@@ -3,20 +3,68 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v2.1.0...master
+[unreleased]: https://github.com/owncloud/web/compare/v3.0.0...master
+
+Summary
+-------
+
+* Bugfix - Improve web container: [#4942](https://github.com/owncloud/web/pull/4942)
+* Enhancement - Accessibility improvements: [#4965](https://github.com/owncloud/web/pull/4965)
+* Enhancement - Enable files app search bar to be toggleable on a per-route basis: [#4815](https://github.com/owncloud/web/pull/4815)
+* Enhancement - Use list for displaying added people: [#4915](https://github.com/owncloud/web/pull/4915)
+
+Details
+-------
+
+* Bugfix - Improve web container: [#4942](https://github.com/owncloud/web/pull/4942)
+
+   The wrapping `index.html.ejs` had some minor problems with HTML validators which are now
+   fixed.
+
+   https://github.com/owncloud/web/pull/4942
+
+* Enhancement - Accessibility improvements: [#4965](https://github.com/owncloud/web/pull/4965)
+
+   A lot of random changes: - Extracted some helper classes to ODS & unified their usage - Removed
+   `<br>` tags that were incorrectly used for spacing - Used `<h4>` tags for headings in the files
+   sidebar - Make skip-to-main button translate-able - Update searchbar label string - Renamed
+   "personal files" to "all files" in routes (soft rename, due to changes in the future) - Updated
+   ODS to v5.1.0
+
+   https://github.com/owncloud/web/pull/4965
+   https://github.com/owncloud/web/pull/4975
+
+* Enhancement - Enable files app search bar to be toggleable on a per-route basis: [#4815](https://github.com/owncloud/web/pull/4815)
+
+   Permits the search bar in the files app to be toggleable on a per-route basis as shown or hidden.
+
+   https://github.com/owncloud/web/pull/4815
+
+* Enhancement - Use list for displaying added people: [#4915](https://github.com/owncloud/web/pull/4915)
+
+   We've changed the HTML elements in the people accordion when adding new people. People added
+   via people autocomplete are now displayed in a list element to use correct structure for screen
+   readers.
+
+   https://github.com/owncloud/web/pull/4915
+
+Changelog for ownCloud Web [3.0.0] (2021-04-21)
+=======================================
+The following sections list the changes in ownCloud web 3.0.0 relevant to
+ownCloud admins and users.
+
+[3.0.0]: https://github.com/owncloud/web/compare/v2.1.0...v3.0.0
 
 Summary
 -------
 
 * Bugfix - Avatar url without double slash: [#4610](https://github.com/owncloud/web/issues/4610)
-* Bugfix - Improve web container: [#4942](https://github.com/owncloud/web/pull/4942)
 * Bugfix - Open mediaviewer for upper case file extensions: [#4647](https://github.com/owncloud/web/issues/4647)
 * Bugfix - Only one `<main>` tag per HTML document: [#1652](https://github.com/owncloud/web/issues/1652)
 * Bugfix - Parent paths traversal for shares: [#4860](https://github.com/owncloud/web/issues/4860)
 * Change - Update owncloud Design System to v6.0.1: [#4940](https://github.com/owncloud/web/pull/4940)
 * Change - New files list: [#4627](https://github.com/owncloud/web/pull/4627)
 * Enhancement - A11y improvements for files app bar: [#4786](https://github.com/owncloud/web/issues/4786)
-* Enhancement - Accessibility improvements: [#4965](https://github.com/owncloud/web/pull/4965)
 * Enhancement - Enable files app search bar to be toggleable on a per-route basis: [#4815](https://github.com/owncloud/web/pull/4815)
 * Enhancement - Add web-pkg package: [#4907](https://github.com/owncloud/web/pull/4907)
 * Enhancement - Implement live region updates on route changes: [#4812](https://github.com/owncloud/web/pull/4812)
@@ -35,13 +83,6 @@ Details
 
    https://github.com/owncloud/web/issues/4610
    https://github.com/owncloud/web/pull/4849
-
-* Bugfix - Improve web container: [#4942](https://github.com/owncloud/web/pull/4942)
-
-   The wrapping `index.html.ejs` had some minor problems with HTML validators which are now
-   fixed.
-
-   https://github.com/owncloud/web/pull/4942
 
 * Bugfix - Open mediaviewer for upper case file extensions: [#4647](https://github.com/owncloud/web/issues/4647)
 
@@ -97,17 +138,6 @@ Details
 
    https://github.com/owncloud/web/issues/4786
    https://github.com/owncloud/web/pull/4833
-
-* Enhancement - Accessibility improvements: [#4965](https://github.com/owncloud/web/pull/4965)
-
-   A lot of random changes: - Extracted some helper classes to ODS & unified their usage - Removed
-   `<br>` tags that were incorrectly used for spacing - Used `<h4>` tags for headings in the files
-   sidebar - Make skip-to-main button translate-able - Update searchbar label string - Renamed
-   "personal files" to "all files" in routes (soft rename, due to changes in the future) - Updated
-   ODS to v5.1.0
-
-   https://github.com/owncloud/web/pull/4965
-   https://github.com/owncloud/web/pull/4975
 
 * Enhancement - Enable files app search bar to be toggleable on a per-route basis: [#4815](https://github.com/owncloud/web/pull/4815)
 
