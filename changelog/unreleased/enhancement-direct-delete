@@ -1,0 +1,6 @@
+Enhancement: Implement proper direct delete
+
+Implement a proper delete action for a single file. Previously this was being handled via selecting the file.
+This also solves the issue with the checkbox being checked when opening the delete modal, which was not a11y compliant.
+
+https://github.com/owncloud/web/pull/4991
