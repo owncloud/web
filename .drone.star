@@ -432,6 +432,105 @@ config = {
 			'runningOnOCIS': True,
 			'visualTesting': True,
 			'filterTags': 'not @skip and not @skipOnOCIS and not @notToImplementOnOCIS',
+		},
+		'webUI-notifications-oc10-integration': {
+			'suites': {
+				'oc10-integration-notifications': [
+					'webUINotifications',
+					'webUISharingNotifications',
+					'webUISharingNotificationsToRoot'
+				]
+			},
+			'extraEnvironment': {
+				'WEB_UI_CONFIG': '/srv/config/drone/config-oc10-integration-app-openid.json',
+				'SERVER_HOST': 'http://owncloud/index.php/apps/web/index.html',
+				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/web/tests/acceptance/expected-failures-with-oc10-server-oauth2-login-and-web-integration-app.md'
+			},
+			'filterTags': 'not @skip and not @skipOnOC10 and not @openIdLogin and @smokeTest',
+			'oc10IntegrationAppIncluded': True,
+			'notificationsAppNeeded': True,
+			'screenShots': True
+		},
+		'webUI-oc10-integration': {
+			'suites': {
+				'IntegrationApp1': [
+					'webUIAccount',
+					'webUICreateFilesFolders',
+					'webUIDeleteFilesFolders',
+					'webUIFavorites',
+					'webUIFiles',
+					'webUIFilesActionMenu',
+					'webUIFilesCopy',
+					'webUIFilesDetails',
+					'webUIFilesList',
+					'webUIFilesSearch',
+					'webUILogin',
+					'webUIPreview',
+					'webUIPrivateLinks',
+					'webUIRenameFiles',
+					'webUIRenameFolders',
+					'webUIRestrictSharing',
+					'webUISharingAcceptShares',
+					'webUISharingAcceptSharesToRoot',
+					# The following suites may have all scenarios currently skipped.
+					# The suites are listed here so that scenarios will run when
+					# they are enabled.
+					'webUIAdminSettings',
+					'webUIComments',
+					'webUITags',
+					'webUIWebdavLockProtection',
+					'webUIWebdavLocks',
+				],
+				'IntegrationApp2': [
+					'webUIMoveFilesFolders',
+					'webUIResharing1',
+					'webUIResharing2',
+					'webUIResharingToRoot',
+					'webUISharingAutocompletion',
+					'webUISharingFilePermissionMultipleUsers',
+					'webUISharingFilePermissionsGroups',
+					'webUISharingFolderAdvancedPermissionMultipleUsers',
+					'webUISharingFolderAdvancedPermissionsGroups',
+					'webUISharingFolderPermissionMultipleUsers',
+					'webUISharingFolderPermissionsGroups',
+					'webUISharingInternalGroups',
+					'webUISharingInternalGroupsEdgeCases',
+					'webUISharingInternalGroupsSharingIndicator',
+					'webUISharingInternalGroupsToRoot',
+					'webUISharingInternalGroupsToRootEdgeCases',
+					'webUISharingInternalGroupsToRootSharingIndicator',
+					'webUISharingInternalUsers',
+					'webUISharingInternalUsersExpire',
+					'webUISharingInternalUsersCollaborator',
+					'webUISharingInternalUsersShareWithPage',
+					'webUISharingInternalUsersSharingIndicator',
+					'webUISharingInternalUsersToRootCollaborator',
+					'webUISharingInternalUsersToRootPreviews',
+					'webUISharingInternalUsersToRootShareWithPage',
+					'webUISharingInternalUsersToRootSharingIndicator',
+					'webUISharingInternalUsersExpireToRoot',
+					'webUISharingInternalUsersToRoot',
+					'webUISharingInternalUsersToRootBlacklisted',
+					'webUISharingPermissionsUsers',
+					'webUISharingPermissionToRoot',
+					'webUISharingPublicBasic',
+					'webUISharingPublicManagement',
+					'webUISharingPublicDifferentRoles',
+					'webUISharingPublicExpire',
+					'webUITrashbinDelete',
+					'webUITrashbinFilesFolders',
+					'webUITrashbinRestore',
+					'webUIUpload',
+				]
+			},
+			'extraEnvironment': {
+				'WEB_UI_CONFIG': '/srv/config/drone/config-oc10-integration-app-openid.json',
+				'SERVER_HOST': 'http://owncloud/index.php/apps/web/index.html',
+				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/web/tests/acceptance/expected-failures-with-oc10-server-oauth2-login-and-web-integration-app.md'
+			},
+			'filterTags': 'not @skip and not @skipOnOC10 and not @openIdLogin and @smokeTest',
+			'oc10IntegrationAppIncluded': True,
+			'screenShots': True
 		}
 	},
 
@@ -696,6 +795,7 @@ def acceptance(ctx):
 		'screenShots': False,
 		'visualTesting': False,
 		'openIdConnect': False,
+		'oc10IntegrationAppIncluded': False,
 	}
 
 	if 'defaults' in config:
@@ -744,7 +844,12 @@ def acceptance(ctx):
 							errorFound = True
 
 						# Basic steps and services for all testing
-						steps = installNPM() + buildWeb()
+						steps = installNPM()
+						if (params['oc10IntegrationAppIncluded']):
+							steps += buildWebApp()
+						else:
+							steps += buildWeb()
+
 						services = browserService(alternateSuiteName, browser)
 
 						if (params['runningOnOCIS']):
@@ -760,7 +865,13 @@ def acceptance(ctx):
 							if server == '':
 								server = False
 
-							steps += installCore(server, db) + owncloudLog() + setupServerAndApp(params['logLevel'])
+							steps += installCore(server, db) + owncloudLog()
+
+							if (params['oc10IntegrationAppIncluded']):
+								steps += setupIntegrationWebApp()
+								steps += setupServerAndAppsForIntegrationApp(params['logLevel'])
+							else:
+								steps += setupServerAndApp(params['logLevel'])
 
 							if params['notificationsAppNeeded']:
 								steps += setupNotificationsAppForServer()
@@ -771,7 +882,7 @@ def acceptance(ctx):
 								steps += idpService() + ocisWebService() + glauthService()
 							else:
 								## Configure oc10 and web with oauth2 and web Service
-								steps += setUpOauth2()
+								steps += setUpOauth2(params['oc10IntegrationAppIncluded'])
 								services += webService()
 
 							steps += fixPermissions()
@@ -1187,6 +1298,43 @@ def lintTest():
 		]
 	}]
 
+def buildWebApp():
+	return [{
+		'name': 'build-web-integration-app',
+		'image': 'owncloudci/nodejs:12',
+		'pull': 'always',
+		'commands': [
+			'yarn build',
+			'mkdir -p /srv/config',
+			'cp -r /var/www/owncloud/web/tests/drone /srv/config',
+			'ls -la /srv/config/drone'
+		],
+		'volumes': [{
+			'name': 'configs',
+			'path': '/srv/config'
+		}],
+	}]
+
+def setupIntegrationWebApp():
+	return [{
+		'name': 'setup-web-integration-app',
+		'image': 'owncloudci/php:7.4',
+		'pull': 'always',
+		'commands': [
+			'cd /var/www/owncloud/server',
+			'mkdir apps-external/web',
+			'cp /srv/config/drone/config-oc10-integration-app-openid.json config/config.json',
+			'cp /var/www/owncloud/web/packages/web-integration-oc10/* apps-external/web -r',
+			'cp /var/www/owncloud/web/dist/* apps-external/web -r',
+			'ls -la apps-external/web',
+			'cat config/config.json'
+		],
+		'volumes': [{
+			'name': 'configs',
+			'path': '/srv/config'
+		}],
+	}]
+
 def buildWeb():
 	return [{
 		'name': 'build-web',
@@ -1394,7 +1542,14 @@ def webService():
 		]
 	}]
 
-def setUpOauth2():
+def setUpOauth2(forIntegrationApp):
+	oidcURL = ''
+
+	if (forIntegrationApp):
+		oidcURL = 'http://owncloud/index.php/apps/web/oidc-callback.html'
+	else:
+		oidcURL = 'http://web/oidc-callback.html'
+
 	return [{
 		'name': 'setup-oauth2',
 		'image': 'owncloudci/php:7.4',
@@ -1405,7 +1560,7 @@ def setUpOauth2():
 			'make vendor',
 			'cd /var/www/owncloud/server/',
 			'php occ a:e oauth2',
-			'php occ oauth2:add-client Web Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://web/oidc-callback.html',
+			'php occ oauth2:add-client Web Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ ' + oidcURL
 		]
 	}]
 
@@ -1636,6 +1791,26 @@ def setupNotificationsAppForServer():
 		]
 	}]
 
+
+def setupServerAndAppsForIntegrationApp(logLevel):
+	return [{
+		'name': 'setup-server-%s' % config['app'],
+		'image': 'owncloudci/php:7.4',
+		'pull': 'always',
+		'commands': [
+			'cd /var/www/owncloud/server/',
+			'php occ a:e testing',
+			'php occ a:e web',
+			'php occ a:l',
+			'php occ config:system:set trusted_domains 1 --value=owncloud',
+			'php occ log:manage --level %s' % logLevel,
+			'php occ config:list',
+			'php occ config:system:set skeletondirectory --value=/var/www/owncloud/server/apps/testing/data/webUISkeleton',
+			'php occ config:system:set enable_previews --type=boolean --value=false',
+			'php occ config:system:set web.baseUrl --value="http://owncloud/index.php/apps/web"',
+			'php occ config:system:set sharing.federation.allowHttpFallback --value=true --type=bool'
+		]
+	}]
 
 def setupServerAndApp(logLevel):
 	return [{
