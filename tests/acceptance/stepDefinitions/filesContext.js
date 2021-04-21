@@ -1110,7 +1110,7 @@ Then('the following resources should have share indicators on the webUI', async 
   dataTable
 ) {
   for (const { fileName, expectedIndicators } of dataTable.hashes()) {
-    const indicatorsArray = await client.page.FilesPageElement.filesList().getShareIndicatorsForResource(
+    const indicatorsArray = await client.page.FilesPageElement.filesList().getShareIndicatorsForResourceWithRetry(
       fileName,
       true
     )
