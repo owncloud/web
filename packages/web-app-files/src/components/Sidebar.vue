@@ -3,6 +3,7 @@
     :key="highlightedFile.id"
     class="files-sidebar oc-p-s oc-border-l"
     :disable-action="false"
+    :close-button-label="$gettext('Close file sidebar')"
     @close="close()"
   >
     <template v-if="highlightedFile" slot="title">
@@ -11,9 +12,10 @@
       </div>
       <div class="uk-inline">
         <div class="uk-flex uk-flex-middle">
-          <span
+          <h3
             id="files-sidebar-item-name"
-            class="oc-mr-s oc-text-bold"
+            class="oc-mr-s oc-text-bold uk-margin-remove"
+            tabindex="-1"
             v-text="highlightedFile.name"
           />
         </div>
@@ -217,5 +219,8 @@ export default {
   &-shining svg {
     fill: #ffba0a !important;
   }
+}
+#files-sidebar-item-name {
+  font-size: medium;
 }
 </style>
