@@ -1,7 +1,9 @@
 <template>
   <ul id="oc-files-actions-sidebar" class="uk-list oc-mt-s">
     <li v-for="action in actions" :key="action.ariaLabel(highlightedFile)" class="oc-py-xs">
-      <oc-button
+      <component
+        :is="getComponentType(action)"
+        v-bind="getComponentProps(action)"
         :aria-Label="action.ariaLabel(highlightedFile)"
         appearance="raw"
         class="oc-text-bold"
@@ -9,7 +11,7 @@
       >
         <oc-icon :name="action.icon" size="medium" />
         {{ action.ariaLabel(highlightedFile) }}
-      </oc-button>
+      </component>
     </li>
   </ul>
 </template>
@@ -37,6 +39,25 @@ export default {
           parent: this.currentFolder
         })
       )
+    }
+  },
+  methods: {
+    getComponentType(action) {
+      if (action.componentType) {
+        return action.componentType
+      }
+
+      return 'oc-button'
+    },
+    getComponentProps(action) {
+      const route = action.getRoute()
+      if (action.componentType === 'router-link' && route) {
+        return {
+          to: route
+        }
+      }
+
+      return {}
     }
   }
 }

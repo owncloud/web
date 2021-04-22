@@ -18,7 +18,9 @@ export default {
 
             return resource.type === 'folder'
           },
-          canBeDefault: true
+          canBeDefault: true,
+          componentType: 'router-link',
+          getRoute: () => this.$route.name
         }
       ]
     }
