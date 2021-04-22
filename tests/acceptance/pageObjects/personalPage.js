@@ -393,15 +393,15 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     resourceBreadcrumb: {
-      selector: '//div[@id="files-breadcrumb"]//*[(self::a or self::span) and contains(text(),%s)]',
+      selector: '//nav[@id="files-breadcrumb"]//*[(self::a or self::span) and contains(text(),%s)]',
       locateStrategy: 'xpath'
     },
     resourceBreadcrumbClickable: {
-      selector: '//div[@id="files-breadcrumb"]//a[contains(text(),%s)]',
+      selector: '//nav[@id="files-breadcrumb"]//a[contains(text(),%s)]',
       locateStrategy: 'xpath'
     },
     resourceBreadcrumbNonClickable: {
-      selector: '//div[@id="files-breadcrumb"]//span[contains(text(),%s)]',
+      selector: '//nav[@id="files-breadcrumb"]//span[contains(text(),%s)]',
       locateStrategy: 'xpath'
     },
     fileUploadButton: {
