@@ -223,6 +223,12 @@ export default {
     }
   },
 
+  watch: {
+    selectedRole: {
+      handler: 'publishChange'
+    }
+  },
+
   created() {
     if (
       (this.existingRole && this.existingRole.name === 'advancedRole' && !this.selectedRole) ||
