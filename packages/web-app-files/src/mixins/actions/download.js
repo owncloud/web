@@ -7,7 +7,7 @@ export default {
         {
           icon: 'file_download',
           handler: this.$_download_trigger,
-          ariaLabel: () => {
+          label: () => {
             return this.$gettext('Download')
           },
           isEnabled: ({ resource }) => {
@@ -17,7 +17,8 @@ export default {
 
             return resource.canDownload()
           },
-          canBeDefault: true
+          canBeDefault: true,
+          componentType: 'oc-button'
         }
       ]
     }
