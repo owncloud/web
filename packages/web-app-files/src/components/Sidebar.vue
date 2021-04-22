@@ -221,6 +221,6 @@ export default {
   }
 }
 #files-sidebar-item-name {
-  font-size: medium;
+  font-size: 1rem;
 }
 </style>
