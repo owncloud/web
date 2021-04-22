@@ -404,9 +404,9 @@ module.exports = {
         this.elements.roleButtonInDropdown.selector,
         newRole.toLowerCase()
       )
-      return this.useXpath()
-        .waitForElementVisible('@selectRoleButtonInCollaboratorInformation')
+      return this.waitForElementVisible('@selectRoleButtonInCollaboratorInformation')
         .click('@selectRoleButtonInCollaboratorInformation')
+        .useXpath()
         .waitForElementVisible(newRoleButton)
         .click(newRoleButton)
         .useCss()
@@ -688,8 +688,7 @@ module.exports = {
       selector: '#files-role-advancedRole'
     },
     selectRoleButtonInCollaboratorInformation: {
-      selector: '//button[contains(@class, "files-collaborators-role-button")]',
-      locateStrategy: 'xpath'
+      selector: '#files-collaborators-role-button'
     },
     roleDropdownInCollaboratorInformation: {
       selector: '//div[contains(@id, "files-collaborators-roles-dropdown")]',
@@ -697,8 +696,7 @@ module.exports = {
     },
     roleButtonInDropdown: {
       // the translate bit is to make it case-insensitive
-      selector:
-        '//ul[contains(@class,"oc-autocomplete-suggestion-list")]//span[translate(.,"ABCDEFGHJIKLMNOPQRSTUVWXYZ","abcdefghjiklmnopqrstuvwxyz") ="%s"]',
+      selector: '//span[@id="files-role-%s"]',
       locateStrategy: 'xpath'
     },
     permissionCheckbox: {
