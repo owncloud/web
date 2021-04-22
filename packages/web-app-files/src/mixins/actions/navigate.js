@@ -9,7 +9,7 @@ export default {
         {
           icon: 'folder-open',
           handler: resource => this.$_navigate_trigger(resource),
-          ariaLabel: () =>
+          label: () =>
             this.$pgettext('Action in the files list row to open a folder', 'Open folder'),
           isEnabled: ({ resource }) => {
             if (checkRoute(['files-trashbin'], this.$route.name)) {
@@ -20,9 +20,18 @@ export default {
           },
           canBeDefault: true,
           componentType: 'router-link',
-          getRoute: () => this.$route.name
+          route: this.route,
+          getRouterLink: resource => this.getRouterLink(resource)
         }
       ]
+    },
+    route() {
+      let route = 'files-personal'
+      if (this.publicPage()) {
+        route = 'files-public-list'
+      }
+
+      return route
     }
   },
   methods: {
@@ -32,12 +41,9 @@ export default {
       if (this.searchTerm !== '' && this.$route.params.item === folder.path) {
         this.resetSearch()
       }
-      let route = 'files-personal'
-      if (this.publicPage()) {
-        route = 'files-public-list'
-      }
+
       this.$router.push({
-        name: route,
+        name: this.route,
         params: {
           item: folder.path
         }
