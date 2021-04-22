@@ -8,9 +8,10 @@ export default {
       return [
         {
           icon: 'restore',
-          ariaLabel: () => this.$gettext('Restore'),
+          label: () => this.$gettext('Restore'),
           handler: this.$_restore_trigger,
-          isEnabled: () => checkRoute(['files-trashbin'], this.$route.name)
+          isEnabled: () => checkRoute(['files-trashbin'], this.$route.name),
+          componentType: 'oc-button'
         }
       ]
     }
