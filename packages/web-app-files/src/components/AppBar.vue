@@ -16,7 +16,7 @@
         id="files-breadcrumb"
         class="oc-p-s"
         :items="breadcrumbs"
-        home
+        variation="lead"
       />
       <h1 class="oc-invisible-sr" v-text="pageTitle" />
       <div
@@ -199,7 +199,7 @@ export default {
         baseUrl = '/files/public/list/'
         pathItems.push(pathSegments.splice(0, 1)[0])
         breadcrumbs.push({
-          text: this.$gettext('Home'),
+          text: this.$gettext('Public link'),
           to: baseUrl + encodeURIComponent(pathUtil.join(...pathItems))
         })
       }
