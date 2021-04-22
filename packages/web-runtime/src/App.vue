@@ -24,11 +24,12 @@
             v-touch:swipe.left="handleNavSwipe"
             class="oc-app-navigation"
             :logo-img="logoImage"
-            :product-name="productName"
+            :logo-alt="sidebarLogoAlt"
             :nav-items="sidebarNavItems"
             :hide-nav="sidebar.navigationHidden"
             :class="sidebarClasses"
             :fixed="isSidebarFixed"
+            :accessible-label="accessibleLabel"
             @close="toggleAppNavigationVisibility"
           >
             <template v-if="sidebar.mainContentComponent" v-slot:mainContent>
@@ -153,8 +154,12 @@ export default {
       return this.configuration.theme.logo.sidebar
     },
 
-    productName() {
-      return this.configuration.theme.general.name
+    accessibleLabel() {
+      return this.$gettext('Sidebar navigation menu')
+    },
+
+    sidebarLogoAlt() {
+      return this.$gettext('Navigate to all files page')
     },
 
     sidebarNavItems() {

@@ -165,7 +165,7 @@ export default {
           breadcrumbs.push(this.createBreadcrumbNode(i + 1, pathSegments[i], itemPath))
         }
       } else {
-        breadcrumbs.push(this.createBreadcrumbNode(0, this.$gettext('Home'), '/'))
+        breadcrumbs.push(this.createBreadcrumbNode(0, this.$gettext('All files'), '/'))
         for (let i = 0; i < pathSegments.length; i++) {
           const itemPath = encodeURIComponent(join.apply(null, pathSegments.slice(0, i + 1)))
           breadcrumbs.push(this.createBreadcrumbNode(i + 1, pathSegments[i], itemPath))
