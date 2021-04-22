@@ -19,7 +19,6 @@ config = {
 				'webUIBasic': [
 					'webUIAccount',
 					'webUILogin',
-					'webUINotifications',
 					'webUIPreview',
 					'webUIPrivateLinks',
 					# The following suites may have all scenarios currently skipped.
@@ -44,11 +43,7 @@ config = {
 				'webUISharingBasic': [
 					'webUISharingAcceptShares',
 					'webUISharingAcceptSharesToRoot',
-				],
-				'webUISharingNotifications': [
-					'webUISharingNotifications',
-					'webUISharingNotificationsToRoot',
-				],
+					],
 				'webUIFavorites': 'Favorites',
 				'webUIMarkdownEditor': 'MarkdownEditor',
 				'webUIFiles1': [
@@ -116,6 +111,24 @@ config = {
 			'visualTesting': True,
 			'screenShots': True
 		},
+		'webUINotification': {
+			'suites': {
+				'webUINotificationBasic': [
+						'webUINotifications'
+				],
+				'webUISharingNotifications': [
+					'webUISharingNotifications',
+					'webUISharingNotificationsToRoot',
+				],
+			},
+			'extraEnvironment': {
+				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/web/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md',
+				'WEB_UI_CONFIG': '/var/www/owncloud/web/dist/config.json'
+			},
+			'visualTesting': True,
+			'screenShots': True,
+			'notificationsAppNeeded': True
+		},
 		'webUIFederation': {
 			'suites': {
 				'webUISharingExternal': 'SharingExternal',
@@ -125,8 +138,24 @@ config = {
 				'REMOTE_BACKEND_HOST': 'http://federated',
 				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/web/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md'
 			},
+			'notificationsAppNeeded': True,
 			'federatedServerNeeded': True,
 			'federatedServerVersion': 'daily-master-qa'
+		},
+		'webUI-XGA-Notifications': {
+			'suites': {
+				'XGAPortrait1-Notifications': [
+					'webUINotifications',
+					'webUISharingNotifications',
+					'webUISharingNotificationsToRoot'
+				]
+			},
+			'extraEnvironment': {
+				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/web/tests/acceptance/expected-failures-XGA-with-oc10-server-oauth2-login.md',
+				'SCREEN_RESOLUTION': '768x1024'
+			},
+			'notificationsAppNeeded': True,
+			'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10'
 		},
 		'webUI-XGA': {
 			'suites': {
@@ -142,7 +171,6 @@ config = {
 					'webUIFilesList',
 					'webUIFilesSearch',
 					'webUILogin',
-					'webUINotifications',
 					'webUIPreview',
 					'webUIPrivateLinks',
 					'webUIRenameFiles',
@@ -150,8 +178,6 @@ config = {
 					'webUIRestrictSharing',
 					'webUISharingAcceptShares',
 					'webUISharingAcceptSharesToRoot',
-					'webUISharingNotifications',
-					'webUISharingNotificationsToRoot',
 					# The following suites may have all scenarios currently skipped.
 					# The suites are listed here so that scenarios will run when
 					# they are enabled.
@@ -205,10 +231,24 @@ config = {
 				]
 			},
 			'extraEnvironment': {
-			        'EXPECTED_FAILURES_FILE': '/var/www/owncloud/web/tests/acceptance/expected-failures-XGA-with-oc10-server-oauth2-login.md',
 				'SCREEN_RESOLUTION': '768x1024'
 			},
 			'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10'
+		},
+		'webUI-Notifications-iPhone': {
+			'suites': {
+				'iPhone1-Notifications': [
+					'webUINotifications',
+					'webUISharingNotifications',
+					'webUISharingNotificationsToRoot'
+				]
+			},
+			'extraEnvironment': {
+				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/web/tests/acceptance/expected-failures-Iphone-oc10-server-oauth2-login.md',
+				'SCREEN_RESOLUTION': '375x812'
+			},
+			'notificationsAppNeeded': True,
+			'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10'
 		},
 		'webUI-iPhone': {
 			'suites': {
@@ -224,7 +264,6 @@ config = {
 					'webUIFilesList',
 					'webUIFilesSearch',
 					'webUILogin',
-					'webUINotifications',
 					'webUIPreview',
 					'webUIPrivateLinks',
 					'webUIRenameFiles',
@@ -232,8 +271,6 @@ config = {
 					'webUIRestrictSharing',
 					'webUISharingAcceptShares',
 					'webUISharingAcceptSharesToRoot',
-					'webUISharingNotifications',
-					'webUISharingNotificationsToRoot',
 					# The following suites may have all scenarios currently skipped.
 					# The suites are listed here so that scenarios will run when
 					# they are enabled.
@@ -286,7 +323,7 @@ config = {
 				]
 			},
 			'extraEnvironment': {
-			        'EXPECTED_FAILURES_FILE': '/var/www/owncloud/web/tests/acceptance/expected-failures-Iphone-oc10-server-oauth2-login.md',
+				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/web/tests/acceptance/expected-failures-Iphone-oc10-server-oauth2-login.md',
 				'SCREEN_RESOLUTION': '375x812'
 			},
 			'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10'
@@ -652,6 +689,7 @@ def acceptance(ctx):
 		'cronOnly': False,
 		'filterTags': 'not @skip and not @skipOnOC10 and not @openIdLogin',
 		'logLevel': '2',
+		'notificationsAppNeeded': False,
 		'federatedServerNeeded': False,
 		'federatedServerVersion': '',
 		'runningOnOCIS': False,
@@ -723,6 +761,9 @@ def acceptance(ctx):
 								server = False
 
 							steps += installCore(server, db) + owncloudLog() + setupServerAndApp(params['logLevel'])
+
+							if params['notificationsAppNeeded']:
+								steps += setupNotificationsAppForServer()
 
 							if (params['openIdConnect']):
 								## Configure oc10 and web with openidConnect login
@@ -1581,6 +1622,21 @@ def ocisWebService():
 		}],
 	}]
 
+
+def setupNotificationsAppForServer():
+	return [{
+		'name': 'install-notifications-app-on-server',
+		'image': 'owncloudci/php:7.4',
+		'pull': 'always',
+		'commands': [
+			'git clone -b master https://github.com/owncloud/notifications.git /var/www/owncloud/server/apps/notifications',
+			'cd /var/www/owncloud/server',
+			'php occ a:e notifications',
+			'php occ a:l'
+		]
+	}]
+
+
 def setupServerAndApp(logLevel):
 	return [{
 		'name': 'setup-server-%s' % config['app'],
@@ -1589,6 +1645,7 @@ def setupServerAndApp(logLevel):
 		'commands': [
 			'cd /var/www/owncloud/server/',
 			'php occ a:e testing',
+			'php occ a:l',
 			'php occ config:system:set trusted_domains 1 --value=owncloud',
 			'php occ config:system:set cors.allowed-domains 0 --value=http://web',
 			'php occ log:manage --level %s' % logLevel,
