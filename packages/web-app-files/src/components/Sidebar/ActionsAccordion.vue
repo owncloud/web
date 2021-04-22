@@ -1,10 +1,9 @@
 <template>
-  <ul id="oc-files-actions-sidebar" class="uk-list oc-mt-s">
+  <ul id="oc-files-actions-sidebar" class="uk-list oc-mt-s oc-files-actions-sidebar-actions">
     <li v-for="action in actions" :key="action.label(highlightedFile)" class="oc-py-xs">
       <component
         :is="action.componentType"
         v-bind="getComponentProps(action, highlightedFile)"
-        appearance="raw"
         class="oc-text-bold"
         @click.stop="action.handler(highlightedFile, action.handlerData)"
       >
@@ -53,8 +52,23 @@ export default {
         }
       }
 
-      return {}
+      return {
+        appearance: 'raw'
+      }
     }
   }
 }
 </script>
+
+<style lang="scss">
+.oc-files-actions-sidebar-actions {
+  > li a,
+  > li a:hover {
+    text-decoration: none;
+    color: var(--oc-color-swatch-passive-default);
+    display: inline-flex;
+    gap: 10px;
+    vertical-align: top;
+  }
+}
+</style>
