@@ -20,8 +20,7 @@ export default {
           },
           canBeDefault: true,
           componentType: 'router-link',
-          route: this.route,
-          getRouterLink: resource => this.getRouterLink(resource)
+          route: this.route
         }
       ]
     },
