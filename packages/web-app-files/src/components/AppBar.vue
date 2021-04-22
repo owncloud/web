@@ -192,7 +192,7 @@ export default {
         baseUrl = '/files/list/all/'
         pathItems.push('/') // as of now we need to add the url encoded root path `/`, otherwise we'll land in the configured homeFolder
         breadcrumbs.push({
-          text: this.$gettext('Home'),
+          text: this.$gettext('All files'),
           to: baseUrl + encodeURIComponent(pathUtil.join(...pathItems))
         })
       } else {
