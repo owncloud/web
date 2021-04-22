@@ -4,6 +4,7 @@ const { COLLABORATOR_PERMISSION_ARRAY, calculateDate } = require('../../helpers/
 const { client } = require('nightwatch-api')
 const userSettings = require('../../helpers/userSettings')
 const collaboratorDialog = client.page.FilesPageElement.SharingDialog.collaboratorsDialog()
+const stringHelper = require('../../helpers/stringHelper')
 const SHARE_TYPE_STRING = {
   user: 'user',
   group: 'group',
@@ -400,10 +401,10 @@ module.exports = {
      * @returns {Promise}
      */
     changeCollaboratorRoleInDropdown: function(newRole) {
-      const newRoleButton = util.format(
-        this.elements.roleButtonInDropdown.selector,
-        newRole.toLowerCase()
-      )
+      newRole = newRole === 'Advanced permissions' ? 'advancedRole' : newRole
+      newRole = stringHelper.camelize(newRole)
+
+      const newRoleButton = util.format(this.elements.roleButtonInDropdown.selector, newRole)
       return this.waitForElementVisible('@selectRoleButtonInCollaboratorInformation')
         .click('@selectRoleButtonInCollaboratorInformation')
         .useXpath()
