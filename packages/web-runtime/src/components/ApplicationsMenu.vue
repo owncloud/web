@@ -1,14 +1,13 @@
 <template>
-  <div>
+  <nav>
     <oc-button
       id="_appSwitcherButton"
       ref="menubutton"
       appearance="raw"
       class="oc-topbar-menu-burger"
       :aria-label="applicationSwitcherLabel"
-      :uk-tooltip="applicationSwitcherLabel"
     >
-      <oc-icon name="apps" class="uk-flex" />
+      <oc-icon :uk-tooltip="applicationSwitcherLabel" name="apps" class="uk-flex" />
     </oc-button>
     <oc-drop
       ref="menu"
@@ -19,8 +18,8 @@
       class="uk-width-large"
       close-on-click
     >
-      <div class="uk-grid-small uk-text-center" uk-grid>
-        <div v-for="(n, nid) in menuItems" :key="`apps-menu-${nid}`" class="uk-width-1-3">
+      <ul class="uk-grid-small uk-text-center" uk-grid>
+        <li v-for="(n, nid) in menuItems" :key="`apps-menu-${nid}`" class="uk-width-1-3">
           <a v-if="n.url" key="apps-menu-external-link" :target="n.target" :href="n.url">
             <oc-icon :name="n.iconMaterial" size="xlarge" />
             <span class="uk-display-block" v-text="$gettext(n.title)" />
@@ -29,23 +28,19 @@
             <oc-icon :name="n.iconMaterial" size="xlarge" />
             <span class="uk-display-block" v-text="$gettext(n.title)" />
           </router-link>
-        </div>
-      </div>
+        </li>
+      </ul>
     </oc-drop>
-  </div>
+  </nav>
 </template>
 
 <script>
 import NavigationMixin from '../mixins/navigationMixin'
+import UiKit from 'uikit'
 
 export default {
   mixins: [NavigationMixin],
   props: {
-    visible: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
     applicationsList: {
       type: Array,
       required: false,
@@ -60,14 +55,15 @@ export default {
       return this.$gettext('Application Switcher')
     }
   },
-  watch: {
-    visible(val) {
-      if (val) {
-        this.focusFirstLink()
-      } else {
-        this.$emit('closed')
-      }
-    }
+  mounted() {
+    UiKit.util.on('#app-switcher-dropdown', 'shown', () => {
+      this.focusFirstLink()
+    })
+
+    UiKit.util.on('#app-switcher-dropdown', 'hidden', () => {
+      this.$emit('closed')
+      this.focusMenuButton()
+    })
   },
   methods: {
     logout() {
@@ -83,6 +79,9 @@ export default {
       setTimeout(() => {
         this.$refs.menu.$el.querySelector('a:first-of-type').focus()
       }, 500)
+    },
+    focusMenuButton() {
+      this.$refs.menubutton.$el.focus()
     }
   }
 }
