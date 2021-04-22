@@ -5,7 +5,7 @@
     :style="{ backgroundImage: 'url(' + backgroundImg + ')' }"
   >
     <div class="oc-login-card uk-position-center">
-      <img class="oc-login-logo" :src="logoImg" :alt="configuration.theme.general.name" />
+      <img class="oc-login-logo" :src="logoImg" alt="" :aria-hidden="true" />
       <div class="oc-login-card-body uk-width-large">
         <h3 class="oc-login-card-title">
           <span v-translate>Login Error</span>

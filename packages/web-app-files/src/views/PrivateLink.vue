@@ -4,16 +4,21 @@
     uk-height-viewport
     :style="{ backgroundImage: 'url(' + backgroundImg + ')' }"
   >
+    <h1 class="oc-invisible-sr">
+      <translate>Resolving private link</translate>
+    </h1>
     <div class="oc-login-card uk-position-center">
-      <img class="oc-login-logo" :src="logoImg" :alt="configuration.theme.general.name" />
+      <img class="oc-login-logo" :src="logoImg" alt="" :aria-hidden="true" />
       <div v-if="loading" class="oc-login-card-body">
-        <h3 class="oc-login-card-title" :aria-hidden="true">{{ $_resolvingPrivateLinkTitle }}</h3>
-        <oc-spinner :aria-label="$_resolvingPrivateLinkTitle" />
+        <h2 class="oc-login-card-title">
+          <translate>Resolving private link…</translate>
+        </h2>
+        <oc-spinner :aria-hidden="true" />
       </div>
       <div v-if="errorMessage" class="oc-login-card-body">
-        <h3 class="oc-login-card-title">
+        <h2 class="oc-login-card-title">
           <translate>An error occurred while resolving the private link</translate>
-        </h3>
+        </h2>
         <span>{{ errorMessage }}</span>
       </div>
     </div>
@@ -32,10 +37,6 @@ export default {
   },
   computed: {
     ...mapGetters(['configuration']),
-
-    $_resolvingPrivateLinkTitle() {
-      return this.$gettext('Resolving private link…')
-    },
 
     backgroundImg() {
       return this.configuration.theme.loginPage.backgroundImg

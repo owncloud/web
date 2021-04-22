@@ -2,11 +2,11 @@
   <div id="Web" class="uk-height-1-1" :style="{ backgroundImage: 'url(' + backgroundImg + ')' }">
     <div class="oc-login" uk-height-viewport>
       <div class="oc-login-card uk-position-center">
-        <img class="oc-login-logo" :src="logoImg" :alt="configuration.theme.general.name" />
+        <img class="oc-login-logo" :src="logoImg" alt="" :aria-hidden="true" />
         <div class="oc-login-card-body">
-          <h3 class="oc-login-card-title">
+          <h1 class="oc-login-card-title">
             <span v-translate>Missing or invalid config</span>
-          </h3>
+          </h1>
           <p v-translate>
             Please check if the file config.json exists and is correct.<br />
             Check the console for more information.

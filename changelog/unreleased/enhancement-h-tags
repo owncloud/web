@@ -1,0 +1,5 @@
+Enhancement: Align headline hierarchy
+
+Streamlined headline tags so that pages have a h1 tag and the headline hierarchy is adhered.
+
+https://github.com/owncloud/web/pull/5003

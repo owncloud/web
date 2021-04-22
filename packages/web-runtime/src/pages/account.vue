@@ -1,7 +1,10 @@
 <template>
-  <div>
-    <oc-loader v-if="loading" />
-    <div v-if="!loading" class="uk-width-3-4@m uk-container oc-p">
+  <div class="uk-width-1-1 uk-container oc-p">
+    <div v-if="loading" class="uk-flex uk-flex-between uk-flex-middle">
+      <h1 v-translate class="oc-page-title">Account</h1>
+      <oc-loader />
+    </div>
+    <template v-else>
       <div class="uk-flex uk-flex-between uk-flex-middle">
         <h1 id="account-page-title" v-translate class="oc-page-title">Account</h1>
         <oc-button v-if="editUrl" variation="primary" type="a" :href="editUrl">
@@ -42,7 +45,7 @@
           <span v-else v-translate>You are not part of any group</span>
         </div>
       </div>
-    </div>
+    </template>
   </div>
 </template>
 

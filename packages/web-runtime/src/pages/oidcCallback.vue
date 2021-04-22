@@ -5,11 +5,11 @@
     uk-height-viewport
   >
     <div class="oc-login-card uk-position-center">
-      <img class="oc-login-logo" :src="logoImg" :alt="configuration.theme.general.name" />
+      <img class="oc-login-logo" :src="logoImg" alt="" :aria-hidden="true" />
       <div v-show="error" class="oc-login-card-body">
-        <h3 class="oc-login-card-title">
+        <h1 class="oc-login-card-title">
           <translate>Authentication failed</translate>
-        </h3>
+        </h1>
         <p v-translate>
           Please contact the administrator if this error persists.
         </p>

@@ -4,36 +4,47 @@
     uk-height-viewport
     :style="{ backgroundImage: 'url(' + backgroundImg + ')' }"
   >
+    <h1 class="oc-invisible-sr">
+      <translate>Resolving public link</translate>
+    </h1>
     <div class="oc-login-card uk-position-center">
-      <img class="oc-login-logo" :src="logoImg" :alt="configuration.theme.general.name" />
-      <div v-if="loading" class="oc-login-card-body">
-        <h3 class="oc-login-card-title" :aria-hidden="true">{{ $_loadingPublicLinkTitle }}</h3>
-        <oc-spinner :aria-label="$_loadingPublicLinkTitle" />
-      </div>
-      <div v-if="errorMessage" class="oc-login-card-body">
-        <h3 class="oc-login-card-title">
-          <translate>An error occurred while loading the public link</translate>
-        </h3>
-        <span>{{ errorMessage }}</span>
-      </div>
-      <div v-if="passwordRequired && !loading" class="oc-login-card-body">
-        <form @submit.prevent="resolvePublicLink">
+      <img class="oc-login-logo" :src="logoImg" alt="" :aria-hidden="true" />
+      <div class="oc-login-card-body">
+        <template v-if="loading">
           <h2 class="oc-login-card-title">
-            <translate>This resource is password-protected.</translate>
+            <translate>Loading public link…</translate>
           </h2>
-          <oc-text-input
-            ref="passwordInput"
-            v-model="password"
-            :error-message="inputErrorMessage"
-            :label="passwordFieldLabel"
-            type="password"
-            :placeholder="passwordPlaceholder"
-            class="oc-mb-s"
-          ></oc-text-input>
-          <oc-button variation="primary" class="oc-login-authorize-button" :disabled="!password">
-            <translate>Continue</translate>
-          </oc-button>
-        </form>
+          <oc-spinner :aria-hidden="true" />
+        </template>
+        <template v-else-if="errorMessage">
+          <h2 class="oc-login-card-title">
+            <translate>An error occurred while loading the public link</translate>
+          </h2>
+          <p class="oc-text-lead">{{ errorMessage }}</p>
+        </template>
+        <template v-else-if="passwordRequired">
+          <form @submit.prevent="resolvePublicLink">
+            <h2 class="oc-login-card-title">
+              <translate>This resource is password-protected.</translate>
+            </h2>
+            <oc-text-input
+              ref="passwordInput"
+              v-model="password"
+              :error-message="inputErrorMessage"
+              :label="passwordFieldLabel"
+              type="password"
+              class="oc-mb-s"
+            ></oc-text-input>
+            <oc-button
+              variation="primary"
+              appearance="filled"
+              class="oc-login-authorize-button"
+              :disabled="!password"
+            >
+              <translate>Continue</translate>
+            </oc-button>
+          </form>
+        </template>
       </div>
       <div class="oc-login-card-footer">
         <p>
@@ -65,12 +76,6 @@ export default {
     ...mapGetters('Files', ['davProperties', 'publicLinkPassword']),
     passwordFieldLabel() {
       return this.$gettext('Enter password for public link')
-    },
-    passwordPlaceholder() {
-      return this.$gettext('Enter password')
-    },
-    $_loadingPublicLinkTitle() {
-      return this.$gettext('Loading public link…')
     },
 
     backgroundImg() {

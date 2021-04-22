@@ -210,7 +210,8 @@ const routes = [
         component: PublicFiles,
         meta: {
           auth: false,
-          hasBulkActions: true
+          hasBulkActions: true,
+          title: $gettext('Public files')
         }
       }
     ]
@@ -221,7 +222,10 @@ const routes = [
     components: {
       fullscreen: PublicLink
     },
-    meta: { auth: false, hideHeadbar: true }
+    meta: {
+      auth: false,
+      hideHeadbar: true
+    }
   },
   {
     path: '/private-link/:fileId',
