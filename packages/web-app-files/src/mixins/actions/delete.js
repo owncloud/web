@@ -8,7 +8,7 @@ export default {
       return [
         {
           icon: 'delete',
-          ariaLabel: () => {
+          label: () => {
             return this.$gettext('Delete')
           },
           handler: this.$_delete_trigger,
@@ -18,13 +18,15 @@ export default {
             }
 
             return resource.canBeDeleted()
-          }
+          },
+          componentType: 'oc-button'
         },
         {
           icon: 'delete',
-          ariaLabel: () => this.$gettext('Delete'),
+          label: () => this.$gettext('Delete'),
           handler: this.$_delete_trigger,
-          isEnabled: () => checkRoute(['files-trashbin'], this.$route.name)
+          isEnabled: () => checkRoute(['files-trashbin'], this.$route.name),
+          componentType: 'oc-button'
         }
       ]
     }

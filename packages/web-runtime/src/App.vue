@@ -24,7 +24,7 @@
             v-touch:swipe.left="handleNavSwipe"
             class="oc-app-navigation"
             :logo-img="logoImage"
-            product-name="ffff"
+            :product-name="productName"
             :nav-items="sidebarNavItems"
             :hide-nav="sidebar.navigationHidden"
             :class="sidebarClasses"
