@@ -79,6 +79,8 @@
           @cancel="modal.onCancel"
           @confirm="modal.onConfirm"
           @input="modal.onInput"
+          @mounted="focusModal"
+          @beforeDestroy="focusModal"
         />
       </transition>
     </div>
@@ -291,6 +293,12 @@ export default {
 
   methods: {
     ...mapActions(['initAuth', 'fetchNotifications', 'deleteMessage']),
+
+    focusModal(component, event) {
+      this.focus({
+        revert: event === 'beforeDestroy'
+      })
+    },
 
     hideAppNavigation() {
       this.appNavigationVisible = false

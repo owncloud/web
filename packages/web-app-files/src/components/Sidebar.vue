@@ -158,6 +158,7 @@ export default {
       if (this.expandedAccordionId === null) {
         this.expandActionsAccordion()
       }
+      this.$nextTick(() => this.$emit('fileChanged', this, 'fileChanged'))
     }
   },
 

@@ -22,6 +22,10 @@ import VueScrollTo from 'vue-scrollto'
 import VueMeta from 'vue-meta'
 import Vue2TouchEvents from 'vue2-touch-events'
 
+// --- Mixins ----
+import focusMixin from './mixins/focusMixin'
+import lifecycleMixin from './mixins/lifecycleMixin'
+
 // --- Gettext ----
 import GetTextPlugin from 'vue-gettext'
 import coreTranslations from '../l10n/translations.json'
@@ -71,6 +75,9 @@ Vue.use(Vue2TouchEvents)
 Vue.component('drag', Drag)
 Vue.component('drop', Drop)
 Vue.component('avatar-image', Avatar)
+
+Vue.mixin(focusMixin)
+Vue.mixin(lifecycleMixin)
 
 // --- Router ----
 

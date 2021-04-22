@@ -14,8 +14,13 @@
     <sidebar
       v-if="_sidebarOpen"
       id="files-sidebar"
+      ref="filesSidebar"
+      tabindex="-1"
       class="uk-width-1-1 uk-width-1-2@m uk-width-1-3@xl"
       @reset="setHighlightedFile(null)"
+      @beforeDestroy="focusSideBar"
+      @mounted="focusSideBar"
+      @fileChanged="focusSideBar"
     />
   </main>
 </template>
@@ -89,6 +94,13 @@ export default {
     openSideBar(file, sideBarName) {
       this.setHighlightedFile(file)
       this.SET_APP_SIDEBAR_EXPANDED_ACCORDION(sideBarName)
+    },
+    focusSideBar(component, event) {
+      this.focus({
+        from: document.activeElement,
+        to: this.$refs.filesSidebar?.$el,
+        revert: event === 'beforeDestroy'
+      })
     },
 
     $_ocApp_dragOver() {
