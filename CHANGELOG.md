@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Improve web container: [#4942](https://github.com/owncloud/web/pull/4942)
 * Enhancement - Accessibility improvements: [#4965](https://github.com/owncloud/web/pull/4965)
+* Enhancement - Implement proper direct delete: [#4991](https://github.com/owncloud/web/pull/4991)
 * Enhancement - Enable files app search bar to be toggleable on a per-route basis: [#4815](https://github.com/owncloud/web/pull/4815)
 * Enhancement - Use list for displaying added people: [#4915](https://github.com/owncloud/web/pull/4915)
 * Enhancement - Show search button in search bar: [#4985](https://github.com/owncloud/web/pull/4985)
@@ -34,6 +35,14 @@ Details
 
    https://github.com/owncloud/web/pull/4965
    https://github.com/owncloud/web/pull/4975
+
+* Enhancement - Implement proper direct delete: [#4991](https://github.com/owncloud/web/pull/4991)
+
+   We implemented a proper delete action for a single file instead of reusing the batch action for
+   deleting multiple files. This also solves the issue with the checkbox being checked when
+   opening the delete modal, which was not a11y compliant.
+
+   https://github.com/owncloud/web/pull/4991
 
 * Enhancement - Enable files app search bar to be toggleable on a per-route basis: [#4815](https://github.com/owncloud/web/pull/4815)
 
