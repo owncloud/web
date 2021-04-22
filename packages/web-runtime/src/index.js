@@ -26,6 +26,9 @@ import Vue2TouchEvents from 'vue2-touch-events'
 import focusMixin from './mixins/focusMixin'
 import lifecycleMixin from './mixins/lifecycleMixin'
 
+// --- Directive ---
+import ClickOutsideDirective from './directives/clickOutside'
+
 // --- Gettext ----
 import GetTextPlugin from 'vue-gettext'
 import coreTranslations from '../l10n/translations.json'
@@ -78,6 +81,8 @@ Vue.component('avatar-image', Avatar)
 
 Vue.mixin(focusMixin)
 Vue.mixin(lifecycleMixin)
+
+Vue.directive('click-outside', ClickOutsideDirective)
 
 // --- Router ----
 
