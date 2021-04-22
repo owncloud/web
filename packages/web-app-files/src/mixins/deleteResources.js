@@ -6,7 +6,8 @@ import PQueue from 'p-queue'
 export default {
   data: () => ({
     deleteResources_queue: new PQueue({ concurrency: 4 }),
-    deleteResources_deleteOps: []
+    deleteResources_deleteOps: [],
+    resourcesToDelete: []
   }),
 
   computed: {
@@ -18,7 +19,7 @@ export default {
     },
 
     $_deleteResources_resources() {
-      return cloneStateObject(this.selectedFiles)
+      return cloneStateObject(this.resourcesToDelete)
     },
 
     $_deleteResources_dialogTitle() {
@@ -184,10 +185,10 @@ export default {
 
     $_deleteResources_displayDialog(resources = null, direct = false) {
       // Deleting a resource via direct action
-      // TODO: Do a direct delete without actually selecting the resource and resetting the selection
       if (direct) {
-        this.resetFileSelection()
-        this.addFileSelection(resources)
+        this.resourcesToDelete = [resources]
+      } else {
+        this.resourcesToDelete = this.selectedFiles
       }
 
       const modal = {
