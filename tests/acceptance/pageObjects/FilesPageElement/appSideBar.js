@@ -199,7 +199,7 @@ module.exports = {
     },
     actionPanelItems: {
       selector:
-        '//div[@class="oc-accordion-content"]//li/button | //div[@class="oc-accordion-content"]//li/a',
+        '//div[@class="oc-accordion-content"]//li/button/span[@class="oc-files-actions-sidebar-action-label"] | //div[@class="oc-accordion-content"]//li/a/span[@class="oc-files-actions-sidebar-action-label"]',
       locateStrategy: 'xpath'
     }
   }
