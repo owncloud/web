@@ -1,0 +1,5 @@
+Enhancement: Use real page title for location picker
+
+We've added real page titles to the location picker. The title is consisted of the current action, target and product name.
+
+https://github.com/owncloud/web/pull/5009
