@@ -11,7 +11,8 @@ export default {
           label: () => this.$gettext('Restore'),
           handler: this.$_restore_trigger,
           isEnabled: () => checkRoute(['files-trashbin'], this.$route.name),
-          componentType: 'oc-button'
+          componentType: 'oc-button',
+          class: 'oc-files-actions-sidebar-restore-trigger'
         }
       ]
     }
