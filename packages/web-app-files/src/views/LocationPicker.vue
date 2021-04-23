@@ -2,8 +2,8 @@
   <div id="files-location-picker" class="uk-flex uk-height-1-1">
     <div tabindex="-1" class="files-list-wrapper uk-width-expand">
       <div id="files-app-bar" class="oc-p-s">
-        <h1 class="location-picker-selection-info oc-mr-s oc-mb" v-text="title" />
-        <p class="oc-text-muted" v-text="currentHint" />
+        <h1 class="location-picker-selection-info oc-mb" v-text="title" />
+        <p class="oc-text-muted uk-text-meta uk-text-italic" v-text="currentHint" />
         <hr class="oc-mt-rm" />
         <oc-breadcrumb :items="breadcrumbs" class="oc-mb-s" />
         <oc-grid gutter="small" flex class="uk-flex-middle">
