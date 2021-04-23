@@ -12,6 +12,7 @@ Summary
 * Enhancement - Accessibility improvements: [#4965](https://github.com/owncloud/web/pull/4965)
 * Enhancement - Implement proper direct delete: [#4991](https://github.com/owncloud/web/pull/4991)
 * Enhancement - Enable files app search bar to be toggleable on a per-route basis: [#4815](https://github.com/owncloud/web/pull/4815)
+* Enhancement - Focus management: [#4993](https://github.com/owncloud/web/pull/4993)
 * Enhancement - Use list for displaying added people: [#4915](https://github.com/owncloud/web/pull/4915)
 * Enhancement - Show search button in search bar: [#4985](https://github.com/owncloud/web/pull/4985)
 
@@ -49,6 +50,14 @@ Details
    Permits the search bar in the files app to be toggleable on a per-route basis as shown or hidden.
 
    https://github.com/owncloud/web/pull/4815
+
+* Enhancement - Focus management: [#4993](https://github.com/owncloud/web/pull/4993)
+
+   We added a mixin that makes it able to manage, record and reverse-replay the focus for the
+   current document. The first components that using it are modal and sidebar in the files app.
+
+   https://github.com/owncloud/web/issues/4992
+   https://github.com/owncloud/web/pull/4993
 
 * Enhancement - Use list for displaying added people: [#4915](https://github.com/owncloud/web/pull/4915)
 
