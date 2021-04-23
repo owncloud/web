@@ -10,7 +10,7 @@
       @error="onFileError"
       @progress="onFileProgress"
     />
-    <div>
+    <div class="files-topbar">
       <oc-breadcrumb
         v-if="showBreadcrumb"
         id="files-breadcrumb"
