@@ -30,7 +30,8 @@ const plugins = [
   }),
   postcss({
     extract: path.join('css', 'web.css'),
-    minimize: production
+    minimize: production,
+    config: false
   }),
   vue({
     css: false
