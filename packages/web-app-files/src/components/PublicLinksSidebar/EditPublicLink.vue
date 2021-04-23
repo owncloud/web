@@ -22,7 +22,7 @@
         :options="roles"
         :clearable="false"
         label="label"
-        class="oc-mb"
+        class="oc-mb files-file-link-role-button-wrapper"
       >
         <template v-slot:option="option">
           <role-item :role="option" />
