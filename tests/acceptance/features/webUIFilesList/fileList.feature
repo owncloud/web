@@ -56,7 +56,7 @@ Feature: User can view files inside a folder
       | simple-empty-folder |
       | data.zip            |
 
-
+  @disablePreviews
   Scenario: select files
     When the user marks these files for batch action using the webUI
       | name                |
@@ -69,7 +69,7 @@ Feature: User can view files inside a folder
       | simple-empty-folder |
       | data.zip            |
 
-
+  @disablePreviews
   Scenario: select files and clear the selection
     When the user marks these files for batch action using the webUI
       | name                |
