@@ -31,6 +31,7 @@ Feature: accept/decline shares coming from internal users
   Scenario: reshare a share that you received to a group that you are member of
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And user "Alice" has created folder "/simple-folder"
+    And user "Brian" has created folder "/simple-folder"
     And these groups have been created:
       | groupname |
       | grp1      |
@@ -38,10 +39,10 @@ Feature: accept/decline shares coming from internal users
     And user "Alice" has shared folder "/simple-folder" with user "Brian"
     And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
     And the user has browsed to the files page
-    When the user shares folder "simple-folder" with group "grp1" as "Viewer" using the webUI
-    And the user unshares folder "simple-folder" using the webUI
+    When the user shares folder "simple-folder (2)" with group "grp1" as "Viewer" using the webUI
+    And the user unshares folder "simple-folder (2)" using the webUI
     And the user browses to the shared-with-me page using the webUI
-    Then folder "simple-folder" shared by "Alice Hansen" should be in "Declined" state on the webUI
+    Then folder "simple-folder (2)" shared by "Alice Hansen" should be in "Declined" state on the webUI
     And folder "simple-folder" shared by "Brian Murphy" should not be listed in the webUI
     And folder "simple-folder" should not be listed on the webUI
 
@@ -49,7 +50,7 @@ Feature: accept/decline shares coming from internal users
   Scenario: unshare an accepted share on the "All files" page
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And user "Alice" has created folder "/simple-folder"
-    And user "Alice" has created file "/testimage.jpg"
+    And user "Alice" has uploaded file "testavatar.jpg" to "/testimage.jpg"
     And these groups have been created:
       | groupname |
       | grp1      |
@@ -71,7 +72,7 @@ Feature: accept/decline shares coming from internal users
   Scenario: Auto-accept shares
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "yes"
     And user "Alice" has created folder "/simple-folder"
-    And user "Alice" has created file "/testimage.jpg"
+    And user "Alice" has uploaded file "testavatar.jpg" to "/testimage.jpg"
     And these groups have been created:
       | groupname |
       | grp1      |
@@ -89,7 +90,7 @@ Feature: accept/decline shares coming from internal users
   Scenario: decline auto-accepted shares
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "yes"
     And user "Alice" has created folder "/simple-folder"
-    And user "Alice" has created file "/testimage.jpg"
+    And user "Alice" has uploaded file "testavatar.jpg" to "/testimage.jpg"
     And these groups have been created:
       | groupname |
       | grp1      |
@@ -109,7 +110,7 @@ Feature: accept/decline shares coming from internal users
   Scenario: unshare auto-accepted shares
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "yes"
     And user "Alice" has created folder "/simple-folder"
-    And user "Alice" has created file "/testimage.jpg"
+    And user "Alice" has uploaded file "testavatar.jpg" to "/testimage.jpg"
     And these groups have been created:
       | groupname |
       | grp1      |
@@ -171,7 +172,7 @@ Feature: accept/decline shares coming from internal users
   Scenario: User-based accepting is disabled while global is enabled
     Given the setting "Automatically accept new incoming local user shares" in the section "Sharing" has been enabled
     And user "Brain" has created folder "/simple-folder"
-    And user "Brain" has created file "/testimage.jpg"
+    And user "Brain" has uploaded file "testavatar.jpg" to "/testimage.jpg"
     And user "Alice" has logged in using the webUI
     And the user has browsed to the personal sharing settings page
     When the user disables automatically accepting new incoming local shares
@@ -189,7 +190,7 @@ Feature: accept/decline shares coming from internal users
   Scenario: User-based accepting is enabled while global is enabled
     Given the setting "Automatically accept new incoming local user shares" in the section "Sharing" has been enabled
     And user "Brain" has created folder "/simple-folder"
-    And user "Brain" has created file "/testimage.jpg"
+    And user "Brain" has uploaded file "testavatar.jpg" to "/testimage.jpg"
     And user "Alice" has logged in using the webUI
     And the user has browsed to the personal sharing settings page
     When the user enables automatically accepting new incoming local shares
@@ -214,7 +215,7 @@ Feature: accept/decline shares coming from internal users
   Scenario: Admin disables auto-accept setting again after user enabled personal auto-accept setting
     Given the setting "Automatically accept new incoming local user shares" in the section "Sharing" has been enabled
     And user "Brain" has created folder "/simple-folder"
-    And user "Brain" has created file "/testimage.jpg"
+    And user "Brain" has uploaded file "testavatar.jpg" to "/testimage.jpg"
     And user "Alice" has logged in using the webUI
     And the user has browsed to the personal sharing settings page
     When the user disables automatically accepting new incoming local shares

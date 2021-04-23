@@ -50,7 +50,7 @@ Feature: accept/decline shares coming from internal users
     Given these groups have been created:
       | groupname |
       | grp1      |
-    And user "Alice" has created file "/testimage.jpg"
+    And user "Alice" has uploaded file "testavatar.jpg" to "testimage.jpg"
     And user "Alice" has created folder "/simple-folder"
     And user "Brian" has been added to group "grp1"
     And user "Alice" has shared folder "/simple-folder" with user "Brian"
@@ -134,7 +134,7 @@ Feature: accept/decline shares coming from internal users
   @ocis-product-276
   Scenario: accept a previously declined share
     Given user "Alice" has created file "lorem.txt"
-    And user "Alice" has created file "testimage.jpg"
+    And user "Alice" has uploaded file "testavatar.jpg" to "testimage.jpg"
     And user "Alice" has shared file "lorem.txt" with user "Brian"
     And user "Alice" has shared file "testimage.jpg" with user "Brian"
     And user "Brian" has declined the share "lorem.txt" offered by user "Alice"
@@ -150,7 +150,7 @@ Feature: accept/decline shares coming from internal users
   @skip @issue-4102
   Scenario: delete an accepted share
     Given user "Alice" has created file "lorem.txt"
-    And user "Alice" has created file "testimage.jpg"
+    And user "Alice" has uploaded file "testavatar.jpg" to "testimage.jpg"
     And user "Alice" has shared file "lorem.txt" with user "Brian"
     And user "Alice" has shared file "testimage.jpg" with user "Brian"
     And the user has browsed to the shared-with-me page
