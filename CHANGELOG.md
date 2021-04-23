@@ -15,6 +15,7 @@ Summary
 * Enhancement - Focus management: [#4993](https://github.com/owncloud/web/pull/4993)
 * Enhancement - Align headline hierarchy: [#5003](https://github.com/owncloud/web/pull/5003)
 * Enhancement - Use list for displaying added people: [#4915](https://github.com/owncloud/web/pull/4915)
+* Enhancement - Use real page title for location picker: [#5009](https://github.com/owncloud/web/pull/5009)
 * Enhancement - Show search button in search bar: [#4985](https://github.com/owncloud/web/pull/4985)
 
 Details
@@ -73,6 +74,13 @@ Details
    readers.
 
    https://github.com/owncloud/web/pull/4915
+
+* Enhancement - Use real page title for location picker: [#5009](https://github.com/owncloud/web/pull/5009)
+
+   We've added real page titles to the location picker. The title is consisted of the current
+   action, target and product name.
+
+   https://github.com/owncloud/web/pull/5009
 
 * Enhancement - Show search button in search bar: [#4985](https://github.com/owncloud/web/pull/4985)
 
