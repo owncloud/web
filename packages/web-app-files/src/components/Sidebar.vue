@@ -15,7 +15,7 @@
         <div class="uk-flex uk-flex-middle">
           <h3
             id="files-sidebar-item-name"
-            class="oc-mr-s oc-text-bold uk-margin-remove"
+            class="oc-text-initial oc-mr-s oc-text-bold uk-margin-remove"
             tabindex="-1"
             v-text="highlightedFile.name"
           />
@@ -233,8 +233,5 @@ export default {
   &-shining svg {
     fill: #ffba0a !important;
   }
-}
-#files-sidebar-item-name {
-  font-size: 1rem;
 }
 </style>
