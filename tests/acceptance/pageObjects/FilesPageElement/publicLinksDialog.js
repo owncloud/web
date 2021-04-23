@@ -439,7 +439,7 @@ module.exports = {
       selector: '#files-sidebar-private-link-icon-copied'
     },
     publicLinkRoleSelectionDropdown: {
-      selector: '//div[@id="files-file-link-role-button"]//span[.="%s"]',
+      selector: '//div[contains(@class, "files-file-link-role-button-wrapper")]//span[.="%s"]',
       locateStrategy: 'xpath'
     }
   }
