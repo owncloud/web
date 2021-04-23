@@ -101,6 +101,20 @@ export default {
 
   mixins: [MixinsGeneral, MixinResources, MixinRoutes],
 
+  metaInfo() {
+    const translated =
+      this.currentAction === 'move'
+        ? this.$gettext('Move into %{ target } - %{ name }')
+        : this.$gettext('Copy into %{ target } - %{ name }')
+    const target = basename(this.target) || this.$gettext('All files')
+    const title = this.$gettextInterpolate(translated, {
+      target,
+      name: this.configuration.theme.general.name
+    })
+
+    return { title }
+  },
+
   data: () => ({
     headerPosition: 0,
     originalLocation: '',
@@ -122,6 +136,7 @@ export default {
       'activeFilesCount',
       'filesTotalSize'
     ]),
+    ...mapGetters('configuration'),
 
     currentAction() {
       return this.$route.params.action
