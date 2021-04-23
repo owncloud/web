@@ -9,6 +9,7 @@ Background: prepare user and files
     And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
     And user "Alice" has uploaded file "testavatar.png" to "testavatar.png"
     And user "Alice" has logged in using the webUI
+    And the user has browsed to the files page
 
   Scenario: observe different actions menu options on selecting different file types or folder
     Given user "Alice" has uploaded file with content "pdf file" to "lorem.pdf"
@@ -28,9 +29,9 @@ Background: prepare user and files
     When the user picks the row of file "lorem.pdf" in the webUI
     Then the app-sidebar for file "lorem.pdf" should be visible on the webUI
     And only the following items with default items should be visible in the actions menu on the webUI
-      | items                     |
-      | open in browser           |
-      | download                  |
+      | items                                           |
+      | open in browser (opens in new window)           |
+      | download                                        |
     When the user picks the row of file "testavatar.png" in the webUI
     Then the app-sidebar for file "testavatar.png" should be visible on the webUI
     And only the following items with default items should be visible in the actions menu on the webUI
