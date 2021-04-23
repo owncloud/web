@@ -43,7 +43,7 @@ export default {
     $_fileActions_editorActions() {
       return this.apps.fileEditors.map(editor => {
         return {
-          ariaLabel: () => {
+          label: () => {
             return `Open in ${this.apps.meta[editor.app].name}`
           },
           icon: this.apps.meta[editor.app].icon,
@@ -55,7 +55,8 @@ export default {
 
             return resource.extension === editor.extension
           },
-          canBeDefault: true
+          canBeDefault: true,
+          componentType: 'oc-button'
         }
       })
     }
