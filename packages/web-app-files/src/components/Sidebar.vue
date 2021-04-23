@@ -210,7 +210,12 @@ export default {
     },
 
     onClickOutside(event) {
-      if (!document.querySelector('.files-table').contains(event.target)) {
+      if (
+        document.querySelector('.files-topbar').contains(event.target) ||
+        document.querySelector('.oc-topbar').contains(event.target) ||
+        document.querySelector('.oc-app-navigation').contains(event.target) ||
+        event.target.id === 'files-view'
+      ) {
         this.close()
       }
     }
