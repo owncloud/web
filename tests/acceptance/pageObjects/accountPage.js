@@ -59,7 +59,7 @@ module.exports = {
       selector: '#account-page-title'
     },
     accountInformationElements: {
-      selector: '//div[contains(@class, "account-page-info-")]',
+      selector: '//dt[contains(@class, "account-page-info-")]',
       locateStrategy: 'xpath'
     }
   }
