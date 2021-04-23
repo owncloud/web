@@ -1,0 +1,6 @@
+Enhancement: Move hint in the Location picker under breadcrumbs
+
+We've moved the hint that is describing how to use the Location picker from sidebar under the breadcrumbs.
+There is navigation of the Files extension displayed in the sidebar now instead.
+
+https://github.com/owncloud/web/pull/5008

@@ -26,14 +26,10 @@
             :logo-img="logoImage"
             :product-name="productName"
             :nav-items="sidebarNavItems"
-            :hide-nav="sidebar.navigationHidden"
             :class="sidebarClasses"
             :fixed="isSidebarFixed"
             @close="toggleAppNavigationVisibility"
           >
-            <template v-if="sidebar.mainContentComponent" v-slot:mainContent>
-              <component :is="sidebar.mainContentComponent" />
-            </template>
             <template v-if="sidebar.sidebarFooterContentComponent" v-slot:footer>
               <component :is="sidebar.sidebarFooterContentComponent" />
             </template>
@@ -158,7 +154,7 @@ export default {
     },
 
     sidebarNavItems() {
-      if (this.publicPage()) {
+      if (!this.user.token) {
         return []
       }
 

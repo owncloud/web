@@ -6,6 +6,7 @@
           <span class="uk-margin-small-right" v-text="title" />
           <oc-breadcrumb :items="breadcrumbs" variation="lead" class="oc-text-lead" />
         </h1>
+        <p class="oc-text-muted uk-text-meta uk-text-italic" v-text="currentHint" />
         <hr class="oc-mt-rm" />
         <div class="oc-mb">
           <oc-grid gutter="small">
@@ -88,9 +89,7 @@ import MixinsGeneral from '../mixins'
 import MixinResources from '../mixins/resources'
 import MixinRoutes from '../mixins/routes'
 
-import MoveSidebarMainContent from '../components/LocationPicker/MoveSidebarMainContent.vue'
 import NoContentMessage from '../components/NoContentMessage.vue'
-import CopySidebarMainContent from '../components/LocationPicker/CopySidebarMainContent.vue'
 import ListLoader from '../components/ListLoader.vue'
 
 export default {
@@ -240,6 +239,24 @@ export default {
           action: this.currentAction
         }
       }
+    },
+
+    currentHint() {
+      if (this.currentAction === 'move') {
+        return this.$gettext(
+          `Navigate into the desired folder and move selected resources into it.
+          You can navigate into a folder by clicking on its name.
+          To navigate back, you can click on the breadcrumbs.
+          Resources will be moved into the folder where you are currently located.`
+        )
+      }
+
+      return this.$gettext(
+        `Navigate into the desired folder and copy selected resources into it.
+        You can navigate into a folder by clicking on its name.
+        To navigate back, you can click on the breadcrumbs.
+        Resources will be copied into the folder where you are currently located.`
+      )
     }
   },
 
@@ -253,32 +270,13 @@ export default {
   created() {
     window.onresize = this.adjustTableHeaderPosition
     this.originalLocation = this.target
-
-    switch (this.currentAction) {
-      case batchActions.move: {
-        this.SET_NAVIGATION_HIDDEN(true)
-        this.SET_MAIN_CONTENT_COMPONENT(MoveSidebarMainContent)
-        break
-      }
-      case batchActions.copy: {
-        this.SET_NAVIGATION_HIDDEN(true)
-        this.SET_MAIN_CONTENT_COMPONENT(CopySidebarMainContent)
-        break
-      }
-    }
   },
 
   mounted() {
     this.adjustTableHeaderPosition()
   },
 
-  beforeDestroy() {
-    this.SET_NAVIGATION_HIDDEN(false)
-    this.SET_MAIN_CONTENT_COMPONENT(null)
-  },
-
   methods: {
-    ...mapMutations(['SET_NAVIGATION_HIDDEN', 'SET_MAIN_CONTENT_COMPONENT']),
     ...mapMutations('Files', ['CLEAR_CURRENT_FILES_LIST']),
     ...mapActions('Files', ['loadFiles', 'loadIndicators']),
     ...mapActions(['showMessage']),
