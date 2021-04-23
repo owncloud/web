@@ -211,8 +211,8 @@ export default {
 
     onClickOutside(event) {
       /*
-       * We need to go for this opt-out solution because under circumstances a model will be rendered,
-       * for example if we click rename, clicking in this model would otherwise falsy close the sidebar.
+       * We need to go for this opt-out solution because under circumstances a modal will be rendered,
+       * for example if we click rename, clicking in this modal would otherwise falsy close the sidebar.
        */
 
       if (
