@@ -1,13 +1,18 @@
 <template>
   <div id="files-drop-container" class="uk-height-1-1 uk-flex uk-flex-column uk-flex-between">
+    <h1 class="oc-invisible-sr">
+      <translate>Public file upload</translate>
+    </h1>
     <div class="oc-p uk-height-1-1">
       <div v-if="loading" key="loading-drop" class="uk-flex uk-flex-column uk-flex-middle">
-        <h3 :aria-hidden="true">{{ $_loadingPublicLinkTitle }}</h3>
-        <oc-spinner :aria-label="$_loadingPublicLinkTitle" size="large" />
+        <h2 class="oc-login-card-title">
+          <translate>Loading public link…</translate>
+        </h2>
+        <oc-spinner :aria-hidden="true" />
       </div>
       <div v-else key="loaded-drop" class="uk-flex uk-flex-column uk-flex-middle uk-height-1-1">
         <div class="uk-text-center uk-width-1-1 uk-width-xxlarge@m">
-          <h3 v-text="title" />
+          <h2 v-text="title" />
           <vue-dropzone
             id="oc-dropzone"
             :options="dropzoneOptions"
@@ -57,7 +62,9 @@
           </oc-table-simple>
         </div>
         <div v-if="errorMessage" class="uk-text-center">
-          <translate tag="h3">An error occurred while loading the public link</translate>
+          <h2>
+            <translate>An error occurred while loading the public link</translate>
+          </h2>
           <p class="oc-m-rm" v-text="errorMessage" />
         </div>
       </div>
@@ -119,9 +126,6 @@ export default {
         autoQueue: false,
         previewsContainer: '#previews'
       }
-    },
-    $_loadingPublicLinkTitle() {
-      return this.$gettext('Loading public link…')
     }
   },
   mounted() {
