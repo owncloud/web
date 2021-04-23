@@ -4,7 +4,7 @@
       <component
         :is="action.componentType"
         v-bind="getComponentProps(action, highlightedFile)"
-        class="oc-text-bold"
+        :class="['oc-text-bold', action.class]"
         @click.stop="action.handler(highlightedFile, action.handlerData)"
       >
         <oc-icon :name="action.icon" size="medium" />
