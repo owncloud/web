@@ -18,7 +18,8 @@ export default {
             return resource.canDownload()
           },
           canBeDefault: true,
-          componentType: 'oc-button'
+          componentType: 'oc-button',
+          class: 'oc-files-actions-sidebar-download-trigger'
         }
       ]
     }

@@ -160,27 +160,27 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     deleteButtonInAccordion: {
-      selector: '//button[text()="Delete"]',
+      selector: '//button[contains(@class, "oc-files-actions-sidebar-delete-trigger")]',
       locateStrategy: 'xpath'
     },
     downloadButtonInAccordion: {
-      selector: '//button[text()="Download"]',
+      selector: '//button[contains(@class, "oc-files-actions-sidebar-download-trigger")]',
       locateStrategy: 'xpath'
     },
     favoriteButtonInAccordion: {
-      selector: '//button[text()="Mark as favorite"]',
+      selector: '//button[contains(@class, "oc-files-actions-sidebar-favorite-trigger")]',
       locateStrategy: 'xpath'
     },
     unmarkFavoriteButtonInAccordion: {
-      selector: '//button[text()="Unmark as favorite"]',
+      selector: '//button[contains(@class, "oc-files-actions-sidebar-favorite-trigger")]',
       locateStrategy: 'xpath'
     },
     restoreButtonInAccordion: {
-      selector: '//button[text()="Restore"]',
+      selector: '//button[contains(@class, "oc-files-actions-sidebar-restore-trigger")]',
       locateStrategy: 'xpath'
     },
     renameButtonInAccordion: {
-      selector: '//button[text()="Rename"]',
+      selector: '//button[contains(@class, "oc-files-actions-sidebar-rename-trigger")]',
       locateStrategy: 'xpath'
     },
     // TODO: Merge with selectors in personalPage
@@ -194,19 +194,19 @@ module.exports = {
       selector: '.oc-modal-body-input > input'
     },
     moveButtonInAccordion: {
-      selector: '//button[text()="Move"]',
+      selector: '//button[contains(@class, "oc-files-actions-sidebar-move-trigger")]',
       locateStrategy: 'xpath'
     },
     copyButtonInAccordion: {
-      selector: '//button[text()="Copy"]',
+      selector: '//button[contains(@class, "oc-files-actions-sidebar-copy-trigger")]',
       locateStrategy: 'xpath'
     },
     mediaViewerButtonInAccordion: {
-      selector: '//button[text()="Open in Mediaviewer"]',
+      selector: '//button[contains(@class, "oc-files-actions-sidebar-mediaviewer-trigger")]',
       locateStrategy: 'xpath'
     },
     markdownEditorButtonInAccordion: {
-      selector: '//button[text()="Open in MarkdownEditor"]',
+      selector: '//button[contains(@class, "oc-files-actions-sidebar-markdown-editor-trigger")]',
       locateStrategy: 'xpath'
     }
   }
