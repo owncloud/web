@@ -210,6 +210,11 @@ export default {
     },
 
     onClickOutside(event) {
+      /*
+       * We need to go for this opt-out solution because under circumstances a model will be rendered,
+       * for example if we click rename, clicking in this model would otherwise falsy close the sidebar.
+       */
+
       if (
         document.querySelector('.files-topbar').contains(event.target) ||
         document.querySelector('.oc-topbar').contains(event.target) ||
