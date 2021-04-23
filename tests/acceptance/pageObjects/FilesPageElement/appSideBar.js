@@ -198,7 +198,8 @@ module.exports = {
       selector: '#oc-files-actions-sidebar'
     },
     actionPanelItems: {
-      selector: '//div[@class="oc-accordion-content"]//li/button',
+      selector:
+        '//div[@class="oc-accordion-content"]//li/button | //div[@class="oc-accordion-content"]//li/a',
       locateStrategy: 'xpath'
     }
   }
