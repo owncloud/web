@@ -20,7 +20,8 @@ export default {
           },
           canBeDefault: true,
           componentType: 'router-link',
-          route: this.route
+          route: this.route,
+          class: 'oc-files-actions-sidebar-navigate'
         }
       ]
     },

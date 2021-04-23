@@ -33,7 +33,8 @@ export default {
 
             return canBeMoved(resource, this.currentFolder.path)
           },
-          componentType: 'oc-button'
+          componentType: 'oc-button',
+          class: 'oc-files-actions-sidebar-move-trigger'
         }
       ]
     }
