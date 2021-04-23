@@ -1,33 +1,32 @@
 <template>
-  <oc-grid gutter="small" child-width="1-1">
-    <label class="oc-label">
-      {{ $gettext('Role') }}
-      <oc-select
-        id="files-collaborators-role-button"
-        v-model="selectedRole"
-        :options="roles"
-        :clearable="false"
-        label="label"
-      >
-        <template v-slot:option="option">
-          <role-item :role="option" />
-        </template>
-        <template #no-options v-translate>
-          No matching role found
-        </template>
-      </oc-select>
-    </label>
+  <div>
+    <translate tag="label" for="files-collaborators-role-button" class="oc-label">Role</translate>
+    <oc-select
+      v-model="selectedRole"
+      input-id="files-collaborators-role-button"
+      :options="roles"
+      :clearable="false"
+      label="label"
+    >
+      <template v-slot:option="option">
+        <role-item :role="option" />
+      </template>
+      <template #no-options v-translate>
+        No matching role found
+      </template>
+    </oc-select>
     <template v-if="$_ocCollaborators_hasAdditionalPermissions">
-      <label v-if="selectedRole.name !== 'advancedRole'" class="oc-label">
+      <label v-if="selectedRole.name !== 'advancedRole'" class="oc-label oc-mt-s">
         <translate>Additional permissions</translate>
       </label>
       <additional-permissions
         :available-permissions="selectedRole.additionalPermissions"
         :collaborators-permissions="collaboratorsPermissions"
+        :class="{ 'oc-mt-s': selectedRole.name === 'advancedRole' }"
         @permissionChecked="checkAdditionalPermissions"
       />
     </template>
-    <div v-if="expirationSupported">
+    <div v-if="expirationSupported" class="oc-mt-m">
       <label for="files-collaborators-collaborator-expiration-input">
         <translate>Expiration date</translate>
         <translate v-if="expirationDateEnforced" tag="em">(required)</translate>
@@ -51,7 +50,7 @@
         />
       </div>
     </div>
-  </oc-grid>
+  </div>
 </template>
 
 <script>
