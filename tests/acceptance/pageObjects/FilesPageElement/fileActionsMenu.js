@@ -160,27 +160,27 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     deleteButtonInAccordion: {
-      selector: '//button[@aria-label="Delete"]',
+      selector: '//button[text()="Delete"]',
       locateStrategy: 'xpath'
     },
     downloadButtonInAccordion: {
-      selector: '//button[@aria-label="Download"]',
+      selector: '//button[text()="Download"]',
       locateStrategy: 'xpath'
     },
     favoriteButtonInAccordion: {
-      selector: '//button[@aria-label="Mark as favorite"]',
+      selector: '//button[text()="Mark as favorite"]',
       locateStrategy: 'xpath'
     },
     unmarkFavoriteButtonInAccordion: {
-      selector: '//button[@aria-label="Unmark as favorite"]',
+      selector: '//button[text()="Unmark as favorite"]',
       locateStrategy: 'xpath'
     },
     restoreButtonInAccordion: {
-      selector: '//button[@aria-label="Restore"]',
+      selector: '//button[text()="Restore"]',
       locateStrategy: 'xpath'
     },
     renameButtonInAccordion: {
-      selector: '//button[@aria-label="Rename"]',
+      selector: '//button[text()="Rename"]',
       locateStrategy: 'xpath'
     },
     // TODO: Merge with selectors in personalPage
@@ -194,19 +194,19 @@ module.exports = {
       selector: '.oc-modal-body-input > input'
     },
     moveButtonInAccordion: {
-      selector: '//button[@aria-label="Move"]',
+      selector: '//button[text()="Move"]',
       locateStrategy: 'xpath'
     },
     copyButtonInAccordion: {
-      selector: '//button[@aria-label="Copy"]',
+      selector: '//button[text()="Copy"]',
       locateStrategy: 'xpath'
     },
     mediaViewerButtonInAccordion: {
-      selector: '//button[@aria-label="Open in Mediaviewer"]',
+      selector: '//button[text()="Open in Mediaviewer"]',
       locateStrategy: 'xpath'
     },
     markdownEditorButtonInAccordion: {
-      selector: '//button[@aria-label="Open in MarkdownEditor"]',
+      selector: '//button[text()="Open in MarkdownEditor"]',
       locateStrategy: 'xpath'
     }
   }
