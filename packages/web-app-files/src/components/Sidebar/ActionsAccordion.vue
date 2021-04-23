@@ -8,7 +8,9 @@
         @click.stop="action.handler(highlightedFile, action.handlerData)"
       >
         <oc-icon :name="action.icon" size="medium" />
-        {{ action.label(highlightedFile) }}
+        <span class="oc-files-actions-sidebar-action-label">{{
+          action.label(highlightedFile)
+        }}</span>
         <span
           v-if="action.opensInNewWindow"
           class="oc-invisible-sr"
