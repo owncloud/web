@@ -224,7 +224,8 @@ const routes = [
     },
     meta: {
       auth: false,
-      hideHeadbar: true
+      hideHeadbar: true,
+      title: $gettext('Resolving public link')
     }
   },
   {
@@ -233,7 +234,7 @@ const routes = [
     components: {
       fullscreen: PrivateLink
     },
-    meta: { hideHeadbar: true }
+    meta: { hideHeadbar: true, title: $gettext('Resolving private link') }
   },
   {
     path: '/location-picker/:context/:action/:item?',
@@ -252,7 +253,7 @@ const routes = [
     components: {
       app: FilesDrop
     },
-    meta: { auth: false }
+    meta: { auth: false, title: $gettext('Public file upload') }
   }
 ]
 

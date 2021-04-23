@@ -4,9 +4,7 @@
     uk-height-viewport
     :style="{ backgroundImage: 'url(' + backgroundImg + ')' }"
   >
-    <h1 class="oc-invisible-sr">
-      <translate>Resolving public link</translate>
-    </h1>
+    <h1 class="oc-invisible-sr">{{ pageTitle }}</h1>
     <div class="oc-login-card uk-position-center">
       <img class="oc-login-logo" :src="logoImg" alt="" :aria-hidden="true" />
       <div class="oc-login-card-body">
@@ -74,6 +72,11 @@ export default {
   computed: {
     ...mapGetters(['configuration']),
     ...mapGetters('Files', ['davProperties', 'publicLinkPassword']),
+
+    pageTitle() {
+      return this.$gettext(this.$route.meta.title)
+    },
+
     passwordFieldLabel() {
       return this.$gettext('Enter password for public link')
     },
