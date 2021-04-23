@@ -20,18 +20,20 @@
           />
         </div>
         <div class="uk-flex uk-flex-middle">
-          <oc-icon
+          <oc-button
             v-if="!publicPage() && isFavoritesEnabled"
             id="files-sidebar-star-icon"
-            :class="['uk-inline', 'oc-mr-xs', favoriteIconClass]"
-            name="star"
-            :accessible-label="
+            :aria-label="
               highlightedFile.starred
-                ? $gettext('File is marked as favorite')
-                : $gettext('File is not marked as favorite')
+                ? $gettext('Click to remove this file from your favorites')
+                : $gettext('Click to mark this file as favorite')
             "
+            appearance="raw"
+            class="oc-mr-xs"
             @click.native.stop="toggleFileFavorite(highlightedFile)"
-          />
+          >
+            <oc-icon :class="favoriteIconClass" name="star" />
+          </oc-button>
           <template v-if="highlightedFile.size > -1">
             {{ getResourceSize(highlightedFile.size) }},
           </template>
