@@ -19,14 +19,16 @@ export default {
 
             return resource.canBeDeleted()
           },
-          componentType: 'oc-button'
+          componentType: 'oc-button',
+          class: 'oc-files-actions-sidebar-delete-trigger'
         },
         {
           icon: 'delete',
           label: () => this.$gettext('Delete'),
           handler: this.$_delete_trigger,
           isEnabled: () => checkRoute(['files-trashbin'], this.$route.name),
-          componentType: 'oc-button'
+          componentType: 'oc-button',
+          class: 'oc-files-actions-sidebar-delete-trigger'
         }
       ]
     }

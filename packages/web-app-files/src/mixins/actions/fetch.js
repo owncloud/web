@@ -21,7 +21,8 @@ export default {
             return resource.extension === 'pdf'
           },
           canBeDefault: true,
-          componentType: 'oc-button'
+          componentType: 'oc-button',
+          class: 'oc-files-actions-sidebar-fetch-trigger'
         }
       ]
     }
