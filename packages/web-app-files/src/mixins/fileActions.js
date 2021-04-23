@@ -55,7 +55,8 @@ export default {
 
             return resource.extension === editor.extension
           },
-          canBeDefault: true
+          canBeDefault: true,
+          componentType: 'oc-button'
         }
       })
     }
