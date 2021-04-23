@@ -1,5 +1,5 @@
 <template>
-  <div v-if="userId">
+  <nav v-if="userId" :aria-label="$gettext('This is a main navigation')">
     <oc-button
       id="_userMenuButton"
       ref="menuButton"
@@ -83,7 +83,7 @@
         </li>
       </ul>
     </oc-drop>
-  </div>
+  </nav>
 </template>
 
 <script>
