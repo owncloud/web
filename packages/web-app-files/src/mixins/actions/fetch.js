@@ -22,7 +22,8 @@ export default {
           },
           canBeDefault: true,
           componentType: 'oc-button',
-          class: 'oc-files-actions-sidebar-fetch-trigger'
+          class: 'oc-files-actions-sidebar-fetch-trigger',
+          opensInNewWindow: true
         }
       ]
     }
