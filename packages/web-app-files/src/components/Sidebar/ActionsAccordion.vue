@@ -9,6 +9,11 @@
       >
         <oc-icon :name="action.icon" size="medium" />
         {{ action.label(highlightedFile) }}
+        <span
+          v-if="action.opensInNewWindow"
+          class="oc-invisible-sr"
+          v-text="$gettext('(Opens in new window)')"
+        />
       </component>
     </li>
   </ul>

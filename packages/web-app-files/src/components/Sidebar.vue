@@ -13,7 +13,7 @@
       </div>
       <div class="uk-inline">
         <div class="uk-flex uk-flex-middle">
-          <h3
+          <h2
             id="files-sidebar-item-name"
             class="oc-text-initial oc-mr-s oc-text-bold uk-margin-remove"
             tabindex="-1"
