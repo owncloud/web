@@ -28,7 +28,8 @@ export default {
               isRouteAllowed
             )
           },
-          componentType: 'oc-button'
+          componentType: 'oc-button',
+          class: 'oc-files-actions-sidebar-favorite-trigger'
         }
       ]
     }
