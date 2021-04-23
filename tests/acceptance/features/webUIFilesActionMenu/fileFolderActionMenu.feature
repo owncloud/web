@@ -29,9 +29,9 @@ Background: prepare user and files
     When the user picks the row of file "lorem.pdf" in the webUI
     Then the app-sidebar for file "lorem.pdf" should be visible on the webUI
     And only the following items with default items should be visible in the actions menu on the webUI
-      | items                                           |
-      | open in browser (opens in new window)           |
-      | download                                        |
+      | items                     |
+      | open in browser           |
+      | download                  |
     When the user picks the row of file "testavatar.png" in the webUI
     Then the app-sidebar for file "testavatar.png" should be visible on the webUI
     And only the following items with default items should be visible in the actions menu on the webUI
