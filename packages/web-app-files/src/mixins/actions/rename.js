@@ -21,7 +21,8 @@ export default {
 
             return resource.canRename()
           },
-          componentType: 'oc-button'
+          componentType: 'oc-button',
+          class: 'oc-files-actions-sidebar-rename-trigger'
         }
       ]
     }
