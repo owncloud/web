@@ -1,6 +1,7 @@
 <template>
   <oc-app-side-bar
     :key="highlightedFile.id"
+    v-click-outside="onClickOutside"
     class="files-sidebar oc-p-s oc-border-l"
     :disable-action="false"
     :close-button-label="$gettext('Close file sidebar')"
@@ -206,6 +207,12 @@ export default {
 
     expandActionsAccordion() {
       this.SET_APP_SIDEBAR_EXPANDED_ACCORDION('files-actions')
+    },
+
+    onClickOutside(event) {
+      if (!document.querySelector('.files-table').contains(event.target)) {
+        this.close()
+      }
     }
   }
 }
