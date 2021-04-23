@@ -1,6 +1,6 @@
 <template>
   <oc-grid gutter="small" child-width="1-1">
-    <label tag="label" class="oc-label">
+    <label class="oc-label">
       {{ $gettext('Role') }}
       <oc-select
         id="files-collaborators-role-button"
