@@ -10,6 +10,7 @@ import Move from './actions/move'
 import Navigate from './actions/navigate'
 import Rename from './actions/rename'
 import Restore from './actions/restore'
+import { kebabCase } from 'lodash'
 
 const actionsMixins = [
   'fetch',
@@ -56,7 +57,10 @@ export default {
             return resource.extension === editor.extension
           },
           canBeDefault: true,
-          componentType: 'oc-button'
+          componentType: 'oc-button',
+          class: `oc-files-actions-sidebar-${kebabCase(
+            this.apps.meta[editor.app].name
+          ).toLowerCase()}-trigger`
         }
       })
     }

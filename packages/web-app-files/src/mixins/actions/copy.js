@@ -28,7 +28,8 @@ export default {
 
             return true
           },
-          componentType: 'oc-button'
+          componentType: 'oc-button',
+          class: 'oc-files-actions-sidebar-copy-trigger'
         }
       ]
     }
