@@ -1,0 +1,5 @@
+Enhancement: Improve accessibility on user menu
+
+Wrapped the user menu button in a nav element and added an aria-label which describes it as main navigation.
+
+https://github.com/owncloud/web/pull/5010
