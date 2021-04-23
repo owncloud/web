@@ -13,23 +13,24 @@
       <div class="oc-mb">
         <oc-text-input id="oc-files-file-link-name" v-model="name" :label="$gettext('Name')" />
       </div>
-      <label tag="label" class="oc-label oc-mb">
-        {{ $gettext('Role') }}
-        <oc-select
-          id="files-file-link-role-button"
-          v-model="selectedRole"
-          :options="roles"
-          :clearable="false"
-          label="label"
-        >
-          <template v-slot:option="option">
-            <role-item :role="option" />
-          </template>
-          <template #no-options v-translate>
-            No matching role found
-          </template>
-        </oc-select>
-      </label>
+      <translate tag="label" for="files-file-link-role-button" class="oc-label">
+        Role
+      </translate>
+      <oc-select
+        v-model="selectedRole"
+        input-id="files-file-link-role-button"
+        :options="roles"
+        :clearable="false"
+        label="label"
+        class="oc-mb"
+      >
+        <template v-slot:option="option">
+          <role-item :role="option" />
+        </template>
+        <template #no-options v-translate>
+          No matching role found
+        </template>
+      </oc-select>
       <div class="oc-mb uk-grid-small uk-flex" uk-grid>
         <div v-if="$_expirationDate" class="uk-width-1-1 uk-width-2-5@m">
           <div class="uk-position-relative">
