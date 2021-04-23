@@ -1,6 +1,6 @@
 <template>
   <ul id="oc-files-actions-sidebar" class="uk-list oc-mt-s oc-files-actions-sidebar-actions">
-    <li v-for="action in actions" :key="action.label(highlightedFile)" class="oc-py-xs">
+    <li v-for="(action, index) in actions" :key="`action-${index}`" class="oc-py-xs">
       <component
         :is="action.componentType"
         v-bind="getComponentProps(action, highlightedFile)"
