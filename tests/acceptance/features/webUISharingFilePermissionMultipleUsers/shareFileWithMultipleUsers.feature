@@ -6,18 +6,19 @@ Feature: Sharing files with multiple internal users with different permissions
   Background:
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And the administrator has set the default folder for received shares to "Shares"
-    And these users have been created with default attributes:
+    And these users have been created with default attributes and without skeleton files:
       | username |
       | Alice    |
       | Brian    |
 
   @issue-ocis-1743
   Scenario Outline: share a file with multiple users with different roles and permissions
-    Given these users have been created with default attributes:
+    Given these users have been created with default attributes and without skeleton files:
       | username |
       | user0    |
       | Carol    |
       | David    |
+    And user "Alice" has created file "lorem.txt"
     And user "Alice" has logged in using the webUI
     When the user opens the share dialog for file "lorem.txt" using the webUI
     And the user opens the share creation dialog in the webUI
