@@ -13,7 +13,7 @@ Summary
 * Enhancement - Implement proper direct delete: [#4991](https://github.com/owncloud/web/pull/4991)
 * Enhancement - Enable files app search bar to be toggleable on a per-route basis: [#4815](https://github.com/owncloud/web/pull/4815)
 * Enhancement - Focus management: [#4993](https://github.com/owncloud/web/pull/4993)
-* Enhancement - Align headline hierarchy: [#5003](https://github.com/owncloud/web/pull/5003)
+* Enhancement - Align headline hierarchy: [#5003](https://github.com/owncloud/web/issues/5003)
 * Enhancement - Use list for displaying added people: [#4915](https://github.com/owncloud/web/pull/4915)
 * Enhancement - Use real page title for location picker: [#5009](https://github.com/owncloud/web/pull/5009)
 * Enhancement - Show search button in search bar: [#4985](https://github.com/owncloud/web/pull/4985)
@@ -61,11 +61,13 @@ Details
    https://github.com/owncloud/web/issues/4992
    https://github.com/owncloud/web/pull/4993
 
-* Enhancement - Align headline hierarchy: [#5003](https://github.com/owncloud/web/pull/5003)
+* Enhancement - Align headline hierarchy: [#5003](https://github.com/owncloud/web/issues/5003)
 
    Streamlined headline tags so that pages have a h1 tag and the headline hierarchy is adhered.
 
-   https://github.com/owncloud/web/pull/5003
+   https://github.com/owncloud/web/issues/5003
+   https://github.com/owncloud/web/pull/5004
+   https://github.com/owncloud/web/pull/5005
 
 * Enhancement - Use list for displaying added people: [#4915](https://github.com/owncloud/web/pull/4915)
 
