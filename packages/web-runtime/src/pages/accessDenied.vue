@@ -4,6 +4,7 @@
     uk-height-viewport
     :style="{ backgroundImage: 'url(' + backgroundImg + ')' }"
   >
+    <h1 class="oc-invisible-sr">{{ pageTitle }}</h1>
     <div class="oc-login-card uk-position-center">
       <img class="oc-login-logo" :src="logoImg" alt="" :aria-hidden="true" />
       <div class="oc-login-card-body uk-width-large">
@@ -36,6 +37,9 @@ export default {
   name: 'AccessDeniedPage',
   computed: {
     ...mapGetters(['configuration']),
+    pageTitle() {
+      return this.$gettext(this.$route.meta.title)
+    },
     helpDeskText() {
       if (
         this.configuration.theme.general.helpDeskText &&

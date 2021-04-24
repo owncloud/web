@@ -1,7 +1,7 @@
 <template>
   <div class="uk-width-1-1 uk-container oc-p">
     <div v-if="loading" class="uk-flex uk-flex-between uk-flex-middle">
-      <h1 v-translate class="oc-page-title">Account</h1>
+      <h1 class="oc-page-title">{{ pageTitle }}</h1>
       <oc-loader />
     </div>
     <template v-else>
@@ -61,6 +61,9 @@ export default {
   },
   computed: {
     ...mapGetters(['user', 'configuration', 'getNavItemsByExtension', 'isOcis']),
+    pageTitle() {
+      return this.$gettext(this.$route.meta.title)
+    },
     editUrl() {
       if (this.isOcis) {
         return null

@@ -23,33 +23,33 @@ const router = new Router({
       components: {
         fullscreen: LoginPage
       },
-      meta: { auth: false, hideHeadbar: true, pageTitle: $gettext('Login') }
+      meta: { auth: false, hideHeadbar: true, title: $gettext('Login') }
     },
     {
       path: '/oidc-callback',
       components: {
         fullscreen: OidcCallbackPage
       },
-      meta: { auth: false, hideHeadbar: true, pageTitle: $gettext('Oidc callback') }
+      meta: { auth: false, hideHeadbar: true, title: $gettext('Oidc callback') }
     },
     {
       path: '/oidc-silent-redirect',
       components: {
         fullscreen: OidcCallbackPage
       },
-      meta: { auth: false, hideHeadbar: true, pageTitle: $gettext('Oidc redirect') }
+      meta: { auth: false, hideHeadbar: true, title: $gettext('Oidc redirect') }
     },
     {
       path: '/f/:fileId',
       name: 'privateLink',
       redirect: '/files/private-link/:fileId',
-      meta: { hideHeadbar: true, pageTitle: $gettext('Private link') }
+      meta: { hideHeadbar: true, title: $gettext('Private link') }
     },
     {
       path: '/s/:token',
       name: 'publicLink',
       redirect: '/files/public-link/:token',
-      meta: { auth: false, hideHeadbar: true, pageTitle: $gettext('Public link') }
+      meta: { auth: false, hideHeadbar: true, title: $gettext('Public link') }
     },
     {
       path: '/access-denied',
@@ -57,7 +57,7 @@ const router = new Router({
       components: {
         fullscreen: AccessDeniedPage
       },
-      meta: { auth: false, hideHeadbar: true, pageTitle: $gettext('Access denied') }
+      meta: { auth: false, hideHeadbar: true, title: $gettext('Access denied') }
     },
     {
       path: '/account',
@@ -65,7 +65,7 @@ const router = new Router({
       components: {
         app: Account
       },
-      meta: { pageTitle: $gettext('Account') }
+      meta: { title: $gettext('Account') }
     }
   ]
 })

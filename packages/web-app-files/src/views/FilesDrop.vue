@@ -1,8 +1,6 @@
 <template>
   <div id="files-drop-container" class="uk-height-1-1 uk-flex uk-flex-column uk-flex-between">
-    <h1 class="oc-invisible-sr">
-      <translate>Public file upload</translate>
-    </h1>
+    <h1 class="oc-invisible-sr">{{ pageTitle }}</h1>
     <div class="oc-p uk-height-1-1">
       <div v-if="loading" key="loading-drop" class="uk-flex uk-flex-column uk-flex-middle">
         <h2 class="oc-login-card-title">
@@ -97,6 +95,9 @@ export default {
   computed: {
     ...mapGetters(['configuration']),
     ...mapGetters('Files', ['davProperties', 'publicLinkPassword']),
+    pageTitle() {
+      return this.$gettext(this.$route.meta.title)
+    },
     publicLinkToken() {
       return this.$route.params.token
     },

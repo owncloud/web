@@ -4,9 +4,7 @@
     uk-height-viewport
     :style="{ backgroundImage: 'url(' + backgroundImg + ')' }"
   >
-    <h1 class="oc-invisible-sr">
-      <translate>Resolving private link</translate>
-    </h1>
+    <h1 class="oc-invisible-sr">{{ pageTitle }}</h1>
     <div class="oc-login-card uk-position-center">
       <img class="oc-login-logo" :src="logoImg" alt="" :aria-hidden="true" />
       <div v-if="loading" class="oc-login-card-body">
@@ -37,6 +35,10 @@ export default {
   },
   computed: {
     ...mapGetters(['configuration']),
+
+    pageTitle() {
+      return this.$gettext(this.$route.meta.title)
+    },
 
     backgroundImg() {
       return this.configuration.theme.loginPage.backgroundImg
