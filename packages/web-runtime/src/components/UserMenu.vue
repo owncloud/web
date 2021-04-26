@@ -1,5 +1,5 @@
 <template>
-  <nav v-if="userId" :aria-label="$gettext('This is a main navigation')">
+  <nav v-if="userId" :aria-label="$gettext('Account menu')">
     <oc-button
       id="_userMenuButton"
       ref="menuButton"
