@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Improve web container: [#4942](https://github.com/owncloud/web/pull/4942)
+* Bugfix - Display navigation for resolved private link: [#5023](https://github.com/owncloud/web/pull/5023)
 * Enhancement - Accessibility improvements: [#4965](https://github.com/owncloud/web/pull/4965)
 * Enhancement - Implement proper direct delete: [#4991](https://github.com/owncloud/web/pull/4991)
 * Enhancement - Enable files app search bar to be toggleable on a per-route basis: [#4815](https://github.com/owncloud/web/pull/4815)
@@ -27,6 +28,13 @@ Details
    fixed.
 
    https://github.com/owncloud/web/pull/4942
+
+* Bugfix - Display navigation for resolved private link: [#5023](https://github.com/owncloud/web/pull/5023)
+
+   We've fixed that the navigation in the left sidebar is visible for a resolved private link as
+   well
+
+   https://github.com/owncloud/web/pull/5023
 
 * Enhancement - Accessibility improvements: [#4965](https://github.com/owncloud/web/pull/4965)
 
