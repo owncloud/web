@@ -1,0 +1,6 @@
+Enhancement: Enable focus trap in oc-modal
+
+After the recent changes in ODS, the oc-modal can now use 
+a focus-trap which is a feature needed for accessibility-reasons.
+
+https://github.com/owncloud/web/pull/5013
