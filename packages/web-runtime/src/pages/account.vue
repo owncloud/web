@@ -17,34 +17,56 @@
         </oc-button>
       </div>
       <hr />
-      <div class="oc-text-bold oc-mb"><translate>Account Information</translate></div>
-      <div class="uk-flex uk-flex-wrap account-page-info">
-        <div class="uk-width-1-2@s oc-mb account-page-info-username">
-          <div class="oc-text-muted"><translate>Username</translate></div>
-          {{ user.username || user.id }}
+      <h2 v-translate class="oc-text-bold oc-text-initial oc-mb">Account Information</h2>
+
+      <dl class="account-page-info uk-flex uk-flex-wrap">
+        <div class="oc-mb uk-width-1-2@s">
+          <dt v-translate class="account-page-info-username uk-text-normal oc-text-muted">
+            Username
+          </dt>
+          <dd>
+            {{ user.username || user.id }}
+          </dd>
         </div>
-        <div v-if="user.username && user.id" class="uk-width-1-2@s oc-mb account-page-info-userid">
-          <div class="oc-text-muted"><translate>User ID</translate></div>
-          {{ user.id }}
+        <div v-if="user.username && user.id">
+          <dt v-translate class="account-page-info-userid uk-text-normal oc-text-muted">
+            User ID
+          </dt>
+          <dd>
+            {{ user.id }}
+          </dd>
         </div>
-        <div class="uk-width-1-2@s oc-mb account-page-info-displayname">
-          <div class="oc-text-muted"><translate>Display name</translate></div>
-          {{ user.displayname }}
+        <div class="oc-mb uk-width-1-2@s">
+          <dt v-translate class="account-page-info-displayname uk-text-normal oc-text-muted">
+            Display name
+          </dt>
+          <dd>
+            {{ user.displayname }}
+          </dd>
         </div>
-        <div class="uk-width-1-2@s oc-mb account-page-info-email">
-          <div class="oc-text-muted"><translate>Email</translate></div>
-          <template v-if="user.email">{{ user.email }}</template>
-          <span v-else v-translate>No email has been set up</span>
+        <div class="oc-mb uk-width-1-2@s">
+          <dt v-translate class="account-page-info-email uk-text-normal oc-text-muted">
+            Email
+          </dt>
+          <dd>
+            <template v-if="user.email">{{ user.email }}</template>
+            <span v-else v-translate>No email has been set up</span>
+          </dd>
         </div>
-        <div
-          class="uk-width-1-2@s oc-mb account-page-info-groups"
-          @click="$_oc_settingsAccount_getGroup"
-        >
-          <div class="oc-text-muted"><translate>Group memberships</translate></div>
-          <span v-if="groupNames">{{ groupNames }}</span>
-          <span v-else v-translate>You are not part of any group</span>
+        <div class="oc-mb uk-width-1-2@s">
+          <dt
+            v-translate
+            class="account-page-info-groups uk-text-normal oc-text-muted"
+            @click="$_oc_settingsAccount_getGroup"
+          >
+            Group memberships
+          </dt>
+          <dd>
+            <span v-if="groupNames">{{ groupNames }}</span>
+            <span v-else v-translate>You are not part of any group</span>
+          </dd>
         </div>
-      </div>
+      </dl>
     </template>
   </div>
 </template>
