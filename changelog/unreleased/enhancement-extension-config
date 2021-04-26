@@ -1,0 +1,5 @@
+Enhancement: Extension config
+
+Loading extension specific config was only possible for file editors. We now also load it in the general app information, so that it's available in the `apps` getter of the global vuex store.
+
+https://github.com/owncloud/web/pull/5024
