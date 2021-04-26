@@ -10,6 +10,7 @@ import Move from './actions/move'
 import Navigate from './actions/navigate'
 import Rename from './actions/rename'
 import Restore from './actions/restore'
+import { kebabCase } from 'lodash'
 
 const actionsMixins = [
   'fetch',
@@ -43,7 +44,7 @@ export default {
     $_fileActions_editorActions() {
       return this.apps.fileEditors.map(editor => {
         return {
-          ariaLabel: () => {
+          label: () => {
             return `Open in ${this.apps.meta[editor.app].name}`
           },
           icon: this.apps.meta[editor.app].icon,
@@ -55,7 +56,11 @@ export default {
 
             return resource.extension === editor.extension
           },
-          canBeDefault: true
+          canBeDefault: true,
+          componentType: 'oc-button',
+          class: `oc-files-actions-sidebar-${kebabCase(
+            this.apps.meta[editor.app].name
+          ).toLowerCase()}-trigger`
         }
       })
     }

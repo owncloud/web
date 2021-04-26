@@ -1,0 +1,13 @@
+Enhancement: Improve accessibility for the files sidebar
+
+We've did several improvements to enhance the accessibility on the files sidebar:
+- Transformed the file name to a h2 element
+- Transformed the "Open folder"-action to a link instead of a button
+- Transformed the favorite-star to a button-element
+- Adjusted aria-label of the favorite-star to describe what it does instead of its current state
+- Added a more descriptive close button label
+- Clicking outside of the sidebar now closes it
+- Removed the aria-label on the action buttons as they already include proper labels
+- Added a hint for screen readers if an action opens a new window/tab
+
+https://github.com/owncloud/web/pull/5000

@@ -12,7 +12,7 @@ export default {
         {
           icon: 'folder-move',
           handler: resource => this.$_move_trigger(resource),
-          ariaLabel: () =>
+          label: () =>
             this.$pgettext(
               'Action in the files list row to initiate move of a single resource',
               'Move'
@@ -32,7 +32,9 @@ export default {
             }
 
             return canBeMoved(resource, this.currentFolder.path)
-          }
+          },
+          componentType: 'oc-button',
+          class: 'oc-files-actions-sidebar-move-trigger'
         }
       ]
     }

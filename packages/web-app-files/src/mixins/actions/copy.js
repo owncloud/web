@@ -11,7 +11,7 @@ export default {
         {
           icon: 'file_copy',
           handler: this.$_copy_trigger,
-          ariaLabel: () => this.$gettext('Copy'),
+          label: () => this.$gettext('Copy'),
           isEnabled: () => {
             if (
               !checkRoute(
@@ -27,7 +27,9 @@ export default {
             }
 
             return true
-          }
+          },
+          componentType: 'oc-button',
+          class: 'oc-files-actions-sidebar-copy-trigger'
         }
       ]
     }

@@ -10,7 +10,7 @@ export default {
       return [
         {
           icon: 'edit',
-          ariaLabel: () => {
+          label: () => {
             return this.$gettext('Rename')
           },
           handler: this.$_rename_trigger,
@@ -20,7 +20,9 @@ export default {
             }
 
             return resource.canRename()
-          }
+          },
+          componentType: 'oc-button',
+          class: 'oc-files-actions-sidebar-rename-trigger'
         }
       ]
     }

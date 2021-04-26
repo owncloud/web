@@ -10,7 +10,7 @@ export default {
         {
           icon: 'remove_red_eye',
           handler: file => this.$_fetch_trigger(file, 'application/pdf', this.isPublicFilesRoute),
-          ariaLabel: () => {
+          label: () => {
             return this.$gettext('Open in browser')
           },
           isEnabled: ({ resource }) => {
@@ -20,7 +20,10 @@ export default {
 
             return resource.extension === 'pdf'
           },
-          canBeDefault: true
+          canBeDefault: true,
+          componentType: 'oc-button',
+          class: 'oc-files-actions-sidebar-fetch-trigger',
+          opensInNewWindow: true
         }
       ]
     }

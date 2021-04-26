@@ -9,7 +9,7 @@ export default {
         {
           icon: 'star',
           handler: this.$_favorite_trigger,
-          ariaLabel: item => {
+          label: item => {
             if (item.starred) {
               return this.$gettext('Unmark as favorite')
             }
@@ -27,7 +27,9 @@ export default {
               this.capabilities.files.favorites &&
               isRouteAllowed
             )
-          }
+          },
+          componentType: 'oc-button',
+          class: 'oc-files-actions-sidebar-favorite-trigger'
         }
       ]
     }
