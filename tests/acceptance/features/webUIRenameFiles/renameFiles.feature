@@ -11,7 +11,7 @@ Feature: rename files
     And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
 
-  @smokeTest @ocisSmokeTest
+  @smokeTest @ocisSmokeTest @disablePreviews
   Scenario Outline: Rename a file
     When the user renames file "lorem.txt" to <to_file_name> using the webUI
     Then file <to_file_name> should be listed on the webUI

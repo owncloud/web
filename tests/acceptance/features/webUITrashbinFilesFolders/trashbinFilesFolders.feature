@@ -19,7 +19,7 @@ Feature: files and folders exist in the trashbin after being deleted
     And user "Alice" has uploaded file "lorem.txt" to "strängé नेपाली folder/lorem.txt"
     And user "Alice" has logged in using the webUI
 
-  @smokeTest @ocis-reva-issue-111 @skipOnOCIS @issue-product-186 @skip @disablePreviews
+  @smokeTest @ocis-reva-issue-111 @skipOnOCIS @issue-product-186 @disablePreviews
   Scenario: Delete files & folders one by one and check that they are all in the trashbin
     When the user deletes the following elements using the webUI
       | name                                  |
