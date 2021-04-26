@@ -2,32 +2,29 @@
   <div id="files-location-picker" class="uk-flex uk-height-1-1">
     <div tabindex="-1" class="files-list-wrapper uk-width-expand">
       <div id="files-app-bar" class="oc-p-s">
-        <h1 class="location-picker-selection-info uk-flex oc-text-lead oc-mb">
-          <span class="uk-margin-small-right" v-text="title" />
-          <oc-breadcrumb :items="breadcrumbs" variation="lead" class="oc-text-lead" />
-        </h1>
+        <h1 class="location-picker-selection-info oc-mr-s oc-mb" v-text="title" />
         <p class="oc-text-muted uk-text-meta uk-text-italic" v-text="currentHint" />
         <hr class="oc-mt-rm" />
-        <div class="oc-mb">
-          <oc-grid gutter="small">
-            <div>
-              <oc-button @click="leaveLocationPicker(originalLocation)">
-                <translate>Cancel</translate>
-              </oc-button>
-            </div>
-            <div>
-              <oc-button
-                id="location-picker-btn-confirm"
-                variation="primary"
-                appearance="filled"
-                :disabled="!canConfirm"
-                @click="confirmAction"
-              >
-                <span v-text="confirmBtnText" />
-              </oc-button>
-            </div>
-          </oc-grid>
-        </div>
+        <oc-breadcrumb :items="breadcrumbs" class="oc-mb-s" />
+        <oc-grid gutter="small" flex class="uk-flex-middle">
+          <div>
+            <oc-button size="small" @click="leaveLocationPicker(originalLocation)">
+              <translate>Cancel</translate>
+            </oc-button>
+          </div>
+          <div>
+            <oc-button
+              id="location-picker-btn-confirm"
+              variation="primary"
+              appearance="filled"
+              size="small"
+              :disabled="!canConfirm"
+              @click="confirmAction"
+            >
+              <span v-text="confirmBtnText" />
+            </oc-button>
+          </div>
+        </oc-grid>
       </div>
       <div id="files-view">
         <list-loader v-if="loading" />
@@ -93,26 +90,18 @@ import NoContentMessage from '../components/NoContentMessage.vue'
 import ListLoader from '../components/ListLoader.vue'
 
 export default {
+  metaInfo() {
+    const title = `${this.title} - ${this.configuration.theme.general.name}`
+
+    return { title }
+  },
+
   components: {
     NoContentMessage,
     ListLoader
   },
 
   mixins: [MixinsGeneral, MixinResources, MixinRoutes],
-
-  metaInfo() {
-    const translated =
-      this.currentAction === 'move'
-        ? this.$gettext('Move into %{ target } - %{ name }')
-        : this.$gettext('Copy into %{ target } - %{ name }')
-    const target = basename(this.target) || this.$gettext('All files')
-    const title = this.$gettextInterpolate(translated, {
-      target,
-      name: this.configuration.theme.general.name
-    })
-
-    return { title }
-  },
 
   data: () => ({
     headerPosition: 0,
@@ -136,6 +125,17 @@ export default {
       'filesTotalSize'
     ]),
     ...mapGetters('configuration'),
+
+    title() {
+      const translated =
+        this.currentAction === 'move'
+          ? this.$gettext('Move into %{ target }')
+          : this.$gettext('Copy into %{ target }')
+      const target = basename(this.target) || this.$gettext('All files')
+      const title = this.$gettextInterpolate(translated, { target })
+
+      return title
+    },
 
     currentAction() {
       return this.$route.params.action
@@ -194,31 +194,6 @@ export default {
 
     canConfirm() {
       return this.currentFolder && this.currentFolder.canCreate()
-    },
-
-    title() {
-      const count = this.resourcesCount
-      let title = ''
-
-      switch (this.currentAction) {
-        case batchActions.move: {
-          title = this.$ngettext(
-            'Selected %{ count } resource to move into:',
-            'Selected %{ count } resources to move into:',
-            count
-          )
-          break
-        }
-        case batchActions.copy: {
-          title = this.$ngettext(
-            'Selected %{ count } resource to copy into:',
-            'Selected %{ count } resources to copy into:',
-            count
-          )
-        }
-      }
-
-      return this.$gettextInterpolate(title, { count: count }, false)
     },
 
     confirmBtnText() {
@@ -474,7 +449,7 @@ export default {
 .files-list-wrapper {
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: max-content max-content 1fr;
+  grid-template-rows: max-content 1fr;
   gap: 0 0;
   grid-template-areas:
     'header'
@@ -497,5 +472,11 @@ export default {
 
 #files-view {
   grid-area: main;
+}
+
+#files-location-picker-table ::deep tr {
+  td:first-of-type {
+    padding-left: 30px;
+  }
 }
 </style>
