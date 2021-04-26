@@ -1,0 +1,6 @@
+Bugfix: Hide left sidebar navigation when switching routes
+
+On smaller screens, the left sidebar containing the extension navigation is collapsed.
+We've fixed that when the user expanded the sidebar and navigated to a different route the sidebar is collapsed again.
+
+https://github.com/owncloud/web/pull/5025

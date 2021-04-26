@@ -230,6 +230,7 @@ export default {
       handler: function(to) {
         this.announceRouteChange(to)
         document.title = this.extractPageTitleFromRoute(to)
+        this.appNavigationVisible = false
       }
     },
     capabilities(caps) {
