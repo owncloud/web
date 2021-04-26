@@ -1,0 +1,5 @@
+Bugfix: Display navigation for resolved private link
+
+We've fixed that the navigation in the left sidebar is visible for a resolved private link as well
+
+https://github.com/owncloud/web/pull/5023
