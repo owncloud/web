@@ -13,6 +13,7 @@ Summary
 * Enhancement - Accessibility improvements: [#4965](https://github.com/owncloud/web/pull/4965)
 * Enhancement - Implement proper direct delete: [#4991](https://github.com/owncloud/web/pull/4991)
 * Enhancement - Enable files app search bar to be toggleable on a per-route basis: [#4815](https://github.com/owncloud/web/pull/4815)
+* Enhancement - Extension config: [#5024](https://github.com/owncloud/web/pull/5024)
 * Enhancement - Focus management: [#4993](https://github.com/owncloud/web/pull/4993)
 * Enhancement - Align headline hierarchy: [#5003](https://github.com/owncloud/web/issues/5003)
 * Enhancement - Use list for displaying added people: [#4915](https://github.com/owncloud/web/pull/4915)
@@ -60,6 +61,13 @@ Details
    Permits the search bar in the files app to be toggleable on a per-route basis as shown or hidden.
 
    https://github.com/owncloud/web/pull/4815
+
+* Enhancement - Extension config: [#5024](https://github.com/owncloud/web/pull/5024)
+
+   Loading extension specific config was only possible for file editors. We now also load it in the
+   general app information, so that it's available in the `apps` getter of the global vuex store.
+
+   https://github.com/owncloud/web/pull/5024
 
 * Enhancement - Focus management: [#4993](https://github.com/owncloud/web/pull/4993)
 
