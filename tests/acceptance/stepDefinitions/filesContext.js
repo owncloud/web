@@ -43,6 +43,10 @@ Given('the user has browsed to the shared-with-others page', function() {
   return client.page.sharedWithOthersPage().navigateAndWaitTillLoaded()
 })
 
+Given('the user has browsed to the shared-via-link page', function() {
+  return client.page.sharedViaLinkPage().navigateAndWaitTillLoaded()
+})
+
 When('the user browses to the shared-with-me page using the webUI', function() {
   return client.page.webPage().navigateToUsingMenu('Shared with me')
 })

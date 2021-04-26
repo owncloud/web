@@ -62,21 +62,19 @@ Feature: User can open the details panel for any file or folder
     When the user switches to "links" accordion item in details panel using the webUI
     Then the "links" details panel should be visible
 
-  @skip @yetToImplement @comments-app-required @public_link_share-feature-required
+  @comments-app-required @public_link_share-feature-required
   Scenario: user shares a file through public link and then the details dialog should work in a Shared by link page
     Given user "Alice" has created folder "simple-folder"
     And the user has browsed to the files page
-    And the user has created a new public link for folder "simple-folder" using the webUI
-    When the user browses to the shared-by-link page
-    Then folder "simple-folder" should be listed on the webUI
-    When the user opens the file action menu of folder "simple-folder" in the webUI
-    And the user clicks the details file action in the webUI
-    Then the details dialog should be visible in the webUI
-    And the thumbnail should be visible in the details panel
-    When the user switches to "sharing" accordion item in details panel using the webUI
-    Then the "sharing" details panel should be visible
-    When the user switches to "comments" accordion item in details panel using the webUI
-    Then the "comments" details panel should be visible
+    And user "Alice" has shared folder "simple-folder" with link with "read" permissions
+    When the user opens the file action menu of folder "simple-folder" using the webUI
+    Then the thumbnail should be visible in the app-sidebar
+    When the user switches to "people" accordion item in details panel using the webUI
+    Then the "people" details panel should be visible
+    When the user switches to "links" accordion item in details panel using the webUI
+    Then the "links" details panel should be visible
+    # When the user switches to "comments" accordion item in details panel using the webUI
+    # Then the "comments" details panel should be visible
 
   @comments-app-required @ocis-reva-issue-64
   Scenario: user shares a file and then the details dialog should work in a Shared with others page
@@ -139,7 +137,7 @@ Feature: User can open the details panel for any file or folder
     When the user browses to the shared-with-me page using the webUI
     Then there should be no resources listed on the webUI
 
-  @skip @yetToImplement @comments-app-required
+  @issue-5017 @comments-app-required
   Scenario: View different areas of details panel for the folder with given tag in Tags page
     Given user "Alice" has created folder "simple-folder"
     And the user has browsed to the files page
@@ -148,14 +146,16 @@ Feature: User can open the details panel for any file or folder
     When the user browses to the tags page
     And the user searches for tag "simple" using the webUI
     Then folder "simple-folder" should be listed on the webUI
-    When the user opens the file action menu of folder "simple-folder" in the webUI
-    And the user clicks the details file action in the webUI
-    Then the details dialog should be visible in the webUI
-    And the thumbnail should be visible in the details panel
-    When the user switches to "sharing" accordion item in details panel using the webUI
-    Then the "sharing" details panel should be visible
-    When the user switches to "comments" accordion item in details panel using the webUI
-    Then the "comments" details panel should be visible
+    When the user opens the file action menu of folder "simple-folder" using the webUI
+    Then the thumbnail should be visible in the app-sidebar
+    When the user switches to "people" accordion item in details panel using the webUI
+    Then the "people" details panel should be visible
+    When the user switches to "links" accordion item in details panel using the webUI
+    Then the "links" details panel should be visible
+    When the user switches to "versions" accordion item in details panel using the webUI
+    Then the "versions" details panel should be visible
+    # When the user switches to "comments" accordion item in details panel using the webUI
+    # Then the "comments" details panel should be visible
 
 
   Scenario: the sidebar is invisible after closing

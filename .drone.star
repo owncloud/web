@@ -261,6 +261,7 @@ config = {
                 ],
             },
             "extraEnvironment": {
+                "EXPECTED_FAILURES_FILE": "/var/www/owncloud/web/tests/acceptance/expected-failures-XGA-with-oc10-server-oauth2-login.md",
                 "SCREEN_RESOLUTION": "768x1024",
             },
             "filterTags": "@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10",
