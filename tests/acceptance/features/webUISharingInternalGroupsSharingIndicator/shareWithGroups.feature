@@ -12,10 +12,7 @@ Feature: Sharing files and folders with internal groups
       | Alice    |
       | Brian    |
       | Carol    |
-    And these groups have been created:
-      | groupname |
-      | grp1      |
-      | grp11     |
+    And group "grp1" has been created
     And user "Alice" has been added to group "grp1"
     And user "Brian" has been added to group "grp1"
 

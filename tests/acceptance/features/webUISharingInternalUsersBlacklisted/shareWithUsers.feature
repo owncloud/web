@@ -1,4 +1,4 @@
-@ocis-reva-issue-64
+@ocis-reva-issue-64 @issue-ocis-1317
 Feature: Sharing files and folders with internal users
   As a user
   I want to share files and folders with other users
@@ -22,7 +22,7 @@ Feature: Sharing files and folders with internal users
     And the administrator adds group "grp1" to the group sharing blacklist using the webUI
     Then user "Alice" should not be able to share file "testimage.jpg" with user "Carol" using the sharing API
 
-  @issue-ocis-reva-34
+
   Scenario: member of a blacklisted from sharing group tries to re-share a file or folder received as a share
     Given user "Carol" has been created with default attributes and without skeleton files
     And user "Carol" has uploaded file "testavatar.jpg" to "testimage.jpg"
@@ -40,7 +40,7 @@ Feature: Sharing files and folders with internal users
     Then the user should not be able to share file "testimage.jpg" using the webUI
     And the user should not be able to share folder "simple-folder" using the webUI
 
-  @issue-ocis-reva-34
+
   Scenario: member of a blacklisted from sharing group tries to re-share a file inside a folder received as a share
     Given user "Carol" has been created with default attributes and without skeleton files
     And user "Carol" has uploaded file "testavatar.jpg" to "testimage.jpg"
@@ -58,7 +58,7 @@ Feature: Sharing files and folders with internal users
     When the user opens folder "common" using the webUI
     Then the user should not be able to share file "testimage.jpg" using the webUI
 
-  @issue-ocis-reva-34
+
   Scenario: member of a blacklisted from sharing group tries to re-share a folder inside a folder received as a share
     Given these users have been created with default attributes and without skeleton files:
       | username |
@@ -76,7 +76,7 @@ Feature: Sharing files and folders with internal users
     When the user opens folder "common" using the webUI
     Then the user should not be able to share folder "inside-common" using the webUI
 
-  @issue-ocis-reva-34
+
   Scenario: user tries to share a file or folder from a group which is blacklisted from sharing from files page
     Given group "grp1" has been created
     And user "Alice" has been added to group "grp1"
@@ -88,7 +88,7 @@ Feature: Sharing files and folders with internal users
     Then the user should not be able to share file "testimage.jpg" using the webUI
     And the user should not be able to share folder "simple-folder" using the webUI
 
-  @issue-ocis-reva-34
+
   Scenario: user tries to re-share a file from a group which is blacklisted from sharing using webUI from shared with you page
     Given group "grp1" has been created
     And user "Alice" has been added to group "grp1"

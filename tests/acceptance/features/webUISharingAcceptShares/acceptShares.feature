@@ -12,7 +12,7 @@ Feature: accept/decline shares coming from internal users
       | Brian    |
     And user "Brian" has logged in using the webUI
 
-  @ocis-reva-issue-34
+ @issue-ocis-1950
   Scenario: reject a share that you received as user and as group member
     Given these groups have been created:
       | groupname |
@@ -27,7 +27,7 @@ Feature: accept/decline shares coming from internal users
     When the user browses to the files page
     Then folder "/Shares" should not be listed on the webUI
 
-  @issue-2512 @skip @issue-4102 @ocis-reva-issue-34
+  @issue-2512 @skip @issue-4102
   Scenario: reshare a share that you received to a group that you are member of
     Given these groups have been created:
       | groupname |
@@ -45,7 +45,7 @@ Feature: accept/decline shares coming from internal users
     And folder "simple-folder" shared by "Brian Murphy" should not be listed in the webUI
     And folder "simple-folder" should not be listed on the webUI
 
-  @smokeTest @skip @issue-4102 @ocis-reva-issue-34
+  @smokeTest @skip @issue-4102
   Scenario: unshare an accepted share on the "All files" page
     Given these groups have been created:
       | groupname |
@@ -231,7 +231,7 @@ Feature: accept/decline shares coming from internal users
     And as "Brian" file "from_Alice" should exist inside folder "/Shares/simple-folder"
     And as "Brian" file "from_Carol" should exist inside folder "/Shares/simple-folder (2)"
 
-  @ocis-reva-issue-34
+  @issue-ocis-1950
   Scenario: accept a share that you received as user and as group member
     Given these groups have been created:
       | groupname |
