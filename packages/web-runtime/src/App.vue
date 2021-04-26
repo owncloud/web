@@ -65,6 +65,7 @@
           :title="modal.title"
           :message="modal.message"
           :has-input="modal.hasInput"
+          :focus-trap-active="true"
           :input-label="modal.inputLabel"
           :input-disabled="modal.inputDisabled"
           :input-value="modal.inputValue"
