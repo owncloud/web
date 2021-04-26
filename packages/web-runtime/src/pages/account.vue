@@ -17,7 +17,7 @@
         </oc-button>
       </div>
       <hr />
-      <div class="oc-text-bold oc-mb"><translate>Account Information</translate></div>
+      <h2 v-translate class="oc-text-bold oc-text-initial oc-mb">Account Information</h2>
 
       <dl class="account-page-info uk-flex uk-flex-wrap">
         <div class="oc-mb uk-width-1-2@s">
