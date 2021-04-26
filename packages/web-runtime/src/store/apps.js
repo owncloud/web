@@ -99,15 +99,21 @@ const mutations = {
   },
 
   LOAD_EXTENSION_CONFIG(state, { id, config }) {
-    const editors = state.fileEditors
-
+    // make available in editors
+    const editors = [...state.fileEditors]
     for (const editor of editors) {
       if (editor.app === id) {
         editor.config = config
       }
     }
-
     state.fileEditors = editors
+
+    // make available in meta
+    if (state.meta[id]) {
+      const meta = { ...state.meta }
+      meta[id].config = config
+      state.meta = meta
+    }
   }
 }
 
