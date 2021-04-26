@@ -60,7 +60,7 @@ export default {
         this.$router.push({
           name: 'files-personal',
           params: {
-            item: folder
+            item: folder || '/'
           },
           query: {
             scrollTo: file
