@@ -1,0 +1,7 @@
+Enhancement: Move breadcrumbs out of location picker heading
+
+We've moved the breadcrumbs element out of the location picker heading and moved it under it.
+The heading is now also reflecting the page title.
+We've also decreased the size of both breadcrumbs and action buttons so that they fit better together.
+
+https://github.com/owncloud/web/pull/5020
