@@ -13,14 +13,24 @@
       <div class="oc-mb">
         <oc-text-input id="oc-files-file-link-name" v-model="name" :label="$gettext('Name')" />
       </div>
-      <oc-grid child-width="1-1" gutter="small">
-        <roles-select
-          :roles="$_roles"
-          :selected-role="$_selectedRole"
-          mode="file-link"
-          @roleSelected="$_selectRole"
-        />
-      </oc-grid>
+      <translate tag="label" for="files-file-link-role-button" class="oc-label">
+        Role
+      </translate>
+      <oc-select
+        v-model="selectedRole"
+        input-id="files-file-link-role-button"
+        :options="roles"
+        :clearable="false"
+        label="label"
+        class="oc-mb files-file-link-role-button-wrapper"
+      >
+        <template v-slot:option="option">
+          <role-item :role="option" />
+        </template>
+        <template #no-options v-translate>
+          No matching role found
+        </template>
+      </oc-select>
       <div class="oc-mb uk-grid-small uk-flex" uk-grid>
         <div v-if="$_expirationDate" class="uk-width-1-1 uk-width-2-5@m">
           <div class="uk-position-relative">
@@ -126,15 +136,12 @@
 import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import mixins from '../../mixins'
 import moment from 'moment'
-import filter from 'lodash-es/filter'
-import first from 'lodash-es/first'
-import values from 'lodash-es/values'
 import publicLinkRoles from '../../helpers/publicLinkRolesDefinition'
-import RolesSelect from '../Roles/RolesSelect.vue'
+import RoleItem from '../RoleItem.vue'
 
 export default {
   components: {
-    RolesSelect
+    RoleItem
   },
   mixins: [mixins],
   data() {
@@ -145,11 +152,11 @@ export default {
       name: null,
       hasPassword: false,
       expireDate: null,
-      permissions: 1,
       placeholder: {
         mailTo: this.$gettext('Mail recipients'),
         mailBody: this.$gettext('Personal note')
-      }
+      },
+      selectedRole: null
     }
   },
   title: $gettext => {
@@ -180,7 +187,7 @@ export default {
       return (
         expireDateNow !== expireDateBefore ||
         this.name !== this.publicLinkInEdit.name ||
-        this.permissions !== this.publicLinkInEdit.permissions ||
+        this.selectedRole.permissions !== this.publicLinkInEdit.permissions ||
         (this.publicLinkInEdit.hasPassword
           ? this.password !== null
           : this.password !== null && this.password.trim().length > 0)
@@ -191,23 +198,12 @@ export default {
       return Object.keys(this.capabilities.files_sharing.public.send_mail).length > 0
     },
 
-    $_roles() {
+    roles() {
       const $gettext = this.$gettext
       return publicLinkRoles({
         $gettext,
         isFolder: this.$_isFolder
       })
-    },
-
-    $_selectedRole() {
-      const permissions = parseInt(this.permissions, 10)
-      if (permissions) {
-        const matchingRoles = filter(this.$_roles, r => r.permissions === permissions)
-        if (matchingRoles.length > 0) {
-          return first(values(matchingRoles))
-        }
-      }
-      return this.$_roles.viewer
     },
 
     $_expirationDate() {
@@ -257,7 +253,7 @@ export default {
     },
 
     $_passwordEnforced() {
-      const permissions = parseInt(this.permissions, 10)
+      const permissions = parseInt(this.selectedRole.permissions, 10)
       const password = this.capabilities.files_sharing.public.password.enforced_for
 
       if (permissions === 1 && password.read_only === '1') {
@@ -293,14 +289,27 @@ export default {
     this.name = this.publicLinkInEdit.name
     this.hasPassword = this.publicLinkInEdit.hasPassword
     this.expireDate = this.publicLinkInEdit.expireDate
-    this.permissions = this.publicLinkInEdit.permissions
+
+    this.setRole()
   },
   methods: {
     ...mapActions('Files', ['addLink', 'updateLink']),
     ...mapMutations('Files', ['SET_APP_SIDEBAR_ACCORDION_CONTEXT']),
 
-    $_selectRole(role) {
-      this.permissions = role.permissions
+    setRole() {
+      const permissions = parseInt(this.publicLinkInEdit.permissions, 10)
+
+      if (permissions) {
+        const role = this.roles.find(r => r.permissions === permissions)
+
+        if (role) {
+          this.selectedRole = role
+
+          return
+        }
+      }
+
+      this.selectedRole = this.roles[0]
     },
 
     $_addLink() {
@@ -308,7 +317,7 @@ export default {
 
       const params = {
         expireDate: this.expireDate,
-        permissions: this.permissions,
+        permissions: this.selectedRole.permissions,
         name: this.name
       }
 
@@ -338,7 +347,7 @@ export default {
 
       const params = {
         expireDate: this.expireDate,
-        permissions: this.permissions,
+        permissions: this.selectedRole.permissions,
         name: this.name
       }
 
