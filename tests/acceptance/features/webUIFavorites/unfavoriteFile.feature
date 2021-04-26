@@ -6,12 +6,16 @@ Feature: Unmark file/folder as favorite
   So that I can remove my favorite file/folder from favorite page
 
   Background:
-    Given user "Alice" has been created with default attributes
+    Given user "Alice" has been created with default attributes and without skeleton files
     And user "Alice" has logged in using the webUI
 
   @smokeTest
   Scenario: unmark files as favorite from files page
-    Given user "Alice" has favorited element "data.zip"
+    Given user "Alice" has uploaded file "data.tar.gz" to "data.tar.gz"
+    And user "Alice" has uploaded file "data.zip" to "data.zip"
+    And user "Alice" has created file "lorem.txt"
+    And the user has reloaded the current page of the webUI
+    And user "Alice" has favorited element "data.zip"
     And user "Alice" has favorited element "data.tar.gz"
     And user "Alice" has favorited element "lorem.txt"
     And the user has browsed to the files page
@@ -28,7 +32,11 @@ Feature: Unmark file/folder as favorite
 
 
   Scenario: unmark a folder as favorite from files page
-    Given user "Alice" has favorited element "simple-folder"
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has created folder "simple-empty-folder"
+    And user "Alice" has created folder "0"
+    And the user has reloaded the current page of the webUI
+    And user "Alice" has favorited element "simple-folder"
     And user "Alice" has favorited element "simple-empty-folder"
     And user "Alice" has favorited element "0"
     And the user has browsed to the files page
@@ -45,7 +53,11 @@ Feature: Unmark file/folder as favorite
 
   @smokeTest
   Scenario: unmark a file as favorite from favorite page
-    Given user "Alice" has favorited element "data.zip"
+    Given user "Alice" has uploaded file "data.zip" to "data.zip"
+    And user "Alice" has uploaded file "data.tar.gz" to "data.tar.gz"
+    And user "Alice" has created file "lorem.txt"
+    And the user has reloaded the current page of the webUI
+    And user "Alice" has favorited element "data.zip"
     And user "Alice" has favorited element "data.tar.gz"
     And user "Alice" has favorited element "lorem.txt"
     And the user has browsed to the favorites page
@@ -58,7 +70,11 @@ Feature: Unmark file/folder as favorite
 
 
   Scenario: unmark a folder as favorite from favorite page
-    Given user "Alice" has favorited element "simple-folder"
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has created folder "simple-empty-folder"
+    And user "Alice" has created folder "0"
+    And the user has reloaded the current page of the webUI
+    And user "Alice" has favorited element "simple-folder"
     And user "Alice" has favorited element "simple-empty-folder"
     And user "Alice" has favorited element "0"
     And the user has browsed to the favorites page
@@ -71,7 +87,10 @@ Feature: Unmark file/folder as favorite
 
 
   Scenario: unmark files/folders as favorites using the sidebar
-    Given user "Alice" has favorited element "data.zip"
+    Given user "Alice" has uploaded file "data.zip" to "data.zip"
+    And user "Alice" has created folder "simple-folder"
+    And the user has reloaded the current page of the webUI
+    And user "Alice" has favorited element "data.zip"
     And user "Alice" has favorited element "simple-folder"
     And the user has browsed to the favorites page
     When the user unmarks the favorited folder "simple-folder" using the webUI sidebar
@@ -83,7 +102,10 @@ Feature: Unmark file/folder as favorite
 
   @issue-1720
   Scenario: Try to unfavorite file and folder that used to exist but does not anymore
-    Given user "Alice" has favorited element "simple-folder"
+    Given user "Alice" has created file "lorem.txt"
+    And user "Alice" has created folder "simple-folder"
+    And the user has reloaded the current page of the webUI
+    And user "Alice" has favorited element "simple-folder"
     And user "Alice" has favorited element "lorem.txt"
     And the user has browsed to the files page
     And the following files have been deleted by user "Alice"

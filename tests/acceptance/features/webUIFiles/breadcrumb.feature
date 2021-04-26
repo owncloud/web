@@ -4,11 +4,12 @@ Feature: access breadcrumb
   So that I can access resources with ease
 
   Background:
-    Given user "Alice" has been created with default attributes
+    Given user "Alice" has been created with default attributes and without skeleton files
 
 
   Scenario: Breadcrumb navigation should not happen on last segment
-    Given user "Alice" has created folder "simple-folder/subfolder"
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has created folder "simple-folder/subfolder"
     And user "Alice" has logged in using the webUI
     When the user opens folder "simple-folder" using the webUI
     And the user opens folder "subfolder" using the webUI
