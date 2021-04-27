@@ -12,14 +12,10 @@
           <h4 class="oc-text-bold oc-m-rm oc-text-initial">
             <translate>Public Links</translate>
           </h4>
-          <div class="oc-text-muted">
-            <i
-              ><translate
-                >Any external person with the respective link can access this resource. No sign-in
-                required. Assign a password to avoid unintended document exposure.
-              </translate>
-            </i>
-          </div>
+          <p class="oc-text-muted oc-my-rm" v-translate>
+            Any external person with the respective link can access this resource. No sign-in
+            required. Assign a password to avoid unintended document exposure.
+          </p>
           <div class="oc-mt-s oc-mb-s">
             <oc-button
               id="files-file-link-add"
@@ -44,9 +40,14 @@
             </li>
           </transition-group>
         </section>
-        <div v-if="$_noPublicLinks" key="oc-file-links-no-results">
-          <translate>No public links</translate>
-        </div>
+        <p
+          v-if="$_noPublicLinks"
+          key="oc-file-links-no-results"
+          class="oc-my-rm"
+          v-translate
+        >
+          No public links
+        </p>
       </template>
     </div>
     <div v-if="appSidebarAccordionContext === PANEL_EDIT" :key="PANEL_EDIT">

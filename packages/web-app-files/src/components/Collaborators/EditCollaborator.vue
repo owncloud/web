@@ -13,12 +13,12 @@
         {{ errors }}
       </oc-alert>
     </transition>
-    <div
+    <p
       v-if="user.id !== collaborator.owner.name"
       class="oc-text-muted uk-flex uk-flex-middle oc-mb-s"
     >
       <oc-icon name="repeat" class="oc-mr-s" /> {{ collaborator.owner.displayName }}
-    </div>
+    </p>
     <collaborator class="uk-width-expand" :collaborator="collaborator" :first-column="false" />
     <collaborators-edit-options
       :existing-role="$_originalRole"
