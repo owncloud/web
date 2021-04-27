@@ -1802,7 +1802,6 @@ def setupServerAndAppsForIntegrationApp(logLevel):
 			'php occ a:e testing',
 			'php occ a:e web',
 			'php occ a:l',
-			'php occ config:system:set trusted_domains 1 --value=owncloud',
 			'php occ log:manage --level %s' % logLevel,
 			'php occ config:list',
 			'php occ config:system:set skeletondirectory --value=/var/www/owncloud/server/apps/testing/data/webUISkeleton',
