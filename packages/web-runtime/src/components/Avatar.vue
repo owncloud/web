@@ -3,7 +3,7 @@
     <oc-spinner
       v-if="loading"
       key="avatar-loading"
-      :aria-label="$gettext('Loading')"
+      :aria-label="$gettext('Loading user avatar')"
       :style="`width: ${width}px; height: ${width}px;`"
     />
     <oc-avatar
