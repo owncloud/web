@@ -1,0 +1,6 @@
+Bugfix: Change quick action from IDs to classes
+
+Quick action button IDs were repeated in every row of the file table, which isn't allowed in HTML (IDs must be unique per document).
+By changing to classes, this offense was resolved.
+
+https://github.com/owncloud/web/pull/5028
