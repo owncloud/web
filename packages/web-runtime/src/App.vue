@@ -19,22 +19,23 @@
       </template>
       <div v-else key="core-content" class="uk-flex uk-flex-stretch">
         <transition :name="appNavigationAnimation">
-          <oc-sidebar
-            v-if="isSidebarVisible"
-            v-touch:swipe.left="handleNavSwipe"
-            class="oc-app-navigation"
-            :logo-img="logoImage"
-            :logo-alt="sidebarLogoAlt"
-            :nav-items="sidebarNavItems"
-            :class="sidebarClasses"
-            :fixed="isSidebarFixed"
-            :accessible-label="accessibleLabel"
-            @close="toggleAppNavigationVisibility"
-          >
-            <template v-if="sidebar.sidebarFooterContentComponent" v-slot:footer>
-              <component :is="sidebar.sidebarFooterContentComponent" />
-            </template>
-          </oc-sidebar>
+          <focus-trap v-if="isSidebarVisible" :active="windowWidth < 1200 && appNavigationVisible">
+            <oc-sidebar
+              v-touch:swipe.left="handleNavSwipe"
+              class="oc-app-navigation"
+              :logo-img="logoImage"
+              :logo-alt="sidebarLogoAlt"
+              :nav-items="sidebarNavItems"
+              :class="sidebarClasses"
+              :fixed="isSidebarFixed"
+              :accessible-label="accessibleLabel"
+              @close="toggleAppNavigationVisibility"
+            >
+              <template v-if="sidebar.sidebarFooterContentComponent" v-slot:footer>
+                <component :is="sidebar.sidebarFooterContentComponent" />
+              </template>
+            </oc-sidebar>
+          </focus-trap>
         </transition>
         <div class="uk-width-expand web-content-container">
           <top-bar
@@ -92,12 +93,14 @@ import MessageBar from './components/MessageBar.vue'
 import SkipTo from './components/SkipTo.vue'
 import moment from 'moment'
 import 'moment/min/locales'
+import { FocusTrap } from 'focus-trap-vue'
 
 export default {
   components: {
     MessageBar,
     TopBar,
-    SkipTo
+    SkipTo,
+    FocusTrap
   },
   data() {
     return {
