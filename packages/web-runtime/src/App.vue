@@ -25,6 +25,7 @@
             class="oc-app-navigation"
             :logo-img="logoImage"
             :logo-alt="sidebarLogoAlt"
+            :close-button-label="$gettext('Close sidebar navigation')"
             :nav-items="sidebarNavItems"
             :class="sidebarClasses"
             :fixed="isSidebarFixed"
