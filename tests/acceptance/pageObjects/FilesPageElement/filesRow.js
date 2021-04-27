@@ -50,7 +50,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     quickAction: {
-      selector: '//button[@id="files-quick-action-%s"]',
+      selector: '//button[@class="files-quick-action-%s"]',
       locateStrategy: 'xpath'
     }
   }
