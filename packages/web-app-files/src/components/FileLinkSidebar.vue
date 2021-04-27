@@ -270,9 +270,4 @@ export default {
   padding: 0 10px;
   text-align: left;
 }
-
-/** needed to cover the container below when transitioning */
-.oc-app-side-bar .oc-default-background {
-  background-color: white;
-}
 </style>
