@@ -1,5 +1,5 @@
 <template>
-  <oc-table-simple top class="files-collaborators-collaborator">
+  <oc-table-simple top class="files-collaborators-collaborator" role="presentation">
     <oc-tr class="files-collaborators-collaborator-table-row-info">
       <oc-td width="shrink">
         <div key="collaborator-avatar-loaded">
@@ -34,21 +34,21 @@
       <oc-td>
         <div class="uk-flex uk-flex-column uk-flex-center" :class="collaboratorListItemClass">
           <div class="oc-text-initial oc-mb-xs">
-            <span>
-              <span class="files-collaborators-collaborator-name oc-text-bold">
-                {{ collaborator.collaborator.displayName }}
-              </span>
-              <translate
-                v-if="isCurrentUser"
-                translate-comment="Indicator for current user in list of people"
-                class="oc-text-muted files-collaborators-collaborator-additional-info"
-              >
-                (me)
-              </translate>
-            </span>
-            <span
+            <p 
+              class="files-collaborators-collaborator-name oc-text-bold oc-mb-rm"
+              v-text="collaborator.collaborator.displayName"
+            />
+            <p
+              v-if="isCurrentUser"
+              translate-comment="Indicator for current user in list of people"
+              class="oc-text-muted files-collaborators-collaborator-additional-info oc-my-rm"
+              v-translate
+            >
+              (me)
+            </p>
+            <p
               v-if="collaborator.collaborator.additionalInfo"
-              class="oc-text-muted files-collaborators-collaborator-additional-info"
+              class="oc-text-muted files-collaborators-collaborator-additional-info oc-my-rm"
               v-text="collaborator.collaborator.additionalInfo"
             />
           </div>
@@ -91,14 +91,15 @@
                         :user-name="resharer.displayName"
                       />
                       <div>
-                        <span class="files-collaborators-resharer-name oc-text-bold">{{
-                          resharer.displayName
-                        }}</span>
-                        <span
+                        <p 
+                          class="files-collaborators-resharer-name oc-text-bold oc-my-rm"
+                          v-text="resharer.displayName"
+                        />
+                        <p
                           v-if="resharer.additionalInfo"
-                          class="oc-text-muted files-collaborators-resharer-additional-info"
-                          >({{ resharer.additionalInfo }})</span
-                        >
+                          class="oc-text-muted files-collaborators-resharer-additional-info oc-my-rm"
+                          v-text="resharer.additionalInfo"
+                        />
                       </div>
                     </div>
                   </li>
@@ -140,8 +141,8 @@
         <div class="uk-flex uk-flex-nowrap uk-flex-middle">
           <oc-button
             v-if="$_editButtonVisible"
-            :aria-label="$gettext('Edit share')"
-            :uk-tooltip="$gettext('Edit share')"
+            :aria-label="$gettext(`Edit share with ${ collaborator.collaborator.displayName }`)"
+            :uk-tooltip="$gettext(`Edit share with ${ collaborator.collaborator.displayName }`)"
             appearance="raw"
             class="files-collaborators-collaborator-edit"
             @click="$emit('onEdit', collaborator)"
@@ -151,8 +152,8 @@
           <div>
             <oc-button
               v-if="$_deleteButtonVisible"
-              :aria-label="$gettext('Delete share')"
-              :uk-tooltip="$gettext('Delete share')"
+              :aria-label="$gettext(`Delete share with ${ collaborator.collaborator.displayName }`)"
+              :uk-tooltip="$gettext(`Delete share with ${ collaborator.collaborator.displayName }`)"
               appearance="raw"
               class="files-collaborators-collaborator-delete"
               @click="$_removeShare"
