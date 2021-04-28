@@ -129,12 +129,10 @@ export default {
     title() {
       const translated =
         this.currentAction === 'move'
-          ? this.$gettext('Move into %{ target }')
-          : this.$gettext('Copy into %{ target }')
+          ? this.$gettext('Move into »%{ target }«')
+          : this.$gettext('Copy into »%{ target }«')
       const target = basename(this.target) || this.$gettext('All files')
-      const title = this.$gettextInterpolate(translated, { target })
-
-      return title
+      return this.$gettextInterpolate(translated, { target })
     },
 
     currentAction() {
