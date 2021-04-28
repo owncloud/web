@@ -34,11 +34,6 @@ Add the following entries to config/config.php:
 'cors.allowed-domains' => ['<web-domain>'],
 ```
 
-- optional: when developing against unstable APIs (technical preview), these need to be enabled in the server core:
-```
-dav.enable.tech_preview => true,
-```
-
 ### Setting up OAuth2
 
 To connect to the ownCloud server, it is necessary to set it up with OAuth2.
