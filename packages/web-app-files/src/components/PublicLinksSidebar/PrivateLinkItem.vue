@@ -1,5 +1,5 @@
 <template>
-  <section v-if="privateLinkEnabled">
+  <div v-if="privateLinkEnabled">
     <h4 class="oc-text-bold oc-m-rm oc-text-initial" v-translate>Private Link</h4>
     <p class="oc-text-muted oc-my-rm" v-translate>Only invited people can use this link.</p>
     <div class="uk-width-1-1 uk-flex uk-flex-middle">
@@ -23,7 +23,7 @@
       </oc-button>
     </div>
     <hr />
-  </section>
+  </div>
 </template>
 
 <script>
@@ -37,7 +37,7 @@ export default {
   }),
 
   computed: {
-    ...mapGetters('Files', ['highlightedFile'], ['capabilities']),
+    ...mapGetters('Files', ['highlightedFile', 'capabilities']),
 
     copyLabel() {
       return this.$gettext('Copy private link url')
