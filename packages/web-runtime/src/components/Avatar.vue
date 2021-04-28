@@ -1,9 +1,8 @@
 <template>
-  <component :is="type" v-if="enabled">
+  <component :is="type" v-if="enabled" :aria-hidden="true">
     <oc-spinner
       v-if="loading"
       key="avatar-loading"
-      :aria-label="$gettext('Loading')"
       :style="`width: ${width}px; height: ${width}px;`"
     />
     <oc-avatar

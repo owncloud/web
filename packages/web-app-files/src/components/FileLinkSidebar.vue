@@ -8,45 +8,42 @@
       <oc-loader v-if="linksLoading" :aria-label="$gettext('Loading list of file links')" />
       <template v-else>
         <private-link-item />
-        <section>
-          <h4 class="oc-text-bold oc-m-rm oc-text-initial">
-            <translate>Public Links</translate>
-          </h4>
-          <div class="oc-text-muted">
-            <i
-              ><translate
-                >Any external person with the respective link can access this resource. No sign-in
-                required. Assign a password to avoid unintended document exposure.
-              </translate>
-            </i>
-          </div>
-          <div class="oc-mt-s oc-mb-s">
-            <oc-button
-              id="files-file-link-add"
-              icon="add"
-              variation="primary"
-              :aria-label="$_addButtonAriaLabel"
-              @click="addNewLink"
-            >
-              <oc-icon name="add" />
-              {{ $_addButtonLabel }}
-            </oc-button>
-          </div>
-          <transition-group
-            class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm"
-            :enter-active-class="$_transitionGroupEnter"
-            :leave-active-class="$_transitionGroupLeave"
-            name="custom-classes-transition"
-            tag="ul"
+        <h4 class="oc-text-bold oc-m-rm oc-text-initial" v-translate>Public Links</h4>
+        <p class="oc-text-muted oc-my-rm" v-translate>
+          Any external person with the respective link can access this resource. No sign-in
+          required. Assign a password to avoid unintended document exposure.
+        </p>
+        <div class="oc-my-s">
+          <oc-button
+            id="files-file-link-add"
+            icon="add"
+            variation="primary"
+            :aria-label="$_addButtonAriaLabel"
+            @click="addNewLink"
           >
-            <li v-for="link in links" :key="link.key">
-              <public-link-list-item :link="link" />
-            </li>
-          </transition-group>
-        </section>
-        <div v-if="$_noPublicLinks" key="oc-file-links-no-results">
-          <translate>No public links</translate>
+            <oc-icon name="add" />
+            {{ $_addButtonLabel }}
+          </oc-button>
         </div>
+        <transition-group
+          class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm"
+          :enter-active-class="$_transitionGroupEnter"
+          :leave-active-class="$_transitionGroupLeave"
+          name="custom-classes-transition"
+          tag="ul"
+        >
+          <li v-for="link in links" :key="link.key">
+            <public-link-list-item :link="link" />
+          </li>
+        </transition-group>
+        <p
+          v-if="$_noPublicLinks"
+          key="oc-file-links-no-results"
+          class="oc-my-rm"
+          v-translate
+        >
+          No public links
+        </p>
       </template>
     </div>
     <div v-if="appSidebarAccordionContext === PANEL_EDIT" :key="PANEL_EDIT">
