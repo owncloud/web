@@ -3,7 +3,7 @@
     <div tabindex="-1" class="files-list-wrapper uk-width-expand">
       <div id="files-app-bar" class="oc-p-s">
         <h1 class="location-picker-selection-info oc-mr-s oc-mb" v-text="title" />
-        <p class="oc-text-muted uk-text-meta uk-text-italic" v-text="currentHint" />
+        <p class="oc-text-muted" v-text="currentHint" />
         <hr class="oc-mt-rm" />
         <oc-breadcrumb :items="breadcrumbs" class="oc-mb-s" />
         <oc-grid gutter="small" flex class="uk-flex-middle">
@@ -128,13 +128,11 @@ export default {
 
     title() {
       const translated =
-        this.currentAction === 'move'
-          ? this.$gettext('Move into %{ target }')
-          : this.$gettext('Copy into %{ target }')
+        this.currentAction === batchActions.move
+          ? this.$gettext('Move into »%{ target }«')
+          : this.$gettext('Copy into »%{ target }«')
       const target = basename(this.target) || this.$gettext('All files')
-      const title = this.$gettextInterpolate(translated, { target })
-
-      return title
+      return this.$gettextInterpolate(translated, { target })
     },
 
     currentAction() {
@@ -142,10 +140,7 @@ export default {
     },
 
     isPublicContext() {
-      const context = ['public', 'private'].includes(this.$route.params.context)
-        ? this.$route.params.context
-        : 'private'
-      return context === 'public'
+      return this.$route.params.context === 'public'
     },
 
     target() {
