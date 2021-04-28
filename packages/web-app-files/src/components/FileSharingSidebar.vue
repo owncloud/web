@@ -22,36 +22,35 @@
           class="files-collaborators-no-reshare-permissions-message"
           v-text="noResharePermsMessage"
         />
-        <section>
-          <ul class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm">
-            <li v-if="$_ownerAsCollaborator" :key="$_ownerAsCollaborator.key">
-              <collaborator :collaborator="$_ownerAsCollaborator" />
-            </li>
-            <li>
-              <collaborator :collaborator="$_currentUserAsCollaborator" />
-            </li>
-          </ul>
-          <hr v-if="collaborators.length > 0" class="oc-mt-s oc-mb-s" />
-        </section>
-        <section>
-          <transition-group
-            id="files-collaborators-list"
-            class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm"
-            :enter-active-class="$_transitionGroupEnter"
-            :leave-active-class="$_transitionGroupLeave"
-            name="custom-classes-transition"
-            tag="ul"
-          >
-            <li v-for="collaborator in collaborators" :key="collaborator.key">
-              <collaborator
-                :collaborator="collaborator"
-                :modifiable="!collaborator.indirect"
-                @onDelete="$_ocCollaborators_deleteShare"
-                @onEdit="$_ocCollaborators_editShare"
-              />
-            </li>
-          </transition-group>
-        </section>
+        <template v-if="$_ownerAsCollaborator">
+          <p id="original-sharing-user" class="oc-invisible-sr" v-translate>File owner</p>
+          <collaborator :collaborator="$_ownerAsCollaborator" aria-describedby="original-sharing-user" />
+          <hr/>
+          <collaborator :collaborator="$_currentUserAsCollaborator" />
+        </template>
+        <template v-else>
+          <p id="collaborator-as-fileowner" class="oc-invisible-sr" v-translate>You are the file owner</p>
+          <collaborator :collaborator="$_currentUserAsCollaborator" aria-describedby="collaborator-as-fileowner" />
+        </template>
+        <hr v-if="collaborators.length > 0" class="oc-mt-s oc-mb-s" />
+        <transition-group
+          id="files-collaborators-list"
+          class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm"
+          :enter-active-class="$_transitionGroupEnter"
+          :leave-active-class="$_transitionGroupLeave"
+          name="custom-classes-transition"
+          tag="ul"
+          :aria-label="$gettext('Share receivers')"
+        >
+          <li v-for="collaborator in collaborators" :key="collaborator.key">
+            <collaborator
+              :collaborator="collaborator"
+              :modifiable="!collaborator.indirect"
+              @onDelete="$_ocCollaborators_deleteShare"
+              @onEdit="$_ocCollaborators_editShare"
+            />
+          </li>
+        </transition-group>
       </template>
     </div>
     <new-collaborator
