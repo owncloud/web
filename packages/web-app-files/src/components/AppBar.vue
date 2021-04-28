@@ -10,13 +10,12 @@
       @error="onFileError"
       @progress="onFileProgress"
     />
-    <div class="files-topbar">
+    <div class="files-topbar oc-py-s">
       <oc-breadcrumb
         v-if="showBreadcrumb"
         id="files-breadcrumb"
         class="oc-p-s"
         :items="breadcrumbs"
-        variation="lead"
       />
       <h1 class="oc-invisible-sr" v-text="pageTitle" />
       <div
