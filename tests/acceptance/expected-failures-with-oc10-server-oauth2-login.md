@@ -28,3 +28,8 @@ Other free text and markdown formatting can be used elsewhere in the document if
 
 ### [webUIFilesActionMenu/versions.feature:14 behaves differently on CI](https://github.com/owncloud/web/issues/5022)
 -   [webUIFilesActionMenu/versions.feature:14](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesActionMenu/versions.feature:#L14)
+
+### [Comments in sidebar] (https://github.com/owncloud/web/issues/1158)
+-   [webUIComments/comments.feature:24](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIComments/comments.feature#L24)
+-   [webUIComments/comments.feature:25](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIComments/comments.feature#L25)
+-   [webUIComments/comments.feature:26](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIComments/comments.feature#L26)
