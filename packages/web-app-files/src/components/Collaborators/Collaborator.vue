@@ -9,7 +9,6 @@
             :width="48"
             :userid="collaborator.collaborator.name"
             :user-name="collaborator.collaborator.displayName"
-            :aria-label="$gettext('User')"
           />
           <div v-else key="collaborator-avatar-placeholder">
             <oc-icon
@@ -80,7 +79,7 @@
                 class="oc-mt-s"
                 close-on-click
               >
-                <translate tag="h4">Shared by</translate>
+                <h4 v-translate>Shared by</h4>
                 <ul class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm">
                   <li v-for="resharer in collaborator.resharers" :key="resharer.name">
                     <div class="uk-flex uk-flex-middle uk-flex-left">
@@ -141,8 +140,8 @@
         <div class="uk-flex uk-flex-nowrap uk-flex-middle">
           <oc-button
             v-if="$_editButtonVisible"
-            :aria-label="$gettext(`Edit share with ${ collaborator.collaborator.displayName }`)"
-            :uk-tooltip="$gettext(`Edit share with ${ collaborator.collaborator.displayName }`)"
+            :aria-label="editShareHint"
+            :uk-tooltip="editShareHint"
             appearance="raw"
             class="files-collaborators-collaborator-edit"
             @click="$emit('onEdit', collaborator)"
@@ -152,8 +151,8 @@
           <div>
             <oc-button
               v-if="$_deleteButtonVisible"
-              :aria-label="$gettext(`Delete share with ${ collaborator.collaborator.displayName }`)"
-              :uk-tooltip="$gettext(`Delete share with ${ collaborator.collaborator.displayName }`)"
+              :aria-label="deleteShareHint"
+              :uk-tooltip="deleteShareHint"
               appearance="raw"
               class="files-collaborators-collaborator-delete"
               @click="$_removeShare"
@@ -221,6 +220,16 @@ export default {
     },
     $_editButtonVisible() {
       return this.modifiable && !this.removalInProgress
+    },
+
+    editShareHint() {
+      let translated = this.$gettext('Edit share with %{ currentCollaborator }')
+      return this.$gettextInterpolate(translated, { currentCollaborator: this.collaborator.collaborator.displayName }, true)
+    },
+
+    deleteShareHint() {
+      let translated = this.$gettext('Delete share with %{ currentCollaborator }')
+      return this.$gettextInterpolate(translated, { currentCollaborator: this.collaborator.collaborator.displayName }, true)
     },
 
     isIndirectShare() {
