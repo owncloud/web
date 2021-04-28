@@ -1,0 +1,8 @@
+Bugfix: Add docs link & fix translations on error page
+
+The MissingConfigPage had a translated paragraph that didn't work because 
+of an presumably unallowed `<br/>` tag inside the text.
+
+Also, the link to the GitHub repo was replace with a link to the web docs and public rocket chat.
+
+https://github.com/owncloud/web/pull/5034
