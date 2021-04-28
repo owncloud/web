@@ -19,7 +19,7 @@
       </template>
     </oc-autocomplete>
     <div v-if="selectedCollaborators.length > 0">
-      <translate tag="div">Selected people</translate>
+      <h4 class="oc-text-initial oc-mb-rm" v-translate>Selected people</h4>
       <ul class="uk-list files-collaborators-collaborator-autocomplete-items oc-mt-s oc-mb-m">
         <li
           v-for="collaborator in selectedCollaborators"
