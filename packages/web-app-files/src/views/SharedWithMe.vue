@@ -235,12 +235,11 @@ export default {
 
         // exit on failure
         if (response.status !== 200) {
-          throw new Error()
+          throw new Error(response.statusText)
         }
-
         // get updated share from response or re-fetch it
         let share = null
-        if (response.headers.map['content-length'] > 0) {
+        if (response.headers.get('content-length') > 0) {
           response = await response.json()
           if (response.ocs.data.length > 0) {
             share = response.ocs.data[0]
