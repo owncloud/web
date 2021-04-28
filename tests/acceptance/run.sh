@@ -40,7 +40,7 @@ if [ "${ACCEPTANCE_TESTS_EXIT_STATUS}" -ne 0 ]; then
   # If the second run of a scenario fails, hen it gets reported like:
   # 5) Scenario: try to login with invalid username (attempt 2) # tests/acceptance/features/webUILogin/login.feature:67
   # So only look for scenarios that failed on attempt 2.
-  FAILED_SCENARIOS="$(grep ') Scenario: .* (attempt 2)' logfile.txt)"
+  FAILED_SCENARIOS="$(grep ') Scenario: .*' logfile.txt) | grep -v '(attempt 1, retried)')"
   for FAILED_SCENARIO in ${FAILED_SCENARIOS}; do
     if [[ $FAILED_SCENARIO =~ "tests/acceptance/features/" ]]; then
       SUITE_PATH=$(dirname "${FAILED_SCENARIO}")
