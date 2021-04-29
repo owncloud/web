@@ -246,10 +246,7 @@ export default {
         this.showMessage({
           title: this.$gettext('Error while changing share state'),
           desc: error.message,
-          status: 'danger',
-          autoClose: {
-            enabled: true
-          }
+          status: 'danger'
         })
       }
     }

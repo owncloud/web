@@ -14,13 +14,6 @@ const actions = {
   },
   showMessage({ commit }, message) {
     commit('ENQUEUE_MESSAGE', message)
-
-    // auto close message if desired
-    if (message.autoClose && message.autoClose.enabled === true) {
-      setTimeout(() => {
-        commit('REMOVE_MESSAGE', message)
-      }, message.autoClose.timeout || 5000)
-    }
   },
   deleteMessage(context, mId) {
     context.commit('REMOVE_MESSAGE', mId)
