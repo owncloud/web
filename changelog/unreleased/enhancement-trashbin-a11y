@@ -1,0 +1,5 @@
+Enhancement: Improve accessibility on trash bin
+
+Add more context to the empty trash bin button text and only render it, if resources are present.
+
+https://github.com/owncloud/web/pull/5046
