@@ -1,6 +1,6 @@
 <template>
   <oc-nav-item v-if="checkIfBrowserSupportsFolderUpload" icon="cloud_upload" @click="triggerUpload">
-    <span v-translate>Upload Folder</span>
+    <label v-translate for="folderUploadInput">Upload Folder</label>
     <div slot="outer-content">
       <input
         id="folderUploadInput"
@@ -18,6 +18,7 @@
 
 <script>
 import Mixins from '../mixins'
+
 export default {
   mixins: [Mixins],
   props: {

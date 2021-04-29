@@ -23,14 +23,22 @@
           v-text="noResharePermsMessage"
         />
         <template v-if="$_ownerAsCollaborator">
-          <p id="original-sharing-user" class="oc-invisible-sr" v-translate>File owner</p>
-          <collaborator :collaborator="$_ownerAsCollaborator" aria-describedby="original-sharing-user" />
-          <hr/>
+          <p id="original-sharing-user" v-translate class="oc-invisible-sr">File owner</p>
+          <collaborator
+            :collaborator="$_ownerAsCollaborator"
+            aria-describedby="original-sharing-user"
+          />
+          <hr />
           <collaborator :collaborator="$_currentUserAsCollaborator" />
         </template>
         <template v-else>
-          <p id="collaborator-as-fileowner" class="oc-invisible-sr" v-translate>You are the file owner</p>
-          <collaborator :collaborator="$_currentUserAsCollaborator" aria-describedby="collaborator-as-fileowner" />
+          <p id="collaborator-as-fileowner" v-translate class="oc-invisible-sr">
+            You are the file owner
+          </p>
+          <collaborator
+            :collaborator="$_currentUserAsCollaborator"
+            aria-describedby="collaborator-as-fileowner"
+          />
         </template>
         <hr v-if="collaborators.length > 0" class="oc-mt-s oc-mb-s" />
         <transition-group

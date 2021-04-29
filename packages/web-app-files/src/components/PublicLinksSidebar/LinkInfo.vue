@@ -1,7 +1,10 @@
 <template>
   <div class="uk-width-expand">
     <div class="oc-mb-s uk-width-1-1">
-      <h5 class="oc-text-bold uk-text-truncate oc-files-file-link-name oc-my-rm oc-text-initial" v-text="linkName" />
+      <h5
+        class="oc-text-bold uk-text-truncate oc-files-file-link-name oc-my-rm oc-text-initial"
+        v-text="linkName"
+      />
       <div class="uk-flex uk-flex-middle uk-width-1-1">
         <a
           :href="link.url"

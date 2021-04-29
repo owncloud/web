@@ -8,8 +8,8 @@
       <oc-loader v-if="linksLoading" :aria-label="$gettext('Loading list of file links')" />
       <template v-else>
         <private-link-item />
-        <h4 class="oc-text-bold oc-m-rm oc-text-initial" v-translate>Public Links</h4>
-        <p class="oc-text-muted oc-my-rm" v-translate>
+        <h4 v-translate class="oc-text-bold oc-m-rm oc-text-initial">Public Links</h4>
+        <p v-translate class="oc-text-muted oc-my-rm">
           Any external person with the respective link can access this resource. No sign-in
           required. Assign a password to avoid unintended document exposure.
         </p>
@@ -36,12 +36,7 @@
             <public-link-list-item :link="link" />
           </li>
         </transition-group>
-        <p
-          v-if="$_noPublicLinks"
-          key="oc-file-links-no-results"
-          class="oc-my-rm"
-          v-translate
-        >
+        <p v-if="$_noPublicLinks" key="oc-file-links-no-results" v-translate class="oc-my-rm">
           No public links
         </p>
       </template>
