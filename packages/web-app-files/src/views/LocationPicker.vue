@@ -395,10 +395,7 @@ export default {
         this.showMessage({
           title: this.$gettextInterpolate(title, { resource: errors[0].resource }, true),
           desc: errors[0].message,
-          status: 'danger',
-          autoClose: {
-            enabled: true
-          }
+          status: 'danger'
         })
 
         return
@@ -430,10 +427,7 @@ export default {
       this.showMessage({
         title,
         desc: this.$gettextInterpolate(desc, { count: errors.length }, false),
-        status: 'danger',
-        autoClose: {
-          enabled: true
-        }
+        status: 'danger'
       })
     }
   }
