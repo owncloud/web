@@ -1212,13 +1212,14 @@ def buildDockerImage():
 		'pull': 'always',
 		'settings': {
 			'username': {
-			'from_secret': 'docker_username',
-		},
-		'password': {
-			'from_secret': 'docker_password',
-		},
-		'auto_tag': True,
-		'repo': 'owncloud/web',
+				'from_secret': 'docker_username',
+			},
+			'password': {
+				'from_secret': 'docker_password',
+			},
+			'auto_tag': True,
+			'dockerfile': 'docker/Dockerfile',
+			'repo': 'owncloud/web',
 		},
 		'when': {
 			'ref': {
