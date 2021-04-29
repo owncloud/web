@@ -33,15 +33,15 @@
       <oc-td>
         <div class="uk-flex uk-flex-column uk-flex-center" :class="collaboratorListItemClass">
           <div class="oc-text-initial oc-mb-xs">
-            <p 
+            <p
               class="files-collaborators-collaborator-name oc-text-bold oc-mb-rm"
               v-text="collaborator.collaborator.displayName"
             />
             <p
               v-if="isCurrentUser"
+              v-translate
               translate-comment="Indicator for current user in list of people"
               class="oc-text-muted files-collaborators-collaborator-additional-info oc-my-rm"
-              v-translate
             >
               (me)
             </p>
@@ -90,7 +90,7 @@
                         :user-name="resharer.displayName"
                       />
                       <div>
-                        <p 
+                        <p
                           class="files-collaborators-resharer-name oc-text-bold oc-my-rm"
                           v-text="resharer.displayName"
                         />
@@ -223,13 +223,21 @@ export default {
     },
 
     editShareHint() {
-      let translated = this.$gettext('Edit share with %{ currentCollaborator }')
-      return this.$gettextInterpolate(translated, { currentCollaborator: this.collaborator.collaborator.displayName }, true)
+      const translated = this.$gettext('Edit share with %{ currentCollaborator }')
+      return this.$gettextInterpolate(
+        translated,
+        { currentCollaborator: this.collaborator.collaborator.displayName },
+        true
+      )
     },
 
     deleteShareHint() {
-      let translated = this.$gettext('Delete share with %{ currentCollaborator }')
-      return this.$gettextInterpolate(translated, { currentCollaborator: this.collaborator.collaborator.displayName }, true)
+      const translated = this.$gettext('Delete share with %{ currentCollaborator }')
+      return this.$gettextInterpolate(
+        translated,
+        { currentCollaborator: this.collaborator.collaborator.displayName },
+        true
+      )
     },
 
     isIndirectShare() {
