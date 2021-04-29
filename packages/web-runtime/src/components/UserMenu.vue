@@ -54,7 +54,7 @@
             tabindex="0"
           >
             <oc-icon :name="n.iconMaterial" />
-            <span>{{ n.title }}</span>
+            <translate>{{ n.title }}</translate>
           </oc-button>
           <oc-button
             v-else
@@ -66,7 +66,7 @@
             tabindex="0"
           >
             <oc-icon :name="n.iconMaterial" />
-            <span v-text="n.title" />
+            <translate>{{ n.title }}</translate>
           </oc-button>
         </li>
         <li>
