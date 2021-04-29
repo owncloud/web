@@ -11,12 +11,13 @@
         <translate>Restore</translate>
       </oc-button>
       <oc-button
+        v-if="!isEmpty"
         id="delete-selected-btn"
         key="delete-btn"
         @click="selectedFiles.length < 1 ? emptyTrashbin() : $_deleteResources_displayDialog()"
       >
         <oc-icon name="delete" />
-        {{ clearTrashbinButtonText }}
+        {{ emptyTrashbinButtonText }}
       </oc-button>
     </template>
     <oc-grid v-if="displayBulkActions" gutter="small">
@@ -69,8 +70,10 @@ export default {
   computed: {
     ...mapGetters('Files', ['selectedFiles', 'currentFolder', 'activeFiles']),
 
-    clearTrashbinButtonText() {
-      return this.selectedFiles.length < 1 ? this.$gettext('Empty') : this.$gettext('Delete')
+    emptyTrashbinButtonText() {
+      return this.selectedFiles.length < 1
+        ? this.$gettext('Empty trash bin')
+        : this.$gettext('Delete')
     },
 
     canMove() {
@@ -111,6 +114,10 @@ export default {
 
     displayBulkActions() {
       return this.$route.meta.hasBulkActions && this.selectedFiles.length > 0
+    },
+
+    isEmpty() {
+      return this.activeFiles.length < 1
     }
   },
 
