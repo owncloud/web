@@ -73,10 +73,7 @@ export default {
       this.showMessage({
         title: this.$gettext('The diagram could not be loaded…'),
         desc: error,
-        status: 'danger',
-        autoClose: {
-          enabled: true
-        }
+        status: 'danger'
       })
     },
     checkPermissions() {
@@ -124,10 +121,7 @@ export default {
       this.filePath += `_${this.getTimestamp()}.drawio`
       this.showMessage({
         title: this.$gettext('Diagram imported'),
-        desc: getDescription(),
-        autoClose: {
-          enabled: true
-        }
+        desc: getDescription()
       })
       fetch(url, { headers })
         .then(resp => {
