@@ -21,6 +21,7 @@ import VueClipboard from 'vue-clipboard2'
 import VueScrollTo from 'vue-scrollto'
 import VueMeta from 'vue-meta'
 import Vue2TouchEvents from 'vue2-touch-events'
+import VueAxe from 'vue-axe'
 
 // --- Mixins ----
 import focusMixin from './mixins/focusMixin'
@@ -83,6 +84,11 @@ Vue.mixin(focusMixin)
 Vue.mixin(lifecycleMixin)
 
 Vue.directive('click-outside', ClickOutsideDirective)
+
+// --- DEV only ----
+if (process.env.NODE_ENV === 'development') {
+  Vue.use(VueAxe)
+}
 
 // --- Router ----
 
