@@ -1,0 +1,5 @@
+Enhancement: Enable the left-hand side bar to be toggleable on a per-route basis
+
+Permits the left-hand side bar to be toggleable on a per-route basis as shown or hidden.
+
+https://github.com/owncloud/web/pull/5041
