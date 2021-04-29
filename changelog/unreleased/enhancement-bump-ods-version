@@ -1,7 +1,8 @@
-Enhancement: Update owncloud Design System to v6.2.0
+Enhancement: Update owncloud Design System to v6.3.0
 
 - Lots of updates regarding accessibility topics
 - Removal of home icon in breadcrumbs, changed to "All files" link as breadcrumb root
 - Added aria-label to sidebar and proper logo-alt attribute to image in sidebar
 
 https://github.com/owncloud/web/pull/5002
+https://github.com/owncloud/web/pull/5044
