@@ -439,19 +439,7 @@ config = {
 }
 
 def main(ctx):
-	before = beforePipelines(ctx)
-
-	stages = stagePipelines(ctx)
-	if (stages == False):
-		print('Errors detected. Review messages above.')
-		return []
-
-	dependsOn(before, stages)
-
-	after = afterPipelines(ctx)
-	dependsOn(stages, after)
-
-	return before + stages + after
+		return yarnlint()
 
 def beforePipelines(ctx):
 	return yarnlint() + changelog(ctx) + website(ctx)
