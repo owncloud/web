@@ -10,7 +10,8 @@
     "plugin:prettier/recommended",
     "prettier/standard",
     "prettier/vue",
-    "plugin:jest/recommended"
+    "plugin:jest/recommended",
+    "plugin:vuejs-accessibility/recommended"
   ],
   "parserOptions": {
     "parser": "babel-eslint",
@@ -24,6 +25,7 @@
     "requirejs": false
   },
   "plugins": [
-    "jest"
+    "jest",
+    "vuejs-accessibility"
   ]
 }
