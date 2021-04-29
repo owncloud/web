@@ -4,6 +4,7 @@
       v-if="loading"
       key="avatar-loading"
       :style="`width: ${width}px; height: ${width}px;`"
+      :aria-label="$gettext('Loading user avatar')"
     />
     <oc-avatar
       v-else
