@@ -1,6 +1,6 @@
 <template>
   <header class="oc-topbar uk-flex uk-flex-middle uk-flex-wrap oc-border-b oc-p-s">
-    <oc-grid gutter="medium" flex>
+    <oc-grid gutter="small" flex>
       <div class="uk-hidden@l">
         <oc-button
           appearance="raw"
@@ -9,6 +9,19 @@
           @click="toggleAppNavigationVisibility"
         >
           <oc-icon name="menu" />
+        </oc-button>
+      </div>
+      <div v-if="isBackButtonEnabled" class="uk-width-auto">
+        <oc-button
+          id="back-btn"
+          key="back-btn-enabled"
+          :uk-tooltip="_backButtonText"
+          variation="primary"
+          appearance="filled"
+          @click="navigateBack()"
+        >
+          <oc-icon name="navigate_before" />
+          <translate>Back</translate>
         </oc-button>
       </div>
       <search-bar v-if="!isSearchDisabled" />
@@ -69,15 +82,24 @@ export default {
   computed: {
     ...mapGetters(['configuration']),
 
+    _backButtonText() {
+      return this.$gettext('Back')
+    },
     isSearchDisabled() {
       return (
         this.configuration.options.hideSearchBar === true || this.$route.meta.hideSearchBar === true
       )
+    },
+    isBackButtonEnabled() {
+      return this.$route.meta.hideSideBar === true
     }
   },
   methods: {
     toggleAppNavigationVisibility() {
       this.$emit('toggleAppNavigationVisibility')
+    },
+    navigateBack() {
+      this.$router.back()
     }
   }
 }

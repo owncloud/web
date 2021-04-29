@@ -37,6 +37,7 @@ const state = {
   options: {
     defaultExtension: 'files',
     hideSearchBar: false,
+    hideSideBar: false,
     homeFolder: '',
     disablePreviews: false
   }

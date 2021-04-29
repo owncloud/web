@@ -199,7 +199,10 @@ export default {
     },
 
     isSidebarVisible() {
-      return this.windowWidth >= 1200 || this.appNavigationVisible
+      return (
+        this.$route.meta.hideSideBar !== true &&
+        (this.windowWidth >= 1200 || this.appNavigationVisible)
+      )
     },
 
     appNavigationAnimation() {
