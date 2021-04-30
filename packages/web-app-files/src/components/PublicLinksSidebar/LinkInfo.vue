@@ -13,8 +13,8 @@
           v-text="link.url"
         />
         <oc-button
+          v-oc-tooltip="copyLabel"
           :aria-label="copyLabel"
-          :uk-tooltip="copyLabel"
           appearance="raw"
           class="oc-files-file-link-copy-url"
         >
@@ -57,10 +57,10 @@
       </div>
       <div v-if="link.indirect">
         <oc-tag
+          v-oc-tooltip="viaTooltip"
           type="router-link"
           class="oc-files-file-link-via"
           :to="viaRouterParams"
-          :uk-tooltip="viaTooltip"
         >
           <oc-icon name="exit_to_app" />
           <span class="uk-text-truncate files-file-links-link-via-label" v-text="viaLabel" />
