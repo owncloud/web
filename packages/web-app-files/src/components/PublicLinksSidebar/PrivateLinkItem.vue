@@ -4,7 +4,7 @@
     <p v-translate class="oc-text-muted oc-my-rm">Only invited people can use this link.</p>
     <div class="uk-width-1-1 uk-flex uk-flex-middle">
       <a :href="link" target="_blank" class="uk-text-truncate" v-text="link" />
-      <oc-button :aria-label="copyLabel" :uk-tooltip="copyLabel" appearance="raw" class="oc-ml-s">
+      <oc-button v-oc-tooltip="copyLabel" :aria-label="copyLabel" appearance="raw" class="oc-ml-s">
         <oc-icon
           v-if="linkCopied"
           id="files-sidebar-private-link-icon-copied"
