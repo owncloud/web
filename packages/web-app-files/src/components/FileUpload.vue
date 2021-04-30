@@ -1,18 +1,20 @@
 <template>
-  <oc-nav-item icon="file_upload" @click="triggerUpload">
-    <span id="files-file-upload-button" v-translate>Upload File</span>
-    <div slot="outer-content">
-      <input
-        id="fileUploadInput"
-        ref="input"
-        type="file"
-        aria-labelledby="files-file-upload-button"
-        name="file"
-        multiple
-        @change="$_ocUpload_addFileToQue"
-      />
-    </div>
-  </oc-nav-item>
+  <div>
+    <oc-button class="uk-width-1-1" justify-content="left" appearance="raw" @click="triggerUpload">
+      <oc-icon name="file_upload" />
+      <span id="files-file-upload-button" v-translate>Upload File</span>
+    </oc-button>
+    <input
+      id="fileUploadInput"
+      ref="input"
+      type="file"
+      aria-labelledby="files-file-upload-button"
+      name="file"
+      multiple
+      tabindex="-1"
+      @change="$_ocUpload_addFileToQue"
+    />
+  </div>
 </template>
 
 <script>
