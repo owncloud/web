@@ -42,40 +42,57 @@
               close-on-click
               :options="{ delayHide: 0 }"
             >
-              <oc-nav>
-                <file-upload
-                  :path="currentPath"
-                  :headers="headers"
-                  @success="onFileSuccess"
-                  @error="onFileError"
-                  @progress="onFileProgress"
-                />
-                <folder-upload
-                  v-if="!isIE11()"
-                  :root-path="currentPath"
-                  :path="currentPath"
-                  :headers="headers"
-                  @success="onFileSuccess"
-                  @error="onFileError"
-                  @progress="onFileProgress"
-                />
-                <oc-nav-item
-                  id="new-folder-btn"
-                  icon="create_new_folder"
-                  @click="showCreateResourceModal"
-                >
-                  <translate>New folder…</translate>
-                </oc-nav-item>
-                <oc-nav-item
-                  v-for="(newFileHandler, key) in newFileHandlers"
-                  :key="key"
-                  :class="'new-file-btn-' + newFileHandler.ext"
-                  :icon="newFileHandler.icon || 'save'"
-                  @click="showCreateResourceModal(false, newFileHandler.ext, newFileHandler.action)"
-                >
-                  {{ newFileHandler.menuTitle($gettext) }}
-                </oc-nav-item>
-              </oc-nav>
+              <ul class="uk-list">
+                <li>
+                  <file-upload
+                    :path="currentPath"
+                    :headers="headers"
+                    @success="onFileSuccess"
+                    @error="onFileError"
+                    @progress="onFileProgress"
+                  />
+                </li>
+                <li v-if="checkIfBrowserSupportsFolderUpload">
+                  <folder-upload
+                    v-if="!isIE11()"
+                    :root-path="currentPath"
+                    :path="currentPath"
+                    :headers="headers"
+                    @success="onFileSuccess"
+                    @error="onFileError"
+                    @progress="onFileProgress"
+                  />
+                </li>
+                <li>
+                  <div>
+                    <oc-button
+                      id="new-folder-btn"
+                      appearance="raw"
+                      class="uk-width-1-1"
+                      justify-content="left"
+                      @click="showCreateResourceModal"
+                    >
+                      <oc-icon name="create_new_folder" />
+                      <translate>New folder…</translate>
+                    </oc-button>
+                  </div>
+                </li>
+                <li v-for="(newFileHandler, key) in newFileHandlers" :key="key">
+                  <div>
+                    <oc-button
+                      appearance="raw"
+                      justify-content="left"
+                      :class="['new-file-btn-' + newFileHandler.ext, 'uk-width-1-1']"
+                      @click="
+                        showCreateResourceModal(false, newFileHandler.ext, newFileHandler.action)
+                      "
+                    >
+                      <oc-icon :name="newFileHandler.icon || 'save'" />
+                      <span>{{ newFileHandler.menuTitle($gettext) }}</span>
+                    </oc-button>
+                  </div>
+                </li>
+              </ul>
             </oc-drop>
           </template>
         </template>
