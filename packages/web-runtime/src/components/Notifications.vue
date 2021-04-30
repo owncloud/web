@@ -2,9 +2,9 @@
   <div id="oc-notification">
     <oc-button
       id="oc-notification-bell"
+      v-oc-tooltip="notificationsLabel"
       appearance="raw"
       :aria-label="notificationsLabel"
-      :uk-tooltip="notificationsLabel"
     >
       <oc-icon class="oc-cursor-pointer uk-flex uk-flex-middle" name="bell" />
     </oc-button>
