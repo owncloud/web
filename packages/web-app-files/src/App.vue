@@ -139,7 +139,6 @@ export default {
 #files-app-bar {
   position: sticky;
   height: auto;
-  z-index: 1;
   grid-area: header;
 }
 
