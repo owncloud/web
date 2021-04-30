@@ -7,7 +7,7 @@
       class="oc-topbar-menu-burger"
       :aria-label="applicationSwitcherLabel"
     >
-      <oc-icon :uk-tooltip="applicationSwitcherLabel" name="apps" class="uk-flex" />
+      <oc-icon v-oc-tooltip="applicationSwitcherLabel" name="apps" class="uk-flex" />
     </oc-button>
     <oc-drop
       ref="menu"
