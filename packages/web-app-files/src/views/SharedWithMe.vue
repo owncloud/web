@@ -35,16 +35,18 @@
           >
             <oc-button
               v-if="resource.status === 1 || resource.status === 2"
-              appearance="raw"
-              class="file-row-share-status-action oc-text-muted"
+              appearance="filled"
+              variation="primary"
+              size="small"
+              class="file-row-share-status-action"
               @click.stop="triggerShareAction(resource, 'POST')"
             >
               <translate>Accept</translate>
             </oc-button>
             <oc-button
               v-if="resource.status === 1 || resource.status === 0"
-              appearance="raw"
-              class="file-row-share-status-action oc-text-muted oc-ml"
+              size="small"
+              class="file-row-share-status-action oc-ml-s"
               @click.stop="triggerShareAction(resource, 'DELETE')"
             >
               <translate>Decline</translate>
