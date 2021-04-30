@@ -1,0 +1,5 @@
+Enhancement: Add dictionary file
+
+Added the dictionary.js file which contains strings that should be synced to transifex but not exist in web directly.
+
+https://github.com/owncloud/web/pull/5057
