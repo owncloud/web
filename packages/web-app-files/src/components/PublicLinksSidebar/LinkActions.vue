@@ -3,8 +3,8 @@
     <oc-spinner v-if="removalInProgress" :aria-label="$gettext('Removing public link')" />
     <template v-else>
       <oc-button
+        v-oc-tooltip="editButtonLabel"
         :aria-label="editButtonLabel"
-        :uk-tooltip="editButtonLabel"
         appearance="raw"
         class="oc-files-file-link-edit oc-mr-xs"
         @click="editLink"
@@ -12,8 +12,8 @@
         <oc-icon name="edit" />
       </oc-button>
       <oc-button
+        v-oc-tooltip="deleteButtonLabel"
         :aria-label="deleteButtonLabel"
-        :uk-tooltip="deleteButtonLabel"
         appearance="raw"
         class="oc-files-file-link-delete"
         @click="$_removeLink"
