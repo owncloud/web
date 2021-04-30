@@ -1,0 +1,36 @@
+{
+  "server" : "http://owncloud",
+  "theme": "owncloud",
+  "auth": {
+    "clientId": "Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU",
+    "url": "http://owncloud/index.php/apps/oauth2/api/v1/token",
+    "authUrl": "http://owncloud/index.php/apps/oauth2/authorize"
+  },
+  "apps" : [
+    "files",
+    "media-viewer",
+    "draw-io"
+  ],
+  "applications" : [
+    {
+      "title": {
+        "en": "Classic Design",
+        "de": "Dateien",
+        "fr": "Fichiers",
+        "zh_CN": "文件"
+      },
+      "icon": "switch_ui",
+      "url": "http://owncloud/index.php/apps/files"
+    },
+    {
+      "icon": "application",
+      "menu": "user",
+      "target": "_self",
+      "title": {
+        "de": "Einstellungen",
+        "en": "Settings"
+      },
+      "url": "http://owncloud/index.php/settings/personal"
+    }
+  ]
+}
