@@ -66,9 +66,9 @@
             <li v-if="$_reshareInformation" class="oc-py-rm">
               <oc-tag
                 :id="$_resharerToggleId"
+                v-oc-tooltip="$gettext('Show resharer details')"
                 class="files-collaborators-collaborator-reshare-information"
                 type="button"
-                :uk-tooltip="$gettext('Show resharer details')"
               >
                 <oc-icon name="repeat" />
                 <translate :translate-params="{ resharer: $_reshareInformation }">
@@ -133,10 +133,10 @@
             </li>
             <li v-if="isIndirectShare" class="oc-py-rm">
               <oc-tag
+                v-oc-tooltip="viaTooltip"
                 type="router-link"
                 class="files-collaborators-collaborator-follow-via"
                 :to="viaRouterParams"
-                :uk-tooltip="viaTooltip"
               >
                 <oc-icon name="exit_to_app" />
                 <span
@@ -152,8 +152,8 @@
         <div class="uk-flex uk-flex-nowrap uk-flex-middle">
           <oc-button
             v-if="$_editButtonVisible"
+            v-oc-tooltip="editShareHint"
             :aria-label="editShareHint"
-            :uk-tooltip="editShareHint"
             appearance="raw"
             class="files-collaborators-collaborator-edit"
             @click="$emit('onEdit', collaborator)"
@@ -163,8 +163,8 @@
           <div>
             <oc-button
               v-if="$_deleteButtonVisible"
+              v-oc-tooltip="deleteShareHint"
               :aria-label="deleteShareHint"
-              :uk-tooltip="deleteShareHint"
               appearance="raw"
               class="files-collaborators-collaborator-delete"
               @click="$_removeShare"
