@@ -439,3 +439,8 @@ Other free text and markdown formatting can be used elsewhere in the document if
 
 -   [webUISharingAcceptShares/acceptShares.feature:100](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L100)
 -   [webUISharingAcceptShares/acceptShares.feature:116](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L116)
+
+### [Comments in sidebar] (https://github.com/owncloud/web/issues/1158)
+-   [webUIComments/comments.feature:24](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIComments/comments.feature#L24)
+-   [webUIComments/comments.feature:25](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIComments/comments.feature#L25)
+-   [webUIComments/comments.feature:26](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIComments/comments.feature#L26)
