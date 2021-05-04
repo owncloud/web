@@ -136,8 +136,14 @@ exports.getTrashBinElements = function(user, depth = 2) {
         depth
       )
       .then(str => {
-        const trashData = convert.xml2js(str, { compact: true })['d:multistatus']['d:response']
+        let trashData = convert.xml2js(str, { compact: true })['d:multistatus']['d:response']
         const trashItems = []
+        // 'trashData' gets object instead of array when there are no any files/folders in the trashbin
+        // so trashData.map() will cause error if trashData gets object
+        // following wraps the object in array
+        if (!Array.isArray(trashData)) {
+          trashData = [trashData]
+        }
         trashData.map(trash => {
           if (trash['d:propstat']['d:prop'] === undefined) {
             reject(new Error('trashbin data not defined'))
