@@ -34,9 +34,7 @@
             class="uk-text-nowrap uk-flex uk-flex-middle uk-flex-right"
           >
             <oc-button
-              v-if="resource.status === 1 || resource.status === 2"
-              appearance="filled"
-              variation="primary"
+              v-if="[shareStatus.pending, shareStatus.declined].includes(resource.status)"
               size="small"
               class="file-row-share-status-action"
               @click.stop="triggerShareAction(resource, 'POST')"
@@ -44,7 +42,7 @@
               <translate>Accept</translate>
             </oc-button>
             <oc-button
-              v-if="resource.status === 1 || resource.status === 0"
+              v-if="[shareStatus.pending, shareStatus.accepted].includes(resource.status)"
               size="small"
               class="file-row-share-status-action oc-ml-s"
               @click.stop="triggerShareAction(resource, 'DELETE')"
@@ -94,7 +92,8 @@ export default {
   mixins: [FileActions, MixinFilesListPositioning],
 
   data: () => ({
-    loading: true
+    loading: true,
+    shareStatus
   }),
 
   computed: {
