@@ -796,6 +796,7 @@ def acceptance(ctx):
 		'visualTesting': False,
 		'openIdConnect': False,
 		'oc10IntegrationAppIncluded': False,
+		'skip': False,
 	}
 
 	if 'defaults' in config:
@@ -829,6 +830,8 @@ def acceptance(ctx):
 			for server in params['servers']:
 				for browser in params['browsers']:
 					for db in params['databases']:
+						if params['skip']:
+							continue
 						federatedServerVersion = params['federatedServerVersion']
 						federationDbSuffix = '-federated'
 
