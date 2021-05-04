@@ -35,8 +35,6 @@
           >
             <oc-button
               v-if="resource.status === 1 || resource.status === 2"
-              appearance="filled"
-              variation="primary"
               size="small"
               class="file-row-share-status-action"
               @click.stop="triggerShareAction(resource, 'POST')"
