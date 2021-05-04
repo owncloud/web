@@ -1,0 +1,6 @@
+Bugfix: Fix z-index on the new file menu
+
+Added a z-index to files-view because it prevented the new file menu from having a higher z-index
+than the table headers. As a result the new file menu was being overlapped by them.
+
+https://github.com/owncloud/web/pull/5056

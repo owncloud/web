@@ -145,6 +145,7 @@ export default {
 
 #files-view {
   grid-area: main;
+  z-index: 0;
 }
 
 #files-upload-progress {
