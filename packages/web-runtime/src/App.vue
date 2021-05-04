@@ -19,7 +19,7 @@
       </template>
       <div v-else key="core-content" class="uk-flex uk-flex-stretch">
         <transition :name="appNavigationAnimation">
-          <focus-trap v-if="isSidebarVisible" :active="windowWidth < 1200 && appNavigationVisible">
+          <focus-trap v-if="isSidebarVisible" :active="isSidebarFixed && appNavigationVisible">
             <oc-sidebar
               v-touch:swipe.left="handleNavSwipe"
               class="oc-app-navigation"
