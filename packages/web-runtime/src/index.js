@@ -87,7 +87,9 @@ Vue.directive('click-outside', ClickOutsideDirective)
 
 // --- DEV only ----
 if (process.env.NODE_ENV === 'development') {
-  Vue.use(VueAxe)
+  Vue.use(VueAxe, {
+    allowConsoleClears: false
+  })
 }
 
 // --- Router ----
