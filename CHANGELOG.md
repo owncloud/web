@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Improve web container: [#4942](https://github.com/owncloud/web/pull/4942)
 * Bugfix - Display navigation for resolved private link: [#5023](https://github.com/owncloud/web/pull/5023)
+* Bugfix - Fix z-index on the new file menu: [#5056](https://github.com/owncloud/web/pull/5056)
 * Enhancement - Accessibility improvements: [#4965](https://github.com/owncloud/web/pull/4965)
 * Enhancement - Implement proper direct delete: [#4991](https://github.com/owncloud/web/pull/4991)
 * Enhancement - Enable files app search bar to be toggleable on a per-route basis: [#4815](https://github.com/owncloud/web/pull/4815)
@@ -36,6 +37,13 @@ Details
    well
 
    https://github.com/owncloud/web/pull/5023
+
+* Bugfix - Fix z-index on the new file menu: [#5056](https://github.com/owncloud/web/pull/5056)
+
+   Added a z-index to files-view because it prevented the new file menu from having a higher
+   z-index than the table headers. As a result the new file menu was being overlapped by them.
+
+   https://github.com/owncloud/web/pull/5056
 
 * Enhancement - Accessibility improvements: [#4965](https://github.com/owncloud/web/pull/4965)
 
