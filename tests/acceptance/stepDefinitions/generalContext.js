@@ -245,6 +245,23 @@ Given('server {code} has been added as trusted server on remote server', functio
   return backendHelper.runOnRemoteBackend(setTrustedServer, url)
 })
 
+After(async function(testCase) {
+  if (!client.globals.screenshots) {
+    return
+  }
+  if (testCase.result.status === 'failed' && !testCase.result.retried) {
+    console.log('saving screenshot of failed test')
+    const filename =
+      testCase.sourceLocation.uri
+        .replace('tests/acceptance/features/', '')
+        .replace('/', '-')
+        .replace('.', '-') +
+      '-' +
+      testCase.sourceLocation.line
+    await client.saveScreenshot('./tests/reports/screenshots/' + filename + '.png')
+  }
+})
+
 Before(function(testCase) {
   createdFiles = []
   if (
