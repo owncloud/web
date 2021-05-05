@@ -239,7 +239,7 @@ export default {
         }
         // get updated share from response or re-fetch it
         let share = null
-        if (response.headers.get('content-length') > 0) {
+        if (parseInt(response.headers.get('content-length')) > 0) {
           response = await response.json()
           if (response.ocs.data.length > 0) {
             share = response.ocs.data[0]
