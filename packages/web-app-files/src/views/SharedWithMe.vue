@@ -246,6 +246,7 @@ export default {
           }
         } else {
           share = await this.$client.shares.getShare(resource.share.id)
+          share = share.shareInfo
         }
 
         // update share in store
