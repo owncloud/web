@@ -28,7 +28,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIAccount/accountInformation.feature:20](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIAccount/accountInformation.feature#L20)
 
 ### [REPORT request not implemented](https://github.com/owncloud/ocis/issues/1330)
--   [webUIDeleteFilesFolders/deleteFilesFolders.feature:291](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIDeleteFilesFolders/deleteFilesFolders.feature#L291)
+-   [webUIDeleteFilesFolders/deleteFilesFolders.feature:295](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIDeleteFilesFolders/deleteFilesFolders.feature#L295)
 -   [webUIFavorites/favoritesFile.feature:14](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFavorites/favoritesFile.feature#L14)
 -   [webUIFavorites/favoritesFile.feature:30](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFavorites/favoritesFile.feature#L30)
 -   [webUIFavorites/favoritesFile.feature:46](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFavorites/favoritesFile.feature#L46)
@@ -49,7 +49,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIFilesDetails/fileDetails.feature:51](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesDetails/fileDetails.feature#L51)
 
 ### [Sharing seems to work but does not work](https://github.com/owncloud/ocis/issues/1303)
--   [webUIDeleteFilesFolders/deleteFilesFolders.feature:231](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIDeleteFilesFolders/deleteFilesFolders.feature#L231)
+-   [webUIDeleteFilesFolders/deleteFilesFolders.feature:235](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIDeleteFilesFolders/deleteFilesFolders.feature#L235)
 -   [webUIFilesDetails/fileDetails.feature:99](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesDetails/fileDetails.feature#L99)
 -   [webUIFilesDetails/fileDetails.feature:116](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesDetails/fileDetails.feature#L116)
 -   [webUIFilesActionMenu/versions.feature:34](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesActionMenu/versions.feature#L34)
@@ -120,6 +120,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUISharingPublicManagement/publicLinkIndicator.feature:64](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicManagement/publicLinkIndicator.feature#L64)
 -   [webUISharingPublicManagement/publicLinkIndicator.feature:81](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicManagement/publicLinkIndicator.feature#L81)
 -   [webUISharingPublicManagement/publicLinkIndicator.feature:98](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicManagement/publicLinkIndicator.feature#L98)
+-   [webUISharingInternalUsersSharingIndicator/shareWithUsers.feature:121](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsersSharingIndicator/shareWithUsers.feature#L121)
 
 ### [Copy private link option not available](https://github.com/owncloud/ocis/issues/1409)
 -   [webUIFilesCopy/copyPrivateLinks.feature:20](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesCopy/copyPrivateLinks.feature#L20)
@@ -277,18 +278,18 @@ Other free text and markdown formatting can be used elsewhere in the document if
 
 ### [No occ command in ocis](https://github.com/owncloud/ocis/issues/1317)
 ### [Expiration date set is not implemented in user share](https://github.com/owncloud/ocis/issues/1250)
--   [webUISharingInternalGroups/shareWithGroups.feature:294](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroups/shareWithGroups.feature#L294)
+-   [webUISharingInternalGroups/shareWithGroups.feature:293](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroups/shareWithGroups.feature#L293)
 
 ### [Different path for shares inside folder](https://github.com/owncloud/ocis/issues/1231)
 ### [Different share permissions provides varying roles in oc10 and ocis](https://github.com/owncloud/ocis/issues/1277)
 -   [webUISharingInternalGroups/shareWithGroups.feature:228](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroups/shareWithGroups.feature#L228)
 
 ### [Expiration date set is not implemented in user share](https://github.com/owncloud/ocis/issues/1250)
--   [webUISharingInternalGroups/shareWithGroups.feature:272](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroups/shareWithGroups.feature#L272)
+-   [webUISharingInternalGroups/shareWithGroups.feature:271](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroups/shareWithGroups.feature#L271)
+-   [webUISharingInternalGroups/shareWithGroups.feature:324](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroups/shareWithGroups.feature#L324)
 -   [webUISharingInternalGroups/shareWithGroups.feature:325](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroups/shareWithGroups.feature#L325)
--   [webUISharingInternalGroups/shareWithGroups.feature:326](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroups/shareWithGroups.feature#L326)
+-   [webUISharingInternalGroups/shareWithGroups.feature:349](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroups/shareWithGroups.feature#L349)
 -   [webUISharingInternalGroups/shareWithGroups.feature:350](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroups/shareWithGroups.feature#L350)
--   [webUISharingInternalGroups/shareWithGroups.feature:351](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroups/shareWithGroups.feature#L351)
 
 ### [Sharing Indicator difference](https://github.com/owncloud/ocis/issues/1949)
 -   [webUISharingInternalGroupsSharingIndicator/shareWithGroups.feature:61](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroupsSharingIndicator/shareWithGroups.feature#L61)
@@ -410,20 +411,18 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUISharingAcceptShares/acceptShares.feature:100](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L100)
 -   [webUISharingAcceptShares/acceptShares.feature:116](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L116)
 
-
 ### [Comments in sidebar] (https://github.com/owncloud/web/issues/1158)
 -   [webUIComments/comments.feature:24](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIComments/comments.feature#L24)
 -   [webUIComments/comments.feature:25](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIComments/comments.feature#L25)
 -   [webUIComments/comments.feature:26](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIComments/comments.feature#L26)
 
--   [webUIDeleteFilesFolders/deleteFilesFolders.feature:77](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIDeleteFilesFolders/deleteFilesFolders.feature#L77)
-
+### [Groups endpoint does not exist](https://github.com/owncloud/ocis-reva/issues/34)
 -   [webUIRestrictSharing/restrictSharing.feature:49](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIRestrictSharing/restrictSharing.feature:49)
 
--   [webUISharingInternalGroups/shareWithGroups.feature:245](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroups/shareWithGroups.feature#L245)
+### [Group shares support](https://github.com/owncloud/ocis/issues/1289)
 -   [webUISharingInternalGroupsSharingIndicator/shareWithGroups.feature:80](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroupsSharingIndicator/shareWithGroups.feature#L80)
--   [webUISharingInternalUsersSharingIndicator/shareWithUsers.feature:121](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsersSharingIndicator/shareWithUsers.feature#L121)
 
+### [Deletion of a recursive folder from trashbin is not possible](https://github.com/owncloud/product/issues/188)
 -   [webUITrashbinDelete/trashbinDelete.feature:106](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITrashbinDelete/trashbinDelete.feature#L106)
 -   [webUITrashbinDelete/trashbinDelete.feature:86](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITrashbinDelete/trashbinDelete.feature#L86)
 -   [webUITrashbinDelete/trashbinDelete.feature:50](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITrashbinDelete/trashbinDelete.feature#L50)
