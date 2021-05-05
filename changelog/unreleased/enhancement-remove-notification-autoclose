@@ -1,0 +1,5 @@
+Enhancement: Remove autoclose on notifications
+
+The autoclose is now being handled in the design system component. The timeout can be set via property.
+
+https://github.com/owncloud/web/pull/5040
