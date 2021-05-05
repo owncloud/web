@@ -1,0 +1,6 @@
+Enhancement: Improve accessibility on new file menu
+
+We now use buttons instead of a-tags in the new file menu. Also fixed the double-focus per item when
+navigating via tab.
+
+https://github.com/owncloud/web/pull/5058
