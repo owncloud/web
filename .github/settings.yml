@@ -20,8 +20,6 @@ labels:
     color: "#d4c5f9"
   - name: feature:pdf-viewer
     color: "#d4c5f9"
-  - name: feature:collaborators
-    color: "#d4c5f9"
   - name: feature:media-viewer
     color: "#d4c5f9"
 
