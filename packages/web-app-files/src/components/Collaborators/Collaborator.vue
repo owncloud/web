@@ -51,14 +51,15 @@
               v-text="collaborator.collaborator.additionalInfo"
             />
           </div>
-          <oc-grid gutter="small">
-            <div v-if="!isCurrentUser">
+          <span id="collaborator-list-label" class="oc-invisible-sr">Tags</span>
+          <ul id="collaborator-list" aria-labelledby="collaborator-list-label">
+            <li v-if="!isCurrentUser">
               <oc-tag class="files-collaborators-collaborator-share-type">
                 <oc-icon :name="collaboratorTypeTagIcon" />
                 {{ collaboratorType(collaborator.shareType) }}
               </oc-tag>
-            </div>
-            <div v-if="$_reshareInformation">
+            </li>
+            <li v-if="$_reshareInformation">
               <oc-tag
                 :id="$_resharerToggleId"
                 class="files-collaborators-collaborator-reshare-information"
@@ -79,8 +80,11 @@
                 class="oc-mt-s"
                 close-on-click
               >
-                <h4 v-translate>Shared by</h4>
-                <ul class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm">
+                <h4 id="resharer-info" v-translate>Shared by</h4>
+                <ul
+                  class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm"
+                  aria-labelledby="resharer-info"
+                >
                   <li v-for="resharer in collaborator.resharers" :key="resharer.name">
                     <div class="uk-flex uk-flex-middle uk-flex-left">
                       <avatar-image
@@ -104,22 +108,22 @@
                   </li>
                 </ul>
               </oc-drop>
-            </div>
-            <div>
+            </li>
+            <li>
               <oc-tag class="files-collaborators-collaborator-role">
                 <oc-icon :name="roleTagIcon" />
                 {{ originalRole.label }}
               </oc-tag>
-            </div>
-            <div v-if="collaborator.expires">
+            </li>
+            <li v-if="collaborator.expires">
               <oc-tag class="files-collaborators-collaborator-expires">
                 <oc-icon name="text-calendar" />
                 <translate :translate-params="{ expires: formDateFromNow(expirationDate) }">
                   Expires %{expires}
                 </translate>
               </oc-tag>
-            </div>
-            <div v-if="isIndirectShare">
+            </li>
+            <li v-if="isIndirectShare">
               <oc-tag
                 type="router-link"
                 class="files-collaborators-collaborator-follow-via"
@@ -132,8 +136,8 @@
                   v-text="viaLabel"
                 />
               </oc-tag>
-            </div>
-          </oc-grid>
+            </li>
+          </ul>
         </div>
       </oc-td>
       <oc-td width="shrink" align-v="top">
@@ -353,7 +357,24 @@ export default {
 }
 </script>
 
-<style scoped="scoped">
+<style lang="scss" scoped="scoped">
+#collaborator-list {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-left: 0;
+  list-style-type: none;
+
+  li {
+    float: left;
+    padding-bottom: 0;
+    padding-top: 0;
+
+    &:not(:first-child) {
+      padding-left: 0.5rem;
+    }
+  }
+}
+
 /* FIXME: Move to ODS somehow */
 .files-collaborators-collaborator-table-row-top > td {
   padding: 0 10px 3px 0;
