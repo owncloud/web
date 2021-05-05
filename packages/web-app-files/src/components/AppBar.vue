@@ -330,10 +330,7 @@ export default {
         this.showMessage({
           title: this.$gettext('Creating folder failed…'),
           desc: error,
-          status: 'danger',
-          autoClose: {
-            enabled: true
-          }
+          status: 'danger'
         })
       }
 
@@ -422,10 +419,7 @@ export default {
         this.showMessage({
           title: this.$gettext('Creating file failed…'),
           desc: error,
-          status: 'danger',
-          autoClose: {
-            enabled: true
-          }
+          status: 'danger'
         })
       }
 

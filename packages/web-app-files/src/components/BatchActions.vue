@@ -132,10 +132,7 @@ export default {
           .then(() => {
             const translated = this.$gettext('%{resource} was restored successfully')
             this.showMessage({
-              title: this.$gettextInterpolate(translated, { resource: resource.name }, true),
-              autoClose: {
-                enabled: true
-              }
+              title: this.$gettextInterpolate(translated, { resource: resource.name }, true)
             })
             this.removeFilesFromTrashbin([resource])
           })
@@ -144,10 +141,7 @@ export default {
             this.showMessage({
               title: this.$gettextInterpolate(translated, { resource: resource.name }, true),
               desc: error.message,
-              status: 'danger',
-              autoClose: {
-                enabled: true
-              }
+              status: 'danger'
             })
           })
       }
@@ -160,10 +154,7 @@ export default {
         .clearTrashBin()
         .then(() => {
           this.showMessage({
-            title: this.$gettext('All deleted files were removed'),
-            autoClose: {
-              enabled: true
-            }
+            title: this.$gettext('All deleted files were removed')
           })
           this.removeFilesFromTrashbin(this.activeFiles)
         })
@@ -171,10 +162,7 @@ export default {
           this.showMessage({
             title: this.$gettext('Could not delete files'),
             desc: error.message,
-            status: 'danger',
-            autoClose: {
-              enabled: true
-            }
+            status: 'danger'
           })
         })
     },
