@@ -12,5 +12,7 @@ We've did several improvements to enhance the accessibility on the files sidebar
 - Added screenreader-only explain texts regarding collaborator/share ownership
 - Added aria-label for share receiver section
 - Worked on unifying the way we handle translations: Focus on v-translate and $gettext()
+- Turn tags into `<ul> & <li>` list, add aria-labelledby to both tag list and resharer tag list
 
 https://github.com/owncloud/web/pull/5034
+https://github.com/owncloud/web/pull/5043
