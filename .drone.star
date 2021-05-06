@@ -796,6 +796,7 @@ def acceptance(ctx):
 		'visualTesting': False,
 		'openIdConnect': False,
 		'oc10IntegrationAppIncluded': False,
+		'skip': False,
 	}
 
 	if 'defaults' in config:
@@ -829,6 +830,8 @@ def acceptance(ctx):
 			for server in params['servers']:
 				for browser in params['browsers']:
 					for db in params['databases']:
+						if params['skip']:
+							continue
 						federatedServerVersion = params['federatedServerVersion']
 						federationDbSuffix = '-federated'
 
@@ -2232,7 +2235,7 @@ def buildGithubComment(suite, alternateSuiteName):
 		'commands': [
 			'cd /var/www/owncloud/web/tests/reports/screenshots/',
 			'echo "<details><summary>:boom: Acceptance tests <strong>%s</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n" >> /var/www/owncloud/web/comments.file' % alternateSuiteName,
-			'for f in *.png; do echo \'!\'"[$f]($CACHE_ENDPOINT/owncloud/web/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> /var/www/owncloud/web/comments.file; done',
+			'for f in *.png; do echo "### $f\n" \'!\'"[$f]($CACHE_ENDPOINT/owncloud/web/screenshots/${DRONE_BUILD_NUMBER}/$f) \n" >> /var/www/owncloud/web/comments.file; done',
 			'echo "\n</p></details>" >> /var/www/owncloud/web/comments.file',
 			'more /var/www/owncloud/web/comments.file',
 		],

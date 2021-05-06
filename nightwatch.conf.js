@@ -82,7 +82,8 @@ const config = {
           threshold: 0.002,
           prompt: false,
           always_save_diff_screenshot: UPDATE_VRT_SCREENSHOTS
-        }
+        },
+        screenshots: SCREENSHOTS
       },
       selenium_host: SELENIUM_HOST,
       desiredCapabilities: {
@@ -119,11 +120,6 @@ const config = {
           w3c: false
         },
         idleTimeout: 180
-      },
-      screenshots: {
-        enabled: SCREENSHOTS,
-        path: 'tests/reports/screenshots',
-        on_failure: true
       }
     },
     saucelabs: {
