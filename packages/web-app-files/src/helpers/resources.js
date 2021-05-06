@@ -103,21 +103,24 @@ export function attachIndicators(resource, sharesTree) {
  * @param {Boolean} allowSharePerm Asserts whether the reshare permission is available
  * @param {String} server The url of the backend
  * @param {String} token The access token of the authenticated user
+ * @param {Function} client The ownCloud SDK client
+ * @param {Function} update The closure action that gets called on update
  */
 export async function aggregateResourceShares(
   shares,
   incomingShares = false,
   allowSharePerm,
   server,
-  token
+  token,
+  client,
+  update
 ) {
   if (incomingShares) {
     return Promise.all(
       _(shares)
         .orderBy(['file_target', 'permissions'], ['asc', 'desc'])
-        .map(
-          async share =>
-            await buildSharedResource(share, incomingShares, allowSharePerm, server, token)
+        .map(share =>
+          buildSharedResource(share, incomingShares, allowSharePerm, server, token, client, update)
         )
     )
   }
@@ -132,7 +135,7 @@ export async function aggregateResourceShares(
         prev.sharedWith.push({
           username: share.share_with,
           displayName: share.share_with_displayname,
-          avatar: await getAvatarSrc(share.share_with, server, token)
+          avatar: undefined
         })
       } else if (share.share_type === shareTypes.link) {
         prev.sharedWith.push({
@@ -149,7 +152,7 @@ export async function aggregateResourceShares(
         {
           username: share.share_with,
           displayName: share.share_with_displayname,
-          avatar: await getAvatarSrc(share.share_with, server, token)
+          avatar: undefined
         }
       ]
     } else if (share.share_type === shareTypes.link) {
@@ -166,8 +169,8 @@ export async function aggregateResourceShares(
   }
 
   return Promise.all(
-    resources.map(
-      async share => await buildSharedResource(share, incomingShares, allowSharePerm, server, token)
+    resources.map(share =>
+      buildSharedResource(share, incomingShares, allowSharePerm, server, token, client, update)
     )
   )
 }
@@ -177,7 +180,9 @@ export async function buildSharedResource(
   incomingShares = false,
   allowSharePerm,
   server,
-  token
+  token,
+  client,
+  update
 ) {
   const resource = {
     id: share.item_source,
@@ -194,9 +199,10 @@ export async function buildSharedResource(
       {
         username: share.uid_owner,
         displayName: share.displayname_owner,
-        avatar: await getAvatarSrc(share.uid_file_owner, server, token)
+        avatar: undefined
       }
     ]
+
     resource.status = share.state
     resource.name = path.basename(share.file_target)
     resource.path = share.file_target
@@ -224,6 +230,49 @@ export async function buildSharedResource(
   resource.indicators = []
   resource.icon = isFolder ? 'folder' : getFileIcon(resource.extension)
   resource.sdate = share.stime * 1000
+
+  updateResource(async () => {
+    const avatars = new Map()
+    ;['sharedWith', 'owner'].forEach(k => {
+      ;(resource[k] || []).forEach((obj, i) => {
+        if (!_.has(obj, 'avatar')) {
+          return
+        }
+        avatars.set(`${k}.[${i}].avatar`, obj.username)
+      })
+    })
+
+    if (!avatars.size) {
+      return
+    }
+
+    await Promise.all(
+      Array.from(avatars).map(avatar =>
+        (async () => {
+          let url
+          try {
+            url = await getAvatarSrc(avatar[1], server, token, client)
+          } catch (e) {
+            avatars.delete(avatar[0])
+            return
+          }
+
+          avatars.set(avatar[0], url)
+        })()
+      )
+    )
+
+    if (!avatars.size) {
+      return
+    }
+
+    const cResource = _.cloneDeep(resource)
+    avatars.forEach((value, key) => {
+      _.set(cResource, key, value)
+    })
+
+    return cResource
+  }, update)
 
   return resource
 }
@@ -347,4 +396,21 @@ export function buildDeletedResource(resource) {
     icon: isFolder ? 'folder' : getFileIcon(extension),
     indicators: []
   }
+}
+
+export const updateResource = (source = async () => {}, target = () => {}) => {
+  ;(async () => {
+    let val
+    try {
+      val = await source()
+    } catch (e) {
+      return
+    }
+
+    if (!val) {
+      return
+    }
+
+    target(val)
+  })()
 }
