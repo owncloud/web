@@ -550,7 +550,7 @@ def main(ctx):
 	after = afterPipelines(ctx)
 	dependsOn(stages, after)
 
-	return before + stages + after
+	return before + stages + after + checkStarlark()
 
 def beforePipelines(ctx):
 	return yarnlint() + changelog(ctx) + website(ctx)
@@ -2277,6 +2277,43 @@ def githubComment():
 			]
 		},
 	}]
+
+def checkStarlark():
+    return [{
+        "kind": "pipeline",
+        "type": "docker",
+        "name": "check-starlark",
+        "steps": [
+            {
+                "name": "format-check-starlark",
+                "image": "owncloudci/bazel-buildifier",
+                "pull": "always",
+                "commands": [
+                    "buildifier --mode=check .drone.star",
+                ],
+            },
+            {
+                "name": "show-diff",
+                "image": "owncloudci/bazel-buildifier",
+                "pull": "always",
+                "commands": [
+                    "buildifier --mode=fix .drone.star",
+                    "git diff",
+                ],
+                "when": {
+                    "status": [
+                        "failure",
+                    ],
+                },
+            },
+        ],
+         "depends_on": [],
+        "trigger": {
+            "ref": [
+                "refs/pull/**",
+            ],
+        },
+    }]
 
 def dependsOn(earlierStages, nextStages):
 	for earlierStage in earlierStages:
