@@ -62,13 +62,13 @@
           >
             <span id="files-list-count-folders" v-text="activeFilesCount.folders" />
             <translate :translate-n="activeFilesCount.folders" translate-plural="folders"
-              >folder</translate
-            >
+              >folder
+            </translate>
             <translate>and</translate>
             <span id="files-list-count-files" v-text="activeFilesCount.files" />
             <translate :translate-n="activeFilesCount.files" translate-plural="files"
-              >file</translate
-            >
+              >file
+            </translate>
           </div>
         </template>
       </oc-table-files>
@@ -226,15 +226,36 @@ export default {
 
     async triggerShareAction(resource, type) {
       try {
+        // exec share action
         let response = await this.$client.requests.ocs({
           service: 'apps/files_sharing',
           action: `api/v1/shares/pending/${resource.share.id}`,
           method: type
         })
-        response = await response.json()
-        if (response.ocs.data.length > 0) {
+
+        // exit on failure
+        if (response.status !== 200) {
+          throw new Error(response.statusText)
+        }
+        // get updated share from response or re-fetch it
+        let share = null
+        // oc10
+        if (parseInt(response.headers.get('content-length')) > 0) {
+          response = await response.json()
+
+          if (response.ocs.data.length > 0) {
+            share = response.ocs.data[0]
+          }
+        } else {
+          // ocis
+          const { shareInfo } = await this.$client.shares.getShare(resource.share.id)
+          share = shareInfo
+        }
+
+        // update share in store
+        if (share) {
           const sharedResource = await buildSharedResource(
-            response.ocs.data[0],
+            share,
             true,
             !this.isOcis,
             this.configuration.server,
