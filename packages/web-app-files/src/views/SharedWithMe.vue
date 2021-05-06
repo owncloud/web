@@ -62,13 +62,13 @@
           >
             <span id="files-list-count-folders" v-text="activeFilesCount.folders" />
             <translate :translate-n="activeFilesCount.folders" translate-plural="folders"
-              >folder</translate
-            >
+              >folder
+            </translate>
             <translate>and</translate>
             <span id="files-list-count-files" v-text="activeFilesCount.files" />
             <translate :translate-n="activeFilesCount.files" translate-plural="files"
-              >file</translate
-            >
+              >file
+            </translate>
           </div>
         </template>
       </oc-table-files>
@@ -239,14 +239,17 @@ export default {
         }
         // get updated share from response or re-fetch it
         let share = null
+        // oc10
         if (parseInt(response.headers.get('content-length')) > 0) {
           response = await response.json()
+
           if (response.ocs.data.length > 0) {
             share = response.ocs.data[0]
           }
         } else {
-          share = await this.$client.shares.getShare(resource.share.id)
-          share = share.shareInfo
+          // ocis
+          const { shareInfo } = await this.$client.shares.getShare(resource.share.id)
+          share = shareInfo
         }
 
         // update share in store

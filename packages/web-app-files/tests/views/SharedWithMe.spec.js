@@ -49,14 +49,17 @@ describe('SharedWithMe component', () => {
     })
 
     it('returns a share if content-length header is not present (ocis)', async () => {
+      const shareInfo = { id: 1, shareinfo: true }
       fetch.mockResponse(JSON.stringify({ ocs: { data: [{ id: 1 }] } }), {})
+      getShare.mockReturnValueOnce({ shareInfo })
+
       await wrapper
         .findAll('.file-row-share-status-action')
         .at(1)
         .trigger('click')
       await wrapper.vm.$nextTick()
 
-      expect(store.state.Files.resource).toMatch('1')
+      expect(store.state.Files.resource).toMatchObject(shareInfo)
       expect(getShare).toBeCalledTimes(1)
     })
   })
