@@ -37,7 +37,8 @@ export default {
   }),
 
   computed: {
-    ...mapGetters('Files', ['highlightedFile', 'capabilities']),
+    ...mapGetters('Files', ['highlightedFile']),
+    ...mapGetters(['capabilities']),
 
     copyLabel() {
       return this.$gettext('Copy private link url')
