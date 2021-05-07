@@ -66,7 +66,6 @@
             <li v-if="$_reshareInformation" class="oc-py-rm">
               <oc-tag
                 :id="$_resharerToggleId"
-                v-oc-tooltip="$gettext('Show resharer details')"
                 class="files-collaborators-collaborator-reshare-information"
                 type="button"
               >
@@ -134,6 +133,7 @@
             <li v-if="isIndirectShare" class="oc-py-rm">
               <oc-tag
                 v-oc-tooltip="viaTooltip"
+                :aria-label="viaTooltip"
                 type="router-link"
                 class="files-collaborators-collaborator-follow-via"
                 :to="viaRouterParams"
