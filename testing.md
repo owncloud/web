@@ -47,16 +47,12 @@ When running a standalone Selenium server, make sure to set the environment vari
 - clone and install the [testing app](http://github.com/owncloud/testing) into ownCloud
 
 ### oCIS
-In order to run the acceptance tests you need to run ocis using the owncloud storage driver. Also, you need to enable basic auth on the server with these environment variables.
+In order to run the acceptance tests you need to run ocis using the ocis storage driver. Also, you need to enable basic auth on the server with these environment variables.
 
 `PROXY_ENABLE_BASIC_AUTH=true STORAGE_HOME_DRIVER=owncloud STORAGE_USERS_DRIVER=owncloud`
 
 - set up the [oCIS backend]({{< ref "backend-ocis.md" >}})
   - if you are a Mac user, you need to start the server with additional environment variables: `STORAGE_HOME_DATA_SERVER_URL='http://host.docker.internal:9155/data' STORAGE_DATAGATEWAY_PUBLIC_URL='https://host.docker.internal:9200/data' STORAGE_USERS_DATA_SERVER_URL='http://host.docker.internal:9158/data' STORAGE_FRONTEND_PUBLIC_URL='https://host.docker.internal:9200' PROXY_ENABLE_BASIC_AUTH=true PROXY_OIDC_ISSUER='https://host.docker.internal:9200' IDP_INSECURE='true' IDP_IDENTIFIER_REGISTRATION_CONF='<web-path>/tests/acceptance/mac-identifier-registration.yml' IDP_ISS='https://host.docker.internal:9200' IDP_TLS='true'` (`<web-path>` needs to be replaced with the your local clone of ownCloud Web)
-
-- oCIS also uses redis for caching, so run redis with this command
-
-  `docker run -e REDIS_DATABASES=1 -p 6379:6379 -d webhippie/redis:latest`
 
 ## Setup ownCloud Web
 
