@@ -27,6 +27,38 @@ declare -a UNEXPECTED_PASSED_SCENARIOS
 UNEXPECTED_NIGHTWATCH_CRASH=false
 FINAL_EXIT_STATUS=0
 
+# Work out which suites will be run.
+# TEST_PATHS = "tests/acceptance/features/webUILogin tests/acceptance/features/webUINotifications"
+# or
+# TEST_CONTEXT = "webUIFavorites"
+if [ -n "${TEST_PATHS}" ]; then
+  for TEST_PATH in ${TEST_PATHS}; do
+    SUITE=$(basename "${TEST_PATH}")
+    SUITES_IN_THIS_RUN+=("${SUITE}")
+  done
+fi
+
+if [ -n "${TEST_CONTEXT}" ]; then
+  SUITES_IN_THIS_RUN+=("${TEST_CONTEXT}")
+fi
+
+# check that all the requested suites exist
+INVALID_SUITE_FOUND=false
+
+for SUITE_IN_THIS_RUN in "${SUITES_IN_THIS_RUN[@]}"; do
+  if [ ! -d "tests/acceptance/features/${SUITE_IN_THIS_RUN}" ]
+  then
+    INVALID_SUITE_FOUND=true
+    echo "Invalid suite: ${SUITE_IN_THIS_RUN}"
+  fi
+done
+
+if [ "${INVALID_SUITE_FOUND}" = true ]
+then
+  echo "runsh: Invalid suite(s) requested in test run"
+  exit 1
+fi
+
 echo "waiting for backend server to start"
 timeout 60 bash -c 'while [[ "$(curl --insecure -s -o /dev/null -w ''%{http_code}'' ${BACKEND_HOST})" != "200" ]]; do printf "."; sleep 5; done'
 
@@ -70,21 +102,6 @@ then
   echo "-------------------------------"
   for KEY in "${!FAILED_SCENARIO_PATHS[@]}"; do echo "$KEY"; done
   echo "-------------------------------"
-fi
-
-# Work out which suites were run.
-# TEST_PATHS = "tests/acceptance/features/webUILogin tests/acceptance/features/webUINotifications"
-# or
-# TEST_CONTEXT = "webUIFavorites"
-if [ -n "${TEST_PATHS}" ]; then
-  for TEST_PATH in ${TEST_PATHS}; do
-    SUITE=$(basename "${TEST_PATH}")
-    SUITES_IN_THIS_RUN+=("${SUITE}")
-  done
-fi
-
-if [ -n "${TEST_CONTEXT}" ]; then
-  SUITES_IN_THIS_RUN+=("${TEST_CONTEXT}")
 fi
 
 if [ -n "${EXPECTED_FAILURES_FILE}" ]; then
