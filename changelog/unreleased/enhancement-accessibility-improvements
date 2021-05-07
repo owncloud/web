@@ -9,7 +9,9 @@ A lot of random changes:
 - Renamed "personal files" to "all files" in routes (soft rename, due to changes in the future)
 - Updated ODS to v5.1.0
 - Translate quick action labels/tooltips properly
+- Added a note about actions being available above the file list to the live region update for selection
 
 https://github.com/owncloud/web/pull/4965
 https://github.com/owncloud/web/pull/4975
 https://github.com/owncloud/web/pull/5030
+https://github.com/owncloud/web/pull/5088
