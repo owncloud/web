@@ -15,14 +15,14 @@ config = {
             "suites": {
                 "webUIBasic": [
                     "webUIAccount",
-                    "webUILogin",
+                    "webUILoginz",
                     "webUIPreview",
                     "webUIPrivateLinks",
                     # The following suites may have all scenarios currently skipped.
                     # The suites are listed here so that scenarios will run when
                     # they are enabled.
                     "webUIAdminSettings",
-                    "webUIComments",
+                    "webUIWrongComments",
                     "webUITags",
                     "webUIWebdavLockProtection",
                     "webUIWebdavLocks",
@@ -42,7 +42,7 @@ config = {
                     "webUISharingAcceptSharesToRoot",
                 ],
                 "webUIFavorites": "Favorites",
-                "webUIMarkdownEditor": "MarkdownEditor",
+                "webUIMdEditor": "MarkdownEditor",
                 "webUIFiles1": [
                     "webUIFiles",
                     "webUIFilesActionMenu",
