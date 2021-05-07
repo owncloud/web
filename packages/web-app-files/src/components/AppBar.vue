@@ -28,6 +28,7 @@
               id="new-file-menu-btn"
               key="new-file-menu-btn-enabled"
               v-oc-tooltip="_cannotCreateDialogText"
+              :aria-label="_cannotCreateDialogText"
               variation="primary"
               appearance="filled"
               :disabled="isNewBtnDisabled"
@@ -182,6 +183,8 @@ export default {
       }
     },
     canUpload() {
+      // return this.currentFolder.permissions.indexOf('C') >= 0
+      // borrowed from packages/web-app-files/src/helpers/resources.js
       if (this.currentFolder === null) {
         return false
       }
