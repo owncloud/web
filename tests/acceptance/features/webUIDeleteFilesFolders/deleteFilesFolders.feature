@@ -75,6 +75,10 @@ Feature: deleting files and folders
 
   @skipOnOC10 @issue-4582
   Scenario: Delete all files at once
+    Given user "Alice" has uploaded file "data.zip" to "data.zip"
+    And user "Alice" has created file "lorem.txt"
+    And user "Alice" has created folder "simple-folder"
+    And the user has browsed to the files page
     When the user marks all files for batch action using the webUI
     And the user batch deletes the marked files using the webUI
     And there should be no resources listed on the webUI

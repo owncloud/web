@@ -243,8 +243,7 @@ Feature: Sharing files and folders with internal groups
 
   @issue-2898
   Scenario: see resource owner of parent group shares in collaborators list
-    Given user "Carol" has been created with default attributes and without skeleton files
-    And user "Alice" has created folder "simple-folder"
+    Given user "Alice" has created folder "simple-folder"
     And user "Alice" has created folder "simple-folder/simple-empty-folder"
     And user "Alice" has shared folder "simple-folder" with group "grp1"
     And user "Brian" has accepted the share "simple-folder" offered by user "Alice"

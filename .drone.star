@@ -424,7 +424,7 @@ config = {
                 "TESTING_DATA_DIR": "/srv/app/testing/data/",
                 "OCIS_REVA_DATA_ROOT": "/srv/app/tmp/ocis/owncloud/data/",
                 "WEB_UI_CONFIG": "/srv/config/drone/ocis-config.json",
-                "EXPECTED_FAILURES_FILE": "/var/www/owncloud/web/tests/acceptance/expected-failures-with-ocis-server-owncloud-storage.md",
+                "EXPECTED_FAILURES_FILE": "/var/www/owncloud/web/tests/acceptance/expected-failures-with-ocis-server-ocis-storage.md",
             },
             "runningOnOCIS": True,
             "visualTesting": True,
@@ -851,7 +851,6 @@ def acceptance(ctx):
                             # Services and steps required for running tests with oCIS
                             steps += getOcis() + ocisService() + getSkeletonFiles()
 
-                            services += redisService()
                         else:
                             # Services and steps required for running tests with oc10
                             services += databaseService(db) + owncloudService()
@@ -1699,13 +1698,12 @@ def ocisService():
         "detach": True,
         "environment": {
             "OCIS_URL": "https://ocis:9200",
-            "STORAGE_HOME_DRIVER": "owncloud",
-            "STORAGE_USERS_DRIVER": "owncloud",
+            "STORAGE_HOME_DRIVER": "ocis",
+            "STORAGE_USERS_DRIVER": "ocis",
             "STORAGE_DRIVER_OCIS_ROOT": "/srv/app/tmp/ocis/storage/users",
             "STORAGE_DRIVER_LOCAL_ROOT": "/srv/app/tmp/ocis/local/root",
             "STORAGE_DRIVER_OWNCLOUD_DATADIR": "/srv/app/tmp/ocis/owncloud/data",
             "STORAGE_METADATA_ROOT": "/srv/app/tmp/ocis/metadata",
-            "STORAGE_DRIVER_OWNCLOUD_REDIS_ADDR": "redis:6379",
             "PROXY_OIDC_INSECURE": "true",
             "STORAGE_HOME_DATA_SERVER_URL": "http://ocis:9155/data",
             "STORAGE_USERS_DATA_SERVER_URL": "http://ocis:9158/data",
@@ -1953,13 +1951,6 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
             "name": "configs",
             "path": "/srv/config",
         }],
-    }]
-
-def redisService():
-    return [{
-        "name": "redis",
-        "image": "redis:6-alpine",
-        "pull": "always",
     }]
 
 def cacheOcisPipeline(ctx):
