@@ -49,7 +49,7 @@ export default {
           icon: this.apps.meta[editor.app].icon,
           handler: item => this.$_fileActions_openEditor(editor, item.path, item.id),
           isEnabled: ({ resource }) => {
-            if (editor.routes && !checkRoute(editor.routes, this.$route.name)) {
+            if (editor.routes?.length > 0 && !checkRoute(editor.routes, this.$route.name)) {
               return false
             }
 
