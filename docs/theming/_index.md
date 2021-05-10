@@ -260,7 +260,7 @@ An empty template for your custom theme is provided below, and you can use the i
         "large": "",
         "medium": ""
       },
-      "size": {
+      "sizes": {
         "form-check-default": "",
         "height-small": "",
         "icon-default": "",
