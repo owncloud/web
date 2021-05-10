@@ -39,7 +39,7 @@ module.exports = {
   },
   elements: {
     collaboratorsInFileRow: {
-      selector: '//div[contains(@class, "oc-table-files-people")]//div',
+      selector: '//div[contains(@class, "oc-table-files-people")]//span',
       locateStrategy: 'xpath'
     }
   }

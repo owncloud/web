@@ -108,7 +108,7 @@ module.exports = {
     },
     getSharedFromUserName: {
       selector:
-        '//td[contains(@class,"oc-table-data-cell-owner")]//div[@aria-label=normalize-space("%s")]',
+        '//td[contains(@class,"oc-table-data-cell-owner")]//span[@aria-label=normalize-space("%s")]',
       locateStrategy: 'xpath'
     },
     sharedFrom: {
