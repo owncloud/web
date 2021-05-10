@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Editors for all routes: [#5095](https://github.com/owncloud/web/pull/5095)
 * Bugfix - Improve web container: [#4942](https://github.com/owncloud/web/pull/4942)
 * Bugfix - Display navigation for resolved private link: [#5023](https://github.com/owncloud/web/pull/5023)
 * Bugfix - Fix z-index on the new file menu: [#5056](https://github.com/owncloud/web/pull/5056)
@@ -23,6 +24,13 @@ Summary
 
 Details
 -------
+
+* Bugfix - Editors for all routes: [#5095](https://github.com/owncloud/web/pull/5095)
+
+   If an extension doesn't define valid routes it should be allowed for all routes by default. That
+   behaviour was not working properly and is fixed now.
+
+   https://github.com/owncloud/web/pull/5095
 
 * Bugfix - Improve web container: [#4942](https://github.com/owncloud/web/pull/4942)
 
