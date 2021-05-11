@@ -1,0 +1,9 @@
+Enhancement: Lazy file avatar loading
+
+We've changed the way how large file lists get rendered.
+In some cases where we had a long list of files, the loading of avatars could lead to long waiting times till the first paint happens.
+
+Now we first render the list of files, load the associated avatars in the background and then update the ui.
+
+https://github.com/owncloud/web/pull/5073
+https://github.com/owncloud/web/issues/4973
