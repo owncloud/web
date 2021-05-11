@@ -4498,7 +4498,7 @@ fast-levenshtein@~2.0.6:
   resolved "https://registry.yarnpkg.com/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz#3d8a5c66883a16a30ca8643e851f19baa7797917"
   integrity sha1-PYpcZog6FqMMqGQ+hR8Zuqd5eRc=
 
-fast-xml-parser@^3.19.0:
+fast-xml-parser@^3.17.6:
   version "3.19.0"
   resolved "https://registry.yarnpkg.com/fast-xml-parser/-/fast-xml-parser-3.19.0.tgz#cb637ec3f3999f51406dd8ff0e6fc4d83e520d01"
   integrity sha512-4pXwmBplsCPv8FOY1WRakF970TjNGnGnfbOnLqjlYvMiF1SR3yOHyxMR/YCXpPTOspNF5gwudqktIP4VsWkvBg==
@@ -10689,7 +10689,7 @@ url-parse@^1.4.3:
     querystringify "^2.1.1"
     requires-port "^1.0.0"
 
-url-parse@^1.5.1:
+url-parse@^1.4.7:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/url-parse/-/url-parse-1.5.1.tgz#d5fa9890af8a5e1f274a2c98376510f6425f6e3b"
   integrity sha512-HOfCOUJt7iSYzEx/UqgtwKRMC6EU91NFhsCHMv9oM03VJcVo2Qrp8T8kI9D7amFf1cu+/3CEhgb3rF9zL7k85Q==
@@ -11000,14 +11000,14 @@ wcwidth@^1.0.1:
   dependencies:
     defaults "^1.0.3"
 
-webdav@^4.0.0:
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/webdav/-/webdav-4.3.0.tgz#518f69a7c0ddf2e05f34b8160135bddb10bbf919"
-  integrity sha512-Fa8mw2OmdxCEWO4EO8po7h5t1Av4Mjbn4S4CwTT4TPwF1I58V1eF/lZfr8M2Cc+pYted45Y5ku0S7d1HUVcEgQ==
+webdav@4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/webdav/-/webdav-4.0.0.tgz#ec4594b859b06602103c2e029dbbccab146b2b92"
+  integrity sha512-65YHMUfeuTCPt2oVuoEwEqd+RZ+lEKy7l2LtWwiG/2J9gTJDcY1wyg6pTE8GiuLgv2AbupCJCYV1dKyMsnDIzQ==
   dependencies:
     axios "^0.21.1"
     base-64 "^1.0.0"
-    fast-xml-parser "^3.19.0"
+    fast-xml-parser "^3.17.6"
     he "^1.2.0"
     hot-patcher "^0.5.0"
     layerr "^0.1.2"
@@ -11016,7 +11016,7 @@ webdav@^4.0.0:
     nested-property "^4.0.0"
     path-posix "^1.0.0"
     url-join "^4.0.1"
-    url-parse "^1.5.1"
+    url-parse "^1.4.7"
 
 webfontloader@^1.6.28:
   version "1.6.28"
