@@ -26,8 +26,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 ### [regression in accepting shares from notifications](https://github.com/owncloud/web/issues/4839)
 -   [webUISharingNotificationsToRoot/shareWithUsers.feature:40](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingNotificationsToRoot/shareWithUsers.feature#L40)
 
-### [webUIFilesActionMenu/versions.feature:14 behaves differently on CI](https://github.com/owncloud/web/issues/5022)
--   [webUIFilesActionMenu/versions.feature:14](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesActionMenu/versions.feature:#L14)
 
 ### [Admin settings feature not implemented yet] (https://github.com/owncloud/web/issues/5015)
 -   [webUIAdminSettings/adminAppsSettings.feature:11](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIAdminSettings/adminAppsSettings.feature#L11)
