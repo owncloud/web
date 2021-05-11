@@ -98,7 +98,7 @@ Feature: Edit public link shares
       | password | qwertyui |
     And the public uses the webUI to access the last public link created by user "Alice" with password "qwertyui"
     Then the public should not get access to the publicly shared file
-
+  @debugTag
   Scenario: user edits a name of an already existing public link
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has created file "simple-folder/lorem.txt"
@@ -112,7 +112,7 @@ Feature: Edit public link shares
       | name | simple-folder Share |
     And the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
     Then file "lorem.txt" should be listed on the webUI
-
+  @debugTag
   Scenario: user edits the password of an already existing public link
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has created file "simple-folder/lorem.txt"
@@ -200,7 +200,7 @@ Feature: Edit public link shares
     Then file "lorem.txt" should be listed on the webUI
     And file "lorem (2).txt" should be listed on the webUI
 
-
+  @debugTag
   Scenario: assign password to already created public share
     Given user "Alice" has created file "lorem.txt"
     And user "Alice" has created a public link with following settings

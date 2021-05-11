@@ -147,7 +147,7 @@ Feature: File Upload
     And file "lorem (2).txt" should be listed on the webUI
     And the content of "lorem (2).txt" should be the same as the local "lorem.txt"
 
-  @ocis-reva-issue-64
+  @ocis-reva-issue-64 @debugTag
   Scenario: upload overwriting a file into a public share
     Given user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123"
     When the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
