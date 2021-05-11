@@ -185,12 +185,14 @@ export default {
         return
       }
 
-      resources = await aggregateResourceShares(
+      resources = aggregateResourceShares(
         resources,
         true,
         !this.isOcis,
         this.configuration.server,
-        this.getToken
+        this.getToken,
+        this.$client,
+        this.UPDATE_RESOURCE
       )
 
       this.LOAD_FILES({ currentFolder: rootFolder, files: resources })

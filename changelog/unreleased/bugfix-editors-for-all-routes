@@ -1,0 +1,5 @@
+Bugfix: Editors for all routes
+
+If an extension doesn't define valid routes it should be allowed for all routes by default. That behaviour was not working properly and is fixed now.
+
+https://github.com/owncloud/web/pull/5095

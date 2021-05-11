@@ -128,7 +128,12 @@ export default {
 
   methods: {
     ...mapActions('Files', ['setHighlightedFile', 'loadIndicators', 'loadPreviews']),
-    ...mapMutations('Files', ['LOAD_FILES', 'SELECT_RESOURCES', 'CLEAR_CURRENT_FILES_LIST']),
+    ...mapMutations('Files', [
+      'LOAD_FILES',
+      'SELECT_RESOURCES',
+      'CLEAR_CURRENT_FILES_LIST',
+      'UPDATE_RESOURCE'
+    ]),
     ...mapMutations(['SET_QUOTA']),
 
     async loadResources() {
@@ -153,12 +158,14 @@ export default {
         return
       }
 
-      resources = await aggregateResourceShares(
+      resources = aggregateResourceShares(
         resources,
         false,
         !this.isOcis,
         this.configuration.server,
-        this.getToken
+        this.getToken,
+        this.$client,
+        this.UPDATE_RESOURCE
       )
 
       this.LOAD_FILES({ currentFolder: rootFolder, files: resources })

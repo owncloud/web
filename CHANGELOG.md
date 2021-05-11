@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Editors for all routes: [#5095](https://github.com/owncloud/web/pull/5095)
 * Bugfix - Improve web container: [#4942](https://github.com/owncloud/web/pull/4942)
 * Bugfix - Display navigation for resolved private link: [#5023](https://github.com/owncloud/web/pull/5023)
 * Bugfix - Fix z-index on the new file menu: [#5056](https://github.com/owncloud/web/pull/5056)
@@ -17,12 +18,20 @@ Summary
 * Enhancement - Extension config: [#5024](https://github.com/owncloud/web/pull/5024)
 * Enhancement - Focus management: [#4993](https://github.com/owncloud/web/pull/4993)
 * Enhancement - Align headline hierarchy: [#5003](https://github.com/owncloud/web/issues/5003)
+* Enhancement - Lazy file avatar loading: [#5073](https://github.com/owncloud/web/pull/5073)
 * Enhancement - Use list for displaying added people: [#4915](https://github.com/owncloud/web/pull/4915)
 * Enhancement - Use real page title for location picker: [#5009](https://github.com/owncloud/web/pull/5009)
 * Enhancement - Show search button in search bar: [#4985](https://github.com/owncloud/web/pull/4985)
 
 Details
 -------
+
+* Bugfix - Editors for all routes: [#5095](https://github.com/owncloud/web/pull/5095)
+
+   If an extension doesn't define valid routes it should be allowed for all routes by default. That
+   behaviour was not working properly and is fixed now.
+
+   https://github.com/owncloud/web/pull/5095
 
 * Bugfix - Improve web container: [#4942](https://github.com/owncloud/web/pull/4942)
 
@@ -92,6 +101,17 @@ Details
    https://github.com/owncloud/web/issues/5003
    https://github.com/owncloud/web/pull/5004
    https://github.com/owncloud/web/pull/5005
+
+* Enhancement - Lazy file avatar loading: [#5073](https://github.com/owncloud/web/pull/5073)
+
+   We've changed the way how large file lists get rendered. In some cases where we had a long list of
+   files, the loading of avatars could lead to long waiting times till the first paint happens.
+
+   Now we first render the list of files, load the associated avatars in the background and then
+   update the ui.
+
+   https://github.com/owncloud/web/issues/4973
+   https://github.com/owncloud/web/pull/5073
 
 * Enhancement - Use list for displaying added people: [#4915](https://github.com/owncloud/web/pull/4915)
 
