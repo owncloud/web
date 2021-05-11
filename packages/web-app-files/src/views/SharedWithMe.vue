@@ -185,7 +185,7 @@ export default {
         return
       }
 
-      resources = await aggregateResourceShares(
+      resources = aggregateResourceShares(
         resources,
         true,
         !this.isOcis,

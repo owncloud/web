@@ -106,7 +106,7 @@ export function attachIndicators(resource, sharesTree) {
  * @param {Function} client The ownCloud SDK client
  * @param {Function} update The closure action that gets called on update
  */
-export async function aggregateResourceShares(
+export function aggregateResourceShares(
   shares,
   incomingShares = false,
   allowSharePerm,
@@ -116,13 +116,12 @@ export async function aggregateResourceShares(
   update
 ) {
   if (incomingShares) {
-    return Promise.all(
-      _(shares)
-        .orderBy(['file_target', 'permissions'], ['asc', 'desc'])
-        .map(share =>
-          buildSharedResource(share, incomingShares, allowSharePerm, server, token, client, update)
-        )
-    )
+    return _.chain(shares)
+      .orderBy(['file_target', 'permissions'], ['asc', 'desc'])
+      .map(share =>
+        buildSharedResource(share, incomingShares, allowSharePerm, server, token, client, update)
+      )
+      .value()
   }
 
   shares.sort((a, b) => a.path.localeCompare(b.path))
@@ -168,14 +167,12 @@ export async function aggregateResourceShares(
     resources.push(share)
   }
 
-  return Promise.all(
-    resources.map(share =>
-      buildSharedResource(share, incomingShares, allowSharePerm, server, token, client, update)
-    )
+  return resources.map(share =>
+    buildSharedResource(share, incomingShares, allowSharePerm, server, token, client, update)
   )
 }
 
-export async function buildSharedResource(
+export function buildSharedResource(
   share,
   incomingShares = false,
   allowSharePerm,
@@ -398,11 +395,11 @@ export function buildDeletedResource(resource) {
   }
 }
 
-export const updateResource = (source = async () => {}, target = () => {}) => {
+export const updateResource = (task = async () => {}, cb = () => {}) => {
   ;(async () => {
     let val
     try {
-      val = await source()
+      val = await task()
     } catch (e) {
       return
     }
@@ -411,6 +408,6 @@ export const updateResource = (source = async () => {}, target = () => {}) => {
       return
     }
 
-    target(val)
+    cb(val)
   })()
 }
