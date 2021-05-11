@@ -103,8 +103,8 @@ export function attachIndicators(resource, sharesTree) {
  * @param {Boolean} allowSharePerm Asserts whether the reshare permission is available
  * @param {String} server The url of the backend
  * @param {String} token The access token of the authenticated user
- * @param {Function} client The ownCloud SDK client
- * @param {Function} update The closure action that gets called on update
+ * @param {Object} client The ownCloud SDK client
+ * @param {Function} updateFn The closure action that gets called on update
  */
 export function aggregateResourceShares(
   shares,
@@ -113,13 +113,13 @@ export function aggregateResourceShares(
   server,
   token,
   client,
-  update
+  updateFn
 ) {
   if (incomingShares) {
     return _.chain(shares)
       .orderBy(['file_target', 'permissions'], ['asc', 'desc'])
       .map(share =>
-        buildSharedResource(share, incomingShares, allowSharePerm, server, token, client, update)
+        buildSharedResource(share, incomingShares, allowSharePerm, server, token, client, updateFn)
       )
       .value()
   }
@@ -168,7 +168,7 @@ export function aggregateResourceShares(
   }
 
   return resources.map(share =>
-    buildSharedResource(share, incomingShares, allowSharePerm, server, token, client, update)
+    buildSharedResource(share, incomingShares, allowSharePerm, server, token, client, updateFn)
   )
 }
 
@@ -179,7 +179,7 @@ export function buildSharedResource(
   server,
   token,
   client,
-  update
+  updateFn
 ) {
   const resource = {
     id: share.item_source,
@@ -269,7 +269,7 @@ export function buildSharedResource(
     })
 
     return cResource
-  }, update)
+  }, updateFn)
 
   return resource
 }
