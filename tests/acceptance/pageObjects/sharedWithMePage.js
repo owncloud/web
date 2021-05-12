@@ -115,7 +115,7 @@ module.exports = {
       // ugly hack: oc-avatar has a parent div.oc-avatar-group, which is also matched by `contains(@class, 'oc-avatar')`.
       // to solve this we try matching on the class surrounded by blanks, which is not matching the oc-avatar-group anymore.
       selector:
-        "//td[contains(@class,'oc-table-data-cell-owner')]//div[contains(concat(' ', normalize-space(@class), ' '), ' oc-avatar ')]",
+        "//td[contains(@class,'oc-table-data-cell-owner')]//span[contains(concat(' ', normalize-space(@class), ' '), ' oc-avatar ')]",
       locateStrategy: 'xpath'
     },
     shareStatusActionOnFileRow: {
