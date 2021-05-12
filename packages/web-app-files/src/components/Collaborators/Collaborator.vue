@@ -1,7 +1,7 @@
 <template>
   <oc-table-simple top class="files-collaborators-collaborator" role="presentation">
     <oc-tr class="files-collaborators-collaborator-table-row-info">
-      <oc-td width="shrink">
+      <oc-td width="shrink" class="oc-py-rm oc-pr-s">
         <div key="collaborator-avatar-loaded">
           <avatar-image
             v-if="isUser"
@@ -30,7 +30,7 @@
           </div>
         </div>
       </oc-td>
-      <oc-td>
+      <oc-td class="oc-py-rm oc-pr-s">
         <div class="uk-flex uk-flex-column uk-flex-center" :class="collaboratorListItemClass">
           <div class="oc-text-initial oc-mb-xs">
             <p
@@ -51,15 +51,19 @@
               v-text="collaborator.collaborator.additionalInfo"
             />
           </div>
-          <span id="collaborator-list-label" class="oc-invisible-sr">Tags</span>
-          <ul id="collaborator-list" aria-labelledby="collaborator-list-label">
-            <li v-if="!isCurrentUser">
+          <span id="collaborator-list-label" v-translate class="oc-invisible-sr">Tags</span>
+          <ul
+            id="collaborator-list"
+            class="oc-my-rm oc-pl-rm"
+            aria-labelledby="collaborator-list-label"
+          >
+            <li v-if="!isCurrentUser" class="oc-py-rm">
               <oc-tag class="files-collaborators-collaborator-share-type">
                 <oc-icon :name="collaboratorTypeTagIcon" />
                 {{ collaboratorType(collaborator.shareType) }}
               </oc-tag>
             </li>
-            <li v-if="$_reshareInformation">
+            <li v-if="$_reshareInformation" class="oc-py-rm">
               <oc-tag
                 :id="$_resharerToggleId"
                 class="files-collaborators-collaborator-reshare-information"
@@ -85,7 +89,11 @@
                   class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm"
                   aria-labelledby="resharer-info"
                 >
-                  <li v-for="resharer in collaborator.resharers" :key="resharer.name">
+                  <li
+                    v-for="resharer in collaborator.resharers"
+                    :key="resharer.name"
+                    class="oc-py-rm"
+                  >
                     <div class="uk-flex uk-flex-middle uk-flex-left">
                       <avatar-image
                         class="oc-mr-s"
@@ -109,13 +117,13 @@
                 </ul>
               </oc-drop>
             </li>
-            <li>
+            <li class="oc-py-rm">
               <oc-tag class="files-collaborators-collaborator-role">
                 <oc-icon :name="roleTagIcon" />
                 {{ originalRole.label }}
               </oc-tag>
             </li>
-            <li v-if="collaborator.expires">
+            <li v-if="collaborator.expires" class="oc-py-rm">
               <oc-tag class="files-collaborators-collaborator-expires">
                 <oc-icon name="text-calendar" />
                 <translate :translate-params="{ expires: formDateFromNow(expirationDate) }">
@@ -123,7 +131,7 @@
                 </translate>
               </oc-tag>
             </li>
-            <li v-if="isIndirectShare">
+            <li v-if="isIndirectShare" class="oc-py-rm">
               <oc-tag
                 type="router-link"
                 class="files-collaborators-collaborator-follow-via"
@@ -140,7 +148,7 @@
           </ul>
         </div>
       </oc-td>
-      <oc-td width="shrink" align-v="top">
+      <oc-td width="shrink" align-v="top" class="oc-py-rm oc-pr-s">
         <div class="uk-flex uk-flex-nowrap uk-flex-middle">
           <oc-button
             v-if="$_editButtonVisible"
@@ -359,15 +367,10 @@ export default {
 
 <style lang="scss" scoped="scoped">
 #collaborator-list {
-  margin-top: 0;
-  margin-bottom: 0;
-  padding-left: 0;
   list-style-type: none;
 
   li {
     float: left;
-    padding-bottom: 0;
-    padding-top: 0;
 
     &:not(:first-child) {
       padding-left: 0.5rem;
@@ -376,15 +379,6 @@ export default {
 }
 
 /* FIXME: Move to ODS somehow */
-.files-collaborators-collaborator-table-row-top > td {
-  padding: 0 10px 3px 0;
-}
-.files-collaborators-collaborator-table-row-info > td {
-  padding: 0 10px 0 0;
-}
-.files-collaborators-collaborator-table-row-bottom > td {
-  padding: 3px 10px 0 0;
-}
 .files-collaborators-collaborator-via-label {
   max-width: 75%;
 }
