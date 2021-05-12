@@ -7613,10 +7613,10 @@ ospec@3.1.0:
   dependencies:
     glob "^7.1.3"
 
-owncloud-design-system@^6.0.1:
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-6.0.1.tgz#bfa8a797fd35b38d320ec7e8e74683c9dd1278be"
-  integrity sha512-nLcXRMYdcX7UDS3UkWim7urLOx00u2VUP+01SSpeN5Liuufh8UR88ENLIRW+fqcIPPGhu15qlr1JsV5+0MDgEA==
+owncloud-design-system@6.0.3:
+  version "6.0.3"
+  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-6.0.3.tgz#c7cf5f4e9095120dce139ef52302f0114187dbb2"
+  integrity sha512-6iKYU0aq1Beei8W58TOOWUf/ekUSgdz5gy1yM4lHw/kPSC+fkXu7YWS53h2RjgPOZRP8PdqPxHE9oMqnBd9fnw==
 
 owncloud-sdk@^1.0.0-740:
   version "1.0.0-1716"
@@ -10677,11 +10677,6 @@ void-elements@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/void-elements/-/void-elements-3.1.0.tgz#614f7fbf8d801f0bb5f0661f5b2f5785750e4f09"
   integrity sha1-YU9/v42AHwu18GYfWy9XhXUOTwk=
-
-vue-avatar@^2.2.0:
-  version "2.3.3"
-  resolved "https://registry.yarnpkg.com/vue-avatar/-/vue-avatar-2.3.3.tgz#e125bf4f4a6f4f9480da0c522020266a8609d2a8"
-  integrity sha512-Z57ILRTkFIAuCH9JiFBxX74C5zua5ub/jRDM/KZ+QKXNfscvmUOgWBs3kA2+wrpZMowIvfLHIT0gvQu1z+zpLg==
 
 vue-clipboard2@^0.3.1:
   version "0.3.1"

@@ -7,7 +7,8 @@ A lot of random changes:
 - Make skip-to-main button translate-able
 - Update searchbar label string
 - Renamed "personal files" to "all files" in routes (soft rename, due to changes in the future)
-- Updated ODS to v5.1.0
+- Updated ODS to v6.0.3, making row heights theme-able and bringing a more accessible avatar component that improves loading of users' profile pictures
 
 https://github.com/owncloud/web/pull/4965
 https://github.com/owncloud/web/pull/4975
+https://github.com/owncloud/web/pull/5098
