@@ -1,9 +1,9 @@
-Changelog for ownCloud Web [unreleased] (UNRELEASED)
+Changelog for ownCloud Web [3.1.0] (2021-05-12)
 =======================================
-The following sections list the changes in ownCloud web unreleased relevant to
+The following sections list the changes in ownCloud web 3.1.0 relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v3.0.0...master
+[3.1.0]: https://github.com/owncloud/web/compare/v3.0.0...v3.1.0
 
 Summary
 -------
@@ -60,10 +60,12 @@ Details
    `<br>` tags that were incorrectly used for spacing - Used `<h4>` tags for headings in the files
    sidebar - Make skip-to-main button translate-able - Update searchbar label string - Renamed
    "personal files" to "all files" in routes (soft rename, due to changes in the future) - Updated
-   ODS to v5.1.0
+   ODS to v6.0.3, making row heights theme-able and bringing a more accessible avatar component
+   that improves loading of users' profile pictures
 
    https://github.com/owncloud/web/pull/4965
    https://github.com/owncloud/web/pull/4975
+   https://github.com/owncloud/web/pull/5098
 
 * Enhancement - Implement proper direct delete: [#4991](https://github.com/owncloud/web/pull/4991)
 
