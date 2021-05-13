@@ -790,6 +790,7 @@ def acceptance(ctx):
         "openIdConnect": False,
         "oc10IntegrationAppIncluded": False,
         "skip": False,
+        "debugSuites": [],
     }
 
     if "defaults" in config:
@@ -804,6 +805,14 @@ def acceptance(ctx):
                 suites[suite] = suite
         else:
             suites = matrix["suites"]
+
+        if "debugSuites" in matrix and len(matrix["debugSuites"]) != 0:
+            if type(matrix["debugSuites"]) == "list":
+                suites = {}
+                for suite in matrix["debugSuites"]:
+                    suites[suite] = suite
+            else:
+                suites = matrix["debugSuites"]
 
         for key, value in suites.items():
             if type(value) == "list":
