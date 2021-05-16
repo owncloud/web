@@ -101,7 +101,6 @@ export default {
     ...mapMutations(['SET_QUOTA']),
 
     $_deleteResources_hideDialog() {
-      this.resetFileSelection()
       this.setHighlightedFile(null)
       this.hideModal()
     },
