@@ -44,9 +44,11 @@ const config = {
   page_objects_path: './tests/acceptance/pageObjects',
   custom_commands_path: [
     './tests/acceptance/customCommands',
-    'node_modules/nightwatch-vrt/commands'
+    'node_modules/nightwatch-vrt/commands',
+    'node_modules/nightwatch-coverage/commands'
   ],
   custom_assertions_path: ['node_modules/nightwatch-vrt/assertions'],
+  globals_path: './nightwatch_globals.js',
   test_settings: {
     default: {
       launch_url: LOCAL_LAUNCH_URL,
