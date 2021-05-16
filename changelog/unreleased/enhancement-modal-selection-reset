@@ -1,0 +1,6 @@
+Enhancement: Do not reset file selection when cancelling batch delete
+
+We've removed the reset selection method call when cancelling batch delete.
+If the user now cancels the delete dialog, the file selection stays as it was before displaying the dialog.
+
+https://github.com/owncloud/web/pull/5107
