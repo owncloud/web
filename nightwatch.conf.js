@@ -40,8 +40,6 @@ function generateScreenshotFilePath(nightwatchClient, basePath, imagePath) {
   return path.join(process.cwd(), basePath, imagePath)
 }
 
-const { createCoverageReporter } = require('nightwatch-coverage')
-
 const config = {
   page_objects_path: './tests/acceptance/pageObjects',
   custom_commands_path: [
@@ -50,13 +48,11 @@ const config = {
     'node_modules/nightwatch-coverage/commands'
   ],
   custom_assertions_path: ['node_modules/nightwatch-vrt/assertions'],
+  globals_path: './nightwatch_globals.js',
   test_settings: {
     default: {
       launch_url: LOCAL_LAUNCH_URL,
       globals: {
-        coverageReporter: createCoverageReporter({
-          /* options */
-        }),
         waitForConditionTimeout: 20000,
         waitForNegativeConditionTimeout: 1000,
         waitForConditionPollInterval: 10,

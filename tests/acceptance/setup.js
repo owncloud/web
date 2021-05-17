@@ -1,4 +1,4 @@
-import { setDefaultTimeout, After, Before, defineParameterType } from 'cucumber'
+import { setDefaultTimeout, After, AfterAll, Before, defineParameterType } from 'cucumber'
 import { createSession, closeSession, client, startWebDriver, stopWebDriver } from 'nightwatch-api'
 import { rollbackConfigs, cacheConfigs } from './helpers/config'
 import { getAllLogsWithDateTime } from './helpers/browserConsole.js'
@@ -130,4 +130,8 @@ After(async function tryToReadBrowserConsoleOnFailure({ result }) {
   // MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 unhandledRejection listeners added
   // this clears all remaining eventListeners before proceeding to next test
   process.removeAllListeners()
+})
+
+AfterAll(function() {
+  client.globals.coverageReporter.save()
 })

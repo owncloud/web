@@ -1,5 +1,5 @@
 const { client } = require('nightwatch-api')
-const { After, AfterAll, Before, Given, Then, When } = require('cucumber')
+const { After, Before, Given, Then, When } = require('cucumber')
 const webdavHelper = require('../helpers/webdavHelper')
 const httpHelper = require('../helpers/httpHelper')
 const backendHelper = require('../helpers/backendHelper')
@@ -344,12 +344,5 @@ Given('default expiration date for users is set to {int} day/days', function(day
 })
 
 After(function() {
-  client.collectCoverage(function () {
-    // eslint-disable-next-line no-undef
-    client.end(done)
-  })
-})
-
-AfterAll(function() {
-  client.globals.coverageReporter.save()
+  client.collectCoverage()
 })
