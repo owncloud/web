@@ -1,0 +1,7 @@
+Bugfix: Correct sharee tag
+
+The tag _inside_ a shared folder always announced the current user as "owner", 
+since the shares lookup didn't check for the parent folders' ownership. This has 
+been fixed now and users get the correct tag (e.g. "Viewer", "Editor" etc) in the sidebar.
+
+https://github.com/owncloud/web/pull/5112

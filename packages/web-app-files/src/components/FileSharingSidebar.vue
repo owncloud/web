@@ -277,10 +277,10 @@ export default {
     },
 
     currentUsersPermissions() {
-      if (this.incomingShares.length > 0) {
+      if (this.$_allIncomingShares.length > 0) {
         let permissions = permissionsBitmask.read
 
-        for (const share of this.incomingShares) {
+        for (const share of this.$_allIncomingShares) {
           permissions |= share.permissions
         }
 
