@@ -171,6 +171,7 @@ Again, you can use the [ownCloud design tokens](https://owncloud.design/#/Design
       "size": {
         "form-check-default": "",
         "height-small": "",
+        "height-table-row": "",
         "icon-default": "",
         "width-medium": ""
       },
@@ -263,6 +264,7 @@ An empty template for your custom theme is provided below, and you can use the i
       "sizes": {
         "form-check-default": "",
         "height-small": "",
+        "height-table-row": "",
         "icon-default": "",
         "width-medium": ""
       },
