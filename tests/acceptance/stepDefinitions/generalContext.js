@@ -1,5 +1,5 @@
 const { client } = require('nightwatch-api')
-const { After, Before, Given, Then, When } = require('cucumber')
+const { After, AfterAll, Before, Given, Then, When } = require('cucumber')
 const webdavHelper = require('../helpers/webdavHelper')
 const httpHelper = require('../helpers/httpHelper')
 const backendHelper = require('../helpers/backendHelper')
@@ -341,4 +341,15 @@ Given('default expiration date for users is set to {int} day/days', function(day
   occHelper.runOcc([`config:app:set --value ${days} core shareapi_expire_after_n_days_user_share`])
 
   return this
+})
+
+After(function() {
+  client.collectCoverage(function () {
+    // eslint-disable-next-line no-undef
+    client.end(done)
+  })
+})
+
+AfterAll(function() {
+  client.globals.coverageReporter.save()
 })
