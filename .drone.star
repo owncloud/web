@@ -12,6 +12,7 @@ config = {
     "yarnlint": True,
     "acceptance": {
         "webUI": {
+            "debugSuites": ["webUIUpload"],
             "suites": {
                 "webUIBasic": [
                     "webUIAccount",
@@ -105,10 +106,12 @@ config = {
                 "EXPECTED_FAILURES_FILE": "/var/www/owncloud/web/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md",
                 "WEB_UI_CONFIG": "/var/www/owncloud/web/dist/config.json",
             },
+            "filterTags": "@debugScenario",
             "visualTesting": True,
             "screenShots": True,
         },
         "webUINotification": {
+            "skip": True,
             "suites": {
                 "webUINotificationBasic": [
                     "webUINotifications",
@@ -127,6 +130,7 @@ config = {
             "notificationsAppNeeded": True,
         },
         "webUIFederation": {
+            "skip": True,
             "suites": {
                 "webUISharingExternal": "SharingExternal",
                 "webUISharingExternalToRoot": "SharingExternalRoot",
@@ -140,6 +144,7 @@ config = {
             "federatedServerVersion": "daily-master-qa",
         },
         "webUI-XGA-Notifications": {
+            "skip": True,
             "suites": {
                 "XGAPortrait1-Notifications": [
                     "webUINotifications",
@@ -155,6 +160,7 @@ config = {
             "filterTags": "@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10",
         },
         "webUI-XGA": {
+            "skip": True,
             "suites": {
                 "XGAPortrait1": [
                     "webUIAccount",
@@ -233,6 +239,7 @@ config = {
             "filterTags": "@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10",
         },
         "webUI-Notifications-iPhone": {
+            "skip": True,
             "suites": {
                 "iPhone1-Notifications": [
                     "webUINotifications",
@@ -248,6 +255,7 @@ config = {
             "filterTags": "@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10",
         },
         "webUI-iPhone": {
+            "skip": True,
             "suites": {
                 "iPhone1": [
                     "webUIAccount",
@@ -326,6 +334,7 @@ config = {
             "filterTags": "@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10",
         },
         "webUI-ocis": {
+            "skip": True,
             "suites": {
                 "webUIOCISBasic": [
                     "webUILogin",
@@ -431,6 +440,7 @@ config = {
             "filterTags": "not @skip and not @skipOnOCIS and not @notToImplementOnOCIS",
         },
         "webUI-notifications-oc10-integration": {
+            "skip": True,
             "suites": {
                 "oc10-integration-notifications": [
                     "webUINotifications",
@@ -449,6 +459,7 @@ config = {
             "screenShots": True,
         },
         "webUI-oc10-integration": {
+            "skip": True,
             "suites": {
                 "IntegrationApp1": [
                     "webUIAccount",
@@ -780,7 +791,7 @@ def acceptance(ctx):
         "extraEnvironment": {},
         "cronOnly": False,
         "filterTags": "not @skip and not @skipOnOC10 and not @openIdLogin",
-        "logLevel": "2",
+        "logLevel": "1",
         "notificationsAppNeeded": False,
         "federatedServerNeeded": False,
         "federatedServerVersion": "",

@@ -18,7 +18,7 @@
     "depcheck": "depcheck",
     "lint": "eslint packages/*/src tests --ext vue --ext js --color",
     "serve": "SERVER=true yarn build:w",
-    "test:acceptance:drone": "cucumber-js --retry 1 --require-module @babel/register --require-module @babel/polyfill --require tests/acceptance/setup.js --require tests/acceptance/stepDefinitions --format node_modules/cucumber-pretty ${TEST_PATHS:-tests/acceptance/features/$TEST_CONTEXT} -t \"${TEST_TAGS}\"",
+    "test:acceptance:drone": "cucumber-js --require-module @babel/register --require-module @babel/polyfill --require tests/acceptance/setup.js --require tests/acceptance/stepDefinitions --format node_modules/cucumber-pretty ${TEST_PATHS:-tests/acceptance/features/$TEST_CONTEXT} -t \"${TEST_TAGS}\"",
     "test:acceptance:oc10": "cucumber-js --require-module @babel/register --require-module @babel/polyfill --require tests/acceptance/setup.js --require tests/acceptance/stepDefinitions --format node_modules/cucumber-pretty -t \"${TEST_TAGS:-not @skip and not @skipOnOC10}\"",
     "test:acceptance:ocis": "NODE_TLS_REJECT_UNAUTHORIZED=0 RUN_ON_OCIS=true cucumber-js --require-module @babel/register --require-module @babel/polyfill --require tests/acceptance/setup.js --require tests/acceptance/stepDefinitions --format node_modules/cucumber-pretty -t \"${TEST_TAGS:-not @skip and not @skipOnOCIS and not @notToImplementOnOCIS}\"",
     "test:unit": "jest --coverage --config ./tests/unit/config/jest.config.js"

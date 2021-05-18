@@ -126,7 +126,7 @@ Feature: File Upload
     And the content of "lorem.txt" should not have changed
     And file "lorem (2).txt" should not be listed on the webUI
 
-
+  @disablePreviews @debugScenario
   Scenario: overwrite an existing file in a sub-folder
     When the user opens folder "simple-folder" using the webUI
     And the user uploads overwriting file "lorem.txt" using the webUI
@@ -173,3 +173,168 @@ Feature: File Upload
       | sunday,monday.txt |
     And as "Alice" folder "Folder,With,Comma" should exist
     And as "Alice" file "Folder,With,Comma/sunday,monday.txt" should exist
+
+  @disablePreviews @debugScenario
+  Scenario: overwrite an existing file in a sub-folder
+    When the user opens folder "simple-folder" using the webUI
+    And the user uploads overwriting file "lorem.txt" using the webUI
+    Then file "lorem.txt" should be listed on the webUI
+    And as "Alice" the content of "simple-folder/lorem.txt" should be the same as the local "lorem.txt"
+
+  @disablePreviews @debugScenario
+  Scenario: overwrite an existing file in a sub-folder
+    When the user opens folder "simple-folder" using the webUI
+    And the user uploads overwriting file "lorem.txt" using the webUI
+    Then file "lorem.txt" should be listed on the webUI
+    And as "Alice" the content of "simple-folder/lorem.txt" should be the same as the local "lorem.txt"
+    
+  @disablePreviews @debugScenario
+  Scenario: overwrite an existing file in a sub-folder
+    When the user opens folder "simple-folder" using the webUI
+    And the user uploads overwriting file "lorem.txt" using the webUI
+    Then file "lorem.txt" should be listed on the webUI
+    And as "Alice" the content of "simple-folder/lorem.txt" should be the same as the local "lorem.txt"
+
+  @disablePreviews @debugScenario
+  Scenario: overwrite an existing file in a sub-folder
+    When the user opens folder "simple-folder" using the webUI
+    And the user uploads overwriting file "lorem.txt" using the webUI
+    Then file "lorem.txt" should be listed on the webUI
+    And as "Alice" the content of "simple-folder/lorem.txt" should be the same as the local "lorem.txt"
+
+
+  @disablePreviews @debugScenario
+  Scenario: overwrite an existing file in a sub-folder
+    When the user opens folder "simple-folder" using the webUI
+    And the user uploads overwriting file "lorem.txt" using the webUI
+    Then file "lorem.txt" should be listed on the webUI
+    And as "Alice" the content of "simple-folder/lorem.txt" should be the same as the local "lorem.txt"
+
+  @disablePreviews @debugScenario
+  Scenario: overwrite an existing file in a sub-folder
+    When the user opens folder "simple-folder" using the webUI
+    And the user uploads overwriting file "lorem.txt" using the webUI
+    Then file "lorem.txt" should be listed on the webUI
+    And as "Alice" the content of "simple-folder/lorem.txt" should be the same as the local "lorem.txt"
+
+  @disablePreviews @debugScenario
+  Scenario: overwrite an existing file in a sub-folder
+    When the user opens folder "simple-folder" using the webUI
+    And the user uploads overwriting file "lorem.txt" using the webUI
+    Then file "lorem.txt" should be listed on the webUI
+    And as "Alice" the content of "simple-folder/lorem.txt" should be the same as the local "lorem.txt"
+
+  @disablePreviews @debugScenario
+  Scenario: overwrite an existing file in a sub-folder
+    When the user opens folder "simple-folder" using the webUI
+    And the user uploads overwriting file "lorem.txt" using the webUI
+    Then file "lorem.txt" should be listed on the webUI
+    And as "Alice" the content of "simple-folder/lorem.txt" should be the same as the local "lorem.txt"
+
+
+  @disablePreviews @debugScenario
+  Scenario: overwrite an existing file in a sub-folder
+    When the user opens folder "simple-folder" using the webUI
+    And the user uploads overwriting file "lorem.txt" using the webUI
+    Then file "lorem.txt" should be listed on the webUI
+    And as "Alice" the content of "simple-folder/lorem.txt" should be the same as the local "lorem.txt"
+
+  @disablePreviews @debugScenario
+  Scenario: overwrite an existing file in a sub-folder
+    When the user opens folder "simple-folder" using the webUI
+    And the user uploads overwriting file "lorem.txt" using the webUI
+    Then file "lorem.txt" should be listed on the webUI
+    And as "Alice" the content of "simple-folder/lorem.txt" should be the same as the local "lorem.txt"
+
+
+  @disablePreviews @debugScenario
+  Scenario: overwrite an existing file in a sub-folder
+    When the user opens folder "simple-folder" using the webUI
+    And the user uploads overwriting file "lorem.txt" using the webUI
+    Then file "lorem.txt" should be listed on the webUI
+    And as "Alice" the content of "simple-folder/lorem.txt" should be the same as the local "lorem.txt"
+
+  @disablePreviews @debugScenario
+  Scenario: overwrite an existing file in a sub-folder
+    When the user opens folder "simple-folder" using the webUI
+    And the user uploads overwriting file "lorem.txt" using the webUI
+    Then file "lorem.txt" should be listed on the webUI
+    And as "Alice" the content of "simple-folder/lorem.txt" should be the same as the local "lorem.txt"
+
+  @disablePreviews @debugScenario
+  Scenario: overwrite an existing file in a sub-folder
+    When the user opens folder "simple-folder" using the webUI
+    And the user uploads overwriting file "lorem.txt" using the webUI
+    Then file "lorem.txt" should be listed on the webUI
+    And as "Alice" the content of "simple-folder/lorem.txt" should be the same as the local "lorem.txt"
+
+  @disablePreviews @debugScenario
+  Scenario: overwrite an existing file in a sub-folder
+    When the user opens folder "simple-folder" using the webUI
+    And the user uploads overwriting file "lorem.txt" using the webUI
+    Then file "lorem.txt" should be listed on the webUI
+    And as "Alice" the content of "simple-folder/lorem.txt" should be the same as the local "lorem.txt"
+
+
+  @disablePreviews @debugScenario
+  Scenario: overwrite an existing file in a sub-folder
+    When the user opens folder "simple-folder" using the webUI
+    And the user uploads overwriting file "lorem.txt" using the webUI
+    Then file "lorem.txt" should be listed on the webUI
+    And as "Alice" the content of "simple-folder/lorem.txt" should be the same as the local "lorem.txt"
+
+  @disablePreviews @debugScenario
+  Scenario: overwrite an existing file in a sub-folder
+    When the user opens folder "simple-folder" using the webUI
+    And the user uploads overwriting file "lorem.txt" using the webUI
+    Then file "lorem.txt" should be listed on the webUI
+    And as "Alice" the content of "simple-folder/lorem.txt" should be the same as the local "lorem.txt"
+
+  @disablePreviews @debugScenario
+  Scenario: overwrite an existing file in a sub-folder
+    When the user opens folder "simple-folder" using the webUI
+    And the user uploads overwriting file "lorem.txt" using the webUI
+    Then file "lorem.txt" should be listed on the webUI
+    And as "Alice" the content of "simple-folder/lorem.txt" should be the same as the local "lorem.txt"
+
+  @disablePreviews @debugScenario
+  Scenario: overwrite an existing file in a sub-folder
+    When the user opens folder "simple-folder" using the webUI
+    And the user uploads overwriting file "lorem.txt" using the webUI
+    Then file "lorem.txt" should be listed on the webUI
+    And as "Alice" the content of "simple-folder/lorem.txt" should be the same as the local "lorem.txt"
+
+  @disablePreviews @debugScenario
+  Scenario: overwrite an existing file in a sub-folder
+    When the user opens folder "simple-folder" using the webUI
+    And the user uploads overwriting file "lorem.txt" using the webUI
+    Then file "lorem.txt" should be listed on the webUI
+    And as "Alice" the content of "simple-folder/lorem.txt" should be the same as the local "lorem.txt"
+
+  @disablePreviews @debugScenario
+  Scenario: overwrite an existing file in a sub-folder
+    When the user opens folder "simple-folder" using the webUI
+    And the user uploads overwriting file "lorem.txt" using the webUI
+    Then file "lorem.txt" should be listed on the webUI
+    And as "Alice" the content of "simple-folder/lorem.txt" should be the same as the local "lorem.txt"
+
+  @disablePreviews @debugScenario
+  Scenario: overwrite an existing file in a sub-folder
+    When the user opens folder "simple-folder" using the webUI
+    And the user uploads overwriting file "lorem.txt" using the webUI
+    Then file "lorem.txt" should be listed on the webUI
+    And as "Alice" the content of "simple-folder/lorem.txt" should be the same as the local "lorem.txt"
+
+  @disablePreviews @debugScenario
+  Scenario: overwrite an existing file in a sub-folder
+    When the user opens folder "simple-folder" using the webUI
+    And the user uploads overwriting file "lorem.txt" using the webUI
+    Then file "lorem.txt" should be listed on the webUI
+    And as "Alice" the content of "simple-folder/lorem.txt" should be the same as the local "lorem.txt"
+
+  @disablePreviews @debugScenario
+  Scenario: overwrite an existing file in a sub-folder
+    When the user opens folder "simple-folder" using the webUI
+    And the user uploads overwriting file "lorem.txt" using the webUI
+    Then file "lorem.txt" should be listed on the webUI
+    And as "Alice" the content of "simple-folder/lorem.txt" should be the same as the local "lorem.txt"
