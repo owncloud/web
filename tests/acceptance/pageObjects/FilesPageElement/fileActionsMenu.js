@@ -160,27 +160,27 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     deleteButtonInAccordion: {
-      selector: '//button[@aria-label="Delete"]',
+      selector: '//button[normalize-space()="Delete"]',
       locateStrategy: 'xpath'
     },
     downloadButtonInAccordion: {
-      selector: '//button[@aria-label="Download"]',
+      selector: '//button[normalize-space()="Download"]',
       locateStrategy: 'xpath'
     },
     favoriteButtonInAccordion: {
-      selector: '//button[@aria-label="Mark as favorite"]',
+      selector: '//button[normalize-space()="Mark as favorite"]',
       locateStrategy: 'xpath'
     },
     unmarkFavoriteButtonInAccordion: {
-      selector: '//button[@aria-label="Unmark as favorite"]',
+      selector: '//button[normalize-space()="Unmark as favorite"]',
       locateStrategy: 'xpath'
     },
     restoreButtonInAccordion: {
-      selector: '//button[@aria-label="Restore"]',
+      selector: '//button[normalize-space()="Restore"]',
       locateStrategy: 'xpath'
     },
     renameButtonInAccordion: {
-      selector: '//button[@aria-label="Rename"]',
+      selector: '//button[normalize-space()="Rename"]',
       locateStrategy: 'xpath'
     },
     // TODO: Merge with selectors in personalPage
@@ -194,19 +194,19 @@ module.exports = {
       selector: '.oc-modal-body-input > input'
     },
     moveButtonInAccordion: {
-      selector: '//button[@aria-label="Move"]',
+      selector: '//button[normalize-space()="Move"]',
       locateStrategy: 'xpath'
     },
     copyButtonInAccordion: {
-      selector: '//button[@aria-label="Copy"]',
+      selector: '//button[normalize-space()="Copy"]',
       locateStrategy: 'xpath'
     },
     mediaViewerButtonInAccordion: {
-      selector: '//button[@aria-label="Open in Mediaviewer"]',
+      selector: '//button[normalize-space()="Open in Mediaviewer"]',
       locateStrategy: 'xpath'
     },
     markdownEditorButtonInAccordion: {
-      selector: '//button[@aria-label="Open in MarkdownEditor"]',
+      selector: '//button[normalize-space()="Open in MarkdownEditor"]',
       locateStrategy: 'xpath'
     }
   }
