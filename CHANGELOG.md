@@ -8,10 +8,19 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Correct navigation through "via"-tags: [#5122](https://github.com/owncloud/web/pull/5122)
 * Bugfix - Correct sharee tag: [#5112](https://github.com/owncloud/web/pull/5112)
 
 Details
 -------
+
+* Bugfix - Correct navigation through "via"-tags: [#5122](https://github.com/owncloud/web/pull/5122)
+
+   The "shared via X" link in the indirect share tag in the sidebar was navigating to the parent
+   directory of the indirect share entry. This has been fixed for the collaborators sidebar
+   section and the link target is the share entry itself now.
+
+   https://github.com/owncloud/web/pull/5122
 
 * Bugfix - Correct sharee tag: [#5112](https://github.com/owncloud/web/pull/5112)
 
