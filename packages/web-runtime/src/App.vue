@@ -34,6 +34,7 @@
                     v-if="isSidebarFixed"
                     variation="inverse"
                     appearance="raw"
+                    class="web-sidebar-btn-close"
                     :aria-label="$gettext('Close sidebar navigation')"
                     @click="toggleAppNavigationVisibility"
                   >
@@ -482,5 +483,12 @@ body,
     width: 100%;
     z-index: 3;
   }
+}
+
+.web-sidebar-btn-close {
+  position: absolute;
+  right: var(--oc-space-medium);
+  top: var(--oc-space-medium);
+  z-index: 3;
 }
 </style>
