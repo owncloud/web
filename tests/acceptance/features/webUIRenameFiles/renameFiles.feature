@@ -120,7 +120,7 @@ Feature: rename files
 
   @skipOnOC10
   Scenario Outline: Rename a file using forbidden characters (on ocis)
-    When the user tries to rename file "data.zip" to "<filename>" using the webUI
+    When the user renames file "data.zip" to "<filename>" using the webUI
     Then file "data.zip" should not be listed on the webUI
     And file "<filename>" should be listed on the webUI
     Examples:
