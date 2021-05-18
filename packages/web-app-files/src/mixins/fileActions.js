@@ -44,8 +44,13 @@ export default {
     $_fileActions_editorActions() {
       return this.apps.fileEditors.map(editor => {
         return {
-          label: () => {
-            return `Open in ${this.apps.meta[editor.app].name}`
+          ariaLabel: () => {
+            const translated = this.$gettext('Open in %{app}')
+            return this.$gettextInterpolate(
+              translated,
+              { app: this.apps.meta[editor.app].name },
+              true
+            )
           },
           icon: this.apps.meta[editor.app].icon,
           handler: item => this.$_fileActions_openEditor(editor, item.path, item.id),
