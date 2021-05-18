@@ -1602,16 +1602,9 @@ def buildGlauth():
         "image": "owncloudci/golang:1.16",
         "pull": "always",
         "commands": [
-            # using ocis-glauth repo because latest glauth doesn't supports the bridge setup
-            "mkdir -p /srv/app/src",
-            "cd /srv/app/src",
-            "mkdir -p github.com/owncloud/",
-            "cd github.com/owncloud/",
-            "git clone http://github.com/owncloud/ocis-glauth",
-            "cd ocis-glauth",
-            "git checkout 44e252306af2dedd72ad00567bbfe9c03322ab20",
+            "cd /srv/app/src/github.com/owncloud/ocis/glauth",
             "make build",
-            "cp bin/ocis-glauth /var/www/owncloud",
+            "cp bin/glauth /var/www/owncloud",
         ],
         "volumes": [{
             "name": "gopath",
@@ -1634,7 +1627,7 @@ def glauthService():
         },
         "commands": [
             "cd /var/www/owncloud",
-            "./ocis-glauth --log-level debug server --backend-server http://owncloud/",
+            "./glauth --log-level debug server --backend-server http://owncloud/",
         ],
         "volumes": [{
             "name": "gopath",
