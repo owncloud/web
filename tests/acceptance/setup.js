@@ -131,7 +131,3 @@ After(async function tryToReadBrowserConsoleOnFailure({ result }) {
   // this clears all remaining eventListeners before proceeding to next test
   process.removeAllListeners()
 })
-
-AfterAll(function() {
-  client.globals.coverageReporter.save()
-})

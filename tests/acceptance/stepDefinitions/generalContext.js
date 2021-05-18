@@ -5,10 +5,14 @@ const httpHelper = require('../helpers/httpHelper')
 const backendHelper = require('../helpers/backendHelper')
 const assert = require('assert')
 const fs = require('fs')
+const path = require('path');
 const occHelper = require('../helpers/occHelper')
+const { createCoverageReporter } = require('nightwatch-coverage')
 
 let initialConfigJsonSettings
 let createdFiles = []
+
+
 
 Given(
   'a file with the size of {string} bytes and the name {string} has been created locally',
@@ -343,6 +347,15 @@ Given('default expiration date for users is set to {int} day/days', function(day
   return this
 })
 
-After(function() {
-  client.collectCoverage()
+After(async function() {
+  // placing this in `setup.js` does not work
+  await client.collectCoverage()
+  await client.globals.coverageReporter.save()
+})
+
+Before(function(testData) {
+  client.globals.coverageReporter = createCoverageReporter({
+    coverageDirectory: path.join(process.cwd(), 'coverage', testData.sourceLocation.uri, testData.sourceLocation.line.toString())
+    /* options */
+  })
 })
