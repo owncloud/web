@@ -175,7 +175,7 @@
 import { mapGetters } from 'vuex'
 import moment from 'moment'
 import { shareTypes } from '../../helpers/shareTypes'
-import { basename, dirname } from 'path'
+import { basename } from 'path'
 import CollaboratorsMixins from '../../mixins/collaborators'
 import Mixins from '../../mixins'
 
@@ -249,14 +249,10 @@ export default {
     },
 
     viaRouterParams() {
-      const viaPath = this.collaborator.path
       return {
         name: 'files-personal',
         params: {
-          item: dirname(viaPath) || '/'
-        },
-        query: {
-          scrollTo: basename(viaPath)
+          item: this.collaborator.path || '/'
         }
       }
     },
