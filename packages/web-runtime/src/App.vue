@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="web">
     <oc-hidden-announcer :announcement="announcement" level="polite" />
     <skip-to target="main">
       <translate>Skip to main</translate>
@@ -17,24 +17,51 @@
       <template v-else-if="!showHeader">
         <router-view name="fullscreen" />
       </template>
-      <div v-else key="core-content" class="uk-flex uk-flex-stretch">
+      <div v-else id="web-content" key="core-content" class="uk-flex uk-flex-stretch">
         <transition :name="appNavigationAnimation">
           <focus-trap v-if="isSidebarVisible" :active="isSidebarFixed && appNavigationVisible">
-            <oc-sidebar
+            <oc-sidebar-nav
+              v-show="isSidebarVisible"
+              id="web-nav-sidebar"
               v-touch:swipe.left="handleNavSwipe"
               class="oc-app-navigation"
-              :logo-img="logoImage"
-              :logo-alt="sidebarLogoAlt"
-              :nav-items="sidebarNavItems"
+              :accessible-label="$gettext('Navigation menu')"
               :class="sidebarClasses"
-              :fixed="isSidebarFixed"
-              :accessible-label="accessibleLabel"
-              @close="toggleAppNavigationVisibility"
             >
-              <template v-if="sidebar.sidebarFooterContentComponent" v-slot:footer>
+              <template #header>
+                <div class="uk-text-center">
+                  <oc-button
+                    v-if="isSidebarFixed"
+                    variation="inverse"
+                    appearance="raw"
+                    class="web-sidebar-btn-close"
+                    :aria-label="$gettext('Close navigation menu')"
+                    @click="toggleAppNavigationVisibility"
+                  >
+                    <oc-icon name="close" />
+                  </oc-button>
+                  <router-link ref="navigationSidebarLogo" to="/">
+                    <oc-logo :src="logoImage" :alt="sidebarLogoAlt" />
+                  </router-link>
+                </div>
+              </template>
+              <template #nav>
+                <oc-list>
+                  <oc-sidebar-nav-item
+                    v-for="link in sidebarNavItems"
+                    :key="link.route.path"
+                    :active="link.active"
+                    :target="link.route.path"
+                    :icon="link.icon || link.iconMaterial"
+                  >
+                    {{ link.name }}
+                  </oc-sidebar-nav-item>
+                </oc-list>
+              </template>
+              <template v-if="sidebar.sidebarFooterContentComponent" #footer>
                 <component :is="sidebar.sidebarFooterContentComponent" />
               </template>
-            </oc-sidebar>
+            </oc-sidebar-nav>
           </focus-trap>
         </transition>
         <div class="uk-width-expand web-content-container">
@@ -152,10 +179,6 @@ export default {
 
     logoImage() {
       return this.configuration.theme.logo.sidebar
-    },
-
-    accessibleLabel() {
-      return this.$gettext('Sidebar navigation menu')
     },
 
     sidebarLogoAlt() {
@@ -312,6 +335,12 @@ export default {
 
     toggleAppNavigationVisibility() {
       this.appNavigationVisible = !this.appNavigationVisible
+
+      if (this.appNavigationVisible) {
+        this.$nextTick(() => {
+          this.$refs.navigationSidebarLogo.$el.focus()
+        })
+      }
     },
 
     $_updateNotifications() {
@@ -376,6 +405,14 @@ export default {
 }
 </script>
 <style>
+html,
+body,
+#web,
+#web-container,
+#web-content {
+  height: 100%;
+}
+
 #web-container {
   background-color: var(--oc-color-background-default);
 }
@@ -431,5 +468,23 @@ export default {
 .loading-overlay .oc-spinner:after {
   border: 10px solid;
   border-bottom: 10px solid transparent;
+}
+
+@media only screen and (max-width: 960px) {
+  #web-nav-sidebar {
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 3;
+  }
+}
+
+.web-sidebar-btn-close {
+  position: absolute;
+  right: var(--oc-space-medium);
+  top: var(--oc-space-medium);
+  z-index: 3;
 }
 </style>

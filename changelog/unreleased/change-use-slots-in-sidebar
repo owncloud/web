@@ -1,0 +1,5 @@
+Change: Use slots in the navigation sidebar
+
+In the new sidebar content is defined solely via slots. We've moved all the content into those slots so that the sidebar still gets displayed correctly.
+
+https://github.com/owncloud/web/pull/5105
