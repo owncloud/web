@@ -57,6 +57,9 @@ module.exports = {
         .clearValueWithEvent('@editorTextarea')
         .setValue('@editorTextarea', content)
     },
+    waitForPageLoaded: function() {
+      return this.waitForElementVisible('@editorTextarea')
+    },
     /**
      * appends new content to the existing content
      * @param {string} content

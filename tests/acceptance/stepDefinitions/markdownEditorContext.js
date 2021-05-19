@@ -8,6 +8,7 @@ const filesList = client.page.FilesPageElement.filesList()
 
 Given('the user has opened file {string} in the markdown editor webUI', async fileName => {
   await filesList.clickOnFileName(fileName)
+  await markdownEditor.waitForPageLoaded()
   const actualFileName = await markdownEditor.getFileName()
   return assertEqualText(fileName, actualFileName)
 })
