@@ -25,7 +25,7 @@
               id="web-nav-sidebar"
               v-touch:swipe.left="handleNavSwipe"
               class="oc-app-navigation"
-              :accessible-label="$gettext('Application navigation')"
+              :accessible-label="$gettext('Navigation menu')"
               :class="sidebarClasses"
             >
               <template #header>
@@ -35,13 +35,13 @@
                     variation="inverse"
                     appearance="raw"
                     class="web-sidebar-btn-close"
-                    :aria-label="$gettext('Close sidebar navigation')"
+                    :aria-label="$gettext('Close navigation menu')"
                     @click="toggleAppNavigationVisibility"
                   >
-                    <oc-icon name="close" aria-hidden="true" />
+                    <oc-icon name="close" />
                   </oc-button>
                   <router-link ref="navigationSidebarLogo" to="/">
-                    <oc-logo :src="logoImage" alt="ownCloud" />
+                    <oc-logo :src="logoImage" :alt="sidebarLogoAlt" />
                   </router-link>
                 </div>
               </template>
@@ -179,10 +179,6 @@ export default {
 
     logoImage() {
       return this.configuration.theme.logo.sidebar
-    },
-
-    accessibleLabel() {
-      return this.$gettext('Sidebar navigation menu')
     },
 
     sidebarLogoAlt() {
