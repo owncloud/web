@@ -126,7 +126,7 @@ Feature: File Upload
     And the content of "lorem.txt" should not have changed
     And file "lorem (2).txt" should not be listed on the webUI
 
-
+  @disablePreviews
   Scenario: overwrite an existing file in a sub-folder
     When the user opens folder "simple-folder" using the webUI
     And the user uploads overwriting file "lorem.txt" using the webUI
