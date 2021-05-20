@@ -277,7 +277,7 @@ export default {
       'loadIndicators'
     ]),
     ...mapActions(['openFile', 'showMessage', 'createModal', 'setModalInputErrorMessage']),
-    ...mapMutations('Files', ['PUSH_NEW_RESOURCE']),
+    ...mapMutations('Files', ['UPSERT_RESOURCE']),
     ...mapMutations(['SET_QUOTA']),
 
     showCreateResourceModal(isFolder = true, ext = 'txt', openAction = null) {
@@ -338,7 +338,7 @@ export default {
         }
         resource = buildResource(resource)
 
-        this.PUSH_NEW_RESOURCE(resource)
+        this.UPSERT_RESOURCE(resource)
         this.hideModal()
 
         if (this.isPersonalRoute) {
@@ -427,7 +427,7 @@ export default {
 
         resource = buildResource(resource)
 
-        this.PUSH_NEW_RESOURCE(resource)
+        this.UPSERT_RESOURCE(resource)
         this.hideModal()
 
         if (this.isPersonalRoute) {
@@ -500,7 +500,7 @@ export default {
             )
 
         resource = buildResource(resource)
-        this.PUSH_NEW_RESOURCE(resource)
+        this.UPSERT_RESOURCE(resource)
 
         if (this.isPersonalRoute) {
           await this.loadIndicators({

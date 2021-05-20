@@ -302,23 +302,19 @@ export default {
     state.files = files
   },
 
-  PUSH_NEW_RESOURCE(state, resource) {
-    const files = [...state.files]
-    files.push(resource)
-    state.files = files
-  },
-
   SELECT_RESOURCES(state, resources) {
     state.selected = resources
   },
 
-  UPDATE_RESOURCE(state, resource) {
+  UPSERT_RESOURCE(state, resource) {
     const files = [...state.files]
     const index = files.findIndex(r => r.id === resource.id)
 
     if (index > -1) {
       files.splice(index, 1, resource)
-      state.files = files
+    } else {
+      files.push(resource)
     }
+    state.files = files
   }
 }

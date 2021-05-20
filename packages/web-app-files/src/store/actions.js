@@ -566,7 +566,7 @@ export default {
           }
 
           resource.preview = previewUrl
-          commit('UPDATE_RESOURCE', resource)
+          commit('UPSERT_RESOURCE', resource)
 
           continue
         } catch (ignored) {}
@@ -575,7 +575,7 @@ export default {
       const previewUrl = davUrl + encodePath(resource.path) + '?' + queryString.stringify(query)
       try {
         resource.preview = await mediaSource(previewUrl, 'url')
-        commit('UPDATE_RESOURCE', resource)
+        commit('UPSERT_RESOURCE', resource)
       } catch (ignored) {}
     }
   }
