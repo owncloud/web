@@ -162,10 +162,6 @@ main {
 <style lang="scss">
 // Hide files table columns
 .files-table {
-  thead tr {
-    height: auto;
-  }
-
   .oc-table-header-cell-mdate,
   .oc-table-data-cell-mdate,
   .oc-table-header-cell-sdate,
