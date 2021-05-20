@@ -9,6 +9,7 @@
       <template v-else>
         <div v-if="$_ocCollaborators_canShare" class="oc-mt-s oc-mb-s">
           <oc-button
+            ref="addCollaborators"
             variation="primary"
             class="files-collaborators-open-add-share-dialog-button"
             @click="$_ocCollaborators_addShare"
@@ -371,6 +372,9 @@ export default {
     $_ocCollaborators_showList() {
       this.SET_APP_SIDEBAR_ACCORDION_CONTEXT(PANEL_SHOW)
       this.currentShare = null
+      this.$nextTick(() => {
+        this.$refs.addCollaborators.$el.focus()
+      })
     },
     $_ocCollaborators_isUser(collaborator) {
       return (
