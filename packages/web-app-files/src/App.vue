@@ -7,7 +7,7 @@
       :class="{ 'uk-visible@m': _sidebarOpen }"
       @dragover="$_ocApp_dragOver"
     >
-      <app-bar id="files-app-bar" :style="{ top: $_topBarVisible ? '60px' : '0' }" />
+      <app-bar id="files-app-bar" />
       <upload-progress v-show="$_uploadProgressVisible" id="files-upload-progress" class="oc-p-s" />
       <router-view id="files-view" />
     </div>
@@ -55,10 +55,6 @@ export default {
 
     _sidebarOpen() {
       return this.highlightedFile !== null
-    },
-
-    $_topBarVisible() {
-      return !this.publicPage() && !this.$route.meta.verbose
     },
 
     $_uploadProgressVisible() {
@@ -115,7 +111,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+main {
+  height: 100%;
+  max-height: 100%;
+  overflow-y: hidden;
+}
+
 .files-list-wrapper {
+  height: 100%;
+  max-height: 100%;
+  overflow-y: auto;
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: max-content max-content 1fr;
@@ -131,9 +136,9 @@ export default {
 }
 
 #files-sidebar {
-  position: sticky;
-  top: 60px;
-  max-height: calc(100vh - 60px);
+  height: 100%;
+  max-height: 100%;
+  overflow-y: auto;
 }
 
 #files-app-bar {
@@ -141,6 +146,7 @@ export default {
   height: auto;
   z-index: 1;
   grid-area: header;
+  top: 0;
 }
 
 #files-view {
@@ -156,6 +162,10 @@ export default {
 <style lang="scss">
 // Hide files table columns
 .files-table {
+  thead tr {
+    height: auto;
+  }
+
   .oc-table-header-cell-mdate,
   .oc-table-data-cell-mdate,
   .oc-table-header-cell-sdate,
