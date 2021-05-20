@@ -6,7 +6,7 @@ export default {
     adjustTableHeaderPosition() {
       this.$nextTick(() => {
         const appBar = document.querySelector('#files-app-bar')
-        this.headerPosition = appBar.getBoundingClientRect().bottom
+        this.headerPosition = appBar.getBoundingClientRect().height
       })
     }
   }
