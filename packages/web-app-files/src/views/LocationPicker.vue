@@ -1,5 +1,5 @@
 <template>
-  <div id="files-location-picker" class="uk-flex uk-height-1-1">
+  <main id="files-location-picker" class="uk-flex uk-height-1-1">
     <div tabindex="-1" class="files-list-wrapper uk-width-expand">
       <div id="files-app-bar" class="oc-p-s">
         <h1 class="location-picker-selection-info oc-mb" v-text="title" />
@@ -74,7 +74,7 @@
         </template>
       </div>
     </div>
-  </div>
+  </main>
 </template>
 
 <script>
@@ -435,7 +435,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+#files-location-picker {
+  height: 100%;
+  max-height: 100%;
+  overflow-y: hidden;
+}
+
 .files-list-wrapper {
+  height: 100%;
+  max-height: 100%;
+  overflow-y: auto;
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: max-content 1fr;
