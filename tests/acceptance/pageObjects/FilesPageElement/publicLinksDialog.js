@@ -149,9 +149,14 @@ module.exports = {
         locateStrategy: this.elements.publicLinkDeleteButton.locateStrategy,
         selector: linkRowDeleteButtonSelector
       }
+      const deleteModalConfirmButton = {
+        selector: this.elements.publicLinkDeletionModalConfirmButton
+      }
       return this.waitForElementVisible(linkRowDeleteButton)
         .initAjaxCounters()
         .click(linkRowDeleteButton)
+        .waitForElementVisible(deleteModalConfirmButton)
+        .click(deleteModalConfirmButton)
         .waitForAnimationToFinish()
         .waitForOutstandingAjaxCalls()
     },
@@ -438,6 +443,9 @@ module.exports = {
     },
     publicLinkSaveButton: {
       selector: '#oc-files-file-link-save'
+    },
+    publicLinkDeletionModalConfirmButton: {
+      selector: '.oc-modal-body-actions-confirm'
     },
     sidebarPrivateLinkLabel: {
       selector: '#files-sidebar-private-link-label'

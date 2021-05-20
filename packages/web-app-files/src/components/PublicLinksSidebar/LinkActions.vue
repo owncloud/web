@@ -52,13 +52,35 @@ export default {
   },
 
   methods: {
+    ...mapActions(['showMessage', 'createModal', 'hideModal']),
     ...mapActions('Files', ['removeLink']),
     ...mapMutations('Files', ['TRIGGER_PUBLIC_LINK_EDIT']),
 
     $_removeLink() {
+      const modal = {
+        variation: 'danger',
+        title: this.$gettext('Delete this public link'),
+        cancelText: this.$gettext('Cancel'),
+        confirmText: this.$gettext('Delete'),
+        onCancel: this.hideModal,
+        onConfirm: this.deleteLink
+      }
+
+      this.createModal(modal)
+    },
+
+    deleteLink() {
+      this.hideModal()
       this.removeLink({
         client: this.$client,
         share: this.link
+      })
+
+      this.showMessage({
+        title: this.$gettext('Public link was successfully deleted'),
+        autoClose: {
+          enabled: true
+        }
       })
     },
 
