@@ -1118,8 +1118,6 @@ def owncloudService():
         },
         "command": [
             "/usr/local/bin/apachectl",
-            "-e",
-            "debug",
             "-D",
             "FOREGROUND",
         ],
@@ -1135,8 +1133,6 @@ def owncloudFederatedService():
         },
         "command": [
             "/usr/local/bin/apachectl",
-            "-e",
-            "debug",
             "-D",
             "FOREGROUND",
         ],
@@ -1543,7 +1539,7 @@ def webService():
         },
         "commands": [
             "mkdir dist",
-            "/usr/local/bin/apachectl -e debug -D FOREGROUND",
+            "/usr/local/bin/apachectl -D FOREGROUND",
         ],
     }]
 
