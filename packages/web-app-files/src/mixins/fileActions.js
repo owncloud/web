@@ -44,7 +44,7 @@ export default {
     $_fileActions_editorActions() {
       return this.apps.fileEditors.map(editor => {
         return {
-          ariaLabel: () => {
+          label: () => {
             const translated = this.$gettext('Open in %{app}')
             return this.$gettextInterpolate(
               translated,
