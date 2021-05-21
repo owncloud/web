@@ -1118,8 +1118,6 @@ def owncloudService():
         },
         "command": [
             "/usr/local/bin/apachectl",
-            "-e",
-            "debug",
             "-D",
             "FOREGROUND",
         ],
@@ -1135,8 +1133,6 @@ def owncloudFederatedService():
         },
         "command": [
             "/usr/local/bin/apachectl",
-            "-e",
-            "debug",
             "-D",
             "FOREGROUND",
         ],
@@ -1543,7 +1539,7 @@ def webService():
         },
         "commands": [
             "mkdir dist",
-            "/usr/local/bin/apachectl -e debug -D FOREGROUND",
+            "/usr/local/bin/apachectl -D FOREGROUND",
         ],
     }]
 
@@ -1714,6 +1710,7 @@ def ocisService():
             "IDP_IDENTIFIER_REGISTRATION_CONF": "/srv/config/drone/identifier-registration.yml",
             "ACCOUNTS_DATA_PATH": "/srv/app/tmp/ocis-accounts/",
             "PROXY_ENABLE_BASIC_AUTH": True,
+            "OCIS_LOG_LEVEL": "error",
         },
         "commands": [
             "cd /var/www/owncloud/ocis-build",
