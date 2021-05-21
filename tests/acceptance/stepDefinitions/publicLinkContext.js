@@ -94,6 +94,15 @@ const loadPublicLinkWithPassword = async function(linkCreator, password, newSess
   return client.page.publicLinkPasswordPage().submitPublicLinkPassword(password)
 }
 
+const editPublicLink = async function(linkName, resource, dataTable) {
+  const editData = dataTable.rowsHash()
+  await client.page.FilesPageElement.appSideBar()
+    .closeSidebar(100)
+    .openPublicLinkDialog(resource)
+  await client.page.FilesPageElement.publicLinksDialog().editPublicLink(linkName, editData)
+  return client.page.FilesPageElement.publicLinksDialog().savePublicLink()
+}
+
 Then('user {string} should not have any public link', async function(sharer) {
   const resp = await sharingHelper.getAllPublicLinkShares(sharer)
   assert.strictEqual(resp.length, 0, 'User has shares. Response: ' + resp)
@@ -162,12 +171,27 @@ When(
 When(
   'the user edits the public link named {string} of file/folder/resource {string} changing following',
   async function(linkName, resource, dataTable) {
-    const editData = dataTable.rowsHash()
-    await client.page.FilesPageElement.appSideBar()
-      .closeSidebar(100)
-      .openPublicLinkDialog(resource)
-    await client.page.FilesPageElement.publicLinksDialog().editPublicLink(linkName, editData)
-    return client.page.FilesPageElement.publicLinksDialog().savePublicLink()
+    await editPublicLink(linkName, resource, dataTable)
+  }
+)
+
+When(
+  'the user tries to edit the public link named {string} of file/folder/resource {string} changing following',
+  function(linkName, resource, dataTable) {
+    return (
+      editPublicLink(linkName, resource, dataTable)
+        // while editing public link, after clicking the "Save" button, the button should disappear but if it doesn't
+        // we throw "ElementPresentError" error. So, all the error except "ElementPresentError" is caught and thrown back
+        // Also, when no error is thrown, the button seems to disappear, so an error should be thrown in such case as well.
+        .then(() => {
+          throw new Error('ElementPresentError')
+        })
+        .catch(err => {
+          if (err.message !== 'ElementPresentError') {
+            throw new Error(err)
+          }
+        })
+    )
   }
 )
 

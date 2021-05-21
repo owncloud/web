@@ -122,12 +122,18 @@ module.exports = {
      *
      * @returns {exports}
      */
-    savePublicLink: function() {
-      return this.waitForElementVisible('@publicLinkSaveButton')
+    savePublicLink: async function() {
+      await this.waitForElementVisible('@publicLinkSaveButton')
         .initAjaxCounters()
         .click('@publicLinkSaveButton')
-        .waitForElementNotPresent({ selector: '@publicLinkSaveButton', abortOnFailure: false })
-        .waitForOutstandingAjaxCalls()
+      try {
+        await this.waitForElementNotPresent({
+          selector: '@publicLinkSaveButton'
+        }).waitForOutstandingAjaxCalls()
+      } catch (e) {
+        throw new Error('ElementPresentError')
+      }
+      return this
     },
     /**
      * deletes existing public link share

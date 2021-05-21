@@ -1186,13 +1186,21 @@ When('the user tries to move file/folder {string} into folder {string} using the
   resource,
   target
 ) {
-  return client.page.FilesPageElement.filesList()
-    .moveResource(resource, target)
-    .catch(error => {
+  return (
+    client.page.FilesPageElement.filesList()
+      .moveResource(resource, target)
       // while moving resource, after clicking the "Paste here" button, the button should disappear but if it doesn't
       // we throw "ElementPresentError" error. So, all the error except "ElementPresentError" is caught and thrown back
-      if (error.message !== 'ElementPresentError') throw error
-    })
+      // Also, when no error is thrown, the button seems to disappear, so an error should be thrown in such case as well.
+      .then(() => {
+        throw new Error('ElementPresentError')
+      })
+      .catch(err => {
+        if (err.message !== 'ElementPresentError') {
+          throw new Error(err)
+        }
+      })
+  )
 })
 
 When('the user selects move action for folder/file {string} using the webUI', async function(
