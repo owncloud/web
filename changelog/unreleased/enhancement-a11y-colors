@@ -1,0 +1,10 @@
+Enhancement: Improve a11y colors
+
+To get a11y compliant it's required that colors match a given contrast ratio to it's back-/fore-/ground.
+We improved this on:
+
+- all ODS components
+- all oc-color variables
+- oc-star in sidebar
+
+https://github.com/owncloud/web/pull/5138
