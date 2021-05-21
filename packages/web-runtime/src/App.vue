@@ -4,112 +4,110 @@
     <skip-to target="main">
       <translate>Skip to main</translate>
     </skip-to>
-    <div id="web-container">
-      <div
-        v-if="user.isAuthenticated && !user.userReady"
-        class="loading-overlay"
-        :style="{
-          backgroundImage: 'url(' + configuration.theme.loginPage.backgroundImg + ')'
-        }"
-      >
-        <oc-spinner size="xlarge" :aria-label="$gettext('Loading')" class="uk-position-center" />
-      </div>
-      <template v-else-if="!showHeader">
-        <router-view name="fullscreen" />
-      </template>
-      <div v-else id="web-content" key="core-content" class="uk-flex uk-flex-stretch">
-        <transition :name="appNavigationAnimation">
-          <focus-trap v-if="isSidebarVisible" :active="isSidebarFixed && appNavigationVisible">
-            <oc-sidebar-nav
-              v-show="isSidebarVisible"
-              id="web-nav-sidebar"
-              v-touch:swipe.left="handleNavSwipe"
-              class="oc-app-navigation"
-              :accessible-label="$gettext('Navigation menu')"
-              :class="sidebarClasses"
-            >
-              <template #header>
-                <div class="uk-text-center">
-                  <oc-button
-                    v-if="isSidebarFixed"
-                    variation="inverse"
-                    appearance="raw"
-                    class="web-sidebar-btn-close"
-                    :aria-label="$gettext('Close navigation menu')"
-                    @click="toggleAppNavigationVisibility"
-                  >
-                    <oc-icon name="close" />
-                  </oc-button>
-                  <router-link ref="navigationSidebarLogo" to="/">
-                    <oc-logo :src="logoImage" :alt="sidebarLogoAlt" />
-                  </router-link>
-                </div>
-              </template>
-              <template #nav>
-                <oc-list>
-                  <oc-sidebar-nav-item
-                    v-for="link in sidebarNavItems"
-                    :key="link.route.path"
-                    :active="link.active"
-                    :target="link.route.path"
-                    :icon="link.icon || link.iconMaterial"
-                  >
-                    {{ link.name }}
-                  </oc-sidebar-nav-item>
-                </oc-list>
-              </template>
-              <template v-if="sidebar.sidebarFooterContentComponent" #footer>
-                <component :is="sidebar.sidebarFooterContentComponent" />
-              </template>
-            </oc-sidebar-nav>
-          </focus-trap>
-        </transition>
-        <div class="uk-width-expand web-content-container">
-          <top-bar
-            v-if="!publicPage() && !$route.meta.verbose"
-            id="oc-topbar"
-            class="uk-width-expand"
-            :applications-list="applicationsList"
-            :active-notifications="activeNotifications"
-            :user-id="user.username || user.id"
-            :user-display-name="user.displayname"
-            @toggleAppNavigationVisibility="toggleAppNavigationVisibility"
-          />
-          <div id="main">
-            <message-bar :active-messages="activeMessages" @deleteMessage="$_deleteMessage" />
-            <router-view class="oc-app-container" name="app" />
-          </div>
+    <div
+      v-if="user.isAuthenticated && !user.userReady"
+      class="loading-overlay"
+      :style="{
+        backgroundImage: 'url(' + configuration.theme.loginPage.backgroundImg + ')'
+      }"
+    >
+      <oc-spinner size="xlarge" :aria-label="$gettext('Loading')" class="uk-position-center" />
+    </div>
+    <template v-else-if="!showHeader">
+      <router-view name="fullscreen" />
+    </template>
+    <div v-else id="web-content" key="core-content" class="uk-flex uk-flex-stretch">
+      <transition :name="appNavigationAnimation">
+        <focus-trap v-if="isSidebarVisible" :active="isSidebarFixed && appNavigationVisible">
+          <oc-sidebar-nav
+            v-show="isSidebarVisible"
+            id="web-nav-sidebar"
+            v-touch:swipe.left="handleNavSwipe"
+            class="oc-app-navigation"
+            :accessible-label="$gettext('Navigation menu')"
+            :class="sidebarClasses"
+          >
+            <template #header>
+              <div class="uk-text-center">
+                <oc-button
+                  v-if="isSidebarFixed"
+                  variation="inverse"
+                  appearance="raw"
+                  class="web-sidebar-btn-close"
+                  :aria-label="$gettext('Close navigation menu')"
+                  @click="toggleAppNavigationVisibility"
+                >
+                  <oc-icon name="close" />
+                </oc-button>
+                <router-link ref="navigationSidebarLogo" to="/">
+                  <oc-logo :src="logoImage" :alt="sidebarLogoAlt" />
+                </router-link>
+              </div>
+            </template>
+            <template #nav>
+              <oc-list>
+                <oc-sidebar-nav-item
+                  v-for="link in sidebarNavItems"
+                  :key="link.route.path"
+                  :active="link.active"
+                  :target="link.route.path"
+                  :icon="link.icon || link.iconMaterial"
+                >
+                  {{ link.name }}
+                </oc-sidebar-nav-item>
+              </oc-list>
+            </template>
+            <template v-if="sidebar.sidebarFooterContentComponent" #footer>
+              <component :is="sidebar.sidebarFooterContentComponent" />
+            </template>
+          </oc-sidebar-nav>
+        </focus-trap>
+      </transition>
+      <div class="uk-width-expand web-content-container">
+        <top-bar
+          v-if="!publicPage() && !$route.meta.verbose"
+          id="oc-topbar"
+          class="uk-width-expand"
+          :applications-list="applicationsList"
+          :active-notifications="activeNotifications"
+          :user-id="user.username || user.id"
+          :user-display-name="user.displayname"
+          @toggleAppNavigationVisibility="toggleAppNavigationVisibility"
+        />
+        <div id="main">
+          <message-bar :active-messages="activeMessages" @deleteMessage="$_deleteMessage" />
+          <router-view class="oc-app-container" name="app" />
         </div>
       </div>
-      <transition
-        enter-active-class="uk-animation-fade uk-animation-fast"
-        leave-active-class="uk-animation-fade uk-animation-reverse uk-animation-fast"
-        name="custom-classes-transition"
-      >
-        <oc-modal
-          v-if="modal.displayed"
-          :variation="modal.variation"
-          :icon="modal.icon"
-          :title="modal.title"
-          :message="modal.message"
-          :has-input="modal.hasInput"
-          :focus-trap-active="true"
-          :input-label="modal.inputLabel"
-          :input-disabled="modal.inputDisabled"
-          :input-value="modal.inputValue"
-          :input-description="modal.inputDescription"
-          :input-error="modal.inputError"
-          :button-cancel-text="modal.cancelText"
-          :button-confirm-text="modal.confirmText"
-          :button-confirm-disabled="modal.confirmDisabled || !!modal.inputError"
-          @cancel="modal.onCancel"
-          @confirm="modal.onConfirm"
-          @input="modal.onInput"
-          @mounted="focusModal"
-          @beforeDestroy="focusModal"
-        />
-      </transition>
     </div>
+    <transition
+      enter-active-class="uk-animation-fade uk-animation-fast"
+      leave-active-class="uk-animation-fade uk-animation-reverse uk-animation-fast"
+      name="custom-classes-transition"
+    >
+      <oc-modal
+        v-if="modal.displayed"
+        :variation="modal.variation"
+        :icon="modal.icon"
+        :title="modal.title"
+        :message="modal.message"
+        :has-input="modal.hasInput"
+        :focus-trap-active="true"
+        :input-label="modal.inputLabel"
+        :input-disabled="modal.inputDisabled"
+        :input-value="modal.inputValue"
+        :input-description="modal.inputDescription"
+        :input-error="modal.inputError"
+        :button-cancel-text="modal.cancelText"
+        :button-confirm-text="modal.confirmText"
+        :button-confirm-disabled="modal.confirmDisabled || !!modal.inputError"
+        @cancel="modal.onCancel"
+        @confirm="modal.onConfirm"
+        @input="modal.onInput"
+        @mounted="focusModal"
+        @beforeDestroy="focusModal"
+      />
+    </transition>
   </div>
 </template>
 <script>
@@ -408,12 +406,12 @@ export default {
 html,
 body,
 #web,
-#web-container,
 #web-content {
   height: 100%;
+  overflow-y: hidden;
 }
 
-#web-container {
+#web {
   background-color: var(--oc-color-background-default);
 }
 
@@ -438,6 +436,7 @@ body,
 #main {
   position: relative;
   grid-area: main;
+  overflow-y: auto;
 }
 
 #oc-header {
