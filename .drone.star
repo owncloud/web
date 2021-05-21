@@ -1289,7 +1289,7 @@ def acceptance(ctx):
                             steps += restoreBuildArtifactCache(ctx, "web-dist", "dist")
                             steps += setupServerConfigureWeb(params["logLevel"])
 
-                        services = browserService(alternateSuiteName, browser)
+                        services = browserService(alternateSuiteName, browser) + middlewareService(params["runningOnOCIS"])
 
                         if (params["runningOnOCIS"]):
                             # Services and steps required for running tests with oCIS
@@ -2317,6 +2317,7 @@ def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnv
     environment["SERVER_HOST"] = "http://web"
     environment["BACKEND_HOST"] = "http://owncloud"
     environment["COMMENTS_FILE"] = "/var/www/owncloud/web/comments.file"
+    environment["MIDDLEWARE_HOST"] = "http://middleware:3000"
 
     for env in extraEnvironment:
         environment[env] = extraEnvironment[env]
@@ -2821,6 +2822,29 @@ def checkStarlark():
                 "refs/pull/**",
             ],
         },
+    }]
+
+def middlewareService(ocis = False):
+    return [{
+        "name": "middleware",
+        "image": "dpakach/owncloud-test-middleware",
+        "pull": "always",
+        "environment": {
+            "BACKEND_HOST": "https://ocis:9200" if ocis else "http://owncloud",
+            "OCIS_REVA_DATA_ROOT": "/srv/app/tmp/ocis/storage/owncloud/",
+            "RUN_ON_OCIS": "true" if ocis else "false",
+            "HOST": "middleware",
+            "REMOTE_UPLOAD_DIR": "/filesForUpload",
+            "NODE_TLS_REJECT_UNAUTHORIZED": "0",
+            "MIDDLEWARE_HOST": "middleware",
+        },
+        "volumes": [{
+            "name": "uploads",
+            "path": "/filesForUpload",
+        }, {
+            "name": "gopath",
+            "path": "/srv/app",
+        }],
     }]
 
 def pipelineDependsOn(pipeline, dependant_pipelines):
