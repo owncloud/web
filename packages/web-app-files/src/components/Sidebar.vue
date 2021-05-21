@@ -237,6 +237,9 @@ export default {
 .oc-star {
   &-shining svg {
     fill: #ffba0a !important;
+    path:not([fill='none']) {
+      stroke: var(--oc-color-swatch-passive-default);
+    }
   }
 }
 </style>
