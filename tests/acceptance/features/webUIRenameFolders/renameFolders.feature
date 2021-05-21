@@ -110,7 +110,7 @@ Feature: rename folders
 
   @skipOnOC10
   Scenario Outline: Rename a folder using forbidden characters
-    When the user tries to rename folder <from_name> to <to_name> using the webUI
+    When the user renames folder <from_name> to <to_name> using the webUI
     Then folder <to_name> should be listed on the webUI
     Examples:
       | from_name       | to_name           |
@@ -141,7 +141,7 @@ Feature: rename folders
 
   @skipOnOC10
   Scenario: Rename a folder to .part (on ocis)
-    When the user tries to rename folder "simple-folder" to "simple.part" using the webUI
+    When the user renames folder "simple-folder" to "simple.part" using the webUI
     Then folder "simple.part" should be listed on the webUI
 
   Scenario: User tries to rename a folder that used to exist but does not anymore

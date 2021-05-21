@@ -179,7 +179,7 @@ Feature: rename files
 
   @skipOnOC10
   Scenario: Rename a file to .part
-    When the user tries to rename file "data.zip" to "data.part" using the webUI
+    When the user renames file "data.zip" to "data.part" using the webUI
     Then file 'data.part' should be listed on the webUI
 
   @ocis-reva-issue-64
