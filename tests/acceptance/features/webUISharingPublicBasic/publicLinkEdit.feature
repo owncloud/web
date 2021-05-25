@@ -16,7 +16,7 @@ Feature: Edit public link shares
       | name        | Public-link           |
       | permissions | <initial-permissions> |
     And user "Alice" has logged in using the webUI
-    When the user edits the public link named "Public-link" of folder "simple-folder" changing following
+    When the user tries to edit the public link named "Public-link" of folder "simple-folder" changing following
       | role | <role> |
     Then the user should see an error message on the public link share dialog saying "Passwords are enforced for link shares"
     And user "Alice" should have a share with these details:
@@ -42,7 +42,7 @@ Feature: Edit public link shares
       | permissions | <initial-permissions> |
       | password    | 123                   |
     And user "Alice" has logged in using the webUI
-    When the user edits the public link named "Public-link" of folder "simple-folder" changing following
+    When the user tries to edit the public link named "Public-link" of folder "simple-folder" changing following
       | password |  |
     Then the user should see an error message on the public link share dialog saying "Passwords are enforced for link shares"
     And user "Alice" should have a share with these details:
@@ -137,9 +137,9 @@ Feature: Edit public link shares
       | permissions | read, update, create, delete |
       | password    | pass123                      |
     And user "Alice" has logged in using the webUI
-    And the user edits the public link named "Public-link" of folder "simple-folder" changing following
+    When the user tries to edit the public link named "Public-link" of folder "simple-folder" changing following
       | password | qwertyui |
-    When the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
+    And the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
     Then the public should not get access to the publicly shared file
 
   @issue-ocis-reva-292
