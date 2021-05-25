@@ -9,29 +9,16 @@
         <a
           :href="link.url"
           target="_blank"
-          class="oc-files-file-link-url oc-mr-xs uk-text-truncate"
+          class="oc-files-file-link-url uk-text-truncate"
           v-text="link.url"
         />
-        <oc-button
-          v-oc-tooltip="copyLabel"
-          :aria-label="copyLabel"
-          appearance="raw"
-          class="oc-files-file-link-copy-url"
-        >
-          <oc-icon
-            v-if="linkCopied"
-            key="copy-link-icon-copied"
-            name="ready"
-            class="oc-files-file-link-copied-url _clipboard-success-animation"
-          />
-          <oc-icon
-            v-else
-            key="copy-link-icon"
-            v-clipboard:copy="link.url"
-            v-clipboard:success="clipboardSuccessHandler"
-            name="copy_to_clipboard"
-          />
-        </oc-button>
+        <copy-to-clipboard-button
+          class="oc-files-file-link-copy-url oc-ml-xs"
+          :value="link.url"
+          :label="copyToClipboardLabel"
+          :success-msg-title="copyToClipboardSuccessMsgTitle"
+          :success-msg-text="getCopyToClipboardSuccessMsgText(link)"
+        />
       </div>
     </div>
     <oc-grid gutter="small">
@@ -73,10 +60,11 @@
 <script>
 import { basename, dirname } from 'path'
 import Mixins from '../../mixins'
+import CopyToClipboardButton from './CopyToClipboardButton.vue'
 
 export default {
   name: 'LinkInfo',
-
+  components: { CopyToClipboardButton },
   mixins: [Mixins],
 
   props: {
@@ -86,19 +74,9 @@ export default {
     }
   },
 
-  data: () => ({
-    linkCopied: false
-  }),
-
   computed: {
     linkName() {
       return this.link.name ? this.link.name : this.link.token
-    },
-
-    copyLabel() {
-      return this.linkCopied
-        ? this.$gettext('Public link successfully copied')
-        : this.$gettext('Copy public link url')
     },
 
     roleTagIcon() {
@@ -146,16 +124,32 @@ export default {
 
     viaTooltip() {
       return this.$gettext('Navigate to the parent')
+    },
+
+    copyToClipboardLabel() {
+      return this.$gettext('Copy link to clipboard')
+    },
+
+    copyToClipboardSuccessMsgTitle() {
+      return this.$gettext('Public link copied')
+    },
+    copyToClipboardSuccessMsgText() {
+      return this.$gettext('The public link has been copied to your clipboard.')
     }
   },
 
   methods: {
-    clipboardSuccessHandler() {
-      this.linkCopied = true
-
-      setTimeout(() => {
-        this.linkCopied = false
-      }, 550)
+    getCopyToClipboardSuccessMsgText(link) {
+      const translated = this.$gettext(
+        'The public link "%{linkName}" has been copied to your clipboard.'
+      )
+      return this.$gettextInterpolate(
+        translated,
+        {
+          linkName: link.name
+        },
+        true
+      )
     }
   }
 }
