@@ -1,0 +1,7 @@
+Enhancement: Hide left sidebar if no navitems are present
+
+For extensions / pages without nav items and public link pages, 
+we now hide the left sidebar to not confuse screen readers and 
+give more screen space for the content.
+
+https://github.com/owncloud/web/pull/5149
