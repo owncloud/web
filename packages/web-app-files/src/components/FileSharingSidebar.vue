@@ -67,12 +67,16 @@
       v-if="$_ocCollaborators_canShare && currentPanel === PANEL_NEW"
       key="new-collaborator"
       @close="$_ocCollaborators_showList"
+      @beforeDestroy="toggleCollaboratorNew"
+      @mounted="toggleCollaboratorNew"
     />
     <edit-collaborator
       v-if="$_ocCollaborators_canShare && currentPanel === PANEL_EDIT"
       key="edit-collaborator"
       :collaborator="currentShare"
       @close="$_ocCollaborators_showList"
+      @beforeDestroy="toggleCollaboratorEdit"
+      @mounted="toggleCollaboratorEdit"
     />
   </div>
 </template>
@@ -363,6 +367,19 @@ export default {
       this.currentShare = share
       this.SET_APP_SIDEBAR_ACCORDION_CONTEXT(PANEL_EDIT)
     },
+    toggleCollaboratorNew(component, event) {
+      this.toggleCollaborator(component, event, '#oc-sharing-autocomplete')
+    },
+    toggleCollaboratorEdit(component, event) {
+      this.toggleCollaborator(component, event, '#files-collaborators-role-button')
+    },
+    toggleCollaborator(component, event, selector) {
+      this.focus({
+        from: document.activeElement,
+        to: component.$el.querySelector(selector),
+        revert: event === 'beforeDestroy'
+      })
+    },
     $_ocCollaborators_deleteShare(share) {
       this.transitionGroupActive = true
       this.deleteShare({
@@ -373,9 +390,6 @@ export default {
     $_ocCollaborators_showList() {
       this.SET_APP_SIDEBAR_ACCORDION_CONTEXT(PANEL_SHOW)
       this.currentShare = null
-      this.$nextTick(() => {
-        this.$refs.addCollaborators.$el.focus()
-      })
     },
     $_ocCollaborators_isUser(collaborator) {
       return (
