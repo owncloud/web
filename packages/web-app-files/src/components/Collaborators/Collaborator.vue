@@ -51,11 +51,12 @@
               v-text="collaborator.collaborator.additionalInfo"
             />
           </div>
-          <span id="collaborator-list-label" v-translate class="oc-invisible-sr">Tags</span>
+          <span :id="`collaborator-list-label-${shareId}`" v-translate class="oc-invisible-sr"
+            >Tags</span
+          >
           <ul
-            id="collaborator-list"
-            class="oc-my-rm oc-pl-rm"
-            aria-labelledby="collaborator-list-label"
+            class="collaborator-list oc-my-rm oc-pl-rm"
+            :aria-labelledby="`collaborator-list-label-${shareId}`"
           >
             <li v-if="!isCurrentUser" class="oc-py-rm">
               <oc-tag class="files-collaborators-collaborator-share-type">
@@ -83,10 +84,10 @@
                 class="oc-mt-s"
                 close-on-click
               >
-                <h4 id="resharer-info" v-translate>Shared by</h4>
+                <h4 :id="`resharer-info-${shareId}`" v-translate>Shared by</h4>
                 <ul
                   class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm"
-                  aria-labelledby="resharer-info"
+                  :aria-labelledby="`resharer-info-${shareId}`"
                 >
                   <li
                     v-for="resharer in collaborator.resharers"
@@ -218,6 +219,10 @@ export default {
 
     shareTypes() {
       return shareTypes
+    },
+
+    shareId() {
+      return this.collaborator.id
     },
 
     $_resharerToggleId() {
@@ -366,7 +371,7 @@ export default {
 </script>
 
 <style lang="scss" scoped="scoped">
-#collaborator-list {
+.collaborator-list {
   list-style-type: none;
 
   li {
