@@ -20,7 +20,7 @@
     docker_compose_projects:
       - name: web
         git_url: https://github.com/owncloud/web.git
-        ref: continuous_deployment_latest_web #TODO: set to master
+        ref: master
         docker_compose_path: deployments/examples/ocis_web
         env:
           INSECURE: "false"
