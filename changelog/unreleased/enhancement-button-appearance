@@ -1,0 +1,10 @@
+Enhancement: Button appearance
+
+Changed the appearance of the "accept/decline share" buttons in the "Shared With Me" file list
+so they actually look like buttons.
+
+Also changed the "Clear selection" button in the files table batch actions 
+from `raw` to `outline` appearance.
+
+https://github.com/owncloud/web/pull/5053
+https://github.com/owncloud/web/pull/5148
