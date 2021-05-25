@@ -4,6 +4,7 @@
       <oc-button
         v-if="selectedFiles.length > 0"
         key="restore-btn"
+        variation="primary"
         class="oc-mr-s"
         @click="restoreFiles()"
       >
@@ -14,6 +15,7 @@
         v-if="!isEmpty"
         id="delete-selected-btn"
         key="delete-btn"
+        variation="danger"
         @click="selectedFiles.length < 1 ? emptyTrashbin() : $_deleteResources_displayDialog()"
       >
         <oc-icon name="delete" />
@@ -25,6 +27,7 @@
         <oc-button
           id="copy-selected-btn"
           key="copy-selected-btn"
+          variation="primary"
           @click="triggerLocationPicker('copy')"
         >
           <oc-icon name="file_copy" />
@@ -35,6 +38,7 @@
         <oc-button
           id="move-selected-btn"
           key="move-selected-btn"
+          variation="primary"
           @click="triggerLocationPicker('move')"
         >
           <oc-icon name="folder-move" />
@@ -45,6 +49,7 @@
         <oc-button
           id="delete-selected-btn"
           key="delete-selected-btn"
+          variation="primary"
           @click="$_deleteResources_displayDialog"
         >
           <oc-icon name="delete" />
