@@ -230,27 +230,6 @@ export default {
   }
 }
 </script>
-<style scoped>
-/* FIXME: Move to design system */
-._clipboard-success-animation {
-  animation-name: _clipboard-success-animation;
-  animation-duration: 0.5s;
-  animation-timing-function: ease-out;
-  animation-fill-mode: both;
-}
-
-@keyframes _clipboard-success-animation {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.9;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-</style>
 <style>
 /* FIXME: Move to design system (copied from FileSharingSidebar.vue) */
 .oc-app-side-bar .oc-label {
