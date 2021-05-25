@@ -546,8 +546,8 @@ def main(ctx):
     after = afterPipelines(ctx)
     dependsOn(stages, after)
 
-    if ctx.build.event == "cron":
-        return example_deploys(ctx)
+    # if ctx.build.event == "cron":
+    return example_deploys(ctx)
 
     return before + stages + after + example_deploys(ctx) + checkStarlark()
 
@@ -2329,6 +2329,7 @@ def deploy(ctx, config, rebuild):
         ],
         "trigger": {
             "ref": [
+                "refs/heads/continuous_deployment_latest_web",
                 "refs/heads/master",
                 "refs/tags/v*",
             ],
