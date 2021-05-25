@@ -4,23 +4,13 @@
     <p v-translate class="oc-text-muted oc-my-rm">Only invited people can use this link.</p>
     <div class="uk-width-1-1 uk-flex uk-flex-middle">
       <a :href="link" target="_blank" class="uk-text-truncate" v-text="link" />
-      <oc-button v-oc-tooltip="copyLabel" :aria-label="copyLabel" appearance="raw" class="oc-ml-s">
-        <oc-icon
-          v-if="linkCopied"
-          id="files-sidebar-private-link-icon-copied"
-          key="private-link-copy-icon-copied"
-          name="ready"
-          class="_clipboard-success-animation"
-        />
-        <oc-icon
-          v-else
-          id="files-sidebar-private-link-label"
-          key="private-link-copy-icon"
-          v-clipboard:copy="link"
-          v-clipboard:success="clipboardSuccessHandler"
-          name="copy_to_clipboard"
-        />
-      </oc-button>
+      <copy-to-clipboard-button
+        class="oc-files-file-link-copy-url oc-ml-xs"
+        :value="link"
+        :label="copyToClipboardLabel"
+        :success-msg-title="copyToClipboardSuccessMsgTitle"
+        :success-msg-text="copyToClipboardSuccessMsgText"
+      />
     </div>
     <hr />
   </div>
@@ -28,21 +18,14 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import CopyToClipboardButton from './CopyToClipboardButton.vue'
 
 export default {
   name: 'PrivateLinkItem',
-
-  data: () => ({
-    linkCopied: false
-  }),
-
+  components: { CopyToClipboardButton },
   computed: {
     ...mapGetters('Files', ['highlightedFile']),
     ...mapGetters(['capabilities']),
-
-    copyLabel() {
-      return this.$gettext('Copy private link url')
-    },
 
     link() {
       if (this.highlightedFile.isMounted()) {
@@ -56,16 +39,17 @@ export default {
 
     privateLinkEnabled() {
       return this.capabilities.files.privateLinks
-    }
-  },
+    },
 
-  methods: {
-    clipboardSuccessHandler() {
-      this.linkCopied = true
+    copyToClipboardLabel() {
+      return this.$gettext('Copy private link to clipboard')
+    },
 
-      setTimeout(() => {
-        this.linkCopied = false
-      }, 550)
+    copyToClipboardSuccessMsgTitle() {
+      return this.$gettext('Private link copied')
+    },
+    copyToClipboardSuccessMsgText() {
+      return this.$gettext('The private link has been copied to your clipboard.')
     }
   }
 }
