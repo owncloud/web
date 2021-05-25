@@ -429,6 +429,11 @@ module.exports = {
     sidebarPrivateLinkLabel: {
       selector: '#files-sidebar-private-link-label'
     },
+    privateLinkURLCopyButton: {
+      selector:
+        '//div[contains(@class, "oc-files-file-link-name") and text()="%s"]/../../..//button[contains(@class, "oc-files-file-private-link-copy-url")]',
+      locateStrategy: 'xpath'
+    },
     sidebarPrivateLinkIconCopied: {
       selector: '#files-sidebar-private-link-icon-copied'
     },
