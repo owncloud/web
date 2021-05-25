@@ -183,8 +183,6 @@ export default {
       }
     },
     canUpload() {
-      // return this.currentFolder.permissions.indexOf('C') >= 0
-      // borrowed from packages/web-app-files/src/helpers/resources.js
       if (this.currentFolder === null) {
         return false
       }
