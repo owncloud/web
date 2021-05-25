@@ -549,15 +549,14 @@ def main(ctx):
     return before + stages + after + checkStarlark()
 
 def beforePipelines(ctx):
-    return yarnlint() + changelog(ctx) + website(ctx)
+    return yarnlint() + changelog(ctx) + website(ctx) + cacheOcisPipeline(ctx)
 
 def stagePipelines(ctx):
     acceptancePipelines = acceptance(ctx)
     if acceptancePipelines == False:
         return unitTests()
 
-    cachePipelines = cacheOcisPipeline(ctx)
-    return unitTests() + cachePipelines + acceptancePipelines
+    return unitTests() + acceptancePipelines
 
 def afterPipelines(ctx):
     return build(ctx) + notify()
