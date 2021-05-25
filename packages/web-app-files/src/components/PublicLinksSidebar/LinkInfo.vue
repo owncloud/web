@@ -132,9 +132,6 @@ export default {
 
     copyToClipboardSuccessMsgTitle() {
       return this.$gettext('Public link copied')
-    },
-    copyToClipboardSuccessMsgText() {
-      return this.$gettext('The public link has been copied to your clipboard.')
     }
   },
 
