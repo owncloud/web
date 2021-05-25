@@ -225,6 +225,9 @@ export default {
     },
 
     isSidebarVisible() {
+      if (this.sidebarNavItems.length === 0) {
+        return false
+      }
       return this.windowWidth >= 1200 || this.appNavigationVisible
     },
 
