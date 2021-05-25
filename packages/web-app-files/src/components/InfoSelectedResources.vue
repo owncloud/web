@@ -18,9 +18,13 @@
       translate-comment="Number of selected resources displayed above the files list"
       >%{ amount } selected item
     </translate>
-    <span class="oc-ml-s oc-mr-s">|</span>
-    <oc-button appearance="raw" @click="RESET_SELECTION">
-      <translate>Clear selection</translate>
+    <oc-button
+      v-oc-tooltip="clearSelectionLabel"
+      :aria-label="clearSelectionLabel"
+      class="oc-ml oc-mr-xs"
+      @click="RESET_SELECTION"
+    >
+      <oc-icon name="close" />
     </oc-button>
   </div>
 </template>
@@ -49,6 +53,10 @@ export default {
       }
 
       return this.getResourceSize(size)
+    },
+
+    clearSelectionLabel() {
+      return this.$gettext('Clear selection')
     }
   },
 

@@ -1,6 +1,0 @@
-Enhancement: Share action button appearance
-
-Changed the appearance of the "accept/decline share" buttons in the "Shared With Me" file list
-so they actually look like buttons.
-
-https://github.com/owncloud/web/pull/5053
