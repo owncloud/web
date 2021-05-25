@@ -344,12 +344,8 @@ module.exports = {
       return this.waitForElementVisible(this.api.page.personalPage().elements.sideBar)
         .waitForElementVisible(linksAccordionItem)
         .click(linksAccordionItem)
-        .waitForElementVisible('@sidebarPrivateLinkLabel')
+        .waitForElementVisible('@privateLinkURLCopyButton')
         .click('@sidebarPrivateLinkLabel')
-        .waitForElementNotPresent('@sidebarPrivateLinkLabel')
-        .waitForElementVisible('@sidebarPrivateLinkIconCopied')
-        .waitForElementNotPresent('@sidebarPrivateLinkIconCopied')
-        .waitForElementVisible('@sidebarPrivateLinkLabel')
     }
   },
   elements: {
@@ -419,7 +415,7 @@ module.exports = {
     },
     publicLinkURLCopyButton: {
       selector:
-        '//div[contains(@class, "oc-files-file-link-name") and text()="%s"]/../../..//button[contains(@class, "oc-files-file-link-copy-url")]',
+        '//div[contains(@class, "oc-files-file-link-name") and text()="%s"]/../../..//button[contains(@class, "oc-files-public-link-copy-url")]',
       locateStrategy: 'xpath'
     },
     publicLinkPasswordField: {
@@ -435,16 +431,8 @@ module.exports = {
     publicLinkSaveButton: {
       selector: '#oc-files-file-link-save'
     },
-    sidebarPrivateLinkLabel: {
-      selector: '#files-sidebar-private-link-label'
-    },
     privateLinkURLCopyButton: {
-      selector:
-        '//div[contains(@class, "oc-files-file-link-name") and text()="%s"]/../../..//button[contains(@class, "oc-files-file-private-link-copy-url")]',
-      locateStrategy: 'xpath'
-    },
-    sidebarPrivateLinkIconCopied: {
-      selector: '#files-sidebar-private-link-icon-copied'
+      selector: '.oc-files-private-link-copy-url'
     },
     publicLinkRoleSelectionDropdown: {
       selector: '//div[contains(@class, "files-file-link-role-button-wrapper")]//span[.="%s"]',

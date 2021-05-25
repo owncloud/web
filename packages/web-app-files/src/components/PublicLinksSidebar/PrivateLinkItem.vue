@@ -5,7 +5,7 @@
     <div class="uk-width-1-1 uk-flex uk-flex-middle">
       <a :href="link" target="_blank" class="uk-text-truncate" v-text="link" />
       <copy-to-clipboard-button
-        class="oc-files-file-link-copy-url oc-ml-xs"
+        class="oc-files-private-link-copy-url oc-ml-xs"
         :value="link"
         :label="copyToClipboardLabel"
         :success-msg-title="copyToClipboardSuccessMsgTitle"
