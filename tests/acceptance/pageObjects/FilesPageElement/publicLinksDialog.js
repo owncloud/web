@@ -149,14 +149,12 @@ module.exports = {
         locateStrategy: this.elements.publicLinkDeleteButton.locateStrategy,
         selector: linkRowDeleteButtonSelector
       }
-      const deleteModalConfirmButton = {
-        selector: this.elements.publicLinkDeletionModalConfirmButton
-      }
       return this.waitForElementVisible(linkRowDeleteButton)
         .initAjaxCounters()
         .click(linkRowDeleteButton)
-        .waitForElementVisible(deleteModalConfirmButton)
-        .click(deleteModalConfirmButton)
+        .waitForElementVisible('@dialog')
+        .waitForAnimationToFinish()
+        .click('@dialogConfirmBtn')
         .waitForAnimationToFinish()
         .waitForOutstandingAjaxCalls()
     },
@@ -444,9 +442,6 @@ module.exports = {
     publicLinkSaveButton: {
       selector: '#oc-files-file-link-save'
     },
-    publicLinkDeletionModalConfirmButton: {
-      selector: '.oc-modal-body-actions-confirm'
-    },
     sidebarPrivateLinkLabel: {
       selector: '#files-sidebar-private-link-label'
     },
@@ -456,6 +451,12 @@ module.exports = {
     publicLinkRoleSelectionDropdown: {
       selector: '//button[contains(@class, "files-file-link-role-button")]//span[.="%s"]',
       locateStrategy: 'xpath'
+    },
+    dialog: {
+      selector: '.oc-modal'
+    },
+    dialogConfirmBtn: {
+      selector: '.oc-modal-body-actions-confirm'
     }
   }
 }
