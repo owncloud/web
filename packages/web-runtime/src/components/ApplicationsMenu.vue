@@ -3,11 +3,12 @@
     <oc-button
       id="_appSwitcherButton"
       ref="menubutton"
+      v-oc-tooltip="applicationSwitcherLabel"
       appearance="raw"
       class="oc-topbar-menu-burger"
       :aria-label="applicationSwitcherLabel"
     >
-      <oc-icon v-oc-tooltip="applicationSwitcherLabel" name="apps" class="uk-flex" />
+      <oc-icon name="apps" class="uk-flex" />
     </oc-button>
     <oc-drop
       ref="menu"
