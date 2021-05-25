@@ -13,7 +13,7 @@
           v-text="link.url"
         />
         <copy-to-clipboard-button
-          class="oc-files-file-link-copy-url oc-ml-xs"
+          class="oc-files-public-link-copy-url oc-ml-xs"
           :value="link.url"
           :label="copyToClipboardLabel"
           :success-msg-title="copyToClipboardSuccessMsgTitle"
