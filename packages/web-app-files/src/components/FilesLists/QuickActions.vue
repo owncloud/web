@@ -3,8 +3,8 @@
     <oc-button
       v-for="action in filteredActions"
       :key="action.label"
+      v-oc-tooltip="$gettext(action.label)"
       :aria-label="$gettext(action.label)"
-      :uk-tooltip="$gettext(action.label)"
       appearance="raw"
       class="oc-mr-xs"
       :class="`files-quick-action-${action.id}`"

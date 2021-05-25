@@ -27,9 +27,10 @@
             <oc-button
               id="new-file-menu-btn"
               key="new-file-menu-btn-enabled"
+              v-oc-tooltip="_cannotCreateDialogText"
+              :aria-label="_cannotCreateDialogText"
               variation="primary"
               appearance="filled"
-              :uk-tooltip="_cannotCreateDialogText"
               :disabled="isNewBtnDisabled"
             >
               <oc-icon name="add" />

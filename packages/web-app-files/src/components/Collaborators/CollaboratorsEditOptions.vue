@@ -44,8 +44,8 @@
         <div
           v-if="canResetExpirationDate"
           id="files-collaborators-collaborator-expiration-delete"
+          v-oc-tooltip="expirationDateRemoveTooltip"
           class="uk-position-small uk-position-center-right oc-cursor-pointer"
-          :uk-tooltip="expirationDateRemoveTooltip"
           uk-close
           @click="resetExpirationDate"
         />
