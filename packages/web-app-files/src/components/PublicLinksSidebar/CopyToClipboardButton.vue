@@ -5,7 +5,12 @@
     appearance="raw"
     @click="copyValueToClipboard"
   >
-    <oc-icon v-if="copied" key="oc-copy-to-clipboard-copied" name="ready" />
+    <oc-icon
+      v-if="copied"
+      key="oc-copy-to-clipboard-copied"
+      name="ready"
+      class="_clipboard-success-animation"
+    />
     <oc-icon v-else key="oc-copy-to-clipboard-copy" name="copy_to_clipboard" />
   </oc-button>
 </template>
@@ -73,3 +78,24 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+._clipboard-success-animation {
+  animation-name: _clipboard-success-animation;
+  animation-duration: 0.5s;
+  animation-timing-function: ease-out;
+  animation-fill-mode: both;
+}
+
+@keyframes _clipboard-success-animation {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+</style>
