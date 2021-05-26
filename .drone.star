@@ -800,6 +800,7 @@ def acceptance(ctx):
         "oc10IntegrationAppIncluded": False,
         "skip": False,
         "debugSuites": [],
+        "earlyFail": True,
     }
 
     if "defaults" in config:
@@ -924,9 +925,15 @@ def acceptance(ctx):
                         if (isLocalBrowser(browser) and params["screenShots"]):
                             steps += uploadScreenshots() + buildGithubComment(suiteName, alternateSuiteName)
 
+                        if (params["earlyFail"]):
+                            steps += buildGithubCommentForBuildStopped(suiteName, alternateSuiteName)
+
                         # Upload the screenshots to github comment
-                        if (params["visualTesting"] or (isLocalBrowser(browser) and params["screenShots"])):
+                        if ((params["visualTesting"] or (isLocalBrowser(browser) and params["screenShots"])) or params["earlyFail"]):
                             steps += githubComment()
+
+                        if (params["earlyFail"]):
+                            steps += stopBuild()
 
                         result = {
                             "kind": "pipeline",
@@ -2066,6 +2073,30 @@ def listRemoteCache():
         ],
     }]
 
+def stopBuild():
+    return [{
+        "name": "stop-build",
+        "image": "drone/cli:alpine",
+        "pull": "always",
+        "environment": {
+            "DRONE_SERVER": "https://drone.owncloud.com",
+            "DRONE_TOKEN": {
+                "from_secret": "drone_token",
+            },
+        },
+        "commands": [
+            "drone build stop owncloud/web ${DRONE_BUILD_NUMBER}",
+        ],
+        "when": {
+            "status": [
+                "failure",
+            ],
+            "event": [
+                "pull_request",
+            ],
+        },
+    }]
+
 def uploadScreenshots():
     return [{
         "name": "upload-screenshots",
@@ -2237,6 +2268,24 @@ def buildGithubComment(suite, alternateSuiteName):
                 "from_secret": "cache_s3_endpoint",
             },
         },
+        "when": {
+            "status": [
+                "failure",
+            ],
+            "event": [
+                "pull_request",
+            ],
+        },
+    }]
+
+def buildGithubCommentForBuildStopped(suite, alternateSuiteName):
+    return [{
+        "name": "build-github-comment-buildStop",
+        "image": "owncloud/ubuntu:16.04",
+        "pull": "always",
+        "commands": [
+            'echo "<details><summary>:boom: Acceptance tests <strong>%s</strong> failed. The build is cancelled...</summary>\\n\\n" >> /var/www/owncloud/web/comments.file' % alternateSuiteName,
+        ],
         "when": {
             "status": [
                 "failure",
