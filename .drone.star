@@ -1537,7 +1537,7 @@ def webService():
             "APACHE_WEBROOT": "/var/www/owncloud/web/dist",
         },
         "commands": [
-            "mkdir dist",
+            "mkdir -p /var/www/owncloud/web/dist",
             "/usr/local/bin/apachectl -D FOREGROUND",
         ],
     }]
