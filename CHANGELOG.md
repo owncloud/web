@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Correct navigation through "via"-tags: [#5122](https://github.com/owncloud/web/pull/5122)
 * Bugfix - Correct sharee tag: [#5112](https://github.com/owncloud/web/pull/5112)
+* Enhancement - Confirmation for public link deletion: [#5125](https://github.com/owncloud/web/pull/5125)
 
 Details
 -------
@@ -29,6 +30,14 @@ Details
    correct tag (e.g. "Viewer", "Editor" etc) in the sidebar.
 
    https://github.com/owncloud/web/pull/5112
+
+* Enhancement - Confirmation for public link deletion: [#5125](https://github.com/owncloud/web/pull/5125)
+
+   The deletion of public links is an irreversible interaction and should be handled with more
+   care since users might have bookmarked or shared with other people. We have added a
+   confirmation modal now to prevent users from accidentally deleting public links.
+
+   https://github.com/owncloud/web/pull/5125
 
 Changelog for ownCloud Web [3.1.0] (2021-05-12)
 =======================================
