@@ -59,7 +59,7 @@ export default {
     $_removeLink() {
       const modal = {
         variation: 'danger',
-        title: this.$gettext('Delete this public link'),
+        title: this.$gettext('Delete public link'),
         message: this.$gettext(
           'Are you sure you want to delete this link? Recreating the same link again is not possible.'
         ),
