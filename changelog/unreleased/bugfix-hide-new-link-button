@@ -1,0 +1,7 @@
+Bugfix: Hide "Create new public link" button
+
+The button to create new public links was visible even if the user lacked 
+the permissions to create one. It is now being hidden unless the user is 
+allowed to create a share of the respective file.
+
+https://github.com/owncloud/web/pull/5126
