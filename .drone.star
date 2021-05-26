@@ -549,7 +549,14 @@ def main(ctx):
     if ctx.build.event == "cron":
         return example_deploys(ctx)
 
-    return before + stages + after + example_deploys(ctx) + checkStarlark()
+    pipelines = before + stages + after
+
+    deploys = example_deploys(ctx)
+    dependsOn(pipelines, deploys)
+
+    return pipelines + deploys + checkStarlark()
+
+    return pipelines
 
 def beforePipelines(ctx):
     return yarnlint() + changelog(ctx) + website(ctx) + cacheOcisPipeline(ctx)
@@ -2375,4 +2382,7 @@ def checkStarlark():
 def dependsOn(earlierStages, nextStages):
     for earlierStage in earlierStages:
         for nextStage in nextStages:
-            nextStage["depends_on"].append(earlierStage["name"])
+            if "depends_on" in nextStage.keys():
+                nextStage["depends_on"].append(earlierStage["name"])
+            else:
+                nextStage["depends_on"] = [earlierStage["name"]]
