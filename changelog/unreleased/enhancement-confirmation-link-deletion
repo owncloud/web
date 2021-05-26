@@ -1,0 +1,8 @@
+Enhancement: Confirmation for public link deletion
+
+The deletion of public links is an irreversible interaction and should 
+be handled with more care since users might have bookmarked or 
+shared with other people. We have added a confirmation modal now to 
+prevent users from accidentally deleting public links.
+
+https://github.com/owncloud/web/pull/5125

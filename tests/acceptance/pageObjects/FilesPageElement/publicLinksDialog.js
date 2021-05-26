@@ -152,6 +152,9 @@ module.exports = {
       return this.waitForElementVisible(linkRowDeleteButton)
         .initAjaxCounters()
         .click(linkRowDeleteButton)
+        .waitForElementVisible('@dialog')
+        .waitForAnimationToFinish()
+        .click('@dialogConfirmBtn')
         .waitForAnimationToFinish()
         .waitForOutstandingAjaxCalls()
     },
@@ -448,6 +451,12 @@ module.exports = {
     publicLinkRoleSelectionDropdown: {
       selector: '//button[contains(@class, "files-file-link-role-button")]//span[.="%s"]',
       locateStrategy: 'xpath'
+    },
+    dialog: {
+      selector: '.oc-modal'
+    },
+    dialogConfirmBtn: {
+      selector: '.oc-modal-body-actions-confirm'
     }
   }
 }

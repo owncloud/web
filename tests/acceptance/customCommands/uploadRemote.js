@@ -14,11 +14,11 @@ class UploadRemote extends events.EventEmitter {
   command(filePath, callback) {
     const buffers = []
     const zip = archiver('zip')
-    /*
-    We add all the buffered data to  a list, and then,
-    we concat all the buffer instances, base64encode it and send to the remote
-    selenium browser. On completion, we get the result (containing the destination path to where the file
-    was uploaded) which we can retrieve from the callback
+    /**
+     * We add all the buffered data to  a list, and then,
+     * we concat all the buffer instances, base64encode it and send to the remote
+     * selenium browser. On completion, we get the result (containing the destination path to where the file
+     * was uploaded) which we can retrieve from the callback
      */
     zip
       .on('data', data => {
@@ -39,7 +39,7 @@ class UploadRemote extends events.EventEmitter {
           this.client.transport
             .runProtocolAction(opt) // private api
             .then(result => {
-              if (result.status !== 0) {
+              if (Object.hasOwnProperty.call(result, 'status') && result.status !== 0) {
                 throw new Error(result.value.message)
               }
               return result.value

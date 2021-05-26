@@ -187,7 +187,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('Files', ['loadSharesTree', 'loadCurrentFileOutgoingShares', 'removeLink']),
+    ...mapActions('Files', ['loadSharesTree', 'loadCurrentFileOutgoingShares']),
     ...mapMutations('Files', ['TRIGGER_PUBLIC_LINK_CREATE', 'SET_APP_SIDEBAR_ACCORDION_CONTEXT']),
 
     $_showList() {
