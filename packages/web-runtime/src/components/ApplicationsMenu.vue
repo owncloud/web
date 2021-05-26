@@ -1,5 +1,5 @@
 <template>
-  <nav :aria-label="$gettext('This is the main navigation')">
+  <nav :aria-label="$gettext('Main navigation')">
     <oc-button
       id="_appSwitcherButton"
       ref="menubutton"
