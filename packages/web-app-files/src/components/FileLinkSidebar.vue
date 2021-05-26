@@ -9,11 +9,11 @@
       <template v-else>
         <private-link-item />
         <h4 v-translate class="oc-text-bold oc-m-rm oc-text-initial">Public Links</h4>
-        <p v-translate class="oc-text-muted oc-my-rm">
-          Any external person with the respective link can access this resource. No sign-in
-          required. Assign a password to avoid unintended document exposure.
-        </p>
-        <div class="oc-my-s">
+        <div v-if="canCreatePublicLinks" class="oc-my-s">
+          <p v-translate class="oc-text-muted">
+            Any external person with the respective link can access this resource. No sign-in
+            required. Assign a password to avoid unintended document exposure.
+          </p>
           <oc-button
             id="files-file-link-add"
             icon="add"
@@ -25,6 +25,7 @@
             {{ $_addButtonLabel }}
           </oc-button>
         </div>
+        <p v-else class="oc-mt-s" v-text="noResharePermsMessage" />
         <transition-group
           class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm"
           :enter-active-class="$_transitionGroupEnter"
@@ -36,7 +37,12 @@
             <public-link-list-item :link="link" />
           </li>
         </transition-group>
-        <p v-if="$_noPublicLinks" key="oc-file-links-no-results" v-translate class="oc-my-rm">
+        <p
+          v-if="$_noPublicLinks && canCreatePublicLinks"
+          key="oc-file-links-no-results"
+          v-translate
+          class="oc-my-rm"
+        >
           No public links
         </p>
       </template>
@@ -100,6 +106,16 @@ export default {
     },
     $_transitionGroupLeave() {
       return 'uk-animation-slide-right-medium uk-animation-reverse'
+    },
+
+    canCreatePublicLinks() {
+      return this.highlightedFile.canShare()
+    },
+
+    noResharePermsMessage() {
+      const translatedFile = this.$gettext("You don't have permission to share this file.")
+      const translatedFolder = this.$gettext("You don't have permission to share this folder.")
+      return this.highlightedFile.type === 'file' ? translatedFile : translatedFolder
     },
 
     linksLoading() {
