@@ -1,0 +1,9 @@
+ARG VERSION=latest
+FROM owncloud/server:$VERSION
+
+
+RUN git clone https://github.com/owncloud/testing.git /mnt/data/apps/testing
+COPY ./entrypoint.oc10.sh /usr/bin/entrypoint
+RUN chmod +x /usr/bin/entrypoint
+
+ENTRYPOINT ["/usr/bin/entrypoint"]
