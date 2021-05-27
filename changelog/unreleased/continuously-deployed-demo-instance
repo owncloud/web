@@ -1,0 +1,5 @@
+Enhancement: Continuously deployed demo instance with latest Web
+
+Whenever a commit or merge to master happens, a demo instance with the latest Web build will be deployed.
+
+https://github.com/owncloud/web/pull/5145
