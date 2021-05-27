@@ -1,0 +1,7 @@
+Enhancement: Configure previews
+
+We introduced a new config option to configure which file will be previewed.
+To do so, add `"options.previewFileExtensions": ["jpg", "txt"]` in the config.json file.
+
+https://github.com/owncloud/web/pull/5159
+https://github.com/owncloud/web/issues/5079

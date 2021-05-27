@@ -38,7 +38,8 @@ const state = {
     defaultExtension: 'files',
     hideSearchBar: false,
     homeFolder: '',
-    disablePreviews: false
+    disablePreviews: false,
+    previewFileExtensions: []
   }
 }
 
@@ -87,6 +88,12 @@ const mutations = {
 const getters = {
   configuration: state => {
     return state
+  },
+  previewFileExtensions: state => {
+    const extensions = state.options.previewFileExtensions
+    return (Array.isArray(extensions) ? extensions : [])
+      .filter(Boolean)
+      .map(ext => ext.toLowerCase())
   },
   homeFolder: (state, rootGetters) => {
     if (isEmpty(state.options.homeFolder)) {
