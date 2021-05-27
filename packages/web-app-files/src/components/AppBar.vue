@@ -22,80 +22,78 @@
         v-if="showActions || selectedFiles.length > 0 || isTrashbinRoute"
         class="uk-flex uk-flex-middle oc-p-s"
       >
-        <template v-if="showActions">
-          <template v-if="areDefaultActionsVisible">
-            <oc-button
-              id="new-file-menu-btn"
-              key="new-file-menu-btn-enabled"
-              v-oc-tooltip="_cannotCreateDialogText"
-              :aria-label="_cannotCreateDialogText"
-              variation="primary"
-              appearance="filled"
-              :disabled="isNewBtnDisabled"
-            >
-              <oc-icon name="add" />
-              <translate>New</translate>
-            </oc-button>
-            <oc-drop
-              drop-id="new-file-menu-drop"
-              toggle="#new-file-menu-btn"
-              mode="click"
-              close-on-click
-              :options="{ delayHide: 0 }"
-            >
-              <ul class="uk-list">
-                <li>
-                  <file-upload
-                    :path="currentPath"
-                    :headers="headers"
-                    @success="onFileSuccess"
-                    @error="onFileError"
-                    @progress="onFileProgress"
-                  />
-                </li>
-                <li v-if="checkIfBrowserSupportsFolderUpload">
-                  <folder-upload
-                    v-if="!isIE11()"
-                    :root-path="currentPath"
-                    :path="currentPath"
-                    :headers="headers"
-                    @success="onFileSuccess"
-                    @error="onFileError"
-                    @progress="onFileProgress"
-                  />
-                </li>
-                <li>
-                  <div>
-                    <oc-button
-                      id="new-folder-btn"
-                      appearance="raw"
-                      class="uk-width-1-1"
-                      justify-content="left"
-                      @click="showCreateResourceModal"
-                    >
-                      <oc-icon name="create_new_folder" />
-                      <translate>New folder…</translate>
-                    </oc-button>
-                  </div>
-                </li>
-                <li v-for="(newFileHandler, key) in newFileHandlers" :key="key">
-                  <div>
-                    <oc-button
-                      appearance="raw"
-                      justify-content="left"
-                      :class="['new-file-btn-' + newFileHandler.ext, 'uk-width-1-1']"
-                      @click="
-                        showCreateResourceModal(false, newFileHandler.ext, newFileHandler.action)
-                      "
-                    >
-                      <oc-icon :name="newFileHandler.icon || 'save'" />
-                      <span>{{ newFileHandler.menuTitle($gettext) }}</span>
-                    </oc-button>
-                  </div>
-                </li>
-              </ul>
-            </oc-drop>
-          </template>
+        <template v-if="showActions && areDefaultActionsVisible">
+          <oc-button
+            id="new-file-menu-btn"
+            key="new-file-menu-btn-enabled"
+            v-oc-tooltip="newButtonTooltip"
+            :aria-label="newButtonAriaLabel"
+            variation="primary"
+            appearance="filled"
+            :disabled="isNewBtnDisabled"
+          >
+            <oc-icon name="add" />
+            <translate>New</translate>
+          </oc-button>
+          <oc-drop
+            drop-id="new-file-menu-drop"
+            toggle="#new-file-menu-btn"
+            mode="click"
+            close-on-click
+            :options="{ delayHide: 0 }"
+          >
+            <ul class="uk-list">
+              <li>
+                <file-upload
+                  :path="currentPath"
+                  :headers="headers"
+                  @success="onFileSuccess"
+                  @error="onFileError"
+                  @progress="onFileProgress"
+                />
+              </li>
+              <li v-if="checkIfBrowserSupportsFolderUpload">
+                <folder-upload
+                  v-if="!isIE11()"
+                  :root-path="currentPath"
+                  :path="currentPath"
+                  :headers="headers"
+                  @success="onFileSuccess"
+                  @error="onFileError"
+                  @progress="onFileProgress"
+                />
+              </li>
+              <li>
+                <div>
+                  <oc-button
+                    id="new-folder-btn"
+                    appearance="raw"
+                    class="uk-width-1-1"
+                    justify-content="left"
+                    @click="showCreateResourceModal"
+                  >
+                    <oc-icon name="create_new_folder" />
+                    <translate>New folder…</translate>
+                  </oc-button>
+                </div>
+              </li>
+              <li v-for="(newFileHandler, key) in newFileHandlers" :key="key">
+                <div>
+                  <oc-button
+                    appearance="raw"
+                    justify-content="left"
+                    :class="['new-file-btn-' + newFileHandler.ext, 'uk-width-1-1']"
+                    @click="
+                      showCreateResourceModal(false, newFileHandler.ext, newFileHandler.action)
+                    "
+                  >
+                    <oc-icon :name="newFileHandler.icon || 'save'" />
+                    <span>{{ newFileHandler.menuTitle($gettext) }}</span>
+                  </oc-button>
+                </div>
+              </li>
+            </ul>
+          </oc-drop>
         </template>
         <info-selected-resources v-if="selectedFiles.length > 0" class="oc-mr-s uk-visible@l" />
         <batch-actions />
@@ -147,7 +145,7 @@ export default {
     ]),
     ...mapState(['route']),
 
-    _cannotCreateDialogText() {
+    newButtonTooltip() {
       if (!this.canUpload) {
         return this.$gettext('You have no permission to upload!')
       }
@@ -155,6 +153,13 @@ export default {
         return this.$gettext('You have not enough space left to upload!')
       }
       return null
+    },
+    newButtonAriaLabel() {
+      const tooltip = this.newButtonTooltip
+      if (tooltip) {
+        return tooltip
+      }
+      return this.$gettext('Add files or folders')
     },
     currentPath() {
       const path = this.$route.params.item || ''
