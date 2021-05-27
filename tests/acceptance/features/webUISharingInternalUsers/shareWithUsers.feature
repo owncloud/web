@@ -125,7 +125,7 @@ Feature: Sharing files and folders with internal users
     When the user re-logs in as "Brian" using the webUI
     Then folder "new-simple-folder" should be listed on the webUI
     And the content of file "new-simple-folder/lorem.txt" for user "Brian" should be "text file"
-    
+
   @issue-product-270
   Scenario: share a folder with another internal user and prohibit deleting
     Given user "Brian" has created file "simple-folder/lorem.txt"
@@ -359,3 +359,12 @@ Feature: Sharing files and folders with internal users
     Then user "Brian Murphy" should not be listed in the collaborators list on the webUI
     And file "lorem.txt" should not be listed in shared-with-others page on the webUI
     And as "Brian" file "Shares/lorem.txt" should not exist
+
+
+  Scenario: Sharing the share_folder to user is not possible
+    Given user "Carol" has been created with default attributes and without skeleton files
+    And user "Brian" has shared folder "simple-folder" with user "Alice"
+    And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
+    And user "Alice" has logged in using the webUI
+    When the user opens the share dialog for file "Shares" using the webUI
+    Then the share permission denied message should be displayed in the sharing dialog on the webUI

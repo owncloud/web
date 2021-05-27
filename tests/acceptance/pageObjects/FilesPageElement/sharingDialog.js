@@ -607,9 +607,26 @@ module.exports = {
         }
       )
       return message
+    },
+    /**
+     *
+     * @returns {Promise<string>}
+     */
+    getSharePermissionMessage: async function() {
+      let message
+      await this.waitForElementVisible('@sharingPermissionDisabledMessage').getText(
+        this.elements.sharingPermissionDisabledMessage.selector,
+        function(result) {
+          message = result.value
+        }
+      )
+      return message
     }
   },
   elements: {
+    sharingPermissionDisabledMessage: {
+      selector: '.files-collaborators-no-reshare-permissions-message'
+    },
     collaboratorErrorAlert: {
       selector: '//div[contains(@class, "collaborator-error-alert")]',
       locateStrategy: 'xpath'
