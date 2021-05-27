@@ -532,7 +532,12 @@ export default {
     }
 
     for (const resource of resources) {
-      if (resource.type === 'folder' || !resource.extension) {
+      if (
+        resource.type === 'folder' ||
+        !resource.extension ||
+        (rootGetters.previewFileExtensions.length &&
+          !rootGetters.previewFileExtensions.includes(resource.extension))
+      ) {
         continue
       }
 
