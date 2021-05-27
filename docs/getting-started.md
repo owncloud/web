@@ -31,7 +31,8 @@ menu item. The user will not be jailed in that directory. It simply serves as a 
 variables of the user object to come up with a user specific home path. This uses twig template variable style and allows you to pick a value or a 
 substring of a value of the authenticated user. Examples are `/Shares`, `/{{.Id}}` and `/{{substr 0 3 .Id}}/{{.Id}`.
 - `options.disablePreviews` Set this option to `true` to disable previews in all the different file listing views. The only list view that is not affected
-by this is the trash bin, as that doesn't allow showing previews at all. 
+  by this is the trash bin, as that doesn't allow showing previews at all.
+- `options.previewFileExtensions` Specifies which filetypes will be previewed in the ui. For example to only preview jpg and txt files set this option to `["jpg", "txt"]`.
 
 ## Setting up backend and running
 
