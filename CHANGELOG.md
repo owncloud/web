@@ -12,6 +12,7 @@ Summary
 * Bugfix - Correct sharee tag: [#5112](https://github.com/owncloud/web/pull/5112)
 * Enhancement - Continuously deployed demo instance with latest Web: [#5145](https://github.com/owncloud/web/pull/5145)
 * Enhancement - Confirmation for public link deletion: [#5125](https://github.com/owncloud/web/pull/5125)
+* Enhancement - Configure previews: [#5159](https://github.com/owncloud/web/pull/5159)
 
 Details
 -------
@@ -46,6 +47,14 @@ Details
    confirmation modal now to prevent users from accidentally deleting public links.
 
    https://github.com/owncloud/web/pull/5125
+
+* Enhancement - Configure previews: [#5159](https://github.com/owncloud/web/pull/5159)
+
+   We introduced a new config option to configure which file will be previewed. To do so, add
+   `"options.previewFileExtensions": ["jpg", "txt"]` in the config.json file.
+
+   https://github.com/owncloud/web/issues/5079
+   https://github.com/owncloud/web/pull/5159
 
 Changelog for ownCloud Web [3.1.0] (2021-05-12)
 =======================================
