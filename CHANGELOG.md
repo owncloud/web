@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Correct navigation through "via"-tags: [#5122](https://github.com/owncloud/web/pull/5122)
 * Bugfix - Correct sharee tag: [#5112](https://github.com/owncloud/web/pull/5112)
+* Enhancement - Continuously deployed demo instance with latest Web: [#5145](https://github.com/owncloud/web/pull/5145)
 * Enhancement - Confirmation for public link deletion: [#5125](https://github.com/owncloud/web/pull/5125)
 
 Details
@@ -30,6 +31,13 @@ Details
    correct tag (e.g. "Viewer", "Editor" etc) in the sidebar.
 
    https://github.com/owncloud/web/pull/5112
+
+* Enhancement - Continuously deployed demo instance with latest Web: [#5145](https://github.com/owncloud/web/pull/5145)
+
+   Whenever a commit or merge to master happens, a demo instance with the latest Web build will be
+   deployed.
+
+   https://github.com/owncloud/web/pull/5145
 
 * Enhancement - Confirmation for public link deletion: [#5125](https://github.com/owncloud/web/pull/5125)
 
