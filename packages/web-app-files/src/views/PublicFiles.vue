@@ -131,7 +131,11 @@ export default {
 
   watch: {
     $route: {
-      handler: 'loadResources',
+      handler: function(to, from) {
+        const sameRoute = to.name === from?.name
+        this.checkHomeFallback()
+        this.loadResources(sameRoute)
+      },
       immediate: true
     },
 
@@ -149,7 +153,7 @@ export default {
       'CLEAR_CURRENT_FILES_LIST'
     ]),
 
-    async loadResources() {
+    async loadResources(sameRoute) {
       this.loading = true
       this.CLEAR_CURRENT_FILES_LIST()
 
@@ -204,7 +208,7 @@ export default {
       }
 
       this.loading = false
-      this.accessibleBreadcrumb_focusAndAnnounceBreadcrumb()
+      this.accessibleBreadcrumb_focusAndAnnounceBreadcrumb(sameRoute)
     },
 
     redirectToResolvePage() {
