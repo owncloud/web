@@ -13,6 +13,7 @@ Summary
 * Enhancement - Continuously deployed demo instance with latest Web: [#5145](https://github.com/owncloud/web/pull/5145)
 * Enhancement - Confirmation for public link deletion: [#5125](https://github.com/owncloud/web/pull/5125)
 * Enhancement - Configure previews: [#5159](https://github.com/owncloud/web/pull/5159)
+* Enhancement - Prompts leaving user about pending uploads: [#2590](https://github.com/owncloud/web/issues/2590)
 
 Details
 -------
@@ -55,6 +56,15 @@ Details
 
    https://github.com/owncloud/web/issues/5079
    https://github.com/owncloud/web/pull/5159
+
+* Enhancement - Prompts leaving user about pending uploads: [#2590](https://github.com/owncloud/web/issues/2590)
+
+   Added an unload event listener that detects closes/ reloads/ navigates to another URL. Added
+   prompt that ask for confirmation to leave site on unload events if uploads pending. Removed the
+   event listener before destroy of component.
+
+   https://github.com/owncloud/web/issues/2590
+   https://github.com/owncloud/web/pull/4840
 
 Changelog for ownCloud Web [3.1.0] (2021-05-12)
 =======================================
