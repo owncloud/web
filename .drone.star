@@ -1124,6 +1124,7 @@ def owncloudService():
         "pull": "always",
         "environment": {
             "APACHE_WEBROOT": "/var/www/owncloud/server/",
+            "APACHE_LOGGING_PATH": "/dev/null",
         },
         "command": [
             "/usr/local/bin/apachectl",
@@ -1139,6 +1140,7 @@ def owncloudFederatedService():
         "pull": "always",
         "environment": {
             "APACHE_WEBROOT": "/var/www/owncloud/federated/",
+            "APACHE_LOGGING_PATH": "/dev/null",
         },
         "command": [
             "/usr/local/bin/apachectl",
@@ -1545,6 +1547,7 @@ def webService():
         "pull": "always",
         "environment": {
             "APACHE_WEBROOT": "/var/www/owncloud/web/dist",
+            "APACHE_LOGGING_PATH": "/dev/null",
         },
         "commands": [
             "mkdir -p /var/www/owncloud/web/dist",
