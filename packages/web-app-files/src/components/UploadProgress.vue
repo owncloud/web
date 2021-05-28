@@ -128,16 +128,16 @@ export default {
         this.delayForScreenreader(() => this.$refs.progressbar.$el.focus())
       })
     })
-    window.addEventListener('beforeunload', this.handlerClose)
+    window.addEventListener('beforeunload', this.confirmUnload)
   },
   beforeDestroy() {
-    window.removeEventListener('beforeunload', this.handlerClose)
+    window.removeEventListener('beforeunload', this.confirmUnload)
   },
   methods: {
     $_toggleExpanded() {
       this.expanded = !this.expanded
     },
-    handlerClose(event) {
+    confirmUnload(event) {
       if (this.uploadPending) {
         event.preventDefault()
         event.returnValue = ''
