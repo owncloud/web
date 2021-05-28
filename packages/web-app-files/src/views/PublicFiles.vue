@@ -57,10 +57,11 @@
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 
-import { buildResource } from '../helpers/resources'
-import FileActions from '../mixins/fileActions'
+import MixinAccessibleBreadcrumb from '../mixins/accessibleBreadcrumb'
+import MixinFileActions from '../mixins/fileActions'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
 import MixinResources from '../mixins/resources'
+import { buildResource } from '../helpers/resources'
 
 import ListLoader from '../components/ListLoader.vue'
 import NoContentMessage from '../components/NoContentMessage.vue'
@@ -73,7 +74,7 @@ export default {
     NotFoundMessage
   },
 
-  mixins: [FileActions, MixinFilesListPositioning, MixinResources],
+  mixins: [MixinAccessibleBreadcrumb, MixinFileActions, MixinFilesListPositioning, MixinResources],
 
   data: () => ({
     loading: true
@@ -203,6 +204,7 @@ export default {
       }
 
       this.loading = false
+      this.accessibleBreadcrumb_focusAndAnnounceBreadcrumb()
     },
 
     redirectToResolvePage() {
