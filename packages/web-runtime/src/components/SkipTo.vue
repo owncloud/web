@@ -48,5 +48,6 @@ export default {
 .skip-button:focus {
   top: 0;
   outline: none;
+  border: 1px dashed white;
 }
 </style>
