@@ -1,0 +1,7 @@
+Enhancement: Focus breadcrumb on route change
+
+We now focus the current breadcrumb item when navigating to another page 
+and announce the amount of files and folders in the folder the user 
+has navigated to.
+
+https://github.com/owncloud/web/pull/5166
