@@ -66,7 +66,8 @@
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 import isNil from 'lodash/isNil'
 
-import FileActions from '../mixins/fileActions'
+import MixinAccessibleBreadcrumb from '../mixins/accessibleBreadcrumb'
+import MixinFileActions from '../mixins/fileActions'
 import MixinFilesListScrolling from '../mixins/filesListScrolling'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
 import MixinResources from '../mixins/resources'
@@ -80,7 +81,13 @@ import NotFoundMessage from '../components/FilesLists/NotFoundMessage.vue'
 export default {
   components: { QuickActions, ListLoader, NoContentMessage, NotFoundMessage },
 
-  mixins: [FileActions, MixinFilesListPositioning, MixinFilesListScrolling, MixinResources],
+  mixins: [
+    MixinAccessibleBreadcrumb,
+    MixinFileActions,
+    MixinFilesListPositioning,
+    MixinFilesListScrolling,
+    MixinResources
+  ],
 
   data: () => ({
     loading: true
@@ -212,6 +219,7 @@ export default {
 
       this.adjustTableHeaderPosition()
       this.loading = false
+      this.accessibleBreadcrumb_focusAndAnnounceBreadcrumb()
       this.scrollToResourceFromRoute()
     },
 
