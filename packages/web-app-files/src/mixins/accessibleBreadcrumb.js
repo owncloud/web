@@ -6,7 +6,7 @@ export default {
     ...mapGetters('Files', ['activeFilesCount'])
   },
   methods: {
-    accessibleBreadcrumb_focusAndAnnounceBreadcrumb() {
+    accessibleBreadcrumb_focusAndAnnounceBreadcrumb(sameRoute) {
       const activeBreadcrumb = last(
         document.getElementById('files-breadcrumb').children[0].children
       )
@@ -29,7 +29,9 @@ export default {
       invisibleHint.innerHTML = translatedHint
 
       activeBreadcrumb.append(invisibleHint)
-      activeBreadcrumbItem.focus()
+      if (sameRoute) {
+        activeBreadcrumbItem.focus()
+      }
     }
   }
 }

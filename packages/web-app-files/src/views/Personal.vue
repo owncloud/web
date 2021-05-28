@@ -143,9 +143,10 @@ export default {
 
   watch: {
     $route: {
-      handler: function() {
+      handler: function(to, from) {
+        const sameRoute = to.name === from?.name
         this.checkHomeFallback()
-        this.loadResources()
+        this.loadResources(sameRoute)
       },
       immediate: true
     },
@@ -184,7 +185,7 @@ export default {
       }
     },
 
-    async loadResources() {
+    async loadResources(sameRoute) {
       this.loading = true
       this.CLEAR_CURRENT_FILES_LIST()
 
@@ -219,7 +220,7 @@ export default {
 
       this.adjustTableHeaderPosition()
       this.loading = false
-      this.accessibleBreadcrumb_focusAndAnnounceBreadcrumb()
+      this.accessibleBreadcrumb_focusAndAnnounceBreadcrumb(sameRoute)
       this.scrollToResourceFromRoute()
     },
 
