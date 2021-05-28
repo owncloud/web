@@ -24,14 +24,22 @@ module.exports = {
        *
        * @param {string} username
        * @param {string} password
+       * @param expectToSucceed
        */
-      login: function(username, password) {
-        return this.waitForElementVisible('@usernameInput')
+      login: async function(username, password, expectToSucceed = true) {
+        await this.waitForElementVisible('@usernameInput')
           .clearValue('@usernameInput')
           .setValue('@usernameInput', username)
           .clearValue('@passwordInput')
           .setValue('@passwordInput', password)
           .click('@loginSubmitButton')
+
+        if (expectToSucceed) {
+          await this.waitForElementNotPresent('@usernameInput')
+        } else {
+          await this.waitForElementPresent('@usernameInput')
+        }
+        return this
       },
       getLoginErrorMessage: async function() {
         let errorMessage

@@ -25,9 +25,9 @@ When(
   'the user tries to log in with username {string} and password {string} using the webUI',
   (username, password) => {
     if (client.globals.openid_login) {
-      return client.page.ocisLoginPage().login(username, password)
+      return client.page.ocisLoginPage().login(username, password, false)
     }
-    return client.page.ownCloudLoginPage().login(username, password)
+    return client.page.ownCloudLoginPage().login(username, password, false)
   }
 )
 
