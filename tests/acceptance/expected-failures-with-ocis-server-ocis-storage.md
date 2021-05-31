@@ -155,10 +155,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIRestrictSharing/restrictSharing.feature:40](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIRestrictSharing/restrictSharing.feature#L40)
 -   [webUIRestrictSharing/restrictSharing.feature:56](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIRestrictSharing/restrictSharing.feature#L56)
 
-### [Accept and decline pending share does not work in UI](https://github.com/owncloud/ocis/issues/1950)
--   [webUISharingAcceptShares/acceptShares.feature:16](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L16)
--   [webUISharingAcceptShares/acceptShares.feature:235](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L235)
-
 ### [First request with a recreated user returns a 401 error](https://github.com/owncloud/ocis/issues/1675)
 -   [webUISharingAutocompletion/shareAutocompletion.feature:56](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAutocompletion/shareAutocompletion.feature#L56)
 -   [webUISharingAutocompletion/shareAutocompletion.feature:66](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAutocompletion/shareAutocompletion.feature#L66)
@@ -236,8 +232,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:361](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L361)
 -   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:370](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L370)
 
-### [[OCIS] declining a received share gives 500 error even if the share is declined](https://github.com/owncloud/product/issues/276)
--   [webUISharingAcceptShares/acceptShares.feature:135](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L135)
 
 ### [Cannot delete a received share](https://github.com/owncloud/ocis/issues/714)
 -   [webUISharingAcceptShares/acceptShares.feature:203](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L203)
@@ -408,8 +402,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIFilesList/sort.feature:51](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesList/sort.feature#L51)
 -   [webUIFilesList/sort.feature:72](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesList/sort.feature#L72)
 
--   [webUISharingAcceptShares/acceptShares.feature:100](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L100)
--   [webUISharingAcceptShares/acceptShares.feature:116](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L116)
 
 ### [Comments in sidebar] (https://github.com/owncloud/web/issues/1158)
 -   [webUIComments/comments.feature:24](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIComments/comments.feature#L24)
