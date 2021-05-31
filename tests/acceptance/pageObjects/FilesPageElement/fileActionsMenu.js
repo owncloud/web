@@ -156,7 +156,7 @@ module.exports = {
       selector: '#oc-files-sharing-sidebar'
     },
     actionsAccordion: {
-      selector: '//li[@id="app-sidebar-files-actions"]',
+      selector: '//ul[@id="oc-files-actions-sidebar"]/li',
       locateStrategy: 'xpath'
     },
     deleteButtonInAccordion: {
