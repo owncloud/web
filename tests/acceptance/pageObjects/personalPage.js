@@ -101,6 +101,10 @@ module.exports = {
 
       if (expectToSucceed) {
         await this.waitForElementNotPresent('@dialog')
+      } else {
+        await this.waitForElementPresent('@dialogBoxInputTextInRed')
+          // checking if the button is disabled
+          .waitForElementPresent('@dialogConfirmBtnDisabled')
       }
 
       return this
@@ -128,6 +132,10 @@ module.exports = {
 
       if (expectToSucceed) {
         await this.waitForElementNotPresent('@dialog')
+      } else {
+        await this.waitForElementPresent('@dialogBoxInputTextInRed')
+          // checking if the button is disabled
+          .waitForElementPresent('@dialogConfirmBtnDisabled')
       }
 
       return this
@@ -265,15 +273,6 @@ module.exports = {
           .waitForElementNotPresent('@dialog')
           .waitForAjaxCallsToStartAndFinish()
       )
-    },
-    triesToCreateExistingFile: function(fileName) {
-      return this.waitForElementVisible('@newFileMenuButton')
-        .click('@newFileMenuButton')
-        .waitForElementVisible('@newFileButton')
-        .click('@newFileButton')
-        .waitForElementVisible('@dialogInput')
-        .clearValueWithEvent('@dialogInput')
-        .setValue('@dialogInput', fileName)
     },
     checkForButtonDisabled: function() {
       return this.waitForElementVisible('@dialogConfirmBtnDisabled')
@@ -460,6 +459,9 @@ module.exports = {
     cancelMoveCopyBtn: {
       selector: '//button[.="Cancel"]',
       locateStrategy: 'xpath'
+    },
+    dialogBoxInputTextInRed: {
+      selector: '.oc-text-input-danger'
     }
   }
 }

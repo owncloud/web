@@ -150,14 +150,10 @@ When('the user creates a file with the name {string} using the webUI', function(
 })
 
 When('the user creates a folder with default name using the webUI', function() {
-  return client.page.personalPage().createFolder(null, false)
+  return client.page.personalPage().createFolder(null)
 })
 
-When('the user creates a folder without name using the webUI', function() {
-  return client.page.personalPage().createFolder('', false)
-})
-
-When('the user creates a folder with the invalid name {string} using the webUI', function(
+When('the user tries to create a folder with the invalid name {string} using the webUI', function(
   folderName
 ) {
   return client.page.personalPage().createFolder(folderName, false)
@@ -1041,11 +1037,11 @@ When('the user uploads overwriting file {string} using the webUI', function(file
 When(
   'the user tries to create a file with already existing name {string} using the webUI',
   function(fileName) {
-    return client.page.personalPage().triesToCreateExistingFile(fileName)
+    return client.page.personalPage().createFile(fileName, false)
   }
 )
 
-Then('the create file button should be disabled', function() {
+Then('the create file/folder button should be disabled', function() {
   return client.page.personalPage().checkForButtonDisabled()
 })
 

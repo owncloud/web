@@ -25,25 +25,27 @@ Feature: create folders
 
 
   Scenario: Try to create a folder without name
-    When the user creates a folder without name using the webUI
+    When the user tries to create a folder with the invalid name "" using the webUI
     Then the error message 'Folder name cannot be empty' should be displayed on the webUI dialog prompt
+    And the create folder button should be disabled
 
 
   Scenario: Try to create a folder with existing name
     Given user "Alice" has created folder "simple-folder"
     And the user has reloaded the current page of the webUI
-    When the user creates a folder with the invalid name "simple-folder" using the webUI
+    When the user tries to create a folder with the invalid name "simple-folder" using the webUI
     Then the error message 'simple-folder already exists' should be displayed on the webUI dialog prompt
-
+    And the create folder button should be disabled
 
   Scenario: Try to create a folder with invalid name
-    When the user creates a folder with the invalid name "../folder" using the webUI
+    When the user tries to create a folder with the invalid name "../folder" using the webUI
     Then the error message 'Folder name cannot contain "/"' should be displayed on the webUI dialog prompt
-
+    And the create folder button should be disabled
 
   Scenario: Try to create a folder with another invalid name
-    When the user creates a folder with the invalid name "folder/subfolder" using the webUI
+    When the user tries to create a folder with the invalid name "folder/subfolder" using the webUI
     Then the error message 'Folder name cannot contain "/"' should be displayed on the webUI dialog prompt
+    And the create folder button should be disabled
 
   @issue-2467
   Scenario: Create folder with special characters in its name and browse to that folder
