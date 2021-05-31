@@ -453,7 +453,7 @@ module.exports = {
       selector: '#markdown-editor-app-bar .uk-text-right .oc-button'
     },
     clearSelectionBtn: {
-      selector: '//span[contains(text(),"Clear selection")]',
+      selector: '//button[contains(@aria-label, "Clear selection")]',
       locateStrategy: 'xpath'
     },
     cancelMoveCopyBtn: {
