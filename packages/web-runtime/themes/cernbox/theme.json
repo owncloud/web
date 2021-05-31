@@ -1,0 +1,72 @@
+{
+  "default": {
+    "general": {
+      "name": "CERNBox",
+      "slogan": "CERNBox – The CERN Cloud Storage"
+    },
+    "logo": {
+      "sidebar": "themes/cernbox/assets/cernbox-lrg.svg",
+      "favicon": "themes/cernbox/assets/cernbox-abstract.svg",
+      "login": "themes/cernbox/assets/cernbox-lrg.svg",
+      "notFound": "themes/owncloud/assets/cloud.svg"
+    },
+    "loginPage": {
+      "autoRedirect": true,
+      "backgroundImg": "themes/cernbox/assets/loginBackground.png"
+    },
+    "designTokens": {
+      "colorPalette": {
+        "background-default": "",
+        "background-highlight": "#b8d4ee",
+        "background-muted": "",
+        "border": "",
+        "input-bg": "",
+        "input-border": "",
+        "input-text-default": "",
+        "input-text-muted": "",
+        "swatch-brand-default": "#03142b",
+        "swatch-brand-hover": "#3c5776",
+        "swatch-danger-default": "",
+        "swatch-danger-hover": "",
+        "swatch-danger-muted": "",
+        "swatch-passive-default": "",
+        "swatch-passive-hover": "",
+        "swatch-passive-muted": "",
+        "swatch-primary-default": "#3c7fd0",
+        "swatch-primary-hover": "#759ed2",
+        "swatch-primary-muted": "",
+        "swatch-success-default": "",
+        "swatch-success-hover": "",
+        "swatch-success-muted": "",
+        "swatch-warning-default": "",
+        "swatch-warning-hover": "",
+        "swatch-warning-muted": "",
+        "text-default": "#000",
+        "text-inverse": "",
+        "text-muted": ""
+      },
+      "fontSizes": {
+        "default": "",
+        "large": "",
+        "medium": ""
+      },
+      "sizes": {
+        "form-check-default": "",
+        "height-small": "80px",
+        "height-table-row": "49px",
+        "icon-default": "",
+        "width-medium": ""
+      },
+      "spacing": {
+        "xsmall": "",
+        "small": "",
+        "medium": "",
+        "large": "",
+        "xlarge": "",
+        "xxlarge": ""
+      }
+    }
+  },
+  "dark": {
+  }
+}
