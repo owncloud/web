@@ -12,19 +12,21 @@ export default {
       )
       const activeBreadcrumbItem = activeBreadcrumb.lastChild
 
-      const announcement = this.$gettextInterpolate(
-        'containing %{filesCount} files and %{folderCount} folders',
-        { filesCount: this.activeFilesCount.files, folderCount: this.activeFilesCount.folders }
+      const itemCount = this.activeFilesCount.files + this.activeFilesCount.folders
+      const announcement = this.$ngettext(
+        'This folder contains %{ itemCount } item.',
+        'This folder contains %{ itemCount } items.',
+        itemCount
       )
 
       const translatedHint =
         this.activeFilesCount.folders > 0 || this.activeFilesCount.files > 0
           ? announcement
-          : this.$gettext('This folder has no content')
+          : this.$gettext('This folder has no content.')
 
       document.querySelectorAll('.oc-breadcrumb-sr').forEach(el => el.remove())
 
-      const invisibleHint = document.createElement('span')
+      const invisibleHint = document.createElement('p')
       invisibleHint.className = 'oc-invisible-sr oc-breadcrumb-sr'
       invisibleHint.innerHTML = translatedHint
 
