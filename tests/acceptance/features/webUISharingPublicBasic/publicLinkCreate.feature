@@ -190,3 +190,17 @@ Feature: Create public link shares
       Public link created
       Public link has been successfully created and copied into your clipboard.
       """
+
+
+  Scenario: Sharing the share_folder as public link is not possible
+    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
+    And the administrator has set the default folder for received shares to "Shares"
+    And user "Brian" has been created with default attributes and without skeleton files
+    And user "Brian" has created folder "simple-folder"
+    And user "Carol" has been created with default attributes and without skeleton files
+    And user "Brian" has shared folder "simple-folder" with user "Alice"
+    And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
+    And user "Alice" has logged in using the webUI
+    When the user creates a new public link for folder "Shares" using the webUI with
+      | name | link |
+    Then the user should see an error message on the public link share dialog saying "Path contains files shared with you"

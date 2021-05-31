@@ -880,6 +880,16 @@ Then('{string} {string} should be listed in the autocomplete list on the webUI',
   )
 })
 
+Then(
+  'the share permission denied message should be displayed in the sharing dialog on the webUI',
+  async function() {
+    const permissionDeniedMessage = "You don't have permission to share this folder."
+    const dialogMessage = await client.page.FilesPageElement.sharingDialog().getSharePermissionMessage()
+
+    return assert.strictEqual(dialogMessage, permissionDeniedMessage)
+  }
+)
+
 When('the user opens the share dialog for file/folder/resource {string} using the webUI', function(
   file
 ) {
