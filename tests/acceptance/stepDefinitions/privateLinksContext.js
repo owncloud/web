@@ -36,6 +36,9 @@ When(
   'the user tries to navigate to the private link created by user {string} for file/folder {string}',
   async function(user, resource) {
     const item = await webdav.getProperties(resource, user, ['oc:privatelink'])
-    await client.url(item['oc:privatelink'])
+    await client
+      .url(item['oc:privatelink'])
+      .page.webPage()
+      .waitForElementNotPresent('@webContainer')
   }
 )
