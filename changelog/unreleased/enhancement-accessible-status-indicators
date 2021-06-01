@@ -1,0 +1,7 @@
+Enhancement: Accessible status indicators
+
+To make both the clickable (button) and the visible (icon) part of the 
+status indicators in the files table accessible, we have added a description, 
+in addition to the tooltip and `aria-label`.
+
+https://github.com/owncloud/web/pull/5182
