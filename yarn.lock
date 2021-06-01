@@ -7732,10 +7732,10 @@ owncloud-design-system@^7.1.3:
   resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-7.1.3.tgz#e5f58da6246e7abcee87129672a2bef60f7d602d"
   integrity sha512-ZycqQYvKJ083fE5vTSkZpueH1WsA/DqBFXLkztw3w2DFdVU/2RMJMk8BSkUMgdsAR+Ozk9Y8L+jdgEeT+BNU7g==
 
-owncloud-sdk@^1.0.0-2453:
-  version "1.0.0-2453"
-  resolved "https://registry.yarnpkg.com/owncloud-sdk/-/owncloud-sdk-1.0.0-2453.tgz#72ba93e36021b41d2711397b47df56a8b754b9e4"
-  integrity sha512-SPA3WCuRKKBCPWiPZP5QM0mEnxJunZo0ojibOOjrJgjJ3DSGkTUqZwM/9FKOBhvgbtWZFQrxksyp4WejqoNeOQ==
+owncloud-sdk@^1.0.0-2485:
+  version "1.0.0-2485"
+  resolved "https://registry.yarnpkg.com/owncloud-sdk/-/owncloud-sdk-1.0.0-2485.tgz#cbf3169a02e80fee052a0549030ad2cc62b9c7ba"
+  integrity sha512-EVVDDYga+UVdc8ZeLS+b3jX4/BM7fB8kAe+XsyM74SIAy9SwtxGQtK8Xd8ZpPmC8P4L6aXJWoKueZdGnNQwU3A==
   dependencies:
     axios "^0.21.1"
     cross-fetch "^3.0.6"
