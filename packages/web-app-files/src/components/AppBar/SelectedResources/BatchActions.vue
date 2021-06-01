@@ -183,7 +183,12 @@ export default {
   methods: {
     ...mapActions('Files', ['removeFilesFromTrashbin', 'resetFileSelection', 'setHighlightedFile']),
     ...mapActions(['showMessage']),
-    ...mapMutations('Files', ['UPDATE_RESOURCE']),
+    ...mapMutations('Files', [
+      'LOAD_FILES',
+      'SELECT_RESOURCES',
+      'CLEAR_CURRENT_FILES_LIST',
+      'UPDATE_RESOURCE',
+    ]),
 
     restoreFiles(resources = this.selectedFiles) {
       for (const resource of resources) {
@@ -192,16 +197,22 @@ export default {
           .then(() => {
             const translated = this.$gettext('%{resource} was restored successfully')
             this.showMessage({
-              title: this.$gettextInterpolate(translated, { resource: resource.name }, true)
+              title: this.$gettextInterpolate(translated, { resource: resource.name }, true),
+              autoClose: {
+                enabled: true,
+              },
             })
             this.removeFilesFromTrashbin([resource])
           })
-          .catch(error => {
+          .catch((error) => {
             const translated = this.$gettext('Restoration of %{resource} failed')
             this.showMessage({
               title: this.$gettextInterpolate(translated, { resource: resource.name }, true),
               desc: error.message,
-              status: 'danger'
+              status: 'danger',
+              autoClose: {
+                enabled: true,
+              },
             })
           })
       }
@@ -214,15 +225,21 @@ export default {
         .clearTrashBin()
         .then(() => {
           this.showMessage({
-            title: this.$gettext('All deleted files were removed')
+            title: this.$gettext('All deleted files were removed'),
+            autoClose: {
+              enabled: true,
+            },
           })
           this.removeFilesFromTrashbin(this.activeFiles)
         })
-        .catch(error => {
+        .catch((error) => {
           this.showMessage({
             title: this.$gettext('Could not delete files'),
             desc: error.message,
-            status: 'danger'
+            status: 'danger',
+            autoClose: {
+              enabled: true,
+            },
           })
         })
     },
