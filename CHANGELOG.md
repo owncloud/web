@@ -1,17 +1,17 @@
-Changelog for ownCloud Web [unreleased] (UNRELEASED)
+Changelog for ownCloud Web [3.2.0] (2021-05-31)
 =======================================
-The following sections list the changes in ownCloud web unreleased relevant to
+The following sections list the changes in ownCloud web 3.2.0 relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v3.1.0...master
+[3.2.0]: https://github.com/owncloud/web/compare/v3.1.0...v3.2.0
 
 Summary
 -------
 
 * Bugfix - Correct navigation through "via"-tags: [#5122](https://github.com/owncloud/web/pull/5122)
 * Bugfix - Correct sharee tag: [#5112](https://github.com/owncloud/web/pull/5112)
-* Enhancement - Continuously deployed demo instance with latest Web: [#5145](https://github.com/owncloud/web/pull/5145)
 * Enhancement - Confirmation for public link deletion: [#5125](https://github.com/owncloud/web/pull/5125)
+* Enhancement - Continuously deployed demo instance with latest Web: [#5145](https://github.com/owncloud/web/pull/5145)
 * Enhancement - Configure previews: [#5159](https://github.com/owncloud/web/pull/5159)
 * Enhancement - Prompts leaving user about pending uploads: [#2590](https://github.com/owncloud/web/issues/2590)
 
@@ -34,13 +34,6 @@ Details
 
    https://github.com/owncloud/web/pull/5112
 
-* Enhancement - Continuously deployed demo instance with latest Web: [#5145](https://github.com/owncloud/web/pull/5145)
-
-   Whenever a commit or merge to master happens, a demo instance with the latest Web build will be
-   deployed.
-
-   https://github.com/owncloud/web/pull/5145
-
 * Enhancement - Confirmation for public link deletion: [#5125](https://github.com/owncloud/web/pull/5125)
 
    The deletion of public links is an irreversible interaction and should be handled with more
@@ -48,6 +41,13 @@ Details
    confirmation modal now to prevent users from accidentally deleting public links.
 
    https://github.com/owncloud/web/pull/5125
+
+* Enhancement - Continuously deployed demo instance with latest Web: [#5145](https://github.com/owncloud/web/pull/5145)
+
+   Whenever a commit or merge to master happens, a demo instance with the latest Web build will be
+   deployed.
+
+   https://github.com/owncloud/web/pull/5145
 
 * Enhancement - Configure previews: [#5159](https://github.com/owncloud/web/pull/5159)
 
