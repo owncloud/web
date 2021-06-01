@@ -838,6 +838,9 @@ def acceptance(ctx):
             for item in default:
                 params[item] = matrix[item] if item in matrix else default[item]
 
+            if ("full-ci" in ctx.build.title.lower()):
+                params["earlyFail"] = False
+
             for server in params["servers"]:
                 for browser in params["browsers"]:
                     for db in params["databases"]:
