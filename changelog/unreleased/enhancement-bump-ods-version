@@ -1,4 +1,4 @@
-Enhancement: Update owncloud Design System to v7.0.0
+Enhancement: Update owncloud Design System to v7.0.1
 
 - Lots of updates regarding accessibility topics
 - Removal of home icon in breadcrumbs, changed to "All files" link as breadcrumb root
@@ -7,3 +7,4 @@ Enhancement: Update owncloud Design System to v7.0.0
 https://github.com/owncloud/web/pull/5002
 https://github.com/owncloud/web/pull/5044
 https://github.com/owncloud/web/pull/5074
+https://github.com/owncloud/web/pull/5186
