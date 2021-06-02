@@ -191,7 +191,7 @@ module.exports = {
       selector: '.oc-modal-body-actions-confirm'
     },
     dialogInput: {
-      selector: '.oc-modal-body-input > input'
+      selector: '.oc-modal-body-input .oc-text-input'
     },
     moveButtonInAccordion: {
       selector: '//button[normalize-space()="Move"]',
