@@ -2308,8 +2308,8 @@ def githubComment():
             "message_file": "/var/www/owncloud/web/comments.file",
         },
         "environment": {
-            "PLUGIN_API_KEY": {
-                "from_secret": "plugin_api_key",
+            "GITHUB_TOKEN": {
+                "from_secret": "github_token",
             },
         },
         "when": {
