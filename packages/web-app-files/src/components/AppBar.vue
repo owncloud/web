@@ -258,9 +258,12 @@ export default {
     },
 
     selectedResourcesAnnouncement() {
+      if (this.selectedFiles.length === 0) {
+        return this.$gettext('No items selected.')
+      }
       const translated = this.$ngettext(
-        '%{ amount } selected item. Actions are available above the table.',
-        '%{ amount } selected items. Actions are available above the table.',
+        '%{ amount } item selected. Actions are available above the table.',
+        '%{ amount } items selected. Actions are available above the table.',
         this.selectedFiles.length
       )
       return this.$gettextInterpolate(translated, { amount: this.selectedFiles.length })
