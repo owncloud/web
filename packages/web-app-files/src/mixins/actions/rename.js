@@ -45,11 +45,13 @@ export default {
         this.$_rename_checkNewName(resource.name, newName)
       }
 
+      const title = this.$gettextInterpolate(
+        isFolder ? this.$gettext('Rename folder %{name}') : this.$gettext('Rename file %{name}'),
+        { name: resource.name }
+      )
       const modal = {
         variation: 'passive',
-        title: isFolder
-          ? this.$gettext('Rename folder ') + resource.name
-          : this.$gettext('Rename file ' + resource.name),
+        title,
         cancelText: this.$gettext('Cancel'),
         confirmText: this.$gettext('Rename'),
         hasInput: true,
