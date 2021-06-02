@@ -145,8 +145,18 @@ export default {
   watch: {
     $route: {
       handler: function(to, from) {
+        if (isNil(this.$route.params.item)) {
+          this.$router.push({
+            name: 'files-personal',
+            params: {
+              item: this.homeFolder
+            }
+          })
+
+          return
+        }
+
         const sameRoute = to.name === from?.name
-        this.checkHomeFallback()
         this.loadResources(sameRoute)
         this.$_filesListPagination_updateCurrentPage()
       },
@@ -175,17 +185,6 @@ export default {
       'CLEAR_CURRENT_FILES_LIST'
     ]),
     ...mapMutations(['SET_QUOTA']),
-
-    checkHomeFallback() {
-      if (isNil(this.$route.params.item)) {
-        this.$router.push({
-          name: 'files-personal',
-          params: {
-            item: this.homeFolder
-          }
-        })
-      }
-    },
 
     async loadResources(sameRoute) {
       this.loading = true
