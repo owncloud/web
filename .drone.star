@@ -755,7 +755,7 @@ def unitTests():
                  buildWeb() +
                  [{
                      "name": "tests",
-                     "image": "owncloudci/nodejs:12",
+                     "image": "owncloudci/nodejs:14",
                      "pull": "always",
                      "commands": [
                          "yarn test:unit",
@@ -1302,7 +1302,7 @@ def installFederatedServer(version, db, dbSuffix = "-federated"):
 def installNPM():
     return [{
         "name": "npm-install",
-        "image": "owncloudci/nodejs:12",
+        "image": "owncloudci/nodejs:14",
         "pull": "always",
         "commands": [
             "yarn install --frozen-lockfile",
@@ -1312,7 +1312,7 @@ def installNPM():
 def lintTest():
     return [{
         "name": "lint-test",
-        "image": "owncloudci/nodejs:12",
+        "image": "owncloudci/nodejs:14",
         "pull": "always",
         "commands": [
             "yarn run lint",
@@ -1322,7 +1322,7 @@ def lintTest():
 def buildWebApp():
     return [{
         "name": "build-web-integration-app",
-        "image": "owncloudci/nodejs:12",
+        "image": "owncloudci/nodejs:14",
         "pull": "always",
         "commands": [
             "yarn build",
@@ -1359,7 +1359,7 @@ def setupIntegrationWebApp():
 def buildWeb():
     return [{
         "name": "build-web",
-        "image": "owncloudci/nodejs:12",
+        "image": "owncloudci/nodejs:14",
         "pull": "always",
         "commands": [
             "yarn build",
@@ -1403,7 +1403,7 @@ def buildRelease(ctx):
     return [
         {
             "name": "make",
-            "image": "owncloudci/nodejs:12",
+            "image": "owncloudci/nodejs:14",
             "pull": "always",
             "commands": [
                 "cd /var/www/owncloud/web",
@@ -1886,7 +1886,7 @@ def fixPermissionsFederated():
 def owncloudLog():
     return [{
         "name": "owncloud-log",
-        "image": "owncloud/ubuntu:16.04",
+        "image": "owncloud/ubuntu:20.04",
         "pull": "always",
         "detach": True,
         "commands": [
@@ -1897,7 +1897,7 @@ def owncloudLog():
 def owncloudLogFederated():
     return [{
         "name": "owncloud-federated-log",
-        "image": "owncloud/ubuntu:16.04",
+        "image": "owncloud/ubuntu:20.04",
         "pull": "always",
         "detach": True,
         "commands": [
@@ -1958,7 +1958,7 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
 
     return [{
         "name": "webui-acceptance-tests",
-        "image": "owncloudci/nodejs:12",
+        "image": "owncloudci/nodejs:14",
         "pull": "always",
         "environment": environment,
         "commands": [
@@ -2136,7 +2136,7 @@ def uploadScreenshots():
 def listScreenShots():
     return [{
         "name": "list screenshots-visual",
-        "image": "owncloudci/nodejs:12",
+        "image": "owncloudci/nodejs:14",
         "pull": "always",
         "commands": [
             "ls -laR /var/www/owncloud/web/tests/vrt",
@@ -2219,7 +2219,7 @@ def buildGithubCommentVisualDiff(ctx, suite, alternateSuiteName, runningOnOCIS):
     branch = ctx.build.source if ctx.build.event == "pull_request" else "master"
     return [{
         "name": "build-github-comment-vrt",
-        "image": "owncloud/ubuntu:16.04",
+        "image": "owncloud/ubuntu:20.04",
         "pull": "always",
         "commands": [
             "cd /var/www/owncloud/web/tests/vrt/diff",
@@ -2256,7 +2256,7 @@ def buildGithubCommentVisualDiff(ctx, suite, alternateSuiteName, runningOnOCIS):
 def buildGithubComment(suite, alternateSuiteName):
     return [{
         "name": "build-github-comment",
-        "image": "owncloud/ubuntu:16.04",
+        "image": "owncloud/ubuntu:20.04",
         "pull": "always",
         "commands": [
             "cd /var/www/owncloud/web/tests/reports/screenshots/",
@@ -2284,7 +2284,7 @@ def buildGithubComment(suite, alternateSuiteName):
 def buildGithubCommentForBuildStopped(suite, alternateSuiteName):
     return [{
         "name": "build-github-comment-buildStop",
-        "image": "owncloud/ubuntu:16.04",
+        "image": "owncloud/ubuntu:20.04",
         "pull": "always",
         "commands": [
             'echo "<details><summary>:boom: Acceptance tests <strong>%s</strong> failed. The build is cancelled...</summary>\\n\\n" >> /var/www/owncloud/web/comments.file' % alternateSuiteName,
