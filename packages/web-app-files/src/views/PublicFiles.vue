@@ -133,7 +133,6 @@ export default {
     $route: {
       handler: function(to, from) {
         const sameRoute = to.name === from?.name
-        this.checkHomeFallback()
         this.loadResources(sameRoute)
       },
       immediate: true

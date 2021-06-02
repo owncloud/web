@@ -441,7 +441,7 @@ module.exports = {
       selector: '.oc-modal-body-actions-cancel'
     },
     dialogInput: {
-      selector: '.oc-modal-body-input > input'
+      selector: '.oc-modal-body-input .oc-text-input'
     },
     moveSelectedBtn: {
       selector: '#move-selected-btn'
