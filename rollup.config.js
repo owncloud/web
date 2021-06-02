@@ -19,6 +19,7 @@ import serve from 'rollup-plugin-serve'
 import livereload from 'rollup-plugin-livereload'
 import html from '@rollup/plugin-html'
 import globals from 'rollup-plugin-node-globals'
+import typescript from '@rollup/plugin-typescript'
 
 const production = !process.env.ROLLUP_WATCH
 
@@ -55,6 +56,7 @@ const plugins = [
     'l(o.instance+p,{method:e,body:d.body,headers:h})':
       'l(o.instance+p,{method:e,body:d.body,headers:h}).catch(function(e){return r(e)})'
   }),
+  typescript(),
   globals(),
   json(),
   copy({
