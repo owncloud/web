@@ -20,7 +20,7 @@ Feature: Unmark file/folder as favorite
     And user "Alice" has favorited element "lorem.txt"
     And the user has browsed to the files page
     When the user unmarks the favorited file "data.zip" using the webUI
-    Then as user "Alice" file "data.zip" should not be marked as favorite
+    Then as user "Alice" file "data.zip" should be marked as favorite
     And file "data.zip" should not be marked as favorite on the webUI
     But as user "Alice" file "data.tar.gz" should be marked as favorite
     And file "data.tar.gz" should be marked as favorite on the webUI
