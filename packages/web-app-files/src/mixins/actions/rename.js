@@ -15,7 +15,7 @@ export default {
           },
           handler: this.$_rename_trigger,
           isEnabled: ({ resource }) => {
-            if (checkRoute(['files-trashbin'], this.$route.name)) {
+            if (checkRoute(['files-trashbin', 'files-shared-with-me'], this.$route.name)) {
               return false
             }
 
