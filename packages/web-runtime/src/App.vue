@@ -24,7 +24,9 @@
             id="web-nav-sidebar"
             v-touch:swipe.left="handleNavSwipe"
             class="oc-app-navigation"
-            :accessible-label="$gettext('Navigation menu')"
+            :accessible-label-header="$gettext('Sidebar header')"
+            :accessible-label-nav="$gettext('Sidebar navigation menu')"
+            :accessible-label-footer="$gettext('Sidebar footer')"
             :class="sidebarClasses"
           >
             <template #header>
@@ -34,7 +36,7 @@
                   variation="inverse"
                   appearance="raw"
                   class="web-sidebar-btn-close"
-                  :aria-label="$gettext('Close navigation menu')"
+                  :aria-label="$gettext('Close sidebar')"
                   @click="toggleAppNavigationVisibility"
                 >
                   <oc-icon name="close" />
