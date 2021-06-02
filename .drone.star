@@ -2152,6 +2152,7 @@ def buildGithubCommentVisualDiff(ctx, suite, alternateSuiteName, runningOnOCIS):
             "ls -la",
             "cd /var/www/owncloud/web/tests/vrt",
             "ls -la",
+            "if [ ! -d diff ]; then exit 0; fi",
             "cd /var/www/owncloud/web/tests/vrt/diff",
             "ls -la",
             "cd %s" % backend,
