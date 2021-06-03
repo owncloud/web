@@ -349,27 +349,11 @@ module.exports = {
     for (const element of elementsToAccept) {
       const shareID = element.id
       const apiURL = `apps/files_sharing/api/v1/shares/pending/${shareID}`
-      return httpHelper
-        .postOCS(apiURL, user)
-        .then(res => {
-          res = httpHelper.checkStatus(res, 'The response status is not the expected value')
-          if (client.globals.ocis) return res.text()
-          return res.json()
-        })
-        .then(res => {
-          if (client.globals.ocis) {
-            if (res !== '') {
-              throw new Error(`
-              This is a good error, seems like a bug in ocis has been fixed,
-              just fire up your text editor and remove this line,
-              dont forget to keep your fingers crossed in the meantime.
-              More on https://github.com/owncloud/product/issues/207
-            `)
-            }
-            return
-          }
-          httpHelper.checkOCSStatus(res, 'Could not perform the accept action')
-        })
+      return httpHelper.postOCS(apiURL, user).then(res => {
+        res = httpHelper.checkStatus(res, 'The response status is not the expected value')
+        if (client.globals.ocis) return res.text()
+        return res.json()
+      })
     }
   },
 
