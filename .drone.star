@@ -977,7 +977,7 @@ def acceptance(ctx):
         "oc10IntegrationAppIncluded": False,
         "skip": False,
         "debugSuites": [],
-        "earlyFail": False,
+        "earlyFail": True,
     }
 
     if "defaults" in config:

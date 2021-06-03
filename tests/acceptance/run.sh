@@ -161,7 +161,9 @@ if [ "${ACCEPTANCE_TESTS_EXIT_STATUS}" -ne 0 ]; then
   # and the tests with undefined steps are not retried and are reported simply like:
   # 5) Scenario: try to login with invalid username
   # So we need to look for those failed tests that don't end with (attempt 1, retried)
-  FAILED_SCENARIOS="$(grep ') Scenario: .*' logfile.txt) | grep -v '(attempt 1, retried)')"
+  #
+  # https://stackoverflow.com/questions/6550484/prevent-grep-returning-an-error-when-input-doesnt-match
+  FAILED_SCENARIOS="$(grep ') Scenario: .*' logfile.txt | { grep -v '(attempt 1, retried)' || true; })"
   for FAILED_SCENARIO in ${FAILED_SCENARIOS}; do
     if [[ $FAILED_SCENARIO =~ "tests/acceptance/features/" ]]; then
       SUITE_PATH=$(dirname "${FAILED_SCENARIO}")
