@@ -5,10 +5,6 @@ module.exports = {
     amd: true
   },
   extends: [
-    /**
-     * TODO: fix promise project issues and then enable it
-     * 'plugin:promise/recommended',
-     */
     'standard',
     'prettier/standard',
     'plugin:prettier/recommended',
