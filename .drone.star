@@ -2222,7 +2222,10 @@ def buildGithubCommentVisualDiff(ctx, suite, alternateSuiteName, runningOnOCIS):
         "image": "owncloud/ubuntu:20.04",
         "pull": "always",
         "commands": [
-            "cd /var/www/owncloud/web/tests/vrt/diff",
+            "cd /var/www/owncloud/web/tests/vrt",
+            "if [ ! -d diff ]; then exit 0; fi",
+            "cd diff",
+            "if [ ! -d %s ]; then exit 0; fi" % backend,
             "cd %s" % backend,
             "ls -la",
             'echo "<details><summary>:boom: Visual regression tests <strong>%s</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n" >> /var/www/owncloud/web/comments.file' % alternateSuiteName,
