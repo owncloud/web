@@ -1,3 +1,8 @@
+# UI Test suite types
+FULL = 1
+FEDERATED = 2
+NOTIFICATIONS = 3
+
 config = {
     "app": "web",
     "rocketchat": {
@@ -12,6 +17,7 @@ config = {
     "yarnlint": True,
     "acceptance": {
         "webUI": {
+            "type": FULL,
             "suites": {
                 "webUIBasic": [
                     "webUIAccount",
@@ -131,6 +137,7 @@ config = {
             "screenShots": True,
         },
         "webUINotification": {
+            "type": NOTIFICATIONS,
             "suites": {
                 "webUINotificationBasic": [
                     "webUINotifications",
@@ -149,6 +156,7 @@ config = {
             "notificationsAppNeeded": True,
         },
         "webUIFederation": {
+            "type": FEDERATED,
             "suites": {
                 "webUISharingExternal": "SharingExternal",
                 "webUISharingExternalToRoot": "SharingExternalRoot",
@@ -162,6 +170,7 @@ config = {
             "federatedServerVersion": "daily-master-qa",
         },
         "webUI-XGA-Notifications": {
+            "type": NOTIFICATIONS,
             "suites": {
                 "XGAPortrait1-Notifications": [
                     "webUINotifications",
@@ -177,6 +186,7 @@ config = {
             "filterTags": "@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10",
         },
         "webUI-XGA": {
+            "type": FULL,
             "suites": {
                 "XGAPortrait1": [
                     "webUIAccount",
@@ -197,6 +207,7 @@ config = {
                     "webUIRestrictSharing",
                     "webUISharingAcceptShares",
                     "webUISharingAcceptSharesToRoot",
+                    "webUIMarkdownEditor",
                     # The following suites may have all scenarios currently skipped.
                     # The suites are listed here so that scenarios will run when
                     # they are enabled.
@@ -255,6 +266,7 @@ config = {
             "filterTags": "@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10",
         },
         "webUI-Notifications-iPhone": {
+            "type": NOTIFICATIONS,
             "suites": {
                 "iPhone1-Notifications": [
                     "webUINotifications",
@@ -270,6 +282,7 @@ config = {
             "filterTags": "@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10",
         },
         "webUI-iPhone": {
+            "type": FULL,
             "suites": {
                 "iPhone1": [
                     "webUIAccount",
@@ -290,6 +303,8 @@ config = {
                     "webUIRestrictSharing",
                     "webUISharingAcceptShares",
                     "webUISharingAcceptSharesToRoot",
+                    "webUIMarkdownEditor",
+                    "webUISharingInternalUsersBlacklisted",
                     # The following suites may have all scenarios currently skipped.
                     # The suites are listed here so that scenarios will run when
                     # they are enabled.
@@ -348,6 +363,7 @@ config = {
             "filterTags": "@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10",
         },
         "webUI-ocis": {
+            "type": FULL,
             "suites": {
                 "webUIOCISBasic": [
                     "webUILogin",
@@ -459,6 +475,7 @@ config = {
             "filterTags": "not @skip and not @skipOnOCIS and not @notToImplementOnOCIS",
         },
         "webUI-notifications-oc10-integration": {
+            "type": NOTIFICATIONS,
             "suites": {
                 "oc10-integration-notifications": [
                     "webUINotifications",
@@ -477,6 +494,7 @@ config = {
             "screenShots": True,
         },
         "webUI-oc10-integration": {
+            "type": FULL,
             "suites": {
                 "IntegrationApp1": [
                     "webUIAccount",
@@ -497,6 +515,8 @@ config = {
                     "webUIRestrictSharing",
                     "webUISharingAcceptShares",
                     "webUISharingAcceptSharesToRoot",
+                    "webUIMarkdownEditor",
+                    "webUISharingInternalUsersBlacklisted",
                     # The following suites may have all scenarios currently skipped.
                     # The suites are listed here so that scenarios will run when
                     # they are enabled.
@@ -561,7 +581,143 @@ config = {
     "build": True,
 }
 
+# UI Test Suites
+# These list contains all the test suites that are present
+# When adding new test suites, make sure to update these lists
+federatedTestSuites = [
+    "webUISharingExternal",
+]
+
+federatedRootTestSuites = [
+    "webUISharingExternalToRoot",
+]
+
+rootSharingTestSuites = [
+    "webUIResharingToRoot",
+    "webUISharingAcceptSharesToRoot",
+    "webUISharingInternalGroupsToRoot",
+    "webUISharingInternalGroupsToRootEdgeCases",
+    "webUISharingInternalGroupsToRootSharingIndicator",
+    "webUISharingInternalUsersExpireToRoot",
+    "webUISharingInternalUsersToRoot",
+    "webUISharingInternalUsersToRootBlacklisted",
+    "webUISharingInternalUsersToRootCollaborator",
+    "webUISharingInternalUsersToRootPreviews",
+    "webUISharingInternalUsersToRootShareWithPage",
+    "webUISharingInternalUsersToRootSharingIndicator",
+    "webUISharingPermissionToRoot",
+]
+
+notificationsTestSuite = [
+    "webUINotifications",
+    "webUISharingNotifications",
+]
+
+notificationsRootTestSuites = [
+    "webUISharingNotificationsToRoot",
+]
+
+basicTestSuites = [
+    "webUIAccount",
+    "webUIAdminSettings",
+    "webUIComments",
+    "webUICreateFilesFolders",
+    "webUIDeleteFilesFolders",
+    "webUIFavorites",
+    "webUIFiles",
+    "webUIFilesActionMenu",
+    "webUIFilesCopy",
+    "webUIFilesDetails",
+    "webUIFilesList",
+    "webUIFilesSearch",
+    "webUILogin",
+    "webUIMarkdownEditor",
+    "webUIMoveFilesFolders",
+    "webUIPreview",
+    "webUIPrivateLinks",
+    "webUIRenameFiles",
+    "webUIRenameFolders",
+    "webUIResharing1",
+    "webUIResharing2",
+    "webUIRestrictSharing",
+    "webUISharingAcceptShares",
+    "webUISharingAutocompletion",
+    "webUISharingFilePermissionMultipleUsers",
+    "webUISharingFilePermissionsGroups",
+    "webUISharingFolderAdvancedPermissionMultipleUsers",
+    "webUISharingFolderAdvancedPermissionsGroups",
+    "webUISharingFolderPermissionMultipleUsers",
+    "webUISharingFolderPermissionsGroups",
+    "webUISharingInternalGroups",
+    "webUISharingInternalGroupsEdgeCases",
+    "webUISharingInternalGroupsSharingIndicator",
+    "webUISharingInternalUsers",
+    "webUISharingInternalUsersBlacklisted",
+    "webUISharingInternalUsersCollaborator",
+    "webUISharingInternalUsersExpire",
+    "webUISharingInternalUsersShareWithPage",
+    "webUISharingInternalUsersSharingIndicator",
+    "webUISharingPermissionsUsers",
+    "webUISharingPublicBasic",
+    "webUISharingPublicDifferentRoles",
+    "webUISharingPublicExpire",
+    "webUISharingPublicManagement",
+    "webUITags",
+    "webUITrashbinDelete",
+    "webUITrashbinFilesFolders",
+    "webUITrashbinRestore",
+    "webUIUpload",
+    "webUIWebdavLockProtection",
+    "webUIWebdavLocks",
+]
+
+ocisSpecificTestSuites = [
+    "webUIUserJourney",
+]
+
+def checkTestSuites():
+    for testGroupName, test in config["acceptance"].items():
+        suites = []
+        for key, items in test["suites"].items():
+            if (type(items) == "list"):
+                suites += items
+            elif (type(items) == "string"):
+                suites += [key]
+            else:
+                print("Error: invalid value for suite, it must be a list or string")
+                return False
+
+        expected = []
+        if (test["type"] == FULL):
+            expected += basicTestSuites
+            if ("runningOnOCIS" not in test or test["runningOnOCIS"] != True):
+                expected += rootSharingTestSuites
+        elif (test["type"] == NOTIFICATIONS):
+            expected += notificationsTestSuite
+            if ("runningOnOCIS" not in test or test["runningOnOCIS"] != True):
+                expected += notificationsRootTestSuites
+        elif (test["type"] == FEDERATED):
+            expected += federatedTestSuites + federatedRootTestSuites
+
+        if ("runningOnOCIS" in test and test["runningOnOCIS"] == True):
+            expected += notificationsTestSuite + ocisSpecificTestSuites
+
+        if (sorted(suites) != sorted(expected)):
+            print("Error: Suites dont match " + testGroupName)
+            print(Diff(sorted(suites), sorted(expected)))
+
+    return True
+
+def Diff(li1, li2):
+    li_dif = [i for i in li1 + li2 if i not in li1 or i not in li2]
+    return li_dif
+
 def main(ctx):
+    uiSuitesCheck = checkTestSuites()
+    if (uiSuitesCheck == False):
+        print("Errors detected. Review messages above.")
+        return []
+
     before = beforePipelines(ctx)
 
     stages = stagePipelines(ctx)
