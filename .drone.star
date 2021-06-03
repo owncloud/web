@@ -45,12 +45,12 @@ config = {
                     "webUISharingAcceptShares",
                     "webUISharingAcceptSharesToRoot",
                 ],
-                "webUIFavorites": "Favorites",
                 "webUIFiles1": [
                     "webUIFiles",
                     "webUIFilesActionMenu",
                     "webUIFilesCopy",
                     "webUIMarkdownEditor",
+                    "webUIFavorites",
                 ],
                 "webUIFiles2": [
                     "webUIFilesDetails",
@@ -380,10 +380,6 @@ config = {
                     "webUIWebdavLockProtection",
                     "webUIWebdavLocks",
                 ],
-                "webUIOCISCreateDelete": [
-                    "webUICreateFilesFolders",
-                    "webUIDeleteFilesFolders",
-                ],
                 "webUIOCISRename": [
                     "webUIRenameFiles",
                     "webUIRenameFolders",
@@ -395,17 +391,17 @@ config = {
                 ],
                 "webUIFavorites": "OCISFavorites",
                 "webUIOCISFiles1": [
+                    "webUICreateFilesFolders",
+                    "webUIDeleteFilesFolders",
                     "webUIFiles",
                     "webUIFilesActionMenu",
                     "webUIFilesCopy",
+                    "webUIFilesList",
                     "webUIMarkdownEditor",
                 ],
                 "webUIOCISFiles2": [
                     "webUIFilesDetails",
                     "webUIFilesSearch",
-                ],
-                "webUIOCISFiles3": [
-                    "webUIFilesList",
                 ],
                 "OCISSharingInternalGroups": [
                     "webUISharingInternalGroups",
@@ -436,25 +432,22 @@ config = {
                     "webUISharingFolderPermissionMultipleUsers",
                     "webUISharingFolderAdvancedPermissionMultipleUsers",
                 ],
-                # for now run this suite by itself see https://github.com/owncloud/ocis/issues/736
                 "OCISResharing1": [
                     "webUIResharing1",
-                ],
-                "OCISResharing2": [
                     "webUIResharing2",
                 ],
-                "webUISharingPublicBasic": "OCISSharingPublicBasic",
-                "webUISharingPublicManagement": "OCISSharingPublicManagement",
+                "OCISSharingPublic": [
+                    "webUISharingPublicBasic",
+                    "webUISharingPublicManagement",
+                ],
                 "OCISSharingPublicExpireAndRoles": [
                     "webUISharingPublicDifferentRoles",
                     "webUISharingPublicExpire",
                 ],
-                "OCISTrashBin": [
+                "OCIS-Trashbin-Upload-Move-Journey": [
                     "webUITrashbinDelete",
                     "webUITrashbinFilesFolders",
                     "webUITrashbinRestore",
-                ],
-                "OCIS-Upload-Move-Journey": [
                     "webUIUpload",
                     "webUIMoveFilesFolders",
                     "webUIUserJourney",
