@@ -79,7 +79,7 @@ export default {
             notification: notificationId
           })
           res.json().then(json => {
-            json.ocs.data.map(item => {
+            json.ocs.data.forEach(item => {
               const path = item.path.substr(0, item.path.lastIndexOf('/') + 1)
               const absolutePath = this.$route.params.item ? this.$route.params.item : '/'
               if (path === absolutePath) this.reloadFilesList(path)

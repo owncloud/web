@@ -5,7 +5,7 @@
 // Try dismissing lightboxes/overlays by clicking on the body tag,
 // then click again.
 exports.command = function angryClick(selector, callback) {
-  var self = this
+  const self = this
   return this.click(selector, function(result) {
     if (result.status === 0) {
       // click succeeded, handle callback

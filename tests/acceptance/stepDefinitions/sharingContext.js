@@ -794,8 +794,8 @@ Then(
       .then(itemsList => {
         itemsList.forEach(item => {
           const displayedName = item.split('\n')[0]
-          var found = false
-          for (var userId in userSettings.getCreatedUsers()) {
+          let found = false
+          for (const userId in userSettings.getCreatedUsers()) {
             const userDisplayName = userSettings.getDisplayNameForUser(userId)
             if (
               userDisplayName === displayedName &&

@@ -1,8 +1,8 @@
-var numAjaxRequestsStart = 0
-var start = 0
-var end = 0
+let numAjaxRequestsStart = 0
+let start = 0
+let end = 0
 const sleepWhenNoNewAjaxCallsStarted = function(result) {
-  var currentTime = Date.now()
+  const currentTime = Date.now()
   if (result.value <= numAjaxRequestsStart && currentTime < end) {
     this.pause(this.globals.waitForConditionPollInterval)
     checkSumStartedAjaxRequests(this)

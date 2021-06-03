@@ -95,7 +95,7 @@ exports.move = function(userId, fromName, toName) {
 exports.propfind = function(path, userId, properties, folderDepth = '1') {
   const davPath = encodeURI(path)
   let propertyBody = ''
-  properties.map(prop => {
+  properties.forEach(prop => {
     propertyBody += `<${prop}/>`
   })
   const body = `<?xml version="1.0"?>
@@ -144,7 +144,7 @@ exports.getTrashBinElements = function(user, depth = 2) {
         if (!Array.isArray(trashData)) {
           trashData = [trashData]
         }
-        trashData.map(trash => {
+        trashData.forEach(trash => {
           if (trash['d:propstat']['d:prop'] === undefined) {
             reject(new Error('trashbin data not defined'))
           } else {
@@ -235,7 +235,7 @@ exports.getProperties = function(path, userId, requestedProps) {
         return reject(new Error(errMsg + JSON.stringify(str)))
       }
       const properties = {}
-      requestedProps.map(propertyName => {
+      requestedProps.forEach(propertyName => {
         properties[propertyName] = receivedProps[propertyName]._text
       })
       return resolve(properties)
@@ -271,7 +271,7 @@ exports.getFavouritedResources = function(user) {
     .then(res => {
       const favData = convert.xml2js(res, { compact: true })['d:multistatus']['d:response']
       const favItems = []
-      favData.map(favourite => {
+      favData.forEach(favourite => {
         favItems.push({
           resource: filename(favourite['d:href']._text),
           isFolder: !(Object.keys(favourite['d:propstat']['d:prop']['d:resourcetype']).length === 0)

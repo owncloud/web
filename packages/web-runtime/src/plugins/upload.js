@@ -13,7 +13,7 @@ export default {
           return new Promise((resolve, reject) => {
             const headers = this.$client.helpers.buildHeaders()
             delete headers['OCS-APIREQUEST']
-            var mtime = null
+            let mtime = null
             if (file.lastModifiedDate) {
               mtime = file.lastModifiedDate.getTime() / 1000
             }

@@ -19,6 +19,7 @@ function fileExists(userId, element) {
   const davPath = webdavHelper.createDavPath(userId, element)
   return httpHelper.propfind(davPath, userId)
 }
+
 /**
  * request a single file
  * @param {string} userId - username
