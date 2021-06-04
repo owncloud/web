@@ -1,4 +1,4 @@
-@ocis-product-issue-277
+@ocis-product-issue-277 @federated-server-needed
 Feature: Federation Sharing - sharing with users on other cloud storages
   As a user
   I want to share files with any users on other cloud storages
