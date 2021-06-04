@@ -1,6 +1,35 @@
 #!/usr/bin/env bash
 
+SCRIPT_PATH=$(dirname "$0")
+SCRIPT_PATH=$( cd "${SCRIPT_PATH}" && pwd )  # normalized and made absolute
+FEATURES_DIR="${SCRIPT_PATH}/features"
+
 echo 'run.sh: running acceptance-tests-drone'
+
+# Look for command line options for:
+# --part - run a subset of scenarios, need two numbers.
+#          first number: which part to run
+#          second number: in how many parts to divide the set of scenarios
+
+# Command line options processed here will override environment variables that
+# might have been set by the caller, or in the code above.
+while [[ $# -gt 0 ]]
+do
+	key="$1"
+	case ${key} in
+		--part)
+			RUN_PART="$2"
+			DIVIDE_INTO_NUM_PARTS="$3"
+			if [ "${RUN_PART}" -gt "${DIVIDE_INTO_NUM_PARTS}" ]
+			then
+				echo "cannot run part ${RUN_PART} of ${DIVIDE_INTO_NUM_PARTS}"
+				exit 1
+			fi
+			shift 2
+			;;
+	esac
+	shift
+done
 
 # An array of the suites that were run. Each value is a string like:
 # webUILogin
@@ -28,41 +57,99 @@ UNEXPECTED_NIGHTWATCH_CRASH=false
 FINAL_EXIT_STATUS=0
 
 # Work out which suites will be run.
-# TEST_PATHS = "tests/acceptance/features/webUILogin tests/acceptance/features/webUINotifications"
+# TEST_PATHS: valid if path is from tests directory
+# Example: "tests/acceptance/features/webUILogin tests/acceptance/features/webUINotifications"
 # or
-# TEST_CONTEXT = "webUIFavorites"
-if [ -n "${TEST_PATHS}" ]; then
-  for TEST_PATH in ${TEST_PATHS}; do
-    SUITE=$(basename "${TEST_PATH}")
-    SUITES_IN_THIS_RUN+=("${SUITE}")
-  done
-fi
+# TEST_CONTEXT: name of the suite to run
+# Example: "webUIFavorites"
 
-if [ -n "${TEST_CONTEXT}" ]; then
-  SUITES_IN_THIS_RUN+=("${TEST_CONTEXT}")
+if [ -n "${TEST_PATHS}" ]
+then
+	for TEST_PATH in ${TEST_PATHS}
+	do
+		echo $TEST_PATH
+		SUITES_IN_THIS_RUN+=( "${TEST_PATH}" )
+	done
+elif [[ -n  "${RUN_PART}" ]]
+then
+	ALL_SUITES=$(find "${FEATURES_DIR}"/ -type d | sort | rev | cut -d"/" -f1 | rev)
+	ALL_SUITES_COUNT=$(echo "${ALL_SUITES}" | wc -l)
+	#divide the suites letting it round down (could be zero)
+	MIN_SUITES_PER_RUN=$((ALL_SUITES_COUNT / DIVIDE_INTO_NUM_PARTS))
+	#some jobs might need an extra suite
+	MAX_SUITES_PER_RUN=$((MIN_SUITES_PER_RUN + 1))
+	# the remaining number of suites that need to be distributed (could be zero)
+	REMAINING_SUITES=$((ALL_SUITES_COUNT - (DIVIDE_INTO_NUM_PARTS * MIN_SUITES_PER_RUN)))
+
+	if [[ ${RUN_PART} -le ${REMAINING_SUITES} ]]
+	then
+		SUITES_THIS_RUN=${MAX_SUITES_PER_RUN}
+		SUITES_IN_PREVIOUS_RUNS=$((MAX_SUITES_PER_RUN * (RUN_PART - 1)))
+	else
+		SUITES_THIS_RUN=${MIN_SUITES_PER_RUN}
+		SUITES_IN_PREVIOUS_RUNS=$(((MAX_SUITES_PER_RUN * REMAINING_SUITES) + (MIN_SUITES_PER_RUN * (RUN_PART - REMAINING_SUITES - 1))))
+	fi
+
+	if [ ${SUITES_THIS_RUN} -eq 0 ]
+	then
+		echo "run.sh: there are only ${ALL_SUITES_COUNT} suites, nothing to do in part ${RUN_PART}"
+		exit 0
+	fi
+
+	COUNT_FINISH_AND_TODO_SUITES=$((SUITES_IN_PREVIOUS_RUNS + SUITES_THIS_RUN))
+
+	declare -a TEST_PATHS_TO_RUN
+	TEST_PATHS_TO_RUN+=( `echo "${ALL_SUITES}" | head -n ${COUNT_FINISH_AND_TODO_SUITES} | tail -n ${SUITES_THIS_RUN}` )
+
+	for TEST_PATH in "${TEST_PATHS_TO_RUN[@]}"
+	do
+		SUITE=$(basename "${TEST_PATH}")
+		TEST_PATHS+=( "${FEATURES_DIR}/${SUITE}" )
+		SUITES_IN_THIS_RUN+=( "${FEATURES_DIR}/${SUITE}" )
+	done
+elif [ -n "${TEST_CONTEXT}" ]
+then
+	SUITES_IN_THIS_RUN+=("${FEATURES_DIR}/${TEST_CONTEXT}")
+	TEST_PATHS+=("${FEATURES_DIR}/${TEST_CONTEXT}")
 fi
 
 # check that all the requested suites exist
 INVALID_SUITE_FOUND=false
 
-for SUITE_IN_THIS_RUN in "${SUITES_IN_THIS_RUN[@]}"; do
-  if [ ! -d "tests/acceptance/features/${SUITE_IN_THIS_RUN}" ]
-  then
-    INVALID_SUITE_FOUND=true
-    echo "Invalid suite: ${SUITE_IN_THIS_RUN}"
-  fi
+for SUITE_IN_THIS_RUN in "${SUITES_IN_THIS_RUN[@]}"
+do
+	if [ ! -d "${SUITE_IN_THIS_RUN}" ]
+	then
+		INVALID_SUITE_FOUND=true
+		echo "Invalid suite: ${SUITE_IN_THIS_RUN}"
+	fi
 done
 
 if [ "${INVALID_SUITE_FOUND}" = true ]
 then
-  echo "runsh: Invalid suite(s) requested in test run"
+  echo "run.sh: Invalid suite(s) requested in test run"
   exit 1
 fi
+
+
 
 echo "waiting for backend server to start"
 timeout 180 bash -c 'while [[ "$(curl --insecure -s -o /dev/null -w ''%{http_code}'' ${BACKEND_HOST})" != "200" ]]; do printf "."; sleep 5; done'
 
-yarn test:acceptance:drone | tee -a 'logfile.txt'
+# if no test path is set, set whole feature directory as test path
+if [ -z "${TEST_PATHS}" ]
+then
+	TEST_PATHS+=( "${FEATURES_DIR}" )
+fi
+
+
+if [ -z "${TEST_TAGS}" ]
+then
+	yarn test:acceptance:drone ${TEST_PATHS[@]} | tee -a 'logfile.txt'
+else
+	yarn test:acceptance:drone ${TEST_PATHS[@]} -t "${TEST_TAGS}" | tee -a 'logfile.txt'
+fi
+
 ACCEPTANCE_TESTS_EXIT_STATUS=${PIPESTATUS[0]}
 if [ "${ACCEPTANCE_TESTS_EXIT_STATUS}" -ne 0 ]; then
   echo "The acceptance tests exited with error status ${ACCEPTANCE_TESTS_EXIT_STATUS}"
@@ -74,7 +161,9 @@ if [ "${ACCEPTANCE_TESTS_EXIT_STATUS}" -ne 0 ]; then
   # and the tests with undefined steps are not retried and are reported simply like:
   # 5) Scenario: try to login with invalid username
   # So we need to look for those failed tests that don't end with (attempt 1, retried)
-  FAILED_SCENARIOS="$(grep ') Scenario: .*' logfile.txt) | grep -v '(attempt 1, retried)')"
+  #
+  # https://stackoverflow.com/questions/6550484/prevent-grep-returning-an-error-when-input-doesnt-match
+  FAILED_SCENARIOS="$(grep ') Scenario: .*' logfile.txt | { grep -v '(attempt 1, retried)' || true; })"
   for FAILED_SCENARIO in ${FAILED_SCENARIOS}; do
     if [[ $FAILED_SCENARIO =~ "tests/acceptance/features/" ]]; then
       SUITE_PATH=$(dirname "${FAILED_SCENARIO}")
