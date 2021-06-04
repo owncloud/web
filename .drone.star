@@ -601,7 +601,7 @@ rootSharingTestSuites = [
     "webUISharingPermissionToRoot",
 ]
 
-notificationsTestSuite = [
+notificationsTestSuites = [
     "webUINotifications",
     "webUISharingNotifications",
 ]
@@ -686,14 +686,14 @@ def checkTestSuites():
             if ("runningOnOCIS" not in test or test["runningOnOCIS"] != True):
                 expected += rootSharingTestSuites
         elif (test["type"] == NOTIFICATIONS):
-            expected += notificationsTestSuite
+            expected += notificationsTestSuites
             if ("runningOnOCIS" not in test or test["runningOnOCIS"] != True):
                 expected += notificationsRootTestSuites
         elif (test["type"] == FEDERATED):
             expected += federatedTestSuites + federatedRootTestSuites
 
         if ("runningOnOCIS" in test and test["runningOnOCIS"] == True):
-            expected += notificationsTestSuite + ocisSpecificTestSuites
+            expected += notificationsTestSuites + ocisSpecificTestSuites
 
         if (sorted(suites) != sorted(expected)):
             print("Error: Suites dont match " + testGroupName)
