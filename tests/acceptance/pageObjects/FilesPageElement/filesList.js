@@ -458,26 +458,8 @@ module.exports = {
               if (parseInt(attr.status) < 0) {
                 return
               }
-              if (attr.value.indexOf('uk-invisible') >= 0) {
-                return
-              }
-              this.api.elementIdAttribute(element.ELEMENT, 'aria-label', attr => {
-                switch (attr.value) {
-                  case 'Directly shared with people':
-                    indicators.push('user-direct')
-                    break
-                  case 'Shared with people through one of the parent folders':
-                    indicators.push('user-indirect')
-                    break
-                  case 'Directly shared with links':
-                    indicators.push('link-direct')
-                    break
-                  case 'Shared with links through one of the parent folders':
-                    indicators.push('link-indirect')
-                    break
-                  default:
-                    console.warn('Unknown share indicator found: "' + attr + '"')
-                }
+              this.api.elementIdAttribute(element.ELEMENT, 'data-test-indicator-type', attr => {
+                indicators.push(attr.value)
               })
             })
           })
@@ -665,26 +647,26 @@ module.exports = {
       selector: '.files-table .oc-tbody-tr'
     },
     fileRowByResourcePathAnyType: {
-      selector: `//span[contains(@class, "oc-resource-name") and (@resource-name=%s or @resource-path=%s)]/ancestor::tr[contains(@class, "oc-tbody-tr")]`,
+      selector: `//span[contains(@class, "oc-data-test-resource-name") and (@data-test-resource-name=%s or @data-test-resource-path=%s)]/ancestor::tr[contains(@class, "oc-tbody-tr")]`,
       locateStrategy: 'xpath'
     },
     fileRowByResourcePath: {
-      selector: `//span[contains(@class, "oc-resource-name") and (@resource-name=%s or @resource-path=%s) and @resource-type=%s]/ancestor::tr[contains(@class, "oc-tbody-tr")]`,
+      selector: `//span[contains(@class, "oc-data-test-resource-name") and (@data-test-resource-name=%s or @data-test-resource-path=%s) and @data-test-resource-type=%s]/ancestor::tr[contains(@class, "oc-tbody-tr")]`,
       locateStrategy: 'xpath'
     },
     fileRowDisabled: {
       selector:
-        '//span[contains(@class, "oc-resource-name") and (@resource-name=%s or @resource-path=%s) and @resource-type=%s]/ancestor::tr[contains(@class, "oc-table-disabled")]',
+        '//span[contains(@class, "oc-data-test-resource-name") and (@data-test-resource-name=%s or @data-test-resource-path=%s) and @data-test-resource-type=%s]/ancestor::tr[contains(@class, "oc-table-disabled")]',
       locateStrategy: 'xpath'
     },
     fileLinkInFileRowAnyType: {
       selector:
-        '//span[contains(@class, "oc-resource-name") and (@resource-name=%s or @resource-path=%s)]/parent::*',
+        '//span[contains(@class, "oc-data-test-resource-name") and (@data-test-resource-name=%s or @data-test-resource-path=%s)]/parent::*',
       locateStrategy: 'xpath'
     },
     fileLinkInFileRow: {
       selector:
-        '//span[contains(@class, "oc-resource-name") and (@resource-name=%s or @resource-path=%s) and @resource-type=%s]/parent::*',
+        '//span[contains(@class, "oc-data-test-resource-name") and (@data-test-resource-name=%s or @data-test-resource-path=%s) and @data-test-resource-type=%s]/parent::*',
       locateStrategy: 'xpath'
     },
     /**

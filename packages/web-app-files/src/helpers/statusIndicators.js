@@ -92,6 +92,7 @@ export const getIndicators = (resource, sharesTree) => {
       visible: isUserShare(resource, sharesTree),
       icon: 'group',
       target: 'files-sharing',
+      type: isDirectUserShare(resource) ? 'user-direct' : 'user-indirect',
       handler: indicatorHandler
     },
     {
@@ -101,6 +102,7 @@ export const getIndicators = (resource, sharesTree) => {
       visible: isLinkShare(resource, sharesTree),
       icon: 'link',
       target: 'file-link',
+      type: isDirectLinkShare(resource) ? 'link-direct' : 'link-indirect',
       handler: indicatorHandler
     }
   ]
