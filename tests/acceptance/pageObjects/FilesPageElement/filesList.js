@@ -458,9 +458,6 @@ module.exports = {
               if (parseInt(attr.status) < 0) {
                 return
               }
-              if (attr.value.indexOf('uk-invisible') >= 0) {
-                return
-              }
               this.api.elementIdAttribute(element.ELEMENT, 'aria-label', attr => {
                 switch (attr.value) {
                   case 'Directly shared with people':
