@@ -740,7 +740,8 @@ module.exports = {
       selector: '.files-table .oc-thead'
     },
     filesTableHeaderColumn: {
-      selector: '//*[contains(@class, "oc-table-header-cell")]//*[text()=%s]/following-sibling::button',
+      selector:
+        '//*[contains(@class, "oc-table-header-cell")]//*[text()=%s]/following-sibling::button',
       locateStrategy: 'xpath'
     },
     // TODO: Merge with selectors in personalPage
