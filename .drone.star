@@ -723,17 +723,12 @@ def main(ctx):
     after = afterPipelines(ctx)
     dependsOn(stages, after)
 
-    if ctx.build.event == "cron":
-        return example_deploys(ctx)
-
     pipelines = before + stages + after
 
     deploys = example_deploys(ctx)
     dependsOn(pipelines, deploys)
 
     return pipelines + deploys + checkStarlark()
-
-    return pipelines
 
 def beforePipelines(ctx):
     return yarnlint() + changelog(ctx) + website(ctx) + cacheOcisPipeline(ctx)
