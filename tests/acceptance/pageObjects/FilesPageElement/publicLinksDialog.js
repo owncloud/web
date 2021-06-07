@@ -345,7 +345,7 @@ module.exports = {
         .waitForElementVisible(linksAccordionItem)
         .click(linksAccordionItem)
         .waitForElementVisible('@privateLinkURLCopyButton')
-        .click('@sidebarPrivateLinkLabel')
+        .click('@privateLinkURLCopyButton')
     }
   },
   elements: {
