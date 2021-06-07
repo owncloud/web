@@ -1,4 +1,4 @@
-import { Cache } from './cache'
+import Cache from './cache'
 
 const newCache = <T>(vs: T[], ttl?: number, capacity?: number): Cache<number, T> => {
   const cache = new Cache<number, T>({ ttl, capacity })
@@ -6,7 +6,7 @@ const newCache = <T>(vs: T[], ttl?: number, capacity?: number): Cache<number, T>
   return cache
 }
 
-describe('cache', () => {
+describe('Cache', () => {
   it('can set and get entries', () => {
     const cacheValues: number[] = [1, 2, 3, 4]
     const cache = newCache(cacheValues)
@@ -17,20 +17,21 @@ describe('cache', () => {
 
     cache.set(4, 5)
     expect(cache.get(4)).toBe(5)
+    expect(cache.set(5, 6)).toBe(6)
   })
 
-  it('return all keys', async () => {
+  it('return all keys', () => {
     const cache = newCache([1, 2, 3, 4])
     expect(cache.keys()).toMatchObject([0, 1, 2, 3])
   })
 
-  it('return all values', async () => {
+  it('return all values', () => {
     const cacheValues: number[] = [1, 2, 3, 4]
     const cache = newCache(cacheValues)
     expect(cache.values()).toMatchObject(cacheValues)
   })
 
-  it('return all entries', async () => {
+  it('return all entries', () => {
     const cache = newCache([1, 2, 3, 4])
     expect(cache.entries()).toMatchObject([
       [0, 1],
@@ -40,7 +41,7 @@ describe('cache', () => {
     ])
   })
 
-  it('can handle ttl', async () => {
+  it('can handle ttl', () => {
     jest.useFakeTimers('modern')
     const cacheValues: number[] = []
     const cache = newCache(cacheValues, 50)
@@ -95,7 +96,7 @@ describe('cache', () => {
     expect(cache.entries().length).toBe(0)
   })
 
-  it('can handle capacity', async () => {
+  it('can handle capacity', () => {
     const initialValues: number[] = [1, 2, 3, 4, 5]
     const newValues: number[] = [6, 7, 8, 9, 10]
     const capacity = 5

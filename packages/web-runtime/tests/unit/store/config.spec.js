@@ -22,15 +22,15 @@ describe('config theme bootstrap', () => {
     const { theme, name } = await loadTheme()
 
     await store.dispatch('loadTheme', { theme, name })
-    keysDeep(theme).forEach(k => {
+    objectKeys(theme).forEach(k => {
       expect(get(store.getters.configuration.theme, k)).toBe(get(theme, k))
     })
   })
 
   it('should not overwrite keys that are not part of theme', async () => {
     const { theme, name } = await loadTheme()
-    const storeThemeKeys = keysDeep(store.getters.configuration.theme)
-    const loadedThemeKeys = keysDeep(theme)
+    const storeThemeKeys = objectKeys(store.getters.configuration.theme)
+    const loadedThemeKeys = objectKeys(theme)
     const diffThemeKeys = difference(storeThemeKeys, loadedThemeKeys)
     await store.dispatch('loadTheme', { theme, name })
 

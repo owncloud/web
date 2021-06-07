@@ -1,6 +1,6 @@
 import isPlainObject from 'lodash-es/isPlainObject'
 
-export const keysDeep = obj => {
+export const objectKeys = (obj: Record<string, unknown>): string[] => {
   const paths = []
 
   const walk = (o, p = '') =>
@@ -13,5 +13,6 @@ export const keysDeep = obj => {
     })
 
   walk(obj)
+
   return paths
 }

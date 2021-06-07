@@ -1,4 +1,4 @@
-import ElementIsVisible from './visible'
+import { VisibilityObserver } from './visibility'
 
 let callback
 let mockIntersectionObserver
@@ -18,7 +18,7 @@ beforeEach(reset)
 
 window.document.body.innerHTML = `<div id="target">foo</div>`
 
-describe('ElementIsVisible', () => {
+describe('VisibilityObserver', () => {
   it.each([
     { onEnter: jest.fn() },
     { onExit: jest.fn() },
@@ -28,37 +28,41 @@ describe('ElementIsVisible', () => {
     },
     {}
   ])('observes %p', cb => {
-    new ElementIsVisible(document.getElementById('target'), cb)
+    const observer = new VisibilityObserver()
+    observer.observe(document.getElementById('target'), cb)
     expect(mockIntersectionObserver.observe).toBeCalledTimes(Object.keys(cb).length ? 1 : 0)
   })
 
   it('handles entered and exited callbacks', () => {
     const onEnter = jest.fn()
     const onExit = jest.fn()
-    new ElementIsVisible(document.getElementById('target'), { onEnter, onExit })
-    callback([{ isIntersecting: false, intersectionRatio: -1 }])
+    const observer = new VisibilityObserver()
+    const target = document.getElementById('target')
+    observer.observe(target, { onEnter, onExit })
+    callback([{ isIntersecting: false, intersectionRatio: -1, target }])
     expect(onEnter).toBeCalledTimes(0)
     expect(onExit).toBeCalledTimes(0)
-    callback([{ isIntersecting: true, intersectionRatio: 1 }])
+    callback([{ isIntersecting: true, intersectionRatio: 1, target }])
     expect(onEnter).toBeCalledTimes(1)
     expect(onExit).toBeCalledTimes(0)
-    callback([{ isIntersecting: false, intersectionRatio: -1 }])
+    callback([{ isIntersecting: false, intersectionRatio: -1, target }])
     expect(onEnter).toBeCalledTimes(1)
     expect(onExit).toBeCalledTimes(1)
   })
-
   it.each(['disconnect', 'unobserve'])('handles %p', m => {
     const onEnter = jest.fn()
     const onExit = jest.fn()
-    const obs = new ElementIsVisible(document.getElementById('target'), { onEnter, onExit })
-    obs[m]()
-    callback([{ isIntersecting: false, intersectionRatio: -1 }])
+    const observer = new VisibilityObserver()
+    const target = document.getElementById('target')
+    observer.observe(target, { onEnter, onExit })
+    observer[m](target)
+    callback([{ isIntersecting: false, intersectionRatio: -1, target }])
     expect(onEnter).toBeCalledTimes(0)
     expect(onExit).toBeCalledTimes(0)
-    callback([{ isIntersecting: true, intersectionRatio: 1 }])
+    callback([{ isIntersecting: true, intersectionRatio: 1, target }])
     expect(onEnter).toBeCalledTimes(0)
     expect(onExit).toBeCalledTimes(0)
-    callback([{ isIntersecting: false, intersectionRatio: -1 }])
+    callback([{ isIntersecting: false, intersectionRatio: -1, target }])
     expect(onEnter).toBeCalledTimes(0)
     expect(onExit).toBeCalledTimes(0)
   })

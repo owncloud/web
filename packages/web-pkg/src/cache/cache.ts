@@ -1,4 +1,4 @@
-class Entry<T> {
+class CacheElement<T> {
   public value: T
   public expires: number
 
@@ -12,8 +12,8 @@ class Entry<T> {
   }
 }
 
-export class Cache<K, V> {
-  private map: Map<K, Entry<V>>
+export default class Cache<K, V> {
+  private map: Map<K, CacheElement<V>>
   private readonly ttl: number
   private readonly capacity: number
 
@@ -21,11 +21,11 @@ export class Cache<K, V> {
     this.ttl = ttl || 0
     this.capacity = capacity || 0
 
-    this.map = new Map()
+    this.map = new Map<K, CacheElement<V>>()
   }
 
   public set(key: K, value: V, ttl?: number): V {
-    this.map.set(key, new Entry<V>(value, ttl || this.ttl))
+    this.map.set(key, new CacheElement<V>(value, ttl || ttl === 0 ? 0 : this.ttl))
 
     if (this.capacity && this.map.size > this.capacity) {
       const itemsToDelete = this.map.size - this.capacity
