@@ -249,9 +249,6 @@ module.exports = {
       )
       return isVisible
     },
-    copyPermalinkFromFilesAppBar: function() {
-      return this.waitForElementVisible('@permalinkCopyButton').click('@permalinkCopyButton')
-    },
     checkSidebarItem: function(resourceName) {
       return this.getText('@sidebarItemName', function(itemName) {
         this.assert.strictEqual(
@@ -376,9 +373,6 @@ module.exports = {
     },
     newFolderOkButton: {
       selector: '#new-folder-ok'
-    },
-    permalinkCopyButton: {
-      selector: '#files-sidebar-private-link-label'
     },
     breadcrumb: {
       selector: '#files-breadcrumb li:nth-of-type(2)'
