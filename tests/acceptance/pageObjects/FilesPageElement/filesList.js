@@ -648,26 +648,26 @@ module.exports = {
       selector: '.files-table .oc-tbody-tr'
     },
     fileRowByResourcePathAnyType: {
-      selector: `//span[contains(@class, "oc-data-test-resource-name") and (@data-test-resource-name=%s or @data-test-resource-path=%s)]/ancestor::tr[contains(@class, "oc-tbody-tr")]`,
+      selector: `//span[contains(@class, "oc-resource-name") and (@data-test-resource-name=%s or @data-test-resource-path=%s)]/ancestor::tr[contains(@class, "oc-tbody-tr")]`,
       locateStrategy: 'xpath'
     },
     fileRowByResourcePath: {
-      selector: `//span[contains(@class, "oc-data-test-resource-name") and (@data-test-resource-name=%s or @data-test-resource-path=%s) and @data-test-resource-type=%s]/ancestor::tr[contains(@class, "oc-tbody-tr")]`,
+      selector: `//span[contains(@class, "oc-resource-name") and (@data-test-resource-name=%s or @data-test-resource-path=%s) and @data-test-resource-type=%s]/ancestor::tr[contains(@class, "oc-tbody-tr")]`,
       locateStrategy: 'xpath'
     },
     fileRowDisabled: {
       selector:
-        '//span[contains(@class, "oc-data-test-resource-name") and (@data-test-resource-name=%s or @data-test-resource-path=%s) and @data-test-resource-type=%s]/ancestor::tr[contains(@class, "oc-table-disabled")]',
+        '//span[contains(@class, "oc-resource-name") and (@data-test-resource-name=%s or @data-test-resource-path=%s) and @data-test-resource-type=%s]/ancestor::tr[contains(@class, "oc-table-disabled")]',
       locateStrategy: 'xpath'
     },
     fileLinkInFileRowAnyType: {
       selector:
-        '//span[contains(@class, "oc-data-test-resource-name") and (@data-test-resource-name=%s or @data-test-resource-path=%s)]/parent::*',
+        '//span[contains(@class, "oc-resource-name") and (@data-test-resource-name=%s or @data-test-resource-path=%s)]/parent::*',
       locateStrategy: 'xpath'
     },
     fileLinkInFileRow: {
       selector:
-        '//span[contains(@class, "oc-data-test-resource-name") and (@data-test-resource-name=%s or @data-test-resource-path=%s) and @data-test-resource-type=%s]/parent::*',
+        '//span[contains(@class, "oc-resource-name") and (@data-test-resource-name=%s or @data-test-resource-path=%s) and @data-test-resource-type=%s]/parent::*',
       locateStrategy: 'xpath'
     },
     /**
