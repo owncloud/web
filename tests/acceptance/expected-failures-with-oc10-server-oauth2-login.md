@@ -87,6 +87,11 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIComments/comments.feature:40](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIComments/comments.feature#L40)
 -   [webUIComments/comments.feature:41](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIComments/comments.feature#L41)
 -   [webUIComments/comments.feature:42](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIComments/comments.feature#L42)
+-   [webUIFilesDetails/fileDetails.feature:66](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesDetails/fileDetails.feature#L66)
+-   [webUIFilesDetails/fileDetails.feature:82](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesDetails/fileDetails.feature#L82)
+-   [webUIFilesDetails/fileDetails.feature:99](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesDetails/fileDetails.feature#L99)
+-   [webUIFilesDetails/fileDetails.feature:116](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesDetails/fileDetails.feature#L116)
+-   [webUIFilesDetails/fileDetails.feature:143](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesDetails/fileDetails.feature#L143)
 
 ### [Tags page not implemented yet] (https://github.com/owncloud/web/issues/5017)
 -   [webUIDeleteFilesFolders/deleteFilesFolders.feature:144](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIDeleteFilesFolders/deleteFilesFolders.feature#L144)

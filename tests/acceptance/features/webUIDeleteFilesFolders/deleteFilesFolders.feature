@@ -130,8 +130,8 @@ Feature: deleting files and folders
   @public_link_share-feature-required
   Scenario: delete files from shared by link page
     Given user "Alice" has created file "lorem.txt"
-    And the user has reloaded the current page of the webUI
-    And user "Alice" has shared folder "lorem.txt" with link with "read" permissions
+    And user "Alice" has created a public link with following settings
+      | path        | lorem.txt             |
     And the user has browsed to the shared-via-link page
     Then file "lorem.txt" should be listed on the webUI
     When the user deletes file "lorem.txt" using the webUI
