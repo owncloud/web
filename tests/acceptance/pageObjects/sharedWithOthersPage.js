@@ -28,8 +28,10 @@ module.exports = {
         requiredXpath,
         elements => {
           elements.value.forEach(el => {
-            this.api.elementIdAttribute(el.ELEMENT, 'data-test-user-name', r => {
-              collaborators.push(r.value)
+            ;['data-test-user-name', 'data-test-link-name'].forEach(attr => {
+              this.api.elementIdAttribute(el.ELEMENT, attr, r => {
+                collaborators.push(r.value)
+              })
             })
           })
         }
