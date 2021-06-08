@@ -127,12 +127,12 @@ Feature: deleting files and folders
     And file "zzzz-must-be-last-file-in-folder.txt" should not be listed on the webUI
     And no message should be displayed on the webUI
 
-  @skip @yetToImplement @public_link_share-feature-required
+  @public_link_share-feature-required
   Scenario: delete files from shared by link page
     Given user "Alice" has created file "lorem.txt"
-    And the user has reloaded the current page of the webUI
-    And the user has created a new public link for file "lorem.txt" using the webUI
-    And the user has browsed to the shared-by-link page
+    And user "Alice" has created a public link with following settings
+      | path        | lorem.txt             |
+    And the user has browsed to the shared-via-link page
     Then file "lorem.txt" should be listed on the webUI
     When the user deletes file "lorem.txt" using the webUI
     Then as "Alice" file "lorem.txt" should not exist
@@ -140,7 +140,7 @@ Feature: deleting files and folders
     When the user browses to the files page
     Then file "lorem.txt" should not be listed on the webUI
 
-  @skip @yetToImplement @systemtags-app-required
+  @issue-5017 @systemtags-app-required
   Scenario: delete files from tags page
     Given user "Alice" has created file "lorem.txt"
     And the user has reloaded the current page of the webUI
@@ -211,7 +211,7 @@ Feature: deleting files and folders
       | question?       |
       | &and#hash       |
 
-  @skip @yetToImplement @issue-4582
+  @issue-4582
   Scenario: Delete multiple files at once on a public share
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has created file "simple-folder/data.zip"

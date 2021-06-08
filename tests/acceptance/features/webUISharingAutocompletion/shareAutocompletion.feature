@@ -16,7 +16,7 @@ Feature: Autocompletion of share-with names
     # Some extra users to make the share autocompletion interesting
     And these users have been created without initialization and without skeleton files:
       | username  | password  | displayname     | email          |
-      | two       | %regular% | Brian Murphy        | u2@oc.com.np   |
+      | two       | %regular% | Brian Murphy    | u2@oc.com.np   |
       | u444      | %regular% | Four            | u3@oc.com.np   |
       | five      | %regular% | User Group      | five@oc.com.np |
       | usersmith | %regular% | John Finn Smith | js@oc.com.np   |
@@ -83,9 +83,9 @@ Feature: Autocompletion of share-with names
     When the user types "use" in the share-with-field
     Then the autocomplete list should not be displayed on the webUI
 
-  @skip @yetToImplement
+  @issue-ocis-1961
   Scenario: autocomplete short user/display names when completely typed
-    Given the administrator has set the minimum characters for sharing autocomplete to "4"
+    Given the administrator has set the minimum characters for sharing autocomplete to "3"
     And user "regularuser" has created folder "simple-folder"
     And user "regularuser" has logged in using the webUI
     And the user has browsed to the files page
@@ -95,11 +95,11 @@ Feature: Autocompletion of share-with names
     And the user has opened the share dialog for folder "simple-folder"
     And the user opens the share creation dialog in the webUI
     When the user types "Use" in the share-with-field
-    Then only "Use" should be listed in the autocomplete list on the webUI
+    Then "user" "Use" should be listed in the autocomplete list on the webUI
 
-  @skip @yetToImplement
+  @issue-ocis-1961
   Scenario: autocomplete short group names when completely typed
-    Given the administrator has set the minimum characters for sharing autocomplete to "3"
+    Given the administrator has set the minimum characters for sharing autocomplete to "2"
     And user "regularuser" has created folder "simple-folder"
     And these groups have been created:
       | groupname |
@@ -109,7 +109,7 @@ Feature: Autocompletion of share-with names
     And the user has opened the share dialog for folder "simple-folder"
     And the user opens the share creation dialog in the webUI
     When the user types "fi" in the share-with-field
-    Then only "fi (group)" should be listed in the autocomplete list on the webUI
+    Then "group" "fi" should be listed in the autocomplete list on the webUI
 
   @issue-ocis-1675 @issue-ocis-1317
   Scenario: autocompletion when increasing the minimum characters for sharing autocomplete

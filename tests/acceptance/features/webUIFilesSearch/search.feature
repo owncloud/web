@@ -59,7 +59,7 @@ Feature: Search
     #And file "lorem-big.txt" with path "/strängé नेपाली folder" should be listed in the search results in the other folders section on the webUI
     #But file "lorem.txt" with path "/simple-folder" should not be listed in the search results in the other folders section on the webUI
 
-  @systemtags-app-required @skip @yetToImplement
+  @issue-5017 @systemtags-app-required
   Scenario: search for a file using a tag
     Given user "Alice" has created a "normal" tag with name "ipsum"
     And user "Alice" has added tag "ipsum" to file "/lorem.txt"
@@ -67,7 +67,7 @@ Feature: Search
     And the user searches for tag "ipsum" using the webUI
     Then file "lorem.txt" should be listed on the webUI
 
-  @systemtags-app-required @skip @yetToImplement
+  @issue-5017 @systemtags-app-required
   Scenario: search for a file with multiple tags
     Given user "Alice" has created a "normal" tag with name "lorem"
     And user "Alice" has created a "normal" tag with name "ipsum"
@@ -80,7 +80,7 @@ Feature: Search
     Then file "lorem.txt" should be listed on the webUI
     And file "testimage.jpg" should not be listed on the webUI
 
-  @systemtags-app-required @skip @yetToImplement
+  @issue-5017 @systemtags-app-required
   Scenario: search for a file with tags
     Given user "Alice" has created a "normal" tag with name "lorem"
     And user "Alice" has added tag "lorem" to file "/lorem.txt"

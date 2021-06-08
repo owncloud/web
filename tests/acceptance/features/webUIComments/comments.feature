@@ -13,6 +13,7 @@ Feature: Add, delete and edit comments in files and folders
     And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
 
+  @issue-1158
   Scenario Outline: user adds and deletes comment for a file/folder
     When the user browses directly to display the "comments" details of file "lorem.txt" in folder "/"
     And the user comments with content "<comment>" using the webUI
@@ -23,9 +24,9 @@ Feature: Add, delete and edit comments in files and folders
       | comment     |
       | lorem ipsum |
       | 😀 🤖       |
-      | नेपालि      |
+      | नेपालि        |
 
-  @skip @yetToImplement
+  @issue-1158
   Scenario Outline: Add comment on a shared file and check it is shown in other user's UI
     When the user renames file "lorem.txt" to "new-lorem.txt" using the webUI
     And the user browses directly to display the "comments" details of file "new-lorem.txt" in folder "/"
@@ -38,4 +39,4 @@ Feature: Add, delete and edit comments in files and folders
       | comment     |
       | lorem ipsum |
       | 😀 🤖       |
-      | नेपालि      |
+      | नेपालि        |

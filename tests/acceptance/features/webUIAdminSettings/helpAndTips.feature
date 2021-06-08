@@ -7,7 +7,7 @@ Feature: Help and tips page
   Background:
     Given the administrator has browsed to the help and tips page
 
-  @skip @yetToImplement
+  @issue-5015
   Scenario Outline: Admin can view links in help and tips page
     Then the link for "<linkName>" should be shown in the webUI
     And the link for "<linkName>" should be valid

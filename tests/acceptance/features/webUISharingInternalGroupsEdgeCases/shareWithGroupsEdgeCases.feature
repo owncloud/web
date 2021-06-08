@@ -44,7 +44,7 @@ Feature: Sharing files and folders with internal groups
     Examples:
       | group     |
       | ?\?@#%@,; |
-      | नेपाली    |
+      | नेपाली      |
 
 
   Scenario: Share file with a user and a group with same name
