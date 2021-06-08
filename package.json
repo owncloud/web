@@ -100,6 +100,7 @@
     "url-search-params-polyfill": "^8.0.0",
     "vue-jest": "^3.0.7",
     "vue-template-compiler": "^2.6.12",
+    "vuex-mock-store": "0.0.8",
     "xml-js": "^1.6.11"
   },
   "engines": {
