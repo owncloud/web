@@ -253,7 +253,7 @@ module.exports = {
       return this.waitForElementVisible('@permalinkCopyButton').click('@permalinkCopyButton')
     },
     checkSidebarItem: function(resourceName) {
-      return this.getAttribute('@sidebarItemName', 'innerText', function(itemName) {
+      return this.getText('@sidebarItemName', function(itemName) {
         this.assert.strictEqual(
           itemName.value,
           resourceName,
