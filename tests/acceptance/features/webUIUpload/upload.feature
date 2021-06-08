@@ -11,7 +11,7 @@ Feature: File Upload
     And user "Alice" has uploaded file with content "initial content" to "simple-folder/lorem.txt"
     And user "Alice" has logged in using the webUI
 
-  @smokeTest
+  @smokeTest  @ocisSmokeTest
   Scenario: simple upload of a file that does not exist before
     When the user uploads file "new-lorem.txt" using the webUI
     Then no message should be displayed on the webUI

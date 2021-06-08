@@ -112,7 +112,7 @@ Feature: accept/decline shares coming from internal users
     Then file "toshare.txt" should not be listed on the webUI
     And file "anotherfile.txt" should not be listed on the webUI
 
-
+  @ocisSmokeTest
   Scenario: accept an offered (pending) share
     Given user "Alice" has created file "toshare.txt"
     And user "Alice" has created file "anotherfile.txt"

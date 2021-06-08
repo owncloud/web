@@ -16,7 +16,7 @@ Feature: move folders
     Then the error message 'The name cannot contain "/"' should be displayed on the webUI dialog prompt
     And folder "simple-empty-folder" should be listed on the webUI
 
-  @smokeTest
+  @smokeTest @ocisSmokeTest
   Scenario: move a folder into another folder
     Given user "Alice" has created folder "strängé नेपाली folder"
     And user "Alice" has logged in using the webUI
