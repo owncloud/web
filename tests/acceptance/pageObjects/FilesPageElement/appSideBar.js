@@ -160,7 +160,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     accordionItems: {
-      selector: '//div[@class="sidebar-container"]//li/h3/button',
+      selector: '//div[@class="sidebar-container"]//div[@class="oc-accordion-item"]/h3/button',
       locateStrategy: 'xpath'
     },
     sidebarThumbnail: {
