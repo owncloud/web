@@ -52,7 +52,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIDeleteFilesFolders/deleteFilesFolders.feature:235](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIDeleteFilesFolders/deleteFilesFolders.feature#L235)
 -   [webUIFilesDetails/fileDetails.feature:97](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesDetails/fileDetails.feature#L97)
 -   [webUIFilesDetails/fileDetails.feature:114](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesDetails/fileDetails.feature#L114)
--   [webUIFilesActionMenu/versions.feature:34](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesActionMenu/versions.feature#L34)
+-   [webUIFilesActionMenu/versions.feature:36](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesActionMenu/versions.feature#L36)
 -   [webUIRenameFiles/renameFiles.feature:202](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIRenameFiles/renameFiles.feature#L202)
 -   [webUIRenameFiles/renameFiles.feature:227](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIRenameFiles/renameFiles.feature#L227)
 -   [webUIRenameFiles/renameFiles.feature:249](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIRenameFiles/renameFiles.feature#L249)
@@ -131,9 +131,9 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIFilesList/fileList.feature:33](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesList/fileList.feature#L33)
 
 ### [Versions Cleanup not available](https://github.com/owncloud/ocis/issues/1310)
--   [webUIFilesActionMenu/versions.feature:46](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesActionMenu/versions.feature#L46)
--   [webUIFilesActionMenu/versions.feature:57](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesActionMenu/versions.feature#L57)
--   [webUIFilesActionMenu/versions.feature:72](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesActionMenu/versions.feature#L72)
+-   [webUIFilesActionMenu/versions.feature:48](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesActionMenu/versions.feature#L48)
+-   [webUIFilesActionMenu/versions.feature:59](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesActionMenu/versions.feature#L59)
+-   [webUIFilesActionMenu/versions.feature:74](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesActionMenu/versions.feature#L74)
 
 ### [Search feature does not exist](https://github.com/owncloud/ocis/issues/1330)
 -   [webUIFilesSearch/search.feature:27](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesSearch/search.feature#L27)
