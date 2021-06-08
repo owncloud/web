@@ -15,7 +15,6 @@
       mode="click"
       :options="{ pos: 'bottom-right', delayHide: 0 }"
       class="uk-overflow-auto uk-width-3-4 uk-width-large@s"
-      close-on-click
     >
       <div v-for="(el, index) in activeNotifications" :key="index" class="uk-width-1-1">
         <h4 v-text="el.subject" />
