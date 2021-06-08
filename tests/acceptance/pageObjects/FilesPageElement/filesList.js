@@ -322,7 +322,8 @@ module.exports = {
       const rowSelector = this.getFileRowSelectorByFileName(path, elementType)
       return this.useXpath()
         .waitForElementVisible(rowSelector)
-        .getAttribute(linkSelector, 'innerText', function(result) {
+        .waitForElementVisible(linkSelector)
+        .getText(linkSelector, function(result) {
           assert.strictEqual(result.value.trim(), path, 'displayed file name not as expected')
         })
         .useCss()
