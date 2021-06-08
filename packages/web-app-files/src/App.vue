@@ -101,10 +101,6 @@ export default {
 
     $_ocApp_dragOver() {
       this.dragOver(true)
-    },
-
-    $_ocAppSideBar_onReload() {
-      this.$refs.filesList.$_ocFilesFolder_getFolder()
     }
   }
 }
