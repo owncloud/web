@@ -259,17 +259,10 @@ module.exports = {
       })
     },
     confirmFileOverwrite: function() {
-      return (
-        this.waitForElementVisible('@dialog')
-          .waitForAnimationToFinish()
-          // clicking new resource dropdown to hide it, as we upload the file directly using `setValue`.
-          // The overwrite dialog is too fast and does not give time to close the dropdown beforehand
-          .clickElementAt(this.elements.newResourceDropdown.selector, 0, 0)
-          .waitForElementNotVisible('@newFolderButton')
-          .click('@dialogConfirmBtn')
-          .waitForElementNotPresent('@dialog')
-          .waitForAjaxCallsToStartAndFinish()
-      )
+      return this.waitForAnimationToFinish()
+        .click('@dialogConfirmBtn')
+        .waitForElementNotPresent('@dialog')
+        .waitForAjaxCallsToStartAndFinish()
     },
     checkForButtonDisabled: function() {
       return this.waitForElementVisible('@dialogConfirmBtnDisabled')
@@ -376,11 +369,6 @@ module.exports = {
     },
     breadcrumb: {
       selector: '#files-breadcrumb li:nth-of-type(2)'
-    },
-    newFileButtonLoaded: {
-      selector:
-        '//button[@id="new-file-menu-btn" and contains(@class, "oc-button-primary") and not(@disabled)]',
-      locateStrategy: 'xpath'
     },
     breadcrumbMobile: {
       selector: '//span[@class="oc-breadcrumb-drop-label-text" and text()=%s]',

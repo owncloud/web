@@ -20,10 +20,7 @@ export default {
   },
   methods: {
     skipToTarget() {
-      // Make targetElement programmatically focusable
       this.targetElement.setAttribute('tabindex', '-1')
-
-      // Focus and scroll into view
       this.targetElement.focus()
       this.targetElement.scrollIntoView()
     }
