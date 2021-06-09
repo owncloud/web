@@ -371,7 +371,7 @@ export default {
       this.toggleCollaborator(component, event, '#oc-sharing-autocomplete')
     },
     toggleCollaboratorEdit(component, event) {
-      this.toggleCollaborator(component, event, '#files-collaborators-role-button')
+      this.toggleCollaborator(component, event, '#collaborator-edit-hint')
     },
     toggleCollaborator(component, event, selector) {
       this.focus({

@@ -1,5 +1,11 @@
 <template>
   <div class="files-collaborators-collaborator-edit-dialog">
+    <h4
+      id="collaborator-edit-hint"
+      tabindex="-1"
+      class="oc-invisible-sr"
+      v-text="editCollaboratorHint"
+    />
     <transition
       enter-active-class="uk-animation-slide-top-small"
       leave-active-class="uk-animation-slide-top-small uk-animation-reverse"
@@ -113,6 +119,15 @@ export default {
       }
 
       return null
+    },
+
+    editCollaboratorHint() {
+      const translated = this.$gettext('Editing share with %{ currentCollaborator }')
+      return this.$gettextInterpolate(
+        translated,
+        { currentCollaborator: this.collaborator.collaborator.displayName },
+        true
+      )
     },
 
     $_originalPermissions() {
