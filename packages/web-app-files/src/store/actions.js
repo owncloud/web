@@ -572,13 +572,16 @@ export default {
     if (isPublic) {
       preview = await publicPreviewUrl({ resource, dimensions })
     } else {
-      preview = await privatePreviewBlob({
-        server: rootGetters.configuration.server,
-        userId: rootGetters.user.id,
-        token: rootGetters.getToken,
-        resource,
-        dimensions
-      })
+      preview = await privatePreviewBlob(
+        {
+          server: rootGetters.configuration.server,
+          userId: rootGetters.user.id,
+          token: rootGetters.getToken,
+          resource,
+          dimensions
+        },
+        true
+      )
     }
 
     if (preview) {
