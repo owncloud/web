@@ -706,7 +706,7 @@ module.exports = {
     },
     collaboratorExpirationDate: {
       selector:
-        '//span[contains(@class, "files-collaborators-collaborator-name") and text()="%s"]/../../span/span[contains(@class, "files-collaborators-collaborator-expires")]',
+        '//p[contains(@class, "files-collaborators-collaborator-name") and text()="%s"]/../..//span[contains(@class, "files-collaborators-collaborator-expires")]',
       locateStrategy: 'xpath'
     },
     collaboratorAutocompleteItem: {

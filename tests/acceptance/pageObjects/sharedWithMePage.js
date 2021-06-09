@@ -82,7 +82,7 @@ module.exports = {
       await this.api.getAttribute(
         this.elements.sharedFrom.locateStrategy,
         requiredXpath,
-        'aria-label',
+        'data-test-user-name',
         result => {
           username = result.value
         }
