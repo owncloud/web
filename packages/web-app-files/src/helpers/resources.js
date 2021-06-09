@@ -327,20 +327,3 @@ export function buildDeletedResource(resource) {
     indicators: []
   }
 }
-
-export const updateResource = (task = async () => {}, cb = () => {}) => {
-  ;(async () => {
-    let val
-    try {
-      val = await task()
-    } catch (e) {
-      return
-    }
-
-    if (!val) {
-      return
-    }
-
-    cb(val)
-  })()
-}
