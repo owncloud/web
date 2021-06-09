@@ -201,6 +201,5 @@ Feature: Create public link shares
     And user "Brian" has shared folder "simple-folder" with user "Alice"
     And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
     And user "Alice" has logged in using the webUI
-    When the user creates a new public link for folder "Shares" using the webUI with
-      | name | link |
-    Then the user should see an error message on the public link share dialog saying "Path contains files shared with you"
+    And the user opens the link share dialog for folder "Shares" using the webUI
+    Then the link share permission denied message should be displayed in the sharing dialog on the webUI

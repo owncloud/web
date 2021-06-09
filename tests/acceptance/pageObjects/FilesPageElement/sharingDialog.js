@@ -606,23 +606,20 @@ module.exports = {
     },
     /**
      *
-     * @returns {Promise<string>}
+     * @returns {boolean} Whether the message has been found
      */
-    getSharePermissionMessage: async function() {
-      let message
-      await this.waitForElementVisible('@sharingPermissionDisabledMessage').getText(
-        this.elements.sharingPermissionDisabledMessage.selector,
-        function(result) {
-          message = result.value
-        }
-      )
-      return message
+    isSharePermissionMessageVisible: function() {
+      return this.waitForElementVisible('@noResharePermissions')
+    },
+    /**
+     *
+     * @returns {boolean} Whether the message has been found
+     */
+    isLinkSharePermissionMessageVisible: function() {
+      return this.waitForElementVisible('@noReshareLinkPermissions')
     }
   },
   elements: {
-    sharingPermissionDisabledMessage: {
-      selector: '.files-collaborators-no-reshare-permissions-message'
-    },
     collaboratorErrorAlert: {
       selector: '//div[contains(@class, "collaborator-error-alert")]',
       locateStrategy: 'xpath'
@@ -632,7 +629,14 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     noResharePermissions: {
-      selector: '#oc-files-sharing-sidebar .files-collaborators-no-reshare-permissions-message'
+      selector:
+        '//p[@data-test-id="files-collaborators-no-reshare-permissions-message"]',
+      locateStrategy: 'xpath'
+    },
+    noReshareLinkPermissions: {
+      selector:
+        '//p[@data-test-id="files-links-no-reshare-permissions-message"]',
+      locateStrategy: 'xpath'
     },
     sharingAutoComplete: {
       selector: '#oc-sharing-autocomplete .oc-autocomplete-input'
