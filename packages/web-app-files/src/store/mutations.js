@@ -327,6 +327,10 @@ export default {
    */
   UPDATE_RESOURCE(state, resource) {
     $_upsertResource(state, resource, false)
+  },
+
+  UPDATE_CURRENT_PAGE(state, page) {
+    state.currentPage = parseInt(page, 10)
   }
 }
 

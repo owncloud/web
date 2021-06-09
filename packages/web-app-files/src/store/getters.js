@@ -29,12 +29,16 @@ export default {
     return state.searchTermGlobal !== ''
   },
   activeFiles: state => {
-    // if searchTermGlobal is set, replace current file list with search results
     const files = state.searchTermGlobal ? state.filesSearched : state.files
-    // make a copy of array for sorting as sort() would modify the original array
     const direction = state.fileSortDirectionDesc ? 'desc' : 'asc'
-    return [].concat(files).sort(fileSortFunctions[state.fileSortField][direction])
+    const currentPageIndex = (state.currentPage - 1) * state.filesPageLimit
+
+    return []
+      .concat(files)
+      .sort(fileSortFunctions[state.fileSortField][direction])
+      .splice(currentPageIndex, state.filesPageLimit)
   },
+  paginationLength: state => Math.ceil(state.files.length / state.filesPageLimit),
   filesTotalSize: (state, getters) => {
     let totalSize = 0
     for (const file of getters.activeFiles) {

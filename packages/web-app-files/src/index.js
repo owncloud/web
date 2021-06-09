@@ -134,7 +134,7 @@ const routes = [
     children: [
       {
         name: 'personal',
-        path: 'all/:item?',
+        path: 'all/:item?/:page?',
         component: Personal,
         meta: {
           hasBulkActions: true,
@@ -143,7 +143,7 @@ const routes = [
       },
       {
         name: 'favorites',
-        path: 'favorites',
+        path: 'favorites/:page?',
         component: Favorites,
         meta: {
           hideFilelistActions: true,
@@ -152,7 +152,7 @@ const routes = [
         }
       },
       {
-        path: 'shared-with-me',
+        path: 'shared-with-me/:page?',
         component: SharedWithMe,
         name: 'shared-with-me',
         meta: {
@@ -162,7 +162,7 @@ const routes = [
         }
       },
       {
-        path: 'shared-with-others',
+        path: 'shared-with-others/:page?',
         component: SharedWithOthers,
         name: 'shared-with-others',
         meta: {
@@ -172,7 +172,7 @@ const routes = [
         }
       },
       {
-        path: 'shared-via-link',
+        path: 'shared-via-link/:page?',
         component: SharedViaLink,
         name: 'shared-via-link',
         meta: {
@@ -182,7 +182,7 @@ const routes = [
         }
       },
       {
-        path: 'trash-bin',
+        path: 'trash-bin/:page?',
         component: Trashbin,
         name: 'trashbin',
         meta: {
@@ -206,7 +206,7 @@ const routes = [
     children: [
       {
         name: 'public-list',
-        path: 'list/:item',
+        path: 'list/:item/:page?',
         component: PublicFiles,
         meta: {
           auth: false,
@@ -237,7 +237,7 @@ const routes = [
     meta: { hideHeadbar: true, title: $gettext('Resolving private link') }
   },
   {
-    path: '/location-picker/:context/:action/:item?',
+    path: '/location-picker/:context/:action/:item?/:page?',
     name: 'location-picker',
     components: {
       app: LocationPicker
