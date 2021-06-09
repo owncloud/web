@@ -1,0 +1,8 @@
+Bugfix: Add index route for the OC10 integration
+
+Added an index route for the OC10 integration which gets called when opening http://your-server/index.php/apps/web.
+The route basically redirects to the same URL while appending /index.html, as this is the correct URL for
+accessing the Web UI. Setting Web as default layout would result in an endless redirect loop otherwise.
+
+https://github.com/owncloud/web/pull/5201
+https://github.com/owncloud/core/issues/38799
