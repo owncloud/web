@@ -1,3 +1,28 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v3.2.0...master
+
+Summary
+-------
+
+* Bugfix - Add index route for the OC10 integration: [#5201](https://github.com/owncloud/web/pull/5201)
+
+Details
+-------
+
+* Bugfix - Add index route for the OC10 integration: [#5201](https://github.com/owncloud/web/pull/5201)
+
+   Added an index route for the OC10 integration which gets called when opening
+   http://your-server/index.php/apps/web. The route basically redirects to the same URL
+   while appending /index.html, as this is the correct URL for accessing the Web UI. Setting Web as
+   default layout would result in an endless redirect loop otherwise.
+
+   https://github.com/owncloud/core/issues/38799
+   https://github.com/owncloud/web/pull/5201
+
 Changelog for ownCloud Web [3.2.0] (2021-05-31)
 =======================================
 The following sections list the changes in ownCloud web 3.2.0 relevant to
