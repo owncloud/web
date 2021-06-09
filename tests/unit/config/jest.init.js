@@ -1,5 +1,6 @@
 import { config } from '@vue/test-utils'
 import fetchMock from 'jest-fetch-mock'
+import 'regenerator-runtime/runtime'
 
 fetchMock.enableMocks()
 try {

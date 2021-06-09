@@ -21,6 +21,7 @@
         :header-position="headerPosition"
         @showDetails="setHighlightedFile"
         @fileClick="$_fileActions_triggerDefaultAction"
+        @rowMounted="rowMounted"
       >
         <template v-slot:quickActions="props">
           <quick-actions class="oc-visible@s" :item="props.resource" :actions="app.quickActions" />
@@ -59,6 +60,10 @@ import QuickActions from '../components/FilesLists/QuickActions.vue'
 import ListLoader from '../components/ListLoader.vue'
 import NoContentMessage from '../components/NoContentMessage.vue'
 import ListInfo from '../components/FilesListFooterInfo.vue'
+import { debounce } from 'web-pkg/src/utils'
+import { VisibilityObserver } from 'web-pkg/src/observer'
+
+const visibilityObserver = new VisibilityObserver()
 
 export default {
   components: { QuickActions, ListLoader, NoContentMessage, ListInfo },
@@ -134,10 +139,31 @@ export default {
     this.adjustTableHeaderPosition()
   },
 
+  beforeDestroy() {
+    visibilityObserver.disconnect()
+  },
+
   methods: {
-    ...mapActions('Files', ['setHighlightedFile', 'loadIndicators', 'loadPreviews']),
+    ...mapActions('Files', ['setHighlightedFile', 'loadIndicators', 'loadPreview']),
     ...mapMutations('Files', ['SELECT_RESOURCES', 'LOAD_FILES', 'CLEAR_CURRENT_FILES_LIST']),
     ...mapMutations(['SET_QUOTA']),
+
+    rowMounted(resource, component) {
+      if (!this.displayPreviews) {
+        return
+      }
+
+      const debounced = debounce(({ unobserve }) => {
+        unobserve()
+        this.loadPreview({
+          resource,
+          isPublic: false,
+          dimensions: [25, 25]
+        })
+      })
+
+      visibilityObserver.observe(component.$el, { onEnter: debounced, onExit: debounced.cancel })
+    },
 
     async loadResources() {
       this.loading = true
@@ -149,15 +175,6 @@ export default {
       resources = resources.map(buildResource)
       this.LOAD_FILES({ currentFolder: buildResource(rootFolder), files: resources })
       this.loadIndicators({ client: this.$client, currentFolder: '/' })
-
-      if (this.displayPreviews) {
-        await this.loadPreviews({
-          resources,
-          isPublic: false,
-          mediaSource: this.mediaSource,
-          encodePath: this.encodePath
-        })
-      }
 
       // Load quota
       const user = await this.$client.users.getUser(this.user.id)

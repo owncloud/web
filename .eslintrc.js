@@ -19,7 +19,9 @@ module.exports = {
      * TODO: fix project import issues and then enable it
      * 'sort-imports': 'warn',
      */
-    'require-await': 'warn'
+    'require-await': 'warn',
+    'no-new': 'off',
+    'node/no-callback-literal': 'off'
   },
   globals: {
     require: false,
@@ -34,11 +36,11 @@ module.exports = {
     {
       files: ['**/*.ts'],
       parser: '@typescript-eslint/parser',
-      extends: ['plugin:@typescript-eslint/recommended']
-    },
-    {
-      files: ['**/*.spec.js'],
-      extends: ['plugin:jest/recommended']
+      extends: ['plugin:@typescript-eslint/recommended'],
+      rules: {
+        '@typescript-eslint/no-extra-semi': 'off',
+        '@typescript-eslint/no-explicit-any': 'off'
+      }
     }
   ]
 }

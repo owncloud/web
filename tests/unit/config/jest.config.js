@@ -15,7 +15,7 @@ module.exports = {
     '\\.(css|less)$': '<rootDir>/__mocks__/style.js'
   },
   transformIgnorePatterns: ['<rootDir>/node_modules/(?!lodash-es)'],
-  setupFiles: ['<rootDir>/tests/unit/config/jest.init.js'],
+  setupFiles: ['<rootDir>/tests/unit/config/jest.init.js', 'core-js'],
   snapshotSerializers: ['jest-serializer-vue'],
   coverageDirectory: '<rootDir>/coverage',
   coverageReporters: ['lcov'],

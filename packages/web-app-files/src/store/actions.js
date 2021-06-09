@@ -5,6 +5,9 @@ import { getParentPaths } from '../helpers/path'
 import { shareTypes } from '../helpers/shareTypes'
 import { buildResource, buildShare, buildCollaboratorShare } from '../helpers/resources'
 import { $gettext, $gettextInterpolate } from '../gettext'
+import { privatePreviewBlob, publicPreviewUrl } from '../helpers/resource'
+import { avatarUrl } from '../helpers/user'
+import _ from 'lodash'
 
 export default {
   updateFileProgress({ commit }, progress) {
@@ -502,6 +505,86 @@ export default {
   async loadIndicators({ dispatch, commit }, { client, currentFolder }) {
     await dispatch('loadSharesTree', { client, path: currentFolder })
     commit('LOAD_INDICATORS')
+  },
+
+  async loadAvatars({ commit, rootGetters }, { resource }) {
+    const avatars = new Map()
+
+    ;['sharedWith', 'owner'].forEach(k => {
+      ;(resource[k] || []).forEach((obj, i) => {
+        if (!_.has(obj, 'avatar')) {
+          return
+        }
+        avatars.set(`${k}.[${i}].avatar`, obj.username)
+      })
+    })
+
+    if (!avatars.size) {
+      return
+    }
+
+    await Promise.all(
+      Array.from(avatars).map(avatar =>
+        (async () => {
+          let url
+          try {
+            url = await avatarUrl(
+              {
+                username: avatar[1],
+                server: rootGetters.configuration.server,
+                token: rootGetters.getToken
+              },
+              true
+            )
+          } catch (e) {
+            avatars.delete(avatar[0])
+            return
+          }
+
+          avatars.set(avatar[0], url)
+        })()
+      )
+    )
+
+    if (!avatars.size) {
+      return
+    }
+
+    const cResource = _.cloneDeep(resource)
+    avatars.forEach((value, key) => {
+      _.set(cResource, key, value)
+    })
+
+    commit('UPDATE_RESOURCE', cResource)
+  },
+
+  async loadPreview({ commit, rootGetters }, { resource, isPublic, dimensions }) {
+    if (
+      resource.type === 'folder' ||
+      !resource.extension ||
+      (rootGetters.previewFileExtensions.length &&
+        !rootGetters.previewFileExtensions.includes(resource.extension))
+    ) {
+      return
+    }
+
+    let preview
+    if (isPublic) {
+      preview = await publicPreviewUrl({ resource, dimensions })
+    } else {
+      preview = await privatePreviewBlob({
+        server: rootGetters.configuration.server,
+        userId: rootGetters.user.id,
+        token: rootGetters.getToken,
+        resource,
+        dimensions
+      })
+    }
+
+    if (preview) {
+      resource.preview = preview
+      commit('UPDATE_RESOURCE', resource)
+    }
   },
 
   async loadPreviews({ commit, rootGetters }, { resources, isPublic, mediaSource, encodePath }) {

@@ -1,73 +1,60 @@
-enum States {
+enum states {
   enter,
   exit
 }
 
-type Callback = ({
-  element,
-  callCount,
-  unobserve
-}: {
+interface cbackOptions {
   element: Element
   callCount: number
   unobserve: () => void
-}) => void
-
-type Options = {
-  root?: Element | Document | null
-  rootMargin?: string
-  threshold?: number
 }
 
-type Unobserver = (element: Element) => void
+type cback = (options: cbackOptions) => void
+
+type unobserve = (element: Element) => void
+
+interface cbacks {
+  onEnter?: cback
+  onExit?: cback
+}
 
 class Target {
-  private state: States
+  private state: states
   private observeEnter: boolean
   private observeExit: boolean
   private onEnterCallCount: number
   private onExitCallCount: number
-  private readonly onEnter: Callback
-  private readonly onExit: Callback
+  private readonly onEnter?: cback
+  private readonly onExit?: cback
   public readonly threshold: number
-  public readonly unobserver: Unobserver
+  public readonly unobserver: unobserve
 
-  constructor(
-    unobserver: Unobserver,
-    threshold: number,
-    {
-      onEnter,
-      onExit
-    }: {
-      onEnter?: Callback
-      onExit?: Callback
-    }
-  ) {
+  constructor(unobserver: unobserve, threshold: number, cbacks: cbacks) {
     this.unobserver = unobserver
     this.threshold = threshold
-    this.onEnter = onEnter
-    this.onExit = onExit
-    this.observeEnter = true
-    this.observeExit = true
+    this.onEnter = cbacks.onEnter
+    this.onExit = cbacks.onExit
+    this.observeEnter = !!cbacks.onEnter
+    this.observeExit = !!cbacks.onExit
     this.onEnterCallCount = 0
     this.onExitCallCount = 0
   }
 
-  public propagateEvent(state: States, element: Element) {
+  public request(state: states, element: Element) {
     const sharedProps = {
       element: element,
       unobserve: () => this.unobserve(state, element)
     }
 
-    if (state === States.enter && this.observeEnter && this.onEnter) {
+    if (state === states.enter && this.observeEnter && this.onEnter) {
       this.onEnterCallCount++
       this.onEnter({
         callCount: this.onEnterCallCount,
         ...sharedProps
       })
     } else if (
-      this.state === States.enter &&
-      state === States.exit &&
+      this.state === states.enter &&
+      state === states.exit &&
       this.observeExit &&
       this.onExit
     ) {
@@ -81,63 +68,57 @@ class Target {
     this.state = state
   }
 
-  private unobserve(state: States, element: Element) {
-    if (state === States.enter) {
+  private unobserve(state: states, element: Element) {
+    if (state === states.enter) {
       this.observeEnter = false
-    } else if (state === States.exit) {
+    } else if (state === states.exit) {
       this.observeExit = false
     }
-
     if (!this.observeEnter && !this.observeExit) {
       this.unobserver(element)
     }
   }
 }
 
+interface VisibilityObserverOptions {
+  root?: Element | Document | null
+  rootMargin?: string
+  threshold?: number
+}
+
 export class VisibilityObserver {
   private targets: WeakMap<Element, Target>
   private readonly intersectionObserver: IntersectionObserver
-  private readonly options: Options
+  private readonly options: VisibilityObserverOptions
 
-  constructor({ root, rootMargin, threshold }: Options = {}) {
+  constructor(options: VisibilityObserverOptions = {}) {
     this.options = {
-      root,
-      rootMargin,
-      threshold: threshold || 0
+      root: options.root,
+      rootMargin: options.rootMargin,
+      threshold: options.threshold || 0
     }
     this.targets = new WeakMap<Element, Target>()
     this.intersectionObserver = new IntersectionObserver(this.trigger.bind(this), this.options)
   }
 
-  public observe(
-    element: Element,
-    {
-      onEnter,
-      onExit
-    }: {
-      onEnter?: Callback
-      onExit?: Callback
-    } = {},
-    threshold?: number
-  ): void {
-    if (!onEnter && !onExit) {
+  public observe(element: Element, cbacks: cbacks = {}, threshold?: number): void {
+    if (!cbacks.onEnter && !cbacks.onExit) {
       return
     }
 
     this.targets.set(
       element,
-      new Target(this.unobserve, threshold || this.options.threshold, {
-        onEnter,
-        onExit
+      new Target(this.unobserve.bind(this), threshold || this.options.threshold || 0, {
+        onEnter: cbacks.onEnter,
+        onExit: cbacks.onExit
       })
     )
     this.intersectionObserver.observe(element)
   }
 
   public unobserve(element: Element): void {
-    if (this.targets.delete(element)) {
-      this.intersectionObserver.unobserve(element)
-    }
+    this.targets.delete(element)
+    this.intersectionObserver.unobserve(element)
   }
 
   public disconnect(): void {
@@ -145,7 +126,7 @@ export class VisibilityObserver {
     this.intersectionObserver.disconnect()
   }
 
-  private trigger(entries) {
+  private trigger(entries: IntersectionObserverEntry[]) {
     entries.forEach((entry: IntersectionObserverEntry) => {
       const observedElement = this.targets.get(entry.target)
 
@@ -153,10 +134,10 @@ export class VisibilityObserver {
         return
       }
 
-      observedElement.propagateEvent(
+      observedElement.request(
         entry.isIntersecting && entry.intersectionRatio > observedElement.threshold
-          ? States.enter
-          : States.exit,
+          ? states.enter
+          : states.exit,
         entry.target
       )
     })
