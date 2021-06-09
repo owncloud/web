@@ -25,7 +25,12 @@
             {{ $_addButtonLabel }}
           </oc-button>
         </div>
-        <p v-else class="oc-mt-s" v-text="noResharePermsMessage" />
+        <p
+          v-else
+          data-test-id="files-links-no-reshare-permissions-message"
+          class="oc-mt-s"
+          v-text="noResharePermsMessage"
+        />
         <transition-group
           class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm"
           :enter-active-class="$_transitionGroupEnter"

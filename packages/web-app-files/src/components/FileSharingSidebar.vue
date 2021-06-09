@@ -21,7 +21,7 @@
         <p
           v-else
           key="no-reshare-permissions-message"
-          class="files-collaborators-no-reshare-permissions-message"
+          data-test-id="files-collaborators-no-reshare-permissions-message"
           v-text="noResharePermsMessage"
         />
         <template v-if="$_ownerAsCollaborator">
