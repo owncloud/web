@@ -29,21 +29,6 @@ module.exports = {
       return util.format(this.elements.permissionCheckbox.selector, permission)
     },
     /**
-     * gets share permission message whether is allowed to share or not
-     *
-     * @returns {Promise<string>}
-     */
-    getSharingPermissionMsg: async function() {
-      let shareResponse
-      // eslint-disable-next-line no-unused-expressions
-      this.api.expect.element(this.elements.addShareSaveButton.selector).not.to.be.present
-      await this.api.getText(this.elements.noResharePermissions.selector, function(result) {
-        shareResponse = result.value
-      })
-      return shareResponse
-    },
-
-    /**
      * Return first elementID that matches given selector and is visible
      *
      * @param {string} using
