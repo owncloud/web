@@ -629,13 +629,11 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     noResharePermissions: {
-      selector:
-        '//p[@data-test-id="files-collaborators-no-reshare-permissions-message"]',
+      selector: '//p[@data-test-id="files-collaborators-no-reshare-permissions-message"]',
       locateStrategy: 'xpath'
     },
     noReshareLinkPermissions: {
-      selector:
-        '//p[@data-test-id="files-links-no-reshare-permissions-message"]',
+      selector: '//p[@data-test-id="files-links-no-reshare-permissions-message"]',
       locateStrategy: 'xpath'
     },
     sharingAutoComplete: {
