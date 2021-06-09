@@ -10,7 +10,7 @@ Feature: Sharing files and folders with internal users
       | Alice    |
       | Brian    |
 
-  @yetToImplement @smokeTest
+  @smokeTest
   Scenario Outline: share a file & folder with another internal user
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "yes"
     And user "Brian" has created folder "simple-folder"
@@ -39,12 +39,10 @@ Feature: Sharing files and folders with internal users
       | entry_name    |
       | simple-folder |
       | testimage.jpg |
-    And these resources should be listed in the folder "simple-folder" on the webUI
-      | entry_name |
-      | lorem.txt  |
-    But these resources should not be listed in the folder "simple-folder" on the webUI
-      | entry_name    |
-      | simple-folder |
+    When the user opens the share dialog for file "simple-folder" using the webUI
+    Then user "Brian Murphy" should be listed as "Owner" in the collaborators list on the webUI
+    When the user opens the share dialog for file "testimage.jpg" using the webUI
+    Then user "Brian Murphy" should be listed as "Owner" in the collaborators list on the webUI
     #    And folder "simple-folder" should be marked as shared by "Brian Murphy" on the webUI
     #    And file "testimage.jpg" should be marked as shared by "Brian Murphy" on the webUI
     Examples:

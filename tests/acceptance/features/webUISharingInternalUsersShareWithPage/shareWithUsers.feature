@@ -44,7 +44,7 @@ Feature: Shares in share-with pages
       | lorem.txt     | Alice Hansen              |
       | simple-folder | Alice Hansen, Carol King  |
 
-  @issue-2480 @yetToImplement
+  @issue-2480
   Scenario: check file with same name but different paths are displayed correctly in shared with others page
     Given user "Brian" has created file "lorem.txt"
     And user "Brian" has created file "simple-folder/lorem.txt"

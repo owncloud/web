@@ -13,7 +13,7 @@ Feature: Sharing files and folders with internal users
       | Brian    |
     And user "Brian" has created folder "simple-folder"
 
-  @yetToImplement @smokeTest @issue-ocis-1743
+  @smokeTest @issue-ocis-1743
   Scenario Outline: share a file & folder with another internal user
     Given user "Brian" has created file "testimage.jpg"
     And user "Brian" has created file "simple-folder/lorem.txt"
@@ -44,12 +44,10 @@ Feature: Sharing files and folders with internal users
       | files         |
       | simple-folder |
       | testimage.jpg |
-    And these resources should be listed in the folder "/Shares%2Fsimple-folder" on the webUI
-      | entry_name |
-      | lorem.txt  |
-    But these resources should not be listed in the folder "/Shares%2Fsimple-folder" on the webUI
-      | entry_name    |
-      | simple-folder |
+    When the user opens the share dialog for file "simple-folder" using the webUI
+    Then user "Brian Murphy" should be listed as "Owner" in the collaborators list on the webUI
+    When the user opens the share dialog for file "testimage.jpg" using the webUI
+    Then user "Brian Murphy" should be listed as "Owner" in the collaborators list on the webUI
     #    And folder "simple-folder (2)" should be marked as shared by "Brian Murphy" on the webUI
     #    And file "testimage (2).jpg" should be marked as shared by "Brian Murphy" on the webUI
     Examples:

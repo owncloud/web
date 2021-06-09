@@ -1,5 +1,6 @@
 const util = require('util')
 const { join } = require('../helpers/path')
+const { defaultUsers } = require('../helpers/userSettings')
 
 module.exports = {
   url: function() {
@@ -193,6 +194,17 @@ module.exports = {
         displayedmessage = result.value
       })
       return displayedmessage
+    },
+    getLinkSelectorFromNotification: function(resource, sharer) {
+      const notifyString = `"${defaultUsers[sharer].displayname}" shared "${resource}" with you`
+      const linkSelector = util.format(this.elements.filelink.selector, notifyString)
+      return linkSelector
+    },
+    followLink: function(linkSelector) {
+      return this.useXpath()
+        .waitForElementVisible(linkSelector)
+        .click(linkSelector)
+        .useCss()
     }
   },
   elements: {
@@ -267,6 +279,11 @@ module.exports = {
     },
     appNavigation: {
       selector: '.oc-app-navigation'
+    },
+    filelink: {
+      selector:
+        '//div[@id="oc-notification-drop"]//h4[contains(text(),\'%s\')]/following-sibling::p/a',
+      locateStrategy: 'xpath'
     }
   }
 }

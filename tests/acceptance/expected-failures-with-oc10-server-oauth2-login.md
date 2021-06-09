@@ -97,3 +97,9 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIFilesSearch/search.feature:63](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesSearch/search.feature#L63)
 -   [webUIFilesSearch/search.feature:71](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesSearch/search.feature#L71)
 -   [webUIFilesSearch/search.feature:84](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesSearch/search.feature#L84)
+
+### [When a user shares folder to a group, the sharer is shown as group in group member's sharing-sidebar] (https://github.com/owncloud/web/issues/5216)
+-   [webUISharingInternalGroupsEdgeCases/shareWithGroupsEdgeCases.feature:41](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroupsEdgeCases/shareWithGroupsEdgeCases.feature#L41)
+-   [webUISharingInternalGroupsEdgeCases/shareWithGroupsEdgeCases.feature:42](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroupsEdgeCases/shareWithGroupsEdgeCases.feature#L42)
+-   [webUISharingInternalGroupsToRootEdgeCases/shareWithGroupsEdgeCases.feature:34](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroupsToRootEdgeCases/shareWithGroupsEdgeCases.feature#L34)
+-   [webUISharingInternalGroupsToRootEdgeCases/shareWithGroupsEdgeCases.feature:35](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroupsToRootEdgeCases/shareWithGroupsEdgeCases.feature#L35)

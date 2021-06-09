@@ -89,3 +89,14 @@ Then('the user should have no notifications', async function() {
   const status = await client.page.webPage().isNotificationBellVisible()
   assert.ok(!status, 'Expected: notification bell to be absent but found: visible')
 })
+
+When('the user follows the link of following share from notification using the webUI', function(
+  dataTable
+) {
+  const { resource, sharer } = dataTable.rowsHash()
+  const linkSelector = client.page.webPage().getLinkSelectorFromNotification(resource, sharer)
+  return client.page
+    .webPage()
+    .toggleNotificationDrawer()
+    .followLink(linkSelector)
+})
