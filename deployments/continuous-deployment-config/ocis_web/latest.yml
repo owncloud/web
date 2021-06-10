@@ -11,7 +11,7 @@
       for: oCIS-continuous-deployment-examples
     rebuild: $REBUILD
     rebuild_carry_paths:
-      - /var/lib/docker/volumes/ocis_certs
+      - /var/lib/docker/volumes/web_certs
 
   domains:
     - "*.ocis-web.latest.owncloud.works"
