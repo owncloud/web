@@ -106,7 +106,6 @@ module.exports = {
           }
         }
       )
-      console.log('end')
 
       let receiverType = shareWithGroup === true ? SHARE_TYPE_STRING.group : SHARE_TYPE_STRING.user
       receiverType = remoteShare === true ? SHARE_TYPE_STRING.federation : receiverType
