@@ -16,7 +16,7 @@ export const avatarUrl = async (options: avatarUrlOptions, cached = false): Prom
 
   const url = [options.server, 'remote.php/dav/avatars/', options.username, `/${size}.png`].join('')
 
-  const { status, statusText } = await clientService.httpUnAuthenticated.head(url)
+  const { status, statusText } = await clientService.httpAuthenticated(options.token).head(url)
 
   if (status !== 200) {
     throw new Error(statusText)
