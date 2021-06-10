@@ -1,0 +1,5 @@
+Bugfix: show `0` as used quota if a negative number is given
+
+In the case if the server returns a negative number as used quota (what should not happen) show `0 B of 2 GB` and not only of ` 2 GB`
+
+https://github.com/owncloud/web/pull/5229
