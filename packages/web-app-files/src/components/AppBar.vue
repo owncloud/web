@@ -270,12 +270,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('Files', [
-      'updateFileProgress',
-      'removeFilesFromTrashbin',
-      'loadPreviews',
-      'loadIndicators'
-    ]),
+    ...mapActions('Files', ['updateFileProgress', 'removeFilesFromTrashbin', 'loadIndicators']),
     ...mapActions(['openFile', 'showMessage', 'createModal', 'setModalInputErrorMessage']),
     ...mapMutations('Files', ['UPSERT_RESOURCE']),
     ...mapMutations(['SET_QUOTA']),
@@ -509,13 +504,6 @@ export default {
             encodePath: this.encodePath
           })
         }
-
-        this.loadPreviews({
-          resources: [resource],
-          isPublic: this.publicPage(),
-          mediaSource: this.mediaSource,
-          encodePath: this.encodePath
-        })
 
         const user = await this.$client.users.getUser(this.user.id)
 
