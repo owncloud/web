@@ -73,32 +73,40 @@ describe('Cache', () => {
 
     cache.set(3, 3, 10)
     cache.set(4, 4, 20)
+    cache.set(5, 5, 0)
+    cache.set(6, 6, 0)
 
     expect(cache.get(3)).toBe(3)
     expect(cache.get(4)).toBe(4)
-    expect(cache.values().length).toBe(2)
-    expect(cache.keys().length).toBe(2)
-    expect(cache.entries().length).toBe(2)
+    expect(cache.get(5)).toBe(5)
+    expect(cache.get(6)).toBe(6)
+    expect(cache.values().length).toBe(4)
+    expect(cache.keys().length).toBe(4)
+    expect(cache.entries().length).toBe(4)
 
     jest.setSystemTime(new Date().getTime() + 11)
 
     expect(cache.get(3)).toBeFalsy()
     expect(cache.get(4)).toBe(4)
-    expect(cache.values().length).toBe(1)
-    expect(cache.keys().length).toBe(1)
-    expect(cache.entries().length).toBe(1)
+    expect(cache.get(5)).toBe(5)
+    expect(cache.get(6)).toBe(6)
+    expect(cache.values().length).toBe(3)
+    expect(cache.keys().length).toBe(3)
+    expect(cache.entries().length).toBe(3)
 
     jest.setSystemTime(new Date().getTime() + 10)
 
     expect(cache.get(4)).toBeFalsy()
-    expect(cache.values().length).toBe(0)
-    expect(cache.keys().length).toBe(0)
-    expect(cache.entries().length).toBe(0)
+    expect(cache.get(5)).toBe(5)
+    expect(cache.get(6)).toBe(6)
+    expect(cache.values().length).toBe(2)
+    expect(cache.keys().length).toBe(2)
+    expect(cache.entries().length).toBe(2)
   })
 
   it('can handle capacity', () => {
     const initialValues: number[] = [1, 2, 3, 4, 5]
-    const newValues: number[] = [6, 7, 8, 9, 10]
+    const newValues: number[] = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
     const capacity = 5
     const cache = newCache(initialValues, 0, capacity)
 

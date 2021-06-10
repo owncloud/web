@@ -31,7 +31,7 @@ export default class Cache<K, V> {
 
   public set(key: K, value: V, ttl?: number): V {
     this.evict()
-    this.map.set(key, new CacheElement<V>(value, ttl || this.ttl))
+    this.map.set(key, new CacheElement<V>(value, isNaN(ttl) ? this.ttl : ttl))
 
     return value
   }
@@ -55,7 +55,7 @@ export default class Cache<K, V> {
 
   public entries(): [K, V][] {
     this.evict()
-    return Array.from(this.map).map(kv => [kv[0], kv[1].value])
+    return [...this.map.entries()].map(kv => [kv[0], kv[1].value])
   }
 
   public keys(): K[] {
@@ -70,9 +70,21 @@ export default class Cache<K, V> {
 
   public evict(): void {
     this.map.forEach((mv, mk) => {
-      if (mv.expired || (this.capacity && this.map.size > this.capacity)) {
+      if (mv.expired) {
         this.delete(mk)
       }
     })
+
+    if (!this.capacity) {
+      return
+    }
+
+    for (const [k] of [...this.map.entries()]) {
+      if (this.map.size <= this.capacity) {
+        break
+      }
+
+      this.delete(k)
+    }
   }
 }
