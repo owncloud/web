@@ -99,10 +99,14 @@ module.exports = {
             console.log('WARNING: no sharing autocomplete dropdown found, retry typing')
             this.clearValue('@sharingAutoComplete')
               .enterAutoComplete(sharee)
-              .waitForElementVisible('@sharingAutoCompleteDropDownElements')
+              .waitForElementPresent({
+                selector: '@sharingAutoCompleteDropDownElements',
+                abortOnFailure: false
+              })
           }
         }
       )
+      console.log('end')
 
       let receiverType = shareWithGroup === true ? SHARE_TYPE_STRING.group : SHARE_TYPE_STRING.user
       receiverType = remoteShare === true ? SHARE_TYPE_STRING.federation : receiverType
