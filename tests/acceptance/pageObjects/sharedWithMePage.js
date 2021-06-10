@@ -107,7 +107,8 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     getSharedFromUserName: {
-      selector: '//td[contains(@class,"oc-table-data-cell-owner")]//span[normalize-space("%s")]',
+      selector:
+        '//td[contains(@class,"oc-table-data-cell-owner")]//span[@data-test-user-name="%s"]',
       locateStrategy: 'xpath'
     },
     sharedFrom: {

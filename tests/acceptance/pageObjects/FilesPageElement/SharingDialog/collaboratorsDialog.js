@@ -152,7 +152,9 @@ module.exports = {
       await this.useXpath()
         .waitForElementVisible(formattedCollaboratorInfoByCollaboratorName)
         .getText('xpath', formattedWithUserName, function(result) {
-          text = result.value
+          if (typeof result.value === 'string') {
+            text = result.value
+          }
         })
       return text
     }
