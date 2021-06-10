@@ -1,0 +1,6 @@
+Enhancement: Add focus trap to left sidebar
+
+We've added a focus trap to the left sidebar on smaller resolutions when it's collapsible.
+If the sidebar is opened and focused, the focus stays within the sidebar.
+
+https://github.com/owncloud/web/pull/5027

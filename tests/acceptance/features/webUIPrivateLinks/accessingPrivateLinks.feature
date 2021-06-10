@@ -40,12 +40,6 @@ Feature: Access private link
       An error occurred while resolving the private link
       Error: Unknown error
       """
-#    Then the user should see the following error message on the login card dialog
-#      """
-#      An error occurred while resolving the private link
-#      Any nice error message
-#      """
-
 
   Scenario: Access the private link anonymously
     When the user tries to navigate to the private link created by user "Alice" for file "lorem.txt"

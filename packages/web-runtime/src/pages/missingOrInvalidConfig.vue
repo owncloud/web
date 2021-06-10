@@ -4,20 +4,16 @@
       <div class="oc-login-card uk-position-center">
         <img class="oc-login-logo" :src="logoImg" alt="" :aria-hidden="true" />
         <div class="oc-login-card-body">
-          <h1 class="oc-login-card-title">
-            <span v-translate>Missing or invalid config</span>
-          </h1>
-          <p v-translate>
-            Please check if the file config.json exists and is correct.<br />
-            Check the console for more information.
-          </p>
+          <h1 v-translate class="oc-login-card-title">Missing or invalid config</h1>
+          <p v-translate>Please check if the file config.json exists and is correct.</p>
+          <p v-translate>Also, make sure to check the browser console for more information.</p>
         </div>
         <div class="oc-login-card-footer">
           <p>
-            <!-- Until we have documentation for Web let's point this link to Web repo -->
             <translate>For help visit our</translate>
-            <translate tag="a" href="https://github.com/owncloud/web" target="_blank"
-              >documentation</translate
+            <a v-translate href="https://owncloud.dev/clients/web" target="_blank">documentation</a>
+            <translate>or join our</translate>
+            <a v-translate href="https://talk.owncloud.com/channel/phoenix" target="_blank">chat</a
             >.
           </p>
         </div>

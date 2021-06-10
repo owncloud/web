@@ -9,6 +9,7 @@ Background: prepare user and files
     And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
     And user "Alice" has uploaded file "testavatar.png" to "testavatar.png"
     And user "Alice" has logged in using the webUI
+    And the user has browsed to the files page
 
   Scenario: observe different actions menu options on selecting different file types or folder
     Given user "Alice" has uploaded file with content "pdf file" to "lorem.pdf"

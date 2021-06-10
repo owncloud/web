@@ -20,10 +20,7 @@ export default {
   },
   methods: {
     skipToTarget() {
-      // Make targetElement programmatically focusable
       this.targetElement.setAttribute('tabindex', '-1')
-
-      // Focus and scroll into view
       this.targetElement.focus()
       this.targetElement.scrollIntoView()
     }
@@ -36,10 +33,11 @@ export default {
   position: absolute;
   top: -100px;
   left: 0;
-  z-index: 1;
+  z-index: 4;
   -webkit-appearance: none;
   border: none;
-  background-color: #ffffff;
+  background-color: var(--oc-color-swatch-brand-default);
+  color: var(--oc-color-text-inverse);
   font: inherit;
   padding: 0.25em 0.5em;
 }
@@ -47,5 +45,6 @@ export default {
 .skip-button:focus {
   top: 0;
   outline: none;
+  border: 1px dashed white;
 }
 </style>

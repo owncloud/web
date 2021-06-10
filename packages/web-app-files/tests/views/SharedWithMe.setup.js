@@ -4,6 +4,9 @@ import OwnCloud from 'owncloud-sdk'
 import SharedWithMe from '../../src/views/SharedWithMe'
 import { createStore } from 'vuex-extensions'
 import DesignSystem from 'owncloud-design-system'
+import { config } from "@vue/test-utils"
+
+config.mocks["$gettextInterpolate"] = str => str
 
 const createFile = ({ id, status = 1, type = 'folder' }) => ({
   id: `file-id-${id}`,

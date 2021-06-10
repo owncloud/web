@@ -1,34 +1,24 @@
 <template>
   <div class="uk-width-expand">
     <div class="oc-mb-s uk-width-1-1">
-      <div class="oc-text-bold uk-text-truncate oc-files-file-link-name" v-text="linkName" />
+      <h5
+        class="oc-text-bold uk-text-truncate oc-files-file-link-name oc-my-rm oc-text-initial"
+        v-text="linkName"
+      />
       <div class="uk-flex uk-flex-middle uk-width-1-1">
         <a
           :href="link.url"
           target="_blank"
-          class="oc-files-file-link-url oc-mr-xs uk-text-truncate"
+          class="oc-files-file-link-url uk-text-truncate"
           v-text="link.url"
         />
-        <oc-button
-          :aria-label="copyLabel"
-          :uk-tooltip="copyLabel"
-          appearance="raw"
-          class="oc-files-file-link-copy-url"
-        >
-          <oc-icon
-            v-if="linkCopied"
-            key="copy-link-icon-copied"
-            name="ready"
-            class="oc-files-file-link-copied-url _clipboard-success-animation"
-          />
-          <oc-icon
-            v-else
-            key="copy-link-icon"
-            v-clipboard:copy="link.url"
-            v-clipboard:success="clipboardSuccessHandler"
-            name="copy_to_clipboard"
-          />
-        </oc-button>
+        <copy-to-clipboard-button
+          class="oc-files-public-link-copy-url oc-ml-xs"
+          :value="link.url"
+          :label="copyToClipboardLabel"
+          :success-msg-title="copyToClipboardSuccessMsgTitle"
+          :success-msg-text="getCopyToClipboardSuccessMsgText(link)"
+        />
       </div>
     </div>
     <oc-grid gutter="small">
@@ -39,7 +29,7 @@
         </oc-tag>
       </div>
       <div v-if="link.expiration">
-        <oc-tag>
+        <oc-tag class="oc-files-public-link-expires">
           <oc-icon name="text-calendar" />
           <translate :translate-params="{ expires: formDateFromNow(link.expiration) }">
             Expires %{expires}
@@ -54,10 +44,10 @@
       </div>
       <div v-if="link.indirect">
         <oc-tag
+          v-oc-tooltip="viaTooltip"
           type="router-link"
           class="oc-files-file-link-via"
           :to="viaRouterParams"
-          :uk-tooltip="viaTooltip"
         >
           <oc-icon name="exit_to_app" />
           <span class="uk-text-truncate files-file-links-link-via-label" v-text="viaLabel" />
@@ -70,10 +60,11 @@
 <script>
 import { basename, dirname } from 'path'
 import Mixins from '../../mixins'
+import CopyToClipboardButton from './CopyToClipboardButton.vue'
 
 export default {
   name: 'LinkInfo',
-
+  components: { CopyToClipboardButton },
   mixins: [Mixins],
 
   props: {
@@ -83,19 +74,9 @@ export default {
     }
   },
 
-  data: () => ({
-    linkCopied: false
-  }),
-
   computed: {
     linkName() {
       return this.link.name ? this.link.name : this.link.token
-    },
-
-    copyLabel() {
-      return this.linkCopied
-        ? this.$gettext('Public link successfully copied')
-        : this.$gettext('Copy public link url')
     },
 
     roleTagIcon() {
@@ -143,16 +124,29 @@ export default {
 
     viaTooltip() {
       return this.$gettext('Navigate to the parent')
+    },
+
+    copyToClipboardLabel() {
+      return this.$gettext('Copy link to clipboard')
+    },
+
+    copyToClipboardSuccessMsgTitle() {
+      return this.$gettext('Public link copied')
     }
   },
 
   methods: {
-    clipboardSuccessHandler() {
-      this.linkCopied = true
-
-      setTimeout(() => {
-        this.linkCopied = false
-      }, 550)
+    getCopyToClipboardSuccessMsgText(link) {
+      const translated = this.$gettext(
+        'The public link "%{linkName}" has been copied to your clipboard.'
+      )
+      return this.$gettextInterpolate(
+        translated,
+        {
+          linkName: link.name
+        },
+        true
+      )
     }
   }
 }

@@ -1,32 +1,30 @@
 <template>
-  <div id="files-location-picker" class="uk-flex uk-height-1-1">
+  <main id="files-location-picker" class="uk-flex uk-height-1-1">
     <div tabindex="-1" class="files-list-wrapper uk-width-expand">
       <div id="files-app-bar" class="oc-p-s">
-        <h1 class="location-picker-selection-info uk-flex oc-text-lead oc-mb">
-          <span class="uk-margin-small-right" v-text="title" />
-          <oc-breadcrumb :items="breadcrumbs" variation="lead" class="oc-text-lead" />
-        </h1>
+        <h1 class="location-picker-selection-info oc-mb" v-text="title" />
+        <p class="oc-text-muted uk-text-meta" v-text="currentHint" />
         <hr class="oc-mt-rm" />
-        <div class="oc-mb">
-          <oc-grid gutter="small">
-            <div>
-              <oc-button @click="leaveLocationPicker(originalLocation)">
-                <translate>Cancel</translate>
-              </oc-button>
-            </div>
-            <div>
-              <oc-button
-                id="location-picker-btn-confirm"
-                variation="primary"
-                appearance="filled"
-                :disabled="!canConfirm"
-                @click="confirmAction"
-              >
-                <span v-text="confirmBtnText" />
-              </oc-button>
-            </div>
-          </oc-grid>
-        </div>
+        <oc-breadcrumb :items="breadcrumbs" class="oc-mb-s" />
+        <oc-grid gutter="small" flex class="uk-flex-middle">
+          <div>
+            <oc-button size="small" @click="leaveLocationPicker(originalLocation)">
+              <translate>Cancel</translate>
+            </oc-button>
+          </div>
+          <div>
+            <oc-button
+              id="location-picker-btn-confirm"
+              variation="primary"
+              appearance="filled"
+              size="small"
+              :disabled="!canConfirm"
+              @click="confirmAction"
+            >
+              <span v-text="confirmBtnText" />
+            </oc-button>
+          </div>
+        </oc-grid>
       </div>
       <div id="files-view">
         <list-loader v-if="loading" />
@@ -76,7 +74,7 @@
         </template>
       </div>
     </div>
-  </div>
+  </main>
 </template>
 
 <script>
@@ -88,32 +86,22 @@ import MixinsGeneral from '../mixins'
 import MixinResources from '../mixins/resources'
 import MixinRoutes from '../mixins/routes'
 
-import MoveSidebarMainContent from '../components/LocationPicker/MoveSidebarMainContent.vue'
 import NoContentMessage from '../components/NoContentMessage.vue'
-import CopySidebarMainContent from '../components/LocationPicker/CopySidebarMainContent.vue'
 import ListLoader from '../components/ListLoader.vue'
 
 export default {
+  metaInfo() {
+    const title = `${this.title} - ${this.configuration.theme.general.name}`
+
+    return { title }
+  },
+
   components: {
     NoContentMessage,
     ListLoader
   },
 
   mixins: [MixinsGeneral, MixinResources, MixinRoutes],
-
-  metaInfo() {
-    const translated =
-      this.currentAction === 'move'
-        ? this.$gettext('Move into %{ target } - %{ name }')
-        : this.$gettext('Copy into %{ target } - %{ name }')
-    const target = basename(this.target) || this.$gettext('All files')
-    const title = this.$gettextInterpolate(translated, {
-      target,
-      name: this.configuration.theme.general.name
-    })
-
-    return { title }
-  },
 
   data: () => ({
     headerPosition: 0,
@@ -138,15 +126,21 @@ export default {
     ]),
     ...mapGetters('configuration'),
 
+    title() {
+      const translated =
+        this.currentAction === batchActions.move
+          ? this.$gettext('Move into »%{ target }«')
+          : this.$gettext('Copy into »%{ target }«')
+      const target = basename(this.target) || this.$gettext('All files')
+      return this.$gettextInterpolate(translated, { target })
+    },
+
     currentAction() {
       return this.$route.params.action
     },
 
     isPublicContext() {
-      const context = ['public', 'private'].includes(this.$route.params.context)
-        ? this.$route.params.context
-        : 'private'
-      return context === 'public'
+      return this.$route.params.context === 'public'
     },
 
     target() {
@@ -180,7 +174,7 @@ export default {
           breadcrumbs.push(this.createBreadcrumbNode(i + 1, pathSegments[i], itemPath))
         }
       } else {
-        breadcrumbs.push(this.createBreadcrumbNode(0, this.$gettext('Home'), '/'))
+        breadcrumbs.push(this.createBreadcrumbNode(0, this.$gettext('All files'), '/'))
         for (let i = 0; i < pathSegments.length; i++) {
           const itemPath = encodeURIComponent(join.apply(null, pathSegments.slice(0, i + 1)))
           breadcrumbs.push(this.createBreadcrumbNode(i + 1, pathSegments[i], itemPath))
@@ -195,31 +189,6 @@ export default {
 
     canConfirm() {
       return this.currentFolder && this.currentFolder.canCreate()
-    },
-
-    title() {
-      const count = this.resourcesCount
-      let title = ''
-
-      switch (this.currentAction) {
-        case batchActions.move: {
-          title = this.$ngettext(
-            'Selected %{ count } resource to move into:',
-            'Selected %{ count } resources to move into:',
-            count
-          )
-          break
-        }
-        case batchActions.copy: {
-          title = this.$ngettext(
-            'Selected %{ count } resource to copy into:',
-            'Selected %{ count } resources to copy into:',
-            count
-          )
-        }
-      }
-
-      return this.$gettextInterpolate(title, { count: count }, false)
     },
 
     confirmBtnText() {
@@ -255,6 +224,24 @@ export default {
           action: this.currentAction
         }
       }
+    },
+
+    currentHint() {
+      if (this.currentAction === 'move') {
+        return this.$gettext(
+          `Navigate into the desired folder and move selected resources into it.
+          You can navigate into a folder by clicking on its name.
+          To navigate back, you can click on the breadcrumbs.
+          Resources will be moved into the folder where you are currently located.`
+        )
+      }
+
+      return this.$gettext(
+        `Navigate into the desired folder and copy selected resources into it.
+        You can navigate into a folder by clicking on its name.
+        To navigate back, you can click on the breadcrumbs.
+        Resources will be copied into the folder where you are currently located.`
+      )
     }
   },
 
@@ -268,32 +255,13 @@ export default {
   created() {
     window.onresize = this.adjustTableHeaderPosition
     this.originalLocation = this.target
-
-    switch (this.currentAction) {
-      case batchActions.move: {
-        this.SET_NAVIGATION_HIDDEN(true)
-        this.SET_MAIN_CONTENT_COMPONENT(MoveSidebarMainContent)
-        break
-      }
-      case batchActions.copy: {
-        this.SET_NAVIGATION_HIDDEN(true)
-        this.SET_MAIN_CONTENT_COMPONENT(CopySidebarMainContent)
-        break
-      }
-    }
   },
 
   mounted() {
     this.adjustTableHeaderPosition()
   },
 
-  beforeDestroy() {
-    this.SET_NAVIGATION_HIDDEN(false)
-    this.SET_MAIN_CONTENT_COMPONENT(null)
-  },
-
   methods: {
-    ...mapMutations(['SET_NAVIGATION_HIDDEN', 'SET_MAIN_CONTENT_COMPONENT']),
     ...mapMutations('Files', ['CLEAR_CURRENT_FILES_LIST']),
     ...mapActions('Files', ['loadFiles', 'loadIndicators']),
     ...mapActions(['showMessage']),
@@ -427,10 +395,7 @@ export default {
         this.showMessage({
           title: this.$gettextInterpolate(title, { resource: errors[0].resource }, true),
           desc: errors[0].message,
-          status: 'danger',
-          autoClose: {
-            enabled: true
-          }
+          status: 'danger'
         })
 
         return
@@ -462,10 +427,7 @@ export default {
       this.showMessage({
         title,
         desc: this.$gettextInterpolate(desc, { count: errors.length }, false),
-        status: 'danger',
-        autoClose: {
-          enabled: true
-        }
+        status: 'danger'
       })
     }
   }
@@ -473,10 +435,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+#files-location-picker {
+  height: 100%;
+  max-height: 100%;
+  overflow-y: hidden;
+}
+
 .files-list-wrapper {
+  height: 100%;
+  max-height: 100%;
+  overflow-y: auto;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: max-content max-content 1fr;
+  grid-template-rows: max-content 1fr;
   gap: 0 0;
   grid-template-areas:
     'header'
@@ -499,5 +470,11 @@ export default {
 
 #files-view {
   grid-area: main;
+}
+
+#files-location-picker-table ::deep tr {
+  td:first-of-type {
+    padding-left: 30px;
+  }
 }
 </style>

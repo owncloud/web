@@ -1,22 +1,33 @@
 <template>
-  <oc-grid gutter="small" child-width="1-1">
-    <roles-select
-      mode="collaborators"
-      :roles="roles"
-      :selected-role="role"
-      @roleSelected="selectRole"
-    />
+  <div>
+    <translate tag="label" for="files-collaborators-role-button" class="oc-label">Role</translate>
+    <oc-select
+      v-model="selectedRole"
+      input-id="files-collaborators-role-button"
+      class="files-collaborators-role-button-wrapper"
+      :options="roles"
+      :clearable="false"
+      label="label"
+    >
+      <template v-slot:option="option">
+        <role-item :role="option" />
+      </template>
+      <template #no-options v-translate>
+        No matching role found
+      </template>
+    </oc-select>
     <template v-if="$_ocCollaborators_hasAdditionalPermissions">
-      <label v-if="selectedRole.name !== 'advancedRole'" class="oc-label">
+      <label v-if="selectedRole.name !== 'advancedRole'" class="oc-label oc-mt-s">
         <translate>Additional permissions</translate>
       </label>
       <additional-permissions
-        :available-permissions="role.additionalPermissions"
+        :available-permissions="selectedRole.additionalPermissions"
         :collaborators-permissions="collaboratorsPermissions"
+        :class="{ 'oc-mt-s': selectedRole.name === 'advancedRole' }"
         @permissionChecked="checkAdditionalPermissions"
       />
     </template>
-    <div v-if="expirationSupported">
+    <div v-if="expirationSupported" class="oc-mt-m">
       <label for="files-collaborators-collaborator-expiration-input">
         <translate>Expiration date</translate>
         <translate v-if="expirationDateEnforced" tag="em">(required)</translate>
@@ -33,14 +44,14 @@
         <div
           v-if="canResetExpirationDate"
           id="files-collaborators-collaborator-expiration-delete"
+          v-oc-tooltip="expirationDateRemoveTooltip"
           class="uk-position-small uk-position-center-right oc-cursor-pointer"
-          :uk-tooltip="expirationDateRemoveTooltip"
           uk-close
           @click="resetExpirationDate"
         />
       </div>
     </div>
-  </oc-grid>
+  </div>
 </template>
 
 <script>
@@ -48,14 +59,14 @@ import { mapGetters } from 'vuex'
 import moment from 'moment'
 import collaboratorsMixins from '../../mixins/collaborators'
 
-import RolesSelect from '../Roles/RolesSelect.vue'
+import RoleItem from '../RoleItem.vue'
 import AdditionalPermissions from './AdditionalPermissions.vue'
 
 export default {
   name: 'CollaboratorsEditOptions',
 
   components: {
-    RolesSelect,
+    RoleItem,
     AdditionalPermissions
   },
 
@@ -108,30 +119,6 @@ export default {
 
     $_ocCollaborators_hasAdditionalPermissions() {
       return this.selectedRole && this.selectedRole.additionalPermissions
-    },
-
-    role() {
-      // Returns default role
-      if (!this.existingRole && !this.selectedRole) {
-        const defaultRole = this.roles[Object.keys(this.roles)[0]]
-        this.selectRole(defaultRole, false)
-        return defaultRole
-      }
-
-      if (
-        (this.existingRole && this.existingRole.name === 'advancedRole' && !this.selectedRole) ||
-        (this.selectedRole && this.selectedRole.name === 'advancedRole')
-      ) {
-        this.selectRole(this.advancedRole, false)
-        return this.advancedRole
-      }
-
-      if (this.existingRole && !this.selectedRole) {
-        this.selectRole(this.existingRole, false)
-        return this.existingRole
-      }
-
-      return this.selectedRole
     },
 
     expirationSupported() {
@@ -236,6 +223,25 @@ export default {
     }
   },
 
+  watch: {
+    selectedRole: {
+      handler: 'publishChange'
+    }
+  },
+
+  created() {
+    if (
+      (this.existingRole && this.existingRole.name === 'advancedRole' && !this.selectedRole) ||
+      (this.selectedRole && this.selectedRole.name === 'advancedRole')
+    ) {
+      this.selectedRole = this.advancedRole
+    } else if (this.existingRole && !this.selectedRole) {
+      this.selectedRole = this.existingRole
+    } else {
+      this.selectedRole = this.roles[0]
+    }
+  },
+
   mounted() {
     if (this.expirationSupported) {
       if (this.editingUser || this.editingGroup) {
@@ -253,11 +259,6 @@ export default {
   },
 
   methods: {
-    selectRole(role) {
-      this.selectedRole = role
-      this.publishChange()
-    },
-
     checkAdditionalPermissions(permissions) {
       this.additionalPermissions = permissions
       this.publishChange()

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="userId">
+  <nav v-if="userId" :aria-label="$gettext('Account menu')">
     <oc-button
       id="_userMenuButton"
       ref="menuButton"
@@ -36,7 +36,6 @@
             appearance="raw"
             gap-size="xsmall"
             justify-content="left"
-            tabindex="0"
           >
             <oc-icon name="portrait" />
             <translate>Profile</translate>
@@ -51,10 +50,9 @@
             justify-content="left"
             :target="n.target"
             :href="n.url"
-            tabindex="0"
           >
             <oc-icon :name="n.iconMaterial" />
-            <span>{{ n.title }}</span>
+            <translate>{{ n.title }}</translate>
           </oc-button>
           <oc-button
             v-else
@@ -63,10 +61,9 @@
             gap-size="xsmall"
             justify-content="left"
             :to="{ path: n.path }"
-            tabindex="0"
           >
             <oc-icon :name="n.iconMaterial" />
-            <span v-text="n.title" />
+            <translate>{{ n.title }}</translate>
           </oc-button>
         </li>
         <li>
@@ -83,7 +80,7 @@
         </li>
       </ul>
     </oc-drop>
-  </div>
+  </nav>
 </template>
 
 <script>

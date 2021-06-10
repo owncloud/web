@@ -57,10 +57,11 @@
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 
-import { buildResource } from '../helpers/resources'
-import FileActions from '../mixins/fileActions'
+import MixinAccessibleBreadcrumb from '../mixins/accessibleBreadcrumb'
+import MixinFileActions from '../mixins/fileActions'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
 import MixinResources from '../mixins/resources'
+import { buildResource } from '../helpers/resources'
 
 import ListLoader from '../components/ListLoader.vue'
 import NoContentMessage from '../components/NoContentMessage.vue'
@@ -73,7 +74,7 @@ export default {
     NotFoundMessage
   },
 
-  mixins: [FileActions, MixinFilesListPositioning, MixinResources],
+  mixins: [MixinAccessibleBreadcrumb, MixinFileActions, MixinFilesListPositioning, MixinResources],
 
   data: () => ({
     loading: true
@@ -130,7 +131,10 @@ export default {
 
   watch: {
     $route: {
-      handler: 'loadResources',
+      handler: function(to, from) {
+        const sameRoute = to.name === from?.name
+        this.loadResources(sameRoute)
+      },
       immediate: true
     },
 
@@ -148,7 +152,7 @@ export default {
       'CLEAR_CURRENT_FILES_LIST'
     ]),
 
-    async loadResources() {
+    async loadResources(sameRoute) {
       this.loading = true
       this.CLEAR_CURRENT_FILES_LIST()
 
@@ -203,6 +207,7 @@ export default {
       }
 
       this.loading = false
+      this.accessibleBreadcrumb_focusAndAnnounceBreadcrumb(sameRoute)
     },
 
     redirectToResolvePage() {

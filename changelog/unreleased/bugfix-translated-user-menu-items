@@ -1,0 +1,5 @@
+Bugfix: Translated user menu items
+
+Some of the user menu items were not correctly translated, which is now fixed.
+
+https://github.com/owncloud/web/pull/5042

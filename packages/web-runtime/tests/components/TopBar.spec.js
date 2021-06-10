@@ -2,6 +2,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import TopBar from 'web-runtime/src/components/TopBar.vue'
 import stubs from '../../../../tests/unit/stubs'
+import axe from '../../../../tests/unit/helper/axe'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -19,7 +20,7 @@ const defaultRoute = () => ({
 
 describe('Top Bar component', () => {
   describe('when search bar visible globally', () => {
-    it('Displays search bar if not disabled for specified route', () => {
+    it('Displays search bar if not disabled for specified route', async () => {
       const wrapper = shallowMount(TopBar, {
         store: new Vuex.Store({
           getters: {
@@ -37,6 +38,7 @@ describe('Top Bar component', () => {
         }
       })
 
+      await expect(axe(wrapper.element)).resolves.toHaveNoViolations()
       expect(wrapper.html().indexOf('search-bar-stub')).toBeGreaterThan(-1)
       expect(wrapper).toMatchSnapshot()
     })

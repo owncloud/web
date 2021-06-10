@@ -160,7 +160,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     accordionItems: {
-      selector: '//div[@class="sidebar-container"]//li/h3/button',
+      selector: '//div[@class="sidebar-container"]//div[@class="oc-accordion-item"]/h3/button',
       locateStrategy: 'xpath'
     },
     sidebarThumbnail: {
@@ -198,7 +198,8 @@ module.exports = {
       selector: '#oc-files-actions-sidebar'
     },
     actionPanelItems: {
-      selector: '//div[@class="oc-accordion-content"]//li/button',
+      selector:
+        '//div[@class="oc-accordion-content"]//li/button/span[@class="oc-files-actions-sidebar-action-label"] | //div[@class="oc-accordion-content"]//li/a/span[@class="oc-files-actions-sidebar-action-label"]',
       locateStrategy: 'xpath'
     }
   }

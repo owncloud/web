@@ -34,17 +34,17 @@
             class="uk-text-nowrap uk-flex uk-flex-middle uk-flex-right"
           >
             <oc-button
-              v-if="resource.status === 1 || resource.status === 2"
-              appearance="raw"
-              class="file-row-share-status-action oc-text-muted"
+              v-if="[shareStatus.pending, shareStatus.declined].includes(resource.status)"
+              size="small"
+              class="file-row-share-status-action"
               @click.stop="triggerShareAction(resource, 'POST')"
             >
               <translate>Accept</translate>
             </oc-button>
             <oc-button
-              v-if="resource.status === 1 || resource.status === 0"
-              appearance="raw"
-              class="file-row-share-status-action oc-text-muted oc-ml"
+              v-if="[shareStatus.pending, shareStatus.accepted].includes(resource.status)"
+              size="small"
+              class="file-row-share-status-action oc-ml-s"
               @click.stop="triggerShareAction(resource, 'DELETE')"
             >
               <translate>Decline</translate>
@@ -92,7 +92,8 @@ export default {
   mixins: [FileActions, MixinFilesListPositioning],
 
   data: () => ({
-    loading: true
+    loading: true,
+    shareStatus
   }),
 
   computed: {
@@ -269,10 +270,7 @@ export default {
         this.showMessage({
           title: this.$gettext('Error while changing share state'),
           desc: error.message,
-          status: 'danger',
-          autoClose: {
-            enabled: true
-          }
+          status: 'danger'
         })
       }
     }

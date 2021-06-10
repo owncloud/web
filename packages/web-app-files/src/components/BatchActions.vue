@@ -4,6 +4,7 @@
       <oc-button
         v-if="selectedFiles.length > 0"
         key="restore-btn"
+        variation="primary"
         class="oc-mr-s"
         @click="restoreFiles()"
       >
@@ -11,12 +12,14 @@
         <translate>Restore</translate>
       </oc-button>
       <oc-button
+        v-if="!isEmpty"
         id="delete-selected-btn"
         key="delete-btn"
+        variation="danger"
         @click="selectedFiles.length < 1 ? emptyTrashbin() : $_deleteResources_displayDialog()"
       >
         <oc-icon name="delete" />
-        {{ clearTrashbinButtonText }}
+        {{ emptyTrashbinButtonText }}
       </oc-button>
     </template>
     <oc-grid v-if="displayBulkActions" gutter="small">
@@ -24,6 +27,7 @@
         <oc-button
           id="copy-selected-btn"
           key="copy-selected-btn"
+          variation="primary"
           @click="triggerLocationPicker('copy')"
         >
           <oc-icon name="file_copy" />
@@ -34,6 +38,7 @@
         <oc-button
           id="move-selected-btn"
           key="move-selected-btn"
+          variation="primary"
           @click="triggerLocationPicker('move')"
         >
           <oc-icon name="folder-move" />
@@ -44,6 +49,7 @@
         <oc-button
           id="delete-selected-btn"
           key="delete-selected-btn"
+          variation="primary"
           @click="$_deleteResources_displayDialog"
         >
           <oc-icon name="delete" />
@@ -69,8 +75,10 @@ export default {
   computed: {
     ...mapGetters('Files', ['selectedFiles', 'currentFolder', 'activeFiles']),
 
-    clearTrashbinButtonText() {
-      return this.selectedFiles.length < 1 ? this.$gettext('Empty') : this.$gettext('Delete')
+    emptyTrashbinButtonText() {
+      return this.selectedFiles.length < 1
+        ? this.$gettext('Empty trash bin')
+        : this.$gettext('Delete')
     },
 
     canMove() {
@@ -111,6 +119,10 @@ export default {
 
     displayBulkActions() {
       return this.$route.meta.hasBulkActions && this.selectedFiles.length > 0
+    },
+
+    isEmpty() {
+      return this.activeFiles.length < 1
     }
   },
 
@@ -125,10 +137,7 @@ export default {
           .then(() => {
             const translated = this.$gettext('%{resource} was restored successfully')
             this.showMessage({
-              title: this.$gettextInterpolate(translated, { resource: resource.name }, true),
-              autoClose: {
-                enabled: true
-              }
+              title: this.$gettextInterpolate(translated, { resource: resource.name }, true)
             })
             this.removeFilesFromTrashbin([resource])
           })
@@ -137,10 +146,7 @@ export default {
             this.showMessage({
               title: this.$gettextInterpolate(translated, { resource: resource.name }, true),
               desc: error.message,
-              status: 'danger',
-              autoClose: {
-                enabled: true
-              }
+              status: 'danger'
             })
           })
       }
@@ -153,10 +159,7 @@ export default {
         .clearTrashBin()
         .then(() => {
           this.showMessage({
-            title: this.$gettext('All deleted files were removed'),
-            autoClose: {
-              enabled: true
-            }
+            title: this.$gettext('All deleted files were removed')
           })
           this.removeFilesFromTrashbin(this.activeFiles)
         })
@@ -164,10 +167,7 @@ export default {
           this.showMessage({
             title: this.$gettext('Could not delete files'),
             desc: error.message,
-            status: 'danger',
-            autoClose: {
-              enabled: true
-            }
+            status: 'danger'
           })
         })
     },

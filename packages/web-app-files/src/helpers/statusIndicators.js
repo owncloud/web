@@ -42,16 +42,16 @@ const isLinkShare = (resource, sharesTree) => {
   return isDirectLinkShare(resource) || isIndirectLinkShare(resource, sharesTree)
 }
 
-const shareUserIconLabel = resource => {
+const shareUserIconDescribedBy = resource => {
   return isDirectUserShare(resource)
-    ? $gettext('Directly shared with people')
-    : $gettext('Shared with people through one of the parent folders')
+    ? $gettext('This item is directly shared with others.')
+    : $gettext('This item is shared with others through one of the parent folders.')
 }
 
-const shareLinkIconLabel = resource => {
+const shareLinkDescribedBy = resource => {
   return isDirectLinkShare(resource)
-    ? $gettext('Directly shared with links')
-    : $gettext('Shared with links through one of the parent folders')
+    ? $gettext('This item is directly shared via links.')
+    : $gettext('This item is shared via links through one of the parent folders.')
 }
 
 const shareTypesIndirect = (path, sharesTree) => {
@@ -86,17 +86,23 @@ const shareTypesIndirect = (path, sharesTree) => {
 export const getIndicators = (resource, sharesTree) => {
   const indicators = [
     {
-      id: 'files-sharing',
-      label: shareUserIconLabel(resource, sharesTree),
+      id: `files-sharing-${resource.id.replaceAll('=', '')}`,
+      accessibleDescription: shareUserIconDescribedBy(resource, sharesTree),
+      label: $gettext('Show invited people'),
       visible: isUserShare(resource, sharesTree),
       icon: 'group',
+      target: 'files-sharing',
+      type: isDirectUserShare(resource) ? 'user-direct' : 'user-indirect',
       handler: indicatorHandler
     },
     {
-      id: 'file-link',
-      label: shareLinkIconLabel(resource, sharesTree),
+      id: `file-link-${resource.id.replaceAll('=', '')}`,
+      accessibleDescription: shareLinkDescribedBy(resource, sharesTree),
+      label: $gettext('Show links'),
       visible: isLinkShare(resource, sharesTree),
       icon: 'link',
+      target: 'file-link',
+      type: isDirectLinkShare(resource) ? 'link-direct' : 'link-indirect',
       handler: indicatorHandler
     }
   ]

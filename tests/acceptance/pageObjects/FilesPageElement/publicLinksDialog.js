@@ -40,12 +40,8 @@ module.exports = {
         this.elements.publicLinkRoleSelectionDropdown.selector,
         role
       )
-      return this.waitForElementPresent('@selectRoleButton')
-        .click('@selectRoleButton')
-        .waitForElementVisible('@rolesDropdown')
-        .waitForElementVisible(`@role${role}`)
+      return this.click('@selectRoleButton')
         .click(`@role${role}`)
-        .waitForElementNotVisible('@rolesDropdown')
         .useXpath()
         .waitForElementVisible(selectedRoleDropdown)
         .useCss()
@@ -348,12 +344,8 @@ module.exports = {
       return this.waitForElementVisible(this.api.page.personalPage().elements.sideBar)
         .waitForElementVisible(linksAccordionItem)
         .click(linksAccordionItem)
-        .waitForElementVisible('@sidebarPrivateLinkLabel')
-        .click('@sidebarPrivateLinkLabel')
-        .waitForElementNotPresent('@sidebarPrivateLinkLabel')
-        .waitForElementVisible('@sidebarPrivateLinkIconCopied')
-        .waitForElementNotPresent('@sidebarPrivateLinkIconCopied')
-        .waitForElementVisible('@sidebarPrivateLinkLabel')
+        .waitForElementVisible('@privateLinkURLCopyButton')
+        .click('@privateLinkURLCopyButton')
     }
   },
   elements: {
@@ -391,20 +383,17 @@ module.exports = {
     selectRoleButton: {
       selector: '#files-file-link-role-button'
     },
-    rolesDropdown: {
-      selector: '#files-file-link-roles-dropdown'
-    },
     roleViewer: {
-      selector: '#files-file-link-role-viewer'
+      selector: '#files-role-viewer'
     },
     roleContributor: {
-      selector: '#files-file-link-role-contributor'
+      selector: '#files-role-contributor'
     },
     roleEditor: {
-      selector: '#files-file-link-role-editor'
+      selector: '#files-role-editor'
     },
     roleUploader: {
-      selector: '#files-file-link-role-uploader'
+      selector: '#files-role-uploader'
     },
     errorMessageInsidePublicLinkContainer: {
       selector: '//div[contains(@class, "oc-alert-danger")]',
@@ -416,17 +405,17 @@ module.exports = {
     },
     publicLinkEditButton: {
       selector:
-        '//div[contains(@class, "oc-files-file-link-name") and text()="%s"]/../../..//button[contains(@class, "oc-files-file-link-edit")]',
+        '//h5[contains(@class, "oc-files-file-link-name") and text()="%s"]/../../..//button[contains(@class, "oc-files-file-link-edit")]',
       locateStrategy: 'xpath'
     },
     publicLinkDeleteButton: {
       selector:
-        '//div[contains(@class, "oc-files-file-link-name") and text()="%s"]/../../..//button[contains(@class, "oc-files-file-link-delete")]',
+        '//h5[contains(@class, "oc-files-file-link-name") and text()="%s"]/../../..//button[contains(@class, "oc-files-file-link-delete")]',
       locateStrategy: 'xpath'
     },
     publicLinkURLCopyButton: {
       selector:
-        '//div[contains(@class, "oc-files-file-link-name") and text()="%s"]/../../..//button[contains(@class, "oc-files-file-link-copy-url")]',
+        '//h5[contains(@class, "oc-files-file-link-name") and text()="%s"]/../../..//button[contains(@class, "oc-files-public-link-copy-url")]',
       locateStrategy: 'xpath'
     },
     publicLinkPasswordField: {
@@ -442,14 +431,11 @@ module.exports = {
     publicLinkSaveButton: {
       selector: '#oc-files-file-link-save'
     },
-    sidebarPrivateLinkLabel: {
-      selector: '#files-sidebar-private-link-label'
-    },
-    sidebarPrivateLinkIconCopied: {
-      selector: '#files-sidebar-private-link-icon-copied'
+    privateLinkURLCopyButton: {
+      selector: '.oc-files-private-link-copy-url'
     },
     publicLinkRoleSelectionDropdown: {
-      selector: '//button[contains(@class, "files-file-link-role-button")]//span[.="%s"]',
+      selector: '//div[contains(@class, "files-file-link-role-button-wrapper")]//span[.="%s"]',
       locateStrategy: 'xpath'
     },
     dialog: {

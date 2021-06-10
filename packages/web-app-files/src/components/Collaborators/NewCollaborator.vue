@@ -19,7 +19,7 @@
       </template>
     </oc-autocomplete>
     <div v-if="selectedCollaborators.length > 0">
-      <translate tag="div">Selected people</translate>
+      <h4 v-translate class="oc-text-initial oc-mb-rm">Selected people</h4>
       <ul class="uk-list files-collaborators-collaborator-autocomplete-items oc-mt-s oc-mb-m">
         <li
           v-for="collaborator in selectedCollaborators"
@@ -64,7 +64,7 @@
           :disabled="!$_isValid"
           variation="primary"
           appearance="filled"
-          @click="$_ocCollaborators_newCollaboratorsAdd(selectedCollaborators)"
+          @click="share"
         >
           <translate>Share</translate>
         </oc-button>
@@ -203,12 +203,12 @@ export default {
       this.saving = false
       this.close()
     },
-    $_ocCollaborators_newCollaboratorsAdd(collaborators) {
+    share() {
       this.saving = true
 
       const saveQueue = new PQueue({ concurrency: 4 })
       const savePromises = []
-      collaborators.forEach(collaborator => {
+      this.selectedCollaborators.forEach(collaborator => {
         savePromises.push(
           saveQueue.add(() =>
             this.addShare({

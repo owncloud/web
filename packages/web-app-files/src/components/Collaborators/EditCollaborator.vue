@@ -1,5 +1,11 @@
 <template>
   <div class="files-collaborators-collaborator-edit-dialog">
+    <h4
+      id="collaborator-edit-hint"
+      tabindex="-1"
+      class="oc-invisible-sr"
+      v-text="editCollaboratorHint"
+    />
     <transition
       enter-active-class="uk-animation-slide-top-small"
       leave-active-class="uk-animation-slide-top-small uk-animation-reverse"
@@ -13,12 +19,12 @@
         {{ errors }}
       </oc-alert>
     </transition>
-    <div
+    <p
       v-if="user.id !== collaborator.owner.name"
       class="oc-text-muted uk-flex uk-flex-middle oc-mb-s"
     >
       <oc-icon name="repeat" class="oc-mr-s" /> {{ collaborator.owner.displayName }}
-    </div>
+    </p>
     <collaborator class="uk-width-expand" :collaborator="collaborator" :first-column="false" />
     <collaborators-edit-options
       :existing-role="$_originalRole"
@@ -115,13 +121,22 @@ export default {
       return null
     },
 
+    editCollaboratorHint() {
+      const translated = this.$gettext('Editing share with %{ currentCollaborator }')
+      return this.$gettextInterpolate(
+        translated,
+        { currentCollaborator: this.collaborator.collaborator.displayName },
+        true
+      )
+    },
+
     $_originalPermissions() {
       const permissions = this.collaborator.customPermissions
       return filterObject(permissions, (key, value) => value)
     },
 
     $_originalRole() {
-      return this.roles[this.collaborator.role.name]
+      return this.roles.find(r => r.name === this.collaborator.role.name)
     },
 
     $_permissionsBitmask() {

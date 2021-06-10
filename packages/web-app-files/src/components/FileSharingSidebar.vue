@@ -9,61 +9,74 @@
       <template v-else>
         <div v-if="$_ocCollaborators_canShare" class="oc-mt-s oc-mb-s">
           <oc-button
+            ref="addCollaborators"
             variation="primary"
             class="files-collaborators-open-add-share-dialog-button"
             @click="$_ocCollaborators_addShare"
           >
+            <oc-icon name="add" />
             <translate>Add people</translate>
           </oc-button>
         </div>
         <p
           v-else
           key="no-reshare-permissions-message"
-          class="files-collaborators-no-reshare-permissions-message"
+          data-test-id="files-collaborators-no-reshare-permissions-message"
           v-text="noResharePermsMessage"
         />
-        <section>
-          <ul class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm">
-            <li v-if="$_ownerAsCollaborator" :key="$_ownerAsCollaborator.key">
-              <collaborator :collaborator="$_ownerAsCollaborator" />
-            </li>
-            <li>
-              <collaborator :collaborator="$_currentUserAsCollaborator" />
-            </li>
-          </ul>
-          <hr v-if="collaborators.length > 0" class="oc-mt-s oc-mb-s" />
-        </section>
-        <section>
-          <transition-group
-            id="files-collaborators-list"
-            class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm"
-            :enter-active-class="$_transitionGroupEnter"
-            :leave-active-class="$_transitionGroupLeave"
-            name="custom-classes-transition"
-            tag="ul"
-          >
-            <li v-for="collaborator in collaborators" :key="collaborator.key">
-              <collaborator
-                :collaborator="collaborator"
-                :modifiable="!collaborator.indirect"
-                @onDelete="$_ocCollaborators_deleteShare"
-                @onEdit="$_ocCollaborators_editShare"
-              />
-            </li>
-          </transition-group>
-        </section>
+        <template v-if="$_ownerAsCollaborator">
+          <p id="original-sharing-user" v-translate class="oc-invisible-sr">File owner</p>
+          <collaborator
+            :collaborator="$_ownerAsCollaborator"
+            aria-describedby="original-sharing-user"
+          />
+          <hr />
+          <collaborator :collaborator="$_currentUserAsCollaborator" />
+        </template>
+        <template v-else>
+          <p id="collaborator-as-fileowner" v-translate class="oc-invisible-sr">
+            You are the file owner
+          </p>
+          <collaborator
+            :collaborator="$_currentUserAsCollaborator"
+            aria-describedby="collaborator-as-fileowner"
+          />
+        </template>
+        <hr v-if="collaborators.length > 0" class="oc-mt-s oc-mb-s" />
+        <transition-group
+          id="files-collaborators-list"
+          class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm"
+          :enter-active-class="$_transitionGroupEnter"
+          :leave-active-class="$_transitionGroupLeave"
+          name="custom-classes-transition"
+          tag="ul"
+          :aria-label="$gettext('Share receivers')"
+        >
+          <li v-for="collaborator in collaborators" :key="collaborator.key">
+            <collaborator
+              :collaborator="collaborator"
+              :modifiable="!collaborator.indirect"
+              @onDelete="$_ocCollaborators_deleteShare"
+              @onEdit="$_ocCollaborators_editShare"
+            />
+          </li>
+        </transition-group>
       </template>
     </div>
     <new-collaborator
       v-if="$_ocCollaborators_canShare && currentPanel === PANEL_NEW"
       key="new-collaborator"
       @close="$_ocCollaborators_showList"
+      @beforeDestroy="toggleCollaboratorNew"
+      @mounted="toggleCollaboratorNew"
     />
     <edit-collaborator
       v-if="$_ocCollaborators_canShare && currentPanel === PANEL_EDIT"
       key="edit-collaborator"
       :collaborator="currentShare"
       @close="$_ocCollaborators_showList"
+      @beforeDestroy="toggleCollaboratorEdit"
+      @mounted="toggleCollaboratorEdit"
     />
   </div>
 </template>
@@ -353,6 +366,19 @@ export default {
     $_ocCollaborators_editShare(share) {
       this.currentShare = share
       this.SET_APP_SIDEBAR_ACCORDION_CONTEXT(PANEL_EDIT)
+    },
+    toggleCollaboratorNew(component, event) {
+      this.toggleCollaborator(component, event, '#oc-sharing-autocomplete')
+    },
+    toggleCollaboratorEdit(component, event) {
+      this.toggleCollaborator(component, event, '#collaborator-edit-hint')
+    },
+    toggleCollaborator(component, event, selector) {
+      this.focus({
+        from: document.activeElement,
+        to: component.$el.querySelector(selector),
+        revert: event === 'beforeDestroy'
+      })
     },
     $_ocCollaborators_deleteShare(share) {
       this.transitionGroupActive = true

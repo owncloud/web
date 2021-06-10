@@ -1,0 +1,11 @@
+Enhancement: OcTooltip
+
+We've changed the tooltip implementation to use oc-tooltip directive from ODS instead of uikit's.
+
+https://github.com/owncloud/web/pull/5055
+https://github.com/owncloud/web/issues/4654
+https://github.com/owncloud/web/issues/2623
+https://github.com/owncloud/web/issues/4597
+https://github.com/owncloud/web/issues/4332
+https://github.com/owncloud/web/issues/4300
+https://github.com/owncloud/web/issues/5155

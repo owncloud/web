@@ -4,6 +4,7 @@ const { COLLABORATOR_PERMISSION_ARRAY, calculateDate } = require('../../helpers/
 const { client } = require('nightwatch-api')
 const userSettings = require('../../helpers/userSettings')
 const collaboratorDialog = client.page.FilesPageElement.SharingDialog.collaboratorsDialog()
+const stringHelper = require('../../helpers/stringHelper')
 const SHARE_TYPE_STRING = {
   user: 'user',
   group: 'group',
@@ -27,21 +28,6 @@ module.exports = {
     getPermissionCheckbox: function(permission) {
       return util.format(this.elements.permissionCheckbox.selector, permission)
     },
-    /**
-     * gets share permission message whether is allowed to share or not
-     *
-     * @returns {Promise<string>}
-     */
-    getSharingPermissionMsg: async function() {
-      let shareResponse
-      // eslint-disable-next-line no-unused-expressions
-      this.api.expect.element(this.elements.addShareSaveButton.selector).not.to.be.present
-      await this.api.getText(this.elements.noResharePermissions.selector, function(result) {
-        shareResponse = result.value
-      })
-      return shareResponse
-    },
-
     /**
      * Return first elementID that matches given selector and is visible
      *
@@ -203,12 +189,7 @@ module.exports = {
         .startCase()
         .replace(/\s/g, '')
         .value()
-      return this.waitForElementPresent('@newCollaboratorSelectRoleButton')
-        .click('@newCollaboratorSelectRoleButton')
-        .waitForElementVisible('@newCollaboratorRolesDropdown')
-        .waitForElementVisible(`@newCollaboratorRole${role}`)
-        .click(`@newCollaboratorRole${role}`)
-        .waitForElementNotVisible('@newCollaboratorRolesDropdown')
+      return this.click('@newCollaboratorSelectRoleButton').click(`@newCollaboratorRole${role}`)
     },
     confirmShare: function() {
       return this.waitForElementPresent('@addShareSaveButton')
@@ -405,13 +386,13 @@ module.exports = {
      * @returns {Promise}
      */
     changeCollaboratorRoleInDropdown: function(newRole) {
-      const newRoleButton = util.format(
-        this.elements.roleButtonInDropdown.selector,
-        newRole.toLowerCase()
-      )
-      return this.useXpath()
-        .waitForElementVisible('@selectRoleButtonInCollaboratorInformation')
+      newRole = newRole === 'Advanced permissions' ? 'advancedRole' : newRole
+      newRole = stringHelper.camelize(newRole)
+
+      const newRoleButton = util.format(this.elements.roleButtonInDropdown.selector, newRole)
+      return this.waitForElementVisible('@selectRoleButtonInCollaboratorInformation')
         .click('@selectRoleButtonInCollaboratorInformation')
+        .useXpath()
         .waitForElementVisible(newRoleButton)
         .click(newRoleButton)
         .useCss()
@@ -610,23 +591,20 @@ module.exports = {
     },
     /**
      *
-     * @returns {Promise<string>}
+     * @returns {boolean} Whether the message has been found
      */
-    getSharePermissionMessage: async function() {
-      let message
-      await this.waitForElementVisible('@sharingPermissionDisabledMessage').getText(
-        this.elements.sharingPermissionDisabledMessage.selector,
-        function(result) {
-          message = result.value
-        }
-      )
-      return message
+    isSharePermissionMessageVisible: function() {
+      return this.waitForElementVisible('@noResharePermissions')
+    },
+    /**
+     *
+     * @returns {boolean} Whether the message has been found
+     */
+    isLinkSharePermissionMessageVisible: function() {
+      return this.waitForElementVisible('@noReshareLinkPermissions')
     }
   },
   elements: {
-    sharingPermissionDisabledMessage: {
-      selector: '.files-collaborators-no-reshare-permissions-message'
-    },
     collaboratorErrorAlert: {
       selector: '//div[contains(@class, "collaborator-error-alert")]',
       locateStrategy: 'xpath'
@@ -636,7 +614,12 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     noResharePermissions: {
-      selector: '#oc-files-sharing-sidebar .files-collaborators-no-reshare-permissions-message'
+      selector: '//p[@data-test-id="files-collaborators-no-reshare-permissions-message"]',
+      locateStrategy: 'xpath'
+    },
+    noReshareLinkPermissions: {
+      selector: '//p[@data-test-id="files-links-no-reshare-permissions-message"]',
+      locateStrategy: 'xpath'
     },
     sharingAutoComplete: {
       selector: '#oc-sharing-autocomplete .oc-autocomplete-input'
@@ -675,14 +658,11 @@ module.exports = {
     newCollaboratorSelectRoleButton: {
       selector: '#files-collaborators-role-button'
     },
-    newCollaboratorRolesDropdown: {
-      selector: '#files-collaborators-roles-dropdown'
-    },
     newCollaboratorRoleViewer: {
-      selector: '#files-collaborators-role-viewer'
+      selector: '#files-role-viewer'
     },
     newCollaboratorRoleEditor: {
-      selector: '#files-collaborators-role-editor'
+      selector: '#files-role-editor'
     },
     newCollaboratorItems: {
       selector:
@@ -693,11 +673,10 @@ module.exports = {
         "//button[contains(@class, 'files-collaborators-collaborator-autocomplete-item-remove')]"
     },
     newCollaboratorRoleAdvancedPermissions: {
-      selector: '#files-collaborators-role-advancedRole'
+      selector: '#files-role-advancedRole'
     },
     selectRoleButtonInCollaboratorInformation: {
-      selector: '//button[contains(@class, "files-collaborators-role-button")]',
-      locateStrategy: 'xpath'
+      selector: '#files-collaborators-role-button'
     },
     roleDropdownInCollaboratorInformation: {
       selector: '//div[contains(@id, "files-collaborators-roles-dropdown")]',
@@ -705,8 +684,7 @@ module.exports = {
     },
     roleButtonInDropdown: {
       // the translate bit is to make it case-insensitive
-      selector:
-        '//ul[contains(@class,"oc-autocomplete-suggestion-list")]//span[translate(.,"ABCDEFGHJIKLMNOPQRSTUVWXYZ","abcdefghjiklmnopqrstuvwxyz") ="%s"]',
+      selector: '//span[@id="files-role-%s"]',
       locateStrategy: 'xpath'
     },
     permissionCheckbox: {
@@ -728,7 +706,7 @@ module.exports = {
     },
     collaboratorExpirationDate: {
       selector:
-        '//span[contains(@class, "files-collaborators-collaborator-name") and text()="%s"]/../../span/span[contains(@class, "files-collaborators-collaborator-expires")]',
+        '//p[contains(@class, "files-collaborators-collaborator-name") and text()="%s"]/../..//span[contains(@class, "files-collaborators-collaborator-expires")]',
       locateStrategy: 'xpath'
     },
     collaboratorAutocompleteItem: {

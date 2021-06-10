@@ -882,11 +882,15 @@ Then('{string} {string} should be listed in the autocomplete list on the webUI',
 
 Then(
   'the share permission denied message should be displayed in the sharing dialog on the webUI',
-  async function() {
-    const permissionDeniedMessage = "You don't have permission to share this folder."
-    const dialogMessage = await client.page.FilesPageElement.sharingDialog().getSharePermissionMessage()
+  function() {
+    return client.page.FilesPageElement.sharingDialog().isSharePermissionMessageVisible()
+  }
+)
 
-    return assert.strictEqual(dialogMessage, permissionDeniedMessage)
+Then(
+  'the link share permission denied message should be displayed in the sharing dialog on the webUI',
+  function() {
+    return client.page.FilesPageElement.sharingDialog().isLinkSharePermissionMessageVisible()
   }
 )
 
@@ -1113,14 +1117,7 @@ Then(
   async function(resource) {
     const api = client.page.FilesPageElement
     await api.filesList().openSharingDialog(resource)
-    const shareResponse = await api.sharingDialog().getSharingPermissionMsg()
-    const noSharePermissionsMsgFormat = "You don't have permission to share this %s."
-    const noSharePermissionsFileMsg = util.format(noSharePermissionsMsgFormat, 'file')
-    const noSharePermissionsFolderMsg = util.format(noSharePermissionsMsgFormat, 'folder')
-    return assert.ok(
-      noSharePermissionsFileMsg === shareResponse || noSharePermissionsFolderMsg === shareResponse,
-      `Expected: no permission to share resource '${resource}' but found: '${shareResponse}'`
-    )
+    return await api.sharingDialog().isSharePermissionMessageVisible()
   }
 )
 

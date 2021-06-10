@@ -82,7 +82,7 @@ module.exports = {
       await this.api.getAttribute(
         this.elements.sharedFrom.locateStrategy,
         requiredXpath,
-        'aria-label',
+        'data-test-user-name',
         result => {
           username = result.value
         }
@@ -108,7 +108,7 @@ module.exports = {
     },
     getSharedFromUserName: {
       selector:
-        '//td[contains(@class,"oc-table-data-cell-owner")]//span[@aria-label=normalize-space("%s")]',
+        '//td[contains(@class,"oc-table-data-cell-owner")]//span[@data-test-user-name="%s"]',
       locateStrategy: 'xpath'
     },
     sharedFrom: {

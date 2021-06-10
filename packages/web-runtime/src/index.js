@@ -1,7 +1,8 @@
+// --- Styles ---
+import 'vue-resize/dist/vue-resize.css'
+
 // --- Libraries and Plugins ---
 import Vue from './vue'
-import 'vue-resize/dist/vue-resize.css'
-import VueResize from 'vue-resize'
 
 // --- Components ---
 import App from './App.vue'
@@ -15,16 +16,20 @@ import store from './store'
 import router from './router'
 
 // --- Plugins ----
+import VueResize from 'vue-resize'
 import VueEvents from 'vue-events'
 import VueRouter from 'vue-router'
-import VueClipboard from 'vue-clipboard2'
 import VueScrollTo from 'vue-scrollto'
 import VueMeta from 'vue-meta'
 import Vue2TouchEvents from 'vue2-touch-events'
+import VueAxe from 'vue-axe'
 
 // --- Mixins ----
 import focusMixin from './mixins/focusMixin'
 import lifecycleMixin from './mixins/lifecycleMixin'
+
+// --- Directive ---
+import ClickOutsideDirective from './directives/clickOutside'
 
 // --- Gettext ----
 import GetTextPlugin from 'vue-gettext'
@@ -60,7 +65,6 @@ Vue.prototype.$client = new OwnCloud()
 
 Vue.use(VueEvents)
 Vue.use(VueRouter)
-Vue.use(VueClipboard)
 Vue.use(VueScrollTo)
 Vue.use(MediaSource)
 Vue.use(WebPlugin)
@@ -78,6 +82,15 @@ Vue.component('avatar-image', Avatar)
 
 Vue.mixin(focusMixin)
 Vue.mixin(lifecycleMixin)
+
+Vue.directive('click-outside', ClickOutsideDirective)
+
+// --- DEV only ----
+if (process.env.NODE_ENV === 'development') {
+  Vue.use(VueAxe, {
+    allowConsoleClears: false
+  })
+}
 
 // --- Router ----
 

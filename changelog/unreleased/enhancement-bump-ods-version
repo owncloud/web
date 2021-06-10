@@ -1,0 +1,11 @@
+Enhancement: Update owncloud Design System to v7.1.2
+
+- Lots of updates regarding accessibility topics
+- Removal of home icon in breadcrumbs, changed to "All files" link as breadcrumb root
+- Added aria-labels to all landmarks in sidebar and proper logo-alt attribute to image in sidebar
+
+https://github.com/owncloud/web/pull/5002
+https://github.com/owncloud/web/pull/5044
+https://github.com/owncloud/web/pull/5074
+https://github.com/owncloud/web/pull/5186
+https://github.com/owncloud/web/pull/5189

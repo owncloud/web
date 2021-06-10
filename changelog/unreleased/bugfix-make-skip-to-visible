@@ -1,0 +1,8 @@
+Bugfix: Make skip to main content link visible
+
+We've fixed the z-index of the skip to main content link so that it 
+is not hidden under different content anymore and is again visible 
+on focus, with a visible focus border.
+
+https://github.com/owncloud/web/pull/5118
+https://github.com/owncloud/web/pull/5167

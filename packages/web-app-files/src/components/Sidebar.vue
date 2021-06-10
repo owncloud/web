@@ -1,8 +1,10 @@
 <template>
   <oc-app-side-bar
     :key="highlightedFile.id"
+    v-click-outside="onClickOutside"
     class="files-sidebar oc-p-s oc-border-l"
     :disable-action="false"
+    :close-button-label="$gettext('Close file sidebar')"
     @close="close()"
   >
     <template v-if="highlightedFile" slot="title">
@@ -11,25 +13,28 @@
       </div>
       <div class="uk-inline">
         <div class="uk-flex uk-flex-middle">
-          <span
+          <h2
             id="files-sidebar-item-name"
-            class="oc-mr-s oc-text-bold"
+            class="oc-text-initial oc-mr-s oc-text-bold uk-margin-remove"
+            tabindex="-1"
             v-text="highlightedFile.name"
           />
         </div>
         <div class="uk-flex uk-flex-middle">
-          <oc-icon
+          <oc-button
             v-if="!publicPage() && isFavoritesEnabled"
             id="files-sidebar-star-icon"
-            :class="['uk-inline', 'oc-mr-xs', favoriteIconClass]"
-            name="star"
-            :accessible-label="
+            :aria-label="
               highlightedFile.starred
-                ? $gettext('File is marked as favorite')
-                : $gettext('File is not marked as favorite')
+                ? $gettext('Click to remove this file from your favorites')
+                : $gettext('Click to mark this file as favorite')
             "
+            appearance="raw"
+            class="oc-mr-xs"
             @click.native.stop="toggleFileFavorite(highlightedFile)"
-          />
+          >
+            <oc-icon :class="favoriteIconClass" name="star" />
+          </oc-button>
           <template v-if="highlightedFile.size > -1">
             {{ getResourceSize(highlightedFile.size) }},
           </template>
@@ -202,6 +207,22 @@ export default {
 
     expandActionsAccordion() {
       this.SET_APP_SIDEBAR_EXPANDED_ACCORDION('files-actions')
+    },
+
+    onClickOutside(event) {
+      /*
+       * We need to go for this opt-out solution because under circumstances a modal will be rendered,
+       * for example if we click rename, clicking in this modal would otherwise falsy close the sidebar.
+       */
+
+      if (
+        document.querySelector('.files-topbar').contains(event.target) ||
+        document.querySelector('.oc-topbar').contains(event.target) ||
+        document.querySelector('.oc-app-navigation').contains(event.target) ||
+        event.target.id === 'files-view'
+      ) {
+        this.close()
+      }
     }
   }
 }
@@ -216,6 +237,9 @@ export default {
 .oc-star {
   &-shining svg {
     fill: #ffba0a !important;
+    path:not([fill='none']) {
+      stroke: var(--oc-color-swatch-passive-default);
+    }
   }
 }
 </style>

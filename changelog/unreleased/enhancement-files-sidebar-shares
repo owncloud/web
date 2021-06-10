@@ -1,0 +1,20 @@
+Enhancement: Improve a11y in the files sidebar peoples & shares section
+
+We've did several improvements to enhance the accessibility on the files sidebar:
+- Gave `role="presentation" to the collaborator avatar
+- Refactored `<span>` and `<div>` tags into `<p>` tags and unified translations a bit
+- Enhanced hints in the collaborator quick action buttons with collaborator name
+- Hide private links if the capability is not enabled
+- Set avatar-images to `:aria-hidden="true"` since they're only visual elements and can be hidden from screenreaders
+- Changed `<section>` wrapper around private link shares
+- Removed `<section>` wrapper around public link shares
+- Removed `<section>` wrapper around collaborators
+- Added screenreader-only explain texts regarding collaborator/share ownership
+- Added aria-label for share receiver section
+- Worked on unifying the way we handle translations: Focus on v-translate and $gettext()
+- Turn tags into `<ul> & <li>` list, add aria-labelledby to both tag list and resharer tag list
+- Translated "Open with $appName" for sidebar quick actions
+
+https://github.com/owncloud/web/pull/5034
+https://github.com/owncloud/web/pull/5043
+https://github.com/owncloud/web/pull/5121

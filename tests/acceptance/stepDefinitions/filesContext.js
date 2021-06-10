@@ -957,16 +957,7 @@ When('the user browses to the folder {string} on the files page', folderName => 
   const targetFolder = folderName === '/' ? '' : folderName
   return client.page.personalPage().navigateAndWaitTillLoaded(targetFolder)
 })
-When(
-  'the user copies the permalink of the file/folder/resource {string} using the webUI',
-  async function(file) {
-    await client.page.FilesPageElement.appSideBar()
-      .closeSidebar(100)
-      .openPublicLinkDialog(file)
-    await client.page.personalPage().copyPermalinkFromFilesAppBar()
-    return client
-  }
-)
+
 Then(
   'as user {string} the clipboard content should match permalink of resource {string}',
   async function(userId, folderName) {

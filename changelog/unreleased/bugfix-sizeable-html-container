@@ -1,0 +1,6 @@
+Bugfix: Resizeable html container
+
+We removed a critical accessibility offense by removing 
+the hardcoded maximum-scale and allowing for user-scalable viewsizes.
+
+https://github.com/owncloud/web/pull/5052

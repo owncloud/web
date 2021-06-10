@@ -1,0 +1,12 @@
+Bugfix: Make sure IDs in HTML are unique
+
+Quick action button IDs were repeated in every row of the file table, 
+which isn't allowed in HTML (IDs must be unique per document).
+By changing to classes, this offense was resolved.
+
+The same goes for IDs in the people shares part of the sidebar where IDs 
+are now appended with the share ID, which is necessary since they need to be 
+both unique and referenced by ID for accessibility reasons.
+
+https://github.com/owncloud/web/pull/5028
+https://github.com/owncloud/web/pull/5148

@@ -140,7 +140,6 @@ module.exports = {
      * @return {Promise.<string>}
      */
     getCollaboratorExpirationInfo: async function(user) {
-      let elementId
       let text
       const formattedWithUserName = util.format(
         this.elements.collaboratorExpirationInfo.selector,
@@ -150,24 +149,20 @@ module.exports = {
         this.elements.collaboratorInformationByCollaboratorName.selector,
         user
       )
-      await this.useXpath().waitForElementVisible(formattedCollaboratorInfoByCollaboratorName)
-      await this.api.element('xpath', formattedWithUserName, function(result) {
-        elementId = result.value.ELEMENT
-      })
-      if (elementId === undefined) {
-        return elementId
-      } else {
-        await this.api.elementIdText(elementId, result => {
-          text = result.value
+      await this.useXpath()
+        .waitForElementVisible(formattedCollaboratorInfoByCollaboratorName)
+        .getText('xpath', formattedWithUserName, function(result) {
+          if (typeof result.value === 'string') {
+            text = result.value
+          }
         })
-        return text
-      }
+      return text
     }
   },
   elements: {
     collaboratorInformationByCollaboratorName: {
       selector:
-        '//*[contains(@class, "files-collaborators-collaborator-name") and normalize-space()="%s"]/ancestor::*[contains(concat(" ", @class, " "), " files-collaborators-collaborator ")]',
+        '//p[contains(@class, "files-collaborators-collaborator-name") and normalize-space()="%s"]/ancestor::*[contains(concat(" ", @class, " "), " files-collaborators-collaborator ")]',
       locateStrategy: 'xpath'
     },
     deleteShareButton: {
@@ -221,7 +216,7 @@ module.exports = {
     },
     collaboratorExpirationInfo: {
       selector:
-        '//span[normalize-space()="%s"]//ancestor::div[contains(@class, "files-collaborators-collaborator-info")]//span[contains(text(), "Expires")]',
+        '//p[contains(@class, "files-collaborators-collaborator-name") and text()="%s"]/../..//span[contains(@class, "files-collaborators-collaborator-expires")]',
       locateStrategy: 'xpath'
     }
   }

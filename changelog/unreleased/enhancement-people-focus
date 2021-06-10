@@ -1,0 +1,8 @@
+Enhancement: Send focus to "Add people" btn after closing Add/Edit panels
+
+We've started sending the focus to "Add people" button after the `Add` panel in the people accordion has been closed.
+Also, when editing a share the focus jumps back to the "Edit" button in the respective share after cancelling or 
+confirming the action.
+
+https://github.com/owncloud/web/pull/5129
+https://github.com/owncloud/web/pull/5146

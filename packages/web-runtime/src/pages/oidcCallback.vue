@@ -8,25 +8,15 @@
     <div class="oc-login-card uk-position-center">
       <img class="oc-login-logo" :src="logoImg" alt="" :aria-hidden="true" />
       <div v-show="error" class="oc-login-card-body">
-        <h2 class="oc-login-card-title">
-          <translate>Authentication failed</translate>
-        </h2>
-        <p v-translate>
-          Please contact the administrator if this error persists.
-        </p>
+        <h2 v-translate class="oc-login-card-title">Authentication failed</h2>
+        <p v-translate>Please contact the administrator if this error persists.</p>
       </div>
       <div v-show="!error" class="oc-login-card-body">
-        <h3 class="oc-login-card-title">
-          <translate>Redirecting</translate>
-        </h3>
-        <p v-translate>
-          Please wait a while. You are being redirected.
-        </p>
+        <h3 v-translate class="oc-login-card-title">Redirecting</h3>
+        <p v-translate>Please wait a while. You are being redirected.</p>
       </div>
       <div class="oc-login-card-footer">
-        <p>
-          {{ configuration.theme.general.slogan }}
-        </p>
+        <p>{{ configuration.theme.general.slogan }}</p>
       </div>
     </div>
   </div>

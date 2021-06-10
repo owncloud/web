@@ -1,7 +1,7 @@
 <template>
-  <oc-table-simple top class="files-collaborators-collaborator">
+  <oc-table-simple top class="files-collaborators-collaborator" role="presentation">
     <oc-tr class="files-collaborators-collaborator-table-row-info">
-      <oc-td width="shrink">
+      <oc-td width="shrink" class="oc-py-rm oc-pr-s">
         <div key="collaborator-avatar-loaded">
           <avatar-image
             v-if="isUser"
@@ -9,7 +9,6 @@
             :width="48"
             :userid="collaborator.collaborator.name"
             :user-name="collaborator.collaborator.displayName"
-            :aria-label="$gettext('User')"
           />
           <div v-else key="collaborator-avatar-placeholder">
             <oc-icon
@@ -31,40 +30,45 @@
           </div>
         </div>
       </oc-td>
-      <oc-td>
+      <oc-td class="oc-py-rm oc-pr-s">
         <div class="uk-flex uk-flex-column uk-flex-center" :class="collaboratorListItemClass">
           <div class="oc-text-initial oc-mb-xs">
-            <span>
-              <span class="files-collaborators-collaborator-name oc-text-bold">
-                {{ collaborator.collaborator.displayName }}
-              </span>
-              <translate
-                v-if="isCurrentUser"
-                translate-comment="Indicator for current user in list of people"
-                class="oc-text-muted files-collaborators-collaborator-additional-info"
-              >
-                (me)
-              </translate>
-            </span>
-            <span
+            <p
+              class="files-collaborators-collaborator-name oc-text-bold oc-mb-rm"
+              v-text="collaborator.collaborator.displayName"
+            />
+            <p
+              v-if="isCurrentUser"
+              v-translate
+              translate-comment="Indicator for current user in list of people"
+              class="oc-text-muted files-collaborators-collaborator-additional-info oc-my-rm"
+            >
+              (me)
+            </p>
+            <p
               v-if="collaborator.collaborator.additionalInfo"
-              class="oc-text-muted files-collaborators-collaborator-additional-info"
+              class="oc-text-muted files-collaborators-collaborator-additional-info oc-my-rm"
               v-text="collaborator.collaborator.additionalInfo"
             />
           </div>
-          <oc-grid gutter="small">
-            <div v-if="!isCurrentUser">
+          <span :id="`collaborator-list-label-${shareId}`" v-translate class="oc-invisible-sr"
+            >Tags</span
+          >
+          <ul
+            class="collaborator-list oc-my-rm oc-pl-rm"
+            :aria-labelledby="`collaborator-list-label-${shareId}`"
+          >
+            <li v-if="!isCurrentUser" class="oc-py-rm">
               <oc-tag class="files-collaborators-collaborator-share-type">
                 <oc-icon :name="collaboratorTypeTagIcon" />
                 {{ collaboratorType(collaborator.shareType) }}
               </oc-tag>
-            </div>
-            <div v-if="$_reshareInformation">
+            </li>
+            <li v-if="$_reshareInformation" class="oc-py-rm">
               <oc-tag
                 :id="$_resharerToggleId"
                 class="files-collaborators-collaborator-reshare-information"
                 type="button"
-                :uk-tooltip="$gettext('Show resharer details')"
               >
                 <oc-icon name="repeat" />
                 <translate :translate-params="{ resharer: $_reshareInformation }">
@@ -80,9 +84,16 @@
                 class="oc-mt-s"
                 close-on-click
               >
-                <translate tag="h4">Shared by</translate>
-                <ul class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm">
-                  <li v-for="resharer in collaborator.resharers" :key="resharer.name">
+                <h4 :id="`resharer-info-${shareId}`" v-translate>Shared by</h4>
+                <ul
+                  class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm"
+                  :aria-labelledby="`resharer-info-${shareId}`"
+                >
+                  <li
+                    v-for="resharer in collaborator.resharers"
+                    :key="resharer.name"
+                    class="oc-py-rm"
+                  >
                     <div class="uk-flex uk-flex-middle uk-flex-left">
                       <avatar-image
                         class="oc-mr-s"
@@ -91,40 +102,42 @@
                         :user-name="resharer.displayName"
                       />
                       <div>
-                        <span class="files-collaborators-resharer-name oc-text-bold">{{
-                          resharer.displayName
-                        }}</span>
-                        <span
+                        <p
+                          class="files-collaborators-resharer-name oc-text-bold oc-my-rm"
+                          v-text="resharer.displayName"
+                        />
+                        <p
                           v-if="resharer.additionalInfo"
-                          class="oc-text-muted files-collaborators-resharer-additional-info"
-                          >({{ resharer.additionalInfo }})</span
-                        >
+                          class="oc-text-muted files-collaborators-resharer-additional-info oc-my-rm"
+                          v-text="resharer.additionalInfo"
+                        />
                       </div>
                     </div>
                   </li>
                 </ul>
               </oc-drop>
-            </div>
-            <div>
+            </li>
+            <li class="oc-py-rm">
               <oc-tag class="files-collaborators-collaborator-role">
                 <oc-icon :name="roleTagIcon" />
                 {{ originalRole.label }}
               </oc-tag>
-            </div>
-            <div v-if="collaborator.expires">
+            </li>
+            <li v-if="collaborator.expires" class="oc-py-rm">
               <oc-tag class="files-collaborators-collaborator-expires">
                 <oc-icon name="text-calendar" />
                 <translate :translate-params="{ expires: formDateFromNow(expirationDate) }">
                   Expires %{expires}
                 </translate>
               </oc-tag>
-            </div>
-            <div v-if="isIndirectShare">
+            </li>
+            <li v-if="isIndirectShare" class="oc-py-rm">
               <oc-tag
+                v-oc-tooltip="viaTooltip"
+                :aria-label="viaTooltip"
                 type="router-link"
                 class="files-collaborators-collaborator-follow-via"
                 :to="viaRouterParams"
-                :uk-tooltip="viaTooltip"
               >
                 <oc-icon name="exit_to_app" />
                 <span
@@ -132,16 +145,16 @@
                   v-text="viaLabel"
                 />
               </oc-tag>
-            </div>
-          </oc-grid>
+            </li>
+          </ul>
         </div>
       </oc-td>
-      <oc-td width="shrink" align-v="top">
+      <oc-td width="shrink" align-v="top" class="oc-py-rm oc-pr-s">
         <div class="uk-flex uk-flex-nowrap uk-flex-middle">
           <oc-button
             v-if="$_editButtonVisible"
-            :aria-label="$gettext('Edit share')"
-            :uk-tooltip="$gettext('Edit share')"
+            v-oc-tooltip="editShareHint"
+            :aria-label="editShareHint"
             appearance="raw"
             class="files-collaborators-collaborator-edit"
             @click="$emit('onEdit', collaborator)"
@@ -151,8 +164,8 @@
           <div>
             <oc-button
               v-if="$_deleteButtonVisible"
-              :aria-label="$gettext('Delete share')"
-              :uk-tooltip="$gettext('Delete share')"
+              v-oc-tooltip="deleteShareHint"
+              :aria-label="deleteShareHint"
               appearance="raw"
               class="files-collaborators-collaborator-delete"
               @click="$_removeShare"
@@ -208,6 +221,10 @@ export default {
       return shareTypes
     },
 
+    shareId() {
+      return this.collaborator.id
+    },
+
     $_resharerToggleId() {
       return 'collaborator-' + this.collaborator.collaborator.name + '-resharer-details-toggle'
     },
@@ -220,6 +237,24 @@ export default {
     },
     $_editButtonVisible() {
       return this.modifiable && !this.removalInProgress
+    },
+
+    editShareHint() {
+      const translated = this.$gettext('Edit share with %{ currentCollaborator }')
+      return this.$gettextInterpolate(
+        translated,
+        { currentCollaborator: this.collaborator.collaborator.displayName },
+        true
+      )
+    },
+
+    deleteShareHint() {
+      const translated = this.$gettext('Delete share with %{ currentCollaborator }')
+      return this.$gettextInterpolate(
+        translated,
+        { currentCollaborator: this.collaborator.collaborator.displayName },
+        true
+      )
     },
 
     isIndirectShare() {
@@ -262,11 +297,8 @@ export default {
     },
 
     originalRole() {
-      if (this.collaborator.role.name === 'advancedRole') {
-        return this.advancedRole
-      }
+      const role = this.displayRoles.find(r => r.name === this.collaborator.role.name)
 
-      const role = this.displayRoles[this.collaborator.role.name]
       if (role) {
         return role
       }
@@ -338,17 +370,20 @@ export default {
 }
 </script>
 
-<style scoped="scoped">
+<style lang="scss" scoped="scoped">
+.collaborator-list {
+  list-style-type: none;
+
+  li {
+    float: left;
+
+    &:not(:first-child) {
+      padding-left: 0.5rem;
+    }
+  }
+}
+
 /* FIXME: Move to ODS somehow */
-.files-collaborators-collaborator-table-row-top > td {
-  padding: 0 10px 3px 0;
-}
-.files-collaborators-collaborator-table-row-info > td {
-  padding: 0 10px 0 0;
-}
-.files-collaborators-collaborator-table-row-bottom > td {
-  padding: 3px 10px 0 0;
-}
 .files-collaborators-collaborator-via-label {
   max-width: 75%;
 }

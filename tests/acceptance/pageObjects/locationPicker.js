@@ -18,15 +18,7 @@ module.exports = {
     selectFolder: async function(target) {
       if (target.startsWith('/')) {
         // if the target is absolute, we need to go to the root element first
-        let firstBreadcrumbLink = null
-        await this.api.elements('xpath', this.elements.breadcrumbLinks, result => {
-          if (result.value && result.value.length > 0) {
-            firstBreadcrumbLink = result.value[0].ELEMENT
-          }
-        })
-        if (firstBreadcrumbLink !== null) {
-          await this.api.elementIdClick(firstBreadcrumbLink)
-        }
+        await this.waitForElementVisible('@firstBreadcrumbLink').click('@firstBreadcrumbLink')
       }
       const targetSplitted = target.replace(/^(\/|\\)+/, '').split('/')
       for (let i = 0; i < targetSplitted.length; i++) {
@@ -36,8 +28,8 @@ module.exports = {
     }
   },
   elements: {
-    breadcrumbLinks: {
-      selector: '//ul[contains(@class, "oc-breadcrumb-list")]/li/a',
+    firstBreadcrumbLink: {
+      selector: '//nav[contains(@class, "oc-breadcrumb")]/ol/li[1]/a',
       locateStrategy: 'xpath'
     },
     confirmBtn: {

@@ -71,7 +71,7 @@ Feature: Sort files/folders
 
   Scenario: Resources can be sorted by updated time
     When the user has browsed to the files page
-    And the user has set the sort order of the "Updated" column to ascending order
+    And the user has set the sort order of the "Modified" column to ascending order
     Then these resources should be listed in the folder "test_sort" on the webUI
       | entry_name |
       | a          |

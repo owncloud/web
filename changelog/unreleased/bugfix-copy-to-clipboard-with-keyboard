@@ -1,0 +1,5 @@
+Bugfix: Keyboard navigation for copy to clipboard
+
+We've fixed that the buttons for copying (private/public) links to the clipboard were not usable via keyboard.
+
+https://github.com/owncloud/web/pull/5147

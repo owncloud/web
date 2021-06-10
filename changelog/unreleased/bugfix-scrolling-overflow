@@ -1,0 +1,8 @@
+Bugfix: Prevent scrolling issues
+
+In cases where the browser-window space was not enough to render all views
+the ui ended up with weird scrolling behavior.
+
+This has been fixed by restructuring the dom elements and giving them proper styles.
+
+https://github.com/owncloud/web/pull/5131
