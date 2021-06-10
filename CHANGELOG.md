@@ -8,10 +8,82 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Keyboard navigation for copy to clipboard: [#5147](https://github.com/owncloud/web/pull/5147)
+* Bugfix - Hide left sidebar navigation when switching routes: [#5025](https://github.com/owncloud/web/pull/5025)
+* Bugfix - Hide "Create new public link" button: [#5126](https://github.com/owncloud/web/pull/5126)
+* Bugfix - Add docs link & fix translations on error page: [#5034](https://github.com/owncloud/web/pull/5034)
+* Bugfix - Make skip to main content link visible: [#5118](https://github.com/owncloud/web/pull/5118)
 * Bugfix - Add index route for the OC10 integration: [#5201](https://github.com/owncloud/web/pull/5201)
+* Bugfix - Prevent scrolling issues: [#5131](https://github.com/owncloud/web/pull/5131)
+* Bugfix - Resizeable html container: [#5052](https://github.com/owncloud/web/pull/5052)
+* Bugfix - Translated user menu items: [#5042](https://github.com/owncloud/web/pull/5042)
+* Bugfix - Make sure IDs in HTML are unique: [#5028](https://github.com/owncloud/web/pull/5028)
+* Change - Use slots in the navigation sidebar: [#5105](https://github.com/owncloud/web/pull/5105)
+* Enhancement - Improve a11y colors: [#5138](https://github.com/owncloud/web/pull/5138)
+* Enhancement - Accessible status indicators: [#5182](https://github.com/owncloud/web/pull/5182)
+* Enhancement - Use a proper definition list for the account settings page: [#5012](https://github.com/owncloud/web/pull/5012)
+* Enhancement - Update owncloud Design System to v7.1.2: [#5002](https://github.com/owncloud/web/pull/5002)
+* Enhancement - Button appearance: [#5053](https://github.com/owncloud/web/pull/5053)
+* Enhancement - Confirmation message when copying links: [#5147](https://github.com/owncloud/web/pull/5147)
+* Enhancement - Improve accessibility for the files sidebar: [#5000](https://github.com/owncloud/web/pull/5000)
+* Enhancement - Improve a11y in the files sidebar peoples & shares section: [#5034](https://github.com/owncloud/web/pull/5034)
+* Enhancement - Focus breadcrumb on route change: [#5166](https://github.com/owncloud/web/pull/5166)
+* Enhancement - Enable focus trap in oc-modal: [#5013](https://github.com/owncloud/web/pull/5013)
+* Enhancement - Hide left sidebar if no navitems are present: [#5149](https://github.com/owncloud/web/pull/5149)
+* Enhancement - Do not reset file selection when cancelling batch delete: [#5107](https://github.com/owncloud/web/pull/5107)
+* Enhancement - Move breadcrumbs out of location picker heading: [#5020](https://github.com/owncloud/web/pull/5020)
+* Enhancement - Move hint in the Location picker under breadcrumbs: [#5008](https://github.com/owncloud/web/pull/5008)
+* Enhancement - Improve accessibility on new file menu: [#5058](https://github.com/owncloud/web/pull/5058)
+* Enhancement - OcTooltip: [#5055](https://github.com/owncloud/web/pull/5055)
+* Enhancement - Send focus to "Add people" btn after closing Add/Edit panels: [#5129](https://github.com/owncloud/web/pull/5129)
+* Enhancement - Remove autoclose on notifications: [#5040](https://github.com/owncloud/web/pull/5040)
+* Enhancement - Use `oc-select` for role select: [#4937](https://github.com/owncloud/web/pull/4937)
+* Enhancement - Add focus trap to left sidebar: [#5027](https://github.com/owncloud/web/pull/5027)
+* Enhancement - Improve accessibility on trash bin: [#5046](https://github.com/owncloud/web/pull/5046)
+* Enhancement - Improve accessibility on user menu: [#5010](https://github.com/owncloud/web/pull/5010)
 
 Details
 -------
+
+* Bugfix - Keyboard navigation for copy to clipboard: [#5147](https://github.com/owncloud/web/pull/5147)
+
+   We've fixed that the buttons for copying (private/public) links to the clipboard were not
+   usable via keyboard.
+
+   https://github.com/owncloud/web/pull/5147
+
+* Bugfix - Hide left sidebar navigation when switching routes: [#5025](https://github.com/owncloud/web/pull/5025)
+
+   On smaller screens, the left sidebar containing the extension navigation is collapsed. We've
+   fixed that when the user expanded the sidebar and navigated to a different route the sidebar is
+   collapsed again.
+
+   https://github.com/owncloud/web/pull/5025
+
+* Bugfix - Hide "Create new public link" button: [#5126](https://github.com/owncloud/web/pull/5126)
+
+   The button to create new public links was visible even if the user lacked the permissions to
+   create one. It is now being hidden unless the user is allowed to create a share of the respective
+   file.
+
+   https://github.com/owncloud/web/pull/5126
+
+* Bugfix - Add docs link & fix translations on error page: [#5034](https://github.com/owncloud/web/pull/5034)
+
+   The MissingConfigPage had a translated paragraph that didn't work because of an presumably
+   unallowed `<br/>` tag inside the text.
+
+   Also, the link to the GitHub repo was replace with a link to the web docs and public rocket chat.
+
+   https://github.com/owncloud/web/pull/5034
+
+* Bugfix - Make skip to main content link visible: [#5118](https://github.com/owncloud/web/pull/5118)
+
+   We've fixed the z-index of the skip to main content link so that it is not hidden under different
+   content anymore and is again visible on focus, with a visible focus border.
+
+   https://github.com/owncloud/web/pull/5118
+   https://github.com/owncloud/web/pull/5167
 
 * Bugfix - Add index route for the OC10 integration: [#5201](https://github.com/owncloud/web/pull/5201)
 
@@ -22,6 +94,236 @@ Details
 
    https://github.com/owncloud/core/issues/38799
    https://github.com/owncloud/web/pull/5201
+
+* Bugfix - Prevent scrolling issues: [#5131](https://github.com/owncloud/web/pull/5131)
+
+   In cases where the browser-window space was not enough to render all views the ui ended up with
+   weird scrolling behavior.
+
+   This has been fixed by restructuring the dom elements and giving them proper styles.
+
+   https://github.com/owncloud/web/pull/5131
+
+* Bugfix - Resizeable html container: [#5052](https://github.com/owncloud/web/pull/5052)
+
+   We removed a critical accessibility offense by removing the hardcoded maximum-scale and
+   allowing for user-scalable viewsizes.
+
+   https://github.com/owncloud/web/pull/5052
+
+* Bugfix - Translated user menu items: [#5042](https://github.com/owncloud/web/pull/5042)
+
+   Some of the user menu items were not correctly translated, which is now fixed.
+
+   https://github.com/owncloud/web/pull/5042
+
+* Bugfix - Make sure IDs in HTML are unique: [#5028](https://github.com/owncloud/web/pull/5028)
+
+   Quick action button IDs were repeated in every row of the file table, which isn't allowed in HTML
+   (IDs must be unique per document). By changing to classes, this offense was resolved.
+
+   The same goes for IDs in the people shares part of the sidebar where IDs are now appended with the
+   share ID, which is necessary since they need to be both unique and referenced by ID for
+   accessibility reasons.
+
+   https://github.com/owncloud/web/pull/5028
+   https://github.com/owncloud/web/pull/5148
+
+* Change - Use slots in the navigation sidebar: [#5105](https://github.com/owncloud/web/pull/5105)
+
+   In the new sidebar content is defined solely via slots. We've moved all the content into those
+   slots so that the sidebar still gets displayed correctly.
+
+   https://github.com/owncloud/web/pull/5105
+
+* Enhancement - Improve a11y colors: [#5138](https://github.com/owncloud/web/pull/5138)
+
+   To get a11y compliant it's required that colors match a given contrast ratio to it's
+   back-/fore-/ground. We improved this on:
+
+   - all ODS components - all oc-color variables - oc-star in sidebar
+
+   https://github.com/owncloud/web/pull/5138
+
+* Enhancement - Accessible status indicators: [#5182](https://github.com/owncloud/web/pull/5182)
+
+   To make both the clickable (button) and the visible (icon) part of the status indicators in the
+   files table accessible, we have added a description, in addition to the tooltip and
+   `aria-label`.
+
+   https://github.com/owncloud/web/pull/5182
+
+* Enhancement - Use a proper definition list for the account settings page: [#5012](https://github.com/owncloud/web/pull/5012)
+
+   https://github.com/owncloud/web/pull/5012
+
+* Enhancement - Update owncloud Design System to v7.1.2: [#5002](https://github.com/owncloud/web/pull/5002)
+
+   - Lots of updates regarding accessibility topics - Removal of home icon in breadcrumbs,
+   changed to "All files" link as breadcrumb root - Added aria-labels to all landmarks in sidebar
+   and proper logo-alt attribute to image in sidebar
+
+   https://github.com/owncloud/web/pull/5002
+   https://github.com/owncloud/web/pull/5044
+   https://github.com/owncloud/web/pull/5074
+   https://github.com/owncloud/web/pull/5186
+   https://github.com/owncloud/web/pull/5189
+
+* Enhancement - Button appearance: [#5053](https://github.com/owncloud/web/pull/5053)
+
+   Changed the appearance of the "accept/decline share" buttons in the "Shared With Me" file list
+   so they actually look like buttons.
+
+   Also changed the "Clear selection" button in the files table batch actions from `raw` to
+   `outline` appearance.
+
+   https://github.com/owncloud/web/pull/5053
+   https://github.com/owncloud/web/pull/5148
+
+* Enhancement - Confirmation message when copying links: [#5147](https://github.com/owncloud/web/pull/5147)
+
+   We've added confirmation messages (toasts) when a private or public link is copied to the
+   clipboard.
+
+   https://github.com/owncloud/web/pull/5147
+
+* Enhancement - Improve accessibility for the files sidebar: [#5000](https://github.com/owncloud/web/pull/5000)
+
+   We've did several improvements to enhance the accessibility on the files sidebar: -
+   Transformed the file name to a h2 element - Transformed the "Open folder"-action to a link
+   instead of a button - Transformed the favorite-star to a button-element - Adjusted aria-label
+   of the favorite-star to describe what it does instead of its current state - Added a more
+   descriptive close button label - Clicking outside of the sidebar now closes it - Removed the
+   aria-label on the action buttons as they already include proper labels - Added a hint for screen
+   readers if an action opens a new window/tab
+
+   https://github.com/owncloud/web/pull/5000
+
+* Enhancement - Improve a11y in the files sidebar peoples & shares section: [#5034](https://github.com/owncloud/web/pull/5034)
+
+   We've did several improvements to enhance the accessibility on the files sidebar: - Gave
+   `role="presentation" to the collaborator avatar - Refactored `<span>` and `<div>` tags into
+   `<p>` tags and unified translations a bit - Enhanced hints in the collaborator quick action
+   buttons with collaborator name - Hide private links if the capability is not enabled - Set
+   avatar-images to `:aria-hidden="true"` since they're only visual elements and can be hidden
+   from screenreaders - Changed `<section>` wrapper around private link shares - Removed
+   `<section>` wrapper around public link shares - Removed `<section>` wrapper around
+   collaborators - Added screenreader-only explain texts regarding collaborator/share
+   ownership - Added aria-label for share receiver section - Worked on unifying the way we handle
+   translations: Focus on v-translate and $gettext() - Turn tags into `<ul> & <li>` list, add
+   aria-labelledby to both tag list and resharer tag list - Translated "Open with $appName" for
+   sidebar quick actions
+
+   https://github.com/owncloud/web/pull/5034
+   https://github.com/owncloud/web/pull/5043
+   https://github.com/owncloud/web/pull/5121
+
+* Enhancement - Focus breadcrumb on route change: [#5166](https://github.com/owncloud/web/pull/5166)
+
+   We now focus the current breadcrumb item when navigating to another page and announce the
+   amount of files and folders in the folder the user has navigated to.
+
+   https://github.com/owncloud/web/pull/5166
+
+* Enhancement - Enable focus trap in oc-modal: [#5013](https://github.com/owncloud/web/pull/5013)
+
+   After the recent changes in ODS, the oc-modal can now use a focus-trap which is a feature needed
+   for accessibility-reasons.
+
+   https://github.com/owncloud/web/pull/5013
+
+* Enhancement - Hide left sidebar if no navitems are present: [#5149](https://github.com/owncloud/web/pull/5149)
+
+   For extensions / pages without nav items and public link pages, we now hide the left sidebar to
+   not confuse screen readers and give more screen space for the content.
+
+   https://github.com/owncloud/web/pull/5149
+
+* Enhancement - Do not reset file selection when cancelling batch delete: [#5107](https://github.com/owncloud/web/pull/5107)
+
+   We've removed the reset selection method call when cancelling batch delete. If the user now
+   cancels the delete dialog, the file selection stays as it was before displaying the dialog.
+
+   https://github.com/owncloud/web/pull/5107
+
+* Enhancement - Move breadcrumbs out of location picker heading: [#5020](https://github.com/owncloud/web/pull/5020)
+
+   We've moved the breadcrumbs element out of the location picker heading and moved it under it.
+   The heading is now also reflecting the page title. We've also decreased the size of both
+   breadcrumbs and action buttons so that they fit better together.
+
+   https://github.com/owncloud/web/pull/5020
+
+* Enhancement - Move hint in the Location picker under breadcrumbs: [#5008](https://github.com/owncloud/web/pull/5008)
+
+   We've moved the hint that is describing how to use the Location picker from sidebar under the
+   breadcrumbs. There is navigation of the Files extension displayed in the sidebar now instead.
+
+   https://github.com/owncloud/web/pull/5008
+
+* Enhancement - Improve accessibility on new file menu: [#5058](https://github.com/owncloud/web/pull/5058)
+
+   We now use buttons instead of a-tags in the new file menu. Also fixed the double-focus per item
+   when navigating via tab.
+
+   https://github.com/owncloud/web/pull/5058
+
+* Enhancement - OcTooltip: [#5055](https://github.com/owncloud/web/pull/5055)
+
+   We've changed the tooltip implementation to use oc-tooltip directive from ODS instead of
+   uikit's.
+
+   https://github.com/owncloud/web/issues/4654
+   https://github.com/owncloud/web/issues/2623
+   https://github.com/owncloud/web/issues/4597
+   https://github.com/owncloud/web/issues/4332
+   https://github.com/owncloud/web/issues/4300
+   https://github.com/owncloud/web/issues/5155
+   https://github.com/owncloud/web/pull/5055
+
+* Enhancement - Send focus to "Add people" btn after closing Add/Edit panels: [#5129](https://github.com/owncloud/web/pull/5129)
+
+   We've started sending the focus to "Add people" button after the `Add` panel in the people
+   accordion has been closed. Also, when editing a share the focus jumps back to the "Edit" button
+   in the respective share after cancelling or confirming the action.
+
+   https://github.com/owncloud/web/pull/5129
+   https://github.com/owncloud/web/pull/5146
+
+* Enhancement - Remove autoclose on notifications: [#5040](https://github.com/owncloud/web/pull/5040)
+
+   The autoclose is now being handled in the design system component. The timeout can be set via
+   property.
+
+   https://github.com/owncloud/web/pull/5040
+
+* Enhancement - Use `oc-select` for role select: [#4937](https://github.com/owncloud/web/pull/4937)
+
+   We've used the new `oc-select` component from ODS for selecting role in people and public links
+   accordions in the right sidebar. We are using this component to enable keyboard navigation
+   when selecting the role.
+
+   https://github.com/owncloud/web/pull/4937
+
+* Enhancement - Add focus trap to left sidebar: [#5027](https://github.com/owncloud/web/pull/5027)
+
+   We've added a focus trap to the left sidebar on smaller resolutions when it's collapsible. If
+   the sidebar is opened and focused, the focus stays within the sidebar.
+
+   https://github.com/owncloud/web/pull/5027
+
+* Enhancement - Improve accessibility on trash bin: [#5046](https://github.com/owncloud/web/pull/5046)
+
+   Add more context to the empty trash bin button text and only render it, if resources are present.
+
+   https://github.com/owncloud/web/pull/5046
+
+* Enhancement - Improve accessibility on user menu: [#5010](https://github.com/owncloud/web/pull/5010)
+
+   Wrapped the user menu button in a nav element and added an aria-label which describes it as main
+   navigation.
+
+   https://github.com/owncloud/web/pull/5010
 
 Changelog for ownCloud Web [3.2.0] (2021-05-31)
 =======================================
@@ -154,11 +456,14 @@ Details
    sidebar - Make skip-to-main button translate-able - Update searchbar label string - Renamed
    "personal files" to "all files" in routes (soft rename, due to changes in the future) - Updated
    ODS to v6.0.3, making row heights theme-able and bringing a more accessible avatar component
-   that improves loading of users' profile pictures
+   that improves loading of users' profile pictures - Translate quick action labels/tooltips
+   properly - Added a note about actions being available above the file list to the live region
+   update for selection
 
    https://github.com/owncloud/web/pull/4965
    https://github.com/owncloud/web/pull/4975
-   https://github.com/owncloud/web/pull/5098
+   https://github.com/owncloud/web/pull/5030
+   https://github.com/owncloud/web/pull/5088
 
 * Enhancement - Implement proper direct delete: [#4991](https://github.com/owncloud/web/pull/4991)
 
