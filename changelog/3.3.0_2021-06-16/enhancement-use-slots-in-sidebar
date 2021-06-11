@@ -1,0 +1,5 @@
+Enhancement: Use slots in the navigation sidebar
+
+Content in the new OcSidebarNav is defined solely via slots. We've moved all the content into those slots.
+
+https://github.com/owncloud/web/pull/5105
