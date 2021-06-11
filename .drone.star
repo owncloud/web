@@ -727,7 +727,9 @@ def main(ctx):
     pipelines = before + stages + after
 
     deploys = example_deploys(ctx)
-    dependsOn(pipelines, deploys)
+    if ctx.build.event != "cron":
+        # run example deploys on cron even if some prior pipelines fail
+        dependsOn(pipelines, deploys)
 
     return pipelines + deploys + checkStarlark()
 
