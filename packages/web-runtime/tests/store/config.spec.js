@@ -1,8 +1,16 @@
+import Vue from 'vue'
+import Vuex from 'vuex'
+import { createStore } from 'vuex-extensions'
+
 import { loadTheme } from 'web-runtime/src/helpers/theme'
-import store from 'web-runtime/src/store'
+import Store from 'web-runtime/src/store'
 import { keysDeep } from 'web-pkg/src/utils/object'
 import get from 'lodash-es/get'
 import difference from 'lodash-es/difference'
+
+Vue.use(Vuex)
+
+const store = createStore(Vuex.Store, { ...Store })
 
 describe('config theme bootstrap', () => {
   const initialStoreTheme = { ...store.getters.configuration.theme }

@@ -5,8 +5,6 @@ import OidcCallbackPage from '../pages/oidcCallback.vue'
 import AccessDeniedPage from '../pages/accessDenied.vue'
 import Account from '../pages/account.vue'
 
-import store from '../store'
-
 Vue.use(Router)
 
 // just a dummy function to trick gettext tools
@@ -71,6 +69,7 @@ const router = new Router({
 })
 
 router.beforeEach(function(to, from, next) {
+  const store = Vue.$store
   const isAuthenticated = store.getters.isAuthenticated
   let authRequired = true
   if (to.meta.auth === false) {

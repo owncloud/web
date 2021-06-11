@@ -1,0 +1,5 @@
+Bugfix: Do not call Vuex create store multiple times
+
+We've moved the create Vuex store logic into the index file of Web runtime to prevent initialising the store multiple times.
+
+https://github.com/owncloud/web/pull/5254
