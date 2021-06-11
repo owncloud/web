@@ -8,6 +8,8 @@ localVue.use(DesignSystem)
 
 config.showDeprecationWarnings = false
 
+const OcTooltip = jest.fn()
+
 const selectors = {
   notificationBell: '#oc-notification-bell',
   ocIconStub: 'oc-icon-stub',
@@ -78,35 +80,64 @@ function getStoreWithLinkActions() {
   ])
 }
 
+function getWrapper(mocks) {
+  return shallowMount(Notifications, {
+    stubs,
+    mocks,
+    directives: {
+      OcTooltip
+    }
+  })
+}
+
+function getMountWrapper(mocks) {
+  return mount(Notifications, {
+    localVue,
+    mocks,
+    directives: {
+      OcTooltip
+    }
+  })
+}
+
+function getMountWrapperWithMockMethods(mocks, mockMethods) {
+  return mount(Notifications, {
+    localVue,
+    mocks,
+    methods: mockMethods,
+    directives: {
+      OcTooltip
+    }
+  })
+}
+
 describe('Notification component', () => {
   describe('notification bell', () => {
     const store = getStoreWithEmptyActions()
-    const mocks = {
-      $store: store
-    }
     let wrapper
     beforeEach(() => {
       store.reset()
-      wrapper = shallowMount(Notifications, { stubs, mocks })
+      wrapper = getWrapper({
+        $store: store
+      })
     })
     it('displays notification bell', () => {
       const bell = wrapper.find(selectors.notificationBell)
       expect(bell.exists()).toBeTruthy()
       expect(bell.find(selectors.ocIconStub).exists()).toBeTruthy()
       expect(bell.find(selectors.ocIconStub).attributes('name')).toBe('bell')
-      expect(bell.attributes('uk-tooltip')).toBe('Notifications')
       expect(bell.attributes('aria-label')).toBe('Notifications')
     })
   })
+
   describe('when active notification contains a message', () => {
     const store = getStoreWithEmptyActions()
-    const mocks = {
-      $store: store
-    }
     let wrapper
     beforeEach(() => {
       store.reset()
-      wrapper = shallowMount(Notifications, { stubs, mocks })
+      wrapper = getWrapper({
+        $store: store
+      })
     })
     it('displays the notification message', () => {
       const messageElement = wrapper.find(selectors.message)
@@ -125,11 +156,7 @@ describe('Notification component', () => {
       let wrapper, store
       beforeEach(() => {
         store = getStoreWithEmptyActions()
-        const mocks = { $store: store }
-        wrapper = mount(Notifications, {
-          localVue,
-          mocks
-        })
+        wrapper = getMountWrapper({ $store: store })
         store.reset()
       })
       it('does not displays action button', () => {
@@ -151,7 +178,8 @@ describe('Notification component', () => {
         })
       })
     })
-    describe('when active notification action has a action', () => {
+
+    describe('when active notification action has an action', () => {
       let store, wrapper
       const mockMethods = {
         executeRequest: jest.fn(),
@@ -159,13 +187,8 @@ describe('Notification component', () => {
       }
       beforeEach(() => {
         store = getStoreWithSingleAction()
+        wrapper = getMountWrapperWithMockMethods({ $store: store }, mockMethods)
         store.reset()
-        const mocks = { $store: store }
-        wrapper = mount(Notifications, {
-          localVue,
-          methods: mockMethods,
-          mocks
-        })
       })
       it('displays the action button with action label', () => {
         const actionButton = wrapper.find(selectors.actionButton)
@@ -184,6 +207,7 @@ describe('Notification component', () => {
       })
     })
   })
+
   describe('active notifications links', () => {
     let store
     afterEach(() => {
@@ -191,33 +215,25 @@ describe('Notification component', () => {
     })
     it('does not display link if no link is given', () => {
       store = getStoreWithEmptyActions()
-      const mocks = {
-        $store: store
-      }
-      const wrapper = shallowMount(Notifications, { stubs, mocks })
+      const wrapper = getWrapper({ $store: store })
       const linkButton = wrapper.find(selectors.link)
       expect(linkButton.exists()).toBeFalsy()
     })
     it('displays link if a link is given', () => {
       store = getStoreWithLinkActions()
-      const mocks = {
-        $store: store
-      }
-      const wrapper = shallowMount(Notifications, { stubs, mocks })
+      const wrapper = getWrapper({ $store: store })
       const linkButton = wrapper.find(selectors.link)
       expect(linkButton.exists()).toBeTruthy()
       expect(linkButton.text()).toBe('http://test.link')
     })
   })
+
   describe('when active notification has multiple notifications', () => {
     let store, wrapper
     beforeEach(() => {
       store = getStoreWithTwoActiveNotifications()
       store.reset()
-      const mocks = {
-        $store: store
-      }
-      wrapper = shallowMount(Notifications, { stubs, mocks })
+      wrapper = getWrapper({ $store: store })
     })
     it('displays all notifications from active notifications', () => {
       const subject = wrapper.findAll(selectors.subject)
