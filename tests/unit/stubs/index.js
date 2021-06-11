@@ -4,5 +4,7 @@ export default {
   'oc-icon': true,
   'oc-checkbox': true,
   'oc-button': true,
-  'oc-breadcrumb': true
+  'oc-breadcrumb': true,
+  'oc-drop': true,
+  'avatar-image': true
 }

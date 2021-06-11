@@ -6826,6 +6826,11 @@ lodash.clone@3.0.3:
     lodash._bindcallback "^3.0.0"
     lodash._isiterateecall "^3.0.0"
 
+lodash.clonedeep@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
+  integrity sha1-4j8/nE+Pvd6HJSnBBxhXoIblzO8=
+
 lodash.defaults@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/lodash.defaults/-/lodash.defaults-4.2.0.tgz#d09178716ffea4dde9e5fb7b37f6f0802274580c"
@@ -10878,6 +10883,13 @@ vuex-extensions@^1.1.5:
   version "1.1.5"
   resolved "https://registry.yarnpkg.com/vuex-extensions/-/vuex-extensions-1.1.5.tgz#d1664aabdc720057c945993324de9bc34d871487"
   integrity sha512-1Jfi8o6coel3jj20k6SaEtinddzS0jEG41lyyWmodAorXoN85AzuYa4oou71e99B6V+Y+gSVUysa3yHVhWpTrQ==
+
+vuex-mock-store@0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/vuex-mock-store/-/vuex-mock-store-0.0.8.tgz#fc734173b83fe39e813e714b32fd7dbca674f149"
+  integrity sha512-pRCNdUuS4KRtycDuJKLNFqSJB8vb2XeVilM+QUVPM5Tp6HKFSdAVOmpbwWoMbEnPnJEypkb7s6Ee4fFxp1b32g==
+  dependencies:
+    lodash.clonedeep "^4.5.0"
 
 vuex-persist@2.0.1:
   version "2.0.1"
