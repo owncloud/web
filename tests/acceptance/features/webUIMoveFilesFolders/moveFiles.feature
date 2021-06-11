@@ -16,7 +16,7 @@ Feature: move files
     Then the error message 'The name cannot contain "/"' should be displayed on the webUI dialog prompt
     And file "lorem.txt" should be listed on the webUI
 
-  @smokeTest
+  @smokeTest @ocisSmokeTest
   Scenario: move a file into a folder
     Given user "Alice" has logged in using the webUI
     And user "Alice" has uploaded file "data.tar.gz" to "data.tar.gz"
@@ -47,7 +47,7 @@ Feature: move files
     When the user tries to move file "lorem.txt" into folder "simple-folder" using the webUI
     Then the error message with header 'An error occurred while moving lorem.txt' should be displayed on the webUI
 
-   @smokeTest @disablePreviews
+   @smokeTest @ocisSmokeTest  @disablePreviews
   Scenario: Move multiple files at once
     Given user "Alice" has logged in using the webUI
     And user "Alice" has uploaded file "data.zip" to "data.zip"

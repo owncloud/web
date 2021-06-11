@@ -54,7 +54,7 @@ Feature: files and folders can be deleted from the trashbin
     When the user deletes folder "Folder,With,Comma" using the webUI
     Then folder "Folder,With,Comma" should not be listed on the webUI
 
-  @skipOnOC10 @issue-4582
+  @ocisSmokeTest @skipOnOC10 @issue-4582
   Scenario: Select some files and delete from trashbin in a batch
     When the user batch deletes these files using the webUI
       | name          |

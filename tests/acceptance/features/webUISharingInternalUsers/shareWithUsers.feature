@@ -280,7 +280,7 @@ Feature: Sharing files and folders with internal users
       | Editor               | Editor               | read,update,create,delete,share | read,update,share |
       | Advanced permissions | Advanced permissions | read                            | read              |
 
-  @skipOnOC10
+  @skipOnOC10 @ocisSmokeTest
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
   Scenario Outline: Share files/folders with special characters in their name
     Given user "Brian" has created folder "Sample,Folder,With,Comma"

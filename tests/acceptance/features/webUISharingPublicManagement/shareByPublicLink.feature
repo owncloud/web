@@ -8,7 +8,7 @@ Feature: Public link share management
     Given user "Alice" has been created with default attributes and without skeleton files
     And user "Alice" has created folder "/simple-folder"
 
-
+  @ocisSmokeTest
   Scenario: public link share shows up on shared-with-others page
     Given user "Alice" has logged in using the webUI
     And user "Alice" has shared folder "simple-folder" with link with "read" permissions
@@ -86,7 +86,7 @@ Feature: Public link share management
     And the public accesses the last created public link using the webUI
     Then the content of the file shared by the last public link should be the same as "lorem.txt"
 
-
+  @ocisSmokeTest
   Scenario: user browses to public link share using copy link button
     Given user "Alice" has created file "simple-folder/lorem.txt"
     And user "Alice" has created a public link with following settings

@@ -6,7 +6,7 @@ Feature: copy files and folders
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files
 
-  @smokeTest
+  @smokeTest @ocisSmokeTest
   Scenario: copy a file and a folder into a folder
     Given user "Alice" has uploaded file "data.zip" to "data.zip"
     And user "Alice" has created folder "simple-empty-folder"
@@ -32,7 +32,7 @@ Feature: copy files and folders
     When the user tries to copy file "strängé filename (duplicate #2 &).txt" into folder "strängé नेपाली folder" using the webUI
     Then the error message with header 'An error occurred while copying strängé filename (duplicate #2 &).txt' should be displayed on the webUI
 
-  @smokeTest
+  @smokeTest @ocisSmokeTest
   Scenario: Copy multiple files at once
     Given user "Alice" has uploaded file "data.zip" to "data.zip"
     And user "Alice" has created file "lorem.txt"
