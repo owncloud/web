@@ -108,7 +108,7 @@ import pathUtil from 'path'
 import isEmpty from 'lodash-es/isEmpty'
 
 import Mixins from '../mixins'
-import MixinFileActions from '../mixins/fileActions'
+import MixinFileActions, { EDITOR_MODE_CREATE } from '../mixins/fileActions'
 import MixinRoutes from '../mixins/routes'
 import MixinScrollToResource from '../mixins/filesListScrolling'
 import { buildResource } from '../helpers/resources'
@@ -419,7 +419,7 @@ export default {
         if (this.newFileAction) {
           const fileId = resource.fileInfo['{http://owncloud.org/ns}fileid']
 
-          this.$_fileActions_openEditor(this.newFileAction, path, fileId)
+          this.$_fileActions_openEditor(this.newFileAction, path, fileId, EDITOR_MODE_CREATE)
           this.hideModal()
 
           return

@@ -24,6 +24,9 @@ const actionsMixins = [
   'delete'
 ]
 
+export const EDITOR_MODE_EDIT = 'edit'
+export const EDITOR_MODE_CREATE = 'create'
+
 export default {
   mixins: [Copy, Delete, Download, Favorite, Fetch, Move, Navigate, Rename, Restore],
   computed: {
@@ -53,7 +56,8 @@ export default {
             )
           },
           icon: this.apps.meta[editor.app].icon,
-          handler: item => this.$_fileActions_openEditor(editor, item.path, item.id),
+          handler: item =>
+            this.$_fileActions_openEditor(editor, item.path, item.id, EDITOR_MODE_EDIT),
           isEnabled: ({ resource }) => {
             if (editor.routes?.length > 0 && !checkRoute(editor.routes, this.$route.name)) {
               return false
@@ -74,25 +78,26 @@ export default {
   methods: {
     ...mapActions(['openFile']),
 
-    $_fileActions_openEditor(editor, filePath, fileId) {
+    $_fileActions_openEditor(editor, filePath, fileId, mode) {
       if (editor.handler) {
         return editor.handler({
           config: this.configuration,
           extensionConfig: editor.config,
           filePath,
-          fileId
+          fileId,
+          mode
         })
       }
 
       // TODO: Refactor in the store
       this.openFile({
-        filePath: filePath
+        filePath
       })
 
       if (editor.newTab) {
         const path = this.$router.resolve({
           name: editor.routeName,
-          params: { filePath: filePath }
+          params: { filePath, fileId, mode }
         }).href
         const target = `${editor.routeName}-${filePath}`
         const win = window.open(path, target)
@@ -103,15 +108,14 @@ export default {
         return
       }
 
-      const routeName = editor.routeName || editor.app
-      const params = {
-        filePath,
-        contextRouteName: this.$route.name
-      }
-
       this.$router.push({
-        name: routeName,
-        params
+        name: editor.routeName || editor.app,
+        params: {
+          filePath,
+          fileId,
+          mode,
+          contextRouteName: this.$route.name
+        }
       })
     },
 

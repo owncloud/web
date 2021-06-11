@@ -1,0 +1,8 @@
+Enhancement: File editor mode
+
+We've added a parameter called `mode` to the different ways of opening a file editor.
+The mode can be `edit` or `create` and reflects whether the file editor was opened
+in an editing mode or in a creation mode.
+
+https://github.com/owncloud/web/issues/5226
+https://github.com/owncloud/web/pull/5256
