@@ -7,7 +7,7 @@
       <div class="uk-hidden@l">
         <oc-button
           appearance="raw"
-          class="oc-app-navigation-toggle"
+          class="oc-m-s oc-app-navigation-toggle"
           :aria-label="$gettext('Open navigation menu')"
           @click="toggleAppNavigationVisibility"
         >
