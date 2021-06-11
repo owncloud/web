@@ -88,8 +88,12 @@ export default {
         if (file.type === 'folder') {
           return 'folder'
         }
-        const icon = fileTypeIconMappings[file.extension.toLowerCase()]
-        if (icon) return `${icon}`
+        if (typeof file.extension === 'string') {
+          const icon = fileTypeIconMappings[file.extension.toLowerCase()]
+          if (icon) {
+            return `${icon}`
+          }
+        }
       }
       return 'file'
     },
