@@ -29,10 +29,13 @@
       <span class="oc-text-bold files-collaborators-autocomplete-username" v-text="item.label" />
       <span
         v-if="item.value.shareWithAdditionalInfo"
-        class="oc-text-muted"
+        class="oc-text-muted files-collaborators-autocomplete-additional-info"
         v-text="item.value.shareWithAdditionalInfo"
       />
-      <div v-text="collaboratorType(item.value.shareType)" />
+      <div
+        class="files-collaborators-autocomplete-share-type"
+        v-text="collaboratorType(item.value.shareType)"
+      />
     </div>
   </div>
 </template>
