@@ -156,7 +156,7 @@
             v-oc-tooltip="editShareHint"
             :aria-label="editShareHint"
             appearance="raw"
-            class="files-collaborators-collaborator-edit"
+            class="files-collaborators-collaborator-edit oc-mr-xs"
             @click="$emit('onEdit', collaborator)"
           >
             <oc-icon name="edit" />
