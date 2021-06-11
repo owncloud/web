@@ -50,7 +50,7 @@ export const store = createStore(Vuex.Store, {
         highlightedFile: () => null
       },
       mutations: {
-        UPSERT_RESOURCE: (state, resource) => {
+        UPDATE_RESOURCE: (state, resource) => {
           state.resource = resource
         }
       },

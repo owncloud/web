@@ -160,7 +160,7 @@ export default {
       'LOAD_FILES',
       'SELECT_RESOURCES',
       'CLEAR_CURRENT_FILES_LIST',
-      'UPSERT_RESOURCE'
+      'UPDATE_RESOURCE'
     ]),
     ...mapMutations(['SET_QUOTA']),
 
@@ -193,7 +193,7 @@ export default {
         this.configuration.server,
         this.getToken,
         this.$client,
-        this.UPSERT_RESOURCE
+        this.UPDATE_RESOURCE
       )
 
       this.LOAD_FILES({ currentFolder: rootFolder, files: resources })
@@ -264,7 +264,7 @@ export default {
             this.configuration.server,
             this.getToken
           )
-          this.UPSERT_RESOURCE(sharedResource)
+          this.UPDATE_RESOURCE(sharedResource)
         }
       } catch (error) {
         this.showMessage({
