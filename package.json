@@ -74,7 +74,7 @@
     "jest-svg-transformer": "^1.0.0",
     "join-path": "^1.1.1",
     "ldapjs": "^2.2.3",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "nightwatch": "1.5.1",
     "nightwatch-api": "3.0.1",
     "nightwatch-vrt": "^0.2.10",
