@@ -45,7 +45,7 @@ describe('focusMixin', () => {
   // #item-8  || --> 10 ||  6 <--
   // #item-9  || -->  7 || 10 <--
   // #item-10 || -->  9 ||  8 <--
-  it('records and replays focus events', async () => {
+  it('records and replays focus events', () => {
     focus({ from: item2.element, to: item4.element })
     expect(document.activeElement.id).toBe(item4.element.id)
 
@@ -109,7 +109,7 @@ describe('focusMixin', () => {
   // #item-1  || -->  8 || x ---
   // #item-8  || --> 10 || 1 <--
   // #item-10 || ---  x || 8 <--
-  it('can be restarted', async () => {
+  it('can be restarted', () => {
     focus({ from: item2.element, to: item4.element })
     expect(document.activeElement.id).toBe(item4.element.id)
 
