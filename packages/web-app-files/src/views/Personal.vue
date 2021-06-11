@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="test-id">
     <list-loader v-if="loading" />
     <template v-else>
       <not-found-message v-if="folderNotFound" class="files-not-found uk-height-1-1" />
