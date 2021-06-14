@@ -101,6 +101,7 @@
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-visualizer": "^4.2.0",
     "rollup-plugin-vue": "^5.1.4",
+    "sync-fetch": "^0.3.0",
     "url-search-params-polyfill": "^8.0.0",
     "vue-jest": "^3.0.7",
     "vue-template-compiler": "^2.6.12",

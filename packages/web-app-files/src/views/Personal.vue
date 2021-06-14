@@ -1,5 +1,5 @@
 <template>
-  <div id="test-id">
+  <div>
     <list-loader v-if="loading" />
     <template v-else>
       <not-found-message v-if="folderNotFound" class="files-not-found uk-height-1-1" />
@@ -44,7 +44,7 @@
               v-if="paginationLength > 1"
               :pages="paginationLength"
               :current-page="currentPage"
-              :max-displayed="2"
+              :max-displayed="3"
               :current-route="$_filesListPagination_targetRoute"
             />
             <div
@@ -205,7 +205,7 @@ export default {
 
       try {
         let resources = await this.$client.files.list(
-          this.$route.params.item,
+          decodeURIComponent(this.$route.params.item),
           1,
           this.davProperties
         )

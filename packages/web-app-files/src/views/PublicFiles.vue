@@ -18,7 +18,7 @@
       </no-content-message>
       <oc-table-files
         v-else
-        id="files-public-list-table"
+        id="files-public-files-table"
         v-model="selected"
         class="files-table"
         :class="{ 'files-table-squashed': isSidebarOpen }"
@@ -36,7 +36,7 @@
               v-if="paginationLength > 1"
               :pages="paginationLength"
               :current-page="currentPage"
-              :max-displayed="2"
+              :max-displayed="3"
               :current-route="$_filesListPagination_targetRoute"
             />
             <div
@@ -84,7 +84,13 @@ export default {
     NotFoundMessage
   },
 
-  mixins: [MixinAccessibleBreadcrumb, MixinFileActions, MixinFilesListPositioning, MixinResources, MixinFilesListPagination],
+  mixins: [
+    MixinAccessibleBreadcrumb,
+    MixinFileActions,
+    MixinFilesListPositioning,
+    MixinResources,
+    MixinFilesListPagination
+  ],
 
   data: () => ({
     loading: true

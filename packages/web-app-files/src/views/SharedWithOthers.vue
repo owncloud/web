@@ -34,7 +34,7 @@
               v-if="paginationLength > 1"
               :pages="paginationLength"
               :current-page="currentPage"
-              :max-displayed="2"
+              :max-displayed="3"
               :current-route="$_filesListPagination_targetRoute"
             />
             <div

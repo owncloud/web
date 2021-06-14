@@ -57,7 +57,7 @@
                   v-if="paginationLength > 1"
                   :pages="paginationLength"
                   :current-page="currentPage"
-                  :max-displayed="2"
+                  :max-displayed="3"
                   :current-route="$_filesListPagination_targetRoute"
                 />
                 <div
@@ -306,7 +306,6 @@ export default {
     },
 
     async navigateToTarget(target) {
-      console.log(this.$route)
       this.loading = true
       this.CLEAR_CURRENT_FILES_LIST()
 
