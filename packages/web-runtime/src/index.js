@@ -3,6 +3,8 @@ import 'vue-resize/dist/vue-resize.css'
 
 // --- Libraries and Plugins ---
 import Vue from './vue'
+import Vuex from 'vuex'
+import { createStore } from 'vuex-extensions'
 
 // --- Components ---
 import App from './App.vue'
@@ -12,7 +14,7 @@ import missingOrInvalidConfigPage from './pages/missingOrInvalidConfig.vue'
 import OwnCloud from 'owncloud-sdk'
 
 import { sync } from 'vuex-router-sync'
-import store from './store'
+import Store from './store'
 import router from './router'
 
 // --- Plugins ----
@@ -64,6 +66,7 @@ wgxpath.install()
 Vue.prototype.$client = new OwnCloud()
 
 Vue.use(VueEvents)
+Vue.use(Vuex)
 Vue.use(VueRouter)
 Vue.use(VueScrollTo)
 Vue.use(MediaSource)
@@ -91,6 +94,9 @@ if (process.env.NODE_ENV === 'development') {
     allowConsoleClears: false
   })
 }
+
+/* --- Store --- */
+const store = createStore(Vuex.Store, { ...Store })
 
 // --- Router ----
 

@@ -1,4 +1,3 @@
-import store from '../store'
 import PQueue from 'p-queue'
 
 export default {
@@ -7,7 +6,7 @@ export default {
       return new Promise((resolve, reject) => {
         if (headers === null) {
           headers = new Headers()
-          headers.append('Authorization', 'Bearer ' + store.getters.getToken)
+          headers.append('Authorization', 'Bearer ' + Vue.$store.getters.getToken)
         }
         headers.append('X-Requested-With', 'XMLHttpRequest')
 

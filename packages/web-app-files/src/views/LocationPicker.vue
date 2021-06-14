@@ -124,7 +124,7 @@ export default {
       'activeFilesCount',
       'filesTotalSize'
     ]),
-    ...mapGetters('configuration'),
+    ...mapGetters(['configuration']),
 
     title() {
       const translated =
