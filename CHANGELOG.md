@@ -14,6 +14,7 @@ Summary
 * Bugfix - Add docs link & fix translations on error page: [#5034](https://github.com/owncloud/web/pull/5034)
 * Bugfix - Make skip to main content link visible: [#5118](https://github.com/owncloud/web/pull/5118)
 * Bugfix - Add index route for the OC10 integration: [#5201](https://github.com/owncloud/web/pull/5201)
+* Bugfix - Do not call Vuex create store multiple times: [#5254](https://github.com/owncloud/web/pull/5254)
 * Bugfix - Prevent scrolling issues: [#5131](https://github.com/owncloud/web/pull/5131)
 * Bugfix - Resizeable html container: [#5052](https://github.com/owncloud/web/pull/5052)
 * Bugfix - Translated user menu items: [#5042](https://github.com/owncloud/web/pull/5042)
@@ -95,6 +96,13 @@ Details
 
    https://github.com/owncloud/core/issues/38799
    https://github.com/owncloud/web/pull/5201
+
+* Bugfix - Do not call Vuex create store multiple times: [#5254](https://github.com/owncloud/web/pull/5254)
+
+   We've moved the create Vuex store logic into the index file of Web runtime to prevent
+   initialising the store multiple times.
+
+   https://github.com/owncloud/web/pull/5254
 
 * Bugfix - Prevent scrolling issues: [#5131](https://github.com/owncloud/web/pull/5131)
 
