@@ -935,7 +935,7 @@ def unitTests(ctx):
     return [{
         "kind": "pipeline",
         "type": "docker",
-        "name": "unit-tests",
+        "name": "unit-and-integration-tests",
         "workspace": {
             "base": "/var/www/owncloud",
             "path": config["app"],
@@ -955,11 +955,19 @@ def unitTests(ctx):
                  buildWeb() +
                  [
                      {
-                         "name": "tests",
+                         "name": "unit-tests",
                          "image": "owncloudci/nodejs:14",
                          "pull": "always",
                          "commands": [
                              "yarn test:unit",
+                         ],
+                     },
+                     {
+                         "name": "integration-tests",
+                         "image": "owncloudci/nodejs:14",
+                         "pull": "always",
+                         "commands": [
+                             "yarn test:integration",
                          ],
                      },
                      {
