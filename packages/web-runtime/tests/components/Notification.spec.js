@@ -165,16 +165,15 @@ describe('Notification component', () => {
       it('displays the resolve notification button', () => {
         expect(wrapper.find(selectors.resolveNotificationButton).exists()).toBeTruthy()
       })
-      it('dispatches deleteNotification when resolve notification is clicked', () => {
+      it('dispatches deleteNotification when resolve notification is clicked', async () => {
         const resolveNotificationButton = wrapper.find(selectors.resolveNotificationButton)
         expect(resolveNotificationButton.exists()).toBeTruthy()
         resolveNotificationButton.trigger('click')
-        wrapper.vm.$nextTick(() => {
-          expect(store.dispatch).toHaveBeenCalledTimes(1)
-          expect(store.dispatch).toHaveBeenCalledWith('deleteNotification', {
-            client: localVue.prototype.$client,
-            notification: 1
-          })
+        await wrapper.vm.$nextTick()
+        expect(store.dispatch).toHaveBeenCalledTimes(1)
+        expect(store.dispatch).toHaveBeenCalledWith('deleteNotification', {
+          client: localVue.prototype.$client,
+          notification: 1
         })
       })
     })
@@ -198,12 +197,11 @@ describe('Notification component', () => {
       it("doesn't displays the resolve notification button", () => {
         expect(wrapper.find(selectors.resolveNotificationButton).exists()).toBeFalsy()
       })
-      it('calls executeRequest when action button is clicked', () => {
+      it('calls executeRequest when action button is clicked', async () => {
         const actionButton = wrapper.find(selectors.actionButton)
         actionButton.trigger('click')
-        actionButton.vm.$nextTick(() => {
-          expect(mockMethods.executeRequest).toHaveBeenCalledTimes(1)
-        })
+        await actionButton.vm.$nextTick()
+        expect(mockMethods.executeRequest).toHaveBeenCalledTimes(1)
       })
     })
   })
