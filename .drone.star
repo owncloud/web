@@ -981,7 +981,7 @@ def unitTests(ctx):
 def acceptance(ctx):
     pipelines = []
 
-    if "acceptance" not in config:
+    if "acceptance" not in config or "unit-tests-only" in ctx.build.title.lower():
         return pipelines
 
     if type(config["acceptance"]) == "bool":
