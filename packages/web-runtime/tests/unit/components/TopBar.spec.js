@@ -1,8 +1,8 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import TopBar from 'web-runtime/src/components/TopBar.vue'
-import stubs from '../../../../tests/unit/stubs'
-import axe from '../../../../tests/unit/helper/axe'
+import stubs from '../../../../../tests/unit/stubs'
+import axe from '../../../../../tests/unit/helper/axe'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)

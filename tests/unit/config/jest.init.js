@@ -8,5 +8,11 @@ try {
 } catch (error) {}
 
 config.mocks = {
-  $gettext: str => str
+  $gettext: str => str,
+  $route: {
+    params: {},
+    query: {},
+    name: '',
+    path: ''
+  }
 }

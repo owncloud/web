@@ -1,5 +1,5 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils'
-import lifecycleMixin from '../../src/mixins/lifecycleMixin'
+import lifecycleMixin from '../../../src/mixins/lifecycleMixin'
 
 const localVue = createLocalVue()
 localVue.mixin(lifecycleMixin)

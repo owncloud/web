@@ -1,7 +1,7 @@
 import { mount, createLocalVue, config } from '@vue/test-utils'
 import Vuex from 'vuex'
 import OwnCloud from 'owncloud-sdk'
-import SharedWithMe from '../../src/views/SharedWithMe'
+import SharedWithMe from '../../../src/views/SharedWithMe'
 import { createStore } from 'vuex-extensions'
 import DesignSystem from 'owncloud-design-system'
 
@@ -39,19 +39,22 @@ export const store = createStore(Vuex.Store, {
   modules: {
     Files: {
       state: {
-        resource: null
+        resource: null,
+        currentPage: 1
       },
       getters: {
         selectedFiles: () => [],
         activeFiles: () => [createFile({ id: 1 }), createFile({ id: 2, status: 2 })],
         activeFilesCount: () => ({ files: 0, folders: 1 }),
         inProgress: () => [null],
-        highlightedFile: () => null
+        highlightedFile: () => null,
+        paginationLength: () => 3
       },
       mutations: {
         UPDATE_RESOURCE: (state, resource) => {
           state.resource = resource
-        }
+        },
+        UPDATE_CURRENT_PAGE: () => {}
       },
       namespaced: true
     }
@@ -73,7 +76,7 @@ export const wrapper = mount(
   }
 )
 
-jest.mock('../../src/helpers/resources', () => ({
+jest.mock('../../../src/helpers/resources', () => ({
   buildSharedResource: jest.fn(share => share)
 }))
 

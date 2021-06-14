@@ -13,6 +13,10 @@ Vue.use(Vuex)
 const store = createStore(Vuex.Store, { ...Store })
 
 describe('config theme bootstrap', () => {
+  Vue.use(Vuex)
+
+  const store = createStore(Vuex.Store, { ...Store })
+
   const initialStoreTheme = { ...store.getters.configuration.theme }
 
   beforeEach(() => {

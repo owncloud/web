@@ -1,5 +1,5 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils'
-import focusMixin from '../../src/mixins/focusMixin'
+import focusMixin from '../../../src/mixins/focusMixin'
 
 const localVue = createLocalVue()
 localVue.mixin(focusMixin)

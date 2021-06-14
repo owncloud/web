@@ -1,4 +1,4 @@
-import { buildSharedResource } from '../../src/helpers/resources'
+import { buildSharedResource } from '../../../src/helpers/resources'
 
 describe('buildSharedResource', () => {
   const resourceFactory = (incomingShares = false) => {

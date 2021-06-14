@@ -1,4 +1,4 @@
-import { getAvatarSrc } from '../../src/helpers/user'
+import { getAvatarSrc } from '../../../src/helpers/user'
 
 describe('getAvatarSrc', () => {
   it('throws an error', async () => {
