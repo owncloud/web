@@ -1,0 +1,7 @@
+Bugfix: Upsert resource in filestable
+
+When uploading an already existing resource in the filestable, we sometimes displayed both 
+files in the filestable until the page got refreshed. We now check when uploading a file if 
+it exists in the filestable and replace it there if that is the case.
+
+https://github.com/owncloud/web/pull/5130

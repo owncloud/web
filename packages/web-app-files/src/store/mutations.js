@@ -302,23 +302,48 @@ export default {
     state.files = files
   },
 
-  PUSH_NEW_RESOURCE(state, resource) {
-    const files = [...state.files]
-    files.push(resource)
-    state.files = files
-  },
-
   SELECT_RESOURCES(state, resources) {
     state.selected = resources
   },
 
-  UPDATE_RESOURCE(state, resource) {
-    const files = [...state.files]
-    const index = files.findIndex(r => r.id === resource.id)
+  /**
+   * Inserts or updates the given resource, depending on whether or not the resource is already loaded.
+   * Updating the resource always takes precedence, so that we don't duplicate resources in the store
+   * accidentally.
+   *
+   * @param state Current state of this store module
+   * @param resource A new or updated resource
+   */
+  UPSERT_RESOURCE(state, resource) {
+    $_upsertResource(state, resource, true)
+  },
 
-    if (index > -1) {
-      files.splice(index, 1, resource)
-      state.files = files
-    }
+  /**
+   * Updates the given resource in the store. If the resource doesn't exist in the store, the update
+   * will be ignored. If you also want to allow inserts, use UPSERT_RESOURCE instead.
+   *
+   * @param state Current state of this store module
+   * @param resource An updated resource
+   */
+  UPDATE_RESOURCE(state, resource) {
+    $_upsertResource(state, resource, false)
   }
+}
+
+// eslint-disable-next-line camelcase
+function $_upsertResource(state, resource, allowInsert) {
+  const files = [...state.files]
+  const index = files.findIndex(r => r.id === resource.id)
+  const found = index > -1
+
+  if (!found && !allowInsert) {
+    return
+  }
+
+  if (found) {
+    files.splice(index, 1, resource)
+  } else {
+    files.push(resource)
+  }
+  state.files = files
 }
