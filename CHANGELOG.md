@@ -18,6 +18,7 @@ Summary
 * Bugfix - Resizeable html container: [#5052](https://github.com/owncloud/web/pull/5052)
 * Bugfix - Translated user menu items: [#5042](https://github.com/owncloud/web/pull/5042)
 * Bugfix - Make sure IDs in HTML are unique: [#5028](https://github.com/owncloud/web/pull/5028)
+* Bugfix - Upsert resource in filestable: [#5130](https://github.com/owncloud/web/pull/5130)
 * Change - Use slots in the navigation sidebar: [#5105](https://github.com/owncloud/web/pull/5105)
 * Enhancement - Improve a11y colors: [#5138](https://github.com/owncloud/web/pull/5138)
 * Enhancement - Accessible status indicators: [#5182](https://github.com/owncloud/web/pull/5182)
@@ -128,6 +129,14 @@ Details
 
    https://github.com/owncloud/web/pull/5028
    https://github.com/owncloud/web/pull/5148
+
+* Bugfix - Upsert resource in filestable: [#5130](https://github.com/owncloud/web/pull/5130)
+
+   When uploading an already existing resource in the filestable, we sometimes displayed both
+   files in the filestable until the page got refreshed. We now check when uploading a file if it
+   exists in the filestable and replace it there if that is the case.
+
+   https://github.com/owncloud/web/pull/5130
 
 * Change - Use slots in the navigation sidebar: [#5105](https://github.com/owncloud/web/pull/5105)
 
