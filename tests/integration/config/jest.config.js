@@ -18,7 +18,7 @@ module.exports = {
   transformIgnorePatterns: ['<rootDir>/node_modules/(?!lodash-es)'],
   setupFiles: ['<rootDir>/tests/integration/config/jest.init.js'],
   snapshotSerializers: ['jest-serializer-vue'],
-  coverageDirectory: '<rootDir>/coverage',
+  coverageDirectory: '<rootDir>/coverage/integration',
   coverageReporters: ['lcov'],
   collectCoverageFrom: ['<rootDir>/packages/**/src/**/*.{js,vue}', '!<rootDir>/**/node_modules/**'],
   testMatch: ['**/tests/integration/specs/**/*.spec.js']
