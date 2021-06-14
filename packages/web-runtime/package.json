@@ -15,7 +15,7 @@
     "moment": "^2.24.0",
     "oidc-client": "1.10.1",
     "owncloud-design-system": "^7.1.3",
-    "owncloud-sdk": "^1.0.0-740",
+    "owncloud-sdk": "^1.0.0-2497",
     "p-queue": "^6.1.1",
     "tippy.js": "^6.3.1",
     "tus-js-client": "^1.8.0",

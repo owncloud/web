@@ -51,14 +51,7 @@ export function buildResource(resource) {
     shareTypes: (function() {
       let shareTypes = resource.fileInfo['{http://owncloud.org/ns}share-types']
       if (shareTypes) {
-        shareTypes = _.chain(shareTypes)
-          .filter(
-            xmlvalue =>
-              xmlvalue.namespaceURI === 'http://owncloud.org/ns' &&
-              xmlvalue.nodeName.split(':')[1] === 'share-type'
-          )
-          .map(xmlvalue => parseInt(xmlvalue.textContent || xmlvalue.text, 10))
-          .value()
+        shareTypes = shareTypes.map(xmlvalue => parseInt(xmlvalue, 10))
       }
       return shareTypes || []
     })(),
