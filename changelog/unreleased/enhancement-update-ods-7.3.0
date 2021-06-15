@@ -1,0 +1,6 @@
+Enhancement: Update ownCloud Design System to v7.3.0
+
+We've updated ownCloud Design System to version 7.3.0 to bring the new pagination component.
+
+https://github.com/owncloud/owncloud-design-system/releases/tag/v7.3.0
+https://github.com/owncloud/web/pull/5224
