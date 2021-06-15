@@ -1,0 +1,8 @@
+Bugfix: Center MediaViewer loading spinner
+
+The loading spinner in the media viewer app wasn't centered vertically since the 
+wrapping element was to small. It has now been given a min-height of the current 
+screen size.
+
+https://github.com/owncloud/web/pull/5270
+https://github.com/owncloud/web/issues/5196
