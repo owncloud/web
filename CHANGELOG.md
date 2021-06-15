@@ -16,6 +16,7 @@ Summary
 * Bugfix - Add index route for the OC10 integration: [#5201](https://github.com/owncloud/web/pull/5201)
 * Bugfix - Do not call Vuex create store multiple times: [#5254](https://github.com/owncloud/web/pull/5254)
 * Bugfix - Prevent scrolling issues: [#5131](https://github.com/owncloud/web/pull/5131)
+* Bugfix - Show `0` as used quota if a negative number is given: [#5229](https://github.com/owncloud/web/pull/5229)
 * Bugfix - Resizeable html container: [#5052](https://github.com/owncloud/web/pull/5052)
 * Bugfix - Translated user menu items: [#5042](https://github.com/owncloud/web/pull/5042)
 * Bugfix - Prevent `fileTypeIcon` to throw a TypeError: [#5253](https://github.com/owncloud/web/pull/5253)
@@ -114,6 +115,13 @@ Details
    This has been fixed by restructuring the dom elements and giving them proper styles.
 
    https://github.com/owncloud/web/pull/5131
+
+* Bugfix - Show `0` as used quota if a negative number is given: [#5229](https://github.com/owncloud/web/pull/5229)
+
+   In the case if the server returns a negative number as used quota (what should not happen) show `0
+   B of 2 GB` and not only of ` 2 GB`
+
+   https://github.com/owncloud/web/pull/5229
 
 * Bugfix - Resizeable html container: [#5052](https://github.com/owncloud/web/pull/5052)
 
