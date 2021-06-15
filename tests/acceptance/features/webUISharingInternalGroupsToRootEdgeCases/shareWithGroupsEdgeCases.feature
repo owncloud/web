@@ -76,8 +76,8 @@ Feature: Sharing files and folders with internal groups
     And user "Brian" has been added to group "ALICE"
     And user "Carol" has uploaded file with content "Carol file" to "/randomfile.txt"
     And user "Carol" has logged in using the webUI
-    And the user shares file "randomfile.txt" with user "Alice Hansen" as "Editor" using the webUI
-    When the user shares file "randomfile.txt" with group "ALICE" as "Editor" using the webUI
+    When the user shares file "randomfile.txt" with user "Alice Hansen" as "Editor" using the webUI
+    And the user shares file "randomfile.txt" with group "ALICE" as "Editor" using the webUI
     And the user opens the share creation dialog in the webUI
     And the user types "ALICE" in the share-with-field
     Then "group" "ALICE" should not be listed in the autocomplete list on the webUI

@@ -18,7 +18,7 @@ Feature: Display notifications when receiving a share and follow embedded links
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has shared folder "/simple-folder" with user "Brian"
     When the user re-logs in as "Brian" using the webUI
-    When the user follows the link of following share from notification using the webUI
+    And the user follows the link of following share from notification using the webUI
       | resource | simple-folder |
       | sharer   | Alice         |
-    # Then the user should be redirected to a webUI page with the title "Shared with you - %productname%"
+    Then the user should be redirected to a webUI page with the title "Shared with you - %productname%"

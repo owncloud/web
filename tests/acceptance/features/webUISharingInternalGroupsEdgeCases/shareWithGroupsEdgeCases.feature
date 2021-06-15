@@ -85,8 +85,8 @@ Feature: Sharing files and folders with internal groups
     And user "Brian" has been added to group "ALICE"
     And user "Carol" has uploaded file with content "Carol file" to "/randomfile.txt"
     And user "Carol" has logged in using the webUI
-    And the user shares file "randomfile.txt" with user "Alice Hansen" as "Editor" using the webUI
-    When the user shares file "randomfile.txt" with group "ALICE" as "Editor" using the webUI
+    When the user shares file "randomfile.txt" with user "Alice Hansen" as "Editor" using the webUI
+    And the user shares file "randomfile.txt" with group "ALICE" as "Editor" using the webUI
     And user "Alice" accepts the share "randomfile.txt" offered by user "Carol" using the sharing API
     And user "Brian" accepts the share "randomfile.txt" offered by user "Carol" using the sharing API
     And the user opens the share creation dialog in the webUI

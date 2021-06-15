@@ -103,3 +103,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUISharingInternalGroupsEdgeCases/shareWithGroupsEdgeCases.feature:42](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroupsEdgeCases/shareWithGroupsEdgeCases.feature#L42)
 -   [webUISharingInternalGroupsToRootEdgeCases/shareWithGroupsEdgeCases.feature:36](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroupsToRootEdgeCases/shareWithGroupsEdgeCases.feature#L36)
 -   [webUISharingInternalGroupsToRootEdgeCases/shareWithGroupsEdgeCases.feature:37](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroupsToRootEdgeCases/shareWithGroupsEdgeCases.feature#L37)
+
+### [File link in notifications seems to not work] (https://github.com/owncloud/web/issues/5227)
+-   [webUISharingNotifications/notificationLink.feature:18](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingNotifications/notificationLink.feature#L18)
+-   [webUISharingNotificationsToRoot/notificationLink.feature:17](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingNotificationsToRoot/notificationLink.feature#L17)

@@ -48,8 +48,6 @@ Feature: Sharing files and folders with internal users
     Then user "Brian Murphy" should be listed as "Owner" in the collaborators list on the webUI
     When the user opens the share dialog for file "testimage.jpg" using the webUI
     Then user "Brian Murphy" should be listed as "Owner" in the collaborators list on the webUI
-    #    And folder "simple-folder (2)" should be marked as shared by "Brian Murphy" on the webUI
-    #    And file "testimage (2).jpg" should be marked as shared by "Brian Murphy" on the webUI
     Examples:
       | set-role             | expected-role        | permissions-folder              | permissions-file  |
       | Viewer               | Viewer               | read,share                      | read, share       |

@@ -22,3 +22,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIAdminSettings/adminGeneralSettings.feature:56](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIAdminSettings/adminGeneralSettings.feature#L56)
 -   [webUIAdminSettings/adminSharingSettings.feature:8](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIAdminSettings/adminSharingSettings.feature#L8)
 -   [webUIAdminSettings/adminSharingSettings.feature:75](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIAdminSettings/adminSharingSettings.feature#L75)
+
+### [File link in notifications seems to not work] (https://github.com/owncloud/web/issues/5227)
+-   [webUISharingNotifications/notificationLink.feature:18](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingNotifications/notificationLink.feature#L18)
+-   [webUISharingNotificationsToRoot/notificationLink.feature:17](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingNotificationsToRoot/notificationLink.feature#L17)
