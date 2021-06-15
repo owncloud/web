@@ -18,6 +18,7 @@ Summary
 * Bugfix - Prevent scrolling issues: [#5131](https://github.com/owncloud/web/pull/5131)
 * Bugfix - Resizeable html container: [#5052](https://github.com/owncloud/web/pull/5052)
 * Bugfix - Translated user menu items: [#5042](https://github.com/owncloud/web/pull/5042)
+* Bugfix - Prevent `fileTypeIcon` to throw a TypeError: [#5253](https://github.com/owncloud/web/pull/5253)
 * Bugfix - Make sure IDs in HTML are unique: [#5028](https://github.com/owncloud/web/pull/5028)
 * Bugfix - Upsert resource in filestable: [#5130](https://github.com/owncloud/web/pull/5130)
 * Change - Use slots in the navigation sidebar: [#5105](https://github.com/owncloud/web/pull/5105)
@@ -126,6 +127,13 @@ Details
    Some of the user menu items were not correctly translated, which is now fixed.
 
    https://github.com/owncloud/web/pull/5042
+
+* Bugfix - Prevent `fileTypeIcon` to throw a TypeError: [#5253](https://github.com/owncloud/web/pull/5253)
+
+   The function would die with `TypeError: file.extension.toLowerCase is not a function` if
+   `file.extension` was set to something that is not a string.
+
+   https://github.com/owncloud/web/pull/5253
 
 * Bugfix - Make sure IDs in HTML are unique: [#5028](https://github.com/owncloud/web/pull/5028)
 
