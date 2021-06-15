@@ -2,7 +2,7 @@
   <oc-app-side-bar
     :key="highlightedFile.id"
     v-click-outside="onClickOutside"
-    class="files-sidebar oc-p-s oc-border-l"
+    class="files-sidebar oc-px-s oc-border-l"
     :disable-action="false"
     :close-button-label="$gettext('Close file sidebar')"
     @close="close()"

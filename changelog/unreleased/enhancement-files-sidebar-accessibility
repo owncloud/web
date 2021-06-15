@@ -9,5 +9,7 @@ We've did several improvements to enhance the accessibility on the files sidebar
 - Clicking outside of the sidebar now closes it
 - Removed the aria-label on the action buttons as they already include proper labels
 - Added a hint for screen readers if an action opens a new window/tab
+- Make sidebar header sticky
 
 https://github.com/owncloud/web/pull/5000
+https://github.com/owncloud/web/pull/5266
