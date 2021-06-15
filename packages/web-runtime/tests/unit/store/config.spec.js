@@ -8,15 +8,10 @@ import { keysDeep } from 'web-pkg/src/utils/object'
 import get from 'lodash-es/get'
 import difference from 'lodash-es/difference'
 
-Vue.use(Vuex)
-
-const store = createStore(Vuex.Store, { ...Store })
-
 describe('config theme bootstrap', () => {
   Vue.use(Vuex)
 
   const store = createStore(Vuex.Store, { ...Store })
-
   const initialStoreTheme = { ...store.getters.configuration.theme }
 
   beforeEach(() => {
