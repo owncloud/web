@@ -19,7 +19,7 @@
         <div id="pending-highlight">
           <oc-table-files
             id="files-shared-with-me-pending-table"
-            v-model="selected"
+            v-model="selectedPending"
             class="files-table"
             :class="{ 'files-table-squashed': isSidebarOpen }"
             :are-previews-displayed="displayPreviews"
@@ -133,7 +133,6 @@
         <no-content-message
           v-if="isEmpty || filterDataByStatus(activeFiles, shareStatus.accepted).length === 0"
           id="files-shared-with-me-accepted-empty"
-          key="files-shared-with-me-accepted-empty"
           class="files-empty"
           icon="group"
         >
@@ -146,7 +145,7 @@
         <oc-table-files
           v-else
           id="files-shared-with-me-accepted-table"
-          v-model="selected"
+          v-model="selectedAccepted"
           class="files-table"
           :class="{ 'files-table-squashed': isSidebarOpen }"
           :are-previews-displayed="displayPreviews"
@@ -164,7 +163,7 @@
               class="uk-text-nowrap uk-flex uk-flex-middle uk-flex-right"
             >
               <oc-button
-                v-if="resource.status === 1 || resource.status === 0"
+                v-if="[shareStatus.accepted, shareStatus.pending].includes(resource.status)"
                 v-translate
                 size="small"
                 class="file-row-share-status-action oc-ml"
@@ -221,7 +220,6 @@
         <no-content-message
           v-if="isEmpty || filterDataByStatus(activeFiles, shareStatus.declined).length === 0"
           id="files-shared-with-me-declined-empty"
-          key="files-shared-with-me-declined-empty"
           class="files-empty"
           icon="group"
         >
@@ -232,15 +230,16 @@
         <oc-table-files
           v-else
           id="files-shared-with-me-declined-table"
-          v-model="selected"
+          v-model="selectedDeclined"
           class="files-table"
           :class="{ 'files-table-squashed': isSidebarOpen }"
           :are-previews-displayed="displayPreviews"
           :resources="filterDataByStatus(activeFiles, shareStatus.declined)"
           :target-route="targetRoute"
+          :are-resources-clickable="false"
           :highlighted="highlightedFile ? highlightedFile.id : null"
+          :has-actions="false"
           :header-position="headerPosition"
-          @showDetails="setHighlightedFile"
           @fileClick="$_fileActions_triggerDefaultAction"
           @rowMounted="rowMounted"
         >
@@ -250,9 +249,9 @@
               class="uk-text-nowrap uk-flex uk-flex-middle uk-flex-right"
             >
               <oc-button
+                v-if="[shareStatus.declined, shareStatus.pending].includes(resource.status)"
                 v-translate
                 size="small"
-                variation="success"
                 class="file-row-share-status-action"
                 @click.stop="triggerShareAction(resource, 'POST')"
               >
@@ -337,7 +336,33 @@ export default {
         this.SELECT_RESOURCES(resources)
       }
     },
-
+    selectedPending: {
+      get() {
+        return this.selectedFiles.filter(r => r.status === shareStatus.pending)
+      },
+      set(resources) {
+        resources = resources.filter(r => r.status === shareStatus.pending)
+        this.SELECT_RESOURCES(resources)
+      }
+    },
+    selectedAccepted: {
+      get() {
+        return this.selectedFiles.filter(r => r.status === shareStatus.accepted)
+      },
+      set(resources) {
+        resources = resources.filter(r => r.status === shareStatus.accepted)
+        this.SELECT_RESOURCES(resources)
+      }
+    },
+    selectedDeclined: {
+      get() {
+        return this.selectedFiles.filter(r => r.status === shareStatus.declined)
+      },
+      set(resources) {
+        resources = resources.filter(r => r.status === shareStatus.declined)
+        this.SELECT_RESOURCES(resources)
+      }
+    },
     isEmpty() {
       return this.activeFiles.length < 1
     },
@@ -511,7 +536,10 @@ export default {
         this.showMessage({
           title: this.$gettext('Error while changing share state'),
           desc: error.message,
-          status: 'danger'
+          status: 'danger',
+          autoClose: {
+            enabled: true
+          }
         })
       }
     }
@@ -531,7 +559,7 @@ export default {
   align-items: baseline;
 }
 #pending-highlight {
-  background-color: #f0f8ff;
+  background-color: var(--oc-color-background-highlight);
 }
 .show-hide-pending {
   text-align: center;
