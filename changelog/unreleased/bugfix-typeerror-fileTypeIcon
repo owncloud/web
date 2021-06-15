@@ -1,0 +1,5 @@
+Bugfix: prevent `fileTypeIcon` to throw a TypeError
+
+The function would die with `TypeError: file.extension.toLowerCase is not a function` if `file.extension` was set to something that is not a string.
+
+https://github.com/owncloud/web/pull/5253
