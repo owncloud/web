@@ -1084,7 +1084,7 @@ def acceptance(ctx):
                             errorFound = True
 
                         # Basic steps and services for all testing
-                        steps = installNPM()
+                        steps = calculateDiffContainsUnitTestsOnly() + installNPM()
                         if (params["oc10IntegrationAppIncluded"]):
                             steps += buildWebApp()
                         else:
@@ -1470,7 +1470,7 @@ def installCore(version, db):
         stepDefinition.update({"commands": [
             ". %s/.drone.env" % dir["web"],
             "export PLUGIN_GIT_REFERENCE=$CORE_COMMITID",
-            "bash /usr/sbin/plugin.sh",
+            "if test -f runUnitTestsOnly; then echo 'Bye!'; else bash /usr/sbin/plugin.sh; fi",
         ]})
 
     return [stepDefinition]
@@ -1517,7 +1517,7 @@ def installFederatedServer(version, db, dbSuffix = "-federated"):
         stepDefinition.update({"commands": [
             ". %s/.drone.env" % dir["web"],
             "export PLUGIN_GIT_REFERENCE=$CORE_COMMITID",
-            "bash /usr/sbin/plugin.sh",
+            "if test -f runUnitTestsOnly; then echo 'Bye!'; else bash /usr/sbin/plugin.sh; fi",
         ]})
 
     return [stepDefinition]
@@ -1528,7 +1528,7 @@ def installNPM():
         "image": "owncloudci/nodejs:16",
         "pull": "always",
         "commands": [
-            "yarn install --frozen-lockfile",
+            "if test -f runUnitTestsOnly; then echo 'Bye!'; else yarn install --frozen-lockfile; fi",
         ],
     }]
 
@@ -1752,7 +1752,7 @@ def getSkeletonFiles():
         "image": "owncloudci/php:7.4",
         "pull": "always",
         "commands": [
-            "git clone https://github.com/owncloud/testing.git /srv/app/testing",
+            "if test -f runUnitTestsOnly; then echo 'Bye!'; else git clone https://github.com/owncloud/testing.git /srv/app/testing; fi",
         ],
         "volumes": [{
             "name": "gopath",
@@ -2020,7 +2020,7 @@ def fixPermissions():
         "pull": "always",
         "commands": [
             "cd %s" % dir["server"],
-            "chown www-data * -R",
+            "if test -f runUnitTestsOnly; then echo 'Bye!'; else chown www-data * -R; fi",
         ],
     }]
 
@@ -2031,7 +2031,7 @@ def fixPermissionsFederated():
         "pull": "always",
         "commands": [
             "cd %s" % dir["federated"],
-            "chown www-data * -R",
+            "if test -f runUnitTestsOnly; then echo 'Bye!'; else chown www-data * -R; fi",
         ],
     }]
 
@@ -2113,7 +2113,7 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
         "environment": environment,
         "commands": [
             "cd %s" % dir["web"],
-            "./tests/acceptance/run.sh",
+            "if test -f runUnitTestsOnly; then echo 'Bye!'; else ./tests/acceptance/run.sh; fi",
         ],
         "volumes": [{
             "name": "gopath",
@@ -2590,3 +2590,16 @@ def dependsOn(earlierStages, nextStages):
                 nextStage["depends_on"].append(earlierStage["name"])
             else:
                 nextStage["depends_on"] = [earlierStage["name"]]
+
+def calculateDiffContainsUnitTestsOnly():
+    return [
+        {
+            "name": "calculate-diff",
+            "image": "owncloudci/nodejs:14",
+            "pull": "always",
+            "commands": [
+                "bash -x tests/drone/if-diff-has-unit-tests-only.sh",
+                "ls -la",
+            ],
+        },
+    ]
