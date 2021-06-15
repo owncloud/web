@@ -859,7 +859,7 @@ def changelog(ctx):
             },
             {
                 "name": "diff",
-                "image": "owncloud/alpine:latest",
+                "image": "owncloudci/alpine:latest",
                 "pull": "always",
                 "commands": [
                     "git diff",
