@@ -6,9 +6,7 @@ import filesize from 'filesize'
  * @returns {String} formatted size
  */
 export function getResourceSize(size) {
-  if (size < 0) {
-    return ''
-  }
+  size = size < 0 ? 0 : size
 
   if (isNaN(size)) {
     return '?'
