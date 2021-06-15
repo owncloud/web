@@ -27,6 +27,7 @@ Summary
 * Enhancement - Update owncloud Design System to v7.1.2: [#5002](https://github.com/owncloud/web/pull/5002)
 * Enhancement - Button appearance: [#5053](https://github.com/owncloud/web/pull/5053)
 * Enhancement - Confirmation message when copying links: [#5147](https://github.com/owncloud/web/pull/5147)
+* Enhancement - File editor mode: [#5226](https://github.com/owncloud/web/issues/5226)
 * Enhancement - Improve accessibility for the files sidebar: [#5000](https://github.com/owncloud/web/pull/5000)
 * Enhancement - Improve a11y in the files sidebar peoples & shares section: [#5034](https://github.com/owncloud/web/pull/5034)
 * Enhancement - Focus breadcrumb on route change: [#5166](https://github.com/owncloud/web/pull/5166)
@@ -203,6 +204,15 @@ Details
    clipboard.
 
    https://github.com/owncloud/web/pull/5147
+
+* Enhancement - File editor mode: [#5226](https://github.com/owncloud/web/issues/5226)
+
+   We've added a parameter called `mode` to the different ways of opening a file editor. The mode
+   can be `edit` or `create` and reflects whether the file editor was opened in an editing mode or in
+   a creation mode.
+
+   https://github.com/owncloud/web/issues/5226
+   https://github.com/owncloud/web/pull/5256
 
 * Enhancement - Improve accessibility for the files sidebar: [#5000](https://github.com/owncloud/web/pull/5000)
 
