@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Center MediaViewer loading spinner: [#5270](https://github.com/owncloud/web/pull/5270)
 * Bugfix - Keyboard navigation for copy to clipboard: [#5147](https://github.com/owncloud/web/pull/5147)
 * Bugfix - Hide left sidebar navigation when switching routes: [#5025](https://github.com/owncloud/web/pull/5025)
 * Bugfix - Hide "Create new public link" button: [#5126](https://github.com/owncloud/web/pull/5126)
@@ -49,6 +50,14 @@ Summary
 
 Details
 -------
+
+* Bugfix - Center MediaViewer loading spinner: [#5270](https://github.com/owncloud/web/pull/5270)
+
+   The loading spinner in the media viewer app wasn't centered vertically since the wrapping
+   element was to small. It has now been given a min-height of the current screen size.
+
+   https://github.com/owncloud/web/issues/5196
+   https://github.com/owncloud/web/pull/5270
 
 * Bugfix - Keyboard navigation for copy to clipboard: [#5147](https://github.com/owncloud/web/pull/5147)
 
