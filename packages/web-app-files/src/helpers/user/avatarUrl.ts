@@ -1,4 +1,5 @@
 import { cacheService, clientService } from '../../services'
+import { ImageDimension } from '../../constants'
 
 interface avatarUrlOptions {
   server: string
@@ -8,7 +9,7 @@ interface avatarUrlOptions {
 }
 
 export const avatarUrl = async (options: avatarUrlOptions, cached = false): Promise<string> => {
-  const size = options.size || 128
+  const size = options.size || ImageDimension.Avatar
 
   if (cached) {
     return cacheFactory({ ...options, size })
@@ -23,7 +24,6 @@ export const avatarUrl = async (options: avatarUrlOptions, cached = false): Prom
   }
 
   const { owncloudSdk } = clientService
-
   if (!owncloudSdk || typeof owncloudSdk.signUrl !== 'function') {
     return url
   }

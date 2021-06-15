@@ -1,7 +1,7 @@
 import { debounce } from './debounce'
 
 describe('debounce', () => {
-  it('waits till callback gets executed', () => {
+  it('waits until callback gets executed', () => {
     const cb = jest.fn()
     const debounced = debounce(cb)
     debounced()

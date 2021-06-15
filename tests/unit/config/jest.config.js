@@ -12,7 +12,7 @@ module.exports = {
     '^.+\\.svg$': 'jest-svg-transformer'
   },
   moduleNameMapper: {
-    '\\.(css|less)$': '<rootDir>/__mocks__/style.js'
+    '\\.(css|less)$': '<rootDir>/tests/unit/stubs/empty.js'
   },
   transformIgnorePatterns: ['<rootDir>/node_modules/(?!lodash-es)'],
   setupFiles: ['<rootDir>/tests/unit/config/jest.init.js', 'core-js'],

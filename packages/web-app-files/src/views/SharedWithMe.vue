@@ -90,6 +90,7 @@ import NoContentMessage from '../components/NoContentMessage.vue'
 import ListInfo from '../components/FilesListFooterInfo.vue'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { debounce } from 'web-pkg/src/utils'
+import { ImageDimension } from '../constants'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -193,7 +194,7 @@ export default {
         this.loadPreview({
           resource,
           isPublic: false,
-          dimensions: [25, 25]
+          dimensions: ImageDimension.ThumbNail
         })
       })
 
