@@ -133,6 +133,7 @@
         <no-content-message
           v-if="isEmpty || filterDataByStatus(activeFiles, shareStatus.accepted).length === 0"
           id="files-shared-with-me-accepted-empty"
+          key="files-shared-with-me-accepted-empty"
           class="files-empty"
           icon="group"
         >
@@ -165,9 +166,8 @@
               <oc-button
                 v-if="resource.status === 1 || resource.status === 0"
                 v-translate
-                appearance="raw"
                 size="small"
-                class="file-row-share-status-action oc-text-meta oc-ml"
+                class="file-row-share-status-action oc-ml"
                 @click.stop="triggerShareAction(resource, 'DELETE')"
               >
                 Decline
@@ -221,6 +221,7 @@
         <no-content-message
           v-if="isEmpty || filterDataByStatus(activeFiles, shareStatus.declined).length === 0"
           id="files-shared-with-me-declined-empty"
+          key="files-shared-with-me-declined-empty"
           class="files-empty"
           icon="group"
         >
@@ -252,7 +253,7 @@
                 v-translate
                 size="small"
                 variation="success"
-                class="file-row-share-status-action oc-text-meta"
+                class="file-row-share-status-action"
                 @click.stop="triggerShareAction(resource, 'POST')"
               >
                 Accept
