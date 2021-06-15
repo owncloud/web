@@ -111,6 +111,8 @@ function getMountWrapperWithMockMethods(mocks, mockMethods) {
   })
 }
 
+// shj
+
 describe('Notification component', () => {
   describe('notification bell', () => {
     const store = getStoreWithEmptyActions()
