@@ -63,10 +63,9 @@
               <list-info
                 v-if="activeFiles.length > 0"
                 class="uk-width-1-1 oc-my-s"
-                :files="activeFilesCount.files"
-                :folders="activeFilesCount.folders"
-                :total="files.length"
-                :size="getResourceSize(filesTotalSize)"
+                :files="totalFilesCount.files"
+                :folders="totalFilesCount.folders"
+                :size="totalFilesSize"
               />
             </template>
           </oc-table-files>
@@ -82,7 +81,6 @@ import { basename, join } from 'path'
 import { batchActions } from '../helpers/batchActions'
 import { cloneStateObject } from '../helpers/store'
 import MixinsGeneral from '../mixins'
-import MixinResources from '../mixins/resources'
 import MixinRoutes from '../mixins/routes'
 import MixinFilesListPagination from '../mixins/filesListPagination'
 
@@ -103,7 +101,7 @@ export default {
     ListInfo
   },
 
-  mixins: [MixinsGeneral, MixinResources, MixinRoutes, MixinFilesListPagination],
+  mixins: [MixinsGeneral, MixinRoutes, MixinFilesListPagination],
 
   data: () => ({
     headerPosition: 0,
@@ -124,8 +122,8 @@ export default {
       'fileSortDirectionDesc',
       'publicLinkPassword',
       'davProperties',
-      'activeFilesCount',
-      'filesTotalSize',
+      'totalFilesCount',
+      'totalFilesSize',
       'paginationLength'
     ]),
     ...mapGetters(['configuration']),

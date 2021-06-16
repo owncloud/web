@@ -73,5 +73,5 @@ export default {
    * Pagination
    */
   currentPage: 1,
-  filesPageLimit: 100 // TODO: Replace with dynamic value from settings once available
+  filesPageLimit: 10 // TODO: Replace with dynamic value from settings once available
 }

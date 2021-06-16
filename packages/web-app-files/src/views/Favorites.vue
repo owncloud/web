@@ -37,10 +37,9 @@
           <list-info
             v-if="activeFiles.length > 0"
             class="uk-width-1-1 oc-my-s"
-            :files="activeFilesCount.files"
-            :folders="activeFilesCount.folders"
-            :total="files.length"
-            :size="getResourceSize(filesTotalSize)"
+            :files="totalFilesCount.files"
+            :folders="totalFilesCount.folders"
+            :size="totalFilesSize"
           />
         </template>
       </oc-table-files>
@@ -54,7 +53,6 @@ import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 import { buildResource } from '../helpers/resources'
 import FileActions from '../mixins/fileActions'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
-import MixinResources from '../mixins/resources'
 import MixinFilesListPagination from '../mixins/filesListPagination'
 
 import QuickActions from '../components/FilesLists/QuickActions.vue'
@@ -65,7 +63,7 @@ import ListInfo from '../components/FilesListFooterInfo.vue'
 export default {
   components: { QuickActions, ListLoader, NoContentMessage, ListInfo },
 
-  mixins: [FileActions, MixinFilesListPositioning, MixinResources, MixinFilesListPagination],
+  mixins: [FileActions, MixinFilesListPositioning, MixinFilesListPagination],
 
   data: () => ({
     loading: true
@@ -80,8 +78,8 @@ export default {
       'activeFiles',
       'selectedFiles',
       'inProgress',
-      'activeFilesCount',
-      'filesTotalSize',
+      'totalFilesCount',
+      'totalFilesSize',
       'paginationLength'
     ]),
     ...mapGetters(['user', 'configuration']),

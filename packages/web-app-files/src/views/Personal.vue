@@ -50,10 +50,9 @@
           <list-info
             v-if="activeFiles.length > 0"
             class="uk-width-1-1 oc-my-s"
-            :files="activeFilesCount.files"
-            :folders="activeFilesCount.folders"
-            :total="files.length"
-            :size="getResourceSize(filesTotalSize)"
+            :files="totalFilesCount.files"
+            :folders="totalFilesCount.folders"
+            :size="totalFilesSize"
           />
         </template>
       </oc-table-files>
@@ -69,7 +68,6 @@ import MixinAccessibleBreadcrumb from '../mixins/accessibleBreadcrumb'
 import MixinFileActions from '../mixins/fileActions'
 import MixinFilesListScrolling from '../mixins/filesListScrolling'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
-import MixinResources from '../mixins/resources'
 import MixinFilesListPagination from '../mixins/filesListPagination'
 import { buildResource } from '../helpers/resources'
 
@@ -87,7 +85,6 @@ export default {
     MixinFileActions,
     MixinFilesListPositioning,
     MixinFilesListScrolling,
-    MixinResources,
     MixinFilesListPagination
   ],
 
@@ -105,8 +102,8 @@ export default {
       'selectedFiles',
       'inProgress',
       'currentFolder',
-      'activeFilesCount',
-      'filesTotalSize',
+      'totalFilesCount',
+      'totalFilesSize',
       'paginationLength'
     ]),
     ...mapGetters(['user', 'homeFolder', 'configuration']),

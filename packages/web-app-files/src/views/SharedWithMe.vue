@@ -67,9 +67,8 @@
           <list-info
             v-if="activeFiles.length > 0"
             class="uk-width-1-1 oc-my-s"
-            :files="activeFilesCount.files"
-            :folders="activeFilesCount.folders"
-            :total="files.length"
+            :files="totalFilesCount.files"
+            :folders="totalFilesCount.folders"
           />
         </template>
       </oc-table-files>
@@ -108,7 +107,7 @@ export default {
       'activeFiles',
       'selectedFiles',
       'inProgress',
-      'activeFilesCount',
+      'totalFilesCount',
       'paginationLength'
     ]),
     ...mapGetters(['isOcis', 'configuration', 'getToken', 'user']),

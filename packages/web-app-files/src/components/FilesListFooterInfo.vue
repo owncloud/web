@@ -5,28 +5,31 @@
     class="uk-text-nowrap oc-text-muted uk-text-center"
     :class="[data.staticClass, data.class]"
   >
-    <!--
-      TODO: merge all strings here to one interpollated translation
-      This requires to come up with a way in tests to still select only folders and files lengths
-    -->
-    <translate>Showing</translate>
-    <span id="files-list-count-folders" v-text="props.folders" />
-    <translate :translate-n="props.folders" translate-plural="folders">folder</translate>
-    <translate>and</translate>
     <translate
-      id="files-list-count-files"
       :translate-n="props.files"
-      translate-plural="%{count} files"
-      :translate-params="{ count: props.files }"
-      >%{count} file</translate
+      :translate-params="{ filesCount: props.files }"
+      translate-plural="%{filesCount} files"
+      data-test-id="files-list-files-count"
+      :data-test-files="props.files"
+      >%{filesCount} file</translate
     >
+    <span>,</span>
     <translate
-      :translate-n="props.total"
-      translate-plural="of %{count} resources"
-      :translate-params="{ count: props.total }"
-      >of %{count} resource</translate
+      :translate-n="props.folders"
+      :translate-params="{ folderCount: props.folders }"
+      translate-plural="%{folderCount} folders"
+      data-test-id="files-list-folder-count"
+      :data-test-files="props.folders"
+      >%{folderCount} folder</translate
     >
-    <span v-if="props.size">&ndash; {{ props.size }}</span>
+    <template v-if="props.size > 0">
+      <span>&ndash;</span>
+      <oc-resource-size
+        data-test-it="files-list-item-size"
+        :data-test-size="props.size"
+        :size="props.size"
+      />
+    </template>
   </div>
 </template>
 
@@ -41,12 +44,11 @@ export default {
       type: Number,
       required: true
     },
-    total: {
-      type: Number,
-      required: true
-    },
+    /**
+     * Total size in bytes. Unformatted strings and integers are allowed.
+     */
     size: {
-      type: String,
+      type: [String, Number],
       required: false,
       default: null
     }

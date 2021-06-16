@@ -31,32 +31,20 @@
         @fileClick="$_fileActions_triggerDefaultAction"
       >
         <template #footer>
-          <div class="uk-flex uk-flex-middle uk-flex-between">
-            <oc-pagination
-              v-if="paginationLength > 1"
-              :pages="paginationLength"
-              :current-page="currentPage"
-              :max-displayed="3"
-              :current-route="$_filesListPagination_targetRoute"
-            />
-            <div
-              v-if="activeFilesCount.folders > 0 || activeFilesCount.files > 0"
-              class="uk-text-nowrap oc-text-muted uk-text-right uk-flex-1"
-            >
-              <span id="files-list-count-folders" v-text="activeFilesCount.folders" />
-              <translate :translate-n="activeFilesCount.folders" translate-plural="folders"
-                >folder</translate
-              >
-              <translate>and</translate>
-              <span id="files-list-count-files" v-text="activeFilesCount.files" />
-              <translate :translate-n="activeFilesCount.files" translate-plural="files"
-                >file</translate
-              >
-              <template v-if="activeFiles.length > 0">
-                &ndash; {{ getResourceSize(filesTotalSize) }}
-              </template>
-            </div>
-          </div>
+          <oc-pagination
+            v-if="paginationLength > 1"
+            :pages="paginationLength"
+            :current-page="currentPage"
+            :max-displayed="3"
+            :current-route="$_filesListPagination_targetRoute"
+          />
+          <list-info
+            v-if="activeFiles.length > 0"
+            class="uk-width-1-1 oc-my-s"
+            :files="totalFilesCount.files"
+            :folders="totalFilesCount.folders"
+            :size="totalFilesSize"
+          />
         </template>
       </oc-table-files>
     </template>
@@ -69,16 +57,17 @@ import { mapGetters, mapActions, mapMutations, mapState } from 'vuex'
 import MixinAccessibleBreadcrumb from '../mixins/accessibleBreadcrumb'
 import MixinFileActions from '../mixins/fileActions'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
-import MixinResources from '../mixins/resources'
 import MixinFilesListPagination from '../mixins/filesListPagination'
 
 import { buildResource } from '../helpers/resources'
 import ListLoader from '../components/ListLoader.vue'
 import NoContentMessage from '../components/NoContentMessage.vue'
 import NotFoundMessage from '../components/FilesLists/NotFoundMessage.vue'
+import ListInfo from '../components/FilesListFooterInfo.vue'
 
 export default {
   components: {
+    ListInfo,
     ListLoader,
     NoContentMessage,
     NotFoundMessage
@@ -88,7 +77,6 @@ export default {
     MixinAccessibleBreadcrumb,
     MixinFileActions,
     MixinFilesListPositioning,
-    MixinResources,
     MixinFilesListPagination
   ],
 
@@ -107,8 +95,8 @@ export default {
       'highlightedFile',
       'inProgress',
       'currentFolder',
-      'activeFilesCount',
-      'filesTotalSize',
+      'totalFilesCount',
+      'totalFilesSize',
       'paginationLength'
     ]),
     ...mapGetters(['configuration']),

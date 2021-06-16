@@ -28,6 +28,7 @@ export default {
   atSearchPage: state => {
     return state.searchTermGlobal !== ''
   },
+  paginationLength: state => Math.ceil(state.files.length / state.filesPageLimit),
   activeFiles: state => {
     const files = state.searchTermGlobal ? state.filesSearched : state.files
     const direction = state.fileSortDirectionDesc ? 'desc' : 'asc'
@@ -38,24 +39,17 @@ export default {
       .sort(fileSortFunctions[state.fileSortField][direction])
       .splice(currentPageIndex, state.filesPageLimit)
   },
-  paginationLength: state => Math.ceil(state.files.length / state.filesPageLimit),
-  filesTotalSize: (state, getters) => {
-    let totalSize = 0
-    for (const file of getters.activeFiles) {
-      totalSize += parseInt(file.size, 10)
-    }
-
-    return totalSize
+  activeFilesSize: (state, getters) => {
+    return $_fileSizes(getters.activeFiles)
   },
   activeFilesCount: (state, getters) => {
-    const files = getters.activeFiles.filter(file => file.type === 'file')
-
-    const folders = getters.activeFiles.filter(file => file.type === 'folder')
-
-    return {
-      files: files.length,
-      folders: folders.length
-    }
+    return $_fileCounts(getters.activeFiles)
+  },
+  totalFilesSize: (state, getters) => {
+    return $_fileSizes(getters.files)
+  },
+  totalFilesCount: (state, getters) => {
+    return $_fileCounts(getters.files)
   },
   davProperties: state => {
     return state.davProperties
@@ -110,4 +104,17 @@ export default {
   },
   uploaded: state => state.uploaded,
   actionsInProgress: state => state.actionsInProgress
+}
+
+function $_fileSizes(files) {
+  return files.map(file => parseInt(file.size)).reduce((x, y) => x + y, 0)
+}
+
+function $_fileCounts(files) {
+  const fileCount = files.filter(file => file.type === 'file').length
+  const folderCount = files.filter(file => file.type === 'folder').length
+  return {
+    files: fileCount,
+    folders: folderCount
+  }
 }
