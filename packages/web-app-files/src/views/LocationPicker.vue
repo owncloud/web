@@ -52,32 +52,22 @@
             :header-position="headerPosition"
           >
             <template #footer>
-              <div class="uk-flex uk-flex-middle uk-flex-between">
-                <oc-pagination
-                  v-if="paginationLength > 1"
-                  :pages="paginationLength"
-                  :current-page="currentPage"
-                  :max-displayed="3"
-                  :current-route="$_filesListPagination_targetRoute"
-                />
-                <div
-                  v-if="activeFilesCount.folders > 0 || activeFilesCount.files > 0"
-                  class="uk-text-nowrap oc-text-muted uk-text-right uk-flex-1"
-                >
-                  <span id="files-list-count-folders" v-text="activeFilesCount.folders" />
-                  <translate :translate-n="activeFilesCount.folders" translate-plural="folders"
-                    >folder</translate
-                  >
-                  <translate>and</translate>
-                  <span id="files-list-count-files" v-text="activeFilesCount.files" />
-                  <translate :translate-n="activeFilesCount.files" translate-plural="files"
-                    >file</translate
-                  >
-                  <template v-if="activeFiles.length > 0">
-                    &ndash; {{ getResourceSize(filesTotalSize) }}
-                  </template>
-                </div>
-              </div>
+              <oc-pagination
+                v-if="paginationLength > 1"
+                :pages="paginationLength"
+                :current-page="currentPage"
+                :max-displayed="3"
+                :current-route="$_filesListPagination_targetRoute"
+                class="files-pagination uk-flex uk-flex-center oc-my-s"
+              />
+              <list-info
+                v-if="activeFiles.length > 0"
+                class="uk-width-1-1 oc-my-s"
+                :files="activeFilesCount.files"
+                :folders="activeFilesCount.folders"
+                :total="files.length"
+                :size="getResourceSize(filesTotalSize)"
+              />
             </template>
           </oc-table-files>
         </template>
@@ -98,6 +88,7 @@ import MixinFilesListPagination from '../mixins/filesListPagination'
 
 import NoContentMessage from '../components/NoContentMessage.vue'
 import ListLoader from '../components/ListLoader.vue'
+import ListInfo from '../components/FilesListFooterInfo.vue'
 
 export default {
   metaInfo() {
@@ -108,7 +99,8 @@ export default {
 
   components: {
     NoContentMessage,
-    ListLoader
+    ListLoader,
+    ListInfo
   },
 
   mixins: [MixinsGeneral, MixinResources, MixinRoutes, MixinFilesListPagination],
