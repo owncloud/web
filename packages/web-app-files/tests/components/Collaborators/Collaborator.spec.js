@@ -83,25 +83,39 @@ describe('Collaborator component', () => {
       })
       expect(wrapper.find(selectors.collaboratorName).text()).toEqual('Alice Hansen')
     })
-    it.each([0, 3, 4, 6])('indicates the current user', shareType => {
-      const wrapper = createWrapper({
-        shareType: shareType,
-        collaborator: {
-          name: 'carol'
-        },
-        currentUserId: 'carol'
+    describe('collaborator is the current user', () => {
+      it.each([0, 3, 4, 6])('indicates the current user', shareType => {
+        const wrapper = createWrapper({
+          shareType: shareType,
+          collaborator: {
+            name: 'carol'
+          },
+          currentUserId: 'carol'
+        })
+        expect(wrapper.find(selectors.collaboratorAdditionalInfo).text()).toEqual('(me)')
       })
-      expect(wrapper.find(selectors.collaboratorAdditionalInfo).text()).toEqual('(me)')
+      it('does not indicate the current user for group shares', () => {
+        const wrapper = createWrapper({
+          shareType: 1,
+          collaborator: {
+            name: 'carol'
+          },
+          currentUserId: 'carol'
+        })
+        expect(wrapper.find(selectors.collaboratorAdditionalInfo).exists()).toBeFalsy()
+      })
     })
-    it('does not indicate the current user for group shares', () => {
-      const wrapper = createWrapper({
-        shareType: 1,
-        collaborator: {
-          name: 'carol'
-        },
-        currentUserId: 'carol'
+    describe('collaborator is not the current user', () => {
+      it.each([0, 3, 4, 6])('does not indicate the current user', shareType => {
+        const wrapper = createWrapper({
+          shareType: shareType,
+          collaborator: {
+            name: 'brian'
+          },
+          currentUserId: 'carol'
+        })
+        expect(wrapper.find(selectors.collaboratorAdditionalInfo).exists()).toBeFalsy()
       })
-      expect(wrapper.find(selectors.collaboratorAdditionalInfo).exists()).toBeFalsy()
     })
     it('shows additional infos about collaborator if set', () => {
       const wrapper = createWrapper({
