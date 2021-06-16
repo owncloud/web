@@ -16,7 +16,7 @@
     "build": "rollup -c",
     "build:w": "rollup -c -w",
     "depcheck": "depcheck",
-    "lint": "eslint packages/**/*/src packages/**/*/tests --color",
+    "lint": "eslint '{packages,tests}/**/*.{js,ts,vue}' --color",
     "serve": "SERVER=true yarn build:w",
     "test:acceptance:drone": "cucumber-js --retry 1 --require-module @babel/register --require-module @babel/polyfill --require tests/acceptance/setup.js --require tests/acceptance/stepDefinitions --format node_modules/cucumber-pretty",
     "test:acceptance:oc10": "cucumber-js --require-module @babel/register --require-module @babel/polyfill --require tests/acceptance/setup.js --require tests/acceptance/stepDefinitions --format node_modules/cucumber-pretty -t \"${TEST_TAGS:-not @skip and not @skipOnOC10}\"",

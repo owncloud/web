@@ -4,7 +4,7 @@ import { createStore } from 'vuex-extensions'
 
 import { loadTheme } from 'web-runtime/src/helpers/theme'
 import Store from 'web-runtime/src/store'
-import { keysDeep } from 'web-pkg/src/utils/object'
+import { objectKeys } from 'web-pkg/src/utils'
 import get from 'lodash-es/get'
 import difference from 'lodash-es/difference'
 
