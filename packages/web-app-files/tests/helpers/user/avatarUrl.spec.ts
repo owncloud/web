@@ -3,6 +3,7 @@ import mockAxios from 'jest-mock-axios'
 
 beforeEach(() => {
   mockAxios.reset()
+  mockClient(undefined)
 })
 
 const mockClient = (signUrl: any) => {
@@ -25,13 +26,12 @@ const buildUrl = ({ server, username, size }: { server: string; username: string
 describe('avatarUrl', () => {
   it('throws an error', async () => {
     const avatarUrlPromise = avatarUrl(defaultOptions)
-    mockAxios.mockResponse({ status: 404, statusText: 'no', data: undefined })
+    mockAxios.mockError()
     await expect(avatarUrlPromise).rejects.toBeTruthy()
     expect(mockAxios.head).toHaveBeenCalledWith(buildUrl(defaultOptions), undefined)
   })
 
   it('returns a unsigned url', async () => {
-    mockClient(undefined)
     const avatarUrlPromise = avatarUrl(defaultOptions)
     mockAxios.mockResponse({ status: 200, data: undefined })
     await expect(avatarUrlPromise).resolves.toBe(buildUrl(defaultOptions))
@@ -47,5 +47,26 @@ describe('avatarUrl', () => {
     mockAxios.mockResponse({ status: 200, data: undefined })
     await expect(avatarUrlPromise).resolves.toBe(`${buildUrl(defaultOptions)}?signed=true`)
     expect(mockAxios.head).toHaveBeenCalledWith(buildUrl(defaultOptions), undefined)
+  })
+
+  it('handles caching', async () => {
+    const avatarUrlPromiseUncached = avatarUrl(defaultOptions, true)
+    await mockAxios.mockResponse({ status: 200, data: undefined })
+    await expect(avatarUrlPromiseUncached).resolves.toBe(buildUrl(defaultOptions))
+    expect(mockAxios.head).toBeCalledTimes(1)
+
+    const avatarUrlPromiseCached = avatarUrl(defaultOptions, true)
+    await expect(avatarUrlPromiseCached).resolves.toBe(buildUrl(defaultOptions))
+    expect(mockAxios.head).toBeCalledTimes(1)
+
+    const avatarUrlPromiseOtherSize = avatarUrl({ ...defaultOptions, size: 1 }, true)
+    await mockAxios.mockResponse({ status: 200, data: undefined })
+    await expect(avatarUrlPromiseOtherSize).resolves.toBe(buildUrl({ ...defaultOptions, size: 1 }))
+    expect(mockAxios.head).toBeCalledTimes(2)
+
+    const avatarUrlPromiseSameUncached = avatarUrl(defaultOptions, false)
+    await mockAxios.mockResponse({ status: 200, data: undefined })
+    await expect(avatarUrlPromiseSameUncached).resolves.toBe(buildUrl(defaultOptions))
+    expect(mockAxios.head).toBeCalledTimes(3)
   })
 })
