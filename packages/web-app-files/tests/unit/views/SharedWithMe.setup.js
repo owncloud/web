@@ -43,6 +43,7 @@ export const store = createStore(Vuex.Store, {
         currentPage: 1
       },
       getters: {
+        totalFilesCount: () => ({ files: 15, folders: 20 }),
         selectedFiles: () => [],
         activeFiles: () => [createFile({ id: 1 }), createFile({ id: 2, status: 2 })],
         activeFilesCount: () => ({ files: 0, folders: 1 }),

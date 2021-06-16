@@ -106,10 +106,12 @@ export default {
   actionsInProgress: state => state.actionsInProgress
 }
 
+// eslint-disable-next-line camelcase
 function $_fileSizes(files) {
   return files.map(file => parseInt(file.size)).reduce((x, y) => x + y, 0)
 }
 
+// eslint-disable-next-line camelcase
 function $_fileCounts(files) {
   const fileCount = files.filter(file => file.type === 'file').length
   const folderCount = files.filter(file => file.type === 'folder').length
