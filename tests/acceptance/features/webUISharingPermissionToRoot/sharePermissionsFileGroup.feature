@@ -19,7 +19,7 @@ Feature: Sharing files with internal groups with permissions
 
 
   Scenario Outline: share a file with multiple users with different roles and permissions
-    Given user "user0" has been created with default attributes
+    Given user "user0" has been created with default attributes and without skeleton files
     And group "grp2" has been created
     And user "Brian" has been added to group "grp2"
     And user "Alice" has logged in using the webUI

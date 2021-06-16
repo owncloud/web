@@ -165,12 +165,6 @@ function blockUser(userId) {
   return httpHelper.putOCS(apiURL, 'admin')
 }
 
-Given('user {string} has been created with default attributes', async function(userId) {
-  await deleteUser(userId)
-  await createDefaultUser(userId, 'large')
-  await initUser(userId)
-})
-
 Given(
   /^user "([^"]*)" has been created with default attributes and (without|large|small) skeleton files$/,
   async function(userId, skeletonType) {
