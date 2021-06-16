@@ -1,5 +1,7 @@
 import { wrapper, store, showMessage, getShare } from './SharedWithMe.setup'
 
+jest.unmock('axios')
+
 describe('SharedWithMe component', () => {
   describe('method triggerShareAction', () => {
     beforeEach(() => {
