@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, CancelTokenSource } from 'axios'
+import merge from 'lodash-es/merge'
 
 export class HttpClient {
   private readonly instance: AxiosInstance
@@ -6,42 +7,46 @@ export class HttpClient {
 
   constructor(config?: AxiosRequestConfig) {
     this.cancelToken = axios.CancelToken.source()
-    this.instance = axios.create({ cancelToken: this.cancelToken.token, ...config })
+    this.instance = axios.create(config)
   }
 
   public cancel(msg?: string): void {
     this.cancelToken.cancel(msg)
   }
 
-  delete(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse> {
-    return this.instance.delete(url, config)
+  public delete(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse> {
+    return this.instance.delete(url, this.obtainConfig(config))
   }
 
-  get(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse> {
-    return this.instance.get(url, config)
+  public get(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse> {
+    return this.instance.get(url, this.obtainConfig(config))
   }
 
-  head(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse> {
-    return this.instance.head(url, config)
+  public head(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse> {
+    return this.instance.head(url, this.obtainConfig(config))
   }
 
-  options(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse> {
-    return this.instance.options(url, config)
+  public options(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse> {
+    return this.instance.options(url, this.obtainConfig(config))
   }
 
-  patch(url: string, data?: never, config?: AxiosRequestConfig): Promise<AxiosResponse> {
-    return this.instance.patch(url, data, config)
+  public patch(url: string, data?: never, config?: AxiosRequestConfig): Promise<AxiosResponse> {
+    return this.instance.patch(url, data, this.obtainConfig(config))
   }
 
-  post(url: string, data?: never, config?: AxiosRequestConfig): Promise<AxiosResponse> {
-    return this.instance.post(url, data, config)
+  public post(url: string, data?: never, config?: AxiosRequestConfig): Promise<AxiosResponse> {
+    return this.instance.post(url, data, this.obtainConfig(config))
   }
 
-  put(url: string, data?: never, config?: AxiosRequestConfig): Promise<AxiosResponse> {
-    return this.instance.put(url, data, config)
+  public put(url: string, data?: never, config?: AxiosRequestConfig): Promise<AxiosResponse> {
+    return this.instance.put(url, data, this.obtainConfig(config))
   }
 
-  request(config: AxiosRequestConfig): Promise<AxiosResponse> {
-    return this.instance.request(config)
+  public request(config: AxiosRequestConfig): Promise<AxiosResponse> {
+    return this.instance.request(this.obtainConfig(config))
+  }
+
+  private obtainConfig(config?: AxiosRequestConfig): AxiosRequestConfig {
+    return merge({ cancelToken: this.cancelToken.token }, config)
   }
 }

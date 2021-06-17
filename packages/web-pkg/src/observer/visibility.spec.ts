@@ -48,7 +48,14 @@ describe('VisibilityObserver', () => {
     callback([{ isIntersecting: false, intersectionRatio: -1, target }])
     expect(onEnter).toBeCalledTimes(1)
     expect(onExit).toBeCalledTimes(1)
+    callback([{ isIntersecting: true, intersectionRatio: 1, target }])
+    expect(onEnter).toBeCalledTimes(2)
+    expect(onExit).toBeCalledTimes(1)
+    callback([{ isIntersecting: false, intersectionRatio: -1, target }])
+    expect(onEnter).toBeCalledTimes(2)
+    expect(onExit).toBeCalledTimes(2)
   })
+
   it.each(['disconnect', 'unobserve'])('handles %p', m => {
     const onEnter = jest.fn()
     const onExit = jest.fn()
@@ -65,5 +72,40 @@ describe('VisibilityObserver', () => {
     callback([{ isIntersecting: false, intersectionRatio: -1, target }])
     expect(onEnter).toBeCalledTimes(0)
     expect(onExit).toBeCalledTimes(0)
+  })
+
+  it('unobserves in callback', () => {
+    const onEnter = jest.fn()
+    const onExit = jest.fn()
+    const observer = new VisibilityObserver()
+    const target = document.getElementById('target')
+    observer.observe(target, {
+      onEnter: ({ unobserve }) => {
+        unobserve()
+        onEnter()
+      },
+      onExit: ({ unobserve }) => {
+        unobserve()
+        onExit()
+      }
+    })
+    callback([{ isIntersecting: false, intersectionRatio: -1, target }])
+    expect(onEnter).toBeCalledTimes(0)
+    expect(onExit).toBeCalledTimes(0)
+    expect(mockIntersectionObserver.unobserve).toBeCalledTimes(0)
+    callback([{ isIntersecting: true, intersectionRatio: 1, target }])
+    expect(onEnter).toBeCalledTimes(1)
+    expect(onExit).toBeCalledTimes(0)
+    expect(mockIntersectionObserver.unobserve).toBeCalledTimes(0)
+    callback([{ isIntersecting: false, intersectionRatio: -1, target }])
+    expect(onEnter).toBeCalledTimes(1)
+    expect(onExit).toBeCalledTimes(1)
+    expect(mockIntersectionObserver.unobserve).toBeCalledTimes(1)
+    callback([{ isIntersecting: true, intersectionRatio: 1, target }])
+    expect(onEnter).toBeCalledTimes(1)
+    expect(onExit).toBeCalledTimes(1)
+    callback([{ isIntersecting: false, intersectionRatio: -1, target }])
+    expect(onEnter).toBeCalledTimes(1)
+    expect(onExit).toBeCalledTimes(1)
   })
 })

@@ -5,6 +5,6 @@
   "license": "AGPL-3.0",
   "devDependencies": {
     "axios": "^0.21.1",
-    "lodash-es": "^4.17.20"
+    "lodash-es": "^4.17.21"
   }
 }

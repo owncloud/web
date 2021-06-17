@@ -36,14 +36,14 @@ describe('avatarUrl', () => {
     const avatarUrlPromise = avatarUrl(defaultOptions)
     mockAxios.mockResponse({ status: 404, data: undefined, statusText: 'error' })
     await expect(avatarUrlPromise).rejects.toThrowError(new Error('error'))
-    expect(mockAxios.head).toHaveBeenCalledWith(buildUrl(defaultOptions), undefined)
+    expect(mockAxios.head).toHaveBeenCalledWith(buildUrl(defaultOptions), expect.anything())
   })
 
   it('returns a unsigned url', async () => {
     const avatarUrlPromise = avatarUrl(defaultOptions)
     mockAxios.mockResponse({ data: undefined })
     await expect(avatarUrlPromise).resolves.toBe(buildUrl(defaultOptions))
-    expect(mockAxios.head).toHaveBeenCalledWith(buildUrl(defaultOptions), undefined)
+    expect(mockAxios.head).toHaveBeenCalledWith(buildUrl(defaultOptions), expect.anything())
   })
 
   it('returns a signed url', async () => {
@@ -54,7 +54,7 @@ describe('avatarUrl', () => {
     const avatarUrlPromise = avatarUrl(defaultOptions)
     mockAxios.mockResponse({ data: undefined })
     await expect(avatarUrlPromise).resolves.toBe(`${buildUrl(defaultOptions)}?signed=true`)
-    expect(mockAxios.head).toHaveBeenCalledWith(buildUrl(defaultOptions), undefined)
+    expect(mockAxios.head).toHaveBeenCalledWith(buildUrl(defaultOptions), expect.anything())
   })
 
   it('handles caching', async () => {
