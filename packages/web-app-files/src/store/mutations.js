@@ -330,7 +330,7 @@ export default {
   },
 
   UPDATE_CURRENT_PAGE(state, page) {
-    state.currentPage = parseInt(page, 10)
+    state.currentPage = parseInt(page)
   }
 }
 

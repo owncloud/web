@@ -33,12 +33,12 @@ export default {
   activeFiles: (state, getters) => {
     const files = getters.filesAll
     const direction = state.fileSortDirectionDesc ? 'desc' : 'asc'
-    const currentPageIndex = (state.currentPage - 1) * state.filesPageLimit
+    const firstElementIndex = (state.currentPage - 1) * state.filesPageLimit
 
     return []
       .concat(files)
       .sort(fileSortFunctions[state.fileSortField][direction])
-      .splice(currentPageIndex, state.filesPageLimit)
+      .splice(firstElementIndex, state.filesPageLimit)
   },
   activeFilesSize: (state, getters) => {
     return $_fileSizes(getters.activeFiles)
