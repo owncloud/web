@@ -5,6 +5,7 @@ import SharedWithMe from '../../../src/views/SharedWithMe'
 import { createStore } from 'vuex-extensions'
 import DesignSystem from 'owncloud-design-system'
 
+config.mocks.$ngettext = str => str
 config.mocks.$gettextInterpolate = str => str
 
 const createFile = ({ id, status = 1, type = 'folder' }) => ({
