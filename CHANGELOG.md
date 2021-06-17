@@ -27,6 +27,7 @@ Summary
 * Enhancement - Improve a11y colors: [#5138](https://github.com/owncloud/web/pull/5138)
 * Enhancement - Accessible status indicators: [#5182](https://github.com/owncloud/web/pull/5182)
 * Enhancement - Use a proper definition list for the account settings page: [#5012](https://github.com/owncloud/web/pull/5012)
+* Enhancement - Add pagination: [#5224](https://github.com/owncloud/web/pull/5224)
 * Enhancement - Update owncloud Design System to v7.1.2: [#5002](https://github.com/owncloud/web/pull/5002)
 * Enhancement - Button appearance: [#5053](https://github.com/owncloud/web/pull/5053)
 * Enhancement - Confirmation message when copying links: [#5147](https://github.com/owncloud/web/pull/5147)
@@ -46,6 +47,7 @@ Summary
 * Enhancement - Use `oc-select` for role select: [#4937](https://github.com/owncloud/web/pull/4937)
 * Enhancement - Add focus trap to left sidebar: [#5027](https://github.com/owncloud/web/pull/5027)
 * Enhancement - Improve accessibility on trash bin: [#5046](https://github.com/owncloud/web/pull/5046)
+* Enhancement - Update ownCloud Design System to v7.4.0: [#5224](https://github.com/owncloud/web/pull/5224)
 * Enhancement - Improve accessibility on user menu: [#5010](https://github.com/owncloud/web/pull/5010)
 
 Details
@@ -199,6 +201,12 @@ Details
 * Enhancement - Use a proper definition list for the account settings page: [#5012](https://github.com/owncloud/web/pull/5012)
 
    https://github.com/owncloud/web/pull/5012
+
+* Enhancement - Add pagination: [#5224](https://github.com/owncloud/web/pull/5224)
+
+   We've added pagination to all files lists. Current limit for displayed resources is 100.
+
+   https://github.com/owncloud/web/pull/5224
 
 * Enhancement - Update owncloud Design System to v7.1.2: [#5002](https://github.com/owncloud/web/pull/5002)
 
@@ -369,6 +377,13 @@ Details
    Add more context to the empty trash bin button text and only render it, if resources are present.
 
    https://github.com/owncloud/web/pull/5046
+
+* Enhancement - Update ownCloud Design System to v7.4.0: [#5224](https://github.com/owncloud/web/pull/5224)
+
+   We've updated ownCloud Design System to version 7.4.0 to bring the new pagination component.
+
+   https://github.com/owncloud/web/pull/5224
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v7.4.0
 
 * Enhancement - Improve accessibility on user menu: [#5010](https://github.com/owncloud/web/pull/5010)
 
