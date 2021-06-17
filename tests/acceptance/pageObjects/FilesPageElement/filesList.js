@@ -410,25 +410,15 @@ module.exports = {
       await this.waitForElementVisible('@filesListNotFoundMessage')
     },
     countFilesAndFolders: async function() {
-      let filesCount = 0
-      await this.waitForElementVisible('@filesCount').getAttribute(
-        '@filesCount',
-        'data-test-files',
+      let itemCount = 0
+      await this.waitForElementVisible('@filesListFooterInfo').getAttribute(
+        '@filesListFooterInfo',
+        'data-test-items',
         result => {
-          filesCount = parseInt(result.value)
+          itemCount = parseInt(result.value)
         }
       )
-
-      let foldersCount = 0
-      await this.waitForElementVisible('@foldersCount').getAttribute(
-        '@foldersCount',
-        'data-test-folders',
-        result => {
-          foldersCount = parseInt(result.value)
-        }
-      )
-
-      return filesCount + foldersCount
+      return itemCount
     },
 
     /**
@@ -719,12 +709,8 @@ module.exports = {
     collaboratorsList: {
       selector: '.files-collaborators-lists'
     },
-    foldersCount: {
-      selector: '//span[@data-test-id="files-list-folder-count"]',
-      locateStrategy: 'xpath'
-    },
-    filesCount: {
-      selector: '//span[@data-test-id="files-list-files-count"]',
+    filesListFooterInfo: {
+      selector: '//span[@data-test-id="files-list-footer-info"]',
       locateStrategy: 'xpath'
     },
     filesTableHeader: {

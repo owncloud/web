@@ -1,39 +1,19 @@
-<template functional>
-  <div
-    :ref="data.ref"
-    v-bind="data.attrs"
-    class="uk-text-nowrap oc-text-muted uk-text-center"
-    :class="[data.staticClass, data.class]"
-  >
-    <translate
-      :translate-n="props.files"
-      :translate-params="{ filesCount: props.files }"
-      translate-plural="%{filesCount} files"
-      data-test-id="files-list-files-count"
-      :data-test-files="props.files"
-      >%{filesCount} file</translate
+<template>
+  <div class="uk-text-nowrap oc-text-muted uk-text-center">
+    <span
+      data-test-id="files-list-footer-info"
+      :data-test-items="items"
+      :data-test-files="files"
+      :data-test-folders="folders"
+      :data-test-size="size"
+      >{{ text }}</span
     >
-    <span>,</span>
-    <translate
-      :translate-n="props.folders"
-      :translate-params="{ folderCount: props.folders }"
-      translate-plural="%{folderCount} folders"
-      data-test-id="files-list-folder-count"
-      :data-test-folders="props.folders"
-      >%{folderCount} folder</translate
-    >
-    <template v-if="props.size > 0">
-      <span>&ndash;</span>
-      <oc-resource-size
-        data-test-it="files-list-item-size"
-        :data-test-size="props.size"
-        :size="props.size"
-      />
-    </template>
   </div>
 </template>
 
 <script>
+import { getResourceSize } from 'web-runtime/src/helpers/resource'
+
 export default {
   props: {
     files: {
@@ -51,6 +31,44 @@ export default {
       type: [String, Number],
       required: false,
       default: null
+    }
+  },
+  computed: {
+    items() {
+      return this.files + this.folders
+    },
+    text() {
+      const filesStr = this.$gettextInterpolate(
+        this.$ngettext('%{ filesCount } file', '%{ filesCount } files', this.files),
+        {
+          filesCount: this.files
+        }
+      )
+      const foldersStr = this.$gettextInterpolate(
+        this.$ngettext('%{ foldersCount } folder', '%{ foldersCount } folders', this.folders),
+        {
+          foldersCount: this.folders
+        }
+      )
+      const itemSize = getResourceSize(this.size)
+      const translated =
+        this.size > 0
+          ? this.$ngettext(
+              '%{ itemsCount } item with %{ itemSize } in total (%{ filesStr}, %{foldersStr})',
+              '%{ itemsCount } items with %{ itemSize } in total (%{ filesStr}, %{foldersStr})',
+              this.items
+            )
+          : this.$ngettext(
+              '%{ itemsCount } item in total (%{ filesStr}, %{foldersStr})',
+              '%{ itemsCount } items in total (%{ filesStr}, %{foldersStr})',
+              this.items
+            )
+      return this.$gettextInterpolate(translated, {
+        itemsCount: this.items,
+        itemSize,
+        filesStr,
+        foldersStr
+      })
     }
   }
 }
