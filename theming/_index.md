@@ -13,7 +13,7 @@ geekdocCollapseSection: true
 
 ## Introduction
 
-By providing your own theme, you can customize the user experience for your own ownCloud installation. This is being achieved by providing a `json` file that contains text snippets (like brand name and slogan), paths to images (e.g. logos or favicon) and design tokens for custom colors (font size and spacing aren't yet supported).
+By providing your own theme, you can customize the user experience for your own ownCloud installation. This is being achieved by providing a `json` file that contains text snippets (like brand name and slogan), paths to images (e.g. logos or favicon) and design tokens for various color, sizing and spacing parameters.
 
 This page documents the setup and configuration options, and provides an empty template for you to get started.
 
@@ -30,39 +30,30 @@ To reference your theme, you have two options:
 
 ## Configuring a theme
 
-Inside your `theme.json`, you can provide multiple themes as first-level objects. Currently, only the one called `"default"` gets applied when the frontend application is started.
+Inside your `theme.json`, you can provide multiple themes as first-level objects. Currently, only the one called `"default"` gets applied when the frontend application is started. In the future, we'll provide functionality to dynamically switch between those themes.
 
 You can use the snippet below as a base for writing your own theme by replacing the strings and image file paths accordingly. Also, make sure to delete the comments from the file.
 
 ```json
 {
   "default": {
-    // a theme named `default` is expected to 
-    // be present and gets applied initially
     "general": {
       "name": "ownCloud",
       "slogan": "ownCloud – A safe home for all your data"
     },
     "logo": {
-      // Reference URL paths for assets when using a remote theme
-      "sidebar": "https://externalurl.example.com/theme-name/assets/logo.svg",
-      "favicon": "https://externalurl.example.com/theme-name/assets/favicon.jpg",
-      // Example use of relative paths for usage with a local theme inside packages/web-runtime/themes/
-      "login": "themes/owncloud/assets/logo.svg"
+      "sidebar": "https://externalurl.example.com/url/for/remote/theme/assets/logo.svg",
+      "favicon": "https://externalurl.example.com/url/for/remote/theme/assets/favicon.jpg",
+      "login": "relative/path/for/local/theme/logo.svg"
     },
     "loginPage": {
       "autoRedirect": true,
-      "backgroundImg": "themes/owncloud/assets/loginBackground.jpg"
+      "backgroundImg": "relative/path/for/local/theme/background.jpg"
     },
-    "designTokens": {
-      // please see the section on Design Tokens below
-    }
+    "designTokens": {}
   },
-  "alternative": {
-    // you can provide multiple themes inside your `.json` file
-    // currently that doesn't do anything, but we'll provide
-    // functionality to dynamically switch between themes in the future
-  }
+  "alternative": {},
+  "dark": {}
 }
 ```
 
@@ -87,27 +78,18 @@ To further customize your ownCloud instance, you can provide your own styles. To
 
 **Hint:** All the variables are initialized using the [ownCloud design tokens](https://owncloud.design/#/Design%20Tokens) and then overwritten by your theme variables. Therefore, you don't have to provide all the variables and can use the default ownCloud colors as a fallback.
 
-In general, the theme loader looks for a `designTokens` key inside your theme configuration. Inside the `designTokens`, it expects to find a `colorPalette`, `fontSize` and `spacing` collection (ony `colorPalette` is being used right now, see below for details).
+In general, the theme loader looks for a `designTokens` key inside your theme configuration. Inside the `designTokens`, it expects to find a `colorPalette`, `fontSizes` and `spacing` collection. The structure is outlined below:
 
 ```json
 {
   "default": {
-    "general": {
-      // ...
-    },
+    "general": {},
     "designTokens": {
-      "colorPalette": {
-        // ...
-      },
-      "fontSizes": {
-        // ...
-      },
-      "sizes": {
-        // ...
-      },
-      "spacing": {
-        // ...
-      }
+      "breakpoints": {},
+      "colorPalette": {},
+      "fontSizes": {},
+      "sizes": {},
+      "spacing": {}
     }
   }
 }
@@ -118,6 +100,29 @@ Please follow this structure to make sure your theming configuration can be load
 ### Extendability
 
 If you define different key-value pairs inside any of the objects in `"designTokens"`, they will get loaded and initialized as CSS custom properties but don't take any effect in the user interface. This gives you an opportunity to, for example, customize extensions from within the theme in the web runtime (and not the extension itself).
+
+### Breakpoints
+
+If you'd like to set different breakpoints than the default ones in the ownCloud design system, you can set them using theming variables.
+
+Breakpoint variables get prepended with `--oc-breakpoint-`, so e.g. *"large-default"* creates the custom CSS property `--oc-breakpoint-large-default`.
+
+
+```json
+{
+  "breakpoints": {
+    "xsmall-max": "",
+    "small-default": "",
+    "small-max": "",
+    "medium-default": "",
+    "medium-max": "",
+    "large-default": "",
+    "large-max": "",
+    "xlarge": ""
+  }
+}
+```
+
 ### Colors
 
 For the color values, you can use any valid CSS color format, e.g. **hex** (#fff), **rgb** (rgb(255,255,255)) or **color names** (white).
@@ -128,62 +133,38 @@ Again, you can use the [ownCloud design tokens](https://owncloud.design/#/Design
 
 ```json
 {
-  "default": {
-    "general": {
-      // ...
-    },
-    "designTokens": {
-      "colorPalette": {
-        "background-default": "",
-        "background-highlight": "",
-        "background-muted": "",
-        "border": "",
-        "input-bg": "",
-        "input-border": "",
-        "input-text-default": "",
-        "input-text-muted": "",
-        "swatch-brand-default": "",
-        "swatch-brand-hover": "",
-        "swatch-danger-default": "",
-        "swatch-danger-hover": "",
-        "swatch-danger-muted": "",
-        "swatch-passive-default": "",
-        "swatch-passive-hover": "",
-        "swatch-passive-muted": "",
-        "swatch-primary-default": "",
-        "swatch-primary-hover": "",
-        "swatch-primary-muted": "",
-        "swatch-success-default": "",
-        "swatch-success-hover": "",
-        "swatch-success-muted": "",
-        "swatch-warning-default": "",
-        "swatch-warning-hover": "",
-        "swatch-warning-muted": "",
-        "text-default": "",
-        "text-inverse": "",
-        "text-muted": ""
-      },
-      "fontSizes": {
-        "default": "",
-        "large": "",
-        "medium": ""
-      },
-      "size": {
-        "form-check-default": "",
-        "height-small": "",
-        "height-table-row": "",
-        "icon-default": "",
-        "width-medium": ""
-      },
-      "spacing": {
-        "xsmall": "",
-        "small": "",
-        "medium": "",
-        "large": "",
-        "xlarge": "",
-        "xxlarge": ""
-      }
-    }
+  "colorPalette": {
+    "background-default": "",
+    "background-highlight": "",
+    "background-muted": "",
+    "border": "",
+    "input-bg": "",
+    "input-border": "",
+    "input-text-default": "",
+    "input-text-muted": "",
+    "swatch-brand-default": "",
+    "swatch-brand-hover": "",
+    "swatch-danger-default": "",
+    "swatch-danger-hover": "",
+    "swatch-danger-muted": "",
+    "swatch-inverse-default": "",
+    "swatch-inverse-hover": "",
+    "swatch-inverse-muted": "",
+    "swatch-passive-default": "",
+    "swatch-passive-hover": "",
+    "swatch-passive-muted": "",
+    "swatch-primary-default": "",
+    "swatch-primary-hover": "",
+    "swatch-primary-muted": "",
+    "swatch-success-default": "",
+    "swatch-success-hover": "",
+    "swatch-success-muted": "",
+    "swatch-warning-default": "",
+    "swatch-warning-hover": "",
+    "swatch-warning-muted": "",
+    "text-default": "",
+    "text-inverse": "",
+    "text-muted": ""
   }
 }
 ```
@@ -193,20 +174,60 @@ Again, you can use the [ownCloud design tokens](https://owncloud.design/#/Design
 You can change the `default`, `large` and `medium` font sizes according to your needs. If you need more customization options regarding font sizes, please [open an issue on GitHub](https://github.com/owncloud/web/issues/new) with a detailed description.
 
 Font size variables get prepended with `--oc-font-size-`, so e.g. *"default"* creates the custom CSS property `--oc-font-size-default`.
+
+```json
+{
+  "fontSizes": {
+    "default": "",
+    "large": "",
+    "medium": ""
+  }
+}
+```
+
 ### Sizes
 
-You can change the `form-check-default` (checkbox sizing), `height-small` (height of the logo img in the sidebar), `icon-default` (icon base size) and `width-medium` (width of the sidebar) according to your needs. If you need more customization options regarding sizes, please [open an issue on GitHub](https://github.com/owncloud/web/issues/new) with a detailed description.
+Use sizing variables to change various UI elements, such as icon and logo appearance, table row or checkbox sizes, according to your needs. 
+If you need more customization options regarding sizes, please [open an issue on GitHub](https://github.com/owncloud/web/issues/new) with a detailed description.
 
 Size variables get prepended with `--oc-size-`, so e.g. *"icon-default"* creates the custom CSS property `--oc-size-icon-default`.
+
+```json
+{
+  "sizes": {
+    "form-check-default": "",
+    "height-small": "",
+    "height-table-row": "",
+    "icon-default": "",
+    "max-height-logo": "",
+    "max-width-logo": "",
+    "width-medium": ""
+  }
+}
+```
 
 ### Spacing
 
 Use the six spacing options (`xsmall | small | medium | large | xlarge | xxlarge`) to create a more (or less) condensed version of the user interface. If you need more customization options regarding sizes, please [open an issue on GitHub](https://github.com/owncloud/web/issues/new) with a detailed description.
 
 Spacing variables get prepended with `--oc-space-`, so e.g. *"xlarge"* creates the custom CSS property `--oc-space-xlarge`.
+
+```json
+{
+  "spacing": {
+    "xsmall": "",
+    "small": "",
+    "medium": "",
+    "large": "",
+    "xlarge": "",
+    "xxlarge": ""
+  }
+}
+```
+
 ## Example theme
 
-An empty template for your custom theme is provided below, and you can use the instructions above to set it up according to your needs. Please note that since changing themes at runtime is not yet supported it only consists of a `default` theme, and the `fontSizes` and `spacing` tokens don't have any effect yet.
+An empty template for your custom theme is provided below, and you can use the instructions above to set it up according to your needs. Please note that since changing themes at runtime is not yet supported it only consists of a `default` theme.
 
 ```json
 {
@@ -226,6 +247,16 @@ An empty template for your custom theme is provided below, and you can use the i
       "backgroundImg": ""
     },
     "designTokens": {
+      "breakpoints": {
+        "xsmall-max": "",
+        "small-default": "",
+        "small-max": "",
+        "medium-default": "",
+        "medium-max": "",
+        "large-default": "",
+        "large-max": "",
+        "xlarge": ""
+      },
       "colorPalette": {
         "background-default": "",
         "background-highlight": "",
@@ -240,6 +271,9 @@ An empty template for your custom theme is provided below, and you can use the i
         "swatch-danger-default": "",
         "swatch-danger-hover": "",
         "swatch-danger-muted": "",
+        "swatch-inverse-default": "",
+        "swatch-inverse-hover": "",
+        "swatch-inverse-muted": "",
         "swatch-passive-default": "",
         "swatch-passive-hover": "",
         "swatch-passive-muted": "",
@@ -266,6 +300,8 @@ An empty template for your custom theme is provided below, and you can use the i
         "height-small": "",
         "height-table-row": "",
         "icon-default": "",
+        "max-height-logo": "",
+        "max-width-logo": "",
         "width-medium": ""
       },
       "spacing": {
