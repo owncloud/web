@@ -34,8 +34,8 @@ const buildUrl = ({
 describe('avatarUrl', () => {
   it('throws an error', async () => {
     const avatarUrlPromise = avatarUrl(defaultOptions)
-    mockAxios.mockError()
-    await expect(avatarUrlPromise).rejects.toBeTruthy()
+    mockAxios.mockResponse({ status: 404, data: undefined, statusText: 'error' })
+    await expect(avatarUrlPromise).rejects.toThrowError(new Error('error'))
     expect(mockAxios.head).toHaveBeenCalledWith(buildUrl(defaultOptions), undefined)
   })
 
