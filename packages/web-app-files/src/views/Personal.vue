@@ -208,7 +208,7 @@ export default {
           isPublic: false,
           dimensions: ImageDimension.ThumbNail
         })
-      })
+      }, 250)
 
       visibilityObserver.observe(component.$el, { onEnter: debounced, onExit: debounced.cancel })
     },
