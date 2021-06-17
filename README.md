@@ -1,3 +1,5 @@
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=owncloud_web&metric=coverage)](https://sonarcloud.io/dashboard?id=owncloud_web)
+
 # ownCloud Web
 **User interface for ownCloud**
 
