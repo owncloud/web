@@ -2035,18 +2035,7 @@ def setupServerAndAppsForIntegrationApp(logLevel):
         "image": "owncloudci/php:7.4",
         "pull": "always",
         "commands": [
-            "cd %s" % dir["server"],
-            "php occ a:e testing",
-            "php occ a:e web",
-            "php occ a:l",
-            "php occ config:system:set trusted_domains 1 --value=owncloud",
-            "php occ log:manage --level %s" % logLevel,
-            "php occ config:list",
-            "php occ config:system:set skeletondirectory --value=%s/apps/testing/data/webUISkeleton" % dir["server"],
-            "php occ config:system:set enable_previews --type=boolean --value=false",
-            'php occ config:system:set web.baseUrl --value="http://owncloud/index.php/apps/web"',
-            "php occ config:system:set sharing.federation.allowHttpFallback --value=true --type=bool",
-            "php occ config:system:set web.rewriteLinks --value=true",
+            "bash -x tests/drone/setup-server-and-app.sh %s %s %s" % (dir["server"], logLevel, "builtInWeb"),
         ],
     }]
 
@@ -2056,17 +2045,7 @@ def setupServerAndApp(logLevel):
         "image": "owncloudci/php:7.4",
         "pull": "always",
         "commands": [
-            "cd /var/www/owncloud/server/",
-            "php occ a:e testing",
-            "php occ a:l",
-            "php occ config:system:set trusted_domains 1 --value=owncloud",
-            "php occ config:system:set cors.allowed-domains 0 --value=http://web",
-            "php occ log:manage --level %s" % logLevel,
-            "php occ config:list",
-            "php occ config:system:set skeletondirectory --value=/var/www/owncloud/server/apps/testing/data/webUISkeleton",
-            'php occ config:system:set web.baseUrl --value="http://web"',
-            "php occ config:system:set sharing.federation.allowHttpFallback --value=true --type=bool",
-            "php occ config:system:set web.rewriteLinks --value=true",
+            "bash -x tests/drone/setup-server-and-app.sh %s %s" % (dir["server"], logLevel),
         ],
     }]
 
