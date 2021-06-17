@@ -1,13 +1,15 @@
 <template>
-  <div class="uk-text-nowrap oc-text-muted uk-text-center">
-    <span
+  <div class="uk-text-nowrap uk-text-center">
+    <p
       data-test-id="files-list-footer-info"
       :data-test-items="items"
       :data-test-files="files"
       :data-test-folders="folders"
       :data-test-size="size"
-      >{{ text }}</span
+      class="oc-text-muted"
     >
+      {{ text }}
+    </p>
   </div>
 </template>
 
