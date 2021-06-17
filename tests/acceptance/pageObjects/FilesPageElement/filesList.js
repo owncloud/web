@@ -411,15 +411,24 @@ module.exports = {
     },
     countFilesAndFolders: async function() {
       let filesCount = 0
+      await this.waitForElementVisible('@filesCount').getAttribute(
+        '@filesCount',
+        'data-test-files',
+        result => {
+          console.log(result)
+          filesCount = parseInt(result.value)
+        }
+      )
+
       let foldersCount = 0
-
-      await this.waitForElementVisible('@filesCount').getText('@filesCount', result => {
-        filesCount = parseInt(result.value, 10)
-      })
-
-      await this.waitForElementVisible('@foldersCount').getText('@foldersCount', result => {
-        foldersCount = parseInt(result.value, 10)
-      })
+      await this.waitForElementVisible('@foldersCount').getAttribute(
+        '@foldersCount',
+        'data-test-folders',
+        result => {
+          console.log(result)
+          foldersCount = parseInt(result.value)
+        }
+      )
 
       return filesCount + foldersCount
     },
@@ -713,10 +722,12 @@ module.exports = {
       selector: '.files-collaborators-lists'
     },
     foldersCount: {
-      selector: '#files-list-count-folders'
+      selector: '//span[@data-test-id="files-list-folder-count"]',
+      locateStrategy: 'xpath'
     },
     filesCount: {
-      selector: '#files-list-count-files'
+      selector: '//span[@data-test-id="files-list-files-count"]',
+      locateStrategy: 'xpath'
     },
     filesTableHeader: {
       selector: '.files-table .oc-thead'
