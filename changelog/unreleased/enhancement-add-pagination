@@ -1,0 +1,5 @@
+Enhancement: Add pagination
+
+We've added pagination to all files lists. Current limit for displayed resources is 100.
+
+https://github.com/owncloud/web/pull/5224

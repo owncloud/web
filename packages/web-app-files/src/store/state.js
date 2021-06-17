@@ -67,5 +67,11 @@ export default {
     permissions: 1,
     hasPassword: false,
     expireDate: null
-  }
+  },
+
+  /**
+   * Pagination
+   */
+  currentPage: 1,
+  filesPageLimit: 100 // TODO: Replace with dynamic value from settings once available
 }

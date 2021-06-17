@@ -11,12 +11,13 @@ module.exports = {
     '^.+\\.svg$': 'jest-svg-transformer'
   },
   moduleNameMapper: {
-    '\\.(css|less)$': '<rootDir>/tests/unit/mocks/style.js'
+    '\\.(css|less)$': '<rootDir>/__mocks__/style.js'
   },
   transformIgnorePatterns: ['<rootDir>/node_modules/(?!lodash-es)'],
   setupFiles: ['<rootDir>/tests/unit/config/jest.init.js'],
   snapshotSerializers: ['jest-serializer-vue'],
   coverageDirectory: '<rootDir>/coverage',
   coverageReporters: ['lcov'],
-  collectCoverageFrom: ['<rootDir>/packages/**/src/**/*.{js,vue}', '!<rootDir>/**/node_modules/**']
+  collectCoverageFrom: ['<rootDir>/packages/**/src/**/*.{js,vue}', '!<rootDir>/**/node_modules/**'],
+  testMatch: ['**/tests/unit/**/*.spec.js']
 }

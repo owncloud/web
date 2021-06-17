@@ -34,7 +34,7 @@
               <oc-tr v-for="(file, key) in getUploadedFiles" :key="key">
                 <oc-td class="oc-pl-rm" v-text="file.name" />
                 <oc-td width="shrink" class="uk-text-nowrap oc-text-muted">
-                  {{ getResourceSize(file.size) }}
+                  <oc-resource-size :size="file.size" />
                 </oc-td>
                 <oc-td width="shrink" class="oc-pr-rm uk-preserve-width">
                   <oc-icon
@@ -77,13 +77,12 @@
 import vue2DropZone from 'vue2-dropzone'
 import { mapGetters } from 'vuex'
 import Mixins from '../mixins.js'
-import MixinResources from '../mixins/resources'
 
 export default {
   components: {
     vueDropzone: vue2DropZone
   },
-  mixins: [Mixins, MixinResources],
+  mixins: [Mixins],
   data() {
     return {
       loading: true,

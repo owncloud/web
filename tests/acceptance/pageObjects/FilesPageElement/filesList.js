@@ -410,18 +410,15 @@ module.exports = {
       await this.waitForElementVisible('@filesListNotFoundMessage')
     },
     countFilesAndFolders: async function() {
-      let filesCount = 0
-      let foldersCount = 0
-
-      await this.waitForElementVisible('@filesCount').getText('@filesCount', result => {
-        filesCount = parseInt(result.value, 10)
-      })
-
-      await this.waitForElementVisible('@foldersCount').getText('@foldersCount', result => {
-        foldersCount = parseInt(result.value, 10)
-      })
-
-      return filesCount + foldersCount
+      let itemCount = 0
+      await this.waitForElementVisible('@filesListFooterInfo').getAttribute(
+        '@filesListFooterInfo',
+        'data-test-items',
+        result => {
+          itemCount = parseInt(result.value)
+        }
+      )
+      return itemCount
     },
 
     /**
@@ -706,17 +703,15 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     linkToPublicLinksTag: {
-      selector: '//div[@class="sidebar-container"]//a[normalize-space(.)="Links"]',
+      selector: '//div[contains(@class, "oc-app-side-bar")]//a[normalize-space(.)="Links"]',
       locateStrategy: 'xpath'
     },
     collaboratorsList: {
       selector: '.files-collaborators-lists'
     },
-    foldersCount: {
-      selector: '#files-list-count-folders'
-    },
-    filesCount: {
-      selector: '#files-list-count-files'
+    filesListFooterInfo: {
+      selector: '//p[@data-test-id="files-list-footer-info"]',
+      locateStrategy: 'xpath'
     },
     filesTableHeader: {
       selector: '.files-table .oc-thead'

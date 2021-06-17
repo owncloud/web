@@ -1,5 +1,7 @@
 import { mapGetters, mapActions } from 'vuex'
 
+import encodePath from '../helpers/encodePath'
+
 export default {
   install(Vue) {
     Vue.mixin({
@@ -79,19 +81,7 @@ export default {
         isIE11() {
           return !!window.MSInputMethodContext && !!document.documentMode
         },
-        /**
-         * URI-Encodes a file path but keep the path slashes.
-         *
-         * @param path path
-         * @return encoded path
-         */
-        encodePath: function(path) {
-          if (!path) {
-            return path
-          }
-          var parts = path.split('/').map(part => encodeURIComponent(part))
-          return parts.join('/')
-        },
+        encodePath,
         triggerDownload(url, name) {
           const a = document.createElement('a')
           a.style.display = 'none'

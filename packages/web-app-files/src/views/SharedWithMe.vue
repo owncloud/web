@@ -56,20 +56,20 @@
           </div>
         </template>
         <template #footer>
-          <div
-            v-if="activeFilesCount.folders > 0 || activeFilesCount.files > 0"
-            class="uk-text-nowrap oc-text-muted uk-text-center uk-width-1-1"
-          >
-            <span id="files-list-count-folders" v-text="activeFilesCount.folders" />
-            <translate :translate-n="activeFilesCount.folders" translate-plural="folders"
-              >folder
-            </translate>
-            <translate>and</translate>
-            <span id="files-list-count-files" v-text="activeFilesCount.files" />
-            <translate :translate-n="activeFilesCount.files" translate-plural="files"
-              >file
-            </translate>
-          </div>
+          <oc-pagination
+            v-if="pages > 1"
+            :pages="pages"
+            :current-page="currentPage"
+            :max-displayed="3"
+            :current-route="$_filesListPagination_targetRoute"
+            class="files-pagination uk-flex uk-flex-center oc-my-s"
+          />
+          <list-info
+            v-if="activeFiles.length > 0"
+            class="uk-width-1-1 oc-my-s"
+            :files="totalFilesCount.files"
+            :folders="totalFilesCount.folders"
+          />
         </template>
       </oc-table-files>
     </template>
@@ -82,14 +82,16 @@ import { shareStatus } from '../helpers/shareStatus'
 import { aggregateResourceShares, buildResource, buildSharedResource } from '../helpers/resources'
 import FileActions from '../mixins/fileActions'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
+import MixinFilesListPagination from '../mixins/filesListPagination'
 
 import ListLoader from '../components/ListLoader.vue'
 import NoContentMessage from '../components/NoContentMessage.vue'
+import ListInfo from '../components/FilesListFooterInfo.vue'
 
 export default {
-  components: { ListLoader, NoContentMessage },
+  components: { ListLoader, NoContentMessage, ListInfo },
 
-  mixins: [FileActions, MixinFilesListPositioning],
+  mixins: [FileActions, MixinFilesListPositioning, MixinFilesListPagination],
 
   data: () => ({
     loading: true,
@@ -98,13 +100,15 @@ export default {
 
   computed: {
     ...mapState(['app']),
+    ...mapState('Files', ['currentPage', 'files']),
     ...mapGetters('Files', [
       'davProperties',
       'highlightedFile',
       'activeFiles',
       'selectedFiles',
       'inProgress',
-      'activeFilesCount'
+      'totalFilesCount',
+      'pages'
     ]),
     ...mapGetters(['isOcis', 'configuration', 'getToken', 'user']),
 
@@ -141,6 +145,10 @@ export default {
   watch: {
     uploadProgressVisible() {
       this.adjustTableHeaderPosition()
+    },
+    $route: {
+      handler: '$_filesListPagination_updateCurrentPage',
+      immediate: true
     }
   },
 

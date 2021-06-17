@@ -52,23 +52,21 @@
             :header-position="headerPosition"
           >
             <template #footer>
-              <div
-                v-if="activeFilesCount.folders > 0 || activeFilesCount.files > 0"
-                class="uk-text-nowrap oc-text-muted uk-text-center uk-width-1-1"
-              >
-                <span id="files-list-count-folders" v-text="activeFilesCount.folders" />
-                <translate :translate-n="activeFilesCount.folders" translate-plural="folders"
-                  >folder</translate
-                >
-                <translate>and</translate>
-                <span id="files-list-count-files" v-text="activeFilesCount.files" />
-                <translate :translate-n="activeFilesCount.files" translate-plural="files"
-                  >file</translate
-                >
-                <template v-if="activeFiles.length > 0">
-                  &ndash; {{ getResourceSize(filesTotalSize) }}
-                </template>
-              </div>
+              <oc-pagination
+                v-if="pages > 1"
+                :pages="pages"
+                :current-page="currentPage"
+                :max-displayed="3"
+                :current-route="$_filesListPagination_targetRoute"
+                class="files-pagination uk-flex uk-flex-center oc-my-s"
+              />
+              <list-info
+                v-if="activeFiles.length > 0"
+                class="uk-width-1-1 oc-my-s"
+                :files="totalFilesCount.files"
+                :folders="totalFilesCount.folders"
+                :size="totalFilesSize"
+              />
             </template>
           </oc-table-files>
         </template>
@@ -83,11 +81,12 @@ import { basename, join } from 'path'
 import { batchActions } from '../helpers/batchActions'
 import { cloneStateObject } from '../helpers/store'
 import MixinsGeneral from '../mixins'
-import MixinResources from '../mixins/resources'
 import MixinRoutes from '../mixins/routes'
+import MixinFilesListPagination from '../mixins/filesListPagination'
 
 import NoContentMessage from '../components/NoContentMessage.vue'
 import ListLoader from '../components/ListLoader.vue'
+import ListInfo from '../components/FilesListFooterInfo.vue'
 
 export default {
   metaInfo() {
@@ -98,10 +97,11 @@ export default {
 
   components: {
     NoContentMessage,
-    ListLoader
+    ListLoader,
+    ListInfo
   },
 
-  mixins: [MixinsGeneral, MixinResources, MixinRoutes],
+  mixins: [MixinsGeneral, MixinRoutes, MixinFilesListPagination],
 
   data: () => ({
     headerPosition: 0,
@@ -113,7 +113,8 @@ export default {
     ...mapState('Files', [
       'selectedResourcesForMove',
       'locationPickerTargetFolder',
-      'currentFolder'
+      'currentFolder',
+      'currentPage'
     ]),
     ...mapGetters('Files', [
       'activeFiles',
@@ -121,8 +122,9 @@ export default {
       'fileSortDirectionDesc',
       'publicLinkPassword',
       'davProperties',
-      'activeFilesCount',
-      'filesTotalSize'
+      'totalFilesCount',
+      'totalFilesSize',
+      'pages'
     ]),
     ...mapGetters(['configuration']),
 
@@ -247,7 +249,10 @@ export default {
 
   watch: {
     $route: {
-      handler: 'navigateToTarget',
+      handler: function() {
+        this.navigateToTarget(this.$route)
+        this.$_filesListPagination_updateCurrentPage()
+      },
       immediate: true
     }
   },

@@ -39,23 +39,21 @@
           />
         </template>
         <template #footer>
-          <div
-            v-if="activeFilesCount.folders > 0 || activeFilesCount.files > 0"
-            class="uk-text-nowrap oc-text-muted uk-text-center uk-width-1-1"
-          >
-            <span id="files-list-count-folders" v-text="activeFilesCount.folders" />
-            <translate :translate-n="activeFilesCount.folders" translate-plural="folders"
-              >folder</translate
-            >
-            <translate>and</translate>
-            <span id="files-list-count-files" v-text="activeFilesCount.files" />
-            <translate :translate-n="activeFilesCount.files" translate-plural="files"
-              >file</translate
-            >
-            <template v-if="activeFiles.length > 0">
-              &ndash; {{ getResourceSize(filesTotalSize) }}
-            </template>
-          </div>
+          <oc-pagination
+            v-if="pages > 1"
+            :pages="pages"
+            :current-page="currentPage"
+            :max-displayed="3"
+            :current-route="$_filesListPagination_targetRoute"
+            class="files-pagination uk-flex uk-flex-center oc-my-s"
+          />
+          <list-info
+            v-if="activeFiles.length > 0"
+            class="uk-width-1-1 oc-my-s"
+            :files="totalFilesCount.files"
+            :folders="totalFilesCount.folders"
+            :size="totalFilesSize"
+          />
         </template>
       </oc-table-files>
     </template>
@@ -70,23 +68,24 @@ import MixinAccessibleBreadcrumb from '../mixins/accessibleBreadcrumb'
 import MixinFileActions from '../mixins/fileActions'
 import MixinFilesListScrolling from '../mixins/filesListScrolling'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
-import MixinResources from '../mixins/resources'
+import MixinFilesListPagination from '../mixins/filesListPagination'
 import { buildResource } from '../helpers/resources'
 
 import QuickActions from '../components/FilesLists/QuickActions.vue'
 import ListLoader from '../components/ListLoader.vue'
 import NoContentMessage from '../components/NoContentMessage.vue'
 import NotFoundMessage from '../components/FilesLists/NotFoundMessage.vue'
+import ListInfo from '../components/FilesListFooterInfo.vue'
 
 export default {
-  components: { QuickActions, ListLoader, NoContentMessage, NotFoundMessage },
+  components: { QuickActions, ListLoader, NoContentMessage, NotFoundMessage, ListInfo },
 
   mixins: [
     MixinAccessibleBreadcrumb,
     MixinFileActions,
     MixinFilesListPositioning,
     MixinFilesListScrolling,
-    MixinResources
+    MixinFilesListPagination
   ],
 
   data: () => ({
@@ -95,6 +94,7 @@ export default {
 
   computed: {
     ...mapState(['app']),
+    ...mapState('Files', ['currentPage', 'files']),
     ...mapGetters('Files', [
       'davProperties',
       'highlightedFile',
@@ -102,8 +102,9 @@ export default {
       'selectedFiles',
       'inProgress',
       'currentFolder',
-      'activeFilesCount',
-      'filesTotalSize'
+      'totalFilesCount',
+      'totalFilesSize',
+      'pages'
     ]),
     ...mapGetters(['user', 'homeFolder', 'configuration']),
 
@@ -147,6 +148,7 @@ export default {
         const sameRoute = to.name === from?.name
         this.checkHomeFallback()
         this.loadResources(sameRoute)
+        this.$_filesListPagination_updateCurrentPage()
       },
       immediate: true
     },
@@ -241,3 +243,10 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+// TODO: remove when fixed in ODS
+.files-pagination > ol {
+  padding: 0;
+}
+</style>

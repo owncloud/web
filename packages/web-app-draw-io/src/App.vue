@@ -6,7 +6,13 @@
       class="uk-position-center"
       size="xlarge"
     />
-    <iframe v-else id="drawio-editor" ref="drawIoEditor" :src="iframeSource" />
+    <iframe
+      v-else
+      id="drawio-editor"
+      ref="drawIoEditor"
+      :src="iframeSource"
+      :title="$gettext('Draw.io editor')"
+    />
   </main>
 </template>
 <script>

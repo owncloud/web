@@ -18,7 +18,7 @@
       </no-content-message>
       <oc-table-files
         v-else
-        id="files-public-list-table"
+        id="files-public-files-table"
         v-model="selected"
         class="files-table"
         :class="{ 'files-table-squashed': isSidebarOpen }"
@@ -31,23 +31,20 @@
         @fileClick="$_fileActions_triggerDefaultAction"
       >
         <template #footer>
-          <div
-            v-if="activeFilesCount.folders > 0 || activeFilesCount.files > 0"
-            class="uk-text-nowrap oc-text-muted uk-text-center uk-width-1-1"
-          >
-            <span id="files-list-count-folders" v-text="activeFilesCount.folders" />
-            <translate :translate-n="activeFilesCount.folders" translate-plural="folders"
-              >folder</translate
-            >
-            <translate>and</translate>
-            <span id="files-list-count-files" v-text="activeFilesCount.files" />
-            <translate :translate-n="activeFilesCount.files" translate-plural="files"
-              >file</translate
-            >
-            <template v-if="activeFiles.length > 0">
-              &ndash; {{ getResourceSize(filesTotalSize) }}
-            </template>
-          </div>
+          <oc-pagination
+            v-if="pages > 1"
+            :pages="pages"
+            :current-page="currentPage"
+            :max-displayed="3"
+            :current-route="$_filesListPagination_targetRoute"
+          />
+          <list-info
+            v-if="activeFiles.length > 0"
+            class="uk-width-1-1 oc-my-s"
+            :files="totalFilesCount.files"
+            :folders="totalFilesCount.folders"
+            :size="totalFilesSize"
+          />
         </template>
       </oc-table-files>
     </template>
@@ -55,32 +52,40 @@
 </template>
 
 <script>
-import { mapGetters, mapActions, mapMutations } from 'vuex'
+import { mapGetters, mapActions, mapMutations, mapState } from 'vuex'
 
 import MixinAccessibleBreadcrumb from '../mixins/accessibleBreadcrumb'
 import MixinFileActions from '../mixins/fileActions'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
-import MixinResources from '../mixins/resources'
-import { buildResource } from '../helpers/resources'
+import MixinFilesListPagination from '../mixins/filesListPagination'
 
+import { buildResource } from '../helpers/resources'
 import ListLoader from '../components/ListLoader.vue'
 import NoContentMessage from '../components/NoContentMessage.vue'
 import NotFoundMessage from '../components/FilesLists/NotFoundMessage.vue'
+import ListInfo from '../components/FilesListFooterInfo.vue'
 
 export default {
   components: {
+    ListInfo,
     ListLoader,
     NoContentMessage,
     NotFoundMessage
   },
 
-  mixins: [MixinAccessibleBreadcrumb, MixinFileActions, MixinFilesListPositioning, MixinResources],
+  mixins: [
+    MixinAccessibleBreadcrumb,
+    MixinFileActions,
+    MixinFilesListPositioning,
+    MixinFilesListPagination
+  ],
 
   data: () => ({
     loading: true
   }),
 
   computed: {
+    ...mapState('Files', ['currentPage']),
     ...mapGetters('Files', [
       'publicLinkPassword',
       'activeFiles',
@@ -90,8 +95,9 @@ export default {
       'highlightedFile',
       'inProgress',
       'currentFolder',
-      'activeFilesCount',
-      'filesTotalSize'
+      'totalFilesCount',
+      'totalFilesSize',
+      'pages'
     ]),
     ...mapGetters(['configuration']),
 
@@ -134,6 +140,7 @@ export default {
       handler: function(to, from) {
         const sameRoute = to.name === from?.name
         this.loadResources(sameRoute)
+        this.$_filesListPagination_updateCurrentPage()
       },
       immediate: true
     },

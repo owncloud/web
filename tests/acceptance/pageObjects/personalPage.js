@@ -399,7 +399,7 @@ module.exports = {
       selector: '#files-upload-progress'
     },
     sideBar: {
-      selector: '//div[@class="sidebar-container"]',
+      selector: '//div[contains(@class, "oc-app-side-bar")]',
       locateStrategy: 'xpath'
     },
     fileOverwriteConfirm: {

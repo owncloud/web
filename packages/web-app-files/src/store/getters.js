@@ -15,6 +15,7 @@ export default {
   files: state => {
     return state.files
   },
+  filesAll: state => (state.searchTermGlobal ? state.filesSearched : state.files),
   currentFolder: state => {
     return state.currentFolder
   },
@@ -28,30 +29,28 @@ export default {
   atSearchPage: state => {
     return state.searchTermGlobal !== ''
   },
-  activeFiles: state => {
-    // if searchTermGlobal is set, replace current file list with search results
-    const files = state.searchTermGlobal ? state.filesSearched : state.files
-    // make a copy of array for sorting as sort() would modify the original array
+  pages: (state, getters) => Math.ceil(getters.filesAll.length / state.filesPageLimit),
+  activeFiles: (state, getters) => {
+    const files = getters.filesAll
     const direction = state.fileSortDirectionDesc ? 'desc' : 'asc'
-    return [].concat(files).sort(fileSortFunctions[state.fileSortField][direction])
-  },
-  filesTotalSize: (state, getters) => {
-    let totalSize = 0
-    for (const file of getters.activeFiles) {
-      totalSize += parseInt(file.size, 10)
-    }
+    const firstElementIndex = (state.currentPage - 1) * state.filesPageLimit
 
-    return totalSize
+    return []
+      .concat(files)
+      .sort(fileSortFunctions[state.fileSortField][direction])
+      .splice(firstElementIndex, state.filesPageLimit)
+  },
+  activeFilesSize: (state, getters) => {
+    return $_fileSizes(getters.activeFiles)
   },
   activeFilesCount: (state, getters) => {
-    const files = getters.activeFiles.filter(file => file.type === 'file')
-
-    const folders = getters.activeFiles.filter(file => file.type === 'folder')
-
-    return {
-      files: files.length,
-      folders: folders.length
-    }
+    return $_fileCounts(getters.activeFiles)
+  },
+  totalFilesSize: (state, getters) => {
+    return $_fileSizes(getters.filesAll)
+  },
+  totalFilesCount: (state, getters) => {
+    return $_fileCounts(getters.filesAll)
   },
   davProperties: state => {
     return state.davProperties
@@ -106,4 +105,19 @@ export default {
   },
   uploaded: state => state.uploaded,
   actionsInProgress: state => state.actionsInProgress
+}
+
+// eslint-disable-next-line camelcase
+function $_fileSizes(files) {
+  return files.map(file => parseInt(file.size)).reduce((x, y) => x + y, 0)
+}
+
+// eslint-disable-next-line camelcase
+function $_fileCounts(files) {
+  const fileCount = files.filter(file => file.type === 'file').length
+  const folderCount = files.filter(file => file.type === 'folder').length
+  return {
+    files: fileCount,
+    folders: folderCount
+  }
 }

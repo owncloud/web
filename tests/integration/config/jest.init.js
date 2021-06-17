@@ -1,0 +1,41 @@
+import Vue from 'vue'
+import { config } from '@vue/test-utils'
+import fetchMock from 'jest-fetch-mock'
+import ODS from 'owncloud-design-system'
+
+// eslint-disable-next-line jest/no-mocks-import
+import sdkMock from '../../../__mocks__/sdk'
+import encodePath from '@runtime/src/helpers/encodePath'
+
+Vue.use(ODS)
+
+fetchMock.enableMocks()
+
+try {
+  jest.setMock('cross-fetch', fetchMock)
+  jest.setMock('sync-fetch', fetchMock)
+} catch (error) {
+  console.error(error)
+}
+
+config.mocks = {
+  $gettext: str => str,
+  $gettextInterpolate: str => str,
+  $ngettext: str => str,
+  $pgettext: str => str,
+  $client: sdkMock,
+  $language: {
+    current: 'en_US'
+  },
+  encodePath
+}
+
+// Translate component mock
+Vue.component('Translate', {
+  props: {
+    tag: { type: String, default: 'span' }
+  },
+  render(createElement) {
+    return createElement(this.tag, {}, this.$slots.default)
+  }
+})
