@@ -6,7 +6,7 @@ import { buildResource, buildShare, buildCollaboratorShare } from '../helpers/re
 import { $gettext, $gettextInterpolate } from '../gettext'
 import { privatePreviewBlob, publicPreviewUrl } from '../helpers/resource'
 import { avatarUrl } from '../helpers/user'
-import _ from 'lodash'
+import { has, set, cloneDeep } from 'lodash-es'
 
 export default {
   updateFileProgress({ commit }, progress) {
@@ -511,7 +511,7 @@ export default {
 
     ;['sharedWith', 'owner'].forEach(k => {
       ;(resource[k] || []).forEach((obj, i) => {
-        if (!_.has(obj, 'avatar')) {
+        if (!has(obj, 'avatar')) {
           return
         }
         avatars.set(`${k}.[${i}].avatar`, obj.username)
@@ -549,9 +549,9 @@ export default {
       return
     }
 
-    const cResource = _.cloneDeep(resource)
+    const cResource = cloneDeep(resource)
     avatars.forEach((value, key) => {
-      _.set(cResource, key, value)
+      set(cResource, key, value)
     })
 
     commit('UPDATE_RESOURCE', cResource)

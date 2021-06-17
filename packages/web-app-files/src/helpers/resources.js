@@ -32,6 +32,7 @@ export function buildResource(resource) {
   const extension = _getFileExtension(resource.name)
   return {
     id: resource.fileInfo['{http://owncloud.org/ns}fileid'],
+    fileId: resource.fileInfo['{http://owncloud.org/ns}fileid'],
     icon: isFolder ? 'folder' : getFileIcon(extension),
     name: path.basename(resource.name),
     extension: isFolder ? '' : extension,
@@ -158,7 +159,8 @@ export function aggregateResourceShares(
 
 export function buildSharedResource(share, incomingShares = false, allowSharePerm) {
   const resource = {
-    id: share.item_source,
+    id: share.id,
+    fileId: share.item_source,
     type: share.item_type
   }
   const isFolder = resource.type === 'folder'
