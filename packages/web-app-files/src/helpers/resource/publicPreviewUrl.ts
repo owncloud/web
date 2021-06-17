@@ -1,7 +1,7 @@
 import { buildQueryString } from './common'
 import { clientService } from '../../services'
 
-interface publicPreviewUrlOptions {
+interface PublicPreviewUrlOptions {
   resource: {
     etag?: string
     downloadURL: string
@@ -9,7 +9,7 @@ interface publicPreviewUrlOptions {
   dimensions?: [number, number]
 }
 
-export const publicPreviewUrl = async (options: publicPreviewUrlOptions): Promise<string> => {
+export const publicPreviewUrl = async (options: PublicPreviewUrlOptions): Promise<string> => {
   // In a public context, i.e. public shares, the downloadURL contains a pre-signed url to
   // download the file.
   const [url, signedQuery] = options.resource.downloadURL.split('?')

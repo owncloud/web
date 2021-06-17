@@ -1,15 +1,14 @@
 import { cacheService, clientService } from '../../services'
 import { ImageDimension } from '../../constants'
-import isEqual from 'lodash-es/isEqual'
 
-interface avatarUrlOptions {
+interface AvatarUrlOptions {
   server: string
   username: string
   token: string
   size?: number
 }
 
-export const avatarUrl = async (options: avatarUrlOptions, cached = false): Promise<string> => {
+export const avatarUrl = async (options: AvatarUrlOptions, cached = false): Promise<string> => {
   const size = options.size || ImageDimension.Avatar
 
   if (cached) {
@@ -29,10 +28,10 @@ export const avatarUrl = async (options: avatarUrlOptions, cached = false): Prom
     return url
   }
 
-  return await owncloudSdk.signUrl(url)
+  return owncloudSdk.signUrl(url)
 }
 
-const cacheFactory = async (options: avatarUrlOptions): Promise<string> => {
+const cacheFactory = async (options: AvatarUrlOptions): Promise<string> => {
   const hit = cacheService.avatarUrl.get(options.username)
   if (hit && hit.size === options.size) {
     return hit.src

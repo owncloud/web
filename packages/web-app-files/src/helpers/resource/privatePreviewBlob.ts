@@ -3,7 +3,7 @@ import { clientService, cacheService } from '../../services'
 import { buildQueryString } from './common'
 import isEqual from 'lodash-es/isEqual'
 
-type privatePreviewBlobOptions = {
+interface PrivatePreviewBlobOptions {
   server: string
   userId: string
   resource: {
@@ -16,7 +16,7 @@ type privatePreviewBlobOptions = {
 }
 
 export const privatePreviewBlob = async (
-  options: privatePreviewBlobOptions,
+  options: PrivatePreviewBlobOptions,
   cached = false
 ): Promise<string> => {
   if (cached) {
@@ -43,7 +43,7 @@ export const privatePreviewBlob = async (
   } catch (ignored) {}
 }
 
-const cacheFactory = async (options: privatePreviewBlobOptions): Promise<string> => {
+const cacheFactory = async (options: PrivatePreviewBlobOptions): Promise<string> => {
   const hit = cacheService.filePreview.get(options.resource.id)
   if (hit && hit.etag === options.resource.etag && isEqual(options.dimensions, hit.dimensions)) {
     return hit.src

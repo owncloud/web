@@ -1,6 +1,6 @@
 import queryString from 'query-string'
 
-interface buildQueryStringOptions {
+interface BuildQueryStringOptions {
   preview?: number
   scalingup?: number
   a?: number
@@ -8,7 +8,7 @@ interface buildQueryStringOptions {
   dimensions?: [number, number]
 }
 
-export const buildQueryString = (options: buildQueryStringOptions): string => {
+export const buildQueryString = (options: BuildQueryStringOptions): string => {
   return queryString.stringify({
     scalingup: options.scalingup || 0,
     preview: Object.hasOwnProperty.call(options, 'preview') ? options.preview : 1,

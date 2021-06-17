@@ -3,17 +3,17 @@ enum states {
   exit
 }
 
-interface cbackOptions {
+interface CbackOptions {
   element: Element
   callCount: number
   unobserve: () => void
 }
 
-type cback = (options: cbackOptions) => void
+type cback = (options: CbackOptions) => void
 
 type unobserve = (element: Element) => void
 
-interface cbacks {
+interface Cbacks {
   onEnter?: cback
   onExit?: cback
 }
@@ -29,7 +29,7 @@ class Target {
   public readonly threshold: number
   public readonly unobserver: unobserve
 
-  constructor(unobserver: unobserve, threshold: number, cbacks: cbacks) {
+  constructor(unobserver: unobserve, threshold: number, cbacks: Cbacks) {
     this.unobserver = unobserver
     this.threshold = threshold
     this.onEnter = cbacks.onEnter
@@ -101,7 +101,7 @@ export class VisibilityObserver {
     this.intersectionObserver = new IntersectionObserver(this.trigger.bind(this), this.options)
   }
 
-  public observe(element: Element, cbacks: cbacks = {}, threshold?: number): void {
+  public observe(element: Element, cbacks: Cbacks = {}, threshold?: number): void {
     if (!cbacks.onEnter && !cbacks.onExit) {
       return
     }
