@@ -255,9 +255,10 @@ Details
    of the favorite-star to describe what it does instead of its current state - Added a more
    descriptive close button label - Clicking outside of the sidebar now closes it - Removed the
    aria-label on the action buttons as they already include proper labels - Added a hint for screen
-   readers if an action opens a new window/tab
+   readers if an action opens a new window/tab - Make sidebar header sticky
 
    https://github.com/owncloud/web/pull/5000
+   https://github.com/owncloud/web/pull/5266
 
 * Enhancement - Improve a11y in the files sidebar peoples & shares section: [#5034](https://github.com/owncloud/web/pull/5034)
 
