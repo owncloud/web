@@ -49,7 +49,7 @@ export const store = createStore(Vuex.Store, {
         activeFilesCount: () => ({ files: 0, folders: 1 }),
         inProgress: () => [null],
         highlightedFile: () => null,
-        paginationLength: () => 3
+        pages: () => 3
       },
       mutations: {
         UPDATE_RESOURCE: (state, resource) => {

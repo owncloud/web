@@ -57,8 +57,8 @@
         </template>
         <template #footer>
           <oc-pagination
-            v-if="paginationLength > 1"
-            :pages="paginationLength"
+            v-if="pages > 1"
+            :pages="pages"
             :current-page="currentPage"
             :max-displayed="3"
             :current-route="$_filesListPagination_targetRoute"
@@ -108,7 +108,7 @@ export default {
       'selectedFiles',
       'inProgress',
       'totalFilesCount',
-      'paginationLength'
+      'pages'
     ]),
     ...mapGetters(['isOcis', 'configuration', 'getToken', 'user']),
 

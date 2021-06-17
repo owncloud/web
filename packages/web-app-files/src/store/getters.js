@@ -29,7 +29,7 @@ export default {
   atSearchPage: state => {
     return state.searchTermGlobal !== ''
   },
-  paginationLength: (state, getters) => Math.ceil(getters.filesAll.length / state.filesPageLimit),
+  pages: (state, getters) => Math.ceil(getters.filesAll.length / state.filesPageLimit),
   activeFiles: (state, getters) => {
     const files = getters.filesAll
     const direction = state.fileSortDirectionDesc ? 'desc' : 'asc'
