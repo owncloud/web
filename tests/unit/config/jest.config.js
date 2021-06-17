@@ -19,6 +19,9 @@ module.exports = {
   snapshotSerializers: ['jest-serializer-vue'],
   coverageDirectory: '<rootDir>/coverage',
   coverageReporters: ['lcov'],
-  collectCoverageFrom: ['<rootDir>/packages/**/src/**/*.{js,vue}', '!<rootDir>/**/node_modules/**'],
+  collectCoverageFrom: [
+    '<rootDir>/packages/**/src/**/*.{js,ts,vue}',
+    '!<rootDir>/**/node_modules/**'
+  ],
   testMatch: ['**/tests/unit/**/*.spec.js']
 }

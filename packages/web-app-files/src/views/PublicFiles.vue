@@ -66,8 +66,8 @@ import NoContentMessage from '../components/NoContentMessage.vue'
 import NotFoundMessage from '../components/FilesLists/NotFoundMessage.vue'
 import ListInfo from '../components/FilesListFooterInfo.vue'
 import { VisibilityObserver } from 'web-pkg/src/observer'
-import { debounce } from 'web-pkg/src/utils'
 import { ImageDimension } from '../constants'
+import debounce from 'lodash-es/debounce'
 
 const visibilityObserver = new VisibilityObserver()
 export default {
@@ -178,7 +178,7 @@ export default {
           isPublic: true,
           dimensions: ImageDimension.ThumbNail
         })
-      })
+      }, 250)
 
       visibilityObserver.observe(component.$el, { onEnter: debounced, onExit: debounced.cancel })
     },

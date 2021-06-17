@@ -116,4 +116,11 @@ describe('Cache', () => {
       expect(cache.entries().length).toBe(capacity)
     })
   })
+
+  it('can clear the cache', () => {
+    const cache = newCache([1, 2, 3, 4, 5])
+    expect(cache.entries().length).toBe(5)
+    cache.clear()
+    expect(cache.entries().length).toBe(0)
+  })
 })
