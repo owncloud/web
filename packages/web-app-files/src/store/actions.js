@@ -124,6 +124,8 @@ export default {
     }
   },
   searchForFile(context, payload) {
+    context.commit('UPDATE_CURRENT_PAGE', 1)
+
     return new Promise(function(resolve, reject) {
       const client = payload.client
       const searchTerm = payload.searchTerm
@@ -335,8 +337,9 @@ export default {
         console.log(e)
       })
   },
-  resetSearch(context) {
-    context.commit('SET_SEARCH_TERM', '')
+  resetSearch({ commit }) {
+    commit('SET_SEARCH_TERM', '')
+    commit('UPDATE_CURRENT_PAGE', 1)
   },
   /**
    * Prune all branches of the shares tree that are
