@@ -1,4 +1,5 @@
 import { avatarUrl } from '../../../src/helpers/user'
+import { ImageDimension } from '../../../src/constants'
 import mockAxios from 'jest-mock-axios'
 
 beforeEach(() => {
@@ -16,12 +17,19 @@ const mockClient = (signUrl: any) => {
 const defaultOptions = {
   server: 'https://www.ocis.rules/',
   username: 'ocis',
-  token: 'rules',
-  size: 64
+  token: 'rules'
 }
 
-const buildUrl = ({ server, username, size }: { server: string; username: string; size: number }) =>
-  [server, 'remote.php/dav/avatars/', username, `/${size}.png`].join('')
+const buildUrl = ({
+  server,
+  username,
+  size
+}: {
+  server: string
+  username: string
+  size?: number
+}) =>
+  [server, 'remote.php/dav/avatars/', username, `/${size || ImageDimension.Avatar}.png`].join('')
 
 describe('avatarUrl', () => {
   it('throws an error', async () => {
