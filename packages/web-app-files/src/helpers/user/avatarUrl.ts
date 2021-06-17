@@ -1,5 +1,6 @@
 import { cacheService, clientService } from '../../services'
 import { ImageDimension } from '../../constants'
+import isEqual from 'lodash-es/isEqual'
 
 interface avatarUrlOptions {
   server: string

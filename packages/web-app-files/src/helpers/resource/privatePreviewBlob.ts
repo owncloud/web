@@ -1,6 +1,7 @@
 import { encodePath } from 'web-pkg/src/utils'
 import { clientService, cacheService } from '../../services'
 import { buildQueryString } from './common'
+import isEqual from 'lodash-es/isEqual'
 
 type privatePreviewBlobOptions = {
   server: string
@@ -44,7 +45,7 @@ export const privatePreviewBlob = async (
 
 const cacheFactory = async (options: privatePreviewBlobOptions): Promise<string> => {
   const hit = cacheService.filePreview.get(options.resource.id)
-  if (hit && hit.etag === options.resource.etag) {
+  if (hit && hit.etag === options.resource.etag && isEqual(options.dimensions, hit.dimensions)) {
     return hit.src
   }
 
@@ -52,7 +53,7 @@ const cacheFactory = async (options: privatePreviewBlobOptions): Promise<string>
     const src = await privatePreviewBlob(options)
     return cacheService.filePreview.set(
       options.resource.id,
-      { src, etag: options.resource.etag },
+      { src, etag: options.resource.etag, dimensions: options.dimensions },
       0
     ).src
   } catch (ignored) {}

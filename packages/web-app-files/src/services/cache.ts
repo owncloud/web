@@ -5,6 +5,7 @@ const filePreviewCache = new Cache<
   {
     etag?: string
     src?: string
+    dimensions?: [number, number]
   }
 >({ ttl: 10 * 1000, capacity: 250 })
 
