@@ -15,6 +15,7 @@ export default {
   files: state => {
     return state.files
   },
+  filesAll: state => (state.searchTermGlobal ? state.filesSearched : state.files),
   currentFolder: state => {
     return state.currentFolder
   },
@@ -28,9 +29,9 @@ export default {
   atSearchPage: state => {
     return state.searchTermGlobal !== ''
   },
-  paginationLength: state => Math.ceil(state.files.length / state.filesPageLimit),
-  activeFiles: state => {
-    const files = state.searchTermGlobal ? state.filesSearched : state.files
+  paginationLength: (state, getters) => Math.ceil(getters.filesAll.length / state.filesPageLimit),
+  activeFiles: (state, getters) => {
+    const files = getters.filesAll
     const direction = state.fileSortDirectionDesc ? 'desc' : 'asc'
     const currentPageIndex = (state.currentPage - 1) * state.filesPageLimit
 
@@ -46,10 +47,10 @@ export default {
     return $_fileCounts(getters.activeFiles)
   },
   totalFilesSize: (state, getters) => {
-    return $_fileSizes(getters.files)
+    return $_fileSizes(getters.filesAll)
   },
   totalFilesCount: (state, getters) => {
-    return $_fileCounts(getters.files)
+    return $_fileCounts(getters.filesAll)
   },
   davProperties: state => {
     return state.davProperties
