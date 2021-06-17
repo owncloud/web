@@ -1,6 +1,5 @@
 import { publicPreviewUrl } from '../../../src/helpers/resource'
 import mockAxios from 'jest-mock-axios'
-import merge from 'lodash-es/merge'
 
 beforeEach(mockAxios.reset)
 

@@ -1,6 +1,5 @@
 import { HttpClient } from './client'
 import mockAxios from 'jest-mock-axios'
-import mock = jest.mock
 
 beforeEach(mockAxios.reset)
 
@@ -19,6 +18,7 @@ describe('HttpClient', () => {
     expect(mockAxios.request).toBeCalledTimes(1)
   })
 
+  // eslint-disable-next-line jest/no-done-callback
   test('cancel', done => {
     const client = new HttpClient()
     const thenFn = jest.fn()

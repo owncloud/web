@@ -6,7 +6,7 @@ beforeEach(jest.resetAllMocks)
 
 describe('client', () => {
   describe('clientService', () => {
-    test('httpAuthenticated', async () => {
+    test('httpAuthenticated', () => {
       const client = clientService.httpAuthenticated('token')
       expect(client).toBeInstanceOf(HttpClient)
       expect(mockAxios.create).toHaveBeenCalledWith(
@@ -21,7 +21,7 @@ describe('client', () => {
       expect(mockAxios.create).toBeCalledTimes(2)
     })
 
-    test('httpUnAuthenticated', async () => {
+    test('httpUnAuthenticated', () => {
       let client = clientService.httpUnAuthenticated
       expect(client).toBeInstanceOf(HttpClient)
       expect(mockAxios.create).toHaveBeenCalledWith(
