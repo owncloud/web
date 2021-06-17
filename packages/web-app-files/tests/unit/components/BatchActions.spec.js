@@ -1,8 +1,8 @@
 import { shallowMount, mount, createLocalVue } from '@vue/test-utils'
 import DesignSystem from 'owncloud-design-system'
 import Vuex from 'vuex'
-import getters from '../../src/store/getters'
-import stubs from '../../../../tests/unit/stubs'
+import getters from '../../../src/store/getters'
+import stubs from '../../../../../tests/unit/stubs'
 import BatchActions from '../../src/components/BatchActions.vue'
 
 const localVue = createLocalVue()
@@ -15,7 +15,7 @@ const elSelector = {
   copyButton: '#copy-selected-btn',
   moveButton: '#move-selected-btn',
   deleteButton: '#delete-selected-btn',
-  restoreButton: 'button.oc-button-primary'
+  restoreButton: '#restore-selected-btn'
 }
 
 describe('Batch Actions component', () => {
@@ -71,16 +71,25 @@ describe('Batch Actions component', () => {
       let copyButton
       let moveButton
       let deleteButton
-      beforeEach(async () => {
-        BatchActions.computed.canMove = jest.fn(() => true)
+
+      BatchActions.computed.canMove = jest.fn(() => true)
+      const spyTriggerLocationPicker = jest
+        .spyOn(BatchActions.methods, 'triggerLocationPicker')
+        .mockImplementation()
+      const spyDeleteResourcesDisplayDialog = jest
+        .spyOn(BatchActions.mixins[1].methods, '$_deleteResources_displayDialog')
+        .mockImplementation()
+
+      beforeEach(() => {
         wrapper = mount(BatchActions, options)
-        wrapper.vm.triggerLocationPicker = jest.fn()
-        wrapper.vm.$_deleteResources_displayDialog = jest.fn()
-        await wrapper.vm.$forceUpdate()
 
         copyButton = wrapper.find(elSelector.copyButton)
         moveButton = wrapper.find(elSelector.moveButton)
         deleteButton = wrapper.find(elSelector.deleteButton)
+      })
+
+      afterEach(() => {
+        jest.clearAllMocks()
       })
 
       it('should display the action buttons', () => {
@@ -92,22 +101,22 @@ describe('Batch Actions component', () => {
         expect(deleteButton.text()).toEqual('Delete')
       })
 
-      it('does copy action on copy button click', async () => {
+      it('should call "triggerLocationPicker" when copy button is clicked', async () => {
         await copyButton.trigger('click')
 
-        expect(wrapper.vm.triggerLocationPicker).toHaveBeenCalledWith('copy')
+        expect(spyTriggerLocationPicker).toHaveBeenCalledWith('copy')
       })
 
-      it('does move action on move button click', async () => {
+      it('should call "triggerLocationPicker" when move button is clicked', async () => {
         await moveButton.trigger('click')
 
-        expect(wrapper.vm.triggerLocationPicker).toHaveBeenCalledWith('move')
+        expect(spyTriggerLocationPicker).toHaveBeenCalledWith('move')
       })
 
-      it('does delete action on delete button click', async () => {
+      it('should call "$_deleteResources_displayDialog" when delete button is clicked', async () => {
         await deleteButton.trigger('click')
 
-        expect(wrapper.vm.$_deleteResources_displayDialog).toHaveBeenCalledTimes(1)
+        expect(spyDeleteResourcesDisplayDialog).toHaveBeenCalledTimes(1)
       })
     })
   })
@@ -121,6 +130,13 @@ describe('Batch Actions component', () => {
     let restoreButton
     let emptyTrashButton
     let deleteButton
+
+    BatchActions.computed.isEmpty = jest.fn(() => false)
+    const spyEmptyTrashbin = jest.spyOn(BatchActions.methods, 'emptyTrashbin').mockImplementation()
+    const spyRestoreFiles = jest.spyOn(BatchActions.methods, 'restoreFiles').mockImplementation()
+    const spyDeleteResourcesDisplayDialog = jest
+      .spyOn(BatchActions.mixins[1].methods, '$_deleteResources_displayDialog')
+      .mockImplementation()
 
     describe('when no items are selected for batch action', () => {
       const store = createStore({ selected: [] })
@@ -138,14 +154,15 @@ describe('Batch Actions component', () => {
         }
       }
 
-      beforeEach(async () => {
-        BatchActions.computed.isEmpty = jest.fn(() => false)
+      beforeEach(() => {
         wrapper = mount(BatchActions, options)
-        wrapper.vm.emptyTrashbin = jest.fn()
-        await wrapper.vm.$forceUpdate()
 
         restoreButton = wrapper.find(elSelector.restoreButton)
         emptyTrashButton = wrapper.find(elSelector.deleteButton)
+      })
+
+      afterEach(() => {
+        jest.clearAllMocks()
       })
 
       it('should not display restore button', () => {
@@ -157,10 +174,10 @@ describe('Batch Actions component', () => {
         expect(emptyTrashButton.text()).toEqual('Empty trash bin')
       })
 
-      it('does empty trashbin on emptyTrashbin button click', async () => {
+      it('should call "emptyTrashbin" when empty trashbin button is clicked', async () => {
         await emptyTrashButton.trigger('click')
 
-        expect(wrapper.vm.emptyTrashbin).toHaveBeenCalledTimes(1)
+        expect(spyEmptyTrashbin).toHaveBeenCalledTimes(1)
       })
     })
 
@@ -181,36 +198,37 @@ describe('Batch Actions component', () => {
         }
       }
 
-      beforeEach(async () => {
-        BatchActions.computed.isEmpty = jest.fn(() => false)
+      beforeEach(() => {
         wrapper = mount(BatchActions, options)
-        wrapper.vm.restoreFiles = jest.fn()
-        wrapper.vm.emptyTrashbin = jest.fn()
-        wrapper.vm.$_deleteResources_displayDialog = jest.fn()
-        await wrapper.vm.$forceUpdate()
 
         restoreButton = wrapper.find(elSelector.restoreButton)
         deleteButton = wrapper.find(elSelector.deleteButton)
+      })
+
+      afterEach(() => {
+        jest.clearAllMocks()
       })
 
       it('should display the batch action buttons', () => {
         const actionButtons = wrapper.findAll('button')
 
         expect(actionButtons.length).toEqual(2)
+        expect(restoreButton.exists()).toBeTruthy()
+        expect(deleteButton.exists()).toBeTruthy()
         expect(restoreButton.text()).toEqual('Restore')
         expect(deleteButton.text()).toEqual('Delete')
       })
 
-      it('does restore action on restore button click', async () => {
+      it('should call "restoreFiles" when restore button is clicked', async () => {
         await restoreButton.trigger('click')
 
-        expect(wrapper.vm.restoreFiles).toHaveBeenCalledTimes(1)
+        expect(spyRestoreFiles).toHaveBeenCalledTimes(1)
       })
 
-      it('does delete action on delete button click', async () => {
+      it('should call "$_deleteResources_displayDialog" when delete button is clicked', async () => {
         await deleteButton.trigger('click')
 
-        expect(wrapper.vm.$_deleteResources_displayDialog).toHaveBeenCalledTimes(1)
+        expect(spyDeleteResourcesDisplayDialog).toHaveBeenCalledTimes(1)
       })
     })
   })
