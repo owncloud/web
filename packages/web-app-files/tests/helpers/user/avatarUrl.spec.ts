@@ -41,7 +41,7 @@ describe('avatarUrl', () => {
 
   it('returns a unsigned url', async () => {
     const avatarUrlPromise = avatarUrl(defaultOptions)
-    mockAxios.mockResponse({ status: 200, data: undefined })
+    mockAxios.mockResponse({ data: undefined })
     await expect(avatarUrlPromise).resolves.toBe(buildUrl(defaultOptions))
     expect(mockAxios.head).toHaveBeenCalledWith(buildUrl(defaultOptions), undefined)
   })
@@ -52,14 +52,14 @@ describe('avatarUrl', () => {
     })
     mockClient(signUrlMock)
     const avatarUrlPromise = avatarUrl(defaultOptions)
-    mockAxios.mockResponse({ status: 200, data: undefined })
+    mockAxios.mockResponse({ data: undefined })
     await expect(avatarUrlPromise).resolves.toBe(`${buildUrl(defaultOptions)}?signed=true`)
     expect(mockAxios.head).toHaveBeenCalledWith(buildUrl(defaultOptions), undefined)
   })
 
   it('handles caching', async () => {
     const avatarUrlPromiseUncached = avatarUrl(defaultOptions, true)
-    await mockAxios.mockResponse({ status: 200, data: undefined })
+    await mockAxios.mockResponse({ data: undefined })
     await expect(avatarUrlPromiseUncached).resolves.toBe(buildUrl(defaultOptions))
     expect(mockAxios.head).toBeCalledTimes(1)
 
@@ -68,12 +68,12 @@ describe('avatarUrl', () => {
     expect(mockAxios.head).toBeCalledTimes(1)
 
     const avatarUrlPromiseOtherSize = avatarUrl({ ...defaultOptions, size: 1 }, true)
-    await mockAxios.mockResponse({ status: 200, data: undefined })
+    await mockAxios.mockResponse({ data: undefined })
     await expect(avatarUrlPromiseOtherSize).resolves.toBe(buildUrl({ ...defaultOptions, size: 1 }))
     expect(mockAxios.head).toBeCalledTimes(2)
 
     const avatarUrlPromiseSameUncached = avatarUrl(defaultOptions, false)
-    await mockAxios.mockResponse({ status: 200, data: undefined })
+    await mockAxios.mockResponse({ data: undefined })
     await expect(avatarUrlPromiseSameUncached).resolves.toBe(buildUrl(defaultOptions))
     expect(mockAxios.head).toBeCalledTimes(3)
   })
