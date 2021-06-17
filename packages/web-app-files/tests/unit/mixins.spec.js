@@ -1,4 +1,4 @@
-import mixins from '../src/mixins'
+import mixins from '../../src/mixins'
 
 describe('mixins', () => {
   describe('fileTypeIcon', () => {

@@ -2,7 +2,7 @@ import { createLocalVue, mount } from '@vue/test-utils'
 import Vuex from 'vuex'
 import GetTextPlugin from 'vue-gettext'
 import SidebarQuota from 'web-runtime/src/components/SidebarQuota.vue'
-import stubs from '../../../../tests/unit/stubs'
+import stubs from '../../../../../tests/unit/stubs'
 import DesignSystem from 'owncloud-design-system'
 
 const localVue = createLocalVue()

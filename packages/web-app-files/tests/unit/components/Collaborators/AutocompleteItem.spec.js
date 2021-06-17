@@ -1,7 +1,7 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils'
 import Vuex from 'vuex'
 import AutocompleteItem from 'packages/web-app-files/src/components/Collaborators/AutocompleteItem.vue'
-import stubs from '../../../../../tests/unit/stubs'
+import stubs from '../../../../../../tests/unit/stubs'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)

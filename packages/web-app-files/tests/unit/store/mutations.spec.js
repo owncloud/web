@@ -1,4 +1,4 @@
-import mutations from '../../src/store/mutations'
+import mutations from '../../../src/store/mutations'
 import { cloneDeep } from 'lodash-es'
 
 const stateFixture = {

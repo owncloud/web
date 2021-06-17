@@ -1,7 +1,7 @@
 import { mount, shallowMount, createLocalVue } from '@vue/test-utils'
-import FileUpload from '../../src/components/FileUpload.vue'
+import FileUpload from '../../../src/components/FileUpload.vue'
 import DesignSystem from 'owncloud-design-system'
-import stubs from '../../../../tests/unit/stubs'
+import stubs from '../../../../../tests/unit/stubs'
 
 const localVue = createLocalVue()
 localVue.use(DesignSystem)
