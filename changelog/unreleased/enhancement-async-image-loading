@@ -1,0 +1,7 @@
+Enhancement: Asynchronous loading of images
+
+Thumbnail and avatar images now get loaded in the background 
+and don't block the main rendering of the user interface.
+
+https://github.com/owncloud/web/issues/4973
+https://github.com/owncloud/web/pull/5194
