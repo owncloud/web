@@ -415,7 +415,6 @@ module.exports = {
         '@filesCount',
         'data-test-files',
         result => {
-          console.log(result)
           filesCount = parseInt(result.value)
         }
       )
@@ -425,7 +424,6 @@ module.exports = {
         '@foldersCount',
         'data-test-folders',
         result => {
-          console.log(result)
           foldersCount = parseInt(result.value)
         }
       )

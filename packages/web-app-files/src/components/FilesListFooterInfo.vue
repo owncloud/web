@@ -19,7 +19,7 @@
       :translate-params="{ folderCount: props.folders }"
       translate-plural="%{folderCount} folders"
       data-test-id="files-list-folder-count"
-      :data-test-files="props.folders"
+      :data-test-folders="props.folders"
       >%{folderCount} folder</translate
     >
     <template v-if="props.size > 0">
