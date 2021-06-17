@@ -160,14 +160,15 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     accordionItems: {
-      selector: '//div[@class="sidebar-container"]//div[@class="oc-accordion-item"]/h3/button',
+      selector:
+        '//div[contains(@class, "oc-app-side-bar")]//div[@class="oc-accordion-item"]/h3/button',
       locateStrategy: 'xpath'
     },
     sidebarThumbnail: {
       selector: '.sidebar-title .oc-icon'
     },
     sidebarCloseBtn: {
-      selector: '//div[@class="sidebar-container"]//div[@class="action"]//button',
+      selector: '//div[contains(@class, "oc-app-side-bar")]//div[@class="action"]//button',
       locateStrategy: 'xpath'
     },
     collaboratorsAccordionItem: {

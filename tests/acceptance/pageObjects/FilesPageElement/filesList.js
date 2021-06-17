@@ -703,7 +703,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     linkToPublicLinksTag: {
-      selector: '//div[@class="sidebar-container"]//a[normalize-space(.)="Links"]',
+      selector: '//div[contains(@class, "oc-app-side-bar")]//a[normalize-space(.)="Links"]',
       locateStrategy: 'xpath'
     },
     collaboratorsList: {
