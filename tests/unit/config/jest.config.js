@@ -23,5 +23,5 @@ module.exports = {
     '<rootDir>/packages/**/src/**/*.{js,ts,vue}',
     '!<rootDir>/**/node_modules/**'
   ],
-  testMatch: ['**/tests/unit/**/*.spec.js']
+  modulePathIgnorePatterns: ['integration']
 }

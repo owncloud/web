@@ -1,6 +1,6 @@
 import { mapGetters, mapActions } from 'vuex'
 
-import encodePath from '../helpers/encodePath'
+import { encodePath } from 'web-pkg/src/utils'
 
 export default {
   install(Vue) {

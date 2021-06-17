@@ -1,4 +1,4 @@
-import { buildQueryString } from '../../../src/helpers/resource/common'
+import { buildQueryString } from '../../../../src/helpers/resource/common'
 
 describe('common', () => {
   test('buildQueryString', () => {

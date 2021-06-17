@@ -1,4 +1,4 @@
-import { cacheService } from '../../src/services'
+import { cacheService } from '../../../src/services'
 import { Cache } from 'web-pkg/src/cache'
 
 describe('cache', () => {

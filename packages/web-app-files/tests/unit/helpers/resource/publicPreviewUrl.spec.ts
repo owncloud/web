@@ -1,4 +1,4 @@
-import { publicPreviewUrl } from '../../../src/helpers/resource'
+import { publicPreviewUrl } from '../../../../src/helpers/resource'
 import mockAxios from 'jest-mock-axios'
 
 beforeEach(mockAxios.reset)

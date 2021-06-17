@@ -1,5 +1,5 @@
-import { avatarUrl } from '../../../src/helpers/user'
-import { ImageDimension } from '../../../src/constants'
+import { avatarUrl } from '../../../../src/helpers/user'
+import { ImageDimension } from '../../../../src/constants'
 import mockAxios from 'jest-mock-axios'
 
 beforeEach(() => {
