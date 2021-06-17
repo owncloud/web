@@ -158,7 +158,7 @@ describe('User can navigate in files list using pagination', () => {
           const _route = { params: { page: 2 } }
 
           if (name === 'Personal') {
-            _route.params.item = encodeURIComponent('/')
+            _route.params.item = '/'
           }
 
           if (name === 'LocationPicker') {
