@@ -193,7 +193,7 @@ export default {
 
       try {
         let resources = await this.$client.files.list(
-          decodeURIComponent(this.$route.params.item),
+          this.$route.params.item,
           1,
           this.davProperties
         )
