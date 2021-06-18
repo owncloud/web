@@ -59,13 +59,13 @@ describe('AutocompleteItem component', () => {
         'Alice Hansen'
       )
     })
-    it('shows additional info when set', () => {
+    it('shows additional information when set', () => {
       const wrapper = createWrapper({ shareWithAdditionalInfo: 'some text' })
       expect(wrapper.find('.files-collaborators-autocomplete-additional-info').text()).toEqual(
         'some text'
       )
     })
-    it('does not shows additional info when not set', () => {
+    it('does not show additional information when not set', () => {
       const wrapper = createWrapper({ shareWithAdditionalInfo: undefined })
       expect(wrapper.find('.files-collaborators-autocomplete-additional-info').exists()).toBeFalsy()
     })
