@@ -1,12 +1,9 @@
-import { shallowMount, mount, createLocalVue } from '@vue/test-utils'
-import DesignSystem from 'owncloud-design-system'
+import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
-import getters from '../../../src/store/getters'
-import stubs from '../../../../../tests/unit/stubs'
-import BatchActions from '../../src/components/BatchActions.vue'
+import stubs from 'tests/unit/stubs'
+import BatchActions from '../../../src/components/AppBar/SelectedResources/BatchActions.vue'
 
 const localVue = createLocalVue()
-localVue.use(DesignSystem)
 localVue.use(Vuex)
 
 const selectedFiles = ['lorem.txt', 'owncloud.png']
@@ -15,22 +12,34 @@ const elSelector = {
   copyButton: '#copy-selected-btn',
   moveButton: '#move-selected-btn',
   deleteButton: '#delete-selected-btn',
-  restoreButton: '#restore-selected-btn'
+  restoreButton: '#restore-selected-btn',
+  ocButton: 'oc-button-stub'
 }
 
 describe('Batch Actions component', () => {
   const mountOptions = {
-    localVue
+    localVue,
+    stubs: componentStubs
   }
+
+  const state = {
+    currentFolder: { path: '' }
+  }
+
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
 
   describe('files page', () => {
     const $route = {
       name: 'files-personal'
     }
 
-    describe('when no items are selected for batch action', () => {
-      const options = {
+    it('should not display action buttons if no items are selected', () => {
+      const store = createStore({ ...state, selected: [] })
+      const wrapper = shallowMount(BatchActions, {
         ...mountOptions,
+        store,
         mocks: {
           $route: {
             ...$route,
@@ -39,23 +48,18 @@ describe('Batch Actions component', () => {
             }
           }
         }
-      }
-
-      it('should not display action buttons', () => {
-        const wrapper = shallowMount(BatchActions, options)
-        const actionButtons = wrapper.findAll('oc-grid-stub oc-button-stub')
-
-        expect(actionButtons.length).toEqual(0)
-        expect(wrapper.exists()).toBeTruthy()
       })
+      const actionButtons = wrapper.findAll('oc-grid-stub oc-button-stub')
+
+      expect(actionButtons.length).toEqual(0)
+      expect(wrapper.exists()).toBeTruthy()
     })
 
     describe('when items are selected for batch action', () => {
-      const store = createStore({ selected: selectedFiles })
+      const store = createStore({ ...state, selected: selectedFiles })
 
       const options = {
         ...mountOptions,
-        stubs: { ...componentStubs, 'oc-button': false },
         store,
         mocks: {
           $route: {
@@ -81,19 +85,15 @@ describe('Batch Actions component', () => {
         .mockImplementation()
 
       beforeEach(() => {
-        wrapper = mount(BatchActions, options)
+        wrapper = shallowMount(BatchActions, options)
 
         copyButton = wrapper.find(elSelector.copyButton)
         moveButton = wrapper.find(elSelector.moveButton)
         deleteButton = wrapper.find(elSelector.deleteButton)
       })
 
-      afterEach(() => {
-        jest.clearAllMocks()
-      })
-
       it('should display the action buttons', () => {
-        const actionButtons = wrapper.findAll('oc-grid-stub button')
+        const actionButtons = wrapper.findAll(elSelector.ocButton)
 
         expect(actionButtons.length).toEqual(3)
         expect(copyButton.text()).toEqual('Copy')
@@ -102,19 +102,19 @@ describe('Batch Actions component', () => {
       })
 
       it('should call "triggerLocationPicker" when copy button is clicked', async () => {
-        await copyButton.trigger('click')
+        await copyButton.vm.$emit('click')
 
         expect(spyTriggerLocationPicker).toHaveBeenCalledWith('copy')
       })
 
       it('should call "triggerLocationPicker" when move button is clicked', async () => {
-        await moveButton.trigger('click')
+        await moveButton.vm.$emit('click')
 
         expect(spyTriggerLocationPicker).toHaveBeenCalledWith('move')
       })
 
       it('should call "$_deleteResources_displayDialog" when delete button is clicked', async () => {
-        await deleteButton.trigger('click')
+        await deleteButton.vm.$emit('click')
 
         expect(spyDeleteResourcesDisplayDialog).toHaveBeenCalledTimes(1)
       })
@@ -124,6 +124,18 @@ describe('Batch Actions component', () => {
   describe('trashbin page', () => {
     const $route = {
       name: 'files-trashbin'
+    }
+
+    const options = {
+      ...mountOptions,
+      mocks: {
+        $route: {
+          ...$route,
+          meta: {
+            hasBulkActions: false
+          }
+        }
+      }
     }
 
     let wrapper
@@ -139,30 +151,16 @@ describe('Batch Actions component', () => {
       .mockImplementation()
 
     describe('when no items are selected for batch action', () => {
-      const store = createStore({ selected: [] })
-      const options = {
-        ...mountOptions,
-        stubs: { ...componentStubs, 'oc-button': false },
-        store,
-        mocks: {
-          $route: {
-            ...$route,
-            meta: {
-              hasBulkActions: false
-            }
-          }
-        }
-      }
+      const store = createStore({ ...state, selected: [] })
 
       beforeEach(() => {
-        wrapper = mount(BatchActions, options)
+        wrapper = shallowMount(BatchActions, {
+          ...options,
+          store
+        })
 
         restoreButton = wrapper.find(elSelector.restoreButton)
         emptyTrashButton = wrapper.find(elSelector.deleteButton)
-      })
-
-      afterEach(() => {
-        jest.clearAllMocks()
       })
 
       it('should not display restore button', () => {
@@ -175,42 +173,27 @@ describe('Batch Actions component', () => {
       })
 
       it('should call "emptyTrashbin" when empty trashbin button is clicked', async () => {
-        await emptyTrashButton.trigger('click')
+        await emptyTrashButton.vm.$emit('click')
 
         expect(spyEmptyTrashbin).toHaveBeenCalledTimes(1)
       })
     })
 
     describe('when items are selected for batch action', () => {
-      const store = createStore({ selected: selectedFiles })
-
-      const options = {
-        ...mountOptions,
-        stubs: { ...componentStubs, 'oc-button': false },
-        store,
-        mocks: {
-          $route: {
-            ...$route,
-            meta: {
-              hasBulkActions: false
-            }
-          }
-        }
-      }
+      const store = createStore({ ...state, selected: selectedFiles })
 
       beforeEach(() => {
-        wrapper = mount(BatchActions, options)
+        wrapper = shallowMount(BatchActions, {
+          ...options,
+          store
+        })
 
         restoreButton = wrapper.find(elSelector.restoreButton)
         deleteButton = wrapper.find(elSelector.deleteButton)
       })
 
-      afterEach(() => {
-        jest.clearAllMocks()
-      })
-
       it('should display the batch action buttons', () => {
-        const actionButtons = wrapper.findAll('button')
+        const actionButtons = wrapper.findAll(elSelector.ocButton)
 
         expect(actionButtons.length).toEqual(2)
         expect(restoreButton.exists()).toBeTruthy()
@@ -220,13 +203,13 @@ describe('Batch Actions component', () => {
       })
 
       it('should call "restoreFiles" when restore button is clicked', async () => {
-        await restoreButton.trigger('click')
+        await restoreButton.vm.$emit('click')
 
         expect(spyRestoreFiles).toHaveBeenCalledTimes(1)
       })
 
       it('should call "$_deleteResources_displayDialog" when delete button is clicked', async () => {
-        await deleteButton.trigger('click')
+        await deleteButton.vm.$emit('click')
 
         expect(spyDeleteResourcesDisplayDialog).toHaveBeenCalledTimes(1)
       })
@@ -243,7 +226,11 @@ function createStore(state) {
           currentFolder: { path: '' }
         },
         namespaced: true,
-        getters
+        getters: {
+          selectedFiles: () => state.selected,
+          currentFolder: () => state.currentFolder,
+          activeFiles: jest.fn()
+        }
       }
     }
   })
