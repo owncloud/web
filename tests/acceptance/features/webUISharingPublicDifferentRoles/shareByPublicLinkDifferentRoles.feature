@@ -137,14 +137,6 @@ Feature: Share by public link with different roles
     When the public uses the webUI to access the last public link created by user "Alice"
     Then it should not be possible to delete file "lorem.txt" using the webUI
 
-  @skipOnOC10 @issue-ocis-270
-  #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
-  Scenario: creating a public link with "Viewer" role only makes it impossible to delete files via the link (ocis bug demonstration)
-    Given user "Alice" has created file "simple-folder/lorem.txt"
-    And user "Alice" has shared folder "simple-folder" with link with "read" permissions
-    When the public uses the webUI to access the last public link created by user "Alice"
-    Then it should be possible to delete file "lorem.txt" using the webUI
-
 
   Scenario: creating a public link with "Editor" role makes it possible to upload a file
     Given user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
@@ -231,29 +223,6 @@ Feature: Share by public link with different roles
     When the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
     Then it should not be possible to create files using the webUI
 
-  @skipOnOC10 @issue-ocis-reva-383
-  #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
-  Scenario: creating a public link with "Viewer" role makes it impossible to create files via the link even with password set (ocis bug demonstration)
-    Given user "Alice" has shared folder "simple-folder" with link with "read" permissions and password "pass123"
-    When the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
-    Then it should be possible to create files using the webUI
-
-  # TODO: Remove blank lines after adjusing expected failures
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   Scenario: creating a public link with "Uploader" role makes it possible to upload a file through files-drop page
     Given user "Alice" has shared folder "simple-folder" with link with "create" permissions
@@ -294,17 +263,6 @@ Feature: Share by public link with different roles
       | 'single'quotes.txt |
     And as "Alice" the content of "simple-folder/'single'quotes.txt" should be the same as the local "'single'quotes.txt"
 
-  @skipOnOC10 @issue-ocis-723
-  #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
-  Scenario: creating a public link with "Uploader" role makes it possible to create files through files-drop page even with password set (ocis bug demonstration)
-    Given user "Alice" has shared folder "simple-folder" with link with "create" permissions and password "pass123"
-    When the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
-    And the public uploads file "'single'quotes.txt" in files-drop page
-    Then the following resources should be listed on the webUI
-      | file-name          |
-      | 'single'quotes.txt |
-    And as "Alice" the content of "simple-folder/'single'quotes.txt" should be the same as the local "'single'quotes.txt"
-
   @issue-ocis-723
   Scenario: creating a public link with "Uploader" role makes it possible to upload multiple files via files-drop page even with password set
     Given user "Alice" has shared folder "simple-folder" with link with "create" permissions and password "pass123"
@@ -312,20 +270,6 @@ Feature: Share by public link with different roles
     And the public uploads file "'single'quotes.txt" in files-drop page
     And the public uploads file "new-lorem.txt" in files-drop page
     Then the following files should be listed on the files-drop page:
-      | 'single'quotes.txt |
-      | new-lorem.txt      |
-    And as "Alice" the content of "simple-folder/'single'quotes.txt" should be the same as the local "'single'quotes.txt"
-    And as "Alice" the content of "simple-folder/new-lorem.txt" should be the same as the local "new-lorem.txt"
-
-  @skipOnOC10 @issue-ocis-723
-  #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
-  Scenario: creating a public link with "Uploader" role makes it possible to upload multiple files via files-drop page even with password set (ocis bug demonstration)
-    Given user "Alice" has shared folder "simple-folder" with link with "create" permissions and password "pass123"
-    When the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
-    And the public uploads file "'single'quotes.txt" in files-drop page
-    And the public uploads file "new-lorem.txt" in files-drop page
-    Then the following resources should be listed on the webUI
-      | file-name          |
       | 'single'quotes.txt |
       | new-lorem.txt      |
     And as "Alice" the content of "simple-folder/'single'quotes.txt" should be the same as the local "'single'quotes.txt"

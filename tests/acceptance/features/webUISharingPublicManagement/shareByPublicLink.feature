@@ -178,25 +178,6 @@ Feature: Public link share management
     Then file "lorem.txt" should be listed on the webUI
     And it should not be possible to create files using the webUI
 
-  @skipOnOC10 @issue-product-130
-  # When this issue is fixed delete this scenario and use the one above
-  Scenario: User can attempt to upload a file in public link (ocis bug demonstration)
-    Given user "Alice" has created file "lorem.txt"
-    And user "Alice" has created a public link with following settings
-      | path        | lorem.txt   |
-      | name        | public link |
-      | permissions | read        |
-    When the public uses the webUI to access the last public link created by user "Alice"
-    Then file "lorem.txt" should be listed on the webUI
-    And it should be possible to create files using the webUI
-#    And it should not be possible to create files using the webUI
-    When the public uploads file "textfile.txt" using the webUI
-    Then the following error message should be displayed on the webUI
-      """
-      File upload failed…
-      Unknown error
-      """
-
 
   Scenario: Shared via link page is displayed
     Given user "Alice" has created file "lorem.txt"

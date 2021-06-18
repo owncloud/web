@@ -228,11 +228,11 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUISharingPublicExpire/shareByPublicLinkExpiringLinks.feature:106](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicExpire/shareByPublicLinkExpiringLinks.feature#L106)
 -   [webUISharingPublicExpire/shareByPublicLinkExpiringLinks.feature:130](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicExpire/shareByPublicLinkExpiringLinks.feature#L130)
 -   [webUISharingPublicExpire/shareByPublicLinkExpiringLinks.feature:147](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicExpire/shareByPublicLinkExpiringLinks.feature#L147)
--   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:335](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L335)
--   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:343](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L343)
--   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:352](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L352)
--   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:361](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L361)
--   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:370](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L370)
+-   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:279](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L279)
+-   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:287](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L287)
+-   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:296](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L296)
+-   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:305](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L305)
+-   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:314](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L314)
 
 
 ### [Cannot delete a received share](https://github.com/owncloud/ocis/issues/714)
@@ -324,13 +324,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 
 ### [restoring a file deleted from a received shared folder is not possible](https://github.com/owncloud/ocis/issues/1124)
 -   [webUITrashbinRestore/trashbinRestore.feature:260](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITrashbinRestore/trashbinRestore.feature#L260)
-
-### [Adjust web UI test scenarios that demonstrate fixed bugs](https://github.com/owncloud/web/issues/4601)
--   [webUISharingPublicManagement/shareByPublicLink.feature:183](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicManagement/shareByPublicLink.feature#L183)
--   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:142](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L142)
--   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:322](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L322)
--   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:299](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L299)
--   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:236](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L236)
 
 ### [Blocked user is not logged out](https://github.com/owncloud/ocis/issues/902)
 -   [webUILogin/adminBlocksUser.feature:13](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/adminBlocksUser.feature#L13)
