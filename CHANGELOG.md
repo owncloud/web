@@ -47,7 +47,7 @@ Summary
 * Enhancement - Use `oc-select` for role select: [#4937](https://github.com/owncloud/web/pull/4937)
 * Enhancement - Add focus trap to left sidebar: [#5027](https://github.com/owncloud/web/pull/5027)
 * Enhancement - Improve accessibility on trash bin: [#5046](https://github.com/owncloud/web/pull/5046)
-* Enhancement - Update ownCloud Design System to v7.4.0: [#5224](https://github.com/owncloud/web/pull/5224)
+* Enhancement - Update ownCloud Design System to v7.4.1: [#5224](https://github.com/owncloud/web/pull/5224)
 * Enhancement - Improve accessibility on user menu: [#5010](https://github.com/owncloud/web/pull/5010)
 
 Details
@@ -379,12 +379,13 @@ Details
 
    https://github.com/owncloud/web/pull/5046
 
-* Enhancement - Update ownCloud Design System to v7.4.0: [#5224](https://github.com/owncloud/web/pull/5224)
+* Enhancement - Update ownCloud Design System to v7.4.1: [#5224](https://github.com/owncloud/web/pull/5224)
 
-   We've updated ownCloud Design System to version 7.4.0 to bring the new pagination component.
+   We've updated ownCloud Design System to version 7.4.1 to bring the new pagination component.
 
    https://github.com/owncloud/web/pull/5224
-   https://github.com/owncloud/owncloud-design-system/releases/tag/v7.4.0
+   https://github.com/owncloud/web/pull/5292
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v7.4.1
 
 * Enhancement - Improve accessibility on user menu: [#5010](https://github.com/owncloud/web/pull/5010)
 
