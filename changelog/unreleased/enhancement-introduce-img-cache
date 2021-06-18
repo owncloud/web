@@ -1,0 +1,7 @@
+Enhancement: Introduce image cache
+
+We have added a (configurable) cache for thumbnails and avatar 
+images to avoid loading the same files over and over again.
+
+https://github.com/owncloud/web/issues/3098
+https://github.com/owncloud/web/pull/5194

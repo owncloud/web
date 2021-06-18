@@ -4,8 +4,9 @@ const rootDir = path.resolve(__dirname, '../../../')
 module.exports = {
   rootDir,
   modulePaths: ['<rootDir>'],
-  moduleFileExtensions: ['js', 'json', 'vue'],
+  moduleFileExtensions: ['js', 'ts', 'json', 'vue'],
   transform: {
+    '^.+\\.(ts|tsx)$': 'ts-jest',
     '^.+\\.js$': ['babel-jest', { configFile: path.join(rootDir, '.babelrc') }],
     '^.+\\.vue$': 'vue-jest',
     '^.+\\.(jpg|ico|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
@@ -13,7 +14,8 @@ module.exports = {
   },
   moduleNameMapper: {
     '^.+\\.(css|scss)$': 'babel-jest',
-    '^@runtime/(.*)$': '<rootDir>/packages/web-runtime/$1'
+    '^@runtime/(.*)$': '<rootDir>/packages/web-runtime/$1',
+    '^@pkg/(.*)$': '<rootDir>/packages/web-pkg/$1'
   },
   transformIgnorePatterns: ['<rootDir>/node_modules/(?!lodash-es)'],
   setupFiles: ['<rootDir>/tests/integration/config/jest.init.js'],

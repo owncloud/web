@@ -297,7 +297,7 @@ module.exports = {
         selector: publicLinkUrlXpath,
         abortOnFailure: false
       }).api.elements('xpath', publicLinkUrlXpath, result => {
-        result.value.map(item => {
+        result.value.forEach(item => {
           promiseList.push(
             new Promise(resolve => {
               this.api.elementIdAttribute(item.ELEMENT, 'href', href => {

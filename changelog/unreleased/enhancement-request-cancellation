@@ -1,0 +1,9 @@
+Enhancement: Request cancellation
+
+Requests (e.g. loading of images) can now be pragmatically 
+cancelled from the client side. Before, obsolete requests 
+would still create load on the server and return results 
+that then would be discarded by the web frontend.
+
+https://github.com/owncloud/web/issues/5163
+https://github.com/owncloud/web/pull/5194

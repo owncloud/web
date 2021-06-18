@@ -36,7 +36,7 @@ module.exports = {
     humanReadablePermissions = humanReadablePermissions.map(function(s) {
       return String.prototype.trim.apply(s)
     })
-    for (var i = 0; i < humanReadablePermissions.length; i++) {
+    for (let i = 0; i < humanReadablePermissions.length; i++) {
       if (humanReadablePermissions[i] in this.PERMISSION_TYPES) {
         permissionBitMask = permissionBitMask + this.PERMISSION_TYPES[humanReadablePermissions[i]]
       } else {
@@ -301,6 +301,11 @@ module.exports = {
     if (elementsToDecline.length < 1) {
       throw new Error('Could not find the share to be declined')
     }
+    /**
+     * TODO: loop only run once because the return
+     * needs tests and further debugging why it's this way
+     */
+    /* eslint-disable-next-line no-unreachable-loop */
     for (const element of elementsToDecline) {
       const shareID = element.id
       const apiURL = `apps/files_sharing/api/v1/shares/pending/${shareID}`
@@ -346,6 +351,11 @@ module.exports = {
     if (elementsToAccept.length < 1) {
       throw new Error('Could not find the share to be accepted')
     }
+    /**
+     * TODO: loop only run once because the return
+     * needs tests and further debugging why it's this way
+     */
+    /* eslint-disable-next-line no-unreachable-loop */
     for (const element of elementsToAccept) {
       const shareID = element.id
       const apiURL = `apps/files_sharing/api/v1/shares/pending/${shareID}`

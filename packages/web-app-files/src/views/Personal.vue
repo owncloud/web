@@ -29,6 +29,7 @@
         :header-position="headerPosition"
         @showDetails="setHighlightedFile"
         @fileClick="$_fileActions_triggerDefaultAction"
+        @rowMounted="rowMounted"
       >
         <template v-slot:quickActions="{ resource }">
           <quick-actions
@@ -76,6 +77,11 @@ import ListLoader from '../components/ListLoader.vue'
 import NoContentMessage from '../components/NoContentMessage.vue'
 import NotFoundMessage from '../components/FilesLists/NotFoundMessage.vue'
 import ListInfo from '../components/FilesListFooterInfo.vue'
+import { VisibilityObserver } from 'web-pkg/src/observer'
+import { ImageDimension } from '../constants'
+import debounce from 'lodash-es/debounce'
+
+const visibilityObserver = new VisibilityObserver()
 
 export default {
   components: { QuickActions, ListLoader, NoContentMessage, NotFoundMessage, ListInfo },
@@ -145,8 +151,18 @@ export default {
   watch: {
     $route: {
       handler: function(to, from) {
+        if (isNil(this.$route.params.item)) {
+          this.$router.push({
+            name: 'files-personal',
+            params: {
+              item: this.homeFolder
+            }
+          })
+
+          return
+        }
+
         const sameRoute = to.name === from?.name
-        this.checkHomeFallback()
         this.loadResources(sameRoute)
         this.$_filesListPagination_updateCurrentPage()
       },
@@ -166,8 +182,12 @@ export default {
     this.adjustTableHeaderPosition()
   },
 
+  beforeDestroy() {
+    visibilityObserver.disconnect()
+  },
+
   methods: {
-    ...mapActions('Files', ['setHighlightedFile', 'loadIndicators', 'loadPreviews']),
+    ...mapActions('Files', ['setHighlightedFile', 'loadIndicators', 'loadPreview']),
     ...mapMutations('Files', [
       'SELECT_RESOURCES',
       'SET_CURRENT_FOLDER',
@@ -176,15 +196,21 @@ export default {
     ]),
     ...mapMutations(['SET_QUOTA']),
 
-    checkHomeFallback() {
-      if (isNil(this.$route.params.item)) {
-        this.$router.push({
-          name: 'files-personal',
-          params: {
-            item: this.homeFolder
-          }
-        })
+    rowMounted(resource, component) {
+      if (!this.displayPreviews) {
+        return
       }
+
+      const debounced = debounce(({ unobserve }) => {
+        unobserve()
+        this.loadPreview({
+          resource,
+          isPublic: false,
+          dimensions: ImageDimension.ThumbNail
+        })
+      }, 250)
+
+      visibilityObserver.observe(component.$el, { onEnter: debounced, onExit: debounced.cancel })
     },
 
     async loadResources(sameRoute) {
@@ -199,17 +225,14 @@ export default {
         )
 
         resources = resources.map(buildResource)
-        this.LOAD_FILES({ currentFolder: resources[0], files: resources.slice(1) })
-        this.loadIndicators({ client: this.$client, currentFolder: this.$route.params.item })
-
-        if (this.displayPreviews) {
-          this.loadPreviews({
-            resources,
-            isPublic: false,
-            mediaSource: this.mediaSource,
-            encodePath: this.encodePath
-          })
-        }
+        this.LOAD_FILES({
+          currentFolder: resources[0],
+          files: resources.slice(1)
+        })
+        this.loadIndicators({
+          client: this.$client,
+          currentFolder: this.$route.params.item
+        })
 
         // Load quota
         const user = await this.$client.users.getUser(this.user.id)
@@ -243,10 +266,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-// TODO: remove when fixed in ODS
-.files-pagination > ol {
-  padding: 0;
-}
-</style>

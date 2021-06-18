@@ -1,9 +1,9 @@
-import { keysDeep } from 'web-pkg/src/utils/object'
+import { objectKeys } from './objectKeys'
 
-describe('keysDeep', () => {
+describe('objectKeys', () => {
   it('should return the correct keys', () => {
     expect(
-      keysDeep({
+      objectKeys({
         foo1: { bar1: { baz1: 1, baz2: 1 }, bar2: { baz1: 1, baz2: 1 }, bar3: 1 },
         foo2: 1
       })

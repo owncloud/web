@@ -7,7 +7,6 @@ import { getIndicators } from './statusIndicators'
 import { bitmaskToRole, checkPermission, permissionsBitmask } from './collaborators'
 import { shareTypes, userShareTypes } from './shareTypes'
 import { $gettext } from '../gettext'
-import { getAvatarSrc } from './user'
 
 // Should we move this to ODS?
 export function getFileIcon(extension) {
@@ -33,6 +32,7 @@ export function buildResource(resource) {
   const extension = _getFileExtension(resource.name)
   return {
     id: resource.fileInfo['{http://owncloud.org/ns}fileid'],
+    fileId: resource.fileInfo['{http://owncloud.org/ns}fileid'],
     icon: isFolder ? 'folder' : getFileIcon(extension),
     name: path.basename(resource.name),
     extension: isFolder ? '' : extension,
@@ -96,24 +96,18 @@ export function attachIndicators(resource, sharesTree) {
  * @param {Boolean} allowSharePerm Asserts whether the reshare permission is available
  * @param {String} server The url of the backend
  * @param {String} token The access token of the authenticated user
- * @param {Object} client The ownCloud SDK client
- * @param {Function} updateFn The closure action that gets called on update
  */
 export function aggregateResourceShares(
   shares,
   incomingShares = false,
   allowSharePerm,
   server,
-  token,
-  client,
-  updateFn
+  token
 ) {
   if (incomingShares) {
     return _.chain(shares)
       .orderBy(['file_target', 'permissions'], ['asc', 'desc'])
-      .map(share =>
-        buildSharedResource(share, incomingShares, allowSharePerm, server, token, client, updateFn)
-      )
+      .map(share => buildSharedResource(share, incomingShares, allowSharePerm))
       .value()
   }
 
@@ -160,22 +154,13 @@ export function aggregateResourceShares(
     resources.push(share)
   }
 
-  return resources.map(share =>
-    buildSharedResource(share, incomingShares, allowSharePerm, server, token, client, updateFn)
-  )
+  return resources.map(share => buildSharedResource(share, incomingShares, allowSharePerm))
 }
 
-export function buildSharedResource(
-  share,
-  incomingShares = false,
-  allowSharePerm,
-  server,
-  token,
-  client,
-  updateFn
-) {
+export function buildSharedResource(share, incomingShares = false, allowSharePerm) {
   const resource = {
-    id: share.item_source,
+    id: share.id,
+    fileId: share.item_source,
     type: share.item_type
   }
   const isFolder = resource.type === 'folder'
@@ -220,49 +205,6 @@ export function buildSharedResource(
   resource.indicators = []
   resource.icon = isFolder ? 'folder' : getFileIcon(resource.extension)
   resource.sdate = share.stime * 1000
-
-  updateResource(async () => {
-    const avatars = new Map()
-    ;['sharedWith', 'owner'].forEach(k => {
-      ;(resource[k] || []).forEach((obj, i) => {
-        if (!_.has(obj, 'avatar')) {
-          return
-        }
-        avatars.set(`${k}.[${i}].avatar`, obj.username)
-      })
-    })
-
-    if (!avatars.size) {
-      return
-    }
-
-    await Promise.all(
-      Array.from(avatars).map(avatar =>
-        (async () => {
-          let url
-          try {
-            url = await getAvatarSrc(avatar[1], server, token, client)
-          } catch (e) {
-            avatars.delete(avatar[0])
-            return
-          }
-
-          avatars.set(avatar[0], url)
-        })()
-      )
-    )
-
-    if (!avatars.size) {
-      return
-    }
-
-    const cResource = _.cloneDeep(resource)
-    avatars.forEach((value, key) => {
-      _.set(cResource, key, value)
-    })
-
-    return cResource
-  }, updateFn)
 
   return resource
 }
@@ -386,21 +328,4 @@ export function buildDeletedResource(resource) {
     icon: isFolder ? 'folder' : getFileIcon(extension),
     indicators: []
   }
-}
-
-export const updateResource = (task = async () => {}, cb = () => {}) => {
-  ;(async () => {
-    let val
-    try {
-      val = await task()
-    } catch (e) {
-      return
-    }
-
-    if (!val) {
-      return
-    }
-
-    cb(val)
-  })()
 }

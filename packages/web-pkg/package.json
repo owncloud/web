@@ -4,6 +4,7 @@
   "description": "ownCloud web pkg",
   "license": "AGPL-3.0",
   "devDependencies": {
-    "lodash-es": "^4.17.20"
+    "axios": "^0.21.1",
+    "lodash-es": "^4.17.21"
   }
 }

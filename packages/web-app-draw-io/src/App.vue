@@ -57,7 +57,7 @@ export default {
     this.checkPermissions()
     window.addEventListener('message', event => {
       if (event.data.length > 0) {
-        var payload = JSON.parse(event.data)
+        const payload = JSON.parse(event.data)
         switch (payload.event) {
           case 'init':
             this.fileExtension === 'vsdx' ? this.importVisio() : this.load()
@@ -137,8 +137,8 @@ export default {
           return resp.arrayBuffer()
         })
         .then(arrayBuffer => {
-          var blob = new Blob([arrayBuffer], { type: 'application/vnd.visio' })
-          var reader = new FileReader()
+          const blob = new Blob([arrayBuffer], { type: 'application/vnd.visio' })
+          const reader = new FileReader()
           reader.onloadend = () => {
             this.$refs.drawIoEditor.contentWindow.postMessage(
               JSON.stringify({

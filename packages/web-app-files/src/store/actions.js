@@ -1,10 +1,12 @@
 import PQueue from 'p-queue'
-import queryString from 'query-string'
 
 import { getParentPaths } from '../helpers/path'
 import { shareTypes } from '../helpers/shareTypes'
 import { buildResource, buildShare, buildCollaboratorShare } from '../helpers/resources'
 import { $gettext, $gettextInterpolate } from '../gettext'
+import { privatePreviewBlob, publicPreviewUrl } from '../helpers/resource'
+import { avatarUrl } from '../helpers/user'
+import { has, set, cloneDeep } from 'lodash-es'
 
 export default {
   updateFileProgress({ commit }, progress) {
@@ -504,82 +506,86 @@ export default {
     commit('LOAD_INDICATORS')
   },
 
-  async loadPreviews({ commit, rootGetters }, { resources, isPublic, mediaSource, encodePath }) {
-    let dimensions
+  async loadAvatars({ commit, rootGetters }, { resource }) {
+    const avatars = new Map()
 
-    switch (true) {
-      case window.innerWidth <= 1024:
-        dimensions = 1024
-        break
-      case window.innerWidth <= 1280:
-        dimensions = 1280
-        break
-      case window.innerWidth <= 1920:
-        dimensions = 1920
-        break
-      case window.innerWidth <= 2160:
-        dimensions = 2160
-        break
-      default:
-        dimensions = 3840
+    ;['sharedWith', 'owner'].forEach(k => {
+      ;(resource[k] || []).forEach((obj, i) => {
+        if (!has(obj, 'avatar')) {
+          return
+        }
+        avatars.set(`${k}.[${i}].avatar`, obj.username)
+      })
+    })
+
+    if (!avatars.size) {
+      return
     }
 
-    const davUrl = rootGetters.configuration.server + 'remote.php/dav/files/' + rootGetters.user.id
-
-    const query = {
-      x: dimensions,
-      y: dimensions,
-      scalingup: 0,
-      preview: 1,
-      a: 1
-    }
-
-    for (const resource of resources) {
-      if (
-        resource.type === 'folder' ||
-        !resource.extension ||
-        (rootGetters.previewFileExtensions.length &&
-          !rootGetters.previewFileExtensions.includes(resource.extension))
-      ) {
-        continue
-      }
-
-      const etag = (resource.etag || '').replaceAll('"', '')
-      if (etag) {
-        query.c = etag
-      }
-
-      if (isPublic) {
-        try {
-          // In a public context, i.e. public shares, the downloadURL contains a pre-signed url to
-          // download the file.
-          const [url, signedQuery] = resource.downloadURL.split('?')
-
-          // Since the pre-signed url contains query parameters and the caller of this method
-          // can also provide query parameters we have to combine them.
-          const combinedQuery = [queryString.stringify(query), signedQuery]
-            .filter(Boolean)
-            .join('&')
-
-          const previewUrl = [url, combinedQuery].filter(Boolean).join('?')
-          const exists = await fetch(previewUrl, { method: 'HEAD' })
-
-          if (exists.status === 404) {
-            continue
+    await Promise.all(
+      Array.from(avatars).map(avatar =>
+        (async () => {
+          let url
+          try {
+            url = await avatarUrl(
+              {
+                username: avatar[1],
+                server: rootGetters.configuration.server,
+                token: rootGetters.getToken
+              },
+              true
+            )
+          } catch (e) {
+            avatars.delete(avatar[0])
+            return
           }
 
-          resource.preview = previewUrl
-          commit('UPDATE_RESOURCE', resource)
+          avatars.set(avatar[0], url)
+        })()
+      )
+    )
 
-          continue
-        } catch (ignored) {}
-      }
+    if (!avatars.size) {
+      return
+    }
 
-      const previewUrl = davUrl + encodePath(resource.path) + '?' + queryString.stringify(query)
-      try {
-        resource.preview = await mediaSource(previewUrl, 'url')
-        commit('UPDATE_RESOURCE', resource)
-      } catch (ignored) {}
+    const cResource = cloneDeep(resource)
+    avatars.forEach((value, key) => {
+      set(cResource, key, value)
+    })
+
+    commit('UPDATE_RESOURCE', cResource)
+  },
+
+  async loadPreview({ commit, rootGetters }, { resource, isPublic, dimensions }) {
+    if (
+      resource.type === 'folder' ||
+      !resource.extension ||
+      (rootGetters.previewFileExtensions.length &&
+        !rootGetters.previewFileExtensions.includes(resource.extension))
+    ) {
+      return
+    }
+
+    let preview
+    if (isPublic) {
+      preview = await publicPreviewUrl({ resource, dimensions })
+    } else {
+      preview = await privatePreviewBlob(
+        {
+          server: rootGetters.configuration.server,
+          userId: rootGetters.user.id,
+          token: rootGetters.getToken,
+          resource,
+          dimensions
+        },
+        true
+      )
+    }
+
+    if (preview) {
+      resource.preview = preview
+      commit('UPDATE_RESOURCE', resource)
     }
   }
 }

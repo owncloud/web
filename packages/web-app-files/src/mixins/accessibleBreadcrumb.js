@@ -12,6 +12,10 @@ export default {
       )
       const activeBreadcrumbItem = activeBreadcrumb.lastChild
 
+      if (!activeBreadcrumbItem) {
+        return
+      }
+
       const itemCount = this.activeFilesCount.files + this.activeFilesCount.folders
       const announcement = this.$ngettext(
         'This folder contains %{ itemCount } item.',

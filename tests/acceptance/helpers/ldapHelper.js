@@ -200,7 +200,7 @@ exports.addUserToGroup = function(client, user, group) {
     client.search(groupCn, { attributes: [] }, (err, res) => {
       if (err) reject(err)
       res.on('searchEntry', function(entry) {
-        var memberUid
+        let memberUid
         if (entry.object.memberUid) {
           if (
             entry.object.memberUid === user ||

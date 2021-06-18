@@ -87,11 +87,9 @@ export default {
       }
 
       if (!this.flatFileList) {
-        const exists = this.activeFiles.find(n => {
-          if (n.name === newName && currentName !== newName) {
-            return n
-          }
-        })
+        const exists = this.activeFiles.find(
+          file => file.name === newName && currentName !== newName
+        )
 
         if (exists) {
           const translated = this.$gettext('The name "%{name}" is already taken')

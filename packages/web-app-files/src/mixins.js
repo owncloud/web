@@ -124,11 +124,7 @@ export default {
     },
     checkIfElementExists(element) {
       const name = element.name || element
-      return this.files.find(n => {
-        if (n.name === name) {
-          return n
-        }
-      })
+      return this.files.find(file => file.name === name)
     },
     processDirectoryEntryRecursively(directory) {
       return this.$client.files.createFolder(this.rootPath + directory.fullPath).then(() => {

@@ -1,0 +1,6 @@
+Enhancement: TypeScript Support
+
+We have added support for TypeScript and started to refactor parts of the codebase.
+This will help us provide clearer interfaces and catch bugs earlier.
+
+https://github.com/owncloud/web/pull/5194

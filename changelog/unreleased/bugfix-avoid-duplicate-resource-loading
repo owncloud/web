@@ -1,0 +1,6 @@
+Bugfix: Avoid duplicate loading of resources
+
+On the personal route, we had a redirect case where 
+resources would be loaded twice, which now is fixed.
+
+https://github.com/owncloud/web/pull/5194

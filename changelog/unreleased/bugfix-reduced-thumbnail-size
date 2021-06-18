@@ -1,0 +1,6 @@
+Bugfix: Reduced Thumbnail Size
+
+We have greatly reduced the size of the images we request from the 
+backend to display as thumbnail previews in order to minimize loading times.
+
+https://github.com/owncloud/web/pull/5194

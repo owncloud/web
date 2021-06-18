@@ -794,8 +794,8 @@ Then(
       .then(itemsList => {
         itemsList.forEach(item => {
           const displayedName = item.split('\n')[0]
-          var found = false
-          for (var userId in userSettings.getCreatedUsers()) {
+          let found = false
+          for (const userId in userSettings.getCreatedUsers()) {
             const userDisplayName = userSettings.getDisplayNameForUser(userId)
             if (
               userDisplayName === displayedName &&
@@ -1181,17 +1181,19 @@ Then(
   }
 )
 
-When('the user declines share {string} offered by user {string} using the webUI', function(
+When('the user declines share {string} offered by user {string} using the webUI', async function(
   filename,
   user
 ) {
+  await client.pause(200)
   return client.page.sharedWithMePage().declineAcceptFile('Decline', filename, user)
 })
 
-When('the user accepts share {string} offered by user {string} using the webUI', function(
+When('the user accepts share {string} offered by user {string} using the webUI', async function(
   filename,
   user
 ) {
+  await client.pause(200)
   return client.page.sharedWithMePage().declineAcceptFile('Accept', filename, user)
 })
 
