@@ -70,7 +70,8 @@ export const wrapper = mount(
     store,
     stubs: {
       'router-link': true,
-      translate: true
+      translate: true,
+      'oc-pagination': true
     },
     data: () => ({
       loading: false
