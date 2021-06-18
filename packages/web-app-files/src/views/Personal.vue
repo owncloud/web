@@ -163,7 +163,10 @@ export default {
         }
 
         const sameRoute = to.name === from?.name
-        this.loadResources(sameRoute)
+        const sameItem = to.params?.item === from?.params?.item
+        if (!sameRoute || !sameItem) {
+          this.loadResources(sameRoute)
+        }
         this.$_filesListPagination_updateCurrentPage()
       },
       immediate: true

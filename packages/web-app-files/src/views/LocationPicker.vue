@@ -249,8 +249,12 @@ export default {
 
   watch: {
     $route: {
-      handler: function() {
-        this.navigateToTarget(this.$route)
+      handler: function(to, from) {
+        const sameRoute = to.name === from?.name
+        const sameItem = to.params?.item === from?.params?.item
+        if (!sameRoute || !sameItem) {
+          this.navigateToTarget(this.$route)
+        }
         this.$_filesListPagination_updateCurrentPage()
       },
       immediate: true
