@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Avoid duplicate loading of resources: [#5194](https://github.com/owncloud/web/pull/5194)
 * Bugfix - Center MediaViewer loading spinner: [#5270](https://github.com/owncloud/web/pull/5270)
 * Bugfix - Keyboard navigation for copy to clipboard: [#5147](https://github.com/owncloud/web/pull/5147)
 * Bugfix - Hide left sidebar navigation when switching routes: [#5025](https://github.com/owncloud/web/pull/5025)
@@ -15,6 +16,7 @@ Summary
 * Bugfix - Add docs link & fix translations on error page: [#5034](https://github.com/owncloud/web/pull/5034)
 * Bugfix - Make skip to main content link visible: [#5118](https://github.com/owncloud/web/pull/5118)
 * Bugfix - Add index route for the OC10 integration: [#5201](https://github.com/owncloud/web/pull/5201)
+* Bugfix - Reduced Thumbnail Size: [#5194](https://github.com/owncloud/web/pull/5194)
 * Bugfix - Do not call Vuex create store multiple times: [#5254](https://github.com/owncloud/web/pull/5254)
 * Bugfix - Prevent scrolling issues: [#5131](https://github.com/owncloud/web/pull/5131)
 * Bugfix - Show `0` as used quota if a negative number is given: [#5229](https://github.com/owncloud/web/pull/5229)
@@ -23,11 +25,11 @@ Summary
 * Bugfix - Prevent `fileTypeIcon` to throw a TypeError: [#5253](https://github.com/owncloud/web/pull/5253)
 * Bugfix - Make sure IDs in HTML are unique: [#5028](https://github.com/owncloud/web/pull/5028)
 * Bugfix - Upsert resource in filestable: [#5130](https://github.com/owncloud/web/pull/5130)
-* Change - Use slots in the navigation sidebar: [#5105](https://github.com/owncloud/web/pull/5105)
 * Enhancement - Improve a11y colors: [#5138](https://github.com/owncloud/web/pull/5138)
 * Enhancement - Accessible status indicators: [#5182](https://github.com/owncloud/web/pull/5182)
 * Enhancement - Use a proper definition list for the account settings page: [#5012](https://github.com/owncloud/web/pull/5012)
 * Enhancement - Add pagination: [#5224](https://github.com/owncloud/web/pull/5224)
+* Enhancement - Asynchronous loading of images: [#4973](https://github.com/owncloud/web/issues/4973)
 * Enhancement - Update owncloud Design System to v7.1.2: [#5002](https://github.com/owncloud/web/pull/5002)
 * Enhancement - Button appearance: [#5053](https://github.com/owncloud/web/pull/5053)
 * Enhancement - Confirmation message when copying links: [#5147](https://github.com/owncloud/web/pull/5147)
@@ -37,6 +39,7 @@ Summary
 * Enhancement - Focus breadcrumb on route change: [#5166](https://github.com/owncloud/web/pull/5166)
 * Enhancement - Enable focus trap in oc-modal: [#5013](https://github.com/owncloud/web/pull/5013)
 * Enhancement - Hide left sidebar if no navitems are present: [#5149](https://github.com/owncloud/web/pull/5149)
+* Enhancement - Introduce image cache: [#3098](https://github.com/owncloud/web/issues/3098)
 * Enhancement - Do not reset file selection when cancelling batch delete: [#5107](https://github.com/owncloud/web/pull/5107)
 * Enhancement - Move breadcrumbs out of location picker heading: [#5020](https://github.com/owncloud/web/pull/5020)
 * Enhancement - Move hint in the Location picker under breadcrumbs: [#5008](https://github.com/owncloud/web/pull/5008)
@@ -44,14 +47,25 @@ Summary
 * Enhancement - OcTooltip: [#5055](https://github.com/owncloud/web/pull/5055)
 * Enhancement - Send focus to "Add people" btn after closing Add/Edit panels: [#5129](https://github.com/owncloud/web/pull/5129)
 * Enhancement - Remove autoclose on notifications: [#5040](https://github.com/owncloud/web/pull/5040)
+* Enhancement - Request cancellation: [#5163](https://github.com/owncloud/web/issues/5163)
 * Enhancement - Use `oc-select` for role select: [#4937](https://github.com/owncloud/web/pull/4937)
 * Enhancement - Add focus trap to left sidebar: [#5027](https://github.com/owncloud/web/pull/5027)
 * Enhancement - Improve accessibility on trash bin: [#5046](https://github.com/owncloud/web/pull/5046)
+* Enhancement - TypeScript Support: [#5194](https://github.com/owncloud/web/pull/5194)
 * Enhancement - Update ownCloud Design System to v7.4.1: [#5224](https://github.com/owncloud/web/pull/5224)
+* Enhancement - Use slots in the navigation sidebar: [#5105](https://github.com/owncloud/web/pull/5105)
 * Enhancement - Improve accessibility on user menu: [#5010](https://github.com/owncloud/web/pull/5010)
+* Enhancement - Visibility observer: [#5194](https://github.com/owncloud/web/pull/5194)
 
 Details
 -------
+
+* Bugfix - Avoid duplicate loading of resources: [#5194](https://github.com/owncloud/web/pull/5194)
+
+   On the personal route, we had a redirect case where resources would be loaded twice, which now is
+   fixed.
+
+   https://github.com/owncloud/web/pull/5194
 
 * Bugfix - Center MediaViewer loading spinner: [#5270](https://github.com/owncloud/web/pull/5270)
 
@@ -110,6 +124,13 @@ Details
 
    https://github.com/owncloud/core/issues/38799
    https://github.com/owncloud/web/pull/5201
+
+* Bugfix - Reduced Thumbnail Size: [#5194](https://github.com/owncloud/web/pull/5194)
+
+   We have greatly reduced the size of the images we request from the backend to display as
+   thumbnail previews in order to minimize loading times.
+
+   https://github.com/owncloud/web/pull/5194
 
 * Bugfix - Do not call Vuex create store multiple times: [#5254](https://github.com/owncloud/web/pull/5254)
 
@@ -174,13 +195,6 @@ Details
 
    https://github.com/owncloud/web/pull/5130
 
-* Change - Use slots in the navigation sidebar: [#5105](https://github.com/owncloud/web/pull/5105)
-
-   In the new sidebar content is defined solely via slots. We've moved all the content into those
-   slots so that the sidebar still gets displayed correctly.
-
-   https://github.com/owncloud/web/pull/5105
-
 * Enhancement - Improve a11y colors: [#5138](https://github.com/owncloud/web/pull/5138)
 
    To get a11y compliant it's required that colors match a given contrast ratio to it's
@@ -207,6 +221,14 @@ Details
    We've added pagination to all files lists. Current limit for displayed resources is 100.
 
    https://github.com/owncloud/web/pull/5224
+
+* Enhancement - Asynchronous loading of images: [#4973](https://github.com/owncloud/web/issues/4973)
+
+   Thumbnail and avatar images now get loaded in the background and don't block the main rendering
+   of the user interface.
+
+   https://github.com/owncloud/web/issues/4973
+   https://github.com/owncloud/web/pull/5194
 
 * Enhancement - Update owncloud Design System to v7.1.2: [#5002](https://github.com/owncloud/web/pull/5002)
 
@@ -300,6 +322,14 @@ Details
 
    https://github.com/owncloud/web/pull/5149
 
+* Enhancement - Introduce image cache: [#3098](https://github.com/owncloud/web/issues/3098)
+
+   We have added a (configurable) cache for thumbnails and avatar images to avoid loading the same
+   files over and over again.
+
+   https://github.com/owncloud/web/issues/3098
+   https://github.com/owncloud/web/pull/5194
+
 * Enhancement - Do not reset file selection when cancelling batch delete: [#5107](https://github.com/owncloud/web/pull/5107)
 
    We've removed the reset selection method call when cancelling batch delete. If the user now
@@ -358,6 +388,15 @@ Details
 
    https://github.com/owncloud/web/pull/5040
 
+* Enhancement - Request cancellation: [#5163](https://github.com/owncloud/web/issues/5163)
+
+   Requests (e.g. loading of images) can now be pragmatically cancelled from the client side.
+   Before, obsolete requests would still create load on the server and return results that then
+   would be discarded by the web frontend.
+
+   https://github.com/owncloud/web/issues/5163
+   https://github.com/owncloud/web/pull/5194
+
 * Enhancement - Use `oc-select` for role select: [#4937](https://github.com/owncloud/web/pull/4937)
 
    We've used the new `oc-select` component from ODS for selecting role in people and public links
@@ -379,6 +418,13 @@ Details
 
    https://github.com/owncloud/web/pull/5046
 
+* Enhancement - TypeScript Support: [#5194](https://github.com/owncloud/web/pull/5194)
+
+   We have added support for TypeScript and started to refactor parts of the codebase. This will
+   help us provide clearer interfaces and catch bugs earlier.
+
+   https://github.com/owncloud/web/pull/5194
+
 * Enhancement - Update ownCloud Design System to v7.4.1: [#5224](https://github.com/owncloud/web/pull/5224)
 
    We've updated ownCloud Design System to version 7.4.1 to bring the new pagination component.
@@ -387,12 +433,27 @@ Details
    https://github.com/owncloud/web/pull/5292
    https://github.com/owncloud/owncloud-design-system/releases/tag/v7.4.1
 
+* Enhancement - Use slots in the navigation sidebar: [#5105](https://github.com/owncloud/web/pull/5105)
+
+   In the new sidebar content is defined solely via slots. We've moved all the content into those
+   slots so that the sidebar still gets displayed correctly.
+
+   https://github.com/owncloud/web/pull/5105
+
 * Enhancement - Improve accessibility on user menu: [#5010](https://github.com/owncloud/web/pull/5010)
 
    Wrapped the user menu button in a nav element and added an aria-label which describes it as main
    navigation.
 
    https://github.com/owncloud/web/pull/5010
+
+* Enhancement - Visibility observer: [#5194](https://github.com/owncloud/web/pull/5194)
+
+   By adding a visibility observer, we now only load image previews for those files that are close
+   to the user's viewport. It is also equiped with a short waiting period so scrolling doesn't lead
+   to an overload of requests.
+
+   https://github.com/owncloud/web/pull/5194
 
 Changelog for ownCloud Web [3.2.0] (2021-05-31)
 =======================================
