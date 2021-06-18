@@ -498,7 +498,7 @@ export default {
         this.UPSERT_RESOURCE(resource)
 
         if (this.isPersonalRoute) {
-          await this.loadIndicators({
+          this.loadIndicators({
             client: this.$client,
             currentFolder: this.currentFolder.path,
             encodePath: this.encodePath

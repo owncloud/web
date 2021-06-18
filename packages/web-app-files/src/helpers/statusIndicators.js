@@ -34,7 +34,7 @@ const isIndirectLinkShare = (resource, sharesTree) => {
   return shareTypesIndirect(resource.path, sharesTree).indexOf(shareTypes.link) >= 0
 }
 
-const isUserShare = (resource, sharesTree) => {
+export const isUserShare = (resource, sharesTree) => {
   return isDirectUserShare(resource) || isIndirectUserShare(resource, sharesTree)
 }
 
