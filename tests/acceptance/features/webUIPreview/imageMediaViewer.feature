@@ -30,7 +30,7 @@ Scenario Outline: preview of image files with media viewer is possible
     And the public views the file "test_video.mp4" in the media viewer using the webUI
     Then the file "test_video.mp4" should be displayed in the media viewer webUI
 
-  @issue-4295
+
   Scenario: image preview in public share
     Given user "Alice" has created folder "simple-empty-folder"
     And user "Alice" has uploaded file "testavatar.jpg" to "simple-empty-folder/testavatar.jpg"
