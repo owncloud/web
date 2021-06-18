@@ -963,7 +963,7 @@ def unitTests(ctx):
                  [
                      {
                          "name": "unit-tests",
-                         "image": "owncloudci/nodejs:14",
+                         "image": "owncloudci/nodejs:16",
                          "pull": "always",
                          "commands": [
                              "yarn test:unit",
@@ -971,7 +971,7 @@ def unitTests(ctx):
                      },
                      {
                          "name": "integration-tests",
-                         "image": "owncloudci/nodejs:14",
+                         "image": "owncloudci/nodejs:16",
                          "pull": "always",
                          "commands": [
                              "yarn test:integration",
@@ -1525,7 +1525,7 @@ def installFederatedServer(version, db, dbSuffix = "-federated"):
 def installNPM():
     return [{
         "name": "npm-install",
-        "image": "owncloudci/nodejs:14",
+        "image": "owncloudci/nodejs:16",
         "pull": "always",
         "commands": [
             "yarn install --frozen-lockfile",
@@ -1535,7 +1535,7 @@ def installNPM():
 def lintTest():
     return [{
         "name": "lint-test",
-        "image": "owncloudci/nodejs:14",
+        "image": "owncloudci/nodejs:16",
         "pull": "always",
         "commands": [
             "yarn run lint",
@@ -1545,7 +1545,7 @@ def lintTest():
 def buildWebApp():
     return [{
         "name": "build-web-integration-app",
-        "image": "owncloudci/nodejs:14",
+        "image": "owncloudci/nodejs:16",
         "pull": "always",
         "commands": [
             "bash -x tests/drone/build-web-app.sh {}".format(dir["web"]),
@@ -1573,7 +1573,7 @@ def setupIntegrationWebApp():
 def buildWeb():
     return [{
         "name": "build-web",
-        "image": "owncloudci/nodejs:14",
+        "image": "owncloudci/nodejs:16",
         "pull": "always",
         "commands": [
             "bash -x tests/drone/build-web.sh {}".format(dir["web"]),
@@ -1613,7 +1613,7 @@ def buildRelease(ctx):
     return [
         {
             "name": "make",
-            "image": "owncloudci/nodejs:14",
+            "image": "owncloudci/nodejs:16",
             "pull": "always",
             "commands": [
                 "cd %s" % dir["web"],
@@ -2108,7 +2108,7 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
 
     return [{
         "name": "webui-acceptance-tests",
-        "image": "owncloudci/nodejs:14",
+        "image": "owncloudci/nodejs:16",
         "pull": "always",
         "environment": environment,
         "commands": [
@@ -2282,7 +2282,7 @@ def uploadScreenshots():
 def listScreenShots():
     return [{
         "name": "list screenshots-visual",
-        "image": "owncloudci/nodejs:14",
+        "image": "owncloudci/nodejs:16",
         "pull": "always",
         "commands": [
             "ls -laR %s/tests/vrt" % dir["web"],
