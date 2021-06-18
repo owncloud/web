@@ -15,7 +15,8 @@ const selectors = {
   userAvatarImage: 'avatar-image-stub.files-collaborators-collaborator-indicator',
   notUserAvatar: 'oc-icon-stub.files-collaborators-collaborator-indicator',
   collaboratorAdditionalInfo: '.files-collaborators-collaborator-additional-info',
-  collaboratorName: '.files-collaborators-collaborator-name'
+  collaboratorName: '.files-collaborators-collaborator-name',
+  shareType: '.files-collaborators-collaborator-share-type'
 }
 
 describe('Collaborator component', () => {
@@ -139,6 +140,48 @@ describe('Collaborator component', () => {
         currentUserId: 'carol'
       })
       expect(wrapper.find(selectors.collaboratorAdditionalInfo).exists()).toBeFalsy()
+    })
+  })
+  describe('share information', () => {
+    describe('share type', () => {
+      it('shows the share type', () => {
+        const wrapper = createWrapper({
+          shareType: 0,
+          collaborator: {
+            name: 'alice'
+          },
+          currentUserId: 'carol'
+        })
+        expect(wrapper.find(selectors.shareType).text()).toEqual('User')
+      })
+      it('does not shows the share type for the owner', () => {
+        const wrapper = createWrapper({
+          shareType: 0,
+          collaborator: {
+            name: 'alice'
+          },
+          currentUserId: 'alice'
+        })
+        expect(wrapper.find(selectors.shareType).exists()).toBeFalsy()
+      })
+      it('shows the group icon for group shares', () => {
+        const wrapper = createWrapper({
+          shareType: 1,
+          currentUserId: 'carol'
+        })
+        expect(wrapper.find(selectors.shareType + ' > oc-icon-stub').attributes().name).toEqual(
+          'group'
+        )
+      })
+      it.each([0, 2, 3, 4, 5, 6])('shows the person icon for not group shares', shareType => {
+        const wrapper = createWrapper({
+          shareType: shareType,
+          currentUserId: 'carol'
+        })
+        expect(wrapper.find(selectors.shareType + ' > oc-icon-stub').attributes().name).toEqual(
+          'person'
+        )
+      })
     })
   })
 })
