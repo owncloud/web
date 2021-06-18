@@ -1548,10 +1548,7 @@ def buildWebApp():
         "image": "owncloudci/nodejs:14",
         "pull": "always",
         "commands": [
-            "yarn build",
-            "mkdir -p /srv/config",
-            "cp -r %s/tests/drone /srv/config" % dir["web"],
-            "ls -la /srv/config/drone",
+            "bash -x tests/drone/build-web-app.sh {}".format(dir["web"]),
         ],
         "volumes": [{
             "name": "configs",
@@ -1565,13 +1562,7 @@ def setupIntegrationWebApp():
         "image": "owncloudci/php:7.4",
         "pull": "always",
         "commands": [
-            "cd %s" % dir["server"],
-            "mkdir apps-external/web",
-            "cp /srv/config/drone/config-oc10-integration-app-oauth.json config/config.json",
-            "cp %s/packages/web-integration-oc10/* apps-external/web -r" % dir["web"],
-            "cp %s/dist/* apps-external/web -r" % dir["web"],
-            "ls -la apps-external/web",
-            "cat config/config.json",
+            "bash -x tests/drone/setup-integration-web-app.sh {} {}".format(dir["server"], dir["web"]),
         ],
         "volumes": [{
             "name": "configs",
@@ -1585,11 +1576,7 @@ def buildWeb():
         "image": "owncloudci/nodejs:14",
         "pull": "always",
         "commands": [
-            "yarn build",
-            "cp tests/drone/config-oc10-oauth.json dist/config.json",
-            "mkdir -p /srv/config",
-            "cp -r %s/tests/drone /srv/config" % dir["web"],
-            "ls -la /srv/config/drone",
+            "bash -x tests/drone/build-web.sh {}".format(dir["web"]),
         ],
         "volumes": [{
             "name": "configs",
@@ -1801,12 +1788,7 @@ def setUpOauth2(forIntegrationApp):
         "image": "owncloudci/php:7.4",
         "pull": "always",
         "commands": [
-            "git clone -b master https://github.com/owncloud/oauth2.git %s/apps/oauth2" % dir["server"],
-            "cd %s/apps/oauth2" % dir["server"],
-            "make vendor",
-            "cd %s" % dir["server"],
-            "php occ a:e oauth2",
-            "php occ oauth2:add-client Web Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ " + oidcURL,
+            "bash -x tests/drone/setup-oauth2.sh {} {}".format(dir["server"], oidcURL),
         ],
     }]
 
@@ -1816,24 +1798,7 @@ def setupGraphapiOIdC():
         "image": "owncloudci/php:7.4",
         "pull": "always",
         "commands": [
-            "git clone -b master https://github.com/owncloud/graphapi.git %s/apps/graphapi" % dir["server"],
-            "cd %s/apps/graphapi" % dir["server"],
-            "make vendor",
-            "git clone -b master https://github.com/owncloud/openidconnect.git %s/apps/openidconnect" % dir["server"],
-            "cd %s/apps/openidconnect" % dir["server"],
-            "make vendor",
-            "cd %s" % dir["server"],
-            "php occ a:e graphapi",
-            "php occ a:e openidconnect",
-            "php occ config:system:set trusted_domains 2 --value=web",
-            'php occ config:system:set openid-connect provider-url --value="https://idp:9130"',
-            "php occ config:system:set openid-connect loginButtonName --value=OpenId-Connect",
-            "php occ config:system:set openid-connect client-id --value=web",
-            "php occ config:system:set openid-connect insecure --value=true --type=bool",
-            'php occ config:system:set cors.allowed-domains 0 --value="http://web"',
-            'php occ config:system:set memcache.local --value="\\\\OC\\\\Memcache\\\\APCu"',
-            'php occ config:system:set web.baseUrl --value="http://web"',
-            "php occ config:list",
+            "bash -x tests/drone/setup-graph-api-oidc.sh {}".format(dir["server"]),
         ],
     }]
 
@@ -1843,9 +1808,7 @@ def buildGlauth():
         "image": "owncloudci/golang:1.16",
         "pull": "always",
         "commands": [
-            "cd /srv/app/src/github.com/owncloud/ocis/glauth",
-            "make build",
-            "cp bin/glauth %s" % dir["base"],
+            "bash -x tests/drone/build-glauth.sh {}".format(dir["base"]),
         ],
         "volumes": [{
             "name": "gopath",
@@ -1885,10 +1848,7 @@ def buildIdP():
         "image": "owncloudci/golang:1.16",
         "pull": "always",
         "commands": [
-            "cd /srv/app/src/github.com/owncloud/ocis",
-            "cd idp",
-            "make build",
-            "cp bin/idp %s" % dir["base"],
+            "bash -x tests/drone/build-idp.sh {}".format(dir["base"]),
         ],
         "volumes": [{
             "name": "gopath",
@@ -1978,10 +1938,7 @@ def buildOcisWeb():
         "image": "owncloudci/golang:1.16",
         "pull": "always",
         "commands": [
-            "cd /srv/app/src/github.com/owncloud/ocis",
-            "cd web",
-            "make build",
-            "cp bin/web %s/ocis-web" % dir["base"],
+            "bash -x tests/drone/build-ocis-web.sh {}".format(dir["base"]),
         ],
         "volumes": [{
             "name": "gopath",
@@ -2022,10 +1979,7 @@ def setupNotificationsAppForServer():
         "image": "owncloudci/php:7.4",
         "pull": "always",
         "commands": [
-            "git clone -b master https://github.com/owncloud/notifications.git %s/apps/notifications" % dir["server"],
-            "cd %s" % dir["server"],
-            "php occ a:e notifications",
-            "php occ a:l",
+            "bash -x tests/drone/setup-notifications-app.sh {}".format(dir["server"]),
         ],
     }]
 
@@ -2055,13 +2009,7 @@ def setupFedServerAndApp(logLevel):
         "image": "owncloudci/php:7.4",
         "pull": "always",
         "commands": [
-            "cd %s/" % dir["federated"],
-            "php occ a:e testing",
-            "php occ config:system:set trusted_domains 2 --value=federated",
-            "php occ log:manage --level %s" % logLevel,
-            "php occ config:list",
-            "php occ config:system:set skeletondirectory --value=%s/apps/testing/data/webUISkeleton" % dir["federated"],
-            "php occ config:system:set sharing.federation.allowHttpFallback --value=true --type=bool",
+            "bash -x tests/drone/setup-fed-server-and-app.sh {} {}".format(dir["federated"], logLevel),
         ],
     }]
 
@@ -2119,9 +2067,7 @@ def copyFilesForUpload():
             "path": "/filesForUpload",
         }],
         "commands": [
-            "ls -la /filesForUpload",
-            "cp -a %s/tests/acceptance/filesForUpload/. /filesForUpload" % dir["web"],
-            "ls -la /filesForUpload",
+            "bash -x tests/drone/copy-files-for-upload.sh {}".format(dir["web"]),
         ],
     }]
 
@@ -2217,11 +2163,7 @@ def getOcis():
             },
         },
         "commands": [
-            "source %s/.drone.env" % dir["web"],
-            "mkdir -p %s/ocis-build" % dir["base"],
-            "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
-            "mc mirror s3/owncloud/web/ocis-build/$OCIS_COMMITID %s/ocis-build/" % dir["base"],
-            "chmod +x %s/ocis-build/ocis" % dir["base"],
+            "bash -x tests/drone/get-ocis.sh {} {}".format(dir["base"], dir["web"]),
         ],
     }]
 
