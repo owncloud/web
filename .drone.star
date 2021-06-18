@@ -3,6 +3,13 @@ FULL = 1
 FEDERATED = 2
 NOTIFICATIONS = 3
 
+dir = {
+    "base": "/var/www/owncloud",
+    "federated": "/var/www/owncloud/federated",
+    "server": "/var/www/owncloud/server",
+    "web": "/var/www/owncloud/web",
+}
+
 config = {
     "app": "web",
     "rocketchat": {
@@ -130,8 +137,8 @@ config = {
                 ],
             },
             "extraEnvironment": {
-                "EXPECTED_FAILURES_FILE": "/var/www/owncloud/web/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md",
-                "WEB_UI_CONFIG": "/var/www/owncloud/web/dist/config.json",
+                "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
+                "WEB_UI_CONFIG": "%s/dist/config.json" % dir["web"],
             },
             "visualTesting": True,
             "screenShots": True,
@@ -148,8 +155,8 @@ config = {
                 ],
             },
             "extraEnvironment": {
-                "EXPECTED_FAILURES_FILE": "/var/www/owncloud/web/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md",
-                "WEB_UI_CONFIG": "/var/www/owncloud/web/dist/config.json",
+                "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
+                "WEB_UI_CONFIG": "%s/dist/config.json" % dir["web"],
             },
             "visualTesting": True,
             "screenShots": True,
@@ -163,7 +170,7 @@ config = {
             },
             "extraEnvironment": {
                 "REMOTE_BACKEND_HOST": "http://federated",
-                "EXPECTED_FAILURES_FILE": "/var/www/owncloud/web/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md",
+                "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
             },
             "notificationsAppNeeded": True,
             "federatedServerNeeded": True,
@@ -179,7 +186,7 @@ config = {
                 ],
             },
             "extraEnvironment": {
-                "EXPECTED_FAILURES_FILE": "/var/www/owncloud/web/tests/acceptance/expected-failures-XGA-with-oc10-server-oauth2-login.md",
+                "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-XGA-with-oc10-server-oauth2-login.md" % dir["web"],
                 "SCREEN_RESOLUTION": "768x1024",
             },
             "notificationsAppNeeded": True,
@@ -261,7 +268,7 @@ config = {
                 ],
             },
             "extraEnvironment": {
-                "EXPECTED_FAILURES_FILE": "/var/www/owncloud/web/tests/acceptance/expected-failures-XGA-with-oc10-server-oauth2-login.md",
+                "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-XGA-with-oc10-server-oauth2-login.md" % dir["web"],
                 "SCREEN_RESOLUTION": "768x1024",
             },
             "filterTags": "@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10",
@@ -276,7 +283,7 @@ config = {
                 ],
             },
             "extraEnvironment": {
-                "EXPECTED_FAILURES_FILE": "/var/www/owncloud/web/tests/acceptance/expected-failures-Iphone-oc10-server-oauth2-login.md",
+                "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-Iphone-oc10-server-oauth2-login.md" % dir["web"],
                 "SCREEN_RESOLUTION": "375x812",
             },
             "notificationsAppNeeded": True,
@@ -358,7 +365,7 @@ config = {
                 ],
             },
             "extraEnvironment": {
-                "EXPECTED_FAILURES_FILE": "/var/www/owncloud/web/tests/acceptance/expected-failures-Iphone-oc10-server-oauth2-login.md",
+                "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-Iphone-oc10-server-oauth2-login.md" % dir["web"],
                 "SCREEN_RESOLUTION": "375x812",
             },
             "filterTags": "@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10",
@@ -462,7 +469,7 @@ config = {
                 "TESTING_DATA_DIR": "/srv/app/testing/data/",
                 "OCIS_REVA_DATA_ROOT": "/srv/app/tmp/ocis/owncloud/data/",
                 "WEB_UI_CONFIG": "/srv/config/drone/ocis-config.json",
-                "EXPECTED_FAILURES_FILE": "/var/www/owncloud/web/tests/acceptance/expected-failures-with-ocis-server-ocis-storage.md",
+                "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-ocis-server-ocis-storage.md" % dir["web"],
             },
             "runningOnOCIS": True,
             "visualTesting": True,
@@ -480,7 +487,7 @@ config = {
             "extraEnvironment": {
                 "WEB_UI_CONFIG": "/srv/config/drone/config-oc10-integration-app-oauth.json",
                 "SERVER_HOST": "http://owncloud/index.php/apps/web/index.html",
-                "EXPECTED_FAILURES_FILE": "/var/www/owncloud/web/tests/acceptance/expected-failures-with-oc10-server-oauth2-login-and-web-integration-app.md",
+                "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login-and-web-integration-app.md" % dir["web"],
             },
             "filterTags": "not @skip and not @skipOnOC10 and not @openIdLogin and @smokeTest",
             "oc10IntegrationAppIncluded": True,
@@ -565,7 +572,7 @@ config = {
             "extraEnvironment": {
                 "WEB_UI_CONFIG": "/srv/config/drone/config-oc10-integration-app-oauth.json",
                 "SERVER_HOST": "http://owncloud/index.php/apps/web/index.html",
-                "EXPECTED_FAILURES_FILE": "/var/www/owncloud/web/tests/acceptance/expected-failures-with-oc10-server-oauth2-login-and-web-integration-app.md",
+                "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login-and-web-integration-app.md" % dir["web"],
             },
             "filterTags": "not @skip and not @skipOnOC10 and not @openIdLogin and @smokeTest",
             "oc10IntegrationAppIncluded": True,
@@ -761,7 +768,7 @@ def yarnlint():
         "type": "docker",
         "name": "lint-test",
         "workspace": {
-            "base": "/var/www/owncloud",
+            "base": dir["base"],
             "path": config["app"],
         },
         "steps": installNPM() +
@@ -798,7 +805,7 @@ def build(ctx):
         "type": "docker",
         "name": "build",
         "workspace": {
-            "base": "/var/www/owncloud",
+            "base": dir["base"],
             "path": config["app"],
         },
         "steps": installNPM() +
@@ -937,7 +944,7 @@ def unitTests(ctx):
         "type": "docker",
         "name": "unit-and-integration-tests",
         "workspace": {
-            "base": "/var/www/owncloud",
+            "base": dir["base"],
             "path": config["app"],
         },
         "clone": {
@@ -1159,7 +1166,7 @@ def acceptance(ctx):
                             "type": "docker",
                             "name": name,
                             "workspace": {
-                                "base": "/var/www/owncloud",
+                                "base": dir["base"],
                                 "path": config["app"],
                             },
                             "steps": steps,
@@ -1349,7 +1356,7 @@ def owncloudService():
         "image": "owncloudci/php:7.4",
         "pull": "always",
         "environment": {
-            "APACHE_WEBROOT": "/var/www/owncloud/server/",
+            "APACHE_WEBROOT": "%s/" % dir["server"],
             "APACHE_LOGGING_PATH": "/dev/null",
         },
         "command": [
@@ -1365,7 +1372,7 @@ def owncloudFederatedService():
         "image": "owncloudci/php:7.4",
         "pull": "always",
         "environment": {
-            "APACHE_WEBROOT": "/var/www/owncloud/federated/",
+            "APACHE_WEBROOT": "%s/" % dir["federated"],
             "APACHE_LOGGING_PATH": "/dev/null",
         },
         "command": [
@@ -1444,7 +1451,7 @@ def installCore(version, db):
     if version:
         stepDefinition.update({"settings": {
             "version": version,
-            "core_path": "/var/www/owncloud/server",
+            "core_path": dir["server"],
             "db_type": dbType,
             "db_name": database,
             "db_host": host,
@@ -1453,7 +1460,7 @@ def installCore(version, db):
         }})
     else:
         stepDefinition.update({"settings": {
-            "core_path": "/var/www/owncloud/server",
+            "core_path": dir["server"],
             "db_type": dbType,
             "db_name": database,
             "db_host": host,
@@ -1461,7 +1468,7 @@ def installCore(version, db):
             "db_password": password,
         }})
         stepDefinition.update({"commands": [
-            ". /var/www/owncloud/web/.drone.env",
+            ". %s/.drone.env" % dir["web"],
             "export PLUGIN_GIT_REFERENCE=$CORE_COMMITID",
             "bash /usr/sbin/plugin.sh",
         ]})
@@ -1491,7 +1498,7 @@ def installFederatedServer(version, db, dbSuffix = "-federated"):
     if version:
         stepDefinition.update({"settings": {
             "version": version,
-            "core_path": "/var/www/owncloud/federated/",
+            "core_path": "%s/" % dir["federated"],
             "db_type": dbType,
             "db_name": database,
             "db_host": host + dbSuffix,
@@ -1500,7 +1507,7 @@ def installFederatedServer(version, db, dbSuffix = "-federated"):
         }})
     else:
         stepDefinition.update({"settings": {
-            "core_path": "/var/www/owncloud/federated/",
+            "core_path": "%s/" % dir["federated"],
             "db_type": dbType,
             "db_name": database,
             "db_host": host + dbSuffix,
@@ -1508,7 +1515,7 @@ def installFederatedServer(version, db, dbSuffix = "-federated"):
             "db_password": password,
         }})
         stepDefinition.update({"commands": [
-            ". /var/www/owncloud/web/.drone.env",
+            ". %s/.drone.env" % dir["web"],
             "export PLUGIN_GIT_REFERENCE=$CORE_COMMITID",
             "bash /usr/sbin/plugin.sh",
         ]})
@@ -1543,7 +1550,7 @@ def buildWebApp():
         "commands": [
             "yarn build",
             "mkdir -p /srv/config",
-            "cp -r /var/www/owncloud/web/tests/drone /srv/config",
+            "cp -r %s/tests/drone /srv/config" % dir["web"],
             "ls -la /srv/config/drone",
         ],
         "volumes": [{
@@ -1558,11 +1565,11 @@ def setupIntegrationWebApp():
         "image": "owncloudci/php:7.4",
         "pull": "always",
         "commands": [
-            "cd /var/www/owncloud/server",
+            "cd %s" % dir["server"],
             "mkdir apps-external/web",
             "cp /srv/config/drone/config-oc10-integration-app-oauth.json config/config.json",
-            "cp /var/www/owncloud/web/packages/web-integration-oc10/* apps-external/web -r",
-            "cp /var/www/owncloud/web/dist/* apps-external/web -r",
+            "cp %s/packages/web-integration-oc10/* apps-external/web -r" % dir["web"],
+            "cp %s/dist/* apps-external/web -r" % dir["web"],
             "ls -la apps-external/web",
             "cat config/config.json",
         ],
@@ -1581,7 +1588,7 @@ def buildWeb():
             "yarn build",
             "cp tests/drone/config-oc10-oauth.json dist/config.json",
             "mkdir -p /srv/config",
-            "cp -r /var/www/owncloud/web/tests/drone /srv/config",
+            "cp -r %s/tests/drone /srv/config" % dir["web"],
             "ls -la /srv/config/drone",
         ],
         "volumes": [{
@@ -1622,7 +1629,7 @@ def buildRelease(ctx):
             "image": "owncloudci/nodejs:14",
             "pull": "always",
             "commands": [
-                "cd /var/www/owncloud/web",
+                "cd %s" % dir["web"],
                 "make -f Makefile.release",
             ],
         },
@@ -1772,11 +1779,11 @@ def webService():
         "image": "owncloudci/php:7.4",
         "pull": "always",
         "environment": {
-            "APACHE_WEBROOT": "/var/www/owncloud/web/dist",
+            "APACHE_WEBROOT": "%s/dist" % dir["web"],
             "APACHE_LOGGING_PATH": "/dev/null",
         },
         "commands": [
-            "mkdir -p /var/www/owncloud/web/dist",
+            "mkdir -p %s/dist" % dir["web"],
             "/usr/local/bin/apachectl -D FOREGROUND",
         ],
     }]
@@ -1794,10 +1801,10 @@ def setUpOauth2(forIntegrationApp):
         "image": "owncloudci/php:7.4",
         "pull": "always",
         "commands": [
-            "git clone -b master https://github.com/owncloud/oauth2.git /var/www/owncloud/server/apps/oauth2",
-            "cd /var/www/owncloud/server/apps/oauth2",
+            "git clone -b master https://github.com/owncloud/oauth2.git %s/apps/oauth2" % dir["server"],
+            "cd %s/apps/oauth2" % dir["server"],
             "make vendor",
-            "cd /var/www/owncloud/server/",
+            "cd %s" % dir["server"],
             "php occ a:e oauth2",
             "php occ oauth2:add-client Web Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ " + oidcURL,
         ],
@@ -1809,13 +1816,13 @@ def setupGraphapiOIdC():
         "image": "owncloudci/php:7.4",
         "pull": "always",
         "commands": [
-            "git clone -b master https://github.com/owncloud/graphapi.git /var/www/owncloud/server/apps/graphapi",
-            "cd /var/www/owncloud/server/apps/graphapi",
+            "git clone -b master https://github.com/owncloud/graphapi.git %s/apps/graphapi" % dir["server"],
+            "cd %s/apps/graphapi" % dir["server"],
             "make vendor",
-            "git clone -b master https://github.com/owncloud/openidconnect.git /var/www/owncloud/server/apps/openidconnect",
-            "cd /var/www/owncloud/server/apps/openidconnect",
+            "git clone -b master https://github.com/owncloud/openidconnect.git %s/apps/openidconnect" % dir["server"],
+            "cd %s/apps/openidconnect" % dir["server"],
             "make vendor",
-            "cd /var/www/owncloud/server/",
+            "cd %s" % dir["server"],
             "php occ a:e graphapi",
             "php occ a:e openidconnect",
             "php occ config:system:set trusted_domains 2 --value=web",
@@ -1838,7 +1845,7 @@ def buildGlauth():
         "commands": [
             "cd /srv/app/src/github.com/owncloud/ocis/glauth",
             "make build",
-            "cp bin/glauth /var/www/owncloud",
+            "cp bin/glauth %s" % dir["base"],
         ],
         "volumes": [{
             "name": "gopath",
@@ -1860,7 +1867,7 @@ def glauthService():
             "GLAUTH_BACKEND_BASEDN": "dc=example,dc=com",
         },
         "commands": [
-            "cd /var/www/owncloud",
+            "cd %s" % dir["base"],
             "./glauth --log-level debug server --backend-server http://owncloud/",
         ],
         "volumes": [{
@@ -1881,7 +1888,7 @@ def buildIdP():
             "cd /srv/app/src/github.com/owncloud/ocis",
             "cd idp",
             "make build",
-            "cp bin/idp /var/www/owncloud",
+            "cp bin/idp %s" % dir["base"],
         ],
         "volumes": [{
             "name": "gopath",
@@ -1914,7 +1921,7 @@ def idpService():
             "LDAP_FILTER": "(objectClass=posixaccount)",
         },
         "commands": [
-            "cd /var/www/owncloud",
+            "cd %s" % dir["base"],
             "./idp  --log-level debug server --signing-kid gen1-2020-02-27",
         ],
         "volumes": [{
@@ -1944,14 +1951,14 @@ def ocisService():
             "STORAGE_HOME_DATA_SERVER_URL": "http://ocis:9155/data",
             "STORAGE_USERS_DATA_SERVER_URL": "http://ocis:9158/data",
             "WEB_UI_CONFIG": "/srv/config/drone/ocis-config.json",
-            "WEB_ASSET_PATH": "/var/www/owncloud/web/dist",
+            "WEB_ASSET_PATH": "%s/dist" % dir["web"],
             "IDP_IDENTIFIER_REGISTRATION_CONF": "/srv/config/drone/identifier-registration.yml",
             "ACCOUNTS_DATA_PATH": "/srv/app/tmp/ocis-accounts/",
             "PROXY_ENABLE_BASIC_AUTH": True,
             "OCIS_LOG_LEVEL": "error",
         },
         "commands": [
-            "cd /var/www/owncloud/ocis-build",
+            "cd %s/ocis-build" % dir["base"],
             "mkdir -p /srv/app/tmp/ocis/owncloud/data/",
             "mkdir -p /srv/app/tmp/ocis/storage/users/",
             "./ocis server",
@@ -1974,7 +1981,7 @@ def buildOcisWeb():
             "cd /srv/app/src/github.com/owncloud/ocis",
             "cd web",
             "make build",
-            "cp bin/web /var/www/owncloud/ocis-web",
+            "cp bin/web %s/ocis-web" % dir["base"],
         ],
         "volumes": [{
             "name": "gopath",
@@ -1994,10 +2001,10 @@ def ocisWebService():
         "detach": True,
         "environment": {
             "WEB_UI_CONFIG": "/srv/config/drone/config-oc10-openid.json",
-            "WEB_ASSET_PATH": "/var/www/owncloud/web/dist",
+            "WEB_ASSET_PATH": "%s/dist" % dir["web"],
         },
         "commands": [
-            "cd /var/www/owncloud",
+            "cd %s" % dir["base"],
             "./ocis-web --log-level debug server",
         ],
         "volumes": [{
@@ -2015,8 +2022,8 @@ def setupNotificationsAppForServer():
         "image": "owncloudci/php:7.4",
         "pull": "always",
         "commands": [
-            "git clone -b master https://github.com/owncloud/notifications.git /var/www/owncloud/server/apps/notifications",
-            "cd /var/www/owncloud/server",
+            "git clone -b master https://github.com/owncloud/notifications.git %s/apps/notifications" % dir["server"],
+            "cd %s" % dir["server"],
             "php occ a:e notifications",
             "php occ a:l",
         ],
@@ -2028,18 +2035,7 @@ def setupServerAndAppsForIntegrationApp(logLevel):
         "image": "owncloudci/php:7.4",
         "pull": "always",
         "commands": [
-            "cd /var/www/owncloud/server/",
-            "php occ a:e testing",
-            "php occ a:e web",
-            "php occ a:l",
-            "php occ config:system:set trusted_domains 1 --value=owncloud",
-            "php occ log:manage --level %s" % logLevel,
-            "php occ config:list",
-            "php occ config:system:set skeletondirectory --value=/var/www/owncloud/server/apps/testing/data/webUISkeleton",
-            "php occ config:system:set enable_previews --type=boolean --value=false",
-            'php occ config:system:set web.baseUrl --value="http://owncloud/index.php/apps/web"',
-            "php occ config:system:set sharing.federation.allowHttpFallback --value=true --type=bool",
-            "php occ config:system:set web.rewriteLinks --value=true",
+            "bash -x tests/drone/setup-server-and-app.sh %s %s %s" % (dir["server"], logLevel, "builtInWeb"),
         ],
     }]
 
@@ -2049,17 +2045,7 @@ def setupServerAndApp(logLevel):
         "image": "owncloudci/php:7.4",
         "pull": "always",
         "commands": [
-            "cd /var/www/owncloud/server/",
-            "php occ a:e testing",
-            "php occ a:l",
-            "php occ config:system:set trusted_domains 1 --value=owncloud",
-            "php occ config:system:set cors.allowed-domains 0 --value=http://web",
-            "php occ log:manage --level %s" % logLevel,
-            "php occ config:list",
-            "php occ config:system:set skeletondirectory --value=/var/www/owncloud/server/apps/testing/data/webUISkeleton",
-            'php occ config:system:set web.baseUrl --value="http://web"',
-            "php occ config:system:set sharing.federation.allowHttpFallback --value=true --type=bool",
-            "php occ config:system:set web.rewriteLinks --value=true",
+            "bash -x tests/drone/setup-server-and-app.sh %s %s" % (dir["server"], logLevel),
         ],
     }]
 
@@ -2069,12 +2055,12 @@ def setupFedServerAndApp(logLevel):
         "image": "owncloudci/php:7.4",
         "pull": "always",
         "commands": [
-            "cd /var/www/owncloud/federated/",
+            "cd %s/" % dir["federated"],
             "php occ a:e testing",
             "php occ config:system:set trusted_domains 2 --value=federated",
             "php occ log:manage --level %s" % logLevel,
             "php occ config:list",
-            "php occ config:system:set skeletondirectory --value=/var/www/owncloud/federated/apps/testing/data/webUISkeleton",
+            "php occ config:system:set skeletondirectory --value=%s/apps/testing/data/webUISkeleton" % dir["federated"],
             "php occ config:system:set sharing.federation.allowHttpFallback --value=true --type=bool",
         ],
     }]
@@ -2085,7 +2071,7 @@ def fixPermissions():
         "image": "owncloudci/php:7.4",
         "pull": "always",
         "commands": [
-            "cd /var/www/owncloud/server",
+            "cd %s" % dir["server"],
             "chown www-data * -R",
         ],
     }]
@@ -2096,7 +2082,7 @@ def fixPermissionsFederated():
         "image": "owncloudci/php:7.4",
         "pull": "always",
         "commands": [
-            "cd /var/www/owncloud/federated",
+            "cd %s" % dir["federated"],
             "chown www-data * -R",
         ],
     }]
@@ -2108,7 +2094,7 @@ def owncloudLog():
         "pull": "always",
         "detach": True,
         "commands": [
-            "tail -f /var/www/owncloud/server/data/owncloud.log",
+            "tail -f %s/data/owncloud.log" % dir["server"],
         ],
     }]
 
@@ -2119,7 +2105,7 @@ def owncloudLogFederated():
         "pull": "always",
         "detach": True,
         "commands": [
-            "tail -f /var/www/owncloud/federated/data/owncloud.log",
+            "tail -f %s/data/owncloud.log" % dir["federated"],
         ],
     }]
 
@@ -2134,7 +2120,7 @@ def copyFilesForUpload():
         }],
         "commands": [
             "ls -la /filesForUpload",
-            "cp -a /var/www/owncloud/web/tests/acceptance/filesForUpload/. /filesForUpload",
+            "cp -a %s/tests/acceptance/filesForUpload/. /filesForUpload" % dir["web"],
             "ls -la /filesForUpload",
         ],
     }]
@@ -2180,7 +2166,7 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
         "pull": "always",
         "environment": environment,
         "commands": [
-            "cd /var/www/owncloud/web",
+            "cd %s" % dir["web"],
             "./tests/acceptance/run.sh",
         ],
         "volumes": [{
@@ -2198,7 +2184,7 @@ def cacheOcisPipeline(ctx):
         "type": "docker",
         "name": "cache-ocis",
         "workspace": {
-            "base": "/var/www/owncloud",
+            "base": dir["base"],
             "path": config["app"],
         },
         "steps": buildOCISCache() +
@@ -2231,11 +2217,11 @@ def getOcis():
             },
         },
         "commands": [
-            "source /var/www/owncloud/web/.drone.env",
-            "mkdir -p /var/www/owncloud/ocis-build",
+            "source %s/.drone.env" % dir["web"],
+            "mkdir -p %s/ocis-build" % dir["base"],
             "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
-            "mc mirror s3/owncloud/web/ocis-build/$OCIS_COMMITID /var/www/owncloud/ocis-build/",
-            "chmod +x /var/www/owncloud/ocis-build/ocis",
+            "mc mirror s3/owncloud/web/ocis-build/$OCIS_COMMITID %s/ocis-build/" % dir["base"],
+            "chmod +x %s/ocis-build/ocis" % dir["base"],
         ],
     }]
 
@@ -2260,8 +2246,8 @@ def cacheOcis():
                 "from_secret": "cache_s3_endpoint",
             },
             "path_style": True,
-            "source": "/var/www/owncloud/ocis-build/**/*",
-            "strip_prefix": "/var/www/owncloud/ocis-build",
+            "source": "%s/ocis-build/**/*" % dir["base"],
+            "strip_prefix": "%s/ocis-build" % dir["base"],
             "target": "/web/ocis-build/",
             "access_key": {
                 "from_secret": "cache_s3_access_key",
@@ -2329,8 +2315,8 @@ def uploadScreenshots():
                 "from_secret": "cache_s3_endpoint",
             },
             "path_style": True,
-            "source": "/var/www/owncloud/web/tests/reports/screenshots/**/*",
-            "strip_prefix": "/var/www/owncloud/web/tests/reports/screenshots",
+            "source": "%s/tests/reports/screenshots/**/*" % dir["web"],
+            "strip_prefix": "%s/tests/reports/screenshots" % dir["web"],
             "target": "/web/screenshots/${DRONE_BUILD_NUMBER}",
         },
         "environment": {
@@ -2357,7 +2343,7 @@ def listScreenShots():
         "image": "owncloudci/nodejs:14",
         "pull": "always",
         "commands": [
-            "ls -laR /var/www/owncloud/web/tests/vrt",
+            "ls -laR %s/tests/vrt" % dir["web"],
         ],
         "when": {
             "status": [
@@ -2377,8 +2363,8 @@ def uploadVisualDiff():
                 "from_secret": "cache_s3_endpoint",
             },
             "path_style": True,
-            "source": "/var/www/owncloud/web/tests/vrt/diff/**/*",
-            "strip_prefix": "/var/www/owncloud/web/tests/vrt",
+            "source": "%s/tests/vrt/diff/**/*" % dir["web"],
+            "strip_prefix": "%s/tests/vrt" % dir["web"],
             "target": "/web/screenshots/${DRONE_BUILD_NUMBER}",
         },
         "environment": {
@@ -2410,8 +2396,8 @@ def uploadVisualScreenShots():
                 "from_secret": "cache_s3_endpoint",
             },
             "path_style": True,
-            "source": "/var/www/owncloud/web/tests/vrt/latest/**/*",
-            "strip_prefix": "/var/www/owncloud/web/tests/vrt",
+            "source": "%s/tests/vrt/latest/**/*" % dir["web"],
+            "strip_prefix": "%s/tests/vrt" % dir["web"],
             "target": "/web/screenshots/${DRONE_BUILD_NUMBER}",
         },
         "environment": {
@@ -2440,23 +2426,23 @@ def buildGithubCommentVisualDiff(ctx, suite, alternateSuiteName, runningOnOCIS):
         "image": "owncloud/ubuntu:20.04",
         "pull": "always",
         "commands": [
-            "cd /var/www/owncloud/web/tests/vrt",
+            "cd %s/tests/vrt" % dir["web"],
             "if [ ! -d diff ]; then exit 0; fi",
             "cd diff",
             "if [ ! -d %s ]; then exit 0; fi" % backend,
             "cd %s" % backend,
             "ls -la",
-            'echo "<details><summary>:boom: Visual regression tests <strong>%s</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n" >> /var/www/owncloud/web/comments.file' % alternateSuiteName,
-            'echo "Diff Image: </br>" >> /var/www/owncloud/web/comments.file',
-            'for f in *.png; do echo \'!\'"[$f]($CACHE_ENDPOINT/owncloud/web/screenshots/${DRONE_BUILD_NUMBER}/diff/%s/$f)" >> /var/www/owncloud/web/comments.file; done' % backend,
+            'echo "<details><summary>:boom: Visual regression tests <strong>%s</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n" >> %s/comments.file' % (alternateSuiteName, dir["web"]),
+            'echo "Diff Image: </br>" >> %s/comments.file' % dir["web"],
+            'for f in *.png; do echo \'!\'"[$f]($CACHE_ENDPOINT/owncloud/web/screenshots/${DRONE_BUILD_NUMBER}/diff/%s/$f)" >> %s/comments.file; done' % (backend, dir["web"]),
             "cd ../../latest",
             "cd %s" % backend,
-            'echo "Actual Image: </br>" >> /var/www/owncloud/web/comments.file',
-            'for f in *.png; do echo \'!\'"[$f]($CACHE_ENDPOINT/owncloud/web/screenshots/${DRONE_BUILD_NUMBER}/latest/%s/$f)" >> /var/www/owncloud/web/comments.file; done' % backend,
-            'echo "Comparing Against: </br>" >> /var/www/owncloud/web/comments.file',
-            'for f in *.png; do echo \'!\'"[$f](https://raw.githubusercontent.com/owncloud/web/%s/tests/vrt/baseline/%s/$f)" >> /var/www/owncloud/web/comments.file; done' % (branch, backend),
-            'echo "\n</p></details>" >> /var/www/owncloud/web/comments.file',
-            "more /var/www/owncloud/web/comments.file",
+            'echo "Actual Image: </br>" >> %s/comments.file' % dir["web"],
+            'for f in *.png; do echo \'!\'"[$f]($CACHE_ENDPOINT/owncloud/web/screenshots/${DRONE_BUILD_NUMBER}/latest/%s/$f)" >> %s/comments.file; done' % (backend, dir["web"]),
+            'echo "Comparing Against: </br>" >> %s/comments.file' % dir["web"],
+            'for f in *.png; do echo \'!\'"[$f](https://raw.githubusercontent.com/owncloud/web/%s/tests/vrt/baseline/%s/$f)" >> %s/comments.file; done' % (branch, backend, dir["web"]),
+            'echo "\n</p></details>" >> %s/comments.file' % dir["web"],
+            "more %s/comments.file" % dir["web"],
         ],
         "environment": {
             "TEST_CONTEXT": suite,
@@ -2480,11 +2466,11 @@ def buildGithubComment(suite, alternateSuiteName):
         "image": "owncloud/ubuntu:20.04",
         "pull": "always",
         "commands": [
-            "cd /var/www/owncloud/web/tests/reports/screenshots/",
-            'echo "<details><summary>:boom: Acceptance tests <strong>%s</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n" >> /var/www/owncloud/web/comments.file' % alternateSuiteName,
-            'for f in *.png; do echo "### $f\n" \'!\'"[$f]($CACHE_ENDPOINT/owncloud/web/screenshots/${DRONE_BUILD_NUMBER}/$f) \n" >> /var/www/owncloud/web/comments.file; done',
-            'echo "\n</p></details>" >> /var/www/owncloud/web/comments.file',
-            "more /var/www/owncloud/web/comments.file",
+            "cd %s/tests/reports/screenshots/" % dir["web"],
+            'echo "<details><summary>:boom: Acceptance tests <strong>%s</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n" >> %s/comments.file' % (alternateSuiteName, dir["web"]),
+            'for f in *.png; do echo "### $f\n" \'!\'"[$f]($CACHE_ENDPOINT/owncloud/web/screenshots/${DRONE_BUILD_NUMBER}/$f) \n" >> %s/comments.file; done' % dir["web"],
+            'echo "\n</p></details>" >> %s/comments.file' % dir["web"],
+            "more %s/comments.file" % dir["web"],
         ],
         "environment": {
             "TEST_CONTEXT": suite,
@@ -2508,7 +2494,7 @@ def buildGithubCommentForBuildStopped(suite, alternateSuiteName):
         "image": "owncloud/ubuntu:20.04",
         "pull": "always",
         "commands": [
-            'echo "<details><summary>:boom: Acceptance tests <strong>%s</strong> failed. The build is cancelled...</summary>\\n\\n" >> /var/www/owncloud/web/comments.file' % alternateSuiteName,
+            'echo "<details><summary>:boom: Acceptance tests <strong>%s</strong> failed. The build is cancelled...</summary>\\n\\n" >> %s/comments.file' % (alternateSuiteName, dir["web"]),
         ],
         "when": {
             "status": [
@@ -2526,7 +2512,7 @@ def githubComment():
         "image": "jmccann/drone-github-comment:1",
         "pull": "if-not-exists",
         "settings": {
-            "message_file": "/var/www/owncloud/web/comments.file",
+            "message_file": "%s/comments.file" % dir["web"],
         },
         "environment": {
             "GITHUB_TOKEN": {
