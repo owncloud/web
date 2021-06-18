@@ -12,16 +12,6 @@ Feature: Sharing files and folders with internal users
       | Alice    |
       | Brian    |
 
-  @skip @yetToImplement
-  Scenario: user tries to share a file from a group which is blacklisted from sharing
-    Given group "grp1" has been created
-    And user "Alice" has been added to group "grp1"
-    And user "Carol" has been created with default attributes
-    And the administrator has browsed to the admin sharing settings page
-    When the administrator enables exclude groups from sharing using the webUI
-    And the administrator adds group "grp1" to the group sharing blacklist using the webUI
-    Then user "Alice" should not be able to share file "testimage.jpg" with user "Carol" using the sharing API
-
 
   Scenario: member of a blacklisted from sharing group tries to re-share a file or folder received as a share
     Given user "Carol" has been created with default attributes and without skeleton files

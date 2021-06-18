@@ -99,7 +99,10 @@ module.exports = {
             console.log('WARNING: no sharing autocomplete dropdown found, retry typing')
             this.clearValue('@sharingAutoComplete')
               .enterAutoComplete(sharee)
-              .waitForElementVisible('@sharingAutoCompleteDropDownElements')
+              .waitForElementPresent({
+                selector: '@sharingAutoCompleteDropDownElements',
+                abortOnFailure: false
+              })
           }
         }
       )

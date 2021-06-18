@@ -162,22 +162,6 @@ Feature: Sharing files and folders with internal groups
     Then file "lorem.txt" should be listed on the webUI
     And as "Carol" the content of "new-simple-folder/lorem.txt" should be the same as the original "simple-folder/lorem.txt"
 
-  @issue-5015
-  Scenario: user tries to share a file in a group which is excluded from receiving share
-    Given group "system-group" has been created
-    And user "Alice" has created file "lorem.txt"
-    And the administrator has browsed to the admin sharing settings page
-    When the administrator excludes group "system-group" from receiving shares using the webUI
-    Then user "Alice" should not be able to share file "lorem.txt" with group "system-group" using the sharing API
-
-  @issue-5015
-  Scenario: user tries to share a folder in a group which is excluded from receiving share
-    Given group "system-group" has been created
-    And user "Alice" has created folder "simple-folder"
-    And the administrator has browsed to the admin sharing settings page
-    When the administrator excludes group "system-group" from receiving shares using the webUI
-    Then user "Alice" should not be able to share folder "simple-folder" with group "system-group" using the sharing API
-
   @issue-ocis-1277
   Scenario: user shares the file/folder with a group and delete the share with group
     Given user "Alice" has created file "lorem.txt"

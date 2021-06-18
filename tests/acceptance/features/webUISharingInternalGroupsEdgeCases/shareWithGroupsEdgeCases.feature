@@ -13,7 +13,7 @@ Feature: Sharing files and folders with internal groups
       | Brian    |
       | Carol    |
 
-  @skip @yetToImplement
+  @issue-5216
   Scenario Outline: sharing  files and folder with an internal problematic group name
     Given these groups have been created:
       | groupname |
@@ -21,26 +21,21 @@ Feature: Sharing files and folders with internal groups
     And user "Carol" has created folder "simple-folder"
     And user "Carol" has created file "testimage.jpg"
     And user "Alice" has been added to group "<group>"
-    And user "Brian" has been added to group "<group>"
     And user "Carol" has logged in using the webUI
-    When the user shares folder "simple-folder" with group "<group>" using the webUI
+    When the user shares folder "simple-folder" with group "<group>" as "Viewer" using the webUI
+    And the user shares file "testimage.jpg" with group "<group>" as "Viewer" using the webUI
     And user "Alice" accepts the share "simple-folder" offered by user "Carol" using the sharing API
-    And user "Brian" accepts the share "simple-folder" offered by user "Carol" using the sharing API
-    And the user shares file "testimage.jpg" with group "<group>" using the webUI
     And user "Alice" accepts the share "testimage.jpg" offered by user "Carol" using the sharing API
-    And user "Brian" accepts the share "testimage.jpg" offered by user "Carol" using the sharing API
-    And the user re-logs in as "Alice" using the webUI
+    Then group "<group>" should be listed as "Viewer" in the collaborators list for folder "simple-folder" on the webUI
+    And group "<group>" should be listed as "Viewer" in the collaborators list for file "testimage.jpg" on the webUI
+    When the user re-logs in as "Alice" using the webUI
     And the user opens folder "Shares" using the webUI
     Then folder "simple-folder" should be listed on the webUI
-    And folder "simple-folder" should be marked as shared with "<group>" by "Carol King" on the webUI
+    When the user opens the share dialog for file "simple-folder" using the webUI
+    Then user "Carol King" should be listed as "Owner" in the collaborators list on the webUI
     And file "testimage.jpg" should be listed on the webUI
-    And file "testimage.jpg" should be marked as shared with "<group>" by "Carol King" on the webUI
-    When the user re-logs in as "Brian" using the webUI
-    And the user opens folder "Shares" using the webUI
-    Then folder "simple-folder" should be listed on the webUI
-    And folder "simple-folder" should be marked as shared with "<group>" by "Carol King" on the webUI
-    And file "testimage.jpg" should be listed on the webUI
-    And file "testimage.jpg" should be marked as shared with "<group>" by "Carol King" on the webUI
+    When the user opens the share dialog for file "testimage.jpg" using the webUI
+    Then user "Carol King" should be listed as "Owner" in the collaborators list on the webUI
     Examples:
       | group     |
       | ?\?@#%@,; |
@@ -77,49 +72,43 @@ Feature: Sharing files and folders with internal groups
     And user "Alice" accepts the share "randomfile.txt" offered by user "Carol" using the sharing API
     And user "Brian" accepts the share "randomfile.txt" offered by user "Carol" using the sharing API
     And the user opens the share creation dialog in the webUI
-    And the user types "user" in the share-with-field
+    And the user types "Alice" in the share-with-field
     Then "user" "Alice Hansen" should not be listed in the autocomplete list on the webUI
     And the content of file "Shares/randomfile.txt" for user "Brian" should be "Carol file"
     And the content of file "Shares/randomfile.txt" for user "Alice" should be "Carol file"
 
-  @yetToImplement
+
   Scenario: Share file with a user and again with a group with same name but different case
     Given these groups have been created:
       | groupname |
-      | User1     |
-    And user "Carol" has created folder "simple-folder"
-    And user "Brian" has been added to group "User1"
+      | ALICE     |
+    And user "Brian" has been added to group "ALICE"
+    And user "Carol" has uploaded file with content "Carol file" to "/randomfile.txt"
     And user "Carol" has logged in using the webUI
-    When the user shares folder "simple-folder" with user "Alice Hansen" as "Editor" using the webUI
-    And the user shares folder "simple-folder" with group "User1" as "Editor" using the webUI
-    And user "Alice" accepts the share "simple-folder" offered by user "Carol" using the sharing API
-    And user "Brian" accepts the share "simple-folder" offered by user "Carol" using the sharing API
-    And the user re-logs in as "Alice" using the webUI
-    And the user opens folder "Shares" using the webUI
-    Then folder "simple-folder" should be listed on the webUI
-#    And folder "simple-folder (2)" should be marked as shared by "Carol King" on the webUI
-    When the user re-logs in as "Brian" using the webUI
-    And the user opens folder "Shares" using the webUI
-    Then folder "simple-folder" should be listed on the webUI
-#    And folder "simple-folder (2)" should be marked as shared with "User1" by "Carol King" on the webUI
+    When the user shares file "randomfile.txt" with user "Alice Hansen" as "Editor" using the webUI
+    And the user shares file "randomfile.txt" with group "ALICE" as "Editor" using the webUI
+    And user "Alice" accepts the share "randomfile.txt" offered by user "Carol" using the sharing API
+    And user "Brian" accepts the share "randomfile.txt" offered by user "Carol" using the sharing API
+    And the user opens the share creation dialog in the webUI
+    And the user types "ALICE" in the share-with-field
+    Then "group" "ALICE" should not be listed in the autocomplete list on the webUI
+    And the content of file "Shares/randomfile.txt" for user "Brian" should be "Carol file"
+    And the content of file "Shares/randomfile.txt" for user "Alice" should be "Carol file"
 
-  @yetToImplement
+
   Scenario: Share file with a group and again with a user with same name but different case
     Given these groups have been created:
       | groupname |
-      | User1     |
-    And user "Carol" has created folder "simple-folder"
-    And user "Brian" has been added to group "User1"
+      | ALICE     |
+    And user "Brian" has been added to group "ALICE"
+    And user "Carol" has uploaded file with content "Carol file" to "/randomfile.txt"
     And user "Carol" has logged in using the webUI
-    When the user shares folder "simple-folder" with group "User1" as "Editor" using the webUI
-    And the user shares folder "simple-folder" with user "Alice Hansen" as "Editor" using the webUI
-    And user "Alice" accepts the share "simple-folder" offered by user "Carol" using the sharing API
-    And user "Brian" accepts the share "simple-folder" offered by user "Carol" using the sharing API
-    And the user re-logs in as "Alice" using the webUI
-    And the user opens folder "Shares" using the webUI
-    Then folder "simple-folder" should be listed on the webUI
-#    And folder "simple-folder" should be marked as shared by "Carol King" on the webUI
-    When the user re-logs in as "Brian" using the webUI
-    And the user opens folder "Shares" using the webUI
-    Then folder "simple-folder" should be listed on the webUI
-#    Then folder "simple-folder" should be marked as shared with "User1" by "Carol King" on the webUI
+    When the user shares file "randomfile.txt" with group "ALICE" as "Editor" using the webUI
+    And the user shares file "randomfile.txt" with user "Alice Hansen" as "Editor" using the webUI
+    And user "Alice" accepts the share "randomfile.txt" offered by user "Carol" using the sharing API
+    And user "Brian" accepts the share "randomfile.txt" offered by user "Carol" using the sharing API
+    And the user opens the share creation dialog in the webUI
+    And the user types "Alice" in the share-with-field
+    Then "user" "Alice Hansen" should not be listed in the autocomplete list on the webUI
+    And the content of file "Shares/randomfile.txt" for user "Brian" should be "Carol file"
+    And the content of file "Shares/randomfile.txt" for user "Alice" should be "Carol file"
