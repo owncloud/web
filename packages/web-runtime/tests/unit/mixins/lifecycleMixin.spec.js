@@ -17,7 +17,7 @@ const wrapper = shallowMount(
 )
 const wrapperComponent = wrapper.findComponent({ name: 'dummy' })
 
-describe('livecycleMixin', () => {
+describe('lifecycleMixin', () => {
   it('handles mounted', async () => {
     await wrapper.vm.$nextTick()
     const event = 'mounted'

@@ -118,7 +118,7 @@ describe('Collaborator component', () => {
         expect(wrapper.find(selectors.collaboratorAdditionalInfo).exists()).toBeFalsy()
       })
     })
-    it('shows additional infos about collaborator if set', () => {
+    it('shows additional information about the collaborator if set', () => {
       const wrapper = createWrapper({
         shareType: 0,
         collaborator: {
@@ -131,7 +131,7 @@ describe('Collaborator component', () => {
         'alice@owncloud.com'
       )
     })
-    it('does not show additional infos about collaborator if not set', () => {
+    it('does not show additional information about the collaborator if not set', () => {
       const wrapper = createWrapper({
         shareType: 0,
         collaborator: {
@@ -154,7 +154,7 @@ describe('Collaborator component', () => {
         })
         expect(wrapper.find(selectors.shareType).text()).toEqual('User')
       })
-      it('does not shows the share type for the owner', () => {
+      it('does not show the share type for the owner', () => {
         const wrapper = createWrapper({
           shareType: 0,
           collaborator: {

@@ -1,6 +1,6 @@
 Feature: Locks
   As a user
-  I would like to be able to see what lock are on files and folders
+  I would like to be able to see what locks are on files and folders
   So that I can understand who has which resources locked
 
   Background:
@@ -230,7 +230,7 @@ Feature: Locks
     And file "data.zip" should be marked as locked by user "brand-new-user" in the locks tab of the details panel on the webUI
 
   @skip @yetToImplement
-  Scenario: setting a depth:0 lock on a folder does not shows the symbols at the sub-elements
+  Scenario: setting a depth:0 lock on a folder does not show the symbols at the sub-elements
     Given user "brand-new-user" has locked folder "simple-folder" setting following properties
       | depth | 0 |
     When the user browses to the files page

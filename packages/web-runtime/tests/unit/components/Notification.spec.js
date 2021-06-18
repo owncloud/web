@@ -159,7 +159,7 @@ describe('Notification component', () => {
         wrapper = getMountWrapper({ $store: store })
         store.reset()
       })
-      it('does not displays action button', () => {
+      it('does not display the action button', () => {
         expect(wrapper.find(selectors.actionButton).exists()).toBeFalsy()
       })
       it('displays the resolve notification button', () => {
@@ -194,7 +194,7 @@ describe('Notification component', () => {
         expect(actionButton.exists()).toBeTruthy()
         expect(actionButton.text()).toBe('Test Action')
       })
-      it("doesn't displays the resolve notification button", () => {
+      it("doesn't display the resolve notification button", () => {
         expect(wrapper.find(selectors.resolveNotificationButton).exists()).toBeFalsy()
       })
       it('calls executeRequest when action button is clicked', async () => {
