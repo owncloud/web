@@ -18,7 +18,7 @@ Feature: File Upload
     And file "new-lorem.txt" should be listed on the webUI
     And as "Alice" the content of "new-lorem.txt" should be the same as the local "new-lorem.txt"
 
-  @smokeTest
+  @smokeTest @ocisSmokeTest
   Scenario: simple upload of a folder that does not exist before
     When the user uploads a folder containing the following files in separate sub-folders using the webUI:
       | lorem.txt     |
@@ -44,7 +44,7 @@ Feature: File Upload
     And as "Alice" file "PARENT/parent.txt" should exist
     And as "Alice" folder "PARENT/CHILD" should exist
 
-  @smokeTest
+  @smokeTest @ocisSmokeTest
   Scenario: Upload of a folder inside a subdirectory
     Given user "Alice" has created folder "simple-empty-folder"
     And the user has browsed to the files page

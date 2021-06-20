@@ -74,7 +74,7 @@ Feature: accept/decline shares coming from internal users
     And the user has browsed to the personal sharing settings page
     Then User-based auto accepting checkbox should not be displayed on the personal sharing settings page in the webUI
 
-
+  
   Scenario: User receives files when auto accept share is disabled
     Given user "Alice" has created file "toshare.txt"
     And user "Alice" has uploaded file with content "test" to "toshare.txt"
@@ -85,7 +85,7 @@ Feature: accept/decline shares coming from internal users
     Then file "toshare.txt" should not be listed on the webUI
     And folder "Shares" should not be listed on the webUI
 
-
+  
   Scenario: receive shares with same name from different users
     Given user "Carol" has been created with default attributes and without skeleton files
     And user "Carol" has created file "lorem.txt"
@@ -96,7 +96,7 @@ Feature: accept/decline shares coming from internal users
     Then file "lorem.txt" shared by "Alice Hansen" should be in "Pending" state on the webUI
     And file "lorem.txt" shared by "Carol King" should be in "Pending" state on the webUI
 
-
+  @ocisSmokeTest
   Scenario: decline an offered (pending) share
     Given user "Alice" has created file "toshare.txt"
     And user "Alice" has created file "anotherfile.txt"
