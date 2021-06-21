@@ -312,7 +312,10 @@ export default {
         : await this.$client.files.list(target, 1, this.davProperties)
 
       this.loadFiles({ currentFolder: resources[0], files: resources.slice(1) })
-      this.loadIndicators({ client: this.$client, currentFolder: this.$route.params.item || '/' })
+      this.loadIndicators({
+        client: this.$client,
+        currentFolder: this.$route.params.item || '/'
+      })
       this.adjustTableHeaderPosition()
       this.loading = false
     },

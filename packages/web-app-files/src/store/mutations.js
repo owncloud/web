@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import pickBy from 'lodash-es/pickBy'
 import moment from 'moment'
-import { attachIndicators } from '../helpers/resources'
+import { set, has } from 'lodash-es'
+import { getIndicators } from '../helpers/statusIndicators'
 
 /**
  * @param {Array.<Object>} shares array of shares
@@ -297,9 +298,19 @@ export default {
   },
 
   LOAD_INDICATORS(state) {
-    const files = [...state.files]
-    files.forEach(resource => attachIndicators(resource, state.sharesTree))
-    state.files = files
+    for (const resource of state.files) {
+      const indicators = getIndicators(resource, state.sharesTree)
+
+      if (!indicators && !resource.indicators.length) {
+        continue
+      }
+
+      this.commit('Files/UPDATE_RESOURCE_FIELD', {
+        id: resource.id,
+        field: 'indicators',
+        value: indicators
+      })
+    }
   },
 
   SELECT_RESOURCES(state, resources) {
@@ -327,6 +338,31 @@ export default {
    */
   UPDATE_RESOURCE(state, resource) {
     $_upsertResource(state, resource, false)
+  },
+
+  /**
+   * Updates a single resource field. If the resource with given id doesn't exist nothing will happen.
+   *
+   * @param state Current state of this store module
+   * @param params.id Id of the resource to be updated
+   * @param params.field the resource field that the value should be applied to
+   * @param params.value the value that will be attached to the key
+   */
+  UPDATE_RESOURCE_FIELD(state, params) {
+    const index = state.files.findIndex(r => r.id === params.id)
+    if (index < 0) {
+      return
+    }
+
+    const resource = state.files[index]
+    const isReactive = has(resource, params.field)
+    const newResource = set(resource, params.field, params.value)
+
+    if (isReactive) {
+      return
+    }
+
+    Vue.set(state.files, index, newResource)
   },
 
   UPDATE_CURRENT_PAGE(state, page) {

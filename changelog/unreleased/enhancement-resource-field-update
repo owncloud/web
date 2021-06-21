@@ -1,0 +1,6 @@
+Enhancement: Ability to update file resource fields
+
+We've introduced the ability to update individual resource fields only instead
+of updating the whole resource at once.
+
+https://github.com/owncloud/web/pull/5311

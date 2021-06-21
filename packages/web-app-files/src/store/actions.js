@@ -6,7 +6,7 @@ import { buildResource, buildShare, buildCollaboratorShare } from '../helpers/re
 import { $gettext, $gettextInterpolate } from '../gettext'
 import { privatePreviewBlob, publicPreviewUrl } from '../helpers/resource'
 import { avatarUrl } from '../helpers/user'
-import { has, set, cloneDeep } from 'lodash-es'
+import { has } from 'lodash-es'
 
 export default {
   updateFileProgress({ commit }, progress) {
@@ -506,55 +506,28 @@ export default {
     commit('LOAD_INDICATORS')
   },
 
-  async loadAvatars({ commit, rootGetters }, { resource }) {
-    const avatars = new Map()
-
+  loadAvatars({ commit, rootGetters }, { resource }) {
     ;['sharedWith', 'owner'].forEach(k => {
       ;(resource[k] || []).forEach((obj, i) => {
         if (!has(obj, 'avatar')) {
           return
         }
-        avatars.set(`${k}.[${i}].avatar`, obj.username)
+        avatarUrl(
+          {
+            username: obj.username,
+            server: rootGetters.configuration.server,
+            token: rootGetters.getToken
+          },
+          true
+        ).then(url =>
+          commit('UPDATE_RESOURCE_FIELD', {
+            id: resource.id,
+            field: `${k}.[${i}].avatar`,
+            value: url
+          })
+        )
       })
     })
-
-    if (!avatars.size) {
-      return
-    }
-
-    await Promise.all(
-      Array.from(avatars).map(avatar =>
-        (async () => {
-          let url
-          try {
-            url = await avatarUrl(
-              {
-                username: avatar[1],
-                server: rootGetters.configuration.server,
-                token: rootGetters.getToken
-              },
-              true
-            )
-          } catch (e) {
-            avatars.delete(avatar[0])
-            return
-          }
-
-          avatars.set(avatar[0], url)
-        })()
-      )
-    )
-
-    if (!avatars.size) {
-      return
-    }
-
-    const cResource = cloneDeep(resource)
-    avatars.forEach((value, key) => {
-      set(cResource, key, value)
-    })
-
-    commit('UPDATE_RESOURCE', cResource)
   },
 
   async loadPreview({ commit, rootGetters }, { resource, isPublic, dimensions }) {
@@ -584,8 +557,7 @@ export default {
     }
 
     if (preview) {
-      resource.preview = preview
-      commit('UPDATE_RESOURCE', resource)
+      commit('UPDATE_RESOURCE_FIELD', { id: resource.id, field: 'preview', value: preview })
     }
   }
 }
