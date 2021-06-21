@@ -52,7 +52,7 @@ Summary
 * Enhancement - Add focus trap to left sidebar: [#5027](https://github.com/owncloud/web/pull/5027)
 * Enhancement - Improve accessibility on trash bin: [#5046](https://github.com/owncloud/web/pull/5046)
 * Enhancement - TypeScript Support: [#5194](https://github.com/owncloud/web/pull/5194)
-* Enhancement - Update ownCloud Design System to v7.4.1: [#5224](https://github.com/owncloud/web/pull/5224)
+* Enhancement - Update ownCloud Design System to v7.4.2: [#5224](https://github.com/owncloud/web/pull/5224)
 * Enhancement - Use slots in the navigation sidebar: [#5105](https://github.com/owncloud/web/pull/5105)
 * Enhancement - Improve accessibility on user menu: [#5010](https://github.com/owncloud/web/pull/5010)
 * Enhancement - Visibility observer: [#5194](https://github.com/owncloud/web/pull/5194)
@@ -426,13 +426,15 @@ Details
 
    https://github.com/owncloud/web/pull/5194
 
-* Enhancement - Update ownCloud Design System to v7.4.1: [#5224](https://github.com/owncloud/web/pull/5224)
+* Enhancement - Update ownCloud Design System to v7.4.2: [#5224](https://github.com/owncloud/web/pull/5224)
 
-   We've updated ownCloud Design System to version 7.4.1 to bring the new pagination component.
+   We've updated ownCloud Design System to version 7.4.2 to bring the new pagination component.
 
    https://github.com/owncloud/web/pull/5224
    https://github.com/owncloud/web/pull/5292
+   https://github.com/owncloud/web/pull/5319
    https://github.com/owncloud/owncloud-design-system/releases/tag/v7.4.1
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v7.4.2
 
 * Enhancement - Use slots in the navigation sidebar: [#5105](https://github.com/owncloud/web/pull/5105)
 
