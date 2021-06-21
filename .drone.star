@@ -1470,7 +1470,7 @@ def installCore(version, db):
         stepDefinition.update({"commands": [
             ". %s/.drone.env" % dir["web"],
             "export PLUGIN_GIT_REFERENCE=$CORE_COMMITID",
-            "yarn config set registry 'https://registry.npmjs.org'",
+            "yarn config set registry 'http://npm-proxy-test.owncloud.works:8080'",
             "bash /usr/sbin/plugin.sh",
         ]})
 
@@ -1529,7 +1529,7 @@ def installNPM():
         "image": "owncloudci/nodejs:16",
         "pull": "always",
         "commands": [
-            "yarn config set registry 'https://registry.npmjs.org'",
+            "yarn config set registry 'http://npm-proxy-test.owncloud.works:8080'",
             "yarn install --frozen-lockfile",
         ],
     }]

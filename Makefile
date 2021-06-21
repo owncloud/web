@@ -6,7 +6,7 @@ OCX_RELEASE := $(CURDIR)/build/dist
 NODE_MODULES := ${CURDIR}/node_modules
 
 node_modules: package.json yarn.lock
-	yarn config set registry 'https://registry.npmjs.org'
+	yarn config set registry 'http://npm-proxy-test.owncloud.works:8080'
 	yarn install --frozen-lockfile && touch ${NODE_MODULES}
 
 .PHONY: clean
