@@ -307,7 +307,177 @@ Feature: display image in media viewer on the webUI
       | testavatar.png  | testavatar.PNG  |
       | testavatar.jpeg | testavatar.JPEG |
 
-    
+  Scenario Outline: preview of image files with extensions in UpperCase with media viewer
+    Given user "Alice" has uploaded file "<image-file>" to "<to-file-name>"
+    And user "Alice" has logged in using the webUI
+    When the user browses to the files page
+    Then the preview image of file "<to-file-name>" should be displayed in the file list view on the webUI
+    When the user views the file "<to-file-name>" in the media viewer by clicking on the file name using the webUI
+    Then the file "<to-file-name>" should be displayed in the media viewer webUI
+    Examples:
+      | image-file      | to-file-name    |
+      | testavatar.jpg  | testavatar.JPG  |
+      | testavatar.png  | testavatar.PNG  |
+      | testavatar.jpeg | testavatar.JPEG |
+
+  Scenario Outline: preview of image files with extensions in UpperCase with media viewer
+    Given user "Alice" has uploaded file "<image-file>" to "<to-file-name>"
+    And user "Alice" has logged in using the webUI
+    When the user browses to the files page
+    Then the preview image of file "<to-file-name>" should be displayed in the file list view on the webUI
+    When the user views the file "<to-file-name>" in the media viewer by clicking on the file name using the webUI
+    Then the file "<to-file-name>" should be displayed in the media viewer webUI
+    Examples:
+      | image-file      | to-file-name    |
+      | testavatar.jpg  | testavatar.JPG  |
+      | testavatar.png  | testavatar.PNG  |
+      | testavatar.jpeg | testavatar.JPEG |
+
+  Scenario Outline: preview of image files with extensions in UpperCase with media viewer
+    Given user "Alice" has uploaded file "<image-file>" to "<to-file-name>"
+    And user "Alice" has logged in using the webUI
+    When the user browses to the files page
+    Then the preview image of file "<to-file-name>" should be displayed in the file list view on the webUI
+    When the user views the file "<to-file-name>" in the media viewer by clicking on the file name using the webUI
+    Then the file "<to-file-name>" should be displayed in the media viewer webUI
+    Examples:
+      | image-file      | to-file-name    |
+      | testavatar.jpg  | testavatar.JPG  |
+      | testavatar.png  | testavatar.PNG  |
+      | testavatar.jpeg | testavatar.JPEG |
+
+  Scenario Outline: preview of image files with extensions in UpperCase with media viewer
+    Given user "Alice" has uploaded file "<image-file>" to "<to-file-name>"
+    And user "Alice" has logged in using the webUI
+    When the user browses to the files page
+    Then the preview image of file "<to-file-name>" should be displayed in the file list view on the webUI
+    When the user views the file "<to-file-name>" in the media viewer by clicking on the file name using the webUI
+    Then the file "<to-file-name>" should be displayed in the media viewer webUI
+    Examples:
+      | image-file      | to-file-name    |
+      | testavatar.jpg  | testavatar.JPG  |
+      | testavatar.png  | testavatar.PNG  |
+      | testavatar.jpeg | testavatar.JPEG |
+
+  Scenario Outline: preview of image files with extensions in UpperCase with media viewer
+    Given user "Alice" has uploaded file "<image-file>" to "<to-file-name>"
+    And user "Alice" has logged in using the webUI
+    When the user browses to the files page
+    Then the preview image of file "<to-file-name>" should be displayed in the file list view on the webUI
+    When the user views the file "<to-file-name>" in the media viewer by clicking on the file name using the webUI
+    Then the file "<to-file-name>" should be displayed in the media viewer webUI
+    Examples:
+      | image-file      | to-file-name    |
+      | testavatar.jpg  | testavatar.JPG  |
+      | testavatar.png  | testavatar.PNG  |
+      | testavatar.jpeg | testavatar.JPEG |
+
+  Scenario Outline: preview of image files with extensions in UpperCase with media viewer
+    Given user "Alice" has uploaded file "<image-file>" to "<to-file-name>"
+    And user "Alice" has logged in using the webUI
+    When the user browses to the files page
+    Then the preview image of file "<to-file-name>" should be displayed in the file list view on the webUI
+    When the user views the file "<to-file-name>" in the media viewer by clicking on the file name using the webUI
+    Then the file "<to-file-name>" should be displayed in the media viewer webUI
+    Examples:
+      | image-file      | to-file-name    |
+      | testavatar.jpg  | testavatar.JPG  |
+      | testavatar.png  | testavatar.PNG  |
+      | testavatar.jpeg | testavatar.JPEG |
+
+
+  Scenario Outline: preview of image files with extensions in UpperCase with media viewer
+    Given user "Alice" has uploaded file "<image-file>" to "<to-file-name>"
+    And user "Alice" has logged in using the webUI
+    When the user browses to the files page
+    Then the preview image of file "<to-file-name>" should be displayed in the file list view on the webUI
+    When the user views the file "<to-file-name>" in the media viewer by clicking on the file name using the webUI
+    Then the file "<to-file-name>" should be displayed in the media viewer webUI
+    Examples:
+      | image-file      | to-file-name    |
+      | testavatar.jpg  | testavatar.JPG  |
+      | testavatar.png  | testavatar.PNG  |
+      | testavatar.jpeg | testavatar.JPEG |
+
+  Scenario Outline: preview of image files with extensions in UpperCase with media viewer
+    Given user "Alice" has uploaded file "<image-file>" to "<to-file-name>"
+    And user "Alice" has logged in using the webUI
+    When the user browses to the files page
+    Then the preview image of file "<to-file-name>" should be displayed in the file list view on the webUI
+    When the user views the file "<to-file-name>" in the media viewer by clicking on the file name using the webUI
+    Then the file "<to-file-name>" should be displayed in the media viewer webUI
+    Examples:
+      | image-file      | to-file-name    |
+      | testavatar.jpg  | testavatar.JPG  |
+      | testavatar.png  | testavatar.PNG  |
+      | testavatar.jpeg | testavatar.JPEG |
+
+  Scenario Outline: preview of image files with extensions in UpperCase with media viewer
+    Given user "Alice" has uploaded file "<image-file>" to "<to-file-name>"
+    And user "Alice" has logged in using the webUI
+    When the user browses to the files page
+    Then the preview image of file "<to-file-name>" should be displayed in the file list view on the webUI
+    When the user views the file "<to-file-name>" in the media viewer by clicking on the file name using the webUI
+    Then the file "<to-file-name>" should be displayed in the media viewer webUI
+    Examples:
+      | image-file      | to-file-name    |
+      | testavatar.jpg  | testavatar.JPG  |
+      | testavatar.png  | testavatar.PNG  |
+      | testavatar.jpeg | testavatar.JPEG |
+
+  Scenario Outline: preview of image files with extensions in UpperCase with media viewer
+    Given user "Alice" has uploaded file "<image-file>" to "<to-file-name>"
+    And user "Alice" has logged in using the webUI
+    When the user browses to the files page
+    Then the preview image of file "<to-file-name>" should be displayed in the file list view on the webUI
+    When the user views the file "<to-file-name>" in the media viewer by clicking on the file name using the webUI
+    Then the file "<to-file-name>" should be displayed in the media viewer webUI
+    Examples:
+      | image-file      | to-file-name    |
+      | testavatar.jpg  | testavatar.JPG  |
+      | testavatar.png  | testavatar.PNG  |
+      | testavatar.jpeg | testavatar.JPEG |
+
+  Scenario Outline: preview of image files with extensions in UpperCase with media viewer
+    Given user "Alice" has uploaded file "<image-file>" to "<to-file-name>"
+    And user "Alice" has logged in using the webUI
+    When the user browses to the files page
+    Then the preview image of file "<to-file-name>" should be displayed in the file list view on the webUI
+    When the user views the file "<to-file-name>" in the media viewer by clicking on the file name using the webUI
+    Then the file "<to-file-name>" should be displayed in the media viewer webUI
+    Examples:
+      | image-file      | to-file-name    |
+      | testavatar.jpg  | testavatar.JPG  |
+      | testavatar.png  | testavatar.PNG  |
+      | testavatar.jpeg | testavatar.JPEG |
+
+  Scenario Outline: preview of image files with extensions in UpperCase with media viewer
+    Given user "Alice" has uploaded file "<image-file>" to "<to-file-name>"
+    And user "Alice" has logged in using the webUI
+    When the user browses to the files page
+    Then the preview image of file "<to-file-name>" should be displayed in the file list view on the webUI
+    When the user views the file "<to-file-name>" in the media viewer by clicking on the file name using the webUI
+    Then the file "<to-file-name>" should be displayed in the media viewer webUI
+    Examples:
+      | image-file      | to-file-name    |
+      | testavatar.jpg  | testavatar.JPG  |
+      | testavatar.png  | testavatar.PNG  |
+      | testavatar.jpeg | testavatar.JPEG |
+
+  Scenario Outline: preview of image files with extensions in UpperCase with media viewer
+    Given user "Alice" has uploaded file "<image-file>" to "<to-file-name>"
+    And user "Alice" has logged in using the webUI
+    When the user browses to the files page
+    Then the preview image of file "<to-file-name>" should be displayed in the file list view on the webUI
+    When the user views the file "<to-file-name>" in the media viewer by clicking on the file name using the webUI
+    Then the file "<to-file-name>" should be displayed in the media viewer webUI
+    Examples:
+      | image-file      | to-file-name    |
+      | testavatar.jpg  | testavatar.JPG  |
+      | testavatar.png  | testavatar.PNG  |
+      | testavatar.jpeg | testavatar.JPEG |
+
+
   Scenario: preview of image files with extensions in UpperCase with media viewer
     Given user "Alice" has uploaded file "testavatar.png" to "testavatar.PNG"
     And user "Alice" has logged in using the webUI
