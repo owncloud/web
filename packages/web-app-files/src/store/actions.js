@@ -520,9 +520,9 @@ export default {
           },
           true
         ).then(url =>
-          commit('UPDATE_RESOURCE_KEY', {
+          commit('UPDATE_RESOURCE_FIELD', {
             id: resource.id,
-            key: `${k}.[${i}].avatar`,
+            field: `${k}.[${i}].avatar`,
             value: url
           })
         )
@@ -557,7 +557,7 @@ export default {
     }
 
     if (preview) {
-      commit('UPDATE_RESOURCE_KEY', { id: resource.id, key: 'preview', value: preview })
+      commit('UPDATE_RESOURCE_FIELD', { id: resource.id, field: 'preview', value: preview })
     }
   }
 }

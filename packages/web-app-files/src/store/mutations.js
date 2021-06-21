@@ -305,9 +305,9 @@ export default {
         continue
       }
 
-      this.commit('Files/UPDATE_RESOURCE_KEY', {
+      this.commit('Files/UPDATE_RESOURCE_FIELD', {
         id: resource.id,
-        key: 'indicators',
+        field: 'indicators',
         value: indicators
       })
     }
@@ -341,22 +341,22 @@ export default {
   },
 
   /**
-   * Updates a single resource key. If the resource with given id doesn't exist nothing will happen.
+   * Updates a single resource field. If the resource with given id doesn't exist nothing will happen.
    *
    * @param state Current state of this store module
    * @param params.id Id of the resource to be updated
-   * @param params.key the resource key that the value should be applied to
+   * @param params.field the resource field that the value should be applied to
    * @param params.value the value that will be attached to the key
    */
-  UPDATE_RESOURCE_KEY(state, params) {
+  UPDATE_RESOURCE_FIELD(state, params) {
     const index = state.files.findIndex(r => r.id === params.id)
     if (index < 0) {
       return
     }
 
     const resource = state.files[index]
-    const isReactive = has(resource, params.key)
-    const newResource = set(resource, params.key, params.value)
+    const isReactive = has(resource, params.field)
+    const newResource = set(resource, params.field, params.value)
 
     if (isReactive) {
       return
