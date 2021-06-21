@@ -948,13 +948,13 @@ def unitTests(ctx):
             "disable": True,  # Sonarcloud does not apply issues on already merged branch
         },
         "steps": [{
-            "name": "clone",
-            "image": "owncloudci/alpine:latest",
-            "commands": [
-                "git clone https://github.com/%s.git ." % (repo_slug),
-                "git checkout $DRONE_COMMIT",
-                ],
-        }] +
+                     "name": "clone",
+                     "image": "owncloudci/alpine:latest",
+                     "commands": [
+                         "git clone https://github.com/%s.git ." % (repo_slug),
+                         "git checkout $DRONE_COMMIT",
+                     ],
+                 }] +
                  installNPM() +
                  buildWeb() +
                  [
@@ -1342,7 +1342,7 @@ def browserService(alternateSuiteName, browser):
             },
             "commands": [
                 "/usr/local/sauce-connect/bin/sc -i %s" % getSaucelabsTunnelName(alternateSuiteName, browser),
-                ],
+            ],
         }]
 
     return []
@@ -1468,7 +1468,7 @@ def installCore(version, db):
             ". %s/.drone.env" % dir["web"],
             "export PLUGIN_GIT_REFERENCE=$CORE_COMMITID",
             "bash /usr/sbin/plugin.sh",
-            ]})
+        ]})
 
     return [stepDefinition]
 
@@ -1515,7 +1515,7 @@ def installFederatedServer(version, db, dbSuffix = "-federated"):
             ". %s/.drone.env" % dir["web"],
             "export PLUGIN_GIT_REFERENCE=$CORE_COMMITID",
             "bash /usr/sbin/plugin.sh",
-            ]})
+        ]})
 
     return [stepDefinition]
 
@@ -1549,7 +1549,7 @@ def buildWebApp():
             "mkdir -p /srv/config",
             "cp -r %s/tests/drone /srv/config" % dir["web"],
             "ls -la /srv/config/drone",
-            ],
+        ],
         "volumes": [{
             "name": "configs",
             "path": "/srv/config",
@@ -1569,7 +1569,7 @@ def setupIntegrationWebApp():
             "cp %s/dist/* apps-external/web -r" % dir["web"],
             "ls -la apps-external/web",
             "cat config/config.json",
-            ],
+        ],
         "volumes": [{
             "name": "configs",
             "path": "/srv/config",
@@ -1587,7 +1587,7 @@ def buildWeb():
             "mkdir -p /srv/config",
             "cp -r %s/tests/drone /srv/config" % dir["web"],
             "ls -la /srv/config/drone",
-            ],
+        ],
         "volumes": [{
             "name": "configs",
             "path": "/srv/config",
@@ -1628,7 +1628,7 @@ def buildRelease(ctx):
             "commands": [
                 "cd %s" % dir["web"],
                 "make -f Makefile.release",
-                ],
+            ],
         },
         {
             "name": "changelog",
@@ -1636,7 +1636,7 @@ def buildRelease(ctx):
             "pull": "always",
             "commands": [
                 "calens --version %s -o dist/CHANGELOG.md -t changelog/CHANGELOG-Release.tmpl" % ctx.build.ref.replace("refs/tags/v", "").split("-")[0],
-                ],
+            ],
             "when": {
                 "ref": [
                     "refs/tags/**",
@@ -1782,7 +1782,7 @@ def webService():
         "commands": [
             "mkdir -p %s/dist" % dir["web"],
             "/usr/local/bin/apachectl -D FOREGROUND",
-            ],
+        ],
     }]
 
 def setUpOauth2(forIntegrationApp):
@@ -1804,7 +1804,7 @@ def setUpOauth2(forIntegrationApp):
             "cd %s" % dir["server"],
             "php occ a:e oauth2",
             "php occ oauth2:add-client Web Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ " + oidcURL,
-            ],
+        ],
     }]
 
 def setupGraphapiOIdC():
@@ -1831,7 +1831,7 @@ def setupGraphapiOIdC():
             'php occ config:system:set memcache.local --value="\\\\OC\\\\Memcache\\\\APCu"',
             'php occ config:system:set web.baseUrl --value="http://web"',
             "php occ config:list",
-            ],
+        ],
     }]
 
 def buildGlauth():
@@ -1843,7 +1843,7 @@ def buildGlauth():
             "cd /srv/app/src/github.com/owncloud/ocis/glauth",
             "make build",
             "cp bin/glauth %s" % dir["base"],
-            ],
+        ],
         "volumes": [{
             "name": "gopath",
             "path": "/srv/app",
@@ -1866,7 +1866,7 @@ def glauthService():
         "commands": [
             "cd %s" % dir["base"],
             "./glauth --log-level debug server --backend-server http://owncloud/",
-            ],
+        ],
         "volumes": [{
             "name": "gopath",
             "path": "/srv/app",
@@ -1886,7 +1886,7 @@ def buildIdP():
             "cd idp",
             "make build",
             "cp bin/idp %s" % dir["base"],
-            ],
+        ],
         "volumes": [{
             "name": "gopath",
             "path": "/srv/app",
@@ -1920,7 +1920,7 @@ def idpService():
         "commands": [
             "cd %s" % dir["base"],
             "./idp  --log-level debug server --signing-kid gen1-2020-02-27",
-            ],
+        ],
         "volumes": [{
             "name": "gopath",
             "path": "/srv/app",
@@ -1959,7 +1959,7 @@ def ocisService():
             "mkdir -p /srv/app/tmp/ocis/owncloud/data/",
             "mkdir -p /srv/app/tmp/ocis/storage/users/",
             "./ocis server",
-            ],
+        ],
         "volumes": [{
             "name": "gopath",
             "path": "/srv/app",
@@ -1979,7 +1979,7 @@ def buildOcisWeb():
             "cd web",
             "make build",
             "cp bin/web %s/ocis-web" % dir["base"],
-            ],
+        ],
         "volumes": [{
             "name": "gopath",
             "path": "/srv/app",
@@ -2003,7 +2003,7 @@ def ocisWebService():
         "commands": [
             "cd %s" % dir["base"],
             "./ocis-web --log-level debug server",
-            ],
+        ],
         "volumes": [{
             "name": "gopath",
             "path": "/srv/app",
@@ -2023,7 +2023,7 @@ def setupNotificationsAppForServer():
             "cd %s" % dir["server"],
             "php occ a:e notifications",
             "php occ a:l",
-            ],
+        ],
     }]
 
 def setupServerAndAppsForIntegrationApp(logLevel):
@@ -2033,7 +2033,7 @@ def setupServerAndAppsForIntegrationApp(logLevel):
         "pull": "always",
         "commands": [
             "bash -x tests/drone/setup-server-and-app.sh %s %s %s" % (dir["server"], logLevel, "builtInWeb"),
-            ],
+        ],
     }]
 
 def setupServerAndApp(logLevel):
@@ -2043,7 +2043,7 @@ def setupServerAndApp(logLevel):
         "pull": "always",
         "commands": [
             "bash -x tests/drone/setup-server-and-app.sh %s %s" % (dir["server"], logLevel),
-            ],
+        ],
     }]
 
 def setupFedServerAndApp(logLevel):
@@ -2059,7 +2059,7 @@ def setupFedServerAndApp(logLevel):
             "php occ config:list",
             "php occ config:system:set skeletondirectory --value=%s/apps/testing/data/webUISkeleton" % dir["federated"],
             "php occ config:system:set sharing.federation.allowHttpFallback --value=true --type=bool",
-            ],
+        ],
     }]
 
 def fixPermissions():
@@ -2070,7 +2070,7 @@ def fixPermissions():
         "commands": [
             "cd %s" % dir["server"],
             "chown www-data * -R",
-            ],
+        ],
     }]
 
 def fixPermissionsFederated():
@@ -2081,7 +2081,7 @@ def fixPermissionsFederated():
         "commands": [
             "cd %s" % dir["federated"],
             "chown www-data * -R",
-            ],
+        ],
     }]
 
 def owncloudLog():
@@ -2092,7 +2092,7 @@ def owncloudLog():
         "detach": True,
         "commands": [
             "tail -f %s/data/owncloud.log" % dir["server"],
-            ],
+        ],
     }]
 
 def owncloudLogFederated():
@@ -2103,7 +2103,7 @@ def owncloudLogFederated():
         "detach": True,
         "commands": [
             "tail -f %s/data/owncloud.log" % dir["federated"],
-            ],
+        ],
     }]
 
 def copyFilesForUpload():
@@ -2119,7 +2119,7 @@ def copyFilesForUpload():
             "ls -la /filesForUpload",
             "cp -a %s/tests/acceptance/filesForUpload/. /filesForUpload" % dir["web"],
             "ls -la /filesForUpload",
-            ],
+        ],
     }]
 
 def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironment, browser, visualTesting, screenShots):
@@ -2165,7 +2165,7 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
         "commands": [
             "cd %s" % dir["web"],
             "./tests/acceptance/run.sh",
-            ],
+        ],
         "volumes": [{
             "name": "gopath",
             "path": "/srv/app",
@@ -2219,7 +2219,7 @@ def getOcis():
             "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
             "mc mirror s3/owncloud/web/ocis-build/$OCIS_COMMITID %s/ocis-build/" % dir["base"],
             "chmod +x %s/ocis-build/ocis" % dir["base"],
-            ],
+        ],
     }]
 
 def buildOCISCache():
@@ -2341,7 +2341,7 @@ def listScreenShots():
         "pull": "always",
         "commands": [
             "ls -laR %s/tests/vrt" % dir["web"],
-            ],
+        ],
         "when": {
             "status": [
                 "failure",
@@ -2440,7 +2440,7 @@ def buildGithubCommentVisualDiff(ctx, suite, alternateSuiteName, runningOnOCIS):
             'for f in *.png; do echo \'!\'"[$f](https://raw.githubusercontent.com/owncloud/web/%s/tests/vrt/baseline/%s/$f)" >> %s/comments.file; done' % (branch, backend, dir["web"]),
             'echo "\n</p></details>" >> %s/comments.file' % dir["web"],
             "more %s/comments.file" % dir["web"],
-            ],
+        ],
         "environment": {
             "TEST_CONTEXT": suite,
             "CACHE_ENDPOINT": {
@@ -2468,7 +2468,7 @@ def buildGithubComment(suite, alternateSuiteName):
             'for f in *.png; do echo "### $f\n" \'!\'"[$f]($CACHE_ENDPOINT/owncloud/web/screenshots/${DRONE_BUILD_NUMBER}/$f) \n" >> %s/comments.file; done' % dir["web"],
             'echo "\n</p></details>" >> %s/comments.file' % dir["web"],
             "more %s/comments.file" % dir["web"],
-            ],
+        ],
         "environment": {
             "TEST_CONTEXT": suite,
             "CACHE_ENDPOINT": {
@@ -2492,7 +2492,7 @@ def buildGithubCommentForBuildStopped(suite, alternateSuiteName):
         "pull": "always",
         "commands": [
             'echo "<details><summary>:boom: Acceptance tests <strong>%s</strong> failed. The build is cancelled...</summary>\\n\\n" >> %s/comments.file' % (alternateSuiteName, dir["web"]),
-            ],
+        ],
         "when": {
             "status": [
                 "failure",
