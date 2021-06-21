@@ -48,6 +48,7 @@ Summary
 * Enhancement - Send focus to "Add people" btn after closing Add/Edit panels: [#5129](https://github.com/owncloud/web/pull/5129)
 * Enhancement - Remove autoclose on notifications: [#5040](https://github.com/owncloud/web/pull/5040)
 * Enhancement - Request cancellation: [#5163](https://github.com/owncloud/web/issues/5163)
+* Enhancement - Ability to update file resource fields: [#5311](https://github.com/owncloud/web/pull/5311)
 * Enhancement - Use `oc-select` for role select: [#4937](https://github.com/owncloud/web/pull/4937)
 * Enhancement - Add focus trap to left sidebar: [#5027](https://github.com/owncloud/web/pull/5027)
 * Enhancement - Improve accessibility on trash bin: [#5046](https://github.com/owncloud/web/pull/5046)
@@ -397,6 +398,13 @@ Details
 
    https://github.com/owncloud/web/issues/5163
    https://github.com/owncloud/web/pull/5194
+
+* Enhancement - Ability to update file resource fields: [#5311](https://github.com/owncloud/web/pull/5311)
+
+   We've introduced the ability to update individual resource fields only instead of updating
+   the whole resource at once.
+
+   https://github.com/owncloud/web/pull/5311
 
 * Enhancement - Use `oc-select` for role select: [#4937](https://github.com/owncloud/web/pull/4937)
 
