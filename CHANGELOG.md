@@ -221,6 +221,7 @@ Details
    We've added pagination to all files lists. Current limit for displayed resources is 100.
 
    https://github.com/owncloud/web/pull/5224
+   https://github.com/owncloud/web/pull/5309
 
 * Enhancement - Asynchronous loading of images: [#4973](https://github.com/owncloud/web/issues/4973)
 
