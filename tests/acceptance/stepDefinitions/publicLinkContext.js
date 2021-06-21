@@ -224,6 +224,16 @@ When(
   }
 )
 
+When(
+  'the user cancels remove the public link named {string} of file/folder/resource {string} using the webUI',
+  async function(linkName, resource) {
+    await client.page.FilesPageElement.appSideBar()
+      .closeSidebar(100)
+      .openPublicLinkDialog(resource)
+    return client.page.FilesPageElement.publicLinksDialog().cancelRemovePublicLink(linkName)
+  }
+)
+
 Then(
   'public link named {string} should not be listed on the public links list on the webUI',
   async function(linkName) {

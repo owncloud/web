@@ -25,17 +25,16 @@ Feature: files and folders can be deleted from the trashbin
     And user "Alice" has logged in using the webUI
     And the user has browsed to the trashbin page
 
-  @smokeTest @yetToImplement
+  @issue-1725
   Scenario: Delete files and check that they are gone
     When the user deletes file "lorem.txt" using the webUI
     And the user deletes file "sample,1.txt" using the webUI
-    # web does not yet support navigating into deleted folders
-    # And the user opens folder "simple-folder" using the webUI
-    # And the user deletes file "lorem-big.txt" using the webUI
+    And the user opens folder "simple-folder" using the webUI
+    And the user deletes file "lorem-big.txt" using the webUI
     Then file "lorem.txt" should not be listed on the webUI
     And file "sample,1.txt" should not be listed on the webUI
-    # But file "lorem.txt" should be listed in the trashbin folder "simple-folder" on the webUI
-    # And file "lorem-big.txt" should not be listed in the trashbin folder "simple-folder" on the webUI
+    But file "lorem.txt" should be listed in the trashbin folder "simple-folder" on the webUI
+    And file "lorem-big.txt" should not be listed in the trashbin folder "simple-folder" on the webUI
     But file "lorem-big.txt" should be listed on the webUI
 
   @issue-product-188

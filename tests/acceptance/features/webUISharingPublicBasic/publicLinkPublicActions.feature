@@ -34,17 +34,6 @@ Feature: Access public link shares by public
     When the public uses the webUI to access the last public link created by user "Alice" with password "pass12"
     Then the public should not get access to the publicly shared file
 
-  @yetToImplement
-  Scenario: public should be able to access the shared file through public link
-    Given user "Alice" has uploaded file with content "Lorem ipsum dolor sit amet, consectetur" to "lorem.txt"
-    And user "Alice" has logged in using the webUI
-    And user "Alice" has created a public link with following settings
-      | path | lorem.txt   |
-      | name | Public link |
-    When the public uses the webUI to access the last public link created by user "Alice"
-    Then file "lorem.txt" should be listed on the webUI
-#    Then the text preview of the public link should contain "Lorem ipsum dolor sit amet, consectetur"
-#    And the content of the file shared by the last public link should be the same as "lorem.txt"
 
   Scenario: public creates a folder in the public link
     Given user "Alice" has created a public link with following settings
