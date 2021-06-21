@@ -257,13 +257,12 @@ import MixinFilesListPositioning from '../mixins/filesListPositioning'
 import MixinFilesListPagination from '../mixins/filesListPagination'
 import ListLoader from '../components/ListLoader.vue'
 import NoContentMessage from '../components/NoContentMessage.vue'
-import ListInfo from '../components/FilesListFooterInfo.vue'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension } from '../constants'
 import debounce from 'lodash-es/debounce'
 const visibilityObserver = new VisibilityObserver()
 export default {
-  components: { ListLoader, NoContentMessage, ListInfo },
+  components: { ListLoader, NoContentMessage },
   mixins: [FileActions, MixinFilesListPositioning, MixinFilesListPagination],
   data: () => ({
     loading: true,
