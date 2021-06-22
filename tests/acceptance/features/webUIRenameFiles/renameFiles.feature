@@ -517,3 +517,214 @@ Feature: rename files
       | "\"quote\"d-folders'"  |
       | "'quotes2'"            |
       | "लोरेम।तयक्स्त? $%#&@" |
+
+  Scenario Outline: Rename a file
+    When the user renames file "lorem.txt" to <to_file_name> using the webUI
+    Then file <to_file_name> should be listed on the webUI
+    When the user reloads the current page of the webUI
+    Then file <to_file_name> should be listed on the webUI
+    Examples:
+      | to_file_name           |
+      | "simple-name.txt"      |
+      | '"quotes1"'            |
+      | "\"quote\"d-folders'"  |
+      | "'quotes2'"            |
+      | "लोरेम।तयक्स्त? $%#&@" |
+
+  Scenario Outline: Rename a file
+    When the user renames file "lorem.txt" to <to_file_name> using the webUI
+    Then file <to_file_name> should be listed on the webUI
+    When the user reloads the current page of the webUI
+    Then file <to_file_name> should be listed on the webUI
+    Examples:
+      | to_file_name           |
+      | "simple-name.txt"      |
+      | '"quotes1"'            |
+      | "\"quote\"d-folders'"  |
+      | "'quotes2'"            |
+      | "लोरेम।तयक्स्त? $%#&@" |
+
+  Scenario Outline: Rename a file
+    When the user renames file "lorem.txt" to <to_file_name> using the webUI
+    Then file <to_file_name> should be listed on the webUI
+    When the user reloads the current page of the webUI
+    Then file <to_file_name> should be listed on the webUI
+    Examples:
+      | to_file_name           |
+      | "simple-name.txt"      |
+      | '"quotes1"'            |
+      | "\"quote\"d-folders'"  |
+      | "'quotes2'"            |
+      | "लोरेम।तयक्स्त? $%#&@" |
+
+  Scenario Outline: Rename a file
+    When the user renames file "lorem.txt" to <to_file_name> using the webUI
+    Then file <to_file_name> should be listed on the webUI
+    When the user reloads the current page of the webUI
+    Then file <to_file_name> should be listed on the webUI
+    Examples:
+      | to_file_name           |
+      | "simple-name.txt"      |
+      | '"quotes1"'            |
+      | "\"quote\"d-folders'"  |
+      | "'quotes2'"            |
+      | "लोरेम।तयक्स्त? $%#&@" |
+
+
+  Scenario Outline: Rename a file
+    When the user renames file "lorem.txt" to <to_file_name> using the webUI
+    Then file <to_file_name> should be listed on the webUI
+    When the user reloads the current page of the webUI
+    Then file <to_file_name> should be listed on the webUI
+    Examples:
+      | to_file_name           |
+      | "simple-name.txt"      |
+      | '"quotes1"'            |
+      | "\"quote\"d-folders'"  |
+      | "'quotes2'"            |
+      | "लोरेम।तयक्स्त? $%#&@" |
+
+  Scenario Outline: Rename a file
+    When the user renames file "lorem.txt" to <to_file_name> using the webUI
+    Then file <to_file_name> should be listed on the webUI
+    When the user reloads the current page of the webUI
+    Then file <to_file_name> should be listed on the webUI
+    Examples:
+      | to_file_name           |
+      | "simple-name.txt"      |
+      | '"quotes1"'            |
+      | "\"quote\"d-folders'"  |
+      | "'quotes2'"            |
+      | "लोरेम।तयक्स्त? $%#&@" |
+
+  Scenario Outline: Rename a file
+    When the user renames file "lorem.txt" to <to_file_name> using the webUI
+    Then file <to_file_name> should be listed on the webUI
+    When the user reloads the current page of the webUI
+    Then file <to_file_name> should be listed on the webUI
+    Examples:
+      | to_file_name           |
+      | "simple-name.txt"      |
+      | '"quotes1"'            |
+      | "\"quote\"d-folders'"  |
+      | "'quotes2'"            |
+      | "लोरेम।तयक्स्त? $%#&@" |
+
+  Scenario Outline: Rename a file
+    When the user renames file "lorem.txt" to <to_file_name> using the webUI
+    Then file <to_file_name> should be listed on the webUI
+    When the user reloads the current page of the webUI
+    Then file <to_file_name> should be listed on the webUI
+    Examples:
+      | to_file_name           |
+      | "simple-name.txt"      |
+      | '"quotes1"'            |
+      | "\"quote\"d-folders'"  |
+      | "'quotes2'"            |
+      | "लोरेम।तयक्स्त? $%#&@" |
+
+
+  Scenario Outline: Rename a file
+    When the user renames file "lorem.txt" to <to_file_name> using the webUI
+    Then file <to_file_name> should be listed on the webUI
+    When the user reloads the current page of the webUI
+    Then file <to_file_name> should be listed on the webUI
+    Examples:
+      | to_file_name           |
+      | "simple-name.txt"      |
+      | '"quotes1"'            |
+      | "\"quote\"d-folders'"  |
+      | "'quotes2'"            |
+      | "लोरेम।तयक्स्त? $%#&@" |
+
+  Scenario Outline: Rename a file
+    When the user renames file "lorem.txt" to <to_file_name> using the webUI
+    Then file <to_file_name> should be listed on the webUI
+    When the user reloads the current page of the webUI
+    Then file <to_file_name> should be listed on the webUI
+    Examples:
+      | to_file_name           |
+      | "simple-name.txt"      |
+      | '"quotes1"'            |
+      | "\"quote\"d-folders'"  |
+      | "'quotes2'"            |
+      | "लोरेम।तयक्स्त? $%#&@" |
+
+  Scenario Outline: Rename a file
+    When the user renames file "lorem.txt" to <to_file_name> using the webUI
+    Then file <to_file_name> should be listed on the webUI
+    When the user reloads the current page of the webUI
+    Then file <to_file_name> should be listed on the webUI
+    Examples:
+      | to_file_name           |
+      | "simple-name.txt"      |
+      | '"quotes1"'            |
+      | "\"quote\"d-folders'"  |
+      | "'quotes2'"            |
+      | "लोरेम।तयक्स्त? $%#&@" |
+
+  Scenario Outline: Rename a file
+    When the user renames file "lorem.txt" to <to_file_name> using the webUI
+    Then file <to_file_name> should be listed on the webUI
+    When the user reloads the current page of the webUI
+    Then file <to_file_name> should be listed on the webUI
+    Examples:
+      | to_file_name           |
+      | "simple-name.txt"      |
+      | '"quotes1"'            |
+      | "\"quote\"d-folders'"  |
+      | "'quotes2'"            |
+      | "लोरेम।तयक्स्त? $%#&@" |
+
+
+  Scenario Outline: Rename a file
+    When the user renames file "lorem.txt" to <to_file_name> using the webUI
+    Then file <to_file_name> should be listed on the webUI
+    When the user reloads the current page of the webUI
+    Then file <to_file_name> should be listed on the webUI
+    Examples:
+      | to_file_name           |
+      | "simple-name.txt"      |
+      | '"quotes1"'            |
+      | "\"quote\"d-folders'"  |
+      | "'quotes2'"            |
+      | "लोरेम।तयक्स्त? $%#&@" |
+
+  Scenario Outline: Rename a file
+    When the user renames file "lorem.txt" to <to_file_name> using the webUI
+    Then file <to_file_name> should be listed on the webUI
+    When the user reloads the current page of the webUI
+    Then file <to_file_name> should be listed on the webUI
+    Examples:
+      | to_file_name           |
+      | "simple-name.txt"      |
+      | '"quotes1"'            |
+      | "\"quote\"d-folders'"  |
+      | "'quotes2'"            |
+      | "लोरेम।तयक्स्त? $%#&@" |
+
+  Scenario Outline: Rename a file
+    When the user renames file "lorem.txt" to <to_file_name> using the webUI
+    Then file <to_file_name> should be listed on the webUI
+    When the user reloads the current page of the webUI
+    Then file <to_file_name> should be listed on the webUI
+    Examples:
+      | to_file_name           |
+      | "simple-name.txt"      |
+      | '"quotes1"'            |
+      | "\"quote\"d-folders'"  |
+      | "'quotes2'"            |
+      | "लोरेम।तयक्स्त? $%#&@" |
+
+  Scenario Outline: Rename a file
+    When the user renames file "lorem.txt" to <to_file_name> using the webUI
+    Then file <to_file_name> should be listed on the webUI
+    When the user reloads the current page of the webUI
+    Then file <to_file_name> should be listed on the webUI
+    Examples:
+      | to_file_name           |
+      | "simple-name.txt"      |
+      | '"quotes1"'            |
+      | "\"quote\"d-folders'"  |
+      | "'quotes2'"            |
+      | "लोरेम।तयक्स्त? $%#&@" |
