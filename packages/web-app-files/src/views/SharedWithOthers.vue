@@ -53,7 +53,7 @@
 <script>
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 
-import { aggregateResourceShares, buildResource } from '../helpers/resources'
+import { aggregateResourceShares } from '../helpers/resources'
 import FileActions from '../mixins/fileActions'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
 import MixinResources from '../mixins/resources'
