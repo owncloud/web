@@ -2157,13 +2157,6 @@ axe-core@^4.0.1, axe-core@^4.2.0:
   resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.2.2.tgz#0c987d82c8b82b4b9b7a945f1b5ef0d8fed586ed"
   integrity sha512-OKRkKM4ojMEZRJ5UNJHmq9tht7cEnRnqKG6KyB/trYws00Xtkv12mHtlJ0SK7cmuNbrU8dPUova3ELTuilfBbw==
 
-axios@^0.19.2:
-  version "0.19.2"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-0.19.2.tgz#3ea36c5d8818d0d5f8a8a97a6d36b86cdc00cb27"
-  integrity sha512-fjgm5MvRHLhx+osE2xoekY70AhARk3a6hkN+3Io1jc00jtquGvxYlKlsFUhmUET0V5te6CcZI7lcv2Ym61mjHA==
-  dependencies:
-    follow-redirects "1.5.10"
-
 axios@^0.21.1:
   version "0.21.1"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.21.1.tgz#22563481962f4d6bde9a76d516ef0e5d3c09b2b8"
@@ -3677,7 +3670,7 @@ debug@2, debug@^2.2.0, debug@^2.3.3, debug@^2.6.8, debug@^2.6.9:
   dependencies:
     ms "2.0.0"
 
-debug@3.1.0, debug@=3.1.0, debug@~3.1.0:
+debug@3.1.0, debug@~3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/debug/-/debug-3.1.0.tgz#5bb5a0672628b64149566ba16819e61518c67261"
   integrity sha512-OX8XqP7/1a9cqkxYw2yXss15f26NKWBpDXQd0/uK/KPqdQhxbPa994hnzjcE2VqQpDslf55723cKPUOGSmMY3g==
@@ -4907,13 +4900,6 @@ focus-trap@^6.4.0:
   integrity sha512-mezVantxaWNMrcJcrdw/bDfW3rVkl0xcdHKiHbNZzJ2R+KfcW9S6j48wFUAu7C52GFeQDGEWgDEIAvk9PxFvZw==
   dependencies:
     tabbable "^5.2.0"
-
-follow-redirects@1.5.10:
-  version "1.5.10"
-  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.5.10.tgz#7b7a9f9aea2fdff36786a94ff643ed07f4ff5e2a"
-  integrity sha512-0V5l4Cizzvqt5D44aTXbFZz+FtyXV1vrDN6qrelxtfYQKW0KO0W2T/hkE8xvGa/540LkZlkaUjO4ailYTFtHVQ==
-  dependencies:
-    debug "=3.1.0"
 
 follow-redirects@^1.10.0:
   version "1.14.1"
@@ -8012,18 +7998,18 @@ owncloud-design-system@^7.4.2:
   resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-7.4.2.tgz#cd6f1d179fe21876cccea643176982b85183f460"
   integrity sha512-SxPFw+6o1AnEuIsxP/gx7jnCS3OXAHWOnlm5k8D8DH+peaNAPfefndaC2/M2BTwZ9YU3no3kIJfRl1fDEohSUQ==
 
-owncloud-sdk@1.0.0-2296:
-  version "1.0.0-2296"
-  resolved "https://registry.yarnpkg.com/owncloud-sdk/-/owncloud-sdk-1.0.0-2296.tgz#8fc737e3de83cf0397e42149c499107873beaecd"
-  integrity sha512-7F6EDwsyd42uvTrG87TsPjzwLEzoFAfW4XRyXJcrwCdT/7XNEjZY5wiUmc15G1Ih5e9WG7WBnDxvTgj1v+ggjw==
+owncloud-sdk@1.0.0-2528:
+  version "1.0.0-2528"
+  resolved "https://registry.yarnpkg.com/owncloud-sdk/-/owncloud-sdk-1.0.0-2528.tgz#caf7a9fb8b2e714665e88865b45a6062347d1c92"
+  integrity sha512-qM6m4X2vv8IZ1ACC41h8d5BKrYb1tueg5sW+aMLpStidC7clYrYMJG9rUGZdio7y9Vky831WzcCUGzW6QpzvqQ==
   dependencies:
-    axios "^0.19.2"
+    axios "^0.21.1"
     cross-fetch "^3.0.6"
     promise "^8.0.3"
     request "^2.88.0"
     utf8 "^3.0.0"
     uuid "^8.2.0"
-    webdav "^4.0.0"
+    webdav "4.6.0"
     xhr "^2.5.0"
     xml-js "^1.6.11"
     xmldom "^0.3.0"
@@ -11170,7 +11156,7 @@ wcwidth@^1.0.1:
   dependencies:
     defaults "^1.0.3"
 
-webdav@^4.0.0:
+webdav@4.6.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/webdav/-/webdav-4.6.0.tgz#b12d3631562ed4a7d665dd1757349682dfc8f441"
   integrity sha512-amL/NeZ73xe8cNC+uqAF3mOC/j5dNoNWlZswYCd7DKxhnZM7dViAVSv6gdCYeGAETjPEZVubcKDDRwGKz9ShQQ==
