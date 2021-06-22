@@ -23,7 +23,7 @@ describe('File Upload Component', () => {
     expect(wrapper.exists()).toBeTruthy()
   })
 
-  describe('when upload file button is clicked', () => {
+  describe('when the upload file button is clicked', () => {
     it('should call "triggerUpload"', async () => {
       const wrapper = mount(FileUpload, {
         ...mountOptions,
