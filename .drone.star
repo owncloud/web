@@ -1083,8 +1083,13 @@ def acceptance(ctx):
                             print("Error: generated stage name of length", nameLength, "is not supported. The maximum length is " + str(maxLength) + ".", name)
                             errorFound = True
 
-                        # Basic steps and services for all testing
-                        steps = calculateDiffContainsUnitTestsOnly() + installNPM()
+                        steps = []
+
+                        if (params["earlyFail"]):
+                            steps += calculateDiffContainsUnitTestsOnly()
+
+                        steps += installNPM()
+
                         if (params["oc10IntegrationAppIncluded"]):
                             steps += buildWebApp()
                         else:
