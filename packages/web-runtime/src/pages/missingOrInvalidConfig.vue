@@ -13,8 +13,7 @@
             <translate>For help visit our</translate>
             <a v-translate href="https://owncloud.dev/clients/web" target="_blank">documentation</a>
             <translate>or join our</translate>
-            <a v-translate href="https://talk.owncloud.com/channel/phoenix" target="_blank">chat</a
-            >.
+            <a v-translate href="https://talk.owncloud.com/channel/web" target="_blank">chat</a>.
           </p>
         </div>
       </div>
