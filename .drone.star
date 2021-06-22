@@ -494,6 +494,7 @@ config = {
             "oc10IntegrationAppIncluded": True,
             "notificationsAppNeeded": True,
             "screenShots": True,
+            "skip": True,
         },
         "webUI-oc10-integration": {
             "type": FULL,
@@ -578,6 +579,7 @@ config = {
             "filterTags": "not @skip and not @skipOnOC10 and not @openIdLogin and @smokeTest",
             "oc10IntegrationAppIncluded": True,
             "screenShots": True,
+            "skip": True,
         },
     },
     "build": True,
