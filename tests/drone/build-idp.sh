@@ -3,7 +3,7 @@
 # $1 base directory
 
 if test -f runUnitTestsOnly
-then echo 'Bye!'
+then echo 'skipping build-idp'
 else
 	cd /srv/app/src/github.com/owncloud/ocis || exit
 	cd idp || exit

@@ -4,7 +4,7 @@
 # $2 log level
 
 if test -f runUnitTestsOnly
-then echo 'Bye!'
+then echo 'skipping setup-fed-server-and-app'
 else
 	cd "$1"/ || exit
 	php occ a:e testing

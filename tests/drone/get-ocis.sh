@@ -4,7 +4,7 @@
 # $2 web directory
 
 if test -f runUnitTestsOnly
-then echo 'Bye!'
+then echo 'skipping get-ocis'
 else
 	source "$2"/.drone.env
 	mkdir -p "$1"/ocis-build

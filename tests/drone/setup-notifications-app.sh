@@ -3,7 +3,7 @@
 # $1 server directory
 
 if test -f runUnitTestsOnly
-then echo 'Bye!'
+then echo 'skipping setup-notifications-app'
 else
 	git clone -b master https://github.com/owncloud/notifications.git "$1"/apps/notifications
 	cd "$1" || exit
