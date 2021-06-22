@@ -6,7 +6,7 @@
 #    else setup to use the "web" being server at http://web
 if test -f runUnitTestsOnly
 then
-	echo "Bye!"
+	echo "skipping setup-server-and-app"
 else
 	cd $1
 	php occ app:enable testing

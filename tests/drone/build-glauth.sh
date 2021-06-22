@@ -2,7 +2,7 @@
 # Input parameters
 # $1 base directory
 if test -f runUnitTestsOnly
-then echo 'Bye!'
+then echo 'skipping build-glauth'
 else
 	cd /srv/app/src/github.com/owncloud/ocis/glauth || exit
 	make build

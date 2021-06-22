@@ -3,7 +3,7 @@
 # $1 the directory where the installed server code is found
 
 if test -f runUnitTestsOnly
-then echo 'Bye!'
+then echo 'skipping setup-graph-api-oidc'
 else
 	git clone -b master https://github.com/owncloud/graphapi.git "$1"/apps/graphapi
 	cd "$1"/apps/graphapi || exit

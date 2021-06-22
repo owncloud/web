@@ -1470,7 +1470,7 @@ def installCore(version, db):
         stepDefinition.update({"commands": [
             ". %s/.drone.env" % dir["web"],
             "export PLUGIN_GIT_REFERENCE=$CORE_COMMITID",
-            "if test -f runUnitTestsOnly; then echo 'Bye!'; else bash /usr/sbin/plugin.sh; fi",
+            "if test -f runUnitTestsOnly; then echo 'skipping installCore'; else bash /usr/sbin/plugin.sh; fi",
         ]})
 
     return [stepDefinition]
@@ -1517,7 +1517,7 @@ def installFederatedServer(version, db, dbSuffix = "-federated"):
         stepDefinition.update({"commands": [
             ". %s/.drone.env" % dir["web"],
             "export PLUGIN_GIT_REFERENCE=$CORE_COMMITID",
-            "if test -f runUnitTestsOnly; then echo 'Bye!'; else bash /usr/sbin/plugin.sh; fi",
+            "if test -f runUnitTestsOnly; then echo 'skipping installFederatedServer'; else bash /usr/sbin/plugin.sh; fi",
         ]})
 
     return [stepDefinition]
@@ -1528,7 +1528,7 @@ def installNPM():
         "image": "owncloudci/nodejs:16",
         "pull": "always",
         "commands": [
-            "if test -f runUnitTestsOnly; then echo 'Bye!'; else yarn install --frozen-lockfile; fi",
+            "if test -f runUnitTestsOnly; then echo 'skipping installNPM'; else yarn install --frozen-lockfile; fi",
         ],
     }]
 
@@ -1752,7 +1752,7 @@ def getSkeletonFiles():
         "image": "owncloudci/php:7.4",
         "pull": "always",
         "commands": [
-            "if test -f runUnitTestsOnly; then echo 'Bye!'; else git clone https://github.com/owncloud/testing.git /srv/app/testing; fi",
+            "if test -f runUnitTestsOnly; then echo 'installNPM getSkeletonFiles'; else git clone https://github.com/owncloud/testing.git /srv/app/testing; fi",
         ],
         "volumes": [{
             "name": "gopath",
@@ -2019,8 +2019,7 @@ def fixPermissions():
         "image": "owncloudci/php:7.4",
         "pull": "always",
         "commands": [
-            "cd %s" % dir["server"],
-            "if test -f runUnitTestsOnly; then echo 'Bye!'; else chown www-data * -R; fi",
+            "if test -f runUnitTestsOnly; then echo 'skipping fixPermissions'; else cd %s && chown www-data * -R; fi" % dir["server"],
         ],
     }]
 
@@ -2030,8 +2029,7 @@ def fixPermissionsFederated():
         "image": "owncloudci/php:7.4",
         "pull": "always",
         "commands": [
-            "cd %s" % dir["federated"],
-            "if test -f runUnitTestsOnly; then echo 'Bye!'; else chown www-data * -R; fi",
+            "if test -f runUnitTestsOnly; then echo 'skipping fixPermissions'; else cd %s && chown www-data * -R; fi" % dir["federated"],
         ],
     }]
 
@@ -2112,8 +2110,7 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
         "pull": "always",
         "environment": environment,
         "commands": [
-            "cd %s" % dir["web"],
-            "if test -f runUnitTestsOnly; then echo 'Bye!'; else ./tests/acceptance/run.sh; fi",
+            "if test -f runUnitTestsOnly; then echo 'skipping webui-acceptance-tests'; else cd %s && ./tests/acceptance/run.sh; fi" % dir["web"],
         ],
         "volumes": [{
             "name": "gopath",

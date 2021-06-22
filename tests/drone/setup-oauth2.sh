@@ -4,7 +4,7 @@
 # $2 oidc url
 
 if test -f runUnitTestsOnly
-then echo 'Bye!'
+then echo 'skipping setup-oauth2'
 else
 	git clone -b master https://github.com/owncloud/oauth2.git "$1"/apps/oauth2
 	cd "$1"/apps/oauth2 || exit

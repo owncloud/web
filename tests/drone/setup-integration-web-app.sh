@@ -4,7 +4,7 @@
 # $2 the directory where the installed web app code is found
 
 if test -f runUnitTestsOnly
-then echo 'Bye!'
+then echo 'skipping setup-integration-web-app'
 else
 	cd "$1" || exit
 	mkdir apps-external/web
