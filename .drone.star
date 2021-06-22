@@ -76,22 +76,11 @@ config = {
                     "webUIRestrictSharing",
                     "webUISharingAutocompletion",
                 ],
-<<<<<<< HEAD
-                "webUIResharingToRoot": "oC10ResharingToRoot",
-                "oC10SharingFilePermission": [
-                    "webUISharingFilePermissionMultipleUsers",
-                    "webUISharingFilePermissionsGroups",
-                ],
-                "webUISharingFolderAdvancedPermissionMultipleUsers": "oC10SharingFolderAdvancedPermissionMU",
-                "webUISharingFolderAdvancedPermissionsGroups": "oC10SharingFolderAdvPermissionsGrp",
-                "oC10SharingFolderPermissions": [
-=======
                 "webUIResharingToRoot": "ResharingToRoot",
                 "webUISharingFilePermissionsGroups": "SharingFilePermission",
                 "webUISharingFolderAdvancedPermissionMultipleUsers": "SharingFolderAdvancedPermissionMU",
                 "webUISharingFolderAdvancedPermissionsGroups": "SharingFolderAdvPermissionsGrp",
                 "SharingFolderPermissions": [
->>>>>>> test
                     "webUISharingFolderPermissionMultipleUsers",
                     "webUISharingFolderPermissionsGroups",
                 ],
