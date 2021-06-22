@@ -17,7 +17,7 @@ Feature: Add, delete and edit comments in files and folders
   Scenario Outline: user adds and deletes comment for a file/folder
     When the user browses directly to display the "comments" details of file "lorem.txt" in folder "/"
     And the user comments with content "<comment>" using the webUI
-    Then the comment "<comment>" should be listed in the comments tab in details dialog
+    Then the comment "<comment>" should not be listed in the comments tab in details dialog
     When the user deletes the comment "<comment>" using the webUI
     Then the comment "<comment>" should not be listed in the comments tab in details dialog
     Examples:

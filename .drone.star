@@ -27,18 +27,7 @@ config = {
             "type": FULL,
             "suites": {
                 "oC10Basic": [
-                    "webUIAccount",
-                    "webUILogin",
-                    "webUIPreview",
-                    "webUIPrivateLinks",
-                    # The following suites may have all scenarios currently skipped.
-                    # The suites are listed here so that scenarios will run when
-                    # they are enabled.
-                    "webUIAdminSettings",
                     "webUIComments",
-                    "webUITags",
-                    "webUIWebdavLockProtection",
-                    "webUIWebdavLocks",
                 ],
                 "oC10CreateDelete": [
                     "webUICreateFilesFolders",
