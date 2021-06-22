@@ -79,12 +79,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUISharingInternalGroups/shareWithGroups.feature:174](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroups/shareWithGroups.feature#L174)
 
 ### [Comments in sidebar] (https://github.com/owncloud/web/issues/1158)
--   [webUIComments/comments.feature:25](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIComments/comments.feature#L25)
--   [webUIComments/comments.feature:26](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIComments/comments.feature#L26)
--   [webUIComments/comments.feature:27](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIComments/comments.feature#L27)
--   [webUIComments/comments.feature:40](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIComments/comments.feature#L40)
--   [webUIComments/comments.feature:41](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIComments/comments.feature#L41)
--   [webUIComments/comments.feature:42](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIComments/comments.feature#L42)
 -   [webUIFilesDetails/fileDetails.feature:66](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesDetails/fileDetails.feature#L66)
 -   [webUIFilesDetails/fileDetails.feature:82](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesDetails/fileDetails.feature#L82)
 -   [webUIFilesDetails/fileDetails.feature:99](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesDetails/fileDetails.feature#L99)
