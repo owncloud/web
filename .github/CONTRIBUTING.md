@@ -28,7 +28,7 @@ Help us to maximize the effort we can spend fixing issues and adding new feature
 
 [tracker]: https://github.com/owncloud/web/issues/new
 [forum]: https://central.owncloud.org/
-[rocketchat]: https://talk.owncloud.com/channel/infinitescale
+[rocketchat]: https://talk.owncloud.com/channel/web
 
 ## Contributing to Source Code
 
