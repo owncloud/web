@@ -53,7 +53,7 @@
 <script>
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 
-import { aggregateResourceShares, buildResource } from '../helpers/resources'
+import { aggregateResourceShares } from '../helpers/resources'
 import FileActions from '../mixins/fileActions'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
 import MixinResources from '../mixins/resources'
@@ -182,30 +182,21 @@ export default {
         action: '/api/v1/shares?format=json&reshares=true&include_tags=false',
         method: 'GET'
       })
-      let rootFolder = await this.$client.files.fileInfo('/', this.davProperties)
 
       resources = await resources.json()
       resources = resources.ocs.data
-      rootFolder = buildResource(rootFolder)
 
-      if (resources.length < 1) {
-        this.LOAD_FILES({ currentFolder: rootFolder, files: [] })
-        this.loading = false
-
-        return
+      if (resources.length) {
+        resources = aggregateResourceShares(
+          resources,
+          false,
+          !this.isOcis,
+          this.configuration.server,
+          this.getToken
+        )
       }
 
-      resources = aggregateResourceShares(
-        resources,
-        false,
-        !this.isOcis,
-        this.configuration.server,
-        this.getToken,
-        this.$client,
-        this.UPDATE_RESOURCE
-      )
-
-      this.LOAD_FILES({ currentFolder: rootFolder, files: resources })
+      this.LOAD_FILES({ currentFolder: null, files: resources })
 
       // Load quota
       const user = await this.$client.users.getUser(this.user.id)

@@ -80,7 +80,7 @@
 <script>
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 import { shareStatus } from '../helpers/shareStatus'
-import { aggregateResourceShares, buildResource, buildSharedResource } from '../helpers/resources'
+import { aggregateResourceShares, buildSharedResource } from '../helpers/resources'
 import FileActions from '../mixins/fileActions'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
 import MixinFilesListPagination from '../mixins/filesListPagination'
@@ -210,28 +210,21 @@ export default {
         action: '/api/v1/shares?format=json&shared_with_me=true&state=all&include_tags=false',
         method: 'GET'
       })
-      let rootFolder = await this.$client.files.fileInfo('/', this.davProperties)
 
       resources = await resources.json()
       resources = resources.ocs.data
-      rootFolder = buildResource(rootFolder)
 
-      if (resources.length < 1) {
-        this.LOAD_FILES({ currentFolder: rootFolder, files: [] })
-        this.loading = false
-
-        return
+      if (resources.length) {
+        resources = aggregateResourceShares(
+          resources,
+          true,
+          !this.isOcis,
+          this.configuration.server,
+          this.getToken
+        )
       }
 
-      resources = aggregateResourceShares(
-        resources,
-        true,
-        !this.isOcis,
-        this.configuration.server,
-        this.getToken
-      )
-
-      this.LOAD_FILES({ currentFolder: rootFolder, files: resources })
+      this.LOAD_FILES({ currentFolder: null, files: resources })
 
       // Load quota
       const user = await this.$client.users.getUser(this.user.id)
