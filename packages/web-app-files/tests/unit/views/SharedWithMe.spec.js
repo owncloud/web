@@ -1,4 +1,35 @@
-import { wrapper, store, showMessage, getShare } from './SharedWithMe.setup'
+import { localVue, getStore } from './views.setup'
+import { mount, config } from '@vue/test-utils'
+import SharedWithMe from '../../../src/views/SharedWithMe'
+
+config.mocks.$ngettext = str => str
+config.mocks.$gettextInterpolate = str => str
+
+const store = getStore()
+const wrapper = mount(
+  { ...SharedWithMe, created: jest.fn(), mounted: jest.fn() },
+  {
+    localVue,
+    store,
+    stubs: {
+      'router-link': true,
+      translate: true,
+      'oc-pagination': true
+    },
+    data: () => ({
+      loading: false
+    })
+  }
+)
+
+jest.mock('../../../src/helpers/resources', () => ({
+  buildSharedResource: jest.fn(share => share)
+}))
+
+const showMessage = jest.spyOn(wrapper.vm, 'showMessage').mockImplementation(v => v)
+const getShare = jest
+  .spyOn(localVue.prototype.$client.shares, 'getShare')
+  .mockImplementation(v => v)
 
 jest.unmock('axios')
 
