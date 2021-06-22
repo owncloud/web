@@ -2433,7 +2433,7 @@ def buildGithubCommentForBuildStopped(suite, alternateSuiteName):
         "image": "owncloud/ubuntu:20.04",
         "pull": "always",
         "commands": [
-            'echo "<summary>:boom: Acceptance tests <strong>%s</strong> failed. The build is cancelled...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}${DRONE_STAGE_NUMBER}/1\\n" >> %s/comments.file' % (alternateSuiteName, dir["web"]),
+            'echo ":boom: Acceptance tests pipeline <strong>%s</strong> failed. The build has been cancelled.\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}${DRONE_STAGE_NUMBER}/1\\n" >> %s/comments.file' % (alternateSuiteName, dir["web"]),
         ],
         "when": {
             "status": [
