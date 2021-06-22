@@ -177,7 +177,7 @@ config = {
             "notificationsAppNeeded": True,
             "federatedServerNeeded": True,
             "federatedServerVersion": "daily-master-qa",
-            "debugSuites" : ['webUISharingExternal']
+            "debugSuites": ["webUISharingExternal"],
         },
         "webUI-XGA-Notifications": {
             "type": NOTIFICATIONS,
