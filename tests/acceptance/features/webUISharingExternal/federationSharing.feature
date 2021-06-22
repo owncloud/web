@@ -1275,3 +1275,50 @@ Feature: Federation Sharing - sharing with users on other cloud storages
       | fileName   | expectedIndicators |
       | new-folder | user-indirect      |
       | lorem.txt  | user-indirect      |
+
+
+  @issue-2060
+  Scenario: sharing indicator of items inside a shared folder two levels down
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has created folder "simple-folder/simple-empty-folder"
+    And user "Alice" has created folder "simple-folder/simple-empty-folder/new-folder"
+    And user "Alice" has uploaded file with content "test" to "/simple-folder/simple-empty-folder/lorem.txt"
+    And the user has reloaded the current page of the webUI
+    When the user shares folder "simple-folder" with remote user "Alice" as "Editor" using the webUI
+    And user "Alice" from server "REMOTE" has accepted the last pending share
+    And the user opens folder "/" directly on the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName      | expectedIndicators |
+      | simple-folder | user-direct        |
+    When the user opens folder "simple-folder" using the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName            | expectedIndicators |
+      | simple-empty-folder | user-indirect      |
+    When the user opens folder "simple-empty-folder" using the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName   | expectedIndicators |
+      | new-folder | user-indirect      |
+      | lorem.txt  | user-indirect      |
+
+  @issue-2060
+  Scenario: sharing indicator of items inside a shared folder two levels down
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has created folder "simple-folder/simple-empty-folder"
+    And user "Alice" has created folder "simple-folder/simple-empty-folder/new-folder"
+    And user "Alice" has uploaded file with content "test" to "/simple-folder/simple-empty-folder/lorem.txt"
+    And the user has reloaded the current page of the webUI
+    When the user shares folder "simple-folder" with remote user "Alice" as "Editor" using the webUI
+    And user "Alice" from server "REMOTE" has accepted the last pending share
+    And the user opens folder "/" directly on the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName      | expectedIndicators |
+      | simple-folder | user-direct        |
+    When the user opens folder "simple-folder" using the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName            | expectedIndicators |
+      | simple-empty-folder | user-indirect      |
+    When the user opens folder "simple-empty-folder" using the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName   | expectedIndicators |
+      | new-folder | user-indirect      |
+      | lorem.txt  | user-indirect      |
