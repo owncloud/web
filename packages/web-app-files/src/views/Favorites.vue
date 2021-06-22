@@ -171,10 +171,9 @@ export default {
       this.CLEAR_CURRENT_FILES_LIST()
 
       let resources = await this.$client.files.getFavoriteFiles(this.davProperties)
-      const rootFolder = await this.$client.files.fileInfo('/', this.davProperties)
 
       resources = resources.map(buildResource)
-      this.LOAD_FILES({ currentFolder: buildResource(rootFolder), files: resources })
+      this.LOAD_FILES({ currentFolder: null, files: resources })
       this.loadIndicators({ client: this.$client, currentFolder: '/' })
 
       // Load quota
