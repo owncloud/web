@@ -24,7 +24,7 @@ Summary
 * Bugfix - Translated user menu items: [#5042](https://github.com/owncloud/web/pull/5042)
 * Bugfix - Prevent `fileTypeIcon` to throw a TypeError: [#5253](https://github.com/owncloud/web/pull/5253)
 * Bugfix - Make sure IDs in HTML are unique: [#5028](https://github.com/owncloud/web/pull/5028)
-* Bugfix - Remove unnecessary Propfind requests: [#5339](https://github.com/owncloud/web/pull/5339)
+* Bugfix - Remove unnecessary Propfind requests: [#5340](https://github.com/owncloud/web/pull/5340)
 * Bugfix - Upsert resource in filestable: [#5130](https://github.com/owncloud/web/pull/5130)
 * Enhancement - Improve a11y colors: [#5138](https://github.com/owncloud/web/pull/5138)
 * Enhancement - Accessible status indicators: [#5182](https://github.com/owncloud/web/pull/5182)
@@ -189,7 +189,7 @@ Details
    https://github.com/owncloud/web/pull/5028
    https://github.com/owncloud/web/pull/5148
 
-* Bugfix - Remove unnecessary Propfind requests: [#5339](https://github.com/owncloud/web/pull/5339)
+* Bugfix - Remove unnecessary Propfind requests: [#5340](https://github.com/owncloud/web/pull/5340)
 
    In the the files-app views `Favorites`, `SharedViaLink`, `SharedWithMe` and
    `SharedWithOthers` we did a unnecessary propfind request to obtain the rootFolder which is
@@ -197,7 +197,7 @@ Details
 
    This has been fixed by removing those requests.
 
-   https://github.com/owncloud/web/pull/5339
+   https://github.com/owncloud/web/pull/5340
 
 * Bugfix - Upsert resource in filestable: [#5130](https://github.com/owncloud/web/pull/5130)
 
