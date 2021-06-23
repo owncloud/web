@@ -660,3 +660,113 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     When the user browses to the shared-with-me page
     And the user reloads the current page of the webUI
     Then file "lorem.txt" should not be listed on the webUI
+
+  Scenario: declining a federation share on the webUI
+    Given user "Alice" has created file "lorem.txt" on remote server
+    And user "Alice" from remote server has shared "/lorem.txt" with user "Alice" from local server
+    And the user has reloaded the current page of the webUI
+    When the user declines all shares displayed in the notifications on the webUI
+    Then file "lorem.txt" should not be listed on the webUI
+    When the user browses to the shared-with-me page
+    And the user reloads the current page of the webUI
+    Then file "lorem.txt" should not be listed on the webUI
+
+  Scenario: declining a federation share on the webUI
+    Given user "Alice" has created file "lorem.txt" on remote server
+    And user "Alice" from remote server has shared "/lorem.txt" with user "Alice" from local server
+    And the user has reloaded the current page of the webUI
+    When the user declines all shares displayed in the notifications on the webUI
+    Then file "lorem.txt" should not be listed on the webUI
+    When the user browses to the shared-with-me page
+    And the user reloads the current page of the webUI
+    Then file "lorem.txt" should not be listed on the webUI
+
+  Scenario: declining a federation share on the webUI
+    Given user "Alice" has created file "lorem.txt" on remote server
+    And user "Alice" from remote server has shared "/lorem.txt" with user "Alice" from local server
+    And the user has reloaded the current page of the webUI
+    When the user declines all shares displayed in the notifications on the webUI
+    Then file "lorem.txt" should not be listed on the webUI
+    When the user browses to the shared-with-me page
+    And the user reloads the current page of the webUI
+    Then file "lorem.txt" should not be listed on the webUI
+
+  Scenario: declining a federation share on the webUI
+    Given user "Alice" has created file "lorem.txt" on remote server
+    And user "Alice" from remote server has shared "/lorem.txt" with user "Alice" from local server
+    And the user has reloaded the current page of the webUI
+    When the user declines all shares displayed in the notifications on the webUI
+    Then file "lorem.txt" should not be listed on the webUI
+    When the user browses to the shared-with-me page
+    And the user reloads the current page of the webUI
+    Then file "lorem.txt" should not be listed on the webUI
+
+  Scenario: declining a federation share on the webUI
+    Given user "Alice" has created file "lorem.txt" on remote server
+    And user "Alice" from remote server has shared "/lorem.txt" with user "Alice" from local server
+    And the user has reloaded the current page of the webUI
+    When the user declines all shares displayed in the notifications on the webUI
+    Then file "lorem.txt" should not be listed on the webUI
+    When the user browses to the shared-with-me page
+    And the user reloads the current page of the webUI
+    Then file "lorem.txt" should not be listed on the webUI
+
+  Scenario: declining a federation share on the webUI
+    Given user "Alice" has created file "lorem.txt" on remote server
+    And user "Alice" from remote server has shared "/lorem.txt" with user "Alice" from local server
+    And the user has reloaded the current page of the webUI
+    When the user declines all shares displayed in the notifications on the webUI
+    Then file "lorem.txt" should not be listed on the webUI
+    When the user browses to the shared-with-me page
+    And the user reloads the current page of the webUI
+    Then file "lorem.txt" should not be listed on the webUI
+
+  Scenario: declining a federation share on the webUI
+    Given user "Alice" has created file "lorem.txt" on remote server
+    And user "Alice" from remote server has shared "/lorem.txt" with user "Alice" from local server
+    And the user has reloaded the current page of the webUI
+    When the user declines all shares displayed in the notifications on the webUI
+    Then file "lorem.txt" should not be listed on the webUI
+    When the user browses to the shared-with-me page
+    And the user reloads the current page of the webUI
+    Then file "lorem.txt" should not be listed on the webUI
+
+  Scenario: declining a federation share on the webUI
+    Given user "Alice" has created file "lorem.txt" on remote server
+    And user "Alice" from remote server has shared "/lorem.txt" with user "Alice" from local server
+    And the user has reloaded the current page of the webUI
+    When the user declines all shares displayed in the notifications on the webUI
+    Then file "lorem.txt" should not be listed on the webUI
+    When the user browses to the shared-with-me page
+    And the user reloads the current page of the webUI
+    Then file "lorem.txt" should not be listed on the webUI
+
+  Scenario: declining a federation share on the webUI
+    Given user "Alice" has created file "lorem.txt" on remote server
+    And user "Alice" from remote server has shared "/lorem.txt" with user "Alice" from local server
+    And the user has reloaded the current page of the webUI
+    When the user declines all shares displayed in the notifications on the webUI
+    Then file "lorem.txt" should not be listed on the webUI
+    When the user browses to the shared-with-me page
+    And the user reloads the current page of the webUI
+    Then file "lorem.txt" should not be listed on the webUI
+
+  Scenario: declining a federation share on the webUI
+    Given user "Alice" has created file "lorem.txt" on remote server
+    And user "Alice" from remote server has shared "/lorem.txt" with user "Alice" from local server
+    And the user has reloaded the current page of the webUI
+    When the user declines all shares displayed in the notifications on the webUI
+    Then file "lorem.txt" should not be listed on the webUI
+    When the user browses to the shared-with-me page
+    And the user reloads the current page of the webUI
+    Then file "lorem.txt" should not be listed on the webUI
+
+  Scenario: declining a federation share on the webUI
+    Given user "Alice" has created file "lorem.txt" on remote server
+    And user "Alice" from remote server has shared "/lorem.txt" with user "Alice" from local server
+    And the user has reloaded the current page of the webUI
+    When the user declines all shares displayed in the notifications on the webUI
+    Then file "lorem.txt" should not be listed on the webUI
+    When the user browses to the shared-with-me page
+    And the user reloads the current page of the webUI
+    Then file "lorem.txt" should not be listed on the webUI    
