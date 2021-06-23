@@ -766,3 +766,48 @@ Feature: Shares in share-with pages
     And the user deletes folder "simple-folder" using the webUI
     And the user browses to the folder "Shares" on the files page
     Then folder "simple-folder" should not be listed on the webUI
+
+  @issue-ocis-730
+  Scenario: deleting an entry on the shared-with-me page unshares from self
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has shared folder "simple-folder" with user "Brian"
+    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
+    And user "Brian" has logged in using the webUI
+    When the user browses to the shared-with-me page using the webUI
+    And the user deletes folder "simple-folder" using the webUI
+    And the user browses to the folder "Shares" on the files page
+    Then folder "simple-folder" should not be listed on the webUI
+
+  @issue-ocis-730
+  Scenario: deleting an entry on the shared-with-me page unshares from self
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has shared folder "simple-folder" with user "Brian"
+    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
+    And user "Brian" has logged in using the webUI
+    When the user browses to the shared-with-me page using the webUI
+    And the user deletes folder "simple-folder" using the webUI
+    And the user browses to the folder "Shares" on the files page
+    Then folder "simple-folder" should not be listed on the webUI
+
+  @issue-ocis-730
+  Scenario: deleting an entry on the shared-with-me page unshares from self
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has shared folder "simple-folder" with user "Brian"
+    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
+    And user "Brian" has logged in using the webUI
+    When the user browses to the shared-with-me page using the webUI
+    And the user deletes folder "simple-folder" using the webUI
+    And the user browses to the folder "Shares" on the files page
+    Then folder "simple-folder" should not be listed on the webUI
+
+  @issue-ocis-730
+  Scenario: deleting an entry on the shared-with-me page unshares from self
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has shared folder "simple-folder" with user "Brian"
+    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
+    And user "Brian" has logged in using the webUI
+    When the user browses to the shared-with-me page using the webUI
+    And the user deletes folder "simple-folder" using the webUI
+    And the user browses to the folder "Shares" on the files page
+    Then folder "simple-folder" should not be listed on the webUI
+
