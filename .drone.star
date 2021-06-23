@@ -1160,8 +1160,7 @@ def acceptance(ctx):
                             steps += buildGithubCommentForBuildStopped(suiteName, alternateSuiteName)
 
                         # Upload the screenshots to github comment
-                        if ((params["visualTesting"] or (isLocalBrowser(browser) and params["screenShots"])) or params["earlyFail"]):
-                            steps += githubComment()
+                        steps += githubComment(alternateSuiteName)
 
                         if (params["earlyFail"]):
                             steps += stopBuild()
@@ -2105,6 +2104,7 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
         environment["SCREENSHOTS"] = "true"
     environment["SERVER_HOST"] = "http://web"
     environment["BACKEND_HOST"] = "http://owncloud"
+    environment["COMMENTS_FILE"] = "/var/www/owncloud/web/comments.file"
 
     for env in extraEnvironment:
         environment[env] = extraEnvironment[env]
@@ -2450,7 +2450,8 @@ def buildGithubCommentForBuildStopped(suite, alternateSuiteName):
         },
     }]
 
-def githubComment():
+def githubComment(alternateSuiteName):
+    prefix = "Results for <strong>%s</strong>" % alternateSuiteName
     return [{
         "name": "github-comment",
         "image": "jmccann/drone-github-comment:1",
@@ -2463,8 +2464,12 @@ def githubComment():
                 "from_secret": "github_token",
             },
         },
+        "commands": [
+            "if [ -s /var/www/owncloud/web/comments.file ]; then echo '%s' | cat - comments.file > temp && mv temp comments.file && /bin/drone-github-comment; fi" % prefix,
+        ],
         "when": {
             "status": [
+                "success",
                 "failure",
             ],
             "event": [

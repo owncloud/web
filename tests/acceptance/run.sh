@@ -4,6 +4,10 @@ SCRIPT_PATH=$(dirname "$0")
 SCRIPT_PATH=$( cd "${SCRIPT_PATH}" && pwd )  # normalized and made absolute
 FEATURES_DIR="${SCRIPT_PATH}/features"
 
+COMMENTS_FILE="${COMMENTS_FILE:-comments.file}"
+
+rm -rf logfile.txt "$COMMENTS_FILE"
+
 echo 'run.sh: running acceptance-tests-drone'
 
 # Look for command line options for:
@@ -52,6 +56,12 @@ declare -a UNEXPECTED_FAILED_SCENARIOS
 # webUILogin/login.feature:50
 # webUIPrivateLinks/accessingPrivateLinks.feature:8
 declare -a UNEXPECTED_PASSED_SCENARIOS
+
+# An array of the scenarios that failed but passed on retry
+# Each value is a string like:
+# webUILogin/login.feature:50
+# webUIPrivateLinks/accessingPrivateLinks.feature:8
+declare -A SINGLE_FAILED_SCENARIOS
 
 UNEXPECTED_NIGHTWATCH_CRASH=false
 FINAL_EXIT_STATUS=0
@@ -185,11 +195,54 @@ if [ "${ACCEPTANCE_TESTS_EXIT_STATUS}" -ne 0 ]; then
   fi
 fi
 
+if [ !$UNEXPECTED_NIGHTWATCH_CRASH ]
+then
+  FAILED_SCENARIOS="$(grep ') Scenario: .*' logfile.txt | { grep '(attempt 1, retried)' || true; })"
+  for FAILED_SCENARIO in ${FAILED_SCENARIOS}; do
+    found=false
+    if [[ $FAILED_SCENARIO =~ "tests/acceptance/features/" ]]; then
+      SUITE_PATH=$(dirname "${FAILED_SCENARIO}")
+      SUITE=$(basename "${SUITE_PATH}")
+      SCENARIO=$(basename "${FAILED_SCENARIO}")
+      SUITE_SCENARIO="${SUITE}/${SCENARIO}"
+      for FAILED_ON_RETRY in ${!FAILED_SCENARIO_PATHS[@]}; do
+        if [ "${FAILED_ON_RETRY}" == "${SUITE_SCENARIO}" ]; then
+          found=true;
+          break;
+        fi
+      done
+    else
+      continue
+    fi
+    if [ "$found" == false ]; then
+      if [[ $FAILED_SCENARIO =~ "tests/acceptance/features/" ]]; then
+        SUITE_PATH=$(dirname "${FAILED_SCENARIO}")
+        SUITE=$(basename "${SUITE_PATH}")
+        SCENARIO=$(basename "${FAILED_SCENARIO}")
+        SUITE_SCENARIO="${SUITE}/${SCENARIO}"
+        # Use the SUITE_SCENARIO as the array key, so that if a SUITE_SCENARIO
+        # occurs twice in the loop, it ends up in the array just once.
+        SINGLE_FAILED_SCENARIOS+=(["${SUITE_SCENARIO}"]="failed")
+      fi
+    fi
+  done
+fi
+
 if [ ${#FAILED_SCENARIO_PATHS[@]} -ne 0 ]
 then
   echo "The following scenarios failed:"
   echo "-------------------------------"
-  for KEY in "${!FAILED_SCENARIO_PATHS[@]}"; do echo "$KEY"; done
+  for KEY in "${!FAILED_SCENARIO_PATHS[@]}"; do echo "- $KEY"; done
+  echo "-------------------------------"
+fi
+
+if [ ${#SINGLE_FAILED_SCENARIOS[@]} -ne 0 ]
+then
+  echo ""
+  echo ""
+  echo "The following scenarios passed on retry:" | tee -a "$COMMENTS_FILE"
+  echo "-------------------------------"
+  for KEY in "${!SINGLE_FAILED_SCENARIOS[@]}"; do echo "- $KEY" | tee -a "$COMMENTS_FILE"; done
   echo "-------------------------------"
 fi
 
