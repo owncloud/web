@@ -76,14 +76,15 @@
 
 <script>
 import debounce from 'lodash-es/debounce'
+import PQueue from 'p-queue'
+
 import { mapActions, mapGetters } from 'vuex'
-import Mixins from '../../mixins/collaborators'
-import { roleToBitmask } from '../../helpers/collaborators'
+import Mixins from '../../../../mixins/collaborators'
+import { roleToBitmask } from '../../../../helpers/collaborators'
+import { shareTypes } from '../../../../helpers/shareTypes'
 
 import AutocompleteItem from './AutocompleteItem.vue'
-import { shareTypes } from '../../helpers/shareTypes'
 import CollaboratorsEditOptions from './CollaboratorsEditOptions.vue'
-import PQueue from 'p-queue'
 
 export default {
   name: 'NewCollaborator',

@@ -41,8 +41,8 @@
 </template>
 
 <script>
-import Mixins from '../../mixins/collaborators'
-import { shareTypes } from '../../helpers/shareTypes'
+import Mixins from '../../../../mixins/collaborators'
+import { shareTypes } from '../../../../helpers/shareTypes'
 
 export default {
   name: 'AutocompleteItem',

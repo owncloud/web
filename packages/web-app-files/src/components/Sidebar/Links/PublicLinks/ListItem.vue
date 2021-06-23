@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import LinkInfo from './LinkInfo.vue'
-import LinkActions from './LinkActions.vue'
+import LinkInfo from './Info.vue'
+import LinkActions from './Actions.vue'
 
 export default {
   name: 'PublicLinkListItem',

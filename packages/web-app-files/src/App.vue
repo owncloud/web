@@ -28,9 +28,9 @@
 import Mixins from './mixins'
 import MixinRoutes from './mixins/routes'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
-import Sidebar from './components/Sidebar.vue'
-import AppBar from './components/AppBar.vue'
-import UploadProgress from './components/UploadProgress.vue'
+import Sidebar from './components/Sidebar/Sidebar.vue'
+import AppBar from './components/AppBar/AppBar.vue'
+import UploadProgress from './components/Upload/Progress.vue'
 
 export default {
   components: {

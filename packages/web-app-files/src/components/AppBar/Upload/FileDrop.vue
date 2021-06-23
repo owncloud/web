@@ -22,7 +22,7 @@
 <script>
 import vue2DropZone from 'vue2-dropzone'
 import 'vue2-dropzone/dist/vue2Dropzone.min.css'
-import Mixins from '../mixins'
+import Mixins from '../../../mixins'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {

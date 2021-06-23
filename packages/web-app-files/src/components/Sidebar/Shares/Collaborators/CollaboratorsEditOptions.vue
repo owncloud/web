@@ -57,9 +57,9 @@
 <script>
 import { mapGetters } from 'vuex'
 import moment from 'moment'
-import collaboratorsMixins from '../../mixins/collaborators'
+import collaboratorsMixins from '../../../../mixins/collaborators'
 
-import RoleItem from '../RoleItem.vue'
+import RoleItem from '../../RoleItem.vue'
 import AdditionalPermissions from './AdditionalPermissions.vue'
 
 export default {

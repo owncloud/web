@@ -46,8 +46,8 @@
   </div>
 </template>
 <script>
-import Mixins from '../mixins'
-import MixinResources from '../mixins/resources'
+import Mixins from '../../../mixins'
+import MixinResources from '../../../mixins/resources'
 import { mapGetters } from 'vuex'
 
 export default {

@@ -134,10 +134,10 @@
 </template>
 <script>
 import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
-import mixins from '../../mixins'
+import mixins from '../../../../mixins'
 import moment from 'moment'
-import publicLinkRoles from '../../helpers/publicLinkRolesDefinition'
-import RoleItem from '../RoleItem.vue'
+import publicLinkRoles from '../../../../helpers/publicLinkRolesDefinition'
+import RoleItem from '../../RoleItem.vue'
 
 export default {
   components: {

@@ -63,11 +63,11 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 
-import MixinRoutes from '../mixins/routes'
-import MixinDeleteResources from '../mixins/deleteResources'
-import { cloneStateObject } from '../helpers/store'
-import { canBeMoved } from '../helpers/permissions'
-import { checkRoute } from '../helpers/route'
+import MixinRoutes from '../../../mixins/routes'
+import MixinDeleteResources from '../../../mixins/deleteResources'
+import { cloneStateObject } from '../../../helpers/store'
+import { canBeMoved } from '../../../helpers/permissions'
+import { checkRoute } from '../../../helpers/route'
 
 export default {
   mixins: [MixinRoutes, MixinDeleteResources],

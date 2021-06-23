@@ -91,7 +91,7 @@ export const getIndicators = (resource, sharesTree) => {
       label: $gettext('Show invited people'),
       visible: isUserShare(resource, sharesTree),
       icon: 'group',
-      target: 'files-sharing',
+      target: 'sharing-item',
       type: isDirectUserShare(resource) ? 'user-direct' : 'user-indirect',
       handler: indicatorHandler
     },
@@ -101,7 +101,7 @@ export const getIndicators = (resource, sharesTree) => {
       label: $gettext('Show links'),
       visible: isLinkShare(resource, sharesTree),
       icon: 'link',
-      target: 'file-link',
+      target: 'sidebar-links-item',
       type: isDirectLinkShare(resource) ? 'link-direct' : 'link-indirect',
       handler: indicatorHandler
     }

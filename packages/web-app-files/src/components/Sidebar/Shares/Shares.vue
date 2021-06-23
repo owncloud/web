@@ -83,12 +83,12 @@
 
 <script>
 import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
-import Mixins from '../mixins/collaborators'
-import { textUtils } from '../helpers/textUtils'
-import { shareTypes, userShareTypes } from '../helpers/shareTypes'
-import { getParentPaths } from '../helpers/path'
+import Mixins from '../../../mixins/collaborators'
+import { textUtils } from '../../../helpers/textUtils'
+import { shareTypes, userShareTypes } from '../../../helpers/shareTypes'
+import { getParentPaths } from '../../../helpers/path'
 import { dirname } from 'path'
-import { bitmaskToRole, permissionsBitmask } from '../helpers/collaborators'
+import { bitmaskToRole, permissionsBitmask } from '../../../helpers/collaborators'
 import NewCollaborator from './Collaborators/NewCollaborator.vue'
 import EditCollaborator from './Collaborators/EditCollaborator.vue'
 import Collaborator from './Collaborators/Collaborator.vue'
@@ -101,7 +101,7 @@ export default {
   title: $gettext => {
     return $gettext('People')
   },
-  name: 'FileSharingSidebar',
+  name: 'SharingAccordion',
   components: {
     NewCollaborator,
     EditCollaborator,

@@ -172,10 +172,10 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     collaboratorsAccordionItem: {
-      selector: '#app-sidebar-files-sharing'
+      selector: '#app-sidebar-sharing-item'
     },
     linksAccordionItem: {
-      selector: '#app-sidebar-file-link'
+      selector: '#app-sidebar-links-item'
     },
     sidebarToggleFavoriteButton: {
       selector: '#files-sidebar-star-icon'

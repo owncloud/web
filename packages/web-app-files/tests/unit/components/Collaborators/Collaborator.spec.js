@@ -1,6 +1,6 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils'
 import Vuex from 'vuex'
-import Collaborator from 'packages/web-app-files/src/components/Collaborators/Collaborator.vue'
+import Collaborator from 'packages/web-app-files/src/components/Sidebar/Shares/Collaborators/Collaborator.vue'
 import stubs from '../../../../../../tests/unit/stubs'
 import GetTextPlugin from 'vue-gettext'
 

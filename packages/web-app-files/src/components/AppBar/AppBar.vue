@@ -107,17 +107,17 @@ import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
 import pathUtil from 'path'
 import isEmpty from 'lodash-es/isEmpty'
 
-import Mixins from '../mixins'
-import MixinFileActions, { EDITOR_MODE_CREATE } from '../mixins/fileActions'
-import MixinRoutes from '../mixins/routes'
-import MixinScrollToResource from '../mixins/filesListScrolling'
-import { buildResource } from '../helpers/resources'
+import Mixins from '../../mixins'
+import MixinFileActions, { EDITOR_MODE_CREATE } from '../../mixins/fileActions'
+import MixinRoutes from '../../mixins/routes'
+import MixinScrollToResource from '../../mixins/filesListScrolling'
+import { buildResource } from '../../helpers/resources'
 
-import FileUpload from './FileUpload.vue'
-import FolderUpload from './FolderUpload.vue'
-import FileDrop from './FileDrop.vue'
-import BatchActions from './BatchActions.vue'
-import InfoSelectedResources from './InfoSelectedResources.vue'
+import FileUpload from './Upload/FileUpload.vue'
+import FolderUpload from './Upload/FolderUpload.vue'
+import FileDrop from './Upload/FileDrop.vue'
+import BatchActions from './SelectedResources/BatchActions.vue'
+import InfoSelectedResources from './SelectedResources/Info.vue'
 
 export default {
   components: {
