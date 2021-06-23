@@ -142,6 +142,7 @@ config = {
             },
             "visualTesting": True,
             "screenShots": True,
+            "skip": True,
         },
         "webUINotification": {
             "type": NOTIFICATIONS,
@@ -161,6 +162,7 @@ config = {
             "visualTesting": True,
             "screenShots": True,
             "notificationsAppNeeded": True,
+            "skip": True,
         },
         "webUIFederation": {
             "type": FEDERATED,
@@ -192,6 +194,7 @@ config = {
             },
             "notificationsAppNeeded": True,
             "filterTags": "@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10",
+            "skip": True,
         },
         "webUI-XGA": {
             "type": FULL,
