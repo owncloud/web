@@ -30,7 +30,8 @@ Feature: Public link share management
   @skip @yetToImplement
   Scenario: mount public link
     Given using server "REMOTE"
-    And user "Brian" has been created with default attributes
+    And user "Brian" has been created with default attributes and without skeleton files
+    And user "Brian" has created folder "/simple-folder"
     When the user creates a new public link for folder "simple-folder" using the webUI
     And the user logs out of the webUI
     And the public accesses the last created public link using the webUI
@@ -45,7 +46,8 @@ Feature: Public link share management
   @skip @yetToImplement
   Scenario: mount public link and overwrite file
     Given using server "REMOTE"
-    And user "Brian" has been created with default attributes
+    And user "Brian" has been created with default attributes and without skeleton files
+    And user "Brian" has created folder "/simple-folder"
     When the user creates a new public link for folder "simple-folder" using the webUI with
       | permission | read-write |
     And the user logs out of the webUI
