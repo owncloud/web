@@ -162,6 +162,7 @@ config = {
             "visualTesting": True,
             "screenShots": True,
             "notificationsAppNeeded": True,
+            "skip": True,
         },
         "webUIFederation": {
             "type": FEDERATED,
