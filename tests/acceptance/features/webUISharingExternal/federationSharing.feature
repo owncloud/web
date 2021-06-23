@@ -1167,3 +1167,194 @@ Feature: Federation Sharing - sharing with users on other cloud storages
       | fileName            | expectedIndicators |
       | simple-empty-folder | user-direct        |
       | lorem.txt           | user-indirect      |
+
+  Scenario: sharing indicator of items inside a re-shared folder
+    Given user "Brian" has been created with default attributes and without skeleton files
+    And user "Carol" has been created with default attributes and without skeleton files
+    And user "Alice" has created folder "simple-folder"
+    And user "Alice" has created folder "simple-folder/simple-empty-folder"
+    And user "Alice" has created file "simple-folder/lorem.txt"
+    And user "Alice" has shared folder "simple-folder" with user "Brian"
+    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
+    And user "Brian" has shared folder "Shares/simple-folder" with user "Carol"
+    When the user re-logs in as "Brian" using the webUI
+    And the user opens folder "Shares/simple-folder" directly on the webUI
+    And the user shares folder "simple-empty-folder" with remote user "Alice" as "Editor" using the webUI
+    And user "Alice" from server "REMOTE" has accepted the last pending share
+    And the user opens folder "/Shares" directly on the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName      | expectedIndicators |
+      | simple-folder | user-direct        |
+    When the user opens folder "simple-folder" using the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName            | expectedIndicators |
+      | simple-empty-folder | user-direct        |
+      | lorem.txt           | user-indirect      |
+
+  @issue-2060
+  Scenario: sharing indicator of items inside a re-shared folder
+    Given user "Brian" has been created with default attributes and without skeleton files
+    And user "Carol" has been created with default attributes and without skeleton files
+    And user "Alice" has created folder "simple-folder"
+    And user "Alice" has created folder "simple-folder/simple-empty-folder"
+    And user "Alice" has created file "simple-folder/lorem.txt"
+    And user "Alice" has shared folder "simple-folder" with user "Brian"
+    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
+    And user "Brian" has shared folder "Shares/simple-folder" with user "Carol"
+    When the user re-logs in as "Brian" using the webUI
+    And the user opens folder "Shares/simple-folder" directly on the webUI
+    And the user shares folder "simple-empty-folder" with remote user "Alice" as "Editor" using the webUI
+    And user "Alice" from server "REMOTE" has accepted the last pending share
+    And the user opens folder "/Shares" directly on the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName      | expectedIndicators |
+      | simple-folder | user-direct        |
+    When the user opens folder "simple-folder" using the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName            | expectedIndicators |
+      | simple-empty-folder | user-direct        |
+      | lorem.txt           | user-indirect      |
+
+  @issue-2060
+  Scenario: sharing indicator of items inside a re-shared folder
+    Given user "Brian" has been created with default attributes and without skeleton files
+    And user "Carol" has been created with default attributes and without skeleton files
+    And user "Alice" has created folder "simple-folder"
+    And user "Alice" has created folder "simple-folder/simple-empty-folder"
+    And user "Alice" has created file "simple-folder/lorem.txt"
+    And user "Alice" has shared folder "simple-folder" with user "Brian"
+    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
+    And user "Brian" has shared folder "Shares/simple-folder" with user "Carol"
+    When the user re-logs in as "Brian" using the webUI
+    And the user opens folder "Shares/simple-folder" directly on the webUI
+    And the user shares folder "simple-empty-folder" with remote user "Alice" as "Editor" using the webUI
+    And user "Alice" from server "REMOTE" has accepted the last pending share
+    And the user opens folder "/Shares" directly on the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName      | expectedIndicators |
+      | simple-folder | user-direct        |
+    When the user opens folder "simple-folder" using the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName            | expectedIndicators |
+      | simple-empty-folder | user-direct        |
+      | lorem.txt           | user-indirect      |
+
+  @issue-2060
+  Scenario: sharing indicator of items inside a re-shared folder
+    Given user "Brian" has been created with default attributes and without skeleton files
+    And user "Carol" has been created with default attributes and without skeleton files
+    And user "Alice" has created folder "simple-folder"
+    And user "Alice" has created folder "simple-folder/simple-empty-folder"
+    And user "Alice" has created file "simple-folder/lorem.txt"
+    And user "Alice" has shared folder "simple-folder" with user "Brian"
+    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
+    And user "Brian" has shared folder "Shares/simple-folder" with user "Carol"
+    When the user re-logs in as "Brian" using the webUI
+    And the user opens folder "Shares/simple-folder" directly on the webUI
+    And the user shares folder "simple-empty-folder" with remote user "Alice" as "Editor" using the webUI
+    And user "Alice" from server "REMOTE" has accepted the last pending share
+    And the user opens folder "/Shares" directly on the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName      | expectedIndicators |
+      | simple-folder | user-direct        |
+    When the user opens folder "simple-folder" using the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName            | expectedIndicators |
+      | simple-empty-folder | user-direct        |
+      | lorem.txt           | user-indirect      |
+
+  Scenario: sharing indicator of items inside a re-shared folder
+    Given user "Brian" has been created with default attributes and without skeleton files
+    And user "Carol" has been created with default attributes and without skeleton files
+    And user "Alice" has created folder "simple-folder"
+    And user "Alice" has created folder "simple-folder/simple-empty-folder"
+    And user "Alice" has created file "simple-folder/lorem.txt"
+    And user "Alice" has shared folder "simple-folder" with user "Brian"
+    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
+    And user "Brian" has shared folder "Shares/simple-folder" with user "Carol"
+    When the user re-logs in as "Brian" using the webUI
+    And the user opens folder "Shares/simple-folder" directly on the webUI
+    And the user shares folder "simple-empty-folder" with remote user "Alice" as "Editor" using the webUI
+    And user "Alice" from server "REMOTE" has accepted the last pending share
+    And the user opens folder "/Shares" directly on the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName      | expectedIndicators |
+      | simple-folder | user-direct        |
+    When the user opens folder "simple-folder" using the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName            | expectedIndicators |
+      | simple-empty-folder | user-direct        |
+      | lorem.txt           | user-indirect      |
+
+  @issue-2060
+  Scenario: sharing indicator of items inside a re-shared folder
+    Given user "Brian" has been created with default attributes and without skeleton files
+    And user "Carol" has been created with default attributes and without skeleton files
+    And user "Alice" has created folder "simple-folder"
+    And user "Alice" has created folder "simple-folder/simple-empty-folder"
+    And user "Alice" has created file "simple-folder/lorem.txt"
+    And user "Alice" has shared folder "simple-folder" with user "Brian"
+    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
+    And user "Brian" has shared folder "Shares/simple-folder" with user "Carol"
+    When the user re-logs in as "Brian" using the webUI
+    And the user opens folder "Shares/simple-folder" directly on the webUI
+    And the user shares folder "simple-empty-folder" with remote user "Alice" as "Editor" using the webUI
+    And user "Alice" from server "REMOTE" has accepted the last pending share
+    And the user opens folder "/Shares" directly on the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName      | expectedIndicators |
+      | simple-folder | user-direct        |
+    When the user opens folder "simple-folder" using the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName            | expectedIndicators |
+      | simple-empty-folder | user-direct        |
+      | lorem.txt           | user-indirect      |
+
+  @issue-2060
+  Scenario: sharing indicator of items inside a re-shared folder
+    Given user "Brian" has been created with default attributes and without skeleton files
+    And user "Carol" has been created with default attributes and without skeleton files
+    And user "Alice" has created folder "simple-folder"
+    And user "Alice" has created folder "simple-folder/simple-empty-folder"
+    And user "Alice" has created file "simple-folder/lorem.txt"
+    And user "Alice" has shared folder "simple-folder" with user "Brian"
+    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
+    And user "Brian" has shared folder "Shares/simple-folder" with user "Carol"
+    When the user re-logs in as "Brian" using the webUI
+    And the user opens folder "Shares/simple-folder" directly on the webUI
+    And the user shares folder "simple-empty-folder" with remote user "Alice" as "Editor" using the webUI
+    And user "Alice" from server "REMOTE" has accepted the last pending share
+    And the user opens folder "/Shares" directly on the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName      | expectedIndicators |
+      | simple-folder | user-direct        |
+    When the user opens folder "simple-folder" using the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName            | expectedIndicators |
+      | simple-empty-folder | user-direct        |
+      | lorem.txt           | user-indirect      |
+
+  @issue-2060
+  Scenario: sharing indicator of items inside a re-shared folder
+    Given user "Brian" has been created with default attributes and without skeleton files
+    And user "Carol" has been created with default attributes and without skeleton files
+    And user "Alice" has created folder "simple-folder"
+    And user "Alice" has created folder "simple-folder/simple-empty-folder"
+    And user "Alice" has created file "simple-folder/lorem.txt"
+    And user "Alice" has shared folder "simple-folder" with user "Brian"
+    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
+    And user "Brian" has shared folder "Shares/simple-folder" with user "Carol"
+    When the user re-logs in as "Brian" using the webUI
+    And the user opens folder "Shares/simple-folder" directly on the webUI
+    And the user shares folder "simple-empty-folder" with remote user "Alice" as "Editor" using the webUI
+    And user "Alice" from server "REMOTE" has accepted the last pending share
+    And the user opens folder "/Shares" directly on the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName      | expectedIndicators |
+      | simple-folder | user-direct        |
+    When the user opens folder "simple-folder" using the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName            | expectedIndicators |
+      | simple-empty-folder | user-direct        |
+      | lorem.txt           | user-indirect      |
+
