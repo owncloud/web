@@ -3,7 +3,32 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v3.2.0...master
+[unreleased]: https://github.com/owncloud/web/compare/v3.3.0...master
+
+Summary
+-------
+
+* Bugfix - Remove unnecessary Propfind requests: [#5340](https://github.com/owncloud/web/pull/5340)
+
+Details
+-------
+
+* Bugfix - Remove unnecessary Propfind requests: [#5340](https://github.com/owncloud/web/pull/5340)
+
+   In the the files-app views `Favorites`, `SharedViaLink`, `SharedWithMe` and
+   `SharedWithOthers` we did a unnecessary propfind request to obtain the rootFolder which is
+   not required there.
+
+   This has been fixed by removing those requests.
+
+   https://github.com/owncloud/web/pull/5340
+
+Changelog for ownCloud Web [3.3.0] (2021-06-23)
+=======================================
+The following sections list the changes in ownCloud web 3.3.0 relevant to
+ownCloud admins and users.
+
+[3.3.0]: https://github.com/owncloud/web/compare/v3.2.0...v3.3.0
 
 Summary
 -------
@@ -24,7 +49,6 @@ Summary
 * Bugfix - Translated user menu items: [#5042](https://github.com/owncloud/web/pull/5042)
 * Bugfix - Prevent `fileTypeIcon` to throw a TypeError: [#5253](https://github.com/owncloud/web/pull/5253)
 * Bugfix - Make sure IDs in HTML are unique: [#5028](https://github.com/owncloud/web/pull/5028)
-* Bugfix - Remove unnecessary Propfind requests: [#5340](https://github.com/owncloud/web/pull/5340)
 * Bugfix - Upsert resource in filestable: [#5130](https://github.com/owncloud/web/pull/5130)
 * Enhancement - Improve a11y colors: [#5138](https://github.com/owncloud/web/pull/5138)
 * Enhancement - Accessible status indicators: [#5182](https://github.com/owncloud/web/pull/5182)
@@ -188,16 +212,6 @@ Details
 
    https://github.com/owncloud/web/pull/5028
    https://github.com/owncloud/web/pull/5148
-
-* Bugfix - Remove unnecessary Propfind requests: [#5340](https://github.com/owncloud/web/pull/5340)
-
-   In the the files-app views `Favorites`, `SharedViaLink`, `SharedWithMe` and
-   `SharedWithOthers` we did a unnecessary propfind request to obtain the rootFolder which is
-   not required there.
-
-   This has been fixed by removing those requests.
-
-   https://github.com/owncloud/web/pull/5340
 
 * Bugfix - Upsert resource in filestable: [#5130](https://github.com/owncloud/web/pull/5130)
 
