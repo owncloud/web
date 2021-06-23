@@ -79,11 +79,11 @@ import MixinResources from '../../mixins/resources'
 import MixinRoutes from '../../mixins/routes'
 import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
 
-import ActionsAccordion from './Actions/Actions.vue'
+import FileActions from './Actions/FileActions.vue'
 
 export default {
   components: {
-    ActionsAccordion
+    FileActions
   },
   mixins: [Mixins, MixinResources, MixinRoutes],
   computed: {
@@ -95,7 +95,7 @@ export default {
       const accordions = [
         {
           app: 'sidebar-actions-item',
-          component: ActionsAccordion,
+          component: FileActions,
           icon: 'slideshow'
         }
       ]

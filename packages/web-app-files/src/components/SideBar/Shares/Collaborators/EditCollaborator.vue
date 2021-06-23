@@ -76,7 +76,7 @@ import { roleToBitmask, bitmaskToRole } from '../../../../helpers/collaborators'
 import { shareTypes } from '../../../../helpers/shareTypes'
 import Mixins from '../../../../mixins/collaborators'
 
-import Collaborator from './Collaborator.vue'
+import Collaborator from './ShowCollaborator.vue'
 import CollaboratorsEditOptions from './CollaboratorsEditOptions.vue'
 
 export default {

@@ -56,7 +56,7 @@
         </translate>
       </div>
     </oc-grid>
-    <upload-details
+    <details-widget
       v-if="expanded"
       :items="inProgress"
       class="uk-width-expand oc-upload-details-scrollable"
@@ -66,13 +66,13 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import UploadDetails from './Details.vue'
+import DetailsWidget from './DetailsWidget.vue'
 import Mixins from '../../mixins'
 
 export default {
   name: 'UploadProgress',
   components: {
-    UploadDetails
+    DetailsWidget
   },
   mixins: [Mixins],
   data() {

@@ -10,9 +10,9 @@ import PublicLink from './views/PublicLink.vue'
 import FilesDrop from './views/FilesDrop.vue'
 import LocationPicker from './views/LocationPicker.vue'
 import PublicFiles from './views/PublicFiles.vue'
-import VersionsSidebarItem from './components/Sidebar/Versions/Versions.vue'
-import SharingSidebarItem from './components/Sidebar/Shares/Shares.vue'
-import LinksSidebarItem from './components/Sidebar/Links/Links.vue'
+import FileVersions from './components/SideBar/Versions/FileVersions.vue'
+import FileShares from './components/SideBar/Shares/FileShares.vue'
+import FileLinks from './components/SideBar/Links/FileLinks.vue'
 
 import translationsJson from '../l10n/translations.json'
 import quickActionsImport from './quickActions'
@@ -33,7 +33,7 @@ const appInfo = {
     {
       app: 'sharing-item',
       icon: 'group',
-      component: SharingSidebarItem,
+      component: FileShares,
       enabled(capabilities) {
         if (capabilities.files_sharing) {
           return capabilities.files_sharing.api_enabled
@@ -44,7 +44,7 @@ const appInfo = {
     {
       app: 'links-item',
       icon: 'link',
-      component: LinksSidebarItem,
+      component: FileLinks,
       enabled(capabilities) {
         if (capabilities.files_sharing) {
           return capabilities.files_sharing.public.enabled
@@ -55,7 +55,7 @@ const appInfo = {
     {
       app: 'versions-item',
       icon: 'file_version',
-      component: VersionsSidebarItem,
+      component: FileVersions,
       enabled(capabilities, highlightedFile) {
         return !!capabilities.core && highlightedFile && highlightedFile.type !== 'folder'
       }

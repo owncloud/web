@@ -39,7 +39,7 @@
           tag="ul"
         >
           <li v-for="link in links" :key="link.key">
-            <public-link-list-item :link="link" />
+            <list-item :link="link" />
           </li>
         </transition-group>
         <p
@@ -58,7 +58,7 @@
         leave-active-class="uk-animation-slide-right uk-animation-reverse uk-animation-fast"
         name="custom-classes-transition"
       >
-        <edit-public-link />
+        <link-edit />
       </transition>
     </div>
   </div>
@@ -72,17 +72,17 @@ import { shareTypes } from '../../../helpers/shareTypes'
 import { getParentPaths } from '../../../helpers/path'
 import { textUtils } from '../../../helpers/textUtils'
 import { cloneStateObject } from '../../../helpers/store'
+import LinkEdit from './PublicLinks/LinkEdit.vue'
+import ListItem from './PublicLinks/ListItem.vue'
 import PrivateLinkItem from './PrivateLinkItem.vue'
-import EditPublicLink from './PublicLinks/Edit.vue'
-import PublicLinkListItem from './PublicLinks/ListItem.vue'
 
 const PANEL_SHOW = 'showLinks'
 const PANEL_EDIT = 'editPublicLink'
 
 export default {
   components: {
-    EditPublicLink,
-    PublicLinkListItem,
+    LinkEdit,
+    ListItem,
     PrivateLinkItem
   },
   mixins: [mixins],

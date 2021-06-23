@@ -8,10 +8,10 @@
       @dragover="$_ocApp_dragOver"
     >
       <app-bar id="files-app-bar" />
-      <upload-progress v-show="$_uploadProgressVisible" id="files-upload-progress" class="oc-p-s" />
+      <progress-bar v-show="$_uploadProgressVisible" id="files-upload-progress" class="oc-p-s" />
       <router-view id="files-view" />
     </div>
-    <sidebar
+    <side-bar
       v-if="_sidebarOpen"
       id="files-sidebar"
       ref="filesSidebar"
@@ -28,15 +28,15 @@
 import Mixins from './mixins'
 import MixinRoutes from './mixins/routes'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
-import Sidebar from './components/Sidebar/Sidebar.vue'
 import AppBar from './components/AppBar/AppBar.vue'
-import UploadProgress from './components/Upload/Progress.vue'
+import ProgressBar from './components/Upload/ProgressBar.vue'
+import SideBar from './components/SideBar/SideBar.vue'
 
 export default {
   components: {
-    Sidebar,
     AppBar,
-    UploadProgress
+    ProgressBar,
+    SideBar
   },
   mixins: [Mixins, MixinRoutes],
   data() {

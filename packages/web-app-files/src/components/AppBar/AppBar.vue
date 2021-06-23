@@ -95,7 +95,7 @@
             </ul>
           </oc-drop>
         </template>
-        <info-selected-resources v-if="selectedFiles.length > 0" class="oc-mr-s uk-visible@l" />
+        <size-info v-if="selectedFiles.length > 0" class="oc-mr-s uk-visible@l" />
         <batch-actions />
       </div>
     </div>
@@ -113,19 +113,19 @@ import MixinRoutes from '../../mixins/routes'
 import MixinScrollToResource from '../../mixins/filesListScrolling'
 import { buildResource } from '../../helpers/resources'
 
+import BatchActions from './SelectedResources/BatchActions.vue'
+import FileDrop from './Upload/FileDrop.vue'
 import FileUpload from './Upload/FileUpload.vue'
 import FolderUpload from './Upload/FolderUpload.vue'
-import FileDrop from './Upload/FileDrop.vue'
-import BatchActions from './SelectedResources/BatchActions.vue'
-import InfoSelectedResources from './SelectedResources/Info.vue'
+import SizeInfo from './SelectedResources/SizeInfo.vue'
 
 export default {
   components: {
+    BatchActions,
+    FileDrop,
     FileUpload,
     FolderUpload,
-    FileDrop,
-    BatchActions,
-    InfoSelectedResources
+    SizeInfo
   },
   mixins: [Mixins, MixinFileActions, MixinRoutes, MixinScrollToResource],
   data: () => ({

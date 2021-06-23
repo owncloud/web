@@ -26,18 +26,18 @@
         />
         <template v-if="$_ownerAsCollaborator">
           <p id="original-sharing-user" v-translate class="oc-invisible-sr">File owner</p>
-          <collaborator
+          <show-collaborator
             :collaborator="$_ownerAsCollaborator"
             aria-describedby="original-sharing-user"
           />
           <hr />
-          <collaborator :collaborator="$_currentUserAsCollaborator" />
+          <show-collaborator :collaborator="$_currentUserAsCollaborator" />
         </template>
         <template v-else>
           <p id="collaborator-as-fileowner" v-translate class="oc-invisible-sr">
             You are the file owner
           </p>
-          <collaborator
+          <show-collaborator
             :collaborator="$_currentUserAsCollaborator"
             aria-describedby="collaborator-as-fileowner"
           />
@@ -53,7 +53,7 @@
           :aria-label="$gettext('Share receivers')"
         >
           <li v-for="collaborator in collaborators" :key="collaborator.key">
-            <collaborator
+            <show-collaborator
               :collaborator="collaborator"
               :modifiable="!collaborator.indirect"
               @onDelete="$_ocCollaborators_deleteShare"
@@ -89,9 +89,9 @@ import { shareTypes, userShareTypes } from '../../../helpers/shareTypes'
 import { getParentPaths } from '../../../helpers/path'
 import { dirname } from 'path'
 import { bitmaskToRole, permissionsBitmask } from '../../../helpers/collaborators'
-import NewCollaborator from './Collaborators/NewCollaborator.vue'
 import EditCollaborator from './Collaborators/EditCollaborator.vue'
-import Collaborator from './Collaborators/Collaborator.vue'
+import NewCollaborator from './Collaborators/NewCollaborator.vue'
+import ShowCollaborator from './Collaborators/ShowCollaborator.vue'
 
 const PANEL_SHOW = 'showCollaborators'
 const PANEL_EDIT = 'editCollaborator'
@@ -103,9 +103,9 @@ export default {
   },
   name: 'SharingAccordion',
   components: {
-    NewCollaborator,
     EditCollaborator,
-    Collaborator
+    NewCollaborator,
+    ShowCollaborator
   },
   mixins: [Mixins],
   data() {
