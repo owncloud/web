@@ -18,6 +18,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 
 
 ### [Exit page re-appears in loop when logged in user is deleted](https://github.com/owncloud/web/issues/4677)
+-   [webUILogin/openidLogin.feature:42](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/openidLogin.feature#L42)
 -   [webUILogin/openidLogin.feature:53](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/openidLogin.feature#L53)
 
 ### [User request using token and basic authentication gives different display names](https://github.com/owncloud/ocis/issues/1312)
