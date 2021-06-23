@@ -142,6 +142,7 @@ config = {
             },
             "visualTesting": True,
             "screenShots": True,
+            "skip": True,
         },
         "webUINotification": {
             "type": NOTIFICATIONS,
@@ -175,6 +176,7 @@ config = {
             "notificationsAppNeeded": True,
             "federatedServerNeeded": True,
             "federatedServerVersion": "daily-master-qa",
+            "skip": True,
         },
         "webUI-XGA-Notifications": {
             "type": NOTIFICATIONS,
@@ -191,6 +193,7 @@ config = {
             },
             "notificationsAppNeeded": True,
             "filterTags": "@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10",
+            "skip": True,
         },
         "webUI-XGA": {
             "type": FULL,
@@ -272,6 +275,7 @@ config = {
                 "SCREEN_RESOLUTION": "768x1024",
             },
             "filterTags": "@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10",
+            "skip": True,
         },
         "webUI-Notifications-iPhone": {
             "type": NOTIFICATIONS,
@@ -288,6 +292,7 @@ config = {
             },
             "notificationsAppNeeded": True,
             "filterTags": "@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10",
+            "skip": True,
         },
         "webUI-iPhone": {
             "type": FULL,
@@ -369,6 +374,7 @@ config = {
                 "SCREEN_RESOLUTION": "375x812",
             },
             "filterTags": "@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10",
+            "skip": True,
         },
         "webUI-ocis": {
             "type": FULL,
@@ -421,12 +427,7 @@ config = {
                     "webUISharingAutocompletion",
                     "webUISharingInternalUsersExpire",
                 ],
-                "oCISSharingInternalUsers2": [
-                    "webUISharingInternalUsersBlacklisted",
-                    "webUISharingInternalUsersCollaborator",
-                    "webUISharingInternalUsersShareWithPage",
-                    "webUISharingInternalUsersSharingIndicator",
-                ],
+                "webUISharingInternalUsersShareWithPage": "oCISSharingInternalUsers2",
                 "oCISSharingPermissions1": [
                     "webUISharingPermissionsUsers",
                     "webUISharingFilePermissionsGroups",
@@ -474,6 +475,7 @@ config = {
             "runningOnOCIS": True,
             "visualTesting": True,
             "filterTags": "not @skip and not @skipOnOCIS and not @notToImplementOnOCIS",
+            "debugSuites": ["webUISharingInternalUsersShareWithPage"],
         },
         "webUI-notifications-oc10-integration": {
             "type": NOTIFICATIONS,
@@ -493,6 +495,7 @@ config = {
             "oc10IntegrationAppIncluded": True,
             "notificationsAppNeeded": True,
             "screenShots": True,
+            "skip": True,
         },
         "webUI-oc10-integration": {
             "type": FULL,
@@ -577,6 +580,7 @@ config = {
             "filterTags": "not @skip and not @skipOnOC10 and not @openIdLogin and @smokeTest",
             "oc10IntegrationAppIncluded": True,
             "screenShots": True,
+            "skip": True,
         },
     },
     "build": True,
