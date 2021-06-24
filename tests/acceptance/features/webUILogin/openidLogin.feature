@@ -62,7 +62,7 @@ Feature: login users
   Scenario: the user session of a deleted user should not be valid for newly created user of same name
     Given user "Alice" has logged in using the webUI
     And user "Alice" has been deleted
-    And user "Alice" has been created with default attributes
+    And user "Alice" has been created with default attributes and without skeleton files
     When the user reloads the current page of the webUI
     Then the user should be redirected to the login error page
     When the user exits the login error page

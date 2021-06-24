@@ -95,7 +95,7 @@
             </ul>
           </oc-drop>
         </template>
-        <info-selected-resources v-if="selectedFiles.length > 0" class="oc-mr-s uk-visible@l" />
+        <size-info v-if="selectedFiles.length > 0" class="oc-mr-s uk-visible@l" />
         <batch-actions />
       </div>
     </div>
@@ -107,25 +107,25 @@ import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
 import pathUtil from 'path'
 import isEmpty from 'lodash-es/isEmpty'
 
-import Mixins from '../mixins'
-import MixinFileActions, { EDITOR_MODE_CREATE } from '../mixins/fileActions'
-import MixinRoutes from '../mixins/routes'
-import MixinScrollToResource from '../mixins/filesListScrolling'
-import { buildResource } from '../helpers/resources'
+import Mixins from '../../mixins'
+import MixinFileActions, { EDITOR_MODE_CREATE } from '../../mixins/fileActions'
+import MixinRoutes from '../../mixins/routes'
+import MixinScrollToResource from '../../mixins/filesListScrolling'
+import { buildResource } from '../../helpers/resources'
 
-import FileUpload from './FileUpload.vue'
-import FolderUpload from './FolderUpload.vue'
-import FileDrop from './FileDrop.vue'
-import BatchActions from './BatchActions.vue'
-import InfoSelectedResources from './InfoSelectedResources.vue'
+import BatchActions from './SelectedResources/BatchActions.vue'
+import FileDrop from './Upload/FileDrop.vue'
+import FileUpload from './Upload/FileUpload.vue'
+import FolderUpload from './Upload/FolderUpload.vue'
+import SizeInfo from './SelectedResources/SizeInfo.vue'
 
 export default {
   components: {
+    BatchActions,
+    FileDrop,
     FileUpload,
     FolderUpload,
-    FileDrop,
-    BatchActions,
-    InfoSelectedResources
+    SizeInfo
   },
   mixins: [Mixins, MixinFileActions, MixinRoutes, MixinScrollToResource],
   data: () => ({
@@ -498,7 +498,7 @@ export default {
         this.UPSERT_RESOURCE(resource)
 
         if (this.isPersonalRoute) {
-          await this.loadIndicators({
+          this.loadIndicators({
             client: this.$client,
             currentFolder: this.currentFolder.path,
             encodePath: this.encodePath

@@ -1,0 +1,8 @@
+Bugfix: Remove unnecessary Propfind requests
+
+in the the files-app views `Favorites`, `SharedViaLink`, `SharedWithMe` and `SharedWithOthers`
+we did a unnecessary propfind request to obtain the rootFolder which is not required there.
+
+This has been fixed by removing those requests.
+
+https://github.com/owncloud/web/pull/5340

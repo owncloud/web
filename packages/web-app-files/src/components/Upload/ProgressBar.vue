@@ -56,23 +56,23 @@
         </translate>
       </div>
     </oc-grid>
-    <upload-menu
+    <details-widget
       v-if="expanded"
       :items="inProgress"
-      class="uk-width-expand oc-upload-menu-scrollable"
+      class="uk-width-expand oc-upload-details-scrollable"
     />
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import UploadMenu from './UploadMenu.vue'
-import Mixins from '../mixins'
+import DetailsWidget from './DetailsWidget.vue'
+import Mixins from '../../mixins'
 
 export default {
   name: 'UploadProgress',
   components: {
-    UploadMenu
+    DetailsWidget
   },
   mixins: [Mixins],
   data() {
@@ -162,7 +162,7 @@ export default {
   background-color: var(--oc-color-background-muted);
 }
 /* FIXME: move to ODS somehow? with the very specific max-height it probably doesn't make a generic css class from it... */
-.oc-upload-menu-scrollable {
+.oc-upload-details-scrollable {
   max-height: 200px;
   overflow: auto;
   -webkit-overflow-scrolling: touch;

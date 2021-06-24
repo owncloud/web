@@ -1,28 +1,31 @@
 <template>
   <div>
     <oc-button class="uk-width-1-1" justify-content="left" appearance="raw" @click="triggerUpload">
-      <oc-icon name="file_upload" />
-      <span id="files-file-upload-button" v-translate>Upload File</span>
+      <oc-icon name="cloud_upload" />
+      <span id="files-folder-upload-button" v-translate>Upload Folder</span>
     </oc-button>
     <input
-      id="fileUploadInput"
+      id="folderUploadInput"
       ref="input"
       type="file"
-      aria-labelledby="files-file-upload-button"
-      name="file"
-      multiple
+      name="folder"
+      aria-labelledby="files-folder-upload-button"
+      webkitdirectory
+      mozdirectory
+      allowdirs
       tabindex="-1"
-      @change="$_ocUpload_addFileToQue"
+      @change="$_ocUpload_addDirectoryToQue"
     />
   </div>
 </template>
 
 <script>
-import Mixins from '../mixins'
+import Mixins from '../../../mixins'
 
 export default {
   mixins: [Mixins],
   props: {
+    rootPath: { type: String, required: true },
     path: { type: String, required: true },
     headers: {
       type: Object,
@@ -47,7 +50,7 @@ export default {
 </script>
 
 <style scoped="true">
-#fileUploadInput {
+#folderUploadInput {
   position: absolute;
   left: -99999px;
 }

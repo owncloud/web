@@ -24,7 +24,7 @@
 <script>
 import { mapGetters } from 'vuex'
 
-import FileActions from '../../mixins/fileActions'
+import FileActions from '../../../mixins/fileActions'
 
 export default {
   name: 'ActionsAccordion',

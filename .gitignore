@@ -36,6 +36,10 @@ tests/testing-app
 /tests/vrt/diff
 /tests/vrt/latest
 
+# acceptance test artifacts
+logfile.txt
+comments.file
+
 # drone CI is in .drone.star, do not let someone accidentally commit a local .drone.yml
 .drone.yml
 

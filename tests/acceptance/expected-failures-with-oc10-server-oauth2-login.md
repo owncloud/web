@@ -97,6 +97,14 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIFilesSearch/search.feature:63](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesSearch/search.feature#L63)
 -   [webUIFilesSearch/search.feature:71](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesSearch/search.feature#L71)
 -   [webUIFilesSearch/search.feature:84](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesSearch/search.feature#L84)
+-   [webUITags/tagsSuggestion.feature:25](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITags/tagsSuggestion.feature#L25)
+-   [webUITags/tagsSuggestion.feature:35](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITags/tagsSuggestion.feature#L35)
+-   [webUITags/createTags.feature:16](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITags/createTags.feature#L16)
+-   [webUITags/createTags.feature:26](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITags/createTags.feature#L26)
+-   [webUITags/createTags.feature:37](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITags/createTags.feature#L37)
+-   [webUITags/createTags.feature:51](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITags/createTags.feature#L51)
+-   [webUITags/createTags.feature:61](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITags/createTags.feature#L61)
+-   [webUITags/createTags.feature:79](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITags/createTags.feature#L79)
 
 ### [When a user shares folder to a group, the sharer is shown as group in group member's sharing-sidebar] (https://github.com/owncloud/web/issues/5216)
 -   [webUISharingInternalGroupsEdgeCases/shareWithGroupsEdgeCases.feature:41](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroupsEdgeCases/shareWithGroupsEdgeCases.feature#L41)
@@ -107,3 +115,20 @@ Other free text and markdown formatting can be used elsewhere in the document if
 ### [File link in notifications seems to not work] (https://github.com/owncloud/web/issues/5227)
 -   [webUISharingNotifications/notificationLink.feature:18](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingNotifications/notificationLink.feature#L18)
 -   [webUISharingNotificationsToRoot/notificationLink.feature:17](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingNotificationsToRoot/notificationLink.feature#L17)
+
+### [Cannot determine share source path when sharing same name file from different path in shared-with pages] (https://github.com/owncloud/web/issues/5302)
+-   [webUISharingPublicBasic/publicLinkCreate.feature:88](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicBasic/publicLinkCreate.feature#L88)
+
+### [impossible to navigate into a folder in the trashbin] (https://github.com/owncloud/web/issues/1725)
+-   [webUITrashbinDelete/trashbinDelete.feature:29](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITrashbinDelete/trashbinDelete.feature#L29)
+
+### [Saving public share is not possible] (https://github.com/owncloud/web/issues/5321)
+-   [webUISharingPublicManagement/shareByPublicLink.feature:31](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicManagement/shareByPublicLink.feature#L31)
+
+### [Public link send by email field] (https://github.com/owncloud/web/issues/2422)
+-   [webUISharingPublicManagement/publicLinkShareByEmail.feature:15](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicManagement/publicLinkShareByEmail.feature#L15)
+-   [webUISharingPublicManagement/publicLinkShareByEmail.feature:25](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicManagement/publicLinkShareByEmail.feature#L25)
+-   [webUISharingPublicManagement/publicLinkShareByEmail.feature:41](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicManagement/publicLinkShareByEmail.feature#L41)
+-   [webUISharingPublicManagement/publicLinkShareByEmail.feature:56](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicManagement/publicLinkShareByEmail.feature#L56)
+-   [webUISharingPublicManagement/publicLinkShareByEmail.feature:71](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicManagement/publicLinkShareByEmail.feature#L71)
+-   [webUISharingPublicManagement/publicLinkShareByEmail.feature:99](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicManagement/publicLinkShareByEmail.feature#L99)

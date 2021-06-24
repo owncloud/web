@@ -84,7 +84,7 @@ Feature: Edit public link shares
       | read, update, create, delete | Uploader    | shareapi_enforce_links_password_read_write_delete | create                       |
       | create                       | Editor      | shareapi_enforce_links_password_write_only        | read, update, create, delete |
 
-  @yetToImplement @issue-ocis-reva-41
+  @issue-ocis-reva-41
   Scenario: user edits a public link and does not save the changes
     Given the setting "shareapi_allow_public_notification" of app "core" has been set to "yes"
     And user "Alice" has created folder "simple-folder"
@@ -92,7 +92,6 @@ Feature: Edit public link shares
       | path     | simple-folder    |
       | name     | test_public_link |
       | password | pass123          |
-#      | email     | foo1234@bar.co   |
     And user "Alice" has logged in using the webUI
     When the user edits the public link named "test_public_link" of folder "simple-folder" changing following but not saving
       | password | qwertyui |
@@ -188,17 +187,21 @@ Feature: Edit public link shares
     When the user removes the public link named "Public-link" of file "lorem.txt" using the webUI
     Then user "Alice" should not have any public link
 
-  @skip @yetToImplement
-  Scenario: user edits the permission of an already existing public link from read-write to upload-write-without-overwrite
+
+  Scenario: user edits the permission of an already existing public link from read-write to read-create
     Given user "Alice" has created folder "simple-folder"
-    And user "Alice" has created file "simple-folder/lorem.txt"
-    And the user has created a new public link for folder "simple-folder" using the webUI with
-      | permission | read-write |
-    When the user changes the permission of the public link named "Public link" to "upload-write-without-modify"
-    And the public accesses the last created public link using the webUI
-    And the user uploads file "lorem.txt" keeping both new and existing files using the webUI
-    Then file "lorem.txt" should be listed on the webUI
-    And file "lorem (2).txt" should be listed on the webUI
+    And user "Alice" has created file "simple-folder/simple.txt"
+    And user "Alice" has created a public link with following settings
+      | path        | simple-folder                |
+      | name        | Public-link                  |
+      | permissions | read, update, create, delete |
+    And user "Alice" has logged in using the webUI
+    When the user edits the public link named "Public-link" of folder "simple-folder" changing following
+      | role | Contributor |
+    And the public uses the webUI to access the last public link created by user "Alice"
+    And the user uploads file "lorem.txt" using the webUI
+    Then file "simple.txt" should be listed on the webUI
+    And file "lorem.txt" should be listed on the webUI
 
 
   Scenario: assign password to already created public share

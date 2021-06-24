@@ -69,13 +69,15 @@
 
 <script>
 import filterObject from 'filter-obj'
-import { mapGetters, mapActions } from 'vuex'
 import moment from 'moment'
-import { roleToBitmask, bitmaskToRole } from '../../helpers/collaborators'
-import { shareTypes } from '../../helpers/shareTypes'
-import Collaborator from './Collaborator.vue'
+
+import { mapGetters, mapActions } from 'vuex'
+import { roleToBitmask, bitmaskToRole } from '../../../../helpers/collaborators'
+import { shareTypes } from '../../../../helpers/shareTypes'
+import Mixins from '../../../../mixins/collaborators'
+
+import Collaborator from './ShowCollaborator.vue'
 import CollaboratorsEditOptions from './CollaboratorsEditOptions.vue'
-import Mixins from '../../mixins/collaborators'
 
 export default {
   name: 'EditCollaborator',

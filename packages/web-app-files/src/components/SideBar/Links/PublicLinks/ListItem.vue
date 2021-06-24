@@ -9,14 +9,14 @@
 </template>
 
 <script>
-import LinkInfo from './LinkInfo.vue'
 import LinkActions from './LinkActions.vue'
+import LinkInfo from './LinkInfo.vue'
 
 export default {
   name: 'PublicLinkListItem',
   components: {
-    LinkInfo,
-    LinkActions
+    LinkActions,
+    LinkInfo
   },
   props: {
     link: {

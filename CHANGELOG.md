@@ -3,7 +3,32 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v3.2.0...master
+[unreleased]: https://github.com/owncloud/web/compare/v3.3.0...master
+
+Summary
+-------
+
+* Bugfix - Remove unnecessary Propfind requests: [#5340](https://github.com/owncloud/web/pull/5340)
+
+Details
+-------
+
+* Bugfix - Remove unnecessary Propfind requests: [#5340](https://github.com/owncloud/web/pull/5340)
+
+   In the the files-app views `Favorites`, `SharedViaLink`, `SharedWithMe` and
+   `SharedWithOthers` we did a unnecessary propfind request to obtain the rootFolder which is
+   not required there.
+
+   This has been fixed by removing those requests.
+
+   https://github.com/owncloud/web/pull/5340
+
+Changelog for ownCloud Web [3.3.0] (2021-06-23)
+=======================================
+The following sections list the changes in ownCloud web 3.3.0 relevant to
+ownCloud admins and users.
+
+[3.3.0]: https://github.com/owncloud/web/compare/v3.2.0...v3.3.0
 
 Summary
 -------
@@ -48,6 +73,7 @@ Summary
 * Enhancement - Send focus to "Add people" btn after closing Add/Edit panels: [#5129](https://github.com/owncloud/web/pull/5129)
 * Enhancement - Remove autoclose on notifications: [#5040](https://github.com/owncloud/web/pull/5040)
 * Enhancement - Request cancellation: [#5163](https://github.com/owncloud/web/issues/5163)
+* Enhancement - Ability to update file resource fields: [#5311](https://github.com/owncloud/web/pull/5311)
 * Enhancement - Use `oc-select` for role select: [#4937](https://github.com/owncloud/web/pull/4937)
 * Enhancement - Add focus trap to left sidebar: [#5027](https://github.com/owncloud/web/pull/5027)
 * Enhancement - Improve accessibility on trash bin: [#5046](https://github.com/owncloud/web/pull/5046)
@@ -397,6 +423,13 @@ Details
 
    https://github.com/owncloud/web/issues/5163
    https://github.com/owncloud/web/pull/5194
+
+* Enhancement - Ability to update file resource fields: [#5311](https://github.com/owncloud/web/pull/5311)
+
+   We've introduced the ability to update individual resource fields only instead of updating
+   the whole resource at once.
+
+   https://github.com/owncloud/web/pull/5311
 
 * Enhancement - Use `oc-select` for role select: [#4937](https://github.com/owncloud/web/pull/4937)
 

@@ -56,10 +56,10 @@ import FileActions from '../mixins/fileActions'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
 import MixinFilesListPagination from '../mixins/filesListPagination'
 
-import QuickActions from '../components/FilesLists/QuickActions.vue'
-import ListLoader from '../components/ListLoader.vue'
-import NoContentMessage from '../components/NoContentMessage.vue'
-import ListInfo from '../components/FilesListFooterInfo.vue'
+import QuickActions from '../components/FilesList/QuickActions.vue'
+import ListLoader from '../components/FilesList/ListLoader.vue'
+import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
+import ListInfo from '../components/FilesList/ListInfo.vue'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension } from '../constants'
 import debounce from 'lodash-es/debounce'
@@ -171,10 +171,9 @@ export default {
       this.CLEAR_CURRENT_FILES_LIST()
 
       let resources = await this.$client.files.getFavoriteFiles(this.davProperties)
-      const rootFolder = await this.$client.files.fileInfo('/', this.davProperties)
 
       resources = resources.map(buildResource)
-      this.LOAD_FILES({ currentFolder: buildResource(rootFolder), files: resources })
+      this.LOAD_FILES({ currentFolder: null, files: resources })
       this.loadIndicators({ client: this.$client, currentFolder: '/' })
 
       // Load quota

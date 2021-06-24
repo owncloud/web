@@ -27,38 +27,23 @@ Feature: Public link share management
     When the public uses the webUI to access the last public link created by user "Alice"
     Then the user should be redirected to the files-drop page
 
-  @skip @yetToImplement
+  @issue-5321
   Scenario: mount public link
-    Given using server "REMOTE"
-    And user "Brian" has been created with default attributes
-    When the user creates a new public link for folder "simple-folder" using the webUI
-    And the user logs out of the webUI
-    And the public accesses the last created public link using the webUI
+    Given user "Brian" has been created with default attributes and without skeleton files
+    And user "Alice" has uploaded file with content "Alice file" to "simple-folder/lorem.txt"
+    And user "Alice" has created a public link with following settings
+      | path        | simple-folder                |
+      | name        | Public-link                  |
+      | permissions | read, update, create, delete |
+    When the public uses the webUI to access the last public link created by user "Alice"
     And the public adds the public link to "%remote_server%" as user "Brian" with password "%alt2%" using the webUI
-    And the user accepts the offered remote shares using the webUI
-    Then folder "simple-folder (2)" should be listed on the webUI
-    When the user opens folder "simple-folder (2)" using the webUI
+    Then folder "simple-folder" should be listed on the webUI
+    When the user opens folder "simple-folder" using the webUI
     Then file "lorem.txt" should be listed on the webUI
-    And the content of "lorem.txt" on the remote server should be the same as the original "simple-folder/lorem.txt"
-    And it should not be possible to delete file "lorem.txt" using the webUI
-
-  @skip @yetToImplement
-  Scenario: mount public link and overwrite file
-    Given using server "REMOTE"
-    And user "Brian" has been created with default attributes
-    When the user creates a new public link for folder "simple-folder" using the webUI with
-      | permission | read-write |
-    And the user logs out of the webUI
-    And the public accesses the last created public link using the webUI
-    And the public adds the public link to "%remote_server%" as user "Brian" with password "%alt2%" using the webUI
-    And the user accepts the offered remote shares using the webUI
-    Then folder "simple-folder (2)" should be listed on the webUI
-    When the user opens folder "simple-folder (2)" using the webUI
+    And the content of file "simple-folder/lorem.txt" for user "Brian" should be "Alice file"
+    When the user uploads overwriting file "lorem.txt" using the webUI
     Then file "lorem.txt" should be listed on the webUI
-    And the content of "lorem.txt" on the remote server should be the same as the original "simple-folder/lorem.txt"
-    When the user uploads overwriting file "lorem.txt" using the webUI and retries if the file is locked
-    Then file "lorem.txt" should be listed on the webUI
-    And the content of "lorem.txt" on the remote server should be the same as the local "lorem.txt"
+    And as "Brian" the content of "simple-folder/lorem.txt" should be the same as the local "lorem.txt"
 
   @issue-ocis-reva-41
   Scenario: user shares a file through public link and then it appears in a shared-with-others page
@@ -78,13 +63,16 @@ Feature: Public link share management
       | fileName      | expectedCollaborators    |
       | simple-folder | link-editor, link-viewer |
 
-  @skip @yetToImplement
+
   Scenario: user cancel removes operation for the public link of a file
     Given user "Alice" has created file "lorem.txt"
-    And the user has created a new public link for file "lorem.txt" using the webUI
-    When the user tries to remove the public link of file "lorem.txt" but later cancels the remove dialog using webUI
-    And the public accesses the last created public link using the webUI
-    Then the content of the file shared by the last public link should be the same as "lorem.txt"
+    And user "Alice" has logged in using the webUI
+    And user "Alice" has created a public link with following settings
+      | path        | lorem.txt   |
+      | name        | Public-link |
+      | permissions | read        |
+    When the user cancels remove the public link named "Public-link" of file "lorem.txt" using the webUI
+    Then user "Alice" should have some public shares
 
   @ocisSmokeTest
   Scenario: user browses to public link share using copy link button

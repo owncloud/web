@@ -260,7 +260,7 @@ Feature: Restore deleted files/folders
   Scenario: delete and restore a file inside a received shared folder
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And the administrator has set the default folder for received shares to "Shares"
-    And user "Carol" has been created with default attributes
+    And user "Carol" has been created with default attributes and without skeleton files
     And user "Carol" has created folder "folder-to-share"
     And user "Carol" has uploaded file with content "does-not-matter" to "folder-to-share/fileToShare.txt"
     And user "Carol" has shared folder "folder-to-share" with user "Alice"

@@ -253,7 +253,7 @@ Feature: accept/decline shares coming from internal users
 
 
   Scenario: receive shares with same name from different users
-    Given user "Carol" has been created with default attributes
+    Given user "Carol" has been created with default attributes and without skeleton files
     And the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And user "Alice" has created file "lorem.txt"
     And user "Carol" has created file "lorem.txt"

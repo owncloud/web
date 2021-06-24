@@ -74,16 +74,16 @@
 </template>
 
 <script>
-import Mixins from '../mixins'
-import MixinResources from '../mixins/resources'
-import MixinRoutes from '../mixins/routes'
+import Mixins from '../../mixins'
+import MixinResources from '../../mixins/resources'
+import MixinRoutes from '../../mixins/routes'
 import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
 
-import ActionsAccordion from './Sidebar/ActionsAccordion.vue'
+import FileActions from './Actions/FileActions.vue'
 
 export default {
   components: {
-    ActionsAccordion
+    FileActions
   },
   mixins: [Mixins, MixinResources, MixinRoutes],
   computed: {
@@ -94,8 +94,8 @@ export default {
     accordions() {
       const accordions = [
         {
-          app: 'files-actions',
-          component: ActionsAccordion,
+          app: 'sidebar-actions-item',
+          component: FileActions,
           icon: 'slideshow'
         }
       ]
@@ -206,7 +206,7 @@ export default {
     },
 
     expandActionsAccordion() {
-      this.SET_APP_SIDEBAR_EXPANDED_ACCORDION('files-actions')
+      this.SET_APP_SIDEBAR_EXPANDED_ACCORDION('sidebar-actions-item')
     },
 
     onClickOutside(event) {

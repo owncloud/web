@@ -39,7 +39,7 @@
           tag="ul"
         >
           <li v-for="link in links" :key="link.key">
-            <public-link-list-item :link="link" />
+            <list-item :link="link" />
           </li>
         </transition-group>
         <p
@@ -58,31 +58,31 @@
         leave-active-class="uk-animation-slide-right uk-animation-reverse uk-animation-fast"
         name="custom-classes-transition"
       >
-        <edit-public-link />
+        <link-edit />
       </transition>
     </div>
   </div>
 </template>
 <script>
-import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import moment from 'moment'
-import mixins from '../mixins'
-import { shareTypes } from '../helpers/shareTypes'
-import { getParentPaths } from '../helpers/path'
 import { dirname } from 'path'
-import { textUtils } from '../helpers/textUtils'
-import { cloneStateObject } from '../helpers/store'
-import PrivateLinkItem from './PublicLinksSidebar/PrivateLinkItem.vue'
-import EditPublicLink from './PublicLinksSidebar/EditPublicLink.vue'
-import PublicLinkListItem from './PublicLinksSidebar/PublicLinkListItem.vue'
+import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
+import mixins from '../../../mixins'
+import { shareTypes } from '../../../helpers/shareTypes'
+import { getParentPaths } from '../../../helpers/path'
+import { textUtils } from '../../../helpers/textUtils'
+import { cloneStateObject } from '../../../helpers/store'
+import LinkEdit from './PublicLinks/LinkEdit.vue'
+import ListItem from './PublicLinks/ListItem.vue'
+import PrivateLinkItem from './PrivateLinkItem.vue'
 
 const PANEL_SHOW = 'showLinks'
 const PANEL_EDIT = 'editPublicLink'
 
 export default {
   components: {
-    EditPublicLink,
-    PublicLinkListItem,
+    LinkEdit,
+    ListItem,
     PrivateLinkItem
   },
   mixins: [mixins],

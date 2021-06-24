@@ -11,7 +11,7 @@ Feature: Share public link shares via email
     And user "Alice" has logged in using the webUI
     And the user reloads the current page of the webUI
 
-  @skip @yetToImplement
+  @issue-2422
   Scenario: user shares a public link via email
     When the user creates a new public link for folder "simple-folder" using the webUI with
       | email | foo@bar.co |
@@ -21,7 +21,7 @@ Feature: Share public link shares via email
       """
     And the email address "foo@bar.co" should have received an email containing the last shared public link
 
-  @skip @yetToImplement
+  @issue-2422
   Scenario: user shares a public link via email and sends a copy to self
     When the user creates a new public link for folder "simple-folder" using the webUI with
       | email       | foo@bar.co |
@@ -37,7 +37,7 @@ Feature: Share public link shares via email
     And the email address "foo@bar.co" should have received an email containing the last shared public link
     And the email address "alice@example.org" should have received an email containing the last shared public link
 
-  @skip @yetToImplement
+  @issue-2422
   Scenario: user shares a public link via email with multiple addresses
     When the user creates a new public link for folder "simple-folder" using the webUI with
       | email | foo@bar.co, foo@barr.co |
@@ -52,7 +52,7 @@ Feature: Share public link shares via email
     And the email address "foo@bar.co" should have received an email containing the last shared public link
     And the email address "foo@barr.co" should have received an email containing the last shared public link
 
-  @skip @yetToImplement
+  @issue-2422
   Scenario: user shares a public link via email with a personal message
     When the user creates a new public link for folder "simple-folder" using the webUI with
       | email           | foo@bar.co  |
@@ -67,7 +67,7 @@ Feature: Share public link shares via email
       """
     And the email address "foo@bar.co" should have received an email containing the last shared public link
 
-  @skip @yetToImplement
+  @issue-2422
   Scenario: user shares a public link via email adding few addresses before and then removing some addresses afterwards
     When the user opens the link share dialog for folder "simple-folder" using the webUI
     And the user opens the create public link share popup
@@ -95,7 +95,7 @@ Feature: Share public link shares via email
     But the email address "foo1234@bar.co" should not have received an email
     And the email address "foo5678@barr.co" should not have received an email
 
-  @skip @yetToImplement @issue-ocis-reva-41
+  @issue-2422 @issue-ocis-reva-41
   Scenario: user shares a public link via email with a personal message (duplicate)
     When the user creates a new public link for folder "simple-folder" using the webUI with
       | email           | foo@bar.co  |

@@ -4,7 +4,6 @@ const backendHelper = require('./backendHelper')
 const convert = require('xml-js')
 const _ = require('lodash/object')
 const { normalize, join, filename } = require('../helpers/path')
-const occHelper = require('../helpers/occHelper')
 
 const uploadTimeStamps = {}
 const deleteTimestamps = {}
@@ -241,21 +240,6 @@ exports.getProperties = function(path, userId, requestedProps) {
       return resolve(properties)
     })
   })
-}
-
-exports.getSkeletonFile = function(filename) {
-  return occHelper
-    .runOcc(['config:system:get', 'skeletondirectory'])
-    .then(resp => resp.ocs.data.stdOut)
-    .then(dir => {
-      const element = join(dir.trim(), filename)
-      const apiURL = `apps/testing/api/v1/file?file=${encodeURIComponent(element)}&absolute=true`
-      return httpHelper.getOCS(apiURL, 'admin')
-    })
-    .then(res => res.json())
-    .then(body => {
-      return decodeURIComponent(body.ocs.data[0].contentUrlEncoded)
-    })
 }
 
 exports.getFavouritedResources = function(user) {

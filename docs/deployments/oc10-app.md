@@ -29,11 +29,20 @@ Within the `Admin` page of ownCloud 10, head into `User Authentication` and add 
 {{< figure src="/clients/web/static/oauth2.jpg" alt="Example OAuth2 entry" >}}
 
 ## Configure ownCloud 10
-To display ownCloud Web in the app switcher and to redirect all private and public links to the new WebUI, add the following config into `config/config.php`:
+### Set ownCloud Web address
+To set the ownCloud Web address and to display ownCloud Web in the app switcher, add the following line into `config/config.php`:
 
 ```php
 'web.baseUrl' => 'https://<your-owncloud-server>/index.php/apps/web',
 ```
+
+### Configure link routing
+Administrators can optionally decide whether ownCloud Links (public and private links) should be provided by the Classic web interface or by ownCloud Web using the `web.rewriteLinks` option in `config/config.php`. The option defaults to `false` so that the links open in the Classic web interface. Setting it to `true` will redirect all links to ownCloud Web. To redirect all private and public links to ownCloud Web, add the following line into `config/config.php`:
+
+```php
+'web.rewriteLinks' => 'true',
+```
+
 ## Configure ownCloud Web
 There are a few config values which need to be set in order for ownCloud Web to work correctly. Please copy the example config below into `config/config.json` and adjust it for your environment:
 

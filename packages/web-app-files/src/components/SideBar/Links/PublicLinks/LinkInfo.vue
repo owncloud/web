@@ -59,8 +59,8 @@
 
 <script>
 import { basename, dirname } from 'path'
-import Mixins from '../../mixins'
-import CopyToClipboardButton from './CopyToClipboardButton.vue'
+import Mixins from '../../../../mixins'
+import CopyToClipboardButton from '../CopyToClipboardButton.vue'
 
 export default {
   name: 'LinkInfo',

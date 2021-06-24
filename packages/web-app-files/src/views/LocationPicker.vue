@@ -84,9 +84,9 @@ import MixinsGeneral from '../mixins'
 import MixinRoutes from '../mixins/routes'
 import MixinFilesListPagination from '../mixins/filesListPagination'
 
-import NoContentMessage from '../components/NoContentMessage.vue'
-import ListLoader from '../components/ListLoader.vue'
-import ListInfo from '../components/FilesListFooterInfo.vue'
+import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
+import ListLoader from '../components/FilesList/ListLoader.vue'
+import ListInfo from '../components/FilesList/ListInfo.vue'
 
 export default {
   metaInfo() {
@@ -312,7 +312,10 @@ export default {
         : await this.$client.files.list(target, 1, this.davProperties)
 
       this.loadFiles({ currentFolder: resources[0], files: resources.slice(1) })
-      this.loadIndicators({ client: this.$client, currentFolder: this.$route.params.item || '/' })
+      this.loadIndicators({
+        client: this.$client,
+        currentFolder: this.$route.params.item || '/'
+      })
       this.adjustTableHeaderPosition()
       this.loading = false
     },

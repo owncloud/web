@@ -155,6 +155,29 @@ module.exports = {
         .waitForOutstandingAjaxCalls()
     },
     /**
+     * cancels remove public link share action
+     *
+     * @param {string} linkName Name of the public link share of a resource to be deleted
+     * @returns {exports}
+     */
+    cancelRemovePublicLink: function(linkName) {
+      const linkRowDeleteButtonSelector =
+        this.elements.publicLinkContainer.selector +
+        util.format(this.elements.publicLinkDeleteButton.selector, linkName)
+      const linkRowDeleteButton = {
+        locateStrategy: this.elements.publicLinkDeleteButton.locateStrategy,
+        selector: linkRowDeleteButtonSelector
+      }
+      return this.waitForElementVisible(linkRowDeleteButton)
+        .initAjaxCounters()
+        .click(linkRowDeleteButton)
+        .waitForElementVisible('@dialog')
+        .waitForAnimationToFinish()
+        .click('@dialogCancelBtn')
+        .waitForAnimationToFinish()
+        .waitForOutstandingAjaxCalls()
+    },
+    /**
      * checks if public link share with given name is present
      *
      * @param {string} linkName - Name of the public link share to be asserted
@@ -443,6 +466,9 @@ module.exports = {
     },
     dialogConfirmBtn: {
       selector: '.oc-modal-body-actions-confirm'
+    },
+    dialogCancelBtn: {
+      selector: '.oc-modal-body-actions-cancel'
     }
   }
 }

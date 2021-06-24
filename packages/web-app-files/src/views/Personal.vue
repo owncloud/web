@@ -64,6 +64,7 @@
 <script>
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 import isNil from 'lodash/isNil'
+import debounce from 'lodash-es/debounce'
 
 import MixinAccessibleBreadcrumb from '../mixins/accessibleBreadcrumb'
 import MixinFileActions from '../mixins/fileActions'
@@ -72,14 +73,13 @@ import MixinFilesListPositioning from '../mixins/filesListPositioning'
 import MixinFilesListPagination from '../mixins/filesListPagination'
 import { buildResource } from '../helpers/resources'
 
-import QuickActions from '../components/FilesLists/QuickActions.vue'
-import ListLoader from '../components/ListLoader.vue'
-import NoContentMessage from '../components/NoContentMessage.vue'
-import NotFoundMessage from '../components/FilesLists/NotFoundMessage.vue'
-import ListInfo from '../components/FilesListFooterInfo.vue'
+import QuickActions from '../components/FilesList/QuickActions.vue'
+import ListLoader from '../components/FilesList/ListLoader.vue'
+import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
+import NotFoundMessage from '../components/FilesList/NotFoundMessage.vue'
+import ListInfo from '../components/FilesList/ListInfo.vue'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension } from '../constants'
-import debounce from 'lodash-es/debounce'
 
 const visibilityObserver = new VisibilityObserver()
 

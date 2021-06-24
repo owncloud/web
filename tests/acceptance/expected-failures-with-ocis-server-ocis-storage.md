@@ -1,4 +1,4 @@
-## Scenarios from web tests that are expected to fail on OCIS with owncloud storage
+## Scenarios from web tests that are expected to fail on OCIS with OCIS storage
 
 Lines that contain a format like "[someSuite.someFeature.feature:n](https://github.com/owncloud/web/path/to/feature)"
 are lines that document a specific expected failure. Follow that with a URL to the line in the feature file in GitHub.
@@ -228,11 +228,11 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUISharingPublicExpire/shareByPublicLinkExpiringLinks.feature:106](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicExpire/shareByPublicLinkExpiringLinks.feature#L106)
 -   [webUISharingPublicExpire/shareByPublicLinkExpiringLinks.feature:130](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicExpire/shareByPublicLinkExpiringLinks.feature#L130)
 -   [webUISharingPublicExpire/shareByPublicLinkExpiringLinks.feature:147](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicExpire/shareByPublicLinkExpiringLinks.feature#L147)
--   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:279](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L279)
--   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:287](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L287)
--   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:296](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L296)
--   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:305](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L305)
--   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:314](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L314)
+-   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:278](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L278)
+-   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:286](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L286)
+-   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:295](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L295)
+-   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:304](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L304)
+-   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:313](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L313)
 
 
 ### [Cannot delete a received share](https://github.com/owncloud/ocis/issues/714)
@@ -309,10 +309,8 @@ Other free text and markdown formatting can be used elsewhere in the document if
 ### [Cannot upload files to the ownCloud storage](https://github.com/owncloud/ocis-reva/issues/398)
 -   [webUISharingPublicBasic/publicLinkPublicActions.feature:12](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicBasic/publicLinkPublicActions.feature#L12)
 
-
-
 ### [Listing shares via ocs API does not show path for parent folders](https://github.com/owncloud/ocis/issues/1231)
--   [webUISharingPublicManagement/shareByPublicLink.feature:146](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicManagement/shareByPublicLink.feature#L146)
+-   [webUISharingPublicManagement/shareByPublicLink.feature:134](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicManagement/shareByPublicLink.feature#L134)
 
 ### [Propfind response to trashbin endpoint is different in ocis](https://github.com/owncloud/product/issues/186)
 ### [restoring a file from "Deleted files" (trashbin) is not possible if the original folder does not exist any-more](https://github.com/owncloud/web/issues/1753)
@@ -421,13 +419,13 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUISharingInternalGroupsSharingIndicator/shareWithGroups.feature:80](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroupsSharingIndicator/shareWithGroups.feature#L80)
 
 ### [Deletion of a recursive folder from trashbin is not possible](https://github.com/owncloud/product/issues/188)
--   [webUITrashbinDelete/trashbinDelete.feature:106](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITrashbinDelete/trashbinDelete.feature#L106)
--   [webUITrashbinDelete/trashbinDelete.feature:86](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITrashbinDelete/trashbinDelete.feature#L86)
--   [webUITrashbinDelete/trashbinDelete.feature:50](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITrashbinDelete/trashbinDelete.feature#L50)
+-   [webUITrashbinDelete/trashbinDelete.feature:105](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITrashbinDelete/trashbinDelete.feature#L105)
+-   [webUITrashbinDelete/trashbinDelete.feature:85](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITrashbinDelete/trashbinDelete.feature#L85)
+-   [webUITrashbinDelete/trashbinDelete.feature:49](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITrashbinDelete/trashbinDelete.feature#L49)
 
 ### [Trying to create a (public) link share of the Shares folder throws an error](https://github.com/owncloud/web/issues/5152)
 -   [webUISharingInternalUsers/shareWithUsers.feature:360](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsers/shareWithUsers.feature#L360)
--   [webUISharingPublicBasic/publicLinkCreate.feature:195](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicBasic/publicLinkCreate.feature#L195)
+-   [webUISharingPublicBasic/publicLinkCreate.feature:187](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicBasic/publicLinkCreate.feature#L187)
 
 ### [Admin settings feature not implemented yet] (https://github.com/owncloud/web/issues/5015)
 -   [webUIAdminSettings/adminAppsSettings.feature:11](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIAdminSettings/adminAppsSettings.feature#L11)
@@ -484,7 +482,32 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIFilesSearch/search.feature:63](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesSearch/search.feature#L63)
 -   [webUIFilesSearch/search.feature:71](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesSearch/search.feature#L71)
 -   [webUIFilesSearch/search.feature:84](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesSearch/search.feature#L84)
+-   [webUITags/tagsSuggestion.feature:25](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITags/tagsSuggestion.feature#L25)
+-   [webUITags/tagsSuggestion.feature:35](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITags/tagsSuggestion.feature#L35)
+-   [webUITags/createTags.feature:16](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITags/createTags.feature#L16)
+-   [webUITags/createTags.feature:26](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITags/createTags.feature#L26)
+-   [webUITags/createTags.feature:37](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITags/createTags.feature#L37)
+-   [webUITags/createTags.feature:51](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITags/createTags.feature#L51)
+-   [webUITags/createTags.feature:61](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITags/createTags.feature#L61)
+-   [webUITags/createTags.feature:79](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITags/createTags.feature#L79)
 
 ### [When a user shares folder to a group, the sharer is shown as group in group member's sharing-sidebar] (https://github.com/owncloud/web/issues/5216)
 -   [webUISharingInternalGroupsEdgeCases/shareWithGroupsEdgeCases.feature:41](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroupsEdgeCases/shareWithGroupsEdgeCases.feature#L41)
 -   [webUISharingInternalGroupsEdgeCases/shareWithGroupsEdgeCases.feature:42](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroupsEdgeCases/shareWithGroupsEdgeCases.feature#L42)
+
+### [Cannot determine share source path when sharing same name file from different path in shared-with pages] (https://github.com/owncloud/web/issues/5302)
+-   [webUISharingPublicBasic/publicLinkCreate.feature:88](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicBasic/publicLinkCreate.feature#L88)
+
+### [impossible to navigate into a folder in the trashbin] (https://github.com/owncloud/web/issues/1725)
+-   [webUITrashbinDelete/trashbinDelete.feature:29](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITrashbinDelete/trashbinDelete.feature#L29)
+
+### [Saving public share is not possible] (https://github.com/owncloud/web/issues/5321)
+-   [webUISharingPublicManagement/shareByPublicLink.feature:31](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicManagement/shareByPublicLink.feature#L31)
+
+### [Public link send by email field] (https://github.com/owncloud/web/issues/2422)
+-   [webUISharingPublicManagement/publicLinkShareByEmail.feature:15](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicManagement/publicLinkShareByEmail.feature#L15)
+-   [webUISharingPublicManagement/publicLinkShareByEmail.feature:25](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicManagement/publicLinkShareByEmail.feature#L25)
+-   [webUISharingPublicManagement/publicLinkShareByEmail.feature:41](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicManagement/publicLinkShareByEmail.feature#L41)
+-   [webUISharingPublicManagement/publicLinkShareByEmail.feature:56](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicManagement/publicLinkShareByEmail.feature#L56)
+-   [webUISharingPublicManagement/publicLinkShareByEmail.feature:71](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicManagement/publicLinkShareByEmail.feature#L71)
+-   [webUISharingPublicManagement/publicLinkShareByEmail.feature:99](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicManagement/publicLinkShareByEmail.feature#L99)

@@ -84,17 +84,16 @@ Feature: Create public link shares
     And the public uses the webUI to access the last public link created by user "Alice"
     Then file "lorem.txt" should be listed on the webUI
 
-  @skip @yetToImplement
+  @issue-5302
   Scenario: share two file with same name but different paths by public link
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has created file "simple-folder/lorem.txt"
     And user "Alice" has created file "lorem.txt"
     And user "Alice" has logged in using the webUI
     When the user creates a new public link for file "lorem.txt" using the webUI
-    And the user closes the details dialog
     And the user opens folder "simple-folder" using the webUI
     And the user creates a new public link for file "lorem.txt" using the webUI
-    And the user browses to the shared-by-link page
+    And the user browses to the shared-via-link page using the webUI
     Then file "lorem.txt" with path "" should be listed in the shared with others page on the webUI
     And file "lorem.txt" with path "/simple-folder" should be listed in the shared with others page on the webUI
 
@@ -152,13 +151,6 @@ Feature: Create public link shares
     And a link named "first-name" should be listed with role "Viewer" in the public link list of file "lorem.txt" on the webUI
     And a link named "second-name" should be listed with role "Viewer" in the public link list of folder "lorem.txt" on the webUI
 
-  @skip @yetToImplement
-  Scenario: user creates public link with view and upload feature
-    Given user "Alice" has created folder "simple-folder"
-    And user "Alice" has logged in using the webUI
-    When the user creates a new public link for folder "simple-folder" using the webUI with
-      | permission | upload-write-without-modify |
-    And the public accesses the last created public link using the webUI
 
   Scenario Outline: user creates multiple public links with same name for the same file/folder
     Given user "Alice" has created <element> "<name>"
