@@ -57,6 +57,7 @@ export function buildResource(resource) {
     })(),
     privateLink: resource.fileInfo['{http://owncloud.org/ns}privatelink'],
     downloadURL: resource.fileInfo['{http://owncloud.org/ns}downloadURL'],
+    ownerDisplayName: resource.fileInfo['{http://owncloud.org/ns}owner-display-name'],
     canUpload: function() {
       return this.permissions.indexOf('C') >= 0
     },

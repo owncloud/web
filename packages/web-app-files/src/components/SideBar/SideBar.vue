@@ -99,6 +99,7 @@ export default {
           icon: 'slideshow'
         }
       ]
+      accordions.splice(0, 0, this.fileSideBars[0])
 
       if (this.isTrashbinRoute) {
         return accordions
@@ -161,7 +162,7 @@ export default {
   watch: {
     highlightedFile: function() {
       if (this.expandedAccordionId === null) {
-        this.expandActionsAccordion()
+        this.expandDetailsAccordion()
       }
       this.$nextTick(() => this.$emit('fileChanged', this, 'fileChanged'))
     }
@@ -173,7 +174,7 @@ export default {
 
   mounted() {
     if (this.expandedAccordionId === null) {
-      this.expandActionsAccordion()
+      this.expandDetailsAccordion()
     }
   },
 
@@ -205,8 +206,8 @@ export default {
       )
     },
 
-    expandActionsAccordion() {
-      this.SET_APP_SIDEBAR_EXPANDED_ACCORDION('sidebar-actions-item')
+    expandDetailsAccordion() {
+      this.SET_APP_SIDEBAR_EXPANDED_ACCORDION('details-item')
     },
 
     onClickOutside(event) {
