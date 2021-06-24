@@ -169,24 +169,6 @@ const assertContentOfLocalFileIsNot = function(fullPathOfLocalFile, expectedCont
   )
 }
 
-const assertRemoteFileSameAsSkeletonFile = async function(userId, remoteFile, skeletonFile) {
-  const skeleton = await webdavHelper.getSkeletonFile(skeletonFile)
-  const remote = await webdavHelper.download(userId, remoteFile)
-  return client.assert.strictEqual(
-    skeleton,
-    remote,
-    `Failed asserting remote file ${remoteFile} is same as skeleton file ${skeletonFile} for user${userId}`
-  )
-}
-
-Then('as {string} the content of {string} should be the same as the original {string}', function(
-  user,
-  remoteFile,
-  skeletonFile
-) {
-  return assertRemoteFileSameAsSkeletonFile(user, remoteFile, skeletonFile)
-})
-
 Given('the setting {string} of app {string} has been set to {string}', function(
   setting,
   app,
