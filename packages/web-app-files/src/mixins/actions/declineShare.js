@@ -8,7 +8,7 @@ import { mapGetters } from 'vuex'
 export default {
   mixins: [MixinRoutes],
   computed: {
-    ...mapGetters(['configuration', 'getToken', 'isOcis']),
+    ...mapGetters(['isOcis']),
     $_declineShare_items() {
       return [
         {
@@ -35,9 +35,7 @@ export default {
           resource,
           shareStatus.declined,
           !this.isOcis,
-          this.$client,
-          this.configuration.server,
-          this.getToken
+          this.$client
         )
         this.UPDATE_RESOURCE(share)
       } catch (error) {

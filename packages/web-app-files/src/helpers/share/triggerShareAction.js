@@ -1,14 +1,7 @@
 import { buildSharedResource } from '../resources'
 import { shareStatus } from '../shareStatus'
 
-export async function triggerShareAction(
-  resource,
-  status,
-  allowReSharing,
-  $client,
-  serverUrl,
-  userToken
-) {
+export async function triggerShareAction(resource, status, allowReSharing, $client) {
   const method = _getRequestMethod(status)
   if (!method) {
     throw new Error('invalid new share status')
@@ -31,7 +24,7 @@ export async function triggerShareAction(
     response = await response.json()
     if (response.ocs.data.length > 0) {
       const share = response.ocs.data[0]
-      return buildSharedResource(share, true, allowReSharing, serverUrl, userToken)
+      return buildSharedResource(share, true, allowReSharing)
     }
   }
 

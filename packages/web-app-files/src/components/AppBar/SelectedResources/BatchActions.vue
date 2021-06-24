@@ -256,9 +256,7 @@ export default {
             resource,
             newShareStatus,
             !this.isOcis,
-            this.$client,
-            this.configuration.server,
-            this.getToken
+            this.$client
           )
           if (share) {
             this.UPDATE_RESOURCE(share)
