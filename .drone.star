@@ -744,11 +744,15 @@ def beforePipelines(ctx):
     return yarnlint() + changelog(ctx) + website(ctx) + cacheOcisPipeline(ctx)
 
 def stagePipelines(ctx):
+    unitTestPipelines = unitTests(ctx)
     acceptancePipelines = acceptance(ctx)
     if acceptancePipelines == False:
-        return unitTests(ctx)
+        return unitTestPipelines
 
-    return unitTests(ctx) + acceptancePipelines
+    if ("acceptance-tests-only" not in ctx.build.title.lower()):
+        dependsOn(unitTestPipelines, acceptancePipelines)
+
+    return unitTestPipelines + acceptancePipelines
 
 def afterPipelines(ctx):
     return build(ctx) + notify()
