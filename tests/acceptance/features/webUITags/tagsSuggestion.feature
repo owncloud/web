@@ -21,7 +21,7 @@ Feature: Suggestion for matching tag names
     And user "Alice" has uploaded file "lorem.txt" to "simple-folder/lorem.txt"
     And user "Alice" has logged in using the webUI
 
-  @skip @yetToImplement
+  @issue-5017
   Scenario: User should get suggestion from already existing tags
     When the user browses directly to display the details of file "lorem.txt" in folder "simple-folder"
     And the user types "sp" in the collaborative tags field using the webUI
@@ -31,7 +31,7 @@ Feature: Suggestion for matching tag names
     And tag "Violates T&C" should not be listed in the dropdown list on the webUI
     And tag "sponsored" should not be listed in the dropdown list on the webUI
 
-  @skip @yetToImplement
+  @issue-5017
   Scenario: User of static tags group should get suggestion for static tags
     When the user browses directly to display the details of file "lorem.txt" in folder "simple-folder"
     And the administrator has created a "static" tag with name "StaticTagName" and groups "group1"

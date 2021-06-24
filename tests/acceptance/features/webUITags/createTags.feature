@@ -12,7 +12,7 @@ Feature: Creation of tags for the files and folders
     And the user has browsed to the login page
     And user "Alice" has logged in using the webUI
 
-  @skip @yetToImplement
+  @issue-5017
   Scenario: Create a new tag that does not exist for a file in the root
     Given user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
     When the user browses directly to display the details of file "lorem.txt" in folder "/"
@@ -22,7 +22,7 @@ Feature: Creation of tags for the files and folders
       | Top Secret   | normal |
       | Confidential | normal |
 
-  @skip @yetToImplement
+  @issue-5017
   Scenario: Create a new tag that does not exist for a file in a folder
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has uploaded file "lorem.txt" to "simple-folder/lorem.txt"
@@ -33,7 +33,7 @@ Feature: Creation of tags for the files and folders
       | Top Secret | normal |
       | Top        | normal |
 
-  @skip @yetToImplement
+  @issue-5017
   Scenario: Add a new tag that already exists for a file in a folder
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has uploaded file "lorem.txt" to "simple-folder/lorem.txt"
@@ -47,7 +47,7 @@ Feature: Creation of tags for the files and folders
     And file "simple-folder/lorem-big.txt" should have the following tags for user "Alice"
       | lorem | normal |
 
-  @skip @yetToImplement
+  @issue-5017
   Scenario: Remove a tag that already exists for a file in a folder
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has uploaded file "lorem.txt" to "simple-folder/lorem.txt"
@@ -57,7 +57,7 @@ Feature: Creation of tags for the files and folders
     And the user toggles a tag "lorem" on the file using the webUI
     Then file "simple-folder/lorem.txt" should have no tags for user "Alice"
 
-  @skip @yetToImplement
+  @issue-5017
   Scenario: Create and add tag on a shared file
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
@@ -75,7 +75,7 @@ Feature: Creation of tags for the files and folders
       | tag1 | normal |
       | tag2 | normal |
 
-  @skip @yetToImplement
+  @issue-5017
   Scenario: Delete a tag in a shared file
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
