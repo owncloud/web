@@ -1150,14 +1150,14 @@ def acceptance(ctx):
                         # capture the screenshots from visual regression testing (only runs on failure)
                         if (params["visualTesting"]):
                             steps += listScreenShots() + uploadVisualDiff() + uploadVisualScreenShots()
-                            steps += buildGithubCommentVisualDiff(ctx, suiteName, alternateSuiteName, params["runningOnOCIS"])
+                            steps += buildGithubCommentVisualDiff(ctx, suiteName, params["runningOnOCIS"])
 
                         # Capture the screenshots from acceptance tests (only runs on failure)
                         if (isLocalBrowser(browser) and params["screenShots"]):
-                            steps += uploadScreenshots() + buildGithubComment(suiteName, alternateSuiteName)
+                            steps += uploadScreenshots() + buildGithubComment(suiteName)
 
                         if (params["earlyFail"]):
-                            steps += buildGithubCommentForBuildStopped(suiteName, alternateSuiteName)
+                            steps += buildGithubCommentForBuildStopped(suiteName)
 
                         # Upload the screenshots to github comment
                         steps += githubComment(alternateSuiteName)
@@ -2362,7 +2362,7 @@ def uploadVisualScreenShots():
         },
     }]
 
-def buildGithubCommentVisualDiff(ctx, suite, alternateSuiteName, runningOnOCIS):
+def buildGithubCommentVisualDiff(ctx, suite, runningOnOCIS):
     backend = "ocis" if runningOnOCIS else "oc10"
     branch = ctx.build.source if ctx.build.event == "pull_request" else "master"
     return [{
@@ -2376,7 +2376,7 @@ def buildGithubCommentVisualDiff(ctx, suite, alternateSuiteName, runningOnOCIS):
             "if [ ! -d %s ]; then exit 0; fi" % backend,
             "cd %s" % backend,
             "ls -la",
-            'echo "<details><summary>:boom: Visual regression tests <strong>%s</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n" >> %s/comments.file' % (alternateSuiteName, dir["web"]),
+            'echo "<details><summary>:boom: Visual regression tests failed. Please find the screenshots inside ...</summary>\\n\\n<p>\\n\\n" >> %s/comments.file' % dir["web"],
             'echo "Diff Image: </br>" >> %s/comments.file' % dir["web"],
             'for f in *.png; do echo \'!\'"[$f]($CACHE_ENDPOINT/owncloud/web/screenshots/${DRONE_BUILD_NUMBER}/diff/%s/$f)" >> %s/comments.file; done' % (backend, dir["web"]),
             "cd ../../latest",
@@ -2404,14 +2404,14 @@ def buildGithubCommentVisualDiff(ctx, suite, alternateSuiteName, runningOnOCIS):
         },
     }]
 
-def buildGithubComment(suite, alternateSuiteName):
+def buildGithubComment(suite):
     return [{
         "name": "build-github-comment",
         "image": "owncloud/ubuntu:20.04",
         "pull": "always",
         "commands": [
             "cd %s/tests/reports/screenshots/" % dir["web"],
-            'echo "<details><summary>:boom: Acceptance tests <strong>%s</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n" >> %s/comments.file' % (alternateSuiteName, dir["web"]),
+            'echo "<details><summary>:boom: The acceptance tests failed. Please find the screenshots inside ...</summary>\\n\\n<p>\\n\\n" >> %s/comments.file' % dir["web"],
             'for f in *.png; do echo "### $f\n" \'!\'"[$f]($CACHE_ENDPOINT/owncloud/web/screenshots/${DRONE_BUILD_NUMBER}/$f) \n" >> %s/comments.file; done' % dir["web"],
             'echo "\n</p></details>" >> %s/comments.file' % dir["web"],
             "more %s/comments.file" % dir["web"],
@@ -2432,13 +2432,13 @@ def buildGithubComment(suite, alternateSuiteName):
         },
     }]
 
-def buildGithubCommentForBuildStopped(suite, alternateSuiteName):
+def buildGithubCommentForBuildStopped(suite):
     return [{
         "name": "build-github-comment-buildStop",
         "image": "owncloud/ubuntu:20.04",
         "pull": "always",
         "commands": [
-            'echo ":boom: Acceptance tests pipeline <strong>%s</strong> failed. The build has been cancelled.\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}${DRONE_STAGE_NUMBER}/1\\n" >> %s/comments.file' % (alternateSuiteName, dir["web"]),
+            'echo ":boom: The acceptance tests pipeline failed. The build has been cancelled.\\n" >> %s/comments.file' % dir["web"],
         ],
         "when": {
             "status": [
@@ -2451,7 +2451,7 @@ def buildGithubCommentForBuildStopped(suite, alternateSuiteName):
     }]
 
 def githubComment(alternateSuiteName):
-    prefix = "Results for <strong>%s</strong>" % alternateSuiteName
+    prefix = "Results for <strong>%s</strong> ${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}${DRONE_STAGE_NUMBER}/1" % alternateSuiteName
     return [{
         "name": "github-comment",
         "image": "jmccann/drone-github-comment:1",
