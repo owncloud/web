@@ -67,10 +67,9 @@ Feature: accept/decline shares coming from internal users
     Then folder "simple-folder" shared by "Alice Hansen" should be in "Declined" state on the webUI
     And file "testimage.jpg" shared by "Alice Hansen" should be in "Declined" state on the webUI
 
-  @skip @yetToImplement
+  @issue-5015
   Scenario: User-based accepting checkbox is not visible while global is disabled
-    Given the setting "Automatically accept new incoming local user shares" in the section "Sharing" has been disabled
-    And user "Alice" has logged in using the webUI
+    Given user "Alice" has logged in using the webUI
     And the user has browsed to the personal sharing settings page
     Then User-based auto accepting checkbox should not be displayed on the personal sharing settings page in the webUI
 

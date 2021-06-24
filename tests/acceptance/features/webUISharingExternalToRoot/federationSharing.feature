@@ -28,7 +28,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And as "Alice" file "/simple-folder/lorem.txt" should exist on remote server
     And as "Alice" folder "/simple-empty-folder" should exist on remote server
 
-  @issue-2510 @yetToImplement
+  @issue-2510
   Scenario: test the single steps of receiving a federation share
     Given user "Brian" has been created with default attributes and without skeleton files on remote server
     And user "Carol" has been created with default attributes and without skeleton files on remote server
@@ -53,10 +53,10 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     When the user opens folder "simple-folder" using the webUI
     Then file "lorem.txt" should be listed on the webUI
     And as "Alice" the content of "simple-folder/lorem.txt" should be the same as the content of local file "lorem.txt"
-    #    When the user browses to the shared-with-me page
-    #    Then file "lorem.txt" should be listed on the webUI
-    #    And folder "simple-folder" should be listed on the webUI
-    #    And folder "simple-empty-folder" should be listed on the webUI
+    When the user browses to the shared-with-me page
+    Then file "lorem.txt" should be listed on the webUI
+    And folder "simple-folder" should be listed on the webUI
+    And folder "simple-empty-folder" should be listed on the webUI
 
 
   Scenario: declining a federation share on the webUI
@@ -69,7 +69,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And the user reloads the current page of the webUI
     Then file "lorem.txt" should not be listed on the webUI
 
-  @issue-2510 @yetToImplement
+  @issue-2510
   Scenario: automatically accept a federation share when it is allowed by the config
     Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes"
     And user "Alice" has created folder "simple-folder" on remote server

@@ -247,6 +247,16 @@ When('the user uploads a created file {string} using the webUI', function(elemen
   })
 })
 
+When('the user uploads a created file {string} with overwrite using the webUI', function(element) {
+  const filePath = path.join(client.globals.filesForUpload, element)
+  return client.uploadRemote(filePath, function(uploadPath) {
+    client.page
+      .personalPage()
+      .selectFileForUpload(uploadPath)
+      .then(() => client.page.personalPage().confirmFileOverwrite())
+  })
+})
+
 When('the public uploads file/folder {string} in files-drop page', function(element) {
   const rootUploadDir = client.globals.mountedUploadDir
   const filePath = path.join(rootUploadDir, element)
