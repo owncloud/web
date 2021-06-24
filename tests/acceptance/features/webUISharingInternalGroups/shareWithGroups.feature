@@ -137,7 +137,7 @@ Feature: Sharing files and folders with internal groups
   @skip @issue-4102
   Scenario: share a folder with an internal group and a member unshares the folder
     Given user "Carol" has created folder "simple-folder"
-    And user "Carol" has created file "simple-folder/lorem.txt"
+    And user "Carol" has uploaded file with content "lorem content" to "simple-folder/lorem.txt"
     And user "Carol" has logged in using the webUI
     When the user renames folder "simple-folder" to "new-simple-folder" using the webUI
     And the user shares folder "new-simple-folder" with group "grp1" as "Editor" using the webUI
@@ -154,13 +154,13 @@ Feature: Sharing files and folders with internal groups
     Then folder "new-simple-folder" should be listed on the webUI
     When the user opens folder "new-simple-folder" using the webUI
     Then file "lorem.txt" should be listed on the webUI
-    And as "Brian" the content of "/Shares/new-simple-folder/lorem.txt" should be the same as the original "simple-folder/lorem.txt"
+    And the content of file "/Shares/new-simple-folder/lorem.txt" for user "Brian" should be "lorem content"
     # check that the folder is still visible for the share owner
     When the user re-logs in as "Carol" using the webUI
     Then folder "new-simple-folder" should be listed on the webUI
     When the user opens folder "new-simple-folder" using the webUI
     Then file "lorem.txt" should be listed on the webUI
-    And as "Carol" the content of "new-simple-folder/lorem.txt" should be the same as the original "simple-folder/lorem.txt"
+    And the content of file "/new-simple-folder/lorem.txt" for user "Carol" should be "lorem content"
 
   @issue-ocis-1277
   Scenario: user shares the file/folder with a group and delete the share with group
