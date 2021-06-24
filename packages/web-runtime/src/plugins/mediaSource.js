@@ -44,7 +44,7 @@ export default {
       )
 
       const value = binding.value
-      el.setAttribute('data-image-source', value);
+      el.setAttribute('data-image-source', value)
       _mediaSource(value)
         .then(dataImage => {
           if (value !== el.getAttribute('data-image-source')) {
