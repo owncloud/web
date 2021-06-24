@@ -25,7 +25,7 @@ Feature: File Upload
     Then file "zzzz-zzzz-will-be-at-the-end-of-the-folder-when-uploaded.txt" should be listed on the webUI
     And as "Alice" the content of "zzzz-zzzz-will-be-at-the-end-of-the-folder-when-uploaded.txt" should be the same as the local "zzzz-zzzz-will-be-at-the-end-of-the-folder-when-uploaded.txt"
 
-  @smokeTest
+  @smokeTest @ocisSmokeTest
   Scenario Outline: upload a new file into a sub folder
     Given user "Alice" has created folder "<folder-to-upload-to>"
     And the user has browsed to the files page
