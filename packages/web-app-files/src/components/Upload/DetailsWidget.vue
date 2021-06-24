@@ -25,8 +25,8 @@
   </ul>
 </template>
 <script>
-import Mixins from '../mixins'
-import MixinResources from '../mixins/resources'
+import Mixins from '../../mixins'
+import MixinResources from '../../mixins/resources'
 
 export default {
   filters: {

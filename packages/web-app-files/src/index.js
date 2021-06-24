@@ -5,14 +5,14 @@ import SharedWithMe from './views/SharedWithMe.vue'
 import SharedWithOthers from './views/SharedWithOthers.vue'
 import SharedViaLink from './views/SharedViaLink.vue'
 import Trashbin from './views/Trashbin.vue'
-import FileInfoVersions from './components/FileInfoVersions.vue'
-import FileSharingSidebar from './components/FileSharingSidebar.vue'
-import FileLinkSidebar from './components/FileLinkSidebar.vue'
 import PrivateLink from './views/PrivateLink.vue'
 import PublicLink from './views/PublicLink.vue'
 import FilesDrop from './views/FilesDrop.vue'
 import LocationPicker from './views/LocationPicker.vue'
 import PublicFiles from './views/PublicFiles.vue'
+import FileVersions from './components/SideBar/Versions/FileVersions.vue'
+import FileShares from './components/SideBar/Shares/FileShares.vue'
+import FileLinks from './components/SideBar/Links/FileLinks.vue'
 
 import translationsJson from '../l10n/translations.json'
 import quickActionsImport from './quickActions'
@@ -31,9 +31,9 @@ const appInfo = {
   extensions: [],
   fileSideBars: [
     {
-      app: 'files-sharing',
+      app: 'sharing-item',
       icon: 'group',
-      component: FileSharingSidebar,
+      component: FileShares,
       enabled(capabilities) {
         if (capabilities.files_sharing) {
           return capabilities.files_sharing.api_enabled
@@ -42,9 +42,9 @@ const appInfo = {
       }
     },
     {
-      app: 'file-link',
+      app: 'links-item',
       icon: 'link',
-      component: FileLinkSidebar,
+      component: FileLinks,
       enabled(capabilities) {
         if (capabilities.files_sharing) {
           return capabilities.files_sharing.public.enabled
@@ -53,9 +53,9 @@ const appInfo = {
       }
     },
     {
-      app: 'files-version',
+      app: 'versions-item',
       icon: 'file_version',
-      component: FileInfoVersions,
+      component: FileVersions,
       enabled(capabilities, highlightedFile) {
         return !!capabilities.core && highlightedFile && highlightedFile.type !== 'folder'
       }

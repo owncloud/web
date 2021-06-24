@@ -187,10 +187,10 @@
 <script>
 import { mapGetters } from 'vuex'
 import moment from 'moment'
-import { shareTypes } from '../../helpers/shareTypes'
+import { shareTypes } from '../../../../helpers/shareTypes'
 import { basename } from 'path'
-import CollaboratorsMixins from '../../mixins/collaborators'
-import Mixins from '../../mixins'
+import CollaboratorsMixins from '../../../../mixins/collaborators'
+import Mixins from '../../../../mixins'
 
 export default {
   name: 'Collaborator',

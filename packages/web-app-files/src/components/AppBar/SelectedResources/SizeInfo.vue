@@ -32,8 +32,8 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex'
 
-import { cloneStateObject } from '../helpers/store'
-import MixinResources from '../mixins/resources'
+import { cloneStateObject } from '../../../helpers/store'
+import MixinResources from '../../../mixins/resources'
 
 export default {
   mixins: [MixinResources],

@@ -84,9 +84,9 @@ import MixinsGeneral from '../mixins'
 import MixinRoutes from '../mixins/routes'
 import MixinFilesListPagination from '../mixins/filesListPagination'
 
-import NoContentMessage from '../components/NoContentMessage.vue'
-import ListLoader from '../components/ListLoader.vue'
-import ListInfo from '../components/FilesListFooterInfo.vue'
+import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
+import ListLoader from '../components/FilesList/ListLoader.vue'
+import ListInfo from '../components/FilesList/ListInfo.vue'
 
 export default {
   metaInfo() {
