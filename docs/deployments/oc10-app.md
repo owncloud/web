@@ -50,6 +50,10 @@ Administrators can optionally decide to make ownCloud Web the default web interf
 'defaultapp' => 'web',
 ```
 
+{{< hint info >}}
+While it is possible to make ownCloud Web the default web interface, the decision should be carefully evaluated. Features are still being added to ownCloud Web and users might need to use the Classic web interface to do certain actions.
+{{< /hint >}}
+
 ## Configure ownCloud Web
 There are a few config values which need to be set in order for ownCloud Web to work correctly. Please copy the example config below into `config/config.json` and adjust it for your environment:
 
