@@ -1,0 +1,7 @@
+Bugfix: image-source directive did not handle updates correctly
+
+When using v-image-source to bind an image source it did not handle changes to the image source url.
+
+This has been fixed by implementing the update hook in the directive.
+
+https://github.com/owncloud/web/pull/5364
