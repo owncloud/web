@@ -58,7 +58,7 @@
       </div>
       <div v-if="canAccept">
         <oc-button id="accept-shares-btn" key="accept-shares-btn" @click="acceptShares()">
-          <oc-icon name="add" />
+          <oc-icon name="check" />
           <translate>Accept</translate>
         </oc-button>
       </div>
@@ -81,7 +81,7 @@ import { cloneStateObject } from '../helpers/store'
 import { canBeMoved } from '../helpers/permissions'
 import { checkRoute } from '../helpers/route'
 import { shareStatus } from '../helpers/shareStatus'
-import { buildSharedResource } from '../helpers/resources'
+import { triggerShareAction } from '../helpers/share/triggerShareAction'
 
 export default {
   mixins: [MixinRoutes, MixinDeleteResources],
@@ -124,11 +124,12 @@ export default {
     },
 
     canDelete() {
-      if (this.isPublicFilesRoute && !checkRoute(['files-shared-with-me'], this.$route.name)) {
-        return this.currentFolder.canBeDeleted()
-      }
       if (checkRoute(['files-shared-with-me'], this.$route.name)) {
         return false
+      }
+
+      if (this.isPublicFilesRoute) {
+        return this.currentFolder.canBeDeleted()
       }
 
       return true
@@ -240,63 +241,58 @@ export default {
     },
 
     acceptShares() {
-      this.selectedFiles.forEach(resource => {
-        this.triggerShareAction(resource, 'POST')
-      })
+      this.triggerShareActions(shareStatus.accepted)
     },
 
     declineShares() {
-      this.selectedFiles.forEach(resource => {
-        this.triggerShareAction(resource, 'DELETE')
-      })
+      this.triggerShareActions(shareStatus.declined)
     },
 
-    async triggerShareAction(resource, type) {
-      try {
-        // exec share action
-        let response = await this.$client.requests.ocs({
-          service: 'apps/files_sharing',
-          action: `api/v1/shares/pending/${resource.share.id}`,
-          method: type
-        })
-        // exit on failure
-        if (response.status !== 200) {
-          throw new Error(response.statusText)
-        }
-        // get updated share from response or re-fetch it
-        let share = null
-        // oc10
-        if (parseInt(response.headers.get('content-length')) > 0) {
-          response = await response.json()
-          if (response.ocs.data.length > 0) {
-            share = response.ocs.data[0]
-          }
-        } else {
-          // ocis
-          const { shareInfo } = await this.$client.shares.getShare(resource.share.id)
-          share = shareInfo
-        }
-        // update share in store
-        if (share) {
-          const sharedResource = await buildSharedResource(
-            share,
-            true,
+    triggerShareActions(newShareStatus) {
+      const errors = []
+      this.selectedFiles.forEach(async resource => {
+        try {
+          const share = await triggerShareAction(
+            resource,
+            newShareStatus,
             !this.isOcis,
+            this.$client,
             this.configuration.server,
             this.getToken
           )
-          this.UPDATE_RESOURCE(sharedResource)
-          this.SELECT_RESOURCES([])
-        }
-      } catch (error) {
-        // this.loadResources()
-        this.showMessage({
-          title: this.$gettext('Error while changing share state'),
-          desc: error.message,
-          status: 'danger',
-          autoClose: {
-            enabled: true
+          if (share) {
+            this.UPDATE_RESOURCE(share)
           }
+        } catch (error) {
+          errors.push(error)
+        }
+      })
+
+      if (errors.length === 0) {
+        this.SELECT_RESOURCES([])
+        return
+      }
+
+      console.log(errors)
+      if (newShareStatus === shareStatus.accepted) {
+        this.showMessage({
+          title: this.$ngettext(
+            'Error while accepting the selected share.',
+            'Error while accepting selected shares.',
+            this.selectedFiles.length
+          ),
+          status: 'danger'
+        })
+        return
+      }
+      if (newShareStatus === shareStatus.declined) {
+        this.showMessage({
+          title: this.$ngettext(
+            'Error while declining the selected share.',
+            'Error while declining selected shares.',
+            this.selectedFiles.length
+          ),
+          status: 'danger'
         })
       }
     }

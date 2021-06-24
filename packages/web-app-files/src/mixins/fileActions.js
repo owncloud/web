@@ -1,7 +1,9 @@
 import { mapGetters, mapActions, mapState } from 'vuex'
 
 import { checkRoute } from '../helpers/route'
+import AcceptShare from './actions/acceptShare'
 import Copy from './actions/copy'
+import DeclineShare from './actions/declineShare'
 import Delete from './actions/delete'
 import Download from './actions/download'
 import Favorite from './actions/favorite'
@@ -17,6 +19,8 @@ const actionsMixins = [
   'navigate',
   'download',
   'favorite',
+  'acceptShare',
+  'declineShare',
   'copy',
   'move',
   'rename',
@@ -28,7 +32,19 @@ export const EDITOR_MODE_EDIT = 'edit'
 export const EDITOR_MODE_CREATE = 'create'
 
 export default {
-  mixins: [Copy, Delete, Download, Favorite, Fetch, Move, Navigate, Rename, Restore],
+  mixins: [
+    AcceptShare,
+    Copy,
+    DeclineShare,
+    Delete,
+    Download,
+    Favorite,
+    Fetch,
+    Move,
+    Navigate,
+    Rename,
+    Restore
+  ],
   computed: {
     ...mapState(['apps']),
     ...mapGetters('Files', ['highlightedFile', 'currentFolder']),

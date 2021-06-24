@@ -38,16 +38,18 @@
               v-if="[shareStatus.pending, shareStatus.declined].includes(resource.status)"
               size="small"
               class="file-row-share-status-action"
-              @click.stop="triggerShareAction(resource, 'POST')"
+              @click.stop="$_acceptShare_trigger(resource)"
             >
+              <oc-icon size="small" name="check" />
               <translate>Accept</translate>
             </oc-button>
             <oc-button
               v-if="[shareStatus.pending, shareStatus.accepted].includes(resource.status)"
               size="small"
               class="file-row-share-status-action oc-ml-s"
-              @click.stop="triggerShareAction(resource, 'DELETE')"
+              @click.stop="$_declineShare_trigger(resource)"
             >
+              <oc-icon size="small" name="not_interested" />
               <translate>Decline</translate>
             </oc-button>
             <span
@@ -80,8 +82,10 @@
 <script>
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 import { shareStatus } from '../helpers/shareStatus'
-import { aggregateResourceShares, buildResource, buildSharedResource } from '../helpers/resources'
+import { aggregateResourceShares, buildResource } from '../helpers/resources'
 import FileActions from '../mixins/fileActions'
+import MixinAcceptShare from '../mixins/actions/acceptShare'
+import MixinDeclineShare from '../mixins/actions/declineShare'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
 import MixinFilesListPagination from '../mixins/filesListPagination'
 
@@ -95,9 +99,19 @@ import debounce from 'lodash-es/debounce'
 const visibilityObserver = new VisibilityObserver()
 
 export default {
-  components: { ListLoader, NoContentMessage, ListInfo },
+  components: {
+    ListLoader,
+    NoContentMessage,
+    ListInfo
+  },
 
-  mixins: [FileActions, MixinFilesListPositioning, MixinFilesListPagination],
+  mixins: [
+    FileActions,
+    MixinAcceptShare,
+    MixinDeclineShare,
+    MixinFilesListPositioning,
+    MixinFilesListPagination
+  ],
 
   data: () => ({
     loading: true,
@@ -198,7 +212,10 @@ export default {
         })
       }, 250)
 
-      visibilityObserver.observe(component.$el, { onEnter: debounced, onExit: debounced.cancel })
+      visibilityObserver.observe(component.$el, {
+        onEnter: debounced,
+        onExit: debounced.cancel
+      })
     },
 
     async loadResources() {
@@ -217,7 +234,10 @@ export default {
       rootFolder = buildResource(rootFolder)
 
       if (resources.length < 1) {
-        this.LOAD_FILES({ currentFolder: rootFolder, files: [] })
+        this.LOAD_FILES({
+          currentFolder: rootFolder,
+          files: []
+        })
         this.loading = false
 
         return
@@ -231,7 +251,10 @@ export default {
         this.getToken
       )
 
-      this.LOAD_FILES({ currentFolder: rootFolder, files: resources })
+      this.LOAD_FILES({
+        currentFolder: rootFolder,
+        files: resources
+      })
 
       // Load quota
       const user = await this.$client.users.getUser(this.user.id)
@@ -249,54 +272,6 @@ export default {
         case shareStatus.pending:
         default:
           return this.$gettext('Pending')
-      }
-    },
-
-    async triggerShareAction(resource, type) {
-      try {
-        // exec share action
-        let response = await this.$client.requests.ocs({
-          service: 'apps/files_sharing',
-          action: `api/v1/shares/pending/${resource.share.id}`,
-          method: type
-        })
-
-        // exit on failure
-        if (response.status !== 200) {
-          throw new Error(response.statusText)
-        }
-        // get updated share from response or re-fetch it
-        let share = null
-        // oc10
-        if (parseInt(response.headers.get('content-length')) > 0) {
-          response = await response.json()
-
-          if (response.ocs.data.length > 0) {
-            share = response.ocs.data[0]
-          }
-        } else {
-          // ocis
-          const { shareInfo } = await this.$client.shares.getShare(resource.share.id)
-          share = shareInfo
-        }
-
-        // update share in store
-        if (share) {
-          const sharedResource = await buildSharedResource(
-            share,
-            true,
-            !this.isOcis,
-            this.configuration.server,
-            this.getToken
-          )
-          this.UPDATE_RESOURCE(sharedResource)
-        }
-      } catch (error) {
-        this.showMessage({
-          title: this.$gettext('Error while changing share state'),
-          desc: error.message,
-          status: 'danger'
-        })
       }
     }
   }
