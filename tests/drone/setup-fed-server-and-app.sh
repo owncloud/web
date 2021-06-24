@@ -11,7 +11,6 @@ else
 	php occ config:system:set trusted_domains 2 --value=federated
 	php occ log:manage --level "$2"
 	php occ config:list
-	php occ config:system:set skeletondirectory --value="$1"/apps/testing/data/webUISkeleton
 	php occ config:system:set sharing.federation.allowHttpFallback --value=true --type=bool
 	php occ config:system:set web.rewriteLinks --type=boolean --value=true
 fi
