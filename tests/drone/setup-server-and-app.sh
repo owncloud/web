@@ -18,7 +18,6 @@ else
 	php occ config:system:set trusted_domains 1 --value=owncloud
 	php occ log:manage --level $2
 	php occ config:list
-	php occ config:system:set skeletondirectory --value=$1/apps/testing/data/webUISkeleton
 	if [ "$3" == "builtInWeb" ]
 	then
 		php occ config:system:set web.baseUrl --value="http://owncloud/index.php/apps/web"
