@@ -196,6 +196,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUISharingInternalGroups/shareWithGroups.feature:200](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroups/shareWithGroups.feature#L200)
 
 ### [Can login with invalid password while logging in with openidconnect in oc10](https://github.com/owncloud/ocis/issues/1428)
+-   [webUILogin/openidLogin.feature:24](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/openidLogin.feature#L24)
 -   [webUILogin/openidLogin.feature:46](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/openidLogin.feature#L46)
 
 
