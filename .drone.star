@@ -166,7 +166,7 @@ config = {
         },
         "webUIFederation1": {
             "suites": {
-                "webUISharingExternal": "oC10SharingExternal1"
+                "webUISharingExternal": "oC10SharingExternal1",
             },
             "extraEnvironment": {
                 "REMOTE_BACKEND_HOST": "http://federated",
@@ -179,7 +179,7 @@ config = {
         },
         "webUIFederation2": {
             "suites": {
-                "webUISharingExternal": "oC10SharingExternal2"
+                "webUISharingExternal": "oC10SharingExternal2",
             },
             "extraEnvironment": {
                 "REMOTE_BACKEND_HOST": "http://federated",
@@ -192,7 +192,7 @@ config = {
         },
         "webUIFederation3": {
             "suites": {
-                "webUISharingExternal": "oC10SharingExternal3"
+                "webUISharingExternal": "oC10SharingExternal3",
             },
             "extraEnvironment": {
                 "REMOTE_BACKEND_HOST": "http://federated",
@@ -205,7 +205,7 @@ config = {
         },
         "webUIFederation4": {
             "suites": {
-                "webUISharingExternal": "oC10SharingExternal4"
+                "webUISharingExternal": "oC10SharingExternal4",
             },
             "extraEnvironment": {
                 "REMOTE_BACKEND_HOST": "http://federated",
@@ -218,7 +218,7 @@ config = {
         },
         "webUIFederation5": {
             "suites": {
-                "webUISharingExternal": "oC10SharingExternal5"
+                "webUISharingExternal": "oC10SharingExternal5",
             },
             "extraEnvironment": {
                 "REMOTE_BACKEND_HOST": "http://federated",
@@ -231,7 +231,7 @@ config = {
         },
         "webUIFederation6": {
             "suites": {
-                "webUISharingExternal": "oC10SharingExternal6"
+                "webUISharingExternal": "oC10SharingExternal6",
             },
             "extraEnvironment": {
                 "REMOTE_BACKEND_HOST": "http://federated",
@@ -244,7 +244,7 @@ config = {
         },
         "webUIFederation7": {
             "suites": {
-                "webUISharingExternal": "oC10SharingExternal7"
+                "webUISharingExternal": "oC10SharingExternal7",
             },
             "extraEnvironment": {
                 "REMOTE_BACKEND_HOST": "http://federated",
@@ -257,7 +257,7 @@ config = {
         },
         "webUIFederation8": {
             "suites": {
-                "webUISharingExternal": "oC10SharingExternal8"
+                "webUISharingExternal": "oC10SharingExternal8",
             },
             "extraEnvironment": {
                 "REMOTE_BACKEND_HOST": "http://federated",
@@ -270,7 +270,7 @@ config = {
         },
         "webUIFederation9": {
             "suites": {
-                "webUISharingExternal": "oC10SharingExternal9"
+                "webUISharingExternal": "oC10SharingExternal9",
             },
             "extraEnvironment": {
                 "REMOTE_BACKEND_HOST": "http://federated",
@@ -283,7 +283,7 @@ config = {
         },
         "webUIFederation10": {
             "suites": {
-                "webUISharingExternal": "oC10SharingExternal10"
+                "webUISharingExternal": "oC10SharingExternal10",
             },
             "extraEnvironment": {
                 "REMOTE_BACKEND_HOST": "http://federated",
@@ -296,7 +296,7 @@ config = {
         },
         "webUIFederation11": {
             "suites": {
-                "webUISharingExternal": "oC10SharingExternal11"
+                "webUISharingExternal": "oC10SharingExternal11",
             },
             "extraEnvironment": {
                 "REMOTE_BACKEND_HOST": "http://federated",
@@ -309,7 +309,7 @@ config = {
         },
         "webUIFederation12": {
             "suites": {
-                "webUISharingExternal": "oC10SharingExternal12"
+                "webUISharingExternal": "oC10SharingExternal12",
             },
             "extraEnvironment": {
                 "REMOTE_BACKEND_HOST": "http://federated",
@@ -322,7 +322,7 @@ config = {
         },
         "webUIFederation13": {
             "suites": {
-                "webUISharingExternal": "oC10SharingExternal13"
+                "webUISharingExternal": "oC10SharingExternal13",
             },
             "extraEnvironment": {
                 "REMOTE_BACKEND_HOST": "http://federated",
@@ -335,7 +335,7 @@ config = {
         },
         "webUIFederation14": {
             "suites": {
-                "webUISharingExternal": "oC10SharingExternal14"
+                "webUISharingExternal": "oC10SharingExternal14",
             },
             "extraEnvironment": {
                 "REMOTE_BACKEND_HOST": "http://federated",
@@ -348,7 +348,7 @@ config = {
         },
         "webUIFederation15": {
             "suites": {
-                "webUISharingExternal": "oC10SharingExternal15"
+                "webUISharingExternal": "oC10SharingExternal15",
             },
             "extraEnvironment": {
                 "REMOTE_BACKEND_HOST": "http://federated",
@@ -361,7 +361,7 @@ config = {
         },
         "webUIFederation16": {
             "suites": {
-                "webUISharingExternal": "oC10SharingExternal16"
+                "webUISharingExternal": "oC10SharingExternal16",
             },
             "extraEnvironment": {
                 "REMOTE_BACKEND_HOST": "http://federated",
@@ -919,8 +919,8 @@ def Diff(li1, li2):
 def main(ctx):
     # uiSuitesCheck = checkTestSuites()
     # if (uiSuitesCheck == False):
-        # print("Errors detected. Review messages above.")
-        # return []
+    # print("Errors detected. Review messages above.")
+    # return []
 
     before = beforePipelines(ctx)
 
