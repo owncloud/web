@@ -113,7 +113,6 @@
   </div>
 </template>
 <script>
-import 'inert-polyfill'
 import { mapGetters, mapState, mapActions } from 'vuex'
 import TopBar from './components/TopBar.vue'
 import MessageBar from './components/MessageBar.vue'

@@ -52,16 +52,12 @@ import 'owncloud-design-system/dist/system/system.css'
 
 import Avatar from './components/Avatar.vue'
 
-import wgxpath from 'wicked-good-xpath'
-
 import { registerClient } from './services/clientRegistration'
 
 import { loadConfig } from './helpers/config'
 import { loadTheme } from './helpers/theme'
 
 import merge from 'lodash-es/merge'
-
-wgxpath.install()
 
 Vue.prototype.$client = new OwnCloud()
 
