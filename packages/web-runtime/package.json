@@ -18,7 +18,7 @@
     "owncloud-sdk": "1.0.0-2296",
     "p-queue": "^6.1.1",
     "tippy.js": "^6.3.1",
-    "tus-js-client": "^1.8.0",
+    "tus-js-client": "^2.3.0",
     "uikit": "3.5.16",
     "vue": "^2.6.10",
     "vue-axe": "^2.4.4",
