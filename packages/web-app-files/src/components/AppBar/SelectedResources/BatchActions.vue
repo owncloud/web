@@ -183,12 +183,7 @@ export default {
   methods: {
     ...mapActions('Files', ['removeFilesFromTrashbin', 'resetFileSelection', 'setHighlightedFile']),
     ...mapActions(['showMessage']),
-    ...mapMutations('Files', [
-      'LOAD_FILES',
-      'SELECT_RESOURCES',
-      'CLEAR_CURRENT_FILES_LIST',
-      'UPDATE_RESOURCE'
-    ]),
+    ...mapMutations('Files', ['SELECT_RESOURCES', 'UPDATE_RESOURCE']),
 
     restoreFiles(resources = this.selectedFiles) {
       for (const resource of resources) {
