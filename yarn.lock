@@ -11107,10 +11107,10 @@ vue@^2.6.10:
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.14.tgz#e51aa5250250d569a3fbad3a8a5a687d6036e235"
   integrity sha512-x2284lgYvjOMj3Za7kqzRcUSxBboHqtgRE2zlos1qWaOye5yUmHn42LB1250NJBLRwEcdrB0JRwyPTEPhfQjiQ==
 
-vuex-extensions@^1.1.5:
-  version "1.1.5"
-  resolved "https://registry.yarnpkg.com/vuex-extensions/-/vuex-extensions-1.1.5.tgz#d1664aabdc720057c945993324de9bc34d871487"
-  integrity sha512-1Jfi8o6coel3jj20k6SaEtinddzS0jEG41lyyWmodAorXoN85AzuYa4oou71e99B6V+Y+gSVUysa3yHVhWpTrQ==
+vuex-extensions@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/vuex-extensions/-/vuex-extensions-4.0.0.tgz#f599400045f25b25ab5899599f21ed64977e7ad0"
+  integrity sha512-cO1erkAa8QmvnpJ8vlCT3aPrP/Wje0vWOI/JFGlBiMuzGQeY3uD4pMmQo6YhtX6akIlcBS4gvpXaIe0Vedhi5g==
 
 vuex-mock-store@0.0.8:
   version "0.0.8"
