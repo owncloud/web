@@ -72,7 +72,8 @@ Then('as {string} file/folder {string} should not exist on remote server', funct
   return backendHelper.runOnRemoteBackend(fileShouldNotExist, userId, element)
 })
 
-Then('as {string} file/folder {string} should exist', function(userId, element) {
+Then('as {string} file/folder {string} should exist', async function(userId, element) {
+  await client.pause(1000)
   return fileShouldExist(userId, element)
 })
 
