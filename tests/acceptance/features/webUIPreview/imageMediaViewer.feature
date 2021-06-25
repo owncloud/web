@@ -3,6 +3,7 @@ Feature: display image in media viewer on the webUI
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files
 
+@ocisSmokeTest
 Scenario Outline: preview of image files with media viewer is possible
     Given user "Alice" has uploaded file "<image-file>" to "<image-file>"
     And user "Alice" has logged in using the webUI

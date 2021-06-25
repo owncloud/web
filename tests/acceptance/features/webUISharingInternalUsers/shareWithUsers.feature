@@ -13,7 +13,7 @@ Feature: Sharing files and folders with internal users
       | Brian    |
     And user "Brian" has created folder "simple-folder"
 
-  @smokeTest @issue-ocis-1743
+  @smokeTest @issue-ocis-1743 @ocisSmokeTest
   Scenario Outline: share a file & folder with another internal user
     Given user "Brian" has created file "testimage.jpg"
     And user "Brian" has created file "simple-folder/lorem.txt"

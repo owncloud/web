@@ -26,3 +26,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 ### [File link in notifications seems to not work] (https://github.com/owncloud/web/issues/5227)
 -   [webUISharingNotifications/notificationLink.feature:18](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingNotifications/notificationLink.feature#L18)
 -   [webUISharingNotificationsToRoot/notificationLink.feature:17](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingNotificationsToRoot/notificationLink.feature#L17)
+
+### [Trashbin Delete with small screen size] (https://github.com/owncloud/web/issues/5372)
+-   [webUITrashbinDelete/trashbinDelete.feature:29](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITrashbinDelete/trashbinDelete.feature#29)

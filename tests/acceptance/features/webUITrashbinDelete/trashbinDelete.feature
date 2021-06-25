@@ -25,7 +25,7 @@ Feature: files and folders can be deleted from the trashbin
     And user "Alice" has logged in using the webUI
     And the user has browsed to the trashbin page
 
-  @issue-1725
+  @issue-1725 @smokeTest @ocisSmokeTest
   Scenario: Delete files and check that they are gone
     When the user deletes file "lorem.txt" using the webUI
     And the user deletes file "sample,1.txt" using the webUI

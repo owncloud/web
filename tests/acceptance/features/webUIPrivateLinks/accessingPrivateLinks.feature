@@ -5,7 +5,7 @@ Feature: Access private link
     Given user "Alice" has been created with default attributes and without skeleton files
     And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
 
-  @smokeTest
+  @smokeTest @ocisSmokeTest
   Scenario: Copy and access private link
     Given user "Alice" has logged in using the webUI
     When the user copies the private link of the file "lorem.txt" using the webUI
@@ -13,7 +13,7 @@ Feature: Access private link
     Then the app-sidebar for file "lorem.txt" should be visible on the webUI
     And the "actions" details panel should be visible
 
-  @smokeTest
+  @smokeTest @ocisSmokeTest
   Scenario: Access private link before authorisation
     When the user tries to navigate to the private link created by user "Alice" for file "lorem.txt"
     Then the user should be redirected to the IdP login page

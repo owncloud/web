@@ -12,7 +12,7 @@ Feature: Share by public link with different roles
     Given user "Alice" has been created with default attributes and without skeleton files
     And user "Alice" has created folder "simple-folder"
 
-  @smokeTest @issue-ocis-reva-383
+  @smokeTest @ocisSmokeTest @issue-ocis-reva-383
   Scenario Outline: simple sharing by public link with different roles
     Given user "Alice" has created file "simple-folder/lorem.txt"
     And user "Alice" has logged in using the webUI

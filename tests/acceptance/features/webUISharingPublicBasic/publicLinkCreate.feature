@@ -7,7 +7,7 @@ Feature: Create public link shares
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files
 
-  @smokeTest @issue-ocis-reva-383
+  @smokeTest @ocisSmokeTest @issue-ocis-reva-383
   Scenario: simple folder sharing by public link
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has created file "simple-folder/lorem.txt"
@@ -24,7 +24,7 @@ Feature: Create public link shares
     When the public uses the webUI to access the last public link created by user "Alice"
     Then file "lorem.txt" should be listed on the webUI
 
-  @smokeTest @issue-ocis-reva-383
+  @smokeTest @ocisSmokeTest @issue-ocis-reva-383
   Scenario: simple file sharing by public link
     Given user "Alice" has created file "lorem.txt"
     And user "Alice" has logged in using the webUI
