@@ -12,7 +12,7 @@ Feature: restrict Sharing
       | Alice    |
       | Brian    |
       | Carol    |
-    And these users have been created but not initialized:
+    And these users have been created without initialization and without skeleton files:
       | username  | password  | displayname     | email             |
       | Alison    | %regular% | Alison Cooper   | alson@oc.com.np   |
     And these groups have been created:

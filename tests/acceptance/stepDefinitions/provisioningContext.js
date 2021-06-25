@@ -234,21 +234,6 @@ Given(
   }
 )
 
-Given('these users have been created but not initialized:', function(dataTable) {
-  codify.replaceInlineTable(dataTable)
-  return Promise.all(
-    dataTable.hashes().map(user => {
-      const userId = user.username
-      const password = user.password || userSettings.getPasswordForUser(userId)
-      const displayName = user.displayname || false
-      const email = user.email || false
-      return deleteUser(userId).then(() =>
-        createUser(userId, password, displayName, email, 'large')
-      )
-    })
-  )
-})
-
 Given(
   /^these users have been created without initialization and (without|small|large) skeleton files:$/,
   function(skeletonType, dataTable) {
