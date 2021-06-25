@@ -142,6 +142,7 @@ config = {
             },
             "visualTesting": True,
             "screenShots": True,
+            "skip": True,
         },
         "webUINotification": {
             "type": NOTIFICATIONS,
@@ -161,17 +162,212 @@ config = {
             "visualTesting": True,
             "screenShots": True,
             "notificationsAppNeeded": True,
+            "skip": True,
         },
-        "webUIFederation": {
-            "type": FEDERATED,
+        "webUIFederation1": {
             "suites": {
-                "webUISharingExternal": "oC10SharingExternal",
-                "webUISharingExternalToRoot": "oC10SharingExternalRoot",
+                "webUISharingExternal": "oC10SharingExternal1"
             },
             "extraEnvironment": {
                 "REMOTE_BACKEND_HOST": "http://federated",
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
             },
+            "filterTags": "@magic",
+            "notificationsAppNeeded": True,
+            "federatedServerNeeded": True,
+            "federatedServerVersion": "daily-master-qa",
+        },
+        "webUIFederation2": {
+            "suites": {
+                "webUISharingExternal": "oC10SharingExternal2"
+            },
+            "extraEnvironment": {
+                "REMOTE_BACKEND_HOST": "http://federated",
+                "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
+            },
+            "filterTags": "@magic",
+            "notificationsAppNeeded": True,
+            "federatedServerNeeded": True,
+            "federatedServerVersion": "daily-master-qa",
+        },
+        "webUIFederation3": {
+            "suites": {
+                "webUISharingExternal": "oC10SharingExternal3"
+            },
+            "extraEnvironment": {
+                "REMOTE_BACKEND_HOST": "http://federated",
+                "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
+            },
+            "filterTags": "@magic",
+            "notificationsAppNeeded": True,
+            "federatedServerNeeded": True,
+            "federatedServerVersion": "daily-master-qa",
+        },
+        "webUIFederation4": {
+            "suites": {
+                "webUISharingExternal": "oC10SharingExternal4"
+            },
+            "extraEnvironment": {
+                "REMOTE_BACKEND_HOST": "http://federated",
+                "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
+            },
+            "filterTags": "@magic",
+            "notificationsAppNeeded": True,
+            "federatedServerNeeded": True,
+            "federatedServerVersion": "daily-master-qa",
+        },
+        "webUIFederation5": {
+            "suites": {
+                "webUISharingExternal": "oC10SharingExternal5"
+            },
+            "extraEnvironment": {
+                "REMOTE_BACKEND_HOST": "http://federated",
+                "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
+            },
+            "filterTags": "@magic",
+            "notificationsAppNeeded": True,
+            "federatedServerNeeded": True,
+            "federatedServerVersion": "daily-master-qa",
+        },
+        "webUIFederation6": {
+            "suites": {
+                "webUISharingExternal": "oC10SharingExternal6"
+            },
+            "extraEnvironment": {
+                "REMOTE_BACKEND_HOST": "http://federated",
+                "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
+            },
+            "filterTags": "@magic",
+            "notificationsAppNeeded": True,
+            "federatedServerNeeded": True,
+            "federatedServerVersion": "daily-master-qa",
+        },
+        "webUIFederation7": {
+            "suites": {
+                "webUISharingExternal": "oC10SharingExternal7"
+            },
+            "extraEnvironment": {
+                "REMOTE_BACKEND_HOST": "http://federated",
+                "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
+            },
+            "filterTags": "@magic",
+            "notificationsAppNeeded": True,
+            "federatedServerNeeded": True,
+            "federatedServerVersion": "daily-master-qa",
+        },
+        "webUIFederation8": {
+            "suites": {
+                "webUISharingExternal": "oC10SharingExternal8"
+            },
+            "extraEnvironment": {
+                "REMOTE_BACKEND_HOST": "http://federated",
+                "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
+            },
+            "filterTags": "@magic",
+            "notificationsAppNeeded": True,
+            "federatedServerNeeded": True,
+            "federatedServerVersion": "daily-master-qa",
+        },
+        "webUIFederation9": {
+            "suites": {
+                "webUISharingExternal": "oC10SharingExternal9"
+            },
+            "extraEnvironment": {
+                "REMOTE_BACKEND_HOST": "http://federated",
+                "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
+            },
+            "filterTags": "@magic",
+            "notificationsAppNeeded": True,
+            "federatedServerNeeded": True,
+            "federatedServerVersion": "daily-master-qa",
+        },
+        "webUIFederation10": {
+            "suites": {
+                "webUISharingExternal": "oC10SharingExternal10"
+            },
+            "extraEnvironment": {
+                "REMOTE_BACKEND_HOST": "http://federated",
+                "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
+            },
+            "filterTags": "@magic",
+            "notificationsAppNeeded": True,
+            "federatedServerNeeded": True,
+            "federatedServerVersion": "daily-master-qa",
+        },
+        "webUIFederation11": {
+            "suites": {
+                "webUISharingExternal": "oC10SharingExternal11"
+            },
+            "extraEnvironment": {
+                "REMOTE_BACKEND_HOST": "http://federated",
+                "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
+            },
+            "filterTags": "@magic",
+            "notificationsAppNeeded": True,
+            "federatedServerNeeded": True,
+            "federatedServerVersion": "daily-master-qa",
+        },
+        "webUIFederation12": {
+            "suites": {
+                "webUISharingExternal": "oC10SharingExternal12"
+            },
+            "extraEnvironment": {
+                "REMOTE_BACKEND_HOST": "http://federated",
+                "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
+            },
+            "filterTags": "@magic",
+            "notificationsAppNeeded": True,
+            "federatedServerNeeded": True,
+            "federatedServerVersion": "daily-master-qa",
+        },
+        "webUIFederation13": {
+            "suites": {
+                "webUISharingExternal": "oC10SharingExternal13"
+            },
+            "extraEnvironment": {
+                "REMOTE_BACKEND_HOST": "http://federated",
+                "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
+            },
+            "filterTags": "@magic",
+            "notificationsAppNeeded": True,
+            "federatedServerNeeded": True,
+            "federatedServerVersion": "daily-master-qa",
+        },
+        "webUIFederation14": {
+            "suites": {
+                "webUISharingExternal": "oC10SharingExternal14"
+            },
+            "extraEnvironment": {
+                "REMOTE_BACKEND_HOST": "http://federated",
+                "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
+            },
+            "filterTags": "@magic",
+            "notificationsAppNeeded": True,
+            "federatedServerNeeded": True,
+            "federatedServerVersion": "daily-master-qa",
+        },
+        "webUIFederation15": {
+            "suites": {
+                "webUISharingExternal": "oC10SharingExternal15"
+            },
+            "extraEnvironment": {
+                "REMOTE_BACKEND_HOST": "http://federated",
+                "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
+            },
+            "filterTags": "@magic",
+            "notificationsAppNeeded": True,
+            "federatedServerNeeded": True,
+            "federatedServerVersion": "daily-master-qa",
+        },
+        "webUIFederation16": {
+            "suites": {
+                "webUISharingExternal": "oC10SharingExternal16"
+            },
+            "extraEnvironment": {
+                "REMOTE_BACKEND_HOST": "http://federated",
+                "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
+            },
+            "filterTags": "@magic",
             "notificationsAppNeeded": True,
             "federatedServerNeeded": True,
             "federatedServerVersion": "daily-master-qa",
@@ -190,6 +386,7 @@ config = {
                 "SCREEN_RESOLUTION": "768x1024",
             },
             "notificationsAppNeeded": True,
+            "skip": True,
             "filterTags": "@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10",
         },
         "webUI-XGA": {
@@ -272,6 +469,7 @@ config = {
                 "SCREEN_RESOLUTION": "768x1024",
             },
             "filterTags": "@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10",
+            "skip": True,
         },
         "webUI-Notifications-iPhone": {
             "type": NOTIFICATIONS,
@@ -288,6 +486,7 @@ config = {
             },
             "notificationsAppNeeded": True,
             "filterTags": "@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10",
+            "skip": True,
         },
         "webUI-iPhone": {
             "type": FULL,
@@ -369,6 +568,7 @@ config = {
                 "SCREEN_RESOLUTION": "375x812",
             },
             "filterTags": "@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10",
+            "skip": True,
         },
         "webUI-ocis": {
             "type": FULL,
@@ -473,6 +673,7 @@ config = {
             },
             "runningOnOCIS": True,
             "visualTesting": True,
+            "skip": True,
             "filterTags": "not @skip and not @skipOnOCIS and not @notToImplementOnOCIS",
         },
         "webUI-notifications-oc10-integration": {
@@ -493,6 +694,7 @@ config = {
             "oc10IntegrationAppIncluded": True,
             "notificationsAppNeeded": True,
             "screenShots": True,
+            "skip": True,
         },
         "webUI-oc10-integration": {
             "type": FULL,
@@ -577,6 +779,7 @@ config = {
             "filterTags": "not @skip and not @skipOnOC10 and not @openIdLogin and @smokeTest",
             "oc10IntegrationAppIncluded": True,
             "screenShots": True,
+            "skip": True,
         },
     },
     "build": True,
@@ -714,10 +917,10 @@ def Diff(li1, li2):
     return li_dif
 
 def main(ctx):
-    uiSuitesCheck = checkTestSuites()
-    if (uiSuitesCheck == False):
-        print("Errors detected. Review messages above.")
-        return []
+    # uiSuitesCheck = checkTestSuites()
+    # if (uiSuitesCheck == False):
+        # print("Errors detected. Review messages above.")
+        # return []
 
     before = beforePipelines(ctx)
 

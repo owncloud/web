@@ -90,7 +90,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
       | permissions | read, share                |
     And as "Alice" folder "Shares/simple-empty-folder" should exist on remote server
 
-  @issue-3309 @issue-4247
+  @issue-3309 @issue-4247 @magic
   Scenario: share a folder with an remote user and prohibit deleting - remote server shares - local server receives
     Given user "Alice" has created folder "simple-folder" on remote server
     And user "Alice" has created file "simple-folder/lorem.txt" on remote server
