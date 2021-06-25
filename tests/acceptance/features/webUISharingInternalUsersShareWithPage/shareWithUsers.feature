@@ -95,7 +95,7 @@ Feature: Shares in share-with pages
     And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
     And user "Brian" has logged in using the webUI
     When the user browses to the shared-with-me page using the webUI
-    And the user deletes folder "simple-folder" using the webUI
+    And the user unshares folder "simple-folder" using the webUI
     And the user browses to the folder "Shares" on the files page
     Then folder "simple-folder" should not be listed on the webUI
 
@@ -109,11 +109,11 @@ Feature: Shares in share-with pages
     And user "Brian" has accepted the share "lorem.txt" offered by user "Alice"
     And user "Brian" has logged in using the webUI
     And the user browses to the shared-with-me page using the webUI
-    When the user batch deletes these files using the webUI
+    When the user batch unshares these files using the webUI
       | name          |
       | simple-folder |
       | lorem.txt     |
-    Then the deleted elements should not be listed on the webUI
+    Then the unshared elements should be in declined state on the webUI
 
   @issue-3040 @issue-4113 @ocis-reva-issue-39
   Scenario: see resource owner of parent shares in "shared with others" and "favorites" list

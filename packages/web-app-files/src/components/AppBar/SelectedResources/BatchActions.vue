@@ -3,6 +3,7 @@
     <template v-if="isTrashbinRoute">
       <oc-button
         v-if="selectedFiles.length > 0"
+        id="restore-selected-btn"
         key="restore-btn"
         variation="primary"
         class="oc-mr-s"
@@ -57,13 +58,23 @@
         </oc-button>
       </div>
       <div v-if="canAccept">
-        <oc-button id="accept-shares-btn" key="accept-shares-btn" @click="acceptShares()">
+        <oc-button
+          id="accept-selected-shares-btn"
+          key="accept-shares-btn"
+          variation="primary"
+          @click="acceptShares()"
+        >
           <oc-icon name="check" />
           <translate>Accept</translate>
         </oc-button>
       </div>
       <div v-if="canDecline">
-        <oc-button id="decline-shares-btn" key="decline-shares-btn" @click="declineShares()">
+        <oc-button
+          id="decline-selected-shares-btn"
+          key="decline-shares-btn"
+          variation="primary"
+          @click="declineShares()"
+        >
           <oc-icon name="not_interested" />
           <translate>Decline</translate>
         </oc-button>
