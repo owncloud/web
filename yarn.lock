@@ -11097,10 +11097,10 @@ vue2-dropzone@^3.6.0:
   dependencies:
     dropzone "^5.5.1"
 
-vue2-touch-events@^2.2.1:
-  version "2.3.2"
-  resolved "https://registry.yarnpkg.com/vue2-touch-events/-/vue2-touch-events-2.3.2.tgz#585941bda540da3a1e251507fa92d9c41354d661"
-  integrity sha512-OTXYvgzZsvlDFlB0WqaDXIiZulJpvf+Gp9hdGO9hZUb8j5uo0SIJbr4xQ78rPZPg7rvsXWYLmUvLVro7wy3zJw==
+vue2-touch-events@^3.2.2:
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/vue2-touch-events/-/vue2-touch-events-3.2.2.tgz#77b760a70659ed8a75e7c685163e73497be87042"
+  integrity sha512-rGV8jxgOQEJYkJCp7uOBe3hjvmG1arThrq1wGtJHwJTgi65+P2a+0l4CYcQO/U1ZFqTq2/TT2+oTE6H7Y+6Eog==
 
 vue@^2.6.10:
   version "2.6.14"
