@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import orderBy from 'lodash-es/orderBy'
 import path from 'path'
 import moment from 'moment'
 
@@ -106,10 +106,9 @@ export function aggregateResourceShares(
   token
 ) {
   if (incomingShares) {
-    return _.chain(shares)
-      .orderBy(['file_target', 'permissions'], ['asc', 'desc'])
-      .map(share => buildSharedResource(share, incomingShares, allowSharePerm))
-      .value()
+    return orderBy(shares, ['file_target', 'permissions'], ['asc', 'desc']).map(share =>
+      buildSharedResource(share, incomingShares, allowSharePerm)
+    )
   }
 
   shares.sort((a, b) => a.path.localeCompare(b.path))
