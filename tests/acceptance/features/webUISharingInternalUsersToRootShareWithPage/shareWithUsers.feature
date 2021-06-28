@@ -76,13 +76,14 @@ Feature: Shares in share-with pages
     Then file "collaborate-on-this.txt" should be listed on the webUI
 
 
-  Scenario: deleting an entry on the shared-with-me page unshares from self
+  Scenario: unsharing an entry on the shared-with-me page results in declined share
     Given user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Brian" has logged in using the webUI
     When the user browses to the shared-with-me page using the webUI
-    And the user deletes folder "simple-folder" using the webUI
-    And the user browses to the files page
-    Then folder "simple-folder" should not be listed on the webUI
+    And the user unshares folder "simple-folder" using the webUI
+    And the user closes the app-sidebar using the webUI
+    Then folder "simple-folder" shared by "Alice Hansen" should be in "Declined" state on the webUI
+    And as "Brian" folder "simple-folder" should not exist
 
   @issue-2898
   Scenario: see resource owner for direct shares in "shared with me"

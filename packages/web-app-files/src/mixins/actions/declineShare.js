@@ -3,7 +3,7 @@ import { triggerShareAction } from '../../helpers/share/triggerShareAction'
 import { checkRoute } from '../../helpers/route'
 import MixinRoutes from '../routes'
 import { shareStatus } from '../../helpers/shareStatus'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 
 export default {
   mixins: [MixinRoutes],
@@ -29,6 +29,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations('Files', ['UPDATE_RESOURCE']),
     async $_declineShare_trigger(resource) {
       try {
         const share = await triggerShareAction(

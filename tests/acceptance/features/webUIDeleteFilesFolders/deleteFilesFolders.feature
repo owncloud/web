@@ -239,8 +239,8 @@ Feature: deleting files and folders
     And user "Brian" has shared folder "simple-folder" with user "Alice"
     And user "Brian" has shared file "lorem.txt" with user "Alice"
     And the user has browsed to the shared-with-me page
-    When the user deletes folder "simple-folder" using the webUI
-    And the user deletes file "lorem.txt" using the webUI
+    When the user unshares folder "simple-folder" using the webUI
+    And the user unshares file "lorem.txt" using the webUI
     Then as "Alice" folder "simple-folder" should not exist
     And as "Alice" file "lorem.txt" should not exist
     And no message should be displayed on the webUI
