@@ -278,7 +278,8 @@ if [ -n "${EXPECTED_FAILURES_FILE}" ]; then
     EXPECTED_FAILURE_SUITE=$(dirname "${LINE}")
 
     for SUITE_IN_THIS_RUN in "${SUITES_IN_THIS_RUN[@]}"; do
-      if [ "${SUITE_IN_THIS_RUN}" == "${EXPECTED_FAILURE_SUITE}" ]
+      SUITE_IN_RUN="$(basename "${SUITE_IN_THIS_RUN}")"
+      if [ "${SUITE_IN_RUN}" == "${EXPECTED_FAILURE_SUITE}" ]
       then
         # This line in the expected failures file is for a suite that has been run.
         # So we expect that the scenario in LINE has run and failed.
