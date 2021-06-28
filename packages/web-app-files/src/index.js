@@ -20,6 +20,9 @@ import translationsJson from '../l10n/translations.json'
 import quickActionsImport from './quickActions'
 import store from './store'
 import { isTrashbinRoute } from './helpers/route'
+import { FilterSearch, SDKSearch } from './search'
+import { bus } from 'web-pkg/src/instance'
+import { Registry } from './services'
 
 // just a dummy function to trick gettext tools
 function $gettext(msg) {
@@ -300,5 +303,14 @@ export default {
   routes,
   navItems,
   quickActions,
-  translations
+  translations,
+  mounted({ router: runtimeRouter, store: runtimeStore }) {
+    Registry.filterSearch = new FilterSearch(runtimeStore, runtimeRouter)
+    Registry.sdkSearch = new SDKSearch(runtimeStore, runtimeRouter)
+
+    // when discussing the boot process of applications we need to implement a
+    // registry that does not rely on call order, aka first register "on" and only after emit.
+    bus.emit('app.search.register.provider', Registry.filterSearch)
+    bus.emit('app.search.register.provider', Registry.sdkSearch)
+  }
 }

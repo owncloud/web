@@ -4,7 +4,6 @@ export default {
   filesSearched: [],
   selected: [],
   inProgress: [],
-  searchTermGlobal: '',
   davProperties: [
     '{http://owncloud.org/ns}permissions',
     '{http://owncloud.org/ns}favorite',

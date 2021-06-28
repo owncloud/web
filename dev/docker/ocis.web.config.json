@@ -14,7 +14,8 @@
     },
     "apps": [
         "files",
-        "media-viewer"
+        "media-viewer",
+        "search"
     ],
     "external_apps": [
         {

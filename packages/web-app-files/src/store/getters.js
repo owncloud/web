@@ -14,18 +14,12 @@ export default {
   files: state => {
     return state.files
   },
-  filesAll: state => (state.searchTermGlobal ? state.filesSearched : state.files),
+  filesAll: state => (state.filesSearched.length ? state.filesSearched : state.files),
   currentFolder: state => {
     return state.currentFolder
   },
   // a flat file list has no current folder nor parent
   flatFileList: state => !!state.currentFolder === false,
-  searchTerm: state => {
-    return state.searchTermGlobal
-  },
-  atSearchPage: state => {
-    return state.searchTermGlobal !== ''
-  },
   pages: (state, getters) => Math.ceil(getters.filesAll.length / state.filesPageLimit),
   activeFiles: (state, getters) => {
     let files = [].concat(getters.filesAll)

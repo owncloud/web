@@ -36,7 +36,6 @@ const state = {
   },
   options: {
     defaultExtension: 'files',
-    hideSearchBar: false,
     homeFolder: '',
     disablePreviews: false,
     previewFileExtensions: [],

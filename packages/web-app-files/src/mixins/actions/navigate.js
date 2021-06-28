@@ -1,5 +1,3 @@
-import { mapActions } from 'vuex'
-
 import { checkRoute } from '../../helpers/route'
 
 export default {
@@ -32,22 +30,6 @@ export default {
       }
 
       return route
-    }
-  },
-  methods: {
-    ...mapActions('Files', ['resetSearch']),
-
-    $_navigate_trigger(folder) {
-      if (this.searchTerm !== '' && this.$route.params.item === folder.path) {
-        this.resetSearch()
-      }
-
-      this.$router.push({
-        name: this.route,
-        params: {
-          item: folder.path
-        }
-      })
     }
   }
 }

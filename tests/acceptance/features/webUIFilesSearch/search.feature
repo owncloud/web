@@ -138,12 +138,14 @@ Feature: Search
 
   Scenario: Search for files with difficult names
     Given user "Alice" has uploaded file with content "does-not-matter" to "/strängéनेपालीloremfile.txt"
+    And the user has reloaded the current page of the webUI
     When the user searches for "lorem" using the webUI
     Then file "strängéनेपालीloremfile.txt" should be listed on the webUI
 
 
   Scenario: Search for files with difficult names and difficult search phrase
     Given user "Alice" has uploaded file with content "does-not-matter" to "/strängéनेपालीloremfile.txt"
+    And the user has reloaded the current page of the webUI
     When the user searches for "strängéनेपाली" using the webUI
     Then file "strängéनेपालीloremfile.txt" should be listed on the webUI
 
@@ -172,6 +174,7 @@ Feature: Search
 
   Scenario: Delete file from search list
     Given user "Alice" has uploaded file with content "uploaded content" to "file-to-delete.txt"
+    When the user reloads the current page of the webUI
     When the user searches for "file-to" using the webUI
     And the user deletes file "file-to-delete.txt" using the webUI
     Then file "file-to-delete.txt" should not be listed on the webUI
