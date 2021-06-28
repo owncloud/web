@@ -33,7 +33,8 @@ config.mocks = {
   $language: {
     current: 'en_US'
   },
-  encodePath
+  encodePath,
+  isIE11: () => false
 }
 
 // Translate component mock

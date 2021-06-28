@@ -20,83 +20,109 @@
       <h1 class="oc-invisible-sr" v-text="pageTitle" />
       <div
         v-if="showActions || selectedFiles.length > 0 || isTrashbinRoute"
-        class="uk-flex uk-flex-middle oc-p-s"
+        class="uk-flex uk-flex-middle uk-flex-between oc-p-s"
       >
-        <template v-if="showActions && areDefaultActionsVisible">
-          <oc-button
-            id="new-file-menu-btn"
-            key="new-file-menu-btn-enabled"
-            v-oc-tooltip="newButtonTooltip"
-            :aria-label="newButtonAriaLabel"
-            variation="primary"
-            appearance="filled"
-            :disabled="isNewBtnDisabled"
-          >
-            <oc-icon name="add" />
-            <translate>New</translate>
-          </oc-button>
-          <oc-drop
-            drop-id="new-file-menu-drop"
-            toggle="#new-file-menu-btn"
-            mode="click"
-            close-on-click
-            :options="{ delayHide: 0 }"
-          >
-            <ul class="uk-list">
-              <li>
-                <file-upload
-                  :path="currentPath"
-                  :headers="headers"
-                  @success="onFileSuccess"
-                  @error="onFileError"
-                  @progress="onFileProgress"
-                />
-              </li>
-              <li v-if="checkIfBrowserSupportsFolderUpload">
-                <folder-upload
-                  v-if="!isIE11()"
-                  :root-path="currentPath"
-                  :path="currentPath"
-                  :headers="headers"
-                  @success="onFileSuccess"
-                  @error="onFileError"
-                  @progress="onFileProgress"
-                />
-              </li>
-              <li>
-                <div>
-                  <oc-button
-                    id="new-folder-btn"
-                    appearance="raw"
-                    class="uk-width-1-1"
-                    justify-content="left"
-                    @click="showCreateResourceModal"
-                  >
-                    <oc-icon name="create_new_folder" />
-                    <translate>New folder…</translate>
-                  </oc-button>
-                </div>
-              </li>
-              <li v-for="(newFileHandler, key) in newFileHandlers" :key="key">
-                <div>
-                  <oc-button
-                    appearance="raw"
-                    justify-content="left"
-                    :class="['new-file-btn-' + newFileHandler.ext, 'uk-width-1-1']"
-                    @click="
-                      showCreateResourceModal(false, newFileHandler.ext, newFileHandler.action)
-                    "
-                  >
-                    <oc-icon :name="newFileHandler.icon || 'save'" />
-                    <span>{{ newFileHandler.menuTitle($gettext) }}</span>
-                  </oc-button>
-                </div>
-              </li>
-            </ul>
-          </oc-drop>
-        </template>
-        <size-info v-if="selectedFiles.length > 0" class="oc-mr-s uk-visible@l" />
-        <batch-actions />
+        <div class="uk-flex-1 uk-flex uk-flex-middle">
+          <template v-if="showActions && areDefaultActionsVisible">
+            <oc-button
+              id="new-file-menu-btn"
+              key="new-file-menu-btn-enabled"
+              v-oc-tooltip="newButtonTooltip"
+              :aria-label="newButtonAriaLabel"
+              variation="primary"
+              appearance="filled"
+              :disabled="isNewBtnDisabled"
+            >
+              <oc-icon name="add" />
+              <translate>New</translate>
+            </oc-button>
+            <oc-drop
+              drop-id="new-file-menu-drop"
+              toggle="#new-file-menu-btn"
+              mode="click"
+              close-on-click
+              :options="{ delayHide: 0 }"
+            >
+              <ul class="uk-list">
+                <li>
+                  <file-upload
+                    :path="currentPath"
+                    :headers="headers"
+                    @success="onFileSuccess"
+                    @error="onFileError"
+                    @progress="onFileProgress"
+                  />
+                </li>
+                <li v-if="checkIfBrowserSupportsFolderUpload">
+                  <folder-upload
+                    v-if="!isIE11()"
+                    :root-path="currentPath"
+                    :path="currentPath"
+                    :headers="headers"
+                    @success="onFileSuccess"
+                    @error="onFileError"
+                    @progress="onFileProgress"
+                  />
+                </li>
+                <li>
+                  <div>
+                    <oc-button
+                      id="new-folder-btn"
+                      appearance="raw"
+                      class="uk-width-1-1"
+                      justify-content="left"
+                      @click="showCreateResourceModal"
+                    >
+                      <oc-icon name="create_new_folder" />
+                      <translate>New folder…</translate>
+                    </oc-button>
+                  </div>
+                </li>
+                <li v-for="(newFileHandler, key) in newFileHandlers" :key="key">
+                  <div>
+                    <oc-button
+                      appearance="raw"
+                      justify-content="left"
+                      :class="['new-file-btn-' + newFileHandler.ext, 'uk-width-1-1']"
+                      @click="
+                        showCreateResourceModal(false, newFileHandler.ext, newFileHandler.action)
+                      "
+                    >
+                      <oc-icon :name="newFileHandler.icon || 'save'" />
+                      <span>{{ newFileHandler.menuTitle($gettext) }}</span>
+                    </oc-button>
+                  </div>
+                </li>
+              </ul>
+            </oc-drop>
+          </template>
+          <size-info v-if="selectedFiles.length > 0" class="oc-mr-s uk-visible@l" />
+          <batch-actions />
+        </div>
+        <oc-button
+          id="files-view-options-btn"
+          key="files-view-options-btn"
+          v-oc-tooltip="newButtonTooltip"
+          data-testid="files-view-options-btn"
+          :aria-label="newButtonAriaLabel"
+          variation="passive"
+          appearance="outline"
+          size="small"
+        >
+          <oc-icon name="tune" size="small" />
+          <translate>View</translate>
+        </oc-button>
+        <oc-drop drop-id="files-view-options-drop" toggle="#files-view-options-btn" mode="click">
+          <oc-list>
+            <li>
+              <oc-switch
+                v-model="hiddenFilesShownModel"
+                data-testid="files-switch-hidden-files"
+                :label="$gettext('Show hidden files')"
+              />
+            </li>
+          </oc-list>
+        </oc-drop>
       </div>
     </div>
   </div>
@@ -144,6 +170,7 @@ export default {
       'publicLinkPassword'
     ]),
     ...mapState(['route']),
+    ...mapState('Files', ['areHiddenFilesShown']),
 
     newButtonTooltip() {
       if (!this.canUpload) {
@@ -267,12 +294,33 @@ export default {
         this.selectedFiles.length
       )
       return this.$gettextInterpolate(translated, { amount: this.selectedFiles.length })
+    },
+
+    hiddenFilesShownModel: {
+      get() {
+        return this.areHiddenFilesShown
+      },
+
+      set(value) {
+        this.SET_HIDDEN_FILES_VISIBILITY(value)
+      }
     }
   },
+
+  created() {
+    // Storage returns a string so we need to convert it into a boolean
+    const areHiddenFilesShown = window.localStorage.getItem('oc_hiddenFilesShown') || 'true'
+    const areHiddenFilesShownBoolean = areHiddenFilesShown === 'true'
+
+    if (areHiddenFilesShownBoolean !== this.areHiddenFilesShown) {
+      this.SET_HIDDEN_FILES_VISIBILITY(areHiddenFilesShownBoolean)
+    }
+  },
+
   methods: {
     ...mapActions('Files', ['updateFileProgress', 'removeFilesFromTrashbin', 'loadIndicators']),
     ...mapActions(['openFile', 'showMessage', 'createModal', 'setModalInputErrorMessage']),
-    ...mapMutations('Files', ['UPSERT_RESOURCE']),
+    ...mapMutations('Files', ['UPSERT_RESOURCE', 'SET_HIDDEN_FILES_VISIBILITY']),
     ...mapMutations(['SET_QUOTA']),
 
     showCreateResourceModal(isFolder = true, ext = 'txt', openAction = null) {
