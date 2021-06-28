@@ -8,10 +8,20 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Image-source directive did not handle updates correctly: [#5364](https://github.com/owncloud/web/pull/5364)
 * Bugfix - Remove unnecessary Propfind requests: [#5340](https://github.com/owncloud/web/pull/5340)
 
 Details
 -------
+
+* Bugfix - Image-source directive did not handle updates correctly: [#5364](https://github.com/owncloud/web/pull/5364)
+
+   When using v-image-source to bind an image source it did not handle changes to the image source
+   url.
+
+   This has been fixed by implementing the update hook in the directive.
+
+   https://github.com/owncloud/web/pull/5364
 
 * Bugfix - Remove unnecessary Propfind requests: [#5340](https://github.com/owncloud/web/pull/5340)
 
