@@ -16,7 +16,11 @@ export default {
           handler: this.$_declineShare_trigger,
           label: () => this.$gettext('Decline share'),
           isEnabled: ({ resource }) => {
-            if (!checkRoute(['files-shared-with-me'], this.$route.name)) {
+            if (!checkRoute(['files-shared-with-me', 'files-personal'], this.$route.name)) {
+              return false
+            }
+            if (!resource.isReceivedShare()) {
+              // not a received share, but an own file/folder. Use `delete` action instead.
               return false
             }
 

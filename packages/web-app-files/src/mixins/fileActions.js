@@ -19,13 +19,13 @@ const actionsMixins = [
   'navigate',
   'download',
   'favorite',
-  'acceptShare',
-  'declineShare',
   'copy',
   'move',
   'rename',
   'restore',
-  'delete'
+  'delete',
+  'acceptShare',
+  'declineShare'
 ]
 
 export const EDITOR_MODE_EDIT = 'edit'
