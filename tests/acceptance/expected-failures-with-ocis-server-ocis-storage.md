@@ -511,3 +511,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUISharingPublicManagement/publicLinkShareByEmail.feature:56](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicManagement/publicLinkShareByEmail.feature#L56)
 -   [webUISharingPublicManagement/publicLinkShareByEmail.feature:71](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicManagement/publicLinkShareByEmail.feature#L71)
 -   [webUISharingPublicManagement/publicLinkShareByEmail.feature:99](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicManagement/publicLinkShareByEmail.feature#L99)
+
+### [Uploading folders does not work in files-drop] (https://github.com/owncloud/web/issues/2443)
+-   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:248](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L248)

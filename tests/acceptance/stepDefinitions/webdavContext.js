@@ -51,14 +51,24 @@ const fileShouldNotHaveContent = async function(userId, file, content) {
 
 const assertResourceType = function(response, resource, type = 'file') {
   let matches
-  if (type.toLowerCase() === 'folder') {
+  let foundType
+  type = type.toLowerCase()
+
+  if (type === 'folder') {
     matches = response.match(/d:collection/g)
   } else {
     matches = response.match(/d:getcontenttype/g)
   }
 
   const exists = matches !== null
-  assert.strictEqual(exists, true, `${type} "${resource}" should exist, but does not`)
+  if (!exists) {
+    foundType = type === 'folder' ? 'file' : 'folder'
+  }
+  assert.strictEqual(
+    exists,
+    true,
+    `Expected "${resource}" to be a "${type}", but found "${foundType}"`
+  )
 }
 
 const fileOrFolderShouldExist = function(userId, element, type = 'file') {
