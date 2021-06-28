@@ -40,7 +40,7 @@ To set the ownCloud Web address and to display ownCloud Web in the app switcher,
 Administrators can optionally decide whether ownCloud Links (public and private links) should be provided by the Classic web interface or by ownCloud Web using the `web.rewriteLinks` option in `config/config.php`. The option defaults to `false` so that the links open in the Classic web interface. Setting it to `true` will redirect all links to ownCloud Web. To redirect all private and public links to ownCloud Web, add the following line into `config/config.php`:
 
 ```php
-'web.rewriteLinks' => 'true',
+'web.rewriteLinks' => true,
 ```
 
 ### Make ownCloud Web the default web interface
