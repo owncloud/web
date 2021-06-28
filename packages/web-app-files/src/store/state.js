@@ -47,7 +47,7 @@ export default {
   sharesTreeLoading: false,
 
   loadingFolder: false,
-  highlightedFile: null,
+  highlightedResourceId: null,
   publicLinkPassword: null,
   uploaded: [],
   actionsInProgress: [],

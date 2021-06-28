@@ -78,13 +78,16 @@ export default {
     // whenever no file is selected / no sidebar is open.
     // else it means we're loading the shares only for the sidebar contents and shouldn't
     // be showing a progress bar for the whole folder
-    return state.loadingFolder || (state.highlightedFile === null && state.sharesTreeLoading)
+    return state.loadingFolder || (state.highlightedResourceId === null && state.sharesTreeLoading)
   },
   quota: state => {
     return state.quota
   },
   highlightedFile: state => {
-    return state.highlightedFile
+    if (state.highlightedResourceId) {
+      return state.files.find(r => r.id === state.highlightedResourceId)
+    }
+    return null
   },
   publicLinkPassword: state => {
     // we need to use the state for reactivity
