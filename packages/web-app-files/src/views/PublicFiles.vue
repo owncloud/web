@@ -27,7 +27,7 @@
         :target-route="targetRoute"
         :highlighted="highlightedFile ? highlightedFile.id : null"
         :header-position="headerPosition"
-        @showDetails="setHighlightedFile"
+        @showDetails="$_mountSideBar_showDetails"
         @fileClick="$_fileActions_triggerDefaultAction"
         @rowMounted="rowMounted"
       >
@@ -59,6 +59,7 @@ import MixinAccessibleBreadcrumb from '../mixins/accessibleBreadcrumb'
 import MixinFileActions from '../mixins/fileActions'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
 import MixinFilesListPagination from '../mixins/filesListPagination'
+import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 
 import { buildResource } from '../helpers/resources'
 import ListLoader from '../components/FilesList/ListLoader.vue'
@@ -82,7 +83,8 @@ export default {
     MixinAccessibleBreadcrumb,
     MixinFileActions,
     MixinFilesListPositioning,
-    MixinFilesListPagination
+    MixinFilesListPagination,
+    MixinMountSideBar
   ],
 
   data: () => ({
@@ -161,7 +163,7 @@ export default {
     visibilityObserver.disconnect()
   },
   methods: {
-    ...mapActions('Files', ['setHighlightedFile', 'loadPreview']),
+    ...mapActions('Files', ['loadPreview']),
     ...mapMutations('Files', [
       'SELECT_RESOURCES',
       'SET_CURRENT_FOLDER',

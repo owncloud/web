@@ -24,7 +24,7 @@
         :highlighted="highlightedFile ? highlightedFile.id : null"
         :are-resources-clickable="false"
         :header-position="headerPosition"
-        @showDetails="setHighlightedFile"
+        @showDetails="$_mountSideBar_showDetails"
       >
         <template #footer>
           <oc-pagination
@@ -48,12 +48,13 @@
 </template>
 
 <script>
-import { mapGetters, mapActions, mapMutations, mapState } from 'vuex'
+import { mapGetters, mapMutations, mapState } from 'vuex'
 
 import { buildDeletedResource, buildResource } from '../helpers/resources'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
 import MixinResources from '../mixins/resources'
 import MixinFilesListPagination from '../mixins/filesListPagination'
+import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 
 import ListLoader from '../components/FilesList/ListLoader.vue'
 import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
@@ -62,7 +63,7 @@ import ListInfo from '../components/FilesList/ListInfo.vue'
 export default {
   components: { ListLoader, NoContentMessage, ListInfo },
 
-  mixins: [MixinFilesListPositioning, MixinResources, MixinFilesListPagination],
+  mixins: [MixinFilesListPositioning, MixinResources, MixinFilesListPagination, MixinMountSideBar],
 
   data: () => ({
     loading: true
@@ -123,7 +124,6 @@ export default {
   },
 
   methods: {
-    ...mapActions('Files', ['setHighlightedFile']),
     ...mapMutations('Files', ['LOAD_FILES', 'SELECT_RESOURCES', 'CLEAR_CURRENT_FILES_LIST']),
 
     async loadResources() {

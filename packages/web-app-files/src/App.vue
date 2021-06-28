@@ -17,7 +17,7 @@
       ref="filesSidebar"
       tabindex="-1"
       class="uk-width-1-1 uk-width-1-2@m uk-width-1-3@xl"
-      @reset="setHighlightedFile(null)"
+      @reset="$_destroySideBar_hideDetails"
       @beforeDestroy="focusSideBar"
       @mounted="focusSideBar"
       @fileChanged="focusSideBar"
@@ -27,6 +27,7 @@
 <script>
 import Mixins from './mixins'
 import MixinRoutes from './mixins/routes'
+import MixinDestroySideBar from './mixins/sidebar/destroySideBar'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import AppBar from './components/AppBar/AppBar.vue'
 import ProgressBar from './components/Upload/ProgressBar.vue'
@@ -38,7 +39,7 @@ export default {
     ProgressBar,
     SideBar
   },
-  mixins: [Mixins, MixinRoutes],
+  mixins: [Mixins, MixinRoutes, MixinDestroySideBar],
   data() {
     return {
       createFolder: false,
@@ -63,7 +64,7 @@ export default {
   },
   watch: {
     $route() {
-      this.setHighlightedFile(null)
+      this.$_destroySideBar_hideDetails()
       this.resetFileSelection()
     }
   },
@@ -78,7 +79,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('Files', ['dragOver', 'setHighlightedFile', 'resetFileSelection']),
+    ...mapActions('Files', ['dragOver', 'resetFileSelection']),
     ...mapActions(['showMessage']),
     ...mapMutations('Files', ['SET_APP_SIDEBAR_EXPANDED_ACCORDION']),
     ...mapMutations(['SET_SIDEBAR_FOOTER_CONTENT_COMPONENT']),
@@ -87,10 +88,6 @@ export default {
       console.info('trace', arguments)
     },
 
-    openSideBar(file, sideBarName) {
-      this.setHighlightedFile(file)
-      this.SET_APP_SIDEBAR_EXPANDED_ACCORDION(sideBarName)
-    },
     focusSideBar(component, event) {
       this.focus({
         from: document.activeElement,

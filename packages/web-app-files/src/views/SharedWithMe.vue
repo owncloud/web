@@ -25,7 +25,7 @@
         :target-route="targetRoute"
         :highlighted="highlightedFile ? highlightedFile.id : null"
         :header-position="headerPosition"
-        @showDetails="setHighlightedFile"
+        @showDetails="$_mountSideBar_showDetails"
         @fileClick="$_fileActions_triggerDefaultAction"
         @rowMounted="rowMounted"
       >
@@ -88,6 +88,7 @@ import MixinAcceptShare from '../mixins/actions/acceptShare'
 import MixinDeclineShare from '../mixins/actions/declineShare'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
 import MixinFilesListPagination from '../mixins/filesListPagination'
+import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 
 import ListLoader from '../components/FilesList/ListLoader.vue'
 import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
@@ -110,7 +111,8 @@ export default {
     MixinAcceptShare,
     MixinDeclineShare,
     MixinFilesListPositioning,
-    MixinFilesListPagination
+    MixinFilesListPagination,
+    MixinMountSideBar
   ],
 
   data: () => ({
@@ -186,7 +188,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('Files', ['setHighlightedFile', 'loadIndicators', 'loadPreview', 'loadAvatars']),
+    ...mapActions('Files', ['loadIndicators', 'loadPreview', 'loadAvatars']),
     ...mapActions(['showMessage']),
     ...mapMutations('Files', [
       'LOAD_FILES',
