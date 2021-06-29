@@ -102,9 +102,8 @@
         <oc-button
           id="files-view-options-btn"
           key="files-view-options-btn"
-          v-oc-tooltip="newButtonTooltip"
           data-test-id="files-view-options-btn"
-          :aria-label="newButtonAriaLabel"
+          :aria-label="viewButtonAriaLabel"
           variation="passive"
           appearance="outline"
           size="small"
@@ -188,6 +187,11 @@ export default {
       }
       return this.$gettext('Add files or folders')
     },
+
+    viewButtonAriaLabel() {
+      return this.$gettext('Display customization options of the files list')
+    },
+
     currentPath() {
       const path = this.$route.params.item || ''
       if (path.endsWith('/')) {
