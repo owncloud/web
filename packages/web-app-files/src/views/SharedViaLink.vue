@@ -70,7 +70,13 @@ const visibilityObserver = new VisibilityObserver()
 export default {
   components: { ListLoader, NoContentMessage, ListInfo },
 
-  mixins: [FileActions, MixinFilesListPositioning, MixinResources, MixinFilesListPagination, MixinMountSideBar],
+  mixins: [
+    FileActions,
+    MixinFilesListPositioning,
+    MixinResources,
+    MixinFilesListPagination,
+    MixinMountSideBar
+  ],
 
   data: () => ({
     loading: true
