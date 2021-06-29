@@ -103,7 +103,7 @@
           id="files-view-options-btn"
           key="files-view-options-btn"
           v-oc-tooltip="newButtonTooltip"
-          data-testid="files-view-options-btn"
+          data-test-id="files-view-options-btn"
           :aria-label="newButtonAriaLabel"
           variation="passive"
           appearance="outline"
@@ -117,7 +117,7 @@
             <li>
               <oc-switch
                 v-model="hiddenFilesShownModel"
-                data-testid="files-switch-hidden-files"
+                data-test-id="files-switch-hidden-files"
                 :label="$gettext('Show hidden files')"
               />
             </li>
