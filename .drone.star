@@ -2474,6 +2474,30 @@ def githubComment(alternateSuiteName):
             },
         },
         {
+            "name": "notify-passedOnRetry",
+            "image": "plugins/slack:1",
+            "pull": "always",
+            "settings": {
+                "webhook": {
+                    "from_secret": config["rocketchat"]["from_secret"],
+                },
+                "channel": config["rocketchat"]["channel"],
+                "template": "there were scenarios that passed-on-retry",
+            },
+            "commands": [
+                "if [ -f %s/passedOnRetry.file ]; then /bin/drone-slack; fi" % dir["web"],
+            ],
+            "when": {
+                "status": [
+                    "success",
+                    "failure",
+                ],
+                "event": [
+                    "pull_request",
+                ],
+            },
+        },
+        {
             "name": "github-comment",
             "image": "jmccann/drone-github-comment:1",
             "pull": "if-not-exists",
