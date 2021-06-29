@@ -182,7 +182,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server
     And the user has reloaded the current page of the webUI
     When the user shares folder "simple-folder" with user "Brian Murphy" as "Viewer" using the webUI
-    Then as "Brian" folder "simple-folder/lorem.txt" should exist
+    Then as "Brian" file "simple-folder/lorem.txt" should exist
     And user "Brian" should have received a share with these details:
       | field       | value       |
       | uid_owner   | Alice       |

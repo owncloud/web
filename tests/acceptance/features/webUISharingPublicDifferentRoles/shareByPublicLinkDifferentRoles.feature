@@ -248,7 +248,7 @@ Feature: Share by public link with different roles
   Scenario: creating a public link with "Uploader" role makes it possible to upload a folder
     Given user "Alice" has shared folder "simple-folder" with link with "create" permissions
     When the public uses the webUI to access the last public link created by user "Alice"
-    And the public uploads file "FOLDER" in files-drop page
+    And the public uploads folder "FOLDER" in files-drop page
     Then the following files should be listed on the files-drop page:
       | FOLDER |
     And as "Alice" folder "simple-folder/FOLDER" should exist
