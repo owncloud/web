@@ -2,11 +2,12 @@ import { triggerShareAction } from '../../helpers/share/triggerShareAction'
 
 import { checkRoute } from '../../helpers/route'
 import MixinRoutes from '../routes'
+import MixinDestroySideBar from '../sidebar/destroySideBar'
 import { shareStatus } from '../../helpers/shareStatus'
 import { mapGetters, mapMutations } from 'vuex'
 
 export default {
-  mixins: [MixinRoutes],
+  mixins: [MixinRoutes, MixinDestroySideBar],
   computed: {
     ...mapGetters(['isOcis']),
     $_declineShare_items() {
@@ -33,7 +34,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('Files', ['UPDATE_RESOURCE']),
+    ...mapMutations('Files', ['UPDATE_RESOURCE', 'REMOVE_FILE']),
     async $_declineShare_trigger(resource) {
       try {
         const share = await triggerShareAction(
@@ -42,7 +43,19 @@ export default {
           !this.isOcis,
           this.$client
         )
-        this.UPDATE_RESOURCE(share)
+        // handling of store mutations has to be differently per supported route
+        if (this.isSharedWithMeRoute) {
+          this.UPDATE_RESOURCE(share)
+          return
+        }
+        if (this.isPersonalRoute) {
+          this.$_destroySideBar_hideDetails()
+          this.REMOVE_FILE(resource)
+          return
+        }
+        console.error(
+          'Store mutation for declineShare not implemented for route ' + this.$route.name
+        )
       } catch (error) {
         console.log(error)
         this.showMessage({
