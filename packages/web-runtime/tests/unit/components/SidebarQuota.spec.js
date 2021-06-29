@@ -40,7 +40,10 @@ describe('Sidebar Quota component', () => {
         }
       }),
       localVue,
-      stubs
+      stubs: {
+        ...stubs,
+        translate: false
+      }
     })
     expect(wrapper.html()).toContain('1.2 GB of 2 GB')
   })

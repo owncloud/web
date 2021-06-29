@@ -37,6 +37,41 @@ const files = {
         ]
       },
       {
+        id: '57',
+        share_type: 3,
+        uid_owner: 'admin',
+        displayname_owner: 'admin',
+        permissions: 1,
+        stime: 1623242657,
+        parent: null,
+        expiration: null,
+        token: 'sADy5cUdrz931MV',
+        uid_file_owner: 'admin',
+        displayname_file_owner: 'admin',
+        additional_info_owner: null,
+        additional_info_file_owner: null,
+        path: '/.hidden-folder',
+        mimetype: 'httpd/unix-directory',
+        storage_id: 'home::admin',
+        storage: 2,
+        item_type: 'folder',
+        item_source: 3009,
+        file_source: 3009,
+        file_parent: 6,
+        file_target: '/.hidden-folder',
+        name: 'Quick action link',
+        url: 'http://host.docker.internal:8080/s/sADy5cUdrz931MV',
+        mail_send: 0,
+        attributes: null,
+        tags: [],
+        sharedWith: [
+          {
+            name: 'Quick action link',
+            link: true
+          }
+        ]
+      },
+      {
         id: '39',
         share_type: 3,
         uid_owner: 'admin',

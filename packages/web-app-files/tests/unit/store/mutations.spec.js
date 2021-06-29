@@ -58,4 +58,13 @@ describe('vuex store mutations', () => {
       expect(stateMock.files).toEqual(stateFixture.files)
     })
   })
+
+  it('SET_HIDDEN_FILES_VISIBILITY', () => {
+    const state = { areHiddenFilesShown: true }
+    const { SET_HIDDEN_FILES_VISIBILITY } = mutations
+
+    SET_HIDDEN_FILES_VISIBILITY(state, false)
+
+    expect(state.areHiddenFilesShown).toEqual(false)
+  })
 })

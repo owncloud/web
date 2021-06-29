@@ -1,0 +1,7 @@
+Enhancement: Add view options
+
+We've added view options above the files lists so that the user can customise them.
+Currently, it is possible to toggle visibility of hidden files.
+Changes in view options are persisted in local storage.
+
+https://github.com/owncloud/web/pull/5408
