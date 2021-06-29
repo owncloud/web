@@ -3,7 +3,7 @@ import { render, waitFor, fireEvent } from '@testing-library/vue'
 
 import toKebabCase from '../../../../../tests/helpers/toKebabCase'
 
-import StoreFiles from '../../../src/store'
+import StoreFiles from '@files/src/store'
 import Store from '@runtime/src/store'
 
 import Personal from '../../../src/views/Personal.vue'
@@ -62,7 +62,7 @@ const store = {
       ...StoreFiles,
       state: {
         ...StoreFiles.state,
-        filesPageLimit: 1
+        filesPageLimit: 2
       }
     }
   }
@@ -124,7 +124,7 @@ describe('User can navigate in files list using pagination', () => {
       expect(document.querySelector('.oc-pagination')).toBeVisible()
 
       // 2 links, 1 current page and 1 next page link
-      expect(document.querySelectorAll('.oc-pagination-list-item').length).toBe(4)
+      expect(document.querySelectorAll('.oc-pagination-list-item').length).toBe(3)
 
       const secondPage = document
         .evaluate(
@@ -175,9 +175,9 @@ describe('User can navigate in files list using pagination', () => {
 
       expect(queryByText('Documents')).toBe(null)
       expect(getByText('Photos')).toBeVisible()
-      expect(queryByText('ownCloud Manual')).toBe(null)
+      expect(queryByText('ownCloud Manual')).toBeVisible()
       expect(document.querySelector('.oc-pagination')).toBeVisible()
-      expect(document.querySelectorAll('.oc-pagination-list-item').length).toBe(5)
+      expect(document.querySelectorAll('.oc-pagination-list-item').length).toBe(3)
       expect(document.querySelector('.oc-pagination-list-item-current').textContent).toMatch('2')
     }
   )
