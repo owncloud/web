@@ -11,7 +11,7 @@ Feature: Sharing files with multiple internal users with different permissions
       | Alice    |
       | Brian    |
 
-  @issue-ocis-1743
+  @issue-ocis-1743 @ocisSmokeTest
   Scenario Outline: share a file with multiple users with different roles and permissions
     Given these users have been created with default attributes and without skeleton files:
       | username |

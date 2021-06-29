@@ -243,7 +243,7 @@ When('the user uploads a created file {string} using the webUI', function(elemen
   })
 })
 
-When('the public uploads file {string} in files-drop page', function(element) {
+When('the public uploads file/folder {string} in files-drop page', function(element) {
   const rootUploadDir = client.globals.mountedUploadDir
   const filePath = path.join(rootUploadDir, element)
   return client.page

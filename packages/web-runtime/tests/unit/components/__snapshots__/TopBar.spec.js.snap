@@ -4,7 +4,7 @@ exports[`Top Bar component Displays applications menu 1`] = `
 <header aria-label="Top bar" class="oc-topbar uk-flex uk-flex-middle uk-flex-wrap oc-border-b oc-p-s">
   <oc-grid-stub gutter="medium" flex="">
     <div class="uk-hidden@l">
-      <oc-button-stub appearance="raw" aria-label="Open navigation menu" class="oc-app-navigation-toggle">
+      <oc-button-stub appearance="raw" aria-label="Open navigation menu" class="oc-m-s oc-app-navigation-toggle">
         <oc-icon-stub name="menu"></oc-icon-stub>
       </oc-button-stub>
     </div>
@@ -22,7 +22,7 @@ exports[`Top Bar component when search bar hidden globally Hides search bar even
 <header aria-label="Top bar" class="oc-topbar uk-flex uk-flex-middle uk-flex-wrap oc-border-b oc-p-s">
   <oc-grid-stub gutter="medium" flex="">
     <div class="uk-hidden@l">
-      <oc-button-stub appearance="raw" aria-label="Open navigation menu" class="oc-app-navigation-toggle">
+      <oc-button-stub appearance="raw" aria-label="Open navigation menu" class="oc-m-s oc-app-navigation-toggle">
         <oc-icon-stub name="menu"></oc-icon-stub>
       </oc-button-stub>
     </div>
@@ -40,7 +40,7 @@ exports[`Top Bar component when search bar hidden globally Hides the search bar 
 <header aria-label="Top bar" class="oc-topbar uk-flex uk-flex-middle uk-flex-wrap oc-border-b oc-p-s">
   <oc-grid-stub gutter="medium" flex="">
     <div class="uk-hidden@l">
-      <oc-button-stub appearance="raw" aria-label="Open navigation menu" class="oc-app-navigation-toggle">
+      <oc-button-stub appearance="raw" aria-label="Open navigation menu" class="oc-m-s oc-app-navigation-toggle">
         <oc-icon-stub name="menu"></oc-icon-stub>
       </oc-button-stub>
     </div>
@@ -58,7 +58,7 @@ exports[`Top Bar component when search bar visible globally Displays search bar 
 <header aria-label="Top bar" class="oc-topbar uk-flex uk-flex-middle uk-flex-wrap oc-border-b oc-p-s">
   <oc-grid-stub gutter="medium" flex="">
     <div class="uk-hidden@l">
-      <oc-button-stub appearance="raw" aria-label="Open navigation menu" class="oc-app-navigation-toggle">
+      <oc-button-stub appearance="raw" aria-label="Open navigation menu" class="oc-m-s oc-app-navigation-toggle">
         <oc-icon-stub name="menu"></oc-icon-stub>
       </oc-button-stub>
     </div>
@@ -76,7 +76,7 @@ exports[`Top Bar component when search bar visible globally Hides the search bar
 <header aria-label="Top bar" class="oc-topbar uk-flex uk-flex-middle uk-flex-wrap oc-border-b oc-p-s">
   <oc-grid-stub gutter="medium" flex="">
     <div class="uk-hidden@l">
-      <oc-button-stub appearance="raw" aria-label="Open navigation menu" class="oc-app-navigation-toggle">
+      <oc-button-stub appearance="raw" aria-label="Open navigation menu" class="oc-m-s oc-app-navigation-toggle">
         <oc-icon-stub name="menu"></oc-icon-stub>
       </oc-button-stub>
     </div>

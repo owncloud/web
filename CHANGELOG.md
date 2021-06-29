@@ -1,17 +1,27 @@
-Changelog for ownCloud Web [unreleased] (UNRELEASED)
+Changelog for ownCloud Web [3.3.1] (2021-06-28)
 =======================================
-The following sections list the changes in ownCloud web unreleased relevant to
+The following sections list the changes in ownCloud web 3.3.1 relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v3.3.0...master
+[3.3.1]: https://github.com/owncloud/web/compare/v3.3.0...v3.3.1
 
 Summary
 -------
 
+* Bugfix - Image-source directive did not handle updates correctly: [#5364](https://github.com/owncloud/web/pull/5364)
 * Bugfix - Remove unnecessary Propfind requests: [#5340](https://github.com/owncloud/web/pull/5340)
 
 Details
 -------
+
+* Bugfix - Image-source directive did not handle updates correctly: [#5364](https://github.com/owncloud/web/pull/5364)
+
+   When using v-image-source to bind an image source it did not handle changes to the image source
+   url.
+
+   This has been fixed by implementing the update hook in the directive.
+
+   https://github.com/owncloud/web/pull/5364
 
 * Bugfix - Remove unnecessary Propfind requests: [#5340](https://github.com/owncloud/web/pull/5340)
 

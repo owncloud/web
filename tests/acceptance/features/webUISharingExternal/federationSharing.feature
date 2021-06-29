@@ -183,7 +183,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     When the user opens folder "Shares" using the webUI
     And the user shares folder "simple-folder" with user "Brian Murphy" as "Viewer" using the webUI
     And user "Brian" accepts the share "Shares/simple-folder" offered by user "Alice" using the sharing API
-    Then as "Brian" folder "Shares/simple-folder/lorem.txt" should exist
+    Then as "Brian" file "Shares/simple-folder/lorem.txt" should exist
     And user "Brian" should have received a share with these details:
       | field       | value       |
       | uid_owner   | Alice       |

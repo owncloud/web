@@ -380,8 +380,8 @@ Feature: accept/decline shares coming from internal users
     Then folder "simple-folder" shared by "Alice Hansen" should be in "Accepted" state on the webUI
     When the user accepts share "simple-folder" offered by user "Carol King" using the webUI
     Then folder "simple-folder (2)" shared by "Carol King" should be in "Accepted" state on the webUI
-    And as "Brian" file "from_Alice" should exist inside folder "/simple-folder"
-    And as "Brian" file "from_Carol" should exist inside folder "/simple-folder (2)"
+    And as "Brian" folder "from_Alice" should exist inside folder "/simple-folder"
+    And as "Brian" folder "from_Carol" should exist inside folder "/simple-folder (2)"
 
 
   Scenario: accept a share that you received as user and as group member
