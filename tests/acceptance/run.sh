@@ -4,9 +4,9 @@ SCRIPT_PATH=$(dirname "$0")
 SCRIPT_PATH=$( cd "${SCRIPT_PATH}" && pwd )  # normalized and made absolute
 FEATURES_DIR="${SCRIPT_PATH}/features"
 
-COMMENTS_FILE="${COMMENTS_FILE:-comments.file}"
+PASSED_ON_RETRY_FILE="${PASSED_ON_RETRY_FILE:-passedOnRetry.file}"
 
-rm -rf logfile.txt "$COMMENTS_FILE"
+rm -rf logfile.txt "$PASSED_ON_RETRY_FILE"
 
 echo 'run.sh: running acceptance-tests-drone'
 
@@ -240,9 +240,9 @@ if [ ${#SINGLE_FAILED_SCENARIOS[@]} -ne 0 ]
 then
   echo ""
   echo ""
-  echo "The following scenarios passed on retry:" | tee -a "$COMMENTS_FILE"
+  echo "The following scenarios passed on retry:" | tee -a "$PASSED_ON_RETRY_FILE"
   echo "-------------------------------"
-  for KEY in "${!SINGLE_FAILED_SCENARIOS[@]}"; do echo "- $KEY" | tee -a "$COMMENTS_FILE"; done
+  for KEY in "${!SINGLE_FAILED_SCENARIOS[@]}"; do echo "- $KEY" | tee -a "$PASSED_ON_RETRY_FILE"; done
   echo "-------------------------------"
 fi
 

@@ -2455,31 +2455,50 @@ def buildGithubCommentForBuildStopped(suite):
 
 def githubComment(alternateSuiteName):
     prefix = "Results for <strong>%s</strong> ${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}${DRONE_STAGE_NUMBER}/1" % alternateSuiteName
-    return [{
-        "name": "github-comment",
-        "image": "jmccann/drone-github-comment:1",
-        "pull": "if-not-exists",
-        "settings": {
-            "message_file": "%s/comments.file" % dir["web"],
-        },
-        "environment": {
-            "GITHUB_TOKEN": {
-                "from_secret": "github_token",
+    return [
+        {
+            "name": "copy-passedOnRetry",
+            "image": "owncloud/ubuntu:20.04",
+            "pull": "always",
+            "commands": [
+                "if [ -f %s/passedOnRetry.file ]; then cat passedOnRetry.file >> %s/comments.file; fi" % (dir["web"], dir["web"]),
+            ],
+            "when": {
+                "status": [
+                    "success",
+                    "failure",
+                ],
+                "event": [
+                    "pull_request",
+                ],
             },
         },
-        "commands": [
-            "if [ -s /var/www/owncloud/web/comments.file ]; then echo '%s' | cat - comments.file > temp && mv temp comments.file && /bin/drone-github-comment; fi" % prefix,
-        ],
-        "when": {
-            "status": [
-                "success",
-                "failure",
+        {
+            "name": "github-comment",
+            "image": "jmccann/drone-github-comment:1",
+            "pull": "if-not-exists",
+            "settings": {
+                "message_file": "%s/comments.file" % dir["web"],
+            },
+            "environment": {
+                "GITHUB_TOKEN": {
+                    "from_secret": "github_token",
+                },
+            },
+            "commands": [
+                "if [ -s /var/www/owncloud/web/comments.file ]; then echo '%s' | cat - comments.file > temp && mv temp comments.file && /bin/drone-github-comment; fi" % prefix,
             ],
-            "event": [
-                "pull_request",
-            ],
+            "when": {
+                "status": [
+                    "success",
+                    "failure",
+                ],
+                "event": [
+                    "pull_request",
+                ],
+            },
         },
-    }]
+    ]
 
 def example_deploys(ctx):
     latest_configs = [
