@@ -1,4 +1,4 @@
-import { HttpClient } from './client'
+import { HttpClient } from '../../../src/http'
 import mockAxios from 'jest-mock-axios'
 
 beforeEach(mockAxios.reset)
