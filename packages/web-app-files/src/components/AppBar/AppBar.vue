@@ -18,11 +18,11 @@
         :items="breadcrumbs"
       />
       <h1 class="oc-invisible-sr" v-text="pageTitle" />
-      <div
-        v-if="showActions || selectedFiles.length > 0 || isTrashbinRoute"
-        class="uk-flex uk-flex-middle uk-flex-between oc-p-s"
-      >
-        <div class="uk-flex-1 uk-flex uk-flex-middle">
+      <div class="files-app-bar-actions">
+        <div
+          v-if="showActions || selectedFiles.length > 0 || isTrashbinRoute"
+          class="uk-flex-1 uk-flex uk-flex-middle"
+        >
           <template v-if="showActions && areDefaultActionsVisible">
             <oc-button
               id="new-file-menu-btn"
@@ -580,10 +580,18 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .files-app-bar {
   background-color: var(--oc-color-background-default);
   box-sizing: border-box;
   z-index: 2;
+
+  &-actions {
+    align-items: center;
+    display: flex;
+    gap: var(--oc-space-small);
+    justify-content: space-between;
+    padding: var(--oc-space-small);
+  }
 }
 </style>
