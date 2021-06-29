@@ -397,11 +397,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIFilesDetails/fileDetails.feature:116](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesDetails/fileDetails.feature#L116)
 -   [webUIFilesDetails/fileDetails.feature:143](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesDetails/fileDetails.feature#L143)
 
-
-
-### [Groups endpoint does not exist](https://github.com/owncloud/ocis-reva/issues/34)
--   [webUIRestrictSharing/restrictSharing.feature:49](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIRestrictSharing/restrictSharing.feature:49)
-
 ### [Group shares support](https://github.com/owncloud/ocis/issues/1289)
 -   [webUISharingInternalGroupsSharingIndicator/shareWithGroups.feature:80](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroupsSharingIndicator/shareWithGroups.feature#L80)
 
@@ -500,4 +495,3 @@ Other free text and markdown formatting can be used elsewhere in the document if
 
 ### [Uploading folders does not work in files-drop] (https://github.com/owncloud/web/issues/2443)
 -   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:248](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L248)
-
