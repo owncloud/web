@@ -129,11 +129,14 @@ class FilesController extends Controller {
 	}
 
 	private function applyCSPOnlyOffice(ContentSecurityPolicy $csp): ContentSecurityPolicy {
-        $documentServerUrl = $this->extractDomain($this->getOnlyOfficeDocumentServerUrl());
+        $ooUrl = $this->getOnlyOfficeDocumentServerUrl();
+        $documentServerUrl = $this->extractDomain($ooUrl);
         if (!empty($documentServerUrl)) {
             $csp->addAllowedScriptDomain($documentServerUrl);
             $csp->addAllowedFrameDomain($documentServerUrl);
-        }
+        } else if (!empty($ooUrl)) {
+            $csp->addAllowedFrameDomain("'self'");
+	}
         return $csp;
     }
 
