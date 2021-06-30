@@ -169,7 +169,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And user "Alice" from server "REMOTE" has shared "/lorem.txt" with user "Alice" from remote server
     And user "Alice" from server "LOCAL" has accepted the last pending share
     And the user has reloaded the current page of the webUI
-    When the user unshares file "lorem.txt" using the webUI
+    When the user deletes file "lorem.txt" using the webUI
     Then file "lorem.txt" should not be listed on the webUI
     And file "lorem.txt" should not be listed in the files page on the webUI
 

@@ -39,7 +39,7 @@ Feature: accept/decline shares coming from internal users
     And the user has browsed to the files page
     And the user opens folder "Shares" using the webUI
     When the user shares folder "simple-folder" with group "grp1" as "Viewer" using the webUI
-    And the user unshares folder "simple-folder" using the webUI
+    And the user deletes folder "simple-folder" using the webUI
     And the user browses to the shared-with-me page using the webUI
     Then folder "simple-folder" shared by "Alice Hansen" should be in "Declined" state on the webUI
     And folder "simple-folder" shared by "Brian Murphy" should not be listed in the webUI
@@ -59,8 +59,8 @@ Feature: accept/decline shares coming from internal users
     And user "Brian" has accepted the share "testimage.jpg" offered by user "Alice"
     And the user has browsed to the files page
     When the user opens folder "Shares" using the webUI
-    And the user unshares folder "simple-folder" using the webUI
-    And the user unshares file "testimage.jpg" using the webUI
+    And the user deletes folder "simple-folder" using the webUI
+    And the user deletes file "testimage.jpg" using the webUI
     Then folder "simple-folder" should not be listed on the webUI
     And file "testimage.jpg" should not be listed on the webUI
     When the user browses to the shared-with-me page using the webUI
@@ -74,7 +74,7 @@ Feature: accept/decline shares coming from internal users
     And the user has browsed to the personal sharing settings page
     Then User-based auto accepting checkbox should not be displayed on the personal sharing settings page in the webUI
 
-  
+
   Scenario: User receives files when auto accept share is disabled
     Given user "Alice" has created file "toshare.txt"
     And user "Alice" has uploaded file with content "test" to "toshare.txt"
@@ -85,7 +85,7 @@ Feature: accept/decline shares coming from internal users
     Then file "toshare.txt" should not be listed on the webUI
     And folder "Shares" should not be listed on the webUI
 
-  
+
   Scenario: receive shares with same name from different users
     Given user "Carol" has been created with default attributes and without skeleton files
     And user "Carol" has created file "lorem.txt"
