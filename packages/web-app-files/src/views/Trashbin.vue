@@ -19,7 +19,7 @@
         class="files-table"
         :class="{ 'files-table-squashed': isSidebarOpen }"
         :are-paths-displayed="true"
-        :are-previews-displayed="false"
+        :are-thumbnails-displayed="false"
         :resources="activeFiles"
         :highlighted="highlightedFile ? highlightedFile.id : null"
         :are-resources-clickable="false"

@@ -527,7 +527,7 @@ export default {
     })
   },
 
-  async loadPreview({ commit, rootGetters }, { resource, isPublic, dimensions }) {
+  async loadPreview({ commit, rootGetters }, { resource, isPublic, dimensions, type }) {
     if (
       rootGetters.previewFileExtensions.length &&
       !rootGetters.previewFileExtensions.includes(resource.extension)
@@ -548,7 +548,7 @@ export default {
     )
 
     if (preview) {
-      commit('UPDATE_RESOURCE_FIELD', { id: resource.id, field: 'preview', value: preview })
+      commit('UPDATE_RESOURCE_FIELD', { id: resource.id, field: type, value: preview })
     }
   }
 }

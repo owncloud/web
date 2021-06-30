@@ -12,7 +12,7 @@
     "lodash-es": "^4.17.21",
     "luxon": "^1.27.0",
     "oidc-client": "1.10.1",
-    "owncloud-design-system": "^7.5.0",
+    "owncloud-design-system": "^8.0.0-rc1",
     "owncloud-sdk": "1.0.0-2296",
     "p-queue": "^6.1.1",
     "tippy.js": "^6.3.1",

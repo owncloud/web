@@ -22,7 +22,7 @@
         v-model="selected"
         class="files-table"
         :class="{ 'files-table-squashed': isSidebarOpen }"
-        :are-previews-displayed="displayPreviews"
+        :are-thumbnails-displayed="displayThumbnails"
         :resources="activeFiles"
         :target-route="targetRoute"
         :highlighted="highlightedFile ? highlightedFile.id : null"
@@ -137,7 +137,7 @@ export default {
       return { name: this.$route.name }
     },
 
-    displayPreviews() {
+    displayThumbnails() {
       return !this.configuration.options.disablePreviews
     }
   },
@@ -172,7 +172,7 @@ export default {
     ]),
 
     rowMounted(resource, component) {
-      if (!this.displayPreviews) {
+      if (!this.displayThumbnails) {
         return
       }
 
@@ -181,7 +181,8 @@ export default {
         this.loadPreview({
           resource,
           isPublic: true,
-          dimensions: ImageDimension.ThumbNail
+          dimensions: ImageDimension.ThumbNail,
+          type: 'thumbnail'
         })
       }, 250)
 
