@@ -1,0 +1,5 @@
+Enhancement: Content Security Policy for known iframe integrations
+
+We added CSP rules for allowing iframe integrations of the onlyoffice and richdocuments documentservers.
+
+https://github.com/owncloud/web/pull/5420
