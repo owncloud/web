@@ -18,6 +18,24 @@ export default [
     tusSupport: null
   },
   {
+    name: '/.hidden folder',
+    type: 'dir',
+    fileInfo: {
+      '{http://owncloud.org/ns}permissions': 'RDNVCK',
+      '{http://owncloud.org/ns}favorite': '1',
+      '{http://owncloud.org/ns}fileid': '14',
+      '{http://owncloud.org/ns}owner-id': 'admin',
+      '{http://owncloud.org/ns}owner-display-name': 'admin',
+      '{http://owncloud.org/ns}share-types': '',
+      '{http://owncloud.org/ns}privatelink': 'http://localhost:8080/f/14',
+      '{http://owncloud.org/ns}size': '0',
+      '{DAV:}getlastmodified': 'Thu, 24 Jun 2021 15:03:58 GMT',
+      '{DAV:}getetag': '"60d49edf01ab8"',
+      '{DAV:}resourcetype': ['{DAV:}collection']
+    },
+    tusSupport: null
+  },
+  {
     name: '/Photos',
     type: 'dir',
     fileInfo: {

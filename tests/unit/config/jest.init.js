@@ -19,5 +19,6 @@ config.mocks = {
     query: {},
     name: '',
     path: ''
-  }
+  },
+  isIE11: () => false
 }

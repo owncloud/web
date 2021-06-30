@@ -1,3 +1,34 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v3.3.1...master
+
+Summary
+-------
+
+* Enhancement - Add view options: [#5408](https://github.com/owncloud/web/pull/5408)
+* Enhancement - Update owncloud-design-system to v7.5.0: [#5408](https://github.com/owncloud/web/pull/5408)
+
+Details
+-------
+
+* Enhancement - Add view options: [#5408](https://github.com/owncloud/web/pull/5408)
+
+   We've added view options above the files lists so that the user can customise them. Currently,
+   it is possible to toggle visibility of hidden files. Changes in view options are persisted in
+   local storage.
+
+   https://github.com/owncloud/web/pull/5408
+
+* Enhancement - Update owncloud-design-system to v7.5.0: [#5408](https://github.com/owncloud/web/pull/5408)
+
+   We've updated owncloud-design-system to version 7.5.0
+
+   https://github.com/owncloud/web/pull/5408
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v7.5.0
+
 Changelog for ownCloud Web [3.3.1] (2021-06-28)
 =======================================
 The following sections list the changes in ownCloud web 3.3.1 relevant to

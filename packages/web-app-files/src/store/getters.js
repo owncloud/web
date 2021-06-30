@@ -31,10 +31,13 @@ export default {
   },
   pages: (state, getters) => Math.ceil(getters.filesAll.length / state.filesPageLimit),
   activeFiles: (state, getters) => {
-    const files = getters.filesAll
+    let files = getters.filesAll
     const direction = state.fileSortDirectionDesc ? 'desc' : 'asc'
     const firstElementIndex = (state.currentPage - 1) * state.filesPageLimit
 
+    if (!state.areHiddenFilesShown) {
+      files = files.filter(file => !file.name.startsWith('.'))
+    }
     return []
       .concat(files)
       .sort(fileSortFunctions[state.fileSortField][direction])

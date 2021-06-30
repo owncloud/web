@@ -19,6 +19,17 @@ export default [
     tusSupport: null
   },
   {
+    name: '/trash-bin/alice/3875',
+    type: 'dir',
+    fileInfo: {
+      '{http://owncloud.org/ns}trashbin-original-filename': '.hidden-folder',
+      '{http://owncloud.org/ns}trashbin-original-location': '.hidden-folder',
+      '{http://owncloud.org/ns}trashbin-delete-datetime': 'Mon, 14 Jun 2021 12:15:33 GMT',
+      '{DAV:}resourcetype': ['{DAV:}collection']
+    },
+    tusSupport: null
+  },
+  {
     name: '/trash-bin/alice/3873',
     type: 'dir',
     fileInfo: {

@@ -17,6 +17,20 @@ export default {
       }
     },
     {
+      name: '/link/.hidden-folder',
+      type: 'dir',
+      fileInfo: {
+        '{http://owncloud.org/ns}permissions': '',
+        '{http://owncloud.org/ns}fileid': '3834',
+        '{http://owncloud.org/ns}owner-id': 'admin',
+        '{http://owncloud.org/ns}owner-display-name': 'admin',
+        '{http://owncloud.org/ns}size': '0',
+        '{DAV:}getlastmodified': 'Mon, 14 Jun 2021 12:59:12 GMT',
+        '{DAV:}resourcetype': ['{DAV:}collection']
+      },
+      tusSupport: null
+    },
+    {
       name: '/link/Documents',
       type: 'dir',
       fileInfo: {

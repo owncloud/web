@@ -15,7 +15,9 @@ module.exports = {
   moduleNameMapper: {
     '^.+\\.(css|scss)$': 'babel-jest',
     '^@runtime/(.*)$': '<rootDir>/packages/web-runtime/$1',
-    '^@pkg/(.*)$': '<rootDir>/packages/web-pkg/$1'
+    '^@pkg/(.*)$': '<rootDir>/packages/web-pkg/$1',
+    '^@files/(.*)$': '<rootDir>/packages/web-app-files/$1',
+    '^@/(.*)$': '<rootDir>/$1'
   },
   transformIgnorePatterns: ['<rootDir>/node_modules/(?!lodash-es)'],
   setupFiles: ['<rootDir>/tests/integration/config/jest.init.js'],
