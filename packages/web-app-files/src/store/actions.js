@@ -4,7 +4,7 @@ import { getParentPaths } from '../helpers/path'
 import { shareTypes } from '../helpers/shareTypes'
 import { buildResource, buildShare, buildCollaboratorShare } from '../helpers/resources'
 import { $gettext, $gettextInterpolate } from '../gettext'
-import { privatePreviewBlob, publicPreviewUrl } from '../helpers/resource'
+import { loadPreview } from '../helpers/resource'
 import { avatarUrl } from '../helpers/user'
 import { has } from 'lodash-es'
 
@@ -532,29 +532,23 @@ export default {
 
   async loadPreview({ commit, rootGetters }, { resource, isPublic, dimensions }) {
     if (
-      resource.type === 'folder' ||
-      !resource.extension ||
-      (rootGetters.previewFileExtensions.length &&
-        !rootGetters.previewFileExtensions.includes(resource.extension))
+      rootGetters.previewFileExtensions.length &&
+      !rootGetters.previewFileExtensions.includes(resource.extension)
     ) {
       return
     }
 
-    let preview
-    if (isPublic) {
-      preview = await publicPreviewUrl({ resource, dimensions })
-    } else {
-      preview = await privatePreviewBlob(
-        {
-          server: rootGetters.configuration.server,
-          userId: rootGetters.user.id,
-          token: rootGetters.getToken,
-          resource,
-          dimensions
-        },
-        true
-      )
-    }
+    const preview = await loadPreview(
+      {
+        resource,
+        isPublic,
+        dimensions,
+        server: rootGetters.configuration.server,
+        userId: rootGetters.user.id,
+        token: rootGetters.getToken
+      },
+      true
+    )
 
     if (preview) {
       commit('UPDATE_RESOURCE_FIELD', { id: resource.id, field: 'preview', value: preview })
