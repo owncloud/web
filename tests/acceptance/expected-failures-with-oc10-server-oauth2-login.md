@@ -24,8 +24,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 
 
 ### [Admin settings feature not implemented yet] (https://github.com/owncloud/web/issues/5015)
--   [webUIAdminSettings/adminAppsSettings.feature:11](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIAdminSettings/adminAppsSettings.feature#L11)
--   [webUIAdminSettings/adminAppsSettings.feature:17](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIAdminSettings/adminAppsSettings.feature#L17)
 -   [webUIAdminSettings/adminGeneralSettings.feature:12](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIAdminSettings/adminGeneralSettings.feature#L12)
 -   [webUIAdminSettings/adminGeneralSettings.feature:30](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIAdminSettings/adminGeneralSettings.feature#L30)
 -   [webUIAdminSettings/adminGeneralSettings.feature:36](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIAdminSettings/adminGeneralSettings.feature#L36)
