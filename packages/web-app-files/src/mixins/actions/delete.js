@@ -14,10 +14,6 @@ export default {
             if (checkRoute(['files-shared-with-me', 'files-trashbin'], this.$route.name)) {
               return false
             }
-            if (resource.isReceivedShare()) {
-              // not an own file/folder, but a received share. Use `declineShare` action instead.
-              return false
-            }
 
             return resource.canBeDeleted()
           },

@@ -7,7 +7,6 @@ import { getIndicators } from './statusIndicators'
 import { bitmaskToRole, checkPermission, permissionsBitmask } from './collaborators'
 import { shareTypes, userShareTypes } from './shareTypes'
 import { $gettext } from '../gettext'
-import { shareStatus } from './shareStatus'
 
 // Should we move this to ODS?
 export function getFileIcon(extension) {
@@ -83,10 +82,6 @@ export function buildResource(resource) {
     isReceivedShare: function() {
       return this.permissions.indexOf('S') >= 0
     }
-  }
-  if (result.isReceivedShare()) {
-    // safe to assume that the share status is `accepted` because otherwise we wouldn't have received the file/folder via webdav
-    result.status = shareStatus.accepted
   }
   return result
 }

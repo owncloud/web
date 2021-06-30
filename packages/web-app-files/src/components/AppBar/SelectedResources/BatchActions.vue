@@ -135,7 +135,7 @@ export default {
     },
 
     canDelete() {
-      if (checkRoute(['files-shared-with-me'], this.$route.name)) {
+      if (this.isSharedWithMeRoute) {
         return false
       }
 
@@ -147,7 +147,7 @@ export default {
     },
 
     canAccept() {
-      if (!checkRoute(['files-shared-with-me'], this.$route.name)) {
+      if (!this.isSharedWithMeRoute) {
         return false
       }
       let canAccept = true
@@ -161,7 +161,7 @@ export default {
     },
 
     canDecline() {
-      if (!checkRoute(['files-shared-with-me'], this.$route.name)) {
+      if (!this.isSharedWithMeRoute) {
         return false
       }
       let canDecline = true

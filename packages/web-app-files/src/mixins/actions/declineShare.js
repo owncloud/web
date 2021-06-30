@@ -2,12 +2,11 @@ import { triggerShareAction } from '../../helpers/share/triggerShareAction'
 
 import { checkRoute } from '../../helpers/route'
 import MixinRoutes from '../routes'
-import MixinDestroySideBar from '../sidebar/destroySideBar'
 import { shareStatus } from '../../helpers/shareStatus'
 import { mapGetters, mapMutations } from 'vuex'
 
 export default {
-  mixins: [MixinRoutes, MixinDestroySideBar],
+  mixins: [MixinRoutes],
   computed: {
     ...mapGetters(['isOcis']),
     $_declineShare_items() {
@@ -17,11 +16,7 @@ export default {
           handler: this.$_declineShare_trigger,
           label: () => this.$gettext('Decline share'),
           isEnabled: ({ resource }) => {
-            if (!checkRoute(['files-shared-with-me', 'files-personal'], this.$route.name)) {
-              return false
-            }
-            if (!resource.isReceivedShare()) {
-              // not a received share, but an own file/folder. Use `delete` action instead.
+            if (!checkRoute(['files-shared-with-me'], this.$route.name)) {
               return false
             }
 
@@ -34,7 +29,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('Files', ['UPDATE_RESOURCE', 'REMOVE_FILE']),
+    ...mapMutations('Files', ['UPDATE_RESOURCE']),
     async $_declineShare_trigger(resource) {
       try {
         const share = await triggerShareAction(
@@ -43,19 +38,7 @@ export default {
           !this.isOcis,
           this.$client
         )
-        // handling of store mutations has to be differently per supported route
-        if (this.isSharedWithMeRoute) {
-          this.UPDATE_RESOURCE(share)
-          return
-        }
-        if (this.isPersonalRoute) {
-          this.$_destroySideBar_hideDetails()
-          this.REMOVE_FILE(resource)
-          return
-        }
-        console.error(
-          'Store mutation for declineShare not implemented for route ' + this.$route.name
-        )
+        this.UPDATE_RESOURCE(share)
       } catch (error) {
         console.log(error)
         this.showMessage({

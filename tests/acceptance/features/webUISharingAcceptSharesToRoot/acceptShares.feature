@@ -98,8 +98,8 @@ Feature: accept/decline shares coming from internal users
     And user "Alice" has shared folder "/simple-folder" with group "grp1"
     And user "Alice" has shared folder "/testimage.jpg" with user "Brian"
     And the user has browsed to the files page
-    When the user unshares folder "simple-folder" using the webUI
-    And the user unshares file "testimage.jpg" using the webUI
+    When the user deletes folder "simple-folder" using the webUI
+    And the user deletes file "testimage.jpg" using the webUI
     Then folder "simple-folder" should not be listed on the webUI
     And file "testimage.jpg" should not be listed on the webUI
     When the user browses to the shared-with-me page using the webUI
@@ -321,7 +321,7 @@ Feature: accept/decline shares coming from internal users
     And the user has browsed to the shared-with-me page
     When the user accepts share "lorem.txt" offered by user "Alice Hansen" using the webUI
     And the user browses to the files page
-    And the user unshares file "lorem.txt" using the webUI
+    And the user deletes file "lorem.txt" using the webUI
     Then file "lorem.txt" should not be listed on the webUI
     And file "testimage.jpg" should not be listed on the webUI
     When the user browses to the shared-with-me page using the webUI
@@ -352,6 +352,16 @@ Feature: accept/decline shares coming from internal users
     Then file "data.zip" shared by "Alice Hansen" should be in "Declined" state on the webUI
     And file "lorem.txt" shared by "Alice Hansen" should be in "Declined" state on the webUI
     And folder "simple-folder" shared by "Alice Hansen" should be in "Declined" state on the webUI
+
+
+  Scenario: shared file status is changed to declined when user deletes the file
+    Given user "Alice" has created file "lorem.txt"
+    And user "Alice" has shared file "lorem.txt" with user "Brian"
+    And the user has reloaded the current page of the webUI
+    When the user deletes file "lorem.txt" using the webUI
+    And the user browses to the shared-with-me page
+    Then file "lorem.txt" shared by "Alice Hansen" should be in "Declined" state on the webUI
+
 
   Scenario: the deleted shared file is restored back to all files list when accepted from the shared with me file list
     Given user "Alice" has created file "lorem.txt"
