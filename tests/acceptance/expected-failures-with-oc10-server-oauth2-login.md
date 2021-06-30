@@ -19,10 +19,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 ### [webUILogin/adminBlocksUser.feature:20 behaves differently on CI](https://github.com/owncloud/web/issues/4743)
 -   [webUILogin/adminBlocksUser.feature:20](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/adminBlocksUser.feature#L120)
 
-### [sorting for files lists needs to be reimplemented](https://github.com/owncloud/ocis/issues/1179)
--   [webUIFilesList/sort.feature:51](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesList/sort.feature#L51)
--   [webUIFilesList/sort.feature:72](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesList/sort.feature#L72)
-
 ### [regression in accepting shares from notifications](https://github.com/owncloud/web/issues/4839)
 -   [webUISharingNotificationsToRoot/shareWithUsers.feature:40](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingNotificationsToRoot/shareWithUsers.feature#L40)
 
@@ -75,8 +71,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIAdminSettings/helpAndTips.feature:18](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIAdminSettings/helpAndTips.feature#L18)
 -   [webUIAdminSettings/helpAndTips.feature:19](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIAdminSettings/helpAndTips.feature#L19)
 -   [webUIAdminSettings/helpAndTips.feature:20](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIAdminSettings/helpAndTips.feature#L20)
--   [webUISharingInternalGroups/shareWithGroups.feature:166](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroups/shareWithGroups.feature#L166)
--   [webUISharingInternalGroups/shareWithGroups.feature:174](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroups/shareWithGroups.feature#L174)
 
 ### [Comments in sidebar] (https://github.com/owncloud/web/issues/1158)
 -   [webUIComments/comments.feature:25](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIComments/comments.feature#L25)
@@ -93,7 +87,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 
 ### [Tags page not implemented yet] (https://github.com/owncloud/web/issues/5017)
 -   [webUIDeleteFilesFolders/deleteFilesFolders.feature:144](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIDeleteFilesFolders/deleteFilesFolders.feature#L144)
--   [webUIFilesDetails/fileDetails.feature:141](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesDetails/fileDetails.feature#L141)
 -   [webUIFilesSearch/search.feature:63](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesSearch/search.feature#L63)
 -   [webUIFilesSearch/search.feature:71](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesSearch/search.feature#L71)
 -   [webUIFilesSearch/search.feature:84](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesSearch/search.feature#L84)
