@@ -49,21 +49,30 @@ const fileShouldNotHaveContent = async function(userId, file, content) {
   )
 }
 
-const assertResourceType = function(response, resource, type = 'file') {
-  let matches
-  let foundType
+const getResourceType = function(data) {
+  let resourceType
+
+  const result = xml2js(data, { compact: true })
+  const responses = _.get(result, 'd:multistatus.d:response')
+  if (responses instanceof Array) {
+    resourceType = _.get(responses[0], 'd:propstat.d:prop.d:resourcetype')
+  } else {
+    resourceType = _.get(responses, 'd:propstat.d:prop.d:resourcetype')
+  }
+
+  if (Object.keys(resourceType)[0] === 'd:collection') {
+    return 'folder'
+  } else {
+    return 'file'
+  }
+}
+
+const assertResourceType = function(data, resource, type = 'file') {
   type = type.toLowerCase()
 
-  if (type === 'folder') {
-    matches = response.match(/d:collection/g)
-  } else {
-    matches = response.match(/d:getcontenttype/g)
-  }
+  const foundType = getResourceType(data)
 
-  const exists = matches !== null
-  if (!exists) {
-    foundType = type === 'folder' ? 'file' : 'folder'
-  }
+  const exists = foundType === type
   assert.strictEqual(
     exists,
     true,
