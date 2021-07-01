@@ -2223,8 +2223,7 @@ def listRemoteCache():
             },
         },
         "commands": [
-            "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
-            "mc find s3/owncloud/web/ocis-build",
+            "if test -f runUnitTestsOnly; then echo 'skipping list-ocis-bin-cache'; else mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY && mc find s3/owncloud/web/ocis-build; fi",
         ],
     }]
 

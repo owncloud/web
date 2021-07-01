@@ -60,7 +60,7 @@ describe('privatePreviewBlob', () => {
     await expect(window.URL.createObjectURL).toHaveBeenCalledWith('data')
 
     privatePreviewBlobPromise = privatePreviewBlob(
-      merge({ resource: { etag: 'other' }, dimensions: [10, 10] }, defaultOptions),
+      merge({ resource: { etag: 'other' }, dimensions: [10, 10] }, defaultOptions) as any,
       true
     )
     mockAxios.mockResponse({ data: 'data' })
