@@ -34,8 +34,8 @@ Feature: Locks
       | lockscope | shared |
     And user "brand-new-user" has locked file "data.zip" setting following properties
       | lockscope | exclusive |
-    And the user re-logs in as "brand-new-user" using the webUI
-    And folder "simple-folder" should be marked as locked by user "New User" in the locks tab of the details panel on the webUI
+    When the user re-logs in as "brand-new-user" using the webUI
+    Then folder "simple-folder" should be marked as locked by user "New User" in the locks tab of the details panel on the webUI
     And file "data.zip" should be marked as locked by user "New User" in the locks tab of the details panel on the webUI
 
   @issue-5417
@@ -45,8 +45,8 @@ Feature: Locks
     And user "brand-new-user" has locked file "data.zip" setting following properties
       | lockscope | exclusive |
     And the administrator has changed the display name of user "brand-new-user" to "Old User"
-    And the user re-logs in as "brand-new-user" using the webUI
-    And folder "simple-folder" should be marked as locked by user "Old User" in the locks tab of the details panel on the webUI
+    When the user re-logs in as "brand-new-user" using the webUI
+    Then folder "simple-folder" should be marked as locked by user "Old User" in the locks tab of the details panel on the webUI
     And file "data.zip" should be marked as locked by user "Old User" in the locks tab of the details panel on the webUI
 
   @issue-5417
@@ -58,8 +58,8 @@ Feature: Locks
       | lockscope | shared |
     And user "user-with-display-name" has locked file "data.zip" setting following properties
       | lockscope | exclusive |
-    And the user re-logs in as "user-with-display-name" using the webUI
-    And folder "simple-folder" should be marked as locked by user "My fancy name (mail@oc.org)" in the locks tab of the details panel on the webUI
+    When the user re-logs in as "user-with-display-name" using the webUI
+    Then folder "simple-folder" should be marked as locked by user "My fancy name (mail@oc.org)" in the locks tab of the details panel on the webUI
     And file "data.zip" should be marked as locked by user "My fancy name (mail@oc.org)" in the locks tab of the details panel on the webUI
 
   @issue-5417
@@ -71,8 +71,8 @@ Feature: Locks
       | lockscope | shared |
     And user "user-with-email" has locked file "data.zip" setting following properties
       | lockscope | exclusive |
-    And the user re-logs in as "user-with-email" using the webUI
-    And folder "simple-folder" should be marked as locked by user "user-with-email (mail@oc.org)" in the locks tab of the details panel on the webUI
+    When the user re-logs in as "user-with-email" using the webUI
+    Then folder "simple-folder" should be marked as locked by user "user-with-email (mail@oc.org)" in the locks tab of the details panel on the webUI
     And file "data.zip" should be marked as locked by user "user-with-email (mail@oc.org)" in the locks tab of the details panel on the webUI
 
   @issue-5417
@@ -107,7 +107,9 @@ Feature: Locks
     And user "brand-new-user" has shared folder "simple-folder" with user "receiver"
     And user "brand-new-user" has shared folder "simple-empty-folder" with user "receiver"
     When the user browses to the shared-with-others page
-    Then folder "simple-folder" should be marked as locked on the webUIAnd folder "simple-folder" should be marked as locked by user "brand-new-user" in the locks tab of the details panel on the webUI
+    Then folder "simple-folder" should be marked as locked on the webUI
+    And folder "simple-folder" should be marked as locked on the webUIAnd folder "simple-folder" should be marked as locked by user "brand-new-user" in the locks tab of the details panel on the webUI
+    And file "data.zip" should be marked as locked on the webUI
     And file "data.zip" should be marked as locked on the webUIAnd file "data.zip" should be marked as locked by user "brand-new-user" in the locks tab of the details panel on the webUI
     But folder "simple-empty-folder" should not be marked as locked on the webUI
     And file "data.tar.gz" should not be marked as locked on the webUI
@@ -242,7 +244,7 @@ Feature: Locks
     And user "sharer" has shared folder "to-share-folder" with user "brand-new-user"
     And the user has browsed to the shared-with-me page
     When the user declines share "to-share-folder" offered by user "sharer" using the webUI
-    And the user has browsed to the files page
+    And the user browses to the files page
     Then folder "to-share-folder" should not be listed on the webUI
     When the user re-logs in as "sharer" using the webUI
     Then folder "to-share-folder" should be listed on the webUI
@@ -264,7 +266,7 @@ Feature: Locks
     And the user has browsed to the shared-with-me page
     When the user declines share "to-share-folder" offered by user "sharer" using the webUI
     And the user accepts share "to-share-folder" offered by user "sharer" using the webUI
-    And the user has browsed to the files page
+    And the user browses to the files page
     Then folder "to-share-folder" should be marked as locked on the webUI
     And folder "to-share-folder" should be marked as locked by user "sharer" in the locks tab of the details panel on the webUI
     Examples:

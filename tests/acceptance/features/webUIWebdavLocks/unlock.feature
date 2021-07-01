@@ -19,7 +19,7 @@ Feature: Unlock locked files and folders
   Scenario: unlocking file/folder deletes the lock symbols
     Given user "brand-new-user" has locked folder "simple-folder" setting following properties
       | lockscope | shared |
-    Given user "brand-new-user" has locked folder "lorem.txt" setting following properties
+    And user "brand-new-user" has locked folder "lorem.txt" setting following properties
       | lockscope | shared |
     When user "brand-new-user" unlocks the lock of folder "simple-folder" using the webUI
     Then folder "simple-folder" should not be marked as locked on the webUI

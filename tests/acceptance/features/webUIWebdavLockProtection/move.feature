@@ -26,8 +26,8 @@ Feature: Locks
       """
     When the user browses to the files page
     Then file "lorem.txt" should be listed on the webUI
-    # And file "lorem.txt" should be marked as locked on the webUI
-    # And file "lorem.txt" should be marked as locked by user "brand-new-user" in the locks tab of the details panel on the webUI
+    And file "lorem.txt" should be marked as locked on the webUI
+    And file "lorem.txt" should be marked as locked by user "brand-new-user" in the locks tab of the details panel on the webUI
     When the user opens folder "simple-empty-folder" using the webUI
     Then file "lorem.txt" should not be listed on the webUI
     Examples:
@@ -118,7 +118,6 @@ Feature: Locks
     And the user reloads the current page of the webUI
     Then file "lorem.txt" should be listed on the webUI
     And file "a-renamed-file.txt" should not be listed on the webUI
-    When 
     Examples:
       | lockscope |
       | exclusive |
