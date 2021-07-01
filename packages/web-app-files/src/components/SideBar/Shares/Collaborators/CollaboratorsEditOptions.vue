@@ -56,7 +56,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import moment from 'moment'
+import { DateTime } from 'luxon'
 import collaboratorsMixins from '../../../../mixins/collaborators'
 
 import RoleItem from '../../RoleItem.vue'
@@ -154,17 +154,17 @@ export default {
       const groupMaxExpirationDays = parseInt(this.groupExpirationDate.days, 10)
 
       if (this.editingUser) {
-        return moment()
-          .add(userMaxExpirationDays, 'days')
+        return DateTime.now()
+          .plus({ days: userMaxExpirationDays })
           .endOf('day')
-          .toISOString()
+          .toISO()
       }
 
       if (this.editingGroup) {
-        return moment()
-          .add(groupMaxExpirationDays, 'days')
+        return DateTime.now()
+          .plus({ days: groupMaxExpirationDays })
           .endOf('day')
-          .toISOString()
+          .toISO()
       }
 
       // Since we are not separating process for adding users and groups as collaborators
@@ -177,10 +177,10 @@ export default {
         days = userMaxExpirationDays || groupMaxExpirationDays
       }
 
-      return moment()
+      return DateTime.now()
         .add(days, 'days')
         .endOf('day')
-        .toISOString()
+        .toISO()
     },
 
     expirationDateEnforced() {
@@ -204,10 +204,10 @@ export default {
     },
 
     minExpirationDate() {
-      return moment()
-        .add(1, 'days')
+      return DateTime.now()
+        .plus({ days: 1 })
         .endOf('day')
-        .toISOString()
+        .toISO()
     },
 
     expirationDatePlaceholder() {
@@ -246,11 +246,10 @@ export default {
     if (this.expirationSupported) {
       if (this.editingUser || this.editingGroup) {
         // FIXME: Datepicker is not displaying correct timezone so for now we add it manually
-        // this.enteredExpirationDate = this.expirationDate ? moment(this.expirationDate).toISOString(true) : null
         this.enteredExpirationDate = this.expirationDate
-          ? moment(this.expirationDate)
-              .add(moment().utcOffset(), 'm')
-              .toISOString()
+          ? DateTime.fromJSDate(this.expirationDate)
+              .plus({ minutes: DateTime.now().offset })
+              .toISO()
           : null
       } else {
         this.enteredExpirationDate = this.defaultExpirationDate

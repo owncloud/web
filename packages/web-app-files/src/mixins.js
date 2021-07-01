@@ -1,5 +1,5 @@
 import pathUtil from 'path'
-import moment from 'moment'
+import { DateTime } from 'luxon'
 import fileTypeIconMappings from './fileTypeIconMappings.json'
 import { mapActions, mapGetters } from 'vuex'
 import PQueue from 'p-queue'
@@ -72,10 +72,28 @@ export default {
         this.setFilesSort({ field: fieldId, directionIsDesc: false })
       }
     },
-    formDateFromNow(date) {
-      return moment(date)
-        .locale(this.$language.current)
-        .fromNow()
+    formDateFromNow(date, type) {
+      // TODO: Refactor those into their own functions a.k.a relDateFromJSDate() etc
+      if (type === 'JSDate') {
+        return DateTime.fromJSDate(date)
+          .setLocale(this.$language.current)
+          .toRelative()
+      }
+      if (type === 'Http') {
+        return DateTime.fromHTTP(date)
+          .setLocale(this.$language.current)
+          .toRelative()
+      }
+      if (type === 'ISO') {
+        return DateTime.fromISO(date)
+          .setLocale(this.$language.current)
+          .toRelative()
+      }
+      if (type === 'RFC') {
+        return DateTime.fromRFC2822(date)
+          .setLocale(this.$language.current)
+          .toRelative()
+      }
     },
     delayForScreenreader(func, delay = 500) {
       /*

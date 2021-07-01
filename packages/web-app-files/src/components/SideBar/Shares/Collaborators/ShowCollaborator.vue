@@ -126,7 +126,9 @@
             <li v-if="collaborator.expires" class="oc-py-rm">
               <oc-tag class="files-collaborators-collaborator-expires">
                 <oc-icon name="text-calendar" />
-                <translate :translate-params="{ expires: formDateFromNow(expirationDate) }">
+                <translate
+                  :translate-params="{ expires: formDateFromNow(collaborator.expires, 'JSDate') }"
+                >
                   Expires %{expires}
                 </translate>
               </oc-tag>
@@ -186,7 +188,6 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import moment from 'moment'
 import { shareTypes } from '../../../../helpers/shareTypes'
 import { basename } from 'path'
 import CollaboratorsMixins from '../../../../mixins/collaborators'
@@ -335,10 +336,6 @@ export default {
       )
     },
 
-    expirationDate() {
-      return moment(this.collaborator.expires).endOf('day')
-    },
-
     isCurrentUser() {
       return !this.isGroup && this.collaborator.collaborator.name === this.user.id
     },
@@ -382,10 +379,7 @@ export default {
 
   li {
     float: left;
-
-    &:not(:first-child) {
-      padding-left: 0.5rem;
-    }
+    margin: 5px;
   }
 }
 

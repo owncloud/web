@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import pickBy from 'lodash-es/pickBy'
-import moment from 'moment'
+import { DateTime } from 'luxon'
 import { set, has } from 'lodash-es'
 import { getIndicators } from '../helpers/statusIndicators'
 
@@ -276,9 +276,9 @@ export default {
       hasPassword: link.password,
       expireDate:
         link.expiration !== null
-          ? moment(link.expiration)
+          ? DateTime.fromHTTP(link.expiration)
               .endOf('day')
-              .toISOString()
+              .toISO()
           : null
     }
 

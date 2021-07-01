@@ -1,6 +1,6 @@
 import orderBy from 'lodash-es/orderBy'
 import path from 'path'
-import moment from 'moment'
+import { DateTime } from 'luxon'
 
 import fileIconMappings from '../fileTypeIconMappings.json'
 import { getIndicators } from './statusIndicators'
@@ -247,7 +247,9 @@ function _buildLink(link) {
     name: typeof link.name === 'string' ? link.name : '',
     password: !!(link.share_with && link.share_with_displayname),
     expiration:
-      typeof link.expiration === 'string' ? moment(link.expiration).format('YYYY-MM-DD') : null,
+      typeof link.expiration === 'string'
+        ? DateTime.fromFormat(link.expiration, 'yyyy-MM-dd HH:mm:ss').toFormat('yyyy-MM-dd')
+        : null,
     itemSource: link.item_source,
     file: {
       parent: link.file_parent,

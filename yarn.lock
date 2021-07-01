@@ -1292,9 +1292,9 @@
     redent "^3.0.0"
 
 "@testing-library/vue@^5.6.2":
-  version "5.6.2"
-  resolved "https://registry.yarnpkg.com/@testing-library/vue/-/vue-5.6.2.tgz#b6cf64e1781fc334e5ce38c64b7027e5971bc8b3"
-  integrity sha512-GcbKYmID7NMcpQllMRw+op/oUFA6dp4zzaYOz7fsv+lNKC1G4RQCjkBWo9vYRQyt40imbFSNYb7JgEZnPYvrXg==
+  version "5.7.0"
+  resolved "https://registry.yarnpkg.com/@testing-library/vue/-/vue-5.7.0.tgz#33ec173eb5ea090a9f3c1bd88c15391d3fd655fe"
+  integrity sha512-+dL6cdK7ggOLRg7gE8wgakVDTWapLTM5lVKjV8Khm5UxhdTn/9mDWa1NZwLirjJhEZ54f8icoopAIAi4UZFjww==
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@testing-library/dom" "^7.26.6"
@@ -6990,7 +6990,7 @@ locate-path@^5.0.0:
   dependencies:
     p-locate "^4.1.0"
 
-lodash-es@^4.17.20, lodash-es@^4.17.21:
+lodash-es@^4.17.21:
   version "4.17.21"
   resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.21.tgz#43e626c46e6591b7750beb2b50117390c609e3ee"
   integrity sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==
@@ -7251,7 +7251,7 @@ ltgt@^2.1.2:
   resolved "https://registry.yarnpkg.com/ltgt/-/ltgt-2.2.1.tgz#f35ca91c493f7b73da0e07495304f17b31f87ee5"
   integrity sha1-81ypHEk/e3PaDgdJUwTxezH4fuU=
 
-luxon@^1.22.0:
+luxon@^1.27.0:
   version "1.27.0"
   resolved "https://registry.yarnpkg.com/luxon/-/luxon-1.27.0.tgz#ae10c69113d85dab8f15f5e8390d0cbeddf4f00f"
   integrity sha512-VKsFsPggTA0DvnxtJdiExAucKdAnwbCCNlMM5ENvHlxubqWd0xhZcdb4XgZ7QFNhaRhilXCFxHuoObP5BNA4PA==
@@ -7539,11 +7539,6 @@ mocha@6.2.3:
     yargs "13.3.2"
     yargs-parser "13.1.2"
     yargs-unparser "1.6.0"
-
-moment@^2.24.0:
-  version "2.29.1"
-  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
-  integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
 
 ms@2.0.0:
   version "2.0.0"

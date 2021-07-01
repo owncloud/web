@@ -64,7 +64,7 @@
   </div>
 </template>
 <script>
-import moment from 'moment'
+import { DateTime } from 'luxon'
 import { dirname } from 'path'
 import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import mixins from '../../../mixins'
@@ -241,10 +241,10 @@ export default {
       this.TRIGGER_PUBLIC_LINK_CREATE({
         name: this.capabilities.files_sharing.public.defaultPublicLinkShareName,
         expireDate: this.$_expirationDate.days
-          ? moment()
-              .add(this.$_expirationDate.days, 'days')
+          ? DateTime.now()
+              .plus({ days: this.$_expirationDate.days })
               .endOf('day')
-              .toISOString()
+              .toISO()
           : null
       })
     }

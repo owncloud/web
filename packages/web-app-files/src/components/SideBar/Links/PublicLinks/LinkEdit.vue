@@ -135,7 +135,7 @@
 <script>
 import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import mixins from '../../../../mixins'
-import moment from 'moment'
+import { DateTime } from 'luxon'
 import publicLinkRoles from '../../../../helpers/publicLinkRolesDefinition'
 import RoleItem from '../../RoleItem.vue'
 
@@ -181,9 +181,11 @@ export default {
 
     $_hasChanges() {
       const expireDateBefore = this.publicLinkInEdit.expireDate
-        ? moment(this.publicLinkInEdit.expireDate).format('DD-MM-YYYY')
+        ? DateTime.fromHTTP(this.publicLinkInEdit.expireDate).toFormat('dd-MM-yyyy')
         : null
-      const expireDateNow = this.expireDate ? moment(this.expireDate).format('DD-MM-YYYY') : null
+      const expireDateNow = this.expireDate
+        ? DateTime.fromHTTP(this.expireDate).toFormat('dd-MM-yyyy')
+        : null
       return (
         expireDateNow !== expireDateBefore ||
         this.name !== this.publicLinkInEdit.name ||
@@ -217,10 +219,10 @@ export default {
     },
 
     $_minExpirationDate() {
-      return moment()
-        .add(1, 'days')
+      return DateTime.now()
+        .plus({ days: 1 })
         .endOf('day')
-        .toISOString()
+        .toISO()
     },
 
     $_maxExpirationDate() {
@@ -230,10 +232,10 @@ export default {
 
       const days = parseInt(this.$_expirationDate.days, 10)
 
-      return moment()
-        .add(days, 'days')
+      return DateTime.now()
+        .plus({ days: days })
         .endOf('day')
-        .toISOString()
+        .toISO()
     },
 
     $_expirationIsValid() {

@@ -8,7 +8,7 @@
             <oc-icon :name="fileTypeIcon(highlightedFile)" />
           </oc-td>
           <oc-td width="shrink" class="oc-text-muted uk-text-nowrap">
-            {{ formDateFromNow(item.fileInfo['{DAV:}getlastmodified']) }}
+            {{ formDateFromNow(item.fileInfo['{DAV:}getlastmodified'], 'Http') }}
           </oc-td>
           <oc-td width="expand" class="oc-text-muted uk-text-nowrap">
             {{ getResourceSize(item.fileInfo['{DAV:}getcontentlength']) }}
