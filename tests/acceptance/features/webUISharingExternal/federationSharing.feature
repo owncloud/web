@@ -59,7 +59,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And folder "simple-folder" should be listed on the webUI
     And the user opens folder "simple-folder" using the webUI
     And file "lorem.txt" should be listed on the webUI
-    And as "Alice" the content of "Shares/simple-folder/lorem.txt" should be the same as the local "lorem.txt"
+    And as "Alice" the content of "Shares/simple-folder/lorem.txt" should be the same as the content of local file "lorem.txt"
     When the user browses to the shared-with-me page
     Then file "Shares/lorem.txt" should be listed on the webUI
     And folder "Shares/simple-folder" should be listed on the webUI

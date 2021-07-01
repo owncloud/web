@@ -76,11 +76,7 @@ Feature: File Upload
     And the user reloads the current page of the webUI
     And the user uploads a created file "big-video.mp4" with overwrite using the webUI
     Then file "big-video.mp4" should be listed on the webUI
-<<<<<<< HEAD
     And as "Alice" the content of "big-video.mp4" should be the same as the content of local file "big-video.mp4"
-=======
-    And as "Alice" the content of "big-video.mp4" should be the same as the local "big-video.mp4"
->>>>>>> review and adjust yetToImplement tags in scenarios
 
 
   Scenario: upload a new file into a sub folder
@@ -138,7 +134,7 @@ Feature: File Upload
     Then file "lorem.txt" should be listed on the webUI
     And as "Alice" the content of "simple-folder/lorem.txt" should be the same as the content of local file "lorem.txt"
 
-  @issue-5106 @ocis-reva-issue-64
+  @issue-5106
   Scenario: keep new and existing file in a sub-folder
     When the user opens folder "simple-folder" using the webUI
     And the user uploads file "lorem.txt" using the webUI
