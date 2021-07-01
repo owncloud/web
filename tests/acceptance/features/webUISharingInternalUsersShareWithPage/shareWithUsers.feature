@@ -89,7 +89,7 @@ Feature: Shares in share-with pages
     Then file "collaborate-on-this.txt" should be listed on the webUI
 
   @issue-ocis-730
-  Scenario: deleting an entry on the shared-with-me page unshares from self
+  Scenario: unsharing an entry on the shared-with-me page unshares from self
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
@@ -99,8 +99,8 @@ Feature: Shares in share-with pages
     And the user browses to the folder "Shares" on the files page
     Then folder "simple-folder" should not be listed on the webUI
 
-  @issue-ocis-730 @skipOnOC10 @issue-4582
-  Scenario: deleting multiple entries on the shared-with-me page
+  @issue-ocis-730 @issue-4582
+  Scenario: unsharing multiple entries on the shared-with-me page
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has created file "lorem.txt"
     And user "Alice" has shared folder "simple-folder" with user "Brian"

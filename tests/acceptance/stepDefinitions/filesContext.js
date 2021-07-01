@@ -524,7 +524,7 @@ When('the user batch unshares these files using the webUI', async function(share
     unsharedElements.push(item[0])
   }
 
-  return client.page.personalPage().unshareAllCheckedFiles()
+  return client.page.sharedWithMePage().unshareAllCheckedFiles()
 })
 
 When('the user batch deletes these files using the webUI', async function(fileOrFolders) {

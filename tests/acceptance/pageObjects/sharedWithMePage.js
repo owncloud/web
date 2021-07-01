@@ -133,6 +133,11 @@ module.exports = {
         shareFound = result.value.length > 0
       })
       return shareFound
+    },
+    unshareAllCheckedFiles: function() {
+      return this.waitForElementVisible('@batchDeclineSharesButton')
+        .click('@batchDeclineSharesButton')
+        .waitForAjaxCallsToStartAndFinish()
     }
   },
   elements: {
