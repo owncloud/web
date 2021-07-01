@@ -264,3 +264,27 @@ exports.getFavouritedResources = function(user) {
       return favItems
     })
 }
+
+/**
+ *
+ * @param {string} userId
+ * @param {string} resource
+ * @param {object} properties
+ */
+exports.lockResource = function(userId, resource, properties) {
+  const davPath = exports.createDavPath(userId, resource)
+  let body = '<?xml version="1.0" encoding="UTF-8"?><d:lockinfo xmlns:d="DAV:">'
+
+  const headers = {}
+  Object.keys(properties).map(property => {
+    if (property === 'depth' || property === 'timeout') {
+      headers[property] = properties[property]
+    } else {
+      body += `<d:${property}><d:${properties[property]}/></d:${property}>`
+    }
+    return true
+  })
+  body += '</d:lockinfo>'
+
+  return httpHelper.lock(davPath, userId, body, headers).then(res => res.text())
+}

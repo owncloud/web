@@ -1,4 +1,5 @@
 const util = require('util')
+const { client } = require('nightwatch-api')
 const { join } = require('../helpers/path')
 const { defaultUsers } = require('../helpers/userSettings')
 
@@ -205,6 +206,17 @@ module.exports = {
         .waitForElementVisible(linkSelector)
         .click(linkSelector)
         .useCss()
+    },
+    getPopupErrorMessages: async function() {
+      const messages = []
+      await this.api.elements('@messages', function({ value }) {
+        value.forEach(async function({ ELEMENT }) {
+          await client.elementIdText(ELEMENT, function({ value }) {
+            messages.push(value)
+          })
+        })
+      })
+      return messages
     }
   },
   elements: {

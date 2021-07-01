@@ -1,6 +1,7 @@
 const { client } = require('nightwatch-api')
 const { Given, After } = require('cucumber')
 const fs = require('fs-extra')
+const assert = require('assert')
 require('url-search-params-polyfill')
 const httpHelper = require('../helpers/httpHelper')
 const backendHelper = require('../helpers/backendHelper')
@@ -117,6 +118,17 @@ function deleteUser(userId) {
 function initUser(userId) {
   const url = `cloud/users/${userId}`
   return httpHelper.getOCS(url, userId)
+}
+
+function editUser(userId, key, value) {
+  const headers = {
+    'Content-Type': 'application/x-www-form-urlencoded'
+  }
+  value = encodeURI(value)
+  const body = `key=${key}&value=${value}`
+
+  const url = `cloud/users/${userId}`
+  return httpHelper.putOCS(url, userId, body, headers)
 }
 
 /**
@@ -291,6 +303,19 @@ Given('these groups have been created:', function(dataTable) {
 
 Given('user {string} has been added to group {string}', function(userId, groupId) {
   return addToGroup(userId, groupId)
+})
+
+Given('the administrator has changed the display name of user {string} to {string}', async function(
+  userId,
+  newDisplayName
+) {
+  await editUser(userId, 'displayname', newDisplayName).then(function(res) {
+    assert.strictEqual(
+      res.status,
+      200,
+      `As admin, cannot change displayname of user "${userId}" to "${newDisplayName}"`
+    )
+  })
 })
 
 After(async function() {

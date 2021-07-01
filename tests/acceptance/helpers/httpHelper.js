@@ -141,5 +141,7 @@ module.exports = {
   report: (url, userId, body, header) =>
     requestEndpoint(url, { body, method: 'REPORT' }, userId, header),
   proppatch: (url, userId, body, header) =>
-    requestEndpoint(url, { body, method: 'PROPPATCH' }, userId, header)
+    requestEndpoint(url, { body, method: 'PROPPATCH' }, userId, header),
+  lock: (url, userId, body, header) =>
+    requestEndpoint(url, { body, method: 'LOCK' }, userId, header)
 }
