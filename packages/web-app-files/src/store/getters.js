@@ -86,9 +86,9 @@ export default {
   quota: state => {
     return state.quota
   },
-  highlightedFile: state => {
+  highlightedFile: (state, getters) => {
     if (state.highlightedResourceId) {
-      return state.files.find(r => r.id === state.highlightedResourceId)
+      return getters.filesAll.find(r => r.id === state.highlightedResourceId)
     }
     return null
   },
