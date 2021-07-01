@@ -265,10 +265,16 @@ export default {
     },
 
     $_reshareInformation() {
-      if (!this.collaborator.resharers) {
+      try {
+        this.collaborator.resharers.forEach(function(share) {
+          if (typeof share.displayName !== 'string' || !share.displayName) {
+            throw Error('displayName of resharer is not a string')
+          }
+        })
+        return this.collaborator.resharers.map(share => share.displayName).join(', ')
+      } catch (e) {
         return null
       }
-      return this.collaborator.resharers.map(share => share.displayName).join(', ')
     },
 
     viaLabel() {
