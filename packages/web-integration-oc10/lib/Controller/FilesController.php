@@ -141,29 +141,16 @@ class FilesController extends Controller {
     }
 
     /**
-     * Extracts the onlyoffice document server URL from the app-config or system-config, in the same manner
-     * like the onlyoffice connector app:
-     * - https://github.com/ONLYOFFICE/onlyoffice-owncloud/blob/34f69c833ee4b00880d538aed1ecc48025ac8791/lib/appconfig.php#L379
-     * - https://github.com/ONLYOFFICE/onlyoffice-owncloud/blob/34f69c833ee4b00880d538aed1ecc48025ac8791/lib/appconfig.php#L278
+     * Extracts the onlyoffice document server URL from the app
      *
      * @return string
      */
     private function getOnlyOfficeDocumentServerUrl(): string {
-        $appName = 'onlyoffice';
-        $documentServerKey = 'DocumentServerUrl';
-        $documentServerUrl = $this->config->getAppValue($appName, $documentServerKey);
-        if (!empty($documentServerUrl)) {
-            return $documentServerUrl;
+        if (!class_exists("\OCA\Onlyoffice\AppConfig")) {
+            return "";
         }
-        $documentServerUrl = $this->config->getSystemValue($documentServerKey);
-        if (!empty($documentServerUrl)) {
-            return $documentServerUrl;
-        }
-        $onlyOfficeConfig = $this->config->getSystemValue($appName);
-        if (\is_array($onlyOfficeConfig) && \array_key_exists($documentServerKey, $onlyOfficeConfig)) {
-            return $onlyOfficeConfig[$documentServerKey];
-        }
-        return "";
+        $onlyofficeConfig = new \OCA\Onlyoffice\AppConfig("onlyoffice");
+        return $onlyofficeConfig->GetDocumentServerUrl();
     }
 
     private function applyCSPRichDocuments(ContentSecurityPolicy $csp): ContentSecurityPolicy {
