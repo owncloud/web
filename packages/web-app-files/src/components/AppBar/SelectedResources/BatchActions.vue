@@ -93,6 +93,7 @@ import { canBeMoved } from '../../../helpers/permissions'
 import { checkRoute } from '../../../helpers/route'
 import { shareStatus } from '../../../helpers/shareStatus'
 import { triggerShareAction } from '../../../helpers/share/triggerShareAction'
+import PQueue from 'p-queue'
 
 export default {
   mixins: [MixinRoutes, MixinDeleteResources],
@@ -254,23 +255,30 @@ export default {
       this.triggerShareActions(shareStatus.declined)
     },
 
-    triggerShareActions(newShareStatus) {
+    async triggerShareActions(newShareStatus) {
       const errors = []
-      this.selectedFiles.forEach(async resource => {
-        try {
-          const share = await triggerShareAction(
-            resource,
-            newShareStatus,
-            !this.isOcis,
-            this.$client
-          )
-          if (share) {
-            this.UPDATE_RESOURCE(share)
-          }
-        } catch (error) {
-          errors.push(error)
-        }
+      const triggerPromises = []
+      const triggerQueue = new PQueue({ concurrency: 4 })
+      this.selectedFiles.forEach(resource => {
+        triggerPromises.push(
+          triggerQueue.add(async () => {
+            try {
+              const share = await triggerShareAction(
+                resource,
+                newShareStatus,
+                !this.isOcis,
+                this.$client
+              )
+              if (share) {
+                this.UPDATE_RESOURCE(share)
+              }
+            } catch (error) {
+              errors.push(error)
+            }
+          })
+        )
       })
+      await Promise.all(triggerPromises)
 
       if (errors.length === 0) {
         this.SELECT_RESOURCES([])
