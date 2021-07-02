@@ -34,9 +34,7 @@ export default {
     if (!state.areHiddenFilesShown) {
       files = files.filter(file => !file.name.startsWith('.'))
     }
-    return []
-      .concat(files)
-      .splice(firstElementIndex, state.filesPageLimit)
+    return [].concat(files).splice(firstElementIndex, state.filesPageLimit)
   },
   activeFilesSize: (state, getters) => {
     return $_fileSizes(getters.activeFiles)

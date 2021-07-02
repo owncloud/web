@@ -35,8 +35,8 @@
           :date="enteredExpirationDate"
           :max-datetime="maxExpirationDate"
           :min-datetime="minExpirationDate"
-          @input="setExpirationDate"
           :label="datePickerLabel"
+          @input="setExpirationDate"
         />
         <div
           v-if="canResetExpirationDate"
