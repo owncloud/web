@@ -159,7 +159,10 @@ export default {
             .toISO()
         : null
 
-      if (this.expirationDate !== originalExpirationDate) {
+      const exactExpirationDate = DateTime.fromISO(this.expirationDate).ts
+      const exactOriginalExpirationDate = DateTime.fromISO(originalExpirationDate).ts
+
+      if (exactExpirationDate !== exactOriginalExpirationDate) {
         return true
       }
 

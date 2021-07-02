@@ -61,7 +61,7 @@
             <li v-if="!isCurrentUser" class="oc-py-rm">
               <oc-tag class="files-collaborators-collaborator-share-type">
                 <oc-icon :name="collaboratorTypeTagIcon" />
-                {{ collaboratorType(collaborator.shareType) }}
+                {{ getCollaboratorTypeLabel(collaborator.shareType) }}
               </oc-tag>
             </li>
             <li v-if="$_reshareInformation" class="oc-py-rm">

@@ -24,7 +24,7 @@ describe('mixins/collaborators', () => {
       const wrapper = shallowMount(Component, {
         mixins: [CollaboratorsMixins]
       })
-      expect(wrapper.vm.collaboratorType(shareType)).toEqual(expectedResult)
+      expect(wrapper.vm.getCollaboratorTypeLabel(shareType)).toEqual(expectedResult)
     })
   })
 })

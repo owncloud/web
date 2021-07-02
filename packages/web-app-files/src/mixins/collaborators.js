@@ -85,7 +85,7 @@ export default {
       this.expirationDate = expirationDate
     },
 
-    collaboratorType(type) {
+    getCollaboratorTypeLabel(type) {
       switch (type) {
         case shareTypes.user:
           return this.$gettext('User')
