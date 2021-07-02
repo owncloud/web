@@ -19,7 +19,7 @@
         :target-route="targetRoute"
         :highlighted="highlightedFile ? highlightedFile.id : null"
         :header-position="headerPosition"
-        @showDetails="setHighlightedFile"
+        @showDetails="$_mountSideBar_showDetails"
         @fileClick="$_fileActions_triggerDefaultAction"
         @rowMounted="rowMounted"
       >
@@ -55,6 +55,7 @@ import { buildResource } from '../helpers/resources'
 import FileActions from '../mixins/fileActions'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
 import MixinFilesListPagination from '../mixins/filesListPagination'
+import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 
 import QuickActions from '../components/FilesList/QuickActions.vue'
 import ListLoader from '../components/FilesList/ListLoader.vue'
@@ -69,7 +70,7 @@ const visibilityObserver = new VisibilityObserver()
 export default {
   components: { QuickActions, ListLoader, NoContentMessage, ListInfo },
 
-  mixins: [FileActions, MixinFilesListPositioning, MixinFilesListPagination],
+  mixins: [FileActions, MixinFilesListPositioning, MixinFilesListPagination, MixinMountSideBar],
 
   data: () => ({
     loading: true
@@ -145,7 +146,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('Files', ['setHighlightedFile', 'loadIndicators', 'loadPreview']),
+    ...mapActions('Files', ['loadIndicators', 'loadPreview']),
     ...mapMutations('Files', ['SELECT_RESOURCES', 'LOAD_FILES', 'CLEAR_CURRENT_FILES_LIST']),
     ...mapMutations(['SET_QUOTA']),
 

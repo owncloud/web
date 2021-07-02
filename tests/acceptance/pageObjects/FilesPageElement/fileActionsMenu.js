@@ -5,7 +5,9 @@ module.exports = {
      * @readonly
      */
     FileAction: Object.freeze({
+      acceptShare: 'acceptShare',
       download: 'download',
+      declineShare: 'declineShare',
       delete: 'delete',
       favorite: 'favorite',
       unmarkFavorite: 'unmarkFavorite',
@@ -139,6 +141,18 @@ module.exports = {
       return this.performFileAction(this.FileAction.copy)
     },
     /**
+     * Trigger accepting a share
+     */
+    acceptShare: function() {
+      return this.performFileAction(this.FileAction.acceptShare)
+    },
+    /**
+     * Trigger declining a share
+     */
+    declineShare: function() {
+      return this.performFileAction(this.FileAction.declineShare)
+    },
+    /**
      * Open a resource in the media viewer via its file action
      */
     mediaViewer: function() {
@@ -160,11 +174,11 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     deleteButtonInAccordion: {
-      selector: '//button[normalize-space()="Delete"]',
+      selector: '//button[contains(@class, "oc-files-actions-sidebar-delete-trigger")]',
       locateStrategy: 'xpath'
     },
     downloadButtonInAccordion: {
-      selector: '//button[normalize-space()="Download"]',
+      selector: '//button[contains(@class, "oc-files-actions-sidebar-download-trigger")]',
       locateStrategy: 'xpath'
     },
     favoriteButtonInAccordion: {
@@ -176,11 +190,11 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     restoreButtonInAccordion: {
-      selector: '//button[normalize-space()="Restore"]',
+      selector: '//button[contains(@class, "oc-files-actions-sidebar-restore-trigger")]',
       locateStrategy: 'xpath'
     },
     renameButtonInAccordion: {
-      selector: '//button[normalize-space()="Rename"]',
+      selector: '//button[contains(@class, "oc-files-actions-sidebar-rename-trigger")]',
       locateStrategy: 'xpath'
     },
     // TODO: Merge with selectors in personalPage
@@ -194,11 +208,19 @@ module.exports = {
       selector: '.oc-modal-body-input .oc-text-input'
     },
     moveButtonInAccordion: {
-      selector: '//button[normalize-space()="Move"]',
+      selector: '//button[contains(@class, "oc-files-actions-sidebar-move-trigger")]',
       locateStrategy: 'xpath'
     },
     copyButtonInAccordion: {
-      selector: '//button[normalize-space()="Copy"]',
+      selector: '//button[contains(@class, "oc-files-actions-sidebar-copy-trigger")]',
+      locateStrategy: 'xpath'
+    },
+    acceptShareButtonInAccordion: {
+      selector: '//button[contains(@class, "oc-files-actions-sidebar-accept-share-trigger")]',
+      locateStrategy: 'xpath'
+    },
+    declineShareButtonInAccordion: {
+      selector: '//button[contains(@class, "oc-files-actions-sidebar-decline-share-trigger")]',
       locateStrategy: 'xpath'
     },
     mediaViewerButtonInAccordion: {

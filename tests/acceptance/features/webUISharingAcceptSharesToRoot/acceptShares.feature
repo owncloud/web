@@ -40,7 +40,7 @@ Feature: accept/decline shares coming from internal users
     And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
     And the user has browsed to the files page
     When the user shares folder "simple-folder (2)" with group "grp1" as "Viewer" using the webUI
-    And the user unshares folder "simple-folder (2)" using the webUI
+    And the user deletes folder "simple-folder (2)" using the webUI
     And the user browses to the shared-with-me page using the webUI
     Then folder "simple-folder (2)" shared by "Alice Hansen" should be in "Declined" state on the webUI
     And folder "simple-folder" shared by "Brian Murphy" should not be listed in the webUI
@@ -60,8 +60,8 @@ Feature: accept/decline shares coming from internal users
     And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
     And user "Brian" has accepted the share "testimage.jpg" offered by user "Alice"
     And the user has browsed to the files page
-    When the user unshares folder "simple-folder" using the webUI
-    And the user unshares file "testimage.jpg" using the webUI
+    When the user deletes folder "simple-folder" using the webUI
+    And the user deletes file "testimage.jpg" using the webUI
     Then folder "simple-folder" should not be listed on the webUI
     And file "testimage.jpg" should not be listed on the webUI
     When the user browses to the shared-with-me page using the webUI
@@ -134,7 +134,7 @@ Feature: accept/decline shares coming from internal users
     And user "Alice" has shared folder "simple-folder" with user "Brian" with "create, read, share, update" permissions
     And user "Brian" has renamed folder "simple-folder" to "simple-folder-renamed"
     And the user has reloaded the current page of the webUI
-    When the user unshares folder "simple-folder-renamed" using the webUI
+    When the user deletes folder "simple-folder-renamed" using the webUI
     Then folder "simple-folder-renamed" should not be listed on the webUI
     When the user browses to the shared-with-me page using the webUI
     Then folder "simple-folder-renamed" shared by "Alice Hansen" should be in "Declined" state on the webUI
@@ -149,7 +149,7 @@ Feature: accept/decline shares coming from internal users
     And user "Brian" has moved folder "/simple-folder (2)" to "/simple-folder/shared"
     And the user has reloaded the current page of the webUI
     When the user opens folder "simple-folder" using the webUI
-    And the user unshares folder "shared" using the webUI
+    And the user deletes folder "shared" using the webUI
     Then folder "shared" should not be listed on the webUI
     When the user browses to the shared-with-me page using the webUI
     Then folder "shared" shared by "Alice Hansen" should be in "Declined" state on the webUI
@@ -161,7 +161,7 @@ Feature: accept/decline shares coming from internal users
     And user "Alice" has shared folder "/simple-folder" with user "Brian"
     And user "Brian" has renamed folder "/simple-folder" to "/simple-folder-renamed"
     And the user has reloaded the current page of the webUI
-    When the user unshares folder "simple-folder-renamed" using the webUI
+    When the user deletes folder "simple-folder-renamed" using the webUI
     And the user browses to the shared-with-me page using the webUI
     And the user accepts share "simple-folder-renamed" offered by user "Alice Hansen" using the webUI
     Then folder "simple-folder-renamed" shared by "Alice Hansen" should be in "Accepted" state on the webUI

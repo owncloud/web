@@ -49,6 +49,24 @@ module.exports = {
       return this
     },
     /**
+     * @param {string} resource
+     * @returns {Promise<exports.commands>}
+     */
+    acceptShare: async function(resource) {
+      await this.waitForFileVisible(resource)
+      await filesRow.openFileActionsMenu(resource).acceptShare()
+      return this
+    },
+    /**
+     * @param {string} resource
+     * @returns {Promise<exports.commands>}
+     */
+    declineShare: async function(resource) {
+      await this.waitForFileVisible(resource)
+      await filesRow.openFileActionsMenu(resource).declineShare()
+      return this
+    },
+    /**
      * @param {string} fromName
      * @param {string} toName
      * @param {boolean} expectToSucceed

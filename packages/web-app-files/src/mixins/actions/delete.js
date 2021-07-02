@@ -8,12 +8,10 @@ export default {
       return [
         {
           icon: 'delete',
-          label: () => {
-            return this.$gettext('Delete')
-          },
+          label: () => this.$gettext('Delete'),
           handler: this.$_delete_trigger,
           isEnabled: ({ resource }) => {
-            if (checkRoute(['files-trashbin'], this.$route.name)) {
+            if (checkRoute(['files-shared-with-me', 'files-trashbin'], this.$route.name)) {
               return false
             }
 
@@ -23,6 +21,7 @@ export default {
           class: 'oc-files-actions-sidebar-delete-trigger'
         },
         {
+          // this menu item is ONLY for the trashbin (permanently delete a file/folder)
           icon: 'delete',
           label: () => this.$gettext('Delete'),
           handler: this.$_delete_trigger,

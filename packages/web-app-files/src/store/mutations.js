@@ -116,11 +116,11 @@ export default {
   },
   UPDATE_CURRENT_FILE_SHARE_TYPES(state) {
     const files = [...state.files]
-    if (!state.highlightedFile) {
+    if (!state.highlightedResourceId) {
       return
     }
     const fileIndex = files.findIndex(f => {
-      return f.id === state.highlightedFile.id
+      return f.id === state.highlightedResourceId
     })
     files[fileIndex].shareTypes = computeShareTypes(state.currentFileOutgoingShares)
     state.files = files
@@ -222,7 +222,7 @@ export default {
       }
       file = state.files[fileIndex]
     }
-    state.highlightedFile = file
+    state.highlightedResourceId = file ? file.id : file
   },
   SET_PUBLIC_LINK_PASSWORD(state, password) {
     // cache into state for reactivity
@@ -249,7 +249,7 @@ export default {
   CLEAR_CURRENT_FILES_LIST(state) {
     state.currentFolder = null
     state.selected = []
-    state.highlightedFile = null
+    state.highlightedResourceId = null
     // release blob urls
     state.files.forEach(item => {
       if (item.previewUrl && item.previewUrl.startsWith('blob:')) {

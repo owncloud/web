@@ -30,7 +30,7 @@ function _getFileExtension(name) {
 export function buildResource(resource) {
   const isFolder = resource.type === 'dir'
   const extension = _getFileExtension(resource.name)
-  return {
+  const result = {
     id: resource.fileInfo['{http://owncloud.org/ns}fileid'],
     fileId: resource.fileInfo['{http://owncloud.org/ns}fileid'],
     icon: isFolder ? 'folder' : getFileIcon(extension),
@@ -83,6 +83,7 @@ export function buildResource(resource) {
       return this.permissions.indexOf('S') >= 0
     }
   }
+  return result
 }
 
 export function attachIndicators(resource, sharesTree) {

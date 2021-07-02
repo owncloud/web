@@ -57,18 +57,43 @@
           <translate>Delete</translate>
         </oc-button>
       </div>
+      <div v-if="canAccept">
+        <oc-button
+          id="accept-selected-shares-btn"
+          key="accept-shares-btn"
+          variation="primary"
+          @click="acceptShares()"
+        >
+          <oc-icon name="check" />
+          <translate>Accept</translate>
+        </oc-button>
+      </div>
+      <div v-if="canDecline">
+        <oc-button
+          id="decline-selected-shares-btn"
+          key="decline-shares-btn"
+          variation="primary"
+          @click="declineShares()"
+        >
+          <oc-icon name="not_interested" />
+          <translate>Decline</translate>
+        </oc-button>
+      </div>
     </oc-grid>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 
 import MixinRoutes from '../../../mixins/routes'
 import MixinDeleteResources from '../../../mixins/deleteResources'
 import { cloneStateObject } from '../../../helpers/store'
 import { canBeMoved } from '../../../helpers/permissions'
 import { checkRoute } from '../../../helpers/route'
+import { shareStatus } from '../../../helpers/shareStatus'
+import { triggerShareAction } from '../../../helpers/share/triggerShareAction'
+import PQueue from 'p-queue'
 
 export default {
   mixins: [MixinRoutes, MixinDeleteResources],
@@ -111,11 +136,40 @@ export default {
     },
 
     canDelete() {
+      if (this.isSharedWithMeRoute) {
+        return false
+      }
+
       if (this.isPublicFilesRoute) {
         return this.currentFolder.canBeDeleted()
       }
 
       return true
+    },
+
+    canAccept() {
+      if (!this.isSharedWithMeRoute) {
+        return false
+      }
+      let canAccept = true
+      this.selectedFiles.forEach(file => {
+        if (file.status === shareStatus.accepted) {
+          canAccept = false
+        }
+      })
+
+      return canAccept
+    },
+
+    canDecline() {
+      if (!this.isSharedWithMeRoute) {
+        return false
+      }
+      let canDecline = true
+      this.selectedFiles.forEach(file => {
+        if (file.status === shareStatus.declined) canDecline = false
+      })
+      return canDecline
     },
 
     displayBulkActions() {
@@ -130,6 +184,7 @@ export default {
   methods: {
     ...mapActions('Files', ['removeFilesFromTrashbin', 'resetFileSelection', 'setHighlightedFile']),
     ...mapActions(['showMessage']),
+    ...mapMutations('Files', ['SELECT_RESOURCES', 'UPDATE_RESOURCE']),
 
     restoreFiles(resources = this.selectedFiles) {
       for (const resource of resources) {
@@ -190,6 +245,68 @@ export default {
           })
         }
       })
+    },
+
+    acceptShares() {
+      this.triggerShareActions(shareStatus.accepted)
+    },
+
+    declineShares() {
+      this.triggerShareActions(shareStatus.declined)
+    },
+
+    async triggerShareActions(newShareStatus) {
+      const errors = []
+      const triggerPromises = []
+      const triggerQueue = new PQueue({ concurrency: 4 })
+      this.selectedFiles.forEach(resource => {
+        triggerPromises.push(
+          triggerQueue.add(async () => {
+            try {
+              const share = await triggerShareAction(
+                resource,
+                newShareStatus,
+                !this.isOcis,
+                this.$client
+              )
+              if (share) {
+                this.UPDATE_RESOURCE(share)
+              }
+            } catch (error) {
+              errors.push(error)
+            }
+          })
+        )
+      })
+      await Promise.all(triggerPromises)
+
+      if (errors.length === 0) {
+        this.SELECT_RESOURCES([])
+        return
+      }
+
+      console.log(errors)
+      if (newShareStatus === shareStatus.accepted) {
+        this.showMessage({
+          title: this.$ngettext(
+            'Error while accepting the selected share.',
+            'Error while accepting selected shares.',
+            this.selectedFiles.length
+          ),
+          status: 'danger'
+        })
+        return
+      }
+      if (newShareStatus === shareStatus.declined) {
+        this.showMessage({
+          title: this.$ngettext(
+            'Error while declining the selected share.',
+            'Error while declining selected shares.',
+            this.selectedFiles.length
+          ),
+          status: 'danger'
+        })
+      }
     }
   }
 }

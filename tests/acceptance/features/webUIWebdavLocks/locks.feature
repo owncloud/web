@@ -338,8 +338,8 @@ Feature: Locks
     And user "sharer" has shared file "lorem.txt" with user "brand-new-user"
     And user "sharer" has shared folder "simple-folder" with user "brand-new-user"
     And the user has browsed to the files page
-    When the user unshares file "lorem (2).txt" using the webUI
-    And the user unshares folder "simple-folder (2)" using the webUI
+    When the user deletes file "lorem (2).txt" using the webUI
+    And the user deletes folder "simple-folder (2)" using the webUI
     Then notifications should be displayed on the webUI with the text
       | The file "lorem (2).txt" is locked and cannot be deleted.     |
       | The file "simple-folder (2)" is locked and cannot be deleted. |

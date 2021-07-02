@@ -27,7 +27,7 @@
         :target-route="targetRoute"
         :highlighted="highlightedFile ? highlightedFile.id : null"
         :header-position="headerPosition"
-        @showDetails="setHighlightedFile"
+        @showDetails="$_mountSideBar_showDetails"
         @fileClick="$_fileActions_triggerDefaultAction"
         @rowMounted="rowMounted"
       >
@@ -71,6 +71,7 @@ import MixinFileActions from '../mixins/fileActions'
 import MixinFilesListScrolling from '../mixins/filesListScrolling'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
 import MixinFilesListPagination from '../mixins/filesListPagination'
+import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 import { buildResource } from '../helpers/resources'
 
 import QuickActions from '../components/FilesList/QuickActions.vue'
@@ -91,7 +92,8 @@ export default {
     MixinFileActions,
     MixinFilesListPositioning,
     MixinFilesListScrolling,
-    MixinFilesListPagination
+    MixinFilesListPagination,
+    MixinMountSideBar
   ],
 
   data: () => ({
@@ -190,7 +192,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('Files', ['setHighlightedFile', 'loadIndicators', 'loadPreview']),
+    ...mapActions('Files', ['loadIndicators', 'loadPreview']),
     ...mapMutations('Files', [
       'SELECT_RESOURCES',
       'SET_CURRENT_FOLDER',
@@ -260,7 +262,7 @@ export default {
           const resource = this.activeFiles.find(r => r.name === resourceName)
 
           if (resource) {
-            this.setHighlightedFile(resource)
+            this.$_mountSideBar_showDetails(resource)
             this.scrollToResource(resource)
           }
         })

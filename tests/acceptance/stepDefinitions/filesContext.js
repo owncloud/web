@@ -10,13 +10,15 @@ const backendHelper = require('../helpers/backendHelper')
 const { move } = require('../helpers/webdavHelper')
 const path = require('../helpers/path')
 const util = require('util')
-let deletedElements
 const { download } = require('../helpers/webdavHelper')
 const fs = require('fs')
 const sharingHelper = require('../helpers/sharingHelper')
 
+let deletedElements
+let unsharedElements
 Before(() => {
   deletedElements = []
+  unsharedElements = []
 })
 
 When('the user browses to the files page', () => {
@@ -264,7 +266,7 @@ Then('the following files should be listed on the files-drop page:', async funct
 })
 
 When('the user unshares file/folder {string} using the webUI', function(element) {
-  return client.page.FilesPageElement.filesList().deleteFile(element)
+  return client.page.FilesPageElement.filesList().declineShare(element)
 })
 
 When('the user uploads folder {string} using the webUI', function(element) {
@@ -439,6 +441,18 @@ Then('folder {string} should not be listed on the webUI', folder => {
     })
 })
 
+Then('the unshared elements should be in declined state on the webUI', async function() {
+  for (const element of unsharedElements) {
+    const state = await client.page.sharedWithMePage().getShareStatusOfResourceByName(element)
+    assert.strictEqual(
+      state,
+      'Declined',
+      `Expected resource '${element}' to be in 'Declined' state but found '${state}'`
+    )
+  }
+  return client
+})
+
 Then('the deleted elements should not be listed on the webUI', function() {
   return assertDeletedElementsAreNotListed()
 })
@@ -502,6 +516,15 @@ When('the user marks all files for batch action using the webUI', function() {
 
 When('the user/public batch deletes the marked files using the webUI', function() {
   return client.page.personalPage().deleteAllCheckedFiles()
+})
+
+When('the user batch unshares these files using the webUI', async function(shares) {
+  for (const item of shares.rows()) {
+    await client.page.FilesPageElement.filesList().toggleFileOrFolderCheckbox('enable', item[0])
+    unsharedElements.push(item[0])
+  }
+
+  return client.page.sharedWithMePage().unshareAllCheckedFiles()
 })
 
 When('the user batch deletes these files using the webUI', async function(fileOrFolders) {

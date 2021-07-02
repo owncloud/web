@@ -82,7 +82,7 @@ Feature: Sharing files and folders with internal groups
     Then file "new-lorem.txt" should be listed on the webUI
     And as "Alice" the content of "new-lorem.txt" should be the same as the local "new-lorem.txt"
     # unshare the received shared file
-    When the user unshares file "new-lorem.txt" using the webUI
+    When the user deletes file "new-lorem.txt" using the webUI
     Then file "new-lorem.txt" should not be listed on the webUI
     # check that another group member can still see the file
     When the user re-logs in as "Brian" using the webUI

@@ -44,6 +44,41 @@ module.exports = {
       return status
     },
     /**
+     * Gets the displayed share status of a file by its name.
+     * Important: this function ignores the user who shared the file. The same file/foldername could
+     * be shared by different users. In that case you need to use the more precise `getShareStatusOfResource`
+     * instead.
+     *
+     * @param {string} filename
+     *
+     * @returns {Promise<string>}
+     */
+    getShareStatusOfResourceByName: async function(filename) {
+      let status
+      const requiredXpath =
+        this.api.page.FilesPageElement.filesList().getFileRowSelectorByFileName(filename) +
+        '/' +
+        this.elements.shareStatusOnFileRow.selector
+      await this.useXpath()
+        .waitForAnimationToFinish()
+        .api.getText(requiredXpath, result => {
+          if (result.status === 0) {
+            status = result.value === '' ? 'Accepted' : result.value
+          } else {
+            throw new Error(
+              `Expected: share status of the resource but found unexpected response: ${result.value.error}`
+            )
+          }
+        })
+        .useCss()
+      return status
+    },
+    batchDeclineShares: function() {
+      return this.waitForElementVisible('@batchDeclineSharesButton')
+        .click('@batchDeclineSharesButton')
+        .waitForAjaxCallsToStartAndFinish()
+    },
+    /**
      * @param {string} filename
      * @param {string} action - It takes one of the following : Decline and Accept
      * @param {string} user - The user who created the share
@@ -98,6 +133,11 @@ module.exports = {
         shareFound = result.value.length > 0
       })
       return shareFound
+    },
+    unshareAllCheckedFiles: function() {
+      return this.waitForElementVisible('@batchDeclineSharesButton')
+        .click('@batchDeclineSharesButton')
+        .waitForAjaxCallsToStartAndFinish()
     }
   },
   elements: {
@@ -122,6 +162,9 @@ module.exports = {
       selector:
         '/ancestor::tr[contains(@class, "oc-tbody-tr")]//button[contains(@class,"file-row-share-status-action")][normalize-space(.)="%s"]',
       locateStrategy: 'xpath'
+    },
+    batchDeclineSharesButton: {
+      selector: '#decline-selected-shares-btn'
     }
   }
 }
