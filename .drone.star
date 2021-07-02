@@ -2461,7 +2461,8 @@ def githubComment(alternateSuiteName):
             "image": "owncloud/ubuntu:20.04",
             "pull": "always",
             "commands": [
-                "if [ -f %s/passedOnRetry.file ]; then cat passedOnRetry.file >> %s/comments.file; fi" % (dir["web"], dir["web"]),
+                "if [ -s %s/passedOnRetry.file ]; then cat %s/passedOnRetry.file >> %s/comments.file; fi" % (dir["web"], dir["web"], dir["web"]),
+                "if [ -s %s/passedOnRetry.file ]; then echo '%s' | cat - %s/passedOnRetry.file > %s/rocketChat.file; fi" % (dir["web"], prefix, dir["web"], dir["web"]),
             ],
             "when": {
                 "status": [
@@ -2482,7 +2483,7 @@ def githubComment(alternateSuiteName):
                     "from_secret": config["rocketchat"]["from_secret"],
                 },
                 "channel": config["rocketchat"]["channel"],
-                "template": "file:%s/passedOnRetry.file" % dir["web"],
+                "template": "file:%s/rocketChat.file" % dir["web"],
             },
             "when": {
                 "status": [
