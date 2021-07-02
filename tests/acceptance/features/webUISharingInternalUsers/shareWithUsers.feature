@@ -13,7 +13,7 @@ Feature: Sharing files and folders with internal users
       | Brian    |
     And user "Brian" has created folder "simple-folder"
 
-  @smokeTest @issue-ocis-1743 @ocisSmokeTest
+  @smokeTest @issue-ocis-2260 @ocisSmokeTest
   Scenario Outline: share a file & folder with another internal user
     Given user "Brian" has created file "testimage.jpg"
     And user "Brian" has created file "simple-folder/lorem.txt"
@@ -133,7 +133,7 @@ Feature: Sharing files and folders with internal users
     And the user opens folder "simple-folder" using the webUI
     Then it should not be possible to delete file "lorem.txt" using the webUI
 
-  @issue-4193
+  @issue-ocis-2260
   Scenario: user shares the file/folder with multiple internal users and delete the share with one user
     Given user "Carol" has been created with default attributes and without skeleton files
     And user "Alice" has created file "lorem.txt"
@@ -176,7 +176,7 @@ Feature: Sharing files and folders with internal users
     And as "Alice" file "lorem.txt" should not exist
     And as "Alice" folder "simple-folder" should not exist
 
-  @issue-2897 @issue-4193
+  @issue-2897 @issue-ocis-2260
   Scenario: sharing details of items inside a shared folder
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has created folder "simple-folder/simple-empty-folder"
@@ -191,7 +191,7 @@ Feature: Sharing files and folders with internal users
     Then user "Brian Murphy" should be listed as "Editor" via "simple-folder" in the collaborators list on the webUI
 
   # Share permission is not available in oCIS webUI so when setting all permissions, it is displayed as "Advanced permissions" there
-  @issue-2897
+  @issue-2897 @issue-ocis-2260
   Scenario: sharing details of items inside a re-shared folder
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has created folder "simple-folder/simple-empty-folder"
@@ -225,7 +225,7 @@ Feature: Sharing files and folders with internal users
     When the user opens the share dialog for file "lorem.txt" using the webUI
     Then user "Carol King" should be listed as "Advanced permissions" via "simple-folder" in the collaborators list on the webUI
 
-  @issue-2897 @issue-4193
+  @issue-2897 @issue-ocis-2260
   Scenario: sharing details of items inside a shared folder shared with multiple users
     Given user "Alice" has created folder "simple-folder"
     And user "Carol" has been created with default attributes and without skeleton files
@@ -239,7 +239,7 @@ Feature: Sharing files and folders with internal users
     Then user "Brian Murphy" should be listed as "Editor" via "simple-folder" in the collaborators list on the webUI
     And user "Carol King" should be listed as "Editor" via "sub-folder" in the collaborators list on the webUI
 
-
+  @issue-ocis-2260
   Scenario Outline: Share files/folders with special characters in their name
     Given user "Brian" has created folder "Sample,Folder,With,Comma"
     And user "Brian" has created file "sample,1.txt"
@@ -342,7 +342,7 @@ Feature: Sharing files and folders with internal users
     When the user shares resource "new-lorem.txt" with user "Brian Murphy" using the quick action in the webUI
     Then user "Brian Murphy" should be listed as "Viewer" in the collaborators list for file "new-lorem.txt" on the webUI
 
-  @issue-4193
+
   Scenario: user shares the file/folder with another internal user and delete the share with user
     Given user "Alice" has created file "lorem.txt"
     And user "Alice" has logged in using the webUI

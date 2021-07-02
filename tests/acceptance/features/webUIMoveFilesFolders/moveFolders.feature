@@ -68,7 +68,7 @@ Feature: move folders
       | "question?" | "target-folder-with-question?" |
       | "&and#hash" | "target-folder-with-&and#hash" |
 
-  @issue-ocis-reva-243
+  @issue-ocis-1328
   Scenario: move a folder into another folder with no change permission
     Given user "Brian" has been created with default attributes and without skeleton files
     And user "Brian" has created folder "/simple-folder"

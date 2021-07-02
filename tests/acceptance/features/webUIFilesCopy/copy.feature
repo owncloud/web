@@ -94,7 +94,7 @@ Feature: copy files and folders
     When the user tries to copy file "lorem.txt" into folder "simple-folder" using the webUI
     Then as "Alice" file "simple-folder/lorem.txt" should not exist
 
-  @issue-ocis-reva-243
+  @issue-ocis-1328
   Scenario: copy a folder into another folder with no change permission
     Given user "Alice" has created folder "simple-empty-folder"
     And user "Brian" has been created with default attributes and without skeleton files

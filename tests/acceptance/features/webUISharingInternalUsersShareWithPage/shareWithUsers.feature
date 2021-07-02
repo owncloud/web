@@ -1,4 +1,3 @@
-@ocis-reva-issue-64
 Feature: Shares in share-with pages
   As a user
   I want to check share-with pages
@@ -13,7 +12,7 @@ Feature: Shares in share-with pages
       | Brian    |
     And user "Brian" has created folder "simple-folder"
 
-  @issue-#4192
+  @issue-4192
   Scenario: share a folder with other user and then it should be listed on Shared with You for other user
     Given user "Brian" has created file "lorem.txt"
     And user "Brian" has renamed folder "simple-folder" to "new-simple-folder"
@@ -142,7 +141,7 @@ Feature: Shares in share-with pages
     And the user opens the share dialog for folder "simple-folder" using the webUI
     Then user "Alice Hansen" should be listed as "Owner" in the collaborators list on the webUI
 
-  @issue-ocis-reva-41
+  @issue-ocis-1328
   Scenario Outline: collaborators list contains additional info when enabled
     Given the setting "user_additional_info_field" of app "core" has been set to "<additional-info-field>"
     And user "Alice" has created folder "simple-folder"
@@ -155,7 +154,7 @@ Feature: Shares in share-with pages
       | id                    | Brian                  |
       | email                 | brian@example.org      |
 
-
+  @issue-ocis-1328
   Scenario: collaborators list does not contain additional info when disabled
     Given the setting "user_additional_info_field" of app "core" has been set to ""
     And user "Alice" has created folder "simple-folder"
@@ -182,7 +181,7 @@ Feature: Shares in share-with pages
     And the user opens the share dialog for folder "simple-folder" using the webUI
     Then user "Brian Murphy" should be listed with additional info "(me)" in the collaborators list on the webUI
 
-  @issue-ocis-reva-34
+  @issue-ocis-1289
   Scenario: current user should see the highest role in their entry in collaborators list
     Given group "grp1" has been created
     And user "Brian" has been added to group "grp1"

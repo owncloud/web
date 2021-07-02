@@ -180,10 +180,12 @@ const shareFileFolder = async function(
     }
   }
   const url = 'apps/files_sharing/api/v1/shares'
+  console.log(params)
   await httpHelper
     .postOCS(url, sharer, params)
     .then(res => res.json())
     .then(function(json) {
+      console.log(json)
       httpHelper.checkOCSStatus(json, 'Could not create share. Message: ' + json.ocs.meta.message)
     })
   await updateTimeOfLastShareOperation()
