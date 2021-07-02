@@ -2454,7 +2454,8 @@ def buildGithubCommentForBuildStopped(suite):
     }]
 
 def githubComment(alternateSuiteName):
-    prefix = "Results for <strong>%s</strong> ${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}${DRONE_STAGE_NUMBER}/1" % alternateSuiteName
+    prefixGitHub = "Results for <strong>%s</strong> ${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}${DRONE_STAGE_NUMBER}/1" % alternateSuiteName
+    prefixRocketChat = "Results for *%s* ${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}${DRONE_STAGE_NUMBER}/1" % alternateSuiteName
     return [
         {
             "name": "copy-passedOnRetry",
@@ -2462,7 +2463,7 @@ def githubComment(alternateSuiteName):
             "pull": "always",
             "commands": [
                 "if [ -s %s/passedOnRetry.file ]; then cat %s/passedOnRetry.file >> %s/comments.file; fi" % (dir["web"], dir["web"], dir["web"]),
-                "if [ -s %s/passedOnRetry.file ]; then echo '%s' | cat - %s/passedOnRetry.file > %s/rocketChat.file; fi" % (dir["web"], prefix, dir["web"], dir["web"]),
+                "if [ -s %s/passedOnRetry.file ]; then echo '%s' | cat - %s/passedOnRetry.file > %s/rocketChat.file; fi" % (dir["web"], prefixRocketChat, dir["web"], dir["web"]),
             ],
             "when": {
                 "status": [
@@ -2508,7 +2509,7 @@ def githubComment(alternateSuiteName):
                 },
             },
             "commands": [
-                "if [ -s /var/www/owncloud/web/comments.file ]; then echo '%s' | cat - comments.file > temp && mv temp comments.file && /bin/drone-github-comment; fi" % prefix,
+                "if [ -s /var/www/owncloud/web/comments.file ]; then echo '%s' | cat - comments.file > temp && mv temp comments.file && /bin/drone-github-comment; fi" % prefixGitHub,
             ],
             "when": {
                 "status": [
