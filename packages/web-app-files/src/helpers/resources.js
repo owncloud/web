@@ -196,12 +196,21 @@ export function buildSharedResource(share, incomingShares = false, allowSharePer
   // FIXME: add actual permission parsing
   resource.canUpload = () => true
   resource.canBeDeleted = () => {
+    if (!resource.isReceivedShare()) {
+      return true
+    }
     return checkPermission(share.permissions, 'delete')
   }
   resource.canRename = () => {
+    if (!resource.isReceivedShare()) {
+      return true
+    }
     return checkPermission(share.permissions, 'update')
   }
   resource.canShare = () => {
+    if (!resource.isReceivedShare()) {
+      return true
+    }
     return checkPermission(share.permissions, 'share')
   }
   resource.isMounted = () => false
