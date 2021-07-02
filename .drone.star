@@ -2482,7 +2482,7 @@ def githubComment(alternateSuiteName):
                     "from_secret": config["rocketchat"]["from_secret"],
                 },
                 "channel": config["rocketchat"]["channel"],
-                "template": "file:/%s/passedOnRetry.file" % dir["web"],
+                "template": "file:%s/passedOnRetry.file" % dir["web"],
             },
             "when": {
                 "status": [
