@@ -3,6 +3,7 @@
     <template v-if="isTrashbinRoute">
       <oc-button
         v-if="selectedFiles.length > 0"
+        id="restore-selected-btn"
         key="restore-btn"
         variation="primary"
         class="oc-mr-s"
