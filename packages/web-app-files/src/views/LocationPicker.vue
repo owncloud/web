@@ -118,8 +118,6 @@ export default {
     ]),
     ...mapGetters('Files', [
       'activeFiles',
-      'fileSortField',
-      'fileSortDirectionDesc',
       'publicLinkPassword',
       'davProperties',
       'totalFilesCount',

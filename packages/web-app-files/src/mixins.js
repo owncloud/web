@@ -25,9 +25,7 @@ export default {
       'files',
       'highlightedFile',
       'publicLinkPassword',
-      'fileSortField',
-      'currentFolder',
-      'fileSortDirectionDesc'
+      'currentFolder'
     ]),
     ...mapGetters(['getToken', 'capabilities', 'configuration']),
 
@@ -58,20 +56,10 @@ export default {
       'resetSearch',
       'addFileToProgress',
       'removeFileSelection',
-      'removeFileFromProgress',
-      'setFilesSort'
+      'removeFileFromProgress'
     ]),
     ...mapActions(['showMessage', 'createModal', 'hideModal']),
 
-    toggleSort(fieldId) {
-      if (this.fileSortField === fieldId) {
-        // reverse direction
-        this.setFilesSort({ field: fieldId, directionIsDesc: !this.fileSortDirectionDesc })
-      } else {
-        // switch to the other column
-        this.setFilesSort({ field: fieldId, directionIsDesc: false })
-      }
-    },
     formDateFromNow(date, type) {
       // TODO: Refactor those into their own functions a.k.a relDateFromJSDate() etc
       if (type === 'JSDate') {

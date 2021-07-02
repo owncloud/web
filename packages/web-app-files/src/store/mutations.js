@@ -75,10 +75,6 @@ export default {
   REMOVE_FILE_FROM_SEARCHED(state, file) {
     state.filesSearched = state.filesSearched.filter(i => file.id !== i.id)
   },
-  SET_FILES_SORT(state, { field, directionIsDesc }) {
-    state.fileSortDirectionDesc = directionIsDesc
-    state.fileSortField = field
-  },
   ADD_FILE_SELECTION(state, file) {
     const selected = [...state.selected]
     const fileIndex = selected.findIndex(f => {
