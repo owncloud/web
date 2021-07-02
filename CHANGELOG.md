@@ -8,12 +8,20 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Batch action for deleting adhering permissions: [#5441](https://github.com/owncloud/web/pull/5441)
 * Enhancement - Add view options: [#5408](https://github.com/owncloud/web/pull/5408)
 * Enhancement - Batch actions for accepting and declining shares: [#5204](https://github.com/owncloud/web/issues/5204)
 * Enhancement - Update owncloud-design-system to v7.5.0: [#5408](https://github.com/owncloud/web/pull/5408)
 
 Details
 -------
+
+* Bugfix - Batch action for deleting adhering permissions: [#5441](https://github.com/owncloud/web/pull/5441)
+
+   We fixed that the batch actions for deleting files and folders was showing for shares that only
+   have viewer permissions.
+
+   https://github.com/owncloud/web/pull/5441
 
 * Enhancement - Add view options: [#5408](https://github.com/owncloud/web/pull/5408)
 
