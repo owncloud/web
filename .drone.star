@@ -2482,11 +2482,8 @@ def githubComment(alternateSuiteName):
                     "from_secret": config["rocketchat"]["from_secret"],
                 },
                 "channel": config["rocketchat"]["channel"],
-                "template": "there were scenarios that passed-on-retry",
+                "template": "file:/%s/passedOnRetry.file",
             },
-            "commands": [
-                "if [ -f %s/passedOnRetry.file ]; then /bin/drone-slack; fi" % dir["web"],
-            ],
             "when": {
                 "status": [
                     "success",
