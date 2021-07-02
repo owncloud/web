@@ -9,6 +9,7 @@ Summary
 -------
 
 * Enhancement - Add view options: [#5408](https://github.com/owncloud/web/pull/5408)
+* Enhancement - Batch actions for accepting and declining shares: [#5204](https://github.com/owncloud/web/issues/5204)
 * Enhancement - Update owncloud-design-system to v7.5.0: [#5408](https://github.com/owncloud/web/pull/5408)
 
 Details
@@ -21,6 +22,17 @@ Details
    local storage.
 
    https://github.com/owncloud/web/pull/5408
+
+* Enhancement - Batch actions for accepting and declining shares: [#5204](https://github.com/owncloud/web/issues/5204)
+
+   We've added batch actions for accepting and declining multiple selected incoming shares at
+   once.
+
+   https://github.com/owncloud/web/issues/5204
+   https://github.com/owncloud/web/issues/2513
+   https://github.com/owncloud/web/issues/3101
+   https://github.com/owncloud/web/issues/5435
+   https://github.com/owncloud/web/pull/5374
 
 * Enhancement - Update owncloud-design-system to v7.5.0: [#5408](https://github.com/owncloud/web/pull/5408)
 
