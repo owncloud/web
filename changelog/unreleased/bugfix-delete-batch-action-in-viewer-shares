@@ -1,0 +1,5 @@
+Bugfix: Batch action for deleting adhering permissions
+
+We fixed that the batch actions for deleting files and folders was showing for shares that only have viewer permissions.
+
+https://github.com/owncloud/web/pull/5441

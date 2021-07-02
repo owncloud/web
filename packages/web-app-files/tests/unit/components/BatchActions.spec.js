@@ -77,6 +77,7 @@ describe('Batch Actions component', () => {
       let deleteButton
 
       BatchActions.computed.canMove = jest.fn(() => true)
+      BatchActions.computed.canDelete = jest.fn(() => true)
       const spyTriggerLocationPicker = jest
         .spyOn(BatchActions.methods, 'triggerLocationPicker')
         .mockImplementation()

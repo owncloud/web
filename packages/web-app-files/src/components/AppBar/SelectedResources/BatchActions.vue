@@ -114,11 +114,10 @@ export default {
         return false
       }
 
-      const insufficientPermissions = this.selectedFiles.some(resource => {
+      const moveDisabled = this.selectedFiles.some(resource => {
         return canBeMoved(resource, this.currentFolder.path) === false
       })
-
-      return insufficientPermissions === false
+      return !moveDisabled
     },
 
     canCopy() {
@@ -144,32 +143,32 @@ export default {
         return this.currentFolder.canBeDeleted()
       }
 
-      return true
+      const deleteDisabled = this.selectedFiles.some(resource => {
+        return !resource.canBeDeleted()
+      })
+      return !deleteDisabled
     },
 
     canAccept() {
       if (!this.isSharedWithMeRoute) {
         return false
       }
-      let canAccept = true
-      this.selectedFiles.forEach(file => {
-        if (file.status === shareStatus.accepted) {
-          canAccept = false
-        }
-      })
 
-      return canAccept
+      const acceptDisabled = this.selectedFiles.some(resource => {
+        return resource.status === shareStatus.accepted
+      })
+      return !acceptDisabled
     },
 
     canDecline() {
       if (!this.isSharedWithMeRoute) {
         return false
       }
-      let canDecline = true
-      this.selectedFiles.forEach(file => {
-        if (file.status === shareStatus.declined) canDecline = false
+
+      const declineDisabled = this.selectedFiles.some(resource => {
+        return resource.status === shareStatus.declined
       })
-      return canDecline
+      return !declineDisabled
     },
 
     displayBulkActions() {
@@ -184,7 +183,7 @@ export default {
   methods: {
     ...mapActions('Files', ['removeFilesFromTrashbin', 'resetFileSelection', 'setHighlightedFile']),
     ...mapActions(['showMessage']),
-    ...mapMutations('Files', ['SELECT_RESOURCES', 'UPDATE_RESOURCE']),
+    ...mapMutations('Files', ['UPDATE_RESOURCE']),
 
     restoreFiles(resources = this.selectedFiles) {
       for (const resource of resources) {
@@ -281,7 +280,7 @@ export default {
       await Promise.all(triggerPromises)
 
       if (errors.length === 0) {
-        this.SELECT_RESOURCES([])
+        this.resetFileSelection()
         return
       }
 
