@@ -28,10 +28,6 @@
       />
     </template>
     <div v-if="expirationSupported" class="oc-mt-m">
-      <label for="files-collaborators-collaborator-expiration-input">
-        <translate>Expiration date</translate>
-        <translate v-if="expirationDateEnforced" tag="em">(required)</translate>
-      </label>
       <div class="uk-position-relative">
         <oc-datepicker
           id="files-collaborators-collaborator-expiration-input"
@@ -40,6 +36,7 @@
           :max-datetime="maxExpirationDate"
           :min-datetime="minExpirationDate"
           @input="setExpirationDate"
+          :label="datePickerLabel"
         />
         <div
           v-if="canResetExpirationDate"
@@ -121,6 +118,13 @@ export default {
       return this.selectedRole && this.selectedRole.additionalPermissions
     },
 
+    datePickerLabel() {
+      if (this.expirationDateEnforced) {
+        return this.$gettext('Expiration date (required)')
+      }
+      return this.$gettext('Expiration date')
+    },
+
     expirationSupported() {
       return this.userExpirationDate && this.groupExpirationDate
     },
@@ -178,7 +182,7 @@ export default {
       }
 
       return DateTime.now()
-        .add(days, 'days')
+        .plus({ days })
         .endOf('day')
         .toISO()
     },

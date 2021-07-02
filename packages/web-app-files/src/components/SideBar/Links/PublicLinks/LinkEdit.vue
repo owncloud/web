@@ -273,7 +273,7 @@ export default {
 
     expirationDateLabel() {
       if (this.$_expirationDate.enforced) {
-        return `${this.$gettext('Expiration date')} (${this.$gettext('required')})`
+        return this.$gettext('Expiration date (required)')
       }
 
       return this.$gettext('Expiration date')
@@ -281,7 +281,7 @@ export default {
 
     passwordLabel() {
       if (this.$_passwordEnforced) {
-        return `${this.$gettext('Password')} (${this.$gettext('required')})`
+        return this.$gettext('Password (required)')
       }
 
       return this.$gettext('Password')
