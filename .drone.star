@@ -2462,6 +2462,7 @@ def githubComment(alternateSuiteName):
             "image": "owncloud/ubuntu:20.04",
             "pull": "always",
             "commands": [
+                "touch %s/rocketChat.file" % dir["web"],
                 "if [ -s %s/passedOnRetry.file ]; then cat %s/passedOnRetry.file >> %s/comments.file; fi" % (dir["web"], dir["web"], dir["web"]),
                 "if [ -s %s/passedOnRetry.file ]; then echo '%s' | cat - %s/passedOnRetry.file > %s/rocketChat.file; fi" % (dir["web"], prefixRocketChat, dir["web"], dir["web"]),
             ],
