@@ -126,9 +126,7 @@
             <li v-if="collaborator.expires" class="oc-py-rm">
               <oc-tag class="files-collaborators-collaborator-expires">
                 <oc-icon name="text-calendar" />
-                <translate
-                  :translate-params="{ expires: formDateFromNow(collaborator.expires, 'JSDate') }"
-                >
+                <translate :translate-params="{ expires: expirationDate }">
                   Expires %{expires}
                 </translate>
               </oc-tag>
@@ -192,6 +190,7 @@ import { shareTypes } from '../../../../helpers/shareTypes'
 import { basename } from 'path'
 import CollaboratorsMixins from '../../../../mixins/collaborators'
 import Mixins from '../../../../mixins'
+import { DateTime } from 'luxon'
 
 export default {
   name: 'Collaborator',
@@ -325,6 +324,13 @@ export default {
 
     isGroup() {
       return this.collaborator.shareType === this.shareTypes.group
+    },
+
+    expirationDate() {
+      return DateTime.fromJSDate(this.collaborator.expires)
+        .endOf('day')
+        .setLocale(this.$language.current)
+        .toRelative()
     },
 
     collaboratorListItemClass() {
