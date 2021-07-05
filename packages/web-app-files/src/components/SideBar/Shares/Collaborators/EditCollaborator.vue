@@ -69,7 +69,7 @@
 
 <script>
 import filterObject from 'filter-obj'
-import moment from 'moment'
+import { DateTime } from 'luxon'
 
 import { mapGetters, mapActions } from 'vuex'
 import { roleToBitmask, bitmaskToRole } from '../../../../helpers/collaborators'
@@ -152,15 +152,17 @@ export default {
         // if the role has changed, always return true. The user doesn't need to understand if two bitmasks of different roles are the same!
         return true
       }
-
       // FIXME: Datepicker is not displaying correct timezone so for now we add it manually
       const originalExpirationDate = this.originalExpirationDate
-        ? moment(this.originalExpirationDate)
-            .add(moment().utcOffset(), 'm')
-            .toISOString()
+        ? DateTime.fromJSDate(this.originalExpirationDate)
+            .plus({ minutes: DateTime.now().offset })
+            .toISO()
         : null
 
-      if (this.expirationDate !== originalExpirationDate) {
+      const exactExpirationDate = DateTime.fromISO(this.expirationDate).ts
+      const exactOriginalExpirationDate = DateTime.fromISO(originalExpirationDate).ts
+
+      if (exactExpirationDate !== exactOriginalExpirationDate) {
         return true
       }
 

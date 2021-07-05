@@ -12,7 +12,7 @@ import Move from './actions/move'
 import Navigate from './actions/navigate'
 import Rename from './actions/rename'
 import Restore from './actions/restore'
-import { kebabCase } from 'lodash'
+import kebabCase from 'lodash-es/kebabCase'
 
 const actionsMixins = [
   'fetch',

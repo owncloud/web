@@ -1,6 +1,6 @@
-import _ from 'lodash'
+import orderBy from 'lodash-es/orderBy'
 import path from 'path'
-import moment from 'moment'
+import { DateTime } from 'luxon'
 
 import fileIconMappings from '../fileTypeIconMappings.json'
 import { getIndicators } from './statusIndicators'
@@ -106,10 +106,9 @@ export function aggregateResourceShares(
   token
 ) {
   if (incomingShares) {
-    return _.chain(shares)
-      .orderBy(['file_target', 'permissions'], ['asc', 'desc'])
-      .map(share => buildSharedResource(share, incomingShares, allowSharePerm))
-      .value()
+    return orderBy(shares, ['file_target', 'permissions'], ['asc', 'desc']).map(share =>
+      buildSharedResource(share, incomingShares, allowSharePerm)
+    )
   }
 
   shares.sort((a, b) => a.path.localeCompare(b.path))
@@ -261,7 +260,9 @@ function _buildLink(link) {
     name: typeof link.name === 'string' ? link.name : '',
     password: !!(link.share_with && link.share_with_displayname),
     expiration:
-      typeof link.expiration === 'string' ? moment(link.expiration).format('YYYY-MM-DD') : null,
+      typeof link.expiration === 'string'
+        ? DateTime.fromFormat(link.expiration, 'yyyy-MM-dd HH:mm:ss').toFormat('yyyy-MM-dd')
+        : null,
     itemSource: link.item_source,
     file: {
       parent: link.file_parent,

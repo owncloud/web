@@ -1,4 +1,4 @@
-import moment from 'moment'
+import { DateTime } from 'luxon'
 import copyToClipboard from 'copy-to-clipboard'
 
 // just a dummy function to trick gettext tools
@@ -13,10 +13,10 @@ function createPublicLink(ctx) {
   const expirationDate = capabilities.files_sharing.public.expire_date
 
   if (expirationDate.enabled) {
-    params.expireDate = moment()
-      .add(parseInt(expirationDate.days, 10), 'days')
+    params.expireDate = DateTime.now()
+      .plus({ days: parseInt(expirationDate.days, 10) })
       .endOf('day')
-      .toISOString()
+      .toISO()
   }
 
   return new Promise((resolve, reject) => {

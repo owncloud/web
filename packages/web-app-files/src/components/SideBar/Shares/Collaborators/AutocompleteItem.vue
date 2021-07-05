@@ -34,7 +34,7 @@
       />
       <div
         class="files-collaborators-autocomplete-share-type"
-        v-text="collaboratorType(item.value.shareType)"
+        v-text="getCollaboratorTypeLabel(item.value.shareType)"
       />
     </div>
   </div>

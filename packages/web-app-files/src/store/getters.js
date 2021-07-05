@@ -1,4 +1,3 @@
-import { fileSortFunctions } from '../fileSortFunctions.js'
 import { shareTypes, userShareTypes } from '../helpers/shareTypes'
 
 export default {
@@ -19,8 +18,6 @@ export default {
   currentFolder: state => {
     return state.currentFolder
   },
-  fileSortField: state => state.fileSortField,
-  fileSortDirectionDesc: state => state.fileSortDirectionDesc,
   // a flat file list has no current folder nor parent
   flatFileList: state => !!state.currentFolder === false,
   searchTerm: state => {
@@ -32,16 +29,12 @@ export default {
   pages: (state, getters) => Math.ceil(getters.filesAll.length / state.filesPageLimit),
   activeFiles: (state, getters) => {
     let files = getters.filesAll
-    const direction = state.fileSortDirectionDesc ? 'desc' : 'asc'
     const firstElementIndex = (state.currentPage - 1) * state.filesPageLimit
 
     if (!state.areHiddenFilesShown) {
       files = files.filter(file => !file.name.startsWith('.'))
     }
-    return []
-      .concat(files)
-      .sort(fileSortFunctions[state.fileSortField][direction])
-      .splice(firstElementIndex, state.filesPageLimit)
+    return [].concat(files).splice(firstElementIndex, state.filesPageLimit)
   },
   activeFilesSize: (state, getters) => {
     return $_fileSizes(getters.activeFiles)

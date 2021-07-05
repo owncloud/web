@@ -61,7 +61,7 @@
             <li v-if="!isCurrentUser" class="oc-py-rm">
               <oc-tag class="files-collaborators-collaborator-share-type">
                 <oc-icon :name="collaboratorTypeTagIcon" />
-                {{ collaboratorType(collaborator.shareType) }}
+                {{ getCollaboratorTypeLabel(collaborator.shareType) }}
               </oc-tag>
             </li>
             <li v-if="$_reshareInformation" class="oc-py-rm">
@@ -126,7 +126,7 @@
             <li v-if="collaborator.expires" class="oc-py-rm">
               <oc-tag class="files-collaborators-collaborator-expires">
                 <oc-icon name="text-calendar" />
-                <translate :translate-params="{ expires: formDateFromNow(expirationDate) }">
+                <translate :translate-params="{ expires: expirationDate }">
                   Expires %{expires}
                 </translate>
               </oc-tag>
@@ -186,11 +186,11 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import moment from 'moment'
 import { shareTypes } from '../../../../helpers/shareTypes'
 import { basename } from 'path'
 import CollaboratorsMixins from '../../../../mixins/collaborators'
 import Mixins from '../../../../mixins'
+import { DateTime } from 'luxon'
 
 export default {
   name: 'Collaborator',
@@ -326,6 +326,13 @@ export default {
       return this.collaborator.shareType === this.shareTypes.group
     },
 
+    expirationDate() {
+      return DateTime.fromJSDate(this.collaborator.expires)
+        .endOf('day')
+        .setLocale(this.$language.current)
+        .toRelative()
+    },
+
     collaboratorListItemClass() {
       const isUser = this.isUser || this.isRemoteUser
 
@@ -333,10 +340,6 @@ export default {
         'files-collaborators-collaborator-info-' +
         (isUser ? (this.isRemoteUser ? 'remote' : 'user') : 'group')
       )
-    },
-
-    expirationDate() {
-      return moment(this.collaborator.expires).endOf('day')
     },
 
     isCurrentUser() {
@@ -382,10 +385,7 @@ export default {
 
   li {
     float: left;
-
-    &:not(:first-child) {
-      padding-left: 0.5rem;
-    }
+    margin: 5px;
   }
 }
 

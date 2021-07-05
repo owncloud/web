@@ -2,8 +2,6 @@ export default {
   currentFolder: null,
   files: [],
   filesSearched: [],
-  fileSortField: 'name',
-  fileSortDirectionDesc: false,
   selected: [],
   inProgress: [],
   searchTermGlobal: '',

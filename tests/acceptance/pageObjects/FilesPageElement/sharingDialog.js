@@ -734,7 +734,7 @@ module.exports = {
     },
     requiredLabelInCollaboratorsExpirationDate: {
       selector:
-        '//label[@for="files-collaborators-collaborator-expiration-input"]/em[.="(required)"]',
+        '//label[@for="files-collaborators-collaborator-expiration-input" and contains(text(), "Expiration date (required)")]',
       locateStrategy: 'xpath'
     },
     elementInterceptingCollaboratorsExpirationInput: {

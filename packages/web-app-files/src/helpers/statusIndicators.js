@@ -1,4 +1,4 @@
-import intersection from 'lodash/intersection'
+import intersection from 'lodash-es/intersection'
 import { shareTypes, userShareTypes } from './shareTypes'
 import { getParentPaths } from './path'
 import { $gettext } from '../gettext'

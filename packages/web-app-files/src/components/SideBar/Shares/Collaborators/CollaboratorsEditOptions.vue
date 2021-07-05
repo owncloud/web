@@ -28,10 +28,6 @@
       />
     </template>
     <div v-if="expirationSupported" class="oc-mt-m">
-      <label for="files-collaborators-collaborator-expiration-input">
-        <translate>Expiration date</translate>
-        <translate v-if="expirationDateEnforced" tag="em">(required)</translate>
-      </label>
       <div class="uk-position-relative">
         <oc-datepicker
           id="files-collaborators-collaborator-expiration-input"
@@ -39,6 +35,7 @@
           :date="enteredExpirationDate"
           :max-datetime="maxExpirationDate"
           :min-datetime="minExpirationDate"
+          :label="datePickerLabel"
           @input="setExpirationDate"
         />
         <div
@@ -56,7 +53,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import moment from 'moment'
+import { DateTime } from 'luxon'
 import collaboratorsMixins from '../../../../mixins/collaborators'
 
 import RoleItem from '../../RoleItem.vue'
@@ -121,6 +118,13 @@ export default {
       return this.selectedRole && this.selectedRole.additionalPermissions
     },
 
+    datePickerLabel() {
+      if (this.expirationDateEnforced) {
+        return this.$gettext('Expiration date (required)')
+      }
+      return this.$gettext('Expiration date')
+    },
+
     expirationSupported() {
       return this.userExpirationDate && this.groupExpirationDate
     },
@@ -154,17 +158,17 @@ export default {
       const groupMaxExpirationDays = parseInt(this.groupExpirationDate.days, 10)
 
       if (this.editingUser) {
-        return moment()
-          .add(userMaxExpirationDays, 'days')
+        return DateTime.now()
+          .plus({ days: userMaxExpirationDays })
           .endOf('day')
-          .toISOString()
+          .toISO()
       }
 
       if (this.editingGroup) {
-        return moment()
-          .add(groupMaxExpirationDays, 'days')
+        return DateTime.now()
+          .plus({ days: groupMaxExpirationDays })
           .endOf('day')
-          .toISOString()
+          .toISO()
       }
 
       // Since we are not separating process for adding users and groups as collaborators
@@ -177,10 +181,10 @@ export default {
         days = userMaxExpirationDays || groupMaxExpirationDays
       }
 
-      return moment()
-        .add(days, 'days')
+      return DateTime.now()
+        .plus({ days })
         .endOf('day')
-        .toISOString()
+        .toISO()
     },
 
     expirationDateEnforced() {
@@ -204,10 +208,10 @@ export default {
     },
 
     minExpirationDate() {
-      return moment()
-        .add(1, 'days')
+      return DateTime.now()
+        .plus({ days: 1 })
         .endOf('day')
-        .toISOString()
+        .toISO()
     },
 
     expirationDatePlaceholder() {
@@ -246,11 +250,10 @@ export default {
     if (this.expirationSupported) {
       if (this.editingUser || this.editingGroup) {
         // FIXME: Datepicker is not displaying correct timezone so for now we add it manually
-        // this.enteredExpirationDate = this.expirationDate ? moment(this.expirationDate).toISOString(true) : null
         this.enteredExpirationDate = this.expirationDate
-          ? moment(this.expirationDate)
-              .add(moment().utcOffset(), 'm')
-              .toISOString()
+          ? DateTime.fromJSDate(this.expirationDate)
+              .plus({ minutes: DateTime.now().offset })
+              .toISO()
           : null
       } else {
         this.enteredExpirationDate = this.defaultExpirationDate

@@ -63,7 +63,7 @@
 
 <script>
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
-import isNil from 'lodash/isNil'
+import isNil from 'lodash-es/isNil'
 import debounce from 'lodash-es/debounce'
 
 import MixinAccessibleBreadcrumb from '../mixins/accessibleBreadcrumb'

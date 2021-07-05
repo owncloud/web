@@ -113,13 +113,10 @@
   </div>
 </template>
 <script>
-import 'inert-polyfill'
 import { mapGetters, mapState, mapActions } from 'vuex'
 import TopBar from './components/TopBar.vue'
 import MessageBar from './components/MessageBar.vue'
 import SkipTo from './components/SkipTo.vue'
-import moment from 'moment'
-import 'moment/min/locales'
 import { FocusTrap } from 'focus-trap-vue'
 
 export default {
@@ -288,7 +285,6 @@ export default {
         if (languageCode) {
           this.$language.current = languageCode
           document.documentElement.lang = languageCode
-          moment.locale(languageCode)
         }
       }
     }

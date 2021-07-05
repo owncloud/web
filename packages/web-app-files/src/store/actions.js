@@ -27,9 +27,6 @@ export default {
     files = files.map(buildResource)
     context.commit('LOAD_FILES', { currentFolder, files })
   },
-  setFilesSort(context, { field, directionIsDesc }) {
-    context.commit('SET_FILES_SORT', { field, directionIsDesc })
-  },
   addFileSelection(context, file) {
     context.commit('ADD_FILE_SELECTION', file)
   },

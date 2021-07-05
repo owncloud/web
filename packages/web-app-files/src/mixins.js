@@ -1,5 +1,5 @@
 import pathUtil from 'path'
-import moment from 'moment'
+import { DateTime } from 'luxon'
 import fileTypeIconMappings from './fileTypeIconMappings.json'
 import { mapActions, mapGetters } from 'vuex'
 import PQueue from 'p-queue'
@@ -25,9 +25,7 @@ export default {
       'files',
       'highlightedFile',
       'publicLinkPassword',
-      'fileSortField',
-      'currentFolder',
-      'fileSortDirectionDesc'
+      'currentFolder'
     ]),
     ...mapGetters(['getToken', 'capabilities', 'configuration']),
 
@@ -58,24 +56,32 @@ export default {
       'resetSearch',
       'addFileToProgress',
       'removeFileSelection',
-      'removeFileFromProgress',
-      'setFilesSort'
+      'removeFileFromProgress'
     ]),
     ...mapActions(['showMessage', 'createModal', 'hideModal']),
 
-    toggleSort(fieldId) {
-      if (this.fileSortField === fieldId) {
-        // reverse direction
-        this.setFilesSort({ field: fieldId, directionIsDesc: !this.fileSortDirectionDesc })
-      } else {
-        // switch to the other column
-        this.setFilesSort({ field: fieldId, directionIsDesc: false })
+    formDateFromNow(date, type) {
+      // TODO: Refactor those into their own functions a.k.a relDateFromJSDate() etc
+      if (type === 'JSDate') {
+        return DateTime.fromJSDate(date)
+          .setLocale(this.$language.current)
+          .toRelative()
       }
-    },
-    formDateFromNow(date) {
-      return moment(date)
-        .locale(this.$language.current)
-        .fromNow()
+      if (type === 'Http') {
+        return DateTime.fromHTTP(date)
+          .setLocale(this.$language.current)
+          .toRelative()
+      }
+      if (type === 'ISO') {
+        return DateTime.fromISO(date)
+          .setLocale(this.$language.current)
+          .toRelative()
+      }
+      if (type === 'RFC') {
+        return DateTime.fromRFC2822(date)
+          .setLocale(this.$language.current)
+          .toRelative()
+      }
     },
     delayForScreenreader(func, delay = 500) {
       /*

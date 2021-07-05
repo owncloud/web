@@ -7,10 +7,8 @@ describe('Getters', () => {
   beforeEach(() => {
     state = {
       files: FixtureFiles['/'],
-      fileSortField: 'name',
       searchTermGlobal: '',
-      filesPageLimit: 10,
-      fileSortDirectionDesc: 'desc'
+      filesPageLimit: 10
     }
   })
 

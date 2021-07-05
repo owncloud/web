@@ -127,10 +127,10 @@ export default {
 
     modificationTime() {
       if (this.isTrashbinRoute) {
-        return this.formDateFromNow(this.highlightedFile.deleteTimestamp)
+        return this.formDateFromNow(this.highlightedFile.ddate, 'RFC')
       }
 
-      return this.formDateFromNow(this.highlightedFile.mdate)
+      return this.formDateFromNow(this.highlightedFile.mdate, 'Http')
     },
 
     isShareAccepted() {
