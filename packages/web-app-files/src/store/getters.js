@@ -85,6 +85,9 @@ export default {
     }
     return null
   },
+  versions: state => {
+    return state.versions
+  },
   publicLinkPassword: state => {
     // we need to use the state for reactivity
     if (state.publicLinkPassword) {

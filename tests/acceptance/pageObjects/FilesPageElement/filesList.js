@@ -699,7 +699,7 @@ module.exports = {
      * This element is concatenated as child of @see fileRowByResourcePath
      */
     filePreviewInFileRow: {
-      selector: '//img[contains(@class, "oc-resource-preview")]',
+      selector: '//img[contains(@class, "oc-resource-thumbnail")]',
       locateStrategy: 'xpath'
     },
     /**
@@ -753,7 +753,7 @@ module.exports = {
       selector: '.oc-modal-body-actions-cancel'
     },
     previewImage: {
-      selector: '//img[contains(@class, "oc-resource-preview")]',
+      selector: '//img[contains(@class, "oc-resource-thumbnail")]',
       locateStrategy: 'xpath'
     }
   }
