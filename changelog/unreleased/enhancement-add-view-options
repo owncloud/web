@@ -5,3 +5,4 @@ Currently, it is possible to toggle visibility of hidden files.
 Changes in view options are persisted in local storage.
 
 https://github.com/owncloud/web/pull/5408
+https://github.com/owncloud/web/pull/5450
