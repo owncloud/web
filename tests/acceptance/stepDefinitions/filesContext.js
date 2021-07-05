@@ -410,9 +410,7 @@ Then('folder {string} should be listed on the webUI', folder => {
   return client.page.FilesPageElement.filesList().waitForFileVisible(folder, 'folder')
 })
 
-Then('file/folder with path {string} should be listed in the favorites page on the webUI', function(
-  path
-) {
+Then('file/folder with path {string} should be listed in the webUI', function(path) {
   return client.page.FilesPageElement.filesList().waitForFileWithPathVisible(path)
 })
 

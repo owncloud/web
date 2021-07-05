@@ -17,3 +17,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 
 ### [impossible to navigate into a folder in the trashbin] (https://github.com/owncloud/web/issues/1725)
 -   [webUITrashbinDelete/trashbinDelete.feature:29](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITrashbinDelete/trashbinDelete.feature#29)
+
+### [Federated Shares not showing in shared with me page](https://github.com/owncloud/web/issues/2510)
+- [webUISharingExternalToRoot/federationSharing.feature:169](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingExternalToRoot/federationSharing.feature#L169)

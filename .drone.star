@@ -34,8 +34,6 @@ config = {
                     # The following suites may have all scenarios currently skipped.
                     # The suites are listed here so that scenarios will run when
                     # they are enabled.
-                    "webUIComments",
-                    "webUITags",
                 ],
                 "oC10Locks": [
                     "webUIWebdavLockProtection",
@@ -219,8 +217,6 @@ config = {
                     # The following suites may have all scenarios currently skipped.
                     # The suites are listed here so that scenarios will run when
                     # they are enabled.
-                    "webUIComments",
-                    "webUITags",
                     "webUIWebdavLockProtection",
                     "webUIWebdavLocks",
                 ],
@@ -316,8 +312,6 @@ config = {
                     # The following suites may have all scenarios currently skipped.
                     # The suites are listed here so that scenarios will run when
                     # they are enabled.
-                    "webUIComments",
-                    "webUITags",
                     "webUIWebdavLockProtection",
                     "webUIWebdavLocks",
                 ],
@@ -381,8 +375,6 @@ config = {
                     # The following suites may have all scenarios currently skipped.
                     # The suites are listed here so that scenarios will run when
                     # they are enabled.
-                    "webUIComments",
-                    "webUITags",
                 ],
                 "oCISLocks": [
                     "webUIWebdavLockProtection",
@@ -521,8 +513,6 @@ config = {
                     # The following suites may have all scenarios currently skipped.
                     # The suites are listed here so that scenarios will run when
                     # they are enabled.
-                    "webUIComments",
-                    "webUITags",
                     "webUIWebdavLockProtection",
                     "webUIWebdavLocks",
                 ],
@@ -619,7 +609,6 @@ notificationsRootTestSuites = [
 
 basicTestSuites = [
     "webUIAccount",
-    "webUIComments",
     "webUICreateFilesFolders",
     "webUIDeleteFilesFolders",
     "webUIFavorites",
@@ -661,7 +650,6 @@ basicTestSuites = [
     "webUISharingPublicDifferentRoles",
     "webUISharingPublicExpire",
     "webUISharingPublicManagement",
-    "webUITags",
     "webUITrashbinDelete",
     "webUITrashbinFilesFolders",
     "webUITrashbinRestore",
