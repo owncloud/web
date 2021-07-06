@@ -95,7 +95,7 @@ Feature: Share public link shares via email
     But the email address "foo1234@bar.co" should not have received an email
     And the email address "foo5678@barr.co" should not have received an email
 
-  @issue-2422 @issue-ocis-reva-41
+  @issue-2422 @issue-ocis-1328
   Scenario: user shares a public link via email with a personal message (duplicate)
     When the user creates a new public link for folder "simple-folder" using the webUI with
       | email           | foo@bar.co  |

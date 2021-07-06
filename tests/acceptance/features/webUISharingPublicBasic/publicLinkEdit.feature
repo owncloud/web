@@ -7,7 +7,7 @@ Feature: Edit public link shares
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files
 
-  @issue-ocis-reva-41
+  @issue-ocis-1328
   Scenario Outline: user tries to change the role of an existing public link role without entering share password while enforce password for that role is enforced
     Given the setting "<setting-name>" of app "core" has been set to "yes"
     And user "Alice" has created folder "simple-folder"
@@ -32,7 +32,7 @@ Feature: Edit public link shares
       | read                | Editor      | shareapi_enforce_links_password_read_write_delete |
       | read, create        | Uploader    | shareapi_enforce_links_password_write_only        |
 
-  @issue-ocis-reva-41
+  @issue-ocis-1328
   Scenario Outline: user tries to delete the password of an existing public link role while enforce password for that role is enforced
     Given the setting "<setting-name>" of app "core" has been set to "yes"
     And user "Alice" has created folder "simple-folder"
@@ -58,7 +58,7 @@ Feature: Edit public link shares
       | read, update, create, delete | shareapi_enforce_links_password_read_write_delete |
       | create                       | shareapi_enforce_links_password_write_only        |
 
-  @issue-ocis-reva-41
+  @issue-ocis-1328
   Scenario Outline: user changes the role of an existing public link role without entering share password while enforce password for the original role is enforced
     Given the setting "<setting-name>" of app "core" has been set to "yes"
     And user "Alice" has created folder "simple-folder"
@@ -84,7 +84,7 @@ Feature: Edit public link shares
       | read, update, create, delete | Uploader    | shareapi_enforce_links_password_read_write_delete | create                       |
       | create                       | Editor      | shareapi_enforce_links_password_write_only        | read, update, create, delete |
 
-  @issue-ocis-reva-41
+  @issue-ocis-1328
   Scenario: user edits a public link and does not save the changes
     Given the setting "shareapi_allow_public_notification" of app "core" has been set to "yes"
     And user "Alice" has created folder "simple-folder"

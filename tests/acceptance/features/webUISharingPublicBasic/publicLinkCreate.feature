@@ -168,7 +168,7 @@ Feature: Create public link shares
       | folder  | simple-folder |
       | file    | lorem.txt     |
 
-  @issue-ocis-reva-243
+
   Scenario: User can create a public link via quick action
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has logged in using the webUI

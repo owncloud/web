@@ -274,7 +274,7 @@ Feature: Share by public link with different roles
     And as "Alice" the content of "simple-folder/'single'quotes.txt" should be the same as the content of local file "'single'quotes.txt"
     And as "Alice" the content of "simple-folder/new-lorem.txt" should be the same as the content of local file "new-lorem.txt"
 
-  @issue-ocis-reva-41
+  @issue-ocis-1328
   Scenario: user tries to create a public link with Viewer role without entering share password while enforce password on read only public share is enforced
     Given the setting "shareapi_enforce_links_password_read_only" of app "core" has been set to "yes"
     And user "Alice" has logged in using the webUI
@@ -282,7 +282,7 @@ Feature: Share by public link with different roles
     Then the user should see an error message on the public link share dialog saying "Passwords are enforced for link shares"
     And user "Alice" should not have created any shares
 
-  @issue-ocis-reva-41
+  @issue-ocis-1328
   Scenario: user tries to create a public link with Contributor role without entering share password while enforce password on read-write public share is enforced
     Given the setting "shareapi_enforce_links_password_read_write" of app "core" has been set to "yes"
     And user "Alice" has logged in using the webUI
@@ -291,7 +291,7 @@ Feature: Share by public link with different roles
     Then the user should see an error message on the public link share dialog saying "Passwords are enforced for link shares"
     And user "Alice" should not have created any shares
 
-  @issue-ocis-reva-41
+  @issue-ocis-1328
   Scenario: user tries to create a public link with Editor Role without entering share password while enforce password on read-write public share is enforced
     Given the setting "shareapi_enforce_links_password_read_write_delete" of app "core" has been set to "yes"
     And user "Alice" has logged in using the webUI
@@ -300,7 +300,7 @@ Feature: Share by public link with different roles
     Then the user should see an error message on the public link share dialog saying "Passwords are enforced for link shares"
     And user "Alice" should not have created any shares
 
-  @issue-ocis-reva-41
+  @issue-ocis-1328
   Scenario: user tries to create a public link with Uploader role without entering share password while enforce password on write only public share is enforced
     Given the setting "shareapi_enforce_links_password_write_only" of app "core" has been set to "yes"
     And user "Alice" has logged in using the webUI
@@ -309,7 +309,7 @@ Feature: Share by public link with different roles
     Then the user should see an error message on the public link share dialog saying "Passwords are enforced for link shares"
     And user "Alice" should not have created any shares
 
-  @issue-ocis-reva-41
+  @issue-ocis-1328
   Scenario: user creates a public link with Contributor Role without entering share password while enforce password on read only public share is enforced
     Given the setting "shareapi_enforce_links_password_read_only" of app "core" has been set to "yes"
     And user "Alice" has logged in using the webUI

@@ -98,7 +98,7 @@ Feature: Resharing shared files with different permissions
       | Advanced permissions | Advanced permissions | update                    | update                | read, update                 |
       | Advanced permissions | Editor               | delete, create, update    |                       | read, delete, update, create |
 
-  @issue-4193 @issue-ocis-1743
+  @issue-ocis-1743
   Scenario Outline: share a received folder with another user with same permissions(including share permissions) and check if the user is displayed in collaborators list for original owner
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "<permissions>" permissions
     And user "Alice" has accepted the share "simple-folder" offered by user "Brian"

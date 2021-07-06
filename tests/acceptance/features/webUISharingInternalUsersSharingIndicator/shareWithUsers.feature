@@ -12,7 +12,7 @@ Feature: Sharing files and folders with internal users
       | Brian    |
     And user "Alice" has created folder "simple-folder"
 
-  @issue-4193 @issue-4310
+  @issue-4310
   Scenario: sharing indicator for user shares stays up to date
     Given user "Carol" has been created with default attributes and without skeleton files
     And user "David" has been created with default attributes and without skeleton files
