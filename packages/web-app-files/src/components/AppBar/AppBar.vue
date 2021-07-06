@@ -105,13 +105,19 @@
           data-test-id="files-view-options-btn"
           :aria-label="viewButtonAriaLabel"
           variation="passive"
-          appearance="outline"
+          appearance="raw"
           size="small"
+          gap-size="xsmall"
         >
           <oc-icon name="tune" size="small" />
           <translate>View</translate>
         </oc-button>
-        <oc-drop drop-id="files-view-options-drop" toggle="#files-view-options-btn" mode="click">
+        <oc-drop
+          drop-id="files-view-options-drop"
+          toggle="#files-view-options-btn"
+          mode="click"
+          class="uk-width-auto"
+        >
           <oc-list>
             <li>
               <oc-switch
