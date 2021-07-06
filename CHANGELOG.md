@@ -30,6 +30,7 @@ Details
    local storage.
 
    https://github.com/owncloud/web/pull/5408
+   https://github.com/owncloud/web/pull/5450
 
 * Enhancement - Batch actions for accepting and declining shares: [#5204](https://github.com/owncloud/web/issues/5204)
 
