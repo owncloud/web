@@ -187,16 +187,16 @@ module.exports = {
       selector: '.oc-star-shining'
     },
     versionsPanel: {
-      selector: '#oc-file-versions-sidebar'
+      selector: '#app-sidebar-versions-item'
     },
     collaboratorsPanel: {
-      selector: '#oc-files-sharing-sidebar'
+      selector: '#app-sidebar-sharing-item'
     },
     linksPanel: {
-      selector: '#oc-files-file-link'
+      selector: '#app-sidebar-links-item'
     },
     actionsPanel: {
-      selector: '#oc-files-actions-sidebar'
+      selector: '#app-sidebar-sidebar-actions-item'
     },
     actionPanelItems: {
       selector:

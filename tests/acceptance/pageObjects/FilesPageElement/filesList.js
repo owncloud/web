@@ -709,9 +709,6 @@ module.exports = {
       selector: '//*[contains(@class, "oc-status-indicators-indicator")]',
       locateStrategy: 'xpath'
     },
-    publicLinkSideBar: {
-      selector: '#oc-files-file-link'
-    },
     checkBoxAllFiles: {
       selector: '#oc-table-files-select-all'
     },
@@ -721,10 +718,6 @@ module.exports = {
     },
     restoreSelectedButton: {
       selector: '//span[contains(text(),"Restore")]',
-      locateStrategy: 'xpath'
-    },
-    linkToPublicLinksTag: {
-      selector: '//div[contains(@class, "oc-app-side-bar")]//a[normalize-space(.)="Links"]',
       locateStrategy: 'xpath'
     },
     collaboratorsList: {

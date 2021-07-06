@@ -10,5 +10,7 @@ export default {
   'oc-hidden-announcer': true,
   translate: true,
   'oc-list': true,
-  'oc-switch': true
+  'oc-switch': true,
+  'oc-loader': true,
+  'oc-img': true
 }

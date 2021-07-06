@@ -28,9 +28,11 @@ module.exports = {
      */
     openFileActionsMenu: function(resource, elementType = 'any') {
       const fileActionsBtnSelector = this.getFileActionBtnSelector(resource, elementType)
+      const sidebarActions = this.elements.fileActionsSidebarItem.selector
       this.useXpath()
         .waitForElementVisible(fileActionsBtnSelector)
         .click(fileActionsBtnSelector)
+        .click(sidebarActions)
         .useCss()
       return this.api.page.FilesPageElement.fileActionsMenu()
     },
@@ -47,6 +49,10 @@ module.exports = {
   elements: {
     fileActionsButtonInFileRow: {
       selector: '//button[contains(@class, "oc-table-files-btn-show-details")]',
+      locateStrategy: 'xpath'
+    },
+    fileActionsSidebarItem: {
+      selector: '//div[@id="app-sidebar-sidebar-actions-item"]/h3/button',
       locateStrategy: 'xpath'
     },
     quickAction: {
