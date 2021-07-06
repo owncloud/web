@@ -1,4 +1,3 @@
-@ocis-reva-issue-64
 Feature: Sharing files and folders with internal users with different permissions
   As a user
   I want to set different permissions on shared files and folders with other users
@@ -18,7 +17,7 @@ Feature: Sharing files and folders with internal users with different permission
     And user "Brian" has uploaded file "lorem.txt" to "lorem.txt"
     And user "Brian" has uploaded file "lorem.txt" to "simple-folder/lorem.txt"
 
-  @issue-ocis-1743
+  @issue-ocis-2260
   Scenario: Change permissions of the previously shared folder to read, share
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions
     And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
@@ -33,7 +32,7 @@ Feature: Sharing files and folders with internal users with different permission
       | item_type   | folder                |
       | permissions | read, share           |
 
-  @issue-1853 @issue-product-270
+  @issue-1853 @issue-ocis-2260
   Scenario: Change permissions of the previously shared folder to all permissions
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share, create, delete" permissions
     And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
@@ -49,7 +48,7 @@ Feature: Sharing files and folders with internal users with different permission
       | item_type   | folder                      |
       | permissions | read, share, create, delete |
 
-  @issue-1853 @issue-product-270
+  @issue-1853 @issue-ocis-2260
   Scenario: Change permissions of the previously shared folder to update, delete
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share, create" permissions
     And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
@@ -65,7 +64,7 @@ Feature: Sharing files and folders with internal users with different permission
       | item_type   | folder                |
       | permissions | read, update, delete  |
 
-  @issue-product-270
+  @issue-ocis-2260
   Scenario: Change permissions of the previously shared folder to read, create, share
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, delete" permissions
     And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
@@ -81,7 +80,7 @@ Feature: Sharing files and folders with internal users with different permission
       | item_type   | folder                |
       | permissions | read, create, share   |
 
-  @issue-ocis-1743
+  @issue-ocis-2260
   Scenario Outline: share a folder with another internal user assigning a role and the permissions
     Given user "Brian" has logged in using the webUI
     When the user shares folder "simple-folder" with user "Alice Hansen" as "<role>" with permissions "<extra-permissions>" using the webUI
@@ -103,7 +102,7 @@ Feature: Sharing files and folders with internal users with different permission
       | Advanced permissions | Advanced permissions | update, share                 | share, update         | read, update, share                 |
       | Advanced permissions | Editor               | delete, share, create, update | ,                     | read, share, delete, update, create |
 
-  @issue-ocis-1743
+  @issue-ocis-2260
   Scenario Outline: Change permissions of the previously shared file
     Given user "Brian" has shared file "lorem.txt" with user "Alice" with "<initial-permissions>" permissions
     And user "Alice" has accepted the share "lorem.txt" offered by user "Brian"
@@ -137,7 +136,7 @@ Feature: Sharing files and folders with internal users with different permission
       | item_type   | folder                |
       | permissions | read                  |
 
-  @issue-ocis-1743
+  @issue-ocis-2260
   Scenario Outline: share a file with another internal user assigning a role and the permissions
     Given user "Brian" has logged in using the webUI
     When the user shares file "lorem.txt" with user "Alice Hansen" as "<role>" with permissions "<collaborators-permissions>" using the webUI
@@ -157,7 +156,7 @@ Feature: Sharing files and folders with internal users with different permission
       | Editor               | Editor         | ,                         | ,                     | read, share, update |
       | Advanced permissions | Editor         | share, update             | ,                     | read, share, update |
 
-
+  @issue-ocis-2260
   Scenario: Share a folder without share permissions using API and check if it is listed on the collaborators list for original owner
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions
     And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
@@ -175,7 +174,7 @@ Feature: Sharing files and folders with internal users with different permission
     Then user "Alice Hansen" should be listed as "Viewer" in the collaborators list for folder "simple-folder" on the webUI
     And no custom permissions should be set for collaborator "Alice Hansen" for folder "simple-folder" on the webUI
 
-  @issue-product-270
+
   Scenario: Resource owner upgrades share permissions of a re-share
     Given user "Carol" has been created with default attributes and without skeleton files
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share, delete" permissions
@@ -193,7 +192,7 @@ Feature: Sharing files and folders with internal users with different permission
       | item_type   | folder                |
       | permissions | delete, read, update  |
 
-  @issue-product-270
+  @issue-ocis-2260
   Scenario: User is not allowed to reshare sub-folder with more permissions
     Given user "Carol" has been created with default attributes and without skeleton files
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share, delete" permissions
@@ -206,7 +205,7 @@ Feature: Sharing files and folders with internal users with different permission
     And user "Carol" should not have received any shares
     And as "Carol" folder "/Shares/simple-empty-folder" should not exist
 
-  @issue-product-270
+  @issue-ocis-2260
   Scenario: User is not allowed to update permissions of a reshared sub-folder to higher permissions than what user has received
     Given user "Carol" has been created with default attributes and without skeleton files
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share, delete, update" permissions
@@ -220,7 +219,7 @@ Feature: Sharing files and folders with internal users with different permission
     And user "Carol" should not have received any shares
     And as "Carol" folder "/Shares/simple-empty-folder" should not exist
 
-  @issue-ocis-1743
+  @issue-ocis-2260
   Scenario: User is allowed to update permissions of a reshared sub-folder within the permissions that the user has received
     Given user "Carol" has been created with default attributes and without skeleton files
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "all" permissions
@@ -239,7 +238,7 @@ Feature: Sharing files and folders with internal users with different permission
       | item_type   | folder                      |
       | permissions | all                         |
 
-  @skipOnOC10 @issue-ocis-reva-372
+  @skipOnOC10 @issue-ocis-1231
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
   Scenario: User is allowed to update permissions of a reshared sub-folder within the permissions that the user has received (ocis bug demonstration)
     Given user "Carol" has been created with default attributes and without skeleton files

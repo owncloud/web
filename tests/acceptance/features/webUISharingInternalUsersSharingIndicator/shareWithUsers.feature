@@ -1,4 +1,3 @@
-@ocis-reva-issue-64
 Feature: Sharing files and folders with internal users
   As a user
   I want to share files and folders with other users
@@ -96,7 +95,7 @@ Feature: Sharing files and folders with internal users
       | simple-empty-folder | user-indirect      |
       | lorem.txt           | user-indirect      |
 
-  @issue-4167 @issue-4171
+  @issue-4167
   Scenario: sharing indicator of items inside a re-shared subfolder
     Given user "Carol" has been created with default attributes and without skeleton files
     And user "Alice" has created folder "/simple-folder/simple-empty-folder"

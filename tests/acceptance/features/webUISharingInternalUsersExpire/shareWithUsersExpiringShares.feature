@@ -1,4 +1,3 @@
-@ocis-reva-issue-64
 Feature: Sharing files and folders with internal users with expiry date
   As a user
   I want to be able to set an expiry date on my shares

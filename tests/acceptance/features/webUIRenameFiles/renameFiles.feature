@@ -182,7 +182,7 @@ Feature: rename files
     When the user renames file "data.zip" to "data.part" using the webUI
     Then file 'data.part' should be listed on the webUI
 
-  @ocis-reva-issue-64
+
   Scenario: rename a file on a public share (on ocis)
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has uploaded file "lorem.txt" to "simple-folder/lorem.txt"
@@ -198,7 +198,7 @@ Feature: rename files
     And as "Alice" file "simple-folder/a-renamed-file.txt" should exist
     And as "Alice" file "simple-folder/lorem.txt" should not exist
 
-  @ocis-reva-issue-64
+  @issue-2249
   Scenario: Rename a file and folder in shared with me page
     Given user "Brian" has been created with default attributes and without skeleton files
     And user "Brian" has created folder "simple-folder"
@@ -223,7 +223,7 @@ Feature: rename files
     And as "Brian" file "lorem.txt" should exist
     And as "Brian" folder "simple-folder" should exist
 
-  @ocis-reva-issue-64
+  @issue-ocis-2256
   Scenario: Rename a file and folder in shared with others page
     Given user "Brian" has been created with default attributes and without skeleton files
     And user "Alice" has created folder "simple-folder"
@@ -245,7 +245,7 @@ Feature: rename files
     And as "Brian" file "lorem.txt" should exist
     And as "Brian" folder "simple-folder" should exist
 
-  @ocis-reva-issue-39
+  @issue-ocis-1330
   Scenario: Rename a file and folder in favorites page
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has favorited element "lorem.txt"

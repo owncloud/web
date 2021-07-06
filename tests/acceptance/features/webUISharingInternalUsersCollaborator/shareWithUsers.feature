@@ -13,7 +13,7 @@ Feature: Shares collaborator list
       | Brian    |
     And user "Brian" has created folder "simple-folder"
 
-  @issue-ocis-1743
+  @issue-ocis-2260
   Scenario Outline: change the collaborators of a file & folder
     Given user "Brian" has logged in using the webUI
     And user "Brian" has shared folder "/simple-folder" with user "Alice" with "<initial-permissions>" permissions

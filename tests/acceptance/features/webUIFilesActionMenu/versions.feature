@@ -32,7 +32,7 @@ Feature: Versions of a file
     And the user restores the file to last version using the webUI
     Then the content of file "lorem-file.txt" for user "user0" should be "lorem content"
 
-  @ocis-reva-issue-64
+  @issue-ocis-1328
   Scenario: sharee can see the versions of a file
     Given user "user0" has uploaded file with content "lorem content" to "lorem-file.txt"
     And user "user0" has uploaded file with content "lorem" to "lorem-file.txt"

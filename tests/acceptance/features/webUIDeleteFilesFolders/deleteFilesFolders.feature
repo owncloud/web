@@ -155,7 +155,7 @@ Feature: deleting files and folders
     When the user browses to the files page
     Then file "lorem.txt" should not be listed on the webUI
 
-  @ocis-reva-issue-64
+
   Scenario: delete a file on a public share
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has created file "simple-folder/lorem.txt"
@@ -176,7 +176,7 @@ Feature: deleting files and folders
     And no message should be displayed on the webUI
     And the deleted elements should not be listed on the webUI after a page reload
 
-  @ocis-reva-issue-64
+
   Scenario: delete a file on a public share with problematic characters
     Given user "Alice" has created file "lorem.txt"
     And user "Alice" has created folder "simple-folder"
@@ -231,7 +231,7 @@ Feature: deleting files and folders
     And the deleted elements should not be listed on the webUI
     And the deleted elements should not be listed on the webUI after a page reload
 
-  @ocis-reva-issue-64
+  @issue-5435
   Scenario: Delete a file and folder from shared with me page
     Given user "Brian" has been created with default attributes and without skeleton files
     And user "Brian" has created folder "simple-folder"
@@ -245,7 +245,7 @@ Feature: deleting files and folders
     And as "Alice" file "lorem.txt" should not exist
     And no message should be displayed on the webUI
 
-  @ocis-reva-issue-64
+
   Scenario: Delete a file and folder in shared with others page
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has created file "lorem.txt"
@@ -268,7 +268,7 @@ Feature: deleting files and folders
     And as "Alice" file "lorem.txt" should not exist
     And as "Alice" folder "simple-folder" should not exist
 
-  @ocis-reva-issue-64
+
   Scenario: Delete multiple files at once from shared with others page
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has created file "lorem.txt"

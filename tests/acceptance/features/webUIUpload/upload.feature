@@ -133,7 +133,7 @@ Feature: File Upload
     Then file "lorem.txt" should be listed on the webUI
     And as "Alice" the content of "simple-folder/lorem.txt" should be the same as the local "lorem.txt"
 
-  @skip @yetToImplement @ocis-reva-issue-64
+  @skip @yetToImplement
   Scenario: keep new and existing file in a sub-folder
     When the user opens folder "simple-folder" using the webUI
     And the user uploads file "lorem.txt" using the webUI
@@ -147,7 +147,7 @@ Feature: File Upload
     And file "lorem (2).txt" should be listed on the webUI
     And the content of "lorem (2).txt" should be the same as the local "lorem.txt"
 
-  @ocis-reva-issue-64
+  @issue-ocis-2258
   Scenario: upload overwriting a file into a public share
     Given user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123"
     When the public uses the webUI to access the last public link created by user "Alice" with password "pass123"

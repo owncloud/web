@@ -8,7 +8,7 @@ Feature: Public link share indicator
     Given user "Alice" has been created with default attributes and without skeleton files
     And user "Alice" has created folder "/simple-folder"
 
-  @issue-2060 @issue-ocis-reva-243
+  @issue-2060
   Scenario: sharing indicator inside a shared folder
     Given user "Alice" has created folder "/simple-folder/sub-folder"
     And user "Alice" has uploaded file with content "test" to "/simple-folder/textfile.txt"
@@ -23,7 +23,7 @@ Feature: Public link share indicator
       | sub-folder   | link-indirect      |
       | textfile.txt | link-indirect      |
 
-  @issue-2060 @issue-ocis-reva-243
+  @issue-2060
   Scenario: sharing indicator for file uploaded inside a shared folder
     Given user "Alice" has shared folder "simple-folder" with link with "read" permissions
     And user "Alice" has logged in using the webUI
@@ -33,7 +33,7 @@ Feature: Public link share indicator
       | fileName      | expectedIndicators |
       | new-lorem.txt | link-indirect      |
 
-  @issue-2060 @issue-ocis-reva-243
+  @issue-2060
   Scenario: sharing indicator for folder created inside a shared folder
     Given user "Alice" has shared folder "simple-folder" with link with "read" permissions
     And user "Alice" has logged in using the webUI
@@ -43,7 +43,7 @@ Feature: Public link share indicator
       | fileName   | expectedIndicators |
       | sub-folder | link-indirect      |
 
-  @issue-2060 @issue-ocis-reva-243
+  @issue-2060
   Scenario: sharing indicators public link and collaborators inside a shared folder
     Given user "Brian" has been created with default attributes and without skeleton files
     And user "Alice" has created folder "/simple-folder/sub-folder"
@@ -60,7 +60,7 @@ Feature: Public link share indicator
       | sub-folder   | link-indirect,user-indirect |
       | textfile.txt | link-indirect,user-indirect |
 
-  @issue-2060 @issue-ocis-reva-243
+  @issue-2060
   Scenario: sharing indicators public link from reshare
     Given user "Brian" has been created with default attributes and without skeleton files
     And user "Alice" has created folder "/simple-folder/sub-folder"
@@ -77,7 +77,7 @@ Feature: Public link share indicator
       | sub-folder   | link-indirect,user-indirect |
       | textfile.txt | link-indirect,user-indirect |
 
-  @issue-2060 @issue-ocis-reva-243
+  @issue-2060
   Scenario: sharing indicators public link from child of reshare
     Given user "Brian" has been created with default attributes and without skeleton files
     And user "Alice" has created folder "/simple-folder/sub-folder"
@@ -94,7 +94,7 @@ Feature: Public link share indicator
       | sub-folder   | link-direct,user-indirect |
       | textfile.txt | user-indirect             |
 
-  @issue-2060 @issue-ocis-reva-243
+  @issue-2060
   Scenario: no sharing indicator visible in file list from public link
     Given user "Brian" has been created with default attributes and without skeleton files
     And user "Carol" has been created with default attributes and without skeleton files
@@ -106,7 +106,7 @@ Feature: Public link share indicator
     Then the following resources should not have share indicators on the webUI
       | simple-empty-folder |
 
-  @issue-2939 @issue-ocis-reva-243
+  @issue-2939
   Scenario: sharing indicator for link shares stays up to date
     Given user "Brian" has been created with default attributes and without skeleton files
     And user "Alice" has uploaded file "testavatar.png" to "simple-folder/testimage.png"
