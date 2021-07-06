@@ -330,7 +330,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUILogin/openidLogin.feature:62](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/openidLogin.feature#L62)
 
 ### [Moving files in a shared folder causes errors but succeeds](https://github.com/owncloud/ocis/issues/873)
--   [webUIMoveFilesFolders/moveFiles.feature:140](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIMoveFilesFolders/moveFiles.feature#L140)
+-   [webUIMoveFilesFolders/moveFiles.feature:139](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIMoveFilesFolders/moveFiles.feature#L139)
 
 ### [enable re-sharing is not possible](https://github.com/owncloud/ocis/issues/1743)
 -   [webUISharingFolderAdvancedPermissionMultipleUsers/sharedFolderWithMultipleUsersAdvancedPermissions.feature:71](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingFolderAdvancedPermissionMultipleUsers/sharedFolderWithMultipleUsersAdvancedPermissions.feature#L71)
