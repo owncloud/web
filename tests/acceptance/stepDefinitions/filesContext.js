@@ -188,6 +188,10 @@ When('the user deletes file/folder {string} using the webUI', function(element) 
   return client.page.FilesPageElement.filesList().deleteFile(element)
 })
 
+When('the user tries to delete file/folder {string} using the webUI', function(element) {
+  return client.page.FilesPageElement.filesList().deleteFile(element)
+})
+
 Given('the user has deleted file/folder/resource {string} using the webUI', function(element) {
   return client.page.FilesPageElement.filesList().deleteFile(element)
 })
@@ -969,6 +973,7 @@ Given('user {string} has created the following folders', async function(userId, 
   }
   return client
 })
+
 Given('user {string} has created the following files', async function(userId, entryList) {
   for (const entry of entryList.rows()) {
     await webdav.createFile(userId, entry[0])
@@ -1401,3 +1406,31 @@ Then(
     assert.ok(collaboratorsArray.indexOf(lastLink.token) > -1)
   }
 )
+
+Given('user {string} has locked file/folder {string} setting following properties', function(
+  userId,
+  fileName,
+  table
+) {
+  const properties = table.rowsHash()
+  return webdav.lockResource(userId, fileName, properties)
+})
+
+When('the user closes rename dialog', function() {
+  return client.page.FilesPageElement.filesList().closeRenameDialog()
+})
+
+Then('notifications should be displayed on the webUI with the text', async function(message) {
+  const actualMessages = await client.page.webPage().getPopupErrorMessages()
+  const isMessageShown = assertIncludesMessage(actualMessages, message)
+
+  assert.strictEqual(isMessageShown, true, `Expected '${message}' but not found`)
+})
+
+function assertIncludesMessage(messageArr, message) {
+  if (messageArr.includes(message)) {
+    return true
+  } else {
+    return false
+  }
+}
