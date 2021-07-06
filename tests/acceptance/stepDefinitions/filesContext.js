@@ -845,8 +845,8 @@ Then('the app-sidebar should be invisible', async function() {
 })
 
 Then('the {string} details panel should be visible', async function(panel) {
-  const visible = await client.page.FilesPageElement.appSideBar().isPanelVisible(panel)
-  assert.strictEqual(visible, true, `'${panel}-panel' should be visible, but is not`)
+  const expanded = await client.page.FilesPageElement.appSideBar().isAccordionItemExpanded(panel)
+  assert.strictEqual(expanded, true, `'${panel}-panel' should be expanded, but is not`)
 })
 
 Then(

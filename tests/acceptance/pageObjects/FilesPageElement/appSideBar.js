@@ -24,18 +24,21 @@ module.exports = {
     },
     selectAccordionItem: async function(item) {
       await this.waitForElementVisible(this.api.page.personalPage().elements.sideBar)
-      const panelVisible = await this.isPanelVisible(
+      const expanded = await this.isAccordionItemExpanded(
         item,
         this.api.globals.waitForNegativeConditionTimeout
       )
-      if (panelVisible) {
-        await this.useXpath().click(this.getXpathOfLinkToAccordionItemInSidePanel(item))
-        return this
-      } else {
-        return this.useXpath()
+      if (!expanded) {
+        this.useXpath()
+          .initAjaxCounters()
           .click(this.getXpathOfLinkToAccordionItemInSidePanel(item))
+          .waitForOutstandingAjaxCalls()
           .useCss()
       }
+      const panelName = item === 'people' ? 'collaborators' : item
+      const element = this.elements[panelName + 'Panel']
+      const selector = element.selector + ' > .oc-accordion-content:not(:empty)'
+      return this.waitForElementVisible(selector)
     },
     /**
      * return the complete xpath of the link to the specified accordion item in the side-bar
@@ -95,17 +98,15 @@ module.exports = {
       }
       return items
     },
-    isPanelVisible: async function(panelName, timeout = null) {
+    isAccordionItemExpanded: async function(panelName, timeout = null) {
       panelName = panelName === 'people' ? 'collaborators' : panelName
-      const selector = this.elements[panelName + 'Panel']
+      const element = this.elements[panelName + 'Panel']
+      const selector = element.selector + ' > .oc-accordion-content:not(:empty)'
       let isVisible = false
       timeout = timeoutHelper.parseTimeout(timeout)
-      await this.isVisible(
-        { locateStrategy: 'css selector', selector: selector.selector, timeout: timeout },
-        result => {
-          isVisible = result.status === 0
-        }
-      )
+      await this.isVisible({ locateStrategy: 'css selector', selector, timeout }, result => {
+        isVisible = result.status === 0
+      })
       return isVisible
     },
     /**

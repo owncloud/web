@@ -26,17 +26,17 @@ module.exports = {
      *
      * @returns {*}
      */
-    openFileActionsMenu: function(resource, elementType = 'any') {
+    openFileActionsMenu: async function(resource, elementType = 'any') {
       const fileActionsBtnSelector = this.getFileActionBtnSelector(resource, elementType)
-      const sidebarActions = this.elements.fileActionsSidebarItem.selector
       this.useXpath()
+        .initAjaxCounters()
         .waitForElementVisible(fileActionsBtnSelector)
         .click(fileActionsBtnSelector)
+        .waitForOutstandingAjaxCalls()
         .waitForAnimationToFinish()
-        .waitForElementVisible(sidebarActions)
-        .click(sidebarActions)
         .useCss()
-      return this.api.page.FilesPageElement.fileActionsMenu()
+      await this.api.page.FilesPageElement.appSideBar().selectAccordionItem('actions')
+      return await this.api.page.FilesPageElement.fileActionsMenu()
     },
     isQuickActionVisible: function(action) {
       action = action.replace(/\s/, '-')
@@ -51,10 +51,6 @@ module.exports = {
   elements: {
     fileActionsButtonInFileRow: {
       selector: '//button[contains(@class, "oc-table-files-btn-show-details")]',
-      locateStrategy: 'xpath'
-    },
-    fileActionsSidebarItem: {
-      selector: '//div[@id="app-sidebar-actions-item"]/h3/button',
       locateStrategy: 'xpath'
     },
     quickAction: {

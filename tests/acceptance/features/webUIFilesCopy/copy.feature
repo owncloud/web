@@ -129,8 +129,7 @@ Feature: copy files and folders
     And user "Alice" has created folder "simple-empty-folder"
     And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
-    When the user opens the file action menu of folder "data.zip" using the webUI
-    And the user selects copy action for folder "data.zip" using the webUI
+    When the user selects copy action for folder "data.zip" using the webUI
     And the user selects the folder "simple-empty-folder" as a place to copy the file using the webUI
     And the user cancels the attempt to copy resources using the webUI
     Then file "data.zip" should be listed on the webUI
