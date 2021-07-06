@@ -19,7 +19,7 @@ Feature: File Upload
 
     When the user uploads file "new-strängé filename (duplicate #2 &).txt" using the webUI
     Then file "new-strängé filename (duplicate #2 &).txt" should be listed on the webUI
-    And as "Alice" the content of "new-strängé filename (duplicate #2 &).txt" should be the content of local file as the local "new-strängé filename (duplicate #2 &).txt"
+    And as "Alice" the content of "new-strängé filename (duplicate #2 &).txt" should be the same as the content of local file "new-strängé filename (duplicate #2 &).txt"
 
     When the user uploads file "zzzz-zzzz-will-be-at-the-end-of-the-folder-when-uploaded.txt" using the webUI
     Then file "zzzz-zzzz-will-be-at-the-end-of-the-folder-when-uploaded.txt" should be listed on the webUI
