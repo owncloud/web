@@ -130,8 +130,6 @@ module.exports = {
             } else if (expectedDetail.field === 'expiration') {
               expectedDetail.value = sharingHelper.calculateDate(expectedDetail.value)
             }
-            console.log(expectedDetail)
-
             if (
               !(expectedDetail.field in share) ||
               share[expectedDetail.field].toString() !== expectedDetail.value
