@@ -55,11 +55,11 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And the user reloads the current page of the webUI
     And the user opens folder "Shares" using the webUI
     Then file "lorem.txt" should be listed on the webUI
-    And as "Alice" the content of "Shares/lorem.txt" should be the same as the local "lorem.txt"
+    And as "Alice" the content of "Shares/lorem.txt" should be the same as the content of local file "lorem.txt"
     And folder "simple-folder" should be listed on the webUI
     And the user opens folder "simple-folder" using the webUI
     And file "lorem.txt" should be listed on the webUI
-    And as "Alice" the content of "Shares/simple-folder/lorem.txt" should be the same as the local "lorem.txt"
+    And as "Alice" the content of "Shares/simple-folder/lorem.txt" should be the same as the content of local file "lorem.txt"
     #    When the user browses to the shared-with-me page
     #    Then file "Shares/lorem.txt" should be listed on the webUI
     #    And folder "Shares/simple-folder" should be listed on the webUI
@@ -112,7 +112,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And the user opens folder "Shares" using the webUI
     And the user opens folder "simple-folder" using the webUI
     And the user uploads overwriting file "lorem.txt" using the webUI
-    Then as "Alice" the content of "Shares/simple-folder/lorem.txt" should be the same as the local "lorem.txt"
+    Then as "Alice" the content of "Shares/simple-folder/lorem.txt" should be the same as the content of local file "lorem.txt"
 
   @issue-3309
   Scenario: upload a new file in a received share - remote server shares - local server receives
@@ -247,8 +247,8 @@ Feature: Federation Sharing - sharing with users on other cloud storages
       | lorem.txt      |
     When the user downloads file "lorem.txt" using the webUI
     Then no message should be displayed on the webUI
-    And as "Alice" the content of "Shares/'single'quotes/lorem.txt" should be the same as the local "lorem.txt"
-    And as "Alice" the content of "Shares/'single'quotes/simple-empty-folder/lorem.txt" should be the same as the local "lorem.txt"
+    And as "Alice" the content of "Shares/'single'quotes/lorem.txt" should be the same as the content of local file "lorem.txt"
+    And as "Alice" the content of "Shares/'single'quotes/simple-empty-folder/lorem.txt" should be the same as the content of local file "lorem.txt"
 
 
   Scenario: uploading a file inside a folder of a folder

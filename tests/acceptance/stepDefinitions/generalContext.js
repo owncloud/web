@@ -129,27 +129,25 @@ Then('no message should be displayed on the webUI', function() {
   return client.page.webPage().expect.element('@message').to.not.be.present
 })
 
-Then('as {string} the content of {string} should be the same as the local {string}', function(
-  userId,
-  remoteFile,
-  localFile
-) {
-  const fullPathOfLocalFile = client.globals.filesForUpload + localFile
-  return webdavHelper
-    .download(userId, remoteFile)
-    .then(body => assertContentOfLocalFileIs(fullPathOfLocalFile, body))
-})
+Then(
+  'as {string} the content of {string} should be the same as the content of local file {string}',
+  function(userId, remoteFile, localFile) {
+    const fullPathOfLocalFile = client.globals.filesForUpload + localFile
+    return webdavHelper
+      .download(userId, remoteFile)
+      .then(body => assertContentOfLocalFileIs(fullPathOfLocalFile, body))
+  }
+)
 
-Then('as {string} the content of {string} should not be the same as the local {string}', function(
-  userId,
-  remoteFile,
-  localFile
-) {
-  const fullPathOfLocalFile = client.globals.filesForUpload + localFile
-  return webdavHelper
-    .download(userId, remoteFile)
-    .then(body => assertContentOfLocalFileIsNot(fullPathOfLocalFile, body))
-})
+Then(
+  'as {string} the content of {string} should not be the same as the content of local file {string}',
+  function(userId, remoteFile, localFile) {
+    const fullPathOfLocalFile = client.globals.filesForUpload + localFile
+    return webdavHelper
+      .download(userId, remoteFile)
+      .then(body => assertContentOfLocalFileIsNot(fullPathOfLocalFile, body))
+  }
+)
 
 const assertContentOfLocalFileIs = function(fullPathOfLocalFile, expectedContent) {
   const actualContent = fs.readFileSync(fullPathOfLocalFile, { encoding: 'utf-8' })
