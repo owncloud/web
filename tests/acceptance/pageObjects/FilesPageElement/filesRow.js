@@ -32,6 +32,8 @@ module.exports = {
       this.useXpath()
         .waitForElementVisible(fileActionsBtnSelector)
         .click(fileActionsBtnSelector)
+        .waitForAnimationToFinish()
+        .waitForElementVisible(sidebarActions)
         .click(sidebarActions)
         .useCss()
       return this.api.page.FilesPageElement.fileActionsMenu()
@@ -52,7 +54,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     fileActionsSidebarItem: {
-      selector: '//div[@id="app-sidebar-sidebar-actions-item"]/h3/button',
+      selector: '//div[@id="app-sidebar-actions-item"]/h3/button',
       locateStrategy: 'xpath'
     },
     quickAction: {

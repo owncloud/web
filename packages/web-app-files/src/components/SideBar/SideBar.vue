@@ -94,7 +94,7 @@ export default {
     accordions() {
       const accordions = [
         {
-          app: 'sidebar-actions-item',
+          app: 'actions-item',
           component: FileActions,
           icon: 'slideshow'
         }

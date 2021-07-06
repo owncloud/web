@@ -29,6 +29,7 @@ module.exports = {
         this.api.globals.waitForNegativeConditionTimeout
       )
       if (panelVisible) {
+        await this.useXpath().click(this.getXpathOfLinkToAccordionItemInSidePanel(item))
         return this
       } else {
         return this.useXpath()
@@ -196,7 +197,7 @@ module.exports = {
       selector: '#app-sidebar-links-item'
     },
     actionsPanel: {
-      selector: '#app-sidebar-sidebar-actions-item'
+      selector: '#app-sidebar-actions-item'
     },
     actionPanelItems: {
       selector:
