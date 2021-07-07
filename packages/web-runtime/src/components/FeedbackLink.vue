@@ -1,14 +1,18 @@
 <template>
-  <oc-button
-    v-oc-tooltip="label"
-    type="a"
-    :href="href"
-    target="_blank"
-    appearance="raw"
-    :aria-label="label"
-  >
-    <oc-icon name="feedback" />
-  </oc-button>
+  <div>
+    <oc-button
+      v-oc-tooltip="description"
+      type="a"
+      :href="href"
+      target="_blank"
+      appearance="raw"
+      :aria-label="ariaLabel"
+      aria-describedby="oc-feedback-link-description"
+    >
+      <oc-icon name="feedback" />
+    </oc-button>
+    <p id="oc-feedback-link-description" class="oc-invisible-sr" v-text="description" />
+  </div>
 </template>
 
 <script>
@@ -18,7 +22,10 @@ export default {
     href() {
       return 'https://owncloud.com/web-design-feedback'
     },
-    label() {
+    ariaLabel() {
+      return this.$gettext('ownCloud feedback survey')
+    },
+    description() {
       return this.$gettext(
         "Provide your feedback: We'd like to improve the web design and would be happy to hear your feedback. Thank you! Your ownCloud team."
       )
