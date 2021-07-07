@@ -11,6 +11,7 @@ exports[`Top Bar component Displays applications menu 1`] = `
     <!---->
   </oc-grid-stub>
   <oc-grid-stub flex="" gutter="small" class="uk-width-expand uk-flex-right oc-m-rm">
+    <feedback-link-stub></feedback-link-stub>
     <!---->
     <applications-menu-stub applicationslist="testApp"></applications-menu-stub>
     <user-menu-stub userid="einstein" userdisplayname="Albert Einstein" applicationslist="testApp"></user-menu-stub>
@@ -29,6 +30,7 @@ exports[`Top Bar component when search bar hidden globally Hides search bar even
     <!---->
   </oc-grid-stub>
   <oc-grid-stub flex="" gutter="small" class="uk-width-expand uk-flex-right oc-m-rm">
+    <feedback-link-stub></feedback-link-stub>
     <!---->
     <!---->
     <user-menu-stub userid="einstein" userdisplayname="Albert Einstein" applicationslist=""></user-menu-stub>
@@ -47,6 +49,7 @@ exports[`Top Bar component when search bar hidden globally Hides the search bar 
     <!---->
   </oc-grid-stub>
   <oc-grid-stub flex="" gutter="small" class="uk-width-expand uk-flex-right oc-m-rm">
+    <feedback-link-stub></feedback-link-stub>
     <!---->
     <!---->
     <user-menu-stub userid="einstein" userdisplayname="Albert Einstein" applicationslist=""></user-menu-stub>
@@ -65,6 +68,7 @@ exports[`Top Bar component when search bar visible globally Displays search bar 
     <search-bar-stub></search-bar-stub>
   </oc-grid-stub>
   <oc-grid-stub flex="" gutter="small" class="uk-width-expand uk-flex-right oc-m-rm">
+    <feedback-link-stub></feedback-link-stub>
     <!---->
     <!---->
     <user-menu-stub userid="einstein" userdisplayname="Albert Einstein" applicationslist=""></user-menu-stub>
@@ -83,6 +87,7 @@ exports[`Top Bar component when search bar visible globally Hides the search bar
     <!---->
   </oc-grid-stub>
   <oc-grid-stub flex="" gutter="small" class="uk-width-expand uk-flex-right oc-m-rm">
+    <feedback-link-stub></feedback-link-stub>
     <!---->
     <!---->
     <user-menu-stub userid="einstein" userdisplayname="Albert Einstein" applicationslist=""></user-menu-stub>
