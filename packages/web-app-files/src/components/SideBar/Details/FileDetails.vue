@@ -213,7 +213,7 @@ export default {
           type: ImageType.Preview
         })
       ]
-      if (this.highlightedFile.type === 'file') {
+      if (this.highlightedFile.type === 'file' && !this.isPublicPage) {
         calls.push(this.loadVersions({ client: this.$client, fileId: this.highlightedFile.id }))
       }
       await Promise.all(calls)
