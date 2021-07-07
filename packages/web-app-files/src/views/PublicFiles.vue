@@ -32,13 +32,7 @@
         @rowMounted="rowMounted"
       >
         <template #footer>
-          <oc-pagination
-            v-if="pages > 1"
-            :pages="pages"
-            :current-page="currentPage"
-            :max-displayed="3"
-            :current-route="$_filesListPagination_targetRoute"
-          />
+          <pagination />
           <list-info
             v-if="activeFiles.length > 0"
             class="uk-width-1-1 oc-my-s"
@@ -53,22 +47,23 @@
 </template>
 
 <script>
-import { mapGetters, mapActions, mapMutations, mapState } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 
 import MixinAccessibleBreadcrumb from '../mixins/accessibleBreadcrumb'
 import MixinFileActions from '../mixins/fileActions'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
-import MixinFilesListPagination from '../mixins/filesListPagination'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 
+import { VisibilityObserver } from 'web-pkg/src/observer'
+import { ImageDimension, ImageType } from '../constants'
+import debounce from 'lodash-es/debounce'
 import { buildResource } from '../helpers/resources'
+
 import ListLoader from '../components/FilesList/ListLoader.vue'
 import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
 import NotFoundMessage from '../components/FilesList/NotFoundMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
-import { VisibilityObserver } from 'web-pkg/src/observer'
-import { ImageDimension, ImageType } from '../constants'
-import debounce from 'lodash-es/debounce'
+import Pagination from '../components/FilesList/Pagination.vue'
 
 const visibilityObserver = new VisibilityObserver()
 export default {
@@ -76,14 +71,14 @@ export default {
     ListInfo,
     ListLoader,
     NoContentMessage,
-    NotFoundMessage
+    NotFoundMessage,
+    Pagination
   },
 
   mixins: [
     MixinAccessibleBreadcrumb,
     MixinFileActions,
     MixinFilesListPositioning,
-    MixinFilesListPagination,
     MixinMountSideBar
   ],
 
@@ -92,7 +87,6 @@ export default {
   }),
 
   computed: {
-    ...mapState('Files', ['currentPage']),
     ...mapGetters('Files', [
       'publicLinkPassword',
       'activeFiles',
@@ -103,8 +97,7 @@ export default {
       'inProgress',
       'currentFolder',
       'totalFilesCount',
-      'totalFilesSize',
-      'pages'
+      'totalFilesSize'
     ]),
     ...mapGetters(['configuration']),
 
@@ -150,7 +143,6 @@ export default {
         if (!sameRoute || !sameItem) {
           this.loadResources(sameRoute)
         }
-        this.$_filesListPagination_updateCurrentPage()
       },
       immediate: true
     },

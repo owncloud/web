@@ -27,14 +27,7 @@
         @showDetails="$_mountSideBar_showDetails"
       >
         <template #footer>
-          <oc-pagination
-            v-if="pages > 1"
-            :pages="pages"
-            :current-page="currentPage"
-            :max-displayed="3"
-            :current-route="$_filesListPagination_targetRoute"
-            class="files-pagination uk-flex uk-flex-center oc-my-s"
-          />
+          <pagination />
           <list-info
             v-if="activeFiles.length > 0"
             class="uk-width-1-1 oc-my-s"
@@ -53,32 +46,31 @@ import { mapGetters, mapMutations, mapState } from 'vuex'
 import { buildDeletedResource, buildResource } from '../helpers/resources'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
 import MixinResources from '../mixins/resources'
-import MixinFilesListPagination from '../mixins/filesListPagination'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 
 import ListLoader from '../components/FilesList/ListLoader.vue'
 import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
+import Pagination from '../components/FilesList/Pagination.vue'
 
 export default {
-  components: { ListLoader, NoContentMessage, ListInfo },
+  components: { ListLoader, NoContentMessage, ListInfo, Pagination },
 
-  mixins: [MixinFilesListPositioning, MixinResources, MixinFilesListPagination, MixinMountSideBar],
+  mixins: [MixinFilesListPositioning, MixinResources, MixinMountSideBar],
 
   data: () => ({
     loading: true
   }),
 
   computed: {
-    ...mapState('Files', ['currentPage', 'files']),
+    ...mapState('Files', ['files']),
     ...mapGetters('Files', [
       'davProperties',
       'highlightedFile',
       'activeFiles',
       'selectedFiles',
       'inProgress',
-      'totalFilesCount',
-      'pages'
+      'totalFilesCount'
     ]),
 
     selected: {
@@ -106,11 +98,6 @@ export default {
   watch: {
     uploadProgressVisible() {
       this.adjustTableHeaderPosition()
-    },
-
-    $route: {
-      handler: '$_filesListPagination_updateCurrentPage',
-      immediate: true
     }
   },
 

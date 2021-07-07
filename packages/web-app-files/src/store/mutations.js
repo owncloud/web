@@ -373,6 +373,12 @@ export default {
     state.areHiddenFilesShown = value
 
     window.localStorage.setItem('oc_hiddenFilesShown', value)
+  },
+
+  SET_FILES_PAGE_LIMIT(state, limit) {
+    state.filesPageLimit = limit
+
+    window.localStorage.setItem('oc_filesPageLimit', limit)
   }
 }
 

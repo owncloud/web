@@ -52,14 +52,7 @@
             :header-position="headerPosition"
           >
             <template #footer>
-              <oc-pagination
-                v-if="pages > 1"
-                :pages="pages"
-                :current-page="currentPage"
-                :max-displayed="3"
-                :current-route="$_filesListPagination_targetRoute"
-                class="files-pagination uk-flex uk-flex-center oc-my-s"
-              />
+              <pagination />
               <list-info
                 v-if="activeFiles.length > 0"
                 class="uk-width-1-1 oc-my-s"
@@ -82,11 +75,11 @@ import { batchActions } from '../helpers/batchActions'
 import { cloneStateObject } from '../helpers/store'
 import MixinsGeneral from '../mixins'
 import MixinRoutes from '../mixins/routes'
-import MixinFilesListPagination from '../mixins/filesListPagination'
 
 import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
 import ListLoader from '../components/FilesList/ListLoader.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
+import Pagination from '../components/FilesList/Pagination.vue'
 
 export default {
   metaInfo() {
@@ -98,10 +91,11 @@ export default {
   components: {
     NoContentMessage,
     ListLoader,
-    ListInfo
+    ListInfo,
+    Pagination
   },
 
-  mixins: [MixinsGeneral, MixinRoutes, MixinFilesListPagination],
+  mixins: [MixinsGeneral, MixinRoutes],
 
   data: () => ({
     headerPosition: 0,
@@ -113,16 +107,14 @@ export default {
     ...mapState('Files', [
       'selectedResourcesForMove',
       'locationPickerTargetFolder',
-      'currentFolder',
-      'currentPage'
+      'currentFolder'
     ]),
     ...mapGetters('Files', [
       'activeFiles',
       'publicLinkPassword',
       'davProperties',
       'totalFilesCount',
-      'totalFilesSize',
-      'pages'
+      'totalFilesSize'
     ]),
     ...mapGetters(['configuration']),
 
@@ -253,7 +245,6 @@ export default {
         if (!sameRoute || !sameItem) {
           this.navigateToTarget(this.$route)
         }
-        this.$_filesListPagination_updateCurrentPage()
       },
       immediate: true
     }

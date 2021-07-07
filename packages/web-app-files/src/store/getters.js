@@ -28,13 +28,19 @@ export default {
   },
   pages: (state, getters) => Math.ceil(getters.filesAll.length / state.filesPageLimit),
   activeFiles: (state, getters) => {
-    let files = getters.filesAll
-    const firstElementIndex = (state.currentPage - 1) * state.filesPageLimit
+    let files = [].concat(getters.filesAll)
 
     if (!state.areHiddenFilesShown) {
       files = files.filter(file => !file.name.startsWith('.'))
     }
-    return [].concat(files).splice(firstElementIndex, state.filesPageLimit)
+
+    if (state.filesPageLimit > 0) {
+      const firstElementIndex = (state.currentPage - 1) * state.filesPageLimit
+
+      return files.splice(firstElementIndex, state.filesPageLimit)
+    }
+
+    return files
   },
   activeFilesSize: (state, getters) => {
     return $_fileSizes(getters.activeFiles)
