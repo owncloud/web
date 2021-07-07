@@ -34,7 +34,6 @@ config = {
                     # The following suites may have all scenarios currently skipped.
                     # The suites are listed here so that scenarios will run when
                     # they are enabled.
-                    "webUIAdminSettings",
                     "webUIComments",
                     "webUITags",
                     "webUIWebdavLockProtection",
@@ -218,7 +217,6 @@ config = {
                     # The following suites may have all scenarios currently skipped.
                     # The suites are listed here so that scenarios will run when
                     # they are enabled.
-                    "webUIAdminSettings",
                     "webUIComments",
                     "webUITags",
                     "webUIWebdavLockProtection",
@@ -316,7 +314,6 @@ config = {
                     # The following suites may have all scenarios currently skipped.
                     # The suites are listed here so that scenarios will run when
                     # they are enabled.
-                    "webUIAdminSettings",
                     "webUIComments",
                     "webUITags",
                     "webUIWebdavLockProtection",
@@ -382,7 +379,6 @@ config = {
                     # The following suites may have all scenarios currently skipped.
                     # The suites are listed here so that scenarios will run when
                     # they are enabled.
-                    "webUIAdminSettings",
                     "webUIComments",
                     "webUITags",
                     "webUIWebdavLockProtection",
@@ -521,7 +517,6 @@ config = {
                     # The following suites may have all scenarios currently skipped.
                     # The suites are listed here so that scenarios will run when
                     # they are enabled.
-                    "webUIAdminSettings",
                     "webUIComments",
                     "webUITags",
                     "webUIWebdavLockProtection",
@@ -620,7 +615,6 @@ notificationsRootTestSuites = [
 
 basicTestSuites = [
     "webUIAccount",
-    "webUIAdminSettings",
     "webUIComments",
     "webUICreateFilesFolders",
     "webUIDeleteFilesFolders",
