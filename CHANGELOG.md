@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Batch action for deleting adhering permissions: [#5441](https://github.com/owncloud/web/pull/5441)
 * Enhancement - Add view options: [#5408](https://github.com/owncloud/web/pull/5408)
+* Enhancement - Details in Sharing Sidebar: [#5161](https://github.com/owncloud/web/issues/5161)
 * Enhancement - Batch actions for accepting and declining shares: [#5204](https://github.com/owncloud/web/issues/5204)
 * Enhancement - Update owncloud-design-system to v7.5.0: [#5408](https://github.com/owncloud/web/pull/5408)
 * Enhancement - Update Design System to 8.0.0: [#5465](https://github.com/owncloud/web/pull/5465)
@@ -32,6 +33,14 @@ Details
 
    https://github.com/owncloud/web/pull/5408
    https://github.com/owncloud/web/pull/5450
+
+* Enhancement - Details in Sharing Sidebar: [#5161](https://github.com/owncloud/web/issues/5161)
+
+   We're now displaying more information about the highlighted file in the sharing sidebar,
+   including a preview (if applicable) as well as sharing and version information in one place.
+
+   https://github.com/owncloud/web/issues/5161
+   https://github.com/owncloud/web/pull/5284
 
 * Enhancement - Batch actions for accepting and declining shares: [#5204](https://github.com/owncloud/web/issues/5204)
 
@@ -70,7 +79,6 @@ Summary
 -------
 
 * Bugfix - Image-source directive did not handle updates correctly: [#5364](https://github.com/owncloud/web/pull/5364)
-* Bugfix - Remove unnecessary Propfind requests: [#5340](https://github.com/owncloud/web/pull/5340)
 
 Details
 -------
@@ -83,16 +91,6 @@ Details
    This has been fixed by implementing the update hook in the directive.
 
    https://github.com/owncloud/web/pull/5364
-
-* Bugfix - Remove unnecessary Propfind requests: [#5340](https://github.com/owncloud/web/pull/5340)
-
-   In the the files-app views `Favorites`, `SharedViaLink`, `SharedWithMe` and
-   `SharedWithOthers` we did a unnecessary propfind request to obtain the rootFolder which is
-   not required there.
-
-   This has been fixed by removing those requests.
-
-   https://github.com/owncloud/web/pull/5340
 
 Changelog for ownCloud Web [3.3.0] (2021-06-23)
 =======================================
@@ -120,6 +118,7 @@ Summary
 * Bugfix - Translated user menu items: [#5042](https://github.com/owncloud/web/pull/5042)
 * Bugfix - Prevent `fileTypeIcon` to throw a TypeError: [#5253](https://github.com/owncloud/web/pull/5253)
 * Bugfix - Make sure IDs in HTML are unique: [#5028](https://github.com/owncloud/web/pull/5028)
+* Bugfix - Remove unnecessary Propfind requests: [#5340](https://github.com/owncloud/web/pull/5340)
 * Bugfix - Upsert resource in filestable: [#5130](https://github.com/owncloud/web/pull/5130)
 * Enhancement - Improve a11y colors: [#5138](https://github.com/owncloud/web/pull/5138)
 * Enhancement - Accessible status indicators: [#5182](https://github.com/owncloud/web/pull/5182)
@@ -283,6 +282,16 @@ Details
 
    https://github.com/owncloud/web/pull/5028
    https://github.com/owncloud/web/pull/5148
+
+* Bugfix - Remove unnecessary Propfind requests: [#5340](https://github.com/owncloud/web/pull/5340)
+
+   In the the files-app views `Favorites`, `SharedViaLink`, `SharedWithMe` and
+   `SharedWithOthers` we did a unnecessary propfind request to obtain the rootFolder which is
+   not required there.
+
+   This has been fixed by removing those requests.
+
+   https://github.com/owncloud/web/pull/5340
 
 * Bugfix - Upsert resource in filestable: [#5130](https://github.com/owncloud/web/pull/5130)
 
