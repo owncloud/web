@@ -131,8 +131,7 @@ module.exports = {
     isActionAttributeDisabled: async function(action, resource) {
       await this.waitForFileVisible(resource)
       await filesRow.openFileActionsMenu(resource)
-      await filesActionsMenu.getActionDisabledAttr('delete')
-      return this
+      return await filesActionsMenu.getActionDisabledAttr('delete')
     },
     /**
      * @param {string} resource
