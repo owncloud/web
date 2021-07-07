@@ -22,21 +22,18 @@ Background: prepare user and files
       | open folder               |
     When the user opens the actions sidebar accordion of file "lorem.txt" in the webUI
     Then the app-sidebar for file "lorem.txt" should be visible on the webUI
-    
     And only the following items with default items should be visible in the actions menu on the webUI
       | items                     |
       | open in markdowneditor    |
       | download                  |
     When the user opens the actions sidebar accordion of file "lorem.pdf" in the webUI
     Then the app-sidebar for file "lorem.pdf" should be visible on the webUI
-    
     And only the following items with default items should be visible in the actions menu on the webUI
       | items                     |
       | open in browser           |
       | download                  |
     When the user opens the actions sidebar accordion of file "testavatar.png" in the webUI
     Then the app-sidebar for file "testavatar.png" should be visible on the webUI
-    
     And only the following items with default items should be visible in the actions menu on the webUI
       | items                     |
       | open in mediaviewer       |
