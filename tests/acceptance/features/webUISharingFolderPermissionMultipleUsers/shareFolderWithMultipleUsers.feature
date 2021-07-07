@@ -12,7 +12,7 @@ Feature: Sharing folders with multiple internal users with different permissions
       | Alice    |
       | Brian    |
 
-  @issue-ocis-1743
+  @issue-ocis-1743 @issue-ocis-1227
   Scenario Outline: share a folder with multiple users with different roles and permissions
     Given these users have been created with default attributes and without skeleton files:
       | username |

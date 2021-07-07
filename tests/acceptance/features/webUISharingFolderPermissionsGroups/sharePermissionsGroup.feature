@@ -1,4 +1,4 @@
-@ocis-reva-issue-34 @ocis-reva-issue-194
+@ocis-issue-1277 @ocis-issue-2260
 Feature: Sharing folders with internal groups with different roles and permissions
   As a user
   I want to set different permissions on shared folders with groups

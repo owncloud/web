@@ -14,7 +14,7 @@ Feature: Resharing shared files with different permissions
       | Carol    |
     And user "Brian" has created folder "simple-folder"
 
-  @issue-ocis-1743
+  @issue-ocis-1922
   Scenario: Reshare a folder without share permissions using API and check if it is listed on the collaborators list for original owner
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share" permissions
     And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
@@ -25,7 +25,7 @@ Feature: Resharing shared files with different permissions
     Then user "Carol King" should be listed as "Advanced permissions" in the collaborators list for folder "simple-folder" on the webUI
     And no custom permissions should be set for collaborator "Carol King" for folder "simple-folder" on the webUI
 
-  @issue-ocis-1743
+  @issue-ocis-1922
   Scenario: Reshare a folder without share permissions using API and check if it is listed on the collaborators list for resharer
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share" permissions
     And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
@@ -37,7 +37,7 @@ Feature: Resharing shared files with different permissions
     Then user "Carol King" should be listed as "Advanced permissions" in the collaborators list for folder "simple-folder" on the webUI
     And no custom permissions should be set for collaborator "Carol King" for folder "simple-folder" on the webUI
 
-  @issue-product-270 @issue-ocis-1743
+
   Scenario: Reshare a folder without share permissions using API and check if the receiver can reshare
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share" permissions
     And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
@@ -47,7 +47,7 @@ Feature: Resharing shared files with different permissions
     And the user opens folder "Shares" using the webUI
     Then the user should not be able to share folder "simple-folder" using the webUI
 
-  @issue-ocis-1743
+  @issue-ocis-2260 @issue-ocis-1922
   Scenario Outline: share a received folder with another user with same permissions(including share permissions) and check if the user is displayed in collaborators list for resharer
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "<permissions>" permissions
     And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
@@ -72,7 +72,7 @@ Feature: Resharing shared files with different permissions
       | Advanced permissions | Advanced permissions | update, share                 | share, update         | read, update, share                 |
       | Advanced permissions | Editor               | delete, share, create, update |                       | read, share, delete, update, create |
 
-  @skipOnOC10
+  @skipOnOC10 @issue-ocis-2260 @issue-ocis-1922
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
   Scenario Outline: share a received folder with another user with same permissions(including share permissions) and check if the user is displayed in collaborators list for resharer (ocis bug demonstration)
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "<permissions>" permissions
