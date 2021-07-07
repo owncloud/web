@@ -20,7 +20,7 @@ export default {
     },
     label() {
       return this.$gettext(
-        "We'd like to improve the web design and would be happy to hear your feedback. Thank you! Your ownCloud team."
+        "Provide your feedback: We'd like to improve the web design and would be happy to hear your feedback. Thank you! Your ownCloud team."
       )
     }
   }
