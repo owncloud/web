@@ -12,6 +12,7 @@
     />
     <oc-page-size
       v-model="$_filesListPagination_pageItemsLimit"
+      data-testid="files-pagination-size"
       :label="$gettext('Items per page')"
       :options="[100, 500, 1000, $gettext('All')]"
       class="files-pagination-size"

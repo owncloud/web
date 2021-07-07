@@ -63,6 +63,7 @@ import MixinAccessibleBreadcrumb from '../mixins/accessibleBreadcrumb'
 import MixinFileActions from '../mixins/fileActions'
 import MixinFilesListScrolling from '../mixins/filesListScrolling'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
+import MixinFilesListPagination from '../mixins/filesListPagination'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 import { buildResource } from '../helpers/resources'
 import { VisibilityObserver } from 'web-pkg/src/observer'
@@ -85,6 +86,7 @@ export default {
     MixinFileActions,
     MixinFilesListPositioning,
     MixinFilesListScrolling,
+    MixinFilesListPagination,
     MixinMountSideBar
   ],
 

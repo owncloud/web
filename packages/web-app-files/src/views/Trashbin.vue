@@ -46,6 +46,7 @@ import { mapGetters, mapMutations, mapState } from 'vuex'
 import { buildDeletedResource, buildResource } from '../helpers/resources'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
 import MixinResources from '../mixins/resources'
+import MixinFilesListPagination from '../mixins/filesListPagination'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 
 import ListLoader from '../components/FilesList/ListLoader.vue'
@@ -56,7 +57,7 @@ import Pagination from '../components/FilesList/Pagination.vue'
 export default {
   components: { ListLoader, NoContentMessage, ListInfo, Pagination },
 
-  mixins: [MixinFilesListPositioning, MixinResources, MixinMountSideBar],
+  mixins: [MixinFilesListPositioning, MixinResources, MixinFilesListPagination, MixinMountSideBar],
 
   data: () => ({
     loading: true

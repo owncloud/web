@@ -80,6 +80,7 @@ import FileActions from '../mixins/fileActions'
 import MixinAcceptShare from '../mixins/actions/acceptShare'
 import MixinDeclineShare from '../mixins/actions/declineShare'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
+import MixinFilesListPagination from '../mixins/filesListPagination'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../constants'
@@ -105,6 +106,7 @@ export default {
     MixinAcceptShare,
     MixinDeclineShare,
     MixinFilesListPositioning,
+    MixinFilesListPagination,
     MixinMountSideBar
   ],
 

@@ -181,4 +181,26 @@ describe('User can navigate in files list using pagination', () => {
       expect(document.querySelector('.oc-pagination-list-item-current').textContent).toMatch('2')
     }
   )
+
+  test.each(cases)(
+    'Items per page limit can be updated via route query in %s',
+    async (name, route, component) => {
+      const { getByText, queryByText } = render(
+        component,
+        { routes, store },
+        (vue, store, router) => {
+          const _route = { path: route, query: { 'items-limit': 1 } }
+
+          router.push(_route)
+        }
+      )
+
+      await waitFor(() =>
+        expect(document.querySelector(`#files-${toKebabCase(name)}-table`)).toBeVisible()
+      )
+
+      expect(getByText('.hidden-folder')).toBeVisible()
+      expect(queryByText('Documents')).toBe(null)
+    }
+  )
 })

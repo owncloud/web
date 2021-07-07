@@ -52,6 +52,7 @@ import { mapGetters, mapActions, mapMutations } from 'vuex'
 import MixinAccessibleBreadcrumb from '../mixins/accessibleBreadcrumb'
 import MixinFileActions from '../mixins/fileActions'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
+import MixinFilesListPagination from '../mixins/filesListPagination'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 
 import { VisibilityObserver } from 'web-pkg/src/observer'
@@ -79,6 +80,7 @@ export default {
     MixinAccessibleBreadcrumb,
     MixinFileActions,
     MixinFilesListPositioning,
+    MixinFilesListPagination,
     MixinMountSideBar
   ],
 

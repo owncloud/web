@@ -47,6 +47,7 @@ import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 import { buildResource } from '../helpers/resources'
 import FileActions from '../mixins/fileActions'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
+import MixinFilesListPagination from '../mixins/filesListPagination'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../constants'
@@ -63,7 +64,7 @@ const visibilityObserver = new VisibilityObserver()
 export default {
   components: { QuickActions, ListLoader, NoContentMessage, ListInfo, Pagination },
 
-  mixins: [FileActions, MixinFilesListPositioning, MixinMountSideBar],
+  mixins: [FileActions, MixinFilesListPositioning, MixinFilesListPagination, MixinMountSideBar],
 
   data: () => ({
     loading: true

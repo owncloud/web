@@ -50,6 +50,7 @@ import { aggregateResourceShares } from '../helpers/resources'
 import FileActions from '../mixins/fileActions'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
 import MixinResources from '../mixins/resources'
+import MixinFilesListPagination from '../mixins/filesListPagination'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../constants'
@@ -65,7 +66,13 @@ const visibilityObserver = new VisibilityObserver()
 export default {
   components: { ListLoader, NoContentMessage, ListInfo, Pagination },
 
-  mixins: [FileActions, MixinFilesListPositioning, MixinResources, MixinMountSideBar],
+  mixins: [
+    FileActions,
+    MixinFilesListPositioning,
+    MixinResources,
+    MixinFilesListPagination,
+    MixinMountSideBar
+  ],
 
   data: () => ({
     loading: true
