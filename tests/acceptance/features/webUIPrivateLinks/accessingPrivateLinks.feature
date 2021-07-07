@@ -28,7 +28,7 @@ Feature: Access private link
     And user "Brian" has logged in using the webUI
     When the user navigates to the private link created by user "Alice" for file "lorem.txt"
     Then the app-sidebar for file "lorem.txt" should be visible on the webUI
-    And the "actions" details panel should be visible
+    And the "details" details panel should be visible
 
   @issue-3243
   Scenario: Access the private link as an user that does not have permissions to see the file
