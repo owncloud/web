@@ -1,1 +1,1 @@
-tests/acceptance/features/* linguist-vendored
+tests/acceptance/features/**/* linguist-vendored
