@@ -996,6 +996,10 @@ Then(
   }
 )
 
+When('the user opens the actions sidebar accordion of file/folder {string} in the webUI', async function(resource) {
+  await client.page.FilesPageElement.filesRow().openFileActionsMenu(resource)
+})
+
 Then('the app-sidebar for file/folder {string} should be visible on the webUI', async function(
   resource
 ) {
