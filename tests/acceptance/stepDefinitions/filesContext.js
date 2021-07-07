@@ -1008,6 +1008,7 @@ Then('the app-sidebar for file/folder {string} should be visible on the webUI', 
 ) {
   const visible = await client.page.personalPage().isSidebarVisible()
   assert.strictEqual(visible, true, 'app-sidebar should be visible, but is not')
+  await client.page.FilesPageElement.appSideBar().selectAccordionItem('actions')
   return client.page.personalPage().checkSidebarItem(resource)
 })
 

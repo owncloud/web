@@ -17,6 +17,8 @@ Feature: User can open the details panel for any file or folder
     When the user picks the row of file "lorem.txt" in the webUI
     Then the app-sidebar should be visible
     And the thumbnail should be visible in the app-sidebar
+    And the "details" details panel should be visible
+    When the user switches to "actions" accordion item in details panel using the webUI
     And the "actions" details panel should be visible
     When the user switches to "people" accordion item in details panel using the webUI
     Then the "people" details panel should be visible
@@ -28,6 +30,8 @@ Feature: User can open the details panel for any file or folder
     When the user picks the row of folder "simple-folder" in the webUI
     Then the app-sidebar should be visible
     And the thumbnail should be visible in the app-sidebar
+    And the "details" details panel should be visible
+    When the user switches to "actions" accordion item in details panel using the webUI
     And the "actions" details panel should be visible
     When the user switches to "people" accordion item in details panel using the webUI
     Then the "people" details panel should be visible
@@ -43,6 +47,8 @@ Feature: User can open the details panel for any file or folder
     When the user picks the row of file "lorem.txt" in the webUI
     Then the app-sidebar should be visible
     And the thumbnail should be visible in the app-sidebar
+    And the "details" details panel should be visible
+    When the user switches to "actions" accordion item in details panel using the webUI
     And the "actions" details panel should be visible
     When the user switches to "people" accordion item in details panel using the webUI
     Then the "people" details panel should be visible
@@ -56,6 +62,8 @@ Feature: User can open the details panel for any file or folder
     When the user picks the row of folder "simple-folder" in the webUI
     Then the app-sidebar should be visible
     And the thumbnail should be visible in the app-sidebar
+    And the "details" details panel should be visible
+    When the user switches to "actions" accordion item in details panel using the webUI
     And the "actions" details panel should be visible
     When the user switches to "people" accordion item in details panel using the webUI
     Then the "people" details panel should be visible
