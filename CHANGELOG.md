@@ -12,6 +12,7 @@ Summary
 * Enhancement - Add view options: [#5408](https://github.com/owncloud/web/pull/5408)
 * Enhancement - Batch actions for accepting and declining shares: [#5204](https://github.com/owncloud/web/issues/5204)
 * Enhancement - Update owncloud-design-system to v7.5.0: [#5408](https://github.com/owncloud/web/pull/5408)
+* Enhancement - Update Design System to 8.0.0: [#5465](https://github.com/owncloud/web/pull/5465)
 
 Details
 -------
@@ -49,6 +50,14 @@ Details
 
    https://github.com/owncloud/web/pull/5408
    https://github.com/owncloud/owncloud-design-system/releases/tag/v7.5.0
+
+* Enhancement - Update Design System to 8.0.0: [#5465](https://github.com/owncloud/web/pull/5465)
+
+   The ownCloud design system has been updated, bringing mostly small bugfixes and adding a
+   differentiation between `previews` and `thumbnails`.
+
+   https://github.com/owncloud/web/pull/5465
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v8.0.0-rc2
 
 Changelog for ownCloud Web [3.3.1] (2021-06-28)
 =======================================

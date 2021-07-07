@@ -740,7 +740,7 @@ module.exports = {
       selector: '.files-collaborators-lists'
     },
     filesListFooterInfo: {
-      selector: '//p[@data-test-id="files-list-footer-info"]',
+      selector: '//p[@data-testid="files-list-footer-info"]',
       locateStrategy: 'xpath'
     },
     filesTableHeader: {
