@@ -36,6 +36,8 @@ config = {
                     # they are enabled.
                     "webUIComments",
                     "webUITags",
+                ],
+                "oC10Locks": [
                     "webUIWebdavLockProtection",
                     "webUIWebdavLocks",
                 ],
@@ -381,6 +383,8 @@ config = {
                     # they are enabled.
                     "webUIComments",
                     "webUITags",
+                ],
+                "oCISLocks": [
                     "webUIWebdavLockProtection",
                     "webUIWebdavLocks",
                 ],
