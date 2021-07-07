@@ -50,7 +50,7 @@ describe('AppBar', () => {
       directives: { OcTooltip: () => {} }
     })
 
-    wrapper.find('[data-test-id="files-switch-hidden-files"]').vm.$emit('change', false)
+    wrapper.find('[data-testid="files-switch-hidden-files"]').vm.$emit('change', false)
     await wrapper.vm.$nextTick()
 
     expect(mutations.SET_HIDDEN_FILES_VISIBILITY).toHaveBeenCalled()

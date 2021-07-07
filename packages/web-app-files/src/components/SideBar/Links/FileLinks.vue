@@ -27,7 +27,7 @@
         </div>
         <p
           v-else
-          data-test-id="files-links-no-reshare-permissions-message"
+          data-testid="files-links-no-reshare-permissions-message"
           class="oc-mt-s"
           v-text="noResharePermsMessage"
         />
