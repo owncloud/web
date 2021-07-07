@@ -11,7 +11,7 @@ Feature: Access private link
     When the user copies the private link of the file "lorem.txt" using the webUI
     And the user navigates to the copied private link using the webUI
     Then the app-sidebar for file "lorem.txt" should be visible on the webUI
-    And the "actions" details panel should be visible
+    And the "details" details panel should be visible
 
   @smokeTest @ocisSmokeTest
   Scenario: Access private link before authorisation
@@ -19,7 +19,7 @@ Feature: Access private link
     Then the user should be redirected to the IdP login page
     When user "Alice" has logged in using the webUI
     Then the app-sidebar for file "lorem.txt" should be visible on the webUI
-    And the "actions" details panel should be visible
+    And the "details" details panel should be visible
 
 
   Scenario: Access private link as a collaborator
