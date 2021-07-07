@@ -1,0 +1,6 @@
+Enhancement: Update Design System to 8.0.0
+
+The ownCloud design system has been updated, bringing mostly small bugfixes and adding a differentiation between `previews` and `thumbnails`.
+
+https://github.com/owncloud/owncloud-design-system/releases/tag/v8.0.0-rc2
+https://github.com/owncloud/web/pull/5465

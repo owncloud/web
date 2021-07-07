@@ -138,12 +138,12 @@ describe('Favorites component', () => {
           })
         })
         expect(
-          wrapper.find(selectors.favoritesTable).attributes('arepreviewsdisplayed')
+          wrapper.find(selectors.favoritesTable).attributes('arethumbnailsdisplayed')
         ).toBeTruthy()
       })
       it('hides previews when the "disablePreviews" config is enabled', () => {
         expect(
-          defaultWrapper.find(selectors.favoritesTable).attributes('arepreviewsdisplayed')
+          defaultWrapper.find(selectors.favoritesTable).attributes('arethumbnailsdisplayed')
         ).toBeFalsy()
       })
     })

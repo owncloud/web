@@ -22,7 +22,7 @@
         v-model="selected"
         class="files-table"
         :class="{ 'files-table-squashed': isSidebarOpen }"
-        :are-previews-displayed="displayPreviews"
+        :are-thumbnails-displayed="displayThumbnails"
         :resources="activeFiles"
         :target-route="targetRoute"
         :highlighted="highlightedFile ? highlightedFile.id : null"
@@ -67,7 +67,7 @@ import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
 import NotFoundMessage from '../components/FilesList/NotFoundMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
 import { VisibilityObserver } from 'web-pkg/src/observer'
-import { ImageDimension } from '../constants'
+import { ImageDimension, ImageType } from '../constants'
 import debounce from 'lodash-es/debounce'
 
 const visibilityObserver = new VisibilityObserver()
@@ -137,7 +137,7 @@ export default {
       return { name: this.$route.name }
     },
 
-    displayPreviews() {
+    displayThumbnails() {
       return !this.configuration.options.disablePreviews
     }
   },
@@ -172,7 +172,7 @@ export default {
     ]),
 
     rowMounted(resource, component) {
-      if (!this.displayPreviews) {
+      if (!this.displayThumbnails) {
         return
       }
 
@@ -181,7 +181,8 @@ export default {
         this.loadPreview({
           resource,
           isPublic: true,
-          dimensions: ImageDimension.ThumbNail
+          dimensions: ImageDimension.Thumbnail,
+          type: ImageType.Thumbnail
         })
       }, 250)
 
