@@ -845,8 +845,8 @@ Then('the app-sidebar should be invisible', async function() {
 })
 
 Then('the {string} details panel should be visible', async function(panel) {
-  const visible = await client.page.FilesPageElement.appSideBar().isPanelVisible(panel)
-  assert.strictEqual(visible, true, `'${panel}-panel' should be visible, but is not`)
+  const expanded = await client.page.FilesPageElement.appSideBar().isAccordionItemExpanded(panel)
+  assert.strictEqual(expanded, true, `'${panel}-panel' should be expanded, but is not`)
 })
 
 Then(
@@ -993,6 +993,13 @@ Then(
     return client.getClipBoardContent(function(value) {
       assert.strictEqual(folderData['oc:privatelink'], value)
     })
+  }
+)
+
+When(
+  'the user opens the actions sidebar accordion of file/folder {string} in the webUI',
+  async function(resource) {
+    await client.page.FilesPageElement.filesRow().openFileActionsMenu(resource)
   }
 )
 
@@ -1225,9 +1232,8 @@ When('the user tries to move file/folder {string} into folder {string} using the
 When('the user selects move action for folder/file {string} using the webUI', async function(
   resource
 ) {
-  await client.page.FilesPageElement.filesRow()
-    .openFileActionsMenu(resource)
-    .move()
+  await client.page.FilesPageElement.filesRow().openFileActionsMenu(resource)
+  return client.page.FilesPageElement.fileActionsMenu().move()
 })
 
 When('the user cancels the attempt to move/copy resources using the webUI', function() {
@@ -1290,9 +1296,8 @@ When('the user opens the file action menu of file/folder {string} using the webU
 When('the user selects copy action for file/folder {string} using the webUI', async function(
   resource
 ) {
-  await client.page.FilesPageElement.filesRow()
-    .openFileActionsMenu(resource)
-    .copy()
+  await client.page.FilesPageElement.filesRow().openFileActionsMenu(resource)
+  return client.page.FilesPageElement.fileActionsMenu().copy()
 })
 
 When(

@@ -1,11 +1,13 @@
 const util = require('util')
 const { client } = require('nightwatch-api')
 const filesRow = client.page.FilesPageElement.filesRow()
+const filesActionsMenu = client.page.FilesPageElement.fileActionsMenu()
 
 module.exports = {
   commands: {
-    openMediaViewer: function(fileName) {
-      filesRow.openFileActionsMenu(fileName).mediaViewer()
+    openMediaViewer: async function(fileName) {
+      await filesRow.openFileActionsMenu(fileName)
+      await filesActionsMenu.mediaViewer()
 
       return this
     },

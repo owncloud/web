@@ -10,6 +10,7 @@ import PublicLink from './views/PublicLink.vue'
 import FilesDrop from './views/FilesDrop.vue'
 import LocationPicker from './views/LocationPicker.vue'
 import PublicFiles from './views/PublicFiles.vue'
+import FileDetails from './components/SideBar/Details/FileDetails.vue'
 import FileVersions from './components/SideBar/Versions/FileVersions.vue'
 import FileShares from './components/SideBar/Shares/FileShares.vue'
 import FileLinks from './components/SideBar/Links/FileLinks.vue'
@@ -30,6 +31,14 @@ const appInfo = {
   isFileEditor: false,
   extensions: [],
   fileSideBars: [
+    {
+      app: 'details-item',
+      icon: 'info',
+      component: FileDetails,
+      enabled() {
+        return undefined
+      }
+    },
     {
       app: 'sharing-item',
       icon: 'group',

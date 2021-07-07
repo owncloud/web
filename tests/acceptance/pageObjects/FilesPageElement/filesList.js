@@ -3,6 +3,7 @@ const assert = require('assert')
 const xpathHelper = require('../../helpers/xpath')
 const { client } = require('nightwatch-api')
 const filesRow = client.page.FilesPageElement.filesRow()
+const filesActionsMenu = client.page.FilesPageElement.fileActionsMenu()
 
 module.exports = {
   commands: {
@@ -45,7 +46,8 @@ module.exports = {
      */
     deleteFile: async function(resource) {
       await this.waitForFileVisible(resource)
-      await filesRow.openFileActionsMenu(resource).delete()
+      await filesRow.openFileActionsMenu(resource)
+      await filesActionsMenu.delete()
       return this
     },
     /**
@@ -54,7 +56,8 @@ module.exports = {
      */
     acceptShare: async function(resource) {
       await this.waitForFileVisible(resource)
-      await filesRow.openFileActionsMenu(resource).acceptShare()
+      await filesRow.openFileActionsMenu(resource)
+      await filesActionsMenu.acceptShare()
       return this
     },
     /**
@@ -63,7 +66,8 @@ module.exports = {
      */
     declineShare: async function(resource) {
       await this.waitForFileVisible(resource)
-      await filesRow.openFileActionsMenu(resource).declineShare()
+      await filesRow.openFileActionsMenu(resource)
+      await filesActionsMenu.declineShare()
       return this
     },
     /**
@@ -74,7 +78,8 @@ module.exports = {
      */
     renameFile: async function(fromName, toName, expectToSucceed = true) {
       await this.waitForFileVisible(fromName)
-      await filesRow.openFileActionsMenu(fromName).rename(toName, expectToSucceed)
+      await filesRow.openFileActionsMenu(fromName)
+      await filesActionsMenu.rename(toName, expectToSucceed)
       return this
     },
     /**
@@ -83,7 +88,8 @@ module.exports = {
      */
     markFavorite: async function(path) {
       await this.waitForFileVisible(path)
-      await filesRow.openFileActionsMenu(path).favorite()
+      await filesRow.openFileActionsMenu(path)
+      await filesActionsMenu.favorite()
       return this
     },
     /**
@@ -92,7 +98,8 @@ module.exports = {
      */
     unmarkFavorite: async function(path) {
       await this.waitForFileVisible(path)
-      await filesRow.openFileActionsMenu(path).unmarkFavorite()
+      await filesRow.openFileActionsMenu(path)
+      await filesActionsMenu.unmarkFavorite()
       return this
     },
     /**
@@ -102,7 +109,8 @@ module.exports = {
      */
     restoreFile: async function(element, elementType) {
       await this.waitForFileWithPathVisible(element, elementType)
-      await filesRow.openFileActionsMenu(element, elementType).restore()
+      await filesRow.openFileActionsMenu(element, elementType)
+      await filesActionsMenu.restore()
       return this
     },
     /**
@@ -111,7 +119,8 @@ module.exports = {
      */
     deleteImmediately: async function(resource) {
       await this.waitForFileVisible(resource)
-      await filesRow.openFileActionsMenu(resource).deleteResourceImmediately(resource)
+      await filesRow.openFileActionsMenu(resource)
+      await filesActionsMenu.deleteResourceImmediately(resource)
       return this
     },
     /**
@@ -121,7 +130,8 @@ module.exports = {
      */
     isActionAttributeDisabled: async function(action, resource) {
       await this.waitForFileVisible(resource)
-      return filesRow.openFileActionsMenu(resource).getActionDisabledAttr('delete')
+      await filesRow.openFileActionsMenu(resource)
+      return await filesActionsMenu.getActionDisabledAttr('delete')
     },
     /**
      * @param {string} resource
@@ -129,7 +139,8 @@ module.exports = {
      */
     downloadFile: async function(resource) {
       await this.waitForFileVisible(resource)
-      await filesRow.openFileActionsMenu(resource).download()
+      await filesRow.openFileActionsMenu(resource)
+      await filesActionsMenu.download()
       return this
     },
     /**
@@ -565,7 +576,8 @@ module.exports = {
       await this.waitForFileVisible(resource)
 
       // Trigger move
-      await filesRow.openFileActionsMenu(resource).move()
+      await filesRow.openFileActionsMenu(resource)
+      await filesActionsMenu.move()
 
       // Execute move
       await client.page.locationPicker().selectFolderAndConfirm(target)
@@ -577,7 +589,8 @@ module.exports = {
       await this.waitForFileVisible(resource)
 
       // Trigger move
-      await filesRow.openFileActionsMenu(resource).move()
+      await filesRow.openFileActionsMenu(resource)
+      await filesActionsMenu.move()
 
       // select folder
       await client.page.locationPicker().selectFolder(target)
@@ -600,7 +613,8 @@ module.exports = {
       await this.waitForFileVisible(resource)
 
       // Trigger copy
-      await filesRow.openFileActionsMenu(resource).copy()
+      await filesRow.openFileActionsMenu(resource)
+      await filesActionsMenu.copy()
 
       // Execute copy
       await client.page.locationPicker().selectFolderAndConfirm(target)
@@ -612,7 +626,8 @@ module.exports = {
       await this.waitForFileVisible(resource)
 
       // Trigger copy
-      await filesRow.openFileActionsMenu(resource).copy()
+      await filesRow.openFileActionsMenu(resource)
+      await filesActionsMenu.copy()
 
       // Execute copy
       await client.page.locationPicker().selectFolder(target)
@@ -709,9 +724,6 @@ module.exports = {
       selector: '//*[contains(@class, "oc-status-indicators-indicator")]',
       locateStrategy: 'xpath'
     },
-    publicLinkSideBar: {
-      selector: '#oc-files-file-link'
-    },
     checkBoxAllFiles: {
       selector: '#oc-table-files-select-all'
     },
@@ -721,10 +733,6 @@ module.exports = {
     },
     restoreSelectedButton: {
       selector: '//span[contains(text(),"Restore")]',
-      locateStrategy: 'xpath'
-    },
-    linkToPublicLinksTag: {
-      selector: '//div[contains(@class, "oc-app-side-bar")]//a[normalize-space(.)="Links"]',
       locateStrategy: 'xpath'
     },
     collaboratorsList: {

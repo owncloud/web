@@ -402,9 +402,6 @@ module.exports = {
       selector: '//div[contains(@class, "oc-app-side-bar")]',
       locateStrategy: 'xpath'
     },
-    fileOverwriteConfirm: {
-      selector: '#files-overwrite-confirm'
-    },
     sidebarItemName: {
       selector: '#files-sidebar-item-name'
     },

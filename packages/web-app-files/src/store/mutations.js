@@ -255,6 +255,10 @@ export default {
     state.files = []
   },
 
+  SET_VERSIONS(state, versions) {
+    state.versions = versions
+  },
+
   SET_APP_SIDEBAR_EXPANDED_ACCORDION(state, accordion) {
     state.appSidebarExpandedAccordion = accordion
   },

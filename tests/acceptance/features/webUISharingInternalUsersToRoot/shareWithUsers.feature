@@ -117,7 +117,7 @@ Feature: Sharing files and folders with internal users
     And user "Brian" has created file "simple-folder/lorem.txt"
     And user "Brian" has logged in using the webUI
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "create, read, share" permissions
-    And the user re-logs in as "Alice" using the webUI
+    When the user re-logs in as "Alice" using the webUI
     And the user opens folder "simple-folder" using the webUI
     Then it should not be possible to delete file "lorem.txt" using the webUI
 
