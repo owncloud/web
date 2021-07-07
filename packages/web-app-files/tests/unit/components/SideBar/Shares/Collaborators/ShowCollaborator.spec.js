@@ -1,7 +1,7 @@
 import { createLocalVue, mount } from '@vue/test-utils'
 import Vuex from 'vuex'
 import Collaborator from 'packages/web-app-files/src/components/SideBar/Shares/Collaborators/ShowCollaborator.vue'
-import stubs from '../../../../../../tests/unit/stubs'
+import stubs from '../../../../../../../../tests/unit/stubs'
 import GetTextPlugin from 'vue-gettext'
 
 const localVue = createLocalVue()

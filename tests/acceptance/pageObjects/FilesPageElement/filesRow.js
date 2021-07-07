@@ -26,13 +26,17 @@ module.exports = {
      *
      * @returns {*}
      */
-    openFileActionsMenu: function(resource, elementType = 'any') {
+    openFileActionsMenu: async function(resource, elementType = 'any') {
       const fileActionsBtnSelector = this.getFileActionBtnSelector(resource, elementType)
       this.useXpath()
+        .initAjaxCounters()
         .waitForElementVisible(fileActionsBtnSelector)
         .click(fileActionsBtnSelector)
+        .waitForOutstandingAjaxCalls()
+        .waitForAnimationToFinish()
         .useCss()
-      return this.api.page.FilesPageElement.fileActionsMenu()
+      await this.api.page.FilesPageElement.appSideBar().selectAccordionItem('actions')
+      return await this.api.page.FilesPageElement.fileActionsMenu()
     },
     isQuickActionVisible: function(action) {
       action = action.replace(/\s/, '-')

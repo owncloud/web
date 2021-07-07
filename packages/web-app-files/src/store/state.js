@@ -22,6 +22,7 @@ export default {
   ],
   dropzone: false,
   shareOpen: null,
+  versions: [],
 
   /**
    * Outgoing shares and links from currently highlighted element

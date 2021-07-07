@@ -105,7 +105,6 @@ Feature: move files
   Scenario: cancel moving a file
     Given user "Alice" has logged in using the webUI
     And the user has browsed to the files page
-    When the user opens the file action menu of file "lorem.txt" using the webUI
     And the user selects move action for file "lorem.txt" using the webUI
     And the user selects the folder "simple-folder" as a place to move the file using the webUI
     And the user cancels the attempt to move resources using the webUI

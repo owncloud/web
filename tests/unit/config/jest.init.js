@@ -20,5 +20,8 @@ config.mocks = {
     name: '',
     path: ''
   },
-  isIE11: () => false
+  isIE11: () => false,
+  $language: {
+    current: 'en'
+  }
 }

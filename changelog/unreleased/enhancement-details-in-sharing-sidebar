@@ -1,0 +1,9 @@
+Enhancement: Details in Sharing Sidebar
+
+We're now displaying more information about the 
+highlighted file in the sharing sidebar, including 
+a preview (if applicable) as well as sharing and 
+version information in one place.
+
+https://github.com/owncloud/web/issues/5161
+https://github.com/owncloud/web/pull/5284

@@ -431,6 +431,10 @@ export default {
       context.commit('SHARESTREE_LOADING', false)
     })
   },
+  async loadVersions(context, { client, fileId }) {
+    const response = await client.fileVersions.listVersions(fileId)
+    context.commit('SET_VERSIONS', response)
+  },
   dragOver(context, value) {
     context.commit('DRAG_OVER', value)
   },

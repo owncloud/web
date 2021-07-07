@@ -2,6 +2,7 @@ const { client } = require('nightwatch-api')
 
 const filesList = client.page.FilesPageElement.filesList()
 const filesRow = client.page.FilesPageElement.filesRow()
+const filesActionsMenu = client.page.FilesPageElement.fileActionsMenu()
 
 module.exports = {
   commands: {
@@ -72,7 +73,8 @@ module.exports = {
      */
     openMdEditorUsingActionMenu: async function(fileName) {
       await filesList.waitForFileVisible(fileName)
-      await filesRow.openFileActionsMenu(fileName).markdownEditor()
+      await filesRow.openFileActionsMenu(fileName)
+      await filesActionsMenu.markdownEditor()
       return this
     }
   },

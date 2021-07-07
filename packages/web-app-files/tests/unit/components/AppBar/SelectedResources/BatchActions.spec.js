@@ -1,7 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import stubs from 'tests/unit/stubs'
-import BatchActions from '../../../src/components/AppBar/SelectedResources/BatchActions.vue'
+import BatchActions from '../../../../../src/components/AppBar/SelectedResources/BatchActions.vue'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)

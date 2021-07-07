@@ -48,7 +48,7 @@
 <script>
 import Mixins from '../../../mixins'
 import MixinResources from '../../../mixins/resources'
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   mixins: [Mixins, MixinResources],
@@ -56,53 +56,48 @@ export default {
     return $gettext('Versions')
   },
   data: () => ({
-    versions: [],
     loading: false
   }),
   computed: {
-    ...mapGetters('Files', ['highlightedFile']),
+    ...mapGetters('Files', ['highlightedFile', 'versions']),
     ...mapGetters(['getToken']),
     hasVersion() {
       return this.versions.length > 0
-    },
-    currentFile() {
-      return this.highlightedFile
     }
   },
   watch: {
-    currentFile() {
-      this.getFileVersions()
+    highlightedFile() {
+      this.fetchFileVersions()
     }
   },
   mounted() {
-    this.getFileVersions()
+    this.fetchFileVersions()
   },
   methods: {
+    ...mapActions('Files', ['loadVersions']),
     currentVersionId(file) {
       const etag = file.name.split('/')
       return etag[etag.length - 1]
     },
-    getFileVersions() {
+    async fetchFileVersions() {
       this.loading = true
-      this.$client.fileVersions
-        .listVersions(this.currentFile.id)
-        .then(res => {
-          if (res) this.versions = res
-        })
-        .finally(_ => {
-          this.loading = false
-        })
+      await this.loadVersions({ client: this.$client, fileId: this.highlightedFile.id })
+      this.loading = false
     },
     revertVersion(file) {
       this.$client.fileVersions
-        .restoreFileVersion(this.currentFile.id, this.currentVersionId(file), this.currentFile.path)
+        .restoreFileVersion(
+          this.highlightedFile.id,
+          this.currentVersionId(file),
+          this.highlightedFile.path
+        )
         .then(() => {
-          this.getFileVersions()
+          this.fetchFileVersions()
         })
     },
     downloadVersion(file) {
       const version = this.currentVersionId(file)
-      return this.downloadFile(this.currentFile, null, version)
+      return this.downloadFile(this.highlightedFile, null, version)
     }
   }
 }
