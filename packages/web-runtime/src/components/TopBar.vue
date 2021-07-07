@@ -17,7 +17,7 @@
       <search-bar v-if="!isSearchDisabled" />
     </oc-grid>
     <oc-grid flex gutter="small" class="uk-width-expand uk-flex-right oc-m-rm">
-      <feedback-link />
+      <feedback-link v-if="isFeedbackLinkEnabled" />
       <notifications v-if="activeNotifications.length" />
       <applications-menu v-if="applicationsList.length > 0" :applications-list="applicationsList" />
       <user-menu
@@ -79,6 +79,10 @@ export default {
       return (
         this.configuration.options.hideSearchBar === true || this.$route.meta.hideSearchBar === true
       )
+    },
+
+    isFeedbackLinkEnabled() {
+      return !this.configuration.options.disableFeedbackLink
     }
   },
   methods: {
