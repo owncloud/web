@@ -1225,9 +1225,8 @@ When('the user tries to move file/folder {string} into folder {string} using the
 When('the user selects move action for folder/file {string} using the webUI', async function(
   resource
 ) {
-  await client.page.FilesPageElement.filesRow()
-    .openFileActionsMenu(resource)
-    .move()
+  await client.page.FilesPageElement.filesRow().openFileActionsMenu(resource)
+  return client.page.FilesPageElement.fileActionsMenu().move()
 })
 
 When('the user cancels the attempt to move/copy resources using the webUI', function() {
@@ -1290,9 +1289,8 @@ When('the user opens the file action menu of file/folder {string} using the webU
 When('the user selects copy action for file/folder {string} using the webUI', async function(
   resource
 ) {
-  await client.page.FilesPageElement.filesRow()
-    .openFileActionsMenu(resource)
-    .copy()
+  await client.page.FilesPageElement.filesRow().openFileActionsMenu(resource)
+  return client.page.FilesPageElement.fileActionsMenu().copy()
 })
 
 When(
