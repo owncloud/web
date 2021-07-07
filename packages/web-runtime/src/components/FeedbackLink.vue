@@ -7,7 +7,7 @@
     appearance="raw"
     :aria-label="label"
   >
-    <oc-icon name="comment" />
+    <oc-icon name="feedback" />
   </oc-button>
 </template>
 
