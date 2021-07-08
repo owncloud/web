@@ -1,0 +1,6 @@
+Bugfix: Download action permission
+
+Prevent download action from being shown when the user does not have the relevant permission.
+
+https://github.com/owncloud/web/pull/5476
+https://github.com/owncloud/web/issues/5451
