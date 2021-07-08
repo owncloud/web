@@ -11,6 +11,7 @@ Summary
 * Bugfix - Batch action for deleting adhering permissions: [#5441](https://github.com/owncloud/web/pull/5441)
 * Enhancement - Add view options: [#5408](https://github.com/owncloud/web/pull/5408)
 * Enhancement - Details in Sharing Sidebar: [#5161](https://github.com/owncloud/web/issues/5161)
+* Enhancement - Feedback link: [#5468](https://github.com/owncloud/web/pull/5468)
 * Enhancement - Batch actions for accepting and declining shares: [#5204](https://github.com/owncloud/web/issues/5204)
 * Enhancement - Update owncloud-design-system to v7.5.0: [#5408](https://github.com/owncloud/web/pull/5408)
 * Enhancement - Update Design System to 8.0.0: [#5465](https://github.com/owncloud/web/pull/5465)
@@ -41,6 +42,14 @@ Details
 
    https://github.com/owncloud/web/issues/5161
    https://github.com/owncloud/web/pull/5284
+
+* Enhancement - Feedback link: [#5468](https://github.com/owncloud/web/pull/5468)
+
+   We've added a feedback link in the topbar which opens a survey in a new tab. The intention is to
+   gather feedback from users. There is a config option to disable the link (see docs "getting
+   started").
+
+   https://github.com/owncloud/web/pull/5468
 
 * Enhancement - Batch actions for accepting and declining shares: [#5204](https://github.com/owncloud/web/issues/5204)
 
