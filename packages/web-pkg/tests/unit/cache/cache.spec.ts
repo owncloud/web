@@ -1,4 +1,4 @@
-import Cache from './cache'
+import Cache from '../../../src/cache/cache'
 
 const newCache = <T>(vs: T[], ttl?: number, capacity?: number): Cache<number, T> => {
   const cache = new Cache<number, T>({ ttl, capacity })

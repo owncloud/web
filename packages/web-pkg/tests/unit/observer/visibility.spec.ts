@@ -1,4 +1,4 @@
-import { VisibilityObserver } from './visibility'
+import { VisibilityObserver } from '../../../src/observer'
 
 let callback
 let mockIntersectionObserver

@@ -1,4 +1,4 @@
-import { objectKeys } from './objectKeys'
+import { objectKeys } from '../../../src/utils'
 
 describe('objectKeys', () => {
   it('should return the correct keys', () => {

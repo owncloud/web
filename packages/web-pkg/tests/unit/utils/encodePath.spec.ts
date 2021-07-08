@@ -1,4 +1,4 @@
-import { encodePath } from './encodePath'
+import { encodePath } from '../../../src/utils'
 
 describe('encodePath', () => {
   it('is empty if input is empty', () => {
