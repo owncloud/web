@@ -57,7 +57,7 @@ describe('ViewOptions', () => {
     expect(mutations.SET_FILES_PAGE_LIMIT).toHaveBeenCalled()
   })
 
-  it('triggeres mutation to toggle hidden files', async () => {
+  it('triggeres mutation to toggle hidden files', () => {
     const wrapper = shallowMount(ViewOptions, {
       store,
       localVue,
