@@ -23,6 +23,7 @@ namespace OCA\Web\Controller;
 
 use GuzzleHttp\Mimetypes;
 use OC\AppFramework\Http;
+use OCP\App\IAppManager;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\ContentSecurityPolicy;
 use OCP\AppFramework\Http\DataDisplayResponse;
@@ -42,17 +43,23 @@ class FilesController extends Controller {
 	 * @var IConfig
 	 */
 	private $config;
+    /**
+     * @var IAppManager
+     */
+	private $appManager;
 
-	/**
-	 * FilesController constructor.
-	 *
-	 * @param string $appName
-	 * @param IRequest $request
-	 * @param IConfig $config
-	 */
-	public function __construct(string $appName, IRequest $request, IConfig $config) {
+    /**
+     * FilesController constructor.
+     *
+     * @param string $appName
+     * @param IRequest $request
+     * @param IConfig $config
+     * @param IAppManager $appManager
+     */
+	public function __construct(string $appName, IRequest $request, IConfig $config, IAppManager  $appManager) {
 		parent::__construct($appName, $request);
 		$this->config = $config;
+		$this->appManager = $appManager;
 	}
 
 	/**
@@ -144,8 +151,12 @@ class FilesController extends Controller {
      * Extracts the onlyoffice document server URL from the app
      *
      * @return string
+     * @throws \OCP\AppFramework\QueryException
      */
     private function getOnlyOfficeDocumentServerUrl(): string {
+        if (!$this->isAppEnabled("onlyoffice")) {
+            return "";
+        }
         if (!class_exists("\OCA\Onlyoffice\AppConfig")) {
             return "";
         }
@@ -171,10 +182,16 @@ class FilesController extends Controller {
      * @throws \OCP\AppFramework\QueryException
      */
     private function getRichDocumentsServerUrl(): string {
+        if (!$this->isAppEnabled("richdocuments")) {
+            return "";
+        }
         if (!class_exists("\OCA\Richdocuments\AppConfig")) {
             return "";
         }
         $richdocumentsConfig = \OC::$server->query(\OCA\Richdocuments\AppConfig::class);
+        if (empty($richdocumentsConfig)) {
+            return "";
+        }
         return $richdocumentsConfig->getAppValue('wopi_url');
     }
 
@@ -192,5 +209,18 @@ class FilesController extends Controller {
         return (isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] . '://' : '')
             . $parsedUrl['host']
             . (isset($parsedUrl['port']) ? ':' . $parsedUrl['port'] : '');
+    }
+
+    /**
+     * Checks whether the given app is installed and enabled.
+     *
+     * @param string $appName
+     * @return bool
+     */
+    private function isAppEnabled(string $appName): bool {
+        if (!$this->appManager->isInstalled($appName)) {
+            return false;
+        }
+        return $this->appManager->isEnabledForUser($appName);
     }
 }
