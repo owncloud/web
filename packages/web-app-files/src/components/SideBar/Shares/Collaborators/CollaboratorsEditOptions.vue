@@ -9,7 +9,7 @@
       :clearable="false"
       label="label"
     >
-      <template v-slot:option="option">
+      <template #option="option">
         <role-item :role="option" />
       </template>
       <template #no-options v-translate>

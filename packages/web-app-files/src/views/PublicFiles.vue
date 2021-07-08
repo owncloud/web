@@ -9,10 +9,10 @@
         class="files-empty"
         icon="folder"
       >
-        <template v-slot:message>
+        <template #message>
           <span v-translate>There are no resources in this folder</span>
         </template>
-        <template v-if="currentFolder.canCreate()" v-slot:callToAction>
+        <template v-if="currentFolder.canCreate()" #callToAction>
           <span v-translate>Drag files and folders here or use the "+ New" button to upload</span>
         </template>
       </no-content-message>

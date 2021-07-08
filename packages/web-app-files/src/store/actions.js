@@ -432,7 +432,13 @@ export default {
     })
   },
   async loadVersions(context, { client, fileId }) {
-    const response = await client.fileVersions.listVersions(fileId)
+    let response
+    try {
+      response = await client.fileVersions.listVersions(fileId)
+    } catch (e) {
+      console.error(e)
+      response = []
+    }
     context.commit('SET_VERSIONS', response)
   },
   dragOver(context, value) {

@@ -9,10 +9,10 @@
         class="files-empty"
         icon="folder"
       >
-        <template v-slot:message>
+        <template #message>
           <span v-translate>There are no resources in this folder</span>
         </template>
-        <template v-slot:callToAction>
+        <template #callToAction>
           <span v-translate>Drag files and folders here or use the "+ New" button to upload</span>
         </template>
       </no-content-message>
@@ -31,7 +31,7 @@
         @fileClick="$_fileActions_triggerDefaultAction"
         @rowMounted="rowMounted"
       >
-        <template v-slot:quickActions="{ resource }">
+        <template #quickActions="{ resource }">
           <quick-actions
             :class="resource.preview"
             class="oc-visible@s"

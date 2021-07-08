@@ -11,6 +11,7 @@ import FilesDrop from './views/FilesDrop.vue'
 import LocationPicker from './views/LocationPicker.vue'
 import PublicFiles from './views/PublicFiles.vue'
 import FileDetails from './components/SideBar/Details/FileDetails.vue'
+import FileActions from './components/SideBar/Actions/FileActions.vue'
 import FileVersions from './components/SideBar/Versions/FileVersions.vue'
 import FileShares from './components/SideBar/Shares/FileShares.vue'
 import FileLinks from './components/SideBar/Links/FileLinks.vue'
@@ -33,10 +34,18 @@ const appInfo = {
   fileSideBars: [
     {
       app: 'details-item',
-      icon: 'info',
+      icon: 'info_outline',
       component: FileDetails,
       enabled() {
-        return undefined
+        return true
+      }
+    },
+    {
+      app: 'actions-item',
+      component: FileActions,
+      icon: 'slideshow',
+      enabled() {
+        return true
       }
     },
     {

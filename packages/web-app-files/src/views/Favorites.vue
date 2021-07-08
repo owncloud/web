@@ -23,7 +23,7 @@
         @fileClick="$_fileActions_triggerDefaultAction"
         @rowMounted="rowMounted"
       >
-        <template v-slot:quickActions="props">
+        <template #quickActions="props">
           <quick-actions class="oc-visible@s" :item="props.resource" :actions="app.quickActions" />
         </template>
         <template #footer>
