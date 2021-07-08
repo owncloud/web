@@ -23,12 +23,13 @@ namespace OCA\Web\Controller;
 
 use GuzzleHttp\Mimetypes;
 use OC\AppFramework\Http;
+use OCP\App\IAppManager;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\ContentSecurityPolicy;
 use OCP\AppFramework\Http\DataDisplayResponse;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\Response;
-use OCP\ILogger;
+use OCP\IConfig;
 use OCP\IRequest;
 
 /**
@@ -39,20 +40,26 @@ use OCP\IRequest;
 class FilesController extends Controller {
 
 	/**
-	 * @var ILogger
+	 * @var IConfig
 	 */
-	private $logger;
+	private $config;
+    /**
+     * @var IAppManager
+     */
+	private $appManager;
 
-	/**
-	 * FilesController constructor.
-	 *
-	 * @param string $appName
-	 * @param IRequest $request
-	 * @param ILogger $logger
-	 */
-	public function __construct(string $appName, IRequest $request, ILogger $logger) {
+    /**
+     * FilesController constructor.
+     *
+     * @param string $appName
+     * @param IRequest $request
+     * @param IConfig $config
+     * @param IAppManager $appManager
+     */
+	public function __construct(string $appName, IRequest $request, IConfig $config, IAppManager  $appManager) {
 		parent::__construct($appName, $request);
-		$this->logger = $logger;
+		$this->config = $config;
+		$this->appManager = $appManager;
 	}
 
 	/**
@@ -104,11 +111,21 @@ class FilesController extends Controller {
 			'Expires' => 'Wed, 11 Jan 1984 05:00:00 GMT',
 			'X-Frame-Options' => 'DENY'
 		]);
-		if (\strpos($path, "index.html") === 0 || \strpos($path, "oidc-callback.html") === 0 || \strpos($path, "oidc-silent-redirect.html") === 0) {
+		if (\strpos($path, "oidc-callback.html") === 0 || \strpos($path, "oidc-silent-redirect.html") === 0) {
 			$csp = new ContentSecurityPolicy();
 			$csp->allowInlineScript(true);
 			$response->setContentSecurityPolicy($csp);
 		}
+		if (\strpos($path, "index.html") === 0) {
+            $csp = new ContentSecurityPolicy();
+            $csp->allowInlineScript(true);
+
+            // for now we set CSP rules manually, until we have sufficient requirements for a generic solution.
+            $csp = $this->applyCSPOnlyOffice($csp);
+            $csp = $this->applyCSPRichDocuments($csp);
+
+            $response->setContentSecurityPolicy($csp);
+        }
 
 		return $response;
 	}
@@ -117,4 +134,93 @@ class FilesController extends Controller {
 		$mimeTypes = Mimetypes::getInstance();
 		return $mimeTypes->fromFilename($filename);
 	}
+
+	private function applyCSPOnlyOffice(ContentSecurityPolicy $csp): ContentSecurityPolicy {
+        $ooUrl = $this->getOnlyOfficeDocumentServerUrl();
+        $documentServerUrl = $this->extractDomain($ooUrl);
+        if (!empty($documentServerUrl)) {
+            $csp->addAllowedScriptDomain($documentServerUrl);
+            $csp->addAllowedFrameDomain($documentServerUrl);
+        } else if (!empty($ooUrl)) {
+            $csp->addAllowedFrameDomain("'self'");
+	}
+        return $csp;
+    }
+
+    /**
+     * Extracts the onlyoffice document server URL from the app
+     *
+     * @return string
+     * @throws \OCP\AppFramework\QueryException
+     */
+    private function getOnlyOfficeDocumentServerUrl(): string {
+        if (!$this->isAppEnabled("onlyoffice")) {
+            return "";
+        }
+        if (!class_exists("\OCA\Onlyoffice\AppConfig")) {
+            return "";
+        }
+        $onlyofficeConfig = \OC::$server->query(\OCA\Onlyoffice\AppConfig::class);
+        return $onlyofficeConfig->GetDocumentServerUrl();
+    }
+
+    private function applyCSPRichDocuments(ContentSecurityPolicy $csp): ContentSecurityPolicy {
+        $documentServerUrl = $this->extractDomain($this->getRichDocumentsServerUrl());
+        if (!empty($documentServerUrl)) {
+            $csp->addAllowedFrameDomain($documentServerUrl);
+        }
+        return $csp;
+    }
+
+    /**
+     * Extracts the richdocuments document server URL from the app-config, in the same manner like
+     * the richdocuments app:
+     * - https://github.com/owncloud/richdocuments/blob/9a23f426048c540793fc16119f71a44c26077f16/lib/Controller/DocumentController.php#L122
+     * - https://github.com/owncloud/richdocuments/blob/9a23f426048c540793fc16119f71a44c26077f16/lib/Controller/DocumentController.php#L393
+     *
+     * @return string
+     * @throws \OCP\AppFramework\QueryException
+     */
+    private function getRichDocumentsServerUrl(): string {
+        if (!$this->isAppEnabled("richdocuments")) {
+            return "";
+        }
+        if (!class_exists("\OCA\Richdocuments\AppConfig")) {
+            return "";
+        }
+        $richdocumentsConfig = \OC::$server->query(\OCA\Richdocuments\AppConfig::class);
+        if (empty($richdocumentsConfig)) {
+            return "";
+        }
+        return $richdocumentsConfig->getAppValue('wopi_url');
+    }
+
+    /**
+     * Extracts the domain part from a url.
+     *
+     * @param string $url
+     * @return string
+     */
+    private function extractDomain(string $url): string {
+        $parsedUrl = \parse_url($url);
+        if (empty($parsedUrl['host'])) {
+            return "";
+        }
+        return (isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] . '://' : '')
+            . $parsedUrl['host']
+            . (isset($parsedUrl['port']) ? ':' . $parsedUrl['port'] : '');
+    }
+
+    /**
+     * Checks whether the given app is installed and enabled.
+     *
+     * @param string $appName
+     * @return bool
+     */
+    private function isAppEnabled(string $appName): bool {
+        if (!$this->appManager->isInstalled($appName)) {
+            return false;
+        }
+        return $this->appManager->isEnabledForUser($appName);
+    }
 }
