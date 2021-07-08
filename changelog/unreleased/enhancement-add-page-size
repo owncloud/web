@@ -1,0 +1,6 @@
+Enhancement: add page size view option
+
+We've added a new item into the view options which can be used to set the number of items displayed per page.
+This value is persisted in the local storage so that the user doesn't have to update it every time he visits the app.
+
+https://github.com/owncloud/web/pull/5470

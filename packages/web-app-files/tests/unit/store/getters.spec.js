@@ -8,7 +8,8 @@ describe('Getters', () => {
     state = {
       files: FixtureFiles['/'],
       searchTermGlobal: '',
-      filesPageLimit: 10
+      filesPageLimit: 10,
+      areHiddenFilesShown: true
     }
   })
 
@@ -20,6 +21,24 @@ describe('Getters', () => {
 
     it.each(cases)('%s hidden files if areHiddenFilesShown is set to %s', value => {
       state.areHiddenFilesShown = value
+
+      const { activeFiles, filesAll } = getters
+      const result = activeFiles(state, { filesAll: filesAll(state) })
+
+      expect(result.length).toEqual(5)
+    })
+
+    it('returns only a portion of files if files page limit is set', () => {
+      state.filesPageLimit = 2
+
+      const { activeFiles, filesAll } = getters
+      const result = activeFiles(state, { filesAll: filesAll(state) })
+
+      expect(result.length).toEqual(2)
+    })
+
+    it('returns all files if files page limit is of type string', () => {
+      state.filesPageLimit = 'All'
 
       const { activeFiles, filesAll } = getters
       const result = activeFiles(state, { filesAll: filesAll(state) })

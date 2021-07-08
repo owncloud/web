@@ -99,35 +99,7 @@
           <size-info v-if="selectedFiles.length > 0" class="oc-mr-s uk-visible@l" />
           <batch-actions />
         </div>
-        <oc-button
-          id="files-view-options-btn"
-          key="files-view-options-btn"
-          data-testid="files-view-options-btn"
-          :aria-label="viewButtonAriaLabel"
-          variation="passive"
-          appearance="raw"
-          size="small"
-          gap-size="xsmall"
-        >
-          <oc-icon name="tune" size="small" />
-          <translate>View</translate>
-        </oc-button>
-        <oc-drop
-          drop-id="files-view-options-drop"
-          toggle="#files-view-options-btn"
-          mode="click"
-          class="uk-width-auto"
-        >
-          <oc-list>
-            <li>
-              <oc-switch
-                v-model="hiddenFilesShownModel"
-                data-testid="files-switch-hidden-files"
-                :label="$gettext('Show hidden files')"
-              />
-            </li>
-          </oc-list>
-        </oc-drop>
+        <view-options />
       </div>
     </div>
   </div>
@@ -149,6 +121,7 @@ import FileDrop from './Upload/FileDrop.vue'
 import FileUpload from './Upload/FileUpload.vue'
 import FolderUpload from './Upload/FolderUpload.vue'
 import SizeInfo from './SelectedResources/SizeInfo.vue'
+import ViewOptions from './ViewOptions.vue'
 
 export default {
   components: {
@@ -156,7 +129,8 @@ export default {
     FileDrop,
     FileUpload,
     FolderUpload,
-    SizeInfo
+    SizeInfo,
+    ViewOptions
   },
   mixins: [Mixins, MixinFileActions, MixinRoutes, MixinScrollToResource],
   data: () => ({
@@ -192,10 +166,6 @@ export default {
         return tooltip
       }
       return this.$gettext('Add files or folders')
-    },
-
-    viewButtonAriaLabel() {
-      return this.$gettext('Display customization options of the files list')
     },
 
     currentPath() {
@@ -304,16 +274,6 @@ export default {
         this.selectedFiles.length
       )
       return this.$gettextInterpolate(translated, { amount: this.selectedFiles.length })
-    },
-
-    hiddenFilesShownModel: {
-      get() {
-        return this.areHiddenFilesShown
-      },
-
-      set(value) {
-        this.SET_HIDDEN_FILES_VISIBILITY(value)
-      }
     }
   },
 
