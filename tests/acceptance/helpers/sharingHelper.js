@@ -380,7 +380,6 @@ module.exports = {
       .deleteOCS(apiURL, user)
       .then(res => {
         res = httpHelper.checkStatus(res, 'The response status is not the expected value')
-        console.log('deleted Share')
         return res.json()
       })
       .then(res => {

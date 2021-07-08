@@ -109,6 +109,19 @@ async function createUser(
     })
 }
 
+async function createUserWithAttributes(
+  { username, password = false, displayname = false, email = false },
+  skeletonType = 'small',
+  initialize = false
+) {
+  password = password || userSettings.getPasswordForUser(username)
+  await deleteUser(username)
+  await createUser(username, password, displayname, email, skeletonType)
+  if (initialize) {
+    await initUser(username)
+  }
+}
+
 function deleteUser(userId) {
   userSettings.deleteUserFromCreatedUsersList(userId)
   const url = `cloud/users/${userId}`
@@ -252,13 +265,19 @@ Given(
     codify.replaceInlineTable(dataTable)
     return Promise.all(
       dataTable.hashes().map(user => {
-        const userId = user.username
-        const password = user.password || userSettings.getPasswordForUser(userId)
-        const displayName = user.displayname || false
-        const email = user.email || false
-        return deleteUser(userId).then(() =>
-          createUser(userId, password, displayName, email, skeletonType)
-        )
+        return createUserWithAttributes(user, skeletonType)
+      })
+    )
+  }
+)
+
+Given(
+  /^these users have been created with initialization and (without|small|large) skeleton files:$/,
+  function(skeletonType, dataTable) {
+    codify.replaceInlineTable(dataTable)
+    return Promise.all(
+      dataTable.hashes().map(user => {
+        return createUserWithAttributes(user, skeletonType, true)
       })
     )
   }
@@ -324,13 +343,15 @@ After(async function() {
   const createdGroups = userSettings.getCreatedGroups()
 
   if (client.globals.ocis) {
-    const deleteSharePromises = createdUsers.map(user => {
-      return sharingHelper.getAllSharesSharedByUser(user).then(shares => {
-        if (shares.length) {
-          return Promise.all(shares.map(share => sharingHelper.deleteShare(share.id, user)))
+    const deleteSharePromises = []
+    for (const user of createdUsers) {
+      const shares = await sharingHelper.getAllSharesSharedByUser(user)
+      if (shares.length) {
+        for (const share of shares) {
+          await sharingHelper.deleteShare(share.id, user)
         }
-      })
-    })
+      }
+    }
     await Promise.all(deleteSharePromises).catch(err => {
       console.log('Error while deleting shares after test: ', err)
     })

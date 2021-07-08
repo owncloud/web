@@ -67,15 +67,6 @@ const checkOCSStatus = function(response, message = '') {
 
 /**
  *
- * @param {string} url
- * @param {object} options
- *
- * @returns {node-fetch}
- */
-const fetcher = (url, options) => fetch(url, options)
-
-/**
- *
  * @param {string} path
  * @param {object} params
  * @param {string} userId
@@ -87,7 +78,7 @@ const requestEndpoint = function(path, params, userId = 'admin', header = {}) {
   const headers = { ...createAuthHeader(userId), ...header }
   const options = { ...params, headers }
   const url = join(backendHelper.getCurrentBackendUrl(), 'remote.php/dav', path)
-  return fetcher(url, options)
+  return fetch(url, options)
 }
 
 /**
@@ -108,7 +99,7 @@ const requestOCSEndpoint = function(path, params, userId = 'admin', header = {})
     'ocs/v2.php',
     path + separator + 'format=json'
   )
-  return fetcher(url, options)
+  return fetch(url, options)
 }
 
 module.exports = {
