@@ -42,6 +42,7 @@ Details
 
    https://github.com/owncloud/web/issues/5161
    https://github.com/owncloud/web/pull/5284
+   https://github.com/owncloud/web/pull/5483
 
 * Enhancement - Feedback link: [#5468](https://github.com/owncloud/web/pull/5468)
 
@@ -71,11 +72,11 @@ Details
 
 * Enhancement - Update Design System to 8.0.0: [#5465](https://github.com/owncloud/web/pull/5465)
 
-   The ownCloud design system has been updated, bringing mostly small bugfixes and adding a
-   differentiation between `previews` and `thumbnails`.
+   The ownCloud design system has been updated to its latest version.
 
    https://github.com/owncloud/web/pull/5465
-   https://github.com/owncloud/owncloud-design-system/releases/tag/v8.0.0-rc2
+   https://github.com/owncloud/web/pull/5483
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v8.0.0
 
 Changelog for ownCloud Web [3.3.1] (2021-06-28)
 =======================================
