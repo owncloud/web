@@ -13,6 +13,7 @@ Summary
 * Enhancement - Add view options: [#5408](https://github.com/owncloud/web/pull/5408)
 * Enhancement - Details in Sharing Sidebar: [#5161](https://github.com/owncloud/web/issues/5161)
 * Enhancement - Feedback link: [#5468](https://github.com/owncloud/web/pull/5468)
+* Enhancement - Content Security Policy for known iframe integrations: [#5420](https://github.com/owncloud/web/pull/5420)
 * Enhancement - Batch actions for accepting and declining shares: [#5204](https://github.com/owncloud/web/issues/5204)
 * Enhancement - Update owncloud-design-system to v7.5.0: [#5408](https://github.com/owncloud/web/pull/5408)
 * Enhancement - Update Design System to 8.0.0: [#5465](https://github.com/owncloud/web/pull/5465)
@@ -60,6 +61,13 @@ Details
    started").
 
    https://github.com/owncloud/web/pull/5468
+
+* Enhancement - Content Security Policy for known iframe integrations: [#5420](https://github.com/owncloud/web/pull/5420)
+
+   We added CSP rules for allowing iframe integrations of the onlyoffice and richdocuments
+   documentservers.
+
+   https://github.com/owncloud/web/pull/5420
 
 * Enhancement - Batch actions for accepting and declining shares: [#5204](https://github.com/owncloud/web/issues/5204)
 
