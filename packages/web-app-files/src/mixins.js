@@ -31,8 +31,7 @@ export default {
 
     _sidebarOpen() {
       return this.highlightedFile !== null
-    },
-
+    }
   },
   methods: {
     ...mapActions('Files', [

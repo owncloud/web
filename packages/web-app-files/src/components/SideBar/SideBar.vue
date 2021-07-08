@@ -79,12 +79,7 @@ import MixinResources from '../../mixins/resources'
 import MixinRoutes from '../../mixins/routes'
 import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
 
-import FileActions from './Actions/FileActions.vue'
-
 export default {
-  components: {
-    FileActions
-  },
   mixins: [Mixins, MixinResources, MixinRoutes],
   computed: {
     ...mapGetters(['fileSideBars', 'capabilities']),
@@ -92,24 +87,11 @@ export default {
     ...mapState('Files', ['appSidebarExpandedAccordion']),
 
     accordions() {
-      const accordions = [
-        {
-          app: 'actions-item',
-          component: FileActions,
-          icon: 'slideshow'
-        }
-      ]
-      accordions.splice(0, 0, this.fileSideBars[0])
-
       if (this.isTrashbinRoute) {
-        return accordions
+        return [this.fileSideBars.find(bar => bar.app === 'actions-item')]
       }
 
-      return accordions.concat(
-        this.fileSideBars.filter(
-          b => b.enabled === undefined || b.enabled(this.capabilities, this.highlightedFile)
-        )
-      )
+      return this.fileSideBars.filter(b => b.enabled(this.capabilities, this.highlightedFile))
     },
 
     isFavoritesEnabled() {
@@ -162,7 +144,7 @@ export default {
   watch: {
     highlightedFile: function() {
       if (this.expandedAccordionId === null) {
-        this.expandDetailsAccordion()
+        this.expandFirstAccordion()
       }
       this.$nextTick(() => this.$emit('fileChanged', this, 'fileChanged'))
     }
@@ -174,7 +156,7 @@ export default {
 
   mounted() {
     if (this.expandedAccordionId === null) {
-      this.expandDetailsAccordion()
+      this.expandFirstAccordion()
     }
   },
 
@@ -206,8 +188,9 @@ export default {
       )
     },
 
-    expandDetailsAccordion() {
-      this.SET_APP_SIDEBAR_EXPANDED_ACCORDION('details-item')
+    expandFirstAccordion() {
+      const firstAccordion = this.accordions[0]
+      this.SET_APP_SIDEBAR_EXPANDED_ACCORDION(firstAccordion.app)
     },
 
     onClickOutside(event) {

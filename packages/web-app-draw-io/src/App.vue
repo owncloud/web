@@ -2,7 +2,7 @@
   <main>
     <oc-spinner
       v-if="loading"
-      :aria-label="this.$gettext('Loading media')"
+      :aria-label="$gettext('Loading media')"
       class="uk-position-center"
       size="xlarge"
     />

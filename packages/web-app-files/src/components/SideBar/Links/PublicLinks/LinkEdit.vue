@@ -24,7 +24,7 @@
         label="label"
         class="oc-mb files-file-link-role-button-wrapper"
       >
-        <template v-slot:option="option">
+        <template #option="option">
           <role-item :role="option" />
         </template>
         <template #no-options v-translate>

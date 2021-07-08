@@ -14,7 +14,7 @@
       @input="$_ocCollaborators_selectAutocompleteResult"
       @update:input="$_onAutocompleteInput"
     >
-      <template v-slot:item="{ item }">
+      <template #item="{ item }">
         <autocomplete-item :item="item" />
       </template>
     </oc-autocomplete>

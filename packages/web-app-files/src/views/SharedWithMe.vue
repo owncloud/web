@@ -29,7 +29,7 @@
         @fileClick="$_fileActions_triggerDefaultAction"
         @rowMounted="rowMounted"
       >
-        <template v-slot:status="{ resource }">
+        <template #status="{ resource }">
           <div
             :key="resource.id + resource.status"
             class="uk-text-nowrap uk-flex uk-flex-middle uk-flex-right"
