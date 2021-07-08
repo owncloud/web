@@ -4,7 +4,7 @@
     :pages="pages"
     :current-page="currentPage"
     :max-displayed="3"
-    :current-route="targetRoute"
+    :current-route="$route"
     class="files-pagination uk-flex uk-flex-center oc-my-s"
   />
 </template>
@@ -15,11 +15,7 @@ import { mapState, mapGetters } from 'vuex'
 export default {
   computed: {
     ...mapState('Files', ['currentPage']),
-    ...mapGetters('Files', ['pages']),
-
-    targetRoute() {
-      return { name: this.$route.name, query: this.$route.query, params: this.$route.params }
-    }
+    ...mapGetters('Files', ['pages'])
   }
 }
 </script>
