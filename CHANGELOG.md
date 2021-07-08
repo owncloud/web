@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Batch action for deleting adhering permissions: [#5441](https://github.com/owncloud/web/pull/5441)
+* Enhancement - Add page size view option: [#5470](https://github.com/owncloud/web/pull/5470)
 * Enhancement - Add view options: [#5408](https://github.com/owncloud/web/pull/5408)
 * Enhancement - Details in Sharing Sidebar: [#5161](https://github.com/owncloud/web/issues/5161)
 * Enhancement - Feedback link: [#5468](https://github.com/owncloud/web/pull/5468)
@@ -25,6 +26,14 @@ Details
    have viewer permissions.
 
    https://github.com/owncloud/web/pull/5441
+
+* Enhancement - Add page size view option: [#5470](https://github.com/owncloud/web/pull/5470)
+
+   We've added a new item into the view options which can be used to set the number of items displayed
+   per page. This value is persisted in the local storage so that the user doesn't have to update it
+   every time he visits the app.
+
+   https://github.com/owncloud/web/pull/5470
 
 * Enhancement - Add view options: [#5408](https://github.com/owncloud/web/pull/5408)
 
