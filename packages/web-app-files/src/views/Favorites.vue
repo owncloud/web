@@ -27,14 +27,7 @@
           <quick-actions class="oc-visible@s" :item="props.resource" :actions="app.quickActions" />
         </template>
         <template #footer>
-          <oc-pagination
-            v-if="pages > 1"
-            :pages="pages"
-            :current-page="currentPage"
-            :max-displayed="3"
-            :current-route="$_filesListPagination_targetRoute"
-            class="files-pagination uk-flex uk-flex-center oc-my-s"
-          />
+          <pagination />
           <list-info
             v-if="activeFiles.length > 0"
             class="uk-width-1-1 oc-my-s"
@@ -56,19 +49,20 @@ import FileActions from '../mixins/fileActions'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
 import MixinFilesListPagination from '../mixins/filesListPagination'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
+import { VisibilityObserver } from 'web-pkg/src/observer'
+import { ImageDimension, ImageType } from '../constants'
+import debounce from 'lodash-es/debounce'
 
 import QuickActions from '../components/FilesList/QuickActions.vue'
 import ListLoader from '../components/FilesList/ListLoader.vue'
 import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
-import { VisibilityObserver } from 'web-pkg/src/observer'
-import { ImageDimension, ImageType } from '../constants'
-import debounce from 'lodash-es/debounce'
+import Pagination from '../components/FilesList/Pagination.vue'
 
 const visibilityObserver = new VisibilityObserver()
 
 export default {
-  components: { QuickActions, ListLoader, NoContentMessage, ListInfo },
+  components: { QuickActions, ListLoader, NoContentMessage, ListInfo, Pagination },
 
   mixins: [FileActions, MixinFilesListPositioning, MixinFilesListPagination, MixinMountSideBar],
 
@@ -78,7 +72,7 @@ export default {
 
   computed: {
     ...mapState(['app']),
-    ...mapState('Files', ['currentPage', 'files']),
+    ...mapState('Files', ['files']),
     ...mapGetters('Files', [
       'davProperties',
       'highlightedFile',
@@ -86,8 +80,7 @@ export default {
       'selectedFiles',
       'inProgress',
       'totalFilesCount',
-      'totalFilesSize',
-      'pages'
+      'totalFilesSize'
     ]),
     ...mapGetters(['user', 'configuration']),
 

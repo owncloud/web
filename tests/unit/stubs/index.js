@@ -12,5 +12,6 @@ export default {
   'oc-list': true,
   'oc-switch': true,
   'oc-loader': true,
-  'oc-img': true
+  'oc-img': true,
+  'oc-page-size': true
 }

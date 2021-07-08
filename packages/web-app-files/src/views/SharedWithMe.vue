@@ -59,14 +59,7 @@
           </div>
         </template>
         <template #footer>
-          <oc-pagination
-            v-if="pages > 1"
-            :pages="pages"
-            :current-page="currentPage"
-            :max-displayed="3"
-            :current-route="$_filesListPagination_targetRoute"
-            class="files-pagination uk-flex uk-flex-center oc-my-s"
-          />
+          <pagination />
           <list-info
             v-if="activeFiles.length > 0"
             class="uk-width-1-1 oc-my-s"
@@ -89,13 +82,14 @@ import MixinDeclineShare from '../mixins/actions/declineShare'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
 import MixinFilesListPagination from '../mixins/filesListPagination'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
+import { VisibilityObserver } from 'web-pkg/src/observer'
+import { ImageDimension, ImageType } from '../constants'
+import debounce from 'lodash-es/debounce'
 
 import ListLoader from '../components/FilesList/ListLoader.vue'
 import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
-import { VisibilityObserver } from 'web-pkg/src/observer'
-import { ImageDimension, ImageType } from '../constants'
-import debounce from 'lodash-es/debounce'
+import Pagination from '../components/FilesList/Pagination.vue'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -103,7 +97,8 @@ export default {
   components: {
     ListLoader,
     NoContentMessage,
-    ListInfo
+    ListInfo,
+    Pagination
   },
 
   mixins: [
@@ -122,15 +117,14 @@ export default {
 
   computed: {
     ...mapState(['app']),
-    ...mapState('Files', ['currentPage', 'files']),
+    ...mapState('Files', ['files']),
     ...mapGetters('Files', [
       'davProperties',
       'highlightedFile',
       'activeFiles',
       'selectedFiles',
       'inProgress',
-      'totalFilesCount',
-      'pages'
+      'totalFilesCount'
     ]),
     ...mapGetters(['isOcis', 'configuration', 'getToken', 'user']),
 
@@ -168,6 +162,7 @@ export default {
     uploadProgressVisible() {
       this.adjustTableHeaderPosition()
     },
+
     $route: {
       handler: '$_filesListPagination_updateCurrentPage',
       immediate: true

@@ -4,11 +4,15 @@ import Favorites from 'packages/web-app-files/src/views/Favorites.vue'
 import { createStore } from 'vuex-extensions'
 import { createFile, localVue, getStore } from './views.setup'
 import Vuex from 'vuex'
+import VueRouter from 'vue-router'
 
 localVue.use(GetTextPlugin, {
   translations: 'does-not-matter.json',
   silent: true
 })
+localVue.use(VueRouter)
+
+const router = new VueRouter()
 
 jest.unmock('axios')
 
@@ -27,6 +31,7 @@ const stubs = {
 const defaultWrapper = mount(component, {
   store: getStore(),
   localVue,
+  router,
   stubs: stubs,
   data: () => ({
     loading: false
@@ -39,6 +44,7 @@ describe('Favorites component', () => {
       const wrapper = mount(component, {
         store: getStore(),
         localVue,
+        router,
         stubs: stubs,
         data: () => ({
           loading: true
@@ -67,13 +73,15 @@ describe('Favorites component', () => {
                 inProgress: () => [null]
               },
               mutations: {
-                UPDATE_CURRENT_PAGE: () => {}
+                UPDATE_CURRENT_PAGE: () => {},
+                SET_FILES_PAGE_LIMIT: () => {}
               },
               namespaced: true
             }
           }
         }),
         localVue,
+        router,
         stubs: stubs,
         data: () => ({
           loading: false
@@ -105,6 +113,7 @@ describe('Favorites component', () => {
       const wrapper = mount(component, {
         store: getStore({ highlightedFile: createFile({ id: 234 }) }),
         localVue,
+        router,
         stubs: stubs,
         data: () => ({
           loading: false
@@ -132,6 +141,7 @@ describe('Favorites component', () => {
             }
           }),
           localVue,
+          router,
           stubs: stubs,
           data: () => ({
             loading: false
@@ -155,6 +165,7 @@ describe('Favorites component', () => {
         const wrapper = mount(component, {
           store: getStore(),
           localVue,
+          router,
           stubs: stubs,
           data: () => ({
             loading: false
@@ -168,6 +179,7 @@ describe('Favorites component', () => {
         const wrapper = mount(component, {
           store: getStore({ pages: 1 }),
           localVue,
+          router,
           stubs: stubs,
           data: () => ({
             loading: false
@@ -185,6 +197,7 @@ describe('Favorites component', () => {
         const wrapper = mount(component, {
           store: getStore(),
           localVue,
+          router,
           stubs: stubs,
           data: () => ({
             loading: false
@@ -198,6 +211,7 @@ describe('Favorites component', () => {
         const wrapper = mount(component, {
           store: getStore({ activeFiles: [createFile({ id: 3, status: 2, type: 'file' })] }),
           localVue,
+          router,
           stubs: stubs,
           data: () => ({
             loading: false
@@ -210,6 +224,7 @@ describe('Favorites component', () => {
         const wrapper = mount(component, {
           store: getStore({ activeFiles: [] }),
           localVue,
+          router,
           stubs: stubs,
           data: () => ({
             loading: false

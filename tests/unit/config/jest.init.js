@@ -14,12 +14,6 @@ try {
 
 config.mocks = {
   $gettext: str => str,
-  $route: {
-    params: {},
-    query: {},
-    name: '',
-    path: ''
-  },
   isIE11: () => false,
   $language: {
     current: 'en'

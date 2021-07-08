@@ -67,4 +67,14 @@ describe('vuex store mutations', () => {
 
     expect(state.areHiddenFilesShown).toEqual(false)
   })
+
+  it('sets the files page limit', () => {
+    const state = { filesPageLimit: 100 }
+    const { SET_FILES_PAGE_LIMIT } = mutations
+
+    SET_FILES_PAGE_LIMIT(state, 500)
+
+    expect(state.filesPageLimit).toEqual(500)
+    expect(window.localStorage.getItem('oc_filesPageLimit')).toEqual('500')
+  })
 })

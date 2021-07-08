@@ -46,7 +46,8 @@ export const getStore = function({
       Files: {
         state: {
           resource: null,
-          currentPage: 3
+          currentPage: 3,
+          filesPageLimit: 100
         },
         getters: {
           totalFilesCount: () => ({ files: 15, folders: 20 }),
@@ -62,7 +63,8 @@ export const getStore = function({
           UPDATE_RESOURCE: (state, resource) => {
             state.resource = resource
           },
-          UPDATE_CURRENT_PAGE: () => {}
+          UPDATE_CURRENT_PAGE: () => {},
+          SET_FILES_PAGE_LIMIT: () => {}
         },
         namespaced: true
       }

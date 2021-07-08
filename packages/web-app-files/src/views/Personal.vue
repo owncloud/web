@@ -40,14 +40,7 @@
           />
         </template>
         <template #footer>
-          <oc-pagination
-            v-if="pages > 1"
-            :pages="pages"
-            :current-page="currentPage"
-            :max-displayed="3"
-            :current-route="$_filesListPagination_targetRoute"
-            class="files-pagination uk-flex uk-flex-center oc-my-s"
-          />
+          <pagination />
           <list-info
             v-if="activeFiles.length > 0"
             class="uk-width-1-1 oc-my-s"
@@ -73,19 +66,20 @@ import MixinFilesListPositioning from '../mixins/filesListPositioning'
 import MixinFilesListPagination from '../mixins/filesListPagination'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 import { buildResource } from '../helpers/resources'
+import { VisibilityObserver } from 'web-pkg/src/observer'
+import { ImageDimension, ImageType } from '../constants'
 
 import QuickActions from '../components/FilesList/QuickActions.vue'
 import ListLoader from '../components/FilesList/ListLoader.vue'
 import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
 import NotFoundMessage from '../components/FilesList/NotFoundMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
-import { VisibilityObserver } from 'web-pkg/src/observer'
-import { ImageDimension, ImageType } from '../constants'
+import Pagination from '../components/FilesList/Pagination.vue'
 
 const visibilityObserver = new VisibilityObserver()
 
 export default {
-  components: { QuickActions, ListLoader, NoContentMessage, NotFoundMessage, ListInfo },
+  components: { QuickActions, ListLoader, NoContentMessage, NotFoundMessage, ListInfo, Pagination },
 
   mixins: [
     MixinAccessibleBreadcrumb,
@@ -102,7 +96,7 @@ export default {
 
   computed: {
     ...mapState(['app']),
-    ...mapState('Files', ['currentPage', 'files']),
+    ...mapState('Files', ['files']),
     ...mapGetters('Files', [
       'davProperties',
       'highlightedFile',
@@ -111,8 +105,7 @@ export default {
       'inProgress',
       'currentFolder',
       'totalFilesCount',
-      'totalFilesSize',
-      'pages'
+      'totalFilesSize'
     ]),
     ...mapGetters(['user', 'homeFolder', 'configuration']),
 
@@ -164,12 +157,13 @@ export default {
           return
         }
 
+        this.$_filesListPagination_updateCurrentPage()
+
         const sameRoute = to.name === from?.name
         const sameItem = to.params?.item === from?.params?.item
         if (!sameRoute || !sameItem) {
           this.loadResources(sameRoute)
         }
-        this.$_filesListPagination_updateCurrentPage()
       },
       immediate: true
     },

@@ -1,12 +1,6 @@
 import { mapMutations } from 'vuex'
 
 export default {
-  computed: {
-    $_filesListPagination_targetRoute() {
-      return { name: this.$route.name, query: this.$route.query, params: this.$route.params }
-    }
-  },
-
   methods: {
     ...mapMutations('Files', ['UPDATE_CURRENT_PAGE']),
 

@@ -19,7 +19,7 @@ export default {
       tusSupport: null
     },
     {
-      name: '/.hidden folder',
+      name: '/.hidden-folder',
       type: 'dir',
       fileInfo: {
         '{http://owncloud.org/ns}permissions': 'RDNVCK',

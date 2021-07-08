@@ -8,22 +8,22 @@ export default [
     tusSupport: null
   },
   {
-    name: '/trash-bin/alice/3871',
+    name: '/trash-bin/alice/3875',
     type: 'dir',
     fileInfo: {
-      '{http://owncloud.org/ns}trashbin-original-filename': 'Documents',
-      '{http://owncloud.org/ns}trashbin-original-location': 'Documents',
+      '{http://owncloud.org/ns}trashbin-original-filename': '.hidden-folder',
+      '{http://owncloud.org/ns}trashbin-original-location': '.hidden-folder',
       '{http://owncloud.org/ns}trashbin-delete-datetime': 'Mon, 14 Jun 2021 12:15:33 GMT',
       '{DAV:}resourcetype': ['{DAV:}collection']
     },
     tusSupport: null
   },
   {
-    name: '/trash-bin/alice/3875',
+    name: '/trash-bin/alice/3871',
     type: 'dir',
     fileInfo: {
-      '{http://owncloud.org/ns}trashbin-original-filename': '.hidden-folder',
-      '{http://owncloud.org/ns}trashbin-original-location': '.hidden-folder',
+      '{http://owncloud.org/ns}trashbin-original-filename': 'Documents',
+      '{http://owncloud.org/ns}trashbin-original-location': 'Documents',
       '{http://owncloud.org/ns}trashbin-delete-datetime': 'Mon, 14 Jun 2021 12:15:33 GMT',
       '{DAV:}resourcetype': ['{DAV:}collection']
     },
