@@ -1,0 +1,6 @@
+Bugfix: Copy action permission
+
+Prevent copy action from being shown when the user does not have the relevant permission.
+
+https://github.com/owncloud/web/pull/5475
+https://github.com/owncloud/web/issues/5452
