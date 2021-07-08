@@ -127,11 +127,7 @@ export default {
         return false
       }
 
-      if (this.isPublicFilesRoute) {
-        return this.currentFolder.canCreate()
-      }
-
-      return true
+      return this.currentFolder.canCreate()
     },
 
     canDelete() {

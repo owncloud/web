@@ -22,11 +22,7 @@ export default {
               return false
             }
 
-            if (this.publicPage()) {
-              return this.currentFolder.canCreate()
-            }
-
-            return true
+            return this.currentFolder.canCreate()
           },
           componentType: 'oc-button',
           class: 'oc-files-actions-sidebar-copy-trigger'
