@@ -64,7 +64,7 @@ export function buildResource(resource) {
     },
     canDownload: function() {
       // TODO: as soon as we allow folder downloads as archive we want to return `true` here without exceptions
-      return !isFolder
+      return !isFolder && this.permissions.indexOf('V') >= 0
     },
     canBeDeleted: function() {
       return this.permissions.indexOf('D') >= 0
@@ -215,6 +215,8 @@ export function buildSharedResource(share, incomingShares = false, allowSharePer
     return checkPermission(share.permissions, 'share')
   }
   resource.isMounted = () => false
+  // FIXME: add actual permission parsing, should test via:
+  // !isFolder && this.permissions.indexOf('V') >= 0
   resource.canDownload = () => !isFolder
   resource.share = buildShare(share, resource, allowSharePerm)
   resource.indicators = []
