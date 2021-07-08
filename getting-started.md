@@ -33,6 +33,8 @@ substring of a value of the authenticated user. Examples are `/Shares`, `/{{.Id}
 - `options.disablePreviews` Set this option to `true` to disable previews in all the different file listing views. The only list view that is not affected
   by this is the trash bin, as that doesn't allow showing previews at all.
 - `options.previewFileExtensions` Specifies which filetypes will be previewed in the ui. For example to only preview jpg and txt files set this option to `["jpg", "txt"]`.
+- `options.disableFeedbackLink` Set this option to `true` to disable the feedback link in the topbar. Keeping it enabled (value `false` or absence of the option)
+  allows ownCloud to get feedback from your user base through a dedicated survey website.
 
 ## Setting up backend and running
 
