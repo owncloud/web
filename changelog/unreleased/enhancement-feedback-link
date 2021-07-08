@@ -1,0 +1,5 @@
+Enhancement: Feedback link
+
+We've added a feedback link in the topbar which opens a survey in a new tab. The intention is to gather feedback from users. There is a config option to disable the link (see docs "getting started").
+
+https://github.com/owncloud/web/pull/5468
