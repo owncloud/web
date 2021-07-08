@@ -44,7 +44,7 @@
     "@types/jest": "^26.0.23",
     "@types/jest-axe": "^3.5.1",
     "@typescript-eslint/eslint-plugin": "^4.26.0",
-    "@typescript-eslint/parser": "^4.26.0",
+    "@typescript-eslint/parser": "^4.28.2",
     "@vue/test-utils": "^1.1.2",
     "archiver": "^3.0.0",
     "autoprefixer": "^10.2.4",
