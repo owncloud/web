@@ -1,7 +1,7 @@
 <template>
   <div id="oc-file-details-sidebar">
     <oc-loader v-if="loading" />
-    <div v-if="!loading && hasContent">
+    <div v-else-if="hasContent">
       <div
         v-if="highlightedFile.preview"
         class="details-preview uk-flex uk-flex-middle uk-flex-center oc-mb-m"
