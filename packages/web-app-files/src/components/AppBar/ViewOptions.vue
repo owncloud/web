@@ -29,7 +29,7 @@
         </li>
         <li class="files-view-options-list-item">
           <oc-page-size
-            v-model="$_filesListPagination_pageItemsLimit"
+            v-model="pageItemsLimit"
             data-testid="files-pagination-size"
             :label="$gettext('Items per page')"
             :options="[100, 500, 1000, $gettext('All')]"
@@ -44,13 +44,9 @@
 <script>
 import { mapMutations, mapState } from 'vuex'
 
-import MixinFilesListPagination from '../../mixins/filesListPagination'
-
 export default {
-  mixins: [MixinFilesListPagination],
-
   computed: {
-    ...mapState('Files', ['areHiddenFilesShown']),
+    ...mapState('Files', ['areHiddenFilesShown', 'filesPageLimit']),
 
     viewButtonAriaLabel() {
       return this.$gettext('Display customization options of the files list')
@@ -64,11 +60,43 @@ export default {
       set(value) {
         this.SET_HIDDEN_FILES_VISIBILITY(value)
       }
+    },
+
+    pageItemsLimit: {
+      get() {
+        return this.filesPageLimit
+      },
+
+      set(value) {
+        this.updateQuery(value)
+      }
+    }
+  },
+
+  watch: {
+    $route: {
+      handler(route) {
+        if (Object.prototype.hasOwnProperty.call(route.query, 'items-limit')) {
+          this.SET_FILES_PAGE_LIMIT(route.query['items-limit'])
+
+          return
+        }
+
+        this.updateQuery()
+      },
+      immediate: true
     }
   },
 
   methods: {
-    ...mapMutations('Files', ['SET_HIDDEN_FILES_VISIBILITY'])
+    ...mapMutations('Files', ['SET_HIDDEN_FILES_VISIBILITY', 'SET_FILES_PAGE_LIMIT']),
+
+    updateQuery(limit = this.pageItemsLimit) {
+      const query = { ...this.$route.query, 'items-limit': limit }
+
+      this.SET_FILES_PAGE_LIMIT(limit)
+      this.$router.replace({ query }).catch(() => {})
+    }
   }
 }
 </script>

@@ -157,6 +157,8 @@ export default {
           return
         }
 
+        this.$_filesListPagination_updateCurrentPage()
+
         const sameRoute = to.name === from?.name
         const sameItem = to.params?.item === from?.params?.item
         if (!sameRoute || !sameItem) {

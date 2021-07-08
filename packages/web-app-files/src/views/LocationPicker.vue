@@ -246,6 +246,8 @@ export default {
         if (!sameRoute || !sameItem) {
           this.navigateToTarget(this.$route)
         }
+
+        this.$_filesListPagination_updateCurrentPage()
       },
       immediate: true
     }

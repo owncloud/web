@@ -145,6 +145,8 @@ export default {
         if (!sameRoute || !sameItem) {
           this.loadResources(sameRoute)
         }
+
+        this.$_filesListPagination_updateCurrentPage()
       },
       immediate: true
     },

@@ -117,6 +117,11 @@ export default {
   watch: {
     uploadProgressVisible() {
       this.adjustTableHeaderPosition()
+    },
+
+    $route: {
+      handler: '$_filesListPagination_updateCurrentPage',
+      immediate: true
     }
   },
 
