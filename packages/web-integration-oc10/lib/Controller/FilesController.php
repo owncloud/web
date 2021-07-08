@@ -149,7 +149,7 @@ class FilesController extends Controller {
         if (!class_exists("\OCA\Onlyoffice\AppConfig")) {
             return "";
         }
-        $onlyofficeConfig = new \OCA\Onlyoffice\AppConfig("onlyoffice");
+        $onlyofficeConfig = \OC::$server->query(\OCA\Onlyoffice\AppConfig::class);
         return $onlyofficeConfig->GetDocumentServerUrl();
     }
 
@@ -168,15 +168,14 @@ class FilesController extends Controller {
      * - https://github.com/owncloud/richdocuments/blob/9a23f426048c540793fc16119f71a44c26077f16/lib/Controller/DocumentController.php#L393
      *
      * @return string
+     * @throws \OCP\AppFramework\QueryException
      */
     private function getRichDocumentsServerUrl(): string {
-        $appName = 'richdocuments';
-        $documentServerKey = 'wopi_url';
-        $documentServerUrl = $this->config->getAppValue($appName, $documentServerKey);
-        if (!empty($documentServerUrl)) {
-            return $documentServerUrl;
+        if (!class_exists("\OCA\Richdocuments\AppConfig")) {
+            return "";
         }
-        return "";
+        $richdocumentsConfig = \OC::$server->query(\OCA\Richdocuments\AppConfig::class);
+        return $richdocumentsConfig->getAppValue('wopi_url');
     }
 
     /**
