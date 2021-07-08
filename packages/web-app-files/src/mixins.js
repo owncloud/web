@@ -33,23 +33,6 @@ export default {
       return this.highlightedFile !== null
     },
 
-    requestHeaders() {
-      if (!this.publicPage()) {
-        return null
-      }
-
-      const headers = new Headers()
-      headers.append('X-Requested-With', 'XMLHttpRequest')
-
-      const password = this.publicLinkPassword
-      if (password) {
-        headers.append(
-          'Authorization',
-          'Basic ' + Buffer.from('public:' + password).toString('base64')
-        )
-      }
-      return headers
-    }
   },
   methods: {
     ...mapActions('Files', [
@@ -103,22 +86,6 @@ export default {
       }
       return 'file'
     },
-    label(string) {
-      const cssClass = ['uk-label']
-
-      switch (parseInt(string)) {
-        case 1:
-          cssClass.push('uk-label-danger')
-          break
-        case 2:
-          cssClass.push('uk-label-warning')
-          break
-        default:
-          cssClass.push('uk-label-success')
-      }
-
-      return '<span class="' + cssClass.join(' ') + '">' + string + '</span>'
-    },
     checkIfBrowserSupportsFolderUpload() {
       const el = document.createElement('input')
       el.type = 'file'
@@ -148,22 +115,6 @@ export default {
           })
         })
       })
-    },
-    compareIds(a, b) {
-      if (!isNaN(a)) {
-        // OC10 autoincrement id
-        return parseInt(a, 10) === parseInt(b, 10)
-      } else if (this.isOcisId(b)) {
-        return a === this.extractOpaqueId(b)
-      }
-
-      return false
-    },
-    isOcisId(id) {
-      return atob(id).split(':').length === 2
-    },
-    extractOpaqueId(id) {
-      return atob(id).split(':')[1]
     },
 
     hideOverwriteDialog() {

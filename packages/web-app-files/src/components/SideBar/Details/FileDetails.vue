@@ -8,7 +8,7 @@
       >
         <oc-img :src="highlightedFile.preview" alt="" />
       </div>
-      <div v-if="showShares" data-test-id="sharingInfo" class="uk-flex uk-flex-middle oc-my-m">
+      <div v-if="showShares" data-testid="sharingInfo" class="uk-flex uk-flex-middle oc-my-m">
         <oc-button
           v-if="hasPeopleShares"
           v-oc-tooltip="peopleSharesLabel"
@@ -32,7 +32,7 @@
         <p class="oc-my-rm oc-mx-s" v-text="detailSharingInformation" />
       </div>
       <table class="details-table" aria-label="detailsTableLabel">
-        <tr v-if="hasTimestamp" data-test-id="timestamp">
+        <tr v-if="hasTimestamp" data-testid="timestamp">
           <th scope="col" class="oc-pr-s" v-text="timestampTitle" />
           <td>
             <oc-button
@@ -46,7 +46,7 @@
             <span v-else v-text="capitalizedTimestamp" />
           </td>
         </tr>
-        <tr v-if="ownerName" data-test-id="ownerName">
+        <tr v-if="ownerName" data-testid="ownerName">
           <th scope="col" class="oc-pr-s" v-text="ownerTitle" />
           <td>
             <p class="oc-m-rm">
@@ -55,11 +55,11 @@
             </p>
           </td>
         </tr>
-        <tr data-test-id="sizeInfo">
+        <tr data-testid="sizeInfo">
           <th scope="col" class="oc-pr-s" v-text="sizeTitle" />
           <td v-text="getResourceSize(highlightedFile.size)" />
         </tr>
-        <tr v-if="showVersions" data-test-id="versionsInfo">
+        <tr v-if="showVersions" data-testid="versionsInfo">
           <th scope="col" class="oc-pr-s" v-text="versionsTitle" />
           <td>
             <oc-button

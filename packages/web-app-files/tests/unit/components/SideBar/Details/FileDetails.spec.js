@@ -13,11 +13,11 @@ localVue.use(GetTextPlugin, {
 const OcTooltip = jest.fn()
 
 const selectors = {
-  timestamp: '[data-test-id="timestamp"]',
-  ownerName: '[data-test-id="ownerName"]',
-  sharingInfo: '[data-test-id="sharingInfo"]',
-  sizeInfo: '[data-test-id="sizeInfo"]',
-  versionsInfo: '[data-test-id="versionsInfo"]',
+  timestamp: '[data-testid="timestamp"]',
+  ownerName: '[data-testid="ownerName"]',
+  sharingInfo: '[data-testid="sharingInfo"]',
+  sizeInfo: '[data-testid="sizeInfo"]',
+  versionsInfo: '[data-testid="versionsInfo"]',
   previewImgContainer: '.details-preview'
 }
 
