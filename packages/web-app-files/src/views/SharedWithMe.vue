@@ -23,16 +23,13 @@
             class="files-table"
             :class="{ 'files-table-squashed': isSidebarOpen }"
             :are-previews-displayed="displayPreviews"
-            :resources="
-              showAllPending === false
-                ? filterDataByStatus(activeFiles, 1).slice(0, 3)
-                : filterDataByStatus(activeFiles, 1)
-            "
+            :resources="filterDataByStatus(activeFiles, 1)"
             :target-route="targetRoute"
             :are-resources-clickable="false"
             :highlighted="highlightedFile ? highlightedFile.id : null"
             :has-actions="false"
             :header-position="headerPosition"
+            :grouping-settings="groupingSettingsPending"
           >
             <template v-slot:status="{ resource }">
               <div
@@ -65,42 +62,6 @@
               </div>
             </template>
           </oc-table-files>
-
-          <div
-            v-if="
-              showAllPending === false &&
-                filterDataByStatus(activeFiles, shareStatus.pending).length > 3
-            "
-            class="oc-app-bar centered"
-          >
-            <oc-button
-              key="show-all-button"
-              v-translate
-              appearance="raw"
-              class="show-hide-pending"
-              @click="showAllPending = true"
-            >
-              Show all</oc-button
-            >
-          </div>
-
-          <div
-            v-else-if="
-              showAllPending === true &&
-                filterDataByStatus(activeFiles, shareStatus.pending).length > 3
-            "
-            class="oc-app-bar centered"
-          >
-            <oc-button
-              key="show-less-button"
-              v-translate
-              appearance="raw"
-              class="show-hide-pending"
-              @click="showAllPending = false"
-            >
-              Show less
-            </oc-button>
-          </div>
         </div>
       </div>
       <br />
@@ -150,6 +111,7 @@
           :target-route="targetRoute"
           :highlighted="highlightedFile ? highlightedFile.id : null"
           :header-position="headerPosition"
+          :grouping-settings="groupingSettingsAccepted"
           @showDetails="setHighlightedFile"
           @fileClick="$_fileActions_triggerDefaultAction"
         >
@@ -158,15 +120,15 @@
               :key="resource.id + resource.status"
               class="uk-text-nowrap uk-flex uk-flex-middle uk-flex-right"
             >
-               <oc-button
-                 v-if="[shareStatus.accepted, shareStatus.pending].includes(resource.status)"
-                 v-translate
-                 size="small"
-                 class="file-row-share-status-action oc-ml"
-                 @click.stop="triggerShareAction(resource, 'DELETE')"
-               >
-                 Decline
-               </oc-button>
+              <oc-button
+                v-if="[shareStatus.accepted, shareStatus.pending].includes(resource.status)"
+                v-translate
+                size="small"
+                class="file-row-share-status-action oc-ml"
+                @click.stop="triggerShareAction(resource, 'DELETE')"
+              >
+                Decline
+              </oc-button>
               <span
                 class="uk-text-small oc-ml file-row-share-status-text uk-text-baseline"
                 v-text="getShareStatusText(resource.status)"
@@ -220,6 +182,7 @@
           :highlighted="highlightedFile ? highlightedFile.id : null"
           :has-actions="false"
           :header-position="headerPosition"
+          :grouping-settings="groupingSettingsAccepted"
           @fileClick="$_fileActions_triggerDefaultAction"
         >
           <template v-slot:status="{ resource }">
@@ -291,7 +254,38 @@ export default {
       'activeFilesCount'
     ]),
     ...mapGetters(['isOcis', 'configuration', 'getToken', 'user']),
-
+    groupingSettingsAccepted() {
+      return {
+        groupingBy: 'Shared date/on',
+        showGroupingOptions: true,
+        groupingFunctions: {
+          'Share owner': function(row) {
+            return row.owner[0].displayName
+          },
+          'Name alphabetically': function(row) {
+            if (!isNaN(row.name.charAt(0))) return '#'
+            if (row.name.charAt(0) === '.') return row.name.charAt(1).toLowerCase()
+            return row.name.charAt(0).toLowerCase()
+          },
+          'Shared date/on': function(row) {
+            const interval1 = new Date()
+            interval1.setDate(interval1.getDate() - 7)
+            const interval2 = new Date()
+            interval2.setDate(interval2.getDate() - 30)
+            if (row.sdate > interval1.getTime()) {
+              return 'Recent'
+            } else if (row.sdate > interval2.getTime()) {
+              return 'This Month'
+            } else return 'Older'
+          }
+        }
+      }
+    },
+    groupingSettingsPending() {
+      return {
+        previewAmount: 3
+      }
+    },
     selected: {
       get() {
         return this.selectedFiles
@@ -513,6 +507,9 @@ export default {
   align-items: baseline;
 }
 #pending-highlight {
+  background-color: var(--oc-color-background-highlight);
+}
+#pending-highlight th {
   background-color: var(--oc-color-background-highlight);
 }
 .show-hide-pending {
