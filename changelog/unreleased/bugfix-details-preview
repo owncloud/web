@@ -1,0 +1,5 @@
+Bugfix: Load preview in right sidebar
+
+We fixed a bug that caused previews not being loaded in the details accordion of the right sidebar.
+
+https://github.com/owncloud/web/pull/5501
