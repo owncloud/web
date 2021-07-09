@@ -160,18 +160,21 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     When the user reloads the current page of the webUI
     And the user deletes file "lorem.txt" using the webUI
     Then file "lorem.txt" should not be listed on the webUI
+    When the user browses to the shared-with-me page using the webUI
+    Then file "lorem.txt" should not be listed on the webUI
     And as "Alice" file "lorem.txt" should not exist
     And as "Alice" file "lorem.txt" should exist on remote server
 
-  @issue-2510 @skip @yetToImplement
-  Scenario: unshare a federation share from "share-with-you" page
+  @issue-2510
+  Scenario: unshare a federation share from files page and check in the "shared-with-you" page
     Given user "Alice" has created file "lorem.txt" on remote server
-    And user "Alice" from server "REMOTE" has shared "/lorem.txt" with user "Alice" from remote server
+    And user "Alice" from remote server has shared "/lorem.txt" with user "Alice" from local server
     And user "Alice" from server "LOCAL" has accepted the last pending share
-    And the user has reloaded the current page of the webUI
+    And the user has browsed to the shared-with-me page
     When the user deletes file "lorem.txt" using the webUI
     Then file "lorem.txt" should not be listed on the webUI
-    And file "lorem.txt" should not be listed in the files page on the webUI
+    When the user browses to the files page using the webUI
+    Then file "lorem.txt" should not be listed on the webUI
 
 
   Scenario: test resharing folder with "Viewer" role

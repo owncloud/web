@@ -25,17 +25,11 @@ Feature: Session storage for public link
     Then file "lorem.txt" should be listed on the webUI
 
 
-
-
-
   Scenario: Public accesses the public link files page on a new session after visiting once (file share)
     Given user "Alice" has created file "lorem.txt"
     And user "Alice" has shared folder "lorem.txt" with link with "read" permissions and password "pass123"
     When the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
     Then file "lorem.txt" should be listed on the webUI
-
-
-
 
 
   Scenario: Public link author changes the password when the public is in public link files page session (folder share)
