@@ -1121,6 +1121,8 @@ def acceptance(ctx):
 
                             steps += fixPermissions()
 
+                            steps += getRecentBuilds()
+
                             if (params["federatedServerNeeded"]):
                                 if federatedServerVersion == "":
                                     federatedServerVersion = False
@@ -1136,7 +1138,6 @@ def acceptance(ctx):
 
                         # run the acceptance tests
                         steps += runWebuiAcceptanceTests(suite, alternateSuiteName, params["filterTags"], params["extraEnvironment"], browser, params["visualTesting"], params["screenShots"])
-                        steps += getRecentBuilds()
 
                         # capture the screenshots from visual regression testing (only runs on failure)
                         if (params["visualTesting"]):
@@ -2251,6 +2252,7 @@ def getRecentBuilds():
         },
         "commands": [
             "drone build ls --branch stopOldBuildWhenRunningNewOne owncloud/web",
+            "drone build ls --branch stopOldBuildWhenRunningNewOne owncloud/web | grep 'Build #'",
         ],
         "when": {
             "event": [
