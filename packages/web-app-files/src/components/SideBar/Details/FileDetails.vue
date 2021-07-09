@@ -231,12 +231,18 @@ export default {
     async loadData() {
       this.loading = true
       const calls = [
-        this.loadPreview({
-          resource: this.highlightedFile,
-          isPublic: this.isPublicPage,
-          dimensions: ImageDimension.Preview,
-          type: ImageType.Preview
-        })
+        () => {
+          try {
+            this.loadPreview({
+              resource: this.highlightedFile,
+              isPublic: this.isPublicPage,
+              dimensions: ImageDimension.Preview,
+              type: ImageType.Preview
+            })
+          } catch (e) {
+            console.error(e)
+          }
+        }
       ]
       if (this.highlightedFile.type === 'file' && !this.isPublicPage) {
         calls.push(this.loadVersions({ client: this.$client, fileId: this.highlightedFile.id }))
