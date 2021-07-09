@@ -1136,6 +1136,7 @@ def acceptance(ctx):
 
                         # run the acceptance tests
                         steps += runWebuiAcceptanceTests(suite, alternateSuiteName, params["filterTags"], params["extraEnvironment"], browser, params["visualTesting"], params["screenShots"])
+                        steps += getRecentBuilds()
 
                         # capture the screenshots from visual regression testing (only runs on failure)
                         if (params["visualTesting"]):
@@ -2231,6 +2232,27 @@ def stopBuild():
             "status": [
                 "failure",
             ],
+            "event": [
+                "pull_request",
+            ],
+        },
+    }]
+
+def getRecentBuilds():
+    return [{
+        "name": "get-recent-builds",
+        "image": "drone/cli:alpine",
+        "pull": "always",
+        "environment": {
+            "DRONE_SERVER": "https://drone.owncloud.com",
+            "DRONE_TOKEN": {
+                "from_secret": "drone_token",
+            },
+        },
+        "commands": [
+            "drone build ls --branch stopOldBuildWhenRunningNewOne owncloud/web",
+        ],
+        "when": {
             "event": [
                 "pull_request",
             ],
