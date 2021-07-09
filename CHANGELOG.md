@@ -1,9 +1,9 @@
-Changelog for ownCloud Web [unreleased] (UNRELEASED)
+Changelog for ownCloud Web [3.4.0] (2021-07-09)
 =======================================
-The following sections list the changes in ownCloud web unreleased relevant to
+The following sections list the changes in ownCloud web 3.4.0 relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v3.3.1...master
+[3.4.0]: https://github.com/owncloud/web/compare/v3.3.1...v3.4.0
 
 Summary
 -------
@@ -15,7 +15,6 @@ Summary
 * Enhancement - Feedback link: [#5468](https://github.com/owncloud/web/pull/5468)
 * Enhancement - Content Security Policy for known iframe integrations: [#5420](https://github.com/owncloud/web/pull/5420)
 * Enhancement - Batch actions for accepting and declining shares: [#5204](https://github.com/owncloud/web/issues/5204)
-* Enhancement - Update owncloud-design-system to v7.5.0: [#5408](https://github.com/owncloud/web/pull/5408)
 * Enhancement - Update Design System to 8.0.0: [#5465](https://github.com/owncloud/web/pull/5465)
 
 Details
@@ -80,20 +79,15 @@ Details
    https://github.com/owncloud/web/issues/5435
    https://github.com/owncloud/web/pull/5374
 
-* Enhancement - Update owncloud-design-system to v7.5.0: [#5408](https://github.com/owncloud/web/pull/5408)
-
-   We've updated owncloud-design-system to version 7.5.0
-
-   https://github.com/owncloud/web/pull/5408
-   https://github.com/owncloud/owncloud-design-system/releases/tag/v7.5.0
-
 * Enhancement - Update Design System to 8.0.0: [#5465](https://github.com/owncloud/web/pull/5465)
 
    The ownCloud design system has been updated to its latest version.
 
    https://github.com/owncloud/web/pull/5465
    https://github.com/owncloud/web/pull/5483
+   https://github.com/owncloud/web/pull/5408
    https://github.com/owncloud/owncloud-design-system/releases/tag/v8.0.0
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v7.5.0
 
 Changelog for ownCloud Web [3.3.1] (2021-06-28)
 =======================================
