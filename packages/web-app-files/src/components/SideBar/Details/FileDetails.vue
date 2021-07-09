@@ -231,7 +231,7 @@ export default {
     async loadData() {
       this.loading = true
       const calls = [
-        () => {
+        new Promise(resolve => {
           try {
             this.loadPreview({
               resource: this.highlightedFile,
@@ -242,7 +242,8 @@ export default {
           } catch (e) {
             console.error(e)
           }
-        }
+          resolve()
+        })
       ]
       if (this.highlightedFile.type === 'file' && !this.isPublicPage) {
         calls.push(this.loadVersions({ client: this.$client, fileId: this.highlightedFile.id }))
