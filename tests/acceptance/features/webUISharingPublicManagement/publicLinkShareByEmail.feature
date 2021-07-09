@@ -1,4 +1,4 @@
-@mailhog @public_link_share-feature-required @ocis-reva-issue-64
+@mailhog @public_link_share-feature-required
 Feature: Share public link shares via email
   As a user
   I want to share public shared links via email

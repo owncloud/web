@@ -1,4 +1,4 @@
-@mailhog @public_link_share-feature-required @ocis-reva-issue-64
+@mailhog @public_link_share-feature-required
 Feature: Public link share management
   As a user
   I want to check different opitions available in public shares

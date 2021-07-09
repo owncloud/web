@@ -1,4 +1,4 @@
-@mailhog @public_link_share-feature-required @ocis-reva-issue-64
+@mailhog @public_link_share-feature-required
 Feature: Share by public link
   As a user
   I want to be able to set an expiry date on my public links

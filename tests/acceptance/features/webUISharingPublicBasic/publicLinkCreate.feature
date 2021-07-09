@@ -1,4 +1,4 @@
-@public_link_share-feature-required @ocis-reva-issue-64
+@public_link_share-feature-required
 Feature: Create public link shares
   As a user
   I want to share files through a publicly accessible link

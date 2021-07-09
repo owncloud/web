@@ -1,4 +1,4 @@
-@public_link_share-feature-required @ocis-reva-issue-64
+@public_link_share-feature-required
 Feature: Access public link shares by public
   As a public
   I want to access links shared by a owncloud user
