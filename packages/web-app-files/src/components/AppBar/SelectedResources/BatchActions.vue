@@ -127,7 +127,7 @@ export default {
         return false
       }
 
-      return this.currentFolder.canCreate()
+      return this.currentFolder?.canCreate()
     },
 
     canDelete() {

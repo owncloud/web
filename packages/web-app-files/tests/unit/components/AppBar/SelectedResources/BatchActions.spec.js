@@ -23,7 +23,7 @@ describe('Batch Actions component', () => {
   }
 
   const state = {
-    currentFolder: { path: '' }
+    currentFolder: { path: '', canCreate: () => true }
   }
 
   afterEach(() => {
@@ -224,7 +224,7 @@ function createStore(state) {
       Files: {
         state: {
           ...state,
-          currentFolder: { path: '' }
+          currentFolder: { path: '', canCreate: () => true }
         },
         namespaced: true,
         getters: {
