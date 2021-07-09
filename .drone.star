@@ -1076,7 +1076,7 @@ def acceptance(ctx):
                         steps = []
 
                         if (params["earlyFail"]):
-                            steps += calculateDiffContainsUnitTestsOnly()
+                            steps += calculateDiffContainsUnitTestsOnly(ctx)
 
                         steps += installNPM()
 
@@ -2587,7 +2587,12 @@ def dependsOn(earlierStages, nextStages):
             else:
                 nextStage["depends_on"] = [earlierStage["name"]]
 
-def calculateDiffContainsUnitTestsOnly():
+def calculateDiffContainsUnitTestsOnly(ctx):
+    # Do all the pipeline steps fully on tag events. Do not try to analyze diffs
+    # and short-circuit the tests that are executed.
+    if ctx.build.event == "tag":
+        return []
+
     return [
         {
             "name": "calculate-diff",
