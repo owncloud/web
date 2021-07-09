@@ -5,9 +5,6 @@ const convert = require('xml-js')
 const _ = require('lodash/object')
 const { normalize, join, filename } = require('../helpers/path')
 
-const uploadTimeStamps = {}
-const deleteTimestamps = {}
-
 /**
  *
  * @param {string} userId
@@ -39,24 +36,10 @@ exports.download = function(userId, file) {
 exports.delete = async function(userId, file) {
   const davPath = exports.createDavPath(userId, file)
 
-  const filename = file.split('/')[file.split('/').length - 1]
-
-  /**
-   * makes sure delete operations are carried out maximum once a second to avoid trashbin issues
-   * see https://github.com/owncloud/core/issues/23151
-   */
-  if (deleteTimestamps[userId] && deleteTimestamps[userId][filename]) {
-    const timeSinceLastDelete = Date.now() - deleteTimestamps[userId][filename]
-    if (timeSinceLastDelete < 1001) {
-      await client.pause(1001 - timeSinceLastDelete)
-    }
-  }
-
+  await client.pause(1001)
   return httpHelper
     .delete(davPath, userId)
     .then(function(res) {
-      deleteTimestamps[userId] = deleteTimestamps[userId] || {}
-      deleteTimestamps[userId][filename] = Date.now()
       return httpHelper.checkStatus(res, 'Could not delete file ' + file)
     })
     .then(res => res.text())
@@ -187,23 +170,10 @@ exports.createFolder = function(user, folderName) {
  */
 exports.createFile = async function(user, fileName, contents = '') {
   const davPath = exports.createDavPath(user, fileName)
-  /**
-   * makes sure upload operations are carried out maximum once a second to avoid version issues
-   * see https://github.com/owncloud/core/issues/23151
-   */
-
-  if (uploadTimeStamps[user] && uploadTimeStamps[user][fileName]) {
-    const timeSinceLastFileUpload = Date.now() - uploadTimeStamps[user][fileName]
-    if (timeSinceLastFileUpload <= 1001) {
-      await client.pause(1001 - timeSinceLastFileUpload)
-    }
-  }
-
+  await client.pause(1001)
   return httpHelper
     .put(davPath, user, contents)
     .then(function(res) {
-      uploadTimeStamps[user] = uploadTimeStamps[user] || {}
-      uploadTimeStamps[user][fileName] = Date.now()
       return httpHelper.checkStatus(
         res,
         `Could not create the file "${fileName}" for user "${user}".`
