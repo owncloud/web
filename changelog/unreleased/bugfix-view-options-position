@@ -1,0 +1,5 @@
+Bugfix: align view options to the right
+
+We've fixed the position of the view options button which would appear in any screen where actions are missing on the left.
+
+https://github.com/owncloud/web/pull/5493
