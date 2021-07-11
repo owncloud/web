@@ -108,6 +108,7 @@ export default {
   computed: {
     ...mapGetters('Files', ['currentFileOutgoingCollaborators', 'highlightedFile']),
     ...mapGetters(['user']),
+    ...mapGetters(['configuration']),
 
     $_ocCollaborationStatus_autocompleteDescriptionMessage() {
       return this.$gettext("Add new person by name, email or federation ID's")
@@ -138,6 +139,7 @@ export default {
     },
 
     $_onAutocompleteInput(value) {
+      console.log(this.$store)
       const minSearchLength = parseInt(this.user.capabilities.files_sharing.search_min_length, 10)
       if (value.length < minSearchLength) {
         this.autocompleteInProgress = false
@@ -148,7 +150,7 @@ export default {
       this.autocompleteResults = []
       // TODO: move to store
       this.$client.shares
-        .getRecipients(value, 'folder')
+        .getRecipients(value, 'folder', 1, this.configuration.options.sharingRecipientsPerPage)
         .then(recipients => {
           this.autocompleteInProgress = false
           const users = recipients.exact.users
@@ -156,7 +158,6 @@ export default {
             .filter(user => user.value.shareWith !== this.user.id)
           const groups = recipients.exact.groups.concat(recipients.groups)
           const remotes = recipients.exact.remotes.concat(recipients.remotes)
-
           this.autocompleteResults = users.concat(groups, remotes).filter(collaborator => {
             const selected = this.selectedCollaborators.find(selectedCollaborator => {
               return (

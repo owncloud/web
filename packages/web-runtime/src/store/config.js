@@ -39,7 +39,8 @@ const state = {
     hideSearchBar: false,
     homeFolder: '',
     disablePreviews: false,
-    previewFileExtensions: []
+    previewFileExtensions: [],
+    sharingRecipientsPerPage: 200
   }
 }
 
