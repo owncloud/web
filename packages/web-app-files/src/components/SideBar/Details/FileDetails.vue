@@ -231,24 +231,17 @@ export default {
     async loadData() {
       this.loading = true
       const calls = [
-        new Promise(resolve => {
-          try {
-            this.loadPreview({
-              resource: this.highlightedFile,
-              isPublic: this.isPublicPage,
-              dimensions: ImageDimension.Preview,
-              type: ImageType.Preview
-            })
-          } catch (e) {
-            console.error(e)
-          }
-          resolve()
+        this.loadPreview({
+          resource: this.highlightedFile,
+          isPublic: this.isPublicPage,
+          dimensions: ImageDimension.Preview,
+          type: ImageType.Preview
         })
       ]
       if (this.highlightedFile.type === 'file' && !this.isPublicPage) {
         calls.push(this.loadVersions({ client: this.$client, fileId: this.highlightedFile.id }))
       }
-      await Promise.all(calls)
+      await Promise.all(calls.map(p => p.catch(e => e)))
       this.loading = false
     }
   }
@@ -257,18 +250,22 @@ export default {
 <style lang="scss" scoped>
 .details-table {
   text-align: left;
+
   tr {
     height: 1.5rem;
   }
+
   th {
     font-weight: 600;
   }
 }
+
 .details-preview {
   background-color: var(--oc-color-background-highlight);
   border-radius: 3px;
   height: 300px;
   padding: 10px;
+
   img {
     object-fit: contain;
     height: 100%;
