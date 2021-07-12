@@ -86,7 +86,7 @@ Feature: User can open the details panel for any file or folder
     When the user switches to "comments" accordion item in details panel using the webUI
     Then the "comments" details panel should be visible
 
-  @issue-1158 @comments-app-required @ocis-reva-issue-64
+  @issue-1158 @comments-app-required
   Scenario: user shares a file and then the details dialog should work in a Shared with others page
     Given user "Alice" has created folder "simple-folder"
     And the user has browsed to the files page
@@ -103,7 +103,7 @@ Feature: User can open the details panel for any file or folder
     When the user switches to "links" accordion item in details panel using the webUI
     Then the "links" details panel should be visible
 
-  @issue-1158 @comments-app-required @ocis-reva-issue-64
+  @issue-1158 @comments-app-required
   Scenario: user shares a folder via link and then the details dialog should work in a Shared with others page
     Given user "Alice" has created folder "simple-folder"
     And the user has browsed to the files page
@@ -120,7 +120,7 @@ Feature: User can open the details panel for any file or folder
     When the user switches to "links" accordion item in details panel using the webUI
     Then the "links" details panel should be visible
 
-  @issue-1158 @comments-app-required @ocis-reva-issue-64
+  @issue-1158 @comments-app-required
   Scenario: the recipient user should be able to view different areas of details panel in Shared with me page
     Given user "Alice" has created folder "simple-folder"
     And the user has browsed to the files page

@@ -14,7 +14,7 @@ Feature: Resharing shared files with different permissions
       | Carol    |
     And user "Brian" has created folder "simple-folder"
 
-  @issue-4193
+  @issue-ocis-2260
   Scenario: share a folder with another user with share permissions and reshare without share permissions to different user, and check if user is displayed for original sharer
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share" permissions
     And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
@@ -41,7 +41,7 @@ Feature: Resharing shared files with different permissions
       | item_type   | folder                |
       | permissions | read, share           |
 
-  @skipOnOC10
+  @skipOnOC10 @issue-ocis-2260
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
   Scenario: share a folder with another user with share permissions and reshare without share permissions to different user, and check if user is displayed for original sharer (ocis bug demonstration)
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share" permissions
@@ -70,7 +70,7 @@ Feature: Resharing shared files with different permissions
       | item_type   | folder                |
       | permissions | read                  |
 
-  @issue-4193
+  @issue-2260
   Scenario: share a folder with another user with share permissions and reshare without share permissions to different user, and check if user is displayed for the receiver
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share" permissions
     And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
@@ -103,15 +103,15 @@ Feature: Resharing shared files with different permissions
       | item_type   | folder                |
       | permissions | read                  |
 
-  @issue-product-270
+
   Scenario: share a folder without share permissions and check if another user can reshare
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions
     And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
     When user "Alice" logs in using the webUI
     And the user opens folder "Shares" using the webUI
     Then the user should not be able to share resource "simple-folder" using the webUI
-  
-  @issue-product-270
+
+
   Scenario: share a file without share permissions and check if another user can reshare
     Given user "Brian" has created file "lorem.txt"
     And user "Brian" has shared file "lorem.txt" with user "Alice" with "read" permissions
@@ -120,7 +120,7 @@ Feature: Resharing shared files with different permissions
     And the user opens folder "Shares" using the webUI
     Then the user should not be able to share resource "lorem.txt" using the webUI
 
-  @issue-product-270
+
   Scenario: share a received folder without share permissions and check if another user can reshare
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "all" permissions
     And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
@@ -130,7 +130,7 @@ Feature: Resharing shared files with different permissions
     And the user opens folder "Shares" using the webUI
     Then the user should not be able to share resource "simple-folder" using the webUI
 
-  @issue-product-270
+
   Scenario: share a received file without share permissions and check if another user can reshare
     Given user "Brian" has created file "lorem.txt"
     And user "Brian" has shared file "lorem.txt" with user "Alice" with "all" permissions
@@ -141,7 +141,7 @@ Feature: Resharing shared files with different permissions
     And the user opens folder "Shares" using the webUI
     Then the user should not be able to share resource "lorem.txt" using the webUI
 
-  @issue-ocis-1743
+  @issue-5461
   Scenario: User is allowed to reshare a file/folder with the equivalent received permissions, and collaborators should not be listed for the receiver
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share, delete" permissions
     And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
@@ -162,7 +162,7 @@ Feature: Resharing shared files with different permissions
       | item_type   | folder                |
       | permissions | share, delete, read   |
 
-  @issue-product-270 @issue-4193
+  @issue-5461
   Scenario: User is allowed to reshare a file/folder with the lesser permissions, and check if it is listed for original owner
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share, delete" permissions
     And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
@@ -183,7 +183,7 @@ Feature: Resharing shared files with different permissions
       | item_type   | folder                |
       | permissions | delete, read          |
 
-  @issue-product-270
+  @issue-5461
   Scenario: User is not allowed to reshare a file/folder with the higher permissions
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share, delete" permissions
     And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
@@ -226,7 +226,7 @@ Feature: Resharing shared files with different permissions
     Then as "Carol" folder "/Shares/simple-folder" should exist
     And as "Carol" file "/Shares/lorem.txt" should exist
 
-  @ocis-reva-issue-39
+  @issue-ocis-1330
   Scenario: Reshare a file and folder from favorites page
     Given user "Brian" has created file "lorem.txt"
     And user "Brian" has shared folder "simple-folder" with user "Alice"
@@ -244,7 +244,7 @@ Feature: Resharing shared files with different permissions
     Then as "Carol" folder "/Shares/simple-folder" should exist
     And as "Carol" file "/Shares/lorem.txt" should exist
 
-
+  @issue-product-270
   Scenario: Resource owner sees resharer in collaborators list
     Given user "Brian" has created file "lorem.txt"
     And user "Brian" has shared folder "simple-folder" with user "Alice"
@@ -256,7 +256,7 @@ Feature: Resharing shared files with different permissions
     Then user "Alice Hansen" should be listed as "Editor" in the collaborators list on the webUI
     And user "Carol King" should be listed as "Editor" reshared through "Alice Hansen" in the collaborators list on the webUI
 
-  @ocis-reva-issue-34
+  @issue-5642
   Scenario: Share recipient sees resharer in collaborators list
     Given user "David" has been created with default attributes and without skeleton files
     And group "Davidgrp" has been created

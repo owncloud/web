@@ -1,4 +1,4 @@
-@public_link_share-feature-required @ocis-reva-issue-64
+@public_link_share-feature-required
 Feature: Create public link shares
   As a user
   I want to share files through a publicly accessible link
@@ -168,7 +168,7 @@ Feature: Create public link shares
       | folder  | simple-folder |
       | file    | lorem.txt     |
 
-  @issue-ocis-reva-243
+
   Scenario: User can create a public link via quick action
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has logged in using the webUI

@@ -1,4 +1,4 @@
-@mailhog @public_link_share-feature-required @ocis-reva-issue-64
+@mailhog @public_link_share-feature-required
 Feature: Share by public link
   As a user
   I want to be able to set an expiry date on my public links
@@ -32,7 +32,7 @@ Feature: Share by public link
     Then the fields of the last public link share response of user "Alice" should include
       | expireDate | 2038-10-14 |
 
-  @issue-ocis-reva-41
+  @issue-ocis-1328
   Scenario Outline: auto set expiration date on public link (with default amount of expiry days)
     Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes"
     And user "Alice" has created <element> "<shared-resource>"
@@ -51,7 +51,7 @@ Feature: Share by public link
       | file    | lorem.txt       |
       | folder  | simple-folder   |
 
-  @issue-ocis-reva-41
+  @issue-ocis-1328
   Scenario Outline: auto set expiration date on public link (with set amount expiry days)
     Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes"
     And the setting "shareapi_expire_after_n_days" of app "core" has been set to "42"
@@ -71,7 +71,7 @@ Feature: Share by public link
       | file    | lorem.txt       |
       | folder  | simple-folder   |
 
-  @issue-ocis-reva-41
+  @issue-ocis-1328
   Scenario: expiry date is set to enforced max expiry date when creating a public link to a date that is past the enforced max expiry date
     Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes"
     And the setting "shareapi_expire_after_n_days" of app "core" has been set to "7"
@@ -82,7 +82,7 @@ Feature: Share by public link
     Then the expiration date shown on the webUI should be "+7" days
     And user "Alice" should not have created any shares
 
-  @issue-ocis-reva-41
+  @issue-ocis-1328
   Scenario: user cannot change the expiry date of an existing public link to a date that is past the enforced max expiry date
     Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes"
     And the setting "shareapi_enforce_expire_date" of app "core" has been set to "yes"
@@ -102,7 +102,7 @@ Feature: Share by public link
       | name        | Public link |
       | expiration  | +6          |
 
-  @issue-ocis-reva-41
+  @issue-ocis-1328
   Scenario: user cannot change the expiry date on existing public link to a date past the enforced max expiry date once max expiry date is changed
     Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes"
     And the setting "shareapi_expire_after_n_days" of app "core" has been set to "16"
@@ -126,7 +126,7 @@ Feature: Share by public link
       | name        | Public link |
       | expiration  | +16         |
 
-  @issue-ocis-reva-41
+  @issue-ocis-1328
   Scenario: user can set an expiry date when creating a public link to a date that is before the enforced max expiry date
     Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes"
     And the setting "shareapi_enforce_expire_date" of app "core" has been set to "yes"
@@ -143,7 +143,7 @@ Feature: Share by public link
       | name        | Public link |
       | expiration  | +7          |
 
-  @issue-ocis-reva-41
+  @issue-ocis-1328
   Scenario: user can change the expiry date of an existing public link to a date that is before the enforced max expiry date
     Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes"
     And the setting "shareapi_enforce_expire_date" of app "core" has been set to "yes"

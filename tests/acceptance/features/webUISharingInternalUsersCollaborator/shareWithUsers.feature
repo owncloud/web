@@ -1,4 +1,3 @@
-@ocis-reva-issue-64
 Feature: Shares collaborator list
   As a user
   I want to check the collaborator list

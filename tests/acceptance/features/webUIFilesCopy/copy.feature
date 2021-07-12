@@ -83,7 +83,7 @@ Feature: copy files and folders
     And as "Alice" file "simple-folder/simple-empty-folder/data.zip" should exist
     And as "Alice" file "simple-folder/data.zip" should exist
 
-  @issue-ocis-reva-243
+
   Scenario: copy a file into another folder with no change permission
     Given user "Alice" has created file "lorem.txt"
     And user "Alice" has created folder "simple-folder"

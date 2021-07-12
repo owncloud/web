@@ -26,7 +26,7 @@ Feature: Sharing files and folders with internal groups
     And the user shares folder "simple-folder" with user "Alice Hansen" as "Viewer" using the webUI
     Then the current collaborators list should have order "Carol King,Alice Hansen,Brian Murphy,grp1,grp11"
 
-  @issue-ocis-1922 @issue-ocis-1743
+  @issue-ocis-1922
   Scenario Outline: share a file & folder with another internal user
     Given user "Carol" has created folder "simple-folder"
     And user "Carol" has created file "simple-folder/lorem.txt"

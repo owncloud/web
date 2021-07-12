@@ -1,4 +1,4 @@
-@mailhog @public_link_share-feature-required @ocis-reva-issue-64
+@mailhog @public_link_share-feature-required
 Feature: Public link share management
   As a user
   I want to check different opitions available in public shares
@@ -45,7 +45,7 @@ Feature: Public link share management
     Then file "lorem.txt" should be listed on the webUI
     And as "Brian" the content of "simple-folder/lorem.txt" should be the same as the content of local file "lorem.txt"
 
-  @issue-ocis-reva-41
+  @issue-ocis-1328
   Scenario: user shares a file through public link and then it appears in a shared-with-others page
     Given the setting "shareapi_allow_public_notification" of app "core" has been set to "yes"
     And user "Alice" has created a public link with following settings
