@@ -18,7 +18,8 @@ const selectors = {
   collaboratorName: '.files-collaborators-collaborator-name',
   shareType: '.files-collaborators-collaborator-share-type',
   reshareInformation: '.files-collaborators-collaborator-reshare-information',
-  reshareToggleId: 'collaborator-%s-resharer-details-toggle'
+  reshareToggleId: 'collaborator-%s-resharer-details-toggle',
+  colaboratorRole: '.files-collaborators-collaborator-role'
 }
 
 const resharers = [
@@ -273,6 +274,37 @@ describe('Collaborator component', () => {
         })
       })
     })
+    describe('role', () => {
+      it.each([
+        { name: 'viewer', expectedText: 'Viewer' },
+        { name: 'editor', expectedText: 'Editor' },
+        { name: 'advancedRole', expectedText: 'Advanced permissions' },
+        { name: 'owner', expectedText: 'Owner' },
+        { name: 'resharer', expectedText: 'Resharer' },
+        { name: 'invalidRole', expectedText: 'Unknown Role' }
+      ])('shows the role label', cases => {
+        const wrapper = createWrapper({
+          role: { name: cases.name }
+        })
+        expect(wrapper.find(selectors.colaboratorRole).text()).toEqual(cases.expectedText)
+      })
+
+      it.each([
+        { name: 'viewer', expectedName: 'remove_red_eye' },
+        { name: 'editor', expectedName: 'edit' },
+        { name: 'advancedRole', expectedName: 'checklist' },
+        { name: 'owner', expectedName: 'key' },
+        { name: 'resharer', expectedName: 'key' },
+        { name: 'invalidRole', expectedName: 'key' }
+      ])('sets the name of the icon', cases => {
+        const wrapper = createWrapper({
+          role: { name: cases.name }
+        })
+        expect(
+          wrapper.find(selectors.colaboratorRole + ' oc-icon-stub').attributes('name')
+        ).toEqual(cases.expectedName)
+      })
+    })
   })
 })
 
@@ -284,7 +316,8 @@ function createWrapper({
     additionalInfo: 'brian@owncloud.com'
   },
   currentUserId = 'carol',
-  resharers
+  resharers,
+  role = { name: 'viewer' }
 } = {}) {
   return mount(Collaborator, {
     store: new Vuex.Store({
@@ -312,7 +345,7 @@ function createWrapper({
         collaborator: collaborator,
         shareType: shareType,
         resharers: resharers,
-        role: { name: 'viewer' }
+        role: role
       }
     },
     localVue,
