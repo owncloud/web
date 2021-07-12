@@ -67,3 +67,28 @@ Feature: create folders
     Then folder "sub-folder" should be listed on the webUI
     When the user reloads the current page of the webUI
     Then folder "sub-folder" should be listed on the webUI
+
+
+  Scenario: Create folders with dot in the name
+    When the user creates the following folders using the webUI
+      | folders  |
+      | fo.      |
+      | fo.1     |
+      | fo...1.. |
+      | ...      |
+      | ..fo     |
+      | fo.xyz   |
+    Then the following folders should be listed on the webUI
+      | folders  |
+      | fo.      |
+      | fo.1     |
+      | fo...1.. |
+      | ...      |
+      | ..fo     |
+      | fo.xyz   |
+
+
+  @skipOnOC10 @issue-5518
+  Scenario: User creates a folder with .part in the name
+    When the user creates a folder with the name "fo.part" using the webUI
+    Then folder "fo.part" should be listed on the webUI

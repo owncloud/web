@@ -121,3 +121,23 @@ Feature: files and folders exist in the trashbin after being deleted
     When the user browses to the trashbin page
     Then there should be no resources listed on the webUI
 
+
+  Scenario: Delete folders with dot in the name and check they are in the trashbin
+    Given user "Alice" has created the following folders
+      | folders  |
+      | fo.      |
+      | fo.1     |
+      | fo...1.. |
+      | ...      |
+      | ..fo     |
+      | fo.xyz   |
+    And the following folders have been deleted by user "Alice"
+      | name     |
+      | fo.      |
+      | fo.1     |
+      | fo...1.. |
+      | ...      |
+      | ..fo     |
+      | fo.xyz   |
+    When the user browses to the trashbin page
+    Then the deleted elements should be listed on the webUI

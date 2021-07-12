@@ -156,3 +156,15 @@ Feature: rename folders
     And folder "new-simple-folder" should not be listed on the webUI
     And as "Alice" folder "simple-folder" should not exist
     And as "Alice" folder "new-simple-folder" should not exist
+
+
+  Scenario Outline: Rename a folder to a name with dot
+    When the user renames folder "simple-folder" to "<to_name>" using the webUI
+    Then folder "<to_name>" should be listed on the webUI
+    Examples:
+      | to_name  |
+      | fo.      |
+      | fo.1     |
+      | ..fo     |
+      | fo.xyz   |
+

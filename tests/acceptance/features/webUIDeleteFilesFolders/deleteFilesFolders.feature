@@ -323,3 +323,31 @@ Feature: deleting files and folders
     And folder "simple-folder" should not be listed on the webUI
     And as "Alice" file "lorem.txt" should not exist
     And as "Alice" folder "simple-folder" should not exist
+
+
+  Scenario: Delete folder with dot in the name
+    Given user "Alice" has created the following folders
+      | folders  |
+      | fo.      |
+      | fo.1     |
+      | fo...1.. |
+      | ...      |
+      | ..fo     |
+      | fo.xyz   |
+    And the user has reloaded the current page of the webUI
+    When the user batch deletes these files using the webUI
+      | folders  |
+      | fo.      |
+      | fo.1     |
+      | fo...1.. |
+      | ...      |
+      | ..fo     |
+      | fo.xyz   |
+    Then as "Alice" these folders should not be listed on the webUI
+      | folders  |
+      | fo.      |
+      | fo.1     |
+      | fo...1.. |
+      | ...      |
+      | ..fo     |
+      | fo.xyz   |
