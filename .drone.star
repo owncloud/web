@@ -2251,8 +2251,9 @@ def getRecentBuilds():
             },
         },
         "commands": [
-            "drone build ls --branch stopOldBuildWhenRunningNewOne owncloud/web",
+            "drone build ls --branch stopOldBuildWhenRunningNewOne -- limit 25 owncloud/web",
             "drone build ls --branch stopOldBuildWhenRunningNewOne owncloud/web | grep 'Build #'",
+            "drone build ls --branch stopOldBuildWhenRunningNewOne --status Running owncloud/web | grep 'Build #'",
         ],
         "when": {
             "event": [
