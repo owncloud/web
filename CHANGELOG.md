@@ -1,3 +1,25 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v3.4.0...master
+
+Summary
+-------
+
+* Bugfix - Load preview in right sidebar: [#5501](https://github.com/owncloud/web/pull/5501)
+
+Details
+-------
+
+* Bugfix - Load preview in right sidebar: [#5501](https://github.com/owncloud/web/pull/5501)
+
+   We fixed a bug that caused previews not being loaded in the details accordion of the right
+   sidebar.
+
+   https://github.com/owncloud/web/pull/5501
+
 Changelog for ownCloud Web [3.4.0] (2021-07-09)
 =======================================
 The following sections list the changes in ownCloud web 3.4.0 relevant to
