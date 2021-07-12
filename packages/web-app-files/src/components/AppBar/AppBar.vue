@@ -21,7 +21,7 @@
       <div class="files-app-bar-actions">
         <div
           v-if="showActions || selectedFiles.length > 0 || isTrashbinRoute"
-          class="uk-flex-1 uk-flex uk-flex-middle"
+          class="uk-flex-1 uk-flex uk-flex-start"
         >
           <template v-if="showActions && areDefaultActionsVisible">
             <oc-button
@@ -556,7 +556,7 @@ export default {
     align-items: center;
     display: flex;
     gap: var(--oc-space-small);
-    justify-content: space-between;
+    justify-content: flex-end;
     padding: var(--oc-space-small);
   }
 }
