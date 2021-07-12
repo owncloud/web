@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Load preview in right sidebar: [#5501](https://github.com/owncloud/web/pull/5501)
+* Bugfix - Align view options to the right: [#5493](https://github.com/owncloud/web/pull/5493)
 
 Details
 -------
@@ -19,6 +20,13 @@ Details
    sidebar.
 
    https://github.com/owncloud/web/pull/5501
+
+* Bugfix - Align view options to the right: [#5493](https://github.com/owncloud/web/pull/5493)
+
+   We've fixed the position of the view options button which would appear in any screen where
+   actions are missing on the left.
+
+   https://github.com/owncloud/web/pull/5493
 
 Changelog for ownCloud Web [3.4.0] (2021-07-09)
 =======================================
