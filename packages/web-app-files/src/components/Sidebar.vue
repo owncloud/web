@@ -35,10 +35,12 @@
           >
             <oc-icon :class="favoriteIconClass" name="star" />
           </oc-button>
-          <template v-if="highlightedFile.size > -1">
-            {{ getResourceSize(highlightedFile.size) }},
-          </template>
-          {{ modificationTime }}
+          <p class="oc-m-rm uk-inline">
+            <template v-if="highlightedFile.size > -1">
+              {{ getResourceSize(highlightedFile.size) }},
+            </template>
+            {{ modificationTime }}
+          </p>
         </div>
       </div>
     </template>

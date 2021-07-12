@@ -21,28 +21,34 @@
         />
       </div>
     </div>
-    <oc-grid gutter="small">
-      <div>
+    <span :id="`public-link-list-label-${link.id}`" v-translate class="oc-invisible-sr"
+      >Tags</span
+    >
+    <ul
+      class="public-link-list oc-my-rm oc-pl-rm"
+      :aria-labelledby="`public-link-list-label-${link.id}`"
+    >
+      <li>
         <oc-tag class="oc-files-file-link-role">
           <oc-icon :name="roleTagIcon" />
           {{ link.description }}
         </oc-tag>
-      </div>
-      <div v-if="link.expiration">
+      </li>
+      <li v-if="link.expiration">
         <oc-tag class="oc-files-public-link-expires">
           <oc-icon name="text-calendar" />
           <translate :translate-params="{ expires: formDateFromNow(link.expiration) }">
             Expires %{expires}
           </translate>
         </oc-tag>
-      </div>
-      <div v-if="link.password">
+      </li>
+      <li v-if="link.password">
         <oc-tag>
           <oc-icon name="lock" />
           <translate>Password protected</translate>
         </oc-tag>
-      </div>
-      <div v-if="link.indirect">
+      </li>
+      <li v-if="link.indirect">
         <oc-tag
           v-oc-tooltip="viaTooltip"
           type="router-link"
@@ -52,8 +58,8 @@
           <oc-icon name="exit_to_app" />
           <span class="uk-text-truncate files-file-links-link-via-label" v-text="viaLabel" />
         </oc-tag>
-      </div>
-    </oc-grid>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -151,3 +157,14 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped="scoped">
+.public-link-list {
+  list-style-type: none;
+
+  li {
+    float: left;
+    margin: 5px;
+  }
+}
+</style>
