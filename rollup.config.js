@@ -158,6 +158,7 @@ if (production) {
 if (process.env.SERVER === 'true') {
   plugins.push(
     serve({
+      host: '0.0.0.0',
       contentBase: ['dist'],
       port: process.env.PORT || 9100
     })
