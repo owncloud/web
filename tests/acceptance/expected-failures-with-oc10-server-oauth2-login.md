@@ -143,5 +143,21 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIWebdavLockProtection/upload.feature:90](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIWebdavLockProtection/upload.feature#L90)
 -   [webUIWebdavLockProtection/upload.feature:91](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIWebdavLockProtection/upload.feature#L91)
 
-### [Federated Shares not showing in shared with me page](https://github.com/owncloud/web/issues/2510)
-- [webUISharingExternalToRoot/federationSharing.feature:169](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingExternalToRoot/federationSharing.feature#L169)
+### [Uploading a file with a name that already exists is confusing] (https://github.com/owncloud/web/issues/5106)
+-   [webUIUpload/upload.feature:108](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/upload.feature#L108)
+-   [webUIUpload/upload.feature:121](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/upload.feature#L121)
+-   [webUIUpload/upload.feature:138](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/upload.feature#L138)
+
+### [Federated shares not showing in shared with me page] (https://github.com/owncloud/web/issues/2510)
+-   [webUISharingExternalToRoot/federationSharing.feature:32](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingExternalToRoot/federationSharing.feature#L32)
+-   [webUISharingExternalToRoot/federationSharing.feature:169](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingExternalToRoot/federationSharing.feature#L169)
+-   [webUISharingExternal/federationSharing.feature:38](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingExternal/federationSharing.feature#L38)
+-   [webUISharingExternal/federationSharing.feature:166](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingExternal/federationSharing.feature#L166)
+
+### [browsing directly to a details 'tab' is not possible] (https://github.com/owncloud/web/issues/5464)
+-   [webUIFiles/browseDirectlyToDetailsTab.feature:21](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFiles/browseDirectlyToDetailsTab.feature#L21)
+-   [webUIFiles/browseDirectlyToDetailsTab.feature:22](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFiles/browseDirectlyToDetailsTab.feature#L22)
+-   [webUIFiles/browseDirectlyToDetailsTab.feature:31](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFiles/browseDirectlyToDetailsTab.feature#L31)
+-   [webUIFiles/browseDirectlyToDetailsTab.feature:32](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFiles/browseDirectlyToDetailsTab.feature#L32)
+-   [webUIFiles/browseDirectlyToDetailsTab.feature:41](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFiles/browseDirectlyToDetailsTab.feature#L41)
+-   [webUIFiles/browseDirectlyToDetailsTab.feature:42](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFiles/browseDirectlyToDetailsTab.feature#L42)

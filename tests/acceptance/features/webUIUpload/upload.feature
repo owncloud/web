@@ -69,11 +69,12 @@ Feature: File Upload
     And file "big-video.mp4" should be listed on the webUI
     And as "Alice" the content of "big-video.mp4" should be the same as the content of local file "big-video.mp4"
 
-  @skipOnFIREFOX @skip @yetToImplement
+  @skipOnFIREFOX
   Scenario: conflict with a big file (when chunking is implemented this upload should be chunked)
     Given a file with the size of "30000000" bytes and the name "big-video.mp4" has been created locally
     When the user renames file "lorem.txt" to "big-video.mp4" using the webUI
-    And the user uploads overwriting file "big-video.mp4" using the webUI and retries if the file is locked
+    And the user reloads the current page of the webUI
+    And the user uploads a created file "big-video.mp4" with overwrite using the webUI
     Then file "big-video.mp4" should be listed on the webUI
     And as "Alice" the content of "big-video.mp4" should be the same as the content of local file "big-video.mp4"
 
@@ -103,7 +104,7 @@ Feature: File Upload
     And as "Alice" the content of "lorem.txt" should be the same as the content of local file "lorem.txt"
     But file "lorem (2).txt" should not be listed on the webUI
 
-  @smokeTest @skip @yetToImplement
+  @issue-5106
   Scenario: keep new and existing file
     When the user uploads file "lorem.txt" using the webUI
     And the user chooses to keep the new files in the upload dialog
@@ -116,7 +117,7 @@ Feature: File Upload
     And file "lorem (2).txt" should be listed on the webUI
     And as "Alice" the content of "lorem (2).txt" should be the same as the content of local file "lorem.txt"
 
-  @skip @yetToImplement
+  @issue-5106
   Scenario: cancel conflict dialog
     When the user uploads file "lorem.txt" using the webUI
     And the user chooses "Cancel" in the upload dialog
@@ -133,7 +134,7 @@ Feature: File Upload
     Then file "lorem.txt" should be listed on the webUI
     And as "Alice" the content of "simple-folder/lorem.txt" should be the same as the content of local file "lorem.txt"
 
-  @skip @yetToImplement
+  @issue-5106
   Scenario: keep new and existing file in a sub-folder
     When the user opens folder "simple-folder" using the webUI
     And the user uploads file "lorem.txt" using the webUI

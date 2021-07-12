@@ -34,7 +34,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And as "Alice" file "Shares/simple-folder/lorem.txt" should exist on remote server
     And as "Alice" folder "Shares/simple-empty-folder" should exist on remote server
 
-  @issue-2510 @yetToImplement
+  @issue-2510
   Scenario: test the single steps of receiving a federation share
     Given user "Brian" has been created with default attributes and without skeleton files on remote server
     And user "Carol" has been created with default attributes and without skeleton files on remote server
@@ -60,10 +60,10 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And the user opens folder "simple-folder" using the webUI
     And file "lorem.txt" should be listed on the webUI
     And as "Alice" the content of "Shares/simple-folder/lorem.txt" should be the same as the content of local file "lorem.txt"
-    #    When the user browses to the shared-with-me page
-    #    Then file "Shares/lorem.txt" should be listed on the webUI
-    #    And folder "Shares/simple-folder" should be listed on the webUI
-    #    And folder "Shares/simple-empty-folder" should be listed on the webUI
+    When the user browses to the shared-with-me page
+    Then file "Shares/lorem.txt" should be listed on the webUI
+    And folder "Shares/simple-folder" should be listed on the webUI
+    And folder "Shares/simple-empty-folder" should be listed on the webUI
 
 
   Scenario: declining a federation share on the webUI
@@ -162,7 +162,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And as "Alice" file "Shares/lorem.txt" should not exist
     And as "Alice" file "lorem.txt" should exist on remote server
 
-  @issue-2510 @skip @yetToImplement
+  @issue-2510
   Scenario: unshare a federation share from "share-with-you" page
     Given user "Alice" has created file "lorem.txt" on remote server
     And user "Alice" from remote server has shared "lorem.txt" with user "Alice" from local server
