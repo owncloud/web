@@ -82,6 +82,7 @@ Feature: Sharing files and folders with internal users
     And user "Alice" accepts the share "simple-folder" offered by user "Brian" using the sharing API
     And the user re-logs in as "Alice" using the webUI
     And the user browses to the folder "Shares" on the files page
+    And the user reloads the current page of the webUI
     And the user opens folder "simple-folder" using the webUI
     Then as "Alice" the content of "Shares/simple-folder/lorem.txt" should not be the same as the content of local file "lorem.txt"
     # overwrite an existing file in the received share
@@ -363,3 +364,4 @@ Feature: Sharing files and folders with internal users
     And user "Alice" has logged in using the webUI
     When the user opens the share dialog for file "Shares" using the webUI
     Then the share permission denied message should be displayed in the sharing dialog on the webUI
+
