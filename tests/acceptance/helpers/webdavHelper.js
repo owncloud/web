@@ -144,7 +144,6 @@ exports.getTrashBinElements = function(user, depth = 2) {
           if (!Array.isArray(trashData)) {
             trashData = [trashData]
           }
-          console.log(JSON.stringify(trashData))
           trashData.forEach(trash => {
             if (trash['d:propstat']['d:prop'] === undefined) {
               reject(new Error('trashbin data not defined'))
