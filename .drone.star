@@ -818,10 +818,8 @@ def getRecentBuilds():
             },
         },
         "commands": [
-            "drone build ls --branch stopOldBuildWhenRunningNewOne --status Running --limit 25 owncloud/web",
-            "drone build ls --branch stopOldBuildWhenRunningNewOne --status running --limit 25 owncloud/web",
-            "drone build ls --branch stopOldBuildWhenRunningNewOne --status error --limit 25 owncloud/web",
-            "drone build ls --branch stopOldBuildWhenRunningNewOne --status Error --limit 25 owncloud/web",
+            "drone build ls owncloud/web --status running --limit 25",
+            "drone build ls owncloud/web --status running --limit 25 | grep Ref:",
         ],
         "when": {
             "event": [
