@@ -120,7 +120,7 @@ exports.propfind = function(path, userId, properties, folderDepth = '1') {
  *
  * @param {string} user
  */
-exports.getTrashBinElements = function(user, depth = 2) {
+exports.getTrashBinElements = function(user, depth = 'infinity') {
   return new Promise((resolve, reject) => {
     exports
       .propfind(
