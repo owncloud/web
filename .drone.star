@@ -820,6 +820,7 @@ def getRecentBuilds():
         "commands": [
             "drone build ls owncloud/web --status running --limit 25 > %s/recentBuilds.txt" % dir["web"],
             "cat %s/recentBuilds.txt" % dir["web"],
+            "sed --version",
             "sed -n '/^Build #/,/^Ref: refs/p' %s/recentBuilds.txt" % dir["web"],
             "sed -n '/^Build #/,/^Ref: refs/p' %s/recentBuilds.txt > %s/filteredDescriptions.txt" % (dir["web"], dir["web"]),
             "cat %s/filteredDescriptions.txt" % dir["web"],
