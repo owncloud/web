@@ -63,7 +63,7 @@ export function buildResource(resource) {
       return this.permissions.indexOf('C') >= 0
     },
     canDownload: function() {
-      // TODO: as soon as we allow folder downloads as archive we want to return `true` here without exceptions
+      // TODO: as soon as we allow folder downloads as archive we want to remove !isFolder from this test
       return !isFolder && this.permissions.indexOf('V') >= 0
     },
     canBeDeleted: function() {
