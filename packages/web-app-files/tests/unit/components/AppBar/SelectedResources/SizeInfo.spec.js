@@ -27,7 +27,7 @@ const selectedFiles = [
     size: '200'
   }
 ]
-const componentStubs = { ...stubs, translate: true, 'oc-button': false }
+const componentStubs = { ...stubs, translate: true }
 
 describe('SizeInfo component', () => {
   afterEach(() => {
@@ -40,39 +40,27 @@ describe('SizeInfo component', () => {
   const spyResetSelection = jest.spyOn(SizeInfo.methods, 'RESET_SELECTION').mockImplementation()
 
   describe('when item(s) are selected', () => {
-    it('should have 1 selected count and size if one item is selected', () => {
-      const store = createStore({ selected: [selectedFiles[0]] })
-      const size = selectedFiles[0].size
+    it.each([[[selectedFiles[0]]], [selectedFiles]])(
+      'should have selected number count and total size',
+      selected => {
+        const selectedCount = selected.length
+        let totalSize = 0
+        selected.forEach(file => (totalSize += parseInt(file.size, 10)))
 
-      const wrapper = createWrapper({
-        store
-      })
-      const translate = wrapper.find('translate-stub')
+        const store = createStore({ selected })
+        const wrapper = createWrapper({
+          store
+        })
+        const translate = wrapper.find('translate-stub')
 
-      expect(translate.exists()).toBeTruthy()
-      expect(translate.props().translateN).toEqual(1)
-      expect(translate.props().translateParams.amount).toEqual(1)
-      expect(translate.props().translateParams.size).toEqual(size + ' B')
-      expect(translate.text()).toEqual('%{ amount } selected item - %{ size }')
-    })
-    it('should have total number and size of multiple selected items', () => {
-      const selectedCount = selectedFiles.length
-      let totalSize = 0
-      selectedFiles.forEach(file => (totalSize += parseInt(file.size, 10)))
-
-      const store = createStore({ selected: selectedFiles })
-      const wrapper = createWrapper({
-        store
-      })
-      const translate = wrapper.find('translate-stub')
-
-      expect(translate.exists()).toBeTruthy()
-      expect(translate.props().translateN).toEqual(selectedCount)
-      expect(translate.props().translateParams.amount).toEqual(selectedCount)
-      expect(translate.props().translateParams.size).toEqual(totalSize + ' B')
-      expect(translate.text()).toEqual('%{ amount } selected item - %{ size }')
-    })
-    it('should have selected count but not size if item size is NaN', () => {
+        expect(translate.exists()).toBeTruthy()
+        expect(translate.props().translateN).toEqual(selectedCount)
+        expect(translate.props().translateParams.amount).toEqual(selectedCount)
+        expect(translate.props().translateParams.size).toEqual(totalSize + ' B')
+        expect(translate.text()).toEqual('%{ amount } selected item - %{ size }')
+      }
+    )
+    it('should have selected number count but not size if item size is NaN', () => {
       const store = createStore({ selected: [{ path: selectedFiles[0].path }] })
 
       const wrapper = createWrapper({
@@ -89,7 +77,8 @@ describe('SizeInfo component', () => {
     it('should trigger "RESET_SELECTION" if clear button is clicked', () => {
       const store = createStore({ selected: selectedFiles })
       const wrapper = createWrapper({
-        store
+        store,
+        stubs: { ...componentStubs, 'oc-button': false }
       })
       const clearSelectionButton = wrapper.find('button')
       clearSelectionButton.trigger('click')
@@ -112,10 +101,10 @@ function createStore(state) {
   return new Vuex.Store({
     modules: {
       Files: {
+        namespaced: true,
         state: {
           ...state
         },
-        namespaced: true,
         getters: {
           selectedFiles: () => state.selected
         }
