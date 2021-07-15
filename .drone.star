@@ -820,12 +820,10 @@ def getRecentBuilds():
         "commands": [
             "drone build ls owncloud/web --status running > %s/recentBuilds.txt" % dir["web"],
             "drone build info owncloud/web ${DRONE_BUILD_NUMBER} > %s/thisBuildInfo.txt" % dir["web"],
-            "reference=$(awk '/Build #|Ref: refs\\\\/pull/' %s/thisBuildInfo.txt | awk -F: '{print $NF}')" % dir["web"],
-            "echo $reference",
             "awk '/Build #|Ref: refs\\\\/pull/' %s/recentBuilds.txt > %s/filteredDescriptions.txt" % (dir["web"], dir["web"]),
             "cat %s/filteredDescriptions.txt" % dir["web"],
-            "awk -v ref=$reference 'index($0,ref){print p} {p=$0}' %s/filteredDescriptions.txt > %s/buildsToBeStopped.txt" % (dir["web"], dir["web"]),
-            "cat %s/buildsToBeStopped.txt" % dir["web"],
+            "reference=$(awk '/Ref: refs\\\\/pull/' %s/thisBuildInfo.txt)" % dir["web"],
+            "awk -v ref=$reference '/ref/{print p} {p=$0}' %s/filteredDescriptions.txt" % dir["web"],
         ],
         "when": {
             "event": [
