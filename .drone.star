@@ -24,7 +24,11 @@ config = {
     "yarnlint": True,
     "acceptance": {
         "webUI": {
+            "skip": False,
             "type": FULL,
+            "debugSuites": {
+                "webUIPreview": "webUIPreview1",
+            },
             "suites": {
                 "oC10Basic": [
                     "webUIAccount",
@@ -141,6 +145,7 @@ config = {
             },
             "visualTesting": True,
             "screenShots": True,
+            "filterTags": "@debugTest",
         },
         "webUINotification": {
             "type": NOTIFICATIONS,
@@ -1011,7 +1016,7 @@ def acceptance(ctx):
         "visualTesting": False,
         "openIdConnect": False,
         "oc10IntegrationAppIncluded": False,
-        "skip": False,
+        "skip": True,
         "debugSuites": [],
         "earlyFail": True,
     }

@@ -31,7 +31,7 @@ Scenario Outline: preview of image files with media viewer is possible
     And the public views the file "test_video.mp4" in the media viewer using the webUI
     Then the file "test_video.mp4" should be displayed in the media viewer webUI
 
-
+  @debugTest
   Scenario: image preview in public share
     Given user "Alice" has created folder "simple-empty-folder"
     And user "Alice" has uploaded file "testavatar.jpg" to "simple-empty-folder/testavatar.jpg"
@@ -177,3 +177,183 @@ Scenario Outline: preview of image files with media viewer is possible
       | testavatar.jpg  | testavatar.JPG  |
       | testavatar.png  | testavatar.PNG  |
       | testavatar.jpeg | testavatar.JPEG |
+
+  @debugTest
+  Scenario: image preview in public share
+    Given user "Alice" has created folder "simple-empty-folder"
+    And user "Alice" has uploaded file "testavatar.jpg" to "simple-empty-folder/testavatar.jpg"
+    And user "Alice" has created a public link with following settings
+      | path | simple-empty-folder |
+    When the public uses the webUI to access the last public link created by user "Alice"
+    And the public views the file "testavatar.jpg" in the media viewer using the webUI
+    Then the file "testavatar.jpg" should be displayed in the media viewer webUI
+
+  @debugTest
+  Scenario: image preview in public share
+    Given user "Alice" has created folder "simple-empty-folder"
+    And user "Alice" has uploaded file "testavatar.jpg" to "simple-empty-folder/testavatar.jpg"
+    And user "Alice" has created a public link with following settings
+      | path | simple-empty-folder |
+    When the public uses the webUI to access the last public link created by user "Alice"
+    And the public views the file "testavatar.jpg" in the media viewer using the webUI
+    Then the file "testavatar.jpg" should be displayed in the media viewer webUI
+
+  @debugTest
+  Scenario: image preview in public share
+    Given user "Alice" has created folder "simple-empty-folder"
+    And user "Alice" has uploaded file "testavatar.jpg" to "simple-empty-folder/testavatar.jpg"
+    And user "Alice" has created a public link with following settings
+      | path | simple-empty-folder |
+    When the public uses the webUI to access the last public link created by user "Alice"
+    And the public views the file "testavatar.jpg" in the media viewer using the webUI
+    Then the file "testavatar.jpg" should be displayed in the media viewer webUI
+
+  @debugTest
+  Scenario: image preview in public share
+    Given user "Alice" has created folder "simple-empty-folder"
+    And user "Alice" has uploaded file "testavatar.jpg" to "simple-empty-folder/testavatar.jpg"
+    And user "Alice" has created a public link with following settings
+      | path | simple-empty-folder |
+    When the public uses the webUI to access the last public link created by user "Alice"
+    And the public views the file "testavatar.jpg" in the media viewer using the webUI
+    Then the file "testavatar.jpg" should be displayed in the media viewer webUI
+
+  @debugTest
+  Scenario: image preview in public share
+    Given user "Alice" has created folder "simple-empty-folder"
+    And user "Alice" has uploaded file "testavatar.jpg" to "simple-empty-folder/testavatar.jpg"
+    And user "Alice" has created a public link with following settings
+      | path | simple-empty-folder |
+    When the public uses the webUI to access the last public link created by user "Alice"
+    And the public views the file "testavatar.jpg" in the media viewer using the webUI
+    Then the file "testavatar.jpg" should be displayed in the media viewer webUI
+
+  @debugTest
+  Scenario: image preview in public share
+    Given user "Alice" has created folder "simple-empty-folder"
+    And user "Alice" has uploaded file "testavatar.jpg" to "simple-empty-folder/testavatar.jpg"
+    And user "Alice" has created a public link with following settings
+      | path | simple-empty-folder |
+    When the public uses the webUI to access the last public link created by user "Alice"
+    And the public views the file "testavatar.jpg" in the media viewer using the webUI
+    Then the file "testavatar.jpg" should be displayed in the media viewer webUI
+
+  @debugTest
+  Scenario: image preview in public share
+    Given user "Alice" has created folder "simple-empty-folder"
+    And user "Alice" has uploaded file "testavatar.jpg" to "simple-empty-folder/testavatar.jpg"
+    And user "Alice" has created a public link with following settings
+      | path | simple-empty-folder |
+    When the public uses the webUI to access the last public link created by user "Alice"
+    And the public views the file "testavatar.jpg" in the media viewer using the webUI
+    Then the file "testavatar.jpg" should be displayed in the media viewer webUI
+
+  @debugTest
+  Scenario: image preview in public share
+    Given user "Alice" has created folder "simple-empty-folder"
+    And user "Alice" has uploaded file "testavatar.jpg" to "simple-empty-folder/testavatar.jpg"
+    And user "Alice" has created a public link with following settings
+      | path | simple-empty-folder |
+    When the public uses the webUI to access the last public link created by user "Alice"
+    And the public views the file "testavatar.jpg" in the media viewer using the webUI
+    Then the file "testavatar.jpg" should be displayed in the media viewer webUI
+
+  @debugTest
+  Scenario: image preview in public share
+    Given user "Alice" has created folder "simple-empty-folder"
+    And user "Alice" has uploaded file "testavatar.jpg" to "simple-empty-folder/testavatar.jpg"
+    And user "Alice" has created a public link with following settings
+      | path | simple-empty-folder |
+    When the public uses the webUI to access the last public link created by user "Alice"
+    And the public views the file "testavatar.jpg" in the media viewer using the webUI
+    Then the file "testavatar.jpg" should be displayed in the media viewer webUI
+
+  @debugTest
+  Scenario: image preview in public share
+    Given user "Alice" has created folder "simple-empty-folder"
+    And user "Alice" has uploaded file "testavatar.jpg" to "simple-empty-folder/testavatar.jpg"
+    And user "Alice" has created a public link with following settings
+      | path | simple-empty-folder |
+    When the public uses the webUI to access the last public link created by user "Alice"
+    And the public views the file "testavatar.jpg" in the media viewer using the webUI
+    Then the file "testavatar.jpg" should be displayed in the media viewer webUI
+
+  @debugTest
+  Scenario: image preview in public share
+    Given user "Alice" has created folder "simple-empty-folder"
+    And user "Alice" has uploaded file "testavatar.jpg" to "simple-empty-folder/testavatar.jpg"
+    And user "Alice" has created a public link with following settings
+      | path | simple-empty-folder |
+    When the public uses the webUI to access the last public link created by user "Alice"
+    And the public views the file "testavatar.jpg" in the media viewer using the webUI
+    Then the file "testavatar.jpg" should be displayed in the media viewer webUI
+
+  @debugTest
+  Scenario: image preview in public share
+    Given user "Alice" has created folder "simple-empty-folder"
+    And user "Alice" has uploaded file "testavatar.jpg" to "simple-empty-folder/testavatar.jpg"
+    And user "Alice" has created a public link with following settings
+      | path | simple-empty-folder |
+    When the public uses the webUI to access the last public link created by user "Alice"
+    And the public views the file "testavatar.jpg" in the media viewer using the webUI
+    Then the file "testavatar.jpg" should be displayed in the media viewer webUI
+
+  @debugTest
+  Scenario: image preview in public share
+    Given user "Alice" has created folder "simple-empty-folder"
+    And user "Alice" has uploaded file "testavatar.jpg" to "simple-empty-folder/testavatar.jpg"
+    And user "Alice" has created a public link with following settings
+      | path | simple-empty-folder |
+    When the public uses the webUI to access the last public link created by user "Alice"
+    And the public views the file "testavatar.jpg" in the media viewer using the webUI
+    Then the file "testavatar.jpg" should be displayed in the media viewer webUI
+
+  @debugTest
+  Scenario: image preview in public share
+    Given user "Alice" has created folder "simple-empty-folder"
+    And user "Alice" has uploaded file "testavatar.jpg" to "simple-empty-folder/testavatar.jpg"
+    And user "Alice" has created a public link with following settings
+      | path | simple-empty-folder |
+    When the public uses the webUI to access the last public link created by user "Alice"
+    And the public views the file "testavatar.jpg" in the media viewer using the webUI
+    Then the file "testavatar.jpg" should be displayed in the media viewer webUI
+
+  @debugTest
+  Scenario: image preview in public share
+    Given user "Alice" has created folder "simple-empty-folder"
+    And user "Alice" has uploaded file "testavatar.jpg" to "simple-empty-folder/testavatar.jpg"
+    And user "Alice" has created a public link with following settings
+      | path | simple-empty-folder |
+    When the public uses the webUI to access the last public link created by user "Alice"
+    And the public views the file "testavatar.jpg" in the media viewer using the webUI
+    Then the file "testavatar.jpg" should be displayed in the media viewer webUI
+
+  @debugTest
+  Scenario: image preview in public share
+    Given user "Alice" has created folder "simple-empty-folder"
+    And user "Alice" has uploaded file "testavatar.jpg" to "simple-empty-folder/testavatar.jpg"
+    And user "Alice" has created a public link with following settings
+      | path | simple-empty-folder |
+    When the public uses the webUI to access the last public link created by user "Alice"
+    And the public views the file "testavatar.jpg" in the media viewer using the webUI
+    Then the file "testavatar.jpg" should be displayed in the media viewer webUI
+
+  @debugTest
+  Scenario: image preview in public share
+    Given user "Alice" has created folder "simple-empty-folder"
+    And user "Alice" has uploaded file "testavatar.jpg" to "simple-empty-folder/testavatar.jpg"
+    And user "Alice" has created a public link with following settings
+      | path | simple-empty-folder |
+    When the public uses the webUI to access the last public link created by user "Alice"
+    And the public views the file "testavatar.jpg" in the media viewer using the webUI
+    Then the file "testavatar.jpg" should be displayed in the media viewer webUI
+
+  @debugTest
+  Scenario: image preview in public share
+    Given user "Alice" has created folder "simple-empty-folder"
+    And user "Alice" has uploaded file "testavatar.jpg" to "simple-empty-folder/testavatar.jpg"
+    And user "Alice" has created a public link with following settings
+      | path | simple-empty-folder |
+    When the public uses the webUI to access the last public link created by user "Alice"
+    And the public views the file "testavatar.jpg" in the media viewer using the webUI
+    Then the file "testavatar.jpg" should be displayed in the media viewer webUI
