@@ -53,7 +53,7 @@ Feature: Sharing files and folders with internal users
       | Editor               | Editor               | read,update,create,delete,share | read,update,share |
       | Advanced permissions | Advanced permissions | read                            | read              |
 
-  @issue-4102
+  @issue-4102 @issue-ocis-2267
   Scenario: share a file with another internal user who overwrites and unshares the file
     Given user "Brian" has created file "lorem.txt"
     And user "Brian" has logged in using the webUI

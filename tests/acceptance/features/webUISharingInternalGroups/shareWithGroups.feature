@@ -73,7 +73,7 @@ Feature: Sharing files and folders with internal groups
       | Editor               | Editor               | read,update,create,delete,share | read,update,share |
       | Advanced permissions | Advanced permissions | read                            | read              |
 
-  @issue-4102
+  @issue-4102 @issue-ocis-2267
   Scenario: share a file with an internal group a member overwrites and unshares the file
     Given user "Carol" has created file "lorem.txt"
     And user "Carol" has logged in using the webUI

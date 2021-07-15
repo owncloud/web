@@ -18,7 +18,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 
 
 ### [Exit page re-appears in loop when logged in user is deleted](https://github.com/owncloud/web/issues/4677)
--   [webUILogin/openidLogin.feature:53](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/openidLogin.feature#L53)
+-   [webUILogin/openidLogin.feature:51](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/openidLogin.feature#L51)
 
 ### [REPORT request not implemented](https://github.com/owncloud/ocis/issues/1330)
 -   [webUIDeleteFilesFolders/deleteFilesFolders.feature:295](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIDeleteFilesFolders/deleteFilesFolders.feature#L295)
@@ -206,7 +206,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUISharingInternalGroups/shareWithGroups.feature:200](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroups/shareWithGroups.feature#L200)
 
 ### [Can login with invalid password while logging in with openidconnect in oc10](https://github.com/owncloud/ocis/issues/1428)
--   [webUILogin/openidLogin.feature:46](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/openidLogin.feature#L46)
+-   [webUILogin/openidLogin.feature:44](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/openidLogin.feature#L44)
 
 
 ### webUI-Private-Links
@@ -248,11 +248,8 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIMoveFilesFolders/moveFiles.feature:97](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIMoveFilesFolders/moveFiles.feature#L97)
 -   [webUIMoveFilesFolders/moveFolders.feature:72](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIMoveFilesFolders/moveFolders.feature#L72)
 
-### [Cannot delete a received share](https://github.com/owncloud/ocis/issues/714)
--   [webUISharingAcceptShares/acceptShares.feature:194](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L194)
-
 ### [Accepting different shares with same filename from different users overwrites one file](https://github.com/owncloud/ocis/issues/713)
--   [webUISharingAcceptShares/acceptShares.feature:209](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L209)
+-   [webUISharingAcceptShares/acceptShares.feature:208](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L208)
 
 ### [Share Permissions](https://github.com/owncloud/ocis/issues/1277)
 -   [webUISharingFilePermissionsGroups/sharePermissionsGroup.feature:61](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingFilePermissionsGroups/sharePermissionsGroup.feature#L61)
@@ -328,6 +325,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 
 ### [Sharing Indicator difference](https://github.com/owncloud/ocis/issues/1949)
 -   [webUISharingInternalGroupsSharingIndicator/shareWithGroups.feature:61](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroupsSharingIndicator/shareWithGroups.feature#L61)
+-   [webUISharingInternalGroupsSharingIndicator/shareWithGroups.feature:20](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroupsSharingIndicator/shareWithGroups.feature#L20)
 
 ### [Notifications endpoint](https://github.com/owncloud/ocis/issues/14)
 -   [webUISharingNotifications/shareWithGroups.feature:24](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingNotifications/shareWithGroups.feature#L24)
@@ -366,7 +364,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUILogin/adminBlocksUser.feature:13](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/adminBlocksUser.feature#L13)
 
 ### [Browser session deleted user should not be valid for newly created user of same name](https://github.com/owncloud/ocis/issues/904)
--   [webUILogin/openidLogin.feature:62](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/openidLogin.feature#L62)
+-   [webUILogin/openidLogin.feature:60](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/openidLogin.feature#L60)
 
 ### [Moving files in a shared folder causes errors but succeeds](https://github.com/owncloud/ocis/issues/873)
 -   [webUIMoveFilesFolders/moveFiles.feature:139](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIMoveFilesFolders/moveFiles.feature#L139)
@@ -545,3 +543,15 @@ Other free text and markdown formatting can be used elsewhere in the document if
 
 ### [reshared share that is shared with a group the sharer is part of shows twice on "Share with me" page](https://github.com/owncloud/web/issues/2512)
 -   [webUISharingAcceptShares/acceptShares.feature:31](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L31)
+
+### [[oCIS] Received share cannot be deleted/unshared if not shared with full permissions](https://github.com/owncloud/web/issues/5531)
+-   [webUISharingAcceptShares/acceptShares.feature:49](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L49)
+-   [webUISharingAcceptShares/acceptShares.feature:144](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L144)
+-   [webUISharingAcceptShares/acceptShares.feature:182](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L182)
+
+### [[oCIS] Deleting accepted share doesn't change share status from Accepted to Declined](https://github.com/owncloud/web/issues/5532)
+-   [webUISharingAcceptShares/acceptShares.feature:193](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L193)
+
+### [not possible to overwrite a received shared file](https://github.com/owncloud/ocis/issues/2267)
+-   [webUISharingInternalGroups/shareWithGroups.feature:77](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroups/shareWithGroups.feature#L77)
+-   [webUISharingInternalUsers/shareWithUsers.feature:57](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsers/shareWithUsers.feature#L57)

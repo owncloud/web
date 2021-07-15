@@ -45,8 +45,8 @@ Feature: accept/decline shares coming from internal users
     And folder "simple-folder" shared by "Brian Murphy" should not be listed in the webUI
     And folder "simple-folder" should not be listed on the webUI
 
-  @smokeTest @issue-4102
-  Scenario: unshare an accepted share on the "All files" page
+  @issue-4102 @issue-5531
+  Scenario: unshare accepted shares from "All files" page
     Given these groups have been created:
       | groupname |
       | grp1      |
@@ -140,7 +140,7 @@ Feature: accept/decline shares coming from internal users
     Then file "lorem.txt" should be listed on the webUI
     And file "testimage.jpg" should not be listed on the webUI
 
-  @issue-4102
+  @issue-4102 @issue-5531
   Scenario: delete an accepted share
     Given user "Alice" has created file "lorem.txt"
     And user "Alice" has uploaded file "testavatar.jpg" to "testimage.jpg"
@@ -159,8 +159,7 @@ Feature: accept/decline shares coming from internal users
 
   @issue-3101 @issue-4102
   Scenario: Decline multiple accepted shares at once from shared with me page
-    Given user "Alice" has been created with default attributes and without skeleton files
-    And user "Alice" has created file "lorem.txt"
+    Given user "Alice" has created file "lorem.txt"
     And user "Alice" has created file "data.zip"
     And user "Alice" has created folder "simple-folder"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
@@ -179,7 +178,7 @@ Feature: accept/decline shares coming from internal users
     And file "lorem.txt" shared by "Alice Hansen" should be in "Declined" state on the webUI
     And folder "simple-folder" shared by "Alice Hansen" should be in "Declined" state on the webUI
 
-  @issue-4102
+  @issue-4102 @issue-5531
   Scenario: shared file status is changed to declined when user deletes the file
     Given user "Alice" has created file "lorem.txt"
     And user "Alice" has shared file "lorem.txt" with user "Brian"
@@ -190,7 +189,7 @@ Feature: accept/decline shares coming from internal users
     And the user browses to the shared-with-me page
     Then file "lorem.txt" shared by "Alice Hansen" should be in "Declined" state on the webUI
 
-  @ocis-issue-714
+  @ocis-issue-714 @issue-5532
   Scenario: the deleted shared file is restored back to all files list when accepted from the shared with me file list
     Given user "Alice" has created file "lorem.txt"
     And user "Alice" has shared file "lorem.txt" with user "Brian"
