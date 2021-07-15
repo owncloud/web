@@ -530,6 +530,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIUpload/upload.feature:108](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/upload.feature#L108)
 -   [webUIUpload/upload.feature:121](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/upload.feature#L121)
 -   [webUIUpload/upload.feature:138](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/upload.feature#L138)
+-   [webUIUpload/uploadEdgecases.feature:67](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/uploadEdgecases.feature#L67)
 
 ### [browsing directly to a details 'tab' is not possible] (https://github.com/owncloud/web/issues/5464)
 -   [webUIFiles/browseDirectlyToDetailsTab.feature:21](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFiles/browseDirectlyToDetailsTab.feature#L21)

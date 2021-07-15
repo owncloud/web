@@ -147,6 +147,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIUpload/upload.feature:108](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/upload.feature#L108)
 -   [webUIUpload/upload.feature:121](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/upload.feature#L121)
 -   [webUIUpload/upload.feature:138](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/upload.feature#L138)
+-   [webUIUpload/uploadEdgecases.feature:67](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/uploadEdgecases.feature#L67)
 
 ### [Federated shares not showing in shared with me page] (https://github.com/owncloud/web/issues/2510)
 -   [webUISharingExternalToRoot/federationSharing.feature:32](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingExternalToRoot/federationSharing.feature#L32)

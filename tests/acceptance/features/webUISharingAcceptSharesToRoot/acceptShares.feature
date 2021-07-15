@@ -265,8 +265,8 @@ Feature: accept/decline shares coming from internal users
     Then file "lorem.txt" shared by "Alice Hansen" should be in "Declined" state on the webUI
     And file "testimage.jpg" shared by "Alice Hansen" should be in "Pending" state on the webUI
 
-  @issue-3101 @skip @issue-4582
-  Scenario: Delete multiple accepted shares at once from shared with me page
+  @issue-3101
+  Scenario: Decline multiple accepted shares at once from shared with me page
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And user "Alice" has been created with default attributes and without skeleton files
     And user "Alice" has created file "lorem.txt"
@@ -275,17 +275,15 @@ Feature: accept/decline shares coming from internal users
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Alice" has shared file "lorem.txt" with user "Brian"
     And user "Alice" has shared file "data.zip" with user "Brian"
+    And user "Brian" has accepted the share "data.zip" offered by user "Alice"
+    And user "Brian" has accepted the share "lorem.txt" offered by user "Alice"
+    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
     And the user has browsed to the shared-with-me page
-    And the user accepts share "lorem.txt" offered by user "Alice Hansen" using the webUI
-    When the user batch deletes these files using the webUI
+    When the user batch declines these shares using the webUI
       | name          |
       | data.zip      |
-      | lorem.txt |
+      | lorem.txt     |
       | simple-folder |
-    Then file "data.zip" should not be listed on the webUI
-    And file "lorem.txt" should not be listed on the webUI
-    And folder "simple-folder" should not be listed on the webUI
-    When the user has reloaded the current page of the webUI
     Then file "data.zip" shared by "Alice Hansen" should be in "Declined" state on the webUI
     And file "lorem.txt" shared by "Alice Hansen" should be in "Declined" state on the webUI
     And folder "simple-folder" shared by "Alice Hansen" should be in "Declined" state on the webUI

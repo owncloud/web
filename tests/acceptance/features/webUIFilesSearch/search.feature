@@ -125,29 +125,27 @@ Feature: Search
     Then file "lorem.txt" should not be listed on the webUI
     And file "torem.txt" should be listed on the webUI
 
-  @skip
-  Scenario: Search for a newly uploaded file
-    Given user "Alice" has uploaded file with content "does-not-matter" to "torem.txt"
-    And user "Alice" has uploaded file with content "does-not-matter" to "simple-folder/another-torem.txt"
-    When the user searches for "torem" using the webUI
-    Then file "torem.txt" with path "/" should be listed in the search results in the other folders section on the webUI
-    And file "another-torem.txt" with path "/simple-folder" should be listed in the search results in the other folders section on the webUI
 
-  @skip
+  Scenario: Search for a newly uploaded file
+    When the user uploads file "simple.pdf" using the webUI
+    And the user opens folder "simple-folder" using the webUI
+    And the user uploads file "simple.odt" using the webUI
+    And the user browses to the files page
+    And the user searches for "simple" using the webUI
+    Then file "simple.pdf" should be listed on the webUI
+    And file "simple.odt" should be listed on the webUI
+
+
   Scenario: Search for files with difficult names
     Given user "Alice" has uploaded file with content "does-not-matter" to "/strängéनेपालीloremfile.txt"
-    And user "Alice" has uploaded file with content "does-not-matter" to "/strängé नेपाली folder/strängéनेपालीloremfile.txt"
     When the user searches for "lorem" using the webUI
-    Then file "strängéनेपालीloremfile.txt" with path "/" should be listed in the search results in the other folders section on the webUI
-    And file "strängéनेपालीloremfile.txt" with path "/strängé नेपाली folder" should be listed in the search results in the other folders section on the webUI
+    Then file "strängéनेपालीloremfile.txt" should be listed on the webUI
 
-  @skip
+
   Scenario: Search for files with difficult names and difficult search phrase
     Given user "Alice" has uploaded file with content "does-not-matter" to "/strängéनेपालीloremfile.txt"
-    And user "Alice" has uploaded file with content "does-not-matter" to "/strängé नेपाली folder/strängéनेपालीloremfile.txt"
     When the user searches for "strängéनेपाली" using the webUI
-    Then file "strängéनेपालीloremfile.txt" with path "/" should be listed in the search results in the other folders section on the webUI
-    And file "strängéनेपालीloremfile.txt" with path "/strängé नेपाली folder" should be listed in the search results in the other folders section on the webUI
+    Then file "strängéनेपालीloremfile.txt" should be listed on the webUI
 
   @issue-1726
   Scenario: Search for deleted folder in the trashbin

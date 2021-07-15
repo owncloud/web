@@ -59,11 +59,6 @@ Then('the warning {string} should be displayed on the login page', async functio
   )
 })
 
-Then('the authentication page should be visible', () => {
-  const loginPage = client.page.loginPage()
-  return loginPage.waitForElementPresent('@authenticateButton')
-})
-
 Then('the user should be on page with the url containing {string}', function(urlContent) {
   return client.assert.urlContains(urlContent)
 })

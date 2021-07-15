@@ -49,21 +49,21 @@ Feature: File Upload
       | 'single'quotes        |
       | strängé नेपाली folder |
 
-  @skip
+
   Scenario: overwrite an existing file
-    When the user uploads overwriting file "'single'quotes.txt" using the webUI and retries if the file is locked
+    When the user uploads overwriting file "'single'quotes.txt" using the webUI
     Then file "'single'quotes.txt" should be listed on the webUI
     And as "Alice" the content of "'single'quotes.txt" should be the same as the content of local file "'single'quotes.txt"
 
-    When the user uploads overwriting file "strängé filename (duplicate #2 &).txt" using the webUI and retries if the file is locked
+    When the user uploads overwriting file "strängé filename (duplicate #2 &).txt" using the webUI
     Then file "strängé filename (duplicate #2 &).txt" should be listed on the webUI
     And as "Alice" the content of "strängé filename (duplicate #2 &).txt" should be the same as the content of local file "strängé filename (duplicate #2 &).txt"
 
-    When the user uploads overwriting file "zzzz-must-be-last-file-in-folder.txt" using the webUI and retries if the file is locked
+    When the user uploads overwriting file "zzzz-must-be-last-file-in-folder.txt" using the webUI
     Then file "zzzz-must-be-last-file-in-folder.txt" should be listed on the webUI
     And as "Alice" the content of "zzzz-must-be-last-file-in-folder.txt" should be the same as the content of local file "zzzz-must-be-last-file-in-folder.txt"
 
-  @skip
+  @issue-5106
   Scenario: keep new and existing file
     When the user uploads file "'single'quotes.txt" keeping both new and existing files using the webUI
     Then file "'single'quotes.txt" should be listed on the webUI

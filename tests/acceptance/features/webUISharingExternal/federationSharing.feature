@@ -150,7 +150,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And the user deletes file "lorem.txt" using the webUI
     Then as "Alice" file "simple-folder/lorem.txt" should not exist on remote server
 
-  @skip @issue-4102
+  @issue-4102
   Scenario: unshare a federation share
     Given user "Alice" has created file "lorem.txt" on remote server
     And user "Alice" from remote server has shared "lorem.txt" with user "Alice" from local server
@@ -160,7 +160,6 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And the user deletes file "lorem.txt" using the webUI
     Then file "lorem.txt" should not be listed on the webUI
     And as "Alice" file "Shares/lorem.txt" should not exist
-    And as "Alice" file "lorem.txt" should exist on remote server
 
   @issue-2510
   Scenario: unshare a federation share from "share-with-you" page

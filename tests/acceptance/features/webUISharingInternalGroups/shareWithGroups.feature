@@ -73,7 +73,7 @@ Feature: Sharing files and folders with internal groups
       | Editor               | Editor               | read,update,create,delete,share | read,update,share |
       | Advanced permissions | Advanced permissions | read                            | read              |
 
-  @skip @issue-4102
+  @issue-4102
   Scenario: share a file with an internal group a member overwrites and unshares the file
     Given user "Carol" has created file "lorem.txt"
     And user "Carol" has logged in using the webUI
@@ -134,7 +134,7 @@ Feature: Sharing files and folders with internal groups
     And as "Carol" the content of "new-simple-folder/new-lorem.txt" should be the same as the content of local file "new-lorem.txt"
     And file "data.zip" should not be listed on the webUI
 
-  @skip @issue-4102
+  @issue-4102
   Scenario: share a folder with an internal group and a member unshares the folder
     Given user "Carol" has created folder "simple-folder"
     And user "Carol" has uploaded file with content "lorem content" to "simple-folder/lorem.txt"
