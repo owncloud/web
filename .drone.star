@@ -823,7 +823,7 @@ def getRecentBuilds():
             "awk '/Build #|Ref: refs\\\\/pull/' %s/recentBuilds.txt > %s/filteredDescriptions.txt" % (dir["web"], dir["web"]),
             "cat %s/filteredDescriptions.txt" % dir["web"],
             "reference=$(awk '/Ref: refs\\\\/pull/' %s/thisBuildInfo.txt)" % dir["web"],
-            "awk -v ref=$reference '/ref/{print p} {p=$0}' %s/filteredDescriptions.txt" % dir["web"],
+            "awk '/Ref: refs\\\\/pull\\\\/5496\\\\/head/{print p} {p=$0}' %s/filteredDescriptions.txt" % dir["web"],
         ],
         "when": {
             "event": [
