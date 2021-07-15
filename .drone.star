@@ -822,8 +822,13 @@ def getRecentBuilds():
             "drone build info owncloud/web ${DRONE_BUILD_NUMBER} > %s/thisBuildInfo.txt" % dir["web"],
             "awk '/Build #|Ref: refs\\\\/pull/' %s/recentBuilds.txt > %s/filteredDescriptions.txt" % (dir["web"], dir["web"]),
             "cat %s/filteredDescriptions.txt" % dir["web"],
-            "reference=$(awk '/Ref: refs\\\\/pull/' %s/thisBuildInfo.txt)" % dir["web"],
             "awk '/Ref: refs\\\\/pull\\\\/5496\\\\/head/{print p} {p=$0}' %s/filteredDescriptions.txt" % dir["web"],
+            "reference=$(awk '/Ref: refs\\\\/pull/' %s/thisBuildInfo.txt)" % dir["web"],
+            "thisBuildReference=$(awk '/Build #|Ref: refs\\\\/pull/' %s/thisBuildInfo.txt)" % dir["web"],
+            "echo $thisBuildReference",
+            "thisBuildPrNumber=$(awk -F'/head' '{print $(1)}' $thisBuildReference | awk -F'pull/' '{print $(2)}')",
+            "echo $thisBuildPrNumber",
+            "awk -v ref='Ref: refs\\\\/pull\\\\/$thisBuildPrNumber\\\\/head' '/ref/{print p} {p=$0}' %s/filteredDescriptions.txt" % dir["web"],
         ],
         "when": {
             "event": [
