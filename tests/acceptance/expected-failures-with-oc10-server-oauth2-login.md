@@ -161,3 +161,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIFiles/browseDirectlyToDetailsTab.feature:32](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFiles/browseDirectlyToDetailsTab.feature#L32)
 -   [webUIFiles/browseDirectlyToDetailsTab.feature:41](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFiles/browseDirectlyToDetailsTab.feature#L41)
 -   [webUIFiles/browseDirectlyToDetailsTab.feature:42](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFiles/browseDirectlyToDetailsTab.feature#L42)
+
+### [Change the file content of a received shared file](https://github.com/owncloud/web/pull/5534)
+-   [webUIFilesActionMenu/versions.feature:87](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesActionMenu/versions.feature#L87)
