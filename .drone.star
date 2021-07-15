@@ -820,13 +820,13 @@ def getRecentBuilds():
         "commands": [
             "drone build ls owncloud/web --status running > %s/recentBuilds.txt" % dir["web"],
             "drone build info owncloud/web ${DRONE_BUILD_NUMBER} > %s/thisBuildInfo.txt" % dir["web"],
-            "thisBuildReference=$(awk '/Build #|Ref: refs\\/pull/' %s/thisBuildInfo.txt)" % dir["web"],
-            "echo $thisBuildReference",
-            "thisBuildPrNumber=$(awk -F'/head' '{print $(1)}' thisBuildReference | awk -F'pull/' '{print $(2)}')",
-            "echo $thisBuildPrNumber",
-            "awk '/Build #|Ref: refs\\/pull/' %s/recentBuilds.txt > %s/filteredDescriptions.txt" % (dir["web"], dir["web"]),
+            "awk '/Build #|Ref: refs\\\\/pull/' %s/thisBuildInfo.txt | awk -F: '{print $NF}' > %s/thisBuildReference.txt" % (dir["web"], dir["web"]),
             "cat %s/thisBuildReference.txt" % dir["web"],
+            "try='refs/pull/5496/head'",
+            "awk '/Build #|Ref: refs\\\\/pull/' %s/recentBuilds.txt > %s/filteredDescriptions.txt" % (dir["web"], dir["web"]),
             "cat %s/filteredDescriptions.txt" % dir["web"],
+            "awk 'index($0,$try){print p} {p=$0}' %s/filteredDescriptions.txt > %s/buildsToBeStopped.txt" % (dir["web"], dir["web"]),
+            "cat %s/buildsToBeStopped.txt" % dir["web"],
         ],
         "when": {
             "event": [
