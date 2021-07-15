@@ -823,12 +823,10 @@ def getRecentBuilds():
             "awk '/Build #|Ref: refs\\\\/pull/' %s/recentBuilds.txt > %s/filteredDescriptions.txt" % (dir["web"], dir["web"]),
             "cat %s/filteredDescriptions.txt" % dir["web"],
             "awk '/Ref: refs\\\\/pull\\\\/5496\\\\/head/{print p} {p=$0}' %s/filteredDescriptions.txt" % dir["web"],
-            "reference=$(awk '/Ref: refs\\\\/pull/' %s/thisBuildInfo.txt)" % dir["web"],
-            "thisBuildReference=$(awk '/Build #|Ref: refs\\\\/pull/' %s/thisBuildInfo.txt)" % dir["web"],
-            "echo $thisBuildReference",
-            "thisBuildPrNumber=$(awk -F'/head' '{print $(1)}' $thisBuildReference | awk -F'pull/' '{print $(2)}')",
-            "echo $thisBuildPrNumber",
-            "awk -v ref='Ref: refs\\\\/pull\\\\/$thisBuildPrNumber\\\\/head' '/ref/{print p} {p=$0}' %s/filteredDescriptions.txt" % dir["web"],
+            "awk '/Ref: refs\\\\/pull/' %s/thisBuildInfo.txt > %s/thisBuildFiltered.txt" % (dir["web"], dir["web"]),
+            "number=$(awk -F'/head' '{print $(1)}' %s/thisBuildFiltered.txt | awk -F'pull/' '{print $(2)}')" % dir["web"],
+            "echo $number",
+            "awk -v ref='Ref: refs\\\\/pull\\\\/$number\\\\/head' '/ref/{print p} {p=$0}' %s/filteredDescriptions.txt" % dir["web"],
         ],
         "when": {
             "event": [
