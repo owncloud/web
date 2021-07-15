@@ -25,3 +25,4 @@ Feature: User Journey 1
     And the user restores file "new-lorem2.txt" from the trashbin using the webUI
     And the user browses to the files page
     And file "new-lorem2.txt" should be listed on the webUI
+
