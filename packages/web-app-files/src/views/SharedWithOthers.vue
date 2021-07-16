@@ -153,7 +153,6 @@ export default {
       'CLEAR_CURRENT_FILES_LIST',
       'UPDATE_RESOURCE'
     ]),
-    ...mapMutations(['SET_QUOTA']),
 
     rowMounted(resource, component) {
       const debounced = debounce(({ unobserve }) => {
@@ -200,10 +199,6 @@ export default {
 
       this.LOAD_FILES({ currentFolder: null, files: resources })
 
-      // Load quota
-      const user = await this.$client.users.getUser(this.user.id)
-
-      this.SET_QUOTA(user.quota)
       this.loading = false
     },
 

@@ -1,0 +1,5 @@
+Bugfix: Unnecessary quota requests
+
+We've removed requests that checked for a user's quota on pages where it was not relevant.
+
+https://github.com/owncloud/web/pull/5539
