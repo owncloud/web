@@ -301,7 +301,7 @@ export default {
       if (this.loading) {
         return
       }
-
+      this.failed = false
       this.direction = 'rtl'
       if (this.activeIndex + 1 >= this.mediaFiles.length) {
         this.activeIndex = 0
@@ -314,7 +314,7 @@ export default {
       if (this.loading) {
         return
       }
-
+      this.failed = false
       this.direction = 'ltr'
       if (this.activeIndex === 0) {
         this.activeIndex = this.mediaFiles.length - 1
