@@ -274,3 +274,51 @@ Feature: Restore deleted files/folders
     When the user restores file "…/folder-to-share/fileToShare.txt" from the trashbin using the webUI
     Then the success message with header "fileToShare.txt was restored successfully" should be displayed on the webUI
     And as "Alice" file "/Shares/folder-to-share/fileToShare.txt" should exist
+
+  @issue-1502
+  Scenario: Delete and restore folders with dot in the name
+    Given user "Alice" has created the following folders
+      | folders  |
+      | fo.      |
+      | fo.1     |
+      | fo...1.. |
+      | ...      |
+      | ..fo     |
+      | fo.xyz   |
+    And the following folders have been deleted by user "Alice"
+      | name     |
+      | fo.      |
+      | fo.1     |
+      | fo...1.. |
+      | ...      |
+      | ..fo     |
+      | fo.xyz   |
+    And the user has browsed to the trashbin page
+    When the user marks these files for batch action using the webUI
+      | name     |
+      | fo.      |
+      | fo.1     |
+      | fo...1.. |
+      | ...      |
+      | ..fo     |
+      | fo.xyz   |
+    And the user batch restores the marked files using the webUI
+    And the user reloads the current page of the webUI
+    Then these folders should not be listed on the webUI
+      | name     |
+      | fo.      |
+      | fo.1     |
+      | fo...1.. |
+      | ...      |
+      | ..fo     |
+      | fo.xyz   |
+    When the user browses to the files page
+    Then the following folders should be listed on the webUI
+      | name     |
+      | fo.      |
+      | fo.1     |
+      | fo...1.. |
+      | ...      |
+      | ..fo     |
+      | fo.xyz   |
+

@@ -989,6 +989,12 @@ Given('user {string} has created the following files', async function(userId, en
   return client
 })
 
+When('the user/public creates the following folders using the webUI', async function(entryList) {
+  for (const entry of entryList.rows()) {
+    await client.page.personalPage().createFolder(entry[0])
+  }
+})
+
 When('the user browses to the folder {string} on the files page', folderName => {
   const targetFolder = folderName === '/' ? '' : folderName
   return client.page.personalPage().navigateAndWaitTillLoaded(targetFolder)

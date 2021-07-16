@@ -120,3 +120,34 @@ Feature: files and folders can be deleted from the trashbin
     When the user clears the trashbin
     Then the success message with header "All deleted files were removed" should be displayed on the webUI
     And there should be no resources listed on the webUI
+
+
+  Scenario: Delete folders with dot in the name from trashbin
+    Given user "Alice" has created the following folders
+      | folders  |
+      | fo.      |
+      | fo.1     |
+      | fo...1.. |
+      | ...      |
+      | ..fo     |
+      | fo.xyz   |
+    And the following folders have been deleted by user "Alice"
+      | name     |
+      | fo.      |
+      | fo.1     |
+      | fo...1.. |
+      | ...      |
+      | ..fo     |
+      | fo.xyz   |
+    And the user has browsed to the trashbin page
+    And the user has reloaded the current page of the webUI
+    When the user batch deletes these files using the webUI
+      | name     |
+      | fo.      |
+      | fo.1     |
+      | fo...1.. |
+      | ...      |
+      | ..fo     |
+      | fo.xyz   |
+    Then the deleted elements should not be listed on the webUI
+    And the deleted elements should not be listed on the webUI after a page reload
