@@ -1,3 +1,24 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v3.4.1...master
+
+Summary
+-------
+
+* Bugfix - Unnecessary quota requests: [#5539](https://github.com/owncloud/web/pull/5539)
+
+Details
+-------
+
+* Bugfix - Unnecessary quota requests: [#5539](https://github.com/owncloud/web/pull/5539)
+
+   We've removed requests that checked for a user's quota on pages where it was not relevant.
+
+   https://github.com/owncloud/web/pull/5539
+
 Changelog for ownCloud Web [3.4.1] (2021-07-12)
 =======================================
 The following sections list the changes in ownCloud web 3.4.1 relevant to
