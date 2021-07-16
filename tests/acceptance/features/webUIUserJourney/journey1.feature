@@ -26,11 +26,11 @@ Feature: User Journey 1
     And the user browses to the files page
     And file "new-lorem2.txt" should be listed on the webUI
 
-  Scenario: change a file content of a recived shared
+  Scenario: change the file content of a received shared file
     Given user "Brian" has created file "lorem.txt"
     And user "Brian" has shared file "lorem.txt" with user "Alice" with "all" permissions
     And user "Alice" has accepted the share "lorem.txt" offered by user "Brian"
-    When user "Alice" has logged in using the webUI
-    And the user opens folder "Shares" using the webUI
+    And user "Alice" has logged in using the webUI
+    And the user has opened folder "Shares" using the webUI
     When the user uploads overwriting file "lorem.txt" using the webUI
     Then the versions list should contain 1 entries
