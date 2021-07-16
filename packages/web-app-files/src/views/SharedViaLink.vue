@@ -146,7 +146,6 @@ export default {
   methods: {
     ...mapActions('Files', ['loadIndicators', 'loadPreview']),
     ...mapMutations('Files', ['LOAD_FILES', 'SELECT_RESOURCES', 'CLEAR_CURRENT_FILES_LIST']),
-    ...mapMutations(['SET_QUOTA']),
 
     rowMounted(resource, component) {
       if (!this.displayThumbnails) {
@@ -191,10 +190,6 @@ export default {
 
       this.LOAD_FILES({ currentFolder: null, files: resources })
 
-      // Load quota
-      const user = await this.$client.users.getUser(this.user.id)
-
-      this.SET_QUOTA(user.quota)
       this.loading = false
     }
   }
