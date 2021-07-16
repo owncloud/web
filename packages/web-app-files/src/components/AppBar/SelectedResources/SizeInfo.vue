@@ -2,7 +2,7 @@
   <div class="uk-flex uk-flex-middle">
     <translate
       v-if="selectedResourcesSize !== '?'"
-      key="multiple-select-info"
+      key="multiple-select-info-with-size"
       :translate-n="selectedResourcesAmount"
       :translate-params="{ amount: selectedResourcesAmount, size: selectedResourcesSize }"
       translate-plural="%{ amount } selected items - %{ size }"
@@ -11,7 +11,7 @@
     </translate>
     <translate
       v-else
-      key="multiple-select-info-with-size"
+      key="multiple-select-info"
       :translate-n="selectedResourcesAmount"
       :translate-params="{ amount: selectedResourcesAmount }"
       translate-plural="%{ amount } selected items"
