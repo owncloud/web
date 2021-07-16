@@ -34,11 +34,6 @@ describe('SizeInfo component', () => {
     jest.clearAllMocks()
   })
 
-  jest
-    .spyOn(SizeInfo.mixins[0].methods, 'getResourceSize')
-    .mockImplementation(size => (isNaN(size) ? '?' : size + ' B'))
-  const spyResetSelection = jest.spyOn(SizeInfo.methods, 'RESET_SELECTION').mockImplementation()
-
   describe('when item(s) are selected', () => {
     it.each([[[selectedFiles[0]]], [selectedFiles]])(
       'should have selected number count and total size',
@@ -47,6 +42,9 @@ describe('SizeInfo component', () => {
         let totalSize = 0
         selected.forEach(file => (totalSize += parseInt(file.size, 10)))
 
+        jest
+          .spyOn(SizeInfo.mixins[0].methods, 'getResourceSize')
+          .mockImplementation(size => size + ' B')
         const store = createStore({ selected })
         const wrapper = createWrapper({
           store
@@ -61,6 +59,7 @@ describe('SizeInfo component', () => {
       }
     )
     it('should have selected number count but not size if item size is NaN', () => {
+      jest.spyOn(SizeInfo.mixins[0].methods, 'getResourceSize').mockImplementation(() => '?')
       const store = createStore({ selected: [{ path: selectedFiles[0].path }] })
 
       const wrapper = createWrapper({
@@ -75,6 +74,7 @@ describe('SizeInfo component', () => {
       expect(translate.text()).toEqual('%{ amount } selected item')
     })
     it('should trigger "RESET_SELECTION" if clear button is clicked', () => {
+      const spyResetSelection = jest.spyOn(SizeInfo.methods, 'RESET_SELECTION').mockImplementation()
       const store = createStore({ selected: selectedFiles })
       const wrapper = createWrapper({
         store,
