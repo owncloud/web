@@ -27,7 +27,7 @@ Feature: accept/decline shares coming from internal users
     When the user browses to the files page
     Then folder "/Shares" should not be listed on the webUI
 
-  @issue-2512 @skip @issue-4102
+  @issue-2512 @issue-4102
   Scenario: reshare a share that you received to a group that you are member of
     Given these groups have been created:
       | groupname |
@@ -45,8 +45,8 @@ Feature: accept/decline shares coming from internal users
     And folder "simple-folder" shared by "Brian Murphy" should not be listed in the webUI
     And folder "simple-folder" should not be listed on the webUI
 
-  @smokeTest @skip @issue-4102
-  Scenario: unshare an accepted share on the "All files" page
+  @issue-4102 @issue-5531
+  Scenario: unshare accepted shares from "All files" page
     Given these groups have been created:
       | groupname |
       | grp1      |
@@ -140,7 +140,7 @@ Feature: accept/decline shares coming from internal users
     Then file "lorem.txt" should be listed on the webUI
     And file "testimage.jpg" should not be listed on the webUI
 
-  @skip @issue-4102
+  @issue-4102 @issue-5531
   Scenario: delete an accepted share
     Given user "Alice" has created file "lorem.txt"
     And user "Alice" has uploaded file "testavatar.jpg" to "testimage.jpg"
@@ -157,31 +157,28 @@ Feature: accept/decline shares coming from internal users
     Then file "lorem.txt" shared by "Alice Hansen" should be in "Declined" state on the webUI
     And file "testimage.jpg" shared by "Alice Hansen" should be in "Pending" state on the webUI
 
-  @issue-3101 @skip @issue-4102
-  Scenario: Delete multiple accepted shares at once from shared with me page
-    Given user "Alice" has been created with default attributes and without skeleton files
-    And user "Alice" has created file "lorem.txt"
+  @issue-3101 @issue-4102
+  Scenario: Decline multiple accepted shares at once from shared with me page
+    Given user "Alice" has created file "lorem.txt"
     And user "Alice" has created file "data.zip"
     And user "Alice" has created folder "simple-folder"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Alice" has shared file "lorem.txt" with user "Brian"
     And user "Alice" has shared file "data.zip" with user "Brian"
+    And user "Brian" has accepted the share "data.zip" offered by user "Alice"
+    And user "Brian" has accepted the share "lorem.txt" offered by user "Alice"
+    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
     And the user has browsed to the shared-with-me page
-    And the user accepts share "lorem.txt" offered by user "Alice Hansen" using the webUI
-    When the user batch deletes these files using the webUI
+    When the user batch declines these shares using the webUI
       | name          |
       | data.zip      |
       | lorem.txt     |
       | simple-folder |
-    Then file "data.zip" should not be listed on the webUI
-    And file "lorem.txt" should not be listed on the webUI
-    And folder "simple-folder" should not be listed on the webUI
-    When the user has reloaded the current page of the webUI
     Then file "data.zip" shared by "Alice Hansen" should be in "Declined" state on the webUI
     And file "lorem.txt" shared by "Alice Hansen" should be in "Declined" state on the webUI
     And folder "simple-folder" shared by "Alice Hansen" should be in "Declined" state on the webUI
 
-  @skip @issue-4102
+  @issue-4102 @issue-5531
   Scenario: shared file status is changed to declined when user deletes the file
     Given user "Alice" has created file "lorem.txt"
     And user "Alice" has shared file "lorem.txt" with user "Brian"
@@ -192,7 +189,7 @@ Feature: accept/decline shares coming from internal users
     And the user browses to the shared-with-me page
     Then file "lorem.txt" shared by "Alice Hansen" should be in "Declined" state on the webUI
 
-  @ocis-issue-714
+  @ocis-issue-714 @issue-5532
   Scenario: the deleted shared file is restored back to all files list when accepted from the shared with me file list
     Given user "Alice" has created file "lorem.txt"
     And user "Alice" has shared file "lorem.txt" with user "Brian"

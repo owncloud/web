@@ -21,6 +21,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 ### [Federated Shares not showing in shared with me page](https://github.com/owncloud/web/issues/2510)
 - [webUISharingExternalToRoot/federationSharing.feature:169](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingExternalToRoot/federationSharing.feature#L169)
 
-### [browsing directly to a details 'tab' is not possible] (https://github.com/owncloud/web/issues/5464)
+### [browsing directly to a details 'tab' is not possible](https://github.com/owncloud/web/issues/5464)
 -   [webUIFiles/browseDirectlyToDetailsTab.feature:21](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFiles/browseDirectlyToDetailsTab.feature#L21)
 -   [webUIFiles/browseDirectlyToDetailsTab.feature:22](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFiles/browseDirectlyToDetailsTab.feature#L22)

@@ -11,14 +11,12 @@ Feature: login users
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files
 
-  @skip
+
   Scenario: admin login
     Given the user has browsed to the login page
     When the user clicks the authenticate button
     And the user logs in with username "admin" and password "admin" using the webUI
-    And the user authorizes access to web
     Then the files table should be displayed
-    And the files table should not be empty
 
 
   Scenario: logging out

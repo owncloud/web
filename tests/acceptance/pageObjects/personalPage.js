@@ -234,6 +234,11 @@ module.exports = {
         .waitForAjaxCallsToStartAndFinish()
         .waitForElementNotPresent('@dialog')
     },
+    declineAllCheckedShares: function() {
+      return this.waitForElementVisible('@declineSelectedSharesButton').click(
+        '@declineSelectedSharesButton'
+      )
+    },
     isSidebarVisible: async function(timeout = null) {
       let isVisible = false
       timeout = timeoutHelper.parseTimeout(timeout)
@@ -345,6 +350,9 @@ module.exports = {
     },
     deleteSelectedButton: {
       selector: '#delete-selected-btn'
+    },
+    declineSelectedSharesButton: {
+      selector: '#decline-selected-shares-btn'
     },
     newResourceDropdown: {
       selector: '#new-file-menu-drop'

@@ -16,7 +16,7 @@ Feature: Sharing files and folders with internal groups
     And user "Alice" has been added to group "grp1"
     And user "Brian" has been added to group "grp1"
 
-  @skip @issue-2060
+  @issue-2060
   Scenario: sharing indicator of items inside a shared folder two levels down
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has created folder "simple-folder/simple-empty-folder"

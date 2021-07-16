@@ -548,6 +548,14 @@ When('the user batch deletes these files using the webUI', async function(fileOr
   return client.page.personalPage().deleteAllCheckedFiles()
 })
 
+When('the user batch declines these shares using the webUI', async function(fileOrFolders) {
+  for (const item of fileOrFolders.rows()) {
+    await client.page.FilesPageElement.filesList().toggleFileOrFolderCheckbox('enable', item[0])
+  }
+
+  return client.page.personalPage().declineAllCheckedShares()
+})
+
 When('the user unmarks these files for batch action using the webUI', async function(
   fileOrFolders
 ) {
