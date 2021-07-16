@@ -1,0 +1,5 @@
+Bugfix: Content Security Policy for OpenID Connect authentication
+
+We added CSP rules for allowing OpenID Connect authentication when running ownCloud Web as app in ownCloud 10.
+
+https://github.com/owncloud/web/pull/5536
