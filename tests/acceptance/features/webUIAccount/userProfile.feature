@@ -9,13 +9,13 @@ Feature: view profile
   @ocis-reva-issue-107
   Scenario: view user profile for the logged in user
     When user "Alice" logs in using the webUI
-    Then the user profile should be visible in the webUI
+    Then the user profile should be visible on the webUI
     When the user opens the user profile
-    Then username "Alice Hansen" should be visible in the webUI
+    Then username "Alice Hansen" should be visible on the webUI
 
 
   Scenario: browse to account page to manage user account
     Given user "Alice" has logged in using the webUI
     When the user opens the user profile
     And the user browses to manage the account
-    Then the accounts page should be visible in the webUI
+    Then the accounts page should be visible on the webUI

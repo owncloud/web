@@ -589,11 +589,11 @@ Given('the administrator has excluded group {string} from receiving shares', asy
   }
 })
 
-When('the user opens the share creation dialog in the webUI', function() {
+When('the user opens the share creation dialog on the webUI', function() {
   return client.page.FilesPageElement.SharingDialog.collaboratorsDialog().clickCreateShare()
 })
 
-When('the user cancels the share creation dialog in the webUI', function() {
+When('the user cancels the share creation dialog on the webUI', function() {
   return client.page.FilesPageElement.sharingDialog().clickCancel()
 })
 
@@ -1384,7 +1384,7 @@ Then('it should not be possible to save the pending share on the webUI', async f
 })
 
 When(
-  'the user shares resource {string} with user {string} using the quick action in the webUI',
+  'the user shares resource {string} with user {string} using the quick action on the webUI',
   function(resource, user) {
     return userSharesFileOrFolderWithUserOrGroup(
       resource,

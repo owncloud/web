@@ -49,7 +49,7 @@ When(
   }
 )
 
-Then('the password input for the public link should appear in the webUI', function() {
+Then('the password input for the public link should appear on the webUI', function() {
   return client.page.publicLinkPasswordPage().waitForVisible()
 })
 

@@ -420,7 +420,7 @@ Then('folder {string} should be listed on the webUI', folder => {
   return client.page.FilesPageElement.filesList().waitForFileVisible(folder, 'folder')
 })
 
-Then('file/folder with path {string} should be listed in the webUI', function(path) {
+Then('file/folder with path {string} should be listed on the webUI', function(path) {
   return client.page.FilesPageElement.filesList().waitForFileWithPathVisible(path)
 })
 
@@ -598,7 +598,7 @@ When('the user batch restores the marked files using the webUI', function() {
   return client.page.FilesPageElement.filesList().restoreSelected()
 })
 
-When('the user picks the row of file/folder {string} in the webUI', function(item) {
+When('the user picks the row of file/folder {string} on the webUI', function(item) {
   return client.page.FilesPageElement.filesList().clickRow(item)
 })
 
@@ -1019,7 +1019,7 @@ Then(
 )
 
 When(
-  'the user opens the actions sidebar accordion of file/folder {string} in the webUI',
+  'the user opens the actions sidebar accordion of file/folder {string} on the webUI',
   async function(resource) {
     await client.page.FilesPageElement.filesRow().openFileActionsMenu(resource)
   }
@@ -1134,7 +1134,7 @@ Then('the user should be redirected to the public links page', function() {
   return client.page.publicLinkFilesPage().waitForPage()
 })
 
-Then('file/folder {string} shared by {string} should not be listed in the webUI', async function(
+Then('file/folder {string} shared by {string} should not be listed on the webUI', async function(
   element,
   sharer
 ) {
@@ -1368,13 +1368,13 @@ Then('the user should be in the root directory on the webUI', async function() {
   assert.ok(!isUserInRootDirectory, 'Expected user in the root directory but found elsewhere')
 })
 
-Then('the search bar should not be visible in the webUI', async function() {
+Then('the search bar should not be visible on the webUI', async function() {
   await client.page.FilesPageElement.filesList().waitForLoadingFinished(false)
   const isVisible = await client.page.personalPage().isSearchBarVisible()
   assert.strictEqual(isVisible, false, 'Expected search bar to be invisible but is visible')
 })
 
-Then('the search bar should be visible in the webUI', async function() {
+Then('the search bar should be visible on the webUI', async function() {
   await client.page.FilesPageElement.filesList().waitForLoadingFinished(false)
   const isVisible = await client.page.personalPage().isSearchBarVisible()
   assert.strictEqual(isVisible, true, 'Expected search bar to be visible but is not visible')

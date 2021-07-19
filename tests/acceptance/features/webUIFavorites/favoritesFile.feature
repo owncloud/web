@@ -100,11 +100,11 @@ Feature: Mark file as favorite
     And the user opens folder "strängé नेपाली folder" using the webUI
     And the user marks file "lorem.txt" as favorite using the webUI
     And the user browses to the favorites page
-    Then file with path "lorem.txt" should be listed in the webUI
-    And file with path "simple-folder/lorem.txt" should be listed in the webUI
-    And folder with path "simple-empty-folder" should be listed in the webUI
-    And folder with path "simple-folder/simple-empty-folder" should be listed in the webUI
-    And file with path "strängé नेपाली folder/lorem.txt" should be listed in the webUI
+    Then file with path "lorem.txt" should be listed on the webUI
+    And file with path "simple-folder/lorem.txt" should be listed on the webUI
+    And folder with path "simple-empty-folder" should be listed on the webUI
+    And folder with path "simple-folder/simple-empty-folder" should be listed on the webUI
+    And file with path "strängé नेपाली folder/lorem.txt" should be listed on the webUI
 
   @issue-1720
   Scenario: Try to favorite file and folder that used to exist but does not anymore

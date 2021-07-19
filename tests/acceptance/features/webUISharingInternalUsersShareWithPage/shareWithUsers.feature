@@ -198,7 +198,7 @@ Feature: Shares in share-with pages
   Scenario: share a file with another internal user via collaborators quick action
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has logged in using the webUI
-    When the user shares resource "simple-folder" with user "Brian Murphy" using the quick action in the webUI
+    When the user shares resource "simple-folder" with user "Brian Murphy" using the quick action on the webUI
     And user "Brian" accepts the share "simple-folder" offered by user "Alice" using the sharing API
     Then user "Brian Murphy" should be listed as "Viewer" in the collaborators list for folder "simple-folder" on the webUI
     And user "Brian" should have received a share with these details:
