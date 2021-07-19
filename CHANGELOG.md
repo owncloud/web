@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Unnecessary quota requests: [#5539](https://github.com/owncloud/web/pull/5539)
 * Enhancement - Prevent binding to only loopback IP when running in watch mode: [#5515](https://github.com/owncloud/web/pull/5515)
+* Enhancement - Use profile picture capability in avatars: [#5178](https://github.com/owncloud/web/pull/5178)
 
 Details
 -------
@@ -27,6 +28,13 @@ Details
    serve`). Does not break any existing functionality.
 
    https://github.com/owncloud/web/pull/5515
+
+* Enhancement - Use profile picture capability in avatars: [#5178](https://github.com/owncloud/web/pull/5178)
+
+   Requests for loading avatar profile pictures now only get sent if the backend communicates
+   their availability in the capabilities.
+
+   https://github.com/owncloud/web/pull/5178
 
 Changelog for ownCloud Web [3.4.1] (2021-07-12)
 =======================================
