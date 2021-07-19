@@ -32,52 +32,63 @@ const appInfo = {
   isFileEditor: false,
   extensions: [],
   fileSideBars: [
-    {
+    ({ route }) => ({
       app: 'details-item',
       icon: 'info_outline',
       component: FileDetails,
-      enabled() {
-        return true
+      default: route.name !== 'files-trashbin',
+      get enabled() {
+        return route.name !== 'files-trashbin'
       }
-    },
-    {
+    }),
+    ({ route }) => ({
       app: 'actions-item',
       component: FileActions,
       icon: 'slideshow',
-      enabled() {
-        return true
-      }
-    },
-    {
+      default: route.name === 'files-trashbin',
+      enabled: true
+    }),
+    ({ capabilities, route }) => ({
       app: 'sharing-item',
       icon: 'group',
       component: FileShares,
-      enabled(capabilities) {
+      get enabled() {
+        if (route.name === 'files-trashbin') {
+          return false
+        }
+
         if (capabilities.files_sharing) {
           return capabilities.files_sharing.api_enabled
         }
         return false
       }
-    },
-    {
+    }),
+    ({ capabilities, route }) => ({
       app: 'links-item',
       icon: 'link',
       component: FileLinks,
-      enabled(capabilities) {
+      get enabled() {
+        if (route.name === 'files-trashbin') {
+          return false
+        }
+
         if (capabilities.files_sharing) {
           return capabilities.files_sharing.public.enabled
         }
         return false
       }
-    },
-    {
+    }),
+    ({ capabilities, highlightedFile, route }) => ({
       app: 'versions-item',
       icon: 'file_version',
       component: FileVersions,
-      enabled(capabilities, highlightedFile) {
+      get enabled() {
+        if (route.name === 'files-trashbin') {
+          return false
+        }
         return !!capabilities.core && highlightedFile && highlightedFile.type !== 'folder'
       }
-    }
+    })
   ]
 }
 const navItems = [

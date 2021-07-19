@@ -154,13 +154,9 @@ module.exports = {
       role,
       permissions,
       remote = false,
-      days,
-      quickAction = false
+      days
     ) {
-      if (!quickAction) {
-        await collaboratorDialog.clickCreateShare()
-      }
-
+      await collaboratorDialog.clickCreateShare()
       await this.selectCollaboratorForShare(sharee, shareWithGroup, remote)
       await this.selectRoleForNewCollaborator(role)
 

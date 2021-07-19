@@ -29,7 +29,7 @@ import { mapActions, mapMutations } from 'vuex'
 
 export default {
   name: 'LinkActions',
-
+  inject: ['changeView'],
   props: {
     link: {
       type: Object,
@@ -55,7 +55,6 @@ export default {
     ...mapActions(['showMessage', 'createModal', 'hideModal']),
     ...mapActions('Files', ['removeLink']),
     ...mapMutations('Files', ['TRIGGER_PUBLIC_LINK_EDIT']),
-
     $_removeLink() {
       const modal = {
         variation: 'danger',
@@ -89,6 +88,7 @@ export default {
 
     editLink() {
       this.TRIGGER_PUBLIC_LINK_EDIT(this.link)
+      this.changeView('editPublicLink')
     }
   }
 }

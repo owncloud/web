@@ -101,7 +101,7 @@ export const getIndicators = (resource, sharesTree) => {
       label: $gettext('Show links'),
       visible: isLinkShare(resource, sharesTree),
       icon: 'link',
-      target: 'sidebar-links-item',
+      target: 'links-item',
       type: isDirectLinkShare(resource) ? 'link-direct' : 'link-indirect',
       handler: indicatorHandler
     }
@@ -112,5 +112,5 @@ export const getIndicators = (resource, sharesTree) => {
 
 const indicatorHandler = (resource, accordion) => {
   window.Vue.$store.dispatch('Files/setHighlightedFile', resource)
-  window.Vue.$store.commit('Files/SET_APP_SIDEBAR_EXPANDED_ACCORDION', accordion)
+  window.Vue.$store.commit('Files/SET_APP_SIDEBAR_ACTIVE_PANEL', accordion)
 }

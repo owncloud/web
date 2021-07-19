@@ -94,7 +94,7 @@ Feature: Public link share management
       | role | Editor |
     And the public uses the webUI to access the last public link created by user "Alice"
     And the user picks the row of file "lorem.txt" on the webUI
-    Then the following accordion items should be visible in the details dialog on the webUI
+    Then the following panel items should be visible in the details dialog on the webUI
       | name     |
       | versions |
       | links    |

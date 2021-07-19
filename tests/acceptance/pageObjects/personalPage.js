@@ -407,11 +407,11 @@ module.exports = {
       selector: '#files-upload-progress'
     },
     sideBar: {
-      selector: '//div[contains(@class, "oc-app-side-bar")]',
+      selector: '//div[contains(@id, "files-sidebar")]',
       locateStrategy: 'xpath'
     },
     sidebarItemName: {
-      selector: '#files-sidebar-item-name'
+      selector: '.sidebar-panel.is-active h2'
     },
     dialog: {
       selector: '.oc-modal'
