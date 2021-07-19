@@ -952,7 +952,7 @@ Then('user {string} should be listed as {string} in the collaborators list on th
 })
 
 Then(
-  'the share {string} shared with user {string} should have no expiration information displayed on the WebUI',
+  'the share {string} shared with user {string} should have no expiration information displayed on the webUI',
   async function(item, user) {
     await client.page.FilesPageElement.filesList().clickRow(item)
     await client.page.FilesPageElement.appSideBar().selectAccordionItem('people')
@@ -968,7 +968,7 @@ Then(
 )
 
 Then(
-  'the expiration information displayed on the WebUI of share {string} shared with user {string} should be {string} or {string}',
+  'the expiration information displayed on the webUI of share {string} shared with user {string} should be {string} or {string}',
   async function(item, user, information1, information2) {
     await client.page.FilesPageElement.filesList().clickRow(item)
     await client.page.FilesPageElement.appSideBar().selectAccordionItem('people')
@@ -1135,13 +1135,13 @@ Then('the collaborators list for file/folder/resource {string} should be empty',
   )
 })
 
-Then('the expiration date field should be marked as required on the WebUI', async function() {
+Then('the expiration date field should be marked as required on the webUI', async function() {
   await client.page.FilesPageElement.sharingDialog().waitForElementVisible(
     '@requiredLabelInCollaboratorsExpirationDate'
   )
 })
 
-Then('the expiration date for {string} should be disabled on the WebUI', async function(
+Then('the expiration date for {string} should be disabled on the webUI', async function(
   expiration
 ) {
   const dateToSet = calculateDate(expiration)

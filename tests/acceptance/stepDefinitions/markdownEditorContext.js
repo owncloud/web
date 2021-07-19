@@ -48,7 +48,7 @@ Then('the file should not have content {string} in the markdown editor webUI', a
   return assertNotEqualText(content, contentInEditor, 'content')
 })
 
-Then('the preview panel should have the content {string} on the WebUI', async content => {
+Then('the preview panel should have the content {string} on the webUI', async content => {
   const contentInPreview = await markdownEditor.getContentFromPanel()
   return assertEqualText(content, contentInPreview, 'content')
 })
