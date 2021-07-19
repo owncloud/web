@@ -1,5 +1,5 @@
 <template>
-  <component :is="type" v-if="enabled" :aria-hidden="true">
+  <component :is="type" :aria-hidden="true">
     <oc-spinner
       v-if="loading"
       key="avatar-loading"
@@ -61,18 +61,14 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getToken', 'configuration']),
-    enabled: function() {
-      return this.configuration.enableAvatars || true
-    }
+    ...mapGetters(['getToken', 'capabilities', 'configuration'])
   },
   watch: {
-    userid: function(userid, old) {
+    userid: function(userid) {
       this.setUser(userid)
     }
   },
   mounted: function() {
-    // Handled mounted situation. Userid might not be set yet so try placeholder
     if (this.userid !== '') {
       this.setUser(this.userid)
     } else {
@@ -86,13 +82,13 @@ export default {
     setUser(userid) {
       this.loading = true
       this.avatarSource = ''
-      if (!this.enabled || userid === '') {
+      if (!this.capabilities.files_sharing.user.profile_picture || userid === '') {
         this.loading = false
         return
       }
       const headers = new Headers()
       const instance = this.configuration.server || window.location.origin
-      const url = instance + 'remote.php/dav/avatars/' + this.userid + '/128.png'
+      const url = instance + 'remote.php/dav/avatars/' + userid + '/128.png'
       headers.append('Authorization', 'Bearer ' + this.getToken)
       headers.append('X-Requested-With', 'XMLHttpRequest')
       fetch(url, { headers })
@@ -116,7 +112,7 @@ export default {
         .catch(error => {
           this.avatarSource = ''
           this.loading = false
-          console.error(`Error loading avatar image for user "${this.userid}": `, error.message)
+          console.error(`Error loading avatar image for user "${userid}": `, error.message)
         })
     }
   }

@@ -514,6 +514,10 @@ export default {
   },
 
   loadAvatars({ commit, rootGetters }, { resource }) {
+    if (!rootGetters.capabilities.files_sharing.user.profile_picture) {
+      return
+    }
+
     ;['sharedWith', 'owner'].forEach(k => {
       ;(resource[k] || []).forEach((obj, i) => {
         if (!has(obj, 'avatar')) {
