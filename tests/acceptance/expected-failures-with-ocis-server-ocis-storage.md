@@ -16,6 +16,9 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIPreview/imageMediaViewer.feature:141](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L141)
 -   [webUIPreview/imageMediaViewer.feature:159](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L159)
 
+### [Endless loading when opening a file in section "Shared with me" or "Shared with other"](https://github.com/owncloud/web/issues/5324)
+-   [webUIPreview/imageMediaViewer.feature:141](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L181)
+-   [webUIPreview/imageMediaViewer.feature:159](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L189)
 
 ### [Exit page re-appears in loop when logged in user is deleted](https://github.com/owncloud/web/issues/4677)
 -   [webUILogin/openidLogin.feature:51](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/openidLogin.feature#L51)
