@@ -48,13 +48,13 @@ Then('the file should not have content {string} in the markdown editor webUI', a
   return assertNotEqualText(content, contentInEditor, 'content')
 })
 
-Then('the preview panel should have the content {string} in the WebUI', async content => {
+Then('the preview panel should have the content {string} on the webUI', async content => {
   const contentInPreview = await markdownEditor.getContentFromPanel()
   return assertEqualText(content, contentInPreview, 'content')
 })
 
 When(
-  'the user opens file {string} in the markdown editor using the action menu option in the webUI',
+  'the user opens file {string} in the markdown editor using the action menu option on the webUI',
   async fileName => {
     return await markdownEditor.openMdEditorUsingActionMenu(fileName)
   }

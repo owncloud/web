@@ -211,8 +211,8 @@ Feature: Sharing files and folders with internal users with expiry date
     And the setting "shareapi_enforce_expire_date_user_share" of app "core" has been set to "yes"
     And user "Alice" has logged in using the webUI
     When the user tries to edit the collaborator expiry date of "Brian Murphy" of resource "lorem.txt" to "+14" days using the webUI
-    Then the expiration date field should be marked as required on the WebUI
-    And the expiration date for "+14 days" should be disabled on the WebUI
+    Then the expiration date field should be marked as required on the webUI
+    And the expiration date for "+14 days" should be disabled on the webUI
     And the expiration date shown on the webUI should be "+7" days
     And it should not be possible to save the pending share on the webUI
 
@@ -226,7 +226,7 @@ Feature: Sharing files and folders with internal users with expiry date
     And the setting "shareapi_expire_after_n_days_user_share" of app "core" has been set to "7"
     And the setting "shareapi_enforce_expire_date_user_share" of app "core" has been set to "yes"
     When user "Alice" logs in using the webUI
-    Then the share "lorem.txt" shared with user "Brian Murphy" should have no expiration information displayed on the WebUI
+    Then the share "lorem.txt" shared with user "Brian Murphy" should have no expiration information displayed on the webUI
 
 
   Scenario: setting default expiration date and enforcing it does not change the expiration date of a previously created share which is beyond the new maximum date(enforced)
@@ -239,4 +239,4 @@ Feature: Sharing files and folders with internal users with expiry date
     And the setting "shareapi_expire_after_n_days_user_share" of app "core" has been set to "7"
     And the setting "shareapi_enforce_expire_date_user_share" of app "core" has been set to "yes"
     When user "Alice" logs in using the webUI
-    Then the expiration information displayed on the WebUI of share "lorem.txt" shared with user "Brian Murphy" should be "Expires in 15 days" or "Expires in 14 days"
+    Then the expiration information displayed on the webUI of share "lorem.txt" shared with user "Brian Murphy" should be "Expires in 15 days" or "Expires in 14 days"

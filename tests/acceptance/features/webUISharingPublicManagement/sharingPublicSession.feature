@@ -40,7 +40,7 @@ Feature: Session storage for public link
     And user "Alice" changes the password of last public link  to "newpass" using the Sharing API
     Then file "lorem.txt" should be listed on the webUI
     When the user reloads the current page of the webUI
-    Then the password input for the public link should appear in the webUI
+    Then the password input for the public link should appear on the webUI
     When the user accesses the public link with password "newpass" using the webUI
     Then file "lorem.txt" should be listed on the webUI
 
@@ -52,6 +52,6 @@ Feature: Session storage for public link
     And user "Alice" changes the password of last public link  to "newpass" using the Sharing API
     Then file "lorem.txt" should be listed on the webUI
     When the user reloads the current page of the webUI
-    Then the password input for the public link should appear in the webUI
+    Then the password input for the public link should appear on the webUI
     When the user accesses the public link with password "newpass" using the webUI
     Then file "lorem.txt" should be listed on the webUI

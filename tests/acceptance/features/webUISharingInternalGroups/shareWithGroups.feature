@@ -204,7 +204,7 @@ Feature: Sharing files and folders with internal groups
     When the user re-logs in as "Alice" using the webUI
     And the user browses to the files page
     And the user opens the share dialog for folder "simple-folder" using the webUI
-    And the user opens the share creation dialog in the webUI
+    And the user opens the share creation dialog on the webUI
     And the user types "system-group" in the share-with-field
     Then the autocomplete list should not be displayed on the webUI
 

@@ -109,7 +109,7 @@ Feature: Shares collaborator list
   Scenario: share a file with another internal user via collaborators quick action
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "yes"
     And user "Alice" has logged in using the webUI
-    When the user shares resource "simple-folder" with user "Brian Murphy" using the quick action in the webUI
+    When the user shares resource "simple-folder" with user "Brian Murphy" using the quick action on the webUI
     Then user "Brian Murphy" should be listed as "Viewer" in the collaborators list for folder "simple-folder" on the webUI
     And user "Brian" should have received a share with these details:
       | field       | value              |

@@ -53,7 +53,7 @@ Feature: Sharing files and folders with internal groups
     And the user shares file "randomfile.txt" with group "Alice" as "Editor" using the webUI
     And user "Alice" accepts the share "randomfile.txt" offered by user "Carol" using the sharing API
     And user "Brian" accepts the share "randomfile.txt" offered by user "Carol" using the sharing API
-    And the user opens the share creation dialog in the webUI
+    And the user opens the share creation dialog on the webUI
     And the user types "Alice" in the share-with-field
     Then "group" "Alice" should not be listed in the autocomplete list on the webUI
     And the content of file "Shares/randomfile.txt" for user "Alice" should be "Carol file"
@@ -71,7 +71,7 @@ Feature: Sharing files and folders with internal groups
     And the user shares file "randomfile.txt" with user "Alice Hansen" as "Editor" using the webUI
     And user "Alice" accepts the share "randomfile.txt" offered by user "Carol" using the sharing API
     And user "Brian" accepts the share "randomfile.txt" offered by user "Carol" using the sharing API
-    And the user opens the share creation dialog in the webUI
+    And the user opens the share creation dialog on the webUI
     And the user types "Alice" in the share-with-field
     Then "user" "Alice Hansen" should not be listed in the autocomplete list on the webUI
     And the content of file "Shares/randomfile.txt" for user "Brian" should be "Carol file"
@@ -89,7 +89,7 @@ Feature: Sharing files and folders with internal groups
     And the user shares file "randomfile.txt" with group "ALICE" as "Editor" using the webUI
     And user "Alice" accepts the share "randomfile.txt" offered by user "Carol" using the sharing API
     And user "Brian" accepts the share "randomfile.txt" offered by user "Carol" using the sharing API
-    And the user opens the share creation dialog in the webUI
+    And the user opens the share creation dialog on the webUI
     And the user types "ALICE" in the share-with-field
     Then "group" "ALICE" should not be listed in the autocomplete list on the webUI
     And the content of file "Shares/randomfile.txt" for user "Brian" should be "Carol file"
@@ -107,7 +107,7 @@ Feature: Sharing files and folders with internal groups
     And the user shares file "randomfile.txt" with user "Alice Hansen" as "Editor" using the webUI
     And user "Alice" accepts the share "randomfile.txt" offered by user "Carol" using the sharing API
     And user "Brian" accepts the share "randomfile.txt" offered by user "Carol" using the sharing API
-    And the user opens the share creation dialog in the webUI
+    And the user opens the share creation dialog on the webUI
     And the user types "Alice" in the share-with-field
     Then "user" "Alice Hansen" should not be listed in the autocomplete list on the webUI
     And the content of file "Shares/randomfile.txt" for user "Brian" should be "Carol file"

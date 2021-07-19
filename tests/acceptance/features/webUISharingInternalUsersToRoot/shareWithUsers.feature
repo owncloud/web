@@ -272,5 +272,5 @@ Feature: Sharing files and folders with internal users
     Given user "Alice" has uploaded file with content "test" to "lorem.txt"
     And user "Alice" has logged in using the webUI
     And the user has renamed file "lorem.txt" to "new-lorem.txt"
-    When the user shares resource "new-lorem.txt" with user "Brian Murphy" using the quick action in the webUI
+    When the user shares resource "new-lorem.txt" with user "Brian Murphy" using the quick action on the webUI
     Then user "Brian Murphy" should be listed as "Viewer" in the collaborators list for file "new-lorem.txt" on the webUI

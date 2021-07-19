@@ -43,7 +43,7 @@ Feature: accept/decline shares coming from internal users
     And the user deletes folder "simple-folder (2)" using the webUI
     And the user browses to the shared-with-me page using the webUI
     Then folder "simple-folder (2)" shared by "Alice Hansen" should be in "Declined" state on the webUI
-    And folder "simple-folder" shared by "Brian Murphy" should not be listed in the webUI
+    And folder "simple-folder" shared by "Brian Murphy" should not be listed on the webUI
     And folder "simple-folder" should not be listed on the webUI
 
   @smokeTest

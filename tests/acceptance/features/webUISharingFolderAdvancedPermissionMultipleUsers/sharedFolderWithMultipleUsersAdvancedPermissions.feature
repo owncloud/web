@@ -21,7 +21,7 @@ Feature: Sharing folders with multiple internal users using advanced permissions
     And user "Alice" has created folder "/simple-folder"
     And user "Alice" has logged in using the webUI
     When the user opens the share dialog for folder "simple-folder" using the webUI
-    And the user opens the share creation dialog in the webUI
+    And the user opens the share creation dialog on the webUI
     And the user selects the following collaborators for the share as "<role>" with "<extra-permissions>" permissions:
       | collaborator | type |
       | Regular User | user |

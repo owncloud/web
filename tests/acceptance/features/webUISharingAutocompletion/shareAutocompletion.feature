@@ -34,7 +34,7 @@ Feature: Autocompletion of share-with names
     And user "regularuser" has logged in using the webUI
     And the user has browsed to the files page
     And the user has opened the share dialog for folder "simple-folder"
-    And the user opens the share creation dialog in the webUI
+    And the user opens the share creation dialog on the webUI
     When the user types "us" in the share-with-field
     Then all users and groups that contain the string "us" in their name should be listed in the autocomplete list on the webUI
     But only users and groups that contain the string "us" in their name or displayname should be listed in the autocomplete list on the webUI
@@ -46,7 +46,7 @@ Feature: Autocompletion of share-with names
     And user "regularuser" has logged in using the webUI
     And the user has browsed to the files page
     And the user has opened the share dialog for folder "simple-folder"
-    And the user opens the share creation dialog in the webUI
+    And the user opens the share creation dialog on the webUI
     When the user types "fi" in the share-with-field
     Then all users and groups that contain the string "fi" in their name should be listed in the autocomplete list on the webUI
     But only users and groups that contain the string "fi" in their name or displayname should be listed in the autocomplete list on the webUI
@@ -58,7 +58,7 @@ Feature: Autocompletion of share-with names
     And user "regularuser" has logged in using the webUI
     And the user has browsed to the files page
     And the user has opened the share dialog for folder "simple-folder"
-    And the user opens the share creation dialog in the webUI
+    And the user opens the share creation dialog on the webUI
     When the user types "doesnotexist" in the share-with-field
     Then the autocomplete list should not be displayed on the webUI
 
@@ -68,7 +68,7 @@ Feature: Autocompletion of share-with names
     And user "regularuser" has logged in using the webUI
     And the user has browsed to the files page
     And the user has opened the share dialog for folder "simple-folder"
-    And the user opens the share creation dialog in the webUI
+    And the user opens the share creation dialog on the webUI
     When the user types "u" in the share-with-field
     Then the autocomplete list should not be displayed on the webUI
 
@@ -79,7 +79,7 @@ Feature: Autocompletion of share-with names
     And user "regularuser" has logged in using the webUI
     And the user has browsed to the files page
     And the user has opened the share dialog for folder "simple-folder"
-    And the user opens the share creation dialog in the webUI
+    And the user opens the share creation dialog on the webUI
     When the user types "use" in the share-with-field
     Then the autocomplete list should not be displayed on the webUI
 
@@ -93,7 +93,7 @@ Feature: Autocompletion of share-with names
       | username | password | displayname | email        |
       | use      | %alt1%   | Use         | uz@oc.com.np |
     And the user has opened the share dialog for folder "simple-folder"
-    And the user opens the share creation dialog in the webUI
+    And the user opens the share creation dialog on the webUI
     When the user types "Use" in the share-with-field
     Then "user" "Use" should be listed in the autocomplete list on the webUI
 
@@ -107,7 +107,7 @@ Feature: Autocompletion of share-with names
     And user "regularuser" has logged in using the webUI
     And the user has browsed to the files page
     And the user has opened the share dialog for folder "simple-folder"
-    And the user opens the share creation dialog in the webUI
+    And the user opens the share creation dialog on the webUI
     When the user types "fi" in the share-with-field
     Then "group" "fi" should be listed in the autocomplete list on the webUI
 
@@ -118,7 +118,7 @@ Feature: Autocompletion of share-with names
     And user "regularuser" has logged in using the webUI
     And the user has browsed to the files page
     And the user has opened the share dialog for folder "simple-folder"
-    And the user opens the share creation dialog in the webUI
+    And the user opens the share creation dialog on the webUI
     When the user types "use" in the share-with-field
     Then all users and groups that contain the string "use" in their name should be listed in the autocomplete list on the webUI
     But only users and groups that contain the string "use" in their name or displayname should be listed in the autocomplete list on the webUI
@@ -131,7 +131,7 @@ Feature: Autocompletion of share-with names
     And the user has browsed to the files page
     And user "regularuser" has shared folder "simple-folder" with user "Alice"
     And the user has opened the share dialog for folder "simple-folder"
-    And the user opens the share creation dialog in the webUI
+    And the user opens the share creation dialog on the webUI
     When the user types "user" in the share-with-field
     Then all users and groups that contain the string "user" in their name should be listed in the autocomplete list on the webUI except user "Alice Hansen"
     But only users and groups that contain the string "user" in their name or displayname should be listed in the autocomplete list on the webUI
@@ -144,7 +144,7 @@ Feature: Autocompletion of share-with names
     And the user has browsed to the files page
     And user "regularuser" has shared file "data.zip" with user "usergrp"
     And the user has opened the share dialog for file "data.zip"
-    And the user opens the share creation dialog in the webUI
+    And the user opens the share creation dialog on the webUI
     When the user types "user" in the share-with-field
     Then all users and groups that contain the string "user" in their name should be listed in the autocomplete list on the webUI except user "User Grp"
     But only users and groups that contain the string "user" in their name or displayname should be listed in the autocomplete list on the webUI
@@ -158,7 +158,7 @@ Feature: Autocompletion of share-with names
     And the user has browsed to the files page
     And user "regularuser" has shared folder "simple-folder" with group "finance1"
     And the user has opened the share dialog for folder "simple-folder"
-    And the user opens the share creation dialog in the webUI
+    And the user opens the share creation dialog on the webUI
     When the user types "fi" in the share-with-field
     Then all users and groups that contain the string "fi" in their name should be listed in the autocomplete list on the webUI except group "finance1"
     But only users and groups that contain the string "fi" in their name or displayname should be listed in the autocomplete list on the webUI
@@ -172,7 +172,7 @@ Feature: Autocompletion of share-with names
     And the user has browsed to the files page
     And user "regularuser" has shared file "data.zip" with group "finance1"
     And the user has opened the share dialog for file "data.zip"
-    And the user opens the share creation dialog in the webUI
+    And the user opens the share creation dialog on the webUI
     When the user types "fi" in the share-with-field
     Then all users and groups that contain the string "fi" in their name should be listed in the autocomplete list on the webUI except group "finance1"
     But only users and groups that contain the string "fi" in their name or displayname should be listed in the autocomplete list on the webUI

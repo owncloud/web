@@ -39,12 +39,12 @@ Feature: create markdown files
   Scenario: preview content of the file
     When the user opens file "simple.md" in the markdown editor webUI
     Then the file "simple.md" should be displayed in the markdown editor webUI
-    And the preview panel should have the content "simple markdown file" in the WebUI
+    And the preview panel should have the content "simple markdown file" on the webUI
 
   Scenario: preview content of the file while editing
     Given the user has opened file "simple.md" in the markdown editor webUI
     When the user inputs the content "updating the file with new content" in the markdown editor webUI
-    Then the preview panel should have the content "updating the file with new content" in the WebUI
+    Then the preview panel should have the content "updating the file with new content" on the webUI
 
   Scenario: open text file in markdown editor
     Given user "Alice" has uploaded file with content "test" to "lorem.txt"
@@ -55,7 +55,7 @@ Feature: create markdown files
   Scenario Outline: preview of files with markdown editor by clicking the action menu option
     Given user "Alice" has uploaded file with content "test" to "lorem.txt"
     And the user has reloaded the current page of the webUI
-    When the user opens file "<file>" in the markdown editor using the action menu option in the webUI
+    When the user opens file "<file>" in the markdown editor using the action menu option on the webUI
     Then the file "<file>" should be displayed in the markdown editor webUI
     Examples:
       | file          |

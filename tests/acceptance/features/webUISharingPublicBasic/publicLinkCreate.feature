@@ -94,11 +94,11 @@ Feature: Create public link shares
     And the user opens folder "simple-folder" using the webUI
     And the user creates a new public link for file "lorem.txt" using the webUI
     And the user browses to the shared-via-link page using the webUI
-    Then file with path "lorem.txt" should be listed in the webUI
-    And file with path "simple-folder/lorem.txt" should be listed in the webUI
+    Then file with path "lorem.txt" should be listed on the webUI
+    And file with path "simple-folder/lorem.txt" should be listed on the webUI
     When the user browses to the shared-with-others page using the webUI
-    Then file with path "lorem.txt" should be listed in the webUI
-    And file with path "simple-folder/lorem.txt" should be listed in the webUI
+    Then file with path "lorem.txt" should be listed on the webUI
+    And file with path "simple-folder/lorem.txt" should be listed on the webUI
 
 
   Scenario: user creates a multiple public link of a file and delete the first link
