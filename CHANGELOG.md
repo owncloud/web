@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Unnecessary quota requests: [#5539](https://github.com/owncloud/web/pull/5539)
+* Enhancement - Prevent binding to only loopback IP when running in watch mode: [#5515](https://github.com/owncloud/web/pull/5515)
 
 Details
 -------
@@ -18,6 +19,14 @@ Details
    We've removed requests that checked for a user's quota on pages where it was not relevant.
 
    https://github.com/owncloud/web/pull/5539
+
+* Enhancement - Prevent binding to only loopback IP when running in watch mode: [#5515](https://github.com/owncloud/web/pull/5515)
+
+   This is required when running the acceptance tests on Windows, it allows the selenium docker
+   containers to access the frontend due to the host binding in rollup (when running `yarn
+   serve`). Does not break any existing functionality.
+
+   https://github.com/owncloud/web/pull/5515
 
 Changelog for ownCloud Web [3.4.1] (2021-07-12)
 =======================================
