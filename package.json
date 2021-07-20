@@ -83,7 +83,7 @@
     "jsdom": "^16.6.0",
     "ldapjs": "^2.2.3",
     "lodash": "^4.17.21",
-    "nightwatch": "1.5.1",
+    "nightwatch": "1.7.7",
     "nightwatch-api": "3.0.1",
     "nightwatch-vrt": "^0.2.10",
     "node-fetch": "^2.6.1",
