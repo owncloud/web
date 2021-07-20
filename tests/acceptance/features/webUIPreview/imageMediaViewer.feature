@@ -178,6 +178,7 @@ Scenario Outline: preview of image files with media viewer is possible
       | testavatar.png  | testavatar.PNG  |
       | testavatar.jpeg | testavatar.JPEG |
 
+  @issue-5324
   Scenario: Open jpeg file with media viewer in shared-with-others page
     Given user "Brian" has uploaded file "testavatar.jpeg" to "testavatar.jpeg"
     And user "Brian" has shared file "testavatar.jpeg" with user "Alice" with "all" permissions
@@ -186,6 +187,7 @@ Scenario Outline: preview of image files with media viewer is possible
     When the user views the file "testavatar.jpeg" in the media viewer by clicking on the file name using the webUI
     Then the file "testavatar.jpeg" should be displayed in the media viewer webUI    
     
+  @issue-5324
   Scenario: Open jpeg file with media viewer in shared-with-me page
     Given user "Brian" has uploaded file "testavatar.jpeg" to "testavatar.jpeg"
     And user "Brian" has shared file "testavatar.jpeg" with user "Alice" with "all" permissions
