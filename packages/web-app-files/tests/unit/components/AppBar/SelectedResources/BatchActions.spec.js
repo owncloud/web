@@ -1,126 +1,257 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils'
+import { shallowMount, mount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
+import DesignSystem from 'owncloud-design-system'
 import stubs from 'tests/unit/stubs'
 import BatchActions from '../../../../../src/components/AppBar/SelectedResources/BatchActions.vue'
+import { canBeMoved } from '../../../../../src/helpers/permissions'
+const permissionsHelper = '../../../../../src/helpers/permissions'
+
+jest.mock(permissionsHelper, () => ({
+  ...jest.requireActual(permissionsHelper),
+  canBeMoved: jest.fn(() => false)
+}))
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
+localVue.use(DesignSystem)
 
-const selectedFiles = ['lorem.txt', 'owncloud.png']
+const files = [
+  {
+    path: '/Folder'
+  },
+  {
+    path: '/lorem.txt'
+  }
+]
+const shareStatus = {
+  accepted: 0,
+  pending: 1,
+  declined: 2
+}
+const selectedFiles = [
+  {
+    path: '/lorem.txt',
+    canBeDeleted: jest.fn(() => true)
+  }
+]
 const componentStubs = { ...stubs, translate: true }
 const elSelector = {
   copyButton: '#copy-selected-btn',
   moveButton: '#move-selected-btn',
   deleteButton: '#delete-selected-btn',
   restoreButton: '#restore-selected-btn',
-  ocButton: 'oc-button-stub'
+  ocButton: '.oc-button',
+  ocButtonStub: 'oc-button-stub',
+  acceptButton: '#accept-selected-shares-btn',
+  declineButton: '#decline-selected-shares-btn'
 }
 
 describe('Batch Actions component', () => {
-  const mountOptions = {
-    localVue,
-    stubs: componentStubs
-  }
-
-  const state = {
-    currentFolder: { path: '' }
-  }
-
   afterEach(() => {
     jest.clearAllMocks()
+    jest.resetModules()
   })
 
-  describe('files page', () => {
-    const $route = {
-      name: 'files-personal'
-    }
-
-    it('should not display action buttons if no items are selected', () => {
-      const store = createStore({ ...state, selected: [] })
-      const wrapper = shallowMount(BatchActions, {
-        ...mountOptions,
-        store,
-        mocks: {
-          $route: {
-            ...$route,
-            meta: {
-              hasBulkActions: false
-            }
-          }
-        }
-      })
-      const actionButtons = wrapper.findAll('oc-grid-stub oc-button-stub')
-
-      expect(actionButtons.length).toEqual(0)
-      expect(wrapper.exists()).toBeTruthy()
-    })
-
-    describe('when items are selected for batch action', () => {
-      const store = createStore({ ...state, selected: selectedFiles })
-
-      const options = {
-        ...mountOptions,
-        store,
-        mocks: {
-          $route: {
-            ...$route,
-            meta: {
-              hasBulkActions: true
-            }
-          }
-        }
+  describe.each(['files-personal', 'files-favorites', 'files-public-list', 'files-shared-with-me'])(
+    '%s page',
+    page => {
+      const $route = {
+        name: page
       }
 
-      let wrapper
-      let copyButton
-      let moveButton
-      let deleteButton
+      it('should not display action buttons if no items are selected', () => {
+        const store = createStore({ selected: [] })
+        const wrapper = createShallowMountWrapper({
+          store,
+          mocks: {
+            $route: {
+              ...$route,
+              meta: {
+                hasBulkActions: false
+              }
+            }
+          }
+        })
+        const actionButtons = wrapper.findAll(elSelector.ocButtonStub)
 
-      BatchActions.computed.canMove = jest.fn(() => true)
-      BatchActions.computed.canDelete = jest.fn(() => true)
-      const spyTriggerLocationPicker = jest
-        .spyOn(BatchActions.methods, 'triggerLocationPicker')
-        .mockImplementation()
-      const spyDeleteResourcesDisplayDialog = jest
-        .spyOn(BatchActions.mixins[1].methods, '$_deleteResources_displayDialog')
-        .mockImplementation()
-
-      beforeEach(() => {
-        wrapper = shallowMount(BatchActions, options)
-
-        copyButton = wrapper.find(elSelector.copyButton)
-        moveButton = wrapper.find(elSelector.moveButton)
-        deleteButton = wrapper.find(elSelector.deleteButton)
+        expect(actionButtons.length).toEqual(0)
+        expect(wrapper.exists()).toBeTruthy()
       })
 
-      it('should display the action buttons', () => {
-        const actionButtons = wrapper.findAll(elSelector.ocButton)
+      describe('when items are selected for batch action', () => {
+        const options = {
+          mocks: {
+            $route: {
+              ...$route,
+              meta: {
+                hasBulkActions: true
+              }
+            }
+          }
+        }
 
-        expect(actionButtons.length).toEqual(3)
-        expect(copyButton.text()).toEqual('Copy')
-        expect(moveButton.text()).toEqual('Move')
-        expect(deleteButton.text()).toEqual('Delete')
+        if (page === 'files-shared-with-me') {
+          let wrapper
+          let actionButtons
+          let acceptButton
+          let declineButton
+
+          const spyTriggerShareActions = jest
+            .spyOn(BatchActions.methods, 'triggerShareActions')
+            .mockImplementation()
+          const spyAcceptShares = jest.spyOn(BatchActions.methods, 'acceptShares')
+          const spyDeclineShares = jest.spyOn(BatchActions.methods, 'declineShares')
+
+          it('should display accept and decline buttons if share status is pending', () => {
+            const store = createStore({
+              selected: addPropToSelectedFiles(selectedFiles, { status: shareStatus.pending })
+            })
+            wrapper = createShallowMountWrapper({ ...options, store })
+            actionButtons = wrapper.findAll(elSelector.ocButtonStub)
+            acceptButton = wrapper.find(elSelector.acceptButton)
+            declineButton = wrapper.find(elSelector.declineButton)
+
+            expect(actionButtons.length).toEqual(2)
+            expect(acceptButton.exists()).toBeTruthy()
+            expect(acceptButton.text()).toContain('Accept')
+            expect(declineButton.exists()).toBeTruthy()
+            expect(declineButton.text()).toContain('Decline')
+          })
+          describe('when share status is declined', () => {
+            beforeEach(() => {
+              const store = createStore({
+                selected: addPropToSelectedFiles(selectedFiles, { status: shareStatus.declined })
+              })
+              wrapper = createMountWrapper({ ...options, store })
+              actionButtons = wrapper.findAll(elSelector.ocButton)
+              acceptButton = wrapper.find(elSelector.acceptButton)
+              declineButton = wrapper.find(elSelector.declineButton)
+            })
+            it('should display accept button', () => {
+              expect(actionButtons.length).toEqual(1)
+              expect(acceptButton.exists()).toBeTruthy()
+              expect(acceptButton.text()).toContain('Accept')
+              expect(declineButton.exists()).toBeFalsy()
+            })
+            it('should call "acceptShares" when accept button is clicked', async () => {
+              await acceptButton.trigger('click')
+
+              expect(spyAcceptShares).toHaveBeenCalledTimes(1)
+              expect(spyTriggerShareActions).toHaveBeenCalledWith(shareStatus.accepted)
+            })
+          })
+          describe('when share status is accepted', () => {
+            beforeEach(() => {
+              const store = createStore({
+                selected: addPropToSelectedFiles(selectedFiles, { status: shareStatus.accepted })
+              })
+              wrapper = createMountWrapper({ ...options, store })
+              actionButtons = wrapper.findAll(elSelector.ocButton)
+              acceptButton = wrapper.find(elSelector.acceptButton)
+              declineButton = wrapper.find(elSelector.declineButton)
+            })
+            it('should display decline button', () => {
+              expect(actionButtons.length).toEqual(1)
+              expect(declineButton.exists()).toBeTruthy()
+              expect(declineButton.text()).toContain('Decline')
+              expect(acceptButton.exists()).toBeFalsy()
+            })
+            it('should call "declineShares" when decline button is clicked', async () => {
+              await declineButton.trigger('click')
+
+              expect(spyDeclineShares).toHaveBeenCalledTimes(1)
+              expect(spyTriggerShareActions).toHaveBeenCalledWith(shareStatus.declined)
+            })
+          })
+        } else {
+          const currentFolder = {
+            path: '',
+            canCreate: jest.fn(() => true),
+            canBeDeleted: jest.fn(() => true)
+          }
+
+          const store = createStore({ currentFolder, selected: selectedFiles })
+
+          let wrapper
+          let copyButton
+          let moveButton
+          let deleteButton
+          let actionButtons
+
+          const spyTriggerLocationPicker = jest
+            .spyOn(BatchActions.methods, 'triggerLocationPicker')
+            .mockImplementation()
+          const spyDeleteResourcesDisplayDialog = jest
+            .spyOn(BatchActions.mixins[1].methods, '$_deleteResources_displayDialog')
+            .mockImplementation()
+
+          beforeEach(() => {
+            canBeMoved.mockReturnValue(true)
+            wrapper = createMountWrapper({ ...options, store })
+
+            actionButtons = wrapper.findAll(elSelector.ocButton)
+            copyButton = wrapper.find(elSelector.copyButton)
+            moveButton = wrapper.find(elSelector.moveButton)
+            deleteButton = wrapper.find(elSelector.deleteButton)
+          })
+
+          it('should display the action buttons', () => {
+            expect(actionButtons.length).toEqual(3)
+            expect(copyButton.text()).toEqual('Copy')
+            expect(moveButton.text()).toEqual('Move')
+            expect(deleteButton.text()).toEqual('Delete')
+          })
+          it('should call "triggerLocationPicker" when copy button is clicked', async () => {
+            await copyButton.trigger('click')
+
+            expect(spyTriggerLocationPicker).toHaveBeenCalledWith('copy')
+          })
+          it('should call "triggerLocationPicker" when move button is clicked', async () => {
+            await moveButton.trigger('click')
+
+            expect(spyTriggerLocationPicker).toHaveBeenCalledWith('move')
+          })
+          it('should call "$_deleteResources_displayDialog" when delete button is clicked', async () => {
+            await deleteButton.trigger('click')
+
+            expect(spyDeleteResourcesDisplayDialog).toHaveBeenCalledTimes(1)
+          })
+        }
       })
 
-      it('should call "triggerLocationPicker" when copy button is clicked', async () => {
-        await copyButton.vm.$emit('click')
+      if (page === 'files-public-list') {
+        describe('public-files page with read-only permission', () => {
+          const currentFolder = {
+            path: '',
+            canCreate: jest.fn(() => false),
+            canBeDeleted: jest.fn(() => false)
+          }
+          beforeEach(() => {
+            canBeMoved.mockReturnValue(false)
+          })
 
-        expect(spyTriggerLocationPicker).toHaveBeenCalledWith('copy')
-      })
+          it('should not display action buttons when items are selected', () => {
+            const store = createStore({ currentFolder, selected: selectedFiles })
+            const wrapper = createShallowMountWrapper({
+              store,
+              mocks: {
+                $route: {
+                  ...$route,
+                  meta: {
+                    hasBulkActions: true
+                  }
+                }
+              }
+            })
+            const actionButtons = wrapper.findAll(elSelector.ocButtonStub)
 
-      it('should call "triggerLocationPicker" when move button is clicked', async () => {
-        await moveButton.vm.$emit('click')
-
-        expect(spyTriggerLocationPicker).toHaveBeenCalledWith('move')
-      })
-
-      it('should call "$_deleteResources_displayDialog" when delete button is clicked', async () => {
-        await deleteButton.vm.$emit('click')
-
-        expect(spyDeleteResourcesDisplayDialog).toHaveBeenCalledTimes(1)
-      })
-    })
-  })
+            expect(actionButtons.length).toEqual(0)
+            expect(wrapper.exists()).toBeTruthy()
+          })
+        })
+      }
+    }
+  )
 
   describe('trashbin page', () => {
     const $route = {
@@ -128,7 +259,6 @@ describe('Batch Actions component', () => {
     }
 
     const options = {
-      ...mountOptions,
       mocks: {
         $route: {
           ...$route,
@@ -144,7 +274,6 @@ describe('Batch Actions component', () => {
     let emptyTrashButton
     let deleteButton
 
-    BatchActions.computed.isEmpty = jest.fn(() => false)
     const spyEmptyTrashbin = jest.spyOn(BatchActions.methods, 'emptyTrashbin').mockImplementation()
     const spyRestoreFiles = jest.spyOn(BatchActions.methods, 'restoreFiles').mockImplementation()
     const spyDeleteResourcesDisplayDialog = jest
@@ -152,13 +281,10 @@ describe('Batch Actions component', () => {
       .mockImplementation()
 
     describe('when no items are selected for batch action', () => {
-      const store = createStore({ ...state, selected: [] })
+      const store = createStore({ selected: [] })
 
       beforeEach(() => {
-        wrapper = shallowMount(BatchActions, {
-          ...options,
-          store
-        })
+        wrapper = createMountWrapper({ ...options, store })
 
         restoreButton = wrapper.find(elSelector.restoreButton)
         emptyTrashButton = wrapper.find(elSelector.deleteButton)
@@ -167,27 +293,22 @@ describe('Batch Actions component', () => {
       it('should not display restore button', () => {
         expect(restoreButton.exists()).toBeFalsy()
       })
-
       it('should display empty trashbin button', () => {
         expect(emptyTrashButton.exists()).toBeTruthy()
         expect(emptyTrashButton.text()).toEqual('Empty trash bin')
       })
-
       it('should call "emptyTrashbin" when empty trashbin button is clicked', async () => {
-        await emptyTrashButton.vm.$emit('click')
+        await emptyTrashButton.trigger('click')
 
         expect(spyEmptyTrashbin).toHaveBeenCalledTimes(1)
       })
     })
 
     describe('when items are selected for batch action', () => {
-      const store = createStore({ ...state, selected: selectedFiles })
+      const store = createStore({ selected: selectedFiles })
 
       beforeEach(() => {
-        wrapper = shallowMount(BatchActions, {
-          ...options,
-          store
-        })
+        wrapper = createMountWrapper({ ...options, store })
 
         restoreButton = wrapper.find(elSelector.restoreButton)
         deleteButton = wrapper.find(elSelector.deleteButton)
@@ -202,15 +323,13 @@ describe('Batch Actions component', () => {
         expect(restoreButton.text()).toEqual('Restore')
         expect(deleteButton.text()).toEqual('Delete')
       })
-
       it('should call "restoreFiles" when restore button is clicked', async () => {
-        await restoreButton.vm.$emit('click')
+        await restoreButton.trigger('click')
 
         expect(spyRestoreFiles).toHaveBeenCalledTimes(1)
       })
-
       it('should call "$_deleteResources_displayDialog" when delete button is clicked', async () => {
-        await deleteButton.vm.$emit('click')
+        await deleteButton.trigger('click')
 
         expect(spyDeleteResourcesDisplayDialog).toHaveBeenCalledTimes(1)
       })
@@ -218,19 +337,40 @@ describe('Batch Actions component', () => {
   })
 })
 
-function createStore(state) {
+function addPropToSelectedFiles(selectedFiles, prop) {
+  const files = selectedFiles.map(file => ({ ...file, ...prop }))
+  return files
+}
+
+function createMountWrapper(options = {}) {
+  return mount(BatchActions, {
+    localVue,
+    stubs: { ...componentStubs, 'oc-button': false },
+    ...options
+  })
+}
+
+function createShallowMountWrapper(options = {}) {
+  return shallowMount(BatchActions, {
+    localVue,
+    stubs: componentStubs,
+    ...options
+  })
+}
+
+function createStore(state = { selected: [], currentFolder: {} }) {
   return new Vuex.Store({
     modules: {
       Files: {
         state: {
-          ...state,
-          currentFolder: { path: '' }
+          currentFolder: { path: '' },
+          ...state
         },
         namespaced: true,
         getters: {
           selectedFiles: () => state.selected,
           currentFolder: () => state.currentFolder,
-          activeFiles: jest.fn()
+          activeFiles: () => files
         }
       }
     }
