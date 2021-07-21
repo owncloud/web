@@ -8,12 +8,19 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Send authentication on manifests.json: [#5553](https://github.com/owncloud/web/pull/5553)
 * Bugfix - Unnecessary quota requests: [#5539](https://github.com/owncloud/web/pull/5539)
 * Enhancement - Prevent binding to only loopback IP when running in watch mode: [#5515](https://github.com/owncloud/web/pull/5515)
 * Enhancement - Use profile picture capability in avatars: [#5178](https://github.com/owncloud/web/pull/5178)
 
 Details
 -------
+
+* Bugfix - Send authentication on manifests.json: [#5553](https://github.com/owncloud/web/pull/5553)
+
+   We've changed that requests to manifest.json will use authentication, too.
+
+   https://github.com/owncloud/web/pull/5553
 
 * Bugfix - Unnecessary quota requests: [#5539](https://github.com/owncloud/web/pull/5539)
 
