@@ -1,43 +1,36 @@
 <template>
   <div class="files-collaborators-collaborator-add-dialog">
-    <oc-autocomplete
-      id="oc-sharing-autocomplete"
-      ref="ocSharingAutocomplete"
-      :label="$gettext('Select a person to add')"
-      :items="autocompleteResults"
-      :items-loading="autocompleteInProgress"
-      :description-message="$_ocCollaborationStatus_autocompleteDescriptionMessage"
-      :filter="filterRecipients"
-      :fill-on-selection="false"
-      class="uk-width-1-1 oc-mb"
-      dropdown-class="uk-width-1-1"
-      @input="$_ocCollaborators_selectAutocompleteResult"
-      @update:input="$_onAutocompleteInput"
-    >
-      <template #item="{ item }">
-        <autocomplete-item :item="item" />
-      </template>
-    </oc-autocomplete>
-    <div v-if="selectedCollaborators.length > 0">
-      <h4 v-translate class="oc-text-initial oc-mb-rm">Selected people</h4>
-      <ul class="uk-list files-collaborators-collaborator-autocomplete-items oc-mt-s oc-mb-m">
-        <li
-          v-for="collaborator in selectedCollaborators"
-          :key="collaborator.value.shareWith + '-' + collaborator.value.shareType"
-          class="uk-flex files-collaborators-collaborator-autocomplete-item"
-        >
-          <oc-button
-            :aria-label="$gettext('Delete share')"
-            appearance="raw"
-            size="small"
-            class="files-collaborators-collaborator-autocomplete-item-remove oc-mr-xs"
-            @click="$_ocCollaborators_removeFromSelection(collaborator)"
-          >
-            <oc-icon name="close" />
-          </oc-button>
-          <autocomplete-item :item="collaborator" />
-        </li>
-      </ul>
+    <div class="oc-mb">
+      <label for="files-share-invite-input" v-text="$gettext('Invite')" />
+      <oc-select
+        id="files-share-invite"
+        ref="ocSharingAutocomplete"
+        v-model="selectedCollaborators"
+        :options="autocompleteResults"
+        :loading="searchInProgress"
+        :multiple="true"
+        :filter="filterRecipients"
+        input-id="files-share-invite-input"
+        aria-describedby="files-share-invite-hint"
+        @search:input="onSearch"
+        @input="removeFetchedRecipient"
+      >
+        <template #option="option">
+          <autocomplete-item :item="option" />
+        </template>
+        <template #no-options>
+          <span
+            v-if="searchQuery < minSearchLength"
+            key="input-hint"
+            v-text="inviteDescriptionMessage"
+          />
+          <translate v-else key="input-no-options">No users or groups found.</translate>
+        </template>
+        <template #selected-option-container="{ option, deselect }">
+          <recipient-container :recipient="option" :deselect="deselect" />
+        </template>
+      </oc-select>
+      <p id="files-share-invite-hint" class="oc-invisible-sr" v-text="inviteDescriptionMessage" />
     </div>
     <collaborators-edit-options class="oc-mb" @optionChange="collaboratorOptionChanged" />
     <hr class="divider" />
@@ -81,28 +74,30 @@ import PQueue from 'p-queue'
 import { mapActions, mapGetters } from 'vuex'
 import Mixins from '../../../../mixins/collaborators'
 import { roleToBitmask } from '../../../../helpers/collaborators'
-import { shareTypes } from '../../../../helpers/shareTypes'
 
 import AutocompleteItem from './AutocompleteItem.vue'
 import CollaboratorsEditOptions from './CollaboratorsEditOptions.vue'
+import RecipientContainer from './RecipientContainer.vue'
 
 export default {
   name: 'NewCollaborator',
   components: {
     AutocompleteItem,
-    CollaboratorsEditOptions
+    CollaboratorsEditOptions,
+    RecipientContainer
   },
   mixins: [Mixins],
   data() {
     return {
       autocompleteResults: [],
       announcement: '',
-      autocompleteInProgress: false,
+      searchInProgress: false,
       selectedCollaborators: [],
       selectedRole: null,
       additionalPermissions: null,
       saving: false,
-      expirationDate: null
+      expirationDate: null,
+      searchQuery: ''
     }
   },
   computed: {
@@ -110,7 +105,7 @@ export default {
     ...mapGetters(['user']),
     ...mapGetters(['configuration']),
 
-    $_ocCollaborationStatus_autocompleteDescriptionMessage() {
+    inviteDescriptionMessage() {
       return this.$gettext("Add new person by name, email or federation ID's")
     },
 
@@ -120,15 +115,21 @@ export default {
 
     $_isValid() {
       return this.selectedCollaborators.length > 0
+    },
+
+    minSearchLength() {
+      return parseInt(this.user.capabilities.files_sharing.search_min_length, 10)
     }
   },
   mounted() {
     // Ensure default role is not undefined
     this.$nextTick(() => {
-      this.$refs.ocSharingAutocomplete.focus()
+      const inviteInput = document.getElementById('files-share-invite-input')
+
+      inviteInput.focus()
     })
 
-    this.$_onAutocompleteInput = debounce(this.$_onAutocompleteInput, 1000)
+    this.fetchRecipients = debounce(this.fetchRecipients, 1000)
   },
 
   methods: {
@@ -138,20 +139,10 @@ export default {
       this.$emit('close')
     },
 
-    $_onAutocompleteInput(value) {
-      const minSearchLength = parseInt(this.user.capabilities.files_sharing.search_min_length, 10)
-      if (value.length < minSearchLength) {
-        this.autocompleteInProgress = false
-        this.autocompleteResults = []
-        return
-      }
-      this.autocompleteInProgress = true
-      this.autocompleteResults = []
-      // TODO: move to store
+    fetchRecipients(query) {
       this.$client.shares
-        .getRecipients(value, 'folder', 1, this.configuration.options.sharingRecipientsPerPage)
+        .getRecipients(query, 'folder', 1, this.configuration.options.sharingRecipientsPerPage)
         .then(recipients => {
-          this.autocompleteInProgress = false
           const users = recipients.exact.users
             .concat(recipients.users)
             .filter(user => user.value.shareWith !== this.user.id)
@@ -178,26 +169,41 @@ export default {
             }
 
             this.announcement = this.$_announcementWhenCollaboratorAdded
+
             return true
           })
         })
         .catch(error => {
-          console.log(error)
-          this.autocompleteInProgress = false
+          console.error(error)
+
+          this.searchInProgress = false
+        })
+        .finally(() => {
+          this.searchInProgress = false
         })
     },
-    filterRecipients(item, queryText) {
-      if (item.value.shareType === shareTypes.remote) {
-        // done on server side
-        return true
+
+    onSearch(query) {
+      this.autocompleteResults = []
+      this.searchQuery = query
+
+      if (query.length < this.minSearchLength) {
+        this.searchInProgress = false
+
+        return
       }
-      return (
-        item.label.toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) > -1 ||
-        item.value.shareWith.toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) > -1 ||
-        (item.value.shareWithAdditionalInfo || '')
-          .toLocaleLowerCase()
-          .indexOf(queryText.toLocaleLowerCase()) > -1
-      )
+
+      this.searchInProgress = true
+
+      this.fetchRecipients(query)
+    },
+
+    filterRecipients(recipients) {
+      if (recipients.length < 1) {
+        return []
+      }
+
+      return recipients
     },
     $_ocCollaborators_newCollaboratorsCancel() {
       this.selectedCollaborators = []
@@ -229,14 +235,22 @@ export default {
         this.$_ocCollaborators_newCollaboratorsCancel()
       })
     },
-    $_ocCollaborators_selectAutocompleteResult(collaborator) {
-      this.selectedCollaborators.push(collaborator)
-    },
     $_ocCollaborators_removeFromSelection(collaborator) {
       this.selectedCollaborators = this.selectedCollaborators.filter(selectedCollaborator => {
         return collaborator !== selectedCollaborator
       })
+    },
+
+    removeFetchedRecipient() {
+      this.autocompleteResults = []
     }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.files-share-invite-recipient {
+  margin: 4px 2px 0;
+  padding: 0 0.25em;
+}
+</style>

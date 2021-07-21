@@ -1,5 +1,5 @@
 <template>
-  <div class="uk-flex uk-flex-middle" :class="collaboratorClass">
+  <div class="uk-flex uk-flex-middle oc-py-xs" :class="collaboratorClass">
     <avatar-image
       v-if="isUser"
       class="oc-mr-s"
