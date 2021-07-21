@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Content Security Policy for OpenID Connect authentication: [#5536](https://github.com/owncloud/web/pull/5536)
 * Bugfix - Send authentication on manifests.json: [#5553](https://github.com/owncloud/web/pull/5553)
 * Bugfix - Unnecessary quota requests: [#5539](https://github.com/owncloud/web/pull/5539)
 * Enhancement - Prevent binding to only loopback IP when running in watch mode: [#5515](https://github.com/owncloud/web/pull/5515)
@@ -15,6 +16,13 @@ Summary
 
 Details
 -------
+
+* Bugfix - Content Security Policy for OpenID Connect authentication: [#5536](https://github.com/owncloud/web/pull/5536)
+
+   We added CSP rules for allowing OpenID Connect authentication when running ownCloud Web as app
+   in ownCloud 10.
+
+   https://github.com/owncloud/web/pull/5536
 
 * Bugfix - Send authentication on manifests.json: [#5553](https://github.com/owncloud/web/pull/5553)
 
