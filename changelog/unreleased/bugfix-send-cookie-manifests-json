@@ -1,0 +1,5 @@
+Bugfix: Send authentication on manifests.json
+
+We've changed that requests to manifest.json will use authentication, too.
+
+https://github.com/owncloud/web/pull/5553
