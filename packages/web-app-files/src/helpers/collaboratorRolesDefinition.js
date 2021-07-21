@@ -31,6 +31,12 @@ export default ({ isFolder = false, $gettext = returnOriginal, allowSharePerm = 
         permissions: allowSharePerm
           ? ['read', 'update', 'create', 'delete', 'share']
           : ['read', 'update', 'create', 'delete']
+      },
+      {
+        name: 'deny',
+        label: $gettext('Deny'),
+        description: $gettext('Deny'),
+        permissions: ['deny']
       }
     ]
   }
