@@ -28,6 +28,10 @@ Within the `Admin` page of ownCloud 10, head into `User Authentication` and add 
 
 {{< figure src="/clients/web/static/oauth2.jpg" alt="Example OAuth2 entry" >}}
 
+{{< hint >}}
+If you use OpenID Connect you instead need to add a new client for ownCloud Web to your identity provider.
+{{< /hint >}}
+
 ## Configure ownCloud 10
 ### Set ownCloud Web address
 To set the ownCloud Web address and to display ownCloud Web in the app switcher, add the following line into `config/config.php`:
@@ -108,6 +112,20 @@ There are a few config values which need to be set in order for ownCloud Web to 
 
 {{< hint info >}}
 It is important that you don't edit or place the `config.json` within the app folder. If you do, the integrity check of the app will fail and raise warnings.
+{{< /hint >}}
+
+{{< hint >}}
+If you use OpenID Connect you need to replace the `"auth"` part with following configuration:
+
+``` 
+  "openIdConnect": {
+    "metadata_url": "<fqdn-of-the-identity-provider>/.well-known/openid-configuration",
+    "authority": "<fqdn-of-the-identity-provider>",
+    "client_id": "<client-id-from-the-identity-provider>",
+    "response_type": "code",
+    "scope": "openid profile email"
+  },
+```
 {{< /hint >}}
 
 ## Accessing ownCloud Web
