@@ -8,11 +8,11 @@ services:
       OCIS_URL: ${OCIS_URL:-https://host.docker.internal:9200}
       STORAGE_HOME_DRIVER: ${STORAGE_HOME_DRIVER:-ocis}
       STORAGE_USERS_DRIVER: ${STORAGE_USERS_DRIVER:-ocis}
-      PROXY_OIDC_INSECURE: ${PROXY_OIDC_INSECURE:-true}
+      PROXY_OIDC_INSECURE: "${PROXY_OIDC_INSECURE:-true}"
       WEB_UI_CONFIG: ${WEB_UI_CONFIG:-/web/config.json}
       WEB_ASSET_PATH: ${WEB_ASSET_PATH:-/web/dist}
       IDP_IDENTIFIER_REGISTRATION_CONF: ${IDP_IDENTIFIER_REGISTRATION_CONF:-/web/identifier-registration.yml}
-      PROXY_ENABLE_BASIC_AUTH: ${PROXY_ENABLE_BASIC_AUTH:-true}
+      PROXY_ENABLE_BASIC_AUTH: "${PROXY_ENABLE_BASIC_AUTH:-true}"
       OCIS_LOG_LEVEL: ${OCIS_LOG_LEVEL:-error}
     volumes:
       - ./dist:/web/dist:ro
@@ -57,7 +57,7 @@ services:
     extra_hosts:
       - host.docker.internal:${DOCKER_HOST:-host-gateway}
     environment:
-      VNC_NO_PASSWORD: 'true'
+      VNC_NO_PASSWORD: "true"
 
   vnc:
     build:
@@ -68,4 +68,3 @@ services:
       - 6080:6080
     extra_hosts:
       - host.docker.internal:${DOCKER_HOST:-host-gateway}
-
