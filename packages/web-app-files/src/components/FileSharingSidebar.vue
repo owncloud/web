@@ -35,7 +35,7 @@
           <collaborator :collaborator="$_currentUserAsCollaborator" />
         </template>
         <template v-else>
-          <p id="collaborator-as-fileowner" role="alert" v-translate class="oc-invisible-sr">
+          <p id="collaborator-as-fileowner" v-translate role="alert" class="oc-invisible-sr">
             You are the file owner
           </p>
           <collaborator
