@@ -22,6 +22,7 @@
           v-else
           key="no-reshare-permissions-message"
           data-test-id="files-collaborators-no-reshare-permissions-message"
+          role="alert"
           v-text="noResharePermsMessage"
         />
         <template v-if="$_ownerAsCollaborator">
@@ -34,7 +35,7 @@
           <collaborator :collaborator="$_currentUserAsCollaborator" />
         </template>
         <template v-else>
-          <p id="collaborator-as-fileowner" v-translate class="oc-invisible-sr">
+          <p id="collaborator-as-fileowner" role="alert" v-translate class="oc-invisible-sr">
             You are the file owner
           </p>
           <collaborator
