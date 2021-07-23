@@ -14,12 +14,7 @@
             Any external person with the respective link can access this resource. No sign-in
             required. Assign a password to avoid unintended document exposure.
           </p>
-          <oc-button
-            id="files-file-link-add"
-            icon="add"
-            variation="primary"
-            @click="addNewLink"
-          >
+          <oc-button id="files-file-link-add" icon="add" variation="primary" @click="addNewLink">
             <oc-icon name="add" />
             {{ $_addButtonLabel }}
           </oc-button>
