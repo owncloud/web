@@ -18,7 +18,6 @@
             id="files-file-link-add"
             icon="add"
             variation="primary"
-            :aria-label="$_addButtonAriaLabel"
             @click="addNewLink"
           >
             <oc-icon name="add" />

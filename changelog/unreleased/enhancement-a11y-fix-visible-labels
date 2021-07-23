@@ -1,0 +1,5 @@
+Enhancement: Fix visible labels for screenreader
+
+We fixed the wrong aria-labels for "Neu"/"New" and "Öffentlicher Link"/"Public Link"
+
+https://github.com/owncloud/web/issues/5394
