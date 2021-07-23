@@ -824,9 +824,9 @@ def getRecentBuilds():
             "cat %s/filteredDescriptions.txt" % dir["web"],
             "awk '/Ref: refs\\\\/pull\\\\/5496\\\\/head/{print p} {p=$0}' %s/filteredDescriptions.txt" % dir["web"],
             "awk '/Ref: refs\\\\/pull/' %s/thisBuildInfo.txt > %s/thisBuildFiltered.txt" % (dir["web"], dir["web"]),
-            "number=$(awk -F'/head' '{print $(1)}' %s/thisBuildFiltered.txt | awk -F'pull/' '{print $(2)}')" % dir["web"],
-            "echo $number",
-            "awk -v ref='Ref: refs\\\\/pull\\\\/${number}\\\\/head' 'index($0,ref){print p} {p=$0}' %s/filteredDescriptions.txt > %s/buildsToStop.txt" % (dir["web"], dir["web"]),
+            "NUMBER=$(awk -F'/head' '{print $(1)}' %s/thisBuildFiltered.txt | awk -F'pull/' '{print $(2)}')" % dir["web"],
+            "echo 'Ref: refs\\\\/pull\\\\/%s\\\\/head'" % dir["web"],
+            "awk -v ref='Ref: refs\\\\/pull\\\\/$NUMBER\\\\/head' 'index($0,ref){print p} {p=$0}' %s/filteredDescriptions.txt > %s/buildsToStop.txt" % (dir["web"], dir["web"]),
             "cd %s && ./tests/acceptance/cancelBuilds.sh" % dir["web"],
         ],
         "when": {
