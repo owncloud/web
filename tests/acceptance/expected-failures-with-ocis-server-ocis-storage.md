@@ -158,7 +158,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIFilesActionMenu/versions.feature:59](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesActionMenu/versions.feature#L59)
 -   [webUIFilesActionMenu/versions.feature:74](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesActionMenu/versions.feature#L74)
 
-### [Change the file content of a received shared file](https://github.com/owncloud/web/pull/5548)
+### [Change the file content of a received shared file](https://github.com/owncloud/ocis/issues/2319)
 -   [webUIFilesActionMenu/versions.feature:88](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesActionMenu/versions.feature#L88)
 
 ### [No occ command in ocis](https://github.com/owncloud/ocis/issues/1317)

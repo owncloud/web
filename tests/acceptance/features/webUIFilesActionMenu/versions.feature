@@ -84,7 +84,7 @@ Feature: Versions of a file
     And the user browses to display the "versions" details of file "lorem-file.txt"
     Then the versions list should contain 0 entries
 
-  @web-pull-5548
+  @issue-ocis-2319
   Scenario: change the file content of a received shared file
     Given user "Brian" has created file "lorem.txt"
     And user "Brian" has shared file "lorem.txt" with user "Alice" with "all" permissions
