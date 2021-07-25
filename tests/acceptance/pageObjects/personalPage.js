@@ -342,6 +342,15 @@ module.exports = {
         await this.click('@clearSelectionBtn').waitForElementNotPresent('@clearSelectionBtn')
       }
       return this
+    },
+    clearSelection: async function() {
+      await this.useXpath()
+        .waitForElementVisible('@clearSelectionBtn')
+        .click('@clearSelectionBtn')
+        .waitForElementNotPresent('@clearSelectionBtn')
+    },
+    checkForButtonMoveHereDisabled: function() {
+      return this.waitForElementVisible('@moveHereConfirmBtn')
     }
   },
   elements: {
@@ -445,6 +454,9 @@ module.exports = {
     },
     dialogBoxInputTextInRed: {
       selector: '.oc-text-input-danger'
+    },
+    moveHereConfirmBtn: {
+      selector: '#location-picker-btn-confirm:disabled'
     }
   }
 }
