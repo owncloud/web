@@ -630,8 +630,7 @@ module.exports = {
       selector: '#files-share-invite .vs__dropdown-menu'
     },
     sharingAutoCompleteDropDownElements: {
-      selector:
-        '#files-share-invite .vs__dropdown-menu .files-collaborators-autocomplete-user-text'
+      selector: '#files-share-invite .vs__dropdown-menu .files-collaborators-autocomplete-user-text'
     },
     sharingAutoCompleteShowAllResultsButton: {
       selector: '.oc-autocomplete-suggestion-overflow'
