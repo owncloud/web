@@ -74,6 +74,7 @@ import PQueue from 'p-queue'
 import { mapActions, mapGetters } from 'vuex'
 import Mixins from '../../../../mixins/collaborators'
 import { roleToBitmask } from '../../../../helpers/collaborators'
+import { shareTypes } from '../../../../helpers/shareTypes'
 
 import AutocompleteItem from './AutocompleteItem.vue'
 import CollaboratorsEditOptions from './CollaboratorsEditOptions.vue'
@@ -198,12 +199,21 @@ export default {
       this.fetchRecipients(query)
     },
 
-    filterRecipients(recipients) {
+    filterRecipients(recipients, query) {
       if (recipients.length < 1) {
         return []
       }
 
-      return recipients
+      return recipients.filter(recipient => {
+        return (
+          recipient.value.shareType === shareTypes.remote ||
+          recipient.label.toLocaleLowerCase().indexOf(query.toLocaleLowerCase()) > -1 ||
+          recipient.value.shareWith.toLocaleLowerCase().indexOf(query.toLocaleLowerCase()) > -1 ||
+          (recipient.value.shareWithAdditionalInfo || '')
+            .toLocaleLowerCase()
+            .indexOf(query.toLocaleLowerCase()) > -1
+        )
+      })
     },
     $_ocCollaborators_newCollaboratorsCancel() {
       this.selectedCollaborators = []
