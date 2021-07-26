@@ -621,17 +621,17 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     sharingAutoComplete: {
-      selector: '#oc-sharing-autocomplete .oc-autocomplete-input'
+      selector: '#files-share-invite #files-share-invite-input'
     },
     sharingAutoCompleteSpinner: {
-      selector: '#oc-sharing-autocomplete .oc-autocomplete-spinner'
+      selector: '#files-share-invite .oc-autocomplete-spinner'
     },
     sharingAutoCompleteDropDown: {
-      selector: '#oc-sharing-autocomplete .oc-autocomplete-suggestion-list'
+      selector: '#files-share-invite .vs__dropdown-menu'
     },
     sharingAutoCompleteDropDownElements: {
       selector:
-        '#oc-sharing-autocomplete .oc-autocomplete-suggestion .files-collaborators-autocomplete-user-text'
+        '#files-share-invite .vs__dropdown-menu .files-collaborators-autocomplete-user-text'
     },
     sharingAutoCompleteShowAllResultsButton: {
       selector: '.oc-autocomplete-suggestion-overflow'
