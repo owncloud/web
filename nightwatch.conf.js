@@ -5,14 +5,10 @@ const withHttp = url => (/^https?:\/\//i.test(url) ? url : `http://${url}`)
 const RUN_WITH_LDAP = !!process.env.RUN_WITH_LDAP
 const RUN_ON_OCIS = !!process.env.RUN_ON_OCIS
 const LOCAL_LAUNCH_URL = withHttp(
-  process.env.SERVER_HOST ||
-    (RUN_ON_OCIS
-      ? 'https://host.docker.internal:9200'
-      : 'http://host.docker.internal:8080/index.php/apps/web/index.html')
+  process.env.SERVER_HOST || (RUN_ON_OCIS ? 'https://localhost:9200' : 'http://localhost:9100')
 )
 const LOCAL_BACKEND_URL = withHttp(
-  process.env.BACKEND_HOST ||
-    (RUN_ON_OCIS ? 'https://host.docker.internal:9200' : 'http://host.docker.internal:8080')
+  process.env.BACKEND_HOST || (RUN_ON_OCIS ? 'https://localhost:9200' : 'http://localhost:8080')
 )
 const REMOTE_BACKEND_URL = process.env.REMOTE_BACKEND_HOST
   ? withHttp(process.env.REMOTE_BACKEND_HOST || 'http://localhost:8080')
@@ -40,7 +36,6 @@ const SCREENSHOTS = !!process.env.SCREENSHOTS
 
 const VISUAL_TEST = !!process.env.VISUAL_TEST
 const UPDATE_VRT_SCREENSHOTS = !!process.env.UPDATE_VRT_SCREENSHOTS
-
 function generateScreenshotFilePath(nightwatchClient, basePath, imagePath) {
   return path.join(process.cwd(), basePath, imagePath)
 }
@@ -55,7 +50,6 @@ const config = {
   test_settings: {
     default: {
       launch_url: LOCAL_LAUNCH_URL,
-      skip_testcases_on_fail: false,
       globals: {
         waitForConditionTimeout: 20000,
         waitForNegativeConditionTimeout: 1000,
