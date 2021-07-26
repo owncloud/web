@@ -21,9 +21,7 @@
         />
       </div>
     </div>
-    <span :id="`public-link-list-label-${link.id}`" v-translate class="oc-invisible-sr"
-      >Tags</span
-    >
+    <span :id="`public-link-list-label-${link.id}`" v-translate class="oc-invisible-sr">Tags</span>
     <ul
       class="public-link-list oc-my-rm oc-pl-rm"
       :aria-labelledby="`public-link-list-label-${link.id}`"
