@@ -67,6 +67,7 @@ const store = {
     }
   }
 }
+const stubs = { 'context-actions': true }
 const cases = [
   ['Personal', '/files/list/personal/', Personal],
   ['Favorites', '/files/list/favorites/', Favorites],
@@ -108,7 +109,7 @@ describe('User can navigate in files list using pagination', () => {
     async (name, route, component) => {
       const { getByText, queryByText } = render(
         component,
-        { routes, store },
+        { routes, store, stubs },
         (vue, store, router) => {
           router.push(route)
         }
@@ -151,7 +152,7 @@ describe('User can navigate in files list using pagination', () => {
       // eslint-disable-next-line jest/no-done-callback
       const { getByText, queryByText } = render(
         component,
-        { routes, store },
+        { routes, store, stubs },
         (vue, store, router) => {
           router.push(route)
 

@@ -29,7 +29,7 @@ export default {
             )
           },
           componentType: 'oc-button',
-          class: 'oc-files-actions-sidebar-favorite-trigger'
+          class: 'oc-files-actions-favorite-trigger'
         }
       ]
     }

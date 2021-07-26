@@ -19,7 +19,7 @@ export default {
           },
           canBeDefault: true,
           componentType: 'oc-button',
-          class: 'oc-files-actions-sidebar-download-trigger'
+          class: 'oc-files-actions-download-trigger'
         }
       ]
     }

@@ -58,6 +58,9 @@
             />
           </div>
         </template>
+        <template #contextMenu="{ resource }">
+          <context-actions :item="resource" />
+        </template>
         <template #footer>
           <pagination />
           <list-info
@@ -90,6 +93,7 @@ import ListLoader from '../components/FilesList/ListLoader.vue'
 import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
+import ContextActions from '../components/FilesList/ContextActions.vue'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -98,7 +102,8 @@ export default {
     ListLoader,
     NoContentMessage,
     ListInfo,
-    Pagination
+    Pagination,
+    ContextActions
   },
 
   mixins: [

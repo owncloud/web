@@ -12,7 +12,7 @@ export default {
           handler: this.$_restore_trigger,
           isEnabled: () => checkRoute(['files-trashbin'], this.$route.name),
           componentType: 'oc-button',
-          class: 'oc-files-actions-sidebar-restore-trigger'
+          class: 'oc-files-actions-restore-trigger'
         }
       ]
     }

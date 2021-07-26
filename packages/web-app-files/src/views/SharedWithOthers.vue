@@ -29,6 +29,9 @@
         @fileClick="$_fileActions_triggerDefaultAction"
         @rowMounted="rowMounted"
       >
+        <template #contextMenu="{ resource }">
+          <context-actions :item="resource" />
+        </template>
         <template #footer>
           <pagination />
           <list-info
@@ -60,11 +63,12 @@ import ListLoader from '../components/FilesList/ListLoader.vue'
 import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
+import ContextActions from '../components/FilesList/ContextActions.vue'
 
 const visibilityObserver = new VisibilityObserver()
 
 export default {
-  components: { ListLoader, NoContentMessage, ListInfo, Pagination },
+  components: { ListLoader, NoContentMessage, ListInfo, Pagination, ContextActions },
 
   mixins: [
     FileActions,
