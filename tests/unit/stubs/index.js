@@ -13,5 +13,6 @@ export default {
   'oc-switch': true,
   'oc-loader': true,
   'oc-img': true,
-  'oc-page-size': true
+  'oc-page-size': true,
+  'router-link': true
 }

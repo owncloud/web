@@ -1,16 +1,14 @@
 <template>
-  <ul id="oc-files-actions-sidebar" class="uk-list oc-mt-s">
-    <li v-for="(action, index) in actions" :key="`action-${index}`" class="oc-py-xs">
+  <ul id="oc-files-context-actions" class="uk-list oc-mt-s">
+    <li v-for="(action, index) in filteredActions" :key="`action-${index}`" class="oc-py-xs">
       <component
         :is="action.componentType"
-        v-bind="getComponentProps(action, highlightedFile)"
+        v-bind="getComponentProps(action, item)"
         :class="['oc-text-bold', action.class]"
-        @click.stop="action.handler(highlightedFile, action.handlerData)"
+        @click.stop="action.handler(item, action.handlerData)"
       >
         <oc-icon :name="action.icon" size="medium" />
-        <span class="oc-files-actions-sidebar-action-label">{{
-          action.label(highlightedFile)
-        }}</span>
+        <span class="oc-files-context-action-label">{{ action.label(item) }}</span>
         <span
           v-if="action.opensInNewWindow"
           class="oc-invisible-sr"
@@ -24,36 +22,41 @@
 <script>
 import { mapGetters } from 'vuex'
 
-import FileActions from '../../../mixins/fileActions'
+import FileActions from '../../mixins/fileActions'
 
 export default {
-  name: 'ActionsAccordion',
-  title: $gettext => {
-    return $gettext('Actions')
-  },
+  name: 'ContextActions',
   mixins: [FileActions],
-  computed: {
-    ...mapGetters('Files', ['highlightedFile', 'currentFolder']),
 
-    actions() {
+  props: {
+    item: {
+      type: Object,
+      required: true
+    }
+  },
+
+  computed: {
+    ...mapGetters('Files', ['currentFolder']),
+
+    filteredActions() {
       const actions = this.$_fileActions_editorActions.concat(this.$_fileActions_systemActions)
 
       return actions.filter(action =>
         action.isEnabled({
-          resource: this.highlightedFile,
+          resource: this.item,
           parent: this.currentFolder
         })
       )
     }
   },
   methods: {
-    getComponentProps(action, highlightedFile) {
+    getComponentProps(action, target) {
       if (action.componentType === 'router-link' && action.route) {
         return {
           to: {
             name: action.route,
             params: {
-              item: highlightedFile.path
+              item: target.path
             }
           }
         }
@@ -68,7 +71,9 @@ export default {
 </script>
 
 <style lang="scss">
-#oc-files-actions-sidebar {
+#oc-files-context-actions {
+  text-align: left;
+
   > li a,
   > li a:hover {
     text-decoration: none;

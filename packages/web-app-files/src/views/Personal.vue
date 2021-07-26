@@ -39,6 +39,9 @@
             :actions="app.quickActions"
           />
         </template>
+        <template #contextMenu="{ resource }">
+          <context-actions :item="resource" />
+        </template>
         <template #footer>
           <pagination />
           <list-info
@@ -75,11 +78,20 @@ import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
 import NotFoundMessage from '../components/FilesList/NotFoundMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
+import ContextActions from '../components/FilesList/ContextActions.vue'
 
 const visibilityObserver = new VisibilityObserver()
 
 export default {
-  components: { QuickActions, ListLoader, NoContentMessage, NotFoundMessage, ListInfo, Pagination },
+  components: {
+    QuickActions,
+    ListLoader,
+    NoContentMessage,
+    NotFoundMessage,
+    ListInfo,
+    Pagination,
+    ContextActions
+  },
 
   mixins: [
     MixinAccessibleBreadcrumb,

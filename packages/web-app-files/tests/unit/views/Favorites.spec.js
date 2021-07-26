@@ -25,7 +25,8 @@ const stubs = {
   translate: true,
   'oc-pagination': true,
   'oc-table-files': true,
-  'oc-spinner': true
+  'oc-spinner': true,
+  'context-actions': true
 }
 
 const defaultWrapper = mount(component, {

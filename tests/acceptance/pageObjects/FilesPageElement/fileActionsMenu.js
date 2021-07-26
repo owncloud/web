@@ -174,11 +174,11 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     deleteButtonInAccordion: {
-      selector: '//button[contains(@class, "oc-files-actions-sidebar-delete-trigger")]',
+      selector: '//button[contains(@class, "oc-files-actions-delete-trigger")]',
       locateStrategy: 'xpath'
     },
     downloadButtonInAccordion: {
-      selector: '//button[contains(@class, "oc-files-actions-sidebar-download-trigger")]',
+      selector: '//button[contains(@class, "oc-files-actions-download-trigger")]',
       locateStrategy: 'xpath'
     },
     favoriteButtonInAccordion: {
@@ -190,11 +190,11 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     restoreButtonInAccordion: {
-      selector: '//button[contains(@class, "oc-files-actions-sidebar-restore-trigger")]',
+      selector: '//button[contains(@class, "oc-files-actions-restore-trigger")]',
       locateStrategy: 'xpath'
     },
     renameButtonInAccordion: {
-      selector: '//button[contains(@class, "oc-files-actions-sidebar-rename-trigger")]',
+      selector: '//button[contains(@class, "oc-files-actions-rename-trigger")]',
       locateStrategy: 'xpath'
     },
     // TODO: Merge with selectors in personalPage
@@ -208,19 +208,19 @@ module.exports = {
       selector: '.oc-modal-body-input .oc-text-input'
     },
     moveButtonInAccordion: {
-      selector: '//button[contains(@class, "oc-files-actions-sidebar-move-trigger")]',
+      selector: '//button[contains(@class, "oc-files-actions-move-trigger")]',
       locateStrategy: 'xpath'
     },
     copyButtonInAccordion: {
-      selector: '//button[contains(@class, "oc-files-actions-sidebar-copy-trigger")]',
+      selector: '//button[contains(@class, "oc-files-actions-copy-trigger")]',
       locateStrategy: 'xpath'
     },
     acceptShareButtonInAccordion: {
-      selector: '//button[contains(@class, "oc-files-actions-sidebar-accept-share-trigger")]',
+      selector: '//button[contains(@class, "oc-files-actions-accept-share-trigger")]',
       locateStrategy: 'xpath'
     },
     declineShareButtonInAccordion: {
-      selector: '//button[contains(@class, "oc-files-actions-sidebar-decline-share-trigger")]',
+      selector: '//button[contains(@class, "oc-files-actions-decline-share-trigger")]',
       locateStrategy: 'xpath'
     },
     mediaViewerButtonInAccordion: {
