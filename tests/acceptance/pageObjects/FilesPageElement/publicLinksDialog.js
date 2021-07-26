@@ -367,6 +367,7 @@ module.exports = {
       return this.waitForElementVisible(this.api.page.personalPage().elements.sideBar)
         .waitForElementVisible(linksPanelSelect)
         .click(linksPanelSelect)
+        .waitForAnimationToFinish()
         .waitForElementVisible('@privateLinkURLCopyButton')
         .click('@privateLinkURLCopyButton')
     }
