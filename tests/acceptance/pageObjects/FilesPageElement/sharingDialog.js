@@ -624,7 +624,7 @@ module.exports = {
       selector: '#files-share-invite #files-share-invite-input'
     },
     sharingAutoCompleteSpinner: {
-      selector: '#files-share-invite .oc-autocomplete-spinner'
+      selector: '#files-share-invite .oc-spinner'
     },
     sharingAutoCompleteDropDown: {
       selector: '#files-share-invite .vs__dropdown-menu'
@@ -664,11 +664,10 @@ module.exports = {
     },
     newCollaboratorItems: {
       selector:
-        "//span[contains(@class, 'files-collaborators-autocomplete-username') and contains(., '%s')]/ancestor::li[contains(@class, 'files-collaborators-collaborator-autocomplete-item')]"
+        "//p[@class='oc-recipient-name' and contains(., '%s')]/ancestor::span[contains(@class, 'files-share-invite-recipient')]"
     },
     newCollaboratorRemoveButton: {
-      selector:
-        "//button[contains(@class, 'files-collaborators-collaborator-autocomplete-item-remove')]"
+      selector: "//button[contains(@class, 'files-share-invite-recipient-btn-remove')]"
     },
     newCollaboratorRoleAdvancedPermissions: {
       selector: '#files-role-advancedRole'

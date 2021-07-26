@@ -2,6 +2,7 @@
   <oc-recipient class="files-share-invite-recipient" :recipient="formattedRecipient">
     <template #append>
       <oc-button
+        class="files-share-invite-recipient-btn-remove"
         appearance="raw"
         :aria-label="btnDeselectRecipientLabel"
         @click.stop="deselect(recipient)"
