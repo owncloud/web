@@ -11,6 +11,7 @@ Summary
 * Bugfix - Content Security Policy for OpenID Connect authentication: [#5536](https://github.com/owncloud/web/pull/5536)
 * Bugfix - Send authentication on manifests.json: [#5553](https://github.com/owncloud/web/pull/5553)
 * Bugfix - Unnecessary quota requests: [#5539](https://github.com/owncloud/web/pull/5539)
+* Enhancement - Dropdown actions in FilesTable: [#5102](https://github.com/owncloud/web/issues/5102)
 * Enhancement - Prevent binding to only loopback IP when running in watch mode: [#5515](https://github.com/owncloud/web/pull/5515)
 * Enhancement - Use profile picture capability in avatars: [#5178](https://github.com/owncloud/web/pull/5178)
 
@@ -35,6 +36,18 @@ Details
    We've removed requests that checked for a user's quota on pages where it was not relevant.
 
    https://github.com/owncloud/web/pull/5539
+
+* Enhancement - Dropdown actions in FilesTable: [#5102](https://github.com/owncloud/web/issues/5102)
+
+   Users can now access quick actions in a dropdown by clicking on the three-dots button or
+   right-clicking on rows in the files table.
+
+   We've also bumped the ownCloud Design System to version 8.2.0
+
+   https://github.com/owncloud/web/issues/5102
+   https://github.com/owncloud/web/issues/5103
+   https://github.com/owncloud/web/pull/5551
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v8.2.0
 
 * Enhancement - Prevent binding to only loopback IP when running in watch mode: [#5515](https://github.com/owncloud/web/pull/5515)
 
