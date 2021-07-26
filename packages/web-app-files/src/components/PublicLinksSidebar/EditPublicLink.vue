@@ -7,7 +7,7 @@
         name="custom-classes-transition"
       >
         <oc-alert v-if="errors" class="oc-files-file-link-error-alert" variation="danger">
-          {{ errors }}
+          {{ $gettext(errors) }}
         </oc-alert>
       </transition>
       <div class="oc-mb">
