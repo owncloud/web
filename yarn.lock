@@ -1837,7 +1837,7 @@ acorn@^5.7.3:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-5.7.4.tgz#3e8d8a9947d0599a1796d10225d7432f4a4acf5e"
   integrity sha512-1D++VG7BhrtvQpNbBzovKNc1FLGGEE/oGe7b9xJm/RFHMBeUaUGpluV9RLjZa47YFdPcDAenEYuq9pQPcMdLJg==
 
-acorn@^7.1.1, acorn@^7.4.0:
+acorn@^7.1.1, acorn@^7.4.0, acorn@^7.4.1:
   version "7.4.1"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-7.4.1.tgz#feaed255973d2e77555b83dbc08851a6c63520fa"
   integrity sha512-nQyp0o1/mNdbTO1PO6kHkwSrmgZ0MT/jCCpNiwbUjGoRN4dlBhqJtoQuCnEOKzgTVwg0ZWiCoQy6SxMebQVh8A==
@@ -2471,7 +2471,7 @@ base-64@^1.0.0:
   resolved "https://registry.yarnpkg.com/base-64/-/base-64-1.0.0.tgz#09d0f2084e32a3fd08c2475b973788eee6ae8f4a"
   integrity sha512-kwDPIFCGx0NZHog36dj+tHiwP4QMzsZ3AgMViUBKI0+V5n4U0ufTCUMhnQ04diaRI8EX/QcPfql7zlhZ7j4zgg==
 
-base64-js@^1.3.0, base64-js@^1.3.1:
+base64-js@^1.3.1, base64-js@^1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/base64-js/-/base64-js-1.5.1.tgz#1b1b440160a5bf7ad40b650f095963481903930a"
   integrity sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==
@@ -3313,12 +3313,12 @@ core-js-pure@^3.14.0:
   resolved "https://registry.yarnpkg.com/core-js-pure/-/core-js-pure-3.14.0.tgz#72bcfacba74a65ffce04bf94ae91d966e80ee553"
   integrity sha512-YVh+LN2FgNU0odThzm61BsdkwrbrchumFq3oztnE9vTKC4KS2fvnPmcx8t6jnqAyOTCTF4ZSiuK8Qhh7SNcL4g==
 
-core-js@^2.4.0, core-js@^2.5.3, core-js@^2.6.4, core-js@^2.6.5:
+core-js@^2.4.0, core-js@^2.5.3, core-js@^2.6.5:
   version "2.6.12"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.12.tgz#d9333dfa7b065e347cc5682219d6f690859cc2ec"
   integrity sha512-Kb2wC0fvsWfQrgk8HU5lW6U/Lcs8+9aaYcy4ZFc6DDlo4nZ7n70dEgE5rtR0oG6ufKDUnrwfWL1mXR5ljDatrQ==
 
-core-js@^3.15.2:
+core-js@^3.15.2, core-js@^3.8.3:
   version "3.15.2"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.15.2.tgz#740660d2ff55ef34ce664d7e2455119c5bdd3d61"
   integrity sha512-tKs41J7NJVuaya8DxIOCnl8QuPHx5/ZVbFo1oKgVl1qHFBBrDctzQGtuLjPpRdNTWmKPH6oEvgN/MUID+l485Q==
@@ -3451,10 +3451,10 @@ crypto-browserify@^3.11.0:
     randombytes "^2.0.0"
     randomfill "^1.0.3"
 
-crypto-js@^3.1.9-1:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/crypto-js/-/crypto-js-3.3.0.tgz#846dd1cce2f68aacfa156c8578f926a609b7976b"
-  integrity sha512-DIT51nX0dCfKltpRiXV+/TVZq+Qq2NgF4644+K7Ttnla7zEzqc+kjJyiB96BHNyUTBxyjzRcZYpUdZa+QAqi6Q==
+crypto-js@^4.0.0:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/crypto-js/-/crypto-js-4.1.1.tgz#9e485bcf03521041bd85844786b83fb7619736cf"
+  integrity sha512-o2JlM7ydqd3Qk9CA0L4NL6mTzU2sdx96a+oOfPu8Mkl/PK51vSyoi8/rQ8NknZtk44vq15lmhAj9CIAGwgeWKw==
 
 css-color-names@0.0.4, css-color-names@^0.0.4:
   version "0.0.4"
@@ -8067,15 +8067,16 @@ octal@^1.0.0:
   resolved "https://registry.yarnpkg.com/octal/-/octal-1.0.0.tgz#63e7162a68efbeb9e213588d58e989d1e5c4530b"
   integrity sha1-Y+cWKmjvvrniE1iNWOmJ0eXEUws=
 
-oidc-client@1.10.1:
-  version "1.10.1"
-  resolved "https://registry.yarnpkg.com/oidc-client/-/oidc-client-1.10.1.tgz#fe67ae54924fc1c338062f3fd733be362026192c"
-  integrity sha512-/QB5Nl7c9GmT9ir1E+OVY3+yZZnuk7Qa9ZEAJqSvDq0bAyAU9KAgeKipTEfKjGdGLTeOLy9FRWuNpULMkfZydQ==
+oidc-client@1.11.5:
+  version "1.11.5"
+  resolved "https://registry.yarnpkg.com/oidc-client/-/oidc-client-1.11.5.tgz#020aa193d68a3e1f87a24fcbf50073b738de92bb"
+  integrity sha512-LcKrKC8Av0m/KD/4EFmo9Sg8fSQ+WFJWBrmtWd+tZkNn3WT/sQG3REmPANE9tzzhbjW6VkTNy4xhAXCfPApAOg==
   dependencies:
-    base64-js "^1.3.0"
-    core-js "^2.6.4"
-    crypto-js "^3.1.9-1"
-    uuid "^3.3.2"
+    acorn "^7.4.1"
+    base64-js "^1.5.1"
+    core-js "^3.8.3"
+    crypto-js "^4.0.0"
+    serialize-javascript "^4.0.0"
 
 once@^1.3.0, once@^1.3.1, once@^1.4.0:
   version "1.4.0"
