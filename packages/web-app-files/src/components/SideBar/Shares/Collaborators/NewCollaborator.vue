@@ -139,7 +139,6 @@ export default {
     },
 
     $_onAutocompleteInput(value) {
-      console.log(this.$store)
       const minSearchLength = parseInt(this.user.capabilities.files_sharing.search_min_length, 10)
       if (value.length < minSearchLength) {
         this.autocompleteInProgress = false

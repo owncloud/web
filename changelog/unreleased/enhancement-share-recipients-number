@@ -1,0 +1,6 @@
+Enhancement: Define the number of visible share recipients
+
+We've added a new configuration option `sharingRecipientsPerPage` to
+define how many recipients should be shown in the share recipients dropdown.
+
+https://github.com/owncloud/web/pull/5506
