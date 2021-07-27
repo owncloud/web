@@ -864,17 +864,16 @@ Then('the {string} details panel should be visible', async function(panel) {
   assert.strictEqual(expanded, true, `'${panel}-panel' should be active, but is not`)
 })
 
-Then(
-  'the following panels should be visible in the details dialog on the webUI',
-  async function(table) {
-    const visibleItems = await client.page.FilesPageElement.appSideBar().getVisibleAccordionItems()
-    const expectedVisibleItems = table.rows()
-    const difference = _.difference(expectedVisibleItems.flat(), visibleItems)
-    if (difference.length !== 0) {
-      throw new Error(`${difference} panels was expected to be visible but not found.`)
-    }
+Then('the following panels should be visible in the details dialog on the webUI', async function(
+  table
+) {
+  const visibleItems = await client.page.FilesPageElement.appSideBar().getVisibleAccordionItems()
+  const expectedVisibleItems = table.rows()
+  const difference = _.difference(expectedVisibleItems.flat(), visibleItems)
+  if (difference.length !== 0) {
+    throw new Error(`${difference} panels was expected to be visible but not found.`)
   }
-)
+})
 
 const assertElementsAreListed = async function(elements) {
   for (const element of elements) {
