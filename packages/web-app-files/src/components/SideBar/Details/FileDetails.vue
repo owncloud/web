@@ -217,6 +217,7 @@ export default {
   asyncComputed: {
     preview: {
       async get() {
+        // TODO: this timeout resolves flickering of the preview because it's rendered multiple times. Needs a better solution.
         await new Promise(resolve => setTimeout(resolve, 500))
         return loadPreview({
           resource: this.highlightedFile,
