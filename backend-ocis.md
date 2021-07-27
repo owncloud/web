@@ -1,5 +1,5 @@
 ---
-title: "Setup with OCIS"
+title: "Setup with oCIS"
 date: 2020-04-15T00:00:00+00:00
 weight: 50
 geekdocRepo: https://github.com/owncloud/web
@@ -9,9 +9,9 @@ geekdocFilePath: backend-ocis.md
 
 {{< toc >}}
 
-## Setting up OCIS services
+## Setting up oCIS services
 
-- Setup OCIS by following the [setup instructions](https://owncloud.dev/ocis/getting-started/).
+- Setup oCIS by following the [setup instructions](https://owncloud.dev/ocis/getting-started/).
 - Kill the oCIS Web service `./ocis kill web`
 
 ## Setting up Web
@@ -27,5 +27,5 @@ geekdocFilePath: backend-ocis.md
 
 ## Running acceptance tests
 
-For testing, please refer to the [OCIS testing section]({{< ref "testing.md#running-acceptance-tests-using-ocis-backend" >}})
+For testing, please refer to the [oCIS testing section]({{< ref "testing.md#running-acceptance-tests-using-ocis-backend" >}})
 
