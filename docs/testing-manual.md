@@ -1,5 +1,5 @@
 ---
-title: "Running acceptance tests - old"
+title: "Running acceptance tests - manual"
 date: 2020-04-15T00:00:00+00:00
 weight: 60
 geekdocRepo: https://github.com/owncloud/web
