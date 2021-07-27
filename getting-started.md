@@ -51,6 +51,7 @@ substring of a value of the authenticated user. Examples are `/Shares`, `/{{.Id}
 - `options.previewFileExtensions` Specifies which filetypes will be previewed in the ui. For example to only preview jpg and txt files set this option to `["jpg", "txt"]`.
 - `options.disableFeedbackLink` Set this option to `true` to disable the feedback link in the topbar. Keeping it enabled (value `false` or absence of the option)
   allows ownCloud to get feedback from your user base through a dedicated survey website.
+- `options.sharingRecipientsPerPage` Sets the amount of users shown as recipients in the dropdown when sharing resources. Default amount is 200.
 
 ## Setting up backend and running
 
