@@ -1,5 +1,6 @@
 <template>
   <div
+    v-if="highlightedFile"
     v-click-outside="onClickOutside"
     :class="{
       'has-active': !!appSidebarActivePanel
@@ -170,7 +171,6 @@ export default {
     ...mapMutations('Files', ['SET_APP_SIDEBAR_ACTIVE_PANEL']),
     close() {
       this.$emit('reset')
-      this.SET_APP_SIDEBAR_ACTIVE_PANEL(null)
     },
     onClickOutside(event) {
       /*

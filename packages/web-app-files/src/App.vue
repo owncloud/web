@@ -66,6 +66,12 @@ export default {
     $route() {
       this.$_destroySideBar_hideDetails()
       this.resetFileSelection()
+    },
+    highlightedFile(file) {
+      if (file !== null) {
+        return
+      }
+      this.$_destroySideBar_hideDetails()
     }
   },
   created() {
@@ -81,7 +87,6 @@ export default {
   methods: {
     ...mapActions('Files', ['dragOver', 'resetFileSelection']),
     ...mapActions(['showMessage']),
-    ...mapMutations('Files', ['SET_APP_SIDEBAR_ACTIVE_PANEL']),
     ...mapMutations(['SET_SIDEBAR_FOOTER_CONTENT_COMPONENT']),
 
     trace() {
