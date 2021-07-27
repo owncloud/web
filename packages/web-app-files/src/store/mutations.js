@@ -259,12 +259,8 @@ export default {
     state.versions = versions
   },
 
-  SET_APP_SIDEBAR_EXPANDED_ACCORDION(state, accordion) {
-    state.appSidebarExpandedAccordion = accordion
-  },
-
-  SET_APP_SIDEBAR_ACCORDION_CONTEXT(state, panel) {
-    state.appSidebarAccordionContext = panel
+  SET_APP_SIDEBAR_ACTIVE_PANEL(state, accordion) {
+    state.appSidebarActivePanel = accordion
   },
 
   TRIGGER_PUBLIC_LINK_EDIT(state, link) {
@@ -283,7 +279,6 @@ export default {
     }
 
     state.publicLinkInEdit = link
-    state.appSidebarAccordionContext = 'editPublicLink'
   },
 
   TRIGGER_PUBLIC_LINK_CREATE(state, { name, expireDate }) {
@@ -294,7 +289,6 @@ export default {
       hasPassword: false,
       expireDate
     }
-    state.appSidebarAccordionContext = 'editPublicLink'
   },
 
   LOAD_INDICATORS(state) {

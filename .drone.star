@@ -139,8 +139,8 @@ config = {
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
                 "WEB_UI_CONFIG": "%s/dist/config.json" % dir["web"],
             },
-            "visualTesting": True,
-            "screenShots": True,
+            "visualTesting": False,
+            "screenShots": False,
         },
         "webUINotification": {
             "type": NOTIFICATIONS,
@@ -157,8 +157,8 @@ config = {
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
                 "WEB_UI_CONFIG": "%s/dist/config.json" % dir["web"],
             },
-            "visualTesting": True,
-            "screenShots": True,
+            "visualTesting": False,
+            "screenShots": False,
             "notificationsAppNeeded": True,
         },
         "webUIFederation": {
@@ -464,7 +464,7 @@ config = {
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-ocis-server-ocis-storage.md" % dir["web"],
             },
             "runningOnOCIS": True,
-            "visualTesting": True,
+            "visualTesting": False,
             "filterTags": "not @skip and not @skipOnOCIS and not @notToImplementOnOCIS",
         },
         "webUI-notifications-oc10-integration": {
@@ -484,7 +484,7 @@ config = {
             "filterTags": "not @skip and not @skipOnOC10 and not @openIdLogin and @smokeTest",
             "oc10IntegrationAppIncluded": True,
             "notificationsAppNeeded": True,
-            "screenShots": True,
+            "screenShots": False,
         },
         "webUI-oc10-integration": {
             "type": FULL,
@@ -565,7 +565,7 @@ config = {
             },
             "filterTags": "not @skip and not @skipOnOC10 and not @openIdLogin and @smokeTest",
             "oc10IntegrationAppIncluded": True,
-            "screenShots": True,
+            "screenShots": False,
         },
     },
     "build": True,

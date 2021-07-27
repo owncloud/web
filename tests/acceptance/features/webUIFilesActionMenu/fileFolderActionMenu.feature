@@ -15,24 +15,24 @@ Background: prepare user and files
     Given user "Alice" has uploaded file with content "pdf file" to "lorem.pdf"
     And the user has reloaded the current page of the webUI
     And the app-sidebar for file "lorem.txt" has been visible on the webUI
-    When the user opens the actions sidebar accordion of folder "simple-folder" on the webUI
+    When the user opens the actions sidebar panel of folder "simple-folder" on the webUI
     Then the app-sidebar for folder "simple-folder" should be visible on the webUI
     And only the following items with default items should be visible in the actions menu on the webUI
       | items                     |
       | open folder               |
-    When the user opens the actions sidebar accordion of file "lorem.txt" on the webUI
+    When the user opens the actions sidebar panel of file "lorem.txt" on the webUI
     Then the app-sidebar for file "lorem.txt" should be visible on the webUI
     And only the following items with default items should be visible in the actions menu on the webUI
       | items                     |
       | open in markdowneditor    |
       | download                  |
-    When the user opens the actions sidebar accordion of file "lorem.pdf" on the webUI
+    When the user opens the actions sidebar panel of file "lorem.pdf" on the webUI
     Then the app-sidebar for file "lorem.pdf" should be visible on the webUI
     And only the following items with default items should be visible in the actions menu on the webUI
       | items                     |
       | open in browser           |
       | download                  |
-    When the user opens the actions sidebar accordion of file "testavatar.png" on the webUI
+    When the user opens the actions sidebar panel of file "testavatar.png" on the webUI
     Then the app-sidebar for file "testavatar.png" should be visible on the webUI
     And only the following items with default items should be visible in the actions menu on the webUI
       | items                     |

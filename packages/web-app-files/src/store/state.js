@@ -54,8 +54,7 @@ export default {
   /**
    * Right sidebar
    */
-  appSidebarExpandedAccordion: null,
-  appSidebarAccordionContext: null,
+  appSidebarActivePanel: null,
 
   /**
    * Public links

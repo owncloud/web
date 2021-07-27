@@ -1,0 +1,7 @@
+Enhancement: Sidebar sliding panels navigation
+
+The sidebar now uses a ios like concept for navigate through the different actions in the sidebar.
+It replaces the accordion navigation entirely.
+
+https://github.com/owncloud/web/pull/5549
+https://github.com/owncloud/web/issues/5523

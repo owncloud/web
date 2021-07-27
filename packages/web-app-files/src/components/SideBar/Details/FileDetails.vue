@@ -1,12 +1,15 @@
 <template>
   <div id="oc-file-details-sidebar">
-    <oc-loader v-if="loading" />
-    <div v-else-if="hasContent">
+    <div v-if="hasContent">
       <div
-        v-if="highlightedFile.preview"
+        v-if="highlightedFile.thumbnail"
+        :style="{
+          'background-image': $asyncComputed.preview.updating ? 'none' : `url(${preview})`
+        }"
         class="details-preview uk-flex uk-flex-middle uk-flex-center oc-mb-m"
+        data-testid="preview"
       >
-        <oc-img :src="highlightedFile.preview" alt="" />
+        <oc-spinner v-if="$asyncComputed.preview.updating" />
       </div>
       <div v-if="showShares" data-testid="sharingInfo" class="uk-flex uk-flex-middle oc-my-m">
         <oc-button
@@ -83,9 +86,10 @@
 import Mixins from '../../../mixins'
 import MixinResources from '../../../mixins/resources'
 import MixinRoutes from '../../../mixins/routes'
-import { shareTypes, userShareTypes } from '../../../../../web-app-files/src/helpers/shareTypes'
+import { shareTypes, userShareTypes } from '../../../helpers/shareTypes'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
-import { ImageDimension, ImageType } from '../../../constants'
+import { ImageDimension } from '../../../constants'
+import { loadPreview } from '../../../helpers/resource'
 import intersection from 'lodash-es/intersection'
 import upperFirst from 'lodash-es/upperFirst'
 
@@ -99,17 +103,11 @@ export default {
   }),
   computed: {
     ...mapGetters('Files', ['highlightedFile', 'versions']),
-    ...mapGetters(['getToken']),
-    ...mapGetters(['user']),
+    ...mapGetters(['user', 'getToken', 'configuration']),
 
     hasContent() {
       return (
-        this.highlightedFile.preview ||
-        this.hasTimestamp ||
-        this.ownerName ||
-        this.showSize ||
-        this.showShares ||
-        this.showVersions
+        this.hasTimestamp || this.ownerName || this.showSize || this.showShares || this.showVersions
       )
     },
     noContentText() {
@@ -216,28 +214,39 @@ export default {
   mounted() {
     this.loadData()
   },
-  methods: {
-    ...mapActions('Files', ['setHighlightedFile', 'loadPreview', 'loadVersions']),
-    ...mapMutations('Files', ['SET_APP_SIDEBAR_EXPANDED_ACCORDION']),
-    expandPeoplesAccordion() {
-      this.SET_APP_SIDEBAR_EXPANDED_ACCORDION('sharing-item')
-    },
-    expandLinksAccordion() {
-      this.SET_APP_SIDEBAR_EXPANDED_ACCORDION('links-item')
-    },
-    expandVersionsAccordion() {
-      this.SET_APP_SIDEBAR_EXPANDED_ACCORDION('versions-item')
-    },
-    async loadData() {
-      this.loading = true
-      const calls = [
-        this.loadPreview({
+  asyncComputed: {
+    preview: {
+      async get() {
+        // TODO: this timeout resolves flickering of the preview because it's rendered multiple times. Needs a better solution.
+        await new Promise(resolve => setTimeout(resolve, 500))
+        return loadPreview({
           resource: this.highlightedFile,
           isPublic: this.isPublicPage,
           dimensions: ImageDimension.Preview,
-          type: ImageType.Preview
+          server: this.configuration.server,
+          userId: this.user.id,
+          token: this.getToken
         })
-      ]
+      },
+      lazy: true,
+      watch: ['highlightedFile.thumbnail']
+    }
+  },
+  methods: {
+    ...mapActions('Files', ['setHighlightedFile', 'loadPreview', 'loadVersions']),
+    ...mapMutations('Files', ['SET_APP_SIDEBAR_ACTIVE_PANEL']),
+    expandPeoplesAccordion() {
+      this.SET_APP_SIDEBAR_ACTIVE_PANEL('sharing-item')
+    },
+    expandLinksAccordion() {
+      this.SET_APP_SIDEBAR_ACTIVE_PANEL('links-item')
+    },
+    expandVersionsAccordion() {
+      this.SET_APP_SIDEBAR_ACTIVE_PANEL('versions-item')
+    },
+    async loadData() {
+      this.loading = true
+      const calls = []
       if (this.highlightedFile.type === 'file' && !this.isPublicPage) {
         calls.push(this.loadVersions({ client: this.$client, fileId: this.highlightedFile.id }))
       }
@@ -261,15 +270,12 @@ export default {
 }
 
 .details-preview {
-  background-color: var(--oc-color-background-highlight);
-  border-radius: 3px;
-  height: 300px;
-  padding: 10px;
+  background-color: var(--oc-color-background-muted);
+  border: 10px solid var(--oc-color-background-muted);
+  height: 230px;
 
-  img {
-    object-fit: contain;
-    height: 100%;
-    max-height: 100%;
-  }
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 </style>

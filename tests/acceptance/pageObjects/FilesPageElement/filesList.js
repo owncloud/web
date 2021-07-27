@@ -15,7 +15,7 @@ module.exports = {
       const appSidebar = client.page.FilesPageElement.appSideBar()
       await appSidebar.closeSidebar(500)
       await this.openSideBar(resource)
-      return client.page.FilesPageElement.appSideBar().selectAccordionItem('people')
+      return client.page.FilesPageElement.appSideBar().activatePanel('people')
     },
     /**
      * @param {string} resource
@@ -38,7 +38,7 @@ module.exports = {
     openPublicLinkDialog: async function(fileName) {
       await this.waitForFileVisible(fileName)
       await this.openSideBar(fileName)
-      return client.page.FilesPageElement.appSideBar().selectAccordionItem('links')
+      return client.page.FilesPageElement.appSideBar().activatePanel('links')
     },
     /**
      * @param {string} resource

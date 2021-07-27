@@ -5,6 +5,7 @@ import 'vue-resize/dist/vue-resize.css'
 import Vue from './vue'
 import Vuex from 'vuex'
 import { createStore } from 'vuex-extensions'
+import AsyncComputed from 'vue-async-computed'
 
 // --- Components ---
 import App from './App.vue'
@@ -74,6 +75,7 @@ Vue.use(VueMeta, {
 })
 Vue.use(ChunkedUpload)
 Vue.use(Vue2TouchEvents)
+Vue.use(AsyncComputed)
 
 Vue.component('drag', Drag)
 Vue.component('drop', Drop)

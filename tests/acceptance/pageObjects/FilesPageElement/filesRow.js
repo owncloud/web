@@ -35,7 +35,7 @@ module.exports = {
         .waitForOutstandingAjaxCalls()
         .waitForAnimationToFinish()
         .useCss()
-      await this.api.page.FilesPageElement.appSideBar().selectAccordionItem('actions')
+      await this.api.page.FilesPageElement.appSideBar().activatePanel('actions')
       return await this.api.page.FilesPageElement.fileActionsMenu()
     },
     isQuickActionVisible: function(action) {

@@ -245,7 +245,7 @@ module.exports = {
         .waitForOutstandingAjaxCalls()
     },
     /**
-     * Gets the data of all public links of the currently open public link accordion item
+     * Gets the data of all public links of the currently open public link panel
      *
      * @param {Object.<String,Object>} subSelectors Map of arbitrary attribute name to selector to query
      * inside the collaborator element, defaults to all when null
@@ -305,7 +305,7 @@ module.exports = {
       return results
     },
     /**
-     * gets the urls of all public links of the currently open public link accordion item
+     * gets the urls of all public links of the currently open public link panel
      *
      * @returns {Promise<string>}
      */
@@ -362,11 +362,11 @@ module.exports = {
       return this.waitForElementVisible(copyBtnSelector).click(copyBtnSelector)
     },
     copyPrivateLink: function() {
-      const linksAccordionItem = this.api.page.FilesPageElement.appSideBar().elements
-        .linksAccordionItem
+      const linksPanelSelect = this.api.page.FilesPageElement.appSideBar().elements.linksPanelSelect
       return this.waitForElementVisible(this.api.page.personalPage().elements.sideBar)
-        .waitForElementVisible(linksAccordionItem)
-        .click(linksAccordionItem)
+        .waitForElementVisible(linksPanelSelect)
+        .click(linksPanelSelect)
+        .waitForAnimationToFinish()
         .waitForElementVisible('@privateLinkURLCopyButton')
         .click('@privateLinkURLCopyButton')
     }
