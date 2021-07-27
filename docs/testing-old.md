@@ -47,7 +47,7 @@ When running a standalone Selenium server, make sure to set the environment vari
 - clone and install the [testing app](http://github.com/owncloud/testing) into ownCloud
 
 ### oCIS
-In order to run the acceptance tests you need to run ocis using the ocis storage driver. Also, you need to enable basic auth on the server with these environment variables.
+In order to run the acceptance tests you need to run oCIS using the oCIS storage driver. Also, you need to enable basic auth on the server with these environment variables.
 
 `PROXY_ENABLE_BASIC_AUTH=true STORAGE_HOME_DRIVER=owncloud STORAGE_USERS_DRIVER=owncloud`
 
@@ -71,7 +71,7 @@ In order to run the acceptance tests you need to run ocis using the ocis storage
 
 - set the `SELENIUM_HOST` environment variable to your host that runs selenium, mostly `localhost`
 - set the `SELENIUM_PORT` environment variable to your selenium port, mostly `4444`
-- set the `TESTING_DATA_DIR` when running the tests on ocis pointing to the testing data that includes data like skeleton directories. The testing directory is available [here](https://github.com/owncloud/testing/tree/master/data). This is handled automatically by the testrunner while running the tests in oc10.
+- set the `TESTING_DATA_DIR` when running the tests on oCIS pointing to the testing data that includes data like skeleton directories. The testing directory is available [here](https://github.com/owncloud/testing/tree/master/data). This is handled automatically by the testrunner while running the tests in oc10.
 
 The feature files are located in the "tests/acceptance/features" subdirectories.
 
@@ -119,7 +119,7 @@ These values can be set using the environment variables to configure `yarn test:
 | setting             | meaning                                                                | default               |
 |-------------------- | -----------------------------------------------------------------------| ----------------------|
 | `SERVER_HOST`       | web URL                                                            | http://localhost:9100 |
-| `BACKEND_HOST`      | ownCloud server URL (or reva service url for running with OCIS)                                                    | http://localhost:8080 |
+| `BACKEND_HOST`      | ownCloud server URL (or reva service url for running with oCIS)                                                    | http://localhost:8080 |
 | `BACKEND_USERNAME`  | ownCloud administrator username                                        | admin                 |
 | `BACKEND_PASSWORD`  | ownCloud administrator password                                        | admin                 |
 | `SELENIUM_HOST`     | selenium server host, if not set yarn will start selenium automatically<br/>if running the selenium docker container as mentioned above set to `localhost` |                       |
@@ -128,8 +128,8 @@ These values can be set using the environment variables to configure `yarn test:
 | `REMOTE_UPLOAD_DIR` | path to `filesForUpload` directory, used when uploading files through api | `./tests/acceptance/filesForUpload` |
 | `LOCAL_UPLOAD_DIR`  | `filesForUpload` directory available for selenium for direct uploads<br/>If using selenium-docker and example above, set it as `/uploads`.<br/>If running local selenium, set value same as `REMOTE_UPLOAD_DIR` (please, remember to use absolute path)| `/uploads` |
 | `REMOTE_BACKEND_HOST` | ownCloud remote server URL                                               | http://localhost:8080 |
-| `RUN_ON_OCIS`       | Running the tests using the OCIS backend                                                            | false |
-| `OCIS_REVA_DATA_ROOT`       | Data directory of OCIS                                             | /var/tmp/reva |
+| `RUN_ON_OCIS`       | Running the tests using the oCIS backend                                                            | false |
+| `OCIS_REVA_DATA_ROOT`       | Data directory of oCIS                                             | /var/tmp/reva |
 | `TESTING_DATA_DIR`       | Testing data directory for new users                                                           | - |
 | `WEB_UI_CONFIG`       | Path for the web config file (usually in the dist folder)                       | - |
 | `VISUAL_TEST`       | Run the visual regression comparison while running the acceptance tests                       | - |
@@ -140,7 +140,7 @@ These values can be set using the environment variables to configure `yarn test:
 ### too many open files
 
 If tests were running fine and then suddenly start to fail your system might run into open file limits.
-In that case you will see messages in the OCIS log output that look like this:
+In that case you will see messages in the oCIS log output that look like this:
 
 `2020-05-12 11:33:43.974552 I | http: Accept error: accept tcp [::]:9200: accept4: too many open files; retrying in 1s`
 
@@ -153,20 +153,20 @@ We run web UI tests in the following repos in the CI.
 
 ### 1. web Repo
 
-In the `owncloud/web` repo, we run the tests using both the oc10 backend and the OCIS backend.
+In the `owncloud/web` repo, we run the tests using both the oc10 backend and the oCIS backend.
 For the oc10 backend, we use the `owncloudci/core` docker image which runs the latest `daily-master-qa` version of owncloud.
 
-For the OCIS backend, we use the Commit ID from the `owncloud/ocis` repo to indicate which version of backend to use. This can be specified in the `.drone.env` file.
+For the oCIS backend, we use the Commit ID from the `owncloud/ocis` repo to indicate which version of backend to use. This can be specified in the `.drone.env` file.
 ```
-  # The version of OCIS to use in pipelines that test against OCIS
+  # The version of oCIS to use in pipelines that test against oCIS
   OCIS_COMMITID=352034d9eba8be8c4bc4b80421f3c0093e7d472c
   OCIS_BRANCH=master
 ```
 If the version you want to run is on a different branch from master, you also need to change the branch name.
 
-In order to check if new tests are compatible with OCIS, after changing the commit id and the branch name, we can create a draft PR in `owncloud/web` which triggers the CI, and we can see the result there.
+In order to check if new tests are compatible with oCIS, after changing the commit id and the branch name, we can create a draft PR in `owncloud/web` which triggers the CI, and we can see the result there.
 
-### 2. ocis Repo
+### 2. oCIS Repo
 
 We follow the same approach in the `owncloud/ocis` repo too. In order to run the UI tests in CI we use commit IDs from web which can be changed in the `.drone.env` file. 
 
