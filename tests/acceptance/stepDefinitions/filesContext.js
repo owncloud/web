@@ -602,7 +602,7 @@ When('the user picks the row of file/folder {string} on the webUI', function(ite
   return client.page.FilesPageElement.filesList().clickRow(item)
 })
 
-When('the user switches to {string} panel item in details panel using the webUI', function(item) {
+When('the user switches to {string} panel in details panel using the webUI', function(item) {
   return client.page.FilesPageElement.appSideBar().activatePanel(item)
 })
 
@@ -865,13 +865,13 @@ Then('the {string} details panel should be visible', async function(panel) {
 })
 
 Then(
-  'the following panel items should be visible in the details dialog on the webUI',
+  'the following panels should be visible in the details dialog on the webUI',
   async function(table) {
     const visibleItems = await client.page.FilesPageElement.appSideBar().getVisibleAccordionItems()
     const expectedVisibleItems = table.rows()
     const difference = _.difference(expectedVisibleItems.flat(), visibleItems)
     if (difference.length !== 0) {
-      throw new Error(`${difference} panel items was expected to be visible but not found.`)
+      throw new Error(`${difference} panels was expected to be visible but not found.`)
     }
   }
 )

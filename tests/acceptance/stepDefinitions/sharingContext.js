@@ -689,11 +689,11 @@ Then('it should not be possible to share file/folder {string} using the webUI', 
   assert.ok(!state, `Error: Sharing button for resource ${resource} is not in disabled state`)
   await filesList.openSideBar(resource)
   const linkItemState = await appSideBar.isLinksPanelSelectPresent()
-  assert.ok(!linkItemState, `Error: Sidebar 'Links' panel item for resource ${resource} is present`)
+  assert.ok(!linkItemState, `Error: Sidebar 'Links' panel for resource ${resource} is present`)
   const collaboratorsItemState = await appSideBar.isCollaboratorsAccordionItemPresent()
   assert.ok(
     !collaboratorsItemState,
-    `Error: Sidebar 'People' panel item for resource ${resource} is present`
+    `Error: Sidebar 'People' panel for resource ${resource} is present`
   )
 })
 

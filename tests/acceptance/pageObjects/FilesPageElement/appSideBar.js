@@ -50,7 +50,7 @@ module.exports = {
       return this.waitForElementPresent(selector)
     },
     /**
-     * return the complete xpath of the link to the specified panel item in the side-bar
+     * return the complete xpath of the link to the specified panel in the side-bar
      * @param item
      * @returns {string}
      */

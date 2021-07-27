@@ -246,7 +246,7 @@ module.exports = {
         .waitForOutstandingAjaxCalls()
     },
     /**
-     * Gets the data of all public links of the currently open public link panel item
+     * Gets the data of all public links of the currently open public link panel
      *
      * @param {Object.<String,Object>} subSelectors Map of arbitrary attribute name to selector to query
      * inside the collaborator element, defaults to all when null
@@ -306,7 +306,7 @@ module.exports = {
       return results
     },
     /**
-     * gets the urls of all public links of the currently open public link panel item
+     * gets the urls of all public links of the currently open public link panel
      *
      * @returns {Promise<string>}
      */
