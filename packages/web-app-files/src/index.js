@@ -19,6 +19,7 @@ import FileLinks from './components/SideBar/Links/FileLinks.vue'
 import translationsJson from '../l10n/translations.json'
 import quickActionsImport from './quickActions'
 import store from './store'
+import { isTrashbinRoute } from './helpers/route'
 
 // just a dummy function to trick gettext tools
 function $gettext(msg) {
@@ -32,20 +33,22 @@ const appInfo = {
   isFileEditor: false,
   extensions: [],
   fileSideBars: [
+    // We don't have file details in the trashbin, yet.
+    // Only allow `actions` panel on trashbin route for now.
     ({ route }) => ({
       app: 'details-item',
       icon: 'info_outline',
       component: FileDetails,
-      default: route.name !== 'files-trashbin',
+      default: !isTrashbinRoute(route),
       get enabled() {
-        return route.name !== 'files-trashbin'
+        return !isTrashbinRoute(route)
       }
     }),
     ({ route }) => ({
       app: 'actions-item',
       component: FileActions,
       icon: 'slideshow',
-      default: route.name === 'files-trashbin',
+      default: isTrashbinRoute(route),
       enabled: true
     }),
     ({ capabilities, route }) => ({
@@ -53,7 +56,7 @@ const appInfo = {
       icon: 'group',
       component: FileShares,
       get enabled() {
-        if (route.name === 'files-trashbin') {
+        if (isTrashbinRoute(route)) {
           return false
         }
 
@@ -68,7 +71,7 @@ const appInfo = {
       icon: 'link',
       component: FileLinks,
       get enabled() {
-        if (route.name === 'files-trashbin') {
+        if (isTrashbinRoute(route)) {
           return false
         }
 
@@ -83,7 +86,7 @@ const appInfo = {
       icon: 'file_version',
       component: FileVersions,
       get enabled() {
-        if (route.name === 'files-trashbin') {
+        if (isTrashbinRoute(route)) {
           return false
         }
         return !!capabilities.core && highlightedFile && highlightedFile.type !== 'folder'

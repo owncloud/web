@@ -86,10 +86,10 @@
 import Mixins from '../../../mixins'
 import MixinResources from '../../../mixins/resources'
 import MixinRoutes from '../../../mixins/routes'
-import { shareTypes, userShareTypes } from '../../../../../web-app-files/src/helpers/shareTypes'
+import { shareTypes, userShareTypes } from '../../../helpers/shareTypes'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { ImageDimension } from '../../../constants'
-import { loadPreview } from '../../../helpers/resource/asset'
+import { loadPreview } from '../../../helpers/resource'
 import intersection from 'lodash-es/intersection'
 import upperFirst from 'lodash-es/upperFirst'
 

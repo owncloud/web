@@ -23,7 +23,7 @@
           v-if="!panelMeta.default"
           class="header__back"
           appearance="raw"
-          :aria-label="$gettext('Back to previous sidebar')"
+          :aria-label="accessibleLabelBack"
           @click="() => SET_APP_SIDEBAR_ACTIVE_PANEL(null)"
         >
           <oc-icon name="chevron_left" />
@@ -90,30 +90,32 @@ export default {
     ...mapState('Files', ['appSidebarActivePanel']),
     panelMetas() {
       const { panels } = this.fileSideBars.reduce(
-        (acc, panelGen) => {
-          const panel = panelGen({
+        (result, panelGenerator) => {
+          const panel = panelGenerator({
             capabilities: this.capabilities,
             highlightedFile: this.highlightedFile,
             route: this.$route
           })
 
-          if (acc.hasDefault) {
-            panel.default = false
-          }
-
           if (panel.enabled) {
-            acc.panels.push(panel)
+            result.panels.push(panel)
           }
 
-          return acc
+          return result
         },
-        { panels: [], hasDefault: false }
+        { panels: [] }
       )
 
       return panels
     },
     defaultPanelMeta() {
       return this.panelMetas.find(panel => panel.default)
+    },
+    accessibleLabelBack() {
+      const translated = this.$gettext('Back to %{panel} panel')
+      return this.$gettextInterpolate(translated, {
+        panel: this.defaultPanelMeta.component.title(this.$gettext)
+      })
     },
     isShareAccepted() {
       return this.highlightedFile.status === 0
