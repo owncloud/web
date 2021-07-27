@@ -207,8 +207,7 @@ module.exports = {
      * @returns {*}
      */
     addNewLink: async function(settings = null) {
-      await this.waitForElementPresent('@publicLinkAddButton')
-        .pause(500)
+      await this.waitForElementVisible('@publicLinkAddButton')
         .click('@publicLinkAddButton')
         .waitForElementVisible('@publicLinkCreateButton')
       if (settings !== null) {
