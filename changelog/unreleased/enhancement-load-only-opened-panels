@@ -1,0 +1,6 @@
+Enhancement: load only opened panels
+
+Do not load panels in the Files extension sidebar until they are opened.
+
+https://github.com/owncloud/web/issues/5569
+https://github.com/owncloud/web/pull/5573

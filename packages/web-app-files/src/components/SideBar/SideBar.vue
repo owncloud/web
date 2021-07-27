@@ -25,7 +25,7 @@
           class="header__back"
           appearance="raw"
           :aria-label="accessibleLabelBack"
-          @click="() => SET_APP_SIDEBAR_ACTIVE_PANEL(null)"
+          @click="closePanel"
         >
           <oc-icon name="chevron_left" />
           {{ defaultPanelMeta.component.title($gettext) }}
@@ -47,7 +47,7 @@
       <file-info class="sidebar-panel__file_info" :is-content-displayed="isContentDisplayed" />
       <div class="sidebar-panel__body">
         <template v-if="isContentDisplayed">
-          <component :is="panelMeta.component" />
+          <component :is="panelMeta.component" v-if="openedPanels.includes(panelMeta.app)" />
 
           <div v-if="panelMeta.default && panelMetas.length > 1" class="sidebar-panel__navigation">
             <oc-button
@@ -55,7 +55,7 @@
               :id="`sidebar-panel-${panelSelect.app}-select`"
               :key="`panel-select-${panelSelect.app}`"
               appearance="raw"
-              @click="SET_APP_SIDEBAR_ACTIVE_PANEL(panelSelect.app)"
+              @click="openPanel(panelSelect.app)"
             >
               <oc-icon :name="panelSelect.icon" />
               {{ panelSelect.component.title($gettext) }}
@@ -74,6 +74,7 @@ import { mapGetters, mapMutations, mapState } from 'vuex'
 import FileInfo from './FileInfo.vue'
 import MixinRoutes from '../../mixins/routes'
 import { VisibilityObserver } from 'web-pkg/src/observer'
+import { cloneStateObject } from '../../helpers/store'
 
 let visibilityObserver
 
@@ -82,7 +83,8 @@ export default {
   mixins: [MixinRoutes],
   data() {
     return {
-      focused: undefined
+      focused: undefined,
+      openedPanels: [] // Array since default panel is always opened
     }
   },
   computed: {
@@ -167,6 +169,15 @@ export default {
       })
     })
   },
+
+  created() {
+    this.openedPanels.push(this.defaultPanelMeta.app)
+
+    if (this.appSidebarActivePanel) {
+      this.openedPanels.push(this.appSidebarActivePanel)
+    }
+  },
+
   methods: {
     ...mapMutations('Files', ['SET_APP_SIDEBAR_ACTIVE_PANEL']),
     close() {
@@ -186,6 +197,28 @@ export default {
       ) {
         this.close()
       }
+    },
+
+    openPanel(panel) {
+      this.SET_APP_SIDEBAR_ACTIVE_PANEL(panel)
+
+      if (!this.openedPanels.includes(panel)) {
+        this.openedPanels.push(panel)
+      }
+    },
+
+    closePanel() {
+      const activePanel = cloneStateObject(this.appSidebarActivePanel)
+
+      this.SET_APP_SIDEBAR_ACTIVE_PANEL(null)
+
+      setTimeout(() => {
+        const index = this.openedPanels.indexOf(activePanel)
+
+        if (index > -1) {
+          this.openedPanels.splice(index, 1)
+        }
+      }, 400)
     }
   }
 }
