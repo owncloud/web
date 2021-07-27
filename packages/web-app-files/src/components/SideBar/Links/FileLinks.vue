@@ -1,9 +1,9 @@
 <template>
   <div id="oc-files-file-link" class="uk-position-relative">
     <div
-      v-show="CURRENT_VIEW === VIEW_SHOW"
+      v-show="currentView === VIEW_SHOW"
       :key="VIEW_SHOW"
-      :aria-hidden="CURRENT_VIEW !== VIEW_SHOW"
+      :aria-hidden="currentView !== VIEW_SHOW"
     >
       <oc-loader v-if="linksLoading" :aria-label="$gettext('Loading list of file links')" />
       <template v-else>
@@ -52,7 +52,7 @@
         </p>
       </template>
     </div>
-    <div v-if="CURRENT_VIEW === VIEW_EDIT" :key="VIEW_EDIT">
+    <div v-if="currentView === VIEW_EDIT" :key="VIEW_EDIT">
       <transition
         enter-active-class="uk-animation-slide-right uk-animation-fast"
         leave-active-class="uk-animation-slide-right uk-animation-reverse uk-animation-fast"
@@ -91,14 +91,14 @@ export default {
   },
   provide() {
     return {
-      changeView: view => (this.$data.CURRENT_VIEW = view)
+      changeView: view => (this.$data.currentView = view)
     }
   },
   data() {
     return {
       VIEW_SHOW,
       VIEW_EDIT,
-      CURRENT_VIEW: VIEW_SHOW
+      currentView: VIEW_SHOW
     }
   },
   computed: {
@@ -202,7 +202,7 @@ export default {
     ...mapMutations('Files', ['TRIGGER_PUBLIC_LINK_CREATE']),
 
     $_showList() {
-      this.CURRENT_VIEW = VIEW_SHOW
+      this.currentView = VIEW_SHOW
     },
     $_reloadLinks() {
       this.$_showList()
@@ -246,7 +246,7 @@ export default {
           : null
       })
 
-      this.CURRENT_VIEW = VIEW_EDIT
+      this.currentView = VIEW_EDIT
     }
   }
 }

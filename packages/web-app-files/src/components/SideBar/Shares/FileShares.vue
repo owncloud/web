@@ -1,9 +1,9 @@
 <template>
   <div id="oc-files-sharing-sidebar" class="uk-position-relative">
     <div
-      v-show="CURRENT_VIEW === VIEW_SHOW"
+      v-show="currentView === VIEW_SHOW"
       :key="VIEW_SHOW"
-      :aria-hidden="CURRENT_VIEW !== VIEW_SHOW"
+      :aria-hidden="currentView !== VIEW_SHOW"
     >
       <oc-loader v-if="sharesLoading" :aria-label="$gettext('Loading people list')" />
       <template v-else>
@@ -64,14 +64,14 @@
       </template>
     </div>
     <new-collaborator
-      v-if="$_ocCollaborators_canShare && CURRENT_VIEW === VIEW_NEW"
+      v-if="$_ocCollaborators_canShare && currentView === VIEW_NEW"
       key="new-collaborator"
       @close="$_ocCollaborators_showList"
       @beforeDestroy="toggleCollaboratorNew"
       @mounted="toggleCollaboratorNew"
     />
     <edit-collaborator
-      v-if="$_ocCollaborators_canShare && CURRENT_VIEW === VIEW_EDIT"
+      v-if="$_ocCollaborators_canShare && currentView === VIEW_EDIT"
       key="edit-collaborator"
       :collaborator="currentShare"
       @close="$_ocCollaborators_showList"
@@ -117,7 +117,7 @@ export default {
       VIEW_SHOW,
       VIEW_EDIT,
       VIEW_NEW,
-      CURRENT_VIEW: VIEW_SHOW
+      currentView: VIEW_SHOW
     }
   },
   computed: {
@@ -304,7 +304,7 @@ export default {
     // Do not reload shares if we are starting with different panel than 'show'
     highlightedFile: {
       handler: function(newItem, oldItem) {
-        if (oldItem !== newItem && this.CURRENT_VIEW === VIEW_SHOW) {
+        if (oldItem !== newItem && this.currentView === VIEW_SHOW) {
           this.transitionGroupActive = false
           this.$_reloadShares()
         }
@@ -352,11 +352,11 @@ export default {
     },
     $_ocCollaborators_addShare() {
       this.transitionGroupActive = true
-      this.CURRENT_VIEW = VIEW_NEW
+      this.currentView = VIEW_NEW
     },
     $_ocCollaborators_editShare(share) {
       this.currentShare = share
-      this.CURRENT_VIEW = VIEW_EDIT
+      this.currentView = VIEW_EDIT
     },
     toggleCollaboratorNew(component, event) {
       this.toggleCollaborator(component, event, '#oc-sharing-autocomplete')
@@ -379,7 +379,7 @@ export default {
       })
     },
     $_ocCollaborators_showList() {
-      this.CURRENT_VIEW = VIEW_SHOW
+      this.currentView = VIEW_SHOW
       this.currentShare = null
     },
     $_ocCollaborators_isUser(collaborator) {
