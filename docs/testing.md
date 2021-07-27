@@ -12,7 +12,7 @@ geekdocFilePath: testing.md
 
 In order to allow us to make changes quickly, often and with a high level of confidence, we heavily rely on tests within the `web` repository.
 
-All of the steps below require you to have the `web` repo cloned locally and dependencies installed. 
+All the steps below require you to have the `web` repo cloned locally and dependencies installed. 
 This can be achieved by running
 
 ```shell
@@ -35,7 +35,7 @@ You can also specify which tests to run by giving a path param, like so: `yarn t
 ### Acceptance Tests
 
 At ownCloud, we have decided to adopt Docker as the main environment for developing our application.
-This also applies for running our acceptance tests. To run the tests without Docker on your local machine, please refer to the [old testing guide]({{< ref "testing-old.md" >}})
+This also applies for running our acceptance tests. To run the tests without Docker on your local machine, please refer to the [manual testing guide]({{< ref "testing-manual.md" >}})
 
 #### Prerequisites
 
@@ -46,7 +46,7 @@ To run acceptance tests with Docker, please make sure you have the following too
 - yarn
 - node
 
-Please also make sure to point `http://host.docker.internal/` to `127.0.0.1` (automatically included when using Docker Desktop)
+Please also make sure to point `http://host.docker.internal/` to `127.0.0.1` by adding it to your hosts.
 
 #### Prepare & start web
 
