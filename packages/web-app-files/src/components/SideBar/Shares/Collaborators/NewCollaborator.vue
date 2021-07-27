@@ -12,25 +12,33 @@
         :filter="filterRecipients"
         input-id="files-share-invite-input"
         aria-describedby="files-share-invite-hint"
+        :dropdown-should-open="
+          ({ open, search }) => open && search.length >= minSearchLength && !searchInProgress
+        "
         @search:input="onSearch"
-        @input="removeFetchedRecipient"
+        @input="onInviteInput"
       >
         <template #option="option">
           <autocomplete-item :item="option" />
         </template>
         <template #no-options>
-          <span
-            v-if="searchQuery < minSearchLength"
-            key="input-hint"
-            v-text="inviteDescriptionMessage"
-          />
-          <translate v-else key="input-no-options">No users or groups found.</translate>
+          <translate>
+            No users or groups found.
+          </translate>
         </template>
         <template #selected-option-container="{ option, deselect }">
           <recipient-container :recipient="option" :deselect="deselect" />
         </template>
+        <template #open-indicator>
+          <!-- Empty to hide the caret -->
+          <span />
+        </template>
       </oc-select>
-      <p id="files-share-invite-hint" class="oc-invisible-sr" v-text="inviteDescriptionMessage" />
+      <p
+        id="files-share-invite-hint"
+        class="oc-mt-xs oc-mb-rm oc-text-meta"
+        v-text="inviteDescriptionMessage"
+      />
     </div>
     <collaborators-edit-options class="oc-mb" @optionChange="collaboratorOptionChanged" />
     <hr class="divider" />
@@ -123,12 +131,7 @@ export default {
     }
   },
   mounted() {
-    // Ensure default role is not undefined
-    this.$nextTick(() => {
-      const inviteInput = document.getElementById('files-share-invite-input')
-
-      inviteInput.focus()
-    })
+    this.focusInviteInput()
 
     this.fetchRecipients = debounce(this.fetchRecipients, 1000)
   },
@@ -251,8 +254,17 @@ export default {
       })
     },
 
-    removeFetchedRecipient() {
+    focusInviteInput() {
+      this.$nextTick(() => {
+        const inviteInput = document.getElementById('files-share-invite-input')
+
+        inviteInput.focus()
+      })
+    },
+
+    onInviteInput() {
       this.autocompleteResults = []
+      this.focusInviteInput()
     }
   }
 }
