@@ -13,6 +13,7 @@ Summary
 * Bugfix - Unnecessary quota requests: [#5539](https://github.com/owncloud/web/pull/5539)
 * Enhancement - Dropdown actions in FilesTable: [#5102](https://github.com/owncloud/web/issues/5102)
 * Enhancement - Prevent binding to only loopback IP when running in watch mode: [#5515](https://github.com/owncloud/web/pull/5515)
+* Enhancement - Sidebar sliding panels navigation: [#5549](https://github.com/owncloud/web/pull/5549)
 * Enhancement - Use profile picture capability in avatars: [#5178](https://github.com/owncloud/web/pull/5178)
 
 Details
@@ -56,6 +57,14 @@ Details
    serve`). Does not break any existing functionality.
 
    https://github.com/owncloud/web/pull/5515
+
+* Enhancement - Sidebar sliding panels navigation: [#5549](https://github.com/owncloud/web/pull/5549)
+
+   The sidebar now uses a ios like concept for navigate through the different actions in the
+   sidebar. It replaces the accordion navigation entirely.
+
+   https://github.com/owncloud/web/issues/5523
+   https://github.com/owncloud/web/pull/5549
 
 * Enhancement - Use profile picture capability in avatars: [#5178](https://github.com/owncloud/web/pull/5178)
 
