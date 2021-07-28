@@ -1,6 +1,6 @@
 <template>
   <ul id="oc-files-context-actions" class="uk-list oc-mt-s">
-    <li v-for="(action, index) in filteredActions" :key="`action-${index}`" class="oc-py-xs">
+    <li v-for="(action, index) in menuItems" :key="`action-${index}`" class="oc-py-xs">
       <component
         :is="action.componentType"
         v-bind="getComponentProps(action, item)"
@@ -23,10 +23,17 @@
 import { mapGetters } from 'vuex'
 
 import FileActions from '../../mixins/fileActions'
+import Copy from './../../mixins/actions/copy'
+import Delete from './../../mixins/actions/delete'
+import Download from '../../mixins/actions/download'
+import Favorite from '../../mixins/actions/favorite'
+import Move from './../../mixins/actions/move'
+import Navigate from '../../mixins/actions/navigate'
+import Rename from './../../mixins/actions/rename'
 
 export default {
   name: 'ContextActions',
-  mixins: [FileActions],
+  mixins: [FileActions, Copy, Delete, Download, Favorite, Move, Navigate, Rename],
 
   props: {
     item: {
@@ -38,15 +45,41 @@ export default {
   computed: {
     ...mapGetters('Files', ['currentFolder']),
 
-    filteredActions() {
-      const actions = this.$_fileActions_editorActions.concat(this.$_fileActions_systemActions)
+    menuItems() {
+      const filterParams = {
+        resource: this.item,
+        parent: this.currentFolder
+      }
+      const menuItems = []
 
-      return actions.filter(action =>
-        action.isEnabled({
-          resource: this.item,
-          parent: this.currentFolder
-        })
+      // `open` and `open with`
+      const openActions = [
+        ...this.$_navigate_items.filter(item => item.isEnabled(filterParams)),
+        ...this.$_fetch_items.filter(item => item.isEnabled(filterParams)),
+        ...this.$_fileActions_editorActions.filter(item => item.isEnabled(filterParams))
+      ]
+      if (openActions.length > 0) {
+        menuItems.push(openActions[0])
+      }
+      if (openActions.length > 1) {
+        // TODO: sub nav item with all remaining open actions
+      }
+
+      // other actions
+      menuItems.push(
+        ...this.$_download_items.filter(item => item.isEnabled(filterParams)),
+        // create & copy public link
+        // share
+        ...this.$_favorite_items.filter(item => item.isEnabled(filterParams)),
+        ...this.$_rename_items.filter(item => item.isEnabled(filterParams)),
+        ...this.$_move_items.filter(item => item.isEnabled(filterParams)),
+        ...this.$_copy_items.filter(item => item.isEnabled(filterParams)),
+        ...this.$_delete_items.filter(item => item.isEnabled(filterParams))
+        // all actions
+        // details
       )
+
+      return menuItems
     }
   },
   methods: {
