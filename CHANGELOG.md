@@ -12,6 +12,7 @@ Summary
 * Bugfix - Send authentication on manifests.json: [#5553](https://github.com/owncloud/web/pull/5553)
 * Bugfix - Unnecessary quota requests: [#5539](https://github.com/owncloud/web/pull/5539)
 * Enhancement - Dropdown actions in FilesTable: [#5102](https://github.com/owncloud/web/issues/5102)
+* Enhancement - Load only opened panels: [#5569](https://github.com/owncloud/web/issues/5569)
 * Enhancement - Prevent binding to only loopback IP when running in watch mode: [#5515](https://github.com/owncloud/web/pull/5515)
 * Enhancement - Define the number of visible share recipients: [#5506](https://github.com/owncloud/web/pull/5506)
 * Enhancement - Sidebar sliding panels navigation: [#5549](https://github.com/owncloud/web/pull/5549)
@@ -50,6 +51,13 @@ Details
    https://github.com/owncloud/web/issues/5103
    https://github.com/owncloud/web/pull/5551
    https://github.com/owncloud/owncloud-design-system/releases/tag/v8.2.0
+
+* Enhancement - Load only opened panels: [#5569](https://github.com/owncloud/web/issues/5569)
+
+   Do not load panels in the Files extension sidebar until they are opened.
+
+   https://github.com/owncloud/web/issues/5569
+   https://github.com/owncloud/web/pull/5573
 
 * Enhancement - Prevent binding to only loopback IP when running in watch mode: [#5515](https://github.com/owncloud/web/pull/5515)
 
