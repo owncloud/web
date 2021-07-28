@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RoleItem should display the roleItem correctly 1`] = `<span id="files-role-undefined" class="roles-select-role-item"><span class="oc-text-bold uk-display-block uk-width-1-1">Viewer</span> <span class="oc-m-rm">Download, Preview and Share</span></span>`;

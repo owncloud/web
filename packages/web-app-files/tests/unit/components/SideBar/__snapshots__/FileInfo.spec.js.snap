@@ -1,0 +1,89 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FileInfo FileInfo Components on { name: 'files-personal' } routes should show the fileinfo correctly 1`] = `
+<div class="file_info">
+  <oc-icon-stub name="file" accessiblelabel="" type="span" size="large" variation="passive" class="file_info__icon"></oc-icon-stub>
+  <div class="file_info__body">
+    <h3 tabindex="-1"><span data-test-resource-path="/testfile.txt" data-test-resource-name="testfile.txt" data-test-resource-type="file" class="oc-resource-name oc-text-truncate"><!----><span class="oc-resource-basename">testfile</span><span class="oc-resource-extension">.txt</span></span></h3>
+    <p class="oc-my-rm">163 B,
+      2 days ago
+    </p>
+  </div> <button aria-label="Click to mark this file as favorite" class="file_info__favorite oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw">
+    <oc-icon-stub name="star" accessiblelabel="" type="span" size="medium" variation="passive" class="oc-star-dimm"></oc-icon-stub>
+  </button>
+</div>
+`;
+
+exports[`FileInfo FileInfo Components on { name: 'files-personal' } routes should show the fileinfo correctly 2`] = `
+<div class="file_info">
+  <oc-icon-stub name="file" accessiblelabel="" type="span" size="large" variation="passive" class="file_info__icon"></oc-icon-stub>
+  <div class="file_info__body">
+    <h3 tabindex="-1"><span data-test-resource-path="/test-file.drawio" data-test-resource-name="test-file.drawio" data-test-resource-type="file" class="oc-resource-name oc-text-truncate"><!----><span class="oc-resource-basename">test-file</span><span class="oc-resource-extension">.drawio</span></span></h3>
+    <p class="oc-my-rm">163 B,
+      2 days ago
+    </p>
+  </div> <button aria-label="Click to mark this file as favorite" class="file_info__favorite oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw">
+    <oc-icon-stub name="star" accessiblelabel="" type="span" size="medium" variation="passive" class="oc-star-dimm"></oc-icon-stub>
+  </button>
+</div>
+`;
+
+exports[`FileInfo FileInfo Components on { name: 'files-personal' } routes should show the fileinfo correctly 3`] = `
+<div class="file_info">
+  <oc-icon-stub name="folder" accessiblelabel="" type="span" size="large" variation="passive" class="file_info__icon"></oc-icon-stub>
+  <div class="file_info__body">
+    <h3 tabindex="-1"><span data-test-resource-path="/testfolder" data-test-resource-name="testfolder" data-test-resource-type="folder" class="oc-resource-name oc-text-truncate"><!----><span class="oc-resource-basename">testfolder</span>
+      <!----></span>
+    </h3>
+    <p class="oc-my-rm">163 B,
+      2 days ago
+    </p>
+  </div> <button aria-label="Click to mark this file as favorite" class="file_info__favorite oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw">
+    <oc-icon-stub name="star" accessiblelabel="" type="span" size="medium" variation="passive" class="oc-star-dimm"></oc-icon-stub>
+  </button>
+</div>
+`;
+
+exports[`FileInfo FileInfo Components on { name: 'files-public-list' } routes should show the fileinfo correctly 1`] = `
+<div class="file_info">
+  <oc-icon-stub name="file" accessiblelabel="" type="span" size="large" variation="passive" class="file_info__icon"></oc-icon-stub>
+  <div class="file_info__body">
+    <h3 tabindex="-1"><span data-test-resource-path="/testfile.txt" data-test-resource-name="testfile.txt" data-test-resource-type="file" class="oc-resource-name oc-text-truncate"><!----><span class="oc-resource-basename">testfile</span><span class="oc-resource-extension">.txt</span></span></h3>
+    <p class="oc-my-rm">163 B,
+      2 days ago
+    </p>
+  </div> <button aria-label="Click to mark this file as favorite" class="file_info__favorite oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw">
+    <oc-icon-stub name="star" accessiblelabel="" type="span" size="medium" variation="passive" class="oc-star-dimm"></oc-icon-stub>
+  </button>
+</div>
+`;
+
+exports[`FileInfo FileInfo Components on { name: 'files-public-list' } routes should show the fileinfo correctly 2`] = `
+<div class="file_info">
+  <oc-icon-stub name="file" accessiblelabel="" type="span" size="large" variation="passive" class="file_info__icon"></oc-icon-stub>
+  <div class="file_info__body">
+    <h3 tabindex="-1"><span data-test-resource-path="/test-file.drawio" data-test-resource-name="test-file.drawio" data-test-resource-type="file" class="oc-resource-name oc-text-truncate"><!----><span class="oc-resource-basename">test-file</span><span class="oc-resource-extension">.drawio</span></span></h3>
+    <p class="oc-my-rm">163 B,
+      2 days ago
+    </p>
+  </div> <button aria-label="Click to mark this file as favorite" class="file_info__favorite oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw">
+    <oc-icon-stub name="star" accessiblelabel="" type="span" size="medium" variation="passive" class="oc-star-dimm"></oc-icon-stub>
+  </button>
+</div>
+`;
+
+exports[`FileInfo FileInfo Components on { name: 'files-public-list' } routes should show the fileinfo correctly 3`] = `
+<div class="file_info">
+  <oc-icon-stub name="folder" accessiblelabel="" type="span" size="large" variation="passive" class="file_info__icon"></oc-icon-stub>
+  <div class="file_info__body">
+    <h3 tabindex="-1"><span data-test-resource-path="/testfolder" data-test-resource-name="testfolder" data-test-resource-type="folder" class="oc-resource-name oc-text-truncate"><!----><span class="oc-resource-basename">testfolder</span>
+      <!----></span>
+    </h3>
+    <p class="oc-my-rm">163 B,
+      2 days ago
+    </p>
+  </div> <button aria-label="Click to mark this file as favorite" class="file_info__favorite oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw">
+    <oc-icon-stub name="star" accessiblelabel="" type="span" size="medium" variation="passive" class="oc-star-dimm"></oc-icon-stub>
+  </button>
+</div>
+`;
