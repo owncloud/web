@@ -115,7 +115,7 @@ export default {
     ...mapGetters(['configuration']),
 
     inviteDescriptionMessage() {
-      return this.$gettext("Add new person by name, email or federation ID's")
+      return this.$gettext('Add new person by name, email or federation IDs')
     },
 
     $_announcementWhenCollaboratorAdded() {
@@ -133,7 +133,7 @@ export default {
   mounted() {
     this.focusInviteInput()
 
-    this.fetchRecipients = debounce(this.fetchRecipients, 1000)
+    this.fetchRecipients = debounce(this.fetchRecipients, 500)
   },
 
   methods: {
@@ -143,48 +143,49 @@ export default {
       this.$emit('close')
     },
 
-    fetchRecipients(query) {
-      this.$client.shares
-        .getRecipients(query, 'folder', 1, this.configuration.options.sharingRecipientsPerPage)
-        .then(recipients => {
-          const users = recipients.exact.users
-            .concat(recipients.users)
-            .filter(user => user.value.shareWith !== this.user.id)
-          const groups = recipients.exact.groups.concat(recipients.groups)
-          const remotes = recipients.exact.remotes.concat(recipients.remotes)
-          this.autocompleteResults = users.concat(groups, remotes).filter(collaborator => {
-            const selected = this.selectedCollaborators.find(selectedCollaborator => {
-              return (
-                collaborator.value.shareWith === selectedCollaborator.value.shareWith &&
-                parseInt(collaborator.value.shareType, 10) ===
-                  parseInt(selectedCollaborator.value.shareType, 10)
-              )
-            })
+    async fetchRecipients(query) {
+      try {
+        const recipients = await this.$client.shares.getRecipients(
+          query,
+          'folder',
+          1,
+          this.configuration.options.sharingRecipientsPerPage
+        )
+        const users = recipients.exact.users
+          .concat(recipients.users)
+          .filter(user => user.value.shareWith !== this.user.id)
+        const groups = recipients.exact.groups.concat(recipients.groups)
+        const remotes = recipients.exact.remotes.concat(recipients.remotes)
 
-            const exists = this.currentFileOutgoingCollaborators.find(existingCollaborator => {
-              return (
-                collaborator.value.shareWith === existingCollaborator.collaborator.name &&
-                parseInt(collaborator.value.shareType, 10) === existingCollaborator.shareType
-              )
-            })
-
-            if (selected || exists) {
-              return false
-            }
-
-            this.announcement = this.$_announcementWhenCollaboratorAdded
-
-            return true
+        this.autocompleteResults = users.concat(groups, remotes).filter(collaborator => {
+          const selected = this.selectedCollaborators.find(selectedCollaborator => {
+            return (
+              collaborator.value.shareWith === selectedCollaborator.value.shareWith &&
+              parseInt(collaborator.value.shareType, 10) ===
+                parseInt(selectedCollaborator.value.shareType, 10)
+            )
           })
-        })
-        .catch(error => {
-          console.error(error)
 
-          this.searchInProgress = false
+          const exists = this.currentFileOutgoingCollaborators.find(existingCollaborator => {
+            return (
+              collaborator.value.shareWith === existingCollaborator.collaborator.name &&
+              parseInt(collaborator.value.shareType, 10) === existingCollaborator.shareType
+            )
+          })
+
+          if (selected || exists) {
+            return false
+          }
+
+          this.announcement = this.$_announcementWhenCollaboratorAdded
+
+          return true
         })
-        .finally(() => {
-          this.searchInProgress = false
-        })
+      } catch (error) {
+        console.error(error)
+      }
+
+      this.searchInProgress = false
     },
 
     onSearch(query) {
@@ -207,23 +208,22 @@ export default {
         return []
       }
 
-      return recipients.filter(recipient => {
-        return (
+      return recipients.filter(
+        recipient =>
           recipient.value.shareType === shareTypes.remote ||
           recipient.label.toLocaleLowerCase().indexOf(query.toLocaleLowerCase()) > -1 ||
           recipient.value.shareWith.toLocaleLowerCase().indexOf(query.toLocaleLowerCase()) > -1 ||
           (recipient.value.shareWithAdditionalInfo || '')
             .toLocaleLowerCase()
             .indexOf(query.toLocaleLowerCase()) > -1
-        )
-      })
+      )
     },
     $_ocCollaborators_newCollaboratorsCancel() {
       this.selectedCollaborators = []
       this.saving = false
       this.close()
     },
-    share() {
+    async share() {
       this.saving = true
 
       const saveQueue = new PQueue({ concurrency: 4 })
@@ -244,9 +244,8 @@ export default {
         )
       })
 
-      return Promise.all(savePromises).then(() => {
-        this.$_ocCollaborators_newCollaboratorsCancel()
-      })
+      await Promise.all(savePromises)
+      this.$_ocCollaborators_newCollaboratorsCancel()
     },
     $_ocCollaborators_removeFromSelection(collaborator) {
       this.selectedCollaborators = this.selectedCollaborators.filter(selectedCollaborator => {

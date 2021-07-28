@@ -17,6 +17,7 @@
 import { mapGetters } from 'vuex'
 
 import { shareTypes } from '../../../../helpers/shareTypes'
+import { avatarUrl } from '../../../../helpers/user/avatarUrl'
 
 export default {
   props: {
@@ -43,7 +44,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['configuration']),
+    ...mapGetters(['configuration', 'getToken', 'capabilities']),
 
     btnDeselectRecipientLabel() {
       const translated = this.$gettext('Deselect %{name}')
@@ -52,37 +53,28 @@ export default {
     }
   },
 
-  created() {
-    if (this.recipient.value.shareType === shareTypes.user) {
-      this.fetchRecipientAvatar()
-    }
-  },
-
-  methods: {
-    async fetchRecipientAvatar() {
+  async created() {
+    if (
+      this.capabilities.files_sharing.user.profile_picture &&
+      this.recipient.value.shareType === shareTypes.user
+    ) {
       try {
-        const headers = new Headers()
-        const instance = this.configuration.server || window.location.origin
-        const url =
-          instance + 'remote.php/dav/avatars/' + this.recipient.value.shareWith + '/128.png'
+        const avatar = await avatarUrl({
+          server: this.configuration.server,
+          username: this.recipient.value.shareWith,
+          token: this.getToken
+        })
 
-        headers.append('Authorization', 'Bearer ' + this.getToken)
-        headers.append('X-Requested-With', 'XMLHttpRequest')
-
-        const res = await fetch(url, { method: 'HEAD', headers })
-
-        if (res.status === 200) {
-          const signedUrl = await this.$client.signUrl(url)
-
-          this.formattedRecipient.avatar = signedUrl
-        }
+        this.formattedRecipient.avatar = avatar
       } catch (error) {
         console.error(error)
       }
+    }
 
-      this.formattedRecipient.isLoadingAvatar = false
-    },
+    this.formattedRecipient.isLoadingAvatar = false
+  },
 
+  methods: {
     getRecipientIcon() {
       switch (this.recipient.value.shareType) {
         case shareTypes.group:
