@@ -1,7 +1,11 @@
 <template>
   <ul id="oc-files-context-actions" class="uk-list oc-mt-s">
     <template v-for="(section, i) in menuSections">
-      <li v-for="(action, j) in section.items" :key="`section-${section.name}-action-${j}`">
+      <li
+        v-for="(action, j) in section.items"
+        :key="`section-${section.name}-action-${j}`"
+        class="oc-files-context-action"
+      >
         <component
           :is="action.componentType"
           v-bind="getComponentProps(action, item)"
