@@ -1,6 +1,6 @@
 import { mapActions, mapGetters } from 'vuex'
 
-import { checkRoute } from '../../helpers/route'
+import { isTrashbinRoute } from '../../helpers/route'
 
 export default {
   computed: {
@@ -15,7 +15,7 @@ export default {
           },
           handler: this.$_rename_trigger,
           isEnabled: ({ resource }) => {
-            if (checkRoute(['files-trashbin'], this.$route.name)) {
+            if (isTrashbinRoute(this.$route)) {
               return false
             }
 

@@ -23,17 +23,34 @@
 import { mapGetters } from 'vuex'
 
 import FileActions from '../../mixins/fileActions'
-import Copy from './../../mixins/actions/copy'
-import Delete from './../../mixins/actions/delete'
+import Copy from '../../mixins/actions/copy'
+import CreatePublicLink from '../../mixins/actions/createPublicLink'
+import Delete from '../../mixins/actions/delete'
 import Download from '../../mixins/actions/download'
 import Favorite from '../../mixins/actions/favorite'
-import Move from './../../mixins/actions/move'
+import Move from '../../mixins/actions/move'
 import Navigate from '../../mixins/actions/navigate'
-import Rename from './../../mixins/actions/rename'
+import Rename from '../../mixins/actions/rename'
+import ShowActions from '../../mixins/actions/showActions'
+import ShowDetails from '../../mixins/actions/showDetails'
+import ShowShares from '../../mixins/actions/showShares'
 
 export default {
   name: 'ContextActions',
-  mixins: [FileActions, Copy, Delete, Download, Favorite, Move, Navigate, Rename],
+  mixins: [
+    FileActions,
+    Copy,
+    CreatePublicLink,
+    Delete,
+    Download,
+    Favorite,
+    Move,
+    Navigate,
+    Rename,
+    ShowActions,
+    ShowDetails,
+    ShowShares
+  ],
 
   props: {
     item: {
@@ -54,10 +71,10 @@ export default {
 
       // `open` and `open with`
       const openActions = [
-        ...this.$_navigate_items.filter(item => item.isEnabled(filterParams)),
-        ...this.$_fetch_items.filter(item => item.isEnabled(filterParams)),
-        ...this.$_fileActions_editorActions.filter(item => item.isEnabled(filterParams))
-      ]
+        ...this.$_navigate_items,
+        ...this.$_fetch_items,
+        ...this.$_fileActions_editorActions
+      ].filter(item => item.isEnabled(filterParams))
       if (openActions.length > 0) {
         menuItems.push(openActions[0])
       }
@@ -67,16 +84,18 @@ export default {
 
       // other actions
       menuItems.push(
-        ...this.$_download_items.filter(item => item.isEnabled(filterParams)),
-        // create & copy public link
-        // share
-        ...this.$_favorite_items.filter(item => item.isEnabled(filterParams)),
-        ...this.$_rename_items.filter(item => item.isEnabled(filterParams)),
-        ...this.$_move_items.filter(item => item.isEnabled(filterParams)),
-        ...this.$_copy_items.filter(item => item.isEnabled(filterParams)),
-        ...this.$_delete_items.filter(item => item.isEnabled(filterParams))
-        // all actions
-        // details
+        ...[
+          ...this.$_download_items,
+          ...this.$_createPublicLink_items,
+          ...this.$_showShares_items,
+          ...this.$_favorite_items,
+          ...this.$_rename_items,
+          ...this.$_move_items,
+          ...this.$_copy_items,
+          ...this.$_delete_items,
+          ...this.$_showActions_items,
+          ...this.$_showDetails_items
+        ].filter(item => item.isEnabled(filterParams))
       )
 
       return menuItems
