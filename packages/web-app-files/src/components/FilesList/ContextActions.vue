@@ -1,21 +1,24 @@
 <template>
   <ul id="oc-files-context-actions" class="uk-list oc-mt-s">
-    <li v-for="(action, index) in menuItems" :key="`action-${index}`" class="oc-py-xs">
-      <component
-        :is="action.componentType"
-        v-bind="getComponentProps(action, item)"
-        :class="['oc-text-bold', action.class]"
-        @click.stop="action.handler(item, action.handlerData)"
-      >
-        <oc-icon :name="action.icon" size="medium" />
-        <span class="oc-files-context-action-label">{{ action.label(item) }}</span>
-        <span
-          v-if="action.opensInNewWindow"
-          class="oc-invisible-sr"
-          v-text="$gettext('(Opens in new window)')"
-        />
-      </component>
-    </li>
+    <template v-for="(section, i) in menuSections">
+      <li v-for="(action, j) in section.items" :key="`section-${section.name}-action-${j}`">
+        <component
+          :is="action.componentType"
+          v-bind="getComponentProps(action, item)"
+          :class="['oc-text-bold', action.class]"
+          @click.stop="action.handler(item, action.handlerData)"
+        >
+          <oc-icon :name="action.icon" size="medium" />
+          <span class="oc-files-context-action-label">{{ action.label(item) }}</span>
+          <span
+            v-if="action.opensInNewWindow"
+            class="oc-invisible-sr"
+            v-text="$gettext('(Opens in new window)')"
+          />
+        </component>
+      </li>
+      <hr v-if="i < menuSections.length - 1" :key="`section-${section.name}-separator`" />
+    </template>
   </ul>
 </template>
 
@@ -62,11 +65,37 @@ export default {
   computed: {
     ...mapGetters('Files', ['currentFolder']),
 
-    menuItems() {
-      const filterParams = {
+    menuSections() {
+      const sections = []
+      if (this.menuItemsContext.length) {
+        sections.push({
+          name: 'context',
+          items: this.menuItemsContext
+        })
+      }
+      if (this.menuItemsActions.length) {
+        sections.push({
+          name: 'actions',
+          items: this.menuItemsActions
+        })
+      }
+      if (this.menuItemsSidebar.length) {
+        sections.push({
+          name: 'sidebar',
+          items: this.menuItemsSidebar
+        })
+      }
+      return sections
+    },
+
+    filterParams() {
+      return {
         resource: this.item,
         parent: this.currentFolder
       }
+    },
+
+    menuItemsContext() {
       const menuItems = []
 
       // `open` and `open with`
@@ -74,7 +103,7 @@ export default {
         ...this.$_navigate_items,
         ...this.$_fetch_items,
         ...this.$_fileActions_editorActions
-      ].filter(item => item.isEnabled(filterParams))
+      ].filter(item => item.isEnabled(this.filterParams))
       if (openActions.length > 0) {
         menuItems.push(openActions[0])
       }
@@ -82,23 +111,30 @@ export default {
         // TODO: sub nav item with all remaining open actions
       }
 
-      // other actions
       menuItems.push(
         ...[
           ...this.$_download_items,
           ...this.$_createPublicLink_items,
           ...this.$_showShares_items,
-          ...this.$_favorite_items,
-          ...this.$_rename_items,
-          ...this.$_move_items,
-          ...this.$_copy_items,
-          ...this.$_delete_items,
-          ...this.$_showActions_items,
-          ...this.$_showDetails_items
-        ].filter(item => item.isEnabled(filterParams))
+          ...this.$_favorite_items
+        ].filter(item => item.isEnabled(this.filterParams))
       )
 
       return menuItems
+    },
+
+    menuItemsActions() {
+      return [
+        ...this.$_rename_items,
+        ...this.$_move_items,
+        ...this.$_copy_items,
+        ...this.$_delete_items,
+        ...this.$_showActions_items
+      ].filter(item => item.isEnabled(this.filterParams))
+    },
+
+    menuItemsSidebar() {
+      return [...this.$_showDetails_items].filter(item => item.isEnabled(this.filterParams))
     }
   },
   methods: {
