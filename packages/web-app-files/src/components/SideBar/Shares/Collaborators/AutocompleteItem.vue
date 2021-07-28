@@ -1,5 +1,5 @@
 <template>
-  <div class="uk-flex uk-flex-middle" :class="collaboratorClass">
+  <div class="uk-flex uk-flex-middle oc-py-xs" :class="collaboratorClass">
     <avatar-image
       v-if="isUser"
       class="oc-mr-s"
@@ -11,7 +11,7 @@
       <oc-icon
         v-if="item.value.shareType === shareTypes.group"
         key="avatar-group"
-        class="oc-mr-s"
+        class="oc-mr-s files-recipient-suggestion-avatar"
         name="group"
         size="xlarge"
         :accessible-label="$gettext('Group')"
@@ -19,7 +19,7 @@
       <oc-icon
         v-else
         key="avatar-generic-person"
-        class="oc-mr-s"
+        class="oc-mr-s files-recipient-suggestion-avatar"
         name="person"
         size="xlarge"
         :accessible-label="$gettext('User')"
@@ -85,3 +85,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.vs__dropdown-option--highlight .files-recipient-suggestion-avatar svg {
+  fill: white !important;
+}
+</style>

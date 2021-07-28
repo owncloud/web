@@ -1,0 +1,5 @@
+Enhancement: Refactor recipient autocomplete in people panel
+
+We've refactored the recipient autocomplete in people panel so that selected recipients are displayed directly in the autocomplete instead of the list below it.
+
+https://github.com/owncloud/web/pull/5554
