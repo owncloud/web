@@ -10,7 +10,7 @@
           :is="action.componentType"
           v-bind="getComponentProps(action, item)"
           :class="['oc-text-bold', action.class]"
-          @click.stop="action.handler(item, action.handlerData)"
+          v-on="getComponentListeners(action, item)"
         >
           <oc-icon :name="action.icon" size="medium" />
           <span class="oc-files-context-action-label">{{ action.label(item) }}</span>
@@ -120,7 +120,10 @@ export default {
           ...this.$_download_items,
           ...this.$_createPublicLink_items,
           ...this.$_showShares_items,
-          ...this.$_favorite_items
+          ...this.$_favorite_items.map(action => {
+            action.keepOpen = true
+            return action
+          })
         ].filter(item => item.isEnabled(this.filterParams))
       )
 
@@ -142,13 +145,13 @@ export default {
     }
   },
   methods: {
-    getComponentProps(action, target) {
+    getComponentProps(action, resource) {
       if (action.componentType === 'router-link' && action.route) {
         return {
           to: {
             name: action.route,
             params: {
-              item: target.path
+              item: resource.path
             }
           }
         }
@@ -156,6 +159,22 @@ export default {
 
       return {
         appearance: 'raw'
+      }
+    },
+
+    getComponentListeners(action, resource) {
+      if (action.handler === undefined || action.componentType !== 'oc-button') {
+        return {}
+      }
+
+      const callback = () => action.handler(resource, action.handlerData)
+      if (action.keepOpen) {
+        return {
+          'click.stop': callback
+        }
+      }
+      return {
+        click: callback
       }
     }
   }
