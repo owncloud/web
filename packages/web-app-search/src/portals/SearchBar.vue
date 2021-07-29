@@ -153,6 +153,11 @@ export default {
       provider.activate(this.term)
     },
     onEvent(event) {
+      // check if the event is related to the search bar, ignore anything else.
+      if (!event.path.map(node => node.id).includes('files-global-search-bar')) {
+        return
+      }
+
       if (!this.activeProvider) {
         this.activeProvider = this.availableProviders[0]
       }
