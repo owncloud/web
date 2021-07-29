@@ -105,6 +105,7 @@ export default {
   removeFilesFromTrashbin(context, files) {
     for (const file of files) {
       context.commit('REMOVE_FILE', file)
+      context.commit('REMOVE_FILE_SELECTION', file)
     }
   },
   renameFile(context, { file, newValue, client, publicPage }) {
