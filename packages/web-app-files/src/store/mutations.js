@@ -72,6 +72,9 @@ export default {
   LOAD_FILES_SEARCHED(state, files) {
     state.filesSearched = files
   },
+  CLEAR_FILES_SEARCHED(state) {
+    state.filesSearched = []
+  },
   ADD_FILE_SELECTION(state, file) {
     const selected = [...state.selected]
     const fileIndex = selected.findIndex(f => {
