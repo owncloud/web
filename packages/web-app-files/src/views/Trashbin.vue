@@ -47,6 +47,7 @@
 import { mapGetters, mapMutations, mapState } from 'vuex'
 
 import { buildDeletedResource, buildResource } from '../helpers/resources'
+import MixinFilesListFilter from '../mixins/filesListFilter'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
 import MixinResources from '../mixins/resources'
 import MixinFilesListPagination from '../mixins/filesListPagination'
@@ -61,7 +62,13 @@ import ContextActions from '../components/FilesList/ContextActions.vue'
 export default {
   components: { ListLoader, NoContentMessage, ListInfo, Pagination, ContextActions },
 
-  mixins: [MixinFilesListPositioning, MixinResources, MixinFilesListPagination, MixinMountSideBar],
+  mixins: [
+    MixinFilesListPositioning,
+    MixinResources,
+    MixinFilesListPagination,
+    MixinMountSideBar,
+    MixinFilesListFilter
+  ],
 
   data: () => ({
     loading: true

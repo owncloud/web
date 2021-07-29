@@ -82,6 +82,7 @@ import { aggregateResourceShares } from '../helpers/resources'
 import FileActions from '../mixins/fileActions'
 import MixinAcceptShare from '../mixins/actions/acceptShare'
 import MixinDeclineShare from '../mixins/actions/declineShare'
+import MixinFilesListFilter from '../mixins/filesListFilter'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
 import MixinFilesListPagination from '../mixins/filesListPagination'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
@@ -112,7 +113,8 @@ export default {
     MixinDeclineShare,
     MixinFilesListPositioning,
     MixinFilesListPagination,
-    MixinMountSideBar
+    MixinMountSideBar,
+    MixinFilesListFilter
   ],
 
   data: () => ({

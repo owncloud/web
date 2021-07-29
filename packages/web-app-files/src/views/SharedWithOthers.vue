@@ -51,6 +51,7 @@ import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 
 import { aggregateResourceShares } from '../helpers/resources'
 import FileActions from '../mixins/fileActions'
+import MixinFilesListFilter from '../mixins/filesListFilter'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
 import MixinResources from '../mixins/resources'
 import MixinFilesListPagination from '../mixins/filesListPagination'
@@ -75,7 +76,8 @@ export default {
     MixinFilesListPositioning,
     MixinResources,
     MixinFilesListPagination,
-    MixinMountSideBar
+    MixinMountSideBar,
+    MixinFilesListFilter
   ],
 
   data: () => ({
