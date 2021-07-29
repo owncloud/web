@@ -15,7 +15,7 @@ For feedback and bug reports, please use the [public issue tracker](https://gith
 	</description>
 	<licence>AGPL</licence>
 	<author>ownCloud</author>
-	<version>3.4.1</version>
+	<version>3.5.0</version>
 	<category>tools</category>
 	<website>https://github.com/owncloud/web</website>
 	<bugs>https://github.com/owncloud/web/issues</bugs>
@@ -24,7 +24,7 @@ For feedback and bug reports, please use the [public issue tracker](https://gith
 		<admin>https://owncloud.dev/clients/web/deployments/oc10-app</admin>
 	</documentation>
 	<dependencies>
-		<owncloud min-version="10.7" max-version="10" />
+		<owncloud min-version="10.8" max-version="10" />
 	</dependencies>
 	<screenshot>https://raw.githubusercontent.com/owncloud/screenshots/master/web/oc_web.png</screenshot>
 </info>
