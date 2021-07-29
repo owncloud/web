@@ -90,6 +90,9 @@ export default {
     }
     state.selected = []
   },
+  REMOVE_FILE_FROM_SEARCHED(state, file) {
+    state.filesSearched = state.filesSearched.filter(i => file.id !== i.id)
+  },
   RESET_SELECTION(state) {
     state.selected = []
   },
