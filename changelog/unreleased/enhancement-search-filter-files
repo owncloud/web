@@ -1,0 +1,7 @@
+Enhancement: Add filter & search to files app
+
+We've changed the existing searchbar to use the custom search service.
+It is now able to be used at the same time as a filter (on the frontend) and, if the backend 
+is capable of search, as a search input.
+
+https://github.com/owncloud/web/pull/5415

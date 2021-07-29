@@ -12,7 +12,24 @@ module.exports = {
      *
      * @param {string} searchTerm
      */
-    search: function(searchTerm) {
+    search: function(searchTerm, global = false) {
+      if (global === true) {
+        return this.initAjaxCounters()
+          .isVisible('#files-open-search-btn', result => {
+            if (result.value === true) {
+              this.click('#files-open-search-btn')
+                .waitForElementVisible('@searchInputFieldLowResolution')
+                .setValue('@searchInputFieldLowResolution', [searchTerm])
+                .click('@searchGlobalButton')
+            } else {
+              this.waitForElementVisible('@searchInputFieldHighResolution')
+                .setValue('@searchInputFieldHighResolution', [searchTerm])
+                .click('@searchGlobalButton')
+            }
+          })
+          .waitForElementNotVisible('@searchLoadingIndicator')
+          .waitForOutstandingAjaxCalls()
+      }
       return this.initAjaxCounters()
         .isVisible('#files-open-search-btn', result => {
           if (result.value === true) {
@@ -252,6 +269,10 @@ module.exports = {
     },
     searchLoadingIndicator: {
       selector: '#files-global-search-bar .oc-spinner'
+    },
+    searchGlobalButton: {
+      selector: '//button[.="Search all files ↵"]',
+      locateStrategy: 'xpath'
     },
     userMenuButton: {
       selector: '#_userMenuButton'

@@ -72,9 +72,6 @@ export default {
   LOAD_FILES_SEARCHED(state, files) {
     state.filesSearched = files
   },
-  REMOVE_FILE_FROM_SEARCHED(state, file) {
-    state.filesSearched = state.filesSearched.filter(i => file.id !== i.id)
-  },
   ADD_FILE_SELECTION(state, file) {
     const selected = [...state.selected]
     const fileIndex = selected.findIndex(f => {
@@ -93,6 +90,9 @@ export default {
     }
     state.selected = []
   },
+  REMOVE_FILE_FROM_SEARCHED(state, file) {
+    state.filesSearched = state.filesSearched.filter(i => file.id !== i.id)
+  },
   RESET_SELECTION(state) {
     state.selected = []
   },
@@ -106,9 +106,6 @@ export default {
   },
   REMOVE_FILE(state, removedFile) {
     state.files = [...state.files].filter(file => file.id !== removedFile.id)
-  },
-  SET_SEARCH_TERM(state, searchTerm) {
-    state.searchTermGlobal = searchTerm
   },
   UPDATE_CURRENT_FILE_SHARE_TYPES(state) {
     const files = [...state.files]

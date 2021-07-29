@@ -9,6 +9,7 @@ describe('Getters', () => {
       files: FixtureFiles['/'],
       searchTermGlobal: '',
       filesPageLimit: 10,
+      filesSearched: [],
       areHiddenFilesShown: true
     }
   })

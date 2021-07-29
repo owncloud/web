@@ -64,6 +64,7 @@ import debounce from 'lodash-es/debounce'
 
 import MixinAccessibleBreadcrumb from '../mixins/accessibleBreadcrumb'
 import MixinFileActions from '../mixins/fileActions'
+import MixinFilesListFilter from '../mixins/filesListFilter'
 import MixinFilesListScrolling from '../mixins/filesListScrolling'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
 import MixinFilesListPagination from '../mixins/filesListPagination'
@@ -99,7 +100,8 @@ export default {
     MixinFilesListPositioning,
     MixinFilesListScrolling,
     MixinFilesListPagination,
-    MixinMountSideBar
+    MixinMountSideBar,
+    MixinFilesListFilter
   ],
 
   data: () => ({
@@ -108,19 +110,18 @@ export default {
 
   computed: {
     ...mapState(['app']),
-    ...mapState('Files', ['files']),
+    ...mapState('Files', ['currentPage', 'files', 'filesPageLimit']),
     ...mapGetters('Files', [
       'davProperties',
       'highlightedFile',
-      'activeFiles',
       'selectedFiles',
       'inProgress',
+      'activeFiles',
       'currentFolder',
       'totalFilesCount',
       'totalFilesSize'
     ]),
     ...mapGetters(['user', 'homeFolder', 'configuration']),
-
     isSidebarOpen() {
       return this.highlightedFile !== null
     },
@@ -203,7 +204,8 @@ export default {
       'SELECT_RESOURCES',
       'SET_CURRENT_FOLDER',
       'LOAD_FILES',
-      'CLEAR_CURRENT_FILES_LIST'
+      'CLEAR_CURRENT_FILES_LIST',
+      'UPDATE_CURRENT_PAGE'
     ]),
     ...mapMutations(['SET_QUOTA']),
 

@@ -9,7 +9,8 @@
   "apps" : [
     "files",
     "media-viewer",
-    "draw-io"
+    "draw-io",
+    "search"
   ],
   "applications" : [
     {

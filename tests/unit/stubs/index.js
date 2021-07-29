@@ -14,5 +14,6 @@ export default {
   'oc-loader': true,
   'oc-img': true,
   'oc-page-size': true,
-  'router-link': true
+  'router-link': true,
+  'portal-target': true
 }

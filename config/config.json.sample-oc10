@@ -9,6 +9,7 @@
   },
   "apps": [
     "files",
+    "search",
     "media-viewer"
   ],
   "external_apps": [
