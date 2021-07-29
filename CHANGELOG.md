@@ -11,10 +11,12 @@ Summary
 * Bugfix - Content Security Policy for OpenID Connect authentication: [#5536](https://github.com/owncloud/web/pull/5536)
 * Bugfix - Send authentication on manifests.json: [#5553](https://github.com/owncloud/web/pull/5553)
 * Bugfix - Unnecessary quota requests: [#5539](https://github.com/owncloud/web/pull/5539)
+* Enhancement - Add custom search service: [#5415](https://github.com/owncloud/web/pull/5415)
 * Enhancement - Dropdown actions in FilesTable: [#5102](https://github.com/owncloud/web/issues/5102)
 * Enhancement - Refactor recipient autocomplete in people panel: [#5554](https://github.com/owncloud/web/pull/5554)
 * Enhancement - Load only opened panels: [#5569](https://github.com/owncloud/web/issues/5569)
 * Enhancement - Prevent binding to only loopback IP when running in watch mode: [#5515](https://github.com/owncloud/web/pull/5515)
+* Enhancement - Add filter & search to files app: [#5415](https://github.com/owncloud/web/pull/5415)
 * Enhancement - Define the number of visible share recipients: [#5506](https://github.com/owncloud/web/pull/5506)
 * Enhancement - Sidebar sliding panels navigation: [#5549](https://github.com/owncloud/web/pull/5549)
 * Enhancement - Use profile picture capability in avatars: [#5178](https://github.com/owncloud/web/pull/5178)
@@ -40,6 +42,13 @@ Details
    We've removed requests that checked for a user's quota on pages where it was not relevant.
 
    https://github.com/owncloud/web/pull/5539
+
+* Enhancement - Add custom search service: [#5415](https://github.com/owncloud/web/pull/5415)
+
+   We've added `search` as another core app that can be utilized by other (third-party) frontend
+   extensions to provide filter and search functionality.
+
+   https://github.com/owncloud/web/pull/5415
 
 * Enhancement - Dropdown actions in FilesTable: [#5102](https://github.com/owncloud/web/issues/5102)
 
@@ -75,6 +84,14 @@ Details
    serve`). Does not break any existing functionality.
 
    https://github.com/owncloud/web/pull/5515
+
+* Enhancement - Add filter & search to files app: [#5415](https://github.com/owncloud/web/pull/5415)
+
+   We've changed the existing searchbar to use the custom search service. It is now able to be used
+   at the same time as a filter (on the frontend) and, if the backend is capable of search, as a search
+   input.
+
+   https://github.com/owncloud/web/pull/5415
 
 * Enhancement - Define the number of visible share recipients: [#5506](https://github.com/owncloud/web/pull/5506)
 
