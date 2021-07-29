@@ -1,0 +1,7 @@
+Bugfix: load folder in Media viewer
+
+We've fixed the loading of a folder in the Media viewer extension.
+If a user reloads the Media viewer now, it load all the medias both in private and public context.
+
+https://github.com/owncloud/web/issues/5427
+https://github.com/owncloud/web/pull/5585
