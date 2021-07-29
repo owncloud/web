@@ -27,6 +27,8 @@
         :target-route="targetRoute"
         :highlighted="highlightedFile ? highlightedFile.id : null"
         :header-position="headerPosition"
+        :drag-drop="true"
+        @fileDropped="fileDropped"
         @showDetails="$_mountSideBar_showDetails"
         @fileClick="$_fileActions_triggerDefaultAction"
         @rowMounted="rowMounted"
@@ -76,6 +78,8 @@ import NotFoundMessage from '../components/FilesList/NotFoundMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
 
+import { basename } from 'path'
+
 const visibilityObserver = new VisibilityObserver()
 
 export default {
@@ -98,6 +102,7 @@ export default {
     ...mapState(['app']),
     ...mapState('Files', ['files']),
     ...mapGetters('Files', [
+      'files',
       'davProperties',
       'highlightedFile',
       'activeFiles',
@@ -186,7 +191,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('Files', ['loadIndicators', 'loadPreview']),
+    ...mapActions('Files', ['dragOver', 'loadIndicators', 'loadPreview'], 'showMessage'),
     ...mapMutations('Files', [
       'SELECT_RESOURCES',
       'SET_CURRENT_FOLDER',
@@ -194,6 +199,65 @@ export default {
       'CLEAR_CURRENT_FILES_LIST'
     ]),
     ...mapMutations(['SET_QUOTA']),
+
+    async fileDropped(fileIdTarget) {
+      const selected = this.selectedFiles
+      const targetInfo = this.getFileInfoById(fileIdTarget)
+      const targetSelected = selected.some(e => e.id === fileIdTarget)
+      if (targetSelected) return
+      if (targetInfo.type !== 'folder') return
+
+      this.loading = true
+      const targetPath = targetInfo.path + '/'
+      const errors = []
+      const itemsInTarget = await this.getFolderItems(targetPath)
+      for (let i = 0; i < selected.length; i++) {
+        const current = selected[i]
+        const exists = itemsInTarget.some(e => basename(e.name) === current.name)
+        if (exists) {
+          const message = this.$gettext('Resource with name %{name} already exists')
+          errors.push({
+            resource: current.name,
+            message: this.$gettextInterpolate(message, { name: current.name }, true)
+          })
+          continue
+        }
+        const promise = this.$client.files.move(current.path, targetPath + current.name)
+        await promise.catch(error => {
+          error.resource = current.name
+          errors.push(error)
+        })
+      }
+      this.loadResources(true)
+      this.loading = false
+      if (errors.length === 0) {
+        return
+      }
+      let title = this.$gettext('An error occurred while moving %{resource}')
+      if (errors.length === 1) {
+        this.showMessage({
+          title: this.$gettextInterpolate(title, { resource: errors[0].resource }, true),
+          desc: errors[0].message,
+          status: 'danger'
+        })
+        return
+      }
+      title = this.$gettext('An error occurred while moving several resources')
+      const desc = this.$ngettext(
+        '%{count} resource could not be moved',
+        '%{count} resources could not be moved',
+        errors.length
+      )
+      this.showMessage({
+        title,
+        desc: this.$gettextInterpolate(desc, { count: errors.length }, false),
+        status: 'danger'
+      })
+    },
+
+    getFileInfoById(fileId) {
+      return this.activeFiles.find(e => e.id === fileId)
+    },
 
     rowMounted(resource, component) {
       if (!this.displayThumbnails) {
@@ -212,17 +276,21 @@ export default {
 
       visibilityObserver.observe(component.$el, { onEnter: debounced, onExit: debounced.cancel })
     },
-
+    async getFolderItems(path, properties) {
+      try {
+        const resources = await this.$client.files.list(path, 1, properties)
+        return resources
+      } catch (error) {
+        console.log('im here')
+        console.error(error)
+      }
+    },
     async loadResources(sameRoute) {
       this.loading = true
       this.CLEAR_CURRENT_FILES_LIST()
 
       try {
-        let resources = await this.$client.files.list(
-          this.$route.params.item,
-          1,
-          this.davProperties
-        )
+        let resources = await this.getFolderItems(this.$route.params.item, this.davProperties)
 
         resources = resources.map(buildResource)
         this.LOAD_FILES({
