@@ -170,7 +170,10 @@ export default {
       const callback = () => action.handler(resource, action.handlerData)
       if (action.keepOpen) {
         return {
-          'click.stop': callback
+          click: event => {
+            event.stopPropagation()
+            callback()
+          }
         }
       }
       return {
