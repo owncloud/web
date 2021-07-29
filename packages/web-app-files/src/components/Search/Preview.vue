@@ -41,7 +41,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['Files', ['configuration', 'user', 'getToken']])
+    ...mapGetters(['configuration', 'user', 'getToken'])
   },
   beforeMount() {
     this.resource = this.searchResult.data
