@@ -182,11 +182,11 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     favoriteButtonInAccordion: {
-      selector: '//button[normalize-space()="Mark as favorite"]',
+      selector: '//button[normalize-space()="Add to favorites"]',
       locateStrategy: 'xpath'
     },
     unmarkFavoriteButtonInAccordion: {
-      selector: '//button[normalize-space()="Unmark as favorite"]',
+      selector: '//button[normalize-space()="Remove from favorites"]',
       locateStrategy: 'xpath'
     },
     restoreButtonInAccordion: {
