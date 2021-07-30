@@ -75,6 +75,7 @@ import { batchActions } from '../helpers/batchActions'
 import { cloneStateObject } from '../helpers/store'
 import MixinsGeneral from '../mixins'
 import MixinRoutes from '../mixins/routes'
+import MixinFilesListFilter from '../mixins/filesListFilter'
 import MixinFilesListPagination from '../mixins/filesListPagination'
 
 import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
@@ -96,7 +97,7 @@ export default {
     Pagination
   },
 
-  mixins: [MixinsGeneral, MixinRoutes, MixinFilesListPagination],
+  mixins: [MixinsGeneral, MixinRoutes, MixinFilesListFilter, MixinFilesListPagination],
 
   data: () => ({
     headerPosition: 0,
