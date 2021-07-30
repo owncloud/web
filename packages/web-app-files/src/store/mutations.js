@@ -73,7 +73,7 @@ export default {
     state.filesSearched = files
   },
   CLEAR_FILES_SEARCHED(state) {
-    state.filesSearched = []
+    state.filesSearched = null
   },
   ADD_FILE_SELECTION(state, file) {
     const selected = [...state.selected]
@@ -94,6 +94,10 @@ export default {
     state.selected = []
   },
   REMOVE_FILE_FROM_SEARCHED(state, file) {
+    if (!state.filesSearched) {
+      return
+    }
+
     state.filesSearched = state.filesSearched.filter(i => file.id !== i.id)
   },
   RESET_SELECTION(state) {
@@ -343,12 +347,13 @@ export default {
    * @param params.value the value that will be attached to the key
    */
   UPDATE_RESOURCE_FIELD(state, params) {
-    const index = state.files.findIndex(r => r.id === params.id)
+    const fileSource = state.filesSearched || state.files
+    const index = fileSource.findIndex(r => r.id === params.id)
     if (index < 0) {
       return
     }
 
-    const resource = state.files[index]
+    const resource = fileSource[index]
     const isReactive = has(resource, params.field)
     const newResource = set(resource, params.field, params.value)
 
@@ -356,7 +361,7 @@ export default {
       return
     }
 
-    Vue.set(state.files, index, newResource)
+    Vue.set(fileSource, index, newResource)
   },
 
   UPDATE_CURRENT_PAGE(state, page) {
@@ -381,6 +386,8 @@ function $_upsertResource(state, resource, allowInsert) {
   const files = [...state.files]
   const index = files.findIndex(r => r.id === resource.id)
   const found = index > -1
+
+  state.filesSearched = null
 
   if (!found && !allowInsert) {
     return

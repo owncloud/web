@@ -14,7 +14,7 @@ export default {
   files: state => {
     return state.files
   },
-  filesAll: state => (state.filesSearched.length ? state.filesSearched : state.files),
+  filesAll: state => state.filesSearched || state.files,
   currentFolder: state => {
     return state.currentFolder
   },

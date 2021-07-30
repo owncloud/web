@@ -1,7 +1,7 @@
 export default {
   currentFolder: null,
   files: [],
-  filesSearched: [],
+  filesSearched: null,
   selected: [],
   inProgress: [],
   davProperties: [
@@ -70,7 +70,7 @@ export default {
    * Pagination
    */
   currentPage: 1,
-  filesPageLimit: 100,
+  filesPageLimit: 10,
 
   /**
    * View settings
