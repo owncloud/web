@@ -90,6 +90,9 @@ const apps = {
   newFileHandlers: editors,
   meta
 }
+const user = {
+  capabilities: {}
+}
 
 describe('ContextActions', () => {
   function getWrapper(route, { filename = '', extension = '', type = '' }) {
@@ -120,7 +123,7 @@ describe('ContextActions', () => {
 
   const selectors = {
     actionList: '#oc-files-context-actions',
-    actionItem: 'li.oc-py-xs'
+    actionItem: 'li.oc-files-context-action'
   }
 
   describe('renders a list of actions', () => {
@@ -155,7 +158,8 @@ describe('ContextActions', () => {
 function createStore(state) {
   return new Vuex.Store({
     state: {
-      apps: apps
+      apps,
+      user
     },
     modules: {
       Files: {
