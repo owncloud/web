@@ -96,8 +96,7 @@ Feature: rename folders
       | a normal folder       |
       | another normal folder |
 
-  @notToImplementOnOCIS
-  # These are valid file names for ocis
+  # these are invalid file names on all implementations
   Scenario Outline: Rename a folder using forbidden characters
     When the user tries to rename folder <from_name> to <to_name> using the webUI
     Then the error message with header '<alert_message>' should be displayed on the webUI
@@ -106,17 +105,19 @@ Feature: rename folders
       | from_name       | to_name           | alert_message                                             |
       | "simple-folder" | "simple\folder"   | Error while renaming "simple-folder" to "simple\folder"   |
       | "simple-folder" | "\\simple-folder" | Error while renaming "simple-folder" to "\\simple-folder" |
-      | "simple-folder" | ".htaccess"       | Error while renaming "simple-folder" to ".htaccess"       |
+
+  @notToImplementOnOCIS
+  # .htaccess is an invalid folder name on oC10
+  Scenario: Try to rename a folder to .htaccess on oC10
+    When the user tries to rename folder "simple-folder" to ".htaccess" using the webUI
+    Then the error message with header 'Error while renaming "simple-folder" to ".htaccess"' should be displayed on the webUI
+    And folder "simple-folder" should be listed on the webUI
 
   @skipOnOC10
-  Scenario Outline: Rename a folder using forbidden characters
-    When the user renames folder <from_name> to <to_name> using the webUI
-    Then folder <to_name> should be listed on the webUI
-    Examples:
-      | from_name       | to_name           |
-      | "simple-folder" | "simple\folder"   |
-      | "simple-folder" | "\\simple-folder" |
-      | "simple-folder" | ".htaccess"       |
+  # .htaccess is a valid folder name on OCIS
+  Scenario: Rename a folder to .htaccess on OCIS
+    When the user renames folder "simple-folder" to ".htaccess" using the webUI
+    Then folder ".htaccess" should be listed on the webUI
 
 
   Scenario: Rename a folder putting a name of a file which already exists
