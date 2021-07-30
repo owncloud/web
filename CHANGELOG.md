@@ -12,6 +12,7 @@ Summary
 * Bugfix - Send authentication on manifests.json: [#5553](https://github.com/owncloud/web/pull/5553)
 * Bugfix - Unnecessary quota requests: [#5539](https://github.com/owncloud/web/pull/5539)
 * Enhancement - Add custom search service: [#5415](https://github.com/owncloud/web/pull/5415)
+* Enhancement - New layout for context menu: [#5160](https://github.com/owncloud/web/issues/5160)
 * Enhancement - Dropdown actions in FilesTable: [#5102](https://github.com/owncloud/web/issues/5102)
 * Enhancement - Refactor recipient autocomplete in people panel: [#5554](https://github.com/owncloud/web/pull/5554)
 * Enhancement - Load only opened panels: [#5569](https://github.com/owncloud/web/issues/5569)
@@ -50,6 +51,14 @@ Details
 
    https://github.com/owncloud/web/pull/5415
 
+* Enhancement - New layout for context menu: [#5160](https://github.com/owncloud/web/issues/5160)
+
+   The new context menu in the files list received additional menu items and a clear separation
+   into three sections.
+
+   https://github.com/owncloud/web/issues/5160
+   https://github.com/owncloud/web/pull/5576
+
 * Enhancement - Dropdown actions in FilesTable: [#5102](https://github.com/owncloud/web/issues/5102)
 
    Users can now access quick actions in a dropdown by clicking on the three-dots button or
@@ -59,10 +68,8 @@ Details
 
    https://github.com/owncloud/web/issues/5102
    https://github.com/owncloud/web/issues/5103
-   https://github.com/owncloud/web/issues/5160
    https://github.com/owncloud/web/pull/5551
    https://github.com/owncloud/web/pull/5554
-   https://github.com/owncloud/web/pull/5576
    https://github.com/owncloud/owncloud-design-system/releases/tag/v8.3.0
 
 * Enhancement - Refactor recipient autocomplete in people panel: [#5554](https://github.com/owncloud/web/pull/5554)
