@@ -29,9 +29,15 @@ export default class Provider extends EventBus implements SearchProvider {
   }
 
   public activate(term: string): void {
+    const listRoute = 'search-provider-list'
+
+    if (!term && this.router.currentRoute.name !== listRoute) {
+      return
+    }
+
     this.router
       .push({
-        name: 'search-provider-list',
+        name: listRoute,
         query: { term, provider: this.id }
       })
       .catch(() => {
