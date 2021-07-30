@@ -1,0 +1,5 @@
+Enhancement: Prevent binding to only loopback IP when running in watch mode
+
+This is required when running the acceptance tests on Windows, it allows the selenium docker containers to access the frontend due to the host binding in rollup (when running `yarn serve`). Does not break any existing functionality.
+
+https://github.com/owncloud/web/pull/5515
