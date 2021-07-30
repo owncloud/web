@@ -59,8 +59,10 @@ Details
 
    https://github.com/owncloud/web/issues/5102
    https://github.com/owncloud/web/issues/5103
+   https://github.com/owncloud/web/issues/5160
    https://github.com/owncloud/web/pull/5551
    https://github.com/owncloud/web/pull/5554
+   https://github.com/owncloud/web/pull/5576
    https://github.com/owncloud/owncloud-design-system/releases/tag/v8.3.0
 
 * Enhancement - Refactor recipient autocomplete in people panel: [#5554](https://github.com/owncloud/web/pull/5554)
