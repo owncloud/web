@@ -194,7 +194,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('Files', ['dragOver', 'loadIndicators', 'loadPreview'], 'showMessage'),
+    ...mapActions('Files', ['loadIndicators', 'loadPreview'], 'showMessage'),
     ...mapMutations('Files', [
       'SELECT_RESOURCES',
       'SET_CURRENT_FOLDER',
