@@ -822,6 +822,8 @@ def stopRecentBuilds(ctx):
         "commands": [
             "drone build ls %s --status running > %s/recentBuilds.txt" % (repo_slug, dir["web"]),
             "drone build info %s ${DRONE_BUILD_NUMBER} > %s/thisBuildInfo.txt" % (repo_slug, dir["web"]),
+            "cat %s/recentBuilds.txt" % dir["web"],
+            "cat %s/thisBuildInfo.txt" % dir["web"],
             "cd %s && ./tests/acceptance/cancelBuilds.sh" % dir["web"],
         ],
         "when": {
