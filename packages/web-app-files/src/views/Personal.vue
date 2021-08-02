@@ -157,8 +157,7 @@ export default {
             params: {
               item: this.homeFolder
             }
-          })
-
+          }).catch (error => { })
           return
         }
 
