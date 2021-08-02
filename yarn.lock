@@ -2228,10 +2228,10 @@ axe-core@^3.5.5:
   resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-3.5.6.tgz#e762a90d7f6dbd244ceacb4e72760ff8aad521b5"
   integrity sha512-LEUDjgmdJoA3LqklSTwKYqkjcZ4HKc4ddIYGSAiSkr46NTjzg2L9RNB+lekO9P7Dlpa87+hBtzc2Fzn/+GUWMQ==
 
-axe-core@^4.0.1, axe-core@^4.2.0:
-  version "4.2.2"
-  resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.2.2.tgz#0c987d82c8b82b4b9b7a945f1b5ef0d8fed586ed"
-  integrity sha512-OKRkKM4ojMEZRJ5UNJHmq9tht7cEnRnqKG6KyB/trYws00Xtkv12mHtlJ0SK7cmuNbrU8dPUova3ELTuilfBbw==
+axe-core@^4.0.1, axe-core@^4.3.2:
+  version "4.3.2"
+  resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.3.2.tgz#fcf8777b82c62cfc69c7e9f32c0d2226287680e7"
+  integrity sha512-5LMaDRWm8ZFPAEdzTYmgjjEdj1YnQcpfrVajO/sn/LhbpGp0Y0H64c2hLZI1gRMxfA+w1S71Uc/nHaOXgcCvGg==
 
 axios@^0.19.2:
   version "0.19.2"
@@ -4493,10 +4493,10 @@ eslint-plugin-vue@^7.13.0:
     semver "^7.3.2"
     vue-eslint-parser "^7.8.0"
 
-eslint-plugin-vuejs-accessibility@^0.6.1:
-  version "0.6.2"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-vuejs-accessibility/-/eslint-plugin-vuejs-accessibility-0.6.2.tgz#cb2c389d58b944388097bb01f7a9093ef91eb0e3"
-  integrity sha512-AvWOba3NvxEqTBN/NcCYKeJkmJ+66tRLihuzQaad/ay2+cf8M+R+uibyHtbHP2kz+LVnvWp6ApBIqW37MexvKA==
+eslint-plugin-vuejs-accessibility@^0.7.1:
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-vuejs-accessibility/-/eslint-plugin-vuejs-accessibility-0.7.1.tgz#490cad48e03603f1b202596814747ec66cab8275"
+  integrity sha512-Ly31g5o+bGqA1IXjL62nVgy8K0KID9lQb+CSMDO/70svDyval33jmFN6f/0pSqkisgEcspAJbYrbOCfBxUvjLg==
   dependencies:
     aria-query "^4.2.2"
     emoji-regex "^9.0.0"
