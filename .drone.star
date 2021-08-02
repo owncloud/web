@@ -727,7 +727,7 @@ def main(ctx):
     return pipelines + deploys + checkStarlark()
 
 def beforePipelines(ctx):
-    return yarnlint() + changelog(ctx) + website(ctx) + cacheOcisPipeline(ctx)
+    return yarnlint() + checkForRecentBuilds(ctx) + changelog(ctx) + website(ctx) + cacheOcisPipeline(ctx)
 
 def stagePipelines(ctx):
     unitTestPipelines = unitTests(ctx)
@@ -779,6 +779,57 @@ def yarnlint():
     pipelines.append(result)
 
     return pipelines
+
+def checkForRecentBuilds(ctx):
+    pipelines = []
+
+    result = {
+        "kind": "pipeline",
+        "type": "docker",
+        "name": "stop-recent-builds",
+        "workspace": {
+            "base": dir["base"],
+            "path": config["app"],
+        },
+        "steps": stopRecentBuilds(ctx),
+        "depends_on": [],
+        "trigger": {
+            "ref": [
+                "refs/heads/master",
+                "refs/tags/**",
+                "refs/pull/**",
+            ],
+        },
+    }
+
+    pipelines.append(result)
+
+    return pipelines
+
+def stopRecentBuilds(ctx):
+    repo_slug = ctx.build.source_repo if ctx.build.source_repo else ctx.repo.slug
+
+    return [{
+        "name": "stop-recent-builds",
+        "image": "drone/cli:alpine",
+        "pull": "always",
+        "environment": {
+            "DRONE_SERVER": "https://drone.owncloud.com",
+            "DRONE_TOKEN": {
+                "from_secret": "drone_token",
+            },
+        },
+        "commands": [
+            "drone build ls %s --status running > %s/recentBuilds.txt" % (repo_slug, dir["web"]),
+            "drone build info %s ${DRONE_BUILD_NUMBER} > %s/thisBuildInfo.txt" % (repo_slug, dir["web"]),
+            "cd %s && ./tests/acceptance/cancelBuilds.sh" % dir["web"],
+        ],
+        "when": {
+            "event": [
+                "pull_request",
+            ],
+        },
+    }]
 
 def build(ctx):
     pipelines = []
