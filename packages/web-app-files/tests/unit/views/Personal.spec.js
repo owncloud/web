@@ -1,9 +1,7 @@
 import GetTextPlugin from 'vue-gettext'
-import { mount, shallowMount } from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 import Personal from 'packages/web-app-files/src/views/Personal.vue'
-import { createStore } from 'vuex-extensions'
-import { createFile, localVue, getStore } from './views.setup'
-import Vuex from 'vuex'
+import { localVue, getStore } from './views.setup'
 import VueRouter from 'vue-router'
 
 localVue.use(GetTextPlugin, {
@@ -13,10 +11,12 @@ localVue.use(GetTextPlugin, {
 localVue.use(VueRouter)
 
 const router = new VueRouter({
-  routes: [{
-    path: '/',
-    name: 'files-personal'
-  }]
+  routes: [
+    {
+      path: '/',
+      name: 'files-personal'
+    }
+  ]
 })
 
 jest.unmock('axios')
@@ -33,9 +33,7 @@ const stubs = {
 
 const component = { ...Personal, created: jest.fn(), mounted: jest.fn() }
 
-const spyOnFileDropped = jest
-    .spyOn(Personal.methods, "fileDropped")
-    .mockImplementation()
+const spyOnFileDropped = jest.spyOn(Personal.methods, 'fileDropped').mockImplementation()
 
 const wrapper = mount(component, {
   store: getStore(),
@@ -44,7 +42,7 @@ const wrapper = mount(component, {
   stubs: stubs,
   data: () => ({
     loading: false
-  }),
+  })
 })
 
 describe('Personal component', () => {
@@ -53,7 +51,7 @@ describe('Personal component', () => {
       const ocTableFiled = wrapper.find('#files-personal-table')
       ocTableFiled.vm.$emit('fileDropped', '123')
       await wrapper.vm.$nextTick()
-      expect(spyOnFileDropped).toBeCalled();
+      expect(spyOnFileDropped).toBeCalled()
     })
   })
 })

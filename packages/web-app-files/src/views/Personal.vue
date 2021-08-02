@@ -152,12 +152,16 @@ export default {
     $route: {
       handler: function(to, from) {
         if (isNil(this.$route.params.item)) {
-          this.$router.push({
-            name: 'files-personal',
-            params: {
-              item: this.homeFolder
-            }
-          }).catch (error => { })
+          this.$router
+            .push({
+              name: 'files-personal',
+              params: {
+                item: this.homeFolder
+              }
+            })
+            .catch(error => {
+              console.log(error)
+            })
           return
         }
 
