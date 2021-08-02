@@ -1,0 +1,7 @@
+Enhancement: Add table role to version table
+
+In order to achieve better a11y we needed to adjust the role of the
+version table.
+
+https://github.com/owncloud/web/issues/5381
+https://github.com/owncloud/web/pull/5567

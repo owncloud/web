@@ -1,7 +1,7 @@
 <template>
   <div id="oc-file-versions-sidebar">
     <oc-loader v-if="loading" />
-    <oc-table-simple v-if="!loading && hasVersion">
+    <oc-table-simple v-if="!loading && hasVersion" role="presentation">
       <oc-tbody>
         <oc-tr v-for="(item, index) in versions" :key="index" class="file-row">
           <oc-td width="shrink">
