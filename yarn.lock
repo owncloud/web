@@ -4493,10 +4493,10 @@ eslint-plugin-vue@^7.13.0:
     semver "^7.3.2"
     vue-eslint-parser "^7.8.0"
 
-eslint-plugin-vuejs-accessibility@^0.6.1:
-  version "0.6.2"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-vuejs-accessibility/-/eslint-plugin-vuejs-accessibility-0.6.2.tgz#cb2c389d58b944388097bb01f7a9093ef91eb0e3"
-  integrity sha512-AvWOba3NvxEqTBN/NcCYKeJkmJ+66tRLihuzQaad/ay2+cf8M+R+uibyHtbHP2kz+LVnvWp6ApBIqW37MexvKA==
+eslint-plugin-vuejs-accessibility@^0.7.1:
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-vuejs-accessibility/-/eslint-plugin-vuejs-accessibility-0.7.1.tgz#490cad48e03603f1b202596814747ec66cab8275"
+  integrity sha512-Ly31g5o+bGqA1IXjL62nVgy8K0KID9lQb+CSMDO/70svDyval33jmFN6f/0pSqkisgEcspAJbYrbOCfBxUvjLg==
   dependencies:
     aria-query "^4.2.2"
     emoji-regex "^9.0.0"
@@ -9790,10 +9790,10 @@ rollup-plugin-ts@^1.4.0:
     ts-clone-node "^0.3.23"
     tslib "^2.2.0"
 
-rollup-plugin-visualizer@^5.5.1:
-  version "5.5.1"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-visualizer/-/rollup-plugin-visualizer-5.5.1.tgz#cba4eac48a2e3237cd172413d33976be64e54abe"
-  integrity sha512-8fqN6nYNhj8CtP+4Ca0VmaPaPSu/7DYKFMA2kOvNceMiKrwX+wStwTvW0ZEKR6SLbiT6oDbi86pDTUeREwJU6g==
+rollup-plugin-visualizer@^5.5.2:
+  version "5.5.2"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-visualizer/-/rollup-plugin-visualizer-5.5.2.tgz#ae2130ee5ae4a2d901e764e492b71357cb95eed7"
+  integrity sha512-sh+P9KhuWTzeStyRA5yNZpoEFGuj5Ph34JLMa9+muhU8CneFf9L0XE4fmAwAojJLWp//uLUEyytBPSCdZEg5AA==
   dependencies:
     nanoid "^3.1.22"
     open "^7.4.2"
