@@ -1,6 +1,5 @@
 <template>
   <div class="files-app-bar">
-    <oc-hidden-announcer :announcement="selectedResourcesAnnouncement" level="polite" />
     <file-drop
       v-if="!isIE11() && canUpload && hasFreeSpace"
       :root-path="currentPath"
@@ -18,6 +17,7 @@
         :items="breadcrumbs"
       />
       <h1 class="oc-invisible-sr" v-text="pageTitle" />
+      <oc-hidden-announcer :announcement="selectedResourcesAnnouncement" level="polite" />
       <div
         v-if="showActions || selectedFiles.length > 0 || isTrashbinRoute"
         class="uk-flex uk-flex-middle oc-p-s"
