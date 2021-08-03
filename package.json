@@ -53,7 +53,7 @@
     "@vue/test-utils": "^1.1.2",
     "archiver": "^3.0.0",
     "autoprefixer": "^10.2.4",
-    "axe-core": "^4.2.0",
+    "axe-core": "^4.3.2",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^27.0.6",
