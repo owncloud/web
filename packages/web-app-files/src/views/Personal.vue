@@ -284,7 +284,6 @@ export default {
         const resources = await this.$client.files.list(path, 1, properties)
         return resources
       } catch (error) {
-        console.log('im here')
         console.error(error)
       }
     },
