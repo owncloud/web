@@ -63,6 +63,7 @@ import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
+import { DavProperties } from 'web-pkg/src/constants'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -85,7 +86,6 @@ export default {
     ...mapState(['app']),
     ...mapState('Files', ['files']),
     ...mapGetters('Files', [
-      'davProperties',
       'highlightedFile',
       'activeFiles',
       'selectedFiles',
@@ -175,7 +175,7 @@ export default {
       this.loading = true
       this.CLEAR_CURRENT_FILES_LIST()
 
-      let resources = await this.$client.files.getFavoriteFiles(this.davProperties)
+      let resources = await this.$client.files.getFavoriteFiles(DavProperties.Default)
 
       resources = resources.map(buildResource)
       this.LOAD_FILES({ currentFolder: null, files: resources })

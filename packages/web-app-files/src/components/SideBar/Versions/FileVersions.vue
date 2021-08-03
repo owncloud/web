@@ -8,10 +8,10 @@
             <oc-icon :name="fileTypeIcon(highlightedFile)" />
           </oc-td>
           <oc-td width="shrink" class="oc-text-muted uk-text-nowrap">
-            {{ formDateFromNow(item.fileInfo['{DAV:}getlastmodified'], 'Http') }}
+            {{ formDateFromNow(item.fileInfo[DavProperty.LastModifiedDate], 'Http') }}
           </oc-td>
           <oc-td width="expand" class="oc-text-muted uk-text-nowrap">
-            {{ getResourceSize(item.fileInfo['{DAV:}getcontentlength']) }}
+            {{ getResourceSize(item.fileInfo[DavProperty.ContentLength]) }}
           </oc-td>
           <oc-td width="shrink">
             <div class="uk-button-group">
@@ -49,6 +49,7 @@
 import Mixins from '../../../mixins'
 import MixinResources from '../../../mixins/resources'
 import { mapActions, mapGetters } from 'vuex'
+import { DavProperty } from 'web-pkg/src/constants'
 
 export default {
   mixins: [Mixins, MixinResources],
@@ -56,7 +57,8 @@ export default {
     return $gettext('Versions')
   },
   data: () => ({
-    loading: false
+    loading: false,
+    DavProperty
   }),
   computed: {
     ...mapGetters('Files', ['highlightedFile', 'versions']),
