@@ -190,14 +190,20 @@ export default {
 <style lang="scss">
 #oc-files-context-actions {
   text-align: left;
+  white-space: normal;
 
-  > li a,
-  > li a:hover {
-    text-decoration: none;
-    color: var(--oc-color-swatch-passive-default);
-    display: inline-flex;
-    gap: 10px;
-    vertical-align: top;
+  > li {
+    a,
+    a:hover,
+    button,
+    button:hover {
+      text-decoration: none;
+      text-align: left;
+      color: var(--oc-color-swatch-passive-default);
+      display: inline-flex;
+      gap: 10px;
+      vertical-align: top;
+    }
   }
 }
 </style>
