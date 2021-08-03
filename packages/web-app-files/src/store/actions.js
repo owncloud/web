@@ -122,43 +122,6 @@ export default {
       })
     }
   },
-  searchForFile(context, payload) {
-    context.commit('UPDATE_CURRENT_PAGE', 1)
-
-    return new Promise(function(resolve, reject) {
-      const client = payload.client
-      const searchTerm = payload.searchTerm
-      context.commit('SET_SEARCH_TERM', searchTerm)
-      // TODO respect user selected listSize from state.config
-      // do not search for empty strings
-      if (!searchTerm) return
-      client.files
-        .search(searchTerm, null, context.state.davProperties)
-        .then(filesSearched => {
-          filesSearched = filesSearched.map(f => {
-            return buildResource(f)
-          })
-          context.commit('LOAD_FILES_SEARCHED', filesSearched)
-          resolve(filesSearched)
-        })
-        .catch(error => {
-          // TODO notification missing
-          context.dispatch(
-            'showMessage',
-            {
-              title: this.$gettext('Error while searching.'),
-              desc: error.message,
-              status: 'danger',
-              autoClose: {
-                enabled: true
-              }
-            },
-            { root: true }
-          )
-          reject(error)
-        })
-    })
-  },
   loadCurrentFileOutgoingShares(context, { client, path }) {
     context.commit('CURRENT_FILE_OUTGOING_SHARES_SET', [])
     context.commit('CURRENT_FILE_OUTGOING_SHARES_ERROR', null)
@@ -335,10 +298,6 @@ export default {
       .catch(e => {
         console.log(e)
       })
-  },
-  resetSearch({ commit }) {
-    commit('SET_SEARCH_TERM', '')
-    commit('UPDATE_CURRENT_PAGE', 1)
   },
   /**
    * Prune all branches of the shares tree that are

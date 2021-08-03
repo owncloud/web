@@ -18,9 +18,9 @@ Feature: User can open the details panel for any file or folder
     Then the app-sidebar should be visible
     And the thumbnail should be visible in the app-sidebar
     And the "details" details panel should be visible
-    When the user switches to "actions" accordion item in details panel using the webUI
+    When the user switches to "actions" panel in details panel using the webUI
     And the "actions" details panel should be visible
-    When the user switches to "people" accordion item in details panel using the webUI
+    When the user switches to "people" panel in details panel using the webUI
     Then the "people" details panel should be visible
 
   @files_versions-app-required
@@ -31,11 +31,11 @@ Feature: User can open the details panel for any file or folder
     Then the app-sidebar should be visible
     And the thumbnail should be visible in the app-sidebar
     And the "details" details panel should be visible
-    When the user switches to "actions" accordion item in details panel using the webUI
+    When the user switches to "actions" panel in details panel using the webUI
     And the "actions" details panel should be visible
-    When the user switches to "people" accordion item in details panel using the webUI
+    When the user switches to "people" panel in details panel using the webUI
     Then the "people" details panel should be visible
-    When the user switches to "links" accordion item in details panel using the webUI
+    When the user switches to "links" panel in details panel using the webUI
     Then the "links" details panel should be visible
 
   @files_versions-app-required @ocis-reva-issue-39
@@ -48,9 +48,9 @@ Feature: User can open the details panel for any file or folder
     Then the app-sidebar should be visible
     And the thumbnail should be visible in the app-sidebar
     And the "details" details panel should be visible
-    When the user switches to "actions" accordion item in details panel using the webUI
+    When the user switches to "actions" panel in details panel using the webUI
     And the "actions" details panel should be visible
-    When the user switches to "people" accordion item in details panel using the webUI
+    When the user switches to "people" panel in details panel using the webUI
     Then the "people" details panel should be visible
 
   @files_versions-app-required @ocis-reva-issue-39
@@ -63,11 +63,11 @@ Feature: User can open the details panel for any file or folder
     Then the app-sidebar should be visible
     And the thumbnail should be visible in the app-sidebar
     And the "details" details panel should be visible
-    When the user switches to "actions" accordion item in details panel using the webUI
+    When the user switches to "actions" panel in details panel using the webUI
     And the "actions" details panel should be visible
-    When the user switches to "people" accordion item in details panel using the webUI
+    When the user switches to "people" panel in details panel using the webUI
     Then the "people" details panel should be visible
-    When the user switches to "links" accordion item in details panel using the webUI
+    When the user switches to "links" panel in details panel using the webUI
     Then the "links" details panel should be visible
 
   @issue-1158 @comments-app-required @public_link_share-feature-required
@@ -79,11 +79,11 @@ Feature: User can open the details panel for any file or folder
     And the user has browsed to the shared-via-link page
     When the user opens the file action menu of folder "simple-folder" using the webUI
     Then the thumbnail should be visible in the app-sidebar
-    When the user switches to "people" accordion item in details panel using the webUI
+    When the user switches to "people" panel in details panel using the webUI
     Then the "people" details panel should be visible
-    When the user switches to "links" accordion item in details panel using the webUI
+    When the user switches to "links" panel in details panel using the webUI
     Then the "links" details panel should be visible
-    When the user switches to "comments" accordion item in details panel using the webUI
+    When the user switches to "comments" panel in details panel using the webUI
     Then the "comments" details panel should be visible
 
   @issue-1158 @comments-app-required
@@ -96,11 +96,11 @@ Feature: User can open the details panel for any file or folder
     When the user picks the row of folder "simple-folder" on the webUI
     Then the app-sidebar should be visible
     And the thumbnail should be visible in the app-sidebar
-    When the user switches to "people" accordion item in details panel using the webUI
+    When the user switches to "people" panel in details panel using the webUI
     Then the "people" details panel should be visible
-    When the user switches to "comments" accordion item in details panel using the webUI
+    When the user switches to "comments" panel in details panel using the webUI
     Then the "comments" details panel should be visible
-    When the user switches to "links" accordion item in details panel using the webUI
+    When the user switches to "links" panel in details panel using the webUI
     Then the "links" details panel should be visible
 
   @issue-1158 @comments-app-required
@@ -113,11 +113,11 @@ Feature: User can open the details panel for any file or folder
     When the user picks the row of folder "simple-folder" on the webUI
     Then the app-sidebar should be visible
     And the thumbnail should be visible in the app-sidebar
-    When the user switches to "people" accordion item in details panel using the webUI
+    When the user switches to "people" panel in details panel using the webUI
     Then the "people" details panel should be visible
-    When the user switches to "comments" accordion item in details panel using the webUI
+    When the user switches to "comments" panel in details panel using the webUI
     Then the "comments" details panel should be visible
-    When the user switches to "links" accordion item in details panel using the webUI
+    When the user switches to "links" panel in details panel using the webUI
     Then the "links" details panel should be visible
 
   @issue-1158 @comments-app-required
@@ -131,11 +131,11 @@ Feature: User can open the details panel for any file or folder
     When the user picks the row of folder "simple-folder" on the webUI
     Then the app-sidebar should be visible
     And the thumbnail should be visible in the app-sidebar
-    When the user switches to "people" accordion item in details panel using the webUI
+    When the user switches to "people" panel in details panel using the webUI
     Then the "people" details panel should be visible
-    When the user switches to "comments" accordion item in details panel using the webUI
+    When the user switches to "comments" panel in details panel using the webUI
     Then the "comments" details panel should be visible
-    When the user switches to "links" accordion item in details panel using the webUI
+    When the user switches to "links" panel in details panel using the webUI
     Then the "links" details panel should be visible
 
   @ocis-reva-issue-106
@@ -158,13 +158,13 @@ Feature: User can open the details panel for any file or folder
     Then folder "simple-folder" should be listed on the webUI
     When the user opens the file action menu of folder "simple-folder" using the webUI
     Then the thumbnail should be visible in the app-sidebar
-    When the user switches to "people" accordion item in details panel using the webUI
+    When the user switches to "people" panel in details panel using the webUI
     Then the "people" details panel should be visible
-    When the user switches to "links" accordion item in details panel using the webUI
+    When the user switches to "links" panel in details panel using the webUI
     Then the "links" details panel should be visible
-    When the user switches to "versions" accordion item in details panel using the webUI
+    When the user switches to "versions" panel in details panel using the webUI
     Then the "versions" details panel should be visible
-    When the user switches to "comments" accordion item in details panel using the webUI
+    When the user switches to "comments" panel in details panel using the webUI
     Then the "comments" details panel should be visible
 
 

@@ -1,9 +1,9 @@
 <template>
   <div id="oc-files-file-link" class="uk-position-relative">
     <div
-      v-show="appSidebarAccordionContext === PANEL_SHOW"
-      :key="PANEL_SHOW"
-      :aria-hidden="appSidebarAccordionContext !== PANEL_SHOW"
+      v-show="currentView === VIEW_SHOW"
+      :key="VIEW_SHOW"
+      :aria-hidden="currentView !== VIEW_SHOW"
     >
       <oc-loader v-if="linksLoading" :aria-label="$gettext('Loading list of file links')" />
       <template v-else>
@@ -52,7 +52,7 @@
         </p>
       </template>
     </div>
-    <div v-if="appSidebarAccordionContext === PANEL_EDIT" :key="PANEL_EDIT">
+    <div v-if="currentView === VIEW_EDIT" :key="VIEW_EDIT">
       <transition
         enter-active-class="uk-animation-slide-right uk-animation-fast"
         leave-active-class="uk-animation-slide-right uk-animation-reverse uk-animation-fast"
@@ -76,8 +76,8 @@ import LinkEdit from './PublicLinks/LinkEdit.vue'
 import ListItem from './PublicLinks/ListItem.vue'
 import PrivateLinkItem from './PrivateLinkItem.vue'
 
-const PANEL_SHOW = 'showLinks'
-const PANEL_EDIT = 'editPublicLink'
+const VIEW_SHOW = 'showLinks'
+const VIEW_EDIT = 'editPublicLink'
 
 export default {
   components: {
@@ -89,11 +89,16 @@ export default {
   title: $gettext => {
     return $gettext('Links')
   },
+  provide() {
+    return {
+      changeView: view => (this.$data.currentView = view)
+    }
+  },
   data() {
     return {
-      // panel types
-      PANEL_SHOW: PANEL_SHOW,
-      PANEL_EDIT: PANEL_EDIT
+      VIEW_SHOW,
+      VIEW_EDIT,
+      currentView: VIEW_SHOW
     }
   },
   computed: {
@@ -103,8 +108,8 @@ export default {
       'currentFileOutgoingSharesLoading',
       'sharesTreeLoading'
     ]),
-    ...mapGetters(['getToken', 'capabilities', 'configuration']),
-    ...mapState('Files', ['sharesTree', 'appSidebarAccordionContext']),
+    ...mapGetters(['capabilities']),
+    ...mapState('Files', ['sharesTree']),
 
     $_transitionGroupEnter() {
       return 'uk-animation-slide-left-medium'
@@ -179,9 +184,6 @@ export default {
     },
     $_addButtonAriaLabel() {
       return this.$gettext('Create new public link')
-    },
-    currentPanel() {
-      return this.appSidebarAccordionContext || PANEL_SHOW
     }
   },
   watch: {
@@ -195,16 +197,12 @@ export default {
     this.$_reloadLinks()
   },
 
-  beforeDestroy() {
-    this.SET_APP_SIDEBAR_ACCORDION_CONTEXT(null)
-  },
-
   methods: {
     ...mapActions('Files', ['loadSharesTree', 'loadCurrentFileOutgoingShares']),
-    ...mapMutations('Files', ['TRIGGER_PUBLIC_LINK_CREATE', 'SET_APP_SIDEBAR_ACCORDION_CONTEXT']),
+    ...mapMutations('Files', ['TRIGGER_PUBLIC_LINK_CREATE']),
 
     $_showList() {
-      this.SET_APP_SIDEBAR_ACCORDION_CONTEXT(PANEL_SHOW)
+      this.currentView = VIEW_SHOW
     },
     $_reloadLinks() {
       this.$_showList()
@@ -247,6 +245,8 @@ export default {
               .toISO()
           : null
       })
+
+      this.currentView = VIEW_EDIT
     }
   }
 }

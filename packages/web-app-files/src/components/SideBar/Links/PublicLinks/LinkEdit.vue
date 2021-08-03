@@ -11,7 +11,12 @@
         </oc-alert>
       </transition>
       <div class="oc-mb">
-        <oc-text-input id="oc-files-file-link-name" v-model="name" :label="$gettext('Name')" />
+        <oc-text-input
+          id="oc-files-file-link-name"
+          ref="nameInput"
+          v-model="name"
+          :label="$gettext('Name')"
+        />
       </div>
       <translate tag="label" for="files-file-link-role-button" class="oc-label">
         Role
@@ -137,13 +142,14 @@ import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import mixins from '../../../../mixins'
 import { DateTime } from 'luxon'
 import publicLinkRoles from '../../../../helpers/publicLinkRolesDefinition'
-import RoleItem from '../../RoleItem.vue'
+import RoleItem from '../../Shared/RoleItem.vue'
 
 export default {
   components: {
     RoleItem
   },
   mixins: [mixins],
+  inject: ['changeView'],
   data() {
     return {
       saving: false,
@@ -294,6 +300,11 @@ export default {
 
     this.setRole()
   },
+  mounted() {
+    this.$nextTick(() => {
+      this.$refs.nameInput.focus()
+    })
+  },
   methods: {
     ...mapActions('Files', ['addLink', 'updateLink']),
     ...mapMutations('Files', ['SET_APP_SIDEBAR_ACCORDION_CONTEXT']),
@@ -375,7 +386,7 @@ export default {
     },
 
     $_closeForm() {
-      this.SET_APP_SIDEBAR_ACCORDION_CONTEXT('showLinks')
+      this.changeView('showLinks')
     },
 
     removePassword: function() {

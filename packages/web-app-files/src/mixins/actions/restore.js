@@ -1,6 +1,6 @@
 import { mapActions } from 'vuex'
 
-import { checkRoute } from '../../helpers/route'
+import { isTrashbinRoute } from '../../helpers/route'
 
 export default {
   computed: {
@@ -10,9 +10,9 @@ export default {
           icon: 'restore',
           label: () => this.$gettext('Restore'),
           handler: this.$_restore_trigger,
-          isEnabled: () => checkRoute(['files-trashbin'], this.$route.name),
+          isEnabled: () => isTrashbinRoute(this.$route),
           componentType: 'oc-button',
-          class: 'oc-files-actions-sidebar-restore-trigger'
+          class: 'oc-files-actions-restore-trigger'
         }
       ]
     }

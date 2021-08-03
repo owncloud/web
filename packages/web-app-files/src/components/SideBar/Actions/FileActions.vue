@@ -1,5 +1,5 @@
 <template>
-  <ul id="oc-files-actions-sidebar" class="uk-list oc-mt-s oc-files-actions-sidebar-actions">
+  <ul id="oc-files-actions-sidebar" class="uk-list oc-mt-s">
     <li v-for="(action, index) in actions" :key="`action-${index}`" class="oc-py-xs">
       <component
         :is="action.componentType"
@@ -68,7 +68,7 @@ export default {
 </script>
 
 <style lang="scss">
-.oc-files-actions-sidebar-actions {
+#oc-files-actions-sidebar {
   > li a,
   > li a:hover {
     text-decoration: none;

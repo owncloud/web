@@ -1,5 +1,5 @@
 <template>
-  <div id="oc-notification">
+  <div id="oc-notification" class="uk-flex uk-flex-middle">
     <oc-button
       id="oc-notification-bell"
       v-oc-tooltip="notificationsLabel"

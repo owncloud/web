@@ -1,0 +1,35 @@
+{
+  "server" : "http://host.docker.internal:8080",
+  "auth": {
+    "clientId": "M8W5mo3wQV3VHWYsaYpWhkr8dwa949i4GljCkedHhl7GWqmHMkxSeJgK2PcS0jt5",
+    "url": "http://host.docker.internal:8080/index.php/apps/oauth2/api/v1/token",
+    "authUrl": "http://host.docker.internal:8080/index.php/apps/oauth2/authorize"
+  },
+  "apps": [
+    "files",
+    "media-viewer",
+    "search"
+  ],
+  "applications" : [
+    {
+      "title": {
+        "en": "Classic Design",
+        "de": "Dateien",
+        "fr": "Fichiers",
+        "zh_CN": "文件"
+      },
+      "icon": "switch_ui",
+      "url": "http://host.docker.internal:8080/index.php/apps/files"
+    },
+    {
+      "icon": "application",
+      "menu": "user",
+      "target": "_self",
+      "title": {
+        "de": "Einstellungen",
+        "en": "Settings"
+      },
+      "url": "http://host.docker.internal:8080/index.php/settings/personal"
+    }
+  ]
+}

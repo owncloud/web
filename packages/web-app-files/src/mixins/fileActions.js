@@ -83,7 +83,7 @@ export default {
           },
           canBeDefault: true,
           componentType: 'oc-button',
-          class: `oc-files-actions-sidebar-${kebabCase(
+          class: `oc-files-actions-${kebabCase(
             this.apps.meta[editor.app].name
           ).toLowerCase()}-trigger`
         }

@@ -6,9 +6,9 @@ function $gettext(msg) {
   return msg
 }
 
-function createPublicLink(ctx) {
+export function createPublicLink(ctx) {
   // FIXME: Translate name
-  const params = { name: 'Quick action link', permissions: 1 }
+  const params = { name: $gettext('Quick action link'), permissions: 1 }
   const capabilities = ctx.store.state.user.capabilities
   const expirationDate = capabilities.files_sharing.public.expire_date
 
@@ -24,6 +24,7 @@ function createPublicLink(ctx) {
       ctx.store
         .dispatch('Files/addLink', { path: ctx.item.path, client: ctx.client, params })
         .then(link => {
+          ctx.store.commit('Files/SET_APP_SIDEBAR_ACTIVE_PANEL', 'links-item')
           copyToClipboard(link.url)
           ctx.store.dispatch('showMessage', {
             title: $gettext('Public link created'),
@@ -44,18 +45,12 @@ function createPublicLink(ctx) {
   })
 }
 
-function openNewCollaboratorsPanel(ctx) {
+export function openNewCollaboratorsPanel(ctx) {
   ctx.store.dispatch('Files/setHighlightedFile', ctx.item)
-
-  // Workaround for displaying the new collaborators panel even when one is already opened
-  // Creating timeout takes care of the event loop
-  setTimeout(() => {
-    ctx.store.commit('Files/SET_APP_SIDEBAR_EXPANDED_ACCORDION', 'sharing-item')
-    ctx.store.commit('Files/SET_APP_SIDEBAR_ACCORDION_CONTEXT', 'newCollaborator')
-  })
+  ctx.store.commit('Files/SET_APP_SIDEBAR_ACTIVE_PANEL', 'sharing-item')
 }
 
-function canShare(item, store) {
+export function canShare(item, store) {
   return (
     store.state.user.capabilities.files_sharing &&
     store.state.user.capabilities.files_sharing.api_enabled &&

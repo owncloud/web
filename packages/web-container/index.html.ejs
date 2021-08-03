@@ -5,7 +5,7 @@
     <meta<%- helpers.makeHtmlAttributes(m) %>>
   <% }); %>
   <title><%= data.title %></title>
-  <link rel="manifest" href="manifest.json">
+  <link rel="manifest" href="manifest.json" crossorigin="use-credentials">
   <% Object.keys(data.bundle.css).forEach((s) => { %>
     <link href="<%- data.bundle.css[s] %>" rel="stylesheet">
   <% }); %>

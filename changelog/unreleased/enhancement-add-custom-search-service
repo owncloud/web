@@ -1,0 +1,7 @@
+Enhancement: Add custom search service
+
+We've added `search` as another core app that can be utilized by 
+other (third-party) frontend extensions to provide 
+filter and search functionality.
+
+https://github.com/owncloud/web/pull/5415

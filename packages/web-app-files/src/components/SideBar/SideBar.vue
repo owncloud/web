@@ -1,125 +1,128 @@
 <template>
-  <oc-app-side-bar
-    :key="highlightedFile.id"
+  <div
+    v-if="highlightedFile"
     v-click-outside="onClickOutside"
-    class="files-sidebar oc-px-s oc-border-l"
-    :disable-action="false"
-    :close-button-label="$gettext('Close file sidebar')"
-    @close="close()"
+    :class="{
+      'has-active': !!appSidebarActivePanel
+    }"
   >
-    <template v-if="highlightedFile" slot="title">
-      <div class="uk-inline">
-        <oc-icon :name="highlightedFile.icon" size="xlarge" />
-      </div>
-      <div class="uk-inline">
-        <div class="uk-flex uk-flex-middle">
-          <h2
-            id="files-sidebar-item-name"
-            class="oc-text-initial oc-mr-s oc-text-bold uk-margin-remove"
-            tabindex="-1"
-            v-text="highlightedFile.name"
-          />
-        </div>
-        <div class="uk-flex uk-flex-middle">
-          <oc-button
-            v-if="!publicPage() && isFavoritesEnabled"
-            id="files-sidebar-star-icon"
-            :aria-label="
-              highlightedFile.starred
-                ? $gettext('Click to remove this file from your favorites')
-                : $gettext('Click to mark this file as favorite')
-            "
-            appearance="raw"
-            class="oc-mr-xs"
-            @click.native.stop="toggleFileFavorite(highlightedFile)"
-          >
-            <oc-icon :class="favoriteIconClass" name="star" />
-          </oc-button>
-          <template v-if="highlightedFile.size > -1">
-            {{ getResourceSize(highlightedFile.size) }},
-          </template>
-          {{ modificationTime }}
-        </div>
-      </div>
-    </template>
-    <template slot="content">
-      <oc-accordion
-        v-if="isContentDisplayed"
-        key="sidebar-accordions"
-        class="oc-mt-m"
-        :expand-first="true"
-        :expanded-id="expandedAccordionId"
-        mode="data"
-        @expand="expandAccordion"
-        @collapse="expandAccordion(null)"
-      >
-        <oc-accordion-item
-          v-for="accordion in accordions"
-          :id="buildAppSidebarId(accordion.app)"
-          :key="accordion.app"
-          :title="accordion.component.title($gettext)"
-          :icon="accordion.icon"
+    <div
+      v-for="panelMeta in panelMetas"
+      :id="`sidebar-panel-${panelMeta.app}`"
+      :key="`panel-${panelMeta.app}`"
+      ref="panels"
+      :tabindex="appSidebarActivePanel === panelMeta.app ? -1 : false"
+      class="sidebar-panel"
+      :class="{
+        'is-active':
+          appSidebarActivePanel === panelMeta.app || (!appSidebarActivePanel && panelMeta.default),
+        'sidebar-panel--default': panelMeta.default
+      }"
+    >
+      <div class="sidebar-panel__header header">
+        <oc-button
+          v-if="!panelMeta.default"
+          class="header__back"
+          appearance="raw"
+          :aria-label="accessibleLabelBack"
+          @click="closePanel"
         >
-          <component :is="accordion.component" class="oc-px" />
-        </oc-accordion-item>
-      </oc-accordion>
-      <p
-        v-else
-        key="sidebar-warning-message"
-        class="oc-mt"
-        v-text="sidebarAccordionsWarningMessage"
-      />
-    </template>
-  </oc-app-side-bar>
+          <oc-icon name="chevron_left" />
+          {{ defaultPanelMeta.component.title($gettext) }}
+        </oc-button>
+
+        <div class="header__title">
+          {{ panelMeta.component.title($gettext) }}
+        </div>
+
+        <oc-button
+          appearance="raw"
+          class="header__close"
+          :aria-label="$gettext('Close file sidebar')"
+          @click="close"
+        >
+          <oc-icon name="close" />
+        </oc-button>
+      </div>
+      <file-info class="sidebar-panel__file_info" :is-content-displayed="isContentDisplayed" />
+      <div class="sidebar-panel__body">
+        <template v-if="isContentDisplayed">
+          <component :is="panelMeta.component" v-if="openedPanels.includes(panelMeta.app)" />
+
+          <div v-if="panelMeta.default && panelMetas.length > 1" class="sidebar-panel__navigation">
+            <oc-button
+              v-for="panelSelect in panelMetas.filter(p => !p.default)"
+              :id="`sidebar-panel-${panelSelect.app}-select`"
+              :key="`panel-select-${panelSelect.app}`"
+              appearance="raw"
+              @click="openPanel(panelSelect.app)"
+            >
+              <oc-icon :name="panelSelect.icon" />
+              {{ panelSelect.component.title($gettext) }}
+              <oc-icon name="chevron_right" />
+            </oc-button>
+          </div>
+        </template>
+        <p v-else>{{ sidebarAccordionsWarningMessage }}</p>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-import Mixins from '../../mixins'
-import MixinResources from '../../mixins/resources'
+import { mapGetters, mapMutations, mapState } from 'vuex'
+import FileInfo from './FileInfo.vue'
 import MixinRoutes from '../../mixins/routes'
-import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
+import { VisibilityObserver } from 'web-pkg/src/observer'
+import { cloneStateObject } from '../../helpers/store'
+
+let visibilityObserver
 
 export default {
-  mixins: [Mixins, MixinResources, MixinRoutes],
+  components: { FileInfo },
+  mixins: [MixinRoutes],
+  data() {
+    return {
+      focused: undefined,
+      openedPanels: [] // Array since default panel is always opened
+    }
+  },
   computed: {
-    ...mapGetters(['fileSideBars', 'capabilities']),
     ...mapGetters('Files', ['highlightedFile']),
-    ...mapState('Files', ['appSidebarExpandedAccordion']),
+    ...mapGetters(['fileSideBars', 'capabilities']),
+    ...mapState('Files', ['appSidebarActivePanel']),
+    panelMetas() {
+      const { panels } = this.fileSideBars.reduce(
+        (result, panelGenerator) => {
+          const panel = panelGenerator({
+            capabilities: this.capabilities,
+            highlightedFile: this.highlightedFile,
+            route: this.$route
+          })
 
-    accordions() {
-      if (this.isTrashbinRoute) {
-        return [this.fileSideBars.find(bar => bar.app === 'actions-item')]
-      }
+          if (panel.enabled) {
+            result.panels.push(panel)
+          }
 
-      return this.fileSideBars.filter(b => b.enabled(this.capabilities, this.highlightedFile))
-    },
-
-    isFavoritesEnabled() {
-      return (
-        this.capabilities.files &&
-        this.capabilities.files.favorites &&
-        this.isContentDisplayed &&
-        !this.isAnySharedWithRoute &&
-        !this.isTrashbinRoute
+          return result
+        },
+        { panels: [] }
       )
+
+      return panels
     },
-
-    expandedAccordionId() {
-      return this.buildAppSidebarId(this.appSidebarExpandedAccordion)
+    defaultPanelMeta() {
+      return this.panelMetas.find(panel => panel.default)
     },
-
-    modificationTime() {
-      if (this.isTrashbinRoute) {
-        return this.formDateFromNow(this.highlightedFile.ddate, 'RFC')
-      }
-
-      return this.formDateFromNow(this.highlightedFile.mdate, 'Http')
+    accessibleLabelBack() {
+      const translated = this.$gettext('Back to %{panel} panel')
+      return this.$gettextInterpolate(translated, {
+        panel: this.defaultPanelMeta.component.title(this.$gettext)
+      })
     },
-
     isShareAccepted() {
       return this.highlightedFile.status === 0
     },
-
     isContentDisplayed() {
       if (this.isSharedWithMeRoute) {
         return this.isShareAccepted
@@ -127,72 +130,59 @@ export default {
 
       return true
     },
-
     sidebarAccordionsWarningMessage() {
       if (!this.isShareAccepted) {
         return this.$gettext('Please, accept this share first to display available actions')
       }
 
       return null
-    },
-
-    favoriteIconClass() {
-      return this.highlightedFile.starred ? 'oc-star-shining' : 'oc-star-dimm'
     }
   },
-
   watch: {
-    highlightedFile: function() {
-      if (this.expandedAccordionId === null) {
-        this.expandFirstAccordion()
-      }
-      this.$nextTick(() => this.$emit('fileChanged', this, 'fileChanged'))
+    appSidebarActivePanel(panel, select) {
+      this.focused = panel ? `#sidebar-panel-${panel}` : `#sidebar-panel-select-${select}`
     }
   },
-
   beforeDestroy() {
-    this.SET_APP_SIDEBAR_EXPANDED_ACCORDION(null)
+    visibilityObserver.disconnect()
+  },
+  mounted() {
+    visibilityObserver = new VisibilityObserver({
+      root: document.querySelector('#files-sidebar'),
+      threshold: 0.9
+    })
+
+    const doFocus = () => {
+      const selector = document.querySelector(this.focused)
+
+      if (!selector) {
+        return
+      }
+
+      selector.focus()
+    }
+
+    this.$refs.panels.forEach(panel => {
+      visibilityObserver.observe(panel, {
+        onEnter: doFocus,
+        onExit: doFocus
+      })
+    })
   },
 
-  mounted() {
-    if (this.expandedAccordionId === null) {
-      this.expandFirstAccordion()
+  created() {
+    this.openedPanels.push(this.defaultPanelMeta.app)
+
+    if (this.appSidebarActivePanel) {
+      this.openedPanels.push(this.appSidebarActivePanel)
     }
   },
 
   methods: {
-    ...mapActions('Files', ['markFavorite']),
-    ...mapMutations('Files', ['SET_APP_SIDEBAR_EXPANDED_ACCORDION']),
-
+    ...mapMutations('Files', ['SET_APP_SIDEBAR_ACTIVE_PANEL']),
     close() {
       this.$emit('reset')
     },
-
-    toggleFileFavorite(file) {
-      this.markFavorite({
-        client: this.$client,
-        file: file
-      })
-    },
-
-    buildAppSidebarId(accordion) {
-      if (accordion) {
-        return `app-sidebar-${accordion}`
-      }
-      return null
-    },
-
-    expandAccordion(accordion) {
-      this.SET_APP_SIDEBAR_EXPANDED_ACCORDION(
-        accordion ? accordion.replace('app-sidebar-', '') : null
-      )
-    },
-
-    expandFirstAccordion() {
-      const firstAccordion = this.accordions[0]
-      this.SET_APP_SIDEBAR_EXPANDED_ACCORDION(firstAccordion.app)
-    },
-
     onClickOutside(event) {
       /*
        * We need to go for this opt-out solution because under circumstances a modal will be rendered,
@@ -207,22 +197,144 @@ export default {
       ) {
         this.close()
       }
+    },
+
+    openPanel(panel) {
+      this.SET_APP_SIDEBAR_ACTIVE_PANEL(panel)
+
+      if (!this.openedPanels.includes(panel)) {
+        this.openedPanels.push(panel)
+      }
+    },
+
+    closePanel() {
+      const activePanel = cloneStateObject(this.appSidebarActivePanel)
+
+      this.SET_APP_SIDEBAR_ACTIVE_PANEL(null)
+
+      setTimeout(() => {
+        const index = this.openedPanels.indexOf(activePanel)
+
+        if (index > -1) {
+          this.openedPanels.splice(index, 1)
+        }
+      }, 400)
     }
   }
 }
 </script>
 
 <style lang="scss">
-.files-sidebar {
-  background-color: var(--oc-color-background-default);
-  z-index: 1;
+#files-sidebar {
+  border-left: 1px solid var(--oc-color-border);
 }
 
-.oc-star {
-  &-shining svg {
-    fill: #ffba0a !important;
-    path:not([fill='none']) {
-      stroke: var(--oc-color-swatch-passive-default);
+.sidebar-panel {
+  $root: &;
+  overflow: hidden;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  max-height: 100%;
+  display: grid;
+  grid-template-rows: 50px 70px 1fr;
+  background-color: var(--oc-color-background-default);
+  top: 0;
+  position: absolute;
+  transform: translateX(100%);
+  transition: transform 0.4s ease, visibility 0.4s 0s;
+  // visibility is here to prevent focusing panel child elements,
+  // the transition delay keeps care that it will only apply if the element is visible or not.
+  // hidden: if element is off screen
+  // visible: if element is on screen
+  visibility: hidden;
+
+  @media screen and (prefers-reduced-motion: reduce), (update: slow) {
+    transition-duration: 0.001ms !important;
+  }
+
+  &--default {
+    #files-sidebar.has-active & {
+      transform: translateX(-30%);
+      visibility: hidden;
+    }
+  }
+
+  &--default,
+  &.is-active {
+    visibility: unset;
+    transform: translateX(0);
+  }
+
+  &__header {
+    padding: 0 10px;
+
+    &.header {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+    }
+
+    & .header {
+      &__back {
+        grid-column-start: 1;
+      }
+
+      &__title {
+        text-align: center;
+        color: var(--oc-color-text-default);
+        font-size: 1.2rem;
+        grid-column-start: 2;
+      }
+
+      &__close {
+        grid-column-start: 3;
+      }
+    }
+  }
+
+  &__file_info {
+    border-top: 1px solid var(--oc-color-border);
+    border-bottom: 1px solid var(--oc-color-border);
+    background-color: var(--oc-color-background-default);
+    padding: 0 10px;
+  }
+
+  &__body {
+    overflow-y: auto;
+    padding: 10px;
+  }
+
+  &__navigation {
+    margin: 10px -10px -10px;
+
+    > button {
+      border-bottom: 1px solid var(--oc-color-border);
+      width: 100%;
+      border-radius: 0;
+      color: var(--oc-color-text-default) !important;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      text-align: left;
+      height: 50px;
+      padding: 0 10px;
+
+      &:first-of-type {
+        border-top: 1px solid var(--oc-color-border);
+      }
+
+      &:last-of-type {
+        border-bottom: 0;
+      }
+
+      &:hover,
+      &:focus {
+        border-color: var(--oc-color-border) !important;
+      }
+
+      &:hover {
+        background-color: var(--oc-color-background-muted) !important;
+      }
     }
   }
 }

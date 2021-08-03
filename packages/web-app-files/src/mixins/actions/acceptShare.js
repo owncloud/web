@@ -23,7 +23,7 @@ export default {
             return [shareStatus.pending, shareStatus.declined].includes(resource.status)
           },
           componentType: 'oc-button',
-          class: 'oc-files-actions-sidebar-accept-share-trigger'
+          class: 'oc-files-actions-accept-share-trigger'
         }
       ]
     }

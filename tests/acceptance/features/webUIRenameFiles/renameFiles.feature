@@ -105,9 +105,9 @@ Feature: rename files
     Then file "loremz.dat" should be listed on the webUI
     And file "loremy.tad" should be listed on the webUI
 
-  @notToImplementOnOCIS
-  # these are valid file names for ocis
-  Scenario Outline: Rename a file using forbidden characters (on oc10)
+
+  # these are invalid file names on all implementations
+  Scenario Outline: Try to rename a file using forbidden characters
     When the user tries to rename file "data.zip" to "<filename>" using the webUI
     Then the error message with header 'Error while renaming "data.zip" to "<filename>"' should be displayed on the webUI
     And file "data.zip" should be listed on the webUI
@@ -116,18 +116,21 @@ Feature: rename files
       | filename  |
       | lorem\txt |
       | \\.txt    |
-      | .htaccess |
+
+  @notToImplementOnOCIS
+  # .htaccess is an invalid file name on oC10
+  Scenario: Try to rename a file to .htaccess on oC10
+    When the user tries to rename file "data.zip" to ".htaccess" using the webUI
+    Then the error message with header 'Error while renaming "data.zip" to ".htaccess"' should be displayed on the webUI
+    And file "data.zip" should be listed on the webUI
+    And file "<filename>" should not be listed on the webUI
 
   @skipOnOC10
-  Scenario Outline: Rename a file using forbidden characters (on ocis)
-    When the user renames file "data.zip" to "<filename>" using the webUI
+  # .htaccess is a valid file name on OCIS
+  Scenario: Rename a file to .htaccess on OCIS
+    When the user renames file "data.zip" to ".htaccess" using the webUI
     Then file "data.zip" should not be listed on the webUI
-    And file "<filename>" should be listed on the webUI
-    Examples:
-      | filename  |
-      | lorem\txt |
-      | \\.txt    |
-      | .htaccess |
+    And file ".htaccess" should be listed on the webUI
 
   Scenario Outline: Rename a file/folder using forward slash in its name
     When the user tries to rename file "<from_file_name>" to "<to_file_name>" using the webUI

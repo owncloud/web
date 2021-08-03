@@ -139,8 +139,8 @@ config = {
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
                 "WEB_UI_CONFIG": "%s/dist/config.json" % dir["web"],
             },
-            "visualTesting": True,
-            "screenShots": True,
+            "visualTesting": False,
+            "screenShots": False,
         },
         "webUINotification": {
             "type": NOTIFICATIONS,
@@ -157,8 +157,8 @@ config = {
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
                 "WEB_UI_CONFIG": "%s/dist/config.json" % dir["web"],
             },
-            "visualTesting": True,
-            "screenShots": True,
+            "visualTesting": False,
+            "screenShots": False,
             "notificationsAppNeeded": True,
         },
         "webUIFederation": {
@@ -460,11 +460,11 @@ config = {
                 "RUN_ON_OCIS": "true",
                 "TESTING_DATA_DIR": "/srv/app/testing/data/",
                 "OCIS_REVA_DATA_ROOT": "/srv/app/tmp/ocis/owncloud/data/",
-                "WEB_UI_CONFIG": "/srv/config/drone/ocis-config.json",
+                "WEB_UI_CONFIG": "/srv/config/drone/config-ocis.json",
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-ocis-server-ocis-storage.md" % dir["web"],
             },
             "runningOnOCIS": True,
-            "visualTesting": True,
+            "visualTesting": False,
             "filterTags": "not @skip and not @skipOnOCIS and not @notToImplementOnOCIS",
         },
         "webUI-notifications-oc10-integration": {
@@ -484,7 +484,7 @@ config = {
             "filterTags": "not @skip and not @skipOnOC10 and not @openIdLogin and @smokeTest",
             "oc10IntegrationAppIncluded": True,
             "notificationsAppNeeded": True,
-            "screenShots": True,
+            "screenShots": False,
         },
         "webUI-oc10-integration": {
             "type": FULL,
@@ -565,7 +565,7 @@ config = {
             },
             "filterTags": "not @skip and not @skipOnOC10 and not @openIdLogin and @smokeTest",
             "oc10IntegrationAppIncluded": True,
-            "screenShots": True,
+            "screenShots": False,
         },
     },
     "build": True,
@@ -727,7 +727,7 @@ def main(ctx):
     return pipelines + deploys + checkStarlark()
 
 def beforePipelines(ctx):
-    return yarnlint() + changelog(ctx) + website(ctx) + cacheOcisPipeline(ctx)
+    return yarnlint() + checkForRecentBuilds(ctx) + changelog(ctx) + website(ctx) + cacheOcisPipeline(ctx)
 
 def stagePipelines(ctx):
     unitTestPipelines = unitTests(ctx)
@@ -779,6 +779,57 @@ def yarnlint():
     pipelines.append(result)
 
     return pipelines
+
+def checkForRecentBuilds(ctx):
+    pipelines = []
+
+    result = {
+        "kind": "pipeline",
+        "type": "docker",
+        "name": "stop-recent-builds",
+        "workspace": {
+            "base": dir["base"],
+            "path": config["app"],
+        },
+        "steps": stopRecentBuilds(ctx),
+        "depends_on": [],
+        "trigger": {
+            "ref": [
+                "refs/heads/master",
+                "refs/tags/**",
+                "refs/pull/**",
+            ],
+        },
+    }
+
+    pipelines.append(result)
+
+    return pipelines
+
+def stopRecentBuilds(ctx):
+    repo_slug = ctx.build.source_repo if ctx.build.source_repo else ctx.repo.slug
+
+    return [{
+        "name": "stop-recent-builds",
+        "image": "drone/cli:alpine",
+        "pull": "always",
+        "environment": {
+            "DRONE_SERVER": "https://drone.owncloud.com",
+            "DRONE_TOKEN": {
+                "from_secret": "drone_token",
+            },
+        },
+        "commands": [
+            "drone build ls %s --status running > %s/recentBuilds.txt" % (repo_slug, dir["web"]),
+            "drone build info %s ${DRONE_BUILD_NUMBER} > %s/thisBuildInfo.txt" % (repo_slug, dir["web"]),
+            "cd %s && ./tests/acceptance/cancelBuilds.sh" % dir["web"],
+        ],
+        "when": {
+            "event": [
+                "pull_request",
+            ],
+        },
+    }]
 
 def build(ctx):
     pipelines = []
@@ -1904,7 +1955,7 @@ def ocisService():
             "PROXY_OIDC_INSECURE": "true",
             "STORAGE_HOME_DATA_SERVER_URL": "http://ocis:9155/data",
             "STORAGE_USERS_DATA_SERVER_URL": "http://ocis:9158/data",
-            "WEB_UI_CONFIG": "/srv/config/drone/ocis-config.json",
+            "WEB_UI_CONFIG": "/srv/config/drone/config-ocis.json",
             "WEB_ASSET_PATH": "%s/dist" % dir["web"],
             "IDP_IDENTIFIER_REGISTRATION_CONF": "/srv/config/drone/identifier-registration.yml",
             "ACCOUNTS_DATA_PATH": "/srv/app/tmp/ocis-accounts/",

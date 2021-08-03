@@ -123,4 +123,12 @@ describe('Cache', () => {
     cache.clear()
     expect(cache.entries().length).toBe(0)
   })
+
+  it('can check if a cache contains a entry for given key', () => {
+    const values = [1, 2, 3, 4, 5]
+    const cache = newCache(values)
+
+    values.forEach(value => expect(cache.has(value - 1)).toBeTruthy())
+    expect(cache.has(5)).toBeFalsy()
+  })
 })

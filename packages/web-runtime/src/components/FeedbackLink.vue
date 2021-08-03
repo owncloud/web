@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="uk-flex uk-flex-middle">
     <oc-button
       v-oc-tooltip="description"
       type="a"

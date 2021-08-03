@@ -184,9 +184,12 @@ if (production) {
 
 export default {
   input: fs.readdirSync('packages').reduce((acc, i) => {
-    const p = path.join('packages', i, 'src', 'index.js')
-    if (fs.existsSync(p)) {
-      acc[i] = p
+    for (const extension of ['js', 'ts']) {
+      const root = path.join('packages', i, 'src', `index.${extension}`)
+      if (fs.existsSync(root)) {
+        acc[i] = root
+        break
+      }
     }
     return acc
   }, {}),
