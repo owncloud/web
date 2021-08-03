@@ -182,7 +182,11 @@ export default {
     },
 
     sidebarLogoAlt() {
-      return this.$gettext('Logo ownCloud, navigate to all files page')
+      return this.$gettextInterpolate(
+        this.$gettext('Logo %{name}, navigate to all files page'),
+        { name: this.configuration.theme.general.name },
+        false
+      )
     },
 
     sidebarNavItems() {
