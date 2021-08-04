@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Load folder in Media viewer: [#5427](https://github.com/owncloud/web/issues/5427)
 * Bugfix - Content Security Policy for OpenID Connect authentication: [#5536](https://github.com/owncloud/web/pull/5536)
 * Bugfix - Send authentication on manifests.json: [#5553](https://github.com/owncloud/web/pull/5553)
 * Bugfix - Unnecessary quota requests: [#5539](https://github.com/owncloud/web/pull/5539)
@@ -24,6 +25,14 @@ Summary
 
 Details
 -------
+
+* Bugfix - Load folder in Media viewer: [#5427](https://github.com/owncloud/web/issues/5427)
+
+   We've fixed the loading of a folder in the Media viewer extension. If a user reloads the Media
+   viewer now, it load all the medias both in private and public context.
+
+   https://github.com/owncloud/web/issues/5427
+   https://github.com/owncloud/web/pull/5585
 
 * Bugfix - Content Security Policy for OpenID Connect authentication: [#5536](https://github.com/owncloud/web/pull/5536)
 
