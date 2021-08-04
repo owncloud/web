@@ -14,8 +14,7 @@ module.exports = {
       selector: 'button[type="submit"]'
     },
     invalidCredentialsMessage: {
-      locateStrategy: 'xpath',
-      selector: '//form/h6'
+      selector: '#oc-login-error-message'
     }
   },
   commands: [
