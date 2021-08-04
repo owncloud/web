@@ -206,7 +206,7 @@ export default {
     window.addEventListener('popstate', this.handleLocalHistoryEvent)
 
     const filePath = this.$route.params.filePath
-    await this.$_loader_loadItems(this.$route.params.contextRouteName, filePath)
+    await this.$_loader_loadItems(filePath)
     this.setCurrentFile(filePath)
   },
 

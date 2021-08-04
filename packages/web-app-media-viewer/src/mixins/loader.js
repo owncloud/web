@@ -12,10 +12,7 @@ export default {
     ...mapGetters('Files', ['publicLinkPassword', 'davProperties']),
     ...mapGetters(['configuration']),
     $_loader_publicContext() {
-      // TODO: Can we rely on not being "authenticated" while viewing a public link?
-      // Currently it works. We cannot use publicPage() because that will still return
-      // true when opening the mediaviewer from authenticated routes
-      return !this.isAuthenticated
+      return this.$route.params.contextRouteName === 'files-public-list'
     },
     $_loader_folderLoading() {
       return this.$_internal_loader_folderLoading
@@ -32,7 +29,7 @@ export default {
     ...mapMutations('Files', ['CLEAR_CURRENT_FILES_LIST', 'LOAD_FILES', 'SET_CURRENT_FOLDER']),
 
     // This methods ensures the folder is loaded if we don't have a folder loaded currently
-    async $_loader_loadItems(contextRouteName, filePath) {
+    async $_loader_loadItems(filePath) {
       if (this.$store.getters.activeFile.path !== '') {
         return
       }
@@ -50,10 +47,9 @@ export default {
           this.$client.publicFiles.PUBLIC_LINK_SHARE_OWNER
         ])
         const absolutePath = filePath.substring(0, filePath.lastIndexOf('/'))
-        const promise =
-          contextRouteName === 'files-public-list'
-            ? this.$client.publicFiles.list(absolutePath, this.publicLinkPassword, properties)
-            : this.$client.files.list(absolutePath, 1, this.davProperties)
+        const promise = this.$_loader_publicContext
+          ? this.$client.publicFiles.list(absolutePath, this.publicLinkPassword, properties)
+          : this.$client.files.list(absolutePath, 1, this.davProperties)
         let resources = await promise
 
         resources = resources.map(buildResource)
