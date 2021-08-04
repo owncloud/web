@@ -3,25 +3,12 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v3.4.1...master
+[unreleased]: https://github.com/owncloud/web/compare/v4.0.0...master
 
 Summary
 -------
 
 * Bugfix - Load folder in Media viewer: [#5427](https://github.com/owncloud/web/issues/5427)
-* Bugfix - Content Security Policy for OpenID Connect authentication: [#5536](https://github.com/owncloud/web/pull/5536)
-* Bugfix - Send authentication on manifests.json: [#5553](https://github.com/owncloud/web/pull/5553)
-* Bugfix - Unnecessary quota requests: [#5539](https://github.com/owncloud/web/pull/5539)
-* Enhancement - Add custom search service: [#5415](https://github.com/owncloud/web/pull/5415)
-* Enhancement - New layout for context menu: [#5160](https://github.com/owncloud/web/issues/5160)
-* Enhancement - Dropdown actions in FilesTable: [#5102](https://github.com/owncloud/web/issues/5102)
-* Enhancement - Refactor recipient autocomplete in people panel: [#5554](https://github.com/owncloud/web/pull/5554)
-* Enhancement - Load only opened panels: [#5569](https://github.com/owncloud/web/issues/5569)
-* Enhancement - Prevent binding to only loopback IP when running in watch mode: [#5515](https://github.com/owncloud/web/pull/5515)
-* Enhancement - Add filter & search to files app: [#5415](https://github.com/owncloud/web/pull/5415)
-* Enhancement - Define the number of visible share recipients: [#5506](https://github.com/owncloud/web/pull/5506)
-* Enhancement - Sidebar sliding panels navigation: [#5549](https://github.com/owncloud/web/pull/5549)
-* Enhancement - Use profile picture capability in avatars: [#5178](https://github.com/owncloud/web/pull/5178)
 
 Details
 -------
@@ -33,6 +20,53 @@ Details
 
    https://github.com/owncloud/web/issues/5427
    https://github.com/owncloud/web/pull/5585
+
+Changelog for ownCloud Web [4.0.0] (2021-08-04)
+=======================================
+The following sections list the changes in ownCloud web 4.0.0 relevant to
+ownCloud admins and users.
+
+[4.0.0]: https://github.com/owncloud/web/compare/v3.4.1...v4.0.0
+
+Summary
+-------
+
+* Bugfix - Left sidebar visibility in public links: [#5602](https://github.com/owncloud/web/pull/5602)
+* Bugfix - Check names also for folders or files that currently are not visible: [#5583](https://github.com/owncloud/web/pull/5583)
+* Bugfix - Content Security Policy for OpenID Connect authentication: [#5536](https://github.com/owncloud/web/pull/5536)
+* Bugfix - Send authentication on manifests.json: [#5553](https://github.com/owncloud/web/pull/5553)
+* Bugfix - Unnecessary quota requests: [#5539](https://github.com/owncloud/web/pull/5539)
+* Bugfix - Use profile picture capability in avatars: [#5178](https://github.com/owncloud/web/pull/5178)
+* Change - Add custom search service: [#5415](https://github.com/owncloud/web/pull/5415)
+* Enhancement - New layout for context menu: [#5160](https://github.com/owncloud/web/issues/5160)
+* Enhancement - Dropdown actions in FilesTable: [#5102](https://github.com/owncloud/web/issues/5102)
+* Enhancement - Refactor recipient autocomplete in people panel: [#5554](https://github.com/owncloud/web/pull/5554)
+* Enhancement - Load only opened panels: [#5569](https://github.com/owncloud/web/issues/5569)
+* Enhancement - Prevent binding to only loopback IP when running in watch mode: [#5515](https://github.com/owncloud/web/pull/5515)
+* Enhancement - Add filter & search to files app: [#5415](https://github.com/owncloud/web/pull/5415)
+* Enhancement - Define the number of visible share recipients: [#5506](https://github.com/owncloud/web/pull/5506)
+* Enhancement - Sidebar sliding panels navigation: [#5549](https://github.com/owncloud/web/pull/5549)
+
+Details
+-------
+
+* Bugfix - Left sidebar visibility in public links: [#5602](https://github.com/owncloud/web/pull/5602)
+
+   We fixed that the left sidebar was showing the navigation items of an authenticated context
+   when visiting a public link as authenticated user.
+
+   https://github.com/owncloud/web/pull/5602
+
+* Bugfix - Check names also for folders or files that currently are not visible: [#5583](https://github.com/owncloud/web/pull/5583)
+
+   We've changed the way how web checks if a file or folder exists. From now on it also include files
+   from the current folder that actually are not visible.
+
+   This was problematic in situations like the pagination, where a file or folder was not
+   available in the current set of resources and the user tried to create a folder with the same
+   name.
+
+   https://github.com/owncloud/web/pull/5583
 
 * Bugfix - Content Security Policy for OpenID Connect authentication: [#5536](https://github.com/owncloud/web/pull/5536)
 
@@ -53,10 +87,19 @@ Details
 
    https://github.com/owncloud/web/pull/5539
 
-* Enhancement - Add custom search service: [#5415](https://github.com/owncloud/web/pull/5415)
+* Bugfix - Use profile picture capability in avatars: [#5178](https://github.com/owncloud/web/pull/5178)
+
+   Requests for loading avatar profile pictures now only get sent if the backend communicates
+   their availability in the capabilities.
+
+   https://github.com/owncloud/web/pull/5178
+
+* Change - Add custom search service: [#5415](https://github.com/owncloud/web/pull/5415)
 
    We've added `search` as another core app that can be utilized by other (third-party) frontend
-   extensions to provide filter and search functionality.
+   extensions to provide filter and search functionality. Please note that you need to add
+   `search` to the `apps` array of your config.json file, otherwise the search bar with its global
+   file search capabilities will disappear.
 
    https://github.com/owncloud/web/pull/5415
 
@@ -125,13 +168,6 @@ Details
 
    https://github.com/owncloud/web/issues/5523
    https://github.com/owncloud/web/pull/5549
-
-* Enhancement - Use profile picture capability in avatars: [#5178](https://github.com/owncloud/web/pull/5178)
-
-   Requests for loading avatar profile pictures now only get sent if the backend communicates
-   their availability in the capabilities.
-
-   https://github.com/owncloud/web/pull/5178
 
 Changelog for ownCloud Web [3.4.1] (2021-07-12)
 =======================================
