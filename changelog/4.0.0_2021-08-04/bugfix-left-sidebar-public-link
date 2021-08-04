@@ -1,0 +1,5 @@
+Bugfix: Left sidebar visibility in public links
+
+We fixed that the left sidebar was showing the navigation items of an authenticated context when visiting a public link as authenticated user.
+
+https://github.com/owncloud/web/pull/5602

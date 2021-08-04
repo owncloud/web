@@ -52,7 +52,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import { providerStore } from '../service'
 import truncate from 'lodash-es/truncate'
 import get from 'lodash-es/get'
@@ -168,12 +167,14 @@ export default {
 
       event.stopPropagation()
 
-      if (clearEvent || keyEventEsc) {
-        this.optionsVisible = false
+      // optionsVisible is set to
+      // - false if the event is a clearEvent or keyEventEsc
+      // - or as fallback to eventInComponent which detects if the given event is in or outside the search component
+      this.optionsVisible = clearEvent || keyEventEsc ? false : eventInComponent
+      // after that we need to return early if options not visible to prevent side effects on elements that are not related to the search component
+      if (!this.optionsVisible) {
         return
       }
-
-      Vue.set(this, 'optionsVisible', eventInComponent)
 
       if (keyEventEnter) {
         this.activateProvider(this.activeProvider)
