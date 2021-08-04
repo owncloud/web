@@ -1029,6 +1029,7 @@ def unitTests(ctx):
         "trigger": {
             "ref": [
                 "refs/heads/master",
+                "refs/tags/**",
                 "refs/pull/**",
             ],
         },
