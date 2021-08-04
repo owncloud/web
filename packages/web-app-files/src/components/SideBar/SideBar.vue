@@ -47,7 +47,10 @@
       <file-info class="sidebar-panel__file_info" :is-content-displayed="isContentDisplayed" />
       <div class="sidebar-panel__body">
         <template v-if="isContentDisplayed">
-          <component :is="panelMeta.component" v-if="openedPanels.includes(panelMeta.app)" />
+          <component
+            :is="panelMeta.component"
+            v-if="[activePanel, oldPanel].includes(panelMeta.app)"
+          />
 
           <div v-if="panelMeta.default && panelMetas.length > 1" class="sidebar-panel__navigation">
             <oc-button
@@ -74,9 +77,9 @@ import { mapGetters, mapMutations, mapState } from 'vuex'
 import FileInfo from './FileInfo.vue'
 import MixinRoutes from '../../mixins/routes'
 import { VisibilityObserver } from 'web-pkg/src/observer'
-import { cloneStateObject } from '../../helpers/store'
 
 let visibilityObserver
+let hiddenObserver
 
 export default {
   components: { FileInfo },
@@ -84,13 +87,16 @@ export default {
   data() {
     return {
       focused: undefined,
-      openedPanels: [] // Array since default panel is always opened
+      oldPanel: null
     }
   },
   computed: {
     ...mapGetters('Files', ['highlightedFile']),
     ...mapGetters(['fileSideBars', 'capabilities']),
     ...mapState('Files', ['appSidebarActivePanel']),
+    activePanel() {
+      return this.appSidebarActivePanel || this.defaultPanelMeta.app
+    },
     panelMetas() {
       const { panels } = this.fileSideBars.reduce(
         (result, panelGenerator) => {
@@ -139,17 +145,27 @@ export default {
     }
   },
   watch: {
-    appSidebarActivePanel(panel, select) {
-      this.focused = panel ? `#sidebar-panel-${panel}` : `#sidebar-panel-select-${select}`
+    activePanel: {
+      handler: function(panel, select) {
+        this.$nextTick(() => {
+          this.focused = panel ? `#sidebar-panel-${panel}` : `#sidebar-panel-select-${select}`
+        })
+      },
+      immediate: true
     }
   },
   beforeDestroy() {
     visibilityObserver.disconnect()
+    hiddenObserver.disconnect()
   },
   mounted() {
     visibilityObserver = new VisibilityObserver({
       root: document.querySelector('#files-sidebar'),
       threshold: 0.9
+    })
+    hiddenObserver = new VisibilityObserver({
+      root: document.querySelector('#files-sidebar'),
+      threshold: 0.05
     })
 
     const doFocus = () => {
@@ -162,20 +178,19 @@ export default {
       selector.focus()
     }
 
+    const clearOldPanel = () => {
+      this.oldPanel = null
+    }
+
     this.$refs.panels.forEach(panel => {
       visibilityObserver.observe(panel, {
         onEnter: doFocus,
         onExit: doFocus
       })
+      hiddenObserver.observe(panel, {
+        onExit: clearOldPanel
+      })
     })
-  },
-
-  created() {
-    this.openedPanels.push(this.defaultPanelMeta.app)
-
-    if (this.appSidebarActivePanel) {
-      this.openedPanels.push(this.appSidebarActivePanel)
-    }
   },
 
   methods: {
@@ -199,26 +214,18 @@ export default {
       }
     },
 
-    openPanel(panel) {
-      this.SET_APP_SIDEBAR_ACTIVE_PANEL(panel)
+    setOldPanel() {
+      this.oldPanel = this.activePanel || this.defaultPanelMeta.app
+    },
 
-      if (!this.openedPanels.includes(panel)) {
-        this.openedPanels.push(panel)
-      }
+    openPanel(panel) {
+      this.setOldPanel()
+      this.SET_APP_SIDEBAR_ACTIVE_PANEL(panel)
     },
 
     closePanel() {
-      const activePanel = cloneStateObject(this.appSidebarActivePanel)
-
+      this.setOldPanel()
       this.SET_APP_SIDEBAR_ACTIVE_PANEL(null)
-
-      setTimeout(() => {
-        const index = this.openedPanels.indexOf(activePanel)
-
-        if (index > -1) {
-          this.openedPanels.splice(index, 1)
-        }
-      }, 400)
     }
   }
 }
