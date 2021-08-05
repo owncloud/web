@@ -1,5 +1,5 @@
 <template>
-  <div v-if="privateLinkEnabled">
+  <div v-if="privateLinkEnabled" class="oc-files-private-link-item">
     <h4 v-translate class="oc-text-bold oc-m-rm oc-text-initial">Private Link</h4>
     <p v-translate class="oc-text-muted oc-my-rm">Only invited people can use this link.</p>
     <div class="uk-width-1-1 uk-flex uk-flex-middle">
