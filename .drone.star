@@ -727,10 +727,16 @@ def main(ctx):
     return pipelines + deploys + checkStarlark()
 
 def beforePipelines(ctx):
-    return yarnlint() + checkForRecentBuilds(ctx) + changelog(ctx) + website(ctx) + cacheOcisPipeline(ctx)
+    if "unit-tests-only" in ctx.build.title.lower():
+        return yarnlint() + checkForRecentBuilds(ctx)
+    else:
+        return yarnlint() + checkForRecentBuilds(ctx) + changelog(ctx) + website(ctx) + cacheOcisPipeline(ctx)
 
 def stagePipelines(ctx):
     unitTestPipelines = unitTests(ctx)
+    if "unit-tests-only" in ctx.build.title.lower():
+        return unitTestPipelines
+
     acceptancePipelines = acceptance(ctx)
     if acceptancePipelines == False:
         return unitTestPipelines
@@ -1038,7 +1044,7 @@ def unitTests(ctx):
 def acceptance(ctx):
     pipelines = []
 
-    if "acceptance" not in config or "unit-tests-only" in ctx.build.title.lower():
+    if "acceptance" not in config:
         return pipelines
 
     if type(config["acceptance"]) == "bool":
