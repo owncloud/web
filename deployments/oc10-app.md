@@ -128,6 +128,68 @@ If you use OpenID Connect you need to replace the `"auth"` part with following c
 ```
 {{< /hint >}}
 
+## Integrate ownCloud Classic features in ownCloud Web
+### Add links to the app switcher
+ownCloud Classic features that are not deeply integrated with the Classic UI (e.g., full screen apps) can be added to the ownCloud Web app switcher so that users can easily access them from ownCloud Web. You can use the following example and customize it according to your needs. 
+
+To add new elements in the app switcher, paste the following into the `applications` section of `config.json`:
+
+```
+    {
+      "title": {
+        "en": "Custom Groups",
+        "de": "Benutzerdefinierte Gruppen" 
+      },
+      "icon": "application",
+      "url": "https://<your-owncloud-server>/settings/personal?sectionid=customgroups"
+    },
+```
+
+{{< hint info >}}
+The URL in the example might need adaptations depending on the configuration of your ownCloud Server. App switcher elements added this way will open the respective page in a new tab. This method can also be used to link external sites like Help pages or similar.
+{{< /hint >}}
+
+### Add links to the user menu
+Just like adding links to the app switcher, you can also add links to the user menu.
+
+```
+    {
+      "icon": "application",
+      "menu": "user",
+      "target": "_self",
+      "title": {
+        "de": "Hilfe",
+        "en": "Help"
+      },
+      "url": "https://help-link.example"
+    },
+```
+
+This will add a link to the specified URL in the user menu. This way, the link will open in the same tab. If you instead want to open it in a new tab, just remove the line `"target": "_self",`.
+
+### ONLYOFFICE
+For ONLYOFFICE there is a [native integration](https://github.com/ONLYOFFICE/onlyoffice-owncloud-web) available for ownCloud Web when it is used with ownCloud Classic Server. It fully integrates the ONLYOFFICE Document Editors and allows users to create and open documents right from ownCloud Web.
+
+To be able to use ONLYOFFICE in ownCloud Web, it is required to run
+- ownCloud Server >= 10.8
+- ownCloud Web >= 4.0.0
+- [ONLYOFFICE Connector for ownCloud 10](https://marketplace.owncloud.com/apps/onlyoffice) >= 7.1.1
+
+Make sure that ONLYOFFICE works as expected in the Classic UI and add the following to `config.json` to make it available in ownCloud Web:
+
+```
+"external_apps": [
+    {
+        "id": "onlyoffice",
+        "path": "https://<your-owncloud-server>/apps/onlyoffice/js/web/onlyoffice.js",
+    }
+]
+```
+
+{{< hint info >}}
+The URL in the example might need adaptations depending on the configuration of your ownCloud Server.
+{{< /hint >}}
+
 ## Accessing ownCloud Web
 After following all the steps, you should see a new entry in the application switcher called `New Design` which points to the ownCloud web.
 
