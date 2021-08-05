@@ -15,7 +15,7 @@ module.exports = {
       const deleteSelector = informationSelector + this.elements.deleteShareButton.selector
       return this.useXpath()
         .waitForElementVisible(deleteSelector)
-        .waitForAnimationToFinish()
+        .waitForAnimationToFinish() // wait for animation of share sliding out
         .click(deleteSelector)
         .waitForElementNotPresent(informationSelector)
     },
@@ -27,7 +27,7 @@ module.exports = {
         .waitForElementVisible('@createShareButton')
         .click('@createShareButton')
         .waitForElementVisible('@createShareDialog')
-        .waitForAnimationToFinish()
+        .waitForAnimationToFinish() // wait for animation of share sliding in
         .useCss()
     },
     /**

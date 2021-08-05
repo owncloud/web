@@ -74,7 +74,6 @@ module.exports = {
           selector: resourceBreadcrumbXpath,
           abortOnFailure: false
         })
-        .waitForAnimationToFinish()
         .useCss()
       return this
     },
@@ -90,7 +89,6 @@ module.exports = {
         .click('@newFileMenuButton')
         .click('@newFolderButton')
         .waitForElementVisible('@dialog')
-        .waitForAnimationToFinish()
 
       if (name !== null) {
         await this.clearValueWithEvent('@dialogInput')
@@ -121,7 +119,6 @@ module.exports = {
         .waitForElementVisible('@newFileButton')
         .click('@newFileButton')
         .waitForElementVisible('@dialog')
-        .waitForAnimationToFinish()
 
       if (name !== null) {
         await this.clearValueWithEvent('@dialogInput')
@@ -229,7 +226,6 @@ module.exports = {
       return this.waitForElementVisible('@deleteSelectedButton')
         .click('@deleteSelectedButton')
         .waitForElementVisible('@dialog')
-        .waitForAnimationToFinish()
         .click('@dialogConfirmBtn')
         .waitForAjaxCallsToStartAndFinish()
         .waitForElementNotPresent('@dialog')
@@ -264,8 +260,7 @@ module.exports = {
       })
     },
     confirmFileOverwrite: function() {
-      return this.waitForAnimationToFinish()
-        .click('@dialogConfirmBtn')
+      return this.click('@dialogConfirmBtn')
         .waitForElementNotPresent('@dialog')
         .waitForAjaxCallsToStartAndFinish()
     },
@@ -301,7 +296,6 @@ module.exports = {
         .waitForElementVisible('@newMdFileButton')
         .click('@newMdFileButton')
         .waitForElementVisible('@dialog')
-        .waitForAnimationToFinish()
 
       if (name !== null) {
         await this.clearValueWithEvent('@dialogInput')
