@@ -1,21 +1,45 @@
 <template>
   <div>
-    <translate tag="label" for="files-collaborators-role-button" class="oc-label">Role</translate>
-    <oc-select
-      v-model="selectedRole"
-      input-id="files-collaborators-role-button"
-      class="files-collaborators-role-button-wrapper"
-      :options="roles"
-      :clearable="false"
-      label="label"
+    <hr />
+    <oc-button
+      id="files-collaborators-role-button"
+      appearance="raw"
+      justify-content="left"
+      gap-size="xsmall"
+      aria-describedby="files-recipient-role-btn-sr-hint"
     >
-      <template #option="option">
-        <role-item :role="option" />
+      <translate v-if="selectedRole.name === 'advancedRole'" key="advanced-permissions-select"
+        >Invite with custom permissions</translate
+      >
+      <translate
+        v-else
+        key="role-select"
+        :translate-params="{ name: selectedRole.label.toLowerCase() }"
+        >Invite as %{ name }</translate
+      >
+      <oc-icon name="expand_more" />
+    </oc-button>
+    <oc-drop toggle="#files-collaborators-role-button" mode="click" close-on-click>
+      <template #special>
+        <oc-list class="files-recipient-role-drop-list">
+          <li v-for="role in roles" :key="role.name">
+            <oc-button
+              appearance="raw"
+              justify-content="space-between"
+              class="files-recipient-role-drop-btn oc-py-xs oc-px-s"
+              :class="{ selected: role.name === selectedRole.name }"
+              @click="selectRole(role)"
+            >
+              <role-item :role="role" />
+              <oc-icon v-if="role.name === selectedRole.name" name="check" />
+            </oc-button>
+          </li>
+        </oc-list>
       </template>
-      <template #no-options v-translate>
-        No matching role found
-      </template>
-    </oc-select>
+    </oc-drop>
+    <translate id="files-recipient-role-btn-sr-hint" tag="p" class="oc-invisible-sr">
+      Choose a role for all selected recipients.
+    </translate>
     <template v-if="$_ocCollaborators_hasAdditionalPermissions">
       <label v-if="selectedRole.name !== 'advancedRole'" class="oc-label oc-mt-s">
         <translate>Additional permissions</translate>
@@ -27,6 +51,7 @@
         @permissionChecked="checkAdditionalPermissions"
       />
     </template>
+    <hr />
     <div v-if="expirationSupported" class="oc-mt-m">
       <div class="uk-position-relative">
         <oc-datepicker
@@ -285,7 +310,46 @@ export default {
         permissions: this.additionalPermissions,
         expirationDate: this.enteredExpirationDate
       })
+    },
+
+    selectRole(role) {
+      this.selectedRole = role
     }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.files-recipient-role-drop {
+  &-list {
+    background-color: var(--oc-color-swatch-inverse-default);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+
+    &:hover .files-recipient-role-drop-btn.selected:not(:hover),
+    &:focus .files-recipient-role-drop-btn.selected:not(:focus) {
+      background-color: var(--oc-color-swatch-inverse-default);
+      color: var(--oc-color-swatch-passive-default);
+
+      ::v-deep .oc-icon > svg {
+        fill: var(--oc-color-swatch-passive-default);
+      }
+    }
+  }
+
+  &-btn {
+    border-radius: 0;
+    width: 100%;
+
+    &:hover,
+    &:focus,
+    &.selected {
+      background-color: var(--oc-color-swatch-primary-hover);
+      color: var(--oc-color-text-inverse);
+
+      ::v-deep .oc-icon > svg {
+        fill: var(--oc-color-text-inverse);
+      }
+    }
+  }
+}
+</style>
