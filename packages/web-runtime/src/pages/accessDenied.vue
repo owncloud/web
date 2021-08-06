@@ -12,7 +12,7 @@
           <span v-translate>Login Error</span>
         </h3>
         <h4 v-translate class="oc-mb-m">
-          You are not allowed to use this application.
+          Your user session is invalid or has expired.
         </h4>
         <div v-translate class="oc-mb-m" @click="performLogout">
           If you like to login with a different user please proceed to <a id="exitAnchor">exit</a>.

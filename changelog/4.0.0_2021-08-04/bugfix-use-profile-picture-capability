@@ -1,4 +1,4 @@
-Enhancement: Use profile picture capability in avatars
+Bugfix: Use profile picture capability in avatars
 
 Requests for loading avatar profile pictures now only get sent 
 if the backend communicates their availability in the capabilities.

@@ -727,15 +727,28 @@ def main(ctx):
     return pipelines + deploys + checkStarlark()
 
 def beforePipelines(ctx):
-    return yarnlint() + checkForRecentBuilds(ctx) + changelog(ctx) + website(ctx) + cacheOcisPipeline(ctx)
+    title = ctx.build.title.lower()
+    if "docs-only" in title:
+        return checkForRecentBuilds(ctx) + website(ctx)
+    elif "unit-tests-only" in title:
+        return yarnlint() + checkForRecentBuilds(ctx)
+    else:
+        return yarnlint() + checkForRecentBuilds(ctx) + changelog(ctx) + website(ctx) + cacheOcisPipeline(ctx)
 
 def stagePipelines(ctx):
+    title = ctx.build.title.lower()
+    if "docs-only" in title:
+        return []
+
     unitTestPipelines = unitTests(ctx)
+    if "unit-tests-only" in title:
+        return unitTestPipelines
+
     acceptancePipelines = acceptance(ctx)
     if acceptancePipelines == False:
         return unitTestPipelines
 
-    if ("acceptance-tests-only" not in ctx.build.title.lower()):
+    if ("acceptance-tests-only" not in title):
         dependsOn(unitTestPipelines, acceptancePipelines)
 
     return unitTestPipelines + acceptancePipelines
@@ -1029,6 +1042,7 @@ def unitTests(ctx):
         "trigger": {
             "ref": [
                 "refs/heads/master",
+                "refs/tags/**",
                 "refs/pull/**",
             ],
         },
@@ -1037,7 +1051,7 @@ def unitTests(ctx):
 def acceptance(ctx):
     pipelines = []
 
-    if "acceptance" not in config or "unit-tests-only" in ctx.build.title.lower():
+    if "acceptance" not in config:
         return pipelines
 
     if type(config["acceptance"]) == "bool":

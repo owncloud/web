@@ -182,7 +182,7 @@ export default {
     },
 
     sidebarNavItems() {
-      if (!this.user.token) {
+      if (this.publicPage()) {
         return []
       }
 

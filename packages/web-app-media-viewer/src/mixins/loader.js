@@ -1,6 +1,7 @@
-import { mapActions, mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import queryString from 'query-string'
 import { basename, dirname } from 'path'
+import { buildResource } from '../../../web-app-files/src/helpers/resources' // TODO: place the helper in more global space not to create dep on files app
 
 // TODO: this file is a first attempt to separate file/folder loading logic out of the mediaviewer
 // Discussion how to progress from here can be found in this issue:
@@ -8,13 +9,10 @@ import { basename, dirname } from 'path'
 
 export default {
   computed: {
-    ...mapGetters('Files', ['publicLinkPassword']),
+    ...mapGetters('Files', ['publicLinkPassword', 'davProperties']),
     ...mapGetters(['configuration']),
     $_loader_publicContext() {
-      // TODO: Can we rely on not being "authenticated" while viewing a public link?
-      // Currently it works. We cannot use publicPage() because that will still return
-      // true when opening the mediaviewer from authenticated routes
-      return !this.isAuthenticated
+      return this.$route.params.contextRouteName === 'files-public-list'
     },
     $_loader_folderLoading() {
       return this.$_internal_loader_folderLoading
@@ -28,66 +26,43 @@ export default {
   },
 
   methods: {
-    ...mapActions('Files', ['loadFolder']),
+    ...mapMutations('Files', ['CLEAR_CURRENT_FILES_LIST', 'LOAD_FILES', 'SET_CURRENT_FOLDER']),
 
     // This methods ensures the folder is loaded if we don't have a folder loaded currently
-    $_loader_loadFolder(contextRouteName, filePath) {
-      // FIXME: handle public-files with passwords and everything, until then we redirect to the main public link page
-      if (this.$store.getters.activeFile.path === '' && contextRouteName === 'public-files') {
-        const path = this.$route.params.filePath.substring(1)
-        const token = path.substr(0, path.indexOf('/'))
-        this.$nextTick(() => {
-          this.$router.push({
-            name: 'publicLink',
-            params: {
-              token
-            }
-          })
-        })
-        throw new Error('public-files')
+    async $_loader_loadItems(filePath) {
+      if (this.$store.getters.activeFile.path !== '') {
+        return
       }
 
-      // load files
-      if (this.$store.getters.activeFile.path === '') {
-        const absolutePath = filePath.substring(1, filePath.lastIndexOf('/'))
+      this.$_internal_loader_folderLoading = true
 
-        return this.loadFolder({
-          client: this.$client,
-          absolutePath: absolutePath,
-          $gettext: this.$gettext,
-          routeName: contextRouteName,
-          loadSharesTree: !this.publicPage()
+      this.CLEAR_CURRENT_FILES_LIST()
+
+      try {
+        const properties = this.davProperties.concat([
+          this.$client.publicFiles.PUBLIC_LINK_ITEM_TYPE,
+          this.$client.publicFiles.PUBLIC_LINK_PERMISSION,
+          this.$client.publicFiles.PUBLIC_LINK_EXPIRATION,
+          this.$client.publicFiles.PUBLIC_LINK_SHARE_DATETIME,
+          this.$client.publicFiles.PUBLIC_LINK_SHARE_OWNER
+        ])
+        const absolutePath = filePath.substring(0, filePath.lastIndexOf('/'))
+        const promise = this.$_loader_publicContext
+          ? this.$client.publicFiles.list(absolutePath, this.publicLinkPassword, properties)
+          : this.$client.files.list(absolutePath, 1, this.davProperties)
+        let resources = await promise
+
+        resources = resources.map(buildResource)
+        this.LOAD_FILES({
+          currentFolder: resources[0],
+          files: resources.slice(1)
         })
-          .then(() => {
-            this.$data.$_internal_loader_folderLoading = false
-          })
-          .catch(error => {
-            // FIXME: Loading of public link folders doesn't work at all and is disabled hence, so this code should be unreachable
-
-            // // password for public link shares is missing -> this is handled on the caller side
-            // if (this.$_loader_publicContext && error.statusCode === 401) {
-            //   this.$router.push({
-            //     name: 'public-link',
-            //     params: {
-            //       token: this.$route.params.item
-            //     }
-            //   })
-            //   return
-            // }
-
-            this.showMessage({
-              title: this.$gettext('Loading folder failed…'),
-              desc: error.message,
-              status: 'danger',
-              autoClose: {
-                enabled: true
-              }
-            })
-          })
+      } catch (error) {
+        this.SET_CURRENT_FOLDER(null)
+        console.error(error)
       }
 
-      // folder already loaded, nothing to do …
-      this.$data.$_internal_loader_folderLoading = false
+      this.$_internal_loader_folderLoading = false
     },
 
     $_loader_getDavFilePath(mediaFile, query = null) {

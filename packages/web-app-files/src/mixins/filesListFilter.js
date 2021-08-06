@@ -10,11 +10,11 @@ export default {
     }
 
     filterSearch.on('reset', () => {
-      this.LOAD_FILES_SEARCHED([])
+      this.CLEAR_FILES_SEARCHED()
     })
     filterSearch.on('updateTerm', term => {
       if (!term) {
-        this.LOAD_FILES_SEARCHED([])
+        this.CLEAR_FILES_SEARCHED()
       }
     })
     filterSearch.on('activate', ({ resources }) => {
@@ -24,11 +24,11 @@ export default {
   watch: {
     $route: {
       handler: function(to, from) {
-        if (to.params?.item === from?.params?.item) {
+        if (to.name === from?.name && to.params?.item === from?.params?.item) {
           return
         }
 
-        this.LOAD_FILES_SEARCHED([])
+        this.CLEAR_FILES_SEARCHED()
       },
       immediate: true
     },
@@ -49,7 +49,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('Files', ['LOAD_FILES_SEARCHED'])
+    ...mapMutations('Files', ['CLEAR_FILES_SEARCHED', 'LOAD_FILES_SEARCHED'])
   },
   computed: {
     ...mapGetters('Files', ['pages'])

@@ -1,0 +1,9 @@
+Bugfix: Check names also for folders or files that currently are not visible
+
+We've changed the way how web checks if a file or folder exists.
+From now on it also include files from the current folder that actually are not visible.
+
+This was problematic in situations like the pagination, where a file or folder was not
+available in the current set of resources and the user tried to create a folder with the same name.
+
+https://github.com/owncloud/web/pull/5583

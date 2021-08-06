@@ -141,7 +141,7 @@ export default {
   computed: {
     ...mapGetters(['getToken', 'configuration', 'newFileHandlers', 'quota', 'user']),
     ...mapGetters('Files', [
-      'activeFiles',
+      'files',
       'inProgress',
       'currentFolder',
       'davProperties',
@@ -397,7 +397,7 @@ export default {
         return this.$gettext('Folder name cannot end with whitespace')
       }
 
-      const exists = this.activeFiles.find(file => file.name === folderName)
+      const exists = this.files.find(file => file.name === folderName)
 
       if (exists) {
         const translated = this.$gettext('%{name} already exists')
@@ -486,7 +486,7 @@ export default {
         return this.$gettext('File name cannot end with whitespace')
       }
 
-      const exists = this.activeFiles.find(file => file.name === fileName)
+      const exists = this.files.find(file => file.name === fileName)
 
       if (exists) {
         const translated = this.$gettext('%{name} already exists')

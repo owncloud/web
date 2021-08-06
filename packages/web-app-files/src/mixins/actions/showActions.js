@@ -1,4 +1,5 @@
 import { mapActions, mapMutations } from 'vuex'
+import { isTrashbinRoute } from '../../helpers/route'
 
 export default {
   computed: {
@@ -21,7 +22,7 @@ export default {
 
     $_showActions_trigger(resource) {
       this.setHighlightedFile(resource)
-      this.SET_APP_SIDEBAR_ACTIVE_PANEL('actions-item')
+      this.SET_APP_SIDEBAR_ACTIVE_PANEL(isTrashbinRoute(this.$route) ? null : 'actions-item')
     }
   }
 }

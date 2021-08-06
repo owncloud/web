@@ -26,6 +26,10 @@ export default class Provider extends EventBus implements SearchProvider {
   }
 
   public activate(term: string): void {
+    if (!term) {
+      return
+    }
+
     const resources = filterResources(this.store.getters['Files/files'], term)
     this.emit('activate', { term, resources })
   }

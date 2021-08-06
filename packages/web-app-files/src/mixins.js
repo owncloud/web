@@ -20,13 +20,7 @@ export default {
     existingResources: []
   }),
   computed: {
-    ...mapGetters('Files', [
-      'searchTerm',
-      'files',
-      'highlightedFile',
-      'publicLinkPassword',
-      'currentFolder'
-    ]),
+    ...mapGetters('Files', ['files', 'highlightedFile', 'publicLinkPassword', 'currentFolder']),
     ...mapGetters(['getToken', 'capabilities', 'configuration']),
 
     _sidebarOpen() {

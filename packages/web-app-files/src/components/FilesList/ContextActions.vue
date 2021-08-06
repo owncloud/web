@@ -38,6 +38,7 @@ import Favorite from '../../mixins/actions/favorite'
 import Move from '../../mixins/actions/move'
 import Navigate from '../../mixins/actions/navigate'
 import Rename from '../../mixins/actions/rename'
+import Restore from '../../mixins/actions/restore'
 import ShowActions from '../../mixins/actions/showActions'
 import ShowDetails from '../../mixins/actions/showDetails'
 import ShowShares from '../../mixins/actions/showShares'
@@ -54,6 +55,7 @@ export default {
     Move,
     Navigate,
     Rename,
+    Restore,
     ShowActions,
     ShowDetails,
     ShowShares
@@ -135,6 +137,7 @@ export default {
         ...this.$_rename_items,
         ...this.$_move_items,
         ...this.$_copy_items,
+        ...this.$_restore_items,
         ...this.$_delete_items,
         ...this.$_showActions_items
       ].filter(item => item.isEnabled(this.filterParams))
@@ -187,14 +190,20 @@ export default {
 <style lang="scss">
 #oc-files-context-actions {
   text-align: left;
+  white-space: normal;
 
-  > li a,
-  > li a:hover {
-    text-decoration: none;
-    color: var(--oc-color-swatch-passive-default);
-    display: inline-flex;
-    gap: 10px;
-    vertical-align: top;
+  > li {
+    a,
+    a:hover,
+    button,
+    button:hover {
+      text-decoration: none;
+      text-align: left;
+      color: var(--oc-color-swatch-passive-default);
+      display: inline-flex;
+      gap: 10px;
+      vertical-align: top;
+    }
   }
 }
 </style>
