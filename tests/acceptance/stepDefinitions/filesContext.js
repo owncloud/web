@@ -1077,12 +1077,12 @@ Then('it should not be possible to rename file/folder {string} using the webUI',
   assert.ok(state, `expected property disabled of ${resource} to be 'true' but found ${state}`)
 })
 
-When('the user uploads overwriting file {string} using the webUI', function(file) {
+When('the user uploads overwriting file {string} using the webUI', async function(file) {
   const uploadPath = path.join(client.globals.mountedUploadDir, file)
-  return client.page
-    .personalPage()
-    .selectFileForUpload(uploadPath)
-    .then(() => client.page.personalPage().confirmFileOverwrite())
+  await client.page.personalPage().selectFileForUpload(uploadPath)
+  await client.page.personalPage().confirmFileOverwrite()
+
+  return this
 })
 
 When(
