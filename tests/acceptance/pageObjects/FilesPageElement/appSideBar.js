@@ -29,7 +29,7 @@ module.exports = {
       if (!active) {
         let backBtnVisible = false
         const backBtn = this.elements.sidebarBackBtn
-        this.isVisible(
+        await this.isVisible(
           { locateStrategy: backBtn.locateStrategy, selector: backBtn.selector, timeout },
           result => {
             backBtnVisible = result.status === 0
@@ -37,8 +37,7 @@ module.exports = {
         )
         if (backBtnVisible) {
           this.click({
-            selector: '@sidebarBackBtn',
-            timeout: 100
+            selector: '@sidebarBackBtn'
           })
           await this.waitForAnimationToFinish() // wait for sliding animation to the root panel
         }
