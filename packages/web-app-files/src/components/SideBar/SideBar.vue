@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="highlightedFile"
+    v-if="showSidebar"
     v-click-outside="onClickOutside"
     :class="{
       'has-active': !!appSidebarActivePanel
@@ -91,7 +91,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('Files', ['highlightedFile']),
+    ...mapGetters('Files', ['highlightedFile', 'selectedFiles']),
     ...mapGetters(['fileSideBars', 'capabilities']),
     ...mapState('Files', ['appSidebarActivePanel']),
     activePanel() {
@@ -103,7 +103,8 @@ export default {
           const panel = panelGenerator({
             capabilities: this.capabilities,
             highlightedFile: this.highlightedFile,
-            route: this.$route
+            route: this.$route,
+            multipleSelection: this.areMultipleSelected
           })
 
           if (panel.enabled) {
@@ -142,6 +143,12 @@ export default {
       }
 
       return null
+    },
+    areMultipleSelected() {
+      return this.selectedFiles.length > 1
+    },
+    showSidebar() {
+      return this.selectedFiles.length > 0
     }
   },
   watch: {
