@@ -254,10 +254,11 @@ module.exports = {
         )
       })
     },
-    confirmFileOverwrite: function() {
-      return this.click('@dialogConfirmBtn')
+    confirmFileOverwrite: async function() {
+      await this.click('@dialogConfirmBtn')
         .waitForElementNotPresent('@dialog')
         .waitForAjaxCallsToStartAndFinish()
+      return this
     },
     checkForButtonDisabled: function() {
       return this.waitForElementVisible('@dialogConfirmBtnDisabled')
