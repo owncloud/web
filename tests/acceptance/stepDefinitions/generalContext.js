@@ -131,11 +131,13 @@ Then('no message should be displayed on the webUI', function() {
 
 Then(
   'as {string} the content of {string} should be the same as the content of local file {string}',
-  function(userId, remoteFile, localFile) {
+  async function(userId, remoteFile, localFile) {
     const fullPathOfLocalFile = client.globals.filesForUpload + localFile
-    return webdavHelper
-      .download(userId, remoteFile)
-      .then(body => assertContentOfLocalFileIs(fullPathOfLocalFile, body))
+    const body = await webdavHelper.download(userId, remoteFile)
+
+    assertContentOfLocalFileIs(fullPathOfLocalFile, body)
+
+    return this
   }
 )
 

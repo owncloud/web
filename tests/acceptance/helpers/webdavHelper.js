@@ -190,6 +190,7 @@ exports.createFolder = function(user, folderName) {
  * @param {string} user
  * @param {string} fileName
  * @param {string} contents
+ * @param {number} waitMaxIfExisting
  */
 exports.createFile = async function(user, fileName, contents = '', waitMaxIfExisting = 10000) {
   /**
@@ -223,6 +224,8 @@ exports.createFile = async function(user, fileName, contents = '', waitMaxIfExis
     putResponse,
     `Could not create the file "${fileName}" for user "${user}".`
   )
+
+  await client.pause(500)
 
   return statusResponse.text()
 }
