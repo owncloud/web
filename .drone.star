@@ -820,8 +820,6 @@ def checkForRecentBuilds(ctx):
     return pipelines
 
 def stopRecentBuilds(ctx):
-    repo_slug = ctx.build.source_repo if ctx.build.source_repo else ctx.repo.slug
-
     return [{
         "name": "stop-recent-builds",
         "image": "drone/cli:alpine",
@@ -833,8 +831,8 @@ def stopRecentBuilds(ctx):
             },
         },
         "commands": [
-            "drone build ls %s --status running > %s/recentBuilds.txt" % (repo_slug, dir["web"]),
-            "drone build info %s ${DRONE_BUILD_NUMBER} > %s/thisBuildInfo.txt" % (repo_slug, dir["web"]),
+            "drone build ls %s --status running > %s/recentBuilds.txt" % (ctx.repo.slug, dir["web"]),
+            "drone build info %s ${DRONE_BUILD_NUMBER} > %s/thisBuildInfo.txt" % (ctx.repo.slug, dir["web"]),
             "cd %s && ./tests/acceptance/cancelBuilds.sh" % dir["web"],
         ],
         "when": {
