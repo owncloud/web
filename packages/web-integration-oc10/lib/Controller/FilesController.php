@@ -114,11 +114,13 @@ class FilesController extends Controller {
 		if (\strpos($path, "oidc-callback.html") === 0 || \strpos($path, "oidc-silent-redirect.html") === 0) {
 			$csp = new ContentSecurityPolicy();
 			$csp->allowInlineScript(true);
+            $csp = $this->applyCSPOpenIDConnect($csp);
 			$response->setContentSecurityPolicy($csp);
 		}
 		if (\strpos($path, "index.html") === 0) {
             $csp = new ContentSecurityPolicy();
             $csp->allowInlineScript(true);
+            $csp = $this->applyCSPOpenIDConnect($csp);
 
             // for now we set CSP rules manually, until we have sufficient requirements for a generic solution.
             $csp = $this->applyCSPOnlyOffice($csp);
@@ -134,6 +136,32 @@ class FilesController extends Controller {
 		$mimeTypes = Mimetypes::getInstance();
 		return $mimeTypes->fromFilename($filename);
 	}
+
+    private function applyCSPOpenIDConnect(ContentSecurityPolicy $csp): ContentSecurityPolicy {
+        $oidcUrl = $this->getOpenIDConnectServerUrl();
+        $oidcServerUrl = $this->extractDomain($oidcUrl);
+        if (!empty($oidcServerUrl)) {
+            $csp->addAllowedConnectDomain($oidcServerUrl);
+        }
+        return $csp;
+    }
+
+    /**
+     * Extracts the openidconnect provider-url from the app
+     *
+     * @return string
+     * @throws \OCP\AppFramework\QueryException
+     */
+    private function getOpenIDConnectServerUrl(): string {
+        if (!$this->isAppEnabled("openidconnect")) {
+            return "";
+        }
+        if (!class_exists("\OCA\OpenIdConnect\Application")) {
+            return "";
+        }
+        $oidcClient = \OC::$server->query(\OCA\OpenIdConnect\Client::class);
+        return $oidcClient->getProviderURL();
+    }
 
 	private function applyCSPOnlyOffice(ContentSecurityPolicy $csp): ContentSecurityPolicy {
         $ooUrl = $this->getOnlyOfficeDocumentServerUrl();

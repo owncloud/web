@@ -1,0 +1,12 @@
+Enhancement: Dropdown actions in FilesTable
+
+Users can now access quick actions in a dropdown by clicking on
+the three-dots button or right-clicking on rows in the files table.
+
+We've also bumped the ownCloud Design System to version 8.3.0
+
+https://github.com/owncloud/owncloud-design-system/releases/tag/v8.3.0
+https://github.com/owncloud/web/issues/5102
+https://github.com/owncloud/web/issues/5103
+https://github.com/owncloud/web/pull/5551
+https://github.com/owncloud/web/pull/5554

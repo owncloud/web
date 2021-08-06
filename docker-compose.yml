@@ -1,0 +1,73 @@
+services:
+  ocis:
+    image: ${OCIS_IMAGE:-owncloud/ocis:latest}
+    container_name: web_ocis
+    ports:
+      - 9200:9200
+    environment:
+      OCIS_URL: ${OCIS_URL:-https://host.docker.internal:9200}
+      STORAGE_HOME_DRIVER: ${STORAGE_HOME_DRIVER:-ocis}
+      STORAGE_USERS_DRIVER: ${STORAGE_USERS_DRIVER:-ocis}
+      PROXY_OIDC_INSECURE: "${PROXY_OIDC_INSECURE:-true}"
+      WEB_UI_CONFIG: ${WEB_UI_CONFIG:-/web/config.json}
+      WEB_ASSET_PATH: ${WEB_ASSET_PATH:-/web/dist}
+      IDP_IDENTIFIER_REGISTRATION_CONF: ${IDP_IDENTIFIER_REGISTRATION_CONF:-/web/identifier-registration.yml}
+      PROXY_ENABLE_BASIC_AUTH: "${PROXY_ENABLE_BASIC_AUTH:-true}"
+      OCIS_LOG_LEVEL: ${OCIS_LOG_LEVEL:-error}
+    volumes:
+      - ./dist:/web/dist:ro
+      - ./tests/acceptance/mac-identifier-registration.yml:/web/identifier-registration.yml:ro
+      - ${OCIS_WEB_CONFIG:-./dev/docker/ocis.web.config.json}:/web/config.json:ro
+    extra_hosts:
+      - host.docker.internal:${DOCKER_HOST:-host-gateway}
+
+  oc10:
+    image: ${OC10_IMAGE:-owncloud/server:latest}
+    container_name: web_oc10
+    ports:
+      - 8080:8080
+    volumes:
+      - ${OC10_WEB_CONFIG:-./dev/docker/oc10.web.config.json}:/mnt/data/config/config.json
+      - ${OC10_CONFIG:-./dev/docker/oc10.config.php}:/mnt/data/config/setup.config.php
+      - ./dev/docker/oc10.entrypoint.sh:/usr/bin/entrypoint
+      - ./packages/web-integration-oc10/appinfo:/mnt/data/apps/web/appinfo
+      - ./packages/web-integration-oc10/lib:/mnt/data/apps/web/lib
+      - ./dist/css:/mnt/data/apps/web/css
+      - ./dist/img:/mnt/data/apps/web/img
+      - ./dist/js:/mnt/data/apps/web/js
+      - ./dist/themes:/mnt/data/apps/web/themes
+      - ./dist/index.html:/mnt/data/apps/web/index.html
+      - ./dist/manifest.json:/mnt/data/apps/web/manifest.json
+      - ./dist/oidc-callback.html:/mnt/data/apps/web/oidc-callback.html
+      - ./dist/oidc-silent-redirect.html:/mnt/data/apps/web/oidc-silent-redirect.html
+    extra_hosts:
+      - host.docker.internal:${DOCKER_HOST:-host-gateway}
+    entrypoint: /usr/bin/entrypoint
+
+  selenium:
+    build:
+      dockerfile: selenium.Dockerfile
+      context: ./dev/docker
+      args:
+        SELENIUM_IMAGE: ${SELENIUM_IMAGE:-selenium/standalone-chrome-debug}
+    container_name: web_selenium
+    ports:
+      - 4444:4444
+      - 5900:5900
+    volumes:
+      - /dev/shm:/dev/shm
+      - ./tests/acceptance/filesForUpload:/uploads:ro
+    extra_hosts:
+      - host.docker.internal:${DOCKER_HOST:-host-gateway}
+    environment:
+      VNC_NO_PASSWORD: "true"
+
+  vnc:
+    build:
+      dockerfile: vnc.Dockerfile
+      context: ./dev/docker
+    container_name: web_vnc
+    ports:
+      - 6080:6080
+    extra_hosts:
+      - host.docker.internal:${DOCKER_HOST:-host-gateway}

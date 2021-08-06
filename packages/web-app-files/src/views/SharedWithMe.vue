@@ -58,6 +58,9 @@
             />
           </div>
         </template>
+        <template #contextMenu="{ resource }">
+          <context-actions :item="resource" />
+        </template>
         <template #footer>
           <pagination />
           <list-info
@@ -79,6 +82,7 @@ import { aggregateResourceShares } from '../helpers/resources'
 import FileActions from '../mixins/fileActions'
 import MixinAcceptShare from '../mixins/actions/acceptShare'
 import MixinDeclineShare from '../mixins/actions/declineShare'
+import MixinFilesListFilter from '../mixins/filesListFilter'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
 import MixinFilesListPagination from '../mixins/filesListPagination'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
@@ -90,6 +94,7 @@ import ListLoader from '../components/FilesList/ListLoader.vue'
 import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
+import ContextActions from '../components/FilesList/ContextActions.vue'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -98,7 +103,8 @@ export default {
     ListLoader,
     NoContentMessage,
     ListInfo,
-    Pagination
+    Pagination,
+    ContextActions
   },
 
   mixins: [
@@ -107,7 +113,8 @@ export default {
     MixinDeclineShare,
     MixinFilesListPositioning,
     MixinFilesListPagination,
-    MixinMountSideBar
+    MixinMountSideBar,
+    MixinFilesListFilter
   ],
 
   data: () => ({

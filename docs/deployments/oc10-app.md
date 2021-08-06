@@ -28,6 +28,10 @@ Within the `Admin` page of ownCloud 10, head into `User Authentication` and add 
 
 {{< figure src="/clients/web/static/oauth2.jpg" alt="Example OAuth2 entry" >}}
 
+{{< hint >}}
+If you use OpenID Connect you instead need to add a new client for ownCloud Web to your identity provider.
+{{< /hint >}}
+
 ## Configure ownCloud 10
 ### Set ownCloud Web address
 To set the ownCloud Web address and to display ownCloud Web in the app switcher, add the following line into `config/config.php`:
@@ -108,6 +112,82 @@ There are a few config values which need to be set in order for ownCloud Web to 
 
 {{< hint info >}}
 It is important that you don't edit or place the `config.json` within the app folder. If you do, the integrity check of the app will fail and raise warnings.
+{{< /hint >}}
+
+{{< hint >}}
+If you use OpenID Connect you need to replace the `"auth"` part with following configuration:
+
+``` 
+  "openIdConnect": {
+    "metadata_url": "<fqdn-of-the-identity-provider>/.well-known/openid-configuration",
+    "authority": "<fqdn-of-the-identity-provider>",
+    "client_id": "<client-id-from-the-identity-provider>",
+    "response_type": "code",
+    "scope": "openid profile email"
+  },
+```
+{{< /hint >}}
+
+## Integrate ownCloud Classic features in ownCloud Web
+### Add links to the app switcher
+ownCloud Classic features that are not deeply integrated with the Classic UI (e.g., full screen apps) can be added to the ownCloud Web app switcher so that users can easily access them from ownCloud Web. You can use the following example and customize it according to your needs. 
+
+To add new elements in the app switcher, paste the following into the `applications` section of `config.json`:
+
+```
+    {
+      "title": {
+        "en": "Custom Groups",
+        "de": "Benutzerdefinierte Gruppen" 
+      },
+      "icon": "application",
+      "url": "https://<your-owncloud-server>/settings/personal?sectionid=customgroups"
+    },
+```
+
+{{< hint info >}}
+The URL in the example might need adaptations depending on the configuration of your ownCloud Server. App switcher elements added this way will open the respective page in a new tab. This method can also be used to link external sites like Help pages or similar.
+{{< /hint >}}
+
+### Add links to the user menu
+Just like adding links to the app switcher, you can also add links to the user menu.
+
+```
+    {
+      "icon": "application",
+      "menu": "user",
+      "target": "_self",
+      "title": {
+        "de": "Hilfe",
+        "en": "Help"
+      },
+      "url": "https://help-link.example"
+    },
+```
+
+This will add a link to the specified URL in the user menu. This way, the link will open in the same tab. If you instead want to open it in a new tab, just remove the line `"target": "_self",`.
+
+### ONLYOFFICE
+For ONLYOFFICE there is a [native integration](https://github.com/ONLYOFFICE/onlyoffice-owncloud-web) available for ownCloud Web when it is used with ownCloud Classic Server. It fully integrates the ONLYOFFICE Document Editors and allows users to create and open documents right from ownCloud Web.
+
+To be able to use ONLYOFFICE in ownCloud Web, it is required to run
+- ownCloud Server >= 10.8
+- ownCloud Web >= 4.0.0
+- [ONLYOFFICE Connector for ownCloud 10](https://marketplace.owncloud.com/apps/onlyoffice) >= 7.1.1
+
+Make sure that ONLYOFFICE works as expected in the Classic UI and add the following to `config.json` to make it available in ownCloud Web:
+
+```
+"external_apps": [
+    {
+        "id": "onlyoffice",
+        "path": "https://<your-owncloud-server>/apps/onlyoffice/js/web/onlyoffice.js",
+    }
+]
+```
+
+{{< hint info >}}
+The URL in the example might need adaptations depending on the configuration of your ownCloud Server.
 {{< /hint >}}
 
 ## Accessing ownCloud Web

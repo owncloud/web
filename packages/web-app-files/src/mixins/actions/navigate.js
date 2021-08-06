@@ -1,6 +1,4 @@
-import { mapActions } from 'vuex'
-
-import { checkRoute } from '../../helpers/route'
+import { isTrashbinRoute } from '../../helpers/route'
 
 export default {
   computed: {
@@ -12,7 +10,7 @@ export default {
           label: () =>
             this.$pgettext('Action in the files list row to open a folder', 'Open folder'),
           isEnabled: ({ resource }) => {
-            if (checkRoute(['files-trashbin'], this.$route.name)) {
+            if (isTrashbinRoute(this.$route)) {
               return false
             }
 
@@ -21,7 +19,7 @@ export default {
           canBeDefault: true,
           componentType: 'router-link',
           route: this.route,
-          class: 'oc-files-actions-sidebar-navigate-trigger'
+          class: 'oc-files-actions-navigate-trigger'
         }
       ]
     },
@@ -32,22 +30,6 @@ export default {
       }
 
       return route
-    }
-  },
-  methods: {
-    ...mapActions('Files', ['resetSearch']),
-
-    $_navigate_trigger(folder) {
-      if (this.searchTerm !== '' && this.$route.params.item === folder.path) {
-        this.resetSearch()
-      }
-
-      this.$router.push({
-        name: this.route,
-        params: {
-          item: folder.path
-        }
-      })
     }
   }
 }

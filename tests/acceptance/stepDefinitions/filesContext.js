@@ -135,7 +135,7 @@ When('the user browses to display the {string} details of file {string}', async 
   const api = client.page.FilesPageElement
   await api.filesList().clickRow(filename)
   await client.initAjaxCounters()
-  await api.appSideBar().selectAccordionItem(accordionItem)
+  await api.appSideBar().activatePanel(accordionItem)
   await client.waitForOutstandingAjaxCalls()
 
   return client
@@ -486,7 +486,7 @@ Then('the versions list for resource {string} should contain {int} entry/entries
   const api = client.page.FilesPageElement
   await api.filesList().clickRow(resourceName)
   await client.initAjaxCounters()
-  await api.appSideBar().selectAccordionItem('versions')
+  await api.appSideBar().activatePanel('versions')
   await client.waitForOutstandingAjaxCalls()
   const count = await api.versionsDialog().getVersionsCount()
 
@@ -602,10 +602,8 @@ When('the user picks the row of file/folder {string} on the webUI', function(ite
   return client.page.FilesPageElement.filesList().clickRow(item)
 })
 
-When('the user switches to {string} accordion item in details panel using the webUI', function(
-  item
-) {
-  return client.page.FilesPageElement.appSideBar().selectAccordionItem(item)
+When('the user switches to {string} panel in details panel using the webUI', function(item) {
+  return client.page.FilesPageElement.appSideBar().activatePanel(item)
 })
 
 const theseResourcesShouldNotBeListed = async function(table) {
@@ -822,20 +820,20 @@ Then('as user {string} file/folder {string} should not be marked as favorite', a
 })
 
 Then('file/folder {string} should be marked as favorite on the webUI', async function(path) {
-  const selector = client.page.FilesPageElement.appSideBar().elements.favoriteStarShining
+  const selector = client.page.FilesPageElement.appSideBar().elements.fileInfoFavoriteShining
   await client.page.FilesPageElement.filesList().clickRow(path)
 
-  client.expect.element(selector).to.be.visible
+  client.expect.element(selector).to.be.present
   client.page.FilesPageElement.appSideBar().closeSidebar()
 
   return client
 })
 
 Then('file/folder {string} should not be marked as favorite on the webUI', async function(path) {
-  const selector = client.page.FilesPageElement.appSideBar().elements.favoriteStarDimm
+  const selector = client.page.FilesPageElement.appSideBar().elements.fileInfoFavoriteDimm
   await client.page.FilesPageElement.filesList().clickRow(path)
 
-  client.expect.element(selector).to.be.visible
+  client.expect.element(selector).to.be.present
   client.page.FilesPageElement.appSideBar().closeSidebar()
 
   return client
@@ -861,21 +859,21 @@ Then('the app-sidebar should be invisible', async function() {
 })
 
 Then('the {string} details panel should be visible', async function(panel) {
-  const expanded = await client.page.FilesPageElement.appSideBar().isAccordionItemExpanded(panel)
-  assert.strictEqual(expanded, true, `'${panel}-panel' should be expanded, but is not`)
+  await client.page.FilesPageElement.appSideBar().activatePanel(panel)
+  const expanded = await client.page.FilesPageElement.appSideBar().isPanelActive(panel)
+  assert.strictEqual(expanded, true, `'${panel}-panel' should be active, but is not`)
 })
 
-Then(
-  'the following accordion items should be visible in the details dialog on the webUI',
-  async function(table) {
-    const visibleItems = await client.page.FilesPageElement.appSideBar().getVisibleAccordionItems()
-    const expectedVisibleItems = table.rows()
-    const difference = _.difference(expectedVisibleItems.flat(), visibleItems)
-    if (difference.length !== 0) {
-      throw new Error(`${difference} accordion items was expected to be visible but not found.`)
-    }
+Then('the following panels should be visible in the details dialog on the webUI', async function(
+  table
+) {
+  const visibleItems = await client.page.FilesPageElement.appSideBar().getVisibleAccordionItems()
+  const expectedVisibleItems = table.rows()
+  const difference = _.difference(expectedVisibleItems.flat(), visibleItems)
+  if (difference.length !== 0) {
+    throw new Error(`${difference} panels was expected to be visible but not found.`)
   }
-)
+})
 
 const assertElementsAreListed = async function(elements) {
   for (const element of elements) {
@@ -1019,7 +1017,7 @@ Then(
 )
 
 When(
-  'the user opens the actions sidebar accordion of file/folder {string} on the webUI',
+  'the user opens the actions sidebar panel of file/folder {string} on the webUI',
   async function(resource) {
     await client.page.FilesPageElement.filesRow().openFileActionsMenu(resource)
   }

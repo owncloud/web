@@ -39,6 +39,9 @@
             :actions="app.quickActions"
           />
         </template>
+        <template #contextMenu="{ resource }">
+          <context-actions :item="resource" />
+        </template>
         <template #footer>
           <pagination />
           <list-info
@@ -61,6 +64,7 @@ import debounce from 'lodash-es/debounce'
 
 import MixinAccessibleBreadcrumb from '../mixins/accessibleBreadcrumb'
 import MixinFileActions from '../mixins/fileActions'
+import MixinFilesListFilter from '../mixins/filesListFilter'
 import MixinFilesListScrolling from '../mixins/filesListScrolling'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
 import MixinFilesListPagination from '../mixins/filesListPagination'
@@ -75,11 +79,20 @@ import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
 import NotFoundMessage from '../components/FilesList/NotFoundMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
+import ContextActions from '../components/FilesList/ContextActions.vue'
 
 const visibilityObserver = new VisibilityObserver()
 
 export default {
-  components: { QuickActions, ListLoader, NoContentMessage, NotFoundMessage, ListInfo, Pagination },
+  components: {
+    QuickActions,
+    ListLoader,
+    NoContentMessage,
+    NotFoundMessage,
+    ListInfo,
+    Pagination,
+    ContextActions
+  },
 
   mixins: [
     MixinAccessibleBreadcrumb,
@@ -87,7 +100,8 @@ export default {
     MixinFilesListPositioning,
     MixinFilesListScrolling,
     MixinFilesListPagination,
-    MixinMountSideBar
+    MixinMountSideBar,
+    MixinFilesListFilter
   ],
 
   data: () => ({
@@ -96,19 +110,18 @@ export default {
 
   computed: {
     ...mapState(['app']),
-    ...mapState('Files', ['files']),
+    ...mapState('Files', ['currentPage', 'files', 'filesPageLimit']),
     ...mapGetters('Files', [
       'davProperties',
       'highlightedFile',
-      'activeFiles',
       'selectedFiles',
       'inProgress',
+      'activeFiles',
       'currentFolder',
       'totalFilesCount',
       'totalFilesSize'
     ]),
     ...mapGetters(['user', 'homeFolder', 'configuration']),
-
     isSidebarOpen() {
       return this.highlightedFile !== null
     },
@@ -191,7 +204,8 @@ export default {
       'SELECT_RESOURCES',
       'SET_CURRENT_FOLDER',
       'LOAD_FILES',
-      'CLEAR_CURRENT_FILES_LIST'
+      'CLEAR_CURRENT_FILES_LIST',
+      'UPDATE_CURRENT_PAGE'
     ]),
     ...mapMutations(['SET_QUOTA']),
 

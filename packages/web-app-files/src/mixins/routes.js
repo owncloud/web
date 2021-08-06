@@ -1,31 +1,39 @@
+import {
+  isAnySharedWithRoute,
+  isFavoritesRoute,
+  isPersonalRoute,
+  isPublicFilesRoute,
+  isPublicPage,
+  isSharedWithMeRoute,
+  isSharedWithOthersRoute,
+  isTrashbinRoute
+} from '../helpers/route'
+
 export default {
   computed: {
     isPersonalRoute() {
-      return this.$route.name === 'files-personal'
+      return isPersonalRoute(this.$route)
     },
     isFavoritesRoute() {
-      return this.$route.name === 'files-favorites'
+      return isFavoritesRoute(this.$route)
     },
     isTrashbinRoute() {
-      return this.$route.name === 'files-trashbin'
+      return isTrashbinRoute(this.$route)
     },
     isSharedWithMeRoute() {
-      return this.$route.name === 'files-shared-with-me'
+      return isSharedWithMeRoute(this.$route)
     },
     isSharedWithOthersRoute() {
-      return this.$route.name === 'files-shared-with-others'
+      return isSharedWithOthersRoute(this.$route)
     },
     isAnySharedWithRoute() {
-      return this.isSharedWithMeRoute || this.isSharedWithOthersRoute
+      return isAnySharedWithRoute(this.$route)
     },
     isPublicFilesRoute() {
-      return this.$route.name === 'files-public-list'
+      return isPublicFilesRoute(this.$route)
     },
     isPublicPage() {
-      if (this.$route.meta) {
-        return this.$route.meta.auth === false
-      }
-      return false
+      return isPublicPage(this.$route)
     }
   }
 }

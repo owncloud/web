@@ -66,6 +66,12 @@ export default {
     $route() {
       this.$_destroySideBar_hideDetails()
       this.resetFileSelection()
+    },
+    highlightedFile(file) {
+      if (file !== null) {
+        return
+      }
+      this.$_destroySideBar_hideDetails()
     }
   },
   created() {
@@ -81,7 +87,6 @@ export default {
   methods: {
     ...mapActions('Files', ['dragOver', 'resetFileSelection']),
     ...mapActions(['showMessage']),
-    ...mapMutations('Files', ['SET_APP_SIDEBAR_EXPANDED_ACCORDION']),
     ...mapMutations(['SET_SIDEBAR_FOOTER_CONTENT_COMPONENT']),
 
     trace() {
@@ -107,7 +112,6 @@ export default {
 main {
   height: 100%;
   max-height: 100%;
-  overflow-y: hidden;
 }
 
 .files-list-wrapper {
@@ -129,9 +133,8 @@ main {
 }
 
 #files-sidebar {
-  height: 100%;
-  max-height: 100%;
-  overflow-y: auto;
+  position: relative;
+  overflow: hidden;
 }
 
 #files-app-bar {

@@ -1,0 +1,6 @@
+Enhancement: New layout for context menu
+
+The new context menu in the files list received additional menu items and a clear separation into three sections.
+
+https://github.com/owncloud/web/issues/5160
+https://github.com/owncloud/web/pull/5576

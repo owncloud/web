@@ -11,9 +11,9 @@ export default {
           handler: this.$_favorite_trigger,
           label: item => {
             if (item.starred) {
-              return this.$gettext('Unmark as favorite')
+              return this.$gettext('Remove from favorites')
             }
-            return this.$gettext('Mark as favorite')
+            return this.$gettext('Add to favorites')
           },
           isEnabled: () => {
             const isRouteAllowed = checkRoute(
@@ -29,7 +29,7 @@ export default {
             )
           },
           componentType: 'oc-button',
-          class: 'oc-files-actions-sidebar-favorite-trigger'
+          class: 'oc-files-actions-favorite-trigger'
         }
       ]
     }

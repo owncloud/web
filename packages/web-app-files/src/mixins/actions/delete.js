@@ -18,7 +18,7 @@ export default {
             return resource.canBeDeleted()
           },
           componentType: 'oc-button',
-          class: 'oc-files-actions-sidebar-delete-trigger'
+          class: 'oc-files-actions-delete-trigger'
         },
         {
           // this menu item is ONLY for the trashbin (permanently delete a file/folder)
@@ -27,7 +27,7 @@ export default {
           handler: this.$_delete_trigger,
           isEnabled: () => checkRoute(['files-trashbin'], this.$route.name),
           componentType: 'oc-button',
-          class: 'oc-files-actions-sidebar-delete-trigger'
+          class: 'oc-files-actions-delete-trigger'
         }
       ]
     }

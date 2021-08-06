@@ -154,13 +154,9 @@ module.exports = {
       role,
       permissions,
       remote = false,
-      days,
-      quickAction = false
+      days
     ) {
-      if (!quickAction) {
-        await collaboratorDialog.clickCreateShare()
-      }
-
+      await collaboratorDialog.clickCreateShare()
       await this.selectCollaboratorForShare(sharee, shareWithGroup, remote)
       await this.selectRoleForNewCollaborator(role)
 
@@ -625,17 +621,16 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     sharingAutoComplete: {
-      selector: '#oc-sharing-autocomplete .oc-autocomplete-input'
+      selector: '#files-share-invite #files-share-invite-input'
     },
     sharingAutoCompleteSpinner: {
-      selector: '#oc-sharing-autocomplete .oc-autocomplete-spinner'
+      selector: '#files-share-invite .oc-spinner'
     },
     sharingAutoCompleteDropDown: {
-      selector: '#oc-sharing-autocomplete .oc-autocomplete-suggestion-list'
+      selector: '#files-share-invite .vs__dropdown-menu'
     },
     sharingAutoCompleteDropDownElements: {
-      selector:
-        '#oc-sharing-autocomplete .oc-autocomplete-suggestion .files-collaborators-autocomplete-user-text'
+      selector: '#files-share-invite .vs__dropdown-menu .files-collaborators-autocomplete-user-text'
     },
     sharingAutoCompleteShowAllResultsButton: {
       selector: '.oc-autocomplete-suggestion-overflow'
@@ -669,11 +664,10 @@ module.exports = {
     },
     newCollaboratorItems: {
       selector:
-        "//span[contains(@class, 'files-collaborators-autocomplete-username') and contains(., '%s')]/ancestor::li[contains(@class, 'files-collaborators-collaborator-autocomplete-item')]"
+        "//p[@class='oc-recipient-name' and contains(., '%s')]/ancestor::span[contains(@class, 'files-share-invite-recipient')]"
     },
     newCollaboratorRemoveButton: {
-      selector:
-        "//button[contains(@class, 'files-collaborators-collaborator-autocomplete-item-remove')]"
+      selector: "//button[contains(@class, 'files-share-invite-recipient-btn-remove')]"
     },
     newCollaboratorRoleAdvancedPermissions: {
       selector: '#files-role-advancedRole'

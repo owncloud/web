@@ -3,9 +3,11 @@ import Vuex from 'vuex'
 import FileDetails from 'packages/web-app-files/src/components/SideBar/Details/FileDetails.vue'
 import stubs from '../../../../../../../tests/unit/stubs'
 import GetTextPlugin from 'vue-gettext'
+import AsyncComputed from 'vue-async-computed'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
+localVue.use(AsyncComputed)
 localVue.use(GetTextPlugin, {
   translations: 'does-not-matter.json',
   silent: true
@@ -19,7 +21,7 @@ const selectors = {
   sharingInfo: '[data-testid="sharingInfo"]',
   sizeInfo: '[data-testid="sizeInfo"]',
   versionsInfo: '[data-testid="versionsInfo"]',
-  previewImgContainer: '.details-preview'
+  previewImgContainer: '[data-testid="preview"]'
 }
 
 const simpleOwnFolder = {
@@ -52,6 +54,7 @@ const sharedFile = {
   ownerId: 'einstein',
   ownerDisplayName: 'Einstein',
   preview: 'example.com/image',
+  thumbnail: 'example.com/image',
   sdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
   size: '740',
   shareTypes: [0]

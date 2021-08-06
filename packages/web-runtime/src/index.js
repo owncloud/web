@@ -4,7 +4,9 @@ import 'vue-resize/dist/vue-resize.css'
 // --- Libraries and Plugins ---
 import Vue from './vue'
 import Vuex from 'vuex'
+import PortalVue, { Wormhole } from 'portal-vue'
 import { createStore } from 'vuex-extensions'
+import AsyncComputed from 'vue-async-computed'
 
 // --- Components ---
 import App from './App.vue'
@@ -74,6 +76,8 @@ Vue.use(VueMeta, {
 })
 Vue.use(ChunkedUpload)
 Vue.use(Vue2TouchEvents)
+Vue.use(PortalVue)
+Vue.use(AsyncComputed)
 
 Vue.component('drag', Drag)
 Vue.component('drop', Drop)
@@ -108,6 +112,7 @@ const supportedLanguages = {
 }
 
 const translations = merge({}, coreTranslations, odsTranslations)
+const appRegistry = []
 
 const loadApp = async path => {
   const app = await new Promise((resolve, reject) =>
@@ -121,6 +126,8 @@ const loadApp = async path => {
   if (!app.appInfo) {
     throw new Error('Skipping without appInfo for app ' + path)
   }
+
+  appRegistry.push(app)
 
   if (app.routes) {
     // rewrite relative app routes by prefixing their corresponding appId
@@ -200,12 +207,30 @@ const finalizeInit = async () => {
   // TODO: Find a different way to access store from withit JS files
   Vue.$store = store
 
+  const portal = (instance, fromApp) => {
+    const open = (toApp, toPortal, order, components) =>
+      Wormhole.open({
+        to: ['app', toApp, toPortal].filter(Boolean).join('.'),
+        from: ['app', fromApp, toPortal, order].filter(Boolean).join('.'),
+        order: order,
+        passengers: components.map(instance.$createElement)
+      })
+
+    return { open }
+  }
+
   // eslint-disable-next-line no-new
   new Vue({
     el: '#owncloud',
     store,
     router,
-    render: h => h(App)
+    render: h => h(App),
+    mounted() {
+      appRegistry.forEach(
+        app =>
+          app.mounted && app.mounted({ store, router, runtime: this, portal: portal(this, app.id) })
+      )
+    }
   })
 }
 
@@ -245,7 +270,7 @@ export const exec = async () => {
   try {
     config = await loadConfig()
   } catch (err) {
-    console.log(err)
+    console.error(err)
     router.push('missing-config')
     missingOrInvalidConfig(err)
     return
@@ -284,6 +309,6 @@ export const exec = async () => {
     // Finalize loading core and apps
     await finalizeInit()
   } catch (err) {
-    console.log(err)
+    console.error(err)
   }
 }

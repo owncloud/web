@@ -343,6 +343,14 @@ export function buildDeletedResource(resource) {
     path: resource.fileInfo['{http://owncloud.org/ns}trashbin-original-location'],
     id: path.basename(resource.name),
     icon: isFolder ? 'folder' : getFileIcon(extension),
-    indicators: []
+    indicators: [],
+    canUpload: () => false,
+    canDownload: () => false,
+    canBeDeleted: () => true,
+    canRename: () => false,
+    canShare: () => false,
+    canCreate: () => false,
+    isMounted: () => false,
+    isReceivedShare: () => false
   }
 }

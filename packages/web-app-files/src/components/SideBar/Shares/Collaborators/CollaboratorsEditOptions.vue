@@ -56,7 +56,7 @@ import { mapGetters } from 'vuex'
 import { DateTime } from 'luxon'
 import collaboratorsMixins from '../../../../mixins/collaborators'
 
-import RoleItem from '../../RoleItem.vue'
+import RoleItem from '../../Shared/RoleItem.vue'
 import AdditionalPermissions from './AdditionalPermissions.vue'
 
 export default {

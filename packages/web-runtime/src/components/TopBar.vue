@@ -14,8 +14,10 @@
           <oc-icon name="menu" />
         </oc-button>
       </div>
-      <search-bar v-if="!isSearchDisabled" />
     </oc-grid>
+    <div class="portal-wrapper">
+      <portal-target name="app.runtime.header" multiple></portal-target>
+    </div>
     <oc-grid flex gutter="small" class="uk-width-expand uk-flex-right oc-m-rm">
       <feedback-link v-if="isFeedbackLinkEnabled" />
       <notifications v-if="activeNotifications.length" />
@@ -31,10 +33,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
+
 import ApplicationsMenu from './ApplicationsMenu.vue'
 import UserMenu from './UserMenu.vue'
 import Notifications from './Notifications.vue'
-import SearchBar from './SearchBar.vue'
 import FeedbackLink from './FeedbackLink.vue'
 
 export default {
@@ -42,8 +44,7 @@ export default {
     FeedbackLink,
     Notifications,
     ApplicationsMenu,
-    UserMenu,
-    SearchBar
+    UserMenu
   },
   props: {
     userId: {
@@ -75,12 +76,6 @@ export default {
   computed: {
     ...mapGetters(['configuration']),
 
-    isSearchDisabled() {
-      return (
-        this.configuration.options.hideSearchBar === true || this.$route.meta.hideSearchBar === true
-      )
-    },
-
     isFeedbackLinkEnabled() {
       return !this.configuration.options.disableFeedbackLink
     }
@@ -100,5 +95,11 @@ export default {
 
 .oc-topbar {
   height: 60px;
+}
+
+@media (min-width: 960px) {
+  .portal-wrapper {
+    margin-left: 30px;
+  }
 }
 </style>

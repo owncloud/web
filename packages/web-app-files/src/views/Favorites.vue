@@ -26,6 +26,9 @@
         <template #quickActions="props">
           <quick-actions class="oc-visible@s" :item="props.resource" :actions="app.quickActions" />
         </template>
+        <template #contextMenu="props">
+          <context-actions :item="props.resource" />
+        </template>
         <template #footer>
           <pagination />
           <list-info
@@ -46,6 +49,7 @@ import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 
 import { buildResource } from '../helpers/resources'
 import FileActions from '../mixins/fileActions'
+import MixinFilesListFilter from '../mixins/filesListFilter'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
 import MixinFilesListPagination from '../mixins/filesListPagination'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
@@ -58,13 +62,20 @@ import ListLoader from '../components/FilesList/ListLoader.vue'
 import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
+import ContextActions from '../components/FilesList/ContextActions.vue'
 
 const visibilityObserver = new VisibilityObserver()
 
 export default {
-  components: { QuickActions, ListLoader, NoContentMessage, ListInfo, Pagination },
+  components: { QuickActions, ListLoader, NoContentMessage, ListInfo, Pagination, ContextActions },
 
-  mixins: [FileActions, MixinFilesListPositioning, MixinFilesListPagination, MixinMountSideBar],
+  mixins: [
+    FileActions,
+    MixinFilesListPositioning,
+    MixinFilesListPagination,
+    MixinMountSideBar,
+    MixinFilesListFilter
+  ],
 
   data: () => ({
     loading: true

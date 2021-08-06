@@ -1,4 +1,4 @@
-import { checkRoute } from '../../helpers/route'
+import { isTrashbinRoute } from '../../helpers/route'
 
 export default {
   computed: {
@@ -11,7 +11,7 @@ export default {
             return this.$gettext('Download')
           },
           isEnabled: ({ resource }) => {
-            if (checkRoute(['files-trashbin'], this.$route.name)) {
+            if (isTrashbinRoute(this.$route)) {
               return false
             }
 
@@ -19,7 +19,7 @@ export default {
           },
           canBeDefault: true,
           componentType: 'oc-button',
-          class: 'oc-files-actions-sidebar-download-trigger'
+          class: 'oc-files-actions-download-trigger'
         }
       ]
     }

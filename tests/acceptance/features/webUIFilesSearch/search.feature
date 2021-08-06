@@ -49,7 +49,7 @@ Feature: Search
   @issue-980
   Scenario: search in sub folder
     When the user opens folder "simple-folder" using the webUI
-    And the user searches for "lorem" using the webUI
+    And the user searches globally for "lorem" using the webUI
     Then file "lorem.txt" should be listed on the webUI
     And file "lorem-big.txt" should be listed on the webUI
     #And file "lorem.txt" with path "/" should be listed in the search results in the other folders section on the webUI
@@ -131,19 +131,21 @@ Feature: Search
     And the user opens folder "simple-folder" using the webUI
     And the user uploads file "simple.odt" using the webUI
     And the user browses to the files page
-    And the user searches for "simple" using the webUI
+    And the user searches globally for "simple" using the webUI
     Then file "simple.pdf" should be listed on the webUI
-    And file "simple.odt" should be listed on the webUI
+    And file "simple-folder/simple.odt" should be listed on the webUI
 
 
   Scenario: Search for files with difficult names
     Given user "Alice" has uploaded file with content "does-not-matter" to "/strängéनेपालीloremfile.txt"
+    And the user has reloaded the current page of the webUI
     When the user searches for "lorem" using the webUI
     Then file "strängéनेपालीloremfile.txt" should be listed on the webUI
 
 
   Scenario: Search for files with difficult names and difficult search phrase
     Given user "Alice" has uploaded file with content "does-not-matter" to "/strängéनेपालीloremfile.txt"
+    And the user has reloaded the current page of the webUI
     When the user searches for "strängéनेपाली" using the webUI
     Then file "strängéनेपालीloremfile.txt" should be listed on the webUI
 
@@ -172,6 +174,7 @@ Feature: Search
 
   Scenario: Delete file from search list
     Given user "Alice" has uploaded file with content "uploaded content" to "file-to-delete.txt"
+    When the user reloads the current page of the webUI
     When the user searches for "file-to" using the webUI
     And the user deletes file "file-to-delete.txt" using the webUI
     Then file "file-to-delete.txt" should not be listed on the webUI

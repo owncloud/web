@@ -1,10 +1,9 @@
 export default {
   currentFolder: null,
   files: [],
-  filesSearched: [],
+  filesSearched: null,
   selected: [],
   inProgress: [],
-  searchTermGlobal: '',
   davProperties: [
     '{http://owncloud.org/ns}permissions',
     '{http://owncloud.org/ns}favorite',
@@ -54,8 +53,7 @@ export default {
   /**
    * Right sidebar
    */
-  appSidebarExpandedAccordion: null,
-  appSidebarAccordionContext: null,
+  appSidebarActivePanel: null,
 
   /**
    * Public links

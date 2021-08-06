@@ -1,9 +1,9 @@
 <template>
   <div id="oc-files-sharing-sidebar" class="uk-position-relative">
     <div
-      v-show="currentPanel === PANEL_SHOW"
-      :key="PANEL_SHOW"
-      :aria-hidden="currentPanel !== PANEL_SHOW"
+      v-show="currentView === VIEW_SHOW"
+      :key="VIEW_SHOW"
+      :aria-hidden="currentView !== VIEW_SHOW"
     >
       <oc-loader v-if="sharesLoading" :aria-label="$gettext('Loading people list')" />
       <template v-else>
@@ -64,14 +64,14 @@
       </template>
     </div>
     <new-collaborator
-      v-if="$_ocCollaborators_canShare && currentPanel === PANEL_NEW"
+      v-if="$_ocCollaborators_canShare && currentView === VIEW_NEW"
       key="new-collaborator"
       @close="$_ocCollaborators_showList"
       @beforeDestroy="toggleCollaboratorNew"
       @mounted="toggleCollaboratorNew"
     />
     <edit-collaborator
-      v-if="$_ocCollaborators_canShare && currentPanel === PANEL_EDIT"
+      v-if="$_ocCollaborators_canShare && currentView === VIEW_EDIT"
       key="edit-collaborator"
       :collaborator="currentShare"
       @close="$_ocCollaborators_showList"
@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
+import { mapGetters, mapActions, mapState } from 'vuex'
 import Mixins from '../../../mixins/collaborators'
 import { textUtils } from '../../../helpers/textUtils'
 import { shareTypes, userShareTypes } from '../../../helpers/shareTypes'
@@ -93,9 +93,9 @@ import EditCollaborator from './Collaborators/EditCollaborator.vue'
 import NewCollaborator from './Collaborators/NewCollaborator.vue'
 import ShowCollaborator from './Collaborators/ShowCollaborator.vue'
 
-const PANEL_SHOW = 'showCollaborators'
-const PANEL_EDIT = 'editCollaborator'
-const PANEL_NEW = 'newCollaborator'
+const VIEW_SHOW = 'showCollaborators'
+const VIEW_EDIT = 'editCollaborator'
+const VIEW_NEW = 'newCollaborator'
 
 export default {
   title: $gettext => {
@@ -114,9 +114,10 @@ export default {
       transitionGroupActive: false,
 
       // panel types
-      PANEL_SHOW,
-      PANEL_EDIT,
-      PANEL_NEW
+      VIEW_SHOW,
+      VIEW_EDIT,
+      VIEW_NEW,
+      currentView: VIEW_SHOW
     }
   },
   computed: {
@@ -134,10 +135,6 @@ export default {
       'appSidebarAccordionContext'
     ]),
     ...mapState(['user']),
-
-    currentPanel() {
-      return this.appSidebarAccordionContext || PANEL_SHOW
-    },
 
     $_transitionGroupEnter() {
       return this.transitionGroupActive ? 'uk-animation-slide-left-medium' : ''
@@ -307,17 +304,13 @@ export default {
     // Do not reload shares if we are starting with different panel than 'show'
     highlightedFile: {
       handler: function(newItem, oldItem) {
-        if (oldItem !== newItem && this.currentPanel === PANEL_SHOW) {
+        if (oldItem !== newItem && this.currentView === VIEW_SHOW) {
           this.transitionGroupActive = false
           this.$_reloadShares()
         }
       },
       immediate: true
     }
-  },
-
-  beforeDestroy() {
-    this.SET_APP_SIDEBAR_ACCORDION_CONTEXT(null)
   },
 
   methods: {
@@ -329,8 +322,6 @@ export default {
       'loadIncomingShares',
       'incomingSharesClearState'
     ]),
-    ...mapMutations('Files', ['SET_APP_SIDEBAR_ACCORDION_CONTEXT']),
-
     $_isCollaboratorShare(collaborator) {
       return userShareTypes.includes(collaborator.shareType)
     },
@@ -361,11 +352,11 @@ export default {
     },
     $_ocCollaborators_addShare() {
       this.transitionGroupActive = true
-      this.SET_APP_SIDEBAR_ACCORDION_CONTEXT(PANEL_NEW)
+      this.currentView = VIEW_NEW
     },
     $_ocCollaborators_editShare(share) {
       this.currentShare = share
-      this.SET_APP_SIDEBAR_ACCORDION_CONTEXT(PANEL_EDIT)
+      this.currentView = VIEW_EDIT
     },
     toggleCollaboratorNew(component, event) {
       this.toggleCollaborator(component, event, '#oc-sharing-autocomplete')
@@ -388,7 +379,7 @@ export default {
       })
     },
     $_ocCollaborators_showList() {
-      this.SET_APP_SIDEBAR_ACCORDION_CONTEXT(PANEL_SHOW)
+      this.currentView = VIEW_SHOW
       this.currentShare = null
     },
     $_ocCollaborators_isUser(collaborator) {

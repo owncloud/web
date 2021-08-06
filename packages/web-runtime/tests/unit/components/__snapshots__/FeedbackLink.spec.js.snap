@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`FeedbackLink component has no accessibility violations 1`] = `
-<div><a aria-label="ownCloud feedback survey" href="https://owncloud.com/web-design-feedback" class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" target="_blank" aria-describedby="oc-feedback-link-description"><span class="oc-icon oc-icon-m oc-icon-passive"><svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"> <path xmlns="http://www.w3.org/2000/svg" d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z"></path> </svg></span></a>
+<div class="uk-flex uk-flex-middle"><a aria-label="ownCloud feedback survey" href="https://owncloud.com/web-design-feedback" class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" target="_blank" aria-describedby="oc-feedback-link-description"><span class="oc-icon oc-icon-m oc-icon-passive"><svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"> <path xmlns="http://www.w3.org/2000/svg" d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z"></path> </svg></span></a>
   <p id="oc-feedback-link-description" class="oc-invisible-sr">Provide your feedback: We'd like to improve the web design and would be happy to hear your feedback. Thank you! Your ownCloud team.</p>
 </div>
 `;

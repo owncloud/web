@@ -29,7 +29,7 @@ export default {
             return true
           },
           componentType: 'oc-button',
-          class: 'oc-files-actions-sidebar-copy-trigger'
+          class: 'oc-files-actions-copy-trigger'
         }
       ]
     }

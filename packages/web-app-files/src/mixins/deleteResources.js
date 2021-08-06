@@ -93,8 +93,6 @@ export default {
       'pushResourcesToDeleteList',
       'removeFilesFromTrashbin',
       'setHighlightedFile',
-      'resetFileSelection',
-      'addFileSelection',
       'deleteFiles'
     ]),
     ...mapActions(['showMessage', 'toggleModalConfirmButton', 'hideModal', 'createModal']),

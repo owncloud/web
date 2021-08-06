@@ -1,10 +1,10 @@
 import { mapActions, mapGetters } from 'vuex'
 
-import { checkRoute } from '../../helpers/route'
+import { isTrashbinRoute } from '../../helpers/route'
 
 export default {
   computed: {
-    ...mapGetters('Files', ['activeFiles']),
+    ...mapGetters('Files', ['files']),
 
     $_rename_items() {
       return [
@@ -15,14 +15,14 @@ export default {
           },
           handler: this.$_rename_trigger,
           isEnabled: ({ resource }) => {
-            if (checkRoute(['files-trashbin'], this.$route.name)) {
+            if (isTrashbinRoute(this.$route)) {
               return false
             }
 
             return resource.canRename()
           },
           componentType: 'oc-button',
-          class: 'oc-files-actions-sidebar-rename-trigger'
+          class: 'oc-files-actions-rename-trigger'
         }
       ]
     }
@@ -87,9 +87,7 @@ export default {
       }
 
       if (!this.flatFileList) {
-        const exists = this.activeFiles.find(
-          file => file.name === newName && currentName !== newName
-        )
+        const exists = this.files.find(file => file.name === newName && currentName !== newName)
 
         if (exists) {
           const translated = this.$gettext('The name "%{name}" is already taken')

@@ -8,4 +8,5 @@ geekdocFilePath: _index.md
 geekdocCollapseSection: true
 ---
 
-This is the next generation ownCloud frontend.
+This is the next generation ownCloud frontend. 
+If you're new here, head over to the the [getting started guide]({{< ref "getting-started.md" >}}) for a quick introduction.

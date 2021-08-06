@@ -63,6 +63,11 @@ export default class Cache<K, V> {
     return [...this.map.keys()]
   }
 
+  public has(key: K): boolean {
+    this.evict()
+    return this.map.has(key)
+  }
+
   public values(): V[] {
     this.evict()
     return [...this.map.values()].map(e => e.value)

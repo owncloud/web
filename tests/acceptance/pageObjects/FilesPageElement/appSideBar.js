@@ -8,7 +8,7 @@ module.exports = {
     isThumbnailVisible: function() {
       return this.waitForElementVisible(
         this.api.page.personalPage().elements.sideBar
-      ).waitForElementVisible(this.elements.sidebarThumbnail)
+      ).waitForElementVisible(this.elements.fileInfoIcon)
     },
     closeSidebar: function(timeout = null) {
       timeout = timeoutHelper.parseTimeout(timeout)
@@ -22,39 +22,51 @@ module.exports = {
       }
       return this.api.page.FilesPageElement.filesList()
     },
-    selectAccordionItem: async function(item) {
+    activatePanel: async function(item) {
       await this.waitForElementVisible(this.api.page.personalPage().elements.sideBar)
-      const expanded = await this.isAccordionItemExpanded(
+      const active = await this.isPanelActive(
         item,
         this.api.globals.waitForNegativeConditionTimeout
       )
-      if (!expanded) {
+      if (!active) {
+        try {
+          this.click({
+            selector: '@sidebarBackBtn'
+          })
+        } catch (e) {
+          // do nothing
+        }
+        await this.waitForAnimationToFinish()
         this.useXpath()
           .initAjaxCounters()
-          .click(this.getXpathOfLinkToAccordionItemInSidePanel(item))
+          .click(this.getXpathOfPanelSelect(item))
           .waitForOutstandingAjaxCalls()
           .useCss()
+        await this.waitForAnimationToFinish()
       }
       const panelName = item === 'people' ? 'collaborators' : item
       const element = this.elements[panelName + 'Panel']
-      const selector = element.selector + ' > .oc-accordion-content:not(:empty)'
-      return this.waitForElementVisible(selector)
+      const selector = element.selector
+      return this.waitForElementPresent(selector)
     },
     /**
-     * return the complete xpath of the link to the specified accordion item in the side-bar
+     * return the complete xpath of the link to the specified panel in the side-bar
      * @param item
      * @returns {string}
      */
-    getXpathOfLinkToAccordionItemInSidePanel: function(item) {
+    getXpathOfPanelSelect: function(item) {
       return (
         this.api.page.personalPage().elements.sideBar.selector +
-        util.format(this.elements.linkToOpenAccordionItem.selector, item)
+        util.format(
+          "//button[contains(translate(.,'ABCDEFGHJIKLMNOPQRSTUVWXYZ','abcdefghjiklmnopqrstuvwxyz'),'%s')]",
+          item
+        )
       )
     },
     getVisibleAccordionItems: async function() {
       const items = []
       let elements
-      await this.api.elements('@accordionItems', function(result) {
+      await this.api.elements('@panelSelectButtons', function(result) {
         elements = result.value
       })
       for (const { ELEMENT } of elements) {
@@ -67,7 +79,7 @@ module.exports = {
     getVisibleActionsMenuItems: async function() {
       const items = []
       let elements
-      await this.api.elements('@actionPanelItems', function(result) {
+      await this.api.elements('@panelActionsItems', function(result) {
         elements = result.value
       })
       for (const { ELEMENT } of elements) {
@@ -78,10 +90,10 @@ module.exports = {
       return items
     },
     getActionsMenuItemsExceptDefaults: async function() {
-      const defaultItems = ['mark as favorite', 'copy', 'move', 'rename', 'delete']
+      const defaultItems = ['add to favorites', 'copy', 'move', 'rename', 'delete']
       const items = []
       let elements
-      await this.api.elements('@actionPanelItems', function(result) {
+      await this.api.elements('@panelActionsItems', function(result) {
         elements = result.value
       })
       for (const { ELEMENT } of elements) {
@@ -98,10 +110,10 @@ module.exports = {
       }
       return items
     },
-    isAccordionItemExpanded: async function(panelName, timeout = null) {
+    isPanelActive: async function(panelName, timeout = null) {
       panelName = panelName === 'people' ? 'collaborators' : panelName
       const element = this.elements[panelName + 'Panel']
-      const selector = element.selector + ' > .oc-accordion-content:not(:empty)'
+      const selector = element.selector + '.is-active'
       let isVisible = false
       timeout = timeoutHelper.parseTimeout(timeout)
       await this.isVisible({ locateStrategy: 'css selector', selector, timeout }, result => {
@@ -115,7 +127,7 @@ module.exports = {
      * @param {object} selector
      * @returns {Promise<boolean>}
      */
-    isAccordionItemPresent: async function(selector) {
+    isPanelItemPresent: async function(selector) {
       let isPresent = true
       await this.useXpath()
         .waitForElementVisible(this.api.page.personalPage().elements.sideBar) // sidebar is expected to be opened and visible
@@ -128,85 +140,78 @@ module.exports = {
     /**
      * @returns {Promise<boolean>}
      */
-    isLinksAccordionItemPresent: function() {
-      return this.isAccordionItemPresent(this.elements.linksAccordionItem)
+    isLinksPanelSelectPresent: function() {
+      return this.isPanelItemPresent(this.elements.linksPanelSelect)
     },
     /**
      * @returns {Promise<boolean>}
      */
     isCollaboratorsAccordionItemPresent: function() {
-      return this.isAccordionItemPresent(this.elements.collaboratorsAccordionItem)
+      return this.isPanelItemPresent(this.elements.collaboratorsPanel)
     },
     markFavoriteSidebar: function() {
       return this.useXpath()
         .waitForElementVisible(this.api.page.personalPage().elements.sideBar)
-        .waitForElementVisible('@favoriteStarDimm')
-        .click('@sidebarToggleFavoriteButton')
-        .waitForElementVisible('@favoriteStarShining')
+        .waitForElementVisible('@fileInfoFavoriteDimm')
+        .click('@fileInfoFavorite')
+        .waitForElementVisible('@fileInfoFavoriteShining')
     },
     unmarkFavoriteSidebar: function() {
       return this.waitForElementVisible(this.api.page.personalPage().elements.sideBar)
-        .waitForElementVisible('@favoriteStarShining')
-        .click('@sidebarToggleFavoriteButton')
-        .waitForElementVisible('@favoriteStarDimm')
+        .waitForElementVisible('@fileInfoFavoriteShining')
+        .click('@fileInfoFavorite')
+        .waitForElementVisible('@fileInfoFavoriteDimm')
     }
   },
   elements: {
-    /**
-     * path from inside the side-bar
-     */
-    linkToOpenAccordionItem: {
-      // the translate bit is to make it case-insensitive
-      selector:
-        "//button[contains(translate(.,'ABCDEFGHJIKLMNOPQRSTUVWXYZ','abcdefghjiklmnopqrstuvwxyz'),'%s')]",
-      locateStrategy: 'xpath'
+    fileInfoIcon: {
+      selector: '.file_info .oc-icon'
     },
-    accordionItems: {
-      selector:
-        '//div[contains(@class, "oc-app-side-bar")]//div[@class="oc-accordion-item"]/h3/button',
-      locateStrategy: 'xpath'
+    fileInfoFavorite: {
+      selector: '.file_info__favorite'
     },
-    sidebarThumbnail: {
-      selector: '.sidebar-title .oc-icon'
-    },
-    sidebarCloseBtn: {
-      selector: '//div[contains(@class, "oc-app-side-bar")]//div[@class="action"]//button',
-      locateStrategy: 'xpath'
-    },
-    collaboratorsAccordionItem: {
-      selector: '#app-sidebar-sharing-item'
-    },
-    linksAccordionItem: {
-      selector: '#app-sidebar-links-item'
-    },
-    sidebarToggleFavoriteButton: {
-      selector: '#files-sidebar-star-icon'
-    },
-    favoriteStarDimm: {
-      selector: '.oc-star-dimm'
-    },
-    favoriteStarShining: {
+    fileInfoFavoriteShining: {
       selector: '.oc-star-shining'
     },
-    versionsPanel: {
-      selector: '#app-sidebar-versions-item'
+    fileInfoFavoriteDimm: {
+      selector: '.oc-star-dimm'
     },
-    collaboratorsPanel: {
-      selector: '#app-sidebar-sharing-item'
-    },
-    linksPanel: {
-      selector: '#app-sidebar-links-item'
-    },
-    actionsPanel: {
-      selector: '#app-sidebar-actions-item'
-    },
-    actionPanelItems: {
+    sidebarCloseBtn: {
       selector:
-        '//div[@class="oc-accordion-content"]//li/button/span[@class="oc-files-actions-sidebar-action-label"] | //div[@class="oc-accordion-content"]//li/a/span[@class="oc-files-actions-sidebar-action-label"]',
+        '//div[contains(@id, "files-sidebar")]//div[contains(@class, "is-active")]//button[contains(@class, "header__close")]',
       locateStrategy: 'xpath'
     },
+    sidebarBackBtn: {
+      selector:
+        '//div[contains(@id, "files-sidebar")]//div[contains(@class, "is-active")]//button[contains(@class, "header__back")]',
+      locateStrategy: 'xpath'
+    },
+    panelActionsItems: {
+      selector: '//span[@class="oc-files-actions-sidebar-action-label"]',
+      locateStrategy: 'xpath'
+    },
+    panelSelectButtons: {
+      selector:
+        '//div[contains(@id, "files-sidebar")]//div[@class="sidebar-panel__navigation"]/button',
+      locateStrategy: 'xpath'
+    },
+    linksPanelSelect: {
+      selector: '#sidebar-panel-links-item-select'
+    },
+    collaboratorsPanel: {
+      selector: '#sidebar-panel-sharing-item'
+    },
+    linksPanel: {
+      selector: '#sidebar-panel-links-item'
+    },
+    actionsPanel: {
+      selector: '#sidebar-panel-actions-item'
+    },
     detailsPanel: {
-      selector: '#app-sidebar-details-item'
+      selector: '#sidebar-panel-details-item'
+    },
+    versionsPanel: {
+      selector: '#sidebar-panel-versions-item'
     }
   }
 }
