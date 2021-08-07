@@ -23,26 +23,30 @@ module.exports = {
       return this.api.page.FilesPageElement.filesList()
     },
     activatePanel: async function(item) {
+      const timeout = this.api.globals.waitForNegativeConditionTimeout
       await this.waitForElementVisible(this.api.page.personalPage().elements.sideBar)
-      const active = await this.isPanelActive(
-        item,
-        this.api.globals.waitForNegativeConditionTimeout
-      )
+      const active = await this.isPanelActive(item, timeout)
       if (!active) {
-        try {
+        let backBtnVisible = false
+        const backBtn = this.elements.sidebarBackBtn
+        await this.isVisible(
+          { locateStrategy: backBtn.locateStrategy, selector: backBtn.selector, timeout },
+          result => {
+            backBtnVisible = result.status === 0
+          }
+        )
+        if (backBtnVisible) {
           this.click({
             selector: '@sidebarBackBtn'
           })
-        } catch (e) {
-          // do nothing
+          await this.waitForAnimationToFinish() // wait for sliding animation to the root panel
         }
-        await this.waitForAnimationToFinish()
         this.useXpath()
           .initAjaxCounters()
           .click(this.getXpathOfPanelSelect(item))
           .waitForOutstandingAjaxCalls()
           .useCss()
-        await this.waitForAnimationToFinish()
+        await this.waitForAnimationToFinish() // wait for sliding animation to the sub panel
       }
       const panelName = item === 'people' ? 'collaborators' : item
       const element = this.elements[panelName + 'Panel']
