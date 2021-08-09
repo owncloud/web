@@ -12,7 +12,6 @@
       <router-view id="files-view" />
     </div>
     <side-bar
-      v-if="_sidebarOpen"
       id="files-sidebar"
       ref="filesSidebar"
       tabindex="-1"
