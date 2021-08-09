@@ -16,7 +16,7 @@
           <th scope="col" class="oc-pr-s" v-text="foldersText" />
           <td v-text="foldersCount" />
         </tr>
-        <tr data-testid="size">
+        <tr v-if="showSize" data-testid="size">
           <th scope="col" class="oc-pr-s" v-text="sizeText" />
           <td v-text="selectedFilesSize" />
         </tr>
@@ -56,6 +56,9 @@ export default {
       let size = 0
       this.selectedFiles.forEach(i => (size += parseInt(i.size)))
       return this.getResourceSize(size)
+    },
+    showSize() {
+      return this.getResourceSize(this.selectedFiles[0].size) !== '?'
     },
     sizeText() {
       return this.$gettext('Size')
