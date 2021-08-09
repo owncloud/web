@@ -15,7 +15,6 @@
       ref="filesSidebar"
       tabindex="-1"
       class="uk-width-1-1 uk-width-1-2@m uk-width-1-3@xl"
-      @reset="$_destroySideBar_hideDetails"
       @beforeDestroy="focusSideBar"
       @mounted="focusSideBar"
       @fileChanged="focusSideBar"
@@ -50,7 +49,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('Files', ['dropzone', 'highlightedFile', 'inProgress']),
+    ...mapGetters('Files', ['dropzone', 'inProgress']),
 
     $_uploadProgressVisible() {
       return this.inProgress.length > 0
@@ -58,14 +57,7 @@ export default {
   },
   watch: {
     $route() {
-      this.$_destroySideBar_hideDetails()
       this.resetFileSelection()
-    },
-    highlightedFile(file) {
-      if (file !== null) {
-        return
-      }
-      this.$_destroySideBar_hideDetails()
     }
   },
   created() {
