@@ -21,7 +21,7 @@ export default {
   }),
   computed: {
     ...mapGetters('Files', ['files', 'highlightedFile', 'publicLinkPassword', 'currentFolder']),
-    ...mapGetters(['getToken', 'capabilities', 'configuration']),
+    ...mapGetters(['getToken', 'capabilities', 'configuration'])
   },
   methods: {
     ...mapActions('Files', [
