@@ -148,6 +148,7 @@ export default {
       return this.selectedFiles.length > 1
     },
     showSidebar() {
+      console.log(this.selectedFiles.length)
       return this.selectedFiles.length > 0
     }
   },
@@ -157,6 +158,12 @@ export default {
         this.$nextTick(() => {
           this.focused = panel ? `#sidebar-panel-${panel}` : `#sidebar-panel-select-${select}`
         })
+      },
+      immediate: true
+    },
+    selectedFiles: {
+      handler: function(old, now) {
+        console.log("selectedFiles")
       },
       immediate: true
     }

@@ -77,8 +77,8 @@ export default {
     return state.quota
   },
   highlightedFile: (state, getters) => {
-    if (state.highlightedResourceId) {
-      return getters.filesAll.find(r => r.id === state.highlightedResourceId)
+    if (state.selected.length > 0) {
+      return state.selected[0]
     }
     return null
   },
