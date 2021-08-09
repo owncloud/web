@@ -87,7 +87,8 @@ export default {
   data() {
     return {
       focused: undefined,
-      oldPanel: null
+      oldPanel: null,
+      sidebarClosed: false
     }
   },
   computed: {
@@ -148,7 +149,11 @@ export default {
       return this.selectedFiles.length > 1
     },
     showSidebar() {
-      return this.selectedFiles.length > 0
+      const show = this.selectedFiles.length > 0 && !this.sidebarClosed;
+      if(this.sidebarClosed) {
+        this.sidebarClosed = false;
+      }
+      return show;
     }
   },
   watch: {
@@ -203,7 +208,7 @@ export default {
   methods: {
     ...mapMutations('Files', ['SET_APP_SIDEBAR_ACTIVE_PANEL']),
     close() {
-      this.$emit('reset')
+      this.sidebarClosed = true;
     },
     onClickOutside(event) {
       /*
