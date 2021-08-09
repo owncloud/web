@@ -163,7 +163,7 @@ export default {
     },
     selectedFiles: {
       handler: function(old, now) {
-        console.log("selectedFiles")
+        console.log('selectedFiles')
       },
       immediate: true
     }
