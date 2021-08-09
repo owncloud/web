@@ -4,7 +4,6 @@
       ref="filesListWrapper"
       tabindex="-1"
       class="files-list-wrapper uk-width-expand"
-      :class="{ 'uk-visible@m': _sidebarOpen }"
       @dragover="$_ocApp_dragOver"
     >
       <app-bar id="files-app-bar" />
@@ -52,10 +51,6 @@ export default {
   },
   computed: {
     ...mapGetters('Files', ['dropzone', 'highlightedFile', 'inProgress']),
-
-    _sidebarOpen() {
-      return this.highlightedFile !== null
-    },
 
     $_uploadProgressVisible() {
       return this.inProgress.length > 0

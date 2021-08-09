@@ -5,11 +5,7 @@ export default {
     return state.inProgress
   },
   selectedFiles: state => {
-    if (state.selected.length === 0) {
-      return []
-    } else {
-      return state.selected
-    }
+    return state.selected
   },
   files: state => {
     return state.files
