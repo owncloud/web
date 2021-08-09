@@ -149,11 +149,7 @@ export default {
       return this.selectedFiles.length > 1
     },
     showSidebar() {
-      const show = this.selectedFiles.length > 0 && !this.sidebarClosed;
-      if(this.sidebarClosed) {
-        this.sidebarClosed = false;
-      }
-      return show;
+      return this.selectedFiles.length > 0 && !this.sidebarClosed
     }
   },
   watch: {
@@ -162,6 +158,14 @@ export default {
         this.$nextTick(() => {
           this.focused = panel ? `#sidebar-panel-${panel}` : `#sidebar-panel-select-${select}`
         })
+      },
+      immediate: true
+    },
+    selectedFiles: {
+      handler: function(old, selected) {
+        if (selected.length !== old.length) {
+          this.sidebarClosed = false
+        }
       },
       immediate: true
     }
@@ -208,7 +212,7 @@ export default {
   methods: {
     ...mapMutations('Files', ['SET_APP_SIDEBAR_ACTIVE_PANEL']),
     close() {
-      this.sidebarClosed = true;
+      this.sidebarClosed = true
     },
     onClickOutside(event) {
       /*
