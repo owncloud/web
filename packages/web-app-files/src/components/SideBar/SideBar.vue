@@ -1,6 +1,5 @@
 <template>
   <div
-    v-if="showSidebar"
     v-click-outside="onClickOutside"
     :class="{
       'has-active': !!appSidebarActivePanel
@@ -92,8 +91,7 @@ export default {
   data() {
     return {
       focused: undefined,
-      oldPanel: null,
-      sidebarClosed: false
+      oldPanel: null
     }
   },
   computed: {
@@ -151,10 +149,7 @@ export default {
       return null
     },
     areMultipleSelected() {
-      return this.selectedFiles.length > 1
-    },
-    showSidebar() {
-      return this.selectedFiles.length > 0 && !this.sidebarClosed
+      return this.selectedFiles && this.selectedFiles.length > 1
     }
   },
   watch: {
@@ -165,14 +160,6 @@ export default {
         })
       },
       immediate: true
-    },
-    selectedFiles: {
-      handler: function(old, selected) {
-        if (selected.length !== old.length) {
-          this.sidebarClosed = false
-        }
-      },
-      immediate: true
     }
   },
   beforeDestroy() {
@@ -180,44 +167,44 @@ export default {
     hiddenObserver.disconnect()
   },
   mounted() {
-    visibilityObserver = new VisibilityObserver({
-      root: document.querySelector('#files-sidebar'),
-      threshold: 0.9
-    })
-    hiddenObserver = new VisibilityObserver({
-      root: document.querySelector('#files-sidebar'),
-      threshold: 0.05
-    })
-
-    const doFocus = () => {
-      const selector = document.querySelector(this.focused)
-
-      if (!selector) {
-        return
-      }
-
-      selector.focus()
-    }
-
-    const clearOldPanel = () => {
-      this.oldPanel = null
-    }
-
-    this.$refs.panels.forEach(panel => {
-      visibilityObserver.observe(panel, {
-        onEnter: doFocus,
-        onExit: doFocus
-      })
-      hiddenObserver.observe(panel, {
-        onExit: clearOldPanel
-      })
-    })
+    this.initVisibilityObserver()
   },
-
   methods: {
     ...mapMutations('Files', ['SET_APP_SIDEBAR_ACTIVE_PANEL']),
+
     close() {
-      this.sidebarClosed = true
+      this.$root.$emit('toggle-sidebar')
+    },
+    initVisibilityObserver() {
+      visibilityObserver = new VisibilityObserver({
+        root: document.querySelector('#files-sidebar'),
+        threshold: 0.9
+      })
+      hiddenObserver = new VisibilityObserver({
+        root: document.querySelector('#files-sidebar'),
+        threshold: 0.05
+      })
+      const doFocus = () => {
+        const selector = document.querySelector(this.focused)
+        if (!selector) {
+          return
+        }
+        selector.focus()
+      }
+
+      const clearOldPanel = () => {
+        this.oldPanel = null
+      }
+
+      this.$refs.panels.forEach(panel => {
+        visibilityObserver.observe(panel, {
+          onEnter: doFocus,
+          onExit: doFocus
+        })
+        hiddenObserver.observe(panel, {
+          onExit: clearOldPanel
+        })
+      })
     },
     onClickOutside(event) {
       /*

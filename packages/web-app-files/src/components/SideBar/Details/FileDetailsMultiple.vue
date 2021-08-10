@@ -1,5 +1,5 @@
 <template>
-  <div id="oc-file-details-sidebar">
+  <div id="oc-file-details-multiple-sidebar">
     <div class="files-preview">
       <div class="files-preview__body">
         <oc-icon class="preview-icon" size="xxlarge" variation="passive" name="file_copy" />
@@ -7,7 +7,7 @@
       </div>
     </div>
     <div>
-      <table class="details-table" aria-label="detailsTableLabel">
+      <table class="details-table" :aria-label="detailsTableLabel">
         <tr data-testid="filesCount">
           <th scope="col" class="oc-pr-s" v-text="filesText" />
           <td v-text="filesCount" />
@@ -74,6 +74,9 @@ export default {
     },
     foldersText() {
       return this.$gettext('Folders')
+    },
+    detailsTableLabel() {
+      return this.$gettext('Overview of the information about the selected files')
     }
   }
 }
