@@ -51,7 +51,7 @@ export function buildResource(resource) {
     sharePermissions: resource.fileInfo[DavProperty.SharePermissions],
     shareTypes: (function() {
       if (resource.fileInfo[DavProperty.ShareTypes]) {
-        return resource.fileInfo[DavProperty.ShareTypes].map(parseInt)
+        return resource.fileInfo[DavProperty.ShareTypes].map(v => parseInt(v))
       }
       return []
     })(),
