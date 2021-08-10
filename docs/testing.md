@@ -86,3 +86,12 @@ for oCIS acceptance tests.
 #### Watch the test run
 
 To watch the tests while running, open [http://host.docker.internal:6080/](http://host.docker.internal:6080/) in the browser to access your VNC client.
+
+
+#### Watch the test report
+
+To generate test report, should runing test with:  ``` -f json:tests/report/cucumber_report.json && node tests/report/index.js ```
+
+command ``` -f json:tests/report/cucumber_report.json ``` creates or overwrites the file cucumber_report.json in the folder "tests/report"
+
+command ``` node tests/report/index.js ``` converts the report into the format cucumber_report.html and automatically opens in the browser
