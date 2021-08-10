@@ -11,6 +11,7 @@
       <router-view id="files-view" />
     </div>
     <side-bar
+      v-if="showSidebar"
       id="files-sidebar"
       ref="filesSidebar"
       tabindex="-1"
@@ -24,7 +25,6 @@
 <script>
 import Mixins from './mixins'
 import MixinRoutes from './mixins/routes'
-import MixinDestroySideBar from './mixins/sidebar/destroySideBar'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import AppBar from './components/AppBar/AppBar.vue'
 import ProgressBar from './components/Upload/ProgressBar.vue'
@@ -36,7 +36,7 @@ export default {
     ProgressBar,
     SideBar
   },
-  mixins: [Mixins, MixinRoutes, MixinDestroySideBar],
+  mixins: [Mixins, MixinRoutes],
   data() {
     return {
       createFolder: false,
@@ -45,24 +45,50 @@ export default {
       upload: false,
       fileName: '',
       selected: [],
-      breadcrumbs: []
+      breadcrumbs: [],
+      sidebarClosed: false
     }
   },
   computed: {
-    ...mapGetters('Files', ['dropzone', 'inProgress']),
+    ...mapGetters('Files', ['dropzone', 'inProgress', 'selectedFiles']),
 
     $_uploadProgressVisible() {
       return this.inProgress.length > 0
+    },
+    areMultipleSelected() {
+      return this.selectedFiles && this.selectedFiles.length > 1
+    },
+    showSidebar() {
+      return this.selectedFiles && this.selectedFiles.length > 0 && !this.sidebarClosed
     }
   },
   watch: {
     $route() {
       this.resetFileSelection()
+    },
+    showSidebar: {
+      handler: function(value) {
+        if (value) return
+        this.SET_APP_SIDEBAR_ACTIVE_PANEL(null)
+      },
+      immediate: false
+    },
+    selectedFiles: {
+      handler: function(old, selected) {
+        if (!selected) return
+        if (selected.length !== old.length) {
+          this.sidebarClosed = false
+        }
+      },
+      immediate: true
     }
   },
   created() {
     this.$root.$on('upload-end', () => {
       this.delayForScreenreader(() => this.$refs.filesListWrapper.focus())
+    })
+    this.$root.$on('toggle-sidebar', () => {
+      this.close()
     })
   },
 
@@ -73,10 +99,17 @@ export default {
   methods: {
     ...mapActions('Files', ['dragOver', 'resetFileSelection']),
     ...mapActions(['showMessage']),
-    ...mapMutations(['SET_SIDEBAR_FOOTER_CONTENT_COMPONENT']),
+    ...mapMutations('Files', [
+      'SET_SIDEBAR_FOOTER_CONTENT_COMPONENT',
+      'SET_APP_SIDEBAR_ACTIVE_PANEL'
+    ]),
 
     trace() {
       console.info('trace', arguments)
+    },
+
+    close() {
+      this.sidebarClosed = true
     },
 
     focusSideBar(component, event) {
