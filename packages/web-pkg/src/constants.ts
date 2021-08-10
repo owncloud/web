@@ -70,9 +70,11 @@ export abstract class DavProperties {
     DavProperty.PublicLinkShareOwner
   ])
 
-  static readonly Trashbin: DavProperty[] = DavProperties.Default.concat([
+  static readonly Trashbin: DavProperty[] = [
+    DavProperty.ContentLength,
+    DavProperty.ResourceType,
     DavProperty.TrashbinOriginalLocation,
     DavProperty.TrashbinOriginalFilename,
     DavProperty.TrashbinDeletedDate
-  ])
+  ]
 }
