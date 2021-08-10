@@ -16,7 +16,8 @@
       :class="{
         'is-active':
           appSidebarActivePanel === panelMeta.app || (!appSidebarActivePanel && panelMeta.default),
-        'sidebar-panel--default': panelMeta.default
+        'sidebar-panel--default': panelMeta.default,
+        'sidebar-panel--multiple-selected': areMultipleSelected
       }"
     >
       <div class="sidebar-panel__header header">
@@ -44,7 +45,11 @@
           <oc-icon name="close" />
         </oc-button>
       </div>
-      <file-info class="sidebar-panel__file_info" :is-content-displayed="isContentDisplayed" />
+      <file-info
+        v-if="!areMultipleSelected"
+        class="sidebar-panel__file_info"
+        :is-content-displayed="isContentDisplayed"
+      />
       <div class="sidebar-panel__body">
         <template v-if="isContentDisplayed">
           <component
@@ -274,6 +279,10 @@ export default {
 
   @media screen and (prefers-reduced-motion: reduce), (update: slow) {
     transition-duration: 0.001ms !important;
+  }
+
+  &--multiple-selected {
+    grid-template-rows: 50px 1fr;
   }
 
   &--default {
