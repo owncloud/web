@@ -516,7 +516,12 @@ When('the user restores the file to last version using the webUI', function () {
   return client.page.FilesPageElement.versionsDialog().restoreToPreviousVersion()
 })
 
-When('the user/public reloads the current page of the webUI', function () {
+
+When('the user downloads a file of a previous version using the webUI', function() {
+  return client.page.FilesPageElement.versionsDialog().downloadFilePreviousVersion()
+})
+
+When('the user/public reloads the current page of the webUI', function() {
   return client.refresh()
 })
 
@@ -1247,8 +1252,31 @@ Then(
           ']'
       )
     }
+Then('file {string} should be downloaded successfully', function(file) {
+  client.pause(5000) // We should waiting for the file to download
+  return client.checkFileExists(path.join(__dirname, '/../download/', file))
+})
+
+Then('the following resources should have share indicators on the webUI', async function(
+  dataTable
+) {
+  for (const { fileName, expectedIndicators } of dataTable.hashes()) {
+    const indicatorsArray = await client.page.FilesPageElement.filesList().getShareIndicatorsForResourceWithRetry(
+      fileName,
+      true
+    )
+    const expectedIndicatorsArray = expectedIndicators.split(',').map(s => s.trim())
+    assert.ok(
+      _.intersection(indicatorsArray, expectedIndicatorsArray).length ===
+        expectedIndicatorsArray.length,
+      `Expected share indicators to be the same for "${fileName}": expected [` +
+        expectedIndicatorsArray.join(', ') +
+        '] got [' +
+        indicatorsArray.join(', ') +
+        ']'
+    )
   }
-)
+})
 
 Then(
   'the following resources should not have share indicators on the webUI',

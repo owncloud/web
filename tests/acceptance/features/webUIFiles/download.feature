@@ -25,4 +25,4 @@ Feature: download files
     Given user "Alice" has created file "sample,1.txt"
     When the user has browsed to the files page
     And the user downloads file "sample,1.txt" using the webUI
-    Then no message should be displayed on the webUI
+    Then file "sample,1.txt" should be downloaded successfully

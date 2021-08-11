@@ -59,6 +59,7 @@ services:
     volumes:
       - /dev/shm:/dev/shm
       - ./tests/acceptance/filesForUpload:/uploads:ro
+      - ./tests/acceptance/download:/home/seluser/Downloads
     extra_hosts:
       - host.docker.internal:${DOCKER_HOST:-host-gateway}
     environment:

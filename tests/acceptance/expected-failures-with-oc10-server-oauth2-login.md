@@ -199,3 +199,5 @@ Other free text and markdown formatting can be used elsewhere in the document if
 - [webUISharingFilePermissionsGroups/sharePermissionsGroup.feature:66](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingFilePermissionsGroups/sharePermissionsGroup.feature#L66)
 - [webUISharingPermissionToRoot/shareFileWithMultipleUsers.feature:66](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPermissionToRoot/shareFileWithMultipleUsers.feature#L66)
 
+### [downloading an old version of a file returns 501](https://github.com/owncloud/ocis/issues/2261)
+-   [webUIFilesActionMenu/versions.feature:102](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesActionMenu/versions.feature#L102)
