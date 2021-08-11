@@ -288,7 +288,12 @@ export default {
   },
 
   methods: {
-    ...mapActions('Files', ['updateFileProgress', 'removeFilesFromTrashbin', 'loadIndicators', 'setFileSelection']),
+    ...mapActions('Files', [
+      'updateFileProgress',
+      'removeFilesFromTrashbin',
+      'loadIndicators',
+      'setFileSelection'
+    ]),
     ...mapActions(['openFile', 'showMessage', 'createModal', 'setModalInputErrorMessage']),
     ...mapMutations('Files', ['UPSERT_RESOURCE', 'SET_HIDDEN_FILES_VISIBILITY']),
     ...mapMutations(['SET_QUOTA']),
