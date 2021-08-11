@@ -77,6 +77,7 @@
 import vue2DropZone from 'vue2-dropzone'
 import { mapGetters } from 'vuex'
 import Mixins from '../mixins.js'
+import { DavProperties } from 'web-pkg/src/constants'
 
 export default {
   components: {
@@ -93,7 +94,7 @@ export default {
   },
   computed: {
     ...mapGetters(['configuration']),
-    ...mapGetters('Files', ['davProperties', 'publicLinkPassword']),
+    ...mapGetters('Files', ['publicLinkPassword']),
     pageTitle() {
       return this.$gettext(this.$route.meta.title)
     },
@@ -134,16 +135,9 @@ export default {
   methods: {
     resolvePublicLink() {
       this.loading = true
-      const properties = this.davProperties.concat([
-        this.$client.publicFiles.PUBLIC_LINK_ITEM_TYPE,
-        this.$client.publicFiles.PUBLIC_LINK_PERMISSION,
-        this.$client.publicFiles.PUBLIC_LINK_EXPIRATION,
-        this.$client.publicFiles.PUBLIC_LINK_SHARE_DATETIME,
-        this.$client.publicFiles.PUBLIC_LINK_SHARE_OWNER
-      ])
 
       this.$client.publicFiles
-        .list(this.publicLinkToken, this.publicLinkPassword, properties, '0')
+        .list(this.publicLinkToken, this.publicLinkPassword, DavProperties.PublicLink, '0')
         .then(files => {
           if (files[0].getProperty(this.$client.publicFiles.PUBLIC_LINK_SHARE_DATETIME !== '4')) {
             this.$router.push({

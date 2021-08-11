@@ -69,6 +69,7 @@ import NotFoundMessage from '../components/FilesList/NotFoundMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
+import { DavProperties } from 'web-pkg/src/constants'
 
 const visibilityObserver = new VisibilityObserver()
 export default {
@@ -98,7 +99,6 @@ export default {
       'publicLinkPassword',
       'activeFiles',
       'selectedFiles',
-      'davProperties',
       'currentFolder',
       'highlightedFile',
       'inProgress',
@@ -194,19 +194,11 @@ export default {
       this.loading = true
       this.CLEAR_CURRENT_FILES_LIST()
 
-      const properties = this.davProperties.concat([
-        this.$client.publicFiles.PUBLIC_LINK_ITEM_TYPE,
-        this.$client.publicFiles.PUBLIC_LINK_PERMISSION,
-        this.$client.publicFiles.PUBLIC_LINK_EXPIRATION,
-        this.$client.publicFiles.PUBLIC_LINK_SHARE_DATETIME,
-        this.$client.publicFiles.PUBLIC_LINK_SHARE_OWNER
-      ])
-
       try {
         let resources = await this.$client.publicFiles.list(
           this.$route.params.item,
           this.publicLinkPassword,
-          properties
+          DavProperties.PublicLink
         )
 
         // Redirect to files drop if the link has role "uploader"
