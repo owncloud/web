@@ -8,10 +8,19 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Escape file name in Media viewer: [#5593](https://github.com/owncloud/web/issues/5593)
 * Bugfix - Load folder in Media viewer: [#5427](https://github.com/owncloud/web/issues/5427)
 
 Details
 -------
+
+* Bugfix - Escape file name in Media viewer: [#5593](https://github.com/owncloud/web/issues/5593)
+
+   We've started escaping the file name in the Media viewer extension so that a file with special
+   characters in the name can still be loaded.
+
+   https://github.com/owncloud/web/issues/5593
+   https://github.com/owncloud/web/pull/5655
 
 * Bugfix - Load folder in Media viewer: [#5427](https://github.com/owncloud/web/issues/5427)
 
