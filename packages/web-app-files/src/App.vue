@@ -55,9 +55,6 @@ export default {
     $_uploadProgressVisible() {
       return this.inProgress.length > 0
     },
-    areMultipleSelected() {
-      return this.selectedFiles && this.selectedFiles.length > 1
-    },
     showSidebar() {
       return this.selectedFiles && this.selectedFiles.length > 0 && !this.sidebarClosed
     }
@@ -66,21 +63,14 @@ export default {
     $route() {
       this.resetFileSelection()
     },
-    showSidebar: {
-      handler: function(value) {
-        if (value) return
-        this.SET_APP_SIDEBAR_ACTIVE_PANEL(null)
-      },
-      immediate: false
+    showSidebar(visible) {
+      if (visible) return
+      this.SET_APP_SIDEBAR_ACTIVE_PANEL(null)
     },
-    selectedFiles: {
-      handler: function(old, selected) {
-        if (!selected) return
-        if (selected.length !== old.length) {
-          this.sidebarClosed = false
-        }
-      },
-      immediate: true
+    selectedFiles(selected, oldSelected) {
+      if (selected.length !== oldSelected.length) {
+        this.sidebarClosed = false
+      }
     }
   },
   created() {
@@ -88,7 +78,7 @@ export default {
       this.delayForScreenreader(() => this.$refs.filesListWrapper.focus())
     })
     this.$root.$on('toggle-sidebar', () => {
-      this.close()
+      this.closeSidebar()
     })
   },
 
@@ -108,7 +98,7 @@ export default {
       console.info('trace', arguments)
     },
 
-    close() {
+    closeSidebar() {
       this.sidebarClosed = true
     },
 

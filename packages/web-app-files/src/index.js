@@ -48,13 +48,13 @@ const appInfo = {
         return !isTrashbinRoute(route) && !multipleSelection
       }
     }),
-    ({ route, multipleSelection }) => ({
+    ({ multipleSelection }) => ({
       app: 'details-item',
       icon: 'info_outline',
       component: FileDetailsMultiple,
-      default: !isTrashbinRoute(route),
+      default: () => true,
       get enabled() {
-        return !isTrashbinRoute(route) && multipleSelection
+        return multipleSelection
       }
     }),
     ({ route, multipleSelection }) => ({
