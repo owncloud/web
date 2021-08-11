@@ -233,7 +233,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('Files', ['setHighlightedFile', 'loadPreview', 'loadVersions']),
+    ...mapActions('Files', ['loadPreview', 'loadVersions']),
     ...mapMutations('Files', ['SET_APP_SIDEBAR_ACTIVE_PANEL']),
     expandPeoplesAccordion() {
       this.SET_APP_SIDEBAR_ACTIVE_PANEL('sharing-item')

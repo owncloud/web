@@ -1,5 +1,4 @@
 import { mapActions } from 'vuex'
-
 import { isTrashbinRoute } from '../../helpers/route'
 
 export default {
@@ -18,12 +17,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('Files', [
-      'resetFileSelection',
-      'addFileSelection',
-      'setHighlightedFile',
-      'removeFilesFromTrashbin'
-    ]),
+    ...mapActions('Files', ['resetFileSelection', 'addFileSelection', 'removeFilesFromTrashbin']),
 
     $_restore_trigger(resource) {
       this.resetFileSelection()
@@ -53,7 +47,6 @@ export default {
         })
 
       this.resetFileSelection()
-      this.setHighlightedFile(null)
     }
   }
 }

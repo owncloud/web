@@ -29,6 +29,7 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 import AppBar from './components/AppBar/AppBar.vue'
 import ProgressBar from './components/Upload/ProgressBar.vue'
 import SideBar from './components/SideBar/SideBar.vue'
+import { bus } from 'web-pkg/src/instance'
 
 export default {
   components: {
@@ -77,8 +78,11 @@ export default {
     this.$root.$on('upload-end', () => {
       this.delayForScreenreader(() => this.$refs.filesListWrapper.focus())
     })
-    this.$root.$on('toggle-sidebar', () => {
-      this.closeSidebar()
+    bus.on('app.files.sidebar.close', () => {
+      this.sidebarClosed = true
+    })
+    bus.on('app.files.sidebar.show', () => {
+      this.sidebarClosed = false
     })
   },
 
@@ -96,10 +100,6 @@ export default {
 
     trace() {
       console.info('trace', arguments)
-    },
-
-    closeSidebar() {
-      this.sidebarClosed = true
     },
 
     focusSideBar(component, event) {
