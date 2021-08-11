@@ -1,7 +1,7 @@
 <template>
   <div id="oc-file-details-multiple-sidebar">
-    <div class="files-preview">
-      <div class="files-preview__body">
+    <div class="files-preview oc-mb">
+      <div class="files-preview-body">
         <oc-icon class="preview-icon" size="xxlarge" variation="passive" name="file_copy" />
         <span class="preview-text" data-testid="selectedFilesText" v-text="selectedFilesString" />
       </div>
@@ -18,7 +18,7 @@
         </tr>
         <tr v-if="showSize" data-testid="size">
           <th scope="col" class="oc-pr-s" v-text="sizeText" />
-          <td v-text="selectedFilesSize" />
+          <td v-text="sizeValue" />
         </tr>
       </table>
     </div>
@@ -52,7 +52,7 @@ export default {
         }
       )
     },
-    selectedFilesSize() {
+    sizeValue() {
       let size = 0
       this.selectedFiles.forEach(i => (size += parseInt(i.size)))
       return this.getResourceSize(size)
@@ -90,7 +90,7 @@ export default {
   text-align: center;
   color: var(--oc-color-swatch-passive-muted);
 
-  &__body {
+  &-body {
     margin: 0;
     position: absolute;
     top: 50%;
@@ -107,7 +107,6 @@ export default {
   }
 }
 .details-table {
-  padding-top: 20px;
   text-align: left;
 
   tr {
