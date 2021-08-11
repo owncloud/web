@@ -23,7 +23,7 @@
         :resources="activeFiles"
         :are-resources-clickable="false"
         :header-position="headerPosition"
-        @showDetails="$_mountSideBar_showDetails"
+        @showDetails="$_mountSideBar_showDefaultPanel"
       >
         <template #contextMenu="{ resource }">
           <context-actions :item="resource" />
