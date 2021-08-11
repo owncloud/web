@@ -8179,10 +8179,10 @@ ospec@3.1.0:
   dependencies:
     glob "^7.1.3"
 
-owncloud-design-system@^9.0.0:
-  version "9.0.0"
-  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-9.0.0.tgz#da445da6b9f8f01d8adceb197249e3150f09bf0f"
-  integrity sha512-7dg16L7Ind6kES+9LlXlAWI5hl7zsTTpcqpbjBEe0Zi5B3NwGwjr6fiqRoH7oHZGj3sGaL/G9PuYVxfflBjTtw==
+owncloud-design-system@^9.0.1:
+  version "9.0.1"
+  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-9.0.1.tgz#fcfd1ebcb3604a02a72a891f3bdaae7970a1e4b7"
+  integrity sha512-NG6TcK8Hrj4hgXf1Kbhp4UGWvxlUDmX/FTJCxBvioHSOhcI4Gcsb0l+GPX5dcZsV2OctroU935B9BUHb7KXSKQ==
 
 owncloud-sdk@1.0.0-2296:
   version "1.0.0-2296"
