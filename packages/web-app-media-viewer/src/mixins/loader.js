@@ -68,7 +68,13 @@ export default {
     $_loader_getDavFilePath(mediaFile, query = null) {
       const queryStr = !query ? '' : queryString.stringify(query)
       if (!this.$_loader_publicContext) {
-        const path = ['..', 'dav', 'files', this.$store.getters.user.id, mediaFile.path].join('/')
+        const path = [
+          '..',
+          'dav',
+          'files',
+          this.$store.getters.user.id,
+          mediaFile.path.replace(/^\//, '')
+        ].join('/')
         return [this.$client.files.getFileUrl(path), queryStr].filter(Boolean).join('?')
       }
 

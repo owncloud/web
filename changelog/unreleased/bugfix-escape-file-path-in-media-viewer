@@ -1,0 +1,6 @@
+Bugfix: escape file name in Media viewer
+
+We've started escaping the file name in the Media viewer extension so that a file with special characters in the name can still be loaded.
+
+https://github.com/owncloud/web/issues/5593
+https://github.com/owncloud/web/pull/5655
