@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Escape file name in Media viewer: [#5593](https://github.com/owncloud/web/issues/5593)
 * Bugfix - Load folder in Media viewer: [#5427](https://github.com/owncloud/web/issues/5427)
+* Enhancement - Add multiple selection Sidebar: [#5164](https://github.com/owncloud/web/issues/5164)
 
 Details
 -------
@@ -29,6 +30,14 @@ Details
 
    https://github.com/owncloud/web/issues/5427
    https://github.com/owncloud/web/pull/5585
+
+* Enhancement - Add multiple selection Sidebar: [#5164](https://github.com/owncloud/web/issues/5164)
+
+   We've changed the sidebar so if a user selects multiple files or folders he sees a detailed view
+   of his selection in the sidebar.
+
+   https://github.com/owncloud/web/issues/5164
+   https://github.com/owncloud/web/pull/5630
 
 Changelog for ownCloud Web [4.0.0] (2021-08-04)
 =======================================
