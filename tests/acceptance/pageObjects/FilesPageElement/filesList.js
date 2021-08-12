@@ -598,10 +598,9 @@ module.exports = {
 
     cancelResourceMoveOrCopyProgress: async function() {
       // cancel copy or move
-      await this.useXpath()
+      await this
         .waitForElementVisible(this.elements.cancelMoveCopyBtn.selector)
         .click(this.elements.cancelMoveCopyBtn.selector)
-        .useCss()
       await this.waitForLoadingFinished()
 
       return this
