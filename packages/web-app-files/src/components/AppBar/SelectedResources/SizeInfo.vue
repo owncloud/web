@@ -19,6 +19,7 @@
       >%{ amount } selected item
     </translate>
     <oc-button
+      id="files-clear-selection"
       v-oc-tooltip="clearSelectionLabel"
       :aria-label="clearSelectionLabel"
       class="oc-ml oc-mr-xs"

@@ -599,8 +599,8 @@ module.exports = {
     cancelResourceMoveOrCopyProgress: async function() {
       // cancel copy or move
       await this.useXpath()
-        .waitForElementVisible(client.page.personalPage().elements.cancelMoveCopyBtn.selector)
-        .click(this.page.personalPage().elements.cancelMoveCopyBtn.selector)
+        .waitForElementVisible(this.elements.cancelMoveCopyBtn.selector)
+        .click(this.elements.cancelMoveCopyBtn.selector)
         .useCss()
       await this.waitForLoadingFinished()
 
@@ -765,6 +765,9 @@ module.exports = {
     previewImage: {
       selector: '//img[contains(@class, "oc-resource-thumbnail")]',
       locateStrategy: 'xpath'
-    }
+    },
+    cancelMoveCopyBtn: {
+      selector: '#location-picker-btn-cancel'
+    },
   }
 }
