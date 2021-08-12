@@ -82,7 +82,6 @@ import NotFoundMessage from '../components/FilesList/NotFoundMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
-import { DavProperties } from 'web-pkg/src/constants'
 
 import { basename } from 'path'
 
