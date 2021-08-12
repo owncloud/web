@@ -10,10 +10,10 @@ module.exports = {
         this.api.page.personalPage().elements.sideBar
       ).waitForElementVisible(this.elements.fileInfoIcon)
     },
-    closeSidebar: async function(timeout = null) {
+    closeSidebar: function(timeout = null) {
       timeout = timeoutHelper.parseTimeout(timeout)
       try {
-        await this.click({
+        this.click({
           selector: '@sidebarCloseBtn',
           timeout: timeout
         })
