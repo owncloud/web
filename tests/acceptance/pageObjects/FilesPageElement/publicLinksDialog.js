@@ -149,7 +149,8 @@ module.exports = {
         .initAjaxCounters()
         .click(linkRowDeleteButton)
         .waitForElementVisible('@dialog')
-        .click('@dialogConfirmBtn')
+        .waitForAnimationToFinish() // wait for transition on the modal to finish
+        .click('@dialogConfirmBtnEnabled')
         .waitForOutstandingAjaxCalls()
     },
     /**
@@ -170,6 +171,7 @@ module.exports = {
         .initAjaxCounters()
         .click(linkRowDeleteButton)
         .waitForElementVisible('@dialog')
+        .waitForAnimationToFinish() // wait for transition on the modal to finish
         .click('@dialogCancelBtn')
         .waitForOutstandingAjaxCalls()
     },
@@ -456,8 +458,8 @@ module.exports = {
     dialog: {
       selector: '.oc-modal'
     },
-    dialogConfirmBtn: {
-      selector: '.oc-modal-body-actions-confirm'
+    dialogConfirmBtnEnabled: {
+      selector: '.oc-modal-body-actions-confirm:enabled'
     },
     dialogCancelBtn: {
       selector: '.oc-modal-body-actions-cancel'

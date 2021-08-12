@@ -169,9 +169,7 @@ module.exports = {
      * @return {Promise<*>}
      */
     confirmDeletion: function() {
-      return this.waitForElementEnabled('@dialogConfirmBtn')
-        .click('@dialogConfirmBtn')
-        .waitForElementNotPresent('@dialog')
+      return this.click('@dialogConfirmBtnEnabled').waitForElementNotPresent('@dialog')
     },
     /**
      *
@@ -755,8 +753,8 @@ module.exports = {
     dialog: {
       selector: '.oc-modal'
     },
-    dialogConfirmBtn: {
-      selector: '.oc-modal-body-actions-confirm'
+    dialogConfirmBtnEnabled: {
+      selector: '.oc-modal-body-actions-confirm:enabled'
     },
     dialogCancelBtn: {
       selector: '.oc-modal-body-actions-cancel'

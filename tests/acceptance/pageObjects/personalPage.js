@@ -90,13 +90,14 @@ module.exports = {
         .click('@newFileMenuButton')
         .click('@newFolderButton')
         .waitForElementVisible('@dialog')
+        .waitForAnimationToFinish() // wait for transition on the modal to finish
 
       if (name !== null) {
         await this.clearValueWithEvent('@dialogInput')
         await this.setValue('@dialogInput', name)
       }
 
-      await this.click('@dialogConfirmBtn').waitForAjaxCallsToStartAndFinish()
+      await this.click('@dialogConfirmBtnEnabled').waitForAjaxCallsToStartAndFinish()
 
       if (expectToSucceed) {
         await this.waitForElementNotPresent('@dialog')
@@ -121,13 +122,14 @@ module.exports = {
         .waitForElementVisible('@newFileButton')
         .click('@newFileButton')
         .waitForElementVisible('@dialog')
+        .waitForAnimationToFinish() // wait for transition on the modal to finish
 
       if (name !== null) {
         await this.clearValueWithEvent('@dialogInput')
         await this.setValue('@dialogInput', name)
       }
 
-      await this.click('@dialogConfirmBtn')
+      await this.click('@dialogConfirmBtnEnabled')
 
       if (expectToSucceed) {
         await this.waitForElementNotPresent('@dialog')
@@ -228,7 +230,8 @@ module.exports = {
       return this.waitForElementVisible('@deleteSelectedButton')
         .click('@deleteSelectedButton')
         .waitForElementVisible('@dialog')
-        .click('@dialogConfirmBtn')
+        .waitForAnimationToFinish() // wait for transition on the modal to finish
+        .click('@dialogConfirmBtnEnabled')
         .waitForAjaxCallsToStartAndFinish()
         .waitForElementNotPresent('@dialog')
     },
@@ -257,7 +260,8 @@ module.exports = {
       })
     },
     confirmFileOverwrite: async function() {
-      await this.click('@dialogConfirmBtn')
+      await this.waitForAnimationToFinish() // wait for transition on the modal to finish
+        .click('@dialogConfirmBtnEnabled')
         .waitForElementNotPresent('@dialog')
         .waitForAjaxCallsToStartAndFinish()
       return this
@@ -301,7 +305,7 @@ module.exports = {
       }
 
       await this.initAjaxCounters()
-        .click('@dialogConfirmBtn')
+        .click('@dialogConfirmBtnEnabled')
         .waitForOutstandingAjaxCalls()
 
       if (expectToSucceed) {
@@ -415,13 +419,11 @@ module.exports = {
     dialog: {
       selector: '.oc-modal'
     },
-    dialogConfirmBtn: {
-      selector: '.oc-modal-body-actions-confirm'
+    dialogConfirmBtnEnabled: {
+      selector: '.oc-modal-body-actions-confirm:enabled'
     },
     dialogConfirmBtnDisabled: {
-      selector:
-        '//button[contains(@class, "oc-modal-body-actions-confirm") and @disabled="disabled"]',
-      locateStrategy: 'xpath'
+      selector: '.oc-modal-body-actions-confirm:disabled'
     },
     dialogCancelBtn: {
       selector: '.oc-modal-body-actions-cancel'
