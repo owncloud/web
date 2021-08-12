@@ -1,85 +1,99 @@
 <template>
   <div
     :class="{
-      'has-active': !!appSidebarActivePanel
+      'has-active': !!appSidebarActivePanel,
+      'uk-flex uk-flex-center uk-flex-middle': loading
     }"
   >
-    <div
-      v-for="panelMeta in panelMetas"
-      :id="`sidebar-panel-${panelMeta.app}`"
-      :key="`panel-${panelMeta.app}`"
-      ref="panels"
-      :tabindex="appSidebarActivePanel === panelMeta.app ? -1 : false"
-      class="sidebar-panel"
-      :class="{
-        'is-active':
-          appSidebarActivePanel === panelMeta.app || (!appSidebarActivePanel && panelMeta.default),
-        'sidebar-panel--default': panelMeta.default,
-        'sidebar-panel--multiple-selected': areMultipleSelected || isRootFolder
-      }"
-    >
-      <div class="sidebar-panel__header header">
-        <oc-button
-          v-if="!panelMeta.default"
-          class="header__back"
-          appearance="raw"
-          :aria-label="accessibleLabelBack"
-          @click="closePanel"
-        >
-          <oc-icon name="chevron_left" />
-          {{ defaultPanelMeta.component.title($gettext) }}
-        </oc-button>
+    <oc-spinner v-if="loading" />
+    <template v-else>
+      <div
+        v-for="panelMeta in panelMetas"
+        :id="`sidebar-panel-${panelMeta.app}`"
+        :key="`panel-${panelMeta.app}`"
+        ref="panels"
+        :tabindex="appSidebarActivePanel === panelMeta.app ? -1 : false"
+        class="sidebar-panel"
+        :class="{
+          'is-active':
+            appSidebarActivePanel === panelMeta.app ||
+            (!appSidebarActivePanel && panelMeta.default),
+          'sidebar-panel--default': panelMeta.default,
+          'sidebar-panel--multiple-selected': areMultipleSelected || isRootFolder
+        }"
+      >
+        <div class="sidebar-panel__header header">
+          <oc-button
+            v-if="!panelMeta.default"
+            class="header__back"
+            appearance="raw"
+            :aria-label="accessibleLabelBack"
+            @click="closePanel"
+          >
+            <oc-icon name="chevron_left" />
+            {{ defaultPanelMeta.component.title($gettext) }}
+          </oc-button>
 
-        <div class="header__title">
-          {{ panelMeta.component.title($gettext) }}
-        </div>
-
-        <oc-button
-          appearance="raw"
-          class="header__close"
-          :aria-label="$gettext('Close file sidebar')"
-          @click="closeSidebar"
-        >
-          <oc-icon name="close" />
-        </oc-button>
-      </div>
-      <file-info
-        v-if="!areMultipleSelected && !isRootFolder"
-        class="sidebar-panel__file_info"
-        :is-content-displayed="isContentDisplayed"
-      />
-      <div class="sidebar-panel__body">
-        <template v-if="isContentDisplayed">
-          <component
-            :is="panelMeta.component"
-            v-if="[activePanel, oldPanel].includes(panelMeta.app)"
-          />
-
-          <div v-if="panelMeta.default && panelMetas.length > 1" class="sidebar-panel__navigation">
-            <oc-button
-              v-for="panelSelect in panelMetas.filter(p => !p.default)"
-              :id="`sidebar-panel-${panelSelect.app}-select`"
-              :key="`panel-select-${panelSelect.app}`"
-              appearance="raw"
-              @click="openPanel(panelSelect.app)"
-            >
-              <oc-icon :name="panelSelect.icon" />
-              {{ panelSelect.component.title($gettext) }}
-              <oc-icon name="chevron_right" />
-            </oc-button>
+          <div class="header__title">
+            {{ panelMeta.component.title($gettext) }}
           </div>
-        </template>
-        <p v-else>{{ sidebarAccordionsWarningMessage }}</p>
+
+          <oc-button
+            appearance="raw"
+            class="header__close"
+            :aria-label="$gettext('Close file sidebar')"
+            @click="closeSidebar"
+          >
+            <oc-icon name="close" />
+          </oc-button>
+        </div>
+        <file-info
+          v-if="!areMultipleSelected && !isRootFolder"
+          class="sidebar-panel__file_info"
+          :is-content-displayed="isContentDisplayed"
+        />
+        <div class="sidebar-panel__body">
+          <template v-if="isContentDisplayed">
+            <component
+              :is="panelMeta.component"
+              v-if="[activePanel, oldPanel].includes(panelMeta.app)"
+            />
+
+            <div
+              v-if="panelMeta.default && panelMetas.length > 1"
+              class="sidebar-panel__navigation"
+            >
+              <oc-button
+                v-for="panelSelect in panelMetas.filter(p => !p.default)"
+                :id="`sidebar-panel-${panelSelect.app}-select`"
+                :key="`panel-select-${panelSelect.app}`"
+                appearance="raw"
+                @click="openPanel(panelSelect.app)"
+              >
+                <oc-icon :name="panelSelect.icon" />
+                {{ panelSelect.component.title($gettext) }}
+                <oc-icon name="chevron_right" />
+              </oc-button>
+            </div>
+          </template>
+          <p v-else>{{ sidebarAccordionsWarningMessage }}</p>
+        </div>
       </div>
-    </div>
+    </template>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapMutations, mapState, mapActions } from 'vuex'
-import FileInfo from './FileInfo.vue'
-import MixinRoutes from '../../mixins/routes'
 import { VisibilityObserver } from 'web-pkg/src/observer'
+import { bus } from 'web-pkg/src/instance'
+import { DavProperties } from 'web-pkg/src/constants'
+
+import MixinRoutes from '../../mixins/routes'
+import { buildResource } from '../../helpers/resources'
+import { isTrashbinRoute } from '../../helpers/route'
+
+import FileInfo from './FileInfo.vue'
 
 let visibilityObserver
 let hiddenObserver
@@ -87,12 +101,22 @@ let hiddenObserver
 export default {
   components: { FileInfo },
   mixins: [MixinRoutes],
+
+  provide() {
+    return { displayedItem: this.displayedItem }
+  },
+
   data() {
     return {
       focused: undefined,
-      oldPanel: null
+      oldPanel: null,
+      displayedItem: {
+        value: null
+      },
+      loading: false
     }
   },
+
   computed: {
     ...mapGetters('Files', ['highlightedFile', 'selectedFiles', 'currentFolder']),
     ...mapGetters(['fileSideBars', 'capabilities']),
@@ -163,14 +187,24 @@ export default {
         })
       },
       immediate: true
+    },
+    highlightedFile(newFile, oldFile) {
+      if (newFile.id !== oldFile.id) {
+        this.fetchFileInfo()
+      }
     }
   },
+
+  async created() {
+    if (!this.areMultipleSelected) {
+      await this.fetchFileInfo()
+    }
+    this.$nextTick(this.initVisibilityObserver)
+  },
+
   beforeDestroy() {
     visibilityObserver.disconnect()
     hiddenObserver.disconnect()
-  },
-  mounted() {
-    this.initVisibilityObserver()
   },
   methods: {
     ...mapMutations('Files', ['SET_APP_SIDEBAR_ACTIVE_PANEL']),
@@ -220,6 +254,31 @@ export default {
     closePanel() {
       this.setOldPanel()
       this.SET_APP_SIDEBAR_ACTIVE_PANEL(null)
+    },
+
+    async fetchFileInfo() {
+      if (isTrashbinRoute(this.$route)) {
+        this.displayedItem.value = this.highlightedFile
+
+        return
+      }
+
+      this.loading = true
+
+      try {
+        const item = await this.$client.files.fileInfo(
+          this.highlightedFile.path,
+          DavProperties.Default
+        )
+
+        this.displayedItem.value = buildResource(item)
+      } catch (error) {
+        this.displayedItem.value = this.highlightedFile
+
+        console.error(error)
+      }
+
+      this.loading = false
     }
   }
 }

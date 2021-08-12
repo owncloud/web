@@ -23,18 +23,22 @@ import CopyToClipboardButton from './CopyToClipboardButton.vue'
 export default {
   name: 'PrivateLinkItem',
   components: { CopyToClipboardButton },
+
+  inject: ['displayedItem'],
+
   computed: {
-    ...mapGetters('Files', ['highlightedFile']),
     ...mapGetters(['capabilities']),
 
     link() {
-      if (this.highlightedFile.isMounted()) {
-        const file = encodeURIComponent(this.highlightedFile.name)
+      const file = this.displayedItem.value
+
+      if (file.isMounted()) {
+        const file = encodeURIComponent(this.file.name)
 
         return window.location.href.split('?')[0] + `?scrollTo=${file}`
       }
 
-      return this.highlightedFile.privateLink
+      return file.privateLink
     },
 
     privateLinkEnabled() {
