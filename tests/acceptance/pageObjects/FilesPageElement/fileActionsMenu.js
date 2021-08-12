@@ -80,9 +80,10 @@ module.exports = {
       await this.useXpath()
         .performFileAction(this.FileAction.rename)
         .waitForElementVisible('@dialog')
+        .waitForAnimationToFinish() // wait for transition on the modal to finish
         .clearValue('@dialogInput')
         .setValue('@dialogInput', toName)
-        .click('@dialogConfirmBtn')
+        .click('@dialogConfirmBtnEnabled')
         .useCss()
 
       if (expectToSucceed) {
@@ -199,8 +200,8 @@ module.exports = {
     dialog: {
       selector: '.oc-modal'
     },
-    dialogConfirmBtn: {
-      selector: '.oc-modal-body-actions-confirm'
+    dialogConfirmBtnEnabled: {
+      selector: '.oc-modal-body-actions-confirm:enabled'
     },
     dialogInput: {
       selector: '.oc-modal-body-input .oc-text-input'
