@@ -67,11 +67,6 @@ export default {
     showSidebar(visible) {
       if (visible) return
       this.SET_APP_SIDEBAR_ACTIVE_PANEL(null)
-    },
-    selectedFiles(selected, oldSelected) {
-      if (selected.length !== oldSelected.length) {
-        this.sidebarClosed = false
-      }
     }
   },
   created() {
