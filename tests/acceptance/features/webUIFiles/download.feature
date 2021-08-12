@@ -21,8 +21,17 @@ Feature: download files
     And as "Alice" file "lorem.txt" should not exist
 
 
+  # don't work in chrome
+  @skip 
   Scenario: download file with comma in the filename
     Given user "Alice" has created file "sample,1.txt"
     When the user has browsed to the files page
     And the user downloads file "sample,1.txt" using the webUI
     Then file "sample,1.txt" should be downloaded successfully
+
+
+  Scenario: download file
+    Given user "Alice" has created file "lorem.txt"
+    When the user browses to the files page
+    And the user downloads file "lorem.txt" using the webUI
+    Then file "lorem.txt" should be downloaded successfully
