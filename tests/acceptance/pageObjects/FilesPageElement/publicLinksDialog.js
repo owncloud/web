@@ -149,9 +149,7 @@ module.exports = {
         .initAjaxCounters()
         .click(linkRowDeleteButton)
         .waitForElementVisible('@dialog')
-        .waitForAnimationToFinish()
         .click('@dialogConfirmBtn')
-        .waitForAnimationToFinish()
         .waitForOutstandingAjaxCalls()
     },
     /**
@@ -172,9 +170,7 @@ module.exports = {
         .initAjaxCounters()
         .click(linkRowDeleteButton)
         .waitForElementVisible('@dialog')
-        .waitForAnimationToFinish()
         .click('@dialogCancelBtn')
-        .waitForAnimationToFinish()
         .waitForOutstandingAjaxCalls()
     },
     /**
@@ -187,7 +183,7 @@ module.exports = {
       const fileNameSelectorXpath =
         this.elements.publicLinkContainer.selector + this.elements.publicLinkName.selector
       let isPresent
-      await this.waitForAnimationToFinish().api.elements(
+      await this.api.elements(
         this.elements.publicLinkName.locateStrategy,
         util.format(fileNameSelectorXpath, linkName),
         result => {
@@ -362,13 +358,9 @@ module.exports = {
       return this.waitForElementVisible(copyBtnSelector).click(copyBtnSelector)
     },
     copyPrivateLink: function() {
-      const linksPanelSelect = this.api.page.FilesPageElement.appSideBar().elements.linksPanelSelect
-      return this.waitForElementVisible(this.api.page.personalPage().elements.sideBar)
-        .waitForElementVisible(linksPanelSelect)
-        .click(linksPanelSelect)
-        .waitForAnimationToFinish()
-        .waitForElementVisible('@privateLinkURLCopyButton')
-        .click('@privateLinkURLCopyButton')
+      return this.waitForElementVisible('@privateLinkURLCopyButton').click(
+        '@privateLinkURLCopyButton'
+      )
     }
   },
   elements: {

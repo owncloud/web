@@ -58,6 +58,7 @@ import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
+import { DavProperties } from 'web-pkg/src/constants'
 
 export default {
   components: { ListLoader, NoContentMessage, ListInfo, Pagination, ContextActions },
@@ -77,7 +78,6 @@ export default {
   computed: {
     ...mapState('Files', ['files']),
     ...mapGetters('Files', [
-      'davProperties',
       'highlightedFile',
       'activeFiles',
       'selectedFiles',
@@ -134,13 +134,7 @@ export default {
       this.loading = true
       this.CLEAR_CURRENT_FILES_LIST()
 
-      const resources = await this.$client.fileTrash.list('', '1', [
-        '{http://owncloud.org/ns}trashbin-original-filename',
-        '{http://owncloud.org/ns}trashbin-original-location',
-        '{http://owncloud.org/ns}trashbin-delete-datetime',
-        '{DAV:}getcontentlength',
-        '{DAV:}resourcetype'
-      ])
+      const resources = await this.$client.fileTrash.list('', '1', DavProperties.Trashbin)
 
       this.LOAD_FILES({
         currentFolder: buildResource(resources[0]),

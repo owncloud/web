@@ -190,32 +190,44 @@ exports.createFolder = function(user, folderName) {
  * @param {string} user
  * @param {string} fileName
  * @param {string} contents
+ * @param {number} waitMaxIfExisting
  */
-exports.createFile = async function(user, fileName, contents = '') {
-  const davPath = exports.createDavPath(user, fileName)
+exports.createFile = async function(user, fileName, contents = '', waitMaxIfExisting = 10000) {
   /**
    * makes sure upload operations are carried out maximum once a second to avoid version issues
    * see https://github.com/owncloud/core/issues/23151
    */
+  uploadTimeStamps[user] = uploadTimeStamps[user] || {}
 
-  if (uploadTimeStamps[user] && uploadTimeStamps[user][fileName]) {
-    const timeSinceLastFileUpload = Date.now() - uploadTimeStamps[user][fileName]
-    if (timeSinceLastFileUpload <= 1001) {
-      await client.pause(1001 - timeSinceLastFileUpload)
+  const pollCheck = async (retries = 0, waitFor = 100, waitMax = waitMaxIfExisting) => {
+    if (!uploadTimeStamps[user][fileName] || waitMax <= waitFor) {
+      return
+    } else {
+      uploadTimeStamps[user][fileName] = true
     }
+
+    retries++
+    await client.pause(waitFor)
+
+    // O(n)
+    await pollCheck(retries, waitFor * retries, waitMax)
   }
 
-  return httpHelper
-    .put(davPath, user, contents)
-    .then(function(res) {
-      uploadTimeStamps[user] = uploadTimeStamps[user] || {}
-      uploadTimeStamps[user][fileName] = Date.now()
-      return httpHelper.checkStatus(
-        res,
-        `Could not create the file "${fileName}" for user "${user}".`
-      )
-    })
-    .then(res => res.text())
+  await pollCheck()
+
+  const davPath = exports.createDavPath(user, fileName)
+  const putResponse = await httpHelper.put(davPath, user, contents)
+
+  delete uploadTimeStamps[user][fileName]
+
+  const statusResponse = await httpHelper.checkStatus(
+    putResponse,
+    `Could not create the file "${fileName}" for user "${user}".`
+  )
+
+  await client.pause(500)
+
+  return statusResponse.text()
 }
 
 /**

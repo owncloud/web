@@ -86,7 +86,7 @@ Feature: File Upload
     And file "new-lorem.txt" should be listed on the webUI
     And as "Alice" the content of "simple-folder/new-lorem.txt" should be the same as the content of local file "new-lorem.txt"
 
-  @smokeTest
+  @smokeTest @disablePreviews
   Scenario: overwrite an existing file
     When the user uploads overwriting file "lorem.txt" using the webUI
     Then no message should be displayed on the webUI
@@ -148,7 +148,7 @@ Feature: File Upload
     And file "lorem (2).txt" should be listed on the webUI
     And as "Alice" the content of "lorem (2).txt" should be the same as the content of local file "lorem.txt"
 
-  @issue-ocis-2258
+  @issue-ocis-2258 @disablePreviews
   Scenario: upload overwriting a file into a public share
     Given user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123"
     When the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
