@@ -768,6 +768,6 @@ module.exports = {
     },
     cancelMoveCopyBtn: {
       selector: '#location-picker-btn-cancel'
-    },
+    }
   }
 }
