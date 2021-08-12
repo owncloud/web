@@ -116,7 +116,6 @@ export default {
     ...mapState(['app']),
     ...mapState('Files', ['currentPage', 'files', 'filesPageLimit']),
     ...mapGetters('Files', [
-      'files',
       'davProperties',
       'highlightedFile',
       'selectedFiles',

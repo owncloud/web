@@ -100,18 +100,12 @@ export default {
         revert: event === 'beforeDestroy'
       })
     },
-    containsFiles(event) {
-      if (event.dataTransfer.types) {
-        for (let i = 0; i < event.dataTransfer.types.length; i++) {
-          if (event.dataTransfer.types[i] === 'Files') {
-            return true
-          }
-        }
-      }
-      return false
+    containsFilesForUpload(event) {
+      if (!event.dataTransfer.types) return false
+      return event.dataTransfer.types.some(e => e === 'Files')
     },
     $_ocApp_dragOver(e) {
-      if (!this.containsFiles(e)) return
+      if (!this.containsFilesForUpload(e)) return
       this.dragOver(true)
     }
   }
