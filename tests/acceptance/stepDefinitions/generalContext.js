@@ -131,36 +131,38 @@ Then('no message should be displayed on the webUI', function() {
 
 Then(
   'as {string} the content of {string} should be the same as the content of local file {string}',
-  function(userId, remoteFile, localFile) {
+  async function(userId, remoteFile, localFile) {
     const fullPathOfLocalFile = client.globals.filesForUpload + localFile
-    return webdavHelper
-      .download(userId, remoteFile)
-      .then(body => assertContentOfLocalFileIs(fullPathOfLocalFile, body))
+    const body = await webdavHelper.download(userId, remoteFile)
+
+    assertContentOfLocalFileIs(fullPathOfLocalFile, body)
+
+    return this
   }
 )
 
 Then(
   'as {string} the content of {string} should not be the same as the content of local file {string}',
-  function(userId, remoteFile, localFile) {
+  async function(userId, remoteFile, localFile) {
     const fullPathOfLocalFile = client.globals.filesForUpload + localFile
-    return webdavHelper
-      .download(userId, remoteFile)
-      .then(body => assertContentOfLocalFileIsNot(fullPathOfLocalFile, body))
+    const body = await webdavHelper.download(userId, remoteFile)
+
+    assertContentOfLocalFileIsNot(fullPathOfLocalFile, body)
   }
 )
 
-const assertContentOfLocalFileIs = function(fullPathOfLocalFile, expectedContent) {
-  const actualContent = fs.readFileSync(fullPathOfLocalFile, { encoding: 'utf-8' })
-  return client.assert.strictEqual(
+const assertContentOfLocalFileIs = function(fullPathOfLocalFile, actualContent) {
+  const expectedContent = fs.readFileSync(fullPathOfLocalFile, { encoding: 'utf-8' })
+  return assert.strictEqual(
     actualContent,
     expectedContent,
     'asserting content of local file "' + fullPathOfLocalFile + '"'
   )
 }
 
-const assertContentOfLocalFileIsNot = function(fullPathOfLocalFile, expectedContent) {
-  const actualContent = fs.readFileSync(fullPathOfLocalFile, { encoding: 'utf-8' })
-  return client.assert.notEqual(
+const assertContentOfLocalFileIsNot = function(fullPathOfLocalFile, actualContent) {
+  const expectedContent = fs.readFileSync(fullPathOfLocalFile, { encoding: 'utf-8' })
+  return assert.notStrictEqual(
     actualContent,
     expectedContent,
     'asserting content of local file "' + fullPathOfLocalFile + '"'

@@ -44,9 +44,6 @@ export default {
   totalFilesCount: (state, getters) => {
     return $_fileCounts(getters.filesAll)
   },
-  davProperties: state => {
-    return state.davProperties
-  },
   dropzone: state => {
     return state.dropzone
   },

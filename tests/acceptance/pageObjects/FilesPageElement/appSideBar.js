@@ -29,20 +29,25 @@ module.exports = {
         this.api.globals.waitForNegativeConditionTimeout
       )
       if (!active) {
-        try {
-          this.click({
+        let backBtnVisible = false
+        const backBtn = this.elements.sidebarBackBtn
+        await this.isVisible(
+          { locateStrategy: backBtn.locateStrategy, selector: backBtn.selector, timeout: 200 },
+          result => {
+            backBtnVisible = result.status === 0
+          }
+        )
+        if (backBtnVisible) {
+          await this.click({
             selector: '@sidebarBackBtn'
           })
-        } catch (e) {
-          // do nothing
+          await this.waitForAnimationToFinish() // wait for sliding animation to the root panel
         }
-        await this.waitForAnimationToFinish()
         this.useXpath()
-          .initAjaxCounters()
           .click(this.getXpathOfPanelSelect(item))
-          .waitForOutstandingAjaxCalls()
+          .waitForAjaxCallsToStartAndFinish()
           .useCss()
-        await this.waitForAnimationToFinish()
+        await this.waitForAnimationToFinish() // wait for sliding animation to the sub panel
       }
       const panelName = item === 'people' ? 'collaborators' : item
       const element = this.elements[panelName + 'Panel']
@@ -117,7 +122,7 @@ module.exports = {
       let isVisible = false
       timeout = timeoutHelper.parseTimeout(timeout)
       await this.isVisible({ locateStrategy: 'css selector', selector, timeout }, result => {
-        isVisible = result.status === 0
+        isVisible = result.value === true
       })
       return isVisible
     },

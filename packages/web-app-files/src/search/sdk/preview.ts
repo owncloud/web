@@ -5,18 +5,16 @@ import { buildResource } from '../../helpers/resources'
 import { Cache } from 'web-pkg/src/cache'
 import { debounce } from 'web-pkg/src/decorator'
 import { Component } from 'vue'
-import { Store } from 'vuex'
 import VueRouter from 'vue-router'
+import { DavProperties } from 'web-pkg/src/constants'
 
 export default class Preview implements SearchPreview {
   public readonly component: Component
   private readonly cache: Cache<string, SearchResult[]>
-  private readonly store: Store<any>
   private readonly router: VueRouter
 
-  constructor(store: Store<any>, router: VueRouter) {
+  constructor(router: VueRouter) {
     this.component = PreviewComponent
-    this.store = store
     this.router = router
     // define how long the cache should be valid, maybe conf option?
     this.cache = new Cache({ ttl: 10000, capacity: 100 })
@@ -38,7 +36,7 @@ export default class Preview implements SearchPreview {
     const plainResources = await clientService.owncloudSdk.files.search(
       term,
       5, // todo: add configuration option, other places need that too too... needs consolidation
-      this.store.getters['Files/davProperties']
+      DavProperties.Default
     )
 
     return this.cache.set(

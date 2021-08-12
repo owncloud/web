@@ -79,6 +79,7 @@ import NotFoundMessage from '../components/FilesList/NotFoundMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
+import { DavProperties } from 'web-pkg/src/constants'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -111,7 +112,6 @@ export default {
     ...mapState(['app']),
     ...mapState('Files', ['currentPage', 'files', 'filesPageLimit']),
     ...mapGetters('Files', [
-      'davProperties',
       'highlightedFile',
       'selectedFiles',
       'inProgress',
@@ -234,7 +234,7 @@ export default {
         let resources = await this.$client.files.list(
           this.$route.params.item,
           1,
-          this.davProperties
+          DavProperties.Default
         )
 
         resources = resources.map(buildResource)

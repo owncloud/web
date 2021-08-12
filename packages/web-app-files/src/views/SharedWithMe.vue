@@ -125,7 +125,6 @@ export default {
     ...mapState(['app']),
     ...mapState('Files', ['files']),
     ...mapGetters('Files', [
-      'davProperties',
       'highlightedFile',
       'activeFiles',
       'selectedFiles',

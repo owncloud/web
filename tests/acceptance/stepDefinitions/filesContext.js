@@ -104,6 +104,7 @@ Given('user {string} has uploaded file with content {string} to {string}', async
   filename
 ) {
   await webdav.createFile(user, filename, content)
+  return this
 })
 
 Given('user {string} has uploaded file {string} to {string}', async function(
@@ -553,7 +554,7 @@ When('the user batch declines these shares using the webUI', async function(file
     await client.page.FilesPageElement.filesList().toggleFileOrFolderCheckbox('enable', item[0])
   }
 
-  return client.page.personalPage().declineAllCheckedShares()
+  return client.page.sharedWithMePage().batchDeclineShares()
 })
 
 When('the user unmarks these files for batch action using the webUI', async function(
@@ -1076,12 +1077,12 @@ Then('it should not be possible to rename file/folder {string} using the webUI',
   assert.ok(state, `expected property disabled of ${resource} to be 'true' but found ${state}`)
 })
 
-When('the user uploads overwriting file {string} using the webUI', function(file) {
+When('the user uploads overwriting file {string} using the webUI', async function(file) {
   const uploadPath = path.join(client.globals.mountedUploadDir, file)
-  return client.page
-    .personalPage()
-    .selectFileForUpload(uploadPath)
-    .then(() => client.page.personalPage().confirmFileOverwrite())
+  await client.page.personalPage().selectFileForUpload(uploadPath)
+  await client.page.personalPage().confirmFileOverwrite()
+
+  return this
 })
 
 When(

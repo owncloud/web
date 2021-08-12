@@ -80,10 +80,8 @@ module.exports = {
       await this.useXpath()
         .performFileAction(this.FileAction.rename)
         .waitForElementVisible('@dialog')
-        .waitForAnimationToFinish()
         .clearValue('@dialogInput')
         .setValue('@dialogInput', toName)
-        .waitForAnimationToFinish()
         .click('@dialogConfirmBtn')
         .useCss()
 
