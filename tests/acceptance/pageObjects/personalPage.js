@@ -85,8 +85,9 @@ module.exports = {
      * @param {boolean} expectToSucceed
      */
     createFolder: async function(name, expectToSucceed = true) {
+      await this.clearFileSelectionIfAny()
       await this.waitForElementVisible('@newFileMenuButtonAnyState')
-        .waitForElementEnabled(this.elements.newFileMenuButtonAnyState.selector)
+        .waitForElementEnabled('@newFileMenuButtonAnyState')
         .click('@newFileMenuButton')
         .click('@newFolderButton')
         .waitForElementVisible('@dialog')
@@ -116,6 +117,7 @@ module.exports = {
      * @param {boolean} expectToSucceed
      */
     createFile: async function(name, expectToSucceed = true) {
+      await this.clearFileSelectionIfAny()
       await this.waitForElementVisible('@newFileMenuButton')
         .click('@newFileMenuButton')
         .waitForElementVisible('@newFileButton')
@@ -331,11 +333,21 @@ module.exports = {
       })
       return searchBar.length > 0
     },
-    clearSelection: async function() {
-      await this.useXpath()
-        .waitForElementVisible('@clearSelectionBtn')
-        .click('@clearSelectionBtn')
-        .waitForElementNotPresent('@clearSelectionBtn')
+    clearFileSelectionIfAny: async function() {
+      let activeFileSelection = false
+      await this.isVisible(
+        {
+          selector: '@clearSelectionBtn',
+          timeout: client.globals.waitForNegativeConditionTimeout
+        },
+        result => {
+          activeFileSelection = result.value === true
+        }
+      )
+      if (activeFileSelection) {
+        await this.click('@clearSelectionBtn').waitForElementNotPresent('@clearSelectionBtn')
+      }
+      return this
     }
   },
   elements: {
@@ -440,12 +452,7 @@ module.exports = {
       selector: '#markdown-editor-app-bar .uk-text-right .oc-button'
     },
     clearSelectionBtn: {
-      selector: '//button[contains(@aria-label, "Clear selection")]',
-      locateStrategy: 'xpath'
-    },
-    cancelMoveCopyBtn: {
-      selector: '//button[.="Cancel"]',
-      locateStrategy: 'xpath'
+      selector: '#files-clear-selection'
     },
     dialogBoxInputTextInRed: {
       selector: '.oc-text-input-danger'

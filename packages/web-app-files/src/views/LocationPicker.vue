@@ -8,7 +8,11 @@
         <oc-breadcrumb :items="breadcrumbs" class="oc-mb-s" />
         <oc-grid gutter="small" flex class="uk-flex-middle">
           <div>
-            <oc-button size="small" @click="leaveLocationPicker(originalLocation)">
+            <oc-button
+              id="location-picker-btn-cancel"
+              size="small"
+              @click="leaveLocationPicker(originalLocation)"
+            >
               <translate>Cancel</translate>
             </oc-button>
           </div>
