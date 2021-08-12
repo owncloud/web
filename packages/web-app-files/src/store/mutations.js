@@ -119,11 +119,12 @@ export default {
   },
   UPDATE_CURRENT_FILE_SHARE_TYPES(state) {
     const files = [...state.files]
-    if (!state.highlightedResourceId) {
+    const highlighted = state.selected[0]
+    if (!highlighted) {
       return
     }
     const fileIndex = files.findIndex(f => {
-      return f.id === state.highlightedResourceId
+      return f.id === highlighted.id
     })
     files[fileIndex].shareTypes = computeShareTypes(state.currentFileOutgoingShares)
     state.files = files
