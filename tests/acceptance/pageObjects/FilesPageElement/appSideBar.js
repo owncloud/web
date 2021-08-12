@@ -10,10 +10,10 @@ module.exports = {
         this.api.page.personalPage().elements.sideBar
       ).waitForElementVisible(this.elements.fileInfoIcon)
     },
-    closeSidebar: function(timeout = null) {
+    closeSidebar: async function(timeout = null) {
       timeout = timeoutHelper.parseTimeout(timeout)
       try {
-        this.click({
+        await this.click({
           selector: '@sidebarCloseBtn',
           timeout: timeout
         })
@@ -36,15 +36,14 @@ module.exports = {
           }
         )
         if (backBtnVisible) {
-          this.click({
+          await this.click({
             selector: '@sidebarBackBtn'
           })
           await this.waitForAnimationToFinish() // wait for sliding animation to the root panel
         }
         this.useXpath()
-          .initAjaxCounters()
           .click(this.getXpathOfPanelSelect(item))
-          .waitForOutstandingAjaxCalls()
+          .waitForAjaxCallsToStartAndFinish()
           .useCss()
         await this.waitForAnimationToFinish() // wait for sliding animation to the sub panel
       }
@@ -121,7 +120,7 @@ module.exports = {
       let isVisible = false
       timeout = timeoutHelper.parseTimeout(timeout)
       await this.isVisible({ locateStrategy: 'css selector', selector, timeout }, result => {
-        isVisible = result.status === 0
+        isVisible = result.value === true
       })
       return isVisible
     },
