@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Edit Collaborator Action Buttons should render the cancel button 1`] = `
+<oc-button-stub type="button" size="medium" variation="passive" appearance="outline" justifycontent="center" gapsize="medium" class="files-collaborators-collaborator-cancel">
+  <translate-stub tag="span">Cancel</translate-stub>
+</oc-button-stub>
+`;
+
+exports[`Edit Collaborator Action Buttons should render the save button 1`] = `
+<oc-button-stub type="button" size="medium" arialabel="Save Share" variation="primary" appearance="outline" justifycontent="center" gapsize="medium" id="files-collaborators-collaborator-save-share-button" data-testid="recipient-edit-btn-save">
+  <translate-stub tag="span">Save</translate-stub>
+</oc-button-stub>
+`;
+
+exports[`Edit Collaborator Add People Button should render edit collaborator hint 1`] = `<h4 id="collaborator-edit-hint" tabindex="-1" class="oc-invisible-sr">Editing share with User One</h4>`;
+
+exports[`Edit Collaborator Error message should display errors when form has errors 1`] = `
+<oc-alert-stub variation="danger" class="oc-files-collaborators-collaborator-error-alert">
+  some error
+</oc-alert-stub>
+`;

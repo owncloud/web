@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CollaboratorsEditOptions component Role Selection should change the role when new role is selected 1`] = `<button class="oc-button oc-button-m oc-button-justify-content-left oc-button-gap-xs oc-button-passive oc-button-passive-raw" id="files-collaborators-role-button" data-testid="files-recipient-role-select-btn"><span>Invite as viewer</span> <span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button>`;
+
+exports[`CollaboratorsEditOptions component Role Selection should change the role when new role is selected 2`] = `<button class="oc-button oc-button-m oc-button-justify-content-left oc-button-gap-xs oc-button-passive oc-button-passive-raw" id="files-collaborators-role-button" data-testid="files-recipient-role-select-btn"><span>Invite as editor</span> <span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button>`;
+
+exports[`CollaboratorsEditOptions component Role Selection should set the role according to the provided prop 1`] = `<button class="oc-button oc-button-m oc-button-justify-content-left oc-button-gap-xs oc-button-passive oc-button-passive-raw" id="files-collaborators-role-button" data-testid="files-recipient-role-select-btn"><span>Invite as editor</span> <span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button>`;
+
+exports[`CollaboratorsEditOptions component Role Selection should show custom permissions when advanced permission is set 1`] = `<button class="oc-button oc-button-m oc-button-justify-content-left oc-button-gap-xs oc-button-passive oc-button-passive-raw" id="files-collaborators-role-button" data-testid="files-recipient-role-select-btn"><span>Invite with custom permissions</span> <span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button>`;
