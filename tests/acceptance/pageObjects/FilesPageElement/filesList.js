@@ -225,14 +225,12 @@ module.exports = {
      */
     clickRow: async function(item) {
       await this.waitForFileVisible(item)
-      await this.initAjaxCounters()
-        .useXpath()
-        // click in empty space in the tr using coordinates to avoid
-        // clicking on other elements that might be in the front
-        .clickElementAt(this.getFileRowSelectorByFileName(item), 1, 1)
-        .waitForOutstandingAjaxCalls()
-        .useCss()
-
+      const selectorXPath =
+        this.getFileRowSelectorByFileName(item) + this.elements.detailsBtnInFileRow.selector
+      await this.click({
+        selector: selectorXPath,
+        locateStrategy: 'xpath'
+      }).waitForAjaxCallsToStartAndFinish()
       return this
     },
 
@@ -701,6 +699,10 @@ module.exports = {
     fileLinkInFileRow: {
       selector:
         '//span[contains(@class, "oc-resource-name") and (@data-test-resource-name=%s or @data-test-resource-path=%s) and @data-test-resource-type=%s]/parent::*',
+      locateStrategy: 'xpath'
+    },
+    detailsBtnInFileRow: {
+      selector: '//button[contains(@class, "oc-table-files-btn-show-details")]',
       locateStrategy: 'xpath'
     },
     /**
