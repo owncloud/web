@@ -55,6 +55,9 @@ Other free text and markdown formatting can be used elsewhere in the document if
 
 ### [delete pending share option is not available for sharee](https://github.com/owncloud/web/issues/5435)
 -   [webUIDeleteFilesFolders/deleteFilesFolders.feature:235](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIDeleteFilesFolders/deleteFilesFolders.feature#L235)
+- 
+### [declining shares via the right sidebar is broken](https://github.com/owncloud/web/issues/5666)
+-   [webUISharingInternalUsersToRootShareWithPage/shareWithUsers.feature:79](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsersToRootShareWithPage/shareWithUsers.feature#L79)
 
 ### [file_path property is not unique for a share created with same resource name i.e already present in sharee](https://github.com/owncloud/ocis/issues/2249)
 -   [webUIRenameFiles/renameFiles.feature:205](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIRenameFiles/renameFiles.feature#L205)

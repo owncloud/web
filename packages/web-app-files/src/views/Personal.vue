@@ -25,9 +25,8 @@
         :are-thumbnails-displayed="displayThumbnails"
         :resources="activeFiles"
         :target-route="targetRoute"
-        :highlighted="highlightedFile ? highlightedFile.id : null"
         :header-position="headerPosition"
-        @showDetails="$_mountSideBar_showDetails"
+        @showDetails="$_mountSideBar_showDefaultPanel"
         @fileClick="$_fileActions_triggerDefaultAction"
         @rowMounted="rowMounted"
       >
@@ -271,7 +270,8 @@ export default {
           const resource = this.activeFiles.find(r => r.name === resourceName)
 
           if (resource) {
-            this.$_mountSideBar_showDetails(resource)
+            this.selected = [resource]
+            this.$_mountSideBar_showDefaultPanel(resource)
             this.scrollToResource(resource)
           }
         })

@@ -72,8 +72,18 @@ export default {
   LOAD_FILES_SEARCHED(state, files) {
     state.filesSearched = files
   },
+  REMOVE_FILE_FROM_SEARCHED(state, file) {
+    if (!state.filesSearched) {
+      return
+    }
+
+    state.filesSearched = state.filesSearched.filter(i => file.id !== i.id)
+  },
   CLEAR_FILES_SEARCHED(state) {
     state.filesSearched = null
+  },
+  SET_FILE_SELECTION(state, files) {
+    state.selected = files
   },
   ADD_FILE_SELECTION(state, file) {
     const selected = [...state.selected]
@@ -93,13 +103,6 @@ export default {
     }
     state.selected = []
   },
-  REMOVE_FILE_FROM_SEARCHED(state, file) {
-    if (!state.filesSearched) {
-      return
-    }
-
-    state.filesSearched = state.filesSearched.filter(i => file.id !== i.id)
-  },
   RESET_SELECTION(state) {
     state.selected = []
   },
@@ -116,11 +119,12 @@ export default {
   },
   UPDATE_CURRENT_FILE_SHARE_TYPES(state) {
     const files = [...state.files]
-    if (!state.highlightedResourceId) {
+    const highlighted = state.selected[0]
+    if (!highlighted) {
       return
     }
     const fileIndex = files.findIndex(f => {
-      return f.id === state.highlightedResourceId
+      return f.id === highlighted.id
     })
     files[fileIndex].shareTypes = computeShareTypes(state.currentFileOutgoingShares)
     state.files = files
@@ -212,18 +216,6 @@ export default {
   UPDATE_FOLDER_LOADING(state, value) {
     state.loadingFolder = value
   },
-  SET_HIGHLIGHTED_FILE(state, file) {
-    if (typeof file === 'string') {
-      const fileIndex = state.files.findIndex(f => {
-        return f.name === file
-      })
-      if (fileIndex === -1) {
-        return
-      }
-      file = state.files[fileIndex]
-    }
-    state.highlightedResourceId = file ? file.id : file
-  },
   SET_PUBLIC_LINK_PASSWORD(state, password) {
     // cache into state for reactivity
     state.publicLinkPassword = password
@@ -249,7 +241,6 @@ export default {
   CLEAR_CURRENT_FILES_LIST(state) {
     state.currentFolder = null
     state.selected = []
-    state.highlightedResourceId = null
     // release blob urls
     state.files.forEach(item => {
       if (item.previewUrl && item.previewUrl.startsWith('blob:')) {

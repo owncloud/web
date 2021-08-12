@@ -21,9 +21,8 @@
         :are-thumbnails-displayed="displayThumbnails"
         :resources="activeFiles"
         :target-route="targetRoute"
-        :highlighted="highlightedFile ? highlightedFile.id : null"
         :header-position="headerPosition"
-        @showDetails="$_mountSideBar_showDetails"
+        @showDetails="$_mountSideBar_showDefaultPanel"
         @fileClick="$_fileActions_triggerDefaultAction"
         @rowMounted="rowMounted"
       >

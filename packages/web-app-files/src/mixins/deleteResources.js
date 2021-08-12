@@ -89,19 +89,9 @@ export default {
   },
 
   methods: {
-    ...mapActions('Files', [
-      'pushResourcesToDeleteList',
-      'removeFilesFromTrashbin',
-      'setHighlightedFile',
-      'deleteFiles'
-    ]),
+    ...mapActions('Files', ['pushResourcesToDeleteList', 'removeFilesFromTrashbin', 'deleteFiles']),
     ...mapActions(['showMessage', 'toggleModalConfirmButton', 'hideModal', 'createModal']),
     ...mapMutations(['SET_QUOTA']),
-
-    $_deleteResources_hideDialog() {
-      this.setHighlightedFile(null)
-      this.hideModal()
-    },
 
     $_deleteResources_trashbin_deleteOp(resource) {
       return this.$client.fileTrash
@@ -149,7 +139,7 @@ export default {
       }
 
       Promise.all(this.deleteResources_deleteOps).then(() => {
-        this.$_deleteResources_hideDialog()
+        this.hideModal()
         this.toggleModalConfirmButton()
       })
     },
@@ -162,7 +152,7 @@ export default {
         $gettext: this.$gettext,
         $gettextInterpolate: this.$gettextInterpolate
       }).then(async () => {
-        this.$_deleteResources_hideDialog()
+        this.hideModal()
         this.toggleModalConfirmButton()
 
         // Load quota
@@ -195,7 +185,7 @@ export default {
         message: this.$_deleteResources_dialogMessage,
         cancelText: this.$gettext('Cancel'),
         confirmText: this.$gettext('Delete'),
-        onCancel: this.$_deleteResources_hideDialog,
+        onCancel: this.hideModal,
         onConfirm: this.$_deleteResources_delete
       }
 

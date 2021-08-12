@@ -23,28 +23,29 @@ module.exports = {
       return this.api.page.FilesPageElement.filesList()
     },
     activatePanel: async function(item) {
-      const timeout = this.api.globals.waitForNegativeConditionTimeout
       await this.waitForElementVisible(this.api.page.personalPage().elements.sideBar)
-      const active = await this.isPanelActive(item, timeout)
+      const active = await this.isPanelActive(
+        item,
+        this.api.globals.waitForNegativeConditionTimeout
+      )
       if (!active) {
         let backBtnVisible = false
         const backBtn = this.elements.sidebarBackBtn
         await this.isVisible(
-          { locateStrategy: backBtn.locateStrategy, selector: backBtn.selector, timeout },
+          { locateStrategy: backBtn.locateStrategy, selector: backBtn.selector, timeout: 200 },
           result => {
             backBtnVisible = result.status === 0
           }
         )
         if (backBtnVisible) {
-          this.click({
+          await this.click({
             selector: '@sidebarBackBtn'
           })
           await this.waitForAnimationToFinish() // wait for sliding animation to the root panel
         }
         this.useXpath()
-          .initAjaxCounters()
           .click(this.getXpathOfPanelSelect(item))
-          .waitForOutstandingAjaxCalls()
+          .waitForAjaxCallsToStartAndFinish()
           .useCss()
         await this.waitForAnimationToFinish() // wait for sliding animation to the sub panel
       }
@@ -121,7 +122,7 @@ module.exports = {
       let isVisible = false
       timeout = timeoutHelper.parseTimeout(timeout)
       await this.isVisible({ locateStrategy: 'css selector', selector, timeout }, result => {
-        isVisible = result.status === 0
+        isVisible = result.value === true
       })
       return isVisible
     },

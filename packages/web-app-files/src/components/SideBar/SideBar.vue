@@ -1,6 +1,5 @@
 <template>
   <div
-    v-if="highlightedFile"
     v-click-outside="onClickOutside"
     :class="{
       'has-active': !!appSidebarActivePanel
@@ -16,7 +15,8 @@
       :class="{
         'is-active':
           appSidebarActivePanel === panelMeta.app || (!appSidebarActivePanel && panelMeta.default),
-        'sidebar-panel--default': panelMeta.default
+        'sidebar-panel--default': panelMeta.default,
+        'sidebar-panel--multiple-selected': areMultipleSelected
       }"
     >
       <div class="sidebar-panel__header header">
@@ -44,7 +44,11 @@
           <oc-icon name="close" />
         </oc-button>
       </div>
-      <file-info class="sidebar-panel__file_info" :is-content-displayed="isContentDisplayed" />
+      <file-info
+        v-if="!areMultipleSelected"
+        class="sidebar-panel__file_info"
+        :is-content-displayed="isContentDisplayed"
+      />
       <div class="sidebar-panel__body">
         <template v-if="isContentDisplayed">
           <component
@@ -77,6 +81,7 @@ import { mapGetters, mapMutations, mapState } from 'vuex'
 import FileInfo from './FileInfo.vue'
 import MixinRoutes from '../../mixins/routes'
 import { VisibilityObserver } from 'web-pkg/src/observer'
+import { bus } from 'web-pkg/src/instance'
 
 let visibilityObserver
 let hiddenObserver
@@ -91,7 +96,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('Files', ['highlightedFile']),
+    ...mapGetters('Files', ['highlightedFile', 'selectedFiles']),
     ...mapGetters(['fileSideBars', 'capabilities']),
     ...mapState('Files', ['appSidebarActivePanel']),
     activePanel() {
@@ -103,7 +108,8 @@ export default {
           const panel = panelGenerator({
             capabilities: this.capabilities,
             highlightedFile: this.highlightedFile,
-            route: this.$route
+            route: this.$route,
+            multipleSelection: this.areMultipleSelected
           })
 
           if (panel.enabled) {
@@ -142,6 +148,9 @@ export default {
       }
 
       return null
+    },
+    areMultipleSelected() {
+      return this.selectedFiles && this.selectedFiles.length > 1
     }
   },
   watch: {
@@ -159,44 +168,44 @@ export default {
     hiddenObserver.disconnect()
   },
   mounted() {
-    visibilityObserver = new VisibilityObserver({
-      root: document.querySelector('#files-sidebar'),
-      threshold: 0.9
-    })
-    hiddenObserver = new VisibilityObserver({
-      root: document.querySelector('#files-sidebar'),
-      threshold: 0.05
-    })
-
-    const doFocus = () => {
-      const selector = document.querySelector(this.focused)
-
-      if (!selector) {
-        return
-      }
-
-      selector.focus()
-    }
-
-    const clearOldPanel = () => {
-      this.oldPanel = null
-    }
-
-    this.$refs.panels.forEach(panel => {
-      visibilityObserver.observe(panel, {
-        onEnter: doFocus,
-        onExit: doFocus
-      })
-      hiddenObserver.observe(panel, {
-        onExit: clearOldPanel
-      })
-    })
+    this.initVisibilityObserver()
   },
-
   methods: {
     ...mapMutations('Files', ['SET_APP_SIDEBAR_ACTIVE_PANEL']),
+
     close() {
-      this.$emit('reset')
+      bus.emit('app.files.sidebar.close')
+    },
+    initVisibilityObserver() {
+      visibilityObserver = new VisibilityObserver({
+        root: document.querySelector('#files-sidebar'),
+        threshold: 0.9
+      })
+      hiddenObserver = new VisibilityObserver({
+        root: document.querySelector('#files-sidebar'),
+        threshold: 0.05
+      })
+      const doFocus = () => {
+        const selector = document.querySelector(this.focused)
+        if (!selector) {
+          return
+        }
+        selector.focus()
+      }
+
+      const clearOldPanel = () => {
+        this.oldPanel = null
+      }
+
+      this.$refs.panels.forEach(panel => {
+        visibilityObserver.observe(panel, {
+          onEnter: doFocus,
+          onExit: doFocus
+        })
+        hiddenObserver.observe(panel, {
+          onExit: clearOldPanel
+        })
+      })
     },
     onClickOutside(event) {
       /*
@@ -258,6 +267,10 @@ export default {
 
   @media screen and (prefers-reduced-motion: reduce), (update: slow) {
     transition-duration: 0.001ms !important;
+  }
+
+  &--multiple-selected {
+    grid-template-rows: 50px 1fr;
   }
 
   &--default {

@@ -6,7 +6,7 @@
         :style="{
           'background-image': $asyncComputed.preview.updating ? 'none' : `url(${preview})`
         }"
-        class="details-preview uk-flex uk-flex-middle uk-flex-center oc-mb-m"
+        class="details-preview uk-flex uk-flex-middle uk-flex-center oc-mb"
         data-testid="preview"
       >
         <oc-spinner v-if="$asyncComputed.preview.updating" />
@@ -34,7 +34,7 @@
         </oc-button>
         <p class="oc-my-rm oc-mx-s" v-text="detailSharingInformation" />
       </div>
-      <table class="details-table" aria-label="detailsTableLabel">
+      <table class="details-table" :aria-label="detailsTableLabel">
         <tr v-if="hasTimestamp" data-testid="timestamp">
           <th scope="col" class="oc-pr-s" v-text="timestampTitle" />
           <td>
@@ -233,7 +233,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('Files', ['setHighlightedFile', 'loadPreview', 'loadVersions']),
+    ...mapActions('Files', ['loadPreview', 'loadVersions']),
     ...mapMutations('Files', ['SET_APP_SIDEBAR_ACTIVE_PANEL']),
     expandPeoplesAccordion() {
       this.SET_APP_SIDEBAR_ACTIVE_PANEL('sharing-item')

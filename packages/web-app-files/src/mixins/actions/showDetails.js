@@ -1,4 +1,4 @@
-import { mapActions, mapMutations } from 'vuex'
+import { mapMutations } from 'vuex'
 import { isTrashbinRoute } from '../../helpers/route'
 
 export default {
@@ -18,10 +18,8 @@ export default {
   },
   methods: {
     ...mapMutations('Files', ['SET_APP_SIDEBAR_ACTIVE_PANEL']),
-    ...mapActions('Files', ['setHighlightedFile']),
 
-    $_showDetails_trigger(resource) {
-      this.setHighlightedFile(resource)
+    $_showDetails_trigger() {
       this.SET_APP_SIDEBAR_ACTIVE_PANEL(null)
     }
   }

@@ -26,6 +26,9 @@ Other free text and markdown formatting can be used elsewhere in the document if
 ### [regression in accepting shares from notifications](https://github.com/owncloud/web/issues/4839)
 -   [webUISharingNotificationsToRoot/shareWithUsers.feature:40](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingNotificationsToRoot/shareWithUsers.feature#L40)
 
+### [declining shares via the right sidebar is broken](https://github.com/owncloud/web/issues/5666)
+-   [webUISharingInternalUsersToRootShareWithPage/shareWithUsers.feature:79](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsersToRootShareWithPage/shareWithUsers.feature#L79)
+
 ### [Comments in sidebar](https://github.com/owncloud/web/issues/1158)
 -   [webUIComments/comments.feature:25](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIComments/comments.feature#L25)
 -   [webUIComments/comments.feature:26](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIComments/comments.feature#L26)

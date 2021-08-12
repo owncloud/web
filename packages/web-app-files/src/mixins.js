@@ -21,11 +21,7 @@ export default {
   }),
   computed: {
     ...mapGetters('Files', ['files', 'highlightedFile', 'publicLinkPassword', 'currentFolder']),
-    ...mapGetters(['getToken', 'capabilities', 'configuration']),
-
-    _sidebarOpen() {
-      return this.highlightedFile !== null
-    }
+    ...mapGetters(['getToken', 'capabilities', 'configuration'])
   },
   methods: {
     ...mapActions('Files', [

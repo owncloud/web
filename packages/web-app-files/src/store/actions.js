@@ -27,6 +27,9 @@ export default {
     files = files.map(buildResource)
     context.commit('LOAD_FILES', { currentFolder, files })
   },
+  setFileSelection(context, files) {
+    context.commit('SET_FILE_SELECTION', files)
+  },
   addFileSelection(context, file) {
     context.commit('ADD_FILE_SELECTION', file)
   },
@@ -403,9 +406,6 @@ export default {
   },
   dragOver(context, value) {
     context.commit('DRAG_OVER', value)
-  },
-  setHighlightedFile(context, file) {
-    context.commit('SET_HIGHLIGHTED_FILE', file)
   },
   setPublicLinkPassword(context, password) {
     context.commit('SET_PUBLIC_LINK_PASSWORD', password)

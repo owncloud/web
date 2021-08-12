@@ -30,7 +30,6 @@ export default {
   sharesTreeLoading: false,
 
   loadingFolder: false,
-  highlightedResourceId: null,
   publicLinkPassword: null,
   uploaded: [],
   actionsInProgress: [],
