@@ -598,9 +598,9 @@ module.exports = {
 
     cancelResourceMoveOrCopyProgress: async function() {
       // cancel copy or move
-      await this
-        .waitForElementVisible(this.elements.cancelMoveCopyBtn.selector)
-        .click(this.elements.cancelMoveCopyBtn.selector)
+      await this.waitForElementVisible(this.elements.cancelMoveCopyBtn.selector).click(
+        this.elements.cancelMoveCopyBtn.selector
+      )
       await this.waitForLoadingFinished()
 
       return this
