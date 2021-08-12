@@ -1,7 +1,7 @@
 export default {
   currentFolder: null,
   files: [],
-  filesSearched: [],
+  filesSearched: null,
   selected: [],
   inProgress: [],
   davProperties: [
