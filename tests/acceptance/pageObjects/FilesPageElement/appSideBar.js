@@ -23,14 +23,16 @@ module.exports = {
       return this.api.page.FilesPageElement.filesList()
     },
     activatePanel: async function(item) {
-      const timeout = this.api.globals.waitForNegativeConditionTimeout
       await this.waitForElementVisible(this.api.page.personalPage().elements.sideBar)
-      const active = await this.isPanelActive(item, timeout)
+      const active = await this.isPanelActive(
+        item,
+        this.api.globals.waitForNegativeConditionTimeout
+      )
       if (!active) {
         let backBtnVisible = false
         const backBtn = this.elements.sidebarBackBtn
         await this.isVisible(
-          { locateStrategy: backBtn.locateStrategy, selector: backBtn.selector, timeout },
+          { locateStrategy: backBtn.locateStrategy, selector: backBtn.selector, timeout: 200 },
           result => {
             backBtnVisible = result.status === 0
           }
