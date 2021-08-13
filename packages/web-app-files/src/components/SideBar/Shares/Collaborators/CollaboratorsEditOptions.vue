@@ -6,15 +6,11 @@
       appearance="raw"
       justify-content="left"
       gap-size="xsmall"
-      aria-describedby="files-recipient-role-btn-sr-hint"
     >
-      <translate v-if="selectedRole.name === 'advancedRole'" key="advanced-permissions-select"
+      <translate v-if="isAdvancedRoleSelected" key="advanced-permissions-select"
         >Invite with custom permissions</translate
       >
-      <translate
-        v-else
-        key="role-select"
-        :translate-params="{ name: selectedRole.label.toLowerCase() }"
+      <translate v-else key="role-select" :translate-params="{ name: selectedRole.inlineLabel }"
         >Invite as %{ name }</translate
       >
       <oc-icon name="expand_more" />
@@ -37,17 +33,14 @@
         </oc-list>
       </template>
     </oc-drop>
-    <translate id="files-recipient-role-btn-sr-hint" tag="p" class="oc-invisible-sr">
-      Choose a role for all selected recipients.
-    </translate>
     <template v-if="$_ocCollaborators_hasAdditionalPermissions">
-      <label v-if="selectedRole.name !== 'advancedRole'" class="oc-label oc-mt-s">
+      <label v-if="!isAdvancedRoleSelected" class="oc-label oc-mt-s">
         <translate>Additional permissions</translate>
       </label>
       <additional-permissions
         :available-permissions="selectedRole.additionalPermissions"
         :collaborators-permissions="collaboratorsPermissions"
-        :class="{ 'oc-mt-s': selectedRole.name === 'advancedRole' }"
+        :class="{ 'oc-mt-s': isAdvancedRoleSelected }"
         @permissionChecked="checkAdditionalPermissions"
       />
     </template>
@@ -249,6 +242,10 @@ export default {
 
     canResetExpirationDate() {
       return !this.expirationDateEnforced && this.enteredExpirationDate
+    },
+
+    isAdvancedRoleSelected() {
+      return this.selectedRole.name === 'advancedRole'
     }
   },
 
@@ -261,7 +258,7 @@ export default {
   created() {
     if (
       (this.existingRole && this.existingRole.name === 'advancedRole' && !this.selectedRole) ||
-      (this.selectedRole && this.selectedRole.name === 'advancedRole')
+      (this.selectedRole && this.isAdvancedRoleSelected)
     ) {
       this.selectedRole = this.advancedRole
     } else if (this.existingRole && !this.selectedRole) {
