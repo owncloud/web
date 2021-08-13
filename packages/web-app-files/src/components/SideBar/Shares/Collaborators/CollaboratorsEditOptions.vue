@@ -23,11 +23,11 @@
               appearance="raw"
               justify-content="space-between"
               class="files-recipient-role-drop-btn oc-py-xs oc-px-s"
-              :class="{ selected: role.name === selectedRole.name }"
+              :class="{ selected: isSelectedRole(role) }"
               @click="selectRole(role)"
             >
               <role-item :role="role" />
-              <oc-icon v-if="role.name === selectedRole.name" name="check" />
+              <oc-icon v-if="isSelectedRole(role)" name="check" />
             </oc-button>
           </li>
         </oc-list>
@@ -108,7 +108,7 @@ export default {
       required: false,
       default: null,
       validator: function(value) {
-        return ['user', 'group'].indexOf(value) > -1 || value === null
+        return ['user', 'group'].includes(value) || value === null
       }
     }
   },
@@ -245,7 +245,7 @@ export default {
     },
 
     isAdvancedRoleSelected() {
-      return this.selectedRole.name === 'advancedRole'
+      return this.isAdvancedRole(this.selectedRole)
     }
   },
 
@@ -257,7 +257,7 @@ export default {
 
   created() {
     if (
-      (this.existingRole && this.existingRole.name === 'advancedRole' && !this.selectedRole) ||
+      (this.existingRole && this.isAdvancedRole(this.existingRole) && !this.selectedRole) ||
       (this.selectedRole && this.isAdvancedRoleSelected)
     ) {
       this.selectedRole = this.advancedRole
@@ -311,6 +311,14 @@ export default {
 
     selectRole(role) {
       this.selectedRole = role
+    },
+
+    isSelectedRole(role) {
+      return this.selectedRole.name === role.name
+    },
+
+    isAdvancedRole(role) {
+      return role.name === 'advancedRole'
     }
   }
 }
