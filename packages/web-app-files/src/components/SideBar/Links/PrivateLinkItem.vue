@@ -1,5 +1,5 @@
 <template>
-  <div v-if="privateLinkEnabled" class="oc-files-private-link-item">
+  <div class="oc-files-private-link-item" data-testid="files-sidebar-private-link">
     <h4 v-translate class="oc-text-bold oc-m-rm oc-text-initial">Private Link</h4>
     <p v-translate class="oc-text-muted oc-my-rm">Only invited people can use this link.</p>
     <div class="uk-width-1-1 uk-flex uk-flex-middle">
@@ -17,7 +17,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import CopyToClipboardButton from './CopyToClipboardButton.vue'
 
 export default {
@@ -27,8 +26,6 @@ export default {
   inject: ['displayedItem'],
 
   computed: {
-    ...mapGetters(['capabilities']),
-
     link() {
       const file = this.displayedItem.value
 
@@ -39,10 +36,6 @@ export default {
       }
 
       return file.privateLink
-    },
-
-    privateLinkEnabled() {
-      return this.capabilities.files.privateLinks
     },
 
     copyToClipboardLabel() {

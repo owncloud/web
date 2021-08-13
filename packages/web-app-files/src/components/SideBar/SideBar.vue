@@ -1,5 +1,6 @@
 <template>
   <div
+    data-testid="files-sidebar"
     :class="{
       'has-active': !!appSidebarActivePanel,
       'uk-flex uk-flex-center uk-flex-middle': loading
@@ -12,6 +13,7 @@
         :id="`sidebar-panel-${panelMeta.app}`"
         :key="`panel-${panelMeta.app}`"
         ref="panels"
+        :data-testid="`sidebar-panel-${panelMeta.app}`"
         :tabindex="appSidebarActivePanel === panelMeta.app ? -1 : false"
         class="sidebar-panel"
         :class="{
@@ -67,6 +69,7 @@
                 v-for="panelSelect in panelMetas.filter(p => !p.default)"
                 :id="`sidebar-panel-${panelSelect.app}-select`"
                 :key="`panel-select-${panelSelect.app}`"
+                :data-testid="`sidebar-panel-${panelSelect.app}-select`"
                 appearance="raw"
                 @click="openPanel(panelSelect.app)"
               >
