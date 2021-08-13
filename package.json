@@ -23,7 +23,9 @@
     "test:acceptance:oc10": "cucumber-js --require-module @babel/register --require-module @babel/polyfill --require tests/acceptance/setup.js --require tests/acceptance/stepDefinitions --format node_modules/cucumber-pretty -t \"${TEST_TAGS:-not @skip and not @skipOnOC10}\"",
     "test:acceptance:ocis": "NODE_TLS_REJECT_UNAUTHORIZED=0 RUN_ON_OCIS=true cucumber-js --require-module @babel/register --require-module @babel/polyfill --require tests/acceptance/setup.js --require tests/acceptance/stepDefinitions --format node_modules/cucumber-pretty -t \"${TEST_TAGS:-not @skip and not @skipOnOCIS and not @notToImplementOnOCIS}\"",
     "test:unit": "jest --coverage --config ./tests/unit/config/jest.config.js",
-    "test:integration": "jest --config ./tests/integration/config/jest.config.js"
+    "test:integration": "jest --config ./tests/integration/config/jest.config.js",
+    "test:coverage:merge": "npx istanbul-merge --out ./coverage/coverage-final.json ./coverage/unit/coverage-final.json ./coverage/integration/coverage-final.json",
+    "test:coverage:report": "npx istanbul report --include ./coverage/coverage-final.json --dir coverage lcov"
   },
   "browserslist": [
     "last 2 version",

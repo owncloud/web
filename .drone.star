@@ -1026,7 +1026,16 @@ def unitTests(ctx):
                          "image": "owncloudci/nodejs:16",
                          "pull": "always",
                          "commands": [
-                             "yarn test:integration",
+                             "yarn test:integration --coverage",
+                         ],
+                     },
+                     {
+                         "name": "report-coverage",
+                         "image": "owncloudci/nodejs:16",
+                         "pull": "always",
+                         "commands": [
+                             "yarn test:coverage:merge",
+                             "yarn test:coverage:report"
                          ],
                      },
                      {

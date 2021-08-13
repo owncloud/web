@@ -23,7 +23,7 @@ module.exports = {
   setupFiles: ['<rootDir>/tests/integration/config/jest.init.js'],
   snapshotSerializers: ['jest-serializer-vue'],
   coverageDirectory: '<rootDir>/coverage/integration',
-  coverageReporters: ['lcov'],
+  coverageReporters: ['lcov', 'json'],
   collectCoverageFrom: ['<rootDir>/packages/**/src/**/*.{js,vue}', '!<rootDir>/**/node_modules/**'],
   testMatch: ['**/tests/integration/specs/**/*.spec.js']
 }
