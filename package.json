@@ -24,8 +24,8 @@
     "test:acceptance:ocis": "NODE_TLS_REJECT_UNAUTHORIZED=0 RUN_ON_OCIS=true cucumber-js --require-module @babel/register --require-module @babel/polyfill --require tests/acceptance/setup.js --require tests/acceptance/stepDefinitions --format node_modules/cucumber-pretty -t \"${TEST_TAGS:-not @skip and not @skipOnOCIS and not @notToImplementOnOCIS}\"",
     "test:unit": "jest --coverage --config ./tests/unit/config/jest.config.js",
     "test:integration": "jest --config ./tests/integration/config/jest.config.js",
-    "test:coverage:merge": "npx istanbul-merge --out ./coverage/coverage-final.json ./coverage/unit/coverage-final.json ./coverage/integration/coverage-final.json",
-    "test:coverage:report": "npx istanbul report --include ./coverage/coverage-final.json --dir coverage lcov"
+    "test:coverage:merge": "istanbul-merge --out ./coverage/coverage-final.json ./coverage/unit/coverage-final.json ./coverage/integration/coverage-final.json",
+    "test:coverage:report": "istanbul report --include ./coverage/coverage-final.json --dir coverage lcov"
   },
   "browserslist": [
     "last 2 version",
@@ -48,10 +48,10 @@
     "@testing-library/vue": "^5.6.2",
     "@types/jest": "^26.0.23",
     "@types/jest-axe": "^3.5.2",
-    "@typescript-eslint/eslint-plugin": "^4.28.3",
-    "@typescript-eslint/parser": "^4.28.3",
     "@types/lodash-es": "^4.17.4",
     "@types/vue": "^2.0.0",
+    "@typescript-eslint/eslint-plugin": "^4.28.3",
+    "@typescript-eslint/parser": "^4.28.3",
     "@vue/test-utils": "^1.1.2",
     "archiver": "^3.0.0",
     "autoprefixer": "^10.2.4",
@@ -78,6 +78,8 @@
     "focus-trap": "^6.4.0",
     "focus-trap-vue": "^1.1.1",
     "fs-extra": "^9.0.1",
+    "istanbul": "^0.4.5",
+    "istanbul-merge": "^1.1.1",
     "jest": "^26.6.3",
     "jest-axe": "^4.1.0",
     "jest-fetch-mock": "^3.0.3",
