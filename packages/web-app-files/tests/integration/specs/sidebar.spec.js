@@ -59,7 +59,7 @@ describe('Files sidebar', () => {
       (vue, store, router) => {
         vue.directive('click-outside', () => {})
         vue.directive('translate', () => {})
-        router.push({ name: 'files-shared-with-me' })
+        router.push({ name: 'shared-with-me' })
       }
     )
 
