@@ -17,7 +17,7 @@
     </oc-button>
     <oc-drop toggle="#files-collaborators-role-button" mode="click" close-on-click>
       <template #special>
-        <oc-list class="files-recipient-role-drop-list">
+        <oc-list class="files-recipient-role-drop-list" :aria-label="rolesListAriaLabel">
           <li v-for="role in roles" :key="role.name">
             <oc-button
               appearance="raw"
@@ -246,6 +246,10 @@ export default {
 
     isAdvancedRoleSelected() {
       return this.isAdvancedRole(this.selectedRole)
+    },
+
+    rolesListAriaLabel() {
+      return this.$gettext('Sharing roles')
     }
   },
 
