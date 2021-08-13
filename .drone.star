@@ -1035,7 +1035,7 @@ def unitTests(ctx):
                          "pull": "always",
                          "commands": [
                              "yarn test:coverage:merge",
-                             "yarn test:coverage:report"
+                             "yarn test:coverage:report",
                          ],
                      },
                      {
