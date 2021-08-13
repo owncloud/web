@@ -5,11 +5,7 @@ export default {
     return state.inProgress
   },
   selectedFiles: state => {
-    if (state.selected.length === 0) {
-      return []
-    } else {
-      return state.selected
-    }
+    return state.selected
   },
   files: state => {
     return state.files
@@ -66,19 +62,19 @@ export default {
   },
   sharesTree: state => state.sharesTree,
   sharesTreeLoading: state => state.sharesTreeLoading,
-  loadingFolder: state => {
+  loadingFolder: (state, getter) => {
     // when loading the shares tree, it is only related to the full folder
     // whenever no file is selected / no sidebar is open.
     // else it means we're loading the shares only for the sidebar contents and shouldn't
     // be showing a progress bar for the whole folder
-    return state.loadingFolder || (state.highlightedResourceId === null && state.sharesTreeLoading)
+    return state.loadingFolder || (getter.highlightedFile === null && state.sharesTreeLoading)
   },
   quota: state => {
     return state.quota
   },
   highlightedFile: (state, getters) => {
-    if (state.highlightedResourceId) {
-      return getters.filesAll.find(r => r.id === state.highlightedResourceId)
+    if (state.selected.length > 0) {
+      return state.selected[0]
     }
     return null
   },

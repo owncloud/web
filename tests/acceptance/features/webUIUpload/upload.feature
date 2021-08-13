@@ -95,7 +95,7 @@ Feature: File Upload
     And the versions list for resource "lorem.txt" should contain 1 entry
     But file "lorem (2).txt" should not be listed on the webUI
 
-  @smokeTest @issue-ocis-reva-54
+  @smokeTest @disablePreviews @issue-ocis-reva-54
   Scenario: overwrite an existing file when versioning is disabled
     Given the app "files_versions" has been disabled
     When the user uploads overwriting file "lorem.txt" using the webUI

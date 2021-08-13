@@ -288,7 +288,12 @@ export default {
   },
 
   methods: {
-    ...mapActions('Files', ['updateFileProgress', 'removeFilesFromTrashbin', 'loadIndicators']),
+    ...mapActions('Files', [
+      'updateFileProgress',
+      'removeFilesFromTrashbin',
+      'loadIndicators',
+      'setFileSelection'
+    ]),
     ...mapActions(['openFile', 'showMessage', 'createModal', 'setModalInputErrorMessage']),
     ...mapMutations('Files', ['UPSERT_RESOURCE', 'SET_HIDDEN_FILES_VISIBILITY']),
     ...mapMutations(['SET_QUOTA']),
@@ -362,7 +367,7 @@ export default {
         }
 
         setTimeout(() => {
-          this.setHighlightedFile(resource)
+          this.setFileSelection([resource])
           this.scrollToResource(resource)
         })
       } catch (error) {
@@ -451,7 +456,7 @@ export default {
         }
 
         setTimeout(() => {
-          this.setHighlightedFile(resource)
+          this.setFileSelection([resource])
           this.scrollToResource(resource)
         })
       } catch (error) {

@@ -4,7 +4,6 @@
       ref="filesListWrapper"
       tabindex="-1"
       class="files-list-wrapper uk-width-expand"
-      :class="{ 'uk-visible@m': _sidebarOpen }"
       @dragover="$_ocApp_dragOver"
     >
       <app-bar id="files-app-bar" />
@@ -12,12 +11,11 @@
       <router-view id="files-view" />
     </div>
     <side-bar
-      v-if="_sidebarOpen"
+      v-if="showSidebar"
       id="files-sidebar"
       ref="filesSidebar"
       tabindex="-1"
       class="uk-width-1-1 uk-width-1-2@m uk-width-1-3@xl"
-      @reset="$_destroySideBar_hideDetails"
       @beforeDestroy="focusSideBar"
       @mounted="focusSideBar"
       @fileChanged="focusSideBar"
@@ -27,11 +25,11 @@
 <script>
 import Mixins from './mixins'
 import MixinRoutes from './mixins/routes'
-import MixinDestroySideBar from './mixins/sidebar/destroySideBar'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import AppBar from './components/AppBar/AppBar.vue'
 import ProgressBar from './components/Upload/ProgressBar.vue'
 import SideBar from './components/SideBar/SideBar.vue'
+import { bus } from 'web-pkg/src/instance'
 
 export default {
   components: {
@@ -39,7 +37,7 @@ export default {
     ProgressBar,
     SideBar
   },
-  mixins: [Mixins, MixinRoutes, MixinDestroySideBar],
+  mixins: [Mixins, MixinRoutes],
   data() {
     return {
       createFolder: false,
@@ -48,35 +46,38 @@ export default {
       upload: false,
       fileName: '',
       selected: [],
-      breadcrumbs: []
+      breadcrumbs: [],
+      sidebarClosed: true
     }
   },
   computed: {
-    ...mapGetters('Files', ['dropzone', 'highlightedFile', 'inProgress']),
-
-    _sidebarOpen() {
-      return this.highlightedFile !== null
-    },
+    ...mapGetters('Files', ['dropzone', 'inProgress', 'selectedFiles']),
 
     $_uploadProgressVisible() {
       return this.inProgress.length > 0
+    },
+    showSidebar() {
+      return this.selectedFiles && this.selectedFiles.length > 0 && !this.sidebarClosed
     }
   },
   watch: {
     $route() {
-      this.$_destroySideBar_hideDetails()
       this.resetFileSelection()
     },
-    highlightedFile(file) {
-      if (file !== null) {
-        return
-      }
-      this.$_destroySideBar_hideDetails()
+    showSidebar(visible) {
+      if (visible) return
+      this.SET_APP_SIDEBAR_ACTIVE_PANEL(null)
     }
   },
   created() {
     this.$root.$on('upload-end', () => {
       this.delayForScreenreader(() => this.$refs.filesListWrapper.focus())
+    })
+    bus.on('app.files.sidebar.close', () => {
+      this.sidebarClosed = true
+    })
+    bus.on('app.files.sidebar.show', () => {
+      this.sidebarClosed = false
     })
   },
 
@@ -87,7 +88,10 @@ export default {
   methods: {
     ...mapActions('Files', ['dragOver', 'resetFileSelection']),
     ...mapActions(['showMessage']),
-    ...mapMutations(['SET_SIDEBAR_FOOTER_CONTENT_COMPONENT']),
+    ...mapMutations('Files', [
+      'SET_SIDEBAR_FOOTER_CONTENT_COMPONENT',
+      'SET_APP_SIDEBAR_ACTIVE_PANEL'
+    ]),
 
     trace() {
       console.info('trace', arguments)

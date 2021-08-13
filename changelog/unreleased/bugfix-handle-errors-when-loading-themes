@@ -1,0 +1,5 @@
+Bugfix: Handle loading and parsing errors when loading themes
+
+Adds graceful error handling of json parse errors when loading custom themes.
+
+https://github.com/owncloud/web/pull/5669
