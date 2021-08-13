@@ -327,6 +327,15 @@ module.exports = {
       })
       return searchBar.length > 0
     },
+    clearSelection: async function() {
+      await this.useXpath()
+        .waitForElementVisible('@clearSelectionBtn')
+        .click('@clearSelectionBtn')
+        .waitForElementNotPresent('@clearSelectionBtn')
+    },
+    checkForButtonMoveHereDisabled: function() {
+      return this.waitForElementVisible('@moveHereConfirmBtn')
+    },
     clearFileSelectionIfAny: async function() {
       let activeFileSelection = false
       await this.isVisible(
