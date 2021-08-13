@@ -62,7 +62,7 @@ const plugins = [
   globals(),
   json(),
   copy({
-    watch: !production && './config',
+    watch: !production && ['./config', './packages/web-runtime/themes'],
     targets: [
       { src: './packages/web-container/img', dest: 'dist' },
       { src: './packages/web-container/oidc-callback.html', dest: 'dist' },
