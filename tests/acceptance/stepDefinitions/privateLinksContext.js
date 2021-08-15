@@ -1,5 +1,5 @@
 const { client } = require('nightwatch-api')
-const { When } = require('cucumber')
+const { When } = require('@cucumber/cucumber')
 const webdav = require('../helpers/webdavHelper')
 
 When(
