@@ -47,7 +47,7 @@ export default {
       fileName: '',
       selected: [],
       breadcrumbs: [],
-      sidebarClosed: true
+      sidebarClosed: false
     }
   },
   computed: {
@@ -57,7 +57,7 @@ export default {
       return this.inProgress.length > 0
     },
     showSidebar() {
-      return this.selectedFiles && this.selectedFiles.length > 0 && !this.sidebarClosed
+      return !this.sidebarClosed
     }
   },
   watch: {
@@ -78,6 +78,10 @@ export default {
     })
     bus.on('app.files.sidebar.show', () => {
       this.sidebarClosed = false
+    })
+    bus.on('app.files.sidebar.toggle', () => {
+      const event = this.sidebarClosed ? 'app.files.sidebar.show' : 'app.files.sidebar.close'
+      bus.emit(event)
     })
   },
 
