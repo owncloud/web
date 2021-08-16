@@ -122,6 +122,7 @@ import FileUpload from './Upload/FileUpload.vue'
 import FolderUpload from './Upload/FolderUpload.vue'
 import SizeInfo from './SelectedResources/SizeInfo.vue'
 import ViewOptions from './ViewOptions.vue'
+import { DavProperties, DavProperty } from 'web-pkg/src/constants'
 
 export default {
   components: {
@@ -144,7 +145,6 @@ export default {
       'files',
       'inProgress',
       'currentFolder',
-      'davProperties',
       'selectedFiles',
       'publicLinkPassword'
     ]),
@@ -288,7 +288,12 @@ export default {
   },
 
   methods: {
-    ...mapActions('Files', ['updateFileProgress', 'removeFilesFromTrashbin', 'loadIndicators']),
+    ...mapActions('Files', [
+      'updateFileProgress',
+      'removeFilesFromTrashbin',
+      'loadIndicators',
+      'setFileSelection'
+    ]),
     ...mapActions(['openFile', 'showMessage', 'createModal', 'setModalInputErrorMessage']),
     ...mapMutations('Files', ['UPSERT_RESOURCE', 'SET_HIDDEN_FILES_VISIBILITY']),
     ...mapMutations(['SET_QUOTA']),
@@ -340,13 +345,13 @@ export default {
         let resource
         if (this.isPersonalRoute) {
           await this.$client.files.createFolder(path)
-          resource = await this.$client.files.fileInfo(path, this.davProperties)
+          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else {
           await this.$client.publicFiles.createFolder(path, null, this.publicLinkPassword)
           resource = await this.$client.publicFiles.getFileInfo(
             path,
             this.publicLinkPassword,
-            this.davProperties
+            DavProperties.Default
           )
         }
         resource = buildResource(resource)
@@ -362,7 +367,7 @@ export default {
         }
 
         setTimeout(() => {
-          this.setHighlightedFile(resource)
+          this.setFileSelection([resource])
           this.scrollToResource(resource)
         })
       } catch (error) {
@@ -419,18 +424,18 @@ export default {
         let resource
         if (this.isPersonalRoute) {
           await this.$client.files.putFileContents(path, '')
-          resource = await this.$client.files.fileInfo(path, this.davProperties)
+          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else {
           await this.$client.publicFiles.putFileContents(path, null, this.publicLinkPassword, '')
           resource = await this.$client.publicFiles.getFileInfo(
             path,
             this.publicLinkPassword,
-            this.davProperties
+            DavProperties.Default
           )
         }
 
         if (this.newFileAction) {
-          const fileId = resource.fileInfo['{http://owncloud.org/ns}fileid']
+          const fileId = resource.fileInfo[DavProperty.FileId]
 
           this.$_fileActions_openEditor(this.newFileAction, path, fileId, EDITOR_MODE_CREATE)
           this.hideModal()
@@ -451,7 +456,7 @@ export default {
         }
 
         setTimeout(() => {
-          this.setHighlightedFile(resource)
+          this.setFileSelection([resource])
           this.scrollToResource(resource)
         })
       } catch (error) {
@@ -505,11 +510,11 @@ export default {
 
         const path = pathUtil.join(this.currentPath, file)
         let resource = this.isPersonalRoute
-          ? await this.$client.files.fileInfo(path, this.davProperties)
+          ? await this.$client.files.fileInfo(path, DavProperties.Default)
           : await this.$client.publicFiles.getFileInfo(
               path,
               this.publicLinkPassword,
-              this.davProperties
+              DavProperties.Default
             )
 
         resource = buildResource(resource)

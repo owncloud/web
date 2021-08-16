@@ -181,7 +181,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('Files', ['removeFilesFromTrashbin', 'resetFileSelection', 'setHighlightedFile']),
+    ...mapActions('Files', ['removeFilesFromTrashbin', 'resetFileSelection']),
     ...mapActions(['showMessage']),
     ...mapMutations('Files', ['UPDATE_RESOURCE']),
 
@@ -206,7 +206,6 @@ export default {
           })
       }
       this.resetFileSelection()
-      this.setHighlightedFile(null)
     },
 
     emptyTrashbin() {

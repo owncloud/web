@@ -169,9 +169,7 @@ module.exports = {
      * @return {Promise<*>}
      */
     confirmDeletion: function() {
-      return this.waitForElementEnabled('@dialogConfirmBtn')
-        .click('@dialogConfirmBtn')
-        .waitForElementNotPresent('@dialog')
+      return this.click('@dialogConfirmBtnEnabled').waitForElementNotPresent('@dialog')
     },
     /**
      *
@@ -225,14 +223,12 @@ module.exports = {
      */
     clickRow: async function(item) {
       await this.waitForFileVisible(item)
-      await this.initAjaxCounters()
-        .useXpath()
-        // click in empty space in the tr using coordinates to avoid
-        // clicking on other elements that might be in the front
-        .clickElementAt(this.getFileRowSelectorByFileName(item), 1, 1)
-        .waitForOutstandingAjaxCalls()
-        .useCss()
-
+      const selectorXPath =
+        this.getFileRowSelectorByFileName(item) + this.elements.detailsBtnInFileRow.selector
+      await this.click({
+        selector: selectorXPath,
+        locateStrategy: 'xpath'
+      }).waitForAjaxCallsToStartAndFinish()
       return this
     },
 
@@ -600,10 +596,9 @@ module.exports = {
 
     cancelResourceMoveOrCopyProgress: async function() {
       // cancel copy or move
-      await this.useXpath()
-        .waitForElementVisible(client.page.personalPage().elements.cancelMoveCopyBtn.selector)
-        .click(this.page.personalPage().elements.cancelMoveCopyBtn.selector)
-        .useCss()
+      await this.waitForElementVisible(this.elements.cancelMoveCopyBtn.selector).click(
+        this.elements.cancelMoveCopyBtn.selector
+      )
       await this.waitForLoadingFinished()
 
       return this
@@ -703,6 +698,10 @@ module.exports = {
         '//span[contains(@class, "oc-resource-name") and (@data-test-resource-name=%s or @data-test-resource-path=%s) and @data-test-resource-type=%s]/parent::*',
       locateStrategy: 'xpath'
     },
+    detailsBtnInFileRow: {
+      selector: '//button[contains(@class, "oc-table-files-btn-show-details")]',
+      locateStrategy: 'xpath'
+    },
     /**
      * This element is concatenated as child of @see fileRowByResourcePath
      */
@@ -754,8 +753,8 @@ module.exports = {
     dialog: {
       selector: '.oc-modal'
     },
-    dialogConfirmBtn: {
-      selector: '.oc-modal-body-actions-confirm'
+    dialogConfirmBtnEnabled: {
+      selector: '.oc-modal-body-actions-confirm:enabled'
     },
     dialogCancelBtn: {
       selector: '.oc-modal-body-actions-cancel'
@@ -763,6 +762,9 @@ module.exports = {
     previewImage: {
       selector: '//img[contains(@class, "oc-resource-thumbnail")]',
       locateStrategy: 'xpath'
+    },
+    cancelMoveCopyBtn: {
+      selector: '#location-picker-btn-cancel'
     }
   }
 }

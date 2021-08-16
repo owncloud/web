@@ -16,6 +16,9 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIPreview/imageMediaViewer.feature:141](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L141)
 -   [webUIPreview/imageMediaViewer.feature:159](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L159)
 
+### [Endless loading when opening a file in section "Shared with me" or "Shared with other"](https://github.com/owncloud/web/issues/5324)
+-   [webUIPreview/imageMediaViewer.feature:182](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L182)
+-   [webUIPreview/imageMediaViewer.feature:191](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L191)
 
 ### [Exit page re-appears in loop when logged in user is deleted](https://github.com/owncloud/web/issues/4677)
 -   [webUILogin/openidLogin.feature:51](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/openidLogin.feature#L51)
@@ -52,6 +55,9 @@ Other free text and markdown formatting can be used elsewhere in the document if
 
 ### [delete pending share option is not available for sharee](https://github.com/owncloud/web/issues/5435)
 -   [webUIDeleteFilesFolders/deleteFilesFolders.feature:235](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIDeleteFilesFolders/deleteFilesFolders.feature#L235)
+- 
+### [declining shares via the right sidebar is broken](https://github.com/owncloud/web/issues/5666)
+-   [webUISharingInternalUsersToRootShareWithPage/shareWithUsers.feature:79](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsersToRootShareWithPage/shareWithUsers.feature#L79)
 
 ### [file_path property is not unique for a share created with same resource name i.e already present in sharee](https://github.com/owncloud/ocis/issues/2249)
 -   [webUIRenameFiles/renameFiles.feature:205](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIRenameFiles/renameFiles.feature#L205)

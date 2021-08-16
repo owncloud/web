@@ -8,7 +8,7 @@
       appearance="raw"
       class="oc-mr-xs"
       :class="`files-quick-action-${action.id}`"
-      @click.stop="action.handler({ item, client: $client, store: $store })"
+      @click="action.handler({ item, client: $client, store: $store })"
     >
       <oc-icon :name="action.icon" class="uk-flex" />
     </oc-button>

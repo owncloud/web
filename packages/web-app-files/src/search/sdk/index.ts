@@ -22,8 +22,8 @@ export default class Provider extends EventBus implements SearchProvider {
 
     this.id = 'files.sdk'
     this.label = $gettext('Search all files ↵')
-    this.previewSearch = new Preview(store, router)
-    this.listSearch = new List(store)
+    this.previewSearch = new Preview(router)
+    this.listSearch = new List()
     this.store = store
     this.router = router
   }

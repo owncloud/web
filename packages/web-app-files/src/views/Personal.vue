@@ -25,9 +25,8 @@
         :are-thumbnails-displayed="displayThumbnails"
         :resources="activeFiles"
         :target-route="targetRoute"
-        :highlighted="highlightedFile ? highlightedFile.id : null"
         :header-position="headerPosition"
-        @showDetails="$_mountSideBar_showDetails"
+        @showDetails="$_mountSideBar_showDefaultPanel"
         @fileClick="$_fileActions_triggerDefaultAction"
         @rowMounted="rowMounted"
       >
@@ -80,6 +79,7 @@ import NotFoundMessage from '../components/FilesList/NotFoundMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
+import { DavProperties } from 'web-pkg/src/constants'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -112,7 +112,6 @@ export default {
     ...mapState(['app']),
     ...mapState('Files', ['currentPage', 'files', 'filesPageLimit']),
     ...mapGetters('Files', [
-      'davProperties',
       'highlightedFile',
       'selectedFiles',
       'inProgress',
@@ -235,7 +234,7 @@ export default {
         let resources = await this.$client.files.list(
           this.$route.params.item,
           1,
-          this.davProperties
+          DavProperties.Default
         )
 
         resources = resources.map(buildResource)
@@ -271,7 +270,8 @@ export default {
           const resource = this.activeFiles.find(r => r.name === resourceName)
 
           if (resource) {
-            this.$_mountSideBar_showDetails(resource)
+            this.selected = [resource]
+            this.$_mountSideBar_showDefaultPanel(resource)
             this.scrollToResource(resource)
           }
         })

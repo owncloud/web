@@ -4,7 +4,10 @@ import merge from 'lodash-es/merge'
 
 describe('theme loading and error reporting', () => {
   beforeEach(() => {
-    fetch.resetMocks()
+    global.console = { error: jest.fn() }
+  })
+  afterEach(() => {
+    jest.clearAllMocks()
   })
 
   it('should load the default theme if location is empty', async () => {
@@ -12,14 +15,21 @@ describe('theme loading and error reporting', () => {
     expect(theme).toMatchObject(defaultTheme)
   })
 
-  it('should load the default theme if location is not a json file', async () => {
+  it('should load the default theme if location is not a json file extension', async () => {
     const { theme } = await loadTheme('some_location_without_json_file_ending.xml')
     expect(theme).toMatchObject(defaultTheme)
   })
 
-  it('should load the default theme if location errors', async () => {
+  it('should load the default theme if location is not found', async () => {
     fetch.mockResponse(new Error(), { status: 404 })
     const { theme } = await loadTheme('http://www.owncloud.com/unknown.json')
+    expect(theme).toMatchObject(defaultTheme)
+  })
+
+  it('should load the default theme if location is not a valid json file', async () => {
+    const customTheme = merge({}, defaultTheme, { default: { logo: { login: 'custom.svg' } } })
+    fetch.mockResponse(JSON.stringify(customTheme) + '-invalid')
+    const { theme } = await loadTheme('http://www.owncloud.com/invalid.json')
     expect(theme).toMatchObject(defaultTheme)
   })
 

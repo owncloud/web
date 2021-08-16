@@ -8,7 +8,11 @@
         <oc-breadcrumb :items="breadcrumbs" class="oc-mb-s" />
         <oc-grid gutter="small" flex class="uk-flex-middle">
           <div>
-            <oc-button size="small" @click="leaveLocationPicker(originalLocation)">
+            <oc-button
+              id="location-picker-btn-cancel"
+              size="small"
+              @click="leaveLocationPicker(originalLocation)"
+            >
               <translate>Cancel</translate>
             </oc-button>
           </div>
@@ -82,6 +86,7 @@ import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
 import ListLoader from '../components/FilesList/ListLoader.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
+import { DavProperties } from 'web-pkg/src/constants'
 
 export default {
   metaInfo() {
@@ -114,7 +119,6 @@ export default {
     ...mapGetters('Files', [
       'activeFiles',
       'publicLinkPassword',
-      'davProperties',
       'totalFilesCount',
       'totalFilesSize'
     ]),
@@ -301,8 +305,12 @@ export default {
       }
 
       const resources = this.isPublicContext
-        ? await this.$client.publicFiles.list(target, this.publicLinkPassword, this.davProperties)
-        : await this.$client.files.list(target, 1, this.davProperties)
+        ? await this.$client.publicFiles.list(
+            target,
+            this.publicLinkPassword,
+            DavProperties.Default
+          )
+        : await this.$client.files.list(target, 1, DavProperties.Default)
 
       this.loadFiles({ currentFolder: resources[0], files: resources.slice(1) })
       this.loadIndicators({

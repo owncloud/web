@@ -1,11 +1,11 @@
-import { mapActions, mapMutations } from 'vuex'
+import { mapMutations } from 'vuex'
+import { bus } from 'web-pkg/src/instance'
 
 export default {
   methods: {
-    ...mapActions('Files', ['setHighlightedFile']),
     ...mapMutations('Files', ['SET_APP_SIDEBAR_ACTIVE_PANEL']),
-    $_mountSideBar_showDetails(resource) {
-      this.setHighlightedFile(resource)
+    $_mountSideBar_showDefaultPanel() {
+      bus.emit('app.files.sidebar.show')
       this.SET_APP_SIDEBAR_ACTIVE_PANEL(null)
     }
   }

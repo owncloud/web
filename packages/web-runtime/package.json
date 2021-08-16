@@ -13,7 +13,7 @@
     "lodash-es": "^4.17.21",
     "luxon": "^1.27.0",
     "oidc-client": "1.11.5",
-    "owncloud-design-system": "^8.3.1",
+    "owncloud-design-system": "^9.0.1",
     "owncloud-sdk": "1.0.0-2296",
     "p-queue": "^6.1.1",
     "portal-vue": "^2.1.7",

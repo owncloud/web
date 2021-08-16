@@ -125,11 +125,6 @@ describe('Favorites component', () => {
           'files-table-squashed'
         )
       })
-      it('sets the "highlighted" attribute with the correct file id', () => {
-        expect(wrapper.find(selectors.favoritesTable).attributes('highlighted')).toEqual(
-          'file-id-234'
-        )
-      })
     })
     describe('previews', () => {
       it('displays previews when the "disablePreviews" config is disabled', () => {
