@@ -11,8 +11,8 @@ Summary
 * Bugfix - Escape file name in Media viewer: [#5593](https://github.com/owncloud/web/issues/5593)
 * Bugfix - Handle loading and parsing errors when loading themes: [#5669](https://github.com/owncloud/web/pull/5669)
 * Bugfix - Load folder in Media viewer: [#5427](https://github.com/owncloud/web/issues/5427)
-* Change - Enable live reload for changes to themes: [#5668](https://github.com/owncloud/web/pull/5668)
 * Enhancement - Add multiple selection Sidebar: [#5164](https://github.com/owncloud/web/issues/5164)
+* Enhancement - Enable live reload for changes to themes: [#5668](https://github.com/owncloud/web/pull/5668)
 
 Details
 -------
@@ -39,14 +39,6 @@ Details
    https://github.com/owncloud/web/issues/5427
    https://github.com/owncloud/web/pull/5585
 
-* Change - Enable live reload for changes to themes: [#5668](https://github.com/owncloud/web/pull/5668)
-
-   This allows live reloads to be triggered by changes to themes defined within the
-   'packages/web-runtime/themes/**/*' folders, to facilitate efficient WYSIWYG
-   development when wanting to customise the look and feel of the frontend.
-
-   https://github.com/owncloud/web/pull/5668
-
 * Enhancement - Add multiple selection Sidebar: [#5164](https://github.com/owncloud/web/issues/5164)
 
    We've changed the sidebar so if a user selects multiple files or folders he sees a detailed view
@@ -54,6 +46,14 @@ Details
 
    https://github.com/owncloud/web/issues/5164
    https://github.com/owncloud/web/pull/5630
+
+* Enhancement - Enable live reload for changes to themes: [#5668](https://github.com/owncloud/web/pull/5668)
+
+   This allows live reloads to be triggered by changes to themes defined within the
+   'packages/web-runtime/themes/**/*' folders, to facilitate efficient WYSIWYG
+   development when wanting to customise the look and feel of the frontend.
+
+   https://github.com/owncloud/web/pull/5668
 
 Changelog for ownCloud Web [4.0.0] (2021-08-04)
 =======================================
