@@ -13,6 +13,7 @@ Summary
 * Bugfix - Load folder in Media viewer: [#5427](https://github.com/owncloud/web/issues/5427)
 * Enhancement - Add multiple selection Sidebar: [#5164](https://github.com/owncloud/web/issues/5164)
 * Enhancement - Enable live reload for changes to themes: [#5668](https://github.com/owncloud/web/pull/5668)
+* Enhancement - Signout icon: [#5681](https://github.com/owncloud/web/pull/5681)
 
 Details
 -------
@@ -54,6 +55,12 @@ Details
    development when wanting to customise the look and feel of the frontend.
 
    https://github.com/owncloud/web/pull/5668
+
+* Enhancement - Signout icon: [#5681](https://github.com/owncloud/web/pull/5681)
+
+   We changed the icon in the personal menu nav item for signing out based on recent user feedback.
+
+   https://github.com/owncloud/web/pull/5681
 
 Changelog for ownCloud Web [4.0.0] (2021-08-04)
 =======================================
