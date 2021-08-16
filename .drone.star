@@ -142,7 +142,6 @@ config = {
             },
             "visualTesting": False,
             "screenShots": False,
-            "filterTags": "not @skipOnOC10 and not @notToImplementOnOC10",
         },
         "webUINotification": {
             "type": NOTIFICATIONS,
@@ -161,7 +160,6 @@ config = {
             },
             "visualTesting": False,
             "screenShots": False,
-            "filterTags": "not @skipOnOC10 and not @notToImplementOnOC10",
             "notificationsAppNeeded": True,
         },
         "webUIFederation": {
@@ -175,7 +173,6 @@ config = {
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
             },
             "notificationsAppNeeded": True,
-            "filterTags": "not @skipOnOC10 and not @notToImplementOnOC10",
             "federatedServerNeeded": True,
             "federatedServerVersion": "daily-master-qa",
         },
