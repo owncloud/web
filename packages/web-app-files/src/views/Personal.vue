@@ -81,7 +81,7 @@ import NotFoundMessage from '../components/FilesList/NotFoundMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
-
+import { DavProperties } from 'web-pkg/src/constants'
 import { basename } from 'path'
 
 const visibilityObserver = new VisibilityObserver()
@@ -308,7 +308,7 @@ export default {
       this.CLEAR_CURRENT_FILES_LIST()
 
       try {
-        let resources = await this.getFolderItems(this.$route.params.item, this.davProperties)
+        let resources = await this.getFolderItems(this.$route.params.item, DavProperties.Default)
 
         resources = resources.map(buildResource)
         this.LOAD_FILES({
