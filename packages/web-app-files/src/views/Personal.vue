@@ -238,12 +238,14 @@ export default {
           continue
         }
         const promise = this.$client.files.move(current.path, targetPath + current.name)
-        await promise.catch(error => {
-          error.resource = current.name
-          errors.push(error)
-        }).then(() => {
-          this.REMOVE_FILE_FROM_SEARCHED(current)
-        })
+        await promise
+          .catch(error => {
+            error.resource = current.name
+            errors.push(error)
+          })
+          .then(() => {
+            this.REMOVE_FILE_FROM_SEARCHED(current)
+          })
       }
       this.loadResources(true)
       this.loading = false
