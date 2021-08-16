@@ -45,7 +45,7 @@ const appInfo = {
       component: FileDetails,
       default: !isTrashbinRoute(route),
       get enabled() {
-        return !isTrashbinRoute(route) && !multipleSelection
+        return !isTrashbinRoute(route)
       }
     }),
     ({ multipleSelection }) => ({

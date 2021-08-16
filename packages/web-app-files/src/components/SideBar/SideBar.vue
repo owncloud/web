@@ -96,7 +96,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('Files', ['highlightedFile', 'selectedFiles']),
+    ...mapGetters('Files', ['highlightedFile', 'selectedFiles', 'currentFolder']),
     ...mapGetters(['fileSideBars', 'capabilities']),
     ...mapState('Files', ['appSidebarActivePanel']),
     activePanel() {
@@ -161,6 +161,10 @@ export default {
         })
       },
       immediate: true
+    },
+    currentFolder(now, old) {
+      console.log("======")
+      console.log(now)
     }
   },
   beforeDestroy() {

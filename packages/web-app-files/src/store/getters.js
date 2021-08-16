@@ -76,7 +76,7 @@ export default {
     if (state.selected.length > 0) {
       return state.selected[0]
     }
-    return null
+    return state.currentFolder
   },
   versions: state => {
     return state.versions

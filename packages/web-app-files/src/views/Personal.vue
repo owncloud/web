@@ -241,8 +241,8 @@ export default {
           1,
           DavProperties.Default
         )
-
         resources = resources.map(buildResource)
+
         this.LOAD_FILES({
           currentFolder: resources[0],
           files: resources.slice(1)
