@@ -104,13 +104,8 @@ export default {
         revert: event === 'beforeDestroy'
       })
     },
-    containsFilesForUpload(event) {
-      if (!event.dataTransfer.types) return false
-      return event.dataTransfer.types.some(e => e === 'Files')
-    },
-    $_ocApp_dragOver(e) {
-      if (!this.containsFilesForUpload(e)) return
-      this.dragOver(true)
+    $_ocApp_dragOver(event) {
+      this.dragOver((event.dataTransfer.types || []).some(e => e === 'Files'))
     }
   }
 }

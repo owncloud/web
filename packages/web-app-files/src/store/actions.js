@@ -46,11 +46,6 @@ export default {
   resetFileSelection(context) {
     context.commit('RESET_SELECTION')
   },
-  removeFileFromSearched(context, files) {
-    for (const file in files) {
-      context.commit('REMOVE_FILE_FROM_SEARCHED', file)
-    }
-  },
   markFavorite(context, payload) {
     const file = payload.file
     const client = payload.client

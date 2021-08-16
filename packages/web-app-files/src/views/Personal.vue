@@ -210,14 +210,13 @@ export default {
       'SET_CURRENT_FOLDER',
       'LOAD_FILES',
       'CLEAR_CURRENT_FILES_LIST',
-      'UPDATE_CURRENT_PAGE',
       'REMOVE_FILE_FROM_SEARCHED'
     ]),
     ...mapMutations(['SET_QUOTA']),
 
     async fileDropped(fileIdTarget) {
       const selected = this.selectedFiles
-      const targetInfo = this.getFileInfoById(fileIdTarget)
+      const targetInfo = this.activeFiles.find(e => e.id === fileIdTarget)
       const targetSelected = selected.some(e => e.id === fileIdTarget)
       if (targetSelected) return
       if (targetInfo.type !== 'folder') return
@@ -247,7 +246,7 @@ export default {
             this.REMOVE_FILE_FROM_SEARCHED(current)
           })
       }
-      this.loadResources(true)
+      await this.loadResources(true)
       this.loading = false
       if (errors.length === 0) {
         return
@@ -272,10 +271,6 @@ export default {
         desc: this.$gettextInterpolate(desc, { count: errors.length }, false),
         status: 'danger'
       })
-    },
-
-    getFileInfoById(fileId) {
-      return this.activeFiles.find(e => e.id === fileId)
     },
 
     rowMounted(resource, component) {
