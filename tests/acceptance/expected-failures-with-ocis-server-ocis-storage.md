@@ -530,11 +530,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIUpload/upload.feature:138](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/upload.feature#L138)
 -   [webUIUpload/uploadEdgecases.feature:67](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/uploadEdgecases.feature#L67)
 
-### [user cannot upload new folder/file into folder Shares](https://github.com/owncloud/ocis/issues/2322)
--   [webUIOperationsWithFolderShares/accessToSharesFolder.feature:29](https://github.com/owncloud/web/blob/master/tests/acceptance/webUIOperationsWithFolderShares/accessToSharesFolder.feature#L29)
--   [webUIOperationsWithFolderShares/accessToSharesFolder.feature:38](https://github.com/owncloud/web/blob/master/tests/acceptance/webUIOperationsWithFolderShares/accessToSharesFolder.feature#L38)
--   [webUIOperationsWithFolderShares/accessToSharesFolder.feature:89](https://github.com/owncloud/web/blob/master/tests/acceptance/webUIOperationsWithFolderShares/accessToSharesFolder.feature#L89)
-
 ### [browsing directly to a details 'tab' is not possible](https://github.com/owncloud/web/issues/5464)
 -   [webUIFiles/browseDirectlyToDetailsTab.feature:21](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFiles/browseDirectlyToDetailsTab.feature#L21)
 -   [webUIFiles/browseDirectlyToDetailsTab.feature:22](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFiles/browseDirectlyToDetailsTab.feature#L22)
