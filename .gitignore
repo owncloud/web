@@ -46,3 +46,7 @@ comments.file
 # Themes
 /packages/web-runtime/themes/**
 !/packages/web-runtime/themes/owncloud/**
+
+# Report for tests
+tests/report/cucumber_report.json
+tests/report/cucumber_report.html

@@ -1,4 +1,12 @@
+const { version } = require('../../package.json')
 const reporter = require('cucumber-html-reporter')
+const readline = require('readline')
+const os = require('os')
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+})
 
 const options = {
   theme: 'bootstrap',
@@ -8,14 +16,63 @@ const options = {
   scenarioTimestamp: true,
   launchReport: true,
   metadata: {
-    'Ocis Version': '1.9.0',
-    'Web Version': '4.0.0',
-    'Test Environment': 'docker',
-    Browser: 'Chrome  54.0.2840.98',
-    Platform: 'MacOs Big Sure v11.4',
-    Parallel: 'Scenarios',
-    Executed: 'Remote'
+    'web version': version,
+    platform: os.type()
   }
 }
 
-reporter.generate(options)
+const question1 = () => {
+  return new Promise((resolve, reject) => {
+    rl.question('What version of ocis? ', ocisVersion => {
+      options.metadata.ocisVersion = ocisVersion
+      resolve()
+    })
+  })
+}
+
+const question2 = () => {
+  return new Promise((resolve, reject) => {
+    rl.question('What version of ownCloud? ', (oc10Version = 'oc10') => {
+      options.metadata.oc10Version = oc10Version
+      resolve()
+    })
+  })
+}
+
+const question3 = () => {
+  return new Promise((resolve, reject) => {
+    rl.question('What your enviroment? (docker or local)', env => {
+      options.metadata.environment = env
+      resolve()
+    })
+  })
+}
+
+const question4 = () => {
+  return new Promise((resolve, reject) => {
+    rl.question('What your git branch? ', branch => {
+      options.metadata.branch = branch
+      resolve()
+    })
+  })
+}
+
+const question5 = () => {
+  return new Promise((resolve, reject) => {
+    rl.question('What browser and version? ', browser => {
+      options.metadata.browser = browser
+      resolve()
+    })
+  })
+}
+
+const main = async () => {
+  await question1()
+  await question2()
+  await question3()
+  await question4()
+  await question5()
+  rl.close()
+  reporter.generate(options)
+}
+main()

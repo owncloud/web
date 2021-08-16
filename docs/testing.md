@@ -90,8 +90,6 @@ To watch the tests while running, open [http://host.docker.internal:6080/](http:
 
 #### Watch the test report
 
-To generate test report, should runing test with:  ``` -f json:tests/report/cucumber_report.json && node tests/report/index.js ```
+If you want to create a report after the tests are done, run the command ``` node tests/report/index.js ```
 
-command ``` -f json:tests/report/cucumber_report.json ``` creates or overwrites the file cucumber_report.json in the folder "tests/report"
-
-command ``` node tests/report/index.js ``` converts the report into the format cucumber_report.html and automatically opens in the browser
+You will be prompted to enter the environment parameters, after that the report ```cucumber_report.html``` will be created in ```tests/report/``` and opened automatically in the browser
