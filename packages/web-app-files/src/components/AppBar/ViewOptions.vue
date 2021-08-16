@@ -19,7 +19,7 @@
       size="small"
       gap-size="xsmall"
       class="oc-ml-s"
-      @click="toggleSidebar"
+      @click.stop="toggleSidebar"
     >
       <oc-icon :name="toggleIcon" size="medium" />
     </oc-button>
