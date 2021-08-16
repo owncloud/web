@@ -20,6 +20,7 @@
         v-else
         id="files-personal-table"
         v-model="selected"
+        v-click-outside="onClickOutside"
         class="files-table"
         :class="{ 'files-table-squashed': isSidebarOpen }"
         :are-thumbnails-displayed="displayThumbnails"
@@ -207,6 +208,10 @@ export default {
       'UPDATE_CURRENT_PAGE'
     ]),
     ...mapMutations(['SET_QUOTA']),
+
+    onClickOutside() {
+      this.selected = []
+    },
 
     rowMounted(resource, component) {
       if (!this.displayThumbnails) {

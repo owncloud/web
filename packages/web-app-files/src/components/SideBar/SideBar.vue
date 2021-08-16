@@ -1,6 +1,5 @@
 <template>
   <div
-    v-click-outside="onClickOutside"
     :class="{
       'has-active': !!appSidebarActivePanel
     }"
@@ -206,21 +205,6 @@ export default {
           onExit: clearOldPanel
         })
       })
-    },
-    onClickOutside(event) {
-      /*
-       * We need to go for this opt-out solution because under circumstances a modal will be rendered,
-       * for example if we click rename, clicking in this modal would otherwise falsy close the sidebar.
-       */
-
-      if (
-        document.querySelector('.files-topbar').contains(event.target) ||
-        document.querySelector('.oc-topbar').contains(event.target) ||
-        document.querySelector('.oc-app-navigation').contains(event.target) ||
-        event.target.id === 'files-view'
-      ) {
-        this.close()
-      }
     },
 
     setOldPanel() {
