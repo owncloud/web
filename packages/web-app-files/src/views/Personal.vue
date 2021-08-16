@@ -328,14 +328,17 @@ export default {
         console.error(error)
       }
     },
-    async loadResources(sameRoute) {
+    async loadResources(sameRoute, path = null) {
       this.loading = true
       this.CLEAR_CURRENT_FILES_LIST()
 
       try {
-        let resources = await this.fetchResources(this.$route.params.item, DavProperties.Default)
-
+        let resources = await this.fetchResources(
+          path || this.$route.params.item,
+          DavProperties.Default
+        )
         resources = resources.map(buildResource)
+
         this.LOAD_FILES({
           currentFolder: resources[0],
           files: resources.slice(1)
