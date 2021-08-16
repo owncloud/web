@@ -2651,11 +2651,6 @@ def dependsOn(earlierStages, nextStages):
                 nextStage["depends_on"] = [earlierStage["name"]]
 
 def calculateDiffContainsUnitTestsOnly(ctx):
-    # Do all the pipeline steps fully on tag events. Do not try to analyze diffs
-    # and short-circuit the tests that are executed.
-    if ctx.build.event == "tag":
-        return []
-
     return [
         {
             "name": "calculate-diff",
@@ -2665,5 +2660,10 @@ def calculateDiffContainsUnitTestsOnly(ctx):
                 "bash -x tests/drone/if-diff-has-unit-tests-only.sh",
                 "ls -la",
             ],
+            "when": {
+                "event": [
+                    "pull_request",
+                ],
+            },
         },
     ]

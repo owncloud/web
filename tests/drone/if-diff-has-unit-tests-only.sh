@@ -13,7 +13,10 @@ do
 	fi
 done
 
-if [ $CHANGED_UNIT_TESTS_ONLY == "True" ]
+if [ ! "${DIFF}" ]
+then
+	echo "no any files are changed"
+elif [ $CHANGED_UNIT_TESTS_ONLY == "True" ]
 then
 	echo "only unit tests files are changed"
 	touch runUnitTestsOnly
