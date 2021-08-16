@@ -3,6 +3,7 @@
     :class="{
       'has-active': !!appSidebarActivePanel
     }"
+    @click.stop
   >
     <div
       v-for="panelMeta in panelMetas"
