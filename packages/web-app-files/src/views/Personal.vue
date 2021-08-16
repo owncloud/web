@@ -210,7 +210,8 @@ export default {
       'SET_CURRENT_FOLDER',
       'LOAD_FILES',
       'CLEAR_CURRENT_FILES_LIST',
-      'UPDATE_CURRENT_PAGE'
+      'UPDATE_CURRENT_PAGE',
+      'REMOVE_FILE_FROM_SEARCHED'
     ]),
     ...mapMutations(['SET_QUOTA']),
 
@@ -240,6 +241,8 @@ export default {
         await promise.catch(error => {
           error.resource = current.name
           errors.push(error)
+        }).then(() => {
+          this.REMOVE_FILE_FROM_SEARCHED(current)
         })
       }
       this.loadResources(true)
