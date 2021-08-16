@@ -1338,6 +1338,9 @@ def acceptance(ctx):
                         # Copy files for upload
                         steps += copyFilesForUpload()
 
+                        # Add folder download to volume
+                        steps += addDownloadToVolume()
+
                         # run the acceptance tests
                         steps += runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, params["filterTags"], params["extraEnvironment"], browser, params["visualTesting"], params["screenShots"])
 
@@ -1509,6 +1512,9 @@ def browserService(alternateSuiteName, browser):
             "volumes": [{
                 "name": "uploads",
                 "path": "/uploads",
+            }, {
+                "name": "download",
+                "path": "/home/seluser/Downloads"
             }],
         }]
 
@@ -1519,6 +1525,9 @@ def browserService(alternateSuiteName, browser):
             "volumes": [{
                 "name": "uploads",
                 "path": "/uploads",
+            }, {
+                "name": "download",
+                "path": "/home/seluser/Downloads"
             }],
         }]
 
@@ -2284,6 +2293,19 @@ def copyFilesForUpload():
     }]
 
 def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnvironment, browser, visualTesting, screenShots):
+
+def addDownloadToVolume():
+    return [{
+        "name": "add-folder-download",
+        "pull": "always",
+        "image": "selenium/standalone-firefox-debug:3.141.59",
+        "volumes": [{
+            "name": "download",
+            "path": "tests/acceptance/download",
+        }]
+    }]
+
+def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironment, browser, visualTesting, screenShots):
     environment = {}
     if (filterTags != ""):
         environment["TEST_TAGS"] = filterTags
