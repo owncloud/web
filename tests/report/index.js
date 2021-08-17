@@ -48,6 +48,6 @@ reporter.generate({
     platform: os.platform(),
     repository: `${repoInfo.branch}`,
     ...(backendVersion && { [`${backendName}-verison`]: backendVersion }),
-    ...(environment && { Environment: environment })
+    ...(environment && { environment: environment })
   }
 })
