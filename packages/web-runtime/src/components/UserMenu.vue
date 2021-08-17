@@ -74,7 +74,7 @@
             justify-content="left"
             @click="logout"
           >
-            <oc-icon name="exit_to_app" />
+            <oc-icon name="sign-out" />
             <translate>Log out</translate>
           </oc-button>
         </li>
