@@ -1,0 +1,5 @@
+Enhancement: Signout icon
+
+We changed the icon in the personal menu nav item for signing out based on recent user feedback.
+
+https://github.com/owncloud/web/pull/5681

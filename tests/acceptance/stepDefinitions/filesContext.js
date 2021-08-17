@@ -1250,6 +1250,10 @@ When('the user tries to move file/folder {string} into folder {string} using the
   )
 })
 
+Then('the move here file/folder button should be disabled', function() {
+  return client.page.personalPage().checkForButtonMoveHereDisabled()
+})
+
 When('the user selects move action for folder/file {string} using the webUI', async function(
   resource
 ) {
