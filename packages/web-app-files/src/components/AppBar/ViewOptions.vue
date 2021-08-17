@@ -69,7 +69,7 @@ export default {
     },
 
     toggleIcon() {
-      return this.sidebarClosed ? 'arrow_back_ios' : 'arrow_forward_ios'
+      return this.sidebarClosed ? 'chevron_double_left' : 'chevron_double_right'
     },
 
     hiddenFilesShownModel: {
