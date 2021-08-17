@@ -105,7 +105,8 @@ export default {
       })
     },
     $_ocApp_dragOver(event) {
-      this.dragOver((event.dataTransfer.types || []).some(e => e === 'Files'))
+      const hasfileInEvent = (event.dataTransfer.types || []).some(e => e === 'Files')
+      this.dragOver(hasfileInEvent)
     }
   }
 }
