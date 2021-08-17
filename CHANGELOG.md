@@ -14,6 +14,7 @@ Summary
 * Enhancement - Add multiple selection Sidebar: [#5164](https://github.com/owncloud/web/issues/5164)
 * Enhancement - Enable live reload for changes to themes: [#5668](https://github.com/owncloud/web/pull/5668)
 * Enhancement - Signout icon: [#5681](https://github.com/owncloud/web/pull/5681)
+* Enhancement - Update ODS to 9.1.0: [#5689](https://github.com/owncloud/web/pull/5689)
 
 Details
 -------
@@ -61,6 +62,15 @@ Details
    We changed the icon in the personal menu nav item for signing out based on recent user feedback.
 
    https://github.com/owncloud/web/pull/5681
+
+* Enhancement - Update ODS to 9.1.0: [#5689](https://github.com/owncloud/web/pull/5689)
+
+   We updated the ownCloud Design System to version 9.1.0.
+
+   https://github.com/owncloud/web/pull/5689
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v9.0.0
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v9.0.1
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v9.1.0
 
 Changelog for ownCloud Web [4.0.0] (2021-08-04)
 =======================================
