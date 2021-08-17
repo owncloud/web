@@ -17,7 +17,7 @@
         'is-active':
           appSidebarActivePanel === panelMeta.app || (!appSidebarActivePanel && panelMeta.default),
         'sidebar-panel--default': panelMeta.default,
-        'sidebar-panel--multiple-selected': areMultipleSelected
+        'sidebar-panel--multiple-selected': areMultipleSelected || isRootFolder
       }"
     >
       <div class="sidebar-panel__header header">
@@ -33,7 +33,7 @@
         </oc-button>
 
         <div class="header__title">
-          {{ panelMeta.component.title($gettext) }}{{ areMultipleSelected }}
+          {{ panelMeta.component.title($gettext) }}
         </div>
 
         <oc-button
@@ -46,7 +46,7 @@
         </oc-button>
       </div>
       <file-info
-        v-if="!areMultipleSelected"
+        v-if="!areMultipleSelected && !isRootFolder"
         class="sidebar-panel__file_info"
         :is-content-displayed="isContentDisplayed"
       />
@@ -110,7 +110,8 @@ export default {
             capabilities: this.capabilities,
             highlightedFile: this.highlightedFile,
             route: this.$route,
-            multipleSelection: this.areMultipleSelected
+            multipleSelection: this.areMultipleSelected,
+            rootFolder: this.isRootFolder
           })
 
           if (panel.enabled) {
@@ -152,6 +153,9 @@ export default {
     },
     areMultipleSelected() {
       return this.selectedFiles && this.selectedFiles.length > 1
+    },
+    isRootFolder() {
+      return this.highlightedFile.path === ""
     }
   },
   watch: {
