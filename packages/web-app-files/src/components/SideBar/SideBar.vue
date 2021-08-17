@@ -4,6 +4,7 @@
       'has-active': !!appSidebarActivePanel
     }"
     @click.stop
+    v-if="highlightedFile != null"
   >
     <div
       v-for="panelMeta in panelMetas"
@@ -28,11 +29,11 @@
           @click="closePanel"
         >
           <oc-icon name="chevron_left" />
-          {{ defaultPanelMeta.component.title($gettext) }}
+          {{ defaultPanelMeta.component.title($gettext) }} 
         </oc-button>
 
         <div class="header__title">
-          {{ panelMeta.component.title($gettext) }}
+          {{ panelMeta.component.title($gettext) }}{{ areMultipleSelected }}
         </div>
 
         <oc-button
