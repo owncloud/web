@@ -1,7 +1,7 @@
 import GetTextPlugin from 'vue-gettext'
 import { mount } from '@vue/test-utils'
 import Personal from 'packages/web-app-files/src/views/Personal.vue'
-import { localVue, getStore } from './views.setup'
+import { localVue } from './views.setup'
 import { createStore } from 'vuex-extensions'
 import VueRouter from 'vue-router'
 import Vuex from 'vuex'
@@ -37,7 +37,7 @@ localVue.prototype.$client = {
   users: {
     getUser: jest.fn(() => user)
   }
-};
+}
 
 const router = new VueRouter({
   routes: [
@@ -62,48 +62,48 @@ const stubs = {
 
 const resources = [
   {
-    id: "forest",
-    name: "forest.jpg",
-    path: "images/nature/forest.jpg",
-    thumbnail: "https://cdn.pixabay.com/photo/2015/09/09/16/05/forest-931706_960_720.jpg",
-    type: "file",
-    size: "111000234",
-    mdate: "Thu, 01 Jul 2021 08:34:04 GMT"
+    id: 'forest',
+    name: 'forest.jpg',
+    path: 'images/nature/forest.jpg',
+    thumbnail: 'https://cdn.pixabay.com/photo/2015/09/09/16/05/forest-931706_960_720.jpg',
+    type: 'file',
+    size: '111000234',
+    mdate: 'Thu, 01 Jul 2021 08:34:04 GMT'
   },
   {
-    id: "notes",
-    name: "notes.txt",
-    path: "/Documents/notes.txt",
-    icon: "text",
-    type: "file",
-    size: "1245",
-    mdate: "Thu, 01 Jul 2021 08:45:04 GMT"
+    id: 'notes',
+    name: 'notes.txt',
+    path: '/Documents/notes.txt',
+    icon: 'text',
+    type: 'file',
+    size: '1245',
+    mdate: 'Thu, 01 Jul 2021 08:45:04 GMT'
   },
   {
-    id: "documents",
-    name: "Documents",
-    path: "/Documents",
-    icon: "folder",
-    type: "folder",
-    size: "5324435",
-    mdate: "Sat, 09 Jan 2021 14:34:04 GMT"
+    id: 'documents',
+    name: 'Documents',
+    path: '/Documents',
+    icon: 'folder',
+    type: 'folder',
+    size: '5324435',
+    mdate: 'Sat, 09 Jan 2021 14:34:04 GMT'
   },
   {
-    id: "pdfs",
-    name: "Pdfs",
-    path: "/pdfs",
-    icon: "folder",
-    type: "folder",
-    size: "53244",
-    mdate: "Sat, 09 Jan 2021 14:34:04 GMT"
-  },
+    id: 'pdfs',
+    name: 'Pdfs',
+    path: '/pdfs',
+    icon: 'folder',
+    type: 'folder',
+    size: '53244',
+    mdate: 'Sat, 09 Jan 2021 14:34:04 GMT'
+  }
 ]
 
-function createWrapper(selectedFiles = [
-  resources[0]
-]) {
+function createWrapper(selectedFiles = [resources[0]]) {
   jest.spyOn(Personal.methods, 'loadResources').mockImplementation()
-  jest.spyOn(MixinAccessibleBreadcrumb.methods, 'accessibleBreadcrumb_focusAndAnnounceBreadcrumb').mockImplementation()
+  jest
+    .spyOn(MixinAccessibleBreadcrumb.methods, 'accessibleBreadcrumb_focusAndAnnounceBreadcrumb')
+    .mockImplementation()
   const component = { ...Personal, created: jest.fn(), mounted: jest.fn() }
   const wrapper = mount(component, {
     store: createStore(Vuex.Store, {
@@ -116,7 +116,7 @@ function createWrapper(selectedFiles = [
         user: () => user
       },
       mutations: {
-        SET_QUOTA: () => {},
+        SET_QUOTA: () => {}
       },
       actions: {
         showMessage: () => {}
@@ -132,7 +132,7 @@ function createWrapper(selectedFiles = [
             inProgress: () => [null],
             currentFolder: () => '/',
             pages: () => 4,
-            selectedFiles: () => selectedFiles, 
+            selectedFiles: () => selectedFiles,
             highlightedFile: () => resources[0]
           },
           actions: {
@@ -154,41 +154,45 @@ function createWrapper(selectedFiles = [
     localVue,
     router,
     stubs: stubs,
-    mixins: [MixinAccessibleBreadcrumb,
+    mixins: [
+      MixinAccessibleBreadcrumb,
       MixinFileActions,
       MixinFilesListPositioning,
       MixinFilesListScrolling,
       MixinFilesListPagination,
       MixinMountSideBar,
-      MixinFilesListFilter],
+      MixinFilesListFilter
+    ],
     data: () => ({
       loading: false
     })
   })
-  return wrapper;
+  return wrapper
 }
 
 describe('Personal component', () => {
-  describe('file move with drag & drop', () => {      
+  describe('file move with drag & drop', () => {
     it('should exit if target is also selected', async () => {
       const spyOnGetFolderItems = jest.spyOn(Personal.methods, 'getFolderItems')
-      const wrapper = createWrapper([resources[0], resources[3]]);
+      const wrapper = createWrapper([resources[0], resources[3]])
       await wrapper.vm.fileDropped(resources[3].id)
       expect(spyOnGetFolderItems).not.toBeCalled()
       spyOnGetFolderItems.mockReset()
     })
     it('should exit if target is not a folder', async () => {
       const spyOnGetFolderItems = jest.spyOn(Personal.methods, 'getFolderItems')
-      const wrapper = createWrapper([resources[2]]);
+      const wrapper = createWrapper([resources[2]])
       await wrapper.vm.fileDropped(resources[0].id)
       expect(spyOnGetFolderItems).not.toBeCalled()
       spyOnGetFolderItems.mockReset()
     })
     it('should not move file if resource is already in target', async () => {
-      const spyOnGetFolderItems = jest.spyOn(Personal.methods, 'getFolderItems').mockResolvedValueOnce([resources[2]])
+      const spyOnGetFolderItems = jest
+        .spyOn(Personal.methods, 'getFolderItems')
+        .mockResolvedValueOnce([resources[2]])
       const spyOnMoveFiles = jest.spyOn(localVue.prototype.$client.files, 'move')
 
-      const wrapper = createWrapper([resources[2]]);
+      const wrapper = createWrapper([resources[2]])
       await wrapper.vm.fileDropped(resources[3].id)
       expect(spyOnMoveFiles).not.toBeCalled()
 
@@ -196,10 +200,14 @@ describe('Personal component', () => {
       spyOnGetFolderItems.mockReset()
     })
     it('should move a file', async () => {
-      const spyOnGetFolderItems = jest.spyOn(Personal.methods, 'getFolderItems').mockResolvedValueOnce([])
-      const spyOnMoveFilesMove = jest.spyOn(localVue.prototype.$client.files, 'move').mockImplementation()
+      const spyOnGetFolderItems = jest
+        .spyOn(Personal.methods, 'getFolderItems')
+        .mockResolvedValueOnce([])
+      const spyOnMoveFilesMove = jest
+        .spyOn(localVue.prototype.$client.files, 'move')
+        .mockImplementation()
 
-      const wrapper = createWrapper([resources[2]]);
+      const wrapper = createWrapper([resources[2]])
       await wrapper.vm.fileDropped(resources[3].id)
       expect(spyOnMoveFilesMove).toBeCalled()
 
