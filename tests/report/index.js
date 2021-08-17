@@ -1,78 +1,53 @@
-const { version } = require('../../package.json')
+const { program, Option } = require('commander')
+const getRepoInfo = require('git-repo-info')
+const pkg = require('../../package.json')
 const reporter = require('cucumber-html-reporter')
-const readline = require('readline')
 const os = require('os')
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-})
+program
+  .addOption(
+    new Option('--backend-name <name>', 'which backend is used')
+      .default('ocis')
+      .choices(['ocis', 'oc10'])
+  )
+  .option('--backend-version <semver>', 'version of used backend')
+  .option('--environment <type>', 'test environment e.g. docker, local, remote ...')
+  .option('--report-open', 'open report in browser', false)
+  .option(
+    '--report-location <path>',
+    'location where the report gets generated to',
+    'tests/report/cucumber_report.html'
+  )
+  .option(
+    '--report-input <path>',
+    'location of generated cucumber json',
+    'tests/report/cucumber_report.json'
+  )
 
-const options = {
+program.parse()
+
+const {
+  backendName,
+  backendVersion,
+  environment,
+  reportOpen,
+  reportLocation,
+  reportInput
+} = program.opts()
+const repoInfo = getRepoInfo()
+
+reporter.generate({
   theme: 'bootstrap',
-  jsonFile: 'tests/report/cucumber_report.json',
-  output: 'tests/report/cucumber_report.html',
+  jsonFile: reportInput,
+  output: reportLocation,
   reportSuiteAsScenarios: true,
   scenarioTimestamp: true,
-  launchReport: true,
+  launchReport: reportOpen,
   metadata: {
-    'web version': version,
-    platform: os.type()
+    'web-version': pkg.version,
+    platform: os.platform(),
+    repository: `${repoInfo.branch}`,
+    ...(backendVersion && { [`${backendName}-verison`]: backendVersion }),
+    ...(environment && { Environment: environment })
   }
-}
-
-const question1 = () => {
-  return new Promise((resolve, reject) => {
-    rl.question('What version of ocis? ', ocisVersion => {
-      options.metadata.ocisVersion = ocisVersion
-      resolve()
-    })
-  })
-}
-
-const question2 = () => {
-  return new Promise((resolve, reject) => {
-    rl.question('What version of ownCloud? ', (oc10Version = 'oc10') => {
-      options.metadata.oc10Version = oc10Version
-      resolve()
-    })
-  })
-}
-
-const question3 = () => {
-  return new Promise((resolve, reject) => {
-    rl.question('What your enviroment? (docker or local)', env => {
-      options.metadata.environment = env
-      resolve()
-    })
-  })
-}
-
-const question4 = () => {
-  return new Promise((resolve, reject) => {
-    rl.question('What your git branch? ', branch => {
-      options.metadata.branch = branch
-      resolve()
-    })
-  })
-}
-
-const question5 = () => {
-  return new Promise((resolve, reject) => {
-    rl.question('What browser and version? ', browser => {
-      options.metadata.browser = browser
-      resolve()
-    })
-  })
-}
-
-const main = async () => {
-  await question1()
-  await question2()
-  await question3()
-  await question4()
-  await question5()
-  rl.close()
-  reporter.generate(options)
-}
-main()
+})
