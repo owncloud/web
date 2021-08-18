@@ -82,7 +82,7 @@ import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
 import { DavProperties } from 'web-pkg/src/constants'
-import { basename } from 'path'
+import { basename, join } from 'path'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -210,6 +210,7 @@ export default {
       'SET_CURRENT_FOLDER',
       'LOAD_FILES',
       'CLEAR_CURRENT_FILES_LIST',
+      'REMOVE_FILE',
       'REMOVE_FILE_FROM_SEARCHED'
     ]),
     ...mapMutations(['SET_QUOTA']),
@@ -217,16 +218,13 @@ export default {
     async fileDropped(fileIdTarget) {
       const selected = this.selectedFiles
       const targetInfo = this.activeFiles.find(e => e.id === fileIdTarget)
-      const targetSelected = selected.some(e => e.id === fileIdTarget)
-      if (targetSelected) return
+      const isTargetSelected = selected.some(e => e.id === fileIdTarget)
+      if (isTargetSelected) return
       if (targetInfo.type !== 'folder') return
-
-      this.loading = true
-      const targetPath = targetInfo.path + '/'
       const errors = []
-      const itemsInTarget = await this.getFolderItems(targetPath)
-      for (let i = 0; i < selected.length; i++) {
-        const current = selected[i]
+      const itemsInTarget = await this.fetchResources(targetInfo.path)
+
+      selected.forEach(async current => {
         const exists = itemsInTarget.some(e => basename(e.name) === current.name)
         if (exists) {
           const message = this.$gettext('Resource with name %{name} already exists')
@@ -234,23 +232,23 @@ export default {
             resource: current.name,
             message: this.$gettextInterpolate(message, { name: current.name }, true)
           })
-          continue
+          return
         }
         try {
-          await this.$client.files.move(current.path, targetPath + current.name)
+          await this.$client.files.move(current.path, join(targetInfo.path, current.name))
+          this.REMOVE_FILE(current)
           this.REMOVE_FILE_FROM_SEARCHED(current)
         } catch (error) {
           error.resource = current.name
           errors.push(error)
         }
-      }
-      await this.loadResources(true)
-      this.loading = false
+      })
       if (errors.length === 0) {
         return
       }
-      let title = this.$gettext('An error occurred while moving %{resource}')
+
       if (errors.length === 1) {
+        const title = this.$gettext('An error occurred while moving %{resource}')
         this.showMessage({
           title: this.$gettextInterpolate(title, { resource: errors[0].resource }, true),
           desc: errors[0].message,
@@ -258,7 +256,7 @@ export default {
         })
         return
       }
-      title = this.$gettext('An error occurred while moving several resources')
+      const title = this.$gettext('An error occurred while moving several resources')
       const desc = this.$ngettext(
         '%{count} resource could not be moved',
         '%{count} resources could not be moved',
@@ -288,10 +286,9 @@ export default {
 
       visibilityObserver.observe(component.$el, { onEnter: debounced, onExit: debounced.cancel })
     },
-    async getFolderItems(path, properties) {
+    async fetchResources(path, properties) {
       try {
-        const resources = await this.$client.files.list(path, 1, properties)
-        return resources
+        return await this.$client.files.list(path, 1, properties)
       } catch (error) {
         console.error(error)
       }
@@ -301,7 +298,7 @@ export default {
       this.CLEAR_CURRENT_FILES_LIST()
 
       try {
-        let resources = await this.getFolderItems(this.$route.params.item, DavProperties.Default)
+        let resources = await this.fetchResources(this.$route.params.item, DavProperties.Default)
 
         resources = resources.map(buildResource)
         this.LOAD_FILES({

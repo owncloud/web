@@ -139,7 +139,6 @@ function createWrapper(selectedFiles = [resources[0]]) {
             loadIndicators: () => {}
           },
           mutations: {
-            UPDATE_CURRENT_PAGE: () => {},
             SET_FILES_PAGE_LIMIT: () => {},
             CLEAR_FILES_SEARCHED: () => {},
             SET_CURRENT_FOLDER: () => {},
@@ -170,17 +169,17 @@ function createWrapper(selectedFiles = [resources[0]]) {
   return wrapper
 }
 
-describe('Personal component', () => {
+describe('Personal view', () => {
   describe('file move with drag & drop', () => {
     it('should exit if target is also selected', async () => {
-      const spyOnGetFolderItems = jest.spyOn(Personal.methods, 'getFolderItems')
+      const spyOnGetFolderItems = jest.spyOn(Personal.methods, 'fetchResources')
       const wrapper = createWrapper([resources[0], resources[3]])
       await wrapper.vm.fileDropped(resources[3].id)
       expect(spyOnGetFolderItems).not.toBeCalled()
       spyOnGetFolderItems.mockReset()
     })
     it('should exit if target is not a folder', async () => {
-      const spyOnGetFolderItems = jest.spyOn(Personal.methods, 'getFolderItems')
+      const spyOnGetFolderItems = jest.spyOn(Personal.methods, 'fetchResources')
       const wrapper = createWrapper([resources[2]])
       await wrapper.vm.fileDropped(resources[0].id)
       expect(spyOnGetFolderItems).not.toBeCalled()
@@ -188,7 +187,7 @@ describe('Personal component', () => {
     })
     it('should not move file if resource is already in target', async () => {
       const spyOnGetFolderItems = jest
-        .spyOn(Personal.methods, 'getFolderItems')
+        .spyOn(Personal.methods, 'fetchResources')
         .mockResolvedValueOnce([resources[2]])
       const spyOnMoveFiles = jest.spyOn(localVue.prototype.$client.files, 'move')
 
@@ -201,7 +200,7 @@ describe('Personal component', () => {
     })
     it('should move a file', async () => {
       const spyOnGetFolderItems = jest
-        .spyOn(Personal.methods, 'getFolderItems')
+        .spyOn(Personal.methods, 'fetchResources')
         .mockResolvedValueOnce([])
       const spyOnMoveFilesMove = jest
         .spyOn(localVue.prototype.$client.files, 'move')
