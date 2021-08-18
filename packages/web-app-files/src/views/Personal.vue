@@ -84,6 +84,7 @@ import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
 import { DavProperties } from 'web-pkg/src/constants'
 import { basename, join } from 'path'
+import PQueue from 'p-queue'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -221,33 +222,42 @@ export default {
     ...mapMutations(['SET_QUOTA']),
 
     async fileDropped(fileIdTarget) {
-      const selected = this.selectedFiles
+      const selected = [...this.selectedFiles]
       const targetInfo = this.activeFiles.find(e => e.id === fileIdTarget)
       const isTargetSelected = selected.some(e => e.id === fileIdTarget)
       if (isTargetSelected) return
       if (targetInfo.type !== 'folder') return
-      const errors = []
       const itemsInTarget = await this.fetchResources(targetInfo.path)
 
-      selected.forEach(async current => {
-        const exists = itemsInTarget.some(e => basename(e.name) === current.name)
-        if (exists) {
-          const message = this.$gettext('Resource with name %{name} already exists')
-          errors.push({
-            resource: current.name,
-            message: this.$gettextInterpolate(message, { name: current.name }, true)
+      const errors = []
+      const movePromises = []
+      const moveQueue = new PQueue({ concurrency: 4 })
+      selected.forEach(resource => {
+        movePromises.push(
+          moveQueue.add(async () => {
+            const exists = itemsInTarget.some(e => basename(e.name) === resource.name)
+            if (exists) {
+              const message = this.$gettext('Resource with name %{name} already exists')
+              errors.push({
+                resource: resource.name,
+                message: this.$gettextInterpolate(message, { name: resource.name }, true)
+              })
+              return
+            }
+
+            try {
+              await this.$client.files.move(resource.path, join(targetInfo.path, resource.name))
+              this.REMOVE_FILE(resource)
+              this.REMOVE_FILE_FROM_SEARCHED(resource)
+            } catch (error) {
+              error.resource = resource.name
+              errors.push(error)
+            }
           })
-          return
-        }
-        try {
-          await this.$client.files.move(current.path, join(targetInfo.path, current.name))
-          this.REMOVE_FILE(current)
-          this.REMOVE_FILE_FROM_SEARCHED(current)
-        } catch (error) {
-          error.resource = current.name
-          errors.push(error)
-        }
+        )
       })
+      await Promise.all(movePromises)
+
       if (errors.length === 0) {
         return
       }
@@ -261,6 +271,7 @@ export default {
         })
         return
       }
+
       const title = this.$gettext('An error occurred while moving several resources')
       const desc = this.$ngettext(
         '%{count} resource could not be moved',
