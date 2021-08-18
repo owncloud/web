@@ -210,7 +210,8 @@ export default {
   },
 
   methods: {
-    ...mapActions('Files', ['loadIndicators', 'loadPreview'], 'showMessage'),
+    ...mapActions('Files', ['loadIndicators', 'loadPreview']),
+    ...mapActions(['showMessage']),
     ...mapMutations('Files', [
       'SELECT_RESOURCES',
       'SET_CURRENT_FOLDER',
