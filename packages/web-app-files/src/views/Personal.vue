@@ -217,7 +217,8 @@ export default {
       'LOAD_FILES',
       'CLEAR_CURRENT_FILES_LIST',
       'REMOVE_FILE',
-      'REMOVE_FILE_FROM_SEARCHED'
+      'REMOVE_FILE_FROM_SEARCHED',
+      'REMOVE_FILE_SELECTION'
     ]),
     ...mapMutations(['SET_QUOTA']),
 
@@ -249,6 +250,7 @@ export default {
               await this.$client.files.move(resource.path, join(targetInfo.path, resource.name))
               this.REMOVE_FILE(resource)
               this.REMOVE_FILE_FROM_SEARCHED(resource)
+              this.REMOVE_FILE_SELECTION(resource)
             } catch (error) {
               error.resource = resource.name
               errors.push(error)
