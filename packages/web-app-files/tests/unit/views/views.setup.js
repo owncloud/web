@@ -46,7 +46,6 @@ export const getRouter = ({ query = {} }) => ({
 export const getStore = function ({
   highlightedFile = null,
   disablePreviews = true,
-
   currentPage = null,
   activeFiles = [],
   pages = null,
@@ -61,7 +60,11 @@ export const getStore = function ({
   davProperties = [],
   publicLinkPassword = null,
   slogan = null,
-  user = null
+  user = null,
+  generalThemeName = '',
+  isOcis = true,
+  selectedResourcesForMove = null,
+  locationPickerTargetFolder = null
 } = {}) {
   return createStore(Vuex.Store, {
     state: {
@@ -77,6 +80,7 @@ export const getStore = function ({
             login: loginLogo
           },
           general: {
+            name: generalThemeName,
             slogan: slogan
           }
         },
@@ -85,7 +89,7 @@ export const getStore = function ({
         }
       }),
       getToken: () => '',
-      isOcis: () => true,
+      isOcis: () => isOcis,
       homeFolder: () => '/',
       user: () => user
     },
@@ -101,7 +105,11 @@ export const getStore = function ({
           resource: null,
           filesPageLimit: 100,
           files: [],
-          activeFiles: activeFiles
+          activeFiles: activeFiles,
+          currentFolder: currentFolder,
+          currentPage: currentPage,
+          selectedResourcesForMove: selectedResourcesForMove,
+          locationPickerTargetFolder: locationPickerTargetFolder
         },
         getters: {
           totalFilesCount: () => totalFilesCount,
@@ -133,7 +141,8 @@ export const getStore = function ({
           SET_FILE_SELECTION: () => {}
         },
         actions: {
-          loadIndicators: () => {}
+          loadIndicators: () => {},
+          loadFiles: () => {}
         },
         namespaced: true,
         modules: {
