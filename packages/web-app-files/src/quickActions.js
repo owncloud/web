@@ -45,7 +45,7 @@ export function createPublicLink(ctx) {
 }
 
 export function openNewCollaboratorsPanel(ctx) {
-  ctx.store.commit('Files/sidebar/open')
+  ctx.store.dispatch('Files/sidebar/open')
   ctx.store.commit('Files/SET_APP_SIDEBAR_ACTIVE_PANEL', 'sharing-item')
 }
 
