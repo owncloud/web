@@ -47,7 +47,7 @@ export default {
       fileName: '',
       selected: [],
       breadcrumbs: [],
-      sidebarClosed: false
+      sidebarClosed: true
     }
   },
   computed: {
