@@ -11,7 +11,7 @@
       <router-view id="files-view" />
     </div>
     <side-bar
-      v-if="showSidebar"
+      v-if="!sidebarClosed"
       id="files-sidebar"
       ref="filesSidebar"
       tabindex="-1"
@@ -25,11 +25,10 @@
 <script>
 import Mixins from './mixins'
 import MixinRoutes from './mixins/routes'
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import AppBar from './components/AppBar/AppBar.vue'
 import ProgressBar from './components/Upload/ProgressBar.vue'
 import SideBar from './components/SideBar/SideBar.vue'
-import { bus } from 'web-pkg/src/instance'
 
 export default {
   components: {
@@ -46,12 +45,12 @@ export default {
       upload: false,
       fileName: '',
       selected: [],
-      breadcrumbs: [],
-      sidebarClosed: true
+      breadcrumbs: []
     }
   },
   computed: {
     ...mapGetters('Files', ['dropzone', 'inProgress', 'selectedFiles']),
+    ...mapState('Files/sidebar', ['sidebarClosed']),
 
     $_uploadProgressVisible() {
       return this.inProgress.length > 0
@@ -64,24 +63,14 @@ export default {
     $route() {
       this.resetFileSelection()
     },
-    showSidebar(visible) {
-      if (visible) return
+    sidebarClosed(hidden) {
+      if (!hidden) return
       this.SET_APP_SIDEBAR_ACTIVE_PANEL(null)
     }
   },
   created() {
     this.$root.$on('upload-end', () => {
       this.delayForScreenreader(() => this.$refs.filesListWrapper.focus())
-    })
-    bus.on('app.files.sidebar.close', () => {
-      this.sidebarClosed = true
-    })
-    bus.on('app.files.sidebar.show', () => {
-      this.sidebarClosed = false
-    })
-    bus.on('app.files.sidebar.toggle', () => {
-      const event = this.sidebarClosed ? 'app.files.sidebar.show' : 'app.files.sidebar.close'
-      bus.emit(event)
     })
   },
 

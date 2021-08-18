@@ -17,7 +17,7 @@
         id="files-trashbin-table"
         v-model="selected"
         class="files-table"
-        :class="{ 'files-table-squashed': isSidebarOpen }"
+        :class="{ 'files-table-squashed': !sidebarClosed }"
         :are-paths-displayed="true"
         :are-thumbnails-displayed="false"
         :resources="activeFiles"
@@ -83,6 +83,7 @@ export default {
       'inProgress',
       'totalFilesCount'
     ]),
+    ...mapState('Files/sidebar', ['sidebarClosed']),
 
     selected: {
       get() {
@@ -95,10 +96,6 @@ export default {
 
     isEmpty() {
       return this.activeFiles.length < 1
-    },
-
-    isSidebarOpen() {
-      return this.highlightedFile !== null
     },
 
     uploadProgressVisible() {

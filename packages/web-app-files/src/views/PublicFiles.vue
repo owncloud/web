@@ -21,7 +21,7 @@
         id="files-public-files-table"
         v-model="selected"
         class="files-table"
-        :class="{ 'files-table-squashed': isSidebarOpen }"
+        :class="{ 'files-table-squashed': !sidebarClosed }"
         :are-thumbnails-displayed="displayThumbnails"
         :resources="activeFiles"
         :target-route="targetRoute"
@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions, mapMutations } from 'vuex'
+import { mapGetters, mapActions, mapMutations, mapState } from 'vuex'
 
 import MixinAccessibleBreadcrumb from '../mixins/accessibleBreadcrumb'
 import MixinFileActions from '../mixins/fileActions'
@@ -107,13 +107,10 @@ export default {
       'totalFilesSize'
     ]),
     ...mapGetters(['configuration']),
+    ...mapState('Files/sidebar', ['sidebarClosed']),
 
     isEmpty() {
       return this.activeFiles.length < 1
-    },
-
-    isSidebarOpen() {
-      return this.highlightedFile !== null
     },
 
     uploadProgressVisible() {

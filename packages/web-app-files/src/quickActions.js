@@ -24,7 +24,7 @@ export function createPublicLink(ctx) {
     ctx.store
       .dispatch('Files/addLink', { path: ctx.item.path, client: ctx.client, params })
       .then(link => {
-        bus.emit('app.files.sidebar.show')
+        ctx.store.dispatch('Files/sidebar/open')
         ctx.store.commit('Files/SET_APP_SIDEBAR_ACTIVE_PANEL', 'links-item')
         copyToClipboard(link.url)
         ctx.store.dispatch('showMessage', {
@@ -46,7 +46,7 @@ export function createPublicLink(ctx) {
 }
 
 export function openNewCollaboratorsPanel(ctx) {
-  bus.emit('app.files.sidebar.show')
+  ctx.store.commit('Files/sidebar/open')
   ctx.store.commit('Files/SET_APP_SIDEBAR_ACTIVE_PANEL', 'sharing-item')
 }
 

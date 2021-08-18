@@ -19,7 +19,7 @@
         id="files-shared-with-others-table"
         v-model="selected"
         class="files-table"
-        :class="{ 'files-table-squashed': isSidebarOpen }"
+        :class="{ 'files-table-squashed': !sidebarClosed }"
         :are-thumbnails-displayed="displayThumbnails"
         :resources="activeFiles"
         :target-route="targetRoute"
@@ -94,6 +94,7 @@ export default {
       'totalFilesCount'
     ]),
     ...mapGetters(['isOcis', 'configuration', 'getToken', 'user']),
+    ...mapState('Files/sidebar', ['sidebarClosed']),
 
     selected: {
       get() {
@@ -106,10 +107,6 @@ export default {
 
     isEmpty() {
       return this.activeFiles.length < 1
-    },
-
-    isSidebarOpen() {
-      return this.highlightedFile !== null
     },
 
     uploadProgressVisible() {

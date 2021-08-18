@@ -112,6 +112,6 @@ export const getIndicators = (resource, sharesTree) => {
 }
 
 const indicatorHandler = (resource, accordion) => {
-  bus.emit('app.files.sidebar.show')
+  window.Vue.$store.commit('Files/sidebar/OPEN')
   window.Vue.$store.commit('Files/SET_APP_SIDEBAR_ACTIVE_PANEL', accordion)
 }
