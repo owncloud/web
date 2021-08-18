@@ -2,7 +2,6 @@ import intersection from 'lodash-es/intersection'
 import { shareTypes, userShareTypes } from './shareTypes'
 import { getParentPaths } from './path'
 import { $gettext } from '../gettext'
-import { bus } from 'web-pkg/src/instance'
 
 const $shareTypes = resource => {
   if (typeof resource.shareTypes !== 'undefined') {

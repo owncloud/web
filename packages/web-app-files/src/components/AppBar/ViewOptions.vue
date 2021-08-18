@@ -109,7 +109,7 @@ export default {
   },
   methods: {
     ...mapMutations('Files', ['SET_HIDDEN_FILES_VISIBILITY', 'SET_FILES_PAGE_LIMIT']),
-    ...mapActions('Files/sidebar', { toggleSidebar: 'toggle'}),
+    ...mapActions('Files/sidebar', { toggleSidebar: 'toggle' }),
 
     updateQuery(limit = this.pageItemsLimit) {
       const query = { ...this.$route.query, 'items-limit': limit }
