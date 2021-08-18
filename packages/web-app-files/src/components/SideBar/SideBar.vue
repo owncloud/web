@@ -40,7 +40,7 @@
           appearance="raw"
           class="header__close"
           :aria-label="$gettext('Close file sidebar')"
-          @click="close"
+          @click="closeSidebar"
         >
           <oc-icon name="close" />
         </oc-button>
@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations, mapState } from 'vuex'
+import { mapGetters, mapMutations, mapState, mapActions } from 'vuex'
 import FileInfo from './FileInfo.vue'
 import MixinRoutes from '../../mixins/routes'
 import { VisibilityObserver } from 'web-pkg/src/observer'
@@ -177,10 +177,8 @@ export default {
   },
   methods: {
     ...mapMutations('Files', ['SET_APP_SIDEBAR_ACTIVE_PANEL']),
+    ...mapActions('Files/sidebar', { closeSidebar: 'close'}),
 
-    close() {
-      bus.emit('app.files.sidebar.close')
-    },
     initVisibilityObserver() {
       visibilityObserver = new VisibilityObserver({
         root: document.querySelector('#files-sidebar'),

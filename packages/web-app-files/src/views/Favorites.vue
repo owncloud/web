@@ -12,7 +12,7 @@
         id="files-favorites-table"
         v-model="selected"
         class="files-table"
-        :class="{ 'files-table-squashed': isSidebarOpen }"
+        :class="{ 'files-table-squashed': !sidebarClosed }"
         :are-paths-displayed="true"
         :are-thumbnails-displayed="displayThumbnails"
         :resources="activeFiles"
@@ -92,11 +92,8 @@ export default {
       'totalFilesCount',
       'totalFilesSize'
     ]),
+    ...mapState('Files/sidebar', ['sidebarClosed']),
     ...mapGetters(['user', 'configuration']),
-
-    isSidebarOpen() {
-      return this.highlightedFile !== null
-    },
 
     targetRoute() {
       return { name: 'files-personal' }

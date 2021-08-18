@@ -52,17 +52,12 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from 'vuex'
-import { bus } from 'web-pkg/src/instance'
+import { mapMutations, mapState, mapActions } from 'vuex'
 
 export default {
-  data() {
-    return {
-      sidebarClosed: true
-    }
-  },
   computed: {
     ...mapState('Files', ['areHiddenFilesShown', 'filesPageLimit']),
+    ...mapState('Files/sidebar', ['sidebarClosed']),
 
     viewButtonAriaLabel() {
       return this.$gettext('Display customization options of the files list')
@@ -112,26 +107,15 @@ export default {
       immediate: true
     }
   },
-  mounted() {
-    bus.on('app.files.sidebar.close', () => {
-      this.sidebarClosed = true
-    })
-    bus.on('app.files.sidebar.show', () => {
-      this.sidebarClosed = false
-    })
-  },
   methods: {
     ...mapMutations('Files', ['SET_HIDDEN_FILES_VISIBILITY', 'SET_FILES_PAGE_LIMIT']),
+    ...mapActions('Files/sidebar', { toggleSidebar: 'toggle'}),
 
     updateQuery(limit = this.pageItemsLimit) {
       const query = { ...this.$route.query, 'items-limit': limit }
 
       this.SET_FILES_PAGE_LIMIT(limit)
       this.$router.replace({ query }).catch(() => {})
-    },
-
-    toggleSidebar() {
-      bus.emit('app.files.sidebar.toggle')
     }
   }
 }

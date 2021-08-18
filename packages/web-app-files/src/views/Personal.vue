@@ -22,7 +22,7 @@
         v-model="selected"
         v-click-outside="onClickOutside"
         class="files-table"
-        :class="{ 'files-table-squashed': isSidebarOpen }"
+        :class="{ 'files-table-squashed': !sidebarClosed }"
         :are-thumbnails-displayed="displayThumbnails"
         :resources="activeFiles"
         :target-route="targetRoute"
@@ -112,6 +112,7 @@ export default {
   computed: {
     ...mapState(['app']),
     ...mapState('Files', ['currentPage', 'files', 'filesPageLimit']),
+    ...mapState('Files/sidebar', ['sidebarClosed']),
     ...mapGetters('Files', [
       'highlightedFile',
       'selectedFiles',
@@ -122,9 +123,6 @@ export default {
       'totalFilesSize'
     ]),
     ...mapGetters(['user', 'homeFolder', 'configuration']),
-    isSidebarOpen() {
-      return this.highlightedFile !== null
-    },
 
     isEmpty() {
       return this.activeFiles.length < 1
