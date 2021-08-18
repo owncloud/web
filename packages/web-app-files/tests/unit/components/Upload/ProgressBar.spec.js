@@ -17,10 +17,10 @@ const selectors = {
   ocProgressText: '.oc-progress-text',
   ocIcon: 'oc-icon-stub',
   expandedToggle: 'oc-grid-stub',
-  progressSingle: '#upload-progress-single',
-  progressMulti: '#upload-progress-multi',
-  showDetails: '#upload-progress-expand-details',
-  hideDetails: '#upload-progress-collapse-details',
+  progressSingle: '#files-upload-progress-single',
+  progressMulti: '#files-upload-progress-multi',
+  showDetails: '#files-upload-progress-expand-details',
+  hideDetails: '#files-upload-progress-collapse-details',
   detailsWidget: 'details-widget-stub'
 }
 
@@ -91,7 +91,7 @@ describe('ProgressBar component', () => {
 
       expect(progressSingle.exists()).toBeFalsy()
       expect(progressMulti.exists()).toBeTruthy()
-      expect(progressMulti.props().translateN).toEqual(2)
+      expect(progressMulti.props().translateN).toEqual(items.length)
     })
   })
 
