@@ -1,10 +1,10 @@
 <template>
   <div
+    v-if="highlightedFile != null"
     :class="{
       'has-active': !!appSidebarActivePanel
     }"
     @click.stop
-    v-if="highlightedFile != null"
   >
     <div
       v-for="panelMeta in panelMetas"
@@ -29,7 +29,7 @@
           @click="closePanel"
         >
           <oc-icon name="chevron_left" />
-          {{ defaultPanelMeta.component.title($gettext) }} 
+          {{ defaultPanelMeta.component.title($gettext) }}
         </oc-button>
 
         <div class="header__title">
@@ -155,7 +155,7 @@ export default {
       return this.selectedFiles && this.selectedFiles.length > 1
     },
     isRootFolder() {
-      return this.highlightedFile.path === ""
+      return this.highlightedFile.path === ''
     }
   },
   watch: {
@@ -168,7 +168,7 @@ export default {
       immediate: true
     },
     currentFolder(now, old) {
-      console.log("======")
+      console.log('======')
       console.log(now)
     }
   },

@@ -6,8 +6,7 @@
         <span class="preview-text" data-testid="selectedFilesText" v-text="selectedFilesString" />
       </div>
     </div>
-    <div>
-    </div>
+    <div></div>
   </div>
 </template>
 <script>
@@ -23,7 +22,7 @@ export default {
   computed: {
     selectedFilesString() {
       return this.$gettext('Select a file or folder to view details.')
-    },
+    }
   }
 }
 </script>
