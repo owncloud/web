@@ -73,6 +73,7 @@ import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 import { buildResource } from '../helpers/resources'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../constants'
+import { bus } from 'web-pkg/src/instance'
 
 import QuickActions from '../components/FilesList/QuickActions.vue'
 import ListLoader from '../components/FilesList/ListLoader.vue'
@@ -197,6 +198,10 @@ export default {
 
   mounted() {
     this.adjustTableHeaderPosition()
+
+    bus.on('app.files.list.load', path => {
+      this.loadResources(this.$route.params.item === path, path)
+    })
   },
 
   beforeDestroy() {

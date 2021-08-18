@@ -13,7 +13,9 @@ Summary
 * Bugfix - Load folder in Media viewer: [#5427](https://github.com/owncloud/web/issues/5427)
 * Enhancement - Add multiple selection Sidebar: [#5164](https://github.com/owncloud/web/issues/5164)
 * Enhancement - Enable live reload for changes to themes: [#5668](https://github.com/owncloud/web/pull/5668)
+* Enhancement - Refresh files list via breadcrumbs: [#2018](https://github.com/owncloud/web/issues/2018)
 * Enhancement - Signout icon: [#5681](https://github.com/owncloud/web/pull/5681)
+* Enhancement - Update ODS to 9.1.0: [#5689](https://github.com/owncloud/web/pull/5689)
 
 Details
 -------
@@ -56,11 +58,28 @@ Details
 
    https://github.com/owncloud/web/pull/5668
 
+* Enhancement - Refresh files list via breadcrumbs: [#2018](https://github.com/owncloud/web/issues/2018)
+
+   In the personal and public files lists we've added a click handler to the last breadcrumb item
+   representing the current folder that reloads the files list.
+
+   https://github.com/owncloud/web/issues/2018
+   https://github.com/owncloud/web/pull/5659
+
 * Enhancement - Signout icon: [#5681](https://github.com/owncloud/web/pull/5681)
 
    We changed the icon in the personal menu nav item for signing out based on recent user feedback.
 
    https://github.com/owncloud/web/pull/5681
+
+* Enhancement - Update ODS to 9.1.0: [#5689](https://github.com/owncloud/web/pull/5689)
+
+   We updated the ownCloud Design System to version 9.1.0.
+
+   https://github.com/owncloud/web/pull/5689
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v9.0.0
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v9.0.1
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v9.1.0
 
 Changelog for ownCloud Web [4.0.0] (2021-08-04)
 =======================================
