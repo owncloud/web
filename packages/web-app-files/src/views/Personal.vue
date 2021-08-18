@@ -261,6 +261,18 @@ export default {
       await Promise.all(movePromises)
 
       if (errors.length === 0) {
+        const count = selected.length
+        const title = this.$ngettext('%{count} item moved', '%{count} items moved', count)
+        const desc = this.$ngettext(
+          'Successfully moved %{count} item',
+          'Successfully moved %{count} items',
+          count
+        )
+        this.showMessage({
+          title: this.$gettextInterpolate(title, { count }),
+          desc: this.$gettextInterpolate(desc, { count }),
+          status: 'success'
+        })
         return
       }
 
