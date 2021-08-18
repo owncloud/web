@@ -3,7 +3,11 @@
     <div tabindex="-1" class="files-list-wrapper uk-width-expand">
       <div id="files-app-bar" class="oc-p-s">
         <h1 class="location-picker-selection-info oc-mb" v-text="title" />
-        <p class="oc-text-muted uk-text-meta" v-text="currentHint" />
+        <p
+          class="oc-text-muted uk-text-meta"
+          data-testid="location-picker-current-hint"
+          v-text="currentHint"
+        />
         <hr class="oc-mt-rm" />
         <oc-breadcrumb :items="breadcrumbs" class="oc-mb-s" />
         <oc-grid gutter="small" flex class="uk-flex-middle">
