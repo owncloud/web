@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="highlightedFile != null"
+    v-if="highlightedFile !== null"
     :class="{
       'has-active': !!appSidebarActivePanel
     }"
@@ -155,7 +155,7 @@ export default {
       return this.selectedFiles && this.selectedFiles.length > 1
     },
     isRootFolder() {
-      return this.highlightedFile.path === ''
+      return !this.highlightedFile?.path
     }
   },
   watch: {
@@ -166,10 +166,6 @@ export default {
         })
       },
       immediate: true
-    },
-    currentFolder(now, old) {
-      console.log('======')
-      console.log(now)
     }
   },
   beforeDestroy() {
