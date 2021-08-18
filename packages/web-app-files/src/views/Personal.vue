@@ -72,6 +72,7 @@ import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 import { buildResource } from '../helpers/resources'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../constants'
+import { bus } from 'web-pkg/src/instance'
 
 import QuickActions from '../components/FilesList/QuickActions.vue'
 import ListLoader from '../components/FilesList/ListLoader.vue'
@@ -190,6 +191,10 @@ export default {
 
   mounted() {
     this.adjustTableHeaderPosition()
+
+    bus.on('app.files.list.load', path => {
+      this.loadResources(this.$route.params.item === path, path)
+    })
   },
 
   beforeDestroy() {
@@ -229,13 +234,13 @@ export default {
       visibilityObserver.observe(component.$el, { onEnter: debounced, onExit: debounced.cancel })
     },
 
-    async loadResources(sameRoute) {
+    async loadResources(sameRoute, path = null) {
       this.loading = true
       this.CLEAR_CURRENT_FILES_LIST()
 
       try {
         let resources = await this.$client.files.list(
-          this.$route.params.item,
+          path || this.$route.params.item,
           1,
           DavProperties.Default
         )

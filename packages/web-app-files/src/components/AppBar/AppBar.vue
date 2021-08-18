@@ -14,6 +14,7 @@
       <oc-breadcrumb
         v-if="showBreadcrumb"
         id="files-breadcrumb"
+        data-testid="files-breadcrumbs"
         class="oc-p-s"
         :items="breadcrumbs"
       />
@@ -115,6 +116,7 @@ import MixinFileActions, { EDITOR_MODE_CREATE } from '../../mixins/fileActions'
 import MixinRoutes from '../../mixins/routes'
 import MixinScrollToResource from '../../mixins/filesListScrolling'
 import { buildResource } from '../../helpers/resources'
+import { bus } from 'web-pkg/src/instance'
 
 import BatchActions from './SelectedResources/BatchActions.vue'
 import FileDrop from './Upload/FileDrop.vue'
@@ -221,9 +223,13 @@ export default {
         baseUrl = '/files/list/all/'
         pathItems.push('/') // as of now we need to add the url encoded root path `/`, otherwise we'll land in the configured homeFolder
         breadcrumbs.push({
-          text: this.$gettext('All files'),
-          to: baseUrl + encodeURIComponent(pathUtil.join(...pathItems))
+          text: this.$gettext('All files')
         })
+
+        pathSegments.length < 1
+          ? (breadcrumbs[0].onClick = () =>
+              bus.emit('app.files.list.load', this.$route.params.item))
+          : (breadcrumbs[0].to = baseUrl + encodeURIComponent(pathUtil.join(...pathItems)))
       } else {
         baseUrl = '/files/public/list/'
         pathItems.push(pathSegments.splice(0, 1)[0])
@@ -236,6 +242,16 @@ export default {
       for (let i = 0; i < pathSegments.length; i++) {
         pathItems.push(pathSegments[i])
         const to = baseUrl + encodeURIComponent(pathUtil.join(...pathItems))
+
+        if (i === pathSegments.length - 1) {
+          breadcrumbs.push({
+            text: pathSegments[i],
+            onClick: () => bus.emit('app.files.list.load', this.$route.params.item)
+          })
+
+          continue
+        }
+
         breadcrumbs.push({
           text: pathSegments[i],
           to: i + 1 === pathSegments.length ? null : to

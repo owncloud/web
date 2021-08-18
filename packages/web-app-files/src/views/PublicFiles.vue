@@ -61,6 +61,7 @@ import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../constants'
 import debounce from 'lodash-es/debounce'
 import { buildResource } from '../helpers/resources'
+import { bus } from 'web-pkg/src/instance'
 
 import ListLoader from '../components/FilesList/ListLoader.vue'
 import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
@@ -159,6 +160,13 @@ export default {
   beforeDestroy() {
     visibilityObserver.disconnect()
   },
+
+  created() {
+    bus.on('app.files.list.load', path => {
+      this.loadResources(this.$route.params.item === path, path)
+    })
+  },
+
   methods: {
     ...mapActions('Files', ['loadPreview']),
     ...mapMutations('Files', [
@@ -186,13 +194,13 @@ export default {
       visibilityObserver.observe(component.$el, { onEnter: debounced, onExit: debounced.cancel })
     },
 
-    async loadResources(sameRoute) {
+    async loadResources(sameRoute, path = null) {
       this.loading = true
       this.CLEAR_CURRENT_FILES_LIST()
 
       try {
         let resources = await this.$client.publicFiles.list(
-          this.$route.params.item,
+          path || this.$route.params.item,
           this.publicLinkPassword,
           DavProperties.PublicLink
         )

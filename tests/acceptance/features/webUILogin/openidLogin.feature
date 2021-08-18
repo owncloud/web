@@ -40,12 +40,11 @@ Feature: login users
     When the user tries to log in with username "invalid" and password "1234" using the webUI
     Then the warning 'Logon failed. Please verify your credentials and try again.' should be displayed on the login page
 
-  @ocis-konnectd-issue-68
+
   Scenario: try to login with valid username and invalid password
     Given the user has browsed to the login page
     When the user tries to log in with username "Alice" and password "invalid" using the webUI
-    Then the files table should be displayed
-#      Then the warning 'Logon failed. Please verify your credentials and try again.' should be displayed on the login page
+    Then the warning 'Logon failed. Please verify your credentials and try again.' should be displayed on the login page
 
 
   Scenario: the user session of a deleted user is cleared properly
@@ -56,6 +55,7 @@ Feature: login users
     Then the user should be redirected to the login error page
     When the user exits the login error page
     Then the user should be redirected to the login page
+
 
   Scenario: the user session of a deleted user should not be valid for newly created user of same name
     Given user "Alice" has logged in using the webUI
