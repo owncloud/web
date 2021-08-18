@@ -2,11 +2,10 @@
   <div id="oc-no-selection">
     <div class="files-preview oc-mb">
       <div class="files-preview-body">
-        <oc-icon class="preview-icon" size="xxlarge" variation="passive" name="file_copy" />
+        <oc-icon class="preview-icon" size="xxlarge" variation="passive" name="select_items" />
         <span class="preview-text" data-testid="selectedFilesText" v-text="selectedFilesString" />
       </div>
     </div>
-    <div></div>
   </div>
 </template>
 <script>
@@ -48,17 +47,6 @@ export default {
     .preview-text {
       display: block;
     }
-  }
-}
-.details-table {
-  text-align: left;
-
-  tr {
-    height: 1.5rem;
-  }
-
-  th {
-    font-weight: 600;
   }
 }
 </style>

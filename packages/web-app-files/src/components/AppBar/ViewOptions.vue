@@ -58,7 +58,7 @@ import { bus } from 'web-pkg/src/instance'
 export default {
   data() {
     return {
-      sidebarClosed: false
+      sidebarClosed: true
     }
   },
   computed: {
@@ -69,8 +69,7 @@ export default {
     },
 
     toggleSidebarAriaLabel() {
-      if(this.sidebarClosed)
-        return this.$gettext('Open sidebar to view details')
+      if (this.sidebarClosed) return this.$gettext('Open sidebar to view details')
       return this.$gettext('Close sidebar to hide details')
     },
 
