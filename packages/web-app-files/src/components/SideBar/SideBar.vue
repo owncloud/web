@@ -82,7 +82,6 @@ import { mapGetters, mapMutations, mapState, mapActions } from 'vuex'
 import FileInfo from './FileInfo.vue'
 import MixinRoutes from '../../mixins/routes'
 import { VisibilityObserver } from 'web-pkg/src/observer'
-import { bus } from 'web-pkg/src/instance'
 
 let visibilityObserver
 let hiddenObserver
@@ -177,7 +176,7 @@ export default {
   },
   methods: {
     ...mapMutations('Files', ['SET_APP_SIDEBAR_ACTIVE_PANEL']),
-    ...mapActions('Files/sidebar', { closeSidebar: 'close'}),
+    ...mapActions('Files/sidebar', { closeSidebar: 'close' }),
 
     initVisibilityObserver() {
       visibilityObserver = new VisibilityObserver({

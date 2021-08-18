@@ -1,6 +1,5 @@
 import { DateTime } from 'luxon'
 import copyToClipboard from 'copy-to-clipboard'
-import { bus } from 'web-pkg/src/instance'
 
 // just a dummy function to trick gettext tools
 function $gettext(msg) {
