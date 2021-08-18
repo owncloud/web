@@ -99,12 +99,21 @@ describe('Favorites component', () => {
   describe('files table', () => {
     describe('no file is highlighted', () => {
       it("don't squash the table", () => {
-        expect(defaultWrapper.find(selectors.favoritesTable).attributes('class')).not.toContain(
+        const wrapper = mount(component, {
+          store: getStore({
+            sidebarClosed: true
+          }),
+          localVue,
+          router,
+          stubs: stubs,
+          data: () => ({
+            loading: false
+          })
+        })
+        expect(wrapper.find(selectors.favoritesTable).attributes('class')).not.toContain(
           'files-table-squashed'
         )
-        expect(defaultWrapper.find(selectors.favoritesTable).attributes('class')).toContain(
-          'files-table'
-        )
+        expect(wrapper.find(selectors.favoritesTable).attributes('class')).toContain('files-table')
       })
       it('don\'t sets the "highlighted" attribute', () => {
         expect(defaultWrapper.find(selectors.favoritesTable).attributes('highlighted')).toBeFalsy()
