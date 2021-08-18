@@ -13,7 +13,7 @@
       <oc-icon name="tune" size="medium" />
     </oc-button>
     <oc-button
-      :aria-label="viewButtonAriaLabel"
+      :aria-label="toggleSidebarAriaLabel"
       variation="passive"
       appearance="raw"
       size="small"
@@ -66,6 +66,12 @@ export default {
 
     viewButtonAriaLabel() {
       return this.$gettext('Display customization options of the files list')
+    },
+
+    toggleSidebarAriaLabel() {
+      if(this.sidebarClosed)
+        return this.$gettext('Open sidebar to view details')
+      return this.$gettext('Close sidebar to hide details')
     },
 
     toggleIcon() {
