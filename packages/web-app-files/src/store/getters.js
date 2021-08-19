@@ -4,8 +4,8 @@ export default {
   inProgress: state => {
     return state.inProgress
   },
-  selectedFiles: state => {
-    return state.selected
+  selectedFiles: (state, getters) => {
+    return getters.filesAll.filter(f => state.selectedIds.includes(f.id))
   },
   files: state => {
     return state.files
@@ -73,10 +73,10 @@ export default {
     return state.quota
   },
   highlightedFile: (state, getters) => {
-    if (state.selected.length > 0) {
-      return state.selected[0]
+    if (getters.selectedFiles.length > 0) {
+      return getters.selectedFiles[0]
     }
-    return null
+    return state.currentFolder
   },
   versions: state => {
     return state.versions

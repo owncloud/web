@@ -1,6 +1,5 @@
 <template>
   <div
-    v-click-outside="onClickOutside"
     :class="{
       'has-active': !!appSidebarActivePanel
     }"
@@ -16,7 +15,7 @@
         'is-active':
           appSidebarActivePanel === panelMeta.app || (!appSidebarActivePanel && panelMeta.default),
         'sidebar-panel--default': panelMeta.default,
-        'sidebar-panel--multiple-selected': areMultipleSelected
+        'sidebar-panel--multiple-selected': areMultipleSelected || isRootFolder
       }"
     >
       <div class="sidebar-panel__header header">
@@ -39,13 +38,13 @@
           appearance="raw"
           class="header__close"
           :aria-label="$gettext('Close file sidebar')"
-          @click="close"
+          @click="closeSidebar"
         >
           <oc-icon name="close" />
         </oc-button>
       </div>
       <file-info
-        v-if="!areMultipleSelected"
+        v-if="!areMultipleSelected && !isRootFolder"
         class="sidebar-panel__file_info"
         :is-content-displayed="isContentDisplayed"
       />
@@ -77,11 +76,10 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations, mapState } from 'vuex'
+import { mapGetters, mapMutations, mapState, mapActions } from 'vuex'
 import FileInfo from './FileInfo.vue'
 import MixinRoutes from '../../mixins/routes'
 import { VisibilityObserver } from 'web-pkg/src/observer'
-import { bus } from 'web-pkg/src/instance'
 
 let visibilityObserver
 let hiddenObserver
@@ -96,7 +94,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('Files', ['highlightedFile', 'selectedFiles']),
+    ...mapGetters('Files', ['highlightedFile', 'selectedFiles', 'currentFolder']),
     ...mapGetters(['fileSideBars', 'capabilities']),
     ...mapState('Files', ['appSidebarActivePanel']),
     activePanel() {
@@ -109,7 +107,8 @@ export default {
             capabilities: this.capabilities,
             highlightedFile: this.highlightedFile,
             route: this.$route,
-            multipleSelection: this.areMultipleSelected
+            multipleSelection: this.areMultipleSelected,
+            rootFolder: this.isRootFolder
           })
 
           if (panel.enabled) {
@@ -151,6 +150,9 @@ export default {
     },
     areMultipleSelected() {
       return this.selectedFiles && this.selectedFiles.length > 1
+    },
+    isRootFolder() {
+      return !this.highlightedFile?.path
     }
   },
   watch: {
@@ -172,10 +174,8 @@ export default {
   },
   methods: {
     ...mapMutations('Files', ['SET_APP_SIDEBAR_ACTIVE_PANEL']),
+    ...mapActions('Files/sidebar', { closeSidebar: 'close' }),
 
-    close() {
-      bus.emit('app.files.sidebar.close')
-    },
     initVisibilityObserver() {
       visibilityObserver = new VisibilityObserver({
         root: document.querySelector('#files-sidebar'),
@@ -206,21 +206,6 @@ export default {
           onExit: clearOldPanel
         })
       })
-    },
-    onClickOutside(event) {
-      /*
-       * We need to go for this opt-out solution because under circumstances a modal will be rendered,
-       * for example if we click rename, clicking in this modal would otherwise falsy close the sidebar.
-       */
-
-      if (
-        document.querySelector('.files-topbar').contains(event.target) ||
-        document.querySelector('.oc-topbar').contains(event.target) ||
-        document.querySelector('.oc-app-navigation').contains(event.target) ||
-        event.target.id === 'files-view'
-      ) {
-        this.close()
-      }
     },
 
     setOldPanel() {

@@ -17,7 +17,7 @@
         id="files-trashbin-table"
         v-model="selected"
         class="files-table"
-        :class="{ 'files-table-squashed': isSidebarOpen }"
+        :class="{ 'files-table-squashed': !sidebarClosed }"
         :are-paths-displayed="true"
         :are-thumbnails-displayed="false"
         :resources="activeFiles"
@@ -83,22 +83,19 @@ export default {
       'inProgress',
       'totalFilesCount'
     ]),
+    ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
     selected: {
       get() {
         return this.selectedFiles
       },
       set(resources) {
-        this.SELECT_RESOURCES(resources)
+        this.SET_FILE_SELECTION(resources)
       }
     },
 
     isEmpty() {
       return this.activeFiles.length < 1
-    },
-
-    isSidebarOpen() {
-      return this.highlightedFile !== null
     },
 
     uploadProgressVisible() {
@@ -127,7 +124,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations('Files', ['LOAD_FILES', 'SELECT_RESOURCES', 'CLEAR_CURRENT_FILES_LIST']),
+    ...mapMutations('Files', ['LOAD_FILES', 'SET_FILE_SELECTION', 'CLEAR_CURRENT_FILES_LIST']),
 
     async loadResources() {
       this.loading = true

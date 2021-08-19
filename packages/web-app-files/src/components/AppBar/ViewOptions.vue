@@ -10,8 +10,18 @@
       size="small"
       gap-size="xsmall"
     >
-      <oc-icon name="tune" size="small" />
-      <translate>View</translate>
+      <oc-icon name="tune" size="medium" />
+    </oc-button>
+    <oc-button
+      :aria-label="toggleSidebarAriaLabel"
+      variation="passive"
+      appearance="raw"
+      size="small"
+      gap-size="xsmall"
+      class="oc-ml-s"
+      @click.stop="toggleSidebar"
+    >
+      <oc-icon :name="toggleIcon" size="medium" />
     </oc-button>
     <oc-drop
       drop-id="files-view-options-drop"
@@ -42,14 +52,24 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from 'vuex'
+import { mapMutations, mapState, mapActions } from 'vuex'
 
 export default {
   computed: {
     ...mapState('Files', ['areHiddenFilesShown', 'filesPageLimit']),
+    ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
     viewButtonAriaLabel() {
       return this.$gettext('Display customization options of the files list')
+    },
+
+    toggleSidebarAriaLabel() {
+      if (this.sidebarClosed) return this.$gettext('Open sidebar to view details')
+      return this.$gettext('Close sidebar to hide details')
+    },
+
+    toggleIcon() {
+      return this.sidebarClosed ? 'chevron_double_left' : 'chevron_double_right'
     },
 
     hiddenFilesShownModel: {
@@ -87,9 +107,9 @@ export default {
       immediate: true
     }
   },
-
   methods: {
     ...mapMutations('Files', ['SET_HIDDEN_FILES_VISIBILITY', 'SET_FILES_PAGE_LIMIT']),
+    ...mapActions('Files/sidebar', { toggleSidebar: 'toggle' }),
 
     updateQuery(limit = this.pageItemsLimit) {
       const query = { ...this.$route.query, 'items-limit': limit }

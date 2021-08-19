@@ -2,7 +2,6 @@ import intersection from 'lodash-es/intersection'
 import { shareTypes, userShareTypes } from './shareTypes'
 import { getParentPaths } from './path'
 import { $gettext } from '../gettext'
-import { bus } from 'web-pkg/src/instance'
 
 const $shareTypes = resource => {
   if (typeof resource.shareTypes !== 'undefined') {
@@ -111,7 +110,7 @@ export const getIndicators = (resource, sharesTree) => {
   return indicators.filter(indicator => indicator.visible)
 }
 
-const indicatorHandler = (resource, accordion) => {
-  bus.emit('app.files.sidebar.show')
+const indicatorHandler = async (resource, accordion) => {
+  await window.Vue.$store.dispatch('Files/sidebar/open')
   window.Vue.$store.commit('Files/SET_APP_SIDEBAR_ACTIVE_PANEL', accordion)
 }

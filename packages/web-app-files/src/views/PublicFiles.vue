@@ -21,7 +21,7 @@
         id="files-public-files-table"
         v-model="selected"
         class="files-table"
-        :class="{ 'files-table-squashed': isSidebarOpen }"
+        :class="{ 'files-table-squashed': !sidebarClosed }"
         :are-thumbnails-displayed="displayThumbnails"
         :resources="activeFiles"
         :target-route="targetRoute"
@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions, mapMutations } from 'vuex'
+import { mapGetters, mapActions, mapMutations, mapState } from 'vuex'
 
 import MixinAccessibleBreadcrumb from '../mixins/accessibleBreadcrumb'
 import MixinFileActions from '../mixins/fileActions'
@@ -90,10 +90,6 @@ export default {
     MixinMountSideBar
   ],
 
-  data: () => ({
-    loading: true
-  }),
-
   computed: {
     ...mapGetters('Files', [
       'publicLinkPassword',
@@ -107,13 +103,10 @@ export default {
       'totalFilesSize'
     ]),
     ...mapGetters(['configuration']),
+    ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
     isEmpty() {
       return this.activeFiles.length < 1
-    },
-
-    isSidebarOpen() {
-      return this.highlightedFile !== null
     },
 
     uploadProgressVisible() {
@@ -125,7 +118,7 @@ export default {
         return this.selectedFiles
       },
       set(resources) {
-        this.SELECT_RESOURCES(resources)
+        this.SET_FILE_SELECTION(resources)
       }
     },
 
@@ -141,6 +134,10 @@ export default {
       return !this.configuration.options.disablePreviews
     }
   },
+
+  data: () => ({
+    loading: true
+  }),
 
   watch: {
     $route: {
@@ -173,7 +170,7 @@ export default {
   methods: {
     ...mapActions('Files', ['loadPreview']),
     ...mapMutations('Files', [
-      'SELECT_RESOURCES',
+      'SET_FILE_SELECTION',
       'SET_CURRENT_FOLDER',
       'LOAD_FILES',
       'CLEAR_CURRENT_FILES_LIST'

@@ -21,7 +21,7 @@
         id="files-personal-table"
         v-model="selected"
         class="files-table"
-        :class="{ 'files-table-squashed': isSidebarOpen }"
+        :class="{ 'files-table-squashed': !sidebarClosed }"
         :are-thumbnails-displayed="displayThumbnails"
         :resources="activeFiles"
         :target-route="targetRoute"
@@ -116,6 +116,7 @@ export default {
   computed: {
     ...mapState(['app']),
     ...mapState('Files', ['currentPage', 'files', 'filesPageLimit']),
+    ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
     ...mapGetters('Files', [
       'highlightedFile',
       'selectedFiles',
@@ -126,9 +127,6 @@ export default {
       'totalFilesSize'
     ]),
     ...mapGetters(['user', 'homeFolder', 'configuration']),
-    isSidebarOpen() {
-      return this.highlightedFile !== null
-    },
 
     isEmpty() {
       return this.activeFiles.length < 1
@@ -143,7 +141,7 @@ export default {
         return this.selectedFiles
       },
       set(resources) {
-        this.SELECT_RESOURCES(resources)
+        this.SET_FILE_SELECTION(resources)
       }
     },
 
@@ -213,12 +211,12 @@ export default {
     ...mapActions('Files', ['loadIndicators', 'loadPreview']),
     ...mapActions(['showMessage']),
     ...mapMutations('Files', [
-      'SELECT_RESOURCES',
       'SET_CURRENT_FOLDER',
       'LOAD_FILES',
       'CLEAR_CURRENT_FILES_LIST',
       'REMOVE_FILE',
       'REMOVE_FILE_FROM_SEARCHED',
+      'SET_FILE_SELECTION',
       'REMOVE_FILE_SELECTION'
     ]),
     ...mapMutations(['SET_QUOTA']),
@@ -328,14 +326,17 @@ export default {
         console.error(error)
       }
     },
-    async loadResources(sameRoute) {
+    async loadResources(sameRoute, path = null) {
       this.loading = true
       this.CLEAR_CURRENT_FILES_LIST()
 
       try {
-        let resources = await this.fetchResources(this.$route.params.item, DavProperties.Default)
-
+        let resources = await this.fetchResources(
+          path || this.$route.params.item,
+          DavProperties.Default
+        )
         resources = resources.map(buildResource)
+
         this.LOAD_FILES({
           currentFolder: resources[0],
           files: resources.slice(1)

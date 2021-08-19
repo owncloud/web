@@ -31,6 +31,7 @@ import MixinRoutes from '../../../mixins/routes'
 import { mapGetters } from 'vuex'
 
 export default {
+  name: 'FileDetailsMultiple',
   mixins: [Mixins, MixinResources, MixinRoutes],
   title: $gettext => {
     return $gettext('Details')

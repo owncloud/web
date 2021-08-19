@@ -31,7 +31,8 @@ export const getStore = function({
     }
   },
   activeFiles = [createFile({ id: 1 }), createFile({ id: 2, status: 2 })],
-  pages = 4
+  pages = 4,
+  sidebarClosed = false
 } = {}) {
   return createStore(Vuex.Store, {
     state: {
@@ -69,7 +70,15 @@ export const getStore = function({
           SET_FILES_PAGE_LIMIT: () => {},
           CLEAR_FILES_SEARCHED: () => {}
         },
-        namespaced: true
+        namespaced: true,
+        modules: {
+          sidebar: {
+            state: {
+              closed: sidebarClosed
+            },
+            namespaced: true
+          }
+        }
       }
     }
   })

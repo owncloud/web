@@ -1,6 +1,5 @@
 import { DateTime } from 'luxon'
 import copyToClipboard from 'copy-to-clipboard'
-import { bus } from 'web-pkg/src/instance'
 
 // just a dummy function to trick gettext tools
 function $gettext(msg) {
@@ -24,18 +23,19 @@ export function createPublicLink(ctx) {
     ctx.store
       .dispatch('Files/addLink', { path: ctx.item.path, client: ctx.client, params })
       .then(link => {
-        bus.emit('app.files.sidebar.show')
-        ctx.store.commit('Files/SET_APP_SIDEBAR_ACTIVE_PANEL', 'links-item')
-        copyToClipboard(link.url)
-        ctx.store.dispatch('showMessage', {
-          title: $gettext('Public link created'),
-          desc: $gettext(
-            'Public link has been successfully created and copied into your clipboard.'
-          ),
-          status: 'success',
-          autoClose: {
-            enabled: true
-          }
+        ctx.store.dispatch('Files/sidebar/open').then(() => {
+          ctx.store.commit('Files/SET_APP_SIDEBAR_ACTIVE_PANEL', 'links-item')
+          copyToClipboard(link.url)
+          ctx.store.dispatch('showMessage', {
+            title: $gettext('Public link created'),
+            desc: $gettext(
+              'Public link has been successfully created and copied into your clipboard.'
+            ),
+            status: 'success',
+            autoClose: {
+              enabled: true
+            }
+          })
         })
         resolve()
       })
@@ -45,8 +45,8 @@ export function createPublicLink(ctx) {
   })
 }
 
-export function openNewCollaboratorsPanel(ctx) {
-  bus.emit('app.files.sidebar.show')
+export async function openNewCollaboratorsPanel(ctx) {
+  await ctx.store.dispatch('Files/sidebar/open')
   ctx.store.commit('Files/SET_APP_SIDEBAR_ACTIVE_PANEL', 'sharing-item')
 }
 
