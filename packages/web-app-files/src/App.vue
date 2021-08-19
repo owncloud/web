@@ -86,10 +86,8 @@ export default {
     ...mapActions('Files', ['dragOver', 'resetFileSelection']),
     ...mapActions('Files/sidebar', { closeSidebar: 'close' }),
     ...mapActions(['showMessage']),
-    ...mapMutations('Files', [
-      'SET_SIDEBAR_FOOTER_CONTENT_COMPONENT',
-      'SET_APP_SIDEBAR_ACTIVE_PANEL'
-    ]),
+    ...mapMutations('Files', ['SET_APP_SIDEBAR_ACTIVE_PANEL']),
+    ...mapMutations(['SET_SIDEBAR_FOOTER_CONTENT_COMPONENT']),
 
     trace() {
       console.info('trace', arguments)
