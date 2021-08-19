@@ -40,7 +40,8 @@ export const getStore = function({
     getters: {
       configuration: () => configuration,
       getToken: () => '',
-      isOcis: () => true
+      isOcis: () => true,
+      homeFolder: () => '/'
     },
     modules: {
       Files: {
@@ -57,14 +58,16 @@ export const getStore = function({
           activeFilesCount: () => ({ files: 0, folders: 1 }),
           inProgress: () => [null],
           highlightedFile: () => highlightedFile,
-          pages: () => pages
+          pages: () => pages,
+          currentFolder: () => '/'
         },
         mutations: {
           UPDATE_RESOURCE: (state, resource) => {
             state.resource = resource
           },
           UPDATE_CURRENT_PAGE: () => {},
-          SET_FILES_PAGE_LIMIT: () => {}
+          SET_FILES_PAGE_LIMIT: () => {},
+          CLEAR_FILES_SEARCHED: () => {}
         },
         namespaced: true
       }

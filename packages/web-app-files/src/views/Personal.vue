@@ -26,6 +26,8 @@
         :resources="activeFiles"
         :target-route="targetRoute"
         :header-position="headerPosition"
+        :drag-drop="true"
+        @fileDropped="fileDropped"
         @showDetails="$_mountSideBar_showDefaultPanel"
         @fileClick="$_fileActions_triggerDefaultAction"
         @rowMounted="rowMounted"
@@ -81,6 +83,8 @@ import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
 import { DavProperties } from 'web-pkg/src/constants'
+import { basename, join } from 'path'
+import PQueue from 'p-queue'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -160,13 +164,16 @@ export default {
     $route: {
       handler: function(to, from) {
         if (isNil(this.$route.params.item)) {
-          this.$router.push({
-            name: 'files-personal',
-            params: {
-              item: this.homeFolder
-            }
-          })
-
+          this.$router
+            .push({
+              name: 'files-personal',
+              params: {
+                item: this.homeFolder
+              }
+            })
+            .catch(error => {
+              console.log(error)
+            })
           return
         }
 
@@ -204,14 +211,98 @@ export default {
 
   methods: {
     ...mapActions('Files', ['loadIndicators', 'loadPreview']),
+    ...mapActions(['showMessage']),
     ...mapMutations('Files', [
       'SELECT_RESOURCES',
       'SET_CURRENT_FOLDER',
       'LOAD_FILES',
       'CLEAR_CURRENT_FILES_LIST',
-      'UPDATE_CURRENT_PAGE'
+      'REMOVE_FILE',
+      'REMOVE_FILE_FROM_SEARCHED',
+      'REMOVE_FILE_SELECTION'
     ]),
     ...mapMutations(['SET_QUOTA']),
+
+    async fileDropped(fileIdTarget) {
+      const selected = [...this.selectedFiles]
+      const targetInfo = this.activeFiles.find(e => e.id === fileIdTarget)
+      const isTargetSelected = selected.some(e => e.id === fileIdTarget)
+      if (isTargetSelected) return
+      if (targetInfo.type !== 'folder') return
+      const itemsInTarget = await this.fetchResources(targetInfo.path)
+
+      // try to move all selected files
+      const errors = []
+      const movePromises = []
+      const moveQueue = new PQueue({ concurrency: 4 })
+      selected.forEach(resource => {
+        movePromises.push(
+          moveQueue.add(async () => {
+            const exists = itemsInTarget.some(e => basename(e.name) === resource.name)
+            if (exists) {
+              const message = this.$gettext('Resource with name %{name} already exists')
+              errors.push({
+                resource: resource.name,
+                message: this.$gettextInterpolate(message, { name: resource.name }, true)
+              })
+              return
+            }
+
+            try {
+              await this.$client.files.move(resource.path, join(targetInfo.path, resource.name))
+              this.REMOVE_FILE(resource)
+              this.REMOVE_FILE_FROM_SEARCHED(resource)
+              this.REMOVE_FILE_SELECTION(resource)
+            } catch (error) {
+              error.resourceName = resource.name
+              errors.push(error)
+            }
+          })
+        )
+      })
+      await Promise.all(movePromises)
+
+      // show error / success messages
+      let title
+      let desc
+      if (errors.length === 0) {
+        const count = selected.length
+        title = this.$ngettext('%{count} item moved', '%{count} items moved', count)
+        desc = this.$ngettext(
+          'Successfully moved %{count} item',
+          'Successfully moved %{count} items',
+          count
+        )
+        this.showMessage({
+          title: this.$gettextInterpolate(title, { count }),
+          desc: this.$gettextInterpolate(desc, { count }),
+          status: 'success'
+        })
+        return
+      }
+
+      if (errors.length === 1) {
+        title = this.$gettext('An error occurred while moving %{resource}')
+        this.showMessage({
+          title: this.$gettextInterpolate(title, { resource: errors[0].resourceName }, true),
+          desc: errors[0].message,
+          status: 'danger'
+        })
+        return
+      }
+
+      title = this.$gettext('An error occurred while moving several resources')
+      desc = this.$ngettext(
+        '%{count} resource could not be moved',
+        '%{count} resources could not be moved',
+        errors.length
+      )
+      this.showMessage({
+        title,
+        desc: this.$gettextInterpolate(desc, { count: errors.length }, false),
+        status: 'danger'
+      })
+    },
 
     rowMounted(resource, component) {
       if (!this.displayThumbnails) {
@@ -230,17 +321,19 @@ export default {
 
       visibilityObserver.observe(component.$el, { onEnter: debounced, onExit: debounced.cancel })
     },
-
-    async loadResources(sameRoute, path = null) {
+    async fetchResources(path, properties) {
+      try {
+        return await this.$client.files.list(path, 1, properties)
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    async loadResources(sameRoute) {
       this.loading = true
       this.CLEAR_CURRENT_FILES_LIST()
 
       try {
-        let resources = await this.$client.files.list(
-          path || this.$route.params.item,
-          1,
-          DavProperties.Default
-        )
+        let resources = await this.fetchResources(this.$route.params.item, DavProperties.Default)
 
         resources = resources.map(buildResource)
         this.LOAD_FILES({

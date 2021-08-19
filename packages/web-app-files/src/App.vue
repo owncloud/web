@@ -104,9 +104,9 @@ export default {
         revert: event === 'beforeDestroy'
       })
     },
-
-    $_ocApp_dragOver() {
-      this.dragOver(true)
+    $_ocApp_dragOver(event) {
+      const hasfileInEvent = (event.dataTransfer.types || []).some(e => e === 'Files')
+      this.dragOver(hasfileInEvent)
     }
   }
 }
