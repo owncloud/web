@@ -41,25 +41,25 @@ const appInfo = {
     // We don't have file details in the trashbin, yet.
     // Only allow `actions` panel on trashbin route for now.
     ({ rootFolder }) => ({
-      app: 'details-item',
+      app: 'no-selection-item',
       icon: 'info_outline',
       component: NoSelection,
-      default: true,
+      default: () => true,
       get enabled() {
         return rootFolder
       }
     }),
-    ({ route, rootFolder }) => ({
+    ({ route, multipleSelection, rootFolder }) => ({
       app: 'details-item',
       icon: 'info_outline',
       component: FileDetails,
       default: !isTrashbinRoute(route),
       get enabled() {
-        return !isTrashbinRoute(route) && !rootFolder
+        return !isTrashbinRoute(route) && !multipleSelection && !rootFolder
       }
     }),
     ({ multipleSelection, rootFolder }) => ({
-      app: 'details-item',
+      app: 'details-multiple-item',
       icon: 'info_outline',
       component: FileDetailsMultiple,
       default: () => true,

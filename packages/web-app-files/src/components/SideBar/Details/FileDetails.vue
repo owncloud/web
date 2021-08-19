@@ -94,6 +94,7 @@ import intersection from 'lodash-es/intersection'
 import upperFirst from 'lodash-es/upperFirst'
 
 export default {
+  name: 'FileDetails',
   mixins: [Mixins, MixinResources, MixinRoutes],
   title: $gettext => {
     return $gettext('Details')

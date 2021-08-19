@@ -73,6 +73,7 @@ export default {
           context.commit('REMOVE_FILE', file)
           context.commit('REMOVE_FILE_SELECTION', file)
           context.commit('REMOVE_FILE_FROM_SEARCHED', file)
+          context.commit('SET_APP_SIDEBAR_ACTIVE_PANEL', null)
         })
         .catch(error => {
           let translated = $gettext('Error while deleting "%{file}"')

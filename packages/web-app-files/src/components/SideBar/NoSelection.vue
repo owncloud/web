@@ -14,6 +14,7 @@ import MixinResources from '../../mixins/resources'
 import MixinRoutes from '../../mixins/routes'
 
 export default {
+  name: 'NoSelection',
   mixins: [Mixins, MixinResources, MixinRoutes],
   title: $gettext => {
     return $gettext('Details')

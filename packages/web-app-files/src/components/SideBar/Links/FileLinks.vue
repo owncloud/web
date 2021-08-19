@@ -81,6 +81,7 @@ const VIEW_SHOW = 'showLinks'
 const VIEW_EDIT = 'editPublicLink'
 
 export default {
+  name: 'FileLinks',
   components: {
     LinkEdit,
     ListItem,
