@@ -20,7 +20,6 @@
         v-else
         id="files-personal-table"
         v-model="selected"
-        v-click-outside="onClickOutside"
         class="files-table"
         :class="{ 'files-table-squashed': !sidebarClosed }"
         :are-thumbnails-displayed="displayThumbnails"
