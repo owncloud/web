@@ -70,10 +70,11 @@ export default {
       }
       const promise = p
         .then(() => {
+          context.commit('SET_APP_SIDEBAR_ACTIVE_PANEL', null)
+          context.dispatch('sidebar/close')
           context.commit('REMOVE_FILE', file)
           context.commit('REMOVE_FILE_SELECTION', file)
           context.commit('REMOVE_FILE_FROM_SEARCHED', file)
-          context.commit('SET_APP_SIDEBAR_ACTIVE_PANEL', null)
         })
         .catch(error => {
           let translated = $gettext('Error while deleting "%{file}"')
@@ -107,9 +108,12 @@ export default {
     return Promise.all(promises)
   },
   removeFilesFromTrashbin(context, files) {
+    context.commit('SET_APP_SIDEBAR_ACTIVE_PANEL', null)
+    context.dispatch('sidebar/close')
     for (const file of files) {
       context.commit('REMOVE_FILE', file)
       context.commit('REMOVE_FILE_SELECTION', file)
+      context.commit('REMOVE_FILE_FROM_SEARCHED', file)
     }
   },
   renameFile(context, { file, newValue, client, publicPage }) {
