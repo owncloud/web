@@ -41,7 +41,8 @@ export const getStore = function({
     getters: {
       configuration: () => configuration,
       getToken: () => '',
-      isOcis: () => true
+      isOcis: () => true,
+      homeFolder: () => '/'
     },
     modules: {
       Files: {
@@ -58,7 +59,8 @@ export const getStore = function({
           activeFilesCount: () => ({ files: 0, folders: 1 }),
           inProgress: () => [null],
           highlightedFile: () => highlightedFile,
-          pages: () => pages
+          pages: () => pages,
+          currentFolder: () => '/'
         },
         mutations: {
           UPDATE_RESOURCE: (state, resource) => {

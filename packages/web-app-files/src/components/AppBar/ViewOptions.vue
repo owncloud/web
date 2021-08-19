@@ -57,7 +57,7 @@ import { mapMutations, mapState, mapActions } from 'vuex'
 export default {
   computed: {
     ...mapState('Files', ['areHiddenFilesShown', 'filesPageLimit']),
-    ...mapState('Files/sidebar', ['sidebarClosed']),
+    ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
     viewButtonAriaLabel() {
       return this.$gettext('Display customization options of the files list')

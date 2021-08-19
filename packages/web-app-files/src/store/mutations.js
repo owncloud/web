@@ -4,18 +4,6 @@ import { DateTime } from 'luxon'
 import { set, has } from 'lodash-es'
 import { getIndicators } from '../helpers/statusIndicators'
 
-/**
- * @param {Array.<Object>} shares array of shares
- * @return {Array.<Integer>} array of share types
- */
-function computeShareTypes(shares) {
-  const shareTypes = new Set()
-  shares.forEach(share => {
-    shareTypes.add(share.shareType)
-  })
-  return Array.from(shareTypes)
-}
-
 export default {
   UPDATE_FILE_PROGRESS(state, file) {
     const inProgress = [...state.inProgress]
@@ -83,28 +71,28 @@ export default {
     state.filesSearched = null
   },
   SET_FILE_SELECTION(state, files) {
-    state.selected = files
+    state.selectedIds = files.map(f => f.id)
   },
   ADD_FILE_SELECTION(state, file) {
-    const selected = [...state.selected]
-    const fileIndex = selected.findIndex(f => {
-      return f.id === file.id
+    const selected = [...state.selectedIds]
+    const fileIndex = selected.findIndex(id => {
+      return id === file.id
     })
     if (fileIndex === -1) {
-      selected.push(file)
-      state.selected = selected
+      selected.push(file.id)
+      state.selectedIds = selected
     }
   },
   REMOVE_FILE_SELECTION(state, file) {
-    const selected = [...state.selected]
+    const selected = [...state.selectedIds]
     if (selected.length > 1) {
-      state.selected = selected.filter(i => file.id !== i.id)
+      state.selectedIds = selected.filter(id => file.id !== id)
       return
     }
-    state.selected = []
+    state.selectedIds = []
   },
   RESET_SELECTION(state) {
-    state.selected = []
+    state.selectedIds = []
   },
   FAVORITE_FILE(state, item) {
     const files = [...state.files]
@@ -116,18 +104,6 @@ export default {
   },
   REMOVE_FILE(state, removedFile) {
     state.files = [...state.files].filter(file => file.id !== removedFile.id)
-  },
-  UPDATE_CURRENT_FILE_SHARE_TYPES(state) {
-    const files = [...state.files]
-    const highlighted = state.selected[0]
-    if (!highlighted) {
-      return
-    }
-    const fileIndex = files.findIndex(f => {
-      return f.id === highlighted.id
-    })
-    files[fileIndex].shareTypes = computeShareTypes(state.currentFileOutgoingShares)
-    state.files = files
   },
   RENAME_FILE(state, { file, newValue, newPath }) {
     const resources = [...state.files]
@@ -240,7 +216,7 @@ export default {
 
   CLEAR_CURRENT_FILES_LIST(state) {
     state.currentFolder = null
-    state.selected = []
+    state.selectedIds = []
     // release blob urls
     state.files.forEach(item => {
       if (item.previewUrl && item.previewUrl.startsWith('blob:')) {
@@ -300,10 +276,6 @@ export default {
         value: indicators
       })
     }
-  },
-
-  SELECT_RESOURCES(state, resources) {
-    state.selected = resources
   },
 
   /**

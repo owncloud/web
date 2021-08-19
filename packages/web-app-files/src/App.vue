@@ -44,13 +44,12 @@ export default {
       fileUploadProgress: 0,
       upload: false,
       fileName: '',
-      selected: [],
       breadcrumbs: []
     }
   },
   computed: {
-    ...mapGetters('Files', ['dropzone', 'inProgress', 'selectedFiles']),
-    ...mapState('Files/sidebar', ['sidebarClosed']),
+    ...mapGetters('Files', ['dropzone', 'inProgress']),
+    ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
     $_uploadProgressVisible() {
       return this.inProgress.length > 0
@@ -97,9 +96,9 @@ export default {
         revert: event === 'beforeDestroy'
       })
     },
-
-    $_ocApp_dragOver() {
-      this.dragOver(true)
+    $_ocApp_dragOver(event) {
+      const hasfileInEvent = (event.dataTransfer.types || []).some(e => e === 'Files')
+      this.dragOver(hasfileInEvent)
     }
   }
 }

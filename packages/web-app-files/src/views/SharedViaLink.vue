@@ -92,14 +92,14 @@ export default {
       'totalFilesCount'
     ]),
     ...mapGetters(['isOcis', 'configuration', 'getToken', 'user']),
-    ...mapState('Files/sidebar', ['sidebarClosed']),
+    ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
     selected: {
       get() {
         return this.selectedFiles
       },
       set(resources) {
-        this.SELECT_RESOURCES(resources)
+        this.SET_FILE_SELECTION(resources)
       }
     },
 
@@ -146,7 +146,7 @@ export default {
 
   methods: {
     ...mapActions('Files', ['loadIndicators', 'loadPreview']),
-    ...mapMutations('Files', ['LOAD_FILES', 'SELECT_RESOURCES', 'CLEAR_CURRENT_FILES_LIST']),
+    ...mapMutations('Files', ['LOAD_FILES', 'SET_FILE_SELECTION', 'CLEAR_CURRENT_FILES_LIST']),
 
     rowMounted(resource, component) {
       if (!this.displayThumbnails) {

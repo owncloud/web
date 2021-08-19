@@ -1,6 +1,5 @@
 <template>
   <div
-    v-if="highlightedFile !== null"
     :class="{
       'has-active': !!appSidebarActivePanel
     }"

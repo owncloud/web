@@ -1,22 +1,22 @@
 export default {
+  namespaced: true,
   state: () => ({
-    sidebarClosed: true
+    closed: true
   }),
   mutations: {
-    SET_SIDEBAR_CLOSED(state, closed) {
-      state.sidebarClosed = closed
+    SET_CLOSED(state, closed) {
+      state.closed = closed
     }
   },
   actions: {
     open({ commit }) {
-      commit('SET_SIDEBAR_CLOSED', false)
+      commit('SET_CLOSED', false)
     },
     close({ commit }) {
-      commit('SET_SIDEBAR_CLOSED', true)
+      commit('SET_CLOSED', true)
     },
     toggle({ commit, state }) {
-      commit('SET_SIDEBAR_CLOSED', !state.sidebarClosed)
+      commit('SET_CLOSED', !state.closed)
     }
-  },
-  namespaced: true
+  }
 }
