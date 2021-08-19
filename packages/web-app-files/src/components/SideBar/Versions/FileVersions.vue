@@ -52,6 +52,7 @@ import { mapActions, mapGetters } from 'vuex'
 import { DavProperty } from 'web-pkg/src/constants'
 
 export default {
+  name: 'FileVersions',
   mixins: [Mixins, MixinResources],
   title: $gettext => {
     return $gettext('Versions')

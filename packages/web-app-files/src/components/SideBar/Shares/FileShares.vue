@@ -101,7 +101,7 @@ export default {
   title: $gettext => {
     return $gettext('People')
   },
-  name: 'SharingAccordion',
+  name: 'FileShares',
   components: {
     EditCollaborator,
     NewCollaborator,

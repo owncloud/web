@@ -74,7 +74,7 @@ export const getStore = function({
         modules: {
           sidebar: {
             state: {
-              sidebarClosed
+              closed: sidebarClosed
             },
             namespaced: true
           }
