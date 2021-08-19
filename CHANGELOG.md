@@ -13,6 +13,7 @@ Summary
 * Bugfix - Load folder in Media viewer: [#5427](https://github.com/owncloud/web/issues/5427)
 * Enhancement - Add multiple selection Sidebar: [#5164](https://github.com/owncloud/web/issues/5164)
 * Enhancement - Enable live reload for changes to themes: [#5668](https://github.com/owncloud/web/pull/5668)
+* Enhancement - Move file via drag and drop: [#5592](https://github.com/owncloud/web/issues/5592)
 * Enhancement - Refresh files list via breadcrumbs: [#2018](https://github.com/owncloud/web/issues/2018)
 * Enhancement - Signout icon: [#5681](https://github.com/owncloud/web/pull/5681)
 * Enhancement - Update ODS to 9.1.0: [#5689](https://github.com/owncloud/web/pull/5689)
@@ -57,6 +58,13 @@ Details
    development when wanting to customise the look and feel of the frontend.
 
    https://github.com/owncloud/web/pull/5668
+
+* Enhancement - Move file via drag and drop: [#5592](https://github.com/owncloud/web/issues/5592)
+
+   We've added moving files and folders via drag and drop to the files table view.
+
+   https://github.com/owncloud/web/issues/5592
+   https://github.com/owncloud/web/pull/5588
 
 * Enhancement - Refresh files list via breadcrumbs: [#2018](https://github.com/owncloud/web/issues/2018)
 
