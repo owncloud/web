@@ -229,7 +229,7 @@ export default {
         })
       },
       lazy: true,
-      watch: ['highlightedFile.thumbnail']
+      watch: ['highlightedFile.id']
     }
   },
   methods: {
