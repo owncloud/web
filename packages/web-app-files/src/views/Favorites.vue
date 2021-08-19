@@ -104,7 +104,7 @@ export default {
         return this.selectedFiles
       },
       set(resources) {
-        this.SELECT_RESOURCES(resources)
+        this.SET_FILE_SELECTION(resources)
       }
     },
 
@@ -147,7 +147,7 @@ export default {
 
   methods: {
     ...mapActions('Files', ['loadIndicators', 'loadPreview']),
-    ...mapMutations('Files', ['SELECT_RESOURCES', 'LOAD_FILES', 'CLEAR_CURRENT_FILES_LIST']),
+    ...mapMutations('Files', ['SET_FILE_SELECTION', 'LOAD_FILES', 'CLEAR_CURRENT_FILES_LIST']),
 
     rowMounted(resource, component) {
       if (!this.displayThumbnails) {

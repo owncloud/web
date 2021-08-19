@@ -2,7 +2,7 @@ export default {
   currentFolder: null,
   files: [],
   filesSearched: null,
-  selected: [],
+  selectedIds: [],
   inProgress: [],
   dropzone: false,
   shareOpen: null,

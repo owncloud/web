@@ -141,7 +141,7 @@ export default {
         return this.selectedFiles
       },
       set(resources) {
-        this.SELECT_RESOURCES(resources)
+        this.SET_FILE_SELECTION(resources)
       }
     },
 
@@ -211,12 +211,12 @@ export default {
     ...mapActions('Files', ['loadIndicators', 'loadPreview']),
     ...mapActions(['showMessage']),
     ...mapMutations('Files', [
-      'SELECT_RESOURCES',
       'SET_CURRENT_FOLDER',
       'LOAD_FILES',
       'CLEAR_CURRENT_FILES_LIST',
       'REMOVE_FILE',
       'REMOVE_FILE_FROM_SEARCHED',
+      'SET_FILE_SELECTION',
       'REMOVE_FILE_SELECTION'
     ]),
     ...mapMutations(['SET_QUOTA']),

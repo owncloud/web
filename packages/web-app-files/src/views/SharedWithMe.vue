@@ -139,7 +139,7 @@ export default {
         return this.selectedFiles
       },
       set(resources) {
-        this.SELECT_RESOURCES(resources)
+        this.SET_FILE_SELECTION(resources)
       }
     },
 
@@ -189,7 +189,7 @@ export default {
     ...mapActions(['showMessage']),
     ...mapMutations('Files', [
       'LOAD_FILES',
-      'SELECT_RESOURCES',
+      'SET_FILE_SELECTION',
       'CLEAR_CURRENT_FILES_LIST',
       'UPDATE_RESOURCE'
     ]),

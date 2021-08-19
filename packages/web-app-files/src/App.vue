@@ -44,12 +44,11 @@ export default {
       fileUploadProgress: 0,
       upload: false,
       fileName: '',
-      selected: [],
       breadcrumbs: []
     }
   },
   computed: {
-    ...mapGetters('Files', ['dropzone', 'inProgress', 'selectedFiles']),
+    ...mapGetters('Files', ['dropzone', 'inProgress']),
     ...mapState('Files/sidebar', ['sidebarClosed']),
 
     $_uploadProgressVisible() {
