@@ -16,6 +16,7 @@ Summary
 * Enhancement - Move file via drag and drop: [#5592](https://github.com/owncloud/web/issues/5592)
 * Enhancement - Refresh files list via breadcrumbs: [#2018](https://github.com/owncloud/web/issues/2018)
 * Enhancement - Signout icon: [#5681](https://github.com/owncloud/web/pull/5681)
+* Enhancement - Toggle right sidebar: [#5165](https://github.com/owncloud/web/issues/5165)
 * Enhancement - Update ODS to 9.1.0: [#5689](https://github.com/owncloud/web/pull/5689)
 
 Details
@@ -79,6 +80,16 @@ Details
    We changed the icon in the personal menu nav item for signing out based on recent user feedback.
 
    https://github.com/owncloud/web/pull/5681
+
+* Enhancement - Toggle right sidebar: [#5165](https://github.com/owncloud/web/issues/5165)
+
+   We introduced a button above the files list to toggle the right sidebar (open/close). It always
+   opens for the current selection model. If nothing is selected, the current folder will be shown
+   in the right sidebar. With this we now allow sharing a folder when the user already navigated
+   into it.
+
+   https://github.com/owncloud/web/issues/5165
+   https://github.com/owncloud/web/pull/5678
 
 * Enhancement - Update ODS to 9.1.0: [#5689](https://github.com/owncloud/web/pull/5689)
 
