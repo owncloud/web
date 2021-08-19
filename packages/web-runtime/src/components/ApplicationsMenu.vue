@@ -21,11 +21,22 @@
     >
       <ul class="uk-grid-small uk-text-center" uk-grid>
         <li v-for="(n, nid) in menuItems" :key="`apps-menu-${nid}`" class="uk-width-1-3">
-          <a v-if="n.url" key="apps-menu-external-link" :target="n.target" :href="n.url">
+          <a
+            v-if="n.url"
+            key="apps-menu-external-link"
+            class="apps-menu-external-link"
+            :target="n.target"
+            :href="n.url"
+          >
             <oc-icon :name="n.iconMaterial" size="xlarge" />
             <span class="uk-display-block" v-text="$gettext(n.title)" />
           </a>
-          <router-link v-else key="apps-menu-internal-link" :to="n.path">
+          <router-link
+            v-else
+            key="apps-menu-internal-link"
+            class="apps-menu-internal-link"
+            :to="n.path"
+          >
             <oc-icon :name="n.iconMaterial" size="xlarge" />
             <span class="uk-display-block" v-text="$gettext(n.title)" />
           </router-link>
