@@ -49,7 +49,7 @@ export default {
   },
   computed: {
     ...mapGetters('Files', ['dropzone', 'inProgress']),
-    ...mapState('Files/sidebar', ['sidebarClosed']),
+    ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
     $_uploadProgressVisible() {
       return this.inProgress.length > 0

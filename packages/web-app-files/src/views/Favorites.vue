@@ -92,7 +92,7 @@ export default {
       'totalFilesCount',
       'totalFilesSize'
     ]),
-    ...mapState('Files/sidebar', ['sidebarClosed']),
+    ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
     ...mapGetters(['user', 'configuration']),
 
     targetRoute() {

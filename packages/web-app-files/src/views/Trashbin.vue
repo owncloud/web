@@ -83,7 +83,7 @@ export default {
       'inProgress',
       'totalFilesCount'
     ]),
-    ...mapState('Files/sidebar', ['sidebarClosed']),
+    ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
     selected: {
       get() {

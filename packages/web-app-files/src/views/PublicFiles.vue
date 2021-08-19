@@ -90,10 +90,6 @@ export default {
     MixinMountSideBar
   ],
 
-  data: () => ({
-    loading: true
-  }),
-
   computed: {
     ...mapGetters('Files', [
       'publicLinkPassword',
@@ -107,7 +103,7 @@ export default {
       'totalFilesSize'
     ]),
     ...mapGetters(['configuration']),
-    ...mapState('Files/sidebar', ['sidebarClosed']),
+    ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
     isEmpty() {
       return this.activeFiles.length < 1
@@ -138,6 +134,10 @@ export default {
       return !this.configuration.options.disablePreviews
     }
   },
+
+  data: () => ({
+    loading: true
+  }),
 
   watch: {
     $route: {

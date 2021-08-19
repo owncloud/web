@@ -116,7 +116,7 @@ export default {
   computed: {
     ...mapState(['app']),
     ...mapState('Files', ['currentPage', 'files', 'filesPageLimit']),
-    ...mapState('Files/sidebar', ['sidebarClosed']),
+    ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
     ...mapGetters('Files', [
       'highlightedFile',
       'selectedFiles',
