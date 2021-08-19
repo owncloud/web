@@ -59,8 +59,13 @@ export default {
     }
   },
   watch: {
-    $route() {
-      this.resetFileSelection()
+    $route: {
+      handler: function(to, from) {
+        this.resetFileSelection()
+        if (from?.name !== to.name) {
+          this.closeSidebar()
+        }
+      }
     },
     sidebarClosed(hidden) {
       if (!hidden) return
@@ -79,6 +84,7 @@ export default {
 
   methods: {
     ...mapActions('Files', ['dragOver', 'resetFileSelection']),
+    ...mapActions('Files/sidebar', { closeSidebar: 'close' }),
     ...mapActions(['showMessage']),
     ...mapMutations('Files', [
       'SET_SIDEBAR_FOOTER_CONTENT_COMPONENT',
