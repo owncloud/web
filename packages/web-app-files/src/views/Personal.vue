@@ -231,6 +231,7 @@ export default {
       if (targetInfo.type !== 'folder') return
       const itemsInTarget = await this.fetchResources(targetInfo.path)
 
+      // try to move all selected files
       const errors = []
       const movePromises = []
       const moveQueue = new PQueue({ concurrency: 4 })
@@ -253,7 +254,7 @@ export default {
               this.REMOVE_FILE_FROM_SEARCHED(resource)
               this.REMOVE_FILE_SELECTION(resource)
             } catch (error) {
-              error.resource = resource.name
+              error.resourceName = resource.name
               errors.push(error)
             }
           })
@@ -261,10 +262,13 @@ export default {
       })
       await Promise.all(movePromises)
 
+      // show error / success messages
+      let title
+      let desc
       if (errors.length === 0) {
         const count = selected.length
-        const title = this.$ngettext('%{count} item moved', '%{count} items moved', count)
-        const desc = this.$ngettext(
+        title = this.$ngettext('%{count} item moved', '%{count} items moved', count)
+        desc = this.$ngettext(
           'Successfully moved %{count} item',
           'Successfully moved %{count} items',
           count
@@ -278,17 +282,17 @@ export default {
       }
 
       if (errors.length === 1) {
-        const title = this.$gettext('An error occurred while moving %{resource}')
+        title = this.$gettext('An error occurred while moving %{resource}')
         this.showMessage({
-          title: this.$gettextInterpolate(title, { resource: errors[0].resource }, true),
+          title: this.$gettextInterpolate(title, { resource: errors[0].resourceName }, true),
           desc: errors[0].message,
           status: 'danger'
         })
         return
       }
 
-      const title = this.$gettext('An error occurred while moving several resources')
-      const desc = this.$ngettext(
+      title = this.$gettext('An error occurred while moving several resources')
+      desc = this.$ngettext(
         '%{count} resource could not be moved',
         '%{count} resources could not be moved',
         errors.length
