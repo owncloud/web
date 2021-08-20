@@ -252,6 +252,7 @@ export default {
               this.REMOVE_FILE_FROM_SEARCHED(resource)
               this.REMOVE_FILE_SELECTION(resource)
             } catch (error) {
+              console.error(error)
               error.resourceName = resource.name
               errors.push(error)
             }
@@ -262,18 +263,15 @@ export default {
 
       // show error / success messages
       let title
-      let desc
       if (errors.length === 0) {
         const count = selected.length
-        title = this.$ngettext('%{count} item moved', '%{count} items moved', count)
-        desc = this.$ngettext(
+        title = this.$ngettext(
           'Successfully moved %{count} item',
           'Successfully moved %{count} items',
           count
         )
         this.showMessage({
           title: this.$gettextInterpolate(title, { count }),
-          desc: this.$gettextInterpolate(desc, { count }),
           status: 'success'
         })
         return
@@ -290,7 +288,7 @@ export default {
       }
 
       title = this.$gettext('An error occurred while moving several resources')
-      desc = this.$ngettext(
+      const desc = this.$ngettext(
         '%{count} resource could not be moved',
         '%{count} resources could not be moved',
         errors.length
