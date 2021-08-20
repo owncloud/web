@@ -1,9 +1,9 @@
-Changelog for ownCloud Web [unreleased] (UNRELEASED)
+Changelog for ownCloud Web [4.1.0] (2021-08-20)
 =======================================
-The following sections list the changes in ownCloud web unreleased relevant to
+The following sections list the changes in ownCloud web 4.1.0 relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v4.0.0...master
+[4.1.0]: https://github.com/owncloud/web/compare/v4.0.0...v4.1.0
 
 Summary
 -------
@@ -17,7 +17,7 @@ Summary
 * Enhancement - Refresh files list via breadcrumbs: [#2018](https://github.com/owncloud/web/issues/2018)
 * Enhancement - Signout icon: [#5681](https://github.com/owncloud/web/pull/5681)
 * Enhancement - Toggle right sidebar: [#5165](https://github.com/owncloud/web/issues/5165)
-* Enhancement - Update ODS to 9.1.0: [#5689](https://github.com/owncloud/web/pull/5689)
+* Enhancement - Update ODS to 9.2.0: [#5689](https://github.com/owncloud/web/pull/5689)
 
 Details
 -------
@@ -43,6 +43,7 @@ Details
 
    https://github.com/owncloud/web/issues/5427
    https://github.com/owncloud/web/pull/5585
+   https://github.com/owncloud/web/pull/5710
 
 * Enhancement - Add multiple selection Sidebar: [#5164](https://github.com/owncloud/web/issues/5164)
 
@@ -90,15 +91,17 @@ Details
 
    https://github.com/owncloud/web/issues/5165
    https://github.com/owncloud/web/pull/5678
+   https://github.com/owncloud/web/pull/5709
 
-* Enhancement - Update ODS to 9.1.0: [#5689](https://github.com/owncloud/web/pull/5689)
+* Enhancement - Update ODS to 9.2.0: [#5689](https://github.com/owncloud/web/pull/5689)
 
-   We updated the ownCloud Design System to version 9.1.0.
+   We updated the ownCloud Design System to version 9.2.0.
 
    https://github.com/owncloud/web/pull/5689
    https://github.com/owncloud/owncloud-design-system/releases/tag/v9.0.0
    https://github.com/owncloud/owncloud-design-system/releases/tag/v9.0.1
    https://github.com/owncloud/owncloud-design-system/releases/tag/v9.1.0
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v9.2.0
 
 Changelog for ownCloud Web [4.0.0] (2021-08-04)
 =======================================
