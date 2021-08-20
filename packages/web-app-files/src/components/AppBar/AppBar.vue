@@ -99,7 +99,7 @@
           <size-info v-if="selectedFiles.length > 0" class="oc-mr-s uk-visible@l" />
           <batch-actions />
         </div>
-        <view-options />
+        <view-options v-if="!$route.fullPath.includes('/files/list/apps/')" />
       </div>
     </div>
   </div>
@@ -109,20 +109,17 @@
 import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
 import pathUtil from 'path'
 import isEmpty from 'lodash-es/isEmpty'
-
 import Mixins from '../../mixins'
 import MixinFileActions, { EDITOR_MODE_CREATE } from '../../mixins/fileActions'
 import MixinRoutes from '../../mixins/routes'
 import MixinScrollToResource from '../../mixins/filesListScrolling'
 import { buildResource } from '../../helpers/resources'
-
 import BatchActions from './SelectedResources/BatchActions.vue'
 import FileDrop from './Upload/FileDrop.vue'
 import FileUpload from './Upload/FileUpload.vue'
 import FolderUpload from './Upload/FolderUpload.vue'
 import SizeInfo from './SelectedResources/SizeInfo.vue'
 import ViewOptions from './ViewOptions.vue'
-
 export default {
   components: {
     BatchActions,
@@ -150,7 +147,6 @@ export default {
     ]),
     ...mapState(['route']),
     ...mapState('Files', ['areHiddenFilesShown']),
-
     newButtonTooltip() {
       if (!this.canUpload) {
         return this.$gettext('You have no permission to upload!')
@@ -167,7 +163,6 @@ export default {
       }
       return this.$gettext('Add files or folders')
     },
-
     currentPath() {
       const path = this.$route.params.item || ''
       if (path.endsWith('/')) {
@@ -183,11 +178,9 @@ export default {
     headers() {
       if (this.publicPage()) {
         const password = this.publicLinkPassword
-
         if (password) {
           return { Authorization: 'Basic ' + Buffer.from('public:' + password).toString('base64') }
         }
-
         return {}
       }
       return {
@@ -203,7 +196,6 @@ export default {
     showActions() {
       return this.$route.meta.hideFilelistActions !== true
     },
-
     showBreadcrumb() {
       return this.isPublicFilesRoute || this.isPersonalRoute
     },
@@ -211,7 +203,6 @@ export default {
       const title = this.$route.meta.title
       return this.$gettext(title)
     },
-
     breadcrumbs() {
       const pathSegments = this.currentPathSegments
       const breadcrumbs = []
@@ -232,7 +223,6 @@ export default {
           to: baseUrl + encodeURIComponent(pathUtil.join(...pathItems))
         })
       }
-
       for (let i = 0; i < pathSegments.length; i++) {
         pathItems.push(pathSegments[i])
         const to = baseUrl + encodeURIComponent(pathUtil.join(...pathItems))
@@ -241,10 +231,8 @@ export default {
           to: i + 1 === pathSegments.length ? null : to
         })
       }
-
       return breadcrumbs
     },
-
     hasFreeSpace() {
       return (
         !this.quota ||
@@ -255,15 +243,12 @@ export default {
         this.publicPage()
       )
     },
-
     areDefaultActionsVisible() {
       return this.selectedFiles.length < 1
     },
-
     isNewBtnDisabled() {
       return !this.canUpload || !this.hasFreeSpace
     },
-
     selectedResourcesAnnouncement() {
       if (this.selectedFiles.length === 0) {
         return this.$gettext('No items selected.')
@@ -276,23 +261,19 @@ export default {
       return this.$gettextInterpolate(translated, { amount: this.selectedFiles.length })
     }
   },
-
   created() {
     // Storage returns a string so we need to convert it into a boolean
     const areHiddenFilesShown = window.localStorage.getItem('oc_hiddenFilesShown') || 'true'
     const areHiddenFilesShownBoolean = areHiddenFilesShown === 'true'
-
     if (areHiddenFilesShownBoolean !== this.areHiddenFilesShown) {
       this.SET_HIDDEN_FILES_VISIBILITY(areHiddenFilesShownBoolean)
     }
   },
-
   methods: {
     ...mapActions('Files', ['updateFileProgress', 'removeFilesFromTrashbin', 'loadIndicators']),
     ...mapActions(['openFile', 'showMessage', 'createModal', 'setModalInputErrorMessage']),
     ...mapMutations('Files', ['UPSERT_RESOURCE', 'SET_HIDDEN_FILES_VISIBILITY']),
     ...mapMutations(['SET_QUOTA']),
-
     showCreateResourceModal(isFolder = true, ext = 'txt', openAction = null) {
       const defaultName = isFolder
         ? this.$gettext('New folder')
@@ -302,12 +283,10 @@ export default {
           isFolder ? this.checkNewFolderName(value) : this.checkNewFileName(value)
         )
       }
-
       // Sets action to be executed after creation of the file
       if (!isFolder) {
         this.newFileAction = openAction
       }
-
       const modal = {
         variation: 'passive',
         title: isFolder ? this.$gettext('Create a new folder') : this.$gettext('Create a new file'),
@@ -323,20 +302,15 @@ export default {
         onConfirm: isFolder ? this.addNewFolder : this.addNewFile,
         onInput: checkInputValue
       }
-
       this.createModal(modal)
     },
-
     async addNewFolder(folderName) {
       if (folderName === '') {
         return
       }
-
       this.fileFolderCreationLoading = true
-
       try {
         const path = pathUtil.join(this.currentPath, folderName)
-
         let resource
         if (this.isPersonalRoute) {
           await this.$client.files.createFolder(path)
@@ -350,17 +324,14 @@ export default {
           )
         }
         resource = buildResource(resource)
-
         this.UPSERT_RESOURCE(resource)
         this.hideModal()
-
         if (this.isPersonalRoute) {
           this.loadIndicators({
             client: this.$client,
             currentFolder: this.currentFolder.path
           })
         }
-
         setTimeout(() => {
           this.setHighlightedFile(resource)
           this.scrollToResource(resource)
@@ -372,48 +343,36 @@ export default {
           status: 'danger'
         })
       }
-
       this.fileFolderCreationLoading = false
     },
-
     checkNewFolderName(folderName) {
       if (folderName === '') {
         return this.$gettext('Folder name cannot be empty')
       }
-
       if (/[/]/.test(folderName)) {
         return this.$gettext('Folder name cannot contain "/"')
       }
-
       if (folderName === '.') {
         return this.$gettext('Folder name cannot be equal to "."')
       }
-
       if (folderName === '..') {
         return this.$gettext('Folder name cannot be equal to ".."')
       }
-
       if (/\s+$/.test(folderName)) {
         return this.$gettext('Folder name cannot end with whitespace')
       }
-
       const exists = this.activeFiles.find(file => file.name === folderName)
-
       if (exists) {
         const translated = this.$gettext('%{name} already exists')
         return this.$gettextInterpolate(translated, { name: folderName }, true)
       }
-
       return null
     },
-
     async addNewFile(fileName) {
       if (fileName === '') {
         return
       }
-
       this.fileFolderCreationLoading = true
-
       try {
         const path = pathUtil.join(this.currentPath, fileName)
         let resource
@@ -428,28 +387,21 @@ export default {
             this.davProperties
           )
         }
-
         if (this.newFileAction) {
           const fileId = resource.fileInfo['{http://owncloud.org/ns}fileid']
-
           this.$_fileActions_openEditor(this.newFileAction, path, fileId, EDITOR_MODE_CREATE)
           this.hideModal()
-
           return
         }
-
         resource = buildResource(resource)
-
         this.UPSERT_RESOURCE(resource)
         this.hideModal()
-
         if (this.isPersonalRoute) {
           this.loadIndicators({
             client: this.$client,
             currentFolder: this.currentFolder.path
           })
         }
-
         setTimeout(() => {
           this.setHighlightedFile(resource)
           this.scrollToResource(resource)
@@ -461,38 +413,29 @@ export default {
           status: 'danger'
         })
       }
-
       this.fileFolderCreationLoading = false
     },
-
     checkNewFileName(fileName) {
       if (fileName === '') {
         return this.$gettext('File name cannot be empty')
       }
-
       if (/[/]/.test(fileName)) {
         return this.$gettext('File name cannot contain "/"')
       }
-
       if (fileName === '.') {
         return this.$gettext('File name cannot be equal to "."')
       }
-
       if (fileName === '..') {
         return this.$gettext('File name cannot be equal to ".."')
       }
-
       if (/\s+$/.test(fileName)) {
         return this.$gettext('File name cannot end with whitespace')
       }
-
       const exists = this.activeFiles.find(file => file.name === fileName)
-
       if (exists) {
         const translated = this.$gettext('%{name} already exists')
         return this.$gettextInterpolate(translated, { name: fileName }, true)
       }
-
       return null
     },
     async onFileSuccess(event, file) {
@@ -500,9 +443,7 @@ export default {
         if (file.name) {
           file = file.name
         }
-
         await this.$nextTick()
-
         const path = pathUtil.join(this.currentPath, file)
         let resource = this.isPersonalRoute
           ? await this.$client.files.fileInfo(path, this.davProperties)
@@ -511,10 +452,8 @@ export default {
               this.publicLinkPassword,
               this.davProperties
             )
-
         resource = buildResource(resource)
         this.UPSERT_RESOURCE(resource)
-
         if (this.isPersonalRoute) {
           this.loadIndicators({
             client: this.$client,
@@ -522,15 +461,12 @@ export default {
             encodePath: this.encodePath
           })
         }
-
         const user = await this.$client.users.getUser(this.user.id)
-
         this.SET_QUOTA(user.quota)
       } catch (error) {
         console.error(error)
       }
     },
-
     onFileError(error) {
       this.showMessage({
         title: this.$gettext('File upload failed…'),
@@ -538,7 +474,6 @@ export default {
         status: 'danger'
       })
     },
-
     onFileProgress(progress) {
       this.updateFileProgress(progress)
     }
@@ -551,7 +486,6 @@ export default {
   background-color: var(--oc-color-background-default);
   box-sizing: border-box;
   z-index: 2;
-
   &-actions {
     align-items: center;
     display: flex;

@@ -7,7 +7,7 @@
       :class="{ 'uk-visible@m': _sidebarOpen }"
       @dragover="$_ocApp_dragOver"
     >
-      <app-bar id="files-app-bar" />
+      <app-bar v-if="!$route.fullPath.includes('/files/list/apps/')" id="files-app-bar" />
       <progress-bar v-show="$_uploadProgressVisible" id="files-upload-progress" class="oc-p-s" />
       <router-view id="files-view" />
     </div>
@@ -32,7 +32,6 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 import AppBar from './components/AppBar/AppBar.vue'
 import ProgressBar from './components/Upload/ProgressBar.vue'
 import SideBar from './components/SideBar/SideBar.vue'
-
 export default {
   components: {
     AppBar,
@@ -53,11 +52,9 @@ export default {
   },
   computed: {
     ...mapGetters('Files', ['dropzone', 'highlightedFile', 'inProgress']),
-
     _sidebarOpen() {
       return this.highlightedFile !== null
     },
-
     $_uploadProgressVisible() {
       return this.inProgress.length > 0
     }
@@ -79,20 +76,16 @@ export default {
       this.delayForScreenreader(() => this.$refs.filesListWrapper.focus())
     })
   },
-
   beforeDestroy() {
     this.SET_SIDEBAR_FOOTER_CONTENT_COMPONENT(null)
   },
-
   methods: {
     ...mapActions('Files', ['dragOver', 'resetFileSelection']),
     ...mapActions(['showMessage']),
     ...mapMutations(['SET_SIDEBAR_FOOTER_CONTENT_COMPONENT']),
-
     trace() {
       console.info('trace', arguments)
     },
-
     focusSideBar(component, event) {
       this.focus({
         from: document.activeElement,
@@ -100,7 +93,6 @@ export default {
         revert: event === 'beforeDestroy'
       })
     },
-
     $_ocApp_dragOver() {
       this.dragOver(true)
     }
@@ -113,7 +105,6 @@ main {
   height: 100%;
   max-height: 100%;
 }
-
 .files-list-wrapper {
   height: 100%;
   max-height: 100%;
@@ -126,17 +117,14 @@ main {
     'header'
     'upload'
     'main';
-
   &:focus {
     outline: none;
   }
 }
-
 #files-sidebar {
   position: relative;
   overflow: hidden;
 }
-
 #files-app-bar {
   position: sticky;
   height: auto;
@@ -144,12 +132,10 @@ main {
   grid-area: header;
   top: 0;
 }
-
 #files-view {
   grid-area: main;
   z-index: 0;
 }
-
 #files-upload-progress {
   grid-area: upload;
 }
@@ -173,21 +159,17 @@ main {
   .oc-table-header-cell-status,
   .oc-table-data-cell-status {
     display: none;
-
     @media only screen and (min-width: 640px) {
       display: table-cell;
     }
   }
-
   .oc-table-header-cell-owner,
   .oc-table-data-cell-owner {
     display: none;
-
     @media only screen and (min-width: 960px) {
       display: table-cell;
     }
   }
-
   &-squashed {
     .oc-table-header-cell-mdate,
     .oc-table-data-cell-mdate,
@@ -204,7 +186,6 @@ main {
     .oc-table-header-cell-status,
     .oc-table-data-cell-status {
       display: none;
-
       @media only screen and (min-width: 1600px) {
         display: table-cell;
       }

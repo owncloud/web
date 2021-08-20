@@ -1,5 +1,6 @@
 import App from './App.vue'
 import Personal from './views/Personal.vue'
+import externalApps from './views/ExternalApps.vue'
 import Favorites from './views/Favorites.vue'
 import SharedWithMe from './views/SharedWithMe.vue'
 import SharedWithOthers from './views/SharedWithOthers.vue'
@@ -174,6 +175,16 @@ const routes = [
         meta: {
           hasBulkActions: true,
           title: $gettext('All files')
+        }
+      },
+      {
+        name: 'apps',
+        path: 'apps/:app/:file_id',
+        component: externalApps,
+        meta: {
+          hideFilelistActions: true,
+          hasBulkActions: false,
+          title: $gettext('External App')
         }
       },
       {
