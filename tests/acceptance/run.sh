@@ -152,12 +152,13 @@ then
 	TEST_PATHS+=( "${FEATURES_DIR}" )
 fi
 
+RUN_ACCEPTANCE_TESTS="cucumber-js --retry 1 --require-module @babel/register --require-module @babel/polyfill --require tests/acceptance/setup.js --require tests/acceptance/stepDefinitions --format node_modules/cucumber-pretty"
 
 if [ -z "${TEST_TAGS}" ]
 then
-	yarn test:acceptance:drone ${TEST_PATHS[@]} | tee -a 'logfile.txt'
+	yarn ${RUN_ACCEPTANCE_TESTS} ${TEST_PATHS[@]} | tee -a 'logfile.txt'
 else
-	yarn test:acceptance:drone ${TEST_PATHS[@]} -t "${TEST_TAGS}" | tee -a 'logfile.txt'
+	yarn ${RUN_ACCEPTANCE_TESTS} ${TEST_PATHS[@]} -t "${TEST_TAGS}" | tee -a 'logfile.txt'
 fi
 
 ACCEPTANCE_TESTS_EXIT_STATUS=${PIPESTATUS[0]}
