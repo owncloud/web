@@ -93,15 +93,16 @@ module.exports = {
           selector: '@sharingAutoCompleteDropDownElements',
           abortOnFailure: false
         },
-        result => {
+        async result => {
           if (result.value === false) {
             // sharing dropdown was not shown
             console.log('WARNING: no sharing autocomplete dropdown found, retry typing')
-            this.clearValue('@sharingAutoComplete')
+            await this.clearValue('@sharingAutoComplete')
               .enterAutoComplete(sharee)
               .waitForElementPresent({
                 selector: '@sharingAutoCompleteDropDownElements',
-                abortOnFailure: false
+                // fail if not found in second time
+                abortOnFailure: true
               })
           }
         }
