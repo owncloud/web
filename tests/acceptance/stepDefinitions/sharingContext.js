@@ -41,6 +41,8 @@ const userSharesFileOrFolderWithUserOrGroup = async function(
     await api.filesList().openSharingDialog(file)
   }
 
+  await api.sharingDialog().waitForAnimationToFinish()
+
   return api
     .sharingDialog()
     .shareWithUserOrGroup(sharee, shareWithGroup, role, permissions, remote, null)
