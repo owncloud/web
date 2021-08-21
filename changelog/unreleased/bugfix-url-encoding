@@ -1,4 +1,4 @@
-Patch: url encoding / decoding
+Bugfix: url encoding / decoding
 
 Fixes Vue router (prior to version 4) encoding from `files/all/folder` to `files%2Fall%2Ffolder`
 
