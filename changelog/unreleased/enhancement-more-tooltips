@@ -1,0 +1,6 @@
+Enhancement: Add missing tooltips
+
+We've added tooltips to the "view option dropdown" and "toggle sidebar" buttons.
+
+https://github.com/owncloud/web/issues/5723
+https://github.com/owncloud/web/pull/5724
