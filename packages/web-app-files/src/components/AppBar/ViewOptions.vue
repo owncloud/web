@@ -3,8 +3,9 @@
     <oc-button
       id="files-view-options-btn"
       key="files-view-options-btn"
+      v-oc-tooltip="viewOptionsButtonLabel"
       data-testid="files-view-options-btn"
-      :aria-label="viewButtonAriaLabel"
+      :aria-label="viewOptionsButtonLabel"
       variation="passive"
       appearance="raw"
       size="small"
@@ -13,7 +14,8 @@
       <oc-icon name="tune" size="medium" />
     </oc-button>
     <oc-button
-      :aria-label="toggleSidebarAriaLabel"
+      v-oc-tooltip="toggleSidebarButtonLabel"
+      :aria-label="toggleSidebarButtonLabel"
       variation="passive"
       appearance="raw"
       size="small"
@@ -59,11 +61,11 @@ export default {
     ...mapState('Files', ['areHiddenFilesShown', 'filesPageLimit']),
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
-    viewButtonAriaLabel() {
+    viewOptionsButtonLabel() {
       return this.$gettext('Display customization options of the files list')
     },
 
-    toggleSidebarAriaLabel() {
+    toggleSidebarButtonLabel() {
       if (this.sidebarClosed) return this.$gettext('Open sidebar to view details')
       return this.$gettext('Close sidebar to hide details')
     },
