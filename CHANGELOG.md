@@ -1,3 +1,25 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v4.1.0...master
+
+Summary
+-------
+
+* Enhancement - Add missing tooltips: [#5723](https://github.com/owncloud/web/issues/5723)
+
+Details
+-------
+
+* Enhancement - Add missing tooltips: [#5723](https://github.com/owncloud/web/issues/5723)
+
+   We've added tooltips to the "view option dropdown" and "toggle sidebar" buttons.
+
+   https://github.com/owncloud/web/issues/5723
+   https://github.com/owncloud/web/pull/5724
+
 Changelog for ownCloud Web [4.1.0] (2021-08-20)
 =======================================
 The following sections list the changes in ownCloud web 4.1.0 relevant to
