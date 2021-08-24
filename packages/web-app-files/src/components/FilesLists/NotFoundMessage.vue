@@ -20,7 +20,7 @@
         appearance="raw"
         :to="homeRoute"
       >
-        <translate>Go to »All files«</translate>
+        <translate>Go to "All files"</translate>
       </oc-button>
       <oc-button
         v-if="showPublicLinkButton"

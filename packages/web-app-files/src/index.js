@@ -244,7 +244,8 @@ const routes = [
     },
     meta: {
       verbose: true,
-      auth: false
+      auth: false,
+      title: $gettext('Pick target folder')
     }
   },
   {

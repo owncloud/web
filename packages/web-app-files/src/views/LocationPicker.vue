@@ -129,8 +129,16 @@ export default {
     title() {
       const translated =
         this.currentAction === batchActions.move
-          ? this.$gettext('Move into »%{ target }«')
-          : this.$gettext('Copy into »%{ target }«')
+          ? this.$ngettext(
+              'Move selected item into "%{ target }"',
+              'Move selected items into "%{ target }"',
+              this.resourcesCount
+            )
+          : this.$ngettext(
+              'Copy selected item into "%{ target }"',
+              'Copy selected items into "%{ target }"',
+              this.resourcesCount
+            )
       const target = basename(this.target) || this.$gettext('All files')
       return this.$gettextInterpolate(translated, { target })
     },
