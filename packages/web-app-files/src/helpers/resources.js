@@ -310,6 +310,7 @@ export function buildCollaboratorShare(s, file, allowSharePerm) {
         displayName: s.displayname_file_owner,
         additionalInfo: _fixAdditionalInfo(s.additional_info_file_owner)
       }
+      share.stime = s.stime
       // TODO: Refactor to work with roles / prepare for roles API
       share.customPermissions = {
         update: s.permissions & permissionsBitmask.update,

@@ -55,6 +55,12 @@
             <span v-text="sharedWithUserDisplayName" />
           </td>
         </tr>
+        <tr v-if="showShares" data-testid="shared-date">
+          <th scope="col" class="oc-pr-s" v-text="shareDateLabel" />
+          <td>
+            <span v-text="displayShareDate" v-oc-tooltip="shareDateTooltip" />
+          </td>
+        </tr>
         <tr v-if="ownerName" data-testid="ownerName">
           <th scope="col" class="oc-pr-s" v-text="ownerTitle" />
           <td>
@@ -108,7 +114,8 @@ export default {
   data: () => ({
     loading: false,
     sharedWithUserDisplayName: '',
-    sharedWithUserId: ''
+    sharedWithUserId: '',
+    sharedTime: 0
   }),
   computed: {
     ...mapGetters('Files', ['highlightedFile', 'versions', 'sharesTree', 'sharesTreeLoading']),
@@ -125,11 +132,22 @@ export default {
     detailsTableLabel() {
       return this.$gettext('Overview of the information about the selected file')
     },
+    shareDateLabel() {
+      return this.$gettext('Shared on:')
+    },
+    shareDateTooltip() {
+      const date = new Date(this.sharedTime * 1000)
+      return date.toLocaleDateString(this.$language.current) + ' ' + date.toLocaleTimeString(this.$language.current)
+    },
     showShares() {
       return this.hasAnyShares && !this.isPublicPage
     },
     isUserOwner() {
       return this.user.id === this.sharedWithUserId
+    },
+    displayShareDate() {
+      const date = this.formDateFromNow(new Date(this.sharedTime * 1000), 'JSDate');
+      return upperFirst(date)
     },
     detailSharingInformation() {
       const isFolder = this.highlightedFile.type === 'folder'
@@ -228,18 +246,21 @@ export default {
     },
     sharesTreeLoading(current, old) {
       if (current !== false || old !== true) return
-      if (this.sharesTree[this.highlightedFile.path][0] === undefined) return
-      const shareDetailsForFile = this.sharesTree[this.highlightedFile.path][0]
-      this.sharedWithUserDisplayName = shareDetailsForFile.fileOwner.displayName
-      this.sharedWithUserId = shareDetailsForFile.fileOwner.name
+      const shareDetailsForFile = this.sharesTree[this.highlightedFile.path]
+      if (shareDetailsForFile === undefined || 
+          shareDetailsForFile[0] === undefined) return
+      this.sharedWithUserDisplayName = shareDetailsForFile[0].fileOwner.displayName
+      this.sharedWithUserId = shareDetailsForFile[0].fileOwner.name
+      this.sharedTime = shareDetailsForFile[0].stime
     },
-    hasAnyShares(current, old) {
+    hasAnyShares() {
       this.refreshShareDetailsTree()
     }
   },
-  mounted() {
+  async mounted() {
     this.loadData()
     this.refreshShareDetailsTree()
+    
   },
   asyncComputed: {
     preview: {
