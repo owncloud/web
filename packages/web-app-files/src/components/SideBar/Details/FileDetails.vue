@@ -49,6 +49,12 @@
             <span v-else v-text="capitalizedTimestamp" />
           </td>
         </tr>
+        <tr v-if="showShares && !isUserOwner" data-testid="shared-by">
+          <th scope="col" class="oc-pr-s" v-text="sharedByLabel" />
+          <td>
+            <span v-text="sharedWithUserDisplayName" />
+          </td>
+        </tr>
         <tr v-if="ownerName" data-testid="ownerName">
           <th scope="col" class="oc-pr-s" v-text="ownerTitle" />
           <td>
@@ -100,10 +106,12 @@ export default {
     return $gettext('Details')
   },
   data: () => ({
-    loading: false
+    loading: false,
+    sharedWithUserDisplayName: '',
+    sharedWithUserId: ''
   }),
   computed: {
-    ...mapGetters('Files', ['highlightedFile', 'versions']),
+    ...mapGetters('Files', ['highlightedFile', 'versions', 'sharesTree', 'sharesTreeLoading']),
     ...mapGetters(['user', 'getToken', 'configuration']),
 
     hasContent() {
@@ -120,6 +128,9 @@ export default {
     showShares() {
       return this.hasAnyShares && !this.isPublicPage
     },
+    isUserOwner() {
+      return this.user.id === this.sharedWithUserId
+    },
     detailSharingInformation() {
       const isFolder = this.highlightedFile.type === 'folder'
       if (isFolder) {
@@ -132,6 +143,9 @@ export default {
     },
     linkSharesLabel() {
       return this.$gettext('Show links')
+    },
+    sharedByLabel() {
+      return this.$gettext('Shared by:')
     },
     hasTimestamp() {
       return this.highlightedFile.mdate?.length > 0 || this.highlightedFile.sdate?.length > 0
@@ -210,10 +224,22 @@ export default {
   watch: {
     highlightedFile() {
       this.loadData()
+      this.refreshShareDetailsTree()
+    },
+    sharesTreeLoading(current, old) {
+      if (current !== false || old !== true) return
+      if (this.sharesTree[this.highlightedFile.path][0] === undefined) return
+      const shareDetailsForFile = this.sharesTree[this.highlightedFile.path][0]
+      this.sharedWithUserDisplayName = shareDetailsForFile.fileOwner.displayName
+      this.sharedWithUserId = shareDetailsForFile.fileOwner.name
+    },
+    hasAnyShares(current, old) {
+      this.refreshShareDetailsTree()
     }
   },
   mounted() {
     this.loadData()
+    this.refreshShareDetailsTree()
   },
   asyncComputed: {
     preview: {
@@ -234,8 +260,15 @@ export default {
     }
   },
   methods: {
-    ...mapActions('Files', ['loadPreview', 'loadVersions']),
+    ...mapActions('Files', ['loadPreview', 'loadVersions', 'loadSharesTree']),
     ...mapMutations('Files', ['SET_APP_SIDEBAR_ACTIVE_PANEL']),
+    refreshShareDetailsTree() {
+      this.loadSharesTree({
+        client: this.$client,
+        path: this.highlightedFile.path,
+        $gettext: this.$gettext
+      })
+    },
     expandPeoplesAccordion() {
       this.SET_APP_SIDEBAR_ACTIVE_PANEL('sharing-item')
     },
