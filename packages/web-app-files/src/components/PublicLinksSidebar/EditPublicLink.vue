@@ -254,15 +254,16 @@ export default {
 
     $_passwordEnforced() {
       const permissions = parseInt(this.selectedRole.permissions, 10)
+      console.log('password capabilities', this.capabilities.files_sharing.public)
       const password = this.capabilities.files_sharing.public.password.enforced_for
 
-      if (permissions === 1 && password.read_only === '1') {
+      if (permissions === 1 && password.read_only) {
         return true
       }
-      if (permissions === 4 && password.upload_only === '1') {
+      if (permissions === 4 && password.upload_only) {
         return true
       }
-      if (permissions >= 5 && password.read_write === '1') {
+      if (permissions >= 5 && password.read_write) {
         return true
       }
 
@@ -271,17 +272,15 @@ export default {
 
     expirationDateLabel() {
       if (this.$_expirationDate.enforced) {
-        return `${this.$gettext('Expiration date')} (${this.$gettext('required')})`
+        return this.$gettext('Expiration date (required)')
       }
-
       return this.$gettext('Expiration date')
     },
 
     passwordLabel() {
       if (this.$_passwordEnforced) {
-        return `${this.$gettext('Password')} (${this.$gettext('required')})`
+        return this.$gettext('Password (required)')
       }
-
       return this.$gettext('Password')
     }
   },
