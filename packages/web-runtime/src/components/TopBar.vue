@@ -8,7 +8,7 @@
         <oc-button
           appearance="raw"
           class="oc-app-navigation-toggle"
-          :aria-label="$gettext('Open navigation menu')"
+          :aria-label="$gettext('Toggle application navigation menu')"
           @click="toggleAppNavigationVisibility"
         >
           <oc-icon name="menu" />

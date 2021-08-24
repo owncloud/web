@@ -53,7 +53,7 @@ export default {
       return this.navigation_getMenuItems([null, 'apps', 'appSwitcher'])
     },
     applicationSwitcherLabel() {
-      return this.$gettext('Application Switcher')
+      return this.$gettext('Application switcher')
     }
   },
   mounted() {
