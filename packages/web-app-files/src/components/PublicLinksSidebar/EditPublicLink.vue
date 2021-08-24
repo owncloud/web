@@ -86,38 +86,34 @@
           </oc-button>
         </div>
         <div>
-          <oc-button v-if="saving" variation="primary" appearance="filled" disabled>
-            <template v-if="$_isNew">
+          <oc-button
+            v-if="$_isNew"
+            id="oc-files-file-link-create"
+            :disabled="!$_isValid || saving"
+            variation="primary"
+            appearance="filled"
+            @click="$_addLink"
+          >
+            <template v-if="saving">
               <oc-spinner :aria-label="$gettext('Creating Public Link')" size="small" />
               <span v-translate :aria-hidden="true">Creating</span>
             </template>
-            <template v-else>
+            <span v-else v-translate>Create</span>
+          </oc-button>
+          <oc-button
+            v-else
+            id="oc-files-file-link-save"
+            :disabled="!$_isValid || !$_hasChanges || saving"
+            variation="primary"
+            appearance="filled"
+            @click="$_updateLink"
+          >
+            <template v-if="saving">
               <oc-spinner :aria-label="$gettext('Saving Public Link')" size="small" />
               <span v-translate :aria-hidden="true">Saving</span>
             </template>
+            <span v-else v-translate>Save</span>
           </oc-button>
-          <template v-else>
-            <oc-button
-              v-if="$_isNew"
-              id="oc-files-file-link-create"
-              :disabled="!$_isValid"
-              variation="primary"
-              appearance="filled"
-              @click="$_addLink"
-            >
-              <translate>Create</translate>
-            </oc-button>
-            <oc-button
-              v-else
-              id="oc-files-file-link-save"
-              :disabled="!$_isValid || !$_hasChanges"
-              variation="primary"
-              appearance="filled"
-              @click="$_updateLink"
-            >
-              <translate>Save</translate>
-            </oc-button>
-          </template>
         </div>
       </oc-grid>
     </form>

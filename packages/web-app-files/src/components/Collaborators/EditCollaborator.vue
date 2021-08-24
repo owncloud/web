@@ -6,19 +6,6 @@
       class="oc-invisible-sr"
       v-text="editCollaboratorHint"
     />
-    <transition
-      enter-active-class="uk-animation-slide-top-small"
-      leave-active-class="uk-animation-slide-top-small uk-animation-reverse"
-      name="custom-classes-transition"
-    >
-      <oc-alert
-        v-if="errors"
-        class="oc-files-collaborators-collaborator-error-alert"
-        variation="danger"
-      >
-        {{ errors }}
-      </oc-alert>
-    </transition>
     <p
       v-if="user.id !== collaborator.owner.name"
       class="oc-text-muted uk-flex uk-flex-middle oc-mb-s"
@@ -47,20 +34,19 @@
         </oc-button>
       </div>
       <div>
-        <oc-button v-if="saving" key="edit-collaborator-saving-button" :disabled="true">
-          <oc-spinner :aria-label="$gettext('Saving Share')" size="small" />
-          <span v-translate :aria-hidden="true">Saving Share</span>
-        </oc-button>
         <oc-button
-          v-else
           id="files-collaborators-collaborator-save-share-button"
           key="edit-collaborator-saving-button"
           :aria-label="$gettext('Save Share')"
-          :disabled="!$_hasChanges"
+          :disabled="!$_hasChanges || saving"
           variation="primary"
           @click="$_ocCollaborators_saveChanges"
         >
-          <translate>Save</translate>
+          <template v-if="saving">
+            <oc-spinner :aria-label="$gettext('Saving Share')" size="small" />
+            <span v-translate :aria-hidden="true">Saving Share</span>
+          </template>
+          <span v-else v-translate>Save</span>
         </oc-button>
       </div>
     </oc-grid>
@@ -95,8 +81,7 @@ export default {
       selectedRole: null,
       additionalPermissions: null,
       saving: false,
-      expirationDate: null,
-      errors: false
+      expirationDate: null
     }
   },
   computed: {
@@ -181,26 +166,33 @@ export default {
   },
   methods: {
     ...mapActions('Files', ['changeShare']),
+    ...mapActions(['showMessage']),
 
-    $_ocCollaborators_saveChanges() {
+    async $_ocCollaborators_saveChanges() {
       this.saving = true
 
       if (!this.selectedRole) this.selectedRole = this.$_originalRole
       const bitmask = this.$_permissionsBitmask
 
-      this.changeShare({
-        client: this.$client,
-        share: this.collaborator,
-        // Map bitmask to role to get the correct role in case the advanced role was mapped to existing role
-        role: bitmaskToRole(bitmask, this.highlightedFile.type === 'folder', !this.isOcis),
-        permissions: bitmask,
-        expirationDate: this.expirationDate
-      })
-        .then(() => this.$_ocCollaborators_cancelChanges())
-        .catch(errors => {
-          this.errors = errors
-          this.saving = false
+      try {
+        await this.changeShare({
+          client: this.$client,
+          share: this.collaborator,
+          // Map bitmask to role to get the correct role in case the advanced role was mapped to existing role
+          role: bitmaskToRole(bitmask, this.highlightedFile.type === 'folder', !this.isOcis),
+          permissions: bitmask,
+          expirationDate: this.expirationDate
         })
+      } catch (e) {
+        console.error(e)
+        this.showMessage({
+          title: this.$gettext('Failed to update share'),
+          status: 'danger'
+        })
+        this.saving = false
+        return
+      }
+      this.$_ocCollaborators_cancelChanges()
     },
 
     $_ocCollaborators_cancelChanges() {

@@ -253,75 +253,42 @@ export default {
         })
     })
   },
-  addShare(context, { client, path, shareWith, shareType, permissions, expirationDate }) {
+  async addShare(context, { client, path, shareWith, shareType, permissions, expirationDate }) {
     if (shareType === shareTypes.group) {
-      client.shares
-        .shareFileWithGroup(path, shareWith, {
-          permissions: permissions,
-          expirationDate: expirationDate
-        })
-        .then(share => {
-          context.commit(
-            'CURRENT_FILE_OUTGOING_SHARES_ADD',
-            buildCollaboratorShare(
-              share.shareInfo,
-              context.getters.highlightedFile,
-              !context.rootGetters.isOcis
-            )
-          )
-          context.commit('UPDATE_CURRENT_FILE_SHARE_TYPES')
-          context.commit('LOAD_INDICATORS')
-        })
-        .catch(e => {
-          context.dispatch(
-            'showMessage',
-            {
-              title: $gettext('Error while sharing.'),
-              desc: e,
-              status: 'danger',
-              autoClose: {
-                enabled: true
-              }
-            },
-            { root: true }
-          )
-        })
+      const share = await client.shares.shareFileWithGroup(path, shareWith, {
+        permissions: permissions,
+        expirationDate: expirationDate
+      })
+
+      context.commit(
+        'CURRENT_FILE_OUTGOING_SHARES_ADD',
+        buildCollaboratorShare(
+          share.shareInfo,
+          context.getters.highlightedFile,
+          !context.rootGetters.isOcis
+        )
+      )
+      context.commit('UPDATE_CURRENT_FILE_SHARE_TYPES')
+      context.commit('LOAD_INDICATORS')
       return
     }
 
     const remoteShare = shareType === shareTypes.remote
-    client.shares
-      .shareFileWithUser(path, shareWith, {
-        permissions: permissions,
-        remoteUser: remoteShare,
-        expirationDate: expirationDate
-      })
-      .then(share => {
-        context.commit(
-          'CURRENT_FILE_OUTGOING_SHARES_ADD',
-          buildCollaboratorShare(
-            share.shareInfo,
-            context.getters.highlightedFile,
-            !context.rootGetters.isOcis
-          )
-        )
-        context.commit('UPDATE_CURRENT_FILE_SHARE_TYPES')
-        context.commit('LOAD_INDICATORS')
-      })
-      .catch(e => {
-        context.dispatch(
-          'showMessage',
-          {
-            title: $gettext('Error while sharing.'),
-            desc: e,
-            status: 'danger',
-            autoClose: {
-              enabled: true
-            }
-          },
-          { root: true }
-        )
-      })
+    const share = await client.shares.shareFileWithUser(path, shareWith, {
+      permissions: permissions,
+      remoteUser: remoteShare,
+      expirationDate: expirationDate
+    })
+    context.commit(
+      'CURRENT_FILE_OUTGOING_SHARES_ADD',
+      buildCollaboratorShare(
+        share.shareInfo,
+        context.getters.highlightedFile,
+        !context.rootGetters.isOcis
+      )
+    )
+    context.commit('UPDATE_CURRENT_FILE_SHARE_TYPES')
+    context.commit('LOAD_INDICATORS')
   },
   deleteShare(context, { client, share }) {
     client.shares

@@ -53,20 +53,19 @@
         </oc-button>
       </div>
       <div>
-        <oc-button v-if="saving" key="new-collaborator-saving-button" :disabled="true">
-          <oc-spinner :aria-label="$gettext('Adding People')" size="small" />
-          <span v-translate :aria-hidden="true">Adding People</span>
-        </oc-button>
         <oc-button
-          v-else
           id="files-collaborators-collaborator-save-new-share-button"
           key="new-collaborator-save-button"
-          :disabled="!$_isValid"
+          :disabled="!$_isValid || saving"
           variation="primary"
           appearance="filled"
           @click="share"
         >
-          <translate>Share</translate>
+          <template v-if="saving">
+            <oc-spinner :aria-label="$gettext('Adding People')" size="small" />
+            <span v-translate :aria-hidden="true">Adding People</span>
+          </template>
+          <span v-else v-translate>Share</span>
         </oc-button>
       </div>
     </oc-grid>
@@ -131,6 +130,7 @@ export default {
 
   methods: {
     ...mapActions('Files', ['addShare']),
+    ...mapActions(['showMessage']),
 
     close() {
       this.$emit('close')
@@ -203,30 +203,42 @@ export default {
       this.saving = false
       this.close()
     },
-    share() {
+    async share() {
       this.saving = true
 
       const saveQueue = new PQueue({ concurrency: 4 })
       const savePromises = []
+      const errors = []
       this.selectedCollaborators.forEach(collaborator => {
         savePromises.push(
-          saveQueue.add(() =>
-            this.addShare({
-              client: this.$client,
-              path: this.highlightedFile.path,
-              $gettext: this.$gettext,
-              shareWith: collaborator.value.shareWith,
-              shareType: collaborator.value.shareType,
-              permissions: roleToBitmask(this.selectedRole, this.additionalPermissions),
-              expirationDate: this.expirationDate
-            })
-          )
+          saveQueue.add(async () => {
+            try {
+              await this.addShare({
+                client: this.$client,
+                path: this.highlightedFile.path,
+                shareWith: collaborator.value.shareWith,
+                shareType: collaborator.value.shareType,
+                permissions: roleToBitmask(this.selectedRole, this.additionalPermissions),
+                expirationDate: this.expirationDate
+              })
+            } catch (e) {
+              console.error(e)
+              errors.push(e)
+            }
+          })
         )
       })
 
-      return Promise.all(savePromises).then(() => {
-        this.$_ocCollaborators_newCollaboratorsCancel()
-      })
+      await Promise.all(savePromises)
+      if (errors.length > 0) {
+        this.showMessage({
+          title: this.$gettext('Failed to create share'),
+          status: 'danger'
+        })
+        this.saving = false
+        return
+      }
+      this.$_ocCollaborators_newCollaboratorsCancel()
     },
     $_ocCollaborators_selectAutocompleteResult(collaborator) {
       this.selectedCollaborators.push(collaborator)
