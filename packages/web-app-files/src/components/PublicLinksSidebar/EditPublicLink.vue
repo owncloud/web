@@ -1,15 +1,6 @@
 <template>
   <div class="oc-files-edit-public-link oc-files-file-link-form">
     <form @submit.prevent>
-      <transition
-        enter-active-class="uk-animation-slide-top-small"
-        leave-active-class="uk-animation-slide-top-small uk-animation-reverse"
-        name="custom-classes-transition"
-      >
-        <oc-alert v-if="errors" class="oc-files-file-link-error-alert" variation="danger">
-          {{ errors }}
-        </oc-alert>
-      </transition>
       <div class="oc-mb">
         <oc-text-input id="oc-files-file-link-name" v-model="name" :label="$gettext('Name')" />
       </div>
@@ -148,7 +139,6 @@ export default {
     return {
       saving: false,
       password: null,
-      errors: false,
       name: null,
       hasPassword: false,
       expireDate: null,
@@ -292,6 +282,7 @@ export default {
     this.setRole()
   },
   methods: {
+    ...mapActions(['showMessage']),
     ...mapActions('Files', ['addLink', 'updateLink']),
     ...mapMutations('Files', ['SET_APP_SIDEBAR_ACCORDION_CONTEXT']),
 
@@ -330,14 +321,17 @@ export default {
         $gettext: this.$gettext,
         params
       })
-        .then(e => {
+        .then(() => {
           this.saving = false
-          this.errors = false
           this.$_closeForm()
         })
         .catch(e => {
+          console.error(e)
           this.saving = false
-          this.errors = e
+          this.showMessage({
+            title: this.$gettext('Failed to create public link'),
+            status: 'danger'
+          })
         })
     },
 
@@ -362,12 +356,15 @@ export default {
       })
         .then(() => {
           this.saving = false
-          this.errors = false
           this.$_closeForm()
         })
         .catch(e => {
+          console.error(e)
           this.saving = false
-          this.errors = e
+          this.showMessage({
+            title: this.$gettext('Failed to update public link'),
+            status: 'danger'
+          })
         })
     },
 
