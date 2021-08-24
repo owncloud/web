@@ -14,7 +14,6 @@ Background: prepare user and files
   Scenario: observe different actions menu options on selecting different file types or folder
     Given user "Alice" has uploaded file with content "pdf file" to "lorem.pdf"
     And the user has reloaded the current page of the webUI
-    And the app-sidebar for file "lorem.txt" has been visible on the webUI
     When the user opens the actions sidebar panel of folder "simple-folder" on the webUI
     Then the app-sidebar for folder "simple-folder" should be visible on the webUI
     And only the following items with default items should be visible in the actions menu on the webUI

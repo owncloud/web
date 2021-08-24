@@ -63,9 +63,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUISharingNotifications/notificationLink.feature:18](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingNotifications/notificationLink.feature#L18)
 -   [webUISharingNotificationsToRoot/notificationLink.feature:17](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingNotificationsToRoot/notificationLink.feature#L17)
 
-### [Cannot determine share source path when sharing same name file from different path in shared-with pages](https://github.com/owncloud/web/issues/5302)
--   [webUISharingPublicBasic/publicLinkCreate.feature:88](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicBasic/publicLinkCreate.feature#L88)
-
 ### [impossible to navigate into a folder in the trashbin](https://github.com/owncloud/web/issues/1725)
 -   [webUITrashbinDelete/trashbinDelete.feature:29](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITrashbinDelete/trashbinDelete.feature#L29)
 

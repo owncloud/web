@@ -86,15 +86,14 @@ Given('the property {string} has been deleted in web config file', function(key)
   return fs.writeFileSync(this.fullPathOfConfigFile, JSON.stringify(data, null, 4))
 })
 
-Then('the success/error message with header {string} should be displayed on the webUI', function(
-  message
-) {
-  return client.page
-    .webPage()
-    .waitForElementVisible('@message')
-    .expect.element('@message')
-    .text.to.equal(message)
-})
+Then(
+  'the success/error message with header {string} should be displayed on the webUI',
+  async function(message) {
+    const text = await client.page.webPage().getDisplayedMessage(true)
+    assert.strictEqual(text, message)
+    return await client.page.webPage().waitForElementNotPresent('@message')
+  }
+)
 
 Then('the following success/error message should be displayed on the webUI', async function(
   message

@@ -39,12 +39,9 @@ module.exports = {
      * @throws Error
      * @returns {*}
      */
-    performFileAction: function(action) {
+    performFileAction: async function(action) {
       const fileActionBtnSelectorXpath = this.getActionSelector(action)
-      return this.useXpath()
-        .waitForElementVisible(fileActionBtnSelectorXpath)
-        .click(fileActionBtnSelectorXpath)
-        .useCss()
+      return await this.click('xpath', fileActionBtnSelectorXpath)
     },
     /**
      * returns the disabled state of given action
@@ -67,7 +64,7 @@ module.exports = {
      * @returns {Promise<*>}
      */
     delete: async function() {
-      this.performFileAction(this.FileAction.delete)
+      await this.performFileAction(this.FileAction.delete)
       await this.api.page.FilesPageElement.filesList().confirmDeletion()
       return this
     },
@@ -77,8 +74,8 @@ module.exports = {
      * @return {*}
      */
     rename: async function(toName, expectToSucceed = true) {
+      await this.performFileAction(this.FileAction.rename)
       await this.useXpath()
-        .performFileAction(this.FileAction.rename)
         .waitForElementVisible('@dialog')
         .waitForAnimationToFinish() // wait for transition on the modal to finish
         .clearValue('@dialogInput')
@@ -96,33 +93,33 @@ module.exports = {
      * mark as favorite resource using fileActions 'favorite' button
      * @returns {Promise<*>}
      */
-    favorite: function() {
-      return this.performFileAction(this.FileAction.favorite)
+    favorite: async function() {
+      return await this.performFileAction(this.FileAction.favorite)
     },
     /**
      * unmark as favorite resource using fileActions 'favorite' button
      * @returns {Promise<*>}
      */
-    unmarkFavorite: function() {
-      return this.performFileAction(this.FileAction.unmarkFavorite)
+    unmarkFavorite: async function() {
+      return await this.performFileAction(this.FileAction.unmarkFavorite)
     },
     /**
      * @return {Promise<module.exports.commands>}
      */
-    restore: function() {
-      return this.performFileAction(this.FileAction.restore)
+    restore: async function() {
+      return await this.performFileAction(this.FileAction.restore)
     },
     /**
      * @return {Promise<module.exports.commands>}
      */
-    download: function() {
-      return this.performFileAction(this.FileAction.download)
+    download: async function() {
+      return await this.performFileAction(this.FileAction.download)
     },
     /**
      * @return {Promise<module.exports.commands>}
      */
     deleteResourceImmediately: async function() {
-      this.performFileAction(this.FileAction.delete)
+      await this.performFileAction(this.FileAction.delete)
       await this.api.page.FilesPageElement.filesList().confirmDeletion()
 
       return this
@@ -130,14 +127,14 @@ module.exports = {
     /**
      * Trigger the move of a resource via its file action
      */
-    move: function() {
-      return this.performFileAction(this.FileAction.move)
+    move: async function() {
+      return await this.performFileAction(this.FileAction.move)
     },
     /**
      * Trigger the copy of a resource via its file action
      */
-    copy: function() {
-      return this.performFileAction(this.FileAction.copy)
+    copy: async function() {
+      return await this.performFileAction(this.FileAction.copy)
     },
     /**
      * Trigger accepting a share

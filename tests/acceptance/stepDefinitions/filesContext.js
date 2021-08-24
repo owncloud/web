@@ -134,8 +134,8 @@ When('the user browses to display the {string} details of file {string}', async 
   filename
 ) {
   const api = client.page.FilesPageElement
-  await api.filesList().clickRow(filename)
   await client.initAjaxCounters()
+  await api.filesList().openSideBar(filename)
   await api.appSideBar().activatePanel(accordionItem)
   await client.waitForOutstandingAjaxCalls()
 
@@ -177,8 +177,8 @@ Given('the user has opened the share dialog for file/folder {string}', function(
   return client.page.FilesPageElement.filesList().openSharingDialog(fileName)
 })
 
-When('the user closes the app-sidebar using the webUI', function() {
-  return client.page.FilesPageElement.appSideBar().closeSidebar(100)
+When('the user closes the app-sidebar using the webUI', async function() {
+  return await client.page.FilesPageElement.appSideBar().closeSidebarIfOpen()
 })
 
 When('the user browses to folder {string} using the breadcrumb on the webUI', resource =>
@@ -367,7 +367,7 @@ When('the user marks file/folder {string} as favorite using the webUI sidebar', 
   path
 ) {
   const api = client.page.FilesPageElement
-  await api.filesList().clickRow(path)
+  await api.filesList().openSideBar(path)
   api.appSideBar().markFavoriteSidebar()
   return client
 })
@@ -376,7 +376,7 @@ When('the user unmarks the favorited file/folder {string} using the webUI sideba
   path
 ) {
   const api = client.page.FilesPageElement
-  await api.filesList().clickRow(path)
+  await api.filesList().openSideBar(path)
   api.appSideBar().unmarkFavoriteSidebar()
   return client
 })
@@ -422,7 +422,7 @@ Then('folder {string} should be listed on the webUI', folder => {
 })
 
 Then('file/folder with path {string} should be listed on the webUI', function(path) {
-  return client.page.FilesPageElement.filesList().waitForFileWithPathVisible(path)
+  return client.page.FilesPageElement.filesList().waitForFileVisible(path)
 })
 
 Then('the last uploaded folder should be listed on the webUI', async function() {
@@ -485,16 +485,15 @@ Then('the versions list for resource {string} should contain {int} entry/entries
   expectedNumber
 ) {
   const api = client.page.FilesPageElement
-  await api.filesList().clickRow(resourceName)
   await client.initAjaxCounters()
+  await api.filesList().openSideBar(resourceName)
   await api.appSideBar().activatePanel('versions')
   await client.waitForOutstandingAjaxCalls()
   const count = await api.versionsDialog().getVersionsCount()
 
   assert.strictEqual(count, expectedNumber)
 
-  client.page.FilesPageElement.appSideBar().closeSidebar(100)
-
+  await api.appSideBar().closeSidebarIfOpen()
   return this
 })
 
@@ -599,8 +598,8 @@ When('the user batch restores the marked files using the webUI', function() {
   return client.page.FilesPageElement.filesList().restoreSelected()
 })
 
-When('the user picks the row of file/folder {string} on the webUI', function(item) {
-  return client.page.FilesPageElement.filesList().clickRow(item)
+When('the user opens the sidebar for file/folder {string} on the webUI', function(item) {
+  return client.page.FilesPageElement.filesList().openSideBar(item)
 })
 
 When('the user switches to {string} panel in details panel using the webUI', function(item) {
@@ -822,20 +821,20 @@ Then('as user {string} file/folder {string} should not be marked as favorite', a
 
 Then('file/folder {string} should be marked as favorite on the webUI', async function(path) {
   const selector = client.page.FilesPageElement.appSideBar().elements.fileInfoFavoriteShining
-  await client.page.FilesPageElement.filesList().clickRow(path)
+  await client.page.FilesPageElement.filesList().openSideBar(path)
 
   client.expect.element(selector).to.be.present
-  client.page.FilesPageElement.appSideBar().closeSidebar()
+  await client.page.FilesPageElement.appSideBar().closeSidebarIfOpen()
 
   return client
 })
 
 Then('file/folder {string} should not be marked as favorite on the webUI', async function(path) {
   const selector = client.page.FilesPageElement.appSideBar().elements.fileInfoFavoriteDimm
-  await client.page.FilesPageElement.filesList().clickRow(path)
+  await client.page.FilesPageElement.filesList().openSideBar(path)
 
   client.expect.element(selector).to.be.present
-  client.page.FilesPageElement.appSideBar().closeSidebar()
+  await client.page.FilesPageElement.appSideBar().closeSidebarIfOpen()
 
   return client
 })
@@ -848,14 +847,12 @@ Then(/the count of files and folders shown on the webUI should be (\d+)/, async 
 })
 
 Then('the app-sidebar should be visible', async function() {
-  const visible = await client.page.personalPage().isSidebarVisible()
+  const visible = await client.page.FilesPageElement.appSideBar().isSideBarOpen()
   assert.strictEqual(visible, true, 'app-sidebar should be visible, but is not')
 })
 
 Then('the app-sidebar should be invisible', async function() {
-  const visible = await client.page
-    .personalPage()
-    .isSidebarVisible(client.globals.waitForNegativeConditionTimeout)
+  const visible = await client.page.FilesPageElement.appSideBar().isSideBarOpen()
   assert.strictEqual(visible, false, 'app-sidebar should be invisible, but is not')
 })
 
@@ -1018,18 +1015,21 @@ Then(
 )
 
 When(
-  'the user opens the actions sidebar panel of file/folder {string} on the webUI',
-  async function(resource) {
-    await client.page.FilesPageElement.filesRow().openFileActionsMenu(resource)
+  /^the user opens the actions sidebar panel of (file|folder) "([^"]*)" on the webUI$/,
+  async function(elementType, resource) {
+    await client.page.FilesPageElement.filesList().openFileActionsMenu(resource, elementType)
   }
 )
 
-Then('the app-sidebar for file/folder {string} should be visible on the webUI', async function(
+Then(/^the app-sidebar for (file|folder) "([^"]*)" should be visible on the webUI$/, async function(
+  elementType,
   resource
 ) {
-  const visible = await client.page.personalPage().isSidebarVisible()
+  const visible = await client.page.FilesPageElement.appSideBar().isSideBarOpenForResource(
+    resource,
+    elementType
+  )
   assert.strictEqual(visible, true, 'app-sidebar should be visible, but is not')
-  return client.page.personalPage().checkSidebarItem(resource)
 })
 
 Then('the thumbnail should be visible in the app-sidebar', function() {
@@ -1257,8 +1257,8 @@ Then('the move here file/folder button should be disabled', function() {
 When('the user selects move action for folder/file {string} using the webUI', async function(
   resource
 ) {
-  await client.page.FilesPageElement.filesRow().openFileActionsMenu(resource)
-  return client.page.FilesPageElement.fileActionsMenu().move()
+  await client.page.FilesPageElement.filesList().openFileActionsMenu(resource)
+  return await client.page.FilesPageElement.fileActionsMenu().move()
 })
 
 When('the user cancels the attempt to move/copy resources using the webUI', function() {
@@ -1311,18 +1311,11 @@ When('the user tries to copy file/folder {string} into folder {string} using the
     })
 })
 
-When('the user opens the file action menu of file/folder {string} using the webUI', async function(
-  resource
-) {
-  await client.page.FilesPageElement.filesList().waitForFileVisible(resource)
-  await client.page.FilesPageElement.filesRow().openFileActionsMenu(resource)
-})
-
 When('the user selects copy action for file/folder {string} using the webUI', async function(
   resource
 ) {
-  await client.page.FilesPageElement.filesRow().openFileActionsMenu(resource)
-  return client.page.FilesPageElement.fileActionsMenu().copy()
+  await client.page.FilesPageElement.filesList().openFileActionsMenu(resource)
+  return await client.page.FilesPageElement.fileActionsMenu().copy()
 })
 
 When(
@@ -1393,16 +1386,6 @@ Then(
   }
 )
 
-Given('the app-sidebar for file/folder {string} has been visible on the webUI', async function(
-  resource
-) {
-  await client.page.FilesPageElement.filesList().clickRow(resource)
-
-  const visible = await client.page.personalPage().isSidebarVisible()
-  assert.strictEqual(visible, true, 'app-sidebar should be visible, but is not')
-  return client.page.personalPage().checkSidebarItem(resource)
-})
-
 Then(
   'only the following items with default items should be visible in the actions menu on the webUI',
   async function(table) {
@@ -1420,7 +1403,7 @@ Then(
     assert.strictEqual(
       isPresent,
       true,
-      `only '${expectedVisibleItems}' actions menu item(s) was expected to be visible but also found '${visibleItems}'.`
+      `only '${expectedVisibleItems}' actions menu item(s) was expected to be visible but found '${visibleItems}' instead.`
     )
   }
 )
