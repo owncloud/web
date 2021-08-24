@@ -1014,6 +1014,7 @@ def unitTests(ctx):
                          "git checkout $DRONE_COMMIT",
                      ],
                  }] +
+                 calculateTestsToRunBasedOnFilesChanged(ctx) +
                  installNPM() +
                  buildWeb() +
                  [
@@ -1022,7 +1023,7 @@ def unitTests(ctx):
                          "image": "owncloudci/nodejs:14",
                          "pull": "always",
                          "commands": [
-                             "yarn test:unit",
+                             "if test -f runTestsForDocsChangeOnly; then echo 'skipping unit-tests'; else yarn test:unit; fi",
                          ],
                      },
                      {
@@ -1030,7 +1031,7 @@ def unitTests(ctx):
                          "image": "owncloudci/nodejs:14",
                          "pull": "always",
                          "commands": [
-                             "yarn test:integration",
+                             "if test -f runTestsForDocsChangeOnly; then echo 'skipping integration-tests'; else yarn test:integration; fi",
                          ],
                      },
                      {
@@ -1143,7 +1144,7 @@ def acceptance(ctx):
                         steps = []
 
                         if (params["earlyFail"]):
-                            steps += calculateDiffContainsUnitTestsOnly(ctx)
+                            steps += calculateTestsToRunBasedOnFilesChanged(ctx)
 
                         steps += installNPM()
 
@@ -1531,7 +1532,7 @@ def installCore(version, db):
         stepDefinition.update({"commands": [
             ". %s/.drone.env" % dir["web"],
             "export PLUGIN_GIT_REFERENCE=$CORE_COMMITID",
-            "if test -f runUnitTestsOnly; then echo 'skipping installCore'; else bash /usr/sbin/plugin.sh; fi",
+            "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping installCore'; else bash /usr/sbin/plugin.sh; fi",
         ]})
 
     return [stepDefinition]
@@ -1578,7 +1579,7 @@ def installFederatedServer(version, db, dbSuffix = "-federated"):
         stepDefinition.update({"commands": [
             ". %s/.drone.env" % dir["web"],
             "export PLUGIN_GIT_REFERENCE=$CORE_COMMITID",
-            "if test -f runUnitTestsOnly; then echo 'skipping installFederatedServer'; else bash /usr/sbin/plugin.sh; fi",
+            "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping installFederatedServer'; else bash /usr/sbin/plugin.sh; fi",
         ]})
 
     return [stepDefinition]
@@ -1589,7 +1590,7 @@ def installNPM():
         "image": "owncloudci/nodejs:14",
         "pull": "always",
         "commands": [
-            "if test -f runUnitTestsOnly; then echo 'skipping installNPM'; else yarn install --frozen-lockfile; fi",
+            "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping installNPM'; else yarn install --frozen-lockfile; fi",
         ],
     }]
 
@@ -1623,7 +1624,7 @@ def setupIntegrationWebApp():
         "image": "owncloudci/php:7.4",
         "pull": "always",
         "commands": [
-            "bash -x tests/drone/setup-integration-web-app.sh {} {}".format(dir["server"], dir["web"]),
+            "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping setupIntegrationWebApp'; else bash -x tests/drone/setup-integration-web-app.sh {} {}; fi".format(dir["server"], dir["web"]),
         ],
         "volumes": [{
             "name": "configs",
@@ -1637,7 +1638,7 @@ def buildWeb():
         "image": "owncloudci/nodejs:14",
         "pull": "always",
         "commands": [
-            "bash -x tests/drone/build-web.sh {}".format(dir["web"]),
+            "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping buildWeb'; else bash -x tests/drone/build-web.sh {}; fi".format(dir["web"]),
         ],
         "volumes": [{
             "name": "configs",
@@ -1813,7 +1814,7 @@ def getSkeletonFiles():
         "image": "owncloudci/php:7.4",
         "pull": "always",
         "commands": [
-            "if test -f runUnitTestsOnly; then echo 'installNPM getSkeletonFiles'; else git clone https://github.com/owncloud/testing.git /srv/app/testing; fi",
+            "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping getSkeletonFiles'; else git clone https://github.com/owncloud/testing.git /srv/app/testing; fi",
         ],
         "volumes": [{
             "name": "gopath",
@@ -1849,7 +1850,7 @@ def setUpOauth2(forIntegrationApp):
         "image": "owncloudci/php:7.4",
         "pull": "always",
         "commands": [
-            "bash -x tests/drone/setup-oauth2.sh {} {}".format(dir["server"], oidcURL),
+            "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping setup-oauth2'; else bash -x tests/drone/setup-oauth2.sh {} {}; fi".format(dir["server"], oidcURL),
         ],
     }]
 
@@ -1859,7 +1860,7 @@ def setupGraphapiOIdC():
         "image": "owncloudci/php:7.4",
         "pull": "always",
         "commands": [
-            "bash -x tests/drone/setup-graph-api-oidc.sh {}".format(dir["server"]),
+            "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping setupGraphapiOIdC'; else bash -x tests/drone/setup-graph-api-oidc.sh {}; fi".format(dir["server"]),
         ],
     }]
 
@@ -2040,7 +2041,7 @@ def setupNotificationsAppForServer():
         "image": "owncloudci/php:7.4",
         "pull": "always",
         "commands": [
-            "bash -x tests/drone/setup-notifications-app.sh {}".format(dir["server"]),
+            "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping setupNotificationsApp'; else bash -x tests/drone/setup-notifications-app.sh {}; fi".format(dir["server"]),
         ],
     }]
 
@@ -2050,7 +2051,7 @@ def setupServerAndAppsForIntegrationApp(logLevel):
         "image": "owncloudci/php:7.4",
         "pull": "always",
         "commands": [
-            "bash -x tests/drone/setup-server-and-app.sh %s %s %s" % (dir["server"], logLevel, "builtInWeb"),
+            "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping server-setup'; else bash -x tests/drone/setup-server-and-app.sh %s %s %s; fi" % (dir["server"], logLevel, "builtInWeb"),
         ],
     }]
 
@@ -2060,7 +2061,7 @@ def setupServerAndApp(logLevel):
         "image": "owncloudci/php:7.4",
         "pull": "always",
         "commands": [
-            "bash -x tests/drone/setup-server-and-app.sh %s %s" % (dir["server"], logLevel),
+            "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping server-setup'; else bash -x tests/drone/setup-server-and-app.sh %s %s; fi" % (dir["server"], logLevel),
         ],
     }]
 
@@ -2070,7 +2071,7 @@ def setupFedServerAndApp(logLevel):
         "image": "owncloudci/php:7.4",
         "pull": "always",
         "commands": [
-            "bash -x tests/drone/setup-fed-server-and-app.sh {} {}".format(dir["federated"], logLevel),
+            "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping server-setup'; else bash -x tests/drone/setup-fed-server-and-app.sh {} {}; fi".format(dir["federated"], logLevel),
         ],
     }]
 
@@ -2080,7 +2081,7 @@ def fixPermissions():
         "image": "owncloudci/php:7.4",
         "pull": "always",
         "commands": [
-            "if test -f runUnitTestsOnly; then echo 'skipping fixPermissions'; else cd %s && chown www-data * -R; fi" % dir["server"],
+            "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping fixPermissions'; else cd %s && chown www-data * -R; fi" % dir["server"],
         ],
     }]
 
@@ -2090,7 +2091,7 @@ def fixPermissionsFederated():
         "image": "owncloudci/php:7.4",
         "pull": "always",
         "commands": [
-            "if test -f runUnitTestsOnly; then echo 'skipping fixPermissions'; else cd %s && chown www-data * -R; fi" % dir["federated"],
+            "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping fixPermissions'; else cd %s && chown www-data * -R; fi" % dir["federated"],
         ],
     }]
 
@@ -2126,7 +2127,7 @@ def copyFilesForUpload():
             "path": "/filesForUpload",
         }],
         "commands": [
-            "bash -x tests/drone/copy-files-for-upload.sh {}".format(dir["web"]),
+            "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping copyFilesForUpload'; else bash -x tests/drone/copy-files-for-upload.sh {}; fi".format(dir["web"]),
         ],
     }]
 
@@ -2172,7 +2173,7 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
         "pull": "always",
         "environment": environment,
         "commands": [
-            "if test -f runUnitTestsOnly; then echo 'skipping webui-acceptance-tests'; else cd %s && ./tests/acceptance/run.sh; fi" % dir["web"],
+            "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping webui-acceptance-tests'; else cd %s && ./tests/acceptance/run.sh; fi" % dir["web"],
         ],
         "volumes": [{
             "name": "gopath",
@@ -2276,7 +2277,7 @@ def listRemoteCache():
             },
         },
         "commands": [
-            "if test -f runUnitTestsOnly; then echo 'skipping list-ocis-bin-cache'; else mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY && mc find s3/owncloud/web/ocis-build; fi",
+            "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping list-ocis-bin-cache'; else mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY && mc find s3/owncloud/web/ocis-build; fi",
         ],
     }]
 
@@ -2654,14 +2655,14 @@ def dependsOn(earlierStages, nextStages):
             else:
                 nextStage["depends_on"] = [earlierStage["name"]]
 
-def calculateDiffContainsUnitTestsOnly(ctx):
+def calculateTestsToRunBasedOnFilesChanged(ctx):
     return [
         {
             "name": "calculate-diff",
             "image": "owncloudci/nodejs:14",
             "pull": "always",
             "commands": [
-                "bash -x tests/drone/if-diff-has-unit-tests-only.sh",
+                "bash -x tests/drone/getFilesChanged.sh",
                 "ls -la",
             ],
             "when": {
