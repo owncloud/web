@@ -116,6 +116,7 @@ import { loadPreview } from '../../../helpers/resource'
 import intersection from 'lodash-es/intersection'
 import upperFirst from 'lodash-es/upperFirst'
 import path from 'path'
+import { DateTime } from 'luxon'
 
 export default {
   name: 'FileDetails',
@@ -152,12 +153,9 @@ export default {
       return this.$gettext('Shared via:')
     },
     shareDateTooltip() {
-      const date = new Date(this.sharedTime * 1000)
-      return (
-        date.toLocaleDateString(this.$language.current) +
-        ' ' +
-        date.toLocaleTimeString(this.$language.current)
-      )
+      return DateTime.fromSeconds(parseInt(this.sharedTime))
+        .setLocale(this.$language.current)
+        .toLocaleString(DateTime.DATETIME_FULL)
     },
     sharedViaTooltip() {
       return this.$gettextInterpolate(
@@ -279,8 +277,8 @@ export default {
       this.loadData()
       this.refreshShareDetailsTree()
     },
-    sharesTreeLoading(current, old) {
-      if (current !== false || old !== true) return
+    sharesTreeLoading(current) {
+      if (current !== false) return
       const sharePathParentOrCurrent = this.getParentSharePath(
         this.highlightedFile.path,
         this.sharesTree
