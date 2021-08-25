@@ -49,16 +49,22 @@
             <span v-else v-text="capitalizedTimestamp" />
           </td>
         </tr>
-        <tr v-if="showShares && !isUserOwner" data-testid="shared-by">
+        <tr v-if="showShares && !isUserOwner && !sharesTreeLoading" data-testid="shared-by">
           <th scope="col" class="oc-pr-s" v-text="sharedByLabel" />
           <td>
             <span v-text="sharedWithUserDisplayName" />
           </td>
         </tr>
-        <tr v-if="showShares" data-testid="shared-date">
+        <tr v-if="showShares && !sharesTreeLoading" data-testid="shared-on">
+          <th scope="col" class="oc-pr-s" v-text="sharedViaLabel"></th>
+          <td>
+            <span v-oc-tooltip="sharedViaTooltip" v-text="sharedParentDir" />
+          </td>
+        </tr>
+        <tr v-if="showShares && !sharesTreeLoading" data-testid="shared-date">
           <th scope="col" class="oc-pr-s" v-text="shareDateLabel" />
           <td>
-            <span v-text="displayShareDate" v-oc-tooltip="shareDateTooltip" />
+            <span v-oc-tooltip="shareDateTooltip" v-text="displayShareDate" />
           </td>
         </tr>
         <tr v-if="ownerName" data-testid="ownerName">
@@ -104,6 +110,7 @@ import { ImageDimension } from '../../../constants'
 import { loadPreview } from '../../../helpers/resource'
 import intersection from 'lodash-es/intersection'
 import upperFirst from 'lodash-es/upperFirst'
+import path from 'path'
 
 export default {
   name: 'FileDetails',
@@ -115,7 +122,8 @@ export default {
     loading: false,
     sharedWithUserDisplayName: '',
     sharedWithUserId: '',
-    sharedTime: 0
+    sharedTime: 0,
+    sharedParentDir: null
   }),
   computed: {
     ...mapGetters('Files', ['highlightedFile', 'versions', 'sharesTree', 'sharesTreeLoading']),
@@ -135,9 +143,23 @@ export default {
     shareDateLabel() {
       return this.$gettext('Shared on:')
     },
+    sharedViaLabel() {
+      return this.$gettext('Shared via:')
+    },
     shareDateTooltip() {
       const date = new Date(this.sharedTime * 1000)
-      return date.toLocaleDateString(this.$language.current) + ' ' + date.toLocaleTimeString(this.$language.current)
+      return (
+        date.toLocaleDateString(this.$language.current) +
+        ' ' +
+        date.toLocaleTimeString(this.$language.current)
+      )
+    },
+    sharedViaTooltip() {
+      return this.$gettextInterpolate(
+        this.$gettext("Navigate to '%{folder}'"),
+        { folder: this.sharedParentDir ? this.sharedParentDir : '' },
+        true
+      )
     },
     showShares() {
       return this.hasAnyShares && !this.isPublicPage
@@ -146,7 +168,7 @@ export default {
       return this.user.id === this.sharedWithUserId
     },
     displayShareDate() {
-      const date = this.formDateFromNow(new Date(this.sharedTime * 1000), 'JSDate');
+      const date = this.formDateFromNow(new Date(this.sharedTime * 1000), 'JSDate')
       return upperFirst(date)
     },
     detailSharingInformation() {
@@ -243,24 +265,28 @@ export default {
     highlightedFile() {
       this.loadData()
       this.refreshShareDetailsTree()
+      console.log('changed')
     },
     sharesTreeLoading(current, old) {
       if (current !== false || old !== true) return
-      const shareDetailsForFile = this.sharesTree[this.highlightedFile.path]
-      if (shareDetailsForFile === undefined || 
-          shareDetailsForFile[0] === undefined) return
-      this.sharedWithUserDisplayName = shareDetailsForFile[0].fileOwner.displayName
-      this.sharedWithUserId = shareDetailsForFile[0].fileOwner.name
-      this.sharedTime = shareDetailsForFile[0].stime
+      const sharePathParentOrCurrent = this.getParentSharePath(
+        this.highlightedFile.path,
+        this.sharesTree
+      )
+      if (sharePathParentOrCurrent === null) return
+      const shareItem = this.sharesTree[sharePathParentOrCurrent][0]
+      this.sharedWithUserDisplayName = shareItem.fileOwner.displayName
+      this.sharedWithUserId = shareItem.fileOwner.name
+      this.sharedTime = shareItem.stime
+      this.sharedParentDir = sharePathParentOrCurrent
     },
     hasAnyShares() {
       this.refreshShareDetailsTree()
     }
   },
-  async mounted() {
+  mounted() {
     this.loadData()
     this.refreshShareDetailsTree()
-    
   },
   asyncComputed: {
     preview: {
@@ -289,6 +315,15 @@ export default {
         path: this.highlightedFile.path,
         $gettext: this.$gettext
       })
+    },
+    getParentSharePath(childPath, shares) {
+      let currentPath = childPath
+      while (currentPath !== '/') {
+        const share = shares[currentPath]
+        if (share !== undefined && share[0] !== undefined) return currentPath
+        currentPath = path.dirname(currentPath)
+      }
+      return null
     },
     expandPeoplesAccordion() {
       this.SET_APP_SIDEBAR_ACTIVE_PANEL('sharing-item')
