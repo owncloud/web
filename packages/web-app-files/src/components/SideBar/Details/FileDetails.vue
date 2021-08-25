@@ -55,10 +55,15 @@
             <span v-text="sharedWithUserDisplayName" />
           </td>
         </tr>
-        <tr v-if="showShares && !sharesTreeLoading" data-testid="shared-on">
+        <tr
+          v-if="showShares && !sharesTreeLoading && highlightedFile.path !== sharedParentDir"
+          data-testid="shared-on"
+        >
           <th scope="col" class="oc-pr-s" v-text="sharedViaLabel"></th>
           <td>
-            <span v-oc-tooltip="sharedViaTooltip" v-text="sharedParentDir" />
+            <router-link :to="sharedParentRoute">
+              <span v-oc-tooltip="sharedViaTooltip" v-text="sharedParentDir" />
+            </router-link>
           </td>
         </tr>
         <tr v-if="showShares && !sharesTreeLoading" data-testid="shared-date">
@@ -157,9 +162,17 @@ export default {
     sharedViaTooltip() {
       return this.$gettextInterpolate(
         this.$gettext("Navigate to '%{folder}'"),
-        { folder: this.sharedParentDir ? this.sharedParentDir : '' },
+        { folder: this.sharedParentDir || '' },
         true
       )
+    },
+    sharedParentRoute() {
+      return {
+        name: 'files-personal',
+        params: {
+          item: this.sharedParentDir || '/'
+        }
+      }
     },
     showShares() {
       return this.hasAnyShares && !this.isPublicPage
@@ -265,7 +278,6 @@ export default {
     highlightedFile() {
       this.loadData()
       this.refreshShareDetailsTree()
-      console.log('changed')
     },
     sharesTreeLoading(current, old) {
       if (current !== false || old !== true) return
