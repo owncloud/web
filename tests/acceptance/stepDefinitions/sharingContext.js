@@ -1361,14 +1361,8 @@ Then(
 Then('the expiration date shown on the webUI should be {string} days', async function(
   expectedDays
 ) {
-  let expectedDate = sharingHelper.calculateDate(expectedDays)
-  expectedDate = new Date(Date.parse(expectedDate))
-  const expectedDateString =
-    expectedDate.toLocaleString('en-GB', { month: 'short' }) +
-    ' ' +
-    expectedDate.getDate().toString() +
-    ', ' +
-    expectedDate.getFullYear()
+  const expectedDate = sharingHelper.calculateDate(expectedDays)
+  const expectedDateString = sharingHelper.calculateDateString(expectedDate)
   const dateStringFromInputField = await client.page.FilesPageElement.sharingDialog().getExpirationDateFromInputField()
   assert.strictEqual(
     dateStringFromInputField,
