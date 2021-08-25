@@ -77,6 +77,31 @@ module.exports = {
     }
     return dateString
   },
+  /**
+   * Given the string that can be parsed into Date, returns the string that should be displayed in the UI input fields
+   * @param {string} date
+   * @returns {string}
+   */
+  calculateDateString: function(date) {
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
+    ]
+
+    const expectedDate = new Date(Date.parse(date))
+    const expectedMonth = months[expectedDate.getMonth()]
+    return `${expectedMonth} ${expectedDate.getDate().toString()}, ${expectedDate.getFullYear()}`
+  },
   assertUserHasNoShares: function(user) {
     const apiURL = 'apps/files_sharing/api/v1/shares?'
     return httpHelper
