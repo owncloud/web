@@ -44,26 +44,33 @@ const actions = {
 }
 
 const mutations = {
+  REGISTER_EXTENSION(state, extensionBundle) {
+    const { app, extension } = extensionBundle
+    const editor = {
+      app,
+      icon: extension.icon,
+      newTab: extension.newTab || false,
+      routeName: extension.routeName,
+      routes: extension.routes || [],
+      extension: extension.extension,
+      handler: extension.handler
+    }
+
+    state.fileEditors.push(editor)
+
+    if (extension.newFileMenu) {
+      extension.newFileMenu.ext = extension.extension
+      extension.newFileMenu.action = editor
+      state.newFileHandlers.push(extension.newFileMenu)
+    }
+  },
   REGISTER_APP(state, appInfo) {
     if (appInfo.extensions) {
-      appInfo.extensions.forEach(e => {
-        const editor = {
+      appInfo.extensions.forEach(extension => {
+        this.commit('REGISTER_EXTENSION', {
           app: appInfo.id,
-          icon: e.icon,
-          newTab: e.newTab || false,
-          routeName: e.routeName,
-          routes: e.routes || [],
-          extension: e.extension,
-          handler: e.handler
-        }
-
-        state.fileEditors.push(editor)
-
-        if (e.newFileMenu) {
-          e.newFileMenu.ext = e.extension
-          e.newFileMenu.action = editor
-          state.newFileHandlers.push(e.newFileMenu)
-        }
+          extension
+        })
       })
     }
     if (appInfo.fileSideBars) {

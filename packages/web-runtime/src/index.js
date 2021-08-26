@@ -55,6 +55,7 @@ import 'owncloud-design-system/dist/system/system.css'
 import Avatar from './components/Avatar.vue'
 
 import { registerClient } from './services/clientRegistration'
+import { Api } from './services/api'
 
 import { loadConfig } from './helpers/config'
 import { loadTheme } from './helpers/theme'
@@ -113,6 +114,7 @@ const supportedLanguages = {
 
 const translations = merge({}, coreTranslations, odsTranslations)
 const appRegistry = []
+const api = new Api(store)
 
 const loadApp = async path => {
   const app = await new Promise((resolve, reject) =>
@@ -228,7 +230,8 @@ const finalizeInit = async () => {
     mounted() {
       appRegistry.forEach(
         app =>
-          app.mounted && app.mounted({ store, router, runtime: this, portal: portal(this, app.id) })
+          app.mounted &&
+          app.mounted({ store, router, runtime: this, portal: portal(this, app.id), api })
       )
     }
   })
