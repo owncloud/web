@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SharedWithOthers when loading is set as false should show the no content message component if active files length is less than one 1`] = `<no-content-message-stub icon="group" id="files-shared-with-others-empty" class="files-empty"></no-content-message-stub>`;
