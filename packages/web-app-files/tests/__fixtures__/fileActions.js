@@ -86,26 +86,31 @@ exports.apps = {
 
 const basicActions = {
   download: {
+    label: 'Download',
     class: 'oc-files-actions-sidebar-download-trigger',
     selector: '.oc-files-actions-sidebar-download-trigger',
     handler: jest.fn()
   },
   copy: {
+    label: 'Copy',
     class: 'oc-files-actions-sidebar-copy-trigger',
     selector: '.oc-files-actions-sidebar-copy-trigger',
     handler: jest.fn()
   },
   rename: {
+    label: 'Rename',
     class: 'oc-files-actions-sidebar-rename-trigger',
     selector: '.oc-files-actions-sidebar-rename-trigger',
     handler: jest.fn()
   },
   move: {
+    label: 'Move',
     class: 'oc-files-actions-sidebar-move-trigger',
     selector: '.oc-files-actions-sidebar-move-trigger',
     handler: jest.fn()
   },
   delete: {
+    label: 'Delete',
     class: 'oc-files-actions-sidebar-delete-trigger',
     selector: '.oc-files-actions-sidebar-delete-trigger',
     handler: jest.fn()
@@ -114,21 +119,27 @@ const basicActions = {
 
 const extraActions = {
   'markdown-editor': {
+    label: 'Open in Markdown Editor',
     class: 'oc-files-actions-sidebar-markdown-editor-trigger',
     selector: '.oc-files-actions-sidebar-markdown-editor-trigger',
-    handler: jest.fn()
+    handler: jest.fn(),
+    opensInNewWindow: true
   },
   'draw-io': {
+    label: 'Open in DrawIO',
     class: 'oc-files-actions-sidebar-draw-io-trigger',
     selector: '.oc-files-actions-sidebar-draw-io-trigger',
-    handler: jest.fn()
+    handler: jest.fn(),
+    opensInNewWindow: true
   },
   mediaviewer: {
+    label: 'Open in MediaViewer',
     class: 'oc-files-actions-sidebar-mediaviewer-trigger',
     selector: '.oc-files-actions-sidebar-mediaviewer-trigger',
     handler: jest.fn()
   },
   'open-folder': {
+    label: 'Open Folder',
     class: 'oc-files-actions-sidebar-navigate-trigger',
     selector: '.oc-files-actions-sidebar-navigate-trigger',
     handler: jest.fn()
@@ -138,7 +149,7 @@ const extraActions = {
 exports.basicActions = basicActions
 exports.extraActions = extraActions
 
-exports.getActions = function(extractions = []) {
+exports.getActions = function(extraActionKeys = []) {
   const actions = []
   for (const key in basicActions) {
     const action = basicActions[key]
@@ -147,25 +158,27 @@ exports.getActions = function(extractions = []) {
       icon: key,
       handler: action.handler,
       isEnabled: () => true,
-      label: () => key,
+      label: () => action.label,
       componentType: 'oc-button',
-      class: action.class
+      class: action.class,
+      opensInNewWindow: action.opensInNewWindow || false
     }
     if (key === 'download') {
       actionObj.canBeDefault = true
     }
     actions.push(actionObj)
   }
-  for (const key of extractions) {
+  for (const key of extraActionKeys) {
     const action = extraActions[key]
     actions.push({
       icon: key,
       handler: action.handler,
       isEnabled: () => true,
-      label: () => key,
+      label: () => action.label,
       componentType: 'oc-button',
       class: action.class,
-      canBeDefault: true
+      canBeDefault: true,
+      opensInNewWindow: action.opensInNewWindow || false
     })
   }
   return actions
