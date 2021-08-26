@@ -9,6 +9,7 @@ Summary
 -------
 
 * Enhancement - Add missing tooltips: [#5723](https://github.com/owncloud/web/issues/5723)
+* Enhancement - Switch filesize calculation base: [#5739](https://github.com/owncloud/web/pull/5739)
 
 Details
 -------
@@ -19,6 +20,13 @@ Details
 
    https://github.com/owncloud/web/issues/5723
    https://github.com/owncloud/web/pull/5724
+
+* Enhancement - Switch filesize calculation base: [#5739](https://github.com/owncloud/web/pull/5739)
+
+   We've switched from base-2 to base-10 when calculating the displayed file-size to align it
+   better with user expectations.
+
+   https://github.com/owncloud/web/pull/5739
 
 Changelog for ownCloud Web [4.1.0] (2021-08-20)
 =======================================
