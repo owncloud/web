@@ -25,18 +25,18 @@ describe('resources', () => {
     it.each([
       { size: '0', expectedSize: '0 B' },
       { size: '1', expectedSize: '1 B' },
-      { size: '1024', expectedSize: '1 KB' },
+      { size: '1024', expectedSize: '1 kB' },
       { size: '1048576', expectedSize: '1 MB' }
     ])('should return formatted size of given resource', sizeInput => {
       expect(wrapper.vm.getResourceSize(sizeInput.size)).toEqual(sizeInput.expectedSize)
     })
 
     it('should not show round value for size less than a MB', () => {
-      expect(wrapper.vm.getResourceSize('4321')).toEqual('4 KB')
+      expect(wrapper.vm.getResourceSize('4321')).toEqual('4 kB')
     })
 
     it('should show single round value for size larger than a MB', () => {
-      expect(wrapper.vm.getResourceSize('4321000')).toEqual('4.1 MB')
+      expect(wrapper.vm.getResourceSize('4321000')).toEqual('4.3 MB')
     })
   })
 })

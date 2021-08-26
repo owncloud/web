@@ -6,7 +6,7 @@
   "devDependencies": {
     "@vue/test-utils": "^1.1.2",
     "easygettext": "^2.16.1",
-    "filesize": "^6.4.0",
+    "filesize": "^8.0.0",
     "focus-trap": "^6.4.0",
     "focus-trap-vue": "^1.1.1",
     "fuse.js": "^6.4.6",
