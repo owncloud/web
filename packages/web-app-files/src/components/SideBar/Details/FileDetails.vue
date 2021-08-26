@@ -49,16 +49,13 @@
             <span v-else v-text="capitalizedTimestamp" />
           </td>
         </tr>
-        <tr v-if="showShares && !isUserOwner && !sharesTreeLoading" data-testid="shared-by">
+        <tr v-if="showSharedBy" data-testid="shared-by">
           <th scope="col" class="oc-pr-s" v-text="sharedByLabel" />
           <td>
             <span v-text="sharedWithUserDisplayName" />
           </td>
         </tr>
-        <tr
-          v-if="showShares && !sharesTreeLoading && highlightedFile.path !== sharedParentDir"
-          data-testid="shared-on"
-        >
+        <tr v-if="showSharedOn" data-testid="shared-on">
           <th scope="col" class="oc-pr-s" v-text="sharedViaLabel"></th>
           <td>
             <router-link :to="sharedParentRoute">
@@ -66,7 +63,7 @@
             </router-link>
           </td>
         </tr>
-        <tr v-if="showShares && !sharesTreeLoading" data-testid="shared-date">
+        <tr v-if="showShareDate" data-testid="shared-date">
           <th scope="col" class="oc-pr-s" v-text="shareDateLabel" />
           <td>
             <span v-oc-tooltip="shareDateTooltip" v-text="displayShareDate" />
@@ -171,6 +168,19 @@ export default {
           item: this.sharedParentDir || '/'
         }
       }
+    },
+    showSharedBy() {
+      return this.showShares && !this.isUserOwner && !this.sharesTreeLoading
+    },
+    showSharedOn() {
+      return (
+        this.showShares &&
+        !this.sharesTreeLoading &&
+        this.highlightedFile.path !== this.sharedParentDir
+      )
+    },
+    showShareDate() {
+      return this.showShares && !this.sharesTreeLoading
     },
     showShares() {
       return this.hasAnyShares && !this.isPublicPage
