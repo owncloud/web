@@ -9,20 +9,12 @@ const appInfo = {
 }
 
 const injectExtensions = async api => {
-  // the promise is just there to deomo lazy loading of extensions
+  // the promise is just there to showcase lazy loading of extensions
   await new Promise(resolve => setTimeout(resolve, 2000))
-  console.log('#############################################################################')
-  console.log('# FROM THE APP (SKELETON)')
-  console.log('# a maybe long running task like wopi started')
-  console.log('#############################################################################')
-  await new Promise(resolve => setTimeout(resolve, 10000))
-  console.log('#############################################################################')
-  console.log('# FROM THE APP (SKELETON)')
-  console.log('# the server answered and we have all information to register a extension')
-  console.log('#############################################################################')
 
-  api.registerExtension(appInfo.id, {
+  api.announceExtension({
     extension: 'txt',
+    isFileEditor: true,
     newFileMenu: {
       menuTitle($gettext) {
         return $gettext('Extension from skeleton')
@@ -36,10 +28,6 @@ const injectExtensions = async api => {
       'files-public-list'
     ]
   })
-  console.log('#############################################################################')
-  console.log('# FROM THE APP (SKELETON)')
-  console.log('# new extension is now registered, ...')
-  console.log('#############################################################################')
 }
 
 export default {
@@ -62,7 +50,7 @@ export default {
       }
     }
   ],
-  async mounted({ api }) {
+  async mounted(api) {
     await injectExtensions(api)
   }
 }

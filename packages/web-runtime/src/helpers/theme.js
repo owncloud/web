@@ -1,10 +1,13 @@
+import { isEqual } from 'lodash-es'
 import defaultTheme from 'web-runtime/themes/owncloud/theme.json'
 
 export const loadTheme = async (location = '') => {
   const defaults = { theme: defaultTheme }
 
   if (location.split('.').pop() !== 'json') {
-    console.error(`Theme '${location}' does not specify a json file, using default theme.`)
+    if (isEqual(process.env.NODE_ENV, 'development')) {
+      console.info(`Theme '${location}' does not specify a json file, using default theme.`)
+    }
     return defaults
   }
 
