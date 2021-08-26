@@ -1,7 +1,7 @@
 import Vuex from 'vuex'
 import GetTextPlugin from 'vue-gettext'
 import DesignSystem from 'owncloud-design-system'
-import Pagination from '../../../../src/components/FilesList/Pagination.vue'
+import Pagination from '@files/src/components/FilesList/Pagination.vue'
 import { createLocalVue, mount, RouterLinkStub, shallowMount } from '@vue/test-utils'
 
 const localVue = createLocalVue()
@@ -11,6 +11,12 @@ localVue.use(GetTextPlugin, {
   translations: 'does-not-matter.json',
   silent: true
 })
+
+const filesPersonalRoute = { name: 'files-personal', path: '/files/home' }
+
+const selectors = {
+  filesPagination: '.files-pagination'
+}
 
 describe('Pagination', () => {
   describe('pages', () => {
@@ -54,55 +60,49 @@ describe('Pagination', () => {
       expect(links.at(2).props().to.name).toBe(currentRoute.name)
     })
   })
+})
 
-  const filesPersonalRoute = { name: 'files-personal', path: '/files/home' }
-
-  const selectors = {
-    filesPagination: '.files-pagination'
-  }
-
-  function createStore(currentPage = 1, pages = 10) {
-    return new Vuex.Store({
-      modules: {
-        Files: {
-          namespaced: true,
-          state: {
-            currentPage: currentPage
-          },
-          getters: {
-            pages: () => {
-              return pages
-            }
+function createStore(currentPage = 1, pages = 10) {
+  return new Vuex.Store({
+    modules: {
+      Files: {
+        namespaced: true,
+        state: {
+          currentPage: currentPage
+        },
+        getters: {
+          pages: () => {
+            return pages
           }
         }
       }
-    })
-  }
+    }
+  })
+}
 
-  function getWrapper(store) {
-    return shallowMount(Pagination, {
-      localVue,
-      store: store,
-      stubs: {
-        'oc-pagination': true
-      },
-      mocks: {
-        $route: filesPersonalRoute
-      }
-    })
-  }
+function getWrapper(store) {
+  return shallowMount(Pagination, {
+    localVue,
+    store: store,
+    stubs: {
+      'oc-pagination': true
+    },
+    mocks: {
+      $route: filesPersonalRoute
+    }
+  })
+}
 
-  function getMountedWrapper(store) {
-    return mount(Pagination, {
-      localVue,
-      store: store,
-      stubs: {
-        'oc-pagination': false,
-        RouterLink: RouterLinkStub
-      },
-      mocks: {
-        $route: filesPersonalRoute
-      }
-    })
-  }
-})
+function getMountedWrapper(store) {
+  return mount(Pagination, {
+    localVue,
+    store: store,
+    stubs: {
+      'oc-pagination': false,
+      RouterLink: RouterLinkStub
+    },
+    mocks: {
+      $route: filesPersonalRoute
+    }
+  })
+}
