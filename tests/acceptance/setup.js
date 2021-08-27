@@ -1,8 +1,14 @@
-import { setDefaultTimeout, After, Before, defineParameterType } from '@cucumber/cucumber'
-import { createSession, closeSession, client, startWebDriver, stopWebDriver } from 'nightwatch-api'
-import { rollbackConfigs, cacheConfigs } from './helpers/config'
-import { getAllLogsWithDateTime } from './helpers/browserConsole.js'
-import { runOcc } from './helpers/occHelper'
+const { setDefaultTimeout, After, Before, defineParameterType } = require('@cucumber/cucumber')
+const {
+  createSession,
+  closeSession,
+  client,
+  startWebDriver,
+  stopWebDriver
+} = require('nightwatch-api')
+const { rollbackConfigs, cacheConfigs } = require('./helpers/config')
+const { getAllLogsWithDateTime } = require('./helpers/browserConsole.js')
+const { runOcc } = require('./helpers/occHelper')
 
 const codify = require('./helpers/codify')
 

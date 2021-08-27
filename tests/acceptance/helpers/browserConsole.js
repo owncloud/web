@@ -1,4 +1,4 @@
-import { client } from 'nightwatch-api'
+const { client } = require('nightwatch-api')
 
 function cleanupLogMessage(message) {
   return message.replace(/\\u003C/gi, '').replace(/\\n/g, '\n') // revive newlines
@@ -22,7 +22,7 @@ async function getAllLogs() {
   return logs
 }
 
-export async function getAllLogsWithDateTime(level = null) {
+exports.getAllLogsWithDateTime = async function (level = null) {
   let logs = await getAllLogs()
   if (level) {
     logs = logs.filter((entry) => entry.level === level)

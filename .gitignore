@@ -50,6 +50,13 @@ tests/testing-app
 !.yarn/versions
 .pnp.*
 
+tests/acceptance/.yarn/*
+!tests/acceptance/.yarn/patches
+!tests/acceptance/.yarn/releases
+!tests/acceptance/.yarn/plugins
+!tests/acceptance/.yarn/sdks
+!tests/acceptance/.yarn/versions
+
 # visual regression testing artifacts
 /tests/vrt/diff
 /tests/vrt/latest
@@ -69,3 +76,5 @@ comments.file
 tests/report/cucumber_report.json
 tests/report/cucumber_report.html
 .vscode/settings.json
+tests/acceptance/report/cucumber_report.json
+tests/acceptance/report/cucumber_report.html
