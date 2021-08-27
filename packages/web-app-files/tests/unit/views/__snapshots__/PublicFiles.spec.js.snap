@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PublicFiles no content message component call to action should show call to action if current folder has truthy "canCreate" value 1`] = `
+<span data-testid="public-files-call-to-action" data-msgid="
+          Drag files and folders here or use the &quot;+ New&quot; button to upload
+        " data-current-language="en_US">
+          Drag files and folders here or use the "+ New" button to upload
+        </span>
+`;
+
+exports[`PublicFiles no content message component should be visible if active files length is less than one 1`] = `
+<div class="uk-height-1-1 uk-flex uk-flex-column uk-flex-center uk-flex-middle uk-text-center files-empty" id="files-public-list-empty">
+  <div class="oc-icon oc-icon-xxl oc-icon-passive">
+    <!---->
+  </div>
+  <div class="oc-text-muted uk-text-large"><span data-msgid="There are no resources in this folder" data-current-language="en_US">There are no resources in this folder</span></div>
+  <div class="oc-text-muted"></div>
+</div>
+`;
