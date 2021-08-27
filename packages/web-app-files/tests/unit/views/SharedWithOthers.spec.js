@@ -130,7 +130,6 @@ describe('SharedWithOthers', () => {
           '$_mountSideBar_showDefaultPanel'
         )
         const wrapper = getMountedWrapper({ store, loading: false })
-        console.log(wrapper.html())
         const filesTable = wrapper.find(filesTableStub)
         expect(spyMountSideBarShowDefaultPanel).toHaveBeenCalledTimes(0)
 
