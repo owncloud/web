@@ -63,6 +63,9 @@
         </transition-group>
       </template>
     </div>
+    <div>
+      <oc-avatar-group :users="collaborators_avatar" accessible-description="This resource is shared with many users." :stacked="true" :isTooltipDisplayed="true" class="oc-mb" />
+    </div>
     <new-collaborator
       v-if="$_ocCollaborators_canShare && currentView === VIEW_NEW"
       key="new-collaborator"
@@ -175,6 +178,11 @@ export default {
         shareType: shareTypes.user,
         role
       }
+    },
+    collaborators_avatar() {
+      const result = []
+      this.collaborators.forEach(c => result.push(c.collaborator))
+      return result
     },
 
     $_ownerAsCollaborator() {
