@@ -55,7 +55,7 @@
             <span v-text="sharedWithUserDisplayName" />
           </td>
         </tr>
-        <tr v-if="showSharedOn" data-testid="shared-on">
+        <tr v-if="showSharedVia" data-testid="shared-via">
           <th scope="col" class="oc-pr-s" v-text="sharedViaLabel"></th>
           <td>
             <router-link :to="sharedParentRoute">
@@ -172,7 +172,7 @@ export default {
     showSharedBy() {
       return this.showShares && !this.isUserOwner && !this.sharesTreeLoading
     },
-    showSharedOn() {
+    showSharedVia() {
       return (
         this.showShares &&
         !this.sharesTreeLoading &&
