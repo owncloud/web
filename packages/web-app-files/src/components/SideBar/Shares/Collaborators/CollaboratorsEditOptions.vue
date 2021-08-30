@@ -45,7 +45,7 @@
       />
     </template>
     <hr />
-    <div v-if="expirationSupported" class="oc-mt-m">
+    <div v-if="false" class="oc-mt-m">
       <div class="uk-position-relative">
         <oc-datepicker
           id="files-collaborators-collaborator-expiration-input"
@@ -65,6 +65,7 @@
           @click="resetExpirationDate"
         />
       </div>
+      <hr />
     </div>
   </div>
 </template>
