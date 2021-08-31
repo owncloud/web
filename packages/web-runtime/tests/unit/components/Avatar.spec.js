@@ -31,13 +31,13 @@ describe('Avatar component', () => {
 
   const spySetUser = jest.spyOn(Avatar.methods, 'setUser')
 
-  it('should call "setUser" method on mount', () => {
+  it('should set user when the component is mounted', () => {
     getShallowWrapper()
     expect(spySetUser).toHaveBeenCalledTimes(1)
     expect(spySetUser).toHaveBeenCalledWith(propsData.userid)
   })
 
-  describe('when loading is set as true', () => {
+  describe('when the component is still loading', () => {
     it('should render oc-spinner but not oc-avatar', () => {
       const wrapper = getShallowWrapper(true)
       const spinner = wrapper.find(ocSpinner)
@@ -51,7 +51,7 @@ describe('Avatar component', () => {
     })
   })
 
-  describe('when loading is set as false', () => {
+  describe('when the component is not loading anymore', () => {
     let wrapper
     beforeEach(() => {
       wrapper = getShallowWrapper()
@@ -71,7 +71,7 @@ describe('Avatar component', () => {
       expect(avatar.props().userName).toEqual(propsData.userName)
     })
 
-    describe('when avatar is not found', () => {
+    describe('when an avatar is not found', () => {
       it('should set empty string to src prop on oc-avatar component', async () => {
         await new Promise(resolve => {
           setTimeout(() => {
@@ -83,7 +83,7 @@ describe('Avatar component', () => {
       })
     })
 
-    describe('when avatar is found', () => {
+    describe('when an avatar is found', () => {
       const blob = 'blob:https://web.org/6fe8f675-6727'
       beforeEach(() => {
         global.URL.createObjectURL = jest.fn(() => blob)
