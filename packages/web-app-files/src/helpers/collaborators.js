@@ -44,6 +44,11 @@ export function roleToBitmask(role, additionalPermissions = []) {
  * @returns {object} Role mapped to the bitmask
  */
 export function bitmaskToRole(bitmask, isFolder, allowSharePerm) {
+  if (!['number', 'string'].includes(typeof bitmask))
+    throw new Error(
+      'TypeError: bitmask is expected to be a number or stringified number but was found: ' +
+        typeof bitmask
+    )
   // TODO: inject the result of "roles()" in the function header and have the caller of bitmaskToRole call roles() with appropriate arguments including translation
   // Not passing in translation as we don't need it
   const currentRoles = roles({ isFolder: isFolder, allowSharePerm })
@@ -85,6 +90,7 @@ export function bitmaskToRole(bitmask, isFolder, allowSharePerm) {
  * @returns {boolean} Whether the permission has been found
  */
 export function checkPermission(bitmask, permission) {
+  if (!['string', 'number'].includes(typeof bitmask)) return false
   const permBit = permissionsBitmask[permission]
 
   return (bitmask & permBit) === permBit

@@ -217,18 +217,27 @@ describe('collaborators', () => {
         })
       }
     )
+    it.each(['17', 17.2, '17.8'])('should parse provided bitmask to integer', bitmask => {
+      expect(bitmaskToRole(bitmask, false, true)).toMatchObject({
+        name: 'viewer'
+      })
+    })
     it.each([0, 100, -5])('should return advanced role for invalid bitmask values', bitmask => {
       expect(bitmaskToRole(bitmask, false, true)).toMatchObject({
         name: 'advancedRole'
       })
     })
-    it.each(['17', true, {}])('should throw error if bitmask is not a number', bitmask => {
-      expect(() => {
-        bitmaskToRole(bitmask, false, true)
-      }).toThrowError(
-        'TypeError: bitmask is expected to be a number but was found: ' + typeof bitmask
-      )
-    })
+    it.each([true, {}, [17]])(
+      'should throw error if bitmask is not a number or a stringified number',
+      bitmask => {
+        expect(() => {
+          bitmaskToRole(bitmask, false, true)
+        }).toThrowError(
+          'TypeError: bitmask is expected to be a number or stringified number but was found: ' +
+            typeof bitmask
+        )
+      }
+    )
   })
 
   describe('check permission', () => {
