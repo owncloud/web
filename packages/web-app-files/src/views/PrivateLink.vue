@@ -1,24 +1,19 @@
 <template>
   <div
     class="oc-login"
-    data-testid="files-private-link-bg"
     uk-height-viewport
     :style="{ backgroundImage: 'url(' + backgroundImg + ')' }"
   >
-    <h1 class="oc-invisible-sr" data-testid="files-private-link-page-title">{{ pageTitle }}</h1>
+    <h1 class="oc-invisible-sr">{{ pageTitle }}</h1>
     <div class="oc-login-card uk-position-center">
       <img class="oc-login-logo" :src="logoImg" alt="" :aria-hidden="true" />
-      <div v-if="loading" class="oc-login-card-body" data-testid="files-private-link-loader">
+      <div v-if="loading" class="oc-login-card-body">
         <h2 class="oc-login-card-title">
           <translate>Resolving private link…</translate>
         </h2>
         <oc-spinner :aria-hidden="true" />
       </div>
-      <div
-        v-if="errorMessage"
-        class="oc-login-card-body"
-        data-testid="files-private-link-error-msg"
-      >
+      <div v-if="errorMessage" class="oc-login-card-body">
         <h2 class="oc-login-card-title">
           <translate>An error occurred while resolving the private link</translate>
         </h2>
