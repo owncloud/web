@@ -33,8 +33,8 @@ Feature: Shares collaborator list
       | initial-permissions | set-role             | expected-role | expected-permissions            |
       | read,update,create  | Viewer               | Viewer        | read,share                      |
       | read                | Editor               | Editor        | read,update,create,delete,share |
-      | read,share          | Advanced permissions | Viewer        | read,share                      |
-      | all                 | Advanced permissions | Editor        | all                             |
+      | read,share          | Custom permissions | Viewer        | read,share                      |
+      | all                 | Custom permissions | Editor        | all                             |
 
   @issue-2898
   Scenario: see resource owner in collaborators list for direct shares

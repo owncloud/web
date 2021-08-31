@@ -192,7 +192,7 @@ Feature: Shares in share-with pages
     And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
     When user "Brian" logs in using the webUI
     And the user opens folder "Shares" using the webUI
-    Then user "Brian Murphy" should be listed as "Advanced permissions" in the collaborators list for folder "simple-folder (2)" on the webUI
+    Then user "Brian Murphy" should be listed as "Custom permissions" in the collaborators list for folder "simple-folder (2)" on the webUI
 
 
   Scenario: share a file with another internal user via collaborators quick action

@@ -383,7 +383,7 @@ module.exports = {
      * @returns {Promise}
      */
     changeCollaboratorRoleInDropdown: function(newRole) {
-      newRole = newRole === 'Advanced permissions' ? 'advancedRole' : newRole
+      newRole = newRole === 'Custom permissions' ? 'advancedRole' : newRole
       newRole = stringHelper.camelize(newRole)
 
       const newRoleButton = util.format(this.elements.roleButtonInDropdown.selector, newRole)
@@ -670,7 +670,7 @@ module.exports = {
     newCollaboratorRemoveButton: {
       selector: "//button[contains(@class, 'files-share-invite-recipient-btn-remove')]"
     },
-    newCollaboratorRoleAdvancedPermissions: {
+    newCollaboratorRoleCustomPermissions: {
       selector: '#files-role-advancedRole'
     },
     selectRoleButtonInCollaboratorInformation: {

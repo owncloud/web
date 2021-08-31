@@ -59,7 +59,7 @@ Feature: Sharing files with multiple internal users with different permissions
       | role                 | displayed-role       | extra-permissions | displayed-permissions | actual-permissions  |
       | Viewer               | Viewer               | ,                 | ,                     | read, share         |
       | Editor               | Editor               | ,                 | ,                     | read, update, share |
-      | Advanced permissions | Advanced permissions | ,                 | ,                     | read                |
-      | Advanced permissions | Viewer               | share             | ,                     | read, share         |
-      | Advanced permissions | Advanced permissions | update            | update                | read, update        |
-      | Advanced permissions | Editor               | share, update     | ,                     | read, update, share |
+      | Custom permissions | Custom permissions | ,                 | ,                     | read                |
+      | Custom permissions | Viewer               | share             | ,                     | read, share         |
+      | Custom permissions | Custom permissions | update            | update                | read, update        |
+      | Custom permissions | Editor               | share, update     | ,                     | read, update, share |
