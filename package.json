@@ -77,6 +77,7 @@
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-vue": "^7.13.0",
     "eslint-plugin-vuejs-accessibility": "^0.7.1",
+    "flush-promises": "^1.0.2",
     "focus-trap": "^6.4.0",
     "focus-trap-vue": "^1.1.1",
     "jest": "^26.6.3",

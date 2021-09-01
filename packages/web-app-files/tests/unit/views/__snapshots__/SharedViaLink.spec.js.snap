@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SharedViaLink view when the view is not loading anymore when there are no files to be displayed should show no-content-message component 1`] = `
+<div>
+  <div class="uk-height-1-1 uk-flex uk-flex-column uk-flex-center uk-flex-middle uk-text-center files-empty" id="files-shared-via-link-empty">
+    <div class="oc-icon oc-icon-xxl oc-icon-passive"><svg viewBox="0 0 24 24" height="24" width="24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+        <path xmlns="http://www.w3.org/2000/svg" d="M0 0h24v24H0z" fill="none"></path>
+        <path xmlns="http://www.w3.org/2000/svg" d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"></path>
+      </svg></div>
+    <div class="oc-text-muted uk-text-large"><span data-msgid="There are no resources with a public link at the moment" data-current-language="en_US">There are no resources with a public link at the moment</span></div>
+    <div class="oc-text-muted"></div>
+  </div>
+</div>
+`;
+
+exports[`SharedViaLink view when the view is still loading should show list-loader component 1`] = `
+<div>
+  <list-loader-stub></list-loader-stub>
+</div>
+`;
