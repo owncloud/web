@@ -15,11 +15,12 @@
       >
       <oc-icon name="expand_more" />
     </oc-button>
-    <oc-drop toggle="#files-collaborators-role-button" mode="click" close-on-click>
+    <oc-drop ref="rolesDrop" toggle="#files-collaborators-role-button" mode="click" close-on-click>
       <template #special>
         <oc-list class="files-recipient-role-drop-list" :aria-label="rolesListAriaLabel">
           <li v-for="role in roles" :key="role.name">
             <oc-button
+              ref="roleSelect"
               appearance="raw"
               justify-content="space-between"
               class="files-recipient-role-drop-btn oc-py-xs oc-px-s"
@@ -73,6 +74,8 @@
 <script>
 import { mapGetters } from 'vuex'
 import { DateTime } from 'luxon'
+import get from 'lodash-es/get'
+
 import collaboratorsMixins from '../../../../mixins/collaborators'
 
 import RoleItem from '../../Shared/RoleItem.vue'
@@ -273,6 +276,10 @@ export default {
     }
   },
 
+  beforeDestroy() {
+    window.removeEventListener('keydown', this.cycleRoles)
+  },
+
   mounted() {
     if (this.expirationSupported) {
       if (this.editingUser || this.editingGroup) {
@@ -286,6 +293,8 @@ export default {
         this.enteredExpirationDate = this.defaultExpirationDate
       }
     }
+
+    window.addEventListener('keydown', this.cycleRoles)
   },
 
   methods: {
@@ -324,6 +333,65 @@ export default {
 
     isAdvancedRole(role) {
       return role.name === 'advancedRole'
+    },
+
+    cycleRoles(event) {
+      // events only need to be captured if the roleSelect element is visible
+      if (!get(this.$refs.rolesDrop, 'tippy.state.isShown', false)) {
+        return
+      }
+
+      const { keyCode } = event
+      const isKeyUpEvent = keyCode === 38
+      const isKeyDownEvent = keyCode === 40
+
+      // to cycle through the list of roles only up and down keyboard events are allowed
+      // if this is not the case we can return early and stop the script execution from here
+      if (!isKeyUpEvent && !isKeyDownEvent) {
+        return
+      }
+
+      // if there is only 1 or no roleSelect we can early return
+      // it does not make sense to cycle through it if value is less than 1
+      const roleSelect = this.$refs.roleSelect || []
+
+      if (roleSelect.length <= 1) {
+        return
+      }
+
+      // obtain active role select in following priority chain:
+      // first try to get the focused select
+      // then try to get the selected select
+      // and if none of those applies we fall back to the first role select
+      const activeRoleSelect =
+        roleSelect.find(rs => rs.$el === document.activeElement) ||
+        roleSelect.find(rs => rs.$el.classList.contains('selected')) ||
+        roleSelect[0]
+      const activeRoleSelectIndex = roleSelect.indexOf(activeRoleSelect)
+      const activateRoleSelect = idx => roleSelect[idx].$el.focus()
+
+      // if the event key is arrow up
+      // and the next active role select index would be less than 0
+      // then activate the last available role select
+      if (isKeyUpEvent && activeRoleSelectIndex - 1 < 0) {
+        activateRoleSelect(roleSelect.length - 1)
+
+        return
+      }
+
+      // if the event key is arrow down
+      // and the next active role select index would be greater or even to the available amount of role selects
+      // then activate the first available role select
+      if (isKeyDownEvent && activeRoleSelectIndex + 1 >= roleSelect.length) {
+        activateRoleSelect(0)
+
+        return
+      }
+
+      // the only missing part is to navigate up or down, this only happens if:
+      // the next active role index is greater than 0
+      // the next active role index is less than the amount of all available role selects
+      activateRoleSelect(activeRoleSelectIndex + (isKeyUpEvent ? -1 : 1))
     }
   }
 }
