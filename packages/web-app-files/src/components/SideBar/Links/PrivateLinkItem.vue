@@ -30,9 +30,7 @@ export default {
       const file = this.displayedItem.value
 
       if (file.isMounted()) {
-        const file = encodeURIComponent(this.file.name)
-
-        return window.location.href.split('?')[0] + `?scrollTo=${file}`
+        return window.location.href.split('?')[0] + `?scrollTo=${encodeURIComponent(file.name)}`
       }
 
       return file.privateLink

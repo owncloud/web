@@ -43,7 +43,8 @@ const defaultLinksList = [
 const selectors = {
   linkAddButton: '#files-file-link-add',
   noResharePermissions: '[data-testid="files-links-no-reshare-permissions-message"]',
-  linkNoResults: '#oc-file-links-no-results'
+  linkNoResults: '#oc-file-links-no-results',
+  linkPrivate: '.oc-files-private-link-item'
 }
 
 const listItemStubSelector = 'list-item-stub'
@@ -158,6 +159,16 @@ describe('FileLinks', () => {
         const wrapper = getShallowWrapper(store)
 
         expect(wrapper.find(selectors.noResharePermissions).exists()).toBeTruthy()
+      })
+    })
+
+    describe('when the private link functionality is disabled', () => {
+      it('private link should not be visible', () => {
+        const store = createStore()
+        store.getters.capabilities.files.privateLinks = false
+        const wrapper = getShallowWrapper(store)
+
+        expect(wrapper.find(selectors.linkPrivate).exists()).toBeFalsy()
       })
     })
   })
