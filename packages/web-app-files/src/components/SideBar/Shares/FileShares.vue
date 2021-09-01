@@ -24,22 +24,16 @@
           data-testid="files-collaborators-no-reshare-permissions-message"
           v-text="noResharePermsMessage"
         />
-        <div @click="sharedWithClick" :aria-label="sharedWithTooltip">
-          <table class="avatar-sharees-table">
-            <tr data-testid="filesCount">
-              <th scope="col" class="oc-pr-s" v-text="sharedWithLabel" />
-              <td>
-                <oc-avatars
-                  v-oc-tooltip="sharedWithTooltip"
-                  :items="collaborators_avatar"
-                  accessible-description="This resource is shared with many users."
-                  :stacked="true"
-                  :is-tooltip-displayed="false"
-                  class="oc-mb"
-                />
-              </td>
-            </tr>
-          </table>
+        <div class="avatars-wrapper" @click="sharedWithClick" :aria-label="sharedWithTooltip">
+          <h2 class="shared-with-label" v-text="sharedWithLabel" />
+          <oc-avatars
+            v-oc-tooltip="sharedWithTooltip"
+            :items="collaborators_avatar"
+            accessible-description="This resource is shared with many users."
+            :stacked="true"
+            :is-tooltip-displayed="false"
+            class="oc-mb debug-avatar"
+          />
         </div>
         <template v-if="showShareesList">
           <template v-if="$_ownerAsCollaborator">
@@ -451,6 +445,20 @@ export default {
 </script>
 
 <style>
+.avatars-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+  align-items: center;
+  width: 100%;
+}
+.shared-with-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.debug-avatar {
+  justify-self: flex-end;
+}
 .avatar-sharees-table {
   width: 100%;
   text-align: left;
