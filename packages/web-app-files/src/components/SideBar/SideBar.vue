@@ -89,7 +89,6 @@
 <script>
 import { mapGetters, mapMutations, mapState, mapActions } from 'vuex'
 import { VisibilityObserver } from 'web-pkg/src/observer'
-import { bus } from 'web-pkg/src/instance'
 import { DavProperties } from 'web-pkg/src/constants'
 
 import MixinRoutes from '../../mixins/routes'
