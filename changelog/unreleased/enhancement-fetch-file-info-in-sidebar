@@ -1,0 +1,7 @@
+Enhancement: fetch file info in the Files sidebar
+
+We've started fetching the file info when a single item is selected and the Files sidebar is opened.
+With this change we have more information available in different lists e.g. private link in shared lists.
+
+https://github.com/owncloud/web/issues/5570
+https://github.com/owncloud/web/pull/5665
