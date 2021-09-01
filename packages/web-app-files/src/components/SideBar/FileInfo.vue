@@ -77,6 +77,8 @@ export default {
       this.markFavorite({
         client: this.$client,
         file: file
+      }).then(() => {
+        this.$set(this.file, 'starred', !this.file.starred)
       })
     }
   }
