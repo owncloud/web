@@ -131,7 +131,11 @@ describe('PublicFiles', () => {
 
   describe('when length of active files is greater than zero', () => {
     const activeFiles = [createFile({ id: '1234' }), createFile({ id: '5896' })]
-    const store = createStore({ activeFiles: activeFiles, currentFolder: createFolder() })
+    const store = createStore({
+      activeFiles: activeFiles,
+      currentFolder: createFolder(),
+      totalFilesCount: { files: 1, folders: 1 }
+    })
     const wrapper = getMountedWrapper({ store, loading: false })
 
     it('should load files table with correct props', () => {
@@ -204,7 +208,8 @@ describe('PublicFiles', () => {
           currentFolder: createFolder(),
           activeFiles: activeFiles,
           pages: 2,
-          currentPage: 1
+          currentPage: 1,
+          totalFilesCount: { files: 1, folders: 1 }
         })
         const wrapper = getMountedWrapper({ store, loading: false })
         await wrapper.vm.$nextTick()
@@ -223,7 +228,8 @@ describe('PublicFiles', () => {
           currentFolder: createFolder(),
           activeFiles: activeFiles,
           pages: 1,
-          currentPage: 1
+          currentPage: 1,
+          totalFilesCount: { files: 1, folders: 1 }
         })
         const wrapper = getMountedWrapper({ store, loading: false })
         await wrapper.vm.$nextTick()

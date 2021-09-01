@@ -34,7 +34,10 @@ describe('SharedWithOthers', () => {
     })
     describe('when length of active files is greater than zero', () => {
       const activeFiles = [createFile({ id: '1234' }), createFile({ id: '5896' })]
-      const store = createStore({ activeFiles: activeFiles })
+      const store = createStore({
+        activeFiles: activeFiles,
+        totalFilesCount: { files: 1, folders: 1 }
+      })
       const wrapper = getMountedWrapper({ store, loading: false })
 
       it('should not show the no content message component', () => {
@@ -101,7 +104,12 @@ describe('SharedWithOthers', () => {
           stubs['oc-table-files'] = false
           stubs.pagination = false
           stubs.RouterLink = RouterLinkStub
-          const store = getStore({ activeFiles: activeFiles, pages: 2, currentPage: 1 })
+          const store = getStore({
+            activeFiles: activeFiles,
+            pages: 2,
+            currentPage: 1,
+            totalFilesCount: { files: 1, folders: 1 }
+          })
           const wrapper = getMountedWrapper({ store, loading: false })
 
           const pagination = wrapper.find(selectors.pagination)
@@ -114,7 +122,12 @@ describe('SharedWithOthers', () => {
           stubs['oc-table-files'] = false
           stubs.pagination = false
           stubs.RouterLink = RouterLinkStub
-          const store = getStore({ activeFiles: activeFiles, pages: 1, currentPage: 1 })
+          const store = getStore({
+            activeFiles: activeFiles,
+            pages: 1,
+            currentPage: 1,
+            totalFilesCount: { files: 1, folders: 1 }
+          })
           const wrapper = getMountedWrapper({ store, loading: false })
 
           const pagination = wrapper.find(selectors.pagination)

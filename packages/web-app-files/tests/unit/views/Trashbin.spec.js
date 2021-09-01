@@ -14,14 +14,15 @@ const selectors = {
 }
 
 describe('Trashbin', () => {
-  it('should show list loader when loading is set as true', () => {
+  it('should show list loader when the view is still loading', () => {
     const wrapper = getMountedWrapper({ loading: true })
 
     expect(wrapper.find(listLoaderStub).exists()).toBeTruthy()
     expect(wrapper.find(noContentStub).exists()).toBeFalsy()
     expect(wrapper.find(filesTableStub).exists()).toBeFalsy()
   })
-  describe('when loading is set as false', () => {
+
+  describe('when the view is not loading anymore', () => {
     it('should show the no content message component if active files length is less than one', () => {
       const store = createStore({ activeFiles: [] })
       const wrapper = getMountedWrapper({ store, loading: false })
@@ -31,9 +32,13 @@ describe('Trashbin', () => {
       expect(wrapper.find(noContentStub).exists()).toBeTruthy()
       expect(wrapper.find(noContentStub)).toMatchSnapshot()
     })
+
     describe('when length of active files is greater than zero', () => {
       const activeFiles = [createFile({ id: '1234' }), createFile({ id: '5896' })]
-      const store = createStore({ activeFiles: activeFiles })
+      const store = createStore({
+        activeFiles: activeFiles,
+        totalFilesCount: { files: 1, folders: 1 }
+      })
       const wrapper = getMountedWrapper({ store, loading: false })
 
       it('should not show the no content message component', () => {
@@ -57,6 +62,7 @@ describe('Trashbin', () => {
           targetRoute: null
         })
       })
+
       it('should show context menu for each resource', () => {
         stubs['oc-table-files'] = false
         stubs['context-actions'] = true
@@ -70,6 +76,7 @@ describe('Trashbin', () => {
           })
         })
       })
+
       it('should show list info component for oc files table', () => {
         stubs['oc-table-files'] = false
         stubs['list-info'] = true
@@ -98,18 +105,29 @@ describe('Trashbin', () => {
           stubs['oc-table-files'] = false
           stubs.pagination = false
           stubs.RouterLink = RouterLinkStub
-          const store = getStore({ activeFiles: activeFiles, pages: 2, currentPage: 1 })
+          const store = getStore({
+            activeFiles: activeFiles,
+            pages: 2,
+            currentPage: 1,
+            totalFilesCount: { files: 1, folders: 1 }
+          })
           const wrapper = getMountedWrapper({ store, loading: false })
 
           const pagination = wrapper.find(selectors.pagination)
 
           expect(pagination.exists()).toBeTruthy()
         })
+
         it('should not be visible if pages is less than one', () => {
           stubs['oc-table-files'] = false
           stubs.pagination = false
           stubs.RouterLink = RouterLinkStub
-          const store = getStore({ activeFiles: activeFiles, pages: 1, currentPage: 1 })
+          const store = getStore({
+            activeFiles: activeFiles,
+            pages: 1,
+            currentPage: 1,
+            totalFilesCount: { files: 1, folders: 1 }
+          })
           const wrapper = getMountedWrapper({ store, loading: false })
 
           const pagination = wrapper.find(selectors.pagination)
@@ -119,11 +137,12 @@ describe('Trashbin', () => {
       })
 
       it('should call "$_filesListPagination_updateCurrentPage" method if "showDetails" event is emitted from oc files table component', () => {
+        stubs['oc-table-files'] = true
         const spyMountSideBarShowDefaultPanel = jest.spyOn(
           MixinMountSideBar.methods,
           '$_mountSideBar_showDefaultPanel'
         )
-        const wrapper = getMountedWrapper({ store })
+        const wrapper = getMountedWrapper({ store, loading: false })
         const filesTable = wrapper.find(filesTableStub)
         expect(spyMountSideBarShowDefaultPanel).toHaveBeenCalledTimes(0)
 
