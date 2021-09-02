@@ -124,7 +124,6 @@ export default {
   data: () => ({
     loading: false,
     sharedWithUserDisplayName: '',
-    sharedWithUserId: '',
     sharedTime: 0,
     sharedParentDir: null
   }),
@@ -170,7 +169,7 @@ export default {
       }
     },
     showSharedBy() {
-      return this.showShares && !this.isUserOwner && !this.sharesTreeLoading
+      return this.showShares && !this.ownedByCurrentUser && !this.sharesTreeLoading
     },
     showSharedVia() {
       return (
@@ -184,9 +183,6 @@ export default {
     },
     showShares() {
       return this.hasAnyShares && !this.isPublicPage
-    },
-    isUserOwner() {
-      return this.user.id === this.sharedWithUserId
     },
     displayShareDate() {
       const date = this.formDateFromNow(new Date(this.sharedTime * 1000), 'JSDate')
@@ -296,7 +292,6 @@ export default {
       if (sharePathParentOrCurrent === null) return
       const shareItem = this.sharesTree[sharePathParentOrCurrent][0]
       this.sharedWithUserDisplayName = shareItem.fileOwner.displayName
-      this.sharedWithUserId = shareItem.fileOwner.name
       this.sharedTime = shareItem.stime
       this.sharedParentDir = sharePathParentOrCurrent
     },
