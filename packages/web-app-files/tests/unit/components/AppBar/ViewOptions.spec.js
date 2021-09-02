@@ -9,6 +9,8 @@ import OcSwitch from '@/tests/unit/stubs/OcSwitch'
 
 import ViewOptions from '@files/src/components/AppBar/ViewOptions.vue'
 
+const OcTooltip = jest.fn()
+
 describe('ViewOptions', () => {
   let localVue, router, mutations, store
 
@@ -34,7 +36,13 @@ describe('ViewOptions', () => {
   })
 
   it('updates the files page limit when using page size component', () => {
-    const wrapper = shallowMount(ViewOptions, { store, router, localVue, stubs })
+    const wrapper = shallowMount(ViewOptions, {
+      store,
+      router,
+      localVue,
+      stubs,
+      directives: { OcTooltip }
+    })
     const select = wrapper.find('[data-testid="files-pagination-size"]')
 
     expect(select.exists()).toBe(true)
@@ -49,7 +57,13 @@ describe('ViewOptions', () => {
       store,
       router,
       localVue,
-      stubs: { ...stubs, 'oc-page-size': OcPageSize(localVue) }
+      stubs: {
+        ...stubs,
+        'oc-page-size': OcPageSize(localVue)
+      },
+      directives: {
+        OcTooltip
+      }
     })
 
     wrapper.vm.$router.replace({ query: { 'items-limit': 500 } }).catch(() => {})
@@ -65,7 +79,9 @@ describe('ViewOptions', () => {
         ...stubs,
         'oc-switch': OcSwitch(localVue)
       },
-      directives: { OcTooltip: jest.fn() },
+      directives: {
+        OcTooltip
+      },
       router
     })
 

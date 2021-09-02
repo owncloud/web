@@ -1,29 +1,66 @@
 /* eslint-disable no-unused-expressions */
-const util = require('util')
 const _ = require('lodash')
 const timeoutHelper = require('../../helpers/timeoutHelper')
+const xpathHelper = require('../../helpers/xpath')
+const util = require('util')
 
 module.exports = {
   commands: {
     isThumbnailVisible: function() {
-      return this.waitForElementVisible(
-        this.api.page.personalPage().elements.sideBar
-      ).waitForElementVisible(this.elements.fileInfoIcon)
+      return this.waitForElementVisible('@sidebar').waitForElementVisible('@fileInfoIcon')
     },
-    closeSidebar: function(timeout = null) {
-      timeout = timeoutHelper.parseTimeout(timeout)
+    closeSidebarIfOpen: async function(timeout = 300) {
+      if (!(await this.isSideBarOpen(timeout))) {
+        return this.api.page.FilesPageElement.filesList()
+      }
+
       try {
-        this.click({
+        await this.click({
           selector: '@sidebarCloseBtn',
-          timeout: timeout
+          timeout: timeoutHelper.parseTimeout(timeout)
         })
       } catch (e) {
         // do nothing
       }
       return this.api.page.FilesPageElement.filesList()
     },
+    isSideBarOpen: async function(timeout = 500) {
+      const element = this.elements.sidebar
+      let isVisible = false
+      await this.isVisible(
+        {
+          locateStrategy: element.locateStrategy,
+          selector: element.selector,
+          timeout: timeoutHelper.parseTimeout(timeout)
+        },
+        result => {
+          isVisible = result.value === true
+        }
+      )
+      return isVisible
+    },
+    isSideBarOpenForResource: async function(resource, elementType = 'any', timeout = 500) {
+      if (!(await this.isSideBarOpen(timeout))) {
+        return false
+      }
+      const selector = this.getResourceInfoSelector(resource, elementType)
+      let resourceInfoVisible = false
+      await this.isVisible({ locateStrategy: 'xpath', selector, timeout }, result => {
+        resourceInfoVisible = result.status === 0
+      })
+      return resourceInfoVisible
+    },
+    getResourceInfoSelector: function(resource, elementType = 'any') {
+      const name = xpathHelper.buildXpathLiteral(resource)
+      const path = xpathHelper.buildXpathLiteral('/' + resource)
+      if (elementType === 'any') {
+        return util.format(this.elements.fileInfoResourceNameAnyType.selector, name, path)
+      }
+      const type = xpathHelper.buildXpathLiteral(elementType)
+      return util.format(this.elements.fileInfoResourceName.selector, name, path, type)
+    },
     activatePanel: async function(item) {
-      await this.waitForElementVisible(this.api.page.personalPage().elements.sideBar)
+      const panelName = item === 'people' ? 'collaborators' : item
       const active = await this.isPanelActive(
         item,
         this.api.globals.waitForNegativeConditionTimeout
@@ -34,7 +71,7 @@ module.exports = {
         await this.isVisible(
           { locateStrategy: backBtn.locateStrategy, selector: backBtn.selector, timeout: 200 },
           result => {
-            backBtnVisible = result.status === 0
+            backBtnVisible = result.value === true
           }
         )
         if (backBtnVisible) {
@@ -43,48 +80,21 @@ module.exports = {
           })
           await this.waitForAnimationToFinish() // wait for sliding animation to the root panel
         }
-        this.useXpath()
-          .click(this.getXpathOfPanelSelect(item))
+        const menuItemElement = this.elements[panelName + 'PanelMenuItem']
+        await this.click({
+          locateStrategy: menuItemElement.locateStrategy,
+          selector: menuItemElement.selector
+        })
           .waitForAjaxCallsToStartAndFinish()
-          .useCss()
-        await this.waitForAnimationToFinish() // wait for sliding animation to the sub panel
+          .waitForAnimationToFinish() // wait for sliding animation to the sub panel
       }
-      const panelName = item === 'people' ? 'collaborators' : item
-      const element = this.elements[panelName + 'Panel']
-      const selector = element.selector
-      return this.waitForElementPresent(selector)
-    },
-    /**
-     * return the complete xpath of the link to the specified panel in the side-bar
-     * @param item
-     * @returns {string}
-     */
-    getXpathOfPanelSelect: function(item) {
-      return (
-        this.api.page.personalPage().elements.sideBar.selector +
-        util.format(
-          "//button[contains(translate(.,'ABCDEFGHJIKLMNOPQRSTUVWXYZ','abcdefghjiklmnopqrstuvwxyz'),'%s')]",
-          item
-        )
-      )
+      const panelElement = this.elements[panelName + 'Panel']
+      return await this.waitForElementPresent(panelElement.locateStrategy, panelElement.selector)
     },
     getVisibleAccordionItems: async function() {
       const items = []
       let elements
       await this.api.elements('@panelSelectButtons', function(result) {
-        elements = result.value
-      })
-      for (const { ELEMENT } of elements) {
-        await this.api.elementIdText(ELEMENT, function(result) {
-          items.push(result.value.toLowerCase())
-        })
-      }
-      return items
-    },
-    getVisibleActionsMenuItems: async function() {
-      const items = []
-      let elements
-      await this.api.elements('@panelActionsItems', function(result) {
         elements = result.value
       })
       for (const { ELEMENT } of elements) {
@@ -118,57 +128,66 @@ module.exports = {
     isPanelActive: async function(panelName, timeout = null) {
       panelName = panelName === 'people' ? 'collaborators' : panelName
       const element = this.elements[panelName + 'Panel']
-      const selector = element.selector + '.is-active'
       let isVisible = false
-      timeout = timeoutHelper.parseTimeout(timeout)
-      await this.isVisible({ locateStrategy: 'css selector', selector, timeout }, result => {
-        isVisible = result.value === true
-      })
+      await this.isVisible(
+        {
+          locateStrategy: element.locateStrategy,
+          selector: element.selector,
+          timeout: timeoutHelper.parseTimeout(timeout)
+        },
+        result => {
+          isVisible = result.value === true
+        }
+      )
       return isVisible
     },
     /**
-     * checks if the item with the given selector is present on the files-page-sidebar
+     * checks if it's possible to navigate into the given panel
      *
-     * @param {object} selector
+     * @param {string} panelName
+     * @param {number} timeout
      * @returns {Promise<boolean>}
      */
-    isPanelItemPresent: async function(selector) {
-      let isPresent = true
-      await this.useXpath()
-        .waitForElementVisible(this.api.page.personalPage().elements.sideBar) // sidebar is expected to be opened and visible
-        .api.elements(selector, result => {
-          isPresent = result.value.length > 0
-        })
-        .useCss()
-      return isPresent
+    isPanelSelectable: async function(panelName, timeout = 300) {
+      panelName = panelName === 'people' ? 'collaborators' : panelName
+      const element = this.elements[panelName + 'PanelMenuItem']
+      let isVisible = false
+      await this.isVisible(
+        {
+          locateStrategy: element.locateStrategy,
+          selector: element.selector,
+          timeout: timeoutHelper.parseTimeout(timeout)
+        },
+        result => {
+          isVisible = result.value === true
+        }
+      )
+      return isVisible
     },
-    /**
-     * @returns {Promise<boolean>}
-     */
-    isLinksPanelSelectPresent: function() {
-      return this.isPanelItemPresent(this.elements.linksPanelSelect)
+    isLinksPanelSelectable: async function() {
+      return await this.isPanelSelectable('links')
     },
-    /**
-     * @returns {Promise<boolean>}
-     */
-    isCollaboratorsAccordionItemPresent: function() {
-      return this.isPanelItemPresent(this.elements.collaboratorsPanel)
+    isSharingPanelSelectable: async function() {
+      return await this.isPanelSelectable('people')
     },
     markFavoriteSidebar: function() {
-      return this.useXpath()
-        .waitForElementVisible(this.api.page.personalPage().elements.sideBar)
+      return this.waitForElementVisible('@sidebar')
         .waitForElementVisible('@fileInfoFavoriteDimm')
         .click('@fileInfoFavorite')
         .waitForElementVisible('@fileInfoFavoriteShining')
     },
     unmarkFavoriteSidebar: function() {
-      return this.waitForElementVisible(this.api.page.personalPage().elements.sideBar)
+      return this.waitForElementVisible('@sidebar')
         .waitForElementVisible('@fileInfoFavoriteShining')
         .click('@fileInfoFavorite')
         .waitForElementVisible('@fileInfoFavoriteDimm')
     }
   },
   elements: {
+    sidebar: {
+      selector: '//*[@id="files-sidebar"]',
+      locateStrategy: 'xpath'
+    },
     fileInfoIcon: {
       selector: '.file_info .oc-icon'
     },
@@ -180,6 +199,14 @@ module.exports = {
     },
     fileInfoFavoriteDimm: {
       selector: '.oc-star-dimm'
+    },
+    fileInfoResourceNameAnyType: {
+      selector: `//div[contains(@id, "files-sidebar")]//span[contains(@class, "oc-resource-name") and (@data-test-resource-name=%s or @data-test-resource-path=%s)]`,
+      locateStrategy: 'xpath'
+    },
+    fileInfoResourceName: {
+      selector: `//div[contains(@id, "files-sidebar")]//span[contains(@class, "oc-resource-name") and (@data-test-resource-name=%s or @data-test-resource-path=%s) and @data-test-resource-type=%s]`,
+      locateStrategy: 'xpath'
     },
     sidebarCloseBtn: {
       selector:
@@ -200,23 +227,45 @@ module.exports = {
         '//div[contains(@id, "files-sidebar")]//div[@class="sidebar-panel__navigation"]/button',
       locateStrategy: 'xpath'
     },
-    linksPanelSelect: {
-      selector: '#sidebar-panel-links-item-select'
-    },
     collaboratorsPanel: {
-      selector: '#sidebar-panel-sharing-item'
+      selector: '//*[@id="sidebar-panel-sharing-item"]',
+      locateStrategy: 'xpath'
+    },
+    collaboratorsPanelMenuItem: {
+      selector: '//button[@id="sidebar-panel-sharing-item-select"]',
+      locateStrategy: 'xpath'
     },
     linksPanel: {
-      selector: '#sidebar-panel-links-item'
+      selector: '//*[@id="sidebar-panel-links-item"]',
+      locateStrategy: 'xpath'
+    },
+    linksPanelMenuItem: {
+      selector: '//button[@id="sidebar-panel-links-item-select"]',
+      locateStrategy: 'xpath'
     },
     actionsPanel: {
-      selector: '#sidebar-panel-actions-item'
+      selector: '//*[@id="sidebar-panel-actions-item"]',
+      locateStrategy: 'xpath'
+    },
+    actionsPanelMenuItem: {
+      selector: '//button[@id="sidebar-panel-actions-item-select"]',
+      locateStrategy: 'xpath'
     },
     detailsPanel: {
-      selector: '#sidebar-panel-details-item'
+      selector: '//*[@id="sidebar-panel-details-item"]',
+      locateStrategy: 'xpath'
+    },
+    detailsPanelMenuItem: {
+      selector: '//button[@id="sidebar-panel-details-item-select"]',
+      locateStrategy: 'xpath'
     },
     versionsPanel: {
-      selector: '#sidebar-panel-versions-item'
+      selector: '//*[@id="sidebar-panel-versions-item"]',
+      locateStrategy: 'xpath'
+    },
+    versionsPanelMenuItem: {
+      selector: '//button[@id="sidebar-panel-versions-item-select"]',
+      locateStrategy: 'xpath'
     }
   }
 }

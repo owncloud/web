@@ -4921,10 +4921,10 @@ filelist@^1.0.1:
   dependencies:
     minimatch "^3.0.4"
 
-filesize@^6.4.0:
-  version "6.4.0"
-  resolved "https://registry.npmjs.org/filesize/-/filesize-6.4.0.tgz"
-  integrity sha512-mjFIpOHC4jbfcTfoh4rkWpI31mF7viw9ikj/JyLoKzqlwG/YsefKfvYlYhdYdg/9mtK2z1AzgN/0LvVQ3zdlSQ==
+filesize@^8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/filesize/-/filesize-8.0.0.tgz#532db71cb8a04df7d403da054a28de1b648534e0"
+  integrity sha512-sb690gQx3y/5KZIztgWAKM/r4Hf1V3R8mkAE0OhasMw2FDYduFTYCji8YN9BVpsGoMxrHPFvia1BMxwfLHX+fQ==
 
 fill-range@^4.0.0:
   version "4.0.0"
@@ -8088,9 +8088,9 @@ object-keys@~0.2.0:
     is "~0.2.6"
 
 object-path@^0.11.5:
-  version "0.11.5"
-  resolved "https://registry.npmjs.org/object-path/-/object-path-0.11.5.tgz"
-  integrity sha512-jgSbThcoR/s+XumvGMTMf81QVBmah+/Q7K7YduKeKVWL7N111unR2d6pZZarSk6kY/caeNxUDyxOvMWyzoU2eg==
+  version "0.11.7"
+  resolved "https://registry.yarnpkg.com/object-path/-/object-path-0.11.7.tgz#5f211161f34bb395e4b13a5f565b79d933b6f65d"
+  integrity sha512-T4evaK9VfGGQskXBDILcn6F90ZD+WO3OwRFFQ2rmZdUH4vQeDBpiolTpVlPY2yj5xSepyILTjDyM6UvbbdHMZw==
 
 object-visit@^1.0.0:
   version "1.0.1"
@@ -8244,10 +8244,10 @@ ospec@3.1.0:
   dependencies:
     glob "^7.1.3"
 
-owncloud-design-system@^9.2.0:
-  version "9.2.0"
-  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-9.2.0.tgz#1e1dfe2fd7bdafe2e80fcebadf841877b908420d"
-  integrity sha512-EcDoe3NvX112wk9q+JUIOUDjRrvBXVs16w+ZBv1+fq+9LbXqWbgUTPkkFqKZRNWEN/wbgyDFqoczunQHTIa8jA==
+owncloud-design-system@^9.3.0:
+  version "9.3.0"
+  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-9.3.0.tgz#d27b7562ca7548074a4bcf4ed3128e92a248a8a1"
+  integrity sha512-wOQAd6XXRmNq7+9NNP2m6TKJKt7Xx4hzeghAbeu+7YPCmNHlay7B4IhEpuCt0N+WxPqGg3NiTZQ42PUF4vKM1g==
 
 owncloud-sdk@1.0.0-2296:
   version "1.0.0-2296"

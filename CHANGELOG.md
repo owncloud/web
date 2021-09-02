@@ -8,10 +8,19 @@ ownCloud admins and users.
 Summary
 -------
 
+* Enhancement - Add robots.txt file: [#5762](https://github.com/owncloud/web/pull/5762)
 * Enhancement - Add missing tooltips: [#5723](https://github.com/owncloud/web/issues/5723)
+* Enhancement - Switch filesize calculation base: [#5739](https://github.com/owncloud/web/pull/5739)
+* Enhancement - Update ODS to 9.3.0: [#5725](https://github.com/owncloud/web/pull/5725)
 
 Details
 -------
+
+* Enhancement - Add robots.txt file: [#5762](https://github.com/owncloud/web/pull/5762)
+
+   Added a robots.txt for ocis-web
+
+   https://github.com/owncloud/web/pull/5762
 
 * Enhancement - Add missing tooltips: [#5723](https://github.com/owncloud/web/issues/5723)
 
@@ -19,6 +28,32 @@ Details
 
    https://github.com/owncloud/web/issues/5723
    https://github.com/owncloud/web/pull/5724
+
+* Enhancement - Switch filesize calculation base: [#5739](https://github.com/owncloud/web/pull/5739)
+
+   We've switched from base-2 to base-10 when calculating the displayed file-size to align it
+   better with user expectations.
+
+   https://github.com/owncloud/web/pull/5739
+
+* Enhancement - Update ODS to 9.3.0: [#5725](https://github.com/owncloud/web/pull/5725)
+
+   We updated the ownCloud Design System to version 9.3.0. Please refer to the full changelog in
+   the ODS release (linked) for more details. Summary: - Bugfix - Fix search for options provided
+   as objects: https://github.com/owncloud/owncloud-design-system/pull/1602 - Bugfix -
+   Contextmenu button triggered wrong event:
+   https://github.com/owncloud/owncloud-design-system/pull/1610 - Bugfix - Use pointer
+   cursor for OcSelect actions:
+   https://github.com/owncloud/owncloud-design-system/pull/1604 - Enhancement -
+   OcTableFiles Contextmenu Tooltip:
+   https://github.com/owncloud/owncloud-design-system/pull/1610 - Enhancement -
+   Highlight droptarget in OcTableFiles:
+   https://github.com/owncloud/owncloud-design-system/pull/1610 - Enhancement - Remove
+   "Showdetails" button in OcTableFiles:
+   https://github.com/owncloud/owncloud-design-system/pull/1610
+
+   https://github.com/owncloud/web/pull/5725
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v9.3.0
 
 Changelog for ownCloud Web [4.1.0] (2021-08-20)
 =======================================

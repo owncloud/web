@@ -71,7 +71,7 @@ Feature: Locks
       | exclusive |
       | shared    |
 
-  @issue-core-38912
+  @issue-5741 @issue-ocis-1284
   Scenario Outline: uploading a file, trying to overwrite a file in a locked folder in a public share
     Given user "brand-new-user" has locked folder "simple-folder" setting following properties
       | lockscope | <lockscope> |

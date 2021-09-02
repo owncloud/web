@@ -19,8 +19,8 @@ const selectors = {
 }
 
 describe('Pagination', () => {
-  describe('pages', () => {
-    describe('when value is less than or equals one', () => {
+  describe('when amount of pages is', () => {
+    describe('less than or equals one', () => {
       it.each([-1, 0, 1])('should not show wrapper', pages => {
         const store = createStore(0, pages)
         const wrapper = getWrapper(store)
@@ -29,7 +29,7 @@ describe('Pagination', () => {
       })
     })
 
-    describe('when value is greater than one', () => {
+    describe('greater than one', () => {
       const wrapper = getWrapper(createStore(1, 2))
 
       it('should show wrapper', () => {
