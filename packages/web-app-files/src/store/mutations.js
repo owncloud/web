@@ -4,18 +4,6 @@ import { DateTime } from 'luxon'
 import { set, has } from 'lodash-es'
 import { getIndicators } from '../helpers/statusIndicators'
 
-/**
- * @param {Array.<Object>} shares array of shares
- * @return {Array.<Integer>} array of share types
- */
-function computeShareTypes(shares) {
-  const shareTypes = new Set()
-  shares.forEach(share => {
-    shareTypes.add(share.shareType)
-  })
-  return Array.from(shareTypes)
-}
-
 export default {
   UPDATE_FILE_PROGRESS(state, file) {
     const inProgress = [...state.inProgress]
@@ -72,29 +60,39 @@ export default {
   LOAD_FILES_SEARCHED(state, files) {
     state.filesSearched = files
   },
+  REMOVE_FILE_FROM_SEARCHED(state, file) {
+    if (!state.filesSearched) {
+      return
+    }
+
+    state.filesSearched = state.filesSearched.filter(i => file.id !== i.id)
+  },
+  CLEAR_FILES_SEARCHED(state) {
+    state.filesSearched = null
+  },
+  SET_FILE_SELECTION(state, files) {
+    state.selectedIds = files.map(f => f.id)
+  },
   ADD_FILE_SELECTION(state, file) {
-    const selected = [...state.selected]
-    const fileIndex = selected.findIndex(f => {
-      return f.id === file.id
+    const selected = [...state.selectedIds]
+    const fileIndex = selected.findIndex(id => {
+      return id === file.id
     })
     if (fileIndex === -1) {
-      selected.push(file)
-      state.selected = selected
+      selected.push(file.id)
+      state.selectedIds = selected
     }
   },
   REMOVE_FILE_SELECTION(state, file) {
-    const selected = [...state.selected]
+    const selected = [...state.selectedIds]
     if (selected.length > 1) {
-      state.selected = selected.filter(i => file.id !== i.id)
+      state.selectedIds = selected.filter(id => file.id !== id)
       return
     }
-    state.selected = []
-  },
-  REMOVE_FILE_FROM_SEARCHED(state, file) {
-    state.filesSearched = state.filesSearched.filter(i => file.id !== i.id)
+    state.selectedIds = []
   },
   RESET_SELECTION(state) {
-    state.selected = []
+    state.selectedIds = []
   },
   FAVORITE_FILE(state, item) {
     const files = [...state.files]
@@ -106,17 +104,6 @@ export default {
   },
   REMOVE_FILE(state, removedFile) {
     state.files = [...state.files].filter(file => file.id !== removedFile.id)
-  },
-  UPDATE_CURRENT_FILE_SHARE_TYPES(state) {
-    const files = [...state.files]
-    if (!state.highlightedResourceId) {
-      return
-    }
-    const fileIndex = files.findIndex(f => {
-      return f.id === state.highlightedResourceId
-    })
-    files[fileIndex].shareTypes = computeShareTypes(state.currentFileOutgoingShares)
-    state.files = files
   },
   RENAME_FILE(state, { file, newValue, newPath }) {
     const resources = [...state.files]
@@ -205,18 +192,6 @@ export default {
   UPDATE_FOLDER_LOADING(state, value) {
     state.loadingFolder = value
   },
-  SET_HIGHLIGHTED_FILE(state, file) {
-    if (typeof file === 'string') {
-      const fileIndex = state.files.findIndex(f => {
-        return f.name === file
-      })
-      if (fileIndex === -1) {
-        return
-      }
-      file = state.files[fileIndex]
-    }
-    state.highlightedResourceId = file ? file.id : file
-  },
   SET_PUBLIC_LINK_PASSWORD(state, password) {
     // cache into state for reactivity
     state.publicLinkPassword = password
@@ -241,8 +216,7 @@ export default {
 
   CLEAR_CURRENT_FILES_LIST(state) {
     state.currentFolder = null
-    state.selected = []
-    state.highlightedResourceId = null
+    state.selectedIds = []
     // release blob urls
     state.files.forEach(item => {
       if (item.previewUrl && item.previewUrl.startsWith('blob:')) {
@@ -304,10 +278,6 @@ export default {
     }
   },
 
-  SELECT_RESOURCES(state, resources) {
-    state.selected = resources
-  },
-
   /**
    * Inserts or updates the given resource, depending on whether or not the resource is already loaded.
    * Updating the resource always takes precedence, so that we don't duplicate resources in the store
@@ -340,12 +310,13 @@ export default {
    * @param params.value the value that will be attached to the key
    */
   UPDATE_RESOURCE_FIELD(state, params) {
-    const index = state.files.findIndex(r => r.id === params.id)
+    const fileSource = state.filesSearched || state.files
+    const index = fileSource.findIndex(r => r.id === params.id)
     if (index < 0) {
       return
     }
 
-    const resource = state.files[index]
+    const resource = fileSource[index]
     const isReactive = has(resource, params.field)
     const newResource = set(resource, params.field, params.value)
 
@@ -353,7 +324,7 @@ export default {
       return
     }
 
-    Vue.set(state.files, index, newResource)
+    Vue.set(fileSource, index, newResource)
   },
 
   UPDATE_CURRENT_PAGE(state, page) {
@@ -378,6 +349,8 @@ function $_upsertResource(state, resource, allowInsert) {
   const files = [...state.files]
   const index = files.findIndex(r => r.id === resource.id)
   const found = index > -1
+
+  state.filesSearched = null
 
   if (!found && !allowInsert) {
     return

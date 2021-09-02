@@ -47,7 +47,6 @@ Then('the file {string} should not be displayed in the media viewer webUI', asyn
 When(
   'the user views the file {string} in the media viewer by clicking on the file name using the webUI',
   function(fileName) {
-    console.log(fileName)
     return filesList.clickOnFileName(fileName)
   }
 )

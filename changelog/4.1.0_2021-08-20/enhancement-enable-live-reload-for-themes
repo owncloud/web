@@ -1,0 +1,6 @@
+Enhancement: Enable live reload for changes to themes
+
+This allows live reloads to be triggered by changes to themes defined within the 'packages/web-runtime/themes/**/*' folders, to facilitate efficient WYSIWYG
+development when wanting to customise the look and feel of the frontend.
+
+https://github.com/owncloud/web/pull/5668

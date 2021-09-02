@@ -12,14 +12,13 @@
         id="files-favorites-table"
         v-model="selected"
         class="files-table"
-        :class="{ 'files-table-squashed': isSidebarOpen }"
+        :class="{ 'files-table-squashed': !sidebarClosed }"
         :are-paths-displayed="true"
         :are-thumbnails-displayed="displayThumbnails"
         :resources="activeFiles"
         :target-route="targetRoute"
-        :highlighted="highlightedFile ? highlightedFile.id : null"
         :header-position="headerPosition"
-        @showDetails="$_mountSideBar_showDetails"
+        @showDetails="$_mountSideBar_showDefaultPanel"
         @fileClick="$_fileActions_triggerDefaultAction"
         @rowMounted="rowMounted"
       >
@@ -49,6 +48,7 @@ import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 
 import { buildResource } from '../helpers/resources'
 import FileActions from '../mixins/fileActions'
+import MixinFilesListFilter from '../mixins/filesListFilter'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
 import MixinFilesListPagination from '../mixins/filesListPagination'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
@@ -62,13 +62,20 @@ import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
+import { DavProperties } from 'web-pkg/src/constants'
 
 const visibilityObserver = new VisibilityObserver()
 
 export default {
   components: { QuickActions, ListLoader, NoContentMessage, ListInfo, Pagination, ContextActions },
 
-  mixins: [FileActions, MixinFilesListPositioning, MixinFilesListPagination, MixinMountSideBar],
+  mixins: [
+    FileActions,
+    MixinFilesListPositioning,
+    MixinFilesListPagination,
+    MixinMountSideBar,
+    MixinFilesListFilter
+  ],
 
   data: () => ({
     loading: true
@@ -78,7 +85,6 @@ export default {
     ...mapState(['app']),
     ...mapState('Files', ['files']),
     ...mapGetters('Files', [
-      'davProperties',
       'highlightedFile',
       'activeFiles',
       'selectedFiles',
@@ -86,11 +92,8 @@ export default {
       'totalFilesCount',
       'totalFilesSize'
     ]),
+    ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
     ...mapGetters(['user', 'configuration']),
-
-    isSidebarOpen() {
-      return this.highlightedFile !== null
-    },
 
     targetRoute() {
       return { name: 'files-personal' }
@@ -101,7 +104,7 @@ export default {
         return this.selectedFiles
       },
       set(resources) {
-        this.SELECT_RESOURCES(resources)
+        this.SET_FILE_SELECTION(resources)
       }
     },
 
@@ -144,7 +147,7 @@ export default {
 
   methods: {
     ...mapActions('Files', ['loadIndicators', 'loadPreview']),
-    ...mapMutations('Files', ['SELECT_RESOURCES', 'LOAD_FILES', 'CLEAR_CURRENT_FILES_LIST']),
+    ...mapMutations('Files', ['SET_FILE_SELECTION', 'LOAD_FILES', 'CLEAR_CURRENT_FILES_LIST']),
 
     rowMounted(resource, component) {
       if (!this.displayThumbnails) {
@@ -168,7 +171,7 @@ export default {
       this.loading = true
       this.CLEAR_CURRENT_FILES_LIST()
 
-      let resources = await this.$client.files.getFavoriteFiles(this.davProperties)
+      let resources = await this.$client.files.getFavoriteFiles(DavProperties.Default)
 
       resources = resources.map(buildResource)
       this.LOAD_FILES({ currentFolder: null, files: resources })

@@ -33,6 +33,10 @@ const dummyProviderTwo = {
   activate: jest.fn()
 }
 
+const searchEventOptions = {
+  path: [{ id: 'files-global-search-bar' }]
+}
+
 beforeEach(() => {
   jest.resetAllMocks()
 })
@@ -390,6 +394,29 @@ describe('Search Bar portal component', () => {
     expect(wrapper.vm.$data.term).toBe('routeTerm')
     expect((wrapper.get('input').element as HTMLInputElement).value).toBe('routeTerm')
   })
+  test("ignores events that don't belong to the SearchBar", async () => {
+    wrapper = mount(SearchBar, {
+      localVue,
+      attachTo: document.body,
+      data() {
+        return {
+          optionsVisible: true,
+          term: 'old',
+          activeProvider: dummyProviderOne,
+          providerStore: {
+            availableProviders: [dummyProviderOne, dummyProviderTwo]
+          }
+        }
+      }
+    })
+    const options = { path: [] }
+    await wrapper.trigger('keyup.a', options)
+    expect(wrapper.find('.files-global-search-options').exists()).toBeFalsy()
+    await wrapper.trigger('click', options)
+    expect(wrapper.find('.files-global-search-options').exists()).toBeFalsy()
+    await wrapper.trigger('focusin', options)
+    expect(wrapper.find('.files-global-search-options').exists()).toBeFalsy()
+  })
   test('providers can be switched by using the arrow up and down keys on keyboard', async () => {
     wrapper = mount(SearchBar, {
       localVue,
@@ -406,16 +433,16 @@ describe('Search Bar portal component', () => {
       }
     })
     const getClasses = (at: number) => wrapper.findAll('.provider').at(at).element.classList
-    await wrapper.trigger('keyup.up')
+    await wrapper.trigger('keyup.up', searchEventOptions)
     expect(getClasses(1)).toContain('selected')
 
-    await wrapper.trigger('keyup.up')
+    await wrapper.trigger('keyup.up', searchEventOptions)
     expect(getClasses(0)).toContain('selected')
 
-    await wrapper.trigger('keyup.down')
+    await wrapper.trigger('keyup.down', searchEventOptions)
     expect(getClasses(1)).toContain('selected')
 
-    await wrapper.trigger('keyup.down')
+    await wrapper.trigger('keyup.down', searchEventOptions)
     expect(getClasses(0)).toContain('selected')
   })
   test('hides options on escape key press', async () => {
@@ -434,7 +461,7 @@ describe('Search Bar portal component', () => {
       }
     })
     expect(wrapper.vm.$data.optionsVisible).toBeTruthy()
-    await wrapper.trigger('keyup.esc')
+    await wrapper.trigger('keyup.esc', searchEventOptions)
     expect(wrapper.vm.$data.optionsVisible).toBeFalsy()
   })
   test('activate provider on enter key press', async () => {
@@ -450,13 +477,13 @@ describe('Search Bar portal component', () => {
         }
       }
     })
-    await wrapper.trigger('click')
+    await wrapper.trigger('click', searchEventOptions)
     await wrapper.find('input').setValue('new')
 
     const providers = wrapper.findAll('li.provider')
     expect(providers.at(0).classes()).toContain('selected')
     expect(wrapper.vm.$data.optionsVisible).toBeTruthy()
-    await wrapper.trigger('keyup.enter')
+    await wrapper.trigger('keyup.enter', searchEventOptions)
     expect(dummyProviderOne.activate).toBeCalledWith('new')
     expect(dummyProviderOne.activate).toBeCalledTimes(1)
   })
@@ -473,13 +500,13 @@ describe('Search Bar portal component', () => {
         }
       }
     })
-    await wrapper.trigger('click')
+    await wrapper.trigger('click', searchEventOptions)
     await wrapper.find('input').setValue('new')
 
     const providers = wrapper.findAll('li.provider')
     expect(providers.at(0).classes()).toContain('selected')
     expect(wrapper.vm.$data.optionsVisible).toBeTruthy()
-    await providers.at(0).trigger('click')
+    await providers.at(0).trigger('click', searchEventOptions)
     expect(dummyProviderOne.activate).toBeCalledWith('new')
     expect(dummyProviderOne.activate).toBeCalledTimes(1)
   })

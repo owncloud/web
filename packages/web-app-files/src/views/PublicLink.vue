@@ -56,6 +56,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import Mixins from '../mixins'
+import { DavProperties } from 'web-pkg/src/constants'
 
 export default {
   mixins: [Mixins],
@@ -71,7 +72,7 @@ export default {
   },
   computed: {
     ...mapGetters(['configuration']),
-    ...mapGetters('Files', ['davProperties', 'publicLinkPassword']),
+    ...mapGetters('Files', ['publicLinkPassword']),
 
     pageTitle() {
       return this.$gettext(this.$route.meta.title)
@@ -98,15 +99,8 @@ export default {
       const password = this.password || this.publicLinkPassword
       this.loading = true
       this.inputErrorMessage = null
-      const properties = this.davProperties.concat([
-        this.$client.publicFiles.PUBLIC_LINK_ITEM_TYPE,
-        this.$client.publicFiles.PUBLIC_LINK_PERMISSION,
-        this.$client.publicFiles.PUBLIC_LINK_EXPIRATION,
-        this.$client.publicFiles.PUBLIC_LINK_SHARE_DATETIME,
-        this.$client.publicFiles.PUBLIC_LINK_SHARE_OWNER
-      ])
       this.$client.publicFiles
-        .list(this.$route.params.token, password, properties, '0')
+        .list(this.$route.params.token, password, DavProperties.PublicLink, '0')
         .then(files => {
           this.passwordRequired = false
           this.setPublicLinkPassword(password)

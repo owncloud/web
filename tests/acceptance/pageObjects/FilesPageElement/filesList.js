@@ -2,8 +2,10 @@ const util = require('util')
 const assert = require('assert')
 const xpathHelper = require('../../helpers/xpath')
 const { client } = require('nightwatch-api')
+const appSideBar = client.page.FilesPageElement.appSideBar()
+const contextMenu = client.page.FilesPageElement.contextMenu()
 const filesRow = client.page.FilesPageElement.filesRow()
-const filesActionsMenu = client.page.FilesPageElement.fileActionsMenu()
+const fileActionsMenu = client.page.FilesPageElement.fileActionsMenu()
 
 module.exports = {
   commands: {
@@ -12,10 +14,16 @@ module.exports = {
      * @return {Promise<*>}
      */
     openSharingDialog: async function(resource) {
-      const appSidebar = client.page.FilesPageElement.appSideBar()
-      await appSidebar.closeSidebar(500)
       await this.openSideBar(resource)
-      return client.page.FilesPageElement.appSideBar().activatePanel('people')
+      return await appSideBar.activatePanel('people')
+    },
+    /**
+     * @param {string} resource
+     * @return {Promise<*>}
+     */
+    openPublicLinkDialog: async function(resource) {
+      await this.openSideBar(resource)
+      return await appSideBar.activatePanel('links')
     },
     /**
      * @param {string} resource
@@ -32,127 +40,118 @@ module.exports = {
       return this.useXpath().waitForElementNotPresent(previewSelector)
     },
     /**
-     * @param {string} fileName
-     * @return {Promise<*>}
-     */
-    openPublicLinkDialog: async function(fileName) {
-      await this.waitForFileVisible(fileName)
-      await this.openSideBar(fileName)
-      return client.page.FilesPageElement.appSideBar().activatePanel('links')
-    },
-    /**
      * @param {string} resource
+     * @param {string} elementType
      * @return {Promise<module.exports.commands>}
      */
-    deleteFile: async function(resource) {
-      await this.waitForFileVisible(resource)
-      await filesRow.openFileActionsMenu(resource)
-      await filesActionsMenu.delete()
+    deleteFile: async function(resource, elementType = 'any') {
+      await this.openFileActionsMenu(resource, elementType)
+      await fileActionsMenu.delete()
       return this
     },
     /**
      * @param {string} resource
+     * @param {string} elementType
      * @returns {Promise<exports.commands>}
      */
-    acceptShare: async function(resource) {
-      await this.waitForFileVisible(resource)
-      await filesRow.openFileActionsMenu(resource)
-      await filesActionsMenu.acceptShare()
+    acceptShare: async function(resource, elementType = 'any') {
+      await this.openFileActionsMenu(resource, elementType)
+      await fileActionsMenu.acceptShare()
       return this
     },
     /**
      * @param {string} resource
+     * @param {string} elementType
      * @returns {Promise<exports.commands>}
      */
-    declineShare: async function(resource) {
-      await this.waitForFileVisible(resource)
-      await filesRow.openFileActionsMenu(resource)
-      await filesActionsMenu.declineShare()
+    declineShare: async function(resource, elementType = 'any') {
+      await this.openFileActionsMenu(resource, elementType)
+      await fileActionsMenu.declineShare()
       return this
     },
     /**
      * @param {string} fromName
      * @param {string} toName
      * @param {boolean} expectToSucceed
-     * @return {Promise<module.exports.commands>}
-     */
-    renameFile: async function(fromName, toName, expectToSucceed = true) {
-      await this.waitForFileVisible(fromName)
-      await filesRow.openFileActionsMenu(fromName)
-      await filesActionsMenu.rename(toName, expectToSucceed)
-      return this
-    },
-    /**
-     * @param {string} path
-     * @return {Promise<module.exports.commands>}
-     */
-    markFavorite: async function(path) {
-      await this.waitForFileVisible(path)
-      await filesRow.openFileActionsMenu(path)
-      await filesActionsMenu.favorite()
-      return this
-    },
-    /**
-     * @param {string} path
-     * @return {Promise<module.exports.commands>}
-     */
-    unmarkFavorite: async function(path) {
-      await this.waitForFileVisible(path)
-      await filesRow.openFileActionsMenu(path)
-      await filesActionsMenu.unmarkFavorite()
-      return this
-    },
-    /**
-     * @param {string} element
      * @param {string} elementType
      * @return {Promise<module.exports.commands>}
      */
-    restoreFile: async function(element, elementType) {
-      await this.waitForFileWithPathVisible(element, elementType)
-      await filesRow.openFileActionsMenu(element, elementType)
-      await filesActionsMenu.restore()
+    renameFile: async function(fromName, toName, expectToSucceed = true, elementType = 'any') {
+      await this.openFileActionsMenu(fromName, elementType)
+      await fileActionsMenu.rename(toName, expectToSucceed)
       return this
     },
     /**
      * @param {string} resource
+     * @param {string} elementType
      * @return {Promise<module.exports.commands>}
      */
-    deleteImmediately: async function(resource) {
-      await this.waitForFileVisible(resource)
-      await filesRow.openFileActionsMenu(resource)
-      await filesActionsMenu.deleteResourceImmediately(resource)
+    markFavorite: async function(resource, elementType = 'any') {
+      await this.openFileActionsMenu(resource, elementType)
+      await fileActionsMenu.favorite()
+      return this
+    },
+    /**
+     * @param {string} resource
+     * @param {string} elementType
+     * @return {Promise<module.exports.commands>}
+     */
+    unmarkFavorite: async function(resource, elementType = 'any') {
+      await this.openFileActionsMenu(resource, elementType)
+      await fileActionsMenu.unmarkFavorite()
+      return this
+    },
+    /**
+     * @param {string} resource
+     * @param {string} elementType
+     * @return {Promise<module.exports.commands>}
+     */
+    restoreFile: async function(resource, elementType = 'any') {
+      await this.openFileActionsMenu(resource, elementType)
+      await fileActionsMenu.restore()
+      return this
+    },
+    /**
+     * @param {string} resource
+     * @param {string} elementType
+     * @return {Promise<module.exports.commands>}
+     */
+    deleteImmediately: async function(resource, elementType = 'any') {
+      await this.openFileActionsMenu(resource, elementType)
+      await fileActionsMenu.deleteResourceImmediately()
       return this
     },
     /**
      * @param {string} action
      * @param {string} resource
+     * @param {string} elementType
      * @return {Promise<boolean>}
      */
-    isActionAttributeDisabled: async function(action, resource) {
-      await this.waitForFileVisible(resource)
-      await filesRow.openFileActionsMenu(resource)
-      return await filesActionsMenu.getActionDisabledAttr('delete')
+    isActionAttributeDisabled: async function(action, resource, elementType = 'any') {
+      await this.openFileActionsMenu(resource, elementType)
+      return await fileActionsMenu.getActionDisabledAttr('delete')
     },
     /**
      * @param {string} resource
+     * @param {string} elementType
      * @return {Promise<module.exports.commands>}
      */
-    downloadFile: async function(resource) {
-      await this.waitForFileVisible(resource)
-      await filesRow.openFileActionsMenu(resource)
-      await filesActionsMenu.download()
+    downloadFile: async function(resource, elementType = 'any') {
+      await this.openFileActionsMenu(resource, elementType)
+      await fileActionsMenu.download()
       return this
     },
     /**
      * @param {string} resource
+     * @param {string} elementType
      * @return {Promise<module.exports.commands>}
      */
-    isSharingButtonPresent: async function(resource) {
+    isSharingButtonPresent: async function(resource, elementType = 'any') {
       const sharingBtnSelector = util.format(
         filesRow.elements.quickAction.selector,
         'collaborators'
       )
-      const resourceRowSelector = this.getFileRowSelectorByFileName(resource)
+      const resourceRowSelector = this.getFileRowSelectorByFileName(resource, elementType)
       let isPresent = true
 
       await this.api.elements(
@@ -169,9 +168,7 @@ module.exports = {
      * @return {Promise<*>}
      */
     confirmDeletion: function() {
-      return this.waitForElementEnabled('@dialogConfirmBtn')
-        .click('@dialogConfirmBtn')
-        .waitForElementNotPresent('@dialog')
+      return this.click('@dialogConfirmBtnEnabled').waitForElementNotPresent('@dialog')
     },
     /**
      *
@@ -191,14 +188,70 @@ module.exports = {
     },
 
     /**
+     * opens context menu for given resource
+     *
+     * @param {string} resource The name or path of a resource
+     * @param {string} elementType The resource type (file|folder|any)
+     * @returns {*}
+     */
+    openContextMenu: async function(resource, elementType = 'any') {
+      await this.waitForFileVisible(resource, elementType)
+      const selectorContextMenu =
+        this.getFileRowSelectorByFileName(resource, elementType) +
+        this.elements.contextBtnInFileRow.selector
+      await this.click('xpath', selectorContextMenu)
+      await this.waitForElementVisible('@contextMenuPanel')
+      return contextMenu
+    },
+
+    /**
+     * opens file-actions menu for given resource
+     *
+     * @param {string} resource The resource name
+     * @param {string} elementType The resource type (file|folder|any)
+     *
+     * @returns {*}
+     */
+    openFileActionsMenu: async function(resource, elementType = 'any') {
+      await this.openSideBar(resource, elementType)
+      await appSideBar.activatePanel('actions')
+      return fileActionsMenu
+    },
+
+    /**
      * opens sidebar for given resource
      *
      * @param {string} resource
+     * @param {string} elementType The resource type (file|folder|any)
      * @returns {*}
      */
-    openSideBar: async function(resource) {
-      await this.clickRow(resource)
-      return this.api.page.FilesPageElement.appSideBar()
+    openSideBar: async function(resource, elementType = 'any') {
+      // nothing to do if already open for correct resource
+      if (await appSideBar.isSideBarOpenForResource(resource, elementType)) {
+        return appSideBar
+      }
+
+      // open the sidebar for the resource
+      await this.clickRow(resource, elementType)
+      await this.click('@btnToggleSideBar')
+      await this.waitForAnimationToFinish() // wait for the sidebar animation to finish
+      return appSideBar
+    },
+    /**
+     * @param {string} resource the file/folder to click
+     * @param {string} elementType The resource type (file|folder|any)
+     */
+    clickRow: async function(resource, elementType = 'any') {
+      await this.waitForFileVisible(resource, elementType)
+      await this.initAjaxCounters()
+        .useXpath()
+        // click in empty space in the tr using coordinates to avoid
+        // clicking on other elements that might be in the front
+        .clickElementAt(this.getFileRowSelectorByFileName(resource, elementType), 1, 1)
+        .waitForOutstandingAjaxCalls()
+        .useCss()
+
+      return this
     },
     /**
      *
@@ -219,21 +272,6 @@ module.exports = {
         .click('@restoreSelectedButton')
         .waitForOutstandingAjaxCalls()
         .useCss()
-    },
-    /**
-     * @param {string} item the file/folder to click
-     */
-    clickRow: async function(item) {
-      await this.waitForFileVisible(item)
-      await this.initAjaxCounters()
-        .useXpath()
-        // click in empty space in the tr using coordinates to avoid
-        // clicking on other elements that might be in the front
-        .clickElementAt(this.getFileRowSelectorByFileName(item), 1, 1)
-        .waitForOutstandingAjaxCalls()
-        .useCss()
-
-      return this
     },
 
     /**
@@ -268,10 +306,6 @@ module.exports = {
         this.api.elementIdSelected(result.value.ELEMENT, result => (selectionStatus = result.value))
       })
       return selectionStatus
-    },
-    waitForTableLoaded: async function() {
-      await this.waitForElementVisible('@filesTable')
-      return this
     },
     waitForLoadingFinished: async function(awaitVisible = true, abortOnFailure = true) {
       if (awaitVisible) {
@@ -312,7 +346,7 @@ module.exports = {
     waitForFileVisible: async function(fileName, elementType = 'any') {
       const rowSelector = this.getFileRowSelectorByFileName(fileName, elementType)
 
-      await client.page.FilesPageElement.appSideBar().closeSidebar(500)
+      await appSideBar.closeSidebarIfOpen()
       let rowElementId = null
       await this.waitForElementPresent(
         { selector: rowSelector, locateStrategy: 'xpath' },
@@ -324,7 +358,6 @@ module.exports = {
       await this.api.elementIdLocation(rowElementId, result => {
         offset = result.value.y
       })
-
       let firstRowElementId = null
       await this.waitForElementPresent('@fileRow', result => {
         firstRowElementId = result.WebdriverElementId
@@ -334,28 +367,7 @@ module.exports = {
       })
 
       this.api.execute('scrollTo(0,' + offset + ')')
-
       return this
-    },
-    /**
-     * Wait for a filerow with given path to be visible
-     * This only works in the favorites page as it uses the whole path of a file rather than just the name
-     * This does not works in cases where the path starts with a space (eg. "  ParentFolder/file.txt")
-     *
-     * @param {string} path
-     * @param {string} elementType
-     */
-    waitForFileWithPathVisible: async function(path, elementType = 'any') {
-      await client.page.FilesPageElement.appSideBar().closeSidebar(500)
-      const linkSelector = this.getFileLinkSelectorByFileName(path, elementType)
-      const rowSelector = this.getFileRowSelectorByFileName(path, elementType)
-      return this.useXpath()
-        .waitForElementVisible(rowSelector)
-        .waitForElementVisible(linkSelector)
-        .getText(linkSelector, function(result) {
-          assert.strictEqual(result.value.trim(), path, 'displayed file name not as expected')
-        })
-        .useCss()
     },
     /**
      *
@@ -545,39 +557,22 @@ module.exports = {
       return this.useCss()
     },
 
-    /**
-     * Returns original string with replaced target character
-     * @param   {string} string     String in which will be the target character replaced
-     * @param   {string} targetChar Target character which is to be replaced
-     * @param   {string} newChar    New character which will replace target character
-     * @returns {string}            String with replaced target character
-     */
-    replaceChar: function(string, targetChar, newChar) {
-      const regex = new RegExp(targetChar, 'g')
-      return string.replace(regex, newChar)
-    },
-
     useQuickAction: async function(resource, action) {
       action = action.replace(/\s/, '-')
-      const actionSelector = util.format(
-        this.api.page.FilesPageElement.filesRow().elements.quickAction.selector,
-        action
-      )
+      const actionSelector = util.format(filesRow.elements.quickAction.selector, action)
       const resourceRowSelector = this.getFileRowSelectorByFileName(resource)
 
       await this.waitForFileVisible(resource)
 
-      return this.useXpath()
-        .click(resourceRowSelector + actionSelector)
-        .useCss()
+      await this.click('xpath', resourceRowSelector + actionSelector)
+      await this.waitForAnimationToFinish() // wait for the sidebar animation to finish
+      return this
     },
 
     moveResource: async function(resource, target) {
-      await this.waitForFileVisible(resource)
-
       // Trigger move
-      await filesRow.openFileActionsMenu(resource)
-      await filesActionsMenu.move()
+      await this.openFileActionsMenu(resource)
+      await fileActionsMenu.move()
 
       // Execute move
       await client.page.locationPicker().selectFolderAndConfirm(target)
@@ -585,36 +580,20 @@ module.exports = {
       return this
     },
 
-    attemptToMoveResource: async function(resource, target) {
-      await this.waitForFileVisible(resource)
-
-      // Trigger move
-      await filesRow.openFileActionsMenu(resource)
-      await filesActionsMenu.move()
-
-      // select folder
-      await client.page.locationPicker().selectFolder(target)
-
-      return this
-    },
-
     cancelResourceMoveOrCopyProgress: async function() {
       // cancel copy or move
-      await this.useXpath()
-        .waitForElementVisible(client.page.personalPage().elements.cancelMoveCopyBtn.selector)
-        .click(this.page.personalPage().elements.cancelMoveCopyBtn.selector)
-        .useCss()
+      await this.waitForElementVisible(this.elements.cancelMoveCopyBtn.selector).click(
+        this.elements.cancelMoveCopyBtn.selector
+      )
       await this.waitForLoadingFinished()
 
       return this
     },
 
     copyResource: async function(resource, target) {
-      await this.waitForFileVisible(resource)
-
       // Trigger copy
-      await filesRow.openFileActionsMenu(resource)
-      await filesActionsMenu.copy()
+      await this.openFileActionsMenu(resource)
+      await fileActionsMenu.copy()
 
       // Execute copy
       await client.page.locationPicker().selectFolderAndConfirm(target)
@@ -622,18 +601,6 @@ module.exports = {
       return this
     },
 
-    attemptToCopyResource: async function(resource, target) {
-      await this.waitForFileVisible(resource)
-
-      // Trigger copy
-      await filesRow.openFileActionsMenu(resource)
-      await filesActionsMenu.copy()
-
-      // Execute copy
-      await client.page.locationPicker().selectFolder(target)
-
-      return this
-    },
     clickOnFileName: function(fileName) {
       const file = this.getFileLinkSelectorByFileName(fileName, 'file')
       return this.useXpath()
@@ -703,6 +670,13 @@ module.exports = {
         '//span[contains(@class, "oc-resource-name") and (@data-test-resource-name=%s or @data-test-resource-path=%s) and @data-test-resource-type=%s]/parent::*',
       locateStrategy: 'xpath'
     },
+    contextBtnInFileRow: {
+      selector: '//button[contains(@class, "oc-table-files-btn-action-dropdown")]',
+      locateStrategy: 'xpath'
+    },
+    contextMenuPanel: {
+      selector: 'ul#oc-files-context-actions'
+    },
     /**
      * This element is concatenated as child of @see fileRowByResourcePath
      */
@@ -754,8 +728,8 @@ module.exports = {
     dialog: {
       selector: '.oc-modal'
     },
-    dialogConfirmBtn: {
-      selector: '.oc-modal-body-actions-confirm'
+    dialogConfirmBtnEnabled: {
+      selector: '.oc-modal-body-actions-confirm:enabled'
     },
     dialogCancelBtn: {
       selector: '.oc-modal-body-actions-cancel'
@@ -763,6 +737,12 @@ module.exports = {
     previewImage: {
       selector: '//img[contains(@class, "oc-resource-thumbnail")]',
       locateStrategy: 'xpath'
+    },
+    cancelMoveCopyBtn: {
+      selector: '#location-picker-btn-cancel'
+    },
+    btnToggleSideBar: {
+      selector: '#files-toggle-sidebar'
     }
   }
 }

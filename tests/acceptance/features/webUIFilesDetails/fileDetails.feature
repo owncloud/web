@@ -14,7 +14,7 @@ Feature: User can open the details panel for any file or folder
   Scenario: View different areas of the app-sidebar for a file in files page
     Given user "Alice" has created file "lorem.txt"
     And the user has browsed to the files page
-    When the user picks the row of file "lorem.txt" on the webUI
+    When the user opens the sidebar for file "lorem.txt" on the webUI
     Then the app-sidebar should be visible
     And the thumbnail should be visible in the app-sidebar
     And the "details" details panel should be visible
@@ -27,7 +27,7 @@ Feature: User can open the details panel for any file or folder
   Scenario: View different areas of the app-sidebar for a folder in files page
     Given user "Alice" has created folder "simple-folder"
     And the user has browsed to the files page
-    When the user picks the row of folder "simple-folder" on the webUI
+    When the user opens the sidebar for folder "simple-folder" on the webUI
     Then the app-sidebar should be visible
     And the thumbnail should be visible in the app-sidebar
     And the "details" details panel should be visible
@@ -44,7 +44,7 @@ Feature: User can open the details panel for any file or folder
     And the user has browsed to the files page
     And user "Alice" has favorited element "lorem.txt"
     And the user has browsed to the favorites page
-    When the user picks the row of file "lorem.txt" on the webUI
+    When the user opens the sidebar for file "lorem.txt" on the webUI
     Then the app-sidebar should be visible
     And the thumbnail should be visible in the app-sidebar
     And the "details" details panel should be visible
@@ -59,7 +59,7 @@ Feature: User can open the details panel for any file or folder
     And the user has browsed to the files page
     And user "Alice" has favorited element "simple-folder"
     And the user has browsed to the favorites page
-    When the user picks the row of folder "simple-folder" on the webUI
+    When the user opens the sidebar for folder "simple-folder" on the webUI
     Then the app-sidebar should be visible
     And the thumbnail should be visible in the app-sidebar
     And the "details" details panel should be visible
@@ -77,7 +77,7 @@ Feature: User can open the details panel for any file or folder
     And user "Alice" has created a public link with following settings
       | path        | simple-folder         |
     And the user has browsed to the shared-via-link page
-    When the user opens the file action menu of folder "simple-folder" using the webUI
+    When the user opens the actions sidebar panel of file "simple-folder" on the webUI
     Then the thumbnail should be visible in the app-sidebar
     When the user switches to "people" panel in details panel using the webUI
     Then the "people" details panel should be visible
@@ -93,7 +93,7 @@ Feature: User can open the details panel for any file or folder
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     When the user browses to the shared-with-others page
     Then folder "simple-folder" should be listed on the webUI
-    When the user picks the row of folder "simple-folder" on the webUI
+    When the user opens the sidebar for folder "simple-folder" on the webUI
     Then the app-sidebar should be visible
     And the thumbnail should be visible in the app-sidebar
     When the user switches to "people" panel in details panel using the webUI
@@ -110,7 +110,7 @@ Feature: User can open the details panel for any file or folder
     And user "Alice" has created a new public link for resource "simple-folder"
     When the user browses to the shared-with-others page
     Then folder "simple-folder" should be listed on the webUI
-    When the user picks the row of folder "simple-folder" on the webUI
+    When the user opens the sidebar for folder "simple-folder" on the webUI
     Then the app-sidebar should be visible
     And the thumbnail should be visible in the app-sidebar
     When the user switches to "people" panel in details panel using the webUI
@@ -128,7 +128,7 @@ Feature: User can open the details panel for any file or folder
     And the user re-logs in as "Brian" using the webUI
     When the user browses to the shared-with-me page
     Then folder "simple-folder" should be listed on the webUI
-    When the user picks the row of folder "simple-folder" on the webUI
+    When the user opens the sidebar for folder "simple-folder" on the webUI
     Then the app-sidebar should be visible
     And the thumbnail should be visible in the app-sidebar
     When the user switches to "people" panel in details panel using the webUI
@@ -156,7 +156,7 @@ Feature: User can open the details panel for any file or folder
     When the user browses to the tags page
     And the user searches for tag "simple" using the webUI
     Then folder "simple-folder" should be listed on the webUI
-    When the user opens the file action menu of folder "simple-folder" using the webUI
+    When the user opens the actions sidebar panel of file "simple-folder" on the webUI
     Then the thumbnail should be visible in the app-sidebar
     When the user switches to "people" panel in details panel using the webUI
     Then the "people" details panel should be visible
@@ -171,7 +171,7 @@ Feature: User can open the details panel for any file or folder
   Scenario: the sidebar is invisible after closing
     Given user "Alice" has created file "lorem.txt"
     And the user has browsed to the files page
-    When the user picks the row of file "lorem.txt" on the webUI
+    When the user opens the sidebar for file "lorem.txt" on the webUI
     Then the app-sidebar should be visible
     When the user closes the app-sidebar using the webUI
     Then the app-sidebar should be invisible
@@ -180,6 +180,5 @@ Feature: User can open the details panel for any file or folder
   Scenario: the sidebar is invisible after opening the selected folder
     Given user "Alice" has created file "simple-folder"
     And the user has browsed to the files page
-    Given the app-sidebar for file "simple-folder" has been visible on the webUI
     When the user opens folder "simple-folder" using the webUI
     Then the app-sidebar should be invisible

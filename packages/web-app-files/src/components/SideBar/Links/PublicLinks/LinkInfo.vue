@@ -37,7 +37,7 @@
         </oc-tag>
       </div>
       <div v-if="link.password">
-        <oc-tag>
+        <oc-tag class="oc-files-file-link-password">
           <oc-icon name="lock" />
           <translate>Password protected</translate>
         </oc-tag>
@@ -143,7 +143,7 @@ export default {
       return this.$gettextInterpolate(
         translated,
         {
-          linkName: link.name
+          linkName: link.name ? link.name : ''
         },
         true
       )

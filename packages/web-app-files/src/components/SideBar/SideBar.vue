@@ -1,7 +1,5 @@
 <template>
   <div
-    v-if="highlightedFile"
-    v-click-outside="onClickOutside"
     :class="{
       'has-active': !!appSidebarActivePanel
     }"
@@ -16,7 +14,8 @@
       :class="{
         'is-active':
           appSidebarActivePanel === panelMeta.app || (!appSidebarActivePanel && panelMeta.default),
-        'sidebar-panel--default': panelMeta.default
+        'sidebar-panel--default': panelMeta.default,
+        'sidebar-panel--multiple-selected': areMultipleSelected || isRootFolder
       }"
     >
       <div class="sidebar-panel__header header">
@@ -39,15 +38,22 @@
           appearance="raw"
           class="header__close"
           :aria-label="$gettext('Close file sidebar')"
-          @click="close"
+          @click="closeSidebar"
         >
           <oc-icon name="close" />
         </oc-button>
       </div>
-      <file-info class="sidebar-panel__file_info" :is-content-displayed="isContentDisplayed" />
+      <file-info
+        v-if="!areMultipleSelected && !isRootFolder"
+        class="sidebar-panel__file_info"
+        :is-content-displayed="isContentDisplayed"
+      />
       <div class="sidebar-panel__body">
         <template v-if="isContentDisplayed">
-          <component :is="panelMeta.component" v-if="openedPanels.includes(panelMeta.app)" />
+          <component
+            :is="panelMeta.component"
+            v-if="[activePanel, oldPanel].includes(panelMeta.app)"
+          />
 
           <div v-if="panelMeta.default && panelMetas.length > 1" class="sidebar-panel__navigation">
             <oc-button
@@ -70,13 +76,13 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations, mapState } from 'vuex'
+import { mapGetters, mapMutations, mapState, mapActions } from 'vuex'
 import FileInfo from './FileInfo.vue'
 import MixinRoutes from '../../mixins/routes'
 import { VisibilityObserver } from 'web-pkg/src/observer'
-import { cloneStateObject } from '../../helpers/store'
 
 let visibilityObserver
+let hiddenObserver
 
 export default {
   components: { FileInfo },
@@ -84,20 +90,25 @@ export default {
   data() {
     return {
       focused: undefined,
-      openedPanels: [] // Array since default panel is always opened
+      oldPanel: null
     }
   },
   computed: {
-    ...mapGetters('Files', ['highlightedFile']),
+    ...mapGetters('Files', ['highlightedFile', 'selectedFiles', 'currentFolder']),
     ...mapGetters(['fileSideBars', 'capabilities']),
     ...mapState('Files', ['appSidebarActivePanel']),
+    activePanel() {
+      return this.appSidebarActivePanel || this.defaultPanelMeta.app
+    },
     panelMetas() {
       const { panels } = this.fileSideBars.reduce(
         (result, panelGenerator) => {
           const panel = panelGenerator({
             capabilities: this.capabilities,
             highlightedFile: this.highlightedFile,
-            route: this.$route
+            route: this.$route,
+            multipleSelection: this.areMultipleSelected,
+            rootFolder: this.isRootFolder
           })
 
           if (panel.enabled) {
@@ -136,89 +147,79 @@ export default {
       }
 
       return null
+    },
+    areMultipleSelected() {
+      return this.selectedFiles && this.selectedFiles.length > 1
+    },
+    isRootFolder() {
+      return !this.highlightedFile?.path
     }
   },
   watch: {
-    appSidebarActivePanel(panel, select) {
-      this.focused = panel ? `#sidebar-panel-${panel}` : `#sidebar-panel-select-${select}`
+    activePanel: {
+      handler: function(panel, select) {
+        this.$nextTick(() => {
+          this.focused = panel ? `#sidebar-panel-${panel}` : `#sidebar-panel-select-${select}`
+        })
+      },
+      immediate: true
     }
   },
   beforeDestroy() {
     visibilityObserver.disconnect()
+    hiddenObserver.disconnect()
   },
   mounted() {
-    visibilityObserver = new VisibilityObserver({
-      root: document.querySelector('#files-sidebar'),
-      threshold: 0.9
-    })
-
-    const doFocus = () => {
-      const selector = document.querySelector(this.focused)
-
-      if (!selector) {
-        return
-      }
-
-      selector.focus()
-    }
-
-    this.$refs.panels.forEach(panel => {
-      visibilityObserver.observe(panel, {
-        onEnter: doFocus,
-        onExit: doFocus
-      })
-    })
+    this.initVisibilityObserver()
   },
-
-  created() {
-    this.openedPanels.push(this.defaultPanelMeta.app)
-
-    if (this.appSidebarActivePanel) {
-      this.openedPanels.push(this.appSidebarActivePanel)
-    }
-  },
-
   methods: {
     ...mapMutations('Files', ['SET_APP_SIDEBAR_ACTIVE_PANEL']),
-    close() {
-      this.$emit('reset')
-    },
-    onClickOutside(event) {
-      /*
-       * We need to go for this opt-out solution because under circumstances a modal will be rendered,
-       * for example if we click rename, clicking in this modal would otherwise falsy close the sidebar.
-       */
+    ...mapActions('Files/sidebar', { closeSidebar: 'close' }),
 
-      if (
-        document.querySelector('.files-topbar').contains(event.target) ||
-        document.querySelector('.oc-topbar').contains(event.target) ||
-        document.querySelector('.oc-app-navigation').contains(event.target) ||
-        event.target.id === 'files-view'
-      ) {
-        this.close()
+    initVisibilityObserver() {
+      visibilityObserver = new VisibilityObserver({
+        root: document.querySelector('#files-sidebar'),
+        threshold: 0.9
+      })
+      hiddenObserver = new VisibilityObserver({
+        root: document.querySelector('#files-sidebar'),
+        threshold: 0.05
+      })
+      const doFocus = () => {
+        const selector = document.querySelector(this.focused)
+        if (!selector) {
+          return
+        }
+        selector.focus()
       }
+
+      const clearOldPanel = () => {
+        this.oldPanel = null
+      }
+
+      this.$refs.panels.forEach(panel => {
+        visibilityObserver.observe(panel, {
+          onEnter: doFocus,
+          onExit: doFocus
+        })
+        hiddenObserver.observe(panel, {
+          onExit: clearOldPanel
+        })
+      })
+    },
+
+    setOldPanel() {
+      this.oldPanel = this.activePanel || this.defaultPanelMeta.app
     },
 
     openPanel(panel) {
+      this.setOldPanel()
       this.SET_APP_SIDEBAR_ACTIVE_PANEL(panel)
-
-      if (!this.openedPanels.includes(panel)) {
-        this.openedPanels.push(panel)
-      }
     },
 
     closePanel() {
-      const activePanel = cloneStateObject(this.appSidebarActivePanel)
-
+      this.setOldPanel()
       this.SET_APP_SIDEBAR_ACTIVE_PANEL(null)
-
-      setTimeout(() => {
-        const index = this.openedPanels.indexOf(activePanel)
-
-        if (index > -1) {
-          this.openedPanels.splice(index, 1)
-        }
-      }, 400)
     }
   }
 }
@@ -251,6 +252,10 @@ export default {
 
   @media screen and (prefers-reduced-motion: reduce), (update: slow) {
     transition-duration: 0.001ms !important;
+  }
+
+  &--multiple-selected {
+    grid-template-rows: 50px 1fr;
   }
 
   &--default {

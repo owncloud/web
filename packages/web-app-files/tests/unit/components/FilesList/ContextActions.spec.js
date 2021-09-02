@@ -108,9 +108,10 @@ describe('ContextActions', () => {
       },
       propsData: {
         item: {
+          id: 1,
           name: filename,
-          extension: extension,
-          type: type,
+          extension,
+          type,
           canDownload: () => true,
           isReceivedShare: () => true,
           canBeDeleted: () => true,

@@ -21,16 +21,18 @@
         id="files-public-files-table"
         v-model="selected"
         class="files-table"
-        :class="{ 'files-table-squashed': isSidebarOpen }"
+        :class="{ 'files-table-squashed': !sidebarClosed }"
         :are-thumbnails-displayed="displayThumbnails"
         :resources="activeFiles"
         :target-route="targetRoute"
-        :highlighted="highlightedFile ? highlightedFile.id : null"
         :header-position="headerPosition"
-        @showDetails="$_mountSideBar_showDetails"
+        @showDetails="$_mountSideBar_showDefaultPanel"
         @fileClick="$_fileActions_triggerDefaultAction"
         @rowMounted="rowMounted"
       >
+        <template #contextMenu="{ resource }">
+          <context-actions :item="resource" />
+        </template>
         <template #footer>
           <pagination />
           <list-info
@@ -47,7 +49,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions, mapMutations } from 'vuex'
+import { mapGetters, mapActions, mapMutations, mapState } from 'vuex'
 
 import MixinAccessibleBreadcrumb from '../mixins/accessibleBreadcrumb'
 import MixinFileActions from '../mixins/fileActions'
@@ -59,12 +61,15 @@ import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../constants'
 import debounce from 'lodash-es/debounce'
 import { buildResource } from '../helpers/resources'
+import { bus } from 'web-pkg/src/instance'
 
 import ListLoader from '../components/FilesList/ListLoader.vue'
 import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
 import NotFoundMessage from '../components/FilesList/NotFoundMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
+import ContextActions from '../components/FilesList/ContextActions.vue'
+import { DavProperties } from 'web-pkg/src/constants'
 
 const visibilityObserver = new VisibilityObserver()
 export default {
@@ -73,7 +78,8 @@ export default {
     ListLoader,
     NoContentMessage,
     NotFoundMessage,
-    Pagination
+    Pagination,
+    ContextActions
   },
 
   mixins: [
@@ -93,7 +99,6 @@ export default {
       'publicLinkPassword',
       'activeFiles',
       'selectedFiles',
-      'davProperties',
       'currentFolder',
       'highlightedFile',
       'inProgress',
@@ -102,13 +107,10 @@ export default {
       'totalFilesSize'
     ]),
     ...mapGetters(['configuration']),
+    ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
     isEmpty() {
       return this.activeFiles.length < 1
-    },
-
-    isSidebarOpen() {
-      return this.highlightedFile !== null
     },
 
     uploadProgressVisible() {
@@ -120,7 +122,7 @@ export default {
         return this.selectedFiles
       },
       set(resources) {
-        this.SELECT_RESOURCES(resources)
+        this.SET_FILE_SELECTION(resources)
       }
     },
 
@@ -158,10 +160,17 @@ export default {
   beforeDestroy() {
     visibilityObserver.disconnect()
   },
+
+  created() {
+    bus.on('app.files.list.load', path => {
+      this.loadResources(this.$route.params.item === path, path)
+    })
+  },
+
   methods: {
     ...mapActions('Files', ['loadPreview']),
     ...mapMutations('Files', [
-      'SELECT_RESOURCES',
+      'SET_FILE_SELECTION',
       'SET_CURRENT_FOLDER',
       'LOAD_FILES',
       'CLEAR_CURRENT_FILES_LIST'
@@ -185,23 +194,15 @@ export default {
       visibilityObserver.observe(component.$el, { onEnter: debounced, onExit: debounced.cancel })
     },
 
-    async loadResources(sameRoute) {
+    async loadResources(sameRoute, path = null) {
       this.loading = true
       this.CLEAR_CURRENT_FILES_LIST()
 
-      const properties = this.davProperties.concat([
-        this.$client.publicFiles.PUBLIC_LINK_ITEM_TYPE,
-        this.$client.publicFiles.PUBLIC_LINK_PERMISSION,
-        this.$client.publicFiles.PUBLIC_LINK_EXPIRATION,
-        this.$client.publicFiles.PUBLIC_LINK_SHARE_DATETIME,
-        this.$client.publicFiles.PUBLIC_LINK_SHARE_OWNER
-      ])
-
       try {
         let resources = await this.$client.publicFiles.list(
-          this.$route.params.item,
+          path || this.$route.params.item,
           this.publicLinkPassword,
-          properties
+          DavProperties.PublicLink
         )
 
         // Redirect to files drop if the link has role "uploader"

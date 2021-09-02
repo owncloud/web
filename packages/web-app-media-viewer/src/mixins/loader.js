@@ -2,6 +2,7 @@ import { mapGetters, mapMutations } from 'vuex'
 import queryString from 'query-string'
 import { basename, dirname } from 'path'
 import { buildResource } from '../../../web-app-files/src/helpers/resources' // TODO: place the helper in more global space not to create dep on files app
+import { DavProperties } from 'web-pkg/src/constants'
 
 // TODO: this file is a first attempt to separate file/folder loading logic out of the mediaviewer
 // Discussion how to progress from here can be found in this issue:
@@ -9,7 +10,7 @@ import { buildResource } from '../../../web-app-files/src/helpers/resources' // 
 
 export default {
   computed: {
-    ...mapGetters('Files', ['publicLinkPassword', 'davProperties']),
+    ...mapGetters('Files', ['publicLinkPassword']),
     ...mapGetters(['configuration']),
     $_loader_publicContext() {
       return this.$route.params.contextRouteName === 'files-public-list'
@@ -39,17 +40,14 @@ export default {
       this.CLEAR_CURRENT_FILES_LIST()
 
       try {
-        const properties = this.davProperties.concat([
-          this.$client.publicFiles.PUBLIC_LINK_ITEM_TYPE,
-          this.$client.publicFiles.PUBLIC_LINK_PERMISSION,
-          this.$client.publicFiles.PUBLIC_LINK_EXPIRATION,
-          this.$client.publicFiles.PUBLIC_LINK_SHARE_DATETIME,
-          this.$client.publicFiles.PUBLIC_LINK_SHARE_OWNER
-        ])
         const absolutePath = filePath.substring(0, filePath.lastIndexOf('/'))
         const promise = this.$_loader_publicContext
-          ? this.$client.publicFiles.list(absolutePath, this.publicLinkPassword, properties)
-          : this.$client.files.list(absolutePath, 1, this.davProperties)
+          ? this.$client.publicFiles.list(
+              absolutePath,
+              this.publicLinkPassword,
+              DavProperties.PublicLink
+            )
+          : this.$client.files.list(absolutePath, 1, DavProperties.Default)
         let resources = await promise
 
         resources = resources.map(buildResource)
@@ -68,7 +66,13 @@ export default {
     $_loader_getDavFilePath(mediaFile, query = null) {
       const queryStr = !query ? '' : queryString.stringify(query)
       if (!this.$_loader_publicContext) {
-        const path = ['..', 'dav', 'files', this.$store.getters.user.id, mediaFile.path].join('/')
+        const path = [
+          '..',
+          'dav',
+          'files',
+          this.$store.getters.user.id,
+          mediaFile.path.replace(/^\//, '')
+        ].join('/')
         return [this.$client.files.getFileUrl(path), queryStr].filter(Boolean).join('?')
       }
 

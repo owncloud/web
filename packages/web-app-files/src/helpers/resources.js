@@ -7,6 +7,7 @@ import { getIndicators } from './statusIndicators'
 import { bitmaskToRole, checkPermission, permissionsBitmask } from './collaborators'
 import { shareTypes, userShareTypes } from './shareTypes'
 import { $gettext } from '../gettext'
+import { DavPermission, DavProperty } from 'web-pkg/src/constants'
 
 // Should we move this to ODS?
 export function getFileIcon(extension) {
@@ -30,62 +31,60 @@ function _getFileExtension(name) {
 export function buildResource(resource) {
   const isFolder = resource.type === 'dir'
   const extension = _getFileExtension(resource.name)
-  const result = {
-    id: resource.fileInfo['{http://owncloud.org/ns}fileid'],
-    fileId: resource.fileInfo['{http://owncloud.org/ns}fileid'],
+  return {
+    id: resource.fileInfo[DavProperty.FileId],
+    fileId: resource.fileInfo[DavProperty.FileId],
+    mimeType: resource.fileInfo[DavProperty.MimeType],
     icon: isFolder ? 'folder' : getFileIcon(extension),
     name: path.basename(resource.name),
     extension: isFolder ? '' : extension,
     path: resource.name,
     type: isFolder ? 'folder' : resource.type,
-    mdate: resource.fileInfo['{DAV:}getlastmodified'],
+    mdate: resource.fileInfo[DavProperty.LastModifiedDate],
     size: isFolder
-      ? resource.fileInfo['{http://owncloud.org/ns}size']
-      : resource.fileInfo['{DAV:}getcontentlength'],
+      ? resource.fileInfo[DavProperty.ContentSize]
+      : resource.fileInfo[DavProperty.ContentLength],
     indicators: [],
-    permissions: resource.fileInfo['{http://owncloud.org/ns}permissions'] || '',
-    starred: resource.fileInfo['{http://owncloud.org/ns}favorite'] !== '0',
-    etag: resource.fileInfo['{DAV:}getetag'],
-    sharePermissions:
-      resource.fileInfo['{http://open-collaboration-services.org/ns}share-permissions'],
+    permissions: resource.fileInfo[DavProperty.Permissions] || '',
+    starred: resource.fileInfo[DavProperty.IsFavorite] !== '0',
+    etag: resource.fileInfo[DavProperty.ETag],
+    sharePermissions: resource.fileInfo[DavProperty.SharePermissions],
     shareTypes: (function() {
-      let shareTypes = resource.fileInfo['{http://owncloud.org/ns}share-types']
-      if (shareTypes) {
-        shareTypes = shareTypes.map(xmlvalue => parseInt(xmlvalue, 10))
+      if (resource.fileInfo[DavProperty.ShareTypes]) {
+        return resource.fileInfo[DavProperty.ShareTypes].map(v => parseInt(v))
       }
-      return shareTypes || []
+      return []
     })(),
-    privateLink: resource.fileInfo['{http://owncloud.org/ns}privatelink'],
-    downloadURL: resource.fileInfo['{http://owncloud.org/ns}downloadURL'],
-    ownerDisplayName: resource.fileInfo['{http://owncloud.org/ns}owner-display-name'],
-    ownerId: resource.fileInfo['{http://owncloud.org/ns}owner-id'],
+    privateLink: resource.fileInfo[DavProperty.PrivateLink],
+    downloadURL: resource.fileInfo[DavProperty.DownloadURL],
+    ownerDisplayName: resource.fileInfo[DavProperty.OwnerDisplayName],
+    ownerId: resource.fileInfo[DavProperty.OwnerId],
     canUpload: function() {
-      return this.permissions.indexOf('C') >= 0
+      return this.permissions.indexOf(DavPermission.FolderCreateable) >= 0
     },
     canDownload: function() {
       // TODO: as soon as we allow folder downloads as archive we want to return `true` here without exceptions
       return !isFolder
     },
     canBeDeleted: function() {
-      return this.permissions.indexOf('D') >= 0
+      return this.permissions.indexOf(DavPermission.Deletable) >= 0
     },
     canRename: function() {
-      return this.permissions.indexOf('N') >= 0
+      return this.permissions.indexOf(DavPermission.Renameable) >= 0
     },
     canShare: function() {
-      return this.permissions.indexOf('R') >= 0
+      return this.permissions.indexOf(DavPermission.Shareable) >= 0
     },
     canCreate: function() {
-      return this.permissions.indexOf('C') >= 0
+      return this.permissions.indexOf(DavPermission.FolderCreateable) >= 0
     },
     isMounted: function() {
-      return this.permissions.indexOf('M') >= 0
+      return this.permissions.indexOf(DavPermission.Mounted) >= 0
     },
     isReceivedShare: function() {
-      return this.permissions.indexOf('S') >= 0
+      return this.permissions.indexOf(DavPermission.Shared) >= 0
     }
   }
-  return result
 }
 
 export function attachIndicators(resource, sharesTree) {
@@ -118,7 +117,7 @@ export function aggregateResourceShares(
   const resources = []
   let prev = null
   for (const share of shares) {
-    if (prev && share.path === prev.path) {
+    if (prev?.storage_id === share.storage_id && prev?.file_source === share.file_source) {
       if (userShareTypes.includes(share.share_type)) {
         prev.sharedWith.push({
           username: share.share_with,
@@ -333,16 +332,24 @@ export function buildCollaboratorShare(s, file, allowSharePerm) {
 
 export function buildDeletedResource(resource) {
   const isFolder = resource.type === 'dir'
-  const fullName = resource.fileInfo['{http://owncloud.org/ns}trashbin-original-filename']
+  const fullName = resource.fileInfo[DavProperty.TrashbinOriginalFilename]
   const extension = isFolder ? '' : _getFileExtension(fullName)
   return {
     type: isFolder ? 'folder' : resource.type,
-    ddate: resource.fileInfo['{http://owncloud.org/ns}trashbin-delete-datetime'],
+    ddate: resource.fileInfo[DavProperty.TrashbinDeletedDate],
     name: path.basename(fullName),
     extension,
-    path: resource.fileInfo['{http://owncloud.org/ns}trashbin-original-location'],
+    path: resource.fileInfo[DavProperty.TrashbinOriginalLocation],
     id: path.basename(resource.name),
     icon: isFolder ? 'folder' : getFileIcon(extension),
-    indicators: []
+    indicators: [],
+    canUpload: () => false,
+    canDownload: () => false,
+    canBeDeleted: () => true,
+    canRename: () => false,
+    canShare: () => false,
+    canCreate: () => false,
+    isMounted: () => false,
+    isReceivedShare: () => false
   }
 }

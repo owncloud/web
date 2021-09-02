@@ -30,7 +30,6 @@ module.exports = {
         util.format(this.elements.getSharedFromUserName.selector, user) +
         this.elements.shareStatusOnFileRow.selector
       await this.useXpath()
-        .waitForAnimationToFinish()
         .api.getText(requiredXpath, result => {
           if (result.status === 0) {
             status = result.value === '' ? 'Accepted' : result.value
@@ -60,7 +59,6 @@ module.exports = {
         '/' +
         this.elements.shareStatusOnFileRow.selector
       await this.useXpath()
-        .waitForAnimationToFinish()
         .api.getText(requiredXpath, result => {
           if (result.status === 0) {
             status = result.value === '' ? 'Accepted' : result.value

@@ -44,6 +44,7 @@
         </transition-group>
         <p
           v-if="$_noPublicLinks && canCreatePublicLinks"
+          id="oc-file-links-no-results"
           key="oc-file-links-no-results"
           v-translate
           class="oc-my-rm"
@@ -80,6 +81,7 @@ const VIEW_SHOW = 'showLinks'
 const VIEW_EDIT = 'editPublicLink'
 
 export default {
+  name: 'FileLinks',
   components: {
     LinkEdit,
     ListItem,

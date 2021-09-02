@@ -4,7 +4,6 @@
       ref="filesListWrapper"
       tabindex="-1"
       class="files-list-wrapper uk-width-expand"
-      :class="{ 'uk-visible@m': _sidebarOpen }"
       @dragover="$_ocApp_dragOver"
     >
       <app-bar v-if="!$route.fullPath.includes('/files/list/apps/')" id="files-app-bar" />
@@ -12,12 +11,11 @@
       <router-view id="files-view" />
     </div>
     <side-bar
-      v-if="_sidebarOpen"
+      v-if="!sidebarClosed"
       id="files-sidebar"
       ref="filesSidebar"
       tabindex="-1"
       class="uk-width-1-1 uk-width-1-2@m uk-width-1-3@xl"
-      @reset="$_destroySideBar_hideDetails"
       @beforeDestroy="focusSideBar"
       @mounted="focusSideBar"
       @fileChanged="focusSideBar"
@@ -27,8 +25,7 @@
 <script>
 import Mixins from './mixins'
 import MixinRoutes from './mixins/routes'
-import MixinDestroySideBar from './mixins/sidebar/destroySideBar'
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import AppBar from './components/AppBar/AppBar.vue'
 import ProgressBar from './components/Upload/ProgressBar.vue'
 import SideBar from './components/SideBar/SideBar.vue'
@@ -38,7 +35,7 @@ export default {
     ProgressBar,
     SideBar
   },
-  mixins: [Mixins, MixinRoutes, MixinDestroySideBar],
+  mixins: [Mixins, MixinRoutes],
   data() {
     return {
       createFolder: false,
@@ -46,29 +43,34 @@ export default {
       fileUploadProgress: 0,
       upload: false,
       fileName: '',
-      selected: [],
       breadcrumbs: []
     }
   },
   computed: {
     ...mapGetters('Files', ['dropzone', 'highlightedFile', 'inProgress']),
+    ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
     _sidebarOpen() {
       return this.highlightedFile !== null
     },
     $_uploadProgressVisible() {
       return this.inProgress.length > 0
+    },
+    showSidebar() {
+      return !this.sidebarClosed
     }
   },
   watch: {
-    $route() {
-      this.$_destroySideBar_hideDetails()
-      this.resetFileSelection()
-    },
-    highlightedFile(file) {
-      if (file !== null) {
-        return
+    $route: {
+      handler: function(to, from) {
+        this.resetFileSelection()
+        if (from?.name !== to.name) {
+          this.closeSidebar()
+        }
       }
-      this.$_destroySideBar_hideDetails()
+    },
+    sidebarClosed(hidden) {
+      if (!hidden) return
+      this.SET_APP_SIDEBAR_ACTIVE_PANEL(null)
     }
   },
   created() {
@@ -81,7 +83,9 @@ export default {
   },
   methods: {
     ...mapActions('Files', ['dragOver', 'resetFileSelection']),
+    ...mapActions('Files/sidebar', { closeSidebar: 'close' }),
     ...mapActions(['showMessage']),
+    ...mapMutations('Files', ['SET_APP_SIDEBAR_ACTIVE_PANEL']),
     ...mapMutations(['SET_SIDEBAR_FOOTER_CONTENT_COMPONENT']),
     trace() {
       console.info('trace', arguments)
@@ -93,8 +97,9 @@ export default {
         revert: event === 'beforeDestroy'
       })
     },
-    $_ocApp_dragOver() {
-      this.dragOver(true)
+    $_ocApp_dragOver(event) {
+      const hasfileInEvent = (event.dataTransfer.types || []).some(e => e === 'Files')
+      this.dragOver(hasfileInEvent)
     }
   }
 }

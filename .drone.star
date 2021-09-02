@@ -18,8 +18,6 @@ config = {
     },
     "branches": [
         "master",
-        "release*",
-        "develop*",
     ],
     "yarnlint": True,
     "acceptance": {
@@ -66,6 +64,7 @@ config = {
                 "oC10MoveUpload": [
                     "webUIMoveFilesFolders",
                     "webUIUpload",
+                    "webUIOperationsWithFolderShares",
                 ],
                 "oC10Resharing": [
                     "webUIResharing1",
@@ -189,7 +188,7 @@ config = {
                 "SCREEN_RESOLUTION": "768x1024",
             },
             "notificationsAppNeeded": True,
-            "filterTags": "@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10",
+            "filterTags": "@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10 and not @notToImplementOnOC10",
         },
         "webUI-XGA": {
             "type": FULL,
@@ -206,6 +205,7 @@ config = {
                     "webUIFilesList",
                     "webUIFilesSearch",
                     "webUILogin",
+                    "webUIOperationsWithFolderShares",
                     "webUIPreview",
                     "webUIPrivateLinks",
                     "webUIRenameFiles",
@@ -267,7 +267,7 @@ config = {
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-XGA-with-oc10-server-oauth2-login.md" % dir["web"],
                 "SCREEN_RESOLUTION": "768x1024",
             },
-            "filterTags": "@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10",
+            "filterTags": "@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10 and not @notToImplementOnOC10",
         },
         "webUI-Notifications-iPhone": {
             "type": NOTIFICATIONS,
@@ -283,7 +283,7 @@ config = {
                 "SCREEN_RESOLUTION": "375x812",
             },
             "notificationsAppNeeded": True,
-            "filterTags": "@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10",
+            "filterTags": "@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10 and not @notToImplementOnOC10",
         },
         "webUI-iPhone": {
             "type": FULL,
@@ -300,6 +300,7 @@ config = {
                     "webUIFilesList",
                     "webUIFilesSearch",
                     "webUILogin",
+                    "webUIOperationsWithFolderShares",
                     "webUIPreview",
                     "webUIPrivateLinks",
                     "webUIRenameFiles",
@@ -361,7 +362,7 @@ config = {
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-Iphone-oc10-server-oauth2-login.md" % dir["web"],
                 "SCREEN_RESOLUTION": "375x812",
             },
-            "filterTags": "@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10",
+            "filterTags": "@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10 and not @notToImplementOnOC10",
         },
         "webUI-ocis": {
             "type": FULL,
@@ -451,6 +452,7 @@ config = {
                     "webUIUpload",
                     "webUIMoveFilesFolders",
                     "webUIUserJourney",
+                    "webUIOperationsWithFolderShares",
                 ],
             },
             "extraEnvironment": {
@@ -481,7 +483,7 @@ config = {
                 "SERVER_HOST": "http://owncloud/index.php/apps/web/index.html",
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login-and-web-integration-app.md" % dir["web"],
             },
-            "filterTags": "not @skip and not @skipOnOC10 and not @openIdLogin and @smokeTest",
+            "filterTags": "not @skip and not @skipOnOC10 and not @notToImplementOnOC10 and not @openIdLogin and @smokeTest",
             "oc10IntegrationAppIncluded": True,
             "notificationsAppNeeded": True,
             "screenShots": False,
@@ -501,6 +503,7 @@ config = {
                     "webUIFilesList",
                     "webUIFilesSearch",
                     "webUILogin",
+                    "webUIOperationsWithFolderShares",
                     "webUIPreview",
                     "webUIPrivateLinks",
                     "webUIRenameFiles",
@@ -563,7 +566,7 @@ config = {
                 "SERVER_HOST": "http://owncloud/index.php/apps/web/index.html",
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login-and-web-integration-app.md" % dir["web"],
             },
-            "filterTags": "not @skip and not @skipOnOC10 and not @openIdLogin and @smokeTest",
+            "filterTags": "not @skip and not @skipOnOC10 and not @notToImplementOnOC10 and not @openIdLogin and @smokeTest",
             "oc10IntegrationAppIncluded": True,
             "screenShots": False,
         },
@@ -621,6 +624,7 @@ basicTestSuites = [
     "webUILogin",
     "webUIMarkdownEditor",
     "webUIMoveFilesFolders",
+    "webUIOperationsWithFolderShares",
     "webUIPreview",
     "webUIPrivateLinks",
     "webUIRenameFiles",
@@ -727,15 +731,28 @@ def main(ctx):
     return pipelines + deploys + checkStarlark()
 
 def beforePipelines(ctx):
-    return yarnlint() + checkForRecentBuilds(ctx) + changelog(ctx) + website(ctx) + cacheOcisPipeline(ctx)
+    title = ctx.build.title.lower()
+    if "docs-only" in title:
+        return checkForRecentBuilds(ctx) + website(ctx)
+    elif "unit-tests-only" in title:
+        return yarnlint() + checkForRecentBuilds(ctx)
+    else:
+        return yarnlint() + checkForRecentBuilds(ctx) + changelog(ctx) + website(ctx) + cacheOcisPipeline(ctx)
 
 def stagePipelines(ctx):
+    title = ctx.build.title.lower()
+    if "docs-only" in title:
+        return []
+
     unitTestPipelines = unitTests(ctx)
+    if "unit-tests-only" in title:
+        return unitTestPipelines
+
     acceptancePipelines = acceptance(ctx)
     if acceptancePipelines == False:
         return unitTestPipelines
 
-    if ("acceptance-tests-only" not in ctx.build.title.lower()):
+    if ("acceptance-tests-only" not in title):
         dependsOn(unitTestPipelines, acceptancePipelines)
 
     return unitTestPipelines + acceptancePipelines
@@ -807,8 +824,6 @@ def checkForRecentBuilds(ctx):
     return pipelines
 
 def stopRecentBuilds(ctx):
-    repo_slug = ctx.build.source_repo if ctx.build.source_repo else ctx.repo.slug
-
     return [{
         "name": "stop-recent-builds",
         "image": "drone/cli:alpine",
@@ -820,8 +835,8 @@ def stopRecentBuilds(ctx):
             },
         },
         "commands": [
-            "drone build ls %s --status running > %s/recentBuilds.txt" % (repo_slug, dir["web"]),
-            "drone build info %s ${DRONE_BUILD_NUMBER} > %s/thisBuildInfo.txt" % (repo_slug, dir["web"]),
+            "drone build ls %s --status running > %s/recentBuilds.txt" % (ctx.repo.slug, dir["web"]),
+            "drone build info %s ${DRONE_BUILD_NUMBER} > %s/thisBuildInfo.txt" % (ctx.repo.slug, dir["web"]),
             "cd %s && ./tests/acceptance/cancelBuilds.sh" % dir["web"],
         ],
         "when": {
@@ -1004,7 +1019,7 @@ def unitTests(ctx):
                  [
                      {
                          "name": "unit-tests",
-                         "image": "owncloudci/nodejs:16",
+                         "image": "owncloudci/nodejs:14",
                          "pull": "always",
                          "commands": [
                              "yarn test:unit",
@@ -1012,7 +1027,7 @@ def unitTests(ctx):
                      },
                      {
                          "name": "integration-tests",
-                         "image": "owncloudci/nodejs:16",
+                         "image": "owncloudci/nodejs:14",
                          "pull": "always",
                          "commands": [
                              "yarn test:integration",
@@ -1038,7 +1053,7 @@ def unitTests(ctx):
 def acceptance(ctx):
     pipelines = []
 
-    if "acceptance" not in config or "unit-tests-only" in ctx.build.title.lower():
+    if "acceptance" not in config:
         return pipelines
 
     if type(config["acceptance"]) == "bool":
@@ -1053,7 +1068,7 @@ def acceptance(ctx):
         "databases": ["mysql:5.5"],
         "extraEnvironment": {},
         "cronOnly": False,
-        "filterTags": "not @skip and not @skipOnOC10 and not @openIdLogin",
+        "filterTags": "not @skip and not @skipOnOC10 and not @notToImplementOnOC10 and not @openIdLogin",
         "logLevel": "2",
         "notificationsAppNeeded": False,
         "federatedServerNeeded": False,
@@ -1571,7 +1586,7 @@ def installFederatedServer(version, db, dbSuffix = "-federated"):
 def installNPM():
     return [{
         "name": "npm-install",
-        "image": "owncloudci/nodejs:16",
+        "image": "owncloudci/nodejs:14",
         "pull": "always",
         "commands": [
             "if test -f runUnitTestsOnly; then echo 'skipping installNPM'; else yarn install --frozen-lockfile; fi",
@@ -1581,7 +1596,7 @@ def installNPM():
 def lintTest():
     return [{
         "name": "lint-test",
-        "image": "owncloudci/nodejs:16",
+        "image": "owncloudci/nodejs:14",
         "pull": "always",
         "commands": [
             "yarn run lint",
@@ -1591,7 +1606,7 @@ def lintTest():
 def buildWebApp():
     return [{
         "name": "build-web-integration-app",
-        "image": "owncloudci/nodejs:16",
+        "image": "owncloudci/nodejs:14",
         "pull": "always",
         "commands": [
             "bash -x tests/drone/build-web-app.sh {}".format(dir["web"]),
@@ -1619,7 +1634,7 @@ def setupIntegrationWebApp():
 def buildWeb():
     return [{
         "name": "build-web",
-        "image": "owncloudci/nodejs:16",
+        "image": "owncloudci/nodejs:14",
         "pull": "always",
         "commands": [
             "bash -x tests/drone/build-web.sh {}".format(dir["web"]),
@@ -1659,7 +1674,7 @@ def buildRelease(ctx):
     return [
         {
             "name": "make",
-            "image": "owncloudci/nodejs:16",
+            "image": "owncloudci/nodejs:14",
             "pull": "always",
             "commands": [
                 "cd %s" % dir["web"],
@@ -2153,7 +2168,7 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
 
     return [{
         "name": "webui-acceptance-tests",
-        "image": "owncloudci/nodejs:16",
+        "image": "owncloudci/nodejs:14",
         "pull": "always",
         "environment": environment,
         "commands": [
@@ -2325,7 +2340,7 @@ def uploadScreenshots():
 def listScreenShots():
     return [{
         "name": "list screenshots-visual",
-        "image": "owncloudci/nodejs:16",
+        "image": "owncloudci/nodejs:14",
         "pull": "always",
         "commands": [
             "ls -laR %s/tests/vrt" % dir["web"],
@@ -2640,11 +2655,6 @@ def dependsOn(earlierStages, nextStages):
                 nextStage["depends_on"] = [earlierStage["name"]]
 
 def calculateDiffContainsUnitTestsOnly(ctx):
-    # Do all the pipeline steps fully on tag events. Do not try to analyze diffs
-    # and short-circuit the tests that are executed.
-    if ctx.build.event == "tag":
-        return []
-
     return [
         {
             "name": "calculate-diff",
@@ -2654,5 +2664,10 @@ def calculateDiffContainsUnitTestsOnly(ctx):
                 "bash -x tests/drone/if-diff-has-unit-tests-only.sh",
                 "ls -la",
             ],
+            "when": {
+                "event": [
+                    "pull_request",
+                ],
+            },
         },
     ]

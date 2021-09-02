@@ -217,6 +217,7 @@ export default {
 #oc-files-context-actions {
   text-align: left;
   white-space: normal;
+
   > li {
     a,
     a:hover,

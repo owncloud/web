@@ -20,10 +20,10 @@ export function createPublicLink(ctx) {
   }
 
   return new Promise((resolve, reject) => {
-    ctx.store.dispatch('Files/setHighlightedFile', ctx.item).then(() => {
-      ctx.store
-        .dispatch('Files/addLink', { path: ctx.item.path, client: ctx.client, params })
-        .then(link => {
+    ctx.store
+      .dispatch('Files/addLink', { path: ctx.item.path, client: ctx.client, params })
+      .then(link => {
+        ctx.store.dispatch('Files/sidebar/open').then(() => {
           ctx.store.commit('Files/SET_APP_SIDEBAR_ACTIVE_PANEL', 'links-item')
           copyToClipboard(link.url)
           ctx.store.dispatch('showMessage', {
@@ -36,17 +36,17 @@ export function createPublicLink(ctx) {
               enabled: true
             }
           })
-          resolve()
         })
-        .catch(e => {
-          reject(e)
-        })
-    })
+        resolve()
+      })
+      .catch(e => {
+        reject(e)
+      })
   })
 }
 
-export function openNewCollaboratorsPanel(ctx) {
-  ctx.store.dispatch('Files/setHighlightedFile', ctx.item)
+export async function openNewCollaboratorsPanel(ctx) {
+  await ctx.store.dispatch('Files/sidebar/open')
   ctx.store.commit('Files/SET_APP_SIDEBAR_ACTIVE_PANEL', 'sharing-item')
 }
 

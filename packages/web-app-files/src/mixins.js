@@ -20,18 +20,8 @@ export default {
     existingResources: []
   }),
   computed: {
-    ...mapGetters('Files', [
-      'searchTerm',
-      'files',
-      'highlightedFile',
-      'publicLinkPassword',
-      'currentFolder'
-    ]),
-    ...mapGetters(['getToken', 'capabilities', 'configuration']),
-
-    _sidebarOpen() {
-      return this.highlightedFile !== null
-    }
+    ...mapGetters('Files', ['files', 'highlightedFile', 'publicLinkPassword', 'currentFolder']),
+    ...mapGetters(['getToken', 'capabilities', 'configuration'])
   },
   methods: {
     ...mapActions('Files', [

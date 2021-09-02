@@ -17,14 +17,13 @@
         id="files-trashbin-table"
         v-model="selected"
         class="files-table"
-        :class="{ 'files-table-squashed': isSidebarOpen }"
+        :class="{ 'files-table-squashed': !sidebarClosed }"
         :are-paths-displayed="true"
         :are-thumbnails-displayed="false"
         :resources="activeFiles"
-        :highlighted="highlightedFile ? highlightedFile.id : null"
         :are-resources-clickable="false"
         :header-position="headerPosition"
-        @showDetails="$_mountSideBar_showDetails"
+        @showDetails="$_mountSideBar_showDefaultPanel"
       >
         <template #contextMenu="{ resource }">
           <context-actions :item="resource" />
@@ -47,6 +46,7 @@
 import { mapGetters, mapMutations, mapState } from 'vuex'
 
 import { buildDeletedResource, buildResource } from '../helpers/resources'
+import MixinFilesListFilter from '../mixins/filesListFilter'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
 import MixinResources from '../mixins/resources'
 import MixinFilesListPagination from '../mixins/filesListPagination'
@@ -57,11 +57,18 @@ import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
+import { DavProperties } from 'web-pkg/src/constants'
 
 export default {
   components: { ListLoader, NoContentMessage, ListInfo, Pagination, ContextActions },
 
-  mixins: [MixinFilesListPositioning, MixinResources, MixinFilesListPagination, MixinMountSideBar],
+  mixins: [
+    MixinFilesListPositioning,
+    MixinResources,
+    MixinFilesListPagination,
+    MixinMountSideBar,
+    MixinFilesListFilter
+  ],
 
   data: () => ({
     loading: true
@@ -70,29 +77,25 @@ export default {
   computed: {
     ...mapState('Files', ['files']),
     ...mapGetters('Files', [
-      'davProperties',
       'highlightedFile',
       'activeFiles',
       'selectedFiles',
       'inProgress',
       'totalFilesCount'
     ]),
+    ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
     selected: {
       get() {
         return this.selectedFiles
       },
       set(resources) {
-        this.SELECT_RESOURCES(resources)
+        this.SET_FILE_SELECTION(resources)
       }
     },
 
     isEmpty() {
       return this.activeFiles.length < 1
-    },
-
-    isSidebarOpen() {
-      return this.highlightedFile !== null
     },
 
     uploadProgressVisible() {
@@ -121,19 +124,13 @@ export default {
   },
 
   methods: {
-    ...mapMutations('Files', ['LOAD_FILES', 'SELECT_RESOURCES', 'CLEAR_CURRENT_FILES_LIST']),
+    ...mapMutations('Files', ['LOAD_FILES', 'SET_FILE_SELECTION', 'CLEAR_CURRENT_FILES_LIST']),
 
     async loadResources() {
       this.loading = true
       this.CLEAR_CURRENT_FILES_LIST()
 
-      const resources = await this.$client.fileTrash.list('', '1', [
-        '{http://owncloud.org/ns}trashbin-original-filename',
-        '{http://owncloud.org/ns}trashbin-original-location',
-        '{http://owncloud.org/ns}trashbin-delete-datetime',
-        '{DAV:}getcontentlength',
-        '{DAV:}resourcetype'
-      ])
+      const resources = await this.$client.fileTrash.list('', '1', DavProperties.Trashbin)
 
       this.LOAD_FILES({
         currentFolder: buildResource(resources[0]),

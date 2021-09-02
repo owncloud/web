@@ -1,0 +1,8 @@
+Change: Add custom search service
+
+We've added `search` as another core app that can be utilized by 
+other (third-party) frontend extensions to provide 
+filter and search functionality.
+Please note that you need to add `search` to the `apps` array of your config.json file, otherwise the search bar with its global file search capabilities will disappear.
+
+https://github.com/owncloud/web/pull/5415

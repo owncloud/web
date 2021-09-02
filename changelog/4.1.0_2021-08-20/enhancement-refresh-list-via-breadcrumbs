@@ -1,0 +1,6 @@
+Enhancement: refresh files list via breadcrumbs
+
+In the personal and public files lists we've added a click handler to the last breadcrumb item representing the current folder that reloads the files list.
+
+https://github.com/owncloud/web/issues/2018
+https://github.com/owncloud/web/pull/5659

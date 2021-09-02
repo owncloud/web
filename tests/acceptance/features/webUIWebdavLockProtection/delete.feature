@@ -53,11 +53,9 @@ Feature: Locks
       | exclusive |
       | shared    |
 
-  @issue-core-38912
+  @issue-ocis-1284
   Scenario Outline: deleting a file in a public share of a locked folder
-    Given user "brand-new-user" has created folder "simple-folder"
-    And user "brand-new-user" has created file "simple-folder/lorem.txt"
-    And user "brand-new-user" has locked folder "simple-folder" setting following properties
+    Given user "brand-new-user" has locked folder "simple-folder" setting following properties
       | lockscope | <lockscope> |
     And user "brand-new-user" has created a public link with following settings
       | path        | simple-folder                |

@@ -5,8 +5,12 @@
         <oc-icon name="file_copy" class="oc-mr-s" />
         <div class="uk-width-expand">
           <div class="uk-flex">
-            <div class="oc-text-bold uk-width-expand uk-text-truncate">{{ item.name }}</div>
-            <div class="uk-width-auto uk-text-nowrap">{{ getResourceSize(item.size) }}</div>
+            <div class="oc-text-bold uk-width-expand uk-text-truncate upload-details-item-name">
+              {{ item.name }}
+            </div>
+            <div class="uk-width-auto uk-text-nowrap upload-details-item-size">
+              {{ getResourceSize(item.size) }}
+            </div>
           </div>
           <div class="oc-m-rm uk-position-relative uk-width-expand">
             <oc-progress

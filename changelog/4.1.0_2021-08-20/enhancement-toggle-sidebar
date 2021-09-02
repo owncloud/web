@@ -1,0 +1,7 @@
+Enhancement: Toggle right sidebar
+
+We introduced a button above the files list to toggle the right sidebar (open/close). It always opens for the current selection model. If nothing is selected, the current folder will be shown in the right sidebar. With this we now allow sharing a folder when the user already navigated into it.
+
+https://github.com/owncloud/web/issues/5165
+https://github.com/owncloud/web/pull/5678
+https://github.com/owncloud/web/pull/5709

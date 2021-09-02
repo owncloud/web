@@ -1,10 +1,11 @@
 import { mapActions, mapGetters } from 'vuex'
 
 import { isTrashbinRoute } from '../../helpers/route'
+import { isSameResource } from '../../helpers/resource'
 
 export default {
   computed: {
-    ...mapGetters('Files', ['activeFiles']),
+    ...mapGetters('Files', ['files', 'currentFolder']),
 
     $_rename_items() {
       return [
@@ -16,6 +17,10 @@ export default {
           handler: this.$_rename_trigger,
           isEnabled: ({ resource }) => {
             if (isTrashbinRoute(this.$route)) {
+              return false
+            }
+
+            if (isSameResource(resource, this.currentFolder)) {
               return false
             }
 
@@ -87,9 +92,7 @@ export default {
       }
 
       if (!this.flatFileList) {
-        const exists = this.activeFiles.find(
-          file => file.name === newName && currentName !== newName
-        )
+        const exists = this.files.find(file => file.name === newName && currentName !== newName)
 
         if (exists) {
           const translated = this.$gettext('The name "%{name}" is already taken')

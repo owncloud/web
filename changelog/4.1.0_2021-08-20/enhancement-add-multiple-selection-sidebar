@@ -1,0 +1,7 @@
+Enhancement: Add multiple selection Sidebar
+
+We've changed the sidebar so if a user selects multiple files or folders
+he sees a detailed view of his selection in the sidebar.
+
+https://github.com/owncloud/web/issues/5164
+https://github.com/owncloud/web/pull/5630

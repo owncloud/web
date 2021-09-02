@@ -11,7 +11,9 @@ import PublicLink from './views/PublicLink.vue'
 import FilesDrop from './views/FilesDrop.vue'
 import LocationPicker from './views/LocationPicker.vue'
 import PublicFiles from './views/PublicFiles.vue'
+import NoSelection from './components/SideBar/NoSelection.vue'
 import FileDetails from './components/SideBar/Details/FileDetails.vue'
+import FileDetailsMultiple from './components/SideBar/Details/FileDetailsMultiple.vue'
 import FileActions from './components/SideBar/Actions/FileActions.vue'
 import FileVersions from './components/SideBar/Versions/FileVersions.vue'
 import FileShares from './components/SideBar/Shares/FileShares.vue'
@@ -39,27 +41,48 @@ const appInfo = {
   fileSideBars: [
     // We don't have file details in the trashbin, yet.
     // Only allow `actions` panel on trashbin route for now.
-    ({ route }) => ({
+    ({ rootFolder }) => ({
+      app: 'no-selection-item',
+      icon: 'info_outline',
+      component: NoSelection,
+      default: () => true,
+      get enabled() {
+        return rootFolder
+      }
+    }),
+    ({ route, multipleSelection, rootFolder }) => ({
       app: 'details-item',
       icon: 'info_outline',
       component: FileDetails,
       default: !isTrashbinRoute(route),
       get enabled() {
-        return !isTrashbinRoute(route)
+        return !isTrashbinRoute(route) && !multipleSelection && !rootFolder
       }
     }),
-    ({ route }) => ({
+    ({ multipleSelection, rootFolder }) => ({
+      app: 'details-multiple-item',
+      icon: 'info_outline',
+      component: FileDetailsMultiple,
+      default: () => true,
+      get enabled() {
+        return multipleSelection && !rootFolder
+      }
+    }),
+    ({ route, multipleSelection, rootFolder }) => ({
       app: 'actions-item',
       component: FileActions,
       icon: 'slideshow',
       default: isTrashbinRoute(route),
-      enabled: true
+      get enabled() {
+        return !multipleSelection && !rootFolder
+      }
     }),
-    ({ capabilities, route }) => ({
+    ({ capabilities, route, multipleSelection, rootFolder }) => ({
       app: 'sharing-item',
       icon: 'group',
       component: FileShares,
       get enabled() {
+        if (multipleSelection || rootFolder) return false
         if (isTrashbinRoute(route)) {
           return false
         }
@@ -70,11 +93,12 @@ const appInfo = {
         return false
       }
     }),
-    ({ capabilities, route }) => ({
+    ({ capabilities, route, multipleSelection, rootFolder }) => ({
       app: 'links-item',
       icon: 'link',
       component: FileLinks,
       get enabled() {
+        if (multipleSelection || rootFolder) return false
         if (isTrashbinRoute(route)) {
           return false
         }
@@ -85,11 +109,12 @@ const appInfo = {
         return false
       }
     }),
-    ({ capabilities, highlightedFile, route }) => ({
+    ({ capabilities, highlightedFile, route, multipleSelection, rootFolder }) => ({
       app: 'versions-item',
       icon: 'file_version',
       component: FileVersions,
       get enabled() {
+        if (multipleSelection || rootFolder) return false
         if (isTrashbinRoute(route)) {
           return false
         }

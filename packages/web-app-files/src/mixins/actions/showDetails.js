@@ -18,10 +18,10 @@ export default {
   },
   methods: {
     ...mapMutations('Files', ['SET_APP_SIDEBAR_ACTIVE_PANEL']),
-    ...mapActions('Files', ['setHighlightedFile']),
+    ...mapActions('Files/sidebar', { openSidebar: 'open' }),
 
-    $_showDetails_trigger(resource) {
-      this.setHighlightedFile(resource)
+    async $_showDetails_trigger() {
+      await this.openSidebar()
       this.SET_APP_SIDEBAR_ACTIVE_PANEL(null)
     }
   }

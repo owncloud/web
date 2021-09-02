@@ -1,0 +1,6 @@
+Enhancement: Move file via drag and drop
+
+We've added moving files and folders via drag and drop to the files table view.
+
+https://github.com/owncloud/web/issues/5592
+https://github.com/owncloud/web/pull/5588

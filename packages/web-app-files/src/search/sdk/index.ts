@@ -22,16 +22,22 @@ export default class Provider extends EventBus implements SearchProvider {
 
     this.id = 'files.sdk'
     this.label = $gettext('Search all files ↵')
-    this.previewSearch = new Preview(store, router)
-    this.listSearch = new List(store)
+    this.previewSearch = new Preview(router)
+    this.listSearch = new List()
     this.store = store
     this.router = router
   }
 
   public activate(term: string): void {
+    const listRoute = 'search-provider-list'
+
+    if (!term && this.router.currentRoute.name !== listRoute) {
+      return
+    }
+
     this.router
       .push({
-        name: 'search-provider-list',
+        name: listRoute,
         query: { term, provider: this.id }
       })
       .catch(() => {

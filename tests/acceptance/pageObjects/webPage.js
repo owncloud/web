@@ -201,11 +201,12 @@ module.exports = {
     browseToUserProfile: function() {
       return this.click('@userMenuButton')
     },
-    getDisplayedMessage: async function() {
+    getDisplayedMessage: async function(titleOnly = false) {
       let element = ''
       let displayedmessage
-      await this.waitForElementVisible('@messages')
-      await this.api.element('@messages', result => {
+      const selector = titleOnly ? '@message' : '@messages'
+      await this.waitForElementVisible(selector)
+      await this.api.element(selector, result => {
         element = result.value.ELEMENT
       })
       await this.api.elementIdText(element, function(result) {
@@ -226,6 +227,7 @@ module.exports = {
     },
     getPopupErrorMessages: async function() {
       const messages = []
+      await this.waitForElementVisible('@messages')
       await this.api.elements('@messages', function({ value }) {
         value.forEach(async function({ ELEMENT }) {
           await client.elementIdText(ELEMENT, function({ value }) {

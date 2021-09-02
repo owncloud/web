@@ -62,7 +62,7 @@ const plugins = [
   globals(),
   json(),
   copy({
-    watch: !production && './config',
+    watch: !production && ['./config', './packages/web-runtime/themes'],
     targets: [
       { src: './packages/web-container/img', dest: 'dist' },
       { src: './packages/web-container/oidc-callback.html', dest: 'dist' },
@@ -71,6 +71,7 @@ const plugins = [
         dest: 'dist'
       },
       { src: './packages/web-container/manifest.json', dest: 'dist' },
+      { src: './packages/web-container/robots.txt', dest: 'dist' },
       { src: './packages/web-runtime/themes', dest: 'dist' },
       {
         src: `./config/${production ? 'config.dist.json' : 'config.json'}`,

@@ -20,6 +20,7 @@ import { mapGetters, mapActions } from 'vuex'
 import { basename } from 'path'
 import queryString from 'query-string'
 import { DateTime } from 'luxon'
+import { DavPermission, DavProperty } from 'web-pkg/src/constants'
 
 export default {
   name: 'DrawIoEditor',
@@ -84,9 +85,10 @@ export default {
     },
     checkPermissions() {
       this.$client.files
-        .fileInfo(this.filePath, ['{http://owncloud.org/ns}permissions'])
+        .fileInfo(this.filePath, [DavProperty.Permissions])
         .then(v => {
-          this.isReadOnly = v.fileInfo['{http://owncloud.org/ns}permissions'].indexOf('W') === -1
+          this.isReadOnly =
+            v.fileInfo[DavProperty.Permissions].indexOf(DavPermission.Updateable) === -1
           this.loading = false
         })
         .catch(error => {

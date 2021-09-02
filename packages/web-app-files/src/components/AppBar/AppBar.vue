@@ -14,6 +14,7 @@
       <oc-breadcrumb
         v-if="showBreadcrumb"
         id="files-breadcrumb"
+        data-testid="files-breadcrumbs"
         class="oc-p-s"
         :items="breadcrumbs"
       />
@@ -114,12 +115,15 @@ import MixinFileActions, { EDITOR_MODE_CREATE } from '../../mixins/fileActions'
 import MixinRoutes from '../../mixins/routes'
 import MixinScrollToResource from '../../mixins/filesListScrolling'
 import { buildResource } from '../../helpers/resources'
+import { bus } from 'web-pkg/src/instance'
 import BatchActions from './SelectedResources/BatchActions.vue'
 import FileDrop from './Upload/FileDrop.vue'
 import FileUpload from './Upload/FileUpload.vue'
 import FolderUpload from './Upload/FolderUpload.vue'
 import SizeInfo from './SelectedResources/SizeInfo.vue'
 import ViewOptions from './ViewOptions.vue'
+import { DavProperties, DavProperty } from 'web-pkg/src/constants'
+
 export default {
   components: {
     BatchActions,
@@ -138,10 +142,9 @@ export default {
   computed: {
     ...mapGetters(['getToken', 'configuration', 'newFileHandlers', 'quota', 'user']),
     ...mapGetters('Files', [
-      'activeFiles',
+      'files',
       'inProgress',
       'currentFolder',
-      'davProperties',
       'selectedFiles',
       'publicLinkPassword'
     ]),
@@ -212,9 +215,13 @@ export default {
         baseUrl = '/files/list/all/'
         pathItems.push('/') // as of now we need to add the url encoded root path `/`, otherwise we'll land in the configured homeFolder
         breadcrumbs.push({
-          text: this.$gettext('All files'),
-          to: baseUrl + encodeURIComponent(pathUtil.join(...pathItems))
+          text: this.$gettext('All files')
         })
+
+        pathSegments.length < 1
+          ? (breadcrumbs[0].onClick = () =>
+              bus.emit('app.files.list.load', this.$route.params.item))
+          : (breadcrumbs[0].to = baseUrl + encodeURIComponent(pathUtil.join(...pathItems)))
       } else {
         baseUrl = '/files/public/list/'
         pathItems.push(pathSegments.splice(0, 1)[0])
@@ -226,6 +233,16 @@ export default {
       for (let i = 0; i < pathSegments.length; i++) {
         pathItems.push(pathSegments[i])
         const to = baseUrl + encodeURIComponent(pathUtil.join(...pathItems))
+
+        if (i === pathSegments.length - 1) {
+          breadcrumbs.push({
+            text: pathSegments[i],
+            onClick: () => bus.emit('app.files.list.load', this.$route.params.item)
+          })
+
+          continue
+        }
+
         breadcrumbs.push({
           text: pathSegments[i],
           to: i + 1 === pathSegments.length ? null : to
@@ -270,7 +287,12 @@ export default {
     }
   },
   methods: {
-    ...mapActions('Files', ['updateFileProgress', 'removeFilesFromTrashbin', 'loadIndicators']),
+    ...mapActions('Files', [
+      'updateFileProgress',
+      'removeFilesFromTrashbin',
+      'loadIndicators',
+      'setFileSelection'
+    ]),
     ...mapActions(['openFile', 'showMessage', 'createModal', 'setModalInputErrorMessage']),
     ...mapMutations('Files', ['UPSERT_RESOURCE', 'SET_HIDDEN_FILES_VISIBILITY']),
     ...mapMutations(['SET_QUOTA']),
@@ -314,13 +336,13 @@ export default {
         let resource
         if (this.isPersonalRoute) {
           await this.$client.files.createFolder(path)
-          resource = await this.$client.files.fileInfo(path, this.davProperties)
+          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else {
           await this.$client.publicFiles.createFolder(path, null, this.publicLinkPassword)
           resource = await this.$client.publicFiles.getFileInfo(
             path,
             this.publicLinkPassword,
-            this.davProperties
+            DavProperties.Default
           )
         }
         resource = buildResource(resource)
@@ -333,7 +355,7 @@ export default {
           })
         }
         setTimeout(() => {
-          this.setHighlightedFile(resource)
+          this.setFileSelection([resource])
           this.scrollToResource(resource)
         })
       } catch (error) {
@@ -361,7 +383,9 @@ export default {
       if (/\s+$/.test(folderName)) {
         return this.$gettext('Folder name cannot end with whitespace')
       }
-      const exists = this.activeFiles.find(file => file.name === folderName)
+
+      const exists = this.files.find(file => file.name === folderName)
+
       if (exists) {
         const translated = this.$gettext('%{name} already exists')
         return this.$gettextInterpolate(translated, { name: folderName }, true)
@@ -378,17 +402,18 @@ export default {
         let resource
         if (this.isPersonalRoute) {
           await this.$client.files.putFileContents(path, '')
-          resource = await this.$client.files.fileInfo(path, this.davProperties)
+          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else {
           await this.$client.publicFiles.putFileContents(path, null, this.publicLinkPassword, '')
           resource = await this.$client.publicFiles.getFileInfo(
             path,
             this.publicLinkPassword,
-            this.davProperties
+            DavProperties.Default
           )
         }
         if (this.newFileAction) {
-          const fileId = resource.fileInfo['{http://owncloud.org/ns}fileid']
+          const fileId = resource.fileInfo[DavProperty.FileId]
+
           this.$_fileActions_openEditor(this.newFileAction, path, fileId, EDITOR_MODE_CREATE)
           this.hideModal()
           return
@@ -403,7 +428,7 @@ export default {
           })
         }
         setTimeout(() => {
-          this.setHighlightedFile(resource)
+          this.setFileSelection([resource])
           this.scrollToResource(resource)
         })
       } catch (error) {
@@ -431,7 +456,9 @@ export default {
       if (/\s+$/.test(fileName)) {
         return this.$gettext('File name cannot end with whitespace')
       }
-      const exists = this.activeFiles.find(file => file.name === fileName)
+
+      const exists = this.files.find(file => file.name === fileName)
+
       if (exists) {
         const translated = this.$gettext('%{name} already exists')
         return this.$gettextInterpolate(translated, { name: fileName }, true)
@@ -446,11 +473,11 @@ export default {
         await this.$nextTick()
         const path = pathUtil.join(this.currentPath, file)
         let resource = this.isPersonalRoute
-          ? await this.$client.files.fileInfo(path, this.davProperties)
+          ? await this.$client.files.fileInfo(path, DavProperties.Default)
           : await this.$client.publicFiles.getFileInfo(
               path,
               this.publicLinkPassword,
-              this.davProperties
+              DavProperties.Default
             )
         resource = buildResource(resource)
         this.UPSERT_RESOURCE(resource)

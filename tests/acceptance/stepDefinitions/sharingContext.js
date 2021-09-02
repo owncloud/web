@@ -597,8 +597,8 @@ When('the user cancels the share creation dialog on the webUI', function() {
   return client.page.FilesPageElement.sharingDialog().clickCancel()
 })
 
-When('the user types {string} in the share-with-field', function(input) {
-  return client.page.FilesPageElement.sharingDialog().enterAutoComplete(input)
+When('the user types {string} in the share-with-field', async function(input) {
+  return await client.page.FilesPageElement.sharingDialog().enterAutoComplete(input)
 })
 
 When(
@@ -688,9 +688,9 @@ Then('it should not be possible to share file/folder {string} using the webUI', 
   const state = await filesList.isSharingButtonPresent(resource)
   assert.ok(!state, `Error: Sharing button for resource ${resource} is not in disabled state`)
   await filesList.openSideBar(resource)
-  const linkItemState = await appSideBar.isLinksPanelSelectPresent()
+  const linkItemState = await appSideBar.isLinksPanelSelectable()
   assert.ok(!linkItemState, `Error: Sidebar 'Links' panel for resource ${resource} is present`)
-  const collaboratorsItemState = await appSideBar.isCollaboratorsAccordionItemPresent()
+  const collaboratorsItemState = await appSideBar.isSharingPanelSelectable()
   assert.ok(
     !collaboratorsItemState,
     `Error: Sidebar 'People' panel for resource ${resource} is present`
@@ -951,7 +951,7 @@ Then('user {string} should be listed as {string} in the collaborators list on th
 Then(
   'the share {string} shared with user {string} should have no expiration information displayed on the webUI',
   async function(item, user) {
-    await client.page.FilesPageElement.filesList().clickRow(item)
+    await client.page.FilesPageElement.filesList().openSideBar(item)
     await client.page.FilesPageElement.appSideBar().activatePanel('people')
     const elementID = await client.page.FilesPageElement.SharingDialog.collaboratorsDialog().getCollaboratorExpirationInfo(
       user
@@ -967,7 +967,7 @@ Then(
 Then(
   'the expiration information displayed on the webUI of share {string} shared with user {string} should be {string} or {string}',
   async function(item, user, information1, information2) {
-    await client.page.FilesPageElement.filesList().clickRow(item)
+    await client.page.FilesPageElement.filesList().openSideBar(item)
     await client.page.FilesPageElement.appSideBar().activatePanel('people')
     const actualInfo = await client.page.FilesPageElement.SharingDialog.collaboratorsDialog().getCollaboratorExpirationInfo(
       user
@@ -1359,14 +1359,8 @@ Then(
 Then('the expiration date shown on the webUI should be {string} days', async function(
   expectedDays
 ) {
-  let expectedDate = sharingHelper.calculateDate(expectedDays)
-  expectedDate = new Date(Date.parse(expectedDate))
-  const expectedDateString =
-    expectedDate.toLocaleString('en-GB', { month: 'short' }) +
-    ' ' +
-    expectedDate.getDate().toString() +
-    ', ' +
-    expectedDate.getFullYear()
+  const expectedDate = sharingHelper.calculateDate(expectedDays)
+  const expectedDateString = sharingHelper.calculateDateString(expectedDate)
   const dateStringFromInputField = await client.page.FilesPageElement.sharingDialog().getExpirationDateFromInputField()
   assert.strictEqual(
     dateStringFromInputField,

@@ -4,17 +4,13 @@ export default {
   inProgress: state => {
     return state.inProgress
   },
-  selectedFiles: state => {
-    if (state.selected.length === 0) {
-      return []
-    } else {
-      return state.selected
-    }
+  selectedFiles: (state, getters) => {
+    return getters.filesAll.filter(f => state.selectedIds.includes(f.id))
   },
   files: state => {
     return state.files
   },
-  filesAll: state => (state.filesSearched.length ? state.filesSearched : state.files),
+  filesAll: state => state.filesSearched || state.files,
   currentFolder: state => {
     return state.currentFolder
   },
@@ -48,9 +44,6 @@ export default {
   totalFilesCount: (state, getters) => {
     return $_fileCounts(getters.filesAll)
   },
-  davProperties: state => {
-    return state.davProperties
-  },
   dropzone: state => {
     return state.dropzone
   },
@@ -69,21 +62,21 @@ export default {
   },
   sharesTree: state => state.sharesTree,
   sharesTreeLoading: state => state.sharesTreeLoading,
-  loadingFolder: state => {
+  loadingFolder: (state, getter) => {
     // when loading the shares tree, it is only related to the full folder
     // whenever no file is selected / no sidebar is open.
     // else it means we're loading the shares only for the sidebar contents and shouldn't
     // be showing a progress bar for the whole folder
-    return state.loadingFolder || (state.highlightedResourceId === null && state.sharesTreeLoading)
+    return state.loadingFolder || (getter.highlightedFile === null && state.sharesTreeLoading)
   },
   quota: state => {
     return state.quota
   },
   highlightedFile: (state, getters) => {
-    if (state.highlightedResourceId) {
-      return getters.filesAll.find(r => r.id === state.highlightedResourceId)
+    if (getters.selectedFiles.length > 0) {
+      return getters.selectedFiles[0]
     }
-    return null
+    return state.currentFolder
   },
   versions: state => {
     return state.versions

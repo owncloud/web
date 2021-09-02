@@ -27,6 +27,9 @@ export default {
     files = files.map(buildResource)
     context.commit('LOAD_FILES', { currentFolder, files })
   },
+  setFileSelection(context, files) {
+    context.commit('SET_FILE_SELECTION', files)
+  },
   addFileSelection(context, file) {
     context.commit('ADD_FILE_SELECTION', file)
   },
@@ -34,7 +37,7 @@ export default {
     context.commit('REMOVE_FILE_SELECTION', file)
   },
   toggleFileSelection(context, file) {
-    if (context.state.selected.includes(file)) {
+    if (context.state.selectedIds.includes(file.id)) {
       context.commit('REMOVE_FILE_SELECTION', file)
     } else {
       context.commit('ADD_FILE_SELECTION', file)
@@ -67,6 +70,8 @@ export default {
       }
       const promise = p
         .then(() => {
+          context.commit('SET_APP_SIDEBAR_ACTIVE_PANEL', null)
+          context.dispatch('sidebar/close')
           context.commit('REMOVE_FILE', file)
           context.commit('REMOVE_FILE_SELECTION', file)
           context.commit('REMOVE_FILE_FROM_SEARCHED', file)
@@ -103,8 +108,12 @@ export default {
     return Promise.all(promises)
   },
   removeFilesFromTrashbin(context, files) {
+    context.commit('SET_APP_SIDEBAR_ACTIVE_PANEL', null)
+    context.dispatch('sidebar/close')
     for (const file of files) {
       context.commit('REMOVE_FILE', file)
+      context.commit('REMOVE_FILE_SELECTION', file)
+      context.commit('REMOVE_FILE_FROM_SEARCHED', file)
     }
   },
   renameFile(context, { file, newValue, client, publicPage }) {
@@ -121,6 +130,17 @@ export default {
         context.commit('RENAME_FILE', { file, newValue, newPath })
       })
     }
+  },
+  updateCurrentFileShareTypes({ state, getters, commit }) {
+    const highlighted = getters.highlightedFile
+    if (!highlighted) {
+      return
+    }
+    commit('UPDATE_RESOURCE_FIELD', {
+      id: highlighted.id,
+      field: 'shareTypes',
+      value: computeShareTypes(state.currentFileOutgoingShares)
+    })
   },
   loadCurrentFileOutgoingShares(context, { client, path }) {
     context.commit('CURRENT_FILE_OUTGOING_SHARES_SET', [])
@@ -141,7 +161,7 @@ export default {
             )
           })
         )
-        context.commit('UPDATE_CURRENT_FILE_SHARE_TYPES')
+        context.dispatch('updateCurrentFileShareTypes')
         context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', false)
       })
       .catch(error => {
@@ -233,7 +253,7 @@ export default {
               !context.rootGetters.isOcis
             )
           )
-          context.commit('UPDATE_CURRENT_FILE_SHARE_TYPES')
+          context.dispatch('updateCurrentFileShareTypes')
           context.commit('LOAD_INDICATORS')
         })
         .catch(e => {
@@ -269,7 +289,7 @@ export default {
             !context.rootGetters.isOcis
           )
         )
-        context.commit('UPDATE_CURRENT_FILE_SHARE_TYPES')
+        context.dispatch('updateCurrentFileShareTypes')
         context.commit('LOAD_INDICATORS')
       })
       .catch(e => {
@@ -292,7 +312,7 @@ export default {
       .deleteShare(share.id)
       .then(() => {
         context.commit('CURRENT_FILE_OUTGOING_SHARES_REMOVE', share)
-        context.commit('UPDATE_CURRENT_FILE_SHARE_TYPES')
+        context.dispatch('updateCurrentFileShareTypes')
         context.commit('LOAD_INDICATORS')
       })
       .catch(e => {
@@ -403,9 +423,6 @@ export default {
   dragOver(context, value) {
     context.commit('DRAG_OVER', value)
   },
-  setHighlightedFile(context, file) {
-    context.commit('SET_HIGHLIGHTED_FILE', file)
-  },
   setPublicLinkPassword(context, password) {
     context.commit('SET_PUBLIC_LINK_PASSWORD', password)
   },
@@ -417,7 +434,7 @@ export default {
         .then(data => {
           const link = buildShare(data.shareInfo, null, !context.rootGetters.isOcis)
           context.commit('CURRENT_FILE_OUTGOING_SHARES_ADD', link)
-          context.commit('UPDATE_CURRENT_FILE_SHARE_TYPES')
+          context.dispatch('updateCurrentFileShareTypes')
           context.commit('LOAD_INDICATORS')
           resolve(link)
         })
@@ -445,7 +462,7 @@ export default {
       .deleteShare(share.id)
       .then(() => {
         context.commit('CURRENT_FILE_OUTGOING_SHARES_REMOVE', share)
-        context.commit('UPDATE_CURRENT_FILE_SHARE_TYPES')
+        context.dispatch('updateCurrentFileShareTypes')
         context.commit('LOAD_INDICATORS')
       })
       .catch(e => context.commit('CURRENT_FILE_OUTGOING_SHARES_ERROR', e.message))
@@ -524,4 +541,16 @@ export default {
       commit('UPDATE_RESOURCE_FIELD', { id: resource.id, field: type, value: preview })
     }
   }
+}
+
+/**
+ * @param {Array.<Object>} shares array of shares
+ * @return {Array.<Integer>} array of share types
+ */
+function computeShareTypes(shares) {
+  const shareTypes = new Set()
+  shares.forEach(share => {
+    shareTypes.add(share.shareType)
+  })
+  return Array.from(shareTypes)
 }

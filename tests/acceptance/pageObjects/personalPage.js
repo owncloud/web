@@ -1,6 +1,5 @@
 const util = require('util')
 const xpathHelper = require('../helpers/xpath')
-const timeoutHelper = require('../helpers/timeoutHelper')
 const { join, normalize } = require('../helpers/path')
 const { client } = require('nightwatch-api')
 
@@ -74,7 +73,6 @@ module.exports = {
           selector: resourceBreadcrumbXpath,
           abortOnFailure: false
         })
-        .waitForAnimationToFinish()
         .useCss()
       return this
     },
@@ -85,19 +83,20 @@ module.exports = {
      * @param {boolean} expectToSucceed
      */
     createFolder: async function(name, expectToSucceed = true) {
+      await this.clearFileSelectionIfAny()
       await this.waitForElementVisible('@newFileMenuButtonAnyState')
-        .waitForElementEnabled(this.elements.newFileMenuButtonAnyState.selector)
+        .waitForElementEnabled('@newFileMenuButtonAnyState')
         .click('@newFileMenuButton')
         .click('@newFolderButton')
         .waitForElementVisible('@dialog')
-        .waitForAnimationToFinish()
+        .waitForAnimationToFinish() // wait for transition on the modal to finish
 
       if (name !== null) {
         await this.clearValueWithEvent('@dialogInput')
         await this.setValue('@dialogInput', name)
       }
 
-      await this.click('@dialogConfirmBtn').waitForAjaxCallsToStartAndFinish()
+      await this.click('@dialogConfirmBtnEnabled').waitForAjaxCallsToStartAndFinish()
 
       if (expectToSucceed) {
         await this.waitForElementNotPresent('@dialog')
@@ -116,19 +115,20 @@ module.exports = {
      * @param {boolean} expectToSucceed
      */
     createFile: async function(name, expectToSucceed = true) {
+      await this.clearFileSelectionIfAny()
       await this.waitForElementVisible('@newFileMenuButton')
         .click('@newFileMenuButton')
         .waitForElementVisible('@newFileButton')
         .click('@newFileButton')
         .waitForElementVisible('@dialog')
-        .waitForAnimationToFinish()
+        .waitForAnimationToFinish() // wait for transition on the modal to finish
 
       if (name !== null) {
         await this.clearValueWithEvent('@dialogInput')
         await this.setValue('@dialogInput', name)
       }
 
-      await this.click('@dialogConfirmBtn')
+      await this.click('@dialogConfirmBtnEnabled')
 
       if (expectToSucceed) {
         await this.waitForElementNotPresent('@dialog')
@@ -229,45 +229,17 @@ module.exports = {
       return this.waitForElementVisible('@deleteSelectedButton')
         .click('@deleteSelectedButton')
         .waitForElementVisible('@dialog')
-        .waitForAnimationToFinish()
-        .click('@dialogConfirmBtn')
+        .waitForAnimationToFinish() // wait for transition on the modal to finish
+        .click('@dialogConfirmBtnEnabled')
         .waitForAjaxCallsToStartAndFinish()
         .waitForElementNotPresent('@dialog')
     },
-    declineAllCheckedShares: function() {
-      return this.waitForElementVisible('@declineSelectedSharesButton').click(
-        '@declineSelectedSharesButton'
-      )
-    },
-    isSidebarVisible: async function(timeout = null) {
-      let isVisible = false
-      timeout = timeoutHelper.parseTimeout(timeout)
-      await this.isVisible(
-        {
-          locateStrategy: this.elements.sideBar.locateStrategy,
-          selector: this.elements.sideBar.selector,
-          timeout: timeout
-        },
-        result => {
-          isVisible = result.status === 0
-        }
-      )
-      return isVisible
-    },
-    checkSidebarItem: function(resourceName) {
-      return this.getText('@sidebarItemName', function(itemName) {
-        this.assert.strictEqual(
-          itemName.value,
-          resourceName,
-          `In sidebar is different item - ${itemName.value}`
-        )
-      })
-    },
-    confirmFileOverwrite: function() {
-      return this.waitForAnimationToFinish()
-        .click('@dialogConfirmBtn')
+    confirmFileOverwrite: async function() {
+      await this.waitForAnimationToFinish() // wait for transition on the modal to finish
+        .click('@dialogConfirmBtnEnabled')
         .waitForElementNotPresent('@dialog')
         .waitForAjaxCallsToStartAndFinish()
+      return this
     },
     checkForButtonDisabled: function() {
       return this.waitForElementVisible('@dialogConfirmBtnDisabled')
@@ -301,7 +273,6 @@ module.exports = {
         .waitForElementVisible('@newMdFileButton')
         .click('@newMdFileButton')
         .waitForElementVisible('@dialog')
-        .waitForAnimationToFinish()
 
       if (name !== null) {
         await this.clearValueWithEvent('@dialogInput')
@@ -309,7 +280,7 @@ module.exports = {
       }
 
       await this.initAjaxCounters()
-        .click('@dialogConfirmBtn')
+        .click('@dialogConfirmBtnEnabled')
         .waitForOutstandingAjaxCalls()
 
       if (expectToSucceed) {
@@ -336,6 +307,25 @@ module.exports = {
         .waitForElementVisible('@clearSelectionBtn')
         .click('@clearSelectionBtn')
         .waitForElementNotPresent('@clearSelectionBtn')
+    },
+    checkForButtonMoveHereDisabled: function() {
+      return this.waitForElementVisible('@moveHereConfirmBtn')
+    },
+    clearFileSelectionIfAny: async function() {
+      let activeFileSelection = false
+      await this.isVisible(
+        {
+          selector: '@clearSelectionBtn',
+          timeout: client.globals.waitForNegativeConditionTimeout
+        },
+        result => {
+          activeFileSelection = result.value === true
+        }
+      )
+      if (activeFileSelection) {
+        await this.click('@clearSelectionBtn').waitForElementNotPresent('@clearSelectionBtn')
+      }
+      return this
     }
   },
   elements: {
@@ -350,9 +340,6 @@ module.exports = {
     },
     deleteSelectedButton: {
       selector: '#delete-selected-btn'
-    },
-    declineSelectedSharesButton: {
-      selector: '#decline-selected-shares-btn'
     },
     newResourceDropdown: {
       selector: '#new-file-menu-drop'
@@ -406,23 +393,14 @@ module.exports = {
     fileUploadProgress: {
       selector: '#files-upload-progress'
     },
-    sideBar: {
-      selector: '//div[contains(@id, "files-sidebar")]',
-      locateStrategy: 'xpath'
-    },
-    sidebarItemName: {
-      selector: '.sidebar-panel.is-active h2'
-    },
     dialog: {
       selector: '.oc-modal'
     },
-    dialogConfirmBtn: {
-      selector: '.oc-modal-body-actions-confirm'
+    dialogConfirmBtnEnabled: {
+      selector: '.oc-modal-body-actions-confirm:enabled'
     },
     dialogConfirmBtnDisabled: {
-      selector:
-        '//button[contains(@class, "oc-modal-body-actions-confirm") and @disabled="disabled"]',
-      locateStrategy: 'xpath'
+      selector: '.oc-modal-body-actions-confirm:disabled'
     },
     dialogCancelBtn: {
       selector: '.oc-modal-body-actions-cancel'
@@ -440,15 +418,13 @@ module.exports = {
       selector: '#markdown-editor-app-bar .uk-text-right .oc-button'
     },
     clearSelectionBtn: {
-      selector: '//button[contains(@aria-label, "Clear selection")]',
-      locateStrategy: 'xpath'
-    },
-    cancelMoveCopyBtn: {
-      selector: '//button[.="Cancel"]',
-      locateStrategy: 'xpath'
+      selector: '#files-clear-selection'
     },
     dialogBoxInputTextInRed: {
       selector: '.oc-text-input-danger'
+    },
+    moveHereConfirmBtn: {
+      selector: '#location-picker-btn-confirm:disabled'
     }
   }
 }
