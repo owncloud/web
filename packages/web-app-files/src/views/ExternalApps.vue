@@ -1,6 +1,17 @@
 <template>
   <main>
     <div>
+      <list-loader v-if="loading" />
+      <no-content-message
+        v-if="!loading && !app_url"
+        id="no-app-data"
+        class="files-empty"
+        icon="warning"
+      >
+        <template #message>
+          <span v-translate> Application error </span>
+        </template>
+      </no-content-message>
       <iframe v-if="app_url && method === 'GET'" class="app-iframe" :src="app_url" />
       <div v-if="app_url && method === 'POST' && form_parameters">
         <form :action="app_url" target="app-iframe" method="post">
@@ -16,9 +27,16 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import ListLoader from '../components/FilesList/ListLoader.vue'
+import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
 export default {
   name: 'ExternalApps',
+  components: {
+    ListLoader,
+    NoContentMessage
+  },
   data: () => ({
+    loading: true,
     app: '',
     file_id: '',
     app_url: '',
@@ -37,32 +55,31 @@ export default {
   mounted() {
     document.title = this.$route.params.app
   },
-  async created() {
+  created() {
     console.log('route', this.$route.params)
     // this.test = this.$router.params.userId
-    try {
-      this.app = this.$route.params.app
-      this.file_id = this.$route.params.file_id
-      const headers = new Headers()
-      headers.append('Authorization', 'Bearer ' + this.getToken)
-      headers.append('X-Requested-With', 'XMLHttpRequest')
-      const url = '/app/open?file_id=' + this.file_id + '&app_name=' + this.app
-      const response = await fetch(url, {
-        method: 'POST',
-        headers
+    this.app = this.$route.params.app
+    this.file_id = this.$route.params.file_id
+    const headers = new Headers()
+    headers.append('Authorization', 'Bearer ' + this.getToken)
+    headers.append('X-Requested-With', 'XMLHttpRequest')
+    const url = '/app/open?file_id=' + this.file_id + '&app_name=' + this.app
+    fetch(url, {
+      method: 'POST',
+      headers
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data && data.app_url) this.app_url = data.app_url
+        if (data && data.method) this.method = data.method
+        if (data && data.form_parameters) this.form_parameters = data.form_parameters
+        if (this.app_url && this.method) this.loading = false
+        console.log('post data', data)
       })
-      if (!response.ok) {
-        const message = `An error has occured: ${response.status}`
-        throw new Error(message)
-      }
-      const data = await response.json()
-      if (data.app_url) this.app_url = data.app_url
-      if (data.method) this.method = data.method
-      if (data.form_parameters) this.form_parameters = data.form_parameters
-      console.log('post data', data)
-    } catch (error) {
-      console.log(error)
-    }
+      .catch(err => {
+        this.loading = false
+        console.log(err)
+      })
   },
   methods: {
     ...mapActions(['showMessage'])
