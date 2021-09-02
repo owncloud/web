@@ -24,7 +24,7 @@
           data-testid="files-collaborators-no-reshare-permissions-message"
           v-text="noResharePermsMessage"
         />
-        <div class="avatars-wrapper" @click="sharedWithClick" :aria-label="sharedWithTooltip">
+        <div class="avatars-wrapper" @click="sharedWithClick" :aria-label="sharedWithTooltip" data-testid="shared-with-avatars">
           <h2 class="shared-with-label" v-text="sharedWithLabel" />
           <oc-avatars
             v-oc-tooltip="sharedWithTooltip"
