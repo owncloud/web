@@ -421,7 +421,7 @@ export default {
     &:hover,
     &:focus,
     &.selected {
-      background-color: var(--oc-color-swatch-primary-hover);
+      background-color: var(--oc-color-swatch-primary-default);
       color: var(--oc-color-text-inverse);
 
       ::v-deep .oc-icon > svg {
