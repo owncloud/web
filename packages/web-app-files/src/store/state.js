@@ -51,12 +51,6 @@ export default {
   },
 
   /**
-   * Pagination
-   */
-  currentPage: 1,
-  filesPageLimit: 100,
-
-  /**
    * View settings
    */
   areHiddenFilesShown: true
