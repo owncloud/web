@@ -197,7 +197,7 @@ function mountOptions({
     mocks: {
       $route: {
         name: 'some-route',
-        params: { page: 1 }
+        query: { page: 1 }
       }
     },
     data: () => ({
