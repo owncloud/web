@@ -342,12 +342,12 @@ export default {
       }
 
       const { keyCode } = event
-      const isKeyUpEvent = keyCode === 38
-      const isKeyDownEvent = keyCode === 40
+      const isArrowUp = keyCode === 38
+      const isArrowDown = keyCode === 40
 
       // to cycle through the list of roles only up and down keyboard events are allowed
       // if this is not the case we can return early and stop the script execution from here
-      if (!isKeyUpEvent && !isKeyDownEvent) {
+      if (!isArrowUp && !isArrowDown) {
         return
       }
 
@@ -373,7 +373,7 @@ export default {
       // if the event key is arrow up
       // and the next active role select index would be less than 0
       // then activate the last available role select
-      if (isKeyUpEvent && activeRoleSelectIndex - 1 < 0) {
+      if (isArrowUp && activeRoleSelectIndex - 1 < 0) {
         activateRoleSelect(roleSelect.length - 1)
 
         return
@@ -382,7 +382,7 @@ export default {
       // if the event key is arrow down
       // and the next active role select index would be greater or even to the available amount of role selects
       // then activate the first available role select
-      if (isKeyDownEvent && activeRoleSelectIndex + 1 >= roleSelect.length) {
+      if (isArrowDown && activeRoleSelectIndex + 1 >= roleSelect.length) {
         activateRoleSelect(0)
 
         return
@@ -391,7 +391,7 @@ export default {
       // the only missing part is to navigate up or down, this only happens if:
       // the next active role index is greater than 0
       // the next active role index is less than the amount of all available role selects
-      activateRoleSelect(activeRoleSelectIndex + (isKeyUpEvent ? -1 : 1))
+      activateRoleSelect(activeRoleSelectIndex + (isArrowUp ? -1 : 1))
     }
   }
 }
