@@ -206,7 +206,7 @@ const routes = [
       },
       {
         name: 'favorites',
-        path: 'favorites/:page?',
+        path: 'favorites',
         component: Favorites,
         meta: {
           hideFilelistActions: true,
@@ -215,7 +215,7 @@ const routes = [
         }
       },
       {
-        path: 'shared-with-me/:page?',
+        path: 'shared-with-me',
         component: SharedWithMe,
         name: 'shared-with-me',
         meta: {
@@ -225,7 +225,7 @@ const routes = [
         }
       },
       {
-        path: 'shared-with-others/:page?',
+        path: 'shared-with-others',
         component: SharedWithOthers,
         name: 'shared-with-others',
         meta: {
@@ -235,7 +235,7 @@ const routes = [
         }
       },
       {
-        path: 'shared-via-link/:page?',
+        path: 'shared-via-link',
         component: SharedViaLink,
         name: 'shared-via-link',
         meta: {
@@ -245,7 +245,7 @@ const routes = [
         }
       },
       {
-        path: 'trash-bin/:page?',
+        path: 'trash-bin',
         component: Trashbin,
         name: 'trashbin',
         meta: {
@@ -269,7 +269,7 @@ const routes = [
     children: [
       {
         name: 'public-list',
-        path: 'list/:item/:page?',
+        path: 'list/:item',
         component: PublicFiles,
         meta: {
           auth: false,
@@ -300,7 +300,7 @@ const routes = [
     meta: { hideHeadbar: true, title: $gettext('Resolving private link') }
   },
   {
-    path: '/location-picker/:context/:action/:item?/:page?',
+    path: '/location-picker/:context/:action/:item?',
     name: 'location-picker',
     components: {
       app: LocationPicker
@@ -330,10 +330,11 @@ const quickActions = quickActionsImport
 // this takes care that routes like 'foo/bar/baz' which by default would be converted to 'foo%2Fbar%2Fbaz' stay as they are
 // should immediately go away and be removed after finalizing the update
 const patchRouter = router => {
-  // for now we only need the patch on files-personal route, if needed on more just add an d comment why
-  // files-personal: https://github.com/owncloud/web/issues/1883
-  // files-personal: https://github.com/owncloud/web/issues/4595
-  const activateForRoutes = ['files-personal']
+  // for now we only need the patch on following routes, if needed on more just extend
+  // - files-personal: https://github.com/owncloud/web/issues/1883
+  // - files-personal: https://github.com/owncloud/web/issues/4595
+  // - public
+  const activateForRoutes = ['files-personal', 'public']
   const bindMatcher = router.match.bind(router)
   const cleanPath = route =>
     [

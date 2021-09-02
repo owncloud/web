@@ -1,6 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import VueRouter from 'vue-router'
+import merge from 'lodash-es/merge'
 
 import Store from '@files/src/store'
 import stubs from '@/tests/unit/stubs'
@@ -12,7 +13,7 @@ import ViewOptions from '@files/src/components/AppBar/ViewOptions.vue'
 const OcTooltip = jest.fn()
 
 describe('ViewOptions', () => {
-  let localVue, router, mutations, store
+  let localVue, router, mockedStore, store
 
   beforeEach(() => {
     localVue = createLocalVue()
@@ -20,19 +21,29 @@ describe('ViewOptions', () => {
     localVue.use(VueRouter)
 
     router = new VueRouter()
-    mutations = {
-      ...Store.mutations,
-      SET_FILES_PAGE_LIMIT: jest.fn(),
-      SET_HIDDEN_FILES_VISIBILITY: jest.fn()
-    }
-    store = new Vuex.Store({
+
+    mockedStore = {
       modules: {
         Files: {
-          ...Store,
-          mutations
+          namespaced: true,
+          mutations: {
+            SET_HIDDEN_FILES_VISIBILITY: jest.fn()
+          },
+          modules: {
+            sidebar: {
+              namespaced: true
+            },
+            pagination: {
+              namespaced: true,
+              mutations: {
+                SET_ITEMS_PER_PAGE: jest.fn()
+              }
+            }
+          }
         }
       }
-    })
+    }
+    store = new Vuex.Store(merge({}, Store, mockedStore))
   })
 
   it('updates the files page limit when using page size component', () => {
@@ -49,7 +60,9 @@ describe('ViewOptions', () => {
 
     select.vm.$emit('input', 500)
 
-    expect(mutations.SET_FILES_PAGE_LIMIT).toHaveBeenCalled()
+    expect(
+      mockedStore.modules.Files.modules.pagination.mutations.SET_ITEMS_PER_PAGE
+    ).toHaveBeenCalled()
   })
 
   it('updates the files page limit when route query changes', () => {
@@ -68,7 +81,9 @@ describe('ViewOptions', () => {
 
     wrapper.vm.$router.replace({ query: { 'items-limit': 500 } }).catch(() => {})
 
-    expect(mutations.SET_FILES_PAGE_LIMIT).toHaveBeenCalled()
+    expect(
+      mockedStore.modules.Files.modules.pagination.mutations.SET_ITEMS_PER_PAGE
+    ).toHaveBeenCalled()
   })
 
   it('triggeres mutation to toggle hidden files', () => {
@@ -87,6 +102,6 @@ describe('ViewOptions', () => {
 
     wrapper.find('[data-testid="files-switch-hidden-files"]').vm.$emit('change', false)
 
-    expect(mutations.SET_HIDDEN_FILES_VISIBILITY).toHaveBeenCalled()
+    expect(mockedStore.modules.Files.mutations.SET_HIDDEN_FILES_VISIBILITY).toHaveBeenCalled()
   })
 })
