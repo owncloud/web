@@ -117,7 +117,7 @@ export function aggregateResourceShares(
   const resources = []
   let prev = null
   for (const share of shares) {
-    if (prev && share.path === prev.path) {
+    if (prev?.storage_id === share.storage_id && prev?.file_source === share.file_source) {
       if (userShareTypes.includes(share.share_type)) {
         prev.sharedWith.push({
           username: share.share_with,

@@ -93,7 +93,7 @@ Feature: Public link share management
     When the user creates a new public link for folder "simple-folder" using the webUI with
       | role | Editor |
     And the public uses the webUI to access the last public link created by user "Alice"
-    And the user picks the row of file "lorem.txt" on the webUI
+    And the user opens the sidebar for file "lorem.txt" on the webUI
     Then the following panels should be visible in the details dialog on the webUI
       | name     |
       | versions |

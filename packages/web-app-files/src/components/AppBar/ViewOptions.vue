@@ -14,6 +14,7 @@
       <oc-icon name="tune" size="medium" />
     </oc-button>
     <oc-button
+      id="files-toggle-sidebar"
       v-oc-tooltip="toggleSidebarButtonLabel"
       :aria-label="toggleSidebarButtonLabel"
       variation="passive"
