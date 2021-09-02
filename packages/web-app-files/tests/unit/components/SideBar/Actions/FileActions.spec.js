@@ -6,12 +6,7 @@ import FileActions from '@files/src/components/SideBar/Actions/FileActions.vue'
 
 import GetTextPlugin from 'vue-gettext'
 
-import {
-  apps,
-  getActions,
-  basicActions,
-  extraActions
-} from '@files/tests/__fixtures__/fileActions.js'
+import { apps, getActions, fileActions } from '@files/tests/__fixtures__/fileActions.js'
 
 const localVue = createLocalVue()
 localVue.use(DesignSystem)
@@ -23,7 +18,7 @@ localVue.use(GetTextPlugin, {
 
 const filesPersonalRoute = { name: 'files-personal' }
 
-function getWrapper(route, { filename = 'testfile', extension, extraActions = [], type = 'file' }) {
+function getWrapper(route, { filename = 'testfile', extension, actions = [], type = 'file' }) {
   const mountStubs = { ...stubs, 'oc-button': false }
   const mountOptions = {
     localVue,
@@ -34,13 +29,7 @@ function getWrapper(route, { filename = 'testfile', extension, extraActions = []
       publicPage: () => false
     },
     computed: {
-      actions() {
-        let actions = getActions(extraActions)
-        if (type === 'folder') {
-          actions = actions.filter(item => item.icon !== 'download')
-        }
-        return actions
-      }
+      actions: () => getActions(actions)
     }
   }
   return mount(FileActions, mountOptions)
@@ -52,111 +41,36 @@ describe('FileActions', () => {
       jest.clearAllMocks()
     })
 
-    it('Action Buttons should be shown correctly on markdown file', () => {
-      const actions = { ...basicActions, 'markdown-editor': extraActions['markdown-editor'] }
+    it.each([
+      [['copy']],
+      [['copy', 'move']],
+      [['copy', 'markdown-editor']],
+      [['copy', 'move', 'download', 'markdown-editor']]
+    ])('should show the actions correctly', actions => {
       const wrapper = getWrapper(filesPersonalRoute, {
         filename: 'welcome',
         extension: 'md',
-        extraActions: ['markdown-editor']
+        actions
       })
 
-      for (const key in actions) {
-        const action = actions[key]
-
-        const buttonElement = wrapper.find(action.selector)
-        expect(buttonElement.exists()).toBeTruthy()
-
-        let expectedLabel = action.label
-        if (action.opensInNewWindow) {
-          expectedLabel += ' (Opens in new window)'
-        }
-        expect(buttonElement.text()).toBe(expectedLabel)
-      }
-    })
-
-    it('Action Buttons should be shown correctly on png file', () => {
-      const actions = { ...basicActions, mediaviewer: extraActions.mediaviewer }
-      const wrapper = getWrapper(filesPersonalRoute, {
-        filename: 'testfile',
-        extension: 'png',
-        extraActions: ['mediaviewer']
-      })
-
-      for (const key in actions) {
-        const action = actions[key]
-
-        const buttonElement = wrapper.find(action.selector)
-        expect(buttonElement.exists()).toBeTruthy()
-
-        let expectedLabel = action.label
-        if (action.opensInNewWindow) {
-          expectedLabel += ' (Opens in new window)'
-        }
-        expect(buttonElement.text()).toBe(expectedLabel)
-      }
-    })
-
-    it('Action Buttons should be shown correctly on drawio file', () => {
-      const actions = { ...basicActions, 'draw-io': extraActions['draw-io'] }
-      const wrapper = getWrapper(filesPersonalRoute, {
-        filename: 'testfile',
-        extension: 'drawio',
-        extraActions: ['draw-io']
-      })
-
-      for (const key in actions) {
-        const action = actions[key]
-
-        const buttonElement = wrapper.find(action.selector)
-        expect(buttonElement.exists()).toBeTruthy()
-
-        let expectedLabel = action.label
-        if (action.opensInNewWindow) {
-          expectedLabel += ' (Opens in new window)'
-        }
-        expect(buttonElement.text()).toBe(expectedLabel)
-      }
-    })
-
-    it('Action Buttons should be shown correctly on a folder', () => {
-      const actions = { ...basicActions, 'open-folder': extraActions['open-folder'] }
-      const wrapper = getWrapper(filesPersonalRoute, {
-        filename: 'testFolder',
-        extension: '',
-        extraActions: ['open-folder'],
-        type: 'folder'
-      })
-      delete actions.download // download option is not present for folders
-      for (const key in actions) {
-        const action = actions[key]
-
-        const buttonElement = wrapper.find(action.selector)
-        expect(buttonElement.exists()).toBeTruthy()
-
-        let expectedLabel = action.label
-        if (action.opensInNewWindow) {
-          expectedLabel += ' (Opens in new window)'
-        }
-        expect(buttonElement.text()).toBe(expectedLabel)
-      }
+      expect(wrapper).toMatchSnapshot()
     })
 
     it('should trigger the action handlers on click', async () => {
-      const actions = { ...basicActions, 'markdown-editor': extraActions['markdown-editor'] }
+      const actions = ['copy', 'download', 'move', 'open-folder', 'markdown-editor']
       const wrapper = getWrapper(filesPersonalRoute, {
         filename: 'welcome',
         extension: 'md',
-        extraActions: ['markdown-editor']
+        actions
       })
 
-      for (const button in actions) {
-        const action = actions[button]
+      for (const button of actions) {
+        const action = fileActions[button]
 
         const buttonElement = wrapper.find(action.selector)
         expect(buttonElement.exists()).toBeTruthy()
 
         await buttonElement.trigger('click.stop')
-
         expect(action.handler).toHaveBeenCalledTimes(1)
       }
     })

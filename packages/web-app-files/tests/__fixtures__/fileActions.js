@@ -84,7 +84,7 @@ exports.apps = {
   meta
 }
 
-const basicActions = {
+const fileActions = {
   download: {
     label: 'Download',
     class: 'oc-files-actions-sidebar-download-trigger',
@@ -114,10 +114,8 @@ const basicActions = {
     class: 'oc-files-actions-sidebar-delete-trigger',
     selector: '.oc-files-actions-sidebar-delete-trigger',
     handler: jest.fn()
-  }
-}
+  },
 
-const extraActions = {
   'markdown-editor': {
     label: 'Open in Markdown Editor',
     class: 'oc-files-actions-sidebar-markdown-editor-trigger',
@@ -146,13 +144,14 @@ const extraActions = {
   }
 }
 
-exports.basicActions = basicActions
-exports.extraActions = extraActions
+exports.fileActions = fileActions
 
-exports.getActions = function(extraActionKeys = []) {
-  const actions = []
-  for (const key in basicActions) {
-    const action = basicActions[key]
+exports.getActions = function(actions = []) {
+  const defaultActions = ['download', 'markdown-editor', 'draw-io', 'mediaviewer', 'open-folder']
+
+  const res = []
+  for (const key of actions) {
+    const action = fileActions[key]
 
     const actionObj = {
       icon: key,
@@ -161,27 +160,12 @@ exports.getActions = function(extraActionKeys = []) {
       label: () => action.label,
       componentType: 'oc-button',
       class: action.class,
+      canBeDefault: defaultActions.indexOf(key) > -1,
       opensInNewWindow: action.opensInNewWindow || false
     }
-    if (key === 'download') {
-      actionObj.canBeDefault = true
-    }
-    actions.push(actionObj)
+    res.push(actionObj)
   }
-  for (const key of extraActionKeys) {
-    const action = extraActions[key]
-    actions.push({
-      icon: key,
-      handler: action.handler,
-      isEnabled: () => true,
-      label: () => action.label,
-      componentType: 'oc-button',
-      class: action.class,
-      canBeDefault: true,
-      opensInNewWindow: action.opensInNewWindow || false
-    })
-  }
-  return actions
+  return res
 }
 
 exports.filesPersonalRoute = { name: 'files-personal' }
