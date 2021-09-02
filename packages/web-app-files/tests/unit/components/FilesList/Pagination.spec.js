@@ -67,12 +67,17 @@ function createStore(currentPage = 1, pages = 10) {
     modules: {
       Files: {
         namespaced: true,
-        state: {
-          currentPage: currentPage
-        },
-        getters: {
-          pages: () => {
-            return pages
+        modules: {
+          pagination: {
+            namespaced: true,
+            state: {
+              currentPage: currentPage
+            },
+            getters: {
+              pages: () => {
+                return pages
+              }
+            }
           }
         }
       }
