@@ -41,7 +41,7 @@ export const renderSuccess = (): void => {
     router,
     render: h => h(pages.success),
     mounted() {
-      Array.from(applicationStore.values()).map(application => application.mounted(this))
+      Array.from(applicationStore.values()).forEach(application => application.mounted(this))
     }
   })
 }
