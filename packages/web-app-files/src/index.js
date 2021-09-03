@@ -196,9 +196,6 @@ const routes = [
         name: 'personal',
         path: 'all/:item*',
         component: Personal,
-        transform: () => {
-          console.log('111')
-        },
         meta: {
           hasBulkActions: true,
           title: $gettext('All files')
@@ -269,7 +266,7 @@ const routes = [
     children: [
       {
         name: 'public-list',
-        path: 'list/:item',
+        path: 'list/:item*',
         component: PublicFiles,
         meta: {
           auth: false,
@@ -300,7 +297,7 @@ const routes = [
     meta: { hideHeadbar: true, title: $gettext('Resolving private link') }
   },
   {
-    path: '/location-picker/:context/:action/:item?',
+    path: '/location-picker/:context/:action/:item*',
     name: 'location-picker',
     components: {
       app: LocationPicker
@@ -333,8 +330,9 @@ const patchRouter = router => {
   // for now we only need the patch on following routes, if needed on more just extend
   // - files-personal: https://github.com/owncloud/web/issues/1883
   // - files-personal: https://github.com/owncloud/web/issues/4595
-  // - public
-  const activateForRoutes = ['files-personal', 'public']
+  // - files-public-list
+  // - files-location-picker
+  const activateForRoutes = ['files-personal', 'files-public-list', 'files-location-picker']
   const bindMatcher = router.match.bind(router)
   const cleanPath = route =>
     [
