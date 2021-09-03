@@ -138,7 +138,6 @@ export default {
     $_fileActions_triggerDefaultAction(resource) {
       this.$_fileActions_loadApps(resource).then(res => {
         if (res && res[0]) {
-          console.log('trigger apps', res)
           this.$_fileActions_openLink(res[0], resource)
         } else {
           let actions = this.$_fileActions_editorActions.concat(this.$_fileActions_systemActions)
@@ -157,20 +156,7 @@ export default {
     },
 
     async $_fileActions_loadApps(resource) {
-      let data
-      if (!localStorage.mimetypes) {
-        const response = await fetch('/app/list', {
-          method: 'GET'
-        })
-        if (!response.ok) {
-          this.dataList = []
-          const message = `An error has occured: ${response.status}`
-          throw new Error(message)
-        }
-        data = await response.json()
-        console.log('get data', data)
-        localStorage.mimetypes = JSON.stringify(data)
-      } else data = JSON.parse(localStorage.mimetypes)
+      const data = JSON.parse(localStorage.mimetypes)
       const url = 'remote.php/dav/files/' + this.user.id + resource.path
       const headers = new Headers()
       headers.append('Authorization', 'Bearer ' + this.getToken)
@@ -183,7 +169,6 @@ export default {
       const prop = await resp.text()
       const a = prop.match(new RegExp('<d:getcontenttype>' + '(.*)' + '</d:getcontenttype>'))
       const mimetype = a[0].split('<d:getcontenttype>')[1].split('</d:getcontenttype>')[0]
-      console.log('mimetype', mimetype)
       /* if (!data) {
         data = {
           'mime-types': {
@@ -233,7 +218,6 @@ export default {
           }
         }
       } */
-      console.log('mimetype', data['mime-types'][mimetype])
       if (data['mime-types'][mimetype] && data['mime-types'][mimetype].app_providers)
         this.appList = data['mime-types'][mimetype].app_providers
       else {
