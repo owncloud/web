@@ -1505,7 +1505,7 @@ def installCore(version, db):
 
     stepDefinition = {
         "name": "install-core",
-        "image": "owncloudci/core",
+        "image": "owncloudci/core:nodejs14",
         "pull": "always",
     }
 
@@ -1553,7 +1553,7 @@ def installFederatedServer(version, db, dbSuffix = "-federated"):
 
     stepDefinition = {
         "name": "install-federated",
-        "image": "owncloudci/core",
+        "image": "owncloudci/core:nodejs14",
         "pull": "always",
     }
     if version:

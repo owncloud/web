@@ -1,5 +1,5 @@
 const { client } = require('nightwatch-api')
-const { When, Given, Then } = require('cucumber')
+const { When, Given, Then } = require('@cucumber/cucumber')
 const assert = require('assert')
 const { URLSearchParams } = require('url')
 require('url-search-params-polyfill')

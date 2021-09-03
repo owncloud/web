@@ -1,5 +1,5 @@
 const { client } = require('nightwatch-api')
-const { Given, When, Then } = require('cucumber')
+const { Given, When, Then } = require('@cucumber/cucumber')
 const mediaViewerPage = client.page.FilesPageElement.mediaViewerPage()
 const filesList = client.page.FilesPageElement.filesList()
 const assert = require('assert')

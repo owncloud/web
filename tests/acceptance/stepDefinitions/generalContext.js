@@ -1,5 +1,5 @@
 const { client } = require('nightwatch-api')
-const { After, Before, Given, Then, When } = require('cucumber')
+const { After, Before, Given, Then, When } = require('@cucumber/cucumber')
 const webdavHelper = require('../helpers/webdavHelper')
 const httpHelper = require('../helpers/httpHelper')
 const backendHelper = require('../helpers/backendHelper')
@@ -8,7 +8,7 @@ const fs = require('fs')
 const occHelper = require('../helpers/occHelper')
 
 let initialConfigJsonSettings
-let createdFiles = []
+const createdFiles = []
 
 Given(
   'a file with the size of {string} bytes and the name {string} has been created locally',
@@ -244,7 +244,7 @@ After(async function(testCase) {
 })
 
 Before(function(testCase) {
-  createdFiles = []
+  testCase.pickle.createdFiles = []
   if (
     typeof process.env.SCREEN_RESOLUTION !== 'undefined' &&
     process.env.SCREEN_RESOLUTION.trim() !== ''
@@ -264,7 +264,8 @@ Before(function(testCase) {
   } else {
     client.maximizeWindow()
   }
-  console.log('  ' + testCase.sourceLocation.uri + ':' + testCase.sourceLocation.line + '\n')
+  // todo
+  // console.log('  ' + testCase.sourceLocation.uri + ':' + testCase.sourceLocation.line + '\n')
 })
 
 After(async function(testCase) {
@@ -273,7 +274,13 @@ After(async function(testCase) {
   }
   console.log('\n  Result: ' + testCase.result.status + '\n')
 
-  createdFiles.forEach(fileName => fs.unlinkSync(fileName))
+  createdFiles.forEach(fileName => {
+    try {
+      fs.unlinkSync(fileName)
+    } catch (err) {
+      console.info(err.message)
+    }
+  })
 
   // clear file locks
   const body = new URLSearchParams()

@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-expressions */
 const { client } = require('nightwatch-api')
 const assert = require('assert')
-const { Given, When, Then, Before } = require('cucumber')
+const { Given, When, Then, Before } = require('@cucumber/cucumber')
 const webdav = require('../helpers/webdavHelper')
 const _ = require('lodash')
 const loginHelper = require('../helpers/loginHelper')

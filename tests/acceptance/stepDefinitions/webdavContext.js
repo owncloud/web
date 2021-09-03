@@ -1,4 +1,4 @@
-const { Given, Then } = require('cucumber')
+const { Given, Then } = require('@cucumber/cucumber')
 require('url-search-params-polyfill')
 const httpHelper = require('../helpers/httpHelper')
 const backendHelper = require('../helpers/backendHelper')
