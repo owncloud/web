@@ -274,7 +274,13 @@ After(async function(testCase) {
   }
   console.log('\n  Result: ' + testCase.result.status + '\n')
 
-  createdFiles.forEach(fileName => fs.unlinkSync(fileName))
+  createdFiles.forEach(fileName => {
+    try {
+      fs.unlinkSync(fileName)
+    } catch (err) {
+      console.info(err.message)
+    }
+  })
 
   // clear file locks
   const body = new URLSearchParams()
