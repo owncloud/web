@@ -2,7 +2,7 @@ export default {
   namespaced: true,
   state: () => ({
     currentPage: 1,
-    itemsPerPage: 10
+    itemsPerPage: 100
   }),
   mutations: {
     SET_ITEMS_PER_PAGE(state, limit) {
