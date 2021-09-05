@@ -5,11 +5,13 @@
         v-if="file.thumbnail"
         key="file-thumbnail"
         :style="{
-          'background-image': `url(${file.thumbnail})`
+          'background-image': $asyncComputed.preview.updating ? 'none' : `url(${preview})`
         }"
         class="details-preview uk-flex uk-flex-middle uk-flex-center oc-mb"
         data-testid="preview"
-      />
+      >
+        <oc-spinner v-if="$asyncComputed.preview.updating" />
+      </div>
       <div
         v-if="showShares"
         key="file-shares"
@@ -140,7 +142,6 @@ export default {
     ...mapGetters(['user', 'getToken', 'configuration']),
 
     file() {
-      console.log(this.displayedItem.value)
       return this.displayedItem.value
     },
 

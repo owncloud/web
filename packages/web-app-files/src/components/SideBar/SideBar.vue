@@ -105,16 +105,21 @@ export default {
   mixins: [MixinRoutes],
 
   provide() {
-    return { displayedItem: this.displayedItem }
+    const displayedItem = {}
+
+    Object.defineProperty(displayedItem, 'value', {
+      enumerable: true,
+      get: () => this.selectedFile
+    })
+
+    return { displayedItem }
   },
 
   data() {
     return {
       focused: undefined,
       oldPanel: null,
-      displayedItem: {
-        value: null
-      },
+      selectedFile: {},
       loading: false
     }
   },
@@ -200,11 +205,8 @@ export default {
       }
     },
 
-    highlightedFileThumbnail: {
-      handler: function(thumbnail) {
-        this.$set(this.displayedItem.value, 'thumbnail', thumbnail)
-      },
-      immediate: true
+    highlightedFileThumbnail(thumbnail) {
+      this.$set(this.selectedFile, 'thumbnail', thumbnail)
     }
   },
 
@@ -271,7 +273,7 @@ export default {
 
     async fetchFileInfo() {
       if (isTrashbinRoute(this.$route)) {
-        this.displayedItem.value = this.highlightedFile
+        this.selectedFile = this.highlightedFile
 
         return
       }
@@ -284,9 +286,10 @@ export default {
           DavProperties.Default
         )
 
-        this.displayedItem.value = buildResource(item)
+        this.selectedFile = buildResource(item)
+        this.$set(this.selectedFile, 'thumbnail', this.highlightedFile.thumbnail || null)
       } catch (error) {
-        this.displayedItem.value = this.highlightedFile
+        this.selectedFile = this.highlightedFile
 
         console.error(error)
       }
