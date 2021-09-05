@@ -3,15 +3,19 @@
     <div v-if="hasContent">
       <div
         v-if="file.thumbnail"
+        key="file-thumbnail"
         :style="{
-          'background-image': $asyncComputed.preview.updating ? 'none' : `url(${preview})`
+          'background-image': `url(${file.thumbnail})`
         }"
         class="details-preview uk-flex uk-flex-middle uk-flex-center oc-mb"
         data-testid="preview"
+      />
+      <div
+        v-if="showShares"
+        key="file-shares"
+        data-testid="sharingInfo"
+        class="uk-flex uk-flex-middle oc-my-m"
       >
-        <oc-spinner v-if="$asyncComputed.preview.updating" />
-      </div>
-      <div v-if="showShares" data-testid="sharingInfo" class="uk-flex uk-flex-middle oc-my-m">
         <oc-button
           v-if="hasPeopleShares"
           v-oc-tooltip="peopleSharesLabel"
@@ -136,6 +140,7 @@ export default {
     ...mapGetters(['user', 'getToken', 'configuration']),
 
     file() {
+      console.log(this.displayedItem.value)
       return this.displayedItem.value
     },
 

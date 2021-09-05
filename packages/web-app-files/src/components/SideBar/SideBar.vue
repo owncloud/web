@@ -179,6 +179,10 @@ export default {
     },
     isRootFolder() {
       return !this.highlightedFile?.path
+    },
+
+    highlightedFileThumbnail() {
+      return this.highlightedFile.thumbnail
     }
   },
   watch: {
@@ -194,6 +198,13 @@ export default {
       if (newFile.id !== oldFile.id) {
         this.fetchFileInfo()
       }
+    },
+
+    highlightedFileThumbnail: {
+      handler: function(thumbnail) {
+        this.$set(this.displayedItem.value, 'thumbnail', thumbnail)
+      },
+      immediate: true
     }
   },
 
