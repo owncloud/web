@@ -10,7 +10,7 @@
  * @param {Boolean} includeCurrent whether to include the current path (with leading slash)
  * @return {Array.<String>} parent paths
  */
-export function getParentPaths(path, includeCurrent = false) {
+export function getParentPaths(path = '', includeCurrent = false) {
   // remove potential leading and trailing slash from current path (so that the resulting array doesn't start with an empty string).
   // then reintroduce the leading slash, because we know that we need it.
   const s = '/' + path.replace(/^\/+/, '').replace(/\/+$/, '')
