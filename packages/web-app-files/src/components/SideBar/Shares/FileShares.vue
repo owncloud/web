@@ -29,7 +29,6 @@
         >
           <h2 v-if="hasSharees" class="shared-with-label" v-text="sharedWithLabel" />
           <oc-button
-            id="new-folder-btn"
             appearance="raw"
             class="sharee-avatars-button"
             :aria-label="sharedWithTooltip"
