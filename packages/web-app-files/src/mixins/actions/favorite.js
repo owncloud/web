@@ -3,6 +3,7 @@ import { mapActions } from 'vuex'
 import { checkRoute } from '../../helpers/route'
 
 export default {
+  inject: ['displayedItem'],
   computed: {
     $_favorite_items() {
       return [
@@ -41,17 +42,23 @@ export default {
       this.markFavorite({
         client: this.$client,
         file: resource
-      }).catch(() => {
-        const translated = this.$gettext('Error while starring "%{file}"')
-        const title = this.$gettextInterpolate(translated, { file: resource.name }, true)
-        this.showMessage({
-          title: title,
-          status: 'danger',
-          autoClose: {
-            enabled: true
+      })
+        .then(() => {
+          if (this.displayedItem) {
+            this.displayedItem.value.starred = !this.displayedItem.value.starred
           }
         })
-      })
+        .catch(() => {
+          const translated = this.$gettext('Error while starring "%{file}"')
+          const title = this.$gettextInterpolate(translated, { file: resource.name }, true)
+          this.showMessage({
+            title: title,
+            status: 'danger',
+            autoClose: {
+              enabled: true
+            }
+          })
+        })
     }
   }
 }
