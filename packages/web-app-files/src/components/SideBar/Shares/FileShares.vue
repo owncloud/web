@@ -26,19 +26,25 @@
         />
         <div
           class="avatars-wrapper"
-          :aria-label="sharedWithTooltip"
-          data-testid="shared-with-avatars"
-          @click="sharedWithClick"
         >
           <h2 v-if="hasSharees" class="shared-with-label" v-text="sharedWithLabel" />
-          <oc-avatars
-            v-oc-tooltip="sharedWithTooltip"
-            :items="collaborators_avatar"
-            accessible-description="This resource is shared with many users."
-            :stacked="true"
-            :is-tooltip-displayed="false"
-            class="oc-mb sharee-avatars"
-          />
+          <oc-button
+            id="new-folder-btn"
+            appearance="raw"
+            class="sharee-avatars-button"
+            :aria-label="sharedWithTooltip"
+            data-testid="shared-with-avatars"
+            @click="sharedWithClick"
+          >
+            <oc-avatars
+              v-oc-tooltip="sharedWithTooltip"
+              :items="collaborators_avatar"
+              accessible-description="This resource is shared with many users."
+              :stacked="true"
+              :is-tooltip-displayed="false"
+              class="oc-mb sharee-avatars"
+            />
+          </oc-button>
         </div>
         <template v-if="showShareesList">
           <template v-if="$_ownerAsCollaborator">
@@ -467,6 +473,9 @@ export default {
 }
 .sharee-avatars {
   justify-self: flex-end;
+}
+.sharee-avatars-button-wrapper {
+  justify-content: flex-end;
 }
 .avatar-sharees-table {
   width: 100%;
