@@ -1,4 +1,4 @@
-Bugfix: Pagination on Lockationpicker
+Bugfix: Pagination on Locationpicker
 
 Pagination on copying/moving files as well as page reloads when copying/moving files were broken.
 When changing the Vue router encoding, we fixed both issues.
