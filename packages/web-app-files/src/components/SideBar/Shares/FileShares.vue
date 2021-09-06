@@ -24,24 +24,22 @@
           data-testid="files-collaborators-no-reshare-permissions-message"
           v-text="noResharePermsMessage"
         />
-        <div
-          class="avatars-wrapper"
-        >
+        <div class="avatars-wrapper">
           <h2 v-if="hasSharees" class="shared-with-label" v-text="sharedWithLabel" />
           <oc-button
             appearance="raw"
             class="sharee-avatars-button"
             :aria-label="sharedWithTooltip"
             data-testid="shared-with-avatars"
-            @click="sharedWithClick"
+            @click="onClickSharedWith"
           >
             <oc-avatars
               v-if="!showShareesList"
               v-oc-tooltip="sharedWithTooltip"
               :items="collaborators_avatar"
-              accessible-description="This resource is shared with many users."
               :stacked="true"
               :is-tooltip-displayed="false"
+              aria-hidden="true"
               class="oc-mb sharee-avatars"
             />
             <oc-icon v-else name="close" />
@@ -181,7 +179,9 @@ export default {
     },
 
     sharedWithTooltip() {
-      return this.$gettext('Click to show all')
+      return this.showShareesList
+        ? this.$gettext('Collapse list of invited people')
+        : this.$gettext('Show all invited people')
     },
 
     sharesLoading() {
@@ -217,7 +217,6 @@ export default {
     },
     collaborators_avatar() {
       const result = []
-      console.log(this.collaborators)
       this.collaborators.forEach(c => result.push({ ...c.collaborator, shareType: c.shareType }))
       return result
     },
@@ -367,7 +366,7 @@ export default {
       'loadIncomingShares',
       'incomingSharesClearState'
     ]),
-    sharedWithClick() {
+    onClickSharedWith() {
       this.showShareesList = !this.showShareesList
     },
     $_isCollaboratorShare(collaborator) {
