@@ -161,13 +161,13 @@ then
 	TEST_PATHS+=( "${FEATURES_DIR}" )
 fi
 
-RUN_ACCEPTANCE_TESTS="cucumber-js --retry 1 --require-module @babel/register --require-module @babel/polyfill --require tests/acceptance/setup.js --require tests/acceptance/stepDefinitions --format node_modules/cucumber-pretty"
+RUN_ACCEPTANCE_TESTS="cucumber-js --retry 1 --require-module @babel/register --require-module @babel/polyfill --require tests/acceptance/setup.js --require tests/acceptance/stepDefinitions --format @cucumber/pretty-formatter"
 
 if [ -z "${TEST_TAGS}" ]
 then
-	yarn ${RUN_ACCEPTANCE_TESTS} ${TEST_PATHS[@]} | tee -a 'logfile.txt'
+	CUCUMBER_PUBLISH_ENABLED=false yarn ${RUN_ACCEPTANCE_TESTS} ${TEST_PATHS[@]} | tee -a 'logfile.txt'
 else
-	yarn ${RUN_ACCEPTANCE_TESTS} ${TEST_PATHS[@]} -t "${TEST_TAGS}" | tee -a 'logfile.txt'
+	CUCUMBER_PUBLISH_ENABLED=false yarn ${RUN_ACCEPTANCE_TESTS} ${TEST_PATHS[@]} -t "${TEST_TAGS}" | tee -a 'logfile.txt'
 fi
 
 ACCEPTANCE_TESTS_EXIT_STATUS=${PIPESTATUS[0]}

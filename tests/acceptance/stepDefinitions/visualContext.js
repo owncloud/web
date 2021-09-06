@@ -1,4 +1,4 @@
-const { Then } = require('cucumber')
+const { Then } = require('@cucumber/cucumber')
 const { client } = require('nightwatch-api')
 const _ = require('lodash')
 const path = require('path')
