@@ -23,9 +23,6 @@ config = {
     "acceptance": {
         "webUI": {
             "type": FULL,
-            "servers": [
-                "latest",
-            ],
             "suites": {
                 "oC10Basic": [
                     "webUIAccount",
@@ -1066,7 +1063,7 @@ def acceptance(ctx):
     errorFound = False
 
     default = {
-        "servers": [""],
+        "servers": ["latest"],
         "browsers": ["chrome"],
         "databases": ["mysql:5.5"],
         "extraEnvironment": {},
