@@ -24,7 +24,6 @@ config = {
         "webUI": {
             "type": FULL,
             "servers": [
-                "",
                 "latest",
             ],
             "suites": {
