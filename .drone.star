@@ -1133,7 +1133,8 @@ def acceptance(ctx):
                             errorFound = True
 
                         browserString = "" if browser == "" else "-" + browser
-                        name = "%s%s" % (suiteName, browserString)
+                        serverString = "" if server == "" else "-" + server
+                        name = "%s%s%s" % (suiteName, browserString, serverString)
                         maxLength = 50
                         nameLength = len(name)
                         if nameLength > maxLength:
