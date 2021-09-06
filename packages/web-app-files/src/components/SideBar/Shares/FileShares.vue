@@ -30,7 +30,7 @@
           data-testid="shared-with-avatars"
           @click="sharedWithClick"
         >
-          <h2 class="shared-with-label" v-text="sharedWithLabel" />
+          <h2 v-if="hasSharees" class="shared-with-label" v-text="sharedWithLabel" />
           <oc-avatars
             v-oc-tooltip="sharedWithTooltip"
             :items="collaborators_avatar"
@@ -167,6 +167,10 @@ export default {
 
     sharedWithLabel() {
       return this.$gettext('Shared with')
+    },
+
+    hasSharees() {
+      return this.collaborators_avatar.length > 0
     },
 
     sharedWithTooltip() {
