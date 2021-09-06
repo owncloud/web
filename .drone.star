@@ -23,6 +23,10 @@ config = {
     "acceptance": {
         "webUI": {
             "type": FULL,
+            "servers": [
+                "",
+                "latest",
+            ],
             "suites": {
                 "oC10Basic": [
                     "webUIAccount",
