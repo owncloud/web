@@ -37,6 +37,7 @@
             @click="sharedWithClick"
           >
             <oc-avatars
+              v-if="!showShareesList"
               v-oc-tooltip="sharedWithTooltip"
               :items="collaborators_avatar"
               accessible-description="This resource is shared with many users."
@@ -44,6 +45,7 @@
               :is-tooltip-displayed="false"
               class="oc-mb sharee-avatars"
             />
+            <oc-icon v-else name="close" />
           </oc-button>
         </div>
         <template v-if="showShareesList">
@@ -367,7 +369,7 @@ export default {
       'incomingSharesClearState'
     ]),
     sharedWithClick() {
-      this.showShareesList = true
+      this.showShareesList = !this.showShareesList
     },
     $_isCollaboratorShare(collaborator) {
       return userShareTypes.includes(collaborator.shareType)
