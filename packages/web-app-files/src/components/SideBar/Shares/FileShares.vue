@@ -37,7 +37,7 @@
             accessible-description="This resource is shared with many users."
             :stacked="true"
             :is-tooltip-displayed="false"
-            class="oc-mb debug-avatar"
+            class="oc-mb sharee-avatars"
           />
         </div>
         <template v-if="showShareesList">
@@ -465,7 +465,7 @@ export default {
   font-size: 0.9rem;
   font-weight: 600;
 }
-.debug-avatar {
+.sharee-avatars {
   justify-self: flex-end;
 }
 .avatar-sharees-table {
