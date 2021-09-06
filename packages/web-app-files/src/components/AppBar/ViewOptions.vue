@@ -42,7 +42,7 @@
         </li>
         <li class="files-view-options-list-item">
           <oc-page-size
-            v-model="pageItemsLimit"
+            v-model="itemsPerPageModel"
             data-testid="files-pagination-size"
             :label="$gettext('Items per page')"
             :options="[100, 500, 1000, $gettext('All')]"
@@ -86,7 +86,7 @@ export default {
       }
     },
 
-    pageItemsLimit: {
+    itemsPerPageModel: {
       get() {
         return this.itemsPerPage
       },
@@ -100,8 +100,8 @@ export default {
   watch: {
     $route: {
       handler(route) {
-        if (Object.prototype.hasOwnProperty.call(route.query, 'items-limit')) {
-          this.SET_ITEMS_PER_PAGE(route.query['items-limit'])
+        if (Object.prototype.hasOwnProperty.call(route.query, 'items-per-page')) {
+          this.SET_ITEMS_PER_PAGE(route.query['items-per-page'])
 
           return
         }
@@ -116,8 +116,8 @@ export default {
     ...mapActions('Files/sidebar', { toggleSidebar: 'toggle' }),
     ...mapMutations('Files/pagination', ['SET_ITEMS_PER_PAGE']),
 
-    updateQuery(limit = this.pageItemsLimit) {
-      const query = { ...this.$route.query, 'items-limit': limit }
+    updateQuery(limit = this.itemsPerPageModel) {
+      const query = { ...this.$route.query, 'items-per-page': limit }
 
       this.SET_ITEMS_PER_PAGE(limit)
       this.$router.replace({ query }).catch(() => {})

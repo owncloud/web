@@ -79,7 +79,7 @@ describe('ViewOptions', () => {
       }
     })
 
-    wrapper.vm.$router.replace({ query: { 'items-limit': 500 } }).catch(() => {})
+    wrapper.vm.$router.replace({ query: { 'items-per-page': 500 } }).catch(() => {})
 
     expect(
       mockedStore.modules.Files.modules.pagination.mutations.SET_ITEMS_PER_PAGE
