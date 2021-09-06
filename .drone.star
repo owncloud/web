@@ -23,6 +23,10 @@ config = {
     "acceptance": {
         "webUI": {
             "type": FULL,
+            "servers": [
+                "",
+                "latest",
+            ],
             "suites": {
                 "oC10Basic": [
                     "webUIAccount",
@@ -143,6 +147,10 @@ config = {
         },
         "webUINotification": {
             "type": NOTIFICATIONS,
+            "servers": [
+                "",
+                "latest",
+            ],
             "suites": {
                 "oC10NotificationBasic": [
                     "webUINotifications",
@@ -162,6 +170,10 @@ config = {
         },
         "webUIFederation": {
             "type": FEDERATED,
+            "servers": [
+                "",
+                "latest",
+            ],
             "suites": {
                 "webUISharingExternal": "oC10SharingExternal",
                 "webUISharingExternalToRoot": "oC10SharingExternalRoot",
@@ -176,6 +188,10 @@ config = {
         },
         "webUI-XGA-Notifications": {
             "type": NOTIFICATIONS,
+            "servers": [
+                "",
+                "latest",
+            ],
             "suites": {
                 "oC10XGAPortraitNotifications": [
                     "webUINotifications",
@@ -192,6 +208,10 @@ config = {
         },
         "webUI-XGA": {
             "type": FULL,
+            "servers": [
+                "",
+                "latest",
+            ],
             "suites": {
                 "oC10XGAPortrait1": [
                     "webUIAccount",
@@ -271,6 +291,10 @@ config = {
         },
         "webUI-Notifications-iPhone": {
             "type": NOTIFICATIONS,
+            "servers": [
+                "",
+                "latest",
+            ],
             "suites": {
                 "oC10iPhoneNotifications": [
                     "webUINotifications",
@@ -287,6 +311,10 @@ config = {
         },
         "webUI-iPhone": {
             "type": FULL,
+            "servers": [
+                "",
+                "latest",
+            ],
             "suites": {
                 "oC10iPhone1": [
                     "webUIAccount",
@@ -471,6 +499,10 @@ config = {
         },
         "webUI-notifications-oc10-integration": {
             "type": NOTIFICATIONS,
+            "servers": [
+                "",
+                "latest",
+            ],
             "suites": {
                 "oC10IntegrationNotifications": [
                     "webUINotifications",
@@ -490,6 +522,10 @@ config = {
         },
         "webUI-oc10-integration": {
             "type": FULL,
+            "servers": [
+                "",
+                "latest",
+            ],
             "suites": {
                 "oC10IntegrationApp1": [
                     "webUIAccount",
@@ -1133,7 +1169,8 @@ def acceptance(ctx):
                             errorFound = True
 
                         browserString = "" if browser == "" else "-" + browser
-                        name = "%s%s" % (suiteName, browserString)
+                        serverString = "" if server == "" else "-" + server
+                        name = "%s%s%s" % (suiteName, browserString, server)
                         maxLength = 50
                         nameLength = len(name)
                         if nameLength > maxLength:
