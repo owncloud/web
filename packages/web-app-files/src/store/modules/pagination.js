@@ -16,8 +16,11 @@ export default {
   },
   getters: {
     pages: (state, getters, rootState, rootGetters) => {
-      const allFiles = rootGetters['Files/filesAll']
+      if (!parseInt(state.itemsPerPage)) {
+        return 1
+      }
 
+      const allFiles = rootGetters['Files/filesAll']
       return Math.ceil(allFiles.length / state.itemsPerPage)
     }
   }
