@@ -292,7 +292,6 @@ export default {
       )
       if (sharePathParentOrCurrent === null) return
       const shareItem = this.sharesTree[sharePathParentOrCurrent][0]
-      console.log(this.sharesTree[sharePathParentOrCurrent][0])
       const fileOwner = shareItem.fileOwner
       this.sharedWithUserDisplayName = fileOwner ? fileOwner.displayName : null
       this.sharedTime = shareItem.stime
