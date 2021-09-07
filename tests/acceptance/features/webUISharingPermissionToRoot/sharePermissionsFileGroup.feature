@@ -58,7 +58,7 @@ Feature: Sharing files with internal groups with permissions
     # | Viewer               | Viewer         | ,                 | ,                     | read                |
     # | Editor               | Editor         | share             | share                 | share, read, update |
     # | Editor               | Editor         | ,                 | ,                     | read, update        |
-    # | Advanced permissions | Viewer         | ,                 | ,                     | read                |
-    # | Advanced permissions | Viewer         | share             | share                 | read, share         |
-    # | Advanced permissions | Editor         | update            | ,                     | read, update        |
-      | Advanced permissions | Editor         | share, update     | ,                     | read, update, share |
+    # | Custom permissions | Viewer         | ,                 | ,                     | read                |
+    # | Custom permissions | Viewer         | share             | share                 | read, share         |
+    # | Custom permissions | Editor         | update            | ,                     | read, update        |
+      | Custom permissions | Editor         | share, update     | ,                     | read, update, share |

@@ -17,6 +17,7 @@ export default ({ isFolder = false, $gettext = returnOriginal, allowSharePerm = 
       {
         name: 'viewer',
         label: $gettext('Viewer'),
+        inlineLabel: $gettext('viewer'),
         description: allowSharePerm
           ? $gettext('Download, preview and share')
           : $gettext('Download and preview'),
@@ -25,6 +26,7 @@ export default ({ isFolder = false, $gettext = returnOriginal, allowSharePerm = 
       {
         name: 'editor',
         label: $gettext('Editor'),
+        inlineLabel: $gettext('editor'),
         description: allowSharePerm
           ? $gettext('Upload, edit, delete, download, preview and share')
           : $gettext('Upload, edit, delete, download and preview'),
@@ -39,6 +41,7 @@ export default ({ isFolder = false, $gettext = returnOriginal, allowSharePerm = 
     {
       name: 'viewer',
       label: $gettext('Viewer'),
+      inlineLabel: $gettext('viewer'),
       description: allowSharePerm
         ? $gettext('Download, preview and share')
         : $gettext('Download and preview'),
@@ -47,6 +50,7 @@ export default ({ isFolder = false, $gettext = returnOriginal, allowSharePerm = 
     {
       name: 'editor',
       label: $gettext('Editor'),
+      inlineLabel: $gettext('editor'),
       description: allowSharePerm
         ? $gettext('Edit, download, preview and share')
         : $gettext('Edit, download and preview'),

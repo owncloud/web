@@ -54,15 +54,15 @@ Feature: Sharing folders with multiple internal users using advanced permissions
     And as "David" folder "simple-folder" should not exist
     Examples:
       | role                 | displayed-role       | extra-permissions     | displayed-permissions | actual-permissions          |
-      # | Advanced permissions | Advanced permissions | delete                        | delete                | read, delete                 |
-      # | Advanced permissions | Advanced permissions | update                        | update                | read, update                 |
-      # | Advanced permissions | Advanced permissions | create                        | create                | read, create                 |
-      # | Advanced permissions | Advanced permissions | share, delete                 | share, delete         | read, share, delete          |
-      # | Advanced permissions | Advanced permissions | share, update                 | share, update         | read, update, share          |
-      # | Advanced permissions | Advanced permissions | share, create                 | share, create         | read, share, create          |
-      # | Advanced permissions | Advanced permissions | delete, update                | delete, update        | read, delete, update         |
-      # | Advanced permissions | Advanced permissions | delete, create                | delete, create        | read, delete, create         |
-      # | Advanced permissions | Advanced permissions | update, create                | update, create        | read, update, create         |
-      # | Advanced permissions | Advanced permissions | share, delete, update         | share, delete, update | read, share, delete, update  |
-      # | Advanced permissions | Advanced permissions | share, create, delete         | share, create, delete | read, share, delete, create  |
-      | Advanced permissions | Advanced permissions | share, update, create | share, update, create | read, share, update, create |
+      # | Custom permissions | Custom permissions | delete                        | delete                | read, delete                 |
+      # | Custom permissions | Custom permissions | update                        | update                | read, update                 |
+      # | Custom permissions | Custom permissions | create                        | create                | read, create                 |
+      # | Custom permissions | Custom permissions | share, delete                 | share, delete         | read, share, delete          |
+      # | Custom permissions | Custom permissions | share, update                 | share, update         | read, update, share          |
+      # | Custom permissions | Custom permissions | share, create                 | share, create         | read, share, create          |
+      # | Custom permissions | Custom permissions | delete, update                | delete, update        | read, delete, update         |
+      # | Custom permissions | Custom permissions | delete, create                | delete, create        | read, delete, create         |
+      # | Custom permissions | Custom permissions | update, create                | update, create        | read, update, create         |
+      # | Custom permissions | Custom permissions | share, delete, update         | share, delete, update | read, share, delete, update  |
+      # | Custom permissions | Custom permissions | share, create, delete         | share, create, delete | read, share, delete, create  |
+      | Custom permissions | Custom permissions | share, update, create | share, update, create | read, share, update, create |

@@ -1,32 +1,51 @@
 <template>
   <div>
-    <translate tag="label" for="files-collaborators-role-button" class="oc-label">Role</translate>
-    <oc-select
-      v-model="selectedRole"
-      input-id="files-collaborators-role-button"
-      class="files-collaborators-role-button-wrapper"
-      :options="roles"
-      :clearable="false"
-      label="label"
+    <hr />
+    <oc-button
+      id="files-collaborators-role-button"
+      appearance="raw"
+      justify-content="left"
+      gap-size="xsmall"
     >
-      <template #option="option">
-        <role-item :role="option" />
+      <translate v-if="isAdvancedRoleSelected" key="advanced-permissions-select"
+        >Invite with custom permissions</translate
+      >
+      <translate v-else key="role-select" :translate-params="{ name: selectedRole.inlineLabel }"
+        >Invite as %{ name }</translate
+      >
+      <oc-icon name="expand_more" />
+    </oc-button>
+    <oc-drop ref="rolesDrop" toggle="#files-collaborators-role-button" mode="click" close-on-click>
+      <template #special>
+        <oc-list class="files-recipient-role-drop-list" :aria-label="rolesListAriaLabel">
+          <li v-for="role in roles" :key="role.name">
+            <oc-button
+              ref="roleSelect"
+              appearance="raw"
+              justify-content="space-between"
+              class="files-recipient-role-drop-btn oc-py-xs oc-px-s"
+              :class="{ selected: isSelectedRole(role) }"
+              @click="selectRole(role)"
+            >
+              <role-item :role="role" />
+              <oc-icon v-if="isSelectedRole(role)" name="check" />
+            </oc-button>
+          </li>
+        </oc-list>
       </template>
-      <template #no-options v-translate>
-        No matching role found
-      </template>
-    </oc-select>
+    </oc-drop>
     <template v-if="$_ocCollaborators_hasAdditionalPermissions">
-      <label v-if="selectedRole.name !== 'advancedRole'" class="oc-label oc-mt-s">
+      <label v-if="!isAdvancedRoleSelected" class="oc-label oc-mt-s">
         <translate>Additional permissions</translate>
       </label>
       <additional-permissions
         :available-permissions="selectedRole.additionalPermissions"
         :collaborators-permissions="collaboratorsPermissions"
-        :class="{ 'oc-mt-s': selectedRole.name === 'advancedRole' }"
+        :class="{ 'oc-mt-s': isAdvancedRoleSelected }"
         @permissionChecked="checkAdditionalPermissions"
       />
     </template>
+    <hr />
     <div v-if="expirationSupported" class="oc-mt-m">
       <div class="uk-position-relative">
         <oc-datepicker
@@ -47,6 +66,7 @@
           @click="resetExpirationDate"
         />
       </div>
+      <hr />
     </div>
   </div>
 </template>
@@ -54,6 +74,8 @@
 <script>
 import { mapGetters } from 'vuex'
 import { DateTime } from 'luxon'
+import get from 'lodash-es/get'
+
 import collaboratorsMixins from '../../../../mixins/collaborators'
 
 import RoleItem from '../../Shared/RoleItem.vue'
@@ -90,7 +112,7 @@ export default {
       required: false,
       default: null,
       validator: function(value) {
-        return ['user', 'group'].indexOf(value) > -1 || value === null
+        return ['user', 'group'].includes(value) || value === null
       }
     }
   },
@@ -224,6 +246,14 @@ export default {
 
     canResetExpirationDate() {
       return !this.expirationDateEnforced && this.enteredExpirationDate
+    },
+
+    isAdvancedRoleSelected() {
+      return this.isAdvancedRole(this.selectedRole)
+    },
+
+    rolesListAriaLabel() {
+      return this.$gettext('Sharing roles')
     }
   },
 
@@ -235,8 +265,8 @@ export default {
 
   created() {
     if (
-      (this.existingRole && this.existingRole.name === 'advancedRole' && !this.selectedRole) ||
-      (this.selectedRole && this.selectedRole.name === 'advancedRole')
+      (this.existingRole && this.isAdvancedRole(this.existingRole) && !this.selectedRole) ||
+      (this.selectedRole && this.isAdvancedRoleSelected)
     ) {
       this.selectedRole = this.advancedRole
     } else if (this.existingRole && !this.selectedRole) {
@@ -244,6 +274,10 @@ export default {
     } else {
       this.selectedRole = this.roles[0]
     }
+  },
+
+  beforeDestroy() {
+    window.removeEventListener('keydown', this.cycleRoles)
   },
 
   mounted() {
@@ -259,6 +293,8 @@ export default {
         this.enteredExpirationDate = this.defaultExpirationDate
       }
     }
+
+    window.addEventListener('keydown', this.cycleRoles)
   },
 
   methods: {
@@ -285,7 +321,113 @@ export default {
         permissions: this.additionalPermissions,
         expirationDate: this.enteredExpirationDate
       })
+    },
+
+    selectRole(role) {
+      this.selectedRole = role
+    },
+
+    isSelectedRole(role) {
+      return this.selectedRole.name === role.name
+    },
+
+    isAdvancedRole(role) {
+      return role.name === 'advancedRole'
+    },
+
+    cycleRoles(event) {
+      // events only need to be captured if the roleSelect element is visible
+      if (!get(this.$refs.rolesDrop, 'tippy.state.isShown', false)) {
+        return
+      }
+
+      const { keyCode } = event
+      const isArrowUp = keyCode === 38
+      const isArrowDown = keyCode === 40
+
+      // to cycle through the list of roles only up and down keyboard events are allowed
+      // if this is not the case we can return early and stop the script execution from here
+      if (!isArrowUp && !isArrowDown) {
+        return
+      }
+
+      // if there is only 1 or no roleSelect we can early return
+      // it does not make sense to cycle through it if value is less than 1
+      const roleSelect = this.$refs.roleSelect || []
+
+      if (roleSelect.length <= 1) {
+        return
+      }
+
+      // obtain active role select in following priority chain:
+      // first try to get the focused select
+      // then try to get the selected select
+      // and if none of those applies we fall back to the first role select
+      const activeRoleSelect =
+        roleSelect.find(rs => rs.$el === document.activeElement) ||
+        roleSelect.find(rs => rs.$el.classList.contains('selected')) ||
+        roleSelect[0]
+      const activeRoleSelectIndex = roleSelect.indexOf(activeRoleSelect)
+      const activateRoleSelect = idx => roleSelect[idx].$el.focus()
+
+      // if the event key is arrow up
+      // and the next active role select index would be less than 0
+      // then activate the last available role select
+      if (isArrowUp && activeRoleSelectIndex - 1 < 0) {
+        activateRoleSelect(roleSelect.length - 1)
+
+        return
+      }
+
+      // if the event key is arrow down
+      // and the next active role select index would be greater or even to the available amount of role selects
+      // then activate the first available role select
+      if (isArrowDown && activeRoleSelectIndex + 1 >= roleSelect.length) {
+        activateRoleSelect(0)
+
+        return
+      }
+
+      // the only missing part is to navigate up or down, this only happens if:
+      // the next active role index is greater than 0
+      // the next active role index is less than the amount of all available role selects
+      activateRoleSelect(activeRoleSelectIndex + (isArrowUp ? -1 : 1))
     }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.files-recipient-role-drop {
+  &-list {
+    background-color: var(--oc-color-swatch-inverse-default);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+
+    &:hover .files-recipient-role-drop-btn.selected:not(:hover),
+    &:focus .files-recipient-role-drop-btn.selected:not(:focus) {
+      background-color: var(--oc-color-swatch-inverse-default);
+      color: var(--oc-color-swatch-passive-default);
+
+      ::v-deep .oc-icon > svg {
+        fill: var(--oc-color-swatch-passive-default);
+      }
+    }
+  }
+
+  &-btn {
+    border-radius: 0;
+    width: 100%;
+
+    &:hover,
+    &:focus,
+    &.selected {
+      background-color: var(--oc-color-swatch-primary-default);
+      color: var(--oc-color-text-inverse);
+
+      ::v-deep .oc-icon > svg {
+        fill: var(--oc-color-text-inverse);
+      }
+    }
+  }
+}
+</style>

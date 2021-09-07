@@ -34,7 +34,6 @@
       class="oc-mb"
       @optionChange="collaboratorOptionChanged"
     />
-    <hr class="divider" />
     <oc-grid gutter="small" class="oc-mb">
       <div>
         <oc-button

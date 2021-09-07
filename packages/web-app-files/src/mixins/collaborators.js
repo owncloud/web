@@ -24,7 +24,8 @@ export default {
     advancedRole() {
       const advancedRole = {
         name: 'advancedRole',
-        label: this.$gettext('Advanced permissions'),
+        label: this.$gettext('Custom permissions'),
+        inlineLabel: this.$gettext('custom permissions'),
         description: this.$gettext('Set detailed permissions'),
         permissions: ['read'],
         additionalPermissions: {
