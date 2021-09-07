@@ -124,7 +124,7 @@ Feature: accept/decline shares coming from internal users
     Then file "toshare.txt" should be listed on the webUI
     And file "anotherfile.txt" should not be listed on the webUI
 
-  @ocis-product-276
+
   Scenario: accept a previously declined share
     Given user "Alice" has created file "lorem.txt"
     And user "Alice" has uploaded file "testavatar.jpg" to "testimage.jpg"
