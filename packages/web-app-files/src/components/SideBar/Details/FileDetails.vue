@@ -125,7 +125,8 @@ export default {
     loading: false,
     sharedWithUserDisplayName: '',
     sharedTime: 0,
-    sharedParentDir: null
+    sharedParentDir: null,
+    sharedItem: null
   }),
   computed: {
     ...mapGetters('Files', ['highlightedFile', 'versions', 'sharesTree', 'sharesTreeLoading']),
@@ -256,13 +257,14 @@ export default {
     },
     hasAnyShares() {
       return (
-        this.highlightedFile.shareTypes?.length > 0 || this.highlightedFile.indicators?.length > 0
+        this.highlightedFile.shareTypes?.length > 0 || this.highlightedFile.indicators?.length > 0 || this.sharedItem !== null
       )
     },
     hasPeopleShares() {
       return (
         intersection(this.highlightedFile.shareTypes, userShareTypes).length > 0 ||
-        this.highlightedFile.indicators?.filter(e => e.icon === 'group').length > 0
+        this.highlightedFile.indicators?.filter(e => e.icon === 'group').length > 0 ||
+        this.sharedItem !== null
       )
     },
     hasLinkShares() {
@@ -285,20 +287,19 @@ export default {
       this.refreshShareDetailsTree()
     },
     sharesTreeLoading(current) {
+      this.sharedItem = null
       if (current !== false) return
       const sharePathParentOrCurrent = this.getParentSharePath(
         this.highlightedFile.path,
         this.sharesTree
       )
       if (sharePathParentOrCurrent === null) return
-      const shareItem = this.sharesTree[sharePathParentOrCurrent][0]
-      const fileOwner = shareItem.fileOwner
+      this.sharedItem = this.sharesTree[sharePathParentOrCurrent][0]
+      const fileOwner = this.sharedItem.fileOwner
       this.sharedWithUserDisplayName = fileOwner ? fileOwner.displayName : null
-      this.sharedTime = shareItem.stime
+      this.sharedTime = this.sharedItem.stime
       this.sharedParentDir = sharePathParentOrCurrent
-    },
-    hasAnyShares() {
-      this.refreshShareDetailsTree()
+
     }
   },
   mounted() {
