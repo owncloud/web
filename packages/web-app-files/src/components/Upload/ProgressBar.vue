@@ -23,6 +23,7 @@
       <div class="uk-width-expand uk-text-truncate">
         <translate
           v-if="count === 1"
+          id="files-upload-progress-single"
           key="upload-progress-single"
           :translate-params="{ fileName: inProgress[0].name }"
           translate-comment="Upload progress when only uploading one file shows the name of the file."
@@ -31,6 +32,7 @@
         </translate>
         <translate
           v-else
+          id="files-upload-progress-multi"
           key="upload-progress-multi"
           :translate-n="count"
           translate-plural="Uploading %{ count } items"
@@ -42,6 +44,7 @@
       <div class="uk-width-auto">
         <translate
           v-if="expanded"
+          id="files-upload-progress-collapse-details"
           key="upload-progress-collapse-details"
           translate-comment="Hide details panel of upload progress"
         >
@@ -49,6 +52,7 @@
         </translate>
         <translate
           v-else
+          id="files-upload-progress-expand-details"
           key="upload-progress-expand-details"
           translate-comment="Show details panel of upload progress"
         >

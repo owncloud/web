@@ -60,6 +60,6 @@ Feature: Sharing files with internal groups with permissions
       | role                 | displayed-role       | extra-permissions | displayed-permissions | actual-permissions  |
       | Viewer               | Viewer               | ,                 | ,                     | read, share         |
       | Editor               | Editor               | ,                 | ,                     | share, read, update |
-      | Advanced permissions | Advanced permissions | ,                 | ,                     | read                |
-      | Advanced permissions | Viewer               | share             | ,                     | read, share         |
-      | Advanced permissions | Editor               | share, update     | ,                     | read, update, share |
+      | Custom permissions | Custom permissions | ,                 | ,                     | read                |
+      | Custom permissions | Viewer               | share             | ,                     | read, share         |
+      | Custom permissions | Editor               | share, update     | ,                     | read, update, share |

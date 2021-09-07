@@ -140,6 +140,7 @@ Feature: Sharing files and folders with internal groups
       | grp3      |
       | grp4      |
     And user "Alice" has created folder "simple-folder"
+    And user "Alice" has created folder "simple-folder2"
     And user "Alice" has created file "simple-folder/testimage.png"
     When user "Alice" has logged in using the webUI
     Then the following resources should not have share indicators on the webUI

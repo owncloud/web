@@ -4,14 +4,8 @@ import GetTextPlugin from 'vue-gettext'
 import { mount } from '@vue/test-utils'
 import { localVue } from './views.setup'
 import { createStore } from 'vuex-extensions'
-import Personal from 'packages/web-app-files/src/views/Personal.vue'
-import MixinAccessibleBreadcrumb from '../../../src/mixins/accessibleBreadcrumb'
-import MixinFileActions from '../../../src/mixins/fileActions'
-import MixinFilesListFilter from '../../../src/mixins/filesListFilter'
-import MixinFilesListScrolling from '../../../src/mixins/filesListScrolling'
-import MixinFilesListPositioning from '../../../src/mixins/filesListPositioning'
-import MixinFilesListPagination from '../../../src/mixins/filesListPagination'
-import MixinMountSideBar from '../../../src/mixins/sidebar/mountSideBar'
+import Personal from '@files/src/views/Personal.vue'
+import MixinAccessibleBreadcrumb from '@files/src/mixins/accessibleBreadcrumb'
 
 localVue.use(GetTextPlugin, {
   translations: 'does-not-matter.json',
@@ -107,7 +101,7 @@ function createWrapper(selectedFiles = [resourceForestJpg]) {
     .spyOn(MixinAccessibleBreadcrumb.methods, 'accessibleBreadcrumb_focusAndAnnounceBreadcrumb')
     .mockImplementation()
   const component = { ...Personal, created: jest.fn(), mounted: jest.fn() }
-  const wrapper = mount(component, {
+  return mount(component, {
     store: createStore(Vuex.Store, {
       state: {
         app: { quickActions: {} }
@@ -125,6 +119,14 @@ function createWrapper(selectedFiles = [resourceForestJpg]) {
       },
       modules: {
         Files: {
+          modules: {
+            sidebar: {
+              state: {
+                closed: false
+              },
+              namespaced: true
+            }
+          },
           state: {
             resource: null,
             currentPage: 1
@@ -157,20 +159,10 @@ function createWrapper(selectedFiles = [resourceForestJpg]) {
     localVue,
     router,
     stubs: stubs,
-    mixins: [
-      MixinAccessibleBreadcrumb,
-      MixinFileActions,
-      MixinFilesListPositioning,
-      MixinFilesListScrolling,
-      MixinFilesListPagination,
-      MixinMountSideBar,
-      MixinFilesListFilter
-    ],
     data: () => ({
       loading: false
     })
   })
-  return wrapper
 }
 
 describe('Personal view', () => {

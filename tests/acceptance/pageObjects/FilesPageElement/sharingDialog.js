@@ -88,24 +88,26 @@ module.exports = {
 
       // We need waitForElementPresent here.
       // waitForElementVisible would break even with 'abortOnFailure: false' if the element is not present
-      await this.enterAutoComplete(sharee).waitForElementPresent(
-        {
-          selector: '@sharingAutoCompleteDropDownElements',
-          abortOnFailure: false
-        },
+      let failedOnFirstTry = false
+      await this.enterAutoComplete(sharee)
+      const dropdownElement = this.elements.sharingAutoCompleteDropDownElements
+      await this.waitForElementVisible(
+        dropdownElement.locateStrategy,
+        dropdownElement.selector,
+        this.api.globals.waitForConditionTimeout,
+        this.api.globals.waitForConditionPollInterval,
+        false,
         result => {
-          if (result.value === false) {
-            // sharing dropdown was not shown
-            console.log('WARNING: no sharing autocomplete dropdown found, retry typing')
-            this.clearValue('@sharingAutoComplete')
-              .enterAutoComplete(sharee)
-              .waitForElementPresent({
-                selector: '@sharingAutoCompleteDropDownElements',
-                abortOnFailure: false
-              })
-          }
+          failedOnFirstTry = result.status === -1
         }
       )
+      if (failedOnFirstTry) {
+        // sharing dropdown was not shown. Try a second time.
+        console.log('WARNING: no sharing autocomplete dropdown found, retry typing')
+        await this.clearValue('@sharingAutoComplete')
+        await this.enterAutoComplete(sharee)
+        await this.waitForElementVisible(dropdownElement.selector)
+      }
 
       let receiverType = shareWithGroup === true ? SHARE_TYPE_STRING.group : SHARE_TYPE_STRING.user
       receiverType = remoteShare === true ? SHARE_TYPE_STRING.federation : receiverType
@@ -144,7 +146,6 @@ module.exports = {
      * @param {string} permissions
      * @param {boolean} remote
      * @param {string} days
-     * @param {boolean} quickAction Asserts whether the quick actions should be used to open new collaborators panel
      *
      * @return void
      */
@@ -309,11 +310,11 @@ module.exports = {
      *
      * @param {string} input
      */
-    enterAutoComplete: function(input) {
-      return this.waitForElementVisible('@sharingAutoComplete')
-        .initAjaxCounters()
-        .setValueBySingleKeys('@sharingAutoComplete', input)
-        .waitForAjaxCallsToStartAndFinish()
+    enterAutoComplete: async function(input) {
+      await this.waitForElementVisible('@sharingAutoComplete')
+      await this.initAjaxCounters()
+      await this.setValueBySingleKeys('@sharingAutoComplete', input)
+      await this.waitForAjaxCallsToStartAndFinish()
     },
     /**
      *
@@ -339,27 +340,24 @@ module.exports = {
      */
     getShareAutocompleteWebElementIdList: async function() {
       const webElementIdList = []
-      const showAllResultsXpath = this.elements.sharingAutoCompleteShowAllResultsButton.selector
+      const showAllResultsElement = this.elements.sharingAutoCompleteShowAllResultsButton
       // wait for autocomplete to finish loading
-      try {
-        await this.waitForElementVisible('@sharingAutoCompleteDropDown')
-      } catch (e) {
-        // FIXME: the dropdown will not appear when there are zero results
-        // (https://github.com/owncloud/owncloud-design-system/issues/547)
-        // so need to catch the error here
-        return []
-      }
+      await this.waitForElementVisible('@sharingAutoCompleteDropDown')
       await this.waitForElementNotPresent('@sharingAutoCompleteSpinner')
       // note: some result lists don't have the "show all" button depending on the number of entries,
       // so we only click it if present
-      await this.api.element('css selector', showAllResultsXpath, result => {
-        if (result.status !== -1) {
-          return this.click('@sharingAutoCompleteShowAllResultsButton')
+      await this.api.element(
+        showAllResultsElement.locateStrategy,
+        showAllResultsElement.selector,
+        result => {
+          if (result.status !== -1) {
+            return this.click('@sharingAutoCompleteShowAllResultsButton')
+          }
         }
-      })
+      )
 
       await this.api.elements(
-        'css selector',
+        this.elements.sharingAutoCompleteDropDownElements.locateStrategy,
         this.elements.sharingAutoCompleteDropDownElements.selector,
         result => {
           result.value.forEach(value => {
@@ -385,7 +383,7 @@ module.exports = {
      * @returns {Promise}
      */
     changeCollaboratorRoleInDropdown: function(newRole) {
-      newRole = newRole === 'Advanced permissions' ? 'advancedRole' : newRole
+      newRole = newRole === 'Custom permissions' ? 'advancedRole' : newRole
       newRole = stringHelper.camelize(newRole)
 
       const newRoleButton = util.format(this.elements.roleButtonInDropdown.selector, newRole)
@@ -630,10 +628,13 @@ module.exports = {
       selector: '#files-share-invite .vs__dropdown-menu'
     },
     sharingAutoCompleteDropDownElements: {
-      selector: '#files-share-invite .vs__dropdown-menu .files-collaborators-autocomplete-user-text'
+      selector:
+        '#files-share-invite .vs__dropdown-menu .files-collaborators-autocomplete-user-text',
+      locateStrategy: 'css selector'
     },
     sharingAutoCompleteShowAllResultsButton: {
-      selector: '.oc-autocomplete-suggestion-overflow'
+      selector: '.oc-autocomplete-suggestion-overflow',
+      locateStrategy: 'css selector'
     },
     sharedWithListItem: {
       selector: '//*[@id="file-share-list"]//*[@class="oc-user"]//div[.="%s"]/../..',
@@ -669,7 +670,7 @@ module.exports = {
     newCollaboratorRemoveButton: {
       selector: "//button[contains(@class, 'files-share-invite-recipient-btn-remove')]"
     },
-    newCollaboratorRoleAdvancedPermissions: {
+    newCollaboratorRoleCustomPermissions: {
       selector: '#files-role-advancedRole'
     },
     selectRoleButtonInCollaboratorInformation: {

@@ -1,5 +1,5 @@
 const { client } = require('nightwatch-api')
-const { Given, When, Then } = require('cucumber')
+const { Given, When, Then } = require('@cucumber/cucumber')
 const mediaViewerPage = client.page.FilesPageElement.mediaViewerPage()
 const filesList = client.page.FilesPageElement.filesList()
 const assert = require('assert')
@@ -47,7 +47,6 @@ Then('the file {string} should not be displayed in the media viewer webUI', asyn
 When(
   'the user views the file {string} in the media viewer by clicking on the file name using the webUI',
   function(fileName) {
-    console.log(fileName)
     return filesList.clickOnFileName(fileName)
   }
 )

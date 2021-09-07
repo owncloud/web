@@ -21,23 +21,6 @@ localVue.use(GetTextPlugin, {
   silent: true
 })
 
-/**
- * There are some errors that should be caught but sneaked by vue.
- * Vue Warn errors is one of them
- *
- * Global console contains these error from where we can assert if they are expected errors
- */
-console.error = function(message) {
-  if (typeof message === 'string' && message.includes('Vue warn')) {
-    // keep default behaviour
-    // error.apply(console, arguments)
-    // Vue warn contains messages with warning initiator element
-    // Only vue warn message is thrown leaving the initiator element description
-    const errorSplit = message.split('\n')
-    throw errorSplit[0]
-  } else throw message instanceof Error ? message : new Error(message)
-}
-
 function getShallowWrapper(
   link = {
     token: '122235445488',
@@ -106,38 +89,12 @@ describe('LinkInfo', () => {
     })
   })
 
-  describe('link prop', () => {
-    it('should be required', () => {
-      expect(() => {
-        shallowMount(LinkInfo, {
-          localVue,
-          stubs: { ...stubs, 'oc-tag': true }
-        })
-      }).toThrow('[Vue warn]: Missing required prop: "link"')
-    })
-
-    it('should not accept values other than type object', () => {
-      expect(() => {
-        shallowMount(LinkInfo, {
-          localVue,
-          stubs: { ...stubs, 'oc-tag': true },
-          propsData: {
-            link: 'some-link'
-          }
-        })
-      }).toThrow(
-        '[Vue warn]: Invalid prop: type check failed for prop "link". Expected Object, got String with value "some-link".'
-      )
-    })
-  })
   describe('link url', () => {
     it('should set provided link url as href attribute of link tag and as value of copy to clipboard button', () => {
       const wrapper = getShallowWrapper({
         url: 'some-link'
       })
       const linkCopyUrlHyperlink = wrapper.find(selectors.linkUrl)
-      console.log(linkCopyUrlHyperlink.html())
-      console.log(linkCopyUrlHyperlink.attributes())
 
       expect(wrapper.vm.link.url).toEqual('some-link')
       expect(linkCopyUrlHyperlink.attributes().href).toEqual('some-link')

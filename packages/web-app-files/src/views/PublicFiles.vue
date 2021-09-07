@@ -90,6 +90,10 @@ export default {
     MixinMountSideBar
   ],
 
+  data: () => ({
+    loading: true
+  }),
+
   computed: {
     ...mapGetters('Files', [
       'publicLinkPassword',
@@ -134,10 +138,6 @@ export default {
       return !this.configuration.options.disablePreviews
     }
   },
-
-  data: () => ({
-    loading: true
-  }),
 
   watch: {
     $route: {

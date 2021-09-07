@@ -1,5 +1,5 @@
 const { client } = require('nightwatch-api')
-const { After, Before, Given, Then, When } = require('cucumber')
+const { After, Before, Given, Then, When } = require('@cucumber/cucumber')
 const webdavHelper = require('../helpers/webdavHelper')
 const httpHelper = require('../helpers/httpHelper')
 const backendHelper = require('../helpers/backendHelper')
@@ -8,7 +8,7 @@ const fs = require('fs')
 const occHelper = require('../helpers/occHelper')
 
 let initialConfigJsonSettings
-let createdFiles = []
+const createdFiles = []
 
 Given(
   'a file with the size of {string} bytes and the name {string} has been created locally',
@@ -86,15 +86,14 @@ Given('the property {string} has been deleted in web config file', function(key)
   return fs.writeFileSync(this.fullPathOfConfigFile, JSON.stringify(data, null, 4))
 })
 
-Then('the success/error message with header {string} should be displayed on the webUI', function(
-  message
-) {
-  return client.page
-    .webPage()
-    .waitForElementVisible('@message')
-    .expect.element('@message')
-    .text.to.equal(message)
-})
+Then(
+  'the success/error message with header {string} should be displayed on the webUI',
+  async function(message) {
+    const text = await client.page.webPage().getDisplayedMessage(true)
+    assert.strictEqual(text, message)
+    return await client.page.webPage().waitForElementNotPresent('@message')
+  }
+)
 
 Then('the following success/error message should be displayed on the webUI', async function(
   message
@@ -245,7 +244,7 @@ After(async function(testCase) {
 })
 
 Before(function(testCase) {
-  createdFiles = []
+  testCase.pickle.createdFiles = []
   if (
     typeof process.env.SCREEN_RESOLUTION !== 'undefined' &&
     process.env.SCREEN_RESOLUTION.trim() !== ''
@@ -265,7 +264,8 @@ Before(function(testCase) {
   } else {
     client.maximizeWindow()
   }
-  console.log('  ' + testCase.sourceLocation.uri + ':' + testCase.sourceLocation.line + '\n')
+  // todo
+  // console.log('  ' + testCase.sourceLocation.uri + ':' + testCase.sourceLocation.line + '\n')
 })
 
 After(async function(testCase) {
@@ -274,7 +274,13 @@ After(async function(testCase) {
   }
   console.log('\n  Result: ' + testCase.result.status + '\n')
 
-  createdFiles.forEach(fileName => fs.unlinkSync(fileName))
+  createdFiles.forEach(fileName => {
+    try {
+      fs.unlinkSync(fileName)
+    } catch (err) {
+      console.info(err.message)
+    }
+  })
 
   // clear file locks
   const body = new URLSearchParams()

@@ -1,7 +1,7 @@
 const { client } = require('nightwatch-api')
 const assert = require('assert')
 const _ = require('lodash')
-const { Given, When, Then } = require('cucumber')
+const { Given, When, Then } = require('@cucumber/cucumber')
 
 const markdownEditor = client.page.markdownEditorPage()
 const filesList = client.page.FilesPageElement.filesList()

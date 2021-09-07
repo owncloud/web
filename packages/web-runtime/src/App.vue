@@ -6,12 +6,12 @@
     </skip-to>
     <div
       v-if="user.isAuthenticated && !user.userReady"
-      class="loading-overlay"
+      class="loading-overlay uk-flex uk-flex-middle uk-flex-center"
       :style="{
         backgroundImage: 'url(' + configuration.theme.loginPage.backgroundImg + ')'
       }"
     >
-      <oc-spinner size="xlarge" :aria-label="$gettext('Loading')" class="uk-position-center" />
+      <oc-spinner size="xlarge" :aria-label="$gettext('Loading')" />
     </div>
     <template v-else-if="!showHeader">
       <router-view name="fullscreen" />
@@ -402,7 +402,7 @@ export default {
   }
 }
 </script>
-<style>
+<style lang="scss">
 html,
 body,
 #web,
@@ -439,10 +439,6 @@ body,
   overflow-y: auto;
 }
 
-#oc-header {
-  grid-area: header;
-}
-
 .oc-app-navigation {
   position: sticky;
   top: 0;
@@ -452,21 +448,18 @@ body,
 .loading-overlay {
   background-size: cover;
   background-repeat: no-repeat;
-  background-position: 50%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
+  background-position: center;
   height: 100%;
-}
+  width: 100%;
 
-.loading-overlay .oc-spinner {
-  color: #0a264e;
-}
-
-.loading-overlay .oc-spinner:after {
-  border: 10px solid;
-  border-bottom: 10px solid transparent;
+  .oc-spinner {
+    color: #0a264e;
+    display: inline-block;
+    &::after {
+      border: 10px solid;
+      border-bottom: 10px solid transparent;
+    }
+  }
 }
 
 @media only screen and (max-width: 960px) {
