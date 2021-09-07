@@ -122,12 +122,14 @@ export function aggregateResourceShares(
         prev.sharedWith.push({
           username: share.share_with,
           displayName: share.share_with_displayname,
-          avatar: undefined
+          avatar: undefined,
+          shareType: share.share_type
         })
       } else if (share.share_type === shareTypes.link) {
         prev.sharedWith.push({
           name: share.name || share.token,
-          link: true
+          link: true,
+          shareType: share.share_type
         })
       }
 
@@ -139,14 +141,16 @@ export function aggregateResourceShares(
         {
           username: share.share_with,
           displayName: share.share_with_displayname,
-          avatar: undefined
+          avatar: undefined,
+          shareType: share.share_type
         }
       ]
     } else if (share.share_type === shareTypes.link) {
       share.sharedWith = [
         {
           name: share.name || share.token,
-          link: true
+          link: true,
+          shareType: share.share_type
         }
       ]
     }
