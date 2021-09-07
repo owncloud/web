@@ -257,7 +257,9 @@ export default {
     },
     hasAnyShares() {
       return (
-        this.highlightedFile.shareTypes?.length > 0 || this.highlightedFile.indicators?.length > 0 || this.sharedItem !== null
+        this.highlightedFile.shareTypes?.length > 0 ||
+        this.highlightedFile.indicators?.length > 0 ||
+        this.sharedItem !== null
       )
     },
     hasPeopleShares() {
@@ -299,7 +301,6 @@ export default {
       this.sharedWithUserDisplayName = fileOwner ? fileOwner.displayName : null
       this.sharedTime = this.sharedItem.stime
       this.sharedParentDir = sharePathParentOrCurrent
-
     }
   },
   mounted() {
