@@ -35,7 +35,7 @@
           <div class="oc-text-initial oc-mb-xs">
             <p
               class="files-collaborators-collaborator-name oc-text-bold oc-mb-rm"
-              v-text="collaborator.collaborator.displayName"
+              v-text="shareDisplayName"
             />
             <p
               v-if="isCurrentUser"
@@ -216,6 +216,13 @@ export default {
   },
   computed: {
     ...mapGetters(['user']),
+
+    shareDisplayName() {
+      const displayName = this.collaborator.collaborator.displayName
+      const additionalInfo = this.collaborator.collaborator.additionalInfo
+      if(additionalInfo === null) return displayName;
+      return `${displayName} (${additionalInfo})`
+    },
 
     shareTypes() {
       return shareTypes
