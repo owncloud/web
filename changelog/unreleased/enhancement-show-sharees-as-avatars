@@ -1,0 +1,7 @@
+Enhancement: Show sharees as avatars
+
+We've added the sharees as avatars in the peoples panel
+in the right sidebar. 
+
+https://github.com/owncloud/web/pull/5758/files
+https://github.com/owncloud/web/issues/5736

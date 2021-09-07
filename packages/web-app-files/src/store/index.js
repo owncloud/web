@@ -2,7 +2,8 @@ import state from './state'
 import actions from './actions'
 import mutations from './mutations'
 import getters from './getters'
-import sidebar from './sidebar'
+import sidebarModule from './modules/sidebar'
+import paginationModule from './modules/pagination'
 const namespaced = true
 
 export default {
@@ -12,6 +13,7 @@ export default {
   actions,
   mutations,
   modules: {
-    sidebar
+    sidebar: sidebarModule,
+    pagination: paginationModule
   }
 }

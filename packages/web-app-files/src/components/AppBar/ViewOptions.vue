@@ -42,7 +42,7 @@
         </li>
         <li class="files-view-options-list-item">
           <oc-page-size
-            v-model="pageItemsLimit"
+            v-model="itemsPerPageModel"
             data-testid="files-pagination-size"
             :label="$gettext('Items per page')"
             :options="[100, 500, 1000, $gettext('All')]"
@@ -59,8 +59,9 @@ import { mapMutations, mapState, mapActions } from 'vuex'
 
 export default {
   computed: {
-    ...mapState('Files', ['areHiddenFilesShown', 'filesPageLimit']),
+    ...mapState('Files', ['areHiddenFilesShown']),
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
+    ...mapState('Files/pagination', ['itemsPerPage']),
 
     viewOptionsButtonLabel() {
       return this.$gettext('Display customization options of the files list')
@@ -85,9 +86,9 @@ export default {
       }
     },
 
-    pageItemsLimit: {
+    itemsPerPageModel: {
       get() {
-        return this.filesPageLimit
+        return this.itemsPerPage
       },
 
       set(value) {
@@ -99,8 +100,8 @@ export default {
   watch: {
     $route: {
       handler(route) {
-        if (Object.prototype.hasOwnProperty.call(route.query, 'items-limit')) {
-          this.SET_FILES_PAGE_LIMIT(route.query['items-limit'])
+        if (Object.prototype.hasOwnProperty.call(route.query, 'items-per-page')) {
+          this.SET_ITEMS_PER_PAGE(route.query['items-per-page'])
 
           return
         }
@@ -111,13 +112,14 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('Files', ['SET_HIDDEN_FILES_VISIBILITY', 'SET_FILES_PAGE_LIMIT']),
+    ...mapMutations('Files', ['SET_HIDDEN_FILES_VISIBILITY']),
     ...mapActions('Files/sidebar', { toggleSidebar: 'toggle' }),
+    ...mapMutations('Files/pagination', ['SET_ITEMS_PER_PAGE']),
 
-    updateQuery(limit = this.pageItemsLimit) {
-      const query = { ...this.$route.query, 'items-limit': limit }
+    updateQuery(limit = this.itemsPerPageModel) {
+      const query = { ...this.$route.query, 'items-per-page': limit }
 
-      this.SET_FILES_PAGE_LIMIT(limit)
+      this.SET_ITEMS_PER_PAGE(limit)
       this.$router.replace({ query }).catch(() => {})
     }
   }

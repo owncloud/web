@@ -8612,7 +8612,8 @@ ospec@3.1.0:
   dependencies:
     glob "^7.1.3"
 
-owncloud-design-system@10.0.0-rc2:
+
+owncloud-design-system@10.0.0-rc1:
   version "10.0.0-rc1"
   resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-10.0.0-rc1.tgz#132d1bb4699ef805f61a624989648365aa57a193"
   integrity sha512-YJVbxQycTpkeyYI6yiJfpm0IauyldzrOfC0Ny7RUwcG2MI8F7hnzNZxc34QSH1ipbz6n4sIAYm6Ge2Q1zymyVg==
