@@ -175,7 +175,8 @@ export default {
       return (
         this.showShares &&
         !this.sharesTreeLoading &&
-        this.highlightedFile.path !== this.sharedParentDir
+        this.highlightedFile.path !== this.sharedParentDir &&
+        this.sharedParentDir !== null
       )
     },
     showShareDate() {
@@ -291,7 +292,9 @@ export default {
       )
       if (sharePathParentOrCurrent === null) return
       const shareItem = this.sharesTree[sharePathParentOrCurrent][0]
-      this.sharedWithUserDisplayName = shareItem.fileOwner.displayName
+      console.log(this.sharesTree[sharePathParentOrCurrent][0])
+      const fileOwner = shareItem.fileOwner
+      this.sharedWithUserDisplayName = fileOwner ? fileOwner.displayName : null
       this.sharedTime = shareItem.stime
       this.sharedParentDir = sharePathParentOrCurrent
     },

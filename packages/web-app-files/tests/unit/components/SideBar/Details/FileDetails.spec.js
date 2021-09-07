@@ -115,13 +115,11 @@ describe('Details SideBar Accordion Item', () => {
       it('should show detailed sharing information on shared file', () => {
         const wrapper = createWrapper(sharedFile)
         expect(wrapper.find(selectors.sharedBy).exists()).toBeTruthy()
-        expect(wrapper.find(selectors.sharedVia).exists()).toBeTruthy()
         expect(wrapper.find(selectors.sharedDate).exists()).toBeTruthy()
       })
       it('should not show detailed sharing information on normal file', () => {
         const wrapper = createWrapper(simpleOwnFile)
         expect(wrapper.find(selectors.sharedBy).exists()).toBeFalsy()
-        expect(wrapper.find(selectors.sharedVia).exists()).toBeFalsy()
         expect(wrapper.find(selectors.sharedDate).exists()).toBeFalsy()
       })
     })
