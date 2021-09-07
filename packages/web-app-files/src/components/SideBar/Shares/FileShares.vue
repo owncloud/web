@@ -27,16 +27,16 @@
         <div class="avatars-wrapper">
           <h4 v-if="hasSharees" class="shared-with-label" v-text="sharedWithLabel" />
           <oc-button
+            v-oc-tooltip="sharedWithTooltip"
             appearance="raw"
             class="sharee-avatars-button"
             :aria-label="sharedWithTooltip"
             data-testid="shared-with-avatars"
             @click="onClickSharedWith"
-            v-oc-tooltip="sharedWithTooltip"
           >
             <oc-avatars
               v-if="!showShareesList"
-              :items="collaborators_avatar"
+              :items="collaboratorsAvatar"
               :stacked="true"
               :is-tooltip-displayed="false"
               aria-hidden="true"
@@ -175,7 +175,7 @@ export default {
     },
 
     hasSharees() {
-      return this.collaborators_avatar.length > 0
+      return this.collaboratorsAvatar.length > 0
     },
 
     sharedWithTooltip() {
@@ -215,10 +215,13 @@ export default {
         role
       }
     },
-    collaborators_avatar() {
-      const result = []
-      this.collaborators.forEach(c => result.push({ ...c.collaborator, shareType: c.shareType }))
-      return result
+    collaboratorsAvatar() {
+      return this.collaborators.map(c => {
+        return {
+          ...c.collaborator,
+          shareType: c.shareType
+        }
+      })
     },
 
     $_ownerAsCollaborator() {
