@@ -393,6 +393,12 @@ export default {
     },
 
     getRecipientsCustomPermissions() {
+      // Custom permissions are only available for the custom role
+      // so do not display checked permissions if a user is switching from a different role
+      if (this.existingRole !== undefined && this.existingRole.name !== 'advancedRole') {
+        return
+      }
+
       this.customPermissions = []
 
       if (this.collaboratorsPermissions) {

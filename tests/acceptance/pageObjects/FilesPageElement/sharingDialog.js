@@ -135,6 +135,9 @@ module.exports = {
         }
         await this.api.elementIdClick(elementID)
       }
+
+      this.click('@customPermissionsConfirmBtn')
+
       return this
     },
 
@@ -285,8 +288,16 @@ module.exports = {
      */
     getDisplayedPermission: async function(collaborator) {
       await collaboratorDialog.clickEditShare(collaborator)
+      this.selectRoleForNewCollaborator('Custom permissions')
+
       // read the permissions from the checkboxes
       const currentSharePermissions = await this.getSharePermissions()
+
+      // Hide role select dropdown
+      this.click('@customPermissionsCancelBtn')
+      this.click('@selectedRoleBtn')
+      this.waitForElementNotPresent('@selectedRoleBtn')
+
       await this.clickCancel()
       return currentSharePermissions
     },
@@ -672,7 +683,7 @@ module.exports = {
       selector: "//button[contains(@class, 'files-share-invite-recipient-btn-remove')]"
     },
     newCollaboratorRoleCustomPermissions: {
-      selector: '#files-role-advancedRole'
+      selector: '#files-recipient-role-drop-btn-advancedRole'
     },
     selectRoleButtonInCollaboratorInformation: {
       selector: '#files-collaborators-role-button'
@@ -735,6 +746,15 @@ module.exports = {
     },
     elementInterceptingCollaboratorsExpirationInput: {
       selector: '.vdatetime-overlay.vdatetime-fade-leave-active.vdatetime-fade-leave-to'
+    },
+    customPermissionsConfirmBtn: {
+      selector: '[data-testid="files-recipient-custom-permissions-drop-confirm"]'
+    },
+    customPermissionsCancelBtn: {
+      selector: '[data-testid="files-recipient-custom-permissions-drop-cancel"]'
+    },
+    selectedRoleBtn: {
+      selector: '.files-recipient-role-drop-btn.selected'
     }
   }
 }
