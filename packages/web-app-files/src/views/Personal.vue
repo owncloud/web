@@ -60,7 +60,6 @@
 
 <script>
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
-import isNil from 'lodash-es/isNil'
 import debounce from 'lodash-es/debounce'
 
 import MixinAccessibleBreadcrumb from '../mixins/accessibleBreadcrumb'
@@ -115,7 +114,8 @@ export default {
 
   computed: {
     ...mapState(['app']),
-    ...mapState('Files', ['currentPage', 'files', 'filesPageLimit']),
+    ...mapState('Files', ['files']),
+    ...mapState('Files/pagination', ['currentPage']),
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
     ...mapGetters('Files', [
       'highlightedFile',
@@ -161,20 +161,6 @@ export default {
   watch: {
     $route: {
       handler: function(to, from) {
-        if (isNil(this.$route.params.item)) {
-          this.$router
-            .push({
-              name: 'files-personal',
-              params: {
-                item: this.homeFolder
-              }
-            })
-            .catch(error => {
-              console.log(error)
-            })
-          return
-        }
-
         this.$_filesListPagination_updateCurrentPage()
 
         const sameRoute = to.name === from?.name
@@ -330,7 +316,7 @@ export default {
 
       try {
         let resources = await this.fetchResources(
-          path || this.$route.params.item,
+          path || this.$route.params.item || this.homeFolder,
           DavProperties.Default
         )
         resources = resources.map(buildResource)
@@ -341,7 +327,7 @@ export default {
         })
         this.loadIndicators({
           client: this.$client,
-          currentFolder: this.$route.params.item
+          currentFolder: this.$route.params.item || this.homeFolder
         })
 
         // Load quota
