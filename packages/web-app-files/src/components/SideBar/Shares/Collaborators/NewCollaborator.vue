@@ -1,16 +1,15 @@
 <template>
   <div class="files-collaborators-collaborator-add-dialog">
     <div class="oc-mb">
-      <label for="files-share-invite-input" v-text="$gettext('Invite')" />
       <oc-select
-        id="files-share-invite"
+        id="files-share-invite-input"
         ref="ocSharingAutocomplete"
         v-model="selectedCollaborators"
         :options="autocompleteResults"
         :loading="searchInProgress"
         :multiple="true"
         :filter="filterRecipients"
-        input-id="files-share-invite-input"
+        :label="selectedCollaboratorsLabel"
         aria-describedby="files-share-invite-hint"
         :dropdown-should-open="
           ({ open, search }) => open && search.length >= minSearchLength && !searchInProgress
@@ -127,6 +126,9 @@ export default {
 
     minSearchLength() {
       return parseInt(this.user.capabilities.files_sharing.search_min_length, 10)
+    },
+    selectedCollaboratorsLabel() {
+      return this.$gettext('Invite')
     }
   },
   mounted() {

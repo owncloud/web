@@ -21,14 +21,6 @@
   resolved "https://registry.npmjs.org/@babel/compat-data/-/compat-data-7.14.7.tgz"
   integrity sha512-nS6dZaISCXJ3+518CWiBfEr//gHyMO02uDxBkXTKZDN5POruCnOZ1N4YBRZDCabwF8nZMWBpRxIicmXtBs+fvw==
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> 9e3e97c9... fix pagination to work in integration tests
-=======
->>>>>>> 1dd3cd44... Add changelog for copy/move fixes whilst patching Vue router
 "@babel/compat-data@^7.15.0":
   version "7.15.0"
   resolved "https://registry.yarnpkg.com/@babel/compat-data/-/compat-data-7.15.0.tgz#2dbaf8b85334796cafbb0f5793a90a2fc010b176"
@@ -38,19 +30,6 @@
   version "7.14.6"
   resolved "https://registry.npmjs.org/@babel/core/-/core-7.14.6.tgz"
   integrity sha512-gJnOEWSqTk96qG5BoIrl5bVtc23DCycmIePPYnamY9RboYdI4nFy5vAQMSl81O5K/W0sLDWfGysnOECC+KUUCA==
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-"@babel/core@^7.1.0", "@babel/core@^7.11.6", "@babel/core@^7.12.10", "@babel/core@^7.15.0", "@babel/core@^7.7.5":
-  version "7.15.0"
-  resolved "https://registry.yarnpkg.com/@babel/core/-/core-7.15.0.tgz#749e57c68778b73ad8082775561f67f5196aafa8"
-  integrity sha512-tXtmTminrze5HEUPn/a0JtOzzfp0nk+UEXQ/tqIJo3WDGypl/2OFQEMll/zSFU8f/lfmfLXvTaORHF3cfXIQMw==
->>>>>>> 8267ca80... fix(files): fix new errors from rebase
->>>>>>> 9e3e97c9... fix pagination to work in integration tests
-=======
->>>>>>> 1dd3cd44... Add changelog for copy/move fixes whilst patching Vue router
   dependencies:
     "@babel/code-frame" "^7.14.5"
     "@babel/generator" "^7.14.5"
@@ -93,19 +72,6 @@
   version "7.14.5"
   resolved "https://registry.npmjs.org/@babel/generator/-/generator-7.14.5.tgz"
   integrity sha512-y3rlP+/G25OIX3mYKKIOlQRcqj7YgrvHxOLbVmyLJ9bPmi5ttvUmpydVjcFjZphOktWuA7ovbx91ECloWTfjIA==
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-"@babel/generator@^7.15.0":
-  version "7.15.0"
-  resolved "https://registry.yarnpkg.com/@babel/generator/-/generator-7.15.0.tgz#a7d0c172e0d814974bad5aa77ace543b97917f15"
-  integrity sha512-eKl4XdMrbpYvuB505KTta4AV9g+wWzmVBW69tX0H2NwKVKd2YJbKgyK6M8j/rgLbmHOYJn6rUklV677nOyJrEQ==
->>>>>>> 8267ca80... fix(files): fix new errors from rebase
->>>>>>> 9e3e97c9... fix pagination to work in integration tests
-=======
->>>>>>> 1dd3cd44... Add changelog for copy/move fixes whilst patching Vue router
   dependencies:
     "@babel/types" "^7.14.5"
     jsesc "^2.5.1"
@@ -311,14 +277,6 @@
     "@babel/traverse" "^7.14.5"
     "@babel/types" "^7.14.5"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> 9e3e97c9... fix pagination to work in integration tests
-=======
->>>>>>> 1dd3cd44... Add changelog for copy/move fixes whilst patching Vue router
 "@babel/helper-replace-supers@^7.15.0":
   version "7.15.0"
   resolved "https://registry.yarnpkg.com/@babel/helper-replace-supers/-/helper-replace-supers-7.15.0.tgz#ace07708f5bf746bf2e6ba99572cce79b5d4e7f4"
@@ -333,19 +291,6 @@
   version "7.14.5"
   resolved "https://registry.npmjs.org/@babel/helper-simple-access/-/helper-simple-access-7.14.5.tgz"
   integrity sha512-nfBN9xvmCt6nrMZjfhkl7i0oTV3yxR4/FztsbOASyTvVcoYd0TRHh7eMLdlEcCqobydC0LAF3LtC92Iwxo0wyw==
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-"@babel/helper-simple-access@^7.14.8":
-  version "7.14.8"
-  resolved "https://registry.yarnpkg.com/@babel/helper-simple-access/-/helper-simple-access-7.14.8.tgz#82e1fec0644a7e775c74d305f212c39f8fe73924"
-  integrity sha512-TrFN4RHh9gnWEU+s7JloIho2T76GPwRHhdzOWLqTrMnlas8T9O7ec+oEDNsRXndOmru9ymH9DFrEOxpzPoSbdg==
->>>>>>> 8267ca80... fix(files): fix new errors from rebase
->>>>>>> 9e3e97c9... fix pagination to work in integration tests
-=======
->>>>>>> 1dd3cd44... Add changelog for copy/move fixes whilst patching Vue router
   dependencies:
     "@babel/types" "^7.14.5"
 
@@ -1075,50 +1020,14 @@
     pirates "^4.0.0"
     source-map-support "^0.5.16"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 3b4dbc4c... fix pagination to work in integration tests
->>>>>>> 9e3e97c9... fix pagination to work in integration tests
-=======
->>>>>>> 1dd3cd44... Add changelog for copy/move fixes whilst patching Vue router
 "@babel/runtime-corejs3@^7.10.2":
   version "7.14.6"
   resolved "https://registry.npmjs.org/@babel/runtime-corejs3/-/runtime-corejs3-7.14.6.tgz"
   integrity sha512-Xl8SPYtdjcMoCsIM4teyVRg7jIcgl8F2kRtoCcXuHzXswt9UxZCS6BzRo8fcnCuP6u2XtPgvyonmEPF57Kxo9Q==
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-"@babel/runtime-corejs3@^7.10.2", "@babel/runtime-corejs3@^7.12.1":
-  version "7.15.3"
-  resolved "https://registry.yarnpkg.com/@babel/runtime-corejs3/-/runtime-corejs3-7.15.3.tgz#28754263988198f2a928c09733ade2fb4d28089d"
-  integrity sha512-30A3lP+sRL6ml8uhoJSs+8jwpKzbw8CqBvDc1laeptxPm5FahumJxirigcbD2qTs71Sonvj1cyZB0OKGAmxQ+A==
->>>>>>> 8267ca80... fix(files): fix new errors from rebase
-=======
-=======
->>>>>>> 1dd3cd44... Add changelog for copy/move fixes whilst patching Vue router
   dependencies:
     core-js-pure "^3.14.0"
     regenerator-runtime "^0.13.4"
 
-<<<<<<< HEAD
-"@babel/runtime-corejs3@^7.12.1":
-  version "7.15.4"
-  resolved "https://registry.yarnpkg.com/@babel/runtime-corejs3/-/runtime-corejs3-7.15.4.tgz#403139af262b9a6e8f9ba04a6fdcebf8de692bf1"
-  integrity sha512-lWcAqKeB624/twtTc3w6w/2o9RqJPaNBhPGK6DKLSiwuVWC7WFkypWyNg+CpZoyJH0jVzv1uMtXZ/5/lQOLtCg==
->>>>>>> 3b4dbc4c... fix pagination to work in integration tests
->>>>>>> 9e3e97c9... fix pagination to work in integration tests
-  dependencies:
-    core-js-pure "^3.16.0"
-    regenerator-runtime "^0.13.4"
-
-=======
->>>>>>> 1dd3cd44... Add changelog for copy/move fixes whilst patching Vue router
 "@babel/runtime@^7.10.2", "@babel/runtime@^7.12.5", "@babel/runtime@^7.14.0", "@babel/runtime@^7.8.4", "@babel/runtime@^7.9.2":
   version "7.14.6"
   resolved "https://registry.npmjs.org/@babel/runtime/-/runtime-7.14.6.tgz"
@@ -1150,14 +1059,6 @@
     debug "^4.1.0"
     globals "^11.1.0"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> 9e3e97c9... fix pagination to work in integration tests
-=======
->>>>>>> 1dd3cd44... Add changelog for copy/move fixes whilst patching Vue router
 "@babel/traverse@^7.15.0":
   version "7.15.0"
   resolved "https://registry.yarnpkg.com/@babel/traverse/-/traverse-7.15.0.tgz#4cca838fd1b2a03283c1f38e141f639d60b3fc98"
@@ -1177,19 +1078,6 @@
   version "7.14.5"
   resolved "https://registry.npmjs.org/@babel/types/-/types-7.14.5.tgz"
   integrity sha512-M/NzBpEL95I5Hh4dwhin5JlE7EzO5PHMAuzjxss3tiOBD46KfQvVedN/3jEPZvdRvtsK2222XfdHogNIttFgcg==
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-"@babel/types@^7.0.0", "@babel/types@^7.14.5", "@babel/types@^7.14.8", "@babel/types@^7.15.0", "@babel/types@^7.3.0", "@babel/types@^7.3.3", "@babel/types@^7.4.4", "@babel/types@^7.6.1", "@babel/types@^7.7.0", "@babel/types@^7.9.6":
-  version "7.15.0"
-  resolved "https://registry.yarnpkg.com/@babel/types/-/types-7.15.0.tgz#61af11f2286c4e9c69ca8deb5f4375a73c72dcbd"
-  integrity sha512-OBvfqnllOIdX4ojTHpwZbpvz4j3EWyjkZEdmjH0/cgsd6QOdSgU8rLSk6ard/pcW7rlmjdVSX/AWOaORR1uNOQ==
->>>>>>> 8267ca80... fix(files): fix new errors from rebase
->>>>>>> 9e3e97c9... fix pagination to work in integration tests
-=======
->>>>>>> 1dd3cd44... Add changelog for copy/move fixes whilst patching Vue router
   dependencies:
     "@babel/helper-validator-identifier" "^7.14.5"
     to-fast-properties "^2.0.0"
@@ -1794,14 +1682,6 @@
   resolved "https://registry.npmjs.org/@tootallnate/once/-/once-1.1.2.tgz"
   integrity sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw==
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> 9e3e97c9... fix pagination to work in integration tests
-=======
->>>>>>> 1dd3cd44... Add changelog for copy/move fixes whilst patching Vue router
 "@tsconfig/node10@^1.0.7":
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/@tsconfig/node10/-/node10-1.0.8.tgz#c1e4e80d6f964fbecb3359c43bd48b40f7cadad9"
@@ -1978,33 +1858,6 @@
   version "15.12.2"
   resolved "https://registry.npmjs.org/@types/node/-/node-15.12.2.tgz"
   integrity sha512-zjQ69G564OCIWIOHSXyQEEDpdpGl+G348RAKY0XXy9Z5kU9Vzv1GMNnkar/ZJ8dzXB3COzD9Mo9NtRZ4xfgUww==
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
-"@types/node@*":
-  version "16.7.10"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.7.10.tgz#7aa732cc47341c12a16b7d562f519c2383b6d4fc"
-  integrity sha512-S63Dlv4zIPb8x6MMTgDq5WWRJQe56iBEY0O3SOFA9JrRienkOVDXSXBjjJw6HTNQYSE2JI6GMCR6LVbIMHJVvA==
-
-"@types/node@^15.9.0":
-  version "15.14.9"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-15.14.9.tgz#bc43c990c3c9be7281868bbc7b8fdd6e2b57adfa"
-  integrity sha512-qjd88DrCxupx/kJD5yQgZdcYKZKSIGBVDIBE1/LTGcNm3d2Np/jxojkdePDdfnBHJc5W7vSMpbJ1aB7p/Py69A==
->>>>>>> 8267ca80... fix(files): fix new errors from rebase
-=======
-  version "3.0.4"
-  resolved "https://registry.npmjs.org/@types/minimatch/-/minimatch-3.0.4.tgz"
-  integrity sha512-1z8k4wzFnNjVK/tlxvrWuK5WMt6mydWWP7+zvH5eFep4oj+UkrfiJTRtjCeBXNpwaA/FYqqtb4/QS4ianFpIRA==
-
-"@types/node@*", "@types/node@^15.9.0":
-  version "15.12.2"
-  resolved "https://registry.npmjs.org/@types/node/-/node-15.12.2.tgz"
-  integrity sha512-zjQ69G564OCIWIOHSXyQEEDpdpGl+G348RAKY0XXy9Z5kU9Vzv1GMNnkar/ZJ8dzXB3COzD9Mo9NtRZ4xfgUww==
->>>>>>> 3b4dbc4c... fix pagination to work in integration tests
->>>>>>> 9e3e97c9... fix pagination to work in integration tests
-=======
->>>>>>> 1dd3cd44... Add changelog for copy/move fixes whilst patching Vue router
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.0"
@@ -2778,17 +2631,10 @@ axios@^0.19.2:
   dependencies:
     follow-redirects "1.5.10"
 
-<<<<<<< HEAD
 axios@^0.21.1, axios@^0.21.2:
   version "0.21.3"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.21.3.tgz#f85d9b747f9b66d59ca463605cedf1844872b82e"
   integrity sha512-JtoZ3Ndke/+Iwt5n+BgSli/3idTvpt5OjKyoCmz4LX5+lPiY5l7C1colYezhlxThjNa/NhngCUWZSZFypIFuaA==
-=======
-axios@^0.21.1:
-  version "0.21.1"
-  resolved "https://registry.npmjs.org/axios/-/axios-0.21.1.tgz"
-  integrity sha512-dKQiRHxGD9PPRIUNIWvZhPTPpl1rf/OxTYKsqKUDjBwYylTvV7SjSHJb9ratfyzM6wCdLCOYLzs73qpg5c4iGA==
->>>>>>> 9e3e97c9... fix pagination to work in integration tests
   dependencies:
     follow-redirects "^1.14.0"
 
@@ -3523,17 +3369,10 @@ cheerio@^1.0.0-rc.3:
   optionalDependencies:
     fsevents "~2.3.2"
 
-<<<<<<< HEAD
 chromedriver@^93.0.1:
   version "93.0.1"
   resolved "https://registry.yarnpkg.com/chromedriver/-/chromedriver-93.0.1.tgz#3ed1f7baa98a754fc1788c42ac8e4bb1ab27db32"
   integrity sha512-KDzbW34CvQLF5aTkm3b5VdlTrvdIt4wEpCzT2p4XJIQWQZEPco5pNce7Lu9UqZQGkhQ4mpZt4Ky6NKVyIS2N8A==
-=======
-chromedriver@^89.0.0:
-  version "89.0.0"
-  resolved "https://registry.npmjs.org/chromedriver/-/chromedriver-89.0.0.tgz"
-  integrity sha512-+DVYp3+m6tZUYTMl9fEgCZIDk9YBTcHws82nIV1JYwusu51zRITA0oeNzuPyFhuK7ageFnnKCDviH2BL5I4M0w==
->>>>>>> 9e3e97c9... fix pagination to work in integration tests
   dependencies:
     "@testim/chrome-version" "^1.0.7"
     axios "^0.21.2"
@@ -5582,17 +5421,10 @@ follow-redirects@1.5.10:
   dependencies:
     debug "=3.1.0"
 
-<<<<<<< HEAD
 follow-redirects@^1.14.0:
   version "1.14.3"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.14.3.tgz#6ada78118d8d24caee595595accdc0ac6abd022e"
   integrity sha512-3MkHxknWMUtb23apkgz/83fDoe+y+qr0TdgacGIA7bew+QLBo3vdgEN2xEsuXNivpFy4CyDhBBZnNZOtalmenw==
-=======
-follow-redirects@^1.10.0:
-  version "1.14.1"
-  resolved "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.14.1.tgz"
-  integrity sha512-HWqDgT7ZEkqRzBvc2s64vSZ/hfOceEol3ac/7tKwzuvEyWx3/4UegXh5oBOIotkGsObyk3xznnSRVADBgWSQVg==
->>>>>>> 9e3e97c9... fix pagination to work in integration tests
 
 for-in@^1.0.2:
   version "1.0.2"
@@ -10253,23 +10085,7 @@ resolve-url@^0.2.1:
   resolved "https://registry.npmjs.org/resolve-url/-/resolve-url-0.2.1.tgz"
   integrity sha1-LGN/53yJOv0qZj/iGqkIAGjiBSo=
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 resolve@^1.10.0, resolve@^1.10.1, resolve@^1.11.1, resolve@^1.12.0, resolve@^1.13.1, resolve@^1.14.2, resolve@^1.15.1, resolve@^1.17.0, resolve@^1.18.1, resolve@^1.19.0, resolve@^1.20.0:
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-resolve@^1.10.0, resolve@^1.10.1, resolve@^1.11.1, resolve@^1.12.0, resolve@^1.13.1, resolve@^1.14.2, resolve@^1.15.1, resolve@^1.17.0, resolve@^1.18.1, resolve@^1.19.0, resolve@^1.20.0:
-=======
-resolve@^1.10.0, resolve@^1.10.1, resolve@^1.11.1, resolve@^1.12.0, resolve@^1.14.2, resolve@^1.15.1, resolve@^1.17.0, resolve@^1.18.1, resolve@^1.19.0, resolve@^1.20.0, resolve@^1.3.3:
->>>>>>> 8267ca80... fix(files): fix new errors from rebase
-=======
-resolve@^1.10.0, resolve@^1.10.1, resolve@^1.11.1, resolve@^1.12.0, resolve@^1.13.1, resolve@^1.14.2, resolve@^1.15.1, resolve@^1.17.0, resolve@^1.18.1, resolve@^1.19.0, resolve@^1.20.0, resolve@^1.3.3:
->>>>>>> 3b4dbc4c... fix pagination to work in integration tests
->>>>>>> 9e3e97c9... fix pagination to work in integration tests
-=======
-resolve@^1.10.0, resolve@^1.10.1, resolve@^1.11.1, resolve@^1.12.0, resolve@^1.13.1, resolve@^1.14.2, resolve@^1.15.1, resolve@^1.17.0, resolve@^1.18.1, resolve@^1.19.0, resolve@^1.20.0:
->>>>>>> 1dd3cd44... Add changelog for copy/move fixes whilst patching Vue router
   version "1.20.0"
   resolved "https://registry.npmjs.org/resolve/-/resolve-1.20.0.tgz"
   integrity sha512-wENBPt4ySzg4ybFQW2TT1zMQucPK95HSh/nq2CFTZVOGut2+pQvSsgtda4d26YrYcr067wjbmzOG8byDPBX63A==
@@ -11500,14 +11316,6 @@ ts-jest@^26.5.6:
     semver "7.x"
     yargs-parser "20.x"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> 9e3e97c9... fix pagination to work in integration tests
-=======
->>>>>>> 1dd3cd44... Add changelog for copy/move fixes whilst patching Vue router
 ts-node@^10.2.0:
   version "10.2.1"
   resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-10.2.1.tgz#4cc93bea0a7aba2179497e65bb08ddfc198b3ab5"
@@ -11530,21 +11338,6 @@ tsconfig-paths@^3.9.0:
   version "3.9.0"
   resolved "https://registry.npmjs.org/tsconfig-paths/-/tsconfig-paths-3.9.0.tgz"
   integrity sha512-dRcuzokWhajtZWkQsDVKbWyY+jgcLC5sqJhg2PSgf4ZkH2aHPvaOY8YWGhmjb68b5qqTfasSsDO9k7RUiEmZAw==
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-tsconfig-paths@^3.11.0:
-  version "3.11.0"
-  resolved "https://registry.yarnpkg.com/tsconfig-paths/-/tsconfig-paths-3.11.0.tgz#954c1fe973da6339c78e06b03ce2e48810b65f36"
-  integrity sha512-7ecdYDnIdmv639mmDwslG6KQg1Z9STTz1j7Gcz0xa+nshh/gKDAHcPxRbWOsA3SPp0tXP2leTcY9Kw+NAkfZzA==
->>>>>>> 8267ca80... fix(files): fix new errors from rebase
-=======
->>>>>>> 3b4dbc4c... fix pagination to work in integration tests
->>>>>>> 9e3e97c9... fix pagination to work in integration tests
-=======
->>>>>>> 1dd3cd44... Add changelog for copy/move fixes whilst patching Vue router
   dependencies:
     "@types/json5" "^0.0.29"
     json5 "^1.0.1"
@@ -11839,16 +11632,6 @@ util-deprecate@^1.0.1, util-deprecate@^1.0.2, util-deprecate@~1.0.1:
   resolved "https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.2.tgz"
   integrity sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8=
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 3b4dbc4c... fix pagination to work in integration tests
->>>>>>> 9e3e97c9... fix pagination to work in integration tests
-=======
->>>>>>> 1dd3cd44... Add changelog for copy/move fixes whilst patching Vue router
 util.promisify@~1.0.0:
   version "1.0.1"
   resolved "https://registry.npmjs.org/util.promisify/-/util.promisify-1.0.1.tgz"
@@ -11864,16 +11647,6 @@ uuid@8.3.2, uuid@^8.2.0, uuid@^8.3.0:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
   integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 8267ca80... fix(files): fix new errors from rebase
-=======
->>>>>>> 3b4dbc4c... fix pagination to work in integration tests
->>>>>>> 9e3e97c9... fix pagination to work in integration tests
-=======
->>>>>>> 1dd3cd44... Add changelog for copy/move fixes whilst patching Vue router
 uuid@^3.3.2, uuid@^3.3.3:
   version "3.4.0"
   resolved "https://registry.npmjs.org/uuid/-/uuid-3.4.0.tgz"
@@ -12093,18 +11866,9 @@ vuex-router-sync@^5.0.0:
   resolved "https://registry.npmjs.org/vuex-router-sync/-/vuex-router-sync-5.0.0.tgz"
   integrity sha512-Mry2sO4kiAG64714X1CFpTA/shUH1DmkZ26DFDtwoM/yyx6OtMrc+MxrU+7vvbNLO9LSpgwkiJ8W+rlmRtsM+w==
 
-<<<<<<< HEAD
 vuex@3.6.2, vuex@^3.6.2:
-=======
-vuex@3.1.3:
-  version "3.1.3"
-  resolved "https://registry.npmjs.org/vuex/-/vuex-3.1.3.tgz"
-  integrity sha512-k8vZqNMSNMgKelVZAPYw5MNb2xWSmVgCKtYKAptvm9YtZiOXnRXFWu//Y9zQNORTrm3dNj1n/WaZZI26tIX6Mw==
-
-vuex@^3.1.1:
->>>>>>> 9e3e97c9... fix pagination to work in integration tests
   version "3.6.2"
-  resolved "https://registry.npmjs.org/vuex/-/vuex-3.6.2.tgz"
+  resolved "https://registry.yarnpkg.com/vuex/-/vuex-3.6.2.tgz#236bc086a870c3ae79946f107f16de59d5895e71"
   integrity sha512-ETW44IqCgBpVomy520DT5jf8n0zoCac+sxWnn+hMe/CzaSejb/eVw2YToiXYX+Ex/AuHHia28vWTq4goAexFbw==
 
 w3c-hr-time@^1.0.2:
