@@ -1,11 +1,12 @@
 Change: Update ODS to 10.0.0
 
-We updated the ownCloud Design System to version 10.0.0-rc1. Please refer to the full changelog in the ODS release (linked) for more details. Summary:
+We updated the ownCloud Design System to version 10.0.0-rc2. Please refer to the full changelog in the ODS release (linked) for more details. Summary:
 
 - Change - Use route query to store active page: https://github.com/owncloud/owncloud-design-system/pull/1626
 - Change - Refactor OcAvatarGroup and rename to OcAvatars: https://github.com/owncloud/owncloud-design-system/pull/5736
+- Change - Add label prop to OcSelect: https://github.com/owncloud/owncloud-design-system/pull/1633
 - Enhancement - Switch filesize calculation base: https://github.com/owncloud/owncloud-design-system/pull/1598
 - Bugfix - Reset droptarget background color in OcTableFiles: https://github.com/owncloud/owncloud-design-system/pull/1625
 
 https://github.com/owncloud/web/pull/5769
-https://github.com/owncloud/owncloud-design-system/releases/tag/v10.0.0-rc1
+https://github.com/owncloud/owncloud-design-system/releases/tag/v10.0.0-rc2
