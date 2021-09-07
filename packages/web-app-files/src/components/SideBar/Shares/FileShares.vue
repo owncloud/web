@@ -32,10 +32,10 @@
             :aria-label="sharedWithTooltip"
             data-testid="shared-with-avatars"
             @click="onClickSharedWith"
+            v-oc-tooltip="sharedWithTooltip"
           >
             <oc-avatars
               v-if="!showShareesList"
-              v-oc-tooltip="sharedWithTooltip"
               :items="collaborators_avatar"
               :stacked="true"
               :is-tooltip-displayed="false"
@@ -464,7 +464,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-content: center;
-  align-items: center;
+  align-items: flex-start;
   width: 100%;
   height: 40px;
 }
