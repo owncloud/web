@@ -25,7 +25,7 @@
           v-text="noResharePermsMessage"
         />
         <div class="avatars-wrapper">
-          <h2 v-if="hasSharees" class="shared-with-label" v-text="sharedWithLabel" />
+          <h4 v-if="hasSharees" class="shared-with-label" v-text="sharedWithLabel" />
           <oc-button
             appearance="raw"
             class="sharee-avatars-button"
@@ -466,6 +466,7 @@ export default {
   align-content: center;
   align-items: center;
   width: 100%;
+  height: 40px;
 }
 .shared-with-label {
   font-size: 0.9rem;
