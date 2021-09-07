@@ -39,7 +39,7 @@
               :items="collaboratorsAvatar"
               :stacked="true"
               :is-tooltip-displayed="false"
-              class="oc-mb sharee-avatars"
+              class="sharee-avatars"
             />
             <oc-icon v-else name="close" />
           </oc-button>
@@ -465,33 +465,17 @@ export default {
 .avatars-wrapper {
   display: flex;
   justify-content: space-between;
-  align-content: center;
-  align-items: flex-start;
+  align-items: center;
   width: 100%;
   height: 40px;
 }
 .shared-with-label {
+  margin: 0;
   font-size: 0.9rem;
   font-weight: 600;
 }
 .sharee-avatars {
   justify-self: flex-end;
-}
-.sharee-avatars-button-wrapper {
-  justify-content: flex-end;
-}
-.avatar-sharees-table {
-  width: 100%;
-  text-align: left;
-
-  tr {
-    height: 1.5rem;
-    text-align: right;
-  }
-
-  th {
-    font-weight: 600;
-  }
 }
 /* TODO: Move to design system */
 .oc-app-side-bar .oc-label {
