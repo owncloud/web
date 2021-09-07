@@ -39,7 +39,6 @@
               :items="collaboratorsAvatar"
               :stacked="true"
               :is-tooltip-displayed="false"
-              aria-hidden="true"
               class="oc-mb sharee-avatars"
             />
             <oc-icon v-else name="close" />
