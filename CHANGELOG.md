@@ -10,6 +10,7 @@ Summary
 
 * Enhancement - Add robots.txt file: [#5762](https://github.com/owncloud/web/pull/5762)
 * Enhancement - Add missing tooltips: [#5723](https://github.com/owncloud/web/issues/5723)
+* Enhancement - Re-design recipients role select: [#5632](https://github.com/owncloud/web/pull/5632)
 * Enhancement - Switch filesize calculation base: [#5739](https://github.com/owncloud/web/pull/5739)
 * Enhancement - Update ODS to 9.3.0: [#5725](https://github.com/owncloud/web/pull/5725)
 
@@ -28,6 +29,12 @@ Details
 
    https://github.com/owncloud/web/issues/5723
    https://github.com/owncloud/web/pull/5724
+
+* Enhancement - Re-design recipients role select: [#5632](https://github.com/owncloud/web/pull/5632)
+
+   We've redesigned recipient role select in the Files app sidebar.
+
+   https://github.com/owncloud/web/pull/5632
 
 * Enhancement - Switch filesize calculation base: [#5739](https://github.com/owncloud/web/pull/5739)
 
