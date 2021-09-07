@@ -3,7 +3,7 @@ import { mapActions } from 'vuex'
 import { checkRoute } from '../../helpers/route'
 
 export default {
-  inject: ['displayedItem'],
+  inject: { displayedItem: { default: null } },
   computed: {
     $_favorite_items() {
       return [
