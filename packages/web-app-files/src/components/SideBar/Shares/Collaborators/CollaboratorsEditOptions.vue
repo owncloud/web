@@ -4,6 +4,7 @@
     <span>
       <oc-button
         id="files-collaborators-role-button"
+        data-testid="files-recipient-role-select-btn"
         appearance="raw"
         justify-content="left"
         gap-size="xsmall"
@@ -17,13 +18,20 @@
         <oc-icon name="expand_more" />
       </oc-button>
     </span>
-    <oc-drop ref="rolesDrop" toggle="#files-collaborators-role-button" mode="click" close-on-click>
+    <oc-drop
+      ref="rolesDrop"
+      data-testid="files-recipient-roles-drop"
+      toggle="#files-collaborators-role-button"
+      mode="click"
+      close-on-click
+    >
       <template #special>
         <oc-list class="files-recipient-role-drop-list" :aria-label="rolesListAriaLabel">
           <li v-for="role in roles" :key="role.name">
             <oc-button
               :id="`files-recipient-role-drop-btn-${role.name}`"
               ref="roleSelect"
+              :data-testid="`files-recipient-role-drop-btn-${role.name}`"
               appearance="raw"
               justify-content="space-between"
               class="files-recipient-role-drop-btn oc-py-xs oc-px-s"
@@ -39,6 +47,7 @@
     </oc-drop>
     <oc-drop
       ref="customPermissionsDrop"
+      data-testid="files-recipient-custom-permissions-drop"
       class="files-recipient-custom-permissions-drop"
       mode="manual"
       target="#files-collaborators-role-button"
@@ -57,6 +66,7 @@
               :id="`files-collaborators-permission-${permission.name}`"
               :key="permission.name"
               v-model="customPermissions"
+              :data-testid="`files-collaborators-permission-${permission.name}`"
               :label="permission.description"
               :option="permission.name"
               class="oc-mr-xs files-collaborators-permission-checkbox"
@@ -64,10 +74,15 @@
           </li>
         </oc-list>
         <div>
-          <oc-button size="small" @click="cancelCustomPermissions">
+          <oc-button
+            data-testid="files-recipient-custom-permissions-drop-cancel"
+            size="small"
+            @click="cancelCustomPermissions"
+          >
             <translate>Cancel</translate>
           </oc-button>
           <oc-button
+            data-testid="files-recipient-custom-permissions-drop-confirm"
             size="small"
             variation="primary"
             appearance="filled"
