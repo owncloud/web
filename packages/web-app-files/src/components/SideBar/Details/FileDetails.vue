@@ -56,7 +56,7 @@
           </td>
         </tr>
         <tr v-if="showSharedVia" data-testid="shared-via">
-          <th scope="col" class="oc-pr-s" v-text="sharedViaLabel"></th>
+          <th scope="col" class="oc-pr-s" v-text="sharedViaLabel" />
           <td>
             <router-link :to="sharedParentRoute">
               <span v-oc-tooltip="sharedViaTooltip" v-text="sharedParentDir" />
