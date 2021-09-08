@@ -294,9 +294,9 @@ module.exports = {
       const currentSharePermissions = await this.getSharePermissions()
 
       // Hide role select dropdown
-      this.click('@customPermissionsCancelBtn')
-      this.click('@selectedRoleBtn')
-      this.waitForElementNotPresent('@selectedRoleBtn')
+      this.moveToElement('@customPermissionsDrop', -3, 0)
+      this.api.mouseButtonClick()
+      this.waitForElementNotPresent('@customPermissionsDrop', 1000)
 
       await this.clickCancel()
       return currentSharePermissions
@@ -755,6 +755,9 @@ module.exports = {
     },
     selectedRoleBtn: {
       selector: '.files-recipient-role-drop-btn.selected'
+    },
+    customPermissionsDrop: {
+      selector: '[data-testid="files-recipient-custom-permissions-drop"]'
     }
   }
 }
