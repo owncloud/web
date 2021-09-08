@@ -187,7 +187,7 @@ export default {
     },
 
     highlightedFileThumbnail() {
-      return this.highlightedFile.thumbnail
+      return this.highlightedFile?.thumbnail
     }
   },
   watch: {
@@ -200,7 +200,11 @@ export default {
       immediate: true
     },
     highlightedFile(newFile, oldFile) {
-      if (newFile.id !== oldFile.id) {
+      if (this.isRootFolder) {
+        return
+      }
+
+      if (newFile.id !== oldFile?.id) {
         this.fetchFileInfo()
       }
     },
