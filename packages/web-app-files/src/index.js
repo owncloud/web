@@ -277,8 +277,8 @@ const routes = [
     ]
   },
   {
-    path: '/public-link/:token',
     name: 'public-link',
+    path: '/public-link/:token',
     components: {
       fullscreen: PublicLink
     },
@@ -289,16 +289,16 @@ const routes = [
     }
   },
   {
-    path: '/private-link/:fileId',
     name: 'private-link',
+    path: '/private-link/:fileId',
     components: {
       fullscreen: PrivateLink
     },
     meta: { hideHeadbar: true, title: $gettext('Resolving private link') }
   },
   {
-    path: '/location-picker/:context/:action/:item*',
     name: 'location-picker',
+    path: '/location-picker/:context/:action/:item*',
     components: {
       app: LocationPicker
     },
@@ -308,8 +308,8 @@ const routes = [
     }
   },
   {
-    path: '/files-drop/:token',
     name: 'public-drop',
+    path: '/files-drop/:token',
     components: {
       app: FilesDrop
     },
@@ -338,7 +338,7 @@ const patchRouter = router => {
     [
       ['%2F', '/'],
       ['//', '/']
-    ].reduce((acc, rule) => acc.replaceAll(rule[0], rule[1]), route || '')
+    ].reduce((path, rule) => path.replaceAll(rule[0], rule[1]), route || '')
 
   router.match = (raw, current, redirectFrom) => {
     const bindMatch = bindMatcher(raw, current, redirectFrom)

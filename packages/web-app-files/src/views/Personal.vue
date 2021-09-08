@@ -59,6 +59,7 @@
 
 <script>
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
+import isNil from 'lodash-es/isNil'
 import debounce from 'lodash-es/debounce'
 
 import MixinAccessibleBreadcrumb from '../mixins/accessibleBreadcrumb'
@@ -106,6 +107,22 @@ export default {
     MixinMountSideBar,
     MixinFilesListFilter
   ],
+
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      if (vm.isRedirectToHomeFolderRequired(to)) {
+        vm.redirectToHomeFolder(to)
+      }
+    })
+  },
+
+  async beforeRouteUpdate(to, from, next) {
+    if (this.isRedirectToHomeFolderRequired(to)) {
+      await this.redirectToHomeFolder(to)
+      return
+    }
+    next()
+  },
 
   data: () => ({
     loading: true
@@ -205,6 +222,28 @@ export default {
       'REMOVE_FILE_SELECTION'
     ]),
     ...mapMutations(['SET_QUOTA']),
+
+    isRedirectToHomeFolderRequired(to) {
+      return isNil(to.params.item)
+    },
+
+    async redirectToHomeFolder(to) {
+      const route = {
+        name: to.name,
+        params: {
+          ...to.params,
+          item: to.path.endsWith('/') ? '/' : this.homeFolder
+        },
+        query: to.query
+      }
+      await this.$router.replace(
+        route,
+        () => {},
+        e => {
+          console.error(e)
+        }
+      )
+    },
 
     async fileDropped(fileIdTarget) {
       const selected = [...this.selectedFiles]
