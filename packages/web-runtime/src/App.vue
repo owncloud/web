@@ -59,24 +59,9 @@
                 </oc-sidebar-nav-item>
               </oc-list>
             </template>
-            <template #footer>
-              <div style="display: flex; align-items: center; justify-content: center">
-                <oc-button
-                  variation="inverse"
-                  :aria-label="$gettext('Give Feedback')"
-                  @click="toggleFeedbackModal"
-                >
-                  <oc-icon name="tag_faces" /> Feedback
-                </oc-button>
-              </div>
-              <component
-                :is="sidebar.sidebarFooterContentComponent"
-                v-if="sidebar.sidebarFooterContentComponent"
-              />
-            </template>
-            <!--<template v-if="sidebar.sidebarFooterContentComponent" #footer>
+            <template v-if="sidebar.sidebarFooterContentComponent" #footer>
               <component :is="sidebar.sidebarFooterContentComponent" />
-            </template>-->
+            </template>
           </oc-sidebar-nav>
         </focus-trap>
       </transition>
@@ -298,13 +283,6 @@ export default {
     return metaInfo
   },
   mounted() {
-    const _this = this
-    if (localStorage.getItem('feedback') !== 'true' && !this.feedbackModal) {
-      setTimeout(function() {
-        _this.toggleFeedbackModal()
-        localStorage.setItem('feedback', 'true')
-      }, 30000)
-    }
     this.$nextTick(() => {
       window.addEventListener('resize', this.onResize)
       this.onResize()
@@ -314,37 +292,7 @@ export default {
     this.initAuth()
   },
   methods: {
-    ...mapActions(['initAuth', 'fetchNotifications', 'deleteMessage', 'createModal', 'hideModal']),
-    /// // Feedback
-    toggleFeedbackModal() {
-      if (!this.feedbackModal) {
-        const modal = {
-          variation: 'passive',
-          icon: 'tag_faces',
-          title: 'Give Us Feedback',
-          message: this.$gettext(
-            'This version is still in development and your feedback is very important to us! Please add your comments in the following document.'
-          ),
-          cancelText: this.$gettext('Cancel'),
-          confirmText: this.$gettext('To Feedback Document'),
-          onCancel: this.cancelFeedbackModal,
-          onConfirm: this.openFeedbackDoc
-        }
-        this.createModal(modal)
-        this.feedbackModal = !this.feedbackModal
-      } else {
-        this.cancelFeedbackModal()
-      }
-    },
-    cancelFeedbackModal() {
-      this.hideModal()
-      this.feedbackModal = !this.feedbackModal
-    },
-    openFeedbackDoc() {
-      window.open('https://codimd.web.cern.ch/TKGx1_6nQMK2OEHfmQ4XUQ', '_blank').focus()
-      this.cancelFeedbackModal()
-    },
-    /// //
+    ...mapActions(['initAuth', 'fetchNotifications', 'deleteMessage']),
     focusModal(component, event) {
       this.focus({
         revert: event === 'beforeDestroy'
