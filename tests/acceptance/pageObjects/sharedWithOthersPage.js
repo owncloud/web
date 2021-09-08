@@ -28,7 +28,7 @@ module.exports = {
         requiredXpath,
         elements => {
           elements.value.forEach(el => {
-            ;['data-test-user-name', 'data-test-link-name'].forEach(attr => {
+            ;['data-test-user-name', 'data-test-link-name', 'data-test-item-name'].forEach(attr => {
               this.api.elementIdAttribute(el.ELEMENT, attr, r => {
                 collaborators.push(r.value)
               })
@@ -41,7 +41,7 @@ module.exports = {
   },
   elements: {
     collaboratorsInFileRow: {
-      selector: '//div[contains(@class, "oc-table-files-people")]//*[self::span or self::div]',
+      selector: '//span[contains(@class, "oc-table-files-people")]/span[contains(@class, "oc-avatars")]/span[contains(@class, "oc-avatar")]',
       locateStrategy: 'xpath'
     }
   }

@@ -141,6 +141,7 @@ export function aggregateResourceShares(
         {
           username: share.share_with,
           displayName: share.share_with_displayname,
+          name: share.share_with,
           avatar: undefined,
           shareType: share.share_type
         }
@@ -189,6 +190,7 @@ export function buildSharedResource(share, incomingShares = false, allowSharePer
     resource.path = share.file_target
     resource.isReceivedShare = () => true
   } else {
+    resource.shareType = share.share_type
     resource.sharedWith = share.sharedWith
     resource.shareOwner = share.uid_owner
     resource.shareOwnerDisplayname = share.displayname_owner

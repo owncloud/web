@@ -44,7 +44,7 @@
             <oc-icon v-else name="close" />
           </oc-button>
         </div>
-        <template v-if="showShareesList">
+        <template v-if="showShareesList || collaboratorsAvatar.length === 0">
           <template v-if="$_ownerAsCollaborator">
             <p id="original-sharing-user" v-translate class="oc-invisible-sr">File owner</p>
             <show-collaborator

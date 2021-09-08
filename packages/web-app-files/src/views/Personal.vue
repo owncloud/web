@@ -28,7 +28,6 @@
         :header-position="headerPosition"
         :drag-drop="true"
         @fileDropped="fileDropped"
-        @showDetails="$_mountSideBar_showDefaultPanel"
         @fileClick="$_fileActions_triggerDefaultAction"
         @rowMounted="rowMounted"
       >
