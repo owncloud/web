@@ -16,7 +16,10 @@ module.exports = {
     openSharingDialog: async function(resource) {
       await this.openSideBar(resource)
       await appSideBar.activatePanel('people')
-      return await this.click('@sharedWithAvatars')
+      return await this.click({
+        selector: '@sharedWithToggleButton',
+        timeout: 200
+      })
     },
     /**
      * @param {string} resource
@@ -745,8 +748,9 @@ module.exports = {
     btnToggleSideBar: {
       selector: '#files-toggle-sidebar'
     },
-    sharedWithAvatars: {
-      selector: '[data-testid="shared-with-avatars"]'
+    sharedWithToggleButton: {
+      selector: '//*[contains(@class, "sharee-avatars")]/ancestor::button',
+      locateStrategy: 'xpath'
     }
   }
 }

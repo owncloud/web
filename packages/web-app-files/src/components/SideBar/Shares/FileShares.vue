@@ -29,9 +29,7 @@
           <oc-button
             v-oc-tooltip="sharedWithTooltip"
             appearance="raw"
-            class="sharee-avatars-button"
             :aria-label="sharedWithTooltip"
-            data-testid="shared-with-avatars"
             @click="onClickSharedWith"
           >
             <oc-avatars
