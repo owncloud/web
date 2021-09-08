@@ -1,13 +1,12 @@
 <template>
   <div>
-    <translate tag="label" for="files-collaborators-role-button" class="oc-label">Role</translate>
+    <translate v-if="showLabel" tag="label" for="files-collaborators-role-button" class="oc-label">Role</translate>
     <oc-select
       v-model="selectedRole"
       input-id="files-collaborators-role-button"
       class="files-collaborators-role-button-wrapper"
       :options="roles"
       :clearable="false"
-      label="label"
     >
       <template #option="option">
         <role-item :role="option" />
@@ -92,6 +91,11 @@ export default {
       validator: function(value) {
         return ['user', 'group'].indexOf(value) > -1 || value === null
       }
+    },
+    showLabel: {
+      type: Boolean,
+      required: false,
+      default: true
     }
   },
 

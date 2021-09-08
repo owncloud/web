@@ -58,12 +58,6 @@
             class="collaborator-list oc-my-rm oc-pl-rm"
             :aria-labelledby="`collaborator-list-label-${shareId}`"
           >
-            <li v-if="!isCurrentUser" class="oc-py-rm">
-              <oc-tag class="files-collaborators-collaborator-share-type">
-                <oc-icon :name="collaboratorTypeTagIcon" />
-                {{ getCollaboratorTypeLabel(collaborator.shareType) }}
-              </oc-tag>
-            </li>
             <li v-if="$_reshareInformation" class="oc-py-rm">
               <oc-tag
                 :id="$_resharerToggleId"
@@ -151,33 +145,7 @@
       </oc-td>
       <oc-td width="shrink" align-v="top" class="oc-py-rm oc-pr-s">
         <div class="uk-flex uk-flex-nowrap uk-flex-middle">
-          <oc-button
-            v-if="$_editButtonVisible"
-            v-oc-tooltip="editShareHint"
-            :aria-label="editShareHint"
-            appearance="raw"
-            class="files-collaborators-collaborator-edit oc-mr-xs"
-            @click="$emit('onEdit', collaborator)"
-          >
-            <oc-icon name="edit" />
-          </oc-button>
-          <div>
-            <oc-button
-              v-if="$_deleteButtonVisible"
-              v-oc-tooltip="deleteShareHint"
-              :aria-label="deleteShareHint"
-              appearance="raw"
-              class="files-collaborators-collaborator-delete"
-              @click="$_removeShare"
-            >
-              <oc-icon name="delete" />
-            </oc-button>
-            <oc-spinner
-              v-else-if="$_loadingSpinnerVisible"
-              :aria-label="$gettext('Removing person')"
-            />
-            <oc-icon v-else name="lock" class="uk-invisible" />
-          </div>
+          <collaborators-edit-options :show-label="false" class="oc-mb collaborators-edit" @optionChange="collaboratorOptionChanged" />
         </div>
       </oc-td>
     </oc-tr>
@@ -191,9 +159,13 @@ import { basename } from 'path'
 import CollaboratorsMixins from '../../../../mixins/collaborators'
 import Mixins from '../../../../mixins'
 import { DateTime } from 'luxon'
+import CollaboratorsEditOptions from './CollaboratorsEditOptions.vue'
 
 export default {
   name: 'Collaborator',
+  components: {
+    CollaboratorsEditOptions,
+  },
   mixins: [Mixins, CollaboratorsMixins],
   props: {
     collaborator: {
@@ -381,12 +353,20 @@ export default {
     $_removeShare() {
       this.removalInProgress = true
       this.$emit('onDelete', this.collaborator)
+    },
+
+    collaboratorOptionChanged() {
+      alert('test')
     }
   }
 }
 </script>
 
 <style lang="scss" scoped="scoped">
+.collaborators-edit {
+  width: 200px;
+}
+
 .collaborator-list {
   list-style-type: none;
 
