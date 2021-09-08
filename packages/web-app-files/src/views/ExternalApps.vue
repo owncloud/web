@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div>
+    <div class="full-height">
       <list-loader v-if="loading" />
       <no-content-message
         v-if="!loading && !app_url"
@@ -13,7 +13,7 @@
         </template>
       </no-content-message>
       <iframe v-if="app_url && method === 'GET'" class="app-iframe" :src="app_url" />
-      <div v-if="app_url && method === 'POST' && form_parameters">
+      <div v-if="app_url && method === 'POST' && form_parameters" class="full-height">
         <form :action="app_url" target="app-iframe" method="post">
           <input ref="subm" type="submit" :value="form_parameters" class="hide" />
           <div v-for="(item, key, index) in form_parameters" :key="index">
@@ -73,7 +73,7 @@ export default {
         if (data && data.app_url) this.app_url = data.app_url
         if (data && data.method) this.method = data.method
         if (data && data.form_parameters) this.form_parameters = data.form_parameters
-        if (this.app_url && this.method) this.loading = false
+        if ((this.app_url && this.method) || !data) this.loading = false
         console.log('post data', data)
       })
       .catch(err => {
@@ -92,7 +92,10 @@ export default {
 }
 #frameholder,
 .app-iframe {
-  width: 100vw;
-  height: 98vh;
+  width: 100%;
+  height: 100%;
+}
+.full-height {
+  height: 100%;
 }
 </style>
