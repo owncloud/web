@@ -315,18 +315,20 @@ export default {
 
       try {
         let resources = await this.fetchResources(
-          path || this.$route.params.item || this.homeFolder,
+          path || this.$route.params.item,
           DavProperties.Default
         )
         resources = resources.map(buildResource)
 
+        const currentFolder = resources.shift()
+
         this.LOAD_FILES({
-          currentFolder: resources[0],
-          files: resources.slice(1)
+          currentFolder,
+          files: resources
         })
         this.loadIndicators({
           client: this.$client,
-          currentFolder: this.$route.params.item || this.homeFolder
+          currentFolder: currentFolder.path
         })
 
         // Load quota
