@@ -179,7 +179,8 @@ export function buildSharedResource(share, incomingShares = false, allowSharePer
       {
         username: share.uid_owner,
         displayName: share.displayname_owner,
-        avatar: undefined
+        avatar: undefined,
+        shareType: shareTypes.user
       }
     ]
 
