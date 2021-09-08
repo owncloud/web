@@ -951,8 +951,7 @@ Then('user {string} should be listed as {string} in the collaborators list on th
 Then(
   'the share {string} shared with user {string} should have no expiration information displayed on the webUI',
   async function(item, user) {
-    await client.page.FilesPageElement.filesList().openSideBar(item)
-    await client.page.FilesPageElement.appSideBar().activatePanel('people')
+    await client.page.FilesPageElement.filesList().openSharingDialog(item)
     const elementID = await client.page.FilesPageElement.SharingDialog.collaboratorsDialog().getCollaboratorExpirationInfo(
       user
     )
@@ -967,8 +966,7 @@ Then(
 Then(
   'the expiration information displayed on the webUI of share {string} shared with user {string} should be {string} or {string}',
   async function(item, user, information1, information2) {
-    await client.page.FilesPageElement.filesList().openSideBar(item)
-    await client.page.FilesPageElement.appSideBar().activatePanel('people')
+    await client.page.FilesPageElement.filesList().openSharingDialog(item)
     const actualInfo = await client.page.FilesPageElement.SharingDialog.collaboratorsDialog().getCollaboratorExpirationInfo(
       user
     )

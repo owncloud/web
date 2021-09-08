@@ -324,7 +324,7 @@ export default {
 
     leaveLocationPicker(target) {
       if (this.isPublicContext) {
-        this.$router.push({ name: 'files-public-list', params: { token: target } })
+        this.$router.push({ name: 'files-public-list', params: { item: target } })
         return
       }
 
