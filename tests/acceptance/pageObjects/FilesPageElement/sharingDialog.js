@@ -387,28 +387,40 @@ module.exports = {
      *
      * @param {string} collaborator
      * @param {string} newRole
+     * @param {string} permissions
      * @returns {Promise}
      */
-    changeCollaboratorRole: async function(collaborator, newRole) {
+    changeCollaboratorRole: async function(collaborator, newRole, permissions) {
       await collaboratorDialog.clickEditShare(collaborator)
-      await this.changeCollaboratorRoleInDropdown(newRole)
+      await this.changeCollaboratorRoleInDropdown(newRole, permissions)
       return this.saveChanges()
     },
     /**
-     * @params {string} newRole
+     * @param {string} newRole
+     * @param {string} permissions
      * @returns {Promise}
      */
-    changeCollaboratorRoleInDropdown: function(newRole) {
+    changeCollaboratorRoleInDropdown: async function(newRole, permissions) {
       newRole = newRole === 'Custom permissions' ? 'advancedRole' : newRole
       newRole = stringHelper.camelize(newRole)
 
       const newRoleButton = util.format(this.elements.roleButtonInDropdown.selector, newRole)
-      return this.waitForElementVisible('@selectRoleButtonInCollaboratorInformation')
+      const hasCustomPermissions = permissions && permissions !== ','
+
+      await this.waitForElementVisible('@selectRoleButtonInCollaboratorInformation')
         .click('@selectRoleButtonInCollaboratorInformation')
         .useXpath()
         .waitForElementVisible(newRoleButton)
         .click(newRoleButton)
         .useCss()
+
+      if (hasCustomPermissions) {
+        await this.selectPermissionsOnPendingShare(permissions)
+      } else if (newRole === 'advancedRole') {
+        await this.click('@customPermissionsConfirmBtn')
+      }
+
+      return this
     },
     /**
      * checks whether autocomplete list is visible
