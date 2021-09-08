@@ -89,8 +89,8 @@ Then('the files table should be displayed', () => {
   return client.page.FilesPageElement.filesList().waitForElementVisible('@anyAfterLoading')
 })
 
-Given('the user has browsed to the files page', async function() {
-  await client.page.personalPage().navigateAndWaitTillLoaded()
+Given('the user has browsed to the files page', function() {
+  return client.page.personalPage().navigateToBreadcrumb('All files')
 })
 
 When('the user opens folder {string} directly on the webUI', async function(folder) {

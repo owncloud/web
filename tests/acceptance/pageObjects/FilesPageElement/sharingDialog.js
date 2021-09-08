@@ -383,7 +383,7 @@ module.exports = {
      * @returns {Promise}
      */
     changeCollaboratorRoleInDropdown: function(newRole) {
-      newRole = newRole === 'Advanced permissions' ? 'advancedRole' : newRole
+      newRole = newRole === 'Custom permissions' ? 'advancedRole' : newRole
       newRole = stringHelper.camelize(newRole)
 
       const newRoleButton = util.format(this.elements.roleButtonInDropdown.selector, newRole)
@@ -619,17 +619,17 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     sharingAutoComplete: {
-      selector: '#files-share-invite #files-share-invite-input'
+      selector: '#files-share-invite-input'
     },
     sharingAutoCompleteSpinner: {
-      selector: '#files-share-invite .oc-spinner'
+      selector: '.files-collaborators-collaborator-add-dialog .oc-spinner'
     },
     sharingAutoCompleteDropDown: {
-      selector: '#files-share-invite .vs__dropdown-menu'
+      selector: '.files-collaborators-collaborator-add-dialog .vs__dropdown-menu'
     },
     sharingAutoCompleteDropDownElements: {
       selector:
-        '#files-share-invite .vs__dropdown-menu .files-collaborators-autocomplete-user-text',
+        '.files-collaborators-collaborator-add-dialog .vs__dropdown-menu .files-collaborators-autocomplete-user-text',
       locateStrategy: 'css selector'
     },
     sharingAutoCompleteShowAllResultsButton: {
@@ -670,7 +670,7 @@ module.exports = {
     newCollaboratorRemoveButton: {
       selector: "//button[contains(@class, 'files-share-invite-recipient-btn-remove')]"
     },
-    newCollaboratorRoleAdvancedPermissions: {
+    newCollaboratorRoleCustomPermissions: {
       selector: '#files-role-advancedRole'
     },
     selectRoleButtonInCollaboratorInformation: {

@@ -59,7 +59,7 @@ Feature: Sharing folders with internal groups with different roles and permissio
     # | Viewer               | Viewer                  | ,                             | ,                     | read                         |
     # | Editor               | Editor                  | share                         | share                 | all                          |
     # | Editor               | Editor                  | ,                             | ,                     | read, update, delete, create |
-    # | Advanced permissions | Viewer                  | ,                             | ,                     | read                         |
-    # | Advanced permissions | Viewer                  | share                         | share                 | read, share                  |
-    # | Advanced permissions | Editor                  | delete, update, create        | ,                     | read, delete, update, create |
-      | Advanced permissions | Editor         | share, delete, update, create | ,                     | all                |
+    # | Custom permissions | Viewer                  | ,                             | ,                     | read                         |
+    # | Custom permissions | Viewer                  | share                         | share                 | read, share                  |
+    # | Custom permissions | Editor                  | delete, update, create        | ,                     | read, delete, update, create |
+      | Custom permissions | Editor         | share, delete, update, create | ,                     | all                |

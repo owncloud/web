@@ -30,8 +30,8 @@ Feature: Shares collaborator list
       | initial-permissions | set-role             | expected-role | expected-permissions            |
       | read,update,create  | Viewer               | Viewer        | read,share                      |
       | read                | Editor               | Editor        | read,update,create,delete,share |
-      | read,share          | Advanced permissions | Viewer        | read,share                      |
-      | all                 | Advanced permissions | Editor        | all                             |
+      | read,share          | Custom permissions | Viewer        | read,share                      |
+      | all                 | Custom permissions | Editor        | all                             |
 
   @issue-2898
   Scenario: see resource owner in collaborators list for direct shares
@@ -103,7 +103,7 @@ Feature: Shares collaborator list
     And user "Alice" has shared folder "simple-folder" with user "Brian" with "read" permission
     And user "Alice" has shared folder "simple-folder" with group "grp1" with "read,update,create,delete" permissions
     When user "Brian" has logged in using the webUI
-    Then user "Brian Murphy" should be listed as "Advanced permissions" in the collaborators list for folder "simple-folder" on the webUI
+    Then user "Brian Murphy" should be listed as "Custom permissions" in the collaborators list for folder "simple-folder" on the webUI
 
 
   Scenario: share a file with another internal user via collaborators quick action

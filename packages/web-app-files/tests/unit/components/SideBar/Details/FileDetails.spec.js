@@ -21,7 +21,10 @@ const selectors = {
   sharingInfo: '[data-testid="sharingInfo"]',
   sizeInfo: '[data-testid="sizeInfo"]',
   versionsInfo: '[data-testid="versionsInfo"]',
-  previewImgContainer: '[data-testid="preview"]'
+  previewImgContainer: '[data-testid="preview"]',
+  sharedBy: '[data-testid="shared-by"]',
+  sharedVia: '[data-testid="shared-via"]',
+  sharedDate: '[data-testid="shared-date"]'
 }
 
 const simpleOwnFolder = {
@@ -109,6 +112,16 @@ describe('Details SideBar Accordion Item', () => {
         expect(wrapper.find(selectors.versionsInfo).exists()).toBeFalsy()
         expect(wrapper.find(selectors.previewImgContainer).exists()).toBeFalsy()
       })
+      it('should show detailed sharing information on shared file', () => {
+        const wrapper = createWrapper(sharedFile)
+        expect(wrapper.find(selectors.sharedBy).exists()).toBeTruthy()
+        expect(wrapper.find(selectors.sharedDate).exists()).toBeTruthy()
+      })
+      it('should not show detailed sharing information on normal file', () => {
+        const wrapper = createWrapper(simpleOwnFile)
+        expect(wrapper.find(selectors.sharedBy).exists()).toBeFalsy()
+        expect(wrapper.find(selectors.sharedDate).exists()).toBeFalsy()
+      })
     })
   })
   describe('displays a resource of type file', () => {
@@ -180,6 +193,9 @@ function createWrapper(testResource, testVersions = [], testPreview, publicRoute
             },
             versions: function() {
               return 2
+            },
+            sharesTreeLoading: function() {
+              return false
             }
           },
           actions: {
@@ -188,7 +204,8 @@ function createWrapper(testResource, testVersions = [], testPreview, publicRoute
             },
             loadPreview: function() {
               return testPreview
-            }
+            },
+            loadSharesTree: jest.fn()
           }
         }
       }

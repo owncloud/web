@@ -49,6 +49,26 @@
             <span v-else v-text="capitalizedTimestamp" />
           </td>
         </tr>
+        <tr v-if="showSharedBy" data-testid="shared-by">
+          <th scope="col" class="oc-pr-s" v-text="sharedByLabel" />
+          <td>
+            <span v-text="sharedWithUserDisplayName" />
+          </td>
+        </tr>
+        <tr v-if="showSharedVia" data-testid="shared-via">
+          <th scope="col" class="oc-pr-s" v-text="sharedViaLabel" />
+          <td>
+            <router-link :to="sharedParentRoute">
+              <span v-oc-tooltip="sharedViaTooltip" v-text="sharedParentDir" />
+            </router-link>
+          </td>
+        </tr>
+        <tr v-if="showShareDate" data-testid="shared-date">
+          <th scope="col" class="oc-pr-s" v-text="shareDateLabel" />
+          <td>
+            <span v-oc-tooltip="shareDateTooltip" v-text="displayShareDate" />
+          </td>
+        </tr>
         <tr v-if="ownerName" data-testid="ownerName">
           <th scope="col" class="oc-pr-s" v-text="ownerTitle" />
           <td>
@@ -92,6 +112,8 @@ import { ImageDimension } from '../../../constants'
 import { loadPreview } from '../../../helpers/resource'
 import intersection from 'lodash-es/intersection'
 import upperFirst from 'lodash-es/upperFirst'
+import path from 'path'
+import { DateTime } from 'luxon'
 
 export default {
   name: 'FileDetails',
@@ -100,10 +122,14 @@ export default {
     return $gettext('Details')
   },
   data: () => ({
-    loading: false
+    loading: false,
+    sharedWithUserDisplayName: '',
+    sharedTime: 0,
+    sharedParentDir: null,
+    sharedItem: null
   }),
   computed: {
-    ...mapGetters('Files', ['highlightedFile', 'versions']),
+    ...mapGetters('Files', ['highlightedFile', 'versions', 'sharesTree', 'sharesTreeLoading']),
     ...mapGetters(['user', 'getToken', 'configuration']),
 
     hasContent() {
@@ -117,8 +143,52 @@ export default {
     detailsTableLabel() {
       return this.$gettext('Overview of the information about the selected file')
     },
+    shareDateLabel() {
+      return this.$gettext('Shared on:')
+    },
+    sharedViaLabel() {
+      return this.$gettext('Shared via:')
+    },
+    shareDateTooltip() {
+      return DateTime.fromSeconds(parseInt(this.sharedTime))
+        .setLocale(this.$language.current)
+        .toLocaleString(DateTime.DATETIME_FULL)
+    },
+    sharedViaTooltip() {
+      return this.$gettextInterpolate(
+        this.$gettext("Navigate to '%{folder}'"),
+        { folder: this.sharedParentDir || '' },
+        true
+      )
+    },
+    sharedParentRoute() {
+      return {
+        name: 'files-personal',
+        params: {
+          item: this.sharedParentDir || '/'
+        }
+      }
+    },
+    showSharedBy() {
+      return this.showShares && !this.ownedByCurrentUser && !this.sharesTreeLoading
+    },
+    showSharedVia() {
+      return (
+        this.showShares &&
+        !this.sharesTreeLoading &&
+        this.highlightedFile.path !== this.sharedParentDir &&
+        this.sharedParentDir !== null
+      )
+    },
+    showShareDate() {
+      return this.showShares && !this.sharesTreeLoading
+    },
     showShares() {
       return this.hasAnyShares && !this.isPublicPage
+    },
+    displayShareDate() {
+      const date = this.formDateFromNow(new Date(this.sharedTime * 1000), 'JSDate')
+      return upperFirst(date)
     },
     detailSharingInformation() {
       const isFolder = this.highlightedFile.type === 'folder'
@@ -132,6 +202,9 @@ export default {
     },
     linkSharesLabel() {
       return this.$gettext('Show links')
+    },
+    sharedByLabel() {
+      return this.$gettext('Shared by:')
     },
     hasTimestamp() {
       return this.highlightedFile.mdate?.length > 0 || this.highlightedFile.sdate?.length > 0
@@ -184,13 +257,16 @@ export default {
     },
     hasAnyShares() {
       return (
-        this.highlightedFile.shareTypes?.length > 0 || this.highlightedFile.indicators?.length > 0
+        this.highlightedFile.shareTypes?.length > 0 ||
+        this.highlightedFile.indicators?.length > 0 ||
+        this.sharedItem !== null
       )
     },
     hasPeopleShares() {
       return (
         intersection(this.highlightedFile.shareTypes, userShareTypes).length > 0 ||
-        this.highlightedFile.indicators?.filter(e => e.icon === 'group').length > 0
+        this.highlightedFile.indicators?.filter(e => e.icon === 'group').length > 0 ||
+        this.sharedItem !== null
       )
     },
     hasLinkShares() {
@@ -210,10 +286,26 @@ export default {
   watch: {
     highlightedFile() {
       this.loadData()
+      this.refreshShareDetailsTree()
+    },
+    sharesTreeLoading(current) {
+      this.sharedItem = null
+      if (current !== false) return
+      const sharePathParentOrCurrent = this.getParentSharePath(
+        this.highlightedFile.path,
+        this.sharesTree
+      )
+      if (sharePathParentOrCurrent === null) return
+      this.sharedItem = this.sharesTree[sharePathParentOrCurrent][0]
+      const fileOwner = this.sharedItem.fileOwner
+      this.sharedWithUserDisplayName = fileOwner ? fileOwner.displayName : null
+      this.sharedTime = this.sharedItem.stime
+      this.sharedParentDir = sharePathParentOrCurrent
     }
   },
   mounted() {
     this.loadData()
+    this.refreshShareDetailsTree()
   },
   asyncComputed: {
     preview: {
@@ -234,8 +326,24 @@ export default {
     }
   },
   methods: {
-    ...mapActions('Files', ['loadPreview', 'loadVersions']),
+    ...mapActions('Files', ['loadPreview', 'loadVersions', 'loadSharesTree']),
     ...mapMutations('Files', ['SET_APP_SIDEBAR_ACTIVE_PANEL']),
+    refreshShareDetailsTree() {
+      this.loadSharesTree({
+        client: this.$client,
+        path: this.highlightedFile.path,
+        $gettext: this.$gettext
+      })
+    },
+    getParentSharePath(childPath, shares) {
+      let currentPath = childPath
+      while (currentPath !== '/') {
+        const share = shares[currentPath]
+        if (share !== undefined && share[0] !== undefined) return currentPath
+        currentPath = path.dirname(currentPath)
+      }
+      return null
+    },
     expandPeoplesAccordion() {
       this.SET_APP_SIDEBAR_ACTIVE_PANEL('sharing-item')
     },

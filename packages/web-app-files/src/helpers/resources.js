@@ -122,12 +122,14 @@ export function aggregateResourceShares(
         prev.sharedWith.push({
           username: share.share_with,
           displayName: share.share_with_displayname,
-          avatar: undefined
+          avatar: undefined,
+          shareType: share.share_type
         })
       } else if (share.share_type === shareTypes.link) {
         prev.sharedWith.push({
           name: share.name || share.token,
-          link: true
+          link: true,
+          shareType: share.share_type
         })
       }
 
@@ -139,14 +141,16 @@ export function aggregateResourceShares(
         {
           username: share.share_with,
           displayName: share.share_with_displayname,
-          avatar: undefined
+          avatar: undefined,
+          shareType: share.share_type
         }
       ]
     } else if (share.share_type === shareTypes.link) {
       share.sharedWith = [
         {
           name: share.name || share.token,
-          link: true
+          link: true,
+          shareType: share.share_type
         }
       ]
     }
@@ -175,7 +179,8 @@ export function buildSharedResource(share, incomingShares = false, allowSharePer
       {
         username: share.uid_owner,
         displayName: share.displayname_owner,
-        avatar: undefined
+        avatar: undefined,
+        shareType: shareTypes.user
       }
     ]
 
@@ -310,6 +315,7 @@ export function buildCollaboratorShare(s, file, allowSharePerm) {
         displayName: s.displayname_file_owner,
         additionalInfo: _fixAdditionalInfo(s.additional_info_file_owner)
       }
+      share.stime = s.stime
       // TODO: Refactor to work with roles / prepare for roles API
       share.customPermissions = {
         update: s.permissions & permissionsBitmask.update,

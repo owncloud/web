@@ -18,15 +18,12 @@
           :label="$gettext('Name')"
         />
       </div>
-      <translate tag="label" for="files-file-link-role-button" class="oc-label">
-        Role
-      </translate>
       <oc-select
+        id="files-file-link-role-button"
         v-model="selectedRole"
-        input-id="files-file-link-role-button"
         :options="roles"
         :clearable="false"
-        label="label"
+        :label="selectedRoleLabel"
         class="oc-mb files-file-link-role-button-wrapper"
       >
         <template #option="option">
@@ -297,6 +294,9 @@ export default {
       }
 
       return this.$gettext('Password')
+    },
+    selectedRoleLabel() {
+      return this.$gettext('Role')
     }
   },
   created() {

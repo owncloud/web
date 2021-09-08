@@ -22,7 +22,7 @@ Feature: Resharing shared files with different permissions
     And user "Carol" has accepted the share "simple-folder" offered by user "Alice"
     And user "Brian" has logged in using the webUI
     When the user opens the share dialog for folder "simple-folder" using the webUI
-    Then user "Carol King" should be listed as "Advanced permissions" in the collaborators list for folder "simple-folder" on the webUI
+    Then user "Carol King" should be listed as "Custom permissions" in the collaborators list for folder "simple-folder" on the webUI
     And no custom permissions should be set for collaborator "Carol King" for folder "simple-folder" on the webUI
 
   @issue-ocis-1922
@@ -34,7 +34,7 @@ Feature: Resharing shared files with different permissions
     And user "Alice" has logged in using the webUI
     And the user opens folder "Shares" using the webUI
     When the user opens the share dialog for folder "simple-folder" using the webUI
-    Then user "Carol King" should be listed as "Advanced permissions" in the collaborators list for folder "simple-folder" on the webUI
+    Then user "Carol King" should be listed as "Custom permissions" in the collaborators list for folder "simple-folder" on the webUI
     And no custom permissions should be set for collaborator "Carol King" for folder "simple-folder" on the webUI
 
 
@@ -68,9 +68,9 @@ Feature: Resharing shared files with different permissions
       | role                 | displayed-role       | collaborators-permissions     | displayed-permissions | permissions                         |
       | Viewer               | Viewer               | ,                             | ,                     | read, share                         |
       | Editor               | Editor               | ,                             | ,                     | all                                 |
-      | Advanced permissions | Advanced permissions | share, create                 | share, create         | read, share, create                 |
-      | Advanced permissions | Advanced permissions | update, share                 | share, update         | read, update, share                 |
-      | Advanced permissions | Editor               | delete, share, create, update |                       | read, share, delete, update, create |
+      | Custom permissions | Custom permissions | share, create                 | share, create         | read, share, create                 |
+      | Custom permissions | Custom permissions | update, share                 | share, update         | read, update, share                 |
+      | Custom permissions | Editor               | delete, share, create, update |                       | read, share, delete, update, create |
 
   @skipOnOC10 @issue-ocis-2260 @issue-ocis-1922
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
@@ -94,9 +94,9 @@ Feature: Resharing shared files with different permissions
       | role                 | displayed-role       | collaborators-permissions | displayed-permissions | permissions                  |
       | Viewer               | Viewer               | ,                         | ,                     | read                         |
       | Editor               | Editor               | ,                         | ,                     | all                          |
-      | Advanced permissions | Advanced permissions | create                    | create                | read, create                 |
-      | Advanced permissions | Advanced permissions | update                    | update                | read, update                 |
-      | Advanced permissions | Editor               | delete, create, update    |                       | read, delete, update, create |
+      | Custom permissions | Custom permissions | create                    | create                | read, create                 |
+      | Custom permissions | Custom permissions | update                    | update                | read, update                 |
+      | Custom permissions | Editor               | delete, create, update    |                       | read, delete, update, create |
 
   @issue-ocis-1743
   Scenario Outline: share a received folder with another user with same permissions(including share permissions) and check if the user is displayed in collaborators list for original owner
@@ -129,6 +129,6 @@ Feature: Resharing shared files with different permissions
       | role                 | displayed-role       | collaborators-permissions     | displayed-permissions | permissions                         |
       | Viewer               | Viewer               | ,                             | ,                     | read, share                         |
       | Editor               | Editor               | ,                             | ,                     | all                                 |
-      | Advanced permissions | Advanced permissions | share, create                 | share, create         | read, share, create                 |
-      | Advanced permissions | Advanced permissions | update, share                 | share, update         | read, update, share                 |
-      | Advanced permissions | Editor               | delete, share, create, update | ,                     | read, share, delete, update, create |
+      | Custom permissions | Custom permissions | share, create                 | share, create         | read, share, create                 |
+      | Custom permissions | Custom permissions | update, share                 | share, update         | read, update, share                 |
+      | Custom permissions | Editor               | delete, share, create, update | ,                     | read, share, delete, update, create |

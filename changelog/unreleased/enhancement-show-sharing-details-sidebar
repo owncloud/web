@@ -1,0 +1,7 @@
+Enhancement: Show sharing information in details sidebar
+
+We've added sharing information like from whom, when and where
+a file was shared to the detail view in the right sidebar. 
+
+https://github.com/owncloud/web/issues/5735
+https://github.com/owncloud/web/pull/5730

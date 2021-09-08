@@ -147,7 +147,7 @@ Feature: Resharing shared files with different permissions
     And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
     And user "Alice" has logged in using the webUI
     And the user opens folder "Shares" using the webUI
-    When the user shares folder "simple-folder" with user "Carol King" as "Advanced permissions" with permissions "share, delete" using the webUI
+    When the user shares folder "simple-folder" with user "Carol King" as "Custom permissions" with permissions "share, delete" using the webUI
     And user "Carol" accepts the share "simple-folder" offered by user "Alice" using the sharing API
     And the user re-logs in as "Carol" using the webUI
     And the user opens folder "Shares" using the webUI
@@ -168,12 +168,12 @@ Feature: Resharing shared files with different permissions
     And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
     And user "Alice" has logged in using the webUI
     And the user opens folder "Shares" using the webUI
-    When the user shares folder "simple-folder" with user "Carol King" as "Advanced permissions" with permissions "delete" using the webUI
+    When the user shares folder "simple-folder" with user "Carol King" as "Custom permissions" with permissions "delete" using the webUI
     And user "Carol" accepts the share "simple-folder" offered by user "Alice" using the sharing API
     And the user re-logs in as "Brian" using the webUI
-    Then user "Alice Hansen" should be listed as "Advanced permissions" in the collaborators list for folder "simple-folder" on the webUI
+    Then user "Alice Hansen" should be listed as "Custom permissions" in the collaborators list for folder "simple-folder" on the webUI
     And custom permissions "share, delete" should be set for user "Alice Hansen" for folder "simple-folder" on the webUI
-    And user "Carol King" should be listed as "Advanced permissions" in the collaborators list for folder "simple-folder" on the webUI
+    And user "Carol King" should be listed as "Custom permissions" in the collaborators list for folder "simple-folder" on the webUI
     And custom permissions "delete" should be set for user "Carol King" for folder "simple-folder" on the webUI
     And user "Carol" should have received a share with these details:
       | field       | value                 |
@@ -189,7 +189,7 @@ Feature: Resharing shared files with different permissions
     And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
     And user "Alice" has logged in using the webUI
     When the user opens folder "Shares" using the webUI
-    And the user shares folder "simple-folder" with user "Carol King" as "Advanced permissions" with permissions "share, delete, update" using the webUI
+    And the user shares folder "simple-folder" with user "Carol King" as "Custom permissions" with permissions "share, delete, update" using the webUI
     Then the error message with header "Error while sharing." should be displayed on the webUI
     And as "Carol" folder "Shares/simple-folder" should not exist
     And user "Carol" should not have received any shares

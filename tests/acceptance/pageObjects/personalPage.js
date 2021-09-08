@@ -374,7 +374,8 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     resourceBreadcrumbClickable: {
-      selector: '//nav[@id="files-breadcrumb"]//a[contains(text(),%s)]',
+      selector:
+        '//nav[@id="files-breadcrumb"]//*[(self::a or self::button) and contains(text(),%s)]',
       locateStrategy: 'xpath'
     },
     resourceBreadcrumbNonClickable: {

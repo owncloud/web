@@ -71,7 +71,7 @@ Feature: Sharing files and folders with internal groups
       | set-role             | expected-role        | permissions-folder              | permissions-file  |
       | Viewer               | Viewer               | read,share                      | read,share        |
       | Editor               | Editor               | read,update,create,delete,share | read,update,share |
-      | Advanced permissions | Advanced permissions | read                            | read              |
+      | Custom permissions | Custom permissions | read                            | read              |
 
   @issue-4102 @issue-ocis-2267
   Scenario: share a file with an internal group a member overwrites and unshares the file

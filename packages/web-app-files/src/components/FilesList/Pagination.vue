@@ -14,8 +14,8 @@ import { mapState, mapGetters } from 'vuex'
 
 export default {
   computed: {
-    ...mapState('Files', ['currentPage']),
-    ...mapGetters('Files', ['pages'])
+    ...mapState('Files/pagination', ['currentPage']),
+    ...mapGetters('Files/pagination', ['pages'])
   }
 }
 </script>

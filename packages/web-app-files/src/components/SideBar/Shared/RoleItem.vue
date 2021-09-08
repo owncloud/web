@@ -16,3 +16,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.roles-select-role-item {
+  text-align: left;
+}
+</style>
