@@ -168,6 +168,10 @@ module.exports = {
         await this.selectPermissionsOnPendingShare(permissions)
       }
 
+      if (role === 'Custom permissions' && !permissions) {
+        this.click('@customPermissionsConfirmBtn')
+      }
+
       if (days) {
         const dateToSet = calculateDate(days)
         const isExpiryDateChanged = await this.openExpirationDatePicker().setExpirationDate(
