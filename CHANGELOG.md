@@ -11,6 +11,7 @@ Summary
 * Enhancement - Add robots.txt file: [#5762](https://github.com/owncloud/web/pull/5762)
 * Enhancement - Add missing tooltips: [#5723](https://github.com/owncloud/web/issues/5723)
 * Enhancement - Re-design recipients role select: [#5632](https://github.com/owncloud/web/pull/5632)
+* Enhancement - Show sharing information in details sidebar: [#5735](https://github.com/owncloud/web/issues/5735)
 * Enhancement - Switch filesize calculation base: [#5739](https://github.com/owncloud/web/pull/5739)
 * Enhancement - Update ODS to 9.3.0: [#5725](https://github.com/owncloud/web/pull/5725)
 
@@ -35,6 +36,14 @@ Details
    We've redesigned recipient role select in the Files app sidebar.
 
    https://github.com/owncloud/web/pull/5632
+
+* Enhancement - Show sharing information in details sidebar: [#5735](https://github.com/owncloud/web/issues/5735)
+
+   We've added sharing information like from whom, when and where a file was shared to the detail
+   view in the right sidebar.
+
+   https://github.com/owncloud/web/issues/5735
+   https://github.com/owncloud/web/pull/5730
 
 * Enhancement - Switch filesize calculation base: [#5739](https://github.com/owncloud/web/pull/5739)
 
