@@ -177,7 +177,6 @@ export default {
 
   mounted() {
     this.adjustTableHeaderPosition()
-    
   },
 
   beforeDestroy() {

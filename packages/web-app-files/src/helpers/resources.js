@@ -115,18 +115,22 @@ export function aggregateResourceShares(
   shares.sort((a, b) => a.path.localeCompare(b.path))
 
   const resources = []
-  let prev = null
+  let previousShare = null
   for (const share of shares) {
-    if (prev?.storage_id === share.storage_id && prev?.file_source === share.file_source) {
+    if (
+      previousShare?.storage_id === share.storage_id &&
+      previousShare?.file_source === share.file_source
+    ) {
       if (userShareTypes.includes(share.share_type)) {
-        prev.sharedWith.push({
+        previousShare.sharedWith.push({
           username: share.share_with,
+          name: share.share_with_displayname,
           displayName: share.share_with_displayname,
           avatar: undefined,
           shareType: share.share_type
         })
       } else if (share.share_type === shareTypes.link) {
-        prev.sharedWith.push({
+        previousShare.sharedWith.push({
           name: share.name || share.token,
           link: true,
           shareType: share.share_type
@@ -141,7 +145,7 @@ export function aggregateResourceShares(
         {
           username: share.share_with,
           displayName: share.share_with_displayname,
-          name: share.share_with,
+          name: share.share_with_displayname,
           avatar: undefined,
           shareType: share.share_type
         }
@@ -156,7 +160,7 @@ export function aggregateResourceShares(
       ]
     }
 
-    prev = share
+    previousShare = share
     resources.push(share)
   }
 
@@ -190,7 +194,6 @@ export function buildSharedResource(share, incomingShares = false, allowSharePer
     resource.path = share.file_target
     resource.isReceivedShare = () => true
   } else {
-    resource.shareType = share.share_type
     resource.sharedWith = share.sharedWith
     resource.shareOwner = share.uid_owner
     resource.shareOwnerDisplayname = share.displayname_owner

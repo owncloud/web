@@ -198,7 +198,6 @@ export default {
       }
 
       this.LOAD_FILES({ currentFolder: null, files: resources })
-      console.log(resources)
       this.loading = false
     },
 

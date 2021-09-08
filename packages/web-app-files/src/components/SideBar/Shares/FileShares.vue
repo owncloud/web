@@ -353,6 +353,7 @@ export default {
         if (oldItem !== newItem && this.currentView === VIEW_SHOW) {
           this.transitionGroupActive = false
           this.$_reloadShares()
+          this.showShareesList = false
         }
       },
       immediate: true
