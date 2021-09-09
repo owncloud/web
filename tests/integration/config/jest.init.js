@@ -31,7 +31,7 @@ config.mocks = {
   $pgettext: str => str,
   $client: sdkMock,
   $language: {
-    current: 'en_US'
+    current: 'en'
   },
   encodePath,
   isIE11: () => false

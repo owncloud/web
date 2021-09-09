@@ -17,6 +17,7 @@ const files = {
         additional_info_file_owner: null,
         path: '/Documents',
         mimetype: 'httpd/unix-directory',
+        state: 0,
         storage_id: 'home::admin',
         storage: 2,
         item_type: 'folder',

@@ -50,7 +50,8 @@ export default {
     const file = payload.file
     const client = payload.client
     const newValue = !file.starred
-    client.files
+
+    return client.files
       .favorite(file.path, newValue)
       .then(() => {
         context.commit('FAVORITE_FILE', file)

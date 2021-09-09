@@ -106,7 +106,7 @@ Feature: Mark file as favorite
     And folder with path "simple-folder/simple-empty-folder" should be listed on the webUI
     And file with path "strängé नेपाली folder/lorem.txt" should be listed on the webUI
 
-  @issue-1720
+
   Scenario: Try to favorite file and folder that used to exist but does not anymore
     Given user "Alice" has created file "lorem.txt"
     And user "Alice" has created folder "simple-folder"
@@ -116,16 +116,16 @@ Feature: Mark file as favorite
       | lorem.txt     |
       | simple-folder |
     When the user marks file "lorem.txt" as favorite using the webUI
-    Then no message should be displayed on the webUI
-    # Then the error message with header 'Error while marking "lorem.txt" as favorite' should be displayed on the webUI
+    Then the error message with header 'Error while starring "lorem.txt"' should be displayed on the webUI
     And file "lorem.txt" should not be marked as favorite on the webUI
-    # When the user clears all error message from the webUI
-    When the user marks folder "simple-folder" as favorite using the webUI
-    Then no message should be displayed on the webUI
-    # Then the error message with header 'Error while marking "simple-folder" as favorite' should be displayed on the webUI
+    When the user clears all error message from the webUI
+    And the user marks folder "simple-folder" as favorite using the webUI
+    Then the error message with header 'Error while starring "simple-folder"' should be displayed on the webUI
     And folder "simple-folder" should not be marked as favorite on the webUI
     And as "Alice" file "lorem.txt" should not exist
     And as "Alice" folder "simple-folder" should not exist
+
+
 
 
   Scenario: Favourite files and folders with comma in the names
