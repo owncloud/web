@@ -40,7 +40,9 @@ export const getStore = function({
   inProgress = [null],
   totalFilesCount = null,
   selectedFiles = [],
-  totalFilesSize = null
+  totalFilesSize = null,
+  loginBackgroundImg = '',
+  loginLogo = ''
 } = {}) {
   return createStore(Vuex.Store, {
     state: {
@@ -48,6 +50,14 @@ export const getStore = function({
     },
     getters: {
       configuration: () => ({
+        theme: {
+          loginPage: {
+            backgroundImg: loginBackgroundImg
+          },
+          logo: {
+            login: loginLogo
+          }
+        },
         options: {
           disablePreviews: disablePreviews
         }
