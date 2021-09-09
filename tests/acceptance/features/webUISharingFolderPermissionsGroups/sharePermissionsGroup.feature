@@ -32,7 +32,6 @@ Feature: Sharing folders with internal groups with different roles and permissio
       | Carol King   | user  |
       | grp2         | group |
     And the user removes "grp1" as a collaborator from the share
-    And the user removes "Alice Hansen" as a collaborator from the share
     And the user shares with the selected collaborators
     And user "Brian" accepts the share "simple-folder" offered by user "Alice" using the sharing API
     And user "Carol" accepts the share "simple-folder" offered by user "Alice" using the sharing API
@@ -60,7 +59,7 @@ Feature: Sharing folders with internal groups with different roles and permissio
       | role                 | displayed-role       | extra-permissions             | displayed-permissions  | actual-permissions           |
       | Viewer               | Viewer               | ,                             | ,                      | read, share                  |
       | Editor               | Editor               | ,                             | ,                      | all                          |
-      | Custom permissions | Custom permissions | ,                             | ,                      | read                         |
-      | Custom permissions | Viewer               | share                         | ,                      | read, share                  |
-      | Custom permissions | Custom permissions | delete, update, create        | delete, update, create | read, delete, update, create |
-      | Custom permissions | Editor               | share, delete, update, create | ,                      | all                          |
+      | Custom permissions   | Custom permissions   | ,                             | ,                      | read                         |
+      | Custom permissions   | Viewer               | share                         | ,                      | read, share                  |
+      | Custom permissions   | Custom permissions   | delete, update, create        | delete, update, create | read, delete, update, create |
+      | Custom permissions   | Editor               | share, delete, update, create | ,                      | all                          |

@@ -69,9 +69,7 @@ export const getStore = function({
     modules: {
       Files: {
         state: {
-          resource: null,
-          currentPage: currentPage,
-          filesPageLimit: 100
+          resource: null
         },
         getters: {
           totalFilesCount: () => totalFilesCount,
@@ -81,15 +79,12 @@ export const getStore = function({
           activeFilesCount: () => activeFilesCount,
           inProgress: () => inProgress,
           highlightedFile: () => highlightedFile,
-          pages: () => pages,
           currentFolder: () => currentFolder
         },
         mutations: {
           UPDATE_RESOURCE: (state, resource) => {
             state.resource = resource
           },
-          UPDATE_CURRENT_PAGE: () => {},
-          SET_FILES_PAGE_LIMIT: () => {},
           CLEAR_FILES_SEARCHED: () => {}
         },
         namespaced: true,
@@ -97,6 +92,20 @@ export const getStore = function({
           sidebar: {
             state: {
               closed: sidebarClosed
+            },
+            namespaced: true
+          },
+          pagination: {
+            state: {
+              currentPage,
+              itemsPerPage: 100
+            },
+            getters: {
+              pages: () => pages
+            },
+            mutations: {
+              SET_ITEMS_PER_PAGE: () => {},
+              UPDATE_CURRENT_PAGE: () => {}
             },
             namespaced: true
           }

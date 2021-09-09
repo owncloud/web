@@ -89,11 +89,13 @@ module.exports = {
       }
 
       let collaboratorsElementIds = null
-      await this.waitForAnimationToFinish()
-        .waitForElementPresent(informationSelector)
-        .api.elements('css selector', this.elements.collaboratorsInformation, result => {
+      await this.waitForElementPresent(informationSelector).api.elements(
+        'css selector',
+        this.elements.collaboratorsInformation,
+        result => {
           collaboratorsElementIds = result.value.map(item => item[Object.keys(item)[0]])
-        })
+        }
+      )
 
       results = collaboratorsElementIds.map(async collaboratorElementId => {
         const collaboratorResult = {}

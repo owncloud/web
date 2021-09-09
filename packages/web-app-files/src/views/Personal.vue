@@ -28,7 +28,6 @@
         :header-position="headerPosition"
         :drag-drop="true"
         @fileDropped="fileDropped"
-        @showDetails="$_mountSideBar_showDefaultPanel"
         @fileClick="$_fileActions_triggerDefaultAction"
         @rowMounted="rowMounted"
       >
@@ -109,13 +108,30 @@ export default {
     MixinFilesListFilter
   ],
 
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      if (vm.isRedirectToHomeFolderRequired(to)) {
+        vm.redirectToHomeFolder(to)
+      }
+    })
+  },
+
+  async beforeRouteUpdate(to, from, next) {
+    if (this.isRedirectToHomeFolderRequired(to)) {
+      await this.redirectToHomeFolder(to)
+      return
+    }
+    next()
+  },
+
   data: () => ({
     loading: true
   }),
 
   computed: {
     ...mapState(['app']),
-    ...mapState('Files', ['currentPage', 'files', 'filesPageLimit']),
+    ...mapState('Files', ['files']),
+    ...mapState('Files/pagination', ['currentPage']),
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
     ...mapGetters('Files', [
       'highlightedFile',
@@ -161,20 +177,6 @@ export default {
   watch: {
     $route: {
       handler: function(to, from) {
-        if (isNil(this.$route.params.item)) {
-          this.$router
-            .push({
-              name: 'files-personal',
-              params: {
-                item: this.homeFolder
-              }
-            })
-            .catch(error => {
-              console.log(error)
-            })
-          return
-        }
-
         this.$_filesListPagination_updateCurrentPage()
 
         const sameRoute = to.name === from?.name
@@ -220,6 +222,28 @@ export default {
       'REMOVE_FILE_SELECTION'
     ]),
     ...mapMutations(['SET_QUOTA']),
+
+    isRedirectToHomeFolderRequired(to) {
+      return isNil(to.params.item)
+    },
+
+    async redirectToHomeFolder(to) {
+      const route = {
+        name: to.name,
+        params: {
+          ...to.params,
+          item: to.path.endsWith('/') ? '/' : this.homeFolder
+        },
+        query: to.query
+      }
+      await this.$router.replace(
+        route,
+        () => {},
+        e => {
+          console.error(e)
+        }
+      )
+    },
 
     async fileDropped(fileIdTarget) {
       const selected = [...this.selectedFiles]
@@ -335,13 +359,15 @@ export default {
         )
         resources = resources.map(buildResource)
 
+        const currentFolder = resources.shift()
+
         this.LOAD_FILES({
-          currentFolder: resources[0],
-          files: resources.slice(1)
+          currentFolder,
+          files: resources
         })
         this.loadIndicators({
           client: this.$client,
-          currentFolder: this.$route.params.item
+          currentFolder: currentFolder.path
         })
 
         // Load quota

@@ -16,18 +16,18 @@ export default {
   },
   // a flat file list has no current folder nor parent
   flatFileList: state => !!state.currentFolder === false,
-  pages: (state, getters) => Math.ceil(getters.filesAll.length / state.filesPageLimit),
-  activeFiles: (state, getters) => {
+  activeFiles: (state, getters, rootState) => {
     let files = [].concat(getters.filesAll)
 
     if (!state.areHiddenFilesShown) {
       files = files.filter(file => !file.name.startsWith('.'))
     }
 
-    if (state.filesPageLimit > 0) {
-      const firstElementIndex = (state.currentPage - 1) * state.filesPageLimit
+    const { itemsPerPage, currentPage } = rootState.Files.pagination
+    if (itemsPerPage > 0) {
+      const firstElementIndex = (currentPage - 1) * itemsPerPage
 
-      return files.splice(firstElementIndex, state.filesPageLimit)
+      return files.splice(firstElementIndex, itemsPerPage)
     }
 
     return files

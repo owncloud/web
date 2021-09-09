@@ -314,6 +314,7 @@ module.exports = {
       await this.waitForElementVisible('@sharingAutoComplete')
       await this.initAjaxCounters()
       await this.setValueBySingleKeys('@sharingAutoComplete', input)
+      await new Promise(resolve => setTimeout(resolve, 250))
       await this.waitForAjaxCallsToStartAndFinish()
     },
     /**
@@ -619,17 +620,17 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     sharingAutoComplete: {
-      selector: '#files-share-invite #files-share-invite-input'
+      selector: '#files-share-invite-input'
     },
     sharingAutoCompleteSpinner: {
-      selector: '#files-share-invite .oc-spinner'
+      selector: '.files-collaborators-collaborator-add-dialog .oc-spinner'
     },
     sharingAutoCompleteDropDown: {
-      selector: '#files-share-invite .vs__dropdown-menu'
+      selector: '.files-collaborators-collaborator-add-dialog .vs__dropdown-menu'
     },
     sharingAutoCompleteDropDownElements: {
       selector:
-        '#files-share-invite .vs__dropdown-menu .files-collaborators-autocomplete-user-text',
+        '.files-collaborators-collaborator-add-dialog .vs__dropdown-menu .files-collaborators-autocomplete-user-text',
       locateStrategy: 'css selector'
     },
     sharingAutoCompleteShowAllResultsButton: {

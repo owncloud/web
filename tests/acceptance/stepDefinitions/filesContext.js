@@ -89,8 +89,8 @@ Then('the files table should be displayed', () => {
   return client.page.FilesPageElement.filesList().waitForElementVisible('@anyAfterLoading')
 })
 
-Given('the user has browsed to the files page', async function() {
-  await client.page.personalPage().navigateAndWaitTillLoaded()
+Given('the user has browsed to the files page', function() {
+  return client.page.personalPage().navigateToBreadcrumb('All files')
 })
 
 When('the user opens folder {string} directly on the webUI', async function(folder) {
@@ -1332,18 +1332,7 @@ When(
       await client.page.FilesPageElement.filesList().toggleFileOrFolderCheckbox('enable', item[0])
     }
 
-    return client.page.personalPage().copyMultipleResources(target)
-  }
-)
-
-When(
-  'the user tries to batch copy these files/folders into folder {string} using the webUI',
-  async function(target, resources) {
-    for (const item of resources.rows()) {
-      await client.page.FilesPageElement.filesList().toggleFileOrFolderCheckbox('enable', item[0])
-    }
-
-    return client.page.personalPage().attemptToCopyMultipleResources(target)
+    return await client.page.personalPage().copyMultipleResources(target)
   }
 )
 

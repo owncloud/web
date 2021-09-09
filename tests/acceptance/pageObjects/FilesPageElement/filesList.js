@@ -15,7 +15,11 @@ module.exports = {
      */
     openSharingDialog: async function(resource) {
       await this.openSideBar(resource)
-      return await appSideBar.activatePanel('people')
+      await appSideBar.activatePanel('people')
+      return await this.click({
+        selector: '@sharedWithToggleButton',
+        timeout: 200
+      })
     },
     /**
      * @param {string} resource
@@ -743,6 +747,10 @@ module.exports = {
     },
     btnToggleSideBar: {
       selector: '#files-toggle-sidebar'
+    },
+    sharedWithToggleButton: {
+      selector: '//*[contains(@class, "sharee-avatars")]/ancestor::button',
+      locateStrategy: 'xpath'
     }
   }
 }

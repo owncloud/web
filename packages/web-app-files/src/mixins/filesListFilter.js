@@ -33,18 +33,18 @@ export default {
       immediate: true
     },
     pages() {
-      if (!this.$route.params.page) {
+      if (!this.$route.query.page) {
         return
       }
 
-      if (this.$route.params.page <= this.pages) {
+      if (this.$route.query.page <= this.pages) {
         return
       }
 
       this.$router.push({
         name: this.$route.name,
-        query: this.$route.query,
-        params: { ...this.$route.params, page: this.pages }
+        query: { ...this.$route.query, page: this.pages },
+        params: this.$route.params
       })
     }
   },
@@ -52,6 +52,6 @@ export default {
     ...mapMutations('Files', ['CLEAR_FILES_SEARCHED', 'LOAD_FILES_SEARCHED'])
   },
   computed: {
-    ...mapGetters('Files', ['pages'])
+    ...mapGetters('Files/pagination', ['pages'])
   }
 }
