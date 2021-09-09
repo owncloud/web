@@ -48,13 +48,13 @@
     <oc-drop
       ref="customPermissionsDrop"
       data-testid="files-recipient-custom-permissions-drop"
-      class="files-recipient-custom-permissions-drop"
+      class="files-recipient-custom-permissions-drop uk-width-auto"
       mode="manual"
       target="#files-collaborators-role-button"
     >
       <template #special>
         <translate tag="h4" class="files-recipient-custom-permissions-drop-title"
-          >User can
+          >Custom permissions
         </translate>
         <oc-list class="oc-mb">
           <li
