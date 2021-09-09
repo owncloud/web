@@ -6,16 +6,18 @@
       :style="`width: ${width}px; height: ${width}px;`"
     />
     <oc-avatar
-      v-else
+      v-else-if="shareType === null"
       key="avatar-loaded"
       :width="width"
       :src="avatarSource"
       :user-name="userName"
     />
+    <component :is="getAvatarComponent(shareType)" v-else />
   </component>
 </template>
 <script>
 import { mapGetters } from 'vuex'
+import { shareTypes } from '../../../web-app-files/src/helpers/shareTypes'
 
 export default {
   name: 'Avatar',
@@ -46,6 +48,11 @@ export default {
       type: Number,
       required: false,
       default: 42
+    },
+    shareType: {
+      type: Number,
+      retuired: false,
+      default: null
     }
   },
   data() {
@@ -76,6 +83,18 @@ export default {
     }
   },
   methods: {
+    getAvatarComponent(shareType) {
+      switch (shareType) {
+        case shareTypes.group:
+          return 'oc-avatar-group'
+        case shareTypes.link:
+          return 'oc-avatar-link'
+        case shareTypes.guest:
+          return 'oc-avatar-guest'
+        case shareTypes.remote:
+          return 'oc-avatar-federated'
+      }
+    },
     /**
      * Load a new avatar from this userid
      */

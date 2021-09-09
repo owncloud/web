@@ -1,6 +1,8 @@
 <template>
   <div>
-    <translate v-if="showLabel" tag="label" for="files-collaborators-role-button" class="oc-label">Role</translate>
+    <translate v-if="showLabel" tag="label" for="files-collaborators-role-button" class="oc-label"
+      >Role</translate
+    >
     <oc-select
       v-model="selectedRole"
       input-id="files-collaborators-role-button"

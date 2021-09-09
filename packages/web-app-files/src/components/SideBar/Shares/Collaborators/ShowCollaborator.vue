@@ -4,13 +4,13 @@
       <oc-td width="shrink" class="oc-py-rm oc-pr-s">
         <div key="collaborator-avatar-loaded">
           <avatar-image
-            v-if="isUser"
             class="oc-mr-s files-collaborators-collaborator-indicator"
             :width="48"
             :userid="collaborator.collaborator.name"
             :user-name="collaborator.collaborator.displayName"
+            :share-type="shareType"
           />
-          <div v-else key="collaborator-avatar-placeholder">
+          <div v-if="false" key="collaborator-avatar-placeholder">
             <oc-icon
               v-if="collaborator.shareType === shareTypes.group"
               key="avatar-group"
@@ -59,16 +59,6 @@
             :aria-labelledby="`collaborator-list-label-${shareId}`"
           >
             <li v-if="$_reshareInformation" class="oc-py-rm">
-              <oc-tag
-                :id="$_resharerToggleId"
-                class="files-collaborators-collaborator-reshare-information"
-                type="button"
-              >
-                <oc-icon name="repeat" />
-                <translate :translate-params="{ resharer: $_reshareInformation }">
-                  Shared by %{resharer}
-                </translate>
-              </oc-tag>
               <oc-drop
                 ref="menu"
                 :drop-id="$_resharerToggleId + '-drop'"
@@ -111,41 +101,20 @@
                 </ul>
               </oc-drop>
             </li>
-            <li class="oc-py-rm">
-              <oc-tag class="files-collaborators-collaborator-role">
-                <oc-icon :name="roleTagIcon" />
-                {{ originalRole.label }}
-              </oc-tag>
-            </li>
-            <li v-if="collaborator.expires" class="oc-py-rm">
-              <oc-tag class="files-collaborators-collaborator-expires">
-                <oc-icon name="text-calendar" />
-                <translate :translate-params="{ expires: expirationDate }">
-                  Expires %{expires}
-                </translate>
-              </oc-tag>
-            </li>
             <li v-if="isIndirectShare" class="oc-py-rm">
-              <oc-tag
-                v-oc-tooltip="viaTooltip"
-                :aria-label="viaTooltip"
-                type="router-link"
-                class="files-collaborators-collaborator-follow-via"
-                :to="viaRouterParams"
-              >
-                <oc-icon name="exit_to_app" />
-                <span
-                  class="uk-text-truncate files-collaborators-collaborator-via-label"
-                  v-text="viaLabel"
-                />
-              </oc-tag>
+              <!--example -->
             </li>
           </ul>
         </div>
       </oc-td>
       <oc-td width="shrink" align-v="top" class="oc-py-rm oc-pr-s">
         <div class="uk-flex uk-flex-nowrap uk-flex-middle">
-          <collaborators-edit-options :show-label="false" class="oc-mb collaborators-edit" @optionChange="collaboratorOptionChanged" />
+          <collaborators-edit-options
+            v-if="!isCurrentUser"
+            :show-label="false"
+            class="oc-mb collaborators-edit"
+            @optionChange="collaboratorOptionChanged"
+          />
         </div>
       </oc-td>
     </oc-tr>
@@ -164,7 +133,7 @@ import CollaboratorsEditOptions from './CollaboratorsEditOptions.vue'
 export default {
   name: 'Collaborator',
   components: {
-    CollaboratorsEditOptions,
+    CollaboratorsEditOptions
   },
   mixins: [Mixins, CollaboratorsMixins],
   props: {
@@ -192,7 +161,7 @@ export default {
     shareDisplayName() {
       const displayName = this.collaborator.collaborator.displayName
       const additionalInfo = this.collaborator.collaborator.additionalInfo
-      if(additionalInfo === null) return displayName;
+      if (additionalInfo === null) return displayName
       return `${displayName} (${additionalInfo})`
     },
 
@@ -295,6 +264,10 @@ export default {
 
     isUser() {
       return this.collaborator.shareType === this.shareTypes.user
+    },
+
+    shareType() {
+      return this.collaborator.shareType ? this.shareTypes.group : null
     },
 
     isRemoteUser() {
