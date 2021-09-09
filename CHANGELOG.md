@@ -8,15 +8,44 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Pagination on Locationpicker: [#5715](https://github.com/owncloud/web/pull/5715)
+* Change - Update ODS to 10.0.0: [#5769](https://github.com/owncloud/web/pull/5769)
 * Enhancement - Add robots.txt file: [#5762](https://github.com/owncloud/web/pull/5762)
 * Enhancement - Add missing tooltips: [#5723](https://github.com/owncloud/web/issues/5723)
 * Enhancement - Re-design recipients role select: [#5632](https://github.com/owncloud/web/pull/5632)
+* Enhancement - Show sharees as avatars: [#5758](https://github.com/owncloud/web/pull/5758/files)
 * Enhancement - Show sharing information in details sidebar: [#5735](https://github.com/owncloud/web/issues/5735)
 * Enhancement - Switch filesize calculation base: [#5739](https://github.com/owncloud/web/pull/5739)
 * Enhancement - Update ODS to 9.3.0: [#5725](https://github.com/owncloud/web/pull/5725)
+* Enhancement - URL encoding / decoding: [#5714](https://github.com/owncloud/web/issues/5714)
 
 Details
 -------
+
+* Bugfix - Pagination on Locationpicker: [#5715](https://github.com/owncloud/web/pull/5715)
+
+   Pagination on copying/moving files as well as page reloads when copying/moving files were
+   broken. When changing the Vue router encoding, we fixed both issues.
+
+   https://github.com/owncloud/web/pull/5715
+
+* Change - Update ODS to 10.0.0: [#5769](https://github.com/owncloud/web/pull/5769)
+
+   We updated the ownCloud Design System to version 10.0.0-rc2. Please refer to the full
+   changelog in the ODS release (linked) for more details. Summary:
+
+   - Change - Use route query to store active page:
+   https://github.com/owncloud/owncloud-design-system/pull/1626 - Change - Refactor
+   OcAvatarGroup and rename to OcAvatars:
+   https://github.com/owncloud/owncloud-design-system/pull/5736 - Change - Add label prop
+   to OcSelect: https://github.com/owncloud/owncloud-design-system/pull/1633 -
+   Enhancement - Switch filesize calculation base:
+   https://github.com/owncloud/owncloud-design-system/pull/1598 - Bugfix - Reset
+   droptarget background color in OcTableFiles:
+   https://github.com/owncloud/owncloud-design-system/pull/1625
+
+   https://github.com/owncloud/web/pull/5769
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v10.0.0-rc2
 
 * Enhancement - Add robots.txt file: [#5762](https://github.com/owncloud/web/pull/5762)
 
@@ -36,6 +65,13 @@ Details
    We've redesigned recipient role select in the Files app sidebar.
 
    https://github.com/owncloud/web/pull/5632
+
+* Enhancement - Show sharees as avatars: [#5758](https://github.com/owncloud/web/pull/5758/files)
+
+   We've added the sharees as avatars in the peoples panel in the right sidebar.
+
+   https://github.com/owncloud/web/issues/5736
+   https://github.com/owncloud/web/pull/5758/files
 
 * Enhancement - Show sharing information in details sidebar: [#5735](https://github.com/owncloud/web/issues/5735)
 
@@ -70,6 +106,15 @@ Details
 
    https://github.com/owncloud/web/pull/5725
    https://github.com/owncloud/owncloud-design-system/releases/tag/v9.3.0
+
+* Enhancement - URL encoding / decoding: [#5714](https://github.com/owncloud/web/issues/5714)
+
+   We have updated the Vue router (prior to version 4) encoding from `files%2Fall%2Ffolder` to
+   `files/all/folder`. It was also needed to use the router query object instead of the params to
+   store the current page pagination information.
+
+   https://github.com/owncloud/web/issues/5714
+   https://github.com/owncloud/web/pull/5715
 
 Changelog for ownCloud Web [4.1.0] (2021-08-20)
 =======================================
