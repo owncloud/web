@@ -28,7 +28,7 @@ Feature: File Upload
   @smokeTest @ocisSmokeTest
   Scenario Outline: upload a new file into a sub folder
     Given user "Alice" has created folder "<folder-to-upload-to>"
-    And the user has browsed to the files page
+    And the user has reloaded the current page of the webUI
     And a file with the size of "3000" bytes and the name "0" has been created locally
     When the user opens folder "<folder-to-upload-to>" using the webUI
     And the user uploads a created file "0" using the webUI

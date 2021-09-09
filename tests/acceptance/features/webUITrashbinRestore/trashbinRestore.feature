@@ -13,7 +13,7 @@ Feature: Restore deleted files/folders
   @smokeTest @ocisSmokeTest
   Scenario: Restore files
     Given user "Alice" has uploaded file "data.zip" to "data.zip"
-    And the user has browsed to the files page
+    And the user has reloaded the current page of the webUI
     When the user deletes file "data.zip" using the webUI
     And the user deletes file "sample,1.txt" using the webUI
     And the user browses to the trashbin page

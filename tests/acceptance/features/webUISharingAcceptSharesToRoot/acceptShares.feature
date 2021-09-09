@@ -79,7 +79,7 @@ Feature: accept/decline shares coming from internal users
     And user "Brian" has been added to group "grp1"
     And user "Alice" has shared folder "/simple-folder" with group "grp1"
     And user "Alice" has shared folder "/testimage.jpg" with user "Brian"
-    When the user has browsed to the files page
+    When the user reloads the current page of the webUI
     Then folder "simple-folder" should be listed on the webUI
     And file "testimage.jpg" should be listed on the webUI
     When the user browses to the shared-with-me page using the webUI

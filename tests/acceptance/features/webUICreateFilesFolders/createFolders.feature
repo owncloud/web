@@ -6,7 +6,7 @@ Feature: create folders
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files
     And user "Alice" has logged in using the webUI
-    And the user has browsed to the files page
+    And the user has reloaded the current page of the webUI
 
   @smokeTest @ocisSmokeTest
   Scenario: Create a folder inside another folder
