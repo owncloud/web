@@ -9,7 +9,7 @@ module.exports = {
     isThumbnailVisible: function () {
       return this.waitForElementVisible('@sidebar').waitForElementVisible('@fileInfoIcon')
     },
-    closeSidebarIfOpen: async function (timeout = 300) {
+    closeSidebarIfOpen: async function(timeout = this.globals.waitForConditionFastTimeout) {
       if (!(await this.isSideBarOpen(timeout))) {
         return this.api.page.FilesPageElement.filesList()
       }
@@ -24,7 +24,7 @@ module.exports = {
       }
       return this.api.page.FilesPageElement.filesList()
     },
-    isSideBarOpen: async function (timeout = 500) {
+    isSideBarOpen: async function(timeout = this.globals.waitForConditionFastTimeout) {
       const element = this.elements.sidebar
       let isVisible = false
       await this.isVisible(
@@ -39,7 +39,11 @@ module.exports = {
       )
       return isVisible
     },
-    isSideBarOpenForResource: async function (resource, elementType = 'any', timeout = 500) {
+    isSideBarOpenForResource: async function(
+      resource,
+      elementType = 'any',
+      timeout = this.globals.waitForConditionFastTimeout
+    ) {
       if (!(await this.isSideBarOpen(timeout))) {
         return false
       }
@@ -69,8 +73,12 @@ module.exports = {
         let backBtnVisible = false
         const backBtn = this.elements.sidebarBackBtn
         await this.isVisible(
-          { locateStrategy: backBtn.locateStrategy, selector: backBtn.selector, timeout: 200 },
-          (result) => {
+          {
+            locateStrategy: backBtn.locateStrategy,
+            selector: backBtn.selector,
+            timeout: this.globals.waitForConditionFastTimeout
+          },
+          result => {
             backBtnVisible = result.value === true
           }
         )
@@ -148,7 +156,10 @@ module.exports = {
      * @param {number} timeout
      * @returns {Promise<boolean>}
      */
-    isPanelSelectable: async function (panelName, timeout = 300) {
+    isPanelSelectable: async function(
+      panelName,
+      timeout = this.globals.waitForConditionFastTimeout
+    ) {
       panelName = panelName === 'people' ? 'collaborators' : panelName
       const element = this.elements[panelName + 'PanelMenuItem']
       let isVisible = false
