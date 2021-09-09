@@ -319,7 +319,11 @@ module.exports = {
       for (const permission of enabledPermissions) {
         await this.toggleSinglePermission(permission)
       }
+
+      await this.click('@customPermissionsConfirmBtn')
       await this.saveChanges()
+
+      return this
     },
     /**
      *
