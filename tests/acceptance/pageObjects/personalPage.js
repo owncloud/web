@@ -245,20 +245,20 @@ module.exports = {
       return this.waitForElementVisible('@dialogConfirmBtnDisabled')
     },
 
-    moveMultipleResources: function(target) {
+    moveMultipleResources: async function(target) {
       // Trigger move
-      this.click('@moveSelectedBtn')
+      await this.click('@moveSelectedBtn')
 
       // Execute move
-      return client.page.locationPicker().selectFolderAndConfirm(target)
+      return await client.page.locationPicker().selectFolderAndConfirm(target)
     },
 
-    copyMultipleResources: function(target) {
+    copyMultipleResources: async function(target) {
       // Trigger copy
-      this.click('@copySelectedBtn')
+      await this.click('@copySelectedBtn')
 
       // Execute copy
-      return client.page.locationPicker().selectFolderAndConfirm(target)
+      return await client.page.locationPicker().selectFolderAndConfirm(target)
     },
 
     /**

@@ -1332,18 +1332,7 @@ When(
       await client.page.FilesPageElement.filesList().toggleFileOrFolderCheckbox('enable', item[0])
     }
 
-    return client.page.personalPage().copyMultipleResources(target)
-  }
-)
-
-When(
-  'the user tries to batch copy these files/folders into folder {string} using the webUI',
-  async function(target, resources) {
-    for (const item of resources.rows()) {
-      await client.page.FilesPageElement.filesList().toggleFileOrFolderCheckbox('enable', item[0])
-    }
-
-    return client.page.personalPage().attemptToCopyMultipleResources(target)
+    return await client.page.personalPage().copyMultipleResources(target)
   }
 )
 
