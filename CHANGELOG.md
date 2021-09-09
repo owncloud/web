@@ -11,6 +11,7 @@ Summary
 * Bugfix - Pagination on Locationpicker: [#5715](https://github.com/owncloud/web/pull/5715)
 * Change - Update ODS to 10.0.0: [#5769](https://github.com/owncloud/web/pull/5769)
 * Enhancement - Add robots.txt file: [#5762](https://github.com/owncloud/web/pull/5762)
+* Enhancement - Fetch file info in the Files sidebar: [#5570](https://github.com/owncloud/web/issues/5570)
 * Enhancement - Add missing tooltips: [#5723](https://github.com/owncloud/web/issues/5723)
 * Enhancement - Re-design recipients role select: [#5632](https://github.com/owncloud/web/pull/5632)
 * Enhancement - Show sharees as avatars: [#5758](https://github.com/owncloud/web/pull/5758/files)
@@ -52,6 +53,15 @@ Details
    Added a robots.txt for ocis-web
 
    https://github.com/owncloud/web/pull/5762
+
+* Enhancement - Fetch file info in the Files sidebar: [#5570](https://github.com/owncloud/web/issues/5570)
+
+   We've started fetching the file info when a single item is selected and the Files sidebar is
+   opened. With this change we have more information available in different lists e.g. private
+   link in shared lists.
+
+   https://github.com/owncloud/web/issues/5570
+   https://github.com/owncloud/web/pull/5665
 
 * Enhancement - Add missing tooltips: [#5723](https://github.com/owncloud/web/issues/5723)
 
