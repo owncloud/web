@@ -31,10 +31,7 @@ const menuLinks = [
 
 const selectors = {
   appSwitcherButton: '#_appSwitcherButton',
-  internalMenuLink: '.apps-menu-internal-link',
-  internalMenuIcon: '.apps-menu-internal-link oc-icon-stub',
-  externalMenuLink: '.apps-menu-external-link',
-  externalMenuIcon: '.apps-menu-external-link oc-icon-stub'
+  ocDrop: 'oc-drop-stub'
 }
 
 describe('ApplicationsMenu component', () => {
@@ -68,26 +65,12 @@ describe('ApplicationsMenu component', () => {
   it('shoud set aria-label prop on switcher button', () => {
     const appSwitcherButton = wrapper.find(selectors.appSwitcherButton)
 
-    expect(wrapper.exists()).toBeTruthy()
-    expect(appSwitcherButton.props().ariaLabel).toEqual('Application Switcher')
+    expect(appSwitcherButton).toMatchSnapshot()
   })
   it('should show app menus', () => {
-    // internal menu
-    const internalMenuLink = wrapper.find(selectors.internalMenuLink)
-    const internalMenuIcon = wrapper.find(selectors.internalMenuIcon)
+    const ocDrop = wrapper.find(selectors.ocDrop)
 
-    expect(internalMenuLink.props().to).toEqual('/files')
-    expect(internalMenuIcon.props().name).toEqual(menuLinks[0].icon)
-    expect(internalMenuLink.text()).toEqual(menuLinks[0].name)
-
-    // external menu
-    const externalMenuLink = wrapper.find(selectors.externalMenuLink)
-    const externalMenuIcon = wrapper.find(selectors.externalMenuIcon)
-
-    expect(externalMenuLink.attributes().target).toEqual('_blank')
-    expect(externalMenuLink.attributes().href).toEqual(menuLinks[1].url)
-    expect(externalMenuIcon.props().name).toEqual(menuLinks[1].icon)
-    expect(externalMenuLink.text()).toEqual(menuLinks[1].name)
+    expect(ocDrop).toMatchSnapshot()
   })
 })
 
