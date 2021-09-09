@@ -9,7 +9,7 @@
     "filter-obj": "^2.0.1",
     "fuse.js": "^6.4.6",
     "lodash-es": "^4.17.21",
-    "p-queue": "^6.6.2",
+    "p-queue": "^7.1.0",
     "query-string": "^6.8.3",
     "vue": "^2.6.10",
     "vue-gettext": "^2.1.5",
