@@ -279,6 +279,9 @@ module.exports = {
           await this.toggleSinglePermission(permission)
         }
       }
+
+      await this.click('@customPermissionsConfirmBtn')
+
       if (changed) {
         await this.saveChanges()
       } else {
