@@ -100,6 +100,7 @@ Feature: Unmark file/folder as favorite
     And file "data.zip" should not be marked as favorite on the webUI
     And as user "Alice" file "data.zip" should not be marked as favorite
 
+
   Scenario: Try to unfavorite file and folder that used to exist but does not anymore
     Given user "Alice" has created file "lorem.txt"
     And user "Alice" has created folder "simple-folder"

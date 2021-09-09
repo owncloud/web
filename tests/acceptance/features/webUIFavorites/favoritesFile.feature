@@ -106,6 +106,7 @@ Feature: Mark file as favorite
     And folder with path "simple-folder/simple-empty-folder" should be listed on the webUI
     And file with path "strängé नेपाली folder/lorem.txt" should be listed on the webUI
 
+
   Scenario: Try to favorite file and folder that used to exist but does not anymore
     Given user "Alice" has created file "lorem.txt"
     And user "Alice" has created folder "simple-folder"
@@ -123,6 +124,8 @@ Feature: Mark file as favorite
     And folder "simple-folder" should not be marked as favorite on the webUI
     And as "Alice" file "lorem.txt" should not exist
     And as "Alice" folder "simple-folder" should not exist
+
+
 
 
   Scenario: Favourite files and folders with comma in the names
