@@ -296,7 +296,7 @@ module.exports = {
      */
     getDisplayedPermission: async function(collaborator) {
       await collaboratorDialog.clickEditShare(collaborator)
-      this.selectRoleForNewCollaborator('Custom permissions')
+      await this.selectRoleForNewCollaborator('Custom permissions')
 
       // read the permissions from the checkboxes
       const currentSharePermissions = await this.getSharePermissions()
@@ -315,6 +315,8 @@ module.exports = {
      */
     disableAllCustomPermissions: async function(collaborator) {
       await collaboratorDialog.clickEditShare(collaborator)
+      await this.selectRoleForNewCollaborator('Custom permissions')
+
       const sharePermissions = await this.getSharePermissions(collaborator)
       const enabledPermissions = Object.keys(sharePermissions).filter(
         permission => sharePermissions[permission] === true
