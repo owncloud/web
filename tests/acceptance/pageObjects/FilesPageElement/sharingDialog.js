@@ -265,6 +265,7 @@ module.exports = {
      */
     changeCustomPermissionsTo: async function(collaborator, requiredPermissions) {
       await collaboratorDialog.clickEditShare(collaborator)
+      await this.selectRoleForNewCollaborator('Custom permissions')
 
       const requiredPermissionArray = this.getArrayFromPermissionString(requiredPermissions)
       const sharePermissions = await this.getSharePermissions()

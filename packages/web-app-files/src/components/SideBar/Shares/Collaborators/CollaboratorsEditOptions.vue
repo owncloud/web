@@ -385,6 +385,7 @@ export default {
       this.$refs.customPermissionsDrop.hide()
 
       this.selectedRole = this.advancedRole
+      this.publishChange()
     },
 
     cancelCustomPermissions() {
