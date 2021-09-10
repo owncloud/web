@@ -88,7 +88,7 @@
             appearance="filled"
             @click="confirmCustomPermissions"
           >
-            <translate>Ok</translate>
+            <translate>Apply</translate>
           </oc-button>
         </div>
       </template>
