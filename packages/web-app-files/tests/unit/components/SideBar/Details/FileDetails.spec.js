@@ -17,7 +17,7 @@ const OcTooltip = jest.fn()
 const selectors = {
   noContentText: '[data-testid="noContentText"]',
   timestamp: '[data-testid="timestamp"]',
-  ownerName: '[data-testid="ownerName"]',
+  ownerName: '[data-testid="ownerDisplayName"]',
   sharingInfo: '[data-testid="sharingInfo"]',
   sizeInfo: '[data-testid="sizeInfo"]',
   versionsInfo: '[data-testid="versionsInfo"]',
@@ -90,17 +90,6 @@ describe('Details SideBar Panel', () => {
       })
     })
     describe('on a public page', () => {
-      it('with owner, timestap, size info and no share info', () => {
-        const wrapper = createWrapper(sharedFolder, [], null, true)
-        expect(wrapper.find(selectors.noContentText).exists()).toBeFalsy()
-        expect(wrapper.find(selectors.timestamp).exists()).toBeTruthy()
-        expect(wrapper.find(selectors.ownerName).exists()).toBeTruthy()
-        expect(wrapper.find(selectors.ownerName).text()).not.toContain('(me)')
-        expect(wrapper.find(selectors.sizeInfo).exists()).toBeTruthy()
-        expect(wrapper.find(selectors.sharingInfo).exists()).toBeFalsy()
-        expect(wrapper.find(selectors.versionsInfo).exists()).toBeFalsy()
-        expect(wrapper.find(selectors.previewImgContainer).exists()).toBeFalsy()
-      })
       it('with owner, timestamp, size info and no share info', () => {
         const wrapper = createWrapper(sharedFolder, [], null, true)
         expect(wrapper.find(selectors.noContentText).exists()).toBeFalsy()
@@ -111,14 +100,6 @@ describe('Details SideBar Panel', () => {
         expect(wrapper.find(selectors.sharingInfo).exists()).toBeFalsy()
         expect(wrapper.find(selectors.versionsInfo).exists()).toBeFalsy()
         expect(wrapper.find(selectors.previewImgContainer).exists()).toBeFalsy()
-      })
-      it('should show detailed sharing information on shared file', () => {
-        const wrapper = createWrapper(sharedFile)
-        expect(wrapper.find(selectors.sharedBy).exists()).toBeTruthy()
-        expect(wrapper.find(selectors.sharedDate).exists()).toBeTruthy()
-      })
-      it('should not show detailed sharing information on normal file', () => {
-        const wrapper = createWrapper(simpleOwnFile)
         expect(wrapper.find(selectors.sharedBy).exists()).toBeFalsy()
         expect(wrapper.find(selectors.sharedDate).exists()).toBeFalsy()
       })
