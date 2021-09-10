@@ -24,8 +24,8 @@
           data-testid="files-collaborators-no-reshare-permissions-message"
           v-text="noResharePermsMessage"
         />
-        <div class="avatars-wrapper">
-          <h4 v-if="hasSharees" class="shared-with-label" v-text="sharedWithLabel" />
+        <div v-if="hasSharees" class="avatars-wrapper">
+          <h4 class="shared-with-label" v-text="sharedWithLabel" />
           <oc-button
             v-oc-tooltip="sharedWithTooltip"
             appearance="raw"
