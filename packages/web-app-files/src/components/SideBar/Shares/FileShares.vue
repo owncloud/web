@@ -150,12 +150,7 @@ export default {
       'sharesTreeLoading'
     ]),
     ...mapGetters(['isOcis']),
-    ...mapState('Files', [
-      'incomingShares',
-      'incomingSharesLoading',
-      'sharesTree',
-      'appSidebarAccordionContext'
-    ]),
+    ...mapState('Files', ['incomingShares', 'incomingSharesLoading', 'sharesTree']),
     ...mapState(['user']),
 
     $_transitionGroupEnter() {

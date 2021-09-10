@@ -71,7 +71,6 @@ export default {
       }
       const promise = p
         .then(() => {
-          context.commit('SET_APP_SIDEBAR_ACTIVE_PANEL', null)
           context.dispatch('sidebar/close')
           context.commit('REMOVE_FILE', file)
           context.commit('REMOVE_FILE_SELECTION', file)
@@ -109,7 +108,6 @@ export default {
     return Promise.all(promises)
   },
   removeFilesFromTrashbin(context, files) {
-    context.commit('SET_APP_SIDEBAR_ACTIVE_PANEL', null)
     context.dispatch('sidebar/close')
     for (const file of files) {
       context.commit('REMOVE_FILE', file)

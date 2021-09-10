@@ -24,7 +24,7 @@
           appearance="raw"
           class="oc-mr-xs"
           :aria-label="peopleSharesLabel"
-          @click="expandPeoplesAccordion"
+          @click="expandPeoplesPanel"
         >
           <oc-icon name="group" />
         </oc-button>
@@ -34,7 +34,7 @@
           appearance="raw"
           class="oc-mr-xs"
           :aria-label="linkSharesLabel"
-          @click="expandLinksAccordion"
+          @click="expandLinksPanel"
         >
           <oc-icon name="link" />
         </oc-button>
@@ -49,7 +49,7 @@
               v-oc-tooltip="seeVersionsLabel"
               appearance="raw"
               :aria-label="seeVersionsLabel"
-              @click="expandVersionsAccordion"
+              @click="expandVersionsPanel"
               v-text="capitalizedTimestamp"
             />
             <span v-else v-text="capitalizedTimestamp" />
@@ -98,7 +98,7 @@
               v-oc-tooltip="seeVersionsLabel"
               appearance="raw"
               :aria-label="seeVersionsLabel"
-              @click="expandVersionsAccordion"
+              @click="expandVersionsPanel"
               v-text="versions.length"
             />
           </td>
@@ -113,7 +113,7 @@ import Mixins from '../../../mixins'
 import MixinResources from '../../../mixins/resources'
 import MixinRoutes from '../../../mixins/routes'
 import { shareTypes, userShareTypes } from '../../../helpers/shareTypes'
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { ImageDimension } from '../../../constants'
 import { loadPreview } from '../../../helpers/resource'
 import intersection from 'lodash-es/intersection'
@@ -355,7 +355,7 @@ export default {
   },
   methods: {
     ...mapActions('Files', ['loadPreview', 'loadVersions', 'loadSharesTree']),
-    ...mapMutations('Files', ['SET_APP_SIDEBAR_ACTIVE_PANEL']),
+    ...mapActions('Files/sidebar', { setSidebarPanel: 'setActivePanel' }),
     refreshShareDetailsTree() {
       this.loadSharesTree({
         client: this.$client,
@@ -372,14 +372,14 @@ export default {
       }
       return null
     },
-    expandPeoplesAccordion() {
-      this.SET_APP_SIDEBAR_ACTIVE_PANEL('sharing-item')
+    expandPeoplesPanel() {
+      this.setSidebarPanel('sharing-item')
     },
-    expandLinksAccordion() {
-      this.SET_APP_SIDEBAR_ACTIVE_PANEL('links-item')
+    expandLinksPanel() {
+      this.setSidebarPanel('links-item')
     },
-    expandVersionsAccordion() {
-      this.SET_APP_SIDEBAR_ACTIVE_PANEL('versions-item')
+    expandVersionsPanel() {
+      this.setSidebarPanel('versions-item')
     },
     async loadData() {
       this.loading = true

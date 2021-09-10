@@ -2,7 +2,7 @@
   <div
     data-testid="files-sidebar"
     :class="{
-      'has-active': !!appSidebarActivePanel,
+      'has-active': !!sidebarActivePanel,
       'uk-flex uk-flex-center uk-flex-middle': loading
     }"
   >
@@ -14,12 +14,11 @@
         :key="`panel-${panelMeta.app}`"
         ref="panels"
         :data-testid="`sidebar-panel-${panelMeta.app}`"
-        :tabindex="appSidebarActivePanel === panelMeta.app ? -1 : false"
+        :tabindex="sidebarActivePanel === panelMeta.app ? -1 : false"
         class="sidebar-panel"
         :class="{
           'is-active':
-            appSidebarActivePanel === panelMeta.app ||
-            (!appSidebarActivePanel && panelMeta.default),
+            sidebarActivePanel === panelMeta.app || (!sidebarActivePanel && panelMeta.default),
           'sidebar-panel--default': panelMeta.default,
           'sidebar-panel--multiple-selected': areMultipleSelected || isRootFolder
         }"
@@ -87,7 +86,7 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations, mapState, mapActions } from 'vuex'
+import { mapGetters, mapState, mapActions } from 'vuex'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { DavProperties } from 'web-pkg/src/constants'
 
@@ -127,9 +126,9 @@ export default {
   computed: {
     ...mapGetters('Files', ['highlightedFile', 'selectedFiles', 'currentFolder']),
     ...mapGetters(['fileSideBars', 'capabilities']),
-    ...mapState('Files', ['appSidebarActivePanel']),
+    ...mapState('Files/sidebar', { sidebarActivePanel: 'activePanel' }),
     activePanel() {
-      return this.appSidebarActivePanel || this.defaultPanelMeta.app
+      return this.sidebarActivePanel || this.defaultPanelMeta.app
     },
     panelMetas() {
       const { panels } = this.fileSideBars.reduce(
@@ -226,8 +225,11 @@ export default {
     hiddenObserver.disconnect()
   },
   methods: {
-    ...mapMutations('Files', ['SET_APP_SIDEBAR_ACTIVE_PANEL']),
-    ...mapActions('Files/sidebar', { closeSidebar: 'close' }),
+    ...mapActions('Files/sidebar', {
+      closeSidebar: 'close',
+      setSidebarPanel: 'setActivePanel',
+      resetSidebarPanel: 'resetActivePanel'
+    }),
 
     initVisibilityObserver() {
       visibilityObserver = new VisibilityObserver({
@@ -267,12 +269,12 @@ export default {
 
     openPanel(panel) {
       this.setOldPanel()
-      this.SET_APP_SIDEBAR_ACTIVE_PANEL(panel)
+      this.setSidebarPanel(panel)
     },
 
     closePanel() {
       this.setOldPanel()
-      this.SET_APP_SIDEBAR_ACTIVE_PANEL(null)
+      this.resetSidebarPanel()
     },
 
     async fetchFileInfo() {

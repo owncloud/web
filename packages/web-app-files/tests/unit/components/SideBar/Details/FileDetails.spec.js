@@ -63,7 +63,7 @@ const sharedFile = {
   shareTypes: [0]
 }
 
-describe('Details SideBar Accordion Item', () => {
+describe('Details SideBar Panel', () => {
   describe('displays a resource of type folder', () => {
     describe('on a private page', () => {
       it('with timestamp, size info and (me) as owner', () => {

@@ -230,10 +230,6 @@ export default {
     state.versions = versions
   },
 
-  SET_APP_SIDEBAR_ACTIVE_PANEL(state, accordion) {
-    state.appSidebarActivePanel = accordion
-  },
-
   TRIGGER_PUBLIC_LINK_EDIT(state, link) {
     // Adjust link for the edit
     link = {

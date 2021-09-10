@@ -66,10 +66,6 @@ export default {
           this.closeSidebar()
         }
       }
-    },
-    sidebarClosed(hidden) {
-      if (!hidden) return
-      this.SET_APP_SIDEBAR_ACTIVE_PANEL(null)
     }
   },
   created() {
@@ -86,7 +82,6 @@ export default {
     ...mapActions('Files', ['dragOver', 'resetFileSelection']),
     ...mapActions('Files/sidebar', { closeSidebar: 'close' }),
     ...mapActions(['showMessage']),
-    ...mapMutations('Files', ['SET_APP_SIDEBAR_ACTIVE_PANEL']),
     ...mapMutations(['SET_SIDEBAR_FOOTER_CONTENT_COMPONENT']),
 
     trace() {

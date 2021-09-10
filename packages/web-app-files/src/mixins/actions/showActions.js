@@ -1,4 +1,4 @@
-import { mapActions, mapMutations } from 'vuex'
+import { mapActions } from 'vuex'
 import { isTrashbinRoute } from '../../helpers/route'
 
 export default {
@@ -17,12 +17,10 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('Files', ['SET_APP_SIDEBAR_ACTIVE_PANEL']),
-    ...mapActions('Files/sidebar', { openSidebar: 'open' }),
+    ...mapActions('Files/sidebar', { openSidebarWithPanel: 'openWithPanel' }),
 
     async $_showActions_trigger() {
-      await this.openSidebar()
-      this.SET_APP_SIDEBAR_ACTIVE_PANEL(isTrashbinRoute(this.$route) ? null : 'actions-item')
+      await this.openSidebarWithPanel(isTrashbinRoute(this.$route) ? null : 'actions-item')
     }
   }
 }

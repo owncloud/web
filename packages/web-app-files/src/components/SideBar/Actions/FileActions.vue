@@ -27,7 +27,7 @@ import { mapGetters } from 'vuex'
 import FileActions from '../../../mixins/fileActions'
 
 export default {
-  name: 'ActionsAccordion',
+  name: 'FileActions',
   title: $gettext => {
     return $gettext('Actions')
   },
