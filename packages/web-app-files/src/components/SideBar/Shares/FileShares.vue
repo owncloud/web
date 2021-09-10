@@ -39,7 +39,7 @@
               :is-tooltip-displayed="false"
               class="sharee-avatars"
             />
-            <oc-icon v-else name="close" />
+            <oc-icon v-else name="chevron_up" />
           </oc-button>
         </div>
         <template v-if="showShareesList || collaboratorsAvatar.length === 0">
