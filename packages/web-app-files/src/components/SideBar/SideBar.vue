@@ -9,34 +9,33 @@
     <oc-spinner v-if="loading" />
     <template v-else>
       <div
-        v-for="panelMeta in panelMetas"
-        :id="`sidebar-panel-${panelMeta.app}`"
-        :key="`panel-${panelMeta.app}`"
+        v-for="panel in availablePanels"
+        :id="`sidebar-panel-${panel.app}`"
+        :key="`panel-${panel.app}`"
         ref="panels"
-        :data-testid="`sidebar-panel-${panelMeta.app}`"
-        :tabindex="sidebarActivePanel === panelMeta.app ? -1 : false"
+        :data-testid="`sidebar-panel-${panel.app}`"
+        :tabindex="activePanelName === panel.app ? -1 : false"
         class="sidebar-panel"
         :class="{
-          'is-active':
-            sidebarActivePanel === panelMeta.app || (!sidebarActivePanel && panelMeta.default),
-          'sidebar-panel--default': panelMeta.default,
-          'sidebar-panel--multiple-selected': areMultipleSelected || isRootFolder
+          'is-active': sidebarActivePanel === panel.app,
+          'is-default': panel.default,
+          'resource-info-hidden': !isSingleResource
         }"
       >
         <div class="sidebar-panel__header header">
           <oc-button
-            v-if="!panelMeta.default"
+            v-if="!panel.default"
             class="header__back"
             appearance="raw"
             :aria-label="accessibleLabelBack"
             @click="closePanel"
           >
             <oc-icon name="chevron_left" />
-            {{ defaultPanelMeta.component.title($gettext) }}
+            {{ defaultPanel.component.title($gettext) }}
           </oc-button>
 
           <div class="header__title">
-            {{ panelMeta.component.title($gettext) }}
+            {{ panel.component.title($gettext) }}
           </div>
 
           <oc-button
@@ -49,23 +48,23 @@
           </oc-button>
         </div>
         <file-info
-          v-if="!areMultipleSelected && !isRootFolder"
+          v-if="isSingleResource"
           class="sidebar-panel__file_info"
           :is-content-displayed="isContentDisplayed"
         />
         <div class="sidebar-panel__body">
           <template v-if="isContentDisplayed">
             <component
-              :is="panelMeta.component"
-              v-if="[activePanel, oldPanel].includes(panelMeta.app)"
+              :is="panel.component"
+              v-if="[activePanelName, oldPanelName].includes(panel.app)"
             />
 
             <div
-              v-if="panelMeta.default && panelMetas.length > 1"
+              v-if="panel.default && availablePanels.length > 1"
               class="sidebar-panel__navigation"
             >
               <oc-button
-                v-for="panelSelect in panelMetas.filter(p => !p.default)"
+                v-for="panelSelect in availablePanels.filter(p => !p.default)"
                 :id="`sidebar-panel-${panelSelect.app}-select`"
                 :key="`panel-select-${panelSelect.app}`"
                 :data-testid="`sidebar-panel-${panelSelect.app}-select`"
@@ -117,7 +116,7 @@ export default {
   data() {
     return {
       focused: undefined,
-      oldPanel: null,
+      oldPanelName: null,
       selectedFile: {},
       loading: false
     }
@@ -127,10 +126,16 @@ export default {
     ...mapGetters('Files', ['highlightedFile', 'selectedFiles', 'currentFolder']),
     ...mapGetters(['fileSideBars', 'capabilities']),
     ...mapState('Files/sidebar', { sidebarActivePanel: 'activePanel' }),
-    activePanel() {
-      return this.sidebarActivePanel || this.defaultPanelMeta.app
+    activePanelName() {
+      if (!this.sidebarActivePanel) {
+        return this.defaultPanel.app
+      }
+      if (!this.availablePanels.map(p => p.app).includes(this.sidebarActivePanel)) {
+        return this.defaultPanel.app
+      }
+      return this.sidebarActivePanel
     },
-    panelMetas() {
+    availablePanels() {
       const { panels } = this.fileSideBars.reduce(
         (result, panelGenerator) => {
           const panel = panelGenerator({
@@ -152,13 +157,13 @@ export default {
 
       return panels
     },
-    defaultPanelMeta() {
-      return this.panelMetas.find(panel => panel.default)
+    defaultPanel() {
+      return this.availablePanels.find(panel => panel.default)
     },
     accessibleLabelBack() {
       const translated = this.$gettext('Back to %{panel} panel')
       return this.$gettextInterpolate(translated, {
-        panel: this.defaultPanelMeta.component.title(this.$gettext)
+        panel: this.defaultPanel.component.title(this.$gettext)
       })
     },
     isShareAccepted() {
@@ -178,19 +183,21 @@ export default {
 
       return null
     },
+    isSingleResource() {
+      return !this.areMultipleSelected && !this.isRootFolder
+    },
     areMultipleSelected() {
       return this.selectedFiles && this.selectedFiles.length > 1
     },
     isRootFolder() {
       return !this.highlightedFile?.path
     },
-
     highlightedFileThumbnail() {
       return this.highlightedFile?.thumbnail
     }
   },
   watch: {
-    activePanel: {
+    activePanelName: {
       handler: function(panel, select) {
         this.$nextTick(() => {
           this.focused = panel ? `#sidebar-panel-${panel}` : `#sidebar-panel-select-${select}`
@@ -199,7 +206,7 @@ export default {
       immediate: true
     },
     highlightedFile(newFile, oldFile) {
-      if (this.isRootFolder) {
+      if (!this.isSingleResource) {
         return
       }
 
@@ -248,8 +255,8 @@ export default {
         selector.focus()
       }
 
-      const clearOldPanel = () => {
-        this.oldPanel = null
+      const clearOldPanelName = () => {
+        this.oldPanelName = null
       }
 
       this.$refs.panels.forEach(panel => {
@@ -258,22 +265,22 @@ export default {
           onExit: doFocus
         })
         hiddenObserver.observe(panel, {
-          onExit: clearOldPanel
+          onExit: clearOldPanelName
         })
       })
     },
 
-    setOldPanel() {
-      this.oldPanel = this.activePanel || this.defaultPanelMeta.app
+    setOldPanelName() {
+      this.oldPanelName = this.activePanelName
     },
 
     openPanel(panel) {
-      this.setOldPanel()
+      this.setOldPanelName()
       this.setSidebarPanel(panel)
     },
 
     closePanel() {
-      this.setOldPanel()
+      this.setOldPanelName()
       this.resetSidebarPanel()
     },
 
@@ -335,18 +342,18 @@ export default {
     transition-duration: 0.001ms !important;
   }
 
-  &--multiple-selected {
+  &.resource-info-hidden {
     grid-template-rows: 50px 1fr;
   }
 
-  &--default {
+  &.is-default {
     #files-sidebar.has-active & {
       transform: translateX(-30%);
       visibility: hidden;
     }
   }
 
-  &--default,
+  &.is-default,
   &.is-active {
     visibility: unset;
     transform: translateX(0);
@@ -354,6 +361,7 @@ export default {
 
   &__header {
     padding: 0 10px;
+    border-bottom: 1px solid var(--oc-color-border);
 
     &.header {
       display: grid;
@@ -380,7 +388,6 @@ export default {
   }
 
   &__file_info {
-    border-top: 1px solid var(--oc-color-border);
     border-bottom: 1px solid var(--oc-color-border);
     background-color: var(--oc-color-background-default);
     padding: 0 10px;
