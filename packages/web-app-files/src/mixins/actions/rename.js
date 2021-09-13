@@ -1,10 +1,11 @@
 import { mapActions, mapGetters } from 'vuex'
 
 import { isTrashbinRoute } from '../../helpers/route'
+import { isSameResource } from '../../helpers/resource'
 
 export default {
   computed: {
-    ...mapGetters('Files', ['files']),
+    ...mapGetters('Files', ['files', 'currentFolder']),
 
     $_rename_items() {
       return [
@@ -16,6 +17,10 @@ export default {
           handler: this.$_rename_trigger,
           isEnabled: ({ resource }) => {
             if (isTrashbinRoute(this.$route)) {
+              return false
+            }
+
+            if (isSameResource(resource, this.currentFolder)) {
               return false
             }
 

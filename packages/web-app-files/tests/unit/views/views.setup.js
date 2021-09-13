@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import OwnCloud from 'owncloud-sdk'
 import { createStore } from 'vuex-extensions'
 import DesignSystem from 'owncloud-design-system'
+import GetTextPlugin from 'vue-gettext'
 
 export const createFile = ({ id, status = 1, type = 'folder' }) => ({
   id: `file-id-${id}`,
@@ -22,24 +23,45 @@ localVue.prototype.$client = new OwnCloud()
 localVue.prototype.$client.init({ baseUrl: 'http://none.de' })
 localVue.use(Vuex)
 localVue.use(DesignSystem)
+localVue.use(GetTextPlugin, {
+  translations: 'does-not-matter.json',
+  silent: true
+})
 
 export const getStore = function({
   highlightedFile = null,
-  configuration = {
-    options: {
-      disablePreviews: true
-    }
-  },
-  activeFiles = [createFile({ id: 1 }), createFile({ id: 2, status: 2 })],
-  pages = 4,
-  sidebarClosed = false
+  disablePreviews = true,
+  currentPage = null,
+  activeFiles = [],
+  pages = null,
+  sidebarClosed = false,
+  currentFolder = null,
+  activeFilesCount = null,
+  inProgress = [null],
+  totalFilesCount = null,
+  selectedFiles = [],
+  totalFilesSize = null,
+  loginBackgroundImg = '',
+  loginLogo = ''
 } = {}) {
   return createStore(Vuex.Store, {
     state: {
       app: { quickActions: {} }
     },
     getters: {
-      configuration: () => configuration,
+      configuration: () => ({
+        theme: {
+          loginPage: {
+            backgroundImg: loginBackgroundImg
+          },
+          logo: {
+            login: loginLogo
+          }
+        },
+        options: {
+          disablePreviews: disablePreviews
+        }
+      }),
       getToken: () => '',
       isOcis: () => true,
       homeFolder: () => '/'
@@ -47,27 +69,22 @@ export const getStore = function({
     modules: {
       Files: {
         state: {
-          resource: null,
-          currentPage: 3,
-          filesPageLimit: 100
+          resource: null
         },
         getters: {
-          totalFilesCount: () => ({ files: 15, folders: 20 }),
-          totalFilesSize: () => 1024,
-          selectedFiles: () => [],
+          totalFilesCount: () => totalFilesCount,
+          totalFilesSize: () => totalFilesSize,
+          selectedFiles: () => selectedFiles,
           activeFiles: () => activeFiles,
-          activeFilesCount: () => ({ files: 0, folders: 1 }),
-          inProgress: () => [null],
+          activeFilesCount: () => activeFilesCount,
+          inProgress: () => inProgress,
           highlightedFile: () => highlightedFile,
-          pages: () => pages,
-          currentFolder: () => '/'
+          currentFolder: () => currentFolder
         },
         mutations: {
           UPDATE_RESOURCE: (state, resource) => {
             state.resource = resource
           },
-          UPDATE_CURRENT_PAGE: () => {},
-          SET_FILES_PAGE_LIMIT: () => {},
           CLEAR_FILES_SEARCHED: () => {}
         },
         namespaced: true,
@@ -75,6 +92,20 @@ export const getStore = function({
           sidebar: {
             state: {
               closed: sidebarClosed
+            },
+            namespaced: true
+          },
+          pagination: {
+            state: {
+              currentPage,
+              itemsPerPage: 100
+            },
+            getters: {
+              pages: () => pages
+            },
+            mutations: {
+              SET_ITEMS_PER_PAGE: () => {},
+              UPDATE_CURRENT_PAGE: () => {}
             },
             namespaced: true
           }

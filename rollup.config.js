@@ -71,6 +71,7 @@ const plugins = [
         dest: 'dist'
       },
       { src: './packages/web-container/manifest.json', dest: 'dist' },
+      { src: './packages/web-container/robots.txt', dest: 'dist' },
       { src: './packages/web-runtime/themes', dest: 'dist' },
       {
         src: `./config/${production ? 'config.dist.json' : 'config.json'}`,

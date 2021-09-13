@@ -1,6 +1,5 @@
 const util = require('util')
 const xpathHelper = require('../helpers/xpath')
-const timeoutHelper = require('../helpers/timeoutHelper')
 const { join, normalize } = require('../helpers/path')
 const { client } = require('nightwatch-api')
 
@@ -235,30 +234,6 @@ module.exports = {
         .waitForAjaxCallsToStartAndFinish()
         .waitForElementNotPresent('@dialog')
     },
-    isSidebarVisible: async function(timeout = null) {
-      let isVisible = false
-      timeout = timeoutHelper.parseTimeout(timeout)
-      await this.isVisible(
-        {
-          locateStrategy: this.elements.sideBar.locateStrategy,
-          selector: this.elements.sideBar.selector,
-          timeout: timeout
-        },
-        result => {
-          isVisible = result.status === 0
-        }
-      )
-      return isVisible
-    },
-    checkSidebarItem: function(resourceName) {
-      return this.getText('@sidebarItemName', function(itemName) {
-        this.assert.strictEqual(
-          itemName.value,
-          resourceName,
-          `In sidebar is different item - ${itemName.value}`
-        )
-      })
-    },
     confirmFileOverwrite: async function() {
       await this.waitForAnimationToFinish() // wait for transition on the modal to finish
         .click('@dialogConfirmBtnEnabled')
@@ -270,20 +245,20 @@ module.exports = {
       return this.waitForElementVisible('@dialogConfirmBtnDisabled')
     },
 
-    moveMultipleResources: function(target) {
+    moveMultipleResources: async function(target) {
       // Trigger move
-      this.click('@moveSelectedBtn')
+      await this.click('@moveSelectedBtn')
 
       // Execute move
-      return client.page.locationPicker().selectFolderAndConfirm(target)
+      return await client.page.locationPicker().selectFolderAndConfirm(target)
     },
 
-    copyMultipleResources: function(target) {
+    copyMultipleResources: async function(target) {
       // Trigger copy
-      this.click('@copySelectedBtn')
+      await this.click('@copySelectedBtn')
 
       // Execute copy
-      return client.page.locationPicker().selectFolderAndConfirm(target)
+      return await client.page.locationPicker().selectFolderAndConfirm(target)
     },
 
     /**
@@ -395,11 +370,13 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     resourceBreadcrumb: {
-      selector: '//nav[@id="files-breadcrumb"]//*[(self::a or self::span) and contains(text(),%s)]',
+      selector:
+        '//nav[@id="files-breadcrumb"]//*[(self::a or self::span or self::button) and contains(text(),%s)]',
       locateStrategy: 'xpath'
     },
     resourceBreadcrumbClickable: {
-      selector: '//nav[@id="files-breadcrumb"]//a[contains(text(),%s)]',
+      selector:
+        '//nav[@id="files-breadcrumb"]//*[(self::a or self::button) and contains(text(),%s)]',
       locateStrategy: 'xpath'
     },
     resourceBreadcrumbNonClickable: {
@@ -417,13 +394,6 @@ module.exports = {
     },
     fileUploadProgress: {
       selector: '#files-upload-progress'
-    },
-    sideBar: {
-      selector: '//div[contains(@id, "files-sidebar")]',
-      locateStrategy: 'xpath'
-    },
-    sidebarItemName: {
-      selector: '.sidebar-panel.is-active h2'
     },
     dialog: {
       selector: '.oc-modal'

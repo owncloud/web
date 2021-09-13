@@ -4,13 +4,17 @@ module.exports = {
   commands: {
     selectFolderAndConfirm: async function(target) {
       await this.selectFolder(target)
-      await this.waitForElementVisible('@confirmBtn').click('@confirmBtn')
+      await this.initAjaxCounters()
+        .waitForElementVisible('@confirmBtn')
+        .click('@confirmBtn')
+        .waitForAjaxCallsToStartAndFinish()
       try {
         await this.waitForElementNotPresent({
           selector: '@confirmBtn',
-          timeout: client.globals.waitForNegativeConditionTimeout
+          timeout: 200
         })
       } catch (e) {
+        console.error(e)
         throw new Error('ElementPresentError')
       }
       return this

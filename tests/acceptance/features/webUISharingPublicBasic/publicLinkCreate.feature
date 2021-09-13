@@ -85,7 +85,7 @@ Feature: Create public link shares
     Then file "lorem.txt" should be listed on the webUI
 
   @issue-5302
-  Scenario: share two file with same name but different paths by public link
+  Scenario: share two files with same name but different paths by public link
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has created file "simple-folder/lorem.txt"
     And user "Alice" has created file "lorem.txt"

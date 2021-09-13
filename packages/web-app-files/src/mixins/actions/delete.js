@@ -1,9 +1,12 @@
 import MixinDeleteResources from '../../mixins/deleteResources'
 import { checkRoute } from '../../helpers/route'
+import { mapState } from 'vuex'
+import { isSameResource } from '../../helpers/resource'
 
 export default {
   mixins: [MixinDeleteResources],
   computed: {
+    ...mapState('Files', ['currentFolder']),
     $_delete_items() {
       return [
         {
@@ -12,6 +15,10 @@ export default {
           handler: this.$_delete_trigger,
           isEnabled: ({ resource }) => {
             if (checkRoute(['files-shared-with-me', 'files-trashbin'], this.$route.name)) {
+              return false
+            }
+
+            if (isSameResource(resource, this.currentFolder)) {
               return false
             }
 

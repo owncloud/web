@@ -18,7 +18,7 @@ Feature: Resharing shared files with different permissions
     And user "Alice" has shared folder "simple-folder" with user "Carol" with "read" permissions
     And user "Brian" has logged in using the webUI
     When the user opens the share dialog for folder "simple-folder" using the webUI
-    Then user "Carol King" should be listed as "Advanced permissions" in the collaborators list for folder "simple-folder" on the webUI
+    Then user "Carol King" should be listed as "Custom permissions" in the collaborators list for folder "simple-folder" on the webUI
     And no custom permissions should be set for collaborator "Carol King" for folder "simple-folder" on the webUI
 
 
@@ -27,7 +27,7 @@ Feature: Resharing shared files with different permissions
     And user "Alice" has shared folder "simple-folder" with user "Carol" with "read" permissions
     And user "Alice" has logged in using the webUI
     When the user opens the share dialog for folder "simple-folder" using the webUI
-    Then user "Carol King" should be listed as "Advanced permissions" in the collaborators list for folder "simple-folder" on the webUI
+    Then user "Carol King" should be listed as "Custom permissions" in the collaborators list for folder "simple-folder" on the webUI
     And no custom permissions should be set for collaborator "Carol King" for folder "simple-folder" on the webUI
 
 
@@ -55,9 +55,9 @@ Feature: Resharing shared files with different permissions
       | role                 | displayed-role       | collaborators-permissions     | displayed-permissions | permissions                         |
       | Viewer               | Viewer               | ,                             | ,                     | read, share                         |
       | Editor               | Editor               | ,                             | ,                     | all                                 |
-      | Advanced permissions | Advanced permissions | share, create                 | share, create         | read, share, create                 |
-      | Advanced permissions | Advanced permissions | update, share                 | share, update         | read, update, share                 |
-      | Advanced permissions | Editor               | delete, share, create, update | ,                     | read, share, delete, update, create |
+      | Custom permissions | Custom permissions | share, create                 | share, create         | read, share, create                 |
+      | Custom permissions | Custom permissions | update, share                 | share, update         | read, update, share                 |
+      | Custom permissions | Editor               | delete, share, create, update | ,                     | read, share, delete, update, create |
 
 
   Scenario Outline: share a received folder with another user with same permissions(including share permissions) and check if the user is displayed in collaborators list for original owner
@@ -87,9 +87,9 @@ Feature: Resharing shared files with different permissions
       | role                 | displayed-role       | collaborators-permissions     | displayed-permissions | permissions                         |
       | Viewer               | Viewer               | ,                             | ,                     | read, share                         |
       | Editor               | Editor               | ,                             | ,                     | all                                 |
-      | Advanced permissions | Advanced permissions | share, create                 | share, create         | read, share, create                 |
-      | Advanced permissions | Advanced permissions | update, share                 | share, update         | read, update, share                 |
-      | Advanced permissions | Editor               | delete, share, create, update | ,                     | read, share, delete, update, create |
+      | Custom permissions | Custom permissions | share, create                 | share, create         | read, share, create                 |
+      | Custom permissions | Custom permissions | update, share                 | share, update         | read, update, share                 |
+      | Custom permissions | Editor               | delete, share, create, update | ,                     | read, share, delete, update, create |
 
 
   Scenario: share a folder with another user with share permissions and reshare without share permissions to different user, and check if user is displayed for original sharer
@@ -160,7 +160,7 @@ Feature: Resharing shared files with different permissions
   Scenario: User is allowed to reshare a file/folder with the equivalent received permissions, and collaborators should not be listed for the receiver
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share, delete" permissions
     And user "Alice" has logged in using the webUI
-    When the user shares folder "simple-folder" with user "Carol King" as "Advanced permissions" with permissions "share, delete" using the webUI
+    When the user shares folder "simple-folder" with user "Carol King" as "Custom permissions" with permissions "share, delete" using the webUI
     And the user re-logs in as "Carol" using the webUI
     And the user opens the share dialog for folder "simple-folder" using the webUI
     Then the current collaborators list should have order "Brian Murphy,Carol King"
@@ -177,11 +177,11 @@ Feature: Resharing shared files with different permissions
   Scenario: User is allowed to reshare a file/folder with the lesser permissions, and check if it is listed for original owner
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share, delete" permissions
     And user "Alice" has logged in using the webUI
-    When the user shares folder "simple-folder" with user "Carol King" as "Advanced permissions" with permissions "delete" using the webUI
+    When the user shares folder "simple-folder" with user "Carol King" as "Custom permissions" with permissions "delete" using the webUI
     And the user re-logs in as "Brian" using the webUI
-    Then user "Alice Hansen" should be listed as "Advanced permissions" in the collaborators list for folder "simple-folder" on the webUI
+    Then user "Alice Hansen" should be listed as "Custom permissions" in the collaborators list for folder "simple-folder" on the webUI
     And custom permissions "share, delete" should be set for user "Alice Hansen" for folder "simple-folder" on the webUI
-    And user "Carol King" should be listed as "Advanced permissions" in the collaborators list for folder "simple-folder" on the webUI
+    And user "Carol King" should be listed as "Custom permissions" in the collaborators list for folder "simple-folder" on the webUI
     And custom permissions "delete" should be set for user "Carol King" for folder "simple-folder" on the webUI
     And user "Carol" should have received a share with these details:
       | field       | value              |
@@ -195,7 +195,7 @@ Feature: Resharing shared files with different permissions
   Scenario: User is not allowed to reshare a file/folder with the higher permissions
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share, delete" permissions
     And user "Alice" has logged in using the webUI
-    When the user shares folder "simple-folder" with user "Carol King" as "Advanced permissions" with permissions "share, delete, update" using the webUI
+    When the user shares folder "simple-folder" with user "Carol King" as "Custom permissions" with permissions "share, delete, update" using the webUI
     Then the error message with header "Error while sharing." should be displayed on the webUI
     And as "Carol" folder "simple-folder" should not exist
 

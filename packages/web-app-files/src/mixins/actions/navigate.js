@@ -1,7 +1,10 @@
 import { isTrashbinRoute } from '../../helpers/route'
+import { mapState } from 'vuex'
+import { isSameResource } from '../../helpers/resource'
 
 export default {
   computed: {
+    ...mapState('Files', ['currentFolder']),
     $_navigate_items() {
       return [
         {
@@ -11,6 +14,10 @@ export default {
             this.$pgettext('Action in the files list row to open a folder', 'Open folder'),
           isEnabled: ({ resource }) => {
             if (isTrashbinRoute(this.$route)) {
+              return false
+            }
+
+            if (isSameResource(resource, this.currentFolder)) {
               return false
             }
 

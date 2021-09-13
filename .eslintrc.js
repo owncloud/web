@@ -21,6 +21,7 @@ module.exports = {
      */
     'require-await': 'warn',
     'no-new': 'off',
+    'jest/no-standalone-expect': 'off',
     'node/no-callback-literal': 'off'
   },
   globals: {

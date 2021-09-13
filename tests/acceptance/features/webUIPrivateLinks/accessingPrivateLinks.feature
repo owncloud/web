@@ -15,7 +15,7 @@ Feature: Access private link
 
   @smokeTest @ocisSmokeTest
   Scenario: Access private link before authorisation
-    When the user tries to navigate to the private link created by user "Alice" for file "lorem.txt"
+    When an anonymous user tries to navigate to the private link created by user "Alice" for file "lorem.txt"
     Then the user should be redirected to the IdP login page
     When user "Alice" has logged in using the webUI
     Then the app-sidebar for file "lorem.txt" should be visible on the webUI
@@ -27,6 +27,7 @@ Feature: Access private link
     And user "Alice" has shared file "lorem.txt" with user "Brian" with "read" permissions
     And user "Brian" has logged in using the webUI
     When the user navigates to the private link created by user "Alice" for file "lorem.txt"
+    And the private link resolved successfully
     Then the app-sidebar for file "lorem.txt" should be visible on the webUI
     And the "details" details panel should be visible
 
@@ -42,5 +43,5 @@ Feature: Access private link
       """
 
   Scenario: Access the private link anonymously
-    When the user tries to navigate to the private link created by user "Alice" for file "lorem.txt"
+    When an anonymous user tries to navigate to the private link created by user "Alice" for file "lorem.txt"
     Then the user should be redirected to the IdP login page

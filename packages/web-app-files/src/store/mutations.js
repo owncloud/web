@@ -327,20 +327,10 @@ export default {
     Vue.set(fileSource, index, newResource)
   },
 
-  UPDATE_CURRENT_PAGE(state, page) {
-    state.currentPage = parseInt(page)
-  },
-
   SET_HIDDEN_FILES_VISIBILITY(state, value) {
     state.areHiddenFilesShown = value
 
     window.localStorage.setItem('oc_hiddenFilesShown', value)
-  },
-
-  SET_FILES_PAGE_LIMIT(state, limit) {
-    state.filesPageLimit = limit
-
-    window.localStorage.setItem('oc_filesPageLimit', limit)
   }
 }
 

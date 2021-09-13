@@ -3,7 +3,125 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v4.0.0...master
+[unreleased]: https://github.com/owncloud/web/compare/v4.1.0...master
+
+Summary
+-------
+
+* Bugfix - Pagination on Locationpicker: [#5715](https://github.com/owncloud/web/pull/5715)
+* Change - Update ODS to 10.0.0: [#5769](https://github.com/owncloud/web/pull/5769)
+* Enhancement - Add robots.txt file: [#5762](https://github.com/owncloud/web/pull/5762)
+* Enhancement - Add missing tooltips: [#5723](https://github.com/owncloud/web/issues/5723)
+* Enhancement - Re-design recipients role select: [#5632](https://github.com/owncloud/web/pull/5632)
+* Enhancement - Show sharees as avatars: [#5758](https://github.com/owncloud/web/pull/5758/files)
+* Enhancement - Show sharing information in details sidebar: [#5735](https://github.com/owncloud/web/issues/5735)
+* Enhancement - Switch filesize calculation base: [#5739](https://github.com/owncloud/web/pull/5739)
+* Enhancement - Update ODS to 9.3.0: [#5725](https://github.com/owncloud/web/pull/5725)
+* Enhancement - URL encoding / decoding: [#5714](https://github.com/owncloud/web/issues/5714)
+
+Details
+-------
+
+* Bugfix - Pagination on Locationpicker: [#5715](https://github.com/owncloud/web/pull/5715)
+
+   Pagination on copying/moving files as well as page reloads when copying/moving files were
+   broken. When changing the Vue router encoding, we fixed both issues.
+
+   https://github.com/owncloud/web/pull/5715
+
+* Change - Update ODS to 10.0.0: [#5769](https://github.com/owncloud/web/pull/5769)
+
+   We updated the ownCloud Design System to version 10.0.0-rc2. Please refer to the full
+   changelog in the ODS release (linked) for more details. Summary:
+
+   - Change - Use route query to store active page:
+   https://github.com/owncloud/owncloud-design-system/pull/1626 - Change - Refactor
+   OcAvatarGroup and rename to OcAvatars:
+   https://github.com/owncloud/owncloud-design-system/pull/5736 - Change - Add label prop
+   to OcSelect: https://github.com/owncloud/owncloud-design-system/pull/1633 -
+   Enhancement - Switch filesize calculation base:
+   https://github.com/owncloud/owncloud-design-system/pull/1598 - Bugfix - Reset
+   droptarget background color in OcTableFiles:
+   https://github.com/owncloud/owncloud-design-system/pull/1625
+
+   https://github.com/owncloud/web/pull/5769
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v10.0.0-rc2
+
+* Enhancement - Add robots.txt file: [#5762](https://github.com/owncloud/web/pull/5762)
+
+   Added a robots.txt for ocis-web
+
+   https://github.com/owncloud/web/pull/5762
+
+* Enhancement - Add missing tooltips: [#5723](https://github.com/owncloud/web/issues/5723)
+
+   We've added tooltips to the "view option dropdown" and "toggle sidebar" buttons.
+
+   https://github.com/owncloud/web/issues/5723
+   https://github.com/owncloud/web/pull/5724
+
+* Enhancement - Re-design recipients role select: [#5632](https://github.com/owncloud/web/pull/5632)
+
+   We've redesigned recipient role select in the Files app sidebar.
+
+   https://github.com/owncloud/web/pull/5632
+
+* Enhancement - Show sharees as avatars: [#5758](https://github.com/owncloud/web/pull/5758/files)
+
+   We've added the sharees as avatars in the peoples panel in the right sidebar.
+
+   https://github.com/owncloud/web/issues/5736
+   https://github.com/owncloud/web/pull/5758/files
+
+* Enhancement - Show sharing information in details sidebar: [#5735](https://github.com/owncloud/web/issues/5735)
+
+   We've added sharing information like from whom, when and where a file was shared to the detail
+   view in the right sidebar.
+
+   https://github.com/owncloud/web/issues/5735
+   https://github.com/owncloud/web/pull/5730
+
+* Enhancement - Switch filesize calculation base: [#5739](https://github.com/owncloud/web/pull/5739)
+
+   We've switched from base-2 to base-10 when calculating the displayed file-size to align it
+   better with user expectations.
+
+   https://github.com/owncloud/web/pull/5739
+
+* Enhancement - Update ODS to 9.3.0: [#5725](https://github.com/owncloud/web/pull/5725)
+
+   We updated the ownCloud Design System to version 9.3.0. Please refer to the full changelog in
+   the ODS release (linked) for more details. Summary: - Bugfix - Fix search for options provided
+   as objects: https://github.com/owncloud/owncloud-design-system/pull/1602 - Bugfix -
+   Contextmenu button triggered wrong event:
+   https://github.com/owncloud/owncloud-design-system/pull/1610 - Bugfix - Use pointer
+   cursor for OcSelect actions:
+   https://github.com/owncloud/owncloud-design-system/pull/1604 - Enhancement -
+   OcTableFiles Contextmenu Tooltip:
+   https://github.com/owncloud/owncloud-design-system/pull/1610 - Enhancement -
+   Highlight droptarget in OcTableFiles:
+   https://github.com/owncloud/owncloud-design-system/pull/1610 - Enhancement - Remove
+   "Showdetails" button in OcTableFiles:
+   https://github.com/owncloud/owncloud-design-system/pull/1610
+
+   https://github.com/owncloud/web/pull/5725
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v9.3.0
+
+* Enhancement - URL encoding / decoding: [#5714](https://github.com/owncloud/web/issues/5714)
+
+   We have updated the Vue router (prior to version 4) encoding from `files%2Fall%2Ffolder` to
+   `files/all/folder`. It was also needed to use the router query object instead of the params to
+   store the current page pagination information.
+
+   https://github.com/owncloud/web/issues/5714
+   https://github.com/owncloud/web/pull/5715
+
+Changelog for ownCloud Web [4.1.0] (2021-08-20)
+=======================================
+The following sections list the changes in ownCloud web 4.1.0 relevant to
+ownCloud admins and users.
+
+[4.1.0]: https://github.com/owncloud/web/compare/v4.0.0...v4.1.0
 
 Summary
 -------
@@ -17,7 +135,7 @@ Summary
 * Enhancement - Refresh files list via breadcrumbs: [#2018](https://github.com/owncloud/web/issues/2018)
 * Enhancement - Signout icon: [#5681](https://github.com/owncloud/web/pull/5681)
 * Enhancement - Toggle right sidebar: [#5165](https://github.com/owncloud/web/issues/5165)
-* Enhancement - Update ODS to 9.1.0: [#5689](https://github.com/owncloud/web/pull/5689)
+* Enhancement - Update ODS to 9.2.0: [#5689](https://github.com/owncloud/web/pull/5689)
 
 Details
 -------
@@ -43,6 +161,7 @@ Details
 
    https://github.com/owncloud/web/issues/5427
    https://github.com/owncloud/web/pull/5585
+   https://github.com/owncloud/web/pull/5710
 
 * Enhancement - Add multiple selection Sidebar: [#5164](https://github.com/owncloud/web/issues/5164)
 
@@ -90,15 +209,17 @@ Details
 
    https://github.com/owncloud/web/issues/5165
    https://github.com/owncloud/web/pull/5678
+   https://github.com/owncloud/web/pull/5709
 
-* Enhancement - Update ODS to 9.1.0: [#5689](https://github.com/owncloud/web/pull/5689)
+* Enhancement - Update ODS to 9.2.0: [#5689](https://github.com/owncloud/web/pull/5689)
 
-   We updated the ownCloud Design System to version 9.1.0.
+   We updated the ownCloud Design System to version 9.2.0.
 
    https://github.com/owncloud/web/pull/5689
    https://github.com/owncloud/owncloud-design-system/releases/tag/v9.0.0
    https://github.com/owncloud/owncloud-design-system/releases/tag/v9.0.1
    https://github.com/owncloud/owncloud-design-system/releases/tag/v9.1.0
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v9.2.0
 
 Changelog for ownCloud Web [4.0.0] (2021-08-04)
 =======================================

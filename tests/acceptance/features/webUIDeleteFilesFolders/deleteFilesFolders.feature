@@ -6,7 +6,7 @@ Feature: deleting files and folders
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files
     And user "Alice" has logged in using the webUI
-    And the user has browsed to the files page
+    And the user reloads the current page of the webUI
 
   @smokeTest @ocisSmokeTest @disablePreviews
   Scenario: Delete files & folders one by one and check its existence after page reload

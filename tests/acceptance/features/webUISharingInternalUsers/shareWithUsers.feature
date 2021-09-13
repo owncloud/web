@@ -51,7 +51,7 @@ Feature: Sharing files and folders with internal users
       | set-role             | expected-role        | permissions-folder              | permissions-file  |
       | Viewer               | Viewer               | read,share                      | read, share       |
       | Editor               | Editor               | read,update,create,delete,share | read,update,share |
-      | Advanced permissions | Advanced permissions | read                            | read              |
+      | Custom permissions | Custom permissions | read                            | read              |
 
   @issue-4102 @issue-ocis-2267
   Scenario: share a file with another internal user who overwrites and unshares the file
@@ -190,7 +190,7 @@ Feature: Sharing files and folders with internal users
     When the user opens the share dialog for file "lorem.txt" using the webUI
     Then user "Brian Murphy" should be listed as "Editor" via "simple-folder" in the collaborators list on the webUI
 
-  # Share permission is not available in oCIS webUI so when setting all permissions, it is displayed as "Advanced permissions" there
+  # Share permission is not available in oCIS webUI so when setting all permissions, it is displayed as "Custom permissions" there
   @issue-2897 @issue-ocis-2260
   Scenario: sharing details of items inside a re-shared folder
     Given user "Alice" has created folder "simple-folder"
@@ -221,9 +221,9 @@ Feature: Sharing files and folders with internal users
     And the user has opened folder "Shares"
     And the user has opened folder "simple-folder"
     When the user opens the share dialog for folder "simple-empty-folder" using the webUI
-    Then user "Carol King" should be listed as "Advanced permissions" via "simple-folder" in the collaborators list on the webUI
+    Then user "Carol King" should be listed as "Custom permissions" via "simple-folder" in the collaborators list on the webUI
     When the user opens the share dialog for file "lorem.txt" using the webUI
-    Then user "Carol King" should be listed as "Advanced permissions" via "simple-folder" in the collaborators list on the webUI
+    Then user "Carol King" should be listed as "Custom permissions" via "simple-folder" in the collaborators list on the webUI
 
   @issue-2897 @issue-ocis-2260
   Scenario: sharing details of items inside a shared folder shared with multiple users
@@ -274,7 +274,7 @@ Feature: Sharing files and folders with internal users
       | set-role             | expected-role        | permissions-folder              | permissions-file  |
       | Viewer               | Viewer               | read,share                      | read,share        |
       | Editor               | Editor               | read,update,create,delete,share | read,update,share |
-      | Advanced permissions | Advanced permissions | read                            | read              |
+      | Custom permissions | Custom permissions | read                            | read              |
 
   @skipOnOC10 @ocisSmokeTest
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
@@ -312,7 +312,7 @@ Feature: Sharing files and folders with internal users
       | set-role             | expected-role | permissions-folder        | permissions-file |
       | Viewer               | Viewer        | read                      | read             |
       | Editor               | Editor        | read,update,create,delete | read,update      |
-      | Advanced permissions | Viewer        | read                      | read             |
+      | Custom permissions | Viewer        | read                      | read             |
 
   Scenario: file list view image preview in file share
     Given user "Alice" has created file "testavatar.jpg"

@@ -1,4 +1,4 @@
-import { setDefaultTimeout, After, Before, defineParameterType } from 'cucumber'
+import { setDefaultTimeout, After, Before, defineParameterType } from '@cucumber/cucumber'
 import { createSession, closeSession, client, startWebDriver, stopWebDriver } from 'nightwatch-api'
 import { rollbackConfigs, cacheConfigs } from './helpers/config'
 import { getAllLogsWithDateTime } from './helpers/browserConsole.js'

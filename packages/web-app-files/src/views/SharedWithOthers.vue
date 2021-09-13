@@ -24,7 +24,6 @@
         :resources="activeFiles"
         :target-route="targetRoute"
         :header-position="headerPosition"
-        @showDetails="$_mountSideBar_showDefaultPanel"
         @fileClick="$_fileActions_triggerDefaultAction"
         @rowMounted="rowMounted"
       >
@@ -199,7 +198,6 @@ export default {
       }
 
       this.LOAD_FILES({ currentFolder: null, files: resources })
-
       this.loading = false
     },
 

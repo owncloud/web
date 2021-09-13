@@ -45,6 +45,6 @@ describe('Sidebar Quota component', () => {
         translate: false
       }
     })
-    expect(wrapper.html()).toContain('1.2 GB of 2 GB')
+    expect(wrapper.html()).toContain('1.3 GB of 2 GB')
   })
 })

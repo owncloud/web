@@ -3,7 +3,13 @@
     <oc-icon :name="highlightedFile.icon" size="large" class="file_info__icon" />
     <div class="file_info__body">
       <h2 tabindex="-1">
-        {{ highlightedFile.name }}
+        <oc-resource-name
+          :name="highlightedFile.name"
+          :extension="highlightedFile.extension"
+          :type="highlightedFile.type"
+          :full-path="highlightedFile.path"
+          :is-path-displayed="false"
+        />
       </h2>
       <div>
         <template v-if="highlightedFile.size > -1">

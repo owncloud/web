@@ -100,6 +100,7 @@ export default {
 
   computed: {
     ...mapGetters('Files', ['selectedFiles', 'currentFolder', 'activeFiles']),
+    ...mapGetters(['homeFolder']),
 
     emptyTrashbinButtonText() {
       return this.selectedFiles.length < 1
@@ -229,12 +230,13 @@ export default {
     triggerLocationPicker(action) {
       const resources = cloneStateObject(this.selectedFiles)
       const context = this.isPublicPage ? 'public' : 'private'
+      const item = this.currentFolder.path || this.homeFolder
 
       this.$router.push({
         name: 'files-location-picker',
         params: {
           context,
-          item: this.currentFolder.path,
+          item,
           action
         },
         query: {

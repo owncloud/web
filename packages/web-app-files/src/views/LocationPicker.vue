@@ -123,6 +123,7 @@ export default {
       'totalFilesSize'
     ]),
     ...mapGetters(['configuration']),
+    ...mapGetters(['homeFolder']),
 
     title() {
       const translated =
@@ -142,7 +143,7 @@ export default {
     },
 
     target() {
-      return this.$route.params.item
+      return this.$route.params.item || this.homeFolder
     },
 
     resources() {
@@ -323,7 +324,7 @@ export default {
 
     leaveLocationPicker(target) {
       if (this.isPublicContext) {
-        this.$router.push({ name: 'files-public-list', params: { token: target } })
+        this.$router.push({ name: 'files-public-list', params: { item: target } })
         return
       }
 

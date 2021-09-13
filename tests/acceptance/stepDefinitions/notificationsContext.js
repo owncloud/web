@@ -1,5 +1,5 @@
 const { client } = require('nightwatch-api')
-const { Given, When, Then } = require('cucumber')
+const { Given, When, Then } = require('@cucumber/cucumber')
 const httpHelper = require('../helpers/httpHelper')
 const codify = require('../helpers/codify')
 const assert = require('assert')
