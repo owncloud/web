@@ -2,7 +2,7 @@
   <div
     data-testid="files-sidebar"
     :class="{
-      'has-active': !!sidebarActivePanel,
+      'has-active-sub-panel': !!sidebarActivePanel,
       'uk-flex uk-flex-center uk-flex-middle': loading
     }"
   >
@@ -17,12 +17,16 @@
         :tabindex="activePanelName === panel.app ? -1 : false"
         class="sidebar-panel"
         :class="{
-          'is-active': sidebarActivePanel === panel.app,
-          'is-default': panel.default,
+          'is-active-sub-panel': sidebarActivePanel === panel.app,
+          'is-active-default-panel': panel.default && activePanelName === panel.app,
+          'sidebar-panel-default': panel.default,
           'resource-info-hidden': !isSingleResource
         }"
       >
-        <div class="sidebar-panel__header header">
+        <div
+          v-if="[activePanelName, oldPanelName].includes(panel.app)"
+          class="sidebar-panel__header header"
+        >
           <oc-button
             v-if="!panel.default"
             class="header__back"
@@ -54,11 +58,7 @@
         />
         <div class="sidebar-panel__body">
           <template v-if="isContentDisplayed">
-            <component
-              :is="panel.component"
-              v-if="[activePanelName, oldPanelName].includes(panel.app)"
-              class="sidebar-panel__body-content"
-            />
+            <component :is="panel.component" class="sidebar-panel__body-content" />
 
             <div
               v-if="panel.default && availablePanels.length > 1"
@@ -257,6 +257,7 @@ export default {
       }
 
       const clearOldPanelName = () => {
+        console.log('clearing old panel')
         this.oldPanelName = null
       }
 
@@ -347,15 +348,15 @@ export default {
     grid-template-rows: 50px 1fr;
   }
 
-  &.is-default {
-    #files-sidebar.has-active & {
+  &.sidebar-panel-default {
+    #files-sidebar.has-active-sub-panel & {
       transform: translateX(-30%);
       visibility: hidden;
     }
   }
 
-  &.is-default,
-  &.is-active {
+  &.is-active-default-panel,
+  &.is-active-sub-panel {
     visibility: unset;
     transform: translateX(0);
   }

@@ -209,11 +209,13 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     sidebarCloseBtn: {
-      selector: '//div[contains(@id, "files-sidebar")]//button[contains(@class, "header__close")]',
+      selector:
+        '//div[contains(@id, "files-sidebar")]//*[contains(@class, "is-active-")]//button[contains(@class, "header__close")]',
       locateStrategy: 'xpath'
     },
     sidebarBackBtn: {
-      selector: '//div[contains(@id, "files-sidebar")]//button[contains(@class, "header__back")]',
+      selector:
+        '//div[contains(@id, "files-sidebar")]//*[contains(@class, "is-active-sub-panel")]//button[contains(@class, "header__back")]',
       locateStrategy: 'xpath'
     },
     panelActionsItems: {
