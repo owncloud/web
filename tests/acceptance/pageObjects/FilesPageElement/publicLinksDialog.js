@@ -422,17 +422,17 @@ module.exports = {
     },
     publicLinkEditButton: {
       selector:
-        '//h5[contains(@class, "oc-files-file-link-name") and text()="%s"]/../../..//button[contains(@class, "oc-files-file-link-edit")]',
+        '//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]/../../..//button[contains(@class, "oc-files-file-link-edit")]',
       locateStrategy: 'xpath'
     },
     publicLinkDeleteButton: {
       selector:
-        '//h5[contains(@class, "oc-files-file-link-name") and text()="%s"]/../../..//button[contains(@class, "oc-files-file-link-delete")]',
+        '//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]/../../..//button[contains(@class, "oc-files-file-link-delete")]',
       locateStrategy: 'xpath'
     },
     publicLinkURLCopyButton: {
       selector:
-        '//h5[contains(@class, "oc-files-file-link-name") and text()="%s"]/../../..//button[contains(@class, "oc-files-public-link-copy-url")]',
+        '//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]/../../..//button[contains(@class, "oc-files-public-link-copy-url")]',
       locateStrategy: 'xpath'
     },
     publicLinkPasswordField: {

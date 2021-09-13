@@ -235,6 +235,10 @@ module.exports = {
         return appSideBar
       }
 
+      // closing it since otherwise tests fail on mobile
+      // on desktop sidebar content gets replaced with new resource
+      await appSideBar.closeSidebarIfOpen()
+
       // open the sidebar for the resource
       await this.clickRow(resource, elementType)
       await this.click('@btnToggleSideBar')

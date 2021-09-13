@@ -57,6 +57,7 @@
             <component
               :is="panel.component"
               v-if="[activePanelName, oldPanelName].includes(panel.app)"
+              class="sidebar-panel__body-content"
             />
 
             <div
