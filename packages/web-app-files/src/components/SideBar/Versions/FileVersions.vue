@@ -51,9 +51,7 @@
       </oc-tbody>
     </oc-table-simple>
     <div v-else>
-      <span v-translate data-testid="file-versions-no-versions"
-        >No Versions available for this file</span
-      >
+      <p v-translate data-testid="file-versions-no-versions">No Versions available for this file</p>
     </div>
   </div>
 </template>

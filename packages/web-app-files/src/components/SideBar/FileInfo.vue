@@ -2,7 +2,7 @@
   <div class="file_info">
     <oc-icon :name="file.icon" size="large" class="file_info__icon" />
     <div class="file_info__body">
-      <h2 tabindex="-1">
+      <h3 tabindex="-1">
         <oc-resource-name
           :name="file.name"
           :extension="file.extension"
@@ -10,11 +10,11 @@
           :full-path="file.path"
           :is-path-displayed="false"
         />
-      </h2>
-      <div>
+      </h3>
+      <p class="oc-my-rm">
         <template v-if="file.size > -1">{{ getResourceSize(file.size) }},</template>
         {{ modificationTime }}
-      </div>
+      </p>
     </div>
     <oc-button
       v-if="!publicPage() && isFavoritesEnabled"
@@ -92,14 +92,11 @@ export default {
   align-items: center;
   grid-gap: 5px;
 
-  &__icon {
-  }
-
   &__body {
     text-align: left;
     font-size: 0.75rem;
 
-    h2 {
+    h3 {
       font-size: 0.9rem;
       font-weight: 600;
       margin: 0;
