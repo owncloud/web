@@ -34,9 +34,9 @@
             {{ defaultPanel.component.title($gettext) }}
           </oc-button>
 
-          <div class="header__title">
+          <h2 class="header__title oc-my-rm">
             {{ panel.component.title($gettext) }}
-          </div>
+          </h2>
 
           <oc-button
             appearance="raw"

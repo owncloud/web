@@ -8,7 +8,7 @@
       <oc-loader v-if="linksLoading" :aria-label="$gettext('Loading list of file links')" />
       <template v-else>
         <private-link-item v-if="privateLinkEnabled" />
-        <h4 v-translate class="oc-text-bold oc-m-rm oc-text-initial">Public Links</h4>
+        <h3 v-translate class="oc-text-bold oc-m-rm oc-text-initial">Public Links</h3>
         <div v-if="canCreatePublicLinks" class="oc-my-s">
           <p v-translate class="oc-text-muted">
             Any external person with the respective link can access this resource. No sign-in
