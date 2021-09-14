@@ -24,7 +24,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUILogin/openidLogin.feature:50](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/openidLogin.feature#L50)
 
 ### [REPORT request not implemented](https://github.com/owncloud/ocis/issues/1330)
--   [webUIDeleteFilesFolders/deleteFilesFolders.feature:295](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIDeleteFilesFolders/deleteFilesFolders.feature#L295)
+-   [webUIDeleteFilesFolders/deleteFilesFolders.feature:298](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIDeleteFilesFolders/deleteFilesFolders.feature#L298)
 -   [webUIFavorites/favoritesFile.feature:14](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFavorites/favoritesFile.feature#L14)
 -   [webUIFavorites/favoritesFile.feature:30](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFavorites/favoritesFile.feature#L30)
 -   [webUIFavorites/favoritesFile.feature:46](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFavorites/favoritesFile.feature#L46)
