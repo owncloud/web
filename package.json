@@ -127,5 +127,8 @@
   },
   "engines": {
     "node": ">=14 <=16"
+  },
+  "dependencies": {
+    "v-calendar": "^2.3.2"
   }
 }

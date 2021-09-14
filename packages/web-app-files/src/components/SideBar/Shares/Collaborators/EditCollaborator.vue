@@ -25,7 +25,11 @@
     >
       <oc-icon name="repeat" class="oc-mr-s" /> {{ collaborator.owner.displayName }}
     </p>
-    <collaborator class="uk-width-expand" :collaborator="collaborator" :first-column="false" />
+    <collaborator
+      class="uk-width-expand oc-mb"
+      :collaborator="collaborator"
+      :first-column="false"
+    />
     <collaborators-edit-options
       :existing-role="$_originalRole"
       :collaborators-permissions="$_originalPermissions"
@@ -153,10 +157,10 @@ export default {
       }
       // FIXME: Datepicker is not displaying correct timezone so for now we add it manually
       const originalExpirationDate = this.originalExpirationDate
-        ? DateTime.fromJSDate(this.originalExpirationDate)
-            .plus({ minutes: DateTime.now().offset })
-            .toISO()
-        : null
+      // ? DateTime.fromJSDate(this.originalExpirationDate)
+      //     .plus({ minutes: DateTime.now().offset })
+      //     .toISO()
+      // : null
 
       const exactExpirationDate = DateTime.fromISO(this.expirationDate).ts
       const exactOriginalExpirationDate = DateTime.fromISO(originalExpirationDate).ts
