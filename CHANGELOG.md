@@ -1338,7 +1338,7 @@ Details
 
 * Enhancement - Use ODS translations: [#4934](https://github.com/owncloud/web/pull/4934)
 
-   Some ODS components were using their own translation strings which were availabel in the ODS
+   Some ODS components were using their own translation strings which were available in the ODS
    but not exported there/imported in the web project. Now, we import the translation strings
    from the ODS package and merge them with the web translations.
 
