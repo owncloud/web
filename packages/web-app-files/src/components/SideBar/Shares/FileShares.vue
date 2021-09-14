@@ -418,7 +418,8 @@ export default {
       this.transitionGroupActive = true
       this.deleteShare({
         client: this.$client,
-        share: share
+        share: share,
+        resource: this.highlightedFile
       })
     },
     $_ocCollaborators_showList() {
