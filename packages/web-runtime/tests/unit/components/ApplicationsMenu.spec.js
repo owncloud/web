@@ -62,7 +62,7 @@ describe('ApplicationsMenu component', () => {
     wrapper = getShallowWrapper(menuLinks)
   })
 
-  it('shoud set aria-label prop on switcher button', () => {
+  it('should set aria-label prop on switcher button', () => {
     const appSwitcherButton = wrapper.find(selectors.appSwitcherButton)
 
     expect(appSwitcherButton).toMatchSnapshot()

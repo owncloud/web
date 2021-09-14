@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ApplicationsMenu component shoud set aria-label prop on switcher button 1`] = `
+exports[`ApplicationsMenu component should set aria-label prop on switcher button 1`] = `
 <oc-button-stub type="button" size="medium" arialabel="Application Switcher" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="_appSwitcherButton" class="oc-topbar-menu-burger">
   <oc-icon-stub name="apps" accessiblelabel="" type="span" size="medium" variation="passive" class="uk-flex"></oc-icon-stub>
 </oc-button-stub>
