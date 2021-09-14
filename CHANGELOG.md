@@ -1779,7 +1779,7 @@ Details
 
    The label in the text editor that displays the path of the active file was removing the first
    character instead of trimming leading slashes. This might have lead to situations where
-   actual characters were removed. We fixed this by only removing leading slahes instead of
+   actual characters were removed. We fixed this by only removing leading slashes instead of
    blindly removing the first character.
 
    https://github.com/owncloud/web/pull/4391
