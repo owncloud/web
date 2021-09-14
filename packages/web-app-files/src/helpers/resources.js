@@ -60,7 +60,7 @@ export function buildResource(resource) {
     ownerDisplayName: resource.fileInfo[DavProperty.OwnerDisplayName],
     ownerId: resource.fileInfo[DavProperty.OwnerId],
     canUpload: function() {
-      return this.permissions.indexOf(DavPermission.FolderCreateable) >= 0
+      return this.permissions.indexOf(DavPermission.FolderCreatable) >= 0
     },
     canDownload: function() {
       // TODO: as soon as we allow folder downloads as archive we want to return `true` here without exceptions
@@ -76,7 +76,7 @@ export function buildResource(resource) {
       return this.permissions.indexOf(DavPermission.Shareable) >= 0
     },
     canCreate: function() {
-      return this.permissions.indexOf(DavPermission.FolderCreateable) >= 0
+      return this.permissions.indexOf(DavPermission.FolderCreatable) >= 0
     },
     isMounted: function() {
       return this.permissions.indexOf(DavPermission.Mounted) >= 0

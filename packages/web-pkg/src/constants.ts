@@ -7,7 +7,7 @@ export abstract class DavPermission {
   static readonly Moveable: string = 'V'
   static readonly Updateable: string = 'NV'
   static readonly FileUpdateable: string = 'W'
-  static readonly FolderCreateable: string = 'CK'
+  static readonly FolderCreatable: string = 'CK'
 }
 
 export abstract class DavProperty {
