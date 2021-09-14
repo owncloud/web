@@ -19,7 +19,7 @@ const selectors = {
   shareType: '.files-collaborators-collaborator-share-type',
   reshareInformation: '.files-collaborators-collaborator-reshare-information',
   reshareToggleId: 'collaborator-%s-resharer-details-toggle',
-  colaboratorRole: '.files-collaborators-collaborator-role'
+  collaboratorRole: '.files-collaborators-collaborator-role'
 }
 
 const resharers = [
@@ -286,7 +286,7 @@ describe('Collaborator component', () => {
         const wrapper = createWrapper({
           role: { name: cases.name }
         })
-        expect(wrapper.find(selectors.colaboratorRole).text()).toEqual(cases.expectedText)
+        expect(wrapper.find(selectors.collaboratorRole).text()).toEqual(cases.expectedText)
       })
 
       it.each([
@@ -301,7 +301,7 @@ describe('Collaborator component', () => {
           role: { name: cases.name }
         })
         expect(
-          wrapper.find(selectors.colaboratorRole + ' oc-icon-stub').attributes('name')
+          wrapper.find(selectors.collaboratorRole + ' oc-icon-stub').attributes('name')
         ).toEqual(cases.expectedName)
       })
     })
