@@ -148,7 +148,7 @@ describe('ProgressBar component', () => {
       expect(hideDetails.exists()).toBeTruthy()
       expect(hideDetails.text()).toEqual('Hide Details')
     })
-    it('should show details-widget with in-porgress items as prop', () => {
+    it('should show details-widget with in-progress items as prop', () => {
       const detailsWidget = wrapper.find(selectors.detailsWidget)
 
       expect(detailsWidget.exists()).toBeTruthy()
