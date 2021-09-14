@@ -24,7 +24,7 @@
           appearance="raw"
           class="oc-mr-xs"
           :aria-label="peopleSharesLabel"
-          @click="expandPeoplesAccordion"
+          @click="expandPeoplesPanel"
         >
           <oc-icon name="group" />
         </oc-button>
@@ -34,7 +34,7 @@
           appearance="raw"
           class="oc-mr-xs"
           :aria-label="linkSharesLabel"
-          @click="expandLinksAccordion"
+          @click="expandLinksPanel"
         >
           <oc-icon name="link" />
         </oc-button>
@@ -49,16 +49,16 @@
               v-oc-tooltip="seeVersionsLabel"
               appearance="raw"
               :aria-label="seeVersionsLabel"
-              @click="expandVersionsAccordion"
+              @click="expandVersionsPanel"
               v-text="capitalizedTimestamp"
             />
             <span v-else v-text="capitalizedTimestamp" />
           </td>
         </tr>
-        <tr v-if="showSharedBy" data-testid="shared-by">
-          <th scope="col" class="oc-pr-s" v-text="sharedByLabel" />
+        <tr v-if="showShareDate" data-testid="shared-date">
+          <th scope="col" class="oc-pr-s" v-text="shareDateLabel" />
           <td>
-            <span v-text="sharedWithUserDisplayName" />
+            <span v-oc-tooltip="shareDateTooltip" v-text="displayShareDate" />
           </td>
         </tr>
         <tr v-if="showSharedVia" data-testid="shared-via">
@@ -69,17 +69,17 @@
             </router-link>
           </td>
         </tr>
-        <tr v-if="showShareDate" data-testid="shared-date">
-          <th scope="col" class="oc-pr-s" v-text="shareDateLabel" />
+        <tr v-if="showSharedBy" data-testid="shared-by">
+          <th scope="col" class="oc-pr-s" v-text="sharedByLabel" />
           <td>
-            <span v-oc-tooltip="shareDateTooltip" v-text="displayShareDate" />
+            <span v-text="sharedByDisplayName" />
           </td>
         </tr>
-        <tr v-if="ownerName" data-testid="ownerName">
+        <tr v-if="ownerDisplayName" data-testid="ownerDisplayName">
           <th scope="col" class="oc-pr-s" v-text="ownerTitle" />
           <td>
             <p class="oc-m-rm">
-              {{ ownerName }}
+              {{ ownerDisplayName }}
               <span v-if="ownedByCurrentUser" v-translate>(me)</span>
               <span v-if="!ownedByCurrentUser && ownerAdditionalInfo"
                 >({{ ownerAdditionalInfo }})</span
@@ -98,7 +98,7 @@
               v-oc-tooltip="seeVersionsLabel"
               appearance="raw"
               :aria-label="seeVersionsLabel"
-              @click="expandVersionsAccordion"
+              @click="expandVersionsPanel"
               v-text="versions.length"
             />
           </td>
@@ -113,7 +113,7 @@ import Mixins from '../../../mixins'
 import MixinResources from '../../../mixins/resources'
 import MixinRoutes from '../../../mixins/routes'
 import { shareTypes, userShareTypes } from '../../../helpers/shareTypes'
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { ImageDimension } from '../../../constants'
 import { loadPreview } from '../../../helpers/resource'
 import intersection from 'lodash-es/intersection'
@@ -132,7 +132,8 @@ export default {
 
   data: () => ({
     loading: false,
-    sharedWithUserDisplayName: '',
+    sharedByName: '',
+    sharedByDisplayName: '',
     sharedTime: 0,
     sharedParentDir: null,
     sharedItem: null
@@ -147,7 +148,11 @@ export default {
 
     hasContent() {
       return (
-        this.hasTimestamp || this.ownerName || this.showSize || this.showShares || this.showVersions
+        this.hasTimestamp ||
+        this.ownerDisplayName ||
+        this.showSize ||
+        this.showShares ||
+        this.showVersions
       )
     },
     noContentText() {
@@ -157,7 +162,7 @@ export default {
       return this.$gettext('Overview of the information about the selected file')
     },
     shareDateLabel() {
-      return this.$gettext('Shared on:')
+      return this.$gettext('Shared:')
     },
     sharedViaLabel() {
       return this.$gettext('Shared via:')
@@ -183,7 +188,13 @@ export default {
       }
     },
     showSharedBy() {
-      return this.showShares && !this.ownedByCurrentUser && !this.sharesTreeLoading
+      return (
+        this.showShares &&
+        !this.ownedByCurrentUser &&
+        !this.sharesTreeLoading &&
+        this.sharedByDisplayName &&
+        this.sharedByName !== this.file.ownerId
+      )
     },
     showSharedVia() {
       return (
@@ -231,7 +242,7 @@ export default {
     ownerTitle() {
       return this.$gettext('Owner:')
     },
-    ownerName() {
+    ownerDisplayName() {
       return (
         this.file.ownerDisplayName ||
         this.file.shareOwnerDisplayname ||
@@ -306,9 +317,16 @@ export default {
       if (current !== false) return
       const sharePathParentOrCurrent = this.getParentSharePath(this.file.path, this.sharesTree)
       if (sharePathParentOrCurrent === null) return
-      this.sharedItem = this.sharesTree[sharePathParentOrCurrent][0]
-      const fileOwner = this.sharedItem.fileOwner
-      this.sharedWithUserDisplayName = fileOwner ? fileOwner.displayName : null
+      const userShares = this.sharesTree[sharePathParentOrCurrent]?.filter(s =>
+        userShareTypes.includes(s.shareType)
+      )
+      if (userShares.length === 0) return
+      this.sharedItem = userShares[0]
+      this.sharedByName = this.sharedItem.owner?.name
+      this.sharedByDisplayName = this.sharedItem.owner?.displayName
+      if (this.sharedItem.owner?.additionalInfo) {
+        this.sharedByDisplayName += ' (' + this.sharedItem.owner.additionalInfo + ')'
+      }
       this.sharedTime = this.sharedItem.stime
       this.sharedParentDir = sharePathParentOrCurrent
     }
@@ -337,7 +355,7 @@ export default {
   },
   methods: {
     ...mapActions('Files', ['loadPreview', 'loadVersions', 'loadSharesTree']),
-    ...mapMutations('Files', ['SET_APP_SIDEBAR_ACTIVE_PANEL']),
+    ...mapActions('Files/sidebar', { setSidebarPanel: 'setActivePanel' }),
     refreshShareDetailsTree() {
       this.loadSharesTree({
         client: this.$client,
@@ -354,14 +372,14 @@ export default {
       }
       return null
     },
-    expandPeoplesAccordion() {
-      this.SET_APP_SIDEBAR_ACTIVE_PANEL('sharing-item')
+    expandPeoplesPanel() {
+      this.setSidebarPanel('sharing-item')
     },
-    expandLinksAccordion() {
-      this.SET_APP_SIDEBAR_ACTIVE_PANEL('links-item')
+    expandLinksPanel() {
+      this.setSidebarPanel('links-item')
     },
-    expandVersionsAccordion() {
-      this.SET_APP_SIDEBAR_ACTIVE_PANEL('versions-item')
+    expandVersionsPanel() {
+      this.setSidebarPanel('versions-item')
     },
     async loadData() {
       this.loading = true

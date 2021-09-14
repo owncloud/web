@@ -35,11 +35,6 @@ export default {
   actionsInProgress: [],
 
   /**
-   * Right sidebar
-   */
-  appSidebarActivePanel: null,
-
-  /**
    * Public links
    */
   publicLinkInEdit: {

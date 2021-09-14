@@ -24,8 +24,8 @@
           data-testid="files-collaborators-no-reshare-permissions-message"
           v-text="noResharePermsMessage"
         />
-        <div class="avatars-wrapper">
-          <h4 v-if="hasSharees" class="shared-with-label" v-text="sharedWithLabel" />
+        <div v-if="hasSharees" class="avatars-wrapper">
+          <h4 class="shared-with-label" v-text="sharedWithLabel" />
           <oc-button
             v-oc-tooltip="sharedWithTooltip"
             appearance="raw"
@@ -39,7 +39,7 @@
               :is-tooltip-displayed="false"
               class="sharee-avatars"
             />
-            <oc-icon v-else name="close" />
+            <oc-icon v-else name="chevron_up" />
           </oc-button>
         </div>
         <template v-if="showShareesList || collaboratorsAvatar.length === 0">
@@ -150,12 +150,7 @@ export default {
       'sharesTreeLoading'
     ]),
     ...mapGetters(['isOcis']),
-    ...mapState('Files', [
-      'incomingShares',
-      'incomingSharesLoading',
-      'sharesTree',
-      'appSidebarAccordionContext'
-    ]),
+    ...mapState('Files', ['incomingShares', 'incomingSharesLoading', 'sharesTree']),
     ...mapState(['user']),
 
     $_transitionGroupEnter() {
@@ -423,7 +418,8 @@ export default {
       this.transitionGroupActive = true
       this.deleteShare({
         client: this.$client,
-        share: share
+        share: share,
+        resource: this.highlightedFile
       })
     },
     $_ocCollaborators_showList() {

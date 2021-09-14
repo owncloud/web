@@ -24,7 +24,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUILogin/openidLogin.feature:50](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/openidLogin.feature#L50)
 
 ### [REPORT request not implemented](https://github.com/owncloud/ocis/issues/1330)
--   [webUIDeleteFilesFolders/deleteFilesFolders.feature:295](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIDeleteFilesFolders/deleteFilesFolders.feature#L295)
+-   [webUIDeleteFilesFolders/deleteFilesFolders.feature:298](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIDeleteFilesFolders/deleteFilesFolders.feature#L298)
 -   [webUIFavorites/favoritesFile.feature:14](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFavorites/favoritesFile.feature#L14)
 -   [webUIFavorites/favoritesFile.feature:30](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFavorites/favoritesFile.feature#L30)
 -   [webUIFavorites/favoritesFile.feature:46](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFavorites/favoritesFile.feature#L46)
@@ -133,9 +133,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUISharingPublicManagement/publicLinkIndicator.feature:64](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicManagement/publicLinkIndicator.feature#L64)
 -   [webUISharingPublicManagement/publicLinkIndicator.feature:81](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicManagement/publicLinkIndicator.feature#L81)
 -   [webUISharingPublicManagement/publicLinkIndicator.feature:98](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicManagement/publicLinkIndicator.feature#L98)
-
-### [different button to unshare self from a shared resource in ocis-web and web](https://github.com/owncloud/ocis/issues/2266)
--   [webUISharingInternalUsersShareWithPage/shareWithUsers.feature:91](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsersShareWithPage/shareWithUsers.feature#L91)
 
 ### [Copy private link option not available](https://github.com/owncloud/ocis/issues/1409)
 -   [webUIFilesCopy/copyPrivateLinks.feature:20](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesCopy/copyPrivateLinks.feature#L20)

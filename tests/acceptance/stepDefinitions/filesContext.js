@@ -823,7 +823,7 @@ Then('file/folder {string} should be marked as favorite on the webUI', async fun
   const selector = client.page.FilesPageElement.appSideBar().elements.fileInfoFavoriteShining
   await client.page.FilesPageElement.filesList().openSideBar(path)
 
-  client.expect.element(selector).to.be.present
+  await client.waitForElementPresent(selector)
   await client.page.FilesPageElement.appSideBar().closeSidebarIfOpen()
 
   return client

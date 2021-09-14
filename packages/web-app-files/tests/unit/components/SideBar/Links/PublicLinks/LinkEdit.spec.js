@@ -548,9 +548,6 @@ function createStore({
             return { type: type }
           }
         },
-        mutations: {
-          SET_APP_SIDEBAR_ACCORDION_CONTEXT: jest.fn()
-        },
         actions: mapActions
       }
     },

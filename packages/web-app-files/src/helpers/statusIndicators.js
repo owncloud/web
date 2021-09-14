@@ -110,7 +110,6 @@ export const getIndicators = (resource, sharesTree) => {
   return indicators.filter(indicator => indicator.visible)
 }
 
-const indicatorHandler = async (resource, accordion) => {
-  await window.Vue.$store.dispatch('Files/sidebar/open')
-  window.Vue.$store.commit('Files/SET_APP_SIDEBAR_ACTIVE_PANEL', accordion)
+const indicatorHandler = async (resource, panel) => {
+  await window.Vue.$store.dispatch('Files/sidebar/openWithPanel', panel)
 }
