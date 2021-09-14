@@ -426,7 +426,7 @@ module.exports = {
     },
 
     /**
-     * Retures a xpath for the collaborator in the autocomplete list
+     * Returns a xpath for the collaborator in the autocomplete list
      * @param {string} collaborator Name of the collaborator which should be found
      * @param {string} type Type of the collaborator which should be found
      * @returns {string} xpath of the collaborator
