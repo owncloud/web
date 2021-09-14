@@ -484,7 +484,7 @@ export default {
     commit('CLEAR_RESOURCES_TO_DELETE_LIST')
   },
 
-  async loadIndicators({ dispatch, commit, state }, { client, currentFolder }) {
+  async loadIndicators({ dispatch, commit }, { client, currentFolder }) {
     // kind of bruteforce for now: remove the shares for the current folder and children, reload shares tree for the current folder.
     // TODO: when we refactor the shares tree we want to modify shares tree nodes incrementally during adding and removing shares, not loading everything new from the backend.
     commit('SHARESTREE_PRUNE_OUTSIDE_PATH', dirname(currentFolder))
