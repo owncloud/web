@@ -1,7 +1,7 @@
 @mailhog @public_link_share-feature-required
 Feature: Public link share management
   As a user
-  I want to check different opitions available in public shares
+  I want to check different options available in public shares
   So that I can manage and organize the shares
 
   Background:
