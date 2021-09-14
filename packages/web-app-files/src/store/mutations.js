@@ -239,7 +239,7 @@ export default {
       hasPassword: link.password,
       expireDate:
         link.expiration !== null
-          ? DateTime.fromHTTP(link.expiration)
+          ? DateTime.fromISO(link.expiration)
               .endOf('day')
               .toISO()
           : null

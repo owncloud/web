@@ -190,10 +190,10 @@ export default {
 
     $_hasChanges() {
       const expireDateBefore = this.publicLinkInEdit.expireDate
-        ? DateTime.fromHTTP(this.publicLinkInEdit.expireDate).toFormat('dd-MM-yyyy')
+        ? DateTime.fromISO(this.publicLinkInEdit.expireDate).toFormat('dd-MM-yyyy')
         : null
       const expireDateNow = this.expireDate
-        ? DateTime.fromHTTP(this.expireDate).toFormat('dd-MM-yyyy')
+        ? DateTime.fromISO(this.expireDate).toFormat('dd-MM-yyyy')
         : null
       return (
         expireDateNow !== expireDateBefore ||
