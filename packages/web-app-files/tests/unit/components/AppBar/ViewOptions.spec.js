@@ -86,7 +86,7 @@ describe('ViewOptions', () => {
     ).toHaveBeenCalled()
   })
 
-  it('triggeres mutation to toggle hidden files', () => {
+  it('triggers mutation to toggle hidden files', () => {
     const wrapper = shallowMount(ViewOptions, {
       store,
       localVue,
