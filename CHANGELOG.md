@@ -3157,7 +3157,7 @@ Details
    A recent library update in ODS for the recycle scroller seem to have changed the logic or
    calculation of the height.
 
-   This fix accomodates for that change and restores the row height to a correct value.
+   This fix accommodates for that change and restores the row height to a correct value.
 
    The shared file lists are now more responsive, the collaborators/owner and share time columns
    are now hidden on small screens.

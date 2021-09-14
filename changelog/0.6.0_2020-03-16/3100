@@ -3,7 +3,7 @@ Bugfix: Fixed layout of file lists
 A recent library update in ODS for the recycle scroller seem to have
 changed the logic or calculation of the height.
 
-This fix accomodates for that change and restores the row height to a
+This fix accommodates for that change and restores the row height to a
 correct value.
 
 The shared file lists are now more responsive, the collaborators/owner
