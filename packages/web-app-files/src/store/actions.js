@@ -1,6 +1,7 @@
 import PQueue from 'p-queue'
 
 import { getParentPaths } from '../helpers/path'
+import { dirname } from 'path'
 import { shareTypes } from '../helpers/shareTypes'
 import { buildResource, buildShare, buildCollaboratorShare } from '../helpers/resources'
 import { $gettext, $gettextInterpolate } from '../gettext'
@@ -253,7 +254,7 @@ export default {
             )
           )
           context.dispatch('updateCurrentFileShareTypes')
-          context.commit('LOAD_INDICATORS')
+          context.dispatch('loadIndicators', { client, currentFolder: path })
         })
         .catch(e => {
           context.dispatch(
@@ -289,7 +290,7 @@ export default {
           )
         )
         context.dispatch('updateCurrentFileShareTypes')
-        context.commit('LOAD_INDICATORS')
+        context.dispatch('loadIndicators', { client, currentFolder: path })
       })
       .catch(e => {
         context.dispatch(
@@ -312,7 +313,7 @@ export default {
       .then(() => {
         context.commit('CURRENT_FILE_OUTGOING_SHARES_REMOVE', share)
         context.dispatch('updateCurrentFileShareTypes')
-        context.commit('LOAD_INDICATORS')
+        context.dispatch('loadIndicators', { client, currentFolder: share.path })
       })
       .catch(e => {
         console.log(e)
@@ -434,7 +435,7 @@ export default {
           const link = buildShare(data.shareInfo, null, !context.rootGetters.isOcis)
           context.commit('CURRENT_FILE_OUTGOING_SHARES_ADD', link)
           context.dispatch('updateCurrentFileShareTypes')
-          context.commit('LOAD_INDICATORS')
+          context.dispatch('loadIndicators', { client, currentFolder: path })
           resolve(link)
         })
         .catch(e => {
@@ -462,7 +463,7 @@ export default {
       .then(() => {
         context.commit('CURRENT_FILE_OUTGOING_SHARES_REMOVE', share)
         context.dispatch('updateCurrentFileShareTypes')
-        context.commit('LOAD_INDICATORS')
+        context.dispatch('loadIndicators', { client, currentFolder: share.path })
       })
       .catch(e => context.commit('CURRENT_FILE_OUTGOING_SHARES_ERROR', e.message))
   },
@@ -483,7 +484,10 @@ export default {
     commit('CLEAR_RESOURCES_TO_DELETE_LIST')
   },
 
-  async loadIndicators({ dispatch, commit }, { client, currentFolder }) {
+  async loadIndicators({ dispatch, commit, state }, { client, currentFolder }) {
+    // kind of bruteforce for now: remove the shares for the current folder and children, reload shares tree for the current folder.
+    // TODO: when we refactor the shares tree we want to modify shares tree nodes incrementally during adding and removing shares, not loading everything new from the backend.
+    commit('SHARESTREE_PRUNE_OUTSIDE_PATH', dirname(currentFolder))
     await dispatch('loadSharesTree', { client, path: currentFolder })
     commit('LOAD_INDICATORS')
   },
