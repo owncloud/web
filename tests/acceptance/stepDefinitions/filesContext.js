@@ -1369,10 +1369,10 @@ Then('the search bar should be visible on the webUI', async function() {
 
 Then(
   /^the preview image of file "([^"]*)" (should|should not) be displayed in the file list view on the webUI$/,
-  function(fileName, shouldOrShouldnot) {
+  function(fileName, shouldOrShouldNot) {
     return client.page.FilesPageElement.filesList().checkPreviewImage(
       fileName,
-      shouldOrShouldnot === 'should'
+      shouldOrShouldNot === 'should'
     )
   }
 )
