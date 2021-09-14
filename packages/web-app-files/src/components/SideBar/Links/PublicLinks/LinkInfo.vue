@@ -1,7 +1,7 @@
 <template>
   <div class="uk-width-expand">
     <div class="oc-mb-s uk-width-1-1">
-      <h4
+      <h5
         class="oc-text-bold uk-text-truncate oc-files-file-link-name oc-my-rm oc-text-initial"
         v-text="linkName"
       />

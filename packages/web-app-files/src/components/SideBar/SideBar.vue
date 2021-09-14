@@ -257,7 +257,6 @@ export default {
       }
 
       const clearOldPanelName = () => {
-        console.log('clearing old panel')
         this.oldPanelName = null
       }
 
