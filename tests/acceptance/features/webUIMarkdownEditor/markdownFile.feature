@@ -71,7 +71,7 @@ Feature: create markdown files
       | lorem.txt     |
 
   @disablePreviews
-  Scenario Outline: Previewing text writen in markdown format
+  Scenario Outline: Previewing text written in markdown format
     Given the user has opened file "simple.md" in the markdown editor webUI
     When the user inputs the content "<content>" in the markdown editor webUI
     Then the preview panel should have "<tagname>" element with text "<innertext>"
