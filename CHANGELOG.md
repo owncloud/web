@@ -3400,7 +3400,7 @@ Details
    We've stopped escaping translations which contained resource names or user names because
    they can contain special characters which were then not properly displayed. We've done this
    only with translations which are using mustache syntax which does escaping on its own so we
-   don't introduce poteintial XSS vulnerability. For all other translations, we've explicitly
+   don't introduce potential XSS vulnerability. For all other translations, we've explicitly
    set the escaping.
 
    https://github.com/owncloud/web/pull/3032
