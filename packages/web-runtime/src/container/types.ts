@@ -5,7 +5,7 @@ import Vue, { Component } from 'vue'
 /** shim configuration for now, should be typed in a later step */
 export type RuntimeConfiguration = any
 
-/** application information describes needed information from a application */
+/** ApplicationInformation describes required information of an application */
 export interface ApplicationInformation {
   id?: string
   name?: string
@@ -16,8 +16,8 @@ export interface ApplicationInformation {
 }
 
 /**
- * application navigation item describes a application navigation item.
- * a example use for this is the registration of application specific navigation items in the runtime
+ * ApplicationNavigationItem describes an application navigation item.
+ * an example use for this is the registration of application specific navigation items in the runtime
  */
 export interface ApplicationNavigationItem {
   name?: string
@@ -28,18 +28,31 @@ export interface ApplicationNavigationItem {
   }
 }
 
-/** application quick action describes a application action that is used in the runtime */
-export interface ApplicationQuickActions {
-  [key: string]: {
-    id?: string
-    label?: string
-    icon?: string
-    handler?: () => Promise<void>
-    displayed?: boolean
-  }
+/**
+ * ApplicationQuickAction describes an application action that is used in the runtime.
+ *
+ * @deprecated In the future quick actions should be registered just like any other extension. Fine
+ * to use this interface for now, but it will be changed in the near future.
+ */
+export interface ApplicationQuickAction {
+  id?: string
+  label?: string
+  icon?: string
+  handler?: () => Promise<void>
+  displayed?: boolean
 }
 
-/** reflects classic application script structure */
+/**
+ * ApplicationQuickActions describes a map of application actions that are used in the runtime
+ *
+ * @deprecated In the future quick actions should be registered just like any other extension. Fine
+ * to use this interface for now, but it will be changed in the near future.
+ */
+export interface ApplicationQuickActions {
+  [key: string]: ApplicationQuickAction
+}
+
+/** ClassicApplicationScript reflects classic application script structure */
 export interface ClassicApplicationScript {
   appInfo?: ApplicationInformation
   store?: Store<any>
@@ -51,7 +64,7 @@ export interface ClassicApplicationScript {
   mounted?: () => void
 }
 
-/** definition of public available runtime api */
+/** RuntimeApi defines the publicly available runtime api */
 export interface RuntimeApi {
   announceRoutes: (routes: RouteConfig[]) => void
   announceNavigationItems: (navigationItems: ApplicationNavigationItem[]) => void
