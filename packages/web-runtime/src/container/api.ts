@@ -1,10 +1,10 @@
 import VueRouter, { RouteConfig } from 'vue-router'
 import clone from 'lodash-es/clone'
 import {
-  ClassicApplicationScript,
   RuntimeApi,
   ApplicationNavigationItem,
-  ApplicationQuickActions
+  ApplicationQuickActions,
+  ApplicationTranslations
 } from './types'
 import { ApiError } from './error'
 import { get, isEqual, isObject, isArray } from 'lodash-es'
@@ -61,7 +61,7 @@ const announceRoutes = (applicationId: string, router: VueRouter, routes: RouteC
 const announceNavigationItems = (
   applicationId: string,
   store: Store<unknown>,
-  navigationItems: ClassicApplicationScript['navItems']
+  navigationItems: ApplicationNavigationItem[]
 ): void => {
   if (!isObject(navigationItems)) {
     throw new ApiError("navigationItems can't be blank")
@@ -98,7 +98,7 @@ const announceExtension = (
 const announceTranslations = (
   supportedLanguages: { [key: string]: string },
   translations: unknown,
-  appTranslations: ClassicApplicationScript['translations']
+  appTranslations: ApplicationTranslations
 ): void => {
   if (!isObject(translations)) {
     throw new ApiError("translations can't be blank")
@@ -119,7 +119,7 @@ const announceTranslations = (
  */
 const announceQuickActions = (
   store: Store<unknown>,
-  quickActions: ClassicApplicationScript['quickActions']
+  quickActions: ApplicationQuickActions
 ): void => {
   if (!isObject(quickActions)) {
     throw new ApiError("quickActions can't be blank")
@@ -245,7 +245,7 @@ export const buildRuntimeApi = ({
     announceRoutes: (routes: RouteConfig[]): void => announceRoutes(applicationId, router, routes),
     announceNavigationItems: (navigationItems: ApplicationNavigationItem[]): void =>
       announceNavigationItems(applicationId, store, navigationItems),
-    announceTranslations: (appTranslations: unknown): void =>
+    announceTranslations: (appTranslations: ApplicationTranslations): void =>
       announceTranslations(supportedLanguages, translations, appTranslations),
     announceQuickActions: (quickActions: ApplicationQuickActions): void =>
       announceQuickActions(store, quickActions),

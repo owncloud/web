@@ -84,7 +84,13 @@ export const announceApplications = async ({
 
   const applicationImplementations = await Promise.all(
     allApplications.map(applicationPath =>
-      buildApplication({ applicationPath, store, supportedLanguages, router, translations })
+      buildApplication({
+        applicationPath,
+        store,
+        supportedLanguages,
+        router,
+        translations
+      })
     )
   )
   await Promise.all(applicationImplementations.map(application => application.initialize()))

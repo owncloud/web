@@ -52,6 +52,15 @@ export interface ApplicationQuickActions {
   [key: string]: ApplicationQuickAction
 }
 
+/**
+ * ApplicationTranslations is a map of language keys to translations
+ */
+export interface ApplicationTranslations {
+  [lang: string]: {
+    key: string
+  }
+}
+
 /** ClassicApplicationScript reflects classic application script structure */
 export interface ClassicApplicationScript {
   appInfo?: ApplicationInformation
@@ -59,7 +68,7 @@ export interface ClassicApplicationScript {
   routes?: RouteConfig[]
   navItems?: ApplicationNavigationItem[]
   quickActions?: ApplicationQuickActions
-  translations?: unknown
+  translations?: ApplicationTranslations
   ready?: () => void
   mounted?: () => void
 }
@@ -68,7 +77,7 @@ export interface ClassicApplicationScript {
 export interface RuntimeApi {
   announceRoutes: (routes: RouteConfig[]) => void
   announceNavigationItems: (navigationItems: ApplicationNavigationItem[]) => void
-  announceTranslations: (appTranslations: unknown) => void
+  announceTranslations: (appTranslations: ApplicationTranslations) => void
   announceQuickActions: (quickActions: ApplicationQuickActions) => void
   announceStore: (applicationStore: Store<unknown>) => void
   announceExtension: (extension: { [key: string]: unknown }) => void
