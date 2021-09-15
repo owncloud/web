@@ -2,7 +2,7 @@
   <div
     data-testid="files-sidebar"
     :class="{
-      'has-active-sub-panel': !!sidebarActivePanel,
+      'has-active-sub-panel': !!activeAvailablePanelName,
       'uk-flex uk-flex-center uk-flex-middle': loading
     }"
   >
@@ -17,7 +17,7 @@
         :tabindex="activePanelName === panel.app ? -1 : false"
         class="sidebar-panel"
         :class="{
-          'is-active-sub-panel': sidebarActivePanel === panel.app,
+          'is-active-sub-panel': activeAvailablePanelName === panel.app,
           'is-active-default-panel': panel.default && activePanelName === panel.app,
           'sidebar-panel-default': panel.default,
           'resource-info-hidden': !isSingleResource
@@ -127,14 +127,17 @@ export default {
     ...mapGetters('Files', ['highlightedFile', 'selectedFiles', 'currentFolder']),
     ...mapGetters(['fileSideBars', 'capabilities']),
     ...mapState('Files/sidebar', { sidebarActivePanel: 'activePanel' }),
-    activePanelName() {
+    activeAvailablePanelName() {
       if (!this.sidebarActivePanel) {
-        return this.defaultPanel.app
+        return null
       }
       if (!this.availablePanels.map(p => p.app).includes(this.sidebarActivePanel)) {
-        return this.defaultPanel.app
+        return null
       }
       return this.sidebarActivePanel
+    },
+    activePanelName() {
+      return this.activeAvailablePanelName || this.defaultPanel.app
     },
     availablePanels() {
       const { panels } = this.fileSideBars.reduce(
