@@ -13,7 +13,7 @@ const util = require('util')
 const { download } = require('../helpers/webdavHelper')
 const fs = require('fs')
 const sharingHelper = require('../helpers/sharingHelper')
-const appSideBar = client.page.FilesPageElement.appSideBar()
+// const appSideBar = client.page.FilesPageElement.appSideBar()
 
 let deletedElements
 let unsharedElements
