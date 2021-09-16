@@ -37,7 +37,7 @@
     })
 
     requirejs(['web-runtime'], function (runtime) {
-      runtime.exec()
+      runtime.bootstrap('config.json').then(runtime.renderSuccess).catch(runtime.renderFailure)
     })
   </script>
 </body>

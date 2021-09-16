@@ -1,0 +1,17 @@
+{
+  "name": "skeleton",
+  "version": "0.0.0",
+  "description": "ownCloud web app skeleton",
+  "license": "AGPL-3.0",
+  "scripts": {
+    "build": "rollup -c",
+    "serve": "SERVER=true rollup -c -w"
+  },
+  "devDependencies": {
+    "rollup": "^2.41.4",
+    "rollup-plugin-serve": "^1.1.0",
+    "rollup-plugin-vue": "^5",
+    "vue-template-compiler": "^2.6.12",
+    "vue": "^2.6.10"
+  }
+}
