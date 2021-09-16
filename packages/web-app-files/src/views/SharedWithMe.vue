@@ -3,11 +3,11 @@
     <list-loader v-if="loading" />
     <template v-else>
       <!-- Pending shares -->
-      <div v-if="hasPending">
-        <div class="shares-header">
-          <h2>{{ pendingTitle }}</h2>
-          <span>({{ pendingCount }})</span>
-        </div>
+      <div v-if="hasPending" class="oc-p-s">
+        <h2>
+          {{ pendingTitle }}
+          <span class="oc-text-initial">({{ pendingCount }})</span>
+        </h2>
 
         <div id="pending-highlight">
           <oc-table-files
@@ -45,12 +45,9 @@
                 </oc-button>
               </div>
             </template>
-            <template #contextMenu="{ resource }">
-              <context-actions :item="resource" />
-            </template>
             <template v-if="pendingHasMore" #footer>
-              <div class="uk-width-1-1">
-                <oc-button appearance="raw" class="uk-text-center" @click="togglePendingShowMore">
+              <div class="uk-width-1-1 uk-text-center oc-mt">
+                <oc-button @click="togglePendingShowMore">
                   {{ pendingToggleMoreLabel }}
                 </oc-button>
               </div>
@@ -60,14 +57,19 @@
       </div>
 
       <!-- Accepted or declined shares -->
-      <div>
-        <div class="shares-header">
-          <h2>{{ sharesTitle }}</h2>
-          <span v-if="hasShares">({{ sharesCount }})</span>
-          <oc-button id="toggle-view-mode" appearance="raw" @click="toggleSharesViewMode">{{
-            sharesToggleLabel
-          }}</oc-button>
-        </div>
+      <div class="oc-p-s">
+        <h2>
+          {{ sharesTitle }}
+          <span v-if="hasShares" class="oc-text-initial">({{ sharesCount }})</span>
+          <oc-button
+            id="toggle-view-mode"
+            appearance="raw"
+            type="router-link"
+            :to="sharesToggleRouterLink"
+          >
+            {{ sharesToggleLabel }}
+          </oc-button>
+        </h2>
 
         <no-content-message
           v-if="!hasShares"
@@ -180,14 +182,20 @@ export default {
   data: () => ({
     loading: true,
     shareStatus,
-    showMorePending: false,
-    viewMode: shareStatus.accepted
+    showMorePending: false
   }),
 
   computed: {
     ...mapGetters('Files', ['activeFiles', 'selectedFiles', 'inProgress']),
     ...mapGetters(['isOcis', 'configuration', 'getToken']),
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
+
+    viewMode() {
+      if (Object.prototype.hasOwnProperty.call(this.$route.query, 'view-mode')) {
+        return parseInt(this.$route.query['view-mode'])
+      }
+      return shareStatus.accepted
+    },
 
     // pending shares
     pendingSelected: {
@@ -241,7 +249,7 @@ export default {
     sharesEmptyMessage() {
       return this.viewMode === shareStatus.declined
         ? this.$gettext("You don't have any previously declined shares.")
-        : this.$gettext("You are currently not collaborating on other people's resources.")
+        : this.$gettext("You are not collaborating on other people's resources.")
     },
     hasShares() {
       return this.sharesCount > 0
@@ -258,6 +266,19 @@ export default {
     },
     shares() {
       return this.activeFiles.filter(file => file.status === this.viewMode)
+    },
+    sharesToggleRouterLink() {
+      return {
+        name: this.$route.name,
+        params: {
+          ...this.$route.params
+        },
+        query: {
+          ...this.$route.query,
+          'view-mode':
+            this.viewMode === shareStatus.accepted ? shareStatus.declined : shareStatus.accepted
+        }
+      }
     },
 
     // misc
@@ -359,23 +380,7 @@ export default {
 
     togglePendingShowMore() {
       this.showMorePending = !this.showMorePending
-    },
-
-    toggleSharesViewMode() {
-      if (this.viewMode === shareStatus.accepted) {
-        this.viewMode = shareStatus.declined
-        return
-      }
-      this.viewMode = shareStatus.accepted
     }
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.shares-header {
-  display: flex;
-  flex-direction: row;
-  align-items: baseline;
-}
-</style>
