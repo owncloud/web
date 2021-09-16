@@ -3,96 +3,23 @@
     <list-loader v-if="loading" />
     <template v-else>
       <!-- Pending shares -->
-      <div v-if="hasPending" class="oc-p-s">
-        <h2>
+      <div v-if="hasPending">
+        <h2 class="oc-p-s">
           {{ pendingTitle }}
           <span class="oc-text-initial">({{ pendingCount }})</span>
         </h2>
 
-        <div id="pending-highlight">
-          <oc-table-files
-            id="files-shared-with-me-pending-table"
-            v-model="pendingSelected"
-            class="files-table"
-            :class="{ 'files-table-squashed': !sidebarClosed }"
-            :are-thumbnails-displayed="displayThumbnails"
-            :resources="showMorePending ? pending : pending.slice(0, 3)"
-            :target-route="targetRoute"
-            :are-resources-clickable="false"
-            :has-actions="false"
-            :header-position="headerPosition"
-          >
-            <template #status="{ resource }">
-              <div
-                :key="resource.id + resource.status"
-                class="uk-text-nowrap uk-flex uk-flex-middle uk-flex-right"
-              >
-                <oc-button
-                  size="small"
-                  class="file-row-share-status-action"
-                  @click.stop="$_acceptShare_trigger(resource)"
-                >
-                  <oc-icon size="small" name="check" />
-                  <translate>Accept</translate>
-                </oc-button>
-                <oc-button
-                  size="small"
-                  class="file-row-share-status-action oc-ml-s"
-                  @click.stop="$_declineShare_trigger(resource)"
-                >
-                  <oc-icon size="small" name="not_interested" />
-                  <translate>Decline</translate>
-                </oc-button>
-              </div>
-            </template>
-            <template v-if="pendingHasMore" #footer>
-              <div class="uk-width-1-1 uk-text-center oc-mt">
-                <oc-button @click="togglePendingShowMore">
-                  {{ pendingToggleMoreLabel }}
-                </oc-button>
-              </div>
-            </template>
-          </oc-table-files>
-        </div>
-      </div>
-
-      <!-- Accepted or declined shares -->
-      <div class="oc-p-s">
-        <h2>
-          {{ sharesTitle }}
-          <span v-if="hasShares" class="oc-text-initial">({{ sharesCount }})</span>
-          <oc-button
-            id="toggle-view-mode"
-            appearance="raw"
-            type="router-link"
-            :to="sharesToggleRouterLink"
-          >
-            {{ sharesToggleLabel }}
-          </oc-button>
-        </h2>
-
-        <no-content-message
-          v-if="!hasShares"
-          id="files-shared-with-me-shares-empty"
-          class="files-empty"
-          icon="group"
-        >
-          <template #message>
-            <span>{{ sharesEmptyMessage }}</span>
-          </template>
-        </no-content-message>
         <oc-table-files
-          v-else
-          id="files-shared-with-me-shares-table"
-          v-model="sharesSelected"
+          id="files-shared-with-me-pending-table"
+          v-model="pendingSelected"
           class="files-table"
           :class="{ 'files-table-squashed': !sidebarClosed }"
           :are-thumbnails-displayed="displayThumbnails"
-          :resources="shares"
+          :resources="showMorePending ? pending : pending.slice(0, 3)"
           :target-route="targetRoute"
+          :are-resources-clickable="false"
+          :has-actions="false"
           :header-position="headerPosition"
-          @fileClick="$_fileActions_triggerDefaultAction"
-          @rowMounted="rowMounted"
         >
           <template #status="{ resource }">
             <div
@@ -100,7 +27,6 @@
               class="uk-text-nowrap uk-flex uk-flex-middle uk-flex-right"
             >
               <oc-button
-                v-if="resource.status === shareStatus.declined"
                 size="small"
                 class="file-row-share-status-action"
                 @click.stop="$_acceptShare_trigger(resource)"
@@ -109,9 +35,8 @@
                 <translate>Accept</translate>
               </oc-button>
               <oc-button
-                v-if="resource.status === shareStatus.accepted"
                 size="small"
-                class="file-row-share-status-action"
+                class="file-row-share-status-action oc-ml-s"
                 @click.stop="$_declineShare_trigger(resource)"
               >
                 <oc-icon size="small" name="not_interested" />
@@ -119,20 +44,91 @@
               </oc-button>
             </div>
           </template>
-          <template #contextMenu="{ resource }">
-            <context-actions :item="resource" />
-          </template>
-          <template #footer>
-            <pagination />
-            <list-info
-              v-if="hasShares"
-              class="uk-width-1-1 oc-my-s"
-              :files="sharesCountFiles"
-              :folders="sharesCountFolders"
-            />
+          <template v-if="pendingHasMore" #footer>
+            <div class="uk-width-1-1 uk-text-center oc-mt">
+              <oc-button @click="togglePendingShowMore">
+                {{ pendingToggleMoreLabel }}
+              </oc-button>
+            </div>
           </template>
         </oc-table-files>
       </div>
+
+      <!-- Accepted or declined shares -->
+      <h2 class="oc-p-s">
+        {{ sharesTitle }}
+        <span v-if="hasShares" class="oc-text-initial">({{ sharesCount }})</span>
+        <oc-button
+          id="toggle-view-mode"
+          appearance="raw"
+          type="router-link"
+          :to="sharesToggleRouterLink"
+        >
+          {{ sharesToggleLabel }}
+        </oc-button>
+      </h2>
+
+      <no-content-message
+        v-if="!hasShares"
+        id="files-shared-with-me-shares-empty"
+        class="files-empty"
+        icon="group"
+      >
+        <template #message>
+          <span>{{ sharesEmptyMessage }}</span>
+        </template>
+      </no-content-message>
+      <oc-table-files
+        v-else
+        id="files-shared-with-me-shares-table"
+        v-model="sharesSelected"
+        class="files-table"
+        :class="{ 'files-table-squashed': !sidebarClosed }"
+        :are-thumbnails-displayed="displayThumbnails"
+        :resources="shares"
+        :target-route="targetRoute"
+        :header-position="headerPosition"
+        @fileClick="$_fileActions_triggerDefaultAction"
+        @rowMounted="rowMounted"
+      >
+        <template #status="{ resource }">
+          <div
+            :key="resource.id + resource.status"
+            class="uk-text-nowrap uk-flex uk-flex-middle uk-flex-right"
+          >
+            <oc-button
+              v-if="resource.status === shareStatus.declined"
+              size="small"
+              class="file-row-share-status-action"
+              @click.stop="$_acceptShare_trigger(resource)"
+            >
+              <oc-icon size="small" name="check" />
+              <translate>Accept</translate>
+            </oc-button>
+            <oc-button
+              v-if="resource.status === shareStatus.accepted"
+              size="small"
+              class="file-row-share-status-action"
+              @click.stop="$_declineShare_trigger(resource)"
+            >
+              <oc-icon size="small" name="not_interested" />
+              <translate>Decline</translate>
+            </oc-button>
+          </div>
+        </template>
+        <template #contextMenu="{ resource }">
+          <context-actions :item="resource" />
+        </template>
+        <template #footer>
+          <pagination />
+          <list-info
+            v-if="hasShares"
+            class="uk-width-1-1 oc-my-s"
+            :files="sharesCountFiles"
+            :folders="sharesCountFolders"
+          />
+        </template>
+      </oc-table-files>
     </template>
   </div>
 </template>
