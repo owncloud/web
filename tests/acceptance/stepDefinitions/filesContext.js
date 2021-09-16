@@ -732,17 +732,14 @@ const assertBreadcrumbIsDisplayedFor = async function(resource, clickable, nonCl
 
   // Try to look for a mobile breadcrumbs in case it has not been found
   if (!isBreadcrumbVisible) {
-    await appSideBar.closeSidebarIfOpen()
+    // await appSideBar.closeSidebarIfOpen()
     const mobileBreadcrumbMobileXpath = util.format(
       client.page.personalPage().elements.breadcrumbMobile.selector,
       xpathHelper.buildXpathLiteral(resource)
     )
 
-    await client.element('xpath', mobileBreadcrumbMobileXpath, result => {
-      if (result.status > -1) {
-        isBreadcrumbVisible = true
-      }
-    })
+    await client.expect(mobileBreadcrumbMobileXpath).to.be.visible
+    isBreadcrumbVisible = true
   }
 
   return client.assert.strictEqual(
