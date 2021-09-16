@@ -12,7 +12,7 @@
       :src="avatarSource"
       :user-name="userName"
     />
-    <component :is="getAvatarComponent(shareType)" v-else />
+    <component :is="getAvatarComponent(shareType)" v-else :width="width" icon-size="medium" />
   </component>
 </template>
 <script>

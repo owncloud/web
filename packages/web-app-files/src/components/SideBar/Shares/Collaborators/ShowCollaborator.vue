@@ -37,19 +37,6 @@
               class="files-collaborators-collaborator-name oc-text-bold oc-mb-rm"
               v-text="shareDisplayName"
             />
-            <p
-              v-if="isCurrentUser"
-              v-translate
-              translate-comment="Indicator for current user in list of people"
-              class="oc-text-muted files-collaborators-collaborator-additional-info oc-my-rm"
-            >
-              (me)
-            </p>
-            <p
-              v-if="collaborator.collaborator.additionalInfo"
-              class="oc-text-muted files-collaborators-collaborator-additional-info oc-my-rm"
-              v-text="collaborator.collaborator.additionalInfo"
-            />
           </div>
           <span :id="`collaborator-list-label-${shareId}`" v-translate class="oc-invisible-sr"
             >Tags</span
@@ -58,6 +45,7 @@
             class="collaborator-list oc-my-rm oc-pl-rm"
             :aria-labelledby="`collaborator-list-label-${shareId}`"
           >
+            <li>{{ shareTypeName }}</li>
             <li v-if="$_reshareInformation" class="oc-py-rm">
               <oc-drop
                 ref="menu"
@@ -157,6 +145,23 @@ export default {
   },
   computed: {
     ...mapGetters(['user']),
+
+    shareTypeName() {
+      switch(this.shareType) {
+        case shareTypes.user:
+          return this.$gettext('User')
+        case shareTypes.group:
+          return this.$gettext('Group')
+        case shareTypes.link:
+          return this.$gettext('Link')
+        case shareTypes.guest:
+          return this.$gettext('Guest')
+        case shareTypes.remote:
+          return this.$gettext('Federated')
+        default:
+          return this.$gettext('User')
+      }
+    },
 
     shareDisplayName() {
       const displayName = this.collaborator.collaborator.displayName
@@ -328,8 +333,8 @@ export default {
       this.$emit('onDelete', this.collaborator)
     },
 
-    collaboratorOptionChanged() {
-      alert('test')
+    collaboratorOptionChanged(data) {
+      console.log(data)
     }
   }
 }
