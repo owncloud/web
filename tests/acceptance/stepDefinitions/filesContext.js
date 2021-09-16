@@ -13,6 +13,7 @@ const util = require('util')
 const { download } = require('../helpers/webdavHelper')
 const fs = require('fs')
 const sharingHelper = require('../helpers/sharingHelper')
+const appSideBar = client.page.FilesPageElement.appSideBar()
 
 let deletedElements
 let unsharedElements
@@ -731,6 +732,7 @@ const assertBreadcrumbIsDisplayedFor = async function(resource, clickable, nonCl
 
   // Try to look for a mobile breadcrumbs in case it has not been found
   if (!isBreadcrumbVisible) {
+    await appSideBar.closeSidebarIfOpen()
     const mobileBreadcrumbMobileXpath = util.format(
       client.page.personalPage().elements.breadcrumbMobile.selector,
       xpathHelper.buildXpathLiteral(resource)
