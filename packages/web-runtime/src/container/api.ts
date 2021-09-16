@@ -39,9 +39,9 @@ const announceRoutes = (applicationId: string, router: VueRouter, routes: RouteC
           throw new ApiError("route children can't be blank", applicationRoute, childRoute)
         }
 
-        const route = clone(childRoute)
-        route.name = `${applicationId}-${childRoute.name}`
-        return route
+        const r = clone(childRoute)
+        r.name = `${applicationId}-${childRoute.name}`
+        return r
       })
     }
 

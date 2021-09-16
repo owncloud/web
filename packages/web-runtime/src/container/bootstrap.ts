@@ -25,7 +25,7 @@ export const requestConfiguration = async (path: string): Promise<RuntimeConfigu
     throw new Error(`config could not be loaded. HTTP status-code ${request.status}`)
   }
 
-  return await request.json().catch(error => {
+  return request.json().catch(error => {
     throw new Error(`config could not be parsed. ${error}`)
   })
 }
@@ -79,7 +79,7 @@ export const announceApplications = async ({
 
   const allApplications = [
     ...applications.map(application => `web-app-${application}`),
-    ...externalApplications.map(applications => applications.path)
+    ...externalApplications.map(application => application.path)
   ].filter(Boolean)
 
   const applicationImplementations = await Promise.all(
