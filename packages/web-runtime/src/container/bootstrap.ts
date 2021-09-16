@@ -82,7 +82,7 @@ export const announceApplications = async ({
     ...externalApplications.map(application => application.path)
   ].filter(Boolean)
 
-  const applicationImplementations = await Promise.all(
+  const results = await Promise.allSettled(
     allApplications.map(applicationPath =>
       buildApplication({
         applicationPath,
@@ -93,6 +93,15 @@ export const announceApplications = async ({
       })
     )
   )
+  const applicationImplementations = []
+  results.forEach(result => {
+    if (result.status === 'fulfilled') {
+      applicationImplementations.push(result.value)
+      return
+    }
+    // we don't want to fail hard with the full system when one specific application can't get loaded. only log the error.
+    console.error(result.reason)
+  })
   await Promise.all(applicationImplementations.map(application => application.initialize()))
   await Promise.all(applicationImplementations.map(application => application.ready()))
 }
