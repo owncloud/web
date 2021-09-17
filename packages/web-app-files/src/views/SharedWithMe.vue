@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="uk-flex uk-flex-column">
     <list-loader v-if="loading" />
     <template v-else>
       <!-- Pending shares -->
@@ -59,7 +59,7 @@
       <!-- Accepted or declined shares -->
       <h2 class="oc-p-s">
         {{ sharesTitle }}
-        <span v-if="hasShares" class="oc-text-initial">({{ sharesCount }})</span>
+        <span class="oc-text-initial">({{ sharesCount }})</span>
         <oc-button
           id="toggle-view-mode"
           appearance="raw"
@@ -73,7 +73,7 @@
       <no-content-message
         v-if="!hasShares"
         id="files-shared-with-me-empty-shares"
-        class="files-empty"
+        class="files-empty uk-flex-stretch"
         icon="group"
       >
         <template #message>
