@@ -12,7 +12,6 @@ import Favorites from '../../../src/views/Favorites.vue'
 import LocationPicker from '../../../src/views/LocationPicker.vue'
 import PublicFiles from '../../../src/views/PublicFiles.vue'
 import SharedViaLink from '../../../src/views/SharedViaLink.vue'
-import SharedWithMe from '../../../src/views/SharedWithMe.vue'
 import SharedWithOthers from '../../../src/views/SharedWithOthers.vue'
 import Trashbin from '../../../src/views/Trashbin.vue'
 
@@ -20,11 +19,6 @@ import Trashbin from '../../../src/views/Trashbin.vue'
 const routes = [
   { name: 'files-personal', path: '/files/list/personal/:item?', component: Personal },
   { name: 'files-favorites', path: '/files/list/favorites', component: Favorites },
-  {
-    name: 'files-shared-with-me',
-    path: '/files/list/shared-with-me',
-    component: SharedWithMe
-  },
   {
     name: 'files-shared-with-others',
     path: '/files/list/shared-with-others',
@@ -95,7 +89,6 @@ const cases = [
   ],
   ['PublicFiles', '/files/public/list/link', PublicFiles],
   ['SharedViaLink', '/files/list/via-link/', SharedViaLink],
-  ['SharedWithMe', '/files/list/shared-with-me/', SharedWithMe],
   ['SharedWithOthers', '/files/list/shared-with-others/', SharedWithOthers],
   ['Trashbin', '/files/list/trash-bin/', Trashbin]
 ]

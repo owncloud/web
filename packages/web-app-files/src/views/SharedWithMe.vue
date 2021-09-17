@@ -10,7 +10,7 @@
         </h2>
 
         <oc-table-files
-          id="files-shared-with-me-pending-table"
+          id="files-shared-with-me-table-pending"
           v-model="pendingSelected"
           class="files-table"
           :class="{ 'files-table-squashed': !sidebarClosed }"
@@ -70,7 +70,7 @@
 
       <no-content-message
         v-if="!hasShares"
-        id="files-shared-with-me-shares-empty"
+        id="files-shared-with-me-empty-shares"
         class="files-empty"
         icon="group"
       >
@@ -80,7 +80,7 @@
       </no-content-message>
       <oc-table-files
         v-else
-        id="files-shared-with-me-shares-table"
+        id="files-shared-with-me-table-shares"
         v-model="sharesSelected"
         class="files-table"
         :class="{ 'files-table-squashed': !sidebarClosed }"
@@ -120,7 +120,6 @@
           <context-actions :item="resource" />
         </template>
         <template #footer>
-          <pagination />
           <list-info
             v-if="hasShares"
             class="uk-width-1-1 oc-my-s"
@@ -142,7 +141,6 @@ import MixinAcceptShare from '../mixins/actions/acceptShare'
 import MixinDeclineShare from '../mixins/actions/declineShare'
 import MixinFilesListFilter from '../mixins/filesListFilter'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
-import MixinFilesListPagination from '../mixins/filesListPagination'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../constants'
@@ -151,7 +149,6 @@ import debounce from 'lodash-es/debounce'
 import ListLoader from '../components/FilesList/ListLoader.vue'
 import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
-import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
 
 const visibilityObserver = new VisibilityObserver()
@@ -161,7 +158,6 @@ export default {
     ListLoader,
     NoContentMessage,
     ListInfo,
-    Pagination,
     ContextActions
   },
 
@@ -170,7 +166,6 @@ export default {
     MixinAcceptShare,
     MixinDeclineShare,
     MixinFilesListPositioning,
-    MixinFilesListPagination,
     MixinMountSideBar,
     MixinFilesListFilter
   ],
@@ -254,11 +249,10 @@ export default {
       return this.shares.length
     },
     sharesCountFiles() {
-      console.log(this.shares)
-      return this.shares.length
+      return this.shares.filter(s => s.type !== 'folder').length
     },
     sharesCountFolders() {
-      return this.shares.length
+      return this.shares.filter(s => s.type === 'folder').length
     },
     shares() {
       return this.activeFiles.filter(file => file.status === this.viewMode)
@@ -292,11 +286,6 @@ export default {
   watch: {
     uploadProgressVisible() {
       this.adjustTableHeaderPosition()
-    },
-
-    $route: {
-      handler: '$_filesListPagination_updateCurrentPage',
-      immediate: true
     }
   },
 

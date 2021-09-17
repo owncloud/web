@@ -370,7 +370,7 @@ function createStore(state = { selected: [], currentFolder: {} }) {
         getters: {
           selectedFiles: () => state.selected,
           currentFolder: () => state.currentFolder,
-          activeFiles: () => files
+          activeFilesCurrentPage: () => files
         }
       }
     }

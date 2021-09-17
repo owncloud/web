@@ -48,7 +48,7 @@
             id="files-location-picker-table"
             class="files-table"
             :are-thumbnails-displayed="false"
-            :resources="activeFiles"
+            :resources="activeFilesCurrentPage"
             :disabled="disabledResources"
             :target-route="targetRoute"
             :has-actions="false"
@@ -58,7 +58,7 @@
             <template #footer>
               <pagination />
               <list-info
-                v-if="activeFiles.length > 0"
+                v-if="activeFilesCurrentPage.length > 0"
                 class="uk-width-1-1 oc-my-s"
                 :files="totalFilesCount.files"
                 :folders="totalFilesCount.folders"
@@ -117,7 +117,7 @@ export default {
       'currentFolder'
     ]),
     ...mapGetters('Files', [
-      'activeFiles',
+      'activeFilesCurrentPage',
       'publicLinkPassword',
       'totalFilesCount',
       'totalFilesSize'
@@ -202,7 +202,7 @@ export default {
     },
 
     disabledResources() {
-      const resources = cloneStateObject(this.activeFiles)
+      const resources = cloneStateObject(this.activeFilesCurrentPage)
 
       return resources
         .filter(resource => resource.type !== 'folder' || this.resources.includes(resource.path))
@@ -210,7 +210,7 @@ export default {
     },
 
     isEmpty() {
-      return this.activeFiles.length < 1
+      return this.activeFilesCurrentPage.length < 1
     },
 
     targetRoute() {
@@ -347,7 +347,7 @@ export default {
         let targetPath = this.target || '/'
         const resourceName = basename(resource)
         targetPath += '/' + resourceName
-        const exists = this.activeFiles.some(item => {
+        const exists = this.activeFilesCurrentPage.some(item => {
           return basename(item.name) === resourceName
         })
 

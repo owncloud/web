@@ -1,6 +1,6 @@
 <template>
   <div class="files-search-result">
-    <no-content-message v-if="!activeFiles.length" class="files-empty" icon="folder">
+    <no-content-message v-if="!activeFilesCurrentPage.length" class="files-empty" icon="folder">
       <template #message>
         <p class="oc-text-muted">
           <span v-if="!!$route.query.term" v-translate>No resource found</span>
@@ -12,7 +12,7 @@
       v-else
       class="files-table"
       :class="{ 'files-table-squashed': false }"
-      :resources="activeFiles"
+      :resources="activeFilesCurrentPage"
       :target-route="{ name: 'files-personal' }"
       :are-paths-displayed="true"
       :are-thumbnails-displayed="displayThumbnails"
@@ -24,7 +24,7 @@
       <template #footer>
         <pagination />
         <list-info
-          v-if="activeFiles.length > 0"
+          v-if="activeFilesCurrentPage.length > 0"
           class="uk-width-1-1 oc-my-s"
           :files="totalFilesCount.files"
           :folders="totalFilesCount.folders"
@@ -70,7 +70,7 @@ export default {
   },
   computed: {
     ...mapGetters(['configuration']),
-    ...mapGetters('Files', ['activeFiles', 'totalFilesCount', 'totalFilesSize']),
+    ...mapGetters('Files', ['activeFilesCurrentPage', 'totalFilesCount', 'totalFilesSize']),
     displayThumbnails() {
       return !this.configuration.options.disablePreviews
     }

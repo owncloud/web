@@ -99,7 +99,7 @@ export default {
   mixins: [MixinRoutes, MixinDeleteResources],
 
   computed: {
-    ...mapGetters('Files', ['selectedFiles', 'currentFolder', 'activeFiles']),
+    ...mapGetters('Files', ['selectedFiles', 'currentFolder', 'activeFilesCurrentPage']),
     ...mapGetters(['homeFolder']),
 
     emptyTrashbinButtonText() {
@@ -177,7 +177,7 @@ export default {
     },
 
     isEmpty() {
-      return this.activeFiles.length < 1
+      return this.activeFilesCurrentPage.length < 1
     }
   },
 
@@ -216,7 +216,7 @@ export default {
           this.showMessage({
             title: this.$gettext('All deleted files were removed')
           })
-          this.removeFilesFromTrashbin(this.activeFiles)
+          this.removeFilesFromTrashbin(this.activeFilesCurrentPage)
         })
         .catch(error => {
           this.showMessage({

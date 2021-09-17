@@ -23,7 +23,7 @@
         class="files-table"
         :class="{ 'files-table-squashed': !sidebarClosed }"
         :are-thumbnails-displayed="displayThumbnails"
-        :resources="activeFiles"
+        :resources="activeFilesCurrentPage"
         :target-route="targetRoute"
         :header-position="headerPosition"
         :drag-drop="true"
@@ -45,7 +45,7 @@
         <template #footer>
           <pagination />
           <list-info
-            v-if="activeFiles.length > 0"
+            v-if="activeFilesCurrentPage.length > 0"
             class="uk-width-1-1 oc-my-s"
             :files="totalFilesCount.files"
             :folders="totalFilesCount.folders"
@@ -137,7 +137,7 @@ export default {
       'highlightedFile',
       'selectedFiles',
       'inProgress',
-      'activeFiles',
+      'activeFilesCurrentPage',
       'currentFolder',
       'totalFilesCount',
       'totalFilesSize'
@@ -145,7 +145,7 @@ export default {
     ...mapGetters(['user', 'homeFolder', 'configuration']),
 
     isEmpty() {
-      return this.activeFiles.length < 1
+      return this.activeFilesCurrentPage.length < 1
     },
 
     uploadProgressVisible() {
@@ -247,7 +247,7 @@ export default {
 
     async fileDropped(fileIdTarget) {
       const selected = [...this.selectedFiles]
-      const targetInfo = this.activeFiles.find(e => e.id === fileIdTarget)
+      const targetInfo = this.activeFilesCurrentPage.find(e => e.id === fileIdTarget)
       const isTargetSelected = selected.some(e => e.id === fileIdTarget)
       if (isTargetSelected) return
       if (targetInfo.type !== 'folder') return
@@ -388,9 +388,9 @@ export default {
     scrollToResourceFromRoute() {
       const resourceName = this.$route.query.scrollTo
 
-      if (resourceName && this.activeFiles.length > 0) {
+      if (resourceName && this.activeFilesCurrentPage.length > 0) {
         this.$nextTick(() => {
-          const resource = this.activeFiles.find(r => r.name === resourceName)
+          const resource = this.activeFilesCurrentPage.find(r => r.name === resourceName)
 
           if (resource) {
             this.selected = [resource]
