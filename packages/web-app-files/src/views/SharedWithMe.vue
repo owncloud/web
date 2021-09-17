@@ -18,7 +18,6 @@
           :resources="showMorePending ? pending : pending.slice(0, 3)"
           :target-route="targetRoute"
           :are-resources-clickable="false"
-          :has-actions="false"
           :header-position="headerPosition"
         >
           <template #status="{ resource }">
@@ -43,6 +42,9 @@
                 <translate>Decline</translate>
               </oc-button>
             </div>
+          </template>
+          <template #contextMenu="{ resource }">
+            <context-actions :item="resource" />
           </template>
           <template v-if="pendingHasMore" #footer>
             <div class="uk-width-1-1 uk-text-center oc-mt">
