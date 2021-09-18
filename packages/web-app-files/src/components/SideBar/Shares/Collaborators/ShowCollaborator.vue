@@ -1,5 +1,10 @@
 <template>
-  <oc-table-simple top class="files-collaborators-collaborator" role="presentation">
+  <oc-table-simple
+    :data-testid="`collaborator-item-${collaborator.collaborator.name}`"
+    top
+    class="files-collaborators-collaborator"
+    role="presentation"
+  >
     <oc-tr class="files-collaborators-collaborator-table-row-info">
       <oc-td width="shrink" class="oc-py-rm oc-pr-s">
         <div key="collaborator-avatar-loaded">
@@ -124,7 +129,10 @@
               </oc-tag>
             </li>
             <li v-if="collaborator.expires" class="oc-py-rm">
-              <oc-tag class="files-collaborators-collaborator-expires">
+              <oc-tag
+                data-testid="recipient-info-expiration-date"
+                class="files-collaborators-collaborator-expires"
+              >
                 <oc-icon name="text-calendar" />
                 <translate :translate-params="{ expires: expirationDate }">
                   Expires %{expires}
@@ -154,6 +162,7 @@
           <oc-button
             v-if="$_editButtonVisible"
             v-oc-tooltip="editShareHint"
+            :data-testid="`recipient-${collaborator.collaborator.name}-btn-edit`"
             :aria-label="editShareHint"
             appearance="raw"
             class="files-collaborators-collaborator-edit oc-mr-xs"

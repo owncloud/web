@@ -1,12 +1,11 @@
 <template>
-  <div>
+  <div class="recipient-edit-options">
     <hr />
     <oc-button
       id="files-collaborators-role-button"
       appearance="raw"
       justify-content="left"
       gap-size="xsmall"
-      class="oc-mr-s"
     >
       <translate v-if="isAdvancedRoleSelected" key="advanced-permissions-select"
         >Invite with custom permissions</translate
@@ -42,10 +41,12 @@
         :max-date="maxExpirationDate"
         :locale="$language.current"
         class="files-recipient-expiration-datepicker"
+        data-testid="recipient-datepicker"
       >
         <template #default="{ togglePopover }">
           <oc-button
             id="files-collaborators-expiration-button"
+            data-testid="recipient-datepicker-btn"
             appearance="raw"
             justify-content="left"
             gap-size="xsmall"
@@ -61,10 +62,19 @@
             >
               Expires %{expires}
             </translate>
-            <oc-icon name="expand_more" />
+            <oc-icon v-if="!enteredExpirationDate" name="expand_more" />
           </oc-button>
         </template>
       </date-picker>
+      <oc-button
+        v-if="!expirationDateEnforced && enteredExpirationDate"
+        data-testid="recipient-edit-expiration-btn-remove"
+        appearance="raw"
+        :aria-label="$gettext('Remove expiration date')"
+        @click="clearExpirationDate"
+      >
+        <oc-icon name="close" />
+      </oc-button>
     </template>
     <template v-if="$_ocCollaborators_hasAdditionalPermissions">
       <label v-if="!isAdvancedRoleSelected" class="oc-label oc-mt-s">
@@ -374,12 +384,22 @@ export default {
 
     disabledExpirationDates(date) {
       return date < this.minExpirationDate || date > this.maxExpirationDate
+    },
+
+    clearExpirationDate() {
+      this.enteredExpirationDate = null
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.recipient-edit-options {
+  align-items: center;
+  display: flex;
+  gap: var(--oc-space-small);
+}
+
 .files-recipient-role-drop {
   &-list {
     background-color: var(--oc-color-swatch-inverse-default);
@@ -414,7 +434,7 @@ export default {
 }
 
 .files-recipient-expiration-datepicker::v-deep .vc-highlight {
-  // !important to overwrite the inline style
+  // `!important` to overwrite the inline style
   background-color: var(--oc-color-swatch-primary-default) !important;
 }
 </style>

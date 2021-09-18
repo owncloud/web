@@ -46,6 +46,7 @@
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-typescript": "^8.2.5",
     "@testing-library/jest-dom": "^5.13.0",
+    "@testing-library/user-event": "^13.2.1",
     "@testing-library/vue": "^5.6.2",
     "@types/cucumber": "^7.0.0",
     "@types/jest": "^26.0.23",

@@ -1,5 +1,5 @@
 <template>
-  <div class="files-collaborators-collaborator-edit-dialog">
+  <div data-testid="recipient-dialog-edit" class="files-collaborators-collaborator-edit-dialog">
     <h4
       id="collaborator-edit-hint"
       tabindex="-1"
@@ -58,6 +58,7 @@
           v-else
           id="files-collaborators-collaborator-save-share-button"
           key="edit-collaborator-saving-button"
+          data-testid="recipient-edit-btn-save"
           :aria-label="$gettext('Save Share')"
           :disabled="!$_hasChanges"
           variation="primary"
@@ -155,15 +156,10 @@ export default {
         // if the role has changed, always return true. The user doesn't need to understand if two bitmasks of different roles are the same!
         return true
       }
-      // FIXME: Datepicker is not displaying correct timezone so for now we add it manually
-      const originalExpirationDate = this.originalExpirationDate
-      // ? DateTime.fromJSDate(this.originalExpirationDate)
-      //     .plus({ minutes: DateTime.now().offset })
-      //     .toISO()
-      // : null
-
-      const exactExpirationDate = DateTime.fromISO(this.expirationDate).ts
-      const exactOriginalExpirationDate = DateTime.fromISO(originalExpirationDate).ts
+      const exactExpirationDate = this.expirationDate
+        ? DateTime.fromISO(this.expirationDate).ts
+        : null
+      const exactOriginalExpirationDate = DateTime.fromISO(this.originalExpirationDate).ts
 
       if (exactExpirationDate !== exactOriginalExpirationDate) {
         return true
@@ -201,7 +197,7 @@ export default {
         // Map bitmask to role to get the correct role in case the advanced role was mapped to existing role
         role: bitmaskToRole(bitmask, this.highlightedFile.type === 'folder', !this.isOcis),
         permissions: bitmask,
-        expirationDate: this.expirationDate
+        expirationDate: this.expirationDate || ''
       })
         .then(() => this.$_ocCollaborators_cancelChanges())
         .catch(errors => {

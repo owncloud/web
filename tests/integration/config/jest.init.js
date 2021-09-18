@@ -2,6 +2,7 @@ import Vue from 'vue'
 import { config } from '@vue/test-utils'
 import fetchMock from 'jest-fetch-mock'
 import ODS from 'owncloud-design-system'
+import GetTextPlugin from 'vue-gettext'
 
 // eslint-disable-next-line jest/no-mocks-import
 import sdkMock from '../../../__mocks__/sdk'
@@ -15,6 +16,12 @@ window.IntersectionObserver = jest.fn(() => ({
 
 Vue.use(ODS)
 
+Vue.use(GetTextPlugin, {
+  availableLanguages: ['en'],
+  defaultLanguage: 'en',
+  translations: {}
+})
+
 fetchMock.enableMocks()
 
 try {
@@ -24,25 +31,12 @@ try {
   console.error(error)
 }
 
+// since silent doesn't seem to work in test env for gettext plugin
+// we're manually silencing all warn messages
+console.warn = jest.fn()
+
 config.mocks = {
-  $gettext: str => str,
-  $gettextInterpolate: str => str,
-  $ngettext: str => str,
-  $pgettext: str => str,
   $client: sdkMock,
-  $language: {
-    current: 'en'
-  },
   encodePath,
   isIE11: () => false
 }
-
-// Translate component mock
-Vue.component('Translate', {
-  props: {
-    tag: { type: String, default: 'span' }
-  },
-  render(createElement) {
-    return createElement(this.tag, {}, this.$slots.default)
-  }
-})

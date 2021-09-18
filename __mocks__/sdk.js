@@ -6,6 +6,7 @@ import fixtureSharedViaLinksFiles from '../__fixtures__/sharedViaLinkFiles'
 import fixtureSharedWithMeFiles from '../__fixtures__/sharedWithMeFiles'
 import fixtureDeletedFiles from '../__fixtures__/deletedFiles'
 import fixturePublicFiles from '../__fixtures__/publicFiles'
+import fixtureRecipients from '../__fixtures__/recipients'
 
 export default {
   files: {
@@ -41,6 +42,64 @@ export default {
     list: path => fixturePublicFiles[path]
   },
   shares: {
-    getShares: () => new Promise(resolve => resolve())
+    getShares: () => Promise.resolve(),
+    getRecipients,
+    shareFileWithUser: (path, id, params) =>
+      Promise.resolve({
+        shareInfo: {
+          id: 1,
+          share_type: 0,
+          uid_owner: 'alice', // TODO: get user dynamically
+          displayname_owner: 'alice', // TODO: get user dynamically
+          permissions: params.permissions,
+          stime: new Date().getTime(),
+          expiration: params.expirationDate,
+          uid_file_owner: 'alice', // TODO: get user dynamically
+          displayname_file_owner: 'alice', // TODO: get user dynamically
+          path,
+          item_type: 'folder', // TODO: get item type dynamically
+          item_source: 10,
+          file_source: 10,
+          file_parent: 6,
+          file_target: path,
+          share_with: id,
+          share_with_displayname: id
+        }
+      }),
+    shareFileWithGroup: () => Promise.resolve(),
+    updateShare: (id, params) => {
+      const share = {
+        shareInfo: {
+          id,
+          share_type: 0,
+          uid_owner: 'alice', // TODO: get user dynamically
+          displayname_owner: 'alice', // TODO: get user dynamically
+          permissions: params.permissions,
+          stime: new Date().getTime(),
+          uid_file_owner: 'alice', // TODO: get user dynamically
+          displayname_file_owner: 'alice', // TODO: get user dynamically
+          path: '/Documents', // TODO: get path dynamically
+          item_type: 'folder', // TODO: get item type dynamically
+          item_source: 10,
+          file_source: 10,
+          file_parent: 6,
+          file_target: '/Documents', // TODO: get path dynamically
+          share_with: 'bob', // TODO: get user dynamically
+          share_with_displayname: 'bob' // TODO: get user dynamically
+        }
+      }
+
+      if (params.expireDate) {
+        share.shareInfo.expiration = params.expireDate
+      }
+
+      return Promise.resolve(share)
+    }
   }
+}
+
+function getRecipients(query) {
+  const users = fixtureRecipients.users.filter(user => user.label.includes(query))
+
+  return { exact: { users, groups: [], remotes: [] }, users: [], groups: [], remotes: [] }
 }
