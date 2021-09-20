@@ -10,7 +10,7 @@
         </h2>
 
         <oc-table-files
-          id="files-shared-with-me-table-pending"
+          id="files-shared-with-me-pending-table"
           v-model="pendingSelected"
           class="files-table"
           :class="{ 'files-table-squashed': !sidebarClosed }"
@@ -48,7 +48,11 @@
           </template>
           <template v-if="pendingHasMore" #footer>
             <div class="uk-width-1-1 uk-text-center oc-mt">
-              <oc-button @click="togglePendingShowMore">
+              <oc-button
+                id="files-shared-with-me-pending-show-all"
+                :data-test-expand="(!showMorePending).toString()"
+                @click="togglePendingShowMore"
+              >
                 {{ pendingToggleMoreLabel }}
               </oc-button>
             </div>
@@ -61,10 +65,11 @@
         {{ sharesTitle }}
         <span class="oc-text-initial">({{ sharesCount }})</span>
         <oc-button
-          id="toggle-view-mode"
+          id="files-shared-with-me-toggle-view-mode"
           appearance="raw"
           type="router-link"
           :to="sharesToggleRouterLink"
+          :data-test-set-view-mode="sharesOtherViewMode.toString()"
         >
           {{ sharesToggleLabel }}
         </oc-button>
@@ -72,7 +77,7 @@
 
       <no-content-message
         v-if="!hasShares"
-        id="files-shared-with-me-empty-shares"
+        id="files-shared-with-me-shares-empty"
         class="files-empty uk-flex-stretch"
         icon="group"
       >
@@ -82,7 +87,7 @@
       </no-content-message>
       <oc-table-files
         v-else
-        id="files-shared-with-me-table-shares"
+        id="files-shared-with-me-shares-table"
         v-model="sharesSelected"
         class="files-table"
         :class="{ 'files-table-squashed': !sidebarClosed }"
@@ -259,6 +264,9 @@ export default {
     shares() {
       return this.activeFiles.filter(file => file.status === this.viewMode)
     },
+    sharesOtherViewMode() {
+      return this.viewMode === shareStatus.accepted ? shareStatus.declined : shareStatus.accepted
+    },
     sharesToggleRouterLink() {
       return {
         name: this.$route.name,
@@ -267,8 +275,7 @@ export default {
         },
         query: {
           ...this.$route.query,
-          'view-mode':
-            this.viewMode === shareStatus.accepted ? shareStatus.declined : shareStatus.accepted
+          'view-mode': this.sharesOtherViewMode
         }
       }
     },
