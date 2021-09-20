@@ -13,6 +13,7 @@ describe('Getters', () => {
     rootState = {
       Files: {
         pagination: {
+          currentPage: 1,
           itemsPerPage: 10
         }
       }
