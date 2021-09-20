@@ -90,7 +90,10 @@ describe('Favorites component', () => {
 
     describe('previews', () => {
       it('displays previews when the "disablePreviews" config is disabled', () => {
-        const store = getStore({ disablePreviews: false, activeFilesCurrentPage: defaultActiveFiles })
+        const store = getStore({
+          disablePreviews: false,
+          activeFilesCurrentPage: defaultActiveFiles
+        })
         const wrapper = getMountedWrapper({ store, loading: false })
 
         expect(
@@ -99,7 +102,10 @@ describe('Favorites component', () => {
       })
 
       it('hides previews when the "disablePreviews" config is enabled', () => {
-        const store = getStore({ disablePreviews: true, activeFilesCurrentPage: defaultActiveFiles })
+        const store = getStore({
+          disablePreviews: true,
+          activeFilesCurrentPage: defaultActiveFiles
+        })
         const wrapper = getMountedWrapper({ store, loading: false })
 
         expect(
@@ -187,7 +193,10 @@ describe('Favorites component', () => {
 })
 
 function mountOptions({
-  store = getStore({ activeFilesCurrentPage: defaultActiveFiles, totalFilesCount: { files: 1, folders: 1 } }),
+  store = getStore({
+    activeFilesCurrentPage: defaultActiveFiles,
+    totalFilesCount: { files: 1, folders: 1 }
+  }),
   loading = false
 } = {}) {
   return {
