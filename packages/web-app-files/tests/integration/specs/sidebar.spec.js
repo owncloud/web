@@ -52,6 +52,7 @@ const store = {
 describe('Files sidebar', () => {
   test('Links panel displays private link for a shared file', async () => {
     config.mocks.publicPage = () => false
+    config.mocks.$client.shares.getShares = () => new Promise(resolve => resolve([]))
 
     const { getByTestId, findByTestId, findByText } = render(
       Sidebar,
