@@ -42,41 +42,7 @@ const routes = [
     }
   }
 ]
-const store = merge(
-  {
-    ...Store,
-    modules: {
-      ...Store.modules,
-      user: {
-        ...Store.modules.user,
-        state: {
-          ...Store.modules.user.state,
-          id: 'alice'
-        }
-      },
-      Files: {
-        ...StoreFiles,
-        state: {
-          ...StoreFiles.state
-        }
-      }
-    }
-  },
-  {
-    modules: {
-      Files: {
-        modules: {
-          pagination: {
-            state: () => ({
-              currentPage: 1,
-              itemsPerPage: 2
-            })
-          }
-        }
-      }
-    }
-  }
-)
+let store
 
 const stubs = { 'context-actions': true }
 const cases = [
@@ -95,6 +61,35 @@ const cases = [
 
 describe('User can navigate in files list using pagination', () => {
   beforeEach(() => {
+    store = merge(
+      {},
+      Store,
+      {
+        modules: {
+          user: {
+            state: {
+              id: 'alice'
+            }
+          },
+          Files: StoreFiles
+        }
+      },
+      {
+        modules: {
+          Files: {
+            modules: {
+              pagination: {
+                state: () => ({
+                  currentPage: 1,
+                  itemsPerPage: 2
+                })
+              }
+            }
+          }
+        }
+      }
+    )
+
     const appBar = document.createElement('div')
     const breadcrumbs = document.createElement('div')
     const breadcrumbItem = document.createElement('div')
@@ -121,6 +116,7 @@ describe('User can navigate in files list using pagination', () => {
         component,
         { routes, store, stubs },
         (vue, store, router) => {
+          vue.directive('translate', jest.fn())
           router.push(route)
         }
       )
@@ -164,6 +160,8 @@ describe('User can navigate in files list using pagination', () => {
         component,
         { routes, store, stubs },
         (vue, store, router) => {
+          vue.directive('translate', jest.fn())
+
           if (name === 'LocationPicker') {
             router.push(`${route}&page=2`)
             return
