@@ -29,7 +29,7 @@ export default {
     const { itemsPerPage, currentPage } = rootState.Files.pagination
     if (itemsPerPage > 0) {
       const firstElementIndex = (currentPage - 1) * itemsPerPage
-      return getters.activeFiles.splice(firstElementIndex, itemsPerPage)
+      return getters.activeFiles.slice(firstElementIndex, firstElementIndex + itemsPerPage)
     }
     return getters.activeFiles
   },
