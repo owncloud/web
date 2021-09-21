@@ -1,3 +1,29 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v4.2.0...master
+
+Summary
+-------
+
+* Enhancement - Multiple shared with me tables: [#5814](https://github.com/owncloud/web/pull/5814)
+
+Details
+-------
+
+* Enhancement - Multiple shared with me tables: [#5814](https://github.com/owncloud/web/pull/5814)
+
+   We have separated the single table on the shared with me page into up to three different tables: -
+   pending shares - accepted shares - declined shares By default we show pending and accepted
+   shares. There is navigation in place to switch over from the accepted to the declined shares and
+   the other way around. Pending shares stay visible all the time since it's expected that users
+   take immediate action on pending shares anyway.
+
+   https://github.com/owncloud/web/pull/5814
+   https://github.com/owncloud/web/pull/5177
+
 Changelog for ownCloud Web [4.2.0] (2021-09-14)
 =======================================
 The following sections list the changes in ownCloud web 4.2.0 relevant to
