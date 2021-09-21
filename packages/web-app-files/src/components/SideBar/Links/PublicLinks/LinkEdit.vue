@@ -33,44 +33,65 @@
           No matching role found
         </template>
       </oc-select>
-      <div class="oc-mb uk-grid-small uk-flex" uk-grid>
-        <div v-if="$_expirationDate" class="uk-width-1-1 uk-width-2-5@m">
-          <div class="uk-position-relative">
-            <oc-datepicker
-              id="oc-files-file-link-expire-date"
-              :key="'oc-datepicker-' + expireDate"
-              :label="expirationDateLabel"
-              :date="expireDate"
-              :max-datetime="$_maxExpirationDate"
-              :min-datetime="$_minExpirationDate"
-              @input="expireDate = $event"
-            />
+      <div v-if="$_expirationDate" class="oc-mb">
+        <label for="files-links-expiration-btn" v-text="expirationDateLabel" />
+        <date-picker
+          id="oc-files-file-link-expire-date"
+          :key="'oc-datepicker-' + expireDate"
+          v-model="expireDate"
+          :min-date="minExpirationDate"
+          :max-date="maxExpirationDate"
+          :locale="$language.current"
+          class="files-recipient-expiration-datepicker"
+          data-testid="recipient-datepicker"
+        >
+          <template #default="{ togglePopover }">
             <oc-button
-              v-if="!$_expirationDate.enforced && !!expireDate"
-              id="oc-files-file-link-expire-date-delete"
-              class="oc-mt-s"
-              appearance="raw"
-              @click="expireDate = null"
-              v-text="$gettext('Remove expiration date')"
-            />
-          </div>
-        </div>
-        <div class="uk-width-1-1 uk-width-3-5@m">
-          <oc-text-input
-            id="oc-files-file-link-password"
-            v-model="password"
-            type="password"
-            :label="passwordLabel"
-          />
-          <oc-button
-            v-if="!$_passwordEnforced && (password || hasPassword)"
-            id="oc-files-file-link-password-delete"
-            class="oc-mt-s"
-            appearance="raw"
-            @click="removePassword"
-            v-text="$gettext('Remove password')"
-          />
-        </div>
+              id="files-links-expiration-btn"
+              data-testid="recipient-datepicker-btn"
+              class="uk-width-1-1"
+              justify-content="space-between"
+              gap-size="xsmall"
+              @click="togglePopover"
+            >
+              <translate v-if="!expireDate" key="no-expiration-date-label"
+                >Set expiration date</translate
+              >
+              <translate
+                v-else
+                key="set-expiration-date-label"
+                :translate-params="{ expires: relativeExpirationDate }"
+              >
+                Expires %{expires}
+              </translate>
+              <oc-icon name="expand_more" />
+            </oc-button>
+          </template>
+        </date-picker>
+        <oc-button
+          v-if="!$_expirationDate.enforced && !!expireDate"
+          id="oc-files-file-link-expire-date-delete"
+          class="oc-mt-s"
+          appearance="raw"
+          @click="expireDate = null"
+          v-text="$gettext('Remove expiration date')"
+        />
+      </div>
+      <div>
+        <oc-text-input
+          id="oc-files-file-link-password"
+          v-model="password"
+          type="password"
+          :label="passwordLabel"
+        />
+        <oc-button
+          v-if="!$_passwordEnforced && (password || hasPassword)"
+          id="oc-files-file-link-password-delete"
+          class="oc-mt-s"
+          appearance="raw"
+          @click="removePassword"
+          v-text="$gettext('Remove password')"
+        />
       </div>
       <!-- @TODO: Enable Mail API to use the following
                   ++++++++++++++++++++++++++++++++++++
@@ -142,6 +163,8 @@
 </template>
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
+import DatePicker from 'v-calendar/lib/components/date-picker.umd'
+
 import mixins from '../../../../mixins'
 import { DateTime } from 'luxon'
 import publicLinkRoles from '../../../../helpers/publicLinkRolesDefinition'
@@ -149,7 +172,8 @@ import RoleItem from '../../Shared/RoleItem.vue'
 
 export default {
   components: {
-    RoleItem
+    RoleItem,
+    DatePicker
   },
   mixins: [mixins],
   inject: ['changeView'],
@@ -227,24 +251,18 @@ export default {
       }
     },
 
-    $_minExpirationDate() {
-      return DateTime.now()
-        .plus({ days: 1 })
-        .endOf('day')
-        .toISO()
+    minExpirationDate() {
+      return DateTime.now().plus({ days: 1 })
     },
 
-    $_maxExpirationDate() {
+    maxExpirationDate() {
       if (!this.$_expirationDate.enforced) {
         return null
       }
 
       const days = parseInt(this.$_expirationDate.days, 10)
 
-      return DateTime.now()
-        .plus({ days: days })
-        .endOf('day')
-        .toISO()
+      return DateTime.now().plus({ days: days })
     },
 
     $_expirationIsValid() {
@@ -297,6 +315,13 @@ export default {
     },
     selectedRoleLabel() {
       return this.$gettext('Role')
+    },
+
+    relativeExpirationDate() {
+      return DateTime.fromJSDate(this.expireDate)
+        .setLocale(this.$language.current)
+        .endOf('day')
+        .toRelative()
     }
   },
   created() {
@@ -334,7 +359,9 @@ export default {
       this.saving = true
 
       const params = {
-        expireDate: this.expireDate,
+        expireDate: DateTime.fromJSDate(this.expireDate)
+          .endOf('day')
+          .toISO(),
         permissions: this.selectedRole.permissions,
         name: this.name
       }
