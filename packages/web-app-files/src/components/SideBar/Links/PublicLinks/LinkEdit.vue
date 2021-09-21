@@ -329,12 +329,25 @@ export default {
         .setLocale(this.$language.current)
         .endOf('day')
         .toRelative()
+    },
+
+    defaultExpireDate() {
+      if (!this.$_expirationDate.days) {
+        return null
+      }
+
+      const date = new Date()
+      date.setDate(date.getDate() + this.$_expirationDate.days)
+
+      return date
     }
   },
   created() {
     this.name = this.publicLinkInEdit.name
     this.hasPassword = this.publicLinkInEdit.hasPassword
-    this.expireDate = this.publicLinkInEdit.expireDate
+    this.expireDate = this.publicLinkInEdit?.id
+      ? new Date(this.publicLinkInEdit.expireDate)
+      : this.defaultExpireDate
 
     this.setRole()
   },
