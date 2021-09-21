@@ -72,7 +72,7 @@ Feature: Shares in share-with pages
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
     And user "Brian" has logged in using the webUI
-    When the user browses to the shared-with-me page using the webUI
+    When the user browses to the shared-with-me page
     Then folder "simple-folder" should be listed on the webUI
     But file "data.zip" should not be listed on the webUI
 
@@ -83,7 +83,7 @@ Feature: Shares in share-with pages
     And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
     And user "Alice" has created file "simple-folder/collaborate-on-this.txt"
     And user "Brian" has logged in using the webUI
-    When the user browses to the shared-with-me page using the webUI
+    When the user browses to the shared-with-me page
     And the user opens folder "simple-folder" using the webUI
     Then file "collaborate-on-this.txt" should be listed on the webUI
 
@@ -93,7 +93,7 @@ Feature: Shares in share-with pages
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
     And user "Brian" has logged in using the webUI
-    When the user browses to the shared-with-me page using the webUI
+    When the user browses to the shared-with-me page
     And the user unshares folder "simple-folder" using the webUI
     And the user browses to the folder "Shares" on the files page
     Then folder "simple-folder" should not be listed on the webUI
@@ -107,11 +107,12 @@ Feature: Shares in share-with pages
     And user "Alice" has shared file "lorem.txt" with user "Brian"
     And user "Brian" has accepted the share "lorem.txt" offered by user "Alice"
     And user "Brian" has logged in using the webUI
-    And the user browses to the shared-with-me page using the webUI
+    And the user browses to the shared-with-me page in accepted shares view
     When the user batch unshares these files using the webUI
       | name          |
       | simple-folder |
       | lorem.txt     |
+    And the user browses to the shared-with-me page in declined shares view
     Then the unshared elements should be in declined state on the webUI
 
   @issue-3040 @issue-4113 @ocis-reva-issue-39
@@ -193,7 +194,6 @@ Feature: Shares in share-with pages
     When user "Brian" logs in using the webUI
     And the user opens folder "Shares" using the webUI
     Then user "Brian Murphy" should be listed as "Custom permissions" in the collaborators list for folder "simple-folder (2)" on the webUI
-
 
   Scenario: share a file with another internal user via collaborators quick action
     Given user "Alice" has created folder "simple-folder"

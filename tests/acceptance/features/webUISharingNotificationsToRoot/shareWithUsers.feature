@@ -45,7 +45,7 @@ Feature: Sharing files and folders with internal users
     And the user accepts all shares displayed in the notifications on the webUI
     Then folder "simple-folder" should be listed on the webUI
     And folder "simple-empty-folder" should be listed on the webUI
-    When the user browses to the shared-with-me page using the webUI
+    When the user browses to the shared-with-me page in accepted shares view
     Then folder "simple-folder" shared by "Alice Hansen" should be in "Accepted" state on the webUI
     And folder "simple-empty-folder" shared by "Alice Hansen" should be in "Accepted" state on the webUI
 
@@ -58,7 +58,7 @@ Feature: Sharing files and folders with internal users
     And the user declines all shares displayed in the notifications on the webUI
     Then folder "simple-folder" should not be listed on the webUI
     And folder "simple-empty-folder" should not be listed on the webUI
-    When the user browses to the shared-with-me page using the webUI
+    When the user browses to the shared-with-me page in declined shares view
     Then folder "simple-folder" shared by "Alice Hansen" should be in "Declined" state on the webUI
     And folder "simple-empty-folder" shared by "Alice Hansen" should be in "Declined" state on the webUI
 

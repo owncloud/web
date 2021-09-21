@@ -144,7 +144,9 @@ Feature: User can open the details panel for any file or folder
     Then there should be no resources listed on the webUI
 
   Scenario: without any share the shared-with-me page should be empty
-    When the user browses to the shared-with-me page using the webUI
+    When the user browses to the shared-with-me page in accepted shares view
+    Then there should be no resources listed on the webUI
+    When the user browses to the shared-with-me page in declined shares view
     Then there should be no resources listed on the webUI
 
   @issue-1158 @issue-5017 @comments-app-required

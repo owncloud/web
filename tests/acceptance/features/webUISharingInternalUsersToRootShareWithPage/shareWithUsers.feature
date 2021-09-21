@@ -62,7 +62,7 @@ Feature: Shares in share-with pages
     Given user "Alice" has uploaded file "data.zip" to "data.zip"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Brian" has logged in using the webUI
-    When the user browses to the shared-with-me page using the webUI
+    When the user browses to the shared-with-me page
     Then folder "simple-folder" should be listed on the webUI
     But file "data.zip" should not be listed on the webUI
 
@@ -71,7 +71,7 @@ Feature: Shares in share-with pages
     Given user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Alice" has created file "simple-folder/collaborate-on-this.txt"
     And user "Brian" has logged in using the webUI
-    When the user browses to the shared-with-me page using the webUI
+    When the user browses to the shared-with-me page
     And the user opens folder "simple-folder" using the webUI
     Then file "collaborate-on-this.txt" should be listed on the webUI
 
@@ -79,9 +79,10 @@ Feature: Shares in share-with pages
   Scenario: unsharing an entry on the shared-with-me page results in declined share
     Given user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Brian" has logged in using the webUI
-    When the user browses to the shared-with-me page using the webUI
+    When the user browses to the shared-with-me page in accepted shares view
     And the user unshares folder "simple-folder" using the webUI
     And the user closes the app-sidebar using the webUI
+    And the user browses to the shared-with-me page in declined shares view
     Then folder "simple-folder" shared by "Alice Hansen" should be in "Declined" state on the webUI
     And as "Brian" folder "simple-folder" should not exist
 
@@ -114,9 +115,9 @@ Feature: Shares in share-with pages
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Alice" has shared file "lorem.txt" with user "Brian"
     And user "Brian" has logged in using the webUI
-    And the user browses to the shared-with-me page using the webUI
-    When the user batch deletes these files using the webUI
+    And the user browses to the shared-with-me page
+    When the user batch unshares these files using the webUI
       | name              |
       | simple-folder     |
       | lorem.txt         |
-    Then the deleted elements should not be listed on the webUI
+    Then the unshared elements should be in declined state on the webUI

@@ -12,6 +12,7 @@
         <oc-table-files
           id="files-shared-with-me-pending-table"
           v-model="pendingSelected"
+          :data-test-share-status="shareStatus.pending"
           class="files-table"
           :class="{ 'files-table-squashed': !sidebarClosed }"
           :are-thumbnails-displayed="displayThumbnails"
@@ -89,6 +90,7 @@
         v-else
         id="files-shared-with-me-shares-table"
         v-model="sharesSelected"
+        :data-test-share-status="viewMode"
         class="files-table"
         :class="{ 'files-table-squashed': !sidebarClosed }"
         :are-thumbnails-displayed="displayThumbnails"

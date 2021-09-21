@@ -431,7 +431,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     Given user "Alice" has created folder "simple-folder" on remote server
     And user "Alice" from remote server has shared "/simple-folder" with user "Alice" from local server
     And user "Alice" from server "LOCAL" has accepted the last pending share
-    When the user browses to the shared-with-me page using the webUI
+    When the user browses to the shared-with-me page
     # delete below line after the issue has been fixed
     Then folder "simple-folder" should not be listed on the webUI
     # uncomment below line after the issue has been fixed

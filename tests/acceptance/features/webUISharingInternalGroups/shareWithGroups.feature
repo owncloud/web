@@ -64,7 +64,7 @@ Feature: Sharing files and folders with internal groups
     But these resources should not be listed in the folder "/Shares%2Fsimple-folder" on the webUI
       | entry_name    |
       | simple-folder |
-    When the user browses to the shared-with-me page using the webUI
+    When the user browses to the shared-with-me page
     Then folder "simple-folder" should be marked as shared by "Carol King" on the webUI
     And file "testimage.jpg" should be marked as shared by "Carol King" on the webUI
     Examples:

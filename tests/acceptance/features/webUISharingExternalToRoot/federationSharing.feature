@@ -160,7 +160,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     When the user reloads the current page of the webUI
     And the user deletes file "lorem.txt" using the webUI
     Then file "lorem.txt" should not be listed on the webUI
-    When the user browses to the shared-with-me page using the webUI
+    When the user browses to the shared-with-me page
     Then file "lorem.txt" should not be listed on the webUI
     And as "Alice" file "lorem.txt" should not exist
     And as "Alice" file "lorem.txt" should exist on remote server
