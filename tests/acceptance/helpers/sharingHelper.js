@@ -363,6 +363,7 @@ module.exports = {
      */
     const splitted = filename.split('/')
     filename = splitted[splitted.length - 1]
+    console.log('filename to accept:' + filename)
     const allShares = await this.getAllSharesSharedWithUser(user)
     const elementsToAccept = allShares.filter(element => {
       return (

@@ -35,7 +35,7 @@ Feature: accept/decline shares coming from internal users
     And user "Alice" has created folder "/simple-folder"
     And user "Brian" has been added to group "grp1"
     And user "Alice" has shared folder "/simple-folder" with user "Brian"
-    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
+    And user "Brian" has accepted the share "/simple-folder" offered by user "Alice"
     And the user has browsed to the files page
     And the user opens folder "Shares" using the webUI
     When the user shares folder "simple-folder" with group "grp1" as "Viewer" using the webUI
@@ -55,8 +55,8 @@ Feature: accept/decline shares coming from internal users
     And user "Brian" has been added to group "grp1"
     And user "Alice" has shared folder "/simple-folder" with user "Brian"
     And user "Alice" has shared file "/testimage.jpg" with group "grp1"
-    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
-    And user "Brian" has accepted the share "testimage.jpg" offered by user "Alice"
+    And user "Brian" has accepted the share "/simple-folder" offered by user "Alice"
+    And user "Brian" has accepted the share "/testimage.jpg" offered by user "Alice"
     And the user has browsed to the files page
     When the user opens folder "Shares" using the webUI
     And the user deletes folder "simple-folder" using the webUI
