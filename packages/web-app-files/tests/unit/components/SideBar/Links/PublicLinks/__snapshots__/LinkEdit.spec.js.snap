@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`LinkEdit expiration date picker field required field label should have the required label if link expiration date is enforced 1`] = `
-<span id="oc-files-file-link-expire-date" data-testid="recipient-datepicker" class="files-recipient-expiration-datepicker"><button class="uk-width-1-1 oc-button oc-button-m oc-button-justify-content-space-between oc-button-gap-xs oc-button-passive oc-button-passive-outline" id="files-links-expiration-btn" data-testid="recipient-datepicker-btn"><span>Set expiration date</span> <span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button>
+<span id="oc-files-file-link-expire-date" data-testid="recipient-datepicker" class="files-recipient-expiration-datepicker"><button class="uk-width-1-1 expiration-dialog-btn oc-button oc-button-m oc-button-justify-content-space-between oc-button-gap-xs oc-button-passive oc-button-passive-outline" id="files-links-expiration-btn" data-testid="recipient-datepicker-btn"><span>Set expiration date</span> <span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button>
 <div data-v-05016e86="" class="vc-popover-content-wrapper">
   <transition-stub data-v-05016e86="" name="slide-fade" appear="true"></transition-stub>
 </div>
@@ -9,7 +9,7 @@ exports[`LinkEdit expiration date picker field required field label should have 
 `;
 
 exports[`LinkEdit expiration date picker field required field label should not have the required label if link expiration date is not enforced 1`] = `
-<span id="oc-files-file-link-expire-date" data-testid="recipient-datepicker" class="files-recipient-expiration-datepicker"><button class="uk-width-1-1 oc-button oc-button-m oc-button-justify-content-space-between oc-button-gap-xs oc-button-passive oc-button-passive-outline" id="files-links-expiration-btn" data-testid="recipient-datepicker-btn"><span>Set expiration date</span> <span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button>
+<span id="oc-files-file-link-expire-date" data-testid="recipient-datepicker" class="files-recipient-expiration-datepicker"><button class="uk-width-1-1 expiration-dialog-btn oc-button oc-button-m oc-button-justify-content-space-between oc-button-gap-xs oc-button-passive oc-button-passive-outline" id="files-links-expiration-btn" data-testid="recipient-datepicker-btn"><span>Set expiration date</span> <span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button>
 <div data-v-05016e86="" class="vc-popover-content-wrapper">
   <transition-stub data-v-05016e86="" name="slide-fade" appear="true"></transition-stub>
 </div>
