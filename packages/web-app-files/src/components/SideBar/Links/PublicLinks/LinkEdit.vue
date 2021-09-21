@@ -49,7 +49,7 @@
             <oc-button
               id="files-links-expiration-btn"
               data-testid="recipient-datepicker-btn"
-              class="uk-width-1-1"
+              class="uk-width-1-1 expiration-dialog-btn"
               justify-content="space-between"
               gap-size="xsmall"
               @click="togglePopover"
