@@ -398,7 +398,9 @@ export default {
       this.saving = true
 
       const params = {
-        expireDate: this.expireDate,
+        expireDate: DateTime.fromJSDate(this.expireDate)
+          .endOf('day')
+          .toISO(),
         permissions: this.selectedRole.permissions,
         name: this.name
       }
