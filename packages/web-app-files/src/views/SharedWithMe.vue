@@ -28,6 +28,7 @@
             >
               <oc-button
                 size="small"
+                variation="success"
                 class="file-row-share-status-action"
                 @click.stop="$_acceptShare_trigger(resource)"
               >
@@ -51,10 +52,14 @@
             <div class="uk-width-1-1 uk-text-center oc-mt">
               <oc-button
                 id="files-shared-with-me-pending-show-all"
+                appearance="raw"
+                gap-size="xsmall"
+                size="small"
                 :data-test-expand="(!showMorePending).toString()"
                 @click="togglePendingShowMore"
               >
                 {{ pendingToggleMoreLabel }}
+                <oc-icon :name="'chevron_' + (showMorePending ? 'up' : 'down')" />
               </oc-button>
             </div>
           </template>
@@ -108,6 +113,7 @@
             <oc-button
               v-if="resource.status === shareStatus.declined"
               size="small"
+              variation="success"
               class="file-row-share-status-action"
               @click.stop="$_acceptShare_trigger(resource)"
             >
