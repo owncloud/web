@@ -510,9 +510,7 @@ module.exports = {
      * @return {*}
      */
     openExpirationDatePicker: function() {
-      this.waitForElementVisible('@expirationDateField')
-        .waitForElementNotPresent('@elementInterceptingCollaboratorsExpirationInput')
-        .click('@expirationDateField')
+      this.waitForElementVisible('@expirationDateField', 1000).click('@expirationDateField')
       return client.page.FilesPageElement.expirationDatePicker()
     },
     /**
@@ -726,15 +724,12 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     expirationDateField: {
-      selector: '.vdatetime-input'
+      selector: '.expiration-dialog-btn'
     },
     requiredLabelInCollaboratorsExpirationDate: {
       selector:
         '//label[@for="files-collaborators-collaborator-expiration-input" and contains(text(), "Expiration date (required)")]',
       locateStrategy: 'xpath'
-    },
-    elementInterceptingCollaboratorsExpirationInput: {
-      selector: '.vdatetime-overlay.vdatetime-fade-leave-active.vdatetime-fade-leave-to'
     }
   }
 }

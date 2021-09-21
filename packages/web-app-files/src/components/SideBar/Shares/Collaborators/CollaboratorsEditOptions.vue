@@ -46,6 +46,7 @@
         <template #default="{ togglePopover }">
           <oc-button
             id="files-collaborators-expiration-button"
+            class="expiration-dialog-btn"
             data-testid="recipient-datepicker-btn"
             appearance="raw"
             justify-content="left"
