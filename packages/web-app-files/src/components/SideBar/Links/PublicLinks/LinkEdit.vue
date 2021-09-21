@@ -252,7 +252,11 @@ export default {
     },
 
     minExpirationDate() {
-      return DateTime.now().plus({ days: 1 })
+      const date = new Date()
+
+      date.setDate(new Date().getDate() + 1)
+
+      return date
     },
 
     maxExpirationDate() {
@@ -261,8 +265,11 @@ export default {
       }
 
       const days = parseInt(this.$_expirationDate.days, 10)
+      const date = new Date()
 
-      return DateTime.now().plus({ days: days })
+      date.setDate(new Date().getDate() + days)
+
+      return date
     },
 
     $_expirationIsValid() {
