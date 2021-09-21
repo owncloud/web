@@ -13,6 +13,7 @@ describe('Getters', () => {
     rootState = {
       Files: {
         pagination: {
+          currentPage: 1,
           itemsPerPage: 10
         }
       }
@@ -33,12 +34,18 @@ describe('Getters', () => {
 
       expect(result.length).toEqual(5)
     })
+  })
 
+  describe('activeFilesCurrentPage', () => {
     it('returns only a portion of files if files page limit is set', () => {
       rootState.Files.pagination.itemsPerPage = 2
 
-      const { activeFiles, filesAll } = getters
-      const result = activeFiles(state, { filesAll: filesAll(state) }, rootState)
+      const { activeFilesCurrentPage, activeFiles, filesAll } = getters
+      const result = activeFilesCurrentPage(
+        state,
+        { activeFiles: activeFiles(state, { filesAll: filesAll(state) }) },
+        rootState
+      )
 
       expect(result.length).toEqual(2)
     })
@@ -46,8 +53,12 @@ describe('Getters', () => {
     it('returns all files if files page limit is of type string', () => {
       rootState.Files.pagination.itemsPerPage = 'All'
 
-      const { activeFiles, filesAll } = getters
-      const result = activeFiles(state, { filesAll: filesAll(state) }, rootState)
+      const { activeFilesCurrentPage, activeFiles, filesAll } = getters
+      const result = activeFilesCurrentPage(
+        state,
+        { activeFiles: activeFiles(state, { filesAll: filesAll(state) }) },
+        rootState
+      )
 
       expect(result.length).toEqual(5)
     })

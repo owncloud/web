@@ -41,7 +41,7 @@ describe('Favorites component', () => {
   })
   describe('no content message', () => {
     it('shows only the "no content" message if no resources are marked as favorite', () => {
-      const store = getStore({ activeFiles: [] })
+      const store = getStore({ activeFilesCurrentPage: [] })
       const wrapper = getMountedWrapper({ store, loading: false })
 
       expect(wrapper.find(selectors.noContentMessage).exists()).toBeTruthy()
@@ -58,7 +58,7 @@ describe('Favorites component', () => {
   describe('files table', () => {
     describe('no file is highlighted', () => {
       it("don't squash the table", () => {
-        const store = getStore({ sidebarClosed: true, activeFiles: defaultActiveFiles })
+        const store = getStore({ sidebarClosed: true, activeFilesCurrentPage: defaultActiveFiles })
         const wrapper = getMountedWrapper({ store, loading: false })
 
         expect(wrapper.find(selectors.favoritesTable).attributes('class')).not.toContain(
@@ -77,7 +77,7 @@ describe('Favorites component', () => {
     describe('a file is highlighted', () => {
       const store = getStore({
         highlightedFile: defaultActiveFiles[0],
-        activeFiles: defaultActiveFiles
+        activeFilesCurrentPage: defaultActiveFiles
       })
       const wrapper = getMountedWrapper({ store })
 
@@ -90,7 +90,10 @@ describe('Favorites component', () => {
 
     describe('previews', () => {
       it('displays previews when the "disablePreviews" config is disabled', () => {
-        const store = getStore({ disablePreviews: false, activeFiles: defaultActiveFiles })
+        const store = getStore({
+          disablePreviews: false,
+          activeFilesCurrentPage: defaultActiveFiles
+        })
         const wrapper = getMountedWrapper({ store, loading: false })
 
         expect(
@@ -99,7 +102,10 @@ describe('Favorites component', () => {
       })
 
       it('hides previews when the "disablePreviews" config is enabled', () => {
-        const store = getStore({ disablePreviews: true, activeFiles: defaultActiveFiles })
+        const store = getStore({
+          disablePreviews: true,
+          activeFilesCurrentPage: defaultActiveFiles
+        })
         const wrapper = getMountedWrapper({ store, loading: false })
 
         expect(
@@ -115,7 +121,7 @@ describe('Favorites component', () => {
 
       it('sets the pages count & the current page', () => {
         const store = getStore({
-          activeFiles: defaultActiveFiles,
+          activeFilesCurrentPage: defaultActiveFiles,
           pages: 4,
           currentPage: 3,
           totalFilesCount: { files: 10, folders: 10 }
@@ -128,7 +134,7 @@ describe('Favorites component', () => {
 
       it('does not show any pagination when there is only one page', () => {
         const store = getStore({
-          activeFiles: defaultActiveFiles,
+          activeFilesCurrentPage: defaultActiveFiles,
           pages: 1,
           currentPage: 1,
           totalFilesCount: { files: 10, folders: 10 }
@@ -147,7 +153,7 @@ describe('Favorites component', () => {
 
       it('sets the counters and the size', () => {
         const store = getStore({
-          activeFiles: defaultActiveFiles,
+          activeFilesCurrentPage: defaultActiveFiles,
           totalFilesCount: { files: 15, folders: 20 },
           totalFilesSize: 1024
         })
@@ -168,7 +174,7 @@ describe('Favorites component', () => {
 
       it('shows the list info when there is only one active file', () => {
         const store = getStore({
-          activeFiles: [createFile({ id: 3, status: 2, type: 'file' })],
+          activeFilesCurrentPage: [createFile({ id: 3, status: 2, type: 'file' })],
           totalFilesCount: { files: 15, folders: 20 }
         })
         const wrapper = getMountedWrapper({ store, loading: false })
@@ -177,7 +183,7 @@ describe('Favorites component', () => {
       })
 
       it('does not show the list info when there are no active files', () => {
-        const store = getStore({ activeFiles: [] })
+        const store = getStore({ activeFilesCurrentPage: [] })
         const wrapper = getMountedWrapper({ store, loading: false })
 
         expect(wrapper.find(listInfoStub).exists()).toBeFalsy()
@@ -187,7 +193,10 @@ describe('Favorites component', () => {
 })
 
 function mountOptions({
-  store = getStore({ activeFiles: defaultActiveFiles, totalFilesCount: { files: 1, folders: 1 } }),
+  store = getStore({
+    activeFilesCurrentPage: defaultActiveFiles,
+    totalFilesCount: { files: 1, folders: 1 }
+  }),
   loading = false
 } = {}) {
   return {

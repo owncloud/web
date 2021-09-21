@@ -23,6 +23,7 @@ Feature: accept/decline shares coming from internal users
     And user "Alice" has shared folder "/simple-folder" with group "grp1"
     And the user has browsed to the shared-with-me page
     When the user declines share "simple-folder" offered by user "Alice Hansen" using the webUI
+    And the user browses to the shared-with-me page in declined shares view
     Then folder "simple-folder" shared by "Alice Hansen" should be in "Declined" state on the webUI
     When the user browses to the files page
     Then folder "/Shares" should not be listed on the webUI
@@ -40,7 +41,7 @@ Feature: accept/decline shares coming from internal users
     And the user opens folder "Shares" using the webUI
     When the user shares folder "simple-folder" with group "grp1" as "Viewer" using the webUI
     And the user deletes folder "simple-folder" using the webUI
-    And the user browses to the shared-with-me page using the webUI
+    And the user browses to the shared-with-me page in declined shares view
     Then folder "simple-folder" shared by "Alice Hansen" should be in "Declined" state on the webUI
     And folder "simple-folder" shared by "Brian Murphy" should not be listed on the webUI
     And folder "simple-folder" should not be listed on the webUI
@@ -63,7 +64,7 @@ Feature: accept/decline shares coming from internal users
     And the user deletes file "testimage.jpg" using the webUI
     Then folder "simple-folder" should not be listed on the webUI
     And file "testimage.jpg" should not be listed on the webUI
-    When the user browses to the shared-with-me page using the webUI
+    When the user browses to the shared-with-me page in declined shares view
     Then folder "simple-folder" shared by "Alice Hansen" should be in "Declined" state on the webUI
     And file "testimage.jpg" shared by "Alice Hansen" should be in "Declined" state on the webUI
 
@@ -72,7 +73,7 @@ Feature: accept/decline shares coming from internal users
     Given user "Alice" has created file "toshare.txt"
     And user "Alice" has uploaded file with content "test" to "toshare.txt"
     And user "Alice" has shared file "toshare.txt" with user "Brian"
-    When the user browses to the shared-with-me page using the webUI
+    When the user browses to the shared-with-me page
     Then file "toshare.txt" shared by "Alice Hansen" should be in "Pending" state on the webUI
     When the user browses to the files page
     Then file "toshare.txt" should not be listed on the webUI
@@ -85,7 +86,7 @@ Feature: accept/decline shares coming from internal users
     And user "Alice" has created file "lorem.txt"
     And user "Carol" has shared file "lorem.txt" with user "Brian"
     And user "Alice" has shared file "lorem.txt" with user "Brian"
-    When the user browses to the shared-with-me page using the webUI
+    When the user browses to the shared-with-me page
     Then file "lorem.txt" shared by "Alice Hansen" should be in "Pending" state on the webUI
     And file "lorem.txt" shared by "Carol King" should be in "Pending" state on the webUI
 
@@ -97,8 +98,9 @@ Feature: accept/decline shares coming from internal users
     And user "Alice" has uploaded file with content "test" to "anotherfile.txt"
     And user "Alice" has shared file "toshare.txt" with user "Brian"
     And user "Alice" has shared file "anotherfile.txt" with user "Brian"
-    And the user has browsed to the shared-with-me page
-    When the user declines share "toshare.txt" offered by user "Alice Hansen" using the webUI
+    When the user browses to the shared-with-me page in accepted shares view
+    And the user declines share "toshare.txt" offered by user "Alice Hansen" using the webUI
+    And the user browses to the shared-with-me page in declined shares view
     Then file "toshare.txt" shared by "Alice Hansen" should be in "Declined" state on the webUI
     And file "anotherfile.txt" shared by "Alice Hansen" should be in "Pending" state on the webUI
     When the user browses to the files page
@@ -117,12 +119,11 @@ Feature: accept/decline shares coming from internal users
     When the user accepts share "toshare.txt" offered by user "Alice Hansen" using the webUI
     Then file "toshare.txt" shared by "Alice Hansen" should be in "Accepted" state on the webUI
     And file "anotherfile.txt" shared by "Alice Hansen" should be in "Pending" state on the webUI
-    And the file "toshare.txt" shared by "Alice Hansen" should be in "Accepted" state on the webUI after a page reload
-    And the file "anotherfile.txt" shared by "Alice Hansen" should be in "Pending" state on the webUI after a page reload
     When the user browses to the files page
     And the user opens folder "Shares" using the webUI
     Then file "toshare.txt" should be listed on the webUI
     And file "anotherfile.txt" should not be listed on the webUI
+
 
 
   Scenario: accept a previously declined share
@@ -131,8 +132,9 @@ Feature: accept/decline shares coming from internal users
     And user "Alice" has shared file "lorem.txt" with user "Brian"
     And user "Alice" has shared file "testimage.jpg" with user "Brian"
     And user "Brian" has declined the share "lorem.txt" offered by user "Alice"
-    And the user has browsed to the shared-with-me page
-    When the user accepts share "lorem.txt" offered by user "Alice Hansen" using the webUI
+    When the user browses to the shared-with-me page in declined shares view
+    And the user accepts share "lorem.txt" offered by user "Alice Hansen" using the webUI
+    When the user browses to the shared-with-me page in accepted shares view
     Then file "lorem.txt" shared by "Alice Hansen" should be in "Accepted" state on the webUI
     And file "testimage.jpg" shared by "Alice Hansen" should be in "Pending" state on the webUI
     When the user browses to the files page
@@ -153,7 +155,7 @@ Feature: accept/decline shares coming from internal users
     And the user deletes file "lorem.txt" using the webUI
     Then file "lorem.txt" should not be listed on the webUI
     And file "testimage.jpg" should not be listed on the webUI
-    When the user browses to the shared-with-me page using the webUI
+    When the user browses to the shared-with-me page in declined shares view
     Then file "lorem.txt" shared by "Alice Hansen" should be in "Declined" state on the webUI
     And file "testimage.jpg" shared by "Alice Hansen" should be in "Pending" state on the webUI
 
@@ -168,12 +170,13 @@ Feature: accept/decline shares coming from internal users
     And user "Brian" has accepted the share "data.zip" offered by user "Alice"
     And user "Brian" has accepted the share "lorem.txt" offered by user "Alice"
     And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
-    And the user has browsed to the shared-with-me page
-    When the user batch declines these shares using the webUI
+    When the user browses to the shared-with-me page in accepted shares view
+    And the user batch declines these shares using the webUI
       | name          |
       | data.zip      |
       | lorem.txt     |
       | simple-folder |
+    And the user browses to the shared-with-me page in declined shares view
     Then file "data.zip" shared by "Alice Hansen" should be in "Declined" state on the webUI
     And file "lorem.txt" shared by "Alice Hansen" should be in "Declined" state on the webUI
     And folder "simple-folder" shared by "Alice Hansen" should be in "Declined" state on the webUI
@@ -186,7 +189,7 @@ Feature: accept/decline shares coming from internal users
     And the user has reloaded the current page of the webUI
     And the user opens folder "Shares" using the webUI
     When the user deletes file "lorem.txt" using the webUI
-    And the user browses to the shared-with-me page
+    And the user browses to the shared-with-me page in declined shares view
     Then file "lorem.txt" shared by "Alice Hansen" should be in "Declined" state on the webUI
 
   @ocis-issue-714 @issue-5532
@@ -197,9 +200,10 @@ Feature: accept/decline shares coming from internal users
     And the following files have been deleted by user "Brian"
       | name             |
       | Shares/lorem.txt |
-    And the user has browsed to the shared-with-me page
-    When the user accepts share "lorem.txt" offered by user "Alice Hansen" using the webUI
-    Then the file "lorem.txt" shared by "Alice Hansen" should not be in "Declined" state
+    When the user browses to the shared-with-me page in declined shares view
+    And the user accepts share "lorem.txt" offered by user "Alice Hansen" using the webUI
+    And the user browses to the shared-with-me page in accepted shares view
+    Then file "lorem.txt" shared by "Alice Hansen" should be in "Accepted" state on the webUI
     When the user browses to the files page
     And the user opens folder "Shares" using the webUI
     Then file "lorem.txt" should be listed on the webUI

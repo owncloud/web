@@ -13,6 +13,7 @@ const util = require('util')
 const { download } = require('../helpers/webdavHelper')
 const fs = require('fs')
 const sharingHelper = require('../helpers/sharingHelper')
+const { SHARE_STATE } = require('../helpers/sharingHelper')
 const appSideBar = client.page.FilesPageElement.appSideBar()
 
 let deletedElements
@@ -38,6 +39,14 @@ When('the user browses to the shared-with-me page', function() {
   return client.page.sharedWithMePage().navigateAndWaitTillLoaded()
 })
 
+When('the user browses to the shared-with-me page in accepted shares view', function() {
+  return client.page.sharedWithMePage().navigateToAcceptedAndWaitUntilLoaded()
+})
+
+When('the user browses to the shared-with-me page in declined shares view', function() {
+  return client.page.sharedWithMePage().navigateToDeclinedAndWaitUntilLoaded()
+})
+
 Given('the user has browsed to the shared-with-me page', function() {
   return client.page.sharedWithMePage().navigateAndWaitTillLoaded()
 })
@@ -48,10 +57,6 @@ Given('the user has browsed to the shared-with-others page', function() {
 
 Given('the user has browsed to the shared-via-link page', function() {
   return client.page.sharedViaLinkPage().navigateAndWaitTillLoaded()
-})
-
-When('the user browses to the shared-with-me page using the webUI', function() {
-  return client.page.webPage().navigateToUsingMenu('Shared with me')
 })
 
 When('the user browses to the shared-with-others page', function() {
@@ -457,12 +462,10 @@ Then('folder {string} should not be listed on the webUI', folder => {
 
 Then('the unshared elements should be in declined state on the webUI', async function() {
   for (const element of unsharedElements) {
-    const state = await client.page.sharedWithMePage().getShareStatusOfResourceByName(element)
-    assert.strictEqual(
-      state,
-      'Declined',
-      `Expected resource '${element}' to be in 'Declined' state but found '${state}'`
-    )
+    const isDeclined = await client.page
+      .sharedWithMePage()
+      .hasShareStatusByFilename(SHARE_STATE.declined, element)
+    assert.ok(isDeclined, `Expected resource '${element}' to be in 'Declined' state but didn't.`)
   }
   return client
 })

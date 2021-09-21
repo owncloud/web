@@ -185,15 +185,14 @@ Scenario Outline: preview of image files with media viewer is possible
     And user "Brian" has logged in using the webUI
     And the user browses to the shared-with-others page
     When the user views the file "testavatar.jpeg" in the media viewer by clicking on the file name using the webUI
-    Then the file "testavatar.jpeg" should be displayed in the media viewer webUI    
-    
+    Then the file "testavatar.jpeg" should be displayed in the media viewer webUI
+
   @issue-5324
   Scenario: Open jpeg file with media viewer in shared-with-me page
     Given user "Brian" has uploaded file "testavatar.jpeg" to "testavatar.jpeg"
     And user "Brian" has shared file "testavatar.jpeg" with user "Alice" with "all" permissions
     And user "Alice" has accepted the share "testavatar.jpeg" offered by user "Brian"
     And user "Alice" has logged in using the webUI
-    And the user browses to the shared-with-me page using the webUI
+    And the user browses to the shared-with-me page
     When the user views the file "testavatar.jpeg" in the media viewer by clicking on the file name using the webUI
-    Then the file "testavatar.jpeg" should be displayed in the media viewer webUI    
-    
+    Then the file "testavatar.jpeg" should be displayed in the media viewer webUI

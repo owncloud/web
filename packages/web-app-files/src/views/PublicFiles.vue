@@ -23,7 +23,7 @@
         class="files-table"
         :class="{ 'files-table-squashed': !sidebarClosed }"
         :are-thumbnails-displayed="displayThumbnails"
-        :resources="activeFiles"
+        :resources="activeFilesCurrentPage"
         :target-route="targetRoute"
         :header-position="headerPosition"
         @fileClick="$_fileActions_triggerDefaultAction"
@@ -35,7 +35,7 @@
         <template #footer>
           <pagination />
           <list-info
-            v-if="activeFiles.length > 0"
+            v-if="activeFilesCurrentPage.length > 0"
             class="uk-width-1-1 oc-my-s"
             :files="totalFilesCount.files"
             :folders="totalFilesCount.folders"
@@ -96,7 +96,7 @@ export default {
   computed: {
     ...mapGetters('Files', [
       'publicLinkPassword',
-      'activeFiles',
+      'activeFilesCurrentPage',
       'selectedFiles',
       'currentFolder',
       'highlightedFile',
@@ -109,7 +109,7 @@ export default {
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
     isEmpty() {
-      return this.activeFiles.length < 1
+      return this.activeFilesCurrentPage.length < 1
     },
 
     uploadProgressVisible() {

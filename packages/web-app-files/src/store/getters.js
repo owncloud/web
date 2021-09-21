@@ -16,33 +16,33 @@ export default {
   },
   // a flat file list has no current folder nor parent
   flatFileList: state => !!state.currentFolder === false,
-  activeFiles: (state, getters, rootState) => {
+  activeFiles: (state, getters) => {
     let files = [].concat(getters.filesAll)
 
     if (!state.areHiddenFilesShown) {
       files = files.filter(file => !file.name.startsWith('.'))
     }
 
+    return files
+  },
+  activeFilesCurrentPage: (state, getters, rootState) => {
     const { itemsPerPage, currentPage } = rootState.Files.pagination
     if (itemsPerPage > 0) {
       const firstElementIndex = (currentPage - 1) * itemsPerPage
-
-      return files.splice(firstElementIndex, itemsPerPage)
+      return getters.activeFiles.slice(firstElementIndex, firstElementIndex + itemsPerPage)
     }
-
-    return files
-  },
-  activeFilesSize: (state, getters) => {
-    return $_fileSizes(getters.activeFiles)
-  },
-  activeFilesCount: (state, getters) => {
-    return $_fileCounts(getters.activeFiles)
+    return getters.activeFiles
   },
   totalFilesSize: (state, getters) => {
-    return $_fileSizes(getters.filesAll)
+    return getters.filesAll.map(file => parseInt(file.size)).reduce((x, y) => x + y, 0)
   },
   totalFilesCount: (state, getters) => {
-    return $_fileCounts(getters.filesAll)
+    const fileCount = getters.filesAll.filter(file => file.type === 'file').length
+    const folderCount = getters.filesAll.filter(file => file.type === 'folder').length
+    return {
+      files: fileCount,
+      folders: folderCount
+    }
   },
   dropzone: state => {
     return state.dropzone
@@ -100,19 +100,4 @@ export default {
   },
   uploaded: state => state.uploaded,
   actionsInProgress: state => state.actionsInProgress
-}
-
-// eslint-disable-next-line camelcase
-function $_fileSizes(files) {
-  return files.map(file => parseInt(file.size)).reduce((x, y) => x + y, 0)
-}
-
-// eslint-disable-next-line camelcase
-function $_fileCounts(files) {
-  const fileCount = files.filter(file => file.type === 'file').length
-  const folderCount = files.filter(file => file.type === 'folder').length
-  return {
-    files: fileCount,
-    folders: folderCount
-  }
 }

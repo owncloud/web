@@ -171,7 +171,7 @@ export default {
       })
     },
     isShareAccepted() {
-      return this.highlightedFile.status === 0
+      return this.highlightedFile?.status === 0
     },
     isContentDisplayed() {
       if (this.isSharedWithMeRoute) {
@@ -289,14 +289,17 @@ export default {
     },
 
     async fetchFileInfo() {
+      if (!this.highlightedFile) {
+        this.selectedFile = this.highlightedFile
+        return
+      }
+
       if (isTrashbinRoute(this.$route)) {
         this.selectedFile = this.highlightedFile
-
         return
       }
 
       this.loading = true
-
       try {
         const item = await this.$client.files.fileInfo(
           this.highlightedFile.path,
@@ -307,10 +310,8 @@ export default {
         this.$set(this.selectedFile, 'thumbnail', this.highlightedFile.thumbnail || null)
       } catch (error) {
         this.selectedFile = this.highlightedFile
-
         console.error(error)
       }
-
       this.loading = false
     }
   }
