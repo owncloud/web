@@ -214,11 +214,7 @@ export default {
 
     $_hasChanges() {
       const expireDateBefore = this.publicLinkInEdit.expireDate
-        ? DateTime.fromISO(this.publicLinkInEdit.expireDate).toFormat('dd-MM-yyyy')
-        : null
       const expireDateNow = this.expireDate
-        ? DateTime.fromISO(this.expireDate).toFormat('dd-MM-yyyy')
-        : null
       return (
         expireDateNow !== expireDateBefore ||
         this.name !== this.publicLinkInEdit.name ||
@@ -273,7 +269,7 @@ export default {
     },
 
     $_expirationIsValid() {
-      return !(this.$_expirationDate.enforced && this.expireDate === '')
+      return !(this.$_expirationDate.enforced && !this.expireDate)
     },
 
     $_passwordIsValid() {
@@ -343,10 +339,14 @@ export default {
     }
   },
   created() {
-    this.name = this.publicLinkInEdit.name
-    this.hasPassword = this.publicLinkInEdit.hasPassword
-    this.expireDate = this.publicLinkInEdit?.id
-      ? new Date(this.publicLinkInEdit.expireDate)
+    const link = this.publicLinkInEdit
+
+    this.name = link?.name
+    this.hasPassword = link?.hasPassword
+    this.expireDate = link?.id
+      ? link.expireDate
+        ? new Date(this.publicLinkInEdit.expireDate)
+        : null
       : this.defaultExpireDate
 
     this.setRole()

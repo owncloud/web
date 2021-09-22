@@ -108,20 +108,21 @@ describe('LinkEdit', () => {
     })
 
     it('should be pre populated if the public link has already an expiration date set', () => {
-      const expectedExpireDate = DateTime.now()
-        .plus({ days: 4 })
-        .toString()
+      const expectedDate = new Date()
+      expectedDate.setDate(new Date().getDate() + 4)
+
       const wrapper = getShallowMountedWrapper(
         createStore({
           linkInEdit: {
-            expireDate: expectedExpireDate
+            id: 1,
+            expireDate: expectedDate.toISOString()
           },
           publicLinkCapabilities: getLinkCapabilities({ enabledExpireDate: true })
         })
       )
       const expirationDatePickerFieldElement = wrapper.find(selectors.linkExpireDatePicker)
 
-      expect(expirationDatePickerFieldElement.props().value).toEqual(expectedExpireDate)
+      expect(expirationDatePickerFieldElement.props().value).toEqual(expectedDate)
     })
   })
 
@@ -161,7 +162,10 @@ describe('LinkEdit', () => {
     it('should not be present if expiration date is not enforced and the link in edit does not have an expiration date set', () => {
       const wrapper = getShallowMountedWrapper(
         createStore({
-          linkInEdit: { expireDate: null }
+          linkInEdit: { expireDate: null },
+          publicLinkCapabilities: getLinkCapabilities({
+            days: null
+          })
         })
       )
       const expirationDateDeleteButtonElement = wrapper.find(selectors.linkExpireDateDeleteButton)
@@ -489,16 +493,17 @@ describe('LinkEdit', () => {
 
           describe('when the form is valid and has some changes', () => {
             const updateLinkSpy = jest.spyOn(mapActions, 'updateLink')
-            const wrapper = getMountedWrapper(
-              createStore({
-                linkInEdit: { id: 1224, name: 'Public Link', hasPassword: true },
-                publicLinkCapabilities: getLinkCapabilities({ enforcedExpireDate: true })
-              }),
-              {
-                saving: false
-              }
-            )
+
             it('should trigger "updateLink" method if clicked', async () => {
+              const wrapper = getMountedWrapper(
+                createStore({
+                  linkInEdit: { id: 1224, name: 'Public Link', hasPassword: true }
+                }),
+                {
+                  saving: false
+                }
+              )
+
               // make some changes in the form
               const nameInput = wrapper.find(selectors.linkNameInput)
               await nameInput.setValue('Link changed')
