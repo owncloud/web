@@ -258,9 +258,7 @@ export default {
       this.$nextTick(() => {
         const inviteInput = document.getElementById('files-share-invite-input')
 
-        if (inviteInput) {
-          inviteInput.focus()
-        }
+        inviteInput.focus()
       })
     },
 
