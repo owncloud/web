@@ -1,6 +1,6 @@
 Enhancement: Added support for OpenID Connect Dynamic Client Registration 1.0
 
-ownCloud Web can use the dynamic client registration protocol to exchange client id and client secret woth the IdP
+ownCloud Web can use the dynamic client registration protocol to exchange client id and client secret with the IdP
 
 https://github.com/owncloud/web/pull/4286
 https://github.com/owncloud/web/pull/4306
