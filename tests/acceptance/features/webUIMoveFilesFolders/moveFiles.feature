@@ -142,7 +142,7 @@ Feature: move files
     And user "Brian" has been created with default attributes and without skeleton files
     And user "Alice" has uploaded file with content "test content" to "simple-folder/testFile.txt"
     And user "Alice" has shared folder "/simple-folder" with user "Brian"
-    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
+    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
     And user "Brian" has logged in using the webUI
     And user "Brian" has created folder "/Shares/testFolder"
     And the user has opened folder "Shares"

@@ -16,7 +16,7 @@ Feature: Sharing files and folders with internal users with expiry date
     Given user "Alice" has uploaded file "testavatar.jpg" to "testimage.jpg"
     And user "Alice" has logged in using the webUI
     When the user shares file "testimage.jpg" with user "Brian Murphy" which expires in "+2" days using the webUI
-    And user "Brian" accepts the share "testimage.jpg" offered by user "Alice" using the sharing API
+    And user "Brian" accepts the share "Shares/testimage.jpg" offered by user "Alice" using the sharing API
     Then user "Brian" should have received a share with target "Shares/testimage.jpg" and expiration date in 2 days
 
   @issue-4169
@@ -26,7 +26,7 @@ Feature: Sharing files and folders with internal users with expiry date
     And default expiration date for users is set to 3 days
     And user "Alice" has logged in using the webUI
     When the user shares file "testimage.jpg" with user "Brian Murphy" using the webUI
-    And user "Brian" accepts the share "testimage.jpg" offered by user "Alice" using the sharing API
+    And user "Brian" accepts the share "Shares/testimage.jpg" offered by user "Alice" using the sharing API
     Then user "Brian" should have received a share with target "Shares/testimage.jpg" and expiration date in 3 days
 
   @issue-4169
@@ -36,7 +36,7 @@ Feature: Sharing files and folders with internal users with expiry date
       | path       | lorem.txt |
       | shareWith  | Brian     |
       | expireDate | +14       |
-    And user "Brian" has accepted the share "lorem.txt" offered by user "Alice"
+    And user "Brian" has accepted the share "Shares/lorem.txt" offered by user "Alice"
     And user "Alice" has logged in using the webUI
     When the user edits the collaborator expiry date of "Brian Murphy" of file "lorem.txt" to "+7" days using the webUI
     Then user "Brian" should have received a share with target "Shares/lorem.txt" and expiration date in 7 days
@@ -57,7 +57,7 @@ Feature: Sharing files and folders with internal users with expiry date
     And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
     And user "Alice" has logged in using the webUI
     When the user shares file "lorem.txt" with user "Brian Murphy" which expires in "+4" days using the webUI
-    And user "Brian" accepts the share "lorem.txt" offered by user "Alice" using the sharing API
+    And user "Brian" accepts the share "Shares/lorem.txt" offered by user "Alice" using the sharing API
     Then user "Alice" should have a share with these details:
       | field       | value             |
       | path        | /lorem.txt        |

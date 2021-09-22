@@ -33,8 +33,8 @@ Feature: Sharing folders with internal groups with different roles and permissio
       | grp2         | group |
     And the user removes "grp1" as a collaborator from the share
     And the user shares with the selected collaborators
-    And user "Brian" accepts the share "simple-folder" offered by user "Alice" using the sharing API
-    And user "Carol" accepts the share "simple-folder" offered by user "Alice" using the sharing API
+    And user "Brian" accepts the share "Shares/simple-folder" offered by user "Alice" using the sharing API
+    And user "Carol" accepts the share "Shares/simple-folder" offered by user "Alice" using the sharing API
     Then custom permissions "<displayed-permissions>" should be set for user "grp2" for folder "simple-folder" on the webUI
     And custom permissions "<displayed-permissions>" should be set for user "Carol King" for folder "simple-folder" on the webUI
     And group "grp2" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI

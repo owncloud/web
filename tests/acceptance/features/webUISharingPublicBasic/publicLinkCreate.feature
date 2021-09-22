@@ -194,7 +194,7 @@ Feature: Create public link shares
     And user "Brian" has created folder "simple-folder"
     And user "Carol" has been created with default attributes and without skeleton files
     And user "Brian" has shared folder "simple-folder" with user "Alice"
-    And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
+    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian"
     And user "Alice" has logged in using the webUI
     And the user opens the link share dialog for folder "Shares" using the webUI
     Then the link share permission denied message should be displayed in the sharing dialog on the webUI

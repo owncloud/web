@@ -314,6 +314,16 @@ module.exports = {
    * @param {string} sharer
    */
   declineShare: async function(filename, user, sharer) {
+    /** [OCIS] https://github.com/owncloud/ocis/issues/1231
+     * In ocis, when a resource inside a folder is shared, the share details contains
+     * only the resource in the path and not the containing folder
+     *  eg: if "simple-folder/subfolder" has been shared, the share details is shown
+     *  as path: "/subfolder"
+     */
+    if (client.globals.ocis) {
+      const splitted = filename.split('/')
+      filename = splitted[splitted.length - 1]
+    }
     const allShares = await this.getAllSharesSharedWithUser(user)
     const elementsToDecline = allShares.filter(element => {
       return (

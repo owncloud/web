@@ -36,7 +36,7 @@ Feature: accept/decline shares coming from internal users
     And user "Alice" has created folder "/simple-folder"
     And user "Brian" has been added to group "grp1"
     And user "Alice" has shared folder "/simple-folder" with user "Brian"
-    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
+    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
     And the user has browsed to the files page
     And the user opens folder "Shares" using the webUI
     When the user shares folder "simple-folder" with group "grp1" as "Viewer" using the webUI
@@ -56,8 +56,8 @@ Feature: accept/decline shares coming from internal users
     And user "Brian" has been added to group "grp1"
     And user "Alice" has shared folder "/simple-folder" with user "Brian"
     And user "Alice" has shared file "/testimage.jpg" with group "grp1"
-    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
-    And user "Brian" has accepted the share "testimage.jpg" offered by user "Alice"
+    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
+    And user "Brian" has accepted the share "Shares/testimage.jpg" offered by user "Alice"
     And the user has browsed to the files page
     When the user opens folder "Shares" using the webUI
     And the user deletes folder "simple-folder" using the webUI
@@ -131,7 +131,7 @@ Feature: accept/decline shares coming from internal users
     And user "Alice" has uploaded file "testavatar.jpg" to "testimage.jpg"
     And user "Alice" has shared file "lorem.txt" with user "Brian"
     And user "Alice" has shared file "testimage.jpg" with user "Brian"
-    And user "Brian" has declined the share "lorem.txt" offered by user "Alice"
+    And user "Brian" has declined the share "Shares/lorem.txt" offered by user "Alice"
     When the user browses to the shared-with-me page in declined shares view
     And the user accepts share "lorem.txt" offered by user "Alice Hansen" using the webUI
     When the user browses to the shared-with-me page in accepted shares view
@@ -167,9 +167,9 @@ Feature: accept/decline shares coming from internal users
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Alice" has shared file "lorem.txt" with user "Brian"
     And user "Alice" has shared file "data.zip" with user "Brian"
-    And user "Brian" has accepted the share "data.zip" offered by user "Alice"
-    And user "Brian" has accepted the share "lorem.txt" offered by user "Alice"
-    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
+    And user "Brian" has accepted the share "Shares/data.zip" offered by user "Alice"
+    And user "Brian" has accepted the share "Shares/lorem.txt" offered by user "Alice"
+    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
     When the user browses to the shared-with-me page in accepted shares view
     And the user batch declines these shares using the webUI
       | name          |
@@ -185,7 +185,7 @@ Feature: accept/decline shares coming from internal users
   Scenario: shared file status is changed to declined when user deletes the file
     Given user "Alice" has created file "lorem.txt"
     And user "Alice" has shared file "lorem.txt" with user "Brian"
-    And user "Brian" has accepted the share "lorem.txt" offered by user "Alice"
+    And user "Brian" has accepted the share "Shares/lorem.txt" offered by user "Alice"
     And the user has reloaded the current page of the webUI
     And the user opens folder "Shares" using the webUI
     When the user deletes file "lorem.txt" using the webUI
@@ -196,7 +196,7 @@ Feature: accept/decline shares coming from internal users
   Scenario: the deleted shared file is restored back to all files list when accepted from the shared with me file list
     Given user "Alice" has created file "lorem.txt"
     And user "Alice" has shared file "lorem.txt" with user "Brian"
-    And user "Brian" has accepted the share "lorem.txt" offered by user "Alice"
+    And user "Brian" has accepted the share "Shares/lorem.txt" offered by user "Alice"
     And the following files have been deleted by user "Brian"
       | name             |
       | Shares/lorem.txt |

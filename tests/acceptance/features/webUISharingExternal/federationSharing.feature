@@ -321,7 +321,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And user "Alice" has created folder "simple-folder/simple-empty-folder"
     And user "Alice" has created file "simple-folder/lorem.txt"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
+    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
     And user "Brian" has shared folder "Shares/simple-folder" with user "Carol"
     When the user re-logs in as "Brian" using the webUI
     And the user opens folder "Shares/simple-folder" directly on the webUI
@@ -345,7 +345,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And user "Alice" has created folder "simple-folder/simple-empty-folder"
     And user "Alice" has created file "simple-folder/lorem.txt"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
+    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
     When the user re-logs in as "Brian" using the webUI
     And the user opens folder "Shares/simple-folder" directly on the webUI
     And the user shares folder "simple-empty-folder" with remote user "Alice" as "Editor" using the webUI

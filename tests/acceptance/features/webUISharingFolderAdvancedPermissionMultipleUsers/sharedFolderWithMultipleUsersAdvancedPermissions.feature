@@ -31,8 +31,8 @@ Feature: Sharing folders with multiple internal users using advanced permissions
     And the user removes "David Lopez" as a collaborator from the share
     And the user removes "Regular User" as a collaborator from the share
     And the user shares with the selected collaborators
-    And user "Brian" accepts the share "simple-folder" offered by user "Alice" using the sharing API
-    And user "Carol" accepts the share "simple-folder" offered by user "Alice" using the sharing API
+    And user "Brian" accepts the share "Shares/simple-folder" offered by user "Alice" using the sharing API
+    And user "Carol" accepts the share "Shares/simple-folder" offered by user "Alice" using the sharing API
     Then custom permissions "<displayed-permissions>" should be set for user "Brian Murphy" for folder "simple-folder" on the webUI
     And custom permissions "<displayed-permissions>" should be set for user "Carol King" for folder "simple-folder" on the webUI
     And user "Brian Murphy" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
@@ -56,16 +56,16 @@ Feature: Sharing folders with multiple internal users using advanced permissions
     And user "David Lopez" should not be listed in the collaborators list on the webUI
     And as "David" folder "/Shares/simple-folder" should not exist
     Examples:
-      | role                 | displayed-role       | extra-permissions | displayed-permissions | actual-permissions   |
-      | Custom permissions | Custom permissions | delete            | delete                | read, delete         |
-      | Custom permissions | Custom permissions | update            | update                | read, update         |
-      | Custom permissions | Custom permissions | delete, update    | delete, update        | read, delete, update |
-      | Custom permissions | Custom permissions | update, create    | update, create        | read, update, create |
-      | Custom permissions | Custom permissions | create            | create                | read, create         |
-      | Custom permissions | Custom permissions | delete, create    | delete, create        | read, delete, create |
-      | Custom permissions | Custom permissions | share, delete         | share, delete         | read, share, delete         |
-      | Custom permissions | Custom permissions | share, update         | share, update         | read, update, share         |
-      | Custom permissions | Custom permissions | share, create         | share, create         | read, share, create         |
-      | Custom permissions | Custom permissions | share, delete, update | share, delete, update | read, share, delete, update |
-      | Custom permissions | Custom permissions | share, create, delete | share, create, delete | read, share, delete, create |
-      | Custom permissions | Custom permissions | share, update, create | share, update, create | read, share, update, create |
+      | role                 | displayed-role     | extra-permissions     | displayed-permissions | actual-permissions          |
+      | Custom permissions   | Custom permissions | delete                | delete                | read, delete                |
+      | Custom permissions   | Custom permissions | update                | update                | read, update                |
+      | Custom permissions   | Custom permissions | delete, update        | delete, update        | read, delete, update        |
+      | Custom permissions   | Custom permissions | update, create        | update, create        | read, update, create        |
+      | Custom permissions   | Custom permissions | create                | create                | read, create                |
+      | Custom permissions   | Custom permissions | delete, create        | delete, create        | read, delete, create        |
+      | Custom permissions   | Custom permissions | share, delete         | share, delete         | read, share, delete         |
+      | Custom permissions   | Custom permissions | share, update         | share, update         | read, update, share         |
+      | Custom permissions   | Custom permissions | share, create         | share, create         | read, share, create         |
+      | Custom permissions   | Custom permissions | share, delete, update | share, delete, update | read, share, delete, update |
+      | Custom permissions   | Custom permissions | share, create, delete | share, create, delete | read, share, delete, create |
+      | Custom permissions   | Custom permissions | share, update, create | share, update, create | read, share, update, create |

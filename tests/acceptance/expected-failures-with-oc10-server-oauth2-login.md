@@ -160,6 +160,3 @@ Other free text and markdown formatting can be used elsewhere in the document if
 
 ### [reshared share that is shared with a group the sharer is part of shows twice on "Share with me" page](https://github.com/owncloud/web/issues/2512)
 -   [webUISharingAcceptShares/acceptShares.feature:32](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L32)
-
-### [Change the file content of a received shared file](https://github.com/owncloud/ocis/issues/2319)
--   [webUIFilesActionMenu/versions.feature:88](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesActionMenu/versions.feature#L88)
