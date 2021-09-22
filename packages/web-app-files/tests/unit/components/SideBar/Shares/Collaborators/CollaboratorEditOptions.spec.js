@@ -1,6 +1,15 @@
 import EditOptions from '@files/src/components/SideBar/Shares/Collaborators/CollaboratorsEditOptions.vue'
 
 describe('CollaboratorsEditOptions component', () => {
+  beforeEach(() => {
+    jest.useFakeTimers('modern')
+    jest.setSystemTime(new Date(2020, 3, 1))
+  })
+
+  afterEach(() => {
+    jest.useRealTimers()
+  })
+
   it('enforces maximum expiration date', () => {
     const expectedDate = new Date()
     expectedDate.setDate(new Date().getDate() + 2)
