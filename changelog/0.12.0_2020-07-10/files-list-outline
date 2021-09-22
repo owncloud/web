@@ -1,7 +1,7 @@
 Change: Do not display outline when the files list is focused
 
 The files list was displaying outline when it received focus after a click.
-Since the focus is meant only programatically, the outline was not supposed to be displayed.
+Since the focus is meant only programmatically, the outline was not supposed to be displayed.
 
 https://github.com/owncloud/web/issues/3747
 https://github.com/owncloud/web/issues/3551

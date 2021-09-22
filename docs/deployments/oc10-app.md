@@ -48,7 +48,7 @@ Administrators can optionally decide whether ownCloud Links (public and private 
 ```
 
 ### Make ownCloud Web the default web interface
-Administrators can optionally decide to make ownCloud Web the default web interface that users see after they log in to ownCloud. By default the Classic web interface will be presented to users. To present ownCloud Web to users by default, add the following line into `config/config.php`:
+Administrators can optionally decide to make ownCloud Web the default web interface that users see after they log in to ownCloud. By default, the Classic web interface will be presented to users. To present ownCloud Web to users by default, add the following line into `config/config.php`:
 
 ```php
 'defaultapp' => 'web',
