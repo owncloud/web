@@ -91,7 +91,7 @@ To watch the tests while running, open [http://host.docker.internal:6080/](http:
 #### Watch the test report
 
 If you want to create a report after the tests are done, run the command ```node tests/report```.
-By default the report gets generated to tests/report/cucumber_report.html.
+By default, the report gets generated to tests/report/cucumber_report.html.
 The location can be changed by adding the ```--report-location``` flag.
 
 To see all available options run ```node tests/report --help```.

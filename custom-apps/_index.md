@@ -48,7 +48,7 @@ In your `config/config.json`, add the skeleton example app to the `"external_app
 }
 ```
 
-After saving the config file (make sure it's still a valid `JSON` format), your running `web` app should be updated automatically. Open your browsers development tools, reload the page and watch for `(SKELETON)` messages in the browser console.
+After saving the config file (make sure it's still a valid `JSON` format), your running `web` app should be updated automatically. Open your browser's development tools, reload the page and watch for `(SKELETON)` messages in the browser console.
 
 ## Configuration options
 
