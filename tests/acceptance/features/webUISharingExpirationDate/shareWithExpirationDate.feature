@@ -10,7 +10,7 @@ Feature: Sharing files and folders with internal users with expiry date
       | Alice    |
       | Brian    |
 
-  @notToImplementOnOCIS @skipOnOCIS
+  @notToImplementOnOCIS
   Scenario: share a file with another internal user which should expire after 2 days
     Given user "Alice" has uploaded file "testavatar.jpg" to "testimage.jpg"
     And user "Alice" has logged in using the webUI
