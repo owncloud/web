@@ -100,6 +100,10 @@ There are a few config values which need to be set in order for ownCloud Web to 
 }
 ```
 
+{{< hint info >}}
+If any issues arise when trying to access the new design, a good start for debugging it is to run your `config.json` file through a json validator of your choice.
+{{< /hint >}}
+
 |config parameter|explanation|
 |---|---|
 |server|ownCloud 10 server address|
@@ -117,14 +121,14 @@ It is important that you don't edit or place the `config.json` within the app fo
 {{< hint >}}
 If you use OpenID Connect you need to replace the `"auth"` part with following configuration:
 
-``` 
+```json
   "openIdConnect": {
     "metadata_url": "<fqdn-of-the-identity-provider>/.well-known/openid-configuration",
     "authority": "<fqdn-of-the-identity-provider>",
     "client_id": "<client-id-from-the-identity-provider>",
     "response_type": "code",
     "scope": "openid profile email"
-  },
+  }
 ```
 {{< /hint >}}
 
@@ -134,7 +138,7 @@ ownCloud Classic features that are not deeply integrated with the Classic UI (e.
 
 To add new elements in the app switcher, paste the following into the `applications` section of `config.json`:
 
-```
+```json
     {
       "title": {
         "en": "Custom Groups",
@@ -142,7 +146,7 @@ To add new elements in the app switcher, paste the following into the `applicati
       },
       "icon": "application",
       "url": "https://<your-owncloud-server>/settings/personal?sectionid=customgroups"
-    },
+    }
 ```
 
 {{< hint info >}}
@@ -152,7 +156,7 @@ The URL in the example might need adaptations depending on the configuration of 
 ### Add links to the user menu
 Just like adding links to the app switcher, you can also add links to the user menu.
 
-```
+```json
     {
       "icon": "application",
       "menu": "user",
@@ -162,7 +166,7 @@ Just like adding links to the app switcher, you can also add links to the user m
         "en": "Help"
       },
       "url": "https://help-link.example"
-    },
+    }
 ```
 
 This will add a link to the specified URL in the user menu. This way, the link will open in the same tab. If you instead want to open it in a new tab, just remove the line `"target": "_self",`.
@@ -177,11 +181,11 @@ To be able to use ONLYOFFICE in ownCloud Web, it is required to run
 
 Make sure that ONLYOFFICE works as expected in the Classic UI and add the following to `config.json` to make it available in ownCloud Web:
 
-```
+```json
 "external_apps": [
     {
         "id": "onlyoffice",
-        "path": "https://<your-owncloud-server>/apps/onlyoffice/js/web/onlyoffice.js",
+        "path": "https://<your-owncloud-server>/apps/onlyoffice/js/web/onlyoffice.js"
     }
 ]
 ```
