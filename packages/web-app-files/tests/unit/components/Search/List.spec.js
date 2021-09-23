@@ -45,23 +45,21 @@ describe('List component', () => {
     jest.clearAllMocks()
   })
 
-  describe.each(['No search term entered', 'No resource found'])('when %s', message => {
+  describe.each(['no search term is entered', 'no resource is found'])('when %s', message => {
     let wrapper
     beforeEach(() => {
-      if (message === 'No search term entered') {
+      if (message === 'no search term is entered') {
         wrapper = getWrapper()
       } else {
         wrapper = getWrapper('epsum.txt')
       }
     })
 
-    it('should show text "' + message + '"', () => {
+    it('should show no-content-message component', () => {
       const noContentMessage = wrapper.find(selectors.noContentMessage)
-      const filesTable = wrapper.find(selectors.filesTable)
 
-      expect(filesTable.exists()).toBeFalsy()
       expect(noContentMessage.exists()).toBeTruthy()
-      expect(noContentMessage.text()).toEqual(message)
+      expect(wrapper).toMatchSnapshot()
     })
     it('should not show files table', () => {
       const filesTable = wrapper.find(selectors.filesTable)
@@ -140,7 +138,7 @@ function getWrapper(searchTerm = '', files = []) {
   })
 }
 
-function createStore(activeFiles) {
+function createStore(activeFilesCurrentPage) {
   return new Vuex.Store({
     getters: {
       configuration: () => ({
@@ -153,15 +151,24 @@ function createStore(activeFiles) {
       Files: {
         namespaced: true,
         getters: {
-          activeFiles: () => activeFiles,
-          totalFilesCount: () => ({ files: activeFiles.length, folders: 0 }),
-          totalFilesSize: () => getTotalSize(activeFiles),
-          pages: jest.fn()
+          activeFilesCurrentPage: () => activeFilesCurrentPage,
+          totalFilesCount: () => ({ files: activeFilesCurrentPage.length, folders: 0 }),
+          totalFilesSize: () => getTotalSize(activeFilesCurrentPage)
         },
         mutations: {
           CLEAR_CURRENT_FILES_LIST: jest.fn(),
-          LOAD_FILES: jest.fn(),
-          UPDATE_CURRENT_PAGE: jest.fn()
+          LOAD_FILES: jest.fn()
+        },
+        modules: {
+          pagination: {
+            namespaced: true,
+            getters: {
+              pages: jest.fn()
+            },
+            mutations: {
+              UPDATE_CURRENT_PAGE: jest.fn()
+            }
+          }
         }
       }
     }
