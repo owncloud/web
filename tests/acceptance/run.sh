@@ -153,7 +153,7 @@ fi
 
 
 echo "waiting for backend server to start"
-timeout 180 bash -c 'while [[ "$(curl --insecure -s -o /dev/null -w ''%{http_code}'' ${BACKEND_HOST})" != "200" ]]; do printf "."; sleep 5; done'
+timeout 180 bash -c 'while [[ "$(curl --insecure -s -o /dev/null -w ''%{http_code}'' ${BACKEND_HOST}/status.php)" != "200" ]]; do printf "."; sleep 5; done'
 
 # if no test path is set, set whole feature directory as test path
 if [ -z "${TEST_PATHS}" ]
