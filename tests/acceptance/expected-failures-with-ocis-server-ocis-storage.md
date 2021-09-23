@@ -107,8 +107,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIResharing1/reshareUsers.feature:74](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIResharing1/reshareUsers.feature#L74)
 
 ### [sharing expiration date input not present](https://github.com/owncloud/web/issues/4169)
--   [webUISharingExpirationDate/shareWithExpirationDate.feature:15](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsersExpire/shareWithUsersExpiringShares.feature#L14)
--   [webUISharingExpirationDate/shareWithExpirationDate.feature:23](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsersExpire/shareWithUsersExpiringShares.feature#L20)
+-   [webUISharingExpirationDate/shareWithExpirationDate.feature:21](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsersExpire/shareWithUsersExpiringShares.feature#L21)
 
 ### [share indicator in files are not shown until sharing sidebar is opened](https://github.com/owncloud/web/issues/4167)
 -   [webUISharingInternalUsersSharingIndicator/shareWithUsers.feature:99](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsersSharingIndicator/shareWithUsers.feature#L99)
