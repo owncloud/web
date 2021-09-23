@@ -181,7 +181,7 @@ module.exports = {
     },
     dateTimeDayPicker: {
       selector:
-        '//span[contains(@class, "vc-day-content vc-focusable") and normalize-space(.)="%s"]',
+        '//div[not(contains(@class, "is-not-in-month"))]/span[contains(@class, "vc-day-content vc-focusable") and normalize-space(.)="%s"]',
       locateStrategy: 'xpath'
     },
     publicLinkDeleteExpirationDateButton: {
