@@ -168,6 +168,8 @@ import DatePicker from 'v-calendar/lib/components/date-picker.umd'
 import mixins from '../../../../mixins'
 import { DateTime } from 'luxon'
 import publicLinkRoles from '../../../../helpers/publicLinkRolesDefinition'
+import { addDays } from 'web-runtime/src/helpers/date'
+
 import RoleItem from '../../Shared/RoleItem.vue'
 
 export default {
@@ -248,11 +250,7 @@ export default {
     },
 
     minExpirationDate() {
-      const date = new Date()
-
-      date.setDate(new Date().getDate() + 1)
-
-      return date
+      return addDays(new Date(), 1)
     },
 
     maxExpirationDate() {
@@ -261,11 +259,8 @@ export default {
       }
 
       const days = parseInt(this.$_expirationDate.days, 10)
-      const date = new Date()
 
-      date.setDate(new Date().getDate() + days)
-
-      return date
+      return addDays(new Date(), days)
     },
 
     $_expirationIsValid() {
@@ -332,10 +327,7 @@ export default {
         return null
       }
 
-      const date = new Date()
-      date.setDate(date.getDate() + this.$_expirationDate.days)
-
-      return date
+      return addDays(new Date(), parseInt(this.$_expirationDate.days))
     }
   },
   created() {
