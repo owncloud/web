@@ -42,6 +42,7 @@
           :min-date="minExpirationDate"
           :max-date="maxExpirationDate"
           :locale="$language.current"
+          :is-required="$_expirationDate.enforced"
           class="files-recipient-expiration-datepicker"
           data-testid="recipient-datepicker"
         >
