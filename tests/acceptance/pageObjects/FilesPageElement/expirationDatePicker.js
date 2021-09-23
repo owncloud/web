@@ -154,7 +154,7 @@ module.exports = {
         if (disabled) {
           console.log('WARNING: Cannot change expiration date to disabled value!')
           await this.click(
-            client.page.FilesPageElement.expirationDatePicker().selectors.expirationDateField
+            client.page.FilesPageElement.sharingDialog().elements.expirationDateField.selector
           )
           return false
         }
