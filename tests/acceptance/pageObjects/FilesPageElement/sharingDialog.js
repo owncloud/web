@@ -724,7 +724,8 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     expirationDateField: {
-      selector: '.expiration-dialog-btn'
+      selector: '.expiration-dialog-btn',
+      locateStrategy: 'css'
     },
     requiredLabelInCollaboratorsExpirationDate: {
       selector:
