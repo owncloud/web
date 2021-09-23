@@ -1590,7 +1590,7 @@ def installNPM():
         "image": "owncloudci/nodejs:14",
         "pull": "always",
         "commands": [
-            "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping installNPM'; else yarn install --frozen-lockfile; fi",
+            "if test -f runTestsForDocsChangeOnly; then echo 'skipping installNPM'; else yarn install --frozen-lockfile; fi",
         ],
     }]
 
