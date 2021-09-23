@@ -24,6 +24,17 @@
       </oc-button>
     </template>
     <oc-grid v-if="displayBulkActions" gutter="small">
+      <div v-if="canDownloadAsArchive">
+        <oc-button
+          id="download-selected-btn"
+          key="download-selected-btn"
+          variation="primary"
+          @click="downloadAsArchive"
+        >
+          <oc-icon name="archive" />
+          <translate>Download</translate>
+        </oc-button>
+      </div>
       <div v-if="canCopy">
         <oc-button
           id="copy-selected-btn"
@@ -94,18 +105,36 @@ import { checkRoute } from '../../../helpers/route'
 import { shareStatus } from '../../../helpers/shareStatus'
 import { triggerShareAction } from '../../../helpers/share/triggerShareAction'
 import PQueue from 'p-queue'
+import {
+  isDownloadAsArchiveAvailable,
+  triggerDownloadAsArchive
+} from '../../../helpers/download/downloadAsArchive'
 
 export default {
   mixins: [MixinRoutes, MixinDeleteResources],
 
   computed: {
     ...mapGetters('Files', ['selectedFiles', 'currentFolder', 'activeFilesCurrentPage']),
-    ...mapGetters(['homeFolder']),
+    ...mapGetters(['homeFolder', 'getToken']),
 
     emptyTrashbinButtonText() {
       return this.selectedFiles.length < 1
         ? this.$gettext('Empty trash bin')
         : this.$gettext('Delete')
+    },
+
+    canDownloadAsArchive() {
+      if (
+        !checkRoute(['files-personal', 'files-public-list', 'files-favorites'], this.$route.name)
+      ) {
+        return false
+      }
+
+      if (!isDownloadAsArchiveAvailable()) {
+        return false
+      }
+
+      return this.currentFolder.canDownload()
     },
 
     canMove() {
@@ -285,7 +314,7 @@ export default {
         return
       }
 
-      console.log(errors)
+      console.error(errors)
       if (newShareStatus === shareStatus.accepted) {
         this.showMessage({
           title: this.$ngettext(
@@ -307,6 +336,24 @@ export default {
           status: 'danger'
         })
       }
+    },
+
+    async downloadAsArchive() {
+      await triggerDownloadAsArchive({
+        folderPath: this.currentFolder.path,
+        fileNames: this.selectedFiles.map(f => f.name),
+        token: this.getToken
+      }).catch(e => {
+        console.error(e)
+        this.showMessage({
+          title: this.$ngettext(
+            'Error downloading the selected file.',
+            'Error downloading the selected files.',
+            this.selectedFiles.length
+          ),
+          status: 'danger'
+        })
+      })
     }
   }
 }

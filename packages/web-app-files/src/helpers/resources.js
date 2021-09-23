@@ -40,6 +40,7 @@ export function buildResource(resource) {
     extension: isFolder ? '' : extension,
     path: resource.name,
     type: isFolder ? 'folder' : resource.type,
+    isFolder,
     mdate: resource.fileInfo[DavProperty.LastModifiedDate],
     size: isFolder
       ? resource.fileInfo[DavProperty.ContentSize]
@@ -63,8 +64,7 @@ export function buildResource(resource) {
       return this.permissions.indexOf(DavPermission.FolderCreateable) >= 0
     },
     canDownload: function() {
-      // TODO: as soon as we allow folder downloads as archive we want to return `true` here without exceptions
-      return !isFolder
+      return true
     },
     canBeDeleted: function() {
       return this.permissions.indexOf(DavPermission.Deletable) >= 0
