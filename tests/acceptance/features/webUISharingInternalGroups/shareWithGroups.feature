@@ -34,10 +34,10 @@ Feature: Sharing files and folders with internal groups
     And user "Carol" has logged in using the webUI
     When the user shares folder "simple-folder" with group "grp1" as "<set-role>" using the webUI
     And the user shares file "testimage.jpg" with group "grp1" as "<set-role>" using the webUI
-    And user "Alice" accepts the share "simple-folder" offered by user "Carol" using the sharing API
-    And user "Brian" accepts the share "simple-folder" offered by user "Carol" using the sharing API
-    And user "Alice" accepts the share "testimage.jpg" offered by user "Carol" using the sharing API
-    And user "Brian" accepts the share "testimage.jpg" offered by user "Carol" using the sharing API
+    And user "Alice" accepts the share "Shares/simple-folder" offered by user "Carol" using the sharing API
+    And user "Brian" accepts the share "Shares/simple-folder" offered by user "Carol" using the sharing API
+    And user "Alice" accepts the share "Shares/testimage.jpg" offered by user "Carol" using the sharing API
+    And user "Brian" accepts the share "Shares/testimage.jpg" offered by user "Carol" using the sharing API
     Then group "grp1" should be listed as "<expected-role>" in the collaborators list for folder "simple-folder" on the webUI
     And group "grp1" should be listed as "<expected-role>" in the collaborators list for file "testimage.jpg" on the webUI
     And user "Alice" should have received a share with these details:
@@ -71,7 +71,7 @@ Feature: Sharing files and folders with internal groups
       | set-role             | expected-role        | permissions-folder              | permissions-file  |
       | Viewer               | Viewer               | read,share                      | read,share        |
       | Editor               | Editor               | read,update,create,delete,share | read,update,share |
-      | Custom permissions | Custom permissions | read                            | read              |
+      | Custom permissions   | Custom permissions   | read                            | read              |
 
   @issue-4102 @issue-ocis-2267
   Scenario: share a file with an internal group a member overwrites and unshares the file
@@ -79,8 +79,8 @@ Feature: Sharing files and folders with internal groups
     And user "Carol" has logged in using the webUI
     When the user renames file "lorem.txt" to "new-lorem.txt" using the webUI
     And the user shares file "new-lorem.txt" with group "grp1" as "Editor" using the webUI
-    And user "Alice" accepts the share "new-lorem.txt" offered by user "Carol" using the sharing API
-    And user "Brian" accepts the share "new-lorem.txt" offered by user "Carol" using the sharing API
+    And user "Alice" accepts the share "Shares/new-lorem.txt" offered by user "Carol" using the sharing API
+    And user "Brian" accepts the share "Shares/new-lorem.txt" offered by user "Carol" using the sharing API
     And the user re-logs in as "Alice" using the webUI
     Then as "Alice" the content of "/Shares/new-lorem.txt" should not be the same as the content of local file "new-lorem.txt"
     # overwrite the received shared file
@@ -104,8 +104,8 @@ Feature: Sharing files and folders with internal groups
     And user "Carol" has logged in using the webUI
     When the user renames folder "simple-folder" to "new-simple-folder" using the webUI
     And the user shares folder "new-simple-folder" with group "grp1" as "Editor" using the webUI
-    And user "Alice" accepts the share "new-simple-folder" offered by user "Carol" using the sharing API
-    And user "Brian" accepts the share "new-simple-folder" offered by user "Carol" using the sharing API
+    And user "Alice" accepts the share "Shares/new-simple-folder" offered by user "Carol" using the sharing API
+    And user "Brian" accepts the share "Shares/new-simple-folder" offered by user "Carol" using the sharing API
     And the user re-logs in as "Alice" using the webUI
     And the user opens folder "Shares" using the webUI
     And the user opens folder "new-simple-folder" using the webUI
@@ -141,8 +141,8 @@ Feature: Sharing files and folders with internal groups
     And user "Carol" has logged in using the webUI
     When the user renames folder "simple-folder" to "new-simple-folder" using the webUI
     And the user shares folder "new-simple-folder" with group "grp1" as "Editor" using the webUI
-    And user "Alice" accepts the share "new-simple-folder" offered by user "Carol" using the sharing API
-    And user "Brian" accepts the share "new-simple-folder" offered by user "Carol" using the sharing API
+    And user "Alice" accepts the share "Shares/new-simple-folder" offered by user "Carol" using the sharing API
+    And user "Brian" accepts the share "Shares/new-simple-folder" offered by user "Carol" using the sharing API
     # unshare the received shared folder and check it is gone
     And the user re-logs in as "Alice" using the webUI
     And the user opens folder "Shares" using the webUI
@@ -167,7 +167,7 @@ Feature: Sharing files and folders with internal groups
     Given user "Alice" has created file "lorem.txt"
     And user "Alice" has logged in using the webUI
     And user "Alice" has shared file "lorem.txt" with group "grp1"
-    And user "Brian" has accepted the share "lorem.txt" offered by user "Alice"
+    And user "Brian" has accepted the share "Shares/lorem.txt" offered by user "Alice"
     When the user opens the share dialog for file "lorem.txt" using the webUI
     Then group "grp1" should be listed as "Editor" in the collaborators list on the webUI
     When the user deletes "grp1" as collaborator for the current file using the webUI
@@ -183,9 +183,9 @@ Feature: Sharing files and folders with internal groups
     And user "Carol" has been added to group "grp2"
     And user "Alice" has logged in using the webUI
     And user "Alice" has shared file "lorem.txt" with group "grp1"
-    And user "Brian" has accepted the share "lorem.txt" offered by user "Alice"
+    And user "Brian" has accepted the share "Shares/lorem.txt" offered by user "Alice"
     And user "Alice" has shared file "lorem.txt" with group "grp2"
-    And user "Carol" has accepted the share "lorem.txt" offered by user "Alice"
+    And user "Carol" has accepted the share "Shares/lorem.txt" offered by user "Alice"
     When the user opens the share dialog for file "lorem.txt" using the webUI
     Then group "grp1" should be listed as "Editor" in the collaborators list on the webUI
     And group "grp2" should be listed as "Editor" in the collaborators list on the webUI
@@ -215,10 +215,10 @@ Feature: Sharing files and folders with internal groups
     And user "Carol" has created file "/simple-folder/sub-folder/lorem.txt"
     And user "Carol" has uploaded file with content "test" to "/simple-folder/sub-folder/lorem.txt"
     And user "Carol" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has accepted the share "simple-folder" offered by user "Carol"
+    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Carol"
     And user "Carol" has shared folder "/simple-folder/sub-folder" with group "grp1"
-    And user "Alice" has accepted the share "simple-folder/sub-folder" offered by user "Carol"
-    And user "Brian" has accepted the share "simple-folder/sub-folder" offered by user "Carol"
+    And user "Alice" has accepted the share "Shares/sub-folder" offered by user "Carol"
+    And user "Brian" has accepted the share "Shares/sub-folder" offered by user "Carol"
     And user "Carol" has logged in using the webUI
     When the user opens folder "simple-folder/sub-folder" directly on the webUI
     And the user opens the share dialog for file "lorem.txt" using the webUI
@@ -230,9 +230,9 @@ Feature: Sharing files and folders with internal groups
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has created folder "simple-folder/simple-empty-folder"
     And user "Alice" has shared folder "simple-folder" with group "grp1"
-    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
+    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
     And user "Brian" has shared folder "Shares/simple-folder" with user "Carol"
-    And user "Carol" has accepted the share "simple-folder" offered by user "Brian"
+    And user "Carol" has accepted the share "Shares/simple-folder" offered by user "Brian"
     And user "Carol" has logged in using the webUI
     And the user opens folder "Shares" using the webUI
     And the user opens folder "simple-folder" using the webUI
@@ -259,8 +259,8 @@ Feature: Sharing files and folders with internal groups
       | shareTypeString | group     |
       | shareWith       | grp1      |
       | expireDate      | +14       |
-    And user "Alice" has accepted the share "lorem.txt" offered by user "Carol"
-    And user "Brian" has accepted the share "lorem.txt" offered by user "Carol"
+    And user "Alice" has accepted the share "Shares/lorem.txt" offered by user "Carol"
+    And user "Brian" has accepted the share "Shares/lorem.txt" offered by user "Carol"
     And user "Carol" has logged in using the webUI
     When the user edits the collaborator expiry date of "grp1" of file "lorem.txt" to "+7" days using the webUI
     Then user "Alice" should have received a share with target "Shares/lorem.txt" and expiration date in 7 days
@@ -280,8 +280,8 @@ Feature: Sharing files and folders with internal groups
     And user "Carol" has created file "lorem.txt"
     And user "Carol" has logged in using the webUI
     When the user shares folder "lorem.txt" with group "grp1" as "Viewer" using the webUI
-    And user "Alice" accepts the share "lorem.txt" offered by user "Carol" using the sharing API
-    And user "Brian" accepts the share "lorem.txt" offered by user "Carol" using the sharing API
+    And user "Alice" accepts the share "Shares/lorem.txt" offered by user "Carol" using the sharing API
+    And user "Brian" accepts the share "Shares/lorem.txt" offered by user "Carol" using the sharing API
     Then user "Carol" should have a share with these details:
       | field      | value      |
       | path       | /lorem.txt |
@@ -320,8 +320,8 @@ Feature: Sharing files and folders with internal groups
       | shareTypeString | group             |
       | shareWith       | grp1              |
       | expireDate      | +4                |
-    And user "Alice" has accepted the share "<shared-resource>" offered by user "Carol"
-    And user "Brian" has accepted the share "<shared-resource>" offered by user "Carol"
+    And user "Alice" has accepted the share "Shares/<shared-resource>" offered by user "Carol"
+    And user "Brian" has accepted the share "Shares/<shared-resource>" offered by user "Carol"
     And user "Carol" has logged in using the webUI
     When the user tries to edit the collaborator expiry date of "grp1" of resource "<shared-resource>" to "+7" days using the webUI
     Then the expiration date shown on the webUI should be "+4" days

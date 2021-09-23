@@ -24,8 +24,8 @@ Feature: Sharing files and folders with internal groups
     And user "Carol" has logged in using the webUI
     When the user shares folder "simple-folder" with group "<group>" as "Viewer" using the webUI
     And the user shares file "testimage.jpg" with group "<group>" as "Viewer" using the webUI
-    And user "Alice" accepts the share "simple-folder" offered by user "Carol" using the sharing API
-    And user "Alice" accepts the share "testimage.jpg" offered by user "Carol" using the sharing API
+    And user "Alice" accepts the share "Shares/simple-folder" offered by user "Carol" using the sharing API
+    And user "Alice" accepts the share "Shares/testimage.jpg" offered by user "Carol" using the sharing API
     Then group "<group>" should be listed as "Viewer" in the collaborators list for folder "simple-folder" on the webUI
     And group "<group>" should be listed as "Viewer" in the collaborators list for file "testimage.jpg" on the webUI
     When the user re-logs in as "Alice" using the webUI
@@ -51,8 +51,8 @@ Feature: Sharing files and folders with internal groups
     And user "Carol" has logged in using the webUI
     When the user shares file "randomfile.txt" with user "Alice Hansen" as "Editor" using the webUI
     And the user shares file "randomfile.txt" with group "Alice" as "Editor" using the webUI
-    And user "Alice" accepts the share "randomfile.txt" offered by user "Carol" using the sharing API
-    And user "Brian" accepts the share "randomfile.txt" offered by user "Carol" using the sharing API
+    And user "Alice" accepts the share "Shares/randomfile.txt" offered by user "Carol" using the sharing API
+    And user "Brian" accepts the share "Shares/randomfile.txt" offered by user "Carol" using the sharing API
     And the user opens the share creation dialog on the webUI
     And the user types "Alice" in the share-with-field
     Then "group" "Alice" should not be listed in the autocomplete list on the webUI
@@ -69,8 +69,8 @@ Feature: Sharing files and folders with internal groups
     And user "Carol" has logged in using the webUI
     When the user shares file "randomfile.txt" with group "Alice" as "Editor" using the webUI
     And the user shares file "randomfile.txt" with user "Alice Hansen" as "Editor" using the webUI
-    And user "Alice" accepts the share "randomfile.txt" offered by user "Carol" using the sharing API
-    And user "Brian" accepts the share "randomfile.txt" offered by user "Carol" using the sharing API
+    And user "Alice" accepts the share "Shares/randomfile.txt" offered by user "Carol" using the sharing API
+    And user "Brian" accepts the share "Shares/randomfile.txt" offered by user "Carol" using the sharing API
     And the user opens the share creation dialog on the webUI
     And the user types "Alice" in the share-with-field
     Then "user" "Alice Hansen" should not be listed in the autocomplete list on the webUI
@@ -87,8 +87,8 @@ Feature: Sharing files and folders with internal groups
     And user "Carol" has logged in using the webUI
     When the user shares file "randomfile.txt" with user "Alice Hansen" as "Editor" using the webUI
     And the user shares file "randomfile.txt" with group "ALICE" as "Editor" using the webUI
-    And user "Alice" accepts the share "randomfile.txt" offered by user "Carol" using the sharing API
-    And user "Brian" accepts the share "randomfile.txt" offered by user "Carol" using the sharing API
+    And user "Alice" accepts the share "Shares/randomfile.txt" offered by user "Carol" using the sharing API
+    And user "Brian" accepts the share "Shares/randomfile.txt" offered by user "Carol" using the sharing API
     And the user opens the share creation dialog on the webUI
     And the user types "ALICE" in the share-with-field
     Then "group" "ALICE" should not be listed in the autocomplete list on the webUI
@@ -105,8 +105,8 @@ Feature: Sharing files and folders with internal groups
     And user "Carol" has logged in using the webUI
     When the user shares file "randomfile.txt" with group "ALICE" as "Editor" using the webUI
     And the user shares file "randomfile.txt" with user "Alice Hansen" as "Editor" using the webUI
-    And user "Alice" accepts the share "randomfile.txt" offered by user "Carol" using the sharing API
-    And user "Brian" accepts the share "randomfile.txt" offered by user "Carol" using the sharing API
+    And user "Alice" accepts the share "Shares/randomfile.txt" offered by user "Carol" using the sharing API
+    And user "Brian" accepts the share "Shares/randomfile.txt" offered by user "Carol" using the sharing API
     And the user opens the share creation dialog on the webUI
     And the user types "Alice" in the share-with-field
     Then "user" "Alice Hansen" should not be listed in the autocomplete list on the webUI

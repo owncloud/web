@@ -32,9 +32,9 @@ Feature: disable sharing
   Scenario: Check file presence in shared-with-me page when sharing is disabled
     Given user "Brian" has been created with default attributes and without skeleton files
     And user "Alice" has shared file "lorem.txt" with user "Brian"
-    And user "Brian" has accepted the share "lorem.txt" offered by user "Alice"
+    And user "Brian" has accepted the share "Shares/lorem.txt" offered by user "Alice"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
+    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
     And the setting "shareapi_enabled" of app "core" has been set to "no"
     When user "Brian" logs in using the webUI
     And the user opens folder "Shares" using the webUI

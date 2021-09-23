@@ -20,7 +20,7 @@ Feature: Sharing files and folders with internal users with different permission
   @issue-ocis-2260
   Scenario: Change permissions of the previously shared folder to read, share
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions
-    And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
+    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian"
     And user "Brian" has logged in using the webUI
     Then no custom permissions should be set for collaborator "Alice Hansen" for folder "simple-folder" on the webUI
     When the user sets custom permission for current role of collaborator "Alice Hansen" for folder "simple-folder" to "share" using the webUI
@@ -35,7 +35,7 @@ Feature: Sharing files and folders with internal users with different permission
   @issue-1853 @issue-ocis-2260
   Scenario: Change permissions of the previously shared folder to all permissions
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share, create, delete" permissions
-    And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
+    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian"
     And user "Brian" has logged in using the webUI
     Then custom permissions "share, create, delete" should be set for user "Alice Hansen" for folder "simple-folder" on the webUI
     When the user sets custom permission for current role of collaborator "Alice Hansen" for folder "simple-folder" to "create, delete, share" using the webUI
@@ -51,7 +51,7 @@ Feature: Sharing files and folders with internal users with different permission
   @issue-1853 @issue-ocis-2260
   Scenario: Change permissions of the previously shared folder to update, delete
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share, create" permissions
-    And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
+    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian"
     And user "Brian" has logged in using the webUI
     Then custom permissions "share, create" should be set for user "Alice Hansen" for folder "simple-folder" on the webUI
     When the user sets custom permission for current role of collaborator "Alice Hansen" for folder "simple-folder" to "delete, update" using the webUI
@@ -67,7 +67,7 @@ Feature: Sharing files and folders with internal users with different permission
   @issue-ocis-2260
   Scenario: Change permissions of the previously shared folder to read, create, share
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, delete" permissions
-    And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
+    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian"
     And user "Brian" has logged in using the webUI
     Then custom permissions "delete" should be set for user "Alice Hansen" for folder "simple-folder" on the webUI
     When the user sets custom permission for current role of collaborator "Alice Hansen" for folder "simple-folder" to "create, share" using the webUI
@@ -84,7 +84,7 @@ Feature: Sharing files and folders with internal users with different permission
   Scenario Outline: share a folder with another internal user assigning a role and the permissions
     Given user "Brian" has logged in using the webUI
     When the user shares folder "simple-folder" with user "Alice Hansen" as "<role>" with permissions "<extra-permissions>" using the webUI
-    And user "Alice" accepts the share "simple-folder" offered by user "Brian" using the sharing API
+    And user "Alice" accepts the share "Shares/simple-folder" offered by user "Brian" using the sharing API
     Then user "Alice Hansen" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
     And custom permissions "<displayed-permissions>" should be set for user "Alice Hansen" for folder "simple-folder" on the webUI
     And user "Alice" should have received a share with these details:
@@ -98,14 +98,14 @@ Feature: Sharing files and folders with internal users with different permission
       | role                 | displayed-role       | extra-permissions             | displayed-permissions | permissions                         |
       | Viewer               | Viewer               | ,                             | ,                     | read, share                         |
       | Editor               | Editor               | ,                             | ,                     | all                                 |
-      | Custom permissions | Custom permissions | share, create                 | share, create         | read, share, create                 |
-      | Custom permissions | Custom permissions | update, share                 | share, update         | read, update, share                 |
-      | Custom permissions | Editor               | delete, share, create, update | ,                     | read, share, delete, update, create |
+      | Custom permissions   | Custom permissions   | share, create                 | share, create         | read, share, create                 |
+      | Custom permissions   | Custom permissions   | update, share                 | share, update         | read, update, share                 |
+      | Custom permissions   | Editor               | delete, share, create, update | ,                     | read, share, delete, update, create |
 
   @issue-ocis-2260
   Scenario Outline: Change permissions of the previously shared file
     Given user "Brian" has shared file "lorem.txt" with user "Alice" with "<initial-permissions>" permissions
-    And user "Alice" has accepted the share "lorem.txt" offered by user "Brian"
+    And user "Alice" has accepted the share "Shares/lorem.txt" offered by user "Brian"
     And user "Brian" has logged in using the webUI
     Then custom permission "<displayed-permissions>" should be set for user "Alice Hansen" for file "lorem.txt" on the webUI
     When the user sets custom permission for current role of collaborator "Alice Hansen" for file "lorem.txt" to "share" using the webUI
@@ -124,7 +124,7 @@ Feature: Sharing files and folders with internal users with different permission
 
   Scenario: Delete all custom permissions of the previously shared folder
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, update" permissions
-    And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
+    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian"
     And user "Brian" has logged in using the webUI
     When the user disables all the custom permissions of collaborator "Alice Hansen" for folder "simple-folder" using the webUI
     Then no custom permissions should be set for collaborator "Alice Hansen" for folder "simple-folder" on the webUI
@@ -140,7 +140,7 @@ Feature: Sharing files and folders with internal users with different permission
   Scenario Outline: share a file with another internal user assigning a role and the permissions
     Given user "Brian" has logged in using the webUI
     When the user shares file "lorem.txt" with user "Alice Hansen" as "<role>" with permissions "<collaborators-permissions>" using the webUI
-    And user "Alice" accepts the share "lorem.txt" offered by user "Brian" using the sharing API
+    And user "Alice" accepts the share "Shares/lorem.txt" offered by user "Brian" using the sharing API
     Then user "Alice Hansen" should be listed as "<displayed-role>" in the collaborators list for file "lorem.txt" on the webUI
     And custom permissions "<displayed-permissions>" should be set for user "Alice Hansen" for file "lorem.txt" on the webUI
     And user "Alice" should have received a share with these details:
@@ -154,12 +154,12 @@ Feature: Sharing files and folders with internal users with different permission
       | role                 | displayed-role | collaborators-permissions | displayed-permissions | permissions         |
       | Viewer               | Viewer         | ,                         | ,                     | read, share         |
       | Editor               | Editor         | ,                         | ,                     | read, share, update |
-      | Custom permissions | Editor         | share, update             | ,                     | read, share, update |
+      | Custom permissions   | Editor         | share, update             | ,                     | read, share, update |
 
   @issue-ocis-2260
   Scenario: Share a folder without share permissions using API and check if it is listed on the collaborators list for original owner
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions
-    And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
+    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian"
     And user "Brian" has logged in using the webUI
     When the user opens the share dialog for folder "simple-folder" using the webUI
     Then user "Alice Hansen" should be listed as "Custom permissions" in the collaborators list for folder "simple-folder" on the webUI
@@ -168,7 +168,7 @@ Feature: Sharing files and folders with internal users with different permission
   @skipOnOC10
   Scenario: Share a folder without share permissions using API and check if it is listed on the collaborators list for original owner (ocis bug demonstration)
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions
-    And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
+    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian"
     And user "Brian" has logged in using the webUI
     When the user opens the share dialog for folder "simple-folder" using the webUI
     Then user "Alice Hansen" should be listed as "Viewer" in the collaborators list for folder "simple-folder" on the webUI
@@ -178,9 +178,9 @@ Feature: Sharing files and folders with internal users with different permission
   Scenario: Resource owner upgrades share permissions of a re-share
     Given user "Carol" has been created with default attributes and without skeleton files
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share, delete" permissions
-    And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
+    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian"
     And user "Alice" has shared folder "/Shares/simple-folder" with user "Carol" with "read, delete" permissions
-    And user "Carol" has accepted the share "simple-folder" offered by user "Alice"
+    And user "Carol" has accepted the share "Shares/simple-folder" offered by user "Alice"
     And user "Brian" has logged in using the webUI
     When the user sets custom permission for current role of collaborator "Carol King" for folder "simple-folder" to "delete, update" using the webUI
     Then custom permissions "delete, update" should be set for user "Carol King" for folder "simple-folder" on the webUI
@@ -196,7 +196,7 @@ Feature: Sharing files and folders with internal users with different permission
   Scenario: User is not allowed to reshare sub-folder with more permissions
     Given user "Carol" has been created with default attributes and without skeleton files
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share, delete" permissions
-    And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
+    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian"
     And user "Alice" has logged in using the webUI
     When the user opens folder "Shares" using the webUI
     And the user opens folder "simple-folder" using the webUI
@@ -209,7 +209,7 @@ Feature: Sharing files and folders with internal users with different permission
   Scenario: User is not allowed to update permissions of a reshared sub-folder to higher permissions than what user has received
     Given user "Carol" has been created with default attributes and without skeleton files
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share, delete, update" permissions
-    And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
+    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian"
     And user "Alice" has shared folder "/Shares/simple-folder" with user "Carol" with "share, delete" permissions
     And user "Alice" has logged in using the webUI
     When the user opens folder "Shares" using the webUI
@@ -223,13 +223,13 @@ Feature: Sharing files and folders with internal users with different permission
   Scenario: User is allowed to update permissions of a reshared sub-folder within the permissions that the user has received
     Given user "Carol" has been created with default attributes and without skeleton files
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "all" permissions
-    And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
+    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian"
     And user "Alice" has shared folder "/Shares/simple-folder" with user "Carol" with "share, delete" permissions
     And user "Alice" has logged in using the webUI
     When the user opens folder "Shares" using the webUI
     And the user opens folder "simple-folder" using the webUI
     And the user shares folder "simple-empty-folder" with user "Carol King" as "Custom permissions" with permissions "share, delete, create, update" using the webUI
-    And user "Carol" accepts the share "simple-folder/simple-empty-folder" offered by user "Alice" using the sharing API
+    And user "Carol" accepts the share "Shares/simple-empty-folder" offered by user "Alice" using the sharing API
     Then user "Carol" should have received a share with these details:
       | field       | value                       |
       | uid_owner   | Alice                       |
@@ -243,7 +243,7 @@ Feature: Sharing files and folders with internal users with different permission
   Scenario: User is allowed to update permissions of a reshared sub-folder within the permissions that the user has received (ocis bug demonstration)
     Given user "Carol" has been created with default attributes and without skeleton files
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "all" permissions
-    And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
+    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian"
     And user "Alice" has shared folder "/Shares/simple-folder" with user "Carol" with "share, delete" permissions
     And user "Alice" has logged in using the webUI
     When the user opens folder "Shares" using the webUI

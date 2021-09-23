@@ -16,7 +16,7 @@ Feature: Shares collaborator list
   Scenario Outline: change the collaborators of a file & folder
     Given user "Brian" has logged in using the webUI
     And user "Brian" has shared folder "/simple-folder" with user "Alice" with "<initial-permissions>" permissions
-    And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
+    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian"
     When the user changes the collaborator role of "Alice Hansen" for folder "simple-folder" to "<set-role>" using the webUI
     # check role without reloading the collaborators panel, see issue #1786
     Then user "Alice Hansen" should be listed as "<expected-role>" in the collaborators list on the webUI
@@ -40,7 +40,7 @@ Feature: Shares collaborator list
   Scenario: see resource owner in collaborators list for direct shares
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
+    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
     And user "Brian" has logged in using the webUI
     And the user has opened folder "Shares"
     When the user opens the share dialog for folder "simple-folder" using the webUI
@@ -51,9 +51,9 @@ Feature: Shares collaborator list
     Given user "Alice" has created folder "simple-folder"
     And user "Carol" has been created with default attributes and without skeleton files
     And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
+    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
     And user "Brian" has shared folder "Shares/simple-folder" with user "Carol"
-    And user "Carol" has accepted the share "simple-folder" offered by user "Brian"
+    And user "Carol" has accepted the share "Shares/simple-folder" offered by user "Brian"
     And user "Carol" has logged in using the webUI
     And the user has opened folder "Shares"
     When the user opens the share dialog for folder "simple-folder" using the webUI
@@ -66,9 +66,9 @@ Feature: Shares collaborator list
     And user "Alice" has created folder "simple-folder/simple-empty-folder"
     And user "Carol" has been created with default attributes and without skeleton files
     And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
+    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
     And user "Brian" has shared folder "Shares/simple-folder" with user "Carol"
-    And user "Carol" has accepted the share "simple-folder" offered by user "Brian"
+    And user "Carol" has accepted the share "Shares/simple-folder" offered by user "Brian"
     And user "Carol" has logged in using the webUI
     And the user has opened folder "Shares"
     And the user has opened folder "simple-folder"

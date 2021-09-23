@@ -18,9 +18,9 @@ Feature: Sharing files and folders with internal users
     And user "Brian" has created file "simple-folder/lorem.txt"
     And user "Brian" has logged in using the webUI
     When the user shares folder "simple-folder" with user "Alice Hansen" as "<set-role>" using the webUI
-    And user "Alice" accepts the share "simple-folder" offered by user "Brian" using the sharing API
+    And user "Alice" accepts the share "Shares/simple-folder" offered by user "Brian" using the sharing API
     And the user shares file "testimage.jpg" with user "Alice Hansen" as "<set-role>" using the webUI
-    And user "Alice" accepts the share "testimage.jpg" offered by user "Brian" using the sharing API
+    And user "Alice" accepts the share "Shares/testimage.jpg" offered by user "Brian" using the sharing API
     Then user "Alice Hansen" should be listed as "<expected-role>" in the collaborators list for folder "simple-folder" on the webUI
     And user "Alice Hansen" should be listed as "<expected-role>" in the collaborators list for file "testimage.jpg" on the webUI
     And user "Alice" should have received a share with these details:
@@ -59,7 +59,7 @@ Feature: Sharing files and folders with internal users
     And user "Brian" has logged in using the webUI
     And user "Brian" has renamed file "lorem.txt" to "new-lorem.txt"
     And user "Brian" has shared file "new-lorem.txt" with user "Alice" with "all" permissions
-    And user "Alice" has accepted the share "new-lorem.txt" offered by user "Brian"
+    And user "Alice" has accepted the share "Shares/new-lorem.txt" offered by user "Brian"
     When the user re-logs in as "Alice" using the webUI
     And the user opens folder "Shares" using the webUI
     Then as "Alice" the content of "Shares/new-lorem.txt" should not be the same as the content of local file "new-lorem.txt"
@@ -79,7 +79,7 @@ Feature: Sharing files and folders with internal users
     And user "Brian" has created file "simple-folder/data.zip"
     And user "Brian" has logged in using the webUI
     When the user shares folder "simple-folder" with user "Alice Hansen" as "Editor" using the webUI
-    And user "Alice" accepts the share "simple-folder" offered by user "Brian" using the sharing API
+    And user "Alice" accepts the share "Shares/simple-folder" offered by user "Brian" using the sharing API
     And the user re-logs in as "Alice" using the webUI
     And the user browses to the folder "Shares" on the files page
     And the user reloads the current page of the webUI
@@ -110,7 +110,7 @@ Feature: Sharing files and folders with internal users
     And user "Brian" has logged in using the webUI
     When the user renames folder "simple-folder" to "new-simple-folder" using the webUI
     And the user shares folder "new-simple-folder" with user "Alice Hansen" as "Editor" using the webUI
-    And user "Alice" accepts the share "new-simple-folder" offered by user "Brian" using the sharing API
+    And user "Alice" accepts the share "Shares/new-simple-folder" offered by user "Brian" using the sharing API
     # unshare the received shared folder and check it is gone
     And the user re-logs in as "Alice" using the webUI
     And the user browses to the folder "Shares" on the files page
@@ -127,7 +127,7 @@ Feature: Sharing files and folders with internal users
     Given user "Brian" has created file "simple-folder/lorem.txt"
     And user "Brian" has logged in using the webUI
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "create, read, share" permissions
-    And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
+    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian"
     When the user re-logs in as "Alice" using the webUI
     And the user opens folder "Shares" using the webUI
     And the user opens folder "simple-folder" using the webUI
@@ -139,9 +139,9 @@ Feature: Sharing files and folders with internal users
     And user "Alice" has created file "lorem.txt"
     And user "Alice" has logged in using the webUI
     And user "Alice" has shared file "lorem.txt" with user "Brian"
-    And user "Brian" has accepted the share "lorem.txt" offered by user "Alice"
+    And user "Brian" has accepted the share "Shares/lorem.txt" offered by user "Alice"
     And user "Alice" has shared file "lorem.txt" with user "Carol"
-    And user "Carol" has accepted the share "lorem.txt" offered by user "Alice"
+    And user "Carol" has accepted the share "Shares/lorem.txt" offered by user "Alice"
     When the user opens the share dialog for file "lorem.txt" using the webUI
     Then user "Brian Murphy" should be listed as "Editor" in the collaborators list on the webUI
     And user "Carol King" should be listed as "Editor" in the collaborators list on the webUI
@@ -198,7 +198,7 @@ Feature: Sharing files and folders with internal users
     And user "Carol" has been created with default attributes and without skeleton files
     And user "Alice" has uploaded file with content "test" to "/simple-folder/lorem.txt"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
+    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
     And user "Brian" has shared folder "Shares/simple-folder" with user "Carol"
     And user "Brian" has logged in using the webUI
     And the user has opened folder "Shares"
@@ -215,7 +215,7 @@ Feature: Sharing files and folders with internal users
     And user "Carol" has been created with default attributes and without skeleton files
     And user "Alice" has uploaded file with content "test" to "/simple-folder/lorem.txt"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
+    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
     And user "Brian" has shared folder "Shares/simple-folder" with user "Carol"
     And user "Brian" has logged in using the webUI
     And the user has opened folder "Shares"
@@ -245,9 +245,9 @@ Feature: Sharing files and folders with internal users
     And user "Brian" has created file "sample,1.txt"
     And user "Brian" has logged in using the webUI
     When the user shares folder "Sample,Folder,With,Comma" with user "Alice Hansen" as "<set-role>" using the webUI
-    And user "Alice" accepts the share "Sample,Folder,With,Comma" offered by user "Brian" using the sharing API
+    And user "Alice" accepts the share "Shares/Sample,Folder,With,Comma" offered by user "Brian" using the sharing API
     And the user shares file "sample,1.txt" with user "Alice Hansen" as "<set-role>" using the webUI
-    And user "Alice" accepts the share "sample,1.txt" offered by user "Brian" using the sharing API
+    And user "Alice" accepts the share "Shares/sample,1.txt" offered by user "Brian" using the sharing API
     Then user "Alice Hansen" should be listed as "<expected-role>" in the collaborators list for folder "Sample,Folder,With,Comma" on the webUI
     And user "Alice Hansen" should be listed as "<expected-role>" in the collaborators list for file "sample,1.txt" on the webUI
     And user "Alice" should have received a share with these details:
@@ -283,9 +283,9 @@ Feature: Sharing files and folders with internal users
     And user "Brian" has created file "sample,1.txt"
     And user "Brian" has logged in using the webUI
     When the user shares folder "Sample,Folder,With,Comma" with user "Alice Hansen" as "<set-role>" using the webUI
-    And user "Alice" accepts the share "Sample,Folder,With,Comma" offered by user "Brian" using the sharing API
+    And user "Alice" accepts the share "Shares/Sample,Folder,With,Comma" offered by user "Brian" using the sharing API
     And the user shares file "sample,1.txt" with user "Alice Hansen" as "<set-role>" using the webUI
-    And user "Alice" accepts the share "sample,1.txt" offered by user "Brian" using the sharing API
+    And user "Alice" accepts the share "Shares/sample,1.txt" offered by user "Brian" using the sharing API
     Then user "Alice Hansen" should be listed as "<expected-role>" in the collaborators list for folder "Sample,Folder,With,Comma" on the webUI
     And user "Alice Hansen" should be listed as "<expected-role>" in the collaborators list for file "sample,1.txt" on the webUI
     And user "Alice" should have received a share with these details:
@@ -318,7 +318,7 @@ Feature: Sharing files and folders with internal users
     Given user "Alice" has created file "testavatar.jpg"
     And user "Alice" has uploaded file "testavatar.jpg" to "testavatar.jpg"
     And user "Alice" has shared file "testavatar.jpg" with user "Brian"
-    And user "Brian" has accepted the share "testavatar.jpg" offered by user "Alice"
+    And user "Brian" has accepted the share "Shares/testavatar.jpg" offered by user "Alice"
     And user "Brian" has logged in using the webUI
     When the user opens folder "Shares" using the webUI
     Then the preview image of file "testavatar.jpg" should be displayed in the file list view on the webUI
@@ -328,7 +328,7 @@ Feature: Sharing files and folders with internal users
     And user "Alice" has created file "testavatar.jpg"
     And user "Alice" has uploaded file "testavatar.jpg" to "testavatar.jpg"
     And user "Alice" has shared file "testavatar.jpg" with user "Brian"
-    And user "Brian" has accepted the share "testavatar.jpg" offered by user "Alice"
+    And user "Brian" has accepted the share "Shares/testavatar.jpg" offered by user "Alice"
     And user "Brian" has logged in using the webUI
     When the user opens folder "Shares" using the webUI
     Then the preview image of file "testavatar.jpg" should not be displayed in the file list view on the webUI
@@ -347,7 +347,7 @@ Feature: Sharing files and folders with internal users
     Given user "Alice" has created file "lorem.txt"
     And user "Alice" has logged in using the webUI
     And user "Alice" has shared file "lorem.txt" with user "Brian"
-    And user "Brian" has accepted the share "lorem.txt" offered by user "Alice"
+    And user "Brian" has accepted the share "Shares/lorem.txt" offered by user "Alice"
     When the user opens the share dialog for file "lorem.txt" using the webUI
     Then user "Brian Murphy" should be listed as "Editor" in the collaborators list on the webUI
     And as "Brian" file "Shares/lorem.txt" should exist
@@ -360,7 +360,7 @@ Feature: Sharing files and folders with internal users
   Scenario: Sharing the share_folder to user is not possible
     Given user "Carol" has been created with default attributes and without skeleton files
     And user "Brian" has shared folder "simple-folder" with user "Alice"
-    And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
+    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian"
     And user "Alice" has logged in using the webUI
     When the user opens the share dialog for file "Shares" using the webUI
     Then the share permission denied message should be displayed in the sharing dialog on the webUI

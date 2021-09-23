@@ -34,8 +34,8 @@ Feature: Sharing files with internal groups with permissions
       | grp2         | group |
     And the user removes "grp1" as a collaborator from the share
     And the user shares with the selected collaborators
-    And user "Brian" accepts the share "lorem.txt" offered by user "Alice" using the sharing API
-    And user "Carol" accepts the share "lorem.txt" offered by user "Alice" using the sharing API
+    And user "Brian" accepts the share "Shares/lorem.txt" offered by user "Alice" using the sharing API
+    And user "Carol" accepts the share "Shares/lorem.txt" offered by user "Alice" using the sharing API
     Then custom permissions "<displayed-permissions>" should be set for user "grp2" for file "lorem.txt" on the webUI
     And custom permissions "<displayed-permissions>" should be set for user "Carol King" for file "lorem.txt" on the webUI
     And group "grp2" should be listed as "<displayed-role>" in the collaborators list for file "lorem.txt" on the webUI
@@ -60,6 +60,6 @@ Feature: Sharing files with internal groups with permissions
       | role                 | displayed-role       | extra-permissions | displayed-permissions | actual-permissions  |
       | Viewer               | Viewer               | ,                 | ,                     | read, share         |
       | Editor               | Editor               | ,                 | ,                     | share, read, update |
-      | Custom permissions | Custom permissions | ,                 | ,                     | read                |
-      | Custom permissions | Viewer               | share             | ,                     | read, share         |
-      | Custom permissions | Editor               | share, update     | ,                     | read, update, share |
+      | Custom permissions   | Custom permissions   | ,                 | ,                     | read                |
+      | Custom permissions   | Viewer               | share             | ,                     | read, share         |
+      | Custom permissions   | Editor               | share, update     | ,                     | read, update, share |

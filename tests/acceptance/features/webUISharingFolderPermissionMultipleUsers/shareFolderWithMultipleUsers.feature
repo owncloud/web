@@ -32,8 +32,8 @@ Feature: Sharing folders with multiple internal users with different permissions
     And the user removes "David Lopez" as a collaborator from the share
     And the user removes "Regular User" as a collaborator from the share
     And the user shares with the selected collaborators
-    And user "Brian" accepts the share "simple-folder" offered by user "Alice" using the sharing API
-    And user "Carol" accepts the share "simple-folder" offered by user "Alice" using the sharing API
+    And user "Brian" accepts the share "Shares/simple-folder" offered by user "Alice" using the sharing API
+    And user "Carol" accepts the share "Shares/simple-folder" offered by user "Alice" using the sharing API
     Then custom permissions "<displayed-permissions>" should be set for user "Brian Murphy" for folder "simple-folder" on the webUI
     And custom permissions "<displayed-permissions>" should be set for user "Carol King" for folder "simple-folder" on the webUI
     And user "Brian Murphy" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
@@ -60,7 +60,7 @@ Feature: Sharing folders with multiple internal users with different permissions
       | role                 | displayed-role       | extra-permissions             | displayed-permissions  | actual-permissions           |
       | Viewer               | Viewer               | ,                             | ,                      | read, share                  |
       | Editor               | Editor               | ,                             | ,                      | all                          |
-      | Custom permissions | Custom permissions | ,                             | ,                      | read                         |
-      | Custom permissions | Viewer               | share                         | ,                      | read, share                  |
-      | Custom permissions | Custom permissions | delete, update, create        | delete, update, create | read, delete, update, create |
-      | Custom permissions | Editor               | share, delete, update, create | ,                      | all                          |
+      | Custom permissions   | Custom permissions   | ,                             | ,                      | read                         |
+      | Custom permissions   | Viewer               | share                         | ,                      | read, share                  |
+      | Custom permissions   | Custom permissions   | delete, update, create        | delete, update, create | read, delete, update, create |
+      | Custom permissions   | Editor               | share, delete, update, create | ,                      | all                          |
