@@ -477,9 +477,8 @@ module.exports = {
      * @returns {Array} array of sharing indicator
      */
     getShareIndicatorsForResource: async function(fileName, sharingIndicatorExpectedToBeVisible) {
-      const resourceRowXpath = this.getFileRowSelectorByFileName(fileName)
-      const shareIndicatorsXpath =
-        resourceRowXpath + this.elements.shareIndicatorsInFileRow.selector
+      let resourceRowXpath = this.getFileRowSelectorByFileName(fileName)
+      let shareIndicatorsXpath = resourceRowXpath + this.elements.shareIndicatorsInFileRow.selector
       const indicators = []
       await this.waitForFileVisible(fileName)
       const {
@@ -487,15 +486,22 @@ module.exports = {
         waitForConditionTimeout,
         waitForConditionPollInterval
       } = client.globals
-      await this.waitForElementVisible({
-        selector: shareIndicatorsXpath,
-        locateStrategy: this.elements.shareIndicatorsInFileRow.locateStrategy,
-        abortOnFailure: false,
-        timeout: sharingIndicatorExpectedToBeVisible
-          ? waitForConditionTimeout
-          : waitForNegativeConditionTimeout,
-        pollInterval: waitForConditionPollInterval
-      })
+      try {
+        await this.waitForElementVisible({
+          selector: shareIndicatorsXpath,
+          locateStrategy: this.elements.shareIndicatorsInFileRow.locateStrategy,
+          abortOnFailure: false,
+          timeout: sharingIndicatorExpectedToBeVisible
+            ? waitForConditionTimeout
+            : waitForNegativeConditionTimeout,
+          pollInterval: waitForConditionPollInterval
+        })
+      } catch (error) {
+        console.log('\n Retrying with new reference \n')
+        resourceRowXpath = this.getFileRowSelectorByFileName(fileName)
+        shareIndicatorsXpath = resourceRowXpath + this.elements.shareIndicatorsInFileRow.selector
+        await this.waitForFileVisible(fileName)
+      }
       await this.api.elements(
         this.elements.shareIndicatorsInFileRow.locateStrategy,
         shareIndicatorsXpath,
