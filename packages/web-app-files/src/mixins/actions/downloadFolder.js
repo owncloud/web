@@ -42,7 +42,7 @@ export default {
   methods: {
     async $_downloadFolder_trigger(resource) {
       await triggerDownloadAsArchive({
-        folderPath: resource.path,
+        fileIds: [resource.fileId],
         token: this.getToken
       })
     }

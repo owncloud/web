@@ -340,8 +340,7 @@ export default {
 
     async downloadAsArchive() {
       await triggerDownloadAsArchive({
-        folderPath: this.currentFolder.path,
-        fileNames: this.selectedFiles.map(f => f.name),
+        fileIds: this.selectedFiles.map(r => r.fileId),
         token: this.getToken
       }).catch(e => {
         console.error(e)
