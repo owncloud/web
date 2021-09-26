@@ -5,6 +5,7 @@
   "license": "AGPL-3.0",
   "author": "ownCloud",
   "workspaces": [
+    "packages/web-app-example-wiki",
     "packages/web-app-draw-io",
     "packages/web-app-files",
     "packages/web-app-markdown-editor",
