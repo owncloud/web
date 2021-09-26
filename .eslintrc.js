@@ -32,7 +32,10 @@ module.exports = {
   overrides: [
     {
       files: ['**/*.vue'],
-      extends: ['plugin:vue/recommended', 'prettier/vue']
+      extends: ['plugin:vue/recommended', 'prettier/vue'],
+      rules: {
+        'vue/no-v-html': 'off'
+      }
     },
     {
       files: ['**/*.ts'],

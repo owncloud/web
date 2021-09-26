@@ -42,7 +42,7 @@ export class WikiSearch extends EventBus implements SearchProvider {
     /* not needed */
   }
 
-  public updateTerm(term: string): void {
+  public updateTerm(): void {
     /* not needed */
   }
 

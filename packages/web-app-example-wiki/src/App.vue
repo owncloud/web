@@ -3,16 +3,3 @@
     <router-view />
   </main>
 </template>
-
-<script>
-export default {
-  data: () => ({
-    foo: 'bar'
-  }),
-  methods: {
-    hello() {
-      alert(this.foo)
-    }
-  }
-}
-</script>
