@@ -15,6 +15,7 @@ const state = {
   openIdConnect: {
     authority: ''
   },
+  isProjectsPageEnabled: false,
   theme: {
     general: {
       name: '',
@@ -68,6 +69,7 @@ const mutations = {
   LOAD_CONFIG(state, config) {
     state.server = config.server.endsWith('/') ? config.server : config.server + '/'
     state.auth = config.auth
+    state.isProjectsPageEnabled = config.isProjectsPageEnabled
     state.openIdConnect = config.openIdConnect
     state.uploadChunkSize = config.uploadChunkSize === undefined ? Infinity : config.uploadChunkSize
     state.state = config.state === undefined ? 'working' : config.state
@@ -86,6 +88,7 @@ const mutations = {
 }
 
 const getters = {
+  // why not return state.configuration?
   configuration: state => {
     return state
   },

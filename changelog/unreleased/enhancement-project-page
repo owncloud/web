@@ -1,0 +1,6 @@
+Enhancement: Projects overview page
+
+We have added an overview page for projects which can enabled via a `isProjectsPageEnabled` 
+config parameter. It requires the backend to have an open "list projects" endpoint.
+
+https://github.com/owncloud/web/pull/5836

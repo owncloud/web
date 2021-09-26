@@ -127,6 +127,23 @@ export default {
     Registry.filterSearch = new FilterSearch(runtimeStore, runtimeRouter)
     Registry.sdkSearch = new SDKSearch(runtimeStore, runtimeRouter)
 
+    if (window.Vue.$store.state.config.isProjectsPageEnabled) {
+      const projectsNavItem = {
+        name: $gettext('Projects'),
+        iconMaterial: 'library_books',
+        route: {
+          name: 'files-projects',
+          path: `/${appInfo.id}/list/projects`
+        }
+      }
+      // currently adds it to the `dynamicNavItems` so it gets
+      // rendered below the trashbin, which isn't ideal
+      window.Vue.$store.commit('ADD_NAV_ITEM', {
+        extension: 'files',
+        navItem: projectsNavItem
+      })
+    }
+
     // when discussing the boot process of applications we need to implement a
     // registry that does not rely on call order, aka first register "on" and only after emit.
     bus.emit('app.search.register.provider', Registry.filterSearch)
