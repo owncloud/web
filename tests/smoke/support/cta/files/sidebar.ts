@@ -2,12 +2,13 @@ import { Page } from 'playwright'
 
 export const open = async ({ page, resource }: { page: Page; resource: string }): Promise<void> => {
   await page.click(
-    `//span[@data-test-resource-name="${resource}"]/ancestor::tr[contains(@class, "oc-tbody-tr")]//button[contains(@class, "oc-table-files-btn-show-details")]`
-  )
+    `//span[@data-test-resource-name="${resource}"]/ancestor::tr[contains(@class, "oc-tbody-tr")]//button[contains(@class, "oc-table-files-btn-action-dropdown")]`
+  ),
+  await page.click('//*[@id="oc-files-context-actions"]/li[9]/button')
 }
 
 export const close = async ({ page }: { page: Page }): Promise<void> => {
-  await page.click('.sidebar-panel.is-active .header__close')
+  await page.click('.sidebar-panel.is-active-sub-panel .header__close')
 }
 
 export const openPanel = async ({

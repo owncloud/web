@@ -48,7 +48,6 @@ export class AllFilesPage {
     if (folder) {
       await cta.files.navigateToFolder({ page: page, path: folder })
     }
-
     await page.click('#new-file-menu-btn')
     await page.setInputFiles(
       '#fileUploadInput',
@@ -71,11 +70,14 @@ export class AllFilesPage {
 
     if (folder) {
       await cta.files.navigateToFolder({ page: page, path: folder })
+      console.log('I am here1')
     }
 
     for (const name of names) {
+      console.log('I am here2')
       await cta.files.sidebar.open({ page: page, resource: name })
       await cta.files.sidebar.openPanel({ page: page, name: 'actions' })
+      console.log('I am here3')
 
       const [download] = await Promise.all([
         page.waitForEvent('download'),
@@ -92,7 +94,7 @@ export class AllFilesPage {
     return downloads
   }
 
-  async shareFolder({ folder, users }: { folder: string; users: User[] }): Promise<void> {
+  async shareFolder({ folder, users, role }: { folder: string; users: User[], role: string }): Promise<void> {
     const { page } = this.actor
     const startUrl = page.url()
     const folderPaths = folder.split('/')
@@ -110,11 +112,65 @@ export class AllFilesPage {
       await page.fill('#files-share-invite-input', user.displayName)
       await page.waitForSelector('.vs--open')
       await page.press('#files-share-invite-input', 'Enter')
+
+      await page.click('//*[@id="files-collaborators-role-button"]');
+      await page.click(`//*[@id="files-role-${role}"]`)
     }
 
     await page.click('#files-collaborators-collaborator-save-new-share-button')
     await cta.files.sidebar.close({ page: page })
 
+    await page.goto(startUrl)
+  }
+
+  async renameObject({ folder, name }: { folder: string, name: string }): Promise<void> {
+    const { page } = this.actor
+    const startUrl = page.url()
+    const folderPaths = folder.split('/')
+    const folderName = folderPaths.pop()
+
+    if (folderPaths.length) {
+      await cta.files.navigateToFolder({ page: page, path: folderPaths.join('/') })
+    }
+
+    await page.click(`//*[@data-test-resource-name="${folderName}"]`, {button: 'right'})
+    await page.click('.oc-files-actions-rename-trigger')
+    await page.fill('.oc-text-input', name[0])
+    await page.click('.oc-modal-body-actions-confirm')
+    await page.goto(startUrl)
+
+    if (folderPaths.length) {
+      await page.reload()
+      await cta.files.navigateToFolder({ page: page, path: folderPaths.join('/') })
+      await cta.files.resourceExists({ page: page, name: name[0] })
+      await page.goto(startUrl)
+    }
+  }
+
+  async movesFiles({ folder, moveTo }: { folder?: string; moveTo: Object }): Promise<void> {
+    const { page } = this.actor
+    const startUrl = page.url()
+    const folderPaths = folder.split('/')
+    const folderName = folderPaths.pop()
+    const moveToPaths = moveTo[0].split('/')
+    const folderToMoveName = moveToPaths.pop()
+    
+    if (folderPaths.length) {
+      await cta.files.navigateToFolder({ page: page, path: folderPaths.join('/') })
+    }
+    
+    await page.click(`//*[@data-test-resource-name="${folderName}"]`, {button: 'right'})
+    await page.click('.oc-files-actions-move-trigger')
+    await page.click('//ol[@class="oc-breadcrumb-list"]/li/*[1]')
+    
+    if (moveToPaths.length) {
+      await cta.files.navigateToFolder({ page: page, path: moveToPaths.join('/') }) 
+    }
+    
+    if (folderToMoveName.length && folderToMoveName != 'All files') {
+      await page.click(`//*[@data-test-resource-name="${folderToMoveName}"]`)
+    }
+    await page.click('#location-picker-btn-confirm')
     await page.goto(startUrl)
   }
 }
