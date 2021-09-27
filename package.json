@@ -94,7 +94,7 @@
     "nightwatch-api": "3.0.1",
     "nightwatch-vrt": "^0.2.10",
     "node-fetch": "^2.6.1",
-    "playwright": "^1.14.0",
+    "playwright": "^1.15.0",
     "postcss": "^8.3.6",
     "regenerator-runtime": "^0.13.7",
     "requirejs": "^2.3.6",
