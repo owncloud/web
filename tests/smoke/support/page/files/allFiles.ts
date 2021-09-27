@@ -94,7 +94,15 @@ export class AllFilesPage {
     return downloads
   }
 
-  async shareFolder({ folder, users, role }: { folder: string; users: User[], role: string }): Promise<void> {
+  async shareFolder({
+    folder,
+    users,
+    role
+  }: {
+    folder: string
+    users: User[]
+    role: string
+  }): Promise<void> {
     const { page } = this.actor
     const startUrl = page.url()
     const folderPaths = folder.split('/')
@@ -113,7 +121,7 @@ export class AllFilesPage {
       await page.waitForSelector('.vs--open')
       await page.press('#files-share-invite-input', 'Enter')
 
-      await page.click('//*[@id="files-collaborators-role-button"]');
+      await page.click('//*[@id="files-collaborators-role-button"]')
       await page.click(`//*[@id="files-role-${role}"]`)
     }
 
@@ -123,7 +131,7 @@ export class AllFilesPage {
     await page.goto(startUrl)
   }
 
-  async renameObject({ folder, name }: { folder: string, name: string }): Promise<void> {
+  async renameObject({ folder, name }: { folder: string; name: string }): Promise<void> {
     const { page } = this.actor
     const startUrl = page.url()
     const folderPaths = folder.split('/')
@@ -133,7 +141,7 @@ export class AllFilesPage {
       await cta.files.navigateToFolder({ page: page, path: folderPaths.join('/') })
     }
 
-    await page.click(`//*[@data-test-resource-name="${folderName}"]`, {button: 'right'})
+    await page.click(`//*[@data-test-resource-name="${folderName}"]`, { button: 'right' })
     await page.click('.oc-files-actions-rename-trigger')
     await page.fill('.oc-text-input', name[0])
     await page.click('.oc-modal-body-actions-confirm')
@@ -147,27 +155,27 @@ export class AllFilesPage {
     }
   }
 
-  async movesFiles({ folder, moveTo }: { folder?: string; moveTo: Object }): Promise<void> {
+  async movesFiles({ folder, moveTo }: { folder?: string; moveTo: string }): Promise<void> {
     const { page } = this.actor
     const startUrl = page.url()
     const folderPaths = folder.split('/')
     const folderName = folderPaths.pop()
     const moveToPaths = moveTo[0].split('/')
     const folderToMoveName = moveToPaths.pop()
-    
+
     if (folderPaths.length) {
       await cta.files.navigateToFolder({ page: page, path: folderPaths.join('/') })
     }
-    
-    await page.click(`//*[@data-test-resource-name="${folderName}"]`, {button: 'right'})
+
+    await page.click(`//*[@data-test-resource-name="${folderName}"]`, { button: 'right' })
     await page.click('.oc-files-actions-move-trigger')
     await page.click('//ol[@class="oc-breadcrumb-list"]/li/*[1]')
-    
+
     if (moveToPaths.length) {
-      await cta.files.navigateToFolder({ page: page, path: moveToPaths.join('/') }) 
+      await cta.files.navigateToFolder({ page: page, path: moveToPaths.join('/') })
     }
-    
-    if (folderToMoveName.length && folderToMoveName != 'All files') {
+
+    if (folderToMoveName.length && folderToMoveName !== 'All files') {
       await page.click(`//*[@data-test-resource-name="${folderToMoveName}"]`)
     }
     await page.click('#location-picker-btn-confirm')
