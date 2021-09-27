@@ -180,6 +180,30 @@ When('{string} moves following resource(s)', async function(
   }, {})
 
   for (const folder of Object.keys(moveInfo)) {
-    await allFilesPage.movesFiles({ folder, moveTo: moveInfo[folder] })
+    await allFilesPage.moveOrCopyFiles({ folder, moveTo: moveInfo[folder], action: 'move' })
+  }
+})
+
+When('{string} copies following resource(s)', async function(
+  this: World,
+  stepUser: string,
+  stepTable: DataTable
+): Promise<void> {
+  const actor = this.actorContinent.get({ id: stepUser })
+  const { allFiles: allFilesPage } = new FilesPage({ actor })
+  const copyInfo = stepTable.hashes().reduce((acc, stepRow) => {
+    const { resource, to } = stepRow
+
+    if (!acc[resource]) {
+      acc[resource] = []
+    }
+
+    acc[resource].push(to)
+
+    return acc
+  }, {})
+
+  for (const folder of Object.keys(copyInfo)) {
+    await allFilesPage.moveOrCopyFiles({ folder, moveTo: copyInfo[folder], action: 'copy' })
   }
 })
