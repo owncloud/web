@@ -72,7 +72,7 @@ When('{string} shares following resource(s)', async function(
     const { user, resource, role } = stepRow
 
     if (!acc[resource]) {
-      acc[resource] = {users: [], role: ''}
+      acc[resource] = { users: [], role: '' }
     }
 
     acc[resource].users.push(this.userContinent.get({ id: user }))
@@ -82,7 +82,11 @@ When('{string} shares following resource(s)', async function(
   }, {})
 
   for (const folder of Object.keys(shareInfo)) {
-    await allFilesPage.shareFolder({ folder, users: shareInfo[folder].users, role: shareInfo[folder].role })
+    await allFilesPage.shareFolder({
+      folder,
+      users: shareInfo[folder].users,
+      role: shareInfo[folder].role
+    })
   }
 })
 
@@ -136,7 +140,7 @@ When('{string} renames following resource(s)', async function(
   stepTable: DataTable
 ) {
   const actor = this.actorContinent.get({ id: stepUser })
-  const { allFiles: allFilesPage } = new FilesPage({ actor }) 
+  const { allFiles: allFilesPage } = new FilesPage({ actor })
 
   const renameInfo = stepTable.hashes().reduce((acc, stepRow) => {
     const { resource, as } = stepRow
@@ -152,7 +156,7 @@ When('{string} renames following resource(s)', async function(
 
   for (const folder of Object.keys(renameInfo)) {
     const name = renameInfo[folder]
-    await allFilesPage.renameObject({folder, name})
+    await allFilesPage.renameObject({ folder, name })
   }
 })
 

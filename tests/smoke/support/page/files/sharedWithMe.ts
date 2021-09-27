@@ -22,7 +22,7 @@ export class SharedWithMePage {
       page: page,
       name: name
     })
-    if (!objectExists){
+    if (!objectExists) {
       await page.click(`//*[@data-test-resource-name="${name}"]/ancestor::tr//button[1]`)
     }
     await page.goto(startUrl)
