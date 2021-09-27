@@ -69,19 +69,20 @@ When('{string} shares following resource(s)', async function(
   const { allFiles: allFilesPage } = new FilesPage({ actor })
 
   const shareInfo = stepTable.hashes().reduce((acc, stepRow) => {
-    const { user, resource } = stepRow
+    const { user, resource, role } = stepRow
 
     if (!acc[resource]) {
-      acc[resource] = []
+      acc[resource] = {users: [], role: ''}
     }
 
-    acc[resource].push(this.userContinent.get({ id: user }))
+    acc[resource].users.push(this.userContinent.get({ id: user }))
+    acc[resource].role = role
 
     return acc
   }, {})
 
   for (const folder of Object.keys(shareInfo)) {
-    await allFilesPage.shareFolder({ folder, users: shareInfo[folder] })
+    await allFilesPage.shareFolder({ folder, users: shareInfo[folder].users, role: shareInfo[folder].role })
   }
 })
 
@@ -112,5 +113,69 @@ Given('{string} downloads following files', async function(
     downloads.forEach(download => {
       expect(files).toContain(download.suggestedFilename())
     })
+  }
+})
+
+When('{string} accepts following resource(s)', async function(
+  this: World,
+  stepUser: string,
+  stepTable: DataTable
+) {
+  const actor = this.actorContinent.get({ id: stepUser })
+  const { sharedWithMe: sharedWithMePage } = new FilesPage({ actor })
+  const shares = stepTable.raw().map(f => f[0])
+
+  for (const share of shares) {
+    await sharedWithMePage.acceptShares({ name: share })
+  }
+})
+
+When('{string} renames following resource(s)', async function(
+  this: World,
+  stepUser: string,
+  stepTable: DataTable
+) {
+  const actor = this.actorContinent.get({ id: stepUser })
+  const { allFiles: allFilesPage } = new FilesPage({ actor }) 
+
+  const renameInfo = stepTable.hashes().reduce((acc, stepRow) => {
+    const { resource, as } = stepRow
+
+    if (!acc[resource]) {
+      acc[resource] = []
+    }
+
+    acc[resource].push(as)
+
+    return acc
+  }, {})
+
+  for (const folder of Object.keys(renameInfo)) {
+    const name = renameInfo[folder]
+    await allFilesPage.renameObject({folder, name})
+  }
+})
+
+When('{string} moves following resource(s)', async function(
+  this: World,
+  stepUser: string,
+  stepTable: DataTable
+): Promise<void> {
+  const actor = this.actorContinent.get({ id: stepUser })
+  const { allFiles: allFilesPage } = new FilesPage({ actor })
+  const moveInfo = stepTable.hashes().reduce((acc, stepRow) => {
+    const { resource, to } = stepRow
+
+    if (!acc[resource]) {
+      acc[resource] = []
+    }
+
+    acc[resource].push(to)
+
+    return acc
+  }, {})
+
+  for (const folder of Object.keys(moveInfo)) {
+    await allFilesPage.movesFiles({ folder, moveTo: moveInfo[folder] })
   }
 })

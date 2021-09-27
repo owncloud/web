@@ -30,9 +30,9 @@ Feature: Kindergarten can use web to organize a day
       | lorem.txt         | groups/Teddy Bear Daycare/meal plan  |
       | lorem-big.txt     | groups/Teddy Bear Daycare/meal plan  |
     Then "Alice" shares following resources
-      | resource                             | user  |
-      | groups/Pre-Schools Pirates/meal plan | Brian |
-      | groups/Pre-Schools Pirates/meal plan | Carol |
+      | resource                             | user  | role   |
+      | groups/Pre-Schools Pirates/meal plan | Brian | editor |
+      | groups/Pre-Schools Pirates/meal plan | Carol | viewer |
     Given "Brian" has logged in
     Then "Brian" opens the "files" app
     Then "Brian" navigates to the shared with me page
