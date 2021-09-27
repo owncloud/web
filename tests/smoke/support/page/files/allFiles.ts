@@ -155,7 +155,15 @@ export class AllFilesPage {
     }
   }
 
-  async moveOrCopyFiles({ folder, moveTo, action }: { folder?: string; moveTo: string; action: string }): Promise<void> {
+  async moveOrCopyFiles({
+    folder,
+    moveTo,
+    action
+  }: {
+    folder?: string
+    moveTo: string
+    action: string
+  }): Promise<void> {
     const { page } = this.actor
     const startUrl = page.url()
     const folderPaths = folder.split('/')
@@ -168,7 +176,7 @@ export class AllFilesPage {
     }
 
     await page.click(`//*[@data-test-resource-name="${folderName}"]`, { button: 'right' })
-    await page.click((`.oc-files-actions-${action}-trigger`))
+    await page.click(`.oc-files-actions-${action}-trigger`)
     await page.click('//ol[@class="oc-breadcrumb-list"]/li/*[1]')
 
     if (moveToPaths.length) {
@@ -181,4 +189,4 @@ export class AllFilesPage {
     await page.click('#location-picker-btn-confirm')
     await page.goto(startUrl)
   }
-} 
+}
