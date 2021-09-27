@@ -215,16 +215,10 @@ Then('there should be no breadcrumb displayed on the webUI', function() {
   return assertBreadCrumbIsNotDisplayed()
 })
 
-Then('non-clickable breadcrumb for folder {string} should be displayed on the webUI', function(
+Then('non-clickable breadcrumb for folder {string} should be present on the webUI', function(
   resource
 ) {
-  return assertBreadcrumbIsDisplayedFor(resource, false, true)
-})
-
-Then('clickable breadcrumb for folder {string} should be displayed on the webUI', function(
-  resource
-) {
-  return assertBreadcrumbIsDisplayedFor(resource, true, false)
+  return assertBreadcrumbIsPresentFor(resource, false, true)
 })
 
 Then('breadcrumb for folder {string} should be displayed on the webUI', function(resource) {
@@ -725,31 +719,95 @@ const assertBreadcrumbIsDisplayedFor = async function(resource, clickable, nonCl
     abortOnFailure: false
   })
 
-  await client.page.personalPage().checkBreadcrumbVisibility(resourceBreadcrumbXpath)
-
-  await client.element('xpath', resourceBreadcrumbXpath, result => {
-    if (result.status > -1) {
-      isBreadcrumbVisible = true
-    }
-  })
+  try {
+    await client.waitForElementVisible({
+      selector: resourceBreadcrumbXpath,
+      locateStrategy: 'xpath'
+    })
+    isBreadcrumbVisible = true
+  } catch (e) {
+    isBreadcrumbVisible = false
+  }
 
   // Try to look for a mobile breadcrumbs in case it has not been found
   if (!isBreadcrumbVisible) {
+    await appSideBar.closeSidebarIfOpen()
+    const mobileBreadcrumbMobileXpath = util.format(
+      client.page.personalPage().elements.breadcrumbMobileReferencedToOpenSidebarButton.selector,
+      xpathHelper.buildXpathLiteral(resource)
+    )
+
+    try {
+      await client.waitForElementVisible({
+        selector: mobileBreadcrumbMobileXpath,
+        locateStrategy: 'xpath'
+      })
+      isBreadcrumbVisible = true
+    } catch (e) {
+      isBreadcrumbVisible = false
+    }
+  }
+
+  return client.assert.strictEqual(
+    isBreadcrumbVisible,
+    true,
+    `Resource ${resourceBreadcrumbXpath} expected to be visible but is not visible .`
+  )
+}
+
+/**
+ *
+ * @param {string} resource
+ * @param {boolean} clickable
+ * @param {boolean} nonClickable
+ */
+const assertBreadcrumbIsPresentFor = async function(resource, clickable, nonClickable) {
+  const breadcrumbElement = client.page
+    .personalPage()
+    .getBreadcrumbSelector(clickable, nonClickable)
+  const resourceBreadcrumbXpath = util.format(
+    breadcrumbElement.selector,
+    xpathHelper.buildXpathLiteral(resource)
+  )
+  let isBreadcrumbPresent = false
+
+  // lets hope that the breadcrumbs would not take longer than the "NEW" button
+  await client.waitForElementPresent({
+    selector: client.page.personalPage().elements.newFileMenuButtonAnyState.selector,
+    abortOnFailure: false
+  })
+
+  try {
+    await client.waitForElementPresent({
+      selector: resourceBreadcrumbXpath,
+      locateStrategy: 'xpath'
+    })
+    isBreadcrumbPresent = true
+  } catch (e) {
+    isBreadcrumbPresent = false
+  }
+
+  // Try to look for a mobile breadcrumbs in case it has not been found
+  if (!isBreadcrumbPresent) {
     await appSideBar.closeSidebarIfOpen()
     const mobileBreadcrumbMobileXpath = util.format(
       client.page.personalPage().elements.breadcrumbMobile.selector,
       xpathHelper.buildXpathLiteral(resource)
     )
 
-    await client.element('xpath', mobileBreadcrumbMobileXpath, result => {
-      if (result.status > -1) {
-        isBreadcrumbVisible = true
-      }
-    })
+    try {
+      await client.waitForElementPresent({
+        selector: mobileBreadcrumbMobileXpath,
+        locateStrategy: 'xpath'
+      })
+      isBreadcrumbPresent = true
+    } catch (e) {
+      isBreadcrumbPresent = false
+    }
   }
 
   return client.assert.strictEqual(
-    isBreadcrumbVisible,
+    isBreadcrumbPresent,
     true,
     `Resource ${resourceBreadcrumbXpath} expected to be visible but is not visible .`
   )
