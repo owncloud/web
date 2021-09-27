@@ -328,12 +328,14 @@ const assertCollaboratorslistDoesNotContain = function(type, name) {
       {
         displayName: collaboratorsDialog.elements.collaboratorInformationSubName
       },
-      name,
+      null,
       client.globals.waitForNegativeConditionTimeout
     )
     .then(shares => {
       const share = shares.find(share => {
-        return name === share.displayName && type === share.shareType.toLowerCase()
+        return (
+          name === share.displayName && (!share.shareType || type === share.shareType.toLowerCase())
+        )
       })
 
       if (share) {
@@ -727,6 +729,16 @@ When(
 When('the user removes {string} as a collaborator from the share', function(user) {
   return client.page.FilesPageElement.sharingDialog().removePendingCollaboratorForShare(user)
 })
+
+Then(
+  /^(user|group) "([^"]*)" should not be visible in the collaborators selected options in the webUI$/,
+  async function(userOrGroup, userOrGroupName) {
+    await client.page.FilesPageElement.sharingDialog().isGroupNotPresentInSelectedCollaboratorsOptions(
+      userOrGroup,
+      userOrGroupName
+    )
+  }
+)
 
 When('the user shares with the selected collaborators', function() {
   return client.page.FilesPageElement.sharingDialog()

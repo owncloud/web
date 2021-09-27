@@ -31,7 +31,8 @@ Feature: Sharing files with internal groups with permissions
       | Carol King   | user  |
       | grp2         | group |
     And the user removes "grp1" as a collaborator from the share
-    And the user shares with the selected collaborators
+    Then group "grp1" should not be visible in the collaborators selected options in the webUI
+    When the user shares with the selected collaborators
     Then custom permissions "<displayed-permissions>" should be set for user "grp2" for file "lorem.txt" on the webUI
     And custom permissions "<displayed-permissions>" should be set for user "Carol King" for file "lorem.txt" on the webUI
     And group "grp2" should be listed as "<displayed-role>" in the collaborators list for file "lorem.txt" on the webUI

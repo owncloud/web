@@ -59,10 +59,33 @@ module.exports = {
       const newCollaboratorXpath = util.format(this.elements.newCollaboratorItems.selector, sharee)
       const removeCollaboratorBtnXpath =
         newCollaboratorXpath + this.elements.newCollaboratorRemoveButton.selector
-
       return this.useXpath()
         .click(removeCollaboratorBtnXpath)
         .useCss()
+    },
+
+    /**
+     *
+     * @param {string} userOrGroup
+     * @param {string} userOrGroupName
+     */
+    isGroupNotPresentInSelectedCollaboratorsOptions: function(userOrGroup, userOrGroupName) {
+      let requiredSelector
+      if (userOrGroup === 'group') {
+        requiredSelector = util.format(
+          this.elements.groupInSelectedCollaboratorsList.selector,
+          userOrGroupName
+        )
+      } else if (userOrGroup === 'user') {
+        requiredSelector = util.format(
+          this.elements.userInSelectedCollaboratorsList.selector,
+          userOrGroupName
+        )
+      }
+      return this.waitForElementNotVisible({
+        selector: requiredSelector,
+        locateStrategy: 'xpath'
+      })
     },
 
     /**
@@ -784,6 +807,16 @@ module.exports = {
     },
     customPermissionsDrop: {
       selector: '[data-testid="files-recipient-custom-permissions-drop"]'
+    },
+    groupInSelectedCollaboratorsList: {
+      selector:
+        '//span[contains(@class, "files-share-invite-recipient")]//span[.="Group"]/following-sibling::p[.="%s"]',
+      locateStrategy: 'xpath'
+    },
+    userInSelectedCollaboratorsList: {
+      selector:
+        '//span[contains(@class, "files-share-invite-recipient")]//span[@data-test-user-name="%s"]/..',
+      locateStrategy: 'xpath'
     }
   }
 }
