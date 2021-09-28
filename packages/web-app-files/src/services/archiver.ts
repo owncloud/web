@@ -26,7 +26,7 @@ class ArchiverService {
   }
 
   public get available() {
-    return this.capability !== null
+    return !!this.capability?.version
   }
 
   public get url() {
