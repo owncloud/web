@@ -40,6 +40,12 @@ export default {
       await triggerDownloadAsArchive({
         fileIds: [resource.fileId],
         token: this.getToken
+      }).catch(e => {
+        console.error(e)
+        this.showMessage({
+          title: this.$gettext('Error downloading the selected folder.'),
+          status: 'danger'
+        })
       })
     }
   }
