@@ -124,9 +124,7 @@ export default {
     },
 
     canDownloadAsArchive() {
-      if (
-        !checkRoute(['files-personal', 'files-public-list', 'files-favorites'], this.$route.name)
-      ) {
+      if (!checkRoute(['files-personal', 'files-favorites'], this.$route.name)) {
         return false
       }
 

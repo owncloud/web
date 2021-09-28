@@ -1,4 +1,4 @@
-import { isFavoritesRoute, isPersonalRoute, isPublicFilesRoute } from '../../helpers/route'
+import { isFavoritesRoute, isPersonalRoute } from '../../helpers/route'
 import {
   isDownloadAsArchiveAvailable,
   triggerDownloadAsArchive
@@ -17,11 +17,7 @@ export default {
             return this.$gettext('Download folder')
           },
           isEnabled: ({ resource }) => {
-            if (
-              !isPersonalRoute(this.$route) &&
-              !isPublicFilesRoute(this.$route) &&
-              !isFavoritesRoute(this.$route)
-            ) {
+            if (!isPersonalRoute(this.$route) && !isFavoritesRoute(this.$route)) {
               return false
             }
             if (!resource.isFolder) {
