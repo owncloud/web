@@ -35,7 +35,7 @@
       </oc-select>
       <div v-if="$_expirationDate" class="oc-mb">
         <label for="files-links-expiration-btn" v-text="expirationDateLabel" />
-        <date-picker
+        <oc-datepicker
           id="oc-files-file-link-expire-date"
           :key="'oc-datepicker-' + expireDate"
           v-model="expireDate"
@@ -68,7 +68,7 @@
               <oc-icon name="expand_more" />
             </oc-button>
           </template>
-        </date-picker>
+        </oc-datepicker>
         <oc-button
           v-if="!$_expirationDate.enforced && !!expireDate"
           id="oc-files-file-link-expire-date-delete"
@@ -164,7 +164,6 @@
 </template>
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
-import DatePicker from 'v-calendar/lib/components/date-picker.umd'
 
 import mixins from '../../../../mixins'
 import { DateTime } from 'luxon'
@@ -175,8 +174,7 @@ import RoleItem from '../../Shared/RoleItem.vue'
 
 export default {
   components: {
-    RoleItem,
-    DatePicker
+    RoleItem
   },
   mixins: [mixins],
   inject: ['changeView'],

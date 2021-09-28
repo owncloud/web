@@ -35,7 +35,7 @@
       </template>
     </oc-drop>
     <template v-if="expirationSupported">
-      <date-picker
+      <oc-datepicker
         v-model="enteredExpirationDate"
         :min-date="minExpirationDate"
         :max-date="maxExpirationDate"
@@ -67,7 +67,7 @@
             <oc-icon v-if="!enteredExpirationDate" name="expand_more" />
           </oc-button>
         </template>
-      </date-picker>
+      </oc-datepicker>
       <oc-button
         v-if="!expirationDateEnforced && enteredExpirationDate"
         data-testid="recipient-edit-expiration-btn-remove"
@@ -97,7 +97,6 @@
 import { mapGetters } from 'vuex'
 import { DateTime } from 'luxon'
 import get from 'lodash-es/get'
-import DatePicker from 'v-calendar/lib/components/date-picker.umd'
 
 import collaboratorsMixins from '../../../../mixins/collaborators'
 
@@ -109,8 +108,7 @@ export default {
 
   components: {
     RoleItem,
-    AdditionalPermissions,
-    DatePicker
+    AdditionalPermissions
   },
 
   mixins: [collaboratorsMixins],
@@ -433,10 +431,5 @@ export default {
       }
     }
   }
-}
-
-.files-recipient-expiration-datepicker::v-deep .vc-highlight {
-  // `!important` to overwrite the inline style
-  background-color: var(--oc-color-swatch-primary-default) !important;
 }
 </style>

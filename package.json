@@ -130,6 +130,8 @@
     "node": ">=14 <=16"
   },
   "dependencies": {
-    "v-calendar": "^2.3.2"
+    "@popperjs/core": "^2.4.0",
+    "v-calendar": "^2.3.2",
+    "vue": "^2.6.10"
   }
 }

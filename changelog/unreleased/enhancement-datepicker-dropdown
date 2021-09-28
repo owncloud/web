@@ -1,0 +1,6 @@
+Enhancement: Datepicker in Dropdown
+
+We have moved the datepicker for share expiration in the right sidebar into 
+a dropdown to align it with the other elements when creating/editing shares.
+
+https://github.com/owncloud/web/pull/5806
