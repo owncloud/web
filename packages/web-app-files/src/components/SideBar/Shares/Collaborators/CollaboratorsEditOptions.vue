@@ -1,23 +1,21 @@
 <template>
   <div>
     <hr />
-    <span>
-      <oc-button
-        id="files-collaborators-role-button"
-        data-testid="files-recipient-role-select-btn"
-        appearance="raw"
-        justify-content="left"
-        gap-size="xsmall"
+    <oc-button
+      id="files-collaborators-role-button"
+      data-testid="files-recipient-role-select-btn"
+      appearance="raw"
+      justify-content="left"
+      gap-size="xsmall"
+    >
+      <translate v-if="isAdvancedRoleSelected" key="advanced-permissions-select"
+        >Invite with custom permissions</translate
       >
-        <translate v-if="isAdvancedRoleSelected" key="advanced-permissions-select"
-          >Invite with custom permissions</translate
-        >
-        <translate v-else key="role-select" :translate-params="{ name: selectedRole.inlineLabel }"
-          >Invite as %{ name }</translate
-        >
-        <oc-icon name="expand_more" />
-      </oc-button>
-    </span>
+      <translate v-else key="role-select" :translate-params="{ name: selectedRole.inlineLabel }"
+        >Invite as %{ name }</translate
+      >
+      <oc-icon name="expand_more" />
+    </oc-button>
     <oc-drop
       ref="rolesDrop"
       data-testid="files-recipient-roles-drop"
@@ -57,6 +55,14 @@
           >Custom permissions
         </translate>
         <oc-list class="oc-mb">
+          <li class="oc-my-xs">
+            <oc-checkbox
+              :label="readingRoleCheckboxLabel"
+              :value="true"
+              :disabled="true"
+              class="oc-mr-xs files-collaborators-permission-checkbox"
+            />
+          </li>
           <li
             v-for="permission in advancedRole.additionalPermissions"
             :key="permission.name"
@@ -171,6 +177,10 @@ export default {
 
   computed: {
     ...mapGetters(['capabilities']),
+
+    readingRoleCheckboxLabel() {
+      return this.$gettext('Read')
+    },
 
     editingUser() {
       return this.existingCollaboratorType === 'user'
@@ -315,8 +325,7 @@ export default {
       this.selectedRole = this.roles[0]
     }
 
-    this.getRecipientsCustomPermissions()
-    window.addEventListener('keydown', this.cycleRoles)
+    this.resetCustomPermissions()
   },
 
   beforeDestroy() {
@@ -368,7 +377,7 @@ export default {
         return
       }
 
-      this.getRecipientsCustomPermissions()
+      this.resetCustomPermissions()
 
       this.selectedRole = role
     },
@@ -393,20 +402,16 @@ export default {
       this.$refs.rolesDrop.show()
     },
 
-    getRecipientsCustomPermissions() {
+    resetCustomPermissions() {
       // Custom permissions are only available for the custom role
       // so do not display checked permissions if a user is switching from a different role
       if (this.existingRole !== undefined && this.existingRole.name !== 'advancedRole') {
         return
       }
 
-      this.customPermissions = []
-
-      if (this.collaboratorsPermissions) {
-        for (const permission in this.collaboratorsPermissions) {
-          this.customPermissions.push(permission)
-        }
-      }
+      this.customPermissions = this.collaboratorsPermissions
+        ? [...this.collaboratorsPermissions]
+        : []
     },
 
     cycleRoles(event) {
