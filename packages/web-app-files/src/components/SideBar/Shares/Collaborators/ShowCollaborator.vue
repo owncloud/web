@@ -3,31 +3,19 @@
     <oc-tr class="files-collaborators-collaborator-table-row-info">
       <oc-td width="shrink" class="oc-py-rm oc-pr-s">
         <div key="collaborator-avatar-loaded">
-          <avatar-image
-            class="oc-mr-s files-collaborators-collaborator-indicator"
-            :width="48"
-            :userid="collaborator.collaborator.name"
+          <oc-avatar
+            v-if="shareTypeName === 'user'"
+            :src="''"
             :user-name="collaborator.collaborator.displayName"
-            :share-type="shareType"
+            :width="48"
           />
-          <div v-if="false" key="collaborator-avatar-placeholder">
-            <oc-icon
-              v-if="collaborator.shareType === shareTypes.group"
-              key="avatar-group"
-              class="oc-mr-s files-collaborators-collaborator-indicator"
-              name="group"
-              size="xlarge"
-              :accessible-label="$gettext('Group')"
-            />
-            <oc-icon
-              v-else
-              key="avatar-generic-person"
-              class="oc-mr-s files-collaborators-collaborator-indicator"
-              name="person"
-              size="xlarge"
-              :accessible-label="$gettext('Remote user')"
-            />
-          </div>
+          <oc-avatar-item
+            :width="48"
+            icon-size="medium"
+            :icon="shareTypeName"
+            :name="'test'"
+            v-else
+          />
         </div>
       </oc-td>
       <oc-td class="oc-py-rm oc-pr-s">
@@ -45,7 +33,7 @@
             class="collaborator-list oc-my-rm oc-pl-rm"
             :aria-labelledby="`collaborator-list-label-${shareId}`"
           >
-            <li>{{ shareTypeName }}</li>
+            <li>{{ shareTypeText }}</li>
             <li v-if="expirationDate">{{ expirationText }} {{ expirationDate }}</li>
             <li v-if="$_reshareInformation" class="oc-py-rm">
               <oc-drop
@@ -110,13 +98,9 @@ import { basename } from 'path'
 import CollaboratorsMixins from '../../../../mixins/collaborators'
 import Mixins from '../../../../mixins'
 import { DateTime } from 'luxon'
-import CollaboratorsEditOptions from './CollaboratorsEditOptions.vue'
 
 export default {
   name: 'Collaborator',
-  components: {
-    CollaboratorsEditOptions
-  },
   mixins: [Mixins, CollaboratorsMixins],
   props: {
     collaborator: {
@@ -140,7 +124,7 @@ export default {
   computed: {
     ...mapGetters(['user']),
 
-    shareTypeName() {
+    shareTypeText() {
       switch (this.shareType) {
         case shareTypes.user:
           return this.$gettext('User')
@@ -157,6 +141,10 @@ export default {
       }
     },
 
+    shareTypeName() {
+      return Object.keys(shareTypes)[this.shareType];
+    },
+
     shareDisplayName() {
       const displayName = this.collaborator.collaborator.displayName
       const additionalInfo = this.collaborator.collaborator.additionalInfo
@@ -169,6 +157,7 @@ export default {
     },
 
     shareId() {
+      console.log(this.collaborator)
       return this.collaborator.id
     },
 
@@ -266,7 +255,7 @@ export default {
     },
 
     shareType() {
-      return this.collaborator.shareType ? this.shareTypes.group : null
+      return this.collaborator.shareType ? this.collaborator.shareType : 0
     },
 
     isRemoteUser() {
