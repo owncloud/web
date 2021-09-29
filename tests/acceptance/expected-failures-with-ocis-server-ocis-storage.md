@@ -533,6 +533,3 @@ Other free text and markdown formatting can be used elsewhere in the document if
 
 ### [shares are not listed with full paths](https://github.com/owncloud/ocis/issues/2462)
 -   [webUISharingPublicBasic/publicLinkCreate.feature:88](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicBasic/publicLinkCreate.feature#L88)
-
-### [[oCIS] Previewing video from mediaviewer pops up a sign-in dialog](https://github.com/owncloud/web/issues/5840)
--   [webUIPreview/imageMediaViewer.feature:56](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L56)
