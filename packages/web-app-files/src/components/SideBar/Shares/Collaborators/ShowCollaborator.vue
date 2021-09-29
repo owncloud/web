@@ -46,6 +46,7 @@
             :aria-labelledby="`collaborator-list-label-${shareId}`"
           >
             <li>{{ shareTypeName }}</li>
+            <li v-if="expirationDate">{{ expirationText }} {{ expirationDate }}</li>
             <li v-if="$_reshareInformation" class="oc-py-rm">
               <oc-drop
                 ref="menu"
@@ -96,14 +97,7 @@
         </div>
       </oc-td>
       <oc-td width="shrink" align-v="top" class="oc-py-rm oc-pr-s">
-        <div class="uk-flex uk-flex-nowrap uk-flex-middle">
-          <collaborators-edit-options
-            v-if="!isCurrentUser"
-            :show-label="false"
-            class="oc-mb collaborators-edit"
-            @optionChange="collaboratorOptionChanged"
-          />
-        </div>
+        <div class="uk-flex uk-flex-nowrap uk-flex-middle"></div>
       </oc-td>
     </oc-tr>
   </oc-table-simple>
@@ -147,7 +141,7 @@ export default {
     ...mapGetters(['user']),
 
     shareTypeName() {
-      switch(this.shareType) {
+      switch (this.shareType) {
         case shareTypes.user:
           return this.$gettext('User')
         case shareTypes.group:
@@ -283,6 +277,10 @@ export default {
       return this.collaborator.shareType === this.shareTypes.group
     },
 
+    expirationText() {
+      return this.$gettext('Expires')
+    },
+
     expirationDate() {
       return DateTime.fromJSDate(this.collaborator.expires)
         .endOf('day')
@@ -350,7 +348,7 @@ export default {
 
   li {
     float: left;
-    margin: 5px;
+    margin-right: 5px;
   }
 }
 
