@@ -13,7 +13,7 @@ interface ArchiverCapability {
   archiver_url: string
 }
 
-class ArchiverService {
+export class ArchiverService {
   serverUrl: string
   capability?: ArchiverCapability
 
@@ -25,13 +25,16 @@ class ArchiverService {
     this.capability = archivers.length ? archivers[0] : null
   }
 
-  public get available() {
+  public get available(): boolean {
     return !!this.capability?.version
   }
 
-  public get url() {
+  public get url(): string {
     if (!this.available) {
-      throw new RuntimeError('no usable archiver found')
+      throw new RuntimeError('no archiver available')
+    }
+    if (/^https?:\/\//i.test(this.capability.archiver_url)) {
+      return this.capability.archiver_url
     }
     return [
       this.serverUrl.replace(/\/+$/, ''),
