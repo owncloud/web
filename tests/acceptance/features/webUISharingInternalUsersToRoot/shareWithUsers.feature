@@ -10,7 +10,7 @@ Feature: Sharing files and folders with internal users
       | Alice    |
       | Brian    |
 
-  @smokeTest
+  @smokeTest @disablePreviews
   Scenario Outline: share a file & folder with another internal user
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "yes"
     And user "Brian" has created folder "simple-folder"
@@ -49,7 +49,7 @@ Feature: Sharing files and folders with internal users
       | Editor               | Editor               | read,update,create,delete,share | read,update,share |
       | Custom permissions | Custom permissions | read                            | read              |
 
-
+  @disablePreviews
   Scenario: share a file with another internal user who overwrites and unshares the file
     Given user "Brian" has created file "new-lorem.txt"
     And user "Brian" has logged in using the webUI
@@ -66,7 +66,7 @@ Feature: Sharing files and folders with internal users
     # check that the original file owner can still see the file
     And as "Brian" the content of "new-lorem.txt" should be the same as the content of local file "new-lorem.txt"
 
-
+  @disablePreviews
   Scenario: share a folder with another internal user who uploads, overwrites and deletes files
     Given user "Brian" has created folder "new-simple-folder"
     And user "Brian" has created file "new-simple-folder/lorem.txt"
@@ -95,7 +95,7 @@ Feature: Sharing files and folders with internal users
     And as "Brian" the content of "new-simple-folder/new-lorem.txt" should be the same as the content of local file "new-lorem.txt"
     But file "data.zip" should not be listed on the webUI
 
-
+  @disablePreviews
   Scenario: share a folder with another internal user who unshares the folder
     Given user "Brian" has created folder "new-simple-folder"
     And user "Brian" has uploaded file "lorem.txt" to "new-simple-folder/lorem.txt"
@@ -111,7 +111,7 @@ Feature: Sharing files and folders with internal users
     Then folder "new-simple-folder" should be listed on the webUI
     And as "Brian" the content of "new-simple-folder/lorem.txt" should be the same as the content of local file "lorem.txt"
 
-
+  @disablePreviews
   Scenario: share a folder with another internal user and prohibit deleting
     Given user "Brian" has created folder "simple-folder"
     And user "Brian" has created file "simple-folder/lorem.txt"
@@ -121,7 +121,7 @@ Feature: Sharing files and folders with internal users
     And the user opens folder "simple-folder" using the webUI
     Then it should not be possible to delete file "lorem.txt" using the webUI
 
-
+  @disablePreviews
   Scenario: user shares the file/folder with another internal user and delete the share with user
     Given user "Alice" has created file "lorem.txt"
     And user "Alice" has logged in using the webUI
@@ -134,7 +134,7 @@ Feature: Sharing files and folders with internal users
     And file "lorem.txt" should not be listed in shared-with-others page on the webUI
     And as "Brian" file "lorem.txt" should not exist
 
-
+  @disablePreviews
   Scenario: user shares the file/folder with multiple internal users and delete the share with one user
     Given user "Carol" has been created with default attributes and without skeleton files
     And user "Alice" has created file "lorem.txt"
@@ -153,7 +153,7 @@ Feature: Sharing files and folders with internal users
     And as "Brian" file "lorem.txt" should not exist
     But as "Carol" file "lorem.txt" should exist
 
-
+  @disablePreviews
   Scenario: Try to share file and folder that used to exist but does not anymore
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has created file "lorem.txt"
@@ -175,7 +175,7 @@ Feature: Sharing files and folders with internal users
     And as "Alice" file "lorem.txt" should not exist
     And as "Alice" folder "simple-folder" should not exist
 
-  @issue-2897
+  @issue-2897 @disablePreviews
   Scenario: sharing details of items inside a shared folder
     Given user "Carol" has been created with default attributes and without skeleton files
     And user "Alice" has created folder "simple-folder"
@@ -189,7 +189,7 @@ Feature: Sharing files and folders with internal users
     When the user opens the share dialog for file "lorem.txt" using the webUI
     Then user "Brian Murphy" should be listed as "Editor" via "simple-folder" in the collaborators list on the webUI
 
-  @issue-2897
+  @issue-2897 @disablePreviews
   Scenario: sharing details of items inside a re-shared folder
     Given user "Carol" has been created with default attributes and without skeleton files
     And user "Alice" has created folder "simple-folder"
@@ -204,7 +204,7 @@ Feature: Sharing files and folders with internal users
     When the user opens the share dialog for file "lorem.txt" using the webUI
     Then user "Carol King" should be listed as "Editor" via "simple-folder" in the collaborators list on the webUI
 
-  @issue-2897
+  @issue-2897 @disablePreviews
   Scenario: sharing details of items inside a shared folder shared with multiple users
     Given user "Carol" has been created with default attributes and without skeleton files
     And user "Alice" has created folder "simple-folder"
@@ -218,7 +218,7 @@ Feature: Sharing files and folders with internal users
     Then user "Brian Murphy" should be listed as "Editor" via "simple-folder" in the collaborators list on the webUI
     And user "Carol King" should be listed as "Editor" via "sub-folder" in the collaborators list on the webUI
 
-
+  @disablePreviews
   Scenario Outline: Share files/folders with special characters in their name
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "yes"
     And user "Brian" has created folder "Sample,Folder,With,Comma"
@@ -267,7 +267,7 @@ Feature: Sharing files and folders with internal users
     When user "Brian" logs in using the webUI
     Then the preview image of file "testavatar.jpg" should not be displayed in the file list view on the webUI
 
-
+  @disablePreviews
   Scenario: sharing file after renaming it is possible
     Given user "Alice" has uploaded file with content "test" to "lorem.txt"
     And user "Alice" has logged in using the webUI
