@@ -10,11 +10,11 @@
             :width="48"
           />
           <oc-avatar-item
+            v-else
             :width="48"
             icon-size="medium"
             :icon="shareTypeName"
-            :name="'test'"
-            v-else
+            :name="shareTypeName"
           />
         </div>
       </oc-td>
@@ -142,7 +142,9 @@ export default {
     },
 
     shareTypeName() {
-      return Object.keys(shareTypes)[this.shareType];
+      console.log('test')
+      console.log(this.collaborator.collaborator)
+      return Object.keys(shareTypes)[this.shareType]
     },
 
     shareDisplayName() {
