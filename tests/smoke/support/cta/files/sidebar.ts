@@ -4,7 +4,8 @@ export const open = async ({ page, resource }: { page: Page; resource: string })
   await page.click(
     `//span[@data-test-resource-name="${resource}"]/ancestor::tr[contains(@class, "oc-tbody-tr")]//button[contains(@class, "oc-table-files-btn-action-dropdown")]`
   )
-  await page.click('//*[@id="oc-files-context-actions"]/li[9]/button')
+  await page.waitForSelector('//*[@id="oc-files-context-actions"]')
+  await page.click('.oc-files-actions-show-details-trigger')
 }
 
 export const close = async ({ page }: { page: Page }): Promise<void> => {

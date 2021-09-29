@@ -70,14 +70,11 @@ export class AllFilesPage {
 
     if (folder) {
       await cta.files.navigateToFolder({ page: page, path: folder })
-      console.log('I am here1')
     }
 
     for (const name of names) {
-      console.log('I am here2')
       await cta.files.sidebar.open({ page: page, resource: name })
       await cta.files.sidebar.openPanel({ page: page, name: 'actions' })
-      console.log('I am here3')
 
       const [download] = await Promise.all([
         page.waitForEvent('download'),
