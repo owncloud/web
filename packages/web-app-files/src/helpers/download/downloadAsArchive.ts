@@ -1,16 +1,25 @@
-import { archiverService, clientService } from '../../services'
+import {
+  ArchiverService,
+  archiverService as defaultArchiverService,
+  ClientService,
+  clientService as defaultClientService
+} from '../../services'
 import { major } from 'semver'
 import { RuntimeError } from 'web-runtime/src/container/error'
 
 interface TriggerDownloadAsArchiveOptions {
   fileIds: string[]
   token: string // TODO: solve download from a) public link b) public link with password
+  archiverService?: ArchiverService
+  clientService?: ClientService
 }
 
 export const triggerDownloadAsArchive = async (
   options: TriggerDownloadAsArchiveOptions
 ): Promise<void> => {
-  if (!isDownloadAsArchiveAvailable()) {
+  const archiverService = options.archiverService || defaultArchiverService
+  const clientService = options.clientService || defaultClientService
+  if (!isDownloadAsArchiveAvailable(archiverService)) {
     throw new RuntimeError('no archiver capability available')
   }
   if (options.fileIds.length === 0) {
@@ -49,11 +58,13 @@ export const triggerDownloadAsArchive = async (
   }
 }
 
-export const isDownloadAsArchiveAvailable = (): boolean => {
-  return archiverService.available
+export const isDownloadAsArchiveAvailable = (
+  service: ArchiverService = defaultArchiverService
+): boolean => {
+  return service.available
 }
 
-const extractFileNameFromContentDisposition = (contentDisposition: string): string => {
+export const extractFileNameFromContentDisposition = (contentDisposition: string): string => {
   if (contentDisposition?.indexOf('attachment') === -1) {
     return ''
   }
