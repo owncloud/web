@@ -22,7 +22,12 @@ export class SharedWithMePage {
       page: page,
       name: name
     })
-    if (!objectExists) {
+
+    const statusResource = await page.textContent(
+      `//*[@data-test-resource-name="${name}"]/../../../../../td[3]/div[1]/span[1]`
+    )
+
+    if (!objectExists && statusResource !== 'Accepted') {
       await page.click(`//*[@data-test-resource-name="${name}"]/ancestor::tr//button[1]`)
     }
     await page.goto(startUrl)
