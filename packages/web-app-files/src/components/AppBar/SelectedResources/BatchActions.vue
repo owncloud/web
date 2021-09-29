@@ -24,12 +24,12 @@
       </oc-button>
     </template>
     <oc-grid v-if="displayBulkActions" gutter="small">
-      <div v-if="canDownloadAsArchive">
+      <div v-if="canDownload">
         <oc-button
           id="download-selected-btn"
           key="download-selected-btn"
           variation="primary"
-          @click="downloadAsArchive"
+          @click="download"
         >
           <oc-icon name="archive" />
           <translate>Download</translate>
@@ -123,6 +123,28 @@ export default {
         : this.$gettext('Delete')
     },
 
+    canDownload() {
+      return this.canDownloadSingleFile || this.canDownloadAsArchive
+    },
+
+    canDownloadSingleFile() {
+      if (
+        !checkRoute(['files-personal', 'files-favorites', 'files-public-list'], this.$route.name)
+      ) {
+        return false
+      }
+
+      if (this.selectedFiles.length !== 1) {
+        return false
+      }
+
+      if (!this.selectedFiles[0].canDownload()) {
+        return false
+      }
+
+      return !this.selectedFiles[0].isFolder
+    },
+
     canDownloadAsArchive() {
       if (!checkRoute(['files-personal', 'files-favorites'], this.$route.name)) {
         return false
@@ -132,7 +154,7 @@ export default {
         return false
       }
 
-      return this.currentFolder.canDownload()
+      return this.selectedFiles.filter(f => !f.canDownload()).length === 0
     },
 
     canMove() {
@@ -334,6 +356,14 @@ export default {
           status: 'danger'
         })
       }
+    },
+
+    async download() {
+      if (this.selectedFiles.length === 1 && !this.selectedFiles[0].isFolder) {
+        await this.downloadFile(this.selectedFiles[0])
+        return
+      }
+      await this.downloadAsArchive()
     },
 
     async downloadAsArchive() {
