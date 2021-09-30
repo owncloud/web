@@ -30,7 +30,7 @@ export const bootstrap = async (configurationPath: string): Promise<void> => {
   })
   await announceOwncloudSDK({ vue: Vue, runtimeConfiguration })
   await announceTranslations({ vue: Vue, supportedLanguages, translations })
-  await announceTheme({ store, vue: Vue, designSystem })
+  await announceTheme({ store, vue: Vue, designSystem, runtimeConfiguration })
   await announceDefaults({ vue: Vue, store, router, runtimeConfiguration })
 }
 

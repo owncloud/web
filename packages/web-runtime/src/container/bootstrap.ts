@@ -122,17 +122,17 @@ export const announceApplications = async ({
  * @param designSystem
  */
 export const announceTheme = async ({
-  themeLocation,
   store,
   vue,
-  designSystem
+  designSystem,
+  runtimeConfiguration
 }: {
-  themeLocation?: string
   store: Store<unknown>
   vue: VueConstructor
   designSystem: any
+  runtimeConfiguration?: RuntimeConfiguration
 }): Promise<void> => {
-  const { theme } = await loadTheme(themeLocation)
+  const { theme } = await loadTheme(runtimeConfiguration.theme)
   await store.dispatch('loadTheme', { theme: theme.default })
 
   vue.use(designSystem, {
