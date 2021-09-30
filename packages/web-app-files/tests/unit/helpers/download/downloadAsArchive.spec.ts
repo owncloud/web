@@ -1,5 +1,4 @@
 import {
-  extractFileNameFromContentDisposition,
   isDownloadAsArchiveAvailable,
   triggerDownloadAsArchive
 } from '../../../../src/helpers/download/downloadAsArchive'
@@ -23,7 +22,6 @@ describe('downloadAsArchive', () => {
     it('fails with a runtime error if archiver unavailable', async () => {
       const downloadPromise = triggerDownloadAsArchive({
         fileIds: [],
-        token: '',
         archiverService
       })
       await expect(downloadPromise).rejects.toThrow(
@@ -34,7 +32,6 @@ describe('downloadAsArchive', () => {
       archiverService.initialize(serverUrl, [archiverCapability])
       const downloadPromise = triggerDownloadAsArchive({
         fileIds: [],
-        token: '',
         archiverService
       })
       await expect(downloadPromise).rejects.toThrow(
@@ -53,34 +50,6 @@ describe('downloadAsArchive', () => {
         service.initialize(serverUrl, [archiverCapability])
         expect(isDownloadAsArchiveAvailable(service)).toBe(true)
       })
-    })
-  })
-
-  describe('extractFileNameFromContentDisposition', () => {
-    it.each(['', 'Content-Disposition: inline'])(
-      'returns an empty string if content disposition is no attachment',
-      contentDisposition => {
-        expect(extractFileNameFromContentDisposition(contentDisposition)).toBe('')
-      }
-    )
-    it.each(['Content-Disposition: attachment', 'Content-Disposition: attachment; filename=""'])(
-      'returns an empty string for attachment without filename',
-      contentDisposition => {
-        expect(extractFileNameFromContentDisposition(contentDisposition)).toBe('')
-      }
-    )
-    it.each([
-      {
-        contentDisposition: 'Content-Disposition: attachment; filename="filename.jpg"',
-        filename: 'filename.jpg'
-      },
-      {
-        contentDisposition: 'Content-Disposition: attachment; filename=without-quotes.jpg',
-        filename: 'without-quotes.jpg'
-      },
-      { contentDisposition: 'attachment; filename="filename.jpg"', filename: 'filename.jpg' }
-    ])('extracts the filename without quotes', ({ contentDisposition, filename }) => {
-      expect(extractFileNameFromContentDisposition(contentDisposition)).toBe(filename)
     })
   })
 })

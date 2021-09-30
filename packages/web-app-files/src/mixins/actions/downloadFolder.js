@@ -3,11 +3,9 @@ import {
   isDownloadAsArchiveAvailable,
   triggerDownloadAsArchive
 } from '../../helpers/download/downloadAsArchive'
-import { mapGetters } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters(['getToken']),
     $_downloadFolder_items() {
       return [
         {
@@ -38,8 +36,7 @@ export default {
   methods: {
     async $_downloadFolder_trigger(resource) {
       await triggerDownloadAsArchive({
-        fileIds: [resource.fileId],
-        token: this.getToken
+        fileIds: [resource.fileId]
       }).catch(e => {
         console.error(e)
         this.showMessage({

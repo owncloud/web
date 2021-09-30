@@ -115,7 +115,7 @@ export default {
 
   computed: {
     ...mapGetters('Files', ['selectedFiles', 'currentFolder', 'activeFilesCurrentPage']),
-    ...mapGetters(['homeFolder', 'getToken']),
+    ...mapGetters(['homeFolder']),
 
     emptyTrashbinButtonText() {
       return this.selectedFiles.length < 1
@@ -368,8 +368,7 @@ export default {
 
     async downloadAsArchive() {
       await triggerDownloadAsArchive({
-        fileIds: this.selectedFiles.map(r => r.fileId),
-        token: this.getToken
+        fileIds: this.selectedFiles.map(r => r.fileId)
       }).catch(e => {
         console.error(e)
         this.showMessage({
