@@ -408,10 +408,7 @@ export default {
       if (this.existingRole !== undefined && this.existingRole.name !== 'advancedRole') {
         return
       }
-
-      this.customPermissions = this.collaboratorsPermissions
-        ? [...this.collaboratorsPermissions]
-        : []
+      this.customPermissions = []
     },
 
     cycleRoles(event) {
