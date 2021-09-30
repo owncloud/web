@@ -1,6 +1,6 @@
 import { registerClient } from '../services/clientRegistration'
 import { RuntimeConfiguration } from './types'
-import { buildApplication } from './application'
+import { buildApplication, NextApplication } from './application'
 import { Store } from 'vuex'
 import VueRouter from 'vue-router'
 import { VueConstructor } from 'vue'
@@ -75,15 +75,18 @@ export const announceApplications = async ({
   translations: unknown
   supportedLanguages: { [key: string]: string }
 }): Promise<void> => {
-  const { apps: applications = [], external_apps: externalApplications = [] } = runtimeConfiguration
+  const {
+    apps: internalApplications = [],
+    external_apps: externalApplications = []
+  } = runtimeConfiguration
 
-  const allApplications = [
-    ...applications.map(application => `web-app-${application}`),
+  const applicationPaths = [
+    ...internalApplications.map(application => `web-app-${application}`),
     ...externalApplications.map(application => application.path)
   ].filter(Boolean)
 
-  const applicationImplementations = await Promise.all(
-    allApplications.map(applicationPath =>
+  const applicationResults = await Promise.allSettled(
+    applicationPaths.map(applicationPath =>
       buildApplication({
         applicationPath,
         store,
@@ -93,8 +96,20 @@ export const announceApplications = async ({
       })
     )
   )
-  await Promise.all(applicationImplementations.map(application => application.initialize()))
-  await Promise.all(applicationImplementations.map(application => application.ready()))
+
+  const applications = applicationResults.reduce<NextApplication[]>((acc, applicationResult) => {
+    // we don't want to fail hard with the full system when one specific application can't get loaded. only log the error.
+    if (applicationResult.status !== 'fulfilled') {
+      console.error(applicationResult.reason)
+    } else {
+      acc.push(applicationResult.value)
+    }
+
+    return acc
+  }, [])
+
+  await Promise.all(applications.map(application => application.initialize()))
+  await Promise.all(applications.map(application => application.ready()))
 }
 
 /**
