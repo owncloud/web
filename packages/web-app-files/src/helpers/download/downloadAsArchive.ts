@@ -36,9 +36,7 @@ export const triggerDownloadAsArchive = async (
     if (response.status !== 200) {
       throw new RuntimeError('download failed')
     }
-    const fileName = extractFileNameFromContentDisposition(
-      response.headers['content-disposition']
-    )
+    const fileName = extractFileNameFromContentDisposition(response.headers['content-disposition'])
     if (!fileName) {
       throw new RuntimeError('received archive has no file name')
     }
