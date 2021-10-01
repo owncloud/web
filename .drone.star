@@ -1594,7 +1594,7 @@ def installYarn():
         "image": "owncloudci/nodejs:14",
         "pull": "always",
         "commands": [
-            "if test -f runTestsForDocsChangeOnly; then echo 'skipping installYarn'; else yarn install --immutable --immutable-cache; fi",
+            "if test -f runTestsForDocsChangeOnly; then echo 'skipping installYarn'; else yarn install --immutable; fi",
         ],
     }]
 
