@@ -7,7 +7,7 @@ const httpHelper = require('../helpers/httpHelper')
 const backendHelper = require('../helpers/backendHelper')
 const userSettings = require('../helpers/userSettings')
 const sharingHelper = require('../helpers/sharingHelper')
-const { SHARE_TYPES } = require('../helpers/sharingHelper')
+const { SHARE_TYPES, SHARE_STATE } = require('../helpers/sharingHelper')
 const { runOcc } = require('../helpers/occHelper')
 const _ = require('lodash')
 const path = require('../helpers/path')
@@ -924,11 +924,11 @@ When(
 )
 
 When(
-  'the user changes the collaborator role of {string} for file/folder {string} to {string} using the webUI',
-  async function(collaborator, resource, newRole) {
+  'the user changes the collaborator role of {string} for file/folder {string} to {string} with permissions {string} using the webUI',
+  async function(collaborator, resource, newRole, permissions) {
     const api = client.page.FilesPageElement
     await api.filesList().openSharingDialog(resource)
-    return api.sharingDialog().changeCollaboratorRole(collaborator, newRole)
+    return api.sharingDialog().changeCollaboratorRole(collaborator, newRole, permissions)
   }
 )
 
@@ -951,8 +951,7 @@ Then('user {string} should be listed as {string} in the collaborators list on th
 Then(
   'the share {string} shared with user {string} should have no expiration information displayed on the webUI',
   async function(item, user) {
-    await client.page.FilesPageElement.filesList().openSideBar(item)
-    await client.page.FilesPageElement.appSideBar().activatePanel('people')
+    await client.page.FilesPageElement.filesList().openSharingDialog(item)
     const elementID = await client.page.FilesPageElement.SharingDialog.collaboratorsDialog().getCollaboratorExpirationInfo(
       user
     )
@@ -967,8 +966,7 @@ Then(
 Then(
   'the expiration information displayed on the webUI of share {string} shared with user {string} should be {string} or {string}',
   async function(item, user, information1, information2) {
-    await client.page.FilesPageElement.filesList().openSideBar(item)
-    await client.page.FilesPageElement.appSideBar().activatePanel('people')
+    await client.page.FilesPageElement.filesList().openSharingDialog(item)
     const actualInfo = await client.page.FilesPageElement.SharingDialog.collaboratorsDialog().getCollaboratorExpirationInfo(
       user
     )
@@ -1166,14 +1164,18 @@ Then('the current collaborators list should have order {string}', async function
 Then(
   'file/folder {string} shared by {string} should be in {string} state on the webUI',
   async function(resource, sharer, expectedStatus) {
-    const currentStatus = await client.page
+    const shareStatus =
+      expectedStatus === 'Accepted'
+        ? SHARE_STATE.accepted
+        : expectedStatus === 'Declined'
+        ? SHARE_STATE.declined
+        : SHARE_STATE.pending
+    const hasShareStatus = await client.page
       .sharedWithMePage()
-      .getShareStatusOfResource(resource, sharer)
-    return assert.strictEqual(
-      currentStatus,
-      expectedStatus,
-      `Expected resource '${resource}' shared by '${sharer}' to be
-      in state '${expectedStatus}' but it is in state: '${currentStatus}'!`
+      .hasShareStatusByFilenameAndUser(shareStatus, resource, sharer)
+    return assert.ok(
+      hasShareStatus,
+      `Expected resource '${resource}' shared by '${sharer}' to be in state '${expectedStatus}' but isn't.`
     )
   }
 )
@@ -1193,22 +1195,6 @@ When('the user accepts share {string} offered by user {string} using the webUI',
   await client.pause(200)
   return client.page.sharedWithMePage().declineAcceptFile('Accept', filename, user)
 })
-
-Then(
-  'the file {string} shared by {string} should be in {string} state on the webUI after a page reload',
-  async function(filename, sharer, expectedStatus) {
-    await client.refresh()
-    const currentStatus = await client.page
-      .sharedWithMePage()
-      .getShareStatusOfResource(filename, sharer)
-    return assert.strictEqual(
-      currentStatus,
-      expectedStatus,
-      `Expected resource '${filename}'  shared by '${sharer}' to
-       be in state '${expectedStatus}' but it is in state: '${currentStatus}'!`
-    )
-  }
-)
 
 Then('the autocomplete list should not be displayed on the webUI', async function() {
   const isVisible = await client.page.FilesPageElement.sharingDialog().isAutocompleteListVisible()
@@ -1259,22 +1245,6 @@ When(
     }
   }
 )
-
-Then('the file {string} shared by {string} should not be in {string} state', async function(
-  filename,
-  sharer,
-  expectedStatus
-) {
-  const currentStatus = await client.page
-    .sharedWithMePage()
-    .getShareStatusOfResource(filename, sharer)
-  return assert.notStrictEqual(
-    currentStatus,
-    expectedStatus,
-    `Expected resource '${filename}' shared by '${sharer}' not to be
-      present with status '${expectedStatus}' but got found: '${currentStatus}'!`
-  )
-})
 
 Then('file/folder {string} should be marked as shared by {string} on the webUI', async function(
   element,

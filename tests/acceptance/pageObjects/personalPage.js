@@ -33,7 +33,7 @@ module.exports = {
      * @param {string} resource
      */
     navigateToBreadcrumb: function(resource) {
-      const breadcrumbElement = this.elements.resourceBreadcrumbClickable
+      const breadcrumbElement = this.elements.resourceBreadcrumb
       const resourceXpath = util.format(
         breadcrumbElement.selector,
         xpathHelper.buildXpathLiteral(resource)
@@ -53,28 +53,12 @@ module.exports = {
      * @returns {null|{locateStrategy: string, selector: string}}
      */
     getBreadcrumbSelector: function(clickable, nonClickable) {
-      if (clickable && nonClickable) {
+      if (clickable) {
         return this.elements.resourceBreadcrumb
-      } else if (clickable) {
-        return this.elements.resourceBreadcrumbClickable
       } else if (nonClickable) {
         return this.elements.resourceBreadcrumbNonClickable
       }
       return null
-    },
-    /**
-     * Check if the breadcrumb element is visible or not
-     *
-     * @returns Promise
-     */
-    checkBreadcrumbVisibility: async function(resourceBreadcrumbXpath) {
-      await this.useXpath()
-        .waitForElementVisible({
-          selector: resourceBreadcrumbXpath,
-          abortOnFailure: false
-        })
-        .useCss()
-      return this
     },
     /**
      * Create a folder with the given name
@@ -245,20 +229,20 @@ module.exports = {
       return this.waitForElementVisible('@dialogConfirmBtnDisabled')
     },
 
-    moveMultipleResources: function(target) {
+    moveMultipleResources: async function(target) {
       // Trigger move
-      this.click('@moveSelectedBtn')
+      await this.click('@moveSelectedBtn')
 
       // Execute move
-      return client.page.locationPicker().selectFolderAndConfirm(target)
+      return await client.page.locationPicker().selectFolderAndConfirm(target)
     },
 
-    copyMultipleResources: function(target) {
+    copyMultipleResources: async function(target) {
       // Trigger copy
-      this.click('@copySelectedBtn')
+      await this.click('@copySelectedBtn')
 
       // Execute copy
-      return client.page.locationPicker().selectFolderAndConfirm(target)
+      return await client.page.locationPicker().selectFolderAndConfirm(target)
     },
 
     /**
@@ -369,12 +353,14 @@ module.exports = {
       selector: '//span[@class="oc-breadcrumb-drop-label-text" and text()=%s]',
       locateStrategy: 'xpath'
     },
-    resourceBreadcrumb: {
-      selector: '//nav[@id="files-breadcrumb"]//*[(self::a or self::span) and contains(text(),%s)]',
+    breadcrumbMobileReferencedToOpenSidebarButton: {
+      selector:
+        '//button[@aria-label="Open sidebar to view details"]/ancestor::div//span[@class="oc-breadcrumb-drop-label-text" and text()=%s]',
       locateStrategy: 'xpath'
     },
-    resourceBreadcrumbClickable: {
-      selector: '//nav[@id="files-breadcrumb"]//a[contains(text(),%s)]',
+    resourceBreadcrumb: {
+      selector:
+        '//nav[@id="files-breadcrumb"]//*[(self::a or self::button) and contains(text(),%s)]',
       locateStrategy: 'xpath'
     },
     resourceBreadcrumbNonClickable: {

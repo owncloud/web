@@ -29,14 +29,14 @@ describe('PrivateLinkItem', () => {
   describe('when the private link functionality is enabled', () => {
     it('should be visible', () => {
       const store = createStore()
-      const wrapper = getShallowWrapper(store)
+      const wrapper = getShallowWrapper(store, false)
 
       expect(wrapper.find(selectors.linkItem).exists()).toBeTruthy()
     })
 
     it('should render the copy-to-clipboard button', () => {
       const store = createStore()
-      const wrapper = getShallowWrapper(store)
+      const wrapper = getShallowWrapper(store, false)
 
       const copyToClipboardButtonElement = wrapper.find(selectors.copyToClipboardButton)
 
@@ -60,23 +60,24 @@ describe('PrivateLinkItem', () => {
 
       it('should render a hyperlink with href and text as a private link if the highlighted file is not mounted', () => {
         const store = createStore({ isMounted: false })
-        const wrapper = getShallowWrapper(store)
+        const wrapper = getShallowWrapper(store, false)
 
         expect(wrapper.find(selectors.linkItemHyperlink).attributes().href).toBe('some-link')
         expect(wrapper.find(selectors.linkItemHyperlink).text()).toBe('some-link')
       })
     })
   })
+})
 
-  describe('when the private link functionality is disabled', () => {
-    it('should not be visible', () => {
-      const store = createStore()
-      store.getters.capabilities.files.privateLinks = false
-      const wrapper = getShallowWrapper(store)
-
-      expect(wrapper.find(selectors.linkItem).exists()).toBeFalsy()
-    })
-  })
+const getTestFolder = isMounted => ({
+  type: 'folder',
+  ownerId: 'marie',
+  ownerDisplayName: 'Marie',
+  mdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
+  size: '740',
+  isMounted: jest.fn(() => isMounted),
+  name: 'lorem.txt',
+  privateLink: 'some-link'
 })
 
 function createStore({ isMounted = true } = {}) {
@@ -94,25 +95,24 @@ function createStore({ isMounted = true } = {}) {
       Files: {
         namespaced: true,
         getters: {
-          highlightedFile: function() {
-            return {
-              isMounted: jest.fn(() => isMounted),
-              name: 'lorem.txt',
-              privateLink: 'some-link'
-            }
-          }
+          highlightedFile: () => getTestFolder(isMounted)
         }
       }
     }
   })
 }
 
-function getShallowWrapper(store) {
+function getShallowWrapper(store, isMounted = true) {
   return shallowMount(PrivateLinkItem, {
     localVue,
     store,
     stubs: {
       'copy-to-clipboard-button': true
+    },
+    provide: {
+      displayedItem: {
+        value: getTestFolder(isMounted)
+      }
     }
   })
 }

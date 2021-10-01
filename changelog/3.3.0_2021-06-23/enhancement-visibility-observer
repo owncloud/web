@@ -1,7 +1,7 @@
 Enhancement: Visibility observer
 
-By adding a visibility observer, we now only load image previews for those files that 
-are close to the user's viewport. It is also equiped with a short waiting period so 
+By adding a visibility observer, we now only load image previews for those files that
+are close to the user's viewport. It is also equipped with a short waiting period so
 scrolling doesn't lead to an overload of requests.
 
 https://github.com/owncloud/web/pull/5194

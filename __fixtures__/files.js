@@ -92,5 +92,25 @@ export default {
       },
       tusSupport: null
     }
+  ],
+  '/Documents': [
+    {
+      name: '/Documents',
+      type: 'dir',
+      fileInfo: {
+        '{http://owncloud.org/ns}permissions': 'RDNVCK',
+        '{http://owncloud.org/ns}favorite': '0',
+        '{http://owncloud.org/ns}fileid': '3867',
+        '{http://owncloud.org/ns}owner-id': 'alice',
+        '{http://owncloud.org/ns}owner-display-name': 'alice',
+        '{http://owncloud.org/ns}share-types': '',
+        '{http://owncloud.org/ns}privatelink': 'http://host.docker.internal:8080/f/3867',
+        '{http://owncloud.org/ns}size': '36227',
+        '{DAV:}getlastmodified': 'Mon, 14 Jun 2021 09:41:16 GMT',
+        '{DAV:}getetag': '"60c7243c2e7f1"',
+        '{DAV:}resourcetype': ['{DAV:}collection']
+      },
+      tusSupport: null
+    }
   ]
 }

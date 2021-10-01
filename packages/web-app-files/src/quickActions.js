@@ -23,8 +23,7 @@ export function createPublicLink(ctx) {
     ctx.store
       .dispatch('Files/addLink', { path: ctx.item.path, client: ctx.client, params })
       .then(link => {
-        ctx.store.dispatch('Files/sidebar/open').then(() => {
-          ctx.store.commit('Files/SET_APP_SIDEBAR_ACTIVE_PANEL', 'links-item')
+        ctx.store.dispatch('Files/sidebar/openWithPanel', 'links-item').then(() => {
           copyToClipboard(link.url)
           ctx.store.dispatch('showMessage', {
             title: $gettext('Public link created'),
@@ -46,8 +45,7 @@ export function createPublicLink(ctx) {
 }
 
 export async function openNewCollaboratorsPanel(ctx) {
-  await ctx.store.dispatch('Files/sidebar/open')
-  ctx.store.commit('Files/SET_APP_SIDEBAR_ACTIVE_PANEL', 'sharing-item')
+  await ctx.store.dispatch('Files/sidebar/openWithPanel', 'sharing-item')
 }
 
 export function canShare(item, store) {

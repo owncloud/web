@@ -3,24 +3,121 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v4.1.0...master
+[unreleased]: https://github.com/owncloud/web/compare/v4.2.0...master
 
 Summary
 -------
 
-* Enhancement - Add robots.txt file: [#5762](https://github.com/owncloud/web/pull/5762)
-* Enhancement - Add missing tooltips: [#5723](https://github.com/owncloud/web/issues/5723)
-* Enhancement - Switch filesize calculation base: [#5739](https://github.com/owncloud/web/pull/5739)
-* Enhancement - Update ODS to 9.3.0: [#5725](https://github.com/owncloud/web/pull/5725)
+* Enhancement - Add wrapper app for external apps: [#5805](https://github.com/owncloud/web/pull/5805)
+* Enhancement - Add AppProvider actions to fileactions: [#5805](https://github.com/owncloud/web/pull/5805)
+* Enhancement - Move custom permissions to roles drop: [#5764](https://github.com/owncloud/web/issues/5764)
+* Enhancement - Refactor runtime boot process: [#5752](https://github.com/owncloud/web/pull/5752)
+* Enhancement - Multiple shared with me tables: [#5814](https://github.com/owncloud/web/pull/5814)
 
 Details
 -------
+
+* Enhancement - Add wrapper app for external apps: [#5805](https://github.com/owncloud/web/pull/5805)
+
+   We have added a `external` app that can render apps coming from the oCIS AppProvider via iFrame.
+
+   https://github.com/owncloud/web/pull/5805
+
+* Enhancement - Add AppProvider actions to fileactions: [#5805](https://github.com/owncloud/web/pull/5805)
+
+   If the AppProvider within oCIS communicates a matching application for the mime type of a file,
+   there are now additional actions in the default actions and actions in both the contextmenu and
+   the right sidebar.
+
+   https://github.com/owncloud/web/pull/5805
+
+* Enhancement - Move custom permissions to roles drop: [#5764](https://github.com/owncloud/web/issues/5764)
+
+   We've moved all the custom permissions (previously advanced permissions) in the sharing
+   dialog into a dropdown which gets triggered by selecting the Custom permissions item in the
+   roles dropdown.
+
+   https://github.com/owncloud/web/issues/5764
+   https://github.com/owncloud/web/pull/5647
+
+* Enhancement - Refactor runtime boot process: [#5752](https://github.com/owncloud/web/pull/5752)
+
+   We have updated the way applications are being loaded in the web runtime. It does now feature a
+   dedicated boot process, providing hooks that other applications can take advantage of.
+
+   https://github.com/owncloud/web/issues/2891
+   https://github.com/owncloud/web/issues/3726
+   https://github.com/owncloud/web/issues/3771
+   https://github.com/owncloud/web/issues/4735
+   https://github.com/owncloud/web/issues/5135
+   https://github.com/owncloud/web/issues/5460
+   https://github.com/owncloud/web/pull/5752
+   (tbd)
+   (tbd)
+   (tbd,
+   %22needs
+   api
+   tweak%22%29
+   (tbd)
+   (tbd)
+   (tbd)
+
+* Enhancement - Multiple shared with me tables: [#5814](https://github.com/owncloud/web/pull/5814)
+
+   We have separated the single table on the shared with me page into up to three different tables: -
+   pending shares - accepted shares - declined shares By default we show pending and accepted
+   shares. There is navigation in place to switch over from the accepted to the declined shares and
+   the other way around. Pending shares stay visible all the time since it's expected that users
+   take immediate action on pending shares anyway.
+
+   https://github.com/owncloud/web/pull/5814
+   https://github.com/owncloud/web/pull/5177
+
+Changelog for ownCloud Web [4.2.0] (2021-09-14)
+=======================================
+The following sections list the changes in ownCloud web 4.2.0 relevant to
+ownCloud admins and users.
+
+[4.2.0]: https://github.com/owncloud/web/compare/v4.1.0...v4.2.0
+
+Summary
+-------
+
+* Bugfix - Pagination on Locationpicker: [#5715](https://github.com/owncloud/web/pull/5715)
+* Enhancement - Add robots.txt file: [#5762](https://github.com/owncloud/web/pull/5762)
+* Enhancement - Fetch file info in the Files sidebar: [#5570](https://github.com/owncloud/web/issues/5570)
+* Enhancement - Add missing tooltips: [#5723](https://github.com/owncloud/web/issues/5723)
+* Enhancement - Re-design recipients role select: [#5632](https://github.com/owncloud/web/pull/5632)
+* Enhancement - Show sharees as collapsed list of avatars: [#5758](https://github.com/owncloud/web/pull/5758/files)
+* Enhancement - Show sharing information in details sidebar: [#5735](https://github.com/owncloud/web/issues/5735)
+* Enhancement - Switch filesize calculation base: [#5739](https://github.com/owncloud/web/pull/5739)
+* Enhancement - Update ODS to 10.0.0: [#5725](https://github.com/owncloud/web/pull/5725)
+* Enhancement - URL encoding / decoding: [#5714](https://github.com/owncloud/web/issues/5714)
+
+Details
+-------
+
+* Bugfix - Pagination on Locationpicker: [#5715](https://github.com/owncloud/web/pull/5715)
+
+   Pagination on copying/moving files as well as page reloads when copying/moving files were
+   broken. When changing the Vue router encoding, we fixed both issues.
+
+   https://github.com/owncloud/web/pull/5715
 
 * Enhancement - Add robots.txt file: [#5762](https://github.com/owncloud/web/pull/5762)
 
    Added a robots.txt for ocis-web
 
    https://github.com/owncloud/web/pull/5762
+
+* Enhancement - Fetch file info in the Files sidebar: [#5570](https://github.com/owncloud/web/issues/5570)
+
+   We've started fetching the file info when a single item is selected and the Files sidebar is
+   opened. With this change we have more information available in different lists e.g. private
+   link in shared lists.
+
+   https://github.com/owncloud/web/issues/5570
+   https://github.com/owncloud/web/pull/5665
 
 * Enhancement - Add missing tooltips: [#5723](https://github.com/owncloud/web/issues/5723)
 
@@ -29,6 +126,29 @@ Details
    https://github.com/owncloud/web/issues/5723
    https://github.com/owncloud/web/pull/5724
 
+* Enhancement - Re-design recipients role select: [#5632](https://github.com/owncloud/web/pull/5632)
+
+   We've redesigned recipient role select in the Files app sidebar.
+
+   https://github.com/owncloud/web/pull/5632
+
+* Enhancement - Show sharees as collapsed list of avatars: [#5758](https://github.com/owncloud/web/pull/5758/files)
+
+   We've introduced a collapsed list of avatars of sharees in the `People` panel of the right
+   sidebar. On click we switch to showing the full list of sharees. With this additional
+   intermediate state we were able to clean up the UI a bit for easier cognitive load.
+
+   https://github.com/owncloud/web/issues/5736
+   https://github.com/owncloud/web/pull/5758/files
+
+* Enhancement - Show sharing information in details sidebar: [#5735](https://github.com/owncloud/web/issues/5735)
+
+   We've added sharing information like from whom, when and where a file was shared to the detail
+   view in the right sidebar.
+
+   https://github.com/owncloud/web/issues/5735
+   https://github.com/owncloud/web/pull/5730
+
 * Enhancement - Switch filesize calculation base: [#5739](https://github.com/owncloud/web/pull/5739)
 
    We've switched from base-2 to base-10 when calculating the displayed file-size to align it
@@ -36,24 +156,44 @@ Details
 
    https://github.com/owncloud/web/pull/5739
 
-* Enhancement - Update ODS to 9.3.0: [#5725](https://github.com/owncloud/web/pull/5725)
+* Enhancement - Update ODS to 10.0.0: [#5725](https://github.com/owncloud/web/pull/5725)
 
-   We updated the ownCloud Design System to version 9.3.0. Please refer to the full changelog in
+   We updated the ownCloud Design System to version 10.0.0. Please refer to the full changelog in
    the ODS release (linked) for more details. Summary: - Bugfix - Fix search for options provided
    as objects: https://github.com/owncloud/owncloud-design-system/pull/1602 - Bugfix -
    Contextmenu button triggered wrong event:
    https://github.com/owncloud/owncloud-design-system/pull/1610 - Bugfix - Use pointer
    cursor for OcSelect actions:
-   https://github.com/owncloud/owncloud-design-system/pull/1604 - Enhancement -
+   https://github.com/owncloud/owncloud-design-system/pull/1604 - Bugfix - Reset
+   droptarget background color in OcTableFiles:
+   https://github.com/owncloud/owncloud-design-system/pull/1625 - Enhancement -
    OcTableFiles Contextmenu Tooltip:
    https://github.com/owncloud/owncloud-design-system/pull/1610 - Enhancement -
    Highlight droptarget in OcTableFiles:
    https://github.com/owncloud/owncloud-design-system/pull/1610 - Enhancement - Remove
    "Showdetails" button in OcTableFiles:
-   https://github.com/owncloud/owncloud-design-system/pull/1610
+   https://github.com/owncloud/owncloud-design-system/pull/1610 - Enhancement - Switch
+   filesize calculation base:
+   https://github.com/owncloud/owncloud-design-system/pull/1598 - Change - Use route
+   query to store active page:
+   https://github.com/owncloud/owncloud-design-system/pull/1626 - Change - Refactor
+   OcAvatarGroup and rename to OcAvatars:
+   https://github.com/owncloud/owncloud-design-system/pull/5736 - Change - Add label prop
+   to OcSelect: https://github.com/owncloud/owncloud-design-system/pull/1633
 
    https://github.com/owncloud/web/pull/5725
+   https://github.com/owncloud/web/pull/5769
    https://github.com/owncloud/owncloud-design-system/releases/tag/v9.3.0
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v10.0.0
+
+* Enhancement - URL encoding / decoding: [#5714](https://github.com/owncloud/web/issues/5714)
+
+   We have updated the Vue router (prior to version 4) encoding from `files%2Fall%2Ffolder` to
+   `files/all/folder`. It was also needed to use the router query object instead of the params to
+   store the current page pagination information.
+
+   https://github.com/owncloud/web/issues/5714
+   https://github.com/owncloud/web/pull/5715
 
 Changelog for ownCloud Web [4.1.0] (2021-08-20)
 =======================================
@@ -927,8 +1067,8 @@ Details
 * Enhancement - Visibility observer: [#5194](https://github.com/owncloud/web/pull/5194)
 
    By adding a visibility observer, we now only load image previews for those files that are close
-   to the user's viewport. It is also equiped with a short waiting period so scrolling doesn't lead
-   to an overload of requests.
+   to the user's viewport. It is also equipped with a short waiting period so scrolling doesn't
+   lead to an overload of requests.
 
    https://github.com/owncloud/web/pull/5194
 
@@ -1273,7 +1413,7 @@ Details
 
 * Enhancement - Use ODS translations: [#4934](https://github.com/owncloud/web/pull/4934)
 
-   Some ODS components were using their own translation strings which were availabel in the ODS
+   Some ODS components were using their own translation strings which were available in the ODS
    but not exported there/imported in the web project. Now, we import the translation strings
    from the ODS package and merge them with the web translations.
 
@@ -1714,7 +1854,7 @@ Details
 
    The label in the text editor that displays the path of the active file was removing the first
    character instead of trimming leading slashes. This might have lead to situations where
-   actual characters were removed. We fixed this by only removing leading slahes instead of
+   actual characters were removed. We fixed this by only removing leading slashes instead of
    blindly removing the first character.
 
    https://github.com/owncloud/web/pull/4391
@@ -1886,7 +2026,7 @@ Details
 * Enhancement - Added support for OpenID Connect Dynamic Client Registration 1.0: [#4286](https://github.com/owncloud/web/pull/4286)
 
    OwnCloud Web can use the dynamic client registration protocol to exchange client id and client
-   secret woth the IdP
+   secret with the IdP
 
    https://github.com/owncloud/web/pull/4286
    https://github.com/owncloud/web/pull/4306
@@ -2487,7 +2627,7 @@ Details
 * Change - Do not display outline when the files list is focused: [#3747](https://github.com/owncloud/web/issues/3747)
 
    The files list was displaying outline when it received focus after a click. Since the focus is
-   meant only programatically, the outline was not supposed to be displayed.
+   meant only programmatically, the outline was not supposed to be displayed.
 
    https://github.com/owncloud/web/issues/3747
    https://github.com/owncloud/web/issues/3551
@@ -3092,7 +3232,7 @@ Details
    A recent library update in ODS for the recycle scroller seem to have changed the logic or
    calculation of the height.
 
-   This fix accomodates for that change and restores the row height to a correct value.
+   This fix accommodates for that change and restores the row height to a correct value.
 
    The shared file lists are now more responsive, the collaborators/owner and share time columns
    are now hidden on small screens.
@@ -3335,7 +3475,7 @@ Details
    We've stopped escaping translations which contained resource names or user names because
    they can contain special characters which were then not properly displayed. We've done this
    only with translations which are using mustache syntax which does escaping on its own so we
-   don't introduce poteintial XSS vulnerability. For all other translations, we've explicitly
+   don't introduce potential XSS vulnerability. For all other translations, we've explicitly
    set the escaping.
 
    https://github.com/owncloud/web/pull/3032
@@ -3578,7 +3718,7 @@ Details
 
 * Enhancement - Internal links in app switcher: [#2838](https://github.com/owncloud/web/issues/2838)
 
-   In case extensions integrates itself into Phonix core and not as own SPA we need to handle the
+   In case extensions integrates itself into Phoenix core and not as own SPA we need to handle the
    navigation via router-link inside of Web core SPA.
 
    https://github.com/owncloud/web/issues/2838

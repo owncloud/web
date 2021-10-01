@@ -56,8 +56,8 @@ const config = {
     default: {
       launch_url: LOCAL_LAUNCH_URL,
       globals: {
-        waitForConditionTimeout: 20000,
-        waitForNegativeConditionTimeout: 1000,
+        waitForConditionTimeout: 5000,
+        waitForNegativeConditionTimeout: 300,
         waitForConditionPollInterval: 10,
         filesForUpload: REMOTE_UPLOAD_DIR,
         mountedUploadDir: LOCAL_UPLOAD_DIR,

@@ -9,7 +9,7 @@ Feature: rename files
     And user "Alice" has uploaded file "data.zip" to "data.zip"
     And user "Alice" has uploaded file "lorem-big.txt" to "lorem-big.txt"
     And user "Alice" has logged in using the webUI
-    And the user has browsed to the files page
+    And the user reloads the current page of the webUI
 
   @smokeTest @ocisSmokeTest @disablePreviews
   Scenario Outline: Rename a file

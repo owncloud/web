@@ -1,4 +1,4 @@
-@ocis-product-issue-277 @federated-server-needed
+@ocis-product-issue-277 @federated-server-needed @disablePreviews
 Feature: Federation Sharing - sharing with users on other cloud storages
   As a user
   I want to share files with any users on other cloud storages
@@ -321,7 +321,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And user "Alice" has created folder "simple-folder/simple-empty-folder"
     And user "Alice" has created file "simple-folder/lorem.txt"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
+    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
     And user "Brian" has shared folder "Shares/simple-folder" with user "Carol"
     When the user re-logs in as "Brian" using the webUI
     And the user opens folder "Shares/simple-folder" directly on the webUI
@@ -345,7 +345,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And user "Alice" has created folder "simple-folder/simple-empty-folder"
     And user "Alice" has created file "simple-folder/lorem.txt"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
+    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
     When the user re-logs in as "Brian" using the webUI
     And the user opens folder "Shares/simple-folder" directly on the webUI
     And the user shares folder "simple-empty-folder" with remote user "Alice" as "Editor" using the webUI
@@ -431,7 +431,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     Given user "Alice" has created folder "simple-folder" on remote server
     And user "Alice" from remote server has shared "/simple-folder" with user "Alice" from local server
     And user "Alice" from server "LOCAL" has accepted the last pending share
-    When the user browses to the shared-with-me page using the webUI
+    When the user browses to the shared-with-me page
     # delete below line after the issue has been fixed
     Then folder "simple-folder" should not be listed on the webUI
     # uncomment below line after the issue has been fixed

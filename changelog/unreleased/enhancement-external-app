@@ -1,0 +1,6 @@
+Enhancement: Add wrapper app for external apps
+
+We have added a `external` app that can render apps 
+coming from the oCIS AppProvider via iFrame.
+
+https://github.com/owncloud/web/pull/5805

@@ -132,7 +132,7 @@ function createWrapper(selectedFiles = [resourceForestJpg]) {
             currentPage: 1
           },
           getters: {
-            activeFiles: () => [...resources],
+            activeFilesCurrentPage: () => [...resources],
             inProgress: () => [null],
             currentFolder: () => '/',
             pages: () => 4,

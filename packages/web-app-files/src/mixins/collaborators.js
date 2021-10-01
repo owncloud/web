@@ -24,13 +24,14 @@ export default {
     advancedRole() {
       const advancedRole = {
         name: 'advancedRole',
-        label: this.$gettext('Advanced permissions'),
+        label: this.$gettext('Custom permissions'),
+        inlineLabel: this.$gettext('custom permissions'),
         description: this.$gettext('Set detailed permissions'),
         permissions: ['read'],
         additionalPermissions: {
           update: {
             name: 'update',
-            description: this.$gettext('Allow editing')
+            description: this.$gettext('Edit')
           }
         }
       }
@@ -39,18 +40,18 @@ export default {
         const permissions = advancedRole.additionalPermissions
         permissions.create = {
           name: 'create',
-          description: this.$gettext('Allow creating')
+          description: this.$gettext('Create')
         }
         permissions.delete = {
           name: 'delete',
-          description: this.$gettext('Allow deleting')
+          description: this.$gettext('Delete')
         }
       }
 
       if (!this.isOcis) {
         advancedRole.additionalPermissions.share = {
           name: 'share',
-          description: this.$gettext('Allow sharing')
+          description: this.$gettext('Share')
         }
       }
 

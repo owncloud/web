@@ -230,10 +230,6 @@ export default {
     state.versions = versions
   },
 
-  SET_APP_SIDEBAR_ACTIVE_PANEL(state, accordion) {
-    state.appSidebarActivePanel = accordion
-  },
-
   TRIGGER_PUBLIC_LINK_EDIT(state, link) {
     // Adjust link for the edit
     link = {
@@ -243,7 +239,7 @@ export default {
       hasPassword: link.password,
       expireDate:
         link.expiration !== null
-          ? DateTime.fromHTTP(link.expiration)
+          ? DateTime.fromISO(link.expiration)
               .endOf('day')
               .toISO()
           : null
@@ -327,20 +323,10 @@ export default {
     Vue.set(fileSource, index, newResource)
   },
 
-  UPDATE_CURRENT_PAGE(state, page) {
-    state.currentPage = parseInt(page)
-  },
-
   SET_HIDDEN_FILES_VISIBILITY(state, value) {
     state.areHiddenFilesShown = value
 
     window.localStorage.setItem('oc_hiddenFilesShown', value)
-  },
-
-  SET_FILES_PAGE_LIMIT(state, limit) {
-    state.filesPageLimit = limit
-
-    window.localStorage.setItem('oc_filesPageLimit', limit)
   }
 }
 

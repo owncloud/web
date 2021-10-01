@@ -3,7 +3,7 @@ import { mapGetters } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters('Files', ['activeFilesCount'])
+    ...mapGetters('Files', ['totalFilesCount'])
   },
   methods: {
     accessibleBreadcrumb_focusAndAnnounceBreadcrumb(sameRoute) {
@@ -16,7 +16,7 @@ export default {
         return
       }
 
-      const itemCount = this.activeFilesCount.files + this.activeFilesCount.folders
+      const itemCount = this.totalFilesCount.files + this.totalFilesCount.folders
       const announcement = this.$ngettext(
         'This folder contains %{ itemCount } item.',
         'This folder contains %{ itemCount } items.',
@@ -24,9 +24,7 @@ export default {
       )
 
       const translatedHint =
-        this.activeFilesCount.folders > 0 || this.activeFilesCount.files > 0
-          ? announcement
-          : this.$gettext('This folder has no content.')
+        itemCount > 0 ? announcement : this.$gettext('This folder has no content.')
 
       document.querySelectorAll('.oc-breadcrumb-sr').forEach(el => el.remove())
 

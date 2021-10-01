@@ -20,9 +20,9 @@ Feature: Sharing files and folders with internal users
     And group "grp1" has been created
     And user "Alice" has been added to group "grp1"
     And user "Carol" has shared file "testimage.jpg" with user "Alice"
-    And user "Alice" has accepted the share "testimage.jpg" offered by user "Carol"
+    And user "Alice" has accepted the share "Shares/testimage.jpg" offered by user "Carol"
     And user "Carol" has shared folder "simple-folder" with user "Alice"
-    And user "Alice" has accepted the share "simple-folder" offered by user "Carol"
+    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Carol"
     And the administrator has enabled exclude groups from sharing
     And the administrator has excluded group "grp1" from sharing
     When user "Alice" logs in using the webUI
@@ -40,7 +40,7 @@ Feature: Sharing files and folders with internal users
     And user "Carol" has created folder "common"
     And user "Carol" has moved file "testimage.jpg" to "common/testimage.jpg"
     And user "Carol" has shared folder "common" with user "Alice"
-    And user "Alice" has accepted the share "common" offered by user "Carol"
+    And user "Alice" has accepted the share "Shares/common" offered by user "Carol"
     And the administrator has enabled exclude groups from sharing
     And the administrator has excluded group "grp1" from sharing
     And user "Alice" has logged in using the webUI
@@ -58,7 +58,7 @@ Feature: Sharing files and folders with internal users
     And user "Carol" has created folder "common"
     And user "Carol" has created folder "common/inside-common"
     And user "Carol" has shared folder "common" with user "Alice"
-    And user "Alice" has accepted the share "common" offered by user "Carol"
+    And user "Alice" has accepted the share "Shares/common" offered by user "Carol"
     And the administrator has enabled exclude groups from sharing
     And the administrator has excluded group "grp1" from sharing
     And user "Alice" has logged in using the webUI
@@ -85,7 +85,7 @@ Feature: Sharing files and folders with internal users
     And user "Carol" has been created with default attributes and without skeleton files
     And user "Brian" has uploaded file "testavatar.jpg" to "testimage.jpg"
     And user "Brian" has shared file "/testimage.jpg" with user "Alice"
-    And user "Alice" has accepted the share "testimage.jpg" offered by user "Brian"
+    And user "Alice" has accepted the share "Shares/testimage.jpg" offered by user "Brian"
     And the administrator has enabled exclude groups from sharing
     And the administrator has excluded group "grp1" from sharing
     And user "Alice" has logged in using the webUI

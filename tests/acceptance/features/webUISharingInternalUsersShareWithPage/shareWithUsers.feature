@@ -18,9 +18,9 @@ Feature: Shares in share-with pages
     And user "Brian" has renamed folder "simple-folder" to "new-simple-folder"
     And user "Brian" has renamed file "lorem.txt" to "ipsum.txt"
     And user "Brian" has shared file "ipsum.txt" with user "Alice"
-    And user "Alice" has accepted the share "ipsum.txt" offered by user "Brian"
+    And user "Alice" has accepted the share "Shares/ipsum.txt" offered by user "Brian"
     And user "Brian" has shared folder "new-simple-folder" with user "Alice"
-    And user "Alice" has accepted the share "new-simple-folder" offered by user "Brian"
+    And user "Alice" has accepted the share "Shares/new-simple-folder" offered by user "Brian"
     And user "Alice" has logged in using the webUI
     When the user browses to the shared-with-me page
     Then file "ipsum.txt" should be listed on the webUI
@@ -32,11 +32,11 @@ Feature: Shares in share-with pages
     And user "Brian" has created file "lorem.txt"
     And user "Brian" has logged in using the webUI
     And user "Brian" has shared file "lorem.txt" with user "Alice"
-    And user "Alice" has accepted the share "lorem.txt" offered by user "Brian"
+    And user "Alice" has accepted the share "Shares/lorem.txt" offered by user "Brian"
     And user "Brian" has shared folder "simple-folder" with user "Alice"
-    And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
+    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian"
     And user "Brian" has shared folder "simple-folder" with user "Carol"
-    And user "Carol" has accepted the share "simple-folder" offered by user "Brian"
+    And user "Carol" has accepted the share "Shares/simple-folder" offered by user "Brian"
     When the user browses to the shared-with-others page
     Then the following resources should have the following collaborators
       | fileName      | expectedCollaborators |
@@ -70,9 +70,9 @@ Feature: Shares in share-with pages
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has created file "data.zip"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
+    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
     And user "Brian" has logged in using the webUI
-    When the user browses to the shared-with-me page using the webUI
+    When the user browses to the shared-with-me page
     Then folder "simple-folder" should be listed on the webUI
     But file "data.zip" should not be listed on the webUI
 
@@ -80,10 +80,10 @@ Feature: Shares in share-with pages
   Scenario: clicking a folder on shared-with-me page jumps to the main file list inside the folder
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
+    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
     And user "Alice" has created file "simple-folder/collaborate-on-this.txt"
     And user "Brian" has logged in using the webUI
-    When the user browses to the shared-with-me page using the webUI
+    When the user browses to the shared-with-me page
     And the user opens folder "simple-folder" using the webUI
     Then file "collaborate-on-this.txt" should be listed on the webUI
 
@@ -91,9 +91,9 @@ Feature: Shares in share-with pages
   Scenario: unsharing an entry on the shared-with-me page unshares from self
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
+    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
     And user "Brian" has logged in using the webUI
-    When the user browses to the shared-with-me page using the webUI
+    When the user browses to the shared-with-me page
     And the user unshares folder "simple-folder" using the webUI
     And the user browses to the folder "Shares" on the files page
     Then folder "simple-folder" should not be listed on the webUI
@@ -103,15 +103,16 @@ Feature: Shares in share-with pages
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has created file "lorem.txt"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
+    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
     And user "Alice" has shared file "lorem.txt" with user "Brian"
-    And user "Brian" has accepted the share "lorem.txt" offered by user "Alice"
+    And user "Brian" has accepted the share "Shares/lorem.txt" offered by user "Alice"
     And user "Brian" has logged in using the webUI
-    And the user browses to the shared-with-me page using the webUI
+    And the user browses to the shared-with-me page in accepted shares view
     When the user batch unshares these files using the webUI
       | name          |
       | simple-folder |
       | lorem.txt     |
+    And the user browses to the shared-with-me page in declined shares view
     Then the unshared elements should be in declined state on the webUI
 
   @issue-3040 @issue-4113 @ocis-reva-issue-39
@@ -120,7 +121,7 @@ Feature: Shares in share-with pages
     And user "Alice" has created folder "simple-folder/simple-empty-folder"
     And user "Carol" has been created with default attributes and without skeleton files
     And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
+    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
     And user "Brian" has shared folder "Shares/simple-folder/simple-empty-folder" with user "Carol"
     And user "Brian" has favorited element "Shares/simple-folder/simple-empty-folder"
     And user "Brian" has logged in using the webUI
@@ -135,7 +136,7 @@ Feature: Shares in share-with pages
   Scenario: see resource owner for direct shares in "shared with me"
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
+    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
     And user "Brian" has logged in using the webUI
     When the user browses to the shared-with-me page
     And the user opens the share dialog for folder "simple-folder" using the webUI
@@ -175,7 +176,7 @@ Feature: Shares in share-with pages
   Scenario: collaborators list contains the current user when they are a receiver of the resource
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
+    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
     And user "Brian" has logged in using the webUI
     When the user opens folder "Shares" using the webUI
     And the user opens the share dialog for folder "simple-folder" using the webUI
@@ -187,19 +188,18 @@ Feature: Shares in share-with pages
     And user "Brian" has been added to group "grp1"
     And user "Alice" has created folder "simple-folder"
     And user "Alice" has shared folder "simple-folder" with user "Brian" with "read" permission
-    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
+    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
     And user "Alice" has shared folder "simple-folder" with group "grp1" with "read,update,create,delete" permissions
-    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
+    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
     When user "Brian" logs in using the webUI
     And the user opens folder "Shares" using the webUI
-    Then user "Brian Murphy" should be listed as "Advanced permissions" in the collaborators list for folder "simple-folder (2)" on the webUI
-
+    Then user "Brian Murphy" should be listed as "Custom permissions" in the collaborators list for folder "simple-folder (2)" on the webUI
 
   Scenario: share a file with another internal user via collaborators quick action
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has logged in using the webUI
     When the user shares resource "simple-folder" with user "Brian Murphy" using the quick action on the webUI
-    And user "Brian" accepts the share "simple-folder" offered by user "Alice" using the sharing API
+    And user "Brian" accepts the share "Shares/simple-folder" offered by user "Alice" using the sharing API
     Then user "Brian Murphy" should be listed as "Viewer" in the collaborators list for folder "simple-folder" on the webUI
     And user "Brian" should have received a share with these details:
       | field       | value                 |

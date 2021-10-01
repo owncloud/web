@@ -99,7 +99,8 @@ export default {
   mixins: [MixinRoutes, MixinDeleteResources],
 
   computed: {
-    ...mapGetters('Files', ['selectedFiles', 'currentFolder', 'activeFiles']),
+    ...mapGetters('Files', ['selectedFiles', 'currentFolder', 'activeFilesCurrentPage']),
+    ...mapGetters(['homeFolder']),
 
     emptyTrashbinButtonText() {
       return this.selectedFiles.length < 1
@@ -176,7 +177,7 @@ export default {
     },
 
     isEmpty() {
-      return this.activeFiles.length < 1
+      return this.activeFilesCurrentPage.length < 1
     }
   },
 
@@ -215,7 +216,7 @@ export default {
           this.showMessage({
             title: this.$gettext('All deleted files were removed')
           })
-          this.removeFilesFromTrashbin(this.activeFiles)
+          this.removeFilesFromTrashbin(this.activeFilesCurrentPage)
         })
         .catch(error => {
           this.showMessage({
@@ -229,12 +230,13 @@ export default {
     triggerLocationPicker(action) {
       const resources = cloneStateObject(this.selectedFiles)
       const context = this.isPublicPage ? 'public' : 'private'
+      const item = this.currentFolder.path || this.homeFolder
 
       this.$router.push({
         name: 'files-location-picker',
         params: {
           context,
-          item: this.currentFolder.path,
+          item,
           action
         },
         query: {

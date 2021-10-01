@@ -21,10 +21,9 @@
         class="files-table"
         :class="{ 'files-table-squashed': !sidebarClosed }"
         :are-thumbnails-displayed="displayThumbnails"
-        :resources="activeFiles"
+        :resources="activeFilesCurrentPage"
         :target-route="targetRoute"
         :header-position="headerPosition"
-        @showDetails="$_mountSideBar_showDefaultPanel"
         @fileClick="$_fileActions_triggerDefaultAction"
         @rowMounted="rowMounted"
       >
@@ -34,7 +33,7 @@
         <template #footer>
           <pagination />
           <list-info
-            v-if="activeFiles.length > 0"
+            v-if="activeFilesCurrentPage.length > 0"
             class="uk-width-1-1 oc-my-s"
             :files="totalFilesCount.files"
             :folders="totalFilesCount.folders"
@@ -88,7 +87,7 @@ export default {
     ...mapState('Files', ['files']),
     ...mapGetters('Files', [
       'highlightedFile',
-      'activeFiles',
+      'activeFilesCurrentPage',
       'selectedFiles',
       'inProgress',
       'totalFilesCount'
@@ -106,7 +105,7 @@ export default {
     },
 
     isEmpty() {
-      return this.activeFiles.length < 1
+      return this.activeFilesCurrentPage.length < 1
     },
 
     uploadProgressVisible() {
@@ -199,7 +198,6 @@ export default {
       }
 
       this.LOAD_FILES({ currentFolder: null, files: resources })
-
       this.loading = false
     },
 

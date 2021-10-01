@@ -115,18 +115,22 @@ export function aggregateResourceShares(
   shares.sort((a, b) => a.path.localeCompare(b.path))
 
   const resources = []
-  let prev = null
+  let previousShare = null
   for (const share of shares) {
-    if (prev?.storage_id === share.storage_id && prev?.file_source === share.file_source) {
+    if (
+      previousShare?.storage_id === share.storage_id &&
+      previousShare?.file_source === share.file_source
+    ) {
       if (userShareTypes.includes(share.share_type)) {
-        prev.sharedWith.push({
+        previousShare.sharedWith.push({
           username: share.share_with,
+          name: share.share_with_displayname,
           displayName: share.share_with_displayname,
           avatar: undefined,
           shareType: share.share_type
         })
       } else if (share.share_type === shareTypes.link) {
-        prev.sharedWith.push({
+        previousShare.sharedWith.push({
           name: share.name || share.token,
           link: true,
           shareType: share.share_type
@@ -141,6 +145,7 @@ export function aggregateResourceShares(
         {
           username: share.share_with,
           displayName: share.share_with_displayname,
+          name: share.share_with_displayname,
           avatar: undefined,
           shareType: share.share_type
         }
@@ -155,7 +160,7 @@ export function aggregateResourceShares(
       ]
     }
 
-    prev = share
+    previousShare = share
     resources.push(share)
   }
 
@@ -179,7 +184,8 @@ export function buildSharedResource(share, incomingShares = false, allowSharePer
       {
         username: share.uid_owner,
         displayName: share.displayname_owner,
-        avatar: undefined
+        avatar: undefined,
+        shareType: shareTypes.user
       }
     ]
 
@@ -314,6 +320,7 @@ export function buildCollaboratorShare(s, file, allowSharePerm) {
         displayName: s.displayname_file_owner,
         additionalInfo: _fixAdditionalInfo(s.additional_info_file_owner)
       }
+      share.stime = s.stime
       // TODO: Refactor to work with roles / prepare for roles API
       share.customPermissions = {
         update: s.permissions & permissionsBitmask.update,

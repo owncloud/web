@@ -90,9 +90,9 @@ Feature: Sharing files and folders with internal users with different permission
       | role                 | displayed-role       | extra-permissions             | displayed-permissions | permissions                         |
       | Viewer               | Viewer               | ,                             | ,                     | read, share                         |
       | Editor               | Editor               | ,                             | ,                     | all                                 |
-      | Advanced permissions | Advanced permissions | share, create                 | share, create         | read, share, create                 |
-      | Advanced permissions | Advanced permissions | update, share                 | share, update         | read, update, share                 |
-      | Advanced permissions | Editor               | delete, share, create, update | ,                     | read, share, delete, update, create |
+      | Custom permissions | Custom permissions | share, create                 | share, create         | read, share, create                 |
+      | Custom permissions | Custom permissions | update, share                 | share, update         | read, update, share                 |
+      | Custom permissions | Editor               | delete, share, create, update | ,                     | read, share, delete, update, create |
 
 
   Scenario Outline: Change permissions of the previously shared file
@@ -143,14 +143,14 @@ Feature: Sharing files and folders with internal users with different permission
       | role                 | displayed-role | collaborators-permissions | displayed-permissions | permissions         |
       | Viewer               | Viewer         | ,                         | ,                     | read, share         |
       | Editor               | Editor         | ,                         | ,                     | read, share, update |
-      | Advanced permissions | Editor         | share, update             | ,                     | read, share, update |
+      | Custom permissions | Editor         | share, update             | ,                     | read, share, update |
 
 
   Scenario: Share a folder without share permissions using API and check if it is listed on the collaborators list for original owner
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions
     And user "Brian" has logged in using the webUI
     When the user opens the share dialog for folder "simple-folder" using the webUI
-    Then user "Alice Hansen" should be listed as "Advanced permissions" in the collaborators list for folder "simple-folder" on the webUI
+    Then user "Alice Hansen" should be listed as "Custom permissions" in the collaborators list for folder "simple-folder" on the webUI
     And no custom permissions should be set for collaborator "Alice Hansen" for folder "simple-folder" on the webUI
 
 
@@ -175,7 +175,7 @@ Feature: Sharing files and folders with internal users with different permission
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share, delete" permissions
     And user "Alice" has logged in using the webUI
     When the user browses to the folder "simple-folder" on the files page
-    And the user shares folder "simple-empty-folder" with user "Carol King" as "Advanced permissions" with permissions "share, delete, update" using the webUI
+    And the user shares folder "simple-empty-folder" with user "Carol King" as "Custom permissions" with permissions "share, delete, update" using the webUI
     Then the error message with header "Error while sharing." should be displayed on the webUI
     And as "Carol" folder "simple-empty-folder" should not exist
 
@@ -186,7 +186,7 @@ Feature: Sharing files and folders with internal users with different permission
     And user "Alice" has shared folder "simple-folder" with user "Carol" with "share, delete" permissions
     And user "Alice" has logged in using the webUI
     When the user browses to the folder "simple-folder" on the files page
-    And the user shares folder "simple-empty-folder" with user "Carol King" as "Advanced permissions" with permissions "share, delete, update, create" using the webUI
+    And the user shares folder "simple-empty-folder" with user "Carol King" as "Custom permissions" with permissions "share, delete, update, create" using the webUI
     Then the error message with header "Error while sharing." should be displayed on the webUI
     And as "Carol" folder "simple-empty-folder" should not exist
 
@@ -197,7 +197,7 @@ Feature: Sharing files and folders with internal users with different permission
     And user "Alice" has shared folder "simple-folder" with user "Carol" with "share, delete" permissions
     And user "Alice" has logged in using the webUI
     When the user browses to the folder "simple-folder" on the files page
-    And the user shares folder "simple-empty-folder" with user "Carol King" as "Advanced permissions" with permissions "share, delete, create, update" using the webUI
+    And the user shares folder "simple-empty-folder" with user "Carol King" as "Custom permissions" with permissions "share, delete, create, update" using the webUI
     Then user "Carol" should have received a share with these details:
       | field       | value                |
       | uid_owner   | Alice                |

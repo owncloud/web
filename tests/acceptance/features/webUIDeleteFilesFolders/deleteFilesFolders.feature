@@ -6,7 +6,7 @@ Feature: deleting files and folders
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files
     And user "Alice" has logged in using the webUI
-    And the user has browsed to the files page
+    And the user reloads the current page of the webUI
 
   @smokeTest @ocisSmokeTest @disablePreviews
   Scenario: Delete files & folders one by one and check its existence after page reload
@@ -233,12 +233,15 @@ Feature: deleting files and folders
 
   @issue-5435
   Scenario: Delete a file and folder from shared with me page
-    Given user "Brian" has been created with default attributes and without skeleton files
+    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
+    And user "Brian" has been created with default attributes and without skeleton files
     And user "Brian" has created folder "simple-folder"
     And user "Brian" has created file "lorem.txt"
     And user "Brian" has shared folder "simple-folder" with user "Alice"
     And user "Brian" has shared file "lorem.txt" with user "Alice"
     And the user has browsed to the shared-with-me page
+    When the user accepts share "simple-folder" offered by user "Brian Murphy" using the webUI
+    When the user accepts share "lorem.txt" offered by user "Brian Murphy" using the webUI
     When the user unshares folder "simple-folder" using the webUI
     And the user unshares file "lorem.txt" using the webUI
     Then as "Alice" folder "simple-folder" should not exist

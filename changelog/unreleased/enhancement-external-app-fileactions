@@ -1,0 +1,7 @@
+Enhancement: Add AppProvider actions to fileactions
+
+If the AppProvider within oCIS communicates a matching application 
+for the mime type of a file, there are now additional actions in 
+the default actions and actions in both the contextmenu and the right sidebar.
+
+https://github.com/owncloud/web/pull/5805

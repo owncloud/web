@@ -1,0 +1,19 @@
+Enhancement: Update ODS to 10.0.0
+
+We updated the ownCloud Design System to version 10.0.0. Please refer to the full changelog in the ODS release (linked) for more details. Summary:
+- Bugfix - Fix search for options provided as objects: https://github.com/owncloud/owncloud-design-system/pull/1602
+- Bugfix - Contextmenu button triggered wrong event: https://github.com/owncloud/owncloud-design-system/pull/1610
+- Bugfix - Use pointer cursor for OcSelect actions: https://github.com/owncloud/owncloud-design-system/pull/1604
+- Bugfix - Reset droptarget background color in OcTableFiles: https://github.com/owncloud/owncloud-design-system/pull/1625
+- Enhancement - OcTableFiles Contextmenu Tooltip: https://github.com/owncloud/owncloud-design-system/pull/1610
+- Enhancement - Highlight droptarget in OcTableFiles: https://github.com/owncloud/owncloud-design-system/pull/1610
+- Enhancement - Remove "Showdetails" button in OcTableFiles: https://github.com/owncloud/owncloud-design-system/pull/1610
+- Enhancement - Switch filesize calculation base: https://github.com/owncloud/owncloud-design-system/pull/1598
+- Change - Use route query to store active page: https://github.com/owncloud/owncloud-design-system/pull/1626
+- Change - Refactor OcAvatarGroup and rename to OcAvatars: https://github.com/owncloud/owncloud-design-system/pull/5736
+- Change - Add label prop to OcSelect: https://github.com/owncloud/owncloud-design-system/pull/1633
+
+https://github.com/owncloud/web/pull/5725
+https://github.com/owncloud/web/pull/5769
+https://github.com/owncloud/owncloud-design-system/releases/tag/v9.3.0
+https://github.com/owncloud/owncloud-design-system/releases/tag/v10.0.0

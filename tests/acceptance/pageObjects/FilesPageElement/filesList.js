@@ -16,7 +16,10 @@ module.exports = {
     openSharingDialog: async function(resource) {
       await this.openSideBar(resource)
       await appSideBar.activatePanel('people')
-      return await this.click('@sharedWithAvatars')
+      return await this.click({
+        selector: '@sharedWithToggleButton',
+        timeout: 200
+      })
     },
     /**
      * @param {string} resource
@@ -231,6 +234,10 @@ module.exports = {
       if (await appSideBar.isSideBarOpenForResource(resource, elementType)) {
         return appSideBar
       }
+
+      // closing it since otherwise tests fail on mobile
+      // on desktop sidebar content gets replaced with new resource
+      await appSideBar.closeSidebarIfOpen()
 
       // open the sidebar for the resource
       await this.clickRow(resource, elementType)
@@ -676,7 +683,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     contextMenuPanel: {
-      selector: 'ul#oc-files-context-actions'
+      selector: '#oc-files-context-menu'
     },
     /**
      * This element is concatenated as child of @see fileRowByResourcePath
@@ -745,8 +752,9 @@ module.exports = {
     btnToggleSideBar: {
       selector: '#files-toggle-sidebar'
     },
-    sharedWithAvatars: {
-      selector: '[data-testid="shared-with-avatars"]'
+    sharedWithToggleButton: {
+      selector: '//*[contains(@class, "sharee-avatars")]/ancestor::button',
+      locateStrategy: 'xpath'
     }
   }
 }

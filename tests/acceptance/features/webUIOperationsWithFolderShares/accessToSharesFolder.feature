@@ -21,7 +21,7 @@ Feature: Upload into a folder Shares
   Scenario: the Shares folder exists after accepting the first shared file
     Given user "Brian" has created file "lorem.txt"
     And user "Brian" has shared file "lorem.txt" with user "Alice" with "all" permissions
-    And user "Alice" has accepted the share "lorem.txt" offered by user "Brian"
+    And user "Alice" has accepted the share "Shares/lorem.txt" offered by user "Brian"
     When user "Alice" logs in using the webUI
     Then folder "Shares" should be listed on the webUI
 
@@ -47,7 +47,7 @@ Feature: Upload into a folder Shares
   Scenario: upload of a file into a folder Shares in oc10
     Given user "Brian" has created file "lorem.txt"
     And user "Brian" has shared file "lorem.txt" with user "Alice" with "all" permissions
-    And user "Alice" has accepted the share "lorem.txt" offered by user "Brian"
+    And user "Alice" has accepted the share "Shares/lorem.txt" offered by user "Brian"
     And user "Alice" has logged in using the webUI
     And the user has opened folder "Shares"
     When the user uploads file "new-lorem.txt" using the webUI
@@ -57,7 +57,7 @@ Feature: Upload into a folder Shares
   Scenario: upload of a folder into a folder Shares in oc 10
     Given user "Brian" has created file "lorem.txt"
     And user "Brian" has shared file "lorem.txt" with user "Alice" with "all" permissions
-    And user "Alice" has accepted the share "lorem.txt" offered by user "Brian"
+    And user "Alice" has accepted the share "Shares/lorem.txt" offered by user "Brian"
     And user "Alice" has logged in using the webUI
     And the user has opened folder "Shares"
     When the user uploads folder "PARENT" using the webUI
@@ -69,7 +69,7 @@ Feature: Upload into a folder Shares
     Given user "Brian" has been created with default attributes and without skeleton files
     And user "Brian" has created file "lorem.txt"
     And user "Brian" has shared file "lorem.txt" with user "Alice" with "all" permissions
-    And user "Alice" has accepted the share "lorem.txt" offered by user "Brian"
+    And user "Alice" has accepted the share "Shares/lorem.txt" offered by user "Brian"
     And user "Alice" has logged in using the webUI
     And the user has opened folder "Shares"
     When the user creates a folder with the name "New folder" using the webUI
@@ -79,7 +79,7 @@ Feature: Upload into a folder Shares
   Scenario: move a file or a folder into a folder Shares in oc10 
     Given user "Brian" has created file "lorem.txt"
     And user "Brian" has shared file "lorem.txt" with user "Alice" with "read" permissions
-    And user "Alice" has accepted the share "lorem.txt" offered by user "Brian"
+    And user "Alice" has accepted the share "Shares/lorem.txt" offered by user "Brian"
     And user "Alice" has created folder "NewFolder"
     And user "Alice" has logged in using the webUI
     When the user moves folder "NewFolder" into folder "Shares" using the webUI 
@@ -99,7 +99,7 @@ Feature: Upload into a folder Shares
   Scenario: the user can delete files that they wrote into the folder Shares
     Given user "Brian" has created file "lorem.txt"
     And user "Brian" has shared file "lorem.txt" with user "Alice" with "all" permissions
-    And user "Alice" has accepted the share "lorem.txt" offered by user "Brian"
+    And user "Alice" has accepted the share "Shares/lorem.txt" offered by user "Brian"
     And user "Alice" has logged in using the webUI
     And user "Alice" has created folder "Shares/NewFolder"
     And user "Alice" has uploaded file with content "some data" to "Shares/textfile.txt"

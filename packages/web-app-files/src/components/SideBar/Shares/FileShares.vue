@@ -24,28 +24,25 @@
           data-testid="files-collaborators-no-reshare-permissions-message"
           v-text="noResharePermsMessage"
         />
-        <div class="avatars-wrapper">
-          <h4 v-if="hasSharees" class="shared-with-label" v-text="sharedWithLabel" />
+        <div v-if="hasSharees" class="avatars-wrapper">
+          <h4 class="shared-with-label" v-text="sharedWithLabel" />
           <oc-button
+            v-oc-tooltip="sharedWithTooltip"
             appearance="raw"
-            class="sharee-avatars-button"
             :aria-label="sharedWithTooltip"
-            data-testid="shared-with-avatars"
             @click="onClickSharedWith"
           >
             <oc-avatars
               v-if="!showShareesList"
-              v-oc-tooltip="sharedWithTooltip"
-              :items="collaborators_avatar"
+              :items="collaboratorsAvatar"
               :stacked="true"
               :is-tooltip-displayed="false"
-              aria-hidden="true"
-              class="oc-mb sharee-avatars"
+              class="sharee-avatars"
             />
-            <oc-icon v-else name="close" />
+            <oc-icon v-else name="chevron_up" />
           </oc-button>
         </div>
-        <template v-if="showShareesList">
+        <template v-if="showShareesList || collaboratorsAvatar.length === 0">
           <template v-if="$_ownerAsCollaborator">
             <p id="original-sharing-user" v-translate class="oc-invisible-sr">File owner</p>
             <show-collaborator
@@ -153,12 +150,7 @@ export default {
       'sharesTreeLoading'
     ]),
     ...mapGetters(['isOcis']),
-    ...mapState('Files', [
-      'incomingShares',
-      'incomingSharesLoading',
-      'sharesTree',
-      'appSidebarAccordionContext'
-    ]),
+    ...mapState('Files', ['incomingShares', 'incomingSharesLoading', 'sharesTree']),
     ...mapState(['user']),
 
     $_transitionGroupEnter() {
@@ -175,7 +167,7 @@ export default {
     },
 
     hasSharees() {
-      return this.collaborators_avatar.length > 0
+      return this.collaboratorsAvatar.length > 0
     },
 
     sharedWithTooltip() {
@@ -215,10 +207,13 @@ export default {
         role
       }
     },
-    collaborators_avatar() {
-      const result = []
-      this.collaborators.forEach(c => result.push({ ...c.collaborator, shareType: c.shareType }))
-      return result
+    collaboratorsAvatar() {
+      return this.collaborators.map(c => {
+        return {
+          ...c.collaborator,
+          shareType: c.shareType
+        }
+      })
     },
 
     $_ownerAsCollaborator() {
@@ -351,6 +346,7 @@ export default {
         if (oldItem !== newItem && this.currentView === VIEW_SHOW) {
           this.transitionGroupActive = false
           this.$_reloadShares()
+          this.showShareesList = false
         }
       },
       immediate: true
@@ -422,7 +418,8 @@ export default {
       this.transitionGroupActive = true
       this.deleteShare({
         client: this.$client,
-        share: share
+        share: share,
+        resource: this.highlightedFile
       })
     },
     $_ocCollaborators_showList() {
@@ -463,33 +460,17 @@ export default {
 .avatars-wrapper {
   display: flex;
   justify-content: space-between;
-  align-content: center;
   align-items: center;
   width: 100%;
   height: 40px;
 }
 .shared-with-label {
+  margin: 0;
   font-size: 0.9rem;
   font-weight: 600;
 }
 .sharee-avatars {
   justify-self: flex-end;
-}
-.sharee-avatars-button-wrapper {
-  justify-content: flex-end;
-}
-.avatar-sharees-table {
-  width: 100%;
-  text-align: left;
-
-  tr {
-    height: 1.5rem;
-    text-align: right;
-  }
-
-  th {
-    font-weight: 600;
-  }
 }
 /* TODO: Move to design system */
 .oc-app-side-bar .oc-label {

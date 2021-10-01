@@ -13,7 +13,7 @@ Feature: Restore deleted files/folders
   @smokeTest @ocisSmokeTest
   Scenario: Restore files
     Given user "Alice" has uploaded file "data.zip" to "data.zip"
-    And the user has browsed to the files page
+    And the user has reloaded the current page of the webUI
     When the user deletes file "data.zip" using the webUI
     And the user deletes file "sample,1.txt" using the webUI
     And the user browses to the trashbin page
@@ -264,7 +264,7 @@ Feature: Restore deleted files/folders
     And user "Carol" has created folder "folder-to-share"
     And user "Carol" has uploaded file with content "does-not-matter" to "folder-to-share/fileToShare.txt"
     And user "Carol" has shared folder "folder-to-share" with user "Alice"
-    And user "Alice" has accepted the share "folder-to-share" offered by user "Carol"
+    And user "Alice" has accepted the share "Shares/folder-to-share" offered by user "Carol"
     And the user has reloaded the current page of the webUI
     When the user opens folder "Shares" using the webUI
     And the user opens folder "folder-to-share" using the webUI

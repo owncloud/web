@@ -27,12 +27,9 @@
         </div>
       </transition>
     </div>
-    <oc-spinner
-      v-if="loading"
-      :aria-label="$gettext('Loading media')"
-      class="uk-position-center"
-      size="xlarge"
-    />
+    <div v-if="loading" class="uk-position-center">
+      <oc-spinner :aria-label="$gettext('Loading media')" size="xlarge" />
+    </div>
     <oc-icon
       v-if="failed"
       name="review"

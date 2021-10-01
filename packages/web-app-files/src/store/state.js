@@ -35,11 +35,6 @@ export default {
   actionsInProgress: [],
 
   /**
-   * Right sidebar
-   */
-  appSidebarActivePanel: null,
-
-  /**
    * Public links
    */
   publicLinkInEdit: {
@@ -49,12 +44,6 @@ export default {
     hasPassword: false,
     expireDate: null
   },
-
-  /**
-   * Pagination
-   */
-  currentPage: 1,
-  filesPageLimit: 100,
 
   /**
    * View settings

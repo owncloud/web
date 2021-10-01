@@ -39,5 +39,8 @@ export default {
     PUBLIC_LINK_SHARE_DATETIME: '{http://owncloud.org/ns}public-link-share-datetime',
     PUBLIC_LINK_SHARE_OWNER: '{http://owncloud.org/ns}public-link-share-owner',
     list: path => fixturePublicFiles[path]
+  },
+  shares: {
+    getShares: () => new Promise(resolve => resolve())
   }
 }

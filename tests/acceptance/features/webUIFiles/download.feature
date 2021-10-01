@@ -23,6 +23,6 @@ Feature: download files
 
   Scenario: download file with comma in the filename
     Given user "Alice" has created file "sample,1.txt"
-    When the user browses to the files page
+    When the user has browsed to the files page
     And the user downloads file "sample,1.txt" using the webUI
     Then no message should be displayed on the webUI

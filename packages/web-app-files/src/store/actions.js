@@ -1,6 +1,7 @@
 import PQueue from 'p-queue'
 
 import { getParentPaths } from '../helpers/path'
+import { dirname } from 'path'
 import { shareTypes } from '../helpers/shareTypes'
 import { buildResource, buildShare, buildCollaboratorShare } from '../helpers/resources'
 import { $gettext, $gettextInterpolate } from '../gettext'
@@ -50,7 +51,8 @@ export default {
     const file = payload.file
     const client = payload.client
     const newValue = !file.starred
-    client.files
+
+    return client.files
       .favorite(file.path, newValue)
       .then(() => {
         context.commit('FAVORITE_FILE', file)
@@ -70,7 +72,6 @@ export default {
       }
       const promise = p
         .then(() => {
-          context.commit('SET_APP_SIDEBAR_ACTIVE_PANEL', null)
           context.dispatch('sidebar/close')
           context.commit('REMOVE_FILE', file)
           context.commit('REMOVE_FILE_SELECTION', file)
@@ -108,7 +109,6 @@ export default {
     return Promise.all(promises)
   },
   removeFilesFromTrashbin(context, files) {
-    context.commit('SET_APP_SIDEBAR_ACTIVE_PANEL', null)
     context.dispatch('sidebar/close')
     for (const file of files) {
       context.commit('REMOVE_FILE', file)
@@ -254,7 +254,7 @@ export default {
             )
           )
           context.dispatch('updateCurrentFileShareTypes')
-          context.commit('LOAD_INDICATORS')
+          context.dispatch('loadIndicators', { client, currentFolder: path })
         })
         .catch(e => {
           context.dispatch(
@@ -290,7 +290,7 @@ export default {
           )
         )
         context.dispatch('updateCurrentFileShareTypes')
-        context.commit('LOAD_INDICATORS')
+        context.dispatch('loadIndicators', { client, currentFolder: path })
       })
       .catch(e => {
         context.dispatch(
@@ -307,16 +307,16 @@ export default {
         )
       })
   },
-  deleteShare(context, { client, share }) {
+  deleteShare(context, { client, share, resource }) {
     client.shares
       .deleteShare(share.id)
       .then(() => {
         context.commit('CURRENT_FILE_OUTGOING_SHARES_REMOVE', share)
         context.dispatch('updateCurrentFileShareTypes')
-        context.commit('LOAD_INDICATORS')
+        context.dispatch('loadIndicators', { client, currentFolder: resource.path })
       })
       .catch(e => {
-        console.log(e)
+        console.error(e)
       })
   },
   /**
@@ -435,7 +435,7 @@ export default {
           const link = buildShare(data.shareInfo, null, !context.rootGetters.isOcis)
           context.commit('CURRENT_FILE_OUTGOING_SHARES_ADD', link)
           context.dispatch('updateCurrentFileShareTypes')
-          context.commit('LOAD_INDICATORS')
+          context.dispatch('loadIndicators', { client, currentFolder: path })
           resolve(link)
         })
         .catch(e => {
@@ -457,13 +457,13 @@ export default {
         })
     })
   },
-  removeLink(context, { share, client }) {
+  removeLink(context, { share, client, resource }) {
     client.shares
       .deleteShare(share.id)
       .then(() => {
         context.commit('CURRENT_FILE_OUTGOING_SHARES_REMOVE', share)
         context.dispatch('updateCurrentFileShareTypes')
-        context.commit('LOAD_INDICATORS')
+        context.dispatch('loadIndicators', { client, currentFolder: resource.path })
       })
       .catch(e => context.commit('CURRENT_FILE_OUTGOING_SHARES_ERROR', e.message))
   },
@@ -485,6 +485,9 @@ export default {
   },
 
   async loadIndicators({ dispatch, commit }, { client, currentFolder }) {
+    // kind of bruteforce for now: remove the shares for the current folder and children, reload shares tree for the current folder.
+    // TODO: when we refactor the shares tree we want to modify shares tree nodes incrementally during adding and removing shares, not loading everything new from the backend.
+    commit('SHARESTREE_PRUNE_OUTSIDE_PATH', dirname(currentFolder))
     await dispatch('loadSharesTree', { client, path: currentFolder })
     commit('LOAD_INDICATORS')
   },

@@ -13,7 +13,7 @@ Feature: copy files and folders
     And user "Alice" has created folder "simple-folder"
     And user "Alice" has created folder "strängé नेपाली folder empty"
     And user "Alice" has logged in using the webUI
-    And the user has browsed to the files page
+    And the user reloads the current page of the webUI
     When the user copies file "data.zip" into folder "simple-empty-folder" using the webUI
     Then breadcrumb for folder "simple-empty-folder" should be displayed on the webUI
     And file "data.zip" should be listed on the webUI
@@ -39,7 +39,7 @@ Feature: copy files and folders
     And user "Alice" has uploaded file "new-data.zip" to "testapp.zip"
     And user "Alice" has created folder "simple-empty-folder"
     And user "Alice" has logged in using the webUI
-    And the user has browsed to the files page
+    And the user has reloaded the current page of the webUI
     When the user batch copies these files into folder "simple-empty-folder" using the webUI
       | file_name   |
       | data.zip    |

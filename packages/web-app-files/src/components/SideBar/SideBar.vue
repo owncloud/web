@@ -1,85 +1,100 @@
 <template>
   <div
+    data-testid="files-sidebar"
     :class="{
-      'has-active': !!appSidebarActivePanel
+      'has-active-sub-panel': !!activeAvailablePanelName,
+      'uk-flex uk-flex-center uk-flex-middle': loading
     }"
   >
-    <div
-      v-for="panelMeta in panelMetas"
-      :id="`sidebar-panel-${panelMeta.app}`"
-      :key="`panel-${panelMeta.app}`"
-      ref="panels"
-      :tabindex="appSidebarActivePanel === panelMeta.app ? -1 : false"
-      class="sidebar-panel"
-      :class="{
-        'is-active':
-          appSidebarActivePanel === panelMeta.app || (!appSidebarActivePanel && panelMeta.default),
-        'sidebar-panel--default': panelMeta.default,
-        'sidebar-panel--multiple-selected': areMultipleSelected || isRootFolder
-      }"
-    >
-      <div class="sidebar-panel__header header">
-        <oc-button
-          v-if="!panelMeta.default"
-          class="header__back"
-          appearance="raw"
-          :aria-label="accessibleLabelBack"
-          @click="closePanel"
+    <oc-spinner v-if="loading" />
+    <template v-else>
+      <div
+        v-for="panel in availablePanels"
+        :id="`sidebar-panel-${panel.app}`"
+        :key="`panel-${panel.app}`"
+        ref="panels"
+        :data-testid="`sidebar-panel-${panel.app}`"
+        :tabindex="activePanelName === panel.app ? -1 : false"
+        class="sidebar-panel"
+        :class="{
+          'is-active-sub-panel': activeAvailablePanelName === panel.app,
+          'is-active-default-panel': panel.default && activePanelName === panel.app,
+          'sidebar-panel-default': panel.default,
+          'resource-info-hidden': !isSingleResource
+        }"
+      >
+        <div
+          v-if="[activePanelName, oldPanelName].includes(panel.app)"
+          class="sidebar-panel__header header"
         >
-          <oc-icon name="chevron_left" />
-          {{ defaultPanelMeta.component.title($gettext) }}
-        </oc-button>
+          <oc-button
+            v-if="!panel.default"
+            class="header__back"
+            appearance="raw"
+            :aria-label="accessibleLabelBack"
+            @click="closePanel"
+          >
+            <oc-icon name="chevron_left" />
+            {{ defaultPanel.component.title($gettext) }}
+          </oc-button>
 
-        <div class="header__title">
-          {{ panelMeta.component.title($gettext) }}
+          <h2 class="header__title oc-my-rm">
+            {{ panel.component.title($gettext) }}
+          </h2>
+
+          <oc-button
+            appearance="raw"
+            class="header__close"
+            :aria-label="$gettext('Close file sidebar')"
+            @click="closeSidebar"
+          >
+            <oc-icon name="close" />
+          </oc-button>
         </div>
+        <file-info
+          v-if="isSingleResource"
+          class="sidebar-panel__file_info"
+          :is-content-displayed="isContentDisplayed"
+        />
+        <div class="sidebar-panel__body">
+          <template v-if="isContentDisplayed">
+            <component :is="panel.component" class="sidebar-panel__body-content" />
 
-        <oc-button
-          appearance="raw"
-          class="header__close"
-          :aria-label="$gettext('Close file sidebar')"
-          @click="closeSidebar"
-        >
-          <oc-icon name="close" />
-        </oc-button>
-      </div>
-      <file-info
-        v-if="!areMultipleSelected && !isRootFolder"
-        class="sidebar-panel__file_info"
-        :is-content-displayed="isContentDisplayed"
-      />
-      <div class="sidebar-panel__body">
-        <template v-if="isContentDisplayed">
-          <component
-            :is="panelMeta.component"
-            v-if="[activePanel, oldPanel].includes(panelMeta.app)"
-          />
-
-          <div v-if="panelMeta.default && panelMetas.length > 1" class="sidebar-panel__navigation">
-            <oc-button
-              v-for="panelSelect in panelMetas.filter(p => !p.default)"
-              :id="`sidebar-panel-${panelSelect.app}-select`"
-              :key="`panel-select-${panelSelect.app}`"
-              appearance="raw"
-              @click="openPanel(panelSelect.app)"
+            <div
+              v-if="panel.default && availablePanels.length > 1"
+              class="sidebar-panel__navigation"
             >
-              <oc-icon :name="panelSelect.icon" />
-              {{ panelSelect.component.title($gettext) }}
-              <oc-icon name="chevron_right" />
-            </oc-button>
-          </div>
-        </template>
-        <p v-else>{{ sidebarAccordionsWarningMessage }}</p>
+              <oc-button
+                v-for="panelSelect in availablePanels.filter(p => !p.default)"
+                :id="`sidebar-panel-${panelSelect.app}-select`"
+                :key="`panel-select-${panelSelect.app}`"
+                :data-testid="`sidebar-panel-${panelSelect.app}-select`"
+                appearance="raw"
+                @click="openPanel(panelSelect.app)"
+              >
+                <oc-icon :name="panelSelect.icon" />
+                {{ panelSelect.component.title($gettext) }}
+                <oc-icon name="chevron_right" />
+              </oc-button>
+            </div>
+          </template>
+          <p v-else>{{ sidebarAccordionsWarningMessage }}</p>
+        </div>
       </div>
-    </div>
+    </template>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapMutations, mapState, mapActions } from 'vuex'
-import FileInfo from './FileInfo.vue'
-import MixinRoutes from '../../mixins/routes'
+import { mapGetters, mapState, mapActions } from 'vuex'
 import { VisibilityObserver } from 'web-pkg/src/observer'
+import { DavProperties } from 'web-pkg/src/constants'
+
+import MixinRoutes from '../../mixins/routes'
+import { buildResource } from '../../helpers/resources'
+import { isTrashbinRoute } from '../../helpers/route'
+
+import FileInfo from './FileInfo.vue'
 
 let visibilityObserver
 let hiddenObserver
@@ -87,20 +102,44 @@ let hiddenObserver
 export default {
   components: { FileInfo },
   mixins: [MixinRoutes],
+
+  provide() {
+    const displayedItem = {}
+
+    Object.defineProperty(displayedItem, 'value', {
+      enumerable: true,
+      get: () => this.selectedFile
+    })
+
+    return { displayedItem }
+  },
+
   data() {
     return {
       focused: undefined,
-      oldPanel: null
+      oldPanelName: null,
+      selectedFile: {},
+      loading: false
     }
   },
+
   computed: {
     ...mapGetters('Files', ['highlightedFile', 'selectedFiles', 'currentFolder']),
     ...mapGetters(['fileSideBars', 'capabilities']),
-    ...mapState('Files', ['appSidebarActivePanel']),
-    activePanel() {
-      return this.appSidebarActivePanel || this.defaultPanelMeta.app
+    ...mapState('Files/sidebar', { sidebarActivePanel: 'activePanel' }),
+    activeAvailablePanelName() {
+      if (!this.sidebarActivePanel) {
+        return null
+      }
+      if (!this.availablePanels.map(p => p.app).includes(this.sidebarActivePanel)) {
+        return null
+      }
+      return this.sidebarActivePanel
     },
-    panelMetas() {
+    activePanelName() {
+      return this.activeAvailablePanelName || this.defaultPanel.app
+    },
+    availablePanels() {
       const { panels } = this.fileSideBars.reduce(
         (result, panelGenerator) => {
           const panel = panelGenerator({
@@ -122,17 +161,17 @@ export default {
 
       return panels
     },
-    defaultPanelMeta() {
-      return this.panelMetas.find(panel => panel.default)
+    defaultPanel() {
+      return this.availablePanels.find(panel => panel.default)
     },
     accessibleLabelBack() {
       const translated = this.$gettext('Back to %{panel} panel')
       return this.$gettextInterpolate(translated, {
-        panel: this.defaultPanelMeta.component.title(this.$gettext)
+        panel: this.defaultPanel.component.title(this.$gettext)
       })
     },
     isShareAccepted() {
-      return this.highlightedFile.status === 0
+      return this.highlightedFile?.status === 0
     },
     isContentDisplayed() {
       if (this.isSharedWithMeRoute) {
@@ -148,33 +187,60 @@ export default {
 
       return null
     },
+    isSingleResource() {
+      return !this.areMultipleSelected && !this.isRootFolder
+    },
     areMultipleSelected() {
       return this.selectedFiles && this.selectedFiles.length > 1
     },
     isRootFolder() {
       return !this.highlightedFile?.path
+    },
+    highlightedFileThumbnail() {
+      return this.highlightedFile?.thumbnail
     }
   },
   watch: {
-    activePanel: {
+    activePanelName: {
       handler: function(panel, select) {
         this.$nextTick(() => {
           this.focused = panel ? `#sidebar-panel-${panel}` : `#sidebar-panel-select-${select}`
         })
       },
       immediate: true
+    },
+    highlightedFile(newFile, oldFile) {
+      if (!this.isSingleResource) {
+        return
+      }
+
+      if (newFile.id !== oldFile?.id) {
+        this.fetchFileInfo()
+      }
+    },
+
+    highlightedFileThumbnail(thumbnail) {
+      this.$set(this.selectedFile, 'thumbnail', thumbnail)
     }
   },
+
+  async created() {
+    if (!this.areMultipleSelected) {
+      await this.fetchFileInfo()
+    }
+    this.$nextTick(this.initVisibilityObserver)
+  },
+
   beforeDestroy() {
     visibilityObserver.disconnect()
     hiddenObserver.disconnect()
   },
-  mounted() {
-    this.initVisibilityObserver()
-  },
   methods: {
-    ...mapMutations('Files', ['SET_APP_SIDEBAR_ACTIVE_PANEL']),
-    ...mapActions('Files/sidebar', { closeSidebar: 'close' }),
+    ...mapActions('Files/sidebar', {
+      closeSidebar: 'close',
+      setSidebarPanel: 'setActivePanel',
+      resetSidebarPanel: 'resetActivePanel'
+    }),
 
     initVisibilityObserver() {
       visibilityObserver = new VisibilityObserver({
@@ -193,8 +259,8 @@ export default {
         selector.focus()
       }
 
-      const clearOldPanel = () => {
-        this.oldPanel = null
+      const clearOldPanelName = () => {
+        this.oldPanelName = null
       }
 
       this.$refs.panels.forEach(panel => {
@@ -203,23 +269,50 @@ export default {
           onExit: doFocus
         })
         hiddenObserver.observe(panel, {
-          onExit: clearOldPanel
+          onExit: clearOldPanelName
         })
       })
     },
 
-    setOldPanel() {
-      this.oldPanel = this.activePanel || this.defaultPanelMeta.app
+    setOldPanelName() {
+      this.oldPanelName = this.activePanelName
     },
 
     openPanel(panel) {
-      this.setOldPanel()
-      this.SET_APP_SIDEBAR_ACTIVE_PANEL(panel)
+      this.setOldPanelName()
+      this.setSidebarPanel(panel)
     },
 
     closePanel() {
-      this.setOldPanel()
-      this.SET_APP_SIDEBAR_ACTIVE_PANEL(null)
+      this.setOldPanelName()
+      this.resetSidebarPanel()
+    },
+
+    async fetchFileInfo() {
+      if (!this.highlightedFile) {
+        this.selectedFile = this.highlightedFile
+        return
+      }
+
+      if (isTrashbinRoute(this.$route)) {
+        this.selectedFile = this.highlightedFile
+        return
+      }
+
+      this.loading = true
+      try {
+        const item = await this.$client.files.fileInfo(
+          this.highlightedFile.path,
+          DavProperties.Default
+        )
+
+        this.selectedFile = buildResource(item)
+        this.$set(this.selectedFile, 'thumbnail', this.highlightedFile.thumbnail || null)
+      } catch (error) {
+        this.selectedFile = this.highlightedFile
+        console.error(error)
+      }
+      this.loading = false
     }
   }
 }
@@ -254,25 +347,26 @@ export default {
     transition-duration: 0.001ms !important;
   }
 
-  &--multiple-selected {
+  &.resource-info-hidden {
     grid-template-rows: 50px 1fr;
   }
 
-  &--default {
-    #files-sidebar.has-active & {
+  &.sidebar-panel-default {
+    #files-sidebar.has-active-sub-panel & {
       transform: translateX(-30%);
       visibility: hidden;
     }
   }
 
-  &--default,
-  &.is-active {
+  &.is-active-default-panel,
+  &.is-active-sub-panel {
     visibility: unset;
     transform: translateX(0);
   }
 
   &__header {
     padding: 0 10px;
+    border-bottom: 1px solid var(--oc-color-border);
 
     &.header {
       display: grid;
@@ -299,7 +393,6 @@ export default {
   }
 
   &__file_info {
-    border-top: 1px solid var(--oc-color-border);
     border-bottom: 1px solid var(--oc-color-border);
     background-color: var(--oc-color-background-default);
     padding: 0 10px;

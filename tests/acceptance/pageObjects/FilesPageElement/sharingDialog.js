@@ -135,6 +135,9 @@ module.exports = {
         }
         await this.api.elementIdClick(elementID)
       }
+
+      this.click('@customPermissionsConfirmBtn')
+
       return this
     },
 
@@ -163,6 +166,10 @@ module.exports = {
 
       if (permissions) {
         await this.selectPermissionsOnPendingShare(permissions)
+      }
+
+      if (role === 'Custom permissions' && !permissions) {
+        this.click('@customPermissionsConfirmBtn')
       }
 
       if (days) {
@@ -258,6 +265,7 @@ module.exports = {
      */
     changeCustomPermissionsTo: async function(collaborator, requiredPermissions) {
       await collaboratorDialog.clickEditShare(collaborator)
+      await this.selectRoleForNewCollaborator('Custom permissions')
 
       const requiredPermissionArray = this.getArrayFromPermissionString(requiredPermissions)
       const sharePermissions = await this.getSharePermissions()
@@ -272,6 +280,9 @@ module.exports = {
           await this.toggleSinglePermission(permission)
         }
       }
+
+      await this.click('@customPermissionsConfirmBtn')
+
       if (changed) {
         await this.saveChanges()
       } else {
@@ -285,8 +296,16 @@ module.exports = {
      */
     getDisplayedPermission: async function(collaborator) {
       await collaboratorDialog.clickEditShare(collaborator)
+      await this.selectRoleForNewCollaborator('Custom permissions')
+
       // read the permissions from the checkboxes
       const currentSharePermissions = await this.getSharePermissions()
+
+      // Hide role select dropdown
+      this.moveToElement('@customPermissionsDrop', -3, 0)
+      this.api.mouseButtonClick()
+      this.waitForElementNotPresent('@customPermissionsDrop', 1000)
+
       await this.clickCancel()
       return currentSharePermissions
     },
@@ -296,6 +315,8 @@ module.exports = {
      */
     disableAllCustomPermissions: async function(collaborator) {
       await collaboratorDialog.clickEditShare(collaborator)
+      await this.selectRoleForNewCollaborator('Custom permissions')
+
       const sharePermissions = await this.getSharePermissions(collaborator)
       const enabledPermissions = Object.keys(sharePermissions).filter(
         permission => sharePermissions[permission] === true
@@ -304,7 +325,11 @@ module.exports = {
       for (const permission of enabledPermissions) {
         await this.toggleSinglePermission(permission)
       }
+
+      await this.click('@customPermissionsConfirmBtn')
       await this.saveChanges()
+
+      return this
     },
     /**
      *
@@ -314,6 +339,7 @@ module.exports = {
       await this.waitForElementVisible('@sharingAutoComplete')
       await this.initAjaxCounters()
       await this.setValueBySingleKeys('@sharingAutoComplete', input)
+      await new Promise(resolve => setTimeout(resolve, 250))
       await this.waitForAjaxCallsToStartAndFinish()
     },
     /**
@@ -371,28 +397,40 @@ module.exports = {
      *
      * @param {string} collaborator
      * @param {string} newRole
+     * @param {string} permissions
      * @returns {Promise}
      */
-    changeCollaboratorRole: async function(collaborator, newRole) {
+    changeCollaboratorRole: async function(collaborator, newRole, permissions) {
       await collaboratorDialog.clickEditShare(collaborator)
-      await this.changeCollaboratorRoleInDropdown(newRole)
+      await this.changeCollaboratorRoleInDropdown(newRole, permissions)
       return this.saveChanges()
     },
     /**
-     * @params {string} newRole
+     * @param {string} newRole
+     * @param {string} permissions
      * @returns {Promise}
      */
-    changeCollaboratorRoleInDropdown: function(newRole) {
-      newRole = newRole === 'Advanced permissions' ? 'advancedRole' : newRole
+    changeCollaboratorRoleInDropdown: async function(newRole, permissions) {
+      newRole = newRole === 'Custom permissions' ? 'advancedRole' : newRole
       newRole = stringHelper.camelize(newRole)
 
       const newRoleButton = util.format(this.elements.roleButtonInDropdown.selector, newRole)
-      return this.waitForElementVisible('@selectRoleButtonInCollaboratorInformation')
+      const hasCustomPermissions = permissions && permissions !== ','
+
+      await this.waitForElementVisible('@selectRoleButtonInCollaboratorInformation')
         .click('@selectRoleButtonInCollaboratorInformation')
         .useXpath()
         .waitForElementVisible(newRoleButton)
         .click(newRoleButton)
         .useCss()
+
+      if (hasCustomPermissions) {
+        await this.selectPermissionsOnPendingShare(permissions)
+      } else if (newRole === 'advancedRole') {
+        await this.click('@customPermissionsConfirmBtn')
+      }
+
+      return this
     },
     /**
      * checks whether autocomplete list is visible
@@ -619,17 +657,17 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     sharingAutoComplete: {
-      selector: '#files-share-invite #files-share-invite-input'
+      selector: '#files-share-invite-input'
     },
     sharingAutoCompleteSpinner: {
-      selector: '#files-share-invite .oc-spinner'
+      selector: '.files-collaborators-collaborator-add-dialog .oc-spinner'
     },
     sharingAutoCompleteDropDown: {
-      selector: '#files-share-invite .vs__dropdown-menu'
+      selector: '.files-collaborators-collaborator-add-dialog .vs__dropdown-menu'
     },
     sharingAutoCompleteDropDownElements: {
       selector:
-        '#files-share-invite .vs__dropdown-menu .files-collaborators-autocomplete-user-text',
+        '.files-collaborators-collaborator-add-dialog .vs__dropdown-menu .files-collaborators-autocomplete-user-text',
       locateStrategy: 'css selector'
     },
     sharingAutoCompleteShowAllResultsButton: {
@@ -670,8 +708,8 @@ module.exports = {
     newCollaboratorRemoveButton: {
       selector: "//button[contains(@class, 'files-share-invite-recipient-btn-remove')]"
     },
-    newCollaboratorRoleAdvancedPermissions: {
-      selector: '#files-role-advancedRole'
+    newCollaboratorRoleCustomPermissions: {
+      selector: '#files-recipient-role-drop-btn-advancedRole'
     },
     selectRoleButtonInCollaboratorInformation: {
       selector: '#files-collaborators-role-button'
@@ -734,6 +772,18 @@ module.exports = {
     },
     elementInterceptingCollaboratorsExpirationInput: {
       selector: '.vdatetime-overlay.vdatetime-fade-leave-active.vdatetime-fade-leave-to'
+    },
+    customPermissionsConfirmBtn: {
+      selector: '[data-testid="files-recipient-custom-permissions-drop-confirm"]'
+    },
+    customPermissionsCancelBtn: {
+      selector: '[data-testid="files-recipient-custom-permissions-drop-cancel"]'
+    },
+    selectedRoleBtn: {
+      selector: '.files-recipient-role-drop-btn.selected'
+    },
+    customPermissionsDrop: {
+      selector: '[data-testid="files-recipient-custom-permissions-drop"]'
     }
   }
 }

@@ -33,14 +33,19 @@ export const getStore = function({
   disablePreviews = true,
   currentPage = null,
   activeFiles = [],
+  activeFilesCurrentPage = [],
   pages = null,
   sidebarClosed = false,
   currentFolder = null,
-  activeFilesCount = null,
   inProgress = [null],
-  totalFilesCount = null,
   selectedFiles = [],
-  totalFilesSize = null
+  totalFilesCount = null,
+  totalFilesSize = null,
+  loginBackgroundImg = '',
+  loginLogo = '',
+  davProperties = [],
+  publicLinkPassword = null,
+  slogan = null
 } = {}) {
   return createStore(Vuex.Store, {
     state: {
@@ -48,6 +53,17 @@ export const getStore = function({
     },
     getters: {
       configuration: () => ({
+        theme: {
+          loginPage: {
+            backgroundImg: loginBackgroundImg
+          },
+          logo: {
+            login: loginLogo
+          },
+          general: {
+            slogan: slogan
+          }
+        },
         options: {
           disablePreviews: disablePreviews
         }
@@ -59,27 +75,25 @@ export const getStore = function({
     modules: {
       Files: {
         state: {
-          resource: null,
-          currentPage: currentPage,
-          filesPageLimit: 100
+          resource: null
         },
         getters: {
           totalFilesCount: () => totalFilesCount,
           totalFilesSize: () => totalFilesSize,
           selectedFiles: () => selectedFiles,
           activeFiles: () => activeFiles,
-          activeFilesCount: () => activeFilesCount,
+          activeFilesCurrentPage: () => activeFilesCurrentPage,
           inProgress: () => inProgress,
           highlightedFile: () => highlightedFile,
+          currentFolder: () => currentFolder,
           pages: () => pages,
-          currentFolder: () => currentFolder
+          davProperties: () => davProperties,
+          publicLinkPassword: () => publicLinkPassword
         },
         mutations: {
           UPDATE_RESOURCE: (state, resource) => {
             state.resource = resource
           },
-          UPDATE_CURRENT_PAGE: () => {},
-          SET_FILES_PAGE_LIMIT: () => {},
           CLEAR_FILES_SEARCHED: () => {}
         },
         namespaced: true,
@@ -87,6 +101,20 @@ export const getStore = function({
           sidebar: {
             state: {
               closed: sidebarClosed
+            },
+            namespaced: true
+          },
+          pagination: {
+            state: {
+              currentPage,
+              itemsPerPage: 100
+            },
+            getters: {
+              pages: () => pages
+            },
+            mutations: {
+              SET_ITEMS_PER_PAGE: () => {},
+              UPDATE_CURRENT_PAGE: () => {}
             },
             namespaced: true
           }

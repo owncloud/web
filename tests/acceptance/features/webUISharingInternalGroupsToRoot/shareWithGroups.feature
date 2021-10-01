@@ -61,14 +61,14 @@ Feature: Sharing files and folders with internal groups
     But these resources should not be listed in the folder "simple-folder" on the webUI
       | entry_name    |
       | simple-folder |
-    When the user browses to the shared-with-me page using the webUI
+    When the user browses to the shared-with-me page
     Then folder "simple-folder" should be marked as shared by "Carol King" on the webUI
     And file "testavatar.jpg" should be marked as shared by "Carol King" on the webUI
     Examples:
       | set-role             | expected-role        | permissions-folder              | permissions-file  |
       | Viewer               | Viewer               | read,share                      | read,share        |
       | Editor               | Editor               | read,update,create,delete,share | read,update,share |
-      | Advanced permissions | Advanced permissions | read                            | read              |
+      | Custom permissions | Custom permissions | read                            | read              |
 
 
   Scenario: share a file with an internal group a member overwrites and unshares the file

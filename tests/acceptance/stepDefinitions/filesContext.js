@@ -13,6 +13,8 @@ const util = require('util')
 const { download } = require('../helpers/webdavHelper')
 const fs = require('fs')
 const sharingHelper = require('../helpers/sharingHelper')
+const { SHARE_STATE } = require('../helpers/sharingHelper')
+const appSideBar = client.page.FilesPageElement.appSideBar()
 
 let deletedElements
 let unsharedElements
@@ -37,6 +39,14 @@ When('the user browses to the shared-with-me page', function() {
   return client.page.sharedWithMePage().navigateAndWaitTillLoaded()
 })
 
+When('the user browses to the shared-with-me page in accepted shares view', function() {
+  return client.page.sharedWithMePage().navigateToAcceptedAndWaitUntilLoaded()
+})
+
+When('the user browses to the shared-with-me page in declined shares view', function() {
+  return client.page.sharedWithMePage().navigateToDeclinedAndWaitUntilLoaded()
+})
+
 Given('the user has browsed to the shared-with-me page', function() {
   return client.page.sharedWithMePage().navigateAndWaitTillLoaded()
 })
@@ -47,10 +57,6 @@ Given('the user has browsed to the shared-with-others page', function() {
 
 Given('the user has browsed to the shared-via-link page', function() {
   return client.page.sharedViaLinkPage().navigateAndWaitTillLoaded()
-})
-
-When('the user browses to the shared-with-me page using the webUI', function() {
-  return client.page.webPage().navigateToUsingMenu('Shared with me')
 })
 
 When('the user browses to the shared-with-others page', function() {
@@ -89,8 +95,8 @@ Then('the files table should be displayed', () => {
   return client.page.FilesPageElement.filesList().waitForElementVisible('@anyAfterLoading')
 })
 
-Given('the user has browsed to the files page', async function() {
-  await client.page.personalPage().navigateAndWaitTillLoaded()
+Given('the user has browsed to the files page', function() {
+  return client.page.personalPage().navigateToBreadcrumb('All files')
 })
 
 When('the user opens folder {string} directly on the webUI', async function(folder) {
@@ -209,16 +215,10 @@ Then('there should be no breadcrumb displayed on the webUI', function() {
   return assertBreadCrumbIsNotDisplayed()
 })
 
-Then('non-clickable breadcrumb for folder {string} should be displayed on the webUI', function(
+Then('non-clickable breadcrumb for folder {string} should be present on the webUI', function(
   resource
 ) {
-  return assertBreadcrumbIsDisplayedFor(resource, false, true)
-})
-
-Then('clickable breadcrumb for folder {string} should be displayed on the webUI', function(
-  resource
-) {
-  return assertBreadcrumbIsDisplayedFor(resource, true, false)
+  return assertBreadcrumbIsPresentFor(resource, false, true)
 })
 
 Then('breadcrumb for folder {string} should be displayed on the webUI', function(resource) {
@@ -456,12 +456,10 @@ Then('folder {string} should not be listed on the webUI', folder => {
 
 Then('the unshared elements should be in declined state on the webUI', async function() {
   for (const element of unsharedElements) {
-    const state = await client.page.sharedWithMePage().getShareStatusOfResourceByName(element)
-    assert.strictEqual(
-      state,
-      'Declined',
-      `Expected resource '${element}' to be in 'Declined' state but found '${state}'`
-    )
+    const isDeclined = await client.page
+      .sharedWithMePage()
+      .hasShareStatusByFilename(SHARE_STATE.declined, element)
+    assert.ok(isDeclined, `Expected resource '${element}' to be in 'Declined' state but didn't.`)
   }
   return client
 })
@@ -721,30 +719,95 @@ const assertBreadcrumbIsDisplayedFor = async function(resource, clickable, nonCl
     abortOnFailure: false
   })
 
-  await client.page.personalPage().checkBreadcrumbVisibility(resourceBreadcrumbXpath)
-
-  await client.element('xpath', resourceBreadcrumbXpath, result => {
-    if (result.status > -1) {
-      isBreadcrumbVisible = true
-    }
-  })
+  try {
+    await client.waitForElementVisible({
+      selector: resourceBreadcrumbXpath,
+      locateStrategy: 'xpath'
+    })
+    isBreadcrumbVisible = true
+  } catch (e) {
+    isBreadcrumbVisible = false
+  }
 
   // Try to look for a mobile breadcrumbs in case it has not been found
   if (!isBreadcrumbVisible) {
+    await appSideBar.closeSidebarIfOpen()
+    const mobileBreadcrumbMobileXpath = util.format(
+      client.page.personalPage().elements.breadcrumbMobileReferencedToOpenSidebarButton.selector,
+      xpathHelper.buildXpathLiteral(resource)
+    )
+
+    try {
+      await client.waitForElementVisible({
+        selector: mobileBreadcrumbMobileXpath,
+        locateStrategy: 'xpath'
+      })
+      isBreadcrumbVisible = true
+    } catch (e) {
+      isBreadcrumbVisible = false
+    }
+  }
+
+  return client.assert.strictEqual(
+    isBreadcrumbVisible,
+    true,
+    `Resource ${resourceBreadcrumbXpath} expected to be visible but is not visible .`
+  )
+}
+
+/**
+ *
+ * @param {string} resource
+ * @param {boolean} clickable
+ * @param {boolean} nonClickable
+ */
+const assertBreadcrumbIsPresentFor = async function(resource, clickable, nonClickable) {
+  const breadcrumbElement = client.page
+    .personalPage()
+    .getBreadcrumbSelector(clickable, nonClickable)
+  const resourceBreadcrumbXpath = util.format(
+    breadcrumbElement.selector,
+    xpathHelper.buildXpathLiteral(resource)
+  )
+  let isBreadcrumbPresent = false
+
+  // lets hope that the breadcrumbs would not take longer than the "NEW" button
+  await client.waitForElementPresent({
+    selector: client.page.personalPage().elements.newFileMenuButtonAnyState.selector,
+    abortOnFailure: false
+  })
+
+  try {
+    await client.waitForElementPresent({
+      selector: resourceBreadcrumbXpath,
+      locateStrategy: 'xpath'
+    })
+    isBreadcrumbPresent = true
+  } catch (e) {
+    isBreadcrumbPresent = false
+  }
+
+  // Try to look for a mobile breadcrumbs in case it has not been found
+  if (!isBreadcrumbPresent) {
+    await appSideBar.closeSidebarIfOpen()
     const mobileBreadcrumbMobileXpath = util.format(
       client.page.personalPage().elements.breadcrumbMobile.selector,
       xpathHelper.buildXpathLiteral(resource)
     )
 
-    await client.element('xpath', mobileBreadcrumbMobileXpath, result => {
-      if (result.status > -1) {
-        isBreadcrumbVisible = true
-      }
-    })
+    try {
+      await client.waitForElementPresent({
+        selector: mobileBreadcrumbMobileXpath,
+        locateStrategy: 'xpath'
+      })
+      isBreadcrumbPresent = true
+    } catch (e) {
+      isBreadcrumbPresent = false
+    }
   }
 
   return client.assert.strictEqual(
-    isBreadcrumbVisible,
+    isBreadcrumbPresent,
     true,
     `Resource ${resourceBreadcrumbXpath} expected to be visible but is not visible .`
   )
@@ -823,7 +886,7 @@ Then('file/folder {string} should be marked as favorite on the webUI', async fun
   const selector = client.page.FilesPageElement.appSideBar().elements.fileInfoFavoriteShining
   await client.page.FilesPageElement.filesList().openSideBar(path)
 
-  client.expect.element(selector).to.be.present
+  await client.waitForElementPresent(selector)
   await client.page.FilesPageElement.appSideBar().closeSidebarIfOpen()
 
   return client
@@ -1332,18 +1395,7 @@ When(
       await client.page.FilesPageElement.filesList().toggleFileOrFolderCheckbox('enable', item[0])
     }
 
-    return client.page.personalPage().copyMultipleResources(target)
-  }
-)
-
-When(
-  'the user tries to batch copy these files/folders into folder {string} using the webUI',
-  async function(target, resources) {
-    for (const item of resources.rows()) {
-      await client.page.FilesPageElement.filesList().toggleFileOrFolderCheckbox('enable', item[0])
-    }
-
-    return client.page.personalPage().attemptToCopyMultipleResources(target)
+    return await client.page.personalPage().copyMultipleResources(target)
   }
 )
 

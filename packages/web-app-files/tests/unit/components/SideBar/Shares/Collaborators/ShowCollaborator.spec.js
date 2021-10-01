@@ -278,7 +278,7 @@ describe('Collaborator component', () => {
       it.each([
         { name: 'viewer', expectedText: 'Viewer' },
         { name: 'editor', expectedText: 'Editor' },
-        { name: 'advancedRole', expectedText: 'Advanced permissions' },
+        { name: 'advancedRole', expectedText: 'Custom permissions' },
         { name: 'owner', expectedText: 'Owner' },
         { name: 'resharer', expectedText: 'Resharer' },
         { name: 'invalidRole', expectedText: 'Unknown Role' }

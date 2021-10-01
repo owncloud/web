@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { mapActions, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 
 export default {
   name: 'LinkActions',
@@ -42,6 +42,8 @@ export default {
   }),
 
   computed: {
+    ...mapGetters('Files', ['highlightedFile']),
+
     editButtonLabel() {
       return this.$gettext('Edit public link')
     },
@@ -65,18 +67,20 @@ export default {
         cancelText: this.$gettext('Cancel'),
         confirmText: this.$gettext('Delete'),
         onCancel: this.hideModal,
-        onConfirm: this.deleteLink
+        onConfirm: () =>
+          this.deleteLink({
+            client: this.$client,
+            share: this.link,
+            resource: this.highlightedFile
+          })
       }
 
       this.createModal(modal)
     },
 
-    deleteLink() {
+    deleteLink({ client, share, resource }) {
       this.hideModal()
-      this.removeLink({
-        client: this.$client,
-        share: this.link
-      })
+      this.removeLink({ client, share, resource })
 
       this.showMessage({
         title: this.$gettext('Public link was successfully deleted'),

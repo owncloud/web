@@ -1,0 +1,7 @@
+Enhancement: URL encoding / decoding
+
+We have updated the Vue router (prior to version 4) encoding from `files%2Fall%2Ffolder` to `files/all/folder`.
+It was also needed to use the router query object instead of the params to store the current page pagination information.
+
+https://github.com/owncloud/web/issues/5714
+https://github.com/owncloud/web/pull/5715

@@ -13,8 +13,9 @@ Feature: access breadcrumb
     And user "Alice" has logged in using the webUI
     When the user opens folder "simple-folder" using the webUI
     And the user opens folder "subfolder" using the webUI
-    Then clickable breadcrumb for folder "simple-folder" should be displayed on the webUI
-    And non-clickable breadcrumb for folder "subfolder" should be displayed on the webUI
+    Then breadcrumb for folder "simple-folder" should be displayed on the webUI
+    And breadcrumb for folder "subfolder" should be displayed on the webUI
+    And non-clickable breadcrumb for folder "subfolder" should be present on the webUI
 
 
   Scenario: Select breadcrumb inside folder with problematic name
@@ -35,15 +36,15 @@ Feature: access breadcrumb
     Then no message should be displayed on the webUI
 
 
-
   Scenario: breadcrumb for double quotes
     Given user "Alice" has created folder "\'single-double quotes\""
     And user "Alice" has created folder "\'single-double quotes\"/\"inner\" double quotes"
     And user "Alice" has logged in using the webUI
     When the user opens folder "\'single-double quotes\"" using the webUI
     And the user opens folder "\"inner\" double quotes" using the webUI
-    Then clickable breadcrumb for folder "\'single-double quotes\"" should be displayed on the webUI
-    And non-clickable breadcrumb for folder "\"inner\" double quotes" should be displayed on the webUI
+    Then breadcrumb for folder "\'single-double quotes\"" should be displayed on the webUI
+    And breadcrumb for folder "\"inner\" double quotes" should be displayed on the webUI
+    And non-clickable breadcrumb for folder "\"inner\" double quotes" should be present on the webUI
 
 
   Scenario: Check breadCrumb for home folder

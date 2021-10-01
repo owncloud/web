@@ -18,15 +18,12 @@
           :label="$gettext('Name')"
         />
       </div>
-      <translate tag="label" for="files-file-link-role-button" class="oc-label">
-        Role
-      </translate>
       <oc-select
+        id="files-file-link-role-button"
         v-model="selectedRole"
-        input-id="files-file-link-role-button"
         :options="roles"
         :clearable="false"
-        label="label"
+        :label="selectedRoleLabel"
         class="oc-mb files-file-link-role-button-wrapper"
       >
         <template #option="option">
@@ -144,7 +141,7 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
+import { mapGetters, mapActions, mapState } from 'vuex'
 import mixins from '../../../../mixins'
 import { DateTime } from 'luxon'
 import publicLinkRoles from '../../../../helpers/publicLinkRolesDefinition'
@@ -193,10 +190,10 @@ export default {
 
     $_hasChanges() {
       const expireDateBefore = this.publicLinkInEdit.expireDate
-        ? DateTime.fromHTTP(this.publicLinkInEdit.expireDate).toFormat('dd-MM-yyyy')
+        ? DateTime.fromISO(this.publicLinkInEdit.expireDate).toFormat('dd-MM-yyyy')
         : null
       const expireDateNow = this.expireDate
-        ? DateTime.fromHTTP(this.expireDate).toFormat('dd-MM-yyyy')
+        ? DateTime.fromISO(this.expireDate).toFormat('dd-MM-yyyy')
         : null
       return (
         expireDateNow !== expireDateBefore ||
@@ -297,6 +294,9 @@ export default {
       }
 
       return this.$gettext('Password')
+    },
+    selectedRoleLabel() {
+      return this.$gettext('Role')
     }
   },
   created() {
@@ -313,7 +313,6 @@ export default {
   },
   methods: {
     ...mapActions('Files', ['addLink', 'updateLink']),
-    ...mapMutations('Files', ['SET_APP_SIDEBAR_ACCORDION_CONTEXT']),
 
     setRole() {
       const permissions = parseInt(this.publicLinkInEdit.permissions, 10)

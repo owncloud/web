@@ -210,12 +210,12 @@ module.exports = {
     },
     sidebarCloseBtn: {
       selector:
-        '//div[contains(@id, "files-sidebar")]//div[contains(@class, "is-active")]//button[contains(@class, "header__close")]',
+        '//div[contains(@id, "files-sidebar")]//*[contains(@class, "is-active-")]//button[contains(@class, "header__close")]',
       locateStrategy: 'xpath'
     },
     sidebarBackBtn: {
       selector:
-        '//div[contains(@id, "files-sidebar")]//div[contains(@class, "is-active")]//button[contains(@class, "header__back")]',
+        '//div[contains(@id, "files-sidebar")]//*[contains(@class, "is-active-sub-panel")]//button[contains(@class, "header__back")]',
       locateStrategy: 'xpath'
     },
     panelActionsItems: {
@@ -228,7 +228,8 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     collaboratorsPanel: {
-      selector: '//*[@id="sidebar-panel-sharing-item"]',
+      selector:
+        '//*[@id="sidebar-panel-sharing-item"]//*[contains(@class, "sidebar-panel__body-content")]',
       locateStrategy: 'xpath'
     },
     collaboratorsPanelMenuItem: {
@@ -236,7 +237,8 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     linksPanel: {
-      selector: '//*[@id="sidebar-panel-links-item"]',
+      selector:
+        '//*[@id="sidebar-panel-links-item"]//*[contains(@class, "sidebar-panel__body-content")]',
       locateStrategy: 'xpath'
     },
     linksPanelMenuItem: {
@@ -244,7 +246,8 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     actionsPanel: {
-      selector: '//*[@id="sidebar-panel-actions-item"]',
+      selector:
+        '//*[@id="sidebar-panel-actions-item"]//*[contains(@class, "sidebar-panel__body-content")]',
       locateStrategy: 'xpath'
     },
     actionsPanelMenuItem: {
@@ -252,7 +255,8 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     detailsPanel: {
-      selector: '//*[@id="sidebar-panel-details-item"]',
+      selector:
+        '//*[@id="sidebar-panel-details-item"]//*[contains(@class, "sidebar-panel__body-content")]',
       locateStrategy: 'xpath'
     },
     detailsPanelMenuItem: {
@@ -260,7 +264,8 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     versionsPanel: {
-      selector: '//*[@id="sidebar-panel-versions-item"]',
+      selector:
+        '//*[@id="sidebar-panel-versions-item"]//*[contains(@class, "sidebar-panel__body-content")]',
       locateStrategy: 'xpath'
     },
     versionsPanelMenuItem: {

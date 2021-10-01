@@ -32,7 +32,7 @@ Feature: Autocompletion of share-with names
   Scenario: autocompletion of regular existing users
     Given user "regularuser" has created folder "simple-folder"
     And user "regularuser" has logged in using the webUI
-    And the user has browsed to the files page
+
     And the user has opened the share dialog for folder "simple-folder"
     And the user opens the share creation dialog on the webUI
     When the user types "us" in the share-with-field
@@ -44,7 +44,7 @@ Feature: Autocompletion of share-with names
   Scenario: autocompletion of regular existing groups
     Given user "regularuser" has created folder "simple-folder"
     And user "regularuser" has logged in using the webUI
-    And the user has browsed to the files page
+
     And the user has opened the share dialog for folder "simple-folder"
     And the user opens the share creation dialog on the webUI
     When the user types "fi" in the share-with-field

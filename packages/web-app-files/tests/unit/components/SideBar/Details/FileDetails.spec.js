@@ -17,11 +17,14 @@ const OcTooltip = jest.fn()
 const selectors = {
   noContentText: '[data-testid="noContentText"]',
   timestamp: '[data-testid="timestamp"]',
-  ownerName: '[data-testid="ownerName"]',
+  ownerName: '[data-testid="ownerDisplayName"]',
   sharingInfo: '[data-testid="sharingInfo"]',
   sizeInfo: '[data-testid="sizeInfo"]',
   versionsInfo: '[data-testid="versionsInfo"]',
-  previewImgContainer: '[data-testid="preview"]'
+  previewImgContainer: '[data-testid="preview"]',
+  sharedBy: '[data-testid="shared-by"]',
+  sharedVia: '[data-testid="shared-via"]',
+  sharedDate: '[data-testid="shared-date"]'
 }
 
 const simpleOwnFolder = {
@@ -60,7 +63,7 @@ const sharedFile = {
   shareTypes: [0]
 }
 
-describe('Details SideBar Accordion Item', () => {
+describe('Details SideBar Panel', () => {
   describe('displays a resource of type folder', () => {
     describe('on a private page', () => {
       it('with timestamp, size info and (me) as owner', () => {
@@ -87,17 +90,6 @@ describe('Details SideBar Accordion Item', () => {
       })
     })
     describe('on a public page', () => {
-      it('with owner, timestap, size info and no share info', () => {
-        const wrapper = createWrapper(sharedFolder, [], null, true)
-        expect(wrapper.find(selectors.noContentText).exists()).toBeFalsy()
-        expect(wrapper.find(selectors.timestamp).exists()).toBeTruthy()
-        expect(wrapper.find(selectors.ownerName).exists()).toBeTruthy()
-        expect(wrapper.find(selectors.ownerName).text()).not.toContain('(me)')
-        expect(wrapper.find(selectors.sizeInfo).exists()).toBeTruthy()
-        expect(wrapper.find(selectors.sharingInfo).exists()).toBeFalsy()
-        expect(wrapper.find(selectors.versionsInfo).exists()).toBeFalsy()
-        expect(wrapper.find(selectors.previewImgContainer).exists()).toBeFalsy()
-      })
       it('with owner, timestamp, size info and no share info', () => {
         const wrapper = createWrapper(sharedFolder, [], null, true)
         expect(wrapper.find(selectors.noContentText).exists()).toBeFalsy()
@@ -108,6 +100,8 @@ describe('Details SideBar Accordion Item', () => {
         expect(wrapper.find(selectors.sharingInfo).exists()).toBeFalsy()
         expect(wrapper.find(selectors.versionsInfo).exists()).toBeFalsy()
         expect(wrapper.find(selectors.previewImgContainer).exists()).toBeFalsy()
+        expect(wrapper.find(selectors.sharedBy).exists()).toBeFalsy()
+        expect(wrapper.find(selectors.sharedDate).exists()).toBeFalsy()
       })
     })
   })
@@ -180,6 +174,9 @@ function createWrapper(testResource, testVersions = [], testPreview, publicRoute
             },
             versions: function() {
               return 2
+            },
+            sharesTreeLoading: function() {
+              return false
             }
           },
           actions: {
@@ -188,7 +185,8 @@ function createWrapper(testResource, testVersions = [], testPreview, publicRoute
             },
             loadPreview: function() {
               return testPreview
-            }
+            },
+            loadSharesTree: jest.fn()
           }
         }
       }
@@ -203,6 +201,11 @@ function createWrapper(testResource, testVersions = [], testPreview, publicRoute
         meta: {
           auth: !publicRoute
         }
+      }
+    },
+    provide: {
+      displayedItem: {
+        value: testResource
       }
     }
   })

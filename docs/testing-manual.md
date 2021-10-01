@@ -24,7 +24,7 @@ There are multiple ways to run Selenium:
 - If you are a Mac user, run `docker run --rm -d -p ${SELENIUM_PORT:-4444}:4444 -p 5900:5900 -v /dev/shm:/dev/shm -v ${REMOTE_UPLOAD_DIR:-$PWD/tests/acceptance/filesForUpload}:${LOCAL_UPLOAD_DIR:-/uploads}:ro --name web-tests-selenium selenium/standalone-chrome-debug`
   - This command creates a docker container which uses port forwarding instead of host networking [which is not supported on Mac](https://docs.docker.com/network/host/)
 
-  If you are running selenium with these docker commands, you can run these commands from the `web` folder, then you wont need to set `REMOTE_UPLOAD_DIR`.
+  If you are running selenium with these docker commands, you can run these commands from the `web` folder, then you won't need to set `REMOTE_UPLOAD_DIR`.
 
 ### Setup using Docker Desktop for Mac
 
@@ -52,7 +52,7 @@ In order to run the acceptance tests you need to run oCIS using the oCIS storage
 `PROXY_ENABLE_BASIC_AUTH=true STORAGE_HOME_DRIVER=owncloud STORAGE_USERS_DRIVER=owncloud`
 
 - set up the [oCIS backend]({{< ref "backend-ocis.md" >}})
-  - if you are a Mac user, you need to start the server with additional environment variables: `STORAGE_HOME_DATA_SERVER_URL='http://host.docker.internal:9155/data' STORAGE_DATAGATEWAY_PUBLIC_URL='https://host.docker.internal:9200/data' STORAGE_USERS_DATA_SERVER_URL='http://host.docker.internal:9158/data' STORAGE_FRONTEND_PUBLIC_URL='https://host.docker.internal:9200' PROXY_ENABLE_BASIC_AUTH=true PROXY_OIDC_ISSUER='https://host.docker.internal:9200' IDP_INSECURE='true' IDP_IDENTIFIER_REGISTRATION_CONF='<web-path>/tests/acceptance/mac-identifier-registration.yml' IDP_ISS='https://host.docker.internal:9200' IDP_TLS='true'` (`<web-path>` needs to be replaced with the your local clone of ownCloud Web)
+  - if you are a Mac user, you need to start the server with additional environment variables: `STORAGE_HOME_DATA_SERVER_URL='http://host.docker.internal:9155/data' STORAGE_DATAGATEWAY_PUBLIC_URL='https://host.docker.internal:9200/data' STORAGE_USERS_DATA_SERVER_URL='http://host.docker.internal:9158/data' STORAGE_FRONTEND_PUBLIC_URL='https://host.docker.internal:9200' PROXY_ENABLE_BASIC_AUTH=true PROXY_OIDC_ISSUER='https://host.docker.internal:9200' IDP_INSECURE='true' IDP_IDENTIFIER_REGISTRATION_CONF='<web-path>/tests/acceptance/mac-identifier-registration.yml' IDP_ISS='https://host.docker.internal:9200' IDP_TLS='true'` (`<web-path>` needs to be replaced with the path of your local clone of ownCloud Web)
 
 ## Setup ownCloud Web
 

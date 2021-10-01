@@ -2,7 +2,8 @@
   <div id="oc-file-details-sidebar">
     <div v-if="hasContent">
       <div
-        v-if="highlightedFile.thumbnail"
+        v-if="file.thumbnail"
+        key="file-thumbnail"
         :style="{
           'background-image': $asyncComputed.preview.updating ? 'none' : `url(${preview})`
         }"
@@ -11,14 +12,19 @@
       >
         <oc-spinner v-if="$asyncComputed.preview.updating" />
       </div>
-      <div v-if="showShares" data-testid="sharingInfo" class="uk-flex uk-flex-middle oc-my-m">
+      <div
+        v-if="showShares"
+        key="file-shares"
+        data-testid="sharingInfo"
+        class="uk-flex uk-flex-middle oc-my-m"
+      >
         <oc-button
           v-if="hasPeopleShares"
           v-oc-tooltip="peopleSharesLabel"
           appearance="raw"
           class="oc-mr-xs"
           :aria-label="peopleSharesLabel"
-          @click="expandPeoplesAccordion"
+          @click="expandPeoplesPanel"
         >
           <oc-icon name="group" />
         </oc-button>
@@ -28,7 +34,7 @@
           appearance="raw"
           class="oc-mr-xs"
           :aria-label="linkSharesLabel"
-          @click="expandLinksAccordion"
+          @click="expandLinksPanel"
         >
           <oc-icon name="link" />
         </oc-button>
@@ -43,17 +49,37 @@
               v-oc-tooltip="seeVersionsLabel"
               appearance="raw"
               :aria-label="seeVersionsLabel"
-              @click="expandVersionsAccordion"
+              @click="expandVersionsPanel"
               v-text="capitalizedTimestamp"
             />
             <span v-else v-text="capitalizedTimestamp" />
           </td>
         </tr>
-        <tr v-if="ownerName" data-testid="ownerName">
+        <tr v-if="showShareDate" data-testid="shared-date">
+          <th scope="col" class="oc-pr-s" v-text="shareDateLabel" />
+          <td>
+            <span v-oc-tooltip="shareDateTooltip" v-text="displayShareDate" />
+          </td>
+        </tr>
+        <tr v-if="showSharedVia" data-testid="shared-via">
+          <th scope="col" class="oc-pr-s" v-text="sharedViaLabel" />
+          <td>
+            <router-link :to="sharedParentRoute">
+              <span v-oc-tooltip="sharedViaTooltip" v-text="sharedParentDir" />
+            </router-link>
+          </td>
+        </tr>
+        <tr v-if="showSharedBy" data-testid="shared-by">
+          <th scope="col" class="oc-pr-s" v-text="sharedByLabel" />
+          <td>
+            <span v-text="sharedByDisplayName" />
+          </td>
+        </tr>
+        <tr v-if="ownerDisplayName" data-testid="ownerDisplayName">
           <th scope="col" class="oc-pr-s" v-text="ownerTitle" />
           <td>
             <p class="oc-m-rm">
-              {{ ownerName }}
+              {{ ownerDisplayName }}
               <span v-if="ownedByCurrentUser" v-translate>(me)</span>
               <span v-if="!ownedByCurrentUser && ownerAdditionalInfo"
                 >({{ ownerAdditionalInfo }})</span
@@ -63,7 +89,7 @@
         </tr>
         <tr v-if="showSize" data-testid="sizeInfo">
           <th scope="col" class="oc-pr-s" v-text="sizeTitle" />
-          <td v-text="getResourceSize(highlightedFile.size)" />
+          <td v-text="getResourceSize(file.size)" />
         </tr>
         <tr v-if="showVersions" data-testid="versionsInfo">
           <th scope="col" class="oc-pr-s" v-text="versionsTitle" />
@@ -72,7 +98,7 @@
               v-oc-tooltip="seeVersionsLabel"
               appearance="raw"
               :aria-label="seeVersionsLabel"
-              @click="expandVersionsAccordion"
+              @click="expandVersionsPanel"
               v-text="versions.length"
             />
           </td>
@@ -87,11 +113,13 @@ import Mixins from '../../../mixins'
 import MixinResources from '../../../mixins/resources'
 import MixinRoutes from '../../../mixins/routes'
 import { shareTypes, userShareTypes } from '../../../helpers/shareTypes'
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { ImageDimension } from '../../../constants'
 import { loadPreview } from '../../../helpers/resource'
 import intersection from 'lodash-es/intersection'
 import upperFirst from 'lodash-es/upperFirst'
+import path from 'path'
+import { DateTime } from 'luxon'
 
 export default {
   name: 'FileDetails',
@@ -99,16 +127,32 @@ export default {
   title: $gettext => {
     return $gettext('Details')
   },
+
+  inject: ['displayedItem'],
+
   data: () => ({
-    loading: false
+    loading: false,
+    sharedByName: '',
+    sharedByDisplayName: '',
+    sharedTime: 0,
+    sharedParentDir: null,
+    sharedItem: null
   }),
   computed: {
-    ...mapGetters('Files', ['highlightedFile', 'versions']),
+    ...mapGetters('Files', ['versions', 'sharesTree', 'sharesTreeLoading']),
     ...mapGetters(['user', 'getToken', 'configuration']),
+
+    file() {
+      return this.displayedItem.value
+    },
 
     hasContent() {
       return (
-        this.hasTimestamp || this.ownerName || this.showSize || this.showShares || this.showVersions
+        this.hasTimestamp ||
+        this.ownerDisplayName ||
+        this.showSize ||
+        this.showShares ||
+        this.showVersions
       )
     },
     noContentText() {
@@ -117,11 +161,61 @@ export default {
     detailsTableLabel() {
       return this.$gettext('Overview of the information about the selected file')
     },
+    shareDateLabel() {
+      return this.$gettext('Shared:')
+    },
+    sharedViaLabel() {
+      return this.$gettext('Shared via:')
+    },
+    shareDateTooltip() {
+      return DateTime.fromSeconds(parseInt(this.sharedTime))
+        .setLocale(this.$language.current)
+        .toLocaleString(DateTime.DATETIME_FULL)
+    },
+    sharedViaTooltip() {
+      return this.$gettextInterpolate(
+        this.$gettext("Navigate to '%{folder}'"),
+        { folder: this.sharedParentDir || '' },
+        true
+      )
+    },
+    sharedParentRoute() {
+      return {
+        name: 'files-personal',
+        params: {
+          item: this.sharedParentDir || '/'
+        }
+      }
+    },
+    showSharedBy() {
+      return (
+        this.showShares &&
+        !this.ownedByCurrentUser &&
+        !this.sharesTreeLoading &&
+        this.sharedByDisplayName &&
+        this.sharedByName !== this.file.ownerId
+      )
+    },
+    showSharedVia() {
+      return (
+        this.showShares &&
+        !this.sharesTreeLoading &&
+        this.file.path !== this.sharedParentDir &&
+        this.sharedParentDir !== null
+      )
+    },
+    showShareDate() {
+      return this.showShares && !this.sharesTreeLoading
+    },
     showShares() {
       return this.hasAnyShares && !this.isPublicPage
     },
+    displayShareDate() {
+      const date = this.formDateFromNow(new Date(this.sharedTime * 1000), 'JSDate')
+      return upperFirst(date)
+    },
     detailSharingInformation() {
-      const isFolder = this.highlightedFile.type === 'folder'
+      const isFolder = this.file.type === 'folder'
       if (isFolder) {
         return this.$gettext('This folder has been shared.')
       }
@@ -133,11 +227,14 @@ export default {
     linkSharesLabel() {
       return this.$gettext('Show links')
     },
+    sharedByLabel() {
+      return this.$gettext('Shared by:')
+    },
     hasTimestamp() {
-      return this.highlightedFile.mdate?.length > 0 || this.highlightedFile.sdate?.length > 0
+      return this.file.mdate?.length > 0 || this.file.sdate?.length > 0
     },
     timestampTitle() {
-      if (this.highlightedFile.mdate) {
+      if (this.file.mdate) {
         return this.$gettext('Last modified:')
       }
       return this.$gettext('Shared:')
@@ -145,24 +242,24 @@ export default {
     ownerTitle() {
       return this.$gettext('Owner:')
     },
-    ownerName() {
+    ownerDisplayName() {
       return (
-        this.highlightedFile.ownerDisplayName ||
-        this.highlightedFile.shareOwnerDisplayname ||
-        this.highlightedFile.owner?.[0].displayName
+        this.file.ownerDisplayName ||
+        this.file.shareOwnerDisplayname ||
+        this.file.owner?.[0].displayName
       )
     },
     ownerAdditionalInfo() {
-      return this.highlightedFile.owner?.[0].additionalInfo
+      return this.file.owner?.[0].additionalInfo
     },
     showSize() {
-      return this.getResourceSize(this.highlightedFile.size) !== '?'
+      return this.getResourceSize(this.file.size) !== '?'
     },
     sizeTitle() {
       return this.$gettext('Size:')
     },
     showVersions() {
-      if (this.highlightedFile.type === 'folder') {
+      if (this.file.type === 'folder') {
         return
       }
       return this.versions.length > 0 && !this.isPublicPage
@@ -175,45 +272,68 @@ export default {
     },
     capitalizedTimestamp() {
       let displayDate = ''
-      if (this.highlightedFile.mdate) {
-        displayDate = this.formDateFromNow(this.highlightedFile.mdate, 'Http')
+      if (this.file.mdate) {
+        displayDate = this.formDateFromNow(this.file.mdate, 'Http')
       } else {
-        displayDate = this.formDateFromNow(this.highlightedFile.sdate, 'Http')
+        displayDate = this.formDateFromNow(this.file.sdate, 'Http')
       }
       return upperFirst(displayDate)
     },
     hasAnyShares() {
       return (
-        this.highlightedFile.shareTypes?.length > 0 || this.highlightedFile.indicators?.length > 0
+        this.file.shareTypes?.length > 0 ||
+        this.file.indicators?.length > 0 ||
+        this.sharedItem !== null
       )
     },
     hasPeopleShares() {
       return (
-        intersection(this.highlightedFile.shareTypes, userShareTypes).length > 0 ||
-        this.highlightedFile.indicators?.filter(e => e.icon === 'group').length > 0
+        intersection(this.file.shareTypes, userShareTypes).length > 0 ||
+        this.file.indicators?.filter(e => e.icon === 'group').length > 0 ||
+        this.sharedItem !== null
       )
     },
     hasLinkShares() {
       return (
-        this.highlightedFile.shareTypes.includes(shareTypes.link) ||
-        this.highlightedFile.indicators?.filter(e => e.icon === 'link').length > 0
+        this.file.shareTypes.includes(shareTypes.link) ||
+        this.file.indicators?.filter(e => e.icon === 'link').length > 0
       )
     },
     ownedByCurrentUser() {
       return (
-        this.highlightedFile.ownerId === this.user.id ||
-        this.highlightedFile.owner?.[0].username === this.user.id ||
-        this.highlightedFile.shareOwner === this.user.id
+        this.file.ownerId === this.user.id ||
+        this.file.owner?.[0].username === this.user.id ||
+        this.file.shareOwner === this.user.id
       )
     }
   },
   watch: {
-    highlightedFile() {
+    file() {
       this.loadData()
+      this.refreshShareDetailsTree()
+    },
+    sharesTreeLoading(current) {
+      this.sharedItem = null
+      if (current !== false) return
+      const sharePathParentOrCurrent = this.getParentSharePath(this.file.path, this.sharesTree)
+      if (sharePathParentOrCurrent === null) return
+      const userShares = this.sharesTree[sharePathParentOrCurrent]?.filter(s =>
+        userShareTypes.includes(s.shareType)
+      )
+      if (userShares.length === 0) return
+      this.sharedItem = userShares[0]
+      this.sharedByName = this.sharedItem.owner?.name
+      this.sharedByDisplayName = this.sharedItem.owner?.displayName
+      if (this.sharedItem.owner?.additionalInfo) {
+        this.sharedByDisplayName += ' (' + this.sharedItem.owner.additionalInfo + ')'
+      }
+      this.sharedTime = this.sharedItem.stime
+      this.sharedParentDir = sharePathParentOrCurrent
     }
   },
   mounted() {
     this.loadData()
+    this.refreshShareDetailsTree()
   },
   asyncComputed: {
     preview: {
@@ -221,7 +341,7 @@ export default {
         // TODO: this timeout resolves flickering of the preview because it's rendered multiple times. Needs a better solution.
         await new Promise(resolve => setTimeout(resolve, 500))
         return loadPreview({
-          resource: this.highlightedFile,
+          resource: this.file,
           isPublic: this.isPublicPage,
           dimensions: ImageDimension.Preview,
           server: this.configuration.server,
@@ -230,26 +350,42 @@ export default {
         })
       },
       lazy: true,
-      watch: ['highlightedFile.id']
+      watch: ['file.id']
     }
   },
   methods: {
-    ...mapActions('Files', ['loadPreview', 'loadVersions']),
-    ...mapMutations('Files', ['SET_APP_SIDEBAR_ACTIVE_PANEL']),
-    expandPeoplesAccordion() {
-      this.SET_APP_SIDEBAR_ACTIVE_PANEL('sharing-item')
+    ...mapActions('Files', ['loadPreview', 'loadVersions', 'loadSharesTree']),
+    ...mapActions('Files/sidebar', { setSidebarPanel: 'setActivePanel' }),
+    refreshShareDetailsTree() {
+      this.loadSharesTree({
+        client: this.$client,
+        path: this.file.path,
+        $gettext: this.$gettext
+      })
     },
-    expandLinksAccordion() {
-      this.SET_APP_SIDEBAR_ACTIVE_PANEL('links-item')
+    getParentSharePath(childPath, shares) {
+      let currentPath = childPath
+      while (currentPath !== '/') {
+        const share = shares[currentPath]
+        if (share !== undefined && share[0] !== undefined) return currentPath
+        currentPath = path.dirname(currentPath)
+      }
+      return null
     },
-    expandVersionsAccordion() {
-      this.SET_APP_SIDEBAR_ACTIVE_PANEL('versions-item')
+    expandPeoplesPanel() {
+      this.setSidebarPanel('sharing-item')
+    },
+    expandLinksPanel() {
+      this.setSidebarPanel('links-item')
+    },
+    expandVersionsPanel() {
+      this.setSidebarPanel('versions-item')
     },
     async loadData() {
       this.loading = true
       const calls = []
-      if (this.highlightedFile.type === 'file' && !this.isPublicPage) {
-        calls.push(this.loadVersions({ client: this.$client, fileId: this.highlightedFile.id }))
+      if (this.file.type === 'file' && !this.isPublicPage) {
+        calls.push(this.loadVersions({ client: this.$client, fileId: this.file.id }))
       }
       await Promise.all(calls.map(p => p.catch(e => e)))
       this.loading = false

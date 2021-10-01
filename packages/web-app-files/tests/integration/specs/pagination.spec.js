@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom'
 import { render, waitFor, fireEvent } from '@testing-library/vue'
+import merge from 'lodash-es/merge'
 
 import toKebabCase from '../../../../../tests/helpers/toKebabCase'
 
@@ -11,34 +12,28 @@ import Favorites from '../../../src/views/Favorites.vue'
 import LocationPicker from '../../../src/views/LocationPicker.vue'
 import PublicFiles from '../../../src/views/PublicFiles.vue'
 import SharedViaLink from '../../../src/views/SharedViaLink.vue'
-import SharedWithMe from '../../../src/views/SharedWithMe.vue'
 import SharedWithOthers from '../../../src/views/SharedWithOthers.vue'
 import Trashbin from '../../../src/views/Trashbin.vue'
 
 // TODO: Make routes importable instead of defining them manually
 const routes = [
-  { name: 'files-personal', path: '/files/list/personal/:item?/:page?', component: Personal },
-  { name: 'files-favorites', path: '/files/list/favorites/:page?', component: Favorites },
-  {
-    name: 'files-shared-with-me',
-    path: '/files/list/shared-with-me/:page?',
-    component: SharedWithMe
-  },
+  { name: 'files-personal', path: '/files/list/personal/:item?', component: Personal },
+  { name: 'files-favorites', path: '/files/list/favorites', component: Favorites },
   {
     name: 'files-shared-with-others',
-    path: '/files/list/shared-with-others/:page?',
+    path: '/files/list/shared-with-others',
     component: SharedWithOthers
   },
-  { name: 'files-via-link', path: '/files/list/via-link/:page?', component: SharedViaLink },
-  { name: 'files-trashbin', path: '/files/list/trash-bin/:page?', component: Trashbin },
+  { name: 'files-via-link', path: '/files/list/via-link', component: SharedViaLink },
+  { name: 'files-trashbin', path: '/files/list/trash-bin', component: Trashbin },
   {
     name: 'files-location-picker',
-    path: '/files/location-picker/:context/:action/:item?/:page?',
+    path: '/files/location-picker/:context/:action/:item?',
     component: LocationPicker
   },
   {
     name: 'files-public-list',
-    path: '/files/public/list/:item/:page?',
+    path: '/files/public/list/:item',
     component: PublicFiles,
     meta: {
       auth: false,
@@ -47,26 +42,8 @@ const routes = [
     }
   }
 ]
-const store = {
-  ...Store,
-  modules: {
-    ...Store.modules,
-    user: {
-      ...Store.modules.user,
-      state: {
-        ...Store.modules.user.state,
-        id: 'alice'
-      }
-    },
-    Files: {
-      ...StoreFiles,
-      state: {
-        ...StoreFiles.state,
-        filesPageLimit: 2
-      }
-    }
-  }
-}
+let store
+
 const stubs = { 'context-actions': true }
 const cases = [
   ['Personal', '/files/list/personal/', Personal],
@@ -78,13 +55,41 @@ const cases = [
   ],
   ['PublicFiles', '/files/public/list/link', PublicFiles],
   ['SharedViaLink', '/files/list/via-link/', SharedViaLink],
-  ['SharedWithMe', '/files/list/shared-with-me/', SharedWithMe],
   ['SharedWithOthers', '/files/list/shared-with-others/', SharedWithOthers],
   ['Trashbin', '/files/list/trash-bin/', Trashbin]
 ]
 
 describe('User can navigate in files list using pagination', () => {
   beforeEach(() => {
+    store = merge(
+      {},
+      Store,
+      {
+        modules: {
+          user: {
+            state: {
+              id: 'alice'
+            }
+          },
+          Files: StoreFiles
+        }
+      },
+      {
+        modules: {
+          Files: {
+            modules: {
+              pagination: {
+                state: () => ({
+                  currentPage: 1,
+                  itemsPerPage: 2
+                })
+              }
+            }
+          }
+        }
+      }
+    )
+
     const appBar = document.createElement('div')
     const breadcrumbs = document.createElement('div')
     const breadcrumbItem = document.createElement('div')
@@ -111,6 +116,7 @@ describe('User can navigate in files list using pagination', () => {
         component,
         { routes, store, stubs },
         (vue, store, router) => {
+          vue.directive('translate', jest.fn())
           router.push(route)
         }
       )
@@ -154,19 +160,14 @@ describe('User can navigate in files list using pagination', () => {
         component,
         { routes, store, stubs },
         (vue, store, router) => {
-          router.push(route)
-
-          const _route = { params: { page: 2 } }
-
-          if (name === 'Personal') {
-            _route.params.item = '/'
-          }
+          vue.directive('translate', jest.fn())
 
           if (name === 'LocationPicker') {
-            _route.query = { resource: '/Documents' }
+            router.push(`${route}&page=2`)
+            return
           }
 
-          router.push(_route)
+          router.push(`${route}?page=2`)
         }
       )
 
