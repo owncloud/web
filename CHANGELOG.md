@@ -8,10 +8,49 @@ ownCloud admins and users.
 Summary
 -------
 
+* Enhancement - Add wrapper app for external apps: [#5805](https://github.com/owncloud/web/pull/5805)
+* Enhancement - Add AppProvider actions to fileactions: [#5805](https://github.com/owncloud/web/pull/5805)
+* Enhancement - Refactor runtime boot process: [#5752](https://github.com/owncloud/web/pull/5752)
 * Enhancement - Multiple shared with me tables: [#5814](https://github.com/owncloud/web/pull/5814)
 
 Details
 -------
+
+* Enhancement - Add wrapper app for external apps: [#5805](https://github.com/owncloud/web/pull/5805)
+
+   We have added a `external` app that can render apps coming from the oCIS AppProvider via iFrame.
+
+   https://github.com/owncloud/web/pull/5805
+
+* Enhancement - Add AppProvider actions to fileactions: [#5805](https://github.com/owncloud/web/pull/5805)
+
+   If the AppProvider within oCIS communicates a matching application for the mime type of a file,
+   there are now additional actions in the default actions and actions in both the contextmenu and
+   the right sidebar.
+
+   https://github.com/owncloud/web/pull/5805
+
+* Enhancement - Refactor runtime boot process: [#5752](https://github.com/owncloud/web/pull/5752)
+
+   We have updated the way applications are being loaded in the web runtime. It does now feature a
+   dedicated boot process, providing hooks that other applications can take advantage of.
+
+   https://github.com/owncloud/web/issues/2891
+   https://github.com/owncloud/web/issues/3726
+   https://github.com/owncloud/web/issues/3771
+   https://github.com/owncloud/web/issues/4735
+   https://github.com/owncloud/web/issues/5135
+   https://github.com/owncloud/web/issues/5460
+   https://github.com/owncloud/web/pull/5752
+   (tbd)
+   (tbd)
+   (tbd,
+   %22needs
+   api
+   tweak%22%29
+   (tbd)
+   (tbd)
+   (tbd)
 
 * Enhancement - Multiple shared with me tables: [#5814](https://github.com/owncloud/web/pull/5814)
 
