@@ -457,6 +457,9 @@ export default {
 </script>
 
 <style>
+#files-collaborators-list {
+  overflow: visible;
+}
 .avatars-wrapper {
   display: flex;
   justify-content: space-between;

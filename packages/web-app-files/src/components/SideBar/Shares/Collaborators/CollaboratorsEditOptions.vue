@@ -1,25 +1,28 @@
 <template>
   <div>
-    <hr />
+    <hr v-if="!minimal"/>
     <oc-button
-      id="files-collaborators-role-button"
+      :id="roleButtonId"
       data-testid="files-recipient-role-select-btn"
       appearance="raw"
       justify-content="left"
       gap-size="xsmall"
     >
-      <translate v-if="isAdvancedRoleSelected" key="advanced-permissions-select"
+      <translate v-if="isAdvancedRoleSelected && !minimal" key="advanced-permissions-select"
         >Invite with custom permissions</translate
       >
-      <translate v-else key="role-select" :translate-params="{ name: selectedRole.inlineLabel }"
+      <translate v-if="!isAdvancedRoleSelected && !minimal" key="role-select" :translate-params="{ name: selectedRole.inlineLabel }"
         >Invite as %{ name }</translate
       >
+      <translate v-if="minimal" :translate-params="{ name: selectedRole.inlineLabel }">
+        %{ name }
+      </translate>
       <oc-icon name="expand_more" />
     </oc-button>
     <oc-drop
       ref="rolesDrop"
       data-testid="files-recipient-roles-drop"
-      toggle="#files-collaborators-role-button"
+      :toggle="'#' + roleButtonId"
       mode="click"
       close-on-click
     >
@@ -48,7 +51,7 @@
       data-testid="files-recipient-custom-permissions-drop"
       class="files-recipient-custom-permissions-drop uk-width-auto"
       mode="manual"
-      target="#files-collaborators-role-button"
+      :target="'#' + roleButtonId"
     >
       <template #special>
         <translate tag="h4" class="files-recipient-custom-permissions-drop-title"
@@ -99,7 +102,7 @@
         </div>
       </template>
     </oc-drop>
-    <hr />
+    <hr v-if="!minimal" />
     <div v-if="expirationSupported" class="oc-mt-m">
       <div class="uk-position-relative">
         <oc-datepicker
@@ -142,6 +145,11 @@ export default {
   mixins: [collaboratorsMixins],
 
   props: {
+    minimal: { 
+      type: Boolean,
+      required: false,
+      default: false
+    },
     existingRole: {
       type: Object,
       required: false,
@@ -183,6 +191,9 @@ export default {
   computed: {
     ...mapGetters(['capabilities']),
 
+    roleButtonId() {
+      return 'files-collaborators-role-button-' + this._uid
+    },
     readingRoleCheckboxLabel() {
       return this.$gettext('Read')
     },
@@ -338,6 +349,8 @@ export default {
   },
 
   mounted() {
+    console.log("eferfer")
+    console.log(this._uid)
     if (this.expirationSupported) {
       if (this.editingUser || this.editingGroup) {
         // FIXME: Datepicker is not displaying correct timezone so for now we add it manually

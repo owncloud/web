@@ -78,14 +78,22 @@
                 </ul>
               </oc-drop>
             </li>
-            <li v-if="isIndirectShare" class="oc-py-rm">
-              <!--example -->
+            <li class="oc-py-rm">
+              
             </li>
           </ul>
         </div>
       </oc-td>
       <oc-td width="shrink" align-v="top" class="oc-py-rm oc-pr-s">
-        <div class="uk-flex uk-flex-nowrap uk-flex-middle"></div>
+        <div class="uk-flex uk-flex-nowrap uk-flex-middle">
+          <!-- im here -->
+          <collaborators-edit-options
+            :minimal="true"
+            existing-collaborator-type="user"
+            class="oc-mb"
+            @optionChange="collaboratorOptionChanged"
+          />
+        </div>
       </oc-td>
     </oc-tr>
   </oc-table-simple>
@@ -98,10 +106,14 @@ import { basename } from 'path'
 import CollaboratorsMixins from '../../../../mixins/collaborators'
 import Mixins from '../../../../mixins'
 import { DateTime } from 'luxon'
+import CollaboratorsEditOptions from './CollaboratorsEditOptions.vue'
 
 export default {
   name: 'Collaborator',
   mixins: [Mixins, CollaboratorsMixins],
+  components: {
+    CollaboratorsEditOptions
+  },
   props: {
     collaborator: {
       type: Object,
@@ -142,8 +154,6 @@ export default {
     },
 
     shareTypeName() {
-      console.log('test')
-      console.log(this.collaborator.collaborator)
       return Object.keys(shareTypes)[this.shareType]
     },
 
