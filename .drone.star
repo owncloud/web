@@ -737,7 +737,7 @@ def beforePipelines(ctx):
     elif "unit-tests-only" in title:
         return yarnlint(ctx) + checkForRecentBuilds(ctx)
     else:
-        return yarnlint(ctx) + checkForRecentBuilds(ctx) + changelog(ctx) + website(ctx) + cacheOcisPipeline(ctx) + cacheYarnPipeline(ctx)
+        return yarnlint(ctx) + checkForRecentBuilds(ctx) + changelog(ctx) + website(ctx) + cacheOcisPipeline(ctx)
 
 def stagePipelines(ctx):
     title = ctx.build.title.lower()
@@ -778,8 +778,8 @@ def yarnlint(ctx):
             "base": dir["base"],
             "path": config["app"],
         },
-        "steps": restoreBuildArtifactCache(ctx, ".yarn", ".yarn") +
-                 installYarn() +
+        "steps": installYarn() +
+                 rebuildBuildArtifactCache(ctx, ".yarn", ".yarn") +
                  lintTest(),
         "depends_on": [],
         "trigger": {
@@ -2188,22 +2188,6 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
         }],
     }]
 
-def cacheYarnPipeline(ctx):
-    return [{
-        "kind": "pipeline",
-        "type": "docker",
-        "name": "cache-yarn",
-        "steps": installYarn() + rebuildBuildArtifactCache(ctx, ".yarn", ".yarn"),
-        "depends_on": [],
-        "trigger": {
-            "ref": [
-                "refs/heads/master",
-                "refs/tags/**",
-                "refs/pull/**",
-            ],
-        },
-    }]
-
 def cacheOcisPipeline(ctx):
     return [{
         "kind": "pipeline",
@@ -2767,7 +2751,6 @@ def genericCachePurge(ctx, name, cache_key):
         },
     }
 
-
 def listDir(path):
     return {
         "name": "list-dir",
@@ -2795,5 +2778,3 @@ def rebuildBuildArtifactCache(ctx, name, path):
 
 def purgeBuildArtifactCache(ctx, name):
     return genericBuildArtifactCache(ctx, name, "purge", [])
-
-
