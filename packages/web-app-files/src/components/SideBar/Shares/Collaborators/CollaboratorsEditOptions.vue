@@ -3,6 +3,7 @@
     <hr />
     <oc-button
       id="files-collaborators-role-button"
+      data-testid="files-recipient-role-select-btn"
       appearance="raw"
       justify-content="left"
       gap-size="xsmall"
@@ -15,12 +16,20 @@
       >
       <oc-icon name="expand_more" />
     </oc-button>
-    <oc-drop ref="rolesDrop" toggle="#files-collaborators-role-button" mode="click" close-on-click>
+    <oc-drop
+      ref="rolesDrop"
+      data-testid="files-recipient-roles-drop"
+      toggle="#files-collaborators-role-button"
+      mode="click"
+      close-on-click
+    >
       <template #special>
         <oc-list class="files-recipient-role-drop-list" :aria-label="rolesListAriaLabel">
           <li v-for="role in roles" :key="role.name">
             <oc-button
+              :id="`files-recipient-role-drop-btn-${role.name}`"
               ref="roleSelect"
+              :data-testid="`files-recipient-role-drop-btn-${role.name}`"
               appearance="raw"
               justify-content="space-between"
               class="files-recipient-role-drop-btn oc-py-xs oc-px-s"
@@ -34,17 +43,62 @@
         </oc-list>
       </template>
     </oc-drop>
-    <template v-if="$_ocCollaborators_hasAdditionalPermissions">
-      <label v-if="!isAdvancedRoleSelected" class="oc-label oc-mt-s">
-        <translate>Additional permissions</translate>
-      </label>
-      <additional-permissions
-        :available-permissions="selectedRole.additionalPermissions"
-        :collaborators-permissions="collaboratorsPermissions"
-        :class="{ 'oc-mt-s': isAdvancedRoleSelected }"
-        @permissionChecked="checkAdditionalPermissions"
-      />
-    </template>
+    <oc-drop
+      ref="customPermissionsDrop"
+      data-testid="files-recipient-custom-permissions-drop"
+      class="files-recipient-custom-permissions-drop uk-width-auto"
+      mode="manual"
+      target="#files-collaborators-role-button"
+    >
+      <template #special>
+        <translate tag="h4" class="files-recipient-custom-permissions-drop-title"
+          >Custom permissions
+        </translate>
+        <oc-list class="oc-mb">
+          <li class="oc-my-xs">
+            <oc-checkbox
+              :label="readingRoleCheckboxLabel"
+              :value="true"
+              :disabled="true"
+              class="oc-mr-xs files-collaborators-permission-checkbox"
+            />
+          </li>
+          <li
+            v-for="permission in advancedRole.additionalPermissions"
+            :key="permission.name"
+            class="oc-my-xs"
+          >
+            <oc-checkbox
+              :id="`files-collaborators-permission-${permission.name}`"
+              :key="permission.name"
+              v-model="customPermissions"
+              :data-testid="`files-collaborators-permission-${permission.name}`"
+              :label="permission.description"
+              :option="permission.name"
+              class="oc-mr-xs files-collaborators-permission-checkbox"
+            />
+          </li>
+        </oc-list>
+        <div>
+          <oc-button
+            data-testid="files-recipient-custom-permissions-drop-cancel"
+            size="small"
+            @click="cancelCustomPermissions"
+          >
+            <translate>Cancel</translate>
+          </oc-button>
+          <oc-button
+            data-testid="files-recipient-custom-permissions-drop-confirm"
+            size="small"
+            variation="primary"
+            appearance="filled"
+            @click="confirmCustomPermissions"
+          >
+            <translate>Apply</translate>
+          </oc-button>
+        </div>
+      </template>
+    </oc-drop>
     <hr />
     <div v-if="expirationSupported" class="oc-mt-m">
       <div class="uk-position-relative">
@@ -79,15 +133,11 @@ import get from 'lodash-es/get'
 import collaboratorsMixins from '../../../../mixins/collaborators'
 
 import RoleItem from '../../Shared/RoleItem.vue'
-import AdditionalPermissions from './AdditionalPermissions.vue'
 
 export default {
   name: 'CollaboratorsEditOptions',
 
-  components: {
-    RoleItem,
-    AdditionalPermissions
-  },
+  components: { RoleItem },
 
   mixins: [collaboratorsMixins],
 
@@ -120,7 +170,7 @@ export default {
   data() {
     return {
       selectedRole: null,
-      additionalPermissions: null,
+      customPermissions: [],
       enteredExpirationDate: null
     }
   },
@@ -128,16 +178,16 @@ export default {
   computed: {
     ...mapGetters(['capabilities']),
 
+    readingRoleCheckboxLabel() {
+      return this.$gettext('Read')
+    },
+
     editingUser() {
       return this.existingCollaboratorType === 'user'
     },
 
     editingGroup() {
       return this.existingCollaboratorType === 'group'
-    },
-
-    $_ocCollaborators_hasAdditionalPermissions() {
-      return this.selectedRole && this.selectedRole.additionalPermissions
     },
 
     datePickerLabel() {
@@ -274,6 +324,8 @@ export default {
     } else {
       this.selectedRole = this.roles[0]
     }
+
+    this.getRecipientsCustomPermissions()
   },
 
   beforeDestroy() {
@@ -298,11 +350,6 @@ export default {
   },
 
   methods: {
-    checkAdditionalPermissions(permissions) {
-      this.additionalPermissions = permissions
-      this.publishChange()
-    },
-
     setExpirationDate(date) {
       // Expiration date picker is emitting empty string when the component is initialised
       // This ensures it will be null as we treat it everywhere in that way
@@ -318,12 +365,20 @@ export default {
     publishChange() {
       this.$emit('optionChange', {
         role: this.selectedRole,
-        permissions: this.additionalPermissions,
+        permissions: this.customPermissions,
         expirationDate: this.enteredExpirationDate
       })
     },
 
     selectRole(role) {
+      if (role.name === 'advancedRole') {
+        this.$refs.customPermissionsDrop.show()
+
+        return
+      }
+
+      this.getRecipientsCustomPermissions()
+
       this.selectedRole = role
     },
 
@@ -333,6 +388,32 @@ export default {
 
     isAdvancedRole(role) {
       return role.name === 'advancedRole'
+    },
+
+    confirmCustomPermissions() {
+      this.$refs.customPermissionsDrop.hide()
+
+      this.selectedRole = this.advancedRole
+      this.publishChange()
+    },
+
+    cancelCustomPermissions() {
+      this.$refs.customPermissionsDrop.hide()
+      this.$refs.rolesDrop.show()
+    },
+
+    getRecipientsCustomPermissions() {
+      // Custom permissions are only available for the custom role
+      // so do not display checked permissions if a user is switching from a different role
+      if (this.existingRole !== undefined && this.existingRole.name !== 'advancedRole') {
+        return
+      }
+      this.customPermissions = []
+      if (this.collaboratorsPermissions) {
+        for (const permission in this.collaboratorsPermissions) {
+          this.customPermissions.push(permission)
+        }
+      }
     },
 
     cycleRoles(event) {
@@ -398,35 +479,58 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.files-recipient-role-drop {
-  &-list {
-    background-color: var(--oc-color-swatch-inverse-default);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-
-    &:hover .files-recipient-role-drop-btn.selected:not(:hover),
-    &:focus .files-recipient-role-drop-btn.selected:not(:focus) {
+.files-recipient {
+  &-role-drop {
+    &-list {
       background-color: var(--oc-color-swatch-inverse-default);
-      color: var(--oc-color-swatch-passive-default);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
 
-      ::v-deep .oc-icon > svg {
-        fill: var(--oc-color-swatch-passive-default);
+      &:hover .files-recipient-role-drop-btn.selected:not(:hover),
+      &:focus .files-recipient-role-drop-btn.selected:not(:focus) {
+        background-color: var(--oc-color-swatch-inverse-default);
+        color: var(--oc-color-swatch-passive-default);
+
+        ::v-deep .oc-icon > svg {
+          fill: var(--oc-color-swatch-passive-default);
+        }
+      }
+    }
+
+    &-btn {
+      border-radius: 0;
+      width: 100%;
+
+      &:hover,
+      &:focus {
+        background-color: white !important;
+        color: black !important;
+      }
+
+      &.selected {
+        background-color: var(--oc-color-swatch-primary-default) !important;
+        color: var(--oc-color-text-inverse) !important;
+
+        ::v-deep .oc-icon > svg {
+          fill: var(--oc-color-text-inverse) !important;
+        }
       }
     }
   }
 
-  &-btn {
-    border-radius: 0;
-    width: 100%;
+  &-custom-permissions-drop {
+    background-color: var(--oc-color-swatch-inverse-default);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    margin-bottom: var(--oc-space-small);
+    padding: var(--oc-space-small);
 
-    &:hover,
-    &:focus,
-    &.selected {
-      background-color: var(--oc-color-swatch-primary-default);
-      color: var(--oc-color-text-inverse);
+    &-title {
+      color: var(--oc-color-text-muted);
+      font-size: var(--oc-font-size-default);
+      font-weight: 600;
+    }
 
-      ::v-deep .oc-icon > svg {
-        fill: var(--oc-color-text-inverse);
-      }
+    ::v-deep label {
+      color: var(--oc-color-text-default);
     }
   }
 }
