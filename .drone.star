@@ -735,9 +735,9 @@ def beforePipelines(ctx):
     if "docs-only" in title:
         return checkForRecentBuilds(ctx) + website(ctx)
     elif "unit-tests-only" in title:
-        return yarnlint() + checkForRecentBuilds(ctx)
+        return yarnlint(ctx) + checkForRecentBuilds(ctx)
     else:
-        return yarnlint() + checkForRecentBuilds(ctx) + changelog(ctx) + website(ctx) + cacheOcisPipeline(ctx)
+        return yarnlint(ctx) + checkForRecentBuilds(ctx) + changelog(ctx) + website(ctx) + cacheOcisPipeline(ctx) + cacheYarnPipeline(ctx)
 
 def stagePipelines(ctx):
     title = ctx.build.title.lower()
@@ -760,7 +760,7 @@ def stagePipelines(ctx):
 def afterPipelines(ctx):
     return build(ctx) + notify()
 
-def yarnlint():
+def yarnlint(ctx):
     pipelines = []
 
     if "yarnlint" not in config:
@@ -778,7 +778,8 @@ def yarnlint():
             "base": dir["base"],
             "path": config["app"],
         },
-        "steps": installNPM() +
+        "steps": restoreBuildArtifactCache(ctx, ".yarn", ".yarn") +
+                 installNPM() +
                  lintTest(),
         "depends_on": [],
         "trigger": {
@@ -864,7 +865,8 @@ def build(ctx):
             "base": dir["base"],
             "path": config["app"],
         },
-        "steps": installNPM() +
+        "steps": restoreBuildArtifactCache(ctx, ".yarn", ".yarn") +
+                 installNPM() +
                  buildRelease(ctx) +
                  buildDockerImage(),
         "depends_on": [],
@@ -1015,6 +1017,7 @@ def unitTests(ctx):
                      ],
                  }] +
                  calculateTestsToRunBasedOnFilesChanged(ctx) +
+                 restoreBuildArtifactCache(ctx, ".yarn", ".yarn") +
                  installNPM() +
                  buildWeb() +
                  [
@@ -1146,6 +1149,7 @@ def acceptance(ctx):
                         if (params["earlyFail"]):
                             steps += calculateTestsToRunBasedOnFilesChanged(ctx)
 
+                        steps += restoreBuildArtifactCache(ctx, ".yarn", ".yarn")
                         steps += installNPM()
 
                         if (params["oc10IntegrationAppIncluded"]):
@@ -2184,6 +2188,22 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
         }],
     }]
 
+def cacheYarnPipeline(ctx):
+    return [{
+        "kind": "pipeline",
+        "type": "docker",
+        "name": "cache-yarn",
+        "steps": installNPM() + rebuildBuildArtifactCache(ctx, ".yarn", ".yarn"),
+        "depends_on": [],
+        "trigger": {
+            "ref": [
+                "refs/heads/master",
+                "refs/tags/**",
+                "refs/pull/**",
+            ],
+        },
+    }]
+
 def cacheOcisPipeline(ctx):
     return [{
         "kind": "pipeline",
@@ -2672,3 +2692,95 @@ def calculateTestsToRunBasedOnFilesChanged(ctx):
             },
         },
     ]
+
+def genericCache(name, action, mounts, cache_key):
+    rebuild = "false"
+    restore = "false"
+    if action == "rebuild":
+        rebuild = "true"
+        action = "rebuild"
+    else:
+        restore = "true"
+        action = "restore"
+
+    step = {
+        "name": "%s_%s" % (action, name),
+        "image": "meltwater/drone-cache:v1",
+        "pull": "always",
+        "environment": {
+            "AWS_ACCESS_KEY_ID": {
+                "from_secret": "cache_s3_access_key",
+            },
+            "AWS_SECRET_ACCESS_KEY": {
+                "from_secret": "cache_s3_secret_key",
+            },
+        },
+        "settings": {
+            "endpoint": {
+                "from_secret": "cache_s3_endpoint",
+            },
+            "bucket": "cache",
+            "region": "us-east-1",  # not used at all, but fails if not given!
+            "path_style": "true",
+            "cache_key": cache_key,
+            "rebuild": rebuild,
+            "restore": restore,
+            "mount": mounts,
+        },
+    }
+    return step
+
+def genericCachePurge(ctx, name, cache_key):
+    return {
+        "kind": "pipeline",
+        "type": "docker",
+        "name": "purge_%s" % (name),
+        "platform": {
+            "os": "linux",
+            "arch": "amd64",
+        },
+        "steps": [
+            {
+                "name": "purge-cache",
+                "image": "minio/mc:RELEASE.2021-03-23T05-46-11Z",
+                "failure": "ignore",
+                "environment": {
+                    "MC_HOST_cache": {
+                        "from_secret": "cache_s3_connection_url",
+                    },
+                },
+                "commands": [
+                    "mc rm --recursive --force cache/cache/%s/%s" % (ctx.repo.name, cache_key),
+                ],
+            },
+        ],
+        "trigger": {
+            "ref": [
+                "refs/heads/master",
+                "refs/tags/v*",
+                "refs/pull/**",
+            ],
+            "status": [
+                "success",
+                "failure",
+            ],
+        },
+    }
+
+def genericBuildArtifactCache(ctx, name, action, path):
+    name = "%s_build_artifact_cache" % (name)
+    cache_key = "%s/%s/%s" % (ctx.repo.slug, ctx.build.commit + "-${DRONE_BUILD_NUMBER}", name)
+    if action == "rebuild" or action == "restore":
+        return genericCache(name, action, [path], cache_key)
+    if action == "purge":
+        return genericCachePurge(ctx, name, cache_key)
+    return []
+
+def restoreBuildArtifactCache(ctx, name, path):
+    return [genericBuildArtifactCache(ctx, name, "restore", path)]
+
+def rebuildBuildArtifactCache(ctx, name, path):
+    return [genericBuildArtifactCache(ctx, name, "rebuild", path)]
+
+def purgeBuildArtifactCache(ctx, name):
+    return genericBuildArtifactCache(ctx, name, "purge", [])
