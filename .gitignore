@@ -32,6 +32,24 @@ tests/testing-app
 
 /coverage
 
+# with Zero-Installs: https://yarnpkg.com/features/zero-installs
+
+#.yarn/*
+#!.yarn/cache
+#!.yarn/patches
+#!.yarn/plugins
+#!.yarn/releases
+#!.yarn/sdks
+#!.yarn/versions
+# If you're not using Zero-Installs: https://yarnpkg.com/features/zero-installs
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
+
 # visual regression testing artifacts
 /tests/vrt/diff
 /tests/vrt/latest
