@@ -144,6 +144,7 @@ export class AllFilesPage {
     await page.click('.oc-modal-body-actions-confirm')
     await page.reload()
     await page.goto(startUrl)
+
   }
 
   async moveOrCopyFiles({
