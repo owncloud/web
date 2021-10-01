@@ -1,29 +1,52 @@
 <template>
-  <ul id="oc-files-context-actions" class="uk-list oc-mt-s">
-    <template v-for="(section, i) in menuSections">
-      <li
-        v-for="(action, j) in section.items"
-        :key="`section-${section.name}-action-${j}`"
-        class="oc-files-context-action"
-      >
-        <component
-          :is="action.componentType"
-          v-bind="getComponentProps(action, item)"
-          :class="['oc-text-bold', action.class]"
-          v-on="getComponentListeners(action, item)"
+  <div id="oc-files-context-menu">
+    <ul
+      v-if="showExternalApps"
+      id="oc-files-context-default-actions"
+      class="uk-list oc-my-xs oc-files-context-actions"
+    >
+      <li v-for="(app, index) in appList" :key="`app-${index}`">
+        <oc-button
+          appearance="raw"
+          class="oc-text-bold"
+          @click="$_fileActions_openLink(app.name, item.id)"
         >
-          <oc-icon :name="action.icon" size="medium" />
-          <span class="oc-files-context-action-label">{{ action.label(item) }}</span>
-          <span
-            v-if="action.opensInNewWindow"
-            class="oc-invisible-sr"
-            v-text="$gettext('(Opens in new window)')"
-          />
-        </component>
+          <img :src="app.icon" :alt="`Icon for ${app.name} app`" class="oc-icon oc-icon-m" />
+          <span class="oc-files-context-action-label">{{ 'Open in ' + app.name }}</span>
+        </oc-button>
       </li>
+    </ul>
+    <hr v-if="showExternalApps" />
+    <template v-for="(section, i) in menuSections">
+      <ul
+        id="`oc-files-context-actions-${section.name}`"
+        :key="`section-${section.name}-list`"
+        class="uk-list oc-mt-s oc-files-context-actions"
+      >
+        <li
+          v-for="(action, j) in section.items"
+          :key="`section-${section.name}-action-${j}`"
+          class="oc-files-context-action"
+        >
+          <component
+            :is="action.componentType"
+            v-bind="getComponentProps(action, item)"
+            :class="['oc-text-bold', action.class]"
+            v-on="getComponentListeners(action, item)"
+          >
+            <oc-icon :name="action.icon" size="medium" />
+            <span class="oc-files-context-action-label">{{ action.label(item) }}</span>
+            <span
+              v-if="action.opensInNewWindow"
+              class="oc-invisible-sr"
+              v-text="$gettext('(Opens in new window)')"
+            />
+          </component>
+        </li>
+      </ul>
       <hr v-if="i < menuSections.length - 1" :key="`section-${section.name}-separator`" />
     </template>
-  </ul>
+  </div>
 </template>
 
 <script>
@@ -71,9 +94,16 @@ export default {
       required: true
     }
   },
+  data: () => ({
+    appList: []
+  }),
 
   computed: {
     ...mapGetters('Files', ['currentFolder']),
+
+    showExternalApps() {
+      return this.item.extension && this.appList?.length > 0
+    },
 
     menuSections() {
       const sections = []
@@ -153,7 +183,13 @@ export default {
       return [...this.$_showDetails_items].filter(item => item.isEnabled(this.filterParams))
     }
   },
+  mounted() {
+    this.loadApps()
+  },
   methods: {
+    loadApps() {
+      this.appList = this.$_fileActions_loadApps(this.item)
+    },
     getComponentProps(action, resource) {
       if (action.componentType === 'router-link' && action.route) {
         return {
@@ -194,7 +230,7 @@ export default {
 </script>
 
 <style lang="scss">
-#oc-files-context-actions {
+.oc-files-context-actions {
   text-align: left;
   white-space: normal;
 

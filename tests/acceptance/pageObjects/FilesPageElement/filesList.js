@@ -683,7 +683,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     contextMenuPanel: {
-      selector: 'ul#oc-files-context-actions'
+      selector: '#oc-files-context-menu'
     },
     /**
      * This element is concatenated as child of @see fileRowByResourcePath

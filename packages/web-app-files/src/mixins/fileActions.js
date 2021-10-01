@@ -48,7 +48,7 @@ export default {
   computed: {
     ...mapState(['apps']),
     ...mapGetters('Files', ['highlightedFile', 'currentFolder']),
-    ...mapGetters(['configuration']),
+    ...mapGetters(['capabilities', 'configuration']),
 
     $_fileActions_systemActions() {
       const systemActions = []
@@ -92,6 +92,7 @@ export default {
   },
 
   methods: {
+    ...mapGetters('External', ['getMimeTypes']),
     ...mapActions(['openFile']),
 
     $_fileActions_openEditor(editor, filePath, fileId, mode) {
@@ -135,7 +136,16 @@ export default {
       })
     },
 
+    // TODO: Make user-configurable what is a defaultAction for a filetype/mimetype
+    // returns the _first_ action from actions array which we now construct from
+    // available mime-types coming from the app-provider and existing actions
     $_fileActions_triggerDefaultAction(resource) {
+      const availableExternalAppActions = this.$_fileActions_loadApps(resource)
+
+      for (const action of availableExternalAppActions) {
+        action.handler = () => this.$_fileActions_openLink(action.name, resource.fileId)
+      }
+
       let actions = this.$_fileActions_editorActions.concat(this.$_fileActions_systemActions)
 
       actions = actions.filter(action => {
@@ -146,7 +156,40 @@ export default {
           }) && action.canBeDefault
         )
       })
-      actions[0].handler(resource, actions[0].handlerData)
+
+      const allDefaultActions = availableExternalAppActions.concat(actions)
+      allDefaultActions[0].handler(resource, allDefaultActions[0].handlerData)
+    },
+
+    // returns an array of available external Apps
+    // to open a resource with a specific mimeType
+    $_fileActions_loadApps(resource) {
+      const { mimeType } = resource
+      if (mimeType === undefined || !this.capabilities.files.app_providers) {
+        return []
+      }
+      const allAvailableMimeTypes = this.getMimeTypes()
+
+      if (!allAvailableMimeTypes?.length) {
+        return []
+      } else {
+        const availableMimeTypes = allAvailableMimeTypes.find(t => t.mime_type === mimeType)
+        if (availableMimeTypes) {
+          return availableMimeTypes.app_providers
+        } else {
+          return []
+        }
+      }
+    },
+
+    $_fileActions_openLink(appName, resourceId) {
+      const actionableId = resourceId.replaceAll('=', '')
+      const routeData = this.$router.resolve({
+        name: 'external-apps',
+        params: { app: appName, file_id: actionableId }
+      })
+      // TODO: Let users configure whether to open in same/new tab (`_blank` vs `_self`)
+      window.open(routeData.href, '_blank')
     }
   }
 }
