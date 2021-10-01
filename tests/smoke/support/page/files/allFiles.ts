@@ -142,14 +142,8 @@ export class AllFilesPage {
     await page.click('.oc-files-actions-rename-trigger')
     await page.fill('.oc-text-input', name[0])
     await page.click('.oc-modal-body-actions-confirm')
+    await page.reload()
     await page.goto(startUrl)
-
-    if (folderPaths.length) {
-      await page.reload()
-      await cta.files.navigateToFolder({ page: page, path: folderPaths.join('/') })
-      await cta.files.resourceExists({ page: page, name: name[0] })
-      await page.goto(startUrl)
-    }
   }
 
   async moveOrCopyFiles({

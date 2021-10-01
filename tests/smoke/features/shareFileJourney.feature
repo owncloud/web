@@ -6,6 +6,7 @@ Background:
   Given following users have been created
     | Alice |
     | Brian |
+  And admin set the default folder for received shares to "Shares"
 
 Scenario: Alice shares folder with file to Brian
   Given "Alice" has logged in

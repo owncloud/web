@@ -17,7 +17,8 @@ export const createUser = async ({ user, admin }: { user: User; admin: User }): 
       method: 'POST',
       path: join('cloud', 'users'),
       body: body,
-      user: admin
+      user: admin,
+      versionApi: 'v2.php'
     })
     checkResponseStatus(response, 'Failed while creating user')
 
@@ -37,7 +38,8 @@ export const createUser = async ({ user, admin }: { user: User; admin: User }): 
         method: 'PUT',
         path: join('cloud', 'users', encodeURIComponent(user.id)),
         body,
-        user: admin
+        user: admin,
+        versionApi: 'v2.php'
       })
     )
   })
@@ -53,7 +55,8 @@ export const deleteUser = async ({ user, admin }: { user: User; admin: User }): 
   await request({
     method: 'DELETE',
     path: `cloud/users/${encodeURIComponent(user.id)}`,
-    user: admin
+    user: admin,
+    versionApi: 'v2.php'
   })
 
   return user
@@ -63,7 +66,8 @@ export const initUser = async ({ user }: { user: User }): Promise<User> => {
   await request({
     method: 'GET',
     path: join('cloud', 'users', user.id),
-    user
+    user,
+    versionApi: 'v2.php'
   })
 
   return user
