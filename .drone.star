@@ -779,7 +779,7 @@ def yarnlint(ctx):
             "path": config["app"],
         },
         "steps": restoreBuildArtifactCache(ctx, ".yarn", ".yarn") +
-                 installNPM() +
+                 installYarn() +
                  lintTest(),
         "depends_on": [],
         "trigger": {
@@ -866,7 +866,7 @@ def build(ctx):
             "path": config["app"],
         },
         "steps": restoreBuildArtifactCache(ctx, ".yarn", ".yarn") +
-                 installNPM() +
+                 installYarn() +
                  buildRelease(ctx) +
                  buildDockerImage(),
         "depends_on": [],
@@ -1018,7 +1018,7 @@ def unitTests(ctx):
                  }] +
                  calculateTestsToRunBasedOnFilesChanged(ctx) +
                  restoreBuildArtifactCache(ctx, ".yarn", ".yarn") +
-                 installNPM() +
+                 installYarn() +
                  buildWeb() +
                  [
                      {
@@ -1150,7 +1150,7 @@ def acceptance(ctx):
                             steps += calculateTestsToRunBasedOnFilesChanged(ctx)
 
                         steps += restoreBuildArtifactCache(ctx, ".yarn", ".yarn")
-                        steps += installNPM()
+                        steps += installYarn()
 
                         if (params["oc10IntegrationAppIncluded"]):
                             steps += buildWebApp()
@@ -1588,13 +1588,13 @@ def installFederatedServer(version, db, dbSuffix = "-federated"):
 
     return [stepDefinition]
 
-def installNPM():
+def installYarn():
     return [{
-        "name": "npm-install",
+        "name": "yarn-install",
         "image": "owncloudci/nodejs:14",
         "pull": "always",
         "commands": [
-            "if test -f runTestsForDocsChangeOnly; then echo 'skipping installNPM'; else yarn install --frozen-lockfile; fi",
+            "if test -f runTestsForDocsChangeOnly; then echo 'skipping installYarn'; else yarn install --immutable --immutable-cache; fi",
         ],
     }]
 
@@ -2193,7 +2193,7 @@ def cacheYarnPipeline(ctx):
         "kind": "pipeline",
         "type": "docker",
         "name": "cache-yarn",
-        "steps": installNPM() + rebuildBuildArtifactCache(ctx, ".yarn", ".yarn"),
+        "steps": installYarn() + rebuildBuildArtifactCache(ctx, ".yarn", ".yarn"),
         "depends_on": [],
         "trigger": {
             "ref": [
@@ -2767,6 +2767,17 @@ def genericCachePurge(ctx, name, cache_key):
         },
     }
 
+
+def listDir(path):
+    return {
+        "name": "list-dir",
+        "image": "owncloudci/alpine",
+        "pull": "always",
+        "commands": [
+            "tree %s" % (path),
+        ],
+    }
+
 def genericBuildArtifactCache(ctx, name, action, path):
     name = "%s_build_artifact_cache" % (name)
     cache_key = "%s/%s/%s" % (ctx.repo.slug, ctx.build.commit + "-${DRONE_BUILD_NUMBER}", name)
@@ -2777,10 +2788,12 @@ def genericBuildArtifactCache(ctx, name, action, path):
     return []
 
 def restoreBuildArtifactCache(ctx, name, path):
-    return [genericBuildArtifactCache(ctx, name, "restore", path)]
+    return [genericBuildArtifactCache(ctx, name, "restore", path), listDir(path)]
 
 def rebuildBuildArtifactCache(ctx, name, path):
     return [genericBuildArtifactCache(ctx, name, "rebuild", path)]
 
 def purgeBuildArtifactCache(ctx, name):
     return genericBuildArtifactCache(ctx, name, "purge", [])
+
+
