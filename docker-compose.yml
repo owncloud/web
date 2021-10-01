@@ -8,6 +8,7 @@ services:
       OCIS_URL: ${OCIS_URL:-https://host.docker.internal:9200}
       STORAGE_HOME_DRIVER: ${STORAGE_HOME_DRIVER:-ocis}
       STORAGE_USERS_DRIVER: ${STORAGE_USERS_DRIVER:-ocis}
+      STORAGE_LDAP_CACERT: ${STORAGE_LDAP_CACERT:-/web/ldap.crt}
       PROXY_OIDC_INSECURE: "${PROXY_OIDC_INSECURE:-true}"
       WEB_UI_CONFIG: ${WEB_UI_CONFIG:-/web/config.json}
       WEB_ASSET_PATH: ${WEB_ASSET_PATH:-/web/dist}

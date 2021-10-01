@@ -1972,6 +1972,7 @@ def ocisService():
             "PROXY_OIDC_INSECURE": "true",
             "STORAGE_HOME_DATA_SERVER_URL": "http://ocis:9155/data",
             "STORAGE_USERS_DATA_SERVER_URL": "http://ocis:9158/data",
+            "STORAGE_LDAP_CACERT": "/srv/config/drone/ldap.crt",
             "WEB_UI_CONFIG": "/srv/config/drone/config-ocis.json",
             "WEB_ASSET_PATH": "%s/dist" % dir["web"],
             "IDP_IDENTIFIER_REGISTRATION_CONF": "/srv/config/drone/identifier-registration.yml",
