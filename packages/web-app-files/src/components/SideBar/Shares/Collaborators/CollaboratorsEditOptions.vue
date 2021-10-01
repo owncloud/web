@@ -325,7 +325,7 @@ export default {
       this.selectedRole = this.roles[0]
     }
 
-    this.resetCustomPermissions()
+    this.getRecipientsCustomPermissions()
   },
 
   beforeDestroy() {
@@ -377,7 +377,7 @@ export default {
         return
       }
 
-      this.resetCustomPermissions()
+      this.getRecipientsCustomPermissions()
 
       this.selectedRole = role
     },
@@ -402,13 +402,18 @@ export default {
       this.$refs.rolesDrop.show()
     },
 
-    resetCustomPermissions() {
+    getRecipientsCustomPermissions() {
       // Custom permissions are only available for the custom role
       // so do not display checked permissions if a user is switching from a different role
       if (this.existingRole !== undefined && this.existingRole.name !== 'advancedRole') {
         return
       }
       this.customPermissions = []
+      if (this.collaboratorsPermissions) {
+        for (const permission in this.collaboratorsPermissions) {
+          this.customPermissions.push(permission)
+        }
+      }
     },
 
     cycleRoles(event) {
@@ -496,13 +501,17 @@ export default {
       width: 100%;
 
       &:hover,
-      &:focus,
+      &:focus {
+        background-color: white !important;
+        color: black !important;
+      }
+
       &.selected {
-        background-color: var(--oc-color-swatch-primary-default);
-        color: var(--oc-color-text-inverse);
+        background-color: var(--oc-color-swatch-primary-default) !important;
+        color: var(--oc-color-text-inverse) !important;
 
         ::v-deep .oc-icon > svg {
-          fill: var(--oc-color-text-inverse);
+          fill: var(--oc-color-text-inverse) !important;
         }
       }
     }
