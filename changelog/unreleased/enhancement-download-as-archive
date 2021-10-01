@@ -7,3 +7,5 @@ Archive downloads are available in two different ways:
 The implementation is currently limited to authenticated contexts. A public links implementation will follow soon.
 
 https://github.com/owncloud/web/pull/5832
+https://github.com/owncloud/web/issues/3913
+https://github.com/owncloud/web/issues/5809
