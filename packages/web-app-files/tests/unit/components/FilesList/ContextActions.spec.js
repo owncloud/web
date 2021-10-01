@@ -269,18 +269,6 @@ function getWrapper(route, { filename, extension, type = '', mimeType }, availab
 function createStore(state) {
   return new Vuex.Store({
     getters: {
-      capabilities: () => ({
-        files: {
-          app_providers: [
-            {
-              apps_url: 'example',
-              enabled: true
-            }
-          ]
-        }
-      })
-    },
-    getters: {
       capabilities: jest.fn(() => ({
         files: {
           app_providers: [
