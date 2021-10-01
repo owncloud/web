@@ -80,7 +80,7 @@ exports[`FilesDrop when "loading" is set to false should call "dropZoneFileAdded
         <h2>
           <translate-stub tag="span">An error occurred while loading the public link</translate-stub>
         </h2>
-        <p class="oc-m-rm">TypeError: Cannot read property 'push' of undefined</p>
+        <p class="oc-m-rm">TypeError: Cannot read properties of undefined (reading 'push')</p>
       </div>
     </div>
   </div>
@@ -197,7 +197,7 @@ exports[`FilesDrop when "loading" is set to false should show files list of uplo
         <h2>
           <translate-stub tag="span">An error occurred while loading the public link</translate-stub>
         </h2>
-        <p class="oc-m-rm">TypeError: Cannot read property 'push' of undefined</p>
+        <p class="oc-m-rm">TypeError: Cannot read properties of undefined (reading 'push')</p>
       </div>
     </div>
   </div>
@@ -229,7 +229,7 @@ exports[`FilesDrop when "loading" is set to false should show share information 
         <h2>
           <translate-stub tag="span">An error occurred while loading the public link</translate-stub>
         </h2>
-        <p class="oc-m-rm">TypeError: Cannot read property 'push' of undefined</p>
+        <p class="oc-m-rm">TypeError: Cannot read properties of undefined (reading 'push')</p>
       </div>
     </div>
   </div>
