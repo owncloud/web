@@ -32,8 +32,7 @@ tests/testing-app
 
 /coverage
 
-# with Zero-Installs: https://yarnpkg.com/features/zero-installs
-
+# yarn2 with Zero-Installs: https://yarnpkg.com/features/zero-installs
 #.yarn/*
 #!.yarn/cache
 #!.yarn/patches
@@ -41,7 +40,8 @@ tests/testing-app
 #!.yarn/releases
 #!.yarn/sdks
 #!.yarn/versions
-# If you're not using Zero-Installs: https://yarnpkg.com/features/zero-installs
+
+# yarn2 not using Zero-Installs: https://yarnpkg.com/features/zero-installs
 .yarn/*
 !.yarn/patches
 !.yarn/releases
