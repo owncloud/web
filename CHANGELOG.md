@@ -10,6 +10,7 @@ Summary
 
 * Enhancement - Add wrapper app for external apps: [#5805](https://github.com/owncloud/web/pull/5805)
 * Enhancement - Add AppProvider actions to fileactions: [#5805](https://github.com/owncloud/web/pull/5805)
+* Enhancement - Move custom permissions to roles drop: [#5764](https://github.com/owncloud/web/issues/5764)
 * Enhancement - Refactor runtime boot process: [#5752](https://github.com/owncloud/web/pull/5752)
 * Enhancement - Multiple shared with me tables: [#5814](https://github.com/owncloud/web/pull/5814)
 
@@ -29,6 +30,15 @@ Details
    the right sidebar.
 
    https://github.com/owncloud/web/pull/5805
+
+* Enhancement - Move custom permissions to roles drop: [#5764](https://github.com/owncloud/web/issues/5764)
+
+   We've moved all the custom permissions (previously advanced permissions) in the sharing
+   dialog into a dropdown which gets triggered by selecting the Custom permissions item in the
+   roles dropdown.
+
+   https://github.com/owncloud/web/issues/5764
+   https://github.com/owncloud/web/pull/5647
 
 * Enhancement - Refactor runtime boot process: [#5752](https://github.com/owncloud/web/pull/5752)
 
