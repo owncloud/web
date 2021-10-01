@@ -1,0 +1,10 @@
+{
+    "name": "external",
+    "version": "0.0.0",
+    "description": "ownCloud web integration of the reva app provider",
+    "license": "AGPL-3.0",
+    "devDependencies": {
+        "vue": "^2.6.10",
+        "vuex": "3.6.2"
+    }
+}
