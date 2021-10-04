@@ -4,15 +4,15 @@ CHANGED_UNIT_TESTS_ONLY=True
 CHANGED_DOCS_ONLY=True
 CHANGED_UNIT_TESTS_AND_DOCS_ONLY=True
 
-DIFFS=$(git diff origin/master --name-only)
-
-if ((${#DIFFS})); then
-  echo "Not a Merge Commit"
-else
-  echo "This is a merge commit"
-  COMMIT_ID=$(git rev-parse --verify HEAD)
-  DIFFS=$(git diff $COMMIT_ID~ $COMMIT_ID --name-only)
-fi
+#DIFFS=$(git diff origin/master --name-only)
+#
+#if ((${#DIFFS})); then
+#  echo "Not a Merge Commit"
+#else
+echo "This is a merge commit"
+COMMIT_ID=$(git rev-parse --verify HEAD)
+DIFFS=$(git diff $COMMIT_ID~ $COMMIT_ID --name-only)
+#fi
 
 DOCS_ONLY_CHANGES=$(echo "$DIFFS" | grep -E '(^docs/.*|^changelog/.*)')
 UNIT_TESTS_ONLY_CHANGES=$(echo "$DIFFS" | grep '^packages/.*/tests/.*')
