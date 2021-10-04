@@ -30,7 +30,7 @@ $ yarn test:unit
 $ yarn test:integration
 ```
 
-You can also specify which tests to run by giving a path param, like so: `yarn test:unit packages/<app-name>/tests/unit/path/to/test.spec.js`.
+You can also specify which tests to run by giving a path param, like: `yarn test:unit packages/<app-name>/tests/unit/path/to/test.spec.js`.
 
 ### Acceptance Tests
 
