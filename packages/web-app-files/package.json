@@ -12,7 +12,7 @@
     "lodash-es": "^4.17.21",
     "p-queue": "^6.6.2",
     "query-string": "^6.8.3",
-    "semver": "^7.3.5",
+    "semver": "^6.1.0",
     "vue": "^2.6.10",
     "vue-gettext": "^2.1.5",
     "vue2-dropzone": "^3.6.0",
