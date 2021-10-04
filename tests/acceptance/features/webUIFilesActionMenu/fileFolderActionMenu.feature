@@ -19,6 +19,7 @@ Background: prepare user and files
     And only the following items with default items should be visible in the actions menu on the webUI
       | items                     |
       | open folder               |
+      | download folder           |
     When the user opens the actions sidebar panel of file "lorem.txt" on the webUI
     Then the app-sidebar for file "lorem.txt" should be visible on the webUI
     And only the following items with default items should be visible in the actions menu on the webUI
