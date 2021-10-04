@@ -11761,10 +11761,10 @@ vue-scrollto@^2.15.0:
   dependencies:
     bezier-easing "2.1.0"
 
-vue-select@^3.12.0:
-  version "3.12.1"
-  resolved "https://registry.npmjs.org/vue-select/-/vue-select-3.12.1.tgz"
-  integrity sha512-8t2XQLIN5lsKj5r+ixjnOOPnjLdEU/vyRDnpsUmXrmVEgcwU6jfgJnK3EvXF5VfmixoWNRDyCONNbXedLRz1dQ==
+vue-select@^3.13.0:
+  version "3.13.0"
+  resolved "https://registry.yarnpkg.com/vue-select/-/vue-select-3.13.0.tgz#78d519984139156adcbf56af260fb6c2a69093a6"
+  integrity sha512-+PcWtfA1i3WVtkVwBPQknnOZL6QWSD2XiAVbSn0xAQvjOrmGAg7z+o9HkezXhtGdEstloJOdM8SujrUVyphKqg==
 
 vue-template-compiler@^2.6.12:
   version "2.6.14"
