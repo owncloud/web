@@ -58,7 +58,7 @@ $ yarn build:w
 
 #### Start Docker
 
-Using compose, you can start the required Docker containers by running
+Using compose, you can start the required Docker containers by running:
 
 ```shell
 $ docker compose up oc10 ocis vnc selenium
