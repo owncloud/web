@@ -1,0 +1,13 @@
+Enhancement: Refactor runtime boot process
+
+We have updated the way applications are being loaded in 
+the web runtime. It does now feature a dedicated boot process, 
+providing hooks that other applications can take advantage of.
+
+https://github.com/owncloud/web/pull/5752
+https://github.com/owncloud/web/issues/2891 (tbd)
+https://github.com/owncloud/web/issues/3726 (tbd)
+https://github.com/owncloud/web/issues/3771 (tbd, "needs api tweak")
+https://github.com/owncloud/web/issues/4735 (tbd)
+https://github.com/owncloud/web/issues/5135 (tbd)
+https://github.com/owncloud/web/issues/5460 (tbd)

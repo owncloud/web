@@ -1,0 +1,6 @@
+Enhancement: move custom permissions to roles drop
+
+We've moved all the custom permissions (previously advanced permissions) in the sharing dialog into a dropdown which gets triggered by selecting the Custom permissions item in the roles dropdown.
+
+https://github.com/owncloud/web/issues/5764
+https://github.com/owncloud/web/pull/5647

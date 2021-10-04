@@ -1,4 +1,4 @@
-@public_link_share-feature-required
+@public_link_share-feature-required @disablePreviews
 Feature: Public link share indicator
   As a user
   I want to check share indicator

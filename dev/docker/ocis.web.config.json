@@ -12,7 +12,13 @@
   "options": {
     "hideSearchBar": true
   },
-  "apps": ["files", "media-viewer", "markdown-editor", "search"],
+  "apps": [
+    "files", 
+    "markdown-editor", 
+    "media-viewer", 
+    "search",
+    "external"
+  ],
   "external_apps": [
     {
       "id": "settings",

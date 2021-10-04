@@ -1,0 +1,240 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FilesDrop should show page title and configuration theme general slogan 1`] = `
+<div id="files-drop-container" class="uk-height-1-1 uk-flex uk-flex-column uk-flex-between">
+  <h1 class="oc-invisible-sr">page route title</h1>
+  <div class="oc-p uk-height-1-1">
+    <div class="uk-flex uk-flex-column uk-flex-middle uk-height-1-1">
+      <div class="uk-text-center uk-width-1-1 uk-width-xxlarge@m">
+        <h2>admin shared this folder with you for uploading</h2>
+        <vue-dropzone-stub id="oc-dropzone" options="[object Object]" destroydropzone="true" usecustomslot="true">
+          <div class="uk-flex uk-flex-middle uk-flex-center uk-placeholder">
+            <oc-icon-stub name="file_upload" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
+            <translate-stub tag="span">Drop files here to upload or click to select file</translate-stub>
+          </div>
+        </vue-dropzone-stub>
+        <div id="previews" hidden="hidden"></div>
+      </div>
+      <div class="uk-flex uk-flex-center uk-overflow-auto uk-width-1-1 files-empty">
+        <!---->
+      </div>
+      <!---->
+    </div>
+  </div>
+  <div class="uk-text-center">
+    <p>some slogan</p>
+  </div>
+</div>
+`;
+
+exports[`FilesDrop should show spinner with loading text if wrapper is loading 1`] = `
+<div id="files-drop-container" class="uk-height-1-1 uk-flex uk-flex-column uk-flex-between">
+  <h1 class="oc-invisible-sr">page route title</h1>
+  <div class="oc-p uk-height-1-1">
+    <div class="uk-flex uk-flex-column uk-flex-middle">
+      <h2 class="oc-login-card-title">
+        <translate-stub tag="span">Loading public link…</translate-stub>
+      </h2>
+      <oc-spinner-stub arialabel="" size="medium" aria-hidden="true"></oc-spinner-stub>
+    </div>
+  </div>
+  <div class="uk-text-center">
+    <p>some slogan</p>
+  </div>
+</div>
+`;
+
+exports[`FilesDrop when "loading" is set to false should call "dropZoneFileAdded" method if "vdropzone-file-added" event is emitted 1`] = `
+<div id="files-drop-container" class="uk-height-1-1 uk-flex uk-flex-column uk-flex-between">
+  <h1 class="oc-invisible-sr">page route title</h1>
+  <div class="oc-p uk-height-1-1">
+    <div class="uk-flex uk-flex-column uk-flex-middle uk-height-1-1">
+      <div class="uk-text-center uk-width-1-1 uk-width-xxlarge@m">
+        <h2>admin shared this folder with you for uploading</h2>
+        <vue-dropzone-stub id="oc-dropzone" options="[object Object]" destroydropzone="true" usecustomslot="true">
+          <div class="uk-flex uk-flex-middle uk-flex-center uk-placeholder">
+            <oc-icon-stub name="file_upload" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
+            <translate-stub tag="span">Drop files here to upload or click to select file</translate-stub>
+          </div>
+        </vue-dropzone-stub>
+        <div id="previews" hidden="hidden"></div>
+      </div>
+      <div class="uk-flex uk-flex-center uk-overflow-auto uk-width-1-1">
+        <oc-table-simple-stub class="uk-width-1-1 uk-width-xxlarge@m">
+          <oc-tbody-stub>
+            <oc-tr-stub>
+              <oc-td-stub alignh="left" alignv="middle" width="auto" class="oc-pl-rm">file1.txt</oc-td-stub>
+              <oc-td-stub alignh="left" alignv="middle" width="shrink" class="uk-text-nowrap oc-text-muted">
+                <oc-resource-size-stub size="300"></oc-resource-size-stub>
+              </oc-td-stub>
+              <oc-td-stub alignh="left" alignv="middle" width="shrink" class="oc-pr-rm uk-preserve-width">
+                <oc-icon-stub name="ready" accessiblelabel="" type="span" size="small" variation="success"></oc-icon-stub>
+                <!---->
+                <!---->
+              </oc-td-stub>
+            </oc-tr-stub>
+          </oc-tbody-stub>
+        </oc-table-simple-stub>
+      </div>
+      <div class="uk-text-center">
+        <h2>
+          <translate-stub tag="span">An error occurred while loading the public link</translate-stub>
+        </h2>
+        <p class="oc-m-rm">TypeError: Cannot read property 'push' of undefined</p>
+      </div>
+    </div>
+  </div>
+  <div class="uk-text-center">
+    <p>some slogan</p>
+  </div>
+</div>
+`;
+
+exports[`FilesDrop when "loading" is set to false should not show files table if uploaded files list is empty 1`] = `
+<div class="uk-flex uk-flex-center uk-overflow-auto uk-width-1-1 files-empty">
+  <!---->
+</div>
+`;
+
+exports[`FilesDrop when "loading" is set to false should show error message if only it has truthy value 1`] = `
+<div id="files-drop-container" class="uk-height-1-1 uk-flex uk-flex-column uk-flex-between">
+  <h1 class="oc-invisible-sr">page route title</h1>
+  <div class="oc-p uk-height-1-1">
+    <div class="uk-flex uk-flex-column uk-flex-middle uk-height-1-1">
+      <div class="uk-text-center uk-width-1-1 uk-width-xxlarge@m">
+        <h2>admin shared this folder with you for uploading</h2>
+        <vue-dropzone-stub id="oc-dropzone" options="[object Object]" destroydropzone="true" usecustomslot="true">
+          <div class="uk-flex uk-flex-middle uk-flex-center uk-placeholder">
+            <oc-icon-stub name="file_upload" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
+            <translate-stub tag="span">Drop files here to upload or click to select file</translate-stub>
+          </div>
+        </vue-dropzone-stub>
+        <div id="previews" hidden="hidden"></div>
+      </div>
+      <div class="uk-flex uk-flex-center uk-overflow-auto uk-width-1-1 files-empty">
+        <!---->
+      </div>
+      <div class="uk-text-center">
+        <h2>
+          <translate-stub tag="span">An error occurred while loading the public link</translate-stub>
+        </h2>
+        <p class="oc-m-rm">This is a test error message</p>
+      </div>
+    </div>
+  </div>
+  <div class="uk-text-center">
+    <p>some slogan</p>
+  </div>
+</div>
+`;
+
+exports[`FilesDrop when "loading" is set to false should show files list of uploaded files 1`] = `
+<div id="files-drop-container" class="uk-height-1-1 uk-flex uk-flex-column uk-flex-between">
+  <h1 class="oc-invisible-sr">page route title</h1>
+  <div class="oc-p uk-height-1-1">
+    <div class="uk-flex uk-flex-column uk-flex-middle uk-height-1-1">
+      <div class="uk-text-center uk-width-1-1 uk-width-xxlarge@m">
+        <h2></h2>
+        <vue-dropzone-stub id="oc-dropzone" options="[object Object]" destroydropzone="true" usecustomslot="true">
+          <div class="uk-flex uk-flex-middle uk-flex-center uk-placeholder">
+            <oc-icon-stub name="file_upload" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
+            <translate-stub tag="span">Drop files here to upload or click to select file</translate-stub>
+          </div>
+        </vue-dropzone-stub>
+        <div id="previews" hidden="hidden"></div>
+      </div>
+      <div class="uk-flex uk-flex-center uk-overflow-auto uk-width-1-1">
+        <oc-table-simple-stub class="uk-width-1-1 uk-width-xxlarge@m">
+          <oc-tbody-stub>
+            <oc-tr-stub>
+              <oc-td-stub alignh="left" alignv="middle" width="auto" class="oc-pl-rm">file1</oc-td-stub>
+              <oc-td-stub alignh="left" alignv="middle" width="shrink" class="uk-text-nowrap oc-text-muted">
+                <oc-resource-size-stub size="300"></oc-resource-size-stub>
+              </oc-td-stub>
+              <oc-td-stub alignh="left" alignv="middle" width="shrink" class="oc-pr-rm uk-preserve-width">
+                <!---->
+                <oc-icon-stub name="info" accessiblelabel="" type="span" size="small" variation="danger"></oc-icon-stub>
+                <!---->
+              </oc-td-stub>
+            </oc-tr-stub>
+            <oc-tr-stub>
+              <oc-td-stub alignh="left" alignv="middle" width="auto" class="oc-pl-rm">file2</oc-td-stub>
+              <oc-td-stub alignh="left" alignv="middle" width="shrink" class="uk-text-nowrap oc-text-muted">
+                <oc-resource-size-stub size="600"></oc-resource-size-stub>
+              </oc-td-stub>
+              <oc-td-stub alignh="left" alignv="middle" width="shrink" class="oc-pr-rm uk-preserve-width">
+                <oc-icon-stub name="ready" accessiblelabel="" type="span" size="small" variation="success"></oc-icon-stub>
+                <!---->
+                <!---->
+              </oc-td-stub>
+            </oc-tr-stub>
+            <oc-tr-stub>
+              <oc-td-stub alignh="left" alignv="middle" width="auto" class="oc-pl-rm">file3</oc-td-stub>
+              <oc-td-stub alignh="left" alignv="middle" width="shrink" class="uk-text-nowrap oc-text-muted">
+                <oc-resource-size-stub size="900"></oc-resource-size-stub>
+              </oc-td-stub>
+              <oc-td-stub alignh="left" alignv="middle" width="shrink" class="oc-pr-rm uk-preserve-width">
+                <!---->
+                <!---->
+                <oc-spinner-stub arialabel="Uploading file &quot;file3&quot;" size="small"></oc-spinner-stub>
+              </oc-td-stub>
+            </oc-tr-stub>
+            <oc-tr-stub>
+              <oc-td-stub alignh="left" alignv="middle" width="auto" class="oc-pl-rm">file4</oc-td-stub>
+              <oc-td-stub alignh="left" alignv="middle" width="shrink" class="uk-text-nowrap oc-text-muted">
+                <oc-resource-size-stub size="1200"></oc-resource-size-stub>
+              </oc-td-stub>
+              <oc-td-stub alignh="left" alignv="middle" width="shrink" class="oc-pr-rm uk-preserve-width">
+                <!---->
+                <!---->
+                <oc-spinner-stub arialabel="Uploading file &quot;file4&quot;" size="small"></oc-spinner-stub>
+              </oc-td-stub>
+            </oc-tr-stub>
+          </oc-tbody-stub>
+        </oc-table-simple-stub>
+      </div>
+      <div class="uk-text-center">
+        <h2>
+          <translate-stub tag="span">An error occurred while loading the public link</translate-stub>
+        </h2>
+        <p class="oc-m-rm">TypeError: Cannot read property 'push' of undefined</p>
+      </div>
+    </div>
+  </div>
+  <div class="uk-text-center">
+    <p>some slogan</p>
+  </div>
+</div>
+`;
+
+exports[`FilesDrop when "loading" is set to false should show share information title 1`] = `
+<div id="files-drop-container" class="uk-height-1-1 uk-flex uk-flex-column uk-flex-between">
+  <h1 class="oc-invisible-sr">page route title</h1>
+  <div class="oc-p uk-height-1-1">
+    <div class="uk-flex uk-flex-column uk-flex-middle uk-height-1-1">
+      <div class="uk-text-center uk-width-1-1 uk-width-xxlarge@m">
+        <h2>admin shared this folder with you for uploading</h2>
+        <vue-dropzone-stub id="oc-dropzone" options="[object Object]" destroydropzone="true" usecustomslot="true">
+          <div class="uk-flex uk-flex-middle uk-flex-center uk-placeholder">
+            <oc-icon-stub name="file_upload" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
+            <translate-stub tag="span">Drop files here to upload or click to select file</translate-stub>
+          </div>
+        </vue-dropzone-stub>
+        <div id="previews" hidden="hidden"></div>
+      </div>
+      <div class="uk-flex uk-flex-center uk-overflow-auto uk-width-1-1 files-empty">
+        <!---->
+      </div>
+      <div class="uk-text-center">
+        <h2>
+          <translate-stub tag="span">An error occurred while loading the public link</translate-stub>
+        </h2>
+        <p class="oc-m-rm">TypeError: Cannot read property 'push' of undefined</p>
+      </div>
+    </div>
+  </div>
+  <div class="uk-text-center">
+    <p>some slogan</p>
+  </div>
+</div>
+`;

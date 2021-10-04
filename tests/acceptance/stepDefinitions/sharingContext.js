@@ -924,11 +924,11 @@ When(
 )
 
 When(
-  'the user changes the collaborator role of {string} for file/folder {string} to {string} using the webUI',
-  async function(collaborator, resource, newRole) {
+  'the user changes the collaborator role of {string} for file/folder {string} to {string} with permissions {string} using the webUI',
+  async function(collaborator, resource, newRole, permissions) {
     const api = client.page.FilesPageElement
     await api.filesList().openSharingDialog(resource)
-    return api.sharingDialog().changeCollaboratorRole(collaborator, newRole)
+    return api.sharingDialog().changeCollaboratorRole(collaborator, newRole, permissions)
   }
 )
 
