@@ -3,10 +3,9 @@ import quickActionsImport from './quickActions'
 import store from './store'
 import { FilterSearch, SDKSearch } from './search'
 import { bus } from 'web-pkg/src/instance'
-import { Registry } from './services'
+import { archiverService, Registry } from './services'
 import fileSideBars from './fileSideBars'
 import routes from './routes'
-import { archiverService } from './services/archiver'
 
 // just a dummy function to trick gettext tools
 function $gettext(msg) {
