@@ -1,0 +1,5 @@
+Enhancement: Early store initialization
+
+We made sure that the store and auth get initialized as early as possible. With this we ensured that capabilities are always loaded as soon as applications start their initialization process.
+
+https://github.com/owncloud/web/pull/5874

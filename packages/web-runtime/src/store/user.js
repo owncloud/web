@@ -176,8 +176,7 @@ const actions = {
     vueAuthInstance.mgr
       .signinRedirectCallback()
       .then(() => {
-        const autoRedirect = true
-        context.dispatch('initAuth', { autoRedirect })
+        context.dispatch('initAuth', { autoRedirect: true })
       })
       .catch(e => {
         console.warn('error in OpenIdConnect:', e)

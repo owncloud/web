@@ -314,12 +314,8 @@ export default {
     })
   },
 
-  beforeMount() {
-    this.initAuth()
-  },
-
   methods: {
-    ...mapActions(['initAuth', 'fetchNotifications', 'deleteMessage']),
+    ...mapActions(['fetchNotifications', 'deleteMessage']),
 
     focusModal(component, event) {
       this.focus({
