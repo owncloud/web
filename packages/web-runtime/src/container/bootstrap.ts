@@ -31,7 +31,7 @@ export const requestConfiguration = async (path: string): Promise<RuntimeConfigu
 }
 
 /**
- * Prepare store with basic that are needed before any application gets announced.
+ * Announce and prepare vuex store with data that is needed before any application gets announced.
  *
  * @param vue
  * @param runtimeConfiguration
