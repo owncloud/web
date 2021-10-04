@@ -109,7 +109,8 @@ Given('user {string} has uploaded file with content {string} to {string}', async
   content,
   filename
 ) {
-  await webdav.createFile(user, filename, content)
+  const res = await webdav.createFile(user, filename, content)
+  console.log(res)
   return this
 })
 
