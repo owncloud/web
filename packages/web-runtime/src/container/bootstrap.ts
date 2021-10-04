@@ -46,7 +46,6 @@ export const announceStore = async ({
   runtimeConfiguration: RuntimeConfiguration
   store: Store<any>
 }): Promise<void> => {
-  console.log('initAuth')
   await store.dispatch('loadConfig', runtimeConfiguration)
   await store.dispatch('initAuth')
 
