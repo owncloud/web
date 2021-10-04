@@ -132,7 +132,7 @@ export const announceTheme = async ({
   designSystem: any
   runtimeConfiguration?: RuntimeConfiguration
 }): Promise<void> => {
-  const { theme } = await loadTheme(runtimeConfiguration.theme)
+  const { theme } = await loadTheme(runtimeConfiguration?.theme)
   await store.dispatch('loadTheme', { theme: theme.default })
 
   vue.use(designSystem, {
