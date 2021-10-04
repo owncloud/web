@@ -24,7 +24,7 @@ module.exports = {
       }
       return this.api.page.FilesPageElement.filesList()
     },
-    isSideBarOpen: async function(timeout = 500) {
+    isSideBarOpen: async function(timeout = 600) {
       const element = this.elements.sidebar
       let isVisible = false
       await this.isVisible(
