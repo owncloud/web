@@ -93,23 +93,21 @@ describe('LinkEdit', () => {
         const expectedDate = new Date()
         expectedDate.setDate(new Date().getDate() + 2)
 
-        expect(expirationDatePickerFieldElement.props().maxDate).toEqual(expectedDate)
+        expect(expirationDatePickerFieldElement.attributes()['max-date']).toEqual(expectedDate.toString())
       })
     })
 
-    it('should have min-datetime attribute with the value one day ahead from provided day', () => {
-      const wrapper = getShallowMountedWrapper()
-      const expirationDatePickerElement = wrapper.find(selectors.linkExpireDatePicker)
+    it('should have min-datetime attribute with the value one day ahead from provided day', async () => {
+      const wrapper = getMountedWrapper()
+      const expirationDatePickerElement = wrapper.find("#oc-files-file-link-expire-date")
       const expectedDate = new Date()
-
       expectedDate.setDate(new Date().getDate() + 1)
-
-      expect(expirationDatePickerElement.props().minDate).toEqual(expectedDate)
+      expect(expirationDatePickerElement.attributes()['min-date']).toEqual(expectedDate.toString())
     })
 
     it('should be pre populated if the public link has already an expiration date set', () => {
       const expectedDate = new Date()
-      expectedDate.setDate(new Date().getDate() + 4)
+      expectedDate.setDate(expectedDate.getDate() + 1)
 
       const wrapper = getShallowMountedWrapper(
         createStore({
@@ -120,9 +118,10 @@ describe('LinkEdit', () => {
           publicLinkCapabilities: getLinkCapabilities({ enabledExpireDate: true })
         })
       )
+      wrapper.vm.$language = 'en'
       const expirationDatePickerFieldElement = wrapper.find(selectors.linkExpireDatePicker)
 
-      expect(expirationDatePickerFieldElement.props().value).toEqual(expectedDate)
+      expect(expirationDatePickerFieldElement.attributes()['min-date']).toEqual(expectedDate.toString())
     })
   })
 
@@ -584,7 +583,8 @@ function getShallowMountedWrapper(store = createStore(), data = {}) {
       ...stubs,
       'oc-text-input': true,
       'oc-select': true,
-      'oc-datepicker': true
+      'oc-datepicker': true,
+      'role-item':true
     }
   })
   wrapper.vm.$refs.nameInput.focus = jest.fn()

@@ -4,6 +4,7 @@
   "description": "ownCloud web runtime",
   "license": "AGPL-3.0",
   "devDependencies": {
+    "popper-max-size-modifier": "^0.2.0",
     "@vue/test-utils": "^1.1.2",
     "@popperjs/core": "^2.4.0",
     "easygettext": "^2.16.1",
@@ -14,7 +15,7 @@
     "lodash-es": "^4.17.21",
     "luxon": "^1.27.0",
     "oidc-client": "1.11.5",
-    "owncloud-design-system": "11.0.0-alpha",
+    "owncloud-design-system": "11.0.0",
     "owncloud-sdk": "1.0.0-2296",
     "p-queue": "^6.1.1",
     "postcss-url": "^9.0.0",
