@@ -132,8 +132,8 @@ config = {
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
                 "WEB_UI_CONFIG": "%s/dist/config.json" % dir["web"],
             },
-            "visualTesting": False,
-            "screenShots": False,
+            "visualTesting": True,
+            "screenShots": True,
             "debugSuites": ["webUIFilesActionMenu"],
         },
         "webUINotification": {
