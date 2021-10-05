@@ -40,8 +40,9 @@ Feature: Versions of a file
     And user "user0" has shared file "lorem-file.txt" with user "Alice"
     And user "Alice" has logged in using the webUI
     When the user browses to display the "versions" details of file "lorem-file.txt"
-    Then the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
-    And the versions list should contain 2 entries
+    Then the versions list should contain 2 entries
+    And the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
+
 
 #  @ocis-reva-issue-110
 #  @skipOnStorage:ceph @files_primary_s3-issue-1
@@ -105,8 +106,8 @@ Feature: Versions of a file
     And user "user0" has shared file "lorem-file.txt" with user "Alice"
     And user "Alice" has logged in using the webUI
     When the user browses to display the "versions" details of file "lorem-file.txt"
-    Then the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
-    And the versions list should contain 2 entries
+    Then the versions list should contain 2 entries
+    And the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
 
   @issue-ocis-1328 @disablePreviews
   Scenario: sharee can see the versions of a file
@@ -116,8 +117,8 @@ Feature: Versions of a file
     And user "user0" has shared file "lorem-file.txt" with user "Alice"
     And user "Alice" has logged in using the webUI
     When the user browses to display the "versions" details of file "lorem-file.txt"
-    Then the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
-    And the versions list should contain 2 entries
+    Then the versions list should contain 2 entries
+    And the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
 
   @issue-ocis-1328 @disablePreviews
   Scenario: sharee can see the versions of a file
@@ -127,8 +128,8 @@ Feature: Versions of a file
     And user "user0" has shared file "lorem-file.txt" with user "Alice"
     And user "Alice" has logged in using the webUI
     When the user browses to display the "versions" details of file "lorem-file.txt"
-    Then the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
-    And the versions list should contain 2 entries
+    Then the versions list should contain 2 entries
+    And the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
 
   @issue-ocis-1328 @disablePreviews
   Scenario: sharee can see the versions of a file
@@ -138,8 +139,8 @@ Feature: Versions of a file
     And user "user0" has shared file "lorem-file.txt" with user "Alice"
     And user "Alice" has logged in using the webUI
     When the user browses to display the "versions" details of file "lorem-file.txt"
-    Then the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
-    And the versions list should contain 2 entries
+    Then the versions list should contain 2 entries
+    And the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
 
   @issue-ocis-1328 @disablePreviews
   Scenario: sharee can see the versions of a file
@@ -149,8 +150,8 @@ Feature: Versions of a file
     And user "user0" has shared file "lorem-file.txt" with user "Alice"
     And user "Alice" has logged in using the webUI
     When the user browses to display the "versions" details of file "lorem-file.txt"
-    Then the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
-    And the versions list should contain 2 entries
+    Then the versions list should contain 2 entries
+    And the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
 
   @issue-ocis-1328 @disablePreviews
   Scenario: sharee can see the versions of a file
@@ -160,8 +161,8 @@ Feature: Versions of a file
     And user "user0" has shared file "lorem-file.txt" with user "Alice"
     And user "Alice" has logged in using the webUI
     When the user browses to display the "versions" details of file "lorem-file.txt"
-    Then the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
-    And the versions list should contain 2 entries
+    Then the versions list should contain 2 entries
+    And the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
 
   @issue-ocis-1328 @disablePreviews
   Scenario: sharee can see the versions of a file
@@ -171,8 +172,8 @@ Feature: Versions of a file
     And user "user0" has shared file "lorem-file.txt" with user "Alice"
     And user "Alice" has logged in using the webUI
     When the user browses to display the "versions" details of file "lorem-file.txt"
-    Then the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
-    And the versions list should contain 2 entries
+    Then the versions list should contain 2 entries
+    And the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
 
   @issue-ocis-1328 @disablePreviews
   Scenario: sharee can see the versions of a file
@@ -182,8 +183,8 @@ Feature: Versions of a file
     And user "user0" has shared file "lorem-file.txt" with user "Alice"
     And user "Alice" has logged in using the webUI
     When the user browses to display the "versions" details of file "lorem-file.txt"
-    Then the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
-    And the versions list should contain 2 entries
+    Then the versions list should contain 2 entries
+    And the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
 
   @issue-ocis-1328 @disablePreviews
   Scenario: sharee can see the versions of a file
@@ -193,8 +194,8 @@ Feature: Versions of a file
     And user "user0" has shared file "lorem-file.txt" with user "Alice"
     And user "Alice" has logged in using the webUI
     When the user browses to display the "versions" details of file "lorem-file.txt"
-    Then the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
-    And the versions list should contain 2 entries
+    Then the versions list should contain 2 entries
+    And the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
 
   @issue-ocis-1328 @disablePreviews
   Scenario: sharee can see the versions of a file
@@ -204,8 +205,8 @@ Feature: Versions of a file
     And user "user0" has shared file "lorem-file.txt" with user "Alice"
     And user "Alice" has logged in using the webUI
     When the user browses to display the "versions" details of file "lorem-file.txt"
-    Then the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
-    And the versions list should contain 2 entries
+    Then the versions list should contain 2 entries
+    And the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
 
   @issue-ocis-1328 @disablePreviews
   Scenario: sharee can see the versions of a file
@@ -215,8 +216,8 @@ Feature: Versions of a file
     And user "user0" has shared file "lorem-file.txt" with user "Alice"
     And user "Alice" has logged in using the webUI
     When the user browses to display the "versions" details of file "lorem-file.txt"
-    Then the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
-    And the versions list should contain 2 entries
+    Then the versions list should contain 2 entries
+    And the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
 
   @issue-ocis-1328 @disablePreviews
   Scenario: sharee can see the versions of a file
@@ -226,8 +227,8 @@ Feature: Versions of a file
     And user "user0" has shared file "lorem-file.txt" with user "Alice"
     And user "Alice" has logged in using the webUI
     When the user browses to display the "versions" details of file "lorem-file.txt"
-    Then the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
-    And the versions list should contain 2 entries
+    Then the versions list should contain 2 entries
+    And the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
 
   @issue-ocis-1328 @disablePreviews
   Scenario: sharee can see the versions of a file
@@ -237,8 +238,8 @@ Feature: Versions of a file
     And user "user0" has shared file "lorem-file.txt" with user "Alice"
     And user "Alice" has logged in using the webUI
     When the user browses to display the "versions" details of file "lorem-file.txt"
-    Then the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
-    And the versions list should contain 2 entries
+    Then the versions list should contain 2 entries
+    And the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
 
   @issue-ocis-1328 @disablePreviews
   Scenario: sharee can see the versions of a file
@@ -248,8 +249,8 @@ Feature: Versions of a file
     And user "user0" has shared file "lorem-file.txt" with user "Alice"
     And user "Alice" has logged in using the webUI
     When the user browses to display the "versions" details of file "lorem-file.txt"
-    Then the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
-    And the versions list should contain 2 entries
+    Then the versions list should contain 2 entries
+    And the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
 
   @issue-ocis-1328 @disablePreviews
   Scenario: sharee can see the versions of a file
@@ -259,8 +260,8 @@ Feature: Versions of a file
     And user "user0" has shared file "lorem-file.txt" with user "Alice"
     And user "Alice" has logged in using the webUI
     When the user browses to display the "versions" details of file "lorem-file.txt"
-    Then the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
-    And the versions list should contain 2 entries
+    Then the versions list should contain 2 entries
+    And the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
 
   @issue-ocis-1328 @disablePreviews
   Scenario: sharee can see the versions of a file
@@ -270,8 +271,8 @@ Feature: Versions of a file
     And user "user0" has shared file "lorem-file.txt" with user "Alice"
     And user "Alice" has logged in using the webUI
     When the user browses to display the "versions" details of file "lorem-file.txt"
-    Then the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
-    And the versions list should contain 2 entries
+    Then the versions list should contain 2 entries
+    And the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
 
   @issue-ocis-1328 @disablePreviews
   Scenario: sharee can see the versions of a file
@@ -281,8 +282,8 @@ Feature: Versions of a file
     And user "user0" has shared file "lorem-file.txt" with user "Alice"
     And user "Alice" has logged in using the webUI
     When the user browses to display the "versions" details of file "lorem-file.txt"
-    Then the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
-    And the versions list should contain 2 entries
+    Then the versions list should contain 2 entries
+    And the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
 
   @issue-ocis-1328 @disablePreviews
   Scenario: sharee can see the versions of a file
@@ -292,8 +293,8 @@ Feature: Versions of a file
     And user "user0" has shared file "lorem-file.txt" with user "Alice"
     And user "Alice" has logged in using the webUI
     When the user browses to display the "versions" details of file "lorem-file.txt"
-    Then the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
-    And the versions list should contain 2 entries
+    Then the versions list should contain 2 entries
+    And the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
 
   @issue-ocis-1328 @disablePreviews
   Scenario: sharee can see the versions of a file
@@ -303,8 +304,8 @@ Feature: Versions of a file
     And user "user0" has shared file "lorem-file.txt" with user "Alice"
     And user "Alice" has logged in using the webUI
     When the user browses to display the "versions" details of file "lorem-file.txt"
-    Then the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
-    And the versions list should contain 2 entries
+    Then the versions list should contain 2 entries
+    And the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
 
   @issue-ocis-1328 @disablePreviews
   Scenario: sharee can see the versions of a file
@@ -314,8 +315,9 @@ Feature: Versions of a file
     And user "user0" has shared file "lorem-file.txt" with user "Alice"
     And user "Alice" has logged in using the webUI
     When the user browses to display the "versions" details of file "lorem-file.txt"
-    Then the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
-    And the versions list should contain 2 entries
+    Then the versions list should contain 2 entries
+    And the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
+
 
   @issue-ocis-1328 @disablePreviews
   Scenario: sharee can see the versions of a file
@@ -325,8 +327,8 @@ Feature: Versions of a file
     And user "user0" has shared file "lorem-file.txt" with user "Alice"
     And user "Alice" has logged in using the webUI
     When the user browses to display the "versions" details of file "lorem-file.txt"
-    Then the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
-    And the versions list should contain 2 entries
+    Then the versions list should contain 2 entries
+    And the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
 
   @issue-ocis-1328 @disablePreviews
   Scenario: sharee can see the versions of a file
@@ -336,8 +338,8 @@ Feature: Versions of a file
     And user "user0" has shared file "lorem-file.txt" with user "Alice"
     And user "Alice" has logged in using the webUI
     When the user browses to display the "versions" details of file "lorem-file.txt"
-    Then the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
-    And the versions list should contain 2 entries
+    Then the versions list should contain 2 entries
+    And the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
 
   @issue-ocis-1328 @disablePreviews
   Scenario: sharee can see the versions of a file
@@ -347,8 +349,8 @@ Feature: Versions of a file
     And user "user0" has shared file "lorem-file.txt" with user "Alice"
     And user "Alice" has logged in using the webUI
     When the user browses to display the "versions" details of file "lorem-file.txt"
-    Then the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
-    And the versions list should contain 2 entries
+    Then the versions list should contain 2 entries
+    And the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
 
   @issue-ocis-1328 @disablePreviews
   Scenario: sharee can see the versions of a file
@@ -358,5 +360,71 @@ Feature: Versions of a file
     And user "user0" has shared file "lorem-file.txt" with user "Alice"
     And user "Alice" has logged in using the webUI
     When the user browses to display the "versions" details of file "lorem-file.txt"
-    Then the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
-    And the versions list should contain 2 entries
+    Then the versions list should contain 2 entries
+    And the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
+
+  @issue-ocis-1328 @disablePreviews
+  Scenario: sharee can see the versions of a file
+    Given user "user0" has uploaded file with content "lorem content" to "lorem-file.txt"
+    And user "user0" has uploaded file with content "lorem" to "lorem-file.txt"
+    And user "user0" has uploaded file with content "new lorem content" to "lorem-file.txt"
+    And user "user0" has shared file "lorem-file.txt" with user "Alice"
+    And user "Alice" has logged in using the webUI
+    When the user browses to display the "versions" details of file "lorem-file.txt"
+    Then the versions list should contain 2 entries
+    And the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
+
+  @issue-ocis-1328 @disablePreviews
+  Scenario: sharee can see the versions of a file
+    Given user "user0" has uploaded file with content "lorem content" to "lorem-file.txt"
+    And user "user0" has uploaded file with content "lorem" to "lorem-file.txt"
+    And user "user0" has uploaded file with content "new lorem content" to "lorem-file.txt"
+    And user "user0" has shared file "lorem-file.txt" with user "Alice"
+    And user "Alice" has logged in using the webUI
+    When the user browses to display the "versions" details of file "lorem-file.txt"
+    Then the versions list should contain 2 entries
+    And the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
+
+  @issue-ocis-1328 @disablePreviews
+  Scenario: sharee can see the versions of a file
+    Given user "user0" has uploaded file with content "lorem content" to "lorem-file.txt"
+    And user "user0" has uploaded file with content "lorem" to "lorem-file.txt"
+    And user "user0" has uploaded file with content "new lorem content" to "lorem-file.txt"
+    And user "user0" has shared file "lorem-file.txt" with user "Alice"
+    And user "Alice" has logged in using the webUI
+    When the user browses to display the "versions" details of file "lorem-file.txt"
+    Then the versions list should contain 2 entries
+    And the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
+
+  @issue-ocis-1328 @disablePreviews
+  Scenario: sharee can see the versions of a file
+    Given user "user0" has uploaded file with content "lorem content" to "lorem-file.txt"
+    And user "user0" has uploaded file with content "lorem" to "lorem-file.txt"
+    And user "user0" has uploaded file with content "new lorem content" to "lorem-file.txt"
+    And user "user0" has shared file "lorem-file.txt" with user "Alice"
+    And user "Alice" has logged in using the webUI
+    When the user browses to display the "versions" details of file "lorem-file.txt"
+    Then the versions list should contain 2 entries
+    And the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
+
+  @issue-ocis-1328 @disablePreviews
+  Scenario: sharee can see the versions of a file
+    Given user "user0" has uploaded file with content "lorem content" to "lorem-file.txt"
+    And user "user0" has uploaded file with content "lorem" to "lorem-file.txt"
+    And user "user0" has uploaded file with content "new lorem content" to "lorem-file.txt"
+    And user "user0" has shared file "lorem-file.txt" with user "Alice"
+    And user "Alice" has logged in using the webUI
+    When the user browses to display the "versions" details of file "lorem-file.txt"
+    Then the versions list should contain 2 entries
+    And the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
+
+  @issue-ocis-1328 @disablePreviews
+  Scenario: sharee can see the versions of a file
+    Given user "user0" has uploaded file with content "lorem content" to "lorem-file.txt"
+    And user "user0" has uploaded file with content "lorem" to "lorem-file.txt"
+    And user "user0" has uploaded file with content "new lorem content" to "lorem-file.txt"
+    And user "user0" has shared file "lorem-file.txt" with user "Alice"
+    And user "Alice" has logged in using the webUI
+    When the user browses to display the "versions" details of file "lorem-file.txt"
+    Then the versions list should contain 2 entries
+    And the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"

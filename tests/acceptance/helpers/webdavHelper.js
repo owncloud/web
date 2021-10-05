@@ -225,8 +225,7 @@ exports.createFile = async function(user, fileName, contents = '', waitMaxIfExis
     `Could not create the file "${fileName}" for user "${user}".`
   )
 
-  await client.pause(500)
-  console.log(statusResponse)
+  await client.pause(1000)
 
   return statusResponse.text()
 }
