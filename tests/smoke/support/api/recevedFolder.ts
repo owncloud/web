@@ -2,7 +2,7 @@ import { checkResponseStatus, request } from './http'
 import { User } from '../types'
 import { URLSearchParams } from 'url'
 
-export const setRecevedFolder = async ({
+export const setReceivedFolder = async ({
   folder,
   admin
 }: {
@@ -20,6 +20,6 @@ export const setRecevedFolder = async ({
     user: admin,
     versionApi: 'v1.php'
   })
-  console.log(response)
-  checkResponseStatus(response, 'Failed creating receved folder')
+
+  checkResponseStatus(response, 'Failed creating received folder')
 }

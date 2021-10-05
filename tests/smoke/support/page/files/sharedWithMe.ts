@@ -24,7 +24,7 @@ export class SharedWithMePage {
     })
 
     const statusResource = await page.textContent(
-      `//*[@data-test-resource-name="${name}"]/../../../../../td[3]/div[1]/span[1]`
+      `//*[@data-test-resource-name="${name}"]/ancestor::tr//span[contains(@class, "file-row-share-status-text")]`
     )
 
     if (!objectExists && statusResource !== 'Accepted') {

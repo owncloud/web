@@ -9,13 +9,13 @@ export const request = async ({
   path,
   body,
   user,
-  versionApi
+  versionApi = 'v2.php'
 }: {
   method: 'POST' | 'DELETE' | 'PUT' | 'GET'
   path: string
   body?: BodyInit
   user?: User
-  versionApi: string
+  versionApi?: string
 }): Promise<Response> => {
   return await fetch(
     join(
