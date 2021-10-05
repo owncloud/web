@@ -122,7 +122,7 @@ export default {
   navItems,
   quickActions,
   translations,
-  mounted({ router: runtimeRouter, store: runtimeStore }) {
+  ready({ router: runtimeRouter, store: runtimeStore }) {
     patchRouter(runtimeRouter)
     Registry.filterSearch = new FilterSearch(runtimeStore, runtimeRouter)
     Registry.sdkSearch = new SDKSearch(runtimeStore, runtimeRouter)

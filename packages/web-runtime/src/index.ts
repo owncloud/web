@@ -11,16 +11,19 @@ import {
   requestConfiguration,
   announceApplications,
   announceClient,
+  announceDefaults,
+  announceOwncloudSDK,
+  announceStore,
   announceTheme,
   announceTranslations,
-  announceOwncloudSDK,
-  announceDefaults,
   applicationStore
 } from './container'
 
 export const bootstrap = async (configurationPath: string): Promise<void> => {
   const runtimeConfiguration = await requestConfiguration(configurationPath)
+  announceOwncloudSDK({ vue: Vue, runtimeConfiguration })
   await announceClient(runtimeConfiguration)
+  await announceStore({ vue: Vue, store, runtimeConfiguration })
   await announceApplications({
     runtimeConfiguration,
     store,
@@ -28,10 +31,9 @@ export const bootstrap = async (configurationPath: string): Promise<void> => {
     router,
     translations
   })
-  await announceOwncloudSDK({ vue: Vue, runtimeConfiguration })
-  await announceTranslations({ vue: Vue, supportedLanguages, translations })
+  announceTranslations({ vue: Vue, supportedLanguages, translations })
   await announceTheme({ store, vue: Vue, designSystem, runtimeConfiguration })
-  await announceDefaults({ vue: Vue, store, router, runtimeConfiguration })
+  announceDefaults({ store, router })
 }
 
 export const renderSuccess = (): void => {

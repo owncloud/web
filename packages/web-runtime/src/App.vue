@@ -258,14 +258,14 @@ export default {
         this.appNavigationVisible = false
       }
     },
-    capabilities(caps) {
-      if (!caps) {
-        // capabilities not loaded yet
-        return
-      }
+    capabilities: {
+      immediate: true,
+      handler: function(caps) {
+        if (!caps?.notifications) {
+          return
+        }
 
-      // setup periodic loading of notifications if the server supports them
-      if (caps.notifications) {
+        // setup periodic loading of notifications if the server supports them
         this.$nextTick(() => {
           this.$_updateNotifications()
         })
@@ -314,12 +314,8 @@ export default {
     })
   },
 
-  beforeMount() {
-    this.initAuth()
-  },
-
   methods: {
-    ...mapActions(['initAuth', 'fetchNotifications', 'deleteMessage']),
+    ...mapActions(['fetchNotifications', 'deleteMessage']),
 
     focusModal(component, event) {
       this.focus({
