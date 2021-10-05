@@ -161,7 +161,7 @@ then
 	TEST_PATHS+=( "${FEATURES_DIR}" )
 fi
 
-RUN_ACCEPTANCE_TESTS="cucumber-js --retry 1 --require-module @babel/register --require-module @babel/polyfill --require tests/acceptance/setup.js --require tests/acceptance/stepDefinitions --format @cucumber/pretty-formatter"
+RUN_ACCEPTANCE_TESTS="cucumber-js --retry 0 --require-module @babel/register --require-module @babel/polyfill --require tests/acceptance/setup.js --require tests/acceptance/stepDefinitions --format @cucumber/pretty-formatter"
 
 if [ -z "${TEST_TAGS}" ]
 then
