@@ -83,7 +83,7 @@ describe('LinkEdit', () => {
     })
 
     it('should have min-datetime attribute with the value one day ahead from provided day', async () => {
-      const wrapper = getMountedWrapper()
+      const wrapper = getShallowMountedWrapper()
       const expirationDatePickerElement = wrapper.find('#oc-files-file-link-expire-date')
       const expectedDate = new Date()
       expectedDate.setDate(new Date().getDate() + 1)
@@ -570,7 +570,9 @@ function getShallowMountedWrapper(store = createStore(), data = {}) {
       'oc-text-input': true,
       'oc-select': true,
       'oc-datepicker': true,
-      'role-item': true
+      'role-item': true,
+      'oc-icon': true,
+      'oc-progress': true
     }
   })
   wrapper.vm.$refs.nameInput.focus = jest.fn()

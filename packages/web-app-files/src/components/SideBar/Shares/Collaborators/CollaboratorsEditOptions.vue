@@ -143,17 +143,6 @@
         <oc-icon name="close" />
       </oc-button>
     </template>
-    <template v-if="$_ocCollaborators_hasAdditionalPermissions">
-      <label v-if="!isAdvancedRoleSelected" class="oc-label oc-mt-s">
-        <translate>Additional permissions</translate>
-      </label>
-      <additional-permissions
-        :available-permissions="selectedRole.additionalPermissions"
-        :collaborators-permissions="collaboratorsPermissions"
-        :class="{ 'oc-mt-s': isAdvancedRoleSelected }"
-        @permissionChecked="checkAdditionalPermissions"
-      />
-    </template>
     <hr />
   </div>
 </template>
