@@ -24,6 +24,17 @@
       </oc-button>
     </template>
     <oc-grid v-if="displayBulkActions" gutter="small">
+      <div v-if="canDownload">
+        <oc-button
+          id="download-selected-btn"
+          key="download-selected-btn"
+          variation="primary"
+          @click="download"
+        >
+          <oc-icon name="archive" />
+          <translate>Download</translate>
+        </oc-button>
+      </div>
       <div v-if="canCopy">
         <oc-button
           id="copy-selected-btn"
@@ -94,6 +105,10 @@ import { checkRoute } from '../../../helpers/route'
 import { shareStatus } from '../../../helpers/shareStatus'
 import { triggerShareAction } from '../../../helpers/share/triggerShareAction'
 import PQueue from 'p-queue'
+import {
+  isDownloadAsArchiveAvailable,
+  triggerDownloadAsArchive
+} from '../../../helpers/download/downloadAsArchive'
 
 export default {
   mixins: [MixinRoutes, MixinDeleteResources],
@@ -106,6 +121,40 @@ export default {
       return this.selectedFiles.length < 1
         ? this.$gettext('Empty trash bin')
         : this.$gettext('Delete')
+    },
+
+    canDownload() {
+      return this.canDownloadSingleFile || this.canDownloadAsArchive
+    },
+
+    canDownloadSingleFile() {
+      if (
+        !checkRoute(['files-personal', 'files-favorites', 'files-public-list'], this.$route.name)
+      ) {
+        return false
+      }
+
+      if (this.selectedFiles.length !== 1) {
+        return false
+      }
+
+      if (!this.selectedFiles[0].canDownload()) {
+        return false
+      }
+
+      return !this.selectedFiles[0].isFolder
+    },
+
+    canDownloadAsArchive() {
+      if (!checkRoute(['files-personal', 'files-favorites'], this.$route.name)) {
+        return false
+      }
+
+      if (!isDownloadAsArchiveAvailable()) {
+        return false
+      }
+
+      return this.selectedFiles.filter(f => !f.canDownload()).length === 0
     },
 
     canMove() {
@@ -285,7 +334,7 @@ export default {
         return
       }
 
-      console.log(errors)
+      console.error(errors)
       if (newShareStatus === shareStatus.accepted) {
         this.showMessage({
           title: this.$ngettext(
@@ -307,6 +356,30 @@ export default {
           status: 'danger'
         })
       }
+    },
+
+    async download() {
+      if (this.selectedFiles.length === 1 && !this.selectedFiles[0].isFolder) {
+        await this.downloadFile(this.selectedFiles[0])
+        return
+      }
+      await this.downloadAsArchive()
+    },
+
+    async downloadAsArchive() {
+      await triggerDownloadAsArchive({
+        fileIds: this.selectedFiles.map(r => r.fileId)
+      }).catch(e => {
+        console.error(e)
+        this.showMessage({
+          title: this.$ngettext(
+            'Error downloading the selected file.',
+            'Error downloading the selected files.',
+            this.selectedFiles.length
+          ),
+          status: 'danger'
+        })
+      })
     }
   }
 }

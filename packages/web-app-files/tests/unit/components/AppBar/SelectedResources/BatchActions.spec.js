@@ -31,13 +31,15 @@ const shareStatus = {
 const selectedFiles = [
   {
     path: '/lorem.txt',
-    canBeDeleted: jest.fn(() => true)
+    canBeDeleted: jest.fn(() => true),
+    canDownload: jest.fn(() => true)
   }
 ]
 const componentStubs = { ...stubs, translate: true }
 const elSelector = {
   copyButton: '#copy-selected-btn',
   moveButton: '#move-selected-btn',
+  downloadButton: '#download-selected-btn',
   deleteButton: '#delete-selected-btn',
   restoreButton: '#restore-selected-btn',
   ocButton: '.oc-button',
@@ -75,7 +77,6 @@ describe('Batch Actions component', () => {
         const actionButtons = wrapper.findAll(elSelector.ocButtonStub)
 
         expect(actionButtons.length).toEqual(0)
-        expect(wrapper.exists()).toBeTruthy()
       })
 
       describe('when items are selected for batch action', () => {
@@ -111,7 +112,6 @@ describe('Batch Actions component', () => {
             acceptButton = wrapper.find(elSelector.acceptButton)
             declineButton = wrapper.find(elSelector.declineButton)
 
-            expect(actionButtons.length).toEqual(2)
             expect(acceptButton.exists()).toBeTruthy()
             expect(acceptButton.text()).toContain('Accept')
             expect(declineButton.exists()).toBeTruthy()
@@ -173,10 +173,10 @@ describe('Batch Actions component', () => {
           const store = createStore({ currentFolder, selected: selectedFiles })
 
           let wrapper
+          let downloadButton
           let copyButton
           let moveButton
           let deleteButton
-          let actionButtons
 
           const spyTriggerLocationPicker = jest
             .spyOn(BatchActions.methods, 'triggerLocationPicker')
@@ -189,16 +189,20 @@ describe('Batch Actions component', () => {
             canBeMoved.mockReturnValue(true)
             wrapper = createMountWrapper({ ...options, store })
 
-            actionButtons = wrapper.findAll(elSelector.ocButton)
+            downloadButton = wrapper.find(elSelector.downloadButton)
             copyButton = wrapper.find(elSelector.copyButton)
             moveButton = wrapper.find(elSelector.moveButton)
             deleteButton = wrapper.find(elSelector.deleteButton)
           })
 
           it('should display the action buttons', () => {
-            expect(actionButtons.length).toEqual(3)
+            expect(downloadButton.exists()).toBeTruthy()
+            expect(downloadButton.text()).toEqual('Download')
+            expect(copyButton.exists()).toBeTruthy()
             expect(copyButton.text()).toEqual('Copy')
+            expect(moveButton.exists()).toBeTruthy()
             expect(moveButton.text()).toEqual('Move')
+            expect(deleteButton.exists()).toBeTruthy()
             expect(deleteButton.text()).toEqual('Delete')
           })
           it('should call "triggerLocationPicker" when copy button is clicked', async () => {
@@ -230,7 +234,7 @@ describe('Batch Actions component', () => {
             canBeMoved.mockReturnValue(false)
           })
 
-          it('should not display action buttons when items are selected', () => {
+          it('should only display the read-only compliant action buttons when items are selected', () => {
             const store = createStore({ currentFolder, selected: selectedFiles })
             const wrapper = createShallowMountWrapper({
               store,
@@ -245,8 +249,9 @@ describe('Batch Actions component', () => {
             })
             const actionButtons = wrapper.findAll(elSelector.ocButtonStub)
 
-            expect(actionButtons.length).toEqual(0)
-            expect(wrapper.exists()).toBeTruthy()
+            const downloadButton = wrapper.find(elSelector.downloadButton)
+            expect(downloadButton.exists()).toBeTruthy()
+            expect(actionButtons.length).toEqual(1)
           })
         })
       }

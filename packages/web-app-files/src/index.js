@@ -3,9 +3,10 @@ import quickActionsImport from './quickActions'
 import store from './store'
 import { FilterSearch, SDKSearch } from './search'
 import { bus } from 'web-pkg/src/instance'
-import { Registry } from './services'
+import { archiverService, Registry } from './services'
 import fileSideBars from './fileSideBars'
 import routes from './routes'
+import get from 'lodash-es/get'
 
 // just a dummy function to trick gettext tools
 function $gettext(msg) {
@@ -131,5 +132,10 @@ export default {
     // registry that does not rely on call order, aka first register "on" and only after emit.
     bus.emit('app.search.register.provider', Registry.filterSearch)
     bus.emit('app.search.register.provider', Registry.sdkSearch)
+    // initialize services
+    archiverService.initialize(
+      runtimeStore.getters.configuration.server,
+      get(runtimeStore, 'getters.capabilities.files.archivers', [])
+    )
   }
 }

@@ -9,7 +9,7 @@ exports[`ContextActions if externalApps are available, renders one list of actio
         <oc-icon-stub name="text" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Open in editor</span>
         <!---->
       </button></li>
-    <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-download-trigger">
+    <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-download-file-trigger">
         <oc-icon-stub name="file_download" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Download</span>
         <!---->
       </button></li>
@@ -69,7 +69,7 @@ exports[`ContextActions if externalApps are available, renders two lists of acti
         <oc-icon-stub name="text" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Open in editor</span>
         <!---->
       </button></li>
-    <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-download-trigger">
+    <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-download-file-trigger">
         <oc-icon-stub name="file_download" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Download</span>
         <!---->
       </button></li>
@@ -125,7 +125,7 @@ exports[`ContextActions if no externalApps are available, renders a list of acti
         <oc-icon-stub name="text" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Open in editor</span>
         <!---->
       </button></li>
-    <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-download-trigger">
+    <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-download-file-trigger">
         <oc-icon-stub name="file_download" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Download</span>
         <!---->
       </button></li>
@@ -181,7 +181,7 @@ exports[`ContextActions if no externalApps are available, renders a list of acti
         <oc-icon-stub name="text" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Open in editor</span>
         <!---->
       </button></li>
-    <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-download-trigger">
+    <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-download-file-trigger">
         <oc-icon-stub name="file_download" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Download</span>
         <!---->
       </button></li>

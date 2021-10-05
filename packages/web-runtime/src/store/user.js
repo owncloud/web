@@ -125,6 +125,7 @@ const actions = {
 
         if (payload.autoRedirect) {
           router.push({ path: '/' }).catch(() => {})
+          window.location.reload()
         }
       } else {
         context.commit('UPDATE_TOKEN', token)

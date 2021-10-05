@@ -1,0 +1,11 @@
+Enhancement: Download as archive
+
+We've introduced archive downloads based on whether or not an archiver capability is present. The current implementation supports the archiver v2 (a.k.a. the REVA implementation).
+Archive downloads are available in two different ways:
+- as action on a folder (right-click context menu or actions panel in the right sidebar)
+- as batch action for all selected files
+The implementation is currently limited to authenticated contexts. A public links implementation will follow soon.
+
+https://github.com/owncloud/web/pull/5832
+https://github.com/owncloud/web/issues/3913
+https://github.com/owncloud/web/issues/5809
