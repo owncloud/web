@@ -43,6 +43,62 @@
         </oc-list>
       </template>
     </oc-drop>
+    <oc-drop
+      ref="customPermissionsDrop"
+      data-testid="files-recipient-custom-permissions-drop"
+      class="files-recipient-custom-permissions-drop uk-width-auto"
+      mode="manual"
+      target="#files-collaborators-role-button"
+    >
+      <template #special>
+        <translate tag="h4" class="files-recipient-custom-permissions-drop-title"
+          >Custom permissions
+        </translate>
+        <oc-list class="oc-mb">
+          <li class="oc-my-xs">
+            <oc-checkbox
+              :label="readingRoleCheckboxLabel"
+              :value="true"
+              :disabled="true"
+              class="oc-mr-xs files-collaborators-permission-checkbox"
+            />
+          </li>
+          <li
+            v-for="permission in advancedRole.additionalPermissions"
+            :key="permission.name"
+            class="oc-my-xs"
+          >
+            <oc-checkbox
+              :id="`files-collaborators-permission-${permission.name}`"
+              :key="permission.name"
+              v-model="customPermissions"
+              :data-testid="`files-collaborators-permission-${permission.name}`"
+              :label="permission.description"
+              :option="permission.name"
+              class="oc-mr-xs files-collaborators-permission-checkbox"
+            />
+          </li>
+        </oc-list>
+        <div>
+          <oc-button
+            data-testid="files-recipient-custom-permissions-drop-cancel"
+            size="small"
+            @click="cancelCustomPermissions"
+          >
+            <translate>Cancel</translate>
+          </oc-button>
+          <oc-button
+            data-testid="files-recipient-custom-permissions-drop-confirm"
+            size="small"
+            variation="primary"
+            appearance="filled"
+            @click="confirmCustomPermissions"
+          >
+            <translate>Apply</translate>
+          </oc-button>
+        </div>
+      </template>
+    </oc-drop>
     <template v-if="expirationSupported">
       <oc-datepicker
         v-model="enteredExpirationDate"
@@ -445,13 +501,9 @@ export default {
   gap: var(--oc-space-small);
 }
 
-.files-recipient-role-drop {
-  &-list {
-    background-color: var(--oc-color-swatch-inverse-default);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-
-    &:hover .files-recipient-role-drop-btn.selected:not(:hover),
-    &:focus .files-recipient-role-drop-btn.selected:not(:focus) {
+.files-recipient {
+  &-role-drop {
+    &-list {
       background-color: var(--oc-color-swatch-inverse-default);
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
 
