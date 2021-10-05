@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Enhancement - Download as archive: [#5832](https://github.com/owncloud/web/pull/5832)
 * Enhancement - Early store initialization: [#5874](https://github.com/owncloud/web/pull/5874)
 * Enhancement - Add wrapper app for external apps: [#5805](https://github.com/owncloud/web/pull/5805)
 * Enhancement - Add AppProvider actions to fileactions: [#5805](https://github.com/owncloud/web/pull/5805)
@@ -17,6 +18,19 @@ Summary
 
 Details
 -------
+
+* Enhancement - Download as archive: [#5832](https://github.com/owncloud/web/pull/5832)
+
+   We've introduced archive downloads based on whether or not an archiver capability is present.
+   The current implementation supports the archiver v2 (a.k.a. the REVA implementation).
+   Archive downloads are available in two different ways: - as action on a folder (right-click
+   context menu or actions panel in the right sidebar) - as batch action for all selected files The
+   implementation is currently limited to authenticated contexts. A public links
+   implementation will follow soon.
+
+   https://github.com/owncloud/web/issues/3913
+   https://github.com/owncloud/web/issues/5809
+   https://github.com/owncloud/web/pull/5832
 
 * Enhancement - Early store initialization: [#5874](https://github.com/owncloud/web/pull/5874)
 
