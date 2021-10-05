@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Enhancement - Early store initialization: [#5874](https://github.com/owncloud/web/pull/5874)
 * Enhancement - Add wrapper app for external apps: [#5805](https://github.com/owncloud/web/pull/5805)
 * Enhancement - Add AppProvider actions to fileactions: [#5805](https://github.com/owncloud/web/pull/5805)
 * Enhancement - Move custom permissions to roles drop: [#5764](https://github.com/owncloud/web/issues/5764)
@@ -16,6 +17,14 @@ Summary
 
 Details
 -------
+
+* Enhancement - Early store initialization: [#5874](https://github.com/owncloud/web/pull/5874)
+
+   We made sure that the store and auth get initialized as early as possible. With this we ensured
+   that capabilities are always loaded as soon as applications start their initialization
+   process.
+
+   https://github.com/owncloud/web/pull/5874
 
 * Enhancement - Add wrapper app for external apps: [#5805](https://github.com/owncloud/web/pull/5805)
 
