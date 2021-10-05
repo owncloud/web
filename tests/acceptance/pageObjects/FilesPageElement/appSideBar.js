@@ -183,7 +183,7 @@ module.exports = {
   },
   elements: {
     sidebar: {
-      selector: '//*[@id="files-sidebar"]//*[@id="sidebar-panel-details-item"]',
+      selector: '//div[@id="files-sidebar"]//div[@id="sidebar-panel-details-item"]',
       locateStrategy: 'xpath'
     },
     fileInfoIcon: {
