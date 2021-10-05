@@ -5,7 +5,7 @@
 	<summary>User interface for ownCloud</summary>
 	<description>
 **ownCloud Web currently is a technology preview. Bugs and other undesired behavior are expected. After careful testing, ownCloud Web can be used on production systems as users have to opt-in and the classic user interface is not impacted.**
-		
+
 This extension brings the modern ownCloud Web user interface to ownCloud Server. It is the most straightforward way to deploy ownCloud Web to supplement the classic ownCloud web interface.
 
 ownCloud Web is a single page, standalone frontend based on modern web technologies. It brings new features as well as improved user flows and can be deployed independent of the backend server. As the successor to the classic ownCloud frontend, it is compatible with both the classic ownCloud Server and ownCloud Infinite Scale. When used with the classic ownCloud Server, ownCloud Web is made available to users via an additional item "New Design" in the application switcher. Similarly ownCloud Web comes with an item in the application switcher that allows users to switch back to the "Classic Design".
@@ -15,7 +15,7 @@ For feedback and bug reports, please use the [public issue tracker](https://gith
 	</description>
 	<licence>AGPL</licence>
 	<author>ownCloud</author>
-	<version>4.2.0</version>
+	<version>4.3.0</version>
 	<category>tools</category>
 	<website>https://github.com/owncloud/web</website>
 	<bugs>https://github.com/owncloud/web/issues</bugs>
