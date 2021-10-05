@@ -61,24 +61,7 @@ describe('LinkEdit', () => {
   })
 
   describe('expiration date picker field', () => {
-    describe('required field label', () => {
-      it('should not have the required label if link expiration date is not enforced', () => {
-        const wrapper = getMountedWrapper()
-        const expirationDatePickerField = wrapper.find(selectors.linkExpireDatePicker)
-
-        expect(expirationDatePickerField.exists()).toBeTruthy()
-        expect(expirationDatePickerField).toMatchSnapshot()
-      })
-      it('should have the required label if link expiration date is enforced', () => {
-        const wrapper = getMountedWrapper(
-          createStore({ publicLinkCapabilities: getLinkCapabilities({ enforcedExpireDate: true }) })
-        )
-        const expirationDatePickerField = wrapper.find(selectors.linkExpireDatePicker)
-
-        expect(expirationDatePickerField.exists()).toBeTruthy()
-        expect(expirationDatePickerField).toMatchSnapshot()
-      })
-    })
+    describe('required field label', () => {})
     describe('when the link expiration date is enforced', () => {
       it('should have max-datetime attribute with tomorrow datetime value', () => {
         const wrapper = getShallowMountedWrapper(
@@ -115,12 +98,11 @@ describe('LinkEdit', () => {
         createStore({
           linkInEdit: {
             id: 1,
-            expireDate: expectedDate.toISOString()
+            expireDate: expectedDate.toString()
           },
           publicLinkCapabilities: getLinkCapabilities({ enabledExpireDate: true })
         })
       )
-      wrapper.vm.$language = 'en'
       const expirationDatePickerFieldElement = wrapper.find(selectors.linkExpireDatePicker)
 
       expect(expirationDatePickerFieldElement.attributes()['min-date']).toEqual(
