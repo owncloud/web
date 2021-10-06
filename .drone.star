@@ -24,117 +24,14 @@ config = {
         "webUI": {
             "type": FULL,
             "suites": {
-                "oC10Basic": [
-                    "webUIAccount",
-                    "webUILogin",
-                    "webUIPreview",
-                    "webUIPrivateLinks",
-                    # The following suites may have all scenarios currently skipped.
-                    # The suites are listed here so that scenarios will run when
-                    # they are enabled.
-                ],
-                "oC10Locks": [
-                    "webUIWebdavLockProtection",
-                    "webUIWebdavLocks",
-                ],
-                "oC10CreateDelete": [
-                    "webUICreateFilesFolders",
-                    "webUIDeleteFilesFolders",
-                ],
-                "oC10Rename": [
-                    "webUIRenameFiles",
-                    "webUIRenameFolders",
-                ],
-                "oC10SharingAccept": [
-                    "webUISharingAcceptShares",
-                    "webUISharingAcceptSharesToRoot",
-                ],
                 "webUIFilesActionMenu": "oC10Files1",
-                "oC10Files2": [
-                    "webUIFilesDetails",
-                    "webUIFilesList",
-                    "webUIFilesSearch",
-                ],
-                "oC10MoveUpload": [
-                    "webUIMoveFilesFolders",
-                    "webUIUpload",
-                    "webUIOperationsWithFolderShares",
-                ],
-                "oC10Resharing": [
-                    "webUIResharing1",
-                    "webUIResharing2",
-                ],
-                "oC10Sharing1": [
-                    "webUIRestrictSharing",
-                    "webUISharingAutocompletion",
-                ],
-                "webUIResharingToRoot": "oC10ResharingToRoot",
-                "oC10SharingFilePermission": [
-                    "webUISharingFilePermissionMultipleUsers",
-                    "webUISharingFilePermissionsGroups",
-                ],
-                "webUISharingFolderAdvancedPermissionMultipleUsers": "oC10SharingFolderAdvancedPermissionMU",
-                "webUISharingFolderAdvancedPermissionsGroups": "oC10SharingFolderAdvPermissionsGrp",
-                "oC10SharingFolderPermissions": [
-                    "webUISharingFolderPermissionMultipleUsers",
-                    "webUISharingFolderPermissionsGroups",
-                ],
-                "oC10SharingInternalGroups": [
-                    "webUISharingInternalGroups",
-                    "webUISharingInternalGroupsEdgeCases",
-                ],
-                "oC10SharingInternalGroupsToRoot": [
-                    "webUISharingInternalGroupsToRoot",
-                    "webUISharingInternalGroupsToRootEdgeCases",
-                ],
-                "oC10SharingInternalGroupsSharingIndicator": [
-                    "webUISharingInternalGroupsSharingIndicator",
-                    "webUISharingInternalGroupsToRootSharingIndicator",
-                ],
-                "oC10SharingInternalUsers": [
-                    "webUISharingInternalUsers",
-                    "webUISharingInternalUsersCollaborator",
-                    "webUISharingInternalUsersShareWithPage",
-                ],
-                "webUISharingInternalUsersBlacklisted": "oC10SharingInternalUsersBlacklisted",
-                "oC10SharingInternalUsersExpire": [
-                    "webUISharingInternalUsersExpire",
-                    "webUISharingInternalUsersExpireToRoot",
-                ],
-                "oC10SharingInternalUsersSharingIndicator": [
-                    "webUISharingInternalUsersSharingIndicator",
-                    "webUISharingInternalUsersToRootSharingIndicator",
-                ],
-                "oC10SharingInternalUsersRoot1": [
-                    "webUISharingInternalUsersToRoot",
-                    "webUISharingInternalUsersToRootBlacklisted",
-                ],
-                "oC10SharingInternalUsersRoot2": [
-                    "webUISharingInternalUsersToRootCollaborator",
-                    "webUISharingInternalUsersToRootPreviews",
-                    "webUISharingInternalUsersToRootShareWithPage",
-                ],
-                "webUISharingPermissionsUsers": "oC10SharingPermissionsUsers",
-                "webUISharingPermissionToRoot": "oC10SharingPermissionToRoot",
-                "webUISharingPublicBasic": "oC10SharingPublicBasic",
-                "webUISharingPublicManagement": "oC10SharingPublicManagement",
-                "oC10SharingPublicExpireAndRoles": [
-                    "webUISharingPublicDifferentRoles",
-                    "webUISharingPublicExpire",
-                ],
-                "oC10Trashbin": [
-                    "webUITrashbinDelete",
-                    "webUITrashbinFilesFolders",
-                    "webUITrashbinRestore",
-                ],
             },
             "extraEnvironment": {
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
                 "WEB_UI_CONFIG": "%s/dist/config.json" % dir["web"],
             },
-            "visualTesting": True,
+            "visualTesting": False,
             "screenShots": True,
-            "debugSuites": ["webUIFilesActionMenu"],
         },
         "webUINotification": {
             "type": NOTIFICATIONS,
