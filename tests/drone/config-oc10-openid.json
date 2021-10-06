@@ -1,6 +1,6 @@
 {
   "server": "http://owncloud/",
-  "theme": "owncloud",
+  "theme": "http://owncloud/themes/owncloud/theme.json",
   "version": "0.1.0",
   "openIdConnect": {
     "metadata_url": "https://idp:9130/.well-known/openid-configuration",

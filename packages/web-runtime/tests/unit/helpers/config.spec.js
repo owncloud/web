@@ -2,7 +2,7 @@ import { loadConfig } from 'web-runtime/src/helpers/config'
 
 const validConfig = `{
   "server" : "http://localhost/owncloud-core",
-  "theme": "owncloud",
+  "theme": "http://localhost/themes/owncloud/theme.json",
   "version": "0.1.0",
   "auth": {
     "clientId": "bZrw9cijQ9JGf6wDcLCEuiT9iyah2OzzRycjZc30WDEkMHMRybv7VXENbYGbqy3H",
