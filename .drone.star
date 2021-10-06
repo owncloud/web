@@ -2059,8 +2059,8 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
 
     if (visualTesting):
         environment["VISUAL_TEST"] = "true"
-    if (screenShots):
-        environment["SCREENSHOTS"] = "true"
+
+    environment["SCREENSHOTS"] = "true"
     environment["SERVER_HOST"] = "http://web"
     environment["BACKEND_HOST"] = "http://owncloud"
     environment["COMMENTS_FILE"] = "/var/www/owncloud/web/comments.file"

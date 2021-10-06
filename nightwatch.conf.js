@@ -88,7 +88,7 @@ const config = {
           prompt: false,
           always_save_diff_screenshot: UPDATE_VRT_SCREENSHOTS
         },
-        screenshots: SCREENSHOTS
+        screenshots: true
       },
       selenium_host: SELENIUM_HOST,
       desiredCapabilities: {
