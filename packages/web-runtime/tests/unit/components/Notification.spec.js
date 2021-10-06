@@ -62,11 +62,7 @@ const wrapperMounted = (mocks, mockMethods) => {
   return mount(Notifications, {
     localVue,
     mocks,
-    ...(mockMethods && { methods: mockMethods }),
-    stubs: { 'oc-icon': true, 'oc-drop': true },
-    directives: {
-      'oc-tooltip': () => {}
-    }
+    ...(mockMethods && { methods: mockMethods })
   })
 }
 const wrapperShallowMounted = mocks => {
@@ -158,6 +154,7 @@ describe('Notification component', () => {
 
       it('displays the action button with action label', () => {
         const actionButton = wrapper.find(selectors.actionButton)
+
         expect(actionButton.exists()).toBeTruthy()
         expect(actionButton.text()).toBe('Test Action')
       })
@@ -168,6 +165,7 @@ describe('Notification component', () => {
 
       it('calls executeRequest when action button is clicked', async () => {
         const actionButton = wrapper.find(selectors.actionButton)
+
         await actionButton.trigger('click')
         expect(executeRequest).toHaveBeenCalledTimes(1)
       })
@@ -179,6 +177,7 @@ describe('Notification component', () => {
       const store = notificationStore(testData.notifications.emptyActions)
       const wrapper = wrapperShallowMounted({ $store: store })
       const linkButton = wrapper.find(selectors.link)
+
       expect(linkButton.exists()).toBeFalsy()
     })
 
@@ -186,6 +185,7 @@ describe('Notification component', () => {
       const store = notificationStore(testData.notifications.linkActions)
       const wrapper = wrapperShallowMounted({ $store: store })
       const linkButton = wrapper.find(selectors.link)
+
       expect(linkButton.exists()).toBeTruthy()
       expect(linkButton.text()).toBe('http://test.link')
     })
