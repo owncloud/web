@@ -3,9 +3,6 @@ import DesignSystem from 'owncloud-design-system'
 
 import DetailsWidget from '@files/src/components/Upload/DetailsWidget.vue'
 
-const localVue = createLocalVue()
-localVue.use(DesignSystem)
-
 const selectors = {
   oCProgress: 'oc-progress-stub',
   itemName: '.upload-details-item-name',
@@ -20,13 +17,20 @@ const item = {
   progress: 20
 }
 
+const localVue = createLocalVue()
+localVue.use(DesignSystem)
+
+const wrapper = shallowMount(DetailsWidget, {
+  localVue,
+  propsData: { items: [item] },
+  stubs: {
+    'oc-progress': true,
+    'oc-icon': true
+  }
+})
+
 describe('DetailsWidget component', () => {
   describe('when an item is provided in prop', () => {
-    let wrapper
-    beforeEach(() => {
-      wrapper = getShallowWrapper()
-    })
-
     it('should have correct props in oc-progress', () => {
       const ocProgress = wrapper.find(selectors.oCProgress)
 
@@ -53,10 +57,3 @@ describe('DetailsWidget component', () => {
     })
   })
 })
-
-function getShallowWrapper() {
-  return shallowMount(DetailsWidget, {
-    localVue,
-    propsData: { items: [item] }
-  })
-}

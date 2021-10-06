@@ -1,4 +1,4 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils'
+import { mount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import VueRouter from 'vue-router'
 import GetTextPlugin from 'vue-gettext'
@@ -9,14 +9,6 @@ import Files from '@/__fixtures__/files'
 
 import SideBar from '@files/src/components/SideBar/SideBar.vue'
 
-const localVue = createLocalVue()
-localVue.use(Vuex)
-localVue.use(VueRouter)
-localVue.use(GetTextPlugin, {
-  translations: 'does-not-matter.json',
-  silent: true
-})
-
 const simpleOwnFolder = {
   type: 'folder',
   ownerId: 'marie',
@@ -26,7 +18,14 @@ const simpleOwnFolder = {
 }
 
 function createWrapper({ item, selectedItems, mocks }) {
-  return shallowMount(SideBar, {
+  const localVue = createLocalVue()
+  localVue.use(Vuex)
+  localVue.use(VueRouter)
+  localVue.use(GetTextPlugin, {
+    translations: 'does-not-matter.json',
+    silent: true
+  })
+  return mount(SideBar, {
     store: new Vuex.Store({
       getters: {
         user: function() {
@@ -50,6 +49,14 @@ function createWrapper({ item, selectedItems, mocks }) {
           getters: {
             highlightedFile: () => item,
             selectedFiles: () => selectedItems
+          },
+          modules: {
+            sidebar: {
+              namespaced: true,
+              state: {
+                activePanel: null
+              }
+            }
           }
         }
       }

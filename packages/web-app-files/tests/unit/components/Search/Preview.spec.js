@@ -17,20 +17,22 @@ const searchResult = {
   }
 }
 
+const spyTriggerDefaultAction = jest
+  .spyOn(Preview.mixins[0].methods, '$_fileActions_triggerDefaultAction')
+  .mockImplementation()
+
+const wrapper = shallowMount(Preview, {
+  localVue,
+  propsData: {
+    searchResult
+  },
+  stubs: {
+    'oc-progress': true,
+    'oc-resource': true
+  }
+})
+
 describe('Preview component', () => {
-  afterEach(() => {
-    jest.clearAllMocks()
-  })
-
-  const spyTriggerDefaultAction = jest
-    .spyOn(Preview.mixins[0].methods, '$_fileActions_triggerDefaultAction')
-    .mockImplementation()
-
-  let wrapper
-  beforeEach(() => {
-    wrapper = getShallowWrapper()
-  })
-
   it('should set correct props on oc-resource component', () => {
     const ocResource = wrapper.find('oc-resource-stub')
 
@@ -47,12 +49,3 @@ describe('Preview component', () => {
     expect(spyTriggerDefaultAction).toHaveBeenCalledTimes(1)
   })
 })
-
-function getShallowWrapper() {
-  return shallowMount(Preview, {
-    localVue,
-    propsData: {
-      searchResult
-    }
-  })
-}
