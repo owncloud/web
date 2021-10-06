@@ -15,15 +15,18 @@ describe('CollaboratorsEditOptions component', () => {
 
   it('opens custom permissions drop when custom permissions item in the roles is selected', async () => {
     const wrapper = getWrapper()
-    const permissionsDrop = wrapper.find('[data-testid="files-recipient-custom-permissions-drop"]')
+    const permissionsDrop = wrapper.find('[data-testid="files-recipient-roles-drop"]')
 
-    permissionsDrop.vm.show = jest.fn()
+    permissionsDrop.vm.hide = jest.fn()
 
     await wrapper
       .find('[data-testid="files-recipient-role-drop-btn-advancedRole"]')
       .trigger('click')
 
-    expect(permissionsDrop.vm.show).toHaveBeenCalled()
+    const advancedPermissionsDrop = wrapper.find('[data-testid="files-recipient-custom-permissions-drop"]')
+    advancedPermissionsDrop.vm.show = jest.fn()
+    advancedPermissionsDrop.vm.hide = jest.fn()
+    expect(advancedPermissionsDrop.vm.show).toHaveBeenCalled()
   })
 
   it('closes custom permissions drop when they are confirmed', async () => {
@@ -59,7 +62,6 @@ describe('CollaboratorsEditOptions component', () => {
     'displays custom permission %s in the custom permissions drop',
     permission => {
       const wrapper = getWrapper()
-
       expect(
         wrapper.find(`[data-testid="files-collaborators-permission-${permission}"]`).exists()
       ).toBeTruthy()

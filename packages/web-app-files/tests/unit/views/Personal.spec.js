@@ -125,6 +125,20 @@ function createWrapper(selectedFiles = [resourceForestJpg]) {
                 closed: false
               },
               namespaced: true
+            },
+            pagination: {
+              state: {
+                currentPage: 1,
+                itemsPerPage: 100
+              },
+              mutations: {
+                SET_ITEMS_PER_PAGE: () => {},
+                UPDATE_CURRENT_PAGE: () => {}
+              },
+              getters: {
+                pages: () => 1
+              },
+              namespaced: true
             }
           },
           state: {
