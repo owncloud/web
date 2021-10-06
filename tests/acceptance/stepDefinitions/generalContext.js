@@ -230,15 +230,12 @@ After(async function(testCase) {
   if (!client.globals.screenshots) {
     return
   }
-  if (testCase.result.status === 'failed' && !testCase.result.retried) {
+  if (testCase.result.status === 'FAILED' && !testCase.result.retried) {
     console.log('saving screenshot of failed test')
-    const filename =
-      testCase.sourceLocation.uri
-        .replace('tests/acceptance/features/', '')
-        .replace('/', '-')
-        .replace('.', '-') +
-      '-' +
-      testCase.sourceLocation.line
+    const filename = testCase.pickle.uri
+      .replace('tests/acceptance/features/', '')
+      .replace('/', '-')
+      .replace('.', '-')
     await client.saveScreenshot('./tests/reports/screenshots/' + filename + '.png')
   }
 })
