@@ -1,0 +1,8 @@
+Enhancement: Run web as oc10 sidecar
+
+Running web inside docker was supported as application mode, in some cases it is needed to run it as a 'sidecar' deployment.
+This now is supported out of the box without any additional configuration.
+
+Copy config/config.json.sample-oc10 to config/config.json, run dev server build and start oc10 from the docker-compose file and open http://localhost:9100.
+
+https://github.com/owncloud/web/pull/5880
