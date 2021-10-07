@@ -199,7 +199,7 @@ exports.createFile = async function(user, fileName, contents = '', waitMaxIfExis
    */
   uploadTimeStamps[user] = uploadTimeStamps[user] || {}
 
-  const pollCheck = async (retries = 0, waitFor = 1000, waitMax = waitMaxIfExisting) => {
+  const pollCheck = async (retries = 0, waitFor = 5000, waitMax = waitMaxIfExisting) => {
     if (!uploadTimeStamps[user][fileName] || waitMax <= waitFor) {
       return
     } else {
@@ -225,7 +225,7 @@ exports.createFile = async function(user, fileName, contents = '', waitMaxIfExis
     `Could not create the file "${fileName}" for user "${user}".`
   )
 
-  await client.pause(1000)
+  await client.pause(5000)
 
   return statusResponse.text()
 }
