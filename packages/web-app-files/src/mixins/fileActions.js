@@ -186,10 +186,9 @@ export default {
     },
 
     $_fileActions_openLink(appName, resourceId) {
-      const actionableId = resourceId.replaceAll('=', '')
       const routeData = this.$router.resolve({
         name: 'external-apps',
-        params: { app: appName, file_id: actionableId }
+        params: { app: appName, file_id: resourceId }
       })
       // TODO: Let users configure whether to open in same/new tab (`_blank` vs `_self`)
       window.open(routeData.href, '_blank')

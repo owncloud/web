@@ -3,7 +3,14 @@ const state = {
 }
 
 const actions = {
-  async fetchMimeTypes(context, url: string): Promise<void> {
+  async fetchMimeTypes({ rootGetters, commit }): Promise<void> {
+    if (!rootGetters.capabilities.files.app_providers[0]?.enabled) {
+      return
+    }
+    const serverUrl = rootGetters.configuration.server
+    const appList = rootGetters.capabilities.files.app_providers[0].apps_url
+    const url = serverUrl + appList.replace('/app', 'app')
+
     const response = await fetch(url)
 
     if (!response.ok) {
@@ -11,8 +18,7 @@ const actions = {
     }
 
     const mimeTypes = await response.json()
-
-    context.commit('SET_MIME_TYPES', mimeTypes['mime-types'])
+    commit('SET_MIME_TYPES', mimeTypes['mime-types'])
   }
 }
 
