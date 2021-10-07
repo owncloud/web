@@ -24,7 +24,7 @@ module.exports = {
       }
       return this.api.page.FilesPageElement.filesList()
     },
-    isSideBarOpen: async function(timeout = 1000) {
+    isSideBarOpen: async function(timeout = 500) {
       const element = this.elements.sidebar
       let isVisible = false
       await this.isVisible(
@@ -39,7 +39,7 @@ module.exports = {
       )
       return isVisible
     },
-    isSideBarOpenForResource: async function(resource, elementType = 'any', timeout = 1000) {
+    isSideBarOpenForResource: async function(resource, elementType = 'any', timeout = 500) {
       if (!(await this.isSideBarOpen(timeout))) {
         return false
       }
@@ -69,7 +69,7 @@ module.exports = {
         let backBtnVisible = false
         const backBtn = this.elements.sidebarBackBtn
         await this.isVisible(
-          { locateStrategy: backBtn.locateStrategy, selector: backBtn.selector, timeout: 1000 },
+          { locateStrategy: backBtn.locateStrategy, selector: backBtn.selector, timeout: 200 },
           result => {
             backBtnVisible = result.value === true
           }
@@ -183,7 +183,7 @@ module.exports = {
   },
   elements: {
     sidebar: {
-      selector: '//div[@id="files-sidebar"]//div[@id="sidebar-panel-details-item"]',
+      selector: '//*[@id="files-sidebar"]',
       locateStrategy: 'xpath'
     },
     fileInfoIcon: {

@@ -199,7 +199,7 @@ exports.createFile = async function(user, fileName, contents = '', waitMaxIfExis
    */
   uploadTimeStamps[user] = uploadTimeStamps[user] || {}
 
-  const pollCheck = async (retries = 0, waitFor = 5000, waitMax = waitMaxIfExisting) => {
+  const pollCheck = async (retries = 0, waitFor = 500, waitMax = waitMaxIfExisting) => {
     if (!uploadTimeStamps[user][fileName] || waitMax <= waitFor) {
       return
     } else {
@@ -216,7 +216,7 @@ exports.createFile = async function(user, fileName, contents = '', waitMaxIfExis
   await pollCheck()
 
   const davPath = exports.createDavPath(user, fileName)
-  await client.pause(5000)
+  await client.pause(1000)
   const putResponse = await httpHelper.put(davPath, user, contents)
 
   delete uploadTimeStamps[user][fileName]
@@ -226,7 +226,7 @@ exports.createFile = async function(user, fileName, contents = '', waitMaxIfExis
     `Could not create the file "${fileName}" for user "${user}".`
   )
 
-  await client.pause(5000)
+  await client.pause(500)
 
   return statusResponse.text()
 }
