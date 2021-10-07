@@ -1,7 +1,11 @@
 import translations from '../l10n/translations'
-
 import App from './App.vue'
 import store from './store'
+
+// just a dummy function to trick gettext tools
+function $gettext(msg) {
+  return msg
+}
 
 const appInfo = {
   name: 'External',
@@ -14,27 +18,19 @@ const routes = [
     path: '/:app/:file_id',
     components: {
       app: App
+    },
+    meta: {
+      title: $gettext('External app')
     }
   }
 ]
-
-async function fetchAvailableMimeTypes() {
-  const vueStore = window.Vue.$store
-  if (!vueStore.getters.capabilities.files.app_providers[0]?.enabled) {
-    return
-  }
-  const serverUrl = vueStore.getters.configuration.server
-  const appList = vueStore.getters.capabilities.files.app_providers[0].apps_url
-  const url = serverUrl + appList.replace('/app', 'app')
-  await vueStore.dispatch('External/fetchMimeTypes', url)
-}
 
 export default {
   appInfo,
   routes,
   store,
   translations,
-  async mounted() {
-    await fetchAvailableMimeTypes()
+  async ready({ store: runtimeStore }) {
+    await runtimeStore.dispatch('External/fetchMimeTypes')
   }
 }
