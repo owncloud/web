@@ -125,6 +125,7 @@ const actions = {
 
         if (payload.autoRedirect) {
           router.push({ path: '/' }).catch(() => {})
+          window.location.reload()
         }
       } else {
         context.commit('UPDATE_TOKEN', token)
@@ -176,8 +177,7 @@ const actions = {
     vueAuthInstance.mgr
       .signinRedirectCallback()
       .then(() => {
-        const autoRedirect = true
-        context.dispatch('initAuth', { autoRedirect })
+        context.dispatch('initAuth', { autoRedirect: true })
       })
       .catch(e => {
         console.warn('error in OpenIdConnect:', e)

@@ -4,6 +4,7 @@
   "description": "ownCloud web files",
   "license": "AGPL-3.0",
   "devDependencies": {
+    "@types/semver": "^7.3.8",
     "copy-to-clipboard": "^3.3.1",
     "filesize": "^8.0.0",
     "filter-obj": "^2.0.1",
@@ -11,6 +12,7 @@
     "lodash-es": "^4.17.21",
     "p-queue": "^6.6.2",
     "query-string": "^6.8.3",
+    "semver": "^6.1.0",
     "vue": "^2.6.10",
     "vue-gettext": "^2.1.5",
     "vue2-dropzone": "^3.6.0",

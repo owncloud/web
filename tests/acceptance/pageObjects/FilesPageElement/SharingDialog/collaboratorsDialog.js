@@ -61,8 +61,7 @@ module.exports = {
     ) {
       let results = []
       let informationSelector = {
-        selector: '@collaboratorsInformation',
-        abortOnFailure: false
+        selector: '@collaboratorsInformation'
       }
       timeout = timeoutHelper.parseTimeout(timeout)
       if (filterDisplayName !== null) {
@@ -72,7 +71,6 @@ module.exports = {
             filterDisplayName
           ),
           locateStrategy: this.elements.collaboratorInformationByCollaboratorName.locateStrategy,
-          abortOnFailure: false,
           timeout: timeout
         }
       }

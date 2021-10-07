@@ -174,7 +174,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     downloadButtonInAccordion: {
-      selector: '//button[contains(@class, "oc-files-actions-download-trigger")]',
+      selector: '//button[contains(@class, "oc-files-actions-download-file-trigger")]',
       locateStrategy: 'xpath'
     },
     favoriteButtonInAccordion: {

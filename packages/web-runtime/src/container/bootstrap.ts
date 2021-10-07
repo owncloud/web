@@ -31,6 +31,38 @@ export const requestConfiguration = async (path: string): Promise<RuntimeConfigu
 }
 
 /**
+ * Announce and prepare vuex store with data that is needed before any application gets announced.
+ *
+ * @param vue
+ * @param runtimeConfiguration
+ * @param store
+ */
+export const announceStore = async ({
+  vue,
+  runtimeConfiguration,
+  store
+}: {
+  vue: VueConstructor
+  runtimeConfiguration: RuntimeConfiguration
+  store: Store<any>
+}): Promise<void> => {
+  await store.dispatch('loadConfig', runtimeConfiguration)
+  await store.dispatch('initAuth')
+
+  /**
+   * TODO: Find a different way to access store from within JS files
+   * potential options are:
+   * - use the api which already is in place but deprecated
+   * - use a global object
+   *
+   * at the moment it is not clear if this api should be exposed or not.
+   * we need to decide if we extend the api more or just expose the store and de deprecate
+   * the apis for retrieving it.
+   */
+  set(vue, '$store', store)
+}
+
+/**
  * announce auth client to the runtime, currently only openIdConnect is supported here
  *
  * @remarks
@@ -186,21 +218,16 @@ export const announceOwncloudSDK = ({
  * announce runtime defaults, this is usual the last needed announcement before rendering the actual ui
  *
  * @param vue
- * @param runtimeConfiguration
  * @param store
  * @param router
  */
-export const announceDefaults = async ({
-  vue,
-  runtimeConfiguration,
+export const announceDefaults = ({
   store,
   router
 }: {
-  vue: VueConstructor
-  runtimeConfiguration: RuntimeConfiguration
   store: Store<unknown>
   router: VueRouter
-}): Promise<void> => {
+}): void => {
   // set home route
   const appIds = store.getters.appIds
   let defaultExtensionId = store.getters.configuration.options.defaultExtension
@@ -213,21 +240,4 @@ export const announceDefaults = async ({
   ])
 
   routerSync(store, router)
-
-  // inject custom config into vuex
-  await store.dispatch('loadConfig', runtimeConfiguration)
-
-  /**
-   * TODO: Find a different way to access store from withit JS files
-   * potential options are:
-   * - use the api which already is in place but deprecated
-   * - use a global object
-   *
-   * at the moment it is not clear if this api should be exposed or not.
-   * we need to decide if we extend the api more or just expose the store and de deprecate
-   * the apis for retrieving it.
-   */
-  set(vue, '$store', store)
-
-  return Promise.resolve(undefined)
 }

@@ -39,8 +39,8 @@ const mockMenuSections = [
         handler: jest.fn(),
         label: () => 'Download',
         componentType: 'oc-button',
-        selector: '.oc-files-actions-download-trigger',
-        class: 'oc-files-actions-download-trigger'
+        selector: '.oc-files-actions-download-file-trigger',
+        class: 'oc-files-actions-download-file-trigger'
       },
       {
         icon: 'link-add',
