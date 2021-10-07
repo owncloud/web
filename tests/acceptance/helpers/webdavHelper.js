@@ -216,6 +216,7 @@ exports.createFile = async function(user, fileName, contents = '', waitMaxIfExis
   await pollCheck()
 
   const davPath = exports.createDavPath(user, fileName)
+  await client.pause(5000)
   const putResponse = await httpHelper.put(davPath, user, contents)
 
   delete uploadTimeStamps[user][fileName]
