@@ -15,7 +15,9 @@ describe('CollaboratorsEditOptions component', () => {
 
   it('opens custom permissions drop when custom permissions item in the roles is selected', async () => {
     const wrapper = getWrapper()
-    const advancedPermissionsDrop = wrapper.find('[data-testid="files-recipient-custom-permissions-drop"]')
+    const advancedPermissionsDrop = wrapper.find(
+      '[data-testid="files-recipient-custom-permissions-drop"]'
+    )
     advancedPermissionsDrop.vm.show = jest.fn()
     advancedPermissionsDrop.vm.hide = jest.fn()
 
