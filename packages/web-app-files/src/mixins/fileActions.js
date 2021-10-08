@@ -158,6 +158,15 @@ export default {
       })
 
       const allDefaultActions = availableExternalAppActions.concat(actions)
+
+      // if there is an internal action rather than download, prioritize it as default
+      // ToDo: actions identifier
+      const internalAppActionExists = actions[0].icon !== 'file_download'
+      if (internalAppActionExists && availableExternalAppActions)
+        allDefaultActions.unshift(
+          allDefaultActions.splice(availableExternalAppActions.length, 1)[0]
+        )
+
       allDefaultActions[0].handler(resource, allDefaultActions[0].handlerData)
     },
 
