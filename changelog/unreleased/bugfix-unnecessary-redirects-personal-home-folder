@@ -1,0 +1,8 @@
+Bugfix: Unnecessary redirects on personal page
+
+Navigating to all files could tend to loading resources twice, first resources from root (/) and second the resources from the homeFolder (options.homeFolder).
+We've fixed this by detecting those cases and only load resources for the homeFolder.
+
+https://github.com/owncloud/web/pull/5893
+https://github.com/owncloud/web/issues/5085
+https://github.com/owncloud/web/issues/5875
