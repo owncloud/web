@@ -164,7 +164,12 @@ export default {
         const sameRoute = to.name === from?.name
         const sameItem = to.params?.item === from?.params?.item
 
-        if (isNil(to.params.item) && !to.path.endsWith('/') && (!sameRoute || !sameItem)) {
+        if (
+          this.homeFolder !== '/' &&
+          isNil(to.params.item) &&
+          !to.path.endsWith('/') &&
+          (!sameRoute || !sameItem)
+        ) {
           this.$router.replace(
             {
               name: to.name,
