@@ -38,14 +38,13 @@ const existingShares = [
 
 describe('Users can set expiration date when sharing with users or groups', () => {
   afterEach(() => {
+    jest.resetModules()
+
     jest.restoreAllMocks()
   })
-
   test('user can set a new expiration date', async () => {
     const { findByTestId, baseElement, getByTestId, findByText, queryByTestId } = renderComponent()
-
     const addBtn = await findByTestId('file-shares-add-btn')
-
     expect(addBtn).toBeVisible()
     await fireEvent.click(addBtn)
     expect(await findByTestId('new-collaborator')).toBeVisible()
@@ -222,7 +221,6 @@ describe('Users can set expiration date when sharing with users or groups', () =
     await fireEvent.click(addBtn)
     expect(await findByTestId('new-collaborator')).toBeVisible()
     await fireEvent.update(baseElement.querySelector('#files-share-invite-input'), 'bob')
-    await waitFor(() => expect(baseElement.querySelector('#vs2__listbox')).toBeVisible())
 
     const userInAutocomplete = await findByTestId('recipient-autocomplete-item-bob')
     expect(userInAutocomplete).toBeVisible()
@@ -275,7 +273,6 @@ describe('Users can set expiration date when sharing with users or groups', () =
     await fireEvent.click(addBtn)
     expect(await findByTestId('new-collaborator')).toBeVisible()
     await fireEvent.update(baseElement.querySelector('#files-share-invite-input'), 'bob')
-    await waitFor(() => expect(baseElement.querySelector('#vs3__listbox')).toBeVisible())
 
     const userInAutocomplete = await findByTestId('recipient-autocomplete-item-bob')
     expect(userInAutocomplete).toBeVisible()
@@ -321,7 +318,7 @@ describe('Users can set expiration date when sharing with users or groups', () =
     ).toBeVisible()
   })
 
-  test('user can edit expiration date within enforced maximum date', async () => {
+  test('xuser can edit expiration date within enforced maximum date', async () => {
     const { findByTestId, baseElement, getByTestId, findByText, queryByTestId } = renderComponent({
       store: {
         modules: {
@@ -520,6 +517,9 @@ function createStore(store) {
             }),
             currentFileOutgoingSharesLoading: () => false,
             sharesTreeLoading: () => false
+          },
+          actions: {
+            loadSharesTree: jest.fn
           }
         })
       }

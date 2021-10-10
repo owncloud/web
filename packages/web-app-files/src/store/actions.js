@@ -384,6 +384,8 @@ export default {
           client.shares
             .getShares(queryPath, { shared_with_me: true })
             .then(data => {
+
+              console.log(data)
               data.forEach(element => {
                 sharesTree[queryPath].push({
                   ...buildCollaboratorShare(
