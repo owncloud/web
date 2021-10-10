@@ -9,7 +9,7 @@ const routes = [
       app: App
     },
     name: 'media',
-    meta: { auth: false }
+    meta: { auth: false, patchCleanPath: true }
   }
 ]
 

@@ -83,39 +83,6 @@ const navItems = [
 const translations = translationsJson
 const quickActions = quickActionsImport
 
-// type: patch
-// temporary patch till we have upgraded web to the latest vue router which make this obsolete
-// this takes care that routes like 'foo/bar/baz' which by default would be converted to 'foo%2Fbar%2Fbaz' stay as they are
-// should immediately go away and be removed after finalizing the update
-const patchRouter = (router) => {
-  // for now we only need the patch on following routes, if needed on more just extend
-  // - files-personal: https://github.com/owncloud/web/issues/1883
-  // - files-personal: https://github.com/owncloud/web/issues/4595
-  // - files-public-list
-  // - files-location-picker
-  const activateForRoutes = ['files-personal', 'files-public-list', 'files-location-picker']
-  const bindMatcher = router.match.bind(router)
-  const cleanPath = (route) =>
-    [
-      ['%2F', '/'],
-      ['//', '/']
-    ].reduce((path, rule) => path.replaceAll(rule[0], rule[1]), route || '')
-
-  router.match = (raw, current, redirectFrom) => {
-    const bindMatch = bindMatcher(raw, current, redirectFrom)
-
-    if (!activateForRoutes.includes(bindMatch.name)) {
-      return bindMatch
-    }
-
-    return {
-      ...bindMatch,
-      path: cleanPath(bindMatch.path),
-      fullPath: cleanPath(bindMatch.fullPath)
-    }
-  }
-}
-
 export default {
   appInfo,
   store,
@@ -124,7 +91,6 @@ export default {
   quickActions,
   translations,
   ready({ router: runtimeRouter, store: runtimeStore }) {
-    patchRouter(runtimeRouter)
     Registry.filterSearch = new FilterSearch(runtimeStore, runtimeRouter)
     Registry.sdkSearch = new SDKSearch(runtimeStore, runtimeRouter)
 

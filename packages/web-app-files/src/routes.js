@@ -35,7 +35,8 @@ export default [
         component: Personal,
         meta: {
           hasBulkActions: true,
-          title: $gettext('All files')
+          title: $gettext('All files'),
+          patchCleanPath: true
         }
       },
       {
@@ -108,7 +109,8 @@ export default [
         meta: {
           auth: false,
           hasBulkActions: true,
-          title: $gettext('Public files')
+          title: $gettext('Public files'),
+          patchCleanPath: true
         }
       }
     ]
@@ -141,7 +143,8 @@ export default [
     },
     meta: {
       verbose: true,
-      auth: false
+      auth: false,
+      patchCleanPath: true
     }
   },
   {
