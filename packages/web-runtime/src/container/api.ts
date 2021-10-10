@@ -8,6 +8,7 @@ import {
 } from './types'
 import { ApiError } from './error'
 import { get, isEqual, isObject, isArray } from 'lodash-es'
+import OwnCloud from 'owncloud-sdk'
 import { Store } from 'vuex'
 import Vue, { Component } from 'vue'
 import { Wormhole } from 'portal-vue'
@@ -213,6 +214,7 @@ const requestRouter = (router: VueRouter): VueRouter => {
  *
  * @param applicationName
  * @param applicationId
+ * @param sdk
  * @param store
  * @param router
  * @param translations
@@ -221,6 +223,7 @@ const requestRouter = (router: VueRouter): VueRouter => {
 export const buildRuntimeApi = ({
   applicationName,
   applicationId,
+  sdk,
   store,
   router,
   translations,
@@ -228,6 +231,7 @@ export const buildRuntimeApi = ({
 }: {
   applicationName: string
   applicationId: string
+  sdk: OwnCloud
   store: Store<unknown>
   translations: unknown
   router: VueRouter
@@ -253,6 +257,7 @@ export const buildRuntimeApi = ({
       announceStore(applicationName, store, applicationStore),
     announceExtension: (extension: { [key: string]: unknown }): void =>
       announceExtension(applicationId, store, extension),
+    requestSdk: (): OwnCloud => sdk,
     requestStore: (): Store<unknown> => requestStore(store),
     requestRouter: (): VueRouter => requestRouter(router),
     openPortal: (

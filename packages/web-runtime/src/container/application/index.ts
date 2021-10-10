@@ -6,6 +6,8 @@ import { ClassicApplicationScript } from '../types'
 import { RuntimeError } from '../error'
 import { applicationStore } from '../store'
 import { isObject } from 'lodash-es'
+import OwnCloud from 'owncloud-sdk'
+
 export { NextApplication } from './next'
 
 /** shim requirejs, trust me it's there... :( */
@@ -18,12 +20,14 @@ const requirejs = (window as any).requirejs
  */
 export const buildApplication = async ({
   applicationPath,
+  sdk,
   store,
   router,
   translations,
   supportedLanguages
 }: {
   applicationPath: string
+  sdk: OwnCloud
   store: Store<unknown>
   router: VueRouter
   translations: unknown
@@ -52,6 +56,7 @@ export const buildApplication = async ({
     } else {
       application = await convertClassicApplication({
         applicationScript,
+        sdk,
         store,
         router,
         translations,

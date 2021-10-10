@@ -1,4 +1,5 @@
 export * from './archiver'
 export * from './cache'
 export * from './client'
+export * from './listing'
 export { default as Registry } from './registry'

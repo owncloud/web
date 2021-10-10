@@ -1,5 +1,6 @@
 import { ClassicApplicationScript, RuntimeApi } from '../types'
 import { buildRuntimeApi } from '../api'
+import OwnCloud from 'owncloud-sdk'
 import Vue from 'vue'
 import { isFunction, isObject } from 'lodash-es'
 import { NextApplication } from './next'
@@ -68,12 +69,14 @@ class ClassicApplication extends NextApplication {
  */
 export const convertClassicApplication = async ({
   applicationScript,
+  sdk,
   store,
   router,
   translations,
   supportedLanguages
 }: {
   applicationScript: ClassicApplicationScript
+  sdk: OwnCloud
   store: Store<unknown>
   router: VueRouter
   translations: unknown
@@ -98,6 +101,7 @@ export const convertClassicApplication = async ({
   const runtimeApi = buildRuntimeApi({
     applicationName,
     applicationId,
+    sdk,
     store,
     router,
     translations,

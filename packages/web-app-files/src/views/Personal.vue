@@ -1,6 +1,10 @@
 <template>
   <div>
+    <<<<<<< HEAD
     <list-loader v-if="loadResourcesTask.isRunning" />
+    =======
+    <list-loader v-if="isLoading" />
+    >>>>>>> c70e2ee84 (WIP resource management in store)
     <template v-else>
       <not-found-message v-if="folderNotFound" class="files-not-found uk-height-1-1" />
       <no-content-message
@@ -85,6 +89,8 @@ import ContextActions from '../components/FilesList/ContextActions.vue'
 import { DavProperties } from 'web-pkg/src/constants'
 import { basename, join } from 'path'
 import PQueue from 'p-queue'
+import { listingService } from '../services'
+import { View } from '../types/view'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -112,6 +118,14 @@ export default {
     const loadResourcesTask = useTask(function* (signal, ref, sameRoute, path = null) {
       ref.CLEAR_CURRENT_FILES_LIST()
 
+      // TODO: check if `loadResources` runs atomic or if steps inside get cancelled as well.
+      yield listingService
+        .loadResources(View.Personal, path || ref.$route.params.item)
+        .catch((e) => {
+          console.error(e)
+        })
+
+      // TODO: remove anything that's solved in the listingService.
       try {
         let resources = yield ref.fetchResources(
           path || ref.$route.params.item,
@@ -152,6 +166,8 @@ export default {
     ...mapState('Files', ['files']),
     ...mapState('Files/pagination', ['currentPage']),
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
+    ...mapState('Files/navigation', ['activePath']),
+    ...mapGetters(['user', 'homeFolder', 'configuration']),
     ...mapGetters('Files', [
       'highlightedFile',
       'selectedFiles',
@@ -161,7 +177,7 @@ export default {
       'totalFilesCount',
       'totalFilesSize'
     ]),
-    ...mapGetters(['user', 'homeFolder', 'configuration']),
+    ...mapGetters('Files/listing', ['isLoading']), // TODO: check if we're loading for correct view and path?!
 
     isEmpty() {
       return this.activeFilesCurrentPage.length < 1
@@ -256,6 +272,7 @@ export default {
 
   methods: {
     ...mapActions('Files', ['loadIndicators', 'loadPreview']),
+    ...mapMutations('Files/navigation', []),
     ...mapActions(['showMessage']),
     ...mapMutations('Files', [
       'SET_CURRENT_FOLDER',

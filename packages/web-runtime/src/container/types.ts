@@ -1,3 +1,4 @@
+import OwnCloud from 'owncloud-sdk'
 import { Store } from 'vuex'
 import VueRouter, { RouteConfig } from 'vue-router'
 import Vue, { Component } from 'vue'
@@ -82,8 +83,9 @@ export interface RuntimeApi {
   announceQuickActions: (quickActions: ApplicationQuickActions) => void
   announceStore: (applicationStore: Store<unknown>) => void
   announceExtension: (extension: { [key: string]: unknown }) => void
-  requestStore: () => Store<unknown>
+  requestSdk: () => OwnCloud
   requestRouter: () => VueRouter
+  requestStore: () => Store<unknown>
   openPortal: (
     instance: typeof Vue.prototype,
     toApp: string,

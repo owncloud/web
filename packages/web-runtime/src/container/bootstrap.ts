@@ -89,6 +89,7 @@ export const announceClient = async (runtimeConfiguration: RuntimeConfiguration)
  * - bulk activate all applications, all applications are registered, it's safe to request a application api here
  *
  * @param runtimeConfiguration
+ * @param sdk
  * @param store
  * @param router
  * @param translations
@@ -96,12 +97,14 @@ export const announceClient = async (runtimeConfiguration: RuntimeConfiguration)
  */
 export const announceApplications = async ({
   runtimeConfiguration,
+  sdk,
   store,
   router,
   translations,
   supportedLanguages
 }: {
   runtimeConfiguration: RuntimeConfiguration
+  sdk: OwnCloud
   store: Store<unknown>
   router: VueRouter
   translations: unknown
@@ -119,6 +122,7 @@ export const announceApplications = async ({
     applicationPaths.map((applicationPath) =>
       buildApplication({
         applicationPath,
+        sdk,
         store,
         supportedLanguages,
         router,
@@ -206,10 +210,11 @@ export const announceOwncloudSDK = ({
 }: {
   vue: VueConstructor
   runtimeConfiguration: RuntimeConfiguration
-}): void => {
+}): OwnCloud => {
   const sdk = new OwnCloud()
   sdk.init({ baseUrl: runtimeConfiguration.server || window.location.origin })
   vue.prototype.$client = sdk
+  return sdk
 }
 
 /**

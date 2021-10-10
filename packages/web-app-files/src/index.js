@@ -3,10 +3,12 @@ import quickActionsImport from './quickActions'
 import store from './store'
 import { FilterSearch, SDKSearch } from './search'
 import { bus } from 'web-pkg/src/instance'
-import { archiverService, Registry } from './services'
+import { archiverService, listingService, Registry } from './services'
 import fileSideBars from './fileSideBars'
 import routes from './routes'
 import get from 'lodash-es/get'
+import { PersonalLoader, FavoritesLoader } from './services/listing/loader'
+import { View } from './types/view'
 
 // just a dummy function to trick gettext tools
 function $gettext(msg) {
@@ -90,7 +92,7 @@ export default {
   navItems,
   quickActions,
   translations,
-  ready({ router: runtimeRouter, store: runtimeStore }) {
+  ready({ router: runtimeRouter, store: runtimeStore, sdk: runtimeSdk }) {
     Registry.filterSearch = new FilterSearch(runtimeStore, runtimeRouter)
     Registry.sdkSearch = new SDKSearch(runtimeStore, runtimeRouter)
 
@@ -104,5 +106,8 @@ export default {
       runtimeStore.getters.configuration.server,
       get(runtimeStore, 'getters.capabilities.files.archivers', [])
     )
+    listingService.initialize(runtimeStore, runtimeSdk)
+    listingService.registerResourceLoader(View.Personal, new PersonalLoader())
+    listingService.registerResourceLoader(View.Favorites, new FavoritesLoader())
   }
 }
