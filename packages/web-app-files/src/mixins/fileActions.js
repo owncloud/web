@@ -5,7 +5,8 @@ import AcceptShare from './actions/acceptShare'
 import Copy from './actions/copy'
 import DeclineShare from './actions/declineShare'
 import Delete from './actions/delete'
-import Download from './actions/download'
+import DownloadFile from './actions/downloadFile'
+import DownloadFolder from './actions/downloadFolder'
 import Favorite from './actions/favorite'
 import Fetch from './actions/fetch'
 import Move from './actions/move'
@@ -17,7 +18,8 @@ import kebabCase from 'lodash-es/kebabCase'
 const actionsMixins = [
   'fetch',
   'navigate',
-  'download',
+  'downloadFile',
+  'downloadFolder',
   'favorite',
   'copy',
   'move',
@@ -37,7 +39,8 @@ export default {
     Copy,
     DeclineShare,
     Delete,
-    Download,
+    DownloadFile,
+    DownloadFolder,
     Favorite,
     Fetch,
     Move,

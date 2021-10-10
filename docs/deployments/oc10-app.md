@@ -64,7 +64,7 @@ There are a few config values which need to be set in order for ownCloud Web to 
 ```json
 {
   "server" : "https://<your-owncloud-server>",
-  "theme": "owncloud",
+  "theme": "https://<your-owncloud-server>/themes/owncloud/theme.json",
   "auth": {
     "clientId": "<client-id-from-oauth2>",
     "url": "https://<your-owncloud-server>/index.php/apps/oauth2/api/v1/token",

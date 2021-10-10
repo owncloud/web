@@ -2,11 +2,11 @@ import { isTrashbinRoute } from '../../helpers/route'
 
 export default {
   computed: {
-    $_download_items() {
+    $_downloadFile_items() {
       return [
         {
           icon: 'file_download',
-          handler: this.$_download_trigger,
+          handler: this.$_downloadFile_trigger,
           label: () => {
             return this.$gettext('Download')
           },
@@ -14,18 +14,20 @@ export default {
             if (isTrashbinRoute(this.$route)) {
               return false
             }
-
+            if (resource.isFolder) {
+              return false
+            }
             return resource.canDownload()
           },
           canBeDefault: true,
           componentType: 'oc-button',
-          class: 'oc-files-actions-download-trigger'
+          class: 'oc-files-actions-download-file-trigger'
         }
       ]
     }
   },
   methods: {
-    $_download_trigger(resource) {
+    $_downloadFile_trigger(resource) {
       this.downloadFile(resource)
     }
   }

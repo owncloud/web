@@ -58,7 +58,8 @@ import Copy from '../../mixins/actions/copy'
 import CreatePublicLink from '../../mixins/actions/createPublicLink'
 import DeclineShare from '../../mixins/actions/declineShare'
 import Delete from '../../mixins/actions/delete'
-import Download from '../../mixins/actions/download'
+import DownloadFile from '../../mixins/actions/downloadFile'
+import DownloadFolder from '../../mixins/actions/downloadFolder'
 import Favorite from '../../mixins/actions/favorite'
 import Move from '../../mixins/actions/move'
 import Navigate from '../../mixins/actions/navigate'
@@ -77,7 +78,8 @@ export default {
     CreatePublicLink,
     DeclineShare,
     Delete,
-    Download,
+    DownloadFile,
+    DownloadFolder,
     Favorite,
     Move,
     Navigate,
@@ -153,7 +155,8 @@ export default {
 
       menuItems.push(
         ...[
-          ...this.$_download_items,
+          ...this.$_downloadFile_items,
+          ...this.$_downloadFolder_items,
           ...this.$_createPublicLink_items,
           ...this.$_showShares_items,
           ...this.$_favorite_items.map(action => {
