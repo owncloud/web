@@ -239,6 +239,7 @@ module.exports = {
       // on desktop sidebar content gets replaced with new resource
       await appSideBar.closeSidebarIfOpen()
 
+      await this.waitForFileVisible(resource, elementType)
       // open the sidebar for the resource
       await this.clickRow(resource, elementType)
       await this.click('@btnToggleSideBar')
