@@ -39,8 +39,8 @@ const existingShares = [
 describe('Users can set expiration date when sharing with users or groups', () => {
   afterEach(() => {
     jest.resetModules()
-
     jest.restoreAllMocks()
+    window.sessionStorage.clear()
   })
   test('user can set a new expiration date', async () => {
     const { findByTestId, baseElement, getByTestId, findByText, queryByTestId } = renderComponent()
