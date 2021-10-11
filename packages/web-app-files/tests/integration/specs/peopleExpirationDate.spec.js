@@ -318,7 +318,7 @@ describe('Users can set expiration date when sharing with users or groups', () =
     ).toBeVisible()
   })
 
-  test('xuser can edit expiration date within enforced maximum date', async () => {
+  test('user can edit expiration date within enforced maximum date', async () => {
     const { findByTestId, baseElement, getByTestId, findByText, queryByTestId } = renderComponent({
       store: {
         modules: {
