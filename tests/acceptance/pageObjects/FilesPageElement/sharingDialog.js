@@ -785,7 +785,7 @@ module.exports = {
     },
     expirationDateField: {
       selector: '.expiration-dialog-btn',
-      locateStrategy: 'css'
+      locateStrategy: 'css selector'
     },
     requiredLabelInCollaboratorsExpirationDate: {
       selector:
