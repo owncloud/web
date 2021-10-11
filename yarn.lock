@@ -11021,10 +11021,10 @@ symbol-tree@^3.2.4:
   resolved "https://registry.npmjs.org/symbol-tree/-/symbol-tree-3.2.4.tgz"
   integrity sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw==
 
-sync-fetch@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.npmjs.org/sync-fetch/-/sync-fetch-0.3.0.tgz"
-  integrity sha512-dJp4qg+x4JwSEW1HibAuMi0IIrBI3wuQr2GimmqB7OXR50wmwzfdusG+p39R9w3R6aFtZ2mzvxvWKQ3Bd/vx3g==
+sync-fetch@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/sync-fetch/-/sync-fetch-0.3.1.tgz#62aa82c4b4d43afd6906bfd7b5f92056458509f0"
+  integrity sha512-xj5qiCDap/03kpci5a+qc5wSJjc8ZSixgG2EUmH1B8Ea2sfWclQA7eH40hiHPCtkCn6MCk4Wb+dqcXdCy2PP3g==
   dependencies:
     buffer "^5.7.0"
     node-fetch "^2.6.1"
@@ -11766,10 +11766,10 @@ vue-scrollto@^2.15.0:
   dependencies:
     bezier-easing "2.1.0"
 
-vue-select@^3.12.0:
-  version "3.12.1"
-  resolved "https://registry.npmjs.org/vue-select/-/vue-select-3.12.1.tgz"
-  integrity sha512-8t2XQLIN5lsKj5r+ixjnOOPnjLdEU/vyRDnpsUmXrmVEgcwU6jfgJnK3EvXF5VfmixoWNRDyCONNbXedLRz1dQ==
+vue-select@^3.13.2:
+  version "3.13.2"
+  resolved "https://registry.yarnpkg.com/vue-select/-/vue-select-3.13.2.tgz#e9c0f6a0d3c4613aebd23b0bbee7d8568e81e25a"
+  integrity sha512-KfvUebV9cFwsov56Rx3pMYBhkSsVv28zsoZ5XmtMa2P5htVIaC12LImPx9IL/mtmdR4WOt9Fxx9UVEuXfUiWQg==
 
 vue-template-compiler@^2.6.12:
   version "2.6.14"

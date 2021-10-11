@@ -115,7 +115,7 @@
     "rollup-plugin-ts": "^1.4.0",
     "rollup-plugin-visualizer": "^5.5.2",
     "rollup-plugin-vue": "^5.1.4",
-    "sync-fetch": "^0.3.0",
+    "sync-fetch": "^0.3.1",
     "ts-jest": "^26.5.6",
     "ts-node": "^10.2.0",
     "tslib": "^2.2.0",
