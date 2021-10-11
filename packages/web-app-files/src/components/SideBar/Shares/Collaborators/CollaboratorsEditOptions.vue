@@ -360,7 +360,7 @@ export default {
     publishChange() {
       this.$emit('optionChange', {
         role: this.selectedRole,
-        permissions: this.additionalPermissions,
+        permissions: this.customPermissions,
         expirationDate: DateTime.fromJSDate(this.enteredExpirationDate)
           .endOf('day')
           .toISO()
