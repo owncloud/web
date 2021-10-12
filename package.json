@@ -58,7 +58,7 @@
     "@typescript-eslint/eslint-plugin": "^4.28.3",
     "@typescript-eslint/parser": "^4.28.3",
     "@vue/test-utils": "^1.1.2",
-    "archiver": "^3.0.0",
+    "archiver": "^5.3.0",
     "autoprefixer": "^10.2.4",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.1.0",
@@ -116,7 +116,7 @@
     "rollup-plugin-ts": "^1.4.0",
     "rollup-plugin-visualizer": "^5.5.2",
     "rollup-plugin-vue": "^5.1.4",
-    "sync-fetch": "^0.3.0",
+    "sync-fetch": "^0.3.1",
     "ts-jest": "^26.5.6",
     "ts-node": "^10.2.0",
     "tslib": "^2.2.0",
@@ -133,6 +133,7 @@
   "dependencies": {
     "@popperjs/core": "^2.4.0",
     "v-calendar": "^2.3.2",
-    "vue": "^2.6.10"
+    "vue": "^2.6.10",
+    "node-gyp": "^8.2.0"
   }
 }
