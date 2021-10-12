@@ -570,7 +570,7 @@ module.exports = {
      * @return {*}
      */
     openExpirationDatePicker: function() {
-      this.waitForElementVisible('@expirationDateField', 1000).click('@expirationDateField')
+      this.useCss().waitForElementVisible('@expirationDateField', 1000).click('@expirationDateField')
       return client.page.FilesPageElement.expirationDatePicker()
     },
     /**
@@ -579,8 +579,10 @@ module.exports = {
      */
     getExpirationDateFromInputField: async function() {
       let expirationDate
-      await this.waitForElementVisible('[data-testid="recipient-datepicker"]').getAttribute(
-        '[data-testid="recipient-datepicker"]',
+      await this.waitForElementVisible('xpath', '//*[@data-testid="recipient-datepicker"]')
+      await this.getAttribute(
+        'xpath',
+        '//*[@data-testid="recipient-datepicker"]',
         'value',
         result => {
           const date = new Date(result.value)
