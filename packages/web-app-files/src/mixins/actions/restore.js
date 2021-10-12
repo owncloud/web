@@ -34,7 +34,7 @@ export default {
             }
           })
         })
-        .catch(error => {
+        .catch((error) => {
           const translated = this.$gettext('Restoration of %{file} failed')
           this.showMessage({
             title: this.$gettextInterpolate(translated, { file: resource.name }, true),

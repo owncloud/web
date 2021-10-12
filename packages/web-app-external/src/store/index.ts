@@ -23,7 +23,7 @@ const actions = {
 }
 
 const getters = {
-  getMimeTypes: state => {
+  getMimeTypes: (state) => {
     return state.mimeTypes
   }
 }

@@ -10,7 +10,7 @@ module.exports = {
      * @param linkName Name of the public link
      * @returns {Promise<void>}
      */
-    clickLinkEditBtn: function(linkName) {
+    clickLinkEditBtn: function (linkName) {
       const linkRowEditButtonSelector =
         this.elements.publicLinkContainer.selector +
         util.format(this.elements.publicLinkEditButton.selector, linkName)
@@ -29,13 +29,8 @@ module.exports = {
      * @param {string} role - e.g. Viewer, Contributor, Editor, Uploader
      * @returns {Promise<void>}
      */
-    setPublicLinkRole: function(role) {
-      role = _(role)
-        .chain()
-        .toLower()
-        .startCase()
-        .replace(/\s/g, '')
-        .value()
+    setPublicLinkRole: function (role) {
+      role = _(role).chain().toLower().startCase().replace(/\s/g, '').value()
       const selectedRoleDropdown = util.format(
         this.elements.publicLinkRoleSelectionDropdown.selector,
         role
@@ -52,7 +47,7 @@ module.exports = {
      * @param {string} linkName Name of the public link share
      *
      */
-    setPublicLinkName: function(linkName) {
+    setPublicLinkName: function (linkName) {
       return this.waitForElementVisible('@publicLinkNameInputField')
         .clearValue('@publicLinkNameInputField')
         .setValue('@publicLinkNameInputField', linkName)
@@ -63,7 +58,7 @@ module.exports = {
      * @param {string} linkPassword
      * @returns {Promise<void>}
      */
-    setPublicLinkPassword: function(linkPassword) {
+    setPublicLinkPassword: function (linkPassword) {
       this.waitForElementVisible('@publicLinkPasswordField')
       if (linkPassword === '') {
         return this.click('@publicLinkDeletePasswordButton')
@@ -80,7 +75,7 @@ module.exports = {
      * @param value values for the different fields to be set
      * @returns {*|Promise<void>|exports}
      */
-    setPublicLinkForm: function(key, value) {
+    setPublicLinkForm: function (key, value) {
       if (key === 'role') {
         return this.setPublicLinkRole(value)
       } else if (key === 'name') {
@@ -106,7 +101,7 @@ module.exports = {
      * @param {string} editData.expireDate - Expire date for a public link share
      * @returns {exports}
      */
-    editPublicLink: async function(linkName, editData) {
+    editPublicLink: async function (linkName, editData) {
       await this.clickLinkEditBtn(linkName)
       for (const [key, value] of Object.entries(editData)) {
         await this.setPublicLinkForm(key, value)
@@ -118,7 +113,7 @@ module.exports = {
      *
      * @returns {exports}
      */
-    savePublicLink: async function() {
+    savePublicLink: async function () {
       await this.waitForElementVisible('@publicLinkSaveButton')
         .initAjaxCounters()
         .click('@publicLinkSaveButton')
@@ -137,7 +132,7 @@ module.exports = {
      * @param {string} linkName Name of the public link share of a resource to be deleted
      * @returns {exports}
      */
-    removePublicLink: function(linkName) {
+    removePublicLink: function (linkName) {
       const linkRowDeleteButtonSelector =
         this.elements.publicLinkContainer.selector +
         util.format(this.elements.publicLinkDeleteButton.selector, linkName)
@@ -159,7 +154,7 @@ module.exports = {
      * @param {string} linkName Name of the public link share of a resource to be deleted
      * @returns {exports}
      */
-    cancelRemovePublicLink: function(linkName) {
+    cancelRemovePublicLink: function (linkName) {
       const linkRowDeleteButtonSelector =
         this.elements.publicLinkContainer.selector +
         util.format(this.elements.publicLinkDeleteButton.selector, linkName)
@@ -181,14 +176,14 @@ module.exports = {
      * @param {string} linkName - Name of the public link share to be asserted
      * @returns {boolean}
      */
-    isPublicLinkPresent: async function(linkName) {
+    isPublicLinkPresent: async function (linkName) {
       const fileNameSelectorXpath =
         this.elements.publicLinkContainer.selector + this.elements.publicLinkName.selector
       let isPresent
       await this.api.elements(
         this.elements.publicLinkName.locateStrategy,
         util.format(fileNameSelectorXpath, linkName),
-        result => {
+        (result) => {
           isPresent = result.value.length > 0
         }
       )
@@ -204,7 +199,7 @@ module.exports = {
      * @param {string} settings.expireDate - Expire date for a public link share
      * @returns {*}
      */
-    addNewLink: async function(settings = null) {
+    addNewLink: async function (settings = null) {
       await this.waitForElementVisible('@publicLinkAddButton')
         .click('@publicLinkAddButton')
         .waitForElementVisible('@publicLinkCreateButton')
@@ -225,7 +220,7 @@ module.exports = {
      * @param {string} settings.expireDate - Expire date for a public link share
      * @returns {*}
      */
-    setPublicLinkDate: async function(days) {
+    setPublicLinkDate: async function (days) {
       await this.waitForElementVisible('@publicLinkAddButton')
         .click('@publicLinkAddButton')
         .waitForElementVisible('@publicLinkCreateButton')
@@ -249,7 +244,7 @@ module.exports = {
      * inside the collaborator element, defaults to all when null
      * @returns {Array.<Object>} array of link data
      */
-    getPublicLinkList: async function(subSelectors = null) {
+    getPublicLinkList: async function (subSelectors = null) {
       if (subSelectors === null) {
         subSelectors = {
           name: this.elements.publicLinkSubName,
@@ -268,11 +263,11 @@ module.exports = {
         locateStrategy: 'xpath',
         selector: informationSelector,
         abortOnFailure: false
-      }).api.elements('xpath', informationSelector, result => {
-        linkElementIds = result.value.map(item => item[Object.keys(item)[0]])
+      }).api.elements('xpath', informationSelector, (result) => {
+        linkElementIds = result.value.map((item) => item[Object.keys(item)[0]])
       })
 
-      results = linkElementIds.map(async linkElementId => {
+      results = linkElementIds.map(async (linkElementId) => {
         const linkResult = {}
         for (const attrName in subSelectors) {
           let attrElementId = null
@@ -280,7 +275,7 @@ module.exports = {
             linkElementId,
             'css selector',
             subSelectors[attrName],
-            result => {
+            (result) => {
               if (result.status !== -1) {
                 attrElementId = result.value.ELEMENT
               }
@@ -288,7 +283,7 @@ module.exports = {
           )
 
           if (attrElementId) {
-            await this.api.elementIdText(attrElementId, text => {
+            await this.api.elementIdText(attrElementId, (text) => {
               linkResult[attrName] = text.value
             })
           } else {
@@ -307,7 +302,7 @@ module.exports = {
      *
      * @returns {Promise<string>}
      */
-    getPublicLinkUrls: async function() {
+    getPublicLinkUrls: async function () {
       const promiseList = []
       const publicLinkUrlXpath =
         this.elements.publicLinkContainer.selector +
@@ -317,11 +312,11 @@ module.exports = {
         locateStrategy: 'xpath',
         selector: publicLinkUrlXpath,
         abortOnFailure: false
-      }).api.elements('xpath', publicLinkUrlXpath, result => {
-        result.value.forEach(item => {
+      }).api.elements('xpath', publicLinkUrlXpath, (result) => {
+        result.value.forEach((item) => {
           promiseList.push(
-            new Promise(resolve => {
-              this.api.elementIdAttribute(item.ELEMENT, 'href', href => {
+            new Promise((resolve) => {
+              this.api.elementIdAttribute(item.ELEMENT, 'href', (href) => {
                 resolve(href.value)
               })
             })
@@ -334,12 +329,12 @@ module.exports = {
      *
      * @returns {Promise<string>}
      */
-    getErrorMessage: async function() {
+    getErrorMessage: async function () {
       let message
       const errorMessageXpath =
         this.elements.publicLinkContainer.selector +
         this.elements.errorMessageInsidePublicLinkContainer.selector
-      await this.getText('xpath', errorMessageXpath, function(result) {
+      await this.getText('xpath', errorMessageXpath, function (result) {
         message = result.value
       })
       return message
@@ -349,7 +344,7 @@ module.exports = {
      *
      * @param {string} linkName Name of the public link whose URL is to be copied
      */
-    copyPublicLinkURI: function(linkName) {
+    copyPublicLinkURI: function (linkName) {
       const copyBtnXpath =
         this.elements.publicLinkContainer.selector +
         util.format(this.elements.publicLinkURLCopyButton.selector, linkName)
@@ -359,7 +354,7 @@ module.exports = {
       }
       return this.waitForElementVisible(copyBtnSelector).click(copyBtnSelector)
     },
-    copyPrivateLink: function() {
+    copyPrivateLink: function () {
       return this.waitForElementVisible('@privateLinkURLCopyButton').click(
         '@privateLinkURLCopyButton'
       )

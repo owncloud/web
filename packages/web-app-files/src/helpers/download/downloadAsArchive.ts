@@ -26,7 +26,7 @@ export const triggerDownloadAsArchive = async (
   }
   const majorVersion = major(archiverService.capability.version)
   if (majorVersion === 2) {
-    const queryParams = [...options.fileIds.map(id => `id=${id}`)]
+    const queryParams = [...options.fileIds.map((id) => `id=${id}`)]
     const archiverUrl = archiverService.url + '?' + queryParams.join('&')
     window.location = await clientService.owncloudSdk.signUrl(archiverUrl)
   }

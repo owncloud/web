@@ -1,5 +1,5 @@
 module.exports = {
-  url: function() {
+  url: function () {
     return this.api.launchUrl
   },
   elements: {
@@ -16,7 +16,7 @@ module.exports = {
   },
   commands: [
     {
-      authorize: function() {
+      authorize: function () {
         return this.waitForElementVisible('@authorizeButton')
           .click('@authorizeButton')
           .waitForElementNotPresent(
@@ -24,7 +24,7 @@ module.exports = {
               selector: '@authorizeButton',
               abortOnFailure: false
             },
-            result => {
+            (result) => {
               if (result.value.length > 0) {
                 // click failed
                 console.log(
@@ -36,11 +36,11 @@ module.exports = {
             }
           )
       },
-      waitForPage: async function() {
+      waitForPage: async function () {
         let isLoginPageVisible = false
 
         await this.waitForElementVisible('@body')
-        await this.api.element('@inputUsername', result => {
+        await this.api.element('@inputUsername', (result) => {
           if (result.status > -1) {
             isLoginPageVisible = true
           }

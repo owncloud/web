@@ -12,7 +12,7 @@ export default {
     filterSearch.on('reset', () => {
       this.CLEAR_FILES_SEARCHED()
     })
-    filterSearch.on('updateTerm', term => {
+    filterSearch.on('updateTerm', (term) => {
       if (!term) {
         this.CLEAR_FILES_SEARCHED()
       }
@@ -23,7 +23,7 @@ export default {
   },
   watch: {
     $route: {
-      handler: function(to, from) {
+      handler: function (to, from) {
         if (to.name === from?.name && to.params?.item === from?.params?.item) {
           return
         }

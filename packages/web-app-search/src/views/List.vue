@@ -19,7 +19,7 @@ export default {
   data() {
     const { provider: providerId } = this.$route.query
     const { listSearch } = providerStore.availableProviders.find(
-      provider => provider.id === providerId
+      (provider) => provider.id === providerId
     )
     // abort and return if no provider is found
     return {

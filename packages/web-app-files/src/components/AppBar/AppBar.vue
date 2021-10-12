@@ -318,7 +318,7 @@ export default {
       const defaultName = isFolder
         ? this.$gettext('New folder')
         : this.$gettext('New file') + '.' + ext
-      const checkInputValue = value => {
+      const checkInputValue = (value) => {
         this.setModalInputErrorMessage(
           isFolder ? this.checkNewFolderName(value) : this.checkNewFileName(value)
         )
@@ -418,7 +418,7 @@ export default {
         return this.$gettext('Folder name cannot end with whitespace')
       }
 
-      const exists = this.files.find(file => file.name === folderName)
+      const exists = this.files.find((file) => file.name === folderName)
 
       if (exists) {
         const translated = this.$gettext('%{name} already exists')
@@ -507,7 +507,7 @@ export default {
         return this.$gettext('File name cannot end with whitespace')
       }
 
-      const exists = this.files.find(file => file.name === fileName)
+      const exists = this.files.find((file) => file.name === fileName)
 
       if (exists) {
         const translated = this.$gettext('%{name} already exists')

@@ -1,26 +1,26 @@
 import { shareTypes, userShareTypes } from '../helpers/shareTypes'
 
 export default {
-  inProgress: state => {
+  inProgress: (state) => {
     return state.inProgress
   },
   selectedFiles: (state, getters) => {
-    return getters.filesAll.filter(f => state.selectedIds.includes(f.id))
+    return getters.filesAll.filter((f) => state.selectedIds.includes(f.id))
   },
-  files: state => {
+  files: (state) => {
     return state.files
   },
-  filesAll: state => state.filesSearched || state.files,
-  currentFolder: state => {
+  filesAll: (state) => state.filesSearched || state.files,
+  currentFolder: (state) => {
     return state.currentFolder
   },
   // a flat file list has no current folder nor parent
-  flatFileList: state => !!state.currentFolder === false,
+  flatFileList: (state) => !!state.currentFolder === false,
   activeFiles: (state, getters) => {
     let files = [].concat(getters.filesAll)
 
     if (!state.areHiddenFilesShown) {
-      files = files.filter(file => !file.name.startsWith('.'))
+      files = files.filter((file) => !file.name.startsWith('.'))
     }
 
     return files
@@ -34,34 +34,34 @@ export default {
     return getters.activeFiles
   },
   totalFilesSize: (state, getters) => {
-    return getters.filesAll.map(file => parseInt(file.size)).reduce((x, y) => x + y, 0)
+    return getters.filesAll.map((file) => parseInt(file.size)).reduce((x, y) => x + y, 0)
   },
   totalFilesCount: (state, getters) => {
-    const fileCount = getters.filesAll.filter(file => file.type === 'file').length
-    const folderCount = getters.filesAll.filter(file => file.type === 'folder').length
+    const fileCount = getters.filesAll.filter((file) => file.type === 'file').length
+    const folderCount = getters.filesAll.filter((file) => file.type === 'folder').length
     return {
       files: fileCount,
       folders: folderCount
     }
   },
-  dropzone: state => {
+  dropzone: (state) => {
     return state.dropzone
   },
-  currentFileOutgoingCollaborators: state => {
-    return state.currentFileOutgoingShares.filter(share => {
+  currentFileOutgoingCollaborators: (state) => {
+    return state.currentFileOutgoingShares.filter((share) => {
       return userShareTypes.includes(share.shareType)
     })
   },
-  currentFileOutgoingLinks: state => {
-    return state.currentFileOutgoingShares.filter(share => {
+  currentFileOutgoingLinks: (state) => {
+    return state.currentFileOutgoingShares.filter((share) => {
       return share.shareType === shareTypes.link
     })
   },
-  currentFileOutgoingSharesLoading: state => {
+  currentFileOutgoingSharesLoading: (state) => {
     return state.currentFileOutgoingSharesLoading
   },
-  sharesTree: state => state.sharesTree,
-  sharesTreeLoading: state => state.sharesTreeLoading,
+  sharesTree: (state) => state.sharesTree,
+  sharesTreeLoading: (state) => state.sharesTreeLoading,
   loadingFolder: (state, getter) => {
     // when loading the shares tree, it is only related to the full folder
     // whenever no file is selected / no sidebar is open.
@@ -69,7 +69,7 @@ export default {
     // be showing a progress bar for the whole folder
     return state.loadingFolder || (getter.highlightedFile === null && state.sharesTreeLoading)
   },
-  quota: state => {
+  quota: (state) => {
     return state.quota
   },
   highlightedFile: (state, getters) => {
@@ -78,10 +78,10 @@ export default {
     }
     return state.currentFolder
   },
-  versions: state => {
+  versions: (state) => {
     return state.versions
   },
-  publicLinkPassword: state => {
+  publicLinkPassword: (state) => {
     // we need to use the state for reactivity
     if (state.publicLinkPassword) {
       return state.publicLinkPassword
@@ -98,6 +98,6 @@ export default {
 
     return password
   },
-  uploaded: state => state.uploaded,
-  actionsInProgress: state => state.actionsInProgress
+  uploaded: (state) => state.uploaded,
+  actionsInProgress: (state) => state.actionsInProgress
 }

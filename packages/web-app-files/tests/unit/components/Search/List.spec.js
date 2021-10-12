@@ -45,7 +45,7 @@ describe('List component', () => {
     jest.clearAllMocks()
   })
 
-  describe.each(['no search term is entered', 'no resource is found'])('when %s', message => {
+  describe.each(['no search term is entered', 'no resource is found'])('when %s', (message) => {
     let wrapper
     beforeEach(() => {
       if (message === 'no search term is entered') {
@@ -176,7 +176,7 @@ function createStore(activeFilesCurrentPage) {
 }
 
 function getSearchResults(files) {
-  return files.map(file => ({ data: file, id: file.id }))
+  return files.map((file) => ({ data: file, id: file.id }))
 }
 
 function getTotalSize(files) {

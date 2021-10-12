@@ -45,34 +45,38 @@ const mutations = {
 }
 
 const getters = {
-  settingsValuesLoaded: state => {
+  settingsValuesLoaded: (state) => {
     return state.settingsValues !== null
   },
   // calling this getter requires either having the `settingId` or all three other params
-  hasSettingsValue: (state, getters) => ({ settingId, extension, bundle, setting }) => {
-    return getters.getSettingsValue({ settingId, extension, bundle, setting }) !== null
-  },
+  hasSettingsValue:
+    (state, getters) =>
+    ({ settingId, extension, bundle, setting }) => {
+      return getters.getSettingsValue({ settingId, extension, bundle, setting }) !== null
+    },
   // calling this getter requires either having the `settingId` or all three other params
-  getSettingsValue: (state, getters) => ({ settingId, extension, bundle, setting }) => {
-    if (!getters.settingsValuesLoaded) {
-      return null
-    }
-    if (settingId) {
-      const key = findKey(
-        state.settingsValues,
-        settingsValue => settingsValue.value.settingId === settingId
+  getSettingsValue:
+    (state, getters) =>
+    ({ settingId, extension, bundle, setting }) => {
+      if (!getters.settingsValuesLoaded) {
+        return null
+      }
+      if (settingId) {
+        const key = findKey(
+          state.settingsValues,
+          (settingsValue) => settingsValue.value.settingId === settingId
+        )
+        return isNil(key) ? null : state.settingsValues[key].value
+      }
+      const key = findKey(state.settingsValues, (settingsValue) =>
+        isEqual(settingsValue.identifier, {
+          extension,
+          bundle,
+          setting
+        })
       )
       return isNil(key) ? null : state.settingsValues[key].value
     }
-    const key = findKey(state.settingsValues, settingsValue =>
-      isEqual(settingsValue.identifier, {
-        extension,
-        bundle,
-        setting
-      })
-    )
-    return isNil(key) ? null : state.settingsValues[key].value
-  }
 }
 
 export default {

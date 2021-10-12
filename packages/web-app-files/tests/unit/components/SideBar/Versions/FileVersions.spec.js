@@ -14,13 +14,9 @@ const defaultStubs = {
   'oc-table-simple': true
 }
 
-const yesterday = DateTime.now()
-  .minus({ days: 1 })
-  .toHTTP()
+const yesterday = DateTime.now().minus({ days: 1 }).toHTTP()
 
-const sevenDaysBefore = DateTime.now()
-  .minus({ days: 7 })
-  .toHTTP()
+const sevenDaysBefore = DateTime.now().minus({ days: 7 }).toHTTP()
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -116,7 +112,7 @@ function createStore({
 } = {}) {
   return new Vuex.Store({
     getters: {
-      getToken: function() {
+      getToken: function () {
         return 'token'
       }
     },
@@ -124,10 +120,10 @@ function createStore({
       Files: {
         namespaced: true,
         getters: {
-          highlightedFile: function() {
+          highlightedFile: function () {
             return highlightedFile
           },
-          versions: function() {
+          versions: function () {
             return versions
           }
         },
@@ -225,10 +221,10 @@ describe('FileVersions', () => {
         describe('row actions', () => {
           const spyRevertFunction = jest
             .spyOn(FileVersions.methods, 'revertVersion')
-            .mockImplementation(file => {})
+            .mockImplementation((file) => {})
           const spyDownloadFunction = jest
             .spyOn(FileVersions.methods, 'downloadVersion')
-            .mockImplementation(file => {})
+            .mockImplementation((file) => {})
           const wrapper = getMountedWrapper(createStore())
 
           it('should call revertVersion method when revert version button is clicked', async () => {

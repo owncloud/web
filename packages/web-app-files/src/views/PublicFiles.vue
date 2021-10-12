@@ -140,7 +140,7 @@ export default {
 
   watch: {
     $route: {
-      handler: function(to, from) {
+      handler: function (to, from) {
         const sameRoute = to.name === from?.name
         const sameItem = to.params?.item === from?.params?.item
         if (!sameRoute || !sameItem) {
@@ -161,7 +161,7 @@ export default {
   },
 
   created() {
-    bus.on('app.files.list.load', path => {
+    bus.on('app.files.list.load', (path) => {
       this.loadResources(this.$route.params.item === path, path)
     })
   },

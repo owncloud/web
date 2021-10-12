@@ -1,5 +1,5 @@
 const tape = []
-const isDomNode = node => node instanceof Element
+const isDomNode = (node) => node instanceof Element
 const DIRECTION_FORWARD = 'forward'
 const DIRECTION_BACKWARD = 'backward'
 

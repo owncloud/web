@@ -73,7 +73,7 @@ describe('Avatar component', () => {
 
     describe('when an avatar is not found', () => {
       it('should set empty string to src prop on oc-avatar component', async () => {
-        await new Promise(resolve => {
+        await new Promise((resolve) => {
           setTimeout(() => {
             const avatar = wrapper.find(ocAvatar)
             expect(avatar.props().src).toEqual('')
@@ -104,7 +104,7 @@ describe('Avatar component', () => {
       it('should set blob as src prop on oc-avatar component', async () => {
         const wrapper = getShallowWrapper()
 
-        await new Promise(resolve => {
+        await new Promise((resolve) => {
           setTimeout(() => {
             const avatar = wrapper.find(ocAvatar)
             expect(avatar.props().src).toEqual(blob)

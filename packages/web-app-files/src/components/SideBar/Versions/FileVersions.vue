@@ -64,7 +64,7 @@ import { DavProperty } from 'web-pkg/src/constants'
 export default {
   name: 'FileVersions',
   mixins: [Mixins, MixinResources],
-  title: $gettext => {
+  title: ($gettext) => {
     return $gettext('Versions')
   },
   data: () => ({

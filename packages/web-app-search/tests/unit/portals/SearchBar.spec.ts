@@ -360,10 +360,7 @@ describe('Search Bar portal component', () => {
     ])
     await wrapper.find('input').setValue('new')
     await wrapper.vm.$nextTick()
-    await wrapper
-      .findAll('li.preview')
-      .at(1)
-      .trigger('click')
+    await wrapper.findAll('li.preview').at(1).trigger('click')
     expect(dummyProviderOne.previewSearch.activate).toBeCalledTimes(1)
     expect(dummyProviderOne.previewSearch.activate).toBeCalledWith({
       id: 'dummyProviderOne.2',

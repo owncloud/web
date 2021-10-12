@@ -4,7 +4,7 @@ const { join } = require('../helpers/path')
 const { defaultUsers } = require('../helpers/userSettings')
 
 module.exports = {
-  url: function() {
+  url: function () {
     return join(this.api.launchUrl, '/#/')
   },
   commands: {
@@ -12,10 +12,10 @@ module.exports = {
      *
      * @param {string} searchTerm
      */
-    search: function(searchTerm, global = false) {
+    search: function (searchTerm, global = false) {
       if (global === true) {
         return this.initAjaxCounters()
-          .isVisible('#files-open-search-btn', result => {
+          .isVisible('#files-open-search-btn', (result) => {
             if (result.value === true) {
               this.click('#files-open-search-btn')
                 .waitForElementVisible('@searchInputFieldLowResolution')
@@ -31,15 +31,16 @@ module.exports = {
           .waitForOutstandingAjaxCalls()
       }
       return this.initAjaxCounters()
-        .isVisible('#files-open-search-btn', result => {
+        .isVisible('#files-open-search-btn', (result) => {
           if (result.value === true) {
             this.click('#files-open-search-btn')
               .waitForElementVisible('@searchInputFieldLowResolution')
               .setValue('@searchInputFieldLowResolution', [searchTerm, this.api.Keys.ENTER])
           } else {
-            this.waitForElementVisible(
-              '@searchInputFieldHighResolution'
-            ).setValue('@searchInputFieldHighResolution', [searchTerm, this.api.Keys.ENTER])
+            this.waitForElementVisible('@searchInputFieldHighResolution').setValue(
+              '@searchInputFieldHighResolution',
+              [searchTerm, this.api.Keys.ENTER]
+            )
           }
         })
         .waitForElementNotVisible('@searchLoadingIndicator')
@@ -48,12 +49,12 @@ module.exports = {
     /**
      * @param {string} page
      */
-    navigateToUsingMenu: async function(page) {
+    navigateToUsingMenu: async function (page) {
       const menuItemSelector = util.format(this.elements.menuItem.selector, page)
       let isAppNavigationVisible = false
 
       // Check if the navigation is visible
-      await this.api.element('@appNavigation', result => {
+      await this.api.element('@appNavigation', (result) => {
         if (result.status > -1) {
           isAppNavigationVisible = true
         }
@@ -64,25 +65,22 @@ module.exports = {
         this.click('@menuButton').waitForAnimationToFinish()
       }
 
-      await this.useXpath()
-        .waitForElementVisible(menuItemSelector)
-        .click(menuItemSelector)
-        .useCss()
+      await this.useXpath().waitForElementVisible(menuItemSelector).click(menuItemSelector).useCss()
       await this.api.page.FilesPageElement.filesList().waitForLoadingFinished()
       return this
     },
-    markNotificationAsRead: function() {
+    markNotificationAsRead: function () {
       return this.waitForElementVisible('@notificationBell')
         .click('@notificationBell')
         .waitForElementVisible('@markNotificationAsReadLink')
         .click('@markNotificationAsReadLink')
     },
-    closeMessage: function() {
+    closeMessage: function () {
       return this.waitForElementPresent('@messageCloseIcon')
         .click('@messageCloseIcon')
         .waitForElementNotPresent('@messageCloseIcon')
     },
-    toggleNotificationDrawer: function() {
+    toggleNotificationDrawer: function () {
       return this.waitForElementVisible('@notificationBell').click('@notificationBell')
     },
     /**
@@ -90,14 +88,14 @@ module.exports = {
      *
      * @return {Promise<array>}
      */
-    getNotifications: async function() {
+    getNotifications: async function () {
       const notifications = []
       await this.toggleNotificationDrawer()
       await this.waitForElementVisible('@notificationElement').api.elements(
         '@notificationElement',
-        result => {
+        (result) => {
           for (const element of result.value) {
-            this.api.elementIdText(element.ELEMENT, text => {
+            this.api.elementIdText(element.ELEMENT, (text) => {
               notifications.push(text.value)
             })
           }
@@ -109,7 +107,7 @@ module.exports = {
     /**
      * Perform accept action on the offered shares in the notifications
      */
-    acceptAllSharesInNotification: async function() {
+    acceptAllSharesInNotification: async function () {
       const notifications = await this.getNotifications()
       await this.toggleNotificationDrawer()
       for (const element of notifications) {
@@ -131,9 +129,9 @@ module.exports = {
      *
      * @return boolean
      */
-    isNotificationBellVisible: async function() {
+    isNotificationBellVisible: async function () {
       let isVisible = false
-      await this.api.element('@notificationBell', result => {
+      await this.api.element('@notificationBell', (result) => {
         isVisible = result.value === 0
       })
       return isVisible
@@ -141,7 +139,7 @@ module.exports = {
     /**
      * Perform decline action on the offered shares in the notifications
      */
-    declineAllSharesInNotification: async function() {
+    declineAllSharesInNotification: async function () {
       const notifications = await this.getNotifications()
       await this.toggleNotificationDrawer()
       for (const element of notifications) {
@@ -161,12 +159,12 @@ module.exports = {
      *
      * @returns {boolean}
      */
-    isPageVisible: async function() {
+    isPageVisible: async function () {
       let isVisible = true
       await this.api.elements(
         this.elements.webContainer.locateStrategy,
         this.elements.webContainer.selector,
-        function(result) {
+        function (result) {
           isVisible = result.value.length > 0
         }
       )
@@ -178,9 +176,9 @@ module.exports = {
      *
      * @returns {Promise<void>}
      */
-    clearAllErrorMessages: async function() {
+    clearAllErrorMessages: async function () {
       let notificationElements, cancelButtons
-      await this.api.element('@messages', result => {
+      await this.api.element('@messages', (result) => {
         notificationElements = result.value.ELEMENT
       })
       if (!notificationElements) {
@@ -190,7 +188,7 @@ module.exports = {
         notificationElements,
         this.elements.clearErrorMessage.locateStrategy,
         this.elements.clearErrorMessage.selector,
-        res => {
+        (res) => {
           cancelButtons = res.value
         }
       )
@@ -198,39 +196,36 @@ module.exports = {
         await this.api.elementIdClick(btn.ELEMENT).waitForAnimationToFinish()
       }
     },
-    browseToUserProfile: function() {
+    browseToUserProfile: function () {
       return this.click('@userMenuButton')
     },
-    getDisplayedMessage: async function(titleOnly = false) {
+    getDisplayedMessage: async function (titleOnly = false) {
       let element = ''
       let displayedmessage
       const selector = titleOnly ? '@message' : '@messages'
       await this.waitForElementVisible(selector)
-      await this.api.element(selector, result => {
+      await this.api.element(selector, (result) => {
         element = result.value.ELEMENT
       })
-      await this.api.elementIdText(element, function(result) {
+      await this.api.elementIdText(element, function (result) {
         displayedmessage = result.value
       })
       return displayedmessage
     },
-    getLinkSelectorFromNotification: function(resource, sharer) {
+    getLinkSelectorFromNotification: function (resource, sharer) {
       const notifyString = `"${defaultUsers[sharer].displayname}" shared "${resource}" with you`
       const linkSelector = util.format(this.elements.filelink.selector, notifyString)
       return linkSelector
     },
-    followLink: function(linkSelector) {
-      return this.useXpath()
-        .waitForElementVisible(linkSelector)
-        .click(linkSelector)
-        .useCss()
+    followLink: function (linkSelector) {
+      return this.useXpath().waitForElementVisible(linkSelector).click(linkSelector).useCss()
     },
-    getPopupErrorMessages: async function() {
+    getPopupErrorMessages: async function () {
       const messages = []
       await this.waitForElementVisible('@messages')
-      await this.api.elements('@messages', function({ value }) {
-        value.forEach(async function({ ELEMENT }) {
-          await client.elementIdText(ELEMENT, function({ value }) {
+      await this.api.elements('@messages', function ({ value }) {
+        value.forEach(async function ({ ELEMENT }) {
+          await client.elementIdText(ELEMENT, function ({ value }) {
             messages.push(value)
           })
         })

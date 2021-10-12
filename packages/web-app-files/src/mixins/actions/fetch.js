@@ -9,7 +9,7 @@ export default {
       return [
         {
           icon: 'remove_red_eye',
-          handler: file => this.$_fetch_trigger(file, 'application/pdf', this.isPublicFilesRoute),
+          handler: (file) => this.$_fetch_trigger(file, 'application/pdf', this.isPublicFilesRoute),
           label: () => {
             return this.$gettext('Open in browser')
           },
@@ -46,8 +46,8 @@ export default {
         method: 'GET',
         headers
       })
-        .then(r => r.blob())
-        .then(blob => this.$_fetch_openBlobInNewTab(blob, mimetype))
+        .then((r) => r.blob())
+        .then((blob) => this.$_fetch_openBlobInNewTab(blob, mimetype))
     },
 
     $_fetch_openBlobInNewTab(blob, mimetype) {

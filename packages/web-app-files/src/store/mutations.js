@@ -8,7 +8,7 @@ export default {
   UPDATE_FILE_PROGRESS(state, file) {
     const inProgress = [...state.inProgress]
 
-    const fileIndex = inProgress.findIndex(f => {
+    const fileIndex = inProgress.findIndex((f) => {
       return f.id === file.id
     })
     if (fileIndex === -1) return
@@ -32,7 +32,7 @@ export default {
 
   REMOVE_FILE_FROM_PROGRESS(state, file) {
     const inProgress = [...state.inProgress]
-    const fileIndex = inProgress.findIndex(f => {
+    const fileIndex = inProgress.findIndex((f) => {
       return f.id === file.id
     })
 
@@ -65,17 +65,17 @@ export default {
       return
     }
 
-    state.filesSearched = state.filesSearched.filter(i => file.id !== i.id)
+    state.filesSearched = state.filesSearched.filter((i) => file.id !== i.id)
   },
   CLEAR_FILES_SEARCHED(state) {
     state.filesSearched = null
   },
   SET_FILE_SELECTION(state, files) {
-    state.selectedIds = files.map(f => f.id)
+    state.selectedIds = files.map((f) => f.id)
   },
   ADD_FILE_SELECTION(state, file) {
     const selected = [...state.selectedIds]
-    const fileIndex = selected.findIndex(id => {
+    const fileIndex = selected.findIndex((id) => {
       return id === file.id
     })
     if (fileIndex === -1) {
@@ -86,7 +86,7 @@ export default {
   REMOVE_FILE_SELECTION(state, file) {
     const selected = [...state.selectedIds]
     if (selected.length > 1) {
-      state.selectedIds = selected.filter(id => file.id !== id)
+      state.selectedIds = selected.filter((id) => file.id !== id)
       return
     }
     state.selectedIds = []
@@ -96,18 +96,18 @@ export default {
   },
   FAVORITE_FILE(state, item) {
     const files = [...state.files]
-    const fileIndex = files.findIndex(f => {
+    const fileIndex = files.findIndex((f) => {
       return f.id === item.id
     })
     files[fileIndex].starred = !item.starred
     state.files = files
   },
   REMOVE_FILE(state, removedFile) {
-    state.files = [...state.files].filter(file => file.id !== removedFile.id)
+    state.files = [...state.files].filter((file) => file.id !== removedFile.id)
   },
   RENAME_FILE(state, { file, newValue, newPath }) {
     const resources = [...state.files]
-    const fileIndex = resources.findIndex(f => {
+    const fileIndex = resources.findIndex((f) => {
       return f.id === file.id
     })
 
@@ -126,10 +126,12 @@ export default {
     state.currentFileOutgoingShares.push(share)
   },
   CURRENT_FILE_OUTGOING_SHARES_REMOVE(state, share) {
-    state.currentFileOutgoingShares = state.currentFileOutgoingShares.filter(s => share.id !== s.id)
+    state.currentFileOutgoingShares = state.currentFileOutgoingShares.filter(
+      (s) => share.id !== s.id
+    )
   },
   CURRENT_FILE_OUTGOING_SHARES_UPDATE(state, share) {
-    const fileIndex = state.currentFileOutgoingShares.findIndex(s => {
+    const fileIndex = state.currentFileOutgoingShares.findIndex((s) => {
       return s.id === share.id
     })
     if (fileIndex >= 0) {
@@ -207,7 +209,7 @@ export default {
   },
 
   REMOVE_ACTION_FROM_PROGRESS(state, item) {
-    const itemIndex = state.actionsInProgress.findIndex(i => {
+    const itemIndex = state.actionsInProgress.findIndex((i) => {
       return i === item
     })
 
@@ -218,7 +220,7 @@ export default {
     state.currentFolder = null
     state.selectedIds = []
     // release blob urls
-    state.files.forEach(item => {
+    state.files.forEach((item) => {
       if (item.previewUrl && item.previewUrl.startsWith('blob:')) {
         window.URL.revokeObjectURL(item.previewUrl)
       }
@@ -238,11 +240,7 @@ export default {
       permissions: parseInt(link.permissions, 10),
       hasPassword: link.password,
       expireDate:
-        link.expiration !== null
-          ? DateTime.fromISO(link.expiration)
-              .endOf('day')
-              .toISO()
-          : null
+        link.expiration !== null ? DateTime.fromISO(link.expiration).endOf('day').toISO() : null
     }
 
     state.publicLinkInEdit = link
@@ -307,7 +305,7 @@ export default {
    */
   UPDATE_RESOURCE_FIELD(state, params) {
     const fileSource = state.filesSearched || state.files
-    const index = fileSource.findIndex(r => r.id === params.id)
+    const index = fileSource.findIndex((r) => r.id === params.id)
     if (index < 0) {
       return
     }
@@ -333,7 +331,7 @@ export default {
 // eslint-disable-next-line camelcase
 function $_upsertResource(state, resource, allowInsert) {
   const files = [...state.files]
-  const index = files.findIndex(r => r.id === resource.id)
+  const index = files.findIndex((r) => r.id === resource.id)
   const found = index > -1
 
   state.filesSearched = null

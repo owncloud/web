@@ -3,7 +3,7 @@ const util = require('util')
 
 module.exports = {
   commands: {
-    isQuickActionVisible: function(action) {
+    isQuickActionVisible: function (action) {
       action = action.replace(/\s/, '-')
       const actionSelector = util.format(this.elements.quickAction.selector, action)
 

@@ -119,7 +119,7 @@ const VIEW_EDIT = 'editCollaborator'
 const VIEW_NEW = 'newCollaborator'
 
 export default {
-  title: $gettext => {
+  title: ($gettext) => {
     return $gettext('People')
   },
   name: 'FileShares',
@@ -208,7 +208,7 @@ export default {
       }
     },
     collaboratorsAvatar() {
-      return this.collaborators.map(c => {
+      return this.collaborators.map((c) => {
         return {
           ...c.collaborator,
           shareType: c.shareType
@@ -231,7 +231,7 @@ export default {
       }
 
       const resharers = new Map()
-      this.$_allIncomingShares.forEach(share => {
+      this.$_allIncomingShares.forEach((share) => {
         if (share.owner.name !== ownerAsCollaborator.collaborator.name) {
           resharers.set(share.owner.name, share.owner)
         }
@@ -262,10 +262,10 @@ export default {
       // remove root entry
       parentPaths.pop()
 
-      parentPaths.forEach(parentPath => {
+      parentPaths.forEach((parentPath) => {
         const shares = this.sharesTree[parentPath]
         if (shares) {
-          shares.forEach(share => {
+          shares.forEach((share) => {
             if (share.incoming) {
               allShares.push(share)
             }
@@ -279,7 +279,7 @@ export default {
     collaborators() {
       return [...this.currentFileOutgoingCollaborators, ...this.indirectOutgoingShares]
         .sort(this.collaboratorsComparator)
-        .map(collaborator => {
+        .map((collaborator) => {
           collaborator.key = 'collaborator-' + collaborator.id
           if (
             collaborator.owner.name !== collaborator.fileOwner.name &&
@@ -301,10 +301,10 @@ export default {
       // remove root entry
       parentPaths.pop()
 
-      parentPaths.forEach(parentPath => {
+      parentPaths.forEach((parentPath) => {
         const shares = this.sharesTree[parentPath]
         if (shares) {
-          shares.forEach(share => {
+          shares.forEach((share) => {
             if (share.outgoing && this.$_isCollaboratorShare(share)) {
               share.key = 'indirect-collaborator-' + share.id
               allShares.push(share)
@@ -342,7 +342,7 @@ export default {
   watch: {
     // Do not reload shares if we are starting with different panel than 'show'
     highlightedFile: {
-      handler: function(newItem, oldItem) {
+      handler: function (newItem, oldItem) {
         if (oldItem !== newItem && this.currentView === VIEW_SHOW) {
           this.transitionGroupActive = false
           this.$_reloadShares()

@@ -7,7 +7,7 @@ module.exports = {
      * @param {string} collaborator
      * @returns {Promise.<string[]>} Array of autocomplete webElementIds
      */
-    deleteShareWithUserGroup: function(collaborator) {
+    deleteShareWithUserGroup: function (collaborator) {
       const informationSelector = util.format(
         this.elements.collaboratorInformationByCollaboratorName.selector,
         collaborator
@@ -22,7 +22,7 @@ module.exports = {
     /**
      * Clicks the button to add a new collaborator
      */
-    clickCreateShare: function() {
+    clickCreateShare: function () {
       return this.useXpath()
         .waitForElementVisible('@createShareButton')
         .click('@createShareButton')
@@ -34,7 +34,7 @@ module.exports = {
      *
      * @param {string} collaborator
      */
-    clickEditShare: function(collaborator) {
+    clickEditShare: function (collaborator) {
       const informationSelector = util.format(
         this.elements.collaboratorInformationByCollaboratorName.selector,
         collaborator
@@ -54,7 +54,7 @@ module.exports = {
      * @param timeout
      * @returns {Promise.<string[]>} Array of users/groups in share list
      */
-    getCollaboratorsList: async function(
+    getCollaboratorsList: async function (
       subSelectors = null,
       filterDisplayName = null,
       timeout = null
@@ -90,12 +90,12 @@ module.exports = {
       await this.waitForElementPresent(informationSelector).api.elements(
         'css selector',
         this.elements.collaboratorsInformation,
-        result => {
-          collaboratorsElementIds = result.value.map(item => item[Object.keys(item)[0]])
+        (result) => {
+          collaboratorsElementIds = result.value.map((item) => item[Object.keys(item)[0]])
         }
       )
 
-      results = collaboratorsElementIds.map(async collaboratorElementId => {
+      results = collaboratorsElementIds.map(async (collaboratorElementId) => {
         const collaboratorResult = {}
         for (const attrName in subSelectors) {
           let attrElementId = null
@@ -103,7 +103,7 @@ module.exports = {
             collaboratorElementId,
             'css selector',
             subSelectors[attrName],
-            result => {
+            (result) => {
               if (result.status !== -1) {
                 attrElementId = result.value.ELEMENT
               }
@@ -111,7 +111,7 @@ module.exports = {
           )
 
           if (attrElementId) {
-            await this.api.elementIdText(attrElementId, text => {
+            await this.api.elementIdText(attrElementId, (text) => {
               collaboratorResult[attrName] = text.value
             })
           } else {
@@ -129,17 +129,17 @@ module.exports = {
      *
      * @returns {Promise.<string[]>} Array of user/group display names in share list
      */
-    getCollaboratorsListNames: async function() {
+    getCollaboratorsListNames: async function () {
       const list = await this.getCollaboratorsList({
         name: this.elements.collaboratorInformationSubName
       })
-      return list.map(result => result.name)
+      return list.map((result) => result.name)
     },
     /**
      * check if the expiration date is present in the collaborator share and then get the expiration information
      * @return {Promise.<string>}
      */
-    getCollaboratorExpirationInfo: async function(user) {
+    getCollaboratorExpirationInfo: async function (user) {
       let text
       const formattedWithUserName = util.format(
         this.elements.collaboratorExpirationInfo.selector,
@@ -151,7 +151,7 @@ module.exports = {
       )
       await this.useXpath()
         .waitForElementVisible(formattedCollaboratorInfoByCollaboratorName)
-        .getText('xpath', formattedWithUserName, function(result) {
+        .getText('xpath', formattedWithUserName, function (result) {
           if (typeof result.value === 'string') {
             text = result.value
           }

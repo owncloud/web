@@ -146,7 +146,7 @@ const fileActions = {
 
 exports.fileActions = fileActions
 
-exports.getActions = function(actions = []) {
+exports.getActions = function (actions = []) {
   const defaultActions = ['download', 'markdown-editor', 'draw-io', 'mediaviewer', 'open-folder']
 
   const res = []

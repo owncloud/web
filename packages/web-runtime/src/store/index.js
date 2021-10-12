@@ -16,7 +16,7 @@ const vuexPersistInSession = new VuexPersistence({
   key: 'webStateInSessionStorage',
   // Browser tab independent storage which gets deleted after the tab is closed
   storage: window.sessionStorage,
-  reducer: state => {
+  reducer: (state) => {
     const { userReady, ...user } = state.user
     return {
       user,

@@ -1,9 +1,9 @@
 async function get(url) {
   return await fetch(url)
-    .then(res => {
+    .then((res) => {
       return res.json()
     })
-    .catch(err => {
+    .catch((err) => {
       console.log('Error: ', err)
     })
 }
@@ -16,10 +16,10 @@ async function post(url, data) {
     },
     body: JSON.stringify(data)
   })
-    .then(res => {
+    .then((res) => {
       return res.json()
     })
-    .catch(err => {
+    .catch((err) => {
       console.log('Error: ', err)
     })
 }

@@ -9,7 +9,7 @@ export default {
       return [
         {
           icon: 'folder-open',
-          handler: resource => this.$_navigate_trigger(resource),
+          handler: (resource) => this.$_navigate_trigger(resource),
           label: () =>
             this.$pgettext('Action in the files list row to open a folder', 'Open folder'),
           isEnabled: ({ resource }) => {

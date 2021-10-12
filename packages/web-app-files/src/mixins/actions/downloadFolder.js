@@ -37,7 +37,7 @@ export default {
     async $_downloadFolder_trigger(resource) {
       await triggerDownloadAsArchive({
         fileIds: [resource.fileId]
-      }).catch(e => {
+      }).catch((e) => {
         console.error(e)
         this.showMessage({
           title: this.$gettext('Error downloading the selected folder.'),

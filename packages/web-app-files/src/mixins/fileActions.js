@@ -64,7 +64,7 @@ export default {
     },
 
     $_fileActions_editorActions() {
-      return this.apps.fileEditors.map(editor => {
+      return this.apps.fileEditors.map((editor) => {
         return {
           label: () => {
             const translated = this.$gettext('Open in %{app}')
@@ -75,7 +75,7 @@ export default {
             )
           },
           icon: this.apps.meta[editor.app].icon,
-          handler: item =>
+          handler: (item) =>
             this.$_fileActions_openEditor(editor, item.path, item.id, EDITOR_MODE_EDIT),
           isEnabled: ({ resource }) => {
             if (editor.routes?.length > 0 && !checkRoute(editor.routes, this.$route.name)) {
@@ -151,7 +151,7 @@ export default {
 
       let actions = this.$_fileActions_editorActions.concat(this.$_fileActions_systemActions)
 
-      actions = actions.filter(action => {
+      actions = actions.filter((action) => {
         return (
           action.isEnabled({
             resource: resource,
@@ -176,7 +176,7 @@ export default {
       if (!allAvailableMimeTypes?.length) {
         return []
       } else {
-        const availableMimeTypes = allAvailableMimeTypes.find(t => t.mime_type === mimeType)
+        const availableMimeTypes = allAvailableMimeTypes.find((t) => t.mime_type === mimeType)
         if (availableMimeTypes) {
           return availableMimeTypes.app_providers
         } else {

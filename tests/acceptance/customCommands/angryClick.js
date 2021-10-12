@@ -6,7 +6,7 @@
 // then click again.
 exports.command = function angryClick(selector, callback) {
   const self = this
-  return this.click(selector, function(result) {
+  return this.click(selector, function (result) {
     if (result.status === 0) {
       // click succeeded, handle callback
       if (typeof callback === 'function') {
@@ -15,7 +15,7 @@ exports.command = function angryClick(selector, callback) {
     } else {
       // click failed
       console.log('element not clickable; will try again')
-      this.execute(function() {
+      this.execute(function () {
         // Bypass Selenium element selection and access the body directly.
         // TA body click handler will dismiss it.
         if (typeof document.body.click !== 'undefined') {

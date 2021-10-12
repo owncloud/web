@@ -43,10 +43,10 @@ export default {
 
     $_rename_trigger(resource) {
       const isFolder = resource.type === 'folder'
-      const confirmAction = newName => {
+      const confirmAction = (newName) => {
         this.$_rename_renameResource(resource, newName)
       }
-      const checkName = newName => {
+      const checkName = (newName) => {
         this.$_rename_checkNewName(resource.name, newName)
       }
 
@@ -92,7 +92,7 @@ export default {
       }
 
       if (!this.flatFileList) {
-        const exists = this.files.find(file => file.name === newName && currentName !== newName)
+        const exists = this.files.find((file) => file.name === newName && currentName !== newName)
 
         if (exists) {
           const translated = this.$gettext('The name "%{name}" is already taken')
@@ -118,7 +118,7 @@ export default {
         .then(() => {
           this.hideModal()
         })
-        .catch(error => {
+        .catch((error) => {
           this.toggleModalConfirmButton()
           let translated = this.$gettext('Error while renaming "%{file}" to "%{newName}"')
           if (error.statusCode === 423) {

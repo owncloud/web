@@ -29,9 +29,7 @@
         <template #option="option">
           <role-item :role="option" />
         </template>
-        <template #no-options v-translate>
-          No matching role found
-        </template>
+        <template #no-options v-translate> No matching role found </template>
       </oc-select>
       <div class="oc-mb uk-grid-small uk-flex" uk-grid>
         <div v-if="$_expirationDate" class="uk-width-1-1 uk-width-2-5@m">
@@ -168,7 +166,7 @@ export default {
       selectedRole: null
     }
   },
-  title: $gettext => {
+  title: ($gettext) => {
     return $gettext('Links')
   },
   computed: {
@@ -228,10 +226,7 @@ export default {
     },
 
     $_minExpirationDate() {
-      return DateTime.now()
-        .plus({ days: 1 })
-        .endOf('day')
-        .toISO()
+      return DateTime.now().plus({ days: 1 }).endOf('day').toISO()
     },
 
     $_maxExpirationDate() {
@@ -241,10 +236,7 @@ export default {
 
       const days = parseInt(this.$_expirationDate.days, 10)
 
-      return DateTime.now()
-        .plus({ days: days })
-        .endOf('day')
-        .toISO()
+      return DateTime.now().plus({ days: days }).endOf('day').toISO()
     },
 
     $_expirationIsValid() {
@@ -318,7 +310,7 @@ export default {
       const permissions = parseInt(this.publicLinkInEdit.permissions, 10)
 
       if (permissions) {
-        const role = this.roles.find(r => r.permissions === permissions)
+        const role = this.roles.find((r) => r.permissions === permissions)
 
         if (role) {
           this.selectedRole = role
@@ -349,12 +341,12 @@ export default {
         $gettext: this.$gettext,
         params
       })
-        .then(e => {
+        .then((e) => {
           this.saving = false
           this.errors = false
           this.$_closeForm()
         })
-        .catch(e => {
+        .catch((e) => {
           this.saving = false
           this.errors = e
         })
@@ -384,7 +376,7 @@ export default {
           this.errors = false
           this.$_closeForm()
         })
-        .catch(e => {
+        .catch((e) => {
           this.saving = false
           this.errors = e
         })
@@ -394,7 +386,7 @@ export default {
       this.changeView('showLinks')
     },
 
-    removePassword: function() {
+    removePassword: function () {
       this.password = ''
       this.hasPassword = false
     }

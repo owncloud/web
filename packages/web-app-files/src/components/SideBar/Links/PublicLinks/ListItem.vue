@@ -1,7 +1,10 @@
 <template>
   <oc-grid
     gutter="small"
-    class="files-file-links-link files-file-links-link-table-row-info uk-flex uk-flex-top uk-flex-between"
+    class="
+      files-file-links-link files-file-links-link-table-row-info
+      uk-flex uk-flex-top uk-flex-between
+    "
   >
     <link-info :link="link" />
     <link-actions v-if="!link.indirect" :link="link" />

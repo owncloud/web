@@ -33,7 +33,7 @@ const mutations = {
     const dynamicNavItems = { ...state.dynamicNavItems }
     dynamicNavItems[extension] = dynamicNavItems[extension] || []
     const index = dynamicNavItems[extension].findIndex(
-      item => item.route.path === navItem.route.path
+      (item) => item.route.path === navItem.route.path
     )
     if (index >= 0) {
       dynamicNavItems[extension][index] = navItem
@@ -52,10 +52,10 @@ const getters = {
    * @param getters
    * @returns {function(*): *[]}
    */
-  getNavItemsByExtension: (state, getters) => extension => {
+  getNavItemsByExtension: (state, getters) => (extension) => {
     const staticNavItems = state.staticNavItems[extension] || []
     const dynamicNavItems = state.dynamicNavItems[extension] || []
-    return [...staticNavItems, ...dynamicNavItems].filter(navItem => {
+    return [...staticNavItems, ...dynamicNavItems].filter((navItem) => {
       if (!navItem.enabled) {
         // when `enabled` callback not provided: count as enabled.
         return true
@@ -75,7 +75,7 @@ const getters = {
     ]
     // return only those extension ids that really have at least one nav item.
     // Context: NavItems can be removed, so the map key could still exist with an empty array of nav items.
-    return extensions.filter(extension => getters.getNavItemsByExtension(extension).length > 0)
+    return extensions.filter((extension) => getters.getNavItemsByExtension(extension).length > 0)
   }
 }
 

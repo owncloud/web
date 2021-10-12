@@ -145,7 +145,7 @@ export default {
         ...this.$_navigate_items,
         ...this.$_fetch_items,
         ...this.$_fileActions_editorActions
-      ].filter(item => item.isEnabled(this.filterParams))
+      ].filter((item) => item.isEnabled(this.filterParams))
       if (openActions.length > 0) {
         menuItems.push(openActions[0])
       }
@@ -159,11 +159,11 @@ export default {
           ...this.$_downloadFolder_items,
           ...this.$_createPublicLink_items,
           ...this.$_showShares_items,
-          ...this.$_favorite_items.map(action => {
+          ...this.$_favorite_items.map((action) => {
             action.keepOpen = true
             return action
           })
-        ].filter(item => item.isEnabled(this.filterParams))
+        ].filter((item) => item.isEnabled(this.filterParams))
       )
 
       return menuItems
@@ -179,11 +179,11 @@ export default {
         ...this.$_declineShare_items,
         ...this.$_delete_items,
         ...this.$_showActions_items
-      ].filter(item => item.isEnabled(this.filterParams))
+      ].filter((item) => item.isEnabled(this.filterParams))
     },
 
     menuItemsSidebar() {
-      return [...this.$_showDetails_items].filter(item => item.isEnabled(this.filterParams))
+      return [...this.$_showDetails_items].filter((item) => item.isEnabled(this.filterParams))
     }
   },
   mounted() {
@@ -218,7 +218,7 @@ export default {
       const callback = () => action.handler(resource, action.handlerData)
       if (action.keepOpen) {
         return {
-          click: event => {
+          click: (event) => {
             event.stopPropagation()
             callback()
           }

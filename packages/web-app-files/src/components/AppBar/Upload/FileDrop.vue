@@ -13,9 +13,7 @@
     @vdropzone-drag-leave="$_ocDropzone_dragEnd"
   >
     <oc-dropzone>
-      <translate>
-        Drag and drop to upload content into current folder
-      </translate>
+      <translate> Drag and drop to upload content into current folder </translate>
     </oc-dropzone>
   </vue-dropzone>
 </template>

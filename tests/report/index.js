@@ -26,14 +26,8 @@ program
 
 program.parse()
 
-const {
-  backendName,
-  backendVersion,
-  environment,
-  reportOpen,
-  reportLocation,
-  reportInput
-} = program.opts()
+const { backendName, backendVersion, environment, reportOpen, reportLocation, reportInput } =
+  program.opts()
 const repoInfo = getRepoInfo()
 
 reporter.generate({

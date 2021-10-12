@@ -13,7 +13,7 @@ try {
 } catch (error) {}
 
 config.mocks = {
-  $gettext: str => str,
+  $gettext: (str) => str,
   isIE11: () => false,
   $language: {
     current: 'en'
