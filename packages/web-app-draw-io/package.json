@@ -4,7 +4,7 @@
   "description": "ownCloud web draw.io integration",
   "license": "AGPL-3.0",
   "devDependencies": {
-    "luxon": "^1.27.0",
+    "luxon": "^1.28.0",
     "query-string": "^6.8.3",
     "vuex": "3.6.2"
   }
