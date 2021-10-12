@@ -570,7 +570,9 @@ module.exports = {
      * @return {*}
      */
     openExpirationDatePicker: function() {
-      this.useCss().waitForElementVisible('@expirationDateField', 1000).click('@expirationDateField')
+      this.useCss()
+        .waitForElementVisible('@expirationDateField', 1000)
+        .click('@expirationDateField')
       return client.page.FilesPageElement.expirationDatePicker()
     },
     /**
