@@ -128,5 +128,8 @@
   },
   "engines": {
     "node": ">=14 <=16"
+  },
+  "dependencies": {
+    "node-gyp": "^8.2.0"
   }
 }
