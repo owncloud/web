@@ -579,10 +579,19 @@ module.exports = {
      */
     getExpirationDateFromInputField: async function() {
       let expirationDate
-      await this.waitForElementVisible('@expirationDateField').getValue(
-        '@expirationDateField',
+      await this.waitForElementVisible('[data-testid="recipient-datepicker"]').getAttribute(
+        '[data-testid="recipient-datepicker"]',
+        'value',
         result => {
-          expirationDate = result.value
+          const date = new Date(result.value)
+          const dateString =
+            date.getFullYear() +
+            '-' +
+            String(date.getMonth() + 1).padStart(2, '0') +
+            '-' +
+            String(date.getDate()).padStart(2, '0') +
+            ' 00:00:00'
+          expirationDate = dateString
         }
       )
       return expirationDate
