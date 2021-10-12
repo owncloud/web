@@ -211,8 +211,14 @@ export default {
 
     // keep a local history for this component
     window.addEventListener('popstate', this.handleLocalHistoryEvent)
+    const filePath = (filePath => {
+      filePath = filePath.split('/')
+      filePath = filePath.filter(Boolean)
+      filePath = filePath.join('/')
+      filePath = `/${filePath}`
 
-    const filePath = this.$route.params.filePath
+      return filePath
+    })(this.$route.params.filePath)
     await this.$_loader_loadItems(filePath)
     this.setCurrentFile(filePath)
   },

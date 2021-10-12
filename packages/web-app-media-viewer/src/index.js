@@ -4,7 +4,7 @@ import App from './App.vue'
 
 const routes = [
   {
-    path: '/:contextRouteName/:filePath',
+    path: '/:contextRouteName/:filePath*',
     components: {
       app: App
     },
