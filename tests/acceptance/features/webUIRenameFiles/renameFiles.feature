@@ -9,7 +9,7 @@ Feature: rename files
     And user "Alice" has uploaded file "data.zip" to "data.zip"
     And user "Alice" has uploaded file "lorem-big.txt" to "lorem-big.txt"
     And user "Alice" has logged in using the webUI
-    And the user reloads the current page of the webUI
+
 
   @smokeTest @ocisSmokeTest @disablePreviews
   Scenario Outline: Rename a file
@@ -28,7 +28,7 @@ Feature: rename files
 
   Scenario Outline: Rename a file that has special characters in its name
     Given user "Alice" has created file <from_name>
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     When the user renames file <from_name> to <to_name> using the webUI
     Then file <to_name> should be listed on the webUI
     When the user reloads the current page of the webUI
@@ -145,7 +145,7 @@ Feature: rename files
 
   Scenario: Rename the last file in a folder
     Given user "Alice" has created file "zzzz-must-be-last-file-in-folder.txt"
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     When the user renames file "zzzz-must-be-last-file-in-folder.txt" to "a-file.txt" using the webUI
     And the user reloads the current page of the webUI
     Then file "a-file.txt" should be listed on the webUI
@@ -189,7 +189,7 @@ Feature: rename files
   Scenario: rename a file on a public share (on ocis)
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has uploaded file "lorem.txt" to "simple-folder/lorem.txt"
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
     When the public uses the webUI to access the last public link created by user "Alice"
     And the user renames file "lorem.txt" to "a-renamed-file.txt" using the webUI
@@ -207,7 +207,7 @@ Feature: rename files
     And user "Brian" has created folder "simple-folder"
     And user "Brian" has uploaded file "lorem.txt" to "simple-folder/lorem.txt"
     And user "Brian" has uploaded file "lorem.txt" to "lorem.txt"
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     And user "Brian" has shared file "lorem.txt" with user "Alice"
     And user "Brian" has shared folder "simple-folder" with user "Alice"
     When the user browses to the shared-with-me page

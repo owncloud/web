@@ -41,7 +41,6 @@ Feature: login users
 
   Scenario: the user session of a deleted user is cleared properly
     Given user "Alice" has logged in using the webUI
-    And the user has browsed to the files page
     And user "Alice" has been deleted
     When the user reloads the current page of the webUI
     Then the user should be redirected to the owncloud login page

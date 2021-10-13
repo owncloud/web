@@ -20,7 +20,7 @@ Feature: move folders
   Scenario: move a folder into another folder
     Given user "Alice" has created folder "strängé नेपाली folder"
     And user "Alice" has logged in using the webUI
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     When the user moves folder "simple-folder" into folder "simple-empty-folder" using the webUI
     Then breadcrumb for folder "simple-empty-folder" should be displayed on the webUI
     And folder "simple-folder" should be listed on the webUI
@@ -41,7 +41,7 @@ Feature: move folders
   Scenario: Move multiple folders at once
     Given user "Alice" has created folder "strängé नेपाली folder"
     And user "Alice" has logged in using the webUI
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     When the user batch moves these folders into folder "simple-empty-folder" using the webUI
       | name                  |
       | simple-folder         |

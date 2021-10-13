@@ -21,7 +21,7 @@ Feature: Search
     And user "Alice" has uploaded file "lorem-big.txt" to "lorem-big.txt"
     And user "Alice" has uploaded file "data.zip" to "data.zip"
     And user "Alice" has logged in using the webUI
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
 
   @smokeTest @issue-980
   Scenario: Simple search
@@ -138,14 +138,14 @@ Feature: Search
 
   Scenario: Search for files with difficult names
     Given user "Alice" has uploaded file with content "does-not-matter" to "/strängéनेपालीloremfile.txt"
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     When the user searches for "lorem" using the webUI
     Then file "strängéनेपालीloremfile.txt" should be listed on the webUI
 
 
   Scenario: Search for files with difficult names and difficult search phrase
     Given user "Alice" has uploaded file with content "does-not-matter" to "/strängéनेपालीloremfile.txt"
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     When the user searches for "strängéनेपाली" using the webUI
     Then file "strängéनेपालीloremfile.txt" should be listed on the webUI
 

@@ -6,7 +6,6 @@ Feature: Sort files/folders
 
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files
-    And user "Alice" has logged in using the webUI
     And user "Alice" has created folder "test_sort"
     And user "Alice" has created the following folders
       | entry_name     |
@@ -27,6 +26,7 @@ Feature: Sort files/folders
       | test_sort/b2.txt          |
       | test_sort/b10.txt         |
       | test_sort/z.txt           |
+    And user "Alice" has logged in using the webUI
 
   Scenario: Folders are listed before files alphabetically by default and sorted using natural sort
     When the user has browsed to the files page

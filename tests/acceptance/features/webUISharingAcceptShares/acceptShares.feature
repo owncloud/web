@@ -186,7 +186,7 @@ Feature: accept/decline shares coming from internal users
     Given user "Alice" has created file "lorem.txt"
     And user "Alice" has shared file "lorem.txt" with user "Brian"
     And user "Brian" has accepted the share "Shares/lorem.txt" offered by user "Alice"
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     And the user opens folder "Shares" using the webUI
     When the user deletes file "lorem.txt" using the webUI
     And the user browses to the shared-with-me page in declined shares view

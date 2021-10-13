@@ -6,7 +6,7 @@ Feature: view profile
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files
     And user "Alice" has logged in using the webUI
-    And the user has browsed to the files page
+
     And user "Alice" has been blocked by admin
 
   @openIdLogin

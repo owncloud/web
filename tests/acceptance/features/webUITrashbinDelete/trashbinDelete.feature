@@ -140,7 +140,7 @@ Feature: files and folders can be deleted from the trashbin
       | ..fo     |
       | fo.xyz   |
     And the user has browsed to the trashbin page
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     When the user batch deletes these files using the webUI
       | name     |
       | fo.      |

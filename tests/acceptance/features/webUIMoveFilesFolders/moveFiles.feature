@@ -22,7 +22,7 @@ Feature: move files
     And user "Alice" has uploaded file "data.tar.gz" to "data.tar.gz"
     And user "Alice" has uploaded file "strängé filename (duplicate #2 &).txt" to "strängé filename (duplicate #2 &).txt"
     And user "Alice" has created folder "strängé नेपाली folder empty"
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     When the user moves file "lorem.txt" into folder "simple-folder" using the webUI
     Then breadcrumb for folder "simple-folder" should be displayed on the webUI
     And file "lorem.txt" should be listed on the webUI
@@ -52,7 +52,7 @@ Feature: move files
     Given user "Alice" has logged in using the webUI
     And user "Alice" has uploaded file "data.zip" to "data.zip"
     And user "Alice" has uploaded file "data.zip" to "testapp.zip"
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     When the user batch moves these files into folder "simple-folder" using the webUI
       | file_name   |
       | data.zip    |

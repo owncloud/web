@@ -39,7 +39,7 @@ Feature: copy files and folders
     And user "Alice" has uploaded file "new-data.zip" to "testapp.zip"
     And user "Alice" has created folder "simple-empty-folder"
     And user "Alice" has logged in using the webUI
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     When the user batch copies these files into folder "simple-empty-folder" using the webUI
       | file_name   |
       | data.zip    |

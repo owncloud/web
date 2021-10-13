@@ -130,7 +130,7 @@ Feature: accept/decline shares coming from internal users
     And user "Alice" has created folder "/simple-folder"
     And user "Alice" has shared folder "simple-folder" with user "Brian" with "create, read, share, update" permissions
     And user "Brian" has renamed folder "simple-folder" to "simple-folder-renamed"
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     When the user deletes folder "simple-folder-renamed" using the webUI
     Then folder "simple-folder-renamed" should not be listed on the webUI
     When the user browses to the shared-with-me page in declined shares view
@@ -143,7 +143,7 @@ Feature: accept/decline shares coming from internal users
     And user "Brian" has created folder "/simple-folder/shared"
     And user "Alice" has shared folder "simple-folder" with user "Brian" with "create, read, share, update" permissions
     And user "Brian" has moved folder "/simple-folder (2)" to "/simple-folder/shared"
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     When the user opens folder "simple-folder" using the webUI
     And the user deletes folder "shared" using the webUI
     Then folder "shared" should not be listed on the webUI
@@ -155,7 +155,7 @@ Feature: accept/decline shares coming from internal users
     And user "Alice" has created folder "/simple-folder"
     And user "Alice" has shared folder "/simple-folder" with user "Brian"
     And user "Brian" has renamed folder "/simple-folder" to "/simple-folder-renamed"
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     When the user deletes folder "simple-folder-renamed" using the webUI
     And the user browses to the shared-with-me page in declined shares view
     And the user accepts share "simple-folder-renamed" offered by user "Alice Hansen" using the webUI
@@ -281,7 +281,7 @@ Feature: accept/decline shares coming from internal users
   Scenario: shared file status is changed to declined when user deletes the file
     Given user "Alice" has created file "lorem.txt"
     And user "Alice" has shared file "lorem.txt" with user "Brian"
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     When the user deletes file "lorem.txt" using the webUI
     And the user browses to the shared-with-me page in declined shares view
     Then file "lorem.txt" shared by "Alice Hansen" should be in "Declined" state on the webUI

@@ -55,14 +55,14 @@ Feature: create markdown files
   @disablePreviews
   Scenario: open text file in markdown editor
     Given user "Alice" has uploaded file with content "test" to "lorem.txt"
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     When the user opens file "lorem.txt" in the markdown editor webUI
     Then the file "lorem.txt" should be displayed in the markdown editor webUI
 
   @disablePreviews
   Scenario Outline: preview of files with markdown editor by clicking the action menu option
     Given user "Alice" has uploaded file with content "test" to "lorem.txt"
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     When the user opens file "<file>" in the markdown editor using the action menu option on the webUI
     Then the file "<file>" should be displayed in the markdown editor webUI
     Examples:

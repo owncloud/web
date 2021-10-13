@@ -14,7 +14,7 @@ Feature: Unmark file/folder as favorite
     Given user "Alice" has uploaded file "data.tar.gz" to "data.tar.gz"
     And user "Alice" has uploaded file "data.zip" to "data.zip"
     And user "Alice" has created file "lorem.txt"
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     And user "Alice" has favorited element "data.zip"
     And user "Alice" has favorited element "data.tar.gz"
     And user "Alice" has favorited element "lorem.txt"
@@ -35,7 +35,7 @@ Feature: Unmark file/folder as favorite
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has created folder "simple-empty-folder"
     And user "Alice" has created folder "0"
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     And user "Alice" has favorited element "simple-folder"
     And user "Alice" has favorited element "simple-empty-folder"
     And user "Alice" has favorited element "0"
@@ -56,7 +56,7 @@ Feature: Unmark file/folder as favorite
     Given user "Alice" has uploaded file "data.zip" to "data.zip"
     And user "Alice" has uploaded file "data.tar.gz" to "data.tar.gz"
     And user "Alice" has created file "lorem.txt"
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     And user "Alice" has favorited element "data.zip"
     And user "Alice" has favorited element "data.tar.gz"
     And user "Alice" has favorited element "lorem.txt"
@@ -73,7 +73,7 @@ Feature: Unmark file/folder as favorite
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has created folder "simple-empty-folder"
     And user "Alice" has created folder "0"
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     And user "Alice" has favorited element "simple-folder"
     And user "Alice" has favorited element "simple-empty-folder"
     And user "Alice" has favorited element "0"
@@ -89,7 +89,7 @@ Feature: Unmark file/folder as favorite
   Scenario: unmark files/folders as favorites using the sidebar
     Given user "Alice" has uploaded file "data.zip" to "data.zip"
     And user "Alice" has created folder "simple-folder"
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     And user "Alice" has favorited element "data.zip"
     And user "Alice" has favorited element "simple-folder"
     And the user has browsed to the favorites page
@@ -104,7 +104,7 @@ Feature: Unmark file/folder as favorite
   Scenario: Try to unfavorite file and folder that used to exist but does not anymore
     Given user "Alice" has created file "lorem.txt"
     And user "Alice" has created folder "simple-folder"
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     And user "Alice" has favorited element "simple-folder"
     And user "Alice" has favorited element "lorem.txt"
     And the user has browsed to the files page

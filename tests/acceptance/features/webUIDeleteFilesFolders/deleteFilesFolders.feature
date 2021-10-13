@@ -1,12 +1,12 @@
 Feature: deleting files and folders
   As a user
   I want to delete files and folders
-  So that I can keep my filing system clean and tidy
+  So that I can keep my file system clean and tidy
 
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files
     And user "Alice" has logged in using the webUI
-    And the user reloads the current page of the webUI
+
 
   @smokeTest @ocisSmokeTest @disablePreviews
   Scenario: Delete files & folders one by one and check its existence after page reload
@@ -18,7 +18,7 @@ Feature: deleting files and folders
     And user "Alice" has created file "strängé filename (duplicate #2 &).txt"
     And user "Alice" has created file "sample,1.txt"
     And user "Alice" has created folder "Sample,Folder,With,Comma"
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     When the user deletes the following elements using the webUI
       | name                                  |
       | simple-folder                         |
@@ -60,7 +60,7 @@ Feature: deleting files and folders
     Given user "Alice" has uploaded file "data.zip" to "data.zip"
     And user "Alice" has created file "lorem.txt"
     And user "Alice" has created folder "simple-folder"
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     When the user batch deletes these files using the webUI
       | name          |
       | data.zip      |
@@ -90,7 +90,7 @@ Feature: deleting files and folders
     Given user "Alice" has uploaded file "data.zip" to "data.zip"
     And user "Alice" has created file "lorem.txt"
     And user "Alice" has created folder "simple-folder"
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     When the user marks all files for batch action using the webUI
     And the user unmarks these files for batch action using the webUI
       | name          |
@@ -121,7 +121,7 @@ Feature: deleting files and folders
 
   Scenario: Delete the last file in a folder
     Given user "Alice" has created file "zzzz-must-be-last-file-in-folder.txt"
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     When the user deletes file "zzzz-must-be-last-file-in-folder.txt" using the webUI
     Then as "Alice" file "zzzz-must-be-last-file-in-folder.txt" should not exist
     And file "zzzz-must-be-last-file-in-folder.txt" should not be listed on the webUI
@@ -143,7 +143,7 @@ Feature: deleting files and folders
   @issue-5017 @systemtags-app-required
   Scenario: delete files from tags page
     Given user "Alice" has created file "lorem.txt"
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     And user "Alice" has created a "normal" tag with name "lorem"
     And user "Alice" has added tag "lorem" to file "/lorem.txt"
     When the user browses to the tags page
@@ -161,7 +161,7 @@ Feature: deleting files and folders
     And user "Alice" has created file "simple-folder/lorem.txt"
     And user "Alice" has created folder "simple-folder/simple-empty-folder"
     And user "Alice" has created folder "simple-folder/strängé filename (duplicate #2 &).txt"
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
     When the public uses the webUI to access the last public link created by user "Alice"
     And the user deletes the following elements using the webUI
@@ -180,7 +180,7 @@ Feature: deleting files and folders
   Scenario: delete a file on a public share with problematic characters
     Given user "Alice" has created file "lorem.txt"
     And user "Alice" has created folder "simple-folder"
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     And user "Alice" has renamed the following file
       | from-name-parts | to-name-parts   |
       | lorem.txt       | simple-folder/  |
@@ -217,7 +217,7 @@ Feature: deleting files and folders
     And user "Alice" has created file "simple-folder/data.zip"
     And user "Alice" has created file "simple-folder/lorem.txt"
     And user "Alice" has created file "simple-folder/simple-empty-folder"
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
     When the public uses the webUI to access the last public link created by user "Alice"
     And the user batch deletes these files using the webUI
@@ -252,7 +252,7 @@ Feature: deleting files and folders
   Scenario: Delete a file and folder in shared with others page
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has created file "lorem.txt"
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     And user "Brian" has been created with default attributes and without skeleton files
     And user "Alice" has shared file "lorem.txt" with user "Brian"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
@@ -276,7 +276,7 @@ Feature: deleting files and folders
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has created file "lorem.txt"
     And user "Alice" has uploaded file "data.zip" to "data.zip"
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     And user "Brian" has been created with default attributes and without skeleton files
     And user "Alice" has shared file "lorem.txt" with user "Brian"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
@@ -298,10 +298,10 @@ Feature: deleting files and folders
   Scenario: Try to delete file and folder from favorites page
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has created file "lorem.txt"
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     And user "Alice" has favorited element "simple-folder"
     And user "Alice" has favorited element "lorem.txt"
-    When the user browses to the favorites page
+    When the user has browsed to the favorites page
     And the user deletes file "lorem.txt" using the webUI
     And the user deletes folder "simple-folder" using the webUI
     Then file "lorem.txt" should not be listed on the webUI
@@ -337,7 +337,7 @@ Feature: deleting files and folders
       | ...      |
       | ..fo     |
       | fo.xyz   |
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     When the user batch deletes these files using the webUI
       | folders  |
       | fo.      |

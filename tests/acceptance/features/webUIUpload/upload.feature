@@ -47,7 +47,7 @@ Feature: File Upload
   @smokeTest @ocisSmokeTest
   Scenario: Upload of a folder inside a subdirectory
     Given user "Alice" has created folder "simple-empty-folder"
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     When the user browses to the folder "simple-empty-folder" on the files page
     And the user uploads folder "PARENT" using the webUI
     Then no message should be displayed on the webUI

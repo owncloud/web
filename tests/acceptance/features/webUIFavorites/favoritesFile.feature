@@ -8,13 +8,13 @@ Feature: Mark file as favorite
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files
     And user "Alice" has logged in using the webUI
-    And the user has browsed to the files page
+
 
   @smokeTest
   Scenario: mark files as favorites
     Given user "Alice" has uploaded file "data.tar.gz" to "data.tar.gz"
     And user "Alice" has uploaded file "data.zip" to "data.zip"
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     When the user marks file "data.tar.gz" as favorite using the webUI
     And the user marks file "data.zip" as favorite using the webUI
     Then as user "Alice" file "data.tar.gz" should be marked as favorite
@@ -30,7 +30,7 @@ Feature: Mark file as favorite
   Scenario: mark folders as favorites
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has created folder "strängé नेपाली folder"
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     When the user marks folder "simple-folder" as favorite using the webUI
     And the user marks folder "strängé नेपाली folder" as favorite using the webUI
     Then as user "Alice" folder "simple-folder" should be marked as favorite
@@ -46,7 +46,7 @@ Feature: Mark file as favorite
   Scenario: mark files/folders as favorites using the sidebar
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has uploaded file "data.zip" to "data.zip"
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     When the user marks folder "simple-folder" as favorite using the webUI sidebar
     And the user marks file "data.zip" as favorite using the webUI sidebar
     Then folder "simple-folder" should be marked as favorite on the webUI
@@ -64,7 +64,7 @@ Feature: Mark file as favorite
 
   Scenario: navigate to the favorites page using the menu
     Given user "Alice" has uploaded file "data.zip" to "data.zip"
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     And user "Alice" has favorited element "data.zip"
     When the user browses to the favorites page using the webUI
     Then the count of files and folders shown on the webUI should be 1
@@ -90,7 +90,7 @@ Feature: Mark file as favorite
     And user "Alice" has created folder "simple-folder/simple-empty-folder"
     And user "Alice" has created folder "strängé नेपाली folder"
     And user "Alice" has created file "strängé नेपाली folder/lorem.txt"
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     When the user marks file "lorem.txt" as favorite using the webUI
     And the user marks folder "simple-empty-folder" as favorite using the webUI
     And the user opens folder "simple-folder" using the webUI
@@ -131,7 +131,7 @@ Feature: Mark file as favorite
   Scenario: Favourite files and folders with comma in the names
     Given user "Alice" has created file "sample,1.txt"
     And user "Alice" has created folder "Sample,Folder,With,Comma"
-    And the user has reloaded the current page of the webUI
+    And the user reloads the current page of the webUI
     When the user marks file "sample,1.txt" as favorite using the webUI
     And the user marks folder "Sample,Folder,With,Comma" as favorite using the webUI
     Then as user "Alice" file "sample,1.txt" should be marked as favorite

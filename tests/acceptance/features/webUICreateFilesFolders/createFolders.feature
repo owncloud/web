@@ -6,7 +6,7 @@ Feature: create folders
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files
     And user "Alice" has logged in using the webUI
-    And the user has reloaded the current page of the webUI
+
 
   @smokeTest @ocisSmokeTest
   Scenario: Create a folder inside another folder
@@ -31,8 +31,8 @@ Feature: create folders
 
 
   Scenario: Try to create a folder with existing name
-    Given user "Alice" has created folder "simple-folder"
-    And the user has reloaded the current page of the webUI
+    When the user creates a folder with the name "simple-folder" using the webUI
+
     When the user tries to create a folder with the invalid name "simple-folder" using the webUI
     Then the error message 'simple-folder already exists' should be displayed on the webUI dialog prompt
     And the create folder button should be disabled

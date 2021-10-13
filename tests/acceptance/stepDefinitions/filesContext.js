@@ -520,10 +520,6 @@ When('the user/public reloads the current page of the webUI', function () {
   return client.refresh()
 })
 
-Given('the user has reloaded the current page of the webUI', function () {
-  return client.refresh()
-})
-
 When('the user marks all files for batch action using the webUI', function () {
   return client.page.FilesPageElement.filesList().checkAllFiles()
 })
