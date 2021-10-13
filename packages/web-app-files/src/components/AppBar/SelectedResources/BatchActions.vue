@@ -129,7 +129,7 @@ export default {
 
     canDownloadSingleFile() {
       if (
-        !checkRoute(['files-personal', 'files-favorites', 'files-public-list'], this.$route.name)
+        !checkRoute(['files-personal', 'files-public-list', 'files-favorites'], this.$route.name)
       ) {
         return false
       }
@@ -146,7 +146,9 @@ export default {
     },
 
     canDownloadAsArchive() {
-      if (!checkRoute(['files-personal', 'files-favorites'], this.$route.name)) {
+      if (
+        !checkRoute(['files-personal', 'files-public-list', 'files-favorites'], this.$route.name)
+      ) {
         return false
       }
 
