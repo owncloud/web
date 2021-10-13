@@ -3,13 +3,14 @@ const _ = require('lodash')
 const timeoutHelper = require('../../helpers/timeoutHelper')
 const xpathHelper = require('../../helpers/xpath')
 const util = require('util')
+const { client } = require('nightwatch-api')
 
 module.exports = {
   commands: {
     isThumbnailVisible: function () {
       return this.waitForElementVisible('@sidebar').waitForElementVisible('@fileInfoIcon')
     },
-    closeSidebarIfOpen: async function(timeout = this.globals.waitForConditionFastTimeout) {
+    closeSidebarIfOpen: async function (timeout = client.globals.waitForConditionFastTimeout) {
       if (!(await this.isSideBarOpen(timeout))) {
         return this.api.page.FilesPageElement.filesList()
       }
@@ -24,7 +25,7 @@ module.exports = {
       }
       return this.api.page.FilesPageElement.filesList()
     },
-    isSideBarOpen: async function(timeout = this.globals.waitForConditionFastTimeout) {
+    isSideBarOpen: async function (timeout = client.globals.waitForConditionFastTimeout) {
       const element = this.elements.sidebar
       let isVisible = false
       await this.isVisible(
@@ -39,10 +40,10 @@ module.exports = {
       )
       return isVisible
     },
-    isSideBarOpenForResource: async function(
+    isSideBarOpenForResource: async function (
       resource,
       elementType = 'any',
-      timeout = this.globals.waitForConditionFastTimeout
+      timeout = client.globals.waitForConditionFastTimeout
     ) {
       if (!(await this.isSideBarOpen(timeout))) {
         return false
@@ -76,9 +77,9 @@ module.exports = {
           {
             locateStrategy: backBtn.locateStrategy,
             selector: backBtn.selector,
-            timeout: this.globals.waitForConditionFastTimeout
+            timeout: client.globals.waitForConditionFastTimeout
           },
-          result => {
+          (result) => {
             backBtnVisible = result.value === true
           }
         )
@@ -156,9 +157,9 @@ module.exports = {
      * @param {number} timeout
      * @returns {Promise<boolean>}
      */
-    isPanelSelectable: async function(
+    isPanelSelectable: async function (
       panelName,
-      timeout = this.globals.waitForConditionFastTimeout
+      timeout = client.globals.waitForConditionFastTimeout
     ) {
       panelName = panelName === 'people' ? 'collaborators' : panelName
       const element = this.elements[panelName + 'PanelMenuItem']

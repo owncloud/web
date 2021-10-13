@@ -355,7 +355,9 @@ module.exports = {
       await this.waitForElementVisible('@sharingAutoComplete')
       await this.initAjaxCounters()
       await this.setValueBySingleKeys('@sharingAutoComplete', input)
-      await new Promise(resolve => setTimeout(resolve, this.globals.waitForConditionFastTimeout))
+      await new Promise((resolve) =>
+        setTimeout(resolve, client.globals.waitForConditionFastTimeout)
+      )
       await this.waitForAjaxCallsToStartAndFinish()
     },
     /**

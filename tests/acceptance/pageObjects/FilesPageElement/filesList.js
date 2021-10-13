@@ -18,7 +18,7 @@ module.exports = {
       await appSideBar.activatePanel('people')
       return await this.click({
         selector: '@sharedWithToggleButton',
-        timeout: this.globals.waitForConditionFastTimeout
+        timeout: client.globals.waitForConditionFastTimeout
       })
     },
     /**
