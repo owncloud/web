@@ -41,7 +41,7 @@ export default class Preview implements SearchPreview {
 
     return this.cache.set(
       term,
-      plainResources.map(plainResource => {
+      plainResources.map((plainResource) => {
         const resource = buildResource(plainResource)
         return { id: resource.id, data: resource }
       })

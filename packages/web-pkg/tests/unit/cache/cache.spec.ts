@@ -110,7 +110,7 @@ describe('Cache', () => {
     const capacity = 5
     const cache = newCache(initialValues, 0, capacity)
 
-    newValues.forEach(v => {
+    newValues.forEach((v) => {
       cache.set(v, v)
       expect(cache.get(v)).toBe(v)
       expect(cache.entries().length).toBe(capacity)
@@ -128,7 +128,7 @@ describe('Cache', () => {
     const values = [1, 2, 3, 4, 5]
     const cache = newCache(values)
 
-    values.forEach(value => expect(cache.has(value - 1)).toBeTruthy())
+    values.forEach((value) => expect(cache.has(value - 1)).toBeTruthy())
     expect(cache.has(5)).toBeFalsy()
   })
 })

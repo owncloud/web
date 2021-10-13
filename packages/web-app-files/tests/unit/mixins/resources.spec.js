@@ -27,7 +27,7 @@ describe('resources', () => {
       { size: '1', expectedSize: '1 B' },
       { size: '1024', expectedSize: '1 kB' },
       { size: '1048576', expectedSize: '1 MB' }
-    ])('should return formatted size of given resource', sizeInput => {
+    ])('should return formatted size of given resource', (sizeInput) => {
       expect(wrapper.vm.getResourceSize(sizeInput.size)).toEqual(sizeInput.expectedSize)
     })
 

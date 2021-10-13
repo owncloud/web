@@ -13,7 +13,7 @@ module.exports = {
      * @param {string} resource
      * @return {Promise<*>}
      */
-    openSharingDialog: async function(resource) {
+    openSharingDialog: async function (resource) {
       await this.openSideBar(resource)
       await appSideBar.activatePanel('people')
       return await this.click({
@@ -25,7 +25,7 @@ module.exports = {
      * @param {string} resource
      * @return {Promise<*>}
      */
-    openPublicLinkDialog: async function(resource) {
+    openPublicLinkDialog: async function (resource) {
       await this.openSideBar(resource)
       return await appSideBar.activatePanel('links')
     },
@@ -33,7 +33,7 @@ module.exports = {
      * @param {string} resource
      * @param {boolean} expected Asserts if we expect the preview image to be shown
      */
-    checkPreviewImage: function(resource, expected) {
+    checkPreviewImage: function (resource, expected) {
       const resourceRowSelector = this.getFileRowSelectorByFileName(resource)
       const previewSelector = resourceRowSelector + this.elements.previewImage.selector
 
@@ -48,7 +48,7 @@ module.exports = {
      * @param {string} elementType
      * @return {Promise<module.exports.commands>}
      */
-    deleteFile: async function(resource, elementType = 'any') {
+    deleteFile: async function (resource, elementType = 'any') {
       await this.openFileActionsMenu(resource, elementType)
       await fileActionsMenu.delete()
       return this
@@ -58,7 +58,7 @@ module.exports = {
      * @param {string} elementType
      * @returns {Promise<exports.commands>}
      */
-    acceptShare: async function(resource, elementType = 'any') {
+    acceptShare: async function (resource, elementType = 'any') {
       await this.openFileActionsMenu(resource, elementType)
       await fileActionsMenu.acceptShare()
       return this
@@ -68,7 +68,7 @@ module.exports = {
      * @param {string} elementType
      * @returns {Promise<exports.commands>}
      */
-    declineShare: async function(resource, elementType = 'any') {
+    declineShare: async function (resource, elementType = 'any') {
       await this.openFileActionsMenu(resource, elementType)
       await fileActionsMenu.declineShare()
       return this
@@ -80,7 +80,7 @@ module.exports = {
      * @param {string} elementType
      * @return {Promise<module.exports.commands>}
      */
-    renameFile: async function(fromName, toName, expectToSucceed = true, elementType = 'any') {
+    renameFile: async function (fromName, toName, expectToSucceed = true, elementType = 'any') {
       await this.openFileActionsMenu(fromName, elementType)
       await fileActionsMenu.rename(toName, expectToSucceed)
       return this
@@ -90,7 +90,7 @@ module.exports = {
      * @param {string} elementType
      * @return {Promise<module.exports.commands>}
      */
-    markFavorite: async function(resource, elementType = 'any') {
+    markFavorite: async function (resource, elementType = 'any') {
       await this.openFileActionsMenu(resource, elementType)
       await fileActionsMenu.favorite()
       return this
@@ -100,7 +100,7 @@ module.exports = {
      * @param {string} elementType
      * @return {Promise<module.exports.commands>}
      */
-    unmarkFavorite: async function(resource, elementType = 'any') {
+    unmarkFavorite: async function (resource, elementType = 'any') {
       await this.openFileActionsMenu(resource, elementType)
       await fileActionsMenu.unmarkFavorite()
       return this
@@ -110,7 +110,7 @@ module.exports = {
      * @param {string} elementType
      * @return {Promise<module.exports.commands>}
      */
-    restoreFile: async function(resource, elementType = 'any') {
+    restoreFile: async function (resource, elementType = 'any') {
       await this.openFileActionsMenu(resource, elementType)
       await fileActionsMenu.restore()
       return this
@@ -120,7 +120,7 @@ module.exports = {
      * @param {string} elementType
      * @return {Promise<module.exports.commands>}
      */
-    deleteImmediately: async function(resource, elementType = 'any') {
+    deleteImmediately: async function (resource, elementType = 'any') {
       await this.openFileActionsMenu(resource, elementType)
       await fileActionsMenu.deleteResourceImmediately()
       return this
@@ -131,7 +131,7 @@ module.exports = {
      * @param {string} elementType
      * @return {Promise<boolean>}
      */
-    isActionAttributeDisabled: async function(action, resource, elementType = 'any') {
+    isActionAttributeDisabled: async function (action, resource, elementType = 'any') {
       await this.openFileActionsMenu(resource, elementType)
       return await fileActionsMenu.getActionDisabledAttr('delete')
     },
@@ -140,7 +140,7 @@ module.exports = {
      * @param {string} elementType
      * @return {Promise<module.exports.commands>}
      */
-    downloadFile: async function(resource, elementType = 'any') {
+    downloadFile: async function (resource, elementType = 'any') {
       await this.openFileActionsMenu(resource, elementType)
       await fileActionsMenu.download()
       return this
@@ -150,7 +150,7 @@ module.exports = {
      * @param {string} elementType
      * @return {Promise<module.exports.commands>}
      */
-    isSharingButtonPresent: async function(resource, elementType = 'any') {
+    isSharingButtonPresent: async function (resource, elementType = 'any') {
       const sharingBtnSelector = util.format(
         filesRow.elements.quickAction.selector,
         'collaborators'
@@ -161,7 +161,7 @@ module.exports = {
       await this.api.elements(
         this.elements.shareButtonInFileRow.locateStrategy,
         resourceRowSelector + sharingBtnSelector,
-        result => {
+        (result) => {
           isPresent = result.value.length > 0
         }
       )
@@ -171,19 +171,17 @@ module.exports = {
     /**
      * @return {Promise<*>}
      */
-    confirmDeletion: function() {
+    confirmDeletion: function () {
       return this.click('@dialogConfirmBtnEnabled').waitForElementNotPresent('@dialog')
     },
     /**
      *
      * @param {string} folder
      */
-    navigateToFolder: async function(folder) {
+    navigateToFolder: async function (folder) {
       await this.waitForFileVisible(folder)
 
-      await this.useXpath()
-        .click(this.getFileLinkSelectorByFileName(folder, 'folder'))
-        .useCss()
+      await this.useXpath().click(this.getFileLinkSelectorByFileName(folder, 'folder')).useCss()
 
       // wait until loading is finished
       await this.waitForLoadingFinished()
@@ -198,7 +196,7 @@ module.exports = {
      * @param {string} elementType The resource type (file|folder|any)
      * @returns {*}
      */
-    openContextMenu: async function(resource, elementType = 'any') {
+    openContextMenu: async function (resource, elementType = 'any') {
       await this.waitForFileVisible(resource, elementType)
       const selectorContextMenu =
         this.getFileRowSelectorByFileName(resource, elementType) +
@@ -216,7 +214,7 @@ module.exports = {
      *
      * @returns {*}
      */
-    openFileActionsMenu: async function(resource, elementType = 'any') {
+    openFileActionsMenu: async function (resource, elementType = 'any') {
       await this.openSideBar(resource, elementType)
       await appSideBar.activatePanel('actions')
       return fileActionsMenu
@@ -229,7 +227,7 @@ module.exports = {
      * @param {string} elementType The resource type (file|folder|any)
      * @returns {*}
      */
-    openSideBar: async function(resource, elementType = 'any') {
+    openSideBar: async function (resource, elementType = 'any') {
       // nothing to do if already open for correct resource
       if (await appSideBar.isSideBarOpenForResource(resource, elementType)) {
         return appSideBar
@@ -249,7 +247,7 @@ module.exports = {
      * @param {string} resource the file/folder to click
      * @param {string} elementType The resource type (file|folder|any)
      */
-    clickRow: async function(resource, elementType = 'any') {
+    clickRow: async function (resource, elementType = 'any') {
       await this.waitForFileVisible(resource, elementType)
       await this.initAjaxCounters()
         .useXpath()
@@ -264,7 +262,7 @@ module.exports = {
     /**
      *
      */
-    checkAllFiles: function() {
+    checkAllFiles: function () {
       return this.waitForElementVisible('@filesTable')
         .waitForElementVisible('@checkBoxAllFiles')
         .click('@checkBoxAllFiles')
@@ -273,7 +271,7 @@ module.exports = {
      * Restores all the selected files/folders
      *
      */
-    restoreSelected: function() {
+    restoreSelected: function () {
       return this.waitForElementVisible('@restoreSelectedButton')
         .initAjaxCounters()
         .useXpath()
@@ -288,7 +286,7 @@ module.exports = {
      * @param {string} enableOrDisable
      * @param {string} path
      */
-    toggleFileOrFolderCheckbox: async function(enableOrDisable, path) {
+    toggleFileOrFolderCheckbox: async function (enableOrDisable, path) {
       await this.waitForFileVisible(path)
 
       const fileCheckbox =
@@ -302,20 +300,23 @@ module.exports = {
      * @param {string} path
      * @return {Promise<boolean>}
      */
-    isResourceSelected: async function(path) {
+    isResourceSelected: async function (path) {
       await this.waitForFileVisible(path)
       const fileCheckbox =
         this.getFileRowSelectorByFileName(path) + this.elements.checkboxInFileRow.selector
       let selectionStatus = ''
-      await this.api.element('xpath', fileCheckbox, result => {
+      await this.api.element('xpath', fileCheckbox, (result) => {
         if (!result.value.ELEMENT) {
           throw new Error('Web element identifier not found for ' + fileCheckbox)
         }
-        this.api.elementIdSelected(result.value.ELEMENT, result => (selectionStatus = result.value))
+        this.api.elementIdSelected(
+          result.value.ELEMENT,
+          (result) => (selectionStatus = result.value)
+        )
       })
       return selectionStatus
     },
-    waitForLoadingFinished: async function(awaitVisible = true, abortOnFailure = true) {
+    waitForLoadingFinished: async function (awaitVisible = true, abortOnFailure = true) {
       if (awaitVisible) {
         await this.waitForElementVisible({ selector: '@anyAfterLoading', abortOnFailure })
         return this
@@ -323,14 +324,14 @@ module.exports = {
       await this.waitForElementPresent({ selector: '@anyAfterLoading', abortOnFailure })
       return this
     },
-    getResourceThumbnail: async function(resourceName, elementType) {
+    getResourceThumbnail: async function (resourceName, elementType) {
       let iconUrl = null
       await this.waitForFileVisible(resourceName)
       // try reading the src tag
       const fileRowPreviewSelector =
         this.getFileRowSelectorByFileName(resourceName, elementType) +
         this.elements.filePreviewInFileRow.selector
-      await this.api.getAttribute('xpath', fileRowPreviewSelector, 'src', result => {
+      await this.api.getAttribute('xpath', fileRowPreviewSelector, 'src', (result) => {
         // somehow when element was not found the result.value is an empty array...
         if (result.status !== -1 && typeof result.value === 'string') {
           iconUrl = result.value
@@ -351,26 +352,26 @@ module.exports = {
      * @param {string} fileName
      * @param {string} elementType (file|folder)
      */
-    waitForFileVisible: async function(fileName, elementType = 'any') {
+    waitForFileVisible: async function (fileName, elementType = 'any') {
       const rowSelector = this.getFileRowSelectorByFileName(fileName, elementType)
 
       await appSideBar.closeSidebarIfOpen()
       let rowElementId = null
       await this.waitForElementPresent(
         { selector: rowSelector, locateStrategy: 'xpath' },
-        result => {
+        (result) => {
           rowElementId = result.WebdriverElementId
         }
       )
       let offset = 0
-      await this.api.elementIdLocation(rowElementId, result => {
+      await this.api.elementIdLocation(rowElementId, (result) => {
         offset = result.value.y
       })
       let firstRowElementId = null
-      await this.waitForElementPresent('@fileRow', result => {
+      await this.waitForElementPresent('@fileRow', (result) => {
         firstRowElementId = result.WebdriverElementId
       })
-      await this.api.elementIdLocation(firstRowElementId, result => {
+      await this.api.elementIdLocation(firstRowElementId, (result) => {
         offset -= result.value.y
       })
 
@@ -384,7 +385,7 @@ module.exports = {
      *
      * @returns {string}
      */
-    getFileRowSelectorByFileName: function(fileName, elementType = 'any') {
+    getFileRowSelectorByFileName: function (fileName, elementType = 'any') {
       const name = xpathHelper.buildXpathLiteral(fileName)
       const path = xpathHelper.buildXpathLiteral('/' + fileName)
       if (elementType === 'any') {
@@ -399,7 +400,7 @@ module.exports = {
      * @param {string} elementType
      * @returns {string}
      */
-    getFileLinkSelectorByFileName: function(fileName, elementType = 'any') {
+    getFileLinkSelectorByFileName: function (fileName, elementType = 'any') {
       const name = xpathHelper.buildXpathLiteral(fileName)
       const path = xpathHelper.buildXpathLiteral('/' + fileName)
       if (elementType === 'any') {
@@ -415,11 +416,11 @@ module.exports = {
      * @param {string} elementType
      * @returns {boolean}
      */
-    isElementListed: async function(name, elementType = 'any') {
+    isElementListed: async function (name, elementType = 'any') {
       const selector = this.getFileRowSelectorByFileName(name, elementType)
       let isVisible = false
 
-      await this.api.element('xpath', selector, function(result) {
+      await this.api.element('xpath', selector, function (result) {
         isVisible = !!(result.value && result.value.ELEMENT)
       })
 
@@ -428,25 +429,25 @@ module.exports = {
     /**
      * @returns {Array} array of files/folders element
      */
-    allFileRows: async function() {
+    allFileRows: async function () {
       let returnResult = null
       await this.waitForElementPresent('@anyAfterLoading')
-      await this.api.elements('css selector', this.elements.fileRow, function(result) {
+      await this.api.elements('css selector', this.elements.fileRow, function (result) {
         returnResult = result
       })
       return returnResult
     },
-    waitForNoContentMessageVisible: async function() {
+    waitForNoContentMessageVisible: async function () {
       let visible = false
       let elementId = null
       await this.waitForElementVisible('@filesListNoContentMessage')
-      await this.api.element('@filesListNoContentMessage', result => {
+      await this.api.element('@filesListNoContentMessage', (result) => {
         if (result.status !== -1) {
           elementId = result.value.ELEMENT
         }
       })
       if (elementId !== null) {
-        await this.api.elementIdText(elementId, result => {
+        await this.api.elementIdText(elementId, (result) => {
           // verify that at least some text is displayed, not an empty container
           if (result.status !== -1 && result.value.trim() !== '') {
             visible = true
@@ -455,15 +456,15 @@ module.exports = {
       }
       assert.ok(visible, 'Message about empty file list must be visible')
     },
-    waitForNotFoundMessageVisible: async function() {
+    waitForNotFoundMessageVisible: async function () {
       await this.waitForElementVisible('@filesListNotFoundMessage')
     },
-    countFilesAndFolders: async function() {
+    countFilesAndFolders: async function () {
       let itemCount = 0
       await this.waitForElementVisible('@filesListFooterInfo').getAttribute(
         '@filesListFooterInfo',
         'data-test-items',
-        result => {
+        (result) => {
           itemCount = parseInt(result.value)
         }
       )
@@ -476,7 +477,7 @@ module.exports = {
      * @param {boolean} sharingIndicatorExpectedToBeVisible
      * @returns {Array} array of sharing indicator
      */
-    getShareIndicatorsForResource: async function(fileName, sharingIndicatorExpectedToBeVisible) {
+    getShareIndicatorsForResource: async function (fileName, sharingIndicatorExpectedToBeVisible) {
       const resourceRowXpath = this.getFileRowSelectorByFileName(fileName)
       const shareIndicatorsXpath =
         resourceRowXpath + this.elements.shareIndicatorsInFileRow.selector
@@ -499,13 +500,13 @@ module.exports = {
       await this.api.elements(
         this.elements.shareIndicatorsInFileRow.locateStrategy,
         shareIndicatorsXpath,
-        result => {
-          result.value.forEach(element => {
-            this.api.elementIdAttribute(element.ELEMENT, 'class', attr => {
+        (result) => {
+          result.value.forEach((element) => {
+            this.api.elementIdAttribute(element.ELEMENT, 'class', (attr) => {
               if (parseInt(attr.status) < 0) {
                 return
               }
-              this.api.elementIdAttribute(element.ELEMENT, 'data-test-indicator-type', attr => {
+              this.api.elementIdAttribute(element.ELEMENT, 'data-test-indicator-type', (attr) => {
                 indicators.push(attr.value)
               })
             })
@@ -521,7 +522,7 @@ module.exports = {
      * @param {boolean} sharingIndicatorExpectedToBeVisible
      * @returns {Array} array of sharing indicator
      */
-    getShareIndicatorsForResourceWithRetry: async function(
+    getShareIndicatorsForResourceWithRetry: async function (
       fileName,
       sharingIndicatorExpectedToBeVisible
     ) {
@@ -539,7 +540,7 @@ module.exports = {
       return indicators
     },
 
-    setSort: async function(column, isDesc = false) {
+    setSort: async function (column, isDesc = false) {
       const columnSelector = util.format(
         this.elements.filesTableHeaderColumn.selector,
         xpathHelper.buildXpathLiteral(column)
@@ -551,21 +552,18 @@ module.exports = {
         .useCss()
 
       let currentClass = null
-      await this.useXpath().getAttribute(columnSelector, 'class', result => {
+      await this.useXpath().getAttribute(columnSelector, 'class', (result) => {
         currentClass = result.value
       })
       if (currentClass.includes('-asc') && isDesc) {
         // click again to match expected sort order
-        await this.useXpath()
-          .waitForElementVisible(columnSelector)
-          .click(columnSelector)
-          .useCss()
+        await this.useXpath().waitForElementVisible(columnSelector).click(columnSelector).useCss()
       }
 
       return this.useCss()
     },
 
-    useQuickAction: async function(resource, action) {
+    useQuickAction: async function (resource, action) {
       action = action.replace(/\s/, '-')
       const actionSelector = util.format(filesRow.elements.quickAction.selector, action)
       const resourceRowSelector = this.getFileRowSelectorByFileName(resource)
@@ -577,7 +575,7 @@ module.exports = {
       return this
     },
 
-    moveResource: async function(resource, target) {
+    moveResource: async function (resource, target) {
       // Trigger move
       await this.openFileActionsMenu(resource)
       await fileActionsMenu.move()
@@ -588,7 +586,7 @@ module.exports = {
       return this
     },
 
-    cancelResourceMoveOrCopyProgress: async function() {
+    cancelResourceMoveOrCopyProgress: async function () {
       // cancel copy or move
       await this.waitForElementVisible(this.elements.cancelMoveCopyBtn.selector).click(
         this.elements.cancelMoveCopyBtn.selector
@@ -598,7 +596,7 @@ module.exports = {
       return this
     },
 
-    copyResource: async function(resource, target) {
+    copyResource: async function (resource, target) {
       // Trigger copy
       await this.openFileActionsMenu(resource)
       await fileActionsMenu.copy()
@@ -609,14 +607,11 @@ module.exports = {
       return this
     },
 
-    clickOnFileName: function(fileName) {
+    clickOnFileName: function (fileName) {
       const file = this.getFileLinkSelectorByFileName(fileName, 'file')
-      return this.useXpath()
-        .waitForElementVisible(file)
-        .click(file)
-        .useCss()
+      return this.useXpath().waitForElementVisible(file).click(file).useCss()
     },
-    closeRenameDialog: function() {
+    closeRenameDialog: function () {
       return this.waitForElementVisible('@dialogCancelBtn').click('@dialogCancelBtn')
     }
   },

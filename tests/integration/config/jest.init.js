@@ -25,10 +25,10 @@ try {
 }
 
 config.mocks = {
-  $gettext: str => str,
-  $gettextInterpolate: str => str,
-  $ngettext: str => str,
-  $pgettext: str => str,
+  $gettext: (str) => str,
+  $gettextInterpolate: (str) => str,
+  $ngettext: (str) => str,
+  $pgettext: (str) => str,
   $client: sdkMock,
   $language: {
     current: 'en'

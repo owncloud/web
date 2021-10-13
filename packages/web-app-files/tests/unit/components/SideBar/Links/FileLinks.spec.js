@@ -212,10 +212,10 @@ describe('FileLinks', () => {
             sharesTree: {}
           },
           getters: {
-            highlightedFile: function() {
+            highlightedFile: function () {
               return highlightedFile
             },
-            currentFileOutgoingLinks: function() {
+            currentFileOutgoingLinks: function () {
               return links
             },
             currentFileOutgoingSharesLoading: jest.fn(() => currentFileOutgoingSharesLoading),

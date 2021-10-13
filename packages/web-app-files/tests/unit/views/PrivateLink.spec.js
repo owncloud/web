@@ -75,7 +75,7 @@ describe('PrivateLink view', () => {
       }
       const wrapper = getShallowWrapper()
 
-      await new Promise(resolve => {
+      await new Promise((resolve) => {
         setTimeout(() => {
           expect(wrapper.find(selectors.errorMessage)).toMatchSnapshot()
           resolve()

@@ -27,14 +27,14 @@ const validConfig = `{
 }`
 
 describe('config file loading and error reporting', () => {
-  it('should load and parse a valid config', function() {
+  it('should load and parse a valid config', function () {
     fetch.mockResponseOnce(validConfig)
-    return loadConfig().then(async result => {
+    return loadConfig().then(async (result) => {
       expect(await result).toMatchObject(JSON.parse(validConfig))
     })
   })
   describe('empty config', () => {
-    it('should throw an exception', function() {
+    it('should throw an exception', function () {
       fetch.mockResponseOnce('')
       return expect(loadConfig).rejects.toThrow(
         'config could not be parsed. ' +
@@ -44,7 +44,7 @@ describe('config file loading and error reporting', () => {
     })
   })
   describe('config with an trailing comma', () => {
-    it('should throw an exception', function() {
+    it('should throw an exception', function () {
       fetch.mockResponseOnce('"title": { "en": "Classic Design", "de": "Dateien", },')
       return expect(loadConfig).rejects.toThrow(
         'config could not be parsed. ' +
@@ -55,7 +55,7 @@ describe('config file loading and error reporting', () => {
   })
 })
 describe('missing config', () => {
-  it('should throw an exception', function() {
+  it('should throw an exception', function () {
     fetch.mockResponseOnce(
       '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">\n' +
         '<html><head>\n' +

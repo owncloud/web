@@ -124,7 +124,7 @@ import { DateTime } from 'luxon'
 export default {
   name: 'FileDetails',
   mixins: [Mixins, MixinResources, MixinRoutes],
-  title: $gettext => {
+  title: ($gettext) => {
     return $gettext('Details')
   },
 
@@ -289,14 +289,14 @@ export default {
     hasPeopleShares() {
       return (
         intersection(this.file.shareTypes, userShareTypes).length > 0 ||
-        this.file.indicators?.filter(e => e.icon === 'group').length > 0 ||
+        this.file.indicators?.filter((e) => e.icon === 'group').length > 0 ||
         this.sharedItem !== null
       )
     },
     hasLinkShares() {
       return (
         this.file.shareTypes.includes(shareTypes.link) ||
-        this.file.indicators?.filter(e => e.icon === 'link').length > 0
+        this.file.indicators?.filter((e) => e.icon === 'link').length > 0
       )
     },
     ownedByCurrentUser() {
@@ -317,7 +317,7 @@ export default {
       if (current !== false) return
       const sharePathParentOrCurrent = this.getParentSharePath(this.file.path, this.sharesTree)
       if (sharePathParentOrCurrent === null) return
-      const userShares = this.sharesTree[sharePathParentOrCurrent]?.filter(s =>
+      const userShares = this.sharesTree[sharePathParentOrCurrent]?.filter((s) =>
         userShareTypes.includes(s.shareType)
       )
       if (userShares.length === 0) return
@@ -339,7 +339,7 @@ export default {
     preview: {
       async get() {
         // TODO: this timeout resolves flickering of the preview because it's rendered multiple times. Needs a better solution.
-        await new Promise(resolve => setTimeout(resolve, 500))
+        await new Promise((resolve) => setTimeout(resolve, 500))
         return loadPreview({
           resource: this.file,
           isPublic: this.isPublicPage,
@@ -387,7 +387,7 @@ export default {
       if (this.file.type === 'file' && !this.isPublicPage) {
         calls.push(this.loadVersions({ client: this.$client, fileId: this.file.id }))
       }
-      await Promise.all(calls.map(p => p.catch(e => e)))
+      await Promise.all(calls.map((p) => p.catch((e) => e)))
       this.loading = false
     }
   }

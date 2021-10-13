@@ -137,7 +137,7 @@ export default {
     },
 
     $_originalRole() {
-      return this.roles.find(r => r.name === this.collaborator.role.name)
+      return this.roles.find((r) => r.name === this.collaborator.role.name)
     },
 
     $_permissionsBitmask() {
@@ -200,7 +200,7 @@ export default {
         expirationDate: this.expirationDate
       })
         .then(() => this.$_ocCollaborators_cancelChanges())
-        .catch(errors => {
+        .catch((errors) => {
           this.errors = errors
           this.saving = false
         })

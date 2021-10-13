@@ -99,7 +99,7 @@ module.exports = {
    * @param {string} displayname
    * @param {string} email
    */
-  addUserToCreatedUsersList: function(userId, password, displayname = null, email = null) {
+  addUserToCreatedUsersList: function (userId, password, displayname = null, email = null) {
     if (client.globals.default_backend === BACKENDS.remote) {
       this.createdRemoteUsers[userId] = {
         password,
@@ -118,22 +118,22 @@ module.exports = {
    *
    * @param {string} userId
    */
-  deleteUserFromCreatedUsersList: function(userId) {
+  deleteUserFromCreatedUsersList: function (userId) {
     delete this.createdUsers[userId]
   },
   /**
    *
    * @param {string} groupId
    */
-  addGroupToCreatedGroupsList: function(groupId) {
+  addGroupToCreatedGroupsList: function (groupId) {
     this.createdGroups.push(groupId)
   },
   /**
    *
    * @param {string} userId
    */
-  deleteGroupFromCreatedGroupsList: function(groupId) {
-    this.createdGroups = this.createdGroups.filter(item => item !== groupId)
+  deleteGroupFromCreatedGroupsList: function (groupId) {
+    this.createdGroups = this.createdGroups.filter((item) => item !== groupId)
   },
   /**
    * gets the password of a previously created user
@@ -143,7 +143,7 @@ module.exports = {
    * @param {string} userId
    * @returns {string}
    */
-  getPasswordForUser: function(userId) {
+  getPasswordForUser: function (userId) {
     if (userId in this.createdUsers) {
       return this.createdUsers[userId].password
     } else if (userId in this.defaultUsers) {
@@ -161,7 +161,7 @@ module.exports = {
    * @param {string} userId
    * @returns {string}
    */
-  getDisplayNameForUser: function(userId) {
+  getDisplayNameForUser: function (userId) {
     let user = {}
     if (userId in this.createdUsers) {
       user = this.createdUsers[userId]
@@ -182,7 +182,7 @@ module.exports = {
    *
    * @param {string} displayName
    */
-  getUsernameFromDisplayname: function(displayName) {
+  getUsernameFromDisplayname: function (displayName) {
     for (const userid in this.createdUsers) {
       if (this.createdUsers[userid].displayname === displayName) {
         return userid
@@ -196,7 +196,7 @@ module.exports = {
    * @param {string} userId
    * @returns {null|string}
    */
-  getDisplayNameOfDefaultUser: function(userId) {
+  getDisplayNameOfDefaultUser: function (userId) {
     if (userId in this.defaultUsers) {
       return this.defaultUsers[userId].displayname
     } else {
@@ -211,7 +211,7 @@ module.exports = {
    * @param {string} userId
    * @returns {null|string}
    */
-  getEmailAddressForUser: function(userId) {
+  getEmailAddressForUser: function (userId) {
     let user = {}
     if (userId in this.createdUsers) {
       user = this.createdUsers[userId]
@@ -233,7 +233,7 @@ module.exports = {
    * @param {string} userId
    * @returns {null|string}
    */
-  getEmailAddressOfDefaultUser: function(userId) {
+  getEmailAddressOfDefaultUser: function (userId) {
     if (userId in this.defaultUsers) {
       return this.defaultUsers[userId].email
     } else {
@@ -244,7 +244,7 @@ module.exports = {
    *
    * @returns {module.exports.createdUsers|{}}
    */
-  getCreatedUsers: function(server = BACKENDS.local) {
+  getCreatedUsers: function (server = BACKENDS.local) {
     switch (server) {
       case BACKENDS.local:
         return this.createdUsers
@@ -258,15 +258,15 @@ module.exports = {
    *
    * @returns {Array}
    */
-  getCreatedGroups: function() {
+  getCreatedGroups: function () {
     return this.createdGroups
   },
 
-  resetCreatedUsers: function() {
+  resetCreatedUsers: function () {
     this.createdUsers = {}
   },
 
-  resetCreatedGroups: function() {
+  resetCreatedGroups: function () {
     this.createdGroups = []
   }
 }

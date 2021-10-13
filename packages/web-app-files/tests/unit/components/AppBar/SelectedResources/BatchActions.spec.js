@@ -56,7 +56,7 @@ describe('Batch Actions component', () => {
 
   describe.each(['files-personal', 'files-favorites', 'files-public-list', 'files-shared-with-me'])(
     '%s page',
-    page => {
+    (page) => {
       const $route = {
         name: page
       }
@@ -343,7 +343,7 @@ describe('Batch Actions component', () => {
 })
 
 function addPropToSelectedFiles(selectedFiles, prop) {
-  const files = selectedFiles.map(file => ({ ...file, ...prop }))
+  const files = selectedFiles.map((file) => ({ ...file, ...prop }))
   return files
 }
 

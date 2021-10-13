@@ -39,7 +39,7 @@ import FileActions from '../../../mixins/fileActions'
 
 export default {
   name: 'FileActions',
-  title: $gettext => {
+  title: ($gettext) => {
     return $gettext('Actions')
   },
   mixins: [FileActions],
@@ -52,7 +52,7 @@ export default {
     actions() {
       const actions = this.$_fileActions_editorActions.concat(this.$_fileActions_systemActions)
 
-      return actions.filter(action =>
+      return actions.filter((action) =>
         action.isEnabled({
           resource: this.highlightedFile,
           parent: this.currentFolder

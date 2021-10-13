@@ -6,7 +6,7 @@ import stubs from '../../../../../tests/unit/stubs'
 const localVue = createLocalVue()
 localVue.use(Vuex)
 
-const feedbackButtonPresent = enabled => ({
+const feedbackButtonPresent = (enabled) => ({
   options: { disableFeedbackLink: !enabled }
 })
 

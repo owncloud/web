@@ -13,7 +13,7 @@ module.exports = {
    * @param {userId} userId
    * @param {password} [password=null] - If not passed, default password for given `userId` will be used
    */
-  loginAsUser: async function(userId, password = null) {
+  loginAsUser: async function (userId, password = null) {
     await client.page.loginPage().navigate()
 
     password = password || userSettings.getPasswordForUser(userId)
@@ -35,7 +35,7 @@ module.exports = {
    *
    * Destroy and start a new browser session
    */
-  startNewSession: async function() {
+  startNewSession: async function () {
     let env = 'local'
     if (process.env.DRONE) {
       env = 'drone'
@@ -51,12 +51,12 @@ module.exports = {
    *
    * @param {string} userId
    */
-  reLoginAsUser: async function(userId) {
+  reLoginAsUser: async function (userId) {
     await this.startNewSession()
     return this.loginAsUser(userId)
   },
 
-  logout: function(userId) {
+  logout: function (userId) {
     const webPage = client.page.webPage()
     return webPage
       .navigate()

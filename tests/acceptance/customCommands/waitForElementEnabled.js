@@ -14,7 +14,7 @@
  * @param timeout defaults to this.globals.waitForConditionTimeout
  * @returns {exports}
  */
-module.exports.command = function(
+module.exports.command = function (
   selector,
   locateStrategy = 'css selector',
   timeout = this.globals.waitForConditionTimeout

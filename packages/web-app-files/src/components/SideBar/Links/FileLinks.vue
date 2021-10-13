@@ -88,12 +88,12 @@ export default {
     PrivateLinkItem
   },
   mixins: [mixins],
-  title: $gettext => {
+  title: ($gettext) => {
     return $gettext('Links')
   },
   provide() {
     return {
-      changeView: view => (this.$data.currentView = view)
+      changeView: (view) => (this.$data.currentView = view)
     }
   },
   data() {
@@ -137,7 +137,7 @@ export default {
     links() {
       return [...this.currentFileOutgoingLinks, ...this.indirectLinks]
         .sort(this.linksComparator)
-        .map(share => {
+        .map((share) => {
           share.key = 'direct-link-' + share.id
           return share
         })
@@ -153,10 +153,10 @@ export default {
       // remove root entry
       parentPaths.pop()
 
-      parentPaths.forEach(parentPath => {
+      parentPaths.forEach((parentPath) => {
         const shares = cloneStateObject(this.sharesTree[parentPath])
         if (shares) {
-          shares.forEach(share => {
+          shares.forEach((share) => {
             if (share.outgoing && share.shareType === shareTypes.link) {
               share.key = 'indirect-link-' + share.id
               allShares.push(share)
@@ -245,10 +245,7 @@ export default {
       this.TRIGGER_PUBLIC_LINK_CREATE({
         name: this.capabilities.files_sharing.public.defaultPublicLinkShareName,
         expireDate: this.$_expirationDate.days
-          ? DateTime.now()
-              .plus({ days: this.$_expirationDate.days })
-              .endOf('day')
-              .toISO()
+          ? DateTime.now().plus({ days: this.$_expirationDate.days }).endOf('day').toISO()
           : null
       })
 

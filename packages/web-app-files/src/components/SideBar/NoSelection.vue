@@ -12,7 +12,7 @@ import MixinRoutes from '../../mixins/routes'
 export default {
   name: 'NoSelection',
   mixins: [Mixins, MixinResources, MixinRoutes],
-  title: $gettext => {
+  title: ($gettext) => {
     return $gettext('Details')
   },
   computed: {

@@ -48,7 +48,7 @@ const actions = {
     commit('LOAD_CONFIG', config)
 
     if (config.external_apps) {
-      config.external_apps.forEach(externalApp => {
+      config.external_apps.forEach((externalApp) => {
         if (externalApp.config !== undefined) {
           commit(
             'LOAD_EXTENSION_CONFIG',
@@ -86,14 +86,14 @@ const mutations = {
 }
 
 const getters = {
-  configuration: state => {
+  configuration: (state) => {
     return state
   },
-  previewFileExtensions: state => {
+  previewFileExtensions: (state) => {
     const extensions = state.options.previewFileExtensions
     return (Array.isArray(extensions) ? extensions : [])
       .filter(Boolean)
-      .map(ext => ext.toLowerCase())
+      .map((ext) => ext.toLowerCase())
   },
   homeFolder: (state, rootGetters) => {
     if (isEmpty(state.options.homeFolder)) {
@@ -107,7 +107,7 @@ const getters = {
     }
     return parsed
   },
-  theme: state => {
+  theme: (state) => {
     return state.theme
   }
 }
@@ -135,7 +135,7 @@ function parseHomeFolder(tpl, user) {
   const regex = /{{(.*?)}}/g
   const parts = tpl.match(regex)
   if (parts) {
-    parts.forEach(part => {
+    parts.forEach((part) => {
       // check if part is a substring of a user value
       const substringRegex = /{{substr\s([0-9]+)\s([0-9]+)\s\.(.*)}}/
       const substringMatches = part.match(substringRegex)

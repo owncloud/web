@@ -1,5 +1,5 @@
 module.exports = {
-  url: function() {
+  url: function () {
     return this.api.launchUrl
   },
   elements: {
@@ -25,7 +25,7 @@ module.exports = {
        * @param {string} password
        * @param expectedToSucced
        */
-      login: async function(username, password, expectedToSucced = true) {
+      login: async function (username, password, expectedToSucced = true) {
         await this.waitForElementVisible('@usernameInput')
           .clearValue('@usernameInput')
           .setValue('@usernameInput', username)
@@ -39,20 +39,20 @@ module.exports = {
         }
         return this
       },
-      getLoginErrorMessage: async function() {
+      getLoginErrorMessage: async function () {
         let errorMessage
         await this.api.assert.visible(this.elements.usernameInput.selector)
         await this.api.assert.visible(this.elements.passwordInput.selector)
         await this.api.assert.visible(this.elements.loginSubmitButton.selector)
         await this.waitForElementVisible('@invalidCredentialsMessage').getText(
           '@invalidCredentialsMessage',
-          result => {
+          (result) => {
             errorMessage = result.value
           }
         )
         return errorMessage
       },
-      waitTillLoaded: async function() {
+      waitTillLoaded: async function () {
         await this.waitForElementVisible(this.elements.usernameInput.selector)
         await this.waitForElementVisible(this.elements.passwordInput.selector)
         await this.waitForElementVisible(this.elements.loginSubmitButton.selector)

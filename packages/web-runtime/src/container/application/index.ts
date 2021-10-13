@@ -36,8 +36,8 @@ export const buildApplication = async ({
   const applicationScript: ClassicApplicationScript = await new Promise((resolve, reject) =>
     requirejs(
       [applicationPath],
-      app => resolve(app),
-      err => reject(err)
+      (app) => resolve(app),
+      (err) => reject(err)
     )
   ).catch(() => {
     throw new RuntimeError('cannot load application', applicationPath)

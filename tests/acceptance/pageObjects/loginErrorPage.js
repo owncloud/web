@@ -1,7 +1,7 @@
 const { join } = require('../helpers/path')
 
 module.exports = {
-  url: function() {
+  url: function () {
     return join(this.api.launchUrl, '/#/access-denied')
   },
   elements: {
@@ -15,11 +15,11 @@ module.exports = {
     }
   },
   commands: {
-    waitTillLoaded: function() {
+    waitTillLoaded: function () {
       const element = this.elements.loginErrorMessage
       return this.useStrategy(element).waitForElementVisible(element)
     },
-    exit: function() {
+    exit: function () {
       const exitBtn = this.elements.exitButton
       return this.waitForElementVisible(exitBtn).click(exitBtn)
     }

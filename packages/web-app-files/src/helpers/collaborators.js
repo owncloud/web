@@ -54,7 +54,7 @@ export function bitmaskToRole(bitmask, isFolder, allowSharePerm) {
     let rolePermissionsBitmask = 0
 
     // Get bitmask of basic permissions
-    currentRole.permissions.forEach(permission => {
+    currentRole.permissions.forEach((permission) => {
       rolePermissionsBitmask |= permissionsBitmask[permission]
     })
 

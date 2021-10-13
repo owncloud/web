@@ -101,7 +101,7 @@ export default {
       this.inputErrorMessage = null
       this.$client.publicFiles
         .list(this.$route.params.token, password, DavProperties.PublicLink, '0')
-        .then(files => {
+        .then((files) => {
           this.passwordRequired = false
           this.setPublicLinkPassword(password)
           if (files[0].getProperty(this.$client.publicFiles.PUBLIC_LINK_PERMISSION) === '4') {
@@ -121,7 +121,7 @@ export default {
             }
           })
         })
-        .catch(error => {
+        .catch((error) => {
           if (error.statusCode === 401) {
             this.passwordRequired = true
             if (!this.firstTime) {

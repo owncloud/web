@@ -16,7 +16,7 @@ exports.command = function setValueBySingleKeys(selector, inputValue) {
 
     // Sometimes the autocomplete list is not displayed when the characters are entered very fast
     // So we add a small pause for entering the last two characters
-    const charEndPromise = charsEnd.map(char => this.setValue(selector, char).pause(100)) || []
+    const charEndPromise = charsEnd.map((char) => this.setValue(selector, char).pause(100)) || []
 
     return Promise.all([charPromise, ...charEndPromise])
   }

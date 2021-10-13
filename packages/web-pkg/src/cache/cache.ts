@@ -55,7 +55,7 @@ export default class Cache<K, V> {
 
   public entries(): [K, V][] {
     this.evict()
-    return [...this.map.entries()].map(kv => [kv[0], kv[1].value])
+    return [...this.map.entries()].map((kv) => [kv[0], kv[1].value])
   }
 
   public keys(): K[] {
@@ -70,7 +70,7 @@ export default class Cache<K, V> {
 
   public values(): V[] {
     this.evict()
-    return [...this.map.values()].map(e => e.value)
+    return [...this.map.values()].map((e) => e.value)
   }
 
   public evict(): void {

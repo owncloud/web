@@ -12,7 +12,7 @@ class ProviderStore {
   }
 
   public get availableProviders() {
-    return this.providers.filter(provider => provider.available)
+    return this.providers.filter((provider) => provider.available)
   }
 }
 

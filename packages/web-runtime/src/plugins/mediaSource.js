@@ -11,16 +11,16 @@ export default {
         headers.append('X-Requested-With', 'XMLHttpRequest')
 
         fetch(source, { headers })
-          .then(response => {
+          .then((response) => {
             if (!response.ok) {
               reject(response)
               return
             }
-            response.blob().then(blob => {
+            response.blob().then((blob) => {
               if (returnAs === 'base64') {
                 const reader = new FileReader()
                 reader.readAsDataURL(blob)
-                reader.onloadend = function() {
+                reader.onloadend = function () {
                   resolve(reader)
                 }
               } else if (returnAs === 'url') {
@@ -29,7 +29,7 @@ export default {
               }
             })
           })
-          .catch(e => {
+          .catch((e) => {
             console.warn('media-source', e)
             reject(e)
           })
@@ -46,7 +46,7 @@ export default {
       const value = binding.value
       el.setAttribute('data-image-source', value)
       _mediaSource(value)
-        .then(dataImage => {
+        .then((dataImage) => {
           if (value !== el.getAttribute('data-image-source')) {
             console.warn('image-source was updated again before image could load')
             return
@@ -54,7 +54,7 @@ export default {
 
           el.setAttribute('src', dataImage)
         })
-        .catch(e => {
+        .catch((e) => {
           console.warn('image-source', e)
         })
     }
@@ -73,7 +73,7 @@ export default {
     })
 
     Vue.mixin({
-      data: function() {
+      data: function () {
         return {
           mediaSourceQueue: new PQueue({ concurrency: 2 })
         }

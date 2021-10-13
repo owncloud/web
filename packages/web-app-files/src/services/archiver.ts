@@ -20,7 +20,7 @@ export class ArchiverService {
   public initialize(serverUrl: string, archiverCapabilities: ArchiverCapability[] = []): void {
     this.serverUrl = serverUrl
     const archivers = archiverCapabilities
-      .filter(a => a.enabled)
+      .filter((a) => a.enabled)
       .sort((a1, a2) => rcompare(a1.version, a2.version))
     this.capability = archivers.length ? archivers[0] : null
   }

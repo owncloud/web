@@ -24,13 +24,13 @@ export default {
   props: {
     searchResult: {
       type: Object,
-      default: function() {
+      default: function () {
         return {}
       }
     },
     provider: {
       type: Object,
-      default: function() {
+      default: function () {
         return {}
       }
     }

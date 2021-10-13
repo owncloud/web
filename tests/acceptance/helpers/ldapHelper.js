@@ -8,13 +8,13 @@ const userHelper = require('./userSettings')
 const USERS_OU = 'ou=TestUsers,dc=owncloud,dc=com'
 const GROUPS_OU = 'ou=TestGroups,dc=owncloud,dc=com'
 
-exports.createClient = function(url) {
+exports.createClient = function (url) {
   return new Promise((resolve, reject) => {
     const ldapClient = ldap.createClient({
       url: url || client.globals.ldap_url
     })
 
-    ldapClient.bind(client.globals.ldap_base_dn, client.globals.ldap_password, err => {
+    ldapClient.bind(client.globals.ldap_base_dn, client.globals.ldap_password, (err) => {
       if (err) {
         reject(err)
       }
@@ -26,7 +26,7 @@ exports.createClient = function(url) {
         objectclass: ['top', 'organizationalUnit'],
         ou: 'TestUsers'
       },
-      err => {
+      (err) => {
         if (err) {
           console.log('Users OU already exists.')
         }
@@ -36,7 +36,7 @@ exports.createClient = function(url) {
             objectclass: ['top', 'organizationalUnit'],
             ou: 'TestGroups'
           },
-          err => {
+          (err) => {
             if (err) {
               console.log('Groups OU already exists.')
             }
@@ -48,9 +48,9 @@ exports.createClient = function(url) {
   })
 }
 
-exports.createEntry = function(client, dn, entry) {
+exports.createEntry = function (client, dn, entry) {
   return new Promise((resolve, reject) => {
-    client.add(dn, entry, function(err) {
+    client.add(dn, entry, function (err) {
       if (err) {
         reject(err)
       }
@@ -60,16 +60,16 @@ exports.createEntry = function(client, dn, entry) {
   })
 }
 
-exports.cleanup = function(client) {
+exports.cleanup = function (client) {
   return new Promise((resolve, reject) => {
-    client.del(GROUPS_OU, function(err) {
+    client.del(GROUPS_OU, function (err) {
       if (err) {
         reject(err)
       }
       resolve()
     })
   }).then(() => {
-    client.del(USERS_OU, function(err) {
+    client.del(USERS_OU, function (err) {
       if (err) {
         Promise.reject(err)
       }
@@ -78,29 +78,29 @@ exports.cleanup = function(client) {
   })
 }
 
-exports.getNewUID = function(ldapClient) {
+exports.getNewUID = function (ldapClient) {
   const userCn = USERS_OU
   let uid = 1
   return new Promise((resolve, reject) => {
     ldapClient.search(userCn, { scope: 'sub', attributes: ['uidNumber'] }, (err, res) => {
       if (err) reject(err)
-      res.on('searchEntry', function(entry) {
+      res.on('searchEntry', function (entry) {
         const entryId = parseInt(entry.object.uidNumber)
         if (entryId >= uid) {
           uid = entryId + 1
         }
       })
-      res.on('error', function(err) {
+      res.on('error', function (err) {
         reject(err)
       })
-      res.on('end', function(result) {
+      res.on('end', function (result) {
         resolve(uid)
       })
     })
   })
 }
 
-exports.createUser = async function(
+exports.createUser = async function (
   ldapClient,
   user,
   password = null,
@@ -127,7 +127,7 @@ exports.createUser = async function(
       uid: user,
       givenname: user
     })
-    .then(err => {
+    .then((err) => {
       if (!err) {
         userHelper.addUserToCreatedUsersList(user, password, displayName, email)
         const skelDir = client.globals.ocis_skeleton_dir
@@ -145,7 +145,7 @@ exports.createUser = async function(
     })
 }
 
-exports.createGroup = function(client, group, members = []) {
+exports.createGroup = function (client, group, members = []) {
   const entry = {
     cn: group,
     objectclass: ['posixGroup', 'top'],
@@ -157,9 +157,9 @@ exports.createGroup = function(client, group, members = []) {
   return exports.createEntry(client, `cn=${group},${GROUPS_OU}`, entry)
 }
 
-exports.deleteGroup = function(client, group) {
+exports.deleteGroup = function (client, group) {
   return new Promise((resolve, reject) => {
-    client.del(`cn=${group},${GROUPS_OU}`, function(err) {
+    client.del(`cn=${group},${GROUPS_OU}`, function (err) {
       if (err) {
         reject(err)
       }
@@ -168,9 +168,9 @@ exports.deleteGroup = function(client, group) {
   })
 }
 
-exports.deleteUser = function(client, user) {
+exports.deleteUser = function (client, user) {
   return new Promise((resolve, reject) => {
-    client.del(`uid=${user},${USERS_OU}`, function(err) {
+    client.del(`uid=${user},${USERS_OU}`, function (err) {
       if (err) {
         reject(err)
       }
@@ -179,27 +179,27 @@ exports.deleteUser = function(client, user) {
   })
 }
 
-exports.terminate = function(ldapClient) {
-  return new Promise(resolve => {
+exports.terminate = function (ldapClient) {
+  return new Promise((resolve) => {
     if (!ldapClient) {
       resolve()
     }
-    ldapClient.unbind(err => {
+    ldapClient.unbind((err) => {
       !err || console.log(err)
     })
-    ldapClient.destroy(err => {
+    ldapClient.destroy((err) => {
       !err || console.log(err)
     })
     resolve()
   })
 }
 
-exports.addUserToGroup = function(client, user, group) {
+exports.addUserToGroup = function (client, user, group) {
   return new Promise((resolve, reject) => {
     const groupCn = `cn=${group},${GROUPS_OU}`
     client.search(groupCn, { attributes: [] }, (err, res) => {
       if (err) reject(err)
-      res.on('searchEntry', function(entry) {
+      res.on('searchEntry', function (entry) {
         let memberUid
         if (entry.object.memberUid) {
           if (
@@ -221,14 +221,14 @@ exports.addUserToGroup = function(client, user, group) {
             memberUid
           }
         })
-        client.modify(groupCn, change, function(err) {
+        client.modify(groupCn, change, function (err) {
           if (err) reject(err)
         })
       })
-      res.on('error', function(err) {
+      res.on('error', function (err) {
         reject(err)
       })
-      res.on('end', function(result) {
+      res.on('end', function (result) {
         resolve()
       })
     })

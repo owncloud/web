@@ -34,8 +34,11 @@ export default {
   computed: {
     ...mapGetters(['getToken']),
     config() {
-      const { url = 'https://embed.diagrams.net', theme = 'minimal', autosave = false } =
-        this.$store.state.apps.fileEditors.find(editor => editor.app === 'draw-io').config || {}
+      const {
+        url = 'https://embed.diagrams.net',
+        theme = 'minimal',
+        autosave = false
+      } = this.$store.state.apps.fileEditors.find((editor) => editor.app === 'draw-io').config || {}
       return { url, theme, autosave: autosave ? 1 : 0 }
     },
     iframeSource() {
@@ -56,7 +59,7 @@ export default {
     this.filePath = this.$route.params.filePath
     this.fileExtension = this.filePath.split('.').pop()
     this.checkPermissions()
-    window.addEventListener('message', event => {
+    window.addEventListener('message', (event) => {
       if (event.data.length > 0) {
         const payload = JSON.parse(event.data)
         switch (payload.event) {
@@ -86,19 +89,19 @@ export default {
     checkPermissions() {
       this.$client.files
         .fileInfo(this.filePath, [DavProperty.Permissions])
-        .then(v => {
+        .then((v) => {
           this.isReadOnly =
             v.fileInfo[DavProperty.Permissions].indexOf(DavPermission.Updateable) === -1
           this.loading = false
         })
-        .catch(error => {
+        .catch((error) => {
           this.error(error)
         })
     },
     load() {
       this.$client.files
         .getFileContents(this.filePath, { resolveWithResponseObject: true })
-        .then(resp => {
+        .then((resp) => {
           this.currentETag = resp.headers.ETag
           this.$refs.drawIoEditor.contentWindow.postMessage(
             JSON.stringify({
@@ -109,7 +112,7 @@ export default {
             '*'
           )
         })
-        .catch(error => {
+        .catch((error) => {
           this.error(error)
         })
     },
@@ -132,13 +135,13 @@ export default {
         desc: getDescription()
       })
       fetch(url, { headers })
-        .then(resp => {
+        .then((resp) => {
           // Not setting `currentETag` on imports allows to create new files
           // otherwise the ETag comparison fails with a 412 during the autosave/save event
           // this.currentETag = resp.headers.get('etag')
           return resp.arrayBuffer()
         })
-        .then(arrayBuffer => {
+        .then((arrayBuffer) => {
           const blob = new Blob([arrayBuffer], { type: 'application/vnd.visio' })
           const reader = new FileReader()
           reader.onloadend = () => {
@@ -153,7 +156,7 @@ export default {
           }
           reader.readAsDataURL(blob)
         })
-        .catch(error => {
+        .catch((error) => {
           this.error(error)
         })
     },
@@ -162,7 +165,7 @@ export default {
         .putFileContents(this.filePath, payload.xml, {
           previousEntityTag: this.currentETag
         })
-        .then(resp => {
+        .then((resp) => {
           this.currentETag = resp.ETag
           this.$refs.drawIoEditor.contentWindow.postMessage(
             JSON.stringify({
@@ -172,7 +175,7 @@ export default {
             '*'
           )
         })
-        .catch(error => {
+        .catch((error) => {
           this.error(error)
         })
     },

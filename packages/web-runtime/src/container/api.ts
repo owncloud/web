@@ -24,7 +24,7 @@ const announceRoutes = (applicationId: string, router: VueRouter, routes: RouteC
     throw new ApiError("routes can't be blank")
   }
 
-  const applicationRoutes = routes.map(applicationRoute => {
+  const applicationRoutes = routes.map((applicationRoute) => {
     if (!isObject(applicationRoute)) {
       throw new ApiError("route can't be blank", applicationRoute)
     }
@@ -34,7 +34,7 @@ const announceRoutes = (applicationId: string, router: VueRouter, routes: RouteC
     route.path = `/${encodeURI(applicationId)}${route.path}`
 
     if (route.children) {
-      route.children = route.children.map(childRoute => {
+      route.children = route.children.map((childRoute) => {
         if (!isObject(applicationRoute)) {
           throw new ApiError("route children can't be blank", applicationRoute, childRoute)
         }
@@ -104,7 +104,7 @@ const announceTranslations = (
     throw new ApiError("translations can't be blank")
   }
 
-  Object.keys(supportedLanguages).forEach(lang => {
+  Object.keys(supportedLanguages).forEach((lang) => {
     if (translations[lang] && appTranslations[lang]) {
       Object.assign(translations[lang], appTranslations[lang])
     }

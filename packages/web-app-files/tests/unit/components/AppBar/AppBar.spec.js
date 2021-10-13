@@ -89,7 +89,7 @@ describe('AppBar component', () => {
     jest.clearAllMocks()
   })
 
-  describe.each(['files-personal', 'files-public-list'])('%s route', page => {
+  describe.each(['files-personal', 'files-public-list'])('%s route', (page) => {
     const route = {
       name: page,
       params: {
@@ -157,7 +157,7 @@ describe('AppBar component', () => {
       })
       it.each(newFileHandlers)(
         'should trigger "showCreateResourceModal" if new file button is clicked',
-        async fileHandler => {
+        async (fileHandler) => {
           const store = createStore({ currentFolder, selected: [] }, newFileHandlers)
           wrapper = getWrapper(route, store)
 
@@ -238,7 +238,7 @@ describe('AppBar component', () => {
 
   describe.each(['files-favorites', 'files-shared-with-others', 'files-shared-with-me'])(
     '%s page',
-    page => {
+    (page) => {
       const route = {
         name: page,
         params: {},

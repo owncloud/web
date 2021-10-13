@@ -4,14 +4,14 @@ const _ = require('lodash/fp')
 const assert = require('assert')
 const normalize = _.replace(/^\/+|$/g, '')
 const parts = _.pipe(normalize, _.split('/'))
-const relativeTo = function(basePath, childPath) {
+const relativeTo = function (basePath, childPath) {
   basePath = normalize(basePath)
   childPath = normalize(childPath)
   assert.ok(childPath.startsWith(basePath), `${childPath} does not contain ${basePath}`)
   const basePathLength = basePath.length
   return childPath.slice(basePathLength)
 }
-const deleteFolderRecursive = function(path) {
+const deleteFolderRecursive = function (path) {
   if (fs.existsSync(path)) {
     fs.readdirSync(path).forEach((file, index) => {
       const curPath = join(path, file)
@@ -35,7 +35,7 @@ module.exports = {
   relativeTo,
   filename: _.pipe(
     parts,
-    _.remove(n => n === ''),
+    _.remove((n) => n === ''),
     _.last
   ),
   deleteFolderRecursive

@@ -5,11 +5,11 @@ const httpHelper = require('../helpers/httpHelper')
  *
  * @param {Array} args
  */
-exports.runOcc = async function(args) {
+exports.runOcc = async function (args) {
   const params = new URLSearchParams()
   params.append('command', args.join(' '))
   const apiURL = 'apps/testing/api/v1/occ'
-  const res = await httpHelper.postOCS(apiURL, 'admin', params).then(res => {
+  const res = await httpHelper.postOCS(apiURL, 'admin', params).then((res) => {
     return httpHelper.checkStatus(res, 'Failed while executing occ command')
   })
 
@@ -21,11 +21,11 @@ exports.runOcc = async function(args) {
   return json
 }
 
-const clearOpCache = async function() {
+const clearOpCache = async function () {
   const apiURL = 'apps/testing/api/v1/opcache'
 
   try {
-    const res = await httpHelper.deleteOCS(apiURL, 'admin').then(res => {
+    const res = await httpHelper.deleteOCS(apiURL, 'admin').then((res) => {
       return httpHelper.checkStatus(res, 'Failed while resetting the opcache')
     })
     const json = await res.json()

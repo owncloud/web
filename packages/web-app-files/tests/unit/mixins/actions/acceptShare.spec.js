@@ -33,7 +33,7 @@ describe('acceptShare', () => {
         { resource: { status: shareStatus.accepted }, expectedStatus: false }
       ])(
         'should be set according to the resource share status if the route name is "files-shared-with-me"',
-        inputData => {
+        (inputData) => {
           const wrapper = getWrapper()
 
           const resource = inputData.resource
@@ -48,7 +48,7 @@ describe('acceptShare', () => {
         { status: shareStatus.accepted }
       ])(
         'should be set as false if the route name is other than "files-shared-with-me"',
-        resource => {
+        (resource) => {
           const wrapper = getWrapper({ name: 'files-shared-with-others' })
 
           expect(wrapper.vm.$_acceptShare_items[0].isEnabled({ resource })).toBeFalsy()

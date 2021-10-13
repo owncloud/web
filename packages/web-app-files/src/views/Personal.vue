@@ -109,7 +109,7 @@ export default {
   ],
 
   beforeRouteEnter(to, from, next) {
-    next(vm => {
+    next((vm) => {
       if (vm.isRedirectToHomeFolderRequired(to)) {
         vm.redirectToHomeFolder(to)
       }
@@ -176,7 +176,7 @@ export default {
 
   watch: {
     $route: {
-      handler: function(to, from) {
+      handler: function (to, from) {
         this.$_filesListPagination_updateCurrentPage()
 
         const sameRoute = to.name === from?.name
@@ -200,7 +200,7 @@ export default {
   mounted() {
     this.adjustTableHeaderPosition()
 
-    bus.on('app.files.list.load', path => {
+    bus.on('app.files.list.load', (path) => {
       this.loadResources(this.$route.params.item === path, path)
     })
   },
@@ -239,7 +239,7 @@ export default {
       await this.$router.replace(
         route,
         () => {},
-        e => {
+        (e) => {
           console.error(e)
         }
       )
@@ -247,8 +247,8 @@ export default {
 
     async fileDropped(fileIdTarget) {
       const selected = [...this.selectedFiles]
-      const targetInfo = this.activeFilesCurrentPage.find(e => e.id === fileIdTarget)
-      const isTargetSelected = selected.some(e => e.id === fileIdTarget)
+      const targetInfo = this.activeFilesCurrentPage.find((e) => e.id === fileIdTarget)
+      const isTargetSelected = selected.some((e) => e.id === fileIdTarget)
       if (isTargetSelected) return
       if (targetInfo.type !== 'folder') return
       const itemsInTarget = await this.fetchResources(targetInfo.path)
@@ -257,10 +257,10 @@ export default {
       const errors = []
       const movePromises = []
       const moveQueue = new PQueue({ concurrency: 4 })
-      selected.forEach(resource => {
+      selected.forEach((resource) => {
         movePromises.push(
           moveQueue.add(async () => {
-            const exists = itemsInTarget.some(e => basename(e.name) === resource.name)
+            const exists = itemsInTarget.some((e) => basename(e.name) === resource.name)
             if (exists) {
               const message = this.$gettext('Resource with name %{name} already exists')
               errors.push({
@@ -390,7 +390,7 @@ export default {
 
       if (resourceName && this.activeFilesCurrentPage.length > 0) {
         this.$nextTick(() => {
-          const resource = this.activeFilesCurrentPage.find(r => r.name === resourceName)
+          const resource = this.activeFilesCurrentPage.find((r) => r.name === resourceName)
 
           if (resource) {
             this.selected = [resource]

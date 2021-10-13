@@ -35,24 +35,16 @@ export default {
     formDateFromNow(date, type) {
       // TODO: Refactor those into their own functions a.k.a relDateFromJSDate() etc
       if (type === 'JSDate') {
-        return DateTime.fromJSDate(date)
-          .setLocale(this.$language.current)
-          .toRelative()
+        return DateTime.fromJSDate(date).setLocale(this.$language.current).toRelative()
       }
       if (type === 'Http') {
-        return DateTime.fromHTTP(date)
-          .setLocale(this.$language.current)
-          .toRelative()
+        return DateTime.fromHTTP(date).setLocale(this.$language.current).toRelative()
       }
       if (type === 'ISO') {
-        return DateTime.fromISO(date)
-          .setLocale(this.$language.current)
-          .toRelative()
+        return DateTime.fromISO(date).setLocale(this.$language.current).toRelative()
       }
       if (type === 'RFC') {
-        return DateTime.fromRFC2822(date)
-          .setLocale(this.$language.current)
-          .toRelative()
+        return DateTime.fromRFC2822(date).setLocale(this.$language.current).toRelative()
       }
     },
     delayForScreenreader(func, delay = 500) {
@@ -86,18 +78,18 @@ export default {
     },
     checkIfElementExists(element) {
       const name = element.name || element
-      return this.files.find(file => file.name === name)
+      return this.files.find((file) => file.name === name)
     },
     processDirectoryEntryRecursively(directory) {
       return this.$client.files.createFolder(this.rootPath + directory.fullPath).then(() => {
         const directoryReader = directory.createReader()
         const ctrl = this
-        directoryReader.readEntries(function(entries) {
-          entries.forEach(function(entry) {
+        directoryReader.readEntries(function (entries) {
+          entries.forEach(function (entry) {
             if (entry.isDirectory) {
               ctrl.processDirectoryEntryRecursively(entry)
             } else {
-              entry.file(file => {
+              entry.file((file) => {
                 ctrl.$_ocUpload(file, entry.fullPath, null, false)
               })
             }
@@ -189,8 +181,8 @@ export default {
 
         if (exists) {
           promises.push(
-            new Promise(resolve => {
-              item.file(file => {
+            new Promise((resolve) => {
+              item.file((file) => {
                 this.existingResources.push({ file, path: item.fullPath, etag: exists.etag })
 
                 resolve()
@@ -201,7 +193,7 @@ export default {
           continue
         }
 
-        item.file(file => {
+        item.file((file) => {
           this.$_ocUpload(file, item.fullPath)
         })
       }
@@ -379,7 +371,7 @@ export default {
             file,
             {
               headers: extraHeaders,
-              onProgress: progress => {
+              onProgress: (progress) => {
                 this.$_ocUpload_onProgress(progress, file)
               },
               overwrite: overwrite
@@ -406,7 +398,7 @@ export default {
             return this.uploadChunkedFile(file, pathUtil.dirname(relativePath), {
               chunkSize: chunkSize,
               overridePatchMethod: !!this.capabilities.files.tus_support.http_method_override,
-              emitProgress: progress => {
+              emitProgress: (progress) => {
                 this.$_ocUpload_onProgress(progress, file)
               }
             })
@@ -421,7 +413,7 @@ export default {
           promise = this.uploadQueue.add(() =>
             this.$client.files.putFileContents(relativePath, file, {
               headers: extraHeaders,
-              onProgress: progress => {
+              onProgress: (progress) => {
                 this.$_ocUpload_onProgress(progress, file)
               },
               overwrite: overwrite
@@ -431,14 +423,14 @@ export default {
       }
 
       promise
-        .then(e => {
+        .then((e) => {
           this.$root.$emit('upload-end')
           this.removeFileFromProgress(file)
           if (emitSuccess) {
             this.$emit('success', e, file)
           }
         })
-        .catch(e => {
+        .catch((e) => {
           this.removeFileFromProgress(file)
           this.$emit('error', e)
         })

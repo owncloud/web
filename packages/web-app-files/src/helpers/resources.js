@@ -51,9 +51,9 @@ export function buildResource(resource) {
     starred: resource.fileInfo[DavProperty.IsFavorite] !== '0',
     etag: resource.fileInfo[DavProperty.ETag],
     sharePermissions: resource.fileInfo[DavProperty.SharePermissions],
-    shareTypes: (function() {
+    shareTypes: (function () {
       if (resource.fileInfo[DavProperty.ShareTypes]) {
-        return resource.fileInfo[DavProperty.ShareTypes].map(v => parseInt(v))
+        return resource.fileInfo[DavProperty.ShareTypes].map((v) => parseInt(v))
       }
       return []
     })(),
@@ -61,28 +61,28 @@ export function buildResource(resource) {
     downloadURL: resource.fileInfo[DavProperty.DownloadURL],
     ownerDisplayName: resource.fileInfo[DavProperty.OwnerDisplayName],
     ownerId: resource.fileInfo[DavProperty.OwnerId],
-    canUpload: function() {
+    canUpload: function () {
       return this.permissions.indexOf(DavPermission.FolderCreateable) >= 0
     },
-    canDownload: function() {
+    canDownload: function () {
       return true
     },
-    canBeDeleted: function() {
+    canBeDeleted: function () {
       return this.permissions.indexOf(DavPermission.Deletable) >= 0
     },
-    canRename: function() {
+    canRename: function () {
       return this.permissions.indexOf(DavPermission.Renameable) >= 0
     },
-    canShare: function() {
+    canShare: function () {
       return this.permissions.indexOf(DavPermission.Shareable) >= 0
     },
-    canCreate: function() {
+    canCreate: function () {
       return this.permissions.indexOf(DavPermission.FolderCreateable) >= 0
     },
-    isMounted: function() {
+    isMounted: function () {
       return this.permissions.indexOf(DavPermission.Mounted) >= 0
     },
-    isReceivedShare: function() {
+    isReceivedShare: function () {
       return this.permissions.indexOf(DavPermission.Shared) >= 0
     }
   }
@@ -108,7 +108,7 @@ export function aggregateResourceShares(
   token
 ) {
   if (incomingShares) {
-    return orderBy(shares, ['file_target', 'permissions'], ['asc', 'desc']).map(share =>
+    return orderBy(shares, ['file_target', 'permissions'], ['asc', 'desc']).map((share) =>
       buildSharedResource(share, incomingShares, allowSharePerm)
     )
   }
@@ -165,7 +165,7 @@ export function aggregateResourceShares(
     resources.push(share)
   }
 
-  return resources.map(share => buildSharedResource(share, incomingShares, allowSharePerm))
+  return resources.map((share) => buildSharedResource(share, incomingShares, allowSharePerm))
 }
 
 export function buildSharedResource(share, incomingShares = false, allowSharePerm) {

@@ -13,7 +13,7 @@ function addParameters(allParameterNames) {
   return prefix + allParameterNames.join(', ')
 }
 
-TypeScriptSnippetSyntax.prototype.build = function({
+TypeScriptSnippetSyntax.prototype.build = function ({
   generatedExpressions,
   functionName,
   stepParameterNames
@@ -33,15 +33,15 @@ TypeScriptSnippetSyntax.prototype.build = function({
     'const { feature, actorContinent, userContinent, fileContinent } = this\n',
     'await new Promise(resolve => setTimeout(resolve, 10))'
   ]
-    .map(str => `  ${str}`)
+    .map((str) => `  ${str}`)
     .join('\n')
 
   const definitionChoices = generatedExpressions.map((generatedExpression, index) => {
     const prefix = index === 0 ? '' : '// '
 
     const allParameterNames = generatedExpression.parameterNames
-      .map(parameterName => `${parameterName}: any`)
-      .concat(stepParameterNames.map(stepParameterName => `${stepParameterName}: any`))
+      .map((parameterName) => `${parameterName}: any`)
+      .concat(stepParameterNames.map((stepParameterName) => `${stepParameterName}: any`))
 
     return (
       `${prefix}${functionName}('` +

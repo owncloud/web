@@ -1,6 +1,6 @@
 module.exports = {
   commands: {
-    waitTillLoaded: function() {
+    waitTillLoaded: function () {
       const element = this.elements.userDisabledMessage
       return this.useStrategy(element).waitForElementVisible(element)
     }

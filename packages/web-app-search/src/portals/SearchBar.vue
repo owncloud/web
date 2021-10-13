@@ -144,7 +144,7 @@ export default {
     },
     resetProvider() {
       this.optionsVisible = false
-      this.availableProviders.forEach(provider => provider.reset())
+      this.availableProviders.forEach((provider) => provider.reset())
     },
     activateProvider(provider) {
       this.optionsVisible = false

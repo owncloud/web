@@ -16,18 +16,18 @@ export default {
      */
     navigation_getMenuItems(permittedMenus) {
       return this.applicationsList
-        .filter(app => {
+        .filter((app) => {
           if (app.type === 'extension') {
             // check if the extension has at least one navItem with a matching menuId
             return (
-              this.getNavItemsByExtension(app.id).filter(navItem =>
+              this.getNavItemsByExtension(app.id).filter((navItem) =>
                 isNavItemPermitted(permittedMenus, navItem)
               ).length > 0
             )
           }
           return isNavItemPermitted(permittedMenus, app)
         })
-        .map(item => {
+        .map((item) => {
           const lang = this.$language.current
           // TODO: move language resolution to a common function
           // FIXME: need to handle logic for variants like en_US vs en_GB

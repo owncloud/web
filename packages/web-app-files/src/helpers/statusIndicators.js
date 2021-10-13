@@ -3,19 +3,19 @@ import { shareTypes, userShareTypes } from './shareTypes'
 import { getParentPaths } from './path'
 import { $gettext } from '../gettext'
 
-const $shareTypes = resource => {
+const $shareTypes = (resource) => {
   if (typeof resource.shareTypes !== 'undefined') {
     return resource.shareTypes
   }
 
   if (resource.shares) {
-    return Array.from(new Set(resource.shares.map(share => parseInt(share.type, 10))))
+    return Array.from(new Set(resource.shares.map((share) => parseInt(share.type, 10))))
   }
 
   return []
 }
 
-const isDirectUserShare = resource => {
+const isDirectUserShare = (resource) => {
   return intersection(userShareTypes, $shareTypes(resource)).length > 0
 }
 
@@ -26,7 +26,7 @@ const isIndirectUserShare = (resource, sharesTree) => {
   )
 }
 
-const isDirectLinkShare = resource => {
+const isDirectLinkShare = (resource) => {
   return $shareTypes(resource).indexOf(shareTypes.link) >= 0
 }
 
@@ -42,13 +42,13 @@ const isLinkShare = (resource, sharesTree) => {
   return isDirectLinkShare(resource) || isIndirectLinkShare(resource, sharesTree)
 }
 
-const shareUserIconDescribedBy = resource => {
+const shareUserIconDescribedBy = (resource) => {
   return isDirectUserShare(resource)
     ? $gettext('This item is directly shared with others.')
     : $gettext('This item is shared with others through one of the parent folders.')
 }
 
-const shareLinkDescribedBy = resource => {
+const shareLinkDescribedBy = (resource) => {
   return isDirectLinkShare(resource)
     ? $gettext('This item is directly shared via links.')
     : $gettext('This item is shared via links through one of the parent folders.')
@@ -66,12 +66,12 @@ const shareTypesIndirect = (path, sharesTree) => {
 
   const shareTypes = {}
 
-  parentPaths.forEach(parentPath => {
+  parentPaths.forEach((parentPath) => {
     // TODO: optimize for performance by skipping once we got all known types
     const shares = sharesTree[parentPath]
 
     if (shares) {
-      shares.forEach(share => {
+      shares.forEach((share) => {
         // note: no distinction between incoming and outgoing shares as we display the same
         // indirect indicator for them
         shareTypes[share.shareType] = true
@@ -79,7 +79,7 @@ const shareTypesIndirect = (path, sharesTree) => {
     }
   })
 
-  return Object.keys(shareTypes).map(shareType => parseInt(shareType, 10))
+  return Object.keys(shareTypes).map((shareType) => parseInt(shareType, 10))
 }
 
 // TODO: Think of a different way how to access sharesTree
@@ -107,7 +107,7 @@ export const getIndicators = (resource, sharesTree) => {
     }
   ]
 
-  return indicators.filter(indicator => indicator.visible)
+  return indicators.filter((indicator) => indicator.visible)
 }
 
 const indicatorHandler = async (resource, panel) => {

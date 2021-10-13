@@ -4,7 +4,7 @@ const { join, normalize } = require('../helpers/path')
 const { client } = require('nightwatch-api')
 
 module.exports = {
-  url: function() {
+  url: function () {
     return join(this.api.launchUrl, '#/files/list/all')
   },
   commands: {
@@ -13,7 +13,7 @@ module.exports = {
      * @param {string} folder - if given navigate to the folder without clicking the links
      * @returns {*}
      */
-    navigateAndWaitTillLoaded: async function(folder = '') {
+    navigateAndWaitTillLoaded: async function (folder = '') {
       return await this.navigate(join(this.url(), folder)).waitForElementPresent(
         this.page.FilesPageElement.filesList().elements.anyAfterLoading
       )
@@ -22,7 +22,7 @@ module.exports = {
      *
      * @param {string} folder
      */
-    navigateToFolder: function(folder) {
+    navigateToFolder: function (folder) {
       return this.page.FilesPageElement.filesList()
         .navigateToFolder(folder)
         .waitForElementVisible('@breadcrumb')
@@ -32,7 +32,7 @@ module.exports = {
      *
      * @param {string} resource
      */
-    navigateToBreadcrumb: function(resource) {
+    navigateToBreadcrumb: function (resource) {
       const breadcrumbElement = this.elements.resourceBreadcrumb
       const resourceXpath = util.format(
         breadcrumbElement.selector,
@@ -52,7 +52,7 @@ module.exports = {
      * @param nonClickable Whether a non-clickable breadcrumb is wanted
      * @returns {null|{locateStrategy: string, selector: string}}
      */
-    getBreadcrumbSelector: function(clickable, nonClickable) {
+    getBreadcrumbSelector: function (clickable, nonClickable) {
       if (clickable) {
         return this.elements.resourceBreadcrumb
       } else if (nonClickable) {
@@ -66,7 +66,7 @@ module.exports = {
      * @param {string} name to set or null to use default value from dialog
      * @param {boolean} expectToSucceed
      */
-    createFolder: async function(name, expectToSucceed = true) {
+    createFolder: async function (name, expectToSucceed = true) {
       await this.clearFileSelectionIfAny()
       await this.waitForElementVisible('@newFileMenuButtonAnyState')
         .waitForElementEnabled('@newFileMenuButtonAnyState')
@@ -98,7 +98,7 @@ module.exports = {
      * @param {string} name to set or null to use default value from dialog
      * @param {boolean} expectToSucceed
      */
-    createFile: async function(name, expectToSucceed = true) {
+    createFile: async function (name, expectToSucceed = true) {
       await this.clearFileSelectionIfAny()
       await this.waitForElementVisible('@newFileMenuButton')
         .click('@newFileMenuButton')
@@ -124,7 +124,7 @@ module.exports = {
 
       return this
     },
-    selectFileForUpload: function(filePath) {
+    selectFileForUpload: function (filePath) {
       return this.waitForElementVisible('@newFileMenuButton')
         .click('@newFileMenuButton')
         .waitForElementVisible('@fileUploadButton')
@@ -134,7 +134,7 @@ module.exports = {
      *
      * @param {string} filePath
      */
-    uploadFile: function(filePath) {
+    uploadFile: function (filePath) {
       return this.selectFileForUpload(filePath)
         .waitForElementVisible(
           '@fileUploadProgress',
@@ -161,7 +161,7 @@ module.exports = {
      *
      * @param {string} [folderName] - should be passed in as format "/upload<uniqueId>file" or "upload<uniqueId>file"
      */
-    uploadSessionFolder: function(folderName = '') {
+    uploadSessionFolder: function (folderName = '') {
       /*
       files uploaded through selenium endpoints are saved in
       /tmp/<sessionId>/upload<uniqueId>file/<filename>.
@@ -181,7 +181,7 @@ module.exports = {
      *
      * @param {string} folderName
      */
-    uploadFolder: function(folderName) {
+    uploadFolder: function (folderName) {
       return this.waitForElementVisible('@newFileMenuButton')
         .click('@newFileMenuButton')
         .waitForElementVisible('@fileUploadButton')
@@ -198,18 +198,18 @@ module.exports = {
     /**
      * Returns whether files or folders can be created in the current page.
      */
-    canCreateFiles: async function() {
+    canCreateFiles: async function () {
       let canCreate = false
       await this.waitForElementVisible('@newFileMenuButtonAnyState').getAttribute(
         '@newFileMenuButtonAnyState',
         'disabled',
-        result => {
+        (result) => {
           canCreate = result.value === 'true'
         }
       )
       return canCreate
     },
-    deleteAllCheckedFiles: function() {
+    deleteAllCheckedFiles: function () {
       return this.waitForElementVisible('@deleteSelectedButton')
         .click('@deleteSelectedButton')
         .waitForElementVisible('@dialog')
@@ -218,18 +218,18 @@ module.exports = {
         .waitForAjaxCallsToStartAndFinish()
         .waitForElementNotPresent('@dialog')
     },
-    confirmFileOverwrite: async function() {
+    confirmFileOverwrite: async function () {
       await this.waitForAnimationToFinish() // wait for transition on the modal to finish
         .click('@dialogConfirmBtnEnabled')
         .waitForElementNotPresent('@dialog')
         .waitForAjaxCallsToStartAndFinish()
       return this
     },
-    checkForButtonDisabled: function() {
+    checkForButtonDisabled: function () {
       return this.waitForElementVisible('@dialogConfirmBtnDisabled')
     },
 
-    moveMultipleResources: async function(target) {
+    moveMultipleResources: async function (target) {
       // Trigger move
       await this.click('@moveSelectedBtn')
 
@@ -237,7 +237,7 @@ module.exports = {
       return await client.page.locationPicker().selectFolderAndConfirm(target)
     },
 
-    copyMultipleResources: async function(target) {
+    copyMultipleResources: async function (target) {
       // Trigger copy
       await this.click('@copySelectedBtn')
 
@@ -251,7 +251,7 @@ module.exports = {
      * @param {string | null} name to set or null to use default value from dialog
      * @param {boolean} expectToSucceed
      */
-    createMarkdownFile: async function(name, expectToSucceed = true) {
+    createMarkdownFile: async function (name, expectToSucceed = true) {
       await this.waitForElementVisible('@newFileMenuButton')
         .click('@newFileMenuButton')
         .waitForElementVisible('@newMdFileButton')
@@ -263,9 +263,7 @@ module.exports = {
         await this.setValue('@dialogInput', name)
       }
 
-      await this.initAjaxCounters()
-        .click('@dialogConfirmBtnEnabled')
-        .waitForOutstandingAjaxCalls()
+      await this.initAjaxCounters().click('@dialogConfirmBtnEnabled').waitForOutstandingAjaxCalls()
 
       if (expectToSucceed) {
         await this.waitForElementNotPresent('@dialog')
@@ -273,36 +271,36 @@ module.exports = {
 
       return this
     },
-    closeTextEditor: function() {
+    closeTextEditor: function () {
       return this.waitForElementVisible('@editorCloseBtn').click('@editorCloseBtn')
     },
-    isRootDirectory: async function() {
+    isRootDirectory: async function () {
       return await this.assert.not.elementPresent('@breadcrumb')
     },
-    isSearchBarVisible: async function() {
+    isSearchBarVisible: async function () {
       let searchBar
-      await this.api.elements('@searchInput', result => {
+      await this.api.elements('@searchInput', (result) => {
         searchBar = result.value
       })
       return searchBar.length > 0
     },
-    clearSelection: async function() {
+    clearSelection: async function () {
       await this.useXpath()
         .waitForElementVisible('@clearSelectionBtn')
         .click('@clearSelectionBtn')
         .waitForElementNotPresent('@clearSelectionBtn')
     },
-    checkForButtonMoveHereDisabled: function() {
+    checkForButtonMoveHereDisabled: function () {
       return this.waitForElementVisible('@moveHereConfirmBtn')
     },
-    clearFileSelectionIfAny: async function() {
+    clearFileSelectionIfAny: async function () {
       let activeFileSelection = false
       await this.isVisible(
         {
           selector: '@clearSelectionBtn',
           timeout: client.globals.waitForNegativeConditionTimeout
         },
-        result => {
+        (result) => {
           activeFileSelection = result.value === true
         }
       )

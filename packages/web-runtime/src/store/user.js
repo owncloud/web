@@ -50,13 +50,13 @@ const actions = {
     if (u && u.id_token) {
       vueAuthInstance
         .createSignoutRequest({ id_token_hint: u.id_token })
-        .then(signoutRequestUrl => {
+        .then((signoutRequestUrl) => {
           logoutFinalizer()
 
           // Navigate to signout URL
           window.open(signoutRequestUrl, '_self')
         })
-        .catch(error => {
+        .catch((error) => {
           console.error(error)
         })
     } else {
@@ -135,13 +135,13 @@ const actions = {
     if (!vueAuthInstance) {
       vueAuthInstance = initVueAuthenticate(context.rootState.config)
       const client = this._vm.$client
-      vueAuthInstance.events().addAccessTokenExpired(function() {
+      vueAuthInstance.events().addAccessTokenExpired(function () {
         console.log('AccessToken Expired：', arguments)
       })
-      vueAuthInstance.mgr.events.addAccessTokenExpiring(function() {
+      vueAuthInstance.mgr.events.addAccessTokenExpiring(function () {
         console.log('AccessToken Expiring：', arguments)
       })
-      vueAuthInstance.events().addUserLoaded(user => {
+      vueAuthInstance.events().addUserLoaded((user) => {
         console.log(
           `New User Loaded. access_token： ${user.access_token}, refresh_token: ${user.refresh_token}`
         )
@@ -152,7 +152,7 @@ const actions = {
         context.dispatch('cleanUpLoginState')
         router.push({ name: 'login' })
       })
-      vueAuthInstance.events().addSilentRenewError(error => {
+      vueAuthInstance.events().addSilentRenewError((error) => {
         console.error('Silent Renew Error：', error)
         context.dispatch('cleanUpLoginState')
         router.push({ name: 'accessDenied' })
@@ -179,7 +179,7 @@ const actions = {
       .then(() => {
         context.dispatch('initAuth', { autoRedirect: true })
       })
-      .catch(e => {
+      .catch((e) => {
         console.warn('error in OpenIdConnect:', e)
         context.dispatch('cleanUpLoginState')
         router.push({ name: 'accessDenied' })
@@ -226,20 +226,20 @@ const mutations = {
 }
 
 const getters = {
-  isAuthenticated: state => {
+  isAuthenticated: (state) => {
     return state.isAuthenticated
   },
-  getToken: state => {
+  getToken: (state) => {
     return state.token
   },
-  user: state => {
+  user: (state) => {
     return state
   },
-  capabilities: state => {
+  capabilities: (state) => {
     return state.capabilities
   },
 
-  quota: state => state.quota
+  quota: (state) => state.quota
 }
 
 export default {

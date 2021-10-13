@@ -16,10 +16,10 @@ export default (
     trailing?: boolean
   }
 ) => {
-  return function(target: unknown, key: string, descriptor: PropertyDescriptor): void {
+  return function (target: unknown, key: string, descriptor: PropertyDescriptor): void {
     const fn = descriptor.value
     const bouncer = debounce(
-      async function(
+      async function (
         executor: { resolve: (value: any) => void; reject: (reason: any) => void },
         ...args: any[]
       ) {
@@ -34,7 +34,7 @@ export default (
       options
     )
 
-    descriptor.value = function(...args: any[]) {
+    descriptor.value = function (...args: any[]) {
       return new Promise((resolve, reject) => {
         bouncer.apply(this, [{ resolve, reject }, ...args])
       })

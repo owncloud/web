@@ -21,7 +21,7 @@ const selectors = {
 describe('Pagination', () => {
   describe('when amount of pages is', () => {
     describe('less than or equals one', () => {
-      it.each([-1, 0, 1])('should not show wrapper', pages => {
+      it.each([-1, 0, 1])('should not show wrapper', (pages) => {
         const store = createStore(0, pages)
         const wrapper = getWrapper(store)
 

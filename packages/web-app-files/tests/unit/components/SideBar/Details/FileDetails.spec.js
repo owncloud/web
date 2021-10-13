@@ -161,7 +161,7 @@ function createWrapper(testResource, testVersions = [], testPreview, publicRoute
   return shallowMount(FileDetails, {
     store: new Vuex.Store({
       getters: {
-        user: function() {
+        user: function () {
           return { id: 'marie' }
         }
       },
@@ -169,21 +169,21 @@ function createWrapper(testResource, testVersions = [], testPreview, publicRoute
         Files: {
           namespaced: true,
           getters: {
-            highlightedFile: function() {
+            highlightedFile: function () {
               return testResource
             },
-            versions: function() {
+            versions: function () {
               return 2
             },
-            sharesTreeLoading: function() {
+            sharesTreeLoading: function () {
               return false
             }
           },
           actions: {
-            loadVersions: function() {
+            loadVersions: function () {
               return testVersions
             },
-            loadPreview: function() {
+            loadPreview: function () {
               return testPreview
             },
             loadSharesTree: jest.fn()

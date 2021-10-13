@@ -154,7 +154,7 @@ export default {
         return false
       }
 
-      return this.selectedFiles.filter(f => !f.canDownload()).length === 0
+      return this.selectedFiles.filter((f) => !f.canDownload()).length === 0
     },
 
     canMove() {
@@ -164,7 +164,7 @@ export default {
         return false
       }
 
-      const moveDisabled = this.selectedFiles.some(resource => {
+      const moveDisabled = this.selectedFiles.some((resource) => {
         return canBeMoved(resource, this.currentFolder.path) === false
       })
       return !moveDisabled
@@ -193,7 +193,7 @@ export default {
         return this.currentFolder.canBeDeleted()
       }
 
-      const deleteDisabled = this.selectedFiles.some(resource => {
+      const deleteDisabled = this.selectedFiles.some((resource) => {
         return !resource.canBeDeleted()
       })
       return !deleteDisabled
@@ -204,7 +204,7 @@ export default {
         return false
       }
 
-      const acceptDisabled = this.selectedFiles.some(resource => {
+      const acceptDisabled = this.selectedFiles.some((resource) => {
         return resource.status === shareStatus.accepted
       })
       return !acceptDisabled
@@ -215,7 +215,7 @@ export default {
         return false
       }
 
-      const declineDisabled = this.selectedFiles.some(resource => {
+      const declineDisabled = this.selectedFiles.some((resource) => {
         return resource.status === shareStatus.declined
       })
       return !declineDisabled
@@ -246,7 +246,7 @@ export default {
             })
             this.removeFilesFromTrashbin([resource])
           })
-          .catch(error => {
+          .catch((error) => {
             const translated = this.$gettext('Restoration of %{resource} failed')
             this.showMessage({
               title: this.$gettextInterpolate(translated, { resource: resource.name }, true),
@@ -267,7 +267,7 @@ export default {
           })
           this.removeFilesFromTrashbin(this.activeFilesCurrentPage)
         })
-        .catch(error => {
+        .catch((error) => {
           this.showMessage({
             title: this.$gettext('Could not delete files'),
             desc: error.message,
@@ -289,7 +289,7 @@ export default {
           action
         },
         query: {
-          resource: resources.map(resource => {
+          resource: resources.map((resource) => {
             return resource.path
           })
         }
@@ -308,7 +308,7 @@ export default {
       const errors = []
       const triggerPromises = []
       const triggerQueue = new PQueue({ concurrency: 4 })
-      this.selectedFiles.forEach(resource => {
+      this.selectedFiles.forEach((resource) => {
         triggerPromises.push(
           triggerQueue.add(async () => {
             try {
@@ -368,8 +368,8 @@ export default {
 
     async downloadAsArchive() {
       await triggerDownloadAsArchive({
-        fileIds: this.selectedFiles.map(r => r.fileId)
-      }).catch(e => {
+        fileIds: this.selectedFiles.map((r) => r.fileId)
+      }).catch((e) => {
         console.error(e)
         this.showMessage({
           title: this.$ngettext(

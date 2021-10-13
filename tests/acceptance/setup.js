@@ -24,7 +24,7 @@ defineParameterType({
   name: 'code',
   regexp: /"([^"\\]*(\\.[^"\\]*)*)"|'([^'\\]*(\\.[^'\\]*)*)'/,
   type: String,
-  transformer: s => codify.replaceInlineCode(s)
+  transformer: (s) => codify.replaceInlineCode(s)
 })
 
 Before(function startDriverOnLocal() {
@@ -38,7 +38,7 @@ Before(function createSessionForEnv() {
 Before(function logSessionInfoOnSauceLabs() {
   if (process.env.SAUCE_USERNAME) {
     return client
-      .session(function(session) {
+      .session(function (session) {
         console.log('  Link to saucelabs job: https://app.saucelabs.com/tests/' + session.sessionId)
       })
       .timeoutsAsyncScript(SAUCELABS_ASYNC_SCRIPT_TIMEOUT)
@@ -47,7 +47,7 @@ Before(function logSessionInfoOnSauceLabs() {
 
 Before(function createLdapClient() {
   if (client.globals.ldap) {
-    return ldap.createClient().then(ldapClient => {
+    return ldap.createClient().then((ldapClient) => {
       client.globals.ldapClient = ldapClient
     })
   }
@@ -122,7 +122,7 @@ After(async function tryToReadBrowserConsoleOnFailure({ result }) {
     const logs = await getAllLogsWithDateTime('SEVERE')
     if (logs.length > 0) {
       console.log('\nThe following logs were found in the browser console:\n')
-      logs.forEach(log => console.log(log))
+      logs.forEach((log) => console.log(log))
     }
   }
 

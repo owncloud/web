@@ -53,7 +53,7 @@ export default {
     this.loading = true
     this.$client.files
       .getPathForFileId(this.$route.params.fileId)
-      .then(path => {
+      .then((path) => {
         const lastSlash = path.lastIndexOf('/')
         const folder = path.substring(0, lastSlash).replace(/^(\/)/, '')
         const file = path.substring(lastSlash + 1)
@@ -67,7 +67,7 @@ export default {
           }
         })
       })
-      .catch(error => {
+      .catch((error) => {
         this.errorMessage = error
       })
       .finally(() => {

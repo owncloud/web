@@ -22,7 +22,7 @@ describe('config theme bootstrap', () => {
     const { theme, name } = await loadTheme()
 
     await store.dispatch('loadTheme', { theme, name })
-    objectKeys(theme).forEach(k => {
+    objectKeys(theme).forEach((k) => {
       expect(get(store.getters.configuration.theme, k)).toBe(get(theme, k))
     })
   })
@@ -34,7 +34,7 @@ describe('config theme bootstrap', () => {
     const diffThemeKeys = difference(storeThemeKeys, loadedThemeKeys)
     await store.dispatch('loadTheme', { theme, name })
 
-    diffThemeKeys.forEach(k => {
+    diffThemeKeys.forEach((k) => {
       expect(get(store.getters.configuration.theme, k)).toBe(get(initialStoreTheme, k))
     })
   })

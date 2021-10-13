@@ -206,11 +206,11 @@ export default {
     // pending shares
     pendingSelected: {
       get() {
-        return this.selectedFiles.filter(r => r.status === shareStatus.pending)
+        return this.selectedFiles.filter((r) => r.status === shareStatus.pending)
       },
       set(resources) {
         // this will (intentionally) reset the file selection to pending shares only.
-        this.SET_FILE_SELECTION(resources.filter(r => r.status === shareStatus.pending))
+        this.SET_FILE_SELECTION(resources.filter((r) => r.status === shareStatus.pending))
       }
     },
     pendingTitle() {
@@ -229,17 +229,17 @@ export default {
       return this.pending.length
     },
     pending() {
-      return this.activeFiles.filter(file => file.status === shareStatus.pending)
+      return this.activeFiles.filter((file) => file.status === shareStatus.pending)
     },
 
     // accepted or declined shares
     sharesSelected: {
       get() {
-        return this.selectedFiles.filter(r => r.status === this.viewMode)
+        return this.selectedFiles.filter((r) => r.status === this.viewMode)
       },
       set(resources) {
         // this will (intentionally) reset the file selection to shares for the current view mode only.
-        this.SET_FILE_SELECTION(resources.filter(r => r.status === this.viewMode))
+        this.SET_FILE_SELECTION(resources.filter((r) => r.status === this.viewMode))
       }
     },
     sharesTitle() {
@@ -264,13 +264,13 @@ export default {
       return this.shares.length
     },
     sharesCountFiles() {
-      return this.shares.filter(s => s.type !== 'folder').length
+      return this.shares.filter((s) => s.type !== 'folder').length
     },
     sharesCountFolders() {
-      return this.shares.filter(s => s.type === 'folder').length
+      return this.shares.filter((s) => s.type === 'folder').length
     },
     shares() {
-      return this.activeFiles.filter(file => file.status === this.viewMode)
+      return this.activeFiles.filter((file) => file.status === this.viewMode)
     },
     sharesOtherViewMode() {
       return this.viewMode === shareStatus.accepted ? shareStatus.declined : shareStatus.accepted

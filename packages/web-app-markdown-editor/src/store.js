@@ -25,12 +25,12 @@ const actions = {
     commit('CURRENT_FILE', filePath)
     client.files
       .getFileContents(filePath, { resolveWithResponseObject: true })
-      .then(resp => {
+      .then((resp) => {
         commit('CURRENT_ETAG', resp.headers.ETag)
         commit('UPDATE_TEXT', resp.body)
         commit('LOADING', false)
       })
-      .catch(error => {
+      .catch((error) => {
         commit('ERROR', error.message || error)
         commit('LOADING', false)
       })
@@ -41,14 +41,14 @@ const actions = {
       .putFileContents(state.currentFile, state.text, {
         previousEntityTag: state.currentETag
       })
-      .then(resp => {
+      .then((resp) => {
         commit('CURRENT_ETAG', resp.ETag)
 
         // get etag & update
         commit('TOUCHED', false)
         commit('LOADING', false)
       })
-      .catch(error => {
+      .catch((error) => {
         commit('ERROR', error.message || error)
         commit('LOADING', false)
       })
@@ -77,16 +77,16 @@ const mutations = {
 }
 
 const getters = {
-  isTouched: state => {
+  isTouched: (state) => {
     return state.touched
   },
-  isLoading: state => {
+  isLoading: (state) => {
     return state.loading
   },
-  currentContent: state => {
+  currentContent: (state) => {
     return state.text
   },
-  lastError: state => {
+  lastError: (state) => {
     return state.lastError
   }
 }

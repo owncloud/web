@@ -8,7 +8,7 @@
  * @returns {exports}
  */
 
-module.exports.command = function({
+module.exports.command = function ({
   selector,
   locateStrategy = 'css selector',
   property,
@@ -22,10 +22,6 @@ module.exports.command = function({
   } else {
     this.assert.fail('invalid locateStrategy')
   }
-  this.expect
-    .element(selector)
-    .to.have.css(property)
-    .which.equals(value)
-    .before(timeout)
+  this.expect.element(selector).to.have.css(property).which.equals(value).before(timeout)
   return this
 }

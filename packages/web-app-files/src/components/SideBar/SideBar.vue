@@ -65,7 +65,7 @@
               class="sidebar-panel__navigation"
             >
               <oc-button
-                v-for="panelSelect in availablePanels.filter(p => !p.default)"
+                v-for="panelSelect in availablePanels.filter((p) => !p.default)"
                 :id="`sidebar-panel-${panelSelect.app}-select`"
                 :key="`panel-select-${panelSelect.app}`"
                 :data-testid="`sidebar-panel-${panelSelect.app}-select`"
@@ -131,7 +131,7 @@ export default {
       if (!this.sidebarActivePanel) {
         return null
       }
-      if (!this.availablePanels.map(p => p.app).includes(this.sidebarActivePanel)) {
+      if (!this.availablePanels.map((p) => p.app).includes(this.sidebarActivePanel)) {
         return null
       }
       return this.sidebarActivePanel
@@ -162,7 +162,7 @@ export default {
       return panels
     },
     defaultPanel() {
-      return this.availablePanels.find(panel => panel.default)
+      return this.availablePanels.find((panel) => panel.default)
     },
     accessibleLabelBack() {
       const translated = this.$gettext('Back to %{panel} panel')
@@ -202,7 +202,7 @@ export default {
   },
   watch: {
     activePanelName: {
-      handler: function(panel, select) {
+      handler: function (panel, select) {
         this.$nextTick(() => {
           this.focused = panel ? `#sidebar-panel-${panel}` : `#sidebar-panel-select-${select}`
         })
@@ -263,7 +263,7 @@ export default {
         this.oldPanelName = null
       }
 
-      this.$refs.panels.forEach(panel => {
+      this.$refs.panels.forEach((panel) => {
         visibilityObserver.observe(panel, {
           onEnter: doFocus,
           onExit: doFocus
