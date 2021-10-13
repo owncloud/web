@@ -21,16 +21,16 @@ Feature: Share by public link
       | expireDate | 2038-07-21 |
 
 
-  Scenario: user tries to change the expiration date of the public link to past date using webUI
-    Given user "Alice" has created file "lorem.txt"
-    And user "Alice" has created a public link with following settings
-      | path       | lorem.txt   |
-      | name       | Public link |
-      | expireDate | 2038-10-14  |
-    And user "Alice" has logged in using the webUI
-    When the user tries to edit expiration of the public link named "Public link" of file "lorem.txt" to past date "2019 October 10"
-    Then the fields of the last public link share response of user "Alice" should include
-      | expireDate | 2038-10-14 |
+
+
+
+
+
+
+
+
+
+
 
   @issue-ocis-1328
   Scenario Outline: auto set expiration date on public link (with default amount of expiry days)
