@@ -334,12 +334,8 @@ export default {
 
     this.name = link?.name
     this.hasPassword = link?.hasPassword
-    this.expireDate = link?.id
-      ? link.expireDate
-        ? new Date(this.publicLinkInEdit.expireDate)
-        : null
-      : this.defaultExpireDate
-
+    const expireDateOrNull = link.expireDate ? new Date(this.publicLinkInEdit.expireDate) : null
+    this.expireDate = link?.id ? expireDateOrNull : this.defaultExpireDate
     this.setRole()
   },
   mounted() {
