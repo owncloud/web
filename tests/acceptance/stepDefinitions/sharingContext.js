@@ -1348,18 +1348,20 @@ Then(
   }
 )
 
-Then('the expiration date shown on the webUI should be {string} days', async function(
-  expectedDays
-) {
-  const expectedDate = sharingHelper.calculateDate(expectedDays)
-  const expectedDateString = expectedDate.toString()
-  const dateStringFromInputField = await client.page.FilesPageElement.sharingDialog().getExpirationDateFromInputField()
-  assert.strictEqual(
-    dateStringFromInputField,
-    expectedDateString,
-    `Expected: Expiration date field with ${expectedDateString}, but found ${dateStringFromInputField}`
-  )
-})
+Then(
+  'the expiration date shown on the webUI should be {string} days',
+  async function (expectedDays) {
+    const expectedDate = sharingHelper.calculateDate(expectedDays)
+    const expectedDateString = expectedDate.toString()
+    const dateStringFromInputField =
+      await client.page.FilesPageElement.sharingDialog().getExpirationDateFromInputField()
+    assert.strictEqual(
+      dateStringFromInputField,
+      expectedDateString,
+      `Expected: Expiration date field with ${expectedDateString}, but found ${dateStringFromInputField}`
+    )
+  }
+)
 
 When(
   'the user shares resource {string} with user {string} using the quick action on the webUI',

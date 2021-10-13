@@ -562,7 +562,7 @@ module.exports = {
      * opens expiration date field on the webUI
      * @return {*}
      */
-    openExpirationDatePicker: function() {
+    openExpirationDatePicker: function () {
       this.useCss()
         .waitForElementVisible('@expirationDateField', 1000)
         .click('@expirationDateField')
@@ -579,7 +579,7 @@ module.exports = {
         'xpath',
         '//*[@data-testid="recipient-datepicker"]',
         'value',
-        result => {
+        (result) => {
           const date = new Date(result.value)
           const dateString =
             date.getFullYear() +

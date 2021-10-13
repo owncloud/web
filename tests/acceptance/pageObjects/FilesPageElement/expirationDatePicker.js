@@ -99,7 +99,7 @@ module.exports = {
         .waitForElementVisible('@datepickerMonthAndYearTitle', 500)
         .click('@datepickerMonthAndYearTitle')
         .waitForElementVisible(yearSelector, 500)
-        .getAttribute(yearSelector, 'class', result => {
+        .getAttribute(yearSelector, 'class', (result) => {
           if (result.value.includes('is-disabled') === true) {
             disabled = true
           }
@@ -115,7 +115,7 @@ module.exports = {
 
       await this.click(yearSelector)
         .waitForElementVisible(monthSelector)
-        .getAttribute(monthSelector, 'class', result => {
+        .getAttribute(monthSelector, 'class', (result) => {
           if (result.value.includes('is-disabled') === true) {
             disabled = true
           }
@@ -129,7 +129,7 @@ module.exports = {
 
       await this.click(monthSelector)
         .waitForElementVisible(daySelector)
-        .getAttribute(daySelector, 'class', result => {
+        .getAttribute(daySelector, 'class', (result) => {
           if (result.value.includes('is-disabled') === true) {
             disabled = true
           }

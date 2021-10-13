@@ -65,7 +65,7 @@ const wrapperMounted = (mocks, mockMethods) => {
     ...(mockMethods && { methods: mockMethods })
   })
 }
-const wrapperShallowMounted = mocks => {
+const wrapperShallowMounted = (mocks) => {
   return shallowMount(Notifications, {
     stubs,
     mocks,
@@ -74,7 +74,7 @@ const wrapperShallowMounted = mocks => {
     }
   })
 }
-const notificationStore = activeNotifications => {
+const notificationStore = (activeNotifications) => {
   return new Store({
     getters: {
       activeNotifications

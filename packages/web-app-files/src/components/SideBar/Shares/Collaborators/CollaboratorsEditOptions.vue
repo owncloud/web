@@ -361,9 +361,7 @@ export default {
       this.$emit('optionChange', {
         role: this.selectedRole,
         permissions: this.customPermissions,
-        expirationDate: DateTime.fromJSDate(this.enteredExpirationDate)
-          .endOf('day')
-          .toISO()
+        expirationDate: DateTime.fromJSDate(this.enteredExpirationDate).endOf('day').toISO()
       })
     },
 
