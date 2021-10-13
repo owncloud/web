@@ -90,7 +90,7 @@ export default {
     let password = sessionStorage.getItem('publicLinkInfo')
     if (password) {
       try {
-        password = atob(password)
+        password = Buffer.from(password, 'base64').toString()
       } catch (e) {
         sessionStorage.removeItem('publicLinkInfo')
       }

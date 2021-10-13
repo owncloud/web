@@ -198,7 +198,8 @@ export default {
     // cache into state for reactivity
     state.publicLinkPassword = password
     if (password) {
-      sessionStorage.setItem('publicLinkInfo', btoa(password))
+      const encodedPassword = Buffer.from(password).toString('base64')
+      sessionStorage.setItem('publicLinkInfo', encodedPassword)
     } else {
       sessionStorage.removeItem('publicLinkInfo')
     }
