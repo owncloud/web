@@ -368,7 +368,7 @@ export default {
       const params = {
         expireDate: DateTime.fromJSDate(this.expireDate)
           .endOf('day')
-          .toISO(),
+          .toISODate(),
         permissions: this.selectedRole.permissions,
         name: this.name
       }
@@ -400,7 +400,7 @@ export default {
       const params = {
         expireDate: DateTime.fromJSDate(this.expireDate)
           .endOf('day')
-          .toISO(),
+          .toISODate(),
         permissions: this.selectedRole.permissions,
         name: this.name
       }
