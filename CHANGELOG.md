@@ -8,10 +8,22 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Clean router path handling: [#5894](https://github.com/owncloud/web/pull/5894)
 * Enhancement - Sorting out dependencies: [#5898](https://github.com/owncloud/web/pull/5898)
 
 Details
 -------
+
+* Bugfix - Clean router path handling: [#5894](https://github.com/owncloud/web/pull/5894)
+
+   This patch was already introduced earlier for the files application only. In the meantime we
+   found out that this is also needed on different places across the ecosystem.
+
+   We've refactored the way how the patch gets applied to the routes: It is now possible to set an
+   individual route's `meta.patchCleanPath` to true.
+
+   https://github.com/owncloud/web/issues/4595#issuecomment-938587035
+   https://github.com/owncloud/web/pull/5894
 
 * Enhancement - Sorting out dependencies: [#5898](https://github.com/owncloud/web/pull/5898)
 
