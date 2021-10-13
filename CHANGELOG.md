@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Clean router path handling: [#5894](https://github.com/owncloud/web/pull/5894)
+* Bugfix - Unnecessary redirects on personal page: [#5893](https://github.com/owncloud/web/pull/5893)
 * Enhancement - Sorting out dependencies: [#5898](https://github.com/owncloud/web/pull/5898)
 
 Details
@@ -24,6 +25,16 @@ Details
 
    https://github.com/owncloud/web/issues/4595#issuecomment-938587035
    https://github.com/owncloud/web/pull/5894
+
+* Bugfix - Unnecessary redirects on personal page: [#5893](https://github.com/owncloud/web/pull/5893)
+
+   Navigating to all files could lead to loading resources twice, first resources from root (/)
+   and second the resources from the homeFolder (options.homeFolder). We've fixed this by
+   detecting those cases and only load resources for the homeFolder.
+
+   https://github.com/owncloud/web/issues/5085
+   https://github.com/owncloud/web/issues/5875
+   https://github.com/owncloud/web/pull/5893
 
 * Enhancement - Sorting out dependencies: [#5898](https://github.com/owncloud/web/pull/5898)
 
