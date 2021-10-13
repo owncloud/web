@@ -69,7 +69,7 @@ Feature: File Upload
     And file "big-video.mp4" should be listed on the webUI
     And as "Alice" the content of "big-video.mp4" should be the same as the content of local file "big-video.mp4"
 
-  @skipOnFIREFOX
+
   Scenario: conflict with a big file (when chunking is implemented this upload should be chunked)
     Given a file with the size of "30000000" bytes and the name "big-video.mp4" has been created locally
     When the user renames file "lorem.txt" to "big-video.mp4" using the webUI
