@@ -11,7 +11,7 @@ export default {
       return [
         {
           icon: 'folder-move',
-          handler: resource => this.$_move_trigger(resource),
+          handler: (resource) => this.$_move_trigger(resource),
           label: () =>
             this.$pgettext(
               'Action in the files list row to initiate move of a single resource',

@@ -29,9 +29,7 @@
         <template #option="option">
           <role-item :role="option" />
         </template>
-        <template #no-options v-translate>
-          No matching role found
-        </template>
+        <template #no-options v-translate> No matching role found </template>
       </oc-select>
       <div v-if="$_expirationDate" class="oc-mb">
         <label for="files-links-expiration-btn" v-text="expirationDateLabel" />
@@ -193,7 +191,7 @@ export default {
       selectedRole: null
     }
   },
-  title: $gettext => {
+  title: ($gettext) => {
     return $gettext('Links')
   },
   computed: {
@@ -350,7 +348,7 @@ export default {
       const permissions = parseInt(this.publicLinkInEdit.permissions, 10)
 
       if (permissions) {
-        const role = this.roles.find(r => r.permissions === permissions)
+        const role = this.roles.find((r) => r.permissions === permissions)
 
         if (role) {
           this.selectedRole = role
@@ -383,12 +381,12 @@ export default {
         $gettext: this.$gettext,
         params
       })
-        .then(e => {
+        .then((e) => {
           this.saving = false
           this.errors = false
           this.$_closeForm()
         })
-        .catch(e => {
+        .catch((e) => {
           this.saving = false
           this.errors = e
         })
@@ -420,7 +418,7 @@ export default {
           this.errors = false
           this.$_closeForm()
         })
-        .catch(e => {
+        .catch((e) => {
           this.saving = false
           this.errors = e
         })
@@ -430,7 +428,7 @@ export default {
       this.changeView('showLinks')
     },
 
-    removePassword: function() {
+    removePassword: function () {
       this.password = ''
       this.hasPassword = false
     }

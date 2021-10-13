@@ -13,7 +13,7 @@ const deleteTimestamps = {}
  * @param {string} userId
  * @param {string} element
  */
-exports.createDavPath = function(userId, element) {
+exports.createDavPath = function (userId, element) {
   const replaceEncoded = encodeURIComponent(element).replace(/%2F/g, '/')
   return `files/${userId}/${replaceEncoded}`
 }
@@ -23,12 +23,12 @@ exports.createDavPath = function(userId, element) {
  * @param {string} userId
  * @param {string} file
  */
-exports.download = function(userId, file) {
+exports.download = function (userId, file) {
   const davPath = exports.createDavPath(userId, file)
   return httpHelper
     .get(davPath, userId)
-    .then(res => httpHelper.checkStatus(res, 'Could not download file.'))
-    .then(res => res.text())
+    .then((res) => httpHelper.checkStatus(res, 'Could not download file.'))
+    .then((res) => res.text())
 }
 
 /**
@@ -36,7 +36,7 @@ exports.download = function(userId, file) {
  * @param {string} userId
  * @param {string} file
  */
-exports.delete = async function(userId, file) {
+exports.delete = async function (userId, file) {
   const davPath = exports.createDavPath(userId, file)
 
   const filename = file.split('/')[file.split('/').length - 1]
@@ -54,12 +54,12 @@ exports.delete = async function(userId, file) {
 
   return httpHelper
     .delete(davPath, userId)
-    .then(function(res) {
+    .then(function (res) {
       deleteTimestamps[userId] = deleteTimestamps[userId] || {}
       deleteTimestamps[userId][filename] = Date.now()
       return httpHelper.checkStatus(res, 'Could not delete file ' + file)
     })
-    .then(res => res.text())
+    .then((res) => res.text())
 }
 
 /**
@@ -69,7 +69,7 @@ exports.delete = async function(userId, file) {
  * @param {string} fromName
  * @param {string} toName
  */
-exports.move = function(userId, fromName, toName) {
+exports.move = function (userId, fromName, toName) {
   const davPath = exports.createDavPath(userId, fromName)
   let body
   return httpHelper
@@ -80,8 +80,8 @@ exports.move = function(userId, fromName, toName) {
         exports.createDavPath(userId, toName)
       )
     })
-    .then(res => httpHelper.checkStatus(res, 'Could not move file.'))
-    .then(res => res.text())
+    .then((res) => httpHelper.checkStatus(res, 'Could not move file.'))
+    .then((res) => res.text())
 }
 
 /**
@@ -91,10 +91,10 @@ exports.move = function(userId, fromName, toName) {
  * @param {array} properties
  * @param {number} folderDepth
  */
-exports.propfind = function(path, userId, properties, folderDepth = '1') {
+exports.propfind = function (path, userId, properties, folderDepth = '1') {
   const davPath = encodeURI(path)
   let propertyBody = ''
-  properties.forEach(prop => {
+  properties.forEach((prop) => {
     propertyBody += `<${prop}/>`
   })
   const body = `<?xml version="1.0"?>
@@ -104,7 +104,9 @@ exports.propfind = function(path, userId, properties, folderDepth = '1') {
                 xmlns:ocs="http://open-collaboration-services.org/ns">
                 <d:prop>${propertyBody}</d:prop>
                 </d:propfind>`
-  return httpHelper.propfind(davPath, userId, body, { Depth: folderDepth }).then(res => res.text())
+  return httpHelper
+    .propfind(davPath, userId, body, { Depth: folderDepth })
+    .then((res) => res.text())
 }
 
 /**
@@ -120,7 +122,7 @@ exports.propfind = function(path, userId, properties, folderDepth = '1') {
  *
  * @param {string} user
  */
-exports.getTrashBinElements = function(user, depth = 'infinity') {
+exports.getTrashBinElements = function (user, depth = 'infinity') {
   return new Promise((resolve, reject) => {
     exports
       .propfind(
@@ -134,7 +136,7 @@ exports.getTrashBinElements = function(user, depth = 'infinity') {
         ],
         depth
       )
-      .then(str => {
+      .then((str) => {
         try {
           let trashData = convert.xml2js(str, { compact: true })['d:multistatus']['d:response']
           const trashItems = []
@@ -144,7 +146,7 @@ exports.getTrashBinElements = function(user, depth = 'infinity') {
           if (!Array.isArray(trashData)) {
             trashData = [trashData]
           }
-          trashData.forEach(trash => {
+          trashData.forEach((trash) => {
             if (trash['d:propstat']['d:prop'] === undefined) {
               reject(new Error('trashbin data not defined'))
             } else {
@@ -175,14 +177,14 @@ exports.getTrashBinElements = function(user, depth = 'infinity') {
  * @param {string} user
  * @param {string} folderName
  */
-exports.createFolder = function(user, folderName) {
+exports.createFolder = function (user, folderName) {
   const davPath = exports.createDavPath(user, folderName)
   return httpHelper
     .mkcol(davPath, user)
-    .then(res =>
+    .then((res) =>
       httpHelper.checkStatus(res, `Could not create the folder "${folderName}" for user "${user}".`)
     )
-    .then(res => res.text())
+    .then((res) => res.text())
 }
 /**
  * Create a file using webDAV api.
@@ -192,7 +194,7 @@ exports.createFolder = function(user, folderName) {
  * @param {string} contents
  * @param {number} waitMaxIfExisting
  */
-exports.createFile = async function(user, fileName, contents = '', waitMaxIfExisting = 10000) {
+exports.createFile = async function (user, fileName, contents = '', waitMaxIfExisting = 10000) {
   /**
    * makes sure upload operations are carried out maximum once a second to avoid version issues
    * see https://github.com/owncloud/core/issues/23151
@@ -237,11 +239,11 @@ exports.createFile = async function(user, fileName, contents = '', waitMaxIfExis
  * @param {string} userId
  * @param {array} requestedProps
  */
-exports.getProperties = function(path, userId, requestedProps) {
+exports.getProperties = function (path, userId, requestedProps) {
   return new Promise((resolve, reject) => {
     const trimmedPath = normalize(path) // remove a leading slash
     const relativePath = `/files/${userId}/${trimmedPath}`
-    exports.propfind(relativePath, userId, requestedProps, 0).then(str => {
+    exports.propfind(relativePath, userId, requestedProps, 0).then((str) => {
       const response = JSON.parse(convert.xml2json(str, { compact: true }))
       const receivedProps = _.get(
         response,
@@ -252,7 +254,7 @@ exports.getProperties = function(path, userId, requestedProps) {
         return reject(new Error(errMsg + JSON.stringify(str)))
       }
       const properties = {}
-      requestedProps.forEach(propertyName => {
+      requestedProps.forEach((propertyName) => {
         properties[propertyName] = receivedProps[propertyName]._text
       })
       return resolve(properties)
@@ -260,7 +262,7 @@ exports.getProperties = function(path, userId, requestedProps) {
   })
 }
 
-exports.getFavouritedResources = function(user) {
+exports.getFavouritedResources = function (user) {
   const body = `<oc:filter-files  xmlns:d="DAV:" xmlns:oc="http://owncloud.org/ns">
                  <d:prop><d:resourcetype /></d:prop>
                  <oc:filter-rules>
@@ -269,11 +271,11 @@ exports.getFavouritedResources = function(user) {
                 </oc:filter-files>`
   return httpHelper
     .report(`files/${user}`, user, body)
-    .then(res => res.text())
-    .then(res => {
+    .then((res) => res.text())
+    .then((res) => {
       const favData = convert.xml2js(res, { compact: true })['d:multistatus']['d:response']
       const favItems = []
-      favData.forEach(favourite => {
+      favData.forEach((favourite) => {
         favItems.push({
           resource: filename(favourite['d:href']._text),
           isFolder: !(Object.keys(favourite['d:propstat']['d:prop']['d:resourcetype']).length === 0)
@@ -289,12 +291,12 @@ exports.getFavouritedResources = function(user) {
  * @param {string} resource
  * @param {object} properties
  */
-exports.lockResource = function(userId, resource, properties) {
+exports.lockResource = function (userId, resource, properties) {
   const davPath = exports.createDavPath(userId, resource)
   let body = '<?xml version="1.0" encoding="UTF-8"?><d:lockinfo xmlns:d="DAV:">'
 
   const headers = {}
-  Object.keys(properties).map(property => {
+  Object.keys(properties).map((property) => {
     if (property === 'depth' || property === 'timeout') {
       headers[property] = properties[property]
     } else {
@@ -304,5 +306,5 @@ exports.lockResource = function(userId, resource, properties) {
   })
   body += '</d:lockinfo>'
 
-  return httpHelper.lock(davPath, userId, body, headers).then(res => res.text())
+  return httpHelper.lock(davPath, userId, body, headers).then((res) => res.text())
 }

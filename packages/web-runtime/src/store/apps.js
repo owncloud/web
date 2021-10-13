@@ -24,10 +24,7 @@ const actions = {
       // TODO fix js-owncloud-client & use global client
       const client = payload.client || false
       if (client) {
-        client.files
-          .getFileContents(filePath)
-          .then(resolve)
-          .catch(reject)
+        client.files.getFileContents(filePath).then(resolve).catch(reject)
       } else {
         // if no client is given, implicit resolve without fetching the file...
         // useful for images
@@ -66,7 +63,7 @@ const mutations = {
   },
   REGISTER_APP(state, appInfo) {
     if (appInfo.extensions) {
-      appInfo.extensions.forEach(extension => {
+      appInfo.extensions.forEach((extension) => {
         this.commit('REGISTER_EXTENSION', {
           app: appInfo.id,
           extension
@@ -77,7 +74,7 @@ const mutations = {
       // Merge in file side bars into global list
       // Reassign object in whole so that it updates the state properly
       const list = state.fileSideBars
-      appInfo.fileSideBars.forEach(sideBar => {
+      appInfo.fileSideBars.forEach((sideBar) => {
         list.push(sideBar)
       })
       state.fileSideBars = list
@@ -85,7 +82,7 @@ const mutations = {
 
     if (appInfo.filesListIndicators) {
       const indicators = state.customFilesListIndicators
-      appInfo.filesListIndicators.forEach(indicator => {
+      appInfo.filesListIndicators.forEach((indicator) => {
         indicators.push(indicator)
       })
       state.customFilesListIndicators = indicators
@@ -125,22 +122,22 @@ const mutations = {
 }
 
 const getters = {
-  appIds: state => {
+  appIds: (state) => {
     return Object.keys(state.meta)
   },
-  apps: state => {
+  apps: (state) => {
     return state.meta
   },
-  activeFile: state => {
+  activeFile: (state) => {
     return state.file
   },
-  newFileHandlers: state => {
+  newFileHandlers: (state) => {
     return state.newFileHandlers
   },
-  fileSideBars: state => {
+  fileSideBars: (state) => {
     return state.fileSideBars
   },
-  customFilesListIndicators: state => state.customFilesListIndicators
+  customFilesListIndicators: (state) => state.customFilesListIndicators
 }
 
 export default {

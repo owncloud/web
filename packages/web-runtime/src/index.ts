@@ -41,9 +41,9 @@ export const renderSuccess = (): void => {
     el: '#owncloud',
     store,
     router,
-    render: h => h(pages.success),
+    render: (h) => h(pages.success),
     mounted() {
-      Array.from(applicationStore.values()).forEach(application => application.mounted(this))
+      Array.from(applicationStore.values()).forEach((application) => application.mounted(this))
     }
   })
 }
@@ -55,6 +55,6 @@ export const renderFailure = async (err: Error): Promise<void> => {
   new Vue({
     el: '#owncloud',
     store,
-    render: h => h(pages.failure)
+    render: (h) => h(pages.failure)
   })
 }

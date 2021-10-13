@@ -106,7 +106,7 @@ export default {
             }
           })
         })
-        .catch(error => {
+        .catch((error) => {
           if (error.statusCode === 423) {
             // TODO: we need a may retry option ....
             const p = this.deleteResources_queue.add(() => {

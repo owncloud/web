@@ -10,7 +10,7 @@ export default {
         {
           icon: 'star',
           handler: this.$_favorite_trigger,
-          label: item => {
+          label: (item) => {
             if (item.starred) {
               return this.$gettext('Remove from favorites')
             }

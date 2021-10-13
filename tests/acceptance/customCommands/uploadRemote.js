@@ -21,16 +21,16 @@ class UploadRemote extends events.EventEmitter {
      * was uploaded) which we can retrieve from the callback
      */
     zip
-      .on('data', data => {
+      .on('data', (data) => {
         buffers.push(data)
       })
-      .on('error', err => {
+      .on('error', (err) => {
         throw err
       })
       .on('warning', console.log)
       .on('finish', () => {
         const file = Buffer.concat(buffers).toString('base64')
-        this.api.session(session => {
+        this.api.session((session) => {
           const opt = {
             path: `/session/${session.sessionId}/file`,
             method: 'POST',
@@ -38,13 +38,13 @@ class UploadRemote extends events.EventEmitter {
           }
           this.client.transport
             .runProtocolAction(opt) // private api
-            .then(result => {
+            .then((result) => {
               if (Object.hasOwnProperty.call(result, 'status') && result.status !== 0) {
                 throw new Error(result.value.message)
               }
               return result.value
             })
-            .then(pathToFile => _.isFunction(callback) && callback(pathToFile))
+            .then((pathToFile) => _.isFunction(callback) && callback(pathToFile))
             .then(() => this.emit('complete'))
         })
       })

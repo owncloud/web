@@ -1,4 +1,4 @@
-const withHttp = url => (/^https?:\/\//i.test(url) ? url : `http://${url}`)
+const withHttp = (url) => (/^https?:\/\//i.test(url) ? url : `http://${url}`)
 
 export const config = {
   ocis: process.env.OCIS === 'true',

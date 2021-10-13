@@ -60,7 +60,7 @@ describe('CollaboratorsEditOptions component', () => {
 
   it.each(['update', 'create', 'delete', 'share'])(
     'displays custom permission %s in the custom permissions drop',
-    permission => {
+    (permission) => {
       const wrapper = getWrapper()
       expect(
         wrapper.find(`[data-testid="files-collaborators-permission-${permission}"]`).exists()

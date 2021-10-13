@@ -9,7 +9,7 @@ module.exports = {
      * @param year
      * @returns {{locateStrategy: string, selector: *}}
      */
-    setExpiryDateYearSelectorXpath: function(year) {
+    setExpiryDateYearSelectorXpath: function (year) {
       const yearSelectorXpath = util.format(this.elements.dateTimeYearPicker.selector, year)
       return {
         selector: yearSelectorXpath,
@@ -22,7 +22,7 @@ module.exports = {
      * @param {string} month month name
      * @returns {{locateStrategy: string, selector: *}}
      */
-    setExpiryDateMonthSelectorXpath: function(month) {
+    setExpiryDateMonthSelectorXpath: function (month) {
       const monthSelectorXpath = util.format(this.elements.dateTimeMonthPicker.selector, month)
       return {
         selector: monthSelectorXpath,
@@ -35,7 +35,7 @@ module.exports = {
      * @param day
      * @returns {{locateStrategy: string, selector: *}}
      */
-    setExpiryDateDaySelectorXpath: function(day) {
+    setExpiryDateDaySelectorXpath: function (day) {
       const daySelectorXpath = util.format(this.elements.dateTimeDayPicker.selector, day)
       return {
         selector: daySelectorXpath,
@@ -48,7 +48,7 @@ module.exports = {
      * @param {string} year
      * @returns {Promise<void>}
      */
-    setExpiryDateYear: function(year) {
+    setExpiryDateYear: function (year) {
       const yearSelector = this.setExpiryDateYearSelectorXpath(year)
       return this.click('@datepickerTitle')
         .waitForElementVisible('@datepickerMonthAndYearTitle', 500)
@@ -64,7 +64,7 @@ module.exports = {
      * @param {number} month
      * @returns {Promise<void>}
      */
-    setExpiryDateMonth: function(month) {
+    setExpiryDateMonth: function (month) {
       const monthSelector = this.setExpiryDateMonthSelectorXpath(month)
       return this.click('@datepickerTitle')
         .waitForElementVisible('@datepickerMonthAndYearTitle', 500)
@@ -78,7 +78,7 @@ module.exports = {
      * @param {string} day
      * @returns {Promise<void>}
      */
-    setExpiryDateDay: function(day) {
+    setExpiryDateDay: function (day) {
       const daySelector = this.setExpiryDateDaySelectorXpath(day)
       return this.waitForElementVisible(daySelector)
         .click(daySelector)
@@ -91,7 +91,7 @@ module.exports = {
      *
      * @returns {Promise<boolean>}
      */
-    isExpiryDateDisabled: async function(pastDate) {
+    isExpiryDateDisabled: async function (pastDate) {
       let disabled = false
       const yearSelector = this.setExpiryDateYearSelectorXpath(pastDate.getFullYear())
 
@@ -144,7 +144,7 @@ module.exports = {
      * @param {string} shareType link|collaborator
      * @returns {Promise<boolean>} returns true if succeeds to set provided expiration date
      */
-    setExpirationDate: async function(value, shareType = 'collaborator') {
+    setExpirationDate: async function (value, shareType = 'collaborator') {
       if (value === '') {
         return this.click('@publicLinkDeleteExpirationDateButton')
       }
@@ -162,9 +162,7 @@ module.exports = {
       const year = dateToSet.getFullYear()
       const month = dateToSet.toLocaleString('en', { month: 'short' })
       const day = dateToSet.getDate()
-      await this.setExpiryDateYear(year)
-        .setExpiryDateMonth(month)
-        .setExpiryDateDay(day)
+      await this.setExpiryDateYear(year).setExpiryDateMonth(month).setExpiryDateDay(day)
       return true
     }
   },

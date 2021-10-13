@@ -6,10 +6,10 @@ const util = require('util')
 
 module.exports = {
   commands: {
-    isThumbnailVisible: function() {
+    isThumbnailVisible: function () {
       return this.waitForElementVisible('@sidebar').waitForElementVisible('@fileInfoIcon')
     },
-    closeSidebarIfOpen: async function(timeout = 300) {
+    closeSidebarIfOpen: async function (timeout = 300) {
       if (!(await this.isSideBarOpen(timeout))) {
         return this.api.page.FilesPageElement.filesList()
       }
@@ -24,7 +24,7 @@ module.exports = {
       }
       return this.api.page.FilesPageElement.filesList()
     },
-    isSideBarOpen: async function(timeout = 500) {
+    isSideBarOpen: async function (timeout = 500) {
       const element = this.elements.sidebar
       let isVisible = false
       await this.isVisible(
@@ -33,24 +33,24 @@ module.exports = {
           selector: element.selector,
           timeout: timeoutHelper.parseTimeout(timeout)
         },
-        result => {
+        (result) => {
           isVisible = result.value === true
         }
       )
       return isVisible
     },
-    isSideBarOpenForResource: async function(resource, elementType = 'any', timeout = 500) {
+    isSideBarOpenForResource: async function (resource, elementType = 'any', timeout = 500) {
       if (!(await this.isSideBarOpen(timeout))) {
         return false
       }
       const selector = this.getResourceInfoSelector(resource, elementType)
       let resourceInfoVisible = false
-      await this.isVisible({ locateStrategy: 'xpath', selector, timeout }, result => {
+      await this.isVisible({ locateStrategy: 'xpath', selector, timeout }, (result) => {
         resourceInfoVisible = result.status === 0
       })
       return resourceInfoVisible
     },
-    getResourceInfoSelector: function(resource, elementType = 'any') {
+    getResourceInfoSelector: function (resource, elementType = 'any') {
       const name = xpathHelper.buildXpathLiteral(resource)
       const path = xpathHelper.buildXpathLiteral('/' + resource)
       if (elementType === 'any') {
@@ -59,7 +59,7 @@ module.exports = {
       const type = xpathHelper.buildXpathLiteral(elementType)
       return util.format(this.elements.fileInfoResourceName.selector, name, path, type)
     },
-    activatePanel: async function(item) {
+    activatePanel: async function (item) {
       const panelName = item === 'people' ? 'collaborators' : item
       const active = await this.isPanelActive(
         item,
@@ -70,7 +70,7 @@ module.exports = {
         const backBtn = this.elements.sidebarBackBtn
         await this.isVisible(
           { locateStrategy: backBtn.locateStrategy, selector: backBtn.selector, timeout: 200 },
-          result => {
+          (result) => {
             backBtnVisible = result.value === true
           }
         )
@@ -91,28 +91,28 @@ module.exports = {
       const panelElement = this.elements[panelName + 'Panel']
       return await this.waitForElementPresent(panelElement.locateStrategy, panelElement.selector)
     },
-    getVisibleAccordionItems: async function() {
+    getVisibleAccordionItems: async function () {
       const items = []
       let elements
-      await this.api.elements('@panelSelectButtons', function(result) {
+      await this.api.elements('@panelSelectButtons', function (result) {
         elements = result.value
       })
       for (const { ELEMENT } of elements) {
-        await this.api.elementIdText(ELEMENT, function(result) {
+        await this.api.elementIdText(ELEMENT, function (result) {
           items.push(result.value.toLowerCase())
         })
       }
       return items
     },
-    getActionsMenuItemsExceptDefaults: async function() {
+    getActionsMenuItemsExceptDefaults: async function () {
       const defaultItems = ['add to favorites', 'copy', 'move', 'rename', 'delete']
       const items = []
       let elements
-      await this.api.elements('@panelActionsItems', function(result) {
+      await this.api.elements('@panelActionsItems', function (result) {
         elements = result.value
       })
       for (const { ELEMENT } of elements) {
-        await this.api.elementIdText(ELEMENT, function(result) {
+        await this.api.elementIdText(ELEMENT, function (result) {
           let notDefault = true
           for (const item of defaultItems) {
             if (_.isEqual(item, result.value.toLowerCase())) {
@@ -125,7 +125,7 @@ module.exports = {
       }
       return items
     },
-    isPanelActive: async function(panelName, timeout = null) {
+    isPanelActive: async function (panelName, timeout = null) {
       panelName = panelName === 'people' ? 'collaborators' : panelName
       const element = this.elements[panelName + 'Panel']
       let isVisible = false
@@ -135,7 +135,7 @@ module.exports = {
           selector: element.selector,
           timeout: timeoutHelper.parseTimeout(timeout)
         },
-        result => {
+        (result) => {
           isVisible = result.value === true
         }
       )
@@ -148,7 +148,7 @@ module.exports = {
      * @param {number} timeout
      * @returns {Promise<boolean>}
      */
-    isPanelSelectable: async function(panelName, timeout = 300) {
+    isPanelSelectable: async function (panelName, timeout = 300) {
       panelName = panelName === 'people' ? 'collaborators' : panelName
       const element = this.elements[panelName + 'PanelMenuItem']
       let isVisible = false
@@ -158,25 +158,25 @@ module.exports = {
           selector: element.selector,
           timeout: timeoutHelper.parseTimeout(timeout)
         },
-        result => {
+        (result) => {
           isVisible = result.value === true
         }
       )
       return isVisible
     },
-    isLinksPanelSelectable: async function() {
+    isLinksPanelSelectable: async function () {
       return await this.isPanelSelectable('links')
     },
-    isSharingPanelSelectable: async function() {
+    isSharingPanelSelectable: async function () {
       return await this.isPanelSelectable('people')
     },
-    markFavoriteSidebar: function() {
+    markFavoriteSidebar: function () {
       return this.waitForElementVisible('@sidebar')
         .waitForElementVisible('@fileInfoFavoriteDimm')
         .click('@fileInfoFavorite')
         .waitForElementVisible('@fileInfoFavoriteShining')
     },
-    unmarkFavoriteSidebar: function() {
+    unmarkFavoriteSidebar: function () {
       return this.waitForElementVisible('@sidebar')
         .waitForElementVisible('@fileInfoFavoriteShining')
         .click('@fileInfoFavorite')

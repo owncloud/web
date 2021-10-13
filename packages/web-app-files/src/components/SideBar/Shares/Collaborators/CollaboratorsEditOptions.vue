@@ -183,7 +183,7 @@ export default {
       type: [Object, String],
       required: false,
       default: null,
-      validator: function(value) {
+      validator: function (value) {
         return ['user', 'group'].includes(value) || value === null
       }
     }
@@ -442,11 +442,11 @@ export default {
       // then try to get the selected select
       // and if none of those applies we fall back to the first role select
       const activeRoleSelect =
-        roleSelect.find(rs => rs.$el === document.activeElement) ||
-        roleSelect.find(rs => rs.$el.classList.contains('selected')) ||
+        roleSelect.find((rs) => rs.$el === document.activeElement) ||
+        roleSelect.find((rs) => rs.$el.classList.contains('selected')) ||
         roleSelect[0]
       const activeRoleSelectIndex = roleSelect.indexOf(activeRoleSelect)
-      const activateRoleSelect = idx => roleSelect[idx].$el.focus()
+      const activateRoleSelect = (idx) => roleSelect[idx].$el.focus()
 
       // if the event key is arrow up
       // and the next active role select index would be less than 0

@@ -1,3 +1,24 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v4.3.0...master
+
+Summary
+-------
+
+* Enhancement - Sorting out dependencies: [#5898](https://github.com/owncloud/web/pull/5898)
+
+Details
+-------
+
+* Enhancement - Sorting out dependencies: [#5898](https://github.com/owncloud/web/pull/5898)
+
+   We have cleaned and simplified the dependency structure in our apps.
+
+   https://github.com/owncloud/web/pull/5898
+
 Changelog for ownCloud Web [4.3.0] (2021-10-07)
 =======================================
 The following sections list the changes in ownCloud web 4.3.0 relevant to

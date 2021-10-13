@@ -14,15 +14,13 @@ const browserOptions: LaunchOptions = {
   headless: config.headless
 }
 
-BeforeAll(
-  async (): Promise<void> => {
-    browser = await {
-      firefox: async (): Promise<Browser> => await firefox.launch(browserOptions),
-      webkit: async (): Promise<Browser> => await webkit.launch(browserOptions),
-      chrome: async (): Promise<Browser> =>
-        await chromium.launch({ ...browserOptions, channel: 'chrome' }),
-      chromium: async (): Promise<Browser> => await chromium.launch(browserOptions)
-    }[config.browser]()
-  }
-)
+BeforeAll(async (): Promise<void> => {
+  browser = await {
+    firefox: async (): Promise<Browser> => await firefox.launch(browserOptions),
+    webkit: async (): Promise<Browser> => await webkit.launch(browserOptions),
+    chrome: async (): Promise<Browser> =>
+      await chromium.launch({ ...browserOptions, channel: 'chrome' }),
+    chromium: async (): Promise<Browser> => await chromium.launch(browserOptions)
+  }[config.browser]()
+})
 AfterAll(() => browser && browser.close())

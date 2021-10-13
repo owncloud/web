@@ -1660,6 +1660,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@cucumber/messages@npm:^17.1.1":
+  version: 17.1.1
+  resolution: "@cucumber/messages@npm:17.1.1"
+  dependencies:
+    "@types/uuid": 8.3.1
+    class-transformer: 0.4.0
+    reflect-metadata: 0.1.13
+    uuid: 8.3.2
+  checksum: 360852bd76eb827fcb70cb2dd39dc16efe191186bb1ca99ab954eacd50b234323bb9bd24e39db5f12d4ebb5708ba6b06f39c74227a64bcf51428ee38f08e0f45
+  languageName: node
+  linkType: hard
+
 "@cucumber/pretty-formatter@npm:^1.0.0-alpha.1":
   version: 1.0.0-alpha.1
   resolution: "@cucumber/pretty-formatter@npm:1.0.0-alpha.1"
@@ -2513,6 +2525,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node@npm:^16.10.3":
+  version: 16.10.3
+  resolution: "@types/node@npm:16.10.3"
+  checksum: 3fd429bce8a4acb497dcc62b536782a5e87ccf7cd91d64a78b263ae5d66cb72bf84be9eeeff6f84ae0567b065a40b267caa66d311f9e094990a5847bbd168a29
+  languageName: node
+  linkType: hard
+
 "@types/normalize-package-data@npm:^2.4.0":
   version: 2.4.0
   resolution: "@types/normalize-package-data@npm:2.4.0"
@@ -2612,6 +2631,13 @@ __metadata:
   version: 8.3.0
   resolution: "@types/uuid@npm:8.3.0"
   checksum: 0f46b15020b9c252473fb327a6491fd7d238c7b5bbaebd32195a0de178db040f6abb96902507ba25dd4a673cdd9cc28b8880512dba54561e8bc60d8f326c1e30
+  languageName: node
+  linkType: hard
+
+"@types/uuid@npm:8.3.1":
+  version: 8.3.1
+  resolution: "@types/uuid@npm:8.3.1"
+  checksum: b41bdc5e86c6f0f1899306be10455636da0f2168c9489b869edd6837ddeb7c0e501b1ff7d857402462986bada2a379125743dd895fa801d03437cd632116a373
   languageName: node
   linkType: hard
 
@@ -3572,6 +3598,13 @@ __metadata:
   version: 4.3.2
   resolution: "axe-core@npm:4.3.2"
   checksum: ecedf159c4f24fe9c64689890e9b95082f1dab362e57ecd74d2d28573fca2f6b3b915784ccb46d9c3f1506c38524144066066c6d8759d0c5628d22ba3cdc57e0
+  languageName: node
+  linkType: hard
+
+"axe-core@npm:^4.3.3":
+  version: 4.3.3
+  resolution: "axe-core@npm:4.3.3"
+  checksum: ac349d0b5341ad0859052d843717a1f596adf2efaa85ed9796581aa2f8fea74fda0f68b300363da8a0fb50f4b41b381c4f0b53dd14052205b9a082be0ca388b7
   languageName: node
   linkType: hard
 
@@ -6081,9 +6114,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "draw-io@workspace:packages/web-app-draw-io"
   dependencies:
-    luxon: ^1.28.0
     query-string: ^6.8.3
-    vuex: 3.6.2
   languageName: unknown
   linkType: soft
 
@@ -6966,9 +6997,6 @@ __metadata:
 "external@workspace:packages/web-app-external":
   version: 0.0.0-use.local
   resolution: "external@workspace:packages/web-app-external"
-  dependencies:
-    vue: ^2.6.10
-    vuex: 3.6.2
   languageName: unknown
   linkType: soft
 
@@ -7167,17 +7195,9 @@ __metadata:
   dependencies:
     "@types/semver": ^7.3.8
     copy-to-clipboard: ^3.3.1
-    filesize: ^8.0.0
     filter-obj: ^2.0.1
-    fuse.js: ^6.4.6
-    lodash-es: ^4.17.21
-    p-queue: ^6.6.2
-    query-string: ^6.8.3
     semver: ^6.1.0
-    vue: ^2.6.10
-    vue-gettext: ^2.1.5
     vue2-dropzone: ^3.6.0
-    vuex: ^3.6.2
   languageName: unknown
   linkType: soft
 
@@ -10565,7 +10585,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"loose-envify@npm:^1.0.0":
+"loose-envify@npm:^1.0.0, loose-envify@npm:^1.1.0":
   version: 1.4.0
   resolution: "loose-envify@npm:1.4.0"
   dependencies:
@@ -10742,7 +10762,6 @@ __metadata:
   resolution: "markdown-editor@workspace:packages/web-app-markdown-editor"
   dependencies:
     marked: ^3.0.0
-    vuex: ^3.6.2
   languageName: unknown
   linkType: soft
 
@@ -11672,9 +11691,6 @@ __metadata:
 "ocis-media-viewer@workspace:packages/web-app-media-viewer":
   version: 0.0.0-use.local
   resolution: "ocis-media-viewer@workspace:packages/web-app-media-viewer"
-  dependencies:
-    query-string: ^6.8.3
-    vuex: 3.6.2
   languageName: unknown
   linkType: soft
 
@@ -12980,6 +12996,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"prettier@npm:^2.3.2":
+  version: 2.4.1
+  resolution: "prettier@npm:2.4.1"
+  bin:
+    prettier: bin-prettier.js
+  checksum: cc6830588b401b0d742862fe9c46bc9118204fb307c3abe0e49e95b35ed23629573807ffdf9cdd65289c252a0bb51fc0171437f6626ee36378dea80f0ee80b91
+  languageName: node
+  linkType: hard
+
 "pretty-format@npm:^26.0.0, pretty-format@npm:^26.6.2":
   version: 26.6.2
   resolution: "pretty-format@npm:26.6.2"
@@ -13421,6 +13446,16 @@ __metadata:
   version: 17.0.2
   resolution: "react-is@npm:17.0.2"
   checksum: 9d6d111d8990dc98bc5402c1266a808b0459b5d54830bbea24c12d908b536df7883f268a7868cfaedde3dd9d4e0d574db456f84d2e6df9c4526f99bb4b5344d8
+  languageName: node
+  linkType: hard
+
+"react@npm:^17.0.2":
+  version: 17.0.2
+  resolution: "react@npm:17.0.2"
+  dependencies:
+    loose-envify: ^1.1.0
+    object-assign: ^4.1.1
+  checksum: b254cc17ce3011788330f7bbf383ab653c6848902d7936a87b09d835d091e3f295f7e9dd1597c6daac5dc80f90e778c8230218ba8ad599f74adcc11e33b9d61b
   languageName: node
   linkType: hard
 
@@ -14163,6 +14198,7 @@ __metadata:
     "@babel/preset-env": ^7.14.7
     "@babel/register": ^7.13.16
     "@cucumber/cucumber": ^7.3.1
+    "@cucumber/messages": ^17.1.1
     "@cucumber/pretty-formatter": ^1.0.0-alpha.1
     "@erquhart/rollup-plugin-node-builtins": ^2.1.5
     "@playwright/test": ^1.14.0
@@ -14178,6 +14214,7 @@ __metadata:
     "@types/jest": ^26.0.23
     "@types/jest-axe": ^3.5.3
     "@types/lodash-es": ^4.17.4
+    "@types/node": ^16.10.3
     "@types/node-fetch": ^2.5.12
     "@types/vue": ^2.0.0
     "@typescript-eslint/eslint-plugin": ^4.28.3
@@ -14224,6 +14261,8 @@ __metadata:
     node-gyp: ^8.2.0
     playwright: ^1.15.0
     postcss: ^8.3.6
+    prettier: ^2.3.2
+    react: ^17.0.2
     regenerator-runtime: ^0.13.7
     requirejs: ^2.3.6
     rollup: ^2.52.7
@@ -14248,7 +14287,6 @@ __metadata:
     tslib: ^2.2.0
     typescript: ^4.3.2
     url-search-params-polyfill: ^8.0.0
-    v-calendar: ^2.3.2
     vue: ^2.6.10
     vue-jest: ^3.0.7
     vue-template-compiler: ^2.6.12
@@ -14370,13 +14408,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "search@workspace:packages/web-app-search"
   dependencies:
-    lodash-es: ^4.17.21
     p-cancelable: ^3.0.0
     portal-vue: ^2.1.7
     ts-async-decorators: ^0.1.2
     vue: ^2.6.10
     vue-async-computed: ^3.9.0
-    vuex: 3.6.2
   languageName: unknown
   linkType: soft
 
@@ -16423,7 +16459,7 @@ typescript@^4.3.2:
   languageName: node
   linkType: hard
 
-"vuex@npm:3.6.2, vuex@npm:^3.6.2":
+"vuex@npm:^3.6.2":
   version: 3.6.2
   resolution: "vuex@npm:3.6.2"
   peerDependencies:
@@ -16481,8 +16517,7 @@ typescript@^4.3.2:
   version: 0.0.0-use.local
   resolution: "web-runtime@workspace:packages/web-runtime"
   dependencies:
-    "@popperjs/core": ^2.4.0
-    "@vue/test-utils": ^1.1.2
+    axe-core: ^4.3.3
     easygettext: ^2.16.1
     filesize: ^8.0.0
     focus-trap: ^6.4.0
@@ -16498,6 +16533,7 @@ typescript@^4.3.2:
     portal-vue: ^2.1.7
     postcss-import: ^12.0.1
     postcss-url: ^9.0.0
+    query-string: ^6.8.3
     tippy.js: ^6.3.1
     tus-js-client: ^1.8.0
     uikit: 3.5.16

@@ -1,4 +1,4 @@
-export default vue => {
+export default (vue) => {
   return vue.component('oc-page-size', {
     model: { prop: 'value', event: 'input' },
     template: `<select name="size">

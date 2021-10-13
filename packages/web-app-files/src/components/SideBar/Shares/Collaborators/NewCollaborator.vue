@@ -22,9 +22,7 @@
           <autocomplete-item :item="option" />
         </template>
         <template #no-options>
-          <translate>
-            No users or groups found.
-          </translate>
+          <translate> No users or groups found. </translate>
         </template>
         <template #selected-option-container="{ option, deselect }">
           <recipient-container :recipient="option" :deselect="deselect" />
@@ -156,12 +154,12 @@ export default {
         )
         const users = recipients.exact.users
           .concat(recipients.users)
-          .filter(user => user.value.shareWith !== this.user.id)
+          .filter((user) => user.value.shareWith !== this.user.id)
         const groups = recipients.exact.groups.concat(recipients.groups)
         const remotes = recipients.exact.remotes.concat(recipients.remotes)
 
-        this.autocompleteResults = users.concat(groups, remotes).filter(collaborator => {
-          const selected = this.selectedCollaborators.find(selectedCollaborator => {
+        this.autocompleteResults = users.concat(groups, remotes).filter((collaborator) => {
+          const selected = this.selectedCollaborators.find((selectedCollaborator) => {
             return (
               collaborator.value.shareWith === selectedCollaborator.value.shareWith &&
               parseInt(collaborator.value.shareType, 10) ===
@@ -169,7 +167,7 @@ export default {
             )
           })
 
-          const exists = this.currentFileOutgoingCollaborators.find(existingCollaborator => {
+          const exists = this.currentFileOutgoingCollaborators.find((existingCollaborator) => {
             return (
               collaborator.value.shareWith === existingCollaborator.collaborator.name &&
               parseInt(collaborator.value.shareType, 10) === existingCollaborator.shareType
@@ -212,7 +210,7 @@ export default {
       }
 
       return recipients.filter(
-        recipient =>
+        (recipient) =>
           recipient.value.shareType === shareTypes.remote ||
           recipient.label.toLocaleLowerCase().indexOf(query.toLocaleLowerCase()) > -1 ||
           recipient.value.shareWith.toLocaleLowerCase().indexOf(query.toLocaleLowerCase()) > -1 ||
@@ -231,7 +229,7 @@ export default {
 
       const saveQueue = new PQueue({ concurrency: 4 })
       const savePromises = []
-      this.selectedCollaborators.forEach(collaborator => {
+      this.selectedCollaborators.forEach((collaborator) => {
         savePromises.push(
           saveQueue.add(() =>
             this.addShare({
@@ -251,7 +249,7 @@ export default {
       this.$_ocCollaborators_newCollaboratorsCancel()
     },
     $_ocCollaborators_removeFromSelection(collaborator) {
-      this.selectedCollaborators = this.selectedCollaborators.filter(selectedCollaborator => {
+      this.selectedCollaborators = this.selectedCollaborators.filter((selectedCollaborator) => {
         return collaborator !== selectedCollaborator
       })
     },

@@ -25,7 +25,7 @@ let timeOfLastShareOperation = Date.now()
  * @param {boolean} remote
  * @param {boolean} quickAction Asserts whether the quick actions should be used to open new collaborators panel
  */
-const userSharesFileOrFolderWithUserOrGroup = async function(
+const userSharesFileOrFolderWithUserOrGroup = async function (
   file,
   sharee,
   shareWithGroup,
@@ -52,7 +52,7 @@ const userSharesFileOrFolderWithUserOrGroup = async function(
  * @param {string} sharee
  * @param {string} role
  */
-const userSharesFileOrFolderWithUser = function(file, sharee, role) {
+const userSharesFileOrFolderWithUser = function (file, sharee, role) {
   return userSharesFileOrFolderWithUserOrGroup(file, sharee, false, role)
 }
 
@@ -62,7 +62,7 @@ const userSharesFileOrFolderWithUser = function(file, sharee, role) {
  * @param {string} sharee
  * @param {string} role
  */
-const userSharesFileOrFolderWithRemoteUser = function(file, sharee, role) {
+const userSharesFileOrFolderWithRemoteUser = function (file, sharee, role) {
   return userSharesFileOrFolderWithUserOrGroup(file, sharee, false, role, undefined, true)
 }
 /**
@@ -71,13 +71,13 @@ const userSharesFileOrFolderWithRemoteUser = function(file, sharee, role) {
  * @param {string} sharee
  * @param {string} role
  */
-const userSharesFileOrFolderWithGroup = function(file, sharee, role) {
+const userSharesFileOrFolderWithGroup = function (file, sharee, role) {
   return userSharesFileOrFolderWithUserOrGroup(file, sharee, true, role)
 }
 
 Given(
   'user {string} from remote server has shared {string} with user {string} from local server',
-  function(sharer, file, receiver) {
+  function (sharer, file, receiver) {
     receiver = util.format('%s@%s', receiver, client.globals.backend_url)
     return backendHelper.runOnRemoteBackend(
       shareFileFolder,
@@ -91,7 +91,7 @@ Given(
 
 Given(
   'user {string} from remote server has shared {string} with user {string} from local server with {string} permissions',
-  function(sharer, file, receiver, permission) {
+  function (sharer, file, receiver, permission) {
     receiver = util.format('%s@%s', receiver, client.globals.backend_url)
     return backendHelper.runOnRemoteBackend(
       shareFileFolder,
@@ -106,7 +106,7 @@ Given(
 
 When(
   'user {string} from remote server shares {string} with user {string} from local server',
-  function(sharer, file, receiver) {
+  function (sharer, file, receiver) {
     receiver = util.format('%s@%s', receiver, client.globals.backend_url)
     return backendHelper.runOnRemoteBackend(
       shareFileFolder,
@@ -121,7 +121,7 @@ When(
 /**
  * makes sure share operations are carried out maximum once a second to avoid same stime
  */
-const waitBetweenShareOperations = async function() {
+const waitBetweenShareOperations = async function () {
   const timeSinceLastShare = Date.now() - timeOfLastShareOperation
   if (timeSinceLastShare <= 1001) {
     await client.pause(1001 - timeSinceLastShare)
@@ -131,7 +131,7 @@ const waitBetweenShareOperations = async function() {
 /**
  * update time in which the last share operation was carried out
  */
-const updateTimeOfLastShareOperation = function() {
+const updateTimeOfLastShareOperation = function () {
   timeOfLastShareOperation = Date.now()
 }
 
@@ -148,7 +148,7 @@ const updateTimeOfLastShareOperation = function() {
  * @param {string} extraParams.password Password of the share (public links)
  * @param {string} extraParams.expireDate Expiry date of the share
  */
-const shareFileFolder = async function(
+const shareFileFolder = async function (
   elementToShare,
   sharer,
   receiver = null,
@@ -182,8 +182,8 @@ const shareFileFolder = async function(
   const url = 'apps/files_sharing/api/v1/shares'
   await httpHelper
     .postOCS(url, sharer, params)
-    .then(res => res.json())
-    .then(function(json) {
+    .then((res) => res.json())
+    .then(function (json) {
       httpHelper.checkOCSStatus(json, 'Could not create share. Message: ' + json.ocs.meta.message)
     })
   await updateTimeOfLastShareOperation()
@@ -197,34 +197,37 @@ const shareFileFolder = async function(
  *
  * @return void
  */
-Given('user {string} has created a new share with following settings', function(sharer, dataTable) {
-  const settings = dataTable.rowsHash()
-  const expireDate = settings.expireDate
-  let dateToSet = ''
-  if (typeof expireDate !== 'undefined') {
-    dateToSet = sharingHelper.calculateDate(expireDate)
-  }
-  let targetShareType = null
-  if (settings.shareTypeString) {
-    targetShareType = sharingHelper.humanReadableShareTypeToNumber(settings.shareTypeString)
-  }
-  return shareFileFolder(
-    settings.path,
-    sharer,
-    settings.shareWith,
-    targetShareType,
-    settings.permissionString,
-    settings.name,
-    {
-      expireDate: dateToSet,
-      password: settings.password
+Given(
+  'user {string} has created a new share with following settings',
+  function (sharer, dataTable) {
+    const settings = dataTable.rowsHash()
+    const expireDate = settings.expireDate
+    let dateToSet = ''
+    if (typeof expireDate !== 'undefined') {
+      dateToSet = sharingHelper.calculateDate(expireDate)
     }
-  )
-})
+    let targetShareType = null
+    if (settings.shareTypeString) {
+      targetShareType = sharingHelper.humanReadableShareTypeToNumber(settings.shareTypeString)
+    }
+    return shareFileFolder(
+      settings.path,
+      sharer,
+      settings.shareWith,
+      targetShareType,
+      settings.permissionString,
+      settings.name,
+      {
+        expireDate: dateToSet,
+        password: settings.password
+      }
+    )
+  }
+)
 
 When(
   'the user tries to edit the collaborator {string} of file/folder/resource {string} changing following',
-  async function(collaborator, resource, dataTable) {
+  async function (collaborator, resource, dataTable) {
     const settings = dataTable.rowsHash()
     const api = client.page.FilesPageElement
     await api.filesList().openSharingDialog(resource)
@@ -234,7 +237,7 @@ When(
 
 Then(
   'the user should see an error message on the collaborator share dialog saying {string}',
-  async function(expectedMessage) {
+  async function (expectedMessage) {
     const actualMessage = await client.page.FilesPageElement.sharingDialog().getErrorMessage()
     return client.assert.strictEqual(actualMessage, expectedMessage)
   }
@@ -253,7 +256,7 @@ Then(
  * @param {string} data.permissions Allowed permissions on the share
  * @param {string} data.expireDate Expiry date of the share
  */
-const createPublicLink = function(sharer, data) {
+const createPublicLink = function (sharer, data) {
   let { path, permissions = 'read', name, password, expireDate } = data
 
   if (typeof expireDate !== 'undefined') {
@@ -272,7 +275,7 @@ const createPublicLink = function(sharer, data) {
  * @param {string} role
  * @returns {Promise}
  */
-const assertCollaboratorslistContains = function(
+const assertCollaboratorslistContains = function (
   type,
   name,
   { role = null, via = null, resharedThrough = null, additionalInfo = null }
@@ -283,8 +286,8 @@ const assertCollaboratorslistContains = function(
 
   return client.page.FilesPageElement.SharingDialog.collaboratorsDialog()
     .getCollaboratorsList(null, name)
-    .then(shares => {
-      const share = shares.find(share => {
+    .then((shares) => {
+      const share = shares.find((share) => {
         return (
           name === share.displayName && (!share.shareType || type === share.shareType.toLowerCase())
         )
@@ -293,7 +296,7 @@ const assertCollaboratorslistContains = function(
       if (!share) {
         assert.fail(
           `"${name}" with type "${type}" was expected to be in share list but was not present. Found collaborators: ` +
-            shares.map(share => `name=${share.displayName} type=${share.shareType}`)
+            shares.map((share) => `name=${share.displayName} type=${share.shareType}`)
         )
       }
 
@@ -318,7 +321,7 @@ const assertCollaboratorslistContains = function(
  * @param {string} name
  * @returns {Promise}
  */
-const assertCollaboratorslistDoesNotContain = function(type, name) {
+const assertCollaboratorslistDoesNotContain = function (type, name) {
   if (type !== 'user' && type !== 'group') {
     throw new Error('illegal type')
   }
@@ -331,8 +334,8 @@ const assertCollaboratorslistDoesNotContain = function(type, name) {
       null,
       client.globals.waitForNegativeConditionTimeout
     )
-    .then(shares => {
-      const share = shares.find(share => {
+    .then((shares) => {
+      const share = shares.find((share) => {
         return (
           name === share.displayName && (!share.shareType || type === share.shareType.toLowerCase())
         )
@@ -351,15 +354,15 @@ const assertCollaboratorslistDoesNotContain = function(type, name) {
  * @param {string} pattern
  * @return {string[]} groupMatchingPattern
  */
-const getUsersMatchingPattern = function(pattern) {
+const getUsersMatchingPattern = function (pattern) {
   // check if all created users that contain the pattern either in the display name or the username
   // are listed in the autocomplete list
   // in both cases the display name should be listed
   const users = userSettings.getCreatedUsers()
   const usersID = Object.keys(users)
   return usersID
-    .filter(id => users[id].displayname.toLowerCase().includes(pattern) || id.includes(pattern))
-    .map(id => users[id].displayname)
+    .filter((id) => users[id].displayname.toLowerCase().includes(pattern) || id.includes(pattern))
+    .map((id) => users[id].displayname)
 }
 
 /**
@@ -368,9 +371,9 @@ const getUsersMatchingPattern = function(pattern) {
  * @param {string} pattern
  * @return {string[]} groupMatchingPattern
  */
-const getGroupsMatchingPattern = function(pattern) {
+const getGroupsMatchingPattern = function (pattern) {
   const groups = userSettings.getCreatedGroups()
-  const groupMatchingPattern = groups.filter(group => group.toLowerCase().includes(pattern))
+  const groupMatchingPattern = groups.filter((group) => group.toLowerCase().includes(pattern))
   return groupMatchingPattern
 }
 
@@ -382,18 +385,18 @@ const getGroupsMatchingPattern = function(pattern) {
  * @param {string} alreadySharedUserOrGroup
  * @param {string} userOrGroup
  */
-const assertUsersGroupsWithPatternInAutocompleteListExcluding = async function(
+const assertUsersGroupsWithPatternInAutocompleteListExcluding = async function (
   pattern,
   alreadySharedUserOrGroup,
   userOrGroup
 ) {
   const sharingDialog = client.page.FilesPageElement.sharingDialog()
   const currentUserDisplayName = userSettings.getDisplayNameForUser(client.globals.currentUser)
-  const usersMatchingPattern = getUsersMatchingPattern(pattern).filter(displayName => {
+  const usersMatchingPattern = getUsersMatchingPattern(pattern).filter((displayName) => {
     return displayName !== currentUserDisplayName && displayName !== alreadySharedUserOrGroup
   })
   const groupMatchingPattern = getGroupsMatchingPattern(pattern).filter(
-    group => group !== alreadySharedUserOrGroup
+    (group) => group !== alreadySharedUserOrGroup
   )
 
   if (usersMatchingPattern.length + groupMatchingPattern.length > 5) {
@@ -415,7 +418,7 @@ const assertUsersGroupsWithPatternInAutocompleteListExcluding = async function(
  * @param {boolean} remote
  * @param {boolean} expectToSucceed
  */
-const userSharesFileOrFolderWithUserOrGroupWithExpirationDate = async function({
+const userSharesFileOrFolderWithUserOrGroupWithExpirationDate = async function ({
   resource,
   sharee,
   days,
@@ -435,18 +438,18 @@ const userSharesFileOrFolderWithUserOrGroupWithExpirationDate = async function({
  * @param {string} resource
  * @param {string} value
  */
-const checkCollaboratorsExpirationDate = async function(collaborator, resource, value) {
+const checkCollaboratorsExpirationDate = async function (collaborator, resource, value) {
   const api = client.page.FilesPageElement
   await api.filesList().openSharingDialog(resource)
   return api.sharingDialog().checkExpirationDate(collaborator, value)
 }
 
-const checkReceivedSharesExpirationDate = function(user, target, days) {
+const checkReceivedSharesExpirationDate = function (user, target, days) {
   const apiURL = 'apps/files_sharing/api/v1/shares?shared_with_me=true'
   return httpHelper
     .getOCS(apiURL, user)
-    .then(res => res.json())
-    .then(function(result) {
+    .then((res) => res.json())
+    .then(function (result) {
       httpHelper.checkOCSStatus(result, 'Could not get shares. Message: ' + result.ocs.meta.message)
       const shares = result.ocs.data
       const currentDate = new Date()
@@ -480,47 +483,44 @@ const checkReceivedSharesExpirationDate = function(user, target, days) {
     })
 }
 
-Given('user {string} has shared file/folder {string} with user {string}', function(
-  sharer,
-  elementToShare,
-  receiver
-) {
-  return shareFileFolder(elementToShare, sharer, receiver)
-})
+Given(
+  'user {string} has shared file/folder {string} with user {string}',
+  function (sharer, elementToShare, receiver) {
+    return shareFileFolder(elementToShare, sharer, receiver)
+  }
+)
 
 Given(
   'user {string} has shared file/folder {string} with user {string} with {string} permission/permissions',
-  function(sharer, elementToShare, receiver, permissions) {
+  function (sharer, elementToShare, receiver, permissions) {
     return shareFileFolder(elementToShare, sharer, receiver, SHARE_TYPES.user, permissions)
   }
 )
 
-Given('user {string} has shared file/folder {string} with group {string}', function(
-  sharer,
-  elementToShare,
-  receiver
-) {
-  return shareFileFolder(elementToShare, sharer, receiver, SHARE_TYPES.group)
-})
+Given(
+  'user {string} has shared file/folder {string} with group {string}',
+  function (sharer, elementToShare, receiver) {
+    return shareFileFolder(elementToShare, sharer, receiver, SHARE_TYPES.group)
+  }
+)
 
 Given(
   'user {string} has shared file/folder {string} with group {string} with {string} permission/permissions',
-  function(sharer, elementToShare, receiver, permissions) {
+  function (sharer, elementToShare, receiver, permissions) {
     return shareFileFolder(elementToShare, sharer, receiver, SHARE_TYPES.group, permissions)
   }
 )
 
-Given('user {string} has shared file/folder {string} with link with {string} permissions', function(
-  sharer,
-  elementToShare,
-  permissions
-) {
-  return shareFileFolder(elementToShare, sharer, null, SHARE_TYPES.public_link, permissions)
-})
+Given(
+  'user {string} has shared file/folder {string} with link with {string} permissions',
+  function (sharer, elementToShare, permissions) {
+    return shareFileFolder(elementToShare, sharer, null, SHARE_TYPES.public_link, permissions)
+  }
+)
 
 Given(
   'user {string} has shared file/folder {string} with link with {string} permissions and password {string}',
-  function(sharer, elementToShare, permissions, password) {
+  function (sharer, elementToShare, permissions, password) {
     return shareFileFolder(
       elementToShare,
       sharer,
@@ -533,11 +533,11 @@ Given(
   }
 )
 
-Given('the administrator has enabled exclude groups from sharing', function() {
+Given('the administrator has enabled exclude groups from sharing', function () {
   return runOcc(['config:app:set core shareapi_exclude_groups --value=yes'])
 })
 
-Given('the administrator has excluded group {string} from sharing', async function(group) {
+Given('the administrator has excluded group {string} from sharing', async function (group) {
   const configList = await runOcc(['config:list'])
   const config = _.get(configList, 'ocs.data.stdOut')
   const configParsed = JSON.parse(config)
@@ -546,7 +546,7 @@ Given('the administrator has excluded group {string} from sharing', async functi
   )
   if (!initialExcludedGroup.includes(group)) {
     initialExcludedGroup.push(group)
-    const resultGroupList = initialExcludedGroup.map(res => '"' + res + '"')
+    const resultGroupList = initialExcludedGroup.map((res) => '"' + res + '"')
     const resultToString = resultGroupList.join(',')
     return runOcc([
       'config:app:set',
@@ -559,53 +559,56 @@ Given('the administrator has excluded group {string} from sharing', async functi
 
 Given(
   'the administrator has set the minimum characters for sharing autocomplete to {string}',
-  function(value) {
+  function (value) {
     return runOcc(['config:system:set user.search_min_length --value=' + value])
   }
 )
 
-Given('user {string} has created a public link with following settings', function(
-  sharer,
-  dataTable
-) {
-  return createPublicLink(sharer, dataTable.rowsHash())
-})
-
-Given('the administrator has excluded group {string} from receiving shares', async function(group) {
-  const configList = await runOcc(['config:list'])
-  const config = _.get(configList, 'ocs.data.stdOut')
-  const configParsed = JSON.parse(config)
-  const initialExcludedGroup = JSON.parse(
-    _.get(configParsed, 'apps.files_sharing.blacklisted_receiver_groups') || '[]'
-  )
-  if (!initialExcludedGroup.includes(group)) {
-    initialExcludedGroup.push(group)
-    let excludedGroups = initialExcludedGroup.map(res => `"${res}"`)
-    excludedGroups = excludedGroups.join(',')
-    return runOcc([
-      'config:app:set',
-      'files_sharing',
-      'blacklisted_receiver_groups',
-      '--value=[' + excludedGroups + ']'
-    ])
+Given(
+  'user {string} has created a public link with following settings',
+  function (sharer, dataTable) {
+    return createPublicLink(sharer, dataTable.rowsHash())
   }
-})
+)
 
-When('the user opens the share creation dialog on the webUI', function() {
+Given(
+  'the administrator has excluded group {string} from receiving shares',
+  async function (group) {
+    const configList = await runOcc(['config:list'])
+    const config = _.get(configList, 'ocs.data.stdOut')
+    const configParsed = JSON.parse(config)
+    const initialExcludedGroup = JSON.parse(
+      _.get(configParsed, 'apps.files_sharing.blacklisted_receiver_groups') || '[]'
+    )
+    if (!initialExcludedGroup.includes(group)) {
+      initialExcludedGroup.push(group)
+      let excludedGroups = initialExcludedGroup.map((res) => `"${res}"`)
+      excludedGroups = excludedGroups.join(',')
+      return runOcc([
+        'config:app:set',
+        'files_sharing',
+        'blacklisted_receiver_groups',
+        '--value=[' + excludedGroups + ']'
+      ])
+    }
+  }
+)
+
+When('the user opens the share creation dialog on the webUI', function () {
   return client.page.FilesPageElement.SharingDialog.collaboratorsDialog().clickCreateShare()
 })
 
-When('the user cancels the share creation dialog on the webUI', function() {
+When('the user cancels the share creation dialog on the webUI', function () {
   return client.page.FilesPageElement.sharingDialog().clickCancel()
 })
 
-When('the user types {string} in the share-with-field', async function(input) {
+When('the user types {string} in the share-with-field', async function (input) {
   return await client.page.FilesPageElement.sharingDialog().enterAutoComplete(input)
 })
 
 When(
   'the user sets custom permission for current role of collaborator {string} for folder/file {string} to {string} using the webUI',
-  async function(user, resource, permissions) {
+  async function (user, resource, permissions) {
     const api = client.page.FilesPageElement
     await api.filesList().openSharingDialog(resource)
     return api.sharingDialog().changeCustomPermissionsTo(user, permissions)
@@ -614,19 +617,18 @@ When(
 
 When(
   'the user disables all the custom permissions of collaborator {string} for file/folder {string} using the webUI',
-  async function(collaborator, resource) {
+  async function (collaborator, resource) {
     const api = client.page.FilesPageElement
     await api.filesList().openSharingDialog(resource)
     return api.sharingDialog().disableAllCustomPermissions(collaborator)
   }
 )
 
-const assertSharePermissions = async function(currentSharePermissions, permissions = undefined) {
+const assertSharePermissions = async function (currentSharePermissions, permissions = undefined) {
   let expectedPermissionArray
   if (permissions !== undefined) {
-    expectedPermissionArray = await client.page.FilesPageElement.sharingDialog().getArrayFromPermissionString(
-      permissions
-    )
+    expectedPermissionArray =
+      await client.page.FilesPageElement.sharingDialog().getArrayFromPermissionString(permissions)
   }
   for (let i = 0; i < COLLABORATOR_PERMISSION_ARRAY.length; i++) {
     const permissionName = COLLABORATOR_PERMISSION_ARRAY[i]
@@ -651,22 +653,20 @@ const assertSharePermissions = async function(currentSharePermissions, permissio
 
 Then(
   'custom permission/permissions {string} should be set for user {string} for file/folder {string} on the webUI',
-  async function(permissions, user, resource) {
+  async function (permissions, user, resource) {
     await client.page.FilesPageElement.filesList().openSharingDialog(resource)
-    const currentSharePermissions = await client.page.FilesPageElement.sharingDialog().getDisplayedPermission(
-      user
-    )
+    const currentSharePermissions =
+      await client.page.FilesPageElement.sharingDialog().getDisplayedPermission(user)
     return assertSharePermissions(currentSharePermissions, permissions)
   }
 )
 
 Then(
   'no custom permissions should be set for collaborator {string} for file/folder {string} on the webUI',
-  async function(user, resource) {
+  async function (user, resource) {
     await client.page.FilesPageElement.filesList().openSharingDialog(resource)
-    const currentSharePermissions = await client.page.FilesPageElement.sharingDialog().getDisplayedPermission(
-      user
-    )
+    const currentSharePermissions =
+      await client.page.FilesPageElement.sharingDialog().getDisplayedPermission(user)
     return assertSharePermissions(currentSharePermissions)
   }
 )
@@ -681,23 +681,24 @@ When(
   userSharesFileOrFolderWithRemoteUser
 )
 
-Then('it should not be possible to share file/folder {string} using the webUI', async function(
-  resource
-) {
-  const appSideBar = client.page.FilesPageElement.appSideBar()
-  const filesList = client.page.FilesPageElement.filesList()
-  // assumes current webUI state as no sidebar open for any resource
-  const state = await filesList.isSharingButtonPresent(resource)
-  assert.ok(!state, `Error: Sharing button for resource ${resource} is not in disabled state`)
-  await filesList.openSideBar(resource)
-  const linkItemState = await appSideBar.isLinksPanelSelectable()
-  assert.ok(!linkItemState, `Error: Sidebar 'Links' panel for resource ${resource} is present`)
-  const collaboratorsItemState = await appSideBar.isSharingPanelSelectable()
-  assert.ok(
-    !collaboratorsItemState,
-    `Error: Sidebar 'People' panel for resource ${resource} is present`
-  )
-})
+Then(
+  'it should not be possible to share file/folder {string} using the webUI',
+  async function (resource) {
+    const appSideBar = client.page.FilesPageElement.appSideBar()
+    const filesList = client.page.FilesPageElement.filesList()
+    // assumes current webUI state as no sidebar open for any resource
+    const state = await filesList.isSharingButtonPresent(resource)
+    assert.ok(!state, `Error: Sharing button for resource ${resource} is not in disabled state`)
+    await filesList.openSideBar(resource)
+    const linkItemState = await appSideBar.isLinksPanelSelectable()
+    assert.ok(!linkItemState, `Error: Sidebar 'Links' panel for resource ${resource} is present`)
+    const collaboratorsItemState = await appSideBar.isSharingPanelSelectable()
+    assert.ok(
+      !collaboratorsItemState,
+      `Error: Sidebar 'People' panel for resource ${resource} is present`
+    )
+  }
+)
 
 When(
   'the user shares file/folder/resource {string} with user {string} as {string} using the webUI',
@@ -706,14 +707,14 @@ When(
 
 When(
   'the user shares file/folder/resource {string} with user {string} as {string} with permission/permissions {string} using the webUI',
-  function(resource, shareWithUser, role, permissions) {
+  function (resource, shareWithUser, role, permissions) {
     return userSharesFileOrFolderWithUserOrGroup(resource, shareWithUser, false, role, permissions)
   }
 )
 
 When(
   'the user selects the following collaborators for the share as {string} with {string} permissions:',
-  async function(role, permissions, usersTable) {
+  async function (role, permissions, usersTable) {
     const users = usersTable.hashes()
     const dialog = client.page.FilesPageElement.sharingDialog()
 
@@ -726,13 +727,13 @@ When(
   }
 )
 
-When('the user removes {string} as a collaborator from the share', function(user) {
+When('the user removes {string} as a collaborator from the share', function (user) {
   return client.page.FilesPageElement.sharingDialog().removePendingCollaboratorForShare(user)
 })
 
 Then(
   /^(user|group) "([^"]*)" should not be visible in the collaborators selected options in the webUI$/,
-  async function(userOrGroup, userOrGroupName) {
+  async function (userOrGroup, userOrGroupName) {
     await client.page.FilesPageElement.sharingDialog().isGroupNotPresentInSelectedCollaboratorsOptions(
       userOrGroup,
       userOrGroupName
@@ -740,7 +741,7 @@ Then(
   }
 )
 
-When('the user shares with the selected collaborators', function() {
+When('the user shares with the selected collaborators', function () {
   return client.page.FilesPageElement.sharingDialog()
     .initAjaxCounters()
     .confirmShare()
@@ -749,14 +750,14 @@ When('the user shares with the selected collaborators', function() {
 
 Then(
   'all users and groups that contain the string {string} in their name should be listed in the autocomplete list on the webUI',
-  async function(pattern) {
+  async function (pattern) {
     const sharingDialog = client.page.FilesPageElement.sharingDialog()
     const currentUserDisplayName = userSettings.getDisplayNameForUser(client.globals.currentUser)
 
     // check if all created users that contain the pattern either in the display name or the username
     // are listed in the autocomplete list
     // in both cases the display name should be listed
-    const usersMatchingPattern = getUsersMatchingPattern(pattern).filter(displayName => {
+    const usersMatchingPattern = getUsersMatchingPattern(pattern).filter((displayName) => {
       return displayName !== currentUserDisplayName
     })
 
@@ -775,7 +776,7 @@ Then(
 
 Then(
   'all users and groups that contain the string {string} in their name should be listed in the autocomplete list on the webUI except user {string}',
-  function(pattern, alreadySharedUser) {
+  function (pattern, alreadySharedUser) {
     return assertUsersGroupsWithPatternInAutocompleteListExcluding(
       pattern,
       alreadySharedUser,
@@ -786,7 +787,7 @@ Then(
 
 Then(
   'all users and groups that contain the string {string} in their name should be listed in the autocomplete list on the webUI except group {string}',
-  function(pattern, alreadySharedGroup) {
+  function (pattern, alreadySharedGroup) {
     return assertUsersGroupsWithPatternInAutocompleteListExcluding(
       pattern,
       alreadySharedGroup,
@@ -797,11 +798,11 @@ Then(
 
 Then(
   'only users and groups that contain the string {string} in their name or displayname should be listed in the autocomplete list on the webUI',
-  function(pattern) {
+  function (pattern) {
     return client.page.FilesPageElement.sharingDialog()
       .getShareAutocompleteItemsList()
-      .then(itemsList => {
-        itemsList.forEach(item => {
+      .then((itemsList) => {
+        itemsList.forEach((item) => {
           const displayedName = item.split('\n')[0]
           let found = false
           for (const userId in userSettings.getCreatedUsers()) {
@@ -814,7 +815,7 @@ Then(
               found = true
             }
           }
-          userSettings.getCreatedGroups().forEach(function(groupId) {
+          userSettings.getCreatedGroups().forEach(function (groupId) {
             if (displayedName === groupId && groupId.toLowerCase().includes(pattern)) {
               found = true
             }
@@ -830,34 +831,35 @@ Then(
   }
 )
 
-Then('every item listed in the autocomplete list on the webUI should contain {string}', function(
-  pattern
-) {
-  return client.page.FilesPageElement.sharingDialog()
-    .getShareAutocompleteItemsList()
-    .then(itemsList => {
-      itemsList.forEach(item => {
-        if (!item.toLowerCase().includes(pattern)) {
-          assert.fail(`sharee ${item} does not contain pattern ${pattern}`)
-        }
+Then(
+  'every item listed in the autocomplete list on the webUI should contain {string}',
+  function (pattern) {
+    return client.page.FilesPageElement.sharingDialog()
+      .getShareAutocompleteItemsList()
+      .then((itemsList) => {
+        itemsList.forEach((item) => {
+          if (!item.toLowerCase().includes(pattern)) {
+            assert.fail(`sharee ${item} does not contain pattern ${pattern}`)
+          }
+        })
       })
-    })
-})
+  }
+)
 
-When('the user selects role {string}', function(role) {
+When('the user selects role {string}', function (role) {
   return client.page.FilesPageElement.sharingDialog().selectRoleForNewCollaborator(role)
 })
 
-When('the user confirms the share', function() {
+When('the user confirms the share', function () {
   return client.page.FilesPageElement.sharingDialog().confirmShare()
 })
 
-Then('the users own name should not be listed in the autocomplete list on the webUI', function() {
+Then('the users own name should not be listed in the autocomplete list on the webUI', function () {
   const currentUserDisplayName = userSettings.getDisplayNameForUser(client.globals.currentUser)
   return client.page.FilesPageElement.sharingDialog()
     .getShareAutocompleteItemsList()
-    .then(itemsList => {
-      itemsList.forEach(item => {
+    .then((itemsList) => {
+      itemsList.forEach((item) => {
         const displayedName = item.split('\n')[0]
         assert.notStrictEqual(
           displayedName,
@@ -868,57 +870,58 @@ Then('the users own name should not be listed in the autocomplete list on the we
     })
 })
 
-Then('{string} {string} should not be listed in the autocomplete list on the webUI', function(
-  type,
-  displayName
-) {
-  return client.page.FilesPageElement.sharingDialog().assertCollaboratorsInAutocompleteList(
-    displayName,
-    type,
-    false
-  )
-})
+Then(
+  '{string} {string} should not be listed in the autocomplete list on the webUI',
+  function (type, displayName) {
+    return client.page.FilesPageElement.sharingDialog().assertCollaboratorsInAutocompleteList(
+      displayName,
+      type,
+      false
+    )
+  }
+)
 
-Then('{string} {string} should be listed in the autocomplete list on the webUI', function(
-  type,
-  displayName
-) {
-  return client.page.FilesPageElement.sharingDialog().assertCollaboratorsInAutocompleteList(
-    displayName,
-    type
-  )
-})
+Then(
+  '{string} {string} should be listed in the autocomplete list on the webUI',
+  function (type, displayName) {
+    return client.page.FilesPageElement.sharingDialog().assertCollaboratorsInAutocompleteList(
+      displayName,
+      type
+    )
+  }
+)
 
 Then(
   'the share permission denied message should be displayed in the sharing dialog on the webUI',
-  function() {
+  function () {
     return client.page.FilesPageElement.sharingDialog().isSharePermissionMessageVisible()
   }
 )
 
 Then(
   'the link share permission denied message should be displayed in the sharing dialog on the webUI',
-  function() {
+  function () {
     return client.page.FilesPageElement.sharingDialog().isLinkSharePermissionMessageVisible()
   }
 )
 
-When('the user opens the share dialog for file/folder/resource {string} using the webUI', function(
-  file
-) {
-  return client.page.FilesPageElement.filesList().openSharingDialog(file)
-})
+When(
+  'the user opens the share dialog for file/folder/resource {string} using the webUI',
+  function (file) {
+    return client.page.FilesPageElement.filesList().openSharingDialog(file)
+  }
+)
 
 When(
   'the user opens the link share dialog for file/folder/resource {string} using the webUI',
-  function(file) {
+  function (file) {
     return client.page.FilesPageElement.filesList().openPublicLinkDialog(file)
   }
 )
 
 When(
   'the user deletes {string} as collaborator for the current file/folder using the webUI',
-  function(user) {
+  function (user) {
     return client.page.FilesPageElement.SharingDialog.collaboratorsDialog().deleteShareWithUserGroup(
       user
     )
@@ -927,7 +930,7 @@ When(
 
 When(
   'the user deletes {string} as remote collaborator for the current file/folder using the webUI',
-  function(user) {
+  function (user) {
     user = util.format('%s@%s', user, client.globals.remote_backend_url)
     return client.page.FilesPageElement.SharingDialog.collaboratorsDialog().deleteShareWithUserGroup(
       user
@@ -937,7 +940,7 @@ When(
 
 When(
   'the user changes the collaborator role of {string} for file/folder {string} to {string} with permissions {string} using the webUI',
-  async function(collaborator, resource, newRole, permissions) {
+  async function (collaborator, resource, newRole, permissions) {
     const api = client.page.FilesPageElement
     await api.filesList().openSharingDialog(resource)
     return api.sharingDialog().changeCollaboratorRole(collaborator, newRole, permissions)
@@ -946,27 +949,28 @@ When(
 
 When(
   'the user (tries to )edit/edits the collaborator expiry date of {string} of file/folder/resource {string} to {string} days/day using the webUI',
-  async function(collaborator, resource, days) {
+  async function (collaborator, resource, days) {
     const api = client.page.FilesPageElement
     await api.filesList().openSharingDialog(resource)
     return api.sharingDialog().changeCollaboratorExpiryDate(collaborator, days)
   }
 )
 
-Then('user {string} should be listed as {string} in the collaborators list on the webUI', function(
-  user,
-  role
-) {
-  return assertCollaboratorslistContains('user', user, { role })
-})
+Then(
+  'user {string} should be listed as {string} in the collaborators list on the webUI',
+  function (user, role) {
+    return assertCollaboratorslistContains('user', user, { role })
+  }
+)
 
 Then(
   'the share {string} shared with user {string} should have no expiration information displayed on the webUI',
-  async function(item, user) {
+  async function (item, user) {
     await client.page.FilesPageElement.filesList().openSharingDialog(item)
-    const elementID = await client.page.FilesPageElement.SharingDialog.collaboratorsDialog().getCollaboratorExpirationInfo(
-      user
-    )
+    const elementID =
+      await client.page.FilesPageElement.SharingDialog.collaboratorsDialog().getCollaboratorExpirationInfo(
+        user
+      )
     return assert.strictEqual(
       elementID,
       undefined,
@@ -977,11 +981,12 @@ Then(
 
 Then(
   'the expiration information displayed on the webUI of share {string} shared with user {string} should be {string} or {string}',
-  async function(item, user, information1, information2) {
+  async function (item, user, information1, information2) {
     await client.page.FilesPageElement.filesList().openSharingDialog(item)
-    const actualInfo = await client.page.FilesPageElement.SharingDialog.collaboratorsDialog().getCollaboratorExpirationInfo(
-      user
-    )
+    const actualInfo =
+      await client.page.FilesPageElement.SharingDialog.collaboratorsDialog().getCollaboratorExpirationInfo(
+        user
+      )
     if (actualInfo === information1) {
       return true
     } else {
@@ -996,7 +1001,7 @@ Then(
 
 Then(
   'remote user {string} should be listed as {string} via {string} in the collaborators list on the webUI',
-  function(user, role, via) {
+  function (user, role, via) {
     user = util.format('%s@%s', user, client.globals.remote_backend_url)
     return assertCollaboratorslistContains('remote user', user, { role, via })
   }
@@ -1004,165 +1009,172 @@ Then(
 
 Then(
   'user {string} should be listed as {string} via {string} in the collaborators list on the webUI',
-  function(user, role, via) {
+  function (user, role, via) {
     return assertCollaboratorslistContains('user', user, { role, via })
   }
 )
 
 Then(
   'user {string} should be listed as {string} reshared through {string} in the collaborators list on the webUI',
-  function(user, role, resharedThrough) {
+  function (user, role, resharedThrough) {
     return assertCollaboratorslistContains('user', user, { role, resharedThrough })
   }
 )
 
 Then(
   'user {string} should be listed as {string} reshared through {string} via {string} in the collaborators list on the webUI',
-  function(user, role, resharedThrough, via) {
+  function (user, role, resharedThrough, via) {
     return assertCollaboratorslistContains('user', user, { role, resharedThrough, via })
   }
 )
 
 Then(
   'user {string} should be listed with additional info {string} in the collaborators list on the webUI',
-  function(user, additionalInfo) {
+  function (user, additionalInfo) {
     return assertCollaboratorslistContains('user', user, { additionalInfo })
   }
 )
 
 Then(
   'user {string} should be listed without additional info in the collaborators list on the webUI',
-  function(user) {
+  function (user) {
     return assertCollaboratorslistContains('user', user, { additionalInfo: false })
   }
 )
 
 Then(
   'user {string} should be listed as {string} in the collaborators list for file/folder/resource {string} on the webUI',
-  async function(user, role, resource) {
+  async function (user, role, resource) {
     await client.page.FilesPageElement.filesList().openSharingDialog(resource)
     return assertCollaboratorslistContains('user', user, { role })
   }
 )
 
-Then('group {string} should be listed as {string} in the collaborators list on the webUI', function(
-  group,
-  role
-) {
-  return assertCollaboratorslistContains('group', group, { role })
-})
+Then(
+  'group {string} should be listed as {string} in the collaborators list on the webUI',
+  function (group, role) {
+    return assertCollaboratorslistContains('group', group, { role })
+  }
+)
 
 Then(
   'group {string} should be listed as {string} via {string} in the collaborators list on the webUI',
-  function(group, role, via) {
+  function (group, role, via) {
     return assertCollaboratorslistContains('group', group, { role, via })
   }
 )
 
 Then(
   'group {string} should be listed as {string} in the collaborators list for file/folder/resource {string} on the webUI',
-  async function(group, role, resource) {
+  async function (group, role, resource) {
     await client.page.FilesPageElement.filesList().openSharingDialog(resource)
     return assertCollaboratorslistContains('group', group, { role })
   }
 )
 
-Then('user {string} should not be listed in the collaborators list on the webUI', function(user) {
+Then('user {string} should not be listed in the collaborators list on the webUI', function (user) {
   return assertCollaboratorslistDoesNotContain('user', user)
 })
 
-Then('group {string} should not be listed in the collaborators list on the webUI', function(group) {
-  return assertCollaboratorslistDoesNotContain('group', group)
-})
+Then(
+  'group {string} should not be listed in the collaborators list on the webUI',
+  function (group) {
+    return assertCollaboratorslistDoesNotContain('group', group)
+  }
+)
 
-Then('user {string} should have received a share with these details:', function(
-  user,
-  expectedDetailsTable
-) {
-  return sharingHelper.assertUserHasShareWithDetails(user, expectedDetailsTable, {
-    shared_with_me: true
-  })
-})
+Then(
+  'user {string} should have received a share with these details:',
+  function (user, expectedDetailsTable) {
+    return sharingHelper.assertUserHasShareWithDetails(user, expectedDetailsTable, {
+      shared_with_me: true
+    })
+  }
+)
 
-Then('user {string} should not have received any shares', function(user) {
+Then('user {string} should not have received any shares', function (user) {
   return sharingHelper.assertUserHasNoShares(user)
 })
 
-Given('user {string} has created a new public link for resource {string}', function(
-  user,
-  resource
-) {
-  return shareFileFolder(resource, user, '', SHARE_TYPES.public_link)
-})
+Given(
+  'user {string} has created a new public link for resource {string}',
+  function (user, resource) {
+    return shareFileFolder(resource, user, '', SHARE_TYPES.public_link)
+  }
+)
 
-Then('user {string} should have shared a file/folder with these details:', function(
-  user,
-  expectedDetailsTable
-) {
-  return sharingHelper.assertUserHasShareWithDetails(user, expectedDetailsTable, {
-    shared_with_me: false
-  })
-})
+Then(
+  'user {string} should have shared a file/folder with these details:',
+  function (user, expectedDetailsTable) {
+    return sharingHelper.assertUserHasShareWithDetails(user, expectedDetailsTable, {
+      shared_with_me: false
+    })
+  }
+)
 
-Then('user {string} should have shared a file/folder {string} with these details:', function(
-  user,
-  path,
-  expectedDetailsTable
-) {
-  return sharingHelper.assertUserHasShareWithDetails(user, expectedDetailsTable, {
-    shared_with_me: false,
-    path
-  })
-})
+Then(
+  'user {string} should have shared a file/folder {string} with these details:',
+  function (user, path, expectedDetailsTable) {
+    return sharingHelper.assertUserHasShareWithDetails(user, expectedDetailsTable, {
+      shared_with_me: false,
+      path
+    })
+  }
+)
 
-Then('user {string} should have a share with these details:', function(user, expectedDetailsTable) {
-  return sharingHelper.assertUserHasShareWithDetails(user, expectedDetailsTable)
-})
+Then(
+  'user {string} should have a share with these details:',
+  function (user, expectedDetailsTable) {
+    return sharingHelper.assertUserHasShareWithDetails(user, expectedDetailsTable)
+  }
+)
 
 Then(
   'the user should not be able to share file/folder/resource {string} using the webUI',
-  async function(resource) {
+  async function (resource) {
     const api = client.page.FilesPageElement
     await api.filesList().openSharingDialog(resource)
     return await api.sharingDialog().isSharePermissionMessageVisible()
   }
 )
 
-Then('the collaborators list for file/folder/resource {string} should be empty', async function(
-  resource
-) {
-  const api = client.page.FilesPageElement
-  await api.filesList().openSharingDialog(resource)
+Then(
+  'the collaborators list for file/folder/resource {string} should be empty',
+  async function (resource) {
+    const api = client.page.FilesPageElement
+    await api.filesList().openSharingDialog(resource)
 
-  const count = (await api.SharingDialog.collaboratorsDialog().getCollaboratorsList({})).length
-  assert.strictEqual(
-    count,
-    0,
-    `Expected to have no collaborators for '${resource}', Found: ${count}`
-  )
-})
+    const count = (await api.SharingDialog.collaboratorsDialog().getCollaboratorsList({})).length
+    assert.strictEqual(
+      count,
+      0,
+      `Expected to have no collaborators for '${resource}', Found: ${count}`
+    )
+  }
+)
 
-Then('the expiration date field should be marked as required on the webUI', async function() {
+Then('the expiration date field should be marked as required on the webUI', async function () {
   await client.page.FilesPageElement.sharingDialog().waitForElementVisible(
     '@requiredLabelInCollaboratorsExpirationDate'
   )
 })
 
-Then('the expiration date for {string} should be disabled on the webUI', async function(
-  expiration
-) {
-  const dateToSet = calculateDate(expiration)
-  const isEnabled = await client.page.FilesPageElement.sharingDialog()
-    .openExpirationDatePicker()
-    .setExpirationDate(dateToSet)
-  return assert.strictEqual(
-    isEnabled,
-    false,
-    `The expiration date for ${expiration} was expected to be disabled, but is found enabled`
-  )
-})
+Then(
+  'the expiration date for {string} should be disabled on the webUI',
+  async function (expiration) {
+    const dateToSet = calculateDate(expiration)
+    const isEnabled = await client.page.FilesPageElement.sharingDialog()
+      .openExpirationDatePicker()
+      .setExpirationDate(dateToSet)
+    return assert.strictEqual(
+      isEnabled,
+      false,
+      `The expiration date for ${expiration} was expected to be disabled, but is found enabled`
+    )
+  }
+)
 
-Then('the current collaborators list should have order {string}', async function(expectedNames) {
+Then('the current collaborators list should have order {string}', async function (expectedNames) {
   const actualNames = (
     await client.page.FilesPageElement.SharingDialog.collaboratorsDialog().getCollaboratorsListNames()
   ).join(',')
@@ -1175,7 +1187,7 @@ Then('the current collaborators list should have order {string}', async function
 
 Then(
   'file/folder {string} shared by {string} should be in {string} state on the webUI',
-  async function(resource, sharer, expectedStatus) {
+  async function (resource, sharer, expectedStatus) {
     const shareStatus =
       expectedStatus === 'Accepted'
         ? SHARE_STATE.accepted
@@ -1192,64 +1204,51 @@ Then(
   }
 )
 
-When('the user declines share {string} offered by user {string} using the webUI', async function(
-  filename,
-  user
-) {
-  await client.pause(200)
-  return client.page.sharedWithMePage().declineAcceptFile('Decline', filename, user)
-})
+When(
+  'the user declines share {string} offered by user {string} using the webUI',
+  async function (filename, user) {
+    await client.pause(200)
+    return client.page.sharedWithMePage().declineAcceptFile('Decline', filename, user)
+  }
+)
 
-When('the user accepts share {string} offered by user {string} using the webUI', async function(
-  filename,
-  user
-) {
-  await client.pause(200)
-  return client.page.sharedWithMePage().declineAcceptFile('Accept', filename, user)
-})
+When(
+  'the user accepts share {string} offered by user {string} using the webUI',
+  async function (filename, user) {
+    await client.pause(200)
+    return client.page.sharedWithMePage().declineAcceptFile('Accept', filename, user)
+  }
+)
 
-Then('the autocomplete list should not be displayed on the webUI', async function() {
+Then('the autocomplete list should not be displayed on the webUI', async function () {
   const isVisible = await client.page.FilesPageElement.sharingDialog().isAutocompleteListVisible()
   return assert.ok(!isVisible, 'Expected: autocomplete list "not visible" but found "visible"')
 })
 
-Given('user {string} has declined the share {string} offered by user {string}', function(
-  user,
-  filename,
-  sharer
-) {
-  return sharingHelper.declineShare(filename, user, sharer)
-})
+Given(
+  'user {string} has declined the share {string} offered by user {string}',
+  function (user, filename, sharer) {
+    return sharingHelper.declineShare(filename, user, sharer)
+  }
+)
 
-Given('user {string} has accepted the share {string} offered by user {string}', function(
-  user,
-  filename,
-  sharer
-) {
-  return sharingHelper.acceptShare(filename, user, sharer)
-})
-
-When(
-  'user {string} accepts the share {string} offered by user {string} using the sharing API',
-  function(user, filename, sharer) {
+Given(
+  'user {string} has accepted the share {string} offered by user {string}',
+  function (user, filename, sharer) {
     return sharingHelper.acceptShare(filename, user, sharer)
   }
 )
 
-Given('user {string} from server {string} has accepted the last pending share', function(
-  user,
-  server
-) {
-  if (server === backendHelper.BACKENDS.remote) {
-    return backendHelper.runOnRemoteBackend(() => sharingHelper.acceptLastPendingShare(user))
-  } else {
-    return sharingHelper.acceptLastPendingShare(user)
-  }
-})
-
 When(
-  'user {string} from server {string} accepts the last pending share using the sharing API',
-  function(user, server) {
+  'user {string} accepts the share {string} offered by user {string} using the sharing API',
+  function (user, filename, sharer) {
+    return sharingHelper.acceptShare(filename, user, sharer)
+  }
+)
+
+Given(
+  'user {string} from server {string} has accepted the last pending share',
+  function (user, server) {
     if (server === backendHelper.BACKENDS.remote) {
       return backendHelper.runOnRemoteBackend(() => sharingHelper.acceptLastPendingShare(user))
     } else {
@@ -1258,30 +1257,41 @@ When(
   }
 )
 
-Then('file/folder {string} should be marked as shared by {string} on the webUI', async function(
-  element,
-  sharer
-) {
-  const username = await client.page.sharedWithMePage().getSharedByUser(element)
-  return assert.strictEqual(
-    username,
-    sharer,
-    `Expected username: '${sharer}', but found '${username}'`
-  )
-})
+When(
+  'user {string} from server {string} accepts the last pending share using the sharing API',
+  function (user, server) {
+    if (server === backendHelper.BACKENDS.remote) {
+      return backendHelper.runOnRemoteBackend(() => sharingHelper.acceptLastPendingShare(user))
+    } else {
+      return sharingHelper.acceptLastPendingShare(user)
+    }
+  }
+)
 
-Then('user {string} should not have created any shares', async function(user) {
+Then(
+  'file/folder {string} should be marked as shared by {string} on the webUI',
+  async function (element, sharer) {
+    const username = await client.page.sharedWithMePage().getSharedByUser(element)
+    return assert.strictEqual(
+      username,
+      sharer,
+      `Expected username: '${sharer}', but found '${username}'`
+    )
+  }
+)
+
+Then('user {string} should not have created any shares', async function (user) {
   const shares = await sharingHelper.getAllSharesSharedByUser(user)
   assert.strictEqual(shares.length, 0, 'There should not be any share, but there are')
 })
 
-Then('the following resources should have the following collaborators', async function(dataTable) {
+Then('the following resources should have the following collaborators', async function (dataTable) {
   for (const { fileName, expectedCollaborators } of dataTable.hashes()) {
     const collaboratorsArray = await client.page
       .sharedWithOthersPage()
       .getCollaboratorsForResource(fileName)
 
-    const expectedCollaboratorsArray = expectedCollaborators.split(',').map(s => s.trim())
+    const expectedCollaboratorsArray = expectedCollaborators.split(',').map((s) => s.trim())
     assert.ok(
       _.intersection(collaboratorsArray, expectedCollaboratorsArray).length ===
         expectedCollaboratorsArray.length,
@@ -1296,14 +1306,14 @@ Then('the following resources should have the following collaborators', async fu
 
 When(
   'the user (tries to )share/shares file/folder/resource {string} with user {string} which expires in {string} day/days using the webUI',
-  function(resource, sharee, days) {
+  function (resource, sharee, days) {
     return userSharesFileOrFolderWithUserOrGroupWithExpirationDate({ resource, sharee, days })
   }
 )
 
 When(
   'the user (tries to )share/shares file/folder/resource {string} with group {string} which expires in {string} day/days using the webUI',
-  function(resource, sharee, days) {
+  function (resource, sharee, days) {
     return userSharesFileOrFolderWithUserOrGroupWithExpirationDate({
       resource,
       sharee,
@@ -1313,27 +1323,27 @@ When(
   }
 )
 
-When('the user opens the sharing sidebar for file/folder {string}', function(file) {
+When('the user opens the sharing sidebar for file/folder {string}', function (file) {
   return client.page.FilesPageElement.filesList().openSideBar(file)
 })
 
-When('the user shares file/folder/resource {string} with user {string} using the webUI', function(
-  resource,
-  user
-) {
-  return userSharesFileOrFolderWithUser(resource, user, 'Viewer')
-})
+When(
+  'the user shares file/folder/resource {string} with user {string} using the webUI',
+  function (resource, user) {
+    return userSharesFileOrFolderWithUser(resource, user, 'Viewer')
+  }
+)
 
 Then(
   'the fields of the {string} collaborator for file/folder/resource {string} should contain expiration date with value {string} on the webUI',
-  function(collaborator, resource, value) {
+  function (collaborator, resource, value) {
     return checkCollaboratorsExpirationDate(collaborator, resource, value)
   }
 )
 
 Then(
   'user {string} should have received a share with target {string} and expiration date in {int} day/days',
-  function(user, target, days) {
+  function (user, target, days) {
     return checkReceivedSharesExpirationDate(user, target, days)
   }
 )
@@ -1353,7 +1363,7 @@ Then('the expiration date shown on the webUI should be {string} days', async fun
 
 When(
   'the user shares resource {string} with user {string} using the quick action on the webUI',
-  function(resource, user) {
+  function (resource, user) {
     return userSharesFileOrFolderWithUserOrGroup(
       resource,
       user,
@@ -1366,21 +1376,22 @@ When(
   }
 )
 
-Given('the administrator has set the default folder for received shares to {string}', function(
-  folder
-) {
-  if (client.globals.ocis) {
-    if (folder === 'Shares') {
-      return
+Given(
+  'the administrator has set the default folder for received shares to {string}',
+  function (folder) {
+    if (client.globals.ocis) {
+      if (folder === 'Shares') {
+        return
+      }
+      throw Error(`Cannot set ${folder} as default share received folder in OCIS`)
     }
-    throw Error(`Cannot set ${folder} as default share received folder in OCIS`)
+    return runOcc([`config:system:set share_folder --value=${folder}`])
   }
-  return runOcc([`config:system:set share_folder --value=${folder}`])
-})
+)
 
 Given(
   'the administrator has set the default folder for received shares to {string} on remote server',
-  function(folder) {
+  function (folder) {
     if (client.globals.ocis) {
       if (folder === 'Shares') {
         return

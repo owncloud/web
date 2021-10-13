@@ -1,0 +1,5 @@
+Enhancement: Sorting out dependencies
+
+We have cleaned and simplified the dependency structure in our apps.
+
+https://github.com/owncloud/web/pull/5898

@@ -87,7 +87,7 @@ const quickActions = quickActionsImport
 // temporary patch till we have upgraded web to the latest vue router which make this obsolete
 // this takes care that routes like 'foo/bar/baz' which by default would be converted to 'foo%2Fbar%2Fbaz' stay as they are
 // should immediately go away and be removed after finalizing the update
-const patchRouter = router => {
+const patchRouter = (router) => {
   // for now we only need the patch on following routes, if needed on more just extend
   // - files-personal: https://github.com/owncloud/web/issues/1883
   // - files-personal: https://github.com/owncloud/web/issues/4595
@@ -95,7 +95,7 @@ const patchRouter = router => {
   // - files-location-picker
   const activateForRoutes = ['files-personal', 'files-public-list', 'files-location-picker']
   const bindMatcher = router.match.bind(router)
-  const cleanPath = route =>
+  const cleanPath = (route) =>
     [
       ['%2F', '/'],
       ['//', '/']

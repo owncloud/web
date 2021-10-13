@@ -9,7 +9,7 @@ describe('permissions helper', () => {
       { isReceivedShare: false, isMounted: true, canBeDeleted: true, parentPath: 'folder' }
     ])(
       'should return true if the given resource can be deleted and if it is not mounted in root',
-      input => {
+      (input) => {
         // resources are supposed to be external if it is a received share or is mounted
         // resources are supposed to be mountedInRoot if its parentPath is an empty string and resource is external
         expect(
@@ -34,7 +34,7 @@ describe('permissions helper', () => {
       { isReceivedShare: true, isMounted: true, canBeDeleted: true, parentPath: '' }
     ])(
       'should return false if the given resource cannot be deleted or if it is mounted in root',
-      input => {
+      (input) => {
         expect(
           canBeMoved(
             {

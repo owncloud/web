@@ -49,7 +49,7 @@ describe('ListInfo', () => {
         { prop: { files: 1, folders: 0 }, expectedText: '1 item in total (1 file, 0 folders)' },
         { prop: { files: 1, folders: 1 }, expectedText: '2 items in total (1 file, 1 folder)' },
         { prop: { files: 2, folders: 2 }, expectedText: '4 items in total (2 files, 2 folders)' }
-      ])('should be singular or plural according to item, files and folders count', cases => {
+      ])('should be singular or plural according to item, files and folders count', (cases) => {
         const wrapper = getWrapper(cases.prop)
         const itemElement = wrapper.find('p')
         expect(itemElement.text()).toBe(cases.expectedText)
@@ -63,14 +63,17 @@ describe('ListInfo', () => {
 
       expect(itemElement.attributes('data-test-size')).toBe(undefined)
     })
-    it.each([-1, 0, 1, 0.1, 100000.01])('should set data test size property if provided', size => {
-      const wrapper = getWrapper({ size: size })
+    it.each([-1, 0, 1, 0.1, 100000.01])(
+      'should set data test size property if provided',
+      (size) => {
+        const wrapper = getWrapper({ size: size })
 
-      expect(wrapper.find('p').attributes('data-test-size')).toBe(size.toString())
-    })
+        expect(wrapper.find('p').attributes('data-test-size')).toBe(size.toString())
+      }
+    )
 
     describe('when size prop is zero or smaller', () => {
-      it.each([0, -1])('should not contain size information inside text', size => {
+      it.each([0, -1])('should not contain size information inside text', (size) => {
         const wrapper = getWrapper({ size: size })
         const itemElement = wrapper.find('p')
         expect(itemElement.text()).toBe('5 items in total (2 files, 3 folders)')

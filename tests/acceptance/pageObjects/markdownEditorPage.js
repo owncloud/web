@@ -11,9 +11,9 @@ module.exports = {
      *
      * @returns {Promise<string>}
      */
-    getInnerText: async function(element) {
+    getInnerText: async function (element) {
       let text = ''
-      await this.waitForElementVisible(element).getText(element, result => (text = result.value))
+      await this.waitForElementVisible(element).getText(element, (result) => (text = result.value))
       return text
     },
     /**
@@ -22,55 +22,55 @@ module.exports = {
      *
      * @returns {Promise<string>}
      */
-    getInputValue: async function(element) {
+    getInputValue: async function (element) {
       let content = ''
-      await this.waitForElementVisible(element).getValue(element, result => {
+      await this.waitForElementVisible(element).getValue(element, (result) => {
         content = result.value
       })
       return content
     },
-    getFileName: function() {
+    getFileName: function () {
       return this.getInnerText('@fileName')
     },
-    getContentFromEditor: function() {
+    getContentFromEditor: function () {
       return this.getInputValue('@editorTextarea')
     },
-    getContentFromPanel: function() {
+    getContentFromPanel: function () {
       return this.getInnerText('@previewPanel')
     },
-    getPreviewPanelElement: function() {
+    getPreviewPanelElement: function () {
       return this.elements.previewPanel.selector
     },
-    saveFileEdit: function() {
+    saveFileEdit: function () {
       return this.waitForElementVisible('@saveButton').click('@saveButton')
     },
-    closeMarkdownEditor: function() {
+    closeMarkdownEditor: function () {
       return this.waitForElementVisible('@closeButton').click('@closeButton')
     },
     /**
      * clears and updates textarea with new value
      * @param {string} content
      */
-    updateFileContent: async function(content) {
+    updateFileContent: async function (content) {
       await this.waitForElementVisible('@editorTextarea')
         .click('@editorTextarea')
         .clearValueWithEvent('@editorTextarea')
         .setValue('@editorTextarea', content)
     },
-    waitForPageLoaded: function() {
+    waitForPageLoaded: function () {
       return this.waitForElementVisible('@editorTextarea')
     },
     /**
      * appends new content to the existing content
      * @param {string} content
      */
-    appendContentToFile: async function(content) {
+    appendContentToFile: async function (content) {
       await this.waitForElementVisible('@editorTextarea').setValue('@editorTextarea', content)
     },
     /**
      * @param {string} fileName
      */
-    openMdEditorUsingActionMenu: async function(fileName) {
+    openMdEditorUsingActionMenu: async function (fileName) {
       await filesList.openFileActionsMenu(fileName)
       await filesActionsMenu.markdownEditor()
       return this

@@ -25,7 +25,7 @@ export const requestConfiguration = async (path: string): Promise<RuntimeConfigu
     throw new Error(`config could not be loaded. HTTP status-code ${request.status}`)
   }
 
-  return request.json().catch(error => {
+  return request.json().catch((error) => {
     throw new Error(`config could not be parsed. ${error}`)
   })
 }
@@ -107,18 +107,16 @@ export const announceApplications = async ({
   translations: unknown
   supportedLanguages: { [key: string]: string }
 }): Promise<void> => {
-  const {
-    apps: internalApplications = [],
-    external_apps: externalApplications = []
-  } = runtimeConfiguration
+  const { apps: internalApplications = [], external_apps: externalApplications = [] } =
+    runtimeConfiguration
 
   const applicationPaths = [
-    ...internalApplications.map(application => `web-app-${application}`),
-    ...externalApplications.map(application => application.path)
+    ...internalApplications.map((application) => `web-app-${application}`),
+    ...externalApplications.map((application) => application.path)
   ].filter(Boolean)
 
   const applicationResults = await Promise.allSettled(
-    applicationPaths.map(applicationPath =>
+    applicationPaths.map((applicationPath) =>
       buildApplication({
         applicationPath,
         store,
@@ -140,8 +138,8 @@ export const announceApplications = async ({
     return acc
   }, [])
 
-  await Promise.all(applications.map(application => application.initialize()))
-  await Promise.all(applications.map(application => application.ready()))
+  await Promise.all(applications.map((application) => application.initialize()))
+  await Promise.all(applications.map((application) => application.ready()))
 }
 
 /**

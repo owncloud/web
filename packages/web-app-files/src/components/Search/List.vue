@@ -63,7 +63,7 @@ export default {
   props: {
     searchResults: {
       type: Array,
-      default: function() {
+      default: function () {
         return []
       }
     }
@@ -81,12 +81,12 @@ export default {
       immediate: true
     },
     searchResults: {
-      handler: function() {
+      handler: function () {
         this.CLEAR_CURRENT_FILES_LIST()
         this.LOAD_FILES({
           currentFolder: null,
           files: this.searchResults.length
-            ? this.searchResults.map(searchResult => searchResult.data)
+            ? this.searchResults.map((searchResult) => searchResult.data)
             : []
         })
       },

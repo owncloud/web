@@ -8,9 +8,9 @@ const appInfo = {
   extensions: []
 }
 
-const injectExtensions = async api => {
+const injectExtensions = async (api) => {
   // the promise is just there to showcase lazy loading of extensions
-  await new Promise(resolve => setTimeout(resolve, 2000))
+  await new Promise((resolve) => setTimeout(resolve, 2000))
 
   api.announceExtension({
     extension: 'txt',

@@ -11,9 +11,7 @@
         <h3 class="oc-login-card-title">
           <span v-translate>Login Error</span>
         </h3>
-        <h4 v-translate class="oc-mb-m">
-          Your user session is invalid or has expired.
-        </h4>
+        <h4 v-translate class="oc-mb-m">Your user session is invalid or has expired.</h4>
         <div v-translate class="oc-mb-m" @click="performLogout">
           If you like to login with a different user please proceed to <a id="exitAnchor">exit</a>.
         </div>

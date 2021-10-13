@@ -1,7 +1,7 @@
 const { join } = require('../helpers/path')
 
 module.exports = {
-  url: function() {
+  url: function () {
     return join(this.api.launchUrl, '/#/files/list/shared-with-others/')
   },
   commands: {
@@ -9,12 +9,12 @@ module.exports = {
      * like build-in navigate() but also waits till for the progressbar to appear and disappear
      * @returns {*}
      */
-    navigateAndWaitTillLoaded: function() {
+    navigateAndWaitTillLoaded: function () {
       return this.navigate(this.url()).waitForElementPresent(
         this.page.FilesPageElement.filesList().elements.anyAfterLoading
       )
     },
-    getCollaboratorsForResource: async function(fileName) {
+    getCollaboratorsForResource: async function (fileName) {
       const collaborators = []
       const requiredXpath =
         this.api.page.FilesPageElement.filesList().getFileRowSelectorByFileName(fileName) +
@@ -26,13 +26,15 @@ module.exports = {
       await this.api.elements(
         this.elements.collaboratorsInFileRow.locateStrategy,
         requiredXpath,
-        elements => {
-          elements.value.forEach(el => {
-            ;['data-test-user-name', 'data-test-link-name', 'data-test-item-name'].forEach(attr => {
-              this.api.elementIdAttribute(el.ELEMENT, attr, r => {
-                collaborators.push(r.value)
-              })
-            })
+        (elements) => {
+          elements.value.forEach((el) => {
+            ;['data-test-user-name', 'data-test-link-name', 'data-test-item-name'].forEach(
+              (attr) => {
+                this.api.elementIdAttribute(el.ELEMENT, attr, (r) => {
+                  collaborators.push(r.value)
+                })
+              }
+            )
           })
         }
       )

@@ -32,7 +32,7 @@ localVue.use(GetTextPlugin, {
   silent: true
 })
 
-export const getStore = function({
+export const getStore = function ({
   highlightedFile = null,
   disablePreviews = true,
   currentPage = null,

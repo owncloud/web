@@ -26,7 +26,7 @@ export default {
       const translatedHint =
         itemCount > 0 ? announcement : this.$gettext('This folder has no content.')
 
-      document.querySelectorAll('.oc-breadcrumb-sr').forEach(el => el.remove())
+      document.querySelectorAll('.oc-breadcrumb-sr').forEach((el) => el.remove())
 
       const invisibleHint = document.createElement('p')
       invisibleHint.className = 'oc-invisible-sr oc-breadcrumb-sr'

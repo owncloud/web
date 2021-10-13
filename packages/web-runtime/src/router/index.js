@@ -68,7 +68,7 @@ const router = new Router({
   ]
 })
 
-router.beforeEach(function(to, from, next) {
+router.beforeEach(function (to, from, next) {
   const store = Vue.$store
   const isAuthenticated = store.getters.isAuthenticated
   let authRequired = true

@@ -12,7 +12,7 @@ module.exports = {
     /**
      * @param {string} elementName the name of the element (mapped in `ContextMenuItem`)
      */
-    clickMenuItem: async function(elementName) {
+    clickMenuItem: async function (elementName) {
       const element = this.elements[elementName]
       await this.click(element.locateStrategy, element.selector)
       return this
@@ -23,7 +23,7 @@ module.exports = {
      *
      * @returns {*}
      */
-    showDetails: async function() {
+    showDetails: async function () {
       await this.clickMenuItem(this.ContextMenuItem.showDetails)
       await this.waitForAnimationToFinish() // wait for sidebar animation to finish
       return this
@@ -34,7 +34,7 @@ module.exports = {
      *
      * @returns {*}
      */
-    showActions: async function() {
+    showActions: async function () {
       await this.clickMenuItem(this.ContextMenuItem.showActions)
       await this.waitForAnimationToFinish() // wait for sidebar animation to finish
       return this

@@ -4,7 +4,7 @@ import mockAxios from 'jest-mock-axios'
 beforeEach(mockAxios.reset)
 
 describe('HttpClient', () => {
-  test.each(['delete', 'get', 'head', 'options', 'patch', 'post', 'put'])('%s', m => {
+  test.each(['delete', 'get', 'head', 'options', 'patch', 'post', 'put'])('%s', (m) => {
     const client = new HttpClient()
     client[m]('url')
     mockAxios.mockResponse({ data: undefined })
@@ -19,14 +19,11 @@ describe('HttpClient', () => {
   })
 
   // eslint-disable-next-line jest/no-done-callback
-  test('cancel', done => {
+  test('cancel', (done) => {
     const client = new HttpClient()
     const thenFn = jest.fn()
     const catchFn = jest.fn()
-    const promise = client
-      .get('/foo')
-      .then(thenFn)
-      .catch(catchFn)
+    const promise = client.get('/foo').then(thenFn).catch(catchFn)
     client.cancel('foo')
 
     setTimeout(async () => {

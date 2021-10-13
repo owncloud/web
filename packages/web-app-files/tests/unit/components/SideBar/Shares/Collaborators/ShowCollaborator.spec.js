@@ -32,11 +32,11 @@ const resharers = [
   }
 ]
 
-const getReshareToggleId = function(username) {
+const getReshareToggleId = function (username) {
   return selectors.reshareToggleId.replace('%s', username)
 }
 
-const getReshareDetailsToggleDropSelector = function(username) {
+const getReshareDetailsToggleDropSelector = function (username) {
   return 'oc-drop-stub[drop-id="' + getReshareToggleId(username) + '-drop"]'
 }
 
@@ -56,7 +56,7 @@ describe('Collaborator component', () => {
     })
     it.each([3, 4, 6])(
       'should display a generic-person icon for any other share types',
-      shareType => {
+      (shareType) => {
         const wrapper = createWrapper({ shareType: shareType })
         expect(wrapper.find(selectors.userAvatarImage).exists()).toBeFalsy()
         expect(wrapper.find(selectors.notUserAvatar).exists()).toBeTruthy()
@@ -95,7 +95,7 @@ describe('Collaborator component', () => {
       expect(wrapper.find(selectors.collaboratorName).text()).toEqual('Brian Murphy')
     })
     describe('collaborator is the current user', () => {
-      it.each([0, 3, 4, 6])('indicates the current user', shareType => {
+      it.each([0, 3, 4, 6])('indicates the current user', (shareType) => {
         const wrapper = createWrapper({
           shareType: shareType,
           currentUserId: 'brian'
@@ -114,7 +114,7 @@ describe('Collaborator component', () => {
       })
     })
     describe('collaborator is not the current user', () => {
-      it.each([0, 3, 4, 6])('does not indicate the current user', shareType => {
+      it.each([0, 3, 4, 6])('does not indicate the current user', (shareType) => {
         const wrapper = createWrapper({
           shareType: shareType,
           collaborator: {
@@ -159,7 +159,7 @@ describe('Collaborator component', () => {
           'group'
         )
       })
-      it.each([0, 2, 3, 4, 5, 6])('shows the person icon for not group shares', shareType => {
+      it.each([0, 2, 3, 4, 5, 6])('shows the person icon for not group shares', (shareType) => {
         const wrapper = createWrapper({
           shareType: shareType
         })
@@ -171,7 +171,7 @@ describe('Collaborator component', () => {
     describe('reshare information', () => {
       it.each([undefined, 0, null, false, '0', '', []])(
         "does not show information if it's not a reshared share",
-        resharers => {
+        (resharers) => {
           const wrapper = createWrapper({
             resharers: resharers
           })
@@ -190,7 +190,7 @@ describe('Collaborator component', () => {
         '[{ "displayName": 123 }, { "displayName": "Peter" }]',
         '[{ "displayName": null }, { "displayName": "Peter" }]',
         '[{ "displayName": "Tom" }, { "displayName": "" }]'
-      ])('does not show information if a reshare has invalid data', resharers => {
+      ])('does not show information if a reshare has invalid data', (resharers) => {
         const wrapper = createWrapper({
           resharers: JSON.parse(resharers)
         })
@@ -282,7 +282,7 @@ describe('Collaborator component', () => {
         { name: 'owner', expectedText: 'Owner' },
         { name: 'resharer', expectedText: 'Resharer' },
         { name: 'invalidRole', expectedText: 'Unknown Role' }
-      ])('shows the role label', cases => {
+      ])('shows the role label', (cases) => {
         const wrapper = createWrapper({
           role: { name: cases.name }
         })
@@ -296,7 +296,7 @@ describe('Collaborator component', () => {
         { name: 'owner', expectedName: 'key' },
         { name: 'resharer', expectedName: 'key' },
         { name: 'invalidRole', expectedName: 'key' }
-      ])('sets the name of the icon', cases => {
+      ])('sets the name of the icon', (cases) => {
         const wrapper = createWrapper({
           role: { name: cases.name }
         })
@@ -322,10 +322,10 @@ function createWrapper({
   return mount(Collaborator, {
     store: new Vuex.Store({
       getters: {
-        user: function() {
+        user: function () {
           return { id: currentUserId }
         },
-        isOcis: function() {
+        isOcis: function () {
           return false
         }
       },
@@ -333,7 +333,7 @@ function createWrapper({
         Files: {
           namespaced: true,
           getters: {
-            highlightedFile: function() {
+            highlightedFile: function () {
               return { type: 'folder' }
             }
           }

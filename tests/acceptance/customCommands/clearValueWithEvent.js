@@ -10,7 +10,7 @@
  */
 exports.command = function clearValueWithEvent(selector) {
   const { END, BACK_SPACE } = this.Keys
-  return this.getValue(selector, result => {
+  return this.getValue(selector, (result) => {
     const chars = result.value.split('')
     // Make sure we are at the end of the input
     this.setValue(selector, END)

@@ -1,8 +1,8 @@
-import {Actor, User} from '../../types'
+import { Actor, User } from '../../types'
 /* eslint-disable-next-line */
 import type { LoginAdapter } from './index'
 
-export class OcisLoginAdapter implements LoginAdapter{
+export class OcisLoginAdapter implements LoginAdapter {
   private readonly actor: Actor
 
   constructor({ actor }: { actor: Actor }) {

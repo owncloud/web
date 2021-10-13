@@ -116,9 +116,7 @@ describe('LinkEdit', () => {
       const wrapper = getShallowMountedWrapper(
         createStore({
           linkInEdit: {
-            expireDate: DateTime.now()
-              .plus({ days: 1 })
-              .toString()
+            expireDate: DateTime.now().plus({ days: 1 }).toString()
           }
         })
       )
@@ -524,7 +522,7 @@ function createStore({
           publicLinkInEdit: linkInEdit
         },
         getters: {
-          highlightedFile: function() {
+          highlightedFile: function () {
             return { type: type }
           }
         },
@@ -533,7 +531,7 @@ function createStore({
     },
     getters: {
       getToken: jest.fn(),
-      capabilities: function() {
+      capabilities: function () {
         return {
           files_sharing: {
             public: publicLinkCapabilities

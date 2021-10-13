@@ -16,7 +16,7 @@ function formatLog(log) {
 
 async function getAllLogs() {
   let logs = []
-  await client.getLog('browser', entries => {
+  await client.getLog('browser', (entries) => {
     logs = entries
   })
   return logs
@@ -25,8 +25,8 @@ async function getAllLogs() {
 export async function getAllLogsWithDateTime(level = null) {
   let logs = await getAllLogs()
   if (level) {
-    logs = logs.filter(entry => entry.level === level)
+    logs = logs.filter((entry) => entry.level === level)
   }
 
-  return logs.filter(e => !e.message.includes('favicon.ico')).map(formatLog)
+  return logs.filter((e) => !e.message.includes('favicon.ico')).map(formatLog)
 }

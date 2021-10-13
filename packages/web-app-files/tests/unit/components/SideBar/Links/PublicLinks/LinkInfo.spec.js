@@ -109,7 +109,7 @@ describe('LinkInfo', () => {
       { role: 'Contributor', icon: 'edit' },
       { role: 'Uploader', icon: 'file_upload' },
       { role: '*', icon: 'key' }
-    ])('should set different role tag icon for different role types', dataSet => {
+    ])('should set different role tag icon for different role types', (dataSet) => {
       const wrapper = getShallowWrapper({
         url: 'some-link',
         description: dataSet.role

@@ -51,12 +51,12 @@ export class AllFilesPage {
     await page.click('#new-file-menu-btn')
     await page.setInputFiles(
       '#fileUploadInput',
-      files.map(file => file.path)
+      files.map((file) => file.path)
     )
 
     await cta.files.waitForResources({
       page: page,
-      names: files.map(file => path.basename(file.name))
+      names: files.map((file) => path.basename(file.name))
     })
 
     await page.goto(startUrl)

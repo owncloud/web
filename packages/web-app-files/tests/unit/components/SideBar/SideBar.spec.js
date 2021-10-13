@@ -28,7 +28,7 @@ function createWrapper({ item, selectedItems, mocks }) {
   return mount(SideBar, {
     store: new Vuex.Store({
       getters: {
-        user: function() {
+        user: function () {
           return { id: 'marie' }
         },
         capabilities: () => ({

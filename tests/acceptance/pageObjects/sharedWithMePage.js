@@ -3,7 +3,7 @@ const { join } = require('../helpers/path')
 const { SHARE_STATE } = require('../helpers/sharingHelper')
 
 module.exports = {
-  url: function(viewMode) {
+  url: function (viewMode) {
     return join(this.api.launchUrl, '/#/files/list/shared-with-me/?view-mode=' + viewMode)
   },
   commands: {
@@ -11,7 +11,7 @@ module.exports = {
      * like build-in navigate() but also waits till for the progressbar to appear and disappear
      * @returns {*}
      */
-    navigateAndWaitTillLoaded: function(viewMode = SHARE_STATE.accepted) {
+    navigateAndWaitTillLoaded: function (viewMode = SHARE_STATE.accepted) {
       return this.navigate(this.url(viewMode)).waitForElementPresent(
         this.page.FilesPageElement.filesList().elements.anyAfterLoading
       )
@@ -20,14 +20,14 @@ module.exports = {
      * Navigate to the shared with me page in `accepted` view mode and wait until loading finished.
      * @returns {*}
      */
-    navigateToAcceptedAndWaitUntilLoaded: function() {
+    navigateToAcceptedAndWaitUntilLoaded: function () {
       return this.navigateAndWaitTillLoaded(SHARE_STATE.accepted)
     },
     /**
      * Navigate to the shared with me page in `declined` view mode and wait until loading finished.
      * @returns {*}
      */
-    navigateToDeclinedAndWaitUntilLoaded: function() {
+    navigateToDeclinedAndWaitUntilLoaded: function () {
       return this.navigateAndWaitTillLoaded(SHARE_STATE.declined)
     },
     /**
@@ -40,7 +40,7 @@ module.exports = {
      * @param {string} owner
      * @returns {Promise<boolean>}
      */
-    hasShareStatusByFilenameAndUser: async function(status, filename, owner) {
+    hasShareStatusByFilenameAndUser: async function (status, filename, owner) {
       let selector =
         util.format(this.elements.shareTable.selector, status) +
         this.api.page.FilesPageElement.filesList().getFileRowSelectorByFileName(filename)
@@ -48,7 +48,7 @@ module.exports = {
         selector += util.format(this.elements.shareOwnerName.selector, owner)
       }
       let isPresent = false
-      await this.api.element('xpath', selector, function(result) {
+      await this.api.element('xpath', selector, function (result) {
         isPresent = !!(result.value && result.value.ELEMENT)
       })
       return isPresent
@@ -65,10 +65,10 @@ module.exports = {
      * @param {string} filename
      * @returns {Promise<boolean>}
      */
-    hasShareStatusByFilename: async function(status, filename) {
+    hasShareStatusByFilename: async function (status, filename) {
       return await this.hasShareStatusByFilenameAndUser(status, filename, null)
     },
-    batchDeclineShares: function() {
+    batchDeclineShares: function () {
       return this.waitForElementVisible('@batchDeclineSharesButton')
         .initAjaxCounters()
         .click('@batchDeclineSharesButton')
@@ -81,7 +81,7 @@ module.exports = {
      *Performs required action, such as accept and decline, on the file row element of the desired file name
      *  shared by specific user
      */
-    declineAcceptFile: function(action, filename, user) {
+    declineAcceptFile: function (action, filename, user) {
       const actionLocatorButton = {
         locateStrategy: this.elements.shareStatusActionOnFileRow.locateStrategy,
         selector:
@@ -101,7 +101,7 @@ module.exports = {
      *
      * @return {Promise<string>}
      */
-    getSharedByUser: async function(element) {
+    getSharedByUser: async function (element) {
       let username
       const requiredXpath =
         this.api.page.FilesPageElement.filesList().getFileRowSelectorByFileName(element) +
@@ -114,23 +114,23 @@ module.exports = {
         this.elements.sharedFrom.locateStrategy,
         requiredXpath,
         'data-test-user-name',
-        result => {
+        (result) => {
           username = result.value
         }
       )
       return username
     },
-    isSharePresent: async function(element, sharer) {
+    isSharePresent: async function (element, sharer) {
       const requiredXpath =
         this.api.page.FilesPageElement.filesList().getFileRowSelectorByFileName(element) +
         util.format(this.elements.shareOwnerName.selector, sharer)
       let shareFound = false
-      await this.api.elements('xpath', requiredXpath, function(result) {
+      await this.api.elements('xpath', requiredXpath, function (result) {
         shareFound = result.value.length > 0
       })
       return shareFound
     },
-    unshareAllCheckedFiles: function() {
+    unshareAllCheckedFiles: function () {
       return this.waitForElementVisible('@batchDeclineSharesButton')
         .click('@batchDeclineSharesButton')
         .waitForAjaxCallsToStartAndFinish()

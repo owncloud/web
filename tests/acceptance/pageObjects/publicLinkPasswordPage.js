@@ -4,14 +4,14 @@ module.exports = {
       /**
        * Wait for the password input section of public link page to appear
        */
-      waitForVisible: async function() {
+      waitForVisible: async function () {
         await this.waitForElementVisible('@publicLinkPasswordSection')
       },
       /**
        *
        * @param {string} password
        */
-      submitPublicLinkPassword: async function(password) {
+      submitPublicLinkPassword: async function (password) {
         await this.waitForElementVisible('@passwordInput')
           .setValue('@passwordInput', password)
           .click('@passwordSubmitButton')
@@ -22,7 +22,7 @@ module.exports = {
        * submits the public link password input form
        * this is made for those scenarios where we submit wrong password in previous steps and webUI doesn't navigate to files-page
        */
-      submitLinkPasswordForm: function() {
+      submitLinkPasswordForm: function () {
         return this.waitForElementVisible('@passwordInput')
           .initAjaxCounters()
           .click('@passwordSubmitButton')
@@ -33,11 +33,11 @@ module.exports = {
        *
        * @return {Promise<string>}
        */
-      getResourceAccessDeniedMsg: async function() {
+      getResourceAccessDeniedMsg: async function () {
         let message
         await this.waitForElementVisible('@passwordSubmitButton').getText(
           '@resourceProtectedText',
-          result => {
+          (result) => {
             message = result.value
           }
         )

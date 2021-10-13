@@ -69,7 +69,7 @@ describe('PrivateLinkItem', () => {
   })
 })
 
-const getTestFolder = isMounted => ({
+const getTestFolder = (isMounted) => ({
   type: 'folder',
   ownerId: 'marie',
   ownerDisplayName: 'Marie',
@@ -83,7 +83,7 @@ const getTestFolder = isMounted => ({
 function createStore({ isMounted = true } = {}) {
   return new Vuex.Store({
     getters: {
-      capabilities: function() {
+      capabilities: function () {
         return {
           files: {
             privateLinks: true

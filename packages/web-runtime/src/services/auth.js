@@ -61,7 +61,7 @@ export function initVueAuthenticate(config) {
     Log.logger = console
     Log.level = openIdConfig.logLevel
 
-    mgr.events.addUserSignedOut(function() {
+    mgr.events.addUserSignedOut(function () {
       console.log('UserSignedOut：', arguments)
     })
 
@@ -98,8 +98,8 @@ export function initVueAuthenticate(config) {
         return new Promise((resolve, reject) => {
           mgr
             .createSignoutRequest(idToken)
-            .then(signoutRequest => resolve(signoutRequest.url))
-            .catch(error => reject(error))
+            .then((signoutRequest) => resolve(signoutRequest.url))
+            .catch((error) => reject(error))
         })
       },
       clearLoginState() {

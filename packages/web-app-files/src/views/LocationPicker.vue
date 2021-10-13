@@ -163,7 +163,7 @@ export default {
 
     breadcrumbs() {
       const breadcrumbs = []
-      const pathSegments = this.target.split('/').filter(item => item !== '')
+      const pathSegments = this.target.split('/').filter((item) => item !== '')
 
       if (this.isPublicContext) {
         const itemPath = encodeURIComponent(join.apply(null, pathSegments.slice(0, 1)))
@@ -205,8 +205,8 @@ export default {
       const resources = cloneStateObject(this.activeFilesCurrentPage)
 
       return resources
-        .filter(resource => resource.type !== 'folder' || this.resources.includes(resource.path))
-        .map(resource => resource.id)
+        .filter((resource) => resource.type !== 'folder' || this.resources.includes(resource.path))
+        .map((resource) => resource.id)
     },
 
     isEmpty() {
@@ -246,7 +246,7 @@ export default {
 
   watch: {
     $route: {
-      handler: function(to, from) {
+      handler: function (to, from) {
         const sameRoute = to.name === from?.name
         const sameItem = to.params?.item === from?.params?.item
         if (!sameRoute || !sameItem) {
@@ -335,7 +335,7 @@ export default {
       if (resource.type !== 'folder' || !resource.canCreate()) {
         return true
       }
-      return this.resources.some(item => item === resource.path)
+      return this.resources.some((item) => item === resource.path)
     },
 
     async confirmAction() {
@@ -347,7 +347,7 @@ export default {
         let targetPath = this.target || '/'
         const resourceName = basename(resource)
         targetPath += '/' + resourceName
-        const exists = this.activeFilesCurrentPage.some(item => {
+        const exists = this.activeFilesCurrentPage.some((item) => {
           return basename(item.name) === resourceName
         })
 
@@ -377,7 +377,7 @@ export default {
             return
         }
 
-        await promise.catch(error => {
+        await promise.catch((error) => {
           error.resource = resourceName
           errors.push(error)
         })

@@ -26,7 +26,7 @@ describe('Getters', () => {
       ['hides', false]
     ]
 
-    it.each(cases)('%s hidden files if areHiddenFilesShown is set to %s', value => {
+    it.each(cases)('%s hidden files if areHiddenFilesShown is set to %s', (value) => {
       state.areHiddenFilesShown = value
 
       const { activeFiles, filesAll } = getters

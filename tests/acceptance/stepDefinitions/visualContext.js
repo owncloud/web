@@ -13,7 +13,7 @@ const visualElements = Object.freeze({
   sideBar: '.oc-app-navigation'
 })
 
-const getImgPath = function(key) {
+const getImgPath = function (key) {
   const backend = client.globals.ocis ? backends.OCIS : backends.OC10
   if (_.has(visualElements, key)) {
     return path.join(backend, key)
@@ -21,7 +21,7 @@ const getImgPath = function(key) {
   throw new Error(`Cannot find the element ${key}`)
 }
 
-const assertScreenShot = async function(key) {
+const assertScreenShot = async function (key) {
   if (!client.globals.visual_test) {
     return
   }
@@ -34,9 +34,9 @@ const assertScreenShot = async function(key) {
   )
 }
 
-Then('the top bar should match the default baseline', function() {
+Then('the top bar should match the default baseline', function () {
   return assertScreenShot('topBar')
 })
-Then('the sidebar should match the default baseline', function() {
+Then('the sidebar should match the default baseline', function () {
   return assertScreenShot('sideBar')
 })

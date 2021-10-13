@@ -1,7 +1,7 @@
 const { join } = require('../helpers/path')
 
 module.exports = {
-  url: function() {
+  url: function () {
     return join(this.api.launchUrl, '/index.html#/account/')
   },
   commands: {
@@ -9,7 +9,7 @@ module.exports = {
      * like build-in navigate() but also waits for the account display element
      * @returns {Promise}
      */
-    navigateAndWaitTillLoaded: function() {
+    navigateAndWaitTillLoaded: function () {
       return this.navigate(this.url()).waitForElementVisible('@accountDisplay')
     },
 
@@ -18,21 +18,22 @@ module.exports = {
      *
      * @returns {object}
      */
-    getAccountInformation: async function() {
+    getAccountInformation: async function () {
       const accountInformation = []
       let accountInfoElementIds = []
       await this.waitForElementVisible('@accountInformationElements').api.elements(
         '@accountInformationElements',
-        function(result) {
+        function (result) {
           accountInfoElementIds = result.value
         }
       )
       for (const elementIdIndex in accountInfoElementIds) {
-        await this.api.elementIdText(accountInfoElementIds[elementIdIndex].ELEMENT, function(
-          elementText
-        ) {
-          accountInformation.push(elementText.value)
-        })
+        await this.api.elementIdText(
+          accountInfoElementIds[elementIdIndex].ELEMENT,
+          function (elementText) {
+            accountInformation.push(elementText.value)
+          }
+        )
       }
       const actualAccInfo = {}
       for (const elem of accountInformation) {
@@ -44,10 +45,10 @@ module.exports = {
       }
       return actualAccInfo
     },
-    isPageVisible: async function() {
+    isPageVisible: async function () {
       let isVisible = true
 
-      await this.api.element('@accountDisplay', result => {
+      await this.api.element('@accountDisplay', (result) => {
         isVisible = Object.keys(result.value).length > 0
       })
 
