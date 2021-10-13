@@ -108,22 +108,6 @@ export default {
     MixinFilesListFilter
   ],
 
-  beforeRouteEnter(to, from, next) {
-    next((vm) => {
-      if (vm.isRedirectToHomeFolderRequired(to)) {
-        vm.redirectToHomeFolder(to)
-      }
-    })
-  },
-
-  async beforeRouteUpdate(to, from, next) {
-    if (this.isRedirectToHomeFolderRequired(to)) {
-      await this.redirectToHomeFolder(to)
-      return
-    }
-    next()
-  },
-
   data: () => ({
     loading: true
   }),
@@ -177,10 +161,35 @@ export default {
   watch: {
     $route: {
       handler: function (to, from) {
-        this.$_filesListPagination_updateCurrentPage()
-
         const sameRoute = to.name === from?.name
         const sameItem = to.params?.item === from?.params?.item
+
+        const needsRedirectToHome =
+          this.homeFolder !== '/' &&
+          isNil(to.params.item) &&
+          !to.path.endsWith('/') &&
+          (!sameRoute || !sameItem)
+        if (needsRedirectToHome) {
+          this.$router.replace(
+            {
+              name: to.name,
+              params: {
+                ...to.params,
+                item: this.homeFolder
+              },
+              query: to.query
+            },
+            () => {},
+            (e) => {
+              console.error(e)
+            }
+          )
+
+          return
+        }
+
+        this.$_filesListPagination_updateCurrentPage()
+
         if (!sameRoute || !sameItem) {
           this.loadResources(sameRoute)
         }
@@ -222,28 +231,6 @@ export default {
       'REMOVE_FILE_SELECTION'
     ]),
     ...mapMutations(['SET_QUOTA']),
-
-    isRedirectToHomeFolderRequired(to) {
-      return isNil(to.params.item)
-    },
-
-    async redirectToHomeFolder(to) {
-      const route = {
-        name: to.name,
-        params: {
-          ...to.params,
-          item: to.path.endsWith('/') ? '/' : this.homeFolder
-        },
-        query: to.query
-      }
-      await this.$router.replace(
-        route,
-        () => {},
-        (e) => {
-          console.error(e)
-        }
-      )
-    },
 
     async fileDropped(fileIdTarget) {
       const selected = [...this.selectedFiles]
