@@ -160,16 +160,16 @@ export default {
 
   watch: {
     $route: {
-      handler: function(to, from) {
+      handler: function (to, from) {
         const sameRoute = to.name === from?.name
         const sameItem = to.params?.item === from?.params?.item
 
-        if (
+        const needsRedirectToHome =
           this.homeFolder !== '/' &&
           isNil(to.params.item) &&
           !to.path.endsWith('/') &&
           (!sameRoute || !sameItem)
-        ) {
+        if (needsRedirectToHome) {
           this.$router.replace(
             {
               name: to.name,
@@ -180,7 +180,7 @@ export default {
               query: to.query
             },
             () => {},
-            e => {
+            (e) => {
               console.error(e)
             }
           )
