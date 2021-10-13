@@ -69,7 +69,7 @@ const router = new Router({
   ]
 })
 
-router.beforeEach(function(to, from, next) {
+router.beforeEach(function (to, from, next) {
   const store = Vue.$store
   const isAuthenticated = store.getters.isAuthenticated
   let authRequired = true
@@ -100,9 +100,9 @@ router.beforeEach(function(to, from, next) {
 // should immediately go away and be removed after finalizing the update
 // to apply the patch to a route add meta.patchCleanPath = true to it
 // to patch needs to be enabled on a route level, to do so add meta.patchCleanPath = true property to the route
-const patchRouter = router => {
+const patchRouter = (router) => {
   const bindMatcher = router.match.bind(router)
-  const cleanPath = route =>
+  const cleanPath = (route) =>
     [
       ['%2F', '/'],
       ['//', '/']
