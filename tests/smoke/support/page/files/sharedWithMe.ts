@@ -9,14 +9,25 @@ export class SharedWithMePage {
 
   async navigate(): Promise<void> {
     const { page } = this.actor
-    await page.click('a[href="#/files/list/shared-with-me"]')
+    await (await page.waitForSelector('a[href="#/files/list/shared-with-me"]')).click()
   }
 
   async acceptShares({ name }: { name: string }): Promise<void> {
     const { page } = this.actor
+
     await page
       .locator(
         `//*[@data-test-resource-name="${name}"]/ancestor::tr//button[contains(@class, "file-row-share-status-accept")]`
+      )
+      .click()
+  }
+
+  async declineShares({ name }: { name: string }): Promise<void> {
+    const { page } = this.actor
+
+    await page
+      .locator(
+        `//*[@data-test-resource-name="${name}"]/ancestor::tr//button[contains(@class, "file-row-share-decline")]`
       )
       .click()
   }

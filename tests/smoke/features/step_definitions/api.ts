@@ -24,3 +24,10 @@ Given(
     }
   }
 )
+
+Given('admin disables auto accepting', async function (this: World): Promise<void> {
+  const admin = this.userContinent.get({ id: 'admin' })
+  if (!config.ocis) {
+    await api.folder.disablesAutoAccept({ admin })
+  }
+})

@@ -41,7 +41,15 @@ export class AllFilesPage {
     await page.waitForSelector('#files-personal-table')
   }
 
-  async uploadFiles({ files, folder }: { files: File[]; folder?: string }): Promise<void> {
+  async uploadFiles({
+    files,
+    folder,
+    newVersion = false
+  }: {
+    files: File[]
+    folder?: string
+    newVersion?: boolean
+  }): Promise<void> {
     const { page } = this.actor
     const startUrl = page.url()
 
@@ -54,6 +62,11 @@ export class AllFilesPage {
       '#fileUploadInput',
       files.map((file) => file.path)
     )
+
+    if (newVersion) {
+      await page.waitForSelector('.oc-modal-body-actions-confirm')
+      await page.click('.oc-modal-body-actions-confirm')
+    }
 
     await cta.files.waitForResources({
       page: page,
@@ -185,6 +198,40 @@ export class AllFilesPage {
       page: page,
       names: [resourceBase]
     })
+    await page.goto(startUrl)
+  }
+
+  async checkThatResourceExist({ name }: { name: string }): Promise<void> {
+    const { page } = this.actor
+    const startUrl = page.url()
+
+    if (name) {
+      await cta.files.navigateToFolder({ page: page, path: name })
+    }
+
+    await cta.files.resourceExists({ page: page, name: name })
+    // await expect(page.locator(''))
+    // await page('').toBeEnabled()
+
+    // await expect(page.locator(`[data-test-resource-name="${name}"]`)).toBeEnabled()
+    // await page.locator('').toBe
+    // await expect(page).toHaveText('admin')
+    // const op = await page.locator(`[data-test-resource-name="${name}"]`)
+    // await expect(op).toBeEnabled()
+    // await expect(page.locator(`[data-test-resource-name="${name}"]`)).toBeEnabled()
+    await page.goto(startUrl)
+  }
+
+  async checkVersionCount({ folder, count }: { folder: string; count: string }): Promise<void> {
+    const { page } = this.actor
+    const startUrl = page.url()
+
+    if (folder) {
+      console.log('I am here')
+      await cta.files.navigateToFolder({ page: page, path: folder })
+    }
+    console.log('I am here sdcdsdc')
+    await expect(page.locator(`[data-test-resource-name="wefvsavs123"]`)).toBeEnabled
     await page.goto(startUrl)
   }
 }

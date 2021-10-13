@@ -7,6 +7,7 @@ Feature: share folder with file
       | Alice |
       | Brian |
     And admin set the default folder for received shares to "Shares"
+    And admin disables auto accepting
 
   Scenario: Alice shares folder with file to Brian
     Given "Alice" has logged in
