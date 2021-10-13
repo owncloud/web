@@ -21,8 +21,10 @@ export const resourceExists = async ({
   page: Page
   name: string
 }): Promise<boolean> => {
-  const resource = await page.$(`[data-test-resource-name="${name}"]`)
-  return !!resource
+  return !!page.$(`[data-test-resource-name="${name}"]`)
+
+  // const resource = await expect(`[data-test-resource-name="${name}"]`).toBeEnabled()
+  // return !!resource
 }
 
 export const waitForResources = async ({
