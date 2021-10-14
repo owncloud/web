@@ -3,11 +3,8 @@
   "version": "0.0.0",
   "description": "ownCloud web runtime",
   "license": "AGPL-3.0",
-  "devDependencies": {
-    "@popperjs/core": "^2.4.0",
-    "@vue/test-utils": "^1.1.2"
-  },
   "dependencies": {
+    "@popperjs/core": "^2.4.0",
     "axe-core": "^4.3.3",
     "easygettext": "^2.16.1",
     "filesize": "^8.0.0",

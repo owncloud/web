@@ -260,9 +260,7 @@ export default {
       }
 
       const date = new Date()
-
       date.setDate(new Date().getDate() + days)
-
       return date
     },
 

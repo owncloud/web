@@ -136,9 +136,6 @@
     "node": ">=14 <=16"
   },
   "dependencies": {
-    "@popperjs/core": "^2.4.0",
-    "node-gyp": "^8.2.0",
-    "v-calendar": "^2.3.2",
     "vue": "^2.6.10"
   }
 }
