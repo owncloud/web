@@ -72,9 +72,10 @@ Feature: Mark file as favorite
 
 
   Scenario: navigate to the favorites page and back to files page using the menu
-    Given the user has browsed to the favorites page using the webUI
+    Given user "Alice" has uploaded file "data.zip" to "data.zip"
+    And the user has browsed to the favorites page using the webUI
     When the user browses to the files page using the webUI
-    Then the count of files and folders shown on the webUI should be 1
+    Then file "data.zip" should be listed on the webUI
 
   @issue-1910
   Scenario: favorites list appears empty when no favorites are defined
@@ -124,8 +125,6 @@ Feature: Mark file as favorite
     And folder "simple-folder" should not be marked as favorite on the webUI
     And as "Alice" file "lorem.txt" should not exist
     And as "Alice" folder "simple-folder" should not exist
-
-
 
 
   Scenario: Favourite files and folders with comma in the names
