@@ -278,7 +278,7 @@ export default {
             this.loading = false
           },
           // Delay to animate
-          500
+          50
         )
         return
       }
