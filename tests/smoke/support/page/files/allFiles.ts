@@ -41,7 +41,15 @@ export class AllFilesPage {
     await page.waitForSelector('#files-personal-table')
   }
 
-  async uploadFiles({ files, folder, newVersion = false }: { files: File[]; folder?: string; newVersion?: boolean}): Promise<void> {
+  async uploadFiles({
+    files,
+    folder,
+    newVersion = false
+  }: {
+    files: File[]
+    folder?: string
+    newVersion?: boolean
+  }): Promise<void> {
     const { page } = this.actor
     const startUrl = page.url()
 
@@ -55,7 +63,7 @@ export class AllFilesPage {
       files.map((file) => file.path)
     )
 
-    if (newVersion){
+    if (newVersion) {
       await page.waitForSelector('.oc-modal-body-actions-confirm')
       await page.click('.oc-modal-body-actions-confirm')
     }
@@ -193,37 +201,32 @@ export class AllFilesPage {
     await page.goto(startUrl)
   }
 
-  async checkThatResourceExist({ name }: { name: string; }): Promise<void> {
+  async checkThatResourceExist({ name }: { name: string }): Promise<void> {
     const { page } = this.actor
     const startUrl = page.url()
 
     if (name) {
       await cta.files.navigateToFolder({ page: page, path: name })
     }
-
-    await cta.files.resourceExists({ page: page, name: name})
-    // await expect(page.locator(''))
-    // await page('').toBeEnabled()
-
-    // await expect(page.locator(`[data-test-resource-name="${name}"]`)).toBeEnabled()
-    // await page.locator('').toBe
-    // await expect(page).toHaveText('admin')
-    // const op = await page.locator(`[data-test-resource-name="${name}"]`)
-    // await expect(op).toBeEnabled() 
-    // await expect(page.locator(`[data-test-resource-name="${name}"]`)).toBeEnabled()
+    await cta.files.resourceExists({ page: page, name: name })
     await page.goto(startUrl)
   }
 
-  async checkVersionCount({ folder, count }: { folder: string; count: string; }): Promise<void> {
+  async versionExist({ resource }: { resource: string }): Promise<void> {
     const { page } = this.actor
     const startUrl = page.url()
+    const folderPaths = resource.split('/')
+    const resouceName = folderPaths.pop()
 
-    if (folder) {
-      console.log('I am here')
-      await cta.files.navigateToFolder({ page: page, path: folder })
+    console.log('folderPath', resource)
+    if (resource.length) {
+      await cta.files.navigateToFolder({ page: page, path: folderPaths.join('/') })
     }
-    console.log('I am here sdcdsdc')
-    await expect(page.locator(`[data-test-resource-name="wefvsavs123"]`)).toBeEnabled
+
+    await cta.files.sidebar.open({ page: page, resource: resouceName })
+    await cta.files.sidebar.openPanel({ page: page, name: 'versions' })
+    await page.waitForSelector('//div[@id="oc-file-versions-sidebar"]//tr[@class="file-row"]')
+
     await page.goto(startUrl)
   }
 }

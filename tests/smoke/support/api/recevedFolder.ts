@@ -23,11 +23,7 @@ export const setReceivedFolder = async ({
   checkResponseStatus(response, 'Failed creating received folder')
 }
 
-export const disablesAutoAccept = async ({
-  admin
-}: {
-  admin: User
-}): Promise<void> => {
+export const disablesAutoAccept = async ({ admin }: { admin: User }): Promise<void> => {
   const body = new URLSearchParams()
   body.append('command', 'config:app:set core shareapi_auto_accept_share --value=no')
 

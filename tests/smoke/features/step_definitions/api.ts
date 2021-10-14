@@ -19,8 +19,15 @@ Given(
   async function (this: World, value: string): Promise<void> {
     const user = this.userContinent.get({ id: 'admin' })
 
+<<<<<<< HEAD
     if (!config.ocis) {
       await api.config.setShareFolder({ value, user })
     }
+=======
+Given('admin disables auto accepting', async function(this: World): Promise<void> {
+  const admin = this.userContinent.get({ id: 'admin' })
+  if (!config.ocis) {
+    await api.folder.disablesAutoAccept({ admin })
+>>>>>>> 1dd54fe5 (add checking version)
   }
 )

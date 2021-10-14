@@ -132,6 +132,7 @@ When(
       return
     }
 
+<<<<<<< HEAD
     const actor = this.actorContinent.get({ id: stepUser })
     const { sharedWithMe: sharedWithMePage } = new FilesPage({ actor })
     const shares = stepTable.raw().map((f) => f[0])
@@ -178,3 +179,51 @@ When(
     }
   }
 )
+=======
+  for (const folder of Object.keys(uploadInfo)) {
+    await allFilesPage.uploadFiles({ folder, files: uploadInfo[folder], newVersion: true })
+  }
+})
+
+When('{string} declines following resource(s)', async function(
+  this: World,
+  stepUser: string,
+  stepTable: DataTable
+) {
+  const actor = this.actorContinent.get({ id: stepUser })
+  const { sharedWithMe: sharedWithMePage } = new FilesPage({ actor })
+  const shares = stepTable.raw().map(f => f[0])
+
+  for (const share of shares) {
+    await sharedWithMePage.declineShares({ name: share })
+  }
+})
+
+Then('{string} checks whether the following resource(s) exist', async function(
+  this: World,
+  stepUser: string,
+  stepTable: DataTable
+) {
+  const actor = this.actorContinent.get({ id: stepUser })
+  const { allFiles: allFilesPage } = new FilesPage({ actor })
+  const resources = stepTable.raw().map(f => f[0])
+
+  for (const resource of resources) {
+    await allFilesPage.checkThatResourceExist({ name: resource })
+  }
+})
+
+Then('{string} checks that new version exists', async function(
+  this: World,
+  stepUser: string,
+  stepTable: DataTable
+) {
+  const actor = this.actorContinent.get({ id: stepUser })
+  const { allFiles: allFilesPage } = new FilesPage({ actor })
+  const resources = stepTable.raw().map(f => f[0])
+
+  for (const resource of resources) {
+    await allFilesPage.versionExist({ resource: resource })
+  }
+})
+>>>>>>> 1dd54fe5 (add checking version)
