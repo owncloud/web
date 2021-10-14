@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Clean router path handling: [#5894](https://github.com/owncloud/web/pull/5894)
 * Bugfix - Unnecessary redirects on personal page: [#5893](https://github.com/owncloud/web/pull/5893)
+* Enhancement - Accessible, themeable media viewer: [#5900](https://github.com/owncloud/web/pull/5900)
 * Enhancement - Sorting out dependencies: [#5898](https://github.com/owncloud/web/pull/5898)
 
 Details
@@ -35,6 +36,13 @@ Details
    https://github.com/owncloud/web/issues/5085
    https://github.com/owncloud/web/issues/5875
    https://github.com/owncloud/web/pull/5893
+
+* Enhancement - Accessible, themeable media viewer: [#5900](https://github.com/owncloud/web/pull/5900)
+
+   We have updated the media viewer app to respect theme colors and fulfill accessibility
+   requirements (e.g. keyboard navigation, semantic HTML, font size).
+
+   https://github.com/owncloud/web/pull/5900
 
 * Enhancement - Sorting out dependencies: [#5898](https://github.com/owncloud/web/pull/5898)
 
