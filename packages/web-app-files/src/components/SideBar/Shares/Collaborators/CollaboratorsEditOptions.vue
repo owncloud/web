@@ -1,6 +1,6 @@
 <template>
   <div>
-    <hr v-if="!minimal"/>
+    <hr v-if="!minimal" />
     <oc-button
       :id="roleButtonId"
       data-testid="files-recipient-role-select-btn"
@@ -11,7 +11,10 @@
       <translate v-if="isAdvancedRoleSelected && !minimal" key="advanced-permissions-select"
         >Invite with custom permissions</translate
       >
-      <translate v-if="!isAdvancedRoleSelected && !minimal" key="role-select" :translate-params="{ name: selectedRole.inlineLabel }"
+      <translate
+        v-if="!isAdvancedRoleSelected && !minimal"
+        key="role-select"
+        :translate-params="{ name: selectedRole.inlineLabel }"
         >Invite as %{ name }</translate
       >
       <translate v-if="minimal" :translate-params="{ name: selectedRole.inlineLabel }">
@@ -145,7 +148,7 @@ export default {
   mixins: [collaboratorsMixins],
 
   props: {
-    minimal: { 
+    minimal: {
       type: Boolean,
       required: false,
       default: false
@@ -337,7 +340,7 @@ export default {
   },
 
   mounted() {
-    console.log("eferfer")
+    console.log('eferfer')
     console.log(this._uid)
     if (this.expirationSupported) {
       if (this.editingUser || this.editingGroup) {

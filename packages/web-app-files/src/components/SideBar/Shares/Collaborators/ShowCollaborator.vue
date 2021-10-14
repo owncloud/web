@@ -82,9 +82,7 @@
                 </ul>
               </oc-drop>
             </li>
-            <li class="oc-py-rm">
-              
-            </li>
+            <li class="oc-py-rm"></li>
           </ul>
         </div>
       </oc-td>
@@ -114,10 +112,10 @@ import CollaboratorsEditOptions from './CollaboratorsEditOptions.vue'
 
 export default {
   name: 'Collaborator',
-  mixins: [Mixins, CollaboratorsMixins],
   components: {
     CollaboratorsEditOptions
   },
+  mixins: [Mixins, CollaboratorsMixins],
   props: {
     collaborator: {
       type: Object,
