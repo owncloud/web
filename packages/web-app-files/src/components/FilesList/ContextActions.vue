@@ -9,7 +9,7 @@
         <oc-button
           appearance="raw"
           class="oc-text-bold"
-          @click="$_fileActions_openLink(app.name, item.id)"
+          @click="$_fileActions_openLink(app.name, item.fileId)"
         >
           <img :src="app.icon" :alt="`Icon for ${app.name} app`" class="oc-icon oc-icon-m" />
           <span class="oc-files-context-action-label">{{ 'Open in ' + app.name }}</span>
