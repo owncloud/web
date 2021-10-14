@@ -1,34 +1,41 @@
 <template>
-  <main id="mediaviewer" class="uk-position-relative">
-    <div class="uk-text-center oc-p-s">
-      <transition
-        name="custom-classes-transition"
-        :enter-active-class="activeClass.enter"
-        :leave-active-class="activeClass.leave"
+  <main
+    id="mediaviewer"
+    ref="mediaviewer"
+    tabindex="-1"
+    @keydown.left="prev"
+    @keydown.right="next"
+    @keydown.esc="closeApp"
+  >
+    <h1 class="oc-invisible-sr" v-text="pageTitle" />
+    <transition
+      name="custom-classes-transition"
+      :enter-active-class="activeClass.enter"
+      :leave-active-class="activeClass.leave"
+    >
+      <div
+        v-show="!loading && activeMediaFileCached"
+        class="
+          uk-width-1-1 uk-flex uk-flex-center uk-flex-middle
+          oc-p-s
+          uk-box-shadow-medium
+          media-viewer-player
+        "
       >
-        <div v-show="!loading && activeMediaFileCached">
-          <video
-            v-if="medium.isVideo"
-            :key="`media-video-${medium.id}`"
-            class="uk-box-shadow-medium media-viewer-player"
-            controls
-            preload
-          >
-            <source :src="medium.url" :type="`video/${medium.ext}`" />
-          </video>
-          <img
-            v-else
-            :key="`media-image-${medium.id}`"
-            :src="medium.url"
-            :alt="medium.name"
-            :data-id="medium.id"
-            class="uk-box-shadow-medium media-viewer-player"
-          />
-        </div>
-      </transition>
-    </div>
+        <video v-if="medium.isVideo" :key="`media-video-${medium.id}`" controls preload>
+          <source :src="medium.url" :type="`video/${medium.ext}`" />
+        </video>
+        <img
+          v-else
+          :key="`media-image-${medium.id}`"
+          :src="medium.url"
+          :alt="medium.name"
+          :data-id="medium.id"
+        />
+      </div>
+    </transition>
     <div v-if="loading" class="uk-position-center">
-      <oc-spinner :aria-label="$gettext('Loading media')" size="xlarge" />
+      <oc-spinner :aria-label="$gettext('Loading media file')" size="xlarge" />
     </div>
     <oc-icon
       v-if="failed"
@@ -36,65 +43,63 @@
       variation="danger"
       size="xlarge"
       class="uk-position-center uk-z-index"
-      :accessible-label="$gettext('Failed to load media')"
+      :accessible-label="$gettext('Failed to load media file')"
     />
 
     <div class="uk-position-medium uk-position-bottom-center media-viewer-details">
-      <div
-        class="
-          uk-overlay uk-overlay-default
-          oc-p-s
-          uk-text-center
-          oc-text-muted
-          uk-text-truncate
-          media-viewer-file-name
-        "
+      <p
+        class="oc-text-lead uk-text-center oc-text-truncate oc-p-s media-viewer-file-name"
+        aria-hidden="true"
       >
         {{ medium.name }}
-      </div>
-      <div class="uk-overlay uk-overlay-primary uk-light oc-p-s media-viewer-controls-container">
-        <div
-          class="
-            uk-width-large uk-flex uk-flex-middle uk-flex-center uk-flex-around
-            media-viewer-controls-action-bar
-          "
-          style="user-select: none"
+      </p>
+      <div
+        class="
+          oc-background-brand oc-p-s
+          uk-width-large uk-flex uk-flex-middle uk-flex-center uk-flex-around
+          media-viewer-controls-action-bar
+        "
+      >
+        <oc-button
+          class="media-viewer-controls-previous"
+          appearance="raw"
+          variation="inverse"
+          :aria-label="$gettext('Show previous media file in folder')"
+          @click="prev"
         >
-          <oc-icon
-            role="button"
-            class="oc-cursor-pointer media-viewer-controls-previous"
-            size="large"
-            name="chevron_left"
-            :accessible-label="$gettext('Previous')"
-            @click="prev"
-          />
-          <!-- @TODO: Bring back working uk-light -->
-          <span v-if="!$_loader_folderLoading" class="uk-text-small" style="color: #fff">
-            {{ activeIndex + 1 }} <span v-translate>of</span> {{ mediaFiles.length }}
-          </span>
-          <oc-icon
-            role="button"
-            class="oc-cursor-pointer media-viewer-controls-next"
-            size="large"
-            name="chevron_right"
-            :accessible-label="$gettext('Next')"
-            @click="next"
-          />
-          <oc-icon
-            role="button"
-            class="oc-cursor-pointer media-viewer-controls-download"
-            name="file_download"
-            :accessible-label="$gettext('Download')"
-            @click="downloadMedium"
-          />
-          <oc-icon
-            role="button"
-            class="oc-cursor-pointer media-viewer-controls-close"
-            name="close"
-            :accessible-label="$gettext('Close')"
-            @click="closeApp"
-          />
-        </div>
+          <oc-icon size="large" name="chevron_left" />
+        </oc-button>
+        <p v-if="!$_loader_folderLoading" class="oc-m-rm oc-light">
+          <span aria-hidden="true" v-text="ariaHiddenFileCount" />
+          <span class="oc-invisible-sr" v-text="screenreaderFileCount" />
+        </p>
+        <oc-button
+          class="media-viewer-controls-next"
+          appearance="raw"
+          variation="inverse"
+          :aria-label="$gettext('Show next media file in folder')"
+          @click="next"
+        >
+          <oc-icon size="large" name="chevron_right" />
+        </oc-button>
+        <oc-button
+          class="media-viewer-controls-download"
+          appearance="raw"
+          variation="inverse"
+          :aria-label="$gettext('Download currently viewed file')"
+          @click="downloadMedium"
+        >
+          <oc-icon size="large" name="file_download" />
+        </oc-button>
+        <oc-button
+          class="media-viewer-controls-close"
+          appearance="raw"
+          variation="inverse"
+          :aria-label="$gettext('Close mediaviewer app')"
+          @click="closeApp"
+        >
+          <oc-icon size="large" name="close" />
+        </oc-button>
       </div>
     </div>
   </main>
@@ -115,10 +120,7 @@ export default {
       direction: 'rtl',
 
       medium: {},
-      media: [],
-
-      // Milliseconds
-      animationDuration: 1000
+      media: []
     }
   },
 
@@ -126,6 +128,26 @@ export default {
     ...mapGetters('Files', ['activeFiles']),
     ...mapGetters(['getToken', 'capabilities']),
 
+    pageTitle() {
+      const translated = this.$gettext('Mediaviewer for %{currentMediumName}')
+      return this.$gettextInterpolate(translated, {
+        currentMediumName: this.medium.name
+      })
+    },
+    ariaHiddenFileCount() {
+      const translated = this.$gettext('%{ displayIndex } of %{ availableMediaFiles }')
+      return this.$gettextInterpolate(translated, {
+        displayIndex: this.activeIndex + 1,
+        availableMediaFiles: this.mediaFiles.length
+      })
+    },
+    screenreaderFileCount() {
+      const translated = this.$gettext('Media file %{ displayIndex } of %{ availableMediaFiles }')
+      return this.$gettextInterpolate(translated, {
+        displayIndex: this.activeIndex + 1,
+        availableMediaFiles: this.mediaFiles.length
+      })
+    },
     mediaFiles() {
       return this.activeFiles.filter((file) => {
         return file.extension.toLowerCase().match(/(png|jpg|jpeg|gif|mp4|webm|ogg)/)
@@ -207,18 +229,15 @@ export default {
   },
 
   async mounted() {
-    document.addEventListener('keyup', this.handleKeyPress)
-
     // keep a local history for this component
     window.addEventListener('popstate', this.handleLocalHistoryEvent)
     const filePath = `/${this.$route.params.filePath.split('/').filter(Boolean).join('/')}`
     await this.$_loader_loadItems(filePath)
     this.setCurrentFile(filePath)
+    this.$refs.mediaviewer.focus()
   },
 
   beforeDestroy() {
-    document.removeEventListener('keyup', this.handleKeyPress)
-
     window.removeEventListener('popstate', this.handleLocalHistoryEvent)
 
     this.media.forEach((medium) => {
@@ -259,7 +278,7 @@ export default {
             this.loading = false
           },
           // Delay to animate
-          this.animationDuration / 2
+          50
         )
         return
       }
@@ -329,11 +348,6 @@ export default {
       this.activeIndex--
       this.updateLocalHistory()
     },
-    handleKeyPress(e) {
-      if (!e) return false
-      else if (e.key === 'ArrowRight') this.next()
-      else if (e.key === 'ArrowLeft') this.prev()
-    },
     closeApp() {
       this.$_loader_navigateToContextRoute(
         this.$route.params.contextRouteName,
@@ -344,15 +358,36 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 #mediaviewer {
   min-height: 100vh;
 }
 .media-viewer-player {
-  width: 100%;
   max-width: 90vw;
-  height: 100%;
-  max-height: 70vh;
+  height: 70vh;
+  margin: 10px auto;
   object-fit: contain;
+  img,
+  video {
+    max-width: 85vw;
+    max-height: 65vh;
+  }
+}
+
+@media (max-width: 959px) {
+  .media-viewer-player {
+    max-width: 100vw;
+  }
+
+  .media-viewer-details {
+    left: 0;
+    margin: 0;
+    max-width: 100%;
+    transform: none !important;
+    width: 100%;
+    .media-viewer-controls-action-bar {
+      width: 100%;
+    }
+  }
 }
 </style>

@@ -1,6 +1,11 @@
-import translationsJson from '../l10n/translations'
+import translations from '../l10n/translations'
 
 import App from './App.vue'
+
+// just a dummy function to trick gettext tools
+function $gettext(msg) {
+  return msg
+}
 
 const routes = [
   {
@@ -9,8 +14,22 @@ const routes = [
       app: App
     },
     name: 'media',
-    meta: { auth: false, patchCleanPath: true }
+    meta: {
+      auth: false,
+      title: $gettext('Mediaviewer app'),
+      patchCleanPath: true
+    }
   }
+]
+
+const routeName = 'mediaviewer-media'
+
+const routesForFileExtensions = [
+  'files-personal',
+  'files-favorites',
+  'files-shared-with-others',
+  'files-shared-with-me',
+  'files-public-list'
 ]
 
 const appInfo = {
@@ -20,85 +39,42 @@ const appInfo = {
   extensions: [
     {
       extension: 'png',
-      routeName: 'mediaviewer-media',
-      routes: [
-        'files-personal',
-        'files-favorites',
-        'files-shared-with-others',
-        'files-shared-with-me',
-        'files-public-list'
-      ]
+      routeName,
+      routes: routesForFileExtensions
     },
     {
       extension: 'jpg',
-      routeName: 'mediaviewer-media',
-      routes: [
-        'files-personal',
-        'files-favorites',
-        'files-shared-with-others',
-        'files-shared-with-me',
-        'files-public-list'
-      ]
+      routeName,
+      routes: routesForFileExtensions
     },
     {
       extension: 'jpeg',
-      routeName: 'mediaviewer-media',
-      routes: [
-        'files-personal',
-        'files-favorites',
-        'files-shared-with-others',
-        'files-shared-with-me',
-        'files-public-list'
-      ]
+      routeName,
+      routes: routesForFileExtensions
     },
     {
       extension: 'gif',
-      routeName: 'mediaviewer-media',
-      routes: [
-        'files-personal',
-        'files-favorites',
-        'files-shared-with-others',
-        'files-shared-with-me',
-        'files-public-list'
-      ]
+      routeName,
+      routes: routesForFileExtensions
     },
     {
       extension: 'mp4',
-      routeName: 'mediaviewer-media',
-      routes: [
-        'files-personal',
-        'files-favorites',
-        'files-shared-with-others',
-        'files-shared-with-me',
-        'files-public-list'
-      ]
+      routeName,
+      routes: routesForFileExtensions
     },
     {
       extension: 'webm',
-      routeName: 'mediaviewer-media',
-      routes: [
-        'files-personal',
-        'files-favorites',
-        'files-shared-with-others',
-        'files-shared-with-me',
-        'files-public-list'
-      ]
+      routeName,
+      routes: routesForFileExtensions
     },
     {
       extension: 'ogg',
-      routeName: 'mediaviewer-media',
-      routes: [
-        'files-personal',
-        'files-favorites',
-        'files-shared-with-others',
-        'files-shared-with-me',
-        'files-public-list'
-      ]
+      routeName,
+      routes: routesForFileExtensions
     }
   ]
 }
 
-const translations = translationsJson
 export default {
   appInfo,
   routes,

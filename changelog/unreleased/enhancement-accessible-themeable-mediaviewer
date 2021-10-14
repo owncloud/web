@@ -1,0 +1,6 @@
+Enhancement: Accessible, themeable media viewer
+
+We have updated the media viewer app to respect theme colors and 
+fulfill accessibility requirements (e.g. keyboard navigation, semantic HTML, font size).
+
+https://github.com/owncloud/web/pull/5900
