@@ -5,7 +5,6 @@
         id="files-share-invite-input"
         ref="ocSharingAutocomplete"
         v-model="selectedCollaborators"
-        data-testid="new-collaborator-select"
         :options="autocompleteResults"
         :loading="searchInProgress"
         :multiple="true"
