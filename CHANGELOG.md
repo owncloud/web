@@ -3,11 +3,57 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v4.2.0...master
+[unreleased]: https://github.com/owncloud/web/compare/v4.3.0...master
 
 Summary
 -------
 
+* Bugfix - Clean router path handling: [#5894](https://github.com/owncloud/web/pull/5894)
+* Bugfix - Unnecessary redirects on personal page: [#5893](https://github.com/owncloud/web/pull/5893)
+* Enhancement - Sorting out dependencies: [#5898](https://github.com/owncloud/web/pull/5898)
+
+Details
+-------
+
+* Bugfix - Clean router path handling: [#5894](https://github.com/owncloud/web/pull/5894)
+
+   This patch was already introduced earlier for the files application only. In the meantime we
+   found out that this is also needed on different places across the ecosystem.
+
+   We've refactored the way how the patch gets applied to the routes: It is now possible to set an
+   individual route's `meta.patchCleanPath` to true.
+
+   https://github.com/owncloud/web/issues/4595#issuecomment-938587035
+   https://github.com/owncloud/web/pull/5894
+
+* Bugfix - Unnecessary redirects on personal page: [#5893](https://github.com/owncloud/web/pull/5893)
+
+   Navigating to all files could lead to loading resources twice, first resources from root (/)
+   and second the resources from the homeFolder (options.homeFolder). We've fixed this by
+   detecting those cases and only load resources for the homeFolder.
+
+   https://github.com/owncloud/web/issues/5085
+   https://github.com/owncloud/web/issues/5875
+   https://github.com/owncloud/web/pull/5893
+
+* Enhancement - Sorting out dependencies: [#5898](https://github.com/owncloud/web/pull/5898)
+
+   We have cleaned and simplified the dependency structure in our apps.
+
+   https://github.com/owncloud/web/pull/5898
+
+Changelog for ownCloud Web [4.3.0] (2021-10-07)
+=======================================
+The following sections list the changes in ownCloud web 4.3.0 relevant to
+ownCloud admins and users.
+
+[4.3.0]: https://github.com/owncloud/web/compare/v4.2.0...v4.3.0
+
+Summary
+-------
+
+* Enhancement - Download as archive: [#5832](https://github.com/owncloud/web/pull/5832)
+* Enhancement - Early store initialization: [#5874](https://github.com/owncloud/web/pull/5874)
 * Enhancement - Add wrapper app for external apps: [#5805](https://github.com/owncloud/web/pull/5805)
 * Enhancement - Add AppProvider actions to fileactions: [#5805](https://github.com/owncloud/web/pull/5805)
 * Enhancement - Move custom permissions to roles drop: [#5764](https://github.com/owncloud/web/issues/5764)
@@ -16,6 +62,27 @@ Summary
 
 Details
 -------
+
+* Enhancement - Download as archive: [#5832](https://github.com/owncloud/web/pull/5832)
+
+   We've introduced archive downloads based on whether or not an archiver capability is present.
+   The current implementation supports the archiver v2 (a.k.a. the REVA implementation).
+   Archive downloads are available in two different ways: - as action on a folder (right-click
+   context menu or actions panel in the right sidebar) - as batch action for all selected files The
+   implementation is currently limited to authenticated contexts. A public links
+   implementation will follow soon.
+
+   https://github.com/owncloud/web/issues/3913
+   https://github.com/owncloud/web/issues/5809
+   https://github.com/owncloud/web/pull/5832
+
+* Enhancement - Early store initialization: [#5874](https://github.com/owncloud/web/pull/5874)
+
+   We made sure that the store and auth get initialized as early as possible. With this we ensured
+   that capabilities are always loaded as soon as applications start their initialization
+   process.
+
+   https://github.com/owncloud/web/pull/5874
 
 * Enhancement - Add wrapper app for external apps: [#5805](https://github.com/owncloud/web/pull/5805)
 

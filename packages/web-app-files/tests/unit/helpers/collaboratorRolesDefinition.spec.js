@@ -53,7 +53,7 @@ describe('collaboratorRolesDefinition', () => {
         expectedDescription: 'Edit, download and preview'
       }
     ]
-    it.each(batches)('description of editor role definition', batch => {
+    it.each(batches)('description of editor role definition', (batch) => {
       const rolesDefinition = collaboratorRolesDefinition(batch.input)
 
       expect(rolesDefinition[1].description).toBe(batch.expectedDescription)

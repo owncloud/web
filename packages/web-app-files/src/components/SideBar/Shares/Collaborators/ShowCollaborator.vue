@@ -69,7 +69,11 @@
                         />
                         <p
                           v-if="resharer.additionalInfo"
-                          class="oc-text-muted files-collaborators-resharer-additional-info oc-my-rm"
+                          class="
+                            oc-text-muted
+                            files-collaborators-resharer-additional-info
+                            oc-my-rm
+                          "
                           v-text="resharer.additionalInfo"
                         />
                       </div>
@@ -128,7 +132,7 @@ export default {
       default: true
     }
   },
-  data: function() {
+  data: function () {
     return {
       removalInProgress: false
     }
@@ -214,12 +218,12 @@ export default {
 
     $_reshareInformation() {
       try {
-        this.collaborator.resharers.forEach(function(share) {
+        this.collaborator.resharers.forEach(function (share) {
           if (typeof share.displayName !== 'string' || !share.displayName) {
             throw Error('displayName of resharer is not a string')
           }
         })
-        return this.collaborator.resharers.map(share => share.displayName).join(', ')
+        return this.collaborator.resharers.map((share) => share.displayName).join(', ')
       } catch (e) {
         return null
       }
@@ -251,7 +255,7 @@ export default {
     },
 
     originalRole() {
-      const role = this.displayRoles.find(r => r.name === this.collaborator.role.name)
+      const role = this.displayRoles.find((r) => r.name === this.collaborator.role.name)
 
       if (role) {
         return role

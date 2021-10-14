@@ -8,7 +8,7 @@ import { SearchProvider } from './types'
 import { Component } from 'vue'
 
 // just a dummy function to trick gettext tools
-const $gettext = msg => {
+const $gettext = (msg) => {
   return msg
 }
 

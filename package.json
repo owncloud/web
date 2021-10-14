@@ -1,5 +1,5 @@
 {
-  "version": "4.2.0",
+  "version": "4.3.0",
   "private": true,
   "homepage": "https://github.com/owncloud/web",
   "license": "AGPL-3.0",
@@ -39,6 +39,7 @@
     "@babel/preset-env": "^7.14.7",
     "@babel/register": "^7.13.16",
     "@cucumber/cucumber": "^7.3.1",
+    "@cucumber/messages": "^17.1.1",
     "@cucumber/pretty-formatter": "^1.0.0-alpha.1",
     "@erquhart/rollup-plugin-node-builtins": "^2.1.5",
     "@playwright/test": "^1.14.0",
@@ -52,12 +53,13 @@
     "@types/jest": "^26.0.23",
     "@types/jest-axe": "^3.5.3",
     "@types/lodash-es": "^4.17.4",
+    "@types/node": "^16.10.3",
     "@types/node-fetch": "^2.5.12",
     "@types/vue": "^2.0.0",
     "@typescript-eslint/eslint-plugin": "^4.28.3",
     "@typescript-eslint/parser": "^4.28.3",
     "@vue/test-utils": "^1.1.2",
-    "archiver": "^3.0.0",
+    "archiver": "^5.3.0",
     "autoprefixer": "^10.2.4",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.1.0",
@@ -95,8 +97,11 @@
     "nightwatch-api": "3.0.1",
     "nightwatch-vrt": "^0.2.10",
     "node-fetch": "^2.6.1",
+    "node-gyp": "^8.2.0",
     "playwright": "^1.15.0",
     "postcss": "^8.3.6",
+    "prettier": "^2.3.2",
+    "react": "^17.0.2",
     "regenerator-runtime": "^0.13.7",
     "requirejs": "^2.3.6",
     "rollup": "^2.52.7",
@@ -115,7 +120,7 @@
     "rollup-plugin-ts": "^1.4.0",
     "rollup-plugin-visualizer": "^5.5.2",
     "rollup-plugin-vue": "^5.1.4",
-    "sync-fetch": "^0.3.0",
+    "sync-fetch": "^0.3.1",
     "ts-jest": "^26.5.6",
     "ts-node": "^10.2.0",
     "tslib": "^2.2.0",
@@ -128,5 +133,8 @@
   },
   "engines": {
     "node": ">=14 <=16"
+  },
+  "dependencies": {
+    "vue": "^2.6.10"
   }
 }

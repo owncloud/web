@@ -108,22 +108,6 @@ export default {
     MixinFilesListFilter
   ],
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (vm.isRedirectToHomeFolderRequired(to)) {
-        vm.redirectToHomeFolder(to)
-      }
-    })
-  },
-
-  async beforeRouteUpdate(to, from, next) {
-    if (this.isRedirectToHomeFolderRequired(to)) {
-      await this.redirectToHomeFolder(to)
-      return
-    }
-    next()
-  },
-
   data: () => ({
     loading: true
   }),
@@ -176,11 +160,36 @@ export default {
 
   watch: {
     $route: {
-      handler: function(to, from) {
-        this.$_filesListPagination_updateCurrentPage()
-
+      handler: function (to, from) {
         const sameRoute = to.name === from?.name
         const sameItem = to.params?.item === from?.params?.item
+
+        const needsRedirectToHome =
+          this.homeFolder !== '/' &&
+          isNil(to.params.item) &&
+          !to.path.endsWith('/') &&
+          (!sameRoute || !sameItem)
+        if (needsRedirectToHome) {
+          this.$router.replace(
+            {
+              name: to.name,
+              params: {
+                ...to.params,
+                item: this.homeFolder
+              },
+              query: to.query
+            },
+            () => {},
+            (e) => {
+              console.error(e)
+            }
+          )
+
+          return
+        }
+
+        this.$_filesListPagination_updateCurrentPage()
+
         if (!sameRoute || !sameItem) {
           this.loadResources(sameRoute)
         }
@@ -200,7 +209,7 @@ export default {
   mounted() {
     this.adjustTableHeaderPosition()
 
-    bus.on('app.files.list.load', path => {
+    bus.on('app.files.list.load', (path) => {
       this.loadResources(this.$route.params.item === path, path)
     })
   },
@@ -223,32 +232,10 @@ export default {
     ]),
     ...mapMutations(['SET_QUOTA']),
 
-    isRedirectToHomeFolderRequired(to) {
-      return isNil(to.params.item)
-    },
-
-    async redirectToHomeFolder(to) {
-      const route = {
-        name: to.name,
-        params: {
-          ...to.params,
-          item: to.path.endsWith('/') ? '/' : this.homeFolder
-        },
-        query: to.query
-      }
-      await this.$router.replace(
-        route,
-        () => {},
-        e => {
-          console.error(e)
-        }
-      )
-    },
-
     async fileDropped(fileIdTarget) {
       const selected = [...this.selectedFiles]
-      const targetInfo = this.activeFilesCurrentPage.find(e => e.id === fileIdTarget)
-      const isTargetSelected = selected.some(e => e.id === fileIdTarget)
+      const targetInfo = this.activeFilesCurrentPage.find((e) => e.id === fileIdTarget)
+      const isTargetSelected = selected.some((e) => e.id === fileIdTarget)
       if (isTargetSelected) return
       if (targetInfo.type !== 'folder') return
       const itemsInTarget = await this.fetchResources(targetInfo.path)
@@ -257,10 +244,10 @@ export default {
       const errors = []
       const movePromises = []
       const moveQueue = new PQueue({ concurrency: 4 })
-      selected.forEach(resource => {
+      selected.forEach((resource) => {
         movePromises.push(
           moveQueue.add(async () => {
-            const exists = itemsInTarget.some(e => basename(e.name) === resource.name)
+            const exists = itemsInTarget.some((e) => basename(e.name) === resource.name)
             if (exists) {
               const message = this.$gettext('Resource with name %{name} already exists')
               errors.push({
@@ -390,7 +377,7 @@ export default {
 
       if (resourceName && this.activeFilesCurrentPage.length > 0) {
         this.$nextTick(() => {
-          const resource = this.activeFilesCurrentPage.find(r => r.name === resourceName)
+          const resource = this.activeFilesCurrentPage.find((r) => r.name === resourceName)
 
           if (resource) {
             this.selected = [resource]

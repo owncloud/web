@@ -138,7 +138,7 @@ export default {
 
       this.$client.publicFiles
         .list(this.publicLinkToken, this.publicLinkPassword, DavProperties.PublicLink, '0')
-        .then(files => {
+        .then((files) => {
           if (files[0].getProperty(this.$client.publicFiles.PUBLIC_LINK_SHARE_DATETIME !== '4')) {
             this.$router.push({
               name: 'files-public-list',
@@ -150,7 +150,7 @@ export default {
           }
           this.share = files[0]
         })
-        .catch(error => {
+        .catch((error) => {
           // likely missing password, redirect to public link password prompt
           if (error.statusCode === 401) {
             this.$router.push({
@@ -182,7 +182,7 @@ export default {
             {
               // automatically rename in case of duplicates
               headers: { 'OC-Autorename': 1 },
-              onProgress: progressEvent => {
+              onProgress: (progressEvent) => {
                 this.uploadedFilesChangeTracker++
                 this.uploadedFiles.set(uploadId, {
                   name: event.name,
@@ -193,11 +193,11 @@ export default {
             }
           )
         )
-        .then(e => {
+        .then((e) => {
           this.uploadedFilesChangeTracker++
           this.uploadedFiles.set(uploadId, { name: event.name, size: event.size, status: 'done' })
         })
-        .catch(e => {
+        .catch((e) => {
           console.error('Error uploading file ', event.name, ': ', e)
           this.uploadedFilesChangeTracker++
           this.uploadedFiles.set(uploadId, { name: event.name, size: event.size, status: 'error' })

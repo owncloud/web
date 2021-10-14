@@ -24,6 +24,17 @@
       </oc-button>
     </template>
     <oc-grid v-if="displayBulkActions" gutter="small">
+      <div v-if="canDownload">
+        <oc-button
+          id="download-selected-btn"
+          key="download-selected-btn"
+          variation="primary"
+          @click="download"
+        >
+          <oc-icon name="archive" />
+          <translate>Download</translate>
+        </oc-button>
+      </div>
       <div v-if="canCopy">
         <oc-button
           id="copy-selected-btn"
@@ -94,6 +105,10 @@ import { checkRoute } from '../../../helpers/route'
 import { shareStatus } from '../../../helpers/shareStatus'
 import { triggerShareAction } from '../../../helpers/share/triggerShareAction'
 import PQueue from 'p-queue'
+import {
+  isDownloadAsArchiveAvailable,
+  triggerDownloadAsArchive
+} from '../../../helpers/download/downloadAsArchive'
 
 export default {
   mixins: [MixinRoutes, MixinDeleteResources],
@@ -108,6 +123,40 @@ export default {
         : this.$gettext('Delete')
     },
 
+    canDownload() {
+      return this.canDownloadSingleFile || this.canDownloadAsArchive
+    },
+
+    canDownloadSingleFile() {
+      if (
+        !checkRoute(['files-personal', 'files-favorites', 'files-public-list'], this.$route.name)
+      ) {
+        return false
+      }
+
+      if (this.selectedFiles.length !== 1) {
+        return false
+      }
+
+      if (!this.selectedFiles[0].canDownload()) {
+        return false
+      }
+
+      return !this.selectedFiles[0].isFolder
+    },
+
+    canDownloadAsArchive() {
+      if (!checkRoute(['files-personal', 'files-favorites'], this.$route.name)) {
+        return false
+      }
+
+      if (!isDownloadAsArchiveAvailable()) {
+        return false
+      }
+
+      return this.selectedFiles.filter((f) => !f.canDownload()).length === 0
+    },
+
     canMove() {
       if (
         !checkRoute(['files-personal', 'files-public-list', 'files-favorites'], this.$route.name)
@@ -115,7 +164,7 @@ export default {
         return false
       }
 
-      const moveDisabled = this.selectedFiles.some(resource => {
+      const moveDisabled = this.selectedFiles.some((resource) => {
         return canBeMoved(resource, this.currentFolder.path) === false
       })
       return !moveDisabled
@@ -144,7 +193,7 @@ export default {
         return this.currentFolder.canBeDeleted()
       }
 
-      const deleteDisabled = this.selectedFiles.some(resource => {
+      const deleteDisabled = this.selectedFiles.some((resource) => {
         return !resource.canBeDeleted()
       })
       return !deleteDisabled
@@ -155,7 +204,7 @@ export default {
         return false
       }
 
-      const acceptDisabled = this.selectedFiles.some(resource => {
+      const acceptDisabled = this.selectedFiles.some((resource) => {
         return resource.status === shareStatus.accepted
       })
       return !acceptDisabled
@@ -166,7 +215,7 @@ export default {
         return false
       }
 
-      const declineDisabled = this.selectedFiles.some(resource => {
+      const declineDisabled = this.selectedFiles.some((resource) => {
         return resource.status === shareStatus.declined
       })
       return !declineDisabled
@@ -197,7 +246,7 @@ export default {
             })
             this.removeFilesFromTrashbin([resource])
           })
-          .catch(error => {
+          .catch((error) => {
             const translated = this.$gettext('Restoration of %{resource} failed')
             this.showMessage({
               title: this.$gettextInterpolate(translated, { resource: resource.name }, true),
@@ -218,7 +267,7 @@ export default {
           })
           this.removeFilesFromTrashbin(this.activeFilesCurrentPage)
         })
-        .catch(error => {
+        .catch((error) => {
           this.showMessage({
             title: this.$gettext('Could not delete files'),
             desc: error.message,
@@ -240,7 +289,7 @@ export default {
           action
         },
         query: {
-          resource: resources.map(resource => {
+          resource: resources.map((resource) => {
             return resource.path
           })
         }
@@ -259,7 +308,7 @@ export default {
       const errors = []
       const triggerPromises = []
       const triggerQueue = new PQueue({ concurrency: 4 })
-      this.selectedFiles.forEach(resource => {
+      this.selectedFiles.forEach((resource) => {
         triggerPromises.push(
           triggerQueue.add(async () => {
             try {
@@ -285,7 +334,7 @@ export default {
         return
       }
 
-      console.log(errors)
+      console.error(errors)
       if (newShareStatus === shareStatus.accepted) {
         this.showMessage({
           title: this.$ngettext(
@@ -307,6 +356,30 @@ export default {
           status: 'danger'
         })
       }
+    },
+
+    async download() {
+      if (this.selectedFiles.length === 1 && !this.selectedFiles[0].isFolder) {
+        await this.downloadFile(this.selectedFiles[0])
+        return
+      }
+      await this.downloadAsArchive()
+    },
+
+    async downloadAsArchive() {
+      await triggerDownloadAsArchive({
+        fileIds: this.selectedFiles.map((r) => r.fileId)
+      }).catch((e) => {
+        console.error(e)
+        this.showMessage({
+          title: this.$ngettext(
+            'Error downloading the selected file.',
+            'Error downloading the selected files.',
+            this.selectedFiles.length
+          ),
+          status: 'danger'
+        })
+      })
     }
   }
 }

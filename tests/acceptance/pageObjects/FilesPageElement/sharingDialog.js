@@ -17,15 +17,15 @@ module.exports = {
      *
      * @param {string} permissions
      */
-    getArrayFromPermissionString: function(permissions) {
+    getArrayFromPermissionString: function (permissions) {
       permissions = permissions.replace(/\s/g, '')
-      return permissions.split(',').filter(x => x)
+      return permissions.split(',').filter((x) => x)
     },
     /**
      *
      * @param {string} permission
      */
-    getPermissionCheckbox: function(permission) {
+    getPermissionCheckbox: function (permission) {
       return util.format(this.elements.permissionCheckbox.selector, permission)
     },
     /**
@@ -36,11 +36,11 @@ module.exports = {
      *
      * @return {Promise<string|null>}
      */
-    getVisibleElementID: async function(using, value) {
+    getVisibleElementID: async function (using, value) {
       let visibleElementID = null
-      await this.api.elements(using, value, response => {
+      await this.api.elements(using, value, (response) => {
         for (const { ELEMENT } of response.value) {
-          this.api.elementIdDisplayed(ELEMENT, function(result) {
+          this.api.elementIdDisplayed(ELEMENT, function (result) {
             if (result.value === true) {
               visibleElementID = ELEMENT
             }
@@ -55,14 +55,35 @@ module.exports = {
      *
      * @param {string} sharee
      */
-    removePendingCollaboratorForShare: function(sharee) {
+    removePendingCollaboratorForShare: function (sharee) {
       const newCollaboratorXpath = util.format(this.elements.newCollaboratorItems.selector, sharee)
       const removeCollaboratorBtnXpath =
         newCollaboratorXpath + this.elements.newCollaboratorRemoveButton.selector
+      return this.useXpath().click(removeCollaboratorBtnXpath).useCss()
+    },
 
-      return this.useXpath()
-        .click(removeCollaboratorBtnXpath)
-        .useCss()
+    /**
+     *
+     * @param {string} userOrGroup
+     * @param {string} userOrGroupName
+     */
+    isGroupNotPresentInSelectedCollaboratorsOptions: function (userOrGroup, userOrGroupName) {
+      let requiredSelector
+      if (userOrGroup === 'group') {
+        requiredSelector = util.format(
+          this.elements.groupInSelectedCollaboratorsList.selector,
+          userOrGroupName
+        )
+      } else if (userOrGroup === 'user') {
+        requiredSelector = util.format(
+          this.elements.userInSelectedCollaboratorsList.selector,
+          userOrGroupName
+        )
+      }
+      return this.waitForElementNotVisible({
+        selector: requiredSelector,
+        locateStrategy: 'xpath'
+      })
     },
 
     /**
@@ -71,7 +92,7 @@ module.exports = {
      * @param {boolean} [shareWithGroup=false]
      * @param {boolean} remoteShare
      */
-    selectCollaboratorForShare: async function(
+    selectCollaboratorForShare: async function (
       receiver,
       shareWithGroup = false,
       remoteShare = false
@@ -97,7 +118,7 @@ module.exports = {
         this.api.globals.waitForConditionTimeout,
         this.api.globals.waitForConditionPollInterval,
         false,
-        result => {
+        (result) => {
           failedOnFirstTry = result.status === -1
         }
       )
@@ -125,7 +146,7 @@ module.exports = {
     /**
      * @param {string} permissions
      */
-    selectPermissionsOnPendingShare: async function(permissions) {
+    selectPermissionsOnPendingShare: async function (permissions) {
       const permissionArray = this.getArrayFromPermissionString(permissions)
       for (const permission of permissionArray) {
         const permissionCheckbox = this.getPermissionCheckbox(permission)
@@ -152,7 +173,7 @@ module.exports = {
      *
      * @return void
      */
-    shareWithUserOrGroup: async function(
+    shareWithUserOrGroup: async function (
       sharee,
       shareWithGroup = false,
       role,
@@ -189,30 +210,25 @@ module.exports = {
      *
      * @param {String} role
      */
-    selectRoleForNewCollaborator: function(role) {
-      role = _(role)
-        .chain()
-        .toLower()
-        .startCase()
-        .replace(/\s/g, '')
-        .value()
+    selectRoleForNewCollaborator: function (role) {
+      role = _(role).chain().toLower().startCase().replace(/\s/g, '').value()
       return this.click('@newCollaboratorSelectRoleButton').click(`@newCollaboratorRole${role}`)
     },
-    confirmShare: function() {
+    confirmShare: function () {
       return this.waitForElementPresent('@addShareSaveButton')
         .initAjaxCounters()
         .click('@addShareSaveButton')
         .waitForOutstandingAjaxCalls()
         .waitForElementNotPresent('@addShareSaveButton')
     },
-    saveChanges: function() {
+    saveChanges: function () {
       return this.waitForElementVisible('@saveShareButton')
         .initAjaxCounters()
         .click('@saveShareButton')
         .waitForOutstandingAjaxCalls()
         .waitForElementNotPresent('@saveShareButton')
     },
-    clickCancel: function() {
+    clickCancel: function () {
       return this.waitForElementVisible('@cancelButton').click('@cancelButton')
     },
     /**
@@ -221,7 +237,7 @@ module.exports = {
      *
      * @param {string} permission
      */
-    toggleSinglePermission: async function(permission) {
+    toggleSinglePermission: async function (permission) {
       const permissionCheckbox = this.getPermissionCheckbox(permission)
       const elementID = await this.getVisibleElementID('xpath', permissionCheckbox)
       if (!elementID) {
@@ -238,7 +254,7 @@ module.exports = {
      *
      * @return {Promise<Object.<string, boolean>>}  eg - {share: true, change: false}
      */
-    getSharePermissions: async function() {
+    getSharePermissions: async function () {
       const permissions = {}
       const panelSelector = this.elements.sharingSidebarRoot.selector
       let permissionToggle
@@ -247,11 +263,11 @@ module.exports = {
           panelSelector +
           util.format(this.elements.permissionCheckbox.selector, COLLABORATOR_PERMISSION_ARRAY[i])
 
-        await this.api.element('xpath', permissionToggle, result => {
+        await this.api.element('xpath', permissionToggle, (result) => {
           if (!result.value.ELEMENT) {
             return
           }
-          this.api.elementIdSelected(result.value.ELEMENT, result => {
+          this.api.elementIdSelected(result.value.ELEMENT, (result) => {
             permissions[COLLABORATOR_PERMISSION_ARRAY[i]] = result.value
           })
         })
@@ -263,7 +279,7 @@ module.exports = {
      * @param {string} collaborator
      * @param {string} requiredPermissions
      */
-    changeCustomPermissionsTo: async function(collaborator, requiredPermissions) {
+    changeCustomPermissionsTo: async function (collaborator, requiredPermissions) {
       await collaboratorDialog.clickEditShare(collaborator)
       await this.selectRoleForNewCollaborator('Custom permissions')
 
@@ -294,7 +310,7 @@ module.exports = {
      * @param {string} collaborator
      * @param {string} permissions
      */
-    getDisplayedPermission: async function(collaborator) {
+    getDisplayedPermission: async function (collaborator) {
       await collaboratorDialog.clickEditShare(collaborator)
       await this.selectRoleForNewCollaborator('Custom permissions')
 
@@ -313,13 +329,13 @@ module.exports = {
      *
      * @param {string} collaborator
      */
-    disableAllCustomPermissions: async function(collaborator) {
+    disableAllCustomPermissions: async function (collaborator) {
       await collaboratorDialog.clickEditShare(collaborator)
       await this.selectRoleForNewCollaborator('Custom permissions')
 
       const sharePermissions = await this.getSharePermissions(collaborator)
       const enabledPermissions = Object.keys(sharePermissions).filter(
-        permission => sharePermissions[permission] === true
+        (permission) => sharePermissions[permission] === true
       )
 
       for (const permission of enabledPermissions) {
@@ -335,22 +351,22 @@ module.exports = {
      *
      * @param {string} input
      */
-    enterAutoComplete: async function(input) {
+    enterAutoComplete: async function (input) {
       await this.waitForElementVisible('@sharingAutoComplete')
       await this.initAjaxCounters()
       await this.setValueBySingleKeys('@sharingAutoComplete', input)
-      await new Promise(resolve => setTimeout(resolve, 250))
+      await new Promise((resolve) => setTimeout(resolve, 250))
       await this.waitForAjaxCallsToStartAndFinish()
     },
     /**
      *
      * @returns {Promise.<string[]>} Array of autocomplete items
      */
-    getShareAutocompleteItemsList: async function() {
+    getShareAutocompleteItemsList: async function () {
       const webElementIdList = await this.getShareAutocompleteWebElementIdList()
-      const itemsListPromises = webElementIdList.map(webElementId => {
+      const itemsListPromises = webElementIdList.map((webElementId) => {
         return new Promise((resolve, reject) => {
-          this.api.elementIdText(webElementId, text => {
+          this.api.elementIdText(webElementId, (text) => {
             resolve(text.value.trim())
           })
         })
@@ -364,7 +380,7 @@ module.exports = {
      *
      * @returns {Promise.<string[]>} Array of autocomplete webElementIds
      */
-    getShareAutocompleteWebElementIdList: async function() {
+    getShareAutocompleteWebElementIdList: async function () {
       const webElementIdList = []
       const showAllResultsElement = this.elements.sharingAutoCompleteShowAllResultsButton
       // wait for autocomplete to finish loading
@@ -375,7 +391,7 @@ module.exports = {
       await this.api.element(
         showAllResultsElement.locateStrategy,
         showAllResultsElement.selector,
-        result => {
+        (result) => {
           if (result.status !== -1) {
             return this.click('@sharingAutoCompleteShowAllResultsButton')
           }
@@ -385,8 +401,8 @@ module.exports = {
       await this.api.elements(
         this.elements.sharingAutoCompleteDropDownElements.locateStrategy,
         this.elements.sharingAutoCompleteDropDownElements.selector,
-        result => {
-          result.value.forEach(value => {
+        (result) => {
+          result.value.forEach((value) => {
             webElementIdList.push(value[Object.keys(value)[0]])
           })
         }
@@ -400,7 +416,7 @@ module.exports = {
      * @param {string} permissions
      * @returns {Promise}
      */
-    changeCollaboratorRole: async function(collaborator, newRole, permissions) {
+    changeCollaboratorRole: async function (collaborator, newRole, permissions) {
       await collaboratorDialog.clickEditShare(collaborator)
       await this.changeCollaboratorRoleInDropdown(newRole, permissions)
       return this.saveChanges()
@@ -410,7 +426,7 @@ module.exports = {
      * @param {string} permissions
      * @returns {Promise}
      */
-    changeCollaboratorRoleInDropdown: async function(newRole, permissions) {
+    changeCollaboratorRoleInDropdown: async function (newRole, permissions) {
       newRole = newRole === 'Custom permissions' ? 'advancedRole' : newRole
       newRole = stringHelper.camelize(newRole)
 
@@ -437,9 +453,9 @@ module.exports = {
      *
      * @returns {Promise<boolean>}
      */
-    isAutocompleteListVisible: async function() {
+    isAutocompleteListVisible: async function () {
       let isVisible = false
-      await this.api.elements('@sharingAutoCompleteDropDownElements', result => {
+      await this.api.elements('@sharingAutoCompleteDropDownElements', (result) => {
         isVisible = result.value.length > 0
       })
       return isVisible
@@ -452,8 +468,8 @@ module.exports = {
      * @param {string} usersMatchingPattern
      *
      */
-    assertUsersInAutocompleteList: function(usersMatchingPattern) {
-      usersMatchingPattern.map(user => {
+    assertUsersInAutocompleteList: function (usersMatchingPattern) {
+      usersMatchingPattern.map((user) => {
         const collaboratorSelector = this.getCollaboratorInAutocompleteListSelector(user, 'user')
 
         return this.useXpath().expect.element(collaboratorSelector).to.be.visible
@@ -468,14 +484,14 @@ module.exports = {
      * @param {string} type Type of the collaborator which should be found
      * @returns {string} xpath of the collaborator
      */
-    getCollaboratorInAutocompleteListSelector: function(collaborator, type) {
+    getCollaboratorInAutocompleteListSelector: function (collaborator, type) {
       return (
         util.format(this.elements.collaboratorAutocompleteItem.selector, type) +
         util.format(this.elements.collaboratorAutocompleteItemName.selector, collaborator)
       )
     },
 
-    displayAllCollaboratorsAutocompleteResults: function() {
+    displayAllCollaboratorsAutocompleteResults: function () {
       return this.click('@sharingAutoCompleteShowAllResultsButton')
     },
 
@@ -486,8 +502,8 @@ module.exports = {
      * @param {string} groupMatchingPattern
      *
      */
-    assertGroupsInAutocompleteList: function(groupMatchingPattern) {
-      groupMatchingPattern.map(user => {
+    assertGroupsInAutocompleteList: function (groupMatchingPattern) {
+      groupMatchingPattern.map((user) => {
         const collaboratorSelector = this.getCollaboratorInAutocompleteListSelector(user, 'group')
 
         return this.useXpath().expect.element(collaboratorSelector).to.be.visible
@@ -503,7 +519,7 @@ module.exports = {
      * @param {string} type Type of the collaborator. Can be either user, group or remote
      *
      */
-    assertAlreadyExistingCollaboratorIsNotInAutocompleteList: function(name, type) {
+    assertAlreadyExistingCollaboratorIsNotInAutocompleteList: function (name, type) {
       const collaboratorSelector = this.getCollaboratorInAutocompleteListSelector(name, type)
 
       return this.useXpath().expect.element(collaboratorSelector).to.not.be.present
@@ -517,7 +533,7 @@ module.exports = {
      * @param {boolean} shouldBePresent Whether the collaborator should be found in the list or not
      *
      */
-    assertCollaboratorsInAutocompleteList: function(name, type, shouldBePresent = true) {
+    assertCollaboratorsInAutocompleteList: function (name, type, shouldBePresent = true) {
       const collaboratorSelector = this.getCollaboratorInAutocompleteListSelector(name, type)
 
       if (shouldBePresent) {
@@ -532,7 +548,7 @@ module.exports = {
      *
      * @return {Promise<*>}
      */
-    changeCollaboratorExpiryDate: async function(collaborator, days) {
+    changeCollaboratorExpiryDate: async function (collaborator, days) {
       await collaboratorDialog.clickEditShare(collaborator)
       const dateToSet = calculateDate(days)
       const isExpiryDateChanged = await this.openExpirationDatePicker().setExpirationDate(dateToSet)
@@ -546,7 +562,7 @@ module.exports = {
      * opens expiration date field on the webUI
      * @return {*}
      */
-    openExpirationDatePicker: function() {
+    openExpirationDatePicker: function () {
       this.waitForElementVisible('@expirationDateField')
         .waitForElementNotPresent('@elementInterceptingCollaboratorsExpirationInput')
         .click('@expirationDateField')
@@ -556,11 +572,11 @@ module.exports = {
      * extracts set value in expiration date field
      * @return {Promise<*>}
      */
-    getExpirationDateFromInputField: async function() {
+    getExpirationDateFromInputField: async function () {
       let expirationDate
       await this.waitForElementVisible('@expirationDateField').getValue(
         '@expirationDateField',
-        result => {
+        (result) => {
           expirationDate = result.value
         }
       )
@@ -570,12 +586,12 @@ module.exports = {
      * gets disabled status of save share button
      * @return {Promise<*>}
      */
-    getDisabledAttributeOfSaveShareButton: async function() {
+    getDisabledAttributeOfSaveShareButton: async function () {
       let disabled
       await this.waitForElementVisible('@saveShareButton').getAttribute(
         '@saveShareButton',
         'disabled',
-        result => {
+        (result) => {
           disabled = result.value
         }
       )
@@ -586,7 +602,7 @@ module.exports = {
      * @param {string} collaborator Name of the collaborator
      * @return {*}
      */
-    changeCollaboratorSettings: async function(collaborator, editData) {
+    changeCollaboratorSettings: async function (collaborator, editData) {
       await collaboratorDialog.clickEditShare(collaborator)
       for (const [key, value] of Object.entries(editData)) {
         await this.setCollaboratorForm(key, value)
@@ -600,7 +616,7 @@ module.exports = {
      * @param value values for the different fields to be set
      * @returns {*|Promise<void>|exports}
      */
-    setCollaboratorForm: function(key, value) {
+    setCollaboratorForm: function (key, value) {
       if (key === 'permissionString') {
         return this.changeCollaboratorRoleInDropdown(value)
       } else if (key === 'expireDate') {
@@ -613,12 +629,12 @@ module.exports = {
      *
      * @returns {Promise<string>}
      */
-    getErrorMessage: async function() {
+    getErrorMessage: async function () {
       let message
       await this.waitForElementVisible('@collaboratorErrorAlert').getText(
         'xpath',
         this.elements.collaboratorErrorAlert.selector,
-        function(result) {
+        function (result) {
           message = result.value
         }
       )
@@ -628,14 +644,14 @@ module.exports = {
      *
      * @returns {boolean} Whether the message has been found
      */
-    isSharePermissionMessageVisible: function() {
+    isSharePermissionMessageVisible: function () {
       return this.waitForElementVisible('@noResharePermissions')
     },
     /**
      *
      * @returns {boolean} Whether the message has been found
      */
-    isLinkSharePermissionMessageVisible: function() {
+    isLinkSharePermissionMessageVisible: function () {
       return this.waitForElementVisible('@noReshareLinkPermissions')
     }
   },
@@ -784,6 +800,16 @@ module.exports = {
     },
     customPermissionsDrop: {
       selector: '[data-testid="files-recipient-custom-permissions-drop"]'
+    },
+    groupInSelectedCollaboratorsList: {
+      selector:
+        '//span[contains(@class, "files-share-invite-recipient")]//span[.="Group"]/following-sibling::p[.="%s"]',
+      locateStrategy: 'xpath'
+    },
+    userInSelectedCollaboratorsList: {
+      selector:
+        '//span[contains(@class, "files-share-invite-recipient")]//span[@data-test-user-name="%s"]/..',
+      locateStrategy: 'xpath'
     }
   }
 }

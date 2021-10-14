@@ -9,7 +9,7 @@ import { World } from '../world'
 
 setDefaultTimeout(process.env.PWDEBUG ? -1 : 60 * 1000)
 
-Before(function(this: World, { pickle }: ITestCaseHookParameter) {
+Before(function (this: World, { pickle }: ITestCaseHookParameter) {
   this.feature = pickle
 })
 

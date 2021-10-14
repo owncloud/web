@@ -1,6 +1,6 @@
 {
   "server" : "http://owncloud",
-  "theme": "owncloud",
+  "theme": "http://owncloud/themes/owncloud/theme.json",
   "version": "0.1.0",
   "auth": {
     "clientId": "Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU",
@@ -13,7 +13,5 @@
     "markdown-editor",
     "media-viewer",
     "search"
-  ],
-  "external_apps": [
   ]
 }

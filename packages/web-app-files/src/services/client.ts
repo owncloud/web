@@ -1,6 +1,6 @@
 import { HttpClient } from 'web-pkg/src/http'
 
-class ClientService {
+export class ClientService {
   private httpAuthenticatedClient: {
     token: string
     instance: HttpClient

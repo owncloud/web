@@ -1,7 +1,7 @@
 const { join } = require('../helpers/path')
 
 module.exports = {
-  url: function() {
+  url: function () {
     return join(this.api.launchUrl, '/#/files/public-link/')
   },
   commands: {
@@ -9,12 +9,12 @@ module.exports = {
      * like build-in navigate() but also waits till for the progressbar to appear and disappear
      * @returns {*}
      */
-    navigateAndWaitTillLoaded: function(token) {
+    navigateAndWaitTillLoaded: function (token) {
       return this.navigate(join(this.url(), token)).waitForElementPresent(
         this.page.FilesPageElement.filesList().elements.anyAfterLoading
       )
     },
-    navigateAndWaitForPasswordPage: function(token) {
+    navigateAndWaitForPasswordPage: function (token) {
       this.navigate(join(this.api.launchUrl, '/#/files/public-link', token))
       return this.page.publicLinkPasswordPage().waitForElementPresent('@passwordInput')
     },
@@ -25,7 +25,7 @@ module.exports = {
      *
      * @return {Promise<boolean>}
      */
-    waitForPage: function() {
+    waitForPage: function () {
       const menuButton = this.page.webPage().elements.menuButton
       return this.api
         .waitForElementPresent(this.elements.filesListContainer.selector)

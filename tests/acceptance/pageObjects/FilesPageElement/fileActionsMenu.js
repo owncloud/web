@@ -25,7 +25,7 @@ module.exports = {
      * @param {string} action
      * @returns {string}
      */
-    getActionSelector: function(action) {
+    getActionSelector: function (action) {
       const actionsAccordionSelector = this.elements.actionsAccordion.selector
       const actionSelector = this.elements[action + 'ButtonInAccordion'].selector
 
@@ -39,7 +39,7 @@ module.exports = {
      * @throws Error
      * @returns {*}
      */
-    performFileAction: async function(action) {
+    performFileAction: async function (action) {
       const fileActionBtnSelectorXpath = this.getActionSelector(action)
       return await this.click('xpath', fileActionBtnSelectorXpath)
     },
@@ -49,10 +49,10 @@ module.exports = {
      * @param {string} action
      * @returns {Promise<boolean>}
      */
-    getActionDisabledAttr: async function(action) {
+    getActionDisabledAttr: async function (action) {
       let disabledState
       const btnSelector = this.getActionSelector(action)
-      await this.api.element('xpath', btnSelector, result => {
+      await this.api.element('xpath', btnSelector, (result) => {
         // action is disabled when not visible in dropdown menu
         disabledState = result.status === -1
       })
@@ -63,7 +63,7 @@ module.exports = {
      * deletes resource using fileActions 'delete' button
      * @returns {Promise<*>}
      */
-    delete: async function() {
+    delete: async function () {
       await this.performFileAction(this.FileAction.delete)
       await this.api.page.FilesPageElement.filesList().confirmDeletion()
       return this
@@ -73,7 +73,7 @@ module.exports = {
      * @param {boolean} expectToSucceed
      * @return {*}
      */
-    rename: async function(toName, expectToSucceed = true) {
+    rename: async function (toName, expectToSucceed = true) {
       await this.performFileAction(this.FileAction.rename)
       await this.useXpath()
         .waitForElementVisible('@dialog')
@@ -93,32 +93,32 @@ module.exports = {
      * mark as favorite resource using fileActions 'favorite' button
      * @returns {Promise<*>}
      */
-    favorite: async function() {
+    favorite: async function () {
       return await this.performFileAction(this.FileAction.favorite)
     },
     /**
      * unmark as favorite resource using fileActions 'favorite' button
      * @returns {Promise<*>}
      */
-    unmarkFavorite: async function() {
+    unmarkFavorite: async function () {
       return await this.performFileAction(this.FileAction.unmarkFavorite)
     },
     /**
      * @return {Promise<module.exports.commands>}
      */
-    restore: async function() {
+    restore: async function () {
       return await this.performFileAction(this.FileAction.restore)
     },
     /**
      * @return {Promise<module.exports.commands>}
      */
-    download: async function() {
+    download: async function () {
       return await this.performFileAction(this.FileAction.download)
     },
     /**
      * @return {Promise<module.exports.commands>}
      */
-    deleteResourceImmediately: async function() {
+    deleteResourceImmediately: async function () {
       await this.performFileAction(this.FileAction.delete)
       await this.api.page.FilesPageElement.filesList().confirmDeletion()
 
@@ -127,37 +127,37 @@ module.exports = {
     /**
      * Trigger the move of a resource via its file action
      */
-    move: async function() {
+    move: async function () {
       return await this.performFileAction(this.FileAction.move)
     },
     /**
      * Trigger the copy of a resource via its file action
      */
-    copy: async function() {
+    copy: async function () {
       return await this.performFileAction(this.FileAction.copy)
     },
     /**
      * Trigger accepting a share
      */
-    acceptShare: function() {
+    acceptShare: function () {
       return this.performFileAction(this.FileAction.acceptShare)
     },
     /**
      * Trigger declining a share
      */
-    declineShare: function() {
+    declineShare: function () {
       return this.performFileAction(this.FileAction.declineShare)
     },
     /**
      * Open a resource in the media viewer via its file action
      */
-    mediaViewer: function() {
+    mediaViewer: function () {
       return this.performFileAction(this.FileAction.mediaViewer)
     },
     /**
      * Open a resource in the markdown editor via its file action
      */
-    markdownEditor: function() {
+    markdownEditor: function () {
       return this.performFileAction(this.FileAction.markdownEditor)
     }
   },
@@ -174,7 +174,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     downloadButtonInAccordion: {
-      selector: '//button[contains(@class, "oc-files-actions-download-trigger")]',
+      selector: '//button[contains(@class, "oc-files-actions-download-file-trigger")]',
       locateStrategy: 'xpath'
     },
     favoriteButtonInAccordion: {

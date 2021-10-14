@@ -37,14 +37,14 @@ describe('SizeInfo component', () => {
   describe('when item(s) are selected', () => {
     it.each([[[selectedFiles[0]]], [selectedFiles]])(
       'should have selected number count and total size',
-      selected => {
+      (selected) => {
         const selectedCount = selected.length
         let totalSize = 0
-        selected.forEach(file => (totalSize += parseInt(file.size, 10)))
+        selected.forEach((file) => (totalSize += parseInt(file.size, 10)))
 
         jest
           .spyOn(SizeInfo.mixins[0].methods, 'getResourceSize')
-          .mockImplementation(size => size + ' B')
+          .mockImplementation((size) => size + ' B')
         const store = createStore({ selected })
         const wrapper = createWrapper({
           store

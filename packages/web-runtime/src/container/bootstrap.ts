@@ -25,9 +25,41 @@ export const requestConfiguration = async (path: string): Promise<RuntimeConfigu
     throw new Error(`config could not be loaded. HTTP status-code ${request.status}`)
   }
 
-  return request.json().catch(error => {
+  return request.json().catch((error) => {
     throw new Error(`config could not be parsed. ${error}`)
   })
+}
+
+/**
+ * Announce and prepare vuex store with data that is needed before any application gets announced.
+ *
+ * @param vue
+ * @param runtimeConfiguration
+ * @param store
+ */
+export const announceStore = async ({
+  vue,
+  runtimeConfiguration,
+  store
+}: {
+  vue: VueConstructor
+  runtimeConfiguration: RuntimeConfiguration
+  store: Store<any>
+}): Promise<void> => {
+  await store.dispatch('loadConfig', runtimeConfiguration)
+  await store.dispatch('initAuth')
+
+  /**
+   * TODO: Find a different way to access store from within JS files
+   * potential options are:
+   * - use the api which already is in place but deprecated
+   * - use a global object
+   *
+   * at the moment it is not clear if this api should be exposed or not.
+   * we need to decide if we extend the api more or just expose the store and de deprecate
+   * the apis for retrieving it.
+   */
+  set(vue, '$store', store)
 }
 
 /**
@@ -75,18 +107,16 @@ export const announceApplications = async ({
   translations: unknown
   supportedLanguages: { [key: string]: string }
 }): Promise<void> => {
-  const {
-    apps: internalApplications = [],
-    external_apps: externalApplications = []
-  } = runtimeConfiguration
+  const { apps: internalApplications = [], external_apps: externalApplications = [] } =
+    runtimeConfiguration
 
   const applicationPaths = [
-    ...internalApplications.map(application => `web-app-${application}`),
-    ...externalApplications.map(application => application.path)
+    ...internalApplications.map((application) => `web-app-${application}`),
+    ...externalApplications.map((application) => application.path)
   ].filter(Boolean)
 
   const applicationResults = await Promise.allSettled(
-    applicationPaths.map(applicationPath =>
+    applicationPaths.map((applicationPath) =>
       buildApplication({
         applicationPath,
         store,
@@ -108,8 +138,8 @@ export const announceApplications = async ({
     return acc
   }, [])
 
-  await Promise.all(applications.map(application => application.initialize()))
-  await Promise.all(applications.map(application => application.ready()))
+  await Promise.all(applications.map((application) => application.initialize()))
+  await Promise.all(applications.map((application) => application.ready()))
 }
 
 /**
@@ -122,17 +152,17 @@ export const announceApplications = async ({
  * @param designSystem
  */
 export const announceTheme = async ({
-  themeLocation,
   store,
   vue,
-  designSystem
+  designSystem,
+  runtimeConfiguration
 }: {
-  themeLocation?: string
   store: Store<unknown>
   vue: VueConstructor
   designSystem: any
+  runtimeConfiguration?: RuntimeConfiguration
 }): Promise<void> => {
-  const { theme } = await loadTheme(themeLocation)
+  const { theme } = await loadTheme(runtimeConfiguration?.theme)
   await store.dispatch('loadTheme', { theme: theme.default })
 
   vue.use(designSystem, {
@@ -186,21 +216,16 @@ export const announceOwncloudSDK = ({
  * announce runtime defaults, this is usual the last needed announcement before rendering the actual ui
  *
  * @param vue
- * @param runtimeConfiguration
  * @param store
  * @param router
  */
-export const announceDefaults = async ({
-  vue,
-  runtimeConfiguration,
+export const announceDefaults = ({
   store,
   router
 }: {
-  vue: VueConstructor
-  runtimeConfiguration: RuntimeConfiguration
   store: Store<unknown>
   router: VueRouter
-}): Promise<void> => {
+}): void => {
   // set home route
   const appIds = store.getters.appIds
   let defaultExtensionId = store.getters.configuration.options.defaultExtension
@@ -213,21 +238,4 @@ export const announceDefaults = async ({
   ])
 
   routerSync(store, router)
-
-  // inject custom config into vuex
-  await store.dispatch('loadConfig', runtimeConfiguration)
-
-  /**
-   * TODO: Find a different way to access store from withit JS files
-   * potential options are:
-   * - use the api which already is in place but deprecated
-   * - use a global object
-   *
-   * at the moment it is not clear if this api should be exposed or not.
-   * we need to decide if we extend the api more or just expose the store and de deprecate
-   * the apis for retrieving it.
-   */
-  set(vue, '$store', store)
-
-  return Promise.resolve(undefined)
 }

@@ -65,7 +65,7 @@ export default {
       return this.$route.params.app
     },
     fileId() {
-      return this.$route.params.file_id + '=='
+      return this.$route.params.file_id
     }
   },
   async created() {

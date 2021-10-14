@@ -39,7 +39,7 @@ describe('FileActions', () => {
     })
 
     describe('and there are no externalApps', () => {
-      it.each(systemDefaultActions)('only default actions should be rendered', actions => {
+      it.each(systemDefaultActions)('only default actions should be rendered', (actions) => {
         const wrapper = getWrapper(filesPersonalRoute, actions)
 
         expect(wrapper).toMatchSnapshot()
@@ -47,19 +47,22 @@ describe('FileActions', () => {
     })
 
     describe('and there are externalApps', () => {
-      it.each(systemDefaultActions)('default and external actions should be rendered', actions => {
-        const wrapper = getWrapper(
-          filesPersonalRoute,
-          actions,
-          createStore({
-            mimeType: 'application/fileFormat3',
-            availableMimeTypes: fixtureMimeTypes
-          }),
-          exampleApps
-        )
+      it.each(systemDefaultActions)(
+        'default and external actions should be rendered',
+        (actions) => {
+          const wrapper = getWrapper(
+            filesPersonalRoute,
+            actions,
+            createStore({
+              mimeType: 'application/fileFormat3',
+              availableMimeTypes: fixtureMimeTypes
+            }),
+            exampleApps
+          )
 
-        expect(wrapper).toMatchSnapshot()
-      })
+          expect(wrapper).toMatchSnapshot()
+        }
+      )
     })
 
     describe('should trigger the action handlers on click', () => {

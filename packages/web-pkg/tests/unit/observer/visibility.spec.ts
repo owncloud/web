@@ -8,7 +8,7 @@ const reset = () => {
     disconnect: jest.fn(),
     unobserve: jest.fn()
   }
-  window.IntersectionObserver = jest.fn().mockImplementation(cb => {
+  window.IntersectionObserver = jest.fn().mockImplementation((cb) => {
     callback = cb
     return mockIntersectionObserver
   })
@@ -27,7 +27,7 @@ describe('VisibilityObserver', () => {
       onExit: jest.fn()
     },
     {}
-  ])('observes %p', cb => {
+  ])('observes %p', (cb) => {
     const observer = new VisibilityObserver()
     observer.observe(document.getElementById('target'), cb)
     expect(mockIntersectionObserver.observe).toBeCalledTimes(Object.keys(cb).length ? 1 : 0)
@@ -56,7 +56,7 @@ describe('VisibilityObserver', () => {
     expect(onExit).toBeCalledTimes(2)
   })
 
-  it.each(['disconnect', 'unobserve'])('handles %p', m => {
+  it.each(['disconnect', 'unobserve'])('handles %p', (m) => {
     const onEnter = jest.fn()
     const onExit = jest.fn()
     const observer = new VisibilityObserver()

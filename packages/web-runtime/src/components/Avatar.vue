@@ -29,7 +29,7 @@ export default {
     type: {
       type: String,
       default: 'div',
-      validator: value => {
+      validator: (value) => {
         return value.match(/(div|span)/)
       }
     },
@@ -71,11 +71,11 @@ export default {
     ...mapGetters(['getToken', 'capabilities', 'configuration'])
   },
   watch: {
-    userid: function(userid) {
+    userid: function (userid) {
       this.setUser(userid)
     }
   },
-  mounted: function() {
+  mounted: function () {
     if (this.userid !== '') {
       this.setUser(this.userid)
     } else {
@@ -111,7 +111,7 @@ export default {
       headers.append('Authorization', 'Bearer ' + this.getToken)
       headers.append('X-Requested-With', 'XMLHttpRequest')
       fetch(url, { headers })
-        .then(response => {
+        .then((response) => {
           if (response.ok) {
             return response.blob()
           }
@@ -119,7 +119,7 @@ export default {
             throw new Error(`Unexpected status code ${response.status}`)
           }
         })
-        .then(blob => {
+        .then((blob) => {
           this.loading = false
           if (blob) {
             this.avatarSource = window.URL.createObjectURL(blob)
@@ -128,7 +128,7 @@ export default {
             this.avatarSource = ''
           }
         })
-        .catch(error => {
+        .catch((error) => {
           this.avatarSource = ''
           this.loading = false
           console.error(`Error loading avatar image for user "${userid}": `, error.message)

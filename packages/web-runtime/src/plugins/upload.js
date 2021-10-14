@@ -34,7 +34,7 @@ export default {
                 mtime: mtime
               },
 
-              onError: error => {
+              onError: (error) => {
                 console.error(`Error uploading file "${file}" to "${path}"`, error)
                 reject(error)
               },

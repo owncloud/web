@@ -1,7 +1,7 @@
-exports.command = function(callback) {
+exports.command = function (callback) {
   const helperElementId = 'helperClipboardInput'
   this.execute(
-    function(elementId) {
+    function (elementId) {
       const myInput = document.createElement('INPUT')
       const inputId = document.createAttribute('id')
       inputId.value = elementId
@@ -14,11 +14,11 @@ exports.command = function(callback) {
     .useCss()
     .setValue(`#${helperElementId}`, '') // just to focus the element
     .keys([this.Keys.CONTROL, 'v']) // copy the content of the clipboard into that field
-    .getValue(`#${helperElementId}`, function(clipboard) {
+    .getValue(`#${helperElementId}`, function (clipboard) {
       callback(clipboard.value)
     })
     .execute(
-      function(elementId) {
+      function (elementId) {
         const el = document.getElementById(elementId)
         el.parentNode.removeChild(el)
       },

@@ -69,6 +69,7 @@ export interface ClassicApplicationScript {
   navItems?: ApplicationNavigationItem[]
   quickActions?: ApplicationQuickActions
   translations?: ApplicationTranslations
+  initialize?: () => void
   ready?: () => void
   mounted?: () => void
 }

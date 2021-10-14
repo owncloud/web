@@ -26,11 +26,11 @@ const actions = {
         service: 'apps/notifications',
         action: 'api/v1/notifications'
       })
-      .then(response => {
+      .then((response) => {
         if (response.headers.get('Content-Length') === '0') {
           return
         }
-        response.json().then(json => {
+        response.json().then((json) => {
           if (response.ok) {
             context.commit('UPDATE_NOTIFICATIONS', json.ocs.data)
           } else {
@@ -39,7 +39,7 @@ const actions = {
           context.commit('LOADING_NOTIFICATIONS', false)
         })
       })
-      .catch(error => {
+      .catch((error) => {
         context.commit('ERROR_NOTIFICATIONS', error)
         context.commit('LOADING_NOTIFICATIONS', false)
       })
@@ -51,14 +51,14 @@ const actions = {
         action: 'api/v1/notifications/' + notification,
         method: 'DELETE'
       })
-      .then(response => {
+      .then((response) => {
         if (response.ok) {
           context.commit('DELETE_NOTIFICATION', notification)
         } else {
           context.commit('ERROR_NOTIFICATIONS', response.ocs.meta.status)
         }
       })
-      .catch(error => {
+      .catch((error) => {
         context.commit('ERROR_NOTIFICATIONS', error)
       })
   }
@@ -68,9 +68,7 @@ const mutations = {
   ENQUEUE_MESSAGE(state, message) {
     // set random id to improve iteration in v-for & lodash
     if (!message.id) {
-      message.id = Math.random()
-        .toString(36)
-        .slice(2, -1)
+      message.id = Math.random().toString(36).slice(2, -1)
     }
 
     state.messages.push(message)
@@ -88,7 +86,7 @@ const mutations = {
     state.notifications.data = notifications
   },
   DELETE_NOTIFICATION(state, notification) {
-    const data = state.notifications.data.filter(n => {
+    const data = state.notifications.data.filter((n) => {
       return n.notification_id !== notification
     })
     state.notifications.data = data
@@ -100,10 +98,10 @@ const mutations = {
 }
 
 const getters = {
-  activeMessages: state => {
+  activeMessages: (state) => {
     return state.messages
   },
-  activeNotifications: state => {
+  activeNotifications: (state) => {
     return state.notifications.data.length && !state.notifications.failed
       ? state.notifications.data
       : false

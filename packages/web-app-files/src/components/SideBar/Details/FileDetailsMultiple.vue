@@ -33,7 +33,7 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'FileDetailsMultiple',
   mixins: [Mixins, MixinResources, MixinRoutes],
-  title: $gettext => {
+  title: ($gettext) => {
     return $gettext('Details')
   },
   computed: {
@@ -55,7 +55,7 @@ export default {
     },
     sizeValue() {
       let size = 0
-      this.selectedFiles.forEach(i => (size += parseInt(i.size)))
+      this.selectedFiles.forEach((i) => (size += parseInt(i.size)))
       return this.getResourceSize(size)
     },
     showSize() {
@@ -65,13 +65,13 @@ export default {
       return this.$gettext('Size')
     },
     filesCount() {
-      return this.selectedFiles.filter(i => i.type === 'file').length
+      return this.selectedFiles.filter((i) => i.type === 'file').length
     },
     filesText() {
       return this.$gettext('Files')
     },
     foldersCount() {
-      return this.selectedFiles.filter(i => i.type === 'folder').length
+      return this.selectedFiles.filter((i) => i.type === 'folder').length
     },
     foldersText() {
       return this.$gettext('Folders')

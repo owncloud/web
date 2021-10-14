@@ -11,16 +11,19 @@ import {
   requestConfiguration,
   announceApplications,
   announceClient,
+  announceDefaults,
+  announceOwncloudSDK,
+  announceStore,
   announceTheme,
   announceTranslations,
-  announceOwncloudSDK,
-  announceDefaults,
   applicationStore
 } from './container'
 
 export const bootstrap = async (configurationPath: string): Promise<void> => {
   const runtimeConfiguration = await requestConfiguration(configurationPath)
+  announceOwncloudSDK({ vue: Vue, runtimeConfiguration })
   await announceClient(runtimeConfiguration)
+  await announceStore({ vue: Vue, store, runtimeConfiguration })
   await announceApplications({
     runtimeConfiguration,
     store,
@@ -28,10 +31,9 @@ export const bootstrap = async (configurationPath: string): Promise<void> => {
     router,
     translations
   })
-  await announceOwncloudSDK({ vue: Vue, runtimeConfiguration })
-  await announceTranslations({ vue: Vue, supportedLanguages, translations })
-  await announceTheme({ store, vue: Vue, designSystem })
-  await announceDefaults({ vue: Vue, store, router, runtimeConfiguration })
+  announceTranslations({ vue: Vue, supportedLanguages, translations })
+  await announceTheme({ store, vue: Vue, designSystem, runtimeConfiguration })
+  announceDefaults({ store, router })
 }
 
 export const renderSuccess = (): void => {
@@ -39,9 +41,9 @@ export const renderSuccess = (): void => {
     el: '#owncloud',
     store,
     router,
-    render: h => h(pages.success),
+    render: (h) => h(pages.success),
     mounted() {
-      Array.from(applicationStore.values()).forEach(application => application.mounted(this))
+      Array.from(applicationStore.values()).forEach((application) => application.mounted(this))
     }
   })
 }
@@ -53,6 +55,6 @@ export const renderFailure = async (err: Error): Promise<void> => {
   new Vue({
     el: '#owncloud',
     store,
-    render: h => h(pages.failure)
+    render: (h) => h(pages.failure)
   })
 }

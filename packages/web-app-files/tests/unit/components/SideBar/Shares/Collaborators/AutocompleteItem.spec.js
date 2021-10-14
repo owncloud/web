@@ -33,7 +33,7 @@ describe('AutocompleteItem component', () => {
     })
     it.each([3, 4, 6])(
       'should display a generic-person icon for any other share types',
-      shareType => {
+      (shareType) => {
         const wrapper = createWrapper({ shareType: shareType })
         expect(wrapper.find('avatar-image-stub').exists()).toBeFalsy()
         expect(wrapper.find('oc-icon-stub').exists()).toBeTruthy()

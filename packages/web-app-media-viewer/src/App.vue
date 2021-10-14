@@ -41,14 +41,24 @@
 
     <div class="uk-position-medium uk-position-bottom-center media-viewer-details">
       <div
-        class="uk-overlay uk-overlay-default oc-p-s uk-text-center oc-text-muted uk-text-truncate media-viewer-file-name"
+        class="
+          uk-overlay uk-overlay-default
+          oc-p-s
+          uk-text-center
+          oc-text-muted
+          uk-text-truncate
+          media-viewer-file-name
+        "
       >
         {{ medium.name }}
       </div>
       <div class="uk-overlay uk-overlay-primary uk-light oc-p-s media-viewer-controls-container">
         <div
-          class="uk-width-large uk-flex uk-flex-middle uk-flex-center uk-flex-around media-viewer-controls-action-bar"
-          style="user-select:none;"
+          class="
+            uk-width-large uk-flex uk-flex-middle uk-flex-center uk-flex-around
+            media-viewer-controls-action-bar
+          "
+          style="user-select: none"
         >
           <oc-icon
             role="button"
@@ -59,7 +69,7 @@
             @click="prev"
           />
           <!-- @TODO: Bring back working uk-light -->
-          <span v-if="!$_loader_folderLoading" class="uk-text-small" style="color:#fff">
+          <span v-if="!$_loader_folderLoading" class="uk-text-small" style="color: #fff">
             {{ activeIndex + 1 }} <span v-translate>of</span> {{ mediaFiles.length }}
           </span>
           <oc-icon
@@ -117,7 +127,7 @@ export default {
     ...mapGetters(['getToken', 'capabilities']),
 
     mediaFiles() {
-      return this.activeFiles.filter(file => {
+      return this.activeFiles.filter((file) => {
         return file.extension.toLowerCase().match(/(png|jpg|jpeg|gif|mp4|webm|ogg)/)
       })
     },
@@ -125,7 +135,7 @@ export default {
       return this.mediaFiles[this.activeIndex]
     },
     activeMediaFileCached() {
-      const cached = this.media.find(i => i.id === this.activeMediaFile.id)
+      const cached = this.media.find((i) => i.id === this.activeMediaFile.id)
       return cached !== undefined ? cached : false
     },
     activeClass() {
@@ -201,8 +211,7 @@ export default {
 
     // keep a local history for this component
     window.addEventListener('popstate', this.handleLocalHistoryEvent)
-
-    const filePath = this.$route.params.filePath
+    const filePath = `/${this.$route.params.filePath.split('/').filter(Boolean).join('/')}`
     await this.$_loader_loadItems(filePath)
     this.setCurrentFile(filePath)
   },
@@ -212,7 +221,7 @@ export default {
 
     window.removeEventListener('popstate', this.handleLocalHistoryEvent)
 
-    this.media.forEach(medium => {
+    this.media.forEach((medium) => {
       window.URL.revokeObjectURL(medium.url)
     })
   },
@@ -267,7 +276,7 @@ export default {
       }
 
       promise
-        .then(mediaUrl => {
+        .then((mediaUrl) => {
           this.media.push({
             id: this.activeMediaFile.id,
             name: this.activeMediaFile.name,
@@ -280,7 +289,7 @@ export default {
           this.loading = false
           this.failed = false
         })
-        .catch(e => {
+        .catch((e) => {
           this.loading = false
           this.failed = true
           console.error(e)

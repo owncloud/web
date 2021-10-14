@@ -15,7 +15,7 @@ const mutations = {
 }
 
 const getters = {
-  urlBeforeLogin: state => state.urlBeforeLogin
+  urlBeforeLogin: (state) => state.urlBeforeLogin
 }
 
 export default {

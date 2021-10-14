@@ -29,7 +29,9 @@ Feature: Sharing files with multiple internal users with different permissions
       | David Lopez  | user |
     And the user removes "David Lopez" as a collaborator from the share
     And the user removes "Regular User" as a collaborator from the share
-    And the user shares with the selected collaborators
+    Then user "David Lopez" should not be visible in the collaborators selected options in the webUI
+    And user "Regular User" should not be visible in the collaborators selected options in the webUI
+    When the user shares with the selected collaborators
     Then custom permissions "<displayed-permissions>" should be set for user "Brian Murphy" for file "lorem.txt" on the webUI
     And custom permissions "<displayed-permissions>" should be set for user "Carol King" for file "lorem.txt" on the webUI
     And user "Brian Murphy" should be listed as "<displayed-role>" in the collaborators list for file "lorem.txt" on the webUI

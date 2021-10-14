@@ -28,7 +28,7 @@ export const createUser = async ({ user, admin }: { user: User; admin: User }): 
   ;[
     ['display', user.displayName],
     ['email', user.email]
-  ].forEach(kv => {
+  ].forEach((kv) => {
     const body = new URLSearchParams()
     body.append('key', kv[0])
     body.append('value', kv[1])

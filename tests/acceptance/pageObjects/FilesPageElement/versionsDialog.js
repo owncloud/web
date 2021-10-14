@@ -3,9 +3,9 @@ module.exports = {
     /**
      * @returns {Promise<number>}
      */
-    getVersionsCount: async function() {
+    getVersionsCount: async function () {
       let count = 0
-      await this.api.elements('@versionsList', function(result) {
+      await this.api.elements('@versionsList', function (result) {
         count = result.value.length
       })
       return count
@@ -13,7 +13,7 @@ module.exports = {
     /**
      * @returns {*}
      */
-    restoreToPreviousVersion: function() {
+    restoreToPreviousVersion: function () {
       return this.waitForElementVisible('@restorePreviousVersion')
         .initAjaxCounters()
         .click('@restorePreviousVersion')

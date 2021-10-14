@@ -50,9 +50,9 @@ async function createUser(
   const url = 'cloud/users'
   return httpHelper
     .postOCS(url, 'admin', body)
-    .then(res => httpHelper.checkStatus(res, 'Failed while creating user'))
-    .then(res => res.json())
-    .then(res => httpHelper.checkOCSStatus(res, 'Failed while creating user'))
+    .then((res) => httpHelper.checkStatus(res, 'Failed while creating user'))
+    .then((res) => res.json())
+    .then((res) => httpHelper.checkOCSStatus(res, 'Failed while creating user'))
     .then(() => {
       if (client.globals.ocis) {
         const actualSkeletonDir = getActualSkeletonDir(skeletonType)
@@ -73,7 +73,7 @@ async function createUser(
             body.append('key', 'display')
             body.append('value', displayName)
             const url = `cloud/users/${encodeURIComponent(userId)}`
-            httpHelper.putOCS(url, 'admin', body).then(res => {
+            httpHelper.putOCS(url, 'admin', body).then((res) => {
               if (res.status !== 200) {
                 reject(new Error('Could not set display name of user'))
               }
@@ -94,7 +94,7 @@ async function createUser(
             body.append('key', 'email')
             body.append('value', email)
             const url = `cloud/users/${encodeURIComponent(userId)}`
-            httpHelper.putOCS(url, 'admin', body).then(res => {
+            httpHelper.putOCS(url, 'admin', body).then((res) => {
               if (res.status !== 200) {
                 reject(new Error('Could not set email of user'))
               }
@@ -151,7 +151,7 @@ function editUser(userId, key, value) {
  */
 function createGroup(groupId) {
   if (client.globals.ldap) {
-    return ldap.createGroup(client.globals.ldapClient, groupId).then(err => {
+    return ldap.createGroup(client.globals.ldapClient, groupId).then((err) => {
       if (!err) {
         userSettings.addGroupToCreatedGroupsList(groupId)
       }
@@ -192,23 +192,23 @@ function blockUser(userId) {
 
 Given(
   /^user "([^"]*)" has been created with default attributes and (without|large|small) skeleton files$/,
-  async function(userId, skeletonType) {
+  async function (userId, skeletonType) {
     await deleteUser(userId)
     await createDefaultUser(userId, skeletonType)
     await initUser(userId)
   }
 )
 
-Given('user {string} has been deleted', function(userId) {
+Given('user {string} has been deleted', function (userId) {
   return deleteUser(userId)
 })
 
-Given('user {string} has been blocked by admin', function(userId) {
+Given('user {string} has been blocked by admin', function (userId) {
   return blockUser(userId)
 })
 
-Given('user {string} has been created with default attributes on remote server', function(userId) {
-  return backendHelper.runOnRemoteBackend(async function() {
+Given('user {string} has been created with default attributes on remote server', function (userId) {
+  return backendHelper.runOnRemoteBackend(async function () {
     await deleteUser()
       .then(() => createDefaultUser(userId, 'large'))
       .then(() => initUser(userId))
@@ -217,8 +217,8 @@ Given('user {string} has been created with default attributes on remote server',
 
 Given(
   /^user "([^"]*)" has been created with default attributes and (without|large|small) skeleton files on remote server$/,
-  function(userId, skeletonType) {
-    return backendHelper.runOnRemoteBackend(async function() {
+  function (userId, skeletonType) {
+    return backendHelper.runOnRemoteBackend(async function () {
       await deleteUser()
         .then(() => createDefaultUser(userId, skeletonType))
         .then(() => initUser(userId))
@@ -226,31 +226,34 @@ Given(
   }
 )
 
-Given('the quota of user {string} has been set to {string}', function(userId, quota) {
+Given('the quota of user {string} has been set to {string}', function (userId, quota) {
   const body = new URLSearchParams()
   body.append('key', 'quota')
   body.append('value', quota)
   const url = `cloud/users/${userId}`
   return httpHelper
     .putOCS(url, 'admin', body)
-    .then(res => httpHelper.checkStatus(res, 'Could not set quota.'))
-})
-
-Given('these users have been created with default attributes but not initialized:', function(
-  dataTable
-) {
-  return Promise.all(
-    dataTable.rows().map(userId => {
-      return deleteUser(userId.toString()).then(() => createDefaultUser(userId.toString(), 'large'))
-    })
-  )
+    .then((res) => httpHelper.checkStatus(res, 'Could not set quota.'))
 })
 
 Given(
-  /^these users have been created with default attributes and (without|small|large) skeleton files but not initialized:$/,
-  function(skeletonType, dataTable) {
+  'these users have been created with default attributes but not initialized:',
+  function (dataTable) {
     return Promise.all(
-      dataTable.rows().map(userId => {
+      dataTable.rows().map((userId) => {
+        return deleteUser(userId.toString()).then(() =>
+          createDefaultUser(userId.toString(), 'large')
+        )
+      })
+    )
+  }
+)
+
+Given(
+  /^these users have been created with default attributes and (without|small|large) skeleton files but not initialized:$/,
+  function (skeletonType, dataTable) {
+    return Promise.all(
+      dataTable.rows().map((userId) => {
         return deleteUser(userId.toString()).then(() =>
           createDefaultUser(userId.toString(), skeletonType)
         )
@@ -261,10 +264,10 @@ Given(
 
 Given(
   /^these users have been created without initialization and (without|small|large) skeleton files:$/,
-  function(skeletonType, dataTable) {
+  function (skeletonType, dataTable) {
     codify.replaceInlineTable(dataTable)
     return Promise.all(
-      dataTable.hashes().map(user => {
+      dataTable.hashes().map((user) => {
         return createUserWithAttributes(user, skeletonType)
       })
     )
@@ -273,19 +276,19 @@ Given(
 
 Given(
   /^these users have been created with initialization and (without|small|large) skeleton files:$/,
-  function(skeletonType, dataTable) {
+  function (skeletonType, dataTable) {
     codify.replaceInlineTable(dataTable)
     return Promise.all(
-      dataTable.hashes().map(user => {
+      dataTable.hashes().map((user) => {
         return createUserWithAttributes(user, skeletonType, true)
       })
     )
   }
 )
 
-Given('these users have been created with default attributes:', function(dataTable) {
+Given('these users have been created with default attributes:', function (dataTable) {
   return Promise.all(
-    dataTable.rows().map(user => {
+    dataTable.rows().map((user) => {
       const userId = user[0]
       return deleteUser(userId)
         .then(() => createDefaultUser(userId, 'large'))
@@ -296,9 +299,9 @@ Given('these users have been created with default attributes:', function(dataTab
 
 Given(
   /^these users have been created with default attributes and (without|small|large) skeleton files:$/,
-  function(skeletonType, dataTable) {
+  function (skeletonType, dataTable) {
     return Promise.all(
-      dataTable.rows().map(user => {
+      dataTable.rows().map((user) => {
         const userId = user[0]
         return deleteUser(userId)
           .then(() => createDefaultUser(userId, skeletonType))
@@ -308,36 +311,36 @@ Given(
   }
 )
 
-Given('group {string} has been created', function(groupId) {
+Given('group {string} has been created', function (groupId) {
   return deleteGroup(groupId.toString()).then(() => createGroup(groupId.toString()))
 })
 
-Given('these groups have been created:', function(dataTable) {
+Given('these groups have been created:', function (dataTable) {
   return Promise.all(
-    dataTable.rows().map(groupId => {
+    dataTable.rows().map((groupId) => {
       return deleteGroup(groupId.toString()).then(() => createGroup(groupId.toString()))
     })
   )
 })
 
-Given('user {string} has been added to group {string}', function(userId, groupId) {
+Given('user {string} has been added to group {string}', function (userId, groupId) {
   return addToGroup(userId, groupId)
 })
 
-Given('the administrator has changed the display name of user {string} to {string}', async function(
-  userId,
-  newDisplayName
-) {
-  await editUser(userId, 'displayname', newDisplayName).then(function(res) {
-    assert.strictEqual(
-      res.status,
-      200,
-      `As admin, cannot change displayname of user "${userId}" to "${newDisplayName}"`
-    )
-  })
-})
+Given(
+  'the administrator has changed the display name of user {string} to {string}',
+  async function (userId, newDisplayName) {
+    await editUser(userId, 'displayname', newDisplayName).then(function (res) {
+      assert.strictEqual(
+        res.status,
+        200,
+        `As admin, cannot change displayname of user "${userId}" to "${newDisplayName}"`
+      )
+    })
+  }
+)
 
-After(async function() {
+After(async function () {
   const createdUsers = Object.keys(userSettings.getCreatedUsers('LOCAL'))
   const createdRemoteUsers = Object.keys(userSettings.getCreatedUsers('REMOTE'))
   const createdGroups = userSettings.getCreatedGroups()
@@ -352,19 +355,19 @@ After(async function() {
         }
       }
     }
-    await Promise.all(deleteSharePromises).catch(err => {
+    await Promise.all(deleteSharePromises).catch((err) => {
       console.log('Error while deleting shares after test: ', err)
     })
   }
   if (client.globals.ldap) {
-    const dataDir = user => join(client.globals.ocis_data_dir, user)
-    const deleteUserPromises = createdUsers.map(user =>
+    const dataDir = (user) => join(client.globals.ocis_data_dir, user)
+    const deleteUserPromises = createdUsers.map((user) =>
       ldap.deleteUser(client.globals.ldapClient, user).then(() => {
         console.log('Deleted LDAP User: ', user)
       })
     )
-    const deleteUserDirectories = createdUsers.map(user => fs.remove(dataDir(user)))
-    const deleteGroupPromises = createdGroups.map(group =>
+    const deleteUserDirectories = createdUsers.map((user) => fs.remove(dataDir(user)))
+    const deleteGroupPromises = createdGroups.map((group) =>
       ldap.deleteGroup(client.globals.ldapClient, group).then(() => {
         console.log('Deleted LDAP Group: ', group)
       })
@@ -383,8 +386,8 @@ After(async function() {
   }
 
   if (client.globals.ocis) {
-    const dataDir = user => join(client.globals.ocis_data_dir, user)
-    const deleteUserDirectories = createdUsers.map(user => fs.remove(dataDir(user)))
+    const dataDir = (user) => join(client.globals.ocis_data_dir, user)
+    const deleteUserDirectories = createdUsers.map((user) => fs.remove(dataDir(user)))
     await Promise.all(deleteUserDirectories)
   }
 

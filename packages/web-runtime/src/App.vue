@@ -149,7 +149,7 @@ export default {
       const list = []
 
       // Get extensions which have at least one nav item
-      this.getExtensionsWithNavItems.forEach(extensionId => {
+      this.getExtensionsWithNavItems.forEach((extensionId) => {
         list.push({
           ...this.apps[extensionId],
           type: 'extension'
@@ -157,7 +157,7 @@ export default {
       })
 
       // Get extensions manually added into config
-      this.configuration.applications.forEach(application => {
+      this.configuration.applications.forEach((application) => {
         list.push({
           ...application,
           type: 'link'
@@ -191,7 +191,7 @@ export default {
         return []
       }
 
-      items.filter(item => {
+      items.filter((item) => {
         if (this.capabilities === undefined) {
           return false
         }
@@ -203,7 +203,7 @@ export default {
         return item.enabled(this.capabilities)
       })
 
-      return items.map(item => ({
+      return items.map((item) => ({
         ...item,
         name: this.$gettext(item.name),
         active: this.$route.name === item.route.name
@@ -252,20 +252,20 @@ export default {
   watch: {
     $route: {
       immediate: true,
-      handler: function(to) {
+      handler: function (to) {
         this.announceRouteChange(to)
         document.title = this.extractPageTitleFromRoute(to)
         this.appNavigationVisible = false
       }
     },
-    capabilities(caps) {
-      if (!caps) {
-        // capabilities not loaded yet
-        return
-      }
+    capabilities: {
+      immediate: true,
+      handler: function (caps) {
+        if (!caps?.notifications) {
+          return
+        }
 
-      // setup periodic loading of notifications if the server supports them
-      if (caps.notifications) {
+        // setup periodic loading of notifications if the server supports them
         this.$nextTick(() => {
           this.$_updateNotifications()
         })
@@ -314,12 +314,8 @@ export default {
     })
   },
 
-  beforeMount() {
-    this.initAuth()
-  },
-
   methods: {
-    ...mapActions(['initAuth', 'fetchNotifications', 'deleteMessage']),
+    ...mapActions(['fetchNotifications', 'deleteMessage']),
 
     focusModal(component, event) {
       this.focus({
@@ -342,7 +338,7 @@ export default {
     },
 
     $_updateNotifications() {
-      this.fetchNotifications(this.$client).catch(error => {
+      this.fetchNotifications(this.$client).catch((error) => {
         console.error('Error while loading notifications: ', error)
         clearInterval(this.$_notificationsInterval)
       })
@@ -387,7 +383,7 @@ export default {
 
       if (route.params.item) {
         if (route.name.startsWith('files-')) {
-          const fileTree = route.params.item.split('/').filter(el => el.length)
+          const fileTree = route.params.item.split('/').filter((el) => el.length)
 
           if (fileTree.length) {
             titleSegments.unshift(fileTree.pop())

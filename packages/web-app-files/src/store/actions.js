@@ -57,7 +57,7 @@ export default {
       .then(() => {
         context.commit('FAVORITE_FILE', file)
       })
-      .catch(error => {
+      .catch((error) => {
         throw new Error(error)
       })
   },
@@ -77,7 +77,7 @@ export default {
           context.commit('REMOVE_FILE_SELECTION', file)
           context.commit('REMOVE_FILE_FROM_SEARCHED', file)
         })
-        .catch(error => {
+        .catch((error) => {
           let translated = $gettext('Error while deleting "%{file}"')
           if (error.statusCode === 423) {
             if (firstRun) {
@@ -150,10 +150,10 @@ export default {
     // see https://owncloud.dev/owncloud-sdk/Shares.html
     client.shares
       .getShares(path, { reshares: true })
-      .then(data => {
+      .then((data) => {
         context.commit(
           'CURRENT_FILE_OUTGOING_SHARES_SET',
-          data.map(element => {
+          data.map((element) => {
             return buildShare(
               element.shareInfo,
               context.getters.highlightedFile,
@@ -164,7 +164,7 @@ export default {
         context.dispatch('updateCurrentFileShareTypes')
         context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', false)
       })
-      .catch(error => {
+      .catch((error) => {
         context.commit('CURRENT_FILE_OUTGOING_SHARES_ERROR', error.message)
         context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', false)
       })
@@ -179,10 +179,10 @@ export default {
     const path = payload.path
     client.shares
       .getShares(path, { shared_with_me: true })
-      .then(data => {
+      .then((data) => {
         context.commit(
           'INCOMING_SHARES_LOAD',
-          data.map(element => {
+          data.map((element) => {
             return buildCollaboratorShare(
               element.shareInfo,
               context.getters.highlightedFile,
@@ -192,7 +192,7 @@ export default {
         )
         context.commit('INCOMING_SHARES_LOADING', false)
       })
-      .catch(error => {
+      .catch((error) => {
         context.commit('INCOMING_SHARES_ERROR', error.message)
         context.commit('INCOMING_SHARES_LOADING', false)
       })
@@ -223,7 +223,7 @@ export default {
     return new Promise((resolve, reject) => {
       client.shares
         .updateShare(share.id, params)
-        .then(updatedShare => {
+        .then((updatedShare) => {
           const share = buildCollaboratorShare(
             updatedShare.shareInfo,
             getters.highlightedFile,
@@ -232,7 +232,7 @@ export default {
           commit('CURRENT_FILE_OUTGOING_SHARES_UPDATE', share)
           resolve(share)
         })
-        .catch(e => {
+        .catch((e) => {
           reject(e)
         })
     })
@@ -244,7 +244,7 @@ export default {
           permissions: permissions,
           expirationDate: expirationDate
         })
-        .then(share => {
+        .then((share) => {
           context.commit(
             'CURRENT_FILE_OUTGOING_SHARES_ADD',
             buildCollaboratorShare(
@@ -256,7 +256,7 @@ export default {
           context.dispatch('updateCurrentFileShareTypes')
           context.dispatch('loadIndicators', { client, currentFolder: path })
         })
-        .catch(e => {
+        .catch((e) => {
           context.dispatch(
             'showMessage',
             {
@@ -280,7 +280,7 @@ export default {
         remoteUser: remoteShare,
         expirationDate: expirationDate
       })
-      .then(share => {
+      .then((share) => {
         context.commit(
           'CURRENT_FILE_OUTGOING_SHARES_ADD',
           buildCollaboratorShare(
@@ -292,7 +292,7 @@ export default {
         context.dispatch('updateCurrentFileShareTypes')
         context.dispatch('loadIndicators', { client, currentFolder: path })
       })
-      .catch(e => {
+      .catch((e) => {
         context.dispatch(
           'showMessage',
           {
@@ -315,7 +315,7 @@ export default {
         context.dispatch('updateCurrentFileShareTypes')
         context.dispatch('loadIndicators', { client, currentFolder: resource.path })
       })
-      .catch(e => {
+      .catch((e) => {
         console.error(e)
       })
   },
@@ -351,7 +351,7 @@ export default {
 
     const shareQueriesQueue = new PQueue({ concurrency: 2 })
     const shareQueriesPromises = []
-    parentPaths.forEach(queryPath => {
+    parentPaths.forEach((queryPath) => {
       // skip already cached paths
       if (context.getters.sharesTree[queryPath]) {
         return Promise.resolve()
@@ -362,8 +362,8 @@ export default {
         shareQueriesQueue.add(() =>
           client.shares
             .getShares(queryPath, { reshares: true })
-            .then(data => {
-              data.forEach(element => {
+            .then((data) => {
+              data.forEach((element) => {
                 sharesTree[queryPath].push({
                   ...buildShare(element.shareInfo, { type: 'folder' }, !context.rootGetters.isOcis),
                   outgoing: true,
@@ -371,7 +371,7 @@ export default {
                 })
               })
             })
-            .catch(error => {
+            .catch((error) => {
               console.error('SHARESTREE_ERROR', error)
               context.commit('SHARESTREE_ERROR', error.message)
               context.commit('SHARESTREE_LOADING', false)
@@ -383,8 +383,8 @@ export default {
         shareQueriesQueue.add(() =>
           client.shares
             .getShares(queryPath, { shared_with_me: true })
-            .then(data => {
-              data.forEach(element => {
+            .then((data) => {
+              data.forEach((element) => {
                 sharesTree[queryPath].push({
                   ...buildCollaboratorShare(
                     element.shareInfo,
@@ -396,7 +396,7 @@ export default {
                 })
               })
             })
-            .catch(error => {
+            .catch((error) => {
               console.error('SHARESTREE_ERROR', error)
               context.commit('SHARESTREE_ERROR', error.message)
               context.commit('SHARESTREE_LOADING', false)
@@ -431,14 +431,14 @@ export default {
     return new Promise((resolve, reject) => {
       client.shares
         .shareFileWithLink(path, params)
-        .then(data => {
+        .then((data) => {
           const link = buildShare(data.shareInfo, null, !context.rootGetters.isOcis)
           context.commit('CURRENT_FILE_OUTGOING_SHARES_ADD', link)
           context.dispatch('updateCurrentFileShareTypes')
           context.dispatch('loadIndicators', { client, currentFolder: path })
           resolve(link)
         })
-        .catch(e => {
+        .catch((e) => {
           reject(e)
         })
     })
@@ -447,12 +447,12 @@ export default {
     return new Promise((resolve, reject) => {
       client.shares
         .updateShare(id, params)
-        .then(data => {
+        .then((data) => {
           const link = buildShare(data.shareInfo, null, !context.rootGetters.isOcis)
           context.commit('CURRENT_FILE_OUTGOING_SHARES_UPDATE', link)
           resolve(link)
         })
-        .catch(e => {
+        .catch((e) => {
           reject(e)
         })
     })
@@ -465,7 +465,7 @@ export default {
         context.dispatch('updateCurrentFileShareTypes')
         context.dispatch('loadIndicators', { client, currentFolder: resource.path })
       })
-      .catch(e => context.commit('CURRENT_FILE_OUTGOING_SHARES_ERROR', e.message))
+      .catch((e) => context.commit('CURRENT_FILE_OUTGOING_SHARES_ERROR', e.message))
   },
 
   addActionToProgress({ commit }, item) {
@@ -497,7 +497,7 @@ export default {
       return
     }
 
-    ;['sharedWith', 'owner'].forEach(k => {
+    ;['sharedWith', 'owner'].forEach((k) => {
       ;(resource[k] || []).forEach((obj, i) => {
         if (!has(obj, 'avatar')) {
           return
@@ -509,7 +509,7 @@ export default {
             token: rootGetters.getToken
           },
           true
-        ).then(url =>
+        ).then((url) =>
           commit('UPDATE_RESOURCE_FIELD', {
             id: resource.id,
             field: `${k}.[${i}].avatar`,
@@ -552,7 +552,7 @@ export default {
  */
 function computeShareTypes(shares) {
   const shareTypes = new Set()
-  shares.forEach(share => {
+  shares.forEach((share) => {
     shareTypes.add(share.shareType)
   })
   return Array.from(shareTypes)

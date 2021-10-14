@@ -10,7 +10,7 @@ const backendHelper = require('../helpers/backendHelper')
  *
  * @returns {{Authorization: string}}
  */
-const createAuthHeader = function(userId) {
+const createAuthHeader = function (userId) {
   const password = userSettings.getPasswordForUser(userId)
   return {
     Authorization: 'Basic ' + Buffer.from(userId + ':' + password).toString('base64')
@@ -22,7 +22,7 @@ const createAuthHeader = function(userId) {
  *
  * @returns {{<header>: string}}
  */
-const createOCSRequestHeaders = function(userId) {
+const createOCSRequestHeaders = function (userId) {
   return {
     ...createAuthHeader(userId),
     'OCS-APIREQUEST': true
@@ -36,7 +36,7 @@ const createOCSRequestHeaders = function(userId) {
  * @throws Error
  * @returns {node-fetch.Response}
  */
-const checkStatus = function(response, message = '') {
+const checkStatus = function (response, message = '') {
   if (response.ok) {
     // response.status >= 200 && response.status < 300
     return response
@@ -55,7 +55,7 @@ const checkStatus = function(response, message = '') {
  * @throws Error
  * @returns {Object} the body of the response
  */
-const checkOCSStatus = function(response, message = '') {
+const checkOCSStatus = function (response, message = '') {
   const statusCode = _.get(response, 'ocs.meta.statuscode')
   const ocsMessage = _.get(response, 'ocs.meta.message')
   if (statusCode === 200) {
@@ -74,7 +74,7 @@ const checkOCSStatus = function(response, message = '') {
  *
  * @returns {node-fetch}
  */
-const requestEndpoint = function(path, params, userId = 'admin', header = {}) {
+const requestEndpoint = function (path, params, userId = 'admin', header = {}) {
   const headers = { ...createAuthHeader(userId), ...header }
   const options = { ...params, headers }
   const url = join(backendHelper.getCurrentBackendUrl(), 'remote.php/dav', path)
@@ -90,7 +90,7 @@ const requestEndpoint = function(path, params, userId = 'admin', header = {}) {
  *
  * @returns {node-fetch}
  */
-const requestOCSEndpoint = function(path, params, userId = 'admin', header = {}) {
+const requestOCSEndpoint = function (path, params, userId = 'admin', header = {}) {
   const headers = { ...createOCSRequestHeaders(userId), ...header }
   const options = { ...params, headers }
   const separator = path.includes('?') ? '&' : '?'

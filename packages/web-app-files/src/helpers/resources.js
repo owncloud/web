@@ -8,6 +8,7 @@ import { bitmaskToRole, checkPermission, permissionsBitmask } from './collaborat
 import { shareTypes, userShareTypes } from './shareTypes'
 import { $gettext } from '../gettext'
 import { DavPermission, DavProperty } from 'web-pkg/src/constants'
+import { shareStatus } from './shareStatus'
 
 // Should we move this to ODS?
 export function getFileIcon(extension) {
@@ -40,6 +41,7 @@ export function buildResource(resource) {
     extension: isFolder ? '' : extension,
     path: resource.name,
     type: isFolder ? 'folder' : resource.type,
+    isFolder,
     mdate: resource.fileInfo[DavProperty.LastModifiedDate],
     size: isFolder
       ? resource.fileInfo[DavProperty.ContentSize]
@@ -49,9 +51,9 @@ export function buildResource(resource) {
     starred: resource.fileInfo[DavProperty.IsFavorite] !== '0',
     etag: resource.fileInfo[DavProperty.ETag],
     sharePermissions: resource.fileInfo[DavProperty.SharePermissions],
-    shareTypes: (function() {
+    shareTypes: (function () {
       if (resource.fileInfo[DavProperty.ShareTypes]) {
-        return resource.fileInfo[DavProperty.ShareTypes].map(v => parseInt(v))
+        return resource.fileInfo[DavProperty.ShareTypes].map((v) => parseInt(v))
       }
       return []
     })(),
@@ -59,29 +61,28 @@ export function buildResource(resource) {
     downloadURL: resource.fileInfo[DavProperty.DownloadURL],
     ownerDisplayName: resource.fileInfo[DavProperty.OwnerDisplayName],
     ownerId: resource.fileInfo[DavProperty.OwnerId],
-    canUpload: function() {
+    canUpload: function () {
       return this.permissions.indexOf(DavPermission.FolderCreateable) >= 0
     },
-    canDownload: function() {
-      // TODO: as soon as we allow folder downloads as archive we want to return `true` here without exceptions
-      return !isFolder
+    canDownload: function () {
+      return true
     },
-    canBeDeleted: function() {
+    canBeDeleted: function () {
       return this.permissions.indexOf(DavPermission.Deletable) >= 0
     },
-    canRename: function() {
+    canRename: function () {
       return this.permissions.indexOf(DavPermission.Renameable) >= 0
     },
-    canShare: function() {
+    canShare: function () {
       return this.permissions.indexOf(DavPermission.Shareable) >= 0
     },
-    canCreate: function() {
+    canCreate: function () {
       return this.permissions.indexOf(DavPermission.FolderCreateable) >= 0
     },
-    isMounted: function() {
+    isMounted: function () {
       return this.permissions.indexOf(DavPermission.Mounted) >= 0
     },
-    isReceivedShare: function() {
+    isReceivedShare: function () {
       return this.permissions.indexOf(DavPermission.Shared) >= 0
     }
   }
@@ -107,7 +108,7 @@ export function aggregateResourceShares(
   token
 ) {
   if (incomingShares) {
-    return orderBy(shares, ['file_target', 'permissions'], ['asc', 'desc']).map(share =>
+    return orderBy(shares, ['file_target', 'permissions'], ['asc', 'desc']).map((share) =>
       buildSharedResource(share, incomingShares, allowSharePerm)
     )
   }
@@ -164,16 +165,19 @@ export function aggregateResourceShares(
     resources.push(share)
   }
 
-  return resources.map(share => buildSharedResource(share, incomingShares, allowSharePerm))
+  return resources.map((share) => buildSharedResource(share, incomingShares, allowSharePerm))
 }
 
 export function buildSharedResource(share, incomingShares = false, allowSharePerm) {
+  const isFolder = share.item_type === 'folder'
   const resource = {
     id: share.id,
     fileId: share.item_source,
-    type: share.item_type
+    type: share.item_type,
+    isFolder,
+    sdate: share.stime * 1000,
+    indicators: []
   }
-  const isFolder = resource.type === 'folder'
 
   if (incomingShares) {
     resource.resourceOwner = {
@@ -192,43 +196,28 @@ export function buildSharedResource(share, incomingShares = false, allowSharePer
     resource.status = share.state
     resource.name = path.basename(share.file_target)
     resource.path = share.file_target
-    resource.isReceivedShare = () => true
+    resource.canDownload = () => share.state === shareStatus.accepted
+    resource.canShare = () => checkPermission(share.permissions, 'share')
+    resource.canRename = () => checkPermission(share.permissions, 'update')
+    resource.canBeDeleted = () => checkPermission(share.permissions, 'delete')
   } else {
     resource.sharedWith = share.sharedWith
     resource.shareOwner = share.uid_owner
     resource.shareOwnerDisplayname = share.displayname_owner
     resource.name = path.basename(share.path)
     resource.path = share.path
-    // permissions irrelevant here
-    resource.isReceivedShare = () => false
+    resource.canDownload = () => true
+    resource.canShare = () => true
+    resource.canRename = () => true
+    resource.canBeDeleted = () => true
   }
+
   resource.extension = isFolder ? '' : _getFileExtension(resource.name)
-  // FIXME: add actual permission parsing
-  resource.canUpload = () => true
-  resource.canBeDeleted = () => {
-    if (!resource.isReceivedShare()) {
-      return true
-    }
-    return checkPermission(share.permissions, 'delete')
-  }
-  resource.canRename = () => {
-    if (!resource.isReceivedShare()) {
-      return true
-    }
-    return checkPermission(share.permissions, 'update')
-  }
-  resource.canShare = () => {
-    if (!resource.isReceivedShare()) {
-      return true
-    }
-    return checkPermission(share.permissions, 'share')
-  }
-  resource.isMounted = () => false
-  resource.canDownload = () => !isFolder
-  resource.share = buildShare(share, resource, allowSharePerm)
-  resource.indicators = []
   resource.icon = isFolder ? 'folder' : getFileIcon(resource.extension)
-  resource.sdate = share.stime * 1000
+  resource.isReceivedShare = () => incomingShares
+  resource.canUpload = () => true
+  resource.isMounted = () => false
+  resource.share = buildShare(share, resource, allowSharePerm)
 
   return resource
 }
@@ -347,6 +336,7 @@ export function buildDeletedResource(resource) {
   const extension = isFolder ? '' : _getFileExtension(fullName)
   return {
     type: isFolder ? 'folder' : resource.type,
+    isFolder,
     ddate: resource.fileInfo[DavProperty.TrashbinDeletedDate],
     name: path.basename(fullName),
     extension,

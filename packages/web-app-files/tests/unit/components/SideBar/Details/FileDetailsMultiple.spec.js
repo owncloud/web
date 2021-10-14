@@ -80,7 +80,7 @@ function createWrapper(testResource) {
         Files: {
           namespaced: true,
           getters: {
-            selectedFiles: function() {
+            selectedFiles: function () {
               return testResource
             }
           }

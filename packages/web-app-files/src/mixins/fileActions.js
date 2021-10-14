@@ -5,7 +5,8 @@ import AcceptShare from './actions/acceptShare'
 import Copy from './actions/copy'
 import DeclineShare from './actions/declineShare'
 import Delete from './actions/delete'
-import Download from './actions/download'
+import DownloadFile from './actions/downloadFile'
+import DownloadFolder from './actions/downloadFolder'
 import Favorite from './actions/favorite'
 import Fetch from './actions/fetch'
 import Move from './actions/move'
@@ -17,7 +18,8 @@ import kebabCase from 'lodash-es/kebabCase'
 const actionsMixins = [
   'fetch',
   'navigate',
-  'download',
+  'downloadFile',
+  'downloadFolder',
   'favorite',
   'copy',
   'move',
@@ -37,7 +39,8 @@ export default {
     Copy,
     DeclineShare,
     Delete,
-    Download,
+    DownloadFile,
+    DownloadFolder,
     Favorite,
     Fetch,
     Move,
@@ -61,7 +64,7 @@ export default {
     },
 
     $_fileActions_editorActions() {
-      return this.apps.fileEditors.map(editor => {
+      return this.apps.fileEditors.map((editor) => {
         return {
           label: () => {
             const translated = this.$gettext('Open in %{app}')
@@ -72,7 +75,7 @@ export default {
             )
           },
           icon: this.apps.meta[editor.app].icon,
-          handler: item =>
+          handler: (item) =>
             this.$_fileActions_openEditor(editor, item.path, item.id, EDITOR_MODE_EDIT),
           isEnabled: ({ resource }) => {
             if (editor.routes?.length > 0 && !checkRoute(editor.routes, this.$route.name)) {
@@ -148,7 +151,7 @@ export default {
 
       let actions = this.$_fileActions_editorActions.concat(this.$_fileActions_systemActions)
 
-      actions = actions.filter(action => {
+      actions = actions.filter((action) => {
         return (
           action.isEnabled({
             resource: resource,
@@ -173,7 +176,7 @@ export default {
       if (!allAvailableMimeTypes?.length) {
         return []
       } else {
-        const availableMimeTypes = allAvailableMimeTypes.find(t => t.mime_type === mimeType)
+        const availableMimeTypes = allAvailableMimeTypes.find((t) => t.mime_type === mimeType)
         if (availableMimeTypes) {
           return availableMimeTypes.app_providers
         } else {
@@ -183,10 +186,9 @@ export default {
     },
 
     $_fileActions_openLink(appName, resourceId) {
-      const actionableId = resourceId.replaceAll('=', '')
       const routeData = this.$router.resolve({
         name: 'external-apps',
-        params: { app: appName, file_id: actionableId }
+        params: { app: appName, file_id: resourceId }
       })
       // TODO: Let users configure whether to open in same/new tab (`_blank` vs `_self`)
       window.open(routeData.href, '_blank')

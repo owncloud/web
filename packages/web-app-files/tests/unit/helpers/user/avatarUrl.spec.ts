@@ -47,7 +47,7 @@ describe('avatarUrl', () => {
   })
 
   it('returns a signed url', async () => {
-    const signUrlMock = jest.fn().mockImplementation(url => {
+    const signUrlMock = jest.fn().mockImplementation((url) => {
       return `${url}?signed=true`
     })
     mockClient(signUrlMock)

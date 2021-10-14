@@ -73,13 +73,13 @@ export default {
           action: link.substr(link.lastIndexOf('api')),
           method: type
         })
-        .then(res => {
+        .then((res) => {
           this.deleteNotification({
             client: this.$client,
             notification: notificationId
           })
-          res.json().then(json => {
-            json.ocs.data.forEach(item => {
+          res.json().then((json) => {
+            json.ocs.data.forEach((item) => {
               const path = item.path.substr(0, item.path.lastIndexOf('/') + 1)
               const absolutePath = this.$route.params.item ? this.$route.params.item : '/'
               if (path === absolutePath) this.reloadFilesList(path)
@@ -93,7 +93,7 @@ export default {
         absolutePath: path,
         $gettext: this.$gettext,
         routeName: this.$route.name
-      }).catch(error => {
+      }).catch((error) => {
         this.showMessage({
           title: this.$gettext('Loading folder failed…'),
           desc: error.message,

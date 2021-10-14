@@ -1,7 +1,7 @@
 const { join } = require('../helpers/path')
 
 module.exports = {
-  url: function() {
+  url: function () {
     return join(this.api.launchUrl, '/#/files/list/favorites/')
   },
   commands: {
@@ -9,7 +9,7 @@ module.exports = {
      * like build-in navigate() but also waits till for the progressbar to appear and disappear
      * @returns {*}
      */
-    navigateAndWaitTillLoaded: function() {
+    navigateAndWaitTillLoaded: function () {
       return this.navigate(this.url()).waitForElementPresent(
         this.page.FilesPageElement.filesList().elements.anyAfterLoading
       )

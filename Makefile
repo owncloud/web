@@ -6,7 +6,7 @@ OCX_RELEASE := $(CURDIR)/build/dist
 NODE_MODULES := ${CURDIR}/node_modules
 
 node_modules: package.json yarn.lock
-	yarn install --frozen-lockfile && touch ${NODE_MODULES}
+	yarn install --immutable && touch ${NODE_MODULES}
 
 .PHONY: clean
 clean:

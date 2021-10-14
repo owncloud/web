@@ -23,7 +23,7 @@ export default class List implements SearchList {
       DavProperties.Default
     )
 
-    return plainResources.map(plainResource => {
+    return plainResources.map((plainResource) => {
       const resource = buildResource(plainResource)
       return { id: resource.id, data: resource }
     })

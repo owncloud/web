@@ -10,11 +10,11 @@ localVue.use(Vuex)
 localVue.use(DesignSystem)
 
 describe('Sidebar Quota component', () => {
-  it.each([2, 3.34, 0])('displays the progressbar', relativeQuota => {
+  it.each([2, 3.34, 0])('displays the progressbar', (relativeQuota) => {
     const wrapper = mount(SidebarQuota, {
       store: new Vuex.Store({
         getters: {
-          quota: function() {
+          quota: function () {
             return { relative: relativeQuota }
           }
         }
@@ -34,7 +34,7 @@ describe('Sidebar Quota component', () => {
     const wrapper = mount(SidebarQuota, {
       store: new Vuex.Store({
         getters: {
-          quota: function() {
+          quota: function () {
             return { used: 1287654323, definition: '2 GB' }
           }
         }

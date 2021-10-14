@@ -1,3 +1,4 @@
+import get from 'lodash-es/get.js'
 import Vue from 'vue'
 import Router from 'vue-router'
 import LoginPage from '../pages/login.vue'
@@ -68,7 +69,7 @@ const router = new Router({
   ]
 })
 
-router.beforeEach(function(to, from, next) {
+router.beforeEach(function (to, from, next) {
   const store = Vue.$store
   const isAuthenticated = store.getters.isAuthenticated
   let authRequired = true
@@ -93,4 +94,35 @@ router.beforeEach(function(to, from, next) {
   }
 })
 
-export default router
+// type: patch
+// temporary patch till we have upgraded web to the latest vue router which make this obsolete
+// this takes care that routes like 'foo/bar/baz' which by default would be converted to 'foo%2Fbar%2Fbaz' stay as they are
+// should immediately go away and be removed after finalizing the update
+// to apply the patch to a route add meta.patchCleanPath = true to it
+// to patch needs to be enabled on a route level, to do so add meta.patchCleanPath = true property to the route
+const patchRouter = (router) => {
+  const bindMatcher = router.match.bind(router)
+  const cleanPath = (route) =>
+    [
+      ['%2F', '/'],
+      ['//', '/']
+    ].reduce((path, rule) => path.replaceAll(rule[0], rule[1]), route || '')
+
+  router.match = (raw, current, redirectFrom) => {
+    const bindMatch = bindMatcher(raw, current, redirectFrom)
+
+    if (!get(bindMatch, 'meta.patchCleanPath', false)) {
+      return bindMatch
+    }
+
+    return {
+      ...bindMatch,
+      path: cleanPath(bindMatch.path),
+      fullPath: cleanPath(bindMatch.fullPath)
+    }
+  }
+
+  return router
+}
+
+export default patchRouter(router)

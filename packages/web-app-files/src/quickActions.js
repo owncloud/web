@@ -22,7 +22,7 @@ export function createPublicLink(ctx) {
   return new Promise((resolve, reject) => {
     ctx.store
       .dispatch('Files/addLink', { path: ctx.item.path, client: ctx.client, params })
-      .then(link => {
+      .then((link) => {
         ctx.store.dispatch('Files/sidebar/openWithPanel', 'links-item').then(() => {
           copyToClipboard(link.url)
           ctx.store.dispatch('showMessage', {
@@ -38,7 +38,7 @@ export function createPublicLink(ctx) {
         })
         resolve()
       })
-      .catch(e => {
+      .catch((e) => {
         reject(e)
       })
   })

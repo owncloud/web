@@ -2,7 +2,7 @@ const { client } = require('nightwatch-api')
 
 module.exports = {
   commands: {
-    selectFolderAndConfirm: async function(target) {
+    selectFolderAndConfirm: async function (target) {
       await this.selectFolder(target)
       await this.initAjaxCounters()
         .waitForElementVisible('@confirmBtn')
@@ -19,7 +19,7 @@ module.exports = {
       }
       return this
     },
-    selectFolder: async function(target) {
+    selectFolder: async function (target) {
       if (target.startsWith('/')) {
         // if the target is absolute, we need to go to the root element first
         await this.waitForElementVisible('@firstBreadcrumbLink').click('@firstBreadcrumbLink')

@@ -29,9 +29,7 @@
           </dd>
         </div>
         <div v-if="user.username && user.id">
-          <dt v-translate class="account-page-info-userid uk-text-normal oc-text-muted">
-            User ID
-          </dt>
+          <dt v-translate class="account-page-info-userid uk-text-normal oc-text-muted">User ID</dt>
           <dd>
             {{ user.id }}
           </dd>
@@ -45,9 +43,7 @@
           </dd>
         </div>
         <div class="oc-mb uk-width-1-2@s">
-          <dt v-translate class="account-page-info-email uk-text-normal oc-text-muted">
-            Email
-          </dt>
+          <dt v-translate class="account-page-info-email uk-text-normal oc-text-muted">Email</dt>
           <dd>
             <template v-if="user.email">{{ user.email }}</template>
             <span v-else v-translate>No email has been set up</span>
@@ -108,7 +104,7 @@ export default {
   },
   methods: {
     $_oc_settingsAccount_getGroup() {
-      this.$client.users.getUserGroups(this.user.id).then(groups => {
+      this.$client.users.getUserGroups(this.user.id).then((groups) => {
         this.groups = groups
         this.loading = false
       })

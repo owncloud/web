@@ -9,6 +9,7 @@ Feature: Kindergarten can use web to organize a day
       | Alice |
       | Brian |
       | Carol |
+    And admin set the default folder for received shares to "Shares"
 
   Scenario: Alice can share this weeks meal plan with all parents
     Given "Alice" has logged in
@@ -30,28 +31,30 @@ Feature: Kindergarten can use web to organize a day
       | lorem.txt         | groups/Teddy Bear Daycare/meal plan  |
       | lorem-big.txt     | groups/Teddy Bear Daycare/meal plan  |
     Then "Alice" shares following resources
-      | resource                             | user  |
-      | groups/Pre-Schools Pirates/meal plan | Brian |
-      | groups/Pre-Schools Pirates/meal plan | Carol |
+      | resource                             | user  | role   |
+      | groups/Pre-Schools Pirates/meal plan | Brian | editor |
+      | groups/Pre-Schools Pirates/meal plan | Carol | viewer |
     Given "Brian" has logged in
     Then "Brian" opens the "files" app
-    Then "Brian" navigates to the shared with me page
+    Then "Brian" accepts following resources
+    | meal plan |
     Then "Brian" downloads following files
       | resource      | from      |
-      | data.zip      | meal plan |
+      | data.zip      | Shares/meal plan |
     Given "Carol" has logged in
     Then "Carol" opens the "files" app
-    Then "Carol" navigates to the shared with me page
+    Then "Carol" accepts following resources
+    | meal plan |
     Then "Carol" downloads following files
       | resource      | from      |
-      | data.zip      | meal plan |
-      | lorem.txt     | meal plan |
-      | lorem-big.txt | meal plan |
+      | data.zip      | Shares/meal plan |
+      | lorem.txt     | Shares/meal plan |
+      | lorem-big.txt | Shares/meal plan |
     Then "Carol" has logged out
     Then "Brian" downloads following files
       | resource      | from      |
-      | lorem.txt     | meal plan |
-      | lorem-big.txt | meal plan |
+      | lorem.txt     | Shares/meal plan |
+      | lorem-big.txt | Shares/meal plan |
     Then "Brian" has logged out
     Then "Alice" downloads following files
       | resource      | from                                 |

@@ -12,7 +12,7 @@ jest.spyOn(clientService, 'owncloudSdk', 'get').mockImplementation(() => ({
 }))
 
 jest.mock('../../../src/helpers/resources', () => ({
-  buildResource: v => v
+  buildResource: (v) => v
 }))
 
 const localVue = createLocalVue()
@@ -27,7 +27,7 @@ const store = new Vuex.Store({
         }
       },
       getters: {
-        options: state => {
+        options: (state) => {
           return state.options
         }
       },
@@ -46,7 +46,7 @@ describe('SDKProvider', () => {
     const push = jest.fn()
     push.mockReturnValueOnce(Promise.resolve())
 
-    const search = new SDKSearch(store, ({ push } as unknown) as VueRouter)
+    const search = new SDKSearch(store, { push } as unknown as VueRouter)
     const expected = {
       name: 'search-provider-list',
       query: { term: 'foo', provider: 'files.sdk' }
@@ -61,20 +61,20 @@ describe('SDKProvider', () => {
   })
 
   it('can reset', () => {
-    const search = new SDKSearch(store, (jest.fn() as unknown) as VueRouter)
+    const search = new SDKSearch(store, jest.fn() as unknown as VueRouter)
     search.reset()
     expect('not-implemented').toBe('not-implemented')
   })
 
   it('can updateTerm', () => {
-    const search = new SDKSearch(store, (jest.fn() as unknown) as VueRouter)
+    const search = new SDKSearch(store, jest.fn() as unknown as VueRouter)
     search.updateTerm()
     expect('not-implemented').toBe('not-implemented')
   })
 
   it('is only available if enabled in options', () => {
-    const search = new SDKSearch(store, ({} as unknown) as VueRouter)
-    ;[false, true, false].forEach(v => {
+    const search = new SDKSearch(store, {} as unknown as VueRouter)
+    ;[false, true, false].forEach((v) => {
       store.commit('Search/updateOptions', v)
       expect(search.available).toBe(!v)
     })
@@ -82,7 +82,7 @@ describe('SDKProvider', () => {
 
   describe('SDKProvider previewSearch', () => {
     it('covers activate', () => {
-      const search = new SDKSearch(store, (jest.fn() as unknown) as VueRouter)
+      const search = new SDKSearch(store, jest.fn() as unknown as VueRouter)
       search.previewSearch.activate({ id: 'id', data: 'data' })
       expect('not-implemented').toBe('not-implemented')
     })
@@ -92,17 +92,17 @@ describe('SDKProvider', () => {
         { route: 'foo', available: true },
         { route: 'search-provider-list' },
         { route: 'bar', available: true }
-      ].forEach(v => {
-        const search = new SDKSearch(store, ({
+      ].forEach((v) => {
+        const search = new SDKSearch(store, {
           currentRoute: { name: v.route }
-        } as unknown) as VueRouter)
+        } as unknown as VueRouter)
 
         expect(!!search.previewSearch.available).toBe(!!v.available)
       })
     })
 
     it('can search', async () => {
-      const search = new SDKSearch(store, (jest.fn() as unknown) as VueRouter)
+      const search = new SDKSearch(store, jest.fn() as unknown as VueRouter)
       const files = [
         { id: 'foo', name: 'foo' },
         { id: 'bar', name: 'bar' },
@@ -114,15 +114,15 @@ describe('SDKProvider', () => {
 
       searchMock.mockReturnValueOnce(files)
       const withTerm = await search.previewSearch.search('foo')
-      expect(withTerm.map(r => r.data)).toMatchObject(files)
+      expect(withTerm.map((r) => r.data)).toMatchObject(files)
 
       const withTermCached = await search.previewSearch.search('foo')
-      expect(withTermCached.map(r => r.data)).toMatchObject(files)
+      expect(withTermCached.map((r) => r.data)).toMatchObject(files)
     })
   })
   describe('SDKProvider listSearch', () => {
     it('can search', async () => {
-      const search = new SDKSearch(store, (jest.fn() as unknown) as VueRouter)
+      const search = new SDKSearch(store, jest.fn() as unknown as VueRouter)
       const files = [
         { id: 'foo', name: 'foo' },
         { id: 'bar', name: 'bar' },
@@ -131,7 +131,7 @@ describe('SDKProvider', () => {
 
       searchMock.mockReturnValueOnce(files)
       const withTerm = await search.listSearch.search('foo')
-      expect(withTerm.map(r => r.data)).toMatchObject(files)
+      expect(withTerm.map((r) => r.data)).toMatchObject(files)
     })
   })
 })

@@ -83,10 +83,7 @@ describe('LinkEdit', () => {
 
       it('should have max-datetime attribute with tomorrow datetime value', () => {
         expect(expirationDatePickerFieldElement.props().maxDatetime).toBe(
-          DateTime.now()
-            .plus({ days: 2 })
-            .endOf('day')
-            .toISO()
+          DateTime.now().plus({ days: 2 }).endOf('day').toISO()
         )
       })
       it('should set expire date when input event is emitted', () => {
@@ -98,9 +95,7 @@ describe('LinkEdit', () => {
             })
           })
         )
-        const expectedExpireDate = DateTime.now()
-          .plus({ day: 1 })
-          .toString()
+        const expectedExpireDate = DateTime.now().plus({ day: 1 }).toString()
         const expirationDatePickerFieldElement = wrapper.find(selectors.linkExpireDatePicker)
         expirationDatePickerFieldElement.element.value = expectedExpireDate
         expirationDatePickerFieldElement.trigger('input')
@@ -112,17 +107,12 @@ describe('LinkEdit', () => {
       const wrapper = getShallowMountedWrapper()
       const expirationDatePickerElement = wrapper.find(selectors.linkExpireDatePicker)
       expect(expirationDatePickerElement.props().minDatetime).toBe(
-        DateTime.now()
-          .plus({ days: 1 })
-          .endOf('day')
-          .toISO()
+        DateTime.now().plus({ days: 1 }).endOf('day').toISO()
       )
     })
 
     it('should be pre populated if the public link has already an expiration date set', () => {
-      const expectedExpireDate = DateTime.now()
-        .plus({ days: 4 })
-        .toString()
+      const expectedExpireDate = DateTime.now().plus({ days: 4 }).toString()
       const wrapper = getShallowMountedWrapper(
         createStore({
           linkInEdit: {
@@ -142,9 +132,7 @@ describe('LinkEdit', () => {
       const wrapper = getShallowMountedWrapper(
         createStore({
           linkInEdit: {
-            expireDate: DateTime.now()
-              .plus({ days: 1 })
-              .toString()
+            expireDate: DateTime.now().plus({ days: 1 }).toString()
           }
         })
       )
@@ -157,9 +145,7 @@ describe('LinkEdit', () => {
       const wrapper = getMountedWrapper(
         createStore({
           linkInEdit: {
-            expireDate: DateTime.now()
-              .plus({ days: 1 })
-              .toString()
+            expireDate: DateTime.now().plus({ days: 1 }).toString()
           }
         })
       )
@@ -371,9 +357,7 @@ describe('LinkEdit', () => {
             id: 1224,
             name: 'Public Link',
             hasPassword: true,
-            expireDate: DateTime.now()
-              .plus({ day: 1 })
-              .toString()
+            expireDate: DateTime.now().plus({ day: 1 }).toString()
           },
           publicLinkCapabilities: getLinkCapabilities({ enforcedExpireDate: true })
         }),
@@ -544,7 +528,7 @@ function createStore({
           publicLinkInEdit: linkInEdit
         },
         getters: {
-          highlightedFile: function() {
+          highlightedFile: function () {
             return { type: type }
           }
         },
@@ -553,7 +537,7 @@ function createStore({
     },
     getters: {
       getToken: jest.fn(),
-      capabilities: function() {
+      capabilities: function () {
         return {
           files_sharing: {
             public: publicLinkCapabilities

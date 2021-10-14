@@ -5,32 +5,30 @@ const filesActionsMenu = client.page.FilesPageElement.fileActionsMenu()
 
 module.exports = {
   commands: {
-    openMediaViewer: async function(fileName) {
+    openMediaViewer: async function (fileName) {
       await filesList.openFileActionsMenu(fileName)
       await filesActionsMenu.mediaViewer()
 
       return this
     },
-    waitForMediaViewerLoaded: function(fileName) {
+    waitForMediaViewerLoaded: function (fileName) {
       const image = util.format(this.elements.mediaImage.selector, fileName)
-      return this.useXpath()
-        .waitForElementVisible(image)
-        .useCss()
+      return this.useXpath().waitForElementVisible(image).useCss()
     },
-    isMediaViewerPresent: async function() {
+    isMediaViewerPresent: async function () {
       let isPresent = false
       await this.useXpath().waitForElementVisible(
         {
           selector: this.elements.actionBar.selector,
           abortOnFailure: false
         },
-        result => {
+        (result) => {
           isPresent = !!result.value
         }
       )
       return isPresent
     },
-    nextMediaResource: function() {
+    nextMediaResource: function () {
       const nextButtonXpath = this.elements.actionBar.selector + this.elements.nextButton.selector
       return this.useXpath()
         .waitForElementVisible(nextButtonXpath)
@@ -39,7 +37,7 @@ module.exports = {
         .waitForAjaxCallsToStartAndFinish()
         .useCss()
     },
-    previousMediaResource: function() {
+    previousMediaResource: function () {
       const previousButtonXpath =
         this.elements.actionBar.selector + this.elements.previousButton.selector
       return this.useXpath()
@@ -48,7 +46,7 @@ module.exports = {
         .waitForAjaxCallsToStartAndFinish()
         .useCss()
     },
-    downloadMediaResource: function() {
+    downloadMediaResource: function () {
       const downloadButtonXpath =
         this.elements.actionBar.selector + this.elements.downLoadButton.selector
       return this.useXpath()
@@ -57,7 +55,7 @@ module.exports = {
         .waitForAjaxCallsToStartAndFinish()
         .useCss()
     },
-    closeMediaResource: function() {
+    closeMediaResource: function () {
       const closeButtonXpath = this.elements.actionBar.selector + this.elements.closeButton.selector
       return this.useXpath()
         .waitForElementVisible(closeButtonXpath)

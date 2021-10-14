@@ -4,12 +4,12 @@ import App from './App.vue'
 
 const routes = [
   {
-    path: '/:contextRouteName/:filePath',
+    path: '/:contextRouteName/:filePath*',
     components: {
       app: App
     },
     name: 'media',
-    meta: { auth: false }
+    meta: { auth: false, patchCleanPath: true }
   }
 ]
 

@@ -60,7 +60,7 @@ export default {
   },
   watch: {
     $route: {
-      handler: function(to, from) {
+      handler: function (to, from) {
         this.resetFileSelection()
         if (from?.name !== to.name) {
           this.closeSidebar()
@@ -96,7 +96,7 @@ export default {
       })
     },
     $_ocApp_dragOver(event) {
-      const hasfileInEvent = (event.dataTransfer.types || []).some(e => e === 'Files')
+      const hasfileInEvent = (event.dataTransfer.types || []).some((e) => e === 'Files')
       this.dragOver(hasfileInEvent)
     }
   }
