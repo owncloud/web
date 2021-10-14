@@ -106,7 +106,7 @@
       </template>
     </oc-drop>
     <hr v-if="!minimal" />
-    <div v-if="expirationSupported" class="oc-mt-m">
+    <div v-if="expirationSupported && !minimal" class="oc-mt-m">
       <div class="uk-position-relative">
         <oc-datepicker
           id="files-collaborators-collaborator-expiration-input"
@@ -126,7 +126,7 @@
           @click="resetExpirationDate"
         />
       </div>
-      <hr />
+      <hr v-if="!minimal" />
     </div>
   </div>
 </template>

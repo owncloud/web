@@ -95,6 +95,7 @@
             class="oc-mb"
             @optionChange="collaboratorOptionChanged"
           />
+          <show-collaborator-edit-options />
         </div>
       </oc-td>
     </oc-tr>
@@ -110,10 +111,13 @@ import Mixins from '../../../../mixins'
 import { DateTime } from 'luxon'
 import CollaboratorsEditOptions from './CollaboratorsEditOptions.vue'
 
+import ShowCollaboratorEditOptions from './ShowCollaboratorEditOptions.vue'
+
 export default {
   name: 'Collaborator',
   components: {
-    CollaboratorsEditOptions
+    CollaboratorsEditOptions,
+    ShowCollaboratorEditOptions
   },
   mixins: [Mixins, CollaboratorsMixins],
   props: {
@@ -332,10 +336,6 @@ export default {
     $_removeShare() {
       this.removalInProgress = true
       this.$emit('onDelete', this.collaborator)
-    },
-
-    collaboratorOptionChanged(data) {
-      console.log(data)
     }
   }
 }
