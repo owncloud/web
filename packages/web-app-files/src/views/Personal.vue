@@ -207,11 +207,12 @@ export default {
   },
 
   mounted() {
-    this.adjustTableHeaderPosition()
-
-    bus.on('app.files.list.load', (path) => {
+    const loadResourcesEventToken = bus.subscribe('app.files.list.load', (path) => {
       this.loadResources(this.$route.params.item === path, path)
     })
+
+    this.$on('beforeDestroy', () => bus.unsubscribe('app.files.list.load', loadResourcesEventToken))
+    this.adjustTableHeaderPosition()
   },
 
   beforeDestroy() {

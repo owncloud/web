@@ -31,15 +31,15 @@ export default class Provider extends EventBus implements SearchProvider {
     }
 
     const resources = filterResources(this.store.getters['Files/files'], term)
-    this.emit('activate', { term, resources })
+    this.publish('activate', { term, resources })
   }
 
   public reset(): void {
-    this.emit('reset')
+    this.publish('reset')
   }
 
   public updateTerm(term: string): void {
-    this.emit('updateTerm', term)
+    this.publish('updateTerm', term)
   }
 
   public get available(): boolean {

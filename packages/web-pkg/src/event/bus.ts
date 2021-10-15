@@ -1,27 +1,43 @@
+import * as uuid from 'uuid'
+
 export class EventBus {
-  private listeners: Map<string, ((event?: unknown) => void)[]>
+  private topics: Map<string, { callback: (data?: unknown) => void; token: string }[]>
 
   constructor() {
-    this.listeners = new Map()
+    this.topics = new Map()
   }
 
-  public on(selector: string, cb: (event?: unknown) => void): void {
-    let allListeners = []
-    if (this.listeners.has(selector)) {
-      allListeners = this.listeners.get(selector)
+  public subscribe(topic: string, callback: (data?: unknown) => void): string {
+    const subscription = {
+      token: uuid.v4(),
+      callback
     }
-    allListeners.push(cb)
-    this.listeners.set(selector, allListeners)
+    const subscriptions = [subscription, ...(this.topics.get(topic) || [])]
+
+    this.topics.set(topic, subscriptions)
+
+    return subscription.token
   }
 
-  public emit(selector: string, evt?: unknown): void {
-    if (!this.listeners.has(selector)) return
-    const listeners = this.listeners.get(selector)
+  public publish(topic: string, data?: unknown): void {
+    const subscriptions = this.topics.get(topic) || []
 
-    for (let i = 0; i < listeners.length; i++) {
-      const listener = listeners[i]
-      if (!listener) continue
-      listener(evt)
+    subscriptions.forEach((subscription) => subscription.callback(data))
+  }
+
+  public unsubscribe(topic: string, token?: string): void {
+    if (!this.topics.has(topic)) {
+      return
     }
+
+    if (!token) {
+      this.topics.delete(topic)
+      return
+    }
+
+    this.topics.set(
+      topic,
+      this.topics.get(topic).filter((subscription) => subscription.token !== token)
+    )
   }
 }

@@ -96,8 +96,9 @@ export default {
 
     // when discussing the boot process of applications we need to implement a
     // registry that does not rely on call order, aka first register "on" and only after emit.
-    bus.emit('app.search.register.provider', Registry.filterSearch)
-    bus.emit('app.search.register.provider', Registry.sdkSearch)
+    bus.publish('app.search.register.provider', Registry.filterSearch)
+    bus.publish('app.search.register.provider', Registry.sdkSearch)
+
     // initialize services
     archiverService.initialize(
       runtimeStore.getters.configuration.server,

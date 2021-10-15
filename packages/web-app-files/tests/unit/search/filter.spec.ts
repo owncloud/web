@@ -28,7 +28,7 @@ describe('FilterProvider', () => {
   it('emits on activate', () => {
     let val
     const search = new FilterSearch(store, jest.fn() as unknown as VueRouter)
-    search.on('activate', (data) => (val = data))
+    search.subscribe('activate', (data) => (val = data))
     ;['foo', 'bar'].forEach((v, i) => {
       search.activate(v)
       expect(val).toMatchObject({ term: v, resources: [files[i]] })
@@ -38,7 +38,7 @@ describe('FilterProvider', () => {
   it('emits on reset', () => {
     const val = jest.fn()
     const search = new FilterSearch(store, jest.fn() as unknown as VueRouter)
-    search.on('reset', val)
+    search.subscribe('reset', val)
     search.reset()
     search.reset()
 
@@ -48,7 +48,7 @@ describe('FilterProvider', () => {
   it('emits on updateTerm', () => {
     const val = jest.fn()
     const search = new FilterSearch(store, jest.fn() as unknown as VueRouter)
-    search.on('updateTerm', val)
+    search.subscribe('updateTerm', val)
     ;['foo', 'bar', 'baz'].forEach((v, i) => {
       search.updateTerm(v)
       expect(val.mock.calls[i][0]).toBe(v)
