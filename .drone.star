@@ -1571,8 +1571,6 @@ def installCore(version, db):
             "db_password": password,
         }})
         stepDefinition.update({"commands": [
-            ". %s/.drone.env" % dir["web"],
-            "export PLUGIN_GIT_REFERENCE=$CORE_COMMITID",
             "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping installCore'; else bash /usr/sbin/plugin.sh; fi",
         ]})
 
@@ -1618,8 +1616,6 @@ def installFederatedServer(version, db, dbSuffix = "-federated"):
             "db_password": password,
         }})
         stepDefinition.update({"commands": [
-            ". %s/.drone.env" % dir["web"],
-            "export PLUGIN_GIT_REFERENCE=$CORE_COMMITID",
             "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping installFederatedServer'; else bash /usr/sbin/plugin.sh; fi",
         ]})
 
