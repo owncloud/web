@@ -1,6 +1,6 @@
 <template>
   <div class="uk-flex uk-flex-column">
-    <list-loader v-if="loading" />
+    <list-loader v-if="loadResourcesTask.isRunning" />
     <template v-else>
       <!-- Pending shares -->
       <div v-if="hasPending">
@@ -165,6 +165,7 @@ import ListLoader from '../components/FilesList/ListLoader.vue'
 import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
+import { useTask } from 'vue-concurrency'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -185,8 +186,36 @@ export default {
     MixinFilesListFilter
   ],
 
+  setup() {
+    const loadResourcesTask = useTask(function* (signal, ref) {
+      ref.CLEAR_CURRENT_FILES_LIST()
+
+      let resources = yield ref.$client.requests.ocs({
+        service: 'apps/files_sharing',
+        action: '/api/v1/shares?format=json&shared_with_me=true&state=all&include_tags=false',
+        method: 'GET'
+      })
+
+      resources = yield resources.json()
+      resources = resources.ocs.data
+
+      if (resources.length) {
+        resources = aggregateResourceShares(
+          resources,
+          true,
+          !ref.isOcis,
+          ref.configuration.server,
+          ref.getToken
+        )
+      }
+
+      ref.LOAD_FILES({ currentFolder: null, files: resources })
+    })
+
+    return { loadResourcesTask }
+  },
+
   data: () => ({
-    loading: true,
     shareStatus,
     showMorePending: false
   }),
@@ -307,7 +336,7 @@ export default {
   },
 
   created() {
-    this.loadResources()
+    this.loadResourcesTask.perform(this)
     window.onresize = this.adjustTableHeaderPosition
   },
 
@@ -350,34 +379,6 @@ export default {
         onEnter: debounced,
         onExit: debounced.cancel
       })
-    },
-
-    async loadResources() {
-      this.loading = true
-      this.CLEAR_CURRENT_FILES_LIST()
-
-      let resources = await this.$client.requests.ocs({
-        service: 'apps/files_sharing',
-        action: '/api/v1/shares?format=json&shared_with_me=true&state=all&include_tags=false',
-        method: 'GET'
-      })
-
-      resources = await resources.json()
-      resources = resources.ocs.data
-
-      if (resources.length) {
-        resources = aggregateResourceShares(
-          resources,
-          true,
-          !this.isOcis,
-          this.configuration.server,
-          this.getToken
-        )
-      }
-
-      this.LOAD_FILES({ currentFolder: null, files: resources })
-
-      this.loading = false
     },
 
     togglePendingShowMore() {

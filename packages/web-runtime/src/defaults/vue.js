@@ -18,7 +18,9 @@ import { Drag, Drop } from 'vue-drag-drop'
 import VueAxe from 'vue-axe'
 import VueRouter from 'vue-router'
 import Vuex from 'vuex'
+import VueCompositionAPI from '@vue/composition-api'
 
+Vue.use(VueCompositionAPI)
 Vue.use(Vuex)
 Vue.use(VueRouter)
 Vue.use(VueEvents)
