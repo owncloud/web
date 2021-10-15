@@ -1,5 +1,9 @@
 <template>
-  <div class="uk-flex uk-flex-middle oc-py-xs" :class="collaboratorClass">
+  <div
+    :data-testid="`recipient-autocomplete-item-${item.label}`"
+    class="uk-flex uk-flex-middle oc-py-xs"
+    :class="collaboratorClass"
+  >
     <avatar-image
       v-if="isUser"
       class="oc-mr-s"

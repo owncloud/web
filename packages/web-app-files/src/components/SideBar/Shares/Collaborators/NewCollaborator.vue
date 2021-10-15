@@ -1,5 +1,5 @@
 <template>
-  <div class="files-collaborators-collaborator-add-dialog">
+  <div class="files-collaborators-collaborator-add-dialog" data-testid="new-collaborator">
     <div class="oc-mb">
       <oc-select
         id="files-share-invite-input"
@@ -58,6 +58,7 @@
           v-else
           id="files-collaborators-collaborator-save-new-share-button"
           key="new-collaborator-save-button"
+          data-testid="new-collaborator-share-btn"
           :disabled="!$_isValid"
           variation="primary"
           appearance="filled"

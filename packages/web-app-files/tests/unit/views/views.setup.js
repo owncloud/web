@@ -23,6 +23,10 @@ localVue.prototype.$client = new OwnCloud()
 localVue.prototype.$client.init({ baseUrl: 'http://none.de' })
 localVue.use(Vuex)
 localVue.use(DesignSystem)
+/*
+ * TODO: options on GetTextPlugin do not have any effect because of
+ * packages/web-app-files/src/gettext.js which overwrites every setting.
+ */
 localVue.use(GetTextPlugin, {
   translations: 'does-not-matter.json',
   silent: true

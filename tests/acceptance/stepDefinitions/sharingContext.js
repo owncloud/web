@@ -1352,7 +1352,7 @@ Then(
   'the expiration date shown on the webUI should be {string} days',
   async function (expectedDays) {
     const expectedDate = sharingHelper.calculateDate(expectedDays)
-    const expectedDateString = sharingHelper.calculateDateString(expectedDate)
+    const expectedDateString = expectedDate.toString()
     const dateStringFromInputField =
       await client.page.FilesPageElement.sharingDialog().getExpirationDateFromInputField()
     assert.strictEqual(
@@ -1362,12 +1362,6 @@ Then(
     )
   }
 )
-
-Then('it should not be possible to save the pending share on the webUI', async function () {
-  const state =
-    await client.page.FilesPageElement.sharingDialog().getDisabledAttributeOfSaveShareButton()
-  assert.strictEqual('true', state, 'Expected: save share button to be disabled but got enabled')
-})
 
 When(
   'the user shares resource {string} with user {string} using the quick action on the webUI',

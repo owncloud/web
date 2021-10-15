@@ -31,44 +31,66 @@
         </template>
         <template #no-options v-translate> No matching role found </template>
       </oc-select>
-      <div class="oc-mb uk-grid-small uk-flex" uk-grid>
-        <div v-if="$_expirationDate" class="uk-width-1-1 uk-width-2-5@m">
-          <div class="uk-position-relative">
-            <oc-datepicker
-              id="oc-files-file-link-expire-date"
-              :key="'oc-datepicker-' + expireDate"
-              :label="expirationDateLabel"
-              :date="expireDate"
-              :max-datetime="$_maxExpirationDate"
-              :min-datetime="$_minExpirationDate"
-              @input="expireDate = $event"
-            />
+      <div v-if="$_expirationDate" class="oc-mb">
+        <label for="files-links-expiration-btn" v-text="expirationDateLabel" />
+        <oc-datepicker
+          id="oc-files-file-link-expire-date"
+          :key="'oc-datepicker-' + expireDate"
+          v-model="expireDate"
+          :min-date="minExpirationDate"
+          :max-date="maxExpirationDate"
+          :locale="$language.current"
+          :is-required="$_expirationDate.enforced"
+          class="files-recipient-expiration-datepicker"
+          data-testid="recipient-datepicker"
+        >
+          <template #default="{ togglePopover }">
             <oc-button
-              v-if="!$_expirationDate.enforced && !!expireDate"
-              id="oc-files-file-link-expire-date-delete"
-              class="oc-mt-s"
-              appearance="raw"
-              @click="expireDate = null"
-              v-text="$gettext('Remove expiration date')"
-            />
-          </div>
-        </div>
-        <div class="uk-width-1-1 uk-width-3-5@m">
-          <oc-text-input
-            id="oc-files-file-link-password"
-            v-model="password"
-            type="password"
-            :label="passwordLabel"
-          />
-          <oc-button
-            v-if="!$_passwordEnforced && (password || hasPassword)"
-            id="oc-files-file-link-password-delete"
-            class="oc-mt-s"
-            appearance="raw"
-            @click="removePassword"
-            v-text="$gettext('Remove password')"
-          />
-        </div>
+              id="files-links-expiration-btn"
+              data-testid="recipient-datepicker-btn"
+              class="uk-width-1-1 expiration-dialog-btn"
+              justify-content="space-between"
+              gap-size="xsmall"
+              @click="togglePopover"
+            >
+              <translate v-if="!expireDate" key="no-expiration-date-label"
+                >Set expiration date</translate
+              >
+              <translate
+                v-else
+                key="set-expiration-date-label"
+                :translate-params="{ expires: relativeExpirationDate }"
+              >
+                Expires %{expires}
+              </translate>
+              <oc-icon name="expand_more" />
+            </oc-button>
+          </template>
+        </oc-datepicker>
+        <oc-button
+          v-if="!$_expirationDate.enforced && !!expireDate"
+          id="oc-files-file-link-expire-date-delete"
+          class="oc-mt-s"
+          appearance="raw"
+          @click="expireDate = null"
+          v-text="$gettext('Remove expiration date')"
+        />
+      </div>
+      <div>
+        <oc-text-input
+          id="oc-files-file-link-password"
+          v-model="password"
+          type="password"
+          :label="passwordLabel"
+        />
+        <oc-button
+          v-if="!$_passwordEnforced && (password || hasPassword)"
+          id="oc-files-file-link-password-delete"
+          class="oc-mt-s"
+          appearance="raw"
+          @click="removePassword"
+          v-text="$gettext('Remove password')"
+        />
       </div>
       <!-- @TODO: Enable Mail API to use the following
                   ++++++++++++++++++++++++++++++++++++
@@ -140,9 +162,12 @@
 </template>
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
+
 import mixins from '../../../../mixins'
 import { DateTime } from 'luxon'
 import publicLinkRoles from '../../../../helpers/publicLinkRolesDefinition'
+import { addDays } from 'web-runtime/src/helpers/date'
+
 import RoleItem from '../../Shared/RoleItem.vue'
 
 export default {
@@ -188,11 +213,7 @@ export default {
 
     $_hasChanges() {
       const expireDateBefore = this.publicLinkInEdit.expireDate
-        ? DateTime.fromISO(this.publicLinkInEdit.expireDate).toFormat('dd-MM-yyyy')
-        : null
       const expireDateNow = this.expireDate
-        ? DateTime.fromISO(this.expireDate).toFormat('dd-MM-yyyy')
-        : null
       return (
         expireDateNow !== expireDateBefore ||
         this.name !== this.publicLinkInEdit.name ||
@@ -225,22 +246,22 @@ export default {
       }
     },
 
-    $_minExpirationDate() {
-      return DateTime.now().plus({ days: 1 }).endOf('day').toISO()
+    minExpirationDate() {
+      return addDays(new Date(), 1)
     },
 
-    $_maxExpirationDate() {
+    maxExpirationDate() {
       if (!this.$_expirationDate.enforced) {
         return null
       }
 
       const days = parseInt(this.$_expirationDate.days, 10)
 
-      return DateTime.now().plus({ days: days }).endOf('day').toISO()
+      return addDays(new Date(), days)
     },
 
     $_expirationIsValid() {
-      return !(this.$_expirationDate.enforced && this.expireDate === '')
+      return !(this.$_expirationDate.enforced && !this.expireDate)
     },
 
     $_passwordIsValid() {
@@ -289,13 +310,30 @@ export default {
     },
     selectedRoleLabel() {
       return this.$gettext('Role')
+    },
+
+    relativeExpirationDate() {
+      return DateTime.fromJSDate(this.expireDate)
+        .setLocale(this.$language.current)
+        .endOf('day')
+        .toRelative()
+    },
+
+    defaultExpireDate() {
+      if (!this.$_expirationDate.days) {
+        return null
+      }
+
+      return addDays(new Date(), parseInt(this.$_expirationDate.days))
     }
   },
   created() {
-    this.name = this.publicLinkInEdit.name
-    this.hasPassword = this.publicLinkInEdit.hasPassword
-    this.expireDate = this.publicLinkInEdit.expireDate
+    const link = this.publicLinkInEdit
 
+    this.name = link?.name
+    this.hasPassword = link?.hasPassword
+    const expireDateOrNull = link.expireDate ? new Date(this.publicLinkInEdit.expireDate) : null
+    this.expireDate = link?.id ? expireDateOrNull : this.defaultExpireDate
     this.setRole()
   },
   mounted() {
@@ -326,7 +364,7 @@ export default {
       this.saving = true
 
       const params = {
-        expireDate: this.expireDate,
+        expireDate: DateTime.fromJSDate(this.expireDate).endOf('day').toISODate(),
         permissions: this.selectedRole.permissions,
         name: this.name
       }
@@ -356,7 +394,7 @@ export default {
       this.saving = true
 
       const params = {
-        expireDate: this.expireDate,
+        expireDate: DateTime.fromJSDate(this.expireDate).endOf('day').toISODate(),
         permissions: this.selectedRole.permissions,
         name: this.name
       }

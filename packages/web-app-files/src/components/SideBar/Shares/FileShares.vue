@@ -10,6 +10,7 @@
         <div v-if="$_ocCollaborators_canShare" class="oc-mt-s oc-mb-s">
           <oc-button
             ref="addCollaborators"
+            data-testid="file-shares-add-btn"
             variation="primary"
             class="files-collaborators-open-add-share-dialog-button"
             @click="$_ocCollaborators_addShare"
@@ -28,6 +29,7 @@
           <h4 class="shared-with-label" v-text="sharedWithLabel" />
           <oc-button
             v-oc-tooltip="sharedWithTooltip"
+            data-testid="collaborators-show-people"
             appearance="raw"
             :aria-label="sharedWithTooltip"
             @click="onClickSharedWith"

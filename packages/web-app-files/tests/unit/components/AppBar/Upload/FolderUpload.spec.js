@@ -23,13 +23,7 @@ describe('FolderUpload Component', () => {
   describe('when upload folder button is clicked', () => {
     it('should call "triggerUpload"', async () => {
       const spyTriggerUpload = jest.spyOn(FolderUpload.methods, 'triggerUpload')
-      const wrapper = mount(FolderUpload, {
-        ...mountOptions,
-        stubs: {
-          'oc-icon': true,
-          'oc-button': false
-        }
-      })
+      const wrapper = mount(FolderUpload, mountOptions)
 
       const uploadButton = wrapper.find(selector.uploadButton)
       const folderUploadInput = wrapper.find(selector.uploadInput)
@@ -46,7 +40,13 @@ describe('FolderUpload Component', () => {
         const spyOcUploadAddDirectoryToQue = jest
           .spyOn(FolderUpload.mixins[0].methods, '$_ocUpload_addDirectoryToQue')
           .mockImplementation()
-        const wrapper = shallowMount(FolderUpload, mountOptions)
+        const wrapper = shallowMount(FolderUpload, {
+          ...mountOptions,
+          stubs: {
+            'oc-icon': true,
+            'oc-button': true
+          }
+        })
 
         const folderUploadInput = wrapper.find(selector.uploadInput)
         await folderUploadInput.trigger('change')

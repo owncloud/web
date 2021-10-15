@@ -3,9 +3,6 @@ import DesignSystem from 'owncloud-design-system'
 import QuickActions from '../../../../src/components/FilesList/QuickActions.vue'
 const { shallowMount, mount } = require('@vue/test-utils')
 
-const localVue = createLocalVue()
-localVue.use(DesignSystem)
-
 const collaboratorAction = {
   displayed: jest.fn(() => true),
   handler: jest.fn(),
@@ -29,23 +26,21 @@ const testItem = {
   size: '12220'
 }
 
-const options = {
-  localVue,
-  propsData: {
-    actions: {
-      collaborators: collaboratorAction,
-      publicLink: publicLinkAction
-    },
-    item: testItem
-  },
-  directives: {
-    'oc-tooltip': jest.fn()
-  }
-}
-
 function getShallowMountedWrapper() {
+  const localVue = createLocalVue()
+  localVue.use(DesignSystem)
   return shallowMount(QuickActions, {
-    ...options,
+    localVue,
+    propsData: {
+      actions: {
+        collaborators: collaboratorAction,
+        publicLink: publicLinkAction
+      },
+      item: testItem
+    },
+    directives: {
+      'oc-tooltip': jest.fn()
+    },
     stubs: {
       'oc-icon': true,
       'oc-button': true
@@ -54,8 +49,20 @@ function getShallowMountedWrapper() {
 }
 
 function getMountedWrapper() {
+  const localVue = createLocalVue()
+  localVue.use(DesignSystem)
   return mount(QuickActions, {
-    ...options,
+    localVue,
+    propsData: {
+      actions: {
+        collaborators: collaboratorAction,
+        publicLink: publicLinkAction
+      },
+      item: testItem
+    },
+    directives: {
+      'oc-tooltip': jest.fn()
+    },
     stubs: {
       'oc-icon': false,
       'oc-button': false

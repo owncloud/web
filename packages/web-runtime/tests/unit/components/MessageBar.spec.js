@@ -63,17 +63,13 @@ describe('MessageBar component', () => {
   })
 
   describe('when there is an active message', () => {
-    let wrapper
-    let notificationMessage
-    beforeEach(() => {
-      wrapper = getShallowWrapper([messages[0]])
-      notificationMessage = wrapper.find(selectors.notificationMessage)
-    })
+    const wrapper = getShallowWrapper([messages[0]])
+    const notificationMessage = wrapper.find(selectors.notificationMessage)
 
     it('should set props in oc-notification-message component', () => {
-      expect(notificationMessage.props().title).toEqual(messages[0].title)
-      expect(notificationMessage.props().status).toEqual(messages[0].status)
-      expect(notificationMessage.props().message).toEqual(messages[0].desc)
+      expect(notificationMessage.attributes().title).toEqual(messages[0].title)
+      expect(notificationMessage.attributes().status).toEqual(messages[0].status)
+      expect(notificationMessage.attributes().message).toEqual(messages[0].desc)
     })
     it('should call "deleteMessage" method on close event', () => {
       expect(spyDeleteMessage).toHaveBeenCalledTimes(0)
@@ -102,6 +98,11 @@ function getShallowWrapper(activeMessages = []) {
     localVue,
     propsData: {
       activeMessages
+    },
+    stubs: {
+      'oc-icon': true,
+      'oc-notifications': true,
+      'oc-notification-message': true
     }
   })
 }

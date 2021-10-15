@@ -1,4 +1,5 @@
 const util = require('util')
+const { client } = require('nightwatch-api')
 
 module.exports = {
   commands: {
@@ -49,14 +50,13 @@ module.exports = {
      */
     setExpiryDateYear: function (year) {
       const yearSelector = this.setExpiryDateYearSelectorXpath(year)
-      return this.waitForElementVisible('@dateTimePopupYear')
-        .waitForAnimationToFinish()
-        .waitForElementEnabled(this.elements.dateTimePopupYear.selector)
-        .click('@dateTimePopupYear')
-        .waitForElementVisible(yearSelector)
+      return this.click('@datepickerTitle')
+        .waitForElementVisible('@datepickerMonthAndYearTitle', 500)
+        .click('@datepickerMonthAndYearTitle')
+        .waitForElementVisible(yearSelector, 500)
         .click(yearSelector)
-        .click('@dateTimeOkButton')
-        .waitForElementNotPresent(yearSelector)
+        .click('@datepickerTitle')
+        .waitForElementNotPresent('@datepickerMonthAndYearTitle', 500)
     },
     /**
      * sets provided month in expiry date field on webUI
@@ -66,12 +66,11 @@ module.exports = {
      */
     setExpiryDateMonth: function (month) {
       const monthSelector = this.setExpiryDateMonthSelectorXpath(month)
-      return this.waitForElementVisible('@dateTimePopupDate')
-        .click('@dateTimePopupDate')
+      return this.click('@datepickerTitle')
+        .waitForElementVisible('@datepickerMonthAndYearTitle', 500)
         .waitForElementVisible(monthSelector)
         .click(monthSelector)
-        .click('@dateTimeOkButton')
-        .waitForElementNotPresent(monthSelector)
+        .waitForElementNotPresent('@datepickerMonthAndYearTitle', 500)
     },
     /**
      * sets provided day in expiry date field on webUI
@@ -83,7 +82,6 @@ module.exports = {
       const daySelector = this.setExpiryDateDaySelectorXpath(day)
       return this.waitForElementVisible(daySelector)
         .click(daySelector)
-        .click('@dateTimeOkButton')
         .waitForElementNotPresent(daySelector)
     },
     /**
@@ -96,44 +94,47 @@ module.exports = {
     isExpiryDateDisabled: async function (pastDate) {
       let disabled = false
       const yearSelector = this.setExpiryDateYearSelectorXpath(pastDate.getFullYear())
-      const monthSelector = this.setExpiryDateMonthSelectorXpath(
-        pastDate.toLocaleString('en-GB', { month: 'long' })
-      )
-      const daySelector = this.setExpiryDateDaySelectorXpath(pastDate.getDate())
-      await this.waitForElementVisible('@dateTimePopupYear')
-        .waitForAnimationToFinish()
-        .waitForElementEnabled(this.elements.dateTimePopupYear.selector)
-        .angryClick('@dateTimePopupYear')
-        .waitForElementVisible(yearSelector)
+
+      await this.click('@datepickerTitle')
+        .waitForElementVisible('@datepickerMonthAndYearTitle', 500)
+        .click('@datepickerMonthAndYearTitle')
+        .waitForElementVisible(yearSelector, 500)
         .getAttribute(yearSelector, 'class', (result) => {
-          if (result.value.includes('--disabled') === true) {
+          if (result.value.includes('is-disabled') === true) {
             disabled = true
           }
         })
+
       if (disabled) {
         return disabled
       }
+
+      const monthSelector = this.setExpiryDateMonthSelectorXpath(
+        pastDate.toLocaleString('en', { month: 'short' })
+      )
+
       await this.click(yearSelector)
-        .click('@dateTimeOkButton')
-        .waitForElementVisible('@dateTimePopupDate')
-        .click('@dateTimePopupDate')
         .waitForElementVisible(monthSelector)
         .getAttribute(monthSelector, 'class', (result) => {
-          if (result.value.includes('--disabled') === true) {
+          if (result.value.includes('is-disabled') === true) {
             disabled = true
           }
         })
+
       if (disabled) {
         return disabled
       }
+
+      const daySelector = this.setExpiryDateDaySelectorXpath(pastDate.getDate())
+
       await this.click(monthSelector)
-        .click('@dateTimeOkButton')
         .waitForElementVisible(daySelector)
         .getAttribute(daySelector, 'class', (result) => {
-          if (result.value.includes('--disabled') === true) {
+          if (result.value.includes('is-disabled') === true) {
             disabled = true
           }
         })
+
       return disabled
     },
     /**
@@ -152,12 +153,14 @@ module.exports = {
         const disabled = await this.isExpiryDateDisabled(dateToSet)
         if (disabled) {
           console.log('WARNING: Cannot change expiration date to disabled value!')
-          await this.waitForElementVisible('@dateTimeCancelButton').click('@dateTimeCancelButton')
+          await this.click(
+            client.page.FilesPageElement.sharingDialog().elements.expirationDateField.selector
+          )
           return false
         }
       }
       const year = dateToSet.getFullYear()
-      const month = dateToSet.toLocaleString('en-GB', { month: 'long' })
+      const month = dateToSet.toLocaleString('en', { month: 'short' })
       const day = dateToSet.getDate()
       await this.setExpiryDateYear(year).setExpiryDateMonth(month).setExpiryDateDay(day)
       return true
@@ -165,33 +168,28 @@ module.exports = {
   },
   elements: {
     dateTimeYearPicker: {
-      selector: '//div[@class="vdatetime-year-picker"]//div[normalize-space(.)="%s"]',
+      selector:
+        '//span[contains(@class, "vc-nav-item") and @role="button" and normalize-space(.)="%s"]',
       locateStrategy: 'xpath'
     },
     dateTimeMonthPicker: {
-      selector: '//div[@class="vdatetime-month-picker"]//div[contains(text(),"%s")]',
+      selector:
+        '//span[contains(@class, "vc-nav-item") and @role="button" and normalize-space(.)="%s"]',
       locateStrategy: 'xpath'
     },
     dateTimeDayPicker: {
-      selector: '//div[@class="vdatetime-calendar"]//span/span[normalize-space(.)="%s"]/../..',
+      selector:
+        '//div[not(contains(@class, "is-not-in-month"))]/span[contains(@class, "vc-day-content vc-focusable") and normalize-space(.)="%s"]',
       locateStrategy: 'xpath'
-    },
-    dateTimePopupYear: {
-      selector: '.vdatetime-popup__year'
-    },
-    dateTimeOkButton: {
-      selector: '//div[@class="vdatetime-popup__actions"]/div[.="Ok"]',
-      locateStrategy: 'xpath'
-    },
-    dateTimeCancelButton: {
-      selector: '//div[@class="vdatetime-popup__actions"]/div[.="Cancel"]',
-      locateStrategy: 'xpath'
-    },
-    dateTimePopupDate: {
-      selector: '.vdatetime-popup__date'
     },
     publicLinkDeleteExpirationDateButton: {
       selector: '#oc-files-file-link-expire-date-delete'
+    },
+    datepickerTitle: {
+      selector: '.vc-title'
+    },
+    datepickerMonthAndYearTitle: {
+      selector: '.vc-nav-title.vc-grid-focus'
     }
   }
 }

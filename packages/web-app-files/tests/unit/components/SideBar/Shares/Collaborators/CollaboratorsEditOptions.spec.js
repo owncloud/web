@@ -15,15 +15,18 @@ describe('CollaboratorsEditOptions component', () => {
 
   it('opens custom permissions drop when custom permissions item in the roles is selected', async () => {
     const wrapper = getWrapper()
-    const permissionsDrop = wrapper.find('[data-testid="files-recipient-custom-permissions-drop"]')
-
-    permissionsDrop.vm.show = jest.fn()
+    const advancedPermissionsDrop = wrapper.find(
+      '[data-testid="files-recipient-custom-permissions-drop"]'
+    )
+    const showHideMock = jest.fn()
+    advancedPermissionsDrop.vm.show = showHideMock
+    wrapper.vm.$refs.rolesDrop.tippy = { hide: showHideMock }
 
     await wrapper
       .find('[data-testid="files-recipient-role-drop-btn-advancedRole"]')
       .trigger('click')
 
-    expect(permissionsDrop.vm.show).toHaveBeenCalled()
+    expect(showHideMock).toHaveBeenCalledTimes(2)
   })
 
   it('closes custom permissions drop when they are confirmed', async () => {
@@ -59,7 +62,6 @@ describe('CollaboratorsEditOptions component', () => {
     'displays custom permission %s in the custom permissions drop',
     (permission) => {
       const wrapper = getWrapper()
-
       expect(
         wrapper.find(`[data-testid="files-collaborators-permission-${permission}"]`).exists()
       ).toBeTruthy()

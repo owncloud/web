@@ -2126,6 +2126,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@popperjs/core@npm:^2.4.0":
+  version: 2.10.2
+  resolution: "@popperjs/core@npm:2.10.2"
+  checksum: 43c189e3eb6d032433512d94761b54fc7cae15957ca5528008813f887a67b5760b949f30a5141b476be2ba5a6c677c91def150f603d2d3e30b5e97a5ae51474e
+  languageName: node
+  linkType: hard
+
 "@popperjs/core@npm:^2.8.3":
   version: 2.9.2
   resolution: "@popperjs/core@npm:2.9.2"
@@ -2264,6 +2271,17 @@ __metadata:
     lodash: ^4.17.15
     redent: ^3.0.0
   checksum: eeba37ba10be550bd9ab7dd0dda77d9011a96d9a4f75c70ed57d7bf120fe4126b251ccfb1444da1746c19773bbe4efbd96a0408f970d98c9cd1d399b2455d2c1
+  languageName: node
+  linkType: hard
+
+"@testing-library/user-event@npm:^13.2.1":
+  version: 13.3.0
+  resolution: "@testing-library/user-event@npm:13.3.0"
+  dependencies:
+    "@babel/runtime": ^7.12.5
+  peerDependencies:
+    "@testing-library/dom": ">=7.21.4"
+  checksum: 0d17c47728aec71343fc4a8d8b594224c3031513ab59d5797695c53fdfcebef87797a7935ede68c0af896127b2a995e2feb20e64cbd0cd2b2af3f5240241af91
   languageName: node
   linkType: hard
 
@@ -5576,6 +5594,22 @@ __metadata:
     whatwg-mimetype: ^2.3.0
     whatwg-url: ^8.0.0
   checksum: 97caf828aac25e25e04ba6869db0f99c75e6859bb5b424ada28d3e7841941ebf08ddff3c1b1bb4585986bd507a5d54c2a716853ea6cb98af877400e637393e71
+  languageName: node
+  linkType: hard
+
+"date-fns-tz@npm:^1.1.4":
+  version: 1.1.6
+  resolution: "date-fns-tz@npm:1.1.6"
+  peerDependencies:
+    date-fns: ">=2.0.0-alpha.13"
+  checksum: cfe4c799372fcb586b7f22d9c31e10df33dabc74452fbd92269ae02bbaed4024636c477b9aac06c521ec78a7391826d5526fedbcefbad2e5de25bcc00c61ad8f
+  languageName: node
+  linkType: hard
+
+"date-fns@npm:^2.22.1":
+  version: 2.25.0
+  resolution: "date-fns@npm:2.25.0"
+  checksum: 8896dc1dde0ee5ef77616942423bfa11fa2017a5ac19457293b7aaedc8822ff94f0a14eaf93da573b09b601dc0149eb430988a046cc9f79a2eb15f8c66c9c50c
   languageName: node
   linkType: hard
 
@@ -11760,26 +11794,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"owncloud-design-system@npm:10.0.0":
-  version: 10.0.0
-  resolution: "owncloud-design-system@npm:10.0.0"
+"owncloud-design-system@npm:11.0.0":
+  version: 11.0.0
+  resolution: "owncloud-design-system@npm:11.0.0"
   peerDependencies:
     filesize: ^8.0.0
     focus-trap: ^6.4.0
     focus-trap-vue: ^1.1.1
     fuse.js: ^6.4.6
-    luxon: ^1.22.0
+    luxon: ^2.0.2
     postcss-import: ^12.0.1
     postcss-url: ^9.0.0
     tippy.js: ^6.3.1
     uikit: 3.5.16
+    v-calendar: ^2.3.2
     vue: ^2.6.11
-    vue-datetime: ^1.0.0-beta.10
     vue-inline-svg: ^2.0.0
     vue-select: ^3.12.0
     webfontloader: ^1.6.28
-    weekstart: ^1.0.0
-  checksum: c1cd29bf318721608b23f59ffb1aa9d44ef1b47c3ec6a1598258fc7ffb3b8429fcdfdac5a6ce6fa759f3f9281bcfe71c340febdf8cf69030e33f6b0d4210c5ab
+  checksum: 023ed8955fd0c2c71276b36d6bf295fde7a0243fc3e399799b3426ccc23d4813ca567de31b27dd7b51486901821022d6465ce15203c2ae329ecf8a39af66e738
   languageName: node
   linkType: hard
 
@@ -12329,6 +12362,15 @@ __metadata:
   version: 1.1.1
   resolution: "pofile@npm:1.1.1"
   checksum: c470db8271f094c23b4ed907e9e04d6bd108575251dabb5787988811e89f0d04a03d02672d2790676a90af552a6f0185cec241e60d9c1a21fcbad5a909eeeae0
+  languageName: node
+  linkType: hard
+
+"popper-max-size-modifier@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "popper-max-size-modifier@npm:0.2.0"
+  peerDependencies:
+    "@popperjs/core": ^2.2.0
+  checksum: dfff7f91bd584393ef4416399377f5e2e9f7ffd458e176e85dfffa0951dd01eb923c8afb178061833a6c9598c7f0c6fc4693b43daa61423e7eb33247bb94ceb1
   languageName: node
   linkType: hard
 
@@ -14138,6 +14180,7 @@ __metadata:
     "@rollup/plugin-json": ^4.1.0
     "@rollup/plugin-typescript": ^8.2.5
     "@testing-library/jest-dom": ^5.13.0
+    "@testing-library/user-event": ^13.2.1
     "@testing-library/vue": ^5.6.2
     "@types/jest": ^26.0.23
     "@types/jest-axe": ^3.5.3
@@ -16067,6 +16110,21 @@ typescript@^4.3.2:
   languageName: node
   linkType: hard
 
+"v-calendar@npm:^2.3.2":
+  version: 2.3.4
+  resolution: "v-calendar@npm:2.3.4"
+  dependencies:
+    core-js: ^3.15.2
+    date-fns: ^2.22.1
+    date-fns-tz: ^1.1.4
+    lodash: ^4.17.21
+  peerDependencies:
+    "@popperjs/core": ^2.4.0
+    vue: ^2.5.18
+  checksum: bcb508084c02ea477ab623bef8957a12daa15b621ce236dd4c58d8ccd037c7acdd8e5f0b224627ca70452b7871d39dd787f9c112ec78bd2cf808c6a06f4dcb27
+  languageName: node
+  linkType: hard
+
 "v8-compile-cache@npm:^2.0.3":
   version: 2.3.0
   resolution: "v8-compile-cache@npm:2.3.0"
@@ -16167,17 +16225,6 @@ typescript@^4.3.2:
   peerDependencies:
     axe-core: 3.x || 4.x
   checksum: 6e078ad12a8bbc970fcc574d197650528fbad627301c3301b442f3cd8ed410b312085de045dda379b54e937f06ee254d7dee1d77fba16f6f3c25bcb64f4e65db
-  languageName: node
-  linkType: hard
-
-"vue-datetime@npm:^1.0.0-beta.10":
-  version: 1.0.0-beta.14
-  resolution: "vue-datetime@npm:1.0.0-beta.14"
-  peerDependencies:
-    luxon: ^1.0.0
-    vue: ^2.3.0
-    weekstart: ^1.0.0
-  checksum: 4a1fd9e0e49dc297e7c20874b8083d6ea648f709e20ce94e15d99608550efae93294ba409f79de37822fdb0edb6a3e7e33a4e98608187d6cd113551309013b5c
   languageName: node
   linkType: hard
 
@@ -16439,6 +16486,7 @@ typescript@^4.3.2:
   version: 0.0.0-use.local
   resolution: "web-runtime@workspace:packages/web-runtime"
   dependencies:
+    "@popperjs/core": ^2.4.0
     axe-core: ^4.3.3
     easygettext: ^2.16.1
     filesize: ^8.0.0
@@ -16448,9 +16496,10 @@ typescript@^4.3.2:
     lodash-es: ^4.17.21
     luxon: ^1.28.0
     oidc-client: 1.11.5
-    owncloud-design-system: 10.0.0
+    owncloud-design-system: 11.0.0
     owncloud-sdk: 1.0.0-2296
     p-queue: ^6.1.1
+    popper-max-size-modifier: ^0.2.0
     portal-vue: ^2.1.7
     postcss-import: ^12.0.1
     postcss-url: ^9.0.0
@@ -16458,10 +16507,10 @@ typescript@^4.3.2:
     tippy.js: ^6.3.1
     tus-js-client: ^1.8.0
     uikit: 3.5.16
+    v-calendar: ^2.3.2
     vue: ^2.6.10
     vue-async-computed: ^3.9.0
     vue-axe: ^2.4.4
-    vue-datetime: ^1.0.0-beta.10
     vue-drag-drop: ^1.1.4
     vue-events: ^3.1.0
     vue-gettext: ^2.1.5
@@ -16478,7 +16527,6 @@ typescript@^4.3.2:
     vuex-router-sync: ^5.0.0
     web-pkg: "*"
     webfontloader: ^1.6.28
-    weekstart: ^1.0.0
   languageName: unknown
   linkType: soft
 
@@ -16520,13 +16568,6 @@ typescript@^4.3.2:
   version: 6.1.0
   resolution: "webidl-conversions@npm:6.1.0"
   checksum: 1f526507aa491f972a0c1409d07f8444e1d28778dfa269a9971f2e157182f3d496dc33296e4ed45b157fdb3bf535bb90c90bf10c50dcf1dd6caacb2a34cc84fb
-  languageName: node
-  linkType: hard
-
-"weekstart@npm:^1.0.0":
-  version: 1.1.0
-  resolution: "weekstart@npm:1.1.0"
-  checksum: afce96e0b95809a30f00fa02b13a0927324d9f76b9c10ce6b3de9bbd5926615156f8a0526c63e2bd1cabdc8ec3da68b8df8d6608b6364ded11b5da300a8cfcb4
   languageName: node
   linkType: hard
 
