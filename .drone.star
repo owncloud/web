@@ -713,54 +713,81 @@ def main(ctx):
 
     before = beforePipelines(ctx)
 
-    stages = stagePipelines(ctx)
+    stages = pipelinesDependsOn(stagePipelines(ctx), before)
+
     if (stages == False):
         print("Errors detected. Review messages above.")
         return []
 
-    dependsOn(before, stages)
-
-    after = afterPipelines(ctx)
-    dependsOn(stages, after)
+    after = pipelinesDependsOn(afterPipelines(ctx), stages)
 
     pipelines = before + stages + after
 
     deploys = example_deploys(ctx)
     if ctx.build.event != "cron":
         # run example deploys on cron even if some prior pipelines fail
-        dependsOn(pipelines, deploys)
+        deploys = pipelinesDependsOn(deploys, pipelines)
 
-    return pipelines + deploys + checkStarlark()
+    pipelines = pipelines + deploys + checkStarlark()
+
+    pipelineSanityChecks(ctx, pipelines)
+    return pipelines
 
 def beforePipelines(ctx):
+    base = \
+        checkForRecentBuilds(ctx) + \
+        documentation(ctx) + \
+        changelog(ctx)
+
+    lint = \
+        yarnCache(ctx) + \
+        pipelinesDependsOn(yarnlint(ctx), yarnCache(ctx))
+
+    test_cache = \
+        cacheOcisPipeline(ctx) + \
+        pipelinesDependsOn(buildCacheWeb(ctx), yarnCache(ctx))
+
     title = ctx.build.title.lower()
     if "docs-only" in title:
-        return checkForRecentBuilds(ctx) + website(ctx)
+        return base
     elif "unit-tests-only" in title:
-        return yarnlint(ctx) + checkForRecentBuilds(ctx)
+        return base + lint
     else:
-        return yarnlint(ctx) + checkForRecentBuilds(ctx) + changelog(ctx) + website(ctx) + cacheOcisPipeline(ctx)
+        return base + lint + test_cache
 
 def stagePipelines(ctx):
     title = ctx.build.title.lower()
     if "docs-only" in title:
         return []
 
-    unitTestPipelines = unitTests(ctx)
+    unit_test_pipelines = unitTests(ctx)
     if "unit-tests-only" in title:
-        return unitTestPipelines
+        return unit_test_pipelines
 
-    acceptancePipelines = acceptance(ctx)
-    if acceptancePipelines == False:
-        return unitTestPipelines
-
+    acceptance_pipelines = acceptance(ctx)
     if ("acceptance-tests-only" not in title):
-        dependsOn(unitTestPipelines, acceptancePipelines)
+        return acceptance_pipelines
 
-    return unitTestPipelines + acceptancePipelines
+    return unit_test_pipelines + pipelinesDependsOn(acceptance_pipelines, unit_test_pipelines)
 
 def afterPipelines(ctx):
     return build(ctx) + notify()
+
+def yarnCache(ctx):
+    return [{
+        "kind": "pipeline",
+        "type": "docker",
+        "name": "cache-yarn",
+        "steps": installYarn() +
+                 rebuildBuildArtifactCache(ctx, ".yarn", ".yarn"),
+        "trigger": {
+            "ref": [
+                "refs/heads/master",
+                "refs/tags/**",
+                "refs/pull/**",
+            ],
+        },
+    }]
 
 def yarnlint(ctx):
     pipelines = []
@@ -780,10 +807,9 @@ def yarnlint(ctx):
             "base": dir["base"],
             "path": config["app"],
         },
-        "steps": installYarn() +
-                 rebuildBuildArtifactCache(ctx, ".yarn", ".yarn") +
+        "steps": restoreBuildArtifactCache(ctx, ".yarn", ".yarn") +
+                 installYarn() +
                  lintTest(),
-        "depends_on": [],
         "trigger": {
             "ref": [
                 "refs/heads/master",
@@ -801,9 +827,7 @@ def yarnlint(ctx):
     return pipelines
 
 def checkForRecentBuilds(ctx):
-    pipelines = []
-
-    result = {
+    return [{
         "kind": "pipeline",
         "type": "docker",
         "name": "stop-recent-builds",
@@ -811,40 +835,24 @@ def checkForRecentBuilds(ctx):
             "base": dir["base"],
             "path": config["app"],
         },
-        "steps": stopRecentBuilds(ctx),
-        "depends_on": [],
+        "steps": [{
+            "name": "stop-recent-builds",
+            "image": "drone/cli:alpine",
+            "environment": {
+                "DRONE_SERVER": "https://drone.owncloud.com",
+                "DRONE_TOKEN": {
+                    "from_secret": "drone_token",
+                },
+            },
+            "commands": [
+                "drone build ls %s --status running > %s/recentBuilds.txt" % (ctx.repo.slug, dir["web"]),
+                "drone build info %s ${DRONE_BUILD_NUMBER} > %s/thisBuildInfo.txt" % (ctx.repo.slug, dir["web"]),
+                "cd %s && ./tests/acceptance/cancelBuilds.sh" % dir["web"],
+            ],
+        }],
         "trigger": {
             "ref": [
-                "refs/heads/master",
-                "refs/tags/**",
                 "refs/pull/**",
-            ],
-        },
-    }
-
-    pipelines.append(result)
-
-    return pipelines
-
-def stopRecentBuilds(ctx):
-    return [{
-        "name": "stop-recent-builds",
-        "image": "drone/cli:alpine",
-        "pull": "always",
-        "environment": {
-            "DRONE_SERVER": "https://drone.owncloud.com",
-            "DRONE_TOKEN": {
-                "from_secret": "drone_token",
-            },
-        },
-        "commands": [
-            "drone build ls %s --status running > %s/recentBuilds.txt" % (ctx.repo.slug, dir["web"]),
-            "drone build info %s ${DRONE_BUILD_NUMBER} > %s/thisBuildInfo.txt" % (ctx.repo.slug, dir["web"]),
-            "cd %s && ./tests/acceptance/cancelBuilds.sh" % dir["web"],
-        ],
-        "when": {
-            "event": [
-                "pull_request",
             ],
         },
     }]
@@ -871,7 +879,6 @@ def build(ctx):
                  installYarn() +
                  buildRelease(ctx) +
                  buildDockerImage(),
-        "depends_on": [],
         "trigger": {
             "ref": [
                 "refs/heads/master",
@@ -899,7 +906,6 @@ def changelog(ctx):
             {
                 "name": "clone",
                 "image": "plugins/git-action:1",
-                "pull": "always",
                 "settings": {
                     "actions": [
                         "clone",
@@ -919,7 +925,6 @@ def changelog(ctx):
             {
                 "name": "generate",
                 "image": "toolhippie/calens:latest",
-                "pull": "always",
                 "commands": [
                     "calens >| CHANGELOG.md",
                 ],
@@ -927,7 +932,6 @@ def changelog(ctx):
             {
                 "name": "diff",
                 "image": OC_CI_ALPINE,
-                "pull": "always",
                 "commands": [
                     "git diff",
                 ],
@@ -935,7 +939,6 @@ def changelog(ctx):
             {
                 "name": "output",
                 "image": "toolhippie/calens:latest",
-                "pull": "always",
                 "commands": [
                     "cat CHANGELOG.md",
                 ],
@@ -943,7 +946,6 @@ def changelog(ctx):
             {
                 "name": "publish",
                 "image": "plugins/git-action:1",
-                "pull": "always",
                 "settings": {
                     "actions": [
                         "commit",
@@ -971,7 +973,6 @@ def changelog(ctx):
                 },
             },
         ],
-        "depends_on": [],
         "trigger": {
             "ref": [
                 "refs/heads/master",
@@ -983,6 +984,30 @@ def changelog(ctx):
     pipelines.append(result)
 
     return pipelines
+
+def buildCacheWeb(ctx):
+    return [{
+        "kind": "pipeline",
+        "type": "docker",
+        "name": "cache-web",
+        "steps": restoreBuildArtifactCache(ctx, ".yarn", ".yarn") +
+                 installYarn() +
+                 [{
+                     "name": "build-web",
+                     "image": "owncloudci/nodejs:14",
+                     "commands": [
+                         "make dist",
+                     ],
+                 }] +
+                 rebuildBuildArtifactCache(ctx, "web-dist", "dist"),
+        "trigger": {
+            "ref": [
+                "refs/heads/master",
+                "refs/tags/**",
+                "refs/pull/**",
+            ],
+        },
+    }]
 
 def unitTests(ctx):
     sonar_env = {
@@ -1021,12 +1046,11 @@ def unitTests(ctx):
                  calculateTestsToRunBasedOnFilesChanged(ctx) +
                  restoreBuildArtifactCache(ctx, ".yarn", ".yarn") +
                  installYarn() +
-                 buildWeb() +
+                 restoreBuildArtifactCache(ctx, "web-dist", "dist") +
                  [
                      {
                          "name": "unit-tests",
                          "image": OC_CI_NODEJS,
-                         "pull": "always",
                          "commands": [
                              "if test -f runTestsForDocsChangeOnly; then echo 'skipping unit-tests'; else yarn test:unit; fi",
                          ],
@@ -1034,7 +1058,6 @@ def unitTests(ctx):
                      {
                          "name": "integration-tests",
                          "image": OC_CI_NODEJS,
-                         "pull": "always",
                          "commands": [
                              "if test -f runTestsForDocsChangeOnly; then echo 'skipping integration-tests'; else yarn test:integration; fi",
                          ],
@@ -1042,11 +1065,9 @@ def unitTests(ctx):
                      {
                          "name": "sonarcloud",
                          "image": "sonarsource/sonar-scanner-cli:latest",
-                         "pull": "always",
                          "environment": sonar_env,
                      },
                  ],
-        "depends_on": [],
         "trigger": {
             "ref": [
                 "refs/heads/master",
@@ -1158,7 +1179,8 @@ def acceptance(ctx):
                         if (params["oc10IntegrationAppIncluded"]):
                             steps += buildWebApp()
                         else:
-                            steps += buildWeb()
+                            steps += restoreBuildArtifactCache(ctx, "web-dist", "dist")
+                            steps += setupServerConfigureWeb(params["logLevel"])
 
                         services = browserService(alternateSuiteName, browser)
 
@@ -1240,7 +1262,6 @@ def acceptance(ctx):
                             },
                             "steps": steps,
                             "services": services,
-                            "depends_on": ["cache-ocis"] if (params["runningOnOCIS"]) else [],
                             "trigger": {
                                 "ref": [
                                     "refs/tags/**",
@@ -1258,6 +1279,9 @@ def acceptance(ctx):
                                 "temp": {},
                             }],
                         }
+
+                        if params["runningOnOCIS"]:
+                            result = pipelineDependsOn(result, cacheOcisPipeline(ctx))
 
                         for branch in config["branches"]:
                             result["trigger"]["ref"].append("refs/heads/%s" % branch)
@@ -1286,7 +1310,6 @@ def notify():
             {
                 "name": "notify-rocketchat",
                 "image": "plugins/slack:1",
-                "pull": "always",
                 "settings": {
                     "webhook": {
                         "from_secret": config["rocketchat"]["from_secret"],
@@ -1295,7 +1318,6 @@ def notify():
                 },
             },
         ],
-        "depends_on": [],
         "trigger": {
             "ref": [
                 "refs/tags/**",
@@ -1325,7 +1347,6 @@ def databaseServiceForFederation(db, suffix):
     return [{
         "name": dbName + suffix,
         "image": db,
-        "pull": "always",
         "environment": {
             "MYSQL_USER": getDbUsername(db),
             "MYSQL_PASSWORD": getDbPassword(db),
@@ -1340,7 +1361,6 @@ def databaseService(db):
         return [{
             "name": dbName,
             "image": db,
-            "pull": "always",
             "environment": {
                 "MYSQL_USER": getDbUsername(db),
                 "MYSQL_PASSWORD": getDbPassword(db),
@@ -1353,7 +1373,6 @@ def databaseService(db):
         return [{
             "name": dbName,
             "image": db,
-            "pull": "always",
             "environment": {
                 "POSTGRES_USER": getDbUsername(db),
                 "POSTGRES_PASSWORD": getDbPassword(db),
@@ -1365,7 +1384,6 @@ def databaseService(db):
         return [{
             "name": dbName,
             "image": "deepdiver/docker-oracle-xe-11g:latest",
-            "pull": "always",
             "environment": {
                 "ORACLE_USER": getDbUsername(db),
                 "ORACLE_PASSWORD": getDbPassword(db),
@@ -1381,7 +1399,6 @@ def browserService(alternateSuiteName, browser):
         return [{
             "name": "selenium",
             "image": "selenium/standalone-chrome-debug:3.141.59",
-            "pull": "always",
             "volumes": [{
                 "name": "uploads",
                 "path": "/uploads",
@@ -1392,7 +1409,6 @@ def browserService(alternateSuiteName, browser):
         return [{
             "name": "selenium",
             "image": "selenium/standalone-firefox-debug:3.141.59",
-            "pull": "always",
             "volumes": [{
                 "name": "uploads",
                 "path": "/uploads",
@@ -1423,7 +1439,6 @@ def owncloudService():
     return [{
         "name": "owncloud",
         "image": OC_CI_PHP,
-        "pull": "always",
         "environment": {
             "APACHE_WEBROOT": "%s/" % dir["server"],
             "APACHE_LOGGING_PATH": "/dev/null",
@@ -1439,7 +1454,6 @@ def owncloudFederatedService():
     return [{
         "name": "federated",
         "image": OC_CI_PHP,
-        "pull": "always",
         "environment": {
             "APACHE_WEBROOT": "%s/" % dir["federated"],
             "APACHE_LOGGING_PATH": "/dev/null",
@@ -1514,7 +1528,6 @@ def installCore(version, db):
     stepDefinition = {
         "name": "install-core",
         "image": OC_CI_CORE_NODEJS,
-        "pull": "always",
     }
 
     if version:
@@ -1560,7 +1573,6 @@ def installFederatedServer(version, db, dbSuffix = "-federated"):
     stepDefinition = {
         "name": "install-federated",
         "image": OC_CI_CORE_NODEJS,
-        "pull": "always",
     }
     if version:
         stepDefinition.update({"settings": {
@@ -1591,7 +1603,6 @@ def installYarn():
     return [{
         "name": "yarn-install",
         "image": OC_CI_NODEJS,
-        "pull": "always",
         "commands": [
             "if test -f runTestsForDocsChangeOnly; then echo 'skipping installYarn'; else yarn install --immutable; fi",
         ],
@@ -1601,7 +1612,6 @@ def lintTest():
     return [{
         "name": "lint-test",
         "image": OC_CI_NODEJS,
-        "pull": "always",
         "commands": [
             "yarn run lint",
         ],
@@ -1611,7 +1621,6 @@ def buildWebApp():
     return [{
         "name": "build-web-integration-app",
         "image": OC_CI_NODEJS,
-        "pull": "always",
         "commands": [
             "bash -x tests/drone/build-web-app.sh {}".format(dir["web"]),
         ],
@@ -1625,23 +1634,8 @@ def setupIntegrationWebApp():
     return [{
         "name": "setup-web-integration-app",
         "image": OC_CI_PHP,
-        "pull": "always",
         "commands": [
             "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping setupIntegrationWebApp'; else bash -x tests/drone/setup-integration-web-app.sh {} {}; fi".format(dir["server"], dir["web"]),
-        ],
-        "volumes": [{
-            "name": "configs",
-            "path": "/srv/config",
-        }],
-    }]
-
-def buildWeb():
-    return [{
-        "name": "build-web",
-        "image": OC_CI_NODEJS,
-        "pull": "always",
-        "commands": [
-            "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping buildWeb'; else bash -x tests/drone/build-web.sh {}; fi".format(dir["web"]),
         ],
         "volumes": [{
             "name": "configs",
@@ -1653,7 +1647,6 @@ def buildDockerImage():
     return [{
         "name": "docker",
         "image": "plugins/docker:18.09",
-        "pull": "always",
         "settings": {
             "username": {
                 "from_secret": "docker_username",
@@ -1679,7 +1672,6 @@ def buildRelease(ctx):
         {
             "name": "make",
             "image": OC_CI_NODEJS,
-            "pull": "always",
             "commands": [
                 "cd %s" % dir["web"],
                 "make -f Makefile.release",
@@ -1688,7 +1680,6 @@ def buildRelease(ctx):
         {
             "name": "changelog",
             "image": "toolhippie/calens:latest",
-            "pull": "always",
             "commands": [
                 "calens --version %s -o dist/CHANGELOG.md -t changelog/CHANGELOG-Release.tmpl" % ctx.build.ref.replace("refs/tags/v", "").split("-")[0],
             ],
@@ -1701,7 +1692,6 @@ def buildRelease(ctx):
         {
             "name": "publish",
             "image": "plugins/github-release:1",
-            "pull": "always",
             "settings": {
                 "api_key": {
                     "from_secret": "github_token",
@@ -1725,12 +1715,12 @@ def buildRelease(ctx):
         },
     ]
 
-def website(ctx):
+def documentation(ctx):
     return [
         {
             "kind": "pipeline",
             "type": "docker",
-            "name": "website",
+            "name": "documentation",
             "platform": {
                 "os": "linux",
                 "arch": "amd64",
@@ -1740,7 +1730,7 @@ def website(ctx):
                     "name": "prepare",
                     "image": OC_CI_ALPINE,
                     "commands": [
-                        "\tmake docs-copy",
+                        "make docs-copy",
                     ],
                 },
                 {
@@ -1748,7 +1738,7 @@ def website(ctx):
                     "image": "owncloudci/hugo:0.71.0",
                     "commands": [
                         "cd hugo",
-                        "\thugo",
+                        "hugo",
                     ],
                 },
                 {
@@ -1761,7 +1751,6 @@ def website(ctx):
                 {
                     "name": "publish",
                     "image": "plugins/gh-pages:1",
-                    "pull": "always",
                     "settings": {
                         "username": {
                             "from_secret": "github_username",
@@ -1801,7 +1790,6 @@ def website(ctx):
                     },
                 },
             ],
-            "depends_on": [],
             "trigger": {
                 "ref": [
                     "refs/heads/master",
@@ -1815,7 +1803,6 @@ def getSkeletonFiles():
     return [{
         "name": "setup-skeleton-files",
         "image": OC_CI_PHP,
-        "pull": "always",
         "commands": [
             "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping getSkeletonFiles'; else git clone https://github.com/owncloud/testing.git /srv/app/testing; fi",
         ],
@@ -1829,7 +1816,6 @@ def webService():
     return [{
         "name": "web",
         "image": OC_CI_PHP,
-        "pull": "always",
         "environment": {
             "APACHE_WEBROOT": "%s/dist" % dir["web"],
             "APACHE_LOGGING_PATH": "/dev/null",
@@ -1851,7 +1837,6 @@ def setUpOauth2(forIntegrationApp):
     return [{
         "name": "setup-oauth2",
         "image": OC_CI_PHP,
-        "pull": "always",
         "commands": [
             "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping setup-oauth2'; else bash -x tests/drone/setup-oauth2.sh {} {}; fi".format(dir["server"], oidcURL),
         ],
@@ -1861,7 +1846,6 @@ def setupGraphapiOIdC():
     return [{
         "name": "setup-graphapi",
         "image": OC_CI_PHP,
-        "pull": "always",
         "commands": [
             "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping setupGraphapiOIdC'; else bash -x tests/drone/setup-graph-api-oidc.sh {}; fi".format(dir["server"]),
         ],
@@ -1871,7 +1855,6 @@ def buildGlauth():
     return [{
         "name": "build-glauth",
         "image": OC_CI_GOLANG,
-        "pull": "always",
         "commands": [
             "bash -x tests/drone/build-glauth.sh {}".format(dir["base"]),
         ],
@@ -1888,7 +1871,6 @@ def glauthService():
     return [{
         "name": "glauth",
         "image": OC_CI_GOLANG,
-        "pull": "always",
         "detach": True,
         "environment": {
             "GLAUTH_BACKEND_DATASTORE": "owncloud",
@@ -1911,7 +1893,6 @@ def buildIdP():
     return [{
         "name": "build-idp",
         "image": OC_CI_GOLANG,
-        "pull": "always",
         "commands": [
             "bash -x tests/drone/build-idp.sh {}".format(dir["base"]),
         ],
@@ -1928,7 +1909,6 @@ def idpService():
     return [{
         "name": "idp",
         "image": OC_CI_GOLANG,
-        "pull": "always",
         "detach": True,
         "environment": {
             "LDAP_BASEDN": "dc=example,dc=com",
@@ -1962,7 +1942,6 @@ def ocisService():
     return [{
         "name": "ocis",
         "image": OC_CI_GOLANG,
-        "pull": "always",
         "detach": True,
         "environment": {
             "OCIS_URL": "https://ocis:9200",
@@ -2000,7 +1979,6 @@ def buildOcisWeb():
     return [{
         "name": "build-ocis-web",
         "image": OC_CI_GOLANG,
-        "pull": "always",
         "commands": [
             "bash -x tests/drone/build-ocis-web.sh {}".format(dir["base"]),
         ],
@@ -2018,7 +1996,6 @@ def ocisWebService():
     return [{
         "name": "web",
         "image": OC_CI_GOLANG,
-        "pull": "always",
         "detach": True,
         "environment": {
             "WEB_UI_CONFIG": "/srv/config/drone/config-oc10-openid.json",
@@ -2037,11 +2014,23 @@ def ocisWebService():
         }],
     }]
 
+def setupServerConfigureWeb(logLevel):
+    return [{
+        "name": "setup-server-configure-web",
+        "image": OC_CI_PHP,
+        "commands": [
+            "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping configureWeb'; else bash -x tests/drone/configure-web.sh {}; fi".format(dir["web"]),
+        ],
+        "volumes": [{
+            "name": "configs",
+            "path": "/srv/config",
+        }],
+    }]
+
 def setupNotificationsAppForServer():
     return [{
         "name": "install-notifications-app-on-server",
         "image": OC_CI_PHP,
-        "pull": "always",
         "commands": [
             "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping setupNotificationsApp'; else bash -x tests/drone/setup-notifications-app.sh {}; fi".format(dir["server"]),
         ],
@@ -2051,7 +2040,6 @@ def setupServerAndAppsForIntegrationApp(logLevel):
     return [{
         "name": "setup-server-%s" % config["app"],
         "image": OC_CI_PHP,
-        "pull": "always",
         "commands": [
             "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping server-setup'; else bash -x tests/drone/setup-server-and-app.sh %s %s %s; fi" % (dir["server"], logLevel, "builtInWeb"),
         ],
@@ -2061,7 +2049,6 @@ def setupServerAndApp(logLevel):
     return [{
         "name": "setup-server-%s" % config["app"],
         "image": OC_CI_PHP,
-        "pull": "always",
         "commands": [
             "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping server-setup'; else bash -x tests/drone/setup-server-and-app.sh %s %s; fi" % (dir["server"], logLevel),
         ],
@@ -2071,7 +2058,6 @@ def setupFedServerAndApp(logLevel):
     return [{
         "name": "setup-fed-server-%s" % config["app"],
         "image": OC_CI_PHP,
-        "pull": "always",
         "commands": [
             "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping server-setup'; else bash -x tests/drone/setup-fed-server-and-app.sh {} {}; fi".format(dir["federated"], logLevel),
         ],
@@ -2081,7 +2067,6 @@ def fixPermissions():
     return [{
         "name": "fix-permissions",
         "image": OC_CI_PHP,
-        "pull": "always",
         "commands": [
             "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping fixPermissions'; else cd %s && chown www-data * -R; fi" % dir["server"],
         ],
@@ -2091,7 +2076,6 @@ def fixPermissionsFederated():
     return [{
         "name": "fix-permissions-federated",
         "image": OC_CI_PHP,
-        "pull": "always",
         "commands": [
             "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping fixPermissions'; else cd %s && chown www-data * -R; fi" % dir["federated"],
         ],
@@ -2101,7 +2085,6 @@ def owncloudLog():
     return [{
         "name": "owncloud-log",
         "image": "owncloud/ubuntu:20.04",
-        "pull": "always",
         "detach": True,
         "commands": [
             "tail -f %s/data/owncloud.log" % dir["server"],
@@ -2112,7 +2095,6 @@ def owncloudLogFederated():
     return [{
         "name": "owncloud-federated-log",
         "image": "owncloud/ubuntu:20.04",
-        "pull": "always",
         "detach": True,
         "commands": [
             "tail -f %s/data/owncloud.log" % dir["federated"],
@@ -2122,7 +2104,6 @@ def owncloudLogFederated():
 def copyFilesForUpload():
     return [{
         "name": "copy-files-for-upload",
-        "pull": "always",
         "image": OC_CI_PHP,
         "volumes": [{
             "name": "uploads",
@@ -2172,7 +2153,6 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
     return [{
         "name": "webui-acceptance-tests",
         "image": OC_CI_NODEJS,
-        "pull": "always",
         "environment": environment,
         "commands": [
             "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping webui-acceptance-tests'; else cd %s && ./tests/acceptance/run.sh; fi" % dir["web"],
@@ -2198,7 +2178,6 @@ def cacheOcisPipeline(ctx):
         "steps": buildOCISCache() +
                  cacheOcis() +
                  listRemoteCache(),
-        "depends_on": [],
         "trigger": {
             "ref": [
                 "refs/heads/master",
@@ -2233,7 +2212,6 @@ def buildOCISCache():
     return [{
         "name": "build-ocis",
         "image": OC_CI_GOLANG,
-        "pull": "always",
         "commands": [
             "./tests/drone/build-ocis.sh",
         ],
@@ -2287,7 +2265,6 @@ def stopBuild():
     return [{
         "name": "stop-build",
         "image": "drone/cli:alpine",
-        "pull": "always",
         "environment": {
             "DRONE_SERVER": "https://drone.owncloud.com",
             "DRONE_TOKEN": {
@@ -2344,7 +2321,6 @@ def listScreenShots():
     return [{
         "name": "list screenshots-visual",
         "image": OC_CI_NODEJS,
-        "pull": "always",
         "commands": [
             "ls -laR %s/tests/vrt" % dir["web"],
         ],
@@ -2427,7 +2403,6 @@ def buildGithubCommentVisualDiff(ctx, suite, runningOnOCIS):
     return [{
         "name": "build-github-comment-vrt",
         "image": "owncloud/ubuntu:20.04",
-        "pull": "always",
         "commands": [
             "cd %s/tests/vrt" % dir["web"],
             "if [ ! -d diff ]; then exit 0; fi",
@@ -2467,7 +2442,6 @@ def buildGithubComment(suite):
     return [{
         "name": "build-github-comment",
         "image": "owncloud/ubuntu:20.04",
-        "pull": "always",
         "commands": [
             "cd %s/tests/reports/screenshots/" % dir["web"],
             'echo "<details><summary>:boom: The acceptance tests failed. Please find the screenshots inside ...</summary>\\n\\n<p>\\n\\n" >> %s/comments.file' % dir["web"],
@@ -2495,7 +2469,6 @@ def buildGithubCommentForBuildStopped(suite):
     return [{
         "name": "build-github-comment-buildStop",
         "image": "owncloud/ubuntu:20.04",
-        "pull": "always",
         "commands": [
             'echo ":boom: The acceptance tests pipeline failed. The build has been cancelled.\\n" >> %s/comments.file' % dir["web"],
         ],
@@ -2621,7 +2594,6 @@ def checkStarlark():
             {
                 "name": "format-check-starlark",
                 "image": "owncloudci/bazel-buildifier",
-                "pull": "always",
                 "commands": [
                     "buildifier --mode=check .drone.star",
                 ],
@@ -2629,7 +2601,6 @@ def checkStarlark():
             {
                 "name": "show-diff",
                 "image": "owncloudci/bazel-buildifier",
-                "pull": "always",
                 "commands": [
                     "buildifier --mode=fix .drone.star",
                     "git diff",
@@ -2641,7 +2612,6 @@ def checkStarlark():
                 },
             },
         ],
-        "depends_on": [],
         "trigger": {
             "ref": [
                 "refs/pull/**",
@@ -2649,20 +2619,39 @@ def checkStarlark():
         },
     }]
 
-def dependsOn(earlierStages, nextStages):
-    for earlierStage in earlierStages:
-        for nextStage in nextStages:
-            if "depends_on" in nextStage.keys():
-                nextStage["depends_on"].append(earlierStage["name"])
-            else:
-                nextStage["depends_on"] = [earlierStage["name"]]
+def pipelineDependsOn(pipeline, dependant_pipelines):
+    if "depends_on" in pipeline.keys():
+        pipeline["depends_on"] = pipeline["depends_on"] + getPipelineNames(dependant_pipelines)
+    else:
+        pipeline["depends_on"] = getPipelineNames(dependant_pipelines)
+    return pipeline
+
+def pipelinesDependsOn(pipelines, dependant_pipelines):
+    pipes = []
+    for pipeline in pipelines:
+        pipes.append(pipelineDependsOn(pipeline, dependant_pipelines))
+
+    return pipes
+
+def getPipelineNames(pipelines = []):
+    """getPipelineNames returns names of pipelines as a string array
+
+    Args:
+      pipelines: array of drone pipelines
+
+    Returns:
+      names of the given pipelines as string array
+    """
+    names = []
+    for pipeline in pipelines:
+        names.append(pipeline["name"])
+    return names
 
 def calculateTestsToRunBasedOnFilesChanged(ctx):
     return [
         {
             "name": "calculate-diff",
             "image": OC_CI_NODEJS,
-            "pull": "always",
             "commands": [
                 "bash -x tests/drone/getFilesChanged.sh",
                 "ls -la",
@@ -2688,7 +2677,6 @@ def genericCache(name, action, mounts, cache_key):
     step = {
         "name": "%s_%s" % (action, name),
         "image": "meltwater/drone-cache:v1",
-        "pull": "always",
         "environment": {
             "AWS_ACCESS_KEY_ID": {
                 "from_secret": "cache_s3_access_key",
@@ -2751,9 +2739,8 @@ def genericCachePurge(ctx, name, cache_key):
 
 def listDir(path):
     return {
-        "name": "list-dir",
+        "name": "list-dir %s" % (path),
         "image": OC_CI_ALPINE,
-        "pull": "always",
         "commands": [
             "tree %s" % (path),
         ],
@@ -2776,3 +2763,70 @@ def rebuildBuildArtifactCache(ctx, name, path):
 
 def purgeBuildArtifactCache(ctx, name):
     return genericBuildArtifactCache(ctx, name, "purge", [])
+
+def pipelineSanityChecks(ctx, pipelines):
+    """pipelineSanityChecks helps the CI developers to find errors before running it
+
+    These sanity checks are only executed on when converting starlark to yaml.
+    Error outputs are only visible when the conversion is done with the drone cli.
+
+    Args:
+      ctx: drone passes a context with information which the pipeline can be adapted to
+      pipelines: pipelines to be checked, normally you should run this on the return value of main()
+
+    Returns:
+      none
+    """
+
+    # check if name length of pipeline and steps are exceeded.
+    max_name_length = 50
+    for pipeline in pipelines:
+        pipeline_name = pipeline["name"]
+        if len(pipeline_name) > max_name_length:
+            print("Error: pipeline name %s is longer than 50 characters" % (pipeline_name))
+
+        for step in pipeline["steps"]:
+            step_name = step["name"]
+            if len(step_name) > max_name_length:
+                print("Error: step name %s in pipeline %s is longer than 50 characters" % (step_name, pipeline_name))
+
+    # check for non existing depends_on
+    possible_depends = []
+    for pipeline in pipelines:
+        possible_depends.append(pipeline["name"])
+
+    for pipeline in pipelines:
+        if "depends_on" in pipeline.keys():
+            for depends in pipeline["depends_on"]:
+                if not depends in possible_depends:
+                    print("Error: depends_on %s for pipeline %s is not defined" % (depends, pipeline["name"]))
+
+    # check for non declared volumes
+    for pipeline in pipelines:
+        pipeline_volumes = []
+        if "volumes" in pipeline.keys():
+            for volume in pipeline["volumes"]:
+                pipeline_volumes.append(volume["name"])
+
+        for step in pipeline["steps"]:
+            if "volumes" in step.keys():
+                for volume in step["volumes"]:
+                    if not volume["name"] in pipeline_volumes:
+                        print("Warning: volume %s for step %s is not defined in pipeline %s" % (volume["name"], step["name"], pipeline["name"]))
+
+    # list used docker images
+    print("")
+    print("List of used docker images:")
+
+    images = {}
+
+    for pipeline in pipelines:
+        for step in pipeline["steps"]:
+            image = step["image"]
+            if image in images.keys():
+                images[image] = images[image] + 1
+            else:
+                images[image] = 1
+
+    for image in images.keys():
+        print(" %sx\t%s" % (images[image], image))

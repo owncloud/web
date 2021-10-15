@@ -3,9 +3,8 @@
 # $1 the directory where the installed web app code is found
 
 if test -f runUnitTestsOnly
-then echo 'skipping build-web'
+then echo 'skipping configure-web'
 else
-	yarn build
 	cp tests/drone/config-oc10-oauth.json dist/config.json
 	mkdir -p /srv/config
 	cp -r "$1"/tests/drone /srv/config
