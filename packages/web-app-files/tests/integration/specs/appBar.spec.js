@@ -30,7 +30,7 @@ describe('AppBar contains set of actions and informations', () => {
     beforeEach(() => {
       config.mocks.publicPage = () => false
 
-      bus.emit = jest.fn((path) => path)
+      bus.publish = jest.fn((path) => path)
     })
 
     test('user can refresh files list by clicking on last breadcrumb item', async () => {
@@ -49,7 +49,7 @@ describe('AppBar contains set of actions and informations', () => {
 
       await waitFor(() => expect(item).toBeVisible())
       await fireEvent.click(item)
-      expect(bus.emit).toHaveBeenCalledWith('app.files.list.load', '/documents')
+      expect(bus.publish).toHaveBeenCalledWith('app.files.list.load', '/documents')
     })
   })
 })
