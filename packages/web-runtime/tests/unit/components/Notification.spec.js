@@ -1,128 +1,98 @@
-import { config, createLocalVue, mount, shallowMount } from '@vue/test-utils'
+import { config as testConfig, createLocalVue, mount, shallowMount } from '@vue/test-utils'
 import { Store } from 'vuex-mock-store'
 import Notifications from 'web-runtime/src/components/Notifications.vue'
 import stubs from '../../../../../tests/unit/stubs'
 import DesignSystem from 'owncloud-design-system'
-const localVue = createLocalVue()
-localVue.use(DesignSystem)
 
-config.showDeprecationWarnings = false
-
-const OcTooltip = jest.fn()
-
-const selectors = {
-  notificationBell: '#oc-notification-bell',
-  ocIconStub: 'oc-icon-stub',
-  actionButton: '.oc-ml-s',
-  resolveNotificationButton: '#resolve-notification-button',
-  link: '.uk-link',
-  subject: 'h4',
-  message: '.uk-text-small'
-}
-
-const defaultNotificationData = {
-  notification_id: 1,
-  subject: 'Test',
-  message: 'This is a test message',
-  actions: []
-}
-
-function getStoreWithActiveNotifications(activeNotifications) {
-  return new Store({
-    getters: {
-      activeNotifications: activeNotifications
-    }
-  })
-}
-
-function getStoreWithEmptyActions() {
-  return getStoreWithActiveNotifications([
-    {
-      ...defaultNotificationData
-    }
-  ])
-}
-
-function getStoreWithSingleAction() {
-  return getStoreWithActiveNotifications([
-    {
-      ...defaultNotificationData,
-      actions: [
+const testData = {
+  selectors: {
+    notificationBell: '#oc-notification-bell',
+    ocIconStub: 'oc-icon-stub',
+    actionButton: '.oc-ml-s',
+    resolveNotificationButton: '#resolve-notification-button',
+    link: '.uk-link',
+    subject: 'h4',
+    message: '.uk-text-small'
+  },
+  notifications: {
+    emptyActions: [
+      {
+        notification_id: 1,
+        subject: 'Test',
+        message: 'This is a test message',
+        actions: []
+      }
+    ],
+    get singleAction() {
+      return [
         {
-          label: 'Test Action'
+          ...this.emptyActions[0],
+          actions: [
+            {
+              label: 'Test Action'
+            }
+          ]
         }
       ]
-    }
-  ])
-}
-
-function getStoreWithTwoActiveNotifications() {
-  return getStoreWithActiveNotifications([
-    {
-      subject: 'First Notification',
-      message: 'This is first test message',
-      actions: []
     },
-    {
-      subject: 'Second Notification',
-      message: 'This is second test message',
-      actions: []
-    }
-  ])
+    twoActiveNotifications: [
+      {
+        subject: 'First Notification',
+        message: 'This is first test message',
+        actions: []
+      },
+      {
+        subject: 'Second Notification',
+        message: 'This is second test message',
+        actions: []
+      }
+    ],
+    linkActions: [
+      {
+        link: 'http://test.link',
+        actions: []
+      }
+    ]
+  }
 }
+const wrapperMounted = (mocks, mockMethods) => {
+  const localVue = createLocalVue()
+  localVue.use(DesignSystem)
 
-function getStoreWithLinkActions() {
-  return getStoreWithActiveNotifications([
-    {
-      link: 'http://test.link',
-      actions: []
-    }
-  ])
+  return mount(Notifications, {
+    localVue,
+    mocks,
+    ...(mockMethods && { methods: mockMethods })
+  })
 }
-
-function getWrapper(mocks) {
+const wrapperShallowMounted = (mocks) => {
   return shallowMount(Notifications, {
     stubs,
     mocks,
     directives: {
-      OcTooltip
+      'oc-tooltip': () => {}
+    }
+  })
+}
+const notificationStore = (activeNotifications) => {
+  return new Store({
+    getters: {
+      activeNotifications
     }
   })
 }
 
-function getMountWrapper(mocks) {
-  return mount(Notifications, {
-    localVue,
-    mocks,
-    directives: {
-      OcTooltip
-    }
-  })
-}
-
-function getMountWrapperWithMockMethods(mocks, mockMethods) {
-  return mount(Notifications, {
-    localVue,
-    mocks,
-    methods: mockMethods,
-    directives: {
-      OcTooltip
-    }
-  })
-}
+testConfig.showDeprecationWarnings = false
 
 describe('Notification component', () => {
+  const { selectors } = testData
+
   describe('notification bell', () => {
-    const store = getStoreWithEmptyActions()
-    let wrapper
-    beforeEach(() => {
-      store.reset()
-      wrapper = getWrapper({
-        $store: store
-      })
-    })
     it('displays notification bell', () => {
-      const bell = wrapper.find(selectors.notificationBell)
+      const bell = wrapperShallowMounted({
+        $store: notificationStore(testData.notifications.emptyActions)
+      }).find(selectors.notificationBell)
+
       expect(bell.exists()).toBeTruthy()
       expect(bell.find(selectors.ocIconStub).exists()).toBeTruthy()
       expect(bell.find(selectors.ocIconStub).attributes('name')).toBe('bell')
@@ -131,21 +101,21 @@ describe('Notification component', () => {
   })
 
   describe('when active notification contains a message', () => {
-    const store = getStoreWithEmptyActions()
-    let wrapper
-    beforeEach(() => {
-      store.reset()
-      wrapper = getWrapper({
-        $store: store
-      })
+    const store = notificationStore(testData.notifications.emptyActions)
+    const wrapper = wrapperShallowMounted({
+      $store: store
     })
+
     it('displays the notification message', () => {
       const messageElement = wrapper.find(selectors.message)
+
       expect(messageElement.exists()).toBeTruthy()
       expect(messageElement.text()).toBe('This is a test message')
     })
+
     it('displays the notification subject', () => {
       const subjectElement = wrapper.find(selectors.subject)
+
       expect(subjectElement.exists()).toBeTruthy()
       expect(subjectElement.text()).toBe('Test')
     })
@@ -153,89 +123,82 @@ describe('Notification component', () => {
 
   describe('active notifications actions', () => {
     describe('when active notification action is empty', () => {
-      let wrapper, store
-      beforeEach(() => {
-        store = getStoreWithEmptyActions()
-        wrapper = getMountWrapper({ $store: store })
-        store.reset()
-      })
+      const store = notificationStore(testData.notifications.emptyActions)
+      const wrapper = wrapperMounted({ $store: store })
+
       it('does not display the action button', () => {
         expect(wrapper.find(selectors.actionButton).exists()).toBeFalsy()
       })
+
       it('displays the resolve notification button', () => {
         expect(wrapper.find(selectors.resolveNotificationButton).exists()).toBeTruthy()
       })
-      it('dispatches deleteNotification when resolve notification is clicked', async () => {
+
+      it('dispatches deleteNotification when resolve notification is clicked', () => {
         const resolveNotificationButton = wrapper.find(selectors.resolveNotificationButton)
+
         expect(resolveNotificationButton.exists()).toBeTruthy()
         resolveNotificationButton.trigger('click')
-        await wrapper.vm.$nextTick()
         expect(store.dispatch).toHaveBeenCalledTimes(1)
         expect(store.dispatch).toHaveBeenCalledWith('deleteNotification', {
-          client: localVue.prototype.$client,
+          client: wrapper.$client,
           notification: 1
         })
       })
     })
 
     describe('when active notification action has an action', () => {
-      let store, wrapper
-      const mockMethods = {
-        executeRequest: jest.fn(),
-        reloadFilesList: jest.fn()
-      }
-      beforeEach(() => {
-        store = getStoreWithSingleAction()
-        wrapper = getMountWrapperWithMockMethods({ $store: store }, mockMethods)
-        store.reset()
-      })
+      const executeRequest = jest.fn()
+      const store = notificationStore(testData.notifications.singleAction)
+      const wrapper = wrapperMounted({ $store: store }, { executeRequest })
+
       it('displays the action button with action label', () => {
         const actionButton = wrapper.find(selectors.actionButton)
+
         expect(actionButton.exists()).toBeTruthy()
         expect(actionButton.text()).toBe('Test Action')
       })
+
       it("doesn't display the resolve notification button", () => {
         expect(wrapper.find(selectors.resolveNotificationButton).exists()).toBeFalsy()
       })
+
       it('calls executeRequest when action button is clicked', async () => {
         const actionButton = wrapper.find(selectors.actionButton)
-        actionButton.trigger('click')
-        await actionButton.vm.$nextTick()
-        expect(mockMethods.executeRequest).toHaveBeenCalledTimes(1)
+
+        await actionButton.trigger('click')
+        expect(executeRequest).toHaveBeenCalledTimes(1)
       })
     })
   })
 
   describe('active notifications links', () => {
-    let store
-    afterEach(() => {
-      store.reset()
-    })
     it('does not display link if no link is given', () => {
-      store = getStoreWithEmptyActions()
-      const wrapper = getWrapper({ $store: store })
+      const store = notificationStore(testData.notifications.emptyActions)
+      const wrapper = wrapperShallowMounted({ $store: store })
       const linkButton = wrapper.find(selectors.link)
+
       expect(linkButton.exists()).toBeFalsy()
     })
+
     it('displays link if a link is given', () => {
-      store = getStoreWithLinkActions()
-      const wrapper = getWrapper({ $store: store })
+      const store = notificationStore(testData.notifications.linkActions)
+      const wrapper = wrapperShallowMounted({ $store: store })
       const linkButton = wrapper.find(selectors.link)
+
       expect(linkButton.exists()).toBeTruthy()
       expect(linkButton.text()).toBe('http://test.link')
     })
   })
 
   describe('when active notification has multiple notifications', () => {
-    let store, wrapper
-    beforeEach(() => {
-      store = getStoreWithTwoActiveNotifications()
-      store.reset()
-      wrapper = getWrapper({ $store: store })
-    })
     it('displays all notifications from active notifications', () => {
+      const wrapper = wrapperShallowMounted({
+        $store: notificationStore(testData.notifications.twoActiveNotifications)
+      })
       const subject = wrapper.findAll(selectors.subject)
       const message = wrapper.findAll(selectors.message)
+
       expect(subject.exists()).toBeTruthy()
       expect(message.exists()).toBeTruthy()
       expect(subject).toHaveLength(2)

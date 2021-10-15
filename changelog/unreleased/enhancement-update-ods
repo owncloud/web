@@ -1,0 +1,10 @@
+Enhancement: Update ODS to v11.0.0
+
+We updated the ownCloud Design System to version 11.0.0. Please refer to the full changelog in the ODS release (linked) for more details. Summary:
+
+- Bugfix - Prevent hover style on footer of OcTableFiles: https://github.com/owncloud/owncloud-design-system/pull/1667
+- Change - Replace vue-datetime with v-calendar in our datepicker component: https://github.com/owncloud/owncloud-design-system/pull/1661
+- Enhancement - Allow hover option in OcTableFiles: https://github.com/owncloud/owncloud-design-system/pull/1632
+
+https://github.com/owncloud/web/pull/5806
+https://github.com/owncloud/owncloud-design-system/releases/tag/v11.0.0

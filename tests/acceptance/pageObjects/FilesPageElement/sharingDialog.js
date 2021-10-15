@@ -563,8 +563,11 @@ module.exports = {
      * @return {*}
      */
     openExpirationDatePicker: function () {
-      this.waitForElementVisible('@expirationDateField')
-        .waitForElementNotPresent('@elementInterceptingCollaboratorsExpirationInput')
+      this.useCss()
+        .waitForElementVisible(
+          '@expirationDateField',
+          this.api.globals.waitForNegativeConditionTimeout
+        )
         .click('@expirationDateField')
       return client.page.FilesPageElement.expirationDatePicker()
     },
@@ -574,12 +577,18 @@ module.exports = {
      */
     getExpirationDateFromInputField: async function () {
       let expirationDate
-      await this.waitForElementVisible('@expirationDateField').getValue(
-        '@expirationDateField',
-        (result) => {
-          expirationDate = result.value
-        }
-      )
+      await this.waitForElementVisible('@recipientDatepicker')
+      await this.getAttribute('@recipientDatepicker', 'value', (result) => {
+        const date = new Date(result.value)
+        const dateString =
+          date.getFullYear() +
+          '-' +
+          String(date.getMonth() + 1).padStart(2, '0') +
+          '-' +
+          String(date.getDate()).padStart(2, '0') +
+          ' 00:00:00'
+        expirationDate = dateString
+      })
       return expirationDate
     },
     /**
@@ -779,7 +788,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     expirationDateField: {
-      selector: '.vdatetime-input'
+      selector: '.expiration-dialog-btn'
     },
     requiredLabelInCollaboratorsExpirationDate: {
       selector:
@@ -809,6 +818,10 @@ module.exports = {
     userInSelectedCollaboratorsList: {
       selector:
         '//span[contains(@class, "files-share-invite-recipient")]//span[@data-test-user-name="%s"]/..',
+      locateStrategy: 'xpath'
+    },
+    recipientDatepicker: {
+      selector: '//*[@data-testid="recipient-datepicker"]',
       locateStrategy: 'xpath'
     }
   }

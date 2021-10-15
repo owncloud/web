@@ -1,5 +1,10 @@
 <template>
-  <oc-table-simple top class="files-collaborators-collaborator" role="presentation">
+  <oc-table-simple
+    :data-testid="`collaborator-item-${collaborator.collaborator.name}`"
+    top
+    class="files-collaborators-collaborator"
+    role="presentation"
+  >
     <oc-tr class="files-collaborators-collaborator-table-row-info">
       <oc-td width="shrink" class="oc-py-rm oc-pr-s">
         <div key="collaborator-avatar-loaded">

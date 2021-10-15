@@ -105,29 +105,51 @@
         </div>
       </template>
     </oc-drop>
-    <hr v-if="!minimal" />
-    <div v-if="expirationSupported && !minimal" class="oc-mt-m">
-      <div class="uk-position-relative">
-        <oc-datepicker
-          id="files-collaborators-collaborator-expiration-input"
-          :key="`collaborator-datepicker-${enteredExpirationDate}`"
-          :date="enteredExpirationDate"
-          :max-datetime="maxExpirationDate"
-          :min-datetime="minExpirationDate"
-          :label="datePickerLabel"
-          @input="setExpirationDate"
-        />
-        <div
-          v-if="canResetExpirationDate"
-          id="files-collaborators-collaborator-expiration-delete"
-          v-oc-tooltip="expirationDateRemoveTooltip"
-          class="uk-position-small uk-position-center-right oc-cursor-pointer"
-          uk-close
-          @click="resetExpirationDate"
-        />
-      </div>
-      <hr v-if="!minimal" />
-    </div>
+    <template v-if="expirationSupported">
+      <oc-datepicker
+        v-model="enteredExpirationDate"
+        :min-date="minExpirationDate"
+        :max-date="maxExpirationDate"
+        :locale="$language.current"
+        :is-required="expirationDateEnforced"
+        class="files-recipient-expiration-datepicker"
+        data-testid="recipient-datepicker"
+      >
+        <template #default="{ togglePopover }">
+          <oc-button
+            id="files-collaborators-expiration-button"
+            class="expiration-dialog-btn"
+            data-testid="recipient-datepicker-btn"
+            appearance="raw"
+            justify-content="left"
+            gap-size="xsmall"
+            @click="togglePopover"
+          >
+            <translate v-if="!enteredExpirationDate" key="no-expiration-date-label"
+              >Set expiration date</translate
+            >
+            <translate
+              v-else
+              key="set-expiration-date-label"
+              :translate-params="{ expires: relativeExpirationDate }"
+            >
+              Expires %{expires}
+            </translate>
+            <oc-icon v-if="!enteredExpirationDate" name="expand_more" />
+          </oc-button>
+        </template>
+      </oc-datepicker>
+      <oc-button
+        v-if="!expirationDateEnforced && enteredExpirationDate"
+        data-testid="recipient-edit-expiration-btn-remove"
+        appearance="raw"
+        :aria-label="$gettext('Remove expiration date')"
+        @click="clearExpirationDate"
+      >
+        <oc-icon name="close" />
+      </oc-button>
+    </template>
+    <hr />
   </div>
 </template>
 
@@ -209,11 +231,8 @@ export default {
       return this.existingCollaboratorType === 'group'
     },
 
-    datePickerLabel() {
-      if (this.expirationDateEnforced) {
-        return this.$gettext('Expiration date (required)')
-      }
-      return this.$gettext('Expiration date')
+    $_ocCollaborators_hasAdditionalPermissions() {
+      return this.selectedRole && this.selectedRole.additionalPermissions
     },
 
     expirationSupported() {
@@ -247,26 +266,21 @@ export default {
 
       const userMaxExpirationDays = parseInt(this.userExpirationDate.days, 10)
       const groupMaxExpirationDays = parseInt(this.groupExpirationDate.days, 10)
-
-      if (this.editingUser) {
-        return DateTime.now().plus({ days: userMaxExpirationDays }).endOf('day').toISO()
-      }
-
-      if (this.editingGroup) {
-        return DateTime.now().plus({ days: groupMaxExpirationDays }).endOf('day').toISO()
-      }
-
-      // Since we are not separating process for adding users and groups as collaborators
-      // we are using the one which is smaller as enforced date
       let days = 0
 
-      if (userMaxExpirationDays && groupMaxExpirationDays) {
+      if (this.editingUser) {
+        days = userMaxExpirationDays
+      } else if (this.editingGroup) {
+        days = groupMaxExpirationDays
+      } else if (userMaxExpirationDays && groupMaxExpirationDays) {
         days = Math.min(userMaxExpirationDays, groupMaxExpirationDays)
       } else {
         days = userMaxExpirationDays || groupMaxExpirationDays
       }
 
-      return DateTime.now().plus({ days }).endOf('day').toISO()
+      const date = new Date()
+      date.setDate(new Date().getDate() + days)
+      return date
     },
 
     expirationDateEnforced() {
@@ -290,19 +304,11 @@ export default {
     },
 
     minExpirationDate() {
-      return DateTime.now().plus({ days: 1 }).endOf('day').toISO()
-    },
+      const date = new Date()
 
-    expirationDatePlaceholder() {
-      return this.$gettext('Expiration date')
-    },
+      date.setDate(new Date().getDate() + 1)
 
-    expirationDateRemoveTooltip() {
-      return this.$gettext('Remove expiration date')
-    },
-
-    canResetExpirationDate() {
-      return !this.expirationDateEnforced && this.enteredExpirationDate
+      return date
     },
 
     isAdvancedRoleSelected() {
@@ -311,11 +317,22 @@ export default {
 
     rolesListAriaLabel() {
       return this.$gettext('Sharing roles')
+    },
+
+    relativeExpirationDate() {
+      return DateTime.fromJSDate(this.enteredExpirationDate)
+        .setLocale(this.$language.current)
+        .endOf('day')
+        .toRelative()
     }
   },
 
   watch: {
     selectedRole: {
+      handler: 'publishChange'
+    },
+
+    enteredExpirationDate: {
       handler: 'publishChange'
     }
   },
@@ -344,12 +361,7 @@ export default {
     console.log(this._uid)
     if (this.expirationSupported) {
       if (this.editingUser || this.editingGroup) {
-        // FIXME: Datepicker is not displaying correct timezone so for now we add it manually
         this.enteredExpirationDate = this.expirationDate
-          ? DateTime.fromJSDate(this.expirationDate)
-              .plus({ minutes: DateTime.now().offset })
-              .toISO()
-          : null
       } else {
         this.enteredExpirationDate = this.defaultExpirationDate
       }
@@ -359,15 +371,8 @@ export default {
   },
 
   methods: {
-    setExpirationDate(date) {
-      // Expiration date picker is emitting empty string when the component is initialised
-      // This ensures it will be null as we treat it everywhere in that way
-      this.enteredExpirationDate = date === '' ? null : date
-      this.publishChange()
-    },
-
-    resetExpirationDate() {
-      this.enteredExpirationDate = null
+    checkAdditionalPermissions(permissions) {
+      this.additionalPermissions = permissions
       this.publishChange()
     },
 
@@ -375,7 +380,7 @@ export default {
       this.$emit('optionChange', {
         role: this.selectedRole,
         permissions: this.customPermissions,
-        expirationDate: this.enteredExpirationDate
+        expirationDate: DateTime.fromJSDate(this.enteredExpirationDate).endOf('day').toISO()
       })
     },
 
@@ -482,12 +487,26 @@ export default {
       // the next active role index is greater than 0
       // the next active role index is less than the amount of all available role selects
       activateRoleSelect(activeRoleSelectIndex + (isArrowUp ? -1 : 1))
+    },
+
+    disabledExpirationDates(date) {
+      return date < this.minExpirationDate || date > this.maxExpirationDate
+    },
+
+    clearExpirationDate() {
+      this.enteredExpirationDate = null
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.recipient-edit-options {
+  align-items: center;
+  display: flex;
+  gap: var(--oc-space-small);
+}
+
 .files-recipient {
   &-role-drop {
     &-list {

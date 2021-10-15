@@ -26,7 +26,11 @@ occ market:install web
 ## Configure oauth2
 Within the `Admin` page of ownCloud 10, head into `User Authentication` and add a new client with arbitrary name (e.g. `ownCloud Web`) and redirection URL `https://<your-owncloud-server>/index.php/apps/web/oidc-callback.html`.
 
-{{< figure src="/clients/web/static/oauth2.jpg" alt="Example OAuth2 entry" >}}
+{{< figure src="/clients/web/static/oauth2.png" alt="Example OAuth2 entry" >}}
+
+{{< hint >}}
+You can mark the ownCloud web client as `trusted` by clicking the respective checkbox so authorization after authentication gets omitted.
+{{< /hint >}}
 
 {{< hint >}}
 If you use OpenID Connect you instead need to add a new client for ownCloud Web to your identity provider.

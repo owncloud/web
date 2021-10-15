@@ -1,5 +1,9 @@
 <template>
-  <oc-recipient class="files-share-invite-recipient" :recipient="formattedRecipient">
+  <oc-recipient
+    :data-testid="`recipient-container-${formattedRecipient.name}`"
+    class="files-share-invite-recipient"
+    :recipient="formattedRecipient"
+  >
     <template #append>
       <oc-button
         class="files-share-invite-recipient-btn-remove"

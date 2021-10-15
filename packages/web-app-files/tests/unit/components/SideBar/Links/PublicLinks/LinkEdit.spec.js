@@ -51,43 +51,20 @@ const mountOptions = (data, store) => ({
 })
 
 describe('LinkEdit', () => {
+  beforeEach(() => {
+    jest.useFakeTimers('modern')
+    jest.setSystemTime(new Date(2020, 3, 1))
+  })
+
+  afterEach(() => {
+    jest.useRealTimers()
+  })
+
   describe('expiration date picker field', () => {
-    describe('required field label', () => {
-      it('should not have the required label if link expiration date is not enforced', () => {
-        const wrapper = getMountedWrapper()
-        const expirationDatePickerField = wrapper.find(selectors.linkExpireDatePicker)
-
-        expect(expirationDatePickerField.exists()).toBeTruthy()
-        expect(expirationDatePickerField).toMatchSnapshot()
-      })
-      it('should have the required label if link expiration date is enforced', () => {
-        const wrapper = getMountedWrapper(
-          createStore({ publicLinkCapabilities: getLinkCapabilities({ enforcedExpireDate: true }) })
-        )
-        const expirationDatePickerField = wrapper.find(selectors.linkExpireDatePicker)
-
-        expect(expirationDatePickerField.exists()).toBeTruthy()
-        expect(expirationDatePickerField).toMatchSnapshot()
-      })
-    })
+    describe('required field label', () => {})
     describe('when the link expiration date is enforced', () => {
-      const wrapper = getShallowMountedWrapper(
-        createStore({
-          publicLinkCapabilities: getLinkCapabilities({
-            enforcedExpireDate: true,
-            days: 2
-          })
-        })
-      )
-      const expirationDatePickerFieldElement = wrapper.find(selectors.linkExpireDatePicker)
-
       it('should have max-datetime attribute with tomorrow datetime value', () => {
-        expect(expirationDatePickerFieldElement.props().maxDatetime).toBe(
-          DateTime.now().plus({ days: 2 }).endOf('day').toISO()
-        )
-      })
-      it('should set expire date when input event is emitted', () => {
-        const wrapper = getMountedWrapper(
+        const wrapper = getShallowMountedWrapper(
           createStore({
             publicLinkCapabilities: getLinkCapabilities({
               enforcedExpireDate: true,
@@ -95,35 +72,42 @@ describe('LinkEdit', () => {
             })
           })
         )
-        const expectedExpireDate = DateTime.now().plus({ day: 1 }).toString()
         const expirationDatePickerFieldElement = wrapper.find(selectors.linkExpireDatePicker)
-        expirationDatePickerFieldElement.element.value = expectedExpireDate
-        expirationDatePickerFieldElement.trigger('input')
-        expect(wrapper.vm.expireDate.target.value).toBe(expectedExpireDate)
+        const expectedDate = new Date()
+        expectedDate.setDate(new Date().getDate() + 2)
+
+        expect(expirationDatePickerFieldElement.attributes()['max-date']).toEqual(
+          expectedDate.toString()
+        )
       })
     })
 
-    it('should have min-datetime attribute with the value one day ahead from provided day', () => {
+    it('should have min-datetime attribute with the value one day ahead from provided day', async () => {
       const wrapper = getShallowMountedWrapper()
-      const expirationDatePickerElement = wrapper.find(selectors.linkExpireDatePicker)
-      expect(expirationDatePickerElement.props().minDatetime).toBe(
-        DateTime.now().plus({ days: 1 }).endOf('day').toISO()
-      )
+      const expirationDatePickerElement = wrapper.find('#oc-files-file-link-expire-date')
+      const expectedDate = new Date()
+      expectedDate.setDate(new Date().getDate() + 1)
+      expect(expirationDatePickerElement.attributes()['min-date']).toEqual(expectedDate.toString())
     })
 
     it('should be pre populated if the public link has already an expiration date set', () => {
-      const expectedExpireDate = DateTime.now().plus({ days: 4 }).toString()
+      const expectedDate = new Date()
+      expectedDate.setDate(expectedDate.getDate() + 1)
+
       const wrapper = getShallowMountedWrapper(
         createStore({
           linkInEdit: {
-            expireDate: expectedExpireDate
+            id: 1,
+            expireDate: expectedDate.toString()
           },
           publicLinkCapabilities: getLinkCapabilities({ enabledExpireDate: true })
         })
       )
       const expirationDatePickerFieldElement = wrapper.find(selectors.linkExpireDatePicker)
 
-      expect(expirationDatePickerFieldElement.props().date).toBe(expectedExpireDate)
+      expect(expirationDatePickerFieldElement.attributes()['min-date']).toEqual(
+        expectedDate.toString()
+      )
     })
   })
 
@@ -142,23 +126,29 @@ describe('LinkEdit', () => {
     })
 
     it('should set expire date to empty string if clicked', async () => {
+      const expireDate = new Date()
+      expireDate.setDate(new Date().getDate() + 1)
+
       const wrapper = getMountedWrapper(
         createStore({
           linkInEdit: {
-            expireDate: DateTime.now().plus({ days: 1 }).toString()
+            expireDate
           }
         })
       )
       const expirationDateDeleteButtonElement = wrapper.find(selectors.linkExpireDateDeleteButton)
       await expirationDateDeleteButtonElement.trigger('click')
 
-      expect(wrapper.vm.expireDate).toBe('')
+      expect(wrapper.vm.expireDate).toEqual(null)
     })
 
     it('should not be present if expiration date is not enforced and the link in edit does not have an expiration date set', () => {
       const wrapper = getShallowMountedWrapper(
         createStore({
-          linkInEdit: { expireDate: null }
+          linkInEdit: { expireDate: null },
+          publicLinkCapabilities: getLinkCapabilities({
+            days: null
+          })
         })
       )
       const expirationDateDeleteButtonElement = wrapper.find(selectors.linkExpireDateDeleteButton)
@@ -351,13 +341,16 @@ describe('LinkEdit', () => {
     })
 
     it('should enable link save button if the expiration and password fields are valid', () => {
+      const expireDate = new Date()
+      expireDate.setDate(new Date().getDate() + 1)
+
       const wrapper = getMountedWrapper(
         createStore({
           linkInEdit: {
             id: 1224,
             name: 'Public Link',
             hasPassword: true,
-            expireDate: DateTime.now().plus({ day: 1 }).toString()
+            expireDate
           },
           publicLinkCapabilities: getLinkCapabilities({ enforcedExpireDate: true })
         }),
@@ -483,16 +476,17 @@ describe('LinkEdit', () => {
 
           describe('when the form is valid and has some changes', () => {
             const updateLinkSpy = jest.spyOn(mapActions, 'updateLink')
-            const wrapper = getMountedWrapper(
-              createStore({
-                linkInEdit: { id: 1224, name: 'Public Link', hasPassword: true },
-                publicLinkCapabilities: getLinkCapabilities({ enforcedExpireDate: true })
-              }),
-              {
-                saving: false
-              }
-            )
+
             it('should trigger "updateLink" method if clicked', async () => {
+              const wrapper = getMountedWrapper(
+                createStore({
+                  linkInEdit: { id: 1224, name: 'Public Link', hasPassword: true }
+                }),
+                {
+                  saving: false
+                }
+              )
+
               // make some changes in the form
               const nameInput = wrapper.find(selectors.linkNameInput)
               await nameInput.setValue('Link changed')
@@ -573,7 +567,10 @@ function getShallowMountedWrapper(store = createStore(), data = {}) {
       ...stubs,
       'oc-text-input': true,
       'oc-select': true,
-      'oc-datepicker': true
+      'oc-datepicker': true,
+      'role-item': true,
+      'oc-icon': true,
+      'oc-progress': true
     }
   })
   wrapper.vm.$refs.nameInput.focus = jest.fn()

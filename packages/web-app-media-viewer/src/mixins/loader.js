@@ -93,24 +93,6 @@ export default {
       return [url, combinedQuery].filter(Boolean).join('?')
     },
 
-    $_loader_headers() {
-      if (!this.$_loader_publicContext) {
-        return null
-      }
-
-      const headers = new Headers()
-      headers.append('X-Requested-With', 'XMLHttpRequest')
-
-      const password = this.publicLinkPassword
-      if (password) {
-        headers.append(
-          'Authorization',
-          'Basic ' + Buffer.from('public:' + password).toString('base64')
-        )
-      }
-      return headers
-    },
-
     $_loader_navigateToContextRoute(contextRouteName, filePath) {
       this.$router.push({
         name: contextRouteName,

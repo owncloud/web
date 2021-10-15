@@ -1,24 +1,23 @@
 import { mount, shallowMount, createLocalVue } from '@vue/test-utils'
 import FileUpload from '../../../../../src/components/AppBar/Upload/FileUpload.vue'
 import DesignSystem from 'owncloud-design-system'
-import stubs from '../../../../../../../tests/unit/stubs'
-
-const localVue = createLocalVue()
-localVue.use(DesignSystem)
 
 const Translate = jest.fn()
 
-describe('File Upload Component', () => {
-  const mountOptions = {
+function getOptions() {
+  const localVue = createLocalVue()
+  localVue.use(DesignSystem)
+  return {
     propsData: {
       path: ''
     },
     localVue,
     directives: { Translate }
   }
-
+}
+describe('File Upload Component', () => {
   it('should render component', () => {
-    const wrapper = mount(FileUpload, mountOptions)
+    const wrapper = mount(FileUpload, getOptions())
 
     expect(wrapper.exists()).toBeTruthy()
   })
@@ -26,9 +25,9 @@ describe('File Upload Component', () => {
   describe('when upload file button is clicked', () => {
     it('should call "triggerUpload"', async () => {
       const wrapper = mount(FileUpload, {
-        ...mountOptions,
+        ...getOptions(),
         stubs: {
-          ...stubs,
+          'oc-icon': true,
           'oc-button': false
         }
       })
@@ -49,7 +48,13 @@ describe('File Upload Component', () => {
       const event = new Event('change')
 
       it('should call "$_ocUpload_addFileToQue"', async () => {
-        const wrapper = shallowMount(FileUpload, mountOptions)
+        const wrapper = shallowMount(FileUpload, {
+          ...getOptions(),
+          stubs: {
+            'oc-button': true,
+            'oc-icon': true
+          }
+        })
         wrapper.vm.$_ocUpload_addFileToQue = jest.fn()
         await wrapper.vm.$forceUpdate()
 

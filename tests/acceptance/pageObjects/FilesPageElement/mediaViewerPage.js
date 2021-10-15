@@ -70,28 +70,23 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     nextButton: {
-      selector: `//span[contains(@class, "media-viewer-controls-next")]`,
+      selector: `//button[contains(@class, "media-viewer-controls-next")]`,
       locateStrategy: 'xpath'
     },
     previousButton: {
-      selector: `//span[contains(@class, "media-viewer-controls-previous")]`,
+      selector: `//button[contains(@class, "media-viewer-controls-previous")]`,
       locateStrategy: 'xpath'
     },
     downLoadButton: {
-      selector: `//span[contains(@class, "media-viewer-controls-download")]`,
+      selector: `//button[contains(@class, "media-viewer-controls-download")]`,
       locateStrategy: 'xpath'
     },
     closeButton: {
-      selector: `//span[contains(@class, "media-viewer-controls-close")]`,
-      locateStrategy: 'xpath'
-    },
-    fileName: {
-      selector:
-        '//span[contains(@class, "file-row-name")]//span[.="%s"]/following-sibling::span[.="%s"]',
+      selector: `//button[contains(@class, "media-viewer-controls-close")]`,
       locateStrategy: 'xpath'
     },
     mediaImage: {
-      selector: '//div[contains(@class, "media-viewer-file-name") and contains(text(),"%s")]',
+      selector: '//p[contains(@class, "media-viewer-file-name") and contains(text(),"%s")]',
       locateStrategy: 'xpath'
     }
   }

@@ -10,7 +10,10 @@ Summary
 
 * Bugfix - Clean router path handling: [#5894](https://github.com/owncloud/web/pull/5894)
 * Bugfix - Unnecessary redirects on personal page: [#5893](https://github.com/owncloud/web/pull/5893)
+* Enhancement - Accessible, themeable media viewer: [#5900](https://github.com/owncloud/web/pull/5900)
+* Enhancement - Datepicker in Dropdown: [#5806](https://github.com/owncloud/web/pull/5806)
 * Enhancement - Sorting out dependencies: [#5898](https://github.com/owncloud/web/pull/5898)
+* Enhancement - Update ODS to v11.0.0: [#5806](https://github.com/owncloud/web/pull/5806)
 
 Details
 -------
@@ -36,11 +39,40 @@ Details
    https://github.com/owncloud/web/issues/5875
    https://github.com/owncloud/web/pull/5893
 
+* Enhancement - Accessible, themeable media viewer: [#5900](https://github.com/owncloud/web/pull/5900)
+
+   We have updated the media viewer app to respect theme colors and fulfill accessibility
+   requirements (e.g. keyboard navigation, semantic HTML, font size).
+
+   https://github.com/owncloud/web/pull/5900
+
+* Enhancement - Datepicker in Dropdown: [#5806](https://github.com/owncloud/web/pull/5806)
+
+   We have moved the datepicker for share expiration in the right sidebar into a dropdown to align
+   it with the other elements when creating/editing shares.
+
+   https://github.com/owncloud/web/pull/5806
+
 * Enhancement - Sorting out dependencies: [#5898](https://github.com/owncloud/web/pull/5898)
 
    We have cleaned and simplified the dependency structure in our apps.
 
    https://github.com/owncloud/web/pull/5898
+
+* Enhancement - Update ODS to v11.0.0: [#5806](https://github.com/owncloud/web/pull/5806)
+
+   We updated the ownCloud Design System to version 11.0.0. Please refer to the full changelog in
+   the ODS release (linked) for more details. Summary:
+
+   - Bugfix - Prevent hover style on footer of OcTableFiles:
+   https://github.com/owncloud/owncloud-design-system/pull/1667 - Change - Replace
+   vue-datetime with v-calendar in our datepicker component:
+   https://github.com/owncloud/owncloud-design-system/pull/1661 - Enhancement - Allow
+   hover option in OcTableFiles:
+   https://github.com/owncloud/owncloud-design-system/pull/1632
+
+   https://github.com/owncloud/web/pull/5806
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v11.0.0
 
 Changelog for ownCloud Web [4.3.0] (2021-10-07)
 =======================================
