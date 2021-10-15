@@ -174,7 +174,10 @@ export function buildSharedResource(share, incomingShares = false, allowSharePer
     id: share.id,
     fileId: share.item_source,
     type: share.item_type,
-    mimeType: share.state === 0? share.mimetype: ''
+    mimeType: share.state === 0 ? share.mimetype : '',
+    isFolder,
+    sdate: share.stime * 1000,
+    indicators: []
   }
 
   if (incomingShares) {
