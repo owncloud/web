@@ -1,0 +1,9 @@
+Bugfix: Fix duplicated event subscriptions
+
+In some cases it happened that subscriptions to certain topics happened multiple times.
+This is problematic in cases where it should happen only once, for example loading a resource which can result in multiple requests and a overlapping state.
+
+This is fixes by introducing the option to unsubscribe a event individually by a given token or for all on a given topic.
+
+https://github.com/owncloud/web/pull/5910
+https://github.com/owncloud/web/issues/5875
