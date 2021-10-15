@@ -1,5 +1,4 @@
 const httpHelper = require('./httpHelper')
-const { normalize } = require('./path')
 const codify = require('../helpers/codify')
 const assert = require('assert')
 const { client } = require('nightwatch-api')
@@ -320,20 +319,24 @@ module.exports = {
      *  eg: if "simple-folder/subfolder" has been shared, the share details is shown
      *  as path: "/subfolder"
      */
-    if (client.globals.ocis) {
-      const splitted = filename.split('/')
-      filename = splitted[splitted.length - 1]
-    }
+    const splitted = filename.split('/')
+    filename = splitted[splitted.length - 1]
     const allShares = await this.getAllSharesSharedWithUser(user)
     const elementsToDecline = allShares.filter((element) => {
+      const splitPath = element.path.split('/')
+      const resourceAtEndOfPath = splitPath[splitPath.length - 1]
       return (
         element.state === this.SHARE_STATE.pending &&
-        normalize(element.path) === filename &&
+        resourceAtEndOfPath === filename &&
         element.uid_owner === sharer
       )
     })
+    let errorString = ''
     if (elementsToDecline.length < 1) {
-      throw new Error('Could not find the share to be declined')
+      for (const element of allShares) {
+        errorString = errorString + ' ' + element.path
+      }
+      throw new Error('Could not find the share to be declined' + errorString)
     }
     /**
      * TODO: loop only run once because the return
@@ -369,21 +372,27 @@ module.exports = {
      * only the resource in the path and not the containing folder
      *  eg: if "simple-folder/subfolder" has been shared, the share details is shown
      *  as path: "/subfolder"
+     *
+     * We always check just for the last part of the path.
      */
-    if (client.globals.ocis) {
-      const splitted = filename.split('/')
-      filename = splitted[splitted.length - 1]
-    }
+    const splitted = filename.split('/')
+    filename = splitted[splitted.length - 1]
     const allShares = await this.getAllSharesSharedWithUser(user)
     const elementsToAccept = allShares.filter((element) => {
+      const splitPath = element.path.split('/')
+      const resourceAtEndOfPath = splitPath[splitPath.length - 1]
       return (
         element.state === this.SHARE_STATE.pending &&
-        element.path.slice(1) === filename &&
+        resourceAtEndOfPath === filename &&
         element.uid_owner === sharer
       )
     })
+    let errorString = ''
     if (elementsToAccept.length < 1) {
-      throw new Error('Could not find the share to be accepted')
+      for (const element of allShares) {
+        errorString = errorString + ' ' + element.path
+      }
+      throw new Error('Could not find the share to be accepted:' + errorString)
     }
     /**
      * TODO: loop only run once because the return
