@@ -1,4 +1,4 @@
-import { EventBus } from '../../../src/event/bus'
+import { EventBus } from '../../../src/event'
 
 describe('EventBus', () => {
   it('can handle load', () => {
@@ -6,7 +6,7 @@ describe('EventBus', () => {
     let val
 
     for (let i = 0; i < 1000; i++) {
-      bus.subscribe(`evt.${i}`, (v) => (val = v))
+      bus.subscribe(`evt.${i}`, v => (val = v))
     }
 
     for (let i = 0; i < 1000; i++) {
@@ -27,30 +27,31 @@ describe('EventBus', () => {
   it('calls multiple subscriptions for the same topic', () => {
     const bus = new EventBus()
     const fn = jest.fn()
+    const topic = 'evt.1'
 
-    bus.subscribe('evt.1', fn)
-    bus.subscribe('evt.1', fn)
-    bus.publish('evt.1')
+    bus.subscribe(topic, fn)
+    bus.subscribe(topic, fn)
+    bus.publish(topic)
 
     expect(fn).toHaveBeenCalledTimes(2)
   })
 
-  it('can unsubscribe', () => {
+  it('can unsubscribe a subscriber from a topic', () => {
     const bus = new EventBus()
     const fn = jest.fn()
+    const topic = 'evt.1'
 
-    const evt1Token = bus.subscribe('evt.1', fn)
-    bus.subscribe('evt.1', fn)
+    const evt1Token = bus.subscribe(topic, fn)
 
-    bus.publish('evt.1')
+    bus.publish(topic)
+    expect(fn).toHaveBeenCalledTimes(1)
+
+    bus.unsubscribe(topic, '')
+    bus.publish(topic)
     expect(fn).toHaveBeenCalledTimes(2)
 
-    bus.unsubscribe('evt.1', evt1Token)
-    bus.publish('evt.1')
-    expect(fn).toHaveBeenCalledTimes(3)
-
-    bus.unsubscribe('evt.1')
-    bus.publish('evt.1')
-    expect(fn).toHaveBeenCalledTimes(3)
+    bus.unsubscribe(topic, evt1Token)
+    bus.publish(topic)
+    expect(fn).toHaveBeenCalledTimes(2)
   })
 })
