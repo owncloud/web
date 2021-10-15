@@ -6,7 +6,8 @@
       appearance="raw"
       justify-content="left"
       gap-size="xsmall"
-    >test</oc-button>
+      ><oc-icon name="more_vert"></oc-icon></oc-button
+    >
     <oc-drop
       ref="rolesDrop"
       data-testid="files-recipient-roles-drop"
@@ -14,11 +15,11 @@
       mode="click"
       close-on-click
     >
-    <template #special>
-        <oc-list class="files-recipient-role-drop-list" :aria-label="rolesListAriaLabel">
-          <li v-for="(option,i) in options" :key="i">
-            <oc-button appearance="raw" @click="option.method()">
-              <oc-icon :name="options.icon" />
+      <template #special>
+        <oc-list class="show-collaborators-edit-options oc-p-xs" :aria-label="rolesListAriaLabel">
+          <li v-for="(option, i) in options" :key="i" class="oc-p-s">
+            <oc-button class="edit-option" appearance="raw" @click="option.method()">
+              <oc-icon :name="option.icon" />
               {{ option.title }}
             </oc-button>
           </li>
@@ -39,20 +40,19 @@ import { DateTime } from 'luxon'
 export default {
   name: 'ShowCollaboratorEditOptions',
   mixins: [Mixins, CollaboratorsMixins],
-  props: {
-  },
+  props: {},
   data: function () {
     return {
       options: [
         {
           title: 'Expiration Date',
-          icon: 'edit'
+          icon: 'text-calendar'
         },
         {
           title: 'Remove',
-          icon: 'edit',
+          icon: 'delete',
           method: this.test
-        } 
+        }
       ]
     }
   },
@@ -63,7 +63,7 @@ export default {
   },
   methods: {
     test() {
-      alert("hi");
+      alert('hi')
     }
   }
 }
@@ -73,5 +73,8 @@ export default {
 .oc-drop {
   background-color: var(--oc-color-swatch-inverse-default);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+.show-collaborators-edit-options .edit-option:hover {
+  color: black !important;
 }
 </style>
