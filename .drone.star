@@ -24,7 +24,7 @@ config = {
         "webUI": {
             "type": FULL,
             "servers": [
-                "",
+                "daily-master-qa",
                 "latest",
             ],
             "suites": {
@@ -148,7 +148,7 @@ config = {
         "webUINotification": {
             "type": NOTIFICATIONS,
             "servers": [
-                "",
+                "daily-master-qa",
                 "latest",
             ],
             "suites": {
@@ -171,7 +171,7 @@ config = {
         "webUIFederation": {
             "type": FEDERATED,
             "servers": [
-                "",
+                "daily-master-qa",
                 "latest",
             ],
             "suites": {
@@ -189,7 +189,7 @@ config = {
         "webUI-XGA-Notifications": {
             "type": NOTIFICATIONS,
             "servers": [
-                "",
+                "daily-master-qa",
                 "latest",
             ],
             "suites": {
@@ -209,7 +209,7 @@ config = {
         "webUI-XGA": {
             "type": FULL,
             "servers": [
-                "",
+                "daily-master-qa",
                 "latest",
             ],
             "suites": {
@@ -292,7 +292,7 @@ config = {
         "webUI-Notifications-iPhone": {
             "type": NOTIFICATIONS,
             "servers": [
-                "",
+                "daily-master-qa",
                 "latest",
             ],
             "suites": {
@@ -312,7 +312,7 @@ config = {
         "webUI-iPhone": {
             "type": FULL,
             "servers": [
-                "",
+                "daily-master-qa",
                 "latest",
             ],
             "suites": {
@@ -500,7 +500,7 @@ config = {
         "webUI-notifications-oc10-integration": {
             "type": NOTIFICATIONS,
             "servers": [
-                "",
+                "daily-master-qa",
                 "latest",
             ],
             "suites": {
@@ -523,7 +523,7 @@ config = {
         "webUI-oc10-integration": {
             "type": FULL,
             "servers": [
-                "",
+                "daily-master-qa",
                 "latest",
             ],
             "suites": {
@@ -1112,7 +1112,7 @@ def acceptance(ctx):
         "logLevel": "2",
         "notificationsAppNeeded": False,
         "federatedServerNeeded": False,
-        "federatedServerVersion": "",
+        "federatedServerVersion": "daily-master-qa",
         "runningOnOCIS": False,
         "screenShots": False,
         "visualTesting": False,
