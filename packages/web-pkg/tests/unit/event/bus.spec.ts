@@ -6,7 +6,7 @@ describe('EventBus', () => {
     let val
 
     for (let i = 0; i < 1000; i++) {
-      bus.subscribe(`evt.${i}`, v => (val = v))
+      bus.subscribe(`evt.${i}`, (v) => (val = v))
     }
 
     for (let i = 0; i < 1000; i++) {

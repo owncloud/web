@@ -22,7 +22,7 @@ export class EventBus {
   public publish(topic: string, data?: unknown): void {
     const subscriptions = this.topics.get(topic) || []
 
-    subscriptions.forEach(subscription => subscription.callback(data))
+    subscriptions.forEach((subscription) => subscription.callback(data))
   }
 
   public unsubscribe(topic: string, token: string): void {
@@ -32,7 +32,7 @@ export class EventBus {
 
     this.topics.set(
       topic,
-      this.topics.get(topic).filter(subscription => subscription.token !== token)
+      this.topics.get(topic).filter((subscription) => subscription.token !== token)
     )
   }
 }

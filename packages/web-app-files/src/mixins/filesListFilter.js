@@ -1,4 +1,3 @@
-import { bus } from 'web-pkg/src/instance'
 import { Registry } from '../services'
 import { mapMutations, mapGetters } from 'vuex'
 
