@@ -23,12 +23,11 @@ export class SharedWithMePage {
       name: name
     })
 
-    const statusResource = await page.textContent(
-      `//*[@data-test-resource-name="${name}"]/ancestor::tr//span[contains(@class, "file-row-share-status-text")]`
-    )
+    const acceptButton = `//*[@data-test-resource-name="${name}"]/ancestor::tr//button[contains(@class, "file-row-share-status-accept")]`
+    const acceptButtonExists = await page.$(acceptButton)
 
-    if (!objectExists && statusResource !== 'Accepted') {
-      await page.click(`//*[@data-test-resource-name="${name}"]/ancestor::tr//button[1]`)
+    if (objectExists && acceptButtonExists) {
+      await page.click(acceptButton)
     }
     await page.goto(startUrl)
   }
