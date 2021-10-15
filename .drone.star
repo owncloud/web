@@ -1044,7 +1044,7 @@ def unitTests(ctx):
                          "git checkout $DRONE_COMMIT",
                      ],
                  }] +
-                 calculateTestsToRunBasedOnFilesChanged(ctx) +
+                 skipIfUnchanged(ctx, "unit-tests") +
                  restoreBuildArtifactCache(ctx, ".yarn", ".yarn") +
                  installYarn() +
                  restoreBuildArtifactCache(ctx, "web-dist", "dist") +
@@ -1053,14 +1053,14 @@ def unitTests(ctx):
                          "name": "unit-tests",
                          "image": OC_CI_NODEJS,
                          "commands": [
-                             "if test -f runTestsForDocsChangeOnly; then echo 'skipping unit-tests'; else yarn test:unit; fi",
+                             "yarn test:unit",
                          ],
                      },
                      {
                          "name": "integration-tests",
                          "image": OC_CI_NODEJS,
                          "commands": [
-                             "if test -f runTestsForDocsChangeOnly; then echo 'skipping integration-tests'; else yarn test:integration; fi",
+                             "yarn test:integration",
                          ],
                      },
                      {
@@ -1171,8 +1171,8 @@ def acceptance(ctx):
 
                         steps = []
 
-                        if (params["earlyFail"]):
-                            steps += calculateTestsToRunBasedOnFilesChanged(ctx)
+                        # TODO: don't start services if we skip it -> maybe we need to convert them to steps
+                        steps += skipIfUnchanged(ctx, "acceptance-tests")
 
                         steps += restoreBuildArtifactCache(ctx, ".yarn", ".yarn")
                         steps += installYarn()
@@ -1551,7 +1551,7 @@ def installCore(version, db):
             "db_password": password,
         }})
         stepDefinition.update({"commands": [
-            "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping installCore'; else bash /usr/sbin/plugin.sh; fi",
+            "bash /usr/sbin/plugin.sh",
         ]})
 
     return [stepDefinition]
@@ -1595,7 +1595,7 @@ def installFederatedServer(version, db, dbSuffix = "-federated"):
             "db_password": password,
         }})
         stepDefinition.update({"commands": [
-            "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping installFederatedServer'; else bash /usr/sbin/plugin.sh; fi",
+            "bash /usr/sbin/plugin.sh",
         ]})
 
     return [stepDefinition]
@@ -1605,7 +1605,7 @@ def installYarn():
         "name": "yarn-install",
         "image": OC_CI_NODEJS,
         "commands": [
-            "if test -f runTestsForDocsChangeOnly; then echo 'skipping installYarn'; else yarn install --immutable; fi",
+            "yarn install --immutable",
         ],
     }]
 
@@ -1636,7 +1636,7 @@ def setupIntegrationWebApp():
         "name": "setup-web-integration-app",
         "image": OC_CI_PHP,
         "commands": [
-            "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping setupIntegrationWebApp'; else bash -x tests/drone/setup-integration-web-app.sh {} {}; fi".format(dir["server"], dir["web"]),
+            "bash -x tests/drone/setup-integration-web-app.sh {} {}".format(dir["server"], dir["web"]),
         ],
         "volumes": [{
             "name": "configs",
@@ -1805,7 +1805,7 @@ def getSkeletonFiles():
         "name": "setup-skeleton-files",
         "image": OC_CI_PHP,
         "commands": [
-            "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping getSkeletonFiles'; else git clone https://github.com/owncloud/testing.git /srv/app/testing; fi",
+            "git clone https://github.com/owncloud/testing.git /srv/app/testing",
         ],
         "volumes": [{
             "name": "gopath",
@@ -1839,7 +1839,7 @@ def setUpOauth2(forIntegrationApp):
         "name": "setup-oauth2",
         "image": OC_CI_PHP,
         "commands": [
-            "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping setup-oauth2'; else bash -x tests/drone/setup-oauth2.sh {} {}; fi".format(dir["server"], oidcURL),
+            "bash -x tests/drone/setup-oauth2.sh {} {}".format(dir["server"], oidcURL),
         ],
     }]
 
@@ -1848,7 +1848,7 @@ def setupGraphapiOIdC():
         "name": "setup-graphapi",
         "image": OC_CI_PHP,
         "commands": [
-            "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping setupGraphapiOIdC'; else bash -x tests/drone/setup-graph-api-oidc.sh {}; fi".format(dir["server"]),
+            "bash -x tests/drone/setup-graph-api-oidc.sh {}".format(dir["server"]),
         ],
     }]
 
@@ -2033,7 +2033,7 @@ def setupNotificationsAppForServer():
         "name": "install-notifications-app-on-server",
         "image": OC_CI_PHP,
         "commands": [
-            "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping setupNotificationsApp'; else bash -x tests/drone/setup-notifications-app.sh {}; fi".format(dir["server"]),
+            "bash -x tests/drone/setup-notifications-app.sh {}".format(dir["server"]),
         ],
     }]
 
@@ -2042,7 +2042,7 @@ def setupServerAndAppsForIntegrationApp(logLevel):
         "name": "setup-server-%s" % config["app"],
         "image": OC_CI_PHP,
         "commands": [
-            "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping server-setup'; else bash -x tests/drone/setup-server-and-app.sh %s %s %s; fi" % (dir["server"], logLevel, "builtInWeb"),
+            "bash -x tests/drone/setup-server-and-app.sh %s %s %s" % (dir["server"], logLevel, "builtInWeb"),
         ],
     }]
 
@@ -2051,7 +2051,7 @@ def setupServerAndApp(logLevel):
         "name": "setup-server-%s" % config["app"],
         "image": OC_CI_PHP,
         "commands": [
-            "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping server-setup'; else bash -x tests/drone/setup-server-and-app.sh %s %s; fi" % (dir["server"], logLevel),
+            "bash -x tests/drone/setup-server-and-app.sh %s %s" % (dir["server"], logLevel),
         ],
     }]
 
@@ -2060,7 +2060,7 @@ def setupFedServerAndApp(logLevel):
         "name": "setup-fed-server-%s" % config["app"],
         "image": OC_CI_PHP,
         "commands": [
-            "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping server-setup'; else bash -x tests/drone/setup-fed-server-and-app.sh {} {}; fi".format(dir["federated"], logLevel),
+            "bash -x tests/drone/setup-fed-server-and-app.sh {} {}".format(dir["federated"], logLevel),
         ],
     }]
 
@@ -2069,7 +2069,7 @@ def fixPermissions():
         "name": "fix-permissions",
         "image": OC_CI_PHP,
         "commands": [
-            "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping fixPermissions'; else cd %s && chown www-data * -R; fi" % dir["server"],
+            "cd %s && chown www-data * -R" % dir["server"],
         ],
     }]
 
@@ -2078,7 +2078,7 @@ def fixPermissionsFederated():
         "name": "fix-permissions-federated",
         "image": OC_CI_PHP,
         "commands": [
-            "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping fixPermissions'; else cd %s && chown www-data * -R; fi" % dir["federated"],
+            "cd %s && chown www-data * -R" % dir["federated"],
         ],
     }]
 
@@ -2111,7 +2111,7 @@ def copyFilesForUpload():
             "path": "/filesForUpload",
         }],
         "commands": [
-            "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping copyFilesForUpload'; else bash -x tests/drone/copy-files-for-upload.sh {}; fi".format(dir["web"]),
+            "bash -x tests/drone/copy-files-for-upload.sh {}".format(dir["web"]),
         ],
     }]
 
@@ -2156,7 +2156,7 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
         "image": OC_CI_NODEJS,
         "environment": environment,
         "commands": [
-            "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping webui-acceptance-tests'; else cd %s && ./tests/acceptance/run.sh; fi" % dir["web"],
+            "cd %s && ./tests/acceptance/run.sh" % dir["web"],
         ],
         "volumes": [{
             "name": "gopath",
@@ -2258,7 +2258,7 @@ def listRemoteCache():
             },
         },
         "commands": [
-            "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping list-ocis-bin-cache'; else mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY && mc find s3/owncloud/web/ocis-build; fi",
+            "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY && mc find s3/owncloud/web/ocis-build",
         ],
     }]
 
@@ -2648,22 +2648,44 @@ def getPipelineNames(pipelines = []):
         names.append(pipeline["name"])
     return names
 
-def calculateTestsToRunBasedOnFilesChanged(ctx):
-    return [
-        {
-            "name": "calculate-diff",
-            "image": OC_CI_NODEJS,
-            "commands": [
-                "bash -x tests/drone/getFilesChanged.sh",
-                "ls -la",
+def skipIfUnchanged(ctx, type):
+    skip_step = {
+        "name": "skip-if-unchanged",
+        "image": "owncloudci/drone-skip-pipeline",
+        "when": {
+            "event": [
+                "pull_request",
             ],
-            "when": {
-                "event": [
-                    "pull_request",
-                ],
-            },
         },
-    ]
+    }
+
+    if type == "acceptance-tests":
+        skip_step["settings"] = {
+            "ALLOW_SKIP_CHANGED": [
+                "^docs/.*",
+                "^changelog/.*",
+                "^packages/.*/tests/.*",
+                ".drone.star",
+                "tests/drone/getFilesChanged.sh",
+            ],
+        }
+        return [skip_step]
+
+    if type == "unit-tests":
+        skip_step["settings"] = {
+            "ALLOW_SKIP_CHANGED": [
+                "^docs/.*",
+                "^changelog/.*",
+                ".drone.star",
+                "tests/drone/getFilesChanged.sh",
+            ],
+            #"DISALLOW_SKIP_CHANGED": [
+            #    "^packages/.*/tests/.*",
+            #],
+        }
+        return [skip_step]
+
+    return []
 
 def genericCache(name, action, mounts, cache_key):
     rebuild = "false"
