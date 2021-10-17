@@ -15,8 +15,8 @@ For getting in touch with the developers, join our public [RocketChat][rocketcha
 * __SECURITY__: Report any potential security bug to us via [our HackerOne page](https://hackerone.com/owncloud) or security@owncloud.com following our [security policy](https://owncloud.org/security/) instead of filing an issue in our bug tracker
 * This repository ([web](https://github.com/owncloud/web/issues)) is *only* for issues within the Web code.
 * The issues in other components should be reported in their respective repositories: 
-  - [ownCloud X Server](https://github.com/owncloud/core/issues)
-  - [Infinite Scale server](https://github.com/owncloud/ocis/issues)
+  - [ownCloud Core](https://github.com/owncloud/core/issues)
+  - [ownCloud Infinite Scale](https://github.com/owncloud/ocis/issues)
   - [Android client](https://github.com/owncloud/android/issues)
   - [iOS client](https://github.com/owncloud/ios-app)
   - [Desktop client](https://github.com/owncloud/client/issues)
