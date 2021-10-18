@@ -13,10 +13,9 @@ We will carefully discuss if your change can or has to be backported to stable b
 
 Please set the following labels:
 
-- Set label "3 - To review" for review or "2 - Development" in case the PR still has open tasks
-- Set label "backport-request" if backport is needed
+- Set label "Status:Needs-Review" for review or "Status:In-Progress" in case the PR still has open tasks
+- Set label "Category:*" where it fits best
 - Assignment: assign to self
-- Milestone: set the same as the ticket this PR fixes, or "development" by default
 - Reviewers: pick at least one
 -->
 
