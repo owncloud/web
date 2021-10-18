@@ -98,7 +98,7 @@ function createStore(state, filename, fileId, extension, type, mimeType, availab
       External: {
         namespaced: true,
         getters: {
-          getMimeTypes: () => {
+          mimeTypes: () => {
             return availableMimeTypes
           }
         }

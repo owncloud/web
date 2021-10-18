@@ -37,15 +37,30 @@ export const bootstrap = async (configurationPath: string): Promise<void> => {
 }
 
 export const renderSuccess = (): void => {
-  new Vue({
+  const applications = Array.from(applicationStore.values())
+  const instance = new Vue({
     el: '#owncloud',
     store,
     router,
-    render: (h) => h(pages.success),
-    mounted() {
-      Array.from(applicationStore.values()).forEach((application) => application.mounted(this))
-    }
+    render: (h) => h(pages.success)
   })
+
+  instance.$once('mounted', () => {
+    applications.forEach((application) => application.mounted(instance))
+  })
+
+  store.watch(
+    (state, getters) => getters.isUserReady,
+    (newValue, oldValue) => {
+      if (!newValue || newValue === oldValue) {
+        return
+      }
+      applications.forEach((application) => application.userReady(instance))
+    },
+    {
+      immediate: true
+    }
+  )
 }
 
 export const renderFailure = async (err: Error): Promise<void> => {

@@ -48,6 +48,7 @@ export default {
   }),
   computed: {
     ...mapGetters(['getToken', 'capabilities', 'configuration']),
+    ...mapGetters('Files', ['publicLinkPassword']),
 
     pageTitle() {
       const translated = this.$gettext('"%{appName}" app page')
@@ -70,35 +71,20 @@ export default {
   },
   async created() {
     this.loading = true
-
-    // TODO: Enable externalApp usage on public routes below
-    // initialize headers()
-
-    // if (this.isPublicRoute) {
-    //   // send auth header here if public route
-    //   // if password exists send it via basicauth public:password
-
-    //   // headers.append('public-token', 'uUCPJghnVUspjxe')
-    //   // const password = this.publicLinkPassword
-
-    //   // if (password) {
-    //   //  headers.append( Authorization: 'Basic ' + Buffer.from('public:' + password).toString('base64') }
-    //   // }
-    // } else {
-    //   - check for token
-    //   - abort if falsy
-    //   - build headers as below
-    // }
-
-    if (!this.getToken) {
-      this.loading = false
-      this.loadingError = true
-      return
+    const publicLinkPassword = this.publicLinkPassword
+    const { 'public-token': publicToken } = this.$route.query
+    const token = this.getToken
+    const headers = {
+      'X-Requested-With': 'XMLHttpRequest',
+      ...(publicToken && { 'public-token': publicToken }),
+      ...(publicLinkPassword && {
+        Authorization:
+          'Basic ' + Buffer.from(['public', publicLinkPassword].join(':')).toString('base64')
+      }),
+      ...(token && {
+        Authorization: 'Bearer ' + token
+      })
     }
-
-    const headers = new Headers()
-    headers.append('Authorization', 'Bearer ' + this.getToken)
-    headers.append('X-Requested-With', 'XMLHttpRequest')
 
     const configUrl = this.configuration.server
     const appOpenUrl = this.capabilities.files.app_providers[0].open_url.replace('/app', 'app')
