@@ -105,7 +105,7 @@
         </div>
       </template>
     </oc-drop>
-    <template v-if="expirationSupported">
+    <template v-if="expirationSupported && expirationDateInput">
       <oc-datepicker
         v-model="enteredExpirationDate"
         :min-date="minExpirationDate"
@@ -174,6 +174,11 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    expirationDateInput: {
+      type: Boolean,
+      required: false,
+      default: true
     },
     existingRole: {
       type: Object,

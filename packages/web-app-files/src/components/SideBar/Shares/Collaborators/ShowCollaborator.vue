@@ -39,7 +39,7 @@
             :aria-labelledby="`collaborator-list-label-${shareId}`"
           >
             <li>{{ shareTypeText }}</li>
-            <li v-if="expirationDate">{{ expirationText }} {{ expirationDate }}</li>
+            <li v-if="expirationDateLocale">{{ expirationText }} {{ expirationDateLocale }}</li>
             <li v-if="$_reshareInformation" class="oc-py-rm">
               <oc-drop
                 ref="menu"
@@ -92,13 +92,15 @@
         </div>
       </oc-td>
       <oc-td width="shrink" align-v="top" class="oc-py-rm oc-pr-s">
-        <div class="uk-flex uk-flex-nowrap uk-flex-middle">
-          <!-- im here -->
+        <div class="uk-flex uk-flex-nowrap uk-flex-middle" v-if="!isOwner">
           <collaborators-edit-options
             :minimal="true"
-            existing-collaborator-type="user"
+            :existing-role="originalRole"
+            :expiration-date-input="false"
+            :expiration-date="collaborator.expires ? collaborator.expires : null"
+            :existing-collaborator-type="collaboratorType"
             class="oc-mb"
-            @optionChange="collaboratorOptionChanged"
+            @optionChange="collaboratorDropdownChange"
           />
           <show-collaborator-edit-options @removeShare="removeShare" />
         </div>
@@ -108,13 +110,14 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { shareTypes } from '../../../../helpers/shareTypes'
 import { basename } from 'path'
 import CollaboratorsMixins from '../../../../mixins/collaborators'
 import Mixins from '../../../../mixins'
 import { DateTime } from 'luxon'
 import CollaboratorsEditOptions from './CollaboratorsEditOptions.vue'
+import { roleToBitmask, bitmaskToRole } from '../../../../helpers/collaborators'
 
 import ShowCollaboratorEditOptions from './ShowCollaboratorEditOptions.vue'
 
@@ -147,7 +150,8 @@ export default {
   // TODO: Get Current expirationDate to edit collaborator
   // 
   computed: {
-    ...mapGetters(['user']),
+    ...mapGetters('Files', ['highlightedFile']),
+    ...mapGetters(['user', 'isOcis']),
 
     shareTypeText() {
       switch (this.shareType) {
@@ -177,12 +181,29 @@ export default {
       return `${displayName} (${additionalInfo})`
     },
 
+    collaboratorType() {
+      const collaboratorShareType = this.collaborator.shareType
+
+      if (
+        collaboratorShareType === shareTypes.user ||
+        collaboratorShareType === shareTypes.guest ||
+        collaboratorShareType === shareTypes.remote
+      ) {
+        return 'user'
+      }
+
+      if (collaboratorShareType === shareTypes.group) {
+        return 'group'
+      }
+
+      return null
+    },
+
     shareTypes() {
       return shareTypes
     },
 
     shareId() {
-      console.log(this.collaborator)
       return this.collaborator.id
     },
 
@@ -275,6 +296,10 @@ export default {
       }
     },
 
+    isOwner() {
+      return this.collaborator.role.name == 'owner'
+    },
+
     isUser() {
       return this.collaborator.shareType === this.shareTypes.user
     },
@@ -295,7 +320,7 @@ export default {
       return this.$gettext('Expires')
     },
 
-    expirationDate() {
+    expirationDateLocale() {
       return DateTime.fromJSDate(this.collaborator.expires)
         .endOf('day')
         .setLocale(this.$language.current)
@@ -337,15 +362,34 @@ export default {
         default:
           return 'key'
       }
-    }
-  },
-  mounted() {
-    console.log(this.collaborator.expires)
+    },
   },
   methods: {
+    ...mapActions('Files', ['changeShare']),
+
     removeShare() {
       this.removalInProgress = true
       this.$emit('onDelete', this.collaborator)
+    },
+
+    collaboratorDropdownChange({ role, permissions, expirationDate }) {
+      this.collaboratorOptionChanged({ role, permissions, expirationDate })
+      this.saveCollaboratorChanges({ role, permissions, expirationDate })
+    },
+
+    saveCollaboratorChanges({ role, permissions, expirationDate }) {
+      const bitmask = roleToBitmask(role, permissions)
+      this.changeShare({
+        client: this.$client,
+        share: this.collaborator,
+        // Map bitmask to role to get the correct role in case the advanced role was mapped to existing role
+        role: bitmaskToRole(bitmask, this.highlightedFile.type === 'folder', !this.isOcis),
+        permissions: bitmask,
+        expirationDate: this.expirationDate || ''
+      })
+        .catch((errors) => {
+          this.errors = errors
+        })
     }
   }
 }

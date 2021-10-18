@@ -173,13 +173,7 @@ export default {
     },
 
     originalExpirationDate() {
-      const expirationDate = this.collaborator.expires
-
-      if (expirationDate) {
-        return expirationDate
-      }
-
-      return null
+      return this.collaborator.expires ? this.collaborator.expires : null
     }
   },
   methods: {
