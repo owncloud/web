@@ -149,7 +149,7 @@
         <oc-icon name="close" />
       </oc-button>
     </template>
-    <hr />
+    <hr v-if="!minimal"/>
   </div>
 </template>
 

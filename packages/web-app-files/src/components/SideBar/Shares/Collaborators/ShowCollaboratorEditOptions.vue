@@ -5,9 +5,9 @@
       data-testid="files-recipient-role-select-btn"
       appearance="raw"
       justify-content="left"
-      gap-size="xsmall"
-      ><oc-icon name="more_vert"></oc-icon></oc-button
-    >
+      gap-size="xsmall">
+      <oc-icon name="more_vert" />
+    </oc-button>
     <oc-drop
       ref="rolesDrop"
       data-testid="files-recipient-roles-drop"
@@ -17,8 +17,8 @@
     >
       <template #special>
         <oc-list class="show-collaborators-edit-options oc-p-xs" :aria-label="rolesListAriaLabel">
-          <li v-for="(option, i) in options" :key="i" class="oc-p-s">
-            <oc-button class="edit-option" appearance="raw" @click="option.method()">
+          <li v-for="(option, i) in options" :key="i" class="oc-p-s" @click="option.method()">
+            <oc-button class="edit-option" appearance="raw">
               <oc-icon :name="option.icon" />
               {{ option.title }}
             </oc-button>
@@ -30,12 +30,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import { shareTypes } from '../../../../helpers/shareTypes'
-import { basename } from 'path'
 import CollaboratorsMixins from '../../../../mixins/collaborators'
 import Mixins from '../../../../mixins'
-import { DateTime } from 'luxon'
 
 export default {
   name: 'ShowCollaboratorEditOptions',
@@ -51,7 +47,7 @@ export default {
         {
           title: 'Remove',
           icon: 'delete',
-          method: this.test
+          method: this.removeShare
         }
       ]
     }
@@ -64,6 +60,9 @@ export default {
   methods: {
     test() {
       alert('hi')
+    },
+    removeShare() {
+      this.$emit('removeShare')
     }
   }
 }

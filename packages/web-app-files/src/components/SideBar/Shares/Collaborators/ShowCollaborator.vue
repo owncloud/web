@@ -100,7 +100,7 @@
             class="oc-mb"
             @optionChange="collaboratorOptionChanged"
           />
-          <show-collaborator-edit-options />
+          <show-collaborator-edit-options @removeShare="removeShare" />
         </div>
       </oc-td>
     </oc-tr>
@@ -144,6 +144,8 @@ export default {
       removalInProgress: false
     }
   },
+  // TODO: Get Current expirationDate to edit collaborator
+  // 
   computed: {
     ...mapGetters(['user']),
 
@@ -337,8 +339,11 @@ export default {
       }
     }
   },
+  mounted() {
+    console.log(this.collaborator.expires)
+  },
   methods: {
-    $_removeShare() {
+    removeShare() {
       this.removalInProgress = true
       this.$emit('onDelete', this.collaborator)
     }
