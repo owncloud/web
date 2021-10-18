@@ -1,3 +1,5 @@
+import get from 'lodash-es/get.js'
+import isEmpty from 'lodash-es/isEmpty'
 import initVueAuthenticate from '../services/auth'
 import router from '../router/'
 
@@ -96,9 +98,6 @@ const actions = {
           return
         }
 
-        const capabilities = await client.getCapabilities()
-        context.commit('SET_CAPABILITIES', capabilities)
-
         const userGroups = await client.users.getUserGroups(login.id)
         const user = await client.users.getUser(login.id)
 
@@ -121,15 +120,15 @@ const actions = {
         }
 
         await context.dispatch('loadSettingsValues')
-        context.commit('SET_USER_READY', true)
-
         if (payload.autoRedirect) {
           router.push({ path: '/' }).catch(() => {})
-          window.location.reload()
         }
       } else {
         context.commit('UPDATE_TOKEN', token)
       }
+
+      await context.dispatch('loadCapabilities', { token })
+      context.commit('SET_USER_READY', true)
     }
     // if called from login, use available vue-authenticate instance; else re-init
     if (!vueAuthInstance) {
@@ -190,6 +189,38 @@ const actions = {
     vueAuthInstance.mgr.signinSilentCallback().then(() => {
       context.dispatch('initAuth')
     })
+  },
+  async loadCapabilities(
+    { commit, rootState, state },
+    { token, publicToken, user, password, overwrite = false }
+  ) {
+    if (!isEmpty(state.capabilities) && !overwrite) {
+      return
+    }
+
+    const endpoint = new URL(rootState.config.server || window.location.origin)
+    endpoint.pathname = 'ocs/v1.php/cloud/capabilities'
+    endpoint.searchParams.append('format', 'json')
+
+    const headers = {
+      'X-Requested-With': 'XMLHttpRequest',
+      ...(publicToken && { 'public-token': publicToken }),
+      ...(user &&
+        password && {
+          Authorization: 'Basic ' + Buffer.from([user, password].join(':')).toString('base64')
+        }),
+      ...(token && {
+        Authorization: 'Bearer ' + token
+      })
+    }
+
+    const capabilitiesApiResponse = await fetch(endpoint.href, { headers })
+    const capabilitiesApiResponseJson = await capabilitiesApiResponse.json()
+
+    commit(
+      'SET_CAPABILITIES',
+      get(capabilitiesApiResponseJson, 'ocs.data', { capabilities: null, version: null })
+    )
   }
 }
 
@@ -213,7 +244,6 @@ const mutations = {
   SET_USER_READY(state, ready) {
     state.userReady = ready
   },
-
   SET_QUOTA(state, quota) {
     // Turn strings into ints
     quota.free = parseInt(quota.free)
@@ -228,6 +258,9 @@ const mutations = {
 const getters = {
   isAuthenticated: (state) => {
     return state.isAuthenticated
+  },
+  isUserReady: (state) => {
+    return state.userReady
   },
   getToken: (state) => {
     return state.token

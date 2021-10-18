@@ -46,7 +46,7 @@ const storeOptions = {
     External: {
       namespaced: true,
       getters: {
-        getMimeTypes: jest.fn()
+        mimeTypes: jest.fn()
       },
       actions: {
         fetchMimeTypes: jest.fn()

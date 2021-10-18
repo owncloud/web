@@ -24,13 +24,18 @@ const actions = {
       throw new Error('Error fetching app provider MIME types')
     }
 
-    const mimeTypes = await response.json()
-    commit('SET_MIME_TYPES', mimeTypes['mime-types'])
+    const { 'mime-types': mimeTypes } = await response.json()
+
+    commit('SET_MIME_TYPES', mimeTypes)
   }
 }
 
 const getters = {
-  getMimeTypes: (state: typeof State): { [key: string]: string } => {
+  mimeTypes: (
+    state: typeof State
+  ): {
+    [key: string]: string
+  } => {
     return state.mimeTypes
   }
 }
