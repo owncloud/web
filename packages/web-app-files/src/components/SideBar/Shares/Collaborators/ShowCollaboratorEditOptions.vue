@@ -13,7 +13,6 @@
       data-testid="files-recipient-roles-drop"
       :toggle="'#' + roleButtonId"
       mode="click"
-      close-on-click
     >
       <template #special>
         <oc-list class="show-collaborators-edit-options oc-p-xs" :aria-label="rolesListAriaLabel">
@@ -22,6 +21,16 @@
               <oc-icon :name="option.icon" />
               {{ option.title }}
             </oc-button>
+          </li>
+          <li>
+            <collaborators-edit-options
+              :minimal="true"
+              :permissions-input="false"
+              :expiration-date-input="true"
+              :expiration-date="expirationDate"
+              class="oc-mb"
+              @optionChange="expirationDateChanged"
+            />
           </li>
         </oc-list>
       </template>
@@ -32,11 +41,25 @@
 <script>
 import CollaboratorsMixins from '../../../../mixins/collaborators'
 import Mixins from '../../../../mixins'
+import CollaboratorsEditOptions from './CollaboratorsEditOptions.vue'
 
 export default {
   name: 'ShowCollaboratorEditOptions',
   mixins: [Mixins, CollaboratorsMixins],
-  props: {},
+  props: {
+    collaborator: {
+      type: Object,
+      required: true
+    },
+    expirationDate: {
+      type: Date,
+      required: false,
+      default: undefined
+    },
+  },
+  components: {
+    CollaboratorsEditOptions
+  },
   data: function () {
     return {
       options: [
@@ -63,6 +86,9 @@ export default {
     },
     removeShare() {
       this.$emit('removeShare')
+    },
+    expirationDateChanged({expirationDate}){
+      this.$emit('expirationDateChanged', {expirationDate})
     }
   }
 }

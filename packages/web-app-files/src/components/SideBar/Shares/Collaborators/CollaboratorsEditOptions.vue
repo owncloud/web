@@ -2,6 +2,7 @@
   <div>
     <hr v-if="!minimal" />
     <oc-button
+      v-if="permissionsInput"
       :id="roleButtonId"
       data-testid="files-recipient-role-select-btn"
       appearance="raw"
@@ -24,6 +25,7 @@
     </oc-button>
     <oc-drop
       ref="rolesDrop"
+      v-if="permissionsInput"
       data-testid="files-recipient-roles-drop"
       :toggle="'#' + roleButtonId"
       mode="click"
@@ -51,6 +53,7 @@
     </oc-drop>
     <oc-drop
       ref="customPermissionsDrop"
+      v-if="permissionsInput"
       data-testid="files-recipient-custom-permissions-drop"
       class="files-recipient-custom-permissions-drop uk-width-auto"
       mode="manual"
@@ -176,6 +179,11 @@ export default {
       default: false
     },
     expirationDateInput: {
+      type: Boolean,
+      required: false,
+      default: true
+    },
+    permissionsInput: {
       type: Boolean,
       required: false,
       default: true
@@ -362,8 +370,6 @@ export default {
   },
 
   mounted() {
-    console.log('eferfer')
-    console.log(this._uid)
     if (this.expirationSupported) {
       if (this.editingUser || this.editingGroup) {
         this.enteredExpirationDate = this.expirationDate

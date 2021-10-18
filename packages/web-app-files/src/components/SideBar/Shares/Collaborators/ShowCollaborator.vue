@@ -102,7 +102,13 @@
             class="oc-mb"
             @optionChange="collaboratorDropdownChange"
           />
-          <show-collaborator-edit-options @removeShare="removeShare" />
+          <show-collaborator-edit-options 
+            :collaborator="collaborator" 
+            :expiration-date="collaborator.expires ? collaborator.expires : null"
+            @expirationDateChanged="collaboratorDropdownChange"
+            @removeShare="removeShare" 
+            @optionChange="collaboratorDropdownChange"
+          />
         </div>
       </oc-td>
     </oc-tr>
@@ -373,19 +379,22 @@ export default {
     },
 
     collaboratorDropdownChange({ role, permissions, expirationDate }) {
-      this.collaboratorOptionChanged({ role, permissions, expirationDate })
+      this.collaboratorOptionChanged({ role, permissions, expirationDate, checkNull: true })
       this.saveCollaboratorChanges({ role, permissions, expirationDate })
     },
 
     saveCollaboratorChanges({ role, permissions, expirationDate }) {
-      const bitmask = roleToBitmask(role, permissions)
+      const roleValue = role ? role : this.selectedRole
+      const permissionsValue = permissions ? permissions : this.additionalPermissions
+      const bitmask = roleToBitmask(roleValue, permissionsValue)
+      const expiration = expirationDate ? expirationDate : this.expirationDate
       this.changeShare({
         client: this.$client,
         share: this.collaborator,
         // Map bitmask to role to get the correct role in case the advanced role was mapped to existing role
         role: bitmaskToRole(bitmask, this.highlightedFile.type === 'folder', !this.isOcis),
         permissions: bitmask,
-        expirationDate: this.expirationDate || ''
+        expirationDate: expiration || ''
       })
         .catch((errors) => {
           this.errors = errors
