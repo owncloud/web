@@ -22,9 +22,9 @@
     "serve": "SERVER=true yarn build:w",
     "test:acceptance:oc10": "cucumber-js --require-module @babel/register --require-module @babel/polyfill --require tests/acceptance/setup.js --require tests/acceptance/stepDefinitions --format @cucumber/pretty-formatter -t \"${TEST_TAGS:-not @skip and not @skipOnOC10}\" -f json:tests/report/cucumber_report.json",
     "test:acceptance:ocis": "NODE_TLS_REJECT_UNAUTHORIZED=0 RUN_ON_OCIS=true cucumber-js --require-module @babel/register --require-module @babel/polyfill --require tests/acceptance/setup.js --require tests/acceptance/stepDefinitions --format @cucumber/pretty-formatter -t \"${TEST_TAGS:-not @skip and not @skipOnOCIS and not @notToImplementOnOCIS}\" -f json:tests/report/cucumber_report.json",
+    "test:integration": "jest --config ./tests/integration/config/jest.config.js",
     "test:smoke:experimental": "NODE_TLS_REJECT_UNAUTHORIZED=0 cucumber-js --profile=smoke",
-    "test:unit": "jest --coverage --config ./tests/unit/config/jest.config.js",
-    "test:integration": "jest --config ./tests/integration/config/jest.config.js"
+    "test:unit": "jest --coverage --config ./tests/unit/config/jest.config.js"
   },
   "browserslist": [
     "last 2 version",
@@ -33,6 +33,9 @@
     "not IE 11",
     "not IE_Mob 11"
   ],
+  "dependencies": {
+    "vue": "^2.6.10"
+  },
   "devDependencies": {
     "@babel/core": "^7.12.10",
     "@babel/eslint-parser": "^7.15.8",
@@ -132,8 +135,5 @@
   },
   "engines": {
     "node": ">=14 <=16"
-  },
-  "dependencies": {
-    "vue": "^2.6.10"
   }
 }
