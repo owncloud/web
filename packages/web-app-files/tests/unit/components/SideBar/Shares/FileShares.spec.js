@@ -291,7 +291,7 @@ function getResource({
   }
 }
 
-const storeOptions = data => {
+const storeOptions = (data) => {
   let {
     user,
     outgoingCollaborators = [],
@@ -419,7 +419,7 @@ const displayNames = {
   user2: 'User Two'
 }
 
-const userObj = name => {
+const userObj = (name) => {
   return {
     id: name,
     additionalInfo: null,
