@@ -12,7 +12,7 @@ const $gettext = (msg) => {
   return msg
 }
 
-bus.on('app.search.register.provider', (provider: SearchProvider) => {
+bus.subscribe('app.search.register.provider', (provider: SearchProvider) => {
   providerStore.addProvider(provider)
 })
 

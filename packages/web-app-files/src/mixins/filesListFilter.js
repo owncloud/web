@@ -9,16 +9,24 @@ export default {
       return
     }
 
-    filterSearch.on('reset', () => {
+    const resetEventToken = filterSearch.subscribe('reset', () => {
       this.CLEAR_FILES_SEARCHED()
     })
-    filterSearch.on('updateTerm', (term) => {
+
+    const updateTermEventToken = filterSearch.subscribe('updateTerm', (term) => {
       if (!term) {
         this.CLEAR_FILES_SEARCHED()
       }
     })
-    filterSearch.on('activate', ({ resources }) => {
+
+    const activateEventToken = filterSearch.subscribe('activate', ({ resources }) => {
       this.LOAD_FILES_SEARCHED(resources)
+    })
+
+    this.$on('beforeDestroy', () => {
+      filterSearch.unsubscribe('reset', resetEventToken)
+      filterSearch.unsubscribe('updateTerm', updateTermEventToken)
+      filterSearch.unsubscribe('activate', activateEventToken)
     })
   },
   watch: {

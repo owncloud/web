@@ -20,16 +20,28 @@ Tell us what should happen
 ### Actual behaviour
 Tell us what happens instead
 
-### Server configuration
+### Environment general
 **Operating system**:
 
+**Backend (ownCloud Core or Infinite Scale)**:
+
+**Are you using an external user-backend, if yes which one:** LDAP/ActiveDirectory/Webdav/...
+
+### Environment ownCloud Infinite Scale
+**Version:**
+
+**Updated from an older Infinite Scale or fresh install:**
+
+**Where did you install Infinite Scale from:**
+
+### Environment ownCloud Core
 **Web server:**
 
 **Database:**
 
 **PHP version:**
 
-**ownCloud version:** (see ownCloud admin page)
+**Version:** (see ownCloud admin page)
 
 **Updated from an older ownCloud or fresh install:**
 
@@ -77,8 +89,6 @@ from within your ownCloud installation folder.
 **Are you using external storage, if yes which one:** local/smb/sftp/...
 
 **Are you using encryption:** yes/no
-
-**Are you using an external user-backend, if yes which one:** LDAP/ActiveDirectory/Webdav/...
 
 ### Client configuration
 **Browser:**

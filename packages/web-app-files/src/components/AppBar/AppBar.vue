@@ -228,7 +228,7 @@ export default {
 
         pathSegments.length < 1
           ? (breadcrumbs[0].onClick = () =>
-              bus.emit('app.files.list.load', this.$route.params.item))
+              bus.publish('app.files.list.load', this.$route.params.item))
           : (breadcrumbs[0].to = baseUrl + encodeURIComponent(pathUtil.join(...pathItems)))
       } else {
         baseUrl = '/files/public/list/'
@@ -246,7 +246,7 @@ export default {
         if (i === pathSegments.length - 1) {
           breadcrumbs.push({
             text: pathSegments[i],
-            onClick: () => bus.emit('app.files.list.load', this.$route.params.item)
+            onClick: () => bus.publish('app.files.list.load', this.$route.params.item)
           })
 
           continue

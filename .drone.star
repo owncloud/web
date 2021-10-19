@@ -80,8 +80,8 @@ config = {
                     "webUISharingFilePermissionMultipleUsers",
                     "webUISharingFilePermissionsGroups",
                 ],
-                "webUISharingFolderAdvancedPermissionMultipleUsers": "oC10SharingFolderAdvancedPermissionMU",
-                "webUISharingFolderAdvancedPermissionsGroups": "oC10SharingFolderAdvPermissionsGrp",
+                "webUISharingFolderAdvancedPermissionMultipleUsers": "oC10SharingFolderAdvPermMU",
+                "webUISharingFolderAdvancedPermissionsGroups": "oC10SharingFolderAdvPermsGrp",
                 "oC10SharingFolderPermissions": [
                     "webUISharingFolderPermissionMultipleUsers",
                     "webUISharingFolderPermissionsGroups",
@@ -94,7 +94,7 @@ config = {
                     "webUISharingInternalGroupsToRoot",
                     "webUISharingInternalGroupsToRootEdgeCases",
                 ],
-                "oC10SharingInternalGroupsSharingIndicator": [
+                "oC10SharingInternalGroupsSharingInd": [
                     "webUISharingInternalGroupsSharingIndicator",
                     "webUISharingInternalGroupsToRootSharingIndicator",
                 ],
@@ -104,7 +104,7 @@ config = {
                     "webUISharingInternalUsersShareWithPage",
                 ],
                 "webUISharingInternalUsersBlacklisted": "oC10SharingInternalUsersBlacklisted",
-                "oC10SharingInternalUsersSharingIndicator": [
+                "oC10SharingInternalUsersSharingInd": [
                     "webUISharingInternalUsersSharingIndicator",
                     "webUISharingInternalUsersToRootSharingIndicator",
                 ],
@@ -169,7 +169,7 @@ config = {
             },
             "notificationsAppNeeded": True,
             "federatedServerNeeded": True,
-            "federatedServerVersion": "daily-master-qa",
+            "federatedServerVersion": "latest",
         },
         "webUI-XGA-Notifications": {
             "type": NOTIFICATIONS,
@@ -361,6 +361,9 @@ config = {
         },
         "webUI-ocis": {
             "type": FULL,
+            "servers": [
+                "",
+            ],
             "suites": {
                 "oCISBasic": [
                     "webUILogin",
@@ -1060,7 +1063,7 @@ def acceptance(ctx):
     errorFound = False
 
     default = {
-        "servers": [""],
+        "servers": ["latest"],
         "browsers": ["chrome"],
         "databases": ["mysql:5.5"],
         "extraEnvironment": {},
@@ -1069,7 +1072,7 @@ def acceptance(ctx):
         "logLevel": "2",
         "notificationsAppNeeded": False,
         "federatedServerNeeded": False,
-        "federatedServerVersion": "",
+        "federatedServerVersion": "latest",
         "runningOnOCIS": False,
         "screenShots": False,
         "visualTesting": False,
@@ -1130,7 +1133,8 @@ def acceptance(ctx):
                             errorFound = True
 
                         browserString = "" if browser == "" else "-" + browser
-                        name = "%s%s" % (suiteName, browserString)
+                        serverString = "" if server == "" else "-" + server.replace("daily-", "").replace("-qa", "")
+                        name = "%s%s%s" % (suiteName, browserString, serverString)
                         maxLength = 50
                         nameLength = len(name)
                         if nameLength > maxLength:
@@ -1527,8 +1531,6 @@ def installCore(version, db):
             "db_password": password,
         }})
         stepDefinition.update({"commands": [
-            ". %s/.drone.env" % dir["web"],
-            "export PLUGIN_GIT_REFERENCE=$CORE_COMMITID",
             "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping installCore'; else bash /usr/sbin/plugin.sh; fi",
         ]})
 
@@ -1574,8 +1576,6 @@ def installFederatedServer(version, db, dbSuffix = "-federated"):
             "db_password": password,
         }})
         stepDefinition.update({"commands": [
-            ". %s/.drone.env" % dir["web"],
-            "export PLUGIN_GIT_REFERENCE=$CORE_COMMITID",
             "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping installFederatedServer'; else bash /usr/sbin/plugin.sh; fi",
         ]})
 

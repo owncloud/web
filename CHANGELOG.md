@@ -8,6 +8,8 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Fix duplicated event subscriptions: [#5910](https://github.com/owncloud/web/pull/5910)
+* Bugfix - External apps by shares: [#5907](https://github.com/owncloud/web/pull/5907)
 * Bugfix - Clean router path handling: [#5894](https://github.com/owncloud/web/pull/5894)
 * Bugfix - Unnecessary redirects on personal page: [#5893](https://github.com/owncloud/web/pull/5893)
 * Enhancement - Accessible, themeable media viewer: [#5900](https://github.com/owncloud/web/pull/5900)
@@ -17,6 +19,28 @@ Summary
 
 Details
 -------
+
+* Bugfix - Fix duplicated event subscriptions: [#5910](https://github.com/owncloud/web/pull/5910)
+
+   In some cases it happened that subscriptions to certain topics happened multiple times. This
+   is problematic in cases where it should happen only once, for example loading a resource which
+   can result in multiple requests and a overlapping state.
+
+   This is fixes by introducing the option to unsubscribe a event individually by a given token or
+   for all on a given topic.
+
+   https://github.com/owncloud/web/issues/5875
+   https://github.com/owncloud/web/pull/5910
+
+* Bugfix - External apps by shares: [#5907](https://github.com/owncloud/web/pull/5907)
+
+   Opening shares in "Shared with me" section was broken. We have added property `mimeType` by the
+   build of a shared resource, so that the external apps can be found for it.
+
+   We fixed passing the fileId property for the context actions.
+
+   https://github.com/owncloud/web/issues/5906
+   https://github.com/owncloud/web/pull/5907
 
 * Bugfix - Clean router path handling: [#5894](https://github.com/owncloud/web/pull/5894)
 

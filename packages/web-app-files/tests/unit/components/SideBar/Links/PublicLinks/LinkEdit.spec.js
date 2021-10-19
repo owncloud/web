@@ -82,7 +82,7 @@ describe('LinkEdit', () => {
       })
     })
 
-    it('should have min-datetime attribute with the value one day ahead from provided day', async () => {
+    it('should have min-datetime attribute with the value one day ahead from provided day', () => {
       const wrapper = getShallowMountedWrapper()
       const expirationDatePickerElement = wrapper.find('#oc-files-file-link-expire-date')
       const expectedDate = new Date()

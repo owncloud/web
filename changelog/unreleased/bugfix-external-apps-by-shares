@@ -1,0 +1,8 @@
+Bugfix: External apps by shares
+
+Opening shares in "Shared with me" section was broken. We have added property `mimeType` by the build of a shared resource, so that the external apps can be found for it. 
+
+We fixed passing the fileId property for the context actions.
+
+https://github.com/owncloud/web/pull/5907
+https://github.com/owncloud/web/issues/5906

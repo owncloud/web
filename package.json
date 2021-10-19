@@ -22,9 +22,9 @@
     "serve": "SERVER=true yarn build:w",
     "test:acceptance:oc10": "cucumber-js --require-module @babel/register --require-module @babel/polyfill --require tests/acceptance/setup.js --require tests/acceptance/stepDefinitions --format @cucumber/pretty-formatter -t \"${TEST_TAGS:-not @skip and not @skipOnOC10}\" -f json:tests/report/cucumber_report.json",
     "test:acceptance:ocis": "NODE_TLS_REJECT_UNAUTHORIZED=0 RUN_ON_OCIS=true cucumber-js --require-module @babel/register --require-module @babel/polyfill --require tests/acceptance/setup.js --require tests/acceptance/stepDefinitions --format @cucumber/pretty-formatter -t \"${TEST_TAGS:-not @skip and not @skipOnOCIS and not @notToImplementOnOCIS}\" -f json:tests/report/cucumber_report.json",
+    "test:integration": "jest --config ./tests/integration/config/jest.config.js",
     "test:smoke:experimental": "NODE_TLS_REJECT_UNAUTHORIZED=0 cucumber-js --profile=smoke",
-    "test:unit": "jest --coverage --config ./tests/unit/config/jest.config.js",
-    "test:integration": "jest --config ./tests/integration/config/jest.config.js"
+    "test:unit": "jest --coverage --config ./tests/unit/config/jest.config.js"
   },
   "browserslist": [
     "last 2 version",
@@ -33,6 +33,9 @@
     "not IE 11",
     "not IE_Mob 11"
   ],
+  "dependencies": {
+    "vue": "^2.6.10"
+  },
   "devDependencies": {
     "@babel/core": "^7.12.10",
     "@babel/eslint-parser": "^7.15.8",
@@ -48,6 +51,7 @@
     "@rollup/plugin-html": "^0.2.0",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-typescript": "^8.2.5",
+    "@testing-library/dom": "^8.10.0",
     "@testing-library/jest-dom": "^5.13.0",
     "@testing-library/user-event": "^13.2.1",
     "@testing-library/vue": "^5.6.2",
@@ -72,7 +76,7 @@
     "eslint": "^7.30.0",
     "eslint-config-prettier": "^6.10.0",
     "eslint-config-standard": "^16.0.3",
-    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-import": "^2.25.2",
     "eslint-plugin-jest": "^24.1.3",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.0.0",
@@ -132,8 +136,5 @@
   },
   "engines": {
     "node": ">=14 <=16"
-  },
-  "dependencies": {
-    "vue": "^2.6.10"
   }
 }
