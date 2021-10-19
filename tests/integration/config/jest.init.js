@@ -3,6 +3,7 @@ import { config } from '@vue/test-utils'
 import fetchMock from 'jest-fetch-mock'
 import ODS from 'owncloud-design-system'
 import GetTextPlugin from 'vue-gettext'
+import VueCompositionAPI from '@vue/composition-api'
 
 // eslint-disable-next-line jest/no-mocks-import
 import sdkMock from '../../../__mocks__/sdk'
@@ -15,6 +16,7 @@ window.IntersectionObserver = jest.fn(() => ({
 }))
 
 Vue.use(ODS)
+Vue.use(VueCompositionAPI)
 
 Vue.use(GetTextPlugin, {
   availableLanguages: ['en'],

@@ -2934,7 +2934,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vue/test-utils@npm:^1.1.0":
+"@vue/test-utils@npm:^1.1.0, @vue/test-utils@npm:^1.1.2":
   version: 1.2.1
   resolution: "@vue/test-utils@npm:1.2.1"
   dependencies:
@@ -2945,20 +2945,6 @@ __metadata:
     vue: 2.x
     vue-template-compiler: ^2.x
   checksum: 691aa850c7751f5745ce4b611c8fb21c4be8ccb6a86222b92912444d6d0425e5cdcb8fbad8139723c0094a422a05e0a46deefd84fe2d146738d0210516789fd2
-  languageName: node
-  linkType: hard
-
-"@vue/test-utils@npm:^1.1.2":
-  version: 1.2.2
-  resolution: "@vue/test-utils@npm:1.2.2"
-  dependencies:
-    dom-event-types: ^1.0.0
-    lodash: ^4.17.15
-    pretty: ^2.0.0
-  peerDependencies:
-    vue: 2.x
-    vue-template-compiler: ^2.x
-  checksum: a373ffe4fa35f6d7d64eb5547ba656f8445b23923a5735d64b378061b378515139044fe73d931de1130fd310ad692e575f4826db03a4289737eaa4ff5a45dc98
   languageName: node
   linkType: hard
 
