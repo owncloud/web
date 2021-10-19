@@ -128,17 +128,21 @@
             gap-size="xsmall"
             @click="togglePopover"
           >
-            <translate v-if="!enteredExpirationDate" key="no-expiration-date-label"
+            <oc-icon v-if="minimal" name="text-calendar" />
+            <translate v-if="minimal">
+              Expiration Date
+            </translate>
+            <translate v-if="!enteredExpirationDate && !minimal" key="no-expiration-date-label"
               >Set expiration date</translate
             >
             <translate
-              v-else
+              v-else-if="!minimal"
               key="set-expiration-date-label"
               :translate-params="{ expires: relativeExpirationDate }"
             >
               Expires %{expires}
             </translate>
-            <oc-icon v-if="!enteredExpirationDate" name="expand_more" />
+            <oc-icon v-if="!enteredExpirationDate && !minimal" name="expand_more" />
           </oc-button>
         </template>
       </oc-datepicker>

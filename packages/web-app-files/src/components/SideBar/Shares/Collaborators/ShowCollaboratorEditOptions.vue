@@ -16,21 +16,20 @@
     >
       <template #special>
         <oc-list class="show-collaborators-edit-options oc-p-xs" :aria-label="rolesListAriaLabel">
-          <li v-for="(option, i) in options" :key="i" class="oc-p-s" @click="option.method()">
-            <oc-button class="edit-option" appearance="raw">
-              <oc-icon :name="option.icon" />
-              {{ option.title }}
-            </oc-button>
-          </li>
-          <li>
+          <li v-if="expirationDate" class="oc-p-s">
             <collaborators-edit-options
               :minimal="true"
               :permissions-input="false"
               :expiration-date-input="true"
               :expiration-date="expirationDate"
-              class="oc-mb"
               @optionChange="expirationDateChanged"
             />
+          </li>
+          <li v-for="(option, i) in options" :key="i" class="oc-p-s" @click="option.method()">
+            <oc-button class="edit-option" appearance="raw">
+              <oc-icon :name="option.icon" />
+              {{ option.title }}
+            </oc-button>
           </li>
         </oc-list>
       </template>
@@ -64,10 +63,6 @@ export default {
     return {
       options: [
         {
-          title: 'Expiration Date',
-          icon: 'text-calendar'
-        },
-        {
           title: 'Remove',
           icon: 'delete',
           method: this.removeShare
@@ -83,6 +78,12 @@ export default {
   methods: {
     test() {
       alert('hi')
+    },
+    expirationDate() {
+      return DateTime.fromJSDate(this.collaborator.expires)
+        .endOf('day')
+        .setLocale(this.$language.current)
+        .toRelative()
     },
     removeShare() {
       this.$emit('removeShare')
