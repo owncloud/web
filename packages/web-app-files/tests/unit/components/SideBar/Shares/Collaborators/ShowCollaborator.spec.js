@@ -327,6 +327,15 @@ function createWrapper({
         },
         isOcis: function () {
           return false
+        },
+        capabilities: function() {
+          return {
+            files_sharing: {
+              user: {
+                expire_date: new Date()
+              }
+            }
+          }
         }
       },
       modules: {
@@ -336,6 +345,9 @@ function createWrapper({
             highlightedFile: function () {
               return { type: 'folder' }
             }
+          },
+          actions: {
+            changeShare: jest.fn
           }
         }
       }
@@ -355,6 +367,8 @@ function createWrapper({
       'oc-tr': true,
       'oc-td': true,
       'oc-tag': true,
+      'oc-avatar': true,
+      'oc-avatar-item': true,
       'oc-pagination': true,
       translate: false
     }
