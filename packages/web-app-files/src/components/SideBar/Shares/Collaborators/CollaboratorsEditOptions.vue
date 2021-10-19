@@ -18,14 +18,18 @@
         :translate-params="{ name: selectedRole.inlineLabel }"
         >Invite as %{ name }</translate
       >
-      <translate v-if="minimal" :translate-params="{ name: selectedRole.label }">
+      <translate
+        v-if="minimal"
+        class="role-name-text"
+        :translate-params="{ name: selectedRole.label }"
+      >
         %{ name }
       </translate>
       <oc-icon name="expand_more" />
     </oc-button>
     <oc-drop
-      ref="rolesDrop"
       v-if="permissionsInput"
+      ref="rolesDrop"
       data-testid="files-recipient-roles-drop"
       :toggle="'#' + roleButtonId"
       mode="click"
@@ -52,8 +56,8 @@
       </template>
     </oc-drop>
     <oc-drop
-      ref="customPermissionsDrop"
       v-if="permissionsInput"
+      ref="customPermissionsDrop"
       data-testid="files-recipient-custom-permissions-drop"
       class="files-recipient-custom-permissions-drop uk-width-auto"
       mode="manual"
@@ -129,9 +133,7 @@
             @click="togglePopover"
           >
             <oc-icon v-if="minimal" name="text-calendar" />
-            <translate v-if="minimal">
-              Expiration Date
-            </translate>
+            <translate v-if="minimal"> Expiration Date </translate>
             <translate v-if="!enteredExpirationDate && !minimal" key="no-expiration-date-label"
               >Set expiration date</translate
             >
@@ -153,10 +155,10 @@
         :aria-label="$gettext('Remove expiration date')"
         @click="clearExpirationDate"
       >
-        <oc-icon name="close"/>
+        <oc-icon name="close" />
       </oc-button>
     </template>
-    <hr v-if="!minimal"/>
+    <hr v-if="!minimal" />
   </div>
 </template>
 
@@ -516,6 +518,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.role-name-text {
+  font-size: 15px;
+}
+
 .recipient-edit-options {
   align-items: center;
   display: flex;

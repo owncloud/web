@@ -38,8 +38,8 @@
             class="collaborator-list oc-my-rm oc-pl-rm"
             :aria-labelledby="`collaborator-list-label-${shareId}`"
           >
-            <li class="share-type">{{ shareTypeText }}</li>
-            <li v-if="expirationDateLocale" class="collaborator-expiration oc-ml-s">
+            <li class="share-type oc-mr-s">{{ shareTypeText }}</li>
+            <li v-if="expirationDateLocale" class="collaborator-expiration">
               <oc-icon size="small" name="text-calendar" class="oc-mr-xs" />
               {{ expirationText }} {{ expirationDateLocale }}
             </li>
@@ -95,7 +95,7 @@
         </div>
       </oc-td>
       <oc-td width="shrink" align-v="middle" class="oc-py-rm oc-pr-s">
-        <div class="uk-flex uk-flex-nowrap uk-flex-middle" v-if="!isOwner">
+        <div v-if="!isOwner" class="uk-flex uk-flex-nowrap uk-flex-middle">
           <collaborators-edit-options
             class="oc-mr-s"
             :minimal="true"
@@ -105,10 +105,10 @@
             :existing-collaborator-type="collaboratorType"
             @optionChange="collaboratorDropdownChange"
           />
-          <show-collaborator-edit-options 
-            :collaborator="collaborator" 
+          <show-collaborator-edit-options
+            :collaborator="collaborator"
             :expiration-date="collaborator.expires ? collaborator.expires : null"
-            @removeShare="removeShare" 
+            @removeShare="removeShare"
             @optionChange="collaboratorDropdownChange"
             @expirationDateChanged="collaboratorDropdownChange"
           />
@@ -156,8 +156,6 @@ export default {
       removalInProgress: false
     }
   },
-  // TODO: Get Current expirationDate to edit collaborator
-  // 
   computed: {
     ...mapGetters('Files', ['highlightedFile']),
     ...mapGetters(['user', 'isOcis']),
@@ -306,7 +304,7 @@ export default {
     },
 
     isOwner() {
-      return this.collaborator.role.name == 'owner'
+      return this.collaborator.role.name === 'owner'
     },
 
     isUser() {
@@ -371,7 +369,7 @@ export default {
         default:
           return 'key'
       }
-    },
+    }
   },
   methods: {
     ...mapActions('Files', ['changeShare']),
@@ -387,10 +385,10 @@ export default {
     },
 
     saveCollaboratorChanges({ role, permissions, expirationDate }) {
-      const roleValue = role ? role : this.selectedRole
-      const permissionsValue = permissions ? permissions : this.additionalPermissions
+      const roleValue = role || this.selectedRole
+      const permissionsValue = permissions || this.additionalPermissions
       const bitmask = roleToBitmask(roleValue, permissionsValue)
-      const expiration = expirationDate ? expirationDate : this.expirationDate
+      const expiration = expirationDate || this.expirationDate
       this.changeShare({
         client: this.$client,
         share: this.collaborator,
@@ -398,10 +396,9 @@ export default {
         role: bitmaskToRole(bitmask, this.highlightedFile.type === 'folder', !this.isOcis),
         permissions: bitmask,
         expirationDate: expiration || ''
+      }).catch((errors) => {
+        this.errors = errors
       })
-        .catch((errors) => {
-          this.errors = errors
-        })
     }
   }
 }
@@ -427,8 +424,8 @@ export default {
 .collaborator-expiration {
   display: flex;
   align-items: center;
-  color: var(--oc-color-swatch-passive-hover); 
-  span > svg{
+  color: var(--oc-color-swatch-passive-hover);
+  span > svg {
     fill: var(--oc-color-swatch-passive-hover) !important;
   }
 }

@@ -5,7 +5,8 @@
       data-testid="files-recipient-role-select-btn"
       appearance="raw"
       justify-content="left"
-      gap-size="xsmall">
+      gap-size="xsmall"
+    >
       <oc-icon name="more_vert" />
     </oc-button>
     <oc-drop
@@ -16,7 +17,7 @@
     >
       <template #special>
         <oc-list class="list-collaborator-edit-options oc-p-xs" :aria-label="rolesListAriaLabel">
-          <li v-if="expirationDate" class="oc-p-s">
+          <li v-if="expirationDateExists" class="oc-p-s">
             <collaborators-edit-options
               :minimal="true"
               :permissions-input="false"
@@ -44,6 +45,9 @@ import CollaboratorsEditOptions from './CollaboratorsEditOptions.vue'
 
 export default {
   name: 'ShowCollaboratorEditOptions',
+  components: {
+    CollaboratorsEditOptions
+  },
   mixins: [Mixins, CollaboratorsMixins],
   props: {
     collaborator: {
@@ -54,10 +58,7 @@ export default {
       type: Date,
       required: false,
       default: undefined
-    },
-  },
-  components: {
-    CollaboratorsEditOptions
+    }
   },
   data: function () {
     return {
@@ -76,27 +77,20 @@ export default {
     }
   },
   methods: {
-    test() {
-      alert('hi')
-    },
-    expirationDate() {
-      return DateTime.fromJSDate(this.collaborator.expires)
-        .endOf('day')
-        .setLocale(this.$language.current)
-        .toRelative()
+    expirationDateExists() {
+      return this.collaborator.expires
     },
     removeShare() {
       this.$emit('removeShare')
     },
-    expirationDateChanged({expirationDate}){
-      this.$emit('expirationDateChanged', {expirationDate})
+    expirationDateChanged({ expirationDate }) {
+      this.$emit('expirationDateChanged', { expirationDate })
     }
   }
 }
 </script>
 
 <style lang="scss" scoped="scoped">
-
 .oc-drop {
   background-color: var(--oc-color-swatch-inverse-default);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);

@@ -80,10 +80,11 @@ export default {
     }
   },
   methods: {
-    collaboratorOptionChanged({ role, permissions, expirationDate, checkNull=false }) {
-      this.selectedRole = (role || !checkNull) ? role : this.selectedRole
-      this.additionalPermissions = (permissions || !checkNull) ? permissions : this.additionalPermissions
-      this.expirationDate = (expirationDate || !checkNull) ? expirationDate : this.expirationDate 
+    collaboratorOptionChanged({ role, permissions, expirationDate, checkNull = false }) {
+      this.selectedRole = role || !checkNull ? role : this.selectedRole
+      this.additionalPermissions =
+        permissions || !checkNull ? permissions : this.additionalPermissions
+      this.expirationDate = expirationDate || !checkNull ? expirationDate : this.expirationDate
     },
 
     getCollaboratorTypeLabel(type) {
