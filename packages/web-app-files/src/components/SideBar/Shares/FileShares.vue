@@ -54,16 +54,6 @@
             <hr />
             <show-collaborator :collaborator="$_currentUserAsCollaborator" />
           </template>
-          <template v-else>
-            <p id="collaborator-as-fileowner" v-translate class="oc-invisible-sr">
-              You are the file owner
-            </p>
-            <show-collaborator
-              :collaborator="$_currentUserAsCollaborator"
-              aria-describedby="collaborator-as-fileowner"
-            />
-          </template>
-          <hr v-if="collaborators.length > 0" class="oc-mt-s oc-mb-s" />
           <transition-group
             id="files-collaborators-list"
             class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm"

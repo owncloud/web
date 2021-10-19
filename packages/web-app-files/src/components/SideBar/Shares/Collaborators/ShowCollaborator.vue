@@ -38,8 +38,11 @@
             class="collaborator-list oc-my-rm oc-pl-rm"
             :aria-labelledby="`collaborator-list-label-${shareId}`"
           >
-            <li>{{ shareTypeText }}</li>
-            <li v-if="expirationDateLocale">{{ expirationText }} {{ expirationDateLocale }}</li>
+            <li class="share-type">{{ shareTypeText }}</li>
+            <li v-if="expirationDateLocale" class="collaborator-expiration oc-ml-s">
+              <oc-icon size="small" name="text-calendar" class="oc-mr-xs" />
+              {{ expirationText }} {{ expirationDateLocale }}
+            </li>
             <li v-if="$_reshareInformation" class="oc-py-rm">
               <oc-drop
                 ref="menu"
@@ -91,23 +94,23 @@
           </ul>
         </div>
       </oc-td>
-      <oc-td width="shrink" align-v="top" class="oc-py-rm oc-pr-s">
+      <oc-td width="shrink" align-v="middle" class="oc-py-rm oc-pr-s">
         <div class="uk-flex uk-flex-nowrap uk-flex-middle" v-if="!isOwner">
           <collaborators-edit-options
+            class="oc-mr-s"
             :minimal="true"
             :existing-role="originalRole"
             :expiration-date-input="false"
             :expiration-date="collaborator.expires ? collaborator.expires : null"
             :existing-collaborator-type="collaboratorType"
-            class="oc-mb"
             @optionChange="collaboratorDropdownChange"
           />
           <show-collaborator-edit-options 
             :collaborator="collaborator" 
             :expiration-date="collaborator.expires ? collaborator.expires : null"
-            @expirationDateChanged="collaboratorDropdownChange"
             @removeShare="removeShare" 
             @optionChange="collaboratorDropdownChange"
+            @expirationDateChanged="collaboratorDropdownChange"
           />
         </div>
       </oc-td>
@@ -415,9 +418,20 @@ export default {
   li {
     float: left;
     margin-right: 5px;
+    font-size: 14px;
+  }
+  .share-type {
+    width: 60px;
   }
 }
-
+.collaborator-expiration {
+  display: flex;
+  align-items: center;
+  color: var(--oc-color-swatch-passive-hover); 
+  span > svg{
+    fill: var(--oc-color-swatch-passive-hover) !important;
+  }
+}
 /* FIXME: Move to ODS somehow */
 .files-collaborators-collaborator-via-label {
   max-width: 75%;

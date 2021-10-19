@@ -18,7 +18,7 @@
         :translate-params="{ name: selectedRole.inlineLabel }"
         >Invite as %{ name }</translate
       >
-      <translate v-if="minimal" :translate-params="{ name: selectedRole.inlineLabel }">
+      <translate v-if="minimal" :translate-params="{ name: selectedRole.label }">
         %{ name }
       </translate>
       <oc-icon name="expand_more" />
@@ -147,13 +147,13 @@
         </template>
       </oc-datepicker>
       <oc-button
-        v-if="!expirationDateEnforced && enteredExpirationDate"
+        v-if="!expirationDateEnforced && enteredExpirationDate && !minimal"
         data-testid="recipient-edit-expiration-btn-remove"
         appearance="raw"
         :aria-label="$gettext('Remove expiration date')"
         @click="clearExpirationDate"
       >
-        <oc-icon name="close" />
+        <oc-icon name="close"/>
       </oc-button>
     </template>
     <hr v-if="!minimal"/>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="show-collaborator-edit-options">
     <oc-button
       :id="roleButtonId"
       data-testid="files-recipient-role-select-btn"
@@ -15,7 +15,7 @@
       mode="click"
     >
       <template #special>
-        <oc-list class="show-collaborators-edit-options oc-p-xs" :aria-label="rolesListAriaLabel">
+        <oc-list class="list-collaborator-edit-options oc-p-xs" :aria-label="rolesListAriaLabel">
           <li v-if="expirationDate" class="oc-p-s">
             <collaborators-edit-options
               :minimal="true"
@@ -96,11 +96,16 @@ export default {
 </script>
 
 <style lang="scss" scoped="scoped">
+
 .oc-drop {
   background-color: var(--oc-color-swatch-inverse-default);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
 }
-.show-collaborators-edit-options .edit-option:hover {
+.list-collaborator-edit-options .edit-option:hover {
   color: black !important;
+}
+.show-collaborator-edit-options {
+  display: flex;
+  align-items: center;
 }
 </style>
