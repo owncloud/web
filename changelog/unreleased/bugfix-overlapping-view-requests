@@ -1,0 +1,10 @@
+Bugfix: Fix overlapping requests in files app
+
+In some cases the files app tended to display the wrong resources when navigating quickly through the views. This happened because the resource provisioning step wasn't canceled.
+This is now fixed by using vue-concurrency which on a high level wraps iterable generators which are cancelable. We're using it to wrap the resource loading and cancel it as soon as the resource set is not needed anymore.
+
+It also improves the overall performance for the files app.
+
+https://github.com/owncloud/web/pull/5917
+https://github.com/owncloud/web/issues/5085
+https://github.com/owncloud/web/issues/5875

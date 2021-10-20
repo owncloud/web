@@ -2916,6 +2916,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@vue/composition-api@npm:^1.2.4":
+  version: 1.2.4
+  resolution: "@vue/composition-api@npm:1.2.4"
+  dependencies:
+    tslib: ^2.3.0
+  peerDependencies:
+    vue: ">= 2.5 < 3"
+  checksum: a38651fe05b135cbddccf17090aeed4ef1b12e2f8da613778cf788fd18bf92292888ffad422d91b634af11008e843ca815ab1048b3806af0511ac0a7a88e2c8b
+  languageName: node
+  linkType: hard
+
 "@vue/shared@npm:3.1.1":
   version: 3.1.1
   resolution: "@vue/shared@npm:3.1.1"
@@ -4380,6 +4391,13 @@ __metadata:
     union-value: ^1.0.0
     unset-value: ^1.0.0
   checksum: 9114b8654fe2366eedc390bad0bcf534e2f01b239a888894e2928cb58cdc1e6ea23a73c6f3450dcfd2058aa73a8a981e723cd1e7c670c047bf11afdc65880107
+  languageName: node
+  linkType: hard
+
+"caf@npm:^9.0.0":
+  version: 9.1.0
+  resolution: "caf@npm:9.1.0"
+  checksum: 16c2985b73019b5e61681c37ee033aebdaf38c2fb16b4d17bf91382b1687441321e25529285914168de0e6eba0c446f77793d4ec820114dde8117231488dee5a
   languageName: node
   linkType: hard
 
@@ -15833,7 +15851,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.0.3":
+"tslib@npm:^2.0.3, tslib@npm:^2.3.0":
   version: 2.3.1
   resolution: "tslib@npm:2.3.1"
   checksum: de17a98d4614481f7fcb5cd53ffc1aaf8654313be0291e1bfaee4b4bb31a20494b7d218ff2e15017883e8ea9626599b3b0e0229c18383ba9dce89da2adf15cb9
@@ -16372,6 +16390,15 @@ typescript@^4.3.2:
   languageName: node
   linkType: hard
 
+"vue-concurrency@npm:^2.2.1":
+  version: 2.2.1
+  resolution: "vue-concurrency@npm:2.2.1"
+  dependencies:
+    caf: ^9.0.0
+  checksum: 989500bb3d3c3b79ed92a6522e176b87483d05f19a054ecdef78b8b8c3a0f543a536c3bd31cd7aaa03c2507ca38609316ee04f22355dd50fcef88c850fd49e6d
+  languageName: node
+  linkType: hard
+
 "vue-drag-drop@npm:^1.1.4":
   version: 1.1.4
   resolution: "vue-drag-drop@npm:1.1.4"
@@ -16632,6 +16659,7 @@ typescript@^4.3.2:
   resolution: "web-runtime@workspace:packages/web-runtime"
   dependencies:
     "@popperjs/core": ^2.4.0
+    "@vue/composition-api": ^1.2.4
     axe-core: ^4.3.3
     easygettext: ^2.16.1
     filesize: ^8.0.0
@@ -16656,6 +16684,7 @@ typescript@^4.3.2:
     vue: ^2.6.10
     vue-async-computed: ^3.9.0
     vue-axe: ^2.4.4
+    vue-concurrency: ^2.2.1
     vue-drag-drop: ^1.1.4
     vue-events: ^3.1.0
     vue-gettext: ^2.1.5

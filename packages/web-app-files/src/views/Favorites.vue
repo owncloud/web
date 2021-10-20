@@ -1,6 +1,6 @@
 <template>
   <div>
-    <list-loader v-if="loading" />
+    <list-loader v-if="loadResourcesTask.isRunning" />
     <template v-else>
       <no-content-message v-if="isEmpty" id="files-favorites-empty" class="files-empty" icon="star">
         <template #message>
@@ -54,6 +54,7 @@ import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../constants'
 import debounce from 'lodash-es/debounce'
+import { useTask } from 'vue-concurrency'
 
 import QuickActions from '../components/FilesList/QuickActions.vue'
 import ListLoader from '../components/FilesList/ListLoader.vue'
@@ -76,9 +77,18 @@ export default {
     MixinFilesListFilter
   ],
 
-  data: () => ({
-    loading: true
-  }),
+  setup() {
+    const loadResourcesTask = useTask(function* (signal, ref) {
+      ref.CLEAR_CURRENT_FILES_LIST()
+
+      let resources = yield ref.$client.files.getFavoriteFiles(DavProperties.Default)
+      resources = resources.map(buildResource)
+      ref.LOAD_FILES({ currentFolder: null, files: resources })
+      ref.loadIndicators({ client: this.$client, currentFolder: '/' })
+    })
+
+    return { loadResourcesTask }
+  },
 
   computed: {
     ...mapState(['app']),
@@ -132,7 +142,7 @@ export default {
   },
 
   created() {
-    this.loadResources()
+    this.loadResourcesTask.perform(this)
     window.onresize = this.adjustTableHeaderPosition
   },
 
@@ -164,19 +174,6 @@ export default {
       }, 250)
 
       visibilityObserver.observe(component.$el, { onEnter: debounced, onExit: debounced.cancel })
-    },
-
-    async loadResources() {
-      this.loading = true
-      this.CLEAR_CURRENT_FILES_LIST()
-
-      let resources = await this.$client.files.getFavoriteFiles(DavProperties.Default)
-
-      resources = resources.map(buildResource)
-      this.LOAD_FILES({ currentFolder: null, files: resources })
-      this.loadIndicators({ client: this.$client, currentFolder: '/' })
-
-      this.loading = false
     }
   }
 }

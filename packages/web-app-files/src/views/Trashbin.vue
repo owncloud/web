@@ -1,6 +1,6 @@
 <template>
   <div>
-    <list-loader v-if="loading" />
+    <list-loader v-if="loadResourcesTask.isRunning" />
     <template v-else>
       <no-content-message
         v-if="isEmpty"
@@ -50,6 +50,7 @@ import MixinFilesListPositioning from '../mixins/filesListPositioning'
 import MixinResources from '../mixins/resources'
 import MixinFilesListPagination from '../mixins/filesListPagination'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
+import { useTask } from 'vue-concurrency'
 
 import ListLoader from '../components/FilesList/ListLoader.vue'
 import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
@@ -69,9 +70,21 @@ export default {
     MixinFilesListFilter
   ],
 
-  data: () => ({
-    loading: true
-  }),
+  setup() {
+    const loadResourcesTask = useTask(function* (signal, ref) {
+      ref.CLEAR_CURRENT_FILES_LIST()
+
+      const resources = yield ref.$client.fileTrash.list('', '1', DavProperties.Trashbin)
+
+      ref.LOAD_FILES({
+        currentFolder: buildResource(resources[0]),
+        files: resources.slice(1).map(buildDeletedResource)
+      })
+      ref.adjustTableHeaderPosition()
+    })
+
+    return { loadResourcesTask }
+  },
 
   computed: {
     ...mapState('Files', ['files']),
@@ -114,7 +127,7 @@ export default {
   },
 
   created() {
-    this.loadResources()
+    this.loadResourcesTask.perform(this)
     window.onresize = this.adjustTableHeaderPosition
   },
 
@@ -123,21 +136,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations('Files', ['LOAD_FILES', 'SET_FILE_SELECTION', 'CLEAR_CURRENT_FILES_LIST']),
-
-    async loadResources() {
-      this.loading = true
-      this.CLEAR_CURRENT_FILES_LIST()
-
-      const resources = await this.$client.fileTrash.list('', '1', DavProperties.Trashbin)
-
-      this.LOAD_FILES({
-        currentFolder: buildResource(resources[0]),
-        files: resources.slice(1).map(buildDeletedResource)
-      })
-      this.adjustTableHeaderPosition()
-      this.loading = false
-    }
+    ...mapMutations('Files', ['LOAD_FILES', 'SET_FILE_SELECTION', 'CLEAR_CURRENT_FILES_LIST'])
   }
 }
 </script>
