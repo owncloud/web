@@ -2665,8 +2665,6 @@ def skipIfUnchanged(ctx, type):
                 "^docs/.*",
                 "^changelog/.*",
                 "^packages/.*/tests/.*",
-                ".drone.star",
-                "tests/drone/getFilesChanged.sh",
             ],
         }
         return [skip_step]
@@ -2676,12 +2674,7 @@ def skipIfUnchanged(ctx, type):
             "ALLOW_SKIP_CHANGED": [
                 "^docs/.*",
                 "^changelog/.*",
-                ".drone.star",
-                "tests/drone/getFilesChanged.sh",
             ],
-            #"DISALLOW_SKIP_CHANGED": [
-            #    "^packages/.*/tests/.*",
-            #],
         }
         return [skip_step]
 
