@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Fix duplicated event subscriptions: [#5910](https://github.com/owncloud/web/pull/5910)
 * Bugfix - External apps by shares: [#5907](https://github.com/owncloud/web/pull/5907)
+* Bugfix - Fix overlapping requests in files app: [#5917](https://github.com/owncloud/web/pull/5917)
 * Bugfix - Clean router path handling: [#5894](https://github.com/owncloud/web/pull/5894)
 * Bugfix - Unnecessary redirects on personal page: [#5893](https://github.com/owncloud/web/pull/5893)
 * Enhancement - Accessible, themeable media viewer: [#5900](https://github.com/owncloud/web/pull/5900)
@@ -41,6 +42,20 @@ Details
 
    https://github.com/owncloud/web/issues/5906
    https://github.com/owncloud/web/pull/5907
+
+* Bugfix - Fix overlapping requests in files app: [#5917](https://github.com/owncloud/web/pull/5917)
+
+   In some cases the files app tended to display the wrong resources when navigating quickly
+   through the views. This happened because the resource provisioning step wasn't canceled.
+   This is now fixed by using vue-concurrency which on a high level wraps iterable generators
+   which are cancelable. We're using it to wrap the resource loading and cancel it as soon as the
+   resource set is not needed anymore.
+
+   It also improves the overall performance for the files app.
+
+   https://github.com/owncloud/web/issues/5085
+   https://github.com/owncloud/web/issues/5875
+   https://github.com/owncloud/web/pull/5917
 
 * Bugfix - Clean router path handling: [#5894](https://github.com/owncloud/web/pull/5894)
 
