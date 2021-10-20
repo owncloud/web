@@ -728,7 +728,7 @@ def main(ctx):
         # run example deploys on cron even if some prior pipelines fail
         deploys = pipelinesDependsOn(deploys, pipelines)
 
-    pipelines = pipelines + deploys + checkStarlark()
+    pipelines = pipelines + deploys
 
     pipelineSanityChecks(ctx, pipelines)
     return pipelines
@@ -736,6 +736,7 @@ def main(ctx):
 def beforePipelines(ctx):
     base = \
         checkForRecentBuilds(ctx) + \
+        checkStarlark() + \
         documentation(ctx) + \
         changelog(ctx)
 
