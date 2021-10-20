@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Fix duplicated event subscriptions: [#5910](https://github.com/owncloud/web/pull/5910)
 * Bugfix - External apps by shares: [#5907](https://github.com/owncloud/web/pull/5907)
+* Bugfix - New Collaborator removes wrong autocomplete items: [#5857](https://github.com/owncloud/web/issues/5857)
 * Bugfix - Fix overlapping requests in files app: [#5917](https://github.com/owncloud/web/pull/5917)
 * Bugfix - Clean router path handling: [#5894](https://github.com/owncloud/web/pull/5894)
 * Bugfix - Unnecessary redirects on personal page: [#5893](https://github.com/owncloud/web/pull/5893)
@@ -42,6 +43,14 @@ Details
 
    https://github.com/owncloud/web/issues/5906
    https://github.com/owncloud/web/pull/5907
+
+* Bugfix - New Collaborator removes wrong autocomplete items: [#5857](https://github.com/owncloud/web/issues/5857)
+
+   We've addressed that when you add new collaborators in the autocomplete and remove one from the
+   autocompletion it always removes the last element.
+
+   https://github.com/owncloud/web/issues/5857
+   https://github.com/owncloud/web/pull/5931
 
 * Bugfix - Fix overlapping requests in files app: [#5917](https://github.com/owncloud/web/pull/5917)
 
