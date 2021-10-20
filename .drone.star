@@ -3,6 +3,12 @@ FULL = 1
 FEDERATED = 2
 NOTIFICATIONS = 3
 
+OC_CI_ALPINE = "owncloudci/alpine:latest"
+OC_CI_CORE_NODEJS = "owncloudci/core:nodejs14"
+OC_CI_GOLANG = "owncloudci/golang:1.16"
+OC_CI_NODEJS = "owncloudci/nodejs:14"
+OC_CI_PHP = "owncloudci/php:7.4"
+
 dir = {
     "base": "/var/www/owncloud",
     "federated": "/var/www/owncloud/federated",
@@ -920,7 +926,7 @@ def changelog(ctx):
             },
             {
                 "name": "diff",
-                "image": "owncloudci/alpine:latest",
+                "image": OC_CI_ALPINE,
                 "pull": "always",
                 "commands": [
                     "git diff",
@@ -1006,7 +1012,7 @@ def unitTests(ctx):
         },
         "steps": [{
                      "name": "clone",
-                     "image": "owncloudci/alpine:latest",
+                     "image": OC_CI_ALPINE,
                      "commands": [
                          "git clone https://github.com/%s.git ." % (repo_slug),
                          "git checkout $DRONE_COMMIT",
@@ -1019,7 +1025,7 @@ def unitTests(ctx):
                  [
                      {
                          "name": "unit-tests",
-                         "image": "owncloudci/nodejs:14",
+                         "image": OC_CI_NODEJS,
                          "pull": "always",
                          "commands": [
                              "if test -f runTestsForDocsChangeOnly; then echo 'skipping unit-tests'; else yarn test:unit; fi",
@@ -1027,7 +1033,7 @@ def unitTests(ctx):
                      },
                      {
                          "name": "integration-tests",
-                         "image": "owncloudci/nodejs:14",
+                         "image": OC_CI_NODEJS,
                          "pull": "always",
                          "commands": [
                              "if test -f runTestsForDocsChangeOnly; then echo 'skipping integration-tests'; else yarn test:integration; fi",
@@ -1416,7 +1422,7 @@ def browserService(alternateSuiteName, browser):
 def owncloudService():
     return [{
         "name": "owncloud",
-        "image": "owncloudci/php:7.4",
+        "image": OC_CI_PHP,
         "pull": "always",
         "environment": {
             "APACHE_WEBROOT": "%s/" % dir["server"],
@@ -1432,7 +1438,7 @@ def owncloudService():
 def owncloudFederatedService():
     return [{
         "name": "federated",
-        "image": "owncloudci/php:7.4",
+        "image": OC_CI_PHP,
         "pull": "always",
         "environment": {
             "APACHE_WEBROOT": "%s/" % dir["federated"],
@@ -1507,7 +1513,7 @@ def installCore(version, db):
 
     stepDefinition = {
         "name": "install-core",
-        "image": "owncloudci/core:nodejs14",
+        "image": OC_CI_CORE_NODEJS,
         "pull": "always",
     }
 
@@ -1553,7 +1559,7 @@ def installFederatedServer(version, db, dbSuffix = "-federated"):
 
     stepDefinition = {
         "name": "install-federated",
-        "image": "owncloudci/core:nodejs14",
+        "image": OC_CI_CORE_NODEJS,
         "pull": "always",
     }
     if version:
@@ -1584,7 +1590,7 @@ def installFederatedServer(version, db, dbSuffix = "-federated"):
 def installYarn():
     return [{
         "name": "yarn-install",
-        "image": "owncloudci/nodejs:14",
+        "image": OC_CI_NODEJS,
         "pull": "always",
         "commands": [
             "if test -f runTestsForDocsChangeOnly; then echo 'skipping installYarn'; else yarn install --immutable; fi",
@@ -1594,7 +1600,7 @@ def installYarn():
 def lintTest():
     return [{
         "name": "lint-test",
-        "image": "owncloudci/nodejs:14",
+        "image": OC_CI_NODEJS,
         "pull": "always",
         "commands": [
             "yarn run lint",
@@ -1604,7 +1610,7 @@ def lintTest():
 def buildWebApp():
     return [{
         "name": "build-web-integration-app",
-        "image": "owncloudci/nodejs:14",
+        "image": OC_CI_NODEJS,
         "pull": "always",
         "commands": [
             "bash -x tests/drone/build-web-app.sh {}".format(dir["web"]),
@@ -1618,7 +1624,7 @@ def buildWebApp():
 def setupIntegrationWebApp():
     return [{
         "name": "setup-web-integration-app",
-        "image": "owncloudci/php:7.4",
+        "image": OC_CI_PHP,
         "pull": "always",
         "commands": [
             "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping setupIntegrationWebApp'; else bash -x tests/drone/setup-integration-web-app.sh {} {}; fi".format(dir["server"], dir["web"]),
@@ -1632,7 +1638,7 @@ def setupIntegrationWebApp():
 def buildWeb():
     return [{
         "name": "build-web",
-        "image": "owncloudci/nodejs:14",
+        "image": OC_CI_NODEJS,
         "pull": "always",
         "commands": [
             "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping buildWeb'; else bash -x tests/drone/build-web.sh {}; fi".format(dir["web"]),
@@ -1672,7 +1678,7 @@ def buildRelease(ctx):
     return [
         {
             "name": "make",
-            "image": "owncloudci/nodejs:14",
+            "image": OC_CI_NODEJS,
             "pull": "always",
             "commands": [
                 "cd %s" % dir["web"],
@@ -1732,7 +1738,7 @@ def website(ctx):
             "steps": [
                 {
                     "name": "prepare",
-                    "image": "owncloudci/alpine:latest",
+                    "image": OC_CI_ALPINE,
                     "commands": [
                         "\tmake docs-copy",
                     ],
@@ -1747,7 +1753,7 @@ def website(ctx):
                 },
                 {
                     "name": "list",
-                    "image": "owncloudci/alpine:latest",
+                    "image": OC_CI_ALPINE,
                     "commands": [
                         "tree hugo/public",
                     ],
@@ -1808,7 +1814,7 @@ def website(ctx):
 def getSkeletonFiles():
     return [{
         "name": "setup-skeleton-files",
-        "image": "owncloudci/php:7.4",
+        "image": OC_CI_PHP,
         "pull": "always",
         "commands": [
             "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping getSkeletonFiles'; else git clone https://github.com/owncloud/testing.git /srv/app/testing; fi",
@@ -1822,7 +1828,7 @@ def getSkeletonFiles():
 def webService():
     return [{
         "name": "web",
-        "image": "owncloudci/php:7.4",
+        "image": OC_CI_PHP,
         "pull": "always",
         "environment": {
             "APACHE_WEBROOT": "%s/dist" % dir["web"],
@@ -1844,7 +1850,7 @@ def setUpOauth2(forIntegrationApp):
 
     return [{
         "name": "setup-oauth2",
-        "image": "owncloudci/php:7.4",
+        "image": OC_CI_PHP,
         "pull": "always",
         "commands": [
             "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping setup-oauth2'; else bash -x tests/drone/setup-oauth2.sh {} {}; fi".format(dir["server"], oidcURL),
@@ -1854,7 +1860,7 @@ def setUpOauth2(forIntegrationApp):
 def setupGraphapiOIdC():
     return [{
         "name": "setup-graphapi",
-        "image": "owncloudci/php:7.4",
+        "image": OC_CI_PHP,
         "pull": "always",
         "commands": [
             "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping setupGraphapiOIdC'; else bash -x tests/drone/setup-graph-api-oidc.sh {}; fi".format(dir["server"]),
@@ -1864,7 +1870,7 @@ def setupGraphapiOIdC():
 def buildGlauth():
     return [{
         "name": "build-glauth",
-        "image": "owncloudci/golang:1.16",
+        "image": OC_CI_GOLANG,
         "pull": "always",
         "commands": [
             "bash -x tests/drone/build-glauth.sh {}".format(dir["base"]),
@@ -1881,7 +1887,7 @@ def buildGlauth():
 def glauthService():
     return [{
         "name": "glauth",
-        "image": "owncloudci/golang:1.16",
+        "image": OC_CI_GOLANG,
         "pull": "always",
         "detach": True,
         "environment": {
@@ -1904,7 +1910,7 @@ def glauthService():
 def buildIdP():
     return [{
         "name": "build-idp",
-        "image": "owncloudci/golang:1.16",
+        "image": OC_CI_GOLANG,
         "pull": "always",
         "commands": [
             "bash -x tests/drone/build-idp.sh {}".format(dir["base"]),
@@ -1921,7 +1927,7 @@ def buildIdP():
 def idpService():
     return [{
         "name": "idp",
-        "image": "owncloudci/golang:1.16",
+        "image": OC_CI_GOLANG,
         "pull": "always",
         "detach": True,
         "environment": {
@@ -1955,7 +1961,7 @@ def idpService():
 def ocisService():
     return [{
         "name": "ocis",
-        "image": "owncloudci/golang:1.16",
+        "image": OC_CI_GOLANG,
         "pull": "always",
         "detach": True,
         "environment": {
@@ -1994,7 +2000,7 @@ def ocisService():
 def buildOcisWeb():
     return [{
         "name": "build-ocis-web",
-        "image": "owncloudci/golang:1.16",
+        "image": OC_CI_GOLANG,
         "pull": "always",
         "commands": [
             "bash -x tests/drone/build-ocis-web.sh {}".format(dir["base"]),
@@ -2012,7 +2018,7 @@ def buildOcisWeb():
 def ocisWebService():
     return [{
         "name": "web",
-        "image": "owncloudci/golang:1.16",
+        "image": OC_CI_GOLANG,
         "pull": "always",
         "detach": True,
         "environment": {
@@ -2035,7 +2041,7 @@ def ocisWebService():
 def setupNotificationsAppForServer():
     return [{
         "name": "install-notifications-app-on-server",
-        "image": "owncloudci/php:7.4",
+        "image": OC_CI_PHP,
         "pull": "always",
         "commands": [
             "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping setupNotificationsApp'; else bash -x tests/drone/setup-notifications-app.sh {}; fi".format(dir["server"]),
@@ -2045,7 +2051,7 @@ def setupNotificationsAppForServer():
 def setupServerAndAppsForIntegrationApp(logLevel):
     return [{
         "name": "setup-server-%s" % config["app"],
-        "image": "owncloudci/php:7.4",
+        "image": OC_CI_PHP,
         "pull": "always",
         "commands": [
             "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping server-setup'; else bash -x tests/drone/setup-server-and-app.sh %s %s %s; fi" % (dir["server"], logLevel, "builtInWeb"),
@@ -2055,7 +2061,7 @@ def setupServerAndAppsForIntegrationApp(logLevel):
 def setupServerAndApp(logLevel):
     return [{
         "name": "setup-server-%s" % config["app"],
-        "image": "owncloudci/php:7.4",
+        "image": OC_CI_PHP,
         "pull": "always",
         "commands": [
             "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping server-setup'; else bash -x tests/drone/setup-server-and-app.sh %s %s; fi" % (dir["server"], logLevel),
@@ -2065,7 +2071,7 @@ def setupServerAndApp(logLevel):
 def setupFedServerAndApp(logLevel):
     return [{
         "name": "setup-fed-server-%s" % config["app"],
-        "image": "owncloudci/php:7.4",
+        "image": OC_CI_PHP,
         "pull": "always",
         "commands": [
             "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping server-setup'; else bash -x tests/drone/setup-fed-server-and-app.sh {} {}; fi".format(dir["federated"], logLevel),
@@ -2075,7 +2081,7 @@ def setupFedServerAndApp(logLevel):
 def fixPermissions():
     return [{
         "name": "fix-permissions",
-        "image": "owncloudci/php:7.4",
+        "image": OC_CI_PHP,
         "pull": "always",
         "commands": [
             "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping fixPermissions'; else cd %s && chown www-data * -R; fi" % dir["server"],
@@ -2085,7 +2091,7 @@ def fixPermissions():
 def fixPermissionsFederated():
     return [{
         "name": "fix-permissions-federated",
-        "image": "owncloudci/php:7.4",
+        "image": OC_CI_PHP,
         "pull": "always",
         "commands": [
             "if test -f runUnitTestsOnly || test -f runTestsForDocsChangeOnly; then echo 'skipping fixPermissions'; else cd %s && chown www-data * -R; fi" % dir["federated"],
@@ -2118,7 +2124,7 @@ def copyFilesForUpload():
     return [{
         "name": "copy-files-for-upload",
         "pull": "always",
-        "image": "owncloudci/php:7.4",
+        "image": OC_CI_PHP,
         "volumes": [{
             "name": "uploads",
             "path": "/filesForUpload",
@@ -2166,7 +2172,7 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
 
     return [{
         "name": "webui-acceptance-tests",
-        "image": "owncloudci/nodejs:14",
+        "image": OC_CI_NODEJS,
         "pull": "always",
         "environment": environment,
         "commands": [
@@ -2227,7 +2233,7 @@ def getOcis():
 def buildOCISCache():
     return [{
         "name": "build-ocis",
-        "image": "owncloudci/golang:1.16",
+        "image": OC_CI_GOLANG,
         "pull": "always",
         "commands": [
             "./tests/drone/build-ocis.sh",
@@ -2338,7 +2344,7 @@ def uploadScreenshots():
 def listScreenShots():
     return [{
         "name": "list screenshots-visual",
-        "image": "owncloudci/nodejs:14",
+        "image": OC_CI_NODEJS,
         "pull": "always",
         "commands": [
             "ls -laR %s/tests/vrt" % dir["web"],
@@ -2656,7 +2662,7 @@ def calculateTestsToRunBasedOnFilesChanged(ctx):
     return [
         {
             "name": "calculate-diff",
-            "image": "owncloudci/nodejs:14",
+            "image": OC_CI_NODEJS,
             "pull": "always",
             "commands": [
                 "bash -x tests/drone/getFilesChanged.sh",
@@ -2747,7 +2753,7 @@ def genericCachePurge(ctx, name, cache_key):
 def listDir(path):
     return {
         "name": "list-dir",
-        "image": "owncloudci/alpine",
+        "image": OC_CI_ALPINE,
         "pull": "always",
         "commands": [
             "tree %s" % (path),
