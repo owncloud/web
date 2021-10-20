@@ -765,7 +765,7 @@ def stagePipelines(ctx):
         return unit_test_pipelines
 
     acceptance_pipelines = acceptance(ctx)
-    if ("acceptance-tests-only" not in title):
+    if ("acceptance-tests-only" in title):
         return acceptance_pipelines
 
     return unit_test_pipelines + pipelinesDependsOn(acceptance_pipelines, unit_test_pipelines)
