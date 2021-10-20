@@ -1,0 +1,7 @@
+Bugfix: New Collaborator removes wrong autocomplete items
+
+We've addressed that when you add new collaborators in the autocomplete 
+and remove one from the autocompletion it always removes the last element.
+
+https://github.com/owncloud/web/issues/5857
+https://github.com/owncloud/web/pull/5931
