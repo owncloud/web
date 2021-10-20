@@ -5,7 +5,7 @@ NOTIFICATIONS = 3
 
 OC_CI_ALPINE = "owncloudci/alpine:latest"
 OC_CI_CORE_NODEJS = "owncloudci/core:nodejs14"
-OC_CI_GOLANG = "owncloudci/golang:1.16"
+OC_CI_GOLANG = "owncloudci/golang:1.17"
 OC_CI_NODEJS = "owncloudci/nodejs:14"
 OC_CI_PHP = "owncloudci/php:7.4"
 
