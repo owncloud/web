@@ -2659,22 +2659,37 @@ def skipIfUnchanged(ctx, type):
         },
     }
 
+    base_skip_steps = [
+        "^.github/.*",
+        "^changelog/.*",
+        "^config/.*",
+        "^deployments/.*",
+        "^dev/.*",
+        "^docs/.*",
+        "^packages/web-app-skeleton/.*",
+        "^tests/smoke/.*",
+        "README.md",
+    ]
+
     if type == "acceptance-tests":
+        acceptance_skip_steps = [
+            "^__fixtures__/.*",
+            "^__mocks__/.*",
+            "^packages/.*/tests/.*",
+            "^tests/integration/.*",
+            "^tests/unit/.*",
+        ]
         skip_step["settings"] = {
-            "ALLOW_SKIP_CHANGED": [
-                "^docs/.*",
-                "^changelog/.*",
-                "^packages/.*/tests/.*",
-            ],
+            "ALLOW_SKIP_CHANGED": base_skip_steps + acceptance_skip_steps,
         }
         return [skip_step]
 
     if type == "unit-tests":
+        unit_skip_steps = [
+            "^tests/acceptance/.*",
+        ]
         skip_step["settings"] = {
-            "ALLOW_SKIP_CHANGED": [
-                "^docs/.*",
-                "^changelog/.*",
-            ],
+            "ALLOW_SKIP_CHANGED": base_skip_steps + unit_skip_steps,
         }
         return [skip_step]
 
