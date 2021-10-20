@@ -802,14 +802,14 @@ def yarnlint(ctx):
     result = {
         "kind": "pipeline",
         "type": "docker",
-        "name": "lint-test",
+        "name": "lint",
         "workspace": {
             "base": dir["base"],
             "path": config["app"],
         },
         "steps": restoreBuildArtifactCache(ctx, ".yarn", ".yarn") +
                  installYarn() +
-                 lintTest(),
+                 lint(),
         "trigger": {
             "ref": [
                 "refs/heads/master",
@@ -1608,9 +1608,9 @@ def installYarn():
         ],
     }]
 
-def lintTest():
+def lint():
     return [{
-        "name": "lint-test",
+        "name": "lint",
         "image": OC_CI_NODEJS,
         "commands": [
             "yarn run lint",
