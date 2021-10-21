@@ -2649,6 +2649,9 @@ def getPipelineNames(pipelines = []):
     return names
 
 def skipIfUnchanged(ctx, type):
+    if ("full-ci" in ctx.build.title.lower()):
+        return []
+
     skip_step = {
         "name": "skip-if-unchanged",
         "image": "owncloudci/drone-skip-pipeline",
