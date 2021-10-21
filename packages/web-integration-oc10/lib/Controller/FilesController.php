@@ -21,7 +21,7 @@
 
 namespace OCA\Web\Controller;
 
-use GuzzleHttp\Mimetypes;
+use GuzzleHttp\Psr7\MimeType;
 use OC\AppFramework\Http;
 use OCP\App\IAppManager;
 use OCP\AppFramework\Controller;
@@ -39,14 +39,14 @@ use OCP\IRequest;
  */
 class FilesController extends Controller {
 
-	/**
-	 * @var IConfig
-	 */
-	private $config;
+    /**
+     * @var IConfig
+     */
+    private $config;
     /**
      * @var IAppManager
      */
-	private $appManager;
+    private $appManager;
 
     /**
      * FilesController constructor.
@@ -56,68 +56,68 @@ class FilesController extends Controller {
      * @param IConfig $config
      * @param IAppManager $appManager
      */
-	public function __construct(string $appName, IRequest $request, IConfig $config, IAppManager  $appManager) {
-		parent::__construct($appName, $request);
-		$this->config = $config;
-		$this->appManager = $appManager;
-	}
+    public function __construct(string $appName, IRequest $request, IConfig $config, IAppManager  $appManager) {
+        parent::__construct($appName, $request);
+        $this->config = $config;
+        $this->appManager = $appManager;
+    }
 
-	/**
-	 * Tries to load a file by the given $path.
-	 *
-	 * @PublicPage
-	 * @NoCSRFRequired
-	 *
-	 * @param $path string
-	 * @return DataResponse
-	 */
-	public function getFile(string $path): Response {
-		// don't allow directory traversal to parents
-		if (\strpos($path, "..") !== false) {
-			return new DataResponse(['error' => 'resource not found'], Http::STATUS_NOT_FOUND);
-		}
+    /**
+     * Tries to load a file by the given $path.
+     *
+     * @PublicPage
+     * @NoCSRFRequired
+     *
+     * @param $path string
+     * @return DataResponse
+     */
+    public function getFile(string $path): Response {
+        // don't allow directory traversal to parents
+        if (\strpos($path, "..") !== false) {
+            return new DataResponse(['error' => 'resource not found'], Http::STATUS_NOT_FOUND);
+        }
 
-		// check if path permitted
-		$permittedPaths = ["css", "img", "js", "themes", "icons", "index.html", "manifest.json", "oidc-callback.html", "oidc-silent-redirect.html"];
-		$found = false;
-		foreach ($permittedPaths as $p) {
-			if (\strpos($path, $p) === 0) {
-				$found = true;
-				break;
-			}
-		}
-		if (!$found) {
-			return new DataResponse(['error' => 'resource not found'], Http::STATUS_NOT_FOUND);
-		}
+        // check if path permitted
+        $permittedPaths = ["css", "img", "js", "themes", "icons", "index.html", "manifest.json", "oidc-callback.html", "oidc-silent-redirect.html"];
+        $found = false;
+        foreach ($permittedPaths as $p) {
+            if (\strpos($path, $p) === 0) {
+                $found = true;
+                break;
+            }
+        }
+        if (!$found) {
+            return new DataResponse(['error' => 'resource not found'], Http::STATUS_NOT_FOUND);
+        }
 
-		// check if path resolves to an actual file
-		if (\is_dir($path)) {
-			return new DataResponse(['error' => 'resource not found'], Http::STATUS_NOT_FOUND);
-		}
-		$basePath = \dirname(__DIR__,2);
-		$absolutePath = \realpath( $basePath . '/' . $path);
-		if ($absolutePath === false) {
-			return new DataResponse(['error' => 'resource not found'], Http::STATUS_NOT_FOUND);
-		}
-		if (\strpos($absolutePath, $basePath) !== 0) {
-			return new DataResponse(['error' => 'resource not found'], Http::STATUS_NOT_FOUND);
-		}
+        // check if path resolves to an actual file
+        if (\is_dir($path)) {
+            return new DataResponse(['error' => 'resource not found'], Http::STATUS_NOT_FOUND);
+        }
+        $basePath = \dirname(__DIR__,2);
+        $absolutePath = \realpath( $basePath . '/' . $path);
+        if ($absolutePath === false) {
+            return new DataResponse(['error' => 'resource not found'], Http::STATUS_NOT_FOUND);
+        }
+        if (\strpos($absolutePath, $basePath) !== 0) {
+            return new DataResponse(['error' => 'resource not found'], Http::STATUS_NOT_FOUND);
+        }
 
-		$response = new DataDisplayResponse(\file_get_contents($absolutePath), Http::STATUS_OK, [
-			'Content-Type' => $this->getMimeType($absolutePath),
-			'Content-Length' => \filesize($absolutePath),
-			'Cache-Control' => 'max-age=0, no-cache, no-store, must-revalidate',
-			'Pragma' => 'no-cache',
-			'Expires' => 'Wed, 11 Jan 1984 05:00:00 GMT',
-			'X-Frame-Options' => 'DENY'
-		]);
-		if (\strpos($path, "oidc-callback.html") === 0 || \strpos($path, "oidc-silent-redirect.html") === 0) {
-			$csp = new ContentSecurityPolicy();
-			$csp->allowInlineScript(true);
+        $response = new DataDisplayResponse(\file_get_contents($absolutePath), Http::STATUS_OK, [
+            'Content-Type' => $this->getMimeType($absolutePath),
+            'Content-Length' => \filesize($absolutePath),
+            'Cache-Control' => 'max-age=0, no-cache, no-store, must-revalidate',
+            'Pragma' => 'no-cache',
+            'Expires' => 'Wed, 11 Jan 1984 05:00:00 GMT',
+            'X-Frame-Options' => 'DENY'
+        ]);
+        if (\strpos($path, "oidc-callback.html") === 0 || \strpos($path, "oidc-silent-redirect.html") === 0) {
+            $csp = new ContentSecurityPolicy();
+            $csp->allowInlineScript(true);
             $csp = $this->applyCSPOpenIDConnect($csp);
-			$response->setContentSecurityPolicy($csp);
-		}
-		if (\strpos($path, "index.html") === 0) {
+            $response->setContentSecurityPolicy($csp);
+        }
+        if (\strpos($path, "index.html") === 0) {
             $csp = new ContentSecurityPolicy();
             $csp->allowInlineScript(true);
             $csp = $this->applyCSPOpenIDConnect($csp);
@@ -129,13 +129,12 @@ class FilesController extends Controller {
             $response->setContentSecurityPolicy($csp);
         }
 
-		return $response;
-	}
+        return $response;
+    }
 
-	private function getMimeType(string $filename): string {
-		$mimeTypes = Mimetypes::getInstance();
-		return $mimeTypes->fromFilename($filename);
-	}
+    private function getMimeType(string $filename): ?string {
+        return Mimetype::fromFilename($filename);
+    }
 
     private function applyCSPOpenIDConnect(ContentSecurityPolicy $csp): ContentSecurityPolicy {
         $oidcUrl = $this->getOpenIDConnectServerUrl();
@@ -163,7 +162,7 @@ class FilesController extends Controller {
         return $oidcClient->getProviderURL();
     }
 
-	private function applyCSPOnlyOffice(ContentSecurityPolicy $csp): ContentSecurityPolicy {
+    private function applyCSPOnlyOffice(ContentSecurityPolicy $csp): ContentSecurityPolicy {
         $ooUrl = $this->getOnlyOfficeDocumentServerUrl();
         $documentServerUrl = $this->extractDomain($ooUrl);
         if (!empty($documentServerUrl)) {
@@ -171,7 +170,7 @@ class FilesController extends Controller {
             $csp->addAllowedFrameDomain($documentServerUrl);
         } else if (!empty($ooUrl)) {
             $csp->addAllowedFrameDomain("'self'");
-	}
+    }
         return $csp;
     }
 
