@@ -474,23 +474,4 @@ export default {
 .sharee-avatars {
   justify-self: flex-end;
 }
-/* TODO: Move to design system */
-.oc-app-side-bar .oc-label {
-  display: block;
-  margin-bottom: 5px;
-}
-
-.oc-app-side-bar .files-collaborators-role-button {
-  padding: 0 10px;
-  text-align: left;
-}
-
-.oc-app-side-bar .oc-autocomplete-dropdown .uk-card {
-  padding: 0 !important;
-}
-
-.oc-app-side-bar .oc-autocomplete-suggestion:hover .oc-text-muted,
-.oc-autocomplete-suggestion-selected .oc-text-muted {
-  color: white;
-}
 </style>
