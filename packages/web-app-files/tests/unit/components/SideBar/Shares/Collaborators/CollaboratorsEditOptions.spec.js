@@ -40,64 +40,57 @@ function getWrapper() {
 }
 
 const selectors = {
-  roleLabel: 'label',
   roleButton: '#files-collaborators-role-button',
   roleSelect: '.files-collaborators-role-button-wrapper',
   expirationDate: '.files-recipient-expiration-datepicker',
   permissionCheckbox: '.files-collaborators-permission-checkbox',
-  translateStub: 'translate-stub'
+  translateStub: 'translate-stub',
+  fileRecipientrolesDrop: '[data-testid="files-recipient-roles-drop"]',
+  fileRecipientCustomPermissionDrop: '[data-testid="files-recipient-custom-permissions-drop"]',
+  customPermissionDrop: '[data-testid="files-recipient-custom-permissions-drop"]',
+  advancedRoleDropButton: '[data-testid="files-recipient-role-drop-btn-advancedRole"]',
+  customPermissionDropConfirm: '[data-testid="files-recipient-custom-permissions-drop-confirm"]',
+  customPermissionDropCancel: '[data-testid="files-recipient-custom-permissions-drop-cancel"]'
 }
 
 describe('CollaboratorsEditOptions component', () => {
-  describe('Roles selection dropdowns', () => {
+  describe('Role selection dropdown', () => {
     afterEach(() => {
       jest.clearAllMocks()
     })
 
     it('opens custom permissions drop when custom permissions item in the roles is selected', async () => {
       const wrapper = getWrapper()
-      const advancedPermissionsDrop = wrapper.find(
-        '[data-testid="files-recipient-custom-permissions-drop"]'
-      )
+      const advancedPermissionsDrop = wrapper.find(selectors.customPermissionDrop)
       const showHideMock = jest.fn()
       advancedPermissionsDrop.vm.show = showHideMock
       wrapper.vm.$refs.rolesDrop.tippy = { hide: showHideMock }
 
-      await wrapper
-        .find('[data-testid="files-recipient-role-drop-btn-advancedRole"]')
-        .trigger('click')
+      await wrapper.find(selectors.advancedRoleDropButton).trigger('click')
 
       expect(showHideMock).toHaveBeenCalledTimes(2)
     })
 
     it('closes custom permissions drop when they are confirmed', async () => {
       const wrapper = getWrapper()
-      const permissionsDrop = wrapper.find(
-        '[data-testid="files-recipient-custom-permissions-drop"]'
-      )
+      const permissionsDrop = wrapper.find(selectors.customPermissionDrop)
 
       permissionsDrop.vm.hide = jest.fn()
 
-      await wrapper
-        .find('[data-testid="files-recipient-custom-permissions-drop-confirm"]')
-        .trigger('click')
+      await wrapper.find(selectors.customPermissionDropConfirm).trigger('click')
 
       expect(permissionsDrop.vm.hide).toHaveBeenCalled()
     })
 
     it('opens role drop when custom permissions drop is cancelled', async () => {
       const wrapper = getWrapper()
-      const rolesDrop = wrapper.find('[data-testid="files-recipient-roles-drop"]')
-      const permissionsDrop = wrapper.find(
-        '[data-testid="files-recipient-custom-permissions-drop"]'
-      )
+      const rolesDrop = wrapper.find(selectors.fileRecipientrolesDrop)
+      const permissionsDrop = wrapper.find(selectors.fileRecipientCustomPermissionDrop)
 
       rolesDrop.vm.show = jest.fn()
       permissionsDrop.vm.hide = jest.fn()
 
-      await wrapper
-        .find('[data-testid="files-recipient-custom-permissions-drop-cancel"]')
-        .trigger('click')
+      await wrapper.find(selectors.customPermissionDropCancel).trigger('click')
 
       expect(permissionsDrop.vm.hide).toHaveBeenCalled()
       expect(rolesDrop.vm.show).toHaveBeenCalled()
