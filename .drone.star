@@ -734,27 +734,14 @@ def main(ctx):
     return pipelines
 
 def beforePipelines(ctx):
-    base = \
-        checkForRecentBuilds(ctx) + \
-        checkStarlark() + \
-        documentation(ctx) + \
-        changelog(ctx)
-
-    lint = \
-        yarnCache(ctx) + \
-        pipelinesDependsOn(yarnlint(ctx), yarnCache(ctx))
-
-    test_cache = \
-        cacheOcisPipeline(ctx) + \
-        pipelinesDependsOn(buildCacheWeb(ctx), yarnCache(ctx))
-
-    title = ctx.build.title.lower()
-    if "docs-only" in title:
-        return base
-    elif "unit-tests-only" in title:
-        return base + lint
-    else:
-        return base + lint + test_cache
+    return checkForRecentBuilds(ctx) + \
+           checkStarlark() + \
+           documentation(ctx) + \
+           changelog(ctx) + \
+           yarnCache(ctx) + \
+           cacheOcisPipeline(ctx) + \
+           pipelinesDependsOn(buildCacheWeb(ctx), yarnCache(ctx)) + \
+           pipelinesDependsOn(yarnlint(ctx), yarnCache(ctx))
 
 def stagePipelines(ctx):
     title = ctx.build.title.lower()
