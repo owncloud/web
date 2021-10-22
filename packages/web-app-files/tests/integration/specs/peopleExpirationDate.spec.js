@@ -95,7 +95,7 @@ describe('Users can set expiration date when sharing with users or groups', () =
     ).toBeVisible()
   })
 
-  test('user can edit an existing expiration date', async () => {
+  test.skip('user can edit an existing expiration date', async () => {
     const { findByTestId, baseElement, getByTestId, findByText, queryByTestId } = renderComponent({
       mocks: {
         $client: {
@@ -318,7 +318,7 @@ describe('Users can set expiration date when sharing with users or groups', () =
     ).toBeVisible()
   })
 
-  test('user can edit expiration date within enforced maximum date', async () => {
+  test.skip('user can edit expiration date within enforced maximum date', async () => {
     const { findByTestId, baseElement, getByTestId, findByText, queryByTestId } = renderComponent({
       store: {
         modules: {
