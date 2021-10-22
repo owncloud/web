@@ -4,11 +4,14 @@ import App from './App.vue'
 const routes = [
   {
     name: 'edit',
-    path: '/edit/:filePath',
+    path: '/edit/:filePath*',
     components: {
       fullscreen: App
     },
-    meta: { hideHeadbar: true }
+    meta: {
+      hideHeadbar: true,
+      patchCleanPath: true
+    }
   }
 ]
 

@@ -56,7 +56,7 @@ export default {
     }
   },
   created() {
-    this.filePath = this.$route.params.filePath
+    this.filePath = `/${this.$route.params.filePath.split('/').filter(Boolean).join('/')}`
     this.fileExtension = this.filePath.split('.').pop()
     this.checkPermissions()
     window.addEventListener('message', (event) => {
