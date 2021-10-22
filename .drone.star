@@ -2690,7 +2690,6 @@ def skipIfUnchanged(ctx, type):
         "^docs/.*",
         "^packages/web-app-skeleton/.*",
         "^tests/smoke/.*",
-        "^.drone.star",  #TODO: remove me before merging
         "README.md",
     ]
 
