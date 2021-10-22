@@ -766,7 +766,8 @@ def yarnCache(ctx):
         "kind": "pipeline",
         "type": "docker",
         "name": "cache-yarn",
-        "steps": installYarn() +
+        "steps": skipIfUnchanged(ctx, "cache") +
+                 installYarn() +
                  rebuildBuildArtifactCache(ctx, ".yarn", ".yarn"),
         "trigger": {
             "ref": [
@@ -795,7 +796,8 @@ def yarnlint(ctx):
             "base": dir["base"],
             "path": config["app"],
         },
-        "steps": restoreBuildArtifactCache(ctx, ".yarn", ".yarn") +
+        "steps": skipIfUnchanged(ctx, "lint") +
+                 restoreBuildArtifactCache(ctx, ".yarn", ".yarn") +
                  installYarn() +
                  lint(),
         "trigger": {
@@ -978,7 +980,8 @@ def buildCacheWeb(ctx):
         "kind": "pipeline",
         "type": "docker",
         "name": "cache-web",
-        "steps": restoreBuildArtifactCache(ctx, ".yarn", ".yarn") +
+        "steps": skipIfUnchanged(ctx, "cache") +
+                 restoreBuildArtifactCache(ctx, ".yarn", ".yarn") +
                  installYarn() +
                  [{
                      "name": "build-web",
@@ -2163,7 +2166,8 @@ def cacheOcisPipeline(ctx):
             "base": dir["base"],
             "path": config["app"],
         },
-        "steps": buildOCISCache() +
+        "steps": skipIfUnchanged(ctx, "cache") +
+                 buildOCISCache() +
                  cacheOcis() +
                  listRemoteCache(),
         "volumes": [{
@@ -2686,8 +2690,15 @@ def skipIfUnchanged(ctx, type):
         "^docs/.*",
         "^packages/web-app-skeleton/.*",
         "^tests/smoke/.*",
+        "^.drone.star",  #TODO: remove me before merging
         "README.md",
     ]
+
+    if type == "cache" or type == "lint":
+        skip_step["settings"] = {
+            "ALLOW_SKIP_CHANGED": base_skip_steps,
+        }
+        return [skip_step]
 
     if type == "acceptance-tests":
         acceptance_skip_steps = [
