@@ -31,6 +31,24 @@ import { mapGetters } from 'vuex'
 import ErrorScreen from './components/ErrorScreen.vue'
 import LoadingScreen from './components/LoadingScreen.vue'
 
+// hacky, get rid asap, just a workaround
+// same as packages/web-app-files/src/views/PublicFiles.vue
+const unauthenticatedUserReady = async (router, store) => {
+  if (store.getters.userReady) {
+    return
+  }
+
+  const publicToken = router.currentRoute.query['public-token']
+  const publicLinkPassword = store.getters['Files/publicLinkPassword']
+
+  await store.dispatch('loadCapabilities', {
+    publicToken,
+    ...(publicLinkPassword && { user: 'public', password: publicLinkPassword })
+  })
+
+  store.commit('SET_USER_READY', true)
+}
+
 export default {
   name: 'ExternalApp',
 
@@ -70,6 +88,8 @@ export default {
     }
   },
   async created() {
+    await unauthenticatedUserReady(this.$router, this.$store)
+
     this.loading = true
     const publicLinkPassword = this.publicLinkPassword
     const { 'public-token': publicToken } = this.$route.query
