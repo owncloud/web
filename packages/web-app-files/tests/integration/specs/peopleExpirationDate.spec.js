@@ -62,14 +62,14 @@ describe('Users can set expiration date when sharing with users or groups', () =
 
     const newDate = getDateInFuture(2)
     const dateSelector = document.evaluate(
-      `//span[contains(@class, "vc-day-content vc-focusable") and text()="${newDate.getDate()}"]`,
+      `//span[contains(@class, "vc-day-content vc-focusable") and not(contains(@class, "is-disabled")) and text()="${newDate.getDate()}"]`,
       baseElement,
       null,
       XPathResult.FIRST_ORDERED_NODE_TYPE,
       null
     ).singleNodeValue
 
-    if (dateSelector.classList.contains('is-disabled')) {
+    if (!dateSelector) {
       const nextMonthBtn = baseElement.querySelector('.vc-arrow.is-right')
 
       userEvent.click(nextMonthBtn)
@@ -290,14 +290,14 @@ describe('Users can set expiration date when sharing with users or groups', () =
 
     const newDate = getDateInFuture(2)
     const dateSelector = document.evaluate(
-      `//span[contains(@class, "vc-day-content vc-focusable") and text()="${newDate.getDate()}"]`,
+      `//span[contains(@class, "vc-day-content vc-focusable") and not(contains(@class, "is-disabled")) and text()="${newDate.getDate()}"]`,
       baseElement,
       null,
       XPathResult.FIRST_ORDERED_NODE_TYPE,
       null
     ).singleNodeValue
 
-    if (dateSelector.classList.contains('is-disabled')) {
+    if (!dateSelector) {
       const nextMonthBtn = baseElement.querySelector('.vc-arrow.is-right')
 
       userEvent.click(nextMonthBtn)
