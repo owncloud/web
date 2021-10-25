@@ -24,9 +24,9 @@ else
 			git clone -b "$OCIS_BRANCH" --single-branch --no-tags https://github.com/owncloud/ocis
 			cd ocis || exit
 			git checkout "$OCIS_COMMITID"
-			cd ocis || exit
 			make ci-node-generate
 		else # golang
+			cd "$GOPATH"/src/github.com/owncloud/ocis/ocis || exit
 			make build
 			mkdir -p /var/www/owncloud/ocis-build/"$OCIS_COMMITID"
 			cp bin/ocis /var/www/owncloud/ocis-build/"$OCIS_COMMITID"/
