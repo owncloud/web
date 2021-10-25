@@ -2179,6 +2179,10 @@ def cacheOcisPipeline(ctx):
         "steps": buildOCISCache() +
                  cacheOcis() +
                  listRemoteCache(),
+        "volumes": [{
+            "name": "gopath",
+            "temp": {},
+        }],
         "trigger": {
             "ref": [
                 "refs/heads/master",
@@ -2210,13 +2214,37 @@ def getOcis():
     }]
 
 def buildOCISCache():
-    return [{
-        "name": "build-ocis",
-        "image": OC_CI_GOLANG,
-        "commands": [
-            "./tests/drone/build-ocis.sh",
-        ],
-    }]
+    return [
+        {
+            "name": "generate-ocis",
+            "image": OC_CI_NODEJS,
+            "environment": {
+                "GOPATH": "/go",
+            },
+            "commands": [
+                "./tests/drone/build-ocis.sh nodejs",
+            ],
+            "volumes": [
+                {
+                    "name": "gopath",
+                    "path": "/go",
+                },
+            ],
+        },
+        {
+            "name": "build-ocis",
+            "image": OC_CI_GOLANG,
+            "commands": [
+                "./tests/drone/build-ocis.sh golang",
+            ],
+            "volumes": [
+                {
+                    "name": "gopath",
+                    "path": "/go",
+                },
+            ],
+        },
+    ]
 
 def cacheOcis():
     return [{
