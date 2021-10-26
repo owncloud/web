@@ -3,12 +3,35 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v4.3.0...master
+[unreleased]: https://github.com/owncloud/web/compare/v4.4.0...master
 
 Summary
 -------
 
 * Bugfix - Fix location picker breadcrumb url encoding: [#5940](https://github.com/owncloud/web/pull/5940)
+
+Details
+-------
+
+* Bugfix - Fix location picker breadcrumb url encoding: [#5940](https://github.com/owncloud/web/pull/5940)
+
+   The breadcrumb urls in location-picker were encoded. We've fixed this by removing the
+   encoding.
+
+   https://github.com/owncloud/web/issues/5938
+   https://github.com/owncloud/web/pull/5940
+   https://github.com/owncloud/web/pull/5715
+
+Changelog for ownCloud Web [4.4.0] (2021-10-26)
+=======================================
+The following sections list the changes in ownCloud web 4.4.0 relevant to
+ownCloud admins and users.
+
+[4.4.0]: https://github.com/owncloud/web/compare/v4.3.0...v4.4.0
+
+Summary
+-------
+
 * Bugfix - Fix duplicated event subscriptions: [#5910](https://github.com/owncloud/web/pull/5910)
 * Bugfix - External apps by shares: [#5907](https://github.com/owncloud/web/pull/5907)
 * Bugfix - New Collaborator removes wrong autocomplete items: [#5857](https://github.com/owncloud/web/issues/5857)
@@ -22,15 +45,6 @@ Summary
 
 Details
 -------
-
-* Bugfix - Fix location picker breadcrumb url encoding: [#5940](https://github.com/owncloud/web/pull/5940)
-
-   The breadcrumb urls in location-picker were encoded. We've fixed this by removing the
-   encoding.
-
-   https://github.com/owncloud/web/issues/5938
-   https://github.com/owncloud/web/pull/5940
-   https://github.com/owncloud/web/pull/5715
 
 * Bugfix - Fix duplicated event subscriptions: [#5910](https://github.com/owncloud/web/pull/5910)
 
