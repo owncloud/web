@@ -1,6 +1,5 @@
 <template>
   <div class="recipient-edit-options">
-    <hr />
     <oc-button
       id="files-collaborators-role-button"
       data-testid="files-recipient-role-select-btn"
@@ -143,7 +142,6 @@
         <oc-icon name="close" />
       </oc-button>
     </template>
-    <hr />
   </div>
 </template>
 
