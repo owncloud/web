@@ -86,7 +86,7 @@ describe('Edit Collaborator', () => {
       await userSelectInput.setValue('use')
 
       // the api request for fetching the user is triggred few seconds after the input is set
-      await new Promise(resolve => {
+      await new Promise((resolve) => {
         setTimeout(() => {
           expect(autoCompleteTrigger).toHaveBeenCalledTimes(1)
           expect(autoCompleteTrigger).toHaveBeenCalledWith('use')
@@ -113,7 +113,7 @@ describe('Edit Collaborator', () => {
       const userSelectInput = wrapper.find(selectors.userInviteInput)
       await userSelectInput.setValue('use')
 
-      await new Promise(resolve => {
+      await new Promise((resolve) => {
         setTimeout(() => {
           const select = wrapper.findComponent(VueSelect)
           expect(select.props('options')).toMatchObject([])
@@ -161,7 +161,7 @@ describe('Edit Collaborator', () => {
 
       await wrapper.vm.$nextTick()
 
-      await new Promise(resolve => {
+      await new Promise((resolve) => {
         setTimeout(() => {
           const select = wrapper.findComponent(VueSelect)
           expect(select.props('options')).toMatchObject(users)
@@ -229,7 +229,7 @@ describe('Edit Collaborator', () => {
 
       await wrapper.vm.$nextTick()
 
-      await new Promise(resolve => {
+      await new Promise((resolve) => {
         setTimeout(() => {
           const select = wrapper.findComponent(VueSelect)
 
@@ -260,7 +260,7 @@ describe('Edit Collaborator', () => {
 
       await wrapper.vm.$nextTick()
 
-      await new Promise(resolve => {
+      await new Promise((resolve) => {
         setTimeout(() => {
           const select = wrapper.findComponent(VueSelect)
           expect(select.props('options')).toMatchObject([])
@@ -446,7 +446,7 @@ const getConfiguration = () => {
   }
 }
 
-const storeOptions = data => {
+const storeOptions = (data) => {
   let { user, owner } = data
   if (!owner) {
     owner = user
@@ -532,7 +532,7 @@ const displayNames = {
   user2: 'User Two'
 }
 
-const userObj = name => {
+const userObj = (name) => {
   return {
     id: name,
     additionalInfo: null,
@@ -543,7 +543,7 @@ const userObj = name => {
   }
 }
 
-const getMountOptions = data => {
+const getMountOptions = (data) => {
   return {
     localVue,
     store: createStore(data),
