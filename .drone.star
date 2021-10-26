@@ -734,27 +734,14 @@ def main(ctx):
     return pipelines
 
 def beforePipelines(ctx):
-    base = \
-        checkForRecentBuilds(ctx) + \
-        checkStarlark() + \
-        documentation(ctx) + \
-        changelog(ctx)
-
-    lint = \
-        yarnCache(ctx) + \
-        pipelinesDependsOn(yarnlint(ctx), yarnCache(ctx))
-
-    test_cache = \
-        cacheOcisPipeline(ctx) + \
-        pipelinesDependsOn(buildCacheWeb(ctx), yarnCache(ctx))
-
-    title = ctx.build.title.lower()
-    if "docs-only" in title:
-        return base
-    elif "unit-tests-only" in title:
-        return base + lint
-    else:
-        return base + lint + test_cache
+    return checkForRecentBuilds(ctx) + \
+           checkStarlark() + \
+           documentation(ctx) + \
+           changelog(ctx) + \
+           yarnCache(ctx) + \
+           cacheOcisPipeline(ctx) + \
+           pipelinesDependsOn(buildCacheWeb(ctx), yarnCache(ctx)) + \
+           pipelinesDependsOn(yarnlint(ctx), yarnCache(ctx))
 
 def stagePipelines(ctx):
     title = ctx.build.title.lower()
@@ -779,7 +766,8 @@ def yarnCache(ctx):
         "kind": "pipeline",
         "type": "docker",
         "name": "cache-yarn",
-        "steps": installYarn() +
+        "steps": skipIfUnchanged(ctx, "cache") +
+                 installYarn() +
                  rebuildBuildArtifactCache(ctx, ".yarn", ".yarn"),
         "trigger": {
             "ref": [
@@ -808,7 +796,8 @@ def yarnlint(ctx):
             "base": dir["base"],
             "path": config["app"],
         },
-        "steps": restoreBuildArtifactCache(ctx, ".yarn", ".yarn") +
+        "steps": skipIfUnchanged(ctx, "lint") +
+                 restoreBuildArtifactCache(ctx, ".yarn", ".yarn") +
                  installYarn() +
                  lint(),
         "trigger": {
@@ -991,7 +980,8 @@ def buildCacheWeb(ctx):
         "kind": "pipeline",
         "type": "docker",
         "name": "cache-web",
-        "steps": restoreBuildArtifactCache(ctx, ".yarn", ".yarn") +
+        "steps": skipIfUnchanged(ctx, "cache") +
+                 restoreBuildArtifactCache(ctx, ".yarn", ".yarn") +
                  installYarn() +
                  [{
                      "name": "build-web",
@@ -2176,7 +2166,8 @@ def cacheOcisPipeline(ctx):
             "base": dir["base"],
             "path": config["app"],
         },
-        "steps": buildOCISCache() +
+        "steps": skipIfUnchanged(ctx, "cache") +
+                 buildOCISCache() +
                  cacheOcis() +
                  listRemoteCache(),
         "volumes": [{
@@ -2701,6 +2692,12 @@ def skipIfUnchanged(ctx, type):
         "^tests/smoke/.*",
         "README.md",
     ]
+
+    if type == "cache" or type == "lint":
+        skip_step["settings"] = {
+            "ALLOW_SKIP_CHANGED": base_skip_steps,
+        }
+        return [skip_step]
 
     if type == "acceptance-tests":
         acceptance_skip_steps = [
