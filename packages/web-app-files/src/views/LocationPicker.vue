@@ -189,16 +189,16 @@ export default {
       const pathSegments = this.target.split('/').filter((item) => item !== '')
 
       if (this.isPublicContext) {
-        const itemPath = encodeURIComponent(join.apply(null, pathSegments.slice(0, 1)))
+        const itemPath = join.apply(null, pathSegments.slice(0, 1))
         breadcrumbs.push(this.createBreadcrumbNode(0, this.$gettext('Public link'), itemPath))
         for (let i = 1; i < pathSegments.length; i++) {
-          const itemPath = encodeURIComponent(join.apply(null, pathSegments.slice(0, i + 1)))
+          const itemPath = join.apply(null, pathSegments.slice(0, i + 1))
           breadcrumbs.push(this.createBreadcrumbNode(i + 1, pathSegments[i], itemPath))
         }
       } else {
         breadcrumbs.push(this.createBreadcrumbNode(0, this.$gettext('All files'), '/'))
         for (let i = 0; i < pathSegments.length; i++) {
-          const itemPath = encodeURIComponent(join.apply(null, pathSegments.slice(0, i + 1)))
+          const itemPath = join.apply(null, pathSegments.slice(0, i + 1))
           breadcrumbs.push(this.createBreadcrumbNode(i + 1, pathSegments[i], itemPath))
         }
       }
