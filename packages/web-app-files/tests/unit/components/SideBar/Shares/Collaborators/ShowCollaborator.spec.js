@@ -333,6 +333,9 @@ function createWrapper({
             files_sharing: {
               user: {
                 expire_date: new Date()
+              },
+              group: {
+                expire_date: new Date()
               }
             }
           }

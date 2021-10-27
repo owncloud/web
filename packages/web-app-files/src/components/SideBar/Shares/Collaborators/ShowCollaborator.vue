@@ -1,134 +1,72 @@
 <template>
-  <oc-table-simple
+  <div
     :data-testid="`collaborator-item-${collaborator.collaborator.name}`"
-    top
-    class="files-collaborators-collaborator"
-    role="presentation"
+    class="files-collaborators-collaborator uk-flex oc-py-xs"
   >
-    <oc-tr class="files-collaborators-collaborator-table-row-info">
-      <oc-td width="shrink" class="oc-py-rm oc-pr-s">
-        <div key="collaborator-avatar-loaded">
-          <oc-avatar
-            v-if="shareTypeName === 'user'"
-            :src="''"
-            :user-name="collaborator.collaborator.displayName"
-            :width="48"
-          />
-          <oc-avatar-item
-            v-else
-            :width="48"
-            icon-size="medium"
-            :icon="shareTypeName"
-            :name="shareTypeName"
-          />
-        </div>
-      </oc-td>
-      <oc-td class="oc-py-rm oc-pr-s">
-        <div class="uk-flex uk-flex-column uk-flex-center" :class="collaboratorListItemClass">
-          <div class="oc-text-initial oc-mb-xs">
-            <p
-              class="files-collaborators-collaborator-name oc-text-bold oc-mb-rm"
-              v-text="shareDisplayName"
-            />
-          </div>
-          <span :id="`collaborator-list-label-${shareId}`" v-translate class="oc-invisible-sr"
-            >Tags</span
-          >
-          <ul
-            class="collaborator-list oc-my-rm oc-pl-rm"
-            :aria-labelledby="`collaborator-list-label-${shareId}`"
-          >
-            <li class="share-type oc-mr-s">{{ shareTypeText }}</li>
-            <li v-if="expirationDateLocale" class="collaborator-expiration">
-              <oc-icon size="small" name="text-calendar" class="oc-mr-xs" />
-              {{ expirationText }} {{ expirationDateLocale }}
-            </li>
-            <li v-if="$_reshareInformation" class="oc-py-rm">
-              <oc-drop
-                ref="menu"
-                :drop-id="$_resharerToggleId + '-drop'"
-                :toggle="'#' + $_resharerToggleId"
-                mode="click"
-                :options="{ pos: 'bottom-left', delayHide: 0 }"
-                class="oc-mt-s"
-                close-on-click
-              >
-                <h4 :id="`resharer-info-${shareId}`" v-translate>Shared by</h4>
-                <ul
-                  class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm"
-                  :aria-labelledby="`resharer-info-${shareId}`"
-                >
-                  <li
-                    v-for="resharer in collaborator.resharers"
-                    :key="resharer.name"
-                    class="oc-py-rm"
-                  >
-                    <div class="uk-flex uk-flex-middle uk-flex-left">
-                      <avatar-image
-                        class="oc-mr-s"
-                        :width="48"
-                        :userid="resharer.name"
-                        :user-name="resharer.displayName"
-                      />
-                      <div>
-                        <p
-                          class="files-collaborators-resharer-name oc-text-bold oc-my-rm"
-                          v-text="resharer.displayName"
-                        />
-                        <p
-                          v-if="resharer.additionalInfo"
-                          class="
-                            oc-text-muted
-                            files-collaborators-resharer-additional-info
-                            oc-my-rm
-                          "
-                          v-text="resharer.additionalInfo"
-                        />
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </oc-drop>
-            </li>
-            <li class="oc-py-rm"></li>
-          </ul>
-        </div>
-      </oc-td>
-      <oc-td width="shrink" align-v="middle" class="oc-py-rm oc-pr-s">
-        <div v-if="!isOwner" class="uk-flex uk-flex-nowrap uk-flex-middle">
-          <collaborators-edit-options
-            class="oc-mr-s"
-            :minimal="true"
-            :existing-role="originalRole"
-            :expiration-date-input="false"
-            :expiration-date="collaborator.expires ? collaborator.expires : null"
-            :existing-collaborator-type="collaboratorType"
-            @optionChange="collaboratorDropdownChange"
-          />
-          <show-collaborator-edit-options
-            :collaborator="collaborator"
-            :expiration-date="collaborator.expires ? collaborator.expires : null"
-            @removeShare="removeShare"
-            @optionChange="collaboratorDropdownChange"
-            @expirationDateChanged="collaboratorDropdownChange"
-          />
-        </div>
-      </oc-td>
-    </oc-tr>
-  </oc-table-simple>
+    <div class="uk-width-2-3 uk-flex uk-flex-start" style="gap: 10px">
+      <oc-avatar
+        v-if="shareTypeName === 'user'"
+        :src="''"
+        :user-name="collaborator.collaborator.displayName"
+        :width="48"
+        class="sharee-avatar"
+      />
+      <oc-avatar-item
+        v-else
+        :width="48"
+        icon-size="medium"
+        :icon="shareTypeName"
+        :name="shareTypeName"
+        class="sharee-avatar"
+      />
+      <div class="oc-text-truncate">
+        <p class="oc-text-bold oc-text-truncate oc-m-rm">
+          <span aria-hidden="true" v-text="shareDisplayName" />
+          <span class="oc-invisible-sr" v-text="screenreaderShareDisplayName" />
+        </p>
+        <p class="oc-m-rm">
+          <span aria-hidden="true" v-text="shareTypeText" />
+          <span class="oc-invisible-sr" v-text="screenreaderShareDetails" />
+          <span v-if="expirationDateLocale">
+            <span aria-hidden="true">
+              <oc-icon size="small" name="text-calendar" />
+              {{ shareExpirationText }}
+            </span>
+            <span class="oc-invisible-sr" v-text="screenreaderShareExpiration" />
+          </span>
+        </p>
+      </div>
+    </div>
+    <div v-if="!isOwner && canEditOrDelete" class="uk-width-1-3 uk-flex uk-flex-right uk-flex-top">
+      <collaborators-edit-options
+        :minimal="true"
+        :existing-role="originalRole"
+        :expiration-date-input="false"
+        :expiration-date="collaborator.expires ? collaborator.expires : null"
+        :existing-collaborator-type="collaboratorType"
+        @optionChange="collaboratorDropdownChange"
+      />
+      <show-collaborator-edit-options
+        :collaborator="collaborator"
+        :expiration-date="collaborator.expires ? collaborator.expires : null"
+        @expirationDateChanged="collaboratorDropdownChange"
+        @removeShare="removeShare"
+        @optionChange="collaboratorDropdownChange"
+      />
+    </div>
+  </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { shareTypes } from '../../../../helpers/shareTypes'
-import { basename } from 'path'
 import CollaboratorsMixins from '../../../../mixins/collaborators'
 import Mixins from '../../../../mixins'
 import { DateTime } from 'luxon'
-import CollaboratorsEditOptions from './CollaboratorsEditOptions.vue'
 import { roleToBitmask, bitmaskToRole } from '../../../../helpers/collaborators'
 
 import ShowCollaboratorEditOptions from './ShowCollaboratorEditOptions.vue'
+import CollaboratorsEditOptions from './CollaboratorsEditOptions.vue'
 
 export default {
   name: 'Collaborator',
@@ -145,10 +83,6 @@ export default {
     modifiable: {
       type: Boolean,
       default: false
-    },
-    firstColumn: {
-      type: Boolean,
-      default: true
     }
   },
   data: function () {
@@ -206,25 +140,29 @@ export default {
       return null
     },
 
-    shareTypes() {
-      return shareTypes
+    screenreaderShareDisplayName() {
+      const translated = this.$gettext('Share-receiver name: %{ shareName }')
+      return this.$gettextInterpolate(translated, { shareName: this.shareDisplayName })
     },
 
-    shareId() {
-      return this.collaborator.id
+    screenreaderShareDetails() {
+      const translated = this.$gettext('Share-type: %{ shareType }')
+      return this.$gettextInterpolate(translated, { shareType: this.shareTypeText })
     },
 
-    $_resharerToggleId() {
-      return 'collaborator-' + this.collaborator.collaborator.name + '-resharer-details-toggle'
+    shareExpirationText() {
+      const translated = this.$gettext('Expires %{ expiryDate }')
+      return this.$gettextInterpolate(translated, { expiryDate: this.expirationDateLocale })
     },
 
-    $_loadingSpinnerVisible() {
-      return this.modifiable && this.removalInProgress
+    screenreaderShareExpiration() {
+      const translated = this.$gettext('Share expires on %{ expiryDate }')
+      return this.$gettextInterpolate(translated, {
+        expiryDate: this.expirationDateLocale
+      })
     },
-    $_deleteButtonVisible() {
-      return this.modifiable && !this.removalInProgress
-    },
-    $_editButtonVisible() {
+
+    canEditOrDelete() {
       return this.modifiable && !this.removalInProgress
     },
 
@@ -246,13 +184,6 @@ export default {
       )
     },
 
-    isIndirectShare() {
-      // it is assumed that the "incoming" attribute only exists
-      // on shares coming from this.collaborator.sTree which are all indirect
-      // and not related to the current folder
-      return this.collaborator.incoming || this.collaborator.outgoing
-    },
-
     $_reshareInformation() {
       try {
         this.collaborator.resharers.forEach(function (share) {
@@ -264,31 +195,6 @@ export default {
       } catch (e) {
         return null
       }
-    },
-
-    viaLabel() {
-      if (!this.isIndirectShare) {
-        return null
-      }
-      const translated = this.$gettext('Via %{folderName}')
-      return this.$gettextInterpolate(
-        translated,
-        { folderName: basename(this.collaborator.path) },
-        true
-      )
-    },
-
-    viaRouterParams() {
-      return {
-        name: 'files-personal',
-        params: {
-          item: this.collaborator.path || '/'
-        }
-      }
-    },
-
-    viaTooltip() {
-      return this.$gettext('Navigate to the parent')
     },
 
     originalRole() {
@@ -307,24 +213,12 @@ export default {
       return this.collaborator.role.name === 'owner'
     },
 
-    isUser() {
-      return this.collaborator.shareType === this.shareTypes.user
-    },
-
     shareType() {
       return this.collaborator.shareType ? this.collaborator.shareType : 0
     },
 
-    isRemoteUser() {
-      return this.collaborator.shareType === this.shareTypes.remote
-    },
-
     isGroup() {
       return this.collaborator.shareType === this.shareTypes.group
-    },
-
-    expirationText() {
-      return this.$gettext('Expires')
     },
 
     expirationDateLocale() {
@@ -332,43 +226,6 @@ export default {
         .endOf('day')
         .setLocale(this.$language.current)
         .toRelative()
-    },
-
-    collaboratorListItemClass() {
-      const isUser = this.isUser || this.isRemoteUser
-
-      return (
-        'files-collaborators-collaborator-info-' +
-        (isUser ? (this.isRemoteUser ? 'remote' : 'user') : 'group')
-      )
-    },
-
-    isCurrentUser() {
-      return !this.isGroup && this.collaborator.collaborator.name === this.user.id
-    },
-
-    collaboratorTypeTagIcon() {
-      if (this.isGroup) {
-        return 'group'
-      }
-
-      return 'person'
-    },
-
-    roleTagIcon() {
-      switch (this.collaborator.role.name) {
-        case 'viewer':
-          return 'remove_red_eye'
-
-        case 'editor':
-          return 'edit'
-
-        case 'advancedRole':
-          return 'checklist'
-
-        default:
-          return 'key'
-      }
     }
   },
   methods: {
@@ -404,33 +261,8 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped="scoped">
-.collaborators-edit {
-  width: 200px;
-}
-
-.collaborator-list {
-  list-style-type: none;
-
-  li {
-    float: left;
-    margin-right: 5px;
-    font-size: 14px;
-  }
-  .share-type {
-    width: 60px;
-  }
-}
-.collaborator-expiration {
-  display: flex;
-  align-items: center;
-  color: var(--oc-color-swatch-passive-hover);
-  span > svg {
-    fill: var(--oc-color-swatch-passive-hover) !important;
-  }
-}
-/* FIXME: Move to ODS somehow */
-.files-collaborators-collaborator-via-label {
-  max-width: 75%;
+<style lang="scss" scoped>
+.sharee-avatar {
+  min-width: 48px;
 }
 </style>

@@ -25,8 +25,8 @@
           data-testid="files-collaborators-no-reshare-permissions-message"
           v-text="noResharePermsMessage"
         />
-        <div v-if="hasSharees" class="avatars-wrapper">
-          <h4 class="shared-with-label" v-text="sharedWithLabel" />
+        <div v-if="hasSharees" class="uk-flex uk-flex-between oc-my-m">
+          <h4 class="oc-mb-rm oc-text-initial oc-text-bold" v-text="sharedWithLabel" />
           <oc-button
             v-oc-tooltip="sharedWithTooltip"
             data-testid="collaborators-show-people"
@@ -39,7 +39,7 @@
               :items="collaboratorsAvatar"
               :stacked="true"
               :is-tooltip-displayed="false"
-              class="sharee-avatars"
+              class="uk-flex-end"
             />
             <oc-icon v-else name="chevron_up" />
           </oc-button>
@@ -131,7 +131,7 @@ export default {
       VIEW_EDIT,
       VIEW_NEW,
       currentView: VIEW_SHOW,
-      showShareesList: false
+      showShareesList: true
     }
   },
   computed: {
@@ -338,7 +338,7 @@ export default {
         if (oldItem !== newItem && this.currentView === VIEW_SHOW) {
           this.transitionGroupActive = false
           this.$_reloadShares()
-          this.showShareesList = false
+          this.showShareesList = true
         }
       },
       immediate: true
@@ -447,43 +447,3 @@ export default {
   }
 }
 </script>
-
-<style>
-#files-collaborators-list {
-  overflow: visible;
-}
-.avatars-wrapper {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  height: 40px;
-}
-.shared-with-label {
-  margin: 0;
-  font-size: 0.9rem;
-  font-weight: 600;
-}
-.sharee-avatars {
-  justify-self: flex-end;
-}
-/* TODO: Move to design system */
-.oc-app-side-bar .oc-label {
-  display: block;
-  margin-bottom: 5px;
-}
-
-.oc-app-side-bar .files-collaborators-role-button {
-  padding: 0 10px;
-  text-align: left;
-}
-
-.oc-app-side-bar .oc-autocomplete-dropdown .uk-card {
-  padding: 0 !important;
-}
-
-.oc-app-side-bar .oc-autocomplete-suggestion:hover .oc-text-muted,
-.oc-autocomplete-suggestion-selected .oc-text-muted {
-  color: white;
-}
-</style>

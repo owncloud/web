@@ -254,15 +254,3 @@ export default {
   }
 }
 </script>
-<style>
-/* FIXME: Move to design system (copied from FileSharingSidebar.vue) */
-.oc-app-side-bar .oc-label {
-  display: block;
-  margin-bottom: 5px;
-}
-
-.oc-app-side-bar .files-file-link-role-button {
-  padding: 0 10px;
-  text-align: left;
-}
-</style>

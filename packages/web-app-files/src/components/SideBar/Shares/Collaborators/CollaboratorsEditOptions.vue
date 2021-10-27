@@ -125,7 +125,7 @@
         <template #default="{ togglePopover }">
           <oc-button
             id="files-collaborators-expiration-button"
-            class="expiration-dialog-btn"
+            :class="expirationDialogBtnClass"
             data-testid="recipient-datepicker-btn"
             appearance="raw"
             justify-content="left"
@@ -133,7 +133,7 @@
             @click="togglePopover"
           >
             <oc-icon v-if="minimal" name="text-calendar" />
-            <translate v-if="minimal"> Expiration Date </translate>
+            <translate v-if="minimal">Expiration Date</translate>
             <translate v-if="!enteredExpirationDate && !minimal" key="no-expiration-date-label"
               >Set expiration date</translate
             >
@@ -235,6 +235,12 @@ export default {
   computed: {
     ...mapGetters(['capabilities']),
 
+    expirationDialogBtnClass() {
+      return {
+        'expiration-dialog-btn': true,
+        'expiration-dialog-btn-minimal': this.minimal
+      }
+    },
     roleButtonId() {
       return 'files-collaborators-role-button-' + this._uid
     },
@@ -526,6 +532,21 @@ export default {
   align-items: center;
   display: flex;
   gap: var(--oc-space-small);
+}
+
+.expiration-dialog-btn-minimal {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+  height: 35px;
+
+  span {
+    display: table-cell;
+    vertical-align: middle;
+  }
+  .oc-icon {
+    width: 24%;
+  }
 }
 
 .files-recipient {

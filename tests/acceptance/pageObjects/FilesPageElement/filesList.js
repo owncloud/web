@@ -748,8 +748,7 @@ module.exports = {
       selector: '#files-toggle-sidebar'
     },
     sharedWithToggleButton: {
-      selector: '//*[contains(@class, "sharee-avatars")]/ancestor::button',
-      locateStrategy: 'xpath'
+      selector: '.avatars-wrapper button'
     }
   }
 }

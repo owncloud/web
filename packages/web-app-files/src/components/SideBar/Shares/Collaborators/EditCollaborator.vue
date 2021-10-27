@@ -25,11 +25,7 @@
     >
       <oc-icon name="repeat" class="oc-mr-s" /> {{ collaborator.owner.displayName }}
     </p>
-    <collaborator
-      class="uk-width-expand oc-mb"
-      :collaborator="collaborator"
-      :first-column="false"
-    />
+    <collaborator class="uk-width-expand oc-mb" :collaborator="collaborator" />
     <collaborators-edit-options
       :existing-role="$_originalRole"
       :collaborators-permissions="$_originalPermissions"

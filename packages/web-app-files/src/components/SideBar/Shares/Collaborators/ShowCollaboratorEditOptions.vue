@@ -27,10 +27,8 @@
             />
           </li>
           <li v-for="(option, i) in options" :key="i" class="oc-p-s" @click="option.method()">
-            <oc-button class="edit-option" appearance="raw">
-              <oc-icon :name="option.icon" />
-              {{ option.title }}
-            </oc-button>
+              <oc-icon :variation="option.variation" :name="option.icon" />
+              <span :class="option.class">{{ option.title }}</span>
           </li>
         </oc-list>
       </template>
@@ -66,7 +64,9 @@ export default {
         {
           title: 'Remove',
           icon: 'delete',
-          method: this.removeShare
+          variation: 'danger',
+          method: this.removeShare,
+          class: 'remove-share'
         }
       ]
     }
@@ -74,6 +74,10 @@ export default {
   computed: {
     roleButtonId() {
       return 'files-collaborators-role-button-' + this._uid
+    },
+
+    rolesListAriaLabel() {
+      return this.$gettext('Sharing roles')
     }
   },
   methods: {
@@ -101,5 +105,28 @@ export default {
 .show-collaborator-edit-options {
   display: flex;
   align-items: center;
+
+  li {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+    height: 35px;
+    cursor: pointer;
+
+    div {
+      width: 100%;
+    }
+    span {
+      display: table-cell;
+      vertical-align: middle;
+    }
+    .oc-icon {
+      width: 12%;
+    }
+  }
+}
+
+.remove-share {
+  color: var(--oc-color-swatch-danger-default);
 }
 </style>

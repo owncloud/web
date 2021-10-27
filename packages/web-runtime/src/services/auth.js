@@ -41,7 +41,7 @@ export function initVueAuthenticate(config) {
         // oauth2 setup
         Object.assign(openIdConfig, {
           authority: config.auth.url,
-          // with OAuth2 we need to se the metadata manually
+          // with OAuth2 we need to set the metadata manually
           metadata: {
             issuer: config.auth.url,
             authorization_endpoint: config.auth.authUrl,

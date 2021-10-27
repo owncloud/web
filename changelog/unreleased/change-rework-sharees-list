@@ -1,6 +1,0 @@
-Change: Rework/Redesign sharees list
-
-We have reworked the full list view of sharees in the right sidebar for
-better overview and faster editing.
-
-https://github.com/owncloud/web/pull/5789
