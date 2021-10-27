@@ -1,0 +1,8 @@
+Bugfix: Fix location picker breadcrumb url encoding
+
+The breadcrumb urls in location-picker were encoded.
+We've fixed this by removing the encoding.
+
+https://github.com/owncloud/web/pull/5940
+https://github.com/owncloud/web/pull/5715
+https://github.com/owncloud/web/issues/5938

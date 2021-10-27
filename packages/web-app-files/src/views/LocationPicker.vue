@@ -31,7 +31,7 @@
         </oc-grid>
       </div>
       <div id="files-view">
-        <list-loader v-if="loading" />
+        <list-loader v-if="navigateToTargetTask.isRunning" />
         <template v-else>
           <no-content-message
             v-if="isEmpty"
@@ -81,6 +81,7 @@ import MixinsGeneral from '../mixins'
 import MixinRoutes from '../mixins/routes'
 import MixinFilesListFilter from '../mixins/filesListFilter'
 import MixinFilesListPagination from '../mixins/filesListPagination'
+import { useTask } from 'vue-concurrency'
 
 import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
 import ListLoader from '../components/FilesList/ListLoader.vue'
@@ -104,10 +105,32 @@ export default {
 
   mixins: [MixinsGeneral, MixinRoutes, MixinFilesListFilter, MixinFilesListPagination],
 
+  setup() {
+    const navigateToTargetTask = useTask(function* (signal, ref, target) {
+      ref.CLEAR_CURRENT_FILES_LIST()
+
+      if (typeof target === 'object') {
+        target = ref.target
+      }
+
+      const resources = ref.isPublicContext
+        ? yield ref.$client.publicFiles.list(target, ref.publicLinkPassword, DavProperties.Default)
+        : yield ref.$client.files.list(target, 1, DavProperties.Default)
+
+      ref.loadFiles({ currentFolder: resources[0], files: resources.slice(1) })
+      ref.loadIndicators({
+        client: ref.$client,
+        currentFolder: ref.$route.params.item || '/'
+      })
+      ref.adjustTableHeaderPosition()
+    }).restartable()
+
+    return { navigateToTargetTask }
+  },
+
   data: () => ({
     headerPosition: 0,
-    originalLocation: '',
-    loading: true
+    originalLocation: ''
   }),
 
   computed: {
@@ -166,16 +189,16 @@ export default {
       const pathSegments = this.target.split('/').filter((item) => item !== '')
 
       if (this.isPublicContext) {
-        const itemPath = encodeURIComponent(join.apply(null, pathSegments.slice(0, 1)))
+        const itemPath = join.apply(null, pathSegments.slice(0, 1))
         breadcrumbs.push(this.createBreadcrumbNode(0, this.$gettext('Public link'), itemPath))
         for (let i = 1; i < pathSegments.length; i++) {
-          const itemPath = encodeURIComponent(join.apply(null, pathSegments.slice(0, i + 1)))
+          const itemPath = join.apply(null, pathSegments.slice(0, i + 1))
           breadcrumbs.push(this.createBreadcrumbNode(i + 1, pathSegments[i], itemPath))
         }
       } else {
         breadcrumbs.push(this.createBreadcrumbNode(0, this.$gettext('All files'), '/'))
         for (let i = 0; i < pathSegments.length; i++) {
-          const itemPath = encodeURIComponent(join.apply(null, pathSegments.slice(0, i + 1)))
+          const itemPath = join.apply(null, pathSegments.slice(0, i + 1))
           breadcrumbs.push(this.createBreadcrumbNode(i + 1, pathSegments[i], itemPath))
         }
       }
@@ -250,7 +273,7 @@ export default {
         const sameRoute = to.name === from?.name
         const sameItem = to.params?.item === from?.params?.item
         if (!sameRoute || !sameItem) {
-          this.navigateToTarget(this.$route)
+          this.navigateToTargetTask.perform(this, this.$route)
         }
 
         this.$_filesListPagination_updateCurrentPage()
@@ -295,31 +318,6 @@ export default {
         const header = document.querySelector('#files-app-bar')
         this.headerPosition = header.getBoundingClientRect().height
       })
-    },
-
-    async navigateToTarget(target) {
-      this.loading = true
-      this.CLEAR_CURRENT_FILES_LIST()
-
-      if (typeof target === 'object') {
-        target = this.target
-      }
-
-      const resources = this.isPublicContext
-        ? await this.$client.publicFiles.list(
-            target,
-            this.publicLinkPassword,
-            DavProperties.Default
-          )
-        : await this.$client.files.list(target, 1, DavProperties.Default)
-
-      this.loadFiles({ currentFolder: resources[0], files: resources.slice(1) })
-      this.loadIndicators({
-        client: this.$client,
-        currentFolder: this.$route.params.item || '/'
-      })
-      this.adjustTableHeaderPosition()
-      this.loading = false
     },
 
     leaveLocationPicker(target) {

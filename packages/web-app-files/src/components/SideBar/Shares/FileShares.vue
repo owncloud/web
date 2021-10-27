@@ -447,3 +447,21 @@ export default {
   }
 }
 </script>
+
+<style>
+.avatars-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 40px;
+}
+.shared-with-label {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.sharee-avatars {
+  justify-self: flex-end;
+}
+</style>

@@ -5,6 +5,7 @@
   "license": "AGPL-3.0",
   "dependencies": {
     "@popperjs/core": "^2.4.0",
+    "@vue/composition-api": "^1.2.4",
     "axe-core": "^4.3.3",
     "easygettext": "^2.16.1",
     "filesize": "^8.0.0",
@@ -29,6 +30,7 @@
     "vue": "^2.6.10",
     "vue-async-computed": "^3.9.0",
     "vue-axe": "^2.4.4",
+    "vue-concurrency": "^2.2.1",
     "vue-drag-drop": "^1.1.4",
     "vue-events": "^3.1.0",
     "vue-gettext": "^2.1.5",

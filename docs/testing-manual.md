@@ -61,7 +61,8 @@ In order to run the acceptance tests you need to run oCIS using the oCIS storage
 - if you are running web against the oCIS backend, clone the testing app `git clone git@github.com:owncloud/testing.git tests/testing-app`
 
 ## Run tests
-
+- Change the directory to `tests/acceptance`
+- Install all the test dependencies with `yarn` command
 - set `SERVER_HOST` to point at the URL where the Web web pages are served, for example "http://localhost:9100"
 - set `BACKEND_HOST` to point to the URL of the backend, for example "http://localhost/owncloud/"
 - to be able to run federation tests, additional setup is needed:
@@ -84,7 +85,7 @@ see [available settings](#available-settings-to-be-set-by-environment-variables)
 ### with oCIS backend
 
 - run `yarn test:acceptance:ocis <feature-files-to-test>`
-- If you are a mac user, run `STORAGE_HOME_DATA_SERVER_URL='http://host.docker.internal:9155/data' STORAGE_DATAGATEWAY_PUBLIC_URL='https://host.docker.internal:9200/data' STORAGE_USERS_DATA_SERVER_URL='http://host.docker.internal:9158/data' STORAGE_FRONTEND_PUBLIC_URL='https://host.docker.internal:9200' PROXY_ENABLE_BASIC_AUTH=true PROXY_OIDC_ISSUER='https://host.docker.internal:9200' IDP_INSECURE='true' IDP_IDENTIFIER_REGISTRATION_CONF='./tests/acceptance/mac-identifier-registration.yml' IDP_ISS='https://host.docker.internal:9200' IDP_TLS='true' yarn test:acceptance:ocis <feature-files-to-test>`
+- If you are a mac user, run `STORAGE_HOME_DATA_SERVER_URL='http://host.docker.internal:9155/data' STORAGE_DATAGATEWAY_PUBLIC_URL='https://host.docker.internal:9200/data' STORAGE_USERS_DATA_SERVER_URL='http://host.docker.internal:9158/data' STORAGE_FRONTEND_PUBLIC_URL='https://host.docker.internal:9200' PROXY_ENABLE_BASIC_AUTH=true PROXY_OIDC_ISSUER='https://host.docker.internal:9200' IDP_INSECURE='true' IDP_IDENTIFIER_REGISTRATION_CONF='./mac-identifier-registration.yml' IDP_ISS='https://host.docker.internal:9200' IDP_TLS='true' yarn test:acceptance:ocis <feature-files-to-test>`
 
 ### Visual Regression Testing
 
@@ -125,7 +126,7 @@ These values can be set using the environment variables to configure `yarn test:
 | `SELENIUM_HOST`     | selenium server host, if not set yarn will start selenium automatically<br/>if running the selenium docker container as mentioned above set to `localhost` |                       |
 | `SELENIUM_PORT`     | port of selenium server                                                   | 4444                  |
 | `SCREEN_RESOLUTION` | width and height in px to set the browser resolution to e.g. 375x812      | empty = fullscreen    |
-| `REMOTE_UPLOAD_DIR` | path to `filesForUpload` directory, used when uploading files through api | `./tests/acceptance/filesForUpload` |
+| `REMOTE_UPLOAD_DIR` | path to `filesForUpload` directory, used when uploading files through api | `./filesForUpload` |
 | `LOCAL_UPLOAD_DIR`  | `filesForUpload` directory available for selenium for direct uploads<br/>If using selenium-docker and example above, set it as `/uploads`.<br/>If running local selenium, set value same as `REMOTE_UPLOAD_DIR` (please, remember to use absolute path)| `/uploads` |
 | `REMOTE_BACKEND_HOST` | ownCloud remote server URL                                               | http://localhost:8080 |
 | `RUN_ON_OCIS`       | Running the tests using the oCIS backend                                                            | false |

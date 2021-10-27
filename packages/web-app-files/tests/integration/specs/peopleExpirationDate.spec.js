@@ -12,6 +12,8 @@ import sdkMock from '@/__mocks__/sdk'
 
 import FileShares from '@files/src/components/SideBar/Shares/FileShares.vue'
 
+const formatDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
+
 const existingShares = [
   {
     shareInfo: {
@@ -60,14 +62,14 @@ describe('Users can set expiration date when sharing with users or groups', () =
 
     const newDate = getDateInFuture(2)
     const dateSelector = document.evaluate(
-      `//span[contains(@class, "vc-day-content vc-focusable") and text()="${newDate.getDate()}"]`,
+      `//span[contains(@class, "vc-day-content vc-focusable") and not(contains(@class, "is-disabled")) and text()="${newDate.getDate()}"]`,
       baseElement,
       null,
       XPathResult.FIRST_ORDERED_NODE_TYPE,
       null
     ).singleNodeValue
 
-    if (dateSelector.classList.contains('is-disabled')) {
+    if (!dateSelector) {
       const nextMonthBtn = baseElement.querySelector('.vc-arrow.is-right')
 
       userEvent.click(nextMonthBtn)
@@ -125,11 +127,16 @@ describe('Users can set expiration date when sharing with users or groups', () =
 
     expect(editDialog).toBeVisible()
     expect(getByTestId('recipient-datepicker')).toBeVisible()
+    expect(within(getByTestId('recipient-datepicker')).getByText('Expires in 2 days')).toBeVisible()
+
     await fireEvent.click(getByTestId('recipient-datepicker-btn'))
 
     const newDate = getDateInFuture(4)
     const dateSelector = document.evaluate(
-      `//span[contains(@class, "vc-day-content vc-focusable") and text()="${newDate.getDate()}"]`,
+      `//span[contains(@class, "vc-day-content vc-focusable") and @aria-label="${newDate.toLocaleDateString(
+        'en',
+        formatDate
+      )}" and text()="${newDate.getDate()}"]`,
       baseElement,
       null,
       XPathResult.FIRST_ORDERED_NODE_TYPE,
@@ -283,14 +290,14 @@ describe('Users can set expiration date when sharing with users or groups', () =
 
     const newDate = getDateInFuture(2)
     const dateSelector = document.evaluate(
-      `//span[contains(@class, "vc-day-content vc-focusable") and text()="${newDate.getDate()}"]`,
+      `//span[contains(@class, "vc-day-content vc-focusable") and not(contains(@class, "is-disabled")) and text()="${newDate.getDate()}"]`,
       baseElement,
       null,
       XPathResult.FIRST_ORDERED_NODE_TYPE,
       null
     ).singleNodeValue
 
-    if (dateSelector.classList.contains('is-disabled')) {
+    if (!dateSelector) {
       const nextMonthBtn = baseElement.querySelector('.vc-arrow.is-right')
 
       userEvent.click(nextMonthBtn)
@@ -370,7 +377,10 @@ describe('Users can set expiration date when sharing with users or groups', () =
 
     const newDate = getDateInFuture(4)
     const dateSelector = document.evaluate(
-      `//span[contains(@class, "vc-day-content vc-focusable") and text()="${newDate.getDate()}"]`,
+      `//span[contains(@class, "vc-day-content vc-focusable") and @aria-label="${newDate.toLocaleDateString(
+        'en',
+        formatDate
+      )}" and text()="${newDate.getDate()}"]`,
       baseElement,
       null,
       XPathResult.FIRST_ORDERED_NODE_TYPE,

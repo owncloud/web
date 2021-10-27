@@ -3,13 +3,39 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v4.3.0...master
+[unreleased]: https://github.com/owncloud/web/compare/v4.4.0...master
+
+Summary
+-------
+
+* Bugfix - Fix location picker breadcrumb url encoding: [#5940](https://github.com/owncloud/web/pull/5940)
+
+Details
+-------
+
+* Bugfix - Fix location picker breadcrumb url encoding: [#5940](https://github.com/owncloud/web/pull/5940)
+
+   The breadcrumb urls in location-picker were encoded. We've fixed this by removing the
+   encoding.
+
+   https://github.com/owncloud/web/issues/5938
+   https://github.com/owncloud/web/pull/5940
+   https://github.com/owncloud/web/pull/5715
+
+Changelog for ownCloud Web [4.4.0] (2021-10-26)
+=======================================
+The following sections list the changes in ownCloud web 4.4.0 relevant to
+ownCloud admins and users.
+
+[4.4.0]: https://github.com/owncloud/web/compare/v4.3.0...v4.4.0
 
 Summary
 -------
 
 * Bugfix - Fix duplicated event subscriptions: [#5910](https://github.com/owncloud/web/pull/5910)
 * Bugfix - External apps by shares: [#5907](https://github.com/owncloud/web/pull/5907)
+* Bugfix - New Collaborator removes wrong autocomplete items: [#5857](https://github.com/owncloud/web/issues/5857)
+* Bugfix - Fix overlapping requests in files app: [#5917](https://github.com/owncloud/web/pull/5917)
 * Bugfix - Clean router path handling: [#5894](https://github.com/owncloud/web/pull/5894)
 * Bugfix - Unnecessary redirects on personal page: [#5893](https://github.com/owncloud/web/pull/5893)
 * Enhancement - Accessible, themeable media viewer: [#5900](https://github.com/owncloud/web/pull/5900)
@@ -41,6 +67,28 @@ Details
 
    https://github.com/owncloud/web/issues/5906
    https://github.com/owncloud/web/pull/5907
+
+* Bugfix - New Collaborator removes wrong autocomplete items: [#5857](https://github.com/owncloud/web/issues/5857)
+
+   We've addressed that when you add new collaborators in the autocomplete and remove one from the
+   autocompletion it always removes the last element.
+
+   https://github.com/owncloud/web/issues/5857
+   https://github.com/owncloud/web/pull/5931
+
+* Bugfix - Fix overlapping requests in files app: [#5917](https://github.com/owncloud/web/pull/5917)
+
+   In some cases the files app tended to display the wrong resources when navigating quickly
+   through the views. This happened because the resource provisioning step wasn't canceled.
+   This is now fixed by using vue-concurrency which on a high level wraps iterable generators
+   which are cancelable. We're using it to wrap the resource loading and cancel it as soon as the
+   resource set is not needed anymore.
+
+   It also improves the overall performance for the files app.
+
+   https://github.com/owncloud/web/issues/5085
+   https://github.com/owncloud/web/issues/5875
+   https://github.com/owncloud/web/pull/5917
 
 * Bugfix - Clean router path handling: [#5894](https://github.com/owncloud/web/pull/5894)
 

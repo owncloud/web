@@ -96,7 +96,12 @@ const resourcesFolders = [resourceDocumentsFolder, resourcePdfsFolder]
 const resources = [...resourcesFiles, ...resourcesFolders]
 
 function createWrapper(selectedFiles = [resourceForestJpg]) {
-  jest.spyOn(Personal.methods, 'loadResources').mockImplementation()
+  jest.spyOn(Personal, 'setup').mockImplementation(() => ({
+    loadResourcesTask: {
+      isRunning: false,
+      perform: jest.fn()
+    }
+  }))
   jest
     .spyOn(MixinAccessibleBreadcrumb.methods, 'accessibleBreadcrumb_focusAndAnnounceBreadcrumb')
     .mockImplementation()
@@ -172,10 +177,7 @@ function createWrapper(selectedFiles = [resourceForestJpg]) {
     }),
     localVue,
     router,
-    stubs: stubs,
-    data: () => ({
-      loading: false
-    })
+    stubs: stubs
   })
 }
 

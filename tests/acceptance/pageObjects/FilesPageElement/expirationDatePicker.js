@@ -6,50 +6,52 @@ module.exports = {
     /**
      * sets up the xpath for year of expiry date
      *
-     * @param year
+     * @param {Date} date
      * @returns {{locateStrategy: string, selector: *}}
      */
-    setExpiryDateYearSelectorXpath: function (year) {
-      const yearSelectorXpath = util.format(this.elements.dateTimeYearPicker.selector, year)
+    getSelectorExpiryDateYear: function (date) {
+      const yearString = date.getFullYear()
       return {
-        selector: yearSelectorXpath,
+        selector: util.format(this.elements.dateTimeYearPicker.selector, yearString),
         locateStrategy: this.elements.dateTimeYearPicker.locateStrategy
       }
     },
     /**
      * sets up the xpath for month of expiry date
      *
-     * @param {string} month month name
+     * @param {Date} date
      * @returns {{locateStrategy: string, selector: *}}
      */
-    setExpiryDateMonthSelectorXpath: function (month) {
-      const monthSelectorXpath = util.format(this.elements.dateTimeMonthPicker.selector, month)
+    getSelectorExpiryDateMonth: function (date) {
+      const monthString = date.toLocaleString('en', { month: 'short' })
       return {
-        selector: monthSelectorXpath,
+        selector: util.format(this.elements.dateTimeMonthPicker.selector, monthString),
         locateStrategy: this.elements.dateTimeMonthPicker.locateStrategy
       }
     },
     /**
      * sets up the xpath for year of expiry date
      *
-     * @param day
+     * @param {Date} date
      * @returns {{locateStrategy: string, selector: *}}
      */
-    setExpiryDateDaySelectorXpath: function (day) {
-      const daySelectorXpath = util.format(this.elements.dateTimeDayPicker.selector, day)
+    getSelectorExpiryDateDay: function (date) {
+      const formatDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
+      const dayString = date.getDate()
+      const fullDateString = date.toLocaleDateString('en', formatDate)
       return {
-        selector: daySelectorXpath,
+        selector: util.format(this.elements.dateTimeDayPicker.selector, dayString, fullDateString),
         locateStrategy: this.elements.dateTimeDayPicker.locateStrategy
       }
     },
     /**
      * sets provided year in expiry date field on webUI
      *
-     * @param {string} year
+     * @param {Date} date
      * @returns {Promise<void>}
      */
-    setExpiryDateYear: function (year) {
-      const yearSelector = this.setExpiryDateYearSelectorXpath(year)
+    setExpiryDateYear: function (date) {
+      const yearSelector = this.getSelectorExpiryDateYear(date)
       return this.click('@datepickerTitle')
         .waitForElementVisible('@datepickerMonthAndYearTitle', 500)
         .click('@datepickerMonthAndYearTitle')
@@ -61,11 +63,11 @@ module.exports = {
     /**
      * sets provided month in expiry date field on webUI
      *
-     * @param {number} month
+     * @param {Date} date
      * @returns {Promise<void>}
      */
-    setExpiryDateMonth: function (month) {
-      const monthSelector = this.setExpiryDateMonthSelectorXpath(month)
+    setExpiryDateMonth: function (date) {
+      const monthSelector = this.getSelectorExpiryDateMonth(date)
       return this.click('@datepickerTitle')
         .waitForElementVisible('@datepickerMonthAndYearTitle', 500)
         .waitForElementVisible(monthSelector)
@@ -75,11 +77,11 @@ module.exports = {
     /**
      * sets provided day in expiry date field on webUI
      *
-     * @param {string} day
+     * @param {Date} date
      * @returns {Promise<void>}
      */
-    setExpiryDateDay: function (day) {
-      const daySelector = this.setExpiryDateDaySelectorXpath(day)
+    setExpiryDateDay: function (date) {
+      const daySelector = this.getSelectorExpiryDateDay(date)
       return this.waitForElementVisible(daySelector)
         .click(daySelector)
         .waitForElementNotPresent(daySelector)
@@ -93,8 +95,8 @@ module.exports = {
      */
     isExpiryDateDisabled: async function (pastDate) {
       let disabled = false
-      const yearSelector = this.setExpiryDateYearSelectorXpath(pastDate.getFullYear())
 
+      const yearSelector = this.getSelectorExpiryDateYear(pastDate)
       await this.click('@datepickerTitle')
         .waitForElementVisible('@datepickerMonthAndYearTitle', 500)
         .click('@datepickerMonthAndYearTitle')
@@ -109,10 +111,7 @@ module.exports = {
         return disabled
       }
 
-      const monthSelector = this.setExpiryDateMonthSelectorXpath(
-        pastDate.toLocaleString('en', { month: 'short' })
-      )
-
+      const monthSelector = this.getSelectorExpiryDateMonth(pastDate)
       await this.click(yearSelector)
         .waitForElementVisible(monthSelector)
         .getAttribute(monthSelector, 'class', (result) => {
@@ -125,8 +124,7 @@ module.exports = {
         return disabled
       }
 
-      const daySelector = this.setExpiryDateDaySelectorXpath(pastDate.getDate())
-
+      const daySelector = this.getSelectorExpiryDateDay(pastDate)
       await this.click(monthSelector)
         .waitForElementVisible(daySelector)
         .getAttribute(daySelector, 'class', (result) => {
@@ -159,10 +157,9 @@ module.exports = {
           return false
         }
       }
-      const year = dateToSet.getFullYear()
-      const month = dateToSet.toLocaleString('en', { month: 'short' })
-      const day = dateToSet.getDate()
-      await this.setExpiryDateYear(year).setExpiryDateMonth(month).setExpiryDateDay(day)
+      await this.setExpiryDateYear(dateToSet)
+        .setExpiryDateMonth(dateToSet)
+        .setExpiryDateDay(dateToSet)
       return true
     }
   },
@@ -179,7 +176,7 @@ module.exports = {
     },
     dateTimeDayPicker: {
       selector:
-        '//div[not(contains(@class, "is-not-in-month"))]/span[contains(@class, "vc-day-content vc-focusable") and normalize-space(.)="%s"]',
+        '//div[not(contains(@class, "is-not-in-month"))]/span[contains(@class, "vc-day-content vc-focusable") and normalize-space(.)="%s" and @aria-label="%s"]',
       locateStrategy: 'xpath'
     },
     publicLinkDeleteExpirationDateButton: {

@@ -4,6 +4,7 @@ import OwnCloud from 'owncloud-sdk'
 import { createStore } from 'vuex-extensions'
 import DesignSystem from 'owncloud-design-system'
 import GetTextPlugin from 'vue-gettext'
+import VueCompositionAPI from '@vue/composition-api'
 
 export const createFile = ({ id, status = 1, type = 'folder' }) => ({
   id: `file-id-${id}`,
@@ -23,6 +24,7 @@ localVue.prototype.$client = new OwnCloud()
 localVue.prototype.$client.init({ baseUrl: 'http://none.de' })
 localVue.use(Vuex)
 localVue.use(DesignSystem)
+localVue.use(VueCompositionAPI)
 /*
  * TODO: options on GetTextPlugin do not have any effect because of
  * packages/web-app-files/src/gettext.js which overwrites every setting.

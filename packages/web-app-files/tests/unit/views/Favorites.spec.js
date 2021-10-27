@@ -209,8 +209,11 @@ function mountOptions({
         query: { page: 1 }
       }
     },
-    data: () => ({
-      loading: loading
+    setup: () => ({
+      loadResourcesTask: {
+        isRunning: loading,
+        perform: jest.fn()
+      }
     })
   }
 }

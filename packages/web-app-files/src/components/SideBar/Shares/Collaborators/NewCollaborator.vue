@@ -24,7 +24,11 @@
           <translate> No users or groups found. </translate>
         </template>
         <template #selected-option-container="{ option, deselect }">
-          <recipient-container :recipient="option" :deselect="deselect" />
+          <recipient-container
+            :key="option.value.shareWith"
+            :recipient="option"
+            :deselect="deselect"
+          />
         </template>
         <template #open-indicator>
           <!-- Empty to hide the caret -->

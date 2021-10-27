@@ -15,7 +15,7 @@ For feedback and bug reports, please use the [public issue tracker](https://gith
 	</description>
 	<licence>AGPL</licence>
 	<author>ownCloud</author>
-	<version>4.3.0</version>
+	<version>4.4.0</version>
 	<category>tools</category>
 	<website>https://github.com/owncloud/web</website>
 	<bugs>https://github.com/owncloud/web/issues</bugs>

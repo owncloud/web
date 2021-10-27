@@ -185,8 +185,11 @@ function mountOptions({
         query: { page: 1, 'view-mode': viewMode }
       }
     },
-    data: () => ({
-      loading
+    setup: () => ({
+      loadResourcesTask: {
+        isRunning: loading,
+        perform: jest.fn()
+      }
     })
   }
 }

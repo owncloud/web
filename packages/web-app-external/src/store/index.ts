@@ -1,9 +1,16 @@
-const state = {
+import { Commit } from 'vuex'
+const State = {
   mimeTypes: {}
 }
 
 const actions = {
-  async fetchMimeTypes({ rootGetters, commit }): Promise<void> {
+  async fetchMimeTypes({
+    rootGetters,
+    commit
+  }: {
+    rootGetters: any
+    commit: Commit
+  }): Promise<void> {
     if (!rootGetters.capabilities.files.app_providers[0]?.enabled) {
       return
     }
@@ -23,20 +30,20 @@ const actions = {
 }
 
 const getters = {
-  getMimeTypes: (state) => {
+  getMimeTypes: (state: typeof State): { [key: string]: string } => {
     return state.mimeTypes
   }
 }
 
 const mutations = {
-  SET_MIME_TYPES(state, mimeTypes): void {
+  SET_MIME_TYPES(state: typeof State, mimeTypes: { [key: string]: string }): void {
     state.mimeTypes = mimeTypes
   }
 }
 
 export default {
   namespaced: true,
-  state,
+  state: State,
   actions,
   mutations,
   getters

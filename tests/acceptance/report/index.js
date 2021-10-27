@@ -1,6 +1,6 @@
 const { program, Option } = require('commander')
 const getRepoInfo = require('git-repo-info')
-const pkg = require('../../package.json')
+const pkg = require('../../../package.json')
 const reporter = require('cucumber-html-reporter')
 const os = require('os')
 

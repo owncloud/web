@@ -1,6 +1,6 @@
 <template>
   <div>
-    <list-loader v-if="loading" />
+    <list-loader v-if="loadResourcesTask.isRunning" />
     <template v-else>
       <not-found-message v-if="folderNotFound" class="files-not-found uk-height-1-1" />
       <no-content-message
@@ -73,6 +73,7 @@ import { buildResource } from '../helpers/resources'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../constants'
 import { bus } from 'web-pkg/src/instance'
+import { useTask } from 'vue-concurrency'
 
 import QuickActions from '../components/FilesList/QuickActions.vue'
 import ListLoader from '../components/FilesList/ListLoader.vue'
@@ -107,10 +108,44 @@ export default {
     MixinMountSideBar,
     MixinFilesListFilter
   ],
+  setup() {
+    const loadResourcesTask = useTask(function* (signal, ref, sameRoute, path = null) {
+      ref.CLEAR_CURRENT_FILES_LIST()
 
-  data: () => ({
-    loading: true
-  }),
+      try {
+        let resources = yield ref.fetchResources(
+          path || ref.$route.params.item,
+          DavProperties.Default
+        )
+        resources = resources.map(buildResource)
+
+        const currentFolder = resources.shift()
+
+        ref.LOAD_FILES({
+          currentFolder,
+          files: resources
+        })
+        ref.loadIndicators({
+          client: ref.$client,
+          currentFolder: currentFolder.path
+        })
+
+        // Load quota
+        const user = yield ref.$client.users.getUser(ref.user.id)
+
+        ref.SET_QUOTA(user.quota)
+      } catch (error) {
+        ref.SET_CURRENT_FOLDER(null)
+        console.error(error)
+      }
+
+      ref.adjustTableHeaderPosition()
+      ref.accessibleBreadcrumb_focusAndAnnounceBreadcrumb(sameRoute)
+      ref.scrollToResourceFromRoute()
+    }).restartable()
+
+    return { loadResourcesTask }
+  },
 
   computed: {
     ...mapState(['app']),
@@ -191,7 +226,7 @@ export default {
         this.$_filesListPagination_updateCurrentPage()
 
         if (!sameRoute || !sameItem) {
-          this.loadResources(sameRoute)
+          this.loadResourcesTask.perform(this, sameRoute)
         }
       },
       immediate: true
@@ -208,7 +243,7 @@ export default {
 
   mounted() {
     const loadResourcesEventToken = bus.subscribe('app.files.list.load', (path) => {
-      this.loadResources(this.$route.params.item === path, path)
+      this.loadResourcesTask.perform(this, this.$route.params.item === path, path)
     })
 
     this.$on('beforeDestroy', () => bus.unsubscribe('app.files.list.load', loadResourcesEventToken))
@@ -336,43 +371,6 @@ export default {
         console.error(error)
       }
     },
-    async loadResources(sameRoute, path = null) {
-      this.loading = true
-      this.CLEAR_CURRENT_FILES_LIST()
-
-      try {
-        let resources = await this.fetchResources(
-          path || this.$route.params.item,
-          DavProperties.Default
-        )
-        resources = resources.map(buildResource)
-
-        const currentFolder = resources.shift()
-
-        this.LOAD_FILES({
-          currentFolder,
-          files: resources
-        })
-        this.loadIndicators({
-          client: this.$client,
-          currentFolder: currentFolder.path
-        })
-
-        // Load quota
-        const user = await this.$client.users.getUser(this.user.id)
-
-        this.SET_QUOTA(user.quota)
-      } catch (error) {
-        this.SET_CURRENT_FOLDER(null)
-        console.error(error)
-      }
-
-      this.adjustTableHeaderPosition()
-      this.loading = false
-      this.accessibleBreadcrumb_focusAndAnnounceBreadcrumb(sameRoute)
-      this.scrollToResourceFromRoute()
-    },
-
     scrollToResourceFromRoute() {
       const resourceName = this.$route.query.scrollTo
 
