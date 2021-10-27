@@ -4,9 +4,9 @@
     class="files-collaborators-collaborator uk-flex oc-py-xs"
   >
     <div class="uk-width-2-3 uk-flex uk-flex-start" style="gap: 10px">
-      <oc-avatar
+      <avatar-image
         v-if="shareTypeName === 'user'"
-        :src="''"
+        :userid="collaborator.collaborator.name"
         :user-name="collaborator.collaborator.displayName"
         :width="48"
         class="sharee-avatar"
@@ -47,6 +47,7 @@
         @optionChange="collaboratorDropdownChange"
       />
       <show-collaborator-edit-options
+        class="oc-ml-s"
         :collaborator="collaborator"
         :expiration-date="collaborator.expires ? collaborator.expires : null"
         @expirationDateChanged="collaboratorDropdownChange"
