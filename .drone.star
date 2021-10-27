@@ -767,7 +767,7 @@ def yarnCache(ctx):
         "type": "docker",
         "name": "cache-yarn",
         "steps": skipIfUnchanged(ctx, "cache") +
-                 installYarn() +
+                 installYarn() + yarnInstallTests() +
                  rebuildBuildArtifactCache(ctx, ".yarn", ".yarn"),
         "trigger": {
             "ref": [
@@ -1165,7 +1165,7 @@ def acceptance(ctx):
                         steps += skipIfUnchanged(ctx, "acceptance-tests")
 
                         steps += restoreBuildArtifactCache(ctx, ".yarn", ".yarn")
-                        steps += installYarn()
+                        steps += installYarn() + yarnInstallTests()
 
                         if (params["oc10IntegrationAppIncluded"]):
                             steps += buildWebApp()
@@ -1596,6 +1596,16 @@ def installYarn():
         "image": OC_CI_NODEJS,
         "commands": [
             "yarn install --immutable",
+        ],
+    }]
+
+def yarnInstallTests():
+    return [{
+        "name": "yarn-install-tests",
+        "image": OC_CI_NODEJS,
+        "pull": "always",
+        "commands": [
+            "cd tests/acceptance && yarn install --immutable",
         ],
     }]
 
@@ -2114,7 +2124,7 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
         if type(suite) == "list":
             paths = ""
             for path in suite:
-                paths = paths + "tests/acceptance/features/" + path + " "
+                paths = paths + "features/" + path + " "
             environment["TEST_PATHS"] = paths
         elif (suite != "all"):
             environment["TEST_CONTEXT"] = suite
@@ -2146,7 +2156,7 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
         "image": OC_CI_NODEJS,
         "environment": environment,
         "commands": [
-            "cd %s && ./tests/acceptance/run.sh" % dir["web"],
+            "cd %s/tests/acceptance && ./run.sh" % dir["web"],
         ],
         "volumes": [{
             "name": "gopath",

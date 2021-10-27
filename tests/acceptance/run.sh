@@ -68,7 +68,7 @@ FINAL_EXIT_STATUS=0
 
 # Work out which suites will be run.
 # TEST_PATHS: valid if path is from tests directory
-# Example: "tests/acceptance/features/webUILogin tests/acceptance/features/webUINotifications"
+# Example: "features/webUILogin features/webUINotifications"
 # or
 # TEST_CONTEXT: name of the suite to run
 # Example: "webUIFavorites"
@@ -161,7 +161,7 @@ then
 	TEST_PATHS+=( "${FEATURES_DIR}" )
 fi
 
-RUN_ACCEPTANCE_TESTS="cucumber-js --retry 1 --require-module @babel/register --require-module @babel/polyfill --require tests/acceptance/setup.js --require tests/acceptance/stepDefinitions --format @cucumber/pretty-formatter"
+RUN_ACCEPTANCE_TESTS="cucumber-js --retry 1 --require-module @babel/register --require-module @babel/polyfill --require setup.js --require stepDefinitions --format @cucumber/pretty-formatter"
 
 if [ -z "${TEST_TAGS}" ]
 then
@@ -175,9 +175,9 @@ if [ "${ACCEPTANCE_TESTS_EXIT_STATUS}" -ne 0 ]; then
   echo "The acceptance tests exited with error status ${ACCEPTANCE_TESTS_EXIT_STATUS}"
 
   # If the first run of a scenario fails, then it gets reported like:
-  # 5) Scenario: try to login with invalid username (attempt 1, retried) # tests/acceptance/features/webUILogin/login.feature:67
+  # 5) Scenario: try to login with invalid username (attempt 1, retried) # features/webUILogin/login.feature:67
   # If the second run of a scenario fails, hen it gets reported like:
-  # 5) Scenario: try to login with invalid username (attempt 2) # tests/acceptance/features/webUILogin/login.feature:67
+  # 5) Scenario: try to login with invalid username (attempt 2) # features/webUILogin/login.feature:67
   # and the tests with undefined steps are not retried and are reported simply like:
   # 5) Scenario: try to login with invalid username
   # So we need to look for those failed tests that don't end with (attempt 1, retried)
@@ -185,7 +185,7 @@ if [ "${ACCEPTANCE_TESTS_EXIT_STATUS}" -ne 0 ]; then
   # https://stackoverflow.com/questions/6550484/prevent-grep-returning-an-error-when-input-doesnt-match
   FAILED_SCENARIOS="$(grep ') Scenario: .*' logfile.txt | { grep -v '(attempt 1, retried)' || true; })"
   for FAILED_SCENARIO in ${FAILED_SCENARIOS}; do
-    if [[ $FAILED_SCENARIO =~ "tests/acceptance/features/" ]]; then
+    if [[ $FAILED_SCENARIO =~ "features/" ]]; then
       SUITE_PATH=$(dirname "${FAILED_SCENARIO}")
       SUITE=$(basename "${SUITE_PATH}")
       SCENARIO=$(basename "${FAILED_SCENARIO}")
@@ -210,7 +210,7 @@ then
   FAILED_SCENARIOS="$(grep ') Scenario: .*' logfile.txt | { grep '(attempt 1, retried)' || true; })"
   for FAILED_SCENARIO in ${FAILED_SCENARIOS}; do
     found=false
-    if [[ $FAILED_SCENARIO =~ "tests/acceptance/features/" ]]; then
+    if [[ $FAILED_SCENARIO =~ "features/" ]]; then
       SUITE_PATH=$(dirname "${FAILED_SCENARIO}")
       SUITE=$(basename "${SUITE_PATH}")
       SCENARIO=$(basename "${FAILED_SCENARIO}")
@@ -225,7 +225,7 @@ then
       continue
     fi
     if [ "$found" == false ]; then
-      if [[ $FAILED_SCENARIO =~ "tests/acceptance/features/" ]]; then
+      if [[ $FAILED_SCENARIO =~ "features/" ]]; then
         SUITE_PATH=$(dirname "${FAILED_SCENARIO}")
         SUITE=$(basename "${SUITE_PATH}")
         SCENARIO=$(basename "${FAILED_SCENARIO}")

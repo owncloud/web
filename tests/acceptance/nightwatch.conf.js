@@ -1,6 +1,6 @@
 const chromedriver = require('chromedriver')
 const path = require('path')
-const withHttp = url => (/^https?:\/\//i.test(url) ? url : `http://${url}`)
+const withHttp = (url) => (/^https?:\/\//i.test(url) ? url : `http://${url}`)
 
 const RUN_WITH_LDAP = !!process.env.RUN_WITH_LDAP
 const RUN_ON_OCIS = !!process.env.RUN_ON_OCIS
@@ -22,8 +22,7 @@ const BACKEND_ADMIN_PASSWORD = process.env.BACKEND_PASSWORD || 'admin'
 const SELENIUM_HOST = process.env.SELENIUM_HOST || 'localhost'
 const SELENIUM_PORT = process.env.SELENIUM_PORT || 4444
 const REMOTE_UPLOAD_DIR =
-  process.env.REMOTE_UPLOAD_DIR ||
-  require('path').join(__dirname, '/tests/acceptance/filesForUpload/')
+  process.env.REMOTE_UPLOAD_DIR || require('path').join(__dirname, '/filesForUpload/')
 const SAUCE_USERNAME = process.env.SAUCE_USERNAME
 const SAUCE_ACCESS_KEY = process.env.SAUCE_ACCESS_KEY
 const BROWSER_NAME = process.env.BROWSER_NAME
@@ -46,11 +45,8 @@ function generateScreenshotFilePath(nightwatchClient, basePath, imagePath) {
 }
 
 const config = {
-  page_objects_path: './tests/acceptance/pageObjects',
-  custom_commands_path: [
-    './tests/acceptance/customCommands',
-    'node_modules/nightwatch-vrt/commands'
-  ],
+  page_objects_path: './pageObjects',
+  custom_commands_path: ['./customCommands', 'node_modules/nightwatch-vrt/commands'],
   custom_assertions_path: ['node_modules/nightwatch-vrt/assertions'],
   test_settings: {
     default: {
