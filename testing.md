@@ -70,19 +70,23 @@ If you're using a M1 Mac, you need to use `seleniarm/standalone-chromium:4.0.0-b
 
 #### Run acceptance tests
 
-Depending on the backend you're running the tests on, you can either run
+- Change the directory to `tests/acceptance`
+- Install all the test dependencies with `yarn` command
+- Depending on the backend you're running the tests on, you can either run
 
-```shell
-$ yarn test:acceptance:oc10 tests/acceptance/features/path/to/test
-```
+  ```shell
+  $ yarn test:acceptance:oc10 features/path/to/test
+  ```
 
-for ownCloud 10.X or
+  for ownCloud 10.X or
 
-```shell
-$ yarn test:acceptance:ocis tests/acceptance/features/path/to/test
-```
+  ```shell
+  $ yarn test:acceptance:ocis features/path/to/test
+  ```
 
-for oCIS acceptance tests.
+  for oCIS acceptance tests.
+
+
 #### Watch the test run
 
 To watch the tests while running, open [http://host.docker.internal:6080/](http://host.docker.internal:6080/) in the browser to access your VNC client.
