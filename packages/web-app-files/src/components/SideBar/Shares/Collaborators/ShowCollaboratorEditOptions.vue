@@ -17,7 +17,7 @@
     >
       <template #special>
         <oc-list class="list-collaborator-edit-options oc-p-xs" :aria-label="rolesListAriaLabel">
-          <li v-if="expirationDateExists" class="oc-p-s">
+          <li v-if="expirationDateExists" class="oc-pl-xs">
             <collaborators-edit-options
               :minimal="true"
               :permissions-input="false"
@@ -26,7 +26,7 @@
               @optionChange="expirationDateChanged"
             />
           </li>
-          <li v-for="(option, i) in options" :key="i" class="oc-p-s" @click="option.method()">
+          <li v-for="(option, i) in options" :key="i" @click="option.method()" class="oc-pl-xs">
               <oc-icon :variation="option.variation" :name="option.icon" />
               <span :class="option.class">{{ option.title }}</span>
           </li>

@@ -24,12 +24,12 @@
           <span aria-hidden="true" v-text="shareDisplayName" />
           <span class="oc-invisible-sr" v-text="screenreaderShareDisplayName" />
         </p>
-        <p class="oc-m-rm">
-          <span aria-hidden="true" v-text="shareTypeText" />
+        <p class="oc-m-rm collaborator-additional-info">
+          <span aria-hidden="true" v-text="shareTypeText" class="share-type" />
           <span class="oc-invisible-sr" v-text="screenreaderShareDetails" />
           <span v-if="expirationDateLocale">
-            <span aria-hidden="true">
-              <oc-icon size="small" name="text-calendar" />
+            <span aria-hidden="true" class="collaborator-expiration">
+              <oc-icon size="small" name="text-calendar" class="oc-mr-xs" />
               {{ shareExpirationText }}
             </span>
             <span class="oc-invisible-sr" v-text="screenreaderShareExpiration" />
@@ -37,7 +37,7 @@
         </p>
       </div>
     </div>
-    <div v-if="!isOwner && canEditOrDelete" class="uk-width-1-3 uk-flex uk-flex-right uk-flex-top">
+    <div v-if="!isOwner && canEditOrDelete" class="uk-width-1-3 uk-flex uk-flex-nowrap uk-flex-right uk-flex-middle ">
       <collaborators-edit-options
         :minimal="true"
         :existing-role="originalRole"
@@ -264,5 +264,29 @@ export default {
 <style lang="scss" scoped>
 .sharee-avatar {
   min-width: 48px;
+}
+.collaborator-additional-info {
+  font-size: 14px;
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+  .share-type {
+    width: 26%;
+  }
+  span {
+    display: table-cell;
+    vertical-align: middle;
+  }
+  .oc-invisible-sr {
+    display: none;
+  }
+}
+.collaborator-expiration {
+  display: flex !important;
+  align-items: center;
+  color: var(--oc-color-swatch-passive-hover);
+  span {
+    display: inline-block !important;
+  }
 }
 </style>
