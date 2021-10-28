@@ -6,6 +6,8 @@ import { providerStore } from './service'
 import { bus } from 'web-pkg/src/instance'
 import { SearchProvider } from './types'
 import { Component } from 'vue'
+// @ts-ignore
+import translationsJson from '../l10n/translations.json'
 
 // just a dummy function to trick gettext tools
 const $gettext = (msg) => {
@@ -39,6 +41,7 @@ export default {
       ]
     }
   ],
+  translations: translationsJson,
   mounted({
     portal
   }: {
