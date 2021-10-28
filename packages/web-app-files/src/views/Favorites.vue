@@ -24,8 +24,8 @@
         <template #quickActions="props">
           <quick-actions class="oc-visible@s" :item="props.resource" :actions="app.quickActions" />
         </template>
-        <template #contextMenu="props">
-          <context-actions :item="props.resource" />
+        <template #contextMenu="{ resource }">
+          <context-actions v-if="resource.id === highlightedFile.id" :item="resource" />
         </template>
         <template #footer>
           <pagination />

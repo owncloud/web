@@ -25,7 +25,7 @@
         :header-position="headerPosition"
       >
         <template #contextMenu="{ resource }">
-          <context-actions :item="resource" />
+          <context-actions v-if="resource.id === highlightedFile.id" :item="resource" />
         </template>
         <template #footer>
           <pagination />

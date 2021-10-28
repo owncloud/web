@@ -46,7 +46,7 @@
             </div>
           </template>
           <template #contextMenu="{ resource }">
-            <context-actions :item="resource" />
+            <context-actions v-if="resource.id === highlightedFile.id" :item="resource" />
           </template>
           <template v-if="pendingHasMore" #footer>
             <div class="uk-width-1-1 uk-text-center oc-mt">
@@ -132,7 +132,7 @@
           </div>
         </template>
         <template #contextMenu="{ resource }">
-          <context-actions :item="resource" />
+          <context-actions v-if="resource.id === highlightedFile.id" :item="resource" />
         </template>
         <template #footer>
           <list-info
