@@ -40,7 +40,7 @@
           />
         </template>
         <template #contextMenu="{ resource }">
-          <context-actions v-if="resource.id === highlightedFile.id" :item="resource" />
+          <context-actions v-if="isHighlightedFile(resource)" :item="resource" />
         </template>
         <template #footer>
           <pagination />
@@ -385,6 +385,10 @@ export default {
           }
         })
       }
+    },
+
+    isHighlightedFile(resource) {
+      return resource && resource.id === this.highlightedFile?.id
     }
   }
 }

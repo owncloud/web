@@ -33,6 +33,17 @@ const mockMenuSections = [
         selector: '.oc-files-actions-markdown-editor-trigger',
         class: 'oc-files-actions-markdown-editor-trigger'
       },
+      ...exampleApps.map((app) => {
+        return {
+          img: app.icon,
+          canBeDefault: true,
+          handler: jest.fn(),
+          label: () => 'Open in ' + app.name,
+          componentType: 'oc-button',
+          selector: `.oc-files-actions-${app.name}-trigger`,
+          class: `oc-files-actions-${app.name}-trigger`
+        }
+      }),
       {
         icon: 'file_download',
         canBeDefault: true,
@@ -123,90 +134,11 @@ const mockMenuSections = [
 const filesPersonalRoute = { name: 'files-personal' }
 
 describe('ContextActions', () => {
-  describe('if no externalApps are available, renders', () => {
-    it('a list of actions for a file', () => {
-      const wrapper = getWrapper(filesPersonalRoute, {
-        name: 'exampleFile',
-        extension: 'jpg',
-        mimeType: 'application/fileFormat2',
-        type: 'file'
-      })
-
-      expect(wrapper).toMatchSnapshot()
-    })
-
-    it('a list of actions for a folder', () => {
-      const wrapper = getWrapper(filesPersonalRoute, {
-        name: 'exampleFolder',
-        extension: '',
-        type: 'folder'
-      })
-
-      expect(wrapper).toMatchSnapshot()
-    })
-  })
-
-  describe('if externalApps are available, renders', () => {
-    it('two lists of actions for a file', () => {
-      const wrapper = getWrapper(
-        filesPersonalRoute,
-        {
-          name: 'exampleFile',
-          extension: 'jpg',
-          mimeType: 'application/fileFormat2',
-          type: 'file'
-        },
-        exampleApps
-      )
-
-      expect(wrapper).toMatchSnapshot()
-    })
-
-    it('one list of actions for a folder', () => {
-      const wrapper = getWrapper(
-        filesPersonalRoute,
-        {
-          name: 'exampleFolder',
-          extension: '',
-          type: 'folder'
-        },
-        exampleApps
-      )
-
-      expect(wrapper).toMatchSnapshot()
-    })
-  })
-
-  describe('should trigger the action handlers on click', () => {
+  describe('action handlers', () => {
     afterEach(() => {
       jest.clearAllMocks()
     })
-
-    it('for external App actions', async () => {
-      const triggerActionSpy = jest
-        .spyOn(ContextActions.mixins[0].methods, '$_fileActions_openLink')
-        .mockImplementationOnce(jest.fn)
-
-      const wrapper = getWrapper(
-        filesPersonalRoute,
-        {
-          name: 'exampleFile',
-          extension: 'jpg',
-          mimeType: 'application/fileFormat2',
-          type: 'file'
-        },
-        exampleApps
-      )
-
-      const app = exampleApps[0]
-      const appButton = wrapper.find('#oc-files-context-default-actions > li > button')
-      expect(appButton.text()).toBe(`Open in ${app.name}`)
-
-      await appButton.trigger('click')
-      expect(triggerActionSpy).toHaveBeenCalledWith(app.name, 'a93f8adf==')
-    })
-
-    it('for default file and system actions', async () => {
+    it('renders action handlers as clickable elements', async () => {
       const wrapper = getWrapper(
         filesPersonalRoute,
         {
@@ -226,6 +158,29 @@ describe('ContextActions', () => {
           expect(item.handler).toHaveBeenCalledTimes(1)
         }
       }
+    })
+  })
+
+  describe('menu items', () => {
+    it('renders a list of actions for a file', () => {
+      const wrapper = getWrapper(filesPersonalRoute, {
+        name: 'exampleFile',
+        extension: 'jpg',
+        mimeType: 'application/fileFormat2',
+        type: 'file'
+      })
+
+      expect(wrapper).toMatchSnapshot()
+    })
+
+    it('renders a list of actions for a folder', () => {
+      const wrapper = getWrapper(filesPersonalRoute, {
+        name: 'exampleFolder',
+        extension: '',
+        type: 'folder'
+      })
+
+      expect(wrapper).toMatchSnapshot()
     })
   })
 })

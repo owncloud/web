@@ -2,7 +2,7 @@
   <div id="oc-files-context-menu">
     <template v-for="(section, i) in menuSections">
       <ul
-        id="`oc-files-context-actions-${section.name}`"
+        :id="`oc-files-context-actions-${section.name}`"
         :key="`section-${section.name}-list`"
         class="uk-list oc-mt-s oc-files-context-actions"
       >
@@ -80,16 +80,9 @@ export default {
       required: true
     }
   },
-  data: () => ({
-    appList: []
-  }),
 
   computed: {
     ...mapGetters('Files', ['currentFolder']),
-
-    showExternalApps() {
-      return this.item.extension && this.appList?.length > 0
-    },
 
     menuSections() {
       const sections = []
@@ -122,31 +115,24 @@ export default {
     },
 
     menuItemsContext() {
-      const menuItems = []
-
-      // `open` and `open with`
-      const openActions = [
-        ...this.$_navigate_items,
-        ...this.$_fetch_items,
+      const fileHandlers = [
         ...this.$_fileActions_editorActions,
-        ...this.$_fileActions_loadExternalAppActions(this.item)
+        ...this.$_fileActions_loadExternalAppActions(this.filterParams.resource),
+        ...this.$_navigate_items,
+        ...this.$_fetch_items
+      ]
+
+      return [
+        ...fileHandlers,
+        ...this.$_downloadFile_items,
+        ...this.$_downloadFolder_items,
+        ...this.$_createPublicLink_items,
+        ...this.$_showShares_items,
+        ...this.$_favorite_items.map((action) => {
+          action.keepOpen = true
+          return action
+        })
       ].filter((item) => item.isEnabled(this.filterParams))
-
-      menuItems.push(
-        ...[
-          ...openActions,
-          ...this.$_downloadFile_items,
-          ...this.$_downloadFolder_items,
-          ...this.$_createPublicLink_items,
-          ...this.$_showShares_items,
-          ...this.$_favorite_items.map((action) => {
-            action.keepOpen = true
-            return action
-          })
-        ].filter((item) => item.isEnabled(this.filterParams))
-      )
-
-      return menuItems
     },
 
     menuItemsActions() {

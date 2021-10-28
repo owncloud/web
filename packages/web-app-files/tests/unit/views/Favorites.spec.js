@@ -121,6 +121,7 @@ describe('Favorites component', () => {
 
       it('sets the pages count & the current page', () => {
         const store = getStore({
+          highlightedFile: defaultActiveFiles[0],
           activeFilesCurrentPage: defaultActiveFiles,
           pages: 4,
           currentPage: 3,
@@ -134,6 +135,7 @@ describe('Favorites component', () => {
 
       it('does not show any pagination when there is only one page', () => {
         const store = getStore({
+          highlightedFile: defaultActiveFiles[0],
           activeFilesCurrentPage: defaultActiveFiles,
           pages: 1,
           currentPage: 1,
@@ -153,6 +155,7 @@ describe('Favorites component', () => {
 
       it('sets the counters and the size', () => {
         const store = getStore({
+          highlightedFile: defaultActiveFiles[0],
           activeFilesCurrentPage: defaultActiveFiles,
           totalFilesCount: { files: 15, folders: 20 },
           totalFilesSize: 1024
@@ -173,8 +176,10 @@ describe('Favorites component', () => {
       })
 
       it('shows the list info when there is only one active file', () => {
+        const file = createFile({ id: 3, status: 2, type: 'file' })
         const store = getStore({
-          activeFilesCurrentPage: [createFile({ id: 3, status: 2, type: 'file' })],
+          highlightedFile: file,
+          activeFilesCurrentPage: [file],
           totalFilesCount: { files: 15, folders: 20 }
         })
         const wrapper = getMountedWrapper({ store, loading: false })

@@ -25,7 +25,7 @@
           <quick-actions class="oc-visible@s" :item="props.resource" :actions="app.quickActions" />
         </template>
         <template #contextMenu="{ resource }">
-          <context-actions v-if="resource.id === highlightedFile.id" :item="resource" />
+          <context-actions v-if="isHighlightedFile(resource)" :item="resource" />
         </template>
         <template #footer>
           <pagination />
@@ -174,6 +174,10 @@ export default {
       }, 250)
 
       visibilityObserver.observe(component.$el, { onEnter: debounced, onExit: debounced.cancel })
+    },
+
+    isHighlightedFile(resource) {
+      return resource && resource.id === this.highlightedFile?.id
     }
   }
 }

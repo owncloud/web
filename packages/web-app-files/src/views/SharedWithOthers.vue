@@ -28,7 +28,7 @@
         @rowMounted="rowMounted"
       >
         <template #contextMenu="{ resource }">
-          <context-actions v-if="resource.id === highlightedFile.id" :item="resource" />
+          <context-actions v-if="isHighlightedFile(resource)" :item="resource" />
         </template>
         <template #footer>
           <pagination />
@@ -173,12 +173,7 @@ export default {
 
   methods: {
     ...mapActions('Files', ['loadIndicators', 'loadPreview', 'loadAvatars']),
-    ...mapMutations('Files', [
-      'LOAD_FILES',
-      'SET_FILE_SELECTION',
-      'CLEAR_CURRENT_FILES_LIST',
-      'UPDATE_RESOURCE'
-    ]),
+    ...mapMutations('Files', ['LOAD_FILES', 'SET_FILE_SELECTION', 'CLEAR_CURRENT_FILES_LIST']),
 
     rowMounted(resource, component) {
       const debounced = debounce(({ unobserve }) => {
@@ -200,16 +195,8 @@ export default {
       visibilityObserver.observe(component.$el, { onEnter: debounced, onExit: debounced.cancel })
     },
 
-    shareStatus(status) {
-      if (status === 0) {
-        return this.$gettext('Accepted')
-      }
-      if (status === 1) {
-        return this.$gettext('Pending')
-      }
-      if (status === 2) {
-        return this.$gettext('Declined')
-      }
+    isHighlightedFile(resource) {
+      return resource && resource.id === this.highlightedFile?.id
     }
   }
 }
