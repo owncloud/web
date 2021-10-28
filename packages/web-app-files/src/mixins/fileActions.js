@@ -166,7 +166,7 @@ export default {
     // to open a resource with a specific mimeType
     $_fileActions_loadExternalAppActions(resource) {
       const { mimeType } = resource
-      if (mimeType === undefined || !this.capabilities.files.app_providers) {
+      if (mimeType === undefined || !this.capabilities?.files?.app_providers) {
         return []
       }
 
