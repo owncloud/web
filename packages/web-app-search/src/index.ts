@@ -6,6 +6,7 @@ import { providerStore } from './service'
 import { bus } from 'web-pkg/src/instance'
 import { SearchProvider } from './types'
 import { Component } from 'vue'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import translationsJson from '../l10n/translations.json'
 

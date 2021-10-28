@@ -8,7 +8,7 @@ const collaboratorAction = {
   handler: jest.fn(),
   icon: 'group-add',
   id: 'collaborators',
-  label: 'Add people'
+  label: () => 'Add people'
 }
 
 const publicLinkAction = {
@@ -16,7 +16,7 @@ const publicLinkAction = {
   handler: jest.fn(),
   icon: 'link-add',
   id: 'public-link',
-  label: 'Create and copy public link'
+  label: () => 'Create and copy public link'
 }
 
 const testItem = {
