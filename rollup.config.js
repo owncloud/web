@@ -81,7 +81,7 @@ const plugins = [
     ]
   }),
   html({
-    title: 'ownCloud',
+    title: process.env.TITLE || "ownCloud",
     attributes: {
       html: { lang: 'en' },
       link: [],
