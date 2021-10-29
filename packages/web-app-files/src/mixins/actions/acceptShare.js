@@ -40,7 +40,7 @@ export default {
         )
         this.UPDATE_RESOURCE(share)
       } catch (error) {
-        console.log(error)
+        console.error(error)
         this.showMessage({
           title: this.$gettext('Error while accepting the selected share.'),
           status: 'danger'

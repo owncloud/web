@@ -1,0 +1,5 @@
+Bugfix: Context menu rendering
+
+We fixed that the context menu was being created for each and every file row of the current page (it was just not made visible). Now it only gets created when it gets activated by the user for a file row.
+
+https://github.com/owncloud/web/pull/5952

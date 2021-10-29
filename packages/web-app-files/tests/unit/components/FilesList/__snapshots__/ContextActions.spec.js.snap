@@ -1,54 +1,77 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ContextActions if externalApps are available, renders one list of actions for a folder 1`] = `
+exports[`ContextActions menu items renders a list of actions for a file 1`] = `
 <div id="oc-files-context-menu">
-  <!---->
-  <!---->
-  <ul id="\`oc-files-context-actions-\${section.name}\`" class="uk-list oc-mt-s oc-files-context-actions">
+  <ul id="oc-files-context-actions-context" class="uk-list oc-mt-s oc-files-context-actions">
     <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-markdown-editor-trigger">
-        <oc-icon-stub name="text" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Open in editor</span>
+        <oc-icon-stub name="text" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
+        <!----> <span class="oc-files-context-action-label">Open in editor</span>
+        <!---->
+      </button></li>
+    <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-exampleName1-trigger">
+        <!---->
+        <oc-img-stub src="exampleIcon1" alt="" loadingtype="eager" class="oc-icon oc-icon-m"></oc-img-stub> <span class="oc-files-context-action-label">Open in exampleName1</span>
+        <!---->
+      </button></li>
+    <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-exampleName2-trigger">
+        <!---->
+        <oc-img-stub src="exampleIcon2" alt="" loadingtype="eager" class="oc-icon oc-icon-m"></oc-img-stub> <span class="oc-files-context-action-label">Open in exampleName2</span>
+        <!---->
+      </button></li>
+    <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-exampleName3-trigger">
+        <!---->
+        <oc-img-stub src="exampleIcon3" alt="" loadingtype="eager" class="oc-icon oc-icon-m"></oc-img-stub> <span class="oc-files-context-action-label">Open in exampleName3</span>
         <!---->
       </button></li>
     <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-download-file-trigger">
-        <oc-icon-stub name="file_download" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Download</span>
+        <oc-icon-stub name="file_download" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
+        <!----> <span class="oc-files-context-action-label">Download</span>
         <!---->
       </button></li>
     <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-create-public-link-trigger">
-        <oc-icon-stub name="link-add" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Create link</span>
+        <oc-icon-stub name="link-add" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
+        <!----> <span class="oc-files-context-action-label">Create link</span>
         <!---->
       </button></li>
     <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-show-shares-trigger">
-        <oc-icon-stub name="group-add" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Share</span>
+        <oc-icon-stub name="group-add" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
+        <!----> <span class="oc-files-context-action-label">Share</span>
         <!---->
       </button></li>
   </ul>
   <hr>
-  <ul id="\`oc-files-context-actions-\${section.name}\`" class="uk-list oc-mt-s oc-files-context-actions">
+  <ul id="oc-files-context-actions-actions" class="uk-list oc-mt-s oc-files-context-actions">
     <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-rename-trigger">
-        <oc-icon-stub name="edit" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Edit</span>
+        <oc-icon-stub name="edit" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
+        <!----> <span class="oc-files-context-action-label">Edit</span>
         <!---->
       </button></li>
     <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-move-trigger">
-        <oc-icon-stub name="folder-move" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Move</span>
+        <oc-icon-stub name="folder-move" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
+        <!----> <span class="oc-files-context-action-label">Move</span>
         <!---->
       </button></li>
     <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-copy-trigger">
-        <oc-icon-stub name="file_copy" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Copy</span>
+        <oc-icon-stub name="file_copy" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
+        <!----> <span class="oc-files-context-action-label">Copy</span>
         <!---->
       </button></li>
     <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-delete-trigger">
-        <oc-icon-stub name="delete" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Delete</span>
+        <oc-icon-stub name="delete" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
+        <!----> <span class="oc-files-context-action-label">Delete</span>
         <!---->
       </button></li>
     <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-show-actions-trigger">
-        <oc-icon-stub name="slideshow" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">All actions</span>
+        <oc-icon-stub name="slideshow" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
+        <!----> <span class="oc-files-context-action-label">All actions</span>
         <!---->
       </button></li>
   </ul>
   <hr>
-  <ul id="\`oc-files-context-actions-\${section.name}\`" class="uk-list oc-mt-s oc-files-context-actions">
+  <ul id="oc-files-context-actions-sidebar" class="uk-list oc-mt-s oc-files-context-actions">
     <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-show-details-trigger">
-        <oc-icon-stub name="info_outline" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Details</span>
+        <oc-icon-stub name="info_outline" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
+        <!----> <span class="oc-files-context-action-label">Details</span>
         <!---->
       </button></li>
   </ul>
@@ -56,171 +79,78 @@ exports[`ContextActions if externalApps are available, renders one list of actio
 </div>
 `;
 
-exports[`ContextActions if externalApps are available, renders two lists of actions for a file 1`] = `
+exports[`ContextActions menu items renders a list of actions for a folder 1`] = `
 <div id="oc-files-context-menu">
-  <ul id="oc-files-context-default-actions" class="uk-list oc-my-xs oc-files-context-actions">
-    <li><button class="oc-text-bold oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw"><img src="exampleIcon1" alt="Icon for exampleName1 app" class="oc-icon oc-icon-m"> <span class="oc-files-context-action-label">Open in exampleName1</span></button></li>
-    <li><button class="oc-text-bold oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw"><img src="exampleIcon2" alt="Icon for exampleName2 app" class="oc-icon oc-icon-m"> <span class="oc-files-context-action-label">Open in exampleName2</span></button></li>
-    <li><button class="oc-text-bold oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw"><img src="exampleIcon3" alt="Icon for exampleName3 app" class="oc-icon oc-icon-m"> <span class="oc-files-context-action-label">Open in exampleName3</span></button></li>
-  </ul>
-  <hr>
-  <ul id="\`oc-files-context-actions-\${section.name}\`" class="uk-list oc-mt-s oc-files-context-actions">
+  <ul id="oc-files-context-actions-context" class="uk-list oc-mt-s oc-files-context-actions">
     <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-markdown-editor-trigger">
-        <oc-icon-stub name="text" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Open in editor</span>
+        <oc-icon-stub name="text" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
+        <!----> <span class="oc-files-context-action-label">Open in editor</span>
+        <!---->
+      </button></li>
+    <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-exampleName1-trigger">
+        <!---->
+        <oc-img-stub src="exampleIcon1" alt="" loadingtype="eager" class="oc-icon oc-icon-m"></oc-img-stub> <span class="oc-files-context-action-label">Open in exampleName1</span>
+        <!---->
+      </button></li>
+    <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-exampleName2-trigger">
+        <!---->
+        <oc-img-stub src="exampleIcon2" alt="" loadingtype="eager" class="oc-icon oc-icon-m"></oc-img-stub> <span class="oc-files-context-action-label">Open in exampleName2</span>
+        <!---->
+      </button></li>
+    <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-exampleName3-trigger">
+        <!---->
+        <oc-img-stub src="exampleIcon3" alt="" loadingtype="eager" class="oc-icon oc-icon-m"></oc-img-stub> <span class="oc-files-context-action-label">Open in exampleName3</span>
         <!---->
       </button></li>
     <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-download-file-trigger">
-        <oc-icon-stub name="file_download" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Download</span>
+        <oc-icon-stub name="file_download" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
+        <!----> <span class="oc-files-context-action-label">Download</span>
         <!---->
       </button></li>
     <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-create-public-link-trigger">
-        <oc-icon-stub name="link-add" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Create link</span>
+        <oc-icon-stub name="link-add" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
+        <!----> <span class="oc-files-context-action-label">Create link</span>
         <!---->
       </button></li>
     <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-show-shares-trigger">
-        <oc-icon-stub name="group-add" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Share</span>
+        <oc-icon-stub name="group-add" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
+        <!----> <span class="oc-files-context-action-label">Share</span>
         <!---->
       </button></li>
   </ul>
   <hr>
-  <ul id="\`oc-files-context-actions-\${section.name}\`" class="uk-list oc-mt-s oc-files-context-actions">
+  <ul id="oc-files-context-actions-actions" class="uk-list oc-mt-s oc-files-context-actions">
     <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-rename-trigger">
-        <oc-icon-stub name="edit" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Edit</span>
+        <oc-icon-stub name="edit" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
+        <!----> <span class="oc-files-context-action-label">Edit</span>
         <!---->
       </button></li>
     <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-move-trigger">
-        <oc-icon-stub name="folder-move" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Move</span>
+        <oc-icon-stub name="folder-move" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
+        <!----> <span class="oc-files-context-action-label">Move</span>
         <!---->
       </button></li>
     <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-copy-trigger">
-        <oc-icon-stub name="file_copy" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Copy</span>
+        <oc-icon-stub name="file_copy" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
+        <!----> <span class="oc-files-context-action-label">Copy</span>
         <!---->
       </button></li>
     <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-delete-trigger">
-        <oc-icon-stub name="delete" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Delete</span>
+        <oc-icon-stub name="delete" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
+        <!----> <span class="oc-files-context-action-label">Delete</span>
         <!---->
       </button></li>
     <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-show-actions-trigger">
-        <oc-icon-stub name="slideshow" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">All actions</span>
+        <oc-icon-stub name="slideshow" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
+        <!----> <span class="oc-files-context-action-label">All actions</span>
         <!---->
       </button></li>
   </ul>
   <hr>
-  <ul id="\`oc-files-context-actions-\${section.name}\`" class="uk-list oc-mt-s oc-files-context-actions">
+  <ul id="oc-files-context-actions-sidebar" class="uk-list oc-mt-s oc-files-context-actions">
     <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-show-details-trigger">
-        <oc-icon-stub name="info_outline" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Details</span>
-        <!---->
-      </button></li>
-  </ul>
-  <!---->
-</div>
-`;
-
-exports[`ContextActions if no externalApps are available, renders a list of actions for a file 1`] = `
-<div id="oc-files-context-menu">
-  <!---->
-  <!---->
-  <ul id="\`oc-files-context-actions-\${section.name}\`" class="uk-list oc-mt-s oc-files-context-actions">
-    <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-markdown-editor-trigger">
-        <oc-icon-stub name="text" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Open in editor</span>
-        <!---->
-      </button></li>
-    <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-download-file-trigger">
-        <oc-icon-stub name="file_download" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Download</span>
-        <!---->
-      </button></li>
-    <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-create-public-link-trigger">
-        <oc-icon-stub name="link-add" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Create link</span>
-        <!---->
-      </button></li>
-    <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-show-shares-trigger">
-        <oc-icon-stub name="group-add" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Share</span>
-        <!---->
-      </button></li>
-  </ul>
-  <hr>
-  <ul id="\`oc-files-context-actions-\${section.name}\`" class="uk-list oc-mt-s oc-files-context-actions">
-    <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-rename-trigger">
-        <oc-icon-stub name="edit" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Edit</span>
-        <!---->
-      </button></li>
-    <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-move-trigger">
-        <oc-icon-stub name="folder-move" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Move</span>
-        <!---->
-      </button></li>
-    <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-copy-trigger">
-        <oc-icon-stub name="file_copy" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Copy</span>
-        <!---->
-      </button></li>
-    <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-delete-trigger">
-        <oc-icon-stub name="delete" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Delete</span>
-        <!---->
-      </button></li>
-    <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-show-actions-trigger">
-        <oc-icon-stub name="slideshow" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">All actions</span>
-        <!---->
-      </button></li>
-  </ul>
-  <hr>
-  <ul id="\`oc-files-context-actions-\${section.name}\`" class="uk-list oc-mt-s oc-files-context-actions">
-    <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-show-details-trigger">
-        <oc-icon-stub name="info_outline" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Details</span>
-        <!---->
-      </button></li>
-  </ul>
-  <!---->
-</div>
-`;
-
-exports[`ContextActions if no externalApps are available, renders a list of actions for a folder 1`] = `
-<div id="oc-files-context-menu">
-  <!---->
-  <!---->
-  <ul id="\`oc-files-context-actions-\${section.name}\`" class="uk-list oc-mt-s oc-files-context-actions">
-    <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-markdown-editor-trigger">
-        <oc-icon-stub name="text" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Open in editor</span>
-        <!---->
-      </button></li>
-    <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-download-file-trigger">
-        <oc-icon-stub name="file_download" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Download</span>
-        <!---->
-      </button></li>
-    <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-create-public-link-trigger">
-        <oc-icon-stub name="link-add" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Create link</span>
-        <!---->
-      </button></li>
-    <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-show-shares-trigger">
-        <oc-icon-stub name="group-add" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Share</span>
-        <!---->
-      </button></li>
-  </ul>
-  <hr>
-  <ul id="\`oc-files-context-actions-\${section.name}\`" class="uk-list oc-mt-s oc-files-context-actions">
-    <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-rename-trigger">
-        <oc-icon-stub name="edit" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Edit</span>
-        <!---->
-      </button></li>
-    <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-move-trigger">
-        <oc-icon-stub name="folder-move" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Move</span>
-        <!---->
-      </button></li>
-    <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-copy-trigger">
-        <oc-icon-stub name="file_copy" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Copy</span>
-        <!---->
-      </button></li>
-    <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-delete-trigger">
-        <oc-icon-stub name="delete" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Delete</span>
-        <!---->
-      </button></li>
-    <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-show-actions-trigger">
-        <oc-icon-stub name="slideshow" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">All actions</span>
-        <!---->
-      </button></li>
-  </ul>
-  <hr>
-  <ul id="\`oc-files-context-actions-\${section.name}\`" class="uk-list oc-mt-s oc-files-context-actions">
-    <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-show-details-trigger">
-        <oc-icon-stub name="info_outline" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span class="oc-files-context-action-label">Details</span>
+        <oc-icon-stub name="info_outline" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
+        <!----> <span class="oc-files-context-action-label">Details</span>
         <!---->
       </button></li>
   </ul>

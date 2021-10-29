@@ -1,0 +1,5 @@
+Enhancement: Default action order
+
+We've changed the order of actions which are being considered as default action. The order is now 1) installed editors, 2) external apps from the app provider, 3) system default actions. Previously the external apps took precedence.
+
+https://github.com/owncloud/web/pull/5952
