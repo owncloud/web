@@ -14,10 +14,14 @@ export class ActorContinent {
   }
 
   public async create({ id }: { id: string }): Promise<Actor> {
+<<<<<<< HEAD
     if (this.store.has(id)) {
       return this.get({ id })
     }
 
+=======
+    
+>>>>>>> 7e733127 (add remove step/add check that file exist/not exist)
     const context = await browser.newContext({
       acceptDownloads: true,
       ignoreHTTPSErrors: true

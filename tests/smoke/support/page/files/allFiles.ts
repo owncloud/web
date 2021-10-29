@@ -64,8 +64,7 @@ export class AllFilesPage {
     )
 
     if (newVersion) {
-      await page.waitForSelector('.oc-modal-body-actions-confirm')
-      await page.click('.oc-modal-body-actions-confirm')
+      await (await page.waitForSelector('.oc-modal-body-actions-confirm')).click()
     }
 
     await cta.files.waitForResources({
@@ -161,10 +160,15 @@ export class AllFilesPage {
     await page.click('.oc-files-actions-rename-trigger')
     await page.fill('.oc-text-input', newName)
     await page.click('.oc-modal-body-actions-confirm')
+<<<<<<< HEAD
     await cta.files.waitForResources({
       page: page,
       names: [newName]
     })
+=======
+    await page.waitForSelector(`//*[@data-test-resource-name="${name[0]}"]`)
+    await page.reload()
+>>>>>>> 7e733127 (add remove step/add check that file exist/not exist)
     await page.goto(startUrl)
   }
 
@@ -204,11 +208,32 @@ export class AllFilesPage {
   async checkThatResourceExist({ name }: { name: string }): Promise<void> {
     const { page } = this.actor
     const startUrl = page.url()
+    const folderPaths = name.split('/')
+    const resouceName = folderPaths.pop()
 
     if (name) {
-      await cta.files.navigateToFolder({ page: page, path: name })
+      await cta.files.navigateToFolder({ page: page, path: folderPaths.join('/') })
     }
-    await cta.files.resourceExists({ page: page, name: name })
+      
+    await page.waitForSelector(`//*[@data-test-resource-name="${resouceName}"]`) 
+    await page.goto(startUrl)
+  }
+
+  async checkThatResourceDoesNotExist({ name }: { name: string }): Promise<void> {
+    const { page } = this.actor
+    const startUrl = page.url()
+    const folderPaths = name.split('/')
+    const resouceName = folderPaths.pop()
+
+    if (folderPaths.length) {
+      await cta.files.navigateToFolder({ page: page, path: folderPaths.join('/') })
+    }
+    const resourseExists = await cta.files.resourceExists({
+      page: page,
+      name: resouceName
+    })
+    
+    if (resourseExists) throw new Error(`selector was find: "${resouceName}"`);
     await page.goto(startUrl)
   }
 
@@ -218,7 +243,6 @@ export class AllFilesPage {
     const folderPaths = resource.split('/')
     const resouceName = folderPaths.pop()
 
-    console.log('folderPath', resource)
     if (resource.length) {
       await cta.files.navigateToFolder({ page: page, path: folderPaths.join('/') })
     }
@@ -226,6 +250,27 @@ export class AllFilesPage {
     await cta.files.sidebar.open({ page: page, resource: resouceName })
     await cta.files.sidebar.openPanel({ page: page, name: 'versions' })
     await page.waitForSelector('//div[@id="oc-file-versions-sidebar"]//tr[@class="file-row"]')
+
+    await page.goto(startUrl)
+  }
+
+  async removeResourses({ resource }: { resource: string }): Promise<void> {
+    const { page } = this.actor
+    const startUrl = page.url()
+    const folderPaths = resource.split('/')
+    const resouceName = folderPaths.pop()
+    
+    if (folderPaths.length) {
+      await cta.files.navigateToFolder({ page: page, path: folderPaths.join('/') })
+    }
+
+    const resourceCheckbox = `//*[@data-test-resource-name="${resouceName}"]//ancestor::tr//input`
+    
+    if (!await page.isChecked(resourceCheckbox)){
+      await page.check(resourceCheckbox)
+    }
+    await (await page.waitForSelector('//*[@id="delete-selected-btn"]')).click()
+    await (await page.waitForSelector('.oc-modal-body-actions-confirm')).click()
 
     await page.goto(startUrl)
   }
