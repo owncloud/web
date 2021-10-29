@@ -303,6 +303,21 @@ Then('{string} checks whether the following resource(s) exist', async function(
   }
 })
 
+Then('{string} checks whether the following resource(s) not exist', async function(
+
+  this: World,
+  stepUser: string,
+  stepTable: DataTable
+) {
+  const actor = this.actorContinent.get({ id: stepUser })
+  const { allFiles: allFilesPage } = new FilesPage({ actor })
+  const resources = stepTable.raw().map(f => f[0])
+
+  for (const resource of resources) {
+    await allFilesPage.checkThatResourceDoesNotExist({ name: resource })
+  }
+})
+
 Then('{string} checks that new version exists', async function(
   this: World,
   stepUser: string,
@@ -314,5 +329,19 @@ Then('{string} checks that new version exists', async function(
 
   for (const resource of resources) {
     await allFilesPage.versionExist({ resource: resource })
+  }
+})
+
+When('{string} removes following resource(s)', async function(
+  this: World,
+  stepUser: string,
+  stepTable: DataTable
+) {
+  const actor = this.actorContinent.get({ id: stepUser })
+  const { allFiles: allFilesPage } = new FilesPage({ actor })
+  const resources = stepTable.raw().map(f => f[0])
+
+  for (const resource of resources) {
+    await allFilesPage.removeResourses({ resource: resource })
   }
 })
