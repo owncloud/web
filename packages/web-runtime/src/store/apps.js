@@ -46,11 +46,13 @@ const mutations = {
     const editor = {
       app,
       icon: extension.icon,
+      img: extension.img,
       newTab: extension.newTab || false,
       routeName: extension.routeName,
       routes: extension.routes || [],
       extension: extension.extension,
-      handler: extension.handler
+      handler: extension.handler,
+      canBeDefault: extension.canBeDefault === true
     }
 
     state.fileEditors.push(editor)
@@ -94,7 +96,8 @@ const mutations = {
     const app = {
       name: appInfo.name || appInfo.id,
       id: appInfo.id,
-      icon: appInfo.icon || 'check_box_outline_blank'
+      icon: appInfo.icon || 'check_box_outline_blank',
+      img: appInfo.img || null
     }
     state.meta[app.id] = app
   },
