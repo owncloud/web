@@ -7,6 +7,7 @@ export default {
   'oc-breadcrumb': true,
   'oc-drop': true,
   'avatar-image': true,
+  'oc-avatar-item': true,
   'oc-hidden-announcer': true,
   translate: true,
   'oc-list': true,

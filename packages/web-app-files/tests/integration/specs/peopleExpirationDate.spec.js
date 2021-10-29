@@ -88,9 +88,6 @@ describe('Users can set expiration date when sharing with users or groups', () =
       return expect(queryByTestId('new-collaborator')).toBe(null)
     })
 
-    const showPeopleBtn = await findByTestId('collaborators-show-people')
-    expect(showPeopleBtn).toBeVisible()
-    await fireEvent.click(showPeopleBtn)
     expect(await findByTestId('collaborator-item-bob')).toBeVisible()
     expect(
       within(getByTestId('recipient-info-expiration-date')).getByText('Expires in 2 days')
@@ -110,27 +107,21 @@ describe('Users can set expiration date when sharing with users or groups', () =
       }
     })
 
-    const showPeopleBtn = await findByTestId('collaborators-show-people')
-    expect(showPeopleBtn).toBeVisible()
-    await fireEvent.click(showPeopleBtn)
-
     const recipientBob = await findByTestId('collaborator-item-bob')
 
     expect(recipientBob).toBeVisible()
     expect(within(recipientBob).getByText('Expires in 2 days')).toBeVisible()
 
-    const editBtn = getByTestId('recipient-bob-btn-edit')
+    const editBtn = getByTestId('show-collaborator-edit-options-btn')
     expect(editBtn).toBeVisible()
     await fireEvent.click(editBtn)
 
-    const editDialog = await findByTestId('recipient-dialog-edit')
+    const editDialog = await findByTestId('recipient-datepicker-btn')
 
     expect(editDialog).toBeVisible()
     expect(getByTestId('recipient-datepicker')).toBeVisible()
-    expect(within(getByTestId('recipient-datepicker')).getByText('Expires in 2 days')).toBeVisible()
 
     await fireEvent.click(getByTestId('recipient-datepicker-btn'))
-
     const newDate = getDateInFuture(4)
     const dateSelector = document.evaluate(
       `//span[contains(@class, "vc-day-content vc-focusable") and @aria-label="${newDate.toLocaleDateString(
@@ -142,6 +133,8 @@ describe('Users can set expiration date when sharing with users or groups', () =
       XPathResult.FIRST_ORDERED_NODE_TYPE,
       null
     ).singleNodeValue
+
+    console.log(dateSelector);
 
     if (dateSelector.classList.contains('is-disabled')) {
       const nextMonthBtn = baseElement.querySelector('.vc-arrow.is-right')

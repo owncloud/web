@@ -52,34 +52,6 @@ describe('FileShares', () => {
   describe('Collaborators List', () => {
     describe('without any collaborators', () => {
       describe('owner views the shares sidebar', () => {
-        it('should show the user as owner message', () => {
-          const wrapper = getShallowMountedWrapper({ user: 'user0', outgoingCollaborators: [] })
-
-          const ownerMsg = wrapper.find(selectors.collaboratorAsOwner)
-          expect(ownerMsg.exists()).toBe(true)
-          expect(ownerMsg.text()).toBe('You are the file owner')
-        })
-
-        it('should render the file owner as collaborator', () => {
-          const wrapper = getShallowMountedWrapper({ user: 'user0', outgoingCollaborators: [] })
-
-          const owner = wrapper.find(selectors.ownerAsSelfRow)
-          expect(owner.exists()).toBe(true)
-
-          expect(owner.props()).toMatchObject({
-            collaborator: {
-              collaborator: { name: 'user0', displayName: 'User Zero' },
-              shareType: 0,
-              role: { name: 'owner' }
-            },
-            modifiable: false,
-            firstColumn: true
-          })
-
-          const collaborators = wrapper.findAll(selectors.collaboratorsRow)
-          expect(collaborators.length).toBe(0)
-        })
-
         it('should show cannot share permission if the owner cannot share', () => {
           const wrapper = getShallowMountedWrapper({
             user: 'user0',
@@ -96,37 +68,6 @@ describe('FileShares', () => {
 
     describe('with Collaborators', () => {
       describe('owner views the shares panel', () => {
-        it('should display the avatars of the sharees as file collaborators', () => {
-          const wrapper = getShallowMountedWrapper({
-            user: 'user0',
-            outgoingCollaborators: [{ username: 'user1' }, { username: 'user2' }]
-          })
-
-          wrapper.setData({ showShareesList: true })
-          const exptectedSharees = [
-            {
-              id: 'user1',
-              additionalInfo: null,
-              name: 'user1',
-              displayName: 'User One',
-              displayname: 'User One',
-              shareType: 0
-            },
-            {
-              id: 'user2',
-              additionalInfo: null,
-              name: 'user2',
-              displayName: 'User Two',
-              displayname: 'User Two',
-              shareType: 0
-            }
-          ]
-
-          const avatars = wrapper.find(selectors.ocAvatarsStub)
-          expect(avatars.exists()).toBe(true)
-          expect(avatars.props('items')).toMatchObject(exptectedSharees)
-        })
-
         it('should show the shared with label if there are collaborators', () => {
           const wrapper = getShallowMountedWrapper({
             user: 'user0',
@@ -135,28 +76,6 @@ describe('FileShares', () => {
 
           const sharedWithLabel = wrapper.find(selectors.sharedWithLabel)
           expect(sharedWithLabel).toMatchSnapshot()
-        })
-
-        it('should show the show collaborators button if there are collaborators', () => {
-          const wrapper = getShallowMountedWrapper({
-            user: 'user0',
-            outgoingCollaborators: [{ username: 'user1' }, { username: 'user2' }]
-          })
-          const button = wrapper.find(selectors.showCollaboratorButtonStub)
-          expect(button.exists()).toBe(true)
-        })
-
-        it('should show the collaborators list when show collaborators button if there are collaborators', async () => {
-          const wrapper = getMountedWrapper({
-            user: 'user0',
-            outgoingCollaborators: [{ username: 'user1' }, { username: 'user2' }]
-          })
-          expect(wrapper.vm.showShareesList).toBe(false)
-
-          const button = wrapper.find(selectors.showCollaboratorButton)
-          await button.trigger('click')
-
-          expect(wrapper.vm.showShareesList).toBe(true)
         })
 
         it('should not show the collaborators when showSharees is set to true', async () => {
@@ -185,8 +104,7 @@ describe('FileShares', () => {
               shareType: 0,
               role: roles.viewer
             },
-            modifiable: true,
-            firstColumn: true
+            modifiable: true
           })
 
           const collaborator2 = collaborators.at(1)
@@ -196,8 +114,7 @@ describe('FileShares', () => {
               shareType: 0,
               role: roles.viewer
             },
-            modifiable: true,
-            firstColumn: true
+            modifiable: true
           })
         })
       })
@@ -223,8 +140,7 @@ describe('FileShares', () => {
               shareType: 0,
               role: { name: 'owner' }
             },
-            modifiable: false,
-            firstColumn: true
+            modifiable: false
           })
         })
 
@@ -249,8 +165,7 @@ describe('FileShares', () => {
               shareType: 0,
               role: roles.viewer
             },
-            modifiable: false,
-            firstColumn: true
+            modifiable: false
           })
         })
       })
@@ -359,7 +274,8 @@ const storeOptions = (data) => {
           sharesClearState: jest.fn(),
           deleteShare: jest.fn(),
           loadIncomingShares: jest.fn(),
-          incomingSharesclearState: jest.fn()
+          incomingSharesclearState: jest.fn(),
+          changeShare: jest.fn()
         },
         mutations: {}
       }

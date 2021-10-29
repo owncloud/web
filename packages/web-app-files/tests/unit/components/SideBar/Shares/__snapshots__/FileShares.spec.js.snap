@@ -1,3 +1,3 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`FileShares Collaborators List with Collaborators owner views the shares panel should show the shared with label if there are collaborators 1`] = `<h4 class="shared-with-label">Shared with</h4>`;
+exports[`FileShares Collaborators List with Collaborators owner views the shares panel should show the shared with label if there are collaborators 1`] = `<h4 class="oc-mb-rm oc-text-initial oc-text-bold shared-with-label">Shared with</h4>`;

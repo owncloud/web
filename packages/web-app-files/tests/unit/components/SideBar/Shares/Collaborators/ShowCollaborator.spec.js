@@ -12,32 +12,13 @@ localVue.use(GetTextPlugin, {
 })
 
 const selectors = {
-  userAvatarImage: 'avatar-image-stub.files-collaborators-collaborator-indicator',
-  notUserAvatar: 'oc-icon-stub.files-collaborators-collaborator-indicator',
-  collaboratorAdditionalInfo: '.files-collaborators-collaborator-additional-info',
-  collaboratorName: '.files-collaborators-collaborator-name',
-  shareType: '.files-collaborators-collaborator-share-type',
+  userAvatarImage: 'avatar-image-stub.sharee-avatar',
+  notUserAvatar: 'oc-avatar-item-stub.sharee-avatar',
+  collaboratorName: '.collaborator-display-name',
+  shareType: '.share-type',
   reshareInformation: '.files-collaborators-collaborator-reshare-information',
   reshareToggleId: 'collaborator-%s-resharer-details-toggle',
-  colaboratorRole: '.files-collaborators-collaborator-role'
-}
-
-const resharers = [
-  {
-    displayName: 'David Lopez'
-  },
-  {
-    displayName: 'Tim',
-    additionalInfo: 'tim@owncloud.com'
-  }
-]
-
-const getReshareToggleId = function (username) {
-  return selectors.reshareToggleId.replace('%s', username)
-}
-
-const getReshareDetailsToggleDropSelector = function (username) {
-  return 'oc-drop-stub[drop-id="' + getReshareToggleId(username) + '-drop"]'
+  colaboratorRole: '.role-name-text'
 }
 
 describe('Collaborator component', () => {
@@ -52,18 +33,19 @@ describe('Collaborator component', () => {
       expect(wrapper.find(selectors.userAvatarImage).exists()).toBeFalsy()
       expect(wrapper.find(selectors.notUserAvatar).exists()).toBeTruthy()
       expect(wrapper.find(selectors.notUserAvatar).attributes().name).toEqual('group')
-      expect(wrapper.find(selectors.notUserAvatar).rootNode.key).toEqual('avatar-group')
     })
-    it.each([3, 4, 6])(
-      'should display a generic-person icon for any other share types',
-      (shareType) => {
-        const wrapper = createWrapper({ shareType: shareType })
-        expect(wrapper.find(selectors.userAvatarImage).exists()).toBeFalsy()
-        expect(wrapper.find(selectors.notUserAvatar).exists()).toBeTruthy()
-        expect(wrapper.find(selectors.notUserAvatar).attributes().name).toEqual('person')
-        expect(wrapper.find(selectors.notUserAvatar).rootNode.key).toEqual('avatar-generic-person')
-      }
-    )
+    it('should display a guest icon for guest shares', () => {
+      const wrapper = createWrapper({ shareType: 3 })
+      expect(wrapper.find(selectors.userAvatarImage).exists()).toBeFalsy()
+      expect(wrapper.find(selectors.notUserAvatar).exists()).toBeTruthy()
+      expect(wrapper.find(selectors.notUserAvatar).attributes().name).toEqual('guest')
+    })
+    it('should display a remote icon for remote shares', () => {
+      const wrapper = createWrapper({ shareType: 4 })
+      expect(wrapper.find(selectors.userAvatarImage).exists()).toBeFalsy()
+      expect(wrapper.find(selectors.notUserAvatar).exists()).toBeTruthy()
+      expect(wrapper.find(selectors.notUserAvatar).attributes().name).toEqual('remote')
+    })
   })
   describe('collaborator avatar', () => {
     const wrapper = createWrapper()
@@ -77,66 +59,11 @@ describe('Collaborator component', () => {
     })
   })
   describe('collaborator text', () => {
-    it.each`
-      shareType | classSuffix
-      ${0}      | ${'user'}
-      ${1}      | ${'group'}
-      ${3}      | ${'group'}
-      ${4}      | ${'group'}
-      ${6}      | ${'remote'}
-    `('sets the correct class', ({ shareType, classSuffix }) => {
-      const wrapper = createWrapper({ shareType: shareType })
-      expect(
-        wrapper.find('.files-collaborators-collaborator-info-' + classSuffix).exists()
-      ).toBeTruthy()
-    })
     it('shows the collaborator display name', () => {
       const wrapper = createWrapper()
-      expect(wrapper.find(selectors.collaboratorName).text()).toEqual('Brian Murphy')
-    })
-    describe('collaborator is the current user', () => {
-      it.each([0, 3, 4, 6])('indicates the current user', (shareType) => {
-        const wrapper = createWrapper({
-          shareType: shareType,
-          currentUserId: 'brian'
-        })
-        expect(wrapper.find(selectors.collaboratorAdditionalInfo).text()).toEqual('(me)')
-      })
-      it('does not indicate the current user for group shares', () => {
-        const wrapper = createWrapper({
-          shareType: 1,
-          collaborator: {
-            name: 'brian'
-          },
-          currentUserId: 'brian'
-        })
-        expect(wrapper.find(selectors.collaboratorAdditionalInfo).exists()).toBeFalsy()
-      })
-    })
-    describe('collaborator is not the current user', () => {
-      it.each([0, 3, 4, 6])('does not indicate the current user', (shareType) => {
-        const wrapper = createWrapper({
-          shareType: shareType,
-          collaborator: {
-            name: 'brian'
-          }
-        })
-        expect(wrapper.find(selectors.collaboratorAdditionalInfo).exists()).toBeFalsy()
-      })
-    })
-    it('shows additional information about the collaborator if set', () => {
-      const wrapper = createWrapper()
-      expect(wrapper.find(selectors.collaboratorAdditionalInfo).text()).toEqual(
-        'brian@owncloud.com'
+      expect(wrapper.find(selectors.collaboratorName).text()).toEqual(
+        'Brian Murphy (brian@owncloud.com)'
       )
-    })
-    it('does not show additional information about the collaborator if not set', () => {
-      const wrapper = createWrapper({
-        collaborator: {
-          displayName: 'Alice Hansen'
-        }
-      })
-      expect(wrapper.find(selectors.collaboratorAdditionalInfo).exists()).toBeFalsy()
     })
   })
   describe('share information', () => {
@@ -144,165 +71,6 @@ describe('Collaborator component', () => {
       it('shows the share type', () => {
         const wrapper = createWrapper()
         expect(wrapper.find(selectors.shareType).text()).toEqual('User')
-      })
-      it('does not show the share type for the owner', () => {
-        const wrapper = createWrapper({
-          currentUserId: 'brian'
-        })
-        expect(wrapper.find(selectors.shareType).exists()).toBeFalsy()
-      })
-      it('shows the group icon for group shares', () => {
-        const wrapper = createWrapper({
-          shareType: 1
-        })
-        expect(wrapper.find(selectors.shareType + ' > oc-icon-stub').attributes().name).toEqual(
-          'group'
-        )
-      })
-      it.each([0, 2, 3, 4, 5, 6])('shows the person icon for not group shares', (shareType) => {
-        const wrapper = createWrapper({
-          shareType: shareType
-        })
-        expect(wrapper.find(selectors.shareType + ' > oc-icon-stub').attributes().name).toEqual(
-          'person'
-        )
-      })
-    })
-    describe('reshare information', () => {
-      it.each([undefined, 0, null, false, '0', '', []])(
-        "does not show information if it's not a reshared share",
-        (resharers) => {
-          const wrapper = createWrapper({
-            resharers: resharers
-          })
-          expect(wrapper.find(selectors.reshareInformation).exists()).toBeFalsy()
-        }
-      )
-
-      // in the next test JSON is used for the examples to prevent `it.each()` to create a table out of the sub-arrays
-      // we don't want to have multiple parameters for the test function but a real array
-      it.each([
-        '[{ "displayName": "" }]',
-        '[{ "displayName": 123 }]',
-        '[{ "displayName": null }]',
-        '[{ "displayName": true }]',
-        '[{ "displayName": false }]',
-        '[{ "displayName": 123 }, { "displayName": "Peter" }]',
-        '[{ "displayName": null }, { "displayName": "Peter" }]',
-        '[{ "displayName": "Tom" }, { "displayName": "" }]'
-      ])('does not show information if a reshare has invalid data', (resharers) => {
-        const wrapper = createWrapper({
-          resharers: JSON.parse(resharers)
-        })
-        expect(wrapper.find(selectors.reshareInformation).exists()).toBeFalsy()
-      })
-      describe('reshare information', () => {
-        it('is shown for single resharer', () => {
-          const wrapper = createWrapper({
-            resharers: [resharers[0]]
-          })
-          expect(wrapper.find('#' + getReshareToggleId('brian')).exists()).toBeTruthy()
-          expect(wrapper.find('#' + getReshareToggleId('brian')).attributes().class).toEqual(
-            'files-collaborators-collaborator-reshare-information'
-          )
-          expect(wrapper.find('#' + getReshareToggleId('brian')).text()).toEqual(
-            'Shared by David Lopez'
-          )
-        })
-        it('is shown for multiple resharers', () => {
-          const wrapper = createWrapper({
-            resharers: resharers
-          })
-          expect(wrapper.find(selectors.reshareInformation).exists()).toBeTruthy()
-          expect(wrapper.find(selectors.reshareInformation).attributes().id).toEqual(
-            'collaborator-brian-resharer-details-toggle'
-          )
-          expect(wrapper.find(selectors.reshareInformation).text()).toEqual(
-            'Shared by David Lopez, Tim'
-          )
-        })
-        describe('reshare dropdown', () => {
-          it('is shown for single resharer', () => {
-            const wrapper = createWrapper({
-              resharers: [resharers[0]]
-            })
-            expect(wrapper.find(getReshareDetailsToggleDropSelector('brian')).text()).toMatch(
-              /^Shared by\s+David Lopez$/
-            )
-            expect(
-              wrapper
-                .find(getReshareDetailsToggleDropSelector('brian'))
-                .find('avatar-image-stub')
-                .exists()
-            ).toBeTruthy()
-            expect(
-              wrapper
-                .find(getReshareDetailsToggleDropSelector('brian'))
-                .find('avatar-image-stub')
-                .attributes()['user-name']
-            ).toEqual('David Lopez')
-          })
-          it('is shown for multiple resharers', () => {
-            const wrapper = createWrapper({
-              resharers: resharers
-            })
-            expect(wrapper.find(getReshareDetailsToggleDropSelector('brian')).text()).toMatch(
-              /^Shared by\s+David Lopez\s+Tim tim@owncloud\.com$/
-            )
-            expect(
-              wrapper
-                .find(getReshareDetailsToggleDropSelector('brian'))
-                .findAll('avatar-image-stub')
-            ).toHaveLength(2)
-          })
-          it('sets the correct attributes', () => {
-            const wrapper = createWrapper({
-              resharers: [resharers[0]]
-            })
-            expect(
-              wrapper.find(getReshareDetailsToggleDropSelector('brian')).attributes().toggle
-            ).toEqual('#' + getReshareToggleId('brian'))
-            expect(
-              wrapper.find(getReshareDetailsToggleDropSelector('brian')).attributes().mode
-            ).toEqual('click')
-            expect(
-              wrapper.find(getReshareDetailsToggleDropSelector('brian')).attributes()[
-                'close-on-click'
-              ]
-            ).toEqual('')
-          })
-        })
-      })
-    })
-    describe('role', () => {
-      it.each([
-        { name: 'viewer', expectedText: 'Viewer' },
-        { name: 'editor', expectedText: 'Editor' },
-        { name: 'advancedRole', expectedText: 'Custom permissions' },
-        { name: 'owner', expectedText: 'Owner' },
-        { name: 'resharer', expectedText: 'Resharer' },
-        { name: 'invalidRole', expectedText: 'Unknown Role' }
-      ])('shows the role label', (cases) => {
-        const wrapper = createWrapper({
-          role: { name: cases.name }
-        })
-        expect(wrapper.find(selectors.colaboratorRole).text()).toEqual(cases.expectedText)
-      })
-
-      it.each([
-        { name: 'viewer', expectedName: 'remove_red_eye' },
-        { name: 'editor', expectedName: 'edit' },
-        { name: 'advancedRole', expectedName: 'checklist' },
-        { name: 'owner', expectedName: 'key' },
-        { name: 'resharer', expectedName: 'key' },
-        { name: 'invalidRole', expectedName: 'key' }
-      ])('sets the name of the icon', (cases) => {
-        const wrapper = createWrapper({
-          role: { name: cases.name }
-        })
-        expect(
-          wrapper.find(selectors.colaboratorRole + ' oc-icon-stub').attributes('name')
-        ).toEqual(cases.expectedName)
       })
     })
   })
@@ -328,7 +96,7 @@ function createWrapper({
         isOcis: function () {
           return false
         },
-        capabilities: function() {
+        capabilities: function () {
           return {
             files_sharing: {
               user: {
@@ -361,7 +129,8 @@ function createWrapper({
         shareType: shareType,
         resharers: resharers,
         role: role
-      }
+      },
+      modifiable: true
     },
     localVue,
     stubs: {
@@ -373,6 +142,8 @@ function createWrapper({
       'oc-avatar': true,
       'oc-avatar-item': true,
       'oc-pagination': true,
+      'collaborators-edit-options': true,
+      'show-collaborator-edit-options': true,
       translate: false
     }
   })

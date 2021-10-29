@@ -2,7 +2,7 @@
   <div class="show-collaborator-edit-options">
     <oc-button
       :id="roleButtonId"
-      data-testid="files-recipient-role-select-btn"
+      data-testid="show-collaborator-edit-options-btn"
       appearance="raw"
       justify-content="left"
       gap-size="xsmall"
@@ -26,9 +26,9 @@
               @optionChange="expirationDateChanged"
             />
           </li>
-          <li v-for="(option, i) in options" :key="i" @click="option.method()" class="oc-pl-xs">
-              <oc-icon :variation="option.variation" :name="option.icon" />
-              <span :class="option.class">{{ option.title }}</span>
+          <li v-for="(option, i) in options" :key="i" class="oc-pl-xs" @click="option.method()">
+            <oc-icon :variation="option.variation" :name="option.icon" />
+            <span :class="option.class">{{ option.title }}</span>
           </li>
         </oc-list>
       </template>

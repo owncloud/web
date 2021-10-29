@@ -26,7 +26,10 @@
           v-text="noResharePermsMessage"
         />
         <div v-if="hasSharees" class="uk-flex uk-flex-between oc-my-m">
-          <h4 class="oc-mb-rm oc-text-initial oc-text-bold" v-text="sharedWithLabel" />
+          <h4
+            class="oc-mb-rm oc-text-initial oc-text-bold shared-with-label"
+            v-text="sharedWithLabel"
+          />
           <oc-button
             v-oc-tooltip="sharedWithTooltip"
             data-testid="collaborators-show-people"
@@ -45,15 +48,6 @@
           </oc-button>
         </div>
         <template v-if="showShareesList || collaboratorsAvatar.length === 0">
-          <template v-if="$_ownerAsCollaborator">
-            <p id="original-sharing-user" v-translate class="oc-invisible-sr">File owner</p>
-            <show-collaborator
-              :collaborator="$_ownerAsCollaborator"
-              aria-describedby="original-sharing-user"
-            />
-            <hr />
-            <show-collaborator :collaborator="$_currentUserAsCollaborator" />
-          </template>
           <transition-group
             id="files-collaborators-list"
             class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm"

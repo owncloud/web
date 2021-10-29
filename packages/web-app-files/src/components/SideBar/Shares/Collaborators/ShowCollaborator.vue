@@ -21,14 +21,14 @@
       />
       <div class="oc-text-truncate">
         <p class="oc-text-bold oc-text-truncate oc-m-rm">
-          <span aria-hidden="true" v-text="shareDisplayName" />
+          <span aria-hidden="true" class="collaborator-display-name" v-text="shareDisplayName" />
           <span class="oc-invisible-sr" v-text="screenreaderShareDisplayName" />
         </p>
         <p class="oc-m-rm collaborator-additional-info">
-          <span aria-hidden="true" v-text="shareTypeText" class="share-type" />
+          <span aria-hidden="true" class="share-type" v-text="shareTypeText" />
           <span class="oc-invisible-sr" v-text="screenreaderShareDetails" />
           <span v-if="expirationDateLocale">
-            <span aria-hidden="true" class="collaborator-expiration">
+            <span aria-hidden="true" class="collaborator-expiration" data-testid="recipient-info-expiration-date">
               <oc-icon size="small" name="text-calendar" class="oc-mr-xs" />
               {{ shareExpirationText }}
             </span>
@@ -37,8 +37,12 @@
         </p>
       </div>
     </div>
-    <div v-if="!isOwner && canEditOrDelete" class="uk-width-1-3 uk-flex uk-flex-nowrap uk-flex-right uk-flex-middle ">
+    <div
+      v-if="canEditOrDelete"
+      class="uk-width-1-3 uk-flex uk-flex-nowrap uk-flex-right uk-flex-middle"
+    >
       <collaborators-edit-options
+        class="collaborator-role"
         :minimal="true"
         :existing-role="originalRole"
         :expiration-date-input="false"
@@ -117,6 +121,8 @@ export default {
     },
 
     shareDisplayName() {
+      //console.log(this.collaborator.collaborator.displayName)
+      return this.collaborator.collaborator.displayName
       const displayName = this.collaborator.collaborator.displayName
       const additionalInfo = this.collaborator.collaborator.additionalInfo
       if (additionalInfo === null) return displayName
@@ -167,37 +173,6 @@ export default {
       return this.modifiable && !this.removalInProgress
     },
 
-    editShareHint() {
-      const translated = this.$gettext('Edit share with %{ currentCollaborator }')
-      return this.$gettextInterpolate(
-        translated,
-        { currentCollaborator: this.collaborator.collaborator.displayName },
-        true
-      )
-    },
-
-    deleteShareHint() {
-      const translated = this.$gettext('Delete share with %{ currentCollaborator }')
-      return this.$gettextInterpolate(
-        translated,
-        { currentCollaborator: this.collaborator.collaborator.displayName },
-        true
-      )
-    },
-
-    $_reshareInformation() {
-      try {
-        this.collaborator.resharers.forEach(function (share) {
-          if (typeof share.displayName !== 'string' || !share.displayName) {
-            throw Error('displayName of resharer is not a string')
-          }
-        })
-        return this.collaborator.resharers.map((share) => share.displayName).join(', ')
-      } catch (e) {
-        return null
-      }
-    },
-
     originalRole() {
       const role = this.displayRoles.find((r) => r.name === this.collaborator.role.name)
 
@@ -208,10 +183,6 @@ export default {
       return {
         label: this.$gettext('Unknown Role')
       }
-    },
-
-    isOwner() {
-      return this.collaborator.role.name === 'owner'
     },
 
     shareType() {
