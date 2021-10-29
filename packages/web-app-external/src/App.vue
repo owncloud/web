@@ -31,7 +31,7 @@ import { mapGetters } from 'vuex'
 import ErrorScreen from './components/ErrorScreen.vue'
 import LoadingScreen from './components/LoadingScreen.vue'
 
-// hacky, get rid asap, just a workaround
+// FIXME: hacky, get rid asap, just a workaround
 // same as packages/web-app-files/src/views/PublicFiles.vue
 const unauthenticatedUserReady = async (router, store) => {
   if (store.getters.userReady) {
