@@ -68,7 +68,8 @@
     } else {
       requirejs.config({
         baseUrl: <%- JSON.stringify(data.roots.js) %>,
-        paths: <%- JSON.stringify(data.bundle.js) %>
+        paths: <%- JSON.stringify(data.bundle.js) %>,
+        ...<%- JSON.stringify(data.config.requirejs) %>
       })
 
       requirejs(['web-runtime'], function (runtime) {
