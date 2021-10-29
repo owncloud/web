@@ -9,6 +9,8 @@ Summary
 -------
 
 * Bugfix - Fix location picker breadcrumb url encoding: [#5940](https://github.com/owncloud/web/pull/5940)
+* Bugfix - Context menu rendering: [#5952](https://github.com/owncloud/web/pull/5952)
+* Enhancement - Default action order: [#5952](https://github.com/owncloud/web/pull/5952)
 
 Details
 -------
@@ -21,6 +23,22 @@ Details
    https://github.com/owncloud/web/issues/5938
    https://github.com/owncloud/web/pull/5940
    https://github.com/owncloud/web/pull/5715
+
+* Bugfix - Context menu rendering: [#5952](https://github.com/owncloud/web/pull/5952)
+
+   We fixed that the context menu was being created for each and every file row of the current page
+   (it was just not made visible). Now it only gets created when it gets activated by the user for a
+   file row.
+
+   https://github.com/owncloud/web/pull/5952
+
+* Enhancement - Default action order: [#5952](https://github.com/owncloud/web/pull/5952)
+
+   We've changed the order of actions which are being considered as default action. The order is
+   now 1) installed editors, 2) external apps from the app provider, 3) system default actions.
+   Previously the external apps took precedence.
+
+   https://github.com/owncloud/web/pull/5952
 
 Changelog for ownCloud Web [4.4.0] (2021-10-26)
 =======================================

@@ -26,7 +26,7 @@
         @rowMounted="rowMounted"
       >
         <template #contextMenu="{ resource }">
-          <context-actions :item="resource" />
+          <context-actions v-if="isHighlightedFile(resource)" :item="resource" />
         </template>
         <template #footer>
           <pagination />
@@ -188,6 +188,10 @@ export default {
       }, 250)
 
       visibilityObserver.observe(component.$el, { onEnter: debounced, onExit: debounced.cancel })
+    },
+
+    isHighlightedFile(resource) {
+      return resource && resource.id === this.highlightedFile?.id
     }
   }
 }

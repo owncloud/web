@@ -143,46 +143,55 @@ export default {
     // returns the _first_ action from actions array which we now construct from
     // available mime-types coming from the app-provider and existing actions
     $_fileActions_triggerDefaultAction(resource) {
-      const availableExternalAppActions = this.$_fileActions_loadApps(resource)
+      const actions = this.$_fileActions_getAllAvailableActions(resource).filter(
+        (action) => action.canBeDefault
+      )
+      actions[0].handler(resource, actions[0].handlerData)
+    },
 
-      for (const action of availableExternalAppActions) {
-        action.handler = () => this.$_fileActions_openLink(action.name, resource.fileId)
-      }
-
-      let actions = this.$_fileActions_editorActions.concat(this.$_fileActions_systemActions)
-
-      actions = actions.filter((action) => {
-        return (
-          action.isEnabled({
-            resource: resource,
-            parent: this.currentFolder
-          }) && action.canBeDefault
-        )
+    $_fileActions_getAllAvailableActions(resource) {
+      return [
+        ...this.$_fileActions_editorActions,
+        ...this.$_fileActions_loadExternalAppActions(resource),
+        ...this.$_fileActions_systemActions
+      ].filter((action) => {
+        return action.isEnabled({
+          resource,
+          parent: this.currentFolder
+        })
       })
-
-      const allDefaultActions = availableExternalAppActions.concat(actions)
-      allDefaultActions[0].handler(resource, allDefaultActions[0].handlerData)
     },
 
     // returns an array of available external Apps
     // to open a resource with a specific mimeType
-    $_fileActions_loadApps(resource) {
+    $_fileActions_loadExternalAppActions(resource) {
       const { mimeType } = resource
-      if (mimeType === undefined || !this.capabilities.files.app_providers) {
+      if (mimeType === undefined || !this.capabilities?.files?.app_providers) {
         return []
       }
-      const allAvailableMimeTypes = this.getMimeTypes()
 
+      const allAvailableMimeTypes = this.getMimeTypes()
       if (!allAvailableMimeTypes?.length) {
         return []
-      } else {
-        const availableMimeTypes = allAvailableMimeTypes.find((t) => t.mime_type === mimeType)
-        if (availableMimeTypes) {
-          return availableMimeTypes.app_providers
-        } else {
-          return []
-        }
       }
+
+      const availableMimeTypes = allAvailableMimeTypes.find((t) => t.mime_type === mimeType)
+      if (!availableMimeTypes) {
+        return []
+      }
+
+      return availableMimeTypes.app_providers.map((app) => {
+        const label = this.$gettext('Open in %{ appName }')
+        return {
+          img: app.icon,
+          componentType: 'oc-button',
+          class: `oc-files-actions-${app.name}-trigger`,
+          isEnabled: () => true,
+          canBeDefault: true,
+          handler: () => this.$_fileActions_openLink(app.name, resource.fileId),
+          label: () => this.$gettextInterpolate(label, { appName: app.name })
+        }
+      })
     },
 
     $_fileActions_openLink(appName, resourceId) {

@@ -1,16 +1,5 @@
 <template>
   <ul id="oc-files-actions-sidebar" class="uk-list oc-mt-s">
-    <li v-for="(app, index) in appList" :key="`app-${index}`" class="oc-py-xs">
-      <oc-button
-        appearance="raw"
-        class="oc-text-bold"
-        @click="$_fileActions_openLink(app.name, highlightedFile.fileId)"
-      >
-        <!-- why img and not oc-icon again? -->
-        <img :src="app.icon" :alt="`Icon for ${app.name} app`" class="oc-icon oc-icon-m" />
-        <span class="oc-files-actions-sidebar-action-label">{{ 'Open in ' + app.name }}</span>
-      </oc-button>
-    </li>
     <li v-for="(action, index) in actions" :key="`action-${index}`" class="oc-py-xs">
       <component
         :is="action.componentType"
@@ -18,7 +7,8 @@
         :class="['oc-text-bold', action.class]"
         @click.stop="action.handler(highlightedFile, action.handlerData)"
       >
-        <oc-icon :name="action.icon" size="medium" />
+        <oc-icon v-if="action.icon" :name="action.icon" size="medium" />
+        <oc-img v-if="action.img" :src="action.img" alt="" class="oc-icon oc-icon-m" />
         <span class="oc-files-actions-sidebar-action-label">{{
           action.label(highlightedFile)
         }}</span>
@@ -43,30 +33,14 @@ export default {
     return $gettext('Actions')
   },
   mixins: [FileActions],
-  data: () => ({
-    appList: []
-  }),
   computed: {
     ...mapGetters('Files', ['highlightedFile', 'currentFolder']),
 
     actions() {
-      const actions = this.$_fileActions_editorActions.concat(this.$_fileActions_systemActions)
-
-      return actions.filter((action) =>
-        action.isEnabled({
-          resource: this.highlightedFile,
-          parent: this.currentFolder
-        })
-      )
+      return this.$_fileActions_getAllAvailableActions(this.highlightedFile)
     }
   },
-  mounted() {
-    this.loadApps()
-  },
   methods: {
-    loadApps() {
-      this.appList = this.$_fileActions_loadApps(this.highlightedFile)
-    },
     getComponentProps(action, highlightedFile) {
       if (action.componentType === 'router-link' && action.route) {
         return {

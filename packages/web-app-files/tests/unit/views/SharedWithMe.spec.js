@@ -48,9 +48,11 @@ describe('SharedWithMe page', () => {
     describe('pending shares', () => {
       describe('when there are no pending shares to be displayed', () => {
         it('should not show the pending shares list', () => {
+          const file = createSharedFile({ id: '123', status: shareStatus.accepted })
           const wrapper = getMountedWrapper({
             store: getStore({
-              activeFiles: [createSharedFile({ id: '123', status: shareStatus.accepted })],
+              highlightedFile: file,
+              activeFiles: [file],
               totalFilesCount: { files: 0, folders: 1 }
             })
           })
@@ -60,9 +62,11 @@ describe('SharedWithMe page', () => {
 
       describe('when there is a pending share to be displayed', () => {
         it('should show the pending shares list', () => {
+          const file = createSharedFile({ id: '123', status: shareStatus.pending })
           const wrapper = getMountedWrapper({
             store: getStore({
-              activeFiles: [createSharedFile({ id: '123', status: shareStatus.pending })],
+              highlightedFile: file,
+              activeFiles: [file],
               totalFilesCount: { files: 0, folders: 1 }
             })
           })
@@ -81,6 +85,7 @@ describe('SharedWithMe page', () => {
         ]
         const wrapper = getMountedWrapper({
           store: getStore({
+            highlightedFile: pendingShares[0],
             activeFiles: pendingShares,
             totalFilesCount: { files: 0, folders: pendingShares.length }
           })
@@ -98,6 +103,7 @@ describe('SharedWithMe page', () => {
           beforeEach(async () => {
             wrapper = getMountedWrapper({
               store: getStore({
+                highlightedFile: pendingShares[0],
                 activeFiles: pendingShares,
                 totalFilesCount: { files: 0, folders: pendingShares.length }
               })
@@ -125,9 +131,11 @@ describe('SharedWithMe page', () => {
     })
 
     describe('when there are accepted shares to be displayed', () => {
+      const file = createSharedFile({ id: '123', status: shareStatus.accepted })
       const wrapper = getMountedWrapper({
         store: getStore({
-          activeFiles: [createSharedFile({ id: '123', status: shareStatus.accepted })],
+          highlightedFile: file,
+          activeFiles: [file],
           totalFilesCount: { files: 0, folders: 1 }
         })
       })
@@ -145,9 +153,11 @@ describe('SharedWithMe page', () => {
     })
 
     describe('when there are one or more declined shares to be displayed', () => {
+      const file = createSharedFile({ id: '123', status: shareStatus.declined })
       const wrapper = getMountedWrapper({
         store: getStore({
-          activeFiles: [createSharedFile({ id: '123', status: shareStatus.declined })],
+          highlightedFile: file,
+          activeFiles: [file],
           totalFilesCount: { files: 0, folders: 1 }
         }),
         viewMode: shareStatus.declined

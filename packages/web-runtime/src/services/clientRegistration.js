@@ -4,7 +4,7 @@ async function get(url) {
       return res.json()
     })
     .catch((err) => {
-      console.log('Error: ', err)
+      console.error('Error: ', err)
     })
 }
 
@@ -20,7 +20,7 @@ async function post(url, data) {
       return res.json()
     })
     .catch((err) => {
-      console.log('Error: ', err)
+      console.error('Error: ', err)
     })
 }
 

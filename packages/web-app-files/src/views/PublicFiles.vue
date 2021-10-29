@@ -30,7 +30,7 @@
         @rowMounted="rowMounted"
       >
         <template #contextMenu="{ resource }">
-          <context-actions :item="resource" />
+          <context-actions v-if="isHighlightedFile(resource)" :item="resource" />
         </template>
         <template #footer>
           <pagination />
@@ -240,6 +240,10 @@ export default {
         name: 'files-public-link',
         params: { token: this.$route.params.item }
       })
+    },
+
+    isHighlightedFile(resource) {
+      return resource && resource.id === this.highlightedFile?.id
     }
   }
 }

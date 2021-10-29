@@ -123,8 +123,8 @@ describe('Users can set expiration date when sharing with users or groups', () =
 
     await fireEvent.click(getByTestId('recipient-datepicker-btn'))
     const newDate = getDateInFuture(4)
-    const dateSelector = document.evaluate(
-      `//span[contains(@class, "vc-day-content vc-focusable") and @aria-label="${newDate.toLocaleDateString(
+    let dateSelector = document.evaluate(
+      `//span[contains(@class, "vc-day-content vc-focusable") and @tabindex="-1" and @aria-label="${newDate.toLocaleDateString(
         'en',
         formatDate
       )}" and text()="${newDate.getDate()}"]`,
@@ -134,18 +134,26 @@ describe('Users can set expiration date when sharing with users or groups', () =
       null
     ).singleNodeValue
 
-    console.log(dateSelector);
-
-    if (dateSelector.classList.contains('is-disabled')) {
+    if (!dateSelector) {
       const nextMonthBtn = baseElement.querySelector('.vc-arrow.is-right')
 
-      userEvent.click(nextMonthBtn)
+      await userEvent.click(nextMonthBtn)
+      dateSelector = document.evaluate(
+        `//span[contains(@class, "vc-day-content vc-focusable") and @tabindex="-1" and @aria-label="${newDate.toLocaleDateString(
+          'en',
+          formatDate
+        )}" and text()="${newDate.getDate()}"]`,
+        baseElement,
+        null,
+        XPathResult.FIRST_ORDERED_NODE_TYPE,
+        null
+      ).singleNodeValue
     }
 
     expect(
       await findByText(newDate.toLocaleString('en', { month: 'long', year: 'numeric' }))
     ).toBeVisible()
-    userEvent.click(dateSelector)
+    await userEvent.click(dateSelector)
     expect(await within(editDialog).findByText('Expires in 4 days')).toBeVisible()
     await fireEvent.click(getByTestId('recipient-edit-btn-save'))
     await waitFor(() => expect(queryByTestId('recipient-dialog-edit')).toBe(null))
@@ -276,14 +284,14 @@ describe('Users can set expiration date when sharing with users or groups', () =
 
     const userInAutocomplete = await findByTestId('recipient-autocomplete-item-bob')
     expect(userInAutocomplete).toBeVisible()
-    userEvent.click(userInAutocomplete)
+    await userEvent.click(userInAutocomplete)
     expect(await findByTestId('recipient-container-bob')).toBeVisible()
     expect(getByTestId('recipient-datepicker')).toBeVisible()
     await fireEvent.click(getByTestId('recipient-datepicker-btn'))
 
     const newDate = getDateInFuture(2)
-    const dateSelector = document.evaluate(
-      `//span[contains(@class, "vc-day-content vc-focusable") and not(contains(@class, "is-disabled")) and text()="${newDate.getDate()}"]`,
+    let dateSelector = document.evaluate(
+      `//span[contains(@class, "vc-day-content vc-focusable") and @tabindex="-1" and not(contains(@class, "is-disabled")) and text()="${newDate.getDate()}"]`,
       baseElement,
       null,
       XPathResult.FIRST_ORDERED_NODE_TYPE,
@@ -291,15 +299,22 @@ describe('Users can set expiration date when sharing with users or groups', () =
     ).singleNodeValue
 
     if (!dateSelector) {
-      const nextMonthBtn = baseElement.querySelector('.vc-arrow.is-right')
+      const nextMonthBtn = baseElement.querySelector('.vc-arrow.is-left') // the date is less than default expiration date so needs to go back
+      await userEvent.click(nextMonthBtn)
 
-      userEvent.click(nextMonthBtn)
+      dateSelector = document.evaluate(
+        `//span[contains(@class, "vc-day-content vc-focusable") and not(contains(@class, "is-disabled")) and text()="${newDate.getDate()}"]`,
+        baseElement,
+        null,
+        XPathResult.FIRST_ORDERED_NODE_TYPE,
+        null
+      ).singleNodeValue
     }
 
     expect(
       await findByText(newDate.toLocaleString('en', { month: 'long', year: 'numeric' }))
     ).toBeVisible()
-    userEvent.click(dateSelector)
+    await userEvent.click(dateSelector)
     expect(await findByText('Expires in 2 days')).toBeVisible()
 
     const shareBtn = getByTestId('new-collaborator-share-btn')
@@ -369,8 +384,8 @@ describe('Users can set expiration date when sharing with users or groups', () =
     await fireEvent.click(getByTestId('recipient-datepicker-btn'))
 
     const newDate = getDateInFuture(4)
-    const dateSelector = document.evaluate(
-      `//span[contains(@class, "vc-day-content vc-focusable") and @aria-label="${newDate.toLocaleDateString(
+    let dateSelector = document.evaluate(
+      `//span[contains(@class, "vc-day-content vc-focusable") and @tabindex="-1" and @aria-label="${newDate.toLocaleDateString(
         'en',
         formatDate
       )}" and text()="${newDate.getDate()}"]`,
@@ -380,16 +395,26 @@ describe('Users can set expiration date when sharing with users or groups', () =
       null
     ).singleNodeValue
 
-    if (dateSelector.classList.contains('is-disabled')) {
+    if (!dateSelector) {
       const nextMonthBtn = baseElement.querySelector('.vc-arrow.is-right')
 
-      userEvent.click(nextMonthBtn)
+      await userEvent.click(nextMonthBtn)
+      dateSelector = document.evaluate(
+        `//span[contains(@class, "vc-day-content vc-focusable") and @tabindex="-1" and @aria-label="${newDate.toLocaleDateString(
+          'en',
+          formatDate
+        )}" and text()="${newDate.getDate()}"]`,
+        baseElement,
+        null,
+        XPathResult.FIRST_ORDERED_NODE_TYPE,
+        null
+      ).singleNodeValue
     }
 
     expect(
       await findByText(newDate.toLocaleString('en', { month: 'long', year: 'numeric' }))
     ).toBeVisible()
-    userEvent.click(dateSelector)
+    await userEvent.click(dateSelector)
     expect(await within(editDialog).findByText('Expires in 4 days')).toBeVisible()
     await fireEvent.click(getByTestId('recipient-edit-btn-save'))
     await waitFor(() => expect(queryByTestId('recipient-dialog-edit')).toBe(null))

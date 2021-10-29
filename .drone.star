@@ -1165,10 +1165,10 @@ def acceptance(ctx):
                         steps += skipIfUnchanged(ctx, "acceptance-tests")
 
                         steps += restoreBuildArtifactCache(ctx, ".yarn", ".yarn")
-                        steps += installYarn() + yarnInstallTests()
+                        steps += yarnInstallTests()
 
                         if (params["oc10IntegrationAppIncluded"]):
-                            steps += buildWebApp()
+                            steps += installYarn() + buildWebApp()
                         else:
                             steps += restoreBuildArtifactCache(ctx, "web-dist", "dist")
                             steps += setupServerConfigureWeb(params["logLevel"])
