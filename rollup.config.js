@@ -25,9 +25,11 @@ import inject from '@rollup/plugin-inject'
 const production = !process.env.ROLLUP_WATCH
 const sourcemap = process.env.SOURCE_MAP === 'true'
 const { version } = require('./package.json')
+const compilationTimestamp = new Date().getTime()
 
 const config = {
-  requirejs: {}
+  requirejs: {},
+  cdn: process.env.CDN === 'true'
 }
 if (process.env.REQUIRE_TIMEOUT) {
   config.requirejs.waitSeconds = parseInt(process.env.REQUIRE_TIMEOUT)
@@ -154,7 +156,8 @@ const plugins = [
                 css: 'css',
                 js: 'js'
               },
-              config: config
+              config: config,
+              compilationTimestamp: compilationTimestamp
             }
           },
           {},
