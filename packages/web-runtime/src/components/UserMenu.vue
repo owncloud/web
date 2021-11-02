@@ -6,7 +6,7 @@
       class="oc-topbar-personal uk-height-1-1 oc-pr-xs"
       appearance="raw"
       variation="passive"
-      :aria-label="$gettext('User Menu')"
+      :aria-label="userDisplayName"
     >
       <oc-grid flex>
         <avatar-image
@@ -15,7 +15,11 @@
           :userid="userId"
           :user-name="userDisplayName"
         />
-        <div class="oc-topbar-personal-label oc-text-bold oc-ml-rm" v-text="userDisplayName" />
+        <div
+          class="oc-topbar-personal-label oc-text-bold oc-ml-rm"
+          :aria-label="userDisplayName"
+          v-text="userDisplayName"
+        />
       </oc-grid>
     </oc-button>
     <oc-drop
