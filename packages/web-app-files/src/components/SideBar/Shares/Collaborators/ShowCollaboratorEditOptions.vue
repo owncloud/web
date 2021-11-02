@@ -78,12 +78,13 @@ export default {
 
     rolesListAriaLabel() {
       return this.$gettext('Sharing roles')
+    },
+    expirationDateExists() {
+      console.log(1337, this.collaborator.expires)
+      return this.collaborator.expires
     }
   },
   methods: {
-    expirationDateExists() {
-      return this.collaborator.expires
-    },
     removeShare() {
       this.$emit('removeShare')
     },
