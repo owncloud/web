@@ -159,7 +159,7 @@ export default {
       if (tooltip) {
         return tooltip
       }
-      return this.$gettext('Add files or folders')
+      return this.$gettext('Add new files or folders')
     },
     currentPath() {
       const path = this.$route.params.item || ''
