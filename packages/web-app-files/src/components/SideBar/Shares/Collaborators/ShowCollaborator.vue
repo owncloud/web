@@ -36,7 +36,7 @@
         </div>
       </oc-td>
       <oc-td class="oc-py-rm oc-pr-s">
-        <div class="uk-flex uk-flex-column uk-flex-center" :class="collaboratorListItemClass">
+        <div class="oc-flex oc-flex-column oc-flex-center" :class="collaboratorListItemClass">
           <div class="oc-text-initial oc-mb-xs">
             <p
               class="files-collaborators-collaborator-name oc-text-bold oc-mb-rm"
@@ -91,7 +91,7 @@
               >
                 <h4 :id="`resharer-info-${shareId}`" v-translate>Shared by</h4>
                 <ul
-                  class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm"
+                  class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm"
                   :aria-labelledby="`resharer-info-${shareId}`"
                 >
                   <li
@@ -99,7 +99,7 @@
                     :key="resharer.name"
                     class="oc-py-rm"
                   >
-                    <div class="uk-flex uk-flex-middle uk-flex-left">
+                    <div class="oc-flex oc-flex-middle oc-flex-left">
                       <avatar-image
                         class="oc-mr-s"
                         :width="48"
@@ -153,7 +153,7 @@
               >
                 <oc-icon name="exit_to_app" />
                 <span
-                  class="uk-text-truncate files-collaborators-collaborator-via-label"
+                  class="oc-text-truncate files-collaborators-collaborator-via-label"
                   v-text="viaLabel"
                 />
               </oc-tag>
@@ -162,7 +162,7 @@
         </div>
       </oc-td>
       <oc-td width="shrink" align-v="top" class="oc-py-rm oc-pr-s">
-        <div class="uk-flex uk-flex-nowrap uk-flex-middle">
+        <div class="oc-flex oc-flex-nowrap oc-flex-middle">
           <oc-button
             v-if="$_editButtonVisible"
             v-oc-tooltip="editShareHint"
@@ -189,7 +189,7 @@
               v-else-if="$_loadingSpinnerVisible"
               :aria-label="$gettext('Removing person')"
             />
-            <oc-icon v-else name="lock" class="uk-invisible" />
+            <oc-icon v-else name="lock" class="oc-invisible" />
           </div>
         </div>
       </oc-td>

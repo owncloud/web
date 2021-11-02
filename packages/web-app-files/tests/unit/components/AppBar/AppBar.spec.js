@@ -19,7 +19,7 @@ const elSelector = {
   sizeInfo: 'size-info-stub',
   newFileButton: '#new-file-menu-btn',
   ocDrop: 'oc-drop-stub',
-  fileMenuList: 'oc-drop-stub .uk-list > li',
+  fileMenuList: 'oc-drop-stub .oc-list > li',
   fileUpload: 'file-upload-stub',
   folderUpload: 'folder-upload-stub',
   newFolderBtn: '#new-folder-btn',

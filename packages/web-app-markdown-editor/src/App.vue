@@ -9,20 +9,20 @@
         @close="clearLastError"
       />
     </oc-notifications>
-    <div class="uk-flex">
-      <div class="uk-container uk-width-1-2">
+    <div class="oc-flex">
+      <div class="oc-container oc-width-1-2">
         <oc-textarea
           id="markdown-editor-input"
           name="input"
           full-width
           :value="currentContent"
           :label="$gettext('Editor')"
-          class="uk-height-1-1"
+          class="oc-height-1-1"
           :rows="20"
           @input="onType"
         />
       </div>
-      <div class="uk-container uk-width-1-2">
+      <div class="oc-container oc-width-1-2">
         <!-- eslint-disable-next-line vue/no-v-html -->
         <div id="markdown-editor-preview" v-html="renderedMarkdown"></div>
       </div>

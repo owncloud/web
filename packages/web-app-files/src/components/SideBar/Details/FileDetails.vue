@@ -7,7 +7,7 @@
         :style="{
           'background-image': $asyncComputed.preview.updating ? 'none' : `url(${preview})`
         }"
-        class="details-preview uk-flex uk-flex-middle uk-flex-center oc-mb"
+        class="details-preview oc-flex oc-flex-middle oc-flex-center oc-mb"
         data-testid="preview"
       >
         <oc-spinner v-if="$asyncComputed.preview.updating" />
@@ -16,7 +16,7 @@
         v-if="showShares"
         key="file-shares"
         data-testid="sharingInfo"
-        class="uk-flex uk-flex-middle oc-my-m"
+        class="oc-flex oc-flex-middle oc-my-m"
       >
         <oc-button
           v-if="hasPeopleShares"

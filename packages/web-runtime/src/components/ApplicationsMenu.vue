@@ -1,5 +1,5 @@
 <template>
-  <nav :aria-label="$gettext('Main navigation')" class="uk-flex uk-flex-middle">
+  <nav :aria-label="$gettext('Main navigation')" class="oc-flex oc-flex-middle">
     <oc-button
       id="_appSwitcherButton"
       ref="menubutton"
@@ -8,7 +8,7 @@
       class="oc-topbar-menu-burger"
       :aria-label="applicationSwitcherLabel"
     >
-      <oc-icon name="apps" class="uk-flex" />
+      <oc-icon name="apps" class="oc-flex" />
     </oc-button>
     <oc-drop
       ref="menu"
@@ -16,18 +16,18 @@
       toggle="#_appSwitcherButton"
       mode="click"
       :options="{ pos: 'bottom-right', delayHide: 0 }"
-      class="uk-width-large"
+      class="oc-width-large"
       close-on-click
     >
-      <ul class="uk-grid-small uk-text-center" uk-grid>
-        <li v-for="(n, nid) in menuItems" :key="`apps-menu-${nid}`" class="uk-width-1-3">
+      <ul class="oc-list oc-text-center">
+        <li v-for="(n, nid) in menuItems" :key="`apps-menu-${nid}`" class="oc-width-1-3">
           <a v-if="n.url" key="apps-menu-external-link" :target="n.target" :href="n.url">
             <oc-icon :name="n.iconMaterial" size="xlarge" />
-            <span class="uk-display-block" v-text="$gettext(n.title)" />
+            <span class="oc-display-block" v-text="$gettext(n.title)" />
           </a>
           <router-link v-else key="apps-menu-internal-link" :to="n.path">
             <oc-icon :name="n.iconMaterial" size="xlarge" />
-            <span class="uk-display-block" v-text="$gettext(n.title)" />
+            <span class="oc-display-block" v-text="$gettext(n.title)" />
           </router-link>
         </li>
       </ul>
@@ -37,7 +37,6 @@
 
 <script>
 import NavigationMixin from '../mixins/navigationMixin'
-import UiKit from 'uikit'
 
 export default {
   mixins: [NavigationMixin],
@@ -57,14 +56,13 @@ export default {
     }
   },
   mounted() {
-    UiKit.util.on('#app-switcher-dropdown', 'shown', () => {
-      this.focusFirstLink()
-    })
-
-    UiKit.util.on('#app-switcher-dropdown', 'hidden', () => {
-      this.$emit('closed')
-      this.focusMenuButton()
-    })
+    // UiKit.util.on('#app-switcher-dropdown', 'shown', () => {
+    //   this.focusFirstLink()
+    // })
+    // UiKit.util.on('#app-switcher-dropdown', 'hidden', () => {
+    //   this.$emit('closed')
+    //   this.focusMenuButton()
+    // })
   },
   methods: {
     logout() {

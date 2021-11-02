@@ -1,5 +1,5 @@
 <template>
-  <ul id="oc-files-actions-sidebar" class="uk-list oc-mt-s">
+  <ul id="oc-files-actions-sidebar" class="oc-list oc-mt-s">
     <li v-for="(action, index) in actions" :key="`action-${index}`" class="oc-py-xs">
       <component
         :is="action.componentType"

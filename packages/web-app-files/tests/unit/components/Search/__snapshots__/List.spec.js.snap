@@ -2,13 +2,13 @@
 
 exports[`List component when no resource is found should show no-content-message component 1`] = `
 <div class="files-search-result">
-  <div class="uk-height-1-1 uk-flex uk-flex-column uk-flex-center uk-flex-middle uk-text-center files-empty">
+  <div class="oc-height-1-1 oc-flex oc-flex-column oc-flex-center oc-flex-middle oc-text-center files-empty">
     <div class="oc-icon oc-icon-xxl oc-icon-passive"><svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" version="1.0" viewBox="0 0 16 16" height="16" width="16" xmlns="http://www.w3.org/2000/svg" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" aria-hidden="true" focusable="false">
         <g xmlns="http://www.w3.org/2000/svg" transform="matrix(.86667 0 0 .86667 -172.05 -864.43)">
           <path d="m200.2 999.72c-0.28913 0-0.53125 0.2421-0.53125 0.53117v12.784c0 0.2985 0.23264 0.5312 0.53125 0.5312h15.091c0.2986 0 0.53124-0.2327 0.53124-0.5312l0.0004-10.474c0-0.2889-0.24211-0.5338-0.53124-0.5338l-7.5457 0.0005-2.3076-2.3078z"></path>
         </g>
       </svg></div>
-    <div class="oc-text-muted uk-text-large">
+    <div class="oc-text-muted oc-text-large">
       <p class="oc-text-muted"><span data-msgid="No resource found" data-current-language="en_US">No resource found</span></p>
     </div>
     <div class="oc-text-muted"></div>
@@ -18,13 +18,13 @@ exports[`List component when no resource is found should show no-content-message
 
 exports[`List component when no search term is entered should show no-content-message component 1`] = `
 <div class="files-search-result">
-  <div class="uk-height-1-1 uk-flex uk-flex-column uk-flex-center uk-flex-middle uk-text-center files-empty">
+  <div class="oc-height-1-1 oc-flex oc-flex-column oc-flex-center oc-flex-middle oc-text-center files-empty">
     <div class="oc-icon oc-icon-xxl oc-icon-passive"><svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" version="1.0" viewBox="0 0 16 16" height="16" width="16" xmlns="http://www.w3.org/2000/svg" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" aria-hidden="true" focusable="false">
         <g xmlns="http://www.w3.org/2000/svg" transform="matrix(.86667 0 0 .86667 -172.05 -864.43)">
           <path d="m200.2 999.72c-0.28913 0-0.53125 0.2421-0.53125 0.53117v12.784c0 0.2985 0.23264 0.5312 0.53125 0.5312h15.091c0.2986 0 0.53124-0.2327 0.53124-0.5312l0.0004-10.474c0-0.2889-0.24211-0.5338-0.53124-0.5338l-7.5457 0.0005-2.3076-2.3078z"></path>
         </g>
       </svg></div>
-    <div class="oc-text-muted uk-text-large">
+    <div class="oc-text-muted oc-text-large">
       <p class="oc-text-muted"><span data-msgid="No search term entered" data-current-language="en_US">No search term entered</span></p>
     </div>
     <div class="oc-text-muted"></div>

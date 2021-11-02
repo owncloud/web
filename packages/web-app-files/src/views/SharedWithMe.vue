@@ -1,5 +1,5 @@
 <template>
-  <div class="uk-flex uk-flex-column">
+  <div class="oc-flex oc-flex-column">
     <list-loader v-if="loadResourcesTask.isRunning" />
     <template v-else>
       <!-- Pending shares -->
@@ -24,7 +24,7 @@
           <template #status="{ resource }">
             <div
               :key="resource.id + resource.status"
-              class="uk-text-nowrap uk-flex uk-flex-middle uk-flex-right"
+              class="oc-text-nowrap oc-flex oc-flex-middle oc-flex-right"
             >
               <oc-button
                 size="small"
@@ -49,7 +49,7 @@
             <context-actions v-if="isHighlightedFile(resource)" :item="resource" />
           </template>
           <template v-if="pendingHasMore" #footer>
-            <div class="uk-width-1-1 uk-text-center oc-mt">
+            <div class="oc-width-1-1 oc-text-center oc-mt">
               <oc-button
                 id="files-shared-with-me-pending-show-all"
                 appearance="raw"
@@ -84,7 +84,7 @@
       <no-content-message
         v-if="!hasShares"
         id="files-shared-with-me-shares-empty"
-        class="files-empty uk-flex-stretch"
+        class="files-empty oc-flex-stretch"
         icon="group"
       >
         <template #message>
@@ -108,7 +108,7 @@
         <template #status="{ resource }">
           <div
             :key="resource.id + resource.status"
-            class="uk-text-nowrap uk-flex uk-flex-middle uk-flex-right"
+            class="oc-text-nowrap oc-flex oc-flex-middle oc-flex-right"
           >
             <oc-button
               v-if="resource.status === shareStatus.declined"
@@ -137,7 +137,7 @@
         <template #footer>
           <list-info
             v-if="hasShares"
-            class="uk-width-1-1 oc-my-s"
+            class="oc-width-1-1 oc-my-s"
             :files="sharesCountFiles"
             :folders="sharesCountFolders"
           />

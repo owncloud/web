@@ -2,7 +2,7 @@
 
 exports[`ContextActions menu items renders a list of actions for a file 1`] = `
 <div id="oc-files-context-menu">
-  <ul id="oc-files-context-actions-context" class="uk-list oc-mt-s oc-files-context-actions">
+  <ul id="oc-files-context-actions-context" class="oc-list oc-mt-s oc-files-context-actions">
     <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-markdown-editor-trigger">
         <oc-icon-stub name="text" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
         <!----> <span class="oc-files-context-action-label">Open in editor</span>
@@ -40,7 +40,7 @@ exports[`ContextActions menu items renders a list of actions for a file 1`] = `
       </button></li>
   </ul>
   <hr>
-  <ul id="oc-files-context-actions-actions" class="uk-list oc-mt-s oc-files-context-actions">
+  <ul id="oc-files-context-actions-actions" class="oc-list oc-mt-s oc-files-context-actions">
     <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-rename-trigger">
         <oc-icon-stub name="edit" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
         <!----> <span class="oc-files-context-action-label">Edit</span>
@@ -68,7 +68,7 @@ exports[`ContextActions menu items renders a list of actions for a file 1`] = `
       </button></li>
   </ul>
   <hr>
-  <ul id="oc-files-context-actions-sidebar" class="uk-list oc-mt-s oc-files-context-actions">
+  <ul id="oc-files-context-actions-sidebar" class="oc-list oc-mt-s oc-files-context-actions">
     <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-show-details-trigger">
         <oc-icon-stub name="info_outline" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
         <!----> <span class="oc-files-context-action-label">Details</span>
@@ -81,7 +81,7 @@ exports[`ContextActions menu items renders a list of actions for a file 1`] = `
 
 exports[`ContextActions menu items renders a list of actions for a folder 1`] = `
 <div id="oc-files-context-menu">
-  <ul id="oc-files-context-actions-context" class="uk-list oc-mt-s oc-files-context-actions">
+  <ul id="oc-files-context-actions-context" class="oc-list oc-mt-s oc-files-context-actions">
     <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-markdown-editor-trigger">
         <oc-icon-stub name="text" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
         <!----> <span class="oc-files-context-action-label">Open in editor</span>
@@ -119,7 +119,7 @@ exports[`ContextActions menu items renders a list of actions for a folder 1`] = 
       </button></li>
   </ul>
   <hr>
-  <ul id="oc-files-context-actions-actions" class="uk-list oc-mt-s oc-files-context-actions">
+  <ul id="oc-files-context-actions-actions" class="oc-list oc-mt-s oc-files-context-actions">
     <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-rename-trigger">
         <oc-icon-stub name="edit" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
         <!----> <span class="oc-files-context-action-label">Edit</span>
@@ -147,7 +147,7 @@ exports[`ContextActions menu items renders a list of actions for a folder 1`] = 
       </button></li>
   </ul>
   <hr>
-  <ul id="oc-files-context-actions-sidebar" class="uk-list oc-mt-s oc-files-context-actions">
+  <ul id="oc-files-context-actions-sidebar" class="oc-list oc-mt-s oc-files-context-actions">
     <li class="oc-files-context-action"><button class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-bold oc-files-actions-show-details-trigger">
         <oc-icon-stub name="info_outline" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
         <!----> <span class="oc-files-context-action-label">Details</span>

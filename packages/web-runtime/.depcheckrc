@@ -2,10 +2,7 @@
   "ignores": [
     "web-runtime",
     "easygettext",
-    "uikit",
-    "vue-datetime",
     "webfontloader",
-    "weekstart",
     "vue-inline-svg"
   ]
 }

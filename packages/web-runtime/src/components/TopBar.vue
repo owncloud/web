@@ -1,10 +1,10 @@
 <template>
   <header
-    class="oc-topbar uk-flex uk-flex-middle uk-flex-wrap oc-border-b oc-p-s"
+    class="oc-topbar oc-flex oc-flex-middle oc-flex-wrap oc-border-b oc-p-s"
     :aria-label="$gettext('Top bar')"
   >
     <oc-grid gutter="medium" flex>
-      <div class="uk-hidden@l">
+      <div class="oc-hidden@l">
         <oc-button
           appearance="raw"
           class="oc-m-s oc-app-navigation-toggle"
@@ -18,7 +18,7 @@
     <div class="portal-wrapper">
       <portal-target name="app.runtime.header" multiple></portal-target>
     </div>
-    <oc-grid flex gutter="small" class="uk-width-expand uk-flex-right oc-m-rm">
+    <oc-grid flex gutter="small" class="oc-width-expand oc-flex-right oc-m-rm">
       <feedback-link v-if="isFeedbackLinkEnabled" />
       <notifications v-if="activeNotifications.length" />
       <applications-menu v-if="applicationsList.length > 0" :applications-list="applicationsList" />

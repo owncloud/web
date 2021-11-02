@@ -30,7 +30,7 @@
       drop-id="files-view-options-drop"
       toggle="#files-view-options-btn"
       mode="click"
-      class="uk-width-auto"
+      class="oc-width-auto"
     >
       <oc-list>
         <li class="files-view-options-list-item">

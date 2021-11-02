@@ -16,9 +16,7 @@
       <div
         v-show="!loading && activeMediaFileCached"
         class="
-          uk-width-1-1 uk-flex uk-flex-center uk-flex-middle
-          oc-p-s
-          uk-box-shadow-medium
+          oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-box-shadow-medium
           media-viewer-player
         "
       >
@@ -34,7 +32,7 @@
         />
       </div>
     </transition>
-    <div v-if="loading" class="uk-position-center">
+    <div v-if="loading" class="oc-position-center">
       <oc-spinner :aria-label="$gettext('Loading media file')" size="xlarge" />
     </div>
     <oc-icon
@@ -42,21 +40,26 @@
       name="review"
       variation="danger"
       size="xlarge"
-      class="uk-position-center uk-z-index"
+      class="oc-position-center"
       :accessible-label="$gettext('Failed to load media file')"
     />
 
-    <div class="uk-position-medium uk-position-bottom-center media-viewer-details">
+    <div class="oc-position-medium oc-position-bottom-center media-viewer-details">
       <p
-        class="oc-text-lead uk-text-center oc-text-truncate oc-p-s media-viewer-file-name"
+        class="oc-text-lead oc-text-center oc-text-truncate oc-p-s media-viewer-file-name"
         aria-hidden="true"
       >
         {{ medium.name }}
       </p>
       <div
         class="
-          oc-background-brand oc-p-s
-          uk-width-large uk-flex uk-flex-middle uk-flex-center uk-flex-around
+          oc-background-brand
+          oc-p-s
+          oc-width-large
+          oc-flex
+          oc-flex-middle
+          oc-flex-center
+          oc-flex-around
           media-viewer-controls-action-bar
         "
       >

@@ -1,5 +1,5 @@
 <template>
-  <div class="uk-flex uk-flex-nowrap uk-flex-middle">
+  <div class="oc-flex oc-flex-nowrap oc-flex-middle">
     <oc-spinner v-if="removalInProgress" :aria-label="$gettext('Removing public link')" />
     <template v-else>
       <oc-button

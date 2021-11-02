@@ -48,7 +48,7 @@
             <oc-button
               id="files-links-expiration-btn"
               data-testid="recipient-datepicker-btn"
-              class="uk-width-1-1 expiration-dialog-btn"
+              class="oc-width-1-1 expiration-dialog-btn"
               justify-content="space-between"
               gap-size="xsmall"
               @click="togglePopover"
@@ -95,17 +95,17 @@
       <!-- @TODO: Enable Mail API to use the following
                   ++++++++++++++++++++++++++++++++++++
         <template v-if="$_sendMailEnabled">
-            <h4 class="oc-mt-top uk-heading-divider">
+            <h4 class="oc-mt-top oc-heading-divider">
                 Send mail notification
             </h4>
             <div class="oc-mb">
-                <input type="text" class="uk-input" :placeholder="placeholder.mailTo" />
+                <input type="text" class="oc-input" :placeholder="placeholder.mailTo" />
             </div>
             <div class="oc-mb">
-                <textarea class="uk-textarea" :placeholder="placeholder.mailBody rows="4"></textarea>
+                <textarea class="oc-textarea" :placeholder="placeholder.mailBody rows="4"></textarea>
             </div>
             <div class="oc-mb">
-                <label><input type="checkbox" class="uk-checkbox oc-mr-s" v-translate>Send a copy to myself</label>
+                <label><input type="checkbox" class="oc-checkbox oc-mr-s" v-translate>Send a copy to myself</label>
             </div>
         </template>
         -->

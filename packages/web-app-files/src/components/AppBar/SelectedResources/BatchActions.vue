@@ -1,5 +1,5 @@
 <template>
-  <div class="uk-flex uk-flex-middle">
+  <div class="oc-flex oc-flex-middle">
     <template v-if="isTrashbinRoute">
       <oc-button
         v-if="selectedFiles.length > 0"

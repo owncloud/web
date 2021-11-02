@@ -1,6 +1,6 @@
 <template>
   <div>
-    <oc-button class="uk-width-1-1" justify-content="left" appearance="raw" @click="triggerUpload">
+    <oc-button class="oc-width-1-1" justify-content="left" appearance="raw" @click="triggerUpload">
       <oc-icon name="file_upload" />
       <span id="files-file-upload-button" v-translate>Upload File</span>
     </oc-button>

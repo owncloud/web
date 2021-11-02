@@ -1,8 +1,8 @@
 <template>
   <main
-    class="uk-height-viewport"
+    class="oc-height-viewport"
     :class="{
-      'uk-flex uk-flex-center uk-flex-middle': loading || loadingError
+      'oc-flex oc-flex-center oc-flex-middle': loading || loadingError
     }"
   >
     <h1 class="oc-invisible-sr" v-text="pageTitle" />
@@ -11,7 +11,7 @@
     <iframe
       v-if="appUrl && method === 'GET'"
       :src="appUrl"
-      class="uk-width-1-1 uk-height-viewport"
+      class="oc-width-1-1 oc-height-viewport"
       :title="iFrameTitle"
     />
     <div v-if="appUrl && method === 'POST' && formParameters">
@@ -21,7 +21,7 @@
           <input :name="key" :value="item" type="hidden" />
         </div>
       </form>
-      <iframe name="app-iframe" class="uk-width-1-1 uk-height-viewport" :title="iFrameTitle" />
+      <iframe name="app-iframe" class="oc-width-1-1 oc-height-viewport" :title="iFrameTitle" />
     </div>
   </main>
 </template>

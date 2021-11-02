@@ -4,7 +4,7 @@
       <ul
         :id="`oc-files-context-actions-${section.name}`"
         :key="`section-${section.name}-list`"
-        class="uk-list oc-mt-s oc-files-context-actions"
+        class="oc-list oc-mt-s oc-files-context-actions"
       >
         <li
           v-for="(action, j) in section.items"

@@ -45,7 +45,7 @@
     <oc-drop
       ref="customPermissionsDrop"
       data-testid="files-recipient-custom-permissions-drop"
-      class="files-recipient-custom-permissions-drop uk-width-auto"
+      class="files-recipient-custom-permissions-drop oc-width-auto"
       mode="manual"
       target="#files-collaborators-role-button"
     >

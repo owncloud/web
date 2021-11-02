@@ -1,9 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Top Bar component Displays applications menu 1`] = `
-<header aria-label="Top bar" class="oc-topbar uk-flex uk-flex-middle uk-flex-wrap oc-border-b oc-p-s">
+<header aria-label="Top bar" class="oc-topbar oc-flex oc-flex-middle oc-flex-wrap oc-border-b oc-p-s">
   <oc-grid-stub gutter="medium" flex="">
-    <div class="uk-hidden@l">
+    <div class="oc-hidden@l">
       <oc-button-stub appearance="raw" aria-label="Open navigation menu" class="oc-m-s oc-app-navigation-toggle">
         <oc-icon-stub name="menu"></oc-icon-stub>
       </oc-button-stub>
@@ -12,7 +12,7 @@ exports[`Top Bar component Displays applications menu 1`] = `
   <div class="portal-wrapper">
     <portal-target-stub name="app.runtime.header" multiple=""></portal-target-stub>
   </div>
-  <oc-grid-stub flex="" gutter="small" class="uk-width-expand uk-flex-right oc-m-rm">
+  <oc-grid-stub flex="" gutter="small" class="oc-width-expand oc-flex-right oc-m-rm">
     <feedback-link-stub></feedback-link-stub>
     <!---->
     <applications-menu-stub applicationslist="testApp"></applications-menu-stub>

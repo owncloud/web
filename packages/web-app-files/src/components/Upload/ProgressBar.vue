@@ -1,14 +1,14 @@
 <template>
-  <div class="files-upload-progress uk-clearfix oc-py-rm">
-    <div class="oc-m-rm uk-position-relative uk-width-expand">
+  <div class="files-upload-progress oc-py-rm">
+    <div class="oc-m-rm oc-position-relative oc-width-expand">
       <oc-progress
         ref="progressbar"
         :aria-hidden="true"
         :max="100"
         :value="totalUploadProgress"
-        class="uk-width-expand oc-m-rm"
+        class="oc-width-expand oc-m-rm"
       />
-      <span :aria-hidden="true" class="uk-position-center oc-progress-text">
+      <span :aria-hidden="true" class="oc-position-center oc-progress-text">
         {{ totalUploadProgress | roundNumber }} %
       </span>
       <oc-hidden-announcer :announcement="announcement" level="assertive" />
@@ -19,8 +19,8 @@
       :aria-label="$gettext('Click row to toggle upload progress details')"
       @click.native="$_toggleExpanded"
     >
-      <oc-icon class="uk-width-auto" :name="expanded ? 'expand_less' : 'expand_more'" />
-      <div class="uk-width-expand uk-text-truncate">
+      <oc-icon class="oc-width-auto" :name="expanded ? 'expand_less' : 'expand_more'" />
+      <div class="oc-width-expand oc-text-truncate">
         <translate
           v-if="count === 1"
           id="files-upload-progress-single"
@@ -41,7 +41,7 @@
           Uploading %{ count } item
         </translate>
       </div>
-      <div class="uk-width-auto">
+      <div class="oc-width-auto">
         <translate
           v-if="expanded"
           id="files-upload-progress-collapse-details"
@@ -63,7 +63,7 @@
     <details-widget
       v-if="expanded"
       :items="inProgress"
-      class="uk-width-expand oc-upload-details-scrollable"
+      class="oc-width-expand oc-upload-details-scrollable"
     />
   </div>
 </template>
@@ -157,7 +157,7 @@ export default {
   font-size: 0.75em;
   color: var(--oc-color-text-inverse);
 }
-.files-upload-progress .uk-progress {
+.files-upload-progress .oc-progress {
   box-shadow: 0 0 2px var(--oc-color-border);
 }
 </style>

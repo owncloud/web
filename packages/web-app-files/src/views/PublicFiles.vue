@@ -2,7 +2,7 @@
   <div>
     <list-loader v-if="loadResourcesTask.isRunning" />
     <template v-else>
-      <not-found-message v-if="folderNotFound" class="files-not-found uk-height-1-1" />
+      <not-found-message v-if="folderNotFound" class="files-not-found oc-height-1-1" />
       <no-content-message
         v-else-if="isEmpty"
         id="files-public-list-empty"
@@ -36,7 +36,7 @@
           <pagination />
           <list-info
             v-if="activeFilesCurrentPage.length > 0"
-            class="uk-width-1-1 oc-my-s"
+            class="oc-width-1-1 oc-my-s"
             :files="totalFilesCount.files"
             :folders="totalFilesCount.folders"
             :size="totalFilesSize"

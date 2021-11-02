@@ -22,7 +22,7 @@
       <div class="files-app-bar-actions">
         <div
           v-if="showActions || selectedFiles.length > 0 || isTrashbinRoute"
-          class="uk-flex-1 uk-flex uk-flex-start"
+          class="oc-flex-1 oc-flex"
         >
           <template v-if="showActions && areDefaultActionsVisible">
             <oc-button
@@ -44,7 +44,7 @@
               close-on-click
               :options="{ delayHide: 0 }"
             >
-              <ul class="uk-list">
+              <ul class="oc-list">
                 <li>
                   <file-upload
                     :path="currentPath"
@@ -70,7 +70,7 @@
                     <oc-button
                       id="new-folder-btn"
                       appearance="raw"
-                      class="uk-width-1-1"
+                      class="oc-width-1-1"
                       justify-content="left"
                       @click="showCreateResourceModal"
                     >
@@ -84,7 +84,7 @@
                     <oc-button
                       appearance="raw"
                       justify-content="left"
-                      :class="['new-file-btn-' + newFileHandler.ext, 'uk-width-1-1']"
+                      :class="['new-file-btn-' + newFileHandler.ext, 'oc-width-1-1']"
                       @click="
                         showCreateResourceModal(false, newFileHandler.ext, newFileHandler.action)
                       "
@@ -97,7 +97,7 @@
               </ul>
             </oc-drop>
           </template>
-          <size-info v-if="selectedFiles.length > 0" class="oc-mr-s uk-visible@l" />
+          <size-info v-if="selectedFiles.length > 0" class="oc-mr-s oc-visible@l" />
           <batch-actions />
         </div>
         <view-options />

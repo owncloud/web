@@ -1,5 +1,5 @@
 <template>
-  <div id="oc-files-file-link" class="uk-position-relative">
+  <div id="oc-files-file-link" class="oc-position-relative">
     <div
       v-show="currentView === VIEW_SHOW"
       :key="VIEW_SHOW"
@@ -32,7 +32,7 @@
           v-text="noResharePermsMessage"
         />
         <transition-group
-          class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm"
+          class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm"
           :enter-active-class="$_transitionGroupEnter"
           :leave-active-class="$_transitionGroupLeave"
           name="custom-classes-transition"

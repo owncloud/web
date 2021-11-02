@@ -9,43 +9,39 @@
           </oc-td>
           <oc-td
             width="shrink"
-            class="oc-text-muted uk-text-nowrap"
+            class="oc-text-muted oc-text-nowrap"
             data-testid="file-versions-file-last-modified-date"
           >
             {{ formDateFromNow(item.fileInfo[DavProperty.LastModifiedDate], 'Http') }}
           </oc-td>
           <oc-td
             width="expand"
-            class="oc-text-muted uk-text-nowrap"
+            class="oc-text-muted oc-text-nowrap"
             data-testid="file-versions-file-size"
           >
             {{ getResourceSize(item.fileInfo[DavProperty.ContentLength]) }}
           </oc-td>
           <oc-td width="shrink">
-            <div class="uk-button-group">
-              <oc-button
-                v-oc-tooltip="$gettext('Restore older version')"
-                data-testid="file-versions-revert-button"
-                appearance="raw"
-                :aria-label="$gettext('Restore older version')"
-                @click="revertVersion(item)"
-              >
-                <oc-icon name="restore" />
-              </oc-button>
-            </div>
+            <oc-button
+              v-oc-tooltip="$gettext('Restore older version')"
+              data-testid="file-versions-revert-button"
+              appearance="raw"
+              :aria-label="$gettext('Restore older version')"
+              @click="revertVersion(item)"
+            >
+              <oc-icon name="restore" />
+            </oc-button>
           </oc-td>
           <oc-td width="shrink">
-            <div class="uk-button-group">
-              <oc-button
-                v-oc-tooltip="$gettext('Download older version')"
-                data-testid="file-versions-download-button"
-                appearance="raw"
-                :aria-label="$gettext('Download older version')"
-                @click="downloadVersion(item)"
-              >
-                <oc-icon name="cloud_download" />
-              </oc-button>
-            </div>
+            <oc-button
+              v-oc-tooltip="$gettext('Download older version')"
+              data-testid="file-versions-download-button"
+              appearance="raw"
+              :aria-label="$gettext('Download older version')"
+              @click="downloadVersion(item)"
+            >
+              <oc-icon name="cloud_download" />
+            </oc-button>
           </oc-td>
         </oc-tr>
       </oc-tbody>

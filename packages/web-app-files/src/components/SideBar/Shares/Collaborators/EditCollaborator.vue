@@ -21,12 +21,12 @@
     </transition>
     <p
       v-if="user.id !== collaborator.owner.name"
-      class="oc-text-muted uk-flex uk-flex-middle oc-mb-s"
+      class="oc-text-muted oc-flex oc-flex-middle oc-mb-s"
     >
       <oc-icon name="repeat" class="oc-mr-s" /> {{ collaborator.owner.displayName }}
     </p>
     <collaborator
-      class="uk-width-expand oc-mb"
+      class="oc-width-expand oc-mb"
       :collaborator="collaborator"
       :first-column="false"
     />

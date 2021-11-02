@@ -1,5 +1,5 @@
 <template>
-  <div class="uk-text-nowrap uk-text-center">
+  <div class="oc-text-nowrap oc-text-center">
     <p
       data-testid="files-list-footer-info"
       :data-test-items="items"

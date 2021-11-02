@@ -1,15 +1,15 @@
 <template>
-  <div class="uk-width-expand">
-    <div class="oc-mb-s uk-width-1-1">
+  <div class="oc-width-expand">
+    <div class="oc-mb-s oc-width-1-1">
       <h5
-        class="oc-text-bold uk-text-truncate oc-files-file-link-name oc-my-rm oc-text-initial"
+        class="oc-text-bold oc-text-truncate oc-files-file-link-name oc-my-rm oc-text-initial"
         v-text="linkName"
       />
-      <div class="uk-flex uk-flex-middle uk-width-1-1">
+      <div class="oc-flex oc-flex-middle oc-width-1-1">
         <a
           :href="link.url"
           target="_blank"
-          class="oc-files-file-link-url uk-text-truncate"
+          class="oc-files-file-link-url oc-text-truncate"
           v-text="link.url"
         />
         <copy-to-clipboard-button
@@ -50,7 +50,7 @@
           :to="viaRouterParams"
         >
           <oc-icon name="exit_to_app" />
-          <span class="uk-text-truncate files-file-links-link-via-label" v-text="viaLabel" />
+          <span class="oc-text-truncate files-file-links-link-via-label" v-text="viaLabel" />
         </oc-tag>
       </div>
     </oc-grid>

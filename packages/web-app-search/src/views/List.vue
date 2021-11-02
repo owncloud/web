@@ -1,8 +1,8 @@
 <template>
-  <div class="uk-width-1-1">
+  <div class="oc-width-1-1">
     <div
       v-if="$asyncComputed.searchResults.updating"
-      class="uk-flex uk-flex-middle uk-flex-center uk-height-1-1 uk-width-1-1"
+      class="oc-flex oc-flex-middle oc-flex-center oc-height-1-1 oc-width-1-1"
     >
       <oc-spinner size="large" :aria-hidden="true" aria-label="" />
     </div>

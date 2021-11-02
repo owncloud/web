@@ -58,7 +58,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     loadingPublicLink: {
-      selector: "//div[@class='oc-login-card uk-position-center']//span[.='Loading public link…']",
+      selector: "//div[@class='oc-login-card oc-position-center']//span[.='Loading public link…']",
       locateStrategy: 'xpath'
     },
     loginCardDialogBox: {

@@ -1,5 +1,5 @@
 <template>
-  <div id="oc-files-sharing-sidebar" class="uk-position-relative">
+  <div id="oc-files-sharing-sidebar" class="oc-position-relative">
     <div
       v-show="currentView === VIEW_SHOW"
       :key="VIEW_SHOW"
@@ -66,7 +66,7 @@
           <hr v-if="collaborators.length > 0" class="oc-mt-s oc-mb-s" />
           <transition-group
             id="files-collaborators-list"
-            class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm"
+            class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm"
             :enter-active-class="$_transitionGroupEnter"
             :leave-active-class="$_transitionGroupLeave"
             name="custom-classes-transition"

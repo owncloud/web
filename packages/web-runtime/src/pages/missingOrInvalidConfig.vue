@@ -1,7 +1,7 @@
 <template>
-  <div id="Web" class="uk-height-1-1" :style="{ backgroundImage: 'url(' + backgroundImg + ')' }">
-    <div class="oc-login" uk-height-viewport>
-      <div class="oc-login-card uk-position-center">
+  <div id="Web" class="oc-height-1-1" :style="{ backgroundImage: 'url(' + backgroundImg + ')' }">
+    <div class="oc-login oc-height-viewport">
+      <div class="oc-login-card oc-position-center">
         <img class="oc-login-logo" :src="logoImg" alt="" :aria-hidden="true" />
         <div class="oc-login-card-body">
           <h1 v-translate class="oc-login-card-title">Missing or invalid config</h1>

@@ -6,7 +6,7 @@
     </skip-to>
     <div
       v-if="user.isAuthenticated && !user.userReady"
-      class="loading-overlay uk-flex uk-flex-middle uk-flex-center"
+      class="loading-overlay oc-flex oc-flex-middle oc-flex-center"
       :style="{
         backgroundImage: 'url(' + configuration.theme.loginPage.backgroundImg + ')'
       }"
@@ -16,7 +16,7 @@
     <template v-else-if="!showHeader">
       <router-view name="fullscreen" />
     </template>
-    <div v-else id="web-content" key="core-content" class="uk-flex uk-flex-stretch">
+    <div v-else id="web-content" key="core-content" class="oc-flex oc-flex-stretch">
       <transition :name="appNavigationAnimation">
         <focus-trap v-if="isSidebarVisible" :active="isSidebarFixed && appNavigationVisible">
           <oc-sidebar-nav
@@ -30,7 +30,7 @@
             :class="sidebarClasses"
           >
             <template #header>
-              <div class="uk-text-center">
+              <div class="oc-text-center">
                 <oc-button
                   v-if="isSidebarFixed"
                   variation="inverse"
@@ -65,11 +65,11 @@
           </oc-sidebar-nav>
         </focus-trap>
       </transition>
-      <div class="uk-width-expand web-content-container">
+      <div class="oc-width-expand web-content-container">
         <top-bar
           v-if="!publicPage() && !$route.meta.verbose"
           id="oc-topbar"
-          class="uk-width-expand"
+          class="oc-width-expand"
           :applications-list="applicationsList"
           :active-notifications="activeNotifications"
           :user-id="user.username || user.id"
@@ -215,7 +215,7 @@ export default {
         return ''
       }
 
-      return 'uk-visible@l'
+      return 'oc-visible@l'
     },
 
     isSidebarFixed() {
@@ -403,6 +403,7 @@ html,
 body,
 #web,
 #web-content {
+  margin: 0;
   height: 100%;
   overflow-y: hidden;
 }
