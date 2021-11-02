@@ -144,10 +144,30 @@ export default {
     // returns the _first_ action from actions array which we now construct from
     // available mime-types coming from the app-provider and existing actions
     $_fileActions_triggerDefaultAction(resource) {
-      const actions = this.$_fileActions_getAllAvailableActions(resource).filter(
-        (action) => action.canBeDefault
-      )
-      actions[0].handler(resource, actions[0].handlerData)
+      const action = this.$_fileActions_getDefaultAction(resource)
+      action.handler(resource, action.handlerData)
+    },
+
+    $_fileActions_getDefaultAction(resource) {
+      const filterCallback = (action) =>
+        action.canBeDefault && action.isEnabled({ resource, parent: this.currentFolder })
+
+      // first priority: handlers from config
+      const defaultEditorActions = this.$_fileActions_editorActions.filter(filterCallback)
+      if (defaultEditorActions.length) {
+        return defaultEditorActions[0]
+      }
+
+      // second priority: `/app/open` endpoint of app provider if available
+      // FIXME: files app should not know anything about the `external apps` app
+      const externalAppsActions =
+        this.$_fileActions_loadExternalAppActions(resource).filter(filterCallback)
+      if (externalAppsActions.length) {
+        return externalAppsActions[0]
+      }
+
+      // fallback: system actions
+      return this.$_fileActions_systemActions.filter(filterCallback)
     },
 
     $_fileActions_getAllAvailableActions(resource) {
@@ -176,35 +196,40 @@ export default {
         return []
       }
 
-      const { app_providers: appProviders = [] } = this.mimeTypes.find(
-        (t) => t.mime_type === mimeType
-      )
+      const { app_providers: appProviders = [], default_application: defaultApplication } =
+        this.mimeTypes.find((t) => t.mime_type === mimeType)
 
       return appProviders.map((app) => {
         const label = this.$gettext('Open in %{ appName }')
         return {
+          name: app.name,
           img: app.icon,
           componentType: 'oc-button',
           class: `oc-files-actions-${app.name}-trigger`,
           isEnabled: () => true,
-          canBeDefault: true,
-          handler: () => {
-            const routeData = this.$router.resolve({
-              name: 'external-apps',
-              params: { app: app.name, file_id: resource.fileId },
-              // public-token retrieval is weak, same as packages/web-app-files/src/index.js:106
-              query: {
-                ...(this.isPublicPage && {
-                  'public-token': (this.$route.params.item || '').split('/')[0]
-                })
-              }
-            })
-            // TODO: Let users configure whether to open in same/new tab (`_blank` vs `_self`)
-            window.open(routeData.href, '_blank')
-          },
+          canBeDefault: defaultApplication === app.name,
+          handler: () => this.$_fileActions_openLink(app.name, resource.fileId),
           label: () => this.$gettextInterpolate(label, { appName: app.name })
         }
       })
+    },
+
+    $_fileActions_openLink(appName, resourceId) {
+      const routeData = this.$router.resolve({
+        name: 'external-apps',
+        params: {
+          file_id: resourceId,
+          app: appName
+        },
+        // public-token retrieval is weak, same as packages/web-app-files/src/index.js:106
+        query: {
+          ...(this.isPublicPage && {
+            'public-token': (this.$route.params.item || '').split('/')[0]
+          })
+        }
+      })
+      // TODO: Let users configure whether to open in same/new tab (`_blank` vs `_self`)
+      window.open(routeData.href, '_blank')
     }
   }
 }
