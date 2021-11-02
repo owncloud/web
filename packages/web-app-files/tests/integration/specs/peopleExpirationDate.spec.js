@@ -44,7 +44,7 @@ describe('Users can set expiration date when sharing with users or groups', () =
     jest.restoreAllMocks()
     window.sessionStorage.clear()
   })
-  test('user can set a new expiration date', async () => {
+  test(':user can set a new expiration date', async () => {
     const { findByTestId, baseElement, getByTestId, findByText, queryByTestId } = renderComponent()
     const addBtn = await findByTestId('file-shares-add-btn')
     expect(addBtn).toBeVisible()
@@ -93,8 +93,7 @@ describe('Users can set expiration date when sharing with users or groups', () =
       within(getByTestId('recipient-info-expiration-date')).getByText('Expires in 2 days')
     ).toBeVisible()
   })
-
-  test('user can edit an existing expiration date', async () => {
+  test(':user can edit an existing expiration date', async () => {
     const { findByTestId, baseElement, getByTestId, findByText, queryByTestId } = renderComponent({
       mocks: {
         $client: {
@@ -122,7 +121,7 @@ describe('Users can set expiration date when sharing with users or groups', () =
     expect(getByTestId('recipient-datepicker')).toBeVisible()
 
     await fireEvent.click(getByTestId('recipient-datepicker-btn'))
-    const newDate = getDateInFuture(4)
+    const newDate = getDateInFuture(2)
     let dateSelector = document.evaluate(
       `//span[contains(@class, "vc-day-content vc-focusable") and @tabindex="-1" and @aria-label="${newDate.toLocaleDateString(
         'en',
@@ -154,53 +153,14 @@ describe('Users can set expiration date when sharing with users or groups', () =
       await findByText(newDate.toLocaleString('en', { month: 'long', year: 'numeric' }))
     ).toBeVisible()
     await userEvent.click(dateSelector)
-    expect(await within(editDialog).findByText('Expires in 4 days')).toBeVisible()
-    await fireEvent.click(getByTestId('recipient-edit-btn-save'))
+    expect(
+      within(getByTestId('recipient-info-expiration-date')).getByText('Expires in 2 days')
+    ).toBeVisible()
     await waitFor(() => expect(queryByTestId('recipient-dialog-edit')).toBe(null))
-    expect(recipientBob).toBeVisible()
-    expect(within(recipientBob).getByText('Expires in 4 days')).toBeVisible()
-  })
-
-  test('user can remove an existing expiration date', async () => {
-    const { findByTestId, getByTestId, queryByTestId } = renderComponent({
-      mocks: {
-        $client: {
-          ...sdkMock,
-          shares: {
-            ...sdkMock.shares,
-            getShares: jest.fn().mockImplementation(() => Promise.resolve(existingShares))
-          }
-        }
-      }
-    })
-
-    const showPeopleBtn = await findByTestId('collaborators-show-people')
-    expect(showPeopleBtn).toBeVisible()
-    await fireEvent.click(showPeopleBtn)
-
-    const recipientBob = await findByTestId('collaborator-item-bob')
-
     expect(recipientBob).toBeVisible()
     expect(within(recipientBob).getByText('Expires in 2 days')).toBeVisible()
-
-    const editBtn = getByTestId('recipient-bob-btn-edit')
-    expect(editBtn).toBeVisible()
-    await fireEvent.click(editBtn)
-
-    const editDialog = await findByTestId('recipient-dialog-edit')
-    const removeExpirationBtn = getByTestId('recipient-edit-expiration-btn-remove')
-
-    expect(editDialog).toBeVisible()
-    expect(removeExpirationBtn).toBeVisible()
-    await fireEvent.click(removeExpirationBtn)
-    expect(await within(editDialog).findByText('Set expiration date')).toBeVisible()
-    await fireEvent.click(getByTestId('recipient-edit-btn-save'))
-    await waitFor(() => expect(queryByTestId('recipient-dialog-edit')).toBe(null))
-    expect(recipientBob).toBeVisible()
-    expect(within(recipientBob).queryByTestId('recipient-info-expiration-date')).toBe(null)
   })
-
-  test('default expiration is set on new shares', async () => {
+  test(':default expiration is set on new shares', async () => {
     const { findByTestId, getByTestId, queryByTestId, baseElement, findByText } = renderComponent({
       store: {
         modules: {
@@ -243,16 +203,12 @@ describe('Users can set expiration date when sharing with users or groups', () =
       return expect(queryByTestId('new-collaborator')).toBe(null)
     })
 
-    const showPeopleBtn = await findByTestId('collaborators-show-people')
-    expect(showPeopleBtn).toBeVisible()
-    await fireEvent.click(showPeopleBtn)
     expect(await findByTestId('collaborator-item-bob')).toBeVisible()
     expect(
       within(getByTestId('recipient-info-expiration-date')).getByText('Expires in 4 days')
     ).toBeVisible()
   })
-
-  test('user can set expiration date within enforced maximum date', async () => {
+  test(':user can set expiration date within enforced maximum date', async () => {
     const { findByTestId, baseElement, getByTestId, findByText, queryByTestId } = renderComponent({
       store: {
         modules: {
@@ -324,16 +280,13 @@ describe('Users can set expiration date when sharing with users or groups', () =
       return expect(queryByTestId('new-collaborator')).toBe(null)
     })
 
-    const showPeopleBtn = await findByTestId('collaborators-show-people')
-    expect(showPeopleBtn).toBeVisible()
-    await fireEvent.click(showPeopleBtn)
     expect(await findByTestId('collaborator-item-bob')).toBeVisible()
     expect(
-      within(getByTestId('recipient-info-expiration-date')).getByText('Expires in 2 days')
+      within(getByTestId('recipient-info-expiration-date')).getByText('Expires in 4 days')
     ).toBeVisible()
   })
 
-  test('user can edit expiration date within enforced maximum date', async () => {
+  test(':user can edit expiration date within enforced maximum date', async () => {
     const { findByTestId, baseElement, getByTestId, findByText, queryByTestId } = renderComponent({
       store: {
         modules: {
@@ -364,25 +317,22 @@ describe('Users can set expiration date when sharing with users or groups', () =
         }
       }
     })
-    const showPeopleBtn = await findByTestId('collaborators-show-people')
-    expect(showPeopleBtn).toBeVisible()
-    await fireEvent.click(showPeopleBtn)
 
     const recipientBob = await findByTestId('collaborator-item-bob')
 
     expect(recipientBob).toBeVisible()
     expect(within(recipientBob).getByText('Expires in 2 days')).toBeVisible()
 
-    const editBtn = getByTestId('recipient-bob-btn-edit')
+    const editBtn = getByTestId('show-collaborator-edit-options-btn')
     expect(editBtn).toBeVisible()
     await fireEvent.click(editBtn)
 
-    const editDialog = await findByTestId('recipient-dialog-edit')
+    const editDialog = await findByTestId('recipient-datepicker-btn')
 
     expect(editDialog).toBeVisible()
     expect(getByTestId('recipient-datepicker')).toBeVisible()
-    await fireEvent.click(getByTestId('recipient-datepicker-btn'))
 
+    await fireEvent.click(getByTestId('recipient-datepicker-btn'))
     const newDate = getDateInFuture(4)
     let dateSelector = document.evaluate(
       `//span[contains(@class, "vc-day-content vc-focusable") and @tabindex="-1" and @aria-label="${newDate.toLocaleDateString(
@@ -415,11 +365,14 @@ describe('Users can set expiration date when sharing with users or groups', () =
       await findByText(newDate.toLocaleString('en', { month: 'long', year: 'numeric' }))
     ).toBeVisible()
     await userEvent.click(dateSelector)
-    expect(await within(editDialog).findByText('Expires in 4 days')).toBeVisible()
-    await fireEvent.click(getByTestId('recipient-edit-btn-save'))
+    expect(
+      await within(getByTestId('recipient-info-expiration-date')).findByText('Expires in 4 days')
+    ).toBeVisible()
     await waitFor(() => expect(queryByTestId('recipient-dialog-edit')).toBe(null))
     expect(recipientBob).toBeVisible()
-    expect(within(recipientBob).getByText('Expires in 4 days')).toBeVisible()
+    expect(
+      within(getByTestId('recipient-info-expiration-date')).getByText('Expires in 4 days')
+    ).toBeVisible()
   })
 
   // https://github.com/owncloud/web/issues/3174
@@ -458,10 +411,6 @@ describe('Users can set expiration date when sharing with users or groups', () =
       }
     })
 
-    const showPeopleBtn = await findByTestId('collaborators-show-people')
-    expect(showPeopleBtn).toBeVisible()
-    await fireEvent.click(showPeopleBtn)
-
     const recipientBob = await findByTestId('collaborator-item-bob')
 
     expect(recipientBob).toBeVisible()
@@ -499,10 +448,6 @@ describe('Users can set expiration date when sharing with users or groups', () =
         }
       }
     })
-
-    const showPeopleBtn = await findByTestId('collaborators-show-people')
-    expect(showPeopleBtn).toBeVisible()
-    await fireEvent.click(showPeopleBtn)
 
     const recipientBob = await findByTestId('collaborator-item-bob')
 

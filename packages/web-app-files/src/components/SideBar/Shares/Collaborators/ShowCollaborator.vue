@@ -28,7 +28,11 @@
           <span aria-hidden="true" class="share-type" v-text="shareTypeText" />
           <span class="oc-invisible-sr" v-text="screenreaderShareDetails" />
           <span v-if="expirationDateLocale">
-            <span aria-hidden="true" class="collaborator-expiration" data-testid="recipient-info-expiration-date">
+            <span
+              aria-hidden="true"
+              class="collaborator-expiration"
+              data-testid="recipient-info-expiration-date"
+            >
               <oc-icon size="small" name="text-calendar" class="oc-mr-xs" />
               {{ shareExpirationText }}
             </span>
@@ -121,8 +125,6 @@ export default {
     },
 
     shareDisplayName() {
-      //console.log(this.collaborator.collaborator.displayName)
-      return this.collaborator.collaborator.displayName
       const displayName = this.collaborator.collaborator.displayName
       const additionalInfo = this.collaborator.collaborator.additionalInfo
       if (additionalInfo === null) return displayName

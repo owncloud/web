@@ -118,57 +118,6 @@ describe('FileShares', () => {
           })
         })
       })
-
-      describe('sharee views the shares panel', () => {
-        it('should show the owner in the collaborators list', () => {
-          const wrapper = getShallowMountedWrapper({
-            user: 'user1',
-            incomingCollaborators: [
-              {
-                fileOwner: 'user0',
-                username: 'user1'
-              }
-            ]
-          })
-
-          const owner = wrapper.find(selectors.ownerRow)
-          expect(owner.exists()).toBe(true)
-
-          expect(owner.props()).toMatchObject({
-            collaborator: {
-              collaborator: { name: 'user0', displayName: 'User Zero' },
-              shareType: 0,
-              role: { name: 'owner' }
-            },
-            modifiable: false
-          })
-        })
-
-        it('should render the sharee as file collaborators', () => {
-          const wrapper = getShallowMountedWrapper({
-            user: 'user1',
-            incomingCollaborators: [
-              {
-                fileOwner: 'user0',
-                username: 'user1'
-              }
-            ]
-          })
-
-          const collaborators = wrapper.findAll(selectors.collaboratorsRow)
-          expect(collaborators.length).toBe(1)
-
-          const collaborator1 = collaborators.at(0)
-          expect(collaborator1.props()).toMatchObject({
-            collaborator: {
-              collaborator: { name: 'user1', displayName: 'User One' },
-              shareType: 0,
-              role: roles.viewer
-            },
-            modifiable: false
-          })
-        })
-      })
     })
   })
 })
