@@ -45,7 +45,8 @@ describe('Users can set expiration date when sharing with users or groups', () =
     window.sessionStorage.clear()
   })
   test('user can set a new expiration date', async () => {
-    const { findByTestId, baseElement, getByTestId, findByText, queryByTestId } = renderComponent()
+    const component = renderComponent()
+    const { findByTestId, baseElement, getByTestId, findByText, queryByTestId } = component
     const addBtn = await findByTestId('file-shares-add-btn')
     expect(addBtn).toBeVisible()
     await fireEvent.click(addBtn)
@@ -61,24 +62,8 @@ describe('Users can set expiration date when sharing with users or groups', () =
     await fireEvent.click(getByTestId('recipient-datepicker-btn'))
 
     const newDate = getDateInFuture(2)
-    const dateSelector = document.evaluate(
-      `//span[contains(@class, "vc-day-content vc-focusable") and not(contains(@class, "is-disabled")) and text()="${newDate.getDate()}"]`,
-      baseElement,
-      null,
-      XPathResult.FIRST_ORDERED_NODE_TYPE,
-      null
-    ).singleNodeValue
+    await navigateToDate(newDate, component)
 
-    if (!dateSelector) {
-      const nextMonthBtn = baseElement.querySelector('.vc-arrow.is-right')
-
-      userEvent.click(nextMonthBtn)
-    }
-
-    expect(
-      await findByText(newDate.toLocaleString('en', { month: 'long', year: 'numeric' }))
-    ).toBeVisible()
-    userEvent.click(dateSelector)
     expect(await findByText('Expires in 2 days')).toBeVisible()
 
     const shareBtn = getByTestId('new-collaborator-share-btn')
@@ -98,7 +83,7 @@ describe('Users can set expiration date when sharing with users or groups', () =
   })
 
   test('user can edit an existing expiration date', async () => {
-    const { findByTestId, baseElement, getByTestId, findByText, queryByTestId } = renderComponent({
+    const component = renderComponent({
       mocks: {
         $client: {
           ...sdkMock,
@@ -109,6 +94,7 @@ describe('Users can set expiration date when sharing with users or groups', () =
         }
       }
     })
+    const { findByTestId, getByTestId, queryByTestId } = component
 
     const showPeopleBtn = await findByTestId('collaborators-show-people')
     expect(showPeopleBtn).toBeVisible()
@@ -132,37 +118,9 @@ describe('Users can set expiration date when sharing with users or groups', () =
     await fireEvent.click(getByTestId('recipient-datepicker-btn'))
 
     const newDate = getDateInFuture(4)
-    let dateSelector = document.evaluate(
-      `//span[contains(@class, "vc-day-content vc-focusable") and @tabindex="-1" and @aria-label="${newDate.toLocaleDateString(
-        'en',
-        formatDate
-      )}" and text()="${newDate.getDate()}"]`,
-      baseElement,
-      null,
-      XPathResult.FIRST_ORDERED_NODE_TYPE,
-      null
-    ).singleNodeValue
 
-    if (!dateSelector) {
-      const nextMonthBtn = baseElement.querySelector('.vc-arrow.is-right')
+    await navigateToDate(newDate, component)
 
-      await userEvent.click(nextMonthBtn)
-      dateSelector = document.evaluate(
-        `//span[contains(@class, "vc-day-content vc-focusable") and @tabindex="-1" and @aria-label="${newDate.toLocaleDateString(
-          'en',
-          formatDate
-        )}" and text()="${newDate.getDate()}"]`,
-        baseElement,
-        null,
-        XPathResult.FIRST_ORDERED_NODE_TYPE,
-        null
-      ).singleNodeValue
-    }
-
-    expect(
-      await findByText(newDate.toLocaleString('en', { month: 'long', year: 'numeric' }))
-    ).toBeVisible()
-    await userEvent.click(dateSelector)
     expect(await within(editDialog).findByText('Expires in 4 days')).toBeVisible()
     await fireEvent.click(getByTestId('recipient-edit-btn-save'))
     await waitFor(() => expect(queryByTestId('recipient-dialog-edit')).toBe(null))
@@ -262,7 +220,7 @@ describe('Users can set expiration date when sharing with users or groups', () =
   })
 
   test('user can set expiration date within enforced maximum date', async () => {
-    const { findByTestId, baseElement, getByTestId, findByText, queryByTestId } = renderComponent({
+    const component = renderComponent({
       store: {
         modules: {
           user: {
@@ -283,6 +241,7 @@ describe('Users can set expiration date when sharing with users or groups', () =
         }
       }
     })
+    const { findByTestId, baseElement, getByTestId, findByText, queryByTestId } = component
 
     const addBtn = await findByTestId('file-shares-add-btn')
 
@@ -299,31 +258,8 @@ describe('Users can set expiration date when sharing with users or groups', () =
     await fireEvent.click(getByTestId('recipient-datepicker-btn'))
 
     const newDate = getDateInFuture(2)
-    let dateSelector = document.evaluate(
-      `//span[contains(@class, "vc-day-content vc-focusable") and @tabindex="-1" and not(contains(@class, "is-disabled")) and text()="${newDate.getDate()}"]`,
-      baseElement,
-      null,
-      XPathResult.FIRST_ORDERED_NODE_TYPE,
-      null
-    ).singleNodeValue
+    await navigateToDate(newDate, component, 'left') // Since the calendar defaults to the enforced date we need to move left
 
-    if (!dateSelector) {
-      const nextMonthBtn = baseElement.querySelector('.vc-arrow.is-left') // the date is less than default expiration date so needs to go back
-      await userEvent.click(nextMonthBtn)
-
-      dateSelector = document.evaluate(
-        `//span[contains(@class, "vc-day-content vc-focusable") and not(contains(@class, "is-disabled")) and text()="${newDate.getDate()}"]`,
-        baseElement,
-        null,
-        XPathResult.FIRST_ORDERED_NODE_TYPE,
-        null
-      ).singleNodeValue
-    }
-
-    expect(
-      await findByText(newDate.toLocaleString('en', { month: 'long', year: 'numeric' }))
-    ).toBeVisible()
-    await userEvent.click(dateSelector)
     expect(await findByText('Expires in 2 days')).toBeVisible()
 
     const shareBtn = getByTestId('new-collaborator-share-btn')
@@ -343,7 +279,7 @@ describe('Users can set expiration date when sharing with users or groups', () =
   })
 
   test('user can edit expiration date within enforced maximum date', async () => {
-    const { findByTestId, baseElement, getByTestId, findByText, queryByTestId } = renderComponent({
+    const component = renderComponent({
       store: {
         modules: {
           user: {
@@ -373,6 +309,8 @@ describe('Users can set expiration date when sharing with users or groups', () =
         }
       }
     })
+
+    const { findByTestId, getByTestId, queryByTestId } = component
     const showPeopleBtn = await findByTestId('collaborators-show-people')
     expect(showPeopleBtn).toBeVisible()
     await fireEvent.click(showPeopleBtn)
@@ -393,37 +331,7 @@ describe('Users can set expiration date when sharing with users or groups', () =
     await fireEvent.click(getByTestId('recipient-datepicker-btn'))
 
     const newDate = getDateInFuture(4)
-    let dateSelector = document.evaluate(
-      `//span[contains(@class, "vc-day-content vc-focusable") and @tabindex="-1" and @aria-label="${newDate.toLocaleDateString(
-        'en',
-        formatDate
-      )}" and text()="${newDate.getDate()}"]`,
-      baseElement,
-      null,
-      XPathResult.FIRST_ORDERED_NODE_TYPE,
-      null
-    ).singleNodeValue
-
-    if (!dateSelector) {
-      const nextMonthBtn = baseElement.querySelector('.vc-arrow.is-right')
-
-      await userEvent.click(nextMonthBtn)
-      dateSelector = document.evaluate(
-        `//span[contains(@class, "vc-day-content vc-focusable") and @tabindex="-1" and @aria-label="${newDate.toLocaleDateString(
-          'en',
-          formatDate
-        )}" and text()="${newDate.getDate()}"]`,
-        baseElement,
-        null,
-        XPathResult.FIRST_ORDERED_NODE_TYPE,
-        null
-      ).singleNodeValue
-    }
-
-    expect(
-      await findByText(newDate.toLocaleString('en', { month: 'long', year: 'numeric' }))
-    ).toBeVisible()
-    await userEvent.click(dateSelector)
+    await navigateToDate(newDate, component)
     expect(await within(editDialog).findByText('Expires in 4 days')).toBeVisible()
     await fireEvent.click(getByTestId('recipient-edit-btn-save'))
     await waitFor(() => expect(queryByTestId('recipient-dialog-edit')).toBe(null))
@@ -563,6 +471,42 @@ function createStore(store) {
     },
     store
   )
+}
+
+async function navigateToDate(date, component, direction = 'right') {
+  if (['right', 'left'].indexOf(direction) < 0) {
+    return Promise.reject(new Error('invalid value for direction. Please use "left" or "right"'))
+  }
+  const { queryByText, baseElement, findByText } = component
+
+  while (true) {
+    const dateHeader = await queryByText(
+      date.toLocaleString('en', { month: 'long', year: 'numeric' })
+    )
+
+    if (!dateHeader) {
+      const nextMonthBtn = baseElement.querySelector(`.vc-arrow.is-${direction}`)
+      await userEvent.click(nextMonthBtn)
+    } else {
+      break
+    }
+  }
+
+  const dateSelector = document.evaluate(
+    `//span[contains(@class, "vc-day-content vc-focusable") and @tabindex="-1" and @aria-label="${date.toLocaleDateString(
+      'en',
+      formatDate
+    )}" and text()="${date.getDate()}"]`,
+    baseElement,
+    null,
+    XPathResult.FIRST_ORDERED_NODE_TYPE,
+    null
+  ).singleNodeValue
+
+  expect(
+    await findByText(date.toLocaleString('en', { month: 'long', year: 'numeric' }))
+  ).toBeVisible()
+  await userEvent.click(dateSelector)
 }
 
 function renderComponent({ store, mocks } = {}) {
