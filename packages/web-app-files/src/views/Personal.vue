@@ -165,9 +165,12 @@ export default {
         })
 
         // Load quota
-        const user = yield ref.$client.users.getUser(ref.user.id)
-
-        ref.SET_QUOTA(user.quota)
+        const promiseUser = ref.$client.users.getUser(ref.user.id)
+        // The semicolon is important to separate from the previous statement
+        ;(async () => {
+          const user = await promiseUser
+          ref.SET_QUOTA(user.quota)
+        })()
       } catch (error) {
         ref.SET_CURRENT_FOLDER(null)
         console.error(error)
