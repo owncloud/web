@@ -5,6 +5,7 @@
         :id="`oc-files-context-actions-${section.name}`"
         :key="`section-${section.name}-list`"
         class="uk-list oc-mt-s oc-files-context-actions"
+        :class="{ 'oc-my-s': i === menuSections.length - 1 }"
       >
         <li
           v-for="(action, j) in section.items"
@@ -75,8 +76,8 @@ export default {
   ],
 
   props: {
-    item: {
-      type: Object,
+    items: {
+      type: Array,
       required: true
     }
   },
@@ -86,6 +87,15 @@ export default {
 
     menuSections() {
       const sections = []
+
+      if (this.items.length > 1) {
+        sections.push({
+          name: 'batch-actions',
+          items: this.menuItemsBatchActions
+        })
+        return sections
+      }
+
       if (this.menuItemsContext.length) {
         sections.push({
           name: 'context',
@@ -109,9 +119,23 @@ export default {
 
     filterParams() {
       return {
-        resource: this.item,
+        resource: this.items[0],
+        resources: this.items,
         parent: this.currentFolder
       }
+    },
+
+    menuItemsBatchActions() {
+      return [
+        ...this.$_rename_items,
+        ...this.$_move_items,
+        ...this.$_copy_items,
+        ...this.$_restore_items,
+        ...this.$_acceptShare_items,
+        ...this.$_declineShare_items,
+        ...this.$_delete_items,
+        ...this.$_showActions_items
+      ].filter((item) => item.isEnabled(this.filterParams))
     },
 
     menuItemsContext() {
