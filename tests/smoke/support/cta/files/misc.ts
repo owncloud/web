@@ -21,12 +21,8 @@ export const resourceExists = async ({
   page: Page
   name: string
 }): Promise<boolean> => {
-  try {
-    const resource = await page.waitForSelector(`[data-test-resource-name="${name}"]`, {timeout: 100})
-    return true
-  } catch (error) {
-    return false
-  }
+  const resource = await page.$(`[data-test-resource-name="${name}"]`)
+  return !!resource  
 }
 
 export const waitForResources = async ({

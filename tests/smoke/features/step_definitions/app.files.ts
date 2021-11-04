@@ -299,12 +299,11 @@ Then('{string} checks whether the following resource(s) exist', async function(
   const resources = stepTable.raw().map(f => f[0])
 
   for (const resource of resources) {
-    await allFilesPage.checkThatResourceExist({ name: resource })
+    await allFilesPage.resourceExist({ name: resource })
   }
 })
 
 Then('{string} checks whether the following resource(s) not exist', async function(
-
   this: World,
   stepUser: string,
   stepTable: DataTable
@@ -314,7 +313,7 @@ Then('{string} checks whether the following resource(s) not exist', async functi
   const resources = stepTable.raw().map(f => f[0])
 
   for (const resource of resources) {
-    await allFilesPage.checkThatResourceDoesNotExist({ name: resource })
+    await allFilesPage.resourceExist({ name: resource, notExist: true })
   }
 })
 
@@ -328,7 +327,7 @@ Then('{string} checks that new version exists', async function(
   const resources = stepTable.raw().map(f => f[0])
 
   for (const resource of resources) {
-    await allFilesPage.versionExist({ resource: resource })
+    await allFilesPage.resourceExist({ name: resource, version: true })
   }
 })
 

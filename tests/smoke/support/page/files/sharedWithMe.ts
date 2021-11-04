@@ -9,7 +9,7 @@ export class SharedWithMePage {
 
   async navigate(): Promise<void> {
     const { page } = this.actor
-    await (await page.waitForSelector('a[href="#/files/list/shared-with-me"]')).click()
+    await page.click('a[href="#/files/list/shared-with-me"]')
   }
 
   async acceptShares({ name }: { name: string }): Promise<void> {
