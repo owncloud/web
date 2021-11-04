@@ -18,6 +18,9 @@ const componentStubs = {
 }
 
 const $route = {
+  query: {
+    'public-token': 'a-token'
+  },
   params: {
     app: 'exampleApp',
     file_id: '2147491323'
@@ -30,6 +33,7 @@ const storeOptions = {
     configuration: jest.fn(() => ({
       server: 'http://example.com/'
     })),
+    userReady: () => true,
     capabilities: jest.fn(() => ({
       files: {
         app_providers: [
@@ -84,7 +88,7 @@ describe('The app provider extension', () => {
     fetchMock.resetMocks()
   })
 
-  it('should show a loading spinner while loading', () => {
+  it('should show a loading spinner while loading', async () => {
     global.fetch = jest.fn(() =>
       setTimeout(() => {
         Promise.resolve({
@@ -94,18 +98,20 @@ describe('The app provider extension', () => {
       }, 500)
     )
     const wrapper = createShallowMountWrapper()
-
+    await wrapper.vm.$nextTick()
     expect(wrapper).toMatchSnapshot()
   })
   it('should show a meaningful message if an error occurs during loading', async () => {
     fetchMock.mockReject(new Error('fake error message'))
     const wrapper = createShallowMountWrapper()
     await wrapper.vm.$nextTick()
+    await wrapper.vm.$nextTick()
     expect(wrapper).toMatchSnapshot()
   })
   it('should fail for unauthenticated users', async () => {
     fetchMock.mockResponseOnce({ status: 401 })
     const wrapper = createShallowMountWrapper()
+    await wrapper.vm.$nextTick()
     await wrapper.vm.$nextTick()
     expect(wrapper).toMatchSnapshot()
   })
@@ -131,7 +137,6 @@ describe('The app provider extension', () => {
         json: () => providerSuccessResponsePost
       })
     )
-
     const wrapper = createShallowMountWrapper()
     await wrapper.vm.$nextTick()
     await wrapper.vm.$nextTick()
