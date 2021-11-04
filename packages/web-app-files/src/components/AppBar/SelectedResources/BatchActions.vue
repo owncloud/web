@@ -1,30 +1,33 @@
 <template>
-  <div class="uk-flex uk-flex-middle">
+  <ul class="uk-list oc-files-appbar-batch-actions oc-my-rm uk-width-1-1">
     <template v-if="isTrashbinRoute">
-      <oc-button
-        v-if="selectedFiles.length > 0"
-        id="restore-selected-btn"
-        key="restore-btn"
-        variation="primary"
-        class="oc-mr-s"
-        @click="restoreFiles()"
-      >
-        <oc-icon name="restore" />
-        <translate>Restore</translate>
-      </oc-button>
-      <oc-button
-        v-if="!isEmpty"
-        id="delete-selected-btn"
-        key="delete-btn"
-        variation="danger"
-        @click="selectedFiles.length < 1 ? emptyTrashbin() : $_deleteResources_displayDialog()"
-      >
-        <oc-icon name="delete" />
-        {{ emptyTrashbinButtonText }}
-      </oc-button>
+      <li>
+        <oc-button
+          v-if="selectedFiles.length > 0"
+          id="restore-selected-btn"
+          key="restore-btn"
+          variation="primary"
+          @click="restoreFiles()"
+        >
+          <oc-icon name="restore" />
+          <translate>Restore</translate>
+        </oc-button>
+      </li>
+      <li>
+        <oc-button
+          v-if="!isEmpty"
+          id="delete-selected-btn"
+          key="delete-btn"
+          variation="danger"
+          @click="selectedFiles.length < 1 ? emptyTrashbin() : $_deleteResources_displayDialog()"
+        >
+          <oc-icon name="delete" />
+          {{ emptyTrashbinButtonText }}
+        </oc-button>
+      </li>
     </template>
-    <oc-grid v-if="displayBulkActions" gutter="small">
-      <div v-if="canDownload">
+    <template v-if="displayBulkActions">
+      <li v-if="canDownload">
         <oc-button
           id="download-selected-btn"
           key="download-selected-btn"
@@ -34,8 +37,8 @@
           <oc-icon name="archive" />
           <translate>Download</translate>
         </oc-button>
-      </div>
-      <div v-if="canCopy">
+      </li>
+      <li v-if="canCopy">
         <oc-button
           id="copy-selected-btn"
           key="copy-selected-btn"
@@ -45,8 +48,8 @@
           <oc-icon name="file_copy" />
           <translate>Copy</translate>
         </oc-button>
-      </div>
-      <div v-if="canMove">
+      </li>
+      <li v-if="canMove">
         <oc-button
           id="move-selected-btn"
           key="move-selected-btn"
@@ -56,8 +59,8 @@
           <oc-icon name="folder-move" />
           <translate>Move</translate>
         </oc-button>
-      </div>
-      <div v-if="canDelete">
+      </li>
+      <li v-if="canDelete">
         <oc-button
           id="delete-selected-btn"
           key="delete-selected-btn"
@@ -67,8 +70,8 @@
           <oc-icon name="delete" />
           <translate>Delete</translate>
         </oc-button>
-      </div>
-      <div v-if="canAccept">
+      </li>
+      <li v-if="canAccept">
         <oc-button
           id="accept-selected-shares-btn"
           key="accept-shares-btn"
@@ -78,8 +81,8 @@
           <oc-icon name="check" />
           <translate>Accept</translate>
         </oc-button>
-      </div>
-      <div v-if="canDecline">
+      </li>
+      <li v-if="canDecline">
         <oc-button
           id="decline-selected-shares-btn"
           key="decline-shares-btn"
@@ -89,9 +92,9 @@
           <oc-icon name="not_interested" />
           <translate>Decline</translate>
         </oc-button>
-      </div>
-    </oc-grid>
-  </div>
+      </li>
+    </template>
+  </ul>
 </template>
 
 <script>
@@ -390,3 +393,23 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.oc-files-appbar-batch-actions {
+  display: block;
+  li {
+    float: left !important;
+    margin-top: 10px;
+    padding-right: 10px;
+  }
+
+  @media only screen and (min-width: 1200px) {
+    align-items: center;
+    display: flex;
+    gap: 10px;
+    li {
+      margin-top: 0 !important;
+    }
+  }
+}
+</style>
