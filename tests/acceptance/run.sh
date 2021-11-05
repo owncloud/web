@@ -169,9 +169,11 @@ fi
 
 if [ "${RERUN_FAILED_WEBUI_SCENARIOS}" = true ]
 then
-	RETRY_OPTION=" --retry 1"
+	RETRY_OPTION="--retry 1"
+	echo "Failing tests will be automatically retried once"
 else
 	RETRY_OPTION=" "
+	echo "Failing tests will not be retried"
 fi
 
 RUN_ACCEPTANCE_TESTS="cucumber-js ${RETRY_OPTION} --require-module @babel/register --require-module @babel/polyfill --require setup.js --require stepDefinitions --format @cucumber/pretty-formatter"
