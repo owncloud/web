@@ -178,6 +178,8 @@ fi
 
 RUN_ACCEPTANCE_TESTS="cucumber-js ${RETRY_OPTION} --require-module @babel/register --require-module @babel/polyfill --require setup.js --require stepDefinitions --format @cucumber/pretty-formatter"
 
+echo "Running acceptance tests with: ${RUN_ACCEPTANCE_TESTS}"
+
 if [ -z "${TEST_TAGS}" ]
 then
 	CUCUMBER_PUBLISH_ENABLED=false yarn ${RUN_ACCEPTANCE_TESTS} ${TEST_PATHS[@]} | tee -a 'logfile.txt'
