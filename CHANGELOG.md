@@ -11,6 +11,7 @@ Summary
 * Bugfix - Fix location picker breadcrumb url encoding: [#5940](https://github.com/owncloud/web/pull/5940)
 * Bugfix - Context menu rendering: [#5952](https://github.com/owncloud/web/pull/5952)
 * Enhancement - Default action order: [#5952](https://github.com/owncloud/web/pull/5952)
+* Enhancement - Reduced sidebar width: [#5981](https://github.com/owncloud/web/issues/5981)
 
 Details
 -------
@@ -39,6 +40,14 @@ Details
    Previously the external apps took precedence.
 
    https://github.com/owncloud/web/pull/5952
+
+* Enhancement - Reduced sidebar width: [#5981](https://github.com/owncloud/web/issues/5981)
+
+   We reduced the sidebar width to give the files list more horizontal room, especially on medium
+   sized screens.
+
+   https://github.com/owncloud/web/issues/5981
+   https://github.com/owncloud/web/pull/5983
 
 Changelog for ownCloud Web [4.4.0] (2021-10-26)
 =======================================
