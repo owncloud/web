@@ -139,7 +139,7 @@ export default {
     ...mapMutations('Files', ['LOAD_FILES', 'SET_FILE_SELECTION', 'CLEAR_CURRENT_FILES_LIST']),
 
     isResourceInSelection(resource) {
-      return(this.selected?.includes(resource))
+      return this.selected?.includes(resource)
     }
   }
 }

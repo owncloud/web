@@ -196,7 +196,7 @@ export default {
     },
 
     isResourceInSelection(resource) {
-      return(this.selected?.includes(resource))
+      return this.selected?.includes(resource)
     }
   }
 }
