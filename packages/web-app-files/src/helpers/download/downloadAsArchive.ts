@@ -12,7 +12,7 @@ interface TriggerDownloadAsArchiveOptions {
   fileIds: string[]
   archiverService?: ArchiverService
   clientService?: ClientService
-  publicToken?: ClientService
+  publicToken?: string
 }
 
 export const triggerDownloadAsArchive = async (
@@ -35,8 +35,8 @@ export const triggerDownloadAsArchive = async (
   }
 
   const queryParams = [
-    ...options.fileIds.map((id) => `id=${id}`),
-    options.publicToken ? `public-token=${options.publicToken}` : ''
+    options.publicToken ? `public-token=${options.publicToken}` : '',
+    ...options.fileIds.map((id) => `id=${id}`)
   ].filter(Boolean)
   const archiverUrl = archiverService.url + '?' + queryParams.join('&')
 
