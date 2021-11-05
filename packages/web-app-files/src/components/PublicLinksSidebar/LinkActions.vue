@@ -9,7 +9,7 @@
         class="oc-files-file-link-edit oc-mr-xs"
         @click="editLink"
       >
-        <oc-icon name="edit" />
+        <oc-icon id="editButtonLabel" name="edit" />
       </oc-button>
       <oc-button
         v-oc-tooltip="deleteButtonLabel"
