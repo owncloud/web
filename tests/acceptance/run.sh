@@ -35,6 +35,12 @@ do
 	shift
 done
 
+# Default to retrying failing tests
+if [ -z "${RERUN_FAILED_WEBUI_SCENARIOS}" ]
+then
+	RERUN_FAILED_WEBUI_SCENARIOS=true
+fi
+
 # An array of the suites that were run. Each value is a string like:
 # webUILogin
 # webUIPrivateLinks
@@ -161,7 +167,16 @@ then
 	TEST_PATHS+=( "${FEATURES_DIR}" )
 fi
 
-RUN_ACCEPTANCE_TESTS="cucumber-js --retry 1 --require-module @babel/register --require-module @babel/polyfill --require setup.js --require stepDefinitions --format @cucumber/pretty-formatter"
+if [ "${RERUN_FAILED_WEBUI_SCENARIOS}" = true ]
+then
+	RETRY_OPTION="--retry 1"
+	echo "Failing tests will be automatically retried once"
+else
+	RETRY_OPTION=" "
+	echo "Failing tests will not be retried"
+fi
+
+RUN_ACCEPTANCE_TESTS="cucumber-js ${RETRY_OPTION} --require-module @babel/register --require-module @babel/polyfill --require setup.js --require stepDefinitions --format @cucumber/pretty-formatter"
 
 if [ -z "${TEST_TAGS}" ]
 then

@@ -1223,7 +1223,7 @@ def acceptance(ctx):
                         steps += copyFilesForUpload()
 
                         # run the acceptance tests
-                        steps += runWebuiAcceptanceTests(suite, alternateSuiteName, params["filterTags"], params["extraEnvironment"], browser, params["visualTesting"], params["screenShots"])
+                        steps += runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, params["filterTags"], params["extraEnvironment"], browser, params["visualTesting"], params["screenShots"])
 
                         # capture the screenshots from visual regression testing (only runs on failure)
                         if (params["visualTesting"]):
@@ -2115,7 +2115,7 @@ def copyFilesForUpload():
         ],
     }]
 
-def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironment, browser, visualTesting, screenShots):
+def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnvironment, browser, visualTesting, screenShots):
     environment = {}
     if (filterTags != ""):
         environment["TEST_TAGS"] = filterTags
@@ -2140,6 +2140,8 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
             "from_secret": "sauce_access_key",
         }
 
+    if ctx.build.event == "cron":
+        environment["RERUN_FAILED_WEBUI_SCENARIOS"] = "false"
     if (visualTesting):
         environment["VISUAL_TEST"] = "true"
     if (screenShots):
