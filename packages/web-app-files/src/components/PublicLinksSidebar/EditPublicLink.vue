@@ -39,7 +39,7 @@
               id="oc-files-file-link-expire-date-delete"
               class="oc-mt-s"
               appearance="raw"
-              @click="expireDate = null"
+              @click="focusDatepicker"
               v-text="$gettext('Remove expiration date')"
             />
           </div>
@@ -282,6 +282,14 @@ export default {
     ...mapActions('Files', ['addLink', 'updateLink']),
     ...mapMutations('Files', ['SET_APP_SIDEBAR_ACCORDION_CONTEXT']),
 
+    focusDatepicker() {
+      this.expireDate = null
+      this.$nextTick(() => {
+        console.log('DATEPICKER: ', this.$refs.datepicker)
+        document.getElementById('oc-files-file-link-expire-date').click()
+      })
+    },
+
     setRole() {
       const permissions = parseInt(this.publicLinkInEdit.permissions, 10)
 
@@ -364,6 +372,7 @@ export default {
         })
     },
 
+    // TODO: Focus button with id editButtonLabel
     $_closeForm() {
       this.SET_APP_SIDEBAR_ACCORDION_CONTEXT('showLinks')
     },
