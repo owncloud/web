@@ -128,5 +128,17 @@
   },
   "engines": {
     "node": ">=14 <=16"
+  },
+  "packageManager": "yarn@3.1.0",
+  "dependenciesMeta": {
+    "@playwright/test": {
+      "built": true
+    },
+    "playwright": {
+      "built": true
+    },
+    "vue-concurrency": {
+      "built": true
+    }
   }
 }
