@@ -91,9 +91,11 @@ export default {
     await unauthenticatedUserReady(this.$router, this.$store)
 
     this.loading = true
-    const publicLinkPassword = this.publicLinkPassword
+
+    // build headers with respect to the actual auth situation
     const { 'public-token': publicToken } = this.$route.query
-    const token = this.getToken
+    const publicLinkPassword = this.publicLinkPassword
+    const accessToken = this.getToken
     const headers = {
       'X-Requested-With': 'XMLHttpRequest',
       ...(publicToken && { 'public-token': publicToken }),
@@ -101,11 +103,12 @@ export default {
         Authorization:
           'Basic ' + Buffer.from(['public', publicLinkPassword].join(':')).toString('base64')
       }),
-      ...(token && {
-        Authorization: 'Bearer ' + token
+      ...(accessToken && {
+        Authorization: 'Bearer ' + accessToken
       })
     }
 
+    // fetch iframe params for app and file
     const configUrl = this.configuration.server
     const appOpenUrl = this.capabilities.files.app_providers[0].open_url.replace('/app', 'app')
     const url = configUrl + appOpenUrl + '?file_id=' + this.fileId + '&app_name=' + this.appName
