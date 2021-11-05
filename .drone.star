@@ -1223,7 +1223,7 @@ def acceptance(ctx):
                         steps += copyFilesForUpload()
 
                         # run the acceptance tests
-                        steps += runWebuiAcceptanceTests(suite, alternateSuiteName, params["filterTags"], params["extraEnvironment"], browser, params["visualTesting"], params["screenShots"])
+                        steps += runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, params["filterTags"], params["extraEnvironment"], browser, params["visualTesting"], params["screenShots"])
 
                         # capture the screenshots from visual regression testing (only runs on failure)
                         if (params["visualTesting"]):
@@ -2115,7 +2115,7 @@ def copyFilesForUpload():
         ],
     }]
 
-def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironment, browser, visualTesting, screenShots):
+def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnvironment, browser, visualTesting, screenShots):
     environment = {}
     if (filterTags != ""):
         environment["TEST_TAGS"] = filterTags
