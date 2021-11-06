@@ -15235,15 +15235,6 @@ typescript@^4.3.2:
   languageName: node
   linkType: hard
 
-"vue-axe@npm:^2.4.4":
-  version: 2.4.4
-  resolution: "vue-axe@npm:2.4.4"
-  peerDependencies:
-    axe-core: 3.x || 4.x
-  checksum: 6e078ad12a8bbc970fcc574d197650528fbad627301c3301b442f3cd8ed410b312085de045dda379b54e937f06ee254d7dee1d77fba16f6f3c25bcb64f4e65db
-  languageName: node
-  linkType: hard
-
 "vue-concurrency@npm:^2.2.1":
   version: 2.2.1
   resolution: "vue-concurrency@npm:2.2.1"
@@ -15528,7 +15519,6 @@ typescript@^4.3.2:
     v-calendar: ^2.3.2
     vue: ^2.6.10
     vue-async-computed: ^3.9.0
-    vue-axe: ^2.4.4
     vue-concurrency: ^2.2.1
     vue-drag-drop: ^1.1.4
     vue-events: ^3.1.0
