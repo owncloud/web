@@ -7,7 +7,7 @@ import { VueConstructor } from 'vue'
 import { loadTheme } from '../helpers/theme'
 import OwnCloud from 'owncloud-sdk'
 import { sync as routerSync } from 'vuex-router-sync'
-import getTextPlugin from 'vue-gettext'
+import { createGettext } from '@jshmrtn/vue3-gettext'
 import set from 'lodash-es/set'
 
 /**
@@ -186,12 +186,13 @@ export const announceTranslations = ({
   supportedLanguages: unknown
   translations: unknown
 }): void => {
-  vue.use(getTextPlugin, {
-    availableLanguages: supportedLanguages,
+  const getText = createGettext({
+    availableLanguages: (supportedLanguages as unknown) as any,
     defaultLanguage: navigator.language.substring(0, 2),
-    translations,
+    translations: (translations as unknown) as any,
     silent: true
   })
+  vue.use(getText)
 }
 
 /**

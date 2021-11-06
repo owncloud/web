@@ -50,14 +50,14 @@
         </oc-button>
       </div>
       <div>
-        <oc-button v-if="saving" key="edit-collaborator-saving-button" :disabled="true">
+        <oc-button v-if="saving" key="edit-collaborator-saving-button-disabled" :disabled="true">
           <oc-spinner :aria-label="$gettext('Saving Share')" size="small" />
           <span v-translate :aria-hidden="true">Saving Share</span>
         </oc-button>
         <oc-button
           v-else
           id="files-collaborators-collaborator-save-share-button"
-          key="edit-collaborator-saving-button"
+          key="edit-collaborator-saving-button-enabled"
           data-testid="recipient-edit-btn-save"
           :aria-label="$gettext('Save Share')"
           :disabled="!$_hasChanges"
