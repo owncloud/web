@@ -15,7 +15,6 @@ import Vue2TouchEvents from 'vue2-touch-events'
 import PortalVue from 'portal-vue'
 import AsyncComputed from 'vue-async-computed'
 import { Drag, Drop } from 'vue-drag-drop'
-import VueAxe from 'vue-axe'
 import VueRouter from 'vue-router'
 import Vuex from 'vuex'
 import VueCompositionAPI from '@vue/composition-api'
@@ -35,12 +34,6 @@ Vue.use(ChunkedUpload)
 Vue.use(Vue2TouchEvents)
 Vue.use(PortalVue)
 Vue.use(AsyncComputed)
-
-if (process.env.NODE_ENV === 'development') {
-  Vue.use(VueAxe, {
-    allowConsoleClears: false
-  })
-}
 
 Vue.component('drag', Drag)
 Vue.component('drop', Drop)
