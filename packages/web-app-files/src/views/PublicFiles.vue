@@ -59,6 +59,7 @@ import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../constants'
 import debounce from 'lodash-es/debounce'
+import merge from 'lodash-es/merge'
 import { buildResource } from '../helpers/resources'
 import { bus } from 'web-pkg/src/instance'
 import { useTask } from 'vue-concurrency'
@@ -70,6 +71,41 @@ import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
 import { DavProperties } from 'web-pkg/src/constants'
+
+// hacky, get rid asap, just a workaround
+const unauthenticatedUserReady = async (router, store) => {
+  // exit early which could happen if
+  // the resources get reloaded
+  // another application decided that the user is already provisioned
+  if (store.getters.userReady) {
+    return
+  }
+
+  // pretty low level, error prone and weak, add method to the store to obtain the publicToken
+  // it looks like that something was available in the past, store.state.Files.publicLinkInEdit ...
+  const publicToken = (router.currentRoute.params.item || '').split('/')[0]
+  const publicLinkPassword = store.getters['Files/publicLinkPassword']
+
+  if (publicLinkPassword) {
+    return
+  }
+
+  await store.dispatch('loadCapabilities', {
+    publicToken,
+    ...(publicLinkPassword && { user: 'public', password: publicLinkPassword })
+  })
+
+  // ocis at the moment is not able to create archives for public links that are password protected
+  // till this is supported by the backend remove it hard as a workaround
+  if (publicLinkPassword) {
+    store.commit(
+      'SET_CAPABILITIES',
+      merge({}, store.getters.capabilities, { files: { archivers: null } })
+    )
+  }
+
+  store.commit('SET_USER_READY', true)
+}
 
 const visibilityObserver = new VisibilityObserver()
 export default {
@@ -124,9 +160,18 @@ export default {
 
         if (error.statusCode === 401) {
           ref.redirectToResolvePage()
+          return
         }
       }
 
+      // this is a workAround till we have a real bootProcess
+      // if a visitor is able to view the current page
+      // the user is ready and the TOO LATE provisioning can start.
+      // there is no other way at the moment to find out if:
+      // publicLink is password protected
+      // public link is viewable
+      // so we expect if the user is able to load resources, so he also is ready
+      yield unauthenticatedUserReady(ref.$router, ref.$store)
       ref.accessibleBreadcrumb_focusAndAnnounceBreadcrumb(sameRoute)
     }).restartable()
 
