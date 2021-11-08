@@ -138,7 +138,7 @@ When(
     await sharedWithMePage.navigate()
 
     for (const share of shares) {
-      await sharedWithMePage.acceptShares({ name: share })
+      await sharedWithMePage.acceptShare({ name: share })
     }
   }
 )
@@ -282,7 +282,7 @@ When(
     const shares = stepTable.raw().map((f) => f[0])
 
     for (const share of shares) {
-      await sharedWithMePage.declineShares({ name: share })
+      await sharedWithMePage.declineShare({ name: share })
     }
   }
 )

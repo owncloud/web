@@ -12,7 +12,7 @@ export class SharedWithMePage {
     await page.click('a[href="#/files/list/shared-with-me"]')
   }
 
-  async acceptShares({ name }: { name: string }): Promise<void> {
+  async acceptShare({ name }: { name: string }): Promise<void> {
     const { page } = this.actor
 
     await page
@@ -22,7 +22,7 @@ export class SharedWithMePage {
       .click()
   }
 
-  async declineShares({ name }: { name: string }): Promise<void> {
+  async declineShare({ name }: { name: string }): Promise<void> {
     const { page } = this.actor
 
     await page
