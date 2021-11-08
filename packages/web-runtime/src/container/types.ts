@@ -72,6 +72,7 @@ export interface ClassicApplicationScript {
   initialize?: () => void
   ready?: () => void
   mounted?: () => void
+  userReady?: () => void
 }
 
 /** RuntimeApi defines the publicly available runtime api */

@@ -1,3 +1,4 @@
+import get from 'lodash-es/get'
 import { mapGetters, mapActions, mapState } from 'vuex'
 
 import { checkRoute } from '../helpers/route'
@@ -51,6 +52,7 @@ export default {
   computed: {
     ...mapState(['apps']),
     ...mapGetters('Files', ['highlightedFile', 'currentFolder']),
+    ...mapGetters('External', ['mimeTypes']),
     ...mapGetters(['capabilities', 'configuration']),
 
     $_fileActions_systemActions() {
@@ -95,7 +97,6 @@ export default {
   },
 
   methods: {
-    ...mapGetters('External', ['getMimeTypes']),
     ...mapActions(['openFile']),
 
     $_fileActions_openEditor(editor, filePath, fileId, mode) {
@@ -164,23 +165,22 @@ export default {
 
     // returns an array of available external Apps
     // to open a resource with a specific mimeType
+    // FIXME: filesApp should not know anything about any other app, dont cross the line!!! BAD
     $_fileActions_loadExternalAppActions(resource) {
       const { mimeType } = resource
-      if (mimeType === undefined || !this.capabilities?.files?.app_providers) {
+      if (
+        mimeType === undefined ||
+        !get(this, 'capabilities.files.app_providers') ||
+        !get(this, 'mimeTypes', []).length
+      ) {
         return []
       }
 
-      const allAvailableMimeTypes = this.getMimeTypes()
-      if (!allAvailableMimeTypes?.length) {
-        return []
-      }
+      const { app_providers: appProviders = [] } = this.mimeTypes.find(
+        (t) => t.mime_type === mimeType
+      )
 
-      const availableMimeTypes = allAvailableMimeTypes.find((t) => t.mime_type === mimeType)
-      if (!availableMimeTypes) {
-        return []
-      }
-
-      return availableMimeTypes.app_providers.map((app) => {
+      return appProviders.map((app) => {
         const label = this.$gettext('Open in %{ appName }')
         return {
           img: app.icon,
@@ -188,19 +188,23 @@ export default {
           class: `oc-files-actions-${app.name}-trigger`,
           isEnabled: () => true,
           canBeDefault: true,
-          handler: () => this.$_fileActions_openLink(app.name, resource.fileId),
+          handler: () => {
+            const routeData = this.$router.resolve({
+              name: 'external-apps',
+              params: { app: app.name, file_id: resource.fileId },
+              // public-token retrieval is weak, same as packages/web-app-files/src/index.js:106
+              query: {
+                ...(this.isPublicPage && {
+                  'public-token': (this.$route.params.item || '').split('/')[0]
+                })
+              }
+            })
+            // TODO: Let users configure whether to open in same/new tab (`_blank` vs `_self`)
+            window.open(routeData.href, '_blank')
+          },
           label: () => this.$gettextInterpolate(label, { appName: app.name })
         }
       })
-    },
-
-    $_fileActions_openLink(appName, resourceId) {
-      const routeData = this.$router.resolve({
-        name: 'external-apps',
-        params: { app: appName, file_id: resourceId }
-      })
-      // TODO: Let users configure whether to open in same/new tab (`_blank` vs `_self`)
-      window.open(routeData.href, '_blank')
     }
   }
 }

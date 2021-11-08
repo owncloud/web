@@ -36,6 +36,10 @@ export default {
   computed: {
     ...mapGetters('Files', ['highlightedFile', 'currentFolder']),
 
+    appList() {
+      return this.$_fileActions_loadApps(this.highlightedFile) || []
+    },
+
     actions() {
       return this.$_fileActions_getAllAvailableActions(this.highlightedFile)
     }

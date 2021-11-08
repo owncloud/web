@@ -288,7 +288,7 @@ export default {
       // FIXME: at the moment the signing key is not cached, thus it will be loaded again on each request.
       // workaround for now: Load file as blob for images, load as signed url (if supported) for everything else.
       let promise
-      if (this.isActiveMediaFileTypeImage || !this.isUrlSigningEnabled) {
+      if (this.isActiveMediaFileTypeImage || !this.isUrlSigningEnabled || !this.$route.meta.auth) {
         promise = this.mediaSource(url, 'url', null)
       } else {
         promise = this.$client.signUrl(url, 86400) // Timeout of the signed URL = 24 hours
