@@ -1,0 +1,5 @@
+Enhancement: Rename `_chunks` folder to `chunks`
+
+We've renamed the `_chunks` folder to `chunks` in the ownCloud Web build output in order to make it more easily embedable with the Go embed directive.
+
+https://github.com/owncloud/web/pull/5988
