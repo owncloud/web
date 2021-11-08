@@ -1,5 +1,5 @@
 import MixinDeleteResources from '../../mixins/deleteResources'
-import { checkRoute } from '../../helpers/route'
+import { isPersonalRoute, isPublicFilesRoute, isTrashbinRoute } from '../../helpers/route'
 import { mapState } from 'vuex'
 import { isSameResource } from '../../helpers/resource'
 
@@ -10,19 +10,22 @@ export default {
     $_delete_items() {
       return [
         {
+          name: 'delete',
           icon: 'delete',
           label: () => this.$gettext('Delete'),
           handler: this.$_delete_trigger,
-          isEnabled: ({ resource }) => {
-            if (checkRoute(['files-shared-with-me', 'files-trashbin'], this.$route.name)) {
+          isEnabled: ({ resources }) => {
+            if (!isPersonalRoute(this.$route) && !isPublicFilesRoute(this.$route)) {
               return false
             }
 
-            if (isSameResource(resource, this.currentFolder)) {
-              return false
-            }
-
-            return resource.canBeDeleted()
+            const deleteDisabled = resources.some((resource) => {
+              if (isSameResource(resource, this.currentFolder)) {
+                return true
+              }
+              return !resource.canBeDeleted()
+            })
+            return !deleteDisabled
           },
           componentType: 'oc-button',
           class: 'oc-files-actions-delete-trigger'
@@ -32,7 +35,7 @@ export default {
           icon: 'delete',
           label: () => this.$gettext('Delete'),
           handler: this.$_delete_trigger,
-          isEnabled: () => checkRoute(['files-trashbin'], this.$route.name),
+          isEnabled: () => isTrashbinRoute(this.$route),
           componentType: 'oc-button',
           class: 'oc-files-actions-delete-trigger'
         }
@@ -40,8 +43,8 @@ export default {
     }
   },
   methods: {
-    $_delete_trigger(resource) {
-      this.$_deleteResources_displayDialog(resource, true)
+    $_delete_trigger({ resources }) {
+      this.$_deleteResources_displayDialog(resources)
     }
   }
 }

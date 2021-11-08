@@ -8,25 +8,25 @@ export default {
     $_favorite_items() {
       return [
         {
+          name: 'favorite',
           icon: 'star',
           handler: this.$_favorite_trigger,
-          label: (item) => {
-            if (item.starred) {
+          label: ({ resources }) => {
+            if (resources[0].starred) {
               return this.$gettext('Remove from favorites')
             }
             return this.$gettext('Add to favorites')
           },
-          isEnabled: () => {
-            const isRouteAllowed = checkRoute(
-              ['files-personal', 'files-favorites'],
-              this.$route.name
-            )
+          isEnabled: ({ resources }) => {
+            if (!checkRoute(['files-personal', 'files-favorites'], this.$route.name)) {
+              return false
+            }
+            if (resources.length !== 1) {
+              return false
+            }
 
             return (
-              this.isAuthenticated &&
-              this.capabilities.files &&
-              this.capabilities.files.favorites &&
-              isRouteAllowed
+              this.isAuthenticated && this.capabilities.files && this.capabilities.files.favorites
             )
           },
           componentType: 'oc-button',
@@ -38,10 +38,10 @@ export default {
   methods: {
     ...mapActions('Files', ['markFavorite']),
 
-    $_favorite_trigger(resource) {
+    $_favorite_trigger({ resources }) {
       this.markFavorite({
         client: this.$client,
-        file: resource
+        file: resources[0]
       })
         .then(() => {
           if (this.displayedItem) {
@@ -50,7 +50,7 @@ export default {
         })
         .catch(() => {
           const translated = this.$gettext('Error while starring "%{file}"')
-          const title = this.$gettextInterpolate(translated, { file: resource.name }, true)
+          const title = this.$gettextInterpolate(translated, { file: resources[0].name }, true)
           this.showMessage({
             title: title,
             status: 'danger',

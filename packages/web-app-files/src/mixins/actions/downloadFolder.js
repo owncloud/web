@@ -10,12 +10,16 @@ export default {
     $_downloadFolder_items() {
       return [
         {
+          name: 'download-archive',
           icon: 'archive',
           handler: this.$_downloadFolder_trigger,
-          label: () => {
-            return this.$gettext('Download folder')
+          label: ({ resources }) => {
+            if (resources.length === 1 && resources[0].isFolder) {
+              return this.$gettext('Download folder')
+            }
+            return this.$gettext('Download')
           },
-          isEnabled: ({ resource }) => {
+          isEnabled: ({ resources }) => {
             if (
               !checkRoute(
                 ['files-personal', 'files-public-list', 'files-favorites'],
@@ -24,13 +28,16 @@ export default {
             ) {
               return false
             }
-            if (!resource.isFolder) {
+            if (resources.length === 1 && resources[0].isFolder) {
               return false
             }
             if (!isDownloadAsArchiveAvailable()) {
               return false
             }
-            return resource.canDownload()
+            const downloadDisabled = resources.some((resource) => {
+              return !resource.canDownload()
+            })
+            return !downloadDisabled
           },
           canBeDefault: true,
           componentType: 'oc-button',
@@ -40,16 +47,20 @@ export default {
     }
   },
   methods: {
-    async $_downloadFolder_trigger(resource) {
+    async $_downloadFolder_trigger({ resources }) {
       await triggerDownloadAsArchive({
-        fileIds: [resource.fileId],
+        fileIds: resources.map((resource) => resource.fileId),
         ...(isPublicFilesRoute(this.$route) && {
           publicToken: this.$route.params.item.split('/')[0]
         })
       }).catch((e) => {
         console.error(e)
         this.showMessage({
-          title: this.$gettext('Error downloading the selected folder.'),
+          title: this.$ngettext(
+            'Error downloading the selected folder.',
+            'Error downloading the selected files.',
+            this.selectedFiles.length
+          ),
           status: 'danger'
         })
       })

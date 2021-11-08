@@ -1,6 +1,6 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 import { cloneStateObject } from '../helpers/store'
-import { checkRoute } from '../helpers/route'
+import { isTrashbinRoute } from '../helpers/route'
 import PQueue from 'p-queue'
 
 export default {
@@ -15,7 +15,7 @@ export default {
     ...mapGetters(['user']),
 
     $_deleteResources_isInTrashbin() {
-      return checkRoute(['files-trashbin'], this.$route.name)
+      return isTrashbinRoute(this.$route)
     },
 
     $_deleteResources_resources() {
@@ -170,13 +170,8 @@ export default {
         : this.$_deleteResources_filesList_delete()
     },
 
-    $_deleteResources_displayDialog(resources = null, direct = false) {
-      // Deleting a resource via direct action
-      if (direct) {
-        this.resourcesToDelete = [resources]
-      } else {
-        this.resourcesToDelete = this.selectedFiles
-      }
+    $_deleteResources_displayDialog(resources) {
+      this.resourcesToDelete = [...resources]
 
       const modal = {
         variation: 'danger',
