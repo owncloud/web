@@ -22,7 +22,7 @@ export const resourceExists = async ({
   name: string
 }): Promise<boolean> => {
   const resource = await page.$(`[data-test-resource-name="${name}"]`)
-  return !!resource  
+  return !!resource
 }
 
 export const waitForResources = async ({

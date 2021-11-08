@@ -9,7 +9,8 @@ export class RuntimePage {
 
   async navigateToApp({ name }: { name: string }): Promise<void> {
     const { page } = this.actor
-    await (await page.waitForSelector('#_appSwitcherButton')).click()
+    const element = await page.waitForSelector('#_appSwitcherButton')
+    await element.click()
     await page.click(`a[href="#/${name}"]`)
   }
 

@@ -18,7 +18,7 @@ Scenario: Alice shares folder with file to Brian
   And "Alice" uploads following resources
     | resource  | to               |
     | lorem.txt | folder_to_shared | 
-  Then "Alice" checks whether the following resources exist
+  Then "Alice" ensures that the following resources exist
     | folder_to_shared/lorem.txt |
   And "Alice" shares following resources
     | resource         | user  | role   |
@@ -36,21 +36,18 @@ Scenario: Alice shares folder with file to Brian
   And "Brian" copies following resources
     | resource                 | to        |
     | Shares/folder_to_shared  | All files |
-  And "Brian" has logged out
   When "Alice" opens the "files" app
-  Then "Alice" checks whether the following resources exist
+  Then "Alice" ensures that the following resources exist
     | folder_to_shared/lorem_new.txt |
     | folder_to_shared/simple.pdf    |
   When "Alice" creates new versions of the folowing files
     | resource   | to               |
     | simple.pdf | folder_to_shared |   
-  Then "Alice" checks that new version exists
-    | folder_to_shared/simple.pdf |
-  When "Alice" removes following resources
+  Then "Alice" ensure that resource "folder_to_shared/simple.pdf" has 1 versions
+  When "Alice" deletes following resources
     | folder_to_shared/lorem_new.txt |
     | folder_to_shared               |
-  Given "Brian" has logged in
   When "Brian" opens the "files" app
-  Then "Brian" checks whether the following resource not exist
+  Then "Brian" ensures that the following resource does not exist
     | Shares/folder_to_shared |
   

@@ -251,96 +251,99 @@ Then(
   }
 )
 
-When('{string} creates new versions of the folowing file(s)', async function(
-  this: World,
-  stepUser: string,
-  stepTable: DataTable
-): Promise<void> {
-  const actor = this.actorContinent.get({ id: stepUser })
-  const { allFiles: allFilesPage } = new FilesPage({ actor })
-  const uploadInfo = stepTable.hashes().reduce((acc, stepRow) => {
-    const { to, resource } = stepRow
+When(
+  '{string} creates new versions of the folowing file(s)',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const actor = this.actorContinent.get({ id: stepUser })
+    const { allFiles: allFilesPage } = new FilesPage({ actor })
+    const uploadInfo = stepTable.hashes().reduce((acc, stepRow) => {
+      const { to, resource } = stepRow
 
-    if (!acc[to]) {
-      acc[to] = []
+      if (!acc[to]) {
+        acc[to] = []
+      }
+
+      acc[to].push(this.fileContinent.get({ name: resource }))
+
+      return acc
+    }, {})
+
+    for (const folder of Object.keys(uploadInfo)) {
+      await allFilesPage.uploadFiles({ folder, files: uploadInfo[folder], newVersion: true })
     }
-
-    acc[to].push(this.fileContinent.get({ name: resource }))
-
-    return acc
-  }, {})
-
-  for (const folder of Object.keys(uploadInfo)) {
-    await allFilesPage.uploadFiles({ folder, files: uploadInfo[folder], newVersion: true })
   }
-})
+)
 
-When('{string} declines following resource(s)', async function(
-  this: World,
-  stepUser: string,
-  stepTable: DataTable
-) {
-  const actor = this.actorContinent.get({ id: stepUser })
-  const { sharedWithMe: sharedWithMePage } = new FilesPage({ actor })
-  const shares = stepTable.raw().map(f => f[0])
+When(
+  '{string} declines following resource(s)',
+  async function (this: World, stepUser: string, stepTable: DataTable) {
+    const actor = this.actorContinent.get({ id: stepUser })
+    const { sharedWithMe: sharedWithMePage } = new FilesPage({ actor })
+    const shares = stepTable.raw().map((f) => f[0])
 
-  for (const share of shares) {
-    await sharedWithMePage.declineShares({ name: share })
+    for (const share of shares) {
+      await sharedWithMePage.declineShares({ name: share })
+    }
   }
-})
+)
 
-Then('{string} checks whether the following resource(s) exist', async function(
-  this: World,
-  stepUser: string,
-  stepTable: DataTable
-) {
-  const actor = this.actorContinent.get({ id: stepUser })
-  const { allFiles: allFilesPage } = new FilesPage({ actor })
-  const resources = stepTable.raw().map(f => f[0])
+Then(
+  '{string} ensures that the following resource(s) exist',
+  async function (this: World, stepUser: string, stepTable: DataTable) {
+    const actor = this.actorContinent.get({ id: stepUser })
+    const { allFiles: allFilesPage } = new FilesPage({ actor })
+    const resources = stepTable.raw().map((f) => f[0])
 
-  for (const resource of resources) {
-    await allFilesPage.resourceExist({ name: resource })
+    for (const resource of resources) {
+      if (!(await allFilesPage.resourceExist({ name: resource }))) {
+        throw new Error(`resource wasn't find: "${resource}"`)
+      }
+      await allFilesPage.navigate()
+    }
   }
-})
+)
 
-Then('{string} checks whether the following resource(s) not exist', async function(
-  this: World,
-  stepUser: string,
-  stepTable: DataTable
-) {
-  const actor = this.actorContinent.get({ id: stepUser })
-  const { allFiles: allFilesPage } = new FilesPage({ actor })
-  const resources = stepTable.raw().map(f => f[0])
+Then(
+  '{string} ensures that the following resource(s) do(es) not exist',
+  async function (this: World, stepUser: string, stepTable: DataTable) {
+    const actor = this.actorContinent.get({ id: stepUser })
+    const { allFiles: allFilesPage } = new FilesPage({ actor })
+    const resources = stepTable.raw().map((f) => f[0])
 
-  for (const resource of resources) {
-    await allFilesPage.resourceExist({ name: resource, notExist: true })
+    for (const resource of resources) {
+      if (await allFilesPage.resourceExist({ name: resource })) {
+        throw new Error(`resource was find: "${resource}"`)
+      }
+      await allFilesPage.navigate()
+    }
   }
-})
+)
 
-Then('{string} checks that new version exists', async function(
-  this: World,
-  stepUser: string,
-  stepTable: DataTable
-) {
-  const actor = this.actorContinent.get({ id: stepUser })
-  const { allFiles: allFilesPage } = new FilesPage({ actor })
-  const resources = stepTable.raw().map(f => f[0])
+Then(
+  '{string} ensure that resource {string} has {int} versions',
+  async function (this: World, stepUser: string, resource: string, countOfVersion: number) {
+    const actor = this.actorContinent.get({ id: stepUser })
+    const { allFiles: allFilesPage } = new FilesPage({ actor })
 
-  for (const resource of resources) {
-    await allFilesPage.resourceExist({ name: resource, version: true })
+    // skipped in Oc10, since the version number in Oc10 is no more than 1
+    if (config.ocis) {
+      await expect(await allFilesPage.numberOfVersions({ resource: resource })).toEqual(
+        countOfVersion
+      )
+    }
+    await allFilesPage.navigate()
   }
-})
+)
 
-When('{string} removes following resource(s)', async function(
-  this: World,
-  stepUser: string,
-  stepTable: DataTable
-) {
-  const actor = this.actorContinent.get({ id: stepUser })
-  const { allFiles: allFilesPage } = new FilesPage({ actor })
-  const resources = stepTable.raw().map(f => f[0])
+When(
+  '{string} deletes following resource(s)',
+  async function (this: World, stepUser: string, stepTable: DataTable) {
+    const actor = this.actorContinent.get({ id: stepUser })
+    const { allFiles: allFilesPage } = new FilesPage({ actor })
+    const resources = stepTable.raw().map((f) => f[0])
 
-  for (const resource of resources) {
-    await allFilesPage.removeResourses({ resource: resource })
+    for (const resource of resources) {
+      await allFilesPage.deleteResourses({ resource: resource })
+    }
   }
-})
+)

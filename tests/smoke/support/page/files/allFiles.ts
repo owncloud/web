@@ -44,7 +44,7 @@ export class AllFilesPage {
   async uploadFiles({
     files,
     folder,
-    newVersion = false
+    newVersion
   }: {
     files: File[]
     folder?: string
@@ -200,55 +200,51 @@ export class AllFilesPage {
     await page.goto(startUrl)
   }
 
-  async resourceExist({ 
-    name, 
-    version = false, 
-    notExist = false 
-  }: { 
-    name: string; 
-    version?: boolean; 
-    notExist?: boolean  
-  }): Promise<void> {
+  async resourceExist({ name }: { name: string }): Promise<boolean> {
     const { page } = this.actor
-    const startUrl = page.url()
     const folderPaths = name.split('/')
     const resouceName = folderPaths.pop()
 
     if (folderPaths.length) {
       await cta.files.navigateToFolder({ page: page, path: folderPaths.join('/') })
     }
-    
-    if (notExist) {
-      const resourceExists = await cta.files.resourceExists({
-        page: page,
-        name: resouceName
-      })      
-      if (resourceExists) throw new Error(`selector was find: "${resouceName}"`)
-    } else if (version) {
-      await cta.files.sidebar.open({ page: page, resource: resouceName })
-      await cta.files.sidebar.openPanel({ page: page, name: 'versions' })
-      await page.waitForSelector('//div[@id="oc-file-versions-sidebar"]//tr[@class="file-row"]')
-    }
-    else {
-      await page.waitForSelector(`//*[@data-test-resource-name="${resouceName}"]`)
-    }
-     
-    await page.goto(startUrl)
+
+    const resourceExists = await cta.files.resourceExists({
+      page: page,
+      name: resouceName
+    })
+    return resourceExists
   }
 
-  async removeResourses({ resource }: { resource: string }): Promise<void> {
+  async numberOfVersions({ resource }: { resource: string }): Promise<number> {
+    const { page } = this.actor
+    const folderPaths = resource.split('/')
+    const resouceName = folderPaths.pop()
+
+    if (folderPaths.length) {
+      await cta.files.navigateToFolder({ page: page, path: folderPaths.join('/') })
+    }
+
+    await cta.files.sidebar.open({ page: page, resource: resouceName })
+    await cta.files.sidebar.openPanel({ page: page, name: 'versions' })
+
+    const elements = await page.$$('//*[@id="oc-file-versions-sidebar"]/table/tbody/tr')
+    return elements.length
+  }
+
+  async deleteResourses({ resource }: { resource: string }): Promise<void> {
     const { page } = this.actor
     const startUrl = page.url()
     const folderPaths = resource.split('/')
     const resouceName = folderPaths.pop()
-    
+
     if (folderPaths.length) {
       await cta.files.navigateToFolder({ page: page, path: folderPaths.join('/') })
     }
 
     const resourceCheckbox = `//*[@data-test-resource-name="${resouceName}"]//ancestor::tr//input`
-    
-    if (!await page.isChecked(resourceCheckbox)){
+
+    if (!(await page.isChecked(resourceCheckbox))) {
       await page.check(resourceCheckbox)
     }
     await page.click('//*[@id="delete-selected-btn"]')
