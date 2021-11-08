@@ -138,6 +138,7 @@ export default {
     window.removeEventListener('beforeunload', this.confirmUnload)
   },
   methods: {
+    ...mapActions(['showMessage']),
     $_toggleExpanded() {
       this.expanded = !this.expanded
     },

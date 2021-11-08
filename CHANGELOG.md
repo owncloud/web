@@ -10,7 +10,9 @@ Summary
 
 * Bugfix - Fix location picker breadcrumb url encoding: [#5940](https://github.com/owncloud/web/pull/5940)
 * Bugfix - Context menu rendering: [#5952](https://github.com/owncloud/web/pull/5952)
+* Enhancement - Rename `_chunks` folder to `chunks`: [#5988](https://github.com/owncloud/web/pull/5988)
 * Enhancement - Default action order: [#5952](https://github.com/owncloud/web/pull/5952)
+* Enhancement - Reduced sidebar width: [#5981](https://github.com/owncloud/web/issues/5981)
 
 Details
 -------
@@ -32,6 +34,13 @@ Details
 
    https://github.com/owncloud/web/pull/5952
 
+* Enhancement - Rename `_chunks` folder to `chunks`: [#5988](https://github.com/owncloud/web/pull/5988)
+
+   We've renamed the `_chunks` folder to `chunks` in the ownCloud Web build output in order to make
+   it more easily embedable with the Go embed directive.
+
+   https://github.com/owncloud/web/pull/5988
+
 * Enhancement - Default action order: [#5952](https://github.com/owncloud/web/pull/5952)
 
    We've changed the order of actions which are being considered as default action. The order is
@@ -39,6 +48,14 @@ Details
    Previously the external apps took precedence.
 
    https://github.com/owncloud/web/pull/5952
+
+* Enhancement - Reduced sidebar width: [#5981](https://github.com/owncloud/web/issues/5981)
+
+   We reduced the sidebar width to give the files list more horizontal room, especially on medium
+   sized screens.
+
+   https://github.com/owncloud/web/issues/5981
+   https://github.com/owncloud/web/pull/5983
 
 Changelog for ownCloud Web [4.4.0] (2021-10-26)
 =======================================

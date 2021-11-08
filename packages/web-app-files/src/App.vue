@@ -15,7 +15,7 @@
       id="files-sidebar"
       ref="filesSidebar"
       tabindex="-1"
-      class="uk-width-1-1 uk-width-1-2@m uk-width-1-3@xl"
+      class="uk-width-1-1 uk-width-1-3@m uk-width-1-4@xl"
       @beforeDestroy="focusSideBar"
       @mounted="focusSideBar"
       @fileChanged="focusSideBar"

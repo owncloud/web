@@ -1,0 +1,6 @@
+Enhancement: Reduced sidebar width
+
+We reduced the sidebar width to give the files list more horizontal room, especially on medium sized screens.
+
+https://github.com/owncloud/web/issues/5981
+https://github.com/owncloud/web/pull/5983
