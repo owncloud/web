@@ -145,7 +145,8 @@ export default {
           formats: ['tar', 'zip'],
           archiver_url: `${store.getters.configuration.server}index.php/apps/files/ajax/download.php`
         }
-      ])
+      ]),
+      get(store, 'getters.capabilities.core.support-url-signing', true)
     )
     // FIXME: Remove mock data
     thumbnailService.initialize(
