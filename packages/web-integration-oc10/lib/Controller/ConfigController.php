@@ -22,7 +22,6 @@
 namespace OCA\Web\Controller;
 
 use OC\AppFramework\Http;
-use OC\NavigationManager;
 use OCP\App\IAppManager;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
@@ -42,11 +41,6 @@ class ConfigController extends Controller {
     private $logger;
 
     /**
-     * @var NavigationManager
-     */
-    private $navigationManager;
-
-    /**
      * @var IAppManager
      */
     private $appManager;
@@ -57,13 +51,11 @@ class ConfigController extends Controller {
      * @param string $appName
      * @param IRequest $request
      * @param ILogger $logger
-     * @param NavigationManager $navigationManager
      * @param IAppManager $appManager
      */
-    public function __construct(string $appName, IRequest $request, ILogger $logger, NavigationManager $navigationManager, IAppManager $appManager) {
+    public function __construct(string $appName, IRequest $request, ILogger $logger, IAppManager $appManager) {
         parent::__construct($appName, $request);
         $this->logger = $logger;
-        $this->navigationManager = $navigationManager;
         $this->appManager = $appManager;
     }
 
@@ -102,7 +94,7 @@ class ConfigController extends Controller {
      */
     private function addAppsToConfig(array $config): array {
         $apps = $config['applications'] ?? [];
-        $oc10NavigationEntries = $this->navigationManager->getAll();
+        $oc10NavigationEntries = \OC::$server->getNavigationManager()->getAll();
         $ignoredApps = ['files', 'web'];
         $appsToAdd = [];
         $serverUrl = $this->request->getServerProtocol() . '://' . $this->request->getServerHost();
