@@ -197,7 +197,7 @@ export default {
   output: {
     dir: 'dist',
     format: 'amd',
-    chunkFileNames: path.join('js', '_chunks', production ? '[name]-[hash].js' : '[name].js'),
+    chunkFileNames: path.join('js', 'chunks', production ? '[name]-[hash].js' : '[name].js'),
     entryFileNames: path.join('js', production ? '[name]-[hash].js' : '[name].js')
   },
   manualChunks: id => {
