@@ -22,6 +22,8 @@
 namespace OCA\Web\Controller;
 
 use OC\AppFramework\Http;
+use OC\NavigationManager;
+use OCP\App\IAppManager;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\ILogger;
@@ -40,15 +42,29 @@ class ConfigController extends Controller {
     private $logger;
 
     /**
+     * @var NavigationManager
+     */
+    private $navigationManager;
+
+    /**
+     * @var IAppManager
+     */
+    private $appManager;
+
+    /**
      * ConfigController constructor.
      *
      * @param string $appName
      * @param IRequest $request
      * @param ILogger $logger
+     * @param NavigationManager $navigationManager
+     * @param IAppManager $appManager
      */
-    public function __construct(string $appName, IRequest $request, ILogger $logger) {
+    public function __construct(string $appName, IRequest $request, ILogger $logger, NavigationManager $navigationManager, IAppManager $appManager) {
         parent::__construct($appName, $request);
         $this->logger = $logger;
+        $this->navigationManager = $navigationManager;
+        $this->appManager = $appManager;
     }
 
     /**
@@ -64,7 +80,8 @@ class ConfigController extends Controller {
             $configFile = \OC::$SERVERROOT . '/config/config.json';
             $configContent = \file_get_contents($configFile);
             $configAssoc = \json_decode($configContent, true);
-            $response = new JSONResponse($configAssoc);
+            $extendedConfig = $this->addAppsToConfig($configAssoc);
+            $response = new JSONResponse($extendedConfig);
 			$response->addHeader('Cache-Control', 'max-age=0, no-cache, no-store, must-revalidate');
 			$response->addHeader('Pragma', 'no-cache');
 			$response->addHeader('Expires', 'Wed, 11 Jan 1984 05:00:00 GMT');
@@ -74,5 +91,47 @@ class ConfigController extends Controller {
             $this->logger->logException($e, ['app' => 'web']);
             return new JSONResponse(["message" => $e->getMessage()], Http::STATUS_NOT_FOUND);
         }
+    }
+
+    /**
+     * Add enabled OC10 apps to the loaded config. This ensures that they are
+     * listed in the app switcher menu.
+     *
+     * @param array $config
+     * @return array
+     */
+    private function addAppsToConfig(array $config): array {
+        $apps = $config['applications'] ?? [];
+        $oc10NavigationEntries = $this->navigationManager->getAll();
+        $ignoredApps = ['files', 'web'];
+        $appsToAdd = [];
+        $serverUrl = $this->request->getServerProtocol() . '://' . $this->request->getServerHost();
+
+        foreach ($oc10NavigationEntries as $navigationEntry) {
+            if (\in_array($navigationEntry['id'], $ignoredApps)) {
+                continue;
+            }
+
+            $appInfo = $this->appManager->getAppInfo($navigationEntry['id']);
+
+            $frL10n = \OC::$server->getL10N($appInfo['id'], 'fr');
+            $deL10n = \OC::$server->getL10N($appInfo['id'], 'de');
+            $esL10n = \OC::$server->getL10N($appInfo['id'], 'es');
+
+            $appsToAdd[] = [
+                'title' => [
+                    'en' => $appInfo['name'],
+                    'fr' => $frL10n->t($appInfo['name']),
+                    'de' => $deL10n->t($appInfo['name']),
+                    'es' => $esL10n->t($appInfo['name']),
+                ],
+                'url' => $serverUrl . $navigationEntry['href'],
+                'icon' => 'application',
+            ];
+        }
+
+        // apps in config.json have higher prio
+        $config['applications'] = \array_merge($appsToAdd, $apps);
+        return $config;
     }
 }
