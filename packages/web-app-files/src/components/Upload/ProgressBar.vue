@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import DetailsWidget from './DetailsWidget.vue'
 import Mixins from '../../mixins'
 
@@ -123,6 +123,10 @@ export default {
       if (value === 100) {
         this.expanded = false
         this.announcement = this.announcementOnComplete
+        this.showMessage({
+          title: this.$gettext('File upload completed'),
+          status: 'success'
+        })
       }
     }
   },

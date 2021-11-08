@@ -24,6 +24,7 @@
         :class="{ 'files-table-squashed': !sidebarClosed }"
         :are-thumbnails-displayed="displayThumbnails"
         :resources="activeFilesCurrentPage"
+        :accentuated="[]"
         :target-route="targetRoute"
         :header-position="headerPosition"
         :drag-drop="true"
@@ -234,7 +235,12 @@ export default {
 
     uploadProgressVisible() {
       this.adjustTableHeaderPosition()
-    }
+    },
+
+    activeFilesCurrentPage(value, oldValue) {
+      const newFiles = value.filter(x => !oldValue.includes(x))
+      this.accentuateNewFiles(newFiles)
+    }  
   },
 
   created() {
@@ -267,6 +273,19 @@ export default {
       'REMOVE_FILE_SELECTION'
     ]),
     ...mapMutations(['SET_QUOTA']),
+
+    accentuateNewFiles(newFiles) {
+      newFiles.forEach(x => {
+        const targetElement = document.getElementsByClassName(`oc-tbody-tr-${x.id}`)
+        if(!targetElement) return
+        this.$nextTick(() => {
+          targetElement[0].classList.add("oc-table-accentuated")
+          setTimeout(() => {
+            targetElement[0].classList.remove("oc-table-accentuated")
+          }, 3500);
+        })
+      })
+    },
 
     async fileDropped(fileIdTarget) {
       const selected = [...this.selectedFiles]
