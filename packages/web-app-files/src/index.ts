@@ -124,7 +124,8 @@ export default {
           formats: ['tar', 'zip'],
           archiver_url: `${store.getters.configuration.server}index.php/apps/files/ajax/download.php`
         }
-      ])
+      ]),
+      get(store, 'getters.capabilities.core.support-url-signing', true)
     )
     // FIXME: Use capability data only as soon as available
     thumbnailService.initialize(
