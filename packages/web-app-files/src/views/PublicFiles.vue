@@ -86,6 +86,10 @@ const unauthenticatedUserReady = async (router, store) => {
   const publicToken = (router.currentRoute.params.item || '').split('/')[0]
   const publicLinkPassword = store.getters['Files/publicLinkPassword']
 
+  if (publicLinkPassword) {
+    return
+  }
+
   await store.dispatch('loadCapabilities', {
     publicToken,
     ...(publicLinkPassword && { user: 'public', password: publicLinkPassword })
@@ -156,6 +160,7 @@ export default {
 
         if (error.statusCode === 401) {
           ref.redirectToResolvePage()
+          return
         }
       }
 
