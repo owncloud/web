@@ -13,6 +13,7 @@ Summary
 * Enhancement - Rename `_chunks` folder to `chunks`: [#5988](https://github.com/owncloud/web/pull/5988)
 * Enhancement - Default action order: [#5952](https://github.com/owncloud/web/pull/5952)
 * Enhancement - Reduced sidebar width: [#5981](https://github.com/owncloud/web/issues/5981)
+* Enhancement - App provider and archiver on public links: [#5924](https://github.com/owncloud/web/pull/5924)
 
 Details
 -------
@@ -56,6 +57,18 @@ Details
 
    https://github.com/owncloud/web/issues/5981
    https://github.com/owncloud/web/pull/5983
+
+* Enhancement - App provider and archiver on public links: [#5924](https://github.com/owncloud/web/pull/5924)
+
+   We made the app provider and archiver services available on public links. As a prerequisite for
+   this we needed to make backend capabilities available on public links, which will be
+   beneficial for all future extension development.
+
+   https://github.com/owncloud/web/issues/5884
+   https://github.com/owncloud/ocis/issues/2479
+   https://github.com/owncloud/web/issues/2479
+   https://github.com/owncloud/web/issues/5901
+   https://github.com/owncloud/web/pull/5924
 
 Changelog for ownCloud Web [4.4.0] (2021-10-26)
 =======================================
