@@ -25,10 +25,16 @@ interface TriggerDownloadOptions {
 
 export class ArchiverService {
   serverUrl: string
+  urlSigningEnabled: boolean
   capability?: ArchiverCapability
 
-  public initialize(serverUrl: string, archiverCapabilities: ArchiverCapability[] = []): void {
+  public initialize(
+    serverUrl: string,
+    archiverCapabilities: ArchiverCapability[] = [],
+    urlSigningEnabled = true
+  ): void {
     this.serverUrl = serverUrl
+    this.urlSigningEnabled = urlSigningEnabled
     const archivers = archiverCapabilities
       .filter((a) => a.enabled)
       .sort((a1, a2) => rcompare(a1.version, a2.version))
@@ -62,9 +68,14 @@ export class ArchiverService {
       throw new RuntimeError('download url could not be built')
     }
 
-    const url = options.publicToken
-      ? downloadUrl
-      : await clientService.owncloudSdk.signUrl(downloadUrl)
+    let url
+    if (options.publicToken) {
+      url = downloadUrl
+    } else if (this.urlSigningEnabled) {
+      url = await clientService.owncloudSdk.signUrl(downloadUrl)
+    } else {
+      url = downloadUrl + '&access_token=' + (window.Vue as any).$store.state.user.token
+    }
     window.location = url
     return url
   }
