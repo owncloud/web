@@ -171,7 +171,7 @@ export default {
       if (
         mimeType === undefined ||
         !get(this, 'capabilities.files.app_providers') ||
-        !this.mimeTypes.length
+        !get(this, 'mimeTypes', []).length
       ) {
         return []
       }
