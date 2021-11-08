@@ -33,7 +33,7 @@ export function buildResource(resource) {
   const isFolder = resource.type === 'dir'
   const extension = _getFileExtension(resource.name)
   return {
-    id: resource.fileInfo[DavProperty.FileId],
+    id: resource.fileInfo[DavProperty.FileId].replace(/[^A-Za-z]/g, ''),
     fileId: resource.fileInfo[DavProperty.FileId],
     mimeType: resource.fileInfo[DavProperty.MimeType],
     icon: isFolder ? 'folder' : getFileIcon(extension),

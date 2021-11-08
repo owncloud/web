@@ -1,0 +1,6 @@
+Bugfix: Clean resource id
+
+The resource id can contain characters that are not allowed in certain places like the HTML element id, we've fixed this by sanitizing it.
+
+https://github.com/owncloud/web/pull/5998
+https://github.com/owncloud/web/issues/5927
