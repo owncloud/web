@@ -427,7 +427,6 @@ export default {
           this.$root.$emit('upload-end')
           this.removeFileFromProgress(file)
           if (emitSuccess) {
-            
             this.$emit('success', e, file)
           }
         })
@@ -443,11 +442,6 @@ export default {
         fileName: file.name,
         progress
       })
-      /*this.showMessage({
-        title: this.$gettext('File uploaded'),
-        desc: relativePath,
-        status: 'success'
-      })*/
     },
     $_ocUploadInput_clean() {
       const input = this.$refs.input
