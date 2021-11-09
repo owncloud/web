@@ -347,3 +347,95 @@ When(
     }
   }
 )
+
+When(
+  '{string} shares following resource(s) using main menu',
+  async function (this: World, stepUser: string, stepTable: DataTable) {
+    const actor = this.actorContinent.get({ id: stepUser })
+    const { allFiles: allFilesPage } = new FilesPage({ actor })
+
+    const shareInfo = stepTable.hashes().reduce((acc, stepRow) => {
+      const { user, resource, role } = stepRow
+
+      if (!acc[resource]) {
+        acc[resource] = { users: [], role: '' }
+      }
+
+      acc[resource].users.push(this.userContinent.get({ id: user }))
+      acc[resource].role = role
+
+      return acc
+    }, {})
+
+    for (const folder of Object.keys(shareInfo)) {
+      await allFilesPage.shareFolder({
+        folder,
+        users: shareInfo[folder].users,
+        role: shareInfo[folder].role,
+        mainMenu: true,
+      })
+    }
+  }
+)
+
+When(
+  '{string} opens file in Mediaviewer',
+  async function (this: World, stepUser: string, stepTable: DataTable) {
+    const actor = this.actorContinent.get({ id: stepUser })
+    const { allFiles: allFilesPage } = new FilesPage({ actor })
+    const resource = stepTable.raw().map((f) => f[0])
+
+    await allFilesPage.openFileInMediaviewer({ resource: resource[0] })
+  }
+)
+
+When(
+  '{string} changes role for the following shared resources(s)',
+  async function (this: World, stepUser: string, stepTable: DataTable) {
+    const actor = this.actorContinent.get({ id: stepUser })
+    const { allFiles: allFilesPage } = new FilesPage({ actor })
+
+    const shareInfo = stepTable.hashes().reduce((acc, stepRow) => {
+      const { user, resource, role } = stepRow
+
+      if (!acc[resource]) {
+        acc[resource] = { users: [], role: '' }
+      }
+
+      acc[resource].users.push(this.userContinent.get({ id: user }))
+      acc[resource].role = role
+
+      return acc
+    }, {})
+
+    for (const folder of Object.keys(shareInfo)) {
+      await allFilesPage.changeShareRole({
+        folder,
+        users: shareInfo[folder].users,
+        role: shareInfo[folder].role,
+      })
+    }
+  }
+)
+
+When(
+  '{string} deletes share(s) following resource(s) with user(s)',
+  async function (this: World, stepUser: string, stepTable: DataTable) {
+    const actor = this.actorContinent.get({ id: stepUser })
+    const { allFiles: allFilesPage } = new FilesPage({ actor })
+
+    const shareInfo = stepTable.hashes().reduce((acc, stepRow) => {
+      const { user, resource } = stepRow
+
+      acc[resource] = []
+
+      acc[resource].push(this.userContinent.get({ id: user }))
+
+      return acc
+    }, {})
+
+    for (const folder of Object.keys(shareInfo)) {
+      await allFilesPage.deleteShare({ folder, users: shareInfo[folder] })
+    }
+  }
+)
