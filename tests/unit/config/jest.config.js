@@ -14,7 +14,8 @@ module.exports = {
   moduleNameMapper: {
     '\\.(css|less)$': '<rootDir>/tests/unit/stubs/empty.js',
     '^@/(.*)$': '<rootDir>/$1',
-    '^@files/(.*)$': '<rootDir>/packages/web-app-files/$1'
+    '^@files/(.*)$': '<rootDir>/packages/web-app-files/$1',
+    'core-js': '<rootDir>/node_modules/core-js'
   },
   transformIgnorePatterns: ['<rootDir>/node_modules/(?!lodash-es)'],
   setupFiles: ['<rootDir>/tests/unit/config/jest.init.js', 'core-js'],

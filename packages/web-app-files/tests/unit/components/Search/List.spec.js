@@ -29,12 +29,12 @@ const selectors = {
 
 const files = [
   {
-    id: 1,
+    id: '1',
     path: 'lorem.txt',
     size: 100
   },
   {
-    id: 2,
+    id: '2',
     path: 'lorem.pdf',
     size: 50
   }

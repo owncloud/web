@@ -2263,25 +2263,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/dom@npm:^8.10.0":
-  version: 8.10.0
-  resolution: "@testing-library/dom@npm:8.10.0"
+"@testing-library/dom@npm:^8.11.0":
+  version: 8.11.0
+  resolution: "@testing-library/dom@npm:8.11.0"
   dependencies:
     "@babel/code-frame": ^7.10.4
     "@babel/runtime": ^7.12.5
     "@types/aria-query": ^4.2.0
     aria-query: ^5.0.0
     chalk: ^4.1.0
-    dom-accessibility-api: ^0.5.6
+    dom-accessibility-api: ^0.5.9
     lz-string: ^1.4.4
     pretty-format: ^27.0.2
-  checksum: df9e25c44c8bda6da6c5b690c458963320384b1af6e4ed29b709888bcd32a5be40cc7d17fdd0605435ff9438f2ca6151d918abc90941b2b5c2871c2f9c759d84
+  checksum: e546ef5c2d934fedce1d296763694151dfcb0f25a34301fce83f813924c1bc7926740c7036a2395bd611cbaa2dd604b11508d7bf10231f278400fffb8186f402
   languageName: node
   linkType: hard
 
-"@testing-library/jest-dom@npm:^5.13.0":
-  version: 5.14.1
-  resolution: "@testing-library/jest-dom@npm:5.14.1"
+"@testing-library/jest-dom@npm:^5.15.0":
+  version: 5.15.0
+  resolution: "@testing-library/jest-dom@npm:5.15.0"
   dependencies:
     "@babel/runtime": ^7.9.2
     "@types/testing-library__jest-dom": ^5.9.1
@@ -2292,24 +2292,24 @@ __metadata:
     dom-accessibility-api: ^0.5.6
     lodash: ^4.17.15
     redent: ^3.0.0
-  checksum: eeba37ba10be550bd9ab7dd0dda77d9011a96d9a4f75c70ed57d7bf120fe4126b251ccfb1444da1746c19773bbe4efbd96a0408f970d98c9cd1d399b2455d2c1
+  checksum: fb11af2462b28bdcbbddf199f58e7f9153358358e2ec47dba311f21d88014351cc31087560e9cbacbccc78063e455361efffb31be6242edd1dbd2e21bb3f4359
   languageName: node
   linkType: hard
 
-"@testing-library/user-event@npm:^13.2.1":
-  version: 13.3.0
-  resolution: "@testing-library/user-event@npm:13.3.0"
+"@testing-library/user-event@npm:^13.5.0":
+  version: 13.5.0
+  resolution: "@testing-library/user-event@npm:13.5.0"
   dependencies:
     "@babel/runtime": ^7.12.5
   peerDependencies:
     "@testing-library/dom": ">=7.21.4"
-  checksum: 0d17c47728aec71343fc4a8d8b594224c3031513ab59d5797695c53fdfcebef87797a7935ede68c0af896127b2a995e2feb20e64cbd0cd2b2af3f5240241af91
+  checksum: 16319de685fbb7008f1ba667928f458b2d08196918002daca56996de80ef35e6d9de26e9e1ece7d00a004692b95a597cf9142fff0dc53f2f51606a776584f549
   languageName: node
   linkType: hard
 
-"@testing-library/vue@npm:^5.6.2":
-  version: 5.7.0
-  resolution: "@testing-library/vue@npm:5.7.0"
+"@testing-library/vue@npm:^5.8.2":
+  version: 5.8.2
+  resolution: "@testing-library/vue@npm:5.8.2"
   dependencies:
     "@babel/runtime": ^7.12.5
     "@testing-library/dom": ^7.26.6
@@ -2317,7 +2317,7 @@ __metadata:
   peerDependencies:
     vue: ^2.6.10
     vue-template-compiler: ^2.6.10
-  checksum: 870390088f3f19ccb79b0f72f60040f2bb2c4b25eff1d55a4bcc4d25319ff8389c8cc4a368aeee335f11b9b73945b9a5427001656b8ea5522796b479a7778382
+  checksum: 31e320e353fa0bd89371a0de92f6fdf5f816b608a3b0d3d86e77ef56732b07b7e9f6069d38e17115f80863587ecccacdffaa524a474383260e342d72189a9d1f
   languageName: node
   linkType: hard
 
@@ -5001,6 +5001,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"core-js@npm:^3.19.1":
+  version: 3.19.1
+  resolution: "core-js@npm:3.19.1"
+  checksum: 2f669061788dc6fea823f0433d871deeaaaacc7d68ef2748859509522a34df5c83e648c3c6a1993fed0ab188081b3cf32b957b2a1f46156a2b20bd775961ade4
+  languageName: node
+  linkType: hard
+
 "core-util-is@npm:1.0.2, core-util-is@npm:~1.0.0":
   version: 1.0.2
   resolution: "core-util-is@npm:1.0.2"
@@ -5798,6 +5805,13 @@ __metadata:
   version: 0.5.6
   resolution: "dom-accessibility-api@npm:0.5.6"
   checksum: 900eee86c0065ea13a52524093ebf79513d89cc04f1f423d5f5e1641d9d3d41714d271d78ea9827f47013642f222fe515ec3658f51fd82c981512f0a83ba9708
+  languageName: node
+  linkType: hard
+
+"dom-accessibility-api@npm:^0.5.9":
+  version: 0.5.10
+  resolution: "dom-accessibility-api@npm:0.5.10"
+  checksum: c05949889b02f5313d100778e9f736f9bddfb1da47387d351833f0b5d60d6230d4fcb849e124a8a1591706b6200337fa40f0f4f3817dce1459309e075f48371c
   languageName: node
   linkType: hard
 
@@ -13327,10 +13341,10 @@ __metadata:
     "@rollup/plugin-html": ^0.2.0
     "@rollup/plugin-json": ^4.1.0
     "@rollup/plugin-typescript": ^8.2.5
-    "@testing-library/dom": ^8.10.0
-    "@testing-library/jest-dom": ^5.13.0
-    "@testing-library/user-event": ^13.2.1
-    "@testing-library/vue": ^5.6.2
+    "@testing-library/dom": ^8.11.0
+    "@testing-library/jest-dom": ^5.15.0
+    "@testing-library/user-event": ^13.5.0
+    "@testing-library/vue": ^5.8.2
     "@types/jest": ^26.0.23
     "@types/jest-axe": ^3.5.3
     "@types/lodash-es": ^4.17.4
@@ -13344,7 +13358,7 @@ __metadata:
     babel-core: ^7.0.0-bridge.0
     babel-jest: ^27.0.6
     commander: ^8.1.0
-    core-js: ^3.15.2
+    core-js: ^3.19.1
     cucumber-html-reporter: ^5.4.0
     depcheck: ^1.3.1
     ejs: ^3.1.5
