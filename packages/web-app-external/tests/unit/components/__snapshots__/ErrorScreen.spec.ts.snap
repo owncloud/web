@@ -3,6 +3,7 @@
 exports[`The external app error screen component displays an icon and a paragraph 1`] = `
 <div class="uk-text-center">
   <ocicon-stub size="xxlarge" name="warning"></ocicon-stub>
-  <p data-msgid="Error when loading the application" data-current-language="en_US">Error when loading the application</p>
+  <h1 class="oc-text-lead" data-msgid="Error when loading the application" data-current-language="en_US">Error when loading the application</h1>
+  <!---->
 </div>
 `;

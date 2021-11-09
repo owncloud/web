@@ -1,38 +1,38 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`The app provider extension should be able to load an iFrame via get 1`] = `
-<main class="uk-height-viewport">
+<main class="uk-height-1-1">
   <h1 class="oc-invisible-sr">"exampleApp" app page</h1>
-  <!----> <iframe src="https://example.test/d12ab86/loe009157-MzBw" title="&quot;exampleApp&quot; app content area" class="uk-width-1-1 uk-height-viewport"></iframe>
+  <!----> <iframe src="https://example.test/d12ab86/loe009157-MzBw" title="&quot;exampleApp&quot; app content area" class="uk-width-1-1 uk-height-1-1"></iframe>
   <!---->
 </main>
 `;
 
 exports[`The app provider extension should be able to load an iFrame via post 1`] = `
-<main class="uk-height-viewport">
+<main class="uk-height-1-1">
   <h1 class="oc-invisible-sr">"exampleApp" app page</h1>
   <!---->
   <!---->
-  <div>
+  <div class="uk-height-1-1">
     <form action="https://example.test/d12ab86/loe009157-MzBw" target="app-iframe" method="post"><input type="submit" class="oc-hidden" value="[object Object]">
       <div><input name="access_token" type="hidden" value="asdfsadfsadf"></div>
       <div><input name="access_token_ttl" type="hidden" value="123456"></div>
-    </form> <iframe name="app-iframe" title="&quot;exampleApp&quot; app content area" class="uk-width-1-1 uk-height-viewport"></iframe>
+    </form> <iframe name="app-iframe" title="&quot;exampleApp&quot; app content area" class="uk-width-1-1 uk-height-1-1"></iframe>
   </div>
 </main>
 `;
 
 exports[`The app provider extension should fail for unauthenticated users 1`] = `
-<main class="uk-height-viewport uk-flex uk-flex-center uk-flex-middle">
+<main class="uk-height-1-1 uk-flex uk-flex-center uk-flex-middle">
   <h1 class="oc-invisible-sr">"exampleApp" app page</h1>
-  <errorscreen-stub></errorscreen-stub>
+  <loadingscreen-stub></loadingscreen-stub>
   <!---->
   <!---->
 </main>
 `;
 
 exports[`The app provider extension should show a loading spinner while loading 1`] = `
-<main class="uk-height-viewport uk-flex uk-flex-center uk-flex-middle">
+<main class="uk-height-1-1 uk-flex uk-flex-center uk-flex-middle">
   <h1 class="oc-invisible-sr">"exampleApp" app page</h1>
   <loadingscreen-stub></loadingscreen-stub>
   <!---->
@@ -41,9 +41,9 @@ exports[`The app provider extension should show a loading spinner while loading 
 `;
 
 exports[`The app provider extension should show a meaningful message if an error occurs during loading 1`] = `
-<main class="uk-height-viewport uk-flex uk-flex-center uk-flex-middle">
+<main class="uk-height-1-1 uk-flex uk-flex-center uk-flex-middle">
   <h1 class="oc-invisible-sr">"exampleApp" app page</h1>
-  <errorscreen-stub></errorscreen-stub>
+  <loadingscreen-stub></loadingscreen-stub>
   <!---->
   <!---->
 </main>
