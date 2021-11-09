@@ -72,7 +72,7 @@ class ConfigController extends Controller {
             $configFile = \OC::$SERVERROOT . '/config/config.json';
             $configContent = \file_get_contents($configFile);
             $configAssoc = \json_decode($configContent, true);
-            $extendedConfig = $this->addAppsToConfig($configAssoc);
+            $extendedConfig = $this->addOC10AppsToConfig($configAssoc);
             $response = new JSONResponse($extendedConfig);
 			$response->addHeader('Cache-Control', 'max-age=0, no-cache, no-store, must-revalidate');
 			$response->addHeader('Pragma', 'no-cache');
@@ -92,7 +92,7 @@ class ConfigController extends Controller {
      * @param array $config
      * @return array
      */
-    private function addAppsToConfig(array $config): array {
+    private function addOC10AppsToConfig(array $config): array {
         $apps = $config['applications'] ?? [];
 
         $oc10NavigationEntries = \OC::$server->getNavigationManager()->getAll();
