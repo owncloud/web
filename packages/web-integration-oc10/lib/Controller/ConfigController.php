@@ -93,11 +93,14 @@ class ConfigController extends Controller {
      * @return array
      */
     private function addAppsToConfig(array $config): array {
-        $apps = $config['applications'] ?? [];
+        $appsInConfig = $config['applications'] ?? [];
+
         $oc10NavigationEntries = \OC::$server->getNavigationManager()->getAll();
-        $ignoredApps = ['files', 'web'];
-        $appsToAdd = [];
         $serverUrl = $this->request->getServerProtocol() . '://' . $this->request->getServerHost();
+
+        $ignoredApps = ['files', 'web'];
+        $supportedLanguages = ['en', 'fr', 'de', 'es', 'it', 'cs', 'gl'];
+        $appsToAdd = [];
 
         foreach ($oc10NavigationEntries as $navigationEntry) {
             if (\in_array($navigationEntry['id'], $ignoredApps)) {
@@ -106,24 +109,21 @@ class ConfigController extends Controller {
 
             $appInfo = $this->appManager->getAppInfo($navigationEntry['id']);
 
-            $frL10n = \OC::$server->getL10N($appInfo['id'], 'fr');
-            $deL10n = \OC::$server->getL10N($appInfo['id'], 'de');
-            $esL10n = \OC::$server->getL10N($appInfo['id'], 'es');
+            $titles = [];
+            foreach ($supportedLanguages as $lang) {
+                $l10n = \OC::$server->getL10N($appInfo['id'], $lang);
+                $titles[$lang] = $l10n->t($appInfo['name']);
+            }
 
             $appsToAdd[] = [
-                'title' => [
-                    'en' => $appInfo['name'],
-                    'fr' => $frL10n->t($appInfo['name']),
-                    'de' => $deL10n->t($appInfo['name']),
-                    'es' => $esL10n->t($appInfo['name']),
-                ],
+                'title' => $titles,
                 'url' => $serverUrl . $navigationEntry['href'],
-                'icon' => 'application',
+                'icon' => 'extension',
             ];
         }
 
         // apps in config.json have higher prio
-        $config['applications'] = \array_merge($appsToAdd, $apps);
+        $config['applications'] = \array_merge($appsToAdd, $appsInConfig);
         return $config;
     }
 }
