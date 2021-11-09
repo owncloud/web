@@ -141,13 +141,13 @@ export default {
       this.createModal(modal)
     },
 
-    $_ocUpload_addDropToQue(e) {
+    $_ocUpload_addDropToQueue(e) {
       const items = e.dataTransfer.items || e.dataTransfer.files
       const promises = []
 
       // A list of files is being dropped ...
       if (items instanceof FileList) {
-        this.$_ocUpload_addDirectoryToQue(e)
+        this.$_ocUpload_addDirectoryToQueue(e)
         return
       }
 
@@ -206,7 +206,7 @@ export default {
       }
     },
 
-    $_ocUpload_addFileToQue(e) {
+    $_ocUpload_addFileToQueue(e) {
       const files = e.target.files
 
       if (files.length < 1) {
@@ -232,7 +232,7 @@ export default {
       }
     },
 
-    $_ocUpload_addDirectoryToQue(e) {
+    $_ocUpload_addDirectoryToQueue(e) {
       if (this.isIE11()) {
         this.showMessage({
           title: this.$gettext('Upload failed'),

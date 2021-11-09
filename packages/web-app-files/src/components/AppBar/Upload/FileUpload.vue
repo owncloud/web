@@ -12,7 +12,7 @@
       name="file"
       multiple
       tabindex="-1"
-      @change="$_ocUpload_addFileToQue"
+      @change="$_ocUpload_addFileToQueue"
     />
   </div>
 </template>
