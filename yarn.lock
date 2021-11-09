@@ -2505,12 +2505,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash-es@npm:^4.17.4":
-  version: 4.17.4
-  resolution: "@types/lodash-es@npm:4.17.4"
+"@types/lodash-es@npm:^4.17.5":
+  version: 4.17.5
+  resolution: "@types/lodash-es@npm:4.17.5"
   dependencies:
     "@types/lodash": "*"
-  checksum: acffe910e8cffe475b854d74f4372549ec700ac00d9ed885fd85ec34c3f9af1a262bf667000ea9126dc39a05a75f64593d8a5f312cfd7d90e91294d458be08a7
+  checksum: 8910f646310aa008bb45071619fe85abf917bbc2c7cc0af883a971de261723247695a58dd966bfa9defd946cef79811d8b075eb6f0af12343080ab0ae6614e12
   languageName: node
   linkType: hard
 
@@ -2920,7 +2920,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vue/test-utils@npm:^1.1.0, @vue/test-utils@npm:^1.1.2":
+"@vue/test-utils@npm:^1.1.0":
   version: 1.2.1
   resolution: "@vue/test-utils@npm:1.2.1"
   dependencies:
@@ -2931,6 +2931,20 @@ __metadata:
     vue: 2.x
     vue-template-compiler: ^2.x
   checksum: 691aa850c7751f5745ce4b611c8fb21c4be8ccb6a86222b92912444d6d0425e5cdcb8fbad8139723c0094a422a05e0a46deefd84fe2d146738d0210516789fd2
+  languageName: node
+  linkType: hard
+
+"@vue/test-utils@npm:^1.2.2":
+  version: 1.2.2
+  resolution: "@vue/test-utils@npm:1.2.2"
+  dependencies:
+    dom-event-types: ^1.0.0
+    lodash: ^4.17.15
+    pretty: ^2.0.0
+  peerDependencies:
+    vue: 2.x
+    vue-template-compiler: ^2.x
+  checksum: a373ffe4fa35f6d7d64eb5547ba656f8445b23923a5735d64b378061b378515139044fe73d931de1130fd310ad692e575f4826db03a4289737eaa4ff5a45dc98
   languageName: node
   linkType: hard
 
@@ -5679,9 +5693,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"depcheck@npm:^1.3.1":
-  version: 1.4.1
-  resolution: "depcheck@npm:1.4.1"
+"depcheck@npm:^1.4.2":
+  version: 1.4.2
+  resolution: "depcheck@npm:1.4.2"
   dependencies:
     "@babel/parser": ^7.12.5
     "@babel/traverse": ^7.12.5
@@ -5691,6 +5705,7 @@ __metadata:
     debug: ^4.2.0
     deps-regex: ^0.1.4
     ignore: ^5.1.8
+    is-core-module: ^2.4.0
     js-yaml: ^3.14.0
     json5: ^2.1.3
     lodash: ^4.17.20
@@ -5707,7 +5722,7 @@ __metadata:
     yargs: ^16.1.0
   bin:
     depcheck: bin/depcheck.js
-  checksum: 764beabda56339cf9e791207df202111eb2f97a1bc815b1922d45e43cac96dc76e09d940bf47a59289077f44d34f11974dc51133439e2def7ab126cf87a32969
+  checksum: a4fce9a0e35fa09cfb4b46f8aadde4e4f808e42bc5a9523cf70d9f52195702a2608cfa759fd96d9077f11c3bd78f77be4a4ca3f1ee0356ff3e71667bd00e6afa
   languageName: node
   linkType: hard
 
@@ -8197,7 +8212,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-core-module@npm:^2.7.0":
+"is-core-module@npm:^2.4.0, is-core-module@npm:^2.7.0":
   version: 2.8.0
   resolution: "is-core-module@npm:2.8.0"
   dependencies:
@@ -13349,12 +13364,12 @@ __metadata:
     "@testing-library/vue": ^5.8.2
     "@types/jest": ^26.0.23
     "@types/jest-axe": ^3.5.3
-    "@types/lodash-es": ^4.17.4
+    "@types/lodash-es": ^4.17.5
     "@types/node": ^16.10.3
     "@types/node-fetch": ^2.5.12
     "@typescript-eslint/eslint-plugin": ^4.28.3
     "@typescript-eslint/parser": ^4.28.3
-    "@vue/test-utils": ^1.1.2
+    "@vue/test-utils": ^1.2.2
     archiver: ^5.3.0
     autoprefixer: ^10.2.4
     babel-core: ^7.0.0-bridge.0
@@ -13362,7 +13377,7 @@ __metadata:
     commander: ^8.1.0
     core-js: ^3.19.1
     cucumber-html-reporter: ^5.4.0
-    depcheck: ^1.3.1
+    depcheck: ^1.4.2
     ejs: ^3.1.5
     eslint: ^7.30.0
     eslint-config-prettier: ^6.10.0
