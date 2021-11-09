@@ -93,14 +93,13 @@ class ConfigController extends Controller {
      * @return array
      */
     private function addAppsToConfig(array $config): array {
-        $appsInConfig = $config['applications'] ?? [];
+        $apps = $config['applications'] ?? [];
 
         $oc10NavigationEntries = \OC::$server->getNavigationManager()->getAll();
         $serverUrl = $this->request->getServerProtocol() . '://' . $this->request->getServerHost();
 
         $ignoredApps = ['files', 'web'];
         $supportedLanguages = ['en', 'fr', 'de', 'es', 'it', 'cs', 'gl'];
-        $appsToAdd = [];
 
         foreach ($oc10NavigationEntries as $navigationEntry) {
             if (\in_array($navigationEntry['id'], $ignoredApps)) {
@@ -115,15 +114,14 @@ class ConfigController extends Controller {
                 $titles[$lang] = $l10n->t($appInfo['name']);
             }
 
-            $appsToAdd[] = [
+            $apps[] = [
                 'title' => $titles,
                 'url' => $serverUrl . $navigationEntry['href'],
                 'icon' => 'extension',
             ];
         }
 
-        // apps in config.json have higher prio
-        $config['applications'] = \array_merge($appsToAdd, $appsInConfig);
+        $config['applications'] = $apps;
         return $config;
     }
 }
