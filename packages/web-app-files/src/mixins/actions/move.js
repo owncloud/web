@@ -20,6 +20,9 @@ export default {
             ) {
               return false
             }
+            if (resources.length === 0) {
+              return false
+            }
 
             if (!this.currentFolder) {
               return false

@@ -84,7 +84,7 @@ export default {
             if (resources.length !== 1) {
               return false
             }
-            if (editor.routes?.length > 0 && !checkRoute(editor.routes, this.$route.name)) {
+            if (Array.isArray(editor.routes) && !checkRoute(editor.routes, this.$route.name)) {
               return false
             }
 

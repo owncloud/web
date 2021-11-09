@@ -12,7 +12,12 @@ export default {
           handler: this.$_showDetails_trigger,
           // we don't have details in the trahsbin, yet.
           // return hardcoded `true` in all cases once we have them.
-          isEnabled: () => !isTrashbinRoute(this.$route),
+          isEnabled: ({ resources }) => {
+            if (isTrashbinRoute(this.$route)) {
+              return false
+            }
+            return resources.length > 0
+          },
           componentType: 'oc-button',
           class: 'oc-files-actions-show-details-trigger'
         }

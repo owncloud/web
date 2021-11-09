@@ -10,13 +10,16 @@ export default {
           handler: this.$_copy_trigger,
           label: () =>
             this.$pgettext('Action in the files list row to initiate copying resources', 'Copy'),
-          isEnabled: () => {
+          isEnabled: ({ resources }) => {
             if (
               !checkRoute(
                 ['files-personal', 'files-public-list', 'files-favorites'],
                 this.$route.name
               )
             ) {
+              return false
+            }
+            if (resources.length === 0) {
               return false
             }
 

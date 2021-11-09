@@ -1,10 +1,11 @@
 <template>
-  <oc-list v-if="displayBulkActions" class="oc-files-appbar-batch-actions oc-my-rm uk-width-1-1">
+  <oc-list class="oc-files-appbar-batch-actions oc-my-rm uk-width-1-1">
     <action-menu-item
       v-for="(action, i) in menuItemsBatchActions"
       :key="`batch-action-${i}`"
       :action="action"
       :items="selectedFiles"
+      appearance="outline"
     />
   </oc-list>
 </template>
@@ -39,10 +40,6 @@ export default {
   computed: {
     ...mapGetters('Files', ['selectedFiles']),
     ...mapGetters(['homeFolder']),
-
-    displayBulkActions() {
-      return this.$route.meta.hasBulkActions && this.selectedFiles.length > 0
-    },
 
     filterParams() {
       return {

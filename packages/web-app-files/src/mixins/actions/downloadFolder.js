@@ -28,6 +28,9 @@ export default {
             ) {
               return false
             }
+            if (resources.length === 0) {
+              return false
+            }
             if (resources.length === 1 && resources[0].isFolder) {
               return false
             }

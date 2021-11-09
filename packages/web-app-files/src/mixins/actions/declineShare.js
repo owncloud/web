@@ -20,6 +20,9 @@ export default {
             if (!isSharedWithMeRoute(this.$route)) {
               return false
             }
+            if (resources.length === 0) {
+              return false
+            }
 
             const declineDisabled = resources.some((resource) => {
               return resource.status === shareStatus.declined

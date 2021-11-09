@@ -1,4 +1,5 @@
 import quickActions, { canShare, openNewCollaboratorsPanel } from '../../quickActions'
+import { isTrashbinRoute } from '../../helpers/route'
 
 export default {
   computed: {
@@ -10,6 +11,9 @@ export default {
           label: () => this.$gettext('Share'),
           handler: this.$_showShares_trigger,
           isEnabled: ({ resources }) => {
+            if (isTrashbinRoute(this.$route)) {
+              return false
+            }
             if (resources.length !== 1) {
               return false
             }

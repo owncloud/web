@@ -11,7 +11,12 @@ export default {
           icon: 'restore',
           label: () => this.$gettext('Restore'),
           handler: this.$_restore_trigger,
-          isEnabled: () => isTrashbinRoute(this.$route),
+          isEnabled: ({ resources }) => {
+            if (!isTrashbinRoute(this.$route)) {
+              return false
+            }
+            return resources.length > 0
+          },
           componentType: 'oc-button',
           class: 'oc-files-actions-restore-trigger'
         }

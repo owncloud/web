@@ -29,6 +29,10 @@ export default {
     items: {
       type: Array,
       required: true
+    },
+    appearance: {
+      type: String,
+      default: 'raw'
     }
   },
   computed: {
@@ -52,8 +56,8 @@ export default {
       }
 
       return {
-        appearance: 'raw',
-        ...(action.isDisabled() && { disabled: true }),
+        appearance: this.appearance,
+        ...(action.isDisabled && { disabled: action.isDisabled() }),
         ...(action.variation && { variation: action.variation })
       }
     },

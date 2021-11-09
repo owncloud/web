@@ -18,6 +18,9 @@ export default {
             if (!isPersonalRoute(this.$route) && !isPublicFilesRoute(this.$route)) {
               return false
             }
+            if (resources.length === 0) {
+              return false
+            }
 
             const deleteDisabled = resources.some((resource) => {
               if (isSameResource(resource, this.currentFolder)) {
@@ -35,7 +38,12 @@ export default {
           icon: 'delete',
           label: () => this.$gettext('Delete'),
           handler: this.$_delete_trigger,
-          isEnabled: () => isTrashbinRoute(this.$route),
+          isEnabled: ({ resources }) => {
+            if (!isTrashbinRoute(this.$route)) {
+              return false
+            }
+            return resources.length > 0
+          },
           componentType: 'oc-button',
           class: 'oc-files-actions-delete-trigger'
         }
