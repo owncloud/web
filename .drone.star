@@ -728,7 +728,15 @@ def main(ctx):
         # run example deploys on cron even if some prior pipelines fail
         deploys = pipelinesDependsOn(deploys, pipelines)
 
-    pipelines = pipelines + deploys
+    pipelines = pipelines + deploys + pipelinesDependsOn(
+        [
+            purgeBuildArtifactCache(ctx, "yarn"),
+            purgeBuildArtifactCache(ctx, "playwright"),
+            purgeBuildArtifactCache(ctx, "tests-yarn"),
+            purgeBuildArtifactCache(ctx, "web-dist"),
+        ],
+        pipelines,
+    )
 
     pipelineSanityChecks(ctx, pipelines)
     return pipelines
@@ -767,8 +775,11 @@ def yarnCache(ctx):
         "type": "docker",
         "name": "cache-yarn",
         "steps": skipIfUnchanged(ctx, "cache") +
-                 installYarn() + yarnInstallTests() +
-                 rebuildBuildArtifactCache(ctx, ".yarn", ".yarn"),
+                 installYarn() +
+                 yarnInstallTests() +
+                 rebuildBuildArtifactCache(ctx, "yarn", ".yarn") +
+                 rebuildBuildArtifactCache(ctx, "playwright", ".playwright") +
+                 rebuildBuildArtifactCache(ctx, "tests-yarn", "tests/acceptance/.yarn"),
         "trigger": {
             "ref": [
                 "refs/heads/master",
@@ -797,7 +808,8 @@ def yarnlint(ctx):
             "path": config["app"],
         },
         "steps": skipIfUnchanged(ctx, "lint") +
-                 restoreBuildArtifactCache(ctx, ".yarn", ".yarn") +
+                 restoreBuildArtifactCache(ctx, "yarn", ".yarn") +
+                 restoreBuildArtifactCache(ctx, "playwright", ".playwright") +
                  installYarn() +
                  lint(),
         "trigger": {
@@ -865,7 +877,8 @@ def build(ctx):
             "base": dir["base"],
             "path": config["app"],
         },
-        "steps": restoreBuildArtifactCache(ctx, ".yarn", ".yarn") +
+        "steps": restoreBuildArtifactCache(ctx, "yarn", ".yarn") +
+                 restoreBuildArtifactCache(ctx, "playwright", ".playwright") +
                  installYarn() +
                  buildRelease(ctx) +
                  buildDockerImage(),
@@ -981,7 +994,8 @@ def buildCacheWeb(ctx):
         "type": "docker",
         "name": "cache-web",
         "steps": skipIfUnchanged(ctx, "cache") +
-                 restoreBuildArtifactCache(ctx, ".yarn", ".yarn") +
+                 restoreBuildArtifactCache(ctx, "yarn", ".yarn") +
+                 restoreBuildArtifactCache(ctx, "playwright", ".playwright") +
                  installYarn() +
                  [{
                      "name": "build-web",
@@ -1035,7 +1049,8 @@ def unitTests(ctx):
                      ],
                  }] +
                  skipIfUnchanged(ctx, "unit-tests") +
-                 restoreBuildArtifactCache(ctx, ".yarn", ".yarn") +
+                 restoreBuildArtifactCache(ctx, "yarn", ".yarn") +
+                 restoreBuildArtifactCache(ctx, "playwright", ".playwright") +
                  installYarn() +
                  restoreBuildArtifactCache(ctx, "web-dist", "dist") +
                  [
@@ -1164,7 +1179,9 @@ def acceptance(ctx):
                         # TODO: don't start services if we skip it -> maybe we need to convert them to steps
                         steps += skipIfUnchanged(ctx, "acceptance-tests")
 
-                        steps += restoreBuildArtifactCache(ctx, ".yarn", ".yarn")
+                        steps += restoreBuildArtifactCache(ctx, "yarn", ".yarn")
+                        steps += restoreBuildArtifactCache(ctx, "playwright", ".playwright")
+                        steps += restoreBuildArtifactCache(ctx, "tests-yarn", "tests/acceptance/.yarn")
                         steps += yarnInstallTests()
 
                         if (params["oc10IntegrationAppIncluded"]):
@@ -1594,6 +1611,9 @@ def installYarn():
     return [{
         "name": "yarn-install",
         "image": OC_CI_NODEJS,
+        "environment": {
+            "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
+        },
         "commands": [
             "yarn install --immutable",
         ],
@@ -1604,6 +1624,9 @@ def yarnInstallTests():
         "name": "yarn-install-tests",
         "image": OC_CI_NODEJS,
         "pull": "always",
+        "environment": {
+            "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
+        },
         "commands": [
             "cd tests/acceptance && yarn install --immutable",
         ],
@@ -2808,15 +2831,6 @@ def genericCachePurge(ctx, name, cache_key):
         },
     }
 
-def listDir(path):
-    return {
-        "name": "list-dir %s" % (path),
-        "image": OC_CI_ALPINE,
-        "commands": [
-            "tree %s" % (path),
-        ],
-    }
-
 def genericBuildArtifactCache(ctx, name, action, path):
     name = "%s_build_artifact_cache" % (name)
     cache_key = "%s/%s/%s" % (ctx.repo.slug, ctx.build.commit + "-${DRONE_BUILD_NUMBER}", name)
@@ -2827,7 +2841,7 @@ def genericBuildArtifactCache(ctx, name, action, path):
     return []
 
 def restoreBuildArtifactCache(ctx, name, path):
-    return [genericBuildArtifactCache(ctx, name, "restore", path), listDir(path)]
+    return [genericBuildArtifactCache(ctx, name, "restore", path)]
 
 def rebuildBuildArtifactCache(ctx, name, path):
     return [genericBuildArtifactCache(ctx, name, "rebuild", path)]
