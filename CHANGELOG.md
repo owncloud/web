@@ -14,6 +14,7 @@ Summary
 * Enhancement - Default action order: [#5952](https://github.com/owncloud/web/pull/5952)
 * Enhancement - Reduced sidebar width: [#5981](https://github.com/owncloud/web/issues/5981)
 * Enhancement - App provider and archiver on public links: [#5924](https://github.com/owncloud/web/pull/5924)
+* Enhancement - Update ODS to v11.2.1: [#6009](https://github.com/owncloud/web/pull/6009)
 
 Details
 -------
@@ -69,6 +70,34 @@ Details
    https://github.com/owncloud/web/issues/2479
    https://github.com/owncloud/web/issues/5901
    https://github.com/owncloud/web/pull/5924
+
+* Enhancement - Update ODS to v11.2.1: [#6009](https://github.com/owncloud/web/pull/6009)
+
+   We updated the ownCloud Design System to version 11.2.1. Please refer to the full changelog in
+   the ODS release (linked) for more details. Summary:
+
+   - Bugfix - Limit select event in OcTableFiles:
+   https://github.com/owncloud/owncloud-design-system/pull/1753 - Bugfix - Add
+   word-break rule to OcNotificationMessage component:
+   https://github.com/owncloud/owncloud-design-system/issues/1712 - Bugfix - OcTable
+   sorting case sensitivity:
+   https://github.com/owncloud/owncloud-design-system/issues/1698 - Bugfix - Drag and
+   Drop triggers wrong actions: https://github.com/owncloud/web/issues/5808 - Enhancement
+   - Make OcDatepicker themable:
+   https://github.com/owncloud/owncloud-design-system/issues/1679 - Enhancement -
+   Streamline OcTextInput:
+   https://github.com/owncloud/owncloud-design-system/pull/1636 - Enhancement - Add
+   accentuated class for OcTable:
+   https://github.com/owncloud/owncloud-design-system/pull/5967 - Enhancement - Add
+   Ghost Element for Drag & Drop:
+   https://github.com/owncloud/owncloud-design-system/pull/5788 - Enhancement - Add
+   "extension" svg icon: https://github.com/owncloud/owncloud-design-system/pull/1771 -
+   Enhancement - Add closure to mutate resource dom selector:
+   https://github.com/owncloud/owncloud-design-system/pull/1766 - Enhancement - Reduce
+   filename text weight: https://github.com/owncloud/owncloud-design-system/pull/1759
+
+   https://github.com/owncloud/web/pull/6009
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v11.2.1
 
 Changelog for ownCloud Web [4.4.0] (2021-10-26)
 =======================================
