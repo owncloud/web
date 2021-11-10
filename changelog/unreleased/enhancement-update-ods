@@ -1,6 +1,6 @@
-Enhancement: Update ODS to v11.2.0
+Enhancement: Update ODS to v11.2.1
 
-We updated the ownCloud Design System to version 11.2.0. Please refer to the full changelog in the ODS release (linked) for more details. Summary:
+We updated the ownCloud Design System to version 11.2.1. Please refer to the full changelog in the ODS release (linked) for more details. Summary:
 
 - Bugfix - Limit select event in OcTableFiles: https://github.com/owncloud/owncloud-design-system/pull/1753
 - Bugfix - Add word-break rule to OcNotificationMessage component: https://github.com/owncloud/owncloud-design-system/issues/1712
@@ -15,4 +15,4 @@ We updated the ownCloud Design System to version 11.2.0. Please refer to the ful
 - Enhancement - Reduce filename text weight: https://github.com/owncloud/owncloud-design-system/pull/1759
 
 https://github.com/owncloud/web/pull/6009
-https://github.com/owncloud/owncloud-design-system/releases/tag/v11.2.0
+https://github.com/owncloud/owncloud-design-system/releases/tag/v11.2.1
