@@ -47,7 +47,7 @@ describe('File Upload Component', () => {
     describe('when file is selected for upload', () => {
       const event = new Event('change')
 
-      it('should call "$_ocUpload_addFileToQue"', async () => {
+      it('should call "$_ocUpload_addFileToQueue"', async () => {
         const wrapper = shallowMount(FileUpload, {
           ...getOptions(),
           stubs: {
@@ -55,14 +55,14 @@ describe('File Upload Component', () => {
             'oc-icon': true
           }
         })
-        wrapper.vm.$_ocUpload_addFileToQue = jest.fn()
+        wrapper.vm.$_ocUpload_addFileToQueue = jest.fn()
         await wrapper.vm.$forceUpdate()
 
         const fileUploadInput = wrapper.find('#fileUploadInput')
         await fileUploadInput.trigger('change')
 
-        expect(wrapper.vm.$_ocUpload_addFileToQue).toHaveBeenCalledTimes(1)
-        expect(wrapper.vm.$_ocUpload_addFileToQue).toHaveBeenCalledWith(event)
+        expect(wrapper.vm.$_ocUpload_addFileToQueue).toHaveBeenCalledTimes(1)
+        expect(wrapper.vm.$_ocUpload_addFileToQueue).toHaveBeenCalledWith(event)
       })
     })
   })

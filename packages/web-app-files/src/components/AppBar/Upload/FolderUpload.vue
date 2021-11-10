@@ -14,7 +14,7 @@
       mozdirectory
       allowdirs
       tabindex="-1"
-      @change="$_ocUpload_addDirectoryToQue"
+      @change="$_ocUpload_addDirectoryToQueue"
     />
   </div>
 </template>

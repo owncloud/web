@@ -36,9 +36,9 @@ describe('FolderUpload Component', () => {
     })
 
     describe('when folder is selected for upload', () => {
-      it('should call "$_ocUpload_addDirectoryToQue"', async () => {
-        const spyOcUploadAddDirectoryToQue = jest
-          .spyOn(FolderUpload.mixins[0].methods, '$_ocUpload_addDirectoryToQue')
+      it('should call "$_ocUpload_addDirectoryToQueue"', async () => {
+        const spyOcUploadAddDirectoryToQueue = jest
+          .spyOn(FolderUpload.mixins[0].methods, '$_ocUpload_addDirectoryToQueue')
           .mockImplementation()
         const wrapper = shallowMount(FolderUpload, {
           ...mountOptions,
@@ -51,7 +51,7 @@ describe('FolderUpload Component', () => {
         const folderUploadInput = wrapper.find(selector.uploadInput)
         await folderUploadInput.trigger('change')
 
-        expect(spyOcUploadAddDirectoryToQue).toHaveBeenCalledTimes(1)
+        expect(spyOcUploadAddDirectoryToQueue).toHaveBeenCalledTimes(1)
       })
     })
   })

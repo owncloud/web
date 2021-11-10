@@ -25,8 +25,8 @@ describe('FileDrop component', () => {
   })
 
   describe('when dropzone is enabled', () => {
-    const spyOcUploadAddDropToQue = jest
-      .spyOn(FileDrop.mixins[0].methods, '$_ocUpload_addDropToQue')
+    const spyOcUploadAddDropToQueue = jest
+      .spyOn(FileDrop.mixins[0].methods, '$_ocUpload_addDropToQueue')
       .mockImplementation()
     const spyOcDropzoneDragEnd = jest
       .spyOn(FileDrop.methods, '$_ocDropzone_dragEnd')
@@ -55,10 +55,10 @@ describe('FileDrop component', () => {
       expect(dropZone.props().options.autoQueue).toEqual(false)
       expect(dropZone.text()).toEqual('Drag and drop to upload content into current folder')
     })
-    it('should call "$_ocUpload_addDropToQue" if file-drop event is triggered', () => {
+    it('should call "$_ocUpload_addDropToQueue" if file-drop event is triggered', () => {
       dropZone.vm.$emit('vdropzone-drop')
 
-      expect(spyOcUploadAddDropToQue).toHaveBeenCalledTimes(1)
+      expect(spyOcUploadAddDropToQueue).toHaveBeenCalledTimes(1)
     })
     it('should call "$_ocDropzone_dragEnd" if files-added event is triggered', () => {
       dropZone.vm.$emit('vdropzone-files-added')
