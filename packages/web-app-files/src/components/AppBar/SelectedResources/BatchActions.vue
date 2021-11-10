@@ -6,6 +6,7 @@
       :action="action"
       :items="selectedFiles"
       appearance="outline"
+      class="oc-mr-s"
     />
   </oc-list>
 </template>
@@ -69,17 +70,13 @@ export default {
   display: block;
   li {
     float: left !important;
-    margin-top: 10px;
-    padding-right: 10px;
+    margin-bottom: var(--oc-space-xsmall);
   }
 
   @media only screen and (min-width: 1200px) {
     align-items: center;
     display: flex;
-    gap: 10px;
-    li {
-      margin-top: 0 !important;
-    }
+    gap: var(--oc-space-small);
   }
 }
 </style>

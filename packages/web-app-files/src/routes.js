@@ -45,7 +45,7 @@ export default [
         component: Favorites,
         meta: {
           hideFilelistActions: true,
-          hasBulkActions: true,
+          hasBulkActions: false,
           title: $gettext('Favorite files')
         }
       },
@@ -65,7 +65,7 @@ export default [
         name: 'shared-with-others',
         meta: {
           hideFilelistActions: true,
-          hasBulkActions: true,
+          hasBulkActions: false,
           title: $gettext('Files shared with others')
         }
       },
@@ -75,7 +75,7 @@ export default [
         name: 'shared-via-link',
         meta: {
           hideFilelistActions: true,
-          hasBulkActions: true,
+          hasBulkActions: false,
           title: $gettext('Files shared via link')
         }
       },
@@ -85,8 +85,7 @@ export default [
         name: 'trashbin',
         meta: {
           hideFilelistActions: true,
-          // FIXME: should have a generic bulk actions way as it currently handles this separately
-          hasBulkActions: false,
+          hasBulkActions: true,
           title: $gettext('Deleted files')
         }
       }
