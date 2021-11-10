@@ -7,16 +7,13 @@ import {
 
 export default {
   computed: {
-    $_downloadFolder_items() {
+    $_downloadArchive_items() {
       return [
         {
           name: 'download-archive',
           icon: 'archive',
-          handler: this.$_downloadFolder_trigger,
-          label: ({ resources }) => {
-            if (resources.length === 1 && resources[0].isFolder) {
-              return this.$gettext('Download folder')
-            }
+          handler: this.$_downloadArchive_trigger,
+          label: () => {
             return this.$gettext('Download')
           },
           isEnabled: ({ resources }) => {
@@ -31,7 +28,7 @@ export default {
             if (resources.length === 0) {
               return false
             }
-            if (resources.length === 1 && resources[0].isFolder) {
+            if (resources.length === 1 && !resources[0].isFolder) {
               return false
             }
             if (!isDownloadAsArchiveAvailable()) {
@@ -50,7 +47,7 @@ export default {
     }
   },
   methods: {
-    async $_downloadFolder_trigger({ resources }) {
+    async $_downloadArchive_trigger({ resources }) {
       await triggerDownloadAsArchive({
         fileIds: resources.map((resource) => resource.fileId),
         ...(isPublicFilesRoute(this.$route) && {
@@ -60,8 +57,8 @@ export default {
         console.error(e)
         this.showMessage({
           title: this.$ngettext(
-            'Error downloading the selected folder.',
-            'Error downloading the selected files.',
+            'Error downloading the selected folder.', // on single selection only available for folders
+            'Error downloading the selected files.', // on multi selection available for files+folders
             this.selectedFiles.length
           ),
           status: 'danger'

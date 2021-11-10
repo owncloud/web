@@ -4,8 +4,8 @@
       <oc-list
         :id="`oc-files-context-actions-${section.name}`"
         :key="`section-${section.name}-list`"
-        class="oc-mt-s oc-files-context-actions"
-        :class="{ 'oc-my-s': i === menuSections.length - 1 }"
+        class="oc-files-context-actions"
+        :class="getSectionClasses(i)"
       >
         <action-menu-item
           v-for="(action, j) in section.items"
@@ -13,9 +13,9 @@
           :action="action"
           :items="items"
           class="oc-files-context-action"
+          :class="getActionClasses(section, j)"
         />
       </oc-list>
-      <hr v-if="i < menuSections.length - 1" :key="`section-${section.name}-separator`" />
     </template>
   </div>
 </template>
@@ -30,8 +30,8 @@ import Copy from '../../mixins/actions/copy'
 import CreatePublicLink from '../../mixins/actions/createPublicLink'
 import DeclineShare from '../../mixins/actions/declineShare'
 import Delete from '../../mixins/actions/delete'
+import DownloadArchive from '../../mixins/actions/downloadArchive'
 import DownloadFile from '../../mixins/actions/downloadFile'
-import DownloadFolder from '../../mixins/actions/downloadFolder'
 import EmptyTrashBin from '../../mixins/actions/emptyTrashBin'
 import Favorite from '../../mixins/actions/favorite'
 import Move from '../../mixins/actions/move'
@@ -52,8 +52,8 @@ export default {
     CreatePublicLink,
     DeclineShare,
     Delete,
+    DownloadArchive,
     DownloadFile,
-    DownloadFolder,
     EmptyTrashBin,
     Favorite,
     Move,
@@ -117,12 +117,13 @@ export default {
       return [
         ...this.$_acceptShare_items,
         ...this.$_declineShare_items,
+        ...this.$_downloadArchive_items,
         ...this.$_move_items,
         ...this.$_copy_items,
         ...this.$_emptyTrashBin_items,
         ...this.$_restore_items,
         ...this.$_delete_items,
-        ...this.$_showActions_items
+        ...this.$_showDetails_items
       ].filter((item) => item.isEnabled(this.filterParams))
     },
 
@@ -136,8 +137,8 @@ export default {
 
       return [
         ...fileHandlers,
+        ...this.$_downloadArchive_items,
         ...this.$_downloadFile_items,
-        ...this.$_downloadFolder_items,
         ...this.$_createPublicLink_items,
         ...this.$_showShares_items,
         ...this.$_favorite_items.map((action) => {
@@ -163,6 +164,20 @@ export default {
     menuItemsSidebar() {
       return [...this.$_showDetails_items].filter((item) => item.isEnabled(this.filterParams))
     }
+  },
+  methods: {
+    getSectionClasses(index) {
+      if (index < this.menuSections.length - 1) {
+        return ['oc-files-context-actions-border', 'oc-pb-s', 'oc-mb-s']
+      }
+      return []
+    },
+    getActionClasses(section, index) {
+      if (index < section.items.length - 1) {
+        return ['oc-pb-s']
+      }
+      return []
+    }
   }
 }
 </script>
@@ -184,6 +199,10 @@ export default {
       gap: 10px;
       vertical-align: top;
     }
+  }
+
+  &-border {
+    border-bottom: 1px solid var(--oc-color-border);
   }
 }
 </style>

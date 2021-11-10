@@ -97,7 +97,7 @@
               </ul>
             </oc-drop>
           </template>
-          <size-info v-if="selectedFiles.length > 0" class="oc-mr-s uk-visible@l" />
+          <size-info v-if="selectedFiles.length > 0" class="oc-mr uk-visible@l" />
           <batch-actions />
         </div>
         <view-options />
