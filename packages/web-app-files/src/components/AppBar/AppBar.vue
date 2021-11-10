@@ -99,7 +99,7 @@
             </oc-drop>
           </template>
           <size-info v-if="hasBulkActions && selectedFiles.length > 0" class="oc-mr uk-visible@l" />
-          <batch-actions v-if="hasBulkActions" />
+          <batch-actions v-if="hasBulkActions && selectedFiles.length > 0" />
         </div>
         <view-options />
       </div>
