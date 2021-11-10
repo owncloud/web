@@ -3006,6 +3006,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"git-repo-info@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "git-repo-info@npm:2.1.1"
+  checksum: 58cedacae81bbe8fedc81d226346c472d11357d1758140ab0ee5d0c3360ad5b7a9d8613ca6e8b50d089d073e5b3f2e2893536d0cb57bced5f558dc913d5e21c6
+  languageName: node
+  linkType: hard
+
 "glob-parent@npm:^5.1.0":
   version: 5.1.2
   resolution: "glob-parent@npm:5.1.2"
@@ -5489,6 +5496,7 @@ __metadata:
     core-js: ^3.15.2
     cucumber-html-reporter: ^5.4.0
     fs-extra: ^10.0.0
+    git-repo-info: ^2.1.1
     join-path: ^1.1.1
     ldapjs: ^2.2.3
     lodash: ^4.17.21
