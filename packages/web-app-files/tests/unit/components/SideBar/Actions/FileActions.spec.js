@@ -32,7 +32,7 @@ describe('FileActions', () => {
         jest.clearAllMocks()
       })
       it('renders action handlers as clickable elements', async () => {
-        const actions = ['copy', 'download', 'move', 'open-folder', 'markdown-editor']
+        const actions = ['copy', 'download', 'move', 'navigate', 'markdown-editor']
         const wrapper = getWrapper(filesPersonalRoute, actions)
 
         for (const button of actions) {

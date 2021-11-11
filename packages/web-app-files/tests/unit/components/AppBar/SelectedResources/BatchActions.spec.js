@@ -33,32 +33,8 @@ describe('Batch Actions component', () => {
     jest.resetModules()
   })
 
-  describe.each(['files-personal', 'files-favorites', 'files-public-list', 'files-shared-with-me'])(
-    '%s page',
-    (page) => {
-      const $route = {
-        name: page
-      }
-
-      it('should not display action buttons if no items are selected', () => {
-        const store = createStore({ selected: [] })
-        const wrapper = createShallowMountWrapper({
-          store,
-          mocks: {
-            $route: {
-              ...$route,
-              meta: {
-                hasBulkActions: false
-              }
-            }
-          }
-        })
-        const actionButtons = wrapper.findAll(elSelector.ocButtonStub)
-
-        expect(actionButtons.length).toEqual(0)
-      })
-    }
-  )
+  it.todo('renders an empty list if there are no batch actions available')
+  it.todo('renders a button for each available batch action')
 })
 
 function createShallowMountWrapper(options = {}) {

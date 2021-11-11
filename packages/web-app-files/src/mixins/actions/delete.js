@@ -35,6 +35,7 @@ export default {
         },
         {
           // this menu item is ONLY for the trashbin (permanently delete a file/folder)
+          name: 'delete-permanent',
           icon: 'delete',
           label: () => this.$gettext('Delete'),
           handler: this.$_delete_trigger,
@@ -45,7 +46,7 @@ export default {
             return resources.length > 0
           },
           componentType: 'oc-button',
-          class: 'oc-files-actions-delete-trigger'
+          class: 'oc-files-actions-delete-permanent-trigger'
         }
       ]
     }

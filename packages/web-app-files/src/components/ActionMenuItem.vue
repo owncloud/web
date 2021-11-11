@@ -4,13 +4,23 @@
       :is="action.componentType"
       v-bind="getComponentProps(action, items)"
       :class="['oc-text-bold', action.class]"
+      data-testid="action-handler"
       v-on="getComponentListeners(action, items)"
     >
-      <oc-icon v-if="action.icon" :name="action.icon" size="medium" />
-      <oc-img v-else-if="action.img" :src="action.img" alt="" class="oc-icon oc-icon-m" />
-      <span class="oc-files-context-action-label">{{ action.label(filterParams) }}</span>
+      <oc-icon v-if="action.icon" data-testid="action-icon" :name="action.icon" size="medium" />
+      <oc-img
+        v-else-if="action.img"
+        data-testid="action-img"
+        :src="action.img"
+        alt=""
+        class="oc-icon oc-icon-m"
+      />
+      <span class="oc-files-context-action-label" data-testid="action-label">{{
+        action.label(filterParams)
+      }}</span>
       <span
         v-if="action.opensInNewWindow"
+        data-testid="action-sr-hint"
         class="oc-invisible-sr"
         v-text="$gettext('(Opens in new window)')"
       />
