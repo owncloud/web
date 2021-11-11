@@ -1,0 +1,5 @@
+Enhancement: Accentuate new files
+
+We've added a visual highlighting of newly created (or uploaded) resources in the OcFilesTable.
+
+https://github.com/owncloud/web/pull/6020
