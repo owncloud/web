@@ -1,10 +1,5 @@
-// --- Components --------------------------------------------------------------
-
 import App from './App.vue'
-import t from '../l10n/translations'
-
-// --- Routing -----------------------------------------------------------------
-
+import translations from '../l10n/translations'
 import store from './store.js'
 
 const routes = [
@@ -15,6 +10,14 @@ const routes = [
     },
     name: 'markdown-editor'
   }
+]
+
+const routesForFileExtensions = [
+  'files-personal',
+  'files-favorites',
+  'files-shared-with-others',
+  'files-shared-with-me',
+  'files-public-list'
 ]
 
 const appInfo = {
@@ -30,13 +33,7 @@ const appInfo = {
           return $gettext('New plain text file…')
         }
       },
-      routes: [
-        'files-personal',
-        'files-favorites',
-        'files-shared-with-others',
-        'files-shared-with-me',
-        'files-public-list'
-      ]
+      routes: routesForFileExtensions
     },
     {
       extension: 'md',
@@ -45,18 +42,11 @@ const appInfo = {
           return $gettext('New mark-down file…')
         }
       },
-      routes: [
-        'files-personal',
-        'files-favorites',
-        'files-shared-with-others',
-        'files-shared-with-me',
-        'files-public-list'
-      ]
+      routes: routesForFileExtensions
     }
   ]
 }
 
-const translations = t
 export default {
   appInfo,
   routes,

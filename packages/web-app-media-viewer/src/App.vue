@@ -360,12 +360,12 @@ export default {
 
 <style lang="scss" scoped>
 #mediaviewer {
-  min-height: 100vh;
+  min-height: 93vh;
 }
 .media-viewer-player {
   max-width: 90vw;
   height: 70vh;
-  margin: 10px auto;
+  margin: 0 auto;
   object-fit: contain;
   img,
   video {

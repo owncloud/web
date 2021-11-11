@@ -1,5 +1,50 @@
 <template>
   <main id="files" class="uk-flex uk-height-1-1">
+    <!-- <transition :name="appNavigationAnimation">
+      <focus-trap v-if="isSidebarVisible" :active="isSidebarFixed && appNavigationVisible"> -->
+        <oc-sidebar-nav
+
+          id="web-nav-sidebar"
+          class="oc-app-navigation"
+          :accessible-label-header="$gettext('Sidebar header')"
+          :accessible-label-nav="$gettext('Sidebar navigation menu')"
+          :accessible-label-footer="$gettext('Sidebar footer')"
+          :class="sidebarClasses"
+        >
+          <template #header>
+            <div class="uk-text-center">
+              <oc-button
+                v-if="isSidebarFixed"
+                variation="inverse"
+                appearance="raw"
+                class="web-sidebar-btn-close"
+                :aria-label="$gettext('Close sidebar')"
+                @click="toggleAppNavigationVisibility"
+              >
+                <oc-icon name="close" />
+              </oc-button>
+            </div>
+          </template>
+          <template #nav>
+            <oc-list>
+              <oc-sidebar-nav-item
+                v-for="link in sidebarNavItems"
+                :key="link.route.path"
+                :active="link.active"
+                :target="link.route.path"
+                :icon="link.icon || link.iconMaterial"
+              >
+                {{ link.name }}
+              </oc-sidebar-nav-item>
+            </oc-list>
+          </template>
+          <template v-if="sidebar.sidebarFooterContentComponent" #footer>
+            <component :is="sidebar.sidebarFooterContentComponent" />
+          </template>
+        </oc-sidebar-nav>
+      <!-- </focus-trap>
+    </transition> -->
+
     <div
       ref="filesListWrapper"
       tabindex="-1"
@@ -29,16 +74,19 @@ import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import AppBar from './components/AppBar/AppBar.vue'
 import ProgressBar from './components/Upload/ProgressBar.vue'
 import SideBar from './components/SideBar/SideBar.vue'
+import { FocusTrap } from 'focus-trap-vue'
 
 export default {
   components: {
     AppBar,
     ProgressBar,
-    SideBar
+    SideBar,
+    FocusTrap
   },
   mixins: [Mixins, MixinRoutes],
   data() {
     return {
+      appNavigationVisible: false,
       createFolder: false,
       fileUploadName: '',
       fileUploadProgress: 0,
@@ -48,6 +96,12 @@ export default {
     }
   },
   computed: {
+    ...mapState(['route', 'sidebar']),
+    ...mapGetters([
+      'capabilities',
+      'getNavItemsByExtension'
+    ]),
+
     ...mapGetters('Files', ['dropzone', 'inProgress']),
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
@@ -56,6 +110,66 @@ export default {
     },
     showSidebar() {
       return !this.sidebarClosed
+    },
+
+    sidebarNavItems() {
+      if (this.publicPage()) {
+        return []
+      }
+
+      const items = this.getNavItemsByExtension(this.currentExtension)
+      if (!items) {
+        return []
+      }
+
+      items.filter((item) => {
+        if (this.capabilities === undefined) {
+          return false
+        }
+
+        if (item.enabled === undefined) {
+          return true
+        }
+
+        return item.enabled(this.capabilities)
+      })
+
+      return items.map((item) => ({
+        ...item,
+        name: this.$gettext(item.name),
+        active: this.$route.name === item.route.name
+      }))
+    },
+
+    sidebarClasses() {
+      if (this.appNavigationVisible) {
+        return ''
+      }
+
+      return 'uk-visible@l'
+    },
+
+    isSidebarFixed() {
+      return this.windowWidth <= 960
+    },
+
+    isSidebarVisible() {
+      if (this.sidebarNavItems.length === 0) {
+        return false
+      }
+      return this.windowWidth >= 900 || this.appNavigationVisible
+    },
+
+    appNavigationAnimation() {
+      if (this.windowWidth > 1200) {
+        return null
+      }
+
+      if (this.windowWidth > 960) {
+        return 'push-right'
+      }
+
+      return 'fade'
     }
   },
   watch: {
@@ -206,4 +320,28 @@ main {
     }
   }
 }
+
+// .oc-app-navigation {
+//   position: sticky;
+//   top: 0;
+//   z-index: 1;
+// }
+
+
+// .web-sidebar-btn-close {
+//   position: absolute;
+//   right: var(--oc-space-medium);
+//   top: var(--oc-space-medium);
+//   z-index: 3;
+// }
+// @media only screen and (max-width: 960px) {
+//   #web-nav-sidebar {
+//     height: 100%;
+//     left: 0;
+//     position: fixed;
+//     top: 0;
+//     width: 100%;
+//     z-index: 3;
+//   }
+// }
 </style>

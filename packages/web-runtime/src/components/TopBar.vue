@@ -1,33 +1,27 @@
 <template>
   <header
-    class="oc-topbar uk-flex uk-flex-middle uk-flex-wrap oc-border-b oc-p-s"
+    id="oc-topbar"
+    class="uk-flex uk-flex-middle uk-flex-between oc-mx-m"
     :aria-label="$gettext('Top bar')"
   >
-    <oc-grid gutter="medium" flex>
-      <div class="uk-hidden@l">
-        <oc-button
-          appearance="raw"
-          class="oc-m-s oc-app-navigation-toggle"
-          :aria-label="$gettext('Open navigation menu')"
-          @click="toggleAppNavigationVisibility"
-        >
-          <oc-icon name="menu" />
-        </oc-button>
-      </div>
-    </oc-grid>
+  <div class="gap-15 uk-flex uk-flex-middle uk-flex-between">
+    <applications-menu v-if="applicationsList.length > 0" :applications-list="applicationsList" />
+    <router-link ref="navigationSidebarLogo" to="/">
+      <oc-img :src="logoImage" :alt="sidebarLogoAlt" />
+    </router-link>
+  </div>
     <div class="portal-wrapper">
       <portal-target name="app.runtime.header" multiple></portal-target>
     </div>
-    <oc-grid flex gutter="small" class="uk-width-expand uk-flex-right oc-m-rm">
+    <div class="gap-15 uk-flex uk-flex-middle uk-flex-between">
       <feedback-link v-if="isFeedbackLinkEnabled" />
       <notifications v-if="activeNotifications.length" />
-      <applications-menu v-if="applicationsList.length > 0" :applications-list="applicationsList" />
       <user-menu
         :user-id="userId"
         :user-display-name="userDisplayName"
         :applications-list="applicationsList"
       />
-    </oc-grid>
+    </div>
   </header>
 </template>
 
@@ -47,6 +41,9 @@ export default {
     UserMenu
   },
   props: {
+    sidebarLogoAlt() {
+      return this.$gettext('Navigate to all files page')
+    },
     userId: {
       type: String,
       required: false,
@@ -62,11 +59,6 @@ export default {
       required: false,
       default: () => []
     },
-    hasAppNavigation: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
     activeNotifications: {
       type: [Array, Boolean],
       required: false,
@@ -76,30 +68,27 @@ export default {
   computed: {
     ...mapGetters(['configuration']),
 
+    logoImage() {
+      return this.configuration.theme.logo.sidebar
+    },
+
     isFeedbackLinkEnabled() {
       return !this.configuration.options.disableFeedbackLink
-    }
-  },
-  methods: {
-    toggleAppNavigationVisibility() {
-      this.$emit('toggleAppNavigationVisibility')
     }
   }
 }
 </script>
 
-<style scoped>
-.topbar-current-extension-title {
-  color: white;
+<style lang="scss" scoped>
+.gap-15 {
+  gap: 15px;
 }
-
-.oc-topbar {
-  height: 60px;
-}
-
-@media (min-width: 960px) {
-  .portal-wrapper {
-    margin-left: 30px;
+#oc-topbar {
+  z-index: 2;
+  height: 80px;
+  img {
+    margin: 0 !important;
+    height: 60px;
   }
 }
 </style>

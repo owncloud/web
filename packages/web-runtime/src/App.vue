@@ -16,77 +16,20 @@
     <template v-else-if="!showHeader">
       <router-view name="fullscreen" />
     </template>
-    <div v-else id="web-content" key="core-content" class="uk-flex uk-flex-stretch">
-      <transition :name="appNavigationAnimation">
-        <focus-trap v-if="isSidebarVisible" :active="isSidebarFixed && appNavigationVisible">
-          <oc-sidebar-nav
-            v-show="isSidebarVisible"
-            id="web-nav-sidebar"
-            v-touch:swipe.left="handleNavSwipe"
-            class="oc-app-navigation"
-            :accessible-label-header="$gettext('Sidebar header')"
-            :accessible-label-nav="$gettext('Sidebar navigation menu')"
-            :accessible-label-footer="$gettext('Sidebar footer')"
-            :class="sidebarClasses"
-          >
-            <template #header>
-              <div class="uk-text-center">
-                <oc-button
-                  v-if="isSidebarFixed"
-                  variation="inverse"
-                  appearance="raw"
-                  class="web-sidebar-btn-close"
-                  :aria-label="$gettext('Close sidebar')"
-                  @click="toggleAppNavigationVisibility"
-                >
-                  <oc-icon name="close" />
-                </oc-button>
-                <router-link ref="navigationSidebarLogo" to="/">
-                  <oc-logo :src="logoImage" :alt="sidebarLogoAlt" />
-                </router-link>
-              </div>
-            </template>
-            <template #nav>
-              <oc-list>
-                <oc-sidebar-nav-item
-                  v-for="link in sidebarNavItems"
-                  :key="link.route.path"
-                  :active="link.active"
-                  :target="link.route.path"
-                  :icon="link.icon || link.iconMaterial"
-                >
-                  {{ link.name }}
-                </oc-sidebar-nav-item>
-              </oc-list>
-            </template>
-            <template v-if="sidebar.sidebarFooterContentComponent" #footer>
-              <component :is="sidebar.sidebarFooterContentComponent" />
-            </template>
-          </oc-sidebar-nav>
-        </focus-trap>
-      </transition>
-      <div class="uk-width-expand web-content-container">
-        <top-bar
-          v-if="!publicPage() && !$route.meta.verbose"
-          id="oc-topbar"
-          class="uk-width-expand"
-          :applications-list="applicationsList"
-          :active-notifications="activeNotifications"
-          :user-id="user.username || user.id"
-          :user-display-name="user.displayname"
-          @toggleAppNavigationVisibility="toggleAppNavigationVisibility"
-        />
-        <div id="main">
-          <message-bar :active-messages="activeMessages" @deleteMessage="$_deleteMessage" />
-          <router-view class="oc-app-container" name="app" />
-        </div>
+    <div v-else id="web-content" key="core-content" class="uk-width-expand web-content-container">
+      <top-bar
+        v-if="!publicPage() && !$route.meta.verbose"
+        :applications-list="applicationsList"
+        :active-notifications="activeNotifications"
+        :user-id="user.username || user.id"
+        :user-display-name="user.displayname"
+      />
+      <div id="main" class="oc-my-l oc-mx-l">
+        <message-bar :active-messages="activeMessages" @deleteMessage="$_deleteMessage" />
+        <router-view class="oc-app-container" name="app" />
       </div>
     </div>
-    <transition
-      enter-active-class="uk-animation-fade uk-animation-fast"
-      leave-active-class="uk-animation-fade uk-animation-reverse uk-animation-fast"
-      name="custom-classes-transition"
-    >
+    <transition name="custom-classes-transition">
       <oc-modal
         v-if="modal.displayed"
         :variation="modal.variation"
@@ -116,20 +59,16 @@ import { mapGetters, mapState, mapActions } from 'vuex'
 import TopBar from './components/TopBar.vue'
 import MessageBar from './components/MessageBar.vue'
 import SkipTo from './components/SkipTo.vue'
-import { FocusTrap } from 'focus-trap-vue'
 
 export default {
   components: {
     MessageBar,
     TopBar,
-    SkipTo,
-    FocusTrap
+    SkipTo
   },
   data() {
     return {
-      appNavigationVisible: false,
       $_notificationsInterval: null,
-      windowWidth: 0,
       announcement: ''
     }
   },
@@ -142,7 +81,6 @@ export default {
       'capabilities',
       'apps',
       'getSettingsValue',
-      'getNavItemsByExtension',
       'getExtensionsWithNavItems'
     ]),
     applicationsList() {
@@ -173,74 +111,6 @@ export default {
       return this.configuration.theme.logo.favicon
     },
 
-    logoImage() {
-      return this.configuration.theme.logo.sidebar
-    },
-
-    sidebarLogoAlt() {
-      return this.$gettext('Navigate to all files page')
-    },
-
-    sidebarNavItems() {
-      if (this.publicPage()) {
-        return []
-      }
-
-      const items = this.getNavItemsByExtension(this.currentExtension)
-      if (!items) {
-        return []
-      }
-
-      items.filter((item) => {
-        if (this.capabilities === undefined) {
-          return false
-        }
-
-        if (item.enabled === undefined) {
-          return true
-        }
-
-        return item.enabled(this.capabilities)
-      })
-
-      return items.map((item) => ({
-        ...item,
-        name: this.$gettext(item.name),
-        active: this.$route.name === item.route.name
-      }))
-    },
-
-    sidebarClasses() {
-      if (this.appNavigationVisible) {
-        return ''
-      }
-
-      return 'uk-visible@l'
-    },
-
-    isSidebarFixed() {
-      return this.windowWidth <= 960
-    },
-
-    isSidebarVisible() {
-      if (this.sidebarNavItems.length === 0) {
-        return false
-      }
-      return this.windowWidth >= 1200 || this.appNavigationVisible
-    },
-
-    appNavigationAnimation() {
-      if (this.windowWidth > 1200) {
-        return null
-      }
-
-      if (this.windowWidth > 960) {
-        return 'push-right'
-      }
-
-      return 'fade'
-    },
-
     selectedLanguage() {
       return this.getSettingsValue({
         extension: 'ocis-accounts',
@@ -255,7 +125,6 @@ export default {
       handler: function (to) {
         this.announceRouteChange(to)
         document.title = this.extractPageTitleFromRoute(to)
-        this.appNavigationVisible = false
       }
     },
     capabilities: {
@@ -289,10 +158,6 @@ export default {
     }
   },
 
-  beforeDestroy() {
-    window.removeEventListener('resize', this.onResize)
-  },
-
   destroyed() {
     if (this.$_notificationsInterval) {
       clearInterval(this.$_notificationsInterval)
@@ -307,34 +172,13 @@ export default {
     return metaInfo
   },
 
-  mounted() {
-    this.$nextTick(() => {
-      window.addEventListener('resize', this.onResize)
-      this.onResize()
-    })
-  },
-
   methods: {
     ...mapActions(['fetchNotifications', 'deleteMessage']),
 
-    focusModal(component, event) {
+    focusModal(event) {
       this.focus({
         revert: event === 'beforeDestroy'
       })
-    },
-
-    hideAppNavigation() {
-      this.appNavigationVisible = false
-    },
-
-    toggleAppNavigationVisibility() {
-      this.appNavigationVisible = !this.appNavigationVisible
-
-      if (this.appNavigationVisible) {
-        this.$nextTick(() => {
-          this.$refs.navigationSidebarLogo.$el.focus()
-        })
-      }
     },
 
     $_updateNotifications() {
@@ -346,25 +190,6 @@ export default {
 
     $_deleteMessage(item) {
       this.deleteMessage(item)
-    },
-
-    onResize() {
-      const width = window.innerWidth
-
-      // Reset navigation visibility in case of switching back to permanently visible sidebar
-      if (width >= 1200) {
-        this.appNavigationVisible = false
-      }
-
-      this.windowWidth = width
-    },
-
-    handleNavSwipe() {
-      if (this.windowWidth <= 960 || this.windowWidth > 1200) {
-        return
-      }
-
-      this.appNavigationVisible = false
     },
 
     announceRouteChange(route) {
@@ -399,24 +224,16 @@ export default {
 }
 </script>
 <style lang="scss">
+body {
+  background-color: var(--oc-color-swatch-brand-default);
+}
+
 html,
 body,
 #web,
 #web-content {
   height: 100%;
   overflow-y: hidden;
-}
-
-#web {
-  background-color: var(--oc-color-background-default);
-}
-
-#oc-topbar {
-  position: sticky;
-  top: 0;
-  height: 60px;
-  z-index: 2;
-  background-color: var(--oc-color-background-default);
 }
 
 .web-content-container {
@@ -430,15 +247,13 @@ body,
 }
 
 #main {
-  position: relative;
+  background-color: var(--oc-color-swatch-brand-default);
+  border-radius: 2rem;
   grid-area: main;
   overflow-y: auto;
-}
-
-.oc-app-navigation {
-  position: sticky;
-  top: 0;
-  z-index: 1;
+  main {
+    background-color: var(--oc-color-background-default);
+  }
 }
 
 .loading-overlay {
@@ -456,23 +271,5 @@ body,
       border-bottom: 10px solid transparent;
     }
   }
-}
-
-@media only screen and (max-width: 960px) {
-  #web-nav-sidebar {
-    height: 100%;
-    left: 0;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 3;
-  }
-}
-
-.web-sidebar-btn-close {
-  position: absolute;
-  right: var(--oc-space-medium);
-  top: var(--oc-space-medium);
-  z-index: 3;
 }
 </style>
