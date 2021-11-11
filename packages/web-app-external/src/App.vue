@@ -31,6 +31,24 @@ import { mapGetters } from 'vuex'
 import ErrorScreen from './components/ErrorScreen.vue'
 import LoadingScreen from './components/LoadingScreen.vue'
 
+// FIXME: hacky, get rid asap, just a workaround
+// same as packages/web-app-files/src/views/PublicFiles.vue
+const unauthenticatedUserReady = async (router, store) => {
+  if (store.getters.userReady) {
+    return
+  }
+
+  const publicToken = router.currentRoute.query['public-token']
+  const publicLinkPassword = store.getters['Files/publicLinkPassword']
+
+  await store.dispatch('loadCapabilities', {
+    publicToken,
+    ...(publicLinkPassword && { user: 'public', password: publicLinkPassword })
+  })
+
+  store.commit('SET_USER_READY', true)
+}
+
 export default {
   name: 'ExternalApp',
 
@@ -48,6 +66,7 @@ export default {
   }),
   computed: {
     ...mapGetters(['getToken', 'capabilities', 'configuration']),
+    ...mapGetters('Files', ['publicLinkPassword']),
 
     pageTitle() {
       const translated = this.$gettext('"%{appName}" app page')
@@ -69,37 +88,27 @@ export default {
     }
   },
   async created() {
+    await unauthenticatedUserReady(this.$router, this.$store)
+
     this.loading = true
 
-    // TODO: Enable externalApp usage on public routes below
-    // initialize headers()
-
-    // if (this.isPublicRoute) {
-    //   // send auth header here if public route
-    //   // if password exists send it via basicauth public:password
-
-    //   // headers.append('public-token', 'uUCPJghnVUspjxe')
-    //   // const password = this.publicLinkPassword
-
-    //   // if (password) {
-    //   //  headers.append( Authorization: 'Basic ' + Buffer.from('public:' + password).toString('base64') }
-    //   // }
-    // } else {
-    //   - check for token
-    //   - abort if falsy
-    //   - build headers as below
-    // }
-
-    if (!this.getToken) {
-      this.loading = false
-      this.loadingError = true
-      return
+    // build headers with respect to the actual auth situation
+    const { 'public-token': publicToken } = this.$route.query
+    const publicLinkPassword = this.publicLinkPassword
+    const accessToken = this.getToken
+    const headers = {
+      'X-Requested-With': 'XMLHttpRequest',
+      ...(publicToken && { 'public-token': publicToken }),
+      ...(publicLinkPassword && {
+        Authorization:
+          'Basic ' + Buffer.from(['public', publicLinkPassword].join(':')).toString('base64')
+      }),
+      ...(accessToken && {
+        Authorization: 'Bearer ' + accessToken
+      })
     }
 
-    const headers = new Headers()
-    headers.append('Authorization', 'Bearer ' + this.getToken)
-    headers.append('X-Requested-With', 'XMLHttpRequest')
-
+    // fetch iframe params for app and file
     const configUrl = this.configuration.server
     const appOpenUrl = this.capabilities.files.app_providers[0].open_url.replace('/app', 'app')
     const url = configUrl + appOpenUrl + '?file_id=' + this.fileId + '&app_name=' + this.appName

@@ -20,7 +20,8 @@ const routes = [
       app: App
     },
     meta: {
-      title: $gettext('External app')
+      title: $gettext('External app'),
+      auth: false
     }
   }
 ]
@@ -30,7 +31,7 @@ export default {
   routes,
   store,
   translations,
-  async ready({ store: runtimeStore }) {
-    await runtimeStore.dispatch('External/fetchMimeTypes')
+  userReady({ store }) {
+    store.dispatch('External/fetchMimeTypes')
   }
 }

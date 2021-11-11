@@ -43,6 +43,12 @@ class ClassicApplication extends NextApplication {
     return Promise.resolve(undefined)
   }
 
+  userReady(instance: Vue): Promise<void> {
+    const { userReady: userReadyHook } = this.applicationScript
+    this.attachPublicApi(userReadyHook, instance)
+    return Promise.resolve(undefined)
+  }
+
   private attachPublicApi(hook: unknown, instance?: Vue) {
     isFunction(hook) &&
       hook({
@@ -51,6 +57,7 @@ class ClassicApplication extends NextApplication {
             open: (...args) => this.runtimeApi.openPortal.apply(instance, [instance, ...args])
           }
         }),
+        instance,
         store: this.runtimeApi.requestStore(),
         router: this.runtimeApi.requestRouter(),
         announceExtension: this.runtimeApi.announceExtension

@@ -1,0 +1,10 @@
+Enhancement: App provider and archiver on public links
+
+We made the app provider and archiver services available on public links. As a prerequisite for this we needed to make backend capabilities available on public links, which will
+be beneficial for all future extension development.
+
+https://github.com/owncloud/web/pull/5924
+https://github.com/owncloud/web/issues/5884
+https://github.com/owncloud/ocis/issues/2479
+https://github.com/owncloud/web/issues/2479
+https://github.com/owncloud/web/issues/5901

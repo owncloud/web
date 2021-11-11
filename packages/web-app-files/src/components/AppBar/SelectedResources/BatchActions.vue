@@ -101,7 +101,7 @@ import MixinRoutes from '../../../mixins/routes'
 import MixinDeleteResources from '../../../mixins/deleteResources'
 import { cloneStateObject } from '../../../helpers/store'
 import { canBeMoved } from '../../../helpers/permissions'
-import { checkRoute } from '../../../helpers/route'
+import { checkRoute, isPublicFilesRoute } from '../../../helpers/route'
 import { shareStatus } from '../../../helpers/shareStatus'
 import { triggerShareAction } from '../../../helpers/share/triggerShareAction'
 import PQueue from 'p-queue'
@@ -129,7 +129,7 @@ export default {
 
     canDownloadSingleFile() {
       if (
-        !checkRoute(['files-personal', 'files-favorites', 'files-public-list'], this.$route.name)
+        !checkRoute(['files-personal', 'files-public-list', 'files-favorites'], this.$route.name)
       ) {
         return false
       }
@@ -146,7 +146,9 @@ export default {
     },
 
     canDownloadAsArchive() {
-      if (!checkRoute(['files-personal', 'files-favorites'], this.$route.name)) {
+      if (
+        !checkRoute(['files-personal', 'files-public-list', 'files-favorites'], this.$route.name)
+      ) {
         return false
       }
 
@@ -363,12 +365,16 @@ export default {
         await this.downloadFile(this.selectedFiles[0])
         return
       }
+
       await this.downloadAsArchive()
     },
 
     async downloadAsArchive() {
       await triggerDownloadAsArchive({
-        fileIds: this.selectedFiles.map((r) => r.fileId)
+        fileIds: this.selectedFiles.map((r) => r.fileId),
+        ...(isPublicFilesRoute(this.$route) && {
+          publicToken: this.$route.params.item.split('/')[0]
+        })
       }).catch((e) => {
         console.error(e)
         this.showMessage({

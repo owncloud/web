@@ -90,19 +90,19 @@ export default {
   navItems,
   quickActions,
   translations,
-  ready({ router: runtimeRouter, store: runtimeStore }) {
-    Registry.filterSearch = new FilterSearch(runtimeStore, runtimeRouter)
-    Registry.sdkSearch = new SDKSearch(runtimeStore, runtimeRouter)
+  ready({ router, store }) {
+    Registry.filterSearch = new FilterSearch(store, router)
+    Registry.sdkSearch = new SDKSearch(store, router)
 
     // when discussing the boot process of applications we need to implement a
     // registry that does not rely on call order, aka first register "on" and only after emit.
     bus.publish('app.search.register.provider', Registry.filterSearch)
     bus.publish('app.search.register.provider', Registry.sdkSearch)
-
-    // initialize services
+  },
+  userReady({ store }) {
     archiverService.initialize(
-      runtimeStore.getters.configuration.server,
-      get(runtimeStore, 'getters.capabilities.files.archivers', [])
+      store.getters.configuration.server || window.location.origin,
+      get(store, 'getters.capabilities.files.archivers', [])
     )
   }
 }

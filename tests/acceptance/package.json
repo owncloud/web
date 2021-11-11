@@ -22,6 +22,7 @@
     "core-js": "^3.15.2",
     "cucumber-html-reporter": "^5.4.0",
     "fs-extra": "^10.0.0",
+    "git-repo-info": "^2.1.1",
     "join-path": "^1.1.1",
     "ldapjs": "^2.2.3",
     "lodash": "^4.17.21",

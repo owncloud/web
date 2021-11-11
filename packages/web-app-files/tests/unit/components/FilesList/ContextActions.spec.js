@@ -244,7 +244,7 @@ function createStore(state) {
         },
         namespaced: true,
         getters: {
-          getMimeTypes: () => {
+          mimeTypes: () => {
             return fixtureMimeTypes
           }
         }

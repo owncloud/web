@@ -7,7 +7,7 @@
     :options="ocDropzone_options"
     :use-custom-slot="true"
     :include-styling="false"
-    @vdropzone-drop="$_ocUpload_addDropToQue"
+    @vdropzone-drop="$_ocUpload_addDropToQueue"
     @vdropzone-files-added="$_ocDropzone_dragEnd"
     @vdropzone-file-added="$_ocDropzone_removeFiles"
     @vdropzone-drag-leave="$_ocDropzone_dragEnd"

@@ -10,7 +10,11 @@ Summary
 
 * Bugfix - Fix location picker breadcrumb url encoding: [#5940](https://github.com/owncloud/web/pull/5940)
 * Bugfix - Context menu rendering: [#5952](https://github.com/owncloud/web/pull/5952)
+* Enhancement - Rename `_chunks` folder to `chunks`: [#5988](https://github.com/owncloud/web/pull/5988)
 * Enhancement - Default action order: [#5952](https://github.com/owncloud/web/pull/5952)
+* Enhancement - Reduced sidebar width: [#5981](https://github.com/owncloud/web/issues/5981)
+* Enhancement - App provider and archiver on public links: [#5924](https://github.com/owncloud/web/pull/5924)
+* Enhancement - Update ODS to v11.2.1: [#6009](https://github.com/owncloud/web/pull/6009)
 
 Details
 -------
@@ -32,6 +36,13 @@ Details
 
    https://github.com/owncloud/web/pull/5952
 
+* Enhancement - Rename `_chunks` folder to `chunks`: [#5988](https://github.com/owncloud/web/pull/5988)
+
+   We've renamed the `_chunks` folder to `chunks` in the ownCloud Web build output in order to make
+   it more easily embedable with the Go embed directive.
+
+   https://github.com/owncloud/web/pull/5988
+
 * Enhancement - Default action order: [#5952](https://github.com/owncloud/web/pull/5952)
 
    We've changed the order of actions which are being considered as default action. The order is
@@ -39,6 +50,54 @@ Details
    Previously the external apps took precedence.
 
    https://github.com/owncloud/web/pull/5952
+
+* Enhancement - Reduced sidebar width: [#5981](https://github.com/owncloud/web/issues/5981)
+
+   We reduced the sidebar width to give the files list more horizontal room, especially on medium
+   sized screens.
+
+   https://github.com/owncloud/web/issues/5981
+   https://github.com/owncloud/web/pull/5983
+
+* Enhancement - App provider and archiver on public links: [#5924](https://github.com/owncloud/web/pull/5924)
+
+   We made the app provider and archiver services available on public links. As a prerequisite for
+   this we needed to make backend capabilities available on public links, which will be
+   beneficial for all future extension development.
+
+   https://github.com/owncloud/web/issues/5884
+   https://github.com/owncloud/ocis/issues/2479
+   https://github.com/owncloud/web/issues/2479
+   https://github.com/owncloud/web/issues/5901
+   https://github.com/owncloud/web/pull/5924
+
+* Enhancement - Update ODS to v11.2.1: [#6009](https://github.com/owncloud/web/pull/6009)
+
+   We updated the ownCloud Design System to version 11.2.1. Please refer to the full changelog in
+   the ODS release (linked) for more details. Summary:
+
+   - Bugfix - Limit select event in OcTableFiles:
+   https://github.com/owncloud/owncloud-design-system/pull/1753 - Bugfix - Add
+   word-break rule to OcNotificationMessage component:
+   https://github.com/owncloud/owncloud-design-system/issues/1712 - Bugfix - OcTable
+   sorting case sensitivity:
+   https://github.com/owncloud/owncloud-design-system/issues/1698 - Bugfix - Drag and
+   Drop triggers wrong actions: https://github.com/owncloud/web/issues/5808 - Enhancement
+   - Make OcDatepicker themable:
+   https://github.com/owncloud/owncloud-design-system/issues/1679 - Enhancement -
+   Streamline OcTextInput:
+   https://github.com/owncloud/owncloud-design-system/pull/1636 - Enhancement - Add
+   accentuated class for OcTable:
+   https://github.com/owncloud/owncloud-design-system/pull/5967 - Enhancement - Add
+   Ghost Element for Drag & Drop:
+   https://github.com/owncloud/owncloud-design-system/pull/5788 - Enhancement - Add
+   "extension" svg icon: https://github.com/owncloud/owncloud-design-system/pull/1771 -
+   Enhancement - Add closure to mutate resource dom selector:
+   https://github.com/owncloud/owncloud-design-system/pull/1766 - Enhancement - Reduce
+   filename text weight: https://github.com/owncloud/owncloud-design-system/pull/1759
+
+   https://github.com/owncloud/web/pull/6009
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v11.2.1
 
 Changelog for ownCloud Web [4.4.0] (2021-10-26)
 =======================================

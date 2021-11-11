@@ -1,7 +1,7 @@
 <template>
   <div class="file_info">
     <oc-icon :name="file.icon" size="large" class="file_info__icon" />
-    <div class="file_info__body">
+    <div class="file_info__body oc-text-overflow">
       <h3 tabindex="-1">
         <oc-resource-name
           :name="file.name"
