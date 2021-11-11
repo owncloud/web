@@ -138,7 +138,11 @@ If you use OpenID Connect you need to replace the `"auth"` part with following c
 
 ## Integrate ownCloud Classic features in ownCloud Web
 ### Add links to the app switcher
-ownCloud Classic features that are not deeply integrated with the Classic UI (e.g., full screen apps) can be added to the ownCloud Web app switcher so that users can easily access them from ownCloud Web. You can use the following example and customize it according to your needs. 
+ownCloud Classic features that are not deeply integrated with the Classic UI (e.g., full screen apps) can be added to the ownCloud Web app switcher so that users can easily access them from ownCloud Web. You can use the following example and customize it according to your needs.
+
+{{< hint info >}}
+All apps that are listed in the ownCloud Classic app switcher will be added as links to the app switcher of the new ownCloud Web automatically. All of those links will open in a new browser tab on click.
+{{< /hint >}}
 
 To add new elements in the app switcher, paste the following into the `applications` section of `config.json`:
 
