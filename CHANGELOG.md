@@ -14,8 +14,9 @@ Summary
 * Enhancement - Rename `_chunks` folder to `chunks`: [#5988](https://github.com/owncloud/web/pull/5988)
 * Enhancement - Default action order: [#5952](https://github.com/owncloud/web/pull/5952)
 * Enhancement - Reduced sidebar width: [#5981](https://github.com/owncloud/web/issues/5981)
+* Enhancement - Automatically show oC 10 apps in the app switcher menu: [#5980](https://github.com/owncloud/web/issues/5980)
 * Enhancement - App provider and archiver on public links: [#5924](https://github.com/owncloud/web/pull/5924)
-* Enhancement - Update ODS to v11.2.1: [#6009](https://github.com/owncloud/web/pull/6009)
+* Enhancement - Update ODS to v11.2.2: [#6009](https://github.com/owncloud/web/pull/6009)
 
 Details
 -------
@@ -67,6 +68,15 @@ Details
    https://github.com/owncloud/web/issues/5981
    https://github.com/owncloud/web/pull/5983
 
+* Enhancement - Automatically show oC 10 apps in the app switcher menu: [#5980](https://github.com/owncloud/web/issues/5980)
+
+   When using the ownCloud 10 app of web the configuration automatically gets augmented with all
+   menu items / apps from the classic UI. They open in a new tab in the classic UI and have a generic
+   icon.
+
+   https://github.com/owncloud/web/issues/5980
+   https://github.com/owncloud/web/pull/5996
+
 * Enhancement - App provider and archiver on public links: [#5924](https://github.com/owncloud/web/pull/5924)
 
    We made the app provider and archiver services available on public links. As a prerequisite for
@@ -79,9 +89,9 @@ Details
    https://github.com/owncloud/web/issues/5901
    https://github.com/owncloud/web/pull/5924
 
-* Enhancement - Update ODS to v11.2.1: [#6009](https://github.com/owncloud/web/pull/6009)
+* Enhancement - Update ODS to v11.2.2: [#6009](https://github.com/owncloud/web/pull/6009)
 
-   We updated the ownCloud Design System to version 11.2.1. Please refer to the full changelog in
+   We updated the ownCloud Design System to version 11.2.2. Please refer to the full changelog in
    the ODS release (linked) for more details. Summary:
 
    - Bugfix - Limit select event in OcTableFiles:
@@ -90,8 +100,10 @@ Details
    https://github.com/owncloud/owncloud-design-system/issues/1712 - Bugfix - OcTable
    sorting case sensitivity:
    https://github.com/owncloud/owncloud-design-system/issues/1698 - Bugfix - Drag and
-   Drop triggers wrong actions: https://github.com/owncloud/web/issues/5808 - Enhancement
-   - Make OcDatepicker themable:
+   Drop triggers wrong actions: https://github.com/owncloud/web/issues/5808 - Bugfix - Fix
+   files table event: https://github.com/owncloud/web/issues/1777 - Bugfix - Fix extension
+   icon rendering: https://github.com/owncloud/web/issues/1779 - Enhancement - Make
+   OcDatepicker themable:
    https://github.com/owncloud/owncloud-design-system/issues/1679 - Enhancement -
    Streamline OcTextInput:
    https://github.com/owncloud/owncloud-design-system/pull/1636 - Enhancement - Add
@@ -105,7 +117,7 @@ Details
    filename text weight: https://github.com/owncloud/owncloud-design-system/pull/1759
 
    https://github.com/owncloud/web/pull/6009
-   https://github.com/owncloud/owncloud-design-system/releases/tag/v11.2.1
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v11.2.2
 
 Changelog for ownCloud Web [4.4.0] (2021-10-26)
 =======================================
