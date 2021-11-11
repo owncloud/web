@@ -1976,7 +1976,7 @@ def ocisService():
             "STORAGE_USERS_DRIVER_OCIS_ROOT": "/srv/app/tmp/ocis/storage/users",
             "STORAGE_METADATA_DRIVER_OCIS_ROOT": "/srv/app/tmp/ocis/storage/metadata",
             "STORAGE_SHARING_USER_JSON_FILE": "/srv/app/tmp/ocis/shares.json",
-            "PROXY_OIDC_INSECURE": "true",
+            "OCIS_INSECURE": "true",
             "WEB_UI_CONFIG": "/srv/config/drone/config-ocis.json",
             "WEB_ASSET_PATH": "%s/dist" % dir["web"],
             "IDP_IDENTIFIER_REGISTRATION_CONF": "/srv/config/drone/identifier-registration.yml",
