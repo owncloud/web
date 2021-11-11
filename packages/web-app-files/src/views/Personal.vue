@@ -24,7 +24,6 @@
         :class="{ 'files-table-squashed': !sidebarClosed }"
         :are-thumbnails-displayed="displayThumbnails"
         :resources="activeFilesCurrentPage"
-        :accentuated="[]"
         :target-route="targetRoute"
         :header-position="headerPosition"
         :drag-drop="true"
@@ -238,9 +237,11 @@ export default {
     },
 
     activeFilesCurrentPage(value, oldValue) {
-      const newFiles = value.filter(x => !oldValue.includes(x))
-      this.accentuateNewFiles(newFiles)
-    }  
+      const newFiles = value.filter((x) => !oldValue.includes(x))
+      if (newFiles.length) {
+        this.accentuateNewFiles(newFiles)
+      }
+    }
   },
 
   created() {
@@ -275,14 +276,14 @@ export default {
     ...mapMutations(['SET_QUOTA']),
 
     accentuateNewFiles(newFiles) {
-      newFiles.forEach(x => {
-        const targetElement = document.getElementsByClassName(`oc-tbody-tr-${x.id}`)
-        if(!targetElement) return
+      newFiles.forEach((x) => {
+        const targetElement = document.getElementsByClassName(`oc-tbody-tr-${x.id.replaceAll('=', '')}`)
+        if (!targetElement) return
         this.$nextTick(() => {
-          targetElement[0].classList.add("oc-table-accentuated")
+          targetElement[0].classList.add('oc-table-accentuated')
           setTimeout(() => {
-            targetElement[0].classList.remove("oc-table-accentuated")
-          }, 3500);
+            targetElement[0].classList.remove('oc-table-accentuated')
+          }, 3500)
         })
       })
     },

@@ -340,7 +340,7 @@ function $_upsertResource(state, resource, allowInsert) {
   if (!found && !allowInsert) {
     return
   }
-  
+
   if (found) {
     files.splice(index, 1, resource)
   } else {

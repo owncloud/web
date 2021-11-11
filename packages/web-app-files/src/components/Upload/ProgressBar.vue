@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 import DetailsWidget from './DetailsWidget.vue'
 import Mixins from '../../mixins'
 
