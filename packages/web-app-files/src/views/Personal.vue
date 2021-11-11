@@ -87,6 +87,21 @@ import { basename, join } from 'path'
 import PQueue from 'p-queue'
 
 const visibilityObserver = new VisibilityObserver()
+const onFileResourceUpserted = (componentInstance, { id }) => {
+  componentInstance.$nextTick(() => {
+    const [upsertedItem] = document.querySelectorAll(`[data-item-id='${id}']`)
+
+    if (!upsertedItem) {
+      return
+    }
+
+    upsertedItem.classList.add('oc-table-accentuated')
+    // toDo: move setTimeout 'clearTimeout' into configuration object
+    setTimeout(() => {
+      upsertedItem.classList.remove('oc-table-accentuated')
+    }, 3500)
+  })
+}
 
 export default {
   components: {
@@ -234,13 +249,6 @@ export default {
 
     uploadProgressVisible() {
       this.adjustTableHeaderPosition()
-    },
-
-    activeFilesCurrentPage(value, oldValue) {
-      const newFiles = value.filter((x) => !oldValue.includes(x))
-      if (newFiles.length) {
-        this.accentuateNewFiles(newFiles)
-      }
     }
   },
 
@@ -253,7 +261,23 @@ export default {
       this.loadResourcesTask.perform(this, this.$route.params.item === path, path)
     })
 
-    this.$on('beforeDestroy', () => bus.unsubscribe('app.files.list.load', loadResourcesEventToken))
+    // toDo: extract into vue mutation observer job plugin
+    const storeMutationSubscription = this.$store.subscribe((mutation) => {
+      const jobs = [[['Files/UPSERT_RESOURCE'], onFileResourceUpserted]]
+
+      jobs.forEach(([trigger = [], job]) => {
+        if (!trigger.includes(mutation.type)) {
+          return
+        }
+
+        job(this, mutation.payload)
+      })
+    })
+
+    this.$on('beforeDestroy', () => {
+      storeMutationSubscription()
+      bus.unsubscribe('app.files.list.load', loadResourcesEventToken)
+    })
     this.adjustTableHeaderPosition()
   },
 
@@ -274,19 +298,6 @@ export default {
       'REMOVE_FILE_SELECTION'
     ]),
     ...mapMutations(['SET_QUOTA']),
-
-    accentuateNewFiles(newFiles) {
-      newFiles.forEach((x) => {
-        const targetElement = document.getElementsByClassName(`oc-tbody-tr-${x.id.replaceAll('=', '')}`)
-        if (!targetElement) return
-        this.$nextTick(() => {
-          targetElement[0].classList.add('oc-table-accentuated')
-          setTimeout(() => {
-            targetElement[0].classList.remove('oc-table-accentuated')
-          }, 3500)
-        })
-      })
-    },
 
     async fileDropped(fileIdTarget) {
       const selected = [...this.selectedFiles]
