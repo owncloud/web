@@ -209,10 +209,29 @@ module.exports = {
     /**
      *
      * @param {String} role
+     * @param {String} collaborator
      */
-    selectRoleForNewCollaborator: function (role) {
-      role = _(role).chain().toLower().startCase().replace(/\s/g, '').value()
-      return this.click('@newCollaboratorSelectRoleButton').click(`@newCollaboratorRole${role}`)
+    selectRoleForNewCollaborator: function (role, collaborator = '') {
+      // role = _(role).chain().toLower().startCase().replace(/\s/g, '').value()
+      if (role === 'Custom permissions') {
+        role = this.elements.newCollaboratorRoleCustomPermissions.selector
+      } else if (role === 'Viewer') {
+        role = this.elements.newCollaboratorRoleViewer.selector
+      } else if (role === 'Editor') {
+        role = this.elements.newCollaboratorRoleEditor.selector
+      }
+
+      if (!_.isEmpty(collaborator)) {
+        const informationSelector = util.format(
+          collaboratorDialog.elements.collaboratorInformationByCollaboratorName.selector,
+          collaborator
+        )
+
+        return this.useXpath()
+          .click(informationSelector + role)
+          .useCss()
+      }
+      return this.click('@newCollaboratorSelectRoleButton').useXpath().click(role).useCss()
     },
     confirmShare: function () {
       return this.waitForElementPresent('@addShareSaveButton')
@@ -312,8 +331,7 @@ module.exports = {
      */
     getDisplayedPermission: async function (collaborator) {
       await collaboratorDialog.clickEditShare(collaborator)
-      await this.selectRoleForNewCollaborator('Custom permissions')
-
+      this.selectRoleForNewCollaborator('Custom permissions', collaborator)
       // read the permissions from the checkboxes
       const currentSharePermissions = await this.getSharePermissions()
 
@@ -321,8 +339,6 @@ module.exports = {
       this.moveToElement('@customPermissionsDrop', -3, 0)
       this.api.mouseButtonClick()
       this.waitForElementNotPresent('@customPermissionsDrop', 1000)
-
-      await this.clickCancel()
       return currentSharePermissions
     },
     /**
@@ -718,13 +734,16 @@ module.exports = {
       selector: '#files-collaborators-collaborator-save-share-button'
     },
     newCollaboratorSelectRoleButton: {
-      selector: '#files-collaborators-role-button'
+      selector: '//button[contains(@data-testid, "files-recipient-role-select-btn")]',
+      locateStrategy: 'xpath'
     },
     newCollaboratorRoleViewer: {
-      selector: '#files-role-viewer'
+      selector: '//*[contains(@id, "files-recipient-role-drop-btn-viewer")]',
+      locateStrategy: 'xpath'
     },
     newCollaboratorRoleEditor: {
-      selector: '#files-role-editor'
+      selector: '//*[contains(@id, "files-recipient-role-drop-btn-editor")]',
+      locateStrategy: 'xpath'
     },
     newCollaboratorItems: {
       selector:
@@ -734,7 +753,8 @@ module.exports = {
       selector: "//button[contains(@class, 'files-share-invite-recipient-btn-remove')]"
     },
     newCollaboratorRoleCustomPermissions: {
-      selector: '#files-recipient-role-drop-btn-advancedRole'
+      selector: '//*[contains(@id, "files-recipient-role-drop-btn-advancedRole")]',
+      locateStrategy: 'xpath'
     },
     selectRoleButtonInCollaboratorInformation: {
       selector: '#files-collaborators-role-button'

@@ -162,7 +162,7 @@ module.exports = {
   elements: {
     collaboratorInformationByCollaboratorName: {
       selector:
-        '//p[contains(@class, "files-collaborators-collaborator-name") and normalize-space()="%s"]/ancestor::*[contains(concat(" ", @class, " "), " files-collaborators-collaborator ")]',
+        '//span[contains(@class, "collaborator-display-name") and normalize-space()="%s"]/ancestor::*[contains(concat(" ", @class, " "), " files-collaborators-collaborator ")]',
       locateStrategy: 'xpath'
     },
     deleteShareButton: {
@@ -180,11 +180,11 @@ module.exports = {
     },
     editShareButton: {
       // within collaboratorInformationByCollaboratorName
-      selector: '//*[contains(@class, "files-collaborators-collaborator-edit")]',
+      selector: '//*[contains(@class, "collaborator-role")]',
       locateStrategy: 'xpath'
     },
     editShareDialog: {
-      selector: '//*[contains(@class, "files-collaborators-collaborator-edit-dialog")]',
+      selector: '//*[contains(@id, "files-recipient-role-drop-btn-advancedRole")]',
       locateStrategy: 'xpath'
     },
     collaboratorsInformation: {
@@ -193,11 +193,11 @@ module.exports = {
     },
     collaboratorInformationSubName: {
       // within collaboratorsInformation
-      selector: '.files-collaborators-collaborator-name'
+      selector: '.collaborator-display-name'
     },
     collaboratorInformationSubRole: {
       // within collaboratorsInformation
-      selector: '.files-collaborators-collaborator-role'
+      selector: '.role-name-text'
     },
     collaboratorInformationSubAdditionalInfo: {
       // within collaboratorsInformation
@@ -212,11 +212,11 @@ module.exports = {
       selector: '.files-collaborators-collaborator-reshare-information'
     },
     collaboratorShareType: {
-      selector: '.files-collaborators-collaborator-share-type'
+      selector: '.share-type'
     },
     collaboratorExpirationInfo: {
       selector:
-        '//p[contains(@class, "files-collaborators-collaborator-name") and text()="%s"]/../..//span[contains(@class, "files-collaborators-collaborator-expires")]',
+        '//p[contains(@class, "collaborator-display-name") and text()="%s"]/../..//span[contains(@class, "files-collaborators-collaborator-expires")]',
       locateStrategy: 'xpath'
     }
   }
