@@ -2098,6 +2098,8 @@ def setupNotificationsAppForServer():
         "name": "install-notifications-app-on-server",
         "image": OC_CI_PHP,
         "commands": [
+            "mkdir -p %s/apps/" % dir["server"],
+            "rm -rf %s/apps/notifications" % dir["server"],
             "git clone -b master https://github.com/owncloud/notifications.git %s/apps/notifications" % dir["server"],
             "cd %s || exit" % dir["server"],
             "php occ a:e notifications",
