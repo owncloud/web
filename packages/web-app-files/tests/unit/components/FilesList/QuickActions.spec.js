@@ -108,9 +108,8 @@ describe('QuickActions', () => {
       const actionButton = wrapper.find('button')
       await actionButton.trigger('click')
       expect(handlerAction).toHaveBeenCalledTimes(1)
-      expect(handlerAction).toHaveBeenCalledWith({
-        item: testItem,
-        store: undefined // undefined because not provided with wrapper
+      Object.keys(testItem).forEach((key) => {
+        expect(handlerAction.mock.calls[0][0].item[key]).toBe(testItem[key])
       })
     })
   })

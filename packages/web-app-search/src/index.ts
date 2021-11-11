@@ -8,7 +8,7 @@ import { SearchProvider } from './types'
 import { Component } from 'vue'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import translationsJson from '../l10n/translations.json'
+import translations from '../l10n/translations.json'
 
 // just a dummy function to trick gettext tools
 const $gettext = (msg) => {
@@ -42,7 +42,7 @@ export default {
       ]
     }
   ],
-  translations: translationsJson,
+  translations,
   mounted({
     portal
   }: {
