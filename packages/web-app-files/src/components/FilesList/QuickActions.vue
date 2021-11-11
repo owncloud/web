@@ -2,13 +2,13 @@
   <div class="uk-flex">
     <oc-button
       v-for="action in filteredActions"
-      :key="action.label"
-      v-oc-tooltip="$gettext(action.label)"
-      :aria-label="$gettext(action.label)"
+      :key="action.label($gettext)"
+      v-oc-tooltip="action.label($gettext)"
+      :aria-label="action.label($gettext)"
       appearance="raw"
       class="oc-mr-xs"
       :class="`files-quick-action-${action.id}`"
-      @click="action.handler({ item, client: $client, store: $store })"
+      @click="action.handler({ item, client: $client, store: $store, $gettext })"
     >
       <oc-icon :name="action.icon" class="uk-flex" />
     </oc-button>

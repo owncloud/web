@@ -17,7 +17,12 @@ export default {
   },
   methods: {
     $_createPublicLink_trigger(resource) {
-      createPublicLink({ item: resource, client: this.$client, store: this.$store })
+      createPublicLink({
+        item: resource,
+        client: this.$client,
+        store: this.$store,
+        $gettext: this.$gettext
+      })
     }
   }
 }

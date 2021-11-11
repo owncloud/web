@@ -1,0 +1,6 @@
+Bugfix: Use search app translations
+
+We fixed that the search app was not using its translations properly.
+
+https://github.com/owncloud/web/issues/5955
+https://github.com/owncloud/web/pull/5956

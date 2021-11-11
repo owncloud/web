@@ -1,5 +1,5 @@
-import translationsJson from '../l10n/translations.json'
-import quickActionsImport from './quickActions'
+import translations from '../l10n/translations.json'
+import quickActions from './quickActions'
 import store from './store'
 import { FilterSearch, SDKSearch } from './search'
 import { bus } from 'web-pkg/src/instance'
@@ -77,11 +77,6 @@ const navItems = [
     }
   }
 ]
-
-// Prepare imported modules to be exported
-// If we do not define these constants, the export will be undefined
-const translations = translationsJson
-const quickActions = quickActionsImport
 
 export default {
   appInfo,

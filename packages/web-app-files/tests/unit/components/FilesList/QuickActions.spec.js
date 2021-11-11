@@ -8,7 +8,7 @@ const collaboratorAction = {
   handler: jest.fn(),
   icon: 'group-add',
   id: 'collaborators',
-  label: 'Add people'
+  label: () => 'Add people'
 }
 
 const publicLinkAction = {
@@ -16,7 +16,7 @@ const publicLinkAction = {
   handler: jest.fn(),
   icon: 'link-add',
   id: 'public-link',
-  label: 'Create and copy public link'
+  label: () => 'Create and copy public link'
 }
 
 const testItem = {
@@ -108,9 +108,8 @@ describe('QuickActions', () => {
       const actionButton = wrapper.find('button')
       await actionButton.trigger('click')
       expect(handlerAction).toHaveBeenCalledTimes(1)
-      expect(handlerAction).toHaveBeenCalledWith({
-        item: testItem,
-        store: undefined // undefined because not provided with wrapper
+      Object.keys(testItem).forEach((key) => {
+        expect(handlerAction.mock.calls[0][0].item[key]).toBe(testItem[key])
       })
     })
   })
