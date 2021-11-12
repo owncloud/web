@@ -49,6 +49,8 @@
 
 <script>
 import { mapGetters, mapActions, mapMutations, mapState } from 'vuex'
+import { useMutationObserver } from '../helpers/store'
+import { fileList } from '../helpers/ui'
 
 import MixinAccessibleBreadcrumb from '../mixins/accessibleBreadcrumb'
 import MixinFileActions from '../mixins/fileActions'
@@ -63,6 +65,7 @@ import merge from 'lodash-es/merge'
 import { buildResource } from '../helpers/resources'
 import { bus } from 'web-pkg/src/instance'
 import { useTask } from 'vue-concurrency'
+import { nextTick } from '@vue/composition-api'
 
 import ListLoader from '../components/FilesList/ListLoader.vue'
 import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
@@ -127,6 +130,12 @@ export default {
   ],
 
   setup() {
+    useMutationObserver(['Files/UPSERT_RESOURCE'], ({ payload }) =>
+      nextTick(() => {
+        fileList.accentuateItem(payload.id)
+      })
+    )
+
     const loadResourcesTask = useTask(function* (signal, ref, sameRoute, path = null) {
       ref.CLEAR_CURRENT_FILES_LIST()
 
