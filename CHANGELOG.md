@@ -11,6 +11,7 @@ Summary
 * Bugfix - Fix location picker breadcrumb url encoding: [#5940](https://github.com/owncloud/web/pull/5940)
 * Bugfix - Context menu rendering: [#5952](https://github.com/owncloud/web/pull/5952)
 * Bugfix - Use search app translations: [#5955](https://github.com/owncloud/web/issues/5955)
+* Enhancement - Accentuate new files: [#6020](https://github.com/owncloud/web/pull/6020)
 * Enhancement - Rename `_chunks` folder to `chunks`: [#5988](https://github.com/owncloud/web/pull/5988)
 * Enhancement - Default action order: [#5952](https://github.com/owncloud/web/pull/5952)
 * Enhancement - Reduced sidebar width: [#5981](https://github.com/owncloud/web/issues/5981)
@@ -44,6 +45,13 @@ Details
 
    https://github.com/owncloud/web/issues/5955
    https://github.com/owncloud/web/pull/5956
+
+* Enhancement - Accentuate new files: [#6020](https://github.com/owncloud/web/pull/6020)
+
+   We've added a visual highlighting of newly created (or uploaded) resources in the
+   OcFilesTable.
+
+   https://github.com/owncloud/web/pull/6020
 
 * Enhancement - Rename `_chunks` folder to `chunks`: [#5988](https://github.com/owncloud/web/pull/5988)
 
