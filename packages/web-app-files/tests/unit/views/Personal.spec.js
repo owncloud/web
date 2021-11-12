@@ -6,6 +6,7 @@ import { localVue } from './views.setup'
 import { createStore } from 'vuex-extensions'
 import Personal from '@files/src/views/Personal.vue'
 import MixinAccessibleBreadcrumb from '@files/src/mixins/accessibleBreadcrumb'
+import { accentuatesTableRow } from './PublicFiles.spec'
 
 localVue.use(GetTextPlugin, {
   translations: 'does-not-matter.json',
@@ -96,16 +97,20 @@ const resourcesFolders = [resourceDocumentsFolder, resourcePdfsFolder]
 const resources = [...resourcesFiles, ...resourcesFolders]
 
 function createWrapper(selectedFiles = [resourceForestJpg]) {
-  jest.spyOn(Personal, 'setup').mockImplementation(() => ({
-    loadResourcesTask: {
-      isRunning: false,
-      perform: jest.fn()
-    }
-  }))
   jest
     .spyOn(MixinAccessibleBreadcrumb.methods, 'accessibleBreadcrumb_focusAndAnnounceBreadcrumb')
     .mockImplementation()
-  const component = { ...Personal, created: jest.fn(), mounted: jest.fn() }
+  const component = {
+    ...Personal,
+    created: jest.fn(),
+    mounted: jest.fn(),
+    setup: () => ({
+      loadResourcesTask: {
+        isRunning: false,
+        perform: jest.fn()
+      }
+    })
+  }
   return mount(component, {
     store: createStore(Vuex.Store, {
       state: {
@@ -224,6 +229,13 @@ describe('Personal view', () => {
 
       spyOnMoveFilesMove.mockReset()
       spyOnGetFolderItems.mockReset()
+    })
+  })
+
+  describe('accentuate new files and folders', () => {
+    // eslint-disable-next-line jest/expect-expect
+    it('accentuates table row for new files, folders and versions [Files/UPSERT_RESOURCE]', async () => {
+      await accentuatesTableRow(Personal)
     })
   })
 })
