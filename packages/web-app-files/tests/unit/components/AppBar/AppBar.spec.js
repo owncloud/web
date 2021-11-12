@@ -93,7 +93,7 @@ describe('AppBar component', () => {
     const route = {
       name: page,
       params: {
-        // what's going on here?
+        // item is the link token for public links (root of the public link) vs. empty for personal page (root of the home)
         item: page === 'files-public-list' ? '6mfXfTtYHVxrlAu' : ''
       },
       meta: {
@@ -217,11 +217,11 @@ describe('AppBar component', () => {
 
     describe('when no items are selected', () => {
       it('should show batch actions but not size-info', () => {
-        // const batchActions = wrapper.find(elSelector.batchActions) // TODO: Fix this one
+        const batchActions = wrapper.find(elSelector.batchActions)
         const sizeInfo = wrapper.find(elSelector.sizeInfo)
 
         expect(sizeInfo.exists()).toBeFalsy()
-        // expect(batchActions.isVisible()).toBeTruthy() // TODO: Fix this one
+        expect(batchActions.isVisible()).toBeTruthy()
       })
     })
 
@@ -265,12 +265,13 @@ describe('AppBar component', () => {
           expect(newButton.exists()).toBeFalsy()
           expect(ocDrop.exists()).toBeFalsy()
         })
-        it('should not show batch actions and size-info', () => {
-          const batchActions = wrapper.find(elSelector.batchActions)
+        it('should not show size-info', () => {
           const sizeInfo = wrapper.find(elSelector.sizeInfo)
-
           expect(sizeInfo.exists()).toBeFalsy()
-          expect(batchActions.exists()).toBeFalsy()
+        })
+        it('should show batch actions', () => {
+          const batchActions = wrapper.find(elSelector.batchActions)
+          expect(batchActions.exists()).toBeTruthy()
         })
       })
 

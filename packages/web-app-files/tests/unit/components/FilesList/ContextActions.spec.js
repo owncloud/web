@@ -202,19 +202,21 @@ function getWrapper(route, { filename, extension, type = '', mimeType }, availab
       publicPage: () => false
     },
     propsData: {
-      item: {
-        id: 'a93f8adf==',
-        fileId: 'a93f8adf==',
-        name: filename,
-        path: type === 'file' ? `/${filename}.${extension}` : `/${filename}`,
-        mimeType,
-        extension,
-        type,
-        canDownload: () => true,
-        isReceivedShare: () => true,
-        canBeDeleted: () => true,
-        canRename: () => true
-      }
+      items: [
+        {
+          id: 'a93f8adf==',
+          fileId: 'a93f8adf==',
+          name: filename,
+          path: type === 'file' ? `/${filename}.${extension}` : `/${filename}`,
+          mimeType,
+          extension,
+          type,
+          canDownload: () => true,
+          isReceivedShare: () => true,
+          canBeDeleted: () => true,
+          canRename: () => true
+        }
+      ]
     },
     computed: {
       menuSections: () => mockMenuSections
