@@ -6,7 +6,7 @@ import { localVue } from './views.setup'
 import { createStore } from 'vuex-extensions'
 import Personal from '@files/src/views/Personal.vue'
 import MixinAccessibleBreadcrumb from '@files/src/mixins/accessibleBreadcrumb'
-import { accentuatesTableRow } from './PublicFiles.spec'
+import { accentuatesTableRowTest } from './views.shared'
 
 localVue.use(GetTextPlugin, {
   translations: 'does-not-matter.json',
@@ -235,7 +235,7 @@ describe('Personal view', () => {
   describe('accentuate new files and folders', () => {
     // eslint-disable-next-line jest/expect-expect
     it('accentuates table row for new files, folders and versions [Files/UPSERT_RESOURCE]', async () => {
-      await accentuatesTableRow(Personal)
+      await accentuatesTableRowTest(Personal)
     })
   })
 })
