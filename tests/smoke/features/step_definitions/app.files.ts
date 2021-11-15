@@ -92,6 +92,9 @@ Given(
   async function (this: World, stepUser: string, stepTable: DataTable) {
     const actor = this.actorContinent.get({ id: stepUser })
     const { allFiles: allFilesPage } = new FilesPage({ actor })
+
+    await allFilesPage.navigate()
+
     const downloadInfo = stepTable.hashes().reduce((acc, stepRow) => {
       const { resource, from } = stepRow
 
@@ -119,9 +122,17 @@ Given(
 When(
   '{string} accepts following resource(s)',
   async function (this: World, stepUser: string, stepTable: DataTable) {
+    // Todo: implement explicit step definition for *.navigate()
+
+    // if (!config.ocis) {
+    //   Todo: add switch info in case of oc10 autoAccept shares
+    // }
+
     const actor = this.actorContinent.get({ id: stepUser })
     const { sharedWithMe: sharedWithMePage } = new FilesPage({ actor })
     const shares = stepTable.raw().map((f) => f[0])
+
+    await sharedWithMePage.navigate()
 
     for (const share of shares) {
       await sharedWithMePage.acceptShares({ name: share })
