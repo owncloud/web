@@ -16,6 +16,11 @@ export class Oc10LoginAdapter implements LoginAdapter {
     await page.fill('input[name="user"]', id)
     await page.fill('input[name="password"]', password)
     await page.click('#submit')
-    await page.click('button[type="submit"]')
+
+    const authorizeBtn = 'button[type="submit"]'
+    const authorizeBtnExists = await page.waitForSelector(authorizeBtn)
+    if (authorizeBtnExists) {
+      await page.click(authorizeBtn)
+    }
   }
 }
