@@ -752,19 +752,12 @@ def beforePipelines(ctx):
            pipelinesDependsOn(yarnlint(ctx), yarnCache(ctx))
 
 def stagePipelines(ctx):
-    title = ctx.build.title.lower()
-    if "docs-only" in title:
-        return []
-
     unit_test_pipelines = unitTests(ctx)
-    if "unit-tests-only" in title:
-        return unit_test_pipelines
-
+    smoke_pipelines = smokeTests(ctx)
     acceptance_pipelines = acceptance(ctx)
-    if ("acceptance-tests-only" in title):
-        return acceptance_pipelines
 
-    return unit_test_pipelines + pipelinesDependsOn(acceptance_pipelines, unit_test_pipelines)
+    # return unit_test_pipelines + pipelinesDependsOn(smoke_pipelines, unit_test_pipelines) + pipelinesDependsOn(acceptance_pipelines, smoke_pipelines)
+    return smoke_pipelines + pipelinesDependsOn(acceptance_pipelines, smoke_pipelines)
 
 def afterPipelines(ctx):
     return build(ctx) + notify()
@@ -1082,6 +1075,109 @@ def unitTests(ctx):
             ],
         },
     }]
+
+def smokeTests(ctx):
+    db = "mysql:5.5"
+
+    smoke_workspace = {
+        "base": dir["base"],
+        "path": config["app"],
+    }
+
+    smoke_volumes = [{
+        "name": "uploads",
+        "temp": {},
+    }, {
+        "name": "configs",
+        "temp": {},
+    }, {
+        "name": "gopath",
+        "temp": {},
+    }]
+
+    smoke_test_ocis = [{
+        "name": "smoke-tests",
+        "image": OC_CI_NODEJS,
+        "environment": {
+            "BASE_URL_OCIS": "ocis:9200",
+            "HEADLESS": "true",
+            "OCIS": "true",
+        },
+        "commands": [
+            "sleep 10 && yarn test:smoke:experimental tests/smoke/features/kindergarten.feature",  # TODO: enable all smoke tests
+        ],
+    }]
+
+    smoke_test_occ = [{
+        "name": "smoke-tests",
+        "image": OC_CI_NODEJS,
+        "environment": {
+            "BASE_URL_OCC": "owncloud",
+            "HEADLESS": "true",
+        },
+        "commands": [
+            "sleep 10 && yarn test:smoke:experimental tests/smoke/features/kindergarten.feature",  # TODO: enable all smoke tests
+        ],
+    }]
+
+    base_steps = \
+        skipIfUnchanged(ctx, "unit-tests") + \
+        restoreBuildArtifactCache(ctx, "yarn", ".yarn") + \
+        restoreBuildArtifactCache(ctx, "playwright", ".playwright") + \
+        copyFilesForUpload() + \
+        installYarn() + \
+        restoreBuildArtifactCache(ctx, "web-dist", "dist") + \
+        setupServerConfigureWeb("2")
+
+    stepsInfinite = \
+        base_steps + \
+        getOcis() + \
+        ocisService() + \
+        getSkeletonFiles() + \
+        smoke_test_ocis
+
+    stepsClassic = \
+        base_steps + \
+        installCore(db) + \
+        owncloudLog() + \
+        setupServerAndApp("2") + \
+        setUpOauth2(False) + \
+        fixPermissions() + \
+        smoke_test_occ
+
+    services = databaseService(db) + owncloudService() + webService()
+
+    smoke_trigger = {
+        "ref": [
+            "refs/heads/master",
+            "refs/tags/**",
+            "refs/pull/**",
+        ],
+    }
+
+    return [
+        {
+            "kind": "pipeline",
+            "type": "docker",
+            "name": "smoke-tests OC10",
+            "workspace": smoke_workspace,
+            "steps": stepsClassic,
+            "services": services,
+            "depends_on": [],
+            "trigger": smoke_trigger,
+            "volumes": smoke_volumes,
+        },
+        {
+            "kind": "pipeline",
+            "type": "docker",
+            "name": "smoke-tests oCIS",
+            "workspace": smoke_workspace,
+            "steps": stepsInfinite,
+            "depends_on": ["cache-ocis"],
+            "trigger": smoke_trigger,
+            "volumes": smoke_volumes,
+        },
+    ]
 
 def acceptance(ctx):
     pipelines = []
@@ -2769,7 +2865,6 @@ def skipIfUnchanged(ctx, type):
         "^dev/.*",
         "^docs/.*",
         "^packages/web-app-skeleton/.*",
-        "^tests/smoke/.*",
         "README.md",
     ]
 
