@@ -8,6 +8,9 @@ OC_CI_CORE_NODEJS = "owncloudci/core:nodejs14"
 OC_CI_GOLANG = "owncloudci/golang:1.17"
 OC_CI_NODEJS = "owncloudci/nodejs:14"
 OC_CI_PHP = "owncloudci/php:7.4"
+OC_UBUNTU = "owncloud/ubuntu:20.04"
+
+OC10_VERSION = "latest"
 
 dir = {
     "base": "/var/www/owncloud",
@@ -35,9 +38,6 @@ config = {
                     "webUILogin",
                     "webUIPreview",
                     "webUIPrivateLinks",
-                    # The following suites may have all scenarios currently skipped.
-                    # The suites are listed here so that scenarios will run when
-                    # they are enabled.
                 ],
                 "oC10Locks": [
                     "webUIWebdavLockProtection",
@@ -175,7 +175,7 @@ config = {
             },
             "notificationsAppNeeded": True,
             "federatedServerNeeded": True,
-            "federatedServerVersion": "latest",
+            "federatedServerVersion": OC10_VERSION,
         },
         "webUI-XGA-Notifications": {
             "type": NOTIFICATIONS,
@@ -999,7 +999,7 @@ def buildCacheWeb(ctx):
                  installYarn() +
                  [{
                      "name": "build-web",
-                     "image": "owncloudci/nodejs:14",
+                     "image": OC_CI_NODEJS,
                      "commands": [
                          "make dist",
                      ],
@@ -1096,7 +1096,7 @@ def acceptance(ctx):
     errorFound = False
 
     default = {
-        "servers": ["latest"],
+        "servers": [OC10_VERSION],
         "browsers": ["chrome"],
         "databases": ["mysql:5.5"],
         "extraEnvironment": {},
@@ -1105,7 +1105,7 @@ def acceptance(ctx):
         "logLevel": "2",
         "notificationsAppNeeded": False,
         "federatedServerNeeded": False,
-        "federatedServerVersion": "latest",
+        "federatedServerVersion": OC10_VERSION,
         "runningOnOCIS": False,
         "screenShots": False,
         "visualTesting": False,
@@ -1204,7 +1204,7 @@ def acceptance(ctx):
                             if server == "":
                                 server = False
 
-                            steps += installCore(server, db) + owncloudLog()
+                            steps += installCore(db) + owncloudLog()
 
                             if (params["oc10IntegrationAppIncluded"]):
                                 steps += setupIntegrationWebApp()
@@ -1516,7 +1516,7 @@ def getSaucelabsBrowserName(browser):
 def isLocalBrowser(browser):
     return ((browser == "chrome") or (browser == "firefox"))
 
-def installCore(version, db):
+def installCore(db):
     host = getDbName(db)
     dbType = host
 
@@ -1536,30 +1536,16 @@ def installCore(version, db):
     stepDefinition = {
         "name": "install-core",
         "image": OC_CI_CORE_NODEJS,
+        "settings": {
+            "version": OC10_VERSION,
+            "core_path": dir["server"],
+            "db_type": dbType,
+            "db_name": database,
+            "db_host": host,
+            "db_username": username,
+            "db_password": password,
+        },
     }
-
-    if version:
-        stepDefinition.update({"settings": {
-            "version": version,
-            "core_path": dir["server"],
-            "db_type": dbType,
-            "db_name": database,
-            "db_host": host,
-            "db_username": username,
-            "db_password": password,
-        }})
-    else:
-        stepDefinition.update({"settings": {
-            "core_path": dir["server"],
-            "db_type": dbType,
-            "db_name": database,
-            "db_host": host,
-            "db_username": username,
-            "db_password": password,
-        }})
-        stepDefinition.update({"commands": [
-            "bash /usr/sbin/plugin.sh",
-        ]})
 
     return [stepDefinition]
 
@@ -2161,7 +2147,7 @@ def fixPermissionsFederated():
 def owncloudLog():
     return [{
         "name": "owncloud-log",
-        "image": "owncloud/ubuntu:20.04",
+        "image": OC_UBUNTU,
         "detach": True,
         "commands": [
             "tail -f %s/data/owncloud.log" % dir["server"],
@@ -2171,7 +2157,7 @@ def owncloudLog():
 def owncloudLogFederated():
     return [{
         "name": "owncloud-federated-log",
-        "image": "owncloud/ubuntu:20.04",
+        "image": OC_UBUNTU,
         "detach": True,
         "commands": [
             "tail -f %s/data/owncloud.log" % dir["federated"],
@@ -2516,7 +2502,7 @@ def buildGithubCommentVisualDiff(ctx, suite, runningOnOCIS):
     branch = ctx.build.source if ctx.build.event == "pull_request" else "master"
     return [{
         "name": "build-github-comment-vrt",
-        "image": "owncloud/ubuntu:20.04",
+        "image": OC_UBUNTU,
         "commands": [
             "cd %s/tests/vrt" % dir["web"],
             "if [ ! -d diff ]; then exit 0; fi",
@@ -2555,7 +2541,7 @@ def buildGithubCommentVisualDiff(ctx, suite, runningOnOCIS):
 def buildGithubComment(suite):
     return [{
         "name": "build-github-comment",
-        "image": "owncloud/ubuntu:20.04",
+        "image": OC_UBUNTU,
         "commands": [
             "cd %s/tests/reports/screenshots/" % dir["web"],
             'echo "<details><summary>:boom: The acceptance tests failed. Please find the screenshots inside ...</summary>\\n\\n<p>\\n\\n" >> %s/comments.file' % dir["web"],
@@ -2582,7 +2568,7 @@ def buildGithubComment(suite):
 def buildGithubCommentForBuildStopped(suite):
     return [{
         "name": "build-github-comment-buildStop",
-        "image": "owncloud/ubuntu:20.04",
+        "image": OC_UBUNTU,
         "commands": [
             'echo ":boom: The acceptance tests pipeline failed. The build has been cancelled.\\n" >> %s/comments.file' % dir["web"],
         ],
