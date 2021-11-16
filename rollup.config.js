@@ -22,6 +22,7 @@ import globals from 'rollup-plugin-node-globals'
 import ts from 'rollup-plugin-ts'
 
 const production = !process.env.ROLLUP_WATCH
+const sourcemap = process.env.SOURCE_MAP === 'true'
 
 const plugins = [
   del({
@@ -32,6 +33,7 @@ const plugins = [
   postcss({
     extract: path.join('css', 'web.css'),
     minimize: production,
+    sourceMap: sourcemap,
     config: false
   }),
   vue({
@@ -197,6 +199,7 @@ export default {
   output: {
     dir: 'dist',
     format: 'amd',
+    sourcemap: sourcemap,
     chunkFileNames: path.join('js', 'chunks', production ? '[name]-[hash].js' : '[name].js'),
     entryFileNames: path.join('js', production ? '[name]-[hash].js' : '[name].js')
   },
