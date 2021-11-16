@@ -1,0 +1,6 @@
+Enhancement: Use default info from app provider
+
+The app provider returns information about the default application per mime type. This information is now respected when triggering the default action for a file.
+
+https://github.com/owncloud/web/issues/5962
+https://github.com/owncloud/web/pull/5970

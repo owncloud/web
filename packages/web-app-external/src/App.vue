@@ -110,8 +110,12 @@ export default {
 
     // fetch iframe params for app and file
     const configUrl = this.configuration.server
-    const appOpenUrl = this.capabilities.files.app_providers[0].open_url.replace('/app', 'app')
-    const url = configUrl + appOpenUrl + '?file_id=' + this.fileId + '&app_name=' + this.appName
+    const appOpenUrl = this.capabilities.files.app_providers[0].open_url.replace(/^\/+/, '')
+    const url =
+      configUrl +
+      appOpenUrl +
+      `?file_id=${this.fileId}` +
+      (this.appName ? `&app_name=${this.appName}` : '')
 
     const response = await fetch(url, {
       method: 'POST',
