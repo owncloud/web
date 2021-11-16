@@ -15,7 +15,7 @@ export class ActorContinent {
 
   public async create({ id }: { id: string }): Promise<Actor> {
     if (this.store.has(id)) {
-      throw new Error(`Actor '${id}' already exists.`)
+      return this.get({ id })
     }
 
     const context = await browser.newContext({
@@ -29,6 +29,7 @@ export class ActorContinent {
         context,
         page,
         close: async (): Promise<void> => {
+          this.store.delete(id)
           await page.close()
           await context.close()
         }

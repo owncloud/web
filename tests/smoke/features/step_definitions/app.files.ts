@@ -1,5 +1,5 @@
 import { DataTable, Given, When } from '@cucumber/cucumber'
-import { FilesPage, World } from '../../support'
+import { FilesPage, World, config } from '../../support'
 import { expect } from '@playwright/test'
 
 When(
@@ -40,6 +40,9 @@ When(
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const actor = this.actorContinent.get({ id: stepUser })
     const { allFiles: allFilesPage } = new FilesPage({ actor })
+
+    await allFilesPage.navigate()
+
     const uploadInfo = stepTable.hashes().reduce((acc, stepRow) => {
       const { to, resource } = stepRow
 
@@ -124,14 +127,14 @@ When(
   async function (this: World, stepUser: string, stepTable: DataTable) {
     // Todo: implement explicit step definition for *.navigate()
 
-    // if (!config.ocis) {
-    //   Todo: add switch info in case of oc10 autoAccept shares
-    // }
+    if (!config.ocis) {
+      // Todo: add switch info in case of oc10 autoAccept shares
+      return
+    }
 
     const actor = this.actorContinent.get({ id: stepUser })
     const { sharedWithMe: sharedWithMePage } = new FilesPage({ actor })
     const shares = stepTable.raw().map((f) => f[0])
-
     await sharedWithMePage.navigate()
 
     for (const share of shares) {
@@ -146,67 +149,32 @@ When(
     const actor = this.actorContinent.get({ id: stepUser })
     const { allFiles: allFilesPage } = new FilesPage({ actor })
 
-    const renameInfo = stepTable.hashes().reduce((acc, stepRow) => {
-      const { resource, as } = stepRow
+    await allFilesPage.navigate()
 
-      if (!acc[resource]) {
-        acc[resource] = []
-      }
-
-      acc[resource].push(as)
-
-      return acc
-    }, {})
-
-    for (const folder of Object.keys(renameInfo)) {
-      const name = renameInfo[folder]
-      await allFilesPage.renameObject({ folder, name })
+    for (const { resource, newName } of stepTable.hashes()) {
+      await allFilesPage.renameResource({ resource, newName })
     }
   }
 )
 
 When(
-  '{string} moves following resource(s)',
-  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+  /^"([^"]*)" (copies|moves) following (resource|resources)$/,
+  async function (
+    this: World,
+    stepUser: string,
+    actionType: string,
+    _: string,
+    stepTable: DataTable
+  ): Promise<void> {
     const actor = this.actorContinent.get({ id: stepUser })
     const { allFiles: allFilesPage } = new FilesPage({ actor })
-    const moveInfo = stepTable.hashes().reduce((acc, stepRow) => {
-      const { resource, to } = stepRow
 
-      if (!acc[resource]) {
-        acc[resource] = []
-      }
-
-      acc[resource].push(to)
-
-      return acc
-    }, {})
-
-    for (const folder of Object.keys(moveInfo)) {
-      await allFilesPage.moveOrCopyFiles({ folder, moveTo: moveInfo[folder], action: 'move' })
-    }
-  }
-)
-
-When(
-  '{string} copies following resource(s)',
-  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
-    const actor = this.actorContinent.get({ id: stepUser })
-    const { allFiles: allFilesPage } = new FilesPage({ actor })
-    const copyInfo = stepTable.hashes().reduce((acc, stepRow) => {
-      const { resource, to } = stepRow
-
-      if (!acc[resource]) {
-        acc[resource] = []
-      }
-
-      acc[resource].push(to)
-
-      return acc
-    }, {})
-
-    for (const folder of Object.keys(copyInfo)) {
-      await allFilesPage.moveOrCopyFiles({ folder, moveTo: copyInfo[folder], action: 'copy' })
+    for (const { resource, to } of stepTable.hashes()) {
+      await allFilesPage.moveOrCopyResource({
+        resource,
+        newLocation: to,
+        action: actionType === 'copies' ? 'copy' : 'move'
+      })
     }
   }
 )

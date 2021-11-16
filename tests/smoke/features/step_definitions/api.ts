@@ -16,10 +16,11 @@ Given(
 
 Given(
   'admin set the default folder for received shares to {string}',
-  async function (this: World, stepApp: string): Promise<void> {
-    const admin = this.userContinent.get({ id: 'admin' })
+  async function (this: World, value: string): Promise<void> {
+    const user = this.userContinent.get({ id: 'admin' })
+
     if (!config.ocis) {
-      await api.folder.setReceivedFolder({ folder: stepApp, admin })
+      await api.config.setShareFolder({ value, user })
     }
   }
 )

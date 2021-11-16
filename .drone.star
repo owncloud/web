@@ -756,8 +756,7 @@ def stagePipelines(ctx):
     smoke_pipelines = smokeTests(ctx)
     acceptance_pipelines = acceptance(ctx)
 
-    # return unit_test_pipelines + pipelinesDependsOn(smoke_pipelines, unit_test_pipelines) + pipelinesDependsOn(acceptance_pipelines, smoke_pipelines)
-    return smoke_pipelines + pipelinesDependsOn(acceptance_pipelines, smoke_pipelines)
+    return unit_test_pipelines + pipelinesDependsOn(smoke_pipelines, unit_test_pipelines) + pipelinesDependsOn(acceptance_pipelines, smoke_pipelines)
 
 def afterPipelines(ctx):
     return build(ctx) + notify()
@@ -1078,6 +1077,7 @@ def unitTests(ctx):
 
 def smokeTests(ctx):
     db = "mysql:5.5"
+    logLevel = "2"
 
     smoke_workspace = {
         "base": dir["base"],
@@ -1104,7 +1104,7 @@ def smokeTests(ctx):
             "OCIS": "true",
         },
         "commands": [
-            "sleep 10 && yarn test:smoke:experimental tests/smoke/features/kindergarten.feature",  # TODO: enable all smoke tests
+            "sleep 10 && yarn test:smoke:experimental tests/smoke/features/",
         ],
     }]
 
@@ -1116,36 +1116,39 @@ def smokeTests(ctx):
             "HEADLESS": "true",
         },
         "commands": [
-            "sleep 10 && yarn test:smoke:experimental tests/smoke/features/kindergarten.feature",  # TODO: enable all smoke tests
+            "sleep 10 && yarn test:smoke:experimental tests/smoke/features/",
         ],
     }]
 
-    base_steps = \
+    services = databaseService(db) + owncloudService() + webService()
+
+    stepsClassic = \
         skipIfUnchanged(ctx, "unit-tests") + \
         restoreBuildArtifactCache(ctx, "yarn", ".yarn") + \
         restoreBuildArtifactCache(ctx, "playwright", ".playwright") + \
-        copyFilesForUpload() + \
         installYarn() + \
-        restoreBuildArtifactCache(ctx, "web-dist", "dist") + \
-        setupServerConfigureWeb("2")
+        buildWebApp() + \
+        installCore(db) + \
+        owncloudLog() + \
+        setupIntegrationWebApp() + \
+        setupServerAndAppsForIntegrationApp(logLevel) + \
+        setUpOauth2(True, True) + \
+        fixPermissions() + \
+        copyFilesForUpload() + \
+        smoke_test_occ
 
     stepsInfinite = \
-        base_steps + \
+        skipIfUnchanged(ctx, "unit-tests") + \
+        restoreBuildArtifactCache(ctx, "yarn", ".yarn") + \
+        restoreBuildArtifactCache(ctx, "playwright", ".playwright") + \
+        restoreBuildArtifactCache(ctx, "web-dist", "dist") + \
+        installYarn() + \
+        setupServerConfigureWeb(logLevel) + \
         getOcis() + \
         ocisService() + \
         getSkeletonFiles() + \
+        copyFilesForUpload() + \
         smoke_test_ocis
-
-    stepsClassic = \
-        base_steps + \
-        installCore(db) + \
-        owncloudLog() + \
-        setupServerAndApp("2") + \
-        setUpOauth2(False) + \
-        fixPermissions() + \
-        smoke_test_occ
-
-    services = databaseService(db) + owncloudService() + webService()
 
     smoke_trigger = {
         "ref": [
@@ -1317,7 +1320,7 @@ def acceptance(ctx):
                                 steps += idpService() + ocisWebService() + glauthService()
                             else:
                                 ## Configure oc10 and web with oauth2 and web Service
-                                steps += setUpOauth2(params["oc10IntegrationAppIncluded"])
+                                steps += setUpOauth2(params["oc10IntegrationAppIncluded"], True)
                                 services += webService()
 
                             steps += fixPermissions()
@@ -1941,7 +1944,7 @@ def webService():
         ],
     }]
 
-def setUpOauth2(forIntegrationApp):
+def setUpOauth2(forIntegrationApp, disableFileLocking):
     oidcURL = ""
 
     if (forIntegrationApp):
@@ -1949,17 +1952,22 @@ def setUpOauth2(forIntegrationApp):
     else:
         oidcURL = "http://web/oidc-callback.html"
 
+    commands = [
+        "git clone -b master https://github.com/owncloud/oauth2.git %s/apps/oauth2" % dir["server"],
+        "cd %s/apps/oauth2 || exit" % dir["server"],
+        "make vendor",
+        "cd %s || exit" % dir["server"],
+        "php occ a:e oauth2",
+        "php occ oauth2:add-client Web Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ %s" % oidcURL,
+    ]
+
+    if (disableFileLocking):
+        commands.append("php occ config:system:set filelocking.enabled --value=false")
+
     return [{
         "name": "setup-oauth2",
         "image": OC_CI_PHP,
-        "commands": [
-            "git clone -b master https://github.com/owncloud/oauth2.git %s/apps/oauth2" % dir["server"],
-            "cd %s/apps/oauth2 || exit" % dir["server"],
-            "make vendor",
-            "cd %s || exit" % dir["server"],
-            "php occ a:e oauth2",
-            "php occ oauth2:add-client Web Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ %s" % oidcURL,
-        ],
+        "commands": commands,
     }]
 
 def setupGraphapiOIdC():
