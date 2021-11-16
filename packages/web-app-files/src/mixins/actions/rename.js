@@ -115,12 +115,12 @@ export default {
       this.setModalInputErrorMessage(null)
     },
 
-    $_rename_renameResource({ resources, newName }) {
+    $_rename_renameResource(resource, newName) {
       this.toggleModalConfirmButton()
 
       this.renameFile({
         client: this.$client,
-        file: resources[0],
+        file: resource,
         newValue: newName,
         publicPage: this.publicPage()
       })
@@ -135,11 +135,7 @@ export default {
               'Error while renaming "%{file}" to "%{newName}" - the file is locked'
             )
           }
-          const title = this.$gettextInterpolate(
-            translated,
-            { file: resources[0].name, newName },
-            true
-          )
+          const title = this.$gettextInterpolate(translated, { file: resource.name, newName }, true)
           this.showMessage({
             title: title,
             status: 'danger'

@@ -153,12 +153,13 @@ export default {
     // available mime-types coming from the app-provider and existing actions
     $_fileActions_triggerDefaultAction(resource) {
       const action = this.$_fileActions_getDefaultAction(resource)
-      action.handler({ resources: [resource], ...actions[0].handlerData })
+      action.handler({ resources: [resource], ...action.handlerData })
     },
 
     $_fileActions_getDefaultAction(resource) {
+      const resources = [resource]
       const filterCallback = (action) =>
-        action.canBeDefault && action.isEnabled({ resource, parent: this.currentFolder })
+        action.canBeDefault && action.isEnabled({ resources, parent: this.currentFolder })
 
       // first priority: handlers from config
       const defaultEditorActions = this.$_fileActions_editorActions.filter(filterCallback)
@@ -169,7 +170,7 @@ export default {
       // second priority: `/app/open` endpoint of app provider if available
       // FIXME: files app should not know anything about the `external apps` app
       const externalAppsActions =
-        this.$_fileActions_loadExternalAppActions(resource).filter(filterCallback)
+        this.$_fileActions_loadExternalAppActions(resources).filter(filterCallback)
       if (externalAppsActions.length) {
         return externalAppsActions[0]
       }
