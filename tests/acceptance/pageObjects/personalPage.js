@@ -320,8 +320,10 @@ module.exports = {
     newFileMenuButton: {
       selector: '#new-file-menu-btn:enabled'
     },
+    // covers oc-files-actions-delete-permanent-trigger and oc-files-actions-delete-trigger
     deleteSelectedButton: {
-      selector: '.oc-files-actions-delete-trigger'
+      selector: '//button[contains(@class, "oc-files-actions-delete-")]',
+      locateStrategy: 'xpath'
     },
     newResourceDropdown: {
       selector: '#new-file-menu-drop'

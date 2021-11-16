@@ -169,8 +169,9 @@ module.exports = {
       selector: '//ul[@id="oc-files-actions-sidebar"]/li',
       locateStrategy: 'xpath'
     },
+    // covers oc-files-actions-delete-permanent-trigger and oc-files-actions-delete-trigger
     deleteButtonInAccordion: {
-      selector: '//button[contains(@class, "oc-files-actions-delete-trigger")]',
+      selector: '//button[contains(@class, "oc-files-actions-delete-")]',
       locateStrategy: 'xpath'
     },
     downloadButtonInAccordion: {

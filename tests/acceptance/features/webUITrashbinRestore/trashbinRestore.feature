@@ -146,7 +146,7 @@ Feature: Restore deleted files/folders
     And the user restores file "simple-folder/file-to-delete-and-restore" from the trashbin using the webUI
     Then the following error message should be displayed on the webUI
      """
-     Restoration of file-to-delete-and-restore failed
+     Failed to restore file-to-delete-and-restore
      The destination node is not found
      """
     #And a success message "file-to-delete-and-restore was restored successfully" should be displayed on the webUI
@@ -168,14 +168,14 @@ Feature: Restore deleted files/folders
     And the user restores file "simple-folder/file-to-delete-and-restore" from the trashbin using the webUI
     Then the following error message should be displayed on the webUI
       """
-      Restoration of file-to-delete-and-restore failed
-      Unknown error
+      Failed to restore file-to-delete-and-restore
       """
     #And a success message "file-to-delete-and-restore was restored successfully" should be displayed on the webUI
     #And as "Alice" the file with original path "simple-folder/file-to-delete-and-restore" should not exist in the trashbin
     And as "Alice" file "simple-folder-renamed/file-to-delete-and-restore" should not exist
     #And as "Alice" file "simple-folder-renamed/file-to-delete-and-restore" should exist
     And as "Alice" file "simple-folder/file-to-delete-and-restore" should not exist
+
 
   @issue-1753 @skipOnOCIS @issue-product-186
   Scenario: Restore a file from trashbin without restoring the parent folder (bug demonstration)
@@ -189,7 +189,7 @@ Feature: Restore deleted files/folders
     And the user restores file "simple-folder/file-to-delete-and-restore" from the trashbin using the webUI
     Then the following error message should be displayed on the webUI
      """
-     Restoration of file-to-delete-and-restore failed
+     Failed to restore file-to-delete-and-restore
      The destination node is not found
      """
     #And a success message "file-to-delete-and-restore was restored successfully" should be displayed on the webUI
@@ -210,13 +210,13 @@ Feature: Restore deleted files/folders
     And the user restores file "simple-folder/file-to-delete-and-restore" from the trashbin using the webUI
     Then the following error message should be displayed on the webUI
       """
-      Restoration of file-to-delete-and-restore failed
-      Unknown error
+      Failed to restore file-to-delete-and-restore
       """
     #And a success message "file-to-delete-and-restore was restored successfully" should be displayed on the webUI
     #And as "Alice" the file with original path "simple-folder/file-to-delete-and-restore" should not exist in the trashbin
     And as "Alice" file "simple-folder/file-to-delete-and-restore" should not exist
     #And as "Alice" file "simple-folder/file-to-delete-and-restore" should exist
+
 
   @issue-1723
   Scenario: Delete and restore a file that has the same name like a deleted folder
