@@ -13,6 +13,7 @@ Summary
 * Bugfix - Context menu rendering: [#5952](https://github.com/owncloud/web/pull/5952)
 * Bugfix - Use search app translations: [#5955](https://github.com/owncloud/web/issues/5955)
 * Enhancement - Accentuate new files: [#6020](https://github.com/owncloud/web/pull/6020)
+* Enhancement - Use default info from app provider: [#5962](https://github.com/owncloud/web/issues/5962)
 * Enhancement - Rename `_chunks` folder to `chunks`: [#5988](https://github.com/owncloud/web/pull/5988)
 * Enhancement - Default action order: [#5952](https://github.com/owncloud/web/pull/5952)
 * Enhancement - Reduced sidebar width: [#5981](https://github.com/owncloud/web/issues/5981)
@@ -60,6 +61,14 @@ Details
    OcFilesTable.
 
    https://github.com/owncloud/web/pull/6020
+
+* Enhancement - Use default info from app provider: [#5962](https://github.com/owncloud/web/issues/5962)
+
+   The app provider returns information about the default application per mime type. This
+   information is now respected when triggering the default action for a file.
+
+   https://github.com/owncloud/web/issues/5962
+   https://github.com/owncloud/web/pull/5970
 
 * Enhancement - Rename `_chunks` folder to `chunks`: [#5988](https://github.com/owncloud/web/pull/5988)
 
