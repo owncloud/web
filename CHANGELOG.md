@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Fix location picker breadcrumb url encoding: [#5940](https://github.com/owncloud/web/pull/5940)
+* Bugfix - Correct capabilities URL when server run in a subfolder: [#6010](https://github.com/owncloud/web/issues/6010)
 * Bugfix - Context menu rendering: [#5952](https://github.com/owncloud/web/pull/5952)
 * Bugfix - Use search app translations: [#5955](https://github.com/owncloud/web/issues/5955)
 * Enhancement - Accentuate new files: [#6020](https://github.com/owncloud/web/pull/6020)
@@ -30,6 +31,13 @@ Details
    https://github.com/owncloud/web/issues/5938
    https://github.com/owncloud/web/pull/5940
    https://github.com/owncloud/web/pull/5715
+
+* Bugfix - Correct capabilities URL when server run in a subfolder: [#6010](https://github.com/owncloud/web/issues/6010)
+
+   We fixed an issue where the capabilities where requested from a wrong URL in the case the server
+   is running in a subfolder e.g. `http://localhost/owncloud`
+
+   https://github.com/owncloud/web/issues/6010
 
 * Bugfix - Context menu rendering: [#5952](https://github.com/owncloud/web/pull/5952)
 
