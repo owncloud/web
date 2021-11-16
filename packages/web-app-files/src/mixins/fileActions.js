@@ -167,7 +167,7 @@ export default {
       }
 
       // fallback: system actions
-      return this.$_fileActions_systemActions.filter(filterCallback)
+      return this.$_fileActions_systemActions.filter(filterCallback)[0]
     },
 
     $_fileActions_getAllAvailableActions(resource) {
