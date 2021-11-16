@@ -1,0 +1,5 @@
+Bugfix: correct capabilities URL when server run in a subfolder
+
+We fixed an issue where the capabilities where requested from a wrong URL in the case the server is running in a subfolder e.g. `http://localhost/owncloud`
+
+https://github.com/owncloud/web/issues/6010
