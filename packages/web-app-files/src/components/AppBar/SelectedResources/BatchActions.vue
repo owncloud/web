@@ -70,6 +70,7 @@ export default {
   display: block;
   li {
     float: left !important;
+    margin-top: var(--oc-space-xsmall);
     margin-bottom: var(--oc-space-xsmall);
   }
 
