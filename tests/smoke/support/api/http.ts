@@ -2,7 +2,7 @@ import join from 'join-path'
 import fetch, { BodyInit, Response } from 'node-fetch'
 import { User } from '../types'
 import { config } from '../config'
-import get from 'lodash-es/get'
+import _ from 'lodash'
 
 export const request = async ({
   method,
@@ -45,8 +45,8 @@ export const checkResponseStatus = (response: Response, message = ''): void => {
 }
 
 export const checkOCJsonStatus = (json: JSON, message = ''): void => {
-  const statusCode = get(json, 'ocs.meta.statuscode')
-  const ocsMessage = get(json, 'ocs.meta.message')
+  const statusCode = _.get(json, 'ocs.meta.statuscode')
+  const ocsMessage = _.get(json, 'ocs.meta.message')
 
   if (statusCode !== 200) {
     throw Error(`OCS Request Failed: ${message}, Status: ${statusCode}, Message: ${ocsMessage}`)

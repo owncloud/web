@@ -8,6 +8,9 @@ OC_CI_CORE_NODEJS = "owncloudci/core:nodejs14"
 OC_CI_GOLANG = "owncloudci/golang:1.17"
 OC_CI_NODEJS = "owncloudci/nodejs:14"
 OC_CI_PHP = "owncloudci/php:7.4"
+OC_UBUNTU = "owncloud/ubuntu:20.04"
+
+OC10_VERSION = "latest"
 
 dir = {
     "base": "/var/www/owncloud",
@@ -35,9 +38,6 @@ config = {
                     "webUILogin",
                     "webUIPreview",
                     "webUIPrivateLinks",
-                    # The following suites may have all scenarios currently skipped.
-                    # The suites are listed here so that scenarios will run when
-                    # they are enabled.
                 ],
                 "oC10Locks": [
                     "webUIWebdavLockProtection",
@@ -175,7 +175,7 @@ config = {
             },
             "notificationsAppNeeded": True,
             "federatedServerNeeded": True,
-            "federatedServerVersion": "latest",
+            "federatedServerVersion": OC10_VERSION,
         },
         "webUI-XGA-Notifications": {
             "type": NOTIFICATIONS,
@@ -752,19 +752,11 @@ def beforePipelines(ctx):
            pipelinesDependsOn(yarnlint(ctx), yarnCache(ctx))
 
 def stagePipelines(ctx):
-    title = ctx.build.title.lower()
-    if "docs-only" in title:
-        return []
-
     unit_test_pipelines = unitTests(ctx)
-    if "unit-tests-only" in title:
-        return unit_test_pipelines
-
+    smoke_pipelines = smokeTests(ctx)
     acceptance_pipelines = acceptance(ctx)
-    if ("acceptance-tests-only" in title):
-        return acceptance_pipelines
 
-    return unit_test_pipelines + pipelinesDependsOn(acceptance_pipelines, unit_test_pipelines)
+    return unit_test_pipelines + pipelinesDependsOn(smoke_pipelines, unit_test_pipelines) + pipelinesDependsOn(acceptance_pipelines, smoke_pipelines)
 
 def afterPipelines(ctx):
     return build(ctx) + notify()
@@ -999,7 +991,7 @@ def buildCacheWeb(ctx):
                  installYarn() +
                  [{
                      "name": "build-web",
-                     "image": "owncloudci/nodejs:14",
+                     "image": OC_CI_NODEJS,
                      "commands": [
                          "make dist",
                      ],
@@ -1083,6 +1075,113 @@ def unitTests(ctx):
         },
     }]
 
+def smokeTests(ctx):
+    db = "mysql:5.5"
+    logLevel = "2"
+
+    smoke_workspace = {
+        "base": dir["base"],
+        "path": config["app"],
+    }
+
+    smoke_volumes = [{
+        "name": "uploads",
+        "temp": {},
+    }, {
+        "name": "configs",
+        "temp": {},
+    }, {
+        "name": "gopath",
+        "temp": {},
+    }]
+
+    smoke_test_ocis = [{
+        "name": "smoke-tests",
+        "image": OC_CI_NODEJS,
+        "environment": {
+            "BASE_URL_OCIS": "ocis:9200",
+            "HEADLESS": "true",
+            "OCIS": "true",
+        },
+        "commands": [
+            "sleep 10 && yarn test:smoke:experimental tests/smoke/features/",
+        ],
+    }]
+
+    smoke_test_occ = [{
+        "name": "smoke-tests",
+        "image": OC_CI_NODEJS,
+        "environment": {
+            "BASE_URL_OCC": "owncloud",
+            "HEADLESS": "true",
+        },
+        "commands": [
+            "sleep 10 && yarn test:smoke:experimental tests/smoke/features/",
+        ],
+    }]
+
+    services = databaseService(db) + owncloudService() + webService()
+
+    stepsClassic = \
+        skipIfUnchanged(ctx, "unit-tests") + \
+        restoreBuildArtifactCache(ctx, "yarn", ".yarn") + \
+        restoreBuildArtifactCache(ctx, "playwright", ".playwright") + \
+        installYarn() + \
+        buildWebApp() + \
+        installCore(db) + \
+        owncloudLog() + \
+        setupIntegrationWebApp() + \
+        setupServerAndAppsForIntegrationApp(logLevel) + \
+        setUpOauth2(True, True) + \
+        fixPermissions() + \
+        copyFilesForUpload() + \
+        smoke_test_occ
+
+    stepsInfinite = \
+        skipIfUnchanged(ctx, "unit-tests") + \
+        restoreBuildArtifactCache(ctx, "yarn", ".yarn") + \
+        restoreBuildArtifactCache(ctx, "playwright", ".playwright") + \
+        restoreBuildArtifactCache(ctx, "web-dist", "dist") + \
+        installYarn() + \
+        setupServerConfigureWeb(logLevel) + \
+        getOcis() + \
+        ocisService() + \
+        getSkeletonFiles() + \
+        copyFilesForUpload() + \
+        smoke_test_ocis
+
+    smoke_trigger = {
+        "ref": [
+            "refs/heads/master",
+            "refs/tags/**",
+            "refs/pull/**",
+        ],
+    }
+
+    return [
+        {
+            "kind": "pipeline",
+            "type": "docker",
+            "name": "smoke-tests OC10",
+            "workspace": smoke_workspace,
+            "steps": stepsClassic,
+            "services": services,
+            "depends_on": [],
+            "trigger": smoke_trigger,
+            "volumes": smoke_volumes,
+        },
+        {
+            "kind": "pipeline",
+            "type": "docker",
+            "name": "smoke-tests oCIS",
+            "workspace": smoke_workspace,
+            "steps": stepsInfinite,
+            "depends_on": ["cache-ocis"],
+            "trigger": smoke_trigger,
+            "volumes": smoke_volumes,
+        },
+    ]
+
 def acceptance(ctx):
     pipelines = []
 
@@ -1096,7 +1195,7 @@ def acceptance(ctx):
     errorFound = False
 
     default = {
-        "servers": ["latest"],
+        "servers": [OC10_VERSION],
         "browsers": ["chrome"],
         "databases": ["mysql:5.5"],
         "extraEnvironment": {},
@@ -1105,7 +1204,7 @@ def acceptance(ctx):
         "logLevel": "2",
         "notificationsAppNeeded": False,
         "federatedServerNeeded": False,
-        "federatedServerVersion": "latest",
+        "federatedServerVersion": OC10_VERSION,
         "runningOnOCIS": False,
         "screenShots": False,
         "visualTesting": False,
@@ -1204,7 +1303,7 @@ def acceptance(ctx):
                             if server == "":
                                 server = False
 
-                            steps += installCore(server, db) + owncloudLog()
+                            steps += installCore(db) + owncloudLog()
 
                             if (params["oc10IntegrationAppIncluded"]):
                                 steps += setupIntegrationWebApp()
@@ -1221,7 +1320,7 @@ def acceptance(ctx):
                                 steps += idpService() + ocisWebService() + glauthService()
                             else:
                                 ## Configure oc10 and web with oauth2 and web Service
-                                steps += setUpOauth2(params["oc10IntegrationAppIncluded"])
+                                steps += setUpOauth2(params["oc10IntegrationAppIncluded"], True)
                                 services += webService()
 
                             steps += fixPermissions()
@@ -1516,7 +1615,7 @@ def getSaucelabsBrowserName(browser):
 def isLocalBrowser(browser):
     return ((browser == "chrome") or (browser == "firefox"))
 
-def installCore(version, db):
+def installCore(db):
     host = getDbName(db)
     dbType = host
 
@@ -1536,30 +1635,16 @@ def installCore(version, db):
     stepDefinition = {
         "name": "install-core",
         "image": OC_CI_CORE_NODEJS,
+        "settings": {
+            "version": OC10_VERSION,
+            "core_path": dir["server"],
+            "db_type": dbType,
+            "db_name": database,
+            "db_host": host,
+            "db_username": username,
+            "db_password": password,
+        },
     }
-
-    if version:
-        stepDefinition.update({"settings": {
-            "version": version,
-            "core_path": dir["server"],
-            "db_type": dbType,
-            "db_name": database,
-            "db_host": host,
-            "db_username": username,
-            "db_password": password,
-        }})
-    else:
-        stepDefinition.update({"settings": {
-            "core_path": dir["server"],
-            "db_type": dbType,
-            "db_name": database,
-            "db_host": host,
-            "db_username": username,
-            "db_password": password,
-        }})
-        stepDefinition.update({"commands": [
-            "bash /usr/sbin/plugin.sh",
-        ]})
 
     return [stepDefinition]
 
@@ -1859,7 +1944,7 @@ def webService():
         ],
     }]
 
-def setUpOauth2(forIntegrationApp):
+def setUpOauth2(forIntegrationApp, disableFileLocking):
     oidcURL = ""
 
     if (forIntegrationApp):
@@ -1867,17 +1952,22 @@ def setUpOauth2(forIntegrationApp):
     else:
         oidcURL = "http://web/oidc-callback.html"
 
+    commands = [
+        "git clone -b master https://github.com/owncloud/oauth2.git %s/apps/oauth2" % dir["server"],
+        "cd %s/apps/oauth2 || exit" % dir["server"],
+        "make vendor",
+        "cd %s || exit" % dir["server"],
+        "php occ a:e oauth2",
+        "php occ oauth2:add-client Web Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ %s" % oidcURL,
+    ]
+
+    if (disableFileLocking):
+        commands.append("php occ config:system:set filelocking.enabled --value=false")
+
     return [{
         "name": "setup-oauth2",
         "image": OC_CI_PHP,
-        "commands": [
-            "git clone -b master https://github.com/owncloud/oauth2.git %s/apps/oauth2" % dir["server"],
-            "cd %s/apps/oauth2 || exit" % dir["server"],
-            "make vendor",
-            "cd %s || exit" % dir["server"],
-            "php occ a:e oauth2",
-            "php occ oauth2:add-client Web Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ %s" % oidcURL,
-        ],
+        "commands": commands,
     }]
 
 def setupGraphapiOIdC():
@@ -2161,7 +2251,7 @@ def fixPermissionsFederated():
 def owncloudLog():
     return [{
         "name": "owncloud-log",
-        "image": "owncloud/ubuntu:20.04",
+        "image": OC_UBUNTU,
         "detach": True,
         "commands": [
             "tail -f %s/data/owncloud.log" % dir["server"],
@@ -2171,7 +2261,7 @@ def owncloudLog():
 def owncloudLogFederated():
     return [{
         "name": "owncloud-federated-log",
-        "image": "owncloud/ubuntu:20.04",
+        "image": OC_UBUNTU,
         "detach": True,
         "commands": [
             "tail -f %s/data/owncloud.log" % dir["federated"],
@@ -2516,7 +2606,7 @@ def buildGithubCommentVisualDiff(ctx, suite, runningOnOCIS):
     branch = ctx.build.source if ctx.build.event == "pull_request" else "master"
     return [{
         "name": "build-github-comment-vrt",
-        "image": "owncloud/ubuntu:20.04",
+        "image": OC_UBUNTU,
         "commands": [
             "cd %s/tests/vrt" % dir["web"],
             "if [ ! -d diff ]; then exit 0; fi",
@@ -2555,7 +2645,7 @@ def buildGithubCommentVisualDiff(ctx, suite, runningOnOCIS):
 def buildGithubComment(suite):
     return [{
         "name": "build-github-comment",
-        "image": "owncloud/ubuntu:20.04",
+        "image": OC_UBUNTU,
         "commands": [
             "cd %s/tests/reports/screenshots/" % dir["web"],
             'echo "<details><summary>:boom: The acceptance tests failed. Please find the screenshots inside ...</summary>\\n\\n<p>\\n\\n" >> %s/comments.file' % dir["web"],
@@ -2582,7 +2672,7 @@ def buildGithubComment(suite):
 def buildGithubCommentForBuildStopped(suite):
     return [{
         "name": "build-github-comment-buildStop",
-        "image": "owncloud/ubuntu:20.04",
+        "image": OC_UBUNTU,
         "commands": [
             'echo ":boom: The acceptance tests pipeline failed. The build has been cancelled.\\n" >> %s/comments.file' % dir["web"],
         ],
@@ -2783,7 +2873,6 @@ def skipIfUnchanged(ctx, type):
         "^dev/.*",
         "^docs/.*",
         "^packages/web-app-skeleton/.*",
-        "^tests/smoke/.*",
         "README.md",
     ]
 

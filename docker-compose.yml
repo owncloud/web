@@ -26,6 +26,8 @@ services:
     container_name: web_oc10
     ports:
       - 8080:8080
+    environment:
+      OWNCLOUD_LOCKING_ENABLED: "false"
     volumes:
       - ${OC10_WEB_CONFIG:-./dev/docker/oc10.web.config.json}:/mnt/data/config/config.json
       - ${OC10_CONFIG:-./dev/docker/oc10.config.php}:/mnt/data/config/setup.config.php

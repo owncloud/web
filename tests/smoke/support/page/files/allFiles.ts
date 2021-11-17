@@ -48,6 +48,7 @@ export class AllFilesPage {
     if (folder) {
       await cta.files.navigateToFolder({ page: page, path: folder })
     }
+
     await page.click('#new-file-menu-btn')
     await page.setInputFiles(
       '#fileUploadInput',
@@ -78,7 +79,7 @@ export class AllFilesPage {
 
       const [download] = await Promise.all([
         page.waitForEvent('download'),
-        page.click('.oc-files-actions-download-trigger')
+        page.click('.oc-files-actions-download-file-trigger')
       ])
 
       await cta.files.sidebar.close({ page: page })
@@ -128,56 +129,62 @@ export class AllFilesPage {
     await page.goto(startUrl)
   }
 
-  async renameObject({ folder, name }: { folder: string; name: string }): Promise<void> {
-    const { page } = this.actor
-    const startUrl = page.url()
-    const folderPaths = folder.split('/')
-    const folderName = folderPaths.pop()
-
-    if (folderPaths.length) {
-      await cta.files.navigateToFolder({ page: page, path: folderPaths.join('/') })
-    }
-
-    await page.click(`//*[@data-test-resource-name="${folderName}"]`, { button: 'right' })
-    await page.click('.oc-files-actions-rename-trigger')
-    await page.fill('.oc-text-input', name[0])
-    await page.click('.oc-modal-body-actions-confirm')
-    await page.reload()
-    await page.goto(startUrl)
-  }
-
-  async moveOrCopyFiles({
-    folder,
-    moveTo,
-    action
+  async renameResource({
+    resource,
+    newName
   }: {
-    folder?: string
-    moveTo: string
-    action: string
+    resource: string
+    newName: string
   }): Promise<void> {
     const { page } = this.actor
     const startUrl = page.url()
-    const folderPaths = folder.split('/')
-    const folderName = folderPaths.pop()
-    const moveToPaths = moveTo[0].split('/')
-    const folderToMoveName = moveToPaths.pop()
+    const { dir: resourceDir, base: resourceBase } = path.parse(resource)
 
-    if (folderPaths.length) {
-      await cta.files.navigateToFolder({ page: page, path: folderPaths.join('/') })
+    if (resourceDir) {
+      await cta.files.navigateToFolder({ page: page, path: resourceDir })
     }
 
-    await page.click(`//*[@data-test-resource-name="${folderName}"]`, { button: 'right' })
+    await page.click(`//*[@data-test-resource-name="${resourceBase}"]`, { button: 'right' })
+    await page.click('.oc-files-actions-rename-trigger')
+    await page.fill('.oc-text-input', newName)
+    await page.click('.oc-modal-body-actions-confirm')
+    await cta.files.waitForResources({
+      page: page,
+      names: [newName]
+    })
+    await page.goto(startUrl)
+  }
+
+  async moveOrCopyResource({
+    resource,
+    newLocation,
+    action
+  }: {
+    resource: string
+    newLocation: string
+    action: 'copy' | 'move'
+  }): Promise<void> {
+    const { page } = this.actor
+    const startUrl = page.url()
+    const { dir: resourceDir, base: resourceBase } = path.parse(resource)
+
+    if (resourceDir) {
+      await cta.files.navigateToFolder({ page: page, path: resourceDir })
+    }
+
+    await page.click(`//*[@data-test-resource-name="${resourceBase}"]`, { button: 'right' })
     await page.click(`.oc-files-actions-${action}-trigger`)
     await page.click('//ol[@class="oc-breadcrumb-list"]/li/*[1]')
 
-    if (moveToPaths.length) {
-      await cta.files.navigateToFolder({ page: page, path: moveToPaths.join('/') })
+    if (newLocation) {
+      await cta.files.navigateToFolder({ page: page, path: newLocation })
     }
 
-    if (folderToMoveName.length && folderToMoveName !== 'All files') {
-      await page.click(`//*[@data-test-resource-name="${folderToMoveName}"]`)
-    }
     await page.click('#location-picker-btn-confirm')
+    await cta.files.waitForResources({
+      page: page,
+      names: [resourceBase]
+    })
     await page.goto(startUrl)
   }
 }
