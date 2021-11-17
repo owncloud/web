@@ -26,15 +26,8 @@ Given(
 )
 
 Given('admin disables auto accepting', async function (this: World): Promise<void> {
-  const admin = this.userContinent.get({ id: 'admin' })
+  const user = this.userContinent.get({ id: 'admin' })
   if (!config.ocis) {
-    await api.folder.autoAccept({ admin, enable: false })
-  }
-})
-
-Given('enable share auto accepting', async function (this: World): Promise<void> {
-  const admin = this.userContinent.get({ id: 'admin' })
-  if (!config.ocis) {
-    await api.folder.autoAccept({ admin, enable: true })
+    await api.config.disableShareAutoAccept({ user, value: false })
   }
 })

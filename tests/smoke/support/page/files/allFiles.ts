@@ -125,14 +125,15 @@ export class AllFilesPage {
     }
 
     if (mainMenu) {
-      const element = await page.waitForSelector(`//*[@data-test-resource-name="${folderName}"]/ancestor::tr//button[contains(@class, "files-quick-action-collaborators")]`)
+      const element = await page.waitForSelector(
+        `//*[@data-test-resource-name="${folderName}"]/ancestor::tr//button[contains(@class, "files-quick-action-collaborators")]`
+      )
       await element.click()
     } else {
       await cta.files.sidebar.open({ page: page, resource: folderName })
       await cta.files.sidebar.openPanel({ page: page, name: 'sharing' })
     }
     await page.click('.files-collaborators-open-add-share-dialog-button')
-
 
     for (const user of users) {
       await page.fill('#files-share-invite-input', user.displayName)
@@ -275,7 +276,9 @@ export class AllFilesPage {
     await page.waitForSelector('.details-preview')
     await cta.files.sidebar.openPanel({ page: page, name: 'actions' })
     await page.click('.oc-files-actions-mediaviewer-trigger')
-    await page.waitForSelector(`//p[contains(@class, "media-viewer-file-name") and contains(text(),"${resourceName}")]`)
+    await page.waitForSelector(
+      `//p[contains(@class, "media-viewer-file-name") and contains(text(),"${resourceName}")]`
+    )
 
     await page.goto(startUrl)
   }
@@ -283,7 +286,7 @@ export class AllFilesPage {
   async changeShareRole({
     folder,
     users,
-    role,
+    role
   }: {
     folder: string
     users: User[]

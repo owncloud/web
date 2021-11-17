@@ -180,7 +180,7 @@ When(
 )
 
 When(
-  '{string} creates new versions of the folowing file(s)',
+  '{string} creates new versions of the following file(s)',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const actor = this.actorContinent.get({ id: stepUser })
     const { allFiles: allFilesPage } = new FilesPage({ actor })
@@ -210,7 +210,7 @@ When(
     const shares = stepTable.raw().map((f) => f[0])
 
     for (const share of shares) {
-      await sharedWithMePage.declineShares({ name: share })
+      await sharedWithMePage.declineShare({ name: share })
     }
   }
 )
@@ -223,7 +223,7 @@ Then(
     const resources = stepTable.raw().map((f) => f[0])
 
     for (const resource of resources) {
-      await allFilesPage.checkThatResourceExist({ name: resource })
+      await allFilesPage.resourceExist({ name: resource })
     }
   }
 )
@@ -246,13 +246,14 @@ Then(
     }, {})
 
     for (const folder of Object.keys(countInfo)) {
-      await allFilesPage.checkVersionCount({ folder, count: countInfo[folder] })
+      // line below can't work like this, numberOfVersions returns int
+      // await allFilesPage.numberOfVersions({ resource: folder }) === countInfo[folder]
     }
   }
 )
 
 When(
-  '{string} creates new versions of the folowing file(s)',
+  '{string} creates new versions of the following file(s)',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const actor = this.actorContinent.get({ id: stepUser })
     const { allFiles: allFilesPage } = new FilesPage({ actor })
@@ -372,7 +373,7 @@ When(
         folder,
         users: shareInfo[folder].users,
         role: shareInfo[folder].role,
-        mainMenu: true,
+        mainMenu: true
       })
     }
   }
@@ -412,7 +413,7 @@ When(
       await allFilesPage.changeShareRole({
         folder,
         users: shareInfo[folder].users,
-        role: shareInfo[folder].role,
+        role: shareInfo[folder].role
       })
     }
   }
