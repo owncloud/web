@@ -92,25 +92,24 @@ export class AllFilesPage {
     return downloads
   }
 
-  async shareFolder({
-    folder,
+  async shareResource({
+    resource,
     users,
     role
   }: {
-    folder: string
+    resource: string
     users: User[]
     role: string
   }): Promise<void> {
     const { page } = this.actor
     const startUrl = page.url()
-    const folderPaths = folder.split('/')
-    const folderName = folderPaths.pop()
+    const { dir: resourceDir, base: resourceBase } = path.parse(resource)
 
-    if (folderPaths.length) {
-      await cta.files.navigateToFolder({ page: page, path: folderPaths.join('/') })
+    if (resourceDir) {
+      await cta.files.navigateToFolder({ page: page, path: resourceDir })
     }
 
-    await cta.files.sidebar.open({ page: page, resource: folderName })
+    await cta.files.sidebar.open({ page: page, resource: resourceBase })
     await cta.files.sidebar.openPanel({ page: page, name: 'sharing' })
     await page.click('.files-collaborators-open-add-share-dialog-button')
 
@@ -119,8 +118,8 @@ export class AllFilesPage {
       await page.waitForSelector('.vs--open')
       await page.press('#files-share-invite-input', 'Enter')
 
-      await page.click('//*[@id="files-collaborators-role-button"]')
-      await page.click(`//*[@id="files-role-${role}"]`)
+      await page.click('//*[@data-testid="files-recipient-role-select-btn"]')
+      await page.click(`#files-recipient-role-drop-btn-${role}`)
     }
 
     await page.click('#files-collaborators-collaborator-save-new-share-button')

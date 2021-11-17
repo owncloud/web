@@ -81,8 +81,8 @@ When(
     }, {})
 
     for (const folder of Object.keys(shareInfo)) {
-      await allFilesPage.shareFolder({
-        folder,
+      await allFilesPage.shareResource({
+        resource: folder,
         users: shareInfo[folder].users,
         role: shareInfo[folder].role
       })
