@@ -83,17 +83,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/eslint-parser@npm:^7.15.8":
-  version: 7.15.8
-  resolution: "@babel/eslint-parser@npm:7.15.8"
+"@babel/eslint-parser@npm:^7.16.3":
+  version: 7.16.3
+  resolution: "@babel/eslint-parser@npm:7.16.3"
   dependencies:
     eslint-scope: ^5.1.1
     eslint-visitor-keys: ^2.1.0
     semver: ^6.3.0
   peerDependencies:
     "@babel/core": ">=7.11.0"
-    eslint: ">=7.5.0"
-  checksum: 1c88334837d9555330fdeeff7b75404d931a5f9452aa57940602c78807d5324246919029c4d47059bf6927b44187938e7eb1d8570f422458bd3d26b313c9f9b3
+    eslint: ^7.5.0 || ^8.0.0
+  checksum: 3678ea3be1b94dd17516b84b84998f043e8e1a6c5690c572e850011736e224bc62a96d4a96be9e38556e2dfe7914962af5edfd205fdc8b846794a232c81f94a8
   languageName: node
   linkType: hard
 
@@ -4758,6 +4758,13 @@ __metadata:
   version: 6.2.1
   resolution: "commander@npm:6.2.1"
   checksum: d7090410c0de6bc5c67d3ca41c41760d6d268f3c799e530aafb73b7437d1826bbf0d2a3edac33f8b57cc9887b4a986dce307fa5557e109be40eadb7c43b21742
+  languageName: node
+  linkType: hard
+
+"commander@npm:^8.2.0":
+  version: 8.3.0
+  resolution: "commander@npm:8.3.0"
+  checksum: 0f82321821fc27b83bd409510bb9deeebcfa799ff0bf5d102128b500b7af22872c0c92cb6a0ebc5a4cf19c6b550fba9cedfa7329d18c6442a625f851377bacf0
   languageName: node
   linkType: hard
 
@@ -11368,11 +11375,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright@npm:^1.15.0":
-  version: 1.15.0
-  resolution: "playwright@npm:1.15.0"
+"playwright-core@npm:=1.16.3":
+  version: 1.16.3
+  resolution: "playwright-core@npm:1.16.3"
   dependencies:
-    commander: ^6.1.0
+    commander: ^8.2.0
     debug: ^4.1.1
     extract-zip: ^2.0.1
     https-proxy-agent: ^5.0.0
@@ -11383,12 +11390,25 @@ __metadata:
     proper-lockfile: ^4.1.1
     proxy-from-env: ^1.1.0
     rimraf: ^3.0.2
+    socks-proxy-agent: ^6.1.0
     stack-utils: ^2.0.3
     ws: ^7.4.6
+    yauzl: ^2.10.0
     yazl: ^2.5.1
   bin:
-    playwright: lib/cli/cli.js
-  checksum: b133b084f7192c4e2f2f6722559ed16f2502e5b0920fb4d50dc6688c4521033da98787b3b59fd60073e0556c5be785bd0c87181579ea5364f038c1b6999e0ca5
+    playwright: cli.js
+  checksum: b37e5abadb22096f84515fa9307587747a65c2b465b10b0688ae228aff5537eb5faa88ee9d1cd1225ff9270747b6c9b72a76a008cfb670b8df939b078f3d29b9
+  languageName: node
+  linkType: hard
+
+"playwright@npm:^1.16.3":
+  version: 1.16.3
+  resolution: "playwright@npm:1.16.3"
+  dependencies:
+    playwright-core: =1.16.3
+  bin:
+    playwright: cli.js
+  checksum: c1fe9255e3023195ca94c7a693b8816f9f13ce5901599806ac161df8da193f2bbb016fa452c8f750602845e7ce517129ea639feae0ea182d0ec77e4cb6fc9030
   languageName: node
   linkType: hard
 
@@ -13119,7 +13139,7 @@ __metadata:
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
     "@babel/core": ^7.12.10
-    "@babel/eslint-parser": ^7.15.8
+    "@babel/eslint-parser": ^7.16.3
     "@babel/polyfill": ^7.12.1
     "@babel/preset-env": ^7.14.7
     "@babel/register": ^7.13.16
@@ -13171,7 +13191,7 @@ __metadata:
     join-path: ^1.1.1
     lodash: ^4.17.21
     node-fetch: ^2.6.1
-    playwright: ^1.15.0
+    playwright: ^1.16.3
     postcss: ^8.3.6
     prettier: ^2.3.2
     react: ^17.0.2
@@ -13587,7 +13607,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"socks@npm:^2.3.3":
+"socks-proxy-agent@npm:^6.1.0":
+  version: 6.1.0
+  resolution: "socks-proxy-agent@npm:6.1.0"
+  dependencies:
+    agent-base: ^6.0.2
+    debug: ^4.3.1
+    socks: ^2.6.1
+  checksum: 32ea0d62c848b5c246955e8d6c34832fe6cd8c5f3b66f5ace3a9bd7387bafae3e67d96474d41291723ba7135e2da46d65e008a8a35a793dfa5cb0f4ac05429df
+  languageName: node
+  linkType: hard
+
+"socks@npm:^2.3.3, socks@npm:^2.6.1":
   version: 2.6.1
   resolution: "socks@npm:2.6.1"
   dependencies:
