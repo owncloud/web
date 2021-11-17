@@ -10945,9 +10945,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"owncloud-design-system@npm:^11.2.1":
-  version: 11.2.1
-  resolution: "owncloud-design-system@npm:11.2.1"
+"owncloud-design-system@npm:^11.2.2":
+  version: 11.2.2
+  resolution: "owncloud-design-system@npm:11.2.2"
   peerDependencies:
     "@popperjs/core": ^2.4.0
     filesize: ^8.0.0
@@ -10957,14 +10957,14 @@ __metadata:
     luxon: ^2.0.2
     postcss-import: ^12.0.1
     postcss-url: ^9.0.0
-    tippy.js: ^6.3.1
+    tippy.js: ^6.3.7
     uikit: 3.5.16
     v-calendar: ^2.3.2
     vue: ^2.6.11
     vue-inline-svg: ^2.0.0
     vue-select: ^3.12.0
     webfontloader: ^1.6.28
-  checksum: 00cc424a2f8bd3611cc5263bae73e099f0ffebd0bd5c26c69c4119837a2ffc2a17b8907b07e069591c7ffffc701c7bbddeb4bec09b7c5939008f3984baf2fdcd
+  checksum: be4730cbc76c49ee9fa9b90d3155211cfdbf0c5564eaaee2ce0b6185b4ef50348a768fbc5f65dccb411c658551c7a9c7062c8b261de899de1982fca9158cb778
   languageName: node
   linkType: hard
 
@@ -13169,7 +13169,7 @@ __metadata:
     jest-serializer-vue: ^2.0.2
     jest-svg-transformer: ^1.0.0
     join-path: ^1.1.1
-    lodash-es: ^4.17.21
+    lodash: ^4.17.21
     node-fetch: ^2.6.1
     playwright: ^1.15.0
     postcss: ^8.3.6
@@ -15290,7 +15290,7 @@ typescript@^4.3.2:
     lodash-es: ^4.17.21
     luxon: ^2.0.0
     oidc-client: 1.11.5
-    owncloud-design-system: ^11.2.1
+    owncloud-design-system: ^11.2.2
     owncloud-sdk: 1.0.0-2296
     p-queue: ^6.1.1
     popper-max-size-modifier: ^0.2.0

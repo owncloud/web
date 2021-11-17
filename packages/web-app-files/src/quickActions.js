@@ -1,14 +1,9 @@
 import { DateTime } from 'luxon'
 import copyToClipboard from 'copy-to-clipboard'
 
-// just a dummy function to trick gettext tools
-function $gettext(msg) {
-  return msg
-}
-
 export function createPublicLink(ctx) {
   // FIXME: Translate name
-  const params = { name: $gettext('Quick action link'), permissions: 1 }
+  const params = { name: ctx.$gettext('Quick action link'), permissions: 1 }
   const capabilities = ctx.store.state.user.capabilities
   const expirationDate = capabilities.files_sharing.public.expire_date
 
@@ -26,8 +21,8 @@ export function createPublicLink(ctx) {
         ctx.store.dispatch('Files/sidebar/openWithPanel', 'links-item').then(() => {
           copyToClipboard(link.url)
           ctx.store.dispatch('showMessage', {
-            title: $gettext('Public link created'),
-            desc: $gettext(
+            title: ctx.$gettext('Public link created'),
+            desc: ctx.$gettext(
               'Public link has been successfully created and copied into your clipboard.'
             ),
             status: 'success',
@@ -59,14 +54,14 @@ export function canShare(item, store) {
 export default {
   collaborators: {
     id: 'collaborators',
-    label: $gettext('Add people'),
+    label: ($gettext) => $gettext('Add people'),
     icon: 'group-add',
     handler: openNewCollaboratorsPanel,
     displayed: canShare
   },
   publicLink: {
     id: 'public-link',
-    label: $gettext('Create and copy public link'),
+    label: ($gettext) => $gettext('Create and copy public link'),
     icon: 'link-add',
     handler: createPublicLink,
     displayed: canShare

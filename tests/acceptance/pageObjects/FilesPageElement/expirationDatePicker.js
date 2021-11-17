@@ -52,11 +52,13 @@ module.exports = {
      */
     setExpiryDateYear: function (date) {
       const yearSelector = this.getSelectorExpiryDateYear(date)
-      return this.click('@datepickerTitle')
+      return this.waitForElementVisible('@datepickerTitle')
+        .click('@datepickerTitle')
         .waitForElementVisible('@datepickerMonthAndYearTitle', 500)
         .click('@datepickerMonthAndYearTitle')
         .waitForElementVisible(yearSelector, 500)
         .click(yearSelector)
+        .waitForElementVisible('@datepickerTitle')
         .click('@datepickerTitle')
         .waitForElementNotPresent('@datepickerMonthAndYearTitle', 500)
     },
@@ -68,7 +70,8 @@ module.exports = {
      */
     setExpiryDateMonth: function (date) {
       const monthSelector = this.getSelectorExpiryDateMonth(date)
-      return this.click('@datepickerTitle')
+      return this.waitForElementVisible('@datepickerTitle')
+        .click('@datepickerTitle')
         .waitForElementVisible('@datepickerMonthAndYearTitle', 500)
         .waitForElementVisible(monthSelector)
         .click(monthSelector)
@@ -97,7 +100,8 @@ module.exports = {
       let disabled = false
 
       const yearSelector = this.getSelectorExpiryDateYear(pastDate)
-      await this.click('@datepickerTitle')
+      await this.waitForElementVisible('@datepickerTitle')
+        .click('@datepickerTitle')
         .waitForElementVisible('@datepickerMonthAndYearTitle', 500)
         .click('@datepickerMonthAndYearTitle')
         .waitForElementVisible(yearSelector, 500)
@@ -112,7 +116,8 @@ module.exports = {
       }
 
       const monthSelector = this.getSelectorExpiryDateMonth(pastDate)
-      await this.click(yearSelector)
+      await this.waitForElementVisible(yearSelector)
+        .click(yearSelector)
         .waitForElementVisible(monthSelector)
         .getAttribute(monthSelector, 'class', (result) => {
           if (result.value.includes('is-disabled') === true) {
@@ -125,7 +130,8 @@ module.exports = {
       }
 
       const daySelector = this.getSelectorExpiryDateDay(pastDate)
-      await this.click(monthSelector)
+      await this.waitForElementVisible(monthSelector)
+        .click(monthSelector)
         .waitForElementVisible(daySelector)
         .getAttribute(daySelector, 'class', (result) => {
           if (result.value.includes('is-disabled') === true) {

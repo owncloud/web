@@ -199,7 +199,7 @@ const actions = {
     }
 
     const endpoint = new URL(rootState.config.server || window.location.origin)
-    endpoint.pathname = 'ocs/v1.php/cloud/capabilities'
+    endpoint.pathname = endpoint.pathname.replace(/\/$/, '') + '/ocs/v1.php/cloud/capabilities'
     endpoint.searchParams.append('format', 'json')
 
     const headers = {

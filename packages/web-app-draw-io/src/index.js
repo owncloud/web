@@ -1,4 +1,4 @@
-import translationsJson from '../l10n/translations'
+import translations from '../l10n/translations'
 import App from './App.vue'
 
 const routes = [
@@ -49,7 +49,6 @@ const appInfo = {
   ]
 }
 
-const translations = translationsJson
 export default {
   appInfo,
   routes,

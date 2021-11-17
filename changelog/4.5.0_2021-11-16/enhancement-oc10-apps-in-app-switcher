@@ -1,0 +1,6 @@
+Enhancement: Automatically show oC 10 apps in the app switcher menu
+
+When using the ownCloud 10 app of web the configuration automatically gets augmented with all menu items / apps from the classic UI. They open in a new tab in the classic UI and have a generic icon.
+
+https://github.com/owncloud/web/issues/5980
+https://github.com/owncloud/web/pull/5996

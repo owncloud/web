@@ -1,5 +1,5 @@
 {
-  "version": "4.4.0",
+  "version": "4.5.0",
   "private": true,
   "homepage": "https://github.com/owncloud/web",
   "license": "AGPL-3.0",
@@ -86,7 +86,7 @@
     "jest-serializer-vue": "^2.0.2",
     "jest-svg-transformer": "^1.0.0",
     "join-path": "^1.1.1",
-    "lodash-es": "^4.17.21",
+    "lodash": "^4.17.21",
     "node-fetch": "^2.6.1",
     "playwright": "^1.15.0",
     "postcss": "^8.3.6",

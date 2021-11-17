@@ -70,6 +70,8 @@ import MixinFilesListPositioning from '../mixins/filesListPositioning'
 import MixinFilesListPagination from '../mixins/filesListPagination'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 import { buildResource } from '../helpers/resources'
+import { useMutationObserver } from '../helpers/store'
+import { fileList } from '../helpers/ui'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../constants'
 import { bus } from 'web-pkg/src/instance'
@@ -85,6 +87,7 @@ import ContextActions from '../components/FilesList/ContextActions.vue'
 import { DavProperties } from 'web-pkg/src/constants'
 import { basename, join } from 'path'
 import PQueue from 'p-queue'
+import { nextTick } from '@vue/composition-api'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -109,6 +112,12 @@ export default {
     MixinFilesListFilter
   ],
   setup() {
+    useMutationObserver(['Files/UPSERT_RESOURCE'], ({ payload }) =>
+      nextTick(() => {
+        fileList.accentuateItem(payload.id)
+      })
+    )
+
     const loadResourcesTask = useTask(function* (signal, ref, sameRoute, path = null) {
       ref.CLEAR_CURRENT_FILES_LIST()
 

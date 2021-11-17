@@ -155,7 +155,7 @@ module.exports = {
     },
     shareStatusActionOnFileRow: {
       selector:
-        '/ancestor::tr[contains(@class, "oc-tbody-tr")]//button[contains(@class,"file-row-share-status-action")][normalize-space(.)="%s"]',
+        '/ancestor::tr[contains(@class, "oc-tbody-tr")]//button[contains(@class,"file-row-share")][normalize-space(.)="%s"]',
       locateStrategy: 'xpath'
     },
     batchDeclineSharesButton: {

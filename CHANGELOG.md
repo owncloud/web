@@ -1,20 +1,25 @@
-Changelog for ownCloud Web [unreleased] (UNRELEASED)
+Changelog for ownCloud Web [4.5.0] (2021-11-16)
 =======================================
-The following sections list the changes in ownCloud web unreleased relevant to
+The following sections list the changes in ownCloud web 4.5.0 relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v4.4.0...master
+[4.5.0]: https://github.com/owncloud/web/compare/v4.4.0...v4.5.0
 
 Summary
 -------
 
 * Bugfix - Fix location picker breadcrumb url encoding: [#5940](https://github.com/owncloud/web/pull/5940)
+* Bugfix - Correct capabilities URL when server run in a subfolder: [#6010](https://github.com/owncloud/web/issues/6010)
 * Bugfix - Context menu rendering: [#5952](https://github.com/owncloud/web/pull/5952)
+* Bugfix - Use search app translations: [#5955](https://github.com/owncloud/web/issues/5955)
+* Enhancement - Accentuate new files: [#6020](https://github.com/owncloud/web/pull/6020)
+* Enhancement - Use default info from app provider: [#5962](https://github.com/owncloud/web/issues/5962)
 * Enhancement - Rename `_chunks` folder to `chunks`: [#5988](https://github.com/owncloud/web/pull/5988)
 * Enhancement - Default action order: [#5952](https://github.com/owncloud/web/pull/5952)
 * Enhancement - Reduced sidebar width: [#5981](https://github.com/owncloud/web/issues/5981)
+* Enhancement - Automatically show oC 10 apps in the app switcher menu: [#5980](https://github.com/owncloud/web/issues/5980)
 * Enhancement - App provider and archiver on public links: [#5924](https://github.com/owncloud/web/pull/5924)
-* Enhancement - Update ODS to v11.2.1: [#6009](https://github.com/owncloud/web/pull/6009)
+* Enhancement - Update ODS to v11.2.2: [#6009](https://github.com/owncloud/web/pull/6009)
 
 Details
 -------
@@ -28,6 +33,13 @@ Details
    https://github.com/owncloud/web/pull/5940
    https://github.com/owncloud/web/pull/5715
 
+* Bugfix - Correct capabilities URL when server run in a subfolder: [#6010](https://github.com/owncloud/web/issues/6010)
+
+   We fixed an issue where the capabilities where requested from a wrong URL in the case the server
+   is running in a subfolder e.g. `http://localhost/owncloud`
+
+   https://github.com/owncloud/web/issues/6010
+
 * Bugfix - Context menu rendering: [#5952](https://github.com/owncloud/web/pull/5952)
 
    We fixed that the context menu was being created for each and every file row of the current page
@@ -35,6 +47,28 @@ Details
    file row.
 
    https://github.com/owncloud/web/pull/5952
+
+* Bugfix - Use search app translations: [#5955](https://github.com/owncloud/web/issues/5955)
+
+   We fixed that the search app was not using its translations properly.
+
+   https://github.com/owncloud/web/issues/5955
+   https://github.com/owncloud/web/pull/5956
+
+* Enhancement - Accentuate new files: [#6020](https://github.com/owncloud/web/pull/6020)
+
+   We've added a visual highlighting of newly created (or uploaded) resources in the
+   OcFilesTable.
+
+   https://github.com/owncloud/web/pull/6020
+
+* Enhancement - Use default info from app provider: [#5962](https://github.com/owncloud/web/issues/5962)
+
+   The app provider returns information about the default application per mime type. This
+   information is now respected when triggering the default action for a file.
+
+   https://github.com/owncloud/web/issues/5962
+   https://github.com/owncloud/web/pull/5970
 
 * Enhancement - Rename `_chunks` folder to `chunks`: [#5988](https://github.com/owncloud/web/pull/5988)
 
@@ -59,6 +93,15 @@ Details
    https://github.com/owncloud/web/issues/5981
    https://github.com/owncloud/web/pull/5983
 
+* Enhancement - Automatically show oC 10 apps in the app switcher menu: [#5980](https://github.com/owncloud/web/issues/5980)
+
+   When using the ownCloud 10 app of web the configuration automatically gets augmented with all
+   menu items / apps from the classic UI. They open in a new tab in the classic UI and have a generic
+   icon.
+
+   https://github.com/owncloud/web/issues/5980
+   https://github.com/owncloud/web/pull/5996
+
 * Enhancement - App provider and archiver on public links: [#5924](https://github.com/owncloud/web/pull/5924)
 
    We made the app provider and archiver services available on public links. As a prerequisite for
@@ -71,9 +114,9 @@ Details
    https://github.com/owncloud/web/issues/5901
    https://github.com/owncloud/web/pull/5924
 
-* Enhancement - Update ODS to v11.2.1: [#6009](https://github.com/owncloud/web/pull/6009)
+* Enhancement - Update ODS to v11.2.2: [#6009](https://github.com/owncloud/web/pull/6009)
 
-   We updated the ownCloud Design System to version 11.2.1. Please refer to the full changelog in
+   We updated the ownCloud Design System to version 11.2.2. Please refer to the full changelog in
    the ODS release (linked) for more details. Summary:
 
    - Bugfix - Limit select event in OcTableFiles:
@@ -82,8 +125,10 @@ Details
    https://github.com/owncloud/owncloud-design-system/issues/1712 - Bugfix - OcTable
    sorting case sensitivity:
    https://github.com/owncloud/owncloud-design-system/issues/1698 - Bugfix - Drag and
-   Drop triggers wrong actions: https://github.com/owncloud/web/issues/5808 - Enhancement
-   - Make OcDatepicker themable:
+   Drop triggers wrong actions: https://github.com/owncloud/web/issues/5808 - Bugfix - Fix
+   files table event: https://github.com/owncloud/web/issues/1777 - Bugfix - Fix extension
+   icon rendering: https://github.com/owncloud/web/issues/1779 - Enhancement - Make
+   OcDatepicker themable:
    https://github.com/owncloud/owncloud-design-system/issues/1679 - Enhancement -
    Streamline OcTextInput:
    https://github.com/owncloud/owncloud-design-system/pull/1636 - Enhancement - Add
@@ -97,7 +142,7 @@ Details
    filename text weight: https://github.com/owncloud/owncloud-design-system/pull/1759
 
    https://github.com/owncloud/web/pull/6009
-   https://github.com/owncloud/owncloud-design-system/releases/tag/v11.2.1
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v11.2.2
 
 Changelog for ownCloud Web [4.4.0] (2021-10-26)
 =======================================
