@@ -114,7 +114,7 @@ describe('collaborators', () => {
       }
     ])(
       'should return the sum of role permissions and additional permissions bitmasks if the given role has provided additional permission',
-      input => {
+      (input) => {
         expect(roleToBitmask(input.role, input.additionalPermissions)).toBe(input.expectedBitmask)
       }
     )
@@ -154,7 +154,7 @@ describe('collaborators', () => {
       }
     ])(
       'should return advanced role if the given bitmask does not match role permissions bitmask or basic permissions bitmask',
-      input => {
+      (input) => {
         // assume a case when share permission is not allowed, the resource is not folder and provided bitmask is 17
         // two roles with following permissions are available from roleDefinition helper
         // - viewer with permissions ['read']
@@ -204,7 +204,7 @@ describe('collaborators', () => {
       }
     ])(
       'should return the first matching role if the given bitmask equals the role permissions bitmask',
-      input => {
+      (input) => {
         // assume a case when share permission is allowed and resource is not folder and provided bitmask is 17
         // two roles with following permissions are available from the roleDefinition helper
         // - viewer with permissions ['read', 'share']
@@ -217,19 +217,19 @@ describe('collaborators', () => {
         })
       }
     )
-    it.each(['17', 17.2, '17.8'])('should parse provided bitmask to integer', bitmask => {
+    it.each(['17', 17.2, '17.8'])('should parse provided bitmask to integer', (bitmask) => {
       expect(bitmaskToRole(bitmask, false, true)).toMatchObject({
         name: 'viewer'
       })
     })
-    it.each([0, 100, -5])('should return advanced role for invalid bitmask values', bitmask => {
+    it.each([0, 100, -5])('should return advanced role for invalid bitmask values', (bitmask) => {
       expect(bitmaskToRole(bitmask, false, true)).toMatchObject({
         name: 'advancedRole'
       })
     })
     it.each([true, {}, [17]])(
       'should throw error if bitmask is not a number or a stringified number',
-      bitmask => {
+      (bitmask) => {
         expect(() => {
           bitmaskToRole(bitmask, false, true)
         }).toThrowError(
@@ -246,7 +246,7 @@ describe('collaborators', () => {
       (permissionsBitmask.read + permissionsBitmask.update).toString(),
       permissionsBitmask.update,
       permissionsBitmask.update.toString()
-    ])('should return true if given bitmask is found in permissions bitmask', bitmask => {
+    ])('should return true if given bitmask is found in permissions bitmask', (bitmask) => {
       expect(checkPermission(bitmask, 'update')).toBeTruthy()
     })
     it('should return false if given bitmask does not equal permissionBitmask', () => {
@@ -262,7 +262,7 @@ describe('collaborators', () => {
       { bitmask: 17, permission: true },
       { bitmask: {}, permission: 'read' },
       { bitmask: [7], permission: 'read' }
-    ])('should return false if given input is not valid', input => {
+    ])('should return false if given input is not valid', (input) => {
       expect(checkPermission(input.bitmask, input.permission)).toBeFalsy()
     })
   })
