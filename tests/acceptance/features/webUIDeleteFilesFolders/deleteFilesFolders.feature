@@ -127,7 +127,7 @@ Feature: deleting files and folders
     And file "zzzz-must-be-last-file-in-folder.txt" should not be listed on the webUI
     And no message should be displayed on the webUI
 
-  @public_link_share-feature-required
+  @skipOnOC10 @skipOnOCIS @public_link_share-feature-required
   Scenario: delete files from shared by link page
     Given user "Alice" has created file "lorem.txt"
     And user "Alice" has created a public link with following settings
@@ -248,7 +248,7 @@ Feature: deleting files and folders
     And as "Alice" file "lorem.txt" should not exist
     And no message should be displayed on the webUI
 
-
+  @skipOnOC10 @skipOnOCIS
   Scenario: Delete a file and folder in shared with others page
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has created file "lorem.txt"
@@ -271,7 +271,7 @@ Feature: deleting files and folders
     And as "Alice" file "lorem.txt" should not exist
     And as "Alice" folder "simple-folder" should not exist
 
-
+  @skipOnOC10 @skipOnOCIS
   Scenario: Delete multiple files at once from shared with others page
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has created file "lorem.txt"
@@ -294,7 +294,7 @@ Feature: deleting files and folders
     And no message should be displayed on the webUI
     And the deleted elements should not be listed on the webUI after a page reload
 
-  @ocis-reva-issue-39
+  @skipOnOC10 @skipOnOCIS @ocis-reva-issue-39
   Scenario: Try to delete file and folder from favorites page
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has created file "lorem.txt"
