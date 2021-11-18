@@ -55,12 +55,12 @@ export default {
       if (this.isTrashbinRoute) {
         return DateTime.fromRFC2822(this.file.mdate)
           .setLocale(this.$language.current)
-          .toLocaleString(DateTime.DATETIME_SHORT)
+          .toLocaleString(DateTime.DATETIME_FULL)
       }
 
       return DateTime.fromHTTP(this.file.mdate)
         .setLocale(this.$language.current)
-        .toLocaleString(DateTime.DATETIME_SHORT)
+        .toLocaleString(DateTime.DATETIME_FULL)
     },
     modificationTimeRelative() {
       if (this.isTrashbinRoute) {

@@ -138,7 +138,7 @@ export default {
     expirationDate() {
       return DateTime.fromISO(this.link.expiration)
         .setLocale(this.$language.current)
-        .toLocaleString(DateTime.DATETIME_SHORT)
+        .toLocaleString(DateTime.DATETIME_FULL)
     }
   },
 

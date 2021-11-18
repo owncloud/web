@@ -58,7 +58,7 @@
         <tr v-if="showShareDate" data-testid="shared-date">
           <th scope="col" class="oc-pr-s" v-text="shareDateLabel" />
           <td>
-            <span v-oc-tooltip="shareDateTooltip" v-text="displayShareDate" />
+            <span v-oc-tooltip="shareDateTooltip" tabindex="0" v-text="displayShareDate" />
           </td>
         </tr>
         <tr v-if="showSharedVia" data-testid="shared-via">
@@ -275,11 +275,11 @@ export default {
       if (this.file.mdate) {
         displayDate = DateTime.fromRFC2822(this.file.mdate)
           .setLocale(this.$language.current)
-          .toLocaleString(DateTime.DATETIME_SHORT)
+          .toLocaleString(DateTime.DATETIME_FULL)
       } else {
         displayDate = DateTime.fromRFC2822(this.file.sdate)
           .setLocale(this.$language.current)
-          .toLocaleString(DateTime.DATETIME_SHORT)
+          .toLocaleString(DateTime.DATETIME_FULL)
       }
       return upperFirst(displayDate)
     },
