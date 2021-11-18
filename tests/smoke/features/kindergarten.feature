@@ -9,8 +9,8 @@ Feature: Kindergarten can use web to organize a day
       | Alice |
       | Brian |
       | Carol |
-    And set default share folder to "Shares"
-    And disable share auto accepting
+    And admin set the default folder for received shares to "Shares"
+    And admin disables auto accepting
 
   Scenario: Alice can share this weeks meal plan with all parents
     Given "Alice" has logged in

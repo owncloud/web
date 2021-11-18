@@ -151,8 +151,8 @@ When(
 
     await allFilesPage.navigate()
 
-    for (const { resource, newName } of stepTable.hashes()) {
-      await allFilesPage.renameResource({ resource, newName })
+    for (const { resource, as } of stepTable.hashes()) {
+      await allFilesPage.renameResource({ resource, newName: as })
     }
   }
 )
@@ -169,85 +169,14 @@ When(
     const actor = this.actorContinent.get({ id: stepUser })
     const { allFiles: allFilesPage } = new FilesPage({ actor })
 
+    await allFilesPage.navigate()
+
     for (const { resource, to } of stepTable.hashes()) {
       await allFilesPage.moveOrCopyResource({
         resource,
         newLocation: to,
         action: actionType === 'copies' ? 'copy' : 'move'
       })
-    }
-  }
-)
-
-When(
-  '{string} creates new versions of the following file(s)',
-  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
-    const actor = this.actorContinent.get({ id: stepUser })
-    const { allFiles: allFilesPage } = new FilesPage({ actor })
-    const uploadInfo = stepTable.hashes().reduce((acc, stepRow) => {
-      const { to, resource } = stepRow
-
-      if (!acc[to]) {
-        acc[to] = []
-      }
-
-      acc[to].push(this.fileContinent.get({ name: resource }))
-
-      return acc
-    }, {})
-
-    for (const folder of Object.keys(uploadInfo)) {
-      await allFilesPage.uploadFiles({ folder, files: uploadInfo[folder], newVersion: true })
-    }
-  }
-)
-
-When(
-  '{string} declines following resource(s)',
-  async function (this: World, stepUser: string, stepTable: DataTable) {
-    const actor = this.actorContinent.get({ id: stepUser })
-    const { sharedWithMe: sharedWithMePage } = new FilesPage({ actor })
-    const shares = stepTable.raw().map((f) => f[0])
-
-    for (const share of shares) {
-      await sharedWithMePage.declineShare({ name: share })
-    }
-  }
-)
-
-Then(
-  '{string} checks whether the following resource(s) exist',
-  async function (this: World, stepUser: string, stepTable: DataTable) {
-    const actor = this.actorContinent.get({ id: stepUser })
-    const { allFiles: allFilesPage } = new FilesPage({ actor })
-    const resources = stepTable.raw().map((f) => f[0])
-
-    for (const resource of resources) {
-      await allFilesPage.resourceExist({ name: resource })
-    }
-  }
-)
-
-Then(
-  '{string} checks the number of versions of the file',
-  async function (this: World, stepUser: string, stepTable: DataTable) {
-    const actor = this.actorContinent.get({ id: stepUser })
-    const { allFiles: allFilesPage } = new FilesPage({ actor })
-    const countInfo = stepTable.hashes().reduce((acc, stepRow) => {
-      const { count, resource } = stepRow
-
-      if (!acc[resource]) {
-        acc[resource] = []
-      }
-
-      acc[resource].push(count)
-
-      return acc
-    }, {})
-
-    for (const folder of Object.keys(countInfo)) {
-      // line below can't work like this, numberOfVersions returns int
-      // await allFilesPage.numberOfVersions({ resource: folder }) === countInfo[folder]
     }
   }
 )

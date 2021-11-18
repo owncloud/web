@@ -37,7 +37,7 @@ Feature: share folder with file, share file
       | resource   | to                      |
       | simple.pdf | Shares/folder_to_shared |
     And "Brian" copies following resources
-      | resource                | to        |
+      | resource                | to       |
       | Shares/folder_to_shared | All files |
     When "Alice" opens the "files" app
     Then "Alice" ensures that the following resources exist
@@ -72,7 +72,7 @@ Feature: share folder with file, share file
     And "Brian" accepts following resources
       | testavatar.jpeg |
     And "Brian" copies following resources
-      | resource               | to        |
+      | resource               | to       |
       | Shares/testavatar.jpeg | All files |
     And "Brian" opens file in Mediaviewer
       | Shares/testavatar.jpeg |

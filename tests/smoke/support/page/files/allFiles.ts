@@ -197,7 +197,7 @@ export class AllFilesPage {
     await page.click(`.oc-files-actions-${action}-trigger`)
     await page.click('//ol[@class="oc-breadcrumb-list"]/li/*[1]')
 
-    if (newLocation) {
+    if (newLocation !== 'All files') {
       await cta.files.navigateToFolder({ page: page, path: newLocation })
     }
 
