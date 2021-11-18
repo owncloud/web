@@ -40,14 +40,14 @@ Feature: Kindergarten can use web to organize a day
     Given "Brian" has logged in
     Then "Brian" opens the "files" app
     Then "Brian" accepts following resources
-    | meal plan |
+      | meal plan |
     Then "Brian" downloads following files
       | resource      | from      |
       | data.zip      | Shares/meal plan |
     Given "Carol" has logged in
     Then "Carol" opens the "files" app
     Then "Carol" accepts following resources
-    | meal plan |
+      | meal plan |
     Then "Carol" downloads following files
       | resource      | from      |
       | data.zip      | Shares/meal plan |

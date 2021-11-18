@@ -25,9 +25,18 @@ Given(
   }
 )
 
-Given('admin disables auto accepting', async function (this: World): Promise<void> {
-  const user = this.userContinent.get({ id: 'admin' })
-  if (!config.ocis) {
-    await api.config.disableShareAutoAccept({ user, value: false })
+Given(
+  /^admin (disables|enables) auto accepting$/,
+  async function (this: World, actionType: string): Promise<void> {
+    if (config.ocis) {
+      return
+    }
+
+    const user = this.userContinent.get({ id: 'admin' })
+
+    await api.config.disableShareAutoAccept({
+      user,
+      action: actionType === 'disables' ? 'disable' : 'enable'
+    })
   }
-})
+)

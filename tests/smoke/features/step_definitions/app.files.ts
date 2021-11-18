@@ -127,11 +127,6 @@ When(
   async function (this: World, stepUser: string, stepTable: DataTable) {
     // Todo: implement explicit step definition for *.navigate()
 
-    if (!config.ocis) {
-      // Todo: add switch info in case of oc10 autoAccept shares
-      return
-    }
-
     const actor = this.actorContinent.get({ id: stepUser })
     const { sharedWithMe: sharedWithMePage } = new FilesPage({ actor })
     const shares = stepTable.raw().map((f) => f[0])
@@ -240,11 +235,10 @@ Then(
     const { allFiles: allFilesPage } = new FilesPage({ actor })
     const resources = stepTable.raw().map((f) => f[0])
 
+    await allFilesPage.navigate()
+
     for (const resource of resources) {
-      if (await allFilesPage.resourceExist({ name: resource })) {
-        throw new Error(`resource was find: "${resource}"`)
-      }
-      await allFilesPage.navigate()
+      allFilesPage.resourceExist({ name: resource })
     }
   }
 )
