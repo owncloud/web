@@ -2,7 +2,7 @@
   <div class="file_info">
     <oc-icon :name="file.icon" size="large" class="file_info__icon" />
     <div class="file_info__body oc-text-overflow">
-      <h3>
+      <h3 data-testid="files-info-name">
         <oc-resource-name
           :name="file.name"
           :extension="file.extension"
@@ -13,7 +13,9 @@
       </h3>
       <p class="oc-my-rm">
         <template v-if="file.size > -1">{{ getResourceSize(file.size) }},</template>
-        <span v-oc-tooltip="modificationTime" tabindex="0">{{ modificationTimeRelative }}</span>
+        <span v-oc-tooltip="modificationTime" data-testid="files-info-mdate" tabindex="0">{{
+          modificationTimeRelative
+        }}</span>
       </p>
     </div>
     <oc-button
