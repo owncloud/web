@@ -2,7 +2,7 @@
   <div class="file_info">
     <oc-icon :name="file.icon" size="large" class="file_info__icon" />
     <div class="file_info__body oc-text-overflow">
-      <h3 tabindex="-1">
+      <h3>
         <oc-resource-name
           :name="file.name"
           :extension="file.extension"
@@ -13,7 +13,7 @@
       </h3>
       <p class="oc-my-rm">
         <template v-if="file.size > -1">{{ getResourceSize(file.size) }},</template>
-        {{ modificationTime }}
+        <span v-oc-tooltip="modificationTime" tabindex="0">{{ modificationTimeRelative }}</span>
       </p>
     </div>
     <oc-button
@@ -37,6 +37,7 @@ import { mapGetters, mapActions } from 'vuex'
 import Mixins from '../../mixins'
 import MixinResources from '../../mixins/resources'
 import MixinRoutes from '../../mixins/routes'
+import { DateTime } from 'luxon'
 
 export default {
   name: 'FileInfo',
@@ -51,6 +52,17 @@ export default {
   computed: {
     ...mapGetters(['capabilities']),
     modificationTime() {
+      if (this.isTrashbinRoute) {
+        return DateTime.fromRFC2822(this.file.mdate)
+          .setLocale(this.$language.current)
+          .toLocaleString(DateTime.DATETIME_SHORT)
+      }
+
+      return DateTime.fromHTTP(this.file.mdate)
+        .setLocale(this.$language.current)
+        .toLocaleString(DateTime.DATETIME_SHORT)
+    },
+    modificationTimeRelative() {
       if (this.isTrashbinRoute) {
         return this.formDateFromNow(this.file.ddate, 'RFC')
       }

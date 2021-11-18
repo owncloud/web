@@ -273,9 +273,13 @@ export default {
     capitalizedTimestamp() {
       let displayDate = ''
       if (this.file.mdate) {
-        displayDate = this.formDateFromNow(this.file.mdate, 'Http')
+        displayDate = DateTime.fromRFC2822(this.file.mdate)
+          .setLocale(this.$language.current)
+          .toLocaleString(DateTime.DATETIME_SHORT)
       } else {
-        displayDate = this.formDateFromNow(this.file.sdate, 'Http')
+        displayDate = DateTime.fromRFC2822(this.file.sdate)
+          .setLocale(this.$language.current)
+          .toLocaleString(DateTime.DATETIME_SHORT)
       }
       return upperFirst(displayDate)
     },

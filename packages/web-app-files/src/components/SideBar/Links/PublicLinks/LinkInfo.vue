@@ -29,7 +29,7 @@
         </oc-tag>
       </div>
       <div v-if="link.expiration">
-        <oc-tag class="oc-files-public-link-expires">
+        <oc-tag v-oc-tooltip="expirationDate" tabindex="0" class="oc-files-public-link-expires">
           <oc-icon name="text-calendar" />
           <translate :translate-params="{ expires: formDateFromNow(link.expiration, 'ISO') }">
             Expires %{expires}
@@ -61,6 +61,7 @@
 import { basename, dirname } from 'path'
 import Mixins from '../../../../mixins'
 import CopyToClipboardButton from '../CopyToClipboardButton.vue'
+import { DateTime } from 'luxon'
 
 export default {
   name: 'LinkInfo',
@@ -132,6 +133,12 @@ export default {
 
     copyToClipboardSuccessMsgTitle() {
       return this.$gettext('Public link copied')
+    },
+
+    expirationDate() {
+      return DateTime.fromISO(this.link.expiration)
+        .setLocale(this.$language.current)
+        .toLocaleString(DateTime.DATETIME_SHORT)
     }
   },
 
