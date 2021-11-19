@@ -1,77 +1,63 @@
 <template>
   <div class="files-collaborators-collaborator-add-dialog" data-testid="new-collaborator">
-    <div class="oc-mb">
-      <oc-select
-        id="files-share-invite-input"
-        ref="ocSharingAutocomplete"
-        v-model="selectedCollaborators"
-        :options="autocompleteResults"
-        :loading="searchInProgress"
-        :multiple="true"
-        :filter="filterRecipients"
-        :label="selectedCollaboratorsLabel"
-        aria-describedby="files-share-invite-hint"
-        :dropdown-should-open="
-          ({ open, search }) => open && search.length >= minSearchLength && !searchInProgress
-        "
-        @search:input="onSearch"
-        @input="onInviteInput"
+    <oc-select
+      id="files-share-invite-input"
+      ref="ocSharingAutocomplete"
+      v-model="selectedCollaborators"
+      :options="autocompleteResults"
+      :loading="searchInProgress"
+      :multiple="true"
+      :filter="filterRecipients"
+      :label="selectedCollaboratorsLabel"
+      aria-describedby="files-share-invite-hint"
+      :dropdown-should-open="
+        ({ open, search }) => open && search.length >= minSearchLength && !searchInProgress
+      "
+      @search:input="onSearch"
+      @input="onInviteInput"
+    >
+      <template #option="option">
+        <autocomplete-item :item="option" />
+      </template>
+      <template #no-options>
+        <translate> No users or groups found. </translate>
+      </template>
+      <template #selected-option-container="{ option, deselect }">
+        <recipient-container
+          :key="option.value.shareWith"
+          :recipient="option"
+          :deselect="deselect"
+        />
+      </template>
+      <template #open-indicator>
+        <!-- Empty to hide the caret -->
+        <span />
+      </template>
+    </oc-select>
+    <p
+      id="files-share-invite-hint"
+      class="oc-mt-xs oc-text-meta"
+      v-text="inviteDescriptionMessage"
+    />
+    <div class="uk-flex uk-flex-middle uk-flex-between oc-mb-l">
+      <collaborators-edit-options @optionChange="collaboratorOptionChanged" />
+      <oc-button v-if="saving" key="new-collaborator-saving-button" :disabled="true">
+        <oc-spinner :aria-label="$gettext('Adding People')" size="small" />
+        <span v-translate :aria-hidden="true">Adding People</span>
+      </oc-button>
+      <oc-button
+        v-else
+        id="files-collaborators-collaborator-save-new-share-button"
+        key="new-collaborator-save-button"
+        data-testid="new-collaborator-share-btn"
+        :disabled="!$_isValid"
+        variation="primary"
+        appearance="filled"
+        @click="share"
       >
-        <template #option="option">
-          <autocomplete-item :item="option" />
-        </template>
-        <template #no-options>
-          <translate> No users or groups found. </translate>
-        </template>
-        <template #selected-option-container="{ option, deselect }">
-          <recipient-container
-            :key="option.value.shareWith"
-            :recipient="option"
-            :deselect="deselect"
-          />
-        </template>
-        <template #open-indicator>
-          <!-- Empty to hide the caret -->
-          <span />
-        </template>
-      </oc-select>
-      <p
-        id="files-share-invite-hint"
-        class="oc-mt-xs oc-mb-rm oc-text-meta"
-        v-text="inviteDescriptionMessage"
-      />
+        <translate>Share</translate>
+      </oc-button>
     </div>
-    <collaborators-edit-options class="oc-mb" @optionChange="collaboratorOptionChanged" />
-    <oc-grid gutter="small" class="oc-mb">
-      <div>
-        <oc-button
-          key="new-collaborator-cancel-button"
-          :disabled="saving"
-          class="files-collaborators-collaborator-cancel"
-          @click="$_ocCollaborators_newCollaboratorsCancel"
-        >
-          <translate>Cancel</translate>
-        </oc-button>
-      </div>
-      <div>
-        <oc-button v-if="saving" key="new-collaborator-saving-button" :disabled="true">
-          <oc-spinner :aria-label="$gettext('Adding People')" size="small" />
-          <span v-translate :aria-hidden="true">Adding People</span>
-        </oc-button>
-        <oc-button
-          v-else
-          id="files-collaborators-collaborator-save-new-share-button"
-          key="new-collaborator-save-button"
-          data-testid="new-collaborator-share-btn"
-          :disabled="!$_isValid"
-          variation="primary"
-          appearance="filled"
-          @click="share"
-        >
-          <translate>Share</translate>
-        </oc-button>
-      </div>
-    </oc-grid>
     <oc-hidden-announcer level="assertive" :announcement="announcement" />
   </div>
 </template>
@@ -135,17 +121,11 @@ export default {
     }
   },
   mounted() {
-    this.focusInviteInput()
-
     this.fetchRecipients = debounce(this.fetchRecipients, 500)
   },
 
   methods: {
     ...mapActions('Files', ['addShare']),
-
-    close() {
-      this.$emit('close')
-    },
 
     async fetchRecipients(query) {
       try {
@@ -222,11 +202,6 @@ export default {
             .indexOf(query.toLocaleLowerCase()) > -1
       )
     },
-    $_ocCollaborators_newCollaboratorsCancel() {
-      this.selectedCollaborators = []
-      this.saving = false
-      this.close()
-    },
     async share() {
       this.saving = true
 
@@ -254,14 +229,6 @@ export default {
     $_ocCollaborators_removeFromSelection(collaborator) {
       this.selectedCollaborators = this.selectedCollaborators.filter((selectedCollaborator) => {
         return collaborator !== selectedCollaborator
-      })
-    },
-
-    focusInviteInput() {
-      this.$nextTick(() => {
-        const inviteInput = document.getElementById('files-share-invite-input')
-
-        inviteInput.focus()
       })
     },
 

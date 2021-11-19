@@ -13,7 +13,6 @@ localVue.use(GetTextPlugin, {
 })
 
 const selectors = {
-  addPeopleButton: '.files-collaborators-open-add-share-dialog-button',
   ocAvatarsStub: 'oc-avatars-stub',
   ownerAsSelfRow: 'show-collaborator-stub[aria-describedby="collaborator-as-fileowner"]',
   ownerRow: 'show-collaborator-stub[aria-describedby="original-sharing-user"]',
@@ -21,32 +20,18 @@ const selectors = {
   addCollaboratorDialog: '.files-collaborators-collaborator-add-dialog',
   cannotSharePermissionMsg: 'p[data-testid="files-collaborators-no-reshare-permissions-message"]',
   collaboratorAsOwner: 'p#collaborator-as-fileowner',
-  sharedWithLabel: '.shared-with-label',
-  showCollaboratorButtonStub: 'oc-button-stub[arialabel="Show all invited people"]',
-  showCollaboratorButton: 'button[aria-label="Show all invited people"]'
+  sharedWithLabel: '.avatars-wrapper > h4',
+  showCollaboratorButtonStub: 'oc-button-stub[data-testid="collaborators-show-people"]',
+  showCollaboratorButton: 'button[data-testid="collaborators-show-people"]'
 }
 
 describe('FileShares', () => {
-  describe('Add People Button', () => {
-    it('should render add people button', () => {
-      const wrapper = getShallowMountedWrapper({ user: 'user0', collaborators: [] })
+  it('initially should render add people dialog and sharee list', () => {
+    const wrapper = getMountedWrapper({ user: 'user0', collaborators: [] })
 
-      const addPeopleButton = wrapper.find(selectors.addPeopleButton)
-      expect(addPeopleButton.exists()).toBe(true)
-      expect(addPeopleButton.text()).toBe('Add people')
-    })
-
-    it('should set current view to "newCollaborator" and open "addCollaborators" dialog if clicked', async () => {
-      const wrapper = getMountedWrapper({ user: 'user0', collaborators: [] })
-      const addPeopleButton = wrapper.find(selectors.addPeopleButton)
-
-      expect(wrapper.vm.currentView).toBe('showCollaborators')
-      await addPeopleButton.trigger('click')
-      expect(wrapper.vm.currentView).toBe('newCollaborator')
-
-      const addCollaborator = wrapper.find(selectors.addCollaboratorDialog)
-      expect(addCollaborator.exists()).toBe(true)
-    })
+    const addCollaborator = wrapper.find(selectors.addCollaboratorDialog)
+    expect(addCollaborator.exists()).toBe(true)
+    expect(wrapper.vm.showShareesList).toBe(true)
   })
 
   describe('Collaborators List', () => {
@@ -96,37 +81,6 @@ describe('FileShares', () => {
 
     describe('with Collaborators', () => {
       describe('owner views the shares panel', () => {
-        it('should display the avatars of the sharees as file collaborators', () => {
-          const wrapper = getShallowMountedWrapper({
-            user: 'user0',
-            outgoingCollaborators: [{ username: 'user1' }, { username: 'user2' }]
-          })
-
-          wrapper.setData({ showShareesList: true })
-          const exptectedSharees = [
-            {
-              id: 'user1',
-              additionalInfo: null,
-              name: 'user1',
-              displayName: 'User One',
-              displayname: 'User One',
-              shareType: 0
-            },
-            {
-              id: 'user2',
-              additionalInfo: null,
-              name: 'user2',
-              displayName: 'User Two',
-              displayname: 'User Two',
-              shareType: 0
-            }
-          ]
-
-          const avatars = wrapper.find(selectors.ocAvatarsStub)
-          expect(avatars.exists()).toBe(true)
-          expect(avatars.props('items')).toMatchObject(exptectedSharees)
-        })
-
         it('should show the shared with label if there are collaborators', () => {
           const wrapper = getShallowMountedWrapper({
             user: 'user0',
@@ -146,17 +100,17 @@ describe('FileShares', () => {
           expect(button.exists()).toBe(true)
         })
 
-        it('should show the collaborators list when show collaborators button if there are collaborators', async () => {
+        it('should hide the collaborators list when show collaborators button is clicked', async () => {
           const wrapper = getMountedWrapper({
             user: 'user0',
             outgoingCollaborators: [{ username: 'user1' }, { username: 'user2' }]
           })
-          expect(wrapper.vm.showShareesList).toBe(false)
+          expect(wrapper.vm.showShareesList).toBe(true)
 
           const button = wrapper.find(selectors.showCollaboratorButton)
           await button.trigger('click')
 
-          expect(wrapper.vm.showShareesList).toBe(true)
+          expect(wrapper.vm.showShareesList).toBe(false)
         })
 
         it('should not show the collaborators when showSharees is set to true', async () => {

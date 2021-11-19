@@ -112,7 +112,16 @@ export class AllFilesPage {
 
     await cta.files.sidebar.open({ page: page, resource: folderName })
     await cta.files.sidebar.openPanel({ page: page, name: 'sharing' })
-    await page.click('.files-collaborators-open-add-share-dialog-button')
+
+    await page.addStyleTag({
+      content: `
+      *,
+      *::before,
+      *::after {
+      transition: none !important;
+      }
+      `
+    })
 
     for (const user of users) {
       await page.fill('#files-share-invite-input', user.displayName)

@@ -1,106 +1,70 @@
 <template>
   <div id="oc-files-sharing-sidebar" class="uk-position-relative">
-    <div
-      v-show="currentView === VIEW_SHOW"
-      :key="VIEW_SHOW"
-      :aria-hidden="currentView !== VIEW_SHOW"
-    >
-      <oc-loader v-if="sharesLoading" :aria-label="$gettext('Loading people list')" />
-      <template v-else>
-        <div v-if="$_ocCollaborators_canShare" class="oc-mt-s oc-mb-s">
-          <oc-button
-            ref="addCollaborators"
-            data-testid="file-shares-add-btn"
-            variation="primary"
-            class="files-collaborators-open-add-share-dialog-button"
-            @click="$_ocCollaborators_addShare"
-          >
-            <oc-icon name="add" />
-            <translate>Add people</translate>
-          </oc-button>
-        </div>
-        <p
-          v-else
-          key="no-reshare-permissions-message"
-          data-testid="files-collaborators-no-reshare-permissions-message"
-          v-text="noResharePermsMessage"
-        />
-        <div v-if="hasSharees" class="avatars-wrapper">
-          <h4 class="shared-with-label" v-text="sharedWithLabel" />
-          <oc-button
-            v-oc-tooltip="sharedWithTooltip"
-            data-testid="collaborators-show-people"
-            appearance="raw"
-            :aria-label="sharedWithTooltip"
-            @click="onClickSharedWith"
-          >
-            <oc-avatars
-              v-if="!showShareesList"
-              :items="collaboratorsAvatar"
-              :stacked="true"
-              :is-tooltip-displayed="false"
-              class="sharee-avatars"
-            />
-            <oc-icon v-else name="chevron_up" />
-          </oc-button>
-        </div>
-        <template v-if="showShareesList || collaboratorsAvatar.length === 0">
-          <template v-if="$_ownerAsCollaborator">
-            <p id="original-sharing-user" v-translate class="oc-invisible-sr">File owner</p>
-            <show-collaborator
-              :collaborator="$_ownerAsCollaborator"
-              aria-describedby="original-sharing-user"
-            />
-            <hr />
-            <show-collaborator :collaborator="$_currentUserAsCollaborator" />
-          </template>
-          <template v-else>
-            <p id="collaborator-as-fileowner" v-translate class="oc-invisible-sr">
-              You are the file owner
-            </p>
-            <show-collaborator
-              :collaborator="$_currentUserAsCollaborator"
-              aria-describedby="collaborator-as-fileowner"
-            />
-          </template>
-          <hr v-if="collaborators.length > 0" class="oc-mt-s oc-mb-s" />
-          <transition-group
-            id="files-collaborators-list"
-            class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm"
-            :enter-active-class="$_transitionGroupEnter"
-            :leave-active-class="$_transitionGroupLeave"
-            name="custom-classes-transition"
-            tag="ul"
-            :aria-label="$gettext('Share receivers')"
-          >
-            <li v-for="collaborator in collaborators" :key="collaborator.key">
-              <show-collaborator
-                :collaborator="collaborator"
-                :modifiable="!collaborator.indirect"
-                @onDelete="$_ocCollaborators_deleteShare"
-                @onEdit="$_ocCollaborators_editShare"
-              />
-            </li>
-          </transition-group>
+    <oc-loader v-if="sharesLoading" :aria-label="$gettext('Loading people list')" />
+    <template v-else>
+      <new-collaborator v-if="$_ocCollaborators_canShare" key="new-collaborator" class="oc-my-s" />
+      <p
+        v-else
+        key="no-reshare-permissions-message"
+        data-testid="files-collaborators-no-reshare-permissions-message"
+        v-text="noResharePermsMessage"
+      />
+      <div v-if="hasSharees" class="avatars-wrapper uk-flex uk-flex-middle uk-flex-between">
+        <h4 class="oc-text-initial oc-text-bold oc-mb-rm" v-text="sharedWithLabel" />
+        <oc-button
+          v-oc-tooltip="sharedWithTooltip"
+          data-testid="collaborators-show-people"
+          appearance="raw"
+          :aria-label="sharedWithTooltip"
+          @click="toggleShareeList"
+        >
+          <oc-avatars
+            v-if="!showShareesList"
+            :items="collaboratorsAvatar"
+            :stacked="true"
+            :is-tooltip-displayed="false"
+            class="sharee-avatars"
+          />
+          <oc-icon v-else name="chevron_up" />
+        </oc-button>
+      </div>
+      <template v-if="showShareesList || collaboratorsAvatar.length === 0">
+        <template v-if="$_ownerAsCollaborator">
+          <p id="original-sharing-user" v-translate class="oc-invisible-sr">File owner</p>
+          <show-collaborator
+            :collaborator="$_ownerAsCollaborator"
+            aria-describedby="original-sharing-user"
+          />
+          <hr />
+          <show-collaborator :collaborator="$_currentUserAsCollaborator" />
         </template>
+        <template v-else>
+          <p id="collaborator-as-fileowner" v-translate class="oc-invisible-sr">
+            You are the file owner
+          </p>
+          <show-collaborator
+            :collaborator="$_currentUserAsCollaborator"
+            aria-describedby="collaborator-as-fileowner"
+          />
+        </template>
+        <hr v-if="collaborators.length > 0" class="oc-mt-s oc-mb-s" />
+        <transition-group
+          id="files-collaborators-list"
+          class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm"
+          name="custom-classes-transition"
+          tag="ul"
+          :aria-label="$gettext('Share receivers')"
+        >
+          <li v-for="collaborator in collaborators" :key="collaborator.key">
+            <show-collaborator
+              :collaborator="collaborator"
+              :modifiable="!collaborator.indirect"
+              @onDelete="$_ocCollaborators_deleteShare"
+            />
+          </li>
+        </transition-group>
       </template>
-    </div>
-
-    <new-collaborator
-      v-if="$_ocCollaborators_canShare && currentView === VIEW_NEW"
-      key="new-collaborator"
-      @close="$_ocCollaborators_showList"
-      @beforeDestroy="toggleCollaboratorNew"
-      @mounted="toggleCollaboratorNew"
-    />
-    <edit-collaborator
-      v-if="$_ocCollaborators_canShare && currentView === VIEW_EDIT"
-      key="edit-collaborator"
-      :collaborator="currentShare"
-      @close="$_ocCollaborators_showList"
-      @beforeDestroy="toggleCollaboratorEdit"
-      @mounted="toggleCollaboratorEdit"
-    />
+    </template>
   </div>
 </template>
 
@@ -112,13 +76,8 @@ import { shareTypes, userShareTypes } from '../../../helpers/shareTypes'
 import { getParentPaths } from '../../../helpers/path'
 import { dirname } from 'path'
 import { bitmaskToRole, permissionsBitmask } from '../../../helpers/collaborators'
-import EditCollaborator from './Collaborators/EditCollaborator.vue'
 import NewCollaborator from './Collaborators/NewCollaborator.vue'
 import ShowCollaborator from './Collaborators/ShowCollaborator.vue'
-
-const VIEW_SHOW = 'showCollaborators'
-const VIEW_EDIT = 'editCollaborator'
-const VIEW_NEW = 'newCollaborator'
 
 export default {
   title: ($gettext) => {
@@ -126,7 +85,6 @@ export default {
   },
   name: 'FileShares',
   components: {
-    EditCollaborator,
     NewCollaborator,
     ShowCollaborator
   },
@@ -134,14 +92,7 @@ export default {
   data() {
     return {
       currentShare: null,
-      transitionGroupActive: false,
-
-      // panel types
-      VIEW_SHOW,
-      VIEW_EDIT,
-      VIEW_NEW,
-      currentView: VIEW_SHOW,
-      showShareesList: false
+      showShareesList: true
     }
   },
   computed: {
@@ -154,15 +105,6 @@ export default {
     ...mapGetters(['isOcis']),
     ...mapState('Files', ['incomingShares', 'incomingSharesLoading', 'sharesTree']),
     ...mapState(['user']),
-
-    $_transitionGroupEnter() {
-      return this.transitionGroupActive ? 'uk-animation-slide-left-medium' : ''
-    },
-    $_transitionGroupLeave() {
-      return this.transitionGroupActive
-        ? 'uk-animation-slide-right-medium uk-animation-reverse'
-        : ''
-    },
 
     sharedWithLabel() {
       return this.$gettext('Shared with')
@@ -342,13 +284,11 @@ export default {
     }
   },
   watch: {
-    // Do not reload shares if we are starting with different panel than 'show'
     highlightedFile: {
       handler: function (newItem, oldItem) {
-        if (oldItem !== newItem && this.currentView === VIEW_SHOW) {
-          this.transitionGroupActive = false
+        if (oldItem !== newItem) {
           this.$_reloadShares()
-          this.showShareesList = false
+          this.showShareesList = true
         }
       },
       immediate: true
@@ -364,9 +304,6 @@ export default {
       'loadIncomingShares',
       'incomingSharesClearState'
     ]),
-    onClickSharedWith() {
-      this.showShareesList = !this.showShareesList
-    },
     $_isCollaboratorShare(collaborator) {
       return userShareTypes.includes(collaborator.shareType)
     },
@@ -395,38 +332,15 @@ export default {
 
       return c1UserShare ? -1 : 1
     },
-    $_ocCollaborators_addShare() {
-      this.transitionGroupActive = true
-      this.currentView = VIEW_NEW
-    },
-    $_ocCollaborators_editShare(share) {
-      this.currentShare = share
-      this.currentView = VIEW_EDIT
-    },
-    toggleCollaboratorNew(component, event) {
-      this.toggleCollaborator(component, event, '#oc-sharing-autocomplete')
-    },
-    toggleCollaboratorEdit(component, event) {
-      this.toggleCollaborator(component, event, '#collaborator-edit-hint')
-    },
-    toggleCollaborator(component, event, selector) {
-      this.focus({
-        from: document.activeElement,
-        to: component.$el.querySelector(selector),
-        revert: event === 'beforeDestroy'
-      })
+    toggleShareeList() {
+      this.showShareesList = !this.showShareesList
     },
     $_ocCollaborators_deleteShare(share) {
-      this.transitionGroupActive = true
       this.deleteShare({
         client: this.$client,
         share: share,
         resource: this.highlightedFile
       })
-    },
-    $_ocCollaborators_showList() {
-      this.currentView = VIEW_SHOW
-      this.currentShare = null
     },
     $_ocCollaborators_isUser(collaborator) {
       return (
@@ -437,7 +351,6 @@ export default {
       return collaborator.shareType === shareTypes.group
     },
     $_reloadShares() {
-      this.$_ocCollaborators_showList()
       this.loadCurrentFileOutgoingShares({
         client: this.$client,
         path: this.highlightedFile.path,
@@ -460,18 +373,6 @@ export default {
 
 <style>
 .avatars-wrapper {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
   height: 40px;
-}
-.shared-with-label {
-  margin: 0;
-  font-size: 0.9rem;
-  font-weight: 600;
-}
-.sharee-avatars {
-  justify-self: flex-end;
 }
 </style>
