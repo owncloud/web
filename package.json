@@ -21,7 +21,7 @@
     "lint": "eslint '{packages,tests}/**/*.{js,ts,vue}' --color",
     "serve": "SERVER=true yarn build:w",
     "test:integration": "jest --config ./tests/integration/config/jest.config.js",
-    "test:smoke:experimental": "NODE_TLS_REJECT_UNAUTHORIZED=0 cucumber-js --profile=smoke",
+    "test:smoke": "NODE_TLS_REJECT_UNAUTHORIZED=0 cucumber-js --profile=smoke",
     "test:unit": "jest --coverage --config ./tests/unit/config/jest.config.js"
   },
   "browserslist": [
