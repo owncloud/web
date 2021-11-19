@@ -62,7 +62,6 @@
                 :collaborator="collaborator"
                 :modifiable="!collaborator.indirect"
                 @onDelete="$_ocCollaborators_deleteShare"
-                @onEdit="$_ocCollaborators_editShare"
               />
             </li>
           </transition-group>
@@ -77,14 +76,6 @@
       @beforeDestroy="toggleCollaboratorNew"
       @mounted="toggleCollaboratorNew"
     />
-    <edit-collaborator
-      v-if="$_ocCollaborators_canShare && currentView === VIEW_EDIT"
-      key="edit-collaborator"
-      :collaborator="currentShare"
-      @close="$_ocCollaborators_showList"
-      @beforeDestroy="toggleCollaboratorEdit"
-      @mounted="toggleCollaboratorEdit"
-    />
   </div>
 </template>
 
@@ -96,12 +87,10 @@ import { shareTypes, userShareTypes } from '../../../helpers/shareTypes'
 import { getParentPaths } from '../../../helpers/path'
 import { dirname } from 'path'
 import { bitmaskToRole, permissionsBitmask } from '../../../helpers/collaborators'
-import EditCollaborator from './Collaborators/EditCollaborator.vue'
 import NewCollaborator from './Collaborators/NewCollaborator.vue'
 import ShowCollaborator from './Collaborators/ShowCollaborator.vue'
 
 const VIEW_SHOW = 'showCollaborators'
-const VIEW_EDIT = 'editCollaborator'
 const VIEW_NEW = 'newCollaborator'
 
 export default {
@@ -110,7 +99,6 @@ export default {
   },
   name: 'FileShares',
   components: {
-    EditCollaborator,
     NewCollaborator,
     ShowCollaborator
   },
@@ -122,7 +110,6 @@ export default {
 
       // panel types
       VIEW_SHOW,
-      VIEW_EDIT,
       VIEW_NEW,
       currentView: VIEW_SHOW,
       showShareesList: true
@@ -382,10 +369,6 @@ export default {
     $_ocCollaborators_addShare() {
       this.transitionGroupActive = true
       this.currentView = VIEW_NEW
-    },
-    $_ocCollaborators_editShare(share) {
-      this.currentShare = share
-      this.currentView = VIEW_EDIT
     },
     toggleCollaboratorNew(component, event) {
       this.toggleCollaborator(component, event, '#oc-sharing-autocomplete')

@@ -80,7 +80,6 @@ export default {
       return this.$gettext('Sharing roles')
     },
     expirationDateExists() {
-      console.log(1337, this.collaborator.expires)
       return this.collaborator.expires
     }
   },
