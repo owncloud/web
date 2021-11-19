@@ -20,17 +20,6 @@ module.exports = {
         .waitForElementNotPresent(informationSelector)
     },
     /**
-     * Clicks the button to add a new collaborator
-     */
-    clickCreateShare: function () {
-      return this.useXpath()
-        .waitForElementVisible('@createShareButton')
-        .click('@createShareButton')
-        .waitForElementVisible('@createShareDialog')
-        .waitForAnimationToFinish() // wait for animation of share sliding in
-        .useCss()
-    },
-    /**
      *
      * @param {string} collaborator
      */
@@ -168,10 +157,6 @@ module.exports = {
     deleteShareButton: {
       // within collaboratorInformationByCollaboratorName
       selector: '//*[contains(@class, "files-collaborators-collaborator-delete")]',
-      locateStrategy: 'xpath'
-    },
-    createShareButton: {
-      selector: '//*[contains(@class, "files-collaborators-open-add-share-dialog-button")]',
       locateStrategy: 'xpath'
     },
     createShareDialog: {

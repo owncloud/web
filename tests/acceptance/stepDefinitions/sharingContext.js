@@ -594,14 +594,6 @@ Given(
   }
 )
 
-When('the user opens the share creation dialog on the webUI', function () {
-  return client.page.FilesPageElement.SharingDialog.collaboratorsDialog().clickCreateShare()
-})
-
-When('the user cancels the share creation dialog on the webUI', function () {
-  return client.page.FilesPageElement.sharingDialog().clickCancel()
-})
-
 When('the user types {string} in the share-with-field', async function (input) {
   return await client.page.FilesPageElement.sharingDialog().enterAutoComplete(input)
 })

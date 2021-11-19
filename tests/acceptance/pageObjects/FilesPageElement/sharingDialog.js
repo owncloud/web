@@ -181,7 +181,6 @@ module.exports = {
       remote = false,
       days
     ) {
-      await collaboratorDialog.clickCreateShare()
       await this.selectCollaboratorForShare(sharee, shareWithGroup, remote)
       await this.selectRoleForNewCollaborator(role)
 
@@ -219,7 +218,6 @@ module.exports = {
         .initAjaxCounters()
         .click('@addShareSaveButton')
         .waitForOutstandingAjaxCalls()
-        .waitForElementNotPresent('@addShareSaveButton')
     },
     saveChanges: function () {
       return this.waitForElementVisible('@saveShareButton')
@@ -711,6 +709,8 @@ module.exports = {
     cancelButton: {
       selector: '.files-collaborators-collaborator-cancel'
     },
+
+    // sus
     addShareSaveButton: {
       selector: '#files-collaborators-collaborator-save-new-share-button'
     },

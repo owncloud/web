@@ -16,10 +16,6 @@ module.exports = {
     openSharingDialog: async function (resource) {
       await this.openSideBar(resource)
       await appSideBar.activatePanel('people')
-      return await this.click({
-        selector: '@sharedWithToggleButton',
-        timeout: 200
-      })
     },
     /**
      * @param {string} resource
