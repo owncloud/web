@@ -1,3 +1,26 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v4.5.0...master
+
+Summary
+-------
+
+* Enhancement - Contextmenu for multiple files: [#5973](https://github.com/owncloud/web/pull/5973)
+
+Details
+-------
+
+* Enhancement - Contextmenu for multiple files: [#5973](https://github.com/owncloud/web/pull/5973)
+
+   We have enabled batch actions in the context menu for when multiple resources are selected.
+
+   https://github.com/owncloud/web/issues/5968
+   https://github.com/owncloud/web/issues/5977
+   https://github.com/owncloud/web/pull/5973
+
 Changelog for ownCloud Web [4.5.0] (2021-11-16)
 =======================================
 The following sections list the changes in ownCloud web 4.5.0 relevant to
