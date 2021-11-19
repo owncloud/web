@@ -29,25 +29,6 @@
         </oc-button>
       </div>
       <template v-if="showShareesList || collaboratorsAvatar.length === 0">
-        <template v-if="$_ownerAsCollaborator">
-          <p id="original-sharing-user" v-translate class="oc-invisible-sr">File owner</p>
-          <show-collaborator
-            :collaborator="$_ownerAsCollaborator"
-            aria-describedby="original-sharing-user"
-          />
-          <hr />
-          <show-collaborator :collaborator="$_currentUserAsCollaborator" />
-        </template>
-        <template v-else>
-          <p id="collaborator-as-fileowner" v-translate class="oc-invisible-sr">
-            You are the file owner
-          </p>
-          <show-collaborator
-            :collaborator="$_currentUserAsCollaborator"
-            aria-describedby="collaborator-as-fileowner"
-          />
-        </template>
-        <hr v-if="collaborators.length > 0" class="oc-mt-s oc-mb-s" />
         <transition-group
           id="files-collaborators-list"
           class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm"
@@ -75,7 +56,7 @@ import { textUtils } from '../../../helpers/textUtils'
 import { shareTypes, userShareTypes } from '../../../helpers/shareTypes'
 import { getParentPaths } from '../../../helpers/path'
 import { dirname } from 'path'
-import { bitmaskToRole, permissionsBitmask } from '../../../helpers/collaborators'
+import { permissionsBitmask } from '../../../helpers/collaborators'
 import NewCollaborator from './Collaborators/NewCollaborator.vue'
 import ShowCollaborator from './Collaborators/ShowCollaborator.vue'
 
@@ -102,7 +83,6 @@ export default {
       'currentFileOutgoingSharesLoading',
       'sharesTreeLoading'
     ]),
-    ...mapGetters(['isOcis']),
     ...mapState('Files', ['incomingShares', 'incomingSharesLoading', 'sharesTree']),
     ...mapState(['user']),
 
@@ -128,29 +108,6 @@ export default {
       )
     },
 
-    $_currentUserAsCollaborator() {
-      const permissions = this.currentUsersPermissions
-      const isFolder = this.highlightedFile.type === 'folder'
-      let role = { name: '' }
-
-      if (permissions > 0) {
-        role = bitmaskToRole(permissions, isFolder, !this.isOcis)
-      } else {
-        role.name = 'owner'
-      }
-
-      return {
-        collaborator: {
-          name: this.user.id,
-          displayName: this.user.displayname,
-          additionalInfo: null
-        },
-        owner: {},
-        fileOwner: {},
-        shareType: shareTypes.user,
-        role
-      }
-    },
     collaboratorsAvatar() {
       return this.collaborators.map((c) => {
         return {
@@ -158,34 +115,6 @@ export default {
           shareType: c.shareType
         }
       })
-    },
-
-    $_ownerAsCollaborator() {
-      if (!this.$_allIncomingShares.length) {
-        return null
-      }
-      const firstShare = this.$_allIncomingShares[0]
-      const ownerAsCollaborator = {
-        ...firstShare,
-        collaborator: firstShare.fileOwner,
-        owner: {},
-        fileOwner: {},
-        key: 'owner-' + firstShare.id,
-        role: this.ownerRole
-      }
-
-      const resharers = new Map()
-      this.$_allIncomingShares.forEach((share) => {
-        if (share.owner.name !== ownerAsCollaborator.collaborator.name) {
-          resharers.set(share.owner.name, share.owner)
-        }
-      })
-
-      // make them unique then sort
-      ownerAsCollaborator.resharers = Array.from(resharers.values()).sort(
-        this.collaboratorsComparator.bind(this)
-      )
-      return ownerAsCollaborator
     },
 
     /**

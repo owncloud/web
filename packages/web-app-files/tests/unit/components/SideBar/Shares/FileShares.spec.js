@@ -14,12 +14,9 @@ localVue.use(GetTextPlugin, {
 
 const selectors = {
   ocAvatarsStub: 'oc-avatars-stub',
-  ownerAsSelfRow: 'show-collaborator-stub[aria-describedby="collaborator-as-fileowner"]',
-  ownerRow: 'show-collaborator-stub[aria-describedby="original-sharing-user"]',
   collaboratorsRow: 'show-collaborator-stub:not([aria-describedby])',
   addCollaboratorDialog: '.files-collaborators-collaborator-add-dialog',
   cannotSharePermissionMsg: 'p[data-testid="files-collaborators-no-reshare-permissions-message"]',
-  collaboratorAsOwner: 'p#collaborator-as-fileowner',
   sharedWithLabel: '.avatars-wrapper > h4',
   showCollaboratorButtonStub: 'oc-button-stub[data-testid="collaborators-show-people"]',
   showCollaboratorButton: 'button[data-testid="collaborators-show-people"]'
@@ -37,34 +34,6 @@ describe('FileShares', () => {
   describe('Collaborators List', () => {
     describe('without any collaborators', () => {
       describe('owner views the shares sidebar', () => {
-        it('should show the user as owner message', () => {
-          const wrapper = getShallowMountedWrapper({ user: 'user0', outgoingCollaborators: [] })
-
-          const ownerMsg = wrapper.find(selectors.collaboratorAsOwner)
-          expect(ownerMsg.exists()).toBe(true)
-          expect(ownerMsg.text()).toBe('You are the file owner')
-        })
-
-        it('should render the file owner as collaborator', () => {
-          const wrapper = getShallowMountedWrapper({ user: 'user0', outgoingCollaborators: [] })
-
-          const owner = wrapper.find(selectors.ownerAsSelfRow)
-          expect(owner.exists()).toBe(true)
-
-          expect(owner.props()).toMatchObject({
-            collaborator: {
-              collaborator: { name: 'user0', displayName: 'User Zero' },
-              shareType: 0,
-              role: { name: 'owner' }
-            },
-            modifiable: false,
-            firstColumn: true
-          })
-
-          const collaborators = wrapper.findAll(selectors.collaboratorsRow)
-          expect(collaborators.length).toBe(0)
-        })
-
         it('should show cannot share permission if the owner cannot share', () => {
           const wrapper = getShallowMountedWrapper({
             user: 'user0',
@@ -151,59 +120,6 @@ describe('FileShares', () => {
               role: roles.viewer
             },
             modifiable: true,
-            firstColumn: true
-          })
-        })
-      })
-
-      describe('sharee views the shares panel', () => {
-        it('should show the owner in the collaborators list', () => {
-          const wrapper = getShallowMountedWrapper({
-            user: 'user1',
-            incomingCollaborators: [
-              {
-                fileOwner: 'user0',
-                username: 'user1'
-              }
-            ]
-          })
-
-          const owner = wrapper.find(selectors.ownerRow)
-          expect(owner.exists()).toBe(true)
-
-          expect(owner.props()).toMatchObject({
-            collaborator: {
-              collaborator: { name: 'user0', displayName: 'User Zero' },
-              shareType: 0,
-              role: { name: 'owner' }
-            },
-            modifiable: false,
-            firstColumn: true
-          })
-        })
-
-        it('should render the sharee as file collaborators', () => {
-          const wrapper = getShallowMountedWrapper({
-            user: 'user1',
-            incomingCollaborators: [
-              {
-                fileOwner: 'user0',
-                username: 'user1'
-              }
-            ]
-          })
-
-          const collaborators = wrapper.findAll(selectors.collaboratorsRow)
-          expect(collaborators.length).toBe(1)
-
-          const collaborator1 = collaborators.at(0)
-          expect(collaborator1.props()).toMatchObject({
-            collaborator: {
-              collaborator: { name: 'user1', displayName: 'User One' },
-              shareType: 0,
-              role: roles.viewer
-            },
-            modifiable: false,
             firstColumn: true
           })
         })
