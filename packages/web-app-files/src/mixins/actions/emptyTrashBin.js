@@ -1,9 +1,8 @@
 import { isTrashbinRoute } from '../../helpers/route'
-import { mapActions, mapGetters, mapState } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   computed: {
-    ...mapState('Files', ['currentFolder']),
     ...mapGetters('Files', ['activeFilesCurrentPage']),
     $_emptyTrashBin_items() {
       return [

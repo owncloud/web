@@ -1,9 +1,7 @@
-import { mapGetters } from 'vuex'
 import { isPublicFilesRoute } from '../../helpers/route'
 
 export default {
   computed: {
-    ...mapGetters(['configuration']),
     $_fetch_items() {
       return [
         {

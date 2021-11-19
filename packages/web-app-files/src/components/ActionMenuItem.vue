@@ -73,7 +73,7 @@ export default {
     },
 
     getComponentListeners(action, resources) {
-      if (action.handler === undefined || action.componentType !== 'oc-button') {
+      if (typeof action.handler !== 'function' || action.componentType !== 'oc-button') {
         return {}
       }
 

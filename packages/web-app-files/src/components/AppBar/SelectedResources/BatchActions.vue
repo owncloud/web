@@ -40,7 +40,6 @@ export default {
   ],
   computed: {
     ...mapGetters('Files', ['selectedFiles']),
-    ...mapGetters(['homeFolder']),
 
     filterParams() {
       return {

@@ -1,19 +1,19 @@
 <template>
   <div id="oc-files-context-menu">
-    <template v-for="(section, i) in menuSections">
+    <template v-for="(section, sectionIndex) in menuSections">
       <oc-list
         :id="`oc-files-context-actions-${section.name}`"
         :key="`section-${section.name}-list`"
         class="oc-files-context-actions"
-        :class="getSectionClasses(i)"
+        :class="getSectionClasses(sectionIndex)"
       >
         <action-menu-item
-          v-for="(action, j) in section.items"
-          :key="`section-${section.name}-action-${j}`"
+          v-for="(action, actionIndex) in section.items"
+          :key="`section-${section.name}-action-${actionIndex}`"
           :action="action"
           :items="items"
           class="oc-files-context-action"
-          :class="getActionClasses(section, j)"
+          :class="getActionClasses(section, actionIndex)"
         />
       </oc-list>
     </template>
@@ -21,7 +21,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import ActionMenuItem from '../ActionMenuItem.vue'
 
 import FileActions from '../../mixins/fileActions'
@@ -73,8 +72,6 @@ export default {
   },
 
   computed: {
-    ...mapGetters('Files', ['currentFolder']),
-
     menuSections() {
       const sections = []
 
