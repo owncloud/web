@@ -1,15 +1,22 @@
 import { mapActions } from 'vuex'
 import { isTrashbinRoute } from '../../helpers/route'
+import PQueue from 'p-queue'
 
 export default {
   computed: {
     $_restore_items() {
       return [
         {
+          name: 'restore',
           icon: 'restore',
           label: () => this.$gettext('Restore'),
           handler: this.$_restore_trigger,
-          isEnabled: () => isTrashbinRoute(this.$route),
+          isEnabled: ({ resources }) => {
+            if (!isTrashbinRoute(this.$route)) {
+              return false
+            }
+            return resources.length > 0
+          },
           componentType: 'oc-button',
           class: 'oc-files-actions-restore-trigger'
         }
@@ -17,36 +24,61 @@ export default {
     }
   },
   methods: {
-    ...mapActions('Files', ['resetFileSelection', 'addFileSelection', 'removeFilesFromTrashbin']),
+    ...mapActions('Files', ['removeFilesFromTrashbin']),
 
-    $_restore_trigger(resource) {
-      this.resetFileSelection()
-      this.addFileSelection(resource)
-      this.$client.fileTrash
-        .restore(resource.id, resource.path)
-        .then(() => {
-          this.removeFilesFromTrashbin([resource])
-          const translated = this.$gettext('%{file} was restored successfully')
-          this.showMessage({
-            title: this.$gettextInterpolate(translated, { file: resource.name }, true),
-            autoClose: {
-              enabled: true
+    async $_restore_trigger({ resources }) {
+      const restoredResources = []
+      const failedResources = []
+      const restorePromises = []
+      const restoreQueue = new PQueue({ concurrency: 4 })
+      resources.forEach((resource) => {
+        restorePromises.push(
+          restoreQueue.add(async () => {
+            try {
+              await this.$client.fileTrash.restore(resource.id, resource.path)
+              restoredResources.push(resource)
+            } catch (e) {
+              console.error(e)
+              failedResources.push(resource)
             }
           })
-        })
-        .catch((error) => {
-          const translated = this.$gettext('Restoration of %{file} failed')
-          this.showMessage({
-            title: this.$gettextInterpolate(translated, { file: resource.name }, true),
-            desc: error.message,
-            status: 'danger',
-            autoClose: {
-              enabled: true
-            }
-          })
-        })
+        )
+      })
+      await Promise.all(restorePromises)
 
-      this.resetFileSelection()
+      // success handler (for partial and full success)
+      if (restoredResources.length > 0) {
+        this.removeFilesFromTrashbin(restoredResources)
+        let translated
+        const translateParams = {}
+        if (restoredResources.length === 1) {
+          translated = this.$gettext('%{resource} was restored successfully')
+          translateParams.resource = restoredResources[0].name
+        } else {
+          translated = this.$gettext('%{resourceCount} files restored successfully')
+          translateParams.resourceCount = restoredResources.length
+        }
+        this.showMessage({
+          title: this.$gettextInterpolate(translated, translateParams, true)
+        })
+      }
+
+      // failure handler (for partial and full failure)
+      if (failedResources.length > 0) {
+        let translated
+        const translateParams = {}
+        if (failedResources.length === 1) {
+          translated = this.$gettext('Failed to restore %{resource}')
+          translateParams.resource = failedResources[0].name
+        } else {
+          translated = this.$gettext('Failed to restore %{resourceCount} files')
+          translateParams.resourceCount = failedResources.length
+        }
+        this.showMessage({
+          title: this.$gettextInterpolate(translated, translateParams, true),
+          status: 'danger'
+        })
+      }
     }
   }
 }

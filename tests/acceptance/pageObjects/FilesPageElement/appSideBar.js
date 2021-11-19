@@ -219,7 +219,8 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     panelActionsItems: {
-      selector: '//span[@class="oc-files-actions-sidebar-action-label"]',
+      selector:
+        '//ul[@id="oc-files-actions-sidebar"]//span[@class="oc-files-context-action-label"]',
       locateStrategy: 'xpath'
     },
     panelSelectButtons: {

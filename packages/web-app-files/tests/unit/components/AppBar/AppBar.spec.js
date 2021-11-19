@@ -93,9 +93,11 @@ describe('AppBar component', () => {
     const route = {
       name: page,
       params: {
+        // item is the link token for public links (root of the public link) vs. empty for personal page (root of the home)
         item: page === 'files-public-list' ? '6mfXfTtYHVxrlAu' : ''
       },
       meta: {
+        hasBulkActions: true,
         hideFilelistActions: false
       }
     }
@@ -194,6 +196,7 @@ describe('AppBar component', () => {
       name: 'files-trashbin',
       params: {},
       meta: {
+        hasBulkActions: true,
         hideFilelistActions: true
       }
     }
@@ -243,6 +246,7 @@ describe('AppBar component', () => {
         name: page,
         params: {},
         meta: {
+          hasBulkActions: true,
           hideFilelistActions: true
         }
       }
@@ -261,12 +265,13 @@ describe('AppBar component', () => {
           expect(newButton.exists()).toBeFalsy()
           expect(ocDrop.exists()).toBeFalsy()
         })
-        it('should not show batch actions and size-info', () => {
-          const batchActions = wrapper.find(elSelector.batchActions)
+        it('should not show size-info', () => {
           const sizeInfo = wrapper.find(elSelector.sizeInfo)
-
           expect(sizeInfo.exists()).toBeFalsy()
-          expect(batchActions.exists()).toBeFalsy()
+        })
+        it('should show batch actions', () => {
+          const batchActions = wrapper.find(elSelector.batchActions)
+          expect(batchActions.exists()).toBeTruthy()
         })
       })
 

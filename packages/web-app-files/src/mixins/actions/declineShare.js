@@ -1,26 +1,33 @@
 import { triggerShareAction } from '../../helpers/share/triggerShareAction'
 
-import { checkRoute } from '../../helpers/route'
-import MixinRoutes from '../routes'
+import { isSharedWithMeRoute } from '../../helpers/route'
 import { shareStatus } from '../../helpers/shareStatus'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
+import PQueue from 'p-queue'
 
 export default {
-  mixins: [MixinRoutes],
   computed: {
     ...mapGetters(['isOcis']),
     $_declineShare_items() {
       return [
         {
+          name: 'decline-share',
           icon: 'not_interested',
           handler: this.$_declineShare_trigger,
-          label: () => this.$gettext('Decline share'),
-          isEnabled: ({ resource }) => {
-            if (!checkRoute(['files-shared-with-me'], this.$route.name)) {
+          label: ({ resources }) =>
+            this.$ngettext('Decline share', 'Decline shares', resources.length),
+          isEnabled: ({ resources }) => {
+            if (!isSharedWithMeRoute(this.$route)) {
+              return false
+            }
+            if (resources.length === 0) {
               return false
             }
 
-            return [shareStatus.pending, shareStatus.accepted].includes(resource.status)
+            const declineDisabled = resources.some((resource) => {
+              return resource.status === shareStatus.declined
+            })
+            return !declineDisabled
           },
           componentType: 'oc-button',
           class: 'oc-files-actions-decline-share-trigger'
@@ -30,22 +37,47 @@ export default {
   },
   methods: {
     ...mapMutations('Files', ['UPDATE_RESOURCE']),
-    async $_declineShare_trigger(resource) {
-      try {
-        const share = await triggerShareAction(
-          resource,
-          shareStatus.declined,
-          !this.isOcis,
-          this.$client
+    ...mapActions(['showMessage']),
+    ...mapActions('Files', ['resetFileSelection']),
+    async $_declineShare_trigger({ resources }) {
+      const errors = []
+      const triggerPromises = []
+      const triggerQueue = new PQueue({ concurrency: 4 })
+      resources.forEach((resource) => {
+        triggerPromises.push(
+          triggerQueue.add(async () => {
+            try {
+              const share = await triggerShareAction(
+                resource,
+                shareStatus.declined,
+                !this.isOcis,
+                this.$client
+              )
+              if (share) {
+                this.UPDATE_RESOURCE(share)
+              }
+            } catch (error) {
+              console.error(error)
+              errors.push(error)
+            }
+          })
         )
-        this.UPDATE_RESOURCE(share)
-      } catch (error) {
-        console.error(error)
-        this.showMessage({
-          title: this.$gettext('Error while declining the selected share.'),
-          status: 'danger'
-        })
+      })
+      await Promise.all(triggerPromises)
+
+      if (errors.length === 0) {
+        this.resetFileSelection()
+        return
       }
+
+      this.showMessage({
+        title: this.$ngettext(
+          'Error while declining the selected share.',
+          'Error while declining selected shares.',
+          resources.length
+        ),
+        status: 'danger'
+      })
     }
   }
 }

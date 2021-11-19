@@ -1,26 +1,33 @@
 import { triggerShareAction } from '../../helpers/share/triggerShareAction'
 
-import { checkRoute } from '../../helpers/route'
-import MixinRoutes from '../routes'
+import { isSharedWithMeRoute } from '../../helpers/route'
 import { shareStatus } from '../../helpers/shareStatus'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
+import PQueue from 'p-queue'
 
 export default {
-  mixins: [MixinRoutes],
   computed: {
     ...mapGetters(['isOcis']),
     $_acceptShare_items() {
       return [
         {
+          name: 'accept-share',
           icon: 'check',
           handler: this.$_acceptShare_trigger,
-          label: () => this.$gettext('Accept share'),
-          isEnabled: ({ resource }) => {
-            if (!checkRoute(['files-shared-with-me'], this.$route.name)) {
+          label: ({ resources }) =>
+            this.$ngettext('Accept share', 'Accept shares', resources.length),
+          isEnabled: ({ resources }) => {
+            if (!isSharedWithMeRoute(this.$route)) {
+              return false
+            }
+            if (resources.length === 0) {
               return false
             }
 
-            return [shareStatus.pending, shareStatus.declined].includes(resource.status)
+            const acceptDisabled = resources.some((resource) => {
+              return resource.status === shareStatus.accepted
+            })
+            return !acceptDisabled
           },
           componentType: 'oc-button',
           class: 'oc-files-actions-accept-share-trigger'
@@ -30,22 +37,47 @@ export default {
   },
   methods: {
     ...mapMutations('Files', ['UPDATE_RESOURCE']),
-    async $_acceptShare_trigger(resource) {
-      try {
-        const share = await triggerShareAction(
-          resource,
-          shareStatus.accepted,
-          !this.isOcis,
-          this.$client
+    ...mapActions(['showMessage']),
+    ...mapActions('Files', ['resetFileSelection']),
+    async $_acceptShare_trigger({ resources }) {
+      const errors = []
+      const triggerPromises = []
+      const triggerQueue = new PQueue({ concurrency: 4 })
+      resources.forEach((resource) => {
+        triggerPromises.push(
+          triggerQueue.add(async () => {
+            try {
+              const share = await triggerShareAction(
+                resource,
+                shareStatus.accepted,
+                !this.isOcis,
+                this.$client
+              )
+              if (share) {
+                this.UPDATE_RESOURCE(share)
+              }
+            } catch (error) {
+              console.error(error)
+              errors.push(error)
+            }
+          })
         )
-        this.UPDATE_RESOURCE(share)
-      } catch (error) {
-        console.error(error)
-        this.showMessage({
-          title: this.$gettext('Error while accepting the selected share.'),
-          status: 'danger'
-        })
+      })
+      await Promise.all(triggerPromises)
+
+      if (errors.length === 0) {
+        this.resetFileSelection()
+        return
       }
+
+      this.showMessage({
+        title: this.$ngettext(
+          'Error while accepting the selected share.',
+          'Error while accepting selected shares.',
+          resources.length
+        ),
+        status: 'danger'
+      })
     }
   }
 }

@@ -6,8 +6,8 @@ import AcceptShare from './actions/acceptShare'
 import Copy from './actions/copy'
 import DeclineShare from './actions/declineShare'
 import Delete from './actions/delete'
+import DownloadArchive from './actions/downloadArchive'
 import DownloadFile from './actions/downloadFile'
-import DownloadFolder from './actions/downloadFolder'
 import Favorite from './actions/favorite'
 import Fetch from './actions/fetch'
 import Move from './actions/move'
@@ -19,8 +19,8 @@ import kebabCase from 'lodash-es/kebabCase'
 const actionsMixins = [
   'fetch',
   'navigate',
+  'downloadArchive',
   'downloadFile',
-  'downloadFolder',
   'favorite',
   'copy',
   'move',
@@ -41,7 +41,7 @@ export default {
     DeclineShare,
     Delete,
     DownloadFile,
-    DownloadFolder,
+    DownloadArchive,
     Favorite,
     Fetch,
     Move,
@@ -56,13 +56,9 @@ export default {
     ...mapGetters(['capabilities', 'configuration']),
 
     $_fileActions_systemActions() {
-      const systemActions = []
-
-      for (const actionMixin of actionsMixins) {
-        systemActions.push(...this[`$_${actionMixin}_items`])
-      }
-
-      return systemActions
+      return actionsMixins.flatMap((actionMixin) => {
+        return this[`$_${actionMixin}_items`]
+      })
     },
 
     $_fileActions_editorActions() {
@@ -77,14 +73,22 @@ export default {
             )
           },
           icon: this.apps.meta[editor.app].icon,
-          handler: (item) =>
-            this.$_fileActions_openEditor(editor, item.path, item.id, EDITOR_MODE_EDIT),
-          isEnabled: ({ resource }) => {
-            if (editor.routes?.length > 0 && !checkRoute(editor.routes, this.$route.name)) {
+          handler: ({ resources }) =>
+            this.$_fileActions_openEditor(
+              editor,
+              resources[0].path,
+              resources[0].id,
+              EDITOR_MODE_EDIT
+            ),
+          isEnabled: ({ resources }) => {
+            if (resources.length !== 1) {
+              return false
+            }
+            if (Array.isArray(editor.routes) && !checkRoute(editor.routes, this.$route.name)) {
               return false
             }
 
-            return resource.extension === editor.extension
+            return resources[0].extension === editor.extension
           },
           canBeDefault: true,
           componentType: 'oc-button',
@@ -110,7 +114,7 @@ export default {
         })
       }
 
-      // TODO: Refactor in the store
+      // TODO: Refactor (or kill) openFile action in the global store
       this.openFile({
         filePath
       })
@@ -118,7 +122,11 @@ export default {
       if (editor.newTab) {
         const path = this.$router.resolve({
           name: editor.routeName,
-          params: { filePath, fileId, mode }
+          params: {
+            filePath,
+            fileId,
+            mode
+          }
         }).href
         const target = `${editor.routeName}-${filePath}`
         const win = window.open(path, target)
@@ -145,12 +153,13 @@ export default {
     // available mime-types coming from the app-provider and existing actions
     $_fileActions_triggerDefaultAction(resource) {
       const action = this.$_fileActions_getDefaultAction(resource)
-      action.handler(resource, action.handlerData)
+      action.handler({ resources: [resource], ...action.handlerData })
     },
 
     $_fileActions_getDefaultAction(resource) {
+      const resources = [resource]
       const filterCallback = (action) =>
-        action.canBeDefault && action.isEnabled({ resource, parent: this.currentFolder })
+        action.canBeDefault && action.isEnabled({ resources, parent: this.currentFolder })
 
       // first priority: handlers from config
       const defaultEditorActions = this.$_fileActions_editorActions.filter(filterCallback)
@@ -161,7 +170,7 @@ export default {
       // second priority: `/app/open` endpoint of app provider if available
       // FIXME: files app should not know anything about the `external apps` app
       const externalAppsActions =
-        this.$_fileActions_loadExternalAppActions(resource).filter(filterCallback)
+        this.$_fileActions_loadExternalAppActions(resources).filter(filterCallback)
       if (externalAppsActions.length) {
         return externalAppsActions[0]
       }
@@ -170,24 +179,26 @@ export default {
       return this.$_fileActions_systemActions.filter(filterCallback)[0]
     },
 
-    $_fileActions_getAllAvailableActions(resource) {
+    $_fileActions_getAllAvailableActions(resources) {
       return [
         ...this.$_fileActions_editorActions,
-        ...this.$_fileActions_loadExternalAppActions(resource),
+        ...this.$_fileActions_loadExternalAppActions(resources),
         ...this.$_fileActions_systemActions
       ].filter((action) => {
-        return action.isEnabled({
-          resource,
-          parent: this.currentFolder
-        })
+        return action.isEnabled({ resources })
       })
     },
 
     // returns an array of available external Apps
     // to open a resource with a specific mimeType
     // FIXME: filesApp should not know anything about any other app, dont cross the line!!! BAD
-    $_fileActions_loadExternalAppActions(resource) {
-      const { mimeType } = resource
+    $_fileActions_loadExternalAppActions(resources) {
+      // we don't support external apps as batch action as of now
+      if (resources.length > 1) {
+        return []
+      }
+
+      const { mimeType, fileId } = resources[0]
       if (
         mimeType === undefined ||
         !get(this, 'capabilities.files.app_providers') ||
@@ -208,7 +219,7 @@ export default {
           class: `oc-files-actions-${app.name}-trigger`,
           isEnabled: () => true,
           canBeDefault: defaultApplication === app.name,
-          handler: () => this.$_fileActions_openLink(app.name, resource.fileId),
+          handler: () => this.$_fileActions_openLink(app.name, fileId),
           label: () => this.$gettextInterpolate(label, { appName: app.name })
         }
       })

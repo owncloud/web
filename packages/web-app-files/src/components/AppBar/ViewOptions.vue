@@ -8,10 +8,9 @@
       :aria-label="viewOptionsButtonLabel"
       variation="passive"
       appearance="raw"
-      size="small"
-      gap-size="xsmall"
+      class="oc-py-s oc-mb-xs"
     >
-      <oc-icon name="tune" size="medium" />
+      <oc-icon name="tune" />
     </oc-button>
     <oc-button
       id="files-toggle-sidebar"
@@ -19,12 +18,10 @@
       :aria-label="toggleSidebarButtonLabel"
       variation="passive"
       appearance="raw"
-      size="small"
-      gap-size="xsmall"
-      class="oc-ml-s"
+      class="oc-ml-s oc-py-s oc-mb-xs"
       @click.stop="toggleSidebar"
     >
-      <oc-icon :name="toggleIcon" size="medium" />
+      <oc-icon :name="toggleIcon" />
     </oc-button>
     <oc-drop
       drop-id="files-view-options-drop"

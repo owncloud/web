@@ -40,7 +40,7 @@ Background: prepare user and files
     And only the following items with default items should be visible in the actions menu on the webUI
       | items                     |
       | open folder               |
-      | download folder           |
+      | download                  |
 
   @skipOnOCIS
   Scenario: observe different actions menu options on selecting a folder

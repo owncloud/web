@@ -21,7 +21,7 @@
       <h1 class="oc-invisible-sr" v-text="pageTitle" />
       <div class="files-app-bar-actions">
         <div
-          v-if="showActions || selectedFiles.length > 0 || isTrashbinRoute"
+          v-if="showActions || selectedFiles.length > 0 || hasBulkActions"
           class="uk-flex-1 uk-flex uk-flex-start"
         >
           <template v-if="showActions && areDefaultActionsVisible">
@@ -33,6 +33,7 @@
               variation="primary"
               appearance="filled"
               :disabled="isNewBtnDisabled"
+              class="oc-mb-xs"
             >
               <oc-icon name="add" />
               <translate>New</translate>
@@ -97,8 +98,8 @@
               </ul>
             </oc-drop>
           </template>
-          <size-info v-if="selectedFiles.length > 0" class="oc-mr-s uk-visible@l" />
-          <batch-actions />
+          <size-info v-if="hasBulkActions && selectedFiles.length > 0" class="oc-mr uk-visible@l" />
+          <batch-actions v-if="hasBulkActions" />
         </div>
         <view-options />
       </div>
@@ -204,6 +205,9 @@ export default {
     },
     showActions() {
       return this.$route.meta.hideFilelistActions !== true
+    },
+    hasBulkActions() {
+      return this.$route.meta.hasBulkActions === true
     },
 
     showBreadcrumb() {
@@ -578,7 +582,7 @@ export default {
     display: flex;
     gap: var(--oc-space-small);
     justify-content: flex-end;
-    padding: var(--oc-space-small);
+    padding: 0 var(--oc-space-small);
   }
 }
 </style>

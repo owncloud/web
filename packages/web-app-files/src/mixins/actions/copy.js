@@ -1,18 +1,16 @@
-import { dirname } from 'path'
-
-import { checkRoute } from '../../helpers/route'
-import MixinRoutes from '../routes'
+import { checkRoute, isPublicFilesRoute } from '../../helpers/route'
 
 export default {
-  mixins: [MixinRoutes],
   computed: {
     $_copy_items() {
       return [
         {
+          name: 'copy',
           icon: 'file_copy',
           handler: this.$_copy_trigger,
-          label: () => this.$gettext('Copy'),
-          isEnabled: () => {
+          label: () =>
+            this.$pgettext('Action in the files list row to initiate copying resources', 'Copy'),
+          isEnabled: ({ resources }) => {
             if (
               !checkRoute(
                 ['files-personal', 'files-public-list', 'files-favorites'],
@@ -21,11 +19,16 @@ export default {
             ) {
               return false
             }
+            if (resources.length === 0) {
+              return false
+            }
 
-            if (this.publicPage()) {
+            if (isPublicFilesRoute(this.$route)) {
               return this.currentFolder.canCreate()
             }
 
+            // copy can't be restricted in authenticated context, because
+            // a user always has their home dir with write access
             return true
           },
           componentType: 'oc-button',
@@ -35,18 +38,22 @@ export default {
     }
   },
   methods: {
-    $_copy_trigger(resource) {
-      // Parent of the resource selected for copy used as a default target location
-      const parent = dirname(resource.path)
-      const context = this.isPublicPage ? 'public' : 'private'
-      this.$router.push({
+    $_copy_trigger({ resources }) {
+      const context = isPublicFilesRoute(this.$route) ? 'public' : 'private'
+      const item = this.currentFolder.path || this.homeFolder
+
+      return this.$router.push({
         name: 'files-location-picker',
         params: {
           context,
-          item: parent,
+          item,
           action: 'copy'
         },
-        query: { resource: resource.path }
+        query: {
+          resource: resources.map((resource) => {
+            return resource.path
+          })
+        }
       })
     }
   }

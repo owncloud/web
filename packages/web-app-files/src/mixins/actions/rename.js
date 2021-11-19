@@ -10,21 +10,27 @@ export default {
     $_rename_items() {
       return [
         {
+          name: 'rename',
           icon: 'edit',
           label: () => {
             return this.$gettext('Rename')
           },
           handler: this.$_rename_trigger,
-          isEnabled: ({ resource }) => {
+          isEnabled: ({ resources }) => {
             if (isTrashbinRoute(this.$route)) {
               return false
             }
-
-            if (isSameResource(resource, this.currentFolder)) {
+            if (resources.length !== 1) {
+              return false
+            }
+            if (isSameResource(resources[0], this.currentFolder)) {
               return false
             }
 
-            return resource.canRename()
+            const renameDisabled = resources.some((resource) => {
+              return !resource.canRename()
+            })
+            return !renameDisabled
           },
           componentType: 'oc-button',
           class: 'oc-files-actions-rename-trigger'
@@ -41,18 +47,19 @@ export default {
     ]),
     ...mapActions('Files', ['renameFile']),
 
-    $_rename_trigger(resource) {
-      const isFolder = resource.type === 'folder'
+    $_rename_trigger({ resources }) {
       const confirmAction = (newName) => {
-        this.$_rename_renameResource(resource, newName)
+        this.$_rename_renameResource(resources[0], newName)
       }
       const checkName = (newName) => {
-        this.$_rename_checkNewName(resource.name, newName)
+        this.$_rename_checkNewName(resources[0].name, newName)
       }
 
       const title = this.$gettextInterpolate(
-        isFolder ? this.$gettext('Rename folder %{name}') : this.$gettext('Rename file %{name}'),
-        { name: resource.name }
+        resources[0].isFolder
+          ? this.$gettext('Rename folder %{name}')
+          : this.$gettext('Rename file %{name}'),
+        { name: resources[0].name }
       )
       const modal = {
         variation: 'passive',
@@ -60,8 +67,10 @@ export default {
         cancelText: this.$gettext('Cancel'),
         confirmText: this.$gettext('Rename'),
         hasInput: true,
-        inputValue: resource.name,
-        inputLabel: isFolder ? this.$gettext('Folder name') : this.$gettext('File name'),
+        inputValue: resources[0].name,
+        inputLabel: resources[0].isFolder
+          ? this.$gettext('Folder name')
+          : this.$gettext('File name'),
         onCancel: this.hideModal,
         onConfirm: confirmAction,
         onInput: checkName
@@ -126,17 +135,10 @@ export default {
               'Error while renaming "%{file}" to "%{newName}" - the file is locked'
             )
           }
-          const title = this.$gettextInterpolate(
-            translated,
-            { file: resource.name, newName: newName },
-            true
-          )
+          const title = this.$gettextInterpolate(translated, { file: resource.name, newName }, true)
           this.showMessage({
             title: title,
-            status: 'danger',
-            autoClose: {
-              enabled: true
-            }
+            status: 'danger'
           })
         })
     }

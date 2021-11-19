@@ -57,6 +57,9 @@ export default {
   SET_CURRENT_FOLDER(state, currentFolder) {
     state.currentFolder = currentFolder
   },
+  CLEAR_FILES(state) {
+    state.files = []
+  },
   LOAD_FILES_SEARCHED(state, files) {
     state.filesSearched = files
   },

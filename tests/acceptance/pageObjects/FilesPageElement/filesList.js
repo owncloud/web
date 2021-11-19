@@ -267,18 +267,6 @@ module.exports = {
         .waitForElementVisible('@checkBoxAllFiles')
         .click('@checkBoxAllFiles')
     },
-    /**
-     * Restores all the selected files/folders
-     *
-     */
-    restoreSelected: function () {
-      return this.waitForElementVisible('@restoreSelectedButton')
-        .initAjaxCounters()
-        .useXpath()
-        .click('@restoreSelectedButton')
-        .waitForOutstandingAjaxCalls()
-        .useCss()
-    },
 
     /**
      * Toggle enable or disable file/folder select checkbox
@@ -706,10 +694,6 @@ module.exports = {
     },
     checkboxInFileRow: {
       selector: '//input[@type="checkbox"]',
-      locateStrategy: 'xpath'
-    },
-    restoreSelectedButton: {
-      selector: '//span[contains(text(),"Restore")]',
       locateStrategy: 'xpath'
     },
     collaboratorsList: {

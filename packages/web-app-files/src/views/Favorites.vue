@@ -25,7 +25,7 @@
           <quick-actions class="oc-visible@s" :item="props.resource" :actions="app.quickActions" />
         </template>
         <template #contextMenu="{ resource }">
-          <context-actions v-if="isHighlightedFile(resource)" :item="resource" />
+          <context-actions v-if="isResourceInSelection(resource)" :items="selected" />
         </template>
         <template #footer>
           <pagination />
@@ -67,7 +67,14 @@ import { DavProperties } from 'web-pkg/src/constants'
 const visibilityObserver = new VisibilityObserver()
 
 export default {
-  components: { QuickActions, ListLoader, NoContentMessage, ListInfo, Pagination, ContextActions },
+  components: {
+    QuickActions,
+    ListLoader,
+    NoContentMessage,
+    ListInfo,
+    Pagination,
+    ContextActions
+  },
 
   mixins: [
     FileActions,
@@ -176,8 +183,8 @@ export default {
       visibilityObserver.observe(component.$el, { onEnter: debounced, onExit: debounced.cancel })
     },
 
-    isHighlightedFile(resource) {
-      return resource && resource.id === this.highlightedFile?.id
+    isResourceInSelection(resource) {
+      return this.selected?.includes(resource)
     }
   }
 }

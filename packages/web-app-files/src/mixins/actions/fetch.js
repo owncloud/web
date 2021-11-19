@@ -1,24 +1,30 @@
-import MixinRoutes from '../routes'
-import { mapGetters } from 'vuex'
+import { isPublicFilesRoute } from '../../helpers/route'
 
 export default {
-  mixins: [MixinRoutes],
   computed: {
-    ...mapGetters(['configuration']),
     $_fetch_items() {
       return [
         {
+          name: 'open-pdf',
           icon: 'remove_red_eye',
-          handler: (file) => this.$_fetch_trigger(file, 'application/pdf', this.isPublicFilesRoute),
+          handler: ({ resources }) =>
+            this.$_fetch_trigger({
+              resources,
+              mimeType: 'application/pdf',
+              isPublicFile: isPublicFilesRoute(this.$route)
+            }),
           label: () => {
             return this.$gettext('Open in browser')
           },
-          isEnabled: ({ resource }) => {
+          isEnabled: ({ resources }) => {
             if (this.isTrashbinRoute) {
               return false
             }
+            if (resources.length !== 1) {
+              return false
+            }
 
-            return resource.extension === 'pdf'
+            return resources[0].extension === 'pdf'
           },
           canBeDefault: true,
           componentType: 'oc-button',
@@ -29,14 +35,15 @@ export default {
     }
   },
   methods: {
-    $_fetch_trigger(file, mimetype, isPublicFile) {
+    $_fetch_trigger({ resources, mimeType, isPublicFile }) {
       if (isPublicFile) {
-        const url = file.downloadURL
+        const url = resources[0].downloadURL
         window.open(url, '_blank')
         return
       }
 
-      const url = this.$client.helpers._webdavUrl + file.path
+      // FIXME: use presigned URL instead
+      const url = this.$client.helpers._webdavUrl + resources[0].path
       const headers = new Headers()
 
       headers.append('Authorization', 'Bearer ' + this.getToken)
@@ -47,7 +54,7 @@ export default {
         headers
       })
         .then((r) => r.blob())
-        .then((blob) => this.$_fetch_openBlobInNewTab(blob, mimetype))
+        .then((blob) => this.$_fetch_openBlobInNewTab(blob, mimeType))
     },
 
     $_fetch_openBlobInNewTab(blob, mimetype) {

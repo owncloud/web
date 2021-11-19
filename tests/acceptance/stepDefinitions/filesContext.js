@@ -528,6 +528,10 @@ When('the user marks all files for batch action using the webUI', function () {
   return client.page.FilesPageElement.filesList().checkAllFiles()
 })
 
+When('the user batch deletes the marked files permanently using the webUI', function () {
+  return client.page.trashBinPage().deleteSelectedPermanently()
+})
+
 When('the user/public batch deletes the marked files using the webUI', function () {
   return client.page.personalPage().deleteAllCheckedFiles()
 })
@@ -540,6 +544,17 @@ When('the user batch unshares these files using the webUI', async function (shar
 
   return client.page.sharedWithMePage().unshareAllCheckedFiles()
 })
+
+When(
+  'the user batch deletes these files permanently using the webUI',
+  async function (fileOrFolders) {
+    for (const item of fileOrFolders.rows()) {
+      await client.page.FilesPageElement.filesList().toggleFileOrFolderCheckbox('enable', item[0])
+    }
+
+    return client.page.trashBinPage().deleteSelectedPermanently()
+  }
+)
 
 When('the user batch deletes these files using the webUI', async function (fileOrFolders) {
   for (const item of fileOrFolders.rows()) {
@@ -599,7 +614,7 @@ When('the user clears the trashbin', function () {
 })
 
 When('the user batch restores the marked files using the webUI', function () {
-  return client.page.FilesPageElement.filesList().restoreSelected()
+  return client.page.trashbinPage().restoreSelected()
 })
 
 When('the user opens the sidebar for file/folder {string} on the webUI', function (item) {

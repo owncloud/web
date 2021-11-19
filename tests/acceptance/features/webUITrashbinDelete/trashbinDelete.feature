@@ -67,19 +67,6 @@ Feature: files and folders can be deleted from the trashbin
     And file "lorem.txt" should not be listed on the webUI
     And file "lorem-big.txt" should not be listed on the webUI
 
-  @issue-product-188 @skipOnOC10 @issue-4582
-  Scenario: Select all except for some files and delete from trashbin in a batch
-    When the user marks all files for batch action using the webUI
-    And the user unmarks these files for batch action using the webUI
-      | name          |
-      | lorem.txt     |
-      | lorem-big.txt |
-    And the user batch deletes the marked files using the webUI
-    Then file "lorem.txt" should be listed on the webUI
-    And file "lorem-big.txt" should be listed on the webUI
-    But file "data.zip" should not be listed on the webUI
-    And folder "simple-folder" should not be listed on the webUI
-
   @skipOnOC10 @issue-product-188
   # after the issue is fixed delete this scenario and use the one above
   Scenario: Select all except for some files and delete from trashbin in a batch (ocis bug demonstration)
@@ -88,23 +75,17 @@ Feature: files and folders can be deleted from the trashbin
       | name          |
       | lorem.txt     |
       | lorem-big.txt |
-    And the user batch deletes the marked files using the webUI
+    And the user batch deletes the marked files permanently using the webUI
     Then file "lorem.txt" should be listed on the webUI
     And file "lorem-big.txt" should be listed on the webUI
     But folder "simple-folder" should be listed on the webUI
     And file "data.zip" should not be listed on the webUI
 
-  @issue-product-188 @skipOnOC10 @issue-4582
-  Scenario: Select all files and delete from trashbin in a batch
-    When the user marks all files for batch action using the webUI
-    And the user batch deletes the marked files using the webUI
-    Then there should be no resources listed on the webUI
-
   @skipOnOC10 @issue-product-188
   # after the issue is fixed delete this scenario and use the one above
   Scenario: Select all files and delete from trashbin in a batch (ocis bug demonstration)
     When the user marks all files for batch action using the webUI
-    And the user batch deletes the marked files using the webUI
+    And the user batch deletes the marked files permanently using the webUI
     Then file "lorem.txt" should not be listed on the webUI
     But folder "simple-folder" should be listed on the webUI
 

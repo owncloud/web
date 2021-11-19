@@ -127,19 +127,6 @@ Feature: deleting files and folders
     And file "zzzz-must-be-last-file-in-folder.txt" should not be listed on the webUI
     And no message should be displayed on the webUI
 
-  @public_link_share-feature-required
-  Scenario: delete files from shared by link page
-    Given user "Alice" has created file "lorem.txt"
-    And user "Alice" has created a public link with following settings
-      | path        | lorem.txt             |
-    And the user has browsed to the shared-via-link page
-    Then file "lorem.txt" should be listed on the webUI
-    When the user deletes file "lorem.txt" using the webUI
-    Then as "Alice" file "lorem.txt" should not exist
-    And file "lorem.txt" should not be listed on the webUI
-    When the user browses to the files page
-    Then file "lorem.txt" should not be listed on the webUI
-
   @issue-5017 @systemtags-app-required
   Scenario: delete files from tags page
     Given user "Alice" has created file "lorem.txt"
@@ -247,65 +234,6 @@ Feature: deleting files and folders
     Then as "Alice" folder "simple-folder" should not exist
     And as "Alice" file "lorem.txt" should not exist
     And no message should be displayed on the webUI
-
-
-  Scenario: Delete a file and folder in shared with others page
-    Given user "Alice" has created folder "simple-folder"
-    And user "Alice" has created file "lorem.txt"
-    And the user has reloaded the current page of the webUI
-    And user "Brian" has been created with default attributes and without skeleton files
-    And user "Alice" has shared file "lorem.txt" with user "Brian"
-    And user "Alice" has shared folder "simple-folder" with user "Brian"
-    When the user browses to the shared-with-others page
-    And the user deletes folder "simple-folder" using the webUI
-    And the user deletes file "lorem.txt" using the webUI
-    Then file "lorem.txt" should not be listed on the webUI
-    And folder "simple-folder" should not be listed on the webUI
-    And no message should be displayed on the webUI
-    When the user reloads the current page of the webUI
-    Then file "lorem.txt" should not be listed on the webUI
-    And folder "simple-folder" should not be listed on the webUI
-    When the user browses to the files page
-    Then file "lorem.txt" should not be listed on the webUI
-    And folder "simple-folder" should not be listed on the webUI
-    And as "Alice" file "lorem.txt" should not exist
-    And as "Alice" folder "simple-folder" should not exist
-
-
-  Scenario: Delete multiple files at once from shared with others page
-    Given user "Alice" has created folder "simple-folder"
-    And user "Alice" has created file "lorem.txt"
-    And user "Alice" has uploaded file "data.zip" to "data.zip"
-    And the user has reloaded the current page of the webUI
-    And user "Brian" has been created with default attributes and without skeleton files
-    And user "Alice" has shared file "lorem.txt" with user "Brian"
-    And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Alice" has shared file "data.zip" with user "Brian"
-    And the user has browsed to the shared-with-others page
-    When the user batch deletes these files using the webUI
-      | name          |
-      | data.zip      |
-      | lorem.txt     |
-      | simple-folder |
-    Then as "Alice" file "data.zip" should not exist
-    And as "Alice" file "lorem.txt" should not exist
-    And as "Alice" folder "simple-folder" should not exist
-    And the deleted elements should not be listed on the webUI
-    And no message should be displayed on the webUI
-    And the deleted elements should not be listed on the webUI after a page reload
-
-  @ocis-reva-issue-39
-  Scenario: Try to delete file and folder from favorites page
-    Given user "Alice" has created folder "simple-folder"
-    And user "Alice" has created file "lorem.txt"
-    And the user has reloaded the current page of the webUI
-    And user "Alice" has favorited element "simple-folder"
-    And user "Alice" has favorited element "lorem.txt"
-    When the user browses to the favorites page
-    And the user deletes file "lorem.txt" using the webUI
-    And the user deletes folder "simple-folder" using the webUI
-    Then file "lorem.txt" should not be listed on the webUI
-    And folder "simple-folder" should not be listed on the webUI
 
 
   Scenario: Try to delete file and folder that used to exist but does not anymore

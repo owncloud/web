@@ -1,0 +1,7 @@
+Enhancement: Contextmenu for multiple files
+
+We have enabled batch actions in the context menu for when multiple resources are selected.
+
+https://github.com/owncloud/web/pull/5973
+https://github.com/owncloud/web/issues/5968
+https://github.com/owncloud/web/issues/5977

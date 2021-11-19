@@ -86,79 +86,98 @@ exports.apps = {
 
 const fileActions = {
   download: {
-    label: 'Download',
-    class: 'oc-files-actions-sidebar-download-trigger',
-    selector: '.oc-files-actions-sidebar-download-trigger',
-    handler: jest.fn()
+    name: 'download-file',
+    icon: 'file_download',
+    handler: jest.fn(),
+    label: () => 'Download',
+    componentType: 'oc-button',
+    class: 'oc-files-actions-download-file-trigger',
+    selector: '.oc-files-actions-download-file-trigger'
   },
   copy: {
-    label: 'Copy',
-    class: 'oc-files-actions-sidebar-copy-trigger',
-    selector: '.oc-files-actions-sidebar-copy-trigger',
-    handler: jest.fn()
+    name: 'copy',
+    icon: 'file_copy',
+    handler: jest.fn(),
+    label: () => 'Copy',
+    componentType: 'oc-button',
+    class: 'oc-files-actions-copy-trigger',
+    selector: '.oc-files-actions-copy-trigger'
   },
   rename: {
-    label: 'Rename',
-    class: 'oc-files-actions-sidebar-rename-trigger',
-    selector: '.oc-files-actions-sidebar-rename-trigger',
-    handler: jest.fn()
+    name: 'rename',
+    icon: 'edit',
+    handler: jest.fn(),
+    label: () => 'Rename',
+    componentType: 'oc-button',
+    class: 'oc-files-actions-rename-trigger',
+    selector: '.oc-files-actions--rename-trigger'
   },
   move: {
-    label: 'Move',
-    class: 'oc-files-actions-sidebar-move-trigger',
-    selector: '.oc-files-actions-sidebar-move-trigger',
-    handler: jest.fn()
+    name: 'move',
+    icon: 'folder-move',
+    handler: jest.fn(),
+    label: () => 'Move',
+    componentType: 'oc-button',
+    class: 'oc-files-actions-move-trigger',
+    selector: '.oc-files-actions-move-trigger'
   },
   delete: {
-    label: 'Delete',
-    class: 'oc-files-actions-sidebar-delete-trigger',
-    selector: '.oc-files-actions-sidebar-delete-trigger',
-    handler: jest.fn()
+    name: 'delete',
+    icon: 'delete',
+    handler: jest.fn(),
+    label: () => 'Delete',
+    componentType: 'oc-button',
+    class: 'oc-files-actions-delete-trigger',
+    selector: '.oc-files-actions-delete-trigger'
   },
 
   'markdown-editor': {
-    label: 'Open in Markdown Editor',
-    class: 'oc-files-actions-sidebar-markdown-editor-trigger',
-    selector: '.oc-files-actions-sidebar-markdown-editor-trigger',
     handler: jest.fn(),
+    label: () => 'Open in Markdown Editor',
+    class: 'oc-files-actions-markdown-editor-trigger',
+    selector: '.oc-files-actions-markdown-editor-trigger',
     opensInNewWindow: true
   },
   'draw-io': {
-    label: 'Open in DrawIO',
-    class: 'oc-files-actions-sidebar-draw-io-trigger',
-    selector: '.oc-files-actions-sidebar-draw-io-trigger',
     handler: jest.fn(),
+    label: () => 'Open in DrawIO',
+    class: 'oc-files-actions-draw-io-trigger',
+    selector: '.oc-files-actions-draw-io-trigger',
     opensInNewWindow: true
   },
   mediaviewer: {
-    label: 'Open in MediaViewer',
-    class: 'oc-files-actions-sidebar-mediaviewer-trigger',
-    selector: '.oc-files-actions-sidebar-mediaviewer-trigger',
-    handler: jest.fn()
+    handler: jest.fn(),
+    label: () => 'Open in MediaViewer',
+    class: 'oc-files-actions-mediaviewer-trigger',
+    selector: '.oc-files-actions-mediaviewer-trigger'
   },
-  'open-folder': {
-    label: 'Open Folder',
-    class: 'oc-files-actions-sidebar-navigate-trigger',
-    selector: '.oc-files-actions-sidebar-navigate-trigger',
-    handler: jest.fn()
+  navigate: {
+    name: 'navigate',
+    icon: 'folder-open',
+    route: 'files-personal',
+    label: () => 'Open Folder',
+    componentType: 'router-link',
+    class: 'oc-files-actions-navigate-trigger',
+    selector: '.oc-files-actions-navigate-trigger'
   }
 }
 
 exports.fileActions = fileActions
 
 exports.getActions = function (actions = []) {
-  const defaultActions = ['download', 'markdown-editor', 'draw-io', 'mediaviewer', 'open-folder']
+  const defaultActions = ['download', 'markdown-editor', 'draw-io', 'mediaviewer', 'navigate']
 
   const res = []
   for (const key of actions) {
     const action = fileActions[key]
 
     const actionObj = {
-      icon: key,
+      name: action.name,
+      icon: action.icon || key,
       handler: action.handler,
+      label: action.label,
       isEnabled: () => true,
-      label: () => action.label,
-      componentType: 'oc-button',
+      componentType: action.componentType || 'oc-button',
       class: action.class,
       canBeDefault: defaultActions.indexOf(key) > -1,
       opensInNewWindow: action.opensInNewWindow || false

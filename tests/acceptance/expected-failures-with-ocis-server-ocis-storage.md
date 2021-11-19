@@ -118,12 +118,12 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIFilesCopy/copyPrivateLinks.feature:21](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesCopy/copyPrivateLinks.feature#L21)
 
 ### [Versions Cleanup not available](https://github.com/owncloud/ocis/issues/1310)
+-   [webUIFilesActionMenu/versions.feature:37](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesActionMenu/versions.feature#L37)
 -   [webUIFilesActionMenu/versions.feature:48](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesActionMenu/versions.feature#L48)
--   [webUIFilesActionMenu/versions.feature:59](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesActionMenu/versions.feature#L59)
--   [webUIFilesActionMenu/versions.feature:74](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesActionMenu/versions.feature#L74)
+-   [webUIFilesActionMenu/versions.feature:63](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesActionMenu/versions.feature#L63)
 
 ### [Change the file content of a received shared file](https://github.com/owncloud/ocis/issues/2319)
--   [webUIFilesActionMenu/versions.feature:88](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesActionMenu/versions.feature#L88)
+-   [webUIFilesActionMenu/versions.feature:77](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesActionMenu/versions.feature#L77)
 
 ### [No occ command in ocis](https://github.com/owncloud/ocis/issues/1317)
 -   [webUIRestrictSharing/restrictReSharing.feature:23](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIRestrictSharing/restrictReSharing.feature#L23)
@@ -388,12 +388,12 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUISharingInternalUsersShareWithPage/shareWithUsers.feature:187](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsersShareWithPage/shareWithUsers.feature#L187)
 
 ### [Deletion of a recursive folder from trashbin is not possible](https://github.com/owncloud/product/issues/188)
--   [webUITrashbinDelete/trashbinDelete.feature:105](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITrashbinDelete/trashbinDelete.feature#L105)
--   [webUITrashbinDelete/trashbinDelete.feature:85](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITrashbinDelete/trashbinDelete.feature#L85)
+-   [webUITrashbinDelete/trashbinDelete.feature:86](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITrashbinDelete/trashbinDelete.feature#L86)
+-   [webUITrashbinDelete/trashbinDelete.feature:72](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITrashbinDelete/trashbinDelete.feature#L72)
 -   [webUITrashbinDelete/trashbinDelete.feature:49](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITrashbinDelete/trashbinDelete.feature#L49)
 
 ### [Tags page not implemented yet](https://github.com/owncloud/web/issues/5017)
--   [webUIDeleteFilesFolders/deleteFilesFolders.feature:144](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIDeleteFilesFolders/deleteFilesFolders.feature#L144)
+-   [webUIDeleteFilesFolders/deleteFilesFolders.feature:131](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIDeleteFilesFolders/deleteFilesFolders.feature#L131)
 -   [webUIFilesSearch/search.feature:63](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesSearch/search.feature#L63)
 -   [webUIFilesSearch/search.feature:71](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesSearch/search.feature#L71)
 -   [webUIFilesSearch/search.feature:84](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesSearch/search.feature#L84)

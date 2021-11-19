@@ -320,8 +320,10 @@ module.exports = {
     newFileMenuButton: {
       selector: '#new-file-menu-btn:enabled'
     },
+    // covers oc-files-actions-delete-permanent-trigger and oc-files-actions-delete-trigger
     deleteSelectedButton: {
-      selector: '#delete-selected-btn'
+      selector: '//button[contains(@class, "oc-files-actions-delete-")]',
+      locateStrategy: 'xpath'
     },
     newResourceDropdown: {
       selector: '#new-file-menu-drop'
@@ -340,9 +342,6 @@ module.exports = {
     },
     newFileInput: {
       selector: '#new-file-input'
-    },
-    newFolderOkButton: {
-      selector: '#new-folder-ok'
     },
     breadcrumb: {
       selector: '#files-breadcrumb li:nth-of-type(2)'
@@ -393,10 +392,10 @@ module.exports = {
       selector: '.oc-modal-body-input .oc-text-input'
     },
     moveSelectedBtn: {
-      selector: '#move-selected-btn'
+      selector: '.oc-files-actions-move-trigger'
     },
     copySelectedBtn: {
-      selector: '#copy-selected-btn'
+      selector: '.oc-files-actions-copy-trigger'
     },
     editorCloseBtn: {
       selector: '#markdown-editor-app-bar .uk-text-right .oc-button'

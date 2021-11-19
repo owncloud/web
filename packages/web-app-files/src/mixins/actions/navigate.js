@@ -1,4 +1,4 @@
-import { isTrashbinRoute } from '../../helpers/route'
+import { isPublicFilesRoute, isTrashbinRoute } from '../../helpers/route'
 import { mapState } from 'vuex'
 import { isSameResource } from '../../helpers/resource'
 
@@ -8,20 +8,23 @@ export default {
     $_navigate_items() {
       return [
         {
+          name: 'navigate',
           icon: 'folder-open',
-          handler: (resource) => this.$_navigate_trigger(resource),
           label: () =>
             this.$pgettext('Action in the files list row to open a folder', 'Open folder'),
-          isEnabled: ({ resource }) => {
+          isEnabled: ({ resources }) => {
             if (isTrashbinRoute(this.$route)) {
               return false
             }
-
-            if (isSameResource(resource, this.currentFolder)) {
+            if (resources.length !== 1) {
               return false
             }
 
-            return resource.type === 'folder'
+            if (isSameResource(resources[0], this.currentFolder)) {
+              return false
+            }
+
+            return resources[0].isFolder
           },
           canBeDefault: true,
           componentType: 'router-link',
@@ -31,12 +34,10 @@ export default {
       ]
     },
     route() {
-      let route = 'files-personal'
-      if (this.publicPage()) {
-        route = 'files-public-list'
+      if (isPublicFilesRoute(this.$route)) {
+        return 'files-public-list'
       }
-
-      return route
+      return 'files-personal'
     }
   }
 }

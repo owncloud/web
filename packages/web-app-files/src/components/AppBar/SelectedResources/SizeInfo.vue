@@ -1,5 +1,5 @@
 <template>
-  <div class="uk-flex uk-flex-middle">
+  <div class="uk-flex uk-flex-middle uk-text-nowrap">
     <translate
       v-if="selectedResourcesSize !== '?'"
       key="multiple-select-info-with-size"
@@ -22,7 +22,7 @@
       id="files-clear-selection"
       v-oc-tooltip="clearSelectionLabel"
       :aria-label="clearSelectionLabel"
-      class="oc-ml oc-mr-xs"
+      class="oc-ml"
       @click="RESET_SELECTION"
     >
       <oc-icon name="close" />

@@ -28,16 +28,16 @@ describe('acceptShare', () => {
   describe('computed property "$_acceptShare_items"', () => {
     describe('isEnabled property of returned element', () => {
       it.each([
-        { resource: { status: shareStatus.pending }, expectedStatus: true },
-        { resource: { status: shareStatus.declined }, expectedStatus: true },
-        { resource: { status: shareStatus.accepted }, expectedStatus: false }
+        { resources: [{ status: shareStatus.pending }], expectedStatus: true },
+        { resources: [{ status: shareStatus.declined }], expectedStatus: true },
+        { resources: [{ status: shareStatus.accepted }], expectedStatus: false }
       ])(
         'should be set according to the resource share status if the route name is "files-shared-with-me"',
         (inputData) => {
           const wrapper = getWrapper()
 
-          const resource = inputData.resource
-          expect(wrapper.vm.$_acceptShare_items[0].isEnabled({ resource })).toBe(
+          const resources = inputData.resources
+          expect(wrapper.vm.$_acceptShare_items[0].isEnabled({ resources })).toBe(
             inputData.expectedStatus
           )
         }

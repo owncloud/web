@@ -30,7 +30,7 @@
                 size="small"
                 variation="success"
                 class="file-row-share-status-accept"
-                @click.stop="$_acceptShare_trigger(resource)"
+                @click.stop="$_acceptShare_trigger({ resources: [resource] })"
               >
                 <oc-icon size="small" name="check" />
                 <translate>Accept</translate>
@@ -38,7 +38,7 @@
               <oc-button
                 size="small"
                 class="file-row-share-decline oc-ml-s"
-                @click.stop="$_declineShare_trigger(resource)"
+                @click.stop="$_declineShare_trigger({ resources: [resource] })"
               >
                 <oc-icon size="small" name="not_interested" />
                 <translate>Decline</translate>
@@ -46,7 +46,7 @@
             </div>
           </template>
           <template #contextMenu="{ resource }">
-            <context-actions v-if="isHighlightedFile(resource)" :item="resource" />
+            <context-actions v-if="isResourceInSelection(resource)" :item="resource" />
           </template>
           <template v-if="pendingHasMore" #footer>
             <div class="uk-width-1-1 uk-text-center oc-mt">
@@ -115,7 +115,7 @@
               size="small"
               variation="success"
               class="file-row-share-status-accept"
-              @click.stop="$_acceptShare_trigger(resource)"
+              @click.stop="$_acceptShare_trigger({ resources: [resource] })"
             >
               <oc-icon size="small" name="check" />
               <translate>Accept</translate>
@@ -124,7 +124,7 @@
               v-if="resource.status === shareStatus.accepted"
               size="small"
               class="file-row-share-status-decline"
-              @click.stop="$_declineShare_trigger(resource)"
+              @click.stop="$_declineShare_trigger({ resources: [resource] })"
             >
               <oc-icon size="small" name="not_interested" />
               <translate>Decline</translate>
@@ -132,7 +132,7 @@
           </div>
         </template>
         <template #contextMenu="{ resource }">
-          <context-actions v-if="isHighlightedFile(resource)" :item="resource" />
+          <context-actions v-if="isResourceInSelection(resource)" :items="selected" />
         </template>
         <template #footer>
           <list-info
@@ -385,8 +385,8 @@ export default {
       this.showMorePending = !this.showMorePending
     },
 
-    isHighlightedFile(resource) {
-      return resource && resource.id === this.highlightedFile?.id
+    isResourceInSelection(resource) {
+      return this.selected?.includes(resource)
     }
   }
 }

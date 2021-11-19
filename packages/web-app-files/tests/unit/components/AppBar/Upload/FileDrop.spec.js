@@ -82,7 +82,7 @@ function createWrapper(options = {}) {
   return shallowMount(FileDrop, {
     localVue,
     stubs: { translate: true, 'oc-dropzone': true },
-    props: {
+    propsData: {
       rootPath: '/',
       path: '/'
     },

@@ -25,7 +25,7 @@
         :header-position="headerPosition"
       >
         <template #contextMenu="{ resource }">
-          <context-actions v-if="isHighlightedFile(resource)" :item="resource" />
+          <context-actions v-if="isResourceInSelection(resource)" :items="selected" />
         </template>
         <template #footer>
           <pagination />
@@ -138,8 +138,8 @@ export default {
   methods: {
     ...mapMutations('Files', ['LOAD_FILES', 'SET_FILE_SELECTION', 'CLEAR_CURRENT_FILES_LIST']),
 
-    isHighlightedFile(resource) {
-      return resource && resource.id === this.highlightedFile?.id
+    isResourceInSelection(resource) {
+      return this.selected?.includes(resource)
     }
   }
 }

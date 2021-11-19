@@ -1,23 +1,17 @@
-import { dirname } from 'path'
-
 import { canBeMoved } from '../../helpers/permissions'
-import { checkRoute } from '../../helpers/route'
-import MixinRoutes from '../routes'
+import { checkRoute, isPublicFilesRoute } from '../../helpers/route'
 
 export default {
-  mixins: [MixinRoutes],
   computed: {
     $_move_items() {
       return [
         {
+          name: 'move',
           icon: 'folder-move',
-          handler: (resource) => this.$_move_trigger(resource),
+          handler: this.$_move_trigger,
           label: () =>
-            this.$pgettext(
-              'Action in the files list row to initiate move of a single resource',
-              'Move'
-            ),
-          isEnabled: ({ resource }) => {
+            this.$pgettext('Action in the files list row to initiate moving resources', 'Move'),
+          isEnabled: ({ resources }) => {
             if (
               !checkRoute(
                 ['files-personal', 'files-public-list', 'files-favorites'],
@@ -26,12 +20,18 @@ export default {
             ) {
               return false
             }
+            if (resources.length === 0) {
+              return false
+            }
 
             if (!this.currentFolder) {
               return false
             }
 
-            return canBeMoved(resource, this.currentFolder.path)
+            const moveDisabled = resources.some((resource) => {
+              return canBeMoved(resource, this.currentFolder.path) === false
+            })
+            return !moveDisabled
           },
           componentType: 'oc-button',
           class: 'oc-files-actions-move-trigger'
@@ -40,18 +40,22 @@ export default {
     }
   },
   methods: {
-    $_move_trigger(resource) {
-      // Parent of the resource selected for copy used as a default target location
-      const parent = dirname(resource.path)
-      const context = this.isPublicPage ? 'public' : 'private'
-      this.$router.push({
+    $_move_trigger({ resources }) {
+      const context = isPublicFilesRoute(this.$route) ? 'public' : 'private'
+      const item = this.currentFolder.path || this.homeFolder
+
+      return this.$router.push({
         name: 'files-location-picker',
         params: {
           context,
-          item: parent,
+          item,
           action: 'move'
         },
-        query: { resource: resource.path }
+        query: {
+          resource: resources.map((resource) => {
+            return resource.path
+          })
+        }
       })
     }
   }

@@ -108,8 +108,14 @@ export default {
     }
     return Promise.all(promises)
   },
-  removeFilesFromTrashbin(context, files) {
-    context.dispatch('sidebar/close')
+  async clearTrashBin(context) {
+    await context.dispatch('sidebar/close')
+    context.commit('CLEAR_FILES')
+    context.commit('RESET_SELECTION')
+    context.commit('CLEAR_FILES_SEARCHED')
+  },
+  async removeFilesFromTrashbin(context, files) {
+    await context.dispatch('sidebar/close')
     for (const file of files) {
       context.commit('REMOVE_FILE', file)
       context.commit('REMOVE_FILE_SELECTION', file)
