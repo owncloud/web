@@ -20,7 +20,7 @@
         :items="breadcrumbs"
       >
         <template v-if="currentFolder" v-slot:contextMenu>
-          <context-actions :item="currentFolder" />
+          <context-actions :items="[currentFolder]" />
         </template>
       </oc-breadcrumb>
       <h1 class="oc-invisible-sr" v-text="pageTitle" />
