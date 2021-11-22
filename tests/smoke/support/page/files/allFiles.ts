@@ -279,7 +279,6 @@ export class AllFilesPage {
     }
 
     await cta.files.sidebar.open({ page: page, resource: resourceName })
-    await page.waitForSelector('.details-preview')
     await cta.files.sidebar.openPanel({ page: page, name: 'actions' })
     await page.click('.oc-files-actions-mediaviewer-trigger')
     await page.waitForSelector(
