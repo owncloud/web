@@ -16,8 +16,13 @@
         id="files-breadcrumb"
         data-testid="files-breadcrumbs"
         class="oc-p-s"
+        :show-contextmenu="true"
         :items="breadcrumbs"
-      />
+      >
+        <template v-if="currentFolder" v-slot:contextMenu>
+          <context-actions :item="currentFolder" />
+        </template>
+      </oc-breadcrumb>
       <h1 class="oc-invisible-sr" v-text="pageTitle" />
       <div class="files-app-bar-actions">
         <div
@@ -126,6 +131,7 @@ import FolderUpload from './Upload/FolderUpload.vue'
 import SizeInfo from './SelectedResources/SizeInfo.vue'
 import ViewOptions from './ViewOptions.vue'
 import { DavProperties, DavProperty } from 'web-pkg/src/constants'
+import ContextActions from '../FilesList/ContextActions.vue'
 
 export default {
   components: {
@@ -134,7 +140,8 @@ export default {
     FileUpload,
     FolderUpload,
     SizeInfo,
-    ViewOptions
+    ViewOptions,
+    ContextActions
   },
   mixins: [Mixins, MixinFileActions, MixinRoutes, MixinScrollToResource],
   data: () => ({

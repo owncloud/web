@@ -159,6 +159,18 @@ export default {
         const user = await this.$client.users.getUser(this.user.id)
 
         this.SET_QUOTA(user.quota)
+
+        let parentFolderPath;
+        if (this.resourcesToDelete.length) {
+          const resourcePath = this.resourcesToDelete[0].path
+          parentFolderPath = resourcePath.substr(1, resourcePath.lastIndexOf('/'))
+        }
+
+        this.$router.push({
+          params: {
+            item: parentFolderPath || '/'
+          },
+        })
       })
     },
 

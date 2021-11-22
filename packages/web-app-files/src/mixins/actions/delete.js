@@ -1,7 +1,6 @@
 import MixinDeleteResources from '../../mixins/deleteResources'
 import { isPersonalRoute, isPublicFilesRoute, isTrashbinRoute } from '../../helpers/route'
 import { mapState } from 'vuex'
-import { isSameResource } from '../../helpers/resource'
 
 export default {
   mixins: [MixinDeleteResources],
@@ -23,9 +22,6 @@ export default {
             }
 
             const deleteDisabled = resources.some((resource) => {
-              if (isSameResource(resource, this.currentFolder)) {
-                return true
-              }
               return !resource.canBeDeleted()
             })
             return !deleteDisabled

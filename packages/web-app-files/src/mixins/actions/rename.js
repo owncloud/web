@@ -2,6 +2,8 @@ import { mapActions, mapGetters } from 'vuex'
 
 import { isTrashbinRoute } from '../../helpers/route'
 import { isSameResource } from '../../helpers/resource'
+import { getParentPaths } from '../../helpers/path'
+import { buildResource } from '../../helpers/resources'
 
 export default {
   computed: {
@@ -21,9 +23,6 @@ export default {
               return false
             }
             if (resources.length !== 1) {
-              return false
-            }
-            if (isSameResource(resources[0], this.currentFolder)) {
               return false
             }
 
@@ -47,12 +46,20 @@ export default {
     ]),
     ...mapActions('Files', ['renameFile']),
 
-    $_rename_trigger({ resources }) {
+    async $_rename_trigger({ resources }) {
+      let parentResources;
+      if (isSameResource(resources[0], this.currentFolder)) {
+        const parentPaths = getParentPaths(resources[0].path, false)
+        const promise = this.$client.files.list(parentPaths[0], 1)
+        parentResources = await promise
+        parentResources = parentResources.map(buildResource)
+      }
+
       const confirmAction = (newName) => {
         this.$_rename_renameResource(resources[0], newName)
       }
       const checkName = (newName) => {
-        this.$_rename_checkNewName(resources[0].name, newName)
+        this.$_rename_checkNewName(resources[0].name, newName, parentResources)
       }
 
       const title = this.$gettextInterpolate(
@@ -79,7 +86,7 @@ export default {
       this.createModal(modal)
     },
 
-    $_rename_checkNewName(currentName, newName) {
+    $_rename_checkNewName(currentName, newName, parentResources) {
       if (!newName) {
         return this.setModalInputErrorMessage(this.$gettext('The name cannot be empty'))
       }
@@ -112,20 +119,45 @@ export default {
         }
       }
 
+      if (parentResources) {
+        const exists = parentResources.find(
+          (file) => file.name === newName && currentName !== newName
+        )
+
+        if (exists) {
+          const translated = this.$gettext('The name "%{name}" is already taken')
+
+          return this.setModalInputErrorMessage(
+            this.$gettextInterpolate(translated, { name: newName }, true)
+          )
+        }
+      }
+
       this.setModalInputErrorMessage(null)
     },
 
     $_rename_renameResource(resource, newName) {
       this.toggleModalConfirmButton()
+      const sameResource = isSameResource(resource, this.currentFolder)
 
       this.renameFile({
         client: this.$client,
         file: resource,
         newValue: newName,
-        publicPage: this.publicPage()
+        publicPage: this.publicPage(),
+        isSameResource: sameResource
       })
         .then(() => {
           this.hideModal()
+
+          if (sameResource) {
+            const newPath = resource.path.substr(1, resource.path.lastIndexOf('/'))
+            this.$router.push({
+              params: {
+                item: '/' + newPath + newName || '/'
+              }
+            })
+          }
         })
         .catch((error) => {
           this.toggleModalConfirmButton()
