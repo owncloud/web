@@ -19,7 +19,7 @@
         :show-contextmenu="true"
         :items="breadcrumbs"
       >
-        <template v-if="currentFolder" v-slot:contextMenu>
+        <template v-if="currentFolder" #contextMenu>
           <context-actions :items="[currentFolder]" />
         </template>
       </oc-breadcrumb>

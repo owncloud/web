@@ -161,8 +161,11 @@ export default {
 
         this.SET_QUOTA(user.quota)
 
-        let parentFolderPath;
-        if (this.resourcesToDelete.length && isSameResource(this.resourcesToDelete[0], this.currentFolder)) {
+        let parentFolderPath
+        if (
+          this.resourcesToDelete.length &&
+          isSameResource(this.resourcesToDelete[0], this.currentFolder)
+        ) {
           const resourcePath = this.resourcesToDelete[0].path
           parentFolderPath = resourcePath.substr(1, resourcePath.lastIndexOf('/'))
         }
@@ -171,7 +174,7 @@ export default {
           this.$router.push({
             params: {
               item: parentFolderPath
-            },
+            }
           })
         }
       })

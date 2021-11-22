@@ -47,7 +47,7 @@ export default {
     ...mapActions('Files', ['renameFile']),
 
     async $_rename_trigger({ resources }) {
-      let parentResources;
+      let parentResources
       if (isSameResource(resources[0], this.currentFolder)) {
         const parentPaths = getParentPaths(resources[0].path, false)
         const promise = this.$client.files.list(parentPaths[0], 1)
