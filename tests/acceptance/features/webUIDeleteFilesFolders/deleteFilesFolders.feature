@@ -55,7 +55,7 @@ Feature: deleting files and folders
       | "question?"         |
       | "&and#hash"         |
 
-  @smokeTest @issue-4582 @disablePreviews
+  @smokeTest @issue-4582 @disablePreviews @skipOnOC10 @issue-core-38221
   Scenario: Delete multiple files at once
     Given user "Alice" has uploaded file "data.zip" to "data.zip"
     And user "Alice" has created file "lorem.txt"
