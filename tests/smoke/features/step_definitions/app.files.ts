@@ -219,10 +219,15 @@ Then(
     const { allFiles: allFilesPage } = new FilesPage({ actor })
     const resources = stepTable.raw().map((f) => f[0])
 
+    await allFilesPage.navigate()
+
     for (const resource of resources) {
-      if (!(await allFilesPage.resourceExist({ name: resource }))) {
+      const resourceExist = await allFilesPage.resourceExist({ name: resource })
+
+      if (!resourceExist) {
         throw new Error(`resource wasn't find: "${resource}"`)
       }
+
       await allFilesPage.navigate()
     }
   }
@@ -238,7 +243,7 @@ Then(
     await allFilesPage.navigate()
 
     for (const resource of resources) {
-      allFilesPage.resourceExist({ name: resource })
+      await allFilesPage.resourceExist({ name: resource })
     }
   }
 )

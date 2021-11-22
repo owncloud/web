@@ -1,4 +1,4 @@
-import { Page } from 'playwright'
+import { Page, errors } from 'playwright'
 
 export const navigateToFolder = async ({
   page,
@@ -14,15 +14,34 @@ export const navigateToFolder = async ({
   }
 }
 
+/**
+ * one of the few places where timeout should be used, as we also use this to detect the absence of an element
+ * it is not possible to differentiate between `element not there yet` and `element not loaded yet`.
+ *
+ * @param page
+ * @param name
+ * @param timeout
+ */
 export const resourceExists = async ({
   page,
-  name
+  name,
+  timeout = 500
 }: {
   page: Page
   name: string
+  timeout?: number
 }): Promise<boolean> => {
-  const resource = await page.$(`[data-test-resource-name="${name}"]`)
-  return !!resource
+  let exist = true
+
+  await page.waitForSelector(`[data-test-resource-name="${name}"]`, { timeout }).catch((e) => {
+    if (!(e instanceof errors.TimeoutError)) {
+      throw e
+    }
+
+    exist = false
+  })
+
+  return exist
 }
 
 export const waitForResources = async ({

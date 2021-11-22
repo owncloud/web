@@ -136,7 +136,12 @@ export class AllFilesPage {
     await page.click('.files-collaborators-open-add-share-dialog-button')
 
     for (const user of users) {
-      await page.fill('#files-share-invite-input', user.displayName)
+      const shareInputLocator = page.locator('#files-share-invite-input')
+      await Promise.all([
+        page.waitForResponse((resp) => resp.url().includes('sharees') && resp.status() === 200),
+        shareInputLocator.fill(user.displayName)
+      ])
+      await shareInputLocator.focus()
       await page.waitForSelector('.vs--open')
       await page.press('#files-share-invite-input', 'Enter')
 
@@ -222,6 +227,7 @@ export class AllFilesPage {
       page: page,
       name: resouceName
     })
+
     return resourceExists
   }
 
@@ -256,7 +262,7 @@ export class AllFilesPage {
     if (!(await page.isChecked(resourceCheckbox))) {
       await page.check(resourceCheckbox)
     }
-    await page.click('//*[@id="delete-selected-btn"]')
+    await page.click('button.oc-files-actions-delete-trigger')
     await page.click('.oc-modal-body-actions-confirm')
 
     await page.goto(startUrl)
