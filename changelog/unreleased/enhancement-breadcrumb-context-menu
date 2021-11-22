@@ -1,0 +1,6 @@
+Enhancement: Implement breadcrumb context menu
+
+The last element of the breadcrumb now has a context menu which gives the user the possibility to perform actions on the current folder.
+
+https://github.com/owncloud/web/pull/6044
+https://github.com/owncloud/web/issues/6030
