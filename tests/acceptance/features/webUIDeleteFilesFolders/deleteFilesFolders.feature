@@ -58,17 +58,17 @@ Feature: deleting files and folders
   @smokeTest @issue-4582 @disablePreviews
   Scenario: Delete multiple files at once
     Given user "Alice" has uploaded file "data.zip" to "data.zip"
-    And user "Alice" has created file "lorem.txt"
-    And user "Alice" has created folder "simple-folder"
+    And user "Alice" has created file "file1.txt"
+    And user "Alice" has created folder "simple-folder-1"
     And the user has reloaded the current page of the webUI
     When the user batch deletes these files using the webUI
-      | name          |
-      | data.zip      |
-      | lorem.txt     |
-      | simple-folder |
+      | name            |
+      | data.zip        |
+      | file1.txt       |
+      | simple-folder-1 |
     Then as "Alice" file "data.zip" should not exist
-    And as "Alice" file "lorem.txt" should not exist
-    And as "Alice" folder "simple-folder" should not exist
+    And as "Alice" file "file1.txt" should not exist
+    And as "Alice" folder "simple-folder-1" should not exist
     And the deleted elements should not be listed on the webUI
     And the deleted elements should not be listed on the webUI after a page reload
     And no message should be displayed on the webUI
