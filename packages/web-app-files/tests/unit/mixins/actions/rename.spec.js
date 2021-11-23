@@ -20,9 +20,11 @@ describe('rename', () => {
           name: 'files-personal'
         },
         $router: [],
-        $client: { files: { list: jest.fn(() => []) } },
-        $gettextInterpolate: () => 'title',
-        publicPage: () => false
+        $client: { files: { find: jest.fn(() => [{ name: 'file1' }]), list: jest.fn(() => []) } },
+        $gettextInterpolate: jest.fn(),
+        $gettext: jest.fn(),
+        publicPage: () => false,
+        flatFileList: false
       },
       store: createStore(Vuex.Store, {
         modules: {
@@ -72,6 +74,47 @@ describe('rename', () => {
       const resources = [{ id: 1 }]
       await wrapper.vm.$_rename_trigger({ resources })
       expect(spyCreateModalStub).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('method "$_rename_checkNewName"', () => {
+    it('should not show an error with a valid name', () => {
+      const wrapper = getWrapper()
+      const spyErrorMessageStub = jest.spyOn(wrapper.vm, 'setModalInputErrorMessage')
+      wrapper.vm.$_rename_checkNewName('currentName', 'newName')
+      expect(spyErrorMessageStub).toHaveBeenCalledWith(null)
+    })
+
+    it.each([
+      { currentName: 'currentName', newName: '', message: 'The name cannot be empty' },
+      { currentName: 'currentName', newName: 'new/name', message: 'The name cannot contain "/"' },
+      { currentName: 'currentName', newName: '.', message: 'The name cannot be equal to "."' },
+      { currentName: 'currentName', newName: '..', message: 'The name cannot be equal to ".."' },
+      {
+        currentName: 'currentName',
+        newName: 'newname ',
+        message: 'The name cannot end with whitespace'
+      },
+      {
+        currentName: 'currentName',
+        newName: 'file1',
+        message: 'The name "%{name}" is already taken'
+      },
+      {
+        currentName: 'currentName',
+        newName: 'newname',
+        parentResources: [{ name: 'newname' }],
+        message: 'The name "%{name}" is already taken'
+      }
+    ])('should detect name errors and display error messages accordingly', (inputData) => {
+      const wrapper = getWrapper()
+      const spyGetTextStub = jest.spyOn(wrapper.vm, '$gettext')
+      wrapper.vm.$_rename_checkNewName(
+        inputData.currentName,
+        inputData.newName,
+        inputData.parentResources
+      )
+      expect(spyGetTextStub).toHaveBeenCalledWith(inputData.message)
     })
   })
 
