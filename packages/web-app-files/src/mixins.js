@@ -81,6 +81,24 @@ export default {
       return this.files.find((file) => file.name === name)
     },
 
+    processDirectoryEntryRecursively(directory) {
+      return this.$client.files.createFolder(this.rootPath + directory.fullPath).then(() => {
+        const directoryReader = directory.createReader()
+        const ctrl = this
+        directoryReader.readEntries(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isDirectory) {
+              ctrl.processDirectoryEntryRecursively(entry)
+            } else {
+              entry.file((file) => {
+                ctrl.$_ocUpload(file, entry.fullPath, null, false)
+              })
+            }
+          })
+        })
+      })
+    },
+
     hideOverwriteDialog() {
       this.existingResources = []
       this.hideModal()
