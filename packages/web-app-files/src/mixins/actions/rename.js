@@ -42,6 +42,7 @@ export default {
       'createModal',
       'hideModal',
       'setModalInputErrorMessage',
+      'showMessage',
       'toggleModalConfirmButton'
     ]),
     ...mapActions('Files', ['renameFile']),
