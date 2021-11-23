@@ -11,6 +11,11 @@ const user = {
   quota: 1
 }
 
+const currentFolder = {
+  id: 1,
+  path: '/folder'
+}
+
 describe('deleteResources', () => {
   const Component = {
     render() {},
@@ -31,7 +36,7 @@ describe('deleteResources', () => {
           }
         },
         publicPage: () => false,
-        currentFolder: { id: 1, path: '/folder' }
+        currentFolder: currentFolder
       },
       data: () => {
         return { resourcesToDelete: resourcesToDelete }
@@ -78,8 +83,8 @@ describe('deleteResources', () => {
       expect(spyHideModalStub).toHaveBeenCalledTimes(1)
     })
 
-    it('should call the folder itself', async () => {
-      const resourcesToDelete = [{ id: 1, path: '/folder' }]
+    it('should call the delete action on the current folder', async () => {
+      const resourcesToDelete = [currentFolder]
       const wrapper = getWrapper(resourcesToDelete)
       const spyHideModalStub = jest.spyOn(wrapper.vm, 'hideModal')
       await wrapper.vm.$_deleteResources_filesList_delete()

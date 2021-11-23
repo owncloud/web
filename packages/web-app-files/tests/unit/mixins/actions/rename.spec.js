@@ -6,6 +6,11 @@ import rename from '@files/src/mixins/actions/rename.js'
 const localVue = createLocalVue()
 localVue.use(Vuex)
 
+const currentFolder = {
+  id: 1,
+  path: '/folder'
+}
+
 describe('rename', () => {
   const Component = {
     render() {},
@@ -31,9 +36,7 @@ describe('rename', () => {
           Files: {
             namespaced: true,
             getters: {
-              currentFolder: () => {
-                return { id: 1, path: '/folder' }
-              },
+              currentFolder: () => currentFolder,
               files: () => [{ name: 'file1' }]
             },
             actions: {
@@ -142,8 +145,7 @@ describe('rename', () => {
 
       const wrapper = getWrapper(promise)
       const spyHideModalStub = jest.spyOn(wrapper.vm, 'hideModal')
-      const resource = { id: 1, path: 'folder' }
-      wrapper.vm.$_rename_renameResource(resource, 'new name')
+      wrapper.vm.$_rename_renameResource(currentFolder, 'new name')
       await wrapper.vm.$nextTick()
       expect(wrapper.vm.$router.length).toBeGreaterThanOrEqual(1)
       expect(spyHideModalStub).toHaveBeenCalledTimes(1)
@@ -157,8 +159,7 @@ describe('rename', () => {
       const wrapper = getWrapper(promise)
       const spyHideModalStub = jest.spyOn(wrapper.vm, 'hideModal')
       const spyShowMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
-      const resource = { id: 2, path: 'folder' }
-      wrapper.vm.$_rename_renameResource(resource, 'new name')
+      wrapper.vm.$_rename_renameResource(currentFolder, 'new name')
       await wrapper.vm.$nextTick()
       await wrapper.vm.$nextTick()
       expect(spyHideModalStub).toHaveBeenCalledTimes(0)
