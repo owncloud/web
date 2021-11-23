@@ -1,5 +1,4 @@
 import Vuex from 'vuex'
-import { createStore } from 'vuex-extensions'
 import { mount, createLocalVue } from '@vue/test-utils'
 import Delete from '@files/src/mixins/actions/delete.js'
 
@@ -19,33 +18,8 @@ describe('delete', () => {
         $route: {
           name: 'files-personal'
         },
-        $router: [],
-        $client: { files: { list: jest.fn(() => []) } },
-        $gettextInterpolate: () => 'title',
-        publicPage: () => false
-      },
-      store: createStore(Vuex.Store, {
-        modules: {
-          Files: {
-            namespaced: true,
-            getters: {
-              currentFolder: () => {
-                return { id: 1, path: '/folder' }
-              },
-              files: () => [{ name: 'file1' }]
-            },
-            actions: {
-              deleteFile: jest.fn(() => {})
-            }
-          }
-        },
-        actions: {
-          createModal: jest.fn(),
-          hideModal: jest.fn(),
-          toggleModalConfirmButton: jest.fn(),
-          showMessage: jest.fn()
-        }
-      })
+        $router: []
+      }
     })
   }
 

@@ -47,7 +47,8 @@ describe('rename', () => {
           createModal: jest.fn(),
           hideModal: jest.fn(),
           toggleModalConfirmButton: jest.fn(),
-          showMessage: jest.fn()
+          showMessage: jest.fn(),
+          setModalInputErrorMessage: jest.fn()
         }
       })
     })
