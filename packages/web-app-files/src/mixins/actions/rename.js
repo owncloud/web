@@ -51,8 +51,7 @@ export default {
       let parentResources
       if (isSameResource(resources[0], this.currentFolder)) {
         const parentPaths = getParentPaths(resources[0].path, false)
-        const promise = this.$client.files.list(parentPaths[0], 1)
-        parentResources = await promise
+        parentResources = await this.$client.files.list(parentPaths[0], 1)
         parentResources = parentResources.map(buildResource)
       }
 

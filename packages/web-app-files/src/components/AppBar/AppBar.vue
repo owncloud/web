@@ -16,11 +16,10 @@
         id="files-breadcrumb"
         data-testid="files-breadcrumbs"
         class="oc-p-s"
-        :show-contextmenu="true"
         :items="breadcrumbs"
       >
-        <template v-if="currentFolder" #contextMenu>
-          <context-actions :items="[currentFolder]" />
+        <template #contextMenu>
+          <context-actions v-if="currentFolder" :items="[currentFolder]" />
         </template>
       </oc-breadcrumb>
       <h1 class="oc-invisible-sr" v-text="pageTitle" />
