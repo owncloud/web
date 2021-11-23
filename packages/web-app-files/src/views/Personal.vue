@@ -25,7 +25,7 @@
         :are-thumbnails-displayed="displayThumbnails"
         :resources="activeFilesCurrentPage"
         :target-route="targetRoute"
-        :header-position="headerPosition"
+        :header-position="fileListHeaderY"
         :drag-drop="true"
         @fileDropped="fileDropped"
         @fileClick="$_fileActions_triggerDefaultAction"
@@ -66,16 +66,14 @@ import MixinAccessibleBreadcrumb from '../mixins/accessibleBreadcrumb'
 import MixinFileActions from '../mixins/fileActions'
 import MixinFilesListFilter from '../mixins/filesListFilter'
 import MixinFilesListScrolling from '../mixins/filesListScrolling'
-import MixinFilesListPositioning from '../mixins/filesListPositioning'
 import MixinFilesListPagination from '../mixins/filesListPagination'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 import { buildResource } from '../helpers/resources'
-import { useMutationObserver } from '../helpers/store'
 import { fileList } from '../helpers/ui'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../constants'
+import { useMutationSubscription, useFileListHeaderPosition } from '../composables'
 import { bus } from 'web-pkg/src/instance'
-import { useTask } from 'vue-concurrency'
 
 import QuickActions from '../components/FilesList/QuickActions.vue'
 import ListLoader from '../components/FilesList/ListLoader.vue'
@@ -88,6 +86,7 @@ import { DavProperties } from 'web-pkg/src/constants'
 import { basename, join } from 'path'
 import PQueue from 'p-queue'
 import { nextTick } from '@vue/composition-api'
+import { useTask } from 'vue-concurrency'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -105,18 +104,19 @@ export default {
   mixins: [
     MixinAccessibleBreadcrumb,
     MixinFileActions,
-    MixinFilesListPositioning,
     MixinFilesListScrolling,
     MixinFilesListPagination,
     MixinMountSideBar,
     MixinFilesListFilter
   ],
   setup() {
-    useMutationObserver(['Files/UPSERT_RESOURCE'], ({ payload }) =>
-      nextTick(() => {
-        fileList.accentuateItem(payload.id)
-      })
-    )
+    const { refresh: refreshFileListHeaderPosition, y: fileListHeaderY } =
+      useFileListHeaderPosition()
+
+    useMutationSubscription(['Files/UPSERT_RESOURCE'], async (mutation) => {
+      await nextTick()
+      fileList.accentuateItem(mutation.payload.id)
+    })
 
     const loadResourcesTask = useTask(function* (signal, ref, sameRoute, path = null) {
       ref.CLEAR_CURRENT_FILES_LIST()
@@ -148,12 +148,12 @@ export default {
         console.error(error)
       }
 
-      ref.adjustTableHeaderPosition()
+      refreshFileListHeaderPosition()
       ref.accessibleBreadcrumb_focusAndAnnounceBreadcrumb(sameRoute)
       ref.scrollToResourceFromRoute()
     }).restartable()
 
-    return { loadResourcesTask }
+    return { fileListHeaderY, loadResourcesTask }
   },
 
   computed: {
@@ -164,7 +164,6 @@ export default {
     ...mapGetters('Files', [
       'highlightedFile',
       'selectedFiles',
-      'inProgress',
       'activeFilesCurrentPage',
       'currentFolder',
       'totalFilesCount',
@@ -174,10 +173,6 @@ export default {
 
     isEmpty() {
       return this.activeFilesCurrentPage.length < 1
-    },
-
-    uploadProgressVisible() {
-      return this.inProgress.length > 0
     },
 
     selected: {
@@ -239,15 +234,7 @@ export default {
         }
       },
       immediate: true
-    },
-
-    uploadProgressVisible() {
-      this.adjustTableHeaderPosition()
     }
-  },
-
-  created() {
-    window.onresize = this.adjustTableHeaderPosition
   },
 
   mounted() {
@@ -256,7 +243,6 @@ export default {
     })
 
     this.$on('beforeDestroy', () => bus.unsubscribe('app.files.list.load', loadResourcesEventToken))
-    this.adjustTableHeaderPosition()
   },
 
   beforeDestroy() {

@@ -144,13 +144,7 @@ export default {
   }),
   computed: {
     ...mapGetters(['getToken', 'configuration', 'newFileHandlers', 'quota', 'user']),
-    ...mapGetters('Files', [
-      'files',
-      'inProgress',
-      'currentFolder',
-      'selectedFiles',
-      'publicLinkPassword'
-    ]),
+    ...mapGetters('Files', ['files', 'currentFolder', 'selectedFiles', 'publicLinkPassword']),
     ...mapState(['route']),
     ...mapState('Files', ['areHiddenFilesShown']),
 

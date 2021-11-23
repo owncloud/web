@@ -25,7 +25,7 @@
         :are-thumbnails-displayed="displayThumbnails"
         :resources="activeFilesCurrentPage"
         :target-route="targetRoute"
-        :header-position="headerPosition"
+        :header-position="fileListHeaderY"
         @fileClick="$_fileActions_triggerDefaultAction"
         @rowMounted="rowMounted"
       >
@@ -49,12 +49,11 @@
 
 <script>
 import { mapGetters, mapActions, mapMutations, mapState } from 'vuex'
-import { useMutationObserver } from '../helpers/store'
+import { useMutationSubscription, useFileListHeaderPosition } from '../composables'
 import { fileList } from '../helpers/ui'
 
 import MixinAccessibleBreadcrumb from '../mixins/accessibleBreadcrumb'
 import MixinFileActions from '../mixins/fileActions'
-import MixinFilesListPositioning from '../mixins/filesListPositioning'
 import MixinFilesListPagination from '../mixins/filesListPagination'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 
@@ -124,17 +123,18 @@ export default {
   mixins: [
     MixinAccessibleBreadcrumb,
     MixinFileActions,
-    MixinFilesListPositioning,
     MixinFilesListPagination,
     MixinMountSideBar
   ],
 
   setup() {
-    useMutationObserver(['Files/UPSERT_RESOURCE'], ({ payload }) =>
-      nextTick(() => {
-        fileList.accentuateItem(payload.id)
-      })
-    )
+    const { refresh: refreshFileListHeaderPosition, y: fileListHeaderY } =
+      useFileListHeaderPosition()
+
+    useMutationSubscription(['Files/UPSERT_RESOURCE'], async (mutation) => {
+      await nextTick()
+      fileList.accentuateItem(mutation.payload.id)
+    })
 
     const loadResourcesTask = useTask(function* (signal, ref, sameRoute, path = null) {
       ref.CLEAR_CURRENT_FILES_LIST()
@@ -161,8 +161,7 @@ export default {
         resources = resources.map(buildResource)
         ref.LOAD_FILES({ currentFolder: resources[0], files: resources.slice(1) })
 
-        ref.adjustTableHeaderPosition()
-        window.onresize = ref.adjustTableHeaderPosition
+        refreshFileListHeaderPosition()
       } catch (error) {
         ref.SET_CURRENT_FOLDER(null)
         console.error(error)
@@ -184,7 +183,7 @@ export default {
       ref.accessibleBreadcrumb_focusAndAnnounceBreadcrumb(sameRoute)
     }).restartable()
 
-    return { loadResourcesTask }
+    return { fileListHeaderY, loadResourcesTask }
   },
 
   computed: {
@@ -194,7 +193,6 @@ export default {
       'selectedFiles',
       'currentFolder',
       'highlightedFile',
-      'inProgress',
       'currentFolder',
       'totalFilesCount',
       'totalFilesSize'
@@ -204,10 +202,6 @@ export default {
 
     isEmpty() {
       return this.activeFilesCurrentPage.length < 1
-    },
-
-    uploadProgressVisible() {
-      return this.inProgress.length > 0
     },
 
     selected: {
@@ -244,10 +238,6 @@ export default {
         this.$_filesListPagination_updateCurrentPage()
       },
       immediate: true
-    },
-
-    uploadProgressVisible() {
-      this.adjustTableHeaderPosition()
     }
   },
   beforeDestroy() {

@@ -173,9 +173,9 @@ export default {
             continue
           }
 
-          this.processDirectoryEntryRecursively(item).then(() => {
-            this.$emit('success', null, item.name)
-          })
+          // this.processDirectoryEntryRecursively(item).then(() => {
+          //  this.$emit('success', null, item.name)
+          // })
 
           continue
         }
