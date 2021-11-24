@@ -2,7 +2,11 @@
   <div id="oc-files-sharing-sidebar" class="uk-position-relative">
     <oc-loader v-if="sharesLoading" :aria-label="$gettext('Loading people list')" />
     <template v-else>
-      <new-collaborator v-if="$_ocCollaborators_canShare" key="new-collaborator" class="oc-my-s" />
+      <new-collaborator-form
+        v-if="$_ocCollaborators_canShare"
+        key="new-collaborator"
+        class="oc-my-s"
+      />
       <p
         v-else
         key="no-reshare-permissions-message"
@@ -37,7 +41,7 @@
           :aria-label="$gettext('Share receivers')"
         >
           <li v-for="collaborator in collaborators" :key="collaborator.key">
-            <show-collaborator
+            <collaborator-list-item
               :collaborator="collaborator"
               :modifiable="!collaborator.indirect"
               @onDelete="$_ocCollaborators_deleteShare"
@@ -57,8 +61,8 @@ import { shareTypes, userShareTypes } from '../../../helpers/shareTypes'
 import { getParentPaths } from '../../../helpers/path'
 import { dirname } from 'path'
 import { permissionsBitmask } from '../../../helpers/collaborators'
-import NewCollaborator from './Collaborators/NewCollaborator.vue'
-import ShowCollaborator from './Collaborators/ShowCollaborator.vue'
+import NewCollaboratorForm from './NewCollaborator/Form.vue'
+import CollaboratorListItem from './Collaborators/ListItem.vue'
 
 export default {
   title: ($gettext) => {
@@ -66,8 +70,8 @@ export default {
   },
   name: 'FileShares',
   components: {
-    NewCollaborator,
-    ShowCollaborator
+    NewCollaboratorForm,
+    CollaboratorListItem
   },
   mixins: [Mixins],
   data() {
@@ -270,14 +274,6 @@ export default {
         share: share,
         resource: this.highlightedFile
       })
-    },
-    $_ocCollaborators_isUser(collaborator) {
-      return (
-        collaborator.shareType === shareTypes.user || collaborator.shareType === shareTypes.remote
-      )
-    },
-    $_ocCollaborators_isGroup(collaborator) {
-      return collaborator.shareType === shareTypes.group
     },
     $_reloadShares() {
       this.loadCurrentFileOutgoingShares({

@@ -1,5 +1,5 @@
 <template>
-  <div class="files-collaborators-collaborator-add-dialog" data-testid="new-collaborator">
+  <div id="new-collaborators-form">
     <oc-select
       id="files-share-invite-input"
       ref="ocSharingAutocomplete"
@@ -14,7 +14,7 @@
         ({ open, search }) => open && search.length >= minSearchLength && !searchInProgress
       "
       @search:input="onSearch"
-      @input="onInviteInput"
+      @input="resetFocusOnInvite"
     >
       <template #option="option">
         <autocomplete-item :item="option" />
@@ -40,23 +40,22 @@
       v-text="inviteDescriptionMessage"
     />
     <div class="uk-flex uk-flex-middle uk-flex-between oc-mb-l">
-      <collaborators-edit-options @optionChange="collaboratorOptionChanged" />
+      <role-selection @optionChange="collaboratorRoleChanged" />
+      <expiration-datepicker @optionChange="collaboratorExpiryChanged" />
       <oc-button v-if="saving" key="new-collaborator-saving-button" :disabled="true">
-        <oc-spinner :aria-label="$gettext('Adding People')" size="small" />
-        <span v-translate :aria-hidden="true">Adding People</span>
+        <oc-spinner :aria-label="$gettext('Creating shares')" size="small" />
+        <span v-translate :aria-hidden="true">Creating shares</span>
       </oc-button>
       <oc-button
         v-else
-        id="files-collaborators-collaborator-save-new-share-button"
+        id="new-collaborators-form-create-button"
         key="new-collaborator-save-button"
-        data-testid="new-collaborator-share-btn"
         :disabled="!$_isValid"
         variation="primary"
         appearance="filled"
         @click="share"
-      >
-        <translate>Share</translate>
-      </oc-button>
+        v-text="$gettext('Share')"
+      />
     </div>
     <oc-hidden-announcer level="assertive" :announcement="announcement" />
   </div>
@@ -72,15 +71,17 @@ import { roleToBitmask } from '../../../../helpers/collaborators'
 import { shareTypes } from '../../../../helpers/shareTypes'
 
 import AutocompleteItem from './AutocompleteItem.vue'
-import CollaboratorsEditOptions from './CollaboratorsEditOptions.vue'
+import RoleSelection from '../RoleSelection.vue'
 import RecipientContainer from './RecipientContainer.vue'
+import ExpirationDatepicker from './ExpirationDatepicker.vue'
 
 export default {
-  name: 'NewCollaborator',
+  name: 'NewCollaboratorForm',
   components: {
     AutocompleteItem,
-    CollaboratorsEditOptions,
-    RecipientContainer
+    RoleSelection,
+    RecipientContainer,
+    ExpirationDatepicker
   },
   mixins: [Mixins],
   data() {
@@ -122,6 +123,7 @@ export default {
   },
   mounted() {
     this.fetchRecipients = debounce(this.fetchRecipients, 500)
+    this.selectedRole = this.roles[0]
   },
 
   methods: {
@@ -224,25 +226,16 @@ export default {
       })
 
       await Promise.all(savePromises)
-      this.$_ocCollaborators_newCollaboratorsCancel()
-    },
-    $_ocCollaborators_removeFromSelection(collaborator) {
-      this.selectedCollaborators = this.selectedCollaborators.filter((selectedCollaborator) => {
-        return collaborator !== selectedCollaborator
-      })
     },
 
-    onInviteInput() {
+    resetFocusOnInvite() {
       this.autocompleteResults = []
-      this.focusInviteInput()
+      this.$nextTick(() => {
+        const inviteInput = document.getElementById('files-share-invite-input')
+
+        inviteInput.focus()
+      })
     }
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.files-share-invite-recipient {
-  margin: 4px 2px 0;
-  padding: 0 0.25em;
-}
-</style>

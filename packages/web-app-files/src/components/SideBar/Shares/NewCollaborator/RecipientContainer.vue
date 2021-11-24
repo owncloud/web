@@ -109,3 +109,10 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.files-share-invite-recipient {
+  margin: 4px 2px 0;
+  padding: 0 0.25em;
+}
+</style>

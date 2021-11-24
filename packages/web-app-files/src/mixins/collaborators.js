@@ -80,9 +80,12 @@ export default {
     }
   },
   methods: {
-    collaboratorOptionChanged({ role, permissions, expirationDate }) {
+    collaboratorRoleChanged({ role, permissions }) {
       this.selectedRole = role
       this.additionalPermissions = permissions
+    },
+
+    collaboratorExpiryChanged({ expirationDate }) {
       this.expirationDate = expirationDate
     },
 

@@ -1,0 +1,213 @@
+<template>
+  <span>
+    <oc-button :id="editShareBtnId" class="collaborator-edit-dropdown-options-btn" appearance="raw">
+      <oc-icon name="more_vert" />
+    </oc-button>
+    <oc-drop ref="expirationDateDrop" :toggle="'#' + editShareBtnId" mode="click">
+      <oc-list class="collaborator-edit-dropdown-options-list" :aria-label="shareEditOptions">
+        <li v-if="expirationSupported" class="oc-py-xs">
+          <oc-datepicker
+            v-model="enteredExpirationDate"
+            :min-date="minExpirationDate"
+            :max-date="maxExpirationDate"
+            :locale="$language.current"
+            :is-required="expirationDateEnforced"
+            class="files-recipient-expiration-datepicker"
+          >
+            <template #default="{ togglePopover }" class="oc-py-xs">
+              <oc-button
+                class="files-collaborators-expiration-button"
+                appearance="raw"
+                @click="togglePopover"
+              >
+                <span v-if="isExpirationDateSet" v-text="$gettext('Edit expiration date')" />
+                <span v-else v-text="$gettext('Set expiration date')" />
+              </oc-button>
+            </template>
+          </oc-datepicker>
+        </li>
+        <li v-if="expirationSupported && isExpirationDateSet && !expirationDateEnforced">
+          <oc-button
+            appearance="raw"
+            class="remove-expiration-date"
+            @click="removeExpirationDate"
+            v-text="$gettext('Remove expiration date')"
+          />
+        </li>
+        <li v-for="(option, i) in options" :key="i">
+          <oc-button
+            appearance="raw"
+            :class="option.class"
+            :variation="option.variation"
+            @click="option.method()"
+          >
+            <span v-text="option.title" />
+          </oc-button>
+        </li>
+      </oc-list>
+    </oc-drop>
+  </span>
+</template>
+
+<script>
+import { mapGetters } from 'vuex'
+import { DateTime } from 'luxon'
+import CollaboratorsMixins from '../../../../mixins/collaborators'
+import Mixins from '../../../../mixins'
+
+export default {
+  name: 'EditDropdown',
+  mixins: [Mixins, CollaboratorsMixins],
+  props: {
+    expirationDate: {
+      type: Date,
+      required: false,
+      default: undefined
+    },
+    existingCollaboratorType: {
+      type: [Object, String],
+      required: false,
+      default: null,
+      validator: function (value) {
+        return ['user', 'group'].includes(value) || value === null
+      }
+    }
+  },
+  data: function () {
+    return {
+      enteredExpirationDate: null,
+      options: [
+        {
+          title: this.$gettext('Remove share'),
+          variation: 'danger',
+          method: this.removeShare,
+          class: 'remove-share'
+        }
+      ]
+    }
+  },
+  watch: {
+    enteredExpirationDate: {
+      handler: 'updateExpirationDate'
+    }
+  },
+  computed: {
+    ...mapGetters(['capabilities']),
+
+    editShareBtnId() {
+      return 'files-collaborators-edit-button-' + this._uid
+    },
+    shareEditOptions() {
+      return this.$gettext('Sharing expiration')
+    },
+    isExpirationDateSet() {
+      return !!this.expirationDate
+    },
+
+    editingUser() {
+      return this.existingCollaboratorType === 'user'
+    },
+
+    editingGroup() {
+      return this.existingCollaboratorType === 'group'
+    },
+
+    expirationSupported() {
+      return this.userExpirationDate && this.groupExpirationDate
+    },
+
+    defaultExpirationDateSet() {
+      if (this.editingUser) {
+        return this.userExpirationDate.enabled
+      }
+
+      if (this.editingGroup) {
+        return this.groupExpirationDate.enabled
+      }
+
+      return this.userExpirationDate.enabled || this.groupExpirationDate.enabled
+    },
+
+    userExpirationDate() {
+      return this.capabilities.files_sharing.user.expire_date
+    },
+
+    groupExpirationDate() {
+      return this.capabilities.files_sharing.group.expire_date
+    },
+
+    defaultExpirationDate() {
+      if (!this.defaultExpirationDateSet) {
+        return null
+      }
+
+      const userMaxExpirationDays = parseInt(this.userExpirationDate.days, 10)
+      const groupMaxExpirationDays = parseInt(this.groupExpirationDate.days, 10)
+      let days = 0
+
+      if (this.editingUser) {
+        days = userMaxExpirationDays
+      } else if (this.editingGroup) {
+        days = groupMaxExpirationDays
+      } else if (userMaxExpirationDays && groupMaxExpirationDays) {
+        days = Math.min(userMaxExpirationDays, groupMaxExpirationDays)
+      } else {
+        days = userMaxExpirationDays || groupMaxExpirationDays
+      }
+
+      const date = new Date()
+      date.setDate(new Date().getDate() + days)
+      return date
+    },
+
+    expirationDateEnforced() {
+      if (this.editingUser) {
+        return this.userExpirationDate.enforced
+      }
+
+      if (this.editingGroup) {
+        return this.groupExpirationDate.enforced
+      }
+
+      return this.userExpirationDate.enforced || this.groupExpirationDate.enforced
+    },
+
+    maxExpirationDate() {
+      if (!this.expirationDateEnforced) {
+        return null
+      }
+      return this.defaultExpirationDate
+    },
+
+    minExpirationDate() {
+      const date = new Date()
+      date.setDate(new Date().getDate() + 1)
+      return date
+    },
+
+    relativeExpirationDate() {
+      return DateTime.fromJSDate(this.enteredExpirationDate)
+        .setLocale(this.$language.current)
+        .endOf('day')
+        .toRelative()
+    }
+  },
+  methods: {
+    updateExpirationDate() {
+      this.$emit('expirationDateChanged', {
+        expirationDate: DateTime.fromJSDate(this.enteredExpirationDate).endOf('day').toISO()
+      })
+      this.$refs.expirationDateDrop.hide()
+    },
+    removeExpirationDate() {
+      this.$emit('expirationDateChanged', {
+        expirationDate: null
+      })
+      this.$refs.expirationDateDrop.hide()
+    },
+    removeShare() {
+      this.$emit('removeShare')
+    }
+  }
+}
+</script>
