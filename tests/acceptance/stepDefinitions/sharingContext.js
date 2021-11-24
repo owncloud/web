@@ -321,11 +321,21 @@ const assertCollaboratorslistContains = function (
  * @param {string} name
  * @returns {Promise}
  */
-const assertCollaboratorslistDoesNotContain = function (type, name) {
+const assertCollaboratorslistDoesNotContain = async function (type, name) {
   if (type !== 'user' && type !== 'group') {
     throw new Error('illegal type')
   }
   const collaboratorsDialog = client.page.FilesPageElement.SharingDialog.collaboratorsDialog()
+
+  // check if fileslist is not present because it's empty
+  try {
+    await client.waitForElementNotPresent({
+      selector: '#files-collaborators-list',
+      locateStrategy: 'css'
+    })
+    return
+  } catch (e) {}
+
   return collaboratorsDialog
     .getCollaboratorsList(
       {

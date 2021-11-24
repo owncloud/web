@@ -5,6 +5,18 @@ const sharingHelper = require('../../helpers/sharingHelper')
 module.exports = {
   commands: {
     /**
+     * opens expiration date field on the webUI
+     * @return {*}
+     */
+    openExpirationDatePicker: function () {
+      this.useCss()
+        .waitForElementVisible(
+          '@expirationDateField',
+          this.api.globals.waitForNegativeConditionTimeout
+        )
+        .click('@expirationDateField')
+    },
+    /**
      * clicks the edit button of public link
      *
      * @param linkName Name of the public link
@@ -75,7 +87,7 @@ module.exports = {
      * @param value values for the different fields to be set
      * @returns {*|Promise<void>|exports}
      */
-    setPublicLinkForm: function (key, value) {
+    setPublicLinkForm: async function (key, value) {
       if (key === 'role') {
         return this.setPublicLinkRole(value)
       } else if (key === 'name') {
@@ -84,9 +96,11 @@ module.exports = {
         return this.setPublicLinkPassword(value)
       } else if (key === 'expireDate') {
         value = sharingHelper.calculateDate(value)
-        return this.api.page.FilesPageElement.sharingDialog()
-          .openExpirationDatePicker()
-          .setExpirationDate(value, 'link')
+        await this.openExpirationDatePicker()
+        return this.api.page.FilesPageElement.expirationDatePicker().setExpirationDate(
+          value,
+          'link'
+        )
       }
       return this
     },
@@ -361,6 +375,9 @@ module.exports = {
     }
   },
   elements: {
+    expirationDateField: {
+      selector: '#files-links-expiration-btn'
+    },
     publicLinkContainer: {
       selector: '//*[@id="oc-files-file-link"]',
       locateStrategy: 'xpath'

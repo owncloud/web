@@ -12,8 +12,13 @@ module.exports = {
         this.elements.collaboratorInformationByCollaboratorName.selector,
         collaborator
       )
-      const deleteSelector = informationSelector + this.elements.deleteShareButton.selector
+      const dropDown = informationSelector + this.elements.editDropdown.selector
+      const deleteSelector = this.elements.deleteShareButton.selector
+
       return this.useXpath()
+        .waitForElementVisible(dropDown)
+        .waitForAnimationToFinish() // wait for animation of share sliding out
+        .click(dropDown)
         .waitForElementVisible(deleteSelector)
         .waitForAnimationToFinish() // wait for animation of share sliding out
         .click(deleteSelector)
@@ -23,17 +28,13 @@ module.exports = {
      *
      * @param {string} collaborator
      */
-    clickEditShare: function (collaborator) {
+    clickEditShareRole: function (collaborator) {
       const informationSelector = util.format(
         this.elements.collaboratorInformationByCollaboratorName.selector,
         collaborator
       )
-      const editSelector = informationSelector + this.elements.editShareButton.selector
-      return this.useXpath()
-        .waitForElementVisible(editSelector)
-        .click(editSelector)
-        .waitForElementVisible('@editShareDialog')
-        .useCss()
+      const editRoleSelector = informationSelector + this.elements.editShareRoleButton.selector
+      return this.useXpath().waitForElementVisible(editRoleSelector).click(editRoleSelector)
     },
     /**
      *
@@ -69,8 +70,6 @@ module.exports = {
           displayName: this.elements.collaboratorInformationSubName,
           role: this.elements.collaboratorInformationSubRole,
           additionalInfo: this.elements.collaboratorInformationSubAdditionalInfo,
-          viaLabel: this.elements.collaboratorInformationSubVia,
-          resharer: this.elements.collaboratorInformationSubResharer,
           shareType: this.elements.collaboratorShareType
         }
       }
@@ -151,21 +150,25 @@ module.exports = {
   elements: {
     collaboratorInformationByCollaboratorName: {
       selector:
-        '//p[contains(@class, "files-collaborators-collaborator-name") and normalize-space()="%s"]/ancestor::*[contains(concat(" ", @class, " "), " files-collaborators-collaborator ")]',
+        '//span[contains(@class, "collaborator-display-name") and contains(text(),"%s")]/ancestor::div[contains(@class, "files-collaborators-collaborator")]',
       locateStrategy: 'xpath'
     },
     deleteShareButton: {
       // within collaboratorInformationByCollaboratorName
-      selector: '//*[contains(@class, "files-collaborators-collaborator-delete")]',
+      selector: '//button[contains(@class, "remove-share")]',
       locateStrategy: 'xpath'
     },
     createShareDialog: {
-      selector: '//*[contains(@class, "files-collaborators-collaborator-add-dialog")]',
+      selector: '#new-collaborators-form'
+    },
+    editShareRoleButton: {
+      // within collaboratorInformationByCollaboratorName
+      selector: '//button[contains(@class, "files-recipient-role-select-btn")]',
       locateStrategy: 'xpath'
     },
-    editShareButton: {
+    editDropdown: {
       // within collaboratorInformationByCollaboratorName
-      selector: '//*[contains(@class, "files-collaborators-collaborator-edit")]',
+      selector: '//button[contains(@class, "collaborator-edit-dropdown-options-btn")]',
       locateStrategy: 'xpath'
     },
     editShareDialog: {
@@ -178,26 +181,18 @@ module.exports = {
     },
     collaboratorInformationSubName: {
       // within collaboratorsInformation
-      selector: '.files-collaborators-collaborator-name'
+      selector: '.collaborator-display-name'
     },
     collaboratorInformationSubRole: {
       // within collaboratorsInformation
-      selector: '.files-collaborators-collaborator-role'
+      selector: '.files-recipient-role-select-btn:first-child'
     },
     collaboratorInformationSubAdditionalInfo: {
       // within collaboratorsInformation
-      selector: '.files-collaborators-collaborator-additional-info'
-    },
-    collaboratorInformationSubVia: {
-      // within collaboratorsInformation
-      selector: '.files-collaborators-collaborator-via-label'
-    },
-    collaboratorInformationSubResharer: {
-      // within collaboratorsInformation
-      selector: '.files-collaborators-collaborator-reshare-information'
+      selector: '.collaborator-additional-info'
     },
     collaboratorShareType: {
-      selector: '.files-collaborators-collaborator-share-type'
+      selector: '.share-type'
     },
     collaboratorExpirationInfo: {
       selector:

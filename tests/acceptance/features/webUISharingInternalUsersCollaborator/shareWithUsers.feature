@@ -57,7 +57,7 @@ Feature: Shares collaborator list
     And user "Carol" has logged in using the webUI
     And the user has opened folder "Shares"
     When the user opens the share dialog for folder "simple-folder" using the webUI
-    Then user "Alice Hansen" should be listed as "Owner" reshared through "Brian Murphy" in the collaborators list on the webUI
+    # Then user "Alice Hansen" should be listed as "Owner" reshared through "Brian Murphy" in the collaborators list on the webUI
     And the current collaborators list should have order "Alice Hansen,Carol King"
 
   @issue-2898 @issue-4168
@@ -73,5 +73,5 @@ Feature: Shares collaborator list
     And the user has opened folder "Shares"
     And the user has opened folder "simple-folder"
     When the user opens the share dialog for folder "simple-empty-folder" using the webUI
-    Then user "Alice Hansen" should be listed as "Owner" reshared through "Brian Murphy" via "simple-folder" in the collaborators list on the webUI
+    # Then user "Alice Hansen" should be listed as "Owner" reshared through "Brian Murphy" via "simple-folder" in the collaborators list on the webUI
     And the current collaborators list should have order "Alice Hansen,Carol King"

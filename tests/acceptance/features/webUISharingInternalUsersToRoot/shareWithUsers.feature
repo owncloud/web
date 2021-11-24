@@ -39,15 +39,15 @@ Feature: Sharing files and folders with internal users
       | entry_name    |
       | simple-folder |
       | testimage.jpg |
-    When the user opens the share dialog for file "simple-folder" using the webUI
-    Then user "Brian Murphy" should be listed as "Owner" in the collaborators list on the webUI
-    When the user opens the share dialog for file "testimage.jpg" using the webUI
-    Then user "Brian Murphy" should be listed as "Owner" in the collaborators list on the webUI
+    # When the user opens the share dialog for file "simple-folder" using the webUI
+    # Then user "Brian Murphy" should be listed as "Owner" in the collaborators list on the webUI
+    # When the user opens the share dialog for file "testimage.jpg" using the webUI
+    # Then user "Brian Murphy" should be listed as "Owner" in the collaborators list on the webUI
     Examples:
       | set-role             | expected-role        | permissions-folder              | permissions-file  |
       | Viewer               | Viewer               | read,share                      | read,share        |
       | Editor               | Editor               | read,update,create,delete,share | read,update,share |
-      | Custom permissions | Custom permissions | read                            | read              |
+      | Custom permissions   | Custom permissions   | read                            | read              |
 
   @disablePreviews
   Scenario: share a file with another internal user who overwrites and unshares the file

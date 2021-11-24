@@ -352,9 +352,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 ### [share permissions not enforced](https://github.com/owncloud/product/issues/270)
 -   [webUIResharing1/reshareUsers.feature:248](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIResharing1/reshareUsers.feature#L248)
 
-### [share recipient doesn't see resharer in collaborators list](https://github.com/owncloud/web/issues/5462)
--   [webUIResharing1/reshareUsers.feature:260](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIResharing1/reshareUsers.feature#L260)
-
 #### [Searching sharee with displayname](https://github.com/owncloud/ocis/issues/547)
 -   [apiSharees/sharees.feature:586](https://github.com/owncloud/core/blob/master/tests/acceptance/features/apiSharees/sharees.feature#L586)
 -   [apiSharees/sharees.feature:587](https://github.com/owncloud/core/blob/master/tests/acceptance/features/apiSharees/sharees.feature#L587)

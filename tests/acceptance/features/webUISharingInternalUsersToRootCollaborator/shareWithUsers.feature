@@ -59,7 +59,7 @@ Feature: Shares collaborator list
     And user "Carol" has logged in using the webUI
     And the user opens folder "simple-folder" using the webUI
     When the user opens the share dialog for folder "simple-empty-folder" using the webUI
-    Then user "Alice Hansen" should be listed as "Owner" reshared through "Brian Murphy" via "simple-folder" in the collaborators list on the webUI
+    # Then user "Alice Hansen" should be listed as "Owner" reshared through "Brian Murphy" via "simple-folder" in the collaborators list on the webUI
     And the current collaborators list should have order "Alice Hansen,Carol King"
 
 
@@ -72,7 +72,7 @@ Feature: Shares collaborator list
     Examples:
       | additional-info-field | additional-info-result |
       | id                    | Brian                  |
-      | email                 | brian@example.org      |
+      | email                 | (brian@example.org)    |
 
 
   Scenario: collaborators list does not contain additional info when disabled
@@ -83,18 +83,18 @@ Feature: Shares collaborator list
     Then user "Brian Murphy" should be listed without additional info in the collaborators list on the webUI
 
 
-  Scenario: collaborators list contains the current user when they are an owner
-    Given user "Alice" has shared folder "simple-folder" with user "Brian"
-    When user "Alice" has logged in using the webUI
-    And the user opens the share dialog for folder "simple-folder" using the webUI
-    Then user "Alice Hansen" should be listed with additional info "(me)" in the collaborators list on the webUI
 
 
-  Scenario: collaborators list contains the current user when they are a receiver of the resource
-    Given user "Alice" has shared folder "simple-folder" with user "Brian"
-    When user "Brian" has logged in using the webUI
-    And the user opens the share dialog for folder "simple-folder" using the webUI
-    Then user "Brian Murphy" should be listed with additional info "(me)" in the collaborators list on the webUI
+
+
+
+
+
+
+
+
+
+
 
 
   Scenario: current user should see the highest role in their entry in collaborators list

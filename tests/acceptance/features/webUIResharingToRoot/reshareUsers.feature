@@ -164,7 +164,7 @@ Feature: Resharing shared files with different permissions
     And the user re-logs in as "Carol" using the webUI
     And the user opens the share dialog for folder "simple-folder" using the webUI
     Then the current collaborators list should have order "Brian Murphy,Carol King"
-    And user "Brian Murphy" should be listed as "Owner" reshared through "Alice Hansen" in the collaborators list on the webUI
+    # And user "Brian Murphy" should be listed as "Owner" reshared through "Alice Hansen" in the collaborators list on the webUI
     And user "Carol" should have received a share with these details:
       | field       | value               |
       | uid_owner   | Alice               |
@@ -244,17 +244,4 @@ Feature: Resharing shared files with different permissions
     When user "Brian" has logged in using the webUI
     And the user opens the share dialog for folder "simple-folder" using the webUI
     Then user "Alice Hansen" should be listed as "Editor" in the collaborators list on the webUI
-    And user "Carol King" should be listed as "Editor" reshared through "Alice Hansen" in the collaborators list on the webUI
-
-
-  Scenario: Share recipient sees resharer in collaborators list
-    Given user "David" has been created with default attributes and without skeleton files
-    And group "Davidgrp" has been created
-    And user "David" has been added to group "Davidgrp"
-    And user "Brian" has shared folder "simple-folder" with user "Alice"
-    And user "Brian" has shared folder "simple-folder" with user "Carol"
-    And user "Alice" has shared folder "simple-folder" with user "David"
-    And user "Carol" has shared folder "simple-folder" with group "Davidgrp"
-    When user "David" has logged in using the webUI
-    And the user opens the share dialog for folder "simple-folder" using the webUI
-    Then user "Brian Murphy" should be listed as "Owner" reshared through "Alice Hansen, Carol King" in the collaborators list on the webUI
+    # And user "Carol King" should be listed as "Editor" reshared through "Alice Hansen" in the collaborators list on the webUI

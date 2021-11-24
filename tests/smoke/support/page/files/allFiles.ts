@@ -128,11 +128,11 @@ export class AllFilesPage {
       await page.waitForSelector('.vs--open')
       await page.press('#files-share-invite-input', 'Enter')
 
-      await page.click('//*[@id="files-collaborators-role-button"]')
+      await page.click('//*[@id="files-collaborators-role-button-new"]')
       await page.click(`//*[@id="files-role-${role}"]`)
     }
 
-    await page.click('#files-collaborators-collaborator-save-new-share-button')
+    await page.click('#new-collaborators-form-create-button')
     await cta.files.sidebar.close({ page: page })
 
     await page.goto(startUrl)

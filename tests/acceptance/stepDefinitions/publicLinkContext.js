@@ -194,10 +194,8 @@ When(
     await api.publicLinksDialog().clickLinkEditBtn(linkName)
     const value = sharingHelper.calculateDate(pastDate)
     const dateToSet = new Date(Date.parse(value))
-    const isDisabled = await api
-      .sharingDialog()
-      .openExpirationDatePicker()
-      .isExpiryDateDisabled(dateToSet)
+    await api.publicLinksDialog().openExpirationDatePicker()
+    const isDisabled = await api.expirationDatePicker().isExpiryDateDisabled(dateToSet)
     return assert.ok(isDisabled, 'Expected expiration date to be disabled but found not disabled')
   }
 )
