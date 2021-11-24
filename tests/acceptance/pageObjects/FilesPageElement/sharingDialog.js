@@ -157,7 +157,7 @@ module.exports = {
         await this.api.elementIdClick(elementID)
       }
 
-      this.click('@customPermissionsConfirmBtn')
+      await this.click('@customPermissionsConfirmBtn')
 
       return this
     },
@@ -184,12 +184,8 @@ module.exports = {
       await this.selectCollaboratorForShare(sharee, shareWithGroup, remote)
       await this.selectRoleForNewCollaborator(role)
 
-      if (permissions) {
+      if (role === 'Custom permissions') {
         await this.selectPermissionsOnPendingShare(permissions)
-      }
-
-      if (role === 'Custom permissions' && !permissions) {
-        this.click('@customPermissionsConfirmBtn')
       }
 
       if (days) {
@@ -219,11 +215,6 @@ module.exports = {
         .click('@addShareSaveButton')
         .waitForOutstandingAjaxCalls()
     },
-    clickCancel: function () {
-      return this.waitForElementVisible('@customPermissionsCancelBtn').click(
-        '@customPermissionsCancelBtn'
-      )
-    },
     /**
      * Toggle the checkbox to set a certain permission for a share
      * Needs the collaborator information to be expanded
@@ -249,14 +240,9 @@ module.exports = {
      */
     getSharePermissions: async function () {
       const permissions = {}
-      const panelSelector = this.elements.sharingSidebarRoot.selector
-      let permissionToggle
       for (let i = 0; i < COLLABORATOR_PERMISSION_ARRAY.length; i++) {
-        permissionToggle =
-          panelSelector +
-          util.format(this.elements.permissionCheckbox.selector, COLLABORATOR_PERMISSION_ARRAY[i])
-
-        await this.api.element('xpath', permissionToggle, (result) => {
+        const permissionCheckbox = this.getPermissionCheckbox(COLLABORATOR_PERMISSION_ARRAY[i])
+        await this.api.element('xpath', permissionCheckbox, (result) => {
           if (!result.value.ELEMENT) {
             return
           }
