@@ -55,13 +55,7 @@ config = {
                     "webUISharingAcceptShares",
                     "webUISharingAcceptSharesToRoot",
                 ],
-                "oC10Files1": [
-                    "webUIFiles",
-                    "webUIFilesActionMenu",
-                    "webUIFilesCopy",
-                    "webUIMarkdownEditor",
-                    "webUIFavorites",
-                ],
+                "webUIFilesActionMenu": "oC10Files1",
                 "oC10Files2": [
                     "webUIFilesDetails",
                     "webUIFilesList",
@@ -143,6 +137,7 @@ config = {
             },
             "visualTesting": False,
             "screenShots": False,
+            "debugSuites": ["webUIFilesActionMenu"],
         },
         "webUINotification": {
             "type": NOTIFICATIONS,
@@ -162,6 +157,7 @@ config = {
             "visualTesting": False,
             "screenShots": False,
             "notificationsAppNeeded": True,
+            "skip": True,
         },
         "webUIFederation": {
             "type": FEDERATED,
@@ -176,6 +172,7 @@ config = {
             "notificationsAppNeeded": True,
             "federatedServerNeeded": True,
             "federatedServerVersion": OC10_VERSION,
+            "skip": True,
         },
         "webUI-XGA-Notifications": {
             "type": NOTIFICATIONS,
@@ -192,6 +189,7 @@ config = {
             },
             "notificationsAppNeeded": True,
             "filterTags": "@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10 and not @notToImplementOnOC10",
+            "skip": True,
         },
         "webUI-XGA": {
             "type": FULL,
@@ -270,6 +268,7 @@ config = {
                 "SCREEN_RESOLUTION": "768x1024",
             },
             "filterTags": "@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10 and not @notToImplementOnOC10",
+            "skip": True,
         },
         "webUI-Notifications-iPhone": {
             "type": NOTIFICATIONS,
@@ -286,6 +285,7 @@ config = {
             },
             "notificationsAppNeeded": True,
             "filterTags": "@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10 and not @notToImplementOnOC10",
+            "skip": True,
         },
         "webUI-iPhone": {
             "type": FULL,
@@ -364,6 +364,7 @@ config = {
                 "SCREEN_RESOLUTION": "375x812",
             },
             "filterTags": "@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10 and not @notToImplementOnOC10",
+            "skip": True,
         },
         "webUI-ocis": {
             "type": FULL,
@@ -472,6 +473,7 @@ config = {
             "runningOnOCIS": True,
             "visualTesting": False,
             "filterTags": "not @skip and not @skipOnOCIS and not @notToImplementOnOCIS",
+            "skip": True,
         },
         "webUI-notifications-oc10-integration": {
             "type": NOTIFICATIONS,
@@ -491,6 +493,7 @@ config = {
             "oc10IntegrationAppIncluded": True,
             "notificationsAppNeeded": True,
             "screenShots": False,
+            "skip": True,
         },
         "webUI-oc10-integration": {
             "type": FULL,
@@ -572,6 +575,7 @@ config = {
             "filterTags": "not @skip and not @skipOnOC10 and not @notToImplementOnOC10 and not @openIdLogin and @smokeTest",
             "oc10IntegrationAppIncluded": True,
             "screenShots": False,
+            "skip": True,
         },
     },
     "build": True,

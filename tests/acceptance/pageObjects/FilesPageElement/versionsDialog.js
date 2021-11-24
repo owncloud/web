@@ -5,6 +5,8 @@ module.exports = {
      */
     getVersionsCount: async function () {
       let count = 0
+      this.pause(1000)
+      await this.waitForFileVisible('@versionsList')
       await this.api.elements('@versionsList', function (result) {
         count = result.value.length
       })
