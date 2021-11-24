@@ -195,41 +195,67 @@ exports.createFolder = function (user, folderName) {
  * @param {number} waitMaxIfExisting
  */
 exports.createFile = async function (user, fileName, contents = '', waitMaxIfExisting = 10000) {
+  // /**
+  //  * makes sure upload operations are carried out maximum once a second to avoid version issues
+  //  * see https://github.com/owncloud/core/issues/23151
+  //  */
+  // uploadTimeStamps[user] = uploadTimeStamps[user] || {}
+  //
+  // console.log('uploadTimestamp' + Object.values(uploadTimeStamps))
+  //
+  // const pollCheck = async (retries = 0, waitFor = 100, waitMax = waitMaxIfExisting) => {
+  //   console.log('uploadTimestamp 2:' + uploadTimeStamps[user][fileName])
+  //   if (!uploadTimeStamps[user][fileName] || waitMax <= waitFor) {
+  //     console.log('inside if')
+  //     return
+  //   } else {
+  //     console.log('inside else')
+  //     uploadTimeStamps[user][fileName] = true
+  //   }
+  //
+  //   retries++
+  //   await client.pause(waitFor)
+  //
+  //   console.log('retries' + retries++)
+  //   // O(n)
+  //   await pollCheck(retries, waitFor * retries, waitMax)
+  // }
+  //
+  // const davPath = exports.createDavPath(user, fileName)
+  // await pollCheck()
+  // const putResponse = await httpHelper.put(davPath, user, contents)
+  //
+  // const statusResponse = await httpHelper.checkStatus(
+  //   putResponse,
+  //   `Could not create the file "${fileName}" for user "${user}".`
+  // )
+  //
+  // delete uploadTimeStamps[user][fileName]
+  // await client.pause(500)
+  // return statusResponse.text()
+
+  const davPath = exports.createDavPath(user, fileName)
   /**
    * makes sure upload operations are carried out maximum once a second to avoid version issues
    * see https://github.com/owncloud/core/issues/23151
    */
-  uploadTimeStamps[user] = uploadTimeStamps[user] || {}
-
-  const pollCheck = async (retries = 0, waitFor = 100, waitMax = waitMaxIfExisting) => {
-    if (!uploadTimeStamps[user][fileName] || waitMax <= waitFor) {
-      return
-    } else {
-      uploadTimeStamps[user][fileName] = true
+  if (uploadTimeStamps[user] && uploadTimeStamps[user][fileName]) {
+    const timeSinceLastFileUpload = Date.now() - uploadTimeStamps[user][fileName]
+    if (timeSinceLastFileUpload <= 1111) {
+      await client.pause(1111 - timeSinceLastFileUpload)
     }
-
-    retries++
-    await client.pause(waitFor)
-
-    // O(n)
-    await pollCheck(retries, waitFor * retries, waitMax)
   }
-
-  await pollCheck()
-
-  const davPath = exports.createDavPath(user, fileName)
-  const putResponse = await httpHelper.put(davPath, user, contents)
-
-  delete uploadTimeStamps[user][fileName]
-
-  const statusResponse = await httpHelper.checkStatus(
-    putResponse,
-    `Could not create the file "${fileName}" for user "${user}".`
-  )
-
-  await client.pause(500)
-
-  return statusResponse.text()
+  return httpHelper
+    .put(davPath, user, contents)
+    .then(function (res) {
+      uploadTimeStamps[user] = uploadTimeStamps[user] || {}
+      uploadTimeStamps[user][fileName] = Date.now()
+      return httpHelper.checkStatus(
+        res,
+        `Could not create the file "${fileName}" for user "${user}".`
+      )
+    })
+    .then((res) => res.text())
 }
 
 /**
