@@ -1,3 +1,4 @@
+@skip
 Feature: rename folders
   As a user
   I want to rename folders
