@@ -5,7 +5,7 @@ module.exports = {
      */
     getVersionsCount: async function () {
       let count = 0
-      this.pause(1000)
+      this.pause(2000)
       await this.waitForElementVisible('@versionsList')
       await this.api.elements('@versionsList', function (result) {
         count = result.value.length
