@@ -49,7 +49,7 @@
       v-if="canEditOrDelete"
       class="uk-width-1-3 uk-flex uk-flex-nowrap uk-flex-right uk-flex-middle"
     >
-      <role-selection
+      <role-dropdown
         :collaborator-id="collaborator.id"
         :collaborators-permissions="originalPermissions"
         :existing-role="originalRole"
@@ -75,13 +75,13 @@ import { DateTime } from 'luxon'
 import { roleToBitmask, bitmaskToRole } from '../../../../helpers/collaborators'
 
 import EditDropdown from './EditDropdown.vue'
-import RoleSelection from '../RoleSelection.vue'
+import RoleDropdown from '../RoleDropdown.vue'
 
 export default {
   name: 'Collaborator',
   components: {
     EditDropdown,
-    RoleSelection
+    RoleDropdown
   },
   mixins: [Mixins, CollaboratorsMixins],
   props: {

@@ -40,7 +40,7 @@
       v-text="inviteDescriptionMessage"
     />
     <div class="uk-flex uk-flex-middle uk-flex-between oc-mb-l">
-      <role-selection @optionChange="collaboratorRoleChanged" />
+      <role-dropdown @optionChange="collaboratorRoleChanged" />
       <expiration-datepicker @optionChange="collaboratorExpiryChanged" />
       <oc-button v-if="saving" key="new-collaborator-saving-button" :disabled="true">
         <oc-spinner :aria-label="$gettext('Creating shares')" size="small" />
@@ -71,15 +71,15 @@ import { roleToBitmask } from '../../../../helpers/collaborators'
 import { shareTypes } from '../../../../helpers/shareTypes'
 
 import AutocompleteItem from './AutocompleteItem.vue'
-import RoleSelection from '../RoleSelection.vue'
+import RoleDropdown from '../RoleDropdown.vue'
 import RecipientContainer from './RecipientContainer.vue'
 import ExpirationDatepicker from './ExpirationDatepicker.vue'
 
 export default {
-  name: 'NewCollaboratorForm',
+  name: 'InviteCollaboratorForm',
   components: {
     AutocompleteItem,
-    RoleSelection,
+    RoleDropdown,
     RecipientContainer,
     ExpirationDatepicker
   },

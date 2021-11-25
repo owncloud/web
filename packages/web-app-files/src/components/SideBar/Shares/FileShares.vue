@@ -2,7 +2,7 @@
   <div id="oc-files-sharing-sidebar" class="uk-position-relative">
     <oc-loader v-if="sharesLoading" :aria-label="$gettext('Loading people list')" />
     <template v-else>
-      <new-collaborator-form
+      <invite-collaborator-form
         v-if="$_ocCollaborators_canShare"
         key="new-collaborator"
         class="oc-my-s"
@@ -61,7 +61,7 @@ import { shareTypes, userShareTypes } from '../../../helpers/shareTypes'
 import { getParentPaths } from '../../../helpers/path'
 import { dirname } from 'path'
 import { permissionsBitmask } from '../../../helpers/collaborators'
-import NewCollaboratorForm from './NewCollaborator/Form.vue'
+import InviteCollaboratorForm from './InviteCollaborator/InviteCollaboratorForm.vue'
 import CollaboratorListItem from './Collaborators/ListItem.vue'
 
 export default {
@@ -70,7 +70,7 @@ export default {
   },
   name: 'FileShares',
   components: {
-    NewCollaboratorForm,
+    InviteCollaboratorForm,
     CollaboratorListItem
   },
   mixins: [Mixins],

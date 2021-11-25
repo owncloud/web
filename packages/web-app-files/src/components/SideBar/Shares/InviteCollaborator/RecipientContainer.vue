@@ -21,7 +21,7 @@
 import { mapGetters } from 'vuex'
 
 import { shareTypes } from '../../../../helpers/shareTypes'
-import { avatarUrl } from '../../../../helpers/user/avatarUrl'
+import { avatarUrl } from '../../../../helpers/user'
 
 export default {
   props: {
