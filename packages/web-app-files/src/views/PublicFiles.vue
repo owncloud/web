@@ -131,9 +131,9 @@ export default {
     const { refresh: refreshFileListHeaderPosition, y: fileListHeaderY } =
       useFileListHeaderPosition()
 
-    useMutationSubscription(['Files/UPSERT_RESOURCE'], async (mutation) => {
+    useMutationSubscription(['Files/UPSERT_RESOURCE'], async ({ payload }) => {
       await nextTick()
-      fileList.accentuateItem(mutation.payload.id)
+      fileList.accentuateItem(payload.id)
     })
 
     const loadResourcesTask = useTask(function* (signal, ref, sameRoute, path = null) {

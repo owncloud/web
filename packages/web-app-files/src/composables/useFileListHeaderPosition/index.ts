@@ -16,7 +16,6 @@ export const useFileListHeaderPosition = (): { y: Ref; refresh: () => void } => 
     y.value = height
   }
 
-  // vue 3 (also 2 with composition api bridge) has no created hook (uses setup instead), so call it here
   window.onresize = refresh
   onMounted(refresh)
   watch(() => store.getters['Files/inProgress'].length > 0, refresh)
