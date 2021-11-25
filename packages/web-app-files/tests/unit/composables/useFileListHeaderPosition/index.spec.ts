@@ -1,6 +1,6 @@
 import { nextTick } from '@vue/composition-api'
 import { createWrapper, createAppBar } from './spec'
-import { useFileListHeaderPosition } from '.'
+import { useFileListHeaderPosition } from '../../../../src/composables'
 
 describe('useFileListHeaderPosition', () => {
   it('should be valid', () => {

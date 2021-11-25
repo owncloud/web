@@ -1,6 +1,5 @@
 import { MutationPayload } from 'vuex'
-import { useMutationSubscription } from './mutationSubscription'
-import { useStore } from './store'
+import { useMutationSubscription, useStore } from '../../../../src/composables'
 import { createWrapper } from './spec'
 
 describe('subscribeMutation', () => {

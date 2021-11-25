@@ -1,4 +1,4 @@
-import { useStore } from './store'
+import { useStore } from '../../../../src/composables'
 import { createWrapper } from './spec'
 import { Store } from 'vuex'
 
