@@ -1,0 +1,5 @@
+Bugfix: Pagination
+
+We fixed the pagination as it was slicing the items wrong on pages after the first one.
+
+https://github.com/owncloud/web/pull/6056

@@ -6,7 +6,7 @@ export default {
   }),
   mutations: {
     SET_ITEMS_PER_PAGE(state, limit) {
-      state.itemsPerPage = limit
+      state.itemsPerPage = parseInt(limit)
 
       window.localStorage.setItem('oc_filesPageLimit', limit)
     },
@@ -16,7 +16,7 @@ export default {
   },
   getters: {
     pages: (state, getters, rootState, rootGetters) => {
-      if (!parseInt(state.itemsPerPage)) {
+      if (!state.itemsPerPage) {
         return 1
       }
 
