@@ -3,7 +3,12 @@
     <oc-button :id="editShareBtnId" class="collaborator-edit-dropdown-options-btn" appearance="raw">
       <oc-icon name="more_vert" />
     </oc-button>
-    <oc-drop ref="expirationDateDrop" :toggle="'#' + editShareBtnId" mode="click">
+    <oc-drop
+      ref="expirationDateDrop"
+      :toggle="'#' + editShareBtnId"
+      mode="click"
+      padding-size="remove"
+    >
       <oc-list class="collaborator-edit-dropdown-options-list" :aria-label="shareEditOptions">
         <li v-if="expirationSupported" class="oc-py-xs">
           <oc-datepicker

@@ -10,7 +10,13 @@
       <span v-else>{{ selectedRole.label }}</span>
       <oc-icon name="expand_more" />
     </oc-button>
-    <oc-drop ref="rolesDrop" :toggle="'#' + roleButtonId" mode="click" close-on-click>
+    <oc-drop
+      ref="rolesDrop"
+      :toggle="'#' + roleButtonId"
+      mode="click"
+      padding-size="remove"
+      close-on-click
+    >
       <oc-list class="files-recipient-role-drop-list" :aria-label="rolesListAriaLabel">
         <li v-for="role in roles" :key="role.name">
           <oc-button
@@ -33,6 +39,7 @@
       class="files-recipient-custom-permissions-drop"
       mode="manual"
       :target="'#' + roleButtonId"
+      padding-size="small"
     >
       <h4 class="oc-text-bold oc-text-initial" v-text="customPermissionsDropTitle" />
       <oc-list class="oc-mb">

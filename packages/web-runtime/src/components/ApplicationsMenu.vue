@@ -18,6 +18,7 @@
       :options="{ pos: 'bottom-right', delayHide: 0 }"
       class="uk-width-large"
       close-on-click
+      padding-size="small"
     >
       <ul class="uk-grid-small uk-text-center" uk-grid>
         <li v-for="(n, nid) in menuItems" :key="`apps-menu-${nid}`" class="uk-width-1-3">
