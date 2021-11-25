@@ -182,7 +182,8 @@ module.exports = {
       days
     ) {
       await this.selectCollaboratorForShare(sharee, shareWithGroup, remote)
-      await this.selectRoleForNewCollaborator(role)
+      await collaboratorDialog.expandShareRoleDropdown()
+      await this.selectRole(role)
 
       if (role === 'Custom permissions') {
         await this.selectPermissionsOnPendingShare(permissions)
@@ -201,13 +202,42 @@ module.exports = {
 
       return this.confirmShare()
     },
+
+    /**
+     * Share a file with multiple users or groups. Submitting the share is optional.
+     *
+     * @param sharees { collaborator, type }[] list of sharees including their types (e.g. user or group)
+     * @param role
+     * @param permissions
+     * @param submit
+     * @returns {Promise<exports.commands>}
+     */
+    shareWithUsersOrGroups: async function (sharees, role, permissions, submit) {
+      for (const { collaborator, type } of sharees) {
+        await this.selectCollaboratorForShare(collaborator, type === 'group')
+      }
+
+      await collaboratorDialog.expandShareRoleDropdown()
+      await this.selectRole(role)
+
+      if (role === 'Custom permissions') {
+        await this.selectPermissionsOnPendingShare(permissions)
+      }
+
+      if (submit) {
+        await this.confirmShare()
+      }
+
+      return this
+    },
+
     /**
      *
      * @param {String} role
      */
-    selectRoleForNewCollaborator: function (role) {
+    selectRole: function (role) {
       role = _(role).chain().toLower().startCase().replace(/\s/g, '').value()
-      return this.click('@newCollaboratorSelectRoleButton').click(`@newCollaboratorRole${role}`)
+      return this.click(`@shareRole${role}`)
     },
     confirmShare: function () {
       return this.waitForElementPresent('@addShareSaveButton')
@@ -259,8 +289,8 @@ module.exports = {
      * @param {string} requiredPermissions
      */
     changeCustomPermissionsTo: async function (collaborator, requiredPermissions) {
-      await collaboratorDialog.clickEditShareRole(collaborator)
-      await this.selectRoleForNewCollaborator('Custom permissions')
+      await collaboratorDialog.expandShareRoleDropdown(collaborator)
+      await this.selectRole('Custom permissions')
 
       const requiredPermissionArray = this.getArrayFromPermissionString(requiredPermissions)
       const sharePermissions = await this.getSharePermissions()
@@ -279,11 +309,10 @@ module.exports = {
     /**
      *
      * @param {string} collaborator
-     * @param {string} permissions
      */
     getDisplayedPermission: async function (collaborator) {
-      await collaboratorDialog.clickEditShareRole(collaborator)
-      await this.selectRoleForNewCollaborator('Custom permissions')
+      await collaboratorDialog.expandShareRoleDropdown(collaborator)
+      await this.selectRole('Custom permissions')
       // read the permissions from the checkboxes
       const currentSharePermissions = await this.getSharePermissions()
 
@@ -298,8 +327,8 @@ module.exports = {
      * @param {string} collaborator
      */
     disableAllCustomPermissions: async function (collaborator) {
-      await collaboratorDialog.clickEditShareRole(collaborator)
-      await this.selectRoleForNewCollaborator('Custom permissions')
+      await collaboratorDialog.expandShareRoleDropdown(collaborator)
+      await this.selectRole('Custom permissions')
 
       const sharePermissions = await this.getSharePermissions(collaborator)
       const enabledPermissions = Object.keys(sharePermissions).filter(
@@ -384,7 +413,7 @@ module.exports = {
      * @returns {Promise}
      */
     changeCollaboratorRole: async function (collaborator, newRole, permissions) {
-      await collaboratorDialog.clickEditShareRole(collaborator)
+      await collaboratorDialog.expandShareRoleDropdown(collaborator)
       await this.changeCollaboratorRoleInDropdown(newRole, permissions)
       return this
     },
@@ -511,6 +540,7 @@ module.exports = {
      * @return {Promise<*>}
      */
     changeCollaboratorExpiryDate: async function (collaborator, days) {
+      // FIXME: clickEditShare doesn't exist, yet.
       await collaboratorDialog.clickEditShare(collaborator)
       const dateToSet = calculateDate(days)
       const isExpiryDateChanged = await this.openExpirationDatePicker().setExpirationDate(dateToSet)
@@ -649,16 +679,13 @@ module.exports = {
     addShareSaveButton: {
       selector: '#new-collaborators-form-create-button'
     },
-    newCollaboratorSelectRoleButton: {
-      selector: '#files-collaborators-role-button-new'
-    },
-    newCollaboratorRoleViewer: {
+    shareRoleViewer: {
       selector: '#files-recipient-role-drop-btn-viewer'
     },
-    newCollaboratorRoleEditor: {
+    shareRoleEditor: {
       selector: '#files-recipient-role-drop-btn-editor'
     },
-    newCollaboratorRoleCustomPermissions: {
+    shareRoleCustomPermissions: {
       selector: '#files-recipient-role-drop-btn-advancedRole'
     },
     newCollaboratorItems: {

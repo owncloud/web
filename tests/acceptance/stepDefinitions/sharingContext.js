@@ -719,13 +719,7 @@ When(
   async function (role, permissions, usersTable) {
     const users = usersTable.hashes()
     const dialog = client.page.FilesPageElement.sharingDialog()
-
-    for (const { collaborator, type } of users) {
-      await dialog.selectCollaboratorForShare(collaborator, type === 'group')
-    }
-
-    await dialog.selectRoleForNewCollaborator(role)
-    await dialog.selectPermissionsOnPendingShare(permissions)
+    await dialog.shareWithUsersOrGroups(users, role, permissions, false)
   }
 )
 
@@ -847,14 +841,6 @@ Then(
       })
   }
 )
-
-When('the user selects role {string}', function (role) {
-  return client.page.FilesPageElement.sharingDialog().selectRoleForNewCollaborator(role)
-})
-
-When('the user confirms the share', function () {
-  return client.page.FilesPageElement.sharingDialog().confirmShare()
-})
 
 Then('the users own name should not be listed in the autocomplete list on the webUI', function () {
   const currentUserDisplayName = userSettings.getDisplayNameForUser(client.globals.currentUser)

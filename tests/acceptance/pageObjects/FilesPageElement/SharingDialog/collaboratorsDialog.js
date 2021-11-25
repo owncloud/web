@@ -25,10 +25,15 @@ module.exports = {
         .waitForElementNotPresent(informationSelector)
     },
     /**
+     * Open the role selection dialog for a new share or for editing the given collaborator
      *
-     * @param {string} collaborator
+     * @param {string | null} collaborator
      */
-    clickEditShareRole: function (collaborator) {
+    expandShareRoleDropdown: function (collaborator = null) {
+      if (!collaborator) {
+        return this.waitForElementVisible('@newShareRoleButton').click('@newShareRoleButton')
+      }
+
       const informationSelector = util.format(
         this.elements.collaboratorInformationByCollaboratorName.selector,
         collaborator
@@ -160,6 +165,9 @@ module.exports = {
     },
     createShareDialog: {
       selector: '#new-collaborators-form'
+    },
+    newShareRoleButton: {
+      selector: '#files-collaborators-role-button-new'
     },
     editShareRoleButton: {
       // within collaboratorInformationByCollaboratorName
