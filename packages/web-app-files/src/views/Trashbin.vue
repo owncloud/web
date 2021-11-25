@@ -22,7 +22,7 @@
         :are-thumbnails-displayed="false"
         :resources="activeFilesCurrentPage"
         :are-resources-clickable="false"
-        :header-position="headerPosition"
+        :header-position="fileListHeaderY"
       >
         <template #contextMenu="{ resource }">
           <context-actions v-if="isResourceInSelection(resource)" :items="selected" />
@@ -46,10 +46,10 @@ import { mapGetters, mapMutations, mapState } from 'vuex'
 
 import { buildDeletedResource, buildResource } from '../helpers/resources'
 import MixinFilesListFilter from '../mixins/filesListFilter'
-import MixinFilesListPositioning from '../mixins/filesListPositioning'
 import MixinResources from '../mixins/resources'
 import MixinFilesListPagination from '../mixins/filesListPagination'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
+import { useFileListHeaderPosition } from '../composables'
 import { useTask } from 'vue-concurrency'
 
 import ListLoader from '../components/FilesList/ListLoader.vue'
@@ -62,15 +62,12 @@ import { DavProperties } from 'web-pkg/src/constants'
 export default {
   components: { ListLoader, NoContentMessage, ListInfo, Pagination, ContextActions },
 
-  mixins: [
-    MixinFilesListPositioning,
-    MixinResources,
-    MixinFilesListPagination,
-    MixinMountSideBar,
-    MixinFilesListFilter
-  ],
+  mixins: [MixinResources, MixinFilesListPagination, MixinMountSideBar, MixinFilesListFilter],
 
   setup() {
+    const { refresh: refreshFileListHeaderPosition, y: fileListHeaderY } =
+      useFileListHeaderPosition()
+
     const loadResourcesTask = useTask(function* (signal, ref) {
       ref.CLEAR_CURRENT_FILES_LIST()
 
@@ -80,10 +77,10 @@ export default {
         currentFolder: buildResource(resources[0]),
         files: resources.slice(1).map(buildDeletedResource)
       })
-      ref.adjustTableHeaderPosition()
+      refreshFileListHeaderPosition()
     })
 
-    return { loadResourcesTask }
+    return { fileListHeaderY, loadResourcesTask }
   },
 
   computed: {
@@ -92,7 +89,6 @@ export default {
       'highlightedFile',
       'activeFilesCurrentPage',
       'selectedFiles',
-      'inProgress',
       'totalFilesCount'
     ]),
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
@@ -108,18 +104,10 @@ export default {
 
     isEmpty() {
       return this.activeFilesCurrentPage.length < 1
-    },
-
-    uploadProgressVisible() {
-      return this.inProgress.length > 0
     }
   },
 
   watch: {
-    uploadProgressVisible() {
-      this.adjustTableHeaderPosition()
-    },
-
     $route: {
       handler: '$_filesListPagination_updateCurrentPage',
       immediate: true
@@ -128,11 +116,6 @@ export default {
 
   created() {
     this.loadResourcesTask.perform(this)
-    window.onresize = this.adjustTableHeaderPosition
-  },
-
-  mounted() {
-    this.adjustTableHeaderPosition()
   },
 
   methods: {

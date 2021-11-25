@@ -53,7 +53,7 @@
             :target-route="targetRoute"
             :has-actions="false"
             :is-selectable="false"
-            :header-position="headerPosition"
+            :header-position="fileListHeaderY"
           >
             <template #footer>
               <pagination />
@@ -81,6 +81,7 @@ import MixinsGeneral from '../mixins'
 import MixinRoutes from '../mixins/routes'
 import MixinFilesListFilter from '../mixins/filesListFilter'
 import MixinFilesListPagination from '../mixins/filesListPagination'
+import { useFileListHeaderPosition } from '../composables'
 import { useTask } from 'vue-concurrency'
 
 import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
@@ -106,6 +107,9 @@ export default {
   mixins: [MixinsGeneral, MixinRoutes, MixinFilesListFilter, MixinFilesListPagination],
 
   setup() {
+    const { refresh: refreshFileListHeaderPosition, y: fileListHeaderY } =
+      useFileListHeaderPosition()
+
     const navigateToTargetTask = useTask(function* (signal, ref, target) {
       ref.CLEAR_CURRENT_FILES_LIST()
 
@@ -122,14 +126,13 @@ export default {
         client: ref.$client,
         currentFolder: ref.$route.params.item || '/'
       })
-      ref.adjustTableHeaderPosition()
+      refreshFileListHeaderPosition()
     }).restartable()
 
-    return { navigateToTargetTask }
+    return { fileListHeaderY, navigateToTargetTask }
   },
 
   data: () => ({
-    headerPosition: 0,
     originalLocation: ''
   }),
 
@@ -283,12 +286,7 @@ export default {
   },
 
   created() {
-    window.onresize = this.adjustTableHeaderPosition
     this.originalLocation = this.target
-  },
-
-  mounted() {
-    this.adjustTableHeaderPosition()
   },
 
   methods: {
@@ -311,13 +309,6 @@ export default {
           }
         }
       }
-    },
-
-    adjustTableHeaderPosition() {
-      this.$nextTick(() => {
-        const header = document.querySelector('#files-app-bar')
-        this.headerPosition = header.getBoundingClientRect().height
-      })
     },
 
     leaveLocationPicker(target) {

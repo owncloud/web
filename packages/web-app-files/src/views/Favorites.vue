@@ -17,7 +17,7 @@
         :are-thumbnails-displayed="displayThumbnails"
         :resources="activeFilesCurrentPage"
         :target-route="targetRoute"
-        :header-position="headerPosition"
+        :header-position="fileListHeaderY"
         @fileClick="$_fileActions_triggerDefaultAction"
         @rowMounted="rowMounted"
       >
@@ -48,11 +48,11 @@ import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 import { buildResource } from '../helpers/resources'
 import FileActions from '../mixins/fileActions'
 import MixinFilesListFilter from '../mixins/filesListFilter'
-import MixinFilesListPositioning from '../mixins/filesListPositioning'
 import MixinFilesListPagination from '../mixins/filesListPagination'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../constants'
+import { useFileListHeaderPosition } from '../composables'
 import debounce from 'lodash-es/debounce'
 import { useTask } from 'vue-concurrency'
 
@@ -76,15 +76,11 @@ export default {
     ContextActions
   },
 
-  mixins: [
-    FileActions,
-    MixinFilesListPositioning,
-    MixinFilesListPagination,
-    MixinMountSideBar,
-    MixinFilesListFilter
-  ],
+  mixins: [FileActions, MixinFilesListPagination, MixinMountSideBar, MixinFilesListFilter],
 
   setup() {
+    const { y: fileListHeaderY } = useFileListHeaderPosition()
+
     const loadResourcesTask = useTask(function* (signal, ref) {
       ref.CLEAR_CURRENT_FILES_LIST()
 
@@ -94,7 +90,7 @@ export default {
       ref.loadIndicators({ client: this.$client, currentFolder: '/' })
     })
 
-    return { loadResourcesTask }
+    return { fileListHeaderY, loadResourcesTask }
   },
 
   computed: {
@@ -104,7 +100,6 @@ export default {
       'highlightedFile',
       'activeFilesCurrentPage',
       'selectedFiles',
-      'inProgress',
       'totalFilesCount',
       'totalFilesSize'
     ]),
@@ -128,20 +123,12 @@ export default {
       return this.activeFilesCurrentPage.length < 1
     },
 
-    uploadProgressVisible() {
-      return this.inProgress.length > 0
-    },
-
     displayThumbnails() {
       return !this.configuration.options.disablePreviews
     }
   },
 
   watch: {
-    uploadProgressVisible() {
-      this.adjustTableHeaderPosition()
-    },
-
     $route: {
       handler: '$_filesListPagination_updateCurrentPage',
       immediate: true
@@ -150,11 +137,6 @@ export default {
 
   created() {
     this.loadResourcesTask.perform(this)
-    window.onresize = this.adjustTableHeaderPosition
-  },
-
-  mounted() {
-    this.adjustTableHeaderPosition()
   },
 
   beforeDestroy() {

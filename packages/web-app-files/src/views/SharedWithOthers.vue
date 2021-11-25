@@ -23,7 +23,7 @@
         :are-thumbnails-displayed="displayThumbnails"
         :resources="activeFilesCurrentPage"
         :target-route="targetRoute"
-        :header-position="headerPosition"
+        :header-position="fileListHeaderY"
         @fileClick="$_fileActions_triggerDefaultAction"
         @rowMounted="rowMounted"
       >
@@ -50,12 +50,12 @@ import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 import { aggregateResourceShares } from '../helpers/resources'
 import FileActions from '../mixins/fileActions'
 import MixinFilesListFilter from '../mixins/filesListFilter'
-import MixinFilesListPositioning from '../mixins/filesListPositioning'
 import MixinResources from '../mixins/resources'
 import MixinFilesListPagination from '../mixins/filesListPagination'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../constants'
+import { useFileListHeaderPosition } from '../composables'
 import debounce from 'lodash-es/debounce'
 import { useTask } from 'vue-concurrency'
 
@@ -72,7 +72,6 @@ export default {
 
   mixins: [
     FileActions,
-    MixinFilesListPositioning,
     MixinResources,
     MixinFilesListPagination,
     MixinMountSideBar,
@@ -80,6 +79,8 @@ export default {
   ],
 
   setup() {
+    const { y: fileListHeaderY } = useFileListHeaderPosition()
+
     const loadResourcesTask = useTask(function* (signal, ref) {
       ref.CLEAR_CURRENT_FILES_LIST()
 
@@ -105,7 +106,7 @@ export default {
       ref.LOAD_FILES({ currentFolder: null, files: resources })
     })
 
-    return { loadResourcesTask }
+    return { fileListHeaderY, loadResourcesTask }
   },
 
   computed: {
@@ -115,7 +116,6 @@ export default {
       'highlightedFile',
       'activeFilesCurrentPage',
       'selectedFiles',
-      'inProgress',
       'totalFilesCount'
     ]),
     ...mapGetters(['isOcis', 'configuration', 'getToken', 'user']),
@@ -134,10 +134,6 @@ export default {
       return this.activeFilesCurrentPage.length < 1
     },
 
-    uploadProgressVisible() {
-      return this.inProgress.length > 0
-    },
-
     targetRoute() {
       return { name: 'files-personal' }
     },
@@ -148,10 +144,6 @@ export default {
   },
 
   watch: {
-    uploadProgressVisible() {
-      this.adjustTableHeaderPosition()
-    },
-
     $route: {
       handler: '$_filesListPagination_updateCurrentPage',
       immediate: true
@@ -160,11 +152,6 @@ export default {
 
   created() {
     this.loadResourcesTask.perform(this)
-    window.onresize = this.adjustTableHeaderPosition
-  },
-
-  mounted() {
-    this.adjustTableHeaderPosition()
   },
 
   beforeDestroy() {

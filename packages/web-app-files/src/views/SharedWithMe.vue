@@ -19,7 +19,7 @@
           :resources="showMorePending ? pending : pending.slice(0, 3)"
           :target-route="targetRoute"
           :are-resources-clickable="false"
-          :header-position="headerPosition"
+          :header-position="fileListHeaderY"
         >
           <template #status="{ resource }">
             <div
@@ -101,7 +101,7 @@
         :are-thumbnails-displayed="displayThumbnails"
         :resources="shares"
         :target-route="targetRoute"
-        :header-position="headerPosition"
+        :header-position="fileListHeaderY"
         @fileClick="$_fileActions_triggerDefaultAction"
         @rowMounted="rowMounted"
       >
@@ -155,10 +155,10 @@ import FileActions from '../mixins/fileActions'
 import MixinAcceptShare from '../mixins/actions/acceptShare'
 import MixinDeclineShare from '../mixins/actions/declineShare'
 import MixinFilesListFilter from '../mixins/filesListFilter'
-import MixinFilesListPositioning from '../mixins/filesListPositioning'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../constants'
+import { useFileListHeaderPosition } from '../composables'
 import debounce from 'lodash-es/debounce'
 
 import ListLoader from '../components/FilesList/ListLoader.vue'
@@ -181,12 +181,13 @@ export default {
     FileActions,
     MixinAcceptShare,
     MixinDeclineShare,
-    MixinFilesListPositioning,
     MixinMountSideBar,
     MixinFilesListFilter
   ],
 
   setup() {
+    const { y: fileListHeaderY } = useFileListHeaderPosition()
+
     const loadResourcesTask = useTask(function* (signal, ref) {
       ref.CLEAR_CURRENT_FILES_LIST()
 
@@ -212,7 +213,7 @@ export default {
       ref.LOAD_FILES({ currentFolder: null, files: resources })
     })
 
-    return { loadResourcesTask }
+    return { fileListHeaderY, loadResourcesTask }
   },
 
   data: () => ({
@@ -221,7 +222,7 @@ export default {
   }),
 
   computed: {
-    ...mapGetters('Files', ['activeFiles', 'selectedFiles', 'inProgress']),
+    ...mapGetters('Files', ['activeFiles', 'selectedFiles']),
     ...mapGetters(['isOcis', 'configuration', 'getToken']),
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
@@ -318,9 +319,6 @@ export default {
     },
 
     // misc
-    uploadProgressVisible() {
-      return this.inProgress.length > 0
-    },
     targetRoute() {
       return { name: 'files-personal' }
     },
@@ -329,19 +327,8 @@ export default {
     }
   },
 
-  watch: {
-    uploadProgressVisible() {
-      this.adjustTableHeaderPosition()
-    }
-  },
-
   created() {
     this.loadResourcesTask.perform(this)
-    window.onresize = this.adjustTableHeaderPosition
-  },
-
-  mounted() {
-    this.adjustTableHeaderPosition()
   },
 
   beforeDestroy() {

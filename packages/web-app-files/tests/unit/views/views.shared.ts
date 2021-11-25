@@ -33,6 +33,9 @@ export const accentuatesTableRowTest = async <V extends Vue>(
             state.activeFilesCurrentPage.push(resource)
           }
         },
+        getters: {
+          inProgress: () => 0
+        },
         namespaced: true
       }
     }

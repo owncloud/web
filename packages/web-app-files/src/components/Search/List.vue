@@ -46,7 +46,6 @@ import ListInfo from '../FilesList/ListInfo.vue'
 import MixinFileActions from '../../mixins/fileActions'
 import MixinFilesListFilter from '../../mixins/filesListFilter'
 import MixinFilesListScrolling from '../../mixins/filesListScrolling'
-import MixinFilesListPositioning from '../../mixins/filesListPositioning'
 import MixinFilesListPagination from '../../mixins/filesListPagination'
 
 const visibilityObserver = new VisibilityObserver()
@@ -57,7 +56,6 @@ export default {
     MixinFileActions,
     MixinFilesListFilter,
     MixinFilesListScrolling,
-    MixinFilesListPositioning,
     MixinFilesListPagination
   ],
   props: {
