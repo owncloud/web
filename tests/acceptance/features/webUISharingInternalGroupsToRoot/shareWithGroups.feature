@@ -25,7 +25,7 @@ Feature: Sharing files and folders with internal groups
     And the user shares folder "simple-folder" with user "Brian Murphy" as "Viewer" using the webUI
     And the user shares folder "simple-folder" with group "grp1" as "Viewer" using the webUI
     And the user shares folder "simple-folder" with user "Alice Hansen" as "Viewer" using the webUI
-    Then the current collaborators list should have order "Carol King,Alice Hansen,Brian Murphy,grp1,grp11"
+    Then the current collaborators list should have order "Alice Hansen,Brian Murphy,grp1,grp11"
 
 
   Scenario Outline: share a file & folder with another internal user
@@ -68,7 +68,7 @@ Feature: Sharing files and folders with internal groups
       | set-role             | expected-role        | permissions-folder              | permissions-file  |
       | Viewer               | Viewer               | read,share                      | read,share        |
       | Editor               | Editor               | read,update,create,delete,share | read,update,share |
-      | Custom permissions | Custom permissions | read                            | read              |
+      | Custom permissions   | Custom permissions   | read                            | read              |
 
 
   Scenario: share a file with an internal group a member overwrites and unshares the file

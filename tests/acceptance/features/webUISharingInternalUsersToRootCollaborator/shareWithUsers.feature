@@ -33,34 +33,34 @@ Feature: Shares collaborator list
       | read,share          | Custom permissions   | Viewer        | | share                      | read,share                      |
       | all                 | Custom permissions   | Editor        | | update,create,delete,share | all                             |
 
-  @issue-2898
-  Scenario: see resource owner in collaborators list for direct shares
-    Given user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has logged in using the webUI
-    When the user opens the share dialog for folder "simple-folder" using the webUI
-    Then user "Alice Hansen" should be listed as "Owner" in the collaborators list on the webUI
 
-  @issue-2898
-  Scenario: see resource owner in collaborators list for reshares
-    Given user "Carol" has been created with default attributes and without skeleton files
-    And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has shared folder "simple-folder" with user "Carol"
-    And user "Carol" has logged in using the webUI
-    When the user opens the share dialog for folder "simple-folder" using the webUI
-    Then user "Alice Hansen" should be listed as "Owner" reshared through "Brian Murphy" in the collaborators list on the webUI
-    And the current collaborators list should have order "Alice Hansen,Carol King"
 
-  @issue-2898
-  Scenario: see resource owner of parent shares in collaborators list
-    Given user "Carol" has been created with default attributes and without skeleton files
-    And user "Alice" has created folder "simple-folder/simple-empty-folder"
-    And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has shared folder "simple-folder" with user "Carol"
-    And user "Carol" has logged in using the webUI
-    And the user opens folder "simple-folder" using the webUI
-    When the user opens the share dialog for folder "simple-empty-folder" using the webUI
-    # Then user "Alice Hansen" should be listed as "Owner" reshared through "Brian Murphy" via "simple-folder" in the collaborators list on the webUI
-    And the current collaborators list should have order "Alice Hansen,Carol King"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   Scenario Outline: collaborators list contains additional info when enabled

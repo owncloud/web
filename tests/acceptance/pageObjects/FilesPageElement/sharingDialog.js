@@ -17,7 +17,7 @@ module.exports = {
      *
      * @param {string} permissions
      */
-    getArrayFromPermissionString: function (permissions) {
+    getArrayFromPermissionString: function (permissions = ',') {
       permissions = permissions.replace(/\s/g, '')
       return permissions.split(',').filter((x) => x)
     },

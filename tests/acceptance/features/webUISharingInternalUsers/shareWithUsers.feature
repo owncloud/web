@@ -51,7 +51,7 @@ Feature: Sharing files and folders with internal users
       | set-role             | expected-role        | permissions-folder              | permissions-file  |
       | Viewer               | Viewer               | read,share                      | read, share       |
       | Editor               | Editor               | read,update,create,delete,share | read,update,share |
-      | Custom permissions | Custom permissions | read                            | read              |
+      | Custom permissions   | Custom permissions   | read                            | read              |
 
   @issue-4102 @issue-ocis-2267 @disablePreviews
   Scenario: share a file with another internal user who overwrites and unshares the file

@@ -1,4 +1,5 @@
 const util = require('util')
+const timeoutHelper = require('../../../helpers/timeoutHelper')
 
 module.exports = {
   commands: {
@@ -54,21 +55,20 @@ module.exports = {
       timeout = null
     ) {
       let results = []
-      // FIXME: filtering broken? probably will fail in other tests...
-      // let informationSelector = {
-      //   selector: '@collaboratorsInformation'
-      // }
-      // timeout = timeoutHelper.parseTimeout(timeout)
-      // if (filterDisplayName !== null) {
-      // informationSelector = {
-      //   selector: util.format(
-      //     this.elements.collaboratorInformationByCollaboratorName.selector,
-      //     filterDisplayName
-      //   ),
-      //   locateStrategy: this.elements.collaboratorInformationByCollaboratorName.locateStrategy,
-      //   timeout: timeout
-      // }
-      // }
+      let informationSelector = {
+        selector: '@collaboratorsListItem'
+      }
+      timeout = timeoutHelper.parseTimeout(timeout)
+      if (filterDisplayName !== null) {
+        informationSelector = {
+          selector: util.format(
+            this.elements.collaboratorInformationByCollaboratorName.selector,
+            filterDisplayName
+          ),
+          locateStrategy: this.elements.collaboratorInformationByCollaboratorName.locateStrategy,
+          timeout: timeout
+        }
+      }
 
       if (subSelectors === null) {
         subSelectors = {
@@ -82,7 +82,7 @@ module.exports = {
       let collaboratorsElementIds = null
       await this.waitForElementPresent('@collaboratorsList').api.elements(
         'css selector',
-        this.elements.collaboratorsInformation,
+        informationSelector,
         (result) => {
           collaboratorsElementIds = result.value.map((item) => item[Object.keys(item)[0]])
         }
@@ -187,20 +187,20 @@ module.exports = {
       // container around collaborator list items
       selector: '#files-collaborators-list'
     },
-    collaboratorsInformation: {
+    collaboratorsListItem: {
       // addresses users and groups
       selector: '.files-collaborators-collaborator'
     },
     collaboratorInformationSubName: {
-      // within collaboratorsInformation
+      // within collaboratorsListItem
       selector: '.collaborator-display-name'
     },
     collaboratorInformationSubRole: {
-      // within collaboratorsInformation
+      // within collaboratorsListItem
       selector: '.files-recipient-role-select-btn:first-child'
     },
     collaboratorInformationSubAdditionalInfo: {
-      // within collaboratorsInformation
+      // within collaboratorsListItem
       selector: '.collaborator-additional-info'
     },
     collaboratorShareType: {
