@@ -79,7 +79,7 @@ Feature: Share by public link
     And user "Alice" has created folder "simple-folder"
     And user "Alice" has logged in using the webUI
     When the user tries to create a new public link for resource "simple-folder" which expires in "+15" days using the webUI
-    Then the expiration date shown on the webUI should be "+7" days
+    Then the link expiration date shown on the webUI should be "+7" days
     And user "Alice" should not have created any shares
 
   @issue-ocis-1328

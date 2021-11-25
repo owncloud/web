@@ -1,5 +1,4 @@
 const util = require('util')
-const timeoutHelper = require('../../../helpers/timeoutHelper')
 
 module.exports = {
   commands: {
@@ -55,20 +54,21 @@ module.exports = {
       timeout = null
     ) {
       let results = []
-      let informationSelector = {
-        selector: '@collaboratorsInformation'
-      }
-      timeout = timeoutHelper.parseTimeout(timeout)
-      if (filterDisplayName !== null) {
-        informationSelector = {
-          selector: util.format(
-            this.elements.collaboratorInformationByCollaboratorName.selector,
-            filterDisplayName
-          ),
-          locateStrategy: this.elements.collaboratorInformationByCollaboratorName.locateStrategy,
-          timeout: timeout
-        }
-      }
+      // FIXME: filtering broken? probably will fail in other tests...
+      // let informationSelector = {
+      //   selector: '@collaboratorsInformation'
+      // }
+      // timeout = timeoutHelper.parseTimeout(timeout)
+      // if (filterDisplayName !== null) {
+      // informationSelector = {
+      //   selector: util.format(
+      //     this.elements.collaboratorInformationByCollaboratorName.selector,
+      //     filterDisplayName
+      //   ),
+      //   locateStrategy: this.elements.collaboratorInformationByCollaboratorName.locateStrategy,
+      //   timeout: timeout
+      // }
+      // }
 
       if (subSelectors === null) {
         subSelectors = {
@@ -80,7 +80,7 @@ module.exports = {
       }
 
       let collaboratorsElementIds = null
-      await this.waitForElementPresent(informationSelector).api.elements(
+      await this.waitForElementPresent('@collaboratorsList').api.elements(
         'css selector',
         this.elements.collaboratorsInformation,
         (result) => {
@@ -182,6 +182,10 @@ module.exports = {
     editShareDialog: {
       selector: '//*[contains(@class, "files-collaborators-collaborator-edit-dialog")]',
       locateStrategy: 'xpath'
+    },
+    collaboratorsList: {
+      // container around collaborator list items
+      selector: '#files-collaborators-list'
     },
     collaboratorsInformation: {
       // addresses users and groups

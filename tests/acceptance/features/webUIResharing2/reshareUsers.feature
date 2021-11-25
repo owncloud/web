@@ -65,12 +65,12 @@ Feature: Resharing shared files with different permissions
       | item_type   | folder                |
       | permissions | <permissions>         |
     Examples:
-      | role                 | displayed-role       | collaborators-permissions     | displayed-permissions | permissions                         |
-      | Viewer               | Viewer               | ,                             | ,                     | read, share                         |
-      | Editor               | Editor               | ,                             | ,                     | all                                 |
-      | Custom permissions   | Custom permissions   | share, create                 | share, create         | read, share, create                 |
-      | Custom permissions   | Custom permissions   | update, share                 | share, update         | read, update, share                 |
-      | Custom permissions   | Editor               | delete, share, create, update |                       | read, share, delete, update, create |
+      | role                 | displayed-role       | collaborators-permissions     | displayed-permissions         | permissions                         |
+      | Viewer               | Viewer               | ,                             | share                         | read, share                         |
+      | Editor               | Editor               | ,                             | share, delete, update, create | all                                 |
+      | Custom permissions   | Custom permissions   | share, create                 | share, create                 | read, share, create                 |
+      | Custom permissions   | Custom permissions   | update, share                 | share, update                 | read, update, share                 |
+      | Custom permissions   | Editor               | delete, share, create, update | share, delete, update, create | read, share, delete, update, create |
 
   @skipOnOC10 @issue-ocis-2260 @issue-ocis-1922
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
@@ -126,9 +126,9 @@ Feature: Resharing shared files with different permissions
       | item_type   | folder                |
       | permissions | <permissions>         |
     Examples:
-      | role                 | displayed-role       | collaborators-permissions     | displayed-permissions | permissions                         |
-      | Viewer               | Viewer               | ,                             | ,                     | read, share                         |
-      | Editor               | Editor               | ,                             | ,                     | all                                 |
-      | Custom permissions   | Custom permissions   | share, create                 | share, create         | read, share, create                 |
-      | Custom permissions   | Custom permissions   | update, share                 | share, update         | read, update, share                 |
-      | Custom permissions   | Editor               | delete, share, create, update | ,                     | read, share, delete, update, create |
+      | role                 | displayed-role       | collaborators-permissions         | displayed-permissions         | permissions                         |
+      | Viewer               | Viewer               | ,                             | share                         | read, share                         |
+      | Editor               | Editor               | ,                             | share, delete, update, create | all                                 |
+      | Custom permissions   | Custom permissions   | share, create                 | share, create                 | read, share, create                 |
+      | Custom permissions   | Custom permissions   | update, share                 | share, update                 | read, update, share                 |
+      | Custom permissions   | Editor               | delete, share, create, update | share, delete, update, create | read, share, delete, update, create |

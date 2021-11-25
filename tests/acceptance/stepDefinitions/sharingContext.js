@@ -1337,7 +1337,7 @@ Then(
 )
 
 Then(
-  'the expiration date shown on the webUI should be {string} days',
+  'the share expiration date shown on the webUI should be {string} days',
   async function (expectedDays) {
     const expectedDate = sharingHelper.calculateDate(expectedDays)
     const expectedDateString = expectedDate.toString()

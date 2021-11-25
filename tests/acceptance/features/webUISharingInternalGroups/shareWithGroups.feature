@@ -301,7 +301,7 @@ Feature: Sharing files and folders with internal groups
     And user "Carol" has created folder "simple-folder"
     And user "Carol" has logged in using the webUI
     When the user tries to share resource "<shared-resource>" with group "grp1" which expires in "+6" days using the webUI
-    Then the expiration date shown on the webUI should be "+5" days
+    Then the share expiration date shown on the webUI should be "+5" days
     And user "Alice" should not have created any shares
     Examples:
       | shared-resource |

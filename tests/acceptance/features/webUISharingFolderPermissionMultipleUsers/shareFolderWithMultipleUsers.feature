@@ -57,10 +57,10 @@ Feature: Sharing folders with multiple internal users with different permissions
     And user "David Lopez" should not be listed in the collaborators list on the webUI
     And as "David" folder "simple-folder (2)" should not exist
     Examples:
-      | role                 | displayed-role       | extra-permissions             | displayed-permissions  | actual-permissions           |
-      | Viewer               | Viewer               | ,                             | ,                      | read, share                  |
-      | Editor               | Editor               | ,                             | ,                      | all                          |
-      | Custom permissions   | Custom permissions   | ,                             | ,                      | read                         |
-      | Custom permissions   | Viewer               | share                         | ,                      | read, share                  |
-      | Custom permissions   | Custom permissions   | delete, update, create        | delete, update, create | read, delete, update, create |
-      | Custom permissions   | Editor               | share, delete, update, create | ,                      | all                          |
+      | role                 | displayed-role       | extra-permissions             | displayed-permissions         | actual-permissions           |
+      | Viewer               | Viewer               | ,                             | share                         | read, share                  |
+      | Editor               | Editor               | ,                             | delete, update, create, share | all                          |
+      | Custom permissions   | Custom permissions   | ,                             | ,                             | read                         |
+      | Custom permissions   | Viewer               | share                         | share                         | read, share                  |
+      | Custom permissions   | Custom permissions   | delete, update, create        | delete, update, create        | read, delete, update, create |
+      | Custom permissions   | Editor               | share, delete, update, create | delete, update, create, share | all                          |

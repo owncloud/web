@@ -52,12 +52,12 @@ Feature: Resharing shared files with different permissions
       | item_type   | folder             |
       | permissions | <permissions>      |
     Examples:
-      | role                 | displayed-role       | collaborators-permissions     | displayed-permissions | permissions                         |
-      | Viewer               | Viewer               | ,                             | ,                     | read, share                         |
-      | Editor               | Editor               | ,                             | ,                     | all                                 |
-      | Custom permissions | Custom permissions | share, create                 | share, create         | read, share, create                 |
-      | Custom permissions | Custom permissions | update, share                 | share, update         | read, update, share                 |
-      | Custom permissions | Editor               | delete, share, create, update | ,                     | read, share, delete, update, create |
+      | role                 | displayed-role       | collaborators-permissions     | displayed-permissions         | permissions                         |
+      | Viewer               | Viewer               | ,                             | share                         | read, share                         |
+      | Editor               | Editor               | ,                             | share, delete, update, create | all                                 |
+      | Custom permissions   | Custom permissions   | share, create                 | share, create                 | read, share, create                 |
+      | Custom permissions   | Custom permissions   | update, share                 | share, update                 | read, update, share                 |
+      | Custom permissions   | Editor               | delete, share, create, update | share, delete, update, create | read, share, delete, update, create |
 
 
   Scenario Outline: share a received folder with another user with same permissions(including share permissions) and check if the user is displayed in collaborators list for original owner
@@ -84,12 +84,12 @@ Feature: Resharing shared files with different permissions
       | item_type   | folder             |
       | permissions | <permissions>      |
     Examples:
-      | role                 | displayed-role       | collaborators-permissions     | displayed-permissions | permissions                         |
-      | Viewer               | Viewer               | ,                             | ,                     | read, share                         |
-      | Editor               | Editor               | ,                             | ,                     | all                                 |
-      | Custom permissions | Custom permissions | share, create                 | share, create         | read, share, create                 |
-      | Custom permissions | Custom permissions | update, share                 | share, update         | read, update, share                 |
-      | Custom permissions | Editor               | delete, share, create, update | ,                     | read, share, delete, update, create |
+      | role                 | displayed-role       | collaborators-permissions     | displayed-permissions         | permissions                         |
+      | Viewer               | Viewer               | ,                             | share                         | read, share                         |
+      | Editor               | Editor               | ,                             | share, delete, update, create | all                                 |
+      | Custom permissions   | Custom permissions   | share, create                 | share, create                 | read, share, create                 |
+      | Custom permissions   | Custom permissions   | update, share                 | share, update                 | read, update, share                 |
+      | Custom permissions   | Editor               | delete, share, create, update | share, delete, update, create | read, share, delete, update, create |
 
 
   Scenario: share a folder with another user with share permissions and reshare without share permissions to different user, and check if user is displayed for original sharer
@@ -98,7 +98,7 @@ Feature: Resharing shared files with different permissions
     When the user shares folder "simple-folder" with user "Carol King" as "Viewer" with permissions "," using the webUI
     And the user re-logs in as "Brian" using the webUI
     Then user "Carol King" should be listed as "Viewer" in the collaborators list for folder "simple-folder" on the webUI
-    And no custom permissions should be set for collaborator "Carol King" for folder "simple-folder" on the webUI
+    And custom permission "share" should be set for user "Carol King" for folder "simple-folder" on the webUI
     And user "Alice Hansen" should be listed as "Viewer" in the collaborators list for folder "simple-folder" on the webUI
     And user "Alice" should have received a share with these details:
       | field       | value              |
@@ -163,7 +163,8 @@ Feature: Resharing shared files with different permissions
     When the user shares folder "simple-folder" with user "Carol King" as "Custom permissions" with permissions "share, delete" using the webUI
     And the user re-logs in as "Carol" using the webUI
     And the user opens the share dialog for folder "simple-folder" using the webUI
-    Then the current collaborators list should have order "Brian Murphy,Carol King"
+    Then the collaborators list for folder "simple-folder" should be empty
+    # Then the current collaborators list should have order "Brian Murphy,Carol King"
     # And user "Brian Murphy" should be listed as "Owner" reshared through "Alice Hansen" in the collaborators list on the webUI
     And user "Carol" should have received a share with these details:
       | field       | value               |

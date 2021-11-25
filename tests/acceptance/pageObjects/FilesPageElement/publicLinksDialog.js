@@ -372,6 +372,26 @@ module.exports = {
       return this.waitForElementVisible('@privateLinkURLCopyButton').click(
         '@privateLinkURLCopyButton'
       )
+    },
+    /**
+     * extracts set value in expiration date trigger button
+     * @return {Promise<*>}
+     */
+    getExpirationDate: async function () {
+      let expirationDate
+      await this.waitForElementVisible('@expirationDateField')
+      await this.getAttribute('@expirationDateField', 'value', (result) => {
+        const date = new Date(result.value)
+        const dateString =
+          date.getFullYear() +
+          '-' +
+          String(date.getMonth() + 1).padStart(2, '0') +
+          '-' +
+          String(date.getDate()).padStart(2, '0') +
+          ' 00:00:00'
+        expirationDate = dateString
+      })
+      return expirationDate
     }
   },
   elements: {
