@@ -8,10 +8,17 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Pagination: [#6056](https://github.com/owncloud/web/pull/6056)
 * Enhancement - Contextmenu for multiple files: [#5973](https://github.com/owncloud/web/pull/5973)
 
 Details
 -------
+
+* Bugfix - Pagination: [#6056](https://github.com/owncloud/web/pull/6056)
+
+   We fixed the pagination as it was slicing the items wrong on pages after the first one.
+
+   https://github.com/owncloud/web/pull/6056
 
 * Enhancement - Contextmenu for multiple files: [#5973](https://github.com/owncloud/web/pull/5973)
 
