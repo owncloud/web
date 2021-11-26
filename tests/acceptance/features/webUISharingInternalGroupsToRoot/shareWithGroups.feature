@@ -189,18 +189,18 @@ Feature: Sharing files and folders with internal groups
     And the user types "system-group" in the share-with-field
     Then the autocomplete list should not be displayed on the webUI
 
-  @issue-2897
-  Scenario: sharing details of items inside a shared folder shared with user and group
-    Given user "Carol" has created folder "/simple-folder"
-    And user "Carol" has created folder "/simple-folder/sub-folder"
-    And user "Carol" has uploaded file with content "test" to "/simple-folder/sub-folder/lorem.txt"
-    And user "Carol" has shared folder "simple-folder" with user "Brian"
-    And user "Carol" has shared folder "/simple-folder/sub-folder" with group "grp1"
-    And user "Carol" has logged in using the webUI
-    When the user opens folder "simple-folder/sub-folder" directly on the webUI
-    And the user opens the share dialog for file "lorem.txt" using the webUI
-    Then user "Brian Murphy" should be listed as "Editor" via "simple-folder" in the collaborators list on the webUI
-    And group "grp1" should be listed as "Editor" via "sub-folder" in the collaborators list on the webUI
+
+
+
+
+
+
+
+
+
+
+
+
 
   @issue-2898
   Scenario: see resource owner of parent group shares in collaborators list

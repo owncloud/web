@@ -988,31 +988,9 @@ Then(
 )
 
 Then(
-  'remote user {string} should be listed as {string} via {string} in the collaborators list on the webUI',
-  function (user, role, via) {
-    user = util.format('%s@%s', user, client.globals.remote_backend_url)
-    return assertCollaboratorslistContains('remote user', user, { role, via })
-  }
-)
-
-Then(
-  'user {string} should be listed as {string} via {string} in the collaborators list on the webUI',
-  function (user, role, via) {
-    return assertCollaboratorslistContains('user', user, { role, via })
-  }
-)
-
-Then(
   'user {string} should be listed as {string} reshared through {string} in the collaborators list on the webUI',
   function (user, role, resharedThrough) {
     return assertCollaboratorslistContains('user', user, { role, resharedThrough })
-  }
-)
-
-Then(
-  'user {string} should be listed as {string} reshared through {string} via {string} in the collaborators list on the webUI',
-  function (user, role, resharedThrough, via) {
-    return assertCollaboratorslistContains('user', user, { role, resharedThrough, via })
   }
 )
 
@@ -1042,13 +1020,6 @@ Then(
   'group {string} should be listed as {string} in the collaborators list on the webUI',
   function (group, role) {
     return assertCollaboratorslistContains('group', group, { role })
-  }
-)
-
-Then(
-  'group {string} should be listed as {string} via {string} in the collaborators list on the webUI',
-  function (group, role, via) {
-    return assertCollaboratorslistContains('group', group, { role, via })
   }
 )
 

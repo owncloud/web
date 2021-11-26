@@ -500,6 +500,16 @@ Then(
   }
 )
 
+/**
+ * Expects to have opened the `details` panel for the correct resource before
+ */
+Then('the shared-via path in the details dialog should be {string}', async function (expectedPath) {
+  const api = client.page.FilesPageElement
+  const actualPath = await api.detailsDialog().getSharedViaPath()
+  assert.strictEqual(actualPath, expectedPath)
+  return this
+})
+
 Then(
   'the content of file {string} for user {string} should be {string}',
   async function (file, user, content) {
@@ -620,6 +630,13 @@ When('the user batch restores the marked files using the webUI', function () {
 When('the user opens the sidebar for file/folder {string} on the webUI', function (item) {
   return client.page.FilesPageElement.filesList().openSideBar(item)
 })
+
+When(
+  'the user opens the details dialog for file/folder/resource {string} using the webUI',
+  function (item) {
+    return client.page.FilesPageElement.filesList().openDetailsDialog(item)
+  }
+)
 
 When('the user switches to {string} panel in details panel using the webUI', function (item) {
   return client.page.FilesPageElement.appSideBar().activatePanel(item)

@@ -10,6 +10,14 @@ const fileActionsMenu = client.page.FilesPageElement.fileActionsMenu()
 module.exports = {
   commands: {
     /**
+     * @param resource
+     * @returns {Promise<void>}
+     */
+    openDetailsDialog: async function (resource) {
+      await this.openSideBar(resource)
+      await appSideBar.activatePanel('details')
+    },
+    /**
      * @param {string} resource
      * @return {Promise<*>}
      */
