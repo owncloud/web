@@ -183,18 +183,18 @@ Feature: Shares in share-with pages
 
 
 
-  @issue-ocis-1289
-  Scenario: current user should see the highest role in their entry in collaborators list
-    Given group "grp1" has been created
-    And user "Brian" has been added to group "grp1"
-    And user "Alice" has created folder "simple-folder"
-    And user "Alice" has shared folder "simple-folder" with user "Brian" with "read" permission
-    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
-    And user "Alice" has shared folder "simple-folder" with group "grp1" with "read,update,create,delete" permissions
-    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
-    When user "Brian" logs in using the webUI
-    And the user opens folder "Shares" using the webUI
-    Then user "Brian Murphy" should be listed as "Custom permissions" in the collaborators list for folder "simple-folder (2)" on the webUI
+
+
+
+
+
+
+
+
+
+
+
+
 
   Scenario: share a file with another internal user via collaborators quick action
     Given user "Alice" has created folder "simple-folder"

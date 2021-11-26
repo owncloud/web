@@ -4,7 +4,6 @@ const { COLLABORATOR_PERMISSION_ARRAY, calculateDate } = require('../../helpers/
 const { client } = require('nightwatch-api')
 const userSettings = require('../../helpers/userSettings')
 const collaboratorDialog = client.page.FilesPageElement.SharingDialog.collaboratorsDialog()
-const stringHelper = require('../../helpers/stringHelper')
 const SHARE_TYPE_STRING = {
   user: 'user',
   group: 'group',
@@ -144,25 +143,6 @@ module.exports = {
     },
 
     /**
-     * @param {string} permissions
-     */
-    selectPermissionsOnPendingShare: async function (permissions) {
-      const permissionArray = this.getArrayFromPermissionString(permissions)
-      for (const permission of permissionArray) {
-        const permissionCheckbox = this.getPermissionCheckbox(permission)
-        const elementID = await this.getVisibleElementID('xpath', permissionCheckbox)
-        if (elementID === null) {
-          throw new Error(`Checkbox is not visible for the permission '${permission}'`)
-        }
-        await this.api.elementIdClick(elementID)
-      }
-
-      await this.click('@customPermissionsConfirmBtn')
-
-      return this
-    },
-
-    /**
      *
      * @param {string} sharee
      * @param {boolean} shareWithGroup
@@ -182,12 +162,7 @@ module.exports = {
       days
     ) {
       await this.selectCollaboratorForShare(sharee, shareWithGroup, remote)
-      await collaboratorDialog.expandShareRoleDropdown()
-      await this.selectRole(role)
-
-      if (role === 'Custom permissions') {
-        await this.selectPermissionsOnPendingShare(permissions)
-      }
+      await this.changeCollaboratorRole('', role, permissions)
 
       if (days) {
         const dateToSet = calculateDate(days)
@@ -217,17 +192,30 @@ module.exports = {
         await this.selectCollaboratorForShare(collaborator, type === 'group')
       }
 
-      await collaboratorDialog.expandShareRoleDropdown()
-      await this.selectRole(role)
-
-      if (role === 'Custom permissions') {
-        await this.selectPermissionsOnPendingShare(permissions)
-      }
+      await this.changeCollaboratorRole('', role, permissions)
 
       if (submit) {
         await this.confirmShare()
       }
 
+      return this
+    },
+
+    /**
+     * Select a new role for new invite or existing share and apply provided permissions if the new role is custom permissions.
+     *
+     * @param collaborator { string } Empty string for new invite, collaborator name for existing shares.
+     * @param role { string } role name
+     * @param permissions { string } comma separated list of permission keys
+     * @returns {Promise<void>}
+     */
+    changeCollaboratorRole: async function (collaborator = '', role, permissions) {
+      if (role === 'Custom permissions') {
+        await this.changeCustomPermissionsTo(collaborator, permissions)
+      } else {
+        await collaboratorDialog.expandShareRoleDropdown(collaborator)
+        await this.selectRole(role)
+      }
       return this
     },
 
@@ -244,22 +232,6 @@ module.exports = {
         .initAjaxCounters()
         .click('@addShareSaveButton')
         .waitForOutstandingAjaxCalls()
-    },
-    /**
-     * Toggle the checkbox to set a certain permission for a share
-     * Needs the collaborator information to be expanded
-     *
-     * @param {string} permission
-     */
-    toggleSinglePermission: async function (permission) {
-      const permissionCheckbox = this.getPermissionCheckbox(permission)
-      const elementID = await this.getVisibleElementID('xpath', permissionCheckbox)
-      if (!elementID) {
-        throw new Error(`permission ${permission} is not visible `)
-      }
-
-      this.api.elementIdClick(elementID)
-      return this
     },
     /**
      * Get the state of permissions for current share in the screen
@@ -288,23 +260,42 @@ module.exports = {
      * @param {string} collaborator
      * @param {string} requiredPermissions
      */
-    changeCustomPermissionsTo: async function (collaborator, requiredPermissions) {
+    changeCustomPermissionsTo: async function (collaborator, requiredPermissions = ',') {
       await collaboratorDialog.expandShareRoleDropdown(collaborator)
       await this.selectRole('Custom permissions')
 
       const requiredPermissionArray = this.getArrayFromPermissionString(requiredPermissions)
       const sharePermissions = await this.getSharePermissions()
+      const sharePermissionsArray = Object.keys(sharePermissions).filter(
+        (key) => sharePermissions[key]
+      )
 
-      for (const permission in sharePermissions) {
+      for (const permission in COLLABORATOR_PERMISSION_ARRAY) {
         if (
-          (sharePermissions[permission] && !requiredPermissionArray.includes(permission)) ||
-          (!sharePermissions[permission] && requiredPermissionArray.includes(permission))
+          sharePermissionsArray.includes(permission) !==
+          requiredPermissionArray.includes(permission)
         ) {
           await this.toggleSinglePermission(permission)
         }
       }
 
       await this.click('@customPermissionsConfirmBtn')
+    },
+    /**
+     * Toggle the checkbox to set a certain permission for a share
+     * Needs the collaborator information to be expanded
+     *
+     * @param {string} permission
+     */
+    toggleSinglePermission: async function (permission) {
+      const permissionCheckbox = this.getPermissionCheckbox(permission)
+      const elementID = await this.getVisibleElementID('xpath', permissionCheckbox)
+      if (!elementID) {
+        throw new Error(`permission ${permission} is not visible `)
+      }
+
+      this.api.elementIdClick(elementID)
+      return this
     },
     /**
      *
@@ -321,27 +312,6 @@ module.exports = {
       this.api.mouseButtonClick()
       this.waitForElementNotPresent('@customPermissionsDrop', 1000)
       return currentSharePermissions
-    },
-    /**
-     *
-     * @param {string} collaborator
-     */
-    disableAllCustomPermissions: async function (collaborator) {
-      await collaboratorDialog.expandShareRoleDropdown(collaborator)
-      await this.selectRole('Custom permissions')
-
-      const sharePermissions = await this.getSharePermissions(collaborator)
-      const enabledPermissions = Object.keys(sharePermissions).filter(
-        (permission) => sharePermissions[permission] === true
-      )
-
-      for (const permission of enabledPermissions) {
-        await this.toggleSinglePermission(permission)
-      }
-
-      await this.click('@customPermissionsConfirmBtn')
-
-      return this
     },
     /**
      *
@@ -405,40 +375,7 @@ module.exports = {
       )
       return webElementIdList
     },
-    /**
-     *
-     * @param {string} collaborator
-     * @param {string} newRole
-     * @param {string} permissions
-     * @returns {Promise}
-     */
-    changeCollaboratorRole: async function (collaborator, newRole, permissions) {
-      await collaboratorDialog.expandShareRoleDropdown(collaborator)
-      await this.changeCollaboratorRoleInDropdown(newRole, permissions)
-      return this
-    },
-    /**
-     * @param {string} newRole
-     * @param {string} permissions
-     * @returns {Promise}
-     */
-    changeCollaboratorRoleInDropdown: async function (newRole, permissions) {
-      newRole = newRole === 'Custom permissions' ? 'advancedRole' : newRole
-      newRole = stringHelper.camelize(newRole)
 
-      const newRoleButton = util.format(this.elements.roleButtonInDropdown.selector, newRole)
-      const hasCustomPermissions = permissions && permissions !== ','
-
-      await this.useXpath().waitForElementVisible(newRoleButton).click(newRoleButton).useCss()
-
-      if (hasCustomPermissions) {
-        await this.selectPermissionsOnPendingShare(permissions)
-      } else if (newRole === 'advancedRole') {
-        await this.click('@customPermissionsConfirmBtn')
-      }
-
-      return this
-    },
     /**
      * checks whether autocomplete list is visible
      *
@@ -580,34 +517,6 @@ module.exports = {
         expirationDate = dateString
       })
       return expirationDate
-    },
-    /**
-     * tries to change the settings of collaborator
-     * @param {string} collaborator Name of the collaborator
-     * @return {*}
-     */
-    // this tries to open the removed EDIT panel...
-    changeCollaboratorSettings: async function (collaborator, editData) {
-      await collaboratorDialog.clickEditShare(collaborator)
-      for (const [key, value] of Object.entries(editData)) {
-        await this.setCollaboratorForm(key, value)
-      }
-    },
-    /**
-     * function sets different fields for collaborator form
-     *
-     * @param key fields like permissionString, expireDate
-     * @param value values for the different fields to be set
-     * @returns {*|Promise<void>|exports}
-     */
-    setCollaboratorForm: function (key, value) {
-      if (key === 'permissionString') {
-        return this.changeCollaboratorRoleInDropdown(value)
-      } else if (key === 'expireDate') {
-        const dateToSet = calculateDate(value)
-        return this.openExpirationDatePicker().setExpirationDate(dateToSet)
-      }
-      return this
     },
     /**
      *

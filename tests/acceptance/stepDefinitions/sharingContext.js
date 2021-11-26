@@ -225,16 +225,6 @@ Given(
   }
 )
 
-When(
-  'the user tries to edit the collaborator {string} of file/folder/resource {string} changing following',
-  async function (collaborator, resource, dataTable) {
-    const settings = dataTable.rowsHash()
-    const api = client.page.FilesPageElement
-    await api.filesList().openSharingDialog(resource)
-    return api.sharingDialog().changeCollaboratorSettings(collaborator, settings)
-  }
-)
-
 Then(
   'the user should see an error message on the collaborator share dialog saying {string}',
   async function (expectedMessage) {
@@ -273,12 +263,14 @@ const createPublicLink = function (sharer, data) {
  * @param {string} type user|group
  * @param {string} name
  * @param {string} role
+ * @param {string} resharedThrough
+ * @param {string} additionalInfo
  * @returns {Promise}
  */
 const assertCollaboratorslistContains = function (
   type,
   name,
-  { role = null, via = null, resharedThrough = null, additionalInfo = null }
+  { role = undefined, resharedThrough = undefined, additionalInfo = undefined }
 ) {
   if (type !== 'user' && type !== 'group' && type !== 'remote user') {
     throw new Error(`illegal type "${type}"`)
@@ -300,17 +292,14 @@ const assertCollaboratorslistContains = function (
         )
       }
 
-      if (role !== null) {
+      if (role) {
         assert.strictEqual(role, share.role)
       }
-      if (via !== null) {
-        assert.strictEqual('Via ' + via, share.viaLabel)
+      if (resharedThrough) {
+        assert.strictEqual(`Shared by ${resharedThrough}`, share.resharer)
       }
-      if (resharedThrough !== null) {
-        assert.strictEqual('Shared by ' + resharedThrough, share.resharer)
-      }
-      if (additionalInfo !== null) {
-        assert.strictEqual(additionalInfo, share.additionalInfo)
+      if (additionalInfo) {
+        assert.strictEqual(`(${additionalInfo})`, share.additionalInfo)
       }
     })
 }
@@ -622,7 +611,7 @@ When(
   async function (collaborator, resource) {
     const api = client.page.FilesPageElement
     await api.filesList().openSharingDialog(resource)
-    return api.sharingDialog().disableAllCustomPermissions(collaborator)
+    return api.sharingDialog().changeCustomPermissionsTo(collaborator)
   }
 )
 
