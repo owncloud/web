@@ -19,7 +19,10 @@
         :items="breadcrumbs"
       >
         <template #contextMenu>
-          <context-actions v-if="currentFolder" :items="[currentFolder]" />
+          <context-actions
+            v-if="currentFolder && showBreadcrumbContextMenu"
+            :items="[currentFolder]"
+          />
         </template>
       </oc-breadcrumb>
       <h1 class="oc-invisible-sr" v-text="pageTitle" />
@@ -300,6 +303,10 @@ export default {
         this.selectedFiles.length
       )
       return this.$gettextInterpolate(translated, { amount: this.selectedFiles.length })
+    },
+
+    showBreadcrumbContextMenu() {
+      return this.currentPathSegments.length > 0
     }
   },
 
