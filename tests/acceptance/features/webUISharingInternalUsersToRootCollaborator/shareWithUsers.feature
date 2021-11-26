@@ -72,7 +72,7 @@ Feature: Shares collaborator list
     Examples:
       | additional-info-field | additional-info-result |
       | id                    | Brian                  |
-      | email                 | (brian@example.org)    |
+      | email                 | brian@example.org      |
 
 
   Scenario: collaborators list does not contain additional info when disabled
@@ -97,13 +97,13 @@ Feature: Shares collaborator list
 
 
 
-  Scenario: current user should see the highest role in their entry in collaborators list
-    Given group "grp1" has been created
-    And user "Brian" has been added to group "grp1"
-    And user "Alice" has shared folder "simple-folder" with user "Brian" with "read" permission
-    And user "Alice" has shared folder "simple-folder" with group "grp1" with "read,update,create,delete" permissions
-    When user "Brian" has logged in using the webUI
-    Then user "Brian Murphy" should be listed as "Custom permissions" in the collaborators list for folder "simple-folder" on the webUI
+
+
+
+
+
+
+
 
 
   Scenario: share a file with another internal user via collaborators quick action
