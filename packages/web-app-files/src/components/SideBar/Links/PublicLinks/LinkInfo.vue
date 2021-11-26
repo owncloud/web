@@ -31,7 +31,7 @@
       <div v-if="link.expiration">
         <oc-tag v-oc-tooltip="expirationDate" tabindex="0" class="oc-files-public-link-expires">
           <oc-icon name="text-calendar" />
-          <translate :translate-params="{ expires: formDateFromNow(link.expiration, 'ISO') }">
+          <translate :translate-params="{ expires: formRelativeDateFromISO(link.expiration) }">
             Expires %{expires}
           </translate>
         </oc-tag>

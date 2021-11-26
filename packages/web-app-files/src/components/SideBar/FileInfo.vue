@@ -39,7 +39,6 @@ import { mapGetters, mapActions } from 'vuex'
 import Mixins from '../../mixins'
 import MixinResources from '../../mixins/resources'
 import MixinRoutes from '../../mixins/routes'
-import { DateTime } from 'luxon'
 
 export default {
   name: 'FileInfo',
@@ -55,21 +54,17 @@ export default {
     ...mapGetters(['capabilities']),
     modificationTime() {
       if (this.isTrashbinRoute) {
-        return DateTime.fromRFC2822(this.file.mdate)
-          .setLocale(this.$language.current)
-          .toLocaleString(DateTime.DATETIME_FULL)
+        return this.formDateFromRFC(this.file.ddate)
       }
 
-      return DateTime.fromHTTP(this.file.mdate)
-        .setLocale(this.$language.current)
-        .toLocaleString(DateTime.DATETIME_FULL)
+      return this.formDateFromHTTP(this.file.mdate)
     },
     modificationTimeRelative() {
       if (this.isTrashbinRoute) {
-        return this.formDateFromNow(this.file.ddate, 'RFC')
+        return this.formRelativeDateFromRFC(this.file.ddate)
       }
 
-      return this.formDateFromNow(this.file.mdate, 'Http')
+      return this.formRelativeDateFromHTTP(this.file.mdate)
     },
     isFavoritesEnabled() {
       return (

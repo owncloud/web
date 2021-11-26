@@ -211,7 +211,7 @@ export default {
       return this.hasAnyShares && !this.isPublicPage
     },
     displayShareDate() {
-      const date = this.formDateFromNow(new Date(this.sharedTime * 1000), 'JSDate')
+      const date = this.formRelativeDateFromJSDate(new Date(this.sharedTime * 1000))
       return upperFirst(date)
     },
     detailSharingInformation() {
@@ -273,13 +273,9 @@ export default {
     capitalizedTimestamp() {
       let displayDate = ''
       if (this.file.mdate) {
-        displayDate = DateTime.fromRFC2822(this.file.mdate)
-          .setLocale(this.$language.current)
-          .toLocaleString(DateTime.DATETIME_FULL)
+        displayDate = this.formDateFromRFC(this.file.mdate)
       } else {
-        displayDate = DateTime.fromRFC2822(this.file.sdate)
-          .setLocale(this.$language.current)
-          .toLocaleString(DateTime.DATETIME_FULL)
+        displayDate = this.formDateFromRFC(this.file.sdate)
       }
       return upperFirst(displayDate)
     },
