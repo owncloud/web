@@ -7,7 +7,7 @@ exports[`ApplicationsMenu component shoud set aria-label prop on switcher button
 `;
 
 exports[`ApplicationsMenu component should show app menus 1`] = `
-<oc-drop-stub dropid="app-switcher-dropdown" toggle="#_appSwitcherButton" position="bottom-start" mode="click" closeonclick="true" options="[object Object]" class="uk-width-large">
+<oc-drop-stub dropid="app-switcher-dropdown" toggle="#_appSwitcherButton" position="bottom-start" mode="click" closeonclick="true" paddingsize="medium" options="[object Object]" class="uk-width-large">
   <ul uk-grid="" class="uk-grid-small uk-text-center">
     <li class="uk-width-1-3">
       <router-link-stub to="/files" tag="a" ariacurrentvalue="page" event="click">

@@ -1,5 +1,6 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 import { cloneStateObject } from '../helpers/store'
+import { isSameResource } from '../helpers/resource'
 import { isTrashbinRoute } from '../helpers/route'
 import PQueue from 'p-queue'
 
@@ -159,6 +160,23 @@ export default {
         const user = await this.$client.users.getUser(this.user.id)
 
         this.SET_QUOTA(user.quota)
+
+        let parentFolderPath
+        if (
+          this.resourcesToDelete.length &&
+          isSameResource(this.resourcesToDelete[0], this.currentFolder)
+        ) {
+          const resourcePath = this.resourcesToDelete[0].path
+          parentFolderPath = resourcePath.substr(1, resourcePath.lastIndexOf('/'))
+        }
+
+        if (parentFolderPath !== undefined) {
+          this.$router.push({
+            params: {
+              item: parentFolderPath
+            }
+          })
+        }
       })
     },
 

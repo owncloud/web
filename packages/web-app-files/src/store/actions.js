@@ -122,18 +122,22 @@ export default {
       context.commit('REMOVE_FILE_FROM_SEARCHED', file)
     }
   },
-  renameFile(context, { file, newValue, client, publicPage }) {
+  renameFile(context, { file, newValue, client, publicPage, isSameResource }) {
     if (file !== undefined && newValue !== undefined && newValue !== file.name) {
       const newPath = file.path.substr(1, file.path.lastIndexOf('/'))
       if (publicPage) {
         return client.publicFiles
           .move(file.path, newPath + newValue, context.getters.publicLinkPassword)
           .then(() => {
-            context.commit('RENAME_FILE', { file, newValue, newPath })
+            if (!isSameResource) {
+              context.commit('RENAME_FILE', { file, newValue, newPath })
+            }
           })
       }
       return client.files.move(file.path, newPath + newValue).then(() => {
-        context.commit('RENAME_FILE', { file, newValue, newPath })
+        if (!isSameResource) {
+          context.commit('RENAME_FILE', { file, newValue, newPath })
+        }
       })
     }
   },

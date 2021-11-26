@@ -17,7 +17,14 @@
         data-testid="files-breadcrumbs"
         class="oc-p-s"
         :items="breadcrumbs"
-      />
+      >
+        <template #contextMenu>
+          <context-actions
+            v-if="currentFolder && showBreadcrumbContextMenu"
+            :items="[currentFolder]"
+          />
+        </template>
+      </oc-breadcrumb>
       <h1 class="oc-invisible-sr" v-text="pageTitle" />
       <div class="files-app-bar-actions">
         <div
@@ -126,6 +133,7 @@ import FolderUpload from './Upload/FolderUpload.vue'
 import SizeInfo from './SelectedResources/SizeInfo.vue'
 import ViewOptions from './ViewOptions.vue'
 import { DavProperties, DavProperty } from 'web-pkg/src/constants'
+import ContextActions from '../FilesList/ContextActions.vue'
 
 export default {
   components: {
@@ -134,7 +142,8 @@ export default {
     FileUpload,
     FolderUpload,
     SizeInfo,
-    ViewOptions
+    ViewOptions,
+    ContextActions
   },
   mixins: [Mixins, MixinFileActions, MixinRoutes, MixinScrollToResource],
   data: () => ({
@@ -288,6 +297,10 @@ export default {
         this.selectedFiles.length
       )
       return this.$gettextInterpolate(translated, { amount: this.selectedFiles.length })
+    },
+
+    showBreadcrumbContextMenu() {
+      return this.currentPathSegments.length > 0
     }
   },
 
