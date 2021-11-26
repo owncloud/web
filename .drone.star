@@ -10,7 +10,7 @@ OC_CI_NODEJS = "owncloudci/nodejs:14"
 OC_CI_PHP = "owncloudci/php:7.4"
 OC_UBUNTU = "owncloud/ubuntu:20.04"
 
-OC10_VERSION = "latest"
+OC10_VERSION = "10.9.0-beta1"
 
 dir = {
     "base": "/var/www/owncloud",
