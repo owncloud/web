@@ -45,7 +45,7 @@ module.exports = {
      *
      * @param {Object.<String,Object>} subSelectors Map of arbitrary attribute name to selector to query
      * inside the collaborator element, defaults to all when null
-     * @param filterDisplayName
+     * @param filterDisplayName Instead of reading the full list of sharees, only grab the one sharee that matches the given display name
      * @param timeout
      * @returns {Promise.<string[]>} Array of users/groups in share list
      */
@@ -55,18 +55,19 @@ module.exports = {
       timeout = null
     ) {
       let results = []
-      let informationSelector = {
-        selector: '@collaboratorsListItem'
+
+      let listItemSelector = {
+        selector: this.elements.collaboratorsListItem.selector
       }
       timeout = timeoutHelper.parseTimeout(timeout)
       if (filterDisplayName !== null) {
-        informationSelector = {
+        listItemSelector = {
           selector: util.format(
             this.elements.collaboratorInformationByCollaboratorName.selector,
             filterDisplayName
           ),
           locateStrategy: this.elements.collaboratorInformationByCollaboratorName.locateStrategy,
-          timeout: timeout
+          timeout
         }
       }
 
@@ -79,16 +80,21 @@ module.exports = {
         }
       }
 
-      let collaboratorsElementIds = null
+      let listItemElementIds = []
       await this.waitForElementPresent('@collaboratorsList').api.elements(
         'css selector',
-        informationSelector,
+        listItemSelector,
         (result) => {
-          collaboratorsElementIds = result.value.map((item) => item[Object.keys(item)[0]])
+          if (result.status === -1) {
+            return
+          }
+          listItemElementIds = listItemElementIds.concat(
+            result.value.map((item) => item[Object.keys(item)[0]])
+          )
         }
       )
 
-      results = collaboratorsElementIds.map(async (collaboratorElementId) => {
+      results = listItemElementIds.map(async (collaboratorElementId) => {
         const collaboratorResult = {}
         for (const attrName in subSelectors) {
           let attrElementId = null
