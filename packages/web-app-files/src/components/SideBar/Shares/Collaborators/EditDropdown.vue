@@ -10,16 +10,16 @@
       padding-size="remove"
     >
       <oc-list class="collaborator-edit-dropdown-options-list" :aria-label="shareEditOptions">
-        <li v-if="expirationSupported" class="oc-py-xs">
+        <li v-if="isExpirationSupported" class="oc-px-s oc-py-xs">
           <oc-datepicker
             v-model="enteredExpirationDate"
             :min-date="minExpirationDate"
             :max-date="maxExpirationDate"
             :locale="$language.current"
-            :is-required="expirationDateEnforced"
+            :is-required="isExpirationDateEnforced"
             class="files-recipient-expiration-datepicker"
           >
-            <template #default="{ togglePopover }" class="oc-py-xs">
+            <template #default="{ togglePopover }">
               <oc-button
                 class="files-collaborators-expiration-button"
                 appearance="raw"
@@ -31,19 +31,11 @@
             </template>
           </oc-datepicker>
         </li>
-        <li v-if="expirationSupported && isExpirationDateSet && !expirationDateEnforced">
-          <oc-button
-            appearance="raw"
-            class="remove-expiration-date"
-            @click="removeExpirationDate"
-            v-text="$gettext('Remove expiration date')"
-          />
-        </li>
-        <li v-for="(option, i) in options" :key="i">
+        <li v-for="(option, i) in options" :key="i" class="oc-px-s oc-py-xs">
           <oc-button
             appearance="raw"
             :class="option.class"
-            :variation="option.variation"
+            v-bind="option.additionalAttributes || {}"
             @click="option.method()"
           >
             <span v-text="option.title" />
@@ -80,33 +72,39 @@ export default {
   },
   data: function () {
     return {
-      enteredExpirationDate: null,
-      options: [
-        {
-          title: this.$gettext('Remove share'),
-          variation: 'danger',
-          method: this.removeShare,
-          class: 'remove-share'
-        }
-      ]
-    }
-  },
-  watch: {
-    enteredExpirationDate: {
-      handler: 'updateExpirationDate'
+      enteredExpirationDate: null
     }
   },
   computed: {
     ...mapGetters(['capabilities']),
 
+    options() {
+      const result = []
+      if (this.isRemoveExpirationPossible) {
+        result.push({
+          title: this.$gettext('Remove expiration date'),
+          method: this.removeExpirationDate,
+          class: 'remove-expiration-date'
+        })
+      }
+      return [
+        ...result,
+        {
+          title: this.$gettext('Remove share'),
+          method: this.removeShare,
+          class: 'remove-share',
+          additionalAttributes: {
+            variation: 'danger'
+          }
+        }
+      ]
+    },
+
     editShareBtnId() {
       return 'files-collaborators-edit-button-' + this._uid
     },
     shareEditOptions() {
-      return this.$gettext('Sharing expiration')
-    },
-    isExpirationDateSet() {
-      return !!this.expirationDate
+      return this.$gettext('Context menu of the share')
     },
 
     editingUser() {
@@ -117,11 +115,24 @@ export default {
       return this.existingCollaboratorType === 'group'
     },
 
-    expirationSupported() {
-      return this.userExpirationDate && this.groupExpirationDate
+    isExpirationSupported() {
+      return (
+        (this.editingUser && this.userExpirationDate) ||
+        (this.editingGroup && this.groupExpirationDate)
+      )
     },
 
-    defaultExpirationDateSet() {
+    isExpirationDateSet() {
+      return !!this.expirationDate
+    },
+
+    isRemoveExpirationPossible() {
+      return (
+        this.isExpirationSupported && this.isExpirationDateSet && !this.isExpirationDateEnforced
+      )
+    },
+
+    isDefaultExpirationEnabled() {
       if (this.editingUser) {
         return this.userExpirationDate.enabled
       }
@@ -142,12 +153,12 @@ export default {
     },
 
     defaultExpirationDate() {
-      if (!this.defaultExpirationDateSet) {
+      if (!this.isDefaultExpirationEnabled) {
         return null
       }
 
-      const userMaxExpirationDays = parseInt(this.userExpirationDate.days, 10)
-      const groupMaxExpirationDays = parseInt(this.groupExpirationDate.days, 10)
+      const userMaxExpirationDays = parseInt(this.userExpirationDate.days)
+      const groupMaxExpirationDays = parseInt(this.groupExpirationDate.days)
       let days = 0
 
       if (this.editingUser) {
@@ -165,7 +176,7 @@ export default {
       return date
     },
 
-    expirationDateEnforced() {
+    isExpirationDateEnforced() {
       if (this.editingUser) {
         return this.userExpirationDate.enforced
       }
@@ -178,7 +189,7 @@ export default {
     },
 
     maxExpirationDate() {
-      if (!this.expirationDateEnforced) {
+      if (!this.isExpirationDateEnforced) {
         return null
       }
       return this.defaultExpirationDate
@@ -195,6 +206,11 @@ export default {
         .setLocale(this.$language.current)
         .endOf('day')
         .toRelative()
+    }
+  },
+  watch: {
+    enteredExpirationDate: {
+      handler: 'updateExpirationDate'
     }
   },
   methods: {

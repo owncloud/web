@@ -127,7 +127,7 @@ export default {
       return this.$gettext('Custom permissions')
     },
     rolesListAriaLabel() {
-      return this.$gettext('Sharing roles')
+      return this.$gettext('Select role for the share')
     },
     inviteLabel() {
       if (this.selectedRole?.name === 'advancedRole') {
