@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Pagination: [#6056](https://github.com/owncloud/web/pull/6056)
+* Enhancement - Implement breadcrumb context menu: [#6044](https://github.com/owncloud/web/pull/6044)
 * Enhancement - Contextmenu for multiple files: [#5973](https://github.com/owncloud/web/pull/5973)
 
 Details
@@ -19,6 +20,14 @@ Details
    We fixed the pagination as it was slicing the items wrong on pages after the first one.
 
    https://github.com/owncloud/web/pull/6056
+
+* Enhancement - Implement breadcrumb context menu: [#6044](https://github.com/owncloud/web/pull/6044)
+
+   The last element of the breadcrumb now has a context menu which gives the user the possibility to
+   perform actions on the current folder.
+
+   https://github.com/owncloud/web/issues/6030
+   https://github.com/owncloud/web/pull/6044
 
 * Enhancement - Contextmenu for multiple files: [#5973](https://github.com/owncloud/web/pull/5973)
 
