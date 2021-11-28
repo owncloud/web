@@ -26,7 +26,7 @@ Given(
 )
 
 Given(
-  /^admin (disables|enables) auto accepting$/,
+  /^admin (disables|enables) auto accepting of the shares$/,
   async function (this: World, actionType: string): Promise<void> {
     if (config.ocis) {
       return

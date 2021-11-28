@@ -10,44 +10,44 @@ Feature: share folder with file, share file
       | Alice |
       | Brian |
     And admin set the default folder for received shares to "Shares"
-    And admin disables auto accepting
+    And admin disables auto accepting of the shares
 
   Scenario: Alice shares folder with file to Brian
     Given "Alice" has logged in
     When "Alice" opens the "files" app
     And "Alice" navigates to the files page
-    And "Alice" creates following folders
+    And "Alice" creates the following folder
       | folder_to_shared |
-    And "Alice" uploads following resources
+    And "Alice" uploads the following resource
       | resource  | to               |
       | lorem.txt | folder_to_shared |
-    Then "Alice" ensures that the following resources exist
+    Then "Alice" ensures that the following resource exist
       | folder_to_shared/lorem.txt |
-    And "Alice" shares following resources
+    And "Alice" shares the following resource using sidebar panel
       | resource         | user  | role   |
       | folder_to_shared | Brian | editor |
     Given "Brian" has logged in
     When "Brian" opens the "files" app
-    And "Brian" accepts following resources
+    And "Brian" accepts the following resource
       | folder_to_shared |
-    And "Brian" renames following resource
+    And "Brian" renames the following resource
       | resource                          | as            |
       | Shares/folder_to_shared/lorem.txt | lorem_new.txt |
-    And "Brian" uploads following resources
+    And "Brian" uploads the following resource
       | resource   | to                      |
       | simple.pdf | Shares/folder_to_shared |
-    And "Brian" copies following resources
+    And "Brian" copies the following resource
       | resource                | to       |
       | Shares/folder_to_shared | All files |
     When "Alice" opens the "files" app
     Then "Alice" ensures that the following resources exist
       | folder_to_shared/lorem_new.txt |
       | folder_to_shared/simple.pdf    |
-    When "Alice" creates new versions of the following files
+    When "Alice" creates new version of the following files
       | resource   | to               |
       | simple.pdf | folder_to_shared |
-    Then "Alice" ensure that resource "folder_to_shared/simple.pdf" has 1 versions
-    When "Alice" deletes following resources
+    Then "Alice" ensures that the resource "folder_to_shared/simple.pdf" has 1 version
+    When "Alice" deletes the following resources
       | folder_to_shared/lorem_new.txt |
       | folder_to_shared               |
     And "Alice" has logged out
@@ -59,38 +59,34 @@ Feature: share folder with file, share file
   Scenario: Alice shares file to Brian
     Given "Alice" has logged in
     When "Alice" opens the "files" app
-    And "Alice" creates following folders
+    And "Alice" creates the following folder
       | folder_to_shared |
-    And "Alice" uploads following resources
+    And "Alice" uploads the following resource
       | resource        | to               |
       | testavatar.jpeg | folder_to_shared |
-    And "Alice" shares following resources using main menu
+    And "Alice" shares the following resource using quick action
       | resource                         | user  | role   |
       | folder_to_shared/testavatar.jpeg | Brian | viewer |
     Given "Brian" has logged in
     When "Brian" opens the "files" app
-    And "Brian" accepts following resources
+    And "Brian" accepts the following resource
       | testavatar.jpeg |
-    And "Brian" copies following resources
+    And "Brian" copies the following resource
       | resource               | to       |
       | Shares/testavatar.jpeg | All files |
-    # this step failed in the "OC10 smoke tests" in CI
-    # TODO need to include screenshots and read console logs for CI
-    # And "Brian" opens file in Mediaviewer
-    #   | Shares/testavatar.jpeg |
-    And "Brian" downloads following files
+    And "Brian" downloads the following file
       | resource        | from   |
       | testavatar.jpeg | Shares |
     When "Alice" opens the "files" app
-    And "Alice" changes role for the following shared resources
+    And "Alice" changes the shared resource recipient role for the following resources
       | resource                         | user  | role   |
       | folder_to_shared/testavatar.jpeg | Brian | editor |
     When "Brian" opens the "files" app
-    And "Brian" renames following resource
+    And "Brian" renames the following resource
       | resource               | as                  |
       | Shares/testavatar.jpeg | testavatar_new.jpeg |
     When "Alice" opens the "files" app
-    And "Alice" deletes share following resource with user
+    And "Alice" deletes shared access to the following resource with user
       | resource                         | user  |
       | folder_to_shared/testavatar.jpeg | Brian |
     And "Alice" has logged out
