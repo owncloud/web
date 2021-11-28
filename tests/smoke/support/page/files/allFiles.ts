@@ -264,7 +264,7 @@ export class AllFilesPage {
     if (!(await page.isChecked(resourceCheckbox))) {
       await page.check(resourceCheckbox)
     }
-    await page.click('//*[@id="delete-selected-btn"]')
+    await page.click('button.oc-files-actions-delete-trigger')
     await page.click('.oc-modal-body-actions-confirm')
 
     await page.goto(startUrl)
