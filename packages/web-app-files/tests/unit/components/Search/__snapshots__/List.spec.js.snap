@@ -9,7 +9,7 @@ exports[`List component when no resource is found should show no-content-message
         </g>
       </svg></div>
     <div class="oc-text-muted uk-text-large">
-      <p class="oc-text-muted"><span data-msgid="No resource found" data-current-language="en_US">No resource found</span></p>
+      <p class="oc-text-muted"><span data-msgid="No search term entered" data-current-language="en_US">No search term entered</span></p>
     </div>
     <div class="oc-text-muted"></div>
   </div>

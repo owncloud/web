@@ -2,6 +2,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import VueRouter from 'vue-router'
 import merge from 'lodash-es/merge'
+import VueCompositionAPI from '@vue/composition-api'
 
 import Store from '@files/src/store'
 import stubs from '@/tests/unit/stubs'
@@ -19,6 +20,7 @@ describe('ViewOptions', () => {
     localVue = createLocalVue()
     localVue.use(Vuex)
     localVue.use(VueRouter)
+    localVue.use(VueCompositionAPI)
 
     router = new VueRouter()
 
@@ -32,12 +34,6 @@ describe('ViewOptions', () => {
           modules: {
             sidebar: {
               namespaced: true
-            },
-            pagination: {
-              namespaced: true,
-              mutations: {
-                SET_ITEMS_PER_PAGE: jest.fn()
-              }
             }
           }
         }
@@ -46,7 +42,7 @@ describe('ViewOptions', () => {
     store = new Vuex.Store(merge({}, Store, mockedStore))
   })
 
-  it('updates the files page limit when using page size component', () => {
+  it('updates the files page limit when using page size component', async () => {
     const wrapper = shallowMount(ViewOptions, {
       store,
       router,
@@ -59,13 +55,15 @@ describe('ViewOptions', () => {
     expect(select.exists()).toBe(true)
 
     select.vm.$emit('input', 500)
+    await wrapper.vm.$nextTick()
+    expect(window.localStorage.getItem('oc_filesPageLimit')).toBe('500')
 
-    expect(
-      mockedStore.modules.Files.modules.pagination.mutations.SET_ITEMS_PER_PAGE
-    ).toHaveBeenCalled()
+    select.vm.$emit('input', 'all')
+    await wrapper.vm.$nextTick()
+    expect(window.localStorage.getItem('oc_filesPageLimit')).toBe('all')
   })
 
-  it('updates the files page limit when route query changes', () => {
+  it('updates the files page limit when route query changes', async () => {
     const wrapper = shallowMount(ViewOptions, {
       store,
       router,
@@ -81,9 +79,8 @@ describe('ViewOptions', () => {
 
     wrapper.vm.$router.replace({ query: { 'items-per-page': 500 } }).catch(() => {})
 
-    expect(
-      mockedStore.modules.Files.modules.pagination.mutations.SET_ITEMS_PER_PAGE
-    ).toHaveBeenCalled()
+    await wrapper.vm.$nextTick()
+    expect(window.localStorage.getItem('oc_filesPageLimit')).toBe('500')
   })
 
   it('triggeres mutation to toggle hidden files', () => {

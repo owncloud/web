@@ -39,7 +39,7 @@
         </li>
         <li class="files-view-options-list-item">
           <oc-page-size
-            v-model="itemsPerPageModel"
+            v-model="itemsPerPage"
             data-testid="files-pagination-size"
             :label="$gettext('Items per page')"
             :options="[100, 500, 1000, $gettext('All')]"
@@ -53,12 +53,24 @@
 
 <script>
 import { mapMutations, mapState, mapActions } from 'vuex'
+import { watch } from '@vue/composition-api'
+import { useRouteQuery, useDefaults } from '../../composables'
 
 export default {
+  setup() {
+    const { pagination: paginationDefaults } = useDefaults()
+    const itemsPerPage = useRouteQuery('items-per-page', paginationDefaults.perPage.value)
+    watch(itemsPerPage, (v) => {
+      paginationDefaults.perPage.value = v
+    })
+
+    return {
+      itemsPerPage
+    }
+  },
   computed: {
     ...mapState('Files', ['areHiddenFilesShown']),
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
-    ...mapState('Files/pagination', ['itemsPerPage']),
 
     viewOptionsButtonLabel() {
       return this.$gettext('Display customization options of the files list')
@@ -81,44 +93,11 @@ export default {
       set(value) {
         this.SET_HIDDEN_FILES_VISIBILITY(value)
       }
-    },
-
-    itemsPerPageModel: {
-      get() {
-        return this.itemsPerPage
-      },
-
-      set(value) {
-        this.updateQuery(value)
-      }
-    }
-  },
-
-  watch: {
-    $route: {
-      handler(route) {
-        if (Object.prototype.hasOwnProperty.call(route.query, 'items-per-page')) {
-          this.SET_ITEMS_PER_PAGE(route.query['items-per-page'])
-
-          return
-        }
-
-        this.updateQuery()
-      },
-      immediate: true
     }
   },
   methods: {
     ...mapMutations('Files', ['SET_HIDDEN_FILES_VISIBILITY']),
-    ...mapActions('Files/sidebar', { toggleSidebar: 'toggle' }),
-    ...mapMutations('Files/pagination', ['SET_ITEMS_PER_PAGE']),
-
-    updateQuery(limit = this.itemsPerPageModel) {
-      const query = { ...this.$route.query, 'items-per-page': limit }
-
-      this.SET_ITEMS_PER_PAGE(limit)
-      this.$router.replace({ query }).catch(() => {})
-    }
+    ...mapActions('Files/sidebar', { toggleSidebar: 'toggle' })
   }
 }
 </script>

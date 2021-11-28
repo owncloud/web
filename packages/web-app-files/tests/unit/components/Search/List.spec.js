@@ -1,4 +1,6 @@
 import { mount, createLocalVue } from '@vue/test-utils'
+import VueCompositionAPI from '@vue/composition-api'
+import VueRouter from 'vue-router'
 import Vuex from 'vuex'
 import DesignSystem from 'owncloud-design-system'
 import GetTextPlugin from 'vue-gettext'
@@ -7,7 +9,9 @@ import List from '@files/src/components/Search/List.vue'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
+localVue.use(VueRouter)
 localVue.use(DesignSystem)
+localVue.use(VueCompositionAPI)
 localVue.use(GetTextPlugin, {
   translations: 'does-not-matter.json',
   silent: true
@@ -86,14 +90,6 @@ describe('List component', () => {
 
       expect(noContentMessage.exists()).toBeFalsy()
     })
-    it('should show files table with pagination', () => {
-      const filesTable = wrapper.find(selectors.filesTable)
-      const pagination = wrapper.find(selectors.pagination)
-
-      expect(filesTable.exists()).toBeTruthy()
-      expect(filesTable.props().resources).toMatchObject(files)
-      expect(pagination.exists()).toBeTruthy()
-    })
     it('should set correct props on list-info component', () => {
       const listInfo = wrapper.find(selectors.listInfo)
 
@@ -124,21 +120,12 @@ function getWrapper(searchTerm = '', files = []) {
       searchResults: getSearchResults(files)
     },
     store: createStore(files),
-    mocks: {
-      $route: {
-        query: {
-          term: searchTerm
-        },
-        params: {
-          page: 1
-        }
-      }
-    },
+    router: new VueRouter(),
     stubs
   })
 }
 
-function createStore(activeFilesCurrentPage) {
+function createStore(activeFiles) {
   return new Vuex.Store({
     getters: {
       configuration: () => ({
@@ -151,24 +138,14 @@ function createStore(activeFilesCurrentPage) {
       Files: {
         namespaced: true,
         getters: {
-          activeFilesCurrentPage: () => activeFilesCurrentPage,
-          totalFilesCount: () => ({ files: activeFilesCurrentPage.length, folders: 0 }),
-          totalFilesSize: () => getTotalSize(activeFilesCurrentPage)
+          activeFiles: () => activeFiles,
+          totalFilesCount: () => ({ files: activeFiles.length, folders: 0 }),
+          totalFilesSize: () => getTotalSize(activeFiles)
         },
         mutations: {
           CLEAR_CURRENT_FILES_LIST: jest.fn(),
+          CLEAR_FILES_SEARCHED: jest.fn(),
           LOAD_FILES: jest.fn()
-        },
-        modules: {
-          pagination: {
-            namespaced: true,
-            getters: {
-              pages: jest.fn()
-            },
-            mutations: {
-              UPDATE_CURRENT_PAGE: jest.fn()
-            }
-          }
         }
       }
     }

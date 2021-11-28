@@ -23,7 +23,7 @@
         class="files-table"
         :class="{ 'files-table-squashed': !sidebarClosed }"
         :are-thumbnails-displayed="displayThumbnails"
-        :resources="activeFilesCurrentPage"
+        :resources="paginatedResources"
         :target-route="targetRoute"
         :header-position="fileListHeaderY"
         @fileClick="$_fileActions_triggerDefaultAction"
@@ -33,9 +33,16 @@
           <context-actions v-if="isResourceInSelection(resource)" :item="resource" />
         </template>
         <template #footer>
-          <pagination />
+          <oc-pagination
+            v-if="paginationPages > 1"
+            :pages="paginationPages"
+            :current-page="paginationPage"
+            :max-displayed="3"
+            :current-route="$route"
+            class="files-pagination uk-flex uk-flex-center oc-my-s"
+          />
           <list-info
-            v-if="activeFilesCurrentPage.length > 0"
+            v-if="paginatedResources.length > 0"
             class="uk-width-1-1 oc-my-s"
             :files="totalFilesCount.files"
             :folders="totalFilesCount.folders"
@@ -49,12 +56,18 @@
 
 <script>
 import { mapGetters, mapActions, mapMutations, mapState } from 'vuex'
-import { useMutationSubscription, useFileListHeaderPosition } from '../composables'
+import {
+  useMutationSubscription,
+  useFileListHeaderPosition,
+  useStore,
+  useRouteQuery,
+  usePagination,
+  useDefaults
+} from '../composables'
 import { fileList } from '../helpers/ui'
 
 import MixinAccessibleBreadcrumb from '../mixins/accessibleBreadcrumb'
 import MixinFileActions from '../mixins/fileActions'
-import MixinFilesListPagination from '../mixins/filesListPagination'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 
 import { VisibilityObserver } from 'web-pkg/src/observer'
@@ -64,13 +77,12 @@ import merge from 'lodash-es/merge'
 import { buildResource } from '../helpers/resources'
 import { bus } from 'web-pkg/src/instance'
 import { useTask } from 'vue-concurrency'
-import { nextTick } from '@vue/composition-api'
+import { nextTick, computed } from '@vue/composition-api'
 
 import ListLoader from '../components/FilesList/ListLoader.vue'
 import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
 import NotFoundMessage from '../components/FilesList/NotFoundMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
-import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
 import { DavProperties } from 'web-pkg/src/constants'
 
@@ -116,21 +128,26 @@ export default {
     ListLoader,
     NoContentMessage,
     NotFoundMessage,
-    Pagination,
     ContextActions
   },
 
-  mixins: [
-    MixinAccessibleBreadcrumb,
-    MixinFileActions,
-    MixinFilesListPagination,
-    MixinMountSideBar
-  ],
+  mixins: [MixinAccessibleBreadcrumb, MixinFileActions, MixinMountSideBar],
 
   setup() {
+    const store = useStore()
+    const { pagination: paginationDefaults } = useDefaults()
     const { refresh: refreshFileListHeaderPosition, y: fileListHeaderY } =
       useFileListHeaderPosition()
+    const paginationPageQuery = useRouteQuery('page', '1')
+    const paginationPage = computed(() => parseInt(`${paginationPageQuery.value}`))
 
+    const { items: paginatedResources, total: paginationPages } = usePagination({
+      page: paginationPage,
+      perPage: computed(() =>
+        parseInt(useRouteQuery('items-per-page', paginationDefaults.perPage.value).value)
+      ),
+      items: computed(() => store.getters['Files/activeFiles'])
+    })
     useMutationSubscription(['Files/UPSERT_RESOURCE'], async ({ payload }) => {
       await nextTick()
       fileList.accentuateItem(payload.id)
@@ -183,13 +200,18 @@ export default {
       ref.accessibleBreadcrumb_focusAndAnnounceBreadcrumb(sameRoute)
     }).restartable()
 
-    return { fileListHeaderY, loadResourcesTask }
+    return {
+      fileListHeaderY,
+      loadResourcesTask,
+      paginatedResources,
+      paginationPages,
+      paginationPage
+    }
   },
 
   computed: {
     ...mapGetters('Files', [
       'publicLinkPassword',
-      'activeFilesCurrentPage',
       'selectedFiles',
       'currentFolder',
       'highlightedFile',
@@ -201,7 +223,7 @@ export default {
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
     isEmpty() {
-      return this.activeFilesCurrentPage.length < 1
+      return this.paginatedResources.length < 1
     },
 
     selected: {
@@ -234,8 +256,6 @@ export default {
         if (!sameRoute || !sameItem) {
           this.loadResourcesTask.perform(this, sameRoute)
         }
-
-        this.$_filesListPagination_updateCurrentPage()
       },
       immediate: true
     }

@@ -23,7 +23,7 @@
         class="files-table"
         :class="{ 'files-table-squashed': !sidebarClosed }"
         :are-thumbnails-displayed="displayThumbnails"
-        :resources="activeFilesCurrentPage"
+        :resources="paginatedResources"
         :target-route="targetRoute"
         :header-position="fileListHeaderY"
         :drag-drop="true"
@@ -43,9 +43,16 @@
           <context-actions v-if="isResourceInSelection(resource)" :items="selected" />
         </template>
         <template #footer>
-          <pagination />
+          <oc-pagination
+            v-if="paginationPages > 1"
+            :pages="paginationPages"
+            :current-page="paginationPage"
+            :max-displayed="3"
+            :current-route="$route"
+            class="files-pagination uk-flex uk-flex-center oc-my-s"
+          />
           <list-info
-            v-if="activeFilesCurrentPage.length > 0"
+            v-if="paginatedResources.length > 0"
             class="uk-width-1-1 oc-my-s"
             :files="totalFilesCount.files"
             :folders="totalFilesCount.folders"
@@ -66,13 +73,19 @@ import MixinAccessibleBreadcrumb from '../mixins/accessibleBreadcrumb'
 import MixinFileActions from '../mixins/fileActions'
 import MixinFilesListFilter from '../mixins/filesListFilter'
 import MixinFilesListScrolling from '../mixins/filesListScrolling'
-import MixinFilesListPagination from '../mixins/filesListPagination'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 import { buildResource } from '../helpers/resources'
 import { fileList } from '../helpers/ui'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../constants'
-import { useMutationSubscription, useFileListHeaderPosition } from '../composables'
+import {
+  useMutationSubscription,
+  useFileListHeaderPosition,
+  useStore,
+  useRouteQuery,
+  usePagination,
+  useDefaults
+} from '../composables'
 import { bus } from 'web-pkg/src/instance'
 
 import QuickActions from '../components/FilesList/QuickActions.vue'
@@ -80,12 +93,11 @@ import ListLoader from '../components/FilesList/ListLoader.vue'
 import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
 import NotFoundMessage from '../components/FilesList/NotFoundMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
-import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
 import { DavProperties } from 'web-pkg/src/constants'
 import { basename, join } from 'path'
 import PQueue from 'p-queue'
-import { nextTick } from '@vue/composition-api'
+import { nextTick, computed } from '@vue/composition-api'
 import { useTask } from 'vue-concurrency'
 
 const visibilityObserver = new VisibilityObserver()
@@ -97,7 +109,6 @@ export default {
     NoContentMessage,
     NotFoundMessage,
     ListInfo,
-    Pagination,
     ContextActions
   },
 
@@ -105,13 +116,23 @@ export default {
     MixinAccessibleBreadcrumb,
     MixinFileActions,
     MixinFilesListScrolling,
-    MixinFilesListPagination,
     MixinMountSideBar,
     MixinFilesListFilter
   ],
   setup() {
+    const store = useStore()
+    const { pagination: paginationDefaults } = useDefaults()
     const { refresh: refreshFileListHeaderPosition, y: fileListHeaderY } =
       useFileListHeaderPosition()
+    const paginationPageQuery = useRouteQuery('page', '1')
+    const paginationPage = computed(() => parseInt(`${paginationPageQuery.value}`))
+    const { items: paginatedResources, total: paginationPages } = usePagination({
+      page: paginationPage,
+      perPage: computed(() =>
+        parseInt(useRouteQuery('items-per-page', paginationDefaults.perPage.value).value)
+      ),
+      items: computed(() => store.getters['Files/activeFiles'])
+    })
 
     useMutationSubscription(['Files/UPSERT_RESOURCE'], async ({ payload }) => {
       await nextTick()
@@ -153,18 +174,22 @@ export default {
       ref.scrollToResourceFromRoute()
     }).restartable()
 
-    return { fileListHeaderY, loadResourcesTask }
+    return {
+      fileListHeaderY,
+      loadResourcesTask,
+      paginatedResources,
+      paginationPages,
+      paginationPage
+    }
   },
 
   computed: {
     ...mapState(['app']),
     ...mapState('Files', ['files']),
-    ...mapState('Files/pagination', ['currentPage']),
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
     ...mapGetters('Files', [
       'highlightedFile',
       'selectedFiles',
-      'activeFilesCurrentPage',
       'currentFolder',
       'totalFilesCount',
       'totalFilesSize'
@@ -172,7 +197,7 @@ export default {
     ...mapGetters(['user', 'homeFolder', 'configuration']),
 
     isEmpty() {
-      return this.activeFilesCurrentPage.length < 1
+      return this.paginatedResources.length < 1
     },
 
     selected: {
@@ -227,8 +252,6 @@ export default {
           return
         }
 
-        this.$_filesListPagination_updateCurrentPage()
-
         if (!sameRoute || !sameItem) {
           this.loadResourcesTask.perform(this, sameRoute)
         }
@@ -265,7 +288,7 @@ export default {
 
     async fileDropped(fileIdTarget) {
       const selected = [...this.selectedFiles]
-      const targetInfo = this.activeFilesCurrentPage.find((e) => e.id === fileIdTarget)
+      const targetInfo = this.paginatedResources.find((e) => e.id === fileIdTarget)
       const isTargetSelected = selected.some((e) => e.id === fileIdTarget)
       if (isTargetSelected) return
       if (targetInfo.type !== 'folder') return
@@ -369,9 +392,9 @@ export default {
     scrollToResourceFromRoute() {
       const resourceName = this.$route.query.scrollTo
 
-      if (resourceName && this.activeFilesCurrentPage.length > 0) {
+      if (resourceName && this.paginatedResources.length > 0) {
         this.$nextTick(() => {
-          const resource = this.activeFilesCurrentPage.find((r) => r.name === resourceName)
+          const resource = this.paginatedResources.find((r) => r.name === resourceName)
 
           if (resource) {
             this.selected = [resource]
