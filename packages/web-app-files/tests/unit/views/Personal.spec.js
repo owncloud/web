@@ -49,7 +49,7 @@ const stubs = {
   translate: true,
   'oc-pagination': true,
   'list-loader': true,
-  'oc-table-files': true,
+  'resource-table': true,
   'not-found-message': true,
   'quick-actions': true,
   'list-info': true

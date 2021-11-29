@@ -43,7 +43,7 @@
               <span v-translate>There are no resources in this folder.</span>
             </template>
           </no-content-message>
-          <oc-table-files
+          <resource-table
             v-else
             id="files-location-picker-table"
             class="files-table"
@@ -65,7 +65,7 @@
                 :size="totalFilesSize"
               />
             </template>
-          </oc-table-files>
+          </resource-table>
         </template>
       </div>
     </div>
@@ -77,6 +77,7 @@ import { mapMutations, mapState, mapActions, mapGetters } from 'vuex'
 import { computed } from '@vue/composition-api'
 
 import { basename, join } from 'path'
+import ResourceTable from '../components/FilesList/ResourceTable.vue'
 import { batchActions } from '../helpers/batchActions'
 import { cloneStateObject } from '../helpers/store'
 import MixinsGeneral from '../mixins'
@@ -105,6 +106,7 @@ export default {
   },
 
   components: {
+    ResourceTable,
     NoContentMessage,
     ListLoader,
     ListInfo,

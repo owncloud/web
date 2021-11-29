@@ -662,7 +662,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     contextBtnInFileRow: {
-      selector: '//button[contains(@class, "oc-table-files-btn-action-dropdown")]',
+      selector: '//button[contains(@class, "resource-table-btn-action-dropdown")]',
       locateStrategy: 'xpath'
     },
     contextMenuPanel: {
@@ -690,7 +690,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     checkBoxAllFiles: {
-      selector: '#oc-table-files-select-all'
+      selector: '#resource-table-select-all'
     },
     checkboxInFileRow: {
       selector: '//input[@type="checkbox"]',
