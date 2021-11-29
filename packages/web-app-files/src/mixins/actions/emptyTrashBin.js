@@ -3,7 +3,7 @@ import { mapActions, mapGetters } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters('Files', ['activeFilesCurrentPage']),
+    ...mapGetters('Files', ['activeFiles']),
     $_emptyTrashBin_items() {
       return [
         {
@@ -18,7 +18,7 @@ export default {
             // empty trash bin is not available for individual resources, but only for the trash bin as a whole
             return resources.length === 0
           },
-          isDisabled: () => this.activeFilesCurrentPage.length === 0,
+          isDisabled: () => this.activeFiles.length === 0,
           componentType: 'oc-button',
           class: 'oc-files-actions-empty-trash-bin-trigger',
           variation: 'danger'

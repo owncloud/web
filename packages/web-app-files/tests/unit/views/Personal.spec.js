@@ -105,6 +105,7 @@ function createWrapper(selectedFiles = [resourceForestJpg]) {
     created: jest.fn(),
     mounted: jest.fn(),
     setup: () => ({
+      paginatedResources: [...resources],
       loadResourcesTask: {
         isRunning: false,
         perform: jest.fn()
@@ -135,20 +136,6 @@ function createWrapper(selectedFiles = [resourceForestJpg]) {
                 closed: false
               },
               namespaced: true
-            },
-            pagination: {
-              state: {
-                currentPage: 1,
-                itemsPerPage: 100
-              },
-              mutations: {
-                SET_ITEMS_PER_PAGE: () => {},
-                UPDATE_CURRENT_PAGE: () => {}
-              },
-              getters: {
-                pages: () => 1
-              },
-              namespaced: true
             }
           },
           state: {
@@ -156,7 +143,6 @@ function createWrapper(selectedFiles = [resourceForestJpg]) {
             currentPage: 1
           },
           getters: {
-            activeFilesCurrentPage: () => [...resources],
             inProgress: () => [null],
             currentFolder: () => '/',
             pages: () => 4,

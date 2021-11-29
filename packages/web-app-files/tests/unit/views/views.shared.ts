@@ -1,7 +1,17 @@
-import Vuex, { mapState } from 'vuex'
+import Vuex from 'vuex'
 import Vue from 'vue'
+import VueRouter from 'vue-router'
 import { mount, VueClass } from '@vue/test-utils'
 import { localVue } from './views.setup'
+
+const router = new VueRouter({
+  routes: [
+    {
+      path: '/',
+      name: 'files-personal'
+    }
+  ]
+})
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = () => {}
@@ -15,8 +25,16 @@ export const accentuatesTableRowTest = async <V extends Vue>(
   const store = new Vuex.Store({
     modules: {
       Files: {
+        modules: {
+          sidebar: {
+            state: {
+              closed: false
+            },
+            namespaced: true
+          }
+        },
         state: {
-          activeFilesCurrentPage: [
+          activeFiles: [
             {
               id: 'forest',
               name: 'forest.jpg',
@@ -30,11 +48,12 @@ export const accentuatesTableRowTest = async <V extends Vue>(
         },
         mutations: {
           UPSERT_RESOURCE: (state, resource) => {
-            state.activeFilesCurrentPage.push(resource)
+            state.activeFiles.push(resource)
           }
         },
         getters: {
-          inProgress: () => 0
+          inProgress: () => 0,
+          activeFiles: (state) => state.activeFiles
         },
         namespaced: true
       }
@@ -46,12 +65,12 @@ export const accentuatesTableRowTest = async <V extends Vue>(
       mixins: [],
       watch: {},
       mounted: noop,
-      beforeDestroy: noop,
-      computed: { ...mapState('Files', ['activeFilesCurrentPage']) }
+      beforeDestroy: noop
     },
     {
       attachTo: document.body,
       localVue,
+      router,
       store,
       stubs: {
         'list-loader': true,
@@ -64,8 +83,11 @@ export const accentuatesTableRowTest = async <V extends Vue>(
         'list-info': true
       },
       computed: {
+        displayThumbnails: () => false,
         folderNotFound: () => false,
         isEmpty: () => false,
+        selected: () => [],
+        totalFilesSize: () => 0,
         app: () => ({
           quickActions: {}
         }),

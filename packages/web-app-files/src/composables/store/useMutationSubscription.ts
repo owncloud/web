@@ -1,6 +1,6 @@
 import { onMounted, onBeforeUnmount } from '@vue/composition-api'
 import { MutationPayload, SubscribeOptions } from 'vuex'
-import { useStore } from './store'
+import { useStore } from './useStore'
 
 export const useMutationSubscription = <P extends MutationPayload>(
   mutations: string[],

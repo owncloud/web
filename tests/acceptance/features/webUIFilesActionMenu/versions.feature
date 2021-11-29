@@ -11,7 +11,7 @@ Feature: Versions of a file
       | user0    |
       | Alice    |
 
-  @disablePreviews
+  @disablePreviews @skipOnOC10 @issue-5853
   Scenario: upload new file with same name to see if different versions are shown
     Given user "user0" has logged in using the webUI
     And user "user0" has uploaded file "lorem.txt" to "lorem.txt"

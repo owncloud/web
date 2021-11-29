@@ -48,7 +48,7 @@
             id="files-location-picker-table"
             class="files-table"
             :are-thumbnails-displayed="false"
-            :resources="activeFilesCurrentPage"
+            :resources="paginatedResources"
             :disabled="disabledResources"
             :target-route="targetRoute"
             :has-actions="false"
@@ -56,9 +56,9 @@
             :header-position="fileListHeaderY"
           >
             <template #footer>
-              <pagination />
+              <pagination :pages="paginationPages" :current-page="paginationPage" />
               <list-info
-                v-if="activeFilesCurrentPage.length > 0"
+                v-if="paginatedResources.length > 0"
                 class="uk-width-1-1 oc-my-s"
                 :files="totalFilesCount.files"
                 :folders="totalFilesCount.folders"
@@ -74,14 +74,21 @@
 
 <script>
 import { mapMutations, mapState, mapActions, mapGetters } from 'vuex'
+import { computed } from '@vue/composition-api'
+
 import { basename, join } from 'path'
 import { batchActions } from '../helpers/batchActions'
 import { cloneStateObject } from '../helpers/store'
 import MixinsGeneral from '../mixins'
 import MixinRoutes from '../mixins/routes'
 import MixinFilesListFilter from '../mixins/filesListFilter'
-import MixinFilesListPagination from '../mixins/filesListPagination'
-import { useFileListHeaderPosition } from '../composables'
+import {
+  useFileListHeaderPosition,
+  useStore,
+  useRouteQuery,
+  usePagination,
+  useDefaults
+} from '../composables'
 import { useTask } from 'vue-concurrency'
 
 import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
@@ -104,11 +111,21 @@ export default {
     Pagination
   },
 
-  mixins: [MixinsGeneral, MixinRoutes, MixinFilesListFilter, MixinFilesListPagination],
+  mixins: [MixinsGeneral, MixinRoutes, MixinFilesListFilter],
 
   setup() {
+    const store = useStore()
+    const { pagination: paginationDefaults } = useDefaults()
     const { refresh: refreshFileListHeaderPosition, y: fileListHeaderY } =
       useFileListHeaderPosition()
+    const paginationPageQuery = useRouteQuery('page', '1')
+    const paginationPage = computed(() => parseInt(String(paginationPageQuery.value)))
+    const paginationPerPageQuery = useRouteQuery('items-per-page', paginationDefaults.perPage.value)
+    const { items: paginatedResources, total: paginationPages } = usePagination({
+      page: paginationPage,
+      perPage: computed(() => parseInt(String(paginationPerPageQuery.value))),
+      items: computed(() => store.getters['Files/activeFiles'])
+    })
 
     const navigateToTargetTask = useTask(function* (signal, ref, target) {
       ref.CLEAR_CURRENT_FILES_LIST()
@@ -129,7 +146,13 @@ export default {
       refreshFileListHeaderPosition()
     }).restartable()
 
-    return { fileListHeaderY, navigateToTargetTask }
+    return {
+      fileListHeaderY,
+      navigateToTargetTask,
+      paginatedResources,
+      paginationPages,
+      paginationPage
+    }
   },
 
   data: () => ({
@@ -142,12 +165,7 @@ export default {
       'locationPickerTargetFolder',
       'currentFolder'
     ]),
-    ...mapGetters('Files', [
-      'activeFilesCurrentPage',
-      'publicLinkPassword',
-      'totalFilesCount',
-      'totalFilesSize'
-    ]),
+    ...mapGetters('Files', ['publicLinkPassword', 'totalFilesCount', 'totalFilesSize']),
     ...mapGetters(['configuration']),
     ...mapGetters(['homeFolder']),
 
@@ -228,7 +246,7 @@ export default {
     },
 
     disabledResources() {
-      const resources = cloneStateObject(this.activeFilesCurrentPage)
+      const resources = cloneStateObject(this.paginatedResources)
 
       return resources
         .filter((resource) => resource.type !== 'folder' || this.resources.includes(resource.path))
@@ -236,7 +254,7 @@ export default {
     },
 
     isEmpty() {
-      return this.activeFilesCurrentPage.length < 1
+      return this.paginatedResources.length < 1
     },
 
     targetRoute() {
@@ -278,8 +296,6 @@ export default {
         if (!sameRoute || !sameItem) {
           this.navigateToTargetTask.perform(this, this.$route)
         }
-
-        this.$_filesListPagination_updateCurrentPage()
       },
       immediate: true
     }
@@ -336,7 +352,7 @@ export default {
         let targetPath = this.target || '/'
         const resourceName = basename(resource)
         targetPath += '/' + resourceName
-        const exists = this.activeFilesCurrentPage.some((item) => {
+        const exists = this.paginatedResources.some((item) => {
           return basename(item.name) === resourceName
         })
 

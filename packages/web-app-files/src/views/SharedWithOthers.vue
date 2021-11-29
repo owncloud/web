@@ -21,7 +21,7 @@
         class="files-table"
         :class="{ 'files-table-squashed': !sidebarClosed }"
         :are-thumbnails-displayed="displayThumbnails"
-        :resources="activeFilesCurrentPage"
+        :resources="paginatedResources"
         :target-route="targetRoute"
         :header-position="fileListHeaderY"
         @fileClick="$_fileActions_triggerDefaultAction"
@@ -31,9 +31,9 @@
           <context-actions v-if="isResourceInSelection(resource)" :items="selected" />
         </template>
         <template #footer>
-          <pagination />
+          <pagination :pages="paginationPages" :current-page="paginationPage" />
           <list-info
-            v-if="activeFilesCurrentPage.length > 0"
+            v-if="paginatedResources.length > 0"
             class="uk-width-1-1 oc-my-s"
             :files="totalFilesCount.files"
             :folders="totalFilesCount.folders"
@@ -46,16 +46,22 @@
 
 <script>
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
+import { computed } from '@vue/composition-api'
 
 import { aggregateResourceShares } from '../helpers/resources'
 import FileActions from '../mixins/fileActions'
 import MixinFilesListFilter from '../mixins/filesListFilter'
 import MixinResources from '../mixins/resources'
-import MixinFilesListPagination from '../mixins/filesListPagination'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../constants'
-import { useFileListHeaderPosition } from '../composables'
+import {
+  useFileListHeaderPosition,
+  useStore,
+  useRouteQuery,
+  usePagination,
+  useDefaults
+} from '../composables'
 import debounce from 'lodash-es/debounce'
 import { useTask } from 'vue-concurrency'
 
@@ -70,16 +76,20 @@ const visibilityObserver = new VisibilityObserver()
 export default {
   components: { ListLoader, NoContentMessage, ListInfo, Pagination, ContextActions },
 
-  mixins: [
-    FileActions,
-    MixinResources,
-    MixinFilesListPagination,
-    MixinMountSideBar,
-    MixinFilesListFilter
-  ],
+  mixins: [FileActions, MixinResources, MixinMountSideBar, MixinFilesListFilter],
 
   setup() {
+    const store = useStore()
+    const { pagination: paginationDefaults } = useDefaults()
     const { y: fileListHeaderY } = useFileListHeaderPosition()
+    const paginationPageQuery = useRouteQuery('page', '1')
+    const paginationPage = computed(() => parseInt(String(paginationPageQuery.value)))
+    const paginationPerPageQuery = useRouteQuery('items-per-page', paginationDefaults.perPage.value)
+    const { items: paginatedResources, total: paginationPages } = usePagination({
+      page: paginationPage,
+      perPage: computed(() => parseInt(String(paginationPerPageQuery.value))),
+      items: computed(() => store.getters['Files/activeFiles'])
+    })
 
     const loadResourcesTask = useTask(function* (signal, ref) {
       ref.CLEAR_CURRENT_FILES_LIST()
@@ -106,18 +116,19 @@ export default {
       ref.LOAD_FILES({ currentFolder: null, files: resources })
     })
 
-    return { fileListHeaderY, loadResourcesTask }
+    return {
+      fileListHeaderY,
+      loadResourcesTask,
+      paginatedResources,
+      paginationPages,
+      paginationPage
+    }
   },
 
   computed: {
     ...mapState(['app']),
     ...mapState('Files', ['files']),
-    ...mapGetters('Files', [
-      'highlightedFile',
-      'activeFilesCurrentPage',
-      'selectedFiles',
-      'totalFilesCount'
-    ]),
+    ...mapGetters('Files', ['highlightedFile', 'selectedFiles', 'totalFilesCount']),
     ...mapGetters(['isOcis', 'configuration', 'getToken', 'user']),
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
@@ -131,7 +142,7 @@ export default {
     },
 
     isEmpty() {
-      return this.activeFilesCurrentPage.length < 1
+      return this.paginatedResources.length < 1
     },
 
     targetRoute() {
@@ -140,13 +151,6 @@ export default {
 
     displayThumbnails() {
       return !this.configuration.options.disablePreviews
-    }
-  },
-
-  watch: {
-    $route: {
-      handler: '$_filesListPagination_updateCurrentPage',
-      immediate: true
     }
   },
 

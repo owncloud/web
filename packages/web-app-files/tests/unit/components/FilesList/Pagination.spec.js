@@ -1,16 +1,12 @@
-import Vuex from 'vuex'
-import GetTextPlugin from 'vue-gettext'
+import _ from 'lodash'
 import DesignSystem from 'owncloud-design-system'
 import Pagination from '@files/src/components/FilesList/Pagination.vue'
-import { createLocalVue, mount, RouterLinkStub, shallowMount } from '@vue/test-utils'
-
-const localVue = createLocalVue()
-localVue.use(Vuex)
-localVue.use(DesignSystem)
-localVue.use(GetTextPlugin, {
-  translations: 'does-not-matter.json',
-  silent: true
-})
+import {
+  createLocalVue as OGCreateLocalVue,
+  mount,
+  RouterLinkStub,
+  shallowMount
+} from '@vue/test-utils'
 
 const filesPersonalRoute = { name: 'files-personal', path: '/files/home' }
 
@@ -18,19 +14,53 @@ const selectors = {
   filesPagination: '.files-pagination'
 }
 
+const createLocalVue = () => {
+  const localVue = OGCreateLocalVue()
+  localVue.use(DesignSystem)
+  localVue.prototype.$gettextInterpolate = jest.fn()
+
+  return localVue
+}
+
+const getWrapper = (propsData = {}) => {
+  return shallowMount(Pagination, {
+    localVue: createLocalVue(),
+    stubs: {
+      'oc-pagination': true
+    },
+    propsData: _.merge({ currentPage: 1, pages: 10 }, propsData),
+    mocks: {
+      $route: filesPersonalRoute
+    }
+  })
+}
+
+const getMountedWrapper = (propsData = {}) => {
+  return mount(Pagination, {
+    localVue: createLocalVue(),
+    propsData: _.merge({ currentPage: 1, pages: 10 }, propsData),
+    stubs: {
+      'oc-pagination': false,
+      RouterLink: RouterLinkStub
+    },
+    mocks: {
+      $route: filesPersonalRoute
+    }
+  })
+}
+
 describe('Pagination', () => {
   describe('when amount of pages is', () => {
     describe('less than or equals one', () => {
       it.each([-1, 0, 1])('should not show wrapper', (pages) => {
-        const store = createStore(0, pages)
-        const wrapper = getWrapper(store)
+        const wrapper = getWrapper({ currentPage: 0, pages })
 
         expect(wrapper.find(selectors.filesPagination).exists()).toBeFalsy()
       })
     })
 
     describe('greater than one', () => {
-      const wrapper = getWrapper(createStore(1, 2))
+      const wrapper = getWrapper({ currentPage: 1, pages: 2 })
 
       it('should show wrapper', () => {
         const paginationEl = wrapper.find('.files-pagination')
@@ -41,7 +71,7 @@ describe('Pagination', () => {
 
       it('should set provided current page', () => {
         const paginationEl = wrapper.find(selectors.filesPagination)
-
+        console.log(wrapper.html())
         expect(paginationEl.attributes().currentpage).toBe('1')
       })
     })
@@ -49,7 +79,7 @@ describe('Pagination', () => {
 
   describe('current route', () => {
     it('should use provided route to render pages', () => {
-      const wrapper = getMountedWrapper(createStore())
+      const wrapper = getMountedWrapper()
       const currentRoute = wrapper.vm.$route
       const links = wrapper.findAllComponents(RouterLinkStub)
 
@@ -61,53 +91,3 @@ describe('Pagination', () => {
     })
   })
 })
-
-function createStore(currentPage = 1, pages = 10) {
-  return new Vuex.Store({
-    modules: {
-      Files: {
-        namespaced: true,
-        modules: {
-          pagination: {
-            namespaced: true,
-            state: {
-              currentPage: currentPage
-            },
-            getters: {
-              pages: () => {
-                return pages
-              }
-            }
-          }
-        }
-      }
-    }
-  })
-}
-
-function getWrapper(store) {
-  return shallowMount(Pagination, {
-    localVue,
-    store: store,
-    stubs: {
-      'oc-pagination': true
-    },
-    mocks: {
-      $route: filesPersonalRoute
-    }
-  })
-}
-
-function getMountedWrapper(store) {
-  return mount(Pagination, {
-    localVue,
-    store: store,
-    stubs: {
-      'oc-pagination': false,
-      RouterLink: RouterLinkStub
-    },
-    mocks: {
-      $route: filesPersonalRoute
-    }
-  })
-}

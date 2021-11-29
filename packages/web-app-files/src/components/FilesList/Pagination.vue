@@ -10,12 +10,16 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
-
 export default {
-  computed: {
-    ...mapState('Files/pagination', ['currentPage']),
-    ...mapGetters('Files/pagination', ['pages'])
+  props: {
+    pages: {
+      type: Number,
+      required: true
+    },
+    currentPage: {
+      type: Number,
+      required: true
+    }
   }
 }
 </script>

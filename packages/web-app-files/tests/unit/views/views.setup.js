@@ -25,6 +25,7 @@ localVue.prototype.$client.init({ baseUrl: 'http://none.de' })
 localVue.use(Vuex)
 localVue.use(DesignSystem)
 localVue.use(VueCompositionAPI)
+
 /*
  * TODO: options on GetTextPlugin do not have any effect because of
  * packages/web-app-files/src/gettext.js which overwrites every setting.
@@ -39,7 +40,6 @@ export const getStore = function ({
   disablePreviews = true,
   currentPage = null,
   activeFiles = [],
-  activeFilesCurrentPage = [],
   pages = null,
   sidebarClosed = false,
   currentFolder = null,
@@ -88,7 +88,6 @@ export const getStore = function ({
           totalFilesSize: () => totalFilesSize,
           selectedFiles: () => selectedFiles,
           activeFiles: () => activeFiles,
-          activeFilesCurrentPage: () => activeFilesCurrentPage,
           inProgress: () => inProgress,
           highlightedFile: () => highlightedFile,
           currentFolder: () => currentFolder,

@@ -2,6 +2,9 @@ import { mount } from '@vue/test-utils'
 import { createFile, localVue, getStore } from './views.setup'
 import Favorites from 'packages/web-app-files/src/views/Favorites.vue'
 
+import VueRouter from 'vue-router'
+localVue.use(VueRouter)
+
 const stubs = {
   'router-link': true,
   translate: true,
@@ -33,7 +36,13 @@ describe('Favorites component', () => {
     })
 
     it('shows only the files table when loading is finished', () => {
-      const wrapper = getMountedWrapper()
+      const wrapper = getMountedWrapper({
+        setup() {
+          return {
+            paginatedResources: defaultActiveFiles
+          }
+        }
+      })
 
       expect(wrapper.find(spinnerStub).exists()).toBeFalsy()
       expect(wrapper.find(filesTableStub).exists()).toBeTruthy()
@@ -41,7 +50,7 @@ describe('Favorites component', () => {
   })
   describe('no content message', () => {
     it('shows only the "no content" message if no resources are marked as favorite', () => {
-      const store = getStore({ activeFilesCurrentPage: [] })
+      const store = getStore()
       const wrapper = getMountedWrapper({ store, loading: false })
 
       expect(wrapper.find(selectors.noContentMessage).exists()).toBeTruthy()
@@ -49,7 +58,13 @@ describe('Favorites component', () => {
     })
 
     it('does not show the no content message if resources are marked as favorite', () => {
-      const wrapper = getMountedWrapper()
+      const wrapper = getMountedWrapper({
+        setup() {
+          return {
+            paginatedResources: defaultActiveFiles
+          }
+        }
+      })
 
       expect(wrapper.find('#files-favorites-empty').exists()).toBeFalsy()
       expect(wrapper.find(filesTableStub).exists()).toBeTruthy()
@@ -58,8 +73,16 @@ describe('Favorites component', () => {
   describe('files table', () => {
     describe('no file is highlighted', () => {
       it("don't squash the table", () => {
-        const store = getStore({ sidebarClosed: true, activeFilesCurrentPage: defaultActiveFiles })
-        const wrapper = getMountedWrapper({ store, loading: false })
+        const store = getStore({ sidebarClosed: true })
+        const wrapper = getMountedWrapper({
+          store,
+          loading: false,
+          setup() {
+            return {
+              paginatedResources: defaultActiveFiles
+            }
+          }
+        })
 
         expect(wrapper.find(selectors.favoritesTable).attributes('class')).not.toContain(
           'files-table-squashed'
@@ -68,7 +91,13 @@ describe('Favorites component', () => {
       })
 
       it('don\'t sets the "highlighted" attribute', () => {
-        const wrapper = getMountedWrapper()
+        const wrapper = getMountedWrapper({
+          setup() {
+            return {
+              paginatedResources: defaultActiveFiles
+            }
+          }
+        })
 
         expect(wrapper.find(selectors.favoritesTable).attributes('highlighted')).toBeFalsy()
       })
@@ -76,10 +105,16 @@ describe('Favorites component', () => {
 
     describe('a file is highlighted', () => {
       const store = getStore({
-        highlightedFile: defaultActiveFiles[0],
-        activeFilesCurrentPage: defaultActiveFiles
+        highlightedFile: defaultActiveFiles[0]
       })
-      const wrapper = getMountedWrapper({ store })
+      const wrapper = getMountedWrapper({
+        store,
+        setup() {
+          return {
+            paginatedResources: defaultActiveFiles
+          }
+        }
+      })
 
       it('squash the table', () => {
         expect(wrapper.find(selectors.favoritesTable).attributes('class')).toContain(
@@ -91,10 +126,17 @@ describe('Favorites component', () => {
     describe('previews', () => {
       it('displays previews when the "disablePreviews" config is disabled', () => {
         const store = getStore({
-          disablePreviews: false,
-          activeFilesCurrentPage: defaultActiveFiles
+          disablePreviews: false
         })
-        const wrapper = getMountedWrapper({ store, loading: false })
+        const wrapper = getMountedWrapper({
+          store,
+          loading: false,
+          setup() {
+            return {
+              paginatedResources: defaultActiveFiles
+            }
+          }
+        })
 
         expect(
           wrapper.find(selectors.favoritesTable).attributes('arethumbnailsdisplayed')
@@ -103,10 +145,17 @@ describe('Favorites component', () => {
 
       it('hides previews when the "disablePreviews" config is enabled', () => {
         const store = getStore({
-          disablePreviews: true,
-          activeFilesCurrentPage: defaultActiveFiles
+          disablePreviews: true
         })
-        const wrapper = getMountedWrapper({ store, loading: false })
+        const wrapper = getMountedWrapper({
+          store,
+          loading: false,
+          setup() {
+            return {
+              paginatedResources: defaultActiveFiles
+            }
+          }
+        })
 
         expect(
           wrapper.find(selectors.favoritesTable).attributes('arethumbnailsdisplayed')
@@ -119,24 +168,9 @@ describe('Favorites component', () => {
         stubs['oc-table-files'] = false
       })
 
-      it('sets the pages count & the current page', () => {
-        const store = getStore({
-          highlightedFile: defaultActiveFiles[0],
-          activeFilesCurrentPage: defaultActiveFiles,
-          pages: 4,
-          currentPage: 3,
-          totalFilesCount: { files: 10, folders: 10 }
-        })
-        const wrapper = getMountedWrapper({ store, loading: false })
-
-        expect(wrapper.find(paginationStub).attributes('currentpage')).toEqual('3')
-        expect(wrapper.find(paginationStub).attributes('pages')).toEqual('4')
-      })
-
       it('does not show any pagination when there is only one page', () => {
         const store = getStore({
           highlightedFile: defaultActiveFiles[0],
-          activeFilesCurrentPage: defaultActiveFiles,
           pages: 1,
           currentPage: 1,
           totalFilesCount: { files: 10, folders: 10 }
@@ -156,11 +190,18 @@ describe('Favorites component', () => {
       it('sets the counters and the size', () => {
         const store = getStore({
           highlightedFile: defaultActiveFiles[0],
-          activeFilesCurrentPage: defaultActiveFiles,
           totalFilesCount: { files: 15, folders: 20 },
           totalFilesSize: 1024
         })
-        const wrapper = getMountedWrapper({ store, loading: false })
+        const wrapper = getMountedWrapper({
+          store,
+          loading: false,
+          setup() {
+            return {
+              paginatedResources: defaultActiveFiles
+            }
+          }
+        })
         const listInfoStubElement = wrapper.find(listInfoStub)
 
         expect(listInfoStubElement.props()).toMatchObject({
@@ -179,16 +220,23 @@ describe('Favorites component', () => {
         const file = createFile({ id: 3, status: 2, type: 'file' })
         const store = getStore({
           highlightedFile: file,
-          activeFilesCurrentPage: [file],
           totalFilesCount: { files: 15, folders: 20 }
         })
-        const wrapper = getMountedWrapper({ store, loading: false })
+        const wrapper = getMountedWrapper({
+          store,
+          loading: false,
+          setup() {
+            return {
+              paginatedResources: defaultActiveFiles
+            }
+          }
+        })
 
         expect(wrapper.find(listInfoStub).exists()).toBeTruthy()
       })
 
       it('does not show the list info when there are no active files', () => {
-        const store = getStore({ activeFilesCurrentPage: [] })
+        const store = getStore()
         const wrapper = getMountedWrapper({ store, loading: false })
 
         expect(wrapper.find(listInfoStub).exists()).toBeFalsy()
@@ -199,31 +247,27 @@ describe('Favorites component', () => {
 
 function mountOptions({
   store = getStore({
-    activeFilesCurrentPage: defaultActiveFiles,
     totalFilesCount: { files: 1, folders: 1 }
   }),
+  setup = () => ({}),
   loading = false
 } = {}) {
   return {
     localVue,
     store,
     stubs,
-    mocks: {
-      $route: {
-        name: 'some-route',
-        query: { page: 1 }
-      }
-    },
+    router: new VueRouter(),
     setup: () => ({
       loadResourcesTask: {
         isRunning: loading,
         perform: jest.fn()
-      }
+      },
+      ...setup()
     })
   }
 }
 
-function getMountedWrapper({ store, loading } = {}) {
+function getMountedWrapper({ store, loading, setup } = {}) {
   const component = { ...Favorites, created: jest.fn(), mounted: jest.fn() }
-  return mount(component, mountOptions({ store, loading }))
+  return mount(component, mountOptions({ store, loading, setup }))
 }
