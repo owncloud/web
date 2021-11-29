@@ -2827,7 +2827,7 @@ def checkStarlark():
 def middlewareService(ocis = False):
     return [{
         "name": "middleware",
-        "image": "dpakach/owncloud-test-middleware",
+        "image": "owncloud/owncloud-test-middleware",
         "pull": "always",
         "environment": {
             "BACKEND_HOST": "https://ocis:9200" if ocis else "http://owncloud",
