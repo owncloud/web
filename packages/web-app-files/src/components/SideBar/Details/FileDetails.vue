@@ -119,7 +119,6 @@ import { loadPreview } from '../../../helpers/resource'
 import intersection from 'lodash-es/intersection'
 import upperFirst from 'lodash-es/upperFirst'
 import path from 'path'
-import { DateTime } from 'luxon'
 
 export default {
   name: 'FileDetails',
