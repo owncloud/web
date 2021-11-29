@@ -33,14 +33,7 @@
           <context-actions v-if="isResourceInSelection(resource)" :item="resource" />
         </template>
         <template #footer>
-          <oc-pagination
-            v-if="paginationPages > 1"
-            :pages="paginationPages"
-            :current-page="paginationPage"
-            :max-displayed="3"
-            :current-route="$route"
-            class="files-pagination uk-flex uk-flex-center oc-my-s"
-          />
+          <pagination :pages="paginationPages" :current-page="paginationPage" />
           <list-info
             v-if="paginatedResources.length > 0"
             class="uk-width-1-1 oc-my-s"
@@ -83,6 +76,7 @@ import ListLoader from '../components/FilesList/ListLoader.vue'
 import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
 import NotFoundMessage from '../components/FilesList/NotFoundMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
+import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
 import { DavProperties } from 'web-pkg/src/constants'
 
@@ -125,6 +119,7 @@ const visibilityObserver = new VisibilityObserver()
 export default {
   components: {
     ListInfo,
+    Pagination,
     ListLoader,
     NoContentMessage,
     NotFoundMessage,

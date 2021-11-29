@@ -22,14 +22,7 @@
       @rowMounted="rowMounted"
     >
       <template #footer>
-        <oc-pagination
-          v-if="paginationPages > 1"
-          :pages="paginationPages"
-          :current-page="paginationPage"
-          :max-displayed="3"
-          :current-route="$route"
-          class="files-pagination uk-flex uk-flex-center oc-my-s"
-        />
+        <pagination :pages="paginationPages" :current-page="paginationPage" />
         <list-info
           v-if="paginatedResources.length > 0"
           class="uk-width-1-1 oc-my-s"
@@ -51,6 +44,7 @@ import debounce from 'lodash-es/debounce'
 import { mapMutations, mapGetters, mapActions } from 'vuex'
 import { computed } from '@vue/composition-api'
 import ListInfo from '../FilesList/ListInfo.vue'
+import Pagination from '../FilesList/Pagination.vue'
 import MixinFileActions from '../../mixins/fileActions'
 import MixinFilesListFilter from '../../mixins/filesListFilter'
 import MixinFilesListScrolling from '../../mixins/filesListScrolling'
@@ -58,7 +52,7 @@ import MixinFilesListScrolling from '../../mixins/filesListScrolling'
 const visibilityObserver = new VisibilityObserver()
 
 export default {
-  components: { ListInfo, NoContentMessage },
+  components: { ListInfo, Pagination, NoContentMessage },
   mixins: [MixinFileActions, MixinFilesListFilter, MixinFilesListScrolling],
   props: {
     searchResults: {

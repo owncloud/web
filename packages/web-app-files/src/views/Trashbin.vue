@@ -28,14 +28,7 @@
           <context-actions v-if="isResourceInSelection(resource)" :items="selected" />
         </template>
         <template #footer>
-          <oc-pagination
-            v-if="paginationPages > 1"
-            :pages="paginationPages"
-            :current-page="paginationPage"
-            :max-displayed="3"
-            :current-route="$route"
-            class="files-pagination uk-flex uk-flex-center oc-my-s"
-          />
+          <pagination :pages="paginationPages" :current-page="paginationPage" />
           <list-info
             v-if="paginatedResources.length > 0"
             class="uk-width-1-1 oc-my-s"
@@ -68,11 +61,12 @@ import { useTask } from 'vue-concurrency'
 import ListLoader from '../components/FilesList/ListLoader.vue'
 import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
+import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
 import { DavProperties } from 'web-pkg/src/constants'
 
 export default {
-  components: { ListLoader, NoContentMessage, ListInfo, ContextActions },
+  components: { ListLoader, NoContentMessage, ListInfo, Pagination, ContextActions },
 
   mixins: [MixinResources, MixinMountSideBar, MixinFilesListFilter],
 
