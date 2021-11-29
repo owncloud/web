@@ -82,7 +82,7 @@ config = {
                     "webUISharingExpirationDate",
                 ],
                 "webUIResharingToRoot": "oC10ResharingToRoot",
-                "oC10SharingFilePermission": [
+                "oC10SharingFilePerm": [
                     "webUISharingFilePermissionMultipleUsers",
                     "webUISharingFilePermissionsGroups",
                 ],
@@ -92,42 +92,42 @@ config = {
                     "webUISharingFolderPermissionMultipleUsers",
                     "webUISharingFolderPermissionsGroups",
                 ],
-                "oC10SharingInternalGroups": [
+                "oC10SharingIntGroups": [
                     "webUISharingInternalGroups",
                     "webUISharingInternalGroupsEdgeCases",
                 ],
-                "oC10SharingInternalGroupsToRoot": [
+                "oC10SharingIntGroupsToRoot": [
                     "webUISharingInternalGroupsToRoot",
                     "webUISharingInternalGroupsToRootEdgeCases",
                 ],
-                "oC10SharingInternalGroupsSharingInd": [
+                "oC10SharingIntGroupsSharingInd": [
                     "webUISharingInternalGroupsSharingIndicator",
                     "webUISharingInternalGroupsToRootSharingIndicator",
                 ],
-                "oC10SharingInternalUsers": [
+                "oC10SharingIntUsers": [
                     "webUISharingInternalUsers",
                     "webUISharingInternalUsersCollaborator",
                     "webUISharingInternalUsersShareWithPage",
                 ],
-                "webUISharingInternalUsersBlacklisted": "oC10SharingInternalUsersBlacklisted",
-                "oC10SharingInternalUsersSharingInd": [
+                "webUISharingInternalUsersBlacklisted": "oC10SharingIntUsersBlacklisted",
+                "oC10SharingIntUsersSharingInd": [
                     "webUISharingInternalUsersSharingIndicator",
                     "webUISharingInternalUsersToRootSharingIndicator",
                 ],
-                "oC10SharingInternalUsersRoot1": [
+                "oC10SharingIntUsersRoot1": [
                     "webUISharingInternalUsersToRoot",
                     "webUISharingInternalUsersToRootBlacklisted",
                 ],
-                "oC10SharingInternalUsersRoot2": [
+                "oC10SharingIntUsersRoot2": [
                     "webUISharingInternalUsersToRootCollaborator",
                     "webUISharingInternalUsersToRootPreviews",
                     "webUISharingInternalUsersToRootShareWithPage",
                 ],
-                "webUISharingPermissionsUsers": "oC10SharingPermissionsUsers",
-                "webUISharingPermissionToRoot": "oC10SharingPermissionToRoot",
+                "webUISharingPermissionsUsers": "oC10SharingPermUsers",
+                "webUISharingPermissionToRoot": "oC10SharingPermToRoot",
                 "webUISharingPublicBasic": "oC10SharingPublicBasic",
                 "webUISharingPublicManagement": "oC10SharingPublicManagement",
-                "oC10SharingPublicExpireAndRoles": [
+                "oC10SharingPubExpAndRoles": [
                     "webUISharingPublicDifferentRoles",
                     "webUISharingPublicExpire",
                 ],
@@ -408,31 +408,31 @@ config = {
                     "webUIFilesDetails",
                     "webUIFilesSearch",
                 ],
-                "oCISSharingInternalGroups": [
+                "oCISSharingIntGroups": [
                     "webUISharingInternalGroups",
                     "webUISharingInternalGroupsEdgeCases",
                     "webUISharingInternalGroupsSharingIndicator",
                 ],
-                "oCISSharingInternalUsers1": [
+                "oCISSharingIntUsers1": [
                     "webUISharingInternalUsers",
                     "webUISharingAutocompletion",
                     "webUISharingExpirationDate",
                 ],
-                "oCISSharingInternalUsers2": [
+                "oCISSharingIntUsers2": [
                     "webUISharingInternalUsersBlacklisted",
                     "webUISharingInternalUsersCollaborator",
                     "webUISharingInternalUsersShareWithPage",
                     "webUISharingInternalUsersSharingIndicator",
                 ],
-                "oCISSharingPermissions1": [
+                "oCISSharingPerm1": [
                     "webUISharingPermissionsUsers",
                     "webUISharingFilePermissionsGroups",
                 ],
-                "oCISSharingPermissions2": [
+                "oCISSharingPerm2": [
                     "webUISharingFolderPermissionsGroups",
                     "webUISharingFolderAdvancedPermissionsGroups",
                 ],
-                "oCISSharingPermissions3": [
+                "oCISSharingPerm3": [
                     "webUISharingFilePermissionMultipleUsers",
                     "webUISharingFolderPermissionMultipleUsers",
                     "webUISharingFolderAdvancedPermissionMultipleUsers",
@@ -445,7 +445,7 @@ config = {
                     "webUISharingPublicBasic",
                     "webUISharingPublicManagement",
                 ],
-                "oCISSharingPublicExpireAndRoles": [
+                "oCISSharingPubExpAndRoles": [
                     "webUISharingPublicDifferentRoles",
                     "webUISharingPublicExpire",
                 ],
