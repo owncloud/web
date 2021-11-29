@@ -40,7 +40,10 @@ const SCREENSHOTS = !!process.env.SCREENSHOTS
 const VISUAL_TEST = !!process.env.VISUAL_TEST
 const UPDATE_VRT_SCREENSHOTS = !!process.env.UPDATE_VRT_SCREENSHOTS
 
-const MIDDLEWARE_HOST = process.env.MIDDLEWARE_HOST || 'http://host.docker.internal:3000'
+const MIDDLEWARE_HOST = withHttp(
+  process.env.MIDDLEWARE_HOST ||
+    (RUN_ON_OCIS ? 'http://host.docker.internal:3000' : 'http://host.docker.internal:3001')
+)
 
 function generateScreenshotFilePath(nightwatchClient, basePath, imagePath) {
   return path.join(process.cwd(), basePath, imagePath)
