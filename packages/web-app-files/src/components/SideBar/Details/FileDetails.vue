@@ -167,11 +167,6 @@ export default {
     sharedViaLabel() {
       return this.$gettext('Shared via:')
     },
-    shareDateTooltip() {
-      return DateTime.fromSeconds(parseInt(this.sharedTime))
-        .setLocale(this.$language.current)
-        .toLocaleString(DateTime.DATETIME_FULL)
-    },
     sharedViaTooltip() {
       return this.$gettextInterpolate(
         this.$gettext("Navigate to '%{folder}'"),
