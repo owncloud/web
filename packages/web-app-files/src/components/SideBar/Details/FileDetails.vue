@@ -58,12 +58,7 @@
         <tr v-if="showShareDate" data-testid="shared-date">
           <th scope="col" class="oc-pr-s" v-text="shareDateLabel" />
           <td>
-            <span
-              v-oc-tooltip="shareDateTooltip"
-              tabindex="0"
-              :aria-label="displayShareDate + ' (' + shareDateTooltip + ')'"
-              v-text="displayShareDate"
-            />
+            <span v-text="displayShareDate" />
           </td>
         </tr>
         <tr v-if="showSharedVia" data-testid="shared-via">
@@ -216,7 +211,7 @@ export default {
       return this.hasAnyShares && !this.isPublicPage
     },
     displayShareDate() {
-      const date = this.formRelativeDateFromJSDate(new Date(this.sharedTime * 1000))
+      const date = this.formDateFromJSDate(new Date(this.sharedTime * 1000))
       return upperFirst(date)
     },
     detailSharingInformation() {
@@ -278,9 +273,9 @@ export default {
     capitalizedTimestamp() {
       let displayDate = ''
       if (this.file.mdate) {
-        displayDate = this.formDateFromRFC(this.file.mdate)
+        displayDate = this.formDateFromHTTP(this.file.mdate)
       } else {
-        displayDate = this.formDateFromRFC(this.file.sdate)
+        displayDate = this.formDateFromHTTP(this.file.sdate)
       }
       return upperFirst(displayDate)
     },
