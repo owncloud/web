@@ -11,24 +11,22 @@
       :userid="item.value.shareWith"
       :user-name="item.label"
     />
-    <template v-else>
-      <oc-icon
-        v-if="item.value.shareType === shareTypes.group"
-        key="avatar-group"
-        class="oc-mr-s files-recipient-suggestion-avatar"
-        name="group"
-        size="xlarge"
-        :accessible-label="$gettext('Group')"
-      />
-      <oc-icon
-        v-else
-        key="avatar-generic-person"
-        class="oc-mr-s files-recipient-suggestion-avatar"
-        name="person"
-        size="xlarge"
-        :accessible-label="$gettext('User')"
-      />
-    </template>
+    <oc-icon
+      v-else-if="isGroup"
+      key="avatar-group"
+      class="oc-mr-s files-recipient-suggestion-avatar"
+      name="group"
+      size="xlarge"
+      :accessible-label="$gettext('Group')"
+    />
+    <oc-icon
+      v-else
+      key="avatar-generic-person"
+      class="oc-mr-s files-recipient-suggestion-avatar"
+      name="person"
+      size="xlarge"
+      :accessible-label="$gettext('User')"
+    />
     <div class="files-collaborators-autocomplete-user-text">
       <span class="oc-text-bold files-collaborators-autocomplete-username" v-text="item.label" />
       <span
@@ -45,13 +43,10 @@
 </template>
 
 <script>
-import Mixins from '../../../../mixins/collaborators'
-import { shareTypes } from '../../../../helpers/shareTypes'
+import { ShareType } from '../../../../helpers/share'
 
 export default {
   name: 'AutocompleteItem',
-
-  mixins: [Mixins],
 
   props: {
     item: {
@@ -67,24 +62,35 @@ export default {
   },
 
   computed: {
-    shareTypes() {
-      return shareTypes
-    },
-
     isUser() {
-      return this.item.value.shareType === this.shareTypes.user
+      return this.item.value.shareType === ShareType.user
     },
 
-    isRemoteUser() {
-      return this.item.value.shareType === this.shareTypes.remote
+    isGroup() {
+      return this.item.value.shareType === ShareType.group
     },
 
     collaboratorClass() {
-      const isUser = this.isUser || this.isRemoteUser
+      const shareTypeKey = ShareType[this.item.value.shareType]
+      return `files-collaborators-search-${shareTypeKey}`
+    }
+  },
 
-      return (
-        'files-collaborators-search-' + (isUser ? (this.isRemoteUser ? 'remote' : 'user') : 'group')
-      )
+  methods: {
+    // FIXME: move to ShareType (needs to be refactored from enum to class)
+    getCollaboratorTypeLabel(type) {
+      switch (type) {
+        case ShareType.user:
+          return this.$gettext('User')
+        case ShareType.group:
+          return this.$gettext('Group')
+        case ShareType.guest:
+          return this.$gettext('Guest')
+        case ShareType.remote:
+          return this.$gettext('Remote user')
+        default:
+          return this.$gettext('Unknown type')
+      }
     }
   }
 }

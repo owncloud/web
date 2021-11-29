@@ -50,9 +50,11 @@
       class="uk-width-1-3 uk-flex uk-flex-nowrap uk-flex-right uk-flex-middle"
     >
       <role-dropdown
+        :resource="highlightedFile"
         :collaborator-id="collaborator.id"
-        :collaborators-permissions="originalPermissions"
-        :existing-role="originalRole"
+        :existing-permissions="collaborator.customPermissions"
+        :existing-role="collaborator.role"
+        :allow-share-permission="!isOcis"
         @optionChange="collaboratorRoleChanged"
       />
       <edit-dropdown
@@ -68,14 +70,12 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import { shareTypes } from '../../../../helpers/shareTypes'
-import CollaboratorsMixins from '../../../../mixins/collaborators'
 import Mixins from '../../../../mixins'
 import { DateTime } from 'luxon'
-import { roleToBitmask, bitmaskToRole } from '../../../../helpers/collaborators'
 
 import EditDropdown from './EditDropdown.vue'
 import RoleDropdown from '../RoleDropdown.vue'
+import { SharePermissions, ShareType, ShareTypeCategories } from '../../../../helpers/share'
 
 export default {
   name: 'Collaborator',
@@ -83,7 +83,7 @@ export default {
     EditDropdown,
     RoleDropdown
   },
-  mixins: [Mixins, CollaboratorsMixins],
+  mixins: [Mixins],
   props: {
     collaborator: {
       type: Object,
@@ -98,17 +98,18 @@ export default {
     ...mapGetters('Files', ['highlightedFile']),
     ...mapGetters(['user', 'isOcis']),
 
+    // FIXME: move to ShareType (needs to be refactored from enum to class)
     shareTypeText() {
       switch (this.shareType) {
-        case shareTypes.user:
+        case ShareType.user:
           return this.$gettext('User')
-        case shareTypes.group:
+        case ShareType.group:
           return this.$gettext('Group')
-        case shareTypes.link:
+        case ShareType.link:
           return this.$gettext('Link')
-        case shareTypes.guest:
+        case ShareType.guest:
           return this.$gettext('Guest')
-        case shareTypes.remote:
+        case ShareType.remote:
           return this.$gettext('Federated')
         default:
           return this.$gettext('User')
@@ -116,7 +117,7 @@ export default {
     },
 
     shareTypeName() {
-      return Object.keys(shareTypes)[this.shareType]
+      return ShareType[this.shareType]
     },
 
     shareDisplayName() {
@@ -131,21 +132,7 @@ export default {
     },
 
     collaboratorType() {
-      const collaboratorShareType = this.collaborator.shareType
-
-      if (
-        collaboratorShareType === shareTypes.user ||
-        collaboratorShareType === shareTypes.guest ||
-        collaboratorShareType === shareTypes.remote
-      ) {
-        return 'user'
-      }
-
-      if (collaboratorShareType === shareTypes.group) {
-        return 'group'
-      }
-
-      return null
+      return ShareTypeCategories.getByShareType(this.collaborator.shareType)?.key
     },
 
     screenreaderShareDisplayName() {
@@ -174,31 +161,12 @@ export default {
       return this.modifiable
     },
 
-    originalPermissions() {
-      return Object.entries(this.collaborator.customPermissions)
-        .filter(([key, value]) => value > 0)
-        .flat()
-        .filter((value) => typeof value === 'string')
-    },
-
-    originalRole() {
-      const role = this.displayRoles.find((r) => r.name === this.collaborator.role.name)
-
-      if (role) {
-        return role
-      }
-
-      return {
-        label: this.$gettext('Unknown Role')
-      }
-    },
-
     shareType() {
       return this.collaborator.shareType ? this.collaborator.shareType : 0
     },
 
     isGroup() {
-      return this.collaborator.shareType === this.shareTypes.group
+      return this.collaborator.shareType === ShareType.group
     },
 
     expirationDateLocale() {
@@ -216,26 +184,26 @@ export default {
     },
 
     collaboratorRoleChanged({ role, permissions }) {
+      // FIXME: this clears the expiration date somehow?!
       const expiryDate = this.collaborator.expires
       this.saveCollaboratorChanges({ role, permissions, expiryDate })
     },
 
     collaboratorExpirationChanged({ expirationDate }) {
+      // FIXME: does this clear the role?!
       const role = this.collaborator.role
-      const permissions = this.collaborator.additionalPermissions
+      const permissions = this.collaborator.customPermissions
       this.saveCollaboratorChanges({ role, permissions, expirationDate })
     },
 
     saveCollaboratorChanges({ role, permissions, expirationDate }) {
-      const roleValue = role || this.selectedRole
-      const permissionsValue = permissions || this.additionalPermissions
-      const bitmask = roleToBitmask(roleValue, permissionsValue)
+      const bitmask = role.customPermissions
+        ? SharePermissions.permissionsToBitmask(permissions)
+        : SharePermissions.permissionsToBitmask(role.permissions(!this.isOcis))
       const expiration = expirationDate || this.expirationDate
       this.changeShare({
         client: this.$client,
         share: this.collaborator,
-        // Map bitmask to role to get the correct role in case the advanced role was mapped to existing role
-        role: bitmaskToRole(bitmask, this.highlightedFile.type === 'folder', !this.isOcis),
         permissions: bitmask,
         expirationDate: expiration || ''
       }).catch((errors) => {

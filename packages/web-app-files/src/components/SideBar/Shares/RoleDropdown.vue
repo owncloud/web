@@ -7,7 +7,7 @@
       gap-size="none"
     >
       <span v-if="!existingRole" v-text="inviteLabel" />
-      <span v-else>{{ selectedRole.label }}</span>
+      <span v-else>{{ $gettext(selectedRole.label) }}</span>
       <oc-icon name="expand_more" />
     </oc-button>
     <oc-drop
@@ -18,7 +18,7 @@
       close-on-click
     >
       <oc-list class="files-recipient-role-drop-list" :aria-label="rolesListAriaLabel">
-        <li v-for="role in roles" :key="role.name">
+        <li v-for="role in availableRoles" :key="role.key">
           <oc-button
             :id="`files-recipient-role-drop-btn-${role.name}`"
             ref="roleSelect"
@@ -28,7 +28,7 @@
             :class="{ selected: isSelectedRole(role) }"
             @click="selectRole(role)"
           >
-            <role-item :role="role" />
+            <role-item :role="role" :allow-share-permission="!isOcis" />
             <oc-icon v-if="isSelectedRole(role)" name="check" />
           </oc-button>
         </li>
@@ -41,28 +41,21 @@
       :target="'#' + roleButtonId"
       padding-size="small"
     >
-      <h4 class="oc-text-bold oc-text-initial" v-text="customPermissionsDropTitle" />
+      <h4 class="oc-text-bold oc-text-initial" v-text="$gettext(customPermissionsRole.label)" />
       <oc-list class="oc-mb">
-        <li class="oc-my-xs">
-          <oc-checkbox
-            :label="readingRoleCheckboxLabel"
-            :value="true"
-            :disabled="true"
-            class="oc-mr-xs files-collaborators-permission-checkbox"
-          />
-        </li>
         <li
-          v-for="permission in advancedRole.additionalPermissions"
-          :key="permission.name"
+          v-for="permission in availablePermissions"
+          :key="`files-collaborators-permission-${permission.key}`"
           class="oc-my-xs"
         >
           <oc-checkbox
-            :id="`files-collaborators-permission-${permission.name}`"
-            :key="permission.name"
+            :id="`files-collaborators-permission-${permission.key}`"
+            :key="`files-collaborators-permission-checkbox-${permission.key}`"
             v-model="customPermissions"
-            :data-testid="`files-collaborators-permission-${permission.name}`"
-            :label="permission.description"
-            :option="permission.name"
+            :data-testid="`files-collaborators-permission-${permission.key}`"
+            :label="$gettext(permission.label)"
+            :option="permission"
+            :disabled="isPermissionDisabled(permission)"
             class="oc-mr-xs files-collaborators-permission-checkbox"
           />
         </li>
@@ -83,20 +76,24 @@
 
 <script>
 import get from 'lodash-es/get'
-import collaboratorsMixins from '../../../mixins/collaborators'
 import RoleItem from '../Shared/RoleItem.vue'
+import { SharePermissions, ShareRole, ShareRoles } from '../../../helpers/share'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'RoleSelection',
   components: { RoleItem },
-  mixins: [collaboratorsMixins],
   props: {
-    existingRole: {
+    resource: {
       type: Object,
+      required: true
+    },
+    existingRole: {
+      type: ShareRole,
       required: false,
       default: undefined
     },
-    collaboratorsPermissions: {
+    existingPermissions: {
       type: Array,
       required: false,
       default: () => []
@@ -105,6 +102,10 @@ export default {
       type: String,
       required: false,
       default: undefined
+    },
+    allowSharePermission: {
+      type: Boolean,
+      required: true
     }
   },
   data() {
@@ -114,38 +115,42 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['isOcis']),
     roleButtonId() {
       if (this.collaboratorId) {
         return `files-collaborators-role-button-${this.collaboratorId}`
       }
       return 'files-collaborators-role-button-new'
     },
-    readingRoleCheckboxLabel() {
-      return this.$gettext('Read')
-    },
-    customPermissionsDropTitle() {
-      return this.$gettext('Custom permissions')
-    },
     rolesListAriaLabel() {
-      return this.$gettext('Select role for the share')
+      return this.$gettext('Select role for the invitation')
     },
     inviteLabel() {
-      if (this.selectedRole?.name === 'advancedRole') {
+      if (this.selectedRole?.customPermissions) {
         return this.$gettext('Invite with custom permissions')
       } else {
         return this.$gettextInterpolate('Invite as %{ name }', {
           name: this.selectedRole?.inlineLabel || ''
         })
       }
+    },
+    customPermissionsRole() {
+      return this.resource.isFolder ? ShareRoles.customFolder : ShareRoles.customFile
+    },
+    availableRoles() {
+      return ShareRoles.list(this.resource.isFolder)
+    },
+    availablePermissions() {
+      return this.customPermissionsRole.permissions(this.allowSharePermission)
     }
   },
 
   created() {
     if (this.existingRole) {
       this.selectedRole = this.existingRole
-      this.customPermissions = this.collaboratorsPermissions
+      this.customPermissions = this.existingPermissions
     } else {
-      this.selectedRole = this.roles[0]
+      this.selectedRole = ShareRoles.list(this.resource.isFolder)[0]
     }
   },
 
@@ -166,7 +171,7 @@ export default {
     },
 
     selectRole(role) {
-      if (role.name === 'advancedRole') {
+      if (role.customPermissions) {
         this.$refs.customPermissionsDrop.show()
         return
       }
@@ -178,14 +183,18 @@ export default {
       return this.selectedRole?.name === role.name
     },
 
+    isPermissionDisabled(permission) {
+      return permission.bit === SharePermissions.read.bit
+    },
+
     confirmCustomPermissions() {
       this.$refs.customPermissionsDrop.hide()
-      this.selectedRole = this.advancedRole
+      this.selectedRole = this.customPermissionsRole
       this.publishChange()
     },
 
     cancelCustomPermissions() {
-      this.customPermissions = this.collaboratorsPermissions
+      this.customPermissions = this.existingPermissions
       this.$refs.customPermissionsDrop.hide()
       this.$refs.rolesDrop.show()
     },

@@ -40,7 +40,11 @@
       v-text="inviteDescriptionMessage"
     />
     <div class="uk-flex uk-flex-middle uk-flex-between oc-mb-l">
-      <role-dropdown @optionChange="collaboratorRoleChanged" />
+      <role-dropdown
+        :resource="highlightedFile"
+        :allow-share-permission="!isOcis"
+        @optionChange="collaboratorRoleChanged"
+      />
       <expiration-datepicker @optionChange="collaboratorExpiryChanged" />
       <oc-button v-if="saving" key="new-collaborator-saving-button" :disabled="true">
         <oc-spinner :aria-label="$gettext('Creating shares')" size="small" />
@@ -66,14 +70,12 @@ import debounce from 'lodash-es/debounce'
 import PQueue from 'p-queue'
 
 import { mapActions, mapGetters } from 'vuex'
-import Mixins from '../../../../mixins/collaborators'
-import { roleToBitmask } from '../../../../helpers/collaborators'
-import { shareTypes } from '../../../../helpers/shareTypes'
 
 import AutocompleteItem from './AutocompleteItem.vue'
 import RoleDropdown from '../RoleDropdown.vue'
 import RecipientContainer from './RecipientContainer.vue'
 import ExpirationDatepicker from './ExpirationDatepicker.vue'
+import { SharePermissions, ShareRoles, ShareType } from '../../../../helpers/share'
 
 export default {
   name: 'InviteCollaboratorForm',
@@ -83,7 +85,6 @@ export default {
     RecipientContainer,
     ExpirationDatepicker
   },
-  mixins: [Mixins],
   data() {
     return {
       autocompleteResults: [],
@@ -91,7 +92,7 @@ export default {
       searchInProgress: false,
       selectedCollaborators: [],
       selectedRole: null,
-      additionalPermissions: null,
+      customPermissions: null,
       saving: false,
       expirationDate: null,
       searchQuery: ''
@@ -100,7 +101,7 @@ export default {
   computed: {
     ...mapGetters('Files', ['currentFileOutgoingCollaborators', 'highlightedFile']),
     ...mapGetters(['user']),
-    ...mapGetters(['configuration']),
+    ...mapGetters(['configuration', 'isOcis']),
 
     inviteDescriptionMessage() {
       return this.$gettext('Add new person by name, email or federation IDs')
@@ -123,7 +124,7 @@ export default {
   },
   mounted() {
     this.fetchRecipients = debounce(this.fetchRecipients, 500)
-    this.selectedRole = this.roles[0]
+    this.selectedRole = ShareRoles.list(this.highlightedFile.isFolder)[0]
   },
 
   methods: {
@@ -196,7 +197,7 @@ export default {
 
       return recipients.filter(
         (recipient) =>
-          recipient.value.shareType === shareTypes.remote ||
+          recipient.value.shareType === ShareType.remote ||
           recipient.label.toLocaleLowerCase().indexOf(query.toLocaleLowerCase()) > -1 ||
           recipient.value.shareWith.toLocaleLowerCase().indexOf(query.toLocaleLowerCase()) > -1 ||
           (recipient.value.shareWithAdditionalInfo || '')
@@ -204,6 +205,16 @@ export default {
             .indexOf(query.toLocaleLowerCase()) > -1
       )
     },
+
+    collaboratorRoleChanged({ role, permissions }) {
+      this.selectedRole = role
+      this.customPermissions = permissions
+    },
+
+    collaboratorExpiryChanged({ expirationDate }) {
+      this.expirationDate = expirationDate
+    },
+
     async share() {
       this.saving = true
 
@@ -211,17 +222,20 @@ export default {
       const savePromises = []
       this.selectedCollaborators.forEach((collaborator) => {
         savePromises.push(
-          saveQueue.add(() =>
+          saveQueue.add(() => {
+            const bitmask = this.selectedRole.customPermissions
+              ? SharePermissions.permissionsToBitmask(this.customPermissions)
+              : SharePermissions.permissionsToBitmask(this.selectedRole.permissions)
             this.addShare({
               client: this.$client,
               path: this.highlightedFile.path,
               $gettext: this.$gettext,
               shareWith: collaborator.value.shareWith,
               shareType: collaborator.value.shareType,
-              permissions: roleToBitmask(this.selectedRole, this.additionalPermissions),
+              permissions: bitmask,
               expirationDate: this.expirationDate
             })
-          )
+          })
         )
       })
 

@@ -278,7 +278,7 @@ describe('Collaborator component', () => {
       it.each([
         { name: 'viewer', expectedText: 'Viewer' },
         { name: 'editor', expectedText: 'Editor' },
-        { name: 'advancedRole', expectedText: 'Custom permissions' },
+        { name: 'custom', expectedText: 'Custom permissions' },
         { name: 'owner', expectedText: 'Owner' },
         { name: 'resharer', expectedText: 'Resharer' },
         { name: 'invalidRole', expectedText: 'Unknown Role' }
@@ -292,7 +292,7 @@ describe('Collaborator component', () => {
       it.each([
         { name: 'viewer', expectedName: 'remove_red_eye' },
         { name: 'editor', expectedName: 'edit' },
-        { name: 'advancedRole', expectedName: 'checklist' },
+        { name: 'custom', expectedName: 'checklist' },
         { name: 'owner', expectedName: 'key' },
         { name: 'resharer', expectedName: 'key' },
         { name: 'invalidRole', expectedName: 'key' }

@@ -1,8 +1,7 @@
 import { mount } from '@vue/test-utils'
 import { localVue, getStore } from './views.setup'
 import SharedWithMe from '@files/src/views/SharedWithMe.vue'
-import { shareStatus } from '@files/src/helpers/shareStatus'
-import { shareTypes } from '../../../src/helpers/shareTypes'
+import { ShareStatus, ShareType } from '@files/src/helpers/share'
 
 const stubs = {
   'router-link': true,
@@ -48,7 +47,7 @@ describe('SharedWithMe page', () => {
     describe('pending shares', () => {
       describe('when there are no pending shares to be displayed', () => {
         it('should not show the pending shares list', () => {
-          const file = createSharedFile({ id: '123', status: shareStatus.accepted })
+          const file = createSharedFile({ id: '123', status: ShareStatus.accepted })
           const wrapper = getMountedWrapper({
             store: getStore({
               highlightedFile: file,
@@ -62,7 +61,7 @@ describe('SharedWithMe page', () => {
 
       describe('when there is a pending share to be displayed', () => {
         it('should show the pending shares list', () => {
-          const file = createSharedFile({ id: '123', status: shareStatus.pending })
+          const file = createSharedFile({ id: '123', status: ShareStatus.pending })
           const wrapper = getMountedWrapper({
             store: getStore({
               highlightedFile: file,
@@ -77,11 +76,11 @@ describe('SharedWithMe page', () => {
 
       describe('when there are a lot of pending shares to be displayed', () => {
         const pendingShares = [
-          createSharedFile({ id: '123', status: shareStatus.pending }),
-          createSharedFile({ id: '234', status: shareStatus.pending }),
-          createSharedFile({ id: '345', status: shareStatus.pending }),
-          createSharedFile({ id: '456', status: shareStatus.pending }),
-          createSharedFile({ id: '567', status: shareStatus.pending })
+          createSharedFile({ id: '123', status: ShareStatus.pending }),
+          createSharedFile({ id: '234', status: ShareStatus.pending }),
+          createSharedFile({ id: '345', status: ShareStatus.pending }),
+          createSharedFile({ id: '456', status: ShareStatus.pending }),
+          createSharedFile({ id: '567', status: ShareStatus.pending })
         ]
         const wrapper = getMountedWrapper({
           store: getStore({
@@ -131,7 +130,7 @@ describe('SharedWithMe page', () => {
     })
 
     describe('when there are accepted shares to be displayed', () => {
-      const file = createSharedFile({ id: '123', status: shareStatus.accepted })
+      const file = createSharedFile({ id: '123', status: ShareStatus.accepted })
       const wrapper = getMountedWrapper({
         store: getStore({
           highlightedFile: file,
@@ -148,19 +147,19 @@ describe('SharedWithMe page', () => {
       })
       it('should show a link to the declined shares', () => {
         const link = wrapper.find(selectors.sharesToggleViewMode)
-        expect(link.attributes()['data-test-set-view-mode']).toBe(shareStatus.declined.toString())
+        expect(link.attributes()['data-test-set-view-mode']).toBe(ShareStatus.declined.toString())
       })
     })
 
     describe('when there are one or more declined shares to be displayed', () => {
-      const file = createSharedFile({ id: '123', status: shareStatus.declined })
+      const file = createSharedFile({ id: '123', status: ShareStatus.declined })
       const wrapper = getMountedWrapper({
         store: getStore({
           highlightedFile: file,
           activeFiles: [file],
           totalFilesCount: { files: 0, folders: 1 }
         }),
-        viewMode: shareStatus.declined
+        viewMode: ShareStatus.declined
       })
       it('should not show a "no content" message', () => {
         expect(wrapper.find(selectors.sharesNoContentMessage).exists()).toBeFalsy()
@@ -171,7 +170,7 @@ describe('SharedWithMe page', () => {
       })
       it('should show a link to the accepted shares', () => {
         const link = wrapper.find(selectors.sharesToggleViewMode)
-        expect(link.attributes()['data-test-set-view-mode']).toBe(shareStatus.accepted.toString())
+        expect(link.attributes()['data-test-set-view-mode']).toBe(ShareStatus.accepted.toString())
       })
     })
   })
@@ -183,7 +182,7 @@ function mountOptions({
     totalFilesCount: { files: 0, folders: 0 }
   }),
   loading = false,
-  viewMode = shareStatus.accepted
+  viewMode = ShareStatus.accepted
 } = {}) {
   return {
     localVue,
@@ -209,7 +208,7 @@ function getMountedWrapper({ store, loading, viewMode } = {}) {
   return mount(component, mountOptions({ store, loading, viewMode }))
 }
 
-function createSharedFile({ id, shareType = shareTypes.user, status = shareStatus.pending }) {
+function createSharedFile({ id, shareType = ShareType.user, status = ShareStatus.pending }) {
   return {
     id: `share-id-${id}`,
     share_type: shareType,

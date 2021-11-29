@@ -49,24 +49,23 @@
 <script>
 import { mapGetters } from 'vuex'
 import { DateTime } from 'luxon'
-import CollaboratorsMixins from '../../../../mixins/collaborators'
 import Mixins from '../../../../mixins'
 
 export default {
   name: 'EditDropdown',
-  mixins: [Mixins, CollaboratorsMixins],
+  mixins: [Mixins],
   props: {
     expirationDate: {
       type: Date,
       required: false,
       default: undefined
     },
-    existingCollaboratorType: {
-      type: [Object, String],
+    shareCategory: {
+      type: String,
       required: false,
       default: null,
       validator: function (value) {
-        return ['user', 'group'].includes(value) || value === null
+        return ['user', 'group'].includes(value) || !value
       }
     }
   },

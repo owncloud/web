@@ -12,7 +12,7 @@
         <oc-table-files
           id="files-shared-with-me-pending-table"
           v-model="pendingSelected"
-          :data-test-share-status="shareStatus.pending"
+          :data-test-share-status="ShareStatus.pending"
           class="files-table"
           :class="{ 'files-table-squashed': !sidebarClosed }"
           :are-thumbnails-displayed="displayThumbnails"
@@ -111,7 +111,7 @@
             class="uk-text-nowrap uk-flex uk-flex-middle uk-flex-right"
           >
             <oc-button
-              v-if="resource.status === shareStatus.declined"
+              v-if="resource.status === ShareStatus.declined"
               size="small"
               variation="success"
               class="file-row-share-status-accept"
@@ -121,7 +121,7 @@
               <translate>Accept</translate>
             </oc-button>
             <oc-button
-              v-if="resource.status === shareStatus.accepted"
+              v-if="resource.status === ShareStatus.accepted"
               size="small"
               class="file-row-share-status-decline"
               @click.stop="$_declineShare_trigger({ resources: [resource] })"
@@ -149,7 +149,6 @@
 
 <script>
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
-import { shareStatus } from '../helpers/shareStatus'
 import { aggregateResourceShares } from '../helpers/resources'
 import FileActions from '../mixins/fileActions'
 import MixinAcceptShare from '../mixins/actions/acceptShare'
@@ -166,6 +165,7 @@ import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
 import { useTask } from 'vue-concurrency'
+import { ShareStatus } from '../helpers/share'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -217,7 +217,7 @@ export default {
   },
 
   data: () => ({
-    shareStatus,
+    ShareStatus,
     showMorePending: false
   }),
 
@@ -230,17 +230,17 @@ export default {
       if (Object.prototype.hasOwnProperty.call(this.$route.query, 'view-mode')) {
         return parseInt(this.$route.query['view-mode'])
       }
-      return shareStatus.accepted
+      return ShareStatus.accepted
     },
 
     // pending shares
     pendingSelected: {
       get() {
-        return this.selectedFiles.filter((r) => r.status === shareStatus.pending)
+        return this.selectedFiles.filter((r) => r.status === ShareStatus.pending)
       },
       set(resources) {
         // this will (intentionally) reset the file selection to pending shares only.
-        this.SET_FILE_SELECTION(resources.filter((r) => r.status === shareStatus.pending))
+        this.SET_FILE_SELECTION(resources.filter((r) => r.status === ShareStatus.pending))
       }
     },
     pendingTitle() {
@@ -259,7 +259,7 @@ export default {
       return this.pending.length
     },
     pending() {
-      return this.activeFiles.filter((file) => file.status === shareStatus.pending)
+      return this.activeFiles.filter((file) => file.status === ShareStatus.pending)
     },
 
     // accepted or declined shares
@@ -273,17 +273,17 @@ export default {
       }
     },
     sharesTitle() {
-      return this.viewMode === shareStatus.declined
+      return this.viewMode === ShareStatus.declined
         ? this.$gettext('Declined shares')
         : this.$gettext('Accepted shares')
     },
     sharesToggleLabel() {
-      return this.viewMode === shareStatus.declined
+      return this.viewMode === ShareStatus.declined
         ? this.$gettext('Show accepted shares')
         : this.$gettext('Show declined shares')
     },
     sharesEmptyMessage() {
-      return this.viewMode === shareStatus.declined
+      return this.viewMode === ShareStatus.declined
         ? this.$gettext("You don't have any previously declined shares.")
         : this.$gettext("You are not collaborating on other people's resources.")
     },
@@ -303,7 +303,7 @@ export default {
       return this.activeFiles.filter((file) => file.status === this.viewMode)
     },
     sharesOtherViewMode() {
-      return this.viewMode === shareStatus.accepted ? shareStatus.declined : shareStatus.accepted
+      return this.viewMode === ShareStatus.accepted ? ShareStatus.declined : ShareStatus.accepted
     },
     sharesToggleRouterLink() {
       return {

@@ -1,7 +1,7 @@
 import intersection from 'lodash-es/intersection'
-import { shareTypes, userShareTypes } from './shareTypes'
 import { getParentPaths } from './path'
 import { $gettext } from '../gettext'
+import { ShareType, ShareTypes } from './share'
 
 const $shareTypes = (resource) => {
   if (typeof resource.shareTypes !== 'undefined') {
@@ -16,22 +16,22 @@ const $shareTypes = (resource) => {
 }
 
 const isDirectUserShare = (resource) => {
-  return intersection(userShareTypes, $shareTypes(resource)).length > 0
+  return intersection($shareTypes(resource), ShareTypes.authenticated).length > 0
 }
 
 const isIndirectUserShare = (resource, sharesTree) => {
   return (
     resource.isReceivedShare() ||
-    intersection(userShareTypes, shareTypesIndirect(resource.path, sharesTree)).length > 0
+    intersection(shareTypesIndirect(resource.path, sharesTree), ShareTypes.authenticated).length > 0
   )
 }
 
 const isDirectLinkShare = (resource) => {
-  return $shareTypes(resource).indexOf(shareTypes.link) >= 0
+  return $shareTypes(resource).indexOf(ShareType.link) >= 0
 }
 
 const isIndirectLinkShare = (resource, sharesTree) => {
-  return shareTypesIndirect(resource.path, sharesTree).indexOf(shareTypes.link) >= 0
+  return shareTypesIndirect(resource.path, sharesTree).indexOf(ShareType.link) >= 0
 }
 
 const isUserShare = (resource, sharesTree) => {

@@ -35,7 +35,7 @@ export default class Preview implements SearchPreview {
 
     const plainResources = await clientService.owncloudSdk.files.search(
       term,
-      5, // todo: add configuration option, other places need that too too... needs consolidation
+      5, // todo: add configuration option, other places need that too... needs consolidation
       DavProperties.Default
     )
 

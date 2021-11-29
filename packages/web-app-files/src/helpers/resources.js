@@ -4,11 +4,9 @@ import { DateTime } from 'luxon'
 
 import fileIconMappings from '../fileTypeIconMappings.json'
 import { getIndicators } from './statusIndicators'
-import { bitmaskToRole, checkPermission, permissionsBitmask } from './collaborators'
-import { shareTypes, userShareTypes } from './shareTypes'
 import { $gettext } from '../gettext'
 import { DavPermission, DavProperty } from 'web-pkg/src/constants'
-import { shareStatus } from './shareStatus'
+import { SharePermissions, ShareRoles, ShareStatus, ShareType, ShareTypes } from './share'
 
 // Should we move this to ODS?
 export function getFileIcon(extension) {
@@ -96,20 +94,20 @@ export function attachIndicators(resource, sharesTree) {
  * Transforms given shares into a resource format and returns only their unique occurences
  * @param {Array} shares Shares to be transformed into unique resources
  * @param {Boolean} incomingShares Asserts whether the shares are incoming
- * @param {Boolean} allowSharePerm Asserts whether the reshare permission is available
+ * @param {Boolean} allowSharePermission Asserts whether the reshare permission is available
  * @param {String} server The url of the backend
  * @param {String} token The access token of the authenticated user
  */
 export function aggregateResourceShares(
   shares,
   incomingShares = false,
-  allowSharePerm,
+  allowSharePermission,
   server,
   token
 ) {
   if (incomingShares) {
     return orderBy(shares, ['file_target', 'permissions'], ['asc', 'desc']).map((share) =>
-      buildSharedResource(share, incomingShares, allowSharePerm)
+      buildSharedResource(share, incomingShares, allowSharePermission)
     )
   }
 
@@ -122,7 +120,7 @@ export function aggregateResourceShares(
       previousShare?.storage_id === share.storage_id &&
       previousShare?.file_source === share.file_source
     ) {
-      if (userShareTypes.includes(share.share_type)) {
+      if (ShareTypes.authenticated.includes(share.share_type)) {
         previousShare.sharedWith.push({
           username: share.share_with,
           name: share.share_with_displayname,
@@ -130,7 +128,7 @@ export function aggregateResourceShares(
           avatar: undefined,
           shareType: share.share_type
         })
-      } else if (share.share_type === shareTypes.link) {
+      } else if (share.share_type === ShareType.link) {
         previousShare.sharedWith.push({
           name: share.name || share.token,
           link: true,
@@ -141,7 +139,7 @@ export function aggregateResourceShares(
       continue
     }
 
-    if (userShareTypes.includes(share.share_type)) {
+    if (ShareTypes.authenticated.includes(share.share_type)) {
       share.sharedWith = [
         {
           username: share.share_with,
@@ -151,7 +149,7 @@ export function aggregateResourceShares(
           shareType: share.share_type
         }
       ]
-    } else if (share.share_type === shareTypes.link) {
+    } else if (share.share_type === ShareType.link) {
       share.sharedWith = [
         {
           name: share.name || share.token,
@@ -165,10 +163,10 @@ export function aggregateResourceShares(
     resources.push(share)
   }
 
-  return resources.map((share) => buildSharedResource(share, incomingShares, allowSharePerm))
+  return resources.map((share) => buildSharedResource(share, incomingShares, allowSharePermission))
 }
 
-export function buildSharedResource(share, incomingShares = false, allowSharePerm) {
+export function buildSharedResource(share, incomingShares = false, allowSharePermission) {
   const isFolder = share.item_type === 'folder'
   const resource = {
     id: share.id,
@@ -190,17 +188,17 @@ export function buildSharedResource(share, incomingShares = false, allowSharePer
         username: share.uid_owner,
         displayName: share.displayname_owner,
         avatar: undefined,
-        shareType: shareTypes.user
+        shareType: ShareType.user
       }
     ]
 
     resource.status = share.state
     resource.name = path.basename(share.file_target)
     resource.path = share.file_target
-    resource.canDownload = () => share.state === shareStatus.accepted
-    resource.canShare = () => checkPermission(share.permissions, 'share')
-    resource.canRename = () => checkPermission(share.permissions, 'update')
-    resource.canBeDeleted = () => checkPermission(share.permissions, 'delete')
+    resource.canDownload = () => share.state === ShareStatus.accepted
+    resource.canShare = () => SharePermissions.share.enabled(share.permissions)
+    resource.canRename = () => SharePermissions.update.enabled(share.permissions)
+    resource.canBeDeleted = () => SharePermissions.delete.enabled(share.permissions)
   } else {
     resource.sharedWith = share.sharedWith
     resource.shareOwner = share.uid_owner
@@ -218,39 +216,39 @@ export function buildSharedResource(share, incomingShares = false, allowSharePer
   resource.isReceivedShare = () => incomingShares
   resource.canUpload = () => true
   resource.isMounted = () => false
-  resource.share = buildShare(share, resource, allowSharePerm)
+  resource.share = buildShare(share, resource, allowSharePermission)
 
   return resource
 }
 
-export function buildShare(s, file, allowSharePerm) {
-  if (parseInt(s.share_type, 10) === shareTypes.link) {
+export function buildShare(s, file, allowSharePermission) {
+  if (parseInt(s.share_type) === ShareType.link) {
     return _buildLink(s)
   }
-  return buildCollaboratorShare(s, file, allowSharePerm)
+  return buildCollaboratorShare(s, file, allowSharePermission)
 }
 
 function _buildLink(link) {
   let description = ''
 
   // FIXME: use bitmask matching with constants
-  switch (link.permissions) {
-    case '1': // read (1)
+  switch (parseInt(link.permissions)) {
+    case 1: // read (1)
       description = $gettext('Viewer')
       break
-    case '5': // read (1) + create (4)
+    case 5: // read (1) + create (4)
       description = $gettext('Contributor')
       break
-    case '4': // create (4)
+    case 4: // create (4)
       description = $gettext('Uploader')
       break
-    case '15': // read (1) + update (2) + create (4) + delete (8)
+    case 15: // read (1) + update (2) + create (4) + delete (8)
       description = $gettext('Editor')
       break
   }
 
   return {
-    shareType: parseInt(link.share_type, 10),
+    shareType: parseInt(link.share_type),
     id: link.id,
     token: link.token,
     url: link.url,
@@ -280,20 +278,17 @@ function _fixAdditionalInfo(data) {
   return data
 }
 
-export function buildCollaboratorShare(s, file, allowSharePerm) {
+export function buildCollaboratorShare(s, file, allowSharePermission) {
   const share = {
-    shareType: parseInt(s.share_type, 10),
+    shareType: parseInt(s.share_type),
     id: s.id
   }
   switch (share.shareType) {
-    case shareTypes.user: // user share
-    // TODO differentiate groups from users?
+    case ShareType.user:
     // fall through
-    case shareTypes.remote:
+    case ShareType.remote:
     // fall through
-    case shareTypes.group: // group share
-      share.role = bitmaskToRole(s.permissions, file.type === 'folder', allowSharePerm)
-      share.permissions = s.permissions
+    case ShareType.group:
       // FIXME: SDK is returning empty object for additional info when empty
       share.collaborator = {
         name: s.share_with,
@@ -311,13 +306,9 @@ export function buildCollaboratorShare(s, file, allowSharePerm) {
         additionalInfo: _fixAdditionalInfo(s.additional_info_file_owner)
       }
       share.stime = s.stime
-      // TODO: Refactor to work with roles / prepare for roles API
-      share.customPermissions = {
-        update: s.permissions & permissionsBitmask.update,
-        create: s.permissions & permissionsBitmask.create,
-        delete: s.permissions & permissionsBitmask.delete,
-        share: s.permissions & permissionsBitmask.share
-      }
+      share.permissions = s.permissions
+      share.customPermissions = SharePermissions.bitmaskToPermissions(s.permissions)
+      share.role = ShareRoles.getByBitmask(s.permissions, file.isFolder, allowSharePermission)
       // share.email = 'foo@djungle.com' // hm, where do we get the mail from? share_with_additional_info:Object?
       break
   }

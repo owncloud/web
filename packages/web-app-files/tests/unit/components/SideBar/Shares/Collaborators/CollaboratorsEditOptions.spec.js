@@ -22,9 +22,7 @@ describe('CollaboratorsEditOptions component', () => {
     advancedPermissionsDrop.vm.show = showHideMock
     wrapper.vm.$refs.rolesDrop.tippy = { hide: showHideMock }
 
-    await wrapper
-      .find('[data-testid="files-recipient-role-drop-btn-advancedRole"]')
-      .trigger('click')
+    await wrapper.find('[data-testid="files-recipient-role-drop-btn-custom"]').trigger('click')
 
     expect(showHideMock).toHaveBeenCalledTimes(2)
   })

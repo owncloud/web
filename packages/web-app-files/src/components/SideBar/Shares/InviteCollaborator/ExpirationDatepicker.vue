@@ -44,11 +44,9 @@
 <script>
 import { mapGetters } from 'vuex'
 import { DateTime } from 'luxon'
-import collaboratorsMixins from '../../../../mixins/collaborators'
 
 export default {
   name: 'ExpirationDatepicker',
-  mixins: [collaboratorsMixins],
   props: {
     expirationDate: {
       type: Date,

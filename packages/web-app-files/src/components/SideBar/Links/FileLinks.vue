@@ -69,13 +69,13 @@ import { DateTime } from 'luxon'
 import { dirname } from 'path'
 import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import mixins from '../../../mixins'
-import { shareTypes } from '../../../helpers/shareTypes'
 import { getParentPaths } from '../../../helpers/path'
 import { textUtils } from '../../../helpers/textUtils'
 import { cloneStateObject } from '../../../helpers/store'
 import LinkEdit from './PublicLinks/LinkEdit.vue'
 import ListItem from './PublicLinks/ListItem.vue'
 import PrivateLinkItem from './PrivateLinkItem.vue'
+import { ShareType } from '../../../helpers/share'
 
 const VIEW_SHOW = 'showLinks'
 const VIEW_EDIT = 'editPublicLink'
@@ -157,7 +157,7 @@ export default {
         const shares = cloneStateObject(this.sharesTree[parentPath])
         if (shares) {
           shares.forEach((share) => {
-            if (share.outgoing && share.shareType === shareTypes.link) {
+            if (share.outgoing && share.shareType === ShareType.link) {
               share.key = 'indirect-link-' + share.id
               allShares.push(share)
             }

@@ -55,14 +55,12 @@
 
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
-import Mixins from '../../../mixins/collaborators'
 import { textUtils } from '../../../helpers/textUtils'
-import { shareTypes, userShareTypes } from '../../../helpers/shareTypes'
 import { getParentPaths } from '../../../helpers/path'
 import { dirname } from 'path'
-import { permissionsBitmask } from '../../../helpers/collaborators'
 import InviteCollaboratorForm from './InviteCollaborator/InviteCollaboratorForm.vue'
 import CollaboratorListItem from './Collaborators/ListItem.vue'
+import { ShareTypes } from '../../../helpers/share'
 
 export default {
   title: ($gettext) => {
@@ -73,7 +71,6 @@ export default {
     InviteCollaboratorForm,
     CollaboratorListItem
   },
-  mixins: [Mixins],
   data() {
     return {
       currentShare: null,
@@ -204,7 +201,7 @@ export default {
 
     currentUsersPermissions() {
       if (this.$_allIncomingShares.length > 0) {
-        let permissions = permissionsBitmask.read
+        let permissions = 0
 
         for (const share of this.$_allIncomingShares) {
           permissions |= share.permissions
@@ -238,7 +235,7 @@ export default {
       'incomingSharesClearState'
     ]),
     $_isCollaboratorShare(collaborator) {
-      return userShareTypes.includes(collaborator.shareType)
+      return ShareTypes.authenticated.includes(collaborator.shareType)
     },
     collaboratorsComparator(c1, c2) {
       // Sorted by: type, direct, display name, creation date
@@ -246,8 +243,8 @@ export default {
       const c2DisplayName = c2.collaborator ? c2.collaborator.displayName : c2.displayName
       const name1 = c1DisplayName.toLowerCase().trim()
       const name2 = c2DisplayName.toLowerCase().trim()
-      const c1UserShare = c1.shareType === shareTypes.user || c1.shareType === shareTypes.remote
-      const c2UserShare = c2.shareType === shareTypes.user || c1.shareType === shareTypes.remote
+      const c1UserShare = ShareTypes.individuals.includes(c1.shareType)
+      const c2UserShare = ShareTypes.individuals.includes(c2.shareType)
       const c1DirectShare = !c1.indirect
       const c2DirectShare = !c2.indirect
 
