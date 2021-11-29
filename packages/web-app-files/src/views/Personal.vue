@@ -125,12 +125,11 @@ export default {
     const { refresh: refreshFileListHeaderPosition, y: fileListHeaderY } =
       useFileListHeaderPosition()
     const paginationPageQuery = useRouteQuery('page', '1')
-    const paginationPage = computed(() => parseInt(`${paginationPageQuery.value}`))
+    const paginationPage = computed(() => parseInt(String(paginationPageQuery.value)))
+    const paginationPerPageQuery = useRouteQuery('items-per-page', paginationDefaults.perPage.value)
     const { items: paginatedResources, total: paginationPages } = usePagination({
       page: paginationPage,
-      perPage: computed(() =>
-        parseInt(useRouteQuery('items-per-page', paginationDefaults.perPage.value).value)
-      ),
+      perPage: computed(() => parseInt(String(paginationPerPageQuery.value))),
       items: computed(() => store.getters['Files/activeFiles'])
     })
 
