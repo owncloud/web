@@ -58,7 +58,12 @@
         <tr v-if="showShareDate" data-testid="shared-date">
           <th scope="col" class="oc-pr-s" v-text="shareDateLabel" />
           <td>
-            <span v-oc-tooltip="shareDateTooltip" tabindex="0" v-text="displayShareDate" />
+            <span
+              v-oc-tooltip="shareDateTooltip"
+              tabindex="0"
+              :aria-label="displayShareDate + ' (' + shareDateTooltip + ')'"
+              v-text="displayShareDate"
+            />
           </td>
         </tr>
         <tr v-if="showSharedVia" data-testid="shared-via">

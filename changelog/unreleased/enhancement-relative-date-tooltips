@@ -1,6 +1,6 @@
 Enhancement: Add tooltips to relative dates
 
-Relative dates like "1 day ago" now have a tooltip that shows the absolute date. This tooltip is a11y-compliant and can be reached via tab.
+Relative dates like "1 day ago" now have a tooltip that shows the absolute date.
 
 https://github.com/owncloud/web/pull/6037
 https://github.com/owncloud/web/issues/5672

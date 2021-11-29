@@ -13,9 +13,13 @@
       </h3>
       <p class="oc-my-rm">
         <template v-if="file.size > -1">{{ getResourceSize(file.size) }},</template>
-        <span v-oc-tooltip="modificationTime" data-testid="files-info-mdate" tabindex="0">{{
-          modificationTimeRelative
-        }}</span>
+        <span
+          v-oc-tooltip="modificationTime"
+          data-testid="files-info-mdate"
+          tabindex="0"
+          :aria-label="modificationTimeRelative + ' (' + modificationTime + ')'"
+          >{{ modificationTimeRelative }}</span
+        >
       </p>
     </div>
     <oc-button
