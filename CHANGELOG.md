@@ -11,6 +11,7 @@ Summary
 * Bugfix - Pagination: [#6056](https://github.com/owncloud/web/pull/6056)
 * Enhancement - Implement breadcrumb context menu: [#6044](https://github.com/owncloud/web/pull/6044)
 * Enhancement - Contextmenu for multiple files: [#5973](https://github.com/owncloud/web/pull/5973)
+* Enhancement - Add tooltips to relative dates: [#6037](https://github.com/owncloud/web/pull/6037)
 
 Details
 -------
@@ -36,6 +37,13 @@ Details
    https://github.com/owncloud/web/issues/5968
    https://github.com/owncloud/web/issues/5977
    https://github.com/owncloud/web/pull/5973
+
+* Enhancement - Add tooltips to relative dates: [#6037](https://github.com/owncloud/web/pull/6037)
+
+   Relative dates like "1 day ago" now have a tooltip that shows the absolute date.
+
+   https://github.com/owncloud/web/issues/5672
+   https://github.com/owncloud/web/pull/6037
 
 Changelog for ownCloud Web [4.5.0] (2021-11-16)
 =======================================
