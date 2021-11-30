@@ -137,6 +137,7 @@
                 v-oc-tooltip="expirationDate"
                 data-testid="recipient-info-expiration-date"
                 class="files-collaborators-collaborator-expires"
+                tabindex="0"
                 :aria-label="expirationDateRelative + ' (' + expirationDate + ')'"
               >
                 <oc-icon name="text-calendar" />
