@@ -15,13 +15,13 @@
           <oc-spinner :aria-hidden="true" />
         </template>
         <template v-else-if="errorMessage">
-          <h2 class="oc-login-card-title" data-testid="public-link-error-message">
+          <h2 class="oc-login-card-title oc-login-card-error">
             <translate>An error occurred while loading the public link</translate>
           </h2>
           <p class="oc-text-lead">{{ errorMessage }}</p>
         </template>
         <template v-else-if="passwordRequired">
-          <form data-testid="public-link-password-required" @submit.prevent="resolvePublicLink">
+          <form @submit.prevent="resolvePublicLink">
             <h2 class="oc-login-card-title">
               <translate>This resource is password-protected.</translate>
             </h2>

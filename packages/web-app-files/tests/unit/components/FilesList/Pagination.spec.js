@@ -71,7 +71,6 @@ describe('Pagination', () => {
 
       it('should set provided current page', () => {
         const paginationEl = wrapper.find(selectors.filesPagination)
-        console.log(wrapper.html())
         expect(paginationEl.attributes().currentpage).toBe('1')
       })
     })

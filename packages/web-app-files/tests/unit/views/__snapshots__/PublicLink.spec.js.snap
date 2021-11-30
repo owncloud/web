@@ -26,24 +26,18 @@ exports[`PublicLink theming options should have the background image and page-ti
 </div>
 `;
 
-exports[`PublicLink when the view is not loading anymore should display the error message if "errorMessage" is not empty 1`] = `
-<h2 data-testid="public-link-error-message" class="oc-login-card-title">
-  <translate-stub tag="span">An error occurred while loading the public link</translate-stub>
-</h2>
+exports[`PublicLink when the view is not loading anymore and when "passwordRequired" is set as true and the password input should display the error message if "inputErrorMessage" is not empty 1`] = `<oc-text-input-stub id="oc-textinput-3" type="password" clearbuttonaccessiblelabel="" label="Enter password for public link" class="oc-mb-s" errormessage="some input error message"></oc-text-input-stub>`;
+
+exports[`PublicLink when the view is not loading anymore and when "passwordRequired" is set as true and the password input should have a computed label 1`] = `<oc-text-input-stub id="oc-textinput-3" type="password" clearbuttonaccessiblelabel="" label="Enter password for public link" class="oc-mb-s"></oc-text-input-stub>`;
+
+exports[`PublicLink when the view is not loading anymore and when "passwordRequired" is set as true and the submit button should be set as disabled if "password" is empty 1`] = `
+<oc-button-stub type="button" disabled="true" size="medium" variation="primary" appearance="filled" justifycontent="center" gapsize="medium" class="oc-login-authorize-button">
+  <translate-stub tag="span">Continue</translate-stub>
+</oc-button-stub>
 `;
 
-exports[`PublicLink when the view is not loading anymore should not display the loading text and the spinner 1`] = `
-<div class="oc-login-card-body">
-  <!---->
-</div>
-`;
-
-exports[`PublicLink when the view is not loading anymore when "passwordRequired" is set as true password input should display the error message if "inputErrorMessage" is not empty 1`] = `<oc-text-input-stub id="oc-textinput-3" type="password" clearbuttonaccessiblelabel="" label="Enter password for public link" class="oc-mb-s" errormessage="some input error message"></oc-text-input-stub>`;
-
-exports[`PublicLink when the view is not loading anymore when "passwordRequired" is set as true password input should have a computed label 1`] = `<oc-text-input-stub id="oc-textinput-3" type="password" clearbuttonaccessiblelabel="" label="Enter password for public link" class="oc-mb-s"></oc-text-input-stub>`;
-
-exports[`PublicLink when the view is not loading anymore when "passwordRequired" is set as true should display the password required form 1`] = `
-<form data-testid="public-link-password-required">
+exports[`PublicLink when the view is not loading anymore and when "passwordRequired" is set as true should display the password required form 1`] = `
+<form>
   <h2 class="oc-login-card-title">
     <translate-stub tag="span">This resource is password-protected.</translate-stub>
   </h2>
@@ -54,10 +48,16 @@ exports[`PublicLink when the view is not loading anymore when "passwordRequired"
 </form>
 `;
 
-exports[`PublicLink when the view is not loading anymore when "passwordRequired" is set as true submit button should be set as disabled if "password" is empty 1`] = `
-<oc-button-stub type="button" disabled="true" size="medium" variation="primary" appearance="filled" justifycontent="center" gapsize="medium" class="oc-login-authorize-button">
-  <translate-stub tag="span">Continue</translate-stub>
-</oc-button-stub>
+exports[`PublicLink when the view is not loading anymore should display the error message if "errorMessage" is not empty 1`] = `
+<h2 class="oc-login-card-title oc-login-card-error">
+  <translate-stub tag="span">An error occurred while loading the public link</translate-stub>
+</h2>
+`;
+
+exports[`PublicLink when the view is not loading anymore should not display the loading text and the spinner 1`] = `
+<div class="oc-login-card-body">
+  <!---->
+</div>
 `;
 
 exports[`PublicLink when the view is still loading should display the loading text with the spinner 1`] = `

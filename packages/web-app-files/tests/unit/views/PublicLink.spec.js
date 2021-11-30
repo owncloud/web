@@ -22,8 +22,8 @@ const selectors = {
   loginCardFooter: '.oc-login-card-footer',
   loginCardBody: '.oc-login-card-body',
   submitButton: '.oc-login-authorize-button',
-  errorMessage: '[data-testid="public-link-error-message"]',
-  publicLinkPasswordRequired: '[data-testid="public-link-password-required"]'
+  errorMessage: '.oc-login-card-error',
+  publicLinkPasswordRequired: 'form > .oc-login-card-title'
 }
 
 const spinnerStub = 'oc-spinner-stub'
@@ -79,7 +79,7 @@ describe('PublicLink', () => {
       expect(wrapper.find(selectors.errorMessage)).toMatchSnapshot()
     })
 
-    describe('when "passwordRequired" is set as true', () => {
+    describe('and when "passwordRequired" is set as true', () => {
       let passwordRequiredForm
       const wrapper = getWrapper({ loading: false })
 
@@ -93,7 +93,7 @@ describe('PublicLink', () => {
         expect(passwordRequiredForm).toMatchSnapshot()
       })
 
-      describe('password input', () => {
+      describe('and the password input', () => {
         it('should have a computed label', () => {
           const passwordInput = passwordRequiredForm.find(textInputStub)
 
@@ -112,7 +112,7 @@ describe('PublicLink', () => {
         })
       })
 
-      describe('submit button', () => {
+      describe('and the submit button', () => {
         it('should be set as disabled if "password" is empty', () => {
           expect(wrapper.vm.password).toBeNull()
 
@@ -137,11 +137,9 @@ describe('PublicLink', () => {
         await wrapper.setData({ passwordRequired: true, password: 'some-pass' })
 
         const submitButton = wrapper.find(selectors.submitButton)
-
-        await submitButton.trigger('click')
+        await submitButton.trigger('submit')
 
         expect(spyResolvePublicLink).toHaveBeenCalledTimes(1)
-        wrapper.destroy()
       })
     })
   })
@@ -174,16 +172,8 @@ function getWrapper({ loading, store } = {}) {
 }
 
 function getMountedWrapper({ loading, store } = {}) {
-  // https://stackoverflow.com/questions/53382235/trigger-form-submit-on-button-click-in-vue-unit-test
-  // Vue Test Utils does not attach DOM nodes to the document by default.
-  // This is to avoid enforcing cleanup.
-  // You can solve this by setting attachTo to an HTML element when you mount the component
-  const div = document.createElement('div')
-  div.id = 'root'
-  document.body.appendChild(div)
   return mount(component, {
     ...getMountOptions({ store, loading }),
-    attachTo: '#root',
     stubs: {}
   })
 }
