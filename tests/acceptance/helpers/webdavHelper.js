@@ -241,8 +241,8 @@ exports.createFile = async function (user, fileName, contents = '', waitMaxIfExi
    */
   if (uploadTimeStamps[user] && uploadTimeStamps[user][fileName]) {
     const timeSinceLastFileUpload = Date.now() - uploadTimeStamps[user][fileName]
-    if (timeSinceLastFileUpload <= 1111) {
-      await client.pause(1111 - timeSinceLastFileUpload)
+    if (timeSinceLastFileUpload <= 1300) {
+      await client.pause(1300 - timeSinceLastFileUpload)
     }
   }
   return httpHelper
