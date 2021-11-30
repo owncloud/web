@@ -15,7 +15,7 @@
           <oc-spinner :aria-hidden="true" />
         </template>
         <template v-else-if="errorMessage">
-          <h2 class="oc-login-card-title">
+          <h2 class="oc-login-card-title oc-login-card-error">
             <translate>An error occurred while loading the public link</translate>
           </h2>
           <p class="oc-text-lead">{{ errorMessage }}</p>
