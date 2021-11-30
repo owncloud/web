@@ -32,20 +32,29 @@ export default {
     ]),
     ...mapActions(['showMessage', 'createModal', 'hideModal']),
 
-    formDateFromNow(date, type) {
-      // TODO: Refactor those into their own functions a.k.a relDateFromJSDate() etc
-      if (type === 'JSDate') {
-        return DateTime.fromJSDate(date).setLocale(this.$language.current).toRelative()
-      }
-      if (type === 'Http') {
-        return DateTime.fromHTTP(date).setLocale(this.$language.current).toRelative()
-      }
-      if (type === 'ISO') {
-        return DateTime.fromISO(date).setLocale(this.$language.current).toRelative()
-      }
-      if (type === 'RFC') {
-        return DateTime.fromRFC2822(date).setLocale(this.$language.current).toRelative()
-      }
+    formDateFromJSDate(date, format = DateTime.DATETIME_FULL) {
+      return DateTime.fromJSDate(date).setLocale(this.$language.current).toLocaleString(format)
+    },
+    formDateFromHTTP(date, format = DateTime.DATETIME_FULL) {
+      return DateTime.fromHTTP(date).setLocale(this.$language.current).toLocaleString(format)
+    },
+    formDateFromISO(date, format = DateTime.DATETIME_FULL) {
+      return DateTime.fromISO(date).setLocale(this.$language.current).toLocaleString(format)
+    },
+    formDateFromRFC(date, format = DateTime.DATETIME_FULL) {
+      return DateTime.fromRFC2822(date).setLocale(this.$language.current).toLocaleString(format)
+    },
+    formRelativeDateFromJSDate(date) {
+      return DateTime.fromJSDate(date).setLocale(this.$language.current).toRelative()
+    },
+    formRelativeDateFromHTTP(date) {
+      return DateTime.fromHTTP(date).setLocale(this.$language.current).toRelative()
+    },
+    formRelativeDateFromISO(date) {
+      return DateTime.fromISO(date).setLocale(this.$language.current).toRelative()
+    },
+    formRelativeDateFromRFC(date) {
+      return DateTime.fromRFC2822(date).setLocale(this.$language.current).toRelative()
     },
     delayForScreenreader(func, delay = 500) {
       /*

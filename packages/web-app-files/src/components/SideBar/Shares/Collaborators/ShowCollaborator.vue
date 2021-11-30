@@ -134,11 +134,14 @@
             </li>
             <li v-if="collaborator.expires" class="oc-py-rm">
               <oc-tag
+                v-oc-tooltip="expirationDate"
                 data-testid="recipient-info-expiration-date"
                 class="files-collaborators-collaborator-expires"
+                tabindex="0"
+                :aria-label="expirationDateRelative + ' (' + expirationDate + ')'"
               >
                 <oc-icon name="text-calendar" />
-                <translate :translate-params="{ expires: expirationDate }">
+                <translate :translate-params="{ expires: expirationDateRelative }">
                   Expires %{expires}
                 </translate>
               </oc-tag>
@@ -340,6 +343,13 @@ export default {
     },
 
     expirationDate() {
+      return DateTime.fromJSDate(this.collaborator.expires)
+        .endOf('day')
+        .setLocale(this.$language.current)
+        .toLocaleString(DateTime.DATETIME_FULL)
+    },
+
+    expirationDateRelative() {
       return DateTime.fromJSDate(this.collaborator.expires)
         .endOf('day')
         .setLocale(this.$language.current)

@@ -58,7 +58,7 @@
         <tr v-if="showShareDate" data-testid="shared-date">
           <th scope="col" class="oc-pr-s" v-text="shareDateLabel" />
           <td>
-            <span v-oc-tooltip="shareDateTooltip" v-text="displayShareDate" />
+            <span v-text="displayShareDate" />
           </td>
         </tr>
         <tr v-if="showSharedVia" data-testid="shared-via">
@@ -119,7 +119,6 @@ import { loadPreview } from '../../../helpers/resource'
 import intersection from 'lodash-es/intersection'
 import upperFirst from 'lodash-es/upperFirst'
 import path from 'path'
-import { DateTime } from 'luxon'
 
 export default {
   name: 'FileDetails',
@@ -167,11 +166,6 @@ export default {
     sharedViaLabel() {
       return this.$gettext('Shared via:')
     },
-    shareDateTooltip() {
-      return DateTime.fromSeconds(parseInt(this.sharedTime))
-        .setLocale(this.$language.current)
-        .toLocaleString(DateTime.DATETIME_FULL)
-    },
     sharedViaTooltip() {
       return this.$gettextInterpolate(
         this.$gettext("Navigate to '%{folder}'"),
@@ -211,7 +205,7 @@ export default {
       return this.hasAnyShares && !this.isPublicPage
     },
     displayShareDate() {
-      const date = this.formDateFromNow(new Date(this.sharedTime * 1000), 'JSDate')
+      const date = this.formDateFromJSDate(new Date(this.sharedTime * 1000))
       return upperFirst(date)
     },
     detailSharingInformation() {
@@ -273,9 +267,9 @@ export default {
     capitalizedTimestamp() {
       let displayDate = ''
       if (this.file.mdate) {
-        displayDate = this.formDateFromNow(this.file.mdate, 'Http')
+        displayDate = this.formDateFromHTTP(this.file.mdate)
       } else {
-        displayDate = this.formDateFromNow(this.file.sdate, 'Http')
+        displayDate = this.formDateFromHTTP(this.file.sdate)
       }
       return upperFirst(displayDate)
     },
