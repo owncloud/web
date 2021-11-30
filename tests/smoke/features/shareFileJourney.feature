@@ -23,7 +23,7 @@ Feature: share folder with file, share file
       | lorem.txt | folder_to_shared |
     Then "Alice" ensures that the following resource exist
       | folder_to_shared/lorem.txt |
-    And "Alice" shares the following resource using sidebar panel
+    And "Alice" shares the following resource via the sidebar panel
       | resource         | user  | role   |
       | folder_to_shared | Brian | editor |
     Given "Brian" has logged in
@@ -64,7 +64,7 @@ Feature: share folder with file, share file
     And "Alice" uploads the following resource
       | resource        | to               |
       | testavatar.jpeg | folder_to_shared |
-    And "Alice" shares the following resource using quick action
+    And "Alice" shares the following resource via the quick action
       | resource                         | user  | role   |
       | folder_to_shared/testavatar.jpeg | Brian | viewer |
     Given "Brian" has logged in
@@ -86,7 +86,7 @@ Feature: share folder with file, share file
       | resource               | as                  |
       | Shares/testavatar.jpeg | testavatar_new.jpeg |
     When "Alice" opens the "files" app
-    And "Alice" deletes shared access to the following resource with user
+    And "Alice" removes following collaborator from the share
       | resource                         | user  |
       | folder_to_shared/testavatar.jpeg | Brian |
     And "Alice" has logged out

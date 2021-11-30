@@ -33,7 +33,7 @@ Feature: Kindergarten can use web to organize a day
       | lorem-big.txt     | groups/Teddy Bear Daycare/meal plan  |
     # Implementation of sharing with different roles is currently broken
     # since we switched to bulk creating of shares with a single dropdown 
-    Then "Alice" shares the following resources using sidebar panel
+    Then "Alice" shares the following resources via the sidebar panel
       | resource                             | user  | role   |
       | groups/Pre-Schools Pirates/meal plan | Brian | editor |
       | groups/Pre-Schools Pirates/meal plan | Carol | viewer |

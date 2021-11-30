@@ -62,7 +62,7 @@ When(
 )
 
 When(
-  /^"([^"]*)" shares the following (resource|resources) using (sidebar panel|quick action)$/,
+  /^"([^"]*)" shares the following (resource|resources) via the (sidebar panel|quick action)$/,
   async function (
     this: World,
     stepUser: string,
@@ -305,7 +305,7 @@ When(
 )
 
 When(
-  '{string} deletes shared access to the following resource(s) with user(s)',
+  '{string} removes following collaborator(s) from the share(s)',
   async function (this: World, stepUser: string, stepTable: DataTable) {
     const actor = this.actorContinent.get({ id: stepUser })
     const { allFiles: allFilesPage } = new FilesPage({ actor })
