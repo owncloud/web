@@ -71,16 +71,20 @@ export const announceStore = async ({
  *
  * @param runtimeConfiguration
  */
-export const announceClient = async (runtimeConfiguration: RuntimeConfiguration): Promise<void> => {
+export const announceClient = (runtimeConfiguration: RuntimeConfiguration): Promise<void> => {
   const { openIdConnect = {} } = runtimeConfiguration
 
   if (!openIdConnect.dynamic) {
     return
   }
 
-  const { client_id: clientId, client_secret: clientSecret } = await registerClient(openIdConnect)
-  openIdConnect.client_id = clientId
-  openIdConnect.client_secret = clientSecret
+  const promiseRegistration = registerClient(openIdConnect)
+
+  promiseRegistration.then(({ client_id: clientId, client_secret: clientSecret }) => {
+    openIdConnect.client_id = clientId
+    openIdConnect.client_secret = clientSecret
+  })
+  return promiseRegistration
 }
 
 /**
@@ -95,7 +99,7 @@ export const announceClient = async (runtimeConfiguration: RuntimeConfiguration)
  * @param translations
  * @param supportedLanguages
  */
-export const announceApplications = async ({
+export const announceApplications = ({
   runtimeConfiguration,
   store,
   router,
@@ -107,7 +111,7 @@ export const announceApplications = async ({
   router: VueRouter
   translations: unknown
   supportedLanguages: { [key: string]: string }
-}): Promise<void> => {
+}): Promise<any> => {
   const { apps: internalApplications = [], external_apps: externalApplications = [] } =
     runtimeConfiguration
 
@@ -116,31 +120,31 @@ export const announceApplications = async ({
     ...externalApplications.map((application) => application.path)
   ].filter(Boolean)
 
-  const applicationResults = await Promise.allSettled(
-    applicationPaths.map((applicationPath) =>
-      buildApplication({
-        applicationPath,
-        store,
-        supportedLanguages,
-        router,
-        translations
+  const registerApp = (applicationPath) => {
+    const promiseBuild = buildApplication({
+      applicationPath,
+      store,
+      supportedLanguages,
+      router,
+      translations
+    })
+
+    promiseBuild
+      .then((application) => {
+        application.initialize().then(() => {
+          application.ready()
+        })
       })
-    )
-  )
+      .catch((reason) => {
+        console.error(reason)
+      })
 
-  const applications = applicationResults.reduce<NextApplication[]>((acc, applicationResult) => {
-    // we don't want to fail hard with the full system when one specific application can't get loaded. only log the error.
-    if (applicationResult.status !== 'fulfilled') {
-      console.error(applicationResult.reason)
-    } else {
-      acc.push(applicationResult.value)
-    }
+    return promiseBuild
+  }
 
-    return acc
-  }, [])
+  const promiseInternalApps = applicationPaths.map(registerApp)
 
-  await Promise.all(applications.map((application) => application.initialize()))
-  await Promise.all(applications.map((application) => application.ready()))
+  return Promise.allSettled(promiseInternalApps)
 }
 
 /**
@@ -152,7 +156,7 @@ export const announceApplications = async ({
  * @param vue
  * @param designSystem
  */
-export const announceTheme = async ({
+export const announceTheme = ({
   store,
   vue,
   designSystem,
@@ -163,13 +167,15 @@ export const announceTheme = async ({
   designSystem: any
   runtimeConfiguration?: RuntimeConfiguration
 }): Promise<void> => {
-  const { theme } = await loadTheme(runtimeConfiguration?.theme)
-  await store.dispatch('loadThemes', { theme })
-  await store.dispatch('loadTheme', { theme: theme.default })
-
-  vue.use(designSystem, {
-    tokens: store.getters.theme.designTokens
+  const promiseLoad = loadTheme(runtimeConfiguration?.theme)
+  promiseLoad.then(async ({ theme }) => {
+    await store.dispatch('loadThemes', { theme })
+    await store.dispatch('loadTheme', { theme: theme.default })
+    vue.use(designSystem, {
+      tokens: store.getters.theme.designTokens
+    })
   })
+  return promiseLoad
 }
 
 /**

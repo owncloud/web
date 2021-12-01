@@ -22,18 +22,22 @@ import {
 
 export const bootstrap = async (configurationPath: string): Promise<void> => {
   const runtimeConfiguration = await requestConfiguration(configurationPath)
-  announceOwncloudSDK({ vue: Vue, runtimeConfiguration })
-  await announceClient(runtimeConfiguration)
-  await announceStore({ vue: Vue, store, runtimeConfiguration })
-  await announceApplications({
+  const promiseOcSDK = announceOwncloudSDK({ vue: Vue, runtimeConfiguration }) // vue.$client
+  const promiseClient = announceClient(runtimeConfiguration) // oidc client
+  const promiseTheme = announceTheme({ store, vue: Vue, designSystem, runtimeConfiguration })
+  await promiseOcSDK
+  await promiseClient
+  await announceStore({ vue: Vue, store, runtimeConfiguration }) // REQUIRES $client and oidc
+  const promiseApplications = announceApplications({
     runtimeConfiguration,
     store,
     supportedLanguages,
     router,
     translations
   })
+  await promiseTheme
+  await promiseApplications
   announceTranslations({ vue: Vue, supportedLanguages, translations })
-  await announceTheme({ store, vue: Vue, designSystem, runtimeConfiguration })
   announceDefaults({ store, router })
 }
 
