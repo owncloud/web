@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RoleSelection for file shares when an existing role is present renders a button with exisiting role if given 1`] = `
+<div>
+  <oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="center" gapsize="none" id="files-collaborators-role-button-cfa714e8-14dd-4849-83bc-9012fe0e27d6" class="files-collaborators-role-button"><span>Viewer</span>
+    <oc-icon-stub name="expand_more" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
+  </oc-button-stub>
+  <oc-drop-stub dropid="oc-drop-5" toggle="#files-collaborators-role-button-cfa714e8-14dd-4849-83bc-9012fe0e27d6" position="bottom-start" mode="click" closeonclick="true"></oc-drop-stub>
+  <oc-drop-stub dropid="oc-drop-6" toggle="" position="bottom-start" mode="manual" target="#files-collaborators-role-button-cfa714e8-14dd-4849-83bc-9012fe0e27d6" class="files-recipient-custom-permissions-drop"></oc-drop-stub>
+</div>
+`;
+
+exports[`RoleSelection for file shares when no existing role is present renders a button with invite text if no existing role given 1`] = `
+<div>
+  <oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="center" gapsize="none" id="files-collaborators-role-button-new" class="files-collaborators-role-button"><span>Invite as viewer</span>
+    <oc-icon-stub name="expand_more" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
+  </oc-button-stub>
+  <oc-drop-stub dropid="oc-drop-3" toggle="#files-collaborators-role-button-new" position="bottom-start" mode="click" closeonclick="true"></oc-drop-stub>
+  <oc-drop-stub dropid="oc-drop-4" toggle="" position="bottom-start" mode="manual" target="#files-collaborators-role-button-new" class="files-recipient-custom-permissions-drop"></oc-drop-stub>
+</div>
+`;
