@@ -24,3 +24,19 @@ Given(
     }
   }
 )
+
+Given(
+  /^admin (disables|enables) auto accepting of the shares$/,
+  async function (this: World, actionType: string): Promise<void> {
+    if (config.ocis) {
+      return
+    }
+
+    const user = this.userContinent.get({ id: 'admin' })
+
+    await api.config.disableShareAutoAccept({
+      user,
+      action: actionType === 'disables' ? 'disable' : 'enable'
+    })
+  }
+)
