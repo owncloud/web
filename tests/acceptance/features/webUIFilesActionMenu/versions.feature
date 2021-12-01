@@ -11,7 +11,7 @@ Feature: Versions of a file
       | user0    |
       | Alice    |
 
-  @disablePreviews @skipOnOC10 @issue-5853
+  @disablePreviews @issue-5853
   Scenario: upload new file with same name to see if different versions are shown
     Given user "user0" has logged in using the webUI
     And user "user0" has uploaded file "lorem.txt" to "lorem.txt"
@@ -96,4 +96,4 @@ Feature: Versions of a file
     When the user browses to display the "versions" details of file "lorem-file.txt"
     Then the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
     And the versions list should contain 2 entries
-    
+
