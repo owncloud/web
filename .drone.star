@@ -1117,6 +1117,15 @@ def smokeTests(ctx):
         },
         "commands": [
             "sleep 10 && yarn test:smoke:experimental tests/smoke/features/",
+            "sleep 10 && yarn test:smoke:experimental tests/smoke/features/",
+            "sleep 10 && yarn test:smoke:experimental tests/smoke/features/",
+            "sleep 10 && yarn test:smoke:experimental tests/smoke/features/",
+            "sleep 10 && yarn test:smoke:experimental tests/smoke/features/",
+            "sleep 10 && yarn test:smoke:experimental tests/smoke/features/",
+            "sleep 10 && yarn test:smoke:experimental tests/smoke/features/",
+            "sleep 10 && yarn test:smoke:experimental tests/smoke/features/",
+            "sleep 10 && yarn test:smoke:experimental tests/smoke/features/",
+            "sleep 10 && yarn test:smoke:experimental tests/smoke/features/",
         ],
     }]
 
