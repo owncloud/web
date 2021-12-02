@@ -4,7 +4,7 @@ import { config } from '../../config'
 import { api } from '../../support'
 
 Given(
-  'following users have been created',
+  'the following users have been created',
   async function (this: World, stepUsers: DataTable): Promise<void> {
     const users = stepUsers.raw().map((u) => this.usersEnvironment.getUser({ id: u[0] }))
     const admin = this.usersEnvironment.getUser({ id: 'admin' })
@@ -17,7 +17,7 @@ Given(
 )
 
 Given(
-  'admin set the default folder for received shares to {string}',
+  'the default folder for received shares has been set to {string}',
   async function (this: World, value: string): Promise<void> {
     const user = this.usersEnvironment.getUser({ id: 'admin' })
 
@@ -28,7 +28,7 @@ Given(
 )
 
 Given(
-  /^admin (disables|enables) auto accepting of the shares$/,
+  /^auto-accept shares has been (disabled|enabled)$/,
   async function (this: World, actionType: string): Promise<void> {
     if (config.ocis) {
       return
@@ -38,7 +38,7 @@ Given(
 
     await api.config.disableShareAutoAccept({
       user,
-      action: actionType === 'disables' ? 'disable' : 'enable'
+      action: actionType === 'disabled' ? 'disable' : 'enable'
     })
   }
 )
