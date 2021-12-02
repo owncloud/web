@@ -4,12 +4,12 @@ Feature: User can view files inside a folder
   So that I can work with files and folders inside it
 
   Background:
-    Given user "Alice" has been created with default attributes and without skeleton files
-    And user "Alice" has created folder "simple-folder"
-    And user "Alice" has created folder "simple-empty-folder"
-    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
-    And user "Alice" has uploaded file "lorem.txt" to "textfile0.txt"
-    And user "Alice" has uploaded file "data.zip" to "data.zip"
+    Given user "Alice" has been created with default attributes and without skeleton files in the server
+    And user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has created folder "simple-empty-folder" in the server
+    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt" in the server
+    And user "Alice" has uploaded file "lorem.txt" to "textfile0.txt" in the server
+    And user "Alice" has uploaded file "data.zip" to "data.zip" in the server
     And user "Alice" has logged in using the webUI
 
   Scenario: Resources are listed

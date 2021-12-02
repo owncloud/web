@@ -40,6 +40,11 @@ const SCREENSHOTS = !!process.env.SCREENSHOTS
 const VISUAL_TEST = !!process.env.VISUAL_TEST
 const UPDATE_VRT_SCREENSHOTS = !!process.env.UPDATE_VRT_SCREENSHOTS
 
+const MIDDLEWARE_HOST = withHttp(
+  process.env.MIDDLEWARE_HOST ||
+    (RUN_ON_OCIS ? 'http://host.docker.internal:3000' : 'http://host.docker.internal:3001')
+)
+
 function generateScreenshotFilePath(nightwatchClient, basePath, imagePath) {
   return path.join(process.cwd(), basePath, imagePath)
 }
@@ -84,7 +89,8 @@ const config = {
           prompt: false,
           always_save_diff_screenshot: UPDATE_VRT_SCREENSHOTS
         },
-        screenshots: SCREENSHOTS
+        screenshots: SCREENSHOTS,
+        middlewareUrl: MIDDLEWARE_HOST
       },
       selenium_host: SELENIUM_HOST,
       desiredCapabilities: {

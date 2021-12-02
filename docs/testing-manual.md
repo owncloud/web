@@ -54,6 +54,9 @@ In order to run the acceptance tests you need to run oCIS using the oCIS storage
 - set up the [oCIS backend]({{< ref "backend-ocis.md" >}})
   - if you are a Mac user, you need to start the server with additional environment variables: `STORAGE_HOME_DATA_SERVER_URL='http://host.docker.internal:9155/data' STORAGE_DATAGATEWAY_PUBLIC_URL='https://host.docker.internal:9200/data' STORAGE_USERS_DATA_SERVER_URL='http://host.docker.internal:9158/data' STORAGE_FRONTEND_PUBLIC_URL='https://host.docker.internal:9200' PROXY_ENABLE_BASIC_AUTH=true PROXY_OIDC_ISSUER='https://host.docker.internal:9200' IDP_INSECURE='true' IDP_IDENTIFIER_REGISTRATION_CONF='<web-path>/tests/acceptance/mac-identifier-registration.yml' IDP_ISS='https://host.docker.internal:9200' IDP_TLS='true'` (`<web-path>` needs to be replaced with the path of your local clone of ownCloud Web)
 
+## Setup the owncloud test Middleware
+To run the tests, we need to run the [owncloud-test-middleware](https://github.com/owncloud/owncloud-test-middleware). You can find the instructions on how to run the middleware server from its [github page](https://github.com/owncloud/owncloud-test-middleware#starting-the-server)
+
 ## Setup ownCloud Web
 
 - [build Web]({{< ref "building.md" >}})
@@ -65,6 +68,7 @@ In order to run the acceptance tests you need to run oCIS using the oCIS storage
 - Install all the test dependencies with `yarn` command
 - set `SERVER_HOST` to point at the URL where the Web web pages are served, for example "http://localhost:9100"
 - set `BACKEND_HOST` to point to the URL of the backend, for example "http://localhost/owncloud/"
+- set `MIDDLEWARE_HOST` to point to the URL of the [owncloud-test-middleware](https://github.com/owncloud/owncloud-test-middleware)
 - to be able to run federation tests, additional setup is needed:
    1. Install and set up a second ownCloud server-instance that is accessible by a different URL. That second server-instance must have its own database and data directory.
    2. clone and install the testing app into the second ownCloud server-instance from http://github.com/owncloud/testing .
@@ -97,7 +101,7 @@ When you run the acceptance tests as usual, all the visual regression comparison
 
 eg.
 ```
-VISUAL_TEST=true SERVER_HOST=http://<server_host> BACKEND_HOST=http://<backend_host> yarn test:acceptance:oc10 <feature-file-to-test>
+VISUAL_TEST=true yarn test:acceptance:oc10 <feature-file-to-test>
 ```
 
 #### Updating the snapshots
@@ -106,7 +110,7 @@ If there is some change in the components, and you want to update the snapshots 
 
 eg.
 ```
-VISUAL_TEST=true UPDATE_VRT_SCREENSHOTS=true SERVER_HOST=http://<server_host> BACKEND_HOST=http://<backend_host> yarn test:acceptance:oc10 <feature-file-to-test>
+VISUAL_TEST=true UPDATE_VRT_SCREENSHOTS=true yarn test:acceptance:oc10 <feature-file-to-test>
 ```
 
 **note** Visual regression testing may not be completely reliable every time as small changes such as window size and screen resolution may affect the result. For better results it is recommended that you run the tests using the `selenium/standalone-chrome-debug` image of selenium and window size of `1280x1024`
@@ -119,8 +123,8 @@ These values can be set using the environment variables to configure `yarn test:
 
 | setting             | meaning                                                                | default               |
 |-------------------- | -----------------------------------------------------------------------| ----------------------|
-| `SERVER_HOST`       | web URL                                                            | http://localhost:9100 |
-| `BACKEND_HOST`      | ownCloud server URL (or reva service url for running with oCIS)                                                    | http://localhost:8080 |
+| `SERVER_HOST`       | web URL  | http://host.docker.internal:8080/index.php/apps/web/index.html or https://host.docker.internal:9200 |
+| `BACKEND_HOST`      | ownCloud server URL (or reva service url for running with oCIS)        | http://host.docker.internal:8080 or https://host.docker.internal:9200 |
 | `BACKEND_USERNAME`  | ownCloud administrator username                                        | admin                 |
 | `BACKEND_PASSWORD`  | ownCloud administrator password                                        | admin                 |
 | `SELENIUM_HOST`     | selenium server host, if not set yarn will start selenium automatically<br/>if running the selenium docker container as mentioned above set to `localhost` |                       |
@@ -135,6 +139,7 @@ These values can be set using the environment variables to configure `yarn test:
 | `WEB_UI_CONFIG`       | Path for the web config file (usually in the dist folder)                       | - |
 | `VISUAL_TEST`       | Run the visual regression comparison while running the acceptance tests                       | - |
 | `UPDATE_VRT_SCREENSHOTS`       | Update the baseline snapshots with the latest images for visual regression tests                       | - |
+| `MIDDLEWARE_HOST` | Middleware host URL | http://host.docker.internal:3000 |
 
 ## Tips
 
