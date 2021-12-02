@@ -205,17 +205,14 @@ exports.createFile = async function (user, fileName, contents = '') {
       await client.pause(1600 - timeSinceLastFileUpload)
     }
   }
-  return httpHelper
-    .put(davPath, user, contents)
-    .then(function (res) {
-      uploadTimeStamps[user] = uploadTimeStamps[user] || {}
-      uploadTimeStamps[user][fileName] = Date.now()
-      return httpHelper.checkStatus(
-        res,
-        `Could not create the file "${fileName}" for user "${user}".`
-      )
-    })
-    .then((res) => res.text())
+  const putResponse = await httpHelper.put(davPath, user, contents)
+  const statusResponse = await httpHelper.checkStatus(
+    putResponse,
+    `Could not create the file "${fileName}" for user "${user}".`
+  )
+  uploadTimeStamps[user] = uploadTimeStamps[user] || {}
+  uploadTimeStamps[user][fileName] = Date.now()
+  return statusResponse.text()
 }
 
 /**
