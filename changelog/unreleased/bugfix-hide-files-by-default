@@ -1,0 +1,5 @@
+Bugfix: Hidden files hidden by default
+
+Hide hidden files (files started with ".") by default, similar to oc10
+
+https://github.com/owncloud/web/pull/5985
