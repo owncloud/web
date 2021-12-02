@@ -1,0 +1,6 @@
+Bugfix: Show extension image
+
+Allow extensions to set an image as its logo, instead of an icon.
+If `img` is set, it will take precedence over `icon`.
+
+https://github.com/owncloud/web/pull/5985

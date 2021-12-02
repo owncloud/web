@@ -1,0 +1,6 @@
+Enhancement: Build options
+
+Configure the startup title (displayed before the configuration is loaded) via env variable TITLE.
+Make the source map generation optional with the env variable SOURCE_MAP.
+
+https://github.com/owncloud/web/pull/5985
