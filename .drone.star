@@ -8,6 +8,7 @@ OC_CI_CORE_NODEJS = "owncloudci/core:nodejs14"
 OC_CI_GOLANG = "owncloudci/golang:1.17"
 OC_CI_NODEJS = "owncloudci/nodejs:14"
 OC_CI_PHP = "owncloudci/php:7.4"
+OC_CI_WAIT_FOR = "owncloudci/wait-for:latest"
 OC_UBUNTU = "owncloud/ubuntu:20.04"
 
 OC10_VERSION = "latest"
@@ -1134,6 +1135,7 @@ def smokeTests(ctx):
         setupServerAndAppsForIntegrationApp(logLevel) + \
         setUpOauth2(True, True) + \
         fixPermissions() + \
+        waitForOwncloudService() + \
         copyFilesForUpload() + \
         smoke_test_occ
 
@@ -1324,6 +1326,7 @@ def acceptance(ctx):
                                 services += webService()
 
                             steps += fixPermissions()
+                            steps += waitForOwncloudService()
 
                             if (params["federatedServerNeeded"]):
                                 if federatedServerVersion == "":
@@ -1331,7 +1334,7 @@ def acceptance(ctx):
 
                                 # services and steps required to run federated sharing tests
                                 steps += installFederatedServer(federatedServerVersion, db, federationDbSuffix) + setupFedServerAndApp(params["logLevel"])
-                                steps += fixPermissionsFederated() + owncloudLogFederated()
+                                steps += fixPermissionsFederated() + waitForOwncloudFederatedService() + owncloudLogFederated()
 
                                 services += owncloudFederatedService() + databaseServiceForFederation(db, federationDbSuffix)
 
@@ -1570,6 +1573,25 @@ def owncloudFederatedService():
             "-D",
             "FOREGROUND",
         ],
+    }]
+
+def waitForOwncloudService():
+    return [{
+        "name": "wait-for-owncloud-service",
+        "image": OC_CI_WAIT_FOR,
+        "commands": [
+            "wait-for -it owncloud:80 -t 300",
+        ],
+    }]
+
+def waitForOwncloudFederatedService():
+    return [{
+        "name": "wait-for-owncloud-federated",
+        "image": OC_CI_WAIT_FOR,
+        "commands": [
+            "wait-for -it federated:80 -t 300",
+        ],
+        "pull": "always",
     }]
 
 def getDbName(db):
@@ -2089,41 +2111,50 @@ def idpService():
     }]
 
 def ocisService():
-    return [{
-        "name": "ocis",
-        "image": OC_CI_GOLANG,
-        "detach": True,
-        "environment": {
-            "OCIS_URL": "https://ocis:9200",
-            "STORAGE_HOME_DRIVER": "ocis",
-            "STORAGE_USERS_DRIVER": "ocis",
-            "STORAGE_USERS_DRIVER_LOCAL_ROOT": "/srv/app/tmp/ocis/local/root",
-            "STORAGE_USERS_DRIVER_OWNCLOUD_DATADIR": "/srv/app/tmp/ocis/owncloud/data",
-            "STORAGE_USERS_DRIVER_OCIS_ROOT": "/srv/app/tmp/ocis/storage/users",
-            "STORAGE_METADATA_DRIVER_OCIS_ROOT": "/srv/app/tmp/ocis/storage/metadata",
-            "STORAGE_SHARING_USER_JSON_FILE": "/srv/app/tmp/ocis/shares.json",
-            "OCIS_INSECURE": "true",
-            "WEB_UI_CONFIG": "/srv/config/drone/config-ocis.json",
-            "WEB_ASSET_PATH": "%s/dist" % dir["web"],
-            "IDP_IDENTIFIER_REGISTRATION_CONF": "/srv/config/drone/identifier-registration.yml",
-            "ACCOUNTS_DATA_PATH": "/srv/app/tmp/ocis-accounts/",
-            "PROXY_ENABLE_BASIC_AUTH": True,
-            "OCIS_LOG_LEVEL": "error",
+    return [
+        {
+            "name": "ocis",
+            "image": OC_CI_GOLANG,
+            "detach": True,
+            "environment": {
+                "OCIS_URL": "https://ocis:9200",
+                "STORAGE_HOME_DRIVER": "ocis",
+                "STORAGE_USERS_DRIVER": "ocis",
+                "STORAGE_USERS_DRIVER_LOCAL_ROOT": "/srv/app/tmp/ocis/local/root",
+                "STORAGE_USERS_DRIVER_OWNCLOUD_DATADIR": "/srv/app/tmp/ocis/owncloud/data",
+                "STORAGE_USERS_DRIVER_OCIS_ROOT": "/srv/app/tmp/ocis/storage/users",
+                "STORAGE_METADATA_DRIVER_OCIS_ROOT": "/srv/app/tmp/ocis/storage/metadata",
+                "STORAGE_SHARING_USER_JSON_FILE": "/srv/app/tmp/ocis/shares.json",
+                "OCIS_INSECURE": "true",
+                "WEB_UI_CONFIG": "/srv/config/drone/config-ocis.json",
+                "WEB_ASSET_PATH": "%s/dist" % dir["web"],
+                "IDP_IDENTIFIER_REGISTRATION_CONF": "/srv/config/drone/identifier-registration.yml",
+                "ACCOUNTS_DATA_PATH": "/srv/app/tmp/ocis-accounts/",
+                "PROXY_ENABLE_BASIC_AUTH": True,
+                "OCIS_LOG_LEVEL": "error",
+            },
+            "commands": [
+                "cd %s/ocis-build" % dir["base"],
+                "mkdir -p /srv/app/tmp/ocis/owncloud/data/",
+                "mkdir -p /srv/app/tmp/ocis/storage/users/",
+                "./ocis server",
+            ],
+            "volumes": [{
+                "name": "gopath",
+                "path": "/srv/app",
+            }, {
+                "name": "configs",
+                "path": "/srv/config",
+            }],
         },
-        "commands": [
-            "cd %s/ocis-build" % dir["base"],
-            "mkdir -p /srv/app/tmp/ocis/owncloud/data/",
-            "mkdir -p /srv/app/tmp/ocis/storage/users/",
-            "./ocis server",
-        ],
-        "volumes": [{
-            "name": "gopath",
-            "path": "/srv/app",
-        }, {
-            "name": "configs",
-            "path": "/srv/config",
-        }],
-    }]
+        {
+            "name": "wait-for-ocis-server",
+            "image": OC_CI_WAIT_FOR,
+            "commands": [
+                "wait-for -it ocis:9200 -t 300",
+            ],
+        },
+    ]
 
 def buildOcisWeb():
     return [{
