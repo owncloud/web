@@ -30,15 +30,13 @@
       </div>
       <div v-if="link.expiration">
         <oc-tag
-          v-oc-tooltip="formDateFromISO(link.expiration)"
+          v-oc-tooltip="expirationDate"
           tabindex="0"
           class="oc-files-public-link-expires"
-          :aria-label="
-            formRelativeDateFromISO(link.expiration) + ' (' + formDateFromISO(link.expiration) + ')'
-          "
+          :aria-label="expirationDateRelative + ' (' + expirationDate + ')'"
         >
           <oc-icon name="text-calendar" />
-          <translate :translate-params="{ expires: formRelativeDateFromISO(link.expiration) }">
+          <translate :translate-params="{ expires: expirationDateRelative }">
             Expires %{expires}
           </translate>
         </oc-tag>
@@ -68,6 +66,7 @@
 import { basename, dirname } from 'path'
 import Mixins from '../../../../mixins'
 import CopyToClipboardButton from '../CopyToClipboardButton.vue'
+import { DateTime } from 'luxon'
 
 export default {
   name: 'LinkInfo',
@@ -139,6 +138,20 @@ export default {
 
     copyToClipboardSuccessMsgTitle() {
       return this.$gettext('Public link copied')
+    },
+
+    expirationDate() {
+      return DateTime.fromISO(this.link.expiration)
+        .setLocale(this.$language.current)
+        .endOf('day')
+        .toLocaleString(DateTime.DATETIME_FULL)
+    },
+
+    expirationDateRelative() {
+      return DateTime.fromISO(this.link.expiration)
+        .setLocale(this.$language.current)
+        .endOf('day')
+        .toRelative()
     }
   },
 

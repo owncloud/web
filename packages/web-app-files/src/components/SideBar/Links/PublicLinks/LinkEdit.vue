@@ -166,7 +166,6 @@ import { mapGetters, mapActions, mapState } from 'vuex'
 import mixins from '../../../../mixins'
 import { DateTime } from 'luxon'
 import publicLinkRoles from '../../../../helpers/publicLinkRolesDefinition'
-import { addDays } from 'web-runtime/src/helpers/date'
 
 import RoleItem from '../../Shared/RoleItem.vue'
 
@@ -247,7 +246,7 @@ export default {
     },
 
     minExpirationDate() {
-      return addDays(new Date(), 1)
+      return DateTime.now().setLocale(this.$language.current).toJSDate()
     },
 
     maxExpirationDate() {
@@ -256,8 +255,7 @@ export default {
       }
 
       const days = parseInt(this.$_expirationDate.days, 10)
-
-      return addDays(new Date(), days)
+      return DateTime.now().setLocale(this.$language.current).plus({ days: days }).toJSDate()
     },
 
     $_expirationIsValid() {
@@ -324,7 +322,8 @@ export default {
         return null
       }
 
-      return addDays(new Date(), parseInt(this.$_expirationDate.days))
+      const days = parseInt(this.$_expirationDate.days)
+      return DateTime.now().setLocale(this.$language.current).plus({ days: days }).toJSDate()
     }
   },
   created() {
@@ -364,7 +363,10 @@ export default {
       this.saving = true
 
       const params = {
-        expireDate: DateTime.fromJSDate(this.expireDate).endOf('day').toISODate(),
+        expireDate: DateTime.fromJSDate(this.expireDate)
+          .setLocale(this.$language.current)
+          .endOf('day')
+          .toFormat("yyyy-MM-dd'T'HH:mm:ssZZZ"),
         permissions: this.selectedRole.permissions,
         name: this.name
       }
@@ -394,7 +396,10 @@ export default {
       this.saving = true
 
       const params = {
-        expireDate: DateTime.fromJSDate(this.expireDate).endOf('day').toISODate(),
+        expireDate: DateTime.fromJSDate(this.expireDate)
+          .setLocale(this.$language.current)
+          .endOf('day')
+          .toFormat("yyyy-MM-dd'T'HH:mm:ssZZZ"),
         permissions: this.selectedRole.permissions,
         name: this.name
       }
