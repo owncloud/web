@@ -255,7 +255,7 @@ export default {
       }
 
       const days = parseInt(this.$_expirationDate.days, 10)
-      return DateTime.now().setLocale(this.$language.current).plus({ days: days }).toJSDate()
+      return DateTime.now().setLocale(this.$language.current).plus({ days }).toJSDate()
     },
 
     $_expirationIsValid() {
@@ -323,7 +323,7 @@ export default {
       }
 
       const days = parseInt(this.$_expirationDate.days)
-      return DateTime.now().setLocale(this.$language.current).plus({ days: days }).toJSDate()
+      return DateTime.now().setLocale(this.$language.current).plus({ days }).toJSDate()
     }
   },
   created() {
@@ -362,11 +362,12 @@ export default {
     $_addLink() {
       this.saving = true
 
+      const expireDate = DateTime.fromJSDate(this.expireDate)
+        .setLocale(this.$language.current)
+        .endOf('day')
+
       const params = {
-        expireDate: DateTime.fromJSDate(this.expireDate)
-          .setLocale(this.$language.current)
-          .endOf('day')
-          .toFormat("yyyy-MM-dd'T'HH:mm:ssZZZ"),
+        expireDate: expireDate.isValid ? expireDate.toFormat("yyyy-MM-dd'T'HH:mm:ssZZZ") : '',
         permissions: this.selectedRole.permissions,
         name: this.name
       }
@@ -395,11 +396,12 @@ export default {
     $_updateLink() {
       this.saving = true
 
+      const expireDate = DateTime.fromJSDate(this.expireDate)
+        .setLocale(this.$language.current)
+        .endOf('day')
+
       const params = {
-        expireDate: DateTime.fromJSDate(this.expireDate)
-          .setLocale(this.$language.current)
-          .endOf('day')
-          .toFormat("yyyy-MM-dd'T'HH:mm:ssZZZ"),
+        expireDate: expireDate.isValid ? expireDate.toFormat("yyyy-MM-dd'T'HH:mm:ssZZZ") : '',
         permissions: this.selectedRole.permissions,
         name: this.name
       }

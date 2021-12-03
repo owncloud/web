@@ -259,7 +259,7 @@ export default {
         days = userMaxExpirationDays || groupMaxExpirationDays
       }
 
-      return DateTime.now().setLocale(this.$language.current).plus({ days: days }).toJSDate()
+      return DateTime.now().setLocale(this.$language.current).plus({ days }).toJSDate()
     },
 
     expirationDateEnforced() {
@@ -350,12 +350,16 @@ export default {
     },
 
     publishChange() {
+      const expirationDate = DateTime.fromJSDate(this.enteredExpirationDate)
+        .setLocale(this.$language.current)
+        .endOf('day')
+
       this.$emit('optionChange', {
         role: this.selectedRole,
         permissions: this.customPermissions,
-        expirationDate: DateTime.fromJSDate(this.enteredExpirationDate)
-          .endOf('day')
-          .toFormat("yyyy-MM-dd'T'HH:mm:ssZZZ")
+        expirationDate: expirationDate.isValid
+          ? expirationDate.toFormat("yyyy-MM-dd'T'HH:mm:ssZZZ")
+          : null
       })
     },
 
