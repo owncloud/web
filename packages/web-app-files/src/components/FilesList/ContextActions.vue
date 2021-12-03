@@ -12,8 +12,7 @@
           :key="`section-${section.name}-action-${actionIndex}`"
           :action="action"
           :items="items"
-          class="oc-files-context-action"
-          :class="getActionClasses(section, actionIndex)"
+          class="oc-files-context-action oc-py-xs oc-px-s"
         />
       </oc-list>
     </template>
@@ -166,12 +165,6 @@ export default {
     getSectionClasses(index) {
       if (index < this.menuSections.length - 1) {
         return ['oc-files-context-actions-border', 'oc-pb-s', 'oc-mb-s']
-      }
-      return []
-    },
-    getActionClasses(section, index) {
-      if (index < section.items.length - 1) {
-        return ['oc-pb-s']
       }
       return []
     }

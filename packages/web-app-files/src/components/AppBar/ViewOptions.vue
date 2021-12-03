@@ -28,6 +28,7 @@
       toggle="#files-view-options-btn"
       mode="click"
       class="uk-width-auto"
+      padding-size="small"
     >
       <oc-list>
         <li class="files-view-options-list-item">
