@@ -10603,8 +10603,8 @@ __metadata:
   linkType: hard
 
 "owncloud-design-system@npm:^11.3.0":
-  version: 11.3.0
-  resolution: "owncloud-design-system@npm:11.3.0"
+  version: 11.3.1
+  resolution: "owncloud-design-system@npm:11.3.1"
   peerDependencies:
     "@popperjs/core": ^2.4.0
     filesize: ^8.0.0
@@ -10621,7 +10621,7 @@ __metadata:
     vue-inline-svg: ^2.0.0
     vue-select: ^3.12.0
     webfontloader: ^1.6.28
-  checksum: ab1b49cae0c12b3fca76b83a176a38b198e7ed4ebab137a00551d5e8601b090aa96ef55199a1d91a0c8c0651907a7849a1c617ebacd9d2322772659858539534
+  checksum: 659556a4aef76dcf155f35ffeeffc50ee8c3825c002d071f68d185b9e0fa407e8f8414210c4bb570485b82fd8d54ca593f49bb3222c02f9ae5289b3ac84a292c
   languageName: node
   linkType: hard
 
