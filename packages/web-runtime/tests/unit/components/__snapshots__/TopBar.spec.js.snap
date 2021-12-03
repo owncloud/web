@@ -1,22 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Top Bar component Displays applications menu 1`] = `
-<header aria-label="Top bar" class="oc-topbar uk-flex uk-flex-middle uk-flex-wrap oc-border-b oc-p-s">
-  <oc-grid-stub gutter="medium" flex="">
-    <div class="uk-hidden@l">
-      <oc-button-stub appearance="raw" aria-label="Open navigation menu" class="oc-m-s oc-app-navigation-toggle">
-        <oc-icon-stub name="menu"></oc-icon-stub>
-      </oc-button-stub>
-    </div>
-  </oc-grid-stub>
+<header id="oc-topbar" aria-label="Top bar" class="uk-flex uk-flex-middle uk-flex-between oc-mx-m">
+  <div class="gap-15 uk-flex uk-flex-middle uk-flex-between">
+    <applications-menu-stub applicationslist="testApp" class="application-menu"></applications-menu-stub>
+    <router-link-stub to="/" class="oc-ml-m">
+      <oc-img-stub src=""></oc-img-stub>
+    </router-link-stub>
+  </div>
   <div class="portal-wrapper">
     <portal-target-stub name="app.runtime.header" multiple=""></portal-target-stub>
   </div>
-  <oc-grid-stub flex="" gutter="small" class="uk-width-expand uk-flex-right oc-m-rm">
+  <div class="gap-15 uk-flex uk-flex-middle uk-flex-between">
     <feedback-link-stub></feedback-link-stub>
     <!---->
-    <applications-menu-stub applicationslist="testApp"></applications-menu-stub>
     <user-menu-stub userid="einstein" userdisplayname="Albert Einstein" applicationslist="testApp"></user-menu-stub>
-  </oc-grid-stub>
+  </div>
 </header>
 `;

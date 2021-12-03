@@ -3,9 +3,9 @@
     <oc-button
       id="_userMenuButton"
       ref="menuButton"
-      class="oc-topbar-personal uk-height-1-1 oc-pr-xs"
+      class="oc-topbar-personal uk-height-1-1 oc-pr-xs oc-mr-m"
       appearance="raw"
-      variation="passive"
+      variation="inverse"
       :aria-label="$gettext('User Menu')"
     >
       <oc-grid flex>

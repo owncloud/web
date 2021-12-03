@@ -5,10 +5,11 @@
       ref="menubutton"
       v-oc-tooltip="applicationSwitcherLabel"
       appearance="raw"
+      variation="inverse"
       class="oc-topbar-menu-burger"
       :aria-label="applicationSwitcherLabel"
     >
-      <oc-icon name="apps" class="uk-flex" />
+      <oc-icon name="apps" size="large" class="uk-flex" />
     </oc-button>
     <oc-drop
       ref="menu"
@@ -22,12 +23,28 @@
       padding-size="small"
     >
       <ul class="oc-p-xs">
-        <li v-for="(n, nid) in menuItems" :key="`apps-menu-${nid}`" style="list-style:none" class="oc-pt-s oc-pb-s">
-          <a v-if="n.url" key="apps-menu-external-link" :target="n.target" :href="n.url" style="display: inline-flex; vertical-align: top; gap: 10px">
+        <li
+          v-for="(n, nid) in menuItems"
+          :key="`apps-menu-${nid}`"
+          style="list-style: none"
+          class="oc-pt-s oc-pb-s"
+        >
+          <a
+            v-if="n.url"
+            key="apps-menu-external-link"
+            :target="n.target"
+            :href="n.url"
+            style="display: inline-flex; vertical-align: top; gap: 10px"
+          >
             <oc-icon :name="n.iconMaterial" size="medium" />
             <span v-text="$gettext(n.title)" />
           </a>
-          <router-link v-else key="apps-menu-internal-link" :to="n.path"  style="display: inline-flex; vertical-align: top; gap: 10px">
+          <router-link
+            v-else
+            key="apps-menu-internal-link"
+            :to="n.path"
+            style="display: inline-flex; vertical-align: top; gap: 10px"
+          >
             <oc-icon :name="n.iconMaterial" size="medium" />
             <span v-text="$gettext(n.title)" />
           </router-link>
