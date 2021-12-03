@@ -64,7 +64,11 @@ export class AllFilesPage {
     )
 
     if (newVersion) {
-      await page.click('.oc-modal-body-actions-confirm')
+      const fileName = files.map((file) => path.basename(file.name))
+      await Promise.all([
+        page.waitForResponse((resp) => resp.url().endsWith(fileName[0]) && resp.status() === 204),
+        page.click('.oc-modal-body-actions-confirm')
+      ])
     }
 
     await cta.files.waitForResources({
@@ -245,6 +249,7 @@ export class AllFilesPage {
     await cta.files.sidebar.open({ page: page, resource: resouceName })
     await cta.files.sidebar.openPanel({ page: page, name: 'versions' })
 
+    await page.waitForSelector('//*[@id="oc-file-versions-sidebar"]')
     const elements = await page.$$('//*[@id="oc-file-versions-sidebar"]/table/tbody/tr')
     return elements.length
   }
