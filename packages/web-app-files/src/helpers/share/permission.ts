@@ -39,7 +39,6 @@ export abstract class SharePermissions {
   static readonly share = new SharePermission('share', 16, $gettext('Share'))
 
   static permissionsToBitmask(permissions: SharePermission[]): number {
-    console.log(permissions)
     return permissions.reduce((b: number, p: SharePermission) => b | p.bit, 0)
   }
 

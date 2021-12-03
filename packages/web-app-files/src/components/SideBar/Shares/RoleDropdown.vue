@@ -138,7 +138,7 @@ export default {
       return this.resource.isFolder ? ShareRoles.customFolder : ShareRoles.customFile
     },
     availableRoles() {
-      return ShareRoles.list(this.resource.isFolder)
+      return ShareRoles.listPeopleRoles(this.resource.isFolder)
     },
     availablePermissions() {
       return this.customPermissionsRole.permissions(this.allowSharePermission)
@@ -150,7 +150,7 @@ export default {
       this.selectedRole = this.existingRole
       this.customPermissions = this.existingPermissions
     } else {
-      this.selectedRole = ShareRoles.list(this.resource.isFolder)[0]
+      this.selectedRole = ShareRoles.listPeopleRoles(this.resource.isFolder)[0]
     }
   },
 

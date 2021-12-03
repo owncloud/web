@@ -1,5 +1,4 @@
 import { SharePermission, SharePermissions } from './permission'
-import { RuntimeError } from 'web-runtime/src/container/error'
 
 // dummy to trick gettext string extraction into recognizing strings
 const $gettext = (str) => {
@@ -7,32 +6,39 @@ const $gettext = (str) => {
 }
 
 export class ShareRole {
-  private readonly _key: string
   private readonly _name: string
+  private readonly _folder: boolean
   private readonly _label: string
   private readonly _inlineLabel: string
   private readonly _permissions: SharePermission[]
+  private readonly _description: string
 
   constructor(
-    key: string,
     name: string,
+    folder: boolean,
     label: string,
     inlineLabel: string,
-    permissions: SharePermission[]
+    permissions: SharePermission[],
+    description?: string
   ) {
-    this._key = key
     this._name = name
+    this._folder = folder
     this._label = label
     this._inlineLabel = inlineLabel
     this._permissions = permissions
+    this._description = description
   }
 
   get key(): string {
-    return this._key
+    return `${this._name}-${this._folder ? 'folder' : 'file'}`
   }
 
   get name(): string {
     return this._name
+  }
+
+  get folder(): boolean {
+    return this._folder
   }
 
   get label(): string {
@@ -57,7 +63,10 @@ export class ShareRole {
   }
 
   public description(allowSharing: boolean): string {
-    return roleDescriptions[this.bitmask(allowSharing)]
+    if (this._description) {
+      return this._description
+    }
+    return shareRoleDescriptions[this.bitmask(allowSharing)]
   }
 
   /**
@@ -82,88 +91,64 @@ class CustomShareRole extends ShareRole {
 }
 
 export abstract class ShareRoles {
-  static readonly viewerFile = new ShareRole(
-    'viewerFile',
-    'viewer',
-    $gettext('Viewer'),
-    $gettext('viewer'),
-    [SharePermissions.read, SharePermissions.share]
-  )
-
-  static readonly viewerFolder = new ShareRole(
-    'viewerFolder',
-    'viewer',
-    $gettext('Viewer'),
-    $gettext('viewer'),
-    [SharePermissions.read, SharePermissions.share]
-  )
-
-  static readonly editorFile = new ShareRole(
-    'editorFile',
-    'editor',
-    $gettext('Editor'),
-    $gettext('editor'),
-    [SharePermissions.read, SharePermissions.update, SharePermissions.share]
-  )
-
-  static readonly editorFolder = new ShareRole(
-    'editorFolder',
-    'editor',
-    $gettext('Editor'),
-    $gettext('editor'),
-    [
+  private static readonly peopleRoles = [
+    new ShareRole('viewer', false, $gettext('Viewer'), $gettext('viewer'), [
+      SharePermissions.read,
+      SharePermissions.share
+    ]),
+    new ShareRole('viewer', true, $gettext('Viewer'), $gettext('viewer'), [
+      SharePermissions.read,
+      SharePermissions.share
+    ]),
+    new ShareRole('editor', false, $gettext('Editor'), $gettext('editor'), [
+      SharePermissions.read,
+      SharePermissions.update,
+      SharePermissions.share
+    ]),
+    new ShareRole('editor', true, $gettext('Editor'), $gettext('editor'), [
       SharePermissions.read,
       SharePermissions.update,
       SharePermissions.create,
       SharePermissions.delete,
       SharePermissions.share
-    ]
-  )
+    ]),
+    new CustomShareRole(
+      'custom',
+      false,
+      $gettext('Custom permissions'),
+      $gettext('custom permissions'),
+      [SharePermissions.read, SharePermissions.update, SharePermissions.share]
+    ),
+    new CustomShareRole(
+      'custom',
+      true,
+      $gettext('Custom permissions'),
+      $gettext('custom permissions'),
+      [
+        SharePermissions.read,
+        SharePermissions.update,
+        SharePermissions.create,
+        SharePermissions.delete,
+        SharePermissions.share
+      ]
+    )
+  ]
 
-  static readonly customFile = new CustomShareRole(
-    'customFile',
-    'custom',
-    $gettext('Custom permissions'),
-    $gettext('custom permissions'),
-    [SharePermissions.read, SharePermissions.update, SharePermissions.share]
-  )
+  private static readonly linkRoles = [
+    new ShareRole('viewer', false, $gettext('Viewer'), $gettext('viewer'), [SharePermissions.read]),
 
-  static readonly customFolder = new CustomShareRole(
-    'customFolder',
-    'custom',
-    $gettext('Custom permissions'),
-    $gettext('custom permissions'),
-    [
-      SharePermissions.read,
-      SharePermissions.update,
-      SharePermissions.create,
-      SharePermissions.delete,
-      SharePermissions.share
-    ]
-  )
+  ]
 
-  static list(isFolder: boolean): ShareRole[] {
-    if (isFolder) {
-      return [this.viewerFolder, this.editorFolder, this.customFolder]
-    }
-    return [this.viewerFile, this.editorFile, this.customFile]
+  static listPeopleRoles(isFolder: boolean): ShareRole[] {
+    return this.peopleRoles.filter((r) => r.folder === isFolder)
   }
 
-  static getByName(name: string, isFolder: boolean): ShareRole {
-    const r = this.list(isFolder).find((r) => r.name === name)
-    if (!r) {
-      throw new RuntimeError(`ShareRole ${name} not found`)
-    }
-    return r
+  static customPeopleRole(isFolder: boolean): ShareRole {
+    return this.peopleRoles.find((r) => r.folder === isFolder)
   }
 
-  static getByPermissions(
-    permissions: SharePermission[],
-    isFolder: boolean,
-    allowSharing: boolean
-  ): ShareRole {
-    const bitmask = SharePermissions.permissionsToBitmask(permissions)
-    return this.getByBitmask(bitmask, isFolder, allowSharing)
+  static listLinkRoles(isFolder: boolean): ShareRole[] {
+    return this.linkRoles.filter((r) => r.folder === isFolder)
   }
 
   static getByBitmask(bitmask: number, isFolder: boolean, allowSharing: boolean): ShareRole {
@@ -191,8 +176,8 @@ export abstract class ShareRoles {
 /**
  * Maps relevant permission bitmasks to descriptions
  */
-const roleDescriptions = {
-  [ShareRoles.viewerFile.bitmask(false)]: $gettext('Download and preview'),
+const shareRoleDescriptions = {
+  []: $gettext('Download and preview'),
   [ShareRoles.viewerFile.bitmask(true)]: $gettext('Download, preview and share'),
   [ShareRoles.viewerFolder.bitmask(false)]: $gettext('Download and preview'),
   [ShareRoles.viewerFolder.bitmask(true)]: $gettext('Download, preview and share'),
@@ -203,3 +188,5 @@ const roleDescriptions = {
     'Upload, edit, delete, download, preview and share'
   )
 }
+
+const linkRoleDescriptions = {}

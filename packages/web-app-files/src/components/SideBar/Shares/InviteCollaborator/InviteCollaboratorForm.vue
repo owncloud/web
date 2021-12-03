@@ -124,7 +124,7 @@ export default {
   },
   mounted() {
     this.fetchRecipients = debounce(this.fetchRecipients, 500)
-    this.selectedRole = ShareRoles.list(this.highlightedFile.isFolder)[0]
+    this.selectedRole = ShareRoles.listPeopleRoles(this.highlightedFile.isFolder)[0]
   },
 
   methods: {
