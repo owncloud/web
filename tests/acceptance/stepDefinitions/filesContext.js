@@ -718,6 +718,22 @@ When('the user downloads a previous version of the file using the webUI', functi
   return client.page.FilesPageElement.versionsDialog().downloadFilePreviousVersion()
 })
 
+When(
+  'the user renames file {string} to {string} through context-menu using the webUI',
+  function (fromName, toName) {
+    return client.page.FilesPageElement.filesList().renameFileFromContextMenu(
+      fromName,
+      toName,
+      false
+    )
+  }
+)
+
+Then('file {string} should be listed on the sidebar', async function (file) {
+  await client.page.FilesPageElement.filesList().openSideBar(file)
+  await client.page.FilesPageElement.appSideBar().isSideBarOpenForResource(file)
+})
+
 /**
  *
  * @param {DataTable} entryList the list needs a heading line

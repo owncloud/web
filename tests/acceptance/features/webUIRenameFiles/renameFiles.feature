@@ -266,3 +266,9 @@ Feature: rename files
     And file "new-lorem.txt" should not be listed on the webUI
     And as "Alice" file "lorem.txt" should not exist
     And as "Alice" file "new-lorem.txt" should not exist
+
+
+  Scenario: Rename file extension through context-menu without reload
+    When the user renames file "lorem.txt" to "lorem.md" through context-menu using the webUI
+    Then file "lorem.md" should be listed on the webUI
+    And file "lorem.md" should be listed on the sidebar
