@@ -51,6 +51,7 @@
               mode="click"
               close-on-click
               :options="{ delayHide: 0 }"
+              padding-size="small"
             >
               <ul class="uk-list">
                 <li>

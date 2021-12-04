@@ -26,6 +26,7 @@
       close-on-click
       :options="{ pos: 'bottom-right', delayHide: 0 }"
       class="uk-width-auto"
+      padding-size="small"
     >
       <ul class="uk-list">
         <li class="uk-text-nowrap">

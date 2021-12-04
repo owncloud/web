@@ -12,8 +12,7 @@
           :key="`section-${section.name}-action-${actionIndex}`"
           :action="action"
           :items="items"
-          class="oc-files-context-action"
-          :class="getActionClasses(section, actionIndex)"
+          class="oc-files-context-action oc-py-xs oc-px-s"
         />
       </oc-list>
     </template>
@@ -164,16 +163,17 @@ export default {
   },
   methods: {
     getSectionClasses(index) {
+      const classes = []
+      if (index === 0) {
+        classes.push('oc-mt-s')
+      }
       if (index < this.menuSections.length - 1) {
-        return ['oc-files-context-actions-border', 'oc-pb-s', 'oc-mb-s']
+        classes.push('oc-files-context-actions-border', 'oc-pb-s', 'oc-mb-s')
       }
-      return []
-    },
-    getActionClasses(section, index) {
-      if (index < section.items.length - 1) {
-        return ['oc-pb-s']
+      if (index === this.menuSections.length - 1) {
+        classes.push('oc-mb-s')
       }
-      return []
+      return classes
     }
   }
 }

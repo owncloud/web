@@ -21,6 +21,7 @@
       toggle="#files-collaborators-role-button"
       mode="click"
       close-on-click
+      padding-size="remove"
     >
       <template #special>
         <oc-list class="files-recipient-role-drop-list" :aria-label="rolesListAriaLabel">
@@ -48,6 +49,7 @@
       class="files-recipient-custom-permissions-drop uk-width-auto"
       mode="manual"
       target="#files-collaborators-role-button"
+      padding-size="small"
     >
       <template #special>
         <translate tag="h4" class="files-recipient-custom-permissions-drop-title"
