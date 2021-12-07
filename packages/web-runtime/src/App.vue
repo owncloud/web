@@ -64,7 +64,7 @@
                   :collapsed="navigation.closed"
                   :id="`nav-item-${index}`"
                 >
-                  <span v-if="!navigation.closed" class="text">{{ link.name }}</span>
+                  <span :class="{ 'text': true, 'text-invisible': navigation.closed }">{{ link.name }}</span>
                   <span v-if="index === 0" class="active-blob" id="nav-item-blob"></span>
                 </oc-sidebar-nav-item>
               </oc-list>
@@ -497,11 +497,19 @@ body,
 }
 
 #web-nav-sidebar {
+  transition: all 0.35s cubic-bezier(.34,.11,0,1.12);
   .oc-icon {
     z-index: 2;
   }
   .text {
     z-index: 2;
+    opacity: 1;
+    transition: all 0.35s ease-out;
+  }
+  .text-invisible {
+    opacity: 0 !important;
+    transition: 0s;
+    margin-left: var(--oc-space-medium) !important;
   }
   .active-blob {
     position: absolute;
@@ -544,7 +552,7 @@ body,
 }
 
 .oc-app-navigation-collapsed {
-  width: auto !important;
+  width: 75px !important;
 }
 
 .oc-app-navigation {
