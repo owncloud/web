@@ -1,6 +1,7 @@
-import { isPublicFilesRoute, isTrashbinRoute } from '../../helpers/route'
+import { isPublicFilesRoute, isSharedWithMeRoute, isTrashbinRoute } from '../../helpers/route'
 import { mapState } from 'vuex'
 import { isSameResource } from '../../helpers/resource'
+import { shareStatus } from '../../helpers/shareStatus'
 
 export default {
   computed: {
@@ -24,7 +25,15 @@ export default {
               return false
             }
 
-            return resources[0].isFolder
+            if (!resources[0].isFolder) {
+              return false
+            }
+
+            if (isSharedWithMeRoute(this.$route) && resources[0].status !== shareStatus.accepted) {
+              return false
+            }
+
+            return true
           },
           canBeDefault: true,
           componentType: 'router-link',
