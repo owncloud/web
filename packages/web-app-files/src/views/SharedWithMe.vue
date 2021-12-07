@@ -46,7 +46,10 @@
             </div>
           </template>
           <template #contextMenu="{ resource }">
-            <context-actions v-if="isResourceInSelection(resource)" :item="resource" />
+            <context-actions
+              v-if="isResourceInPendingSelection(resource)"
+              :items="pendingSelected"
+            />
           </template>
           <template v-if="pendingHasMore" #footer>
             <div class="uk-width-1-1 uk-text-center oc-mt">
@@ -132,7 +135,7 @@
           </div>
         </template>
         <template #contextMenu="{ resource }">
-          <context-actions v-if="isResourceInSelection(resource)" :items="selected" />
+          <context-actions v-if="isResourceInSharesSelection(resource)" :items="sharesSelected" />
         </template>
         <template #footer>
           <list-info
@@ -372,8 +375,12 @@ export default {
       this.showMorePending = !this.showMorePending
     },
 
-    isResourceInSelection(resource) {
-      return this.selected?.includes(resource)
+    isResourceInPendingSelection(resource) {
+      return this.pendingSelected?.includes(resource)
+    },
+
+    isResourceInSharesSelection(resource) {
+      return this.sharesSelected?.includes(resource)
     }
   }
 }
