@@ -1281,7 +1281,6 @@ def acceptance(ctx):
                         steps += skipIfUnchanged(ctx, "acceptance-tests")
 
                         steps += restoreBuildArtifactCache(ctx, "yarn", ".yarn")
-                        steps += restoreBuildArtifactCache(ctx, "playwright", ".playwright")
                         steps += restoreBuildArtifactCache(ctx, "tests-yarn", "tests/acceptance/.yarn")
                         steps += yarnInstallTests()
 
