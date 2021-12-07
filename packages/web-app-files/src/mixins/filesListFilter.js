@@ -1,5 +1,5 @@
 import { Registry } from '../services'
-import { mapMutations, mapGetters } from 'vuex'
+import { mapMutations } from 'vuex'
 
 export default {
   mounted() {
@@ -39,27 +39,9 @@ export default {
         this.CLEAR_FILES_SEARCHED()
       },
       immediate: true
-    },
-    pages() {
-      if (!this.$route.query.page) {
-        return
-      }
-
-      if (this.$route.query.page <= this.pages) {
-        return
-      }
-
-      this.$router.push({
-        name: this.$route.name,
-        query: { ...this.$route.query, page: this.pages },
-        params: this.$route.params
-      })
     }
   },
   methods: {
     ...mapMutations('Files', ['CLEAR_FILES_SEARCHED', 'LOAD_FILES_SEARCHED'])
-  },
-  computed: {
-    ...mapGetters('Files/pagination', ['pages'])
   }
 }

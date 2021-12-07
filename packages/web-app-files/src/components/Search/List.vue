@@ -1,6 +1,6 @@
 <template>
   <div class="files-search-result">
-    <no-content-message v-if="!activeFilesCurrentPage.length" class="files-empty" icon="folder">
+    <no-content-message v-if="!paginatedResources.length" class="files-empty" icon="folder">
       <template #message>
         <p class="oc-text-muted">
           <span v-if="!!$route.query.term" v-translate>No resource found</span>
@@ -12,7 +12,7 @@
       v-else
       class="files-table"
       :class="{ 'files-table-squashed': false }"
-      :resources="activeFilesCurrentPage"
+      :resources="paginatedResources"
       :target-route="{ name: 'files-personal' }"
       :are-paths-displayed="true"
       :are-thumbnails-displayed="displayThumbnails"
@@ -22,9 +22,9 @@
       @rowMounted="rowMounted"
     >
       <template #footer>
-        <pagination />
+        <pagination :pages="paginationPages" :current-page="paginationPage" />
         <list-info
-          v-if="activeFilesCurrentPage.length > 0"
+          v-if="paginatedResources.length > 0"
           class="uk-width-1-1 oc-my-s"
           :files="totalFilesCount.files"
           :folders="totalFilesCount.folders"
@@ -36,28 +36,24 @@
 </template>
 
 <script>
+import { useStore, useRouteQuery, usePagination, useDefaults } from '../../composables'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageType, ImageDimension } from '../../constants'
 import NoContentMessage from '../FilesList/NoContentMessage.vue'
-import Pagination from '../../components/FilesList/Pagination.vue'
 import debounce from 'lodash-es/debounce'
 import { mapMutations, mapGetters, mapActions } from 'vuex'
+import { computed } from '@vue/composition-api'
 import ListInfo from '../FilesList/ListInfo.vue'
+import Pagination from '../FilesList/Pagination.vue'
 import MixinFileActions from '../../mixins/fileActions'
 import MixinFilesListFilter from '../../mixins/filesListFilter'
 import MixinFilesListScrolling from '../../mixins/filesListScrolling'
-import MixinFilesListPagination from '../../mixins/filesListPagination'
 
 const visibilityObserver = new VisibilityObserver()
 
 export default {
-  components: { ListInfo, NoContentMessage, Pagination },
-  mixins: [
-    MixinFileActions,
-    MixinFilesListFilter,
-    MixinFilesListScrolling,
-    MixinFilesListPagination
-  ],
+  components: { ListInfo, Pagination, NoContentMessage },
+  mixins: [MixinFileActions, MixinFilesListFilter, MixinFilesListScrolling],
   props: {
     searchResults: {
       type: Array,
@@ -66,18 +62,32 @@ export default {
       }
     }
   },
+  setup() {
+    const store = useStore()
+    const { pagination: paginationDefaults } = useDefaults()
+    const paginationPageQuery = useRouteQuery('page', '1')
+    const paginationPage = computed(() => parseInt(String(paginationPageQuery.value)))
+    const paginationPerPageQuery = useRouteQuery('items-per-page', paginationDefaults.perPage.value)
+    const { items: paginatedResources, total: paginationPages } = usePagination({
+      page: paginationPage,
+      perPage: computed(() => parseInt(String(paginationPerPageQuery.value))),
+      items: computed(() => store.getters['Files/activeFiles'])
+    })
+
+    return {
+      paginatedResources,
+      paginationPages,
+      paginationPage
+    }
+  },
   computed: {
     ...mapGetters(['configuration']),
-    ...mapGetters('Files', ['activeFilesCurrentPage', 'totalFilesCount', 'totalFilesSize']),
+    ...mapGetters('Files', ['totalFilesCount', 'totalFilesSize']),
     displayThumbnails() {
       return !this.configuration.options.disablePreviews
     }
   },
   watch: {
-    $route: {
-      handler: '$_filesListPagination_updateCurrentPage',
-      immediate: true
-    },
     searchResults: {
       handler: function () {
         this.CLEAR_CURRENT_FILES_LIST()

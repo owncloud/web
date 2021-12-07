@@ -2,7 +2,7 @@
   <div class="file_info">
     <oc-icon :name="file.icon" size="large" class="file_info__icon" />
     <div class="file_info__body oc-text-overflow">
-      <h3 tabindex="-1">
+      <h3 data-testid="files-info-name">
         <oc-resource-name
           :name="file.name"
           :extension="file.extension"
@@ -13,7 +13,13 @@
       </h3>
       <p class="oc-my-rm">
         <template v-if="file.size > -1">{{ getResourceSize(file.size) }},</template>
-        {{ modificationTime }}
+        <span
+          v-oc-tooltip="modificationTime"
+          data-testid="files-info-mdate"
+          tabindex="0"
+          :aria-label="modificationTimeRelative + ' (' + modificationTime + ')'"
+          >{{ modificationTimeRelative }}</span
+        >
       </p>
     </div>
     <oc-button
@@ -52,10 +58,17 @@ export default {
     ...mapGetters(['capabilities']),
     modificationTime() {
       if (this.isTrashbinRoute) {
-        return this.formDateFromNow(this.file.ddate, 'RFC')
+        return this.formDateFromRFC(this.file.ddate)
       }
 
-      return this.formDateFromNow(this.file.mdate, 'Http')
+      return this.formDateFromHTTP(this.file.mdate)
+    },
+    modificationTimeRelative() {
+      if (this.isTrashbinRoute) {
+        return this.formRelativeDateFromRFC(this.file.ddate)
+      }
+
+      return this.formRelativeDateFromHTTP(this.file.mdate)
     },
     isFavoritesEnabled() {
       return (

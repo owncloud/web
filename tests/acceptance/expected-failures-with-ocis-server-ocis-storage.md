@@ -209,6 +209,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIFilesCopy/copy.feature:98](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesCopy/copy.feature#L98)
 -   [webUIMoveFilesFolders/moveFiles.feature:97](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIMoveFilesFolders/moveFiles.feature#L97)
 -   [webUIMoveFilesFolders/moveFolders.feature:72](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIMoveFilesFolders/moveFolders.feature#L72)
+-   [webUIFilesActionMenu/versions.feature:90](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesActionMenu/versions.feature#L90)
 
 ### [Accepting different shares with same filename from different users overwrites one file](https://github.com/owncloud/ocis/issues/713)
 -   [webUISharingAcceptShares/acceptShares.feature:212](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L212)

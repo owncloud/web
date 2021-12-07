@@ -1,4 +1,4 @@
-import { DataTable, Given, When } from '@cucumber/cucumber'
+import { DataTable, Given, Then, When } from '@cucumber/cucumber'
 import { FilesPage, World, config } from '../../support'
 import { expect } from '@playwright/test'
 
@@ -23,7 +23,7 @@ When(
 )
 
 When(
-  '{string} creates following folder(s)',
+  '{string} creates the following folder(s)',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const actor = this.actorContinent.get({ id: stepUser })
     const { allFiles: allFilesPage } = new FilesPage({ actor })
@@ -36,7 +36,7 @@ When(
 )
 
 When(
-  '{string} uploads following resource(s)',
+  '{string} uploads the following resource(s)',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const actor = this.actorContinent.get({ id: stepUser })
     const { allFiles: allFilesPage } = new FilesPage({ actor })
@@ -62,8 +62,14 @@ When(
 )
 
 When(
-  '{string} shares following resource(s)',
-  async function (this: World, stepUser: string, stepTable: DataTable) {
+  /^"([^"]*)" shares the following (resource|resources) via the (sidebar panel|quick action)$/,
+  async function (
+    this: World,
+    stepUser: string,
+    _: string,
+    actionType: string,
+    stepTable: DataTable
+  ) {
     const actor = this.actorContinent.get({ id: stepUser })
     const { allFiles: allFilesPage } = new FilesPage({ actor })
 
@@ -81,17 +87,18 @@ When(
     }, {})
 
     for (const folder of Object.keys(shareInfo)) {
-      await allFilesPage.shareFolder({
+      await allFilesPage.shareResouce({
         folder,
         users: shareInfo[folder].users,
-        role: shareInfo[folder].role
+        role: shareInfo[folder].role,
+        via: actionType === 'quick action' ? 'QUICK_ACTION' : 'SIDEBAR_PANEL'
       })
     }
   }
 )
 
 Given(
-  '{string} downloads following files',
+  '{string} downloads the following file(s)',
   async function (this: World, stepUser: string, stepTable: DataTable) {
     const actor = this.actorContinent.get({ id: stepUser })
     const { allFiles: allFilesPage } = new FilesPage({ actor })
@@ -123,14 +130,9 @@ Given(
 )
 
 When(
-  '{string} accepts following resource(s)',
+  '{string} accepts the following resource(s)',
   async function (this: World, stepUser: string, stepTable: DataTable) {
     // Todo: implement explicit step definition for *.navigate()
-
-    if (!config.ocis) {
-      // Todo: add switch info in case of oc10 autoAccept shares
-      return
-    }
 
     const actor = this.actorContinent.get({ id: stepUser })
     const { sharedWithMe: sharedWithMePage } = new FilesPage({ actor })
@@ -138,27 +140,27 @@ When(
     await sharedWithMePage.navigate()
 
     for (const share of shares) {
-      await sharedWithMePage.acceptShares({ name: share })
+      await sharedWithMePage.acceptShare({ name: share })
     }
   }
 )
 
 When(
-  '{string} renames following resource(s)',
+  '{string} renames the following resource(s)',
   async function (this: World, stepUser: string, stepTable: DataTable) {
     const actor = this.actorContinent.get({ id: stepUser })
     const { allFiles: allFilesPage } = new FilesPage({ actor })
 
     await allFilesPage.navigate()
 
-    for (const { resource, newName } of stepTable.hashes()) {
-      await allFilesPage.renameResource({ resource, newName })
+    for (const { resource, as } of stepTable.hashes()) {
+      await allFilesPage.renameResource({ resource, newName: as })
     }
   }
 )
 
 When(
-  /^"([^"]*)" (copies|moves) following (resource|resources)$/,
+  /^"([^"]*)" (copies|moves) the following (resource|resources)$/,
   async function (
     this: World,
     stepUser: string,
@@ -169,12 +171,157 @@ When(
     const actor = this.actorContinent.get({ id: stepUser })
     const { allFiles: allFilesPage } = new FilesPage({ actor })
 
+    await allFilesPage.navigate()
+
     for (const { resource, to } of stepTable.hashes()) {
       await allFilesPage.moveOrCopyResource({
         resource,
         newLocation: to,
         action: actionType === 'copies' ? 'copy' : 'move'
       })
+    }
+  }
+)
+
+When(
+  '{string} creates new version(s) of the following file(s)',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const actor = this.actorContinent.get({ id: stepUser })
+    const { allFiles: allFilesPage } = new FilesPage({ actor })
+    const uploadInfo = stepTable.hashes().reduce((acc, stepRow) => {
+      const { to, resource } = stepRow
+
+      if (!acc[to]) {
+        acc[to] = []
+      }
+
+      acc[to].push(this.fileContinent.get({ name: resource }))
+
+      return acc
+    }, {})
+
+    for (const folder of Object.keys(uploadInfo)) {
+      await allFilesPage.uploadFiles({ folder, files: uploadInfo[folder], newVersion: true })
+    }
+  }
+)
+
+When(
+  '{string} declines the following resource share(s)',
+  async function (this: World, stepUser: string, stepTable: DataTable) {
+    const actor = this.actorContinent.get({ id: stepUser })
+    const { sharedWithMe: sharedWithMePage } = new FilesPage({ actor })
+    const shares = stepTable.raw().map((f) => f[0])
+
+    for (const share of shares) {
+      await sharedWithMePage.declineShare({ name: share })
+    }
+  }
+)
+
+Then(
+  /^"([^"]*)" ensures that the following (resource|resources) (exist|does not exist)$/,
+  async function (
+    this: World,
+    stepUser: string,
+    _: string,
+    actionType: string,
+    stepTable: DataTable
+  ) {
+    const actor = this.actorContinent.get({ id: stepUser })
+    const { allFiles: allFilesPage } = new FilesPage({ actor })
+    const resources = stepTable.raw().map((f) => f[0])
+
+    await allFilesPage.navigate()
+
+    for (const resource of resources) {
+      const resourceExist = await allFilesPage.resourceExist({ name: resource })
+
+      if (actionType === 'exist' && !resourceExist) {
+        throw new Error(`resource wasn't found: "${resource}"`)
+      } else if (actionType === 'does not exist' && resourceExist) {
+        throw new Error(`resource was found: "${resource}"`)
+      }
+
+      await allFilesPage.navigate()
+    }
+  }
+)
+
+Then(
+  '{string} ensures that the resource {string} has {int} version(s)',
+  async function (this: World, stepUser: string, resource: string, countOfVersion: number) {
+    const actor = this.actorContinent.get({ id: stepUser })
+    const { allFiles: allFilesPage } = new FilesPage({ actor })
+
+    // skipped in Oc10, since the version number in Oc10 is no more than 1
+    if (config.ocis) {
+      await expect(await allFilesPage.numberOfVersions({ resource })).toEqual(countOfVersion)
+    }
+    await allFilesPage.navigate()
+  }
+)
+
+When(
+  '{string} deletes the following resource(s)',
+  async function (this: World, stepUser: string, stepTable: DataTable) {
+    const actor = this.actorContinent.get({ id: stepUser })
+    const { allFiles: allFilesPage } = new FilesPage({ actor })
+    const resources = stepTable.raw().map((f) => f[0])
+
+    for (const resource of resources) {
+      await allFilesPage.deleteResource({ resource })
+    }
+  }
+)
+
+When(
+  '{string} changes the shared resource recipient role for the following resource(s)',
+  async function (this: World, stepUser: string, stepTable: DataTable) {
+    const actor = this.actorContinent.get({ id: stepUser })
+    const { allFiles: allFilesPage } = new FilesPage({ actor })
+
+    const shareInfo = stepTable.hashes().reduce((acc, stepRow) => {
+      const { user, resource, role } = stepRow
+
+      if (!acc[resource]) {
+        acc[resource] = { users: [], role: '' }
+      }
+
+      acc[resource].users.push(this.userContinent.get({ id: user }))
+      acc[resource].role = role
+
+      return acc
+    }, {})
+
+    for (const folder of Object.keys(shareInfo)) {
+      await allFilesPage.changeShareRole({
+        folder,
+        users: shareInfo[folder].users,
+        role: shareInfo[folder].role
+      })
+    }
+  }
+)
+
+When(
+  '{string} removes following collaborator(s) from the share(s)',
+  async function (this: World, stepUser: string, stepTable: DataTable) {
+    const actor = this.actorContinent.get({ id: stepUser })
+    const { allFiles: allFilesPage } = new FilesPage({ actor })
+
+    const shareInfo = stepTable.hashes().reduce((acc, stepRow) => {
+      const { user, resource } = stepRow
+
+      acc[resource] = []
+
+      acc[resource].push(this.userContinent.get({ id: user }))
+
+      return acc
+    }, {})
+
+    for (const folder of Object.keys(shareInfo)) {
+      await allFilesPage.deleteShare({ folder, users: shareInfo[folder] })
     }
   }
 )

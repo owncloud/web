@@ -61,34 +61,17 @@ const cases = [
 
 describe('User can navigate in files list using pagination', () => {
   beforeEach(() => {
-    store = merge(
-      {},
-      Store,
-      {
-        modules: {
-          user: {
-            state: {
-              id: 'alice'
-            }
-          },
-          Files: StoreFiles
-        }
-      },
-      {
-        modules: {
-          Files: {
-            modules: {
-              pagination: {
-                state: () => ({
-                  currentPage: 1,
-                  itemsPerPage: 2
-                })
-              }
-            }
+    window.localStorage.setItem('oc_filesPageLimit', '2')
+    store = merge({}, Store, {
+      modules: {
+        user: {
+          state: {
+            id: 'alice'
           }
-        }
+        },
+        Files: StoreFiles
       }
-    )
+    })
 
     const appBar = document.createElement('div')
     const breadcrumbs = document.createElement('div')

@@ -25,14 +25,6 @@ export default {
 
     return files
   },
-  activeFilesCurrentPage: (state, getters, rootState) => {
-    const { itemsPerPage, currentPage } = rootState.Files.pagination
-    if (itemsPerPage > 0) {
-      const firstElementIndex = (currentPage - 1) * itemsPerPage
-      return getters.activeFiles.slice(firstElementIndex, firstElementIndex + itemsPerPage)
-    }
-    return getters.activeFiles
-  },
   totalFilesSize: (state, getters) => {
     return getters.filesAll.map((file) => parseInt(file.size)).reduce((x, y) => x + y, 0)
   },

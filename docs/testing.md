@@ -60,8 +60,14 @@ $ yarn build:w
 
 Using compose, you can start the required Docker containers by running
 
+For running the test with oc10 run
 ```shell
-$ docker compose up oc10 ocis vnc selenium
+$ docker compose up oc10 vnc selenium middleware-oc10
+```
+
+For running the test with ocis run
+```shell
+$ docker compose up ocis vnc selenium middleware-ocis
 ```
 
 and make sure there are no conflicting ports and everything runs smoothly. You can check if everything has worked by opening [https://host.docker.internal:9200](https://host.docker.internal:9200) (oCIS) and [http://host.docker.internal:8080](http://host.docker.internal:8080) (OC10) and logging in using the demo user (admin/admin).

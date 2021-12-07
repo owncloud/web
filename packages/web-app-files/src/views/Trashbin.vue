@@ -20,7 +20,7 @@
         :class="{ 'files-table-squashed': !sidebarClosed }"
         :are-paths-displayed="true"
         :are-thumbnails-displayed="false"
-        :resources="activeFilesCurrentPage"
+        :resources="paginatedResources"
         :are-resources-clickable="false"
         :header-position="fileListHeaderY"
       >
@@ -28,9 +28,9 @@
           <context-actions v-if="isResourceInSelection(resource)" :items="selected" />
         </template>
         <template #footer>
-          <pagination />
+          <pagination :pages="paginationPages" :current-page="paginationPage" />
           <list-info
-            v-if="activeFilesCurrentPage.length > 0"
+            v-if="paginatedResources.length > 0"
             class="uk-width-1-1 oc-my-s"
             :files="totalFilesCount.files"
             :folders="totalFilesCount.folders"
@@ -43,13 +43,19 @@
 
 <script>
 import { mapGetters, mapMutations, mapState } from 'vuex'
+import { computed } from '@vue/composition-api'
 
 import { buildDeletedResource, buildResource } from '../helpers/resources'
 import MixinFilesListFilter from '../mixins/filesListFilter'
 import MixinResources from '../mixins/resources'
-import MixinFilesListPagination from '../mixins/filesListPagination'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
-import { useFileListHeaderPosition } from '../composables'
+import {
+  useFileListHeaderPosition,
+  useStore,
+  useRouteQuery,
+  usePagination,
+  useDefaults
+} from '../composables'
 import { useTask } from 'vue-concurrency'
 
 import ListLoader from '../components/FilesList/ListLoader.vue'
@@ -62,11 +68,21 @@ import { DavProperties } from 'web-pkg/src/constants'
 export default {
   components: { ListLoader, NoContentMessage, ListInfo, Pagination, ContextActions },
 
-  mixins: [MixinResources, MixinFilesListPagination, MixinMountSideBar, MixinFilesListFilter],
+  mixins: [MixinResources, MixinMountSideBar, MixinFilesListFilter],
 
   setup() {
+    const store = useStore()
+    const { pagination: paginationDefaults } = useDefaults()
     const { refresh: refreshFileListHeaderPosition, y: fileListHeaderY } =
       useFileListHeaderPosition()
+    const paginationPageQuery = useRouteQuery('page', '1')
+    const paginationPage = computed(() => parseInt(String(paginationPageQuery.value)))
+    const paginationPerPageQuery = useRouteQuery('items-per-page', paginationDefaults.perPage.value)
+    const { items: paginatedResources, total: paginationPages } = usePagination({
+      page: paginationPage,
+      perPage: computed(() => parseInt(String(paginationPerPageQuery.value))),
+      items: computed(() => store.getters['Files/activeFiles'])
+    })
 
     const loadResourcesTask = useTask(function* (signal, ref) {
       ref.CLEAR_CURRENT_FILES_LIST()
@@ -80,17 +96,18 @@ export default {
       refreshFileListHeaderPosition()
     })
 
-    return { fileListHeaderY, loadResourcesTask }
+    return {
+      fileListHeaderY,
+      loadResourcesTask,
+      paginatedResources,
+      paginationPages,
+      paginationPage
+    }
   },
 
   computed: {
     ...mapState('Files', ['files']),
-    ...mapGetters('Files', [
-      'highlightedFile',
-      'activeFilesCurrentPage',
-      'selectedFiles',
-      'totalFilesCount'
-    ]),
+    ...mapGetters('Files', ['highlightedFile', 'selectedFiles', 'totalFilesCount']),
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
     selected: {
@@ -103,14 +120,7 @@ export default {
     },
 
     isEmpty() {
-      return this.activeFilesCurrentPage.length < 1
-    }
-  },
-
-  watch: {
-    $route: {
-      handler: '$_filesListPagination_updateCurrentPage',
-      immediate: true
+      return this.paginatedResources.length < 1
     }
   },
 

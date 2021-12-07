@@ -36,3 +36,18 @@ export const setShareFolder = async ({
 }): Promise<void> => {
   await occ(user, `config:system:set share_folder --value=${value}`)
 }
+
+export const disableShareAutoAccept = async ({
+  action,
+  user
+}: {
+  action: 'disable' | 'enable'
+  user: User
+}): Promise<void> => {
+  await occ(
+    user,
+    `config:app:set core shareapi_auto_accept_share --value=${
+      { disable: 'no', enable: 'yes' }[action]
+    }`
+  )
+}

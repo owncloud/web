@@ -1,0 +1,13 @@
+Enhancement: Update ODS to v11.3.1
+
+We updated the ownCloud Design System to version 11.3.1. Please refer to the full changelog in the ODS release (linked) for more details. Summary:
+
+- Bugfix - Set language for date formatting: https://github.com/owncloud/owncloud-design-system/pull/1806
+- Enhancement - Relative date tooltips in the OcTableFiles component: https://github.com/owncloud/owncloud-design-system/pull/1787
+- Enhancement - Breadcrumb contextmenu: https://github.com/owncloud/web/issues/6030
+- Enhancement - Optional padding size for OcDrop: https://github.com/owncloud/owncloud-design-system/pull/1798
+- Enhancement - Truncate file names while preserving file extensions: https://github.com/owncloud/owncloud-design-system/issues/1758
+
+https://github.com/owncloud/web/pull/6090
+https://github.com/owncloud/owncloud-design-system/releases/tag/v11.3.0
+https://github.com/owncloud/owncloud-design-system/releases/tag/v11.3.1

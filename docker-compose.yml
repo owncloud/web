@@ -64,6 +64,38 @@ services:
     environment:
       VNC_NO_PASSWORD: "true"
 
+  middleware-oc10:
+    image: owncloud/owncloud-test-middleware:latest
+    hostname: middleware
+    extra_hosts:
+      - host.docker.internal:${DOCKER_HOST:-host-gateway}
+    ports:
+      - "3001:3001"
+    volumes:
+      - /var/tmp/ocis:/var/tmp/ocis
+      - ./tests/acceptance/filesForUpload:/usr/src/app/filesForUpload
+    environment:
+      MIDDLEWARE_PORT: 3001
+      MIDDLEWARE_HOST: "0.0.0.0"
+      RUN_ON_OCIS: 'false'
+      BACKEND_HOST: "http://host.docker.internal:8080"
+
+  middleware-ocis:
+    image: owncloud/owncloud-test-middleware:latest
+    hostname: middleware
+    extra_hosts:
+      - host.docker.internal:${DOCKER_HOST:-host-gateway}
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./tests/acceptance/filesForUpload:/usr/src/app/filesForUpload
+    environment:
+      MIDDLEWARE_PORT: 3000
+      MIDDLEWARE_HOST: "0.0.0.0"
+      RUN_ON_OCIS: 'true'
+      NODE_TLS_REJECT_UNAUTHORIZED: '0'
+      BACKEND_HOST: "https://host.docker.internal:9200"
+
   vnc:
     build:
       dockerfile: vnc.Dockerfile

@@ -11,6 +11,8 @@ Summary
 * Bugfix - Pagination: [#6056](https://github.com/owncloud/web/pull/6056)
 * Enhancement - Implement breadcrumb context menu: [#6044](https://github.com/owncloud/web/pull/6044)
 * Enhancement - Contextmenu for multiple files: [#5973](https://github.com/owncloud/web/pull/5973)
+* Enhancement - Add tooltips to relative dates: [#6037](https://github.com/owncloud/web/pull/6037)
+* Enhancement - Update ODS to v11.3.1: [#6090](https://github.com/owncloud/web/pull/6090)
 
 Details
 -------
@@ -36,6 +38,32 @@ Details
    https://github.com/owncloud/web/issues/5968
    https://github.com/owncloud/web/issues/5977
    https://github.com/owncloud/web/pull/5973
+
+* Enhancement - Add tooltips to relative dates: [#6037](https://github.com/owncloud/web/pull/6037)
+
+   Relative dates like "1 day ago" now have a tooltip that shows the absolute date.
+
+   https://github.com/owncloud/web/issues/5672
+   https://github.com/owncloud/web/pull/6037
+
+* Enhancement - Update ODS to v11.3.1: [#6090](https://github.com/owncloud/web/pull/6090)
+
+   We updated the ownCloud Design System to version 11.3.1. Please refer to the full changelog in
+   the ODS release (linked) for more details. Summary:
+
+   - Bugfix - Set language for date formatting:
+   https://github.com/owncloud/owncloud-design-system/pull/1806 - Enhancement -
+   Relative date tooltips in the OcTableFiles component:
+   https://github.com/owncloud/owncloud-design-system/pull/1787 - Enhancement -
+   Breadcrumb contextmenu: https://github.com/owncloud/web/issues/6030 - Enhancement -
+   Optional padding size for OcDrop:
+   https://github.com/owncloud/owncloud-design-system/pull/1798 - Enhancement -
+   Truncate file names while preserving file extensions:
+   https://github.com/owncloud/owncloud-design-system/issues/1758
+
+   https://github.com/owncloud/web/pull/6090
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v11.3.0
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v11.3.1
 
 Changelog for ownCloud Web [4.5.0] (2021-11-16)
 =======================================

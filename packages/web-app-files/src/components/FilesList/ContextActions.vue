@@ -163,10 +163,17 @@ export default {
   },
   methods: {
     getSectionClasses(index) {
-      if (index < this.menuSections.length - 1) {
-        return ['oc-files-context-actions-border', 'oc-pb-s', 'oc-mb-s']
+      const classes = []
+      if (index === 0) {
+        classes.push('oc-mt-s')
       }
-      return []
+      if (index < this.menuSections.length - 1) {
+        classes.push('oc-files-context-actions-border', 'oc-pb-s', 'oc-mb-s')
+      }
+      if (index === this.menuSections.length - 1) {
+        classes.push('oc-mb-s')
+      }
+      return classes
     }
   }
 }

@@ -12,7 +12,7 @@
             class="oc-text-muted uk-text-nowrap"
             data-testid="file-versions-file-last-modified-date"
           >
-            {{ formDateFromNow(item.fileInfo[DavProperty.LastModifiedDate], 'Http') }}
+            {{ formRelativeDateFromHTTP(item.fileInfo[DavProperty.LastModifiedDate]) }}
           </oc-td>
           <oc-td
             width="expand"

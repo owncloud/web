@@ -98,8 +98,26 @@ module.exports = {
      */
     isExpiryDateDisabled: async function (pastDate) {
       let disabled = false
-
       const yearSelector = this.getSelectorExpiryDateYear(pastDate)
+      const month = pastDate.toLocaleString('default', { month: 'long' })
+      const monthSelector = this.getSelectorExpiryDateMonth(pastDate)
+      const daySelector = this.getSelectorExpiryDateDay(pastDate)
+
+      if (month === 'December') {
+        await this.waitForElementVisible(daySelector).getAttribute(
+          daySelector,
+          'class',
+          (result) => {
+            if (result.value.includes('is-disabled') === true) {
+              disabled = true
+            }
+          }
+        )
+        if (disabled) {
+          return disabled
+        } else return false
+      }
+
       await this.waitForElementVisible('@datepickerTitle')
         .click('@datepickerTitle')
         .waitForElementVisible('@datepickerMonthAndYearTitle', 500)
@@ -115,7 +133,6 @@ module.exports = {
         return disabled
       }
 
-      const monthSelector = this.getSelectorExpiryDateMonth(pastDate)
       await this.waitForElementVisible(yearSelector)
         .click(yearSelector)
         .waitForElementVisible(monthSelector)
@@ -129,7 +146,6 @@ module.exports = {
         return disabled
       }
 
-      const daySelector = this.getSelectorExpiryDateDay(pastDate)
       await this.waitForElementVisible(monthSelector)
         .click(monthSelector)
         .waitForElementVisible(daySelector)
@@ -162,6 +178,11 @@ module.exports = {
           )
           return false
         }
+      }
+      const month = dateToSet.toLocaleString('default', { month: 'long' })
+      if (month === 'December') {
+        await this.setExpiryDateMonth(dateToSet).setExpiryDateDay(dateToSet)
+        return true
       }
       await this.setExpiryDateYear(dateToSet)
         .setExpiryDateMonth(dateToSet)

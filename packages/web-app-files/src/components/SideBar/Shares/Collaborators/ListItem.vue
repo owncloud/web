@@ -33,14 +33,15 @@
           <span aria-hidden="true" class="share-type" v-text="shareTypeText" />
           <span class="oc-invisible-sr" v-text="screenreaderShareDetails" />
         </p>
-        <p v-if="expirationDateLocale" class="oc-mt-rm">
+        <p v-if="expirationDate" class="oc-mt-rm">
           <span
+            v-oc-tooltip="expirationDate"
             aria-hidden="true"
             class="collaborator-expiration"
             data-testid="recipient-info-expiration-date"
-          >
-            {{ shareExpirationText }}
-          </span>
+            tabindex="0"
+            v-text="shareExpirationText"
+          />
           <span class="oc-invisible-sr" v-text="screenreaderShareExpiration" />
         </p>
       </div>
@@ -136,24 +137,27 @@ export default {
     },
 
     screenreaderShareDisplayName() {
-      const translated = this.$gettext('Share-receiver name: %{ shareName }')
+      const translated = this.$gettext('Share receiver name: %{ shareName }')
       return this.$gettextInterpolate(translated, { shareName: this.shareDisplayName })
     },
 
     screenreaderShareDetails() {
-      const translated = this.$gettext('Share-type: %{ shareType }')
+      const translated = this.$gettext('Share type: %{ shareType }')
       return this.$gettextInterpolate(translated, { shareType: this.shareTypeText })
     },
 
     shareExpirationText() {
-      const translated = this.$gettext('Expires %{ expiryDate }')
-      return this.$gettextInterpolate(translated, { expiryDate: this.expirationDateLocale })
+      const translated = this.$gettext('Expires %{ expiryDateRelative }')
+      return this.$gettextInterpolate(translated, {
+        expiryDateRelative: this.expirationDateRelative
+      })
     },
 
     screenreaderShareExpiration() {
-      const translated = this.$gettext('Share expires on %{ expiryDate }')
+      const translated = this.$gettext('Share expires %{ expiryDateRelative } (%{ expiryDate })')
       return this.$gettextInterpolate(translated, {
-        expiryDate: this.expirationDateLocale
+        expiryDateRelative: this.expirationDateRelative,
+        expiryDate: this.expirationDate
       })
     },
 
@@ -169,7 +173,14 @@ export default {
       return this.collaborator.shareType === ShareType.group
     },
 
-    expirationDateLocale() {
+    expirationDate() {
+      return DateTime.fromJSDate(this.collaborator.expires)
+        .endOf('day')
+        .setLocale(this.$language.current)
+        .toLocaleString(DateTime.DATETIME_FULL)
+    },
+
+    expirationDateRelative() {
       return DateTime.fromJSDate(this.collaborator.expires)
         .endOf('day')
         .setLocale(this.$language.current)
