@@ -61,7 +61,7 @@
                   :active="link.active"
                   :target="link.route.path"
                   :icon="link.icon || link.iconMaterial"
-                  :collapsed="leftSidebarCollapsed"
+                  :collapsed="navigation.closed"
                 >
                   {{ link.name }}
                 </oc-sidebar-nav-item>
@@ -146,7 +146,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['route', 'user', 'modal', 'sidebar']),
+    ...mapState(['route', 'user', 'modal', 'sidebar', 'navigation']),
     ...mapGetters([
       'configuration',
       'activeNotifications',
@@ -226,7 +226,7 @@ export default {
       if (this.appNavigationVisible) {
         return ''
       }
-      if (this.leftSidebarCollapsed) {
+      if (this.navigation.closed) {
         return 'uk-visible@l oc-app-navigation-collapsed'
       }
       return 'uk-visible@l'
@@ -264,13 +264,13 @@ export default {
     },
 
     toggleSidebarButtonClass() {
-      return this.leftSidebarCollapsed
+      return this.navigation.closed
         ? 'web-sidebar-btn-toggle-collapsed'
         : 'web-sidebar-btn-toggle-expanded oc-pr-s'
     },
 
     toggleSidebarButtonIcon() {
-      return this.leftSidebarCollapsed ? 'chevron_right' : 'chevron_left'
+      return this.navigation.closed ? 'chevron_right' : 'chevron_left'
     }
   },
   watch: {
@@ -346,11 +346,13 @@ export default {
   },
 
   methods: {
-    ...mapActions(['fetchNotifications', 'deleteMessage']),
+    ...mapActions(['fetchNotifications', 'deleteMessage', 'openNavigation', 'closeNavigation']),
 
     toggleSidebarButtonClick() {
-      this.leftSidebarCollapsed = !this.leftSidebarCollapsed
+      if(this.navigation.closed) return this.openNavigation()
+      return this.closeNavigation()
     },
+
     focusModal(component, event) {
       this.focus({
         revert: event === 'beforeDestroy'

@@ -20,7 +20,6 @@
       class="uk-width-large"
       padding-size="small"
       close-on-click
-      padding-size="small"
     >
       <ul class="oc-p-xs">
         <li

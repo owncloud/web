@@ -18,8 +18,10 @@ const vuexPersistInSession = new VuexPersistence({
   storage: window.sessionStorage,
   reducer: (state) => {
     const { userReady, ...user } = state.user
+    const navigation = state.navigation
     return {
       user,
+      navigation,
       router: state.router
     }
   }
