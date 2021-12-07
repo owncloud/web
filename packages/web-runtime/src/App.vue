@@ -56,14 +56,16 @@
                   </oc-button>
                 </oc-sidebar-nav-item>
                 <oc-sidebar-nav-item
-                  v-for="link in sidebarNavItems"
+                  v-for="(link, index) in sidebarNavItems"
                   :key="link.route.path"
-                  :active="link.active"
                   :target="link.route.path"
+                  :active="link.active"
                   :icon="link.icon || link.iconMaterial"
                   :collapsed="navigation.closed"
+                  :id="`nav-item-${index}`"
                 >
-                  {{ link.name }}
+                  <span v-if="!navigation.closed" class="text">{{ link.name }}</span>
+                  <span v-if="index === 0" class="active-blob" id="nav-item-blob"></span>
                 </oc-sidebar-nav-item>
               </oc-list>
             </template>
@@ -142,7 +144,7 @@ export default {
       $_notificationsInterval: null,
       windowWidth: 0,
       announcement: '',
-      leftSidebarCollapsed: true
+      animationTimeout: null
     }
   },
   computed: {
@@ -282,6 +284,16 @@ export default {
         this.appNavigationVisible = false
       }
     },
+    sidebarNavItems: {
+      immediate: true,
+      deep: true,
+      handler: function (sidebarNavItems) {
+        sidebarNavItems.forEach((item, index) => {
+          if(!item.active) return;
+          this.animateBlob(index)
+        })
+      }
+    },
     capabilities: {
       immediate: true,
       handler: function (caps) {
@@ -342,6 +354,11 @@ export default {
     this.$nextTick(() => {
       window.addEventListener('resize', this.onResize)
       this.onResize()
+      this.sidebarNavItems.forEach((item, index) => {
+        if(!item.active) return;
+        console.log(document.getElementById('nav-item-0'))
+        this.animateBlob(index, 0)
+      })
     })
   },
 
@@ -430,7 +447,39 @@ export default {
       }
 
       return titleSegments.join(' - ')
-    }
+    },
+
+    animateBlob(index, duration = 0.2) {
+      clearTimeout(this.animationTimeout);
+      const currentElement = this.getNavigationElement(0);
+      const targetElement = this.getNavigationElement(index);
+      const distance = this.getDistanceBetweenElements(
+        currentElement,
+        targetElement
+      );
+      const blob =  document.getElementById("nav-item-blob");
+      const style = blob.style;
+      style.setProperty("transition-duration", `${duration}s`);
+      style.setProperty("transform", `translateY(${distance}px)`);
+    },
+
+    getNavigationElement(index) {
+      return document.getElementById(`nav-item-${index}`);
+    },
+
+    getPositionAtCenter(element) {
+      const { top, left, width, height } = element.getBoundingClientRect();
+      return {
+        x: left + width / 2,
+        y: top + height / 2,
+      };
+    },
+
+    getDistanceBetweenElements(a, b) {
+      const aPosition = this.getPositionAtCenter(a);
+      const bPosition = this.getPositionAtCenter(b);
+      return Math.hypot(aPosition.x - bPosition.x, aPosition.y - bPosition.y);
+    },
   }
 }
 </script>
@@ -445,6 +494,27 @@ body,
 
 #web {
   background-color: var(--oc-color-background-default);
+}
+
+#web-nav-sidebar {
+  .oc-icon {
+    z-index: 2;
+  }
+  .text {
+    z-index: 2;
+  }
+  .active-blob {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 0;
+    background: linear-gradient(90deg, #0869de 0%, #4e85c8 100%);
+    z-index: 1;
+    transition: transform 0.2s cubic-bezier(0.51, 0.06, 0.56, 1.37);
+    border-radius: 5px;
+  }
 }
 
 #oc-topbar {
