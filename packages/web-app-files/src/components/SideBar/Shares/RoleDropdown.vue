@@ -1,5 +1,5 @@
 <template>
-  <span>
+  <span v-if="selectedRole">
     <oc-button
       :id="roleButtonId"
       class="files-recipient-role-select-btn"
@@ -81,7 +81,7 @@ import { PeopleShareRoles, SharePermissions, ShareRole } from '../../../helpers/
 import { mapGetters } from 'vuex'
 
 export default {
-  name: 'RoleSelection',
+  name: 'RoleDropdown',
   components: { RoleItem },
   props: {
     resource: {
@@ -126,11 +126,11 @@ export default {
       return this.$gettext('Select role for the invitation')
     },
     inviteLabel() {
-      if (this.selectedRole?.hasCustomPermissions) {
+      if (this.selectedRole.hasCustomPermissions) {
         return this.$gettext('Invite with custom permissions')
       } else {
         return this.$gettextInterpolate('Invite as %{ name }', {
-          name: this.selectedRole?.inlineLabel || ''
+          name: this.selectedRole.inlineLabel || ''
         })
       }
     },
@@ -146,12 +146,7 @@ export default {
   },
 
   created() {
-    if (this.existingRole) {
-      this.selectedRole = this.existingRole
-      this.customPermissions = this.existingPermissions
-    } else {
-      this.selectedRole = PeopleShareRoles.list(this.resource.isFolder)[0]
-    }
+    this.applyRoleAndPermissions()
   },
 
   beforeDestroy() {
@@ -159,10 +154,24 @@ export default {
   },
 
   mounted() {
+    this.applyRoleAndPermissions()
     window.addEventListener('keydown', this.cycleRoles)
   },
 
   methods: {
+    applyRoleAndPermissions() {
+      if (this.existingRole) {
+        this.selectedRole = this.existingRole
+      } else {
+        this.selectedRole = PeopleShareRoles.list(this.resource.isFolder)[0]
+      }
+      if (this.selectedRole.hasCustomPermissions) {
+        this.customPermissions = this.existingPermissions
+      } else {
+        this.customPermissions = [...this.selectedRole.permissions(this.allowSharePermission)]
+      }
+    },
+
     publishChange() {
       this.$emit('optionChange', {
         role: this.selectedRole,
@@ -176,11 +185,12 @@ export default {
         return
       }
       this.selectedRole = role
+      this.customPermissions = role.permissions(this.allowSharePermission)
       this.publishChange()
     },
 
     isSelectedRole(role) {
-      return this.selectedRole?.name === role.name
+      return this.selectedRole.name === role.name
     },
 
     isPermissionDisabled(permission) {
@@ -189,7 +199,12 @@ export default {
 
     confirmCustomPermissions() {
       this.$refs.customPermissionsDrop.hide()
-      this.selectedRole = this.customPermissionsRole
+      const bitmask = SharePermissions.permissionsToBitmask(this.customPermissions)
+      this.selectedRole = PeopleShareRoles.getByBitmask(
+        bitmask,
+        this.resource.isFolder,
+        this.allowSharePermission
+      )
       this.publishChange()
     },
 

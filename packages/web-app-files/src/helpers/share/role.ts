@@ -209,7 +209,7 @@ export abstract class PeopleShareRoles {
   }
 
   static custom(isFolder: boolean): ShareRole {
-    return this.all.find((r) => r.folder === isFolder)
+    return this.all.find((r) => r.folder === isFolder && r.hasCustomPermissions)
   }
 
   static getByBitmask(bitmask: number, isFolder: boolean, allowSharing: boolean): ShareRole {
@@ -239,7 +239,7 @@ export abstract class LinkShareRoles {
 }
 
 /**
- * Maps relevant permission bitmasks to descriptions
+ * Maps relevant permission bitmasks of people roles to descriptions
  */
 const shareRoleDescriptions = {
   [peopleRoleViewerFile.bitmask(false)]: $gettext('Download and preview'),
@@ -254,6 +254,9 @@ const shareRoleDescriptions = {
   )
 }
 
+/**
+ * Maps relevant permission bitmasks of link roles to descriptions
+ */
 const linkRoleDescriptions = {
   [linkRoleViewerFile.bitmask(false)]: $gettext('Recipients can view and download contents.'),
   [linkRoleViewerFolder.bitmask(false)]: $gettext('Recipients can view and download contents.'),

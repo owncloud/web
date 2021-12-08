@@ -224,7 +224,7 @@ export default {
         client: this.$client,
         share: this.share,
         permissions: bitmask,
-        expirationDate
+        expirationDate: expirationDate || ''
       })
     }
   }

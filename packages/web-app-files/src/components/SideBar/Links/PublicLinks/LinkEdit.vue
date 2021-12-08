@@ -21,13 +21,13 @@
       <oc-select
         id="files-file-link-role-button"
         v-model="selectedRole"
-        :options="roles"
+        :options="availableRoles"
         :clearable="false"
         :label="selectedRoleLabel"
         class="oc-mb files-file-link-role-button-wrapper"
       >
         <template #option="option">
-          <role-item :role="option" />
+          <role-item :role="option" :allow-share-permission="false" />
         </template>
         <template #no-options v-translate> No matching role found </template>
       </oc-select>
@@ -220,7 +220,7 @@ export default {
       return Object.keys(this.capabilities.files_sharing.public.send_mail).length > 0
     },
 
-    roles() {
+    availableRoles() {
       return LinkShareRoles.list(this.highlightedFile.isFolder)
     },
 
@@ -351,7 +351,7 @@ export default {
         }
       }
 
-      this.selectedRole = LinkShareRoles.list(this.highlightedFile.isFolder)[0]
+      this.selectedRole = this.availableRoles[0]
     },
 
     $_addLink() {

@@ -306,9 +306,13 @@ export function buildCollaboratorShare(s, file, allowSharePermission) {
       additionalInfo: _fixAdditionalInfo(s.additional_info_file_owner)
     }
     share.stime = s.stime
-    share.permissions = s.permissions
+    share.permissions = parseInt(s.permissions)
     share.customPermissions = SharePermissions.bitmaskToPermissions(s.permissions)
-    share.role = PeopleShareRoles.getByBitmask(s.permissions, file.isFolder, allowSharePermission)
+    share.role = PeopleShareRoles.getByBitmask(
+      parseInt(s.permissions),
+      file.isFolder,
+      allowSharePermission
+    )
     // share.email = 'foo@djungle.com' // hm, where do we get the mail from? share_with_additional_info:Object?
   }
 
