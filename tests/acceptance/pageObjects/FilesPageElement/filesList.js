@@ -382,7 +382,9 @@ module.exports = {
       let resourceName = null
       await this.getText('xpath', rowSelector, (result) => {
         const res = result.value
+        console.log(res)
         resourceName = res.split('\n')
+        console.log(resourceName)
       })
       return resourceName[1]
     },
