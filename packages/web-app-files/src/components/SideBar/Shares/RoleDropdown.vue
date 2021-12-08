@@ -77,7 +77,7 @@
 <script>
 import get from 'lodash-es/get'
 import RoleItem from '../Shared/RoleItem.vue'
-import { SharePermissions, ShareRole, ShareRoles } from '../../../helpers/share'
+import { PeopleShareRoles, SharePermissions, ShareRole } from '../../../helpers/share'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -126,7 +126,7 @@ export default {
       return this.$gettext('Select role for the invitation')
     },
     inviteLabel() {
-      if (this.selectedRole?.customPermissions) {
+      if (this.selectedRole?.hasCustomPermissions) {
         return this.$gettext('Invite with custom permissions')
       } else {
         return this.$gettextInterpolate('Invite as %{ name }', {
@@ -135,10 +135,10 @@ export default {
       }
     },
     customPermissionsRole() {
-      return this.resource.isFolder ? ShareRoles.customFolder : ShareRoles.customFile
+      return PeopleShareRoles.custom(this.resource.isFolder)
     },
     availableRoles() {
-      return ShareRoles.listPeopleRoles(this.resource.isFolder)
+      return PeopleShareRoles.list(this.resource.isFolder)
     },
     availablePermissions() {
       return this.customPermissionsRole.permissions(this.allowSharePermission)
@@ -150,7 +150,7 @@ export default {
       this.selectedRole = this.existingRole
       this.customPermissions = this.existingPermissions
     } else {
-      this.selectedRole = ShareRoles.listPeopleRoles(this.resource.isFolder)[0]
+      this.selectedRole = PeopleShareRoles.list(this.resource.isFolder)[0]
     }
   },
 
@@ -171,7 +171,7 @@ export default {
     },
 
     selectRole(role) {
-      if (role.customPermissions) {
+      if (role.hasCustomPermissions) {
         this.$refs.customPermissionsDrop.show()
         return
       }

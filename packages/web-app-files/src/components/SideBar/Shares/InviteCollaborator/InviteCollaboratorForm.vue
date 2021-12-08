@@ -75,7 +75,7 @@ import AutocompleteItem from './AutocompleteItem.vue'
 import RoleDropdown from '../RoleDropdown.vue'
 import RecipientContainer from './RecipientContainer.vue'
 import ExpirationDatepicker from './ExpirationDatepicker.vue'
-import { SharePermissions, ShareRoles, ShareType } from '../../../../helpers/share'
+import { PeopleShareRoles, SharePermissions, ShareType } from '../../../../helpers/share'
 
 export default {
   name: 'InviteCollaboratorForm',
@@ -124,7 +124,7 @@ export default {
   },
   mounted() {
     this.fetchRecipients = debounce(this.fetchRecipients, 500)
-    this.selectedRole = ShareRoles.listPeopleRoles(this.highlightedFile.isFolder)[0]
+    this.selectedRole = PeopleShareRoles.list(this.highlightedFile.isFolder)[0]
   },
 
   methods: {
@@ -223,7 +223,7 @@ export default {
       this.selectedCollaborators.forEach((collaborator) => {
         savePromises.push(
           saveQueue.add(() => {
-            const bitmask = this.selectedRole.customPermissions
+            const bitmask = this.selectedRole.hasCustomPermissions
               ? SharePermissions.permissionsToBitmask(this.customPermissions)
               : SharePermissions.permissionsToBitmask(this.selectedRole.permissions)
             this.addShare({

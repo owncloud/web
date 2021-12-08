@@ -208,7 +208,7 @@ export default {
     },
 
     saveCollaboratorChanges({ role, permissions, expirationDate }) {
-      const bitmask = role.customPermissions
+      const bitmask = role.hasCustomPermissions
         ? SharePermissions.permissionsToBitmask(permissions)
         : SharePermissions.permissionsToBitmask(role.permissions(!this.isOcis))
       const expiration = expirationDate || this.expirationDate

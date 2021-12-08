@@ -5,28 +5,25 @@ const $gettext = (str) => {
   return str
 }
 
-export class ShareRole {
+export abstract class ShareRole {
   private readonly _name: string
   private readonly _folder: boolean
   private readonly _label: string
   private readonly _inlineLabel: string
   private readonly _permissions: SharePermission[]
-  private readonly _description: string
 
   constructor(
     name: string,
     folder: boolean,
     label: string,
     inlineLabel: string,
-    permissions: SharePermission[],
-    description?: string
+    permissions: SharePermission[]
   ) {
     this._name = name
     this._folder = folder
     this._label = label
     this._inlineLabel = inlineLabel
     this._permissions = permissions
-    this._description = description
   }
 
   get key(): string {
@@ -49,7 +46,7 @@ export class ShareRole {
     return this._inlineLabel
   }
 
-  get customPermissions(): boolean {
+  get hasCustomPermissions(): boolean {
     return false
   }
 
@@ -62,12 +59,7 @@ export class ShareRole {
     })
   }
 
-  public description(allowSharing: boolean): string {
-    if (this._description) {
-      return this._description
-    }
-    return shareRoleDescriptions[this.bitmask(allowSharing)]
-  }
+  public abstract description(allowSharing: boolean): string
 
   /**
    * Calculates a bitmask from this role combined with the additional permissions (optional).
@@ -77,10 +69,20 @@ export class ShareRole {
   public bitmask(allowSharing: boolean): number {
     return SharePermissions.permissionsToBitmask(this.permissions(allowSharing))
   }
+
+  /**
+   * Checks if the given permission exists in the permissions of the role.
+   *
+   * @param permission {SharePermission} The permission to be checked
+   * @param allowSharing {boolean} Asserts whether share permission of the role should be taken into account.
+   */
+  public hasPermission(permission: SharePermission, allowSharing = false): boolean {
+    return this.permissions(allowSharing).filter((p) => p.bit === permission.bit).length > 0
+  }
 }
 
 class CustomShareRole extends ShareRole {
-  get customPermissions(): boolean {
+  get hasCustomPermissions(): boolean {
     return true
   }
 
@@ -90,86 +92,149 @@ class CustomShareRole extends ShareRole {
   }
 }
 
-export abstract class ShareRoles {
-  private static readonly peopleRoles = [
-    new ShareRole('viewer', false, $gettext('Viewer'), $gettext('viewer'), [
-      SharePermissions.read,
-      SharePermissions.share
-    ]),
-    new ShareRole('viewer', true, $gettext('Viewer'), $gettext('viewer'), [
-      SharePermissions.read,
-      SharePermissions.share
-    ]),
-    new ShareRole('editor', false, $gettext('Editor'), $gettext('editor'), [
-      SharePermissions.read,
-      SharePermissions.update,
-      SharePermissions.share
-    ]),
-    new ShareRole('editor', true, $gettext('Editor'), $gettext('editor'), [
-      SharePermissions.read,
-      SharePermissions.update,
-      SharePermissions.create,
-      SharePermissions.delete,
-      SharePermissions.share
-    ]),
-    new CustomShareRole(
-      'custom',
-      false,
-      $gettext('Custom permissions'),
-      $gettext('custom permissions'),
-      [SharePermissions.read, SharePermissions.update, SharePermissions.share]
-    ),
-    new CustomShareRole(
-      'custom',
-      true,
-      $gettext('Custom permissions'),
-      $gettext('custom permissions'),
-      [
-        SharePermissions.read,
-        SharePermissions.update,
-        SharePermissions.create,
-        SharePermissions.delete,
-        SharePermissions.share
-      ]
-    )
+class PeopleShareRole extends ShareRole {
+  public description(allowSharing: boolean): string {
+    return shareRoleDescriptions[this.bitmask(allowSharing)]
+  }
+}
+
+class LinkShareRole extends ShareRole {
+  public description(allowSharing: boolean): string {
+    return linkRoleDescriptions[this.bitmask(allowSharing)]
+  }
+}
+
+const peopleRoleViewerFile = new PeopleShareRole(
+  'viewer',
+  false,
+  $gettext('Viewer'),
+  $gettext('viewer'),
+  [SharePermissions.read, SharePermissions.share]
+)
+const peopleRoleViewerFolder = new PeopleShareRole(
+  'viewer',
+  true,
+  $gettext('Viewer'),
+  $gettext('viewer'),
+  [SharePermissions.read, SharePermissions.share]
+)
+const peopleRoleEditorFile = new PeopleShareRole(
+  'editor',
+  false,
+  $gettext('Editor'),
+  $gettext('editor'),
+  [SharePermissions.read, SharePermissions.update, SharePermissions.share]
+)
+const peopleRoleEditorFolder = new PeopleShareRole(
+  'editor',
+  true,
+  $gettext('Editor'),
+  $gettext('editor'),
+  [
+    SharePermissions.read,
+    SharePermissions.update,
+    SharePermissions.create,
+    SharePermissions.delete,
+    SharePermissions.share
+  ]
+)
+const peopleRoleCustomFile = new CustomShareRole(
+  'custom',
+  false,
+  $gettext('Custom permissions'),
+  $gettext('custom permissions'),
+  [SharePermissions.read, SharePermissions.update, SharePermissions.share]
+)
+const peopleRoleCustomFolder = new CustomShareRole(
+  'custom',
+  true,
+  $gettext('Custom permissions'),
+  $gettext('custom permissions'),
+  [
+    SharePermissions.read,
+    SharePermissions.update,
+    SharePermissions.create,
+    SharePermissions.delete,
+    SharePermissions.share
+  ]
+)
+const linkRoleViewerFile = new LinkShareRole(
+  'viewer',
+  false,
+  $gettext('Viewer'),
+  $gettext('viewer'),
+  [SharePermissions.read]
+)
+const linkRoleViewerFolder = new LinkShareRole(
+  'viewer',
+  true,
+  $gettext('Viewer'),
+  $gettext('viewer'),
+  [SharePermissions.read]
+)
+const linkRoleContributorFolder = new LinkShareRole(
+  'contributor',
+  true,
+  $gettext('Contributor'),
+  $gettext('contributor'),
+  [SharePermissions.read, SharePermissions.create]
+)
+const linkRoleEditorFolder = new LinkShareRole(
+  'editor',
+  true,
+  $gettext('Editor'),
+  $gettext('editor'),
+  [SharePermissions.read, SharePermissions.update, SharePermissions.create, SharePermissions.delete]
+)
+const linkRoleUploaderFolder = new LinkShareRole(
+  'uploader',
+  true,
+  $gettext('Uploader'),
+  $gettext('uploader'),
+  [SharePermissions.create]
+)
+
+export abstract class PeopleShareRoles {
+  private static readonly all = [
+    peopleRoleViewerFile,
+    peopleRoleViewerFolder,
+    peopleRoleEditorFile,
+    peopleRoleEditorFolder,
+    peopleRoleCustomFile,
+    peopleRoleCustomFolder
   ]
 
-  private static readonly linkRoles = [
-    new ShareRole('viewer', false, $gettext('Viewer'), $gettext('viewer'), [SharePermissions.read]),
-
-  ]
-
-  static listPeopleRoles(isFolder: boolean): ShareRole[] {
-    return this.peopleRoles.filter((r) => r.folder === isFolder)
+  static list(isFolder: boolean): ShareRole[] {
+    return this.all.filter((r) => r.folder === isFolder)
   }
 
-  static customPeopleRole(isFolder: boolean): ShareRole {
-    return this.peopleRoles.find((r) => r.folder === isFolder)
-  }
-
-  static listLinkRoles(isFolder: boolean): ShareRole[] {
-    return this.linkRoles.filter((r) => r.folder === isFolder)
+  static custom(isFolder: boolean): ShareRole {
+    return this.all.find((r) => r.folder === isFolder)
   }
 
   static getByBitmask(bitmask: number, isFolder: boolean, allowSharing: boolean): ShareRole {
-    if (isFolder) {
-      switch (bitmask) {
-        case ShareRoles.viewerFolder.bitmask(allowSharing):
-          return ShareRoles.viewerFolder
-        case ShareRoles.editorFolder.bitmask(allowSharing):
-          return ShareRoles.editorFolder
-        default:
-          return ShareRoles.customFolder
-      }
-    }
-    switch (bitmask) {
-      case ShareRoles.viewerFile.bitmask(allowSharing):
-        return ShareRoles.viewerFile
-      case ShareRoles.editorFile.bitmask(allowSharing):
-        return ShareRoles.editorFile
-      default:
-        return ShareRoles.customFile
-    }
+    const role = this.all
+      .filter((r) => !r.hasCustomPermissions)
+      .find((r) => r.folder === isFolder && r.bitmask(allowSharing) === bitmask)
+    return role || this.custom(isFolder)
+  }
+}
+
+export abstract class LinkShareRoles {
+  private static readonly all = [
+    linkRoleViewerFile,
+    linkRoleViewerFolder,
+    linkRoleContributorFolder,
+    linkRoleEditorFolder,
+    linkRoleUploaderFolder
+  ]
+
+  static list(isFolder: boolean): ShareRole[] {
+    return this.all.filter((r) => r.folder === isFolder)
+  }
+
+  static getByBitmask(bitmask: number, isFolder: boolean): ShareRole {
+    return this.all.find((r) => r.folder === isFolder && r.bitmask(false) === bitmask)
   }
 }
 
@@ -177,16 +242,28 @@ export abstract class ShareRoles {
  * Maps relevant permission bitmasks to descriptions
  */
 const shareRoleDescriptions = {
-  []: $gettext('Download and preview'),
-  [ShareRoles.viewerFile.bitmask(true)]: $gettext('Download, preview and share'),
-  [ShareRoles.viewerFolder.bitmask(false)]: $gettext('Download and preview'),
-  [ShareRoles.viewerFolder.bitmask(true)]: $gettext('Download, preview and share'),
-  [ShareRoles.editorFile.bitmask(false)]: $gettext('Edit, download and preview'),
-  [ShareRoles.editorFile.bitmask(true)]: $gettext('Edit, download, preview and share'),
-  [ShareRoles.editorFolder.bitmask(false)]: $gettext('Upload, edit, delete, download and preview'),
-  [ShareRoles.editorFolder.bitmask(true)]: $gettext(
+  [peopleRoleViewerFile.bitmask(false)]: $gettext('Download and preview'),
+  [peopleRoleViewerFile.bitmask(true)]: $gettext('Download, preview and share'),
+  [peopleRoleViewerFolder.bitmask(false)]: $gettext('Download and preview'),
+  [peopleRoleViewerFolder.bitmask(true)]: $gettext('Download, preview and share'),
+  [peopleRoleEditorFile.bitmask(false)]: $gettext('Edit, download and preview'),
+  [peopleRoleEditorFile.bitmask(true)]: $gettext('Edit, download, preview and share'),
+  [peopleRoleEditorFolder.bitmask(false)]: $gettext('Upload, edit, delete, download and preview'),
+  [peopleRoleEditorFolder.bitmask(true)]: $gettext(
     'Upload, edit, delete, download, preview and share'
   )
 }
 
-const linkRoleDescriptions = {}
+const linkRoleDescriptions = {
+  [linkRoleViewerFile.bitmask(false)]: $gettext('Recipients can view and download contents.'),
+  [linkRoleViewerFolder.bitmask(false)]: $gettext('Recipients can view and download contents.'),
+  [linkRoleContributorFolder.bitmask(false)]: $gettext(
+    'Recipients can view, download and upload contents.'
+  ),
+  [linkRoleEditorFolder.bitmask(false)]: $gettext(
+    'Recipients can view, download, edit, delete and upload contents.'
+  ),
+  [linkRoleUploaderFolder.bitmask(false)]: $gettext(
+    'Recipients can upload but existing contents are not revealed.'
+  )
+}

@@ -6,7 +6,7 @@ import fileIconMappings from '../fileTypeIconMappings.json'
 import { getIndicators } from './statusIndicators'
 import { $gettext } from '../gettext'
 import { DavPermission, DavProperty } from 'web-pkg/src/constants'
-import { SharePermissions, ShareRoles, ShareStatus, ShareType, ShareTypes } from './share'
+import { PeopleShareRoles, SharePermissions, ShareStatus, ShareType, ShareTypes } from './share'
 
 // Should we move this to ODS?
 export function getFileIcon(extension) {
@@ -308,7 +308,7 @@ export function buildCollaboratorShare(s, file, allowSharePermission) {
       share.stime = s.stime
       share.permissions = s.permissions
       share.customPermissions = SharePermissions.bitmaskToPermissions(s.permissions)
-      share.role = ShareRoles.getByBitmask(s.permissions, file.isFolder, allowSharePermission)
+      share.role = PeopleShareRoles.getByBitmask(s.permissions, file.isFolder, allowSharePermission)
       // share.email = 'foo@djungle.com' // hm, where do we get the mail from? share_with_additional_info:Object?
       break
   }
