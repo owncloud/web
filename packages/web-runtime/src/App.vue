@@ -65,6 +65,7 @@
                   :id="`nav-item-${index}`"
                 >
                   <span :class="{ 'text': true, 'text-invisible': navigation.closed }">{{ link.name }}</span>
+                  <span class="hover-blob"></span>
                   <span v-if="index === 0" class="active-blob" id="nav-item-blob"></span>
                 </oc-sidebar-nav-item>
               </oc-list>
@@ -143,8 +144,7 @@ export default {
       appNavigationVisible: false,
       $_notificationsInterval: null,
       windowWidth: 0,
-      announcement: '',
-      animationTimeout: null
+      announcement: ''
     }
   },
   computed: {
@@ -183,16 +183,9 @@ export default {
     showHeader() {
       return this.$route.meta.hideHeadbar !== true
     },
+
     favicon() {
       return this.configuration.theme.logo.favicon
-    },
-
-    logoImage() {
-      return this.configuration.theme.logo.sidebar
-    },
-
-    sidebarLogoAlt() {
-      return this.$gettext('Navigate to all files page')
     },
 
     sidebarNavItems() {
@@ -356,7 +349,6 @@ export default {
       this.onResize()
       this.sidebarNavItems.forEach((item, index) => {
         if(!item.active) return;
-        console.log(document.getElementById('nav-item-0'))
         this.animateBlob(index, 0)
       })
     })
@@ -449,8 +441,7 @@ export default {
       return titleSegments.join(' - ')
     },
 
-    animateBlob(index, duration = 0.2) {
-      clearTimeout(this.animationTimeout);
+    animateBlob(index, duration = 0.26) {
       const currentElement = this.getNavigationElement(0);
       const targetElement = this.getNavigationElement(index);
       const distance = this.getDistanceBetweenElements(
@@ -505,6 +496,7 @@ body,
     z-index: 2;
     opacity: 1;
     transition: all 0.35s ease-out;
+    overflow: hidden;
   }
   .text-invisible {
     opacity: 0 !important;
@@ -520,8 +512,36 @@ body,
     border: 0;
     background: linear-gradient(90deg, #0869de 0%, #4e85c8 100%);
     z-index: 1;
-    transition: transform 0.2s cubic-bezier(0.51, 0.06, 0.56, 1.37);
+    transition: transform 0.3s cubic-bezier(.51,.06,.42,1.26);
     border-radius: 5px;
+  }
+  .active-blob::before {
+    content: "";
+    position: absolute;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 44px;
+    box-shadow: 2px 0px 6px rgba(0, 0, 0, 0.14);
+  }
+  .hover-blob {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 0;
+    z-index: 0;
+  }
+  .hover-blob:hover,
+  .text:hover + .hover-blob,
+  .oc-icon:hover ~ .hover-blob {
+    background-color: #202020;
+    border-radius: 5px;
+  }
+  .icon-expanded {
+    margin-right: var(--oc-space-medium);
   }
 }
 

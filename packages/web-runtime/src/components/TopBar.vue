@@ -99,6 +99,7 @@ export default {
     image-rendering: crisp-edges;
     image-rendering: pixelated;
     image-rendering: -webkit-optimize-contrast;
+    user-select: none;
   }
 }
 .application-menu {
