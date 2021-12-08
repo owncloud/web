@@ -49,6 +49,7 @@
                   <oc-button
                     variation="inverse"
                     appearance="raw"
+                    class="toggle-sidebar-button"
                     :aria-label="$gettext('Toggle sidebar')"
                     @click="toggleSidebarButtonClick"
                   >
@@ -64,9 +65,16 @@
                   :collapsed="navigation.closed"
                   :id="`nav-item-${index}`"
                 >
-                  <span :class="{ 'text': true, 'text-invisible': navigation.closed }">{{ link.name }}</span>
-                  <span class="hover-blob"></span>
-                  <span v-if="index === 0" class="active-blob" id="nav-item-blob"></span>
+                  <span :class="{ 'text': true, 'text-invisible': navigation.closed }">
+                    {{ link.name }}
+                  </span>
+                  <span class="hover-blob" />
+                  <span
+                    v-if="index === 0"
+                    @click.prevent.stop
+                    class="active-blob"
+                    id="nav-item-blob"
+                  />
                 </oc-sidebar-nav-item>
               </oc-list>
             </template>
@@ -280,10 +288,11 @@ export default {
     sidebarNavItems: {
       immediate: true,
       deep: true,
-      handler: function (sidebarNavItems) {
+      handler: function (sidebarNavItems, beforeNavItems) {
         sidebarNavItems.forEach((item, index) => {
-          if(!item.active) return;
-          this.animateBlob(index)
+          if(!item.active) return
+          if(beforeNavItems) return this.animateBlob(index)
+          this.updateNavigationHighlight(sidebarNavItems)
         })
       }
     },
@@ -347,16 +356,21 @@ export default {
     this.$nextTick(() => {
       window.addEventListener('resize', this.onResize)
       this.onResize()
-      this.sidebarNavItems.forEach((item, index) => {
-        if(!item.active) return;
-        this.animateBlob(index, 0)
-      })
+      this.updateNavigationHighlight()
     })
   },
 
   methods: {
     ...mapActions(['fetchNotifications', 'deleteMessage', 'openNavigation', 'closeNavigation']),
 
+    updateNavigationHighlight(sidebarNavItems=this.sidebarNavItems) {
+      sidebarNavItems.forEach((item, index) => {
+        if(!item.active) return
+        setTimeout(() => {
+          this.animateBlob(index, 0)
+        }, 1)
+      })
+    },
     toggleSidebarButtonClick() {
       if(this.navigation.closed) return this.openNavigation()
       return this.closeNavigation()
@@ -450,6 +464,8 @@ export default {
       );
       const blob =  document.getElementById("nav-item-blob");
       const style = blob.style;
+
+      style.setProperty("opacity", "1");
       style.setProperty("transition-duration", `${duration}s`);
       style.setProperty("transform", `translateY(${distance}px)`);
     },
@@ -503,6 +519,14 @@ body,
     transition: 0s;
     margin-left: var(--oc-space-medium) !important;
   }
+  .toggle-sidebar-button {
+    padding: 4px;
+    border-radius: 5px;
+    transition: all 0.2s ease-out;
+    &:hover {
+      background: #383838;
+    }
+  }
   .active-blob {
     position: absolute;
     top: 0;
@@ -510,20 +534,20 @@ body,
     right: 0;
     bottom: 0;
     border: 0;
+    opacity: 0;
     background: linear-gradient(90deg, #0869de 0%, #4e85c8 100%);
     z-index: 1;
     transition: transform 0.3s cubic-bezier(.51,.06,.42,1.26);
     border-radius: 5px;
-  }
-  .active-blob::before {
-    content: "";
-    position: absolute;
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width: 44px;
-    box-shadow: 2px 0px 6px rgba(0, 0, 0, 0.14);
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 44px;
+      box-shadow: 2px 0px 6px rgba(0, 0, 0, 0.14);
+    }
   }
   .hover-blob {
     position: absolute;
@@ -533,6 +557,7 @@ body,
     bottom: 0;
     border: 0;
     z-index: 0;
+    transition: all 0.2s ease-out;
   }
   .hover-blob:hover,
   .text:hover + .hover-blob,
@@ -615,6 +640,7 @@ body,
   top: var(--oc-space-medium);
   z-index: 3;
 }
+
 .web-sidebar-btn-apps {
   position: absolute;
   left: var(--oc-space-medium);
