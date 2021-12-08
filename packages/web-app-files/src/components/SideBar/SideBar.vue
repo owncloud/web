@@ -93,7 +93,7 @@ import { DavProperties } from 'web-pkg/src/constants'
 import MixinRoutes from '../../mixins/routes'
 import { buildResource } from '../../helpers/resources'
 import { isTrashbinRoute } from '../../helpers/route'
-
+import { computed } from '@vue/composition-api'
 import FileInfo from './FileInfo.vue'
 
 let visibilityObserver
@@ -104,14 +104,9 @@ export default {
   mixins: [MixinRoutes],
 
   provide() {
-    const displayedItem = {}
-
-    Object.defineProperty(displayedItem, 'value', {
-      enumerable: true,
-      get: () => this.selectedFile
-    })
-
-    return { displayedItem }
+    return {
+      displayedItem: computed(() => this.selectedFile)
+    }
   },
 
   data() {

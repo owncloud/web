@@ -1,4 +1,5 @@
 import { mount, createLocalVue } from '@vue/test-utils'
+import VueCompositionAPI from '@vue/composition-api'
 import Vuex from 'vuex'
 import VueRouter from 'vue-router'
 import GetTextPlugin from 'vue-gettext'
@@ -20,6 +21,7 @@ const simpleOwnFolder = {
 function createWrapper({ item, selectedItems, mocks }) {
   const localVue = createLocalVue()
   localVue.use(Vuex)
+  localVue.use(VueCompositionAPI)
   localVue.use(VueRouter)
   localVue.use(GetTextPlugin, {
     translations: 'does-not-matter.json',
