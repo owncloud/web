@@ -88,7 +88,7 @@ export default {
               return false
             }
 
-            return resources[0].extension === editor.extension
+            return resources[0].extension.toLowerCase() === editor.extension.toLowerCase()
           },
           canBeDefault: true,
           componentType: 'oc-button',

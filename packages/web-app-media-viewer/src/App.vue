@@ -208,7 +208,7 @@ export default {
     },
 
     isActiveMediaFileTypeVideo() {
-      return this.videoExtensions.includes(this.activeMediaFile.extension)
+      return this.videoExtensions.includes(this.activeMediaFile.extension.toLowerCase())
     },
 
     isActiveMediaFileTypeImage() {

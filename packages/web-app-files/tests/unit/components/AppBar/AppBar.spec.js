@@ -292,11 +292,12 @@ describe('AppBar component', () => {
 })
 
 function getFileHandlerSelector(extension) {
-  if (extension === 'txt') {
+  const ext = extension.toLowerCase()
+  if (ext === 'txt') {
     return elSelector.newTextFileBtn
-  } else if (extension === 'md') {
+  } else if (ext === 'md') {
     return elSelector.newMdFileBtn
-  } else if (extension === 'drawio') {
+  } else if (ext === 'drawio') {
     return elSelector.newDrawioFileBtn
   }
   return null
