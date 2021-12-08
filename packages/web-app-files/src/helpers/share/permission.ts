@@ -39,7 +39,7 @@ export abstract class SharePermissions {
   static readonly share = new SharePermission('share', 16, $gettext('Share'))
 
   static permissionsToBitmask(permissions: SharePermission[]): number {
-    return permissions.reduce((b: number, p: SharePermission) => b | p.bit, 0)
+    return (permissions || []).reduce((b: number, p: SharePermission) => b | p.bit, 0)
   }
 
   static bitmaskToPermissions(bitmask: number): SharePermission[] {

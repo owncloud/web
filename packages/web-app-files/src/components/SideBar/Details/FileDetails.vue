@@ -109,10 +109,9 @@ import MixinRoutes from '../../../mixins/routes'
 import { mapActions, mapGetters } from 'vuex'
 import { ImageDimension } from '../../../constants'
 import { loadPreview } from '../../../helpers/resource'
-import intersection from 'lodash-es/intersection'
 import upperFirst from 'lodash-es/upperFirst'
 import path from 'path'
-import { ShareType, ShareTypes } from '../../../helpers/share'
+import { ShareTypes } from '../../../helpers/share'
 
 export default {
   name: 'FileDetails',
@@ -269,14 +268,14 @@ export default {
     },
     hasPeopleShares() {
       return (
-        intersection(this.file.shareTypes, ShareTypes.authenticated).length > 0 ||
+        ShareTypes.containsAnyValue(ShareTypes.authenticated, this.file.shareTypes) ||
         this.file.indicators?.filter((e) => e.icon === 'group').length > 0 ||
         this.sharedItem !== null
       )
     },
     hasLinkShares() {
       return (
-        this.file.shareTypes.includes(ShareType.link) ||
+        ShareTypes.containsAnyValue(ShareTypes.unauthenticated, this.file.shareTypes) ||
         this.file.indicators?.filter((e) => e.icon === 'link').length > 0
       )
     },
@@ -299,7 +298,7 @@ export default {
       const sharePathParentOrCurrent = this.getParentSharePath(this.file.path, this.sharesTree)
       if (sharePathParentOrCurrent === null) return
       const userShares = this.sharesTree[sharePathParentOrCurrent]?.filter((s) =>
-        ShareTypes.individuals.includes(s.shareType)
+        ShareTypes.containsAnyValue(ShareTypes.individuals, [s.shareType])
       )
       if (userShares.length === 0) return
       this.sharedItem = userShares[0]

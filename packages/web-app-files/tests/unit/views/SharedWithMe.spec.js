@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils'
 import { localVue, getStore } from './views.setup'
 import SharedWithMe from '@files/src/views/SharedWithMe.vue'
-import { ShareStatus, ShareType } from '@files/src/helpers/share'
+import { ShareStatus, ShareTypes } from '@files/src/helpers/share'
 
 const stubs = {
   'router-link': true,
@@ -208,7 +208,7 @@ function getMountedWrapper({ store, loading, viewMode } = {}) {
   return mount(component, mountOptions({ store, loading, viewMode }))
 }
 
-function createSharedFile({ id, shareType = ShareType.user, status = ShareStatus.pending }) {
+function createSharedFile({ id, shareType = ShareTypes.user.value, status = ShareStatus.pending }) {
   return {
     id: `share-id-${id}`,
     share_type: shareType,

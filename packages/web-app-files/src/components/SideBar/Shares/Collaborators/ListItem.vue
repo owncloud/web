@@ -5,7 +5,7 @@
   >
     <div class="uk-width-2-3 uk-flex uk-flex-start" style="gap: 10px">
       <avatar-image
-        v-if="shareTypeName === 'user'"
+        v-if="isUser"
         :userid="collaborator.collaborator.name"
         :user-name="collaborator.collaborator.displayName"
         :width="48"
@@ -15,8 +15,8 @@
         v-else
         :width="48"
         icon-size="medium"
-        :icon="shareTypeName"
-        :name="shareTypeName"
+        :icon="shareTypeKey"
+        :name="shareTypeKey"
         class="sharee-avatar"
       />
       <div class="oc-text-truncate">
@@ -33,7 +33,7 @@
           <span aria-hidden="true" class="share-type" v-text="shareTypeText" />
           <span class="oc-invisible-sr" v-text="screenreaderShareDetails" />
         </p>
-        <p v-if="expirationDate" class="oc-mt-rm">
+        <p v-if="hasExpirationDate" class="oc-mt-rm">
           <span
             v-oc-tooltip="expirationDate"
             aria-hidden="true"
@@ -76,10 +76,10 @@ import { DateTime } from 'luxon'
 
 import EditDropdown from './EditDropdown.vue'
 import RoleDropdown from '../RoleDropdown.vue'
-import { SharePermissions, ShareType, ShareTypeCategories } from '../../../../helpers/share'
+import { SharePermissions, ShareTypes } from '../../../../helpers/share'
 
 export default {
-  name: 'Collaborator',
+  name: 'ListItem',
   components: {
     EditDropdown,
     RoleDropdown
@@ -99,26 +99,28 @@ export default {
     ...mapGetters('Files', ['highlightedFile']),
     ...mapGetters(['user', 'isOcis']),
 
-    // FIXME: move to ShareType (needs to be refactored from enum to class)
-    shareTypeText() {
-      switch (this.shareType) {
-        case ShareType.user:
-          return this.$gettext('User')
-        case ShareType.group:
-          return this.$gettext('Group')
-        case ShareType.link:
-          return this.$gettext('Link')
-        case ShareType.guest:
-          return this.$gettext('Guest')
-        case ShareType.remote:
-          return this.$gettext('Federated')
-        default:
-          return this.$gettext('User')
-      }
+    shareType() {
+      return ShareTypes.getByValue(this.collaborator.shareType)
     },
 
-    shareTypeName() {
-      return ShareType[this.shareType]
+    shareTypeKey() {
+      return this.shareType.key
+    },
+
+    isGroup() {
+      return this.shareType === ShareTypes.group
+    },
+
+    isUser() {
+      return this.shareType === ShareTypes.user
+    },
+
+    shareTypeText() {
+      return this.$gettext(this.shareType.label)
+    },
+
+    collaboratorType() {
+      return ShareTypes.isIndividual(this.shareType) ? 'user' : 'group'
     },
 
     shareDisplayName() {
@@ -130,10 +132,6 @@ export default {
         return
       }
       return ` (${this.collaborator.collaborator.additionalInfo})`
-    },
-
-    collaboratorType() {
-      return ShareTypeCategories.getByShareType(this.collaborator.shareType)?.key
     },
 
     screenreaderShareDisplayName() {
@@ -165,12 +163,8 @@ export default {
       return this.modifiable
     },
 
-    shareType() {
-      return this.collaborator.shareType ? this.collaborator.shareType : 0
-    },
-
-    isGroup() {
-      return this.collaborator.shareType === ShareType.group
+    hasExpirationDate() {
+      return this.collaborator.expires
     },
 
     expirationDate() {

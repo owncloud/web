@@ -34,16 +34,13 @@
         class="oc-text-muted files-collaborators-autocomplete-additional-info"
         v-text="item.value.shareWithAdditionalInfo"
       />
-      <div
-        class="files-collaborators-autocomplete-share-type"
-        v-text="getCollaboratorTypeLabel(item.value.shareType)"
-      />
+      <div class="files-collaborators-autocomplete-share-type" v-text="$gettext(shareType.label)" />
     </div>
   </div>
 </template>
 
 <script>
-import { ShareType } from '../../../../helpers/share'
+import { ShareTypes } from '../../../../helpers/share'
 
 export default {
   name: 'AutocompleteItem',
@@ -62,35 +59,20 @@ export default {
   },
 
   computed: {
+    shareType() {
+      return ShareTypes.getByValue(this.item.value.shareType)
+    },
+
     isUser() {
-      return this.item.value.shareType === ShareType.user
+      return this.shareType === ShareTypes.user
     },
 
     isGroup() {
-      return this.item.value.shareType === ShareType.group
+      return this.shareType === ShareTypes.group
     },
 
     collaboratorClass() {
-      const shareTypeKey = ShareType[this.item.value.shareType]
-      return `files-collaborators-search-${shareTypeKey}`
-    }
-  },
-
-  methods: {
-    // FIXME: move to ShareType (needs to be refactored from enum to class)
-    getCollaboratorTypeLabel(type) {
-      switch (type) {
-        case ShareType.user:
-          return this.$gettext('User')
-        case ShareType.group:
-          return this.$gettext('Group')
-        case ShareType.guest:
-          return this.$gettext('Guest')
-        case ShareType.remote:
-          return this.$gettext('Remote user')
-        default:
-          return this.$gettext('Unknown type')
-      }
+      return `files-collaborators-search-${this.shareType.key}`
     }
   }
 }

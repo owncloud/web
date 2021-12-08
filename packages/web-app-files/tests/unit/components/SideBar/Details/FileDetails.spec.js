@@ -4,7 +4,7 @@ import FileDetails from 'packages/web-app-files/src/components/SideBar/Details/F
 import stubs from '../../../../../../../tests/unit/stubs'
 import GetTextPlugin from 'vue-gettext'
 import AsyncComputed from 'vue-async-computed'
-import { ShareType } from '@files/src/helpers/share'
+import { ShareTypes } from '../../../../../src/helpers/share'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -42,7 +42,7 @@ const sharedFolder = {
   ownerDisplayName: 'Einstein',
   sdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
   size: '740',
-  shareTypes: [ShareType.user]
+  shareTypes: [ShareTypes.user.value]
 }
 
 const simpleOwnFile = {
@@ -61,7 +61,7 @@ const sharedFile = {
   thumbnail: 'example.com/image',
   sdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
   size: '740',
-  shareTypes: [ShareType.user]
+  shareTypes: [ShareTypes.user.value]
 }
 
 describe('Details SideBar Panel', () => {

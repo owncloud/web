@@ -120,7 +120,7 @@ export function aggregateResourceShares(
       previousShare?.storage_id === share.storage_id &&
       previousShare?.file_source === share.file_source
     ) {
-      if (ShareTypes.authenticated.includes(share.share_type)) {
+      if (ShareTypes.containsAnyValue(ShareTypes.authenticated, [share.share_type])) {
         previousShare.sharedWith.push({
           username: share.share_with,
           name: share.share_with_displayname,
@@ -128,7 +128,7 @@ export function aggregateResourceShares(
           avatar: undefined,
           shareType: share.share_type
         })
-      } else if (share.share_type === ShareType.link) {
+      } else if (share.share_type === ShareTypes.link.value) {
         previousShare.sharedWith.push({
           name: share.name || share.token,
           link: true,
@@ -139,7 +139,7 @@ export function aggregateResourceShares(
       continue
     }
 
-    if (ShareTypes.authenticated.includes(share.share_type)) {
+    if (ShareTypes.containsAnyValue(ShareTypes.authenticated, [share.share_type])) {
       share.sharedWith = [
         {
           username: share.share_with,
@@ -149,7 +149,7 @@ export function aggregateResourceShares(
           shareType: share.share_type
         }
       ]
-    } else if (share.share_type === ShareType.link) {
+    } else if (share.share_type === ShareTypes.link.value) {
       share.sharedWith = [
         {
           name: share.name || share.token,
@@ -188,7 +188,7 @@ export function buildSharedResource(share, incomingShares = false, allowSharePer
         username: share.uid_owner,
         displayName: share.displayname_owner,
         avatar: undefined,
-        shareType: ShareType.user
+        shareType: ShareTypes.user.value
       }
     ]
 
@@ -222,7 +222,7 @@ export function buildSharedResource(share, incomingShares = false, allowSharePer
 }
 
 export function buildShare(s, file, allowSharePermission) {
-  if (parseInt(s.share_type) === ShareType.link) {
+  if (parseInt(s.share_type) === ShareTypes.link.value) {
     return _buildLink(s)
   }
   return buildCollaboratorShare(s, file, allowSharePermission)
@@ -283,34 +283,33 @@ export function buildCollaboratorShare(s, file, allowSharePermission) {
     shareType: parseInt(s.share_type),
     id: s.id
   }
-  switch (share.shareType) {
-    case ShareType.user:
-    // fall through
-    case ShareType.remote:
-    // fall through
-    case ShareType.group:
-      // FIXME: SDK is returning empty object for additional info when empty
-      share.collaborator = {
-        name: s.share_with,
-        displayName: s.share_with_displayname,
-        additionalInfo: _fixAdditionalInfo(s.share_with_additional_info)
-      }
-      share.owner = {
-        name: s.uid_owner,
-        displayName: s.displayname_owner,
-        additionalInfo: _fixAdditionalInfo(s.additional_info_owner)
-      }
-      share.fileOwner = {
-        name: s.uid_file_owner,
-        displayName: s.displayname_file_owner,
-        additionalInfo: _fixAdditionalInfo(s.additional_info_file_owner)
-      }
-      share.stime = s.stime
-      share.permissions = s.permissions
-      share.customPermissions = SharePermissions.bitmaskToPermissions(s.permissions)
-      share.role = PeopleShareRoles.getByBitmask(s.permissions, file.isFolder, allowSharePermission)
-      // share.email = 'foo@djungle.com' // hm, where do we get the mail from? share_with_additional_info:Object?
-      break
+  if (
+    ShareTypes.containsAnyValue(
+      [ShareTypes.user, ShareTypes.remote, ShareTypes.group],
+      [share.shareType]
+    )
+  ) {
+    // FIXME: SDK is returning empty object for additional info when empty
+    share.collaborator = {
+      name: s.share_with,
+      displayName: s.share_with_displayname,
+      additionalInfo: _fixAdditionalInfo(s.share_with_additional_info)
+    }
+    share.owner = {
+      name: s.uid_owner,
+      displayName: s.displayname_owner,
+      additionalInfo: _fixAdditionalInfo(s.additional_info_owner)
+    }
+    share.fileOwner = {
+      name: s.uid_file_owner,
+      displayName: s.displayname_file_owner,
+      additionalInfo: _fixAdditionalInfo(s.additional_info_file_owner)
+    }
+    share.stime = s.stime
+    share.permissions = s.permissions
+    share.customPermissions = SharePermissions.bitmaskToPermissions(s.permissions)
+    share.role = PeopleShareRoles.getByBitmask(s.permissions, file.isFolder, allowSharePermission)
+    // share.email = 'foo@djungle.com' // hm, where do we get the mail from? share_with_additional_info:Object?
   }
 
   // expiration:Object if unset, or string "2019-04-24 00:00:00"

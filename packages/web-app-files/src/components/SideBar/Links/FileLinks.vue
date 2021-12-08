@@ -75,7 +75,7 @@ import { cloneStateObject } from '../../../helpers/store'
 import LinkEdit from './PublicLinks/LinkEdit.vue'
 import ListItem from './PublicLinks/ListItem.vue'
 import PrivateLinkItem from './PrivateLinkItem.vue'
-import { ShareType } from '../../../helpers/share'
+import { ShareTypes } from '../../../helpers/share'
 
 const VIEW_SHOW = 'showLinks'
 const VIEW_EDIT = 'editPublicLink'
@@ -157,7 +157,7 @@ export default {
         const shares = cloneStateObject(this.sharesTree[parentPath])
         if (shares) {
           shares.forEach((share) => {
-            if (share.outgoing && share.shareType === ShareType.link) {
+            if (share.outgoing && share.shareType === ShareTypes.link.value) {
               share.key = 'indirect-link-' + share.id
               allShares.push(share)
             }

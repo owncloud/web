@@ -235,7 +235,7 @@ export default {
       'incomingSharesClearState'
     ]),
     $_isCollaboratorShare(collaborator) {
-      return ShareTypes.authenticated.includes(collaborator.shareType)
+      return ShareTypes.containsAnyValue(ShareTypes.authenticated, [collaborator.shareType])
     },
     collaboratorsComparator(c1, c2) {
       // Sorted by: type, direct, display name, creation date
@@ -243,8 +243,8 @@ export default {
       const c2DisplayName = c2.collaborator ? c2.collaborator.displayName : c2.displayName
       const name1 = c1DisplayName.toLowerCase().trim()
       const name2 = c2DisplayName.toLowerCase().trim()
-      const c1UserShare = ShareTypes.individuals.includes(c1.shareType)
-      const c2UserShare = ShareTypes.individuals.includes(c2.shareType)
+      const c1UserShare = ShareTypes.containsAnyValue(ShareTypes.individuals, [c1.shareType])
+      const c2UserShare = ShareTypes.containsAnyValue(ShareTypes.individuals, [c2.shareType])
       const c1DirectShare = !c1.indirect
       const c2DirectShare = !c2.indirect
 

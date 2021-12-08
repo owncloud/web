@@ -1,7 +1,6 @@
-import intersection from 'lodash-es/intersection'
 import { getParentPaths } from './path'
 import { $gettext } from '../gettext'
-import { ShareType, ShareTypes } from './share'
+import { ShareTypes } from './share'
 
 const $shareTypes = (resource) => {
   if (typeof resource.shareTypes !== 'undefined') {
@@ -9,29 +8,35 @@ const $shareTypes = (resource) => {
   }
 
   if (resource.shares) {
-    return Array.from(new Set(resource.shares.map((share) => parseInt(share.type, 10))))
+    return Array.from(new Set(resource.shares.map((share) => parseInt(share.type))))
   }
 
   return []
 }
 
 const isDirectUserShare = (resource) => {
-  return intersection($shareTypes(resource), ShareTypes.authenticated).length > 0
+  return ShareTypes.containsAnyValue(ShareTypes.authenticated, $shareTypes(resource))
 }
 
 const isIndirectUserShare = (resource, sharesTree) => {
   return (
     resource.isReceivedShare() ||
-    intersection(shareTypesIndirect(resource.path, sharesTree), ShareTypes.authenticated).length > 0
+    ShareTypes.containsAnyValue(
+      ShareTypes.authenticated,
+      shareTypesIndirect(resource.path, sharesTree)
+    )
   )
 }
 
 const isDirectLinkShare = (resource) => {
-  return $shareTypes(resource).indexOf(ShareType.link) >= 0
+  return ShareTypes.containsAnyValue(ShareTypes.unauthenticated, $shareTypes(resource))
 }
 
 const isIndirectLinkShare = (resource, sharesTree) => {
-  return shareTypesIndirect(resource.path, sharesTree).indexOf(ShareType.link) >= 0
+  return ShareTypes.containsAnyValue(
+    ShareTypes.unauthenticated,
+    shareTypesIndirect(resource.path, sharesTree)
+  )
 }
 
 const isUserShare = (resource, sharesTree) => {

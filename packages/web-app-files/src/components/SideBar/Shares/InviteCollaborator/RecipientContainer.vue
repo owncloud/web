@@ -20,7 +20,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { avatarUrl } from '../../../../helpers/user'
-import { ShareType } from '../../../../helpers/share'
+import { ShareTypes } from '../../../../helpers/share'
 
 export default {
   props: {
@@ -40,7 +40,7 @@ export default {
       formattedRecipient: {
         name: this.recipient.label,
         icon: this.getRecipientIcon(),
-        hasAvatar: this.recipient.value.shareType === ShareType.user,
+        hasAvatar: this.recipient.value.shareType === ShareTypes.user.value,
         isLoadingAvatar: true
       }
     }
@@ -59,7 +59,7 @@ export default {
   async created() {
     if (
       this.capabilities.files_sharing.user.profile_picture &&
-      this.recipient.value.shareType === ShareType.user
+      this.recipient.value.shareType === ShareTypes.user.value
     ) {
       try {
         this.formattedRecipient.avatar = await avatarUrl({
@@ -78,19 +78,19 @@ export default {
   methods: {
     getRecipientIcon() {
       switch (this.recipient.value.shareType) {
-        case ShareType.group:
+        case ShareTypes.group.value:
           return {
             name: 'group',
             label: this.$gettext('Group')
           }
 
-        case ShareType.guest:
+        case ShareTypes.guest.value:
           return {
             name: 'user_remote',
             label: this.$gettext('Guest user')
           }
 
-        case ShareType.remote:
+        case ShareTypes.remote.value:
           return {
             name: 'user_remote',
             label: this.$gettext('Remote user')

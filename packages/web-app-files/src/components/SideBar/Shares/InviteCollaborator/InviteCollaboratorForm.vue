@@ -75,7 +75,7 @@ import AutocompleteItem from './AutocompleteItem.vue'
 import RoleDropdown from '../RoleDropdown.vue'
 import RecipientContainer from './RecipientContainer.vue'
 import ExpirationDatepicker from './ExpirationDatepicker.vue'
-import { PeopleShareRoles, SharePermissions, ShareType } from '../../../../helpers/share'
+import { PeopleShareRoles, SharePermissions, ShareTypes } from '../../../../helpers/share'
 
 export default {
   name: 'InviteCollaboratorForm',
@@ -197,7 +197,7 @@ export default {
 
       return recipients.filter(
         (recipient) =>
-          recipient.value.shareType === ShareType.remote ||
+          recipient.value.shareType === ShareTypes.remote.value ||
           recipient.label.toLocaleLowerCase().indexOf(query.toLocaleLowerCase()) > -1 ||
           recipient.value.shareWith.toLocaleLowerCase().indexOf(query.toLocaleLowerCase()) > -1 ||
           (recipient.value.shareWithAdditionalInfo || '')
@@ -225,7 +225,7 @@ export default {
           saveQueue.add(() => {
             const bitmask = this.selectedRole.hasCustomPermissions
               ? SharePermissions.permissionsToBitmask(this.customPermissions)
-              : SharePermissions.permissionsToBitmask(this.selectedRole.permissions)
+              : SharePermissions.permissionsToBitmask(this.selectedRole.permissions(!this.isOcis))
             this.addShare({
               client: this.$client,
               path: this.highlightedFile.path,
