@@ -36,6 +36,8 @@ export function renameResource(resource, newName, newPath) {
   resource.name = newName
   resource.path = '/' + newPath + newName
   resource.extension = isFolder ? '' : extension
+
+  return resource
 }
 
 export function buildResource(resource) {
