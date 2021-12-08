@@ -214,9 +214,7 @@ export default {
         return
       }
 
-      if (newFile.id !== oldFile?.id) {
-        this.fetchFileInfo()
-      }
+      this.fetchFileInfo()
     },
 
     highlightedFileThumbnail(thumbnail) {
