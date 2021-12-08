@@ -272,3 +272,15 @@ Feature: rename files
     And file "new-lorem.txt" should not be listed on the webUI
     And as "Alice" file "lorem.txt" should not exist
     And as "Alice" file "new-lorem.txt" should not exist
+
+  @issue-4893
+  Scenario: Rename file extension through context-menu without reload (oc10 and ocis bug demonstration)
+    When the user renames file "lorem.txt" to "lorem.md" through context-menu using the webUI
+    Then file "lorem.md" should be listed as "lore.txt" on the files-table
+    And file "lorem.md" should be listed on the sidebar
+
+  @issue-4893
+  Scenario: Rename file extension through sidebar without reload (oc10 and ocis bug demonstration)
+    When the user renames file "lorem.txt" to "lorem.md" using the webUI
+    Then file "lorem.txt" should be listed on the sidebar
+    And file "lorem.md" should be listed as "lore.txt" on the files-table

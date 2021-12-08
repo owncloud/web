@@ -85,6 +85,16 @@ module.exports = {
       await fileActionsMenu.rename(toName, expectToSucceed)
       return this
     },
+    renameFileFromContextMenu: async function (
+      fromName,
+      toName,
+      expectToSucceed = true,
+      elementType = 'any'
+    ) {
+      await this.openContextMenu(fromName, elementType)
+      await contextMenu.selectRenameFile()
+      return await fileActionsMenu.rename(toName, expectToSucceed)
+    },
     /**
      * @param {string} resource
      * @param {string} elementType
@@ -365,6 +375,16 @@ module.exports = {
 
       this.api.execute('scrollTo(0,' + offset + ')')
       return this
+    },
+    waitForFileRenameVisible: async function (fileName, elementType = 'any') {
+      const rowSelector = this.getFileRowSelectorByFileName(fileName, elementType)
+      await this.waitForFileVisible(fileName, (elementType = 'any'))
+      let resourceName = null
+      await this.getText('xpath', rowSelector, (result) => {
+        const res = result.value
+        resourceName = res.split('\n')
+      })
+      return resourceName[1]
     },
     /**
      *

@@ -1537,3 +1537,30 @@ function assertIncludesMessage(messageArr, message) {
     return false
   }
 }
+
+When(
+  'the user renames file {string} to {string} through context-menu using the webUI',
+  function (fromName, toName) {
+    return client.page.FilesPageElement.filesList().renameFileFromContextMenu(
+      fromName,
+      toName,
+      false
+    )
+  }
+)
+
+Then(
+  'file {string} should be listed as {string} on the files-table',
+  async function (expectedFileName, actualFileName) {
+    const fileRename = await client.page.FilesPageElement.filesList().waitForFileRenameVisible(
+      expectedFileName,
+      'file'
+    )
+    return assert.strictEqual(fileRename, actualFileName)
+  }
+)
+
+Then('file {string} should be listed on the sidebar', async function (file) {
+  await client.page.FilesPageElement.filesList().openSideBar(file)
+  await client.page.FilesPageElement.appSideBar().isSideBarOpenForResource(file)
+})
