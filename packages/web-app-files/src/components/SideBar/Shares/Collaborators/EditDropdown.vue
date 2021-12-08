@@ -107,11 +107,11 @@ export default {
     },
 
     editingUser() {
-      return this.existingCollaboratorType === 'user'
+      return this.shareCategory === 'user'
     },
 
     editingGroup() {
-      return this.existingCollaboratorType === 'group'
+      return this.shareCategory === 'group'
     },
 
     isExpirationSupported() {

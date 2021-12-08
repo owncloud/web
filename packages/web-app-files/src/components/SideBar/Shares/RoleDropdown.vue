@@ -98,7 +98,7 @@ export default {
       required: false,
       default: () => []
     },
-    collaboratorId: {
+    shareId: {
       type: String,
       required: false,
       default: undefined
@@ -117,8 +117,8 @@ export default {
   computed: {
     ...mapGetters(['isOcis']),
     roleButtonId() {
-      if (this.collaboratorId) {
-        return `files-collaborators-role-button-${this.collaboratorId}`
+      if (this.shareId) {
+        return `files-collaborators-role-button-${this.shareId}`
       }
       return 'files-collaborators-role-button-new'
     },

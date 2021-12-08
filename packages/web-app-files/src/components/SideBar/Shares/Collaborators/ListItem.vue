@@ -1,13 +1,13 @@
 <template>
   <div
-    :data-testid="`collaborator-item-${collaborator.collaborator.name}`"
+    :data-testid="`collaborator-item-${share.collaborator.name}`"
     class="files-collaborators-collaborator uk-flex oc-py-xs"
   >
     <div class="uk-width-2-3 uk-flex uk-flex-start" style="gap: 10px">
       <avatar-image
         v-if="isUser"
-        :userid="collaborator.collaborator.name"
-        :user-name="collaborator.collaborator.displayName"
+        :userid="share.collaborator.name"
+        :user-name="share.collaborator.displayName"
         :width="48"
         class="sharee-avatar"
       />
@@ -52,17 +52,17 @@
     >
       <role-dropdown
         :resource="highlightedFile"
-        :collaborator-id="collaborator.id"
-        :existing-permissions="collaborator.customPermissions"
-        :existing-role="collaborator.role"
+        :share-id="share.id"
+        :existing-permissions="share.customPermissions"
+        :existing-role="share.role"
         :allow-share-permission="!isOcis"
-        @optionChange="collaboratorRoleChanged"
+        @optionChange="shareRoleChanged"
       />
       <edit-dropdown
         class="oc-ml-s"
-        :expiration-date="collaborator.expires ? collaborator.expires : null"
-        :existing-collaborator-type="collaboratorType"
-        @expirationDateChanged="collaboratorExpirationChanged"
+        :expiration-date="share.expires ? share.expires : null"
+        :share-category="shareCategory"
+        @expirationDateChanged="shareExpirationChanged"
         @removeShare="removeShare"
       />
     </div>
@@ -86,7 +86,7 @@ export default {
   },
   mixins: [Mixins],
   props: {
-    collaborator: {
+    share: {
       type: Object,
       required: true
     },
@@ -100,7 +100,7 @@ export default {
     ...mapGetters(['user', 'isOcis']),
 
     shareType() {
-      return ShareTypes.getByValue(this.collaborator.shareType)
+      return ShareTypes.getByValue(this.share.shareType)
     },
 
     shareTypeKey() {
@@ -119,19 +119,19 @@ export default {
       return this.$gettext(this.shareType.label)
     },
 
-    collaboratorType() {
+    shareCategory() {
       return ShareTypes.isIndividual(this.shareType) ? 'user' : 'group'
     },
 
     shareDisplayName() {
-      return this.collaborator.collaborator.displayName
+      return this.share.collaborator.displayName
     },
 
     shareAdditionalInfo() {
-      if (this.collaborator.collaborator.additionalInfo === null) {
+      if (this.share.collaborator.additionalInfo === null) {
         return
       }
-      return ` (${this.collaborator.collaborator.additionalInfo})`
+      return ` (${this.share.collaborator.additionalInfo})`
     },
 
     screenreaderShareDisplayName() {
@@ -164,55 +164,67 @@ export default {
     },
 
     hasExpirationDate() {
-      return this.collaborator.expires
+      return this.share.expires
     },
 
     expirationDate() {
-      return DateTime.fromJSDate(this.collaborator.expires)
+      return DateTime.fromJSDate(this.share.expires)
         .endOf('day')
         .setLocale(this.$language.current)
         .toLocaleString(DateTime.DATETIME_FULL)
     },
 
     expirationDateRelative() {
-      return DateTime.fromJSDate(this.collaborator.expires)
+      return DateTime.fromJSDate(this.share.expires)
         .endOf('day')
         .setLocale(this.$language.current)
         .toRelative()
     }
   },
   methods: {
+    ...mapActions(['showMessage']),
     ...mapActions('Files', ['changeShare']),
 
     removeShare() {
-      this.$emit('onDelete', this.collaborator)
+      this.$emit('onDelete', this.share)
     },
 
-    collaboratorRoleChanged({ role, permissions }) {
-      // FIXME: this clears the expiration date somehow?!
-      const expiryDate = this.collaborator.expires
-      this.saveCollaboratorChanges({ role, permissions, expiryDate })
+    shareRoleChanged({ role, permissions }) {
+      const expirationDate = this.share.expires
+      try {
+        this.saveShareChanges({ role, permissions, expirationDate })
+      } catch (e) {
+        console.error(e)
+        this.showMessage({
+          title: this.$gettext('Failed to apply new permissions'),
+          status: 'danger'
+        })
+      }
     },
 
-    collaboratorExpirationChanged({ expirationDate }) {
-      // FIXME: does this clear the role?!
-      const role = this.collaborator.role
-      const permissions = this.collaborator.customPermissions
-      this.saveCollaboratorChanges({ role, permissions, expirationDate })
+    shareExpirationChanged({ expirationDate }) {
+      const role = this.share.role
+      const permissions = this.share.customPermissions
+      try {
+        this.saveShareChanges({ role, permissions, expirationDate })
+      } catch (e) {
+        console.error(e)
+        this.showMessage({
+          title: this.$gettext('Failed to apply expiration date'),
+          status: 'danger'
+        })
+      }
     },
 
-    saveCollaboratorChanges({ role, permissions, expirationDate }) {
+    saveShareChanges({ role, permissions, expirationDate }) {
       const bitmask = role.hasCustomPermissions
         ? SharePermissions.permissionsToBitmask(permissions)
         : SharePermissions.permissionsToBitmask(role.permissions(!this.isOcis))
-      const expiration = expirationDate || this.expirationDate
       this.changeShare({
         client: this.$client,
-        share: this.collaborator,
+        share: this.share,
         permissions: bitmask,
-        expirationDate: expiration || ''
-      }).catch((errors) => {
-        this.errors = errors
+        expirationDate
       })
     }
   }

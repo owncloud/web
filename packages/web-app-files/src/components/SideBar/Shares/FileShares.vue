@@ -42,7 +42,7 @@
         >
           <li v-for="collaborator in collaborators" :key="collaborator.key">
             <collaborator-list-item
-              :collaborator="collaborator"
+              :share="collaborator"
               :modifiable="!collaborator.indirect"
               @onDelete="$_ocCollaborators_deleteShare"
             />
