@@ -94,7 +94,7 @@
     "react": "^17.0.2",
     "regenerator-runtime": "^0.13.7",
     "requirejs": "^2.3.6",
-    "rollup": "^2.52.7",
+    "rollup": "^2.60.2",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-copy-watch": "^0.0.1",
     "rollup-plugin-delete": "^2.0.0",
