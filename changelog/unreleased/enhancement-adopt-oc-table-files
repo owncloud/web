@@ -1,0 +1,7 @@
+Enhancement: Adopt oc-table-files from ods
+
+ods oc-table-files always contained concrete web-app-files logic, to make development more agile and keep things close
+oc-table-files was renamed to resource-table and relocated to live in web-app-files from now on.
+
+https://github.com/owncloud/web/pull/6106
+https://github.com/owncloud/owncloud-design-system/pull/1817

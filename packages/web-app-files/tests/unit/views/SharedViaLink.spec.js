@@ -13,12 +13,12 @@ describe('SharedViaLink view', () => {
 
     describe('when there are no files to be displayed', () => {
       it.todo('should show no-content-message component')
-      it.todo('should not show oc-table-files component')
+      it.todo('should not show resource-table component')
     })
 
     describe('when there are one or more files to be displayed', () => {
       it.todo('should not show no-content-message component')
-      it.todo('should show oc-table-files component with props')
+      it.todo('should show resource-table component with props')
       it.todo('should set props on context-actions component')
       it.todo('should set props on list-info component')
       it.todo('should trigger showing the sidebar when a "showDetails" event gets emitted')

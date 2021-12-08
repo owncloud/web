@@ -9,7 +9,7 @@
           <span class="oc-text-initial">({{ pendingCount }})</span>
         </h2>
 
-        <oc-table-files
+        <resource-table
           id="files-shared-with-me-pending-table"
           v-model="pendingSelected"
           :data-test-share-status="shareStatus.pending"
@@ -66,7 +66,7 @@
               </oc-button>
             </div>
           </template>
-        </oc-table-files>
+        </resource-table>
       </div>
 
       <!-- Accepted or declined shares -->
@@ -94,7 +94,7 @@
           <span>{{ sharesEmptyMessage }}</span>
         </template>
       </no-content-message>
-      <oc-table-files
+      <resource-table
         v-else
         id="files-shared-with-me-shares-table"
         v-model="sharesSelected"
@@ -145,13 +145,14 @@
             :folders="sharesCountFolders"
           />
         </template>
-      </oc-table-files>
+      </resource-table>
     </template>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
+import ResourceTable from '../components/FilesList/ResourceTable.vue'
 import { shareStatus } from '../helpers/shareStatus'
 import { aggregateResourceShares } from '../helpers/resources'
 import FileActions from '../mixins/fileActions'
@@ -174,6 +175,7 @@ const visibilityObserver = new VisibilityObserver()
 
 export default {
   components: {
+    ResourceTable,
     ListLoader,
     NoContentMessage,
     ListInfo,

@@ -19,7 +19,7 @@ localVue.use(GetTextPlugin, {
 
 const stubs = {
   'no-content-message': false,
-  'oc-table-files': false,
+  'resource-table': false,
   pagination: true,
   'list-info': true
 }
