@@ -382,11 +382,10 @@ module.exports = {
       let resourceName = null
       await this.getText('xpath', rowSelector, (result) => {
         const res = result.value
-        console.log(res)
         resourceName = res.split('\n')
-        console.log(resourceName)
       })
-      return resourceName[1]
+      const actualResourceName = client.globals.ocis ? resourceName[1] : resourceName[1] + resourceName[2]
+      return actualResourceName
     },
     /**
      *
