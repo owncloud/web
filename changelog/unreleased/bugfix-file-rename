@@ -1,0 +1,6 @@
+Bugfix: File renaming
+
+We fixed the displayed file name not being properly updated in files list and sidebar after renaming.
+
+https://github.com/owncloud/web/issues/4893
+https://github.com/owncloud/web/pull/6114
