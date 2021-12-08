@@ -1,3 +1,41 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v4.6.0...master
+
+Summary
+-------
+
+* Enhancement - Adopt oc-table-files from ods: [#6106](https://github.com/owncloud/web/pull/6106)
+* Enhancement - Update ODS to v12.0.0-alpha1: [#6106](https://github.com/owncloud/web/pull/6106)
+
+Details
+-------
+
+* Enhancement - Adopt oc-table-files from ods: [#6106](https://github.com/owncloud/web/pull/6106)
+
+   Ods oc-table-files always contained concrete web-app-files logic, to make development more
+   agile and keep things close oc-table-files was renamed to resource-table and relocated to
+   live in web-app-files from now on.
+
+   https://github.com/owncloud/web/pull/6106
+   https://github.com/owncloud/owncloud-design-system/pull/1817
+
+* Enhancement - Update ODS to v12.0.0-alpha1: [#6106](https://github.com/owncloud/web/pull/6106)
+
+   We updated the ownCloud Design System to version 12.0.0-alpha1. Please refer to the full
+   changelog in the ODS release (linked) for more details. Summary:
+
+   - Change - Remove oc-table-files from ods:
+   https://github.com/owncloud/owncloud-design-system/pull/1817 - Change - Remove unused
+   props for unstyled components:
+   https://github.com/owncloud/owncloud-design-system/pull/1795
+
+   https://github.com/owncloud/web/pull/6106
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v12.0.0-alpha1
+
 Changelog for ownCloud Web [4.6.0] (2021-12-07)
 =======================================
 The following sections list the changes in ownCloud web 4.6.0 relevant to
