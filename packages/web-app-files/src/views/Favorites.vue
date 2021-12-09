@@ -7,7 +7,7 @@
           <span v-translate>There are no resources marked as favorite</span>
         </template>
       </no-content-message>
-      <oc-table-files
+      <resource-table
         v-else
         id="files-favorites-table"
         v-model="selected"
@@ -37,7 +37,7 @@
             :size="totalFilesSize"
           />
         </template>
-      </oc-table-files>
+      </resource-table>
     </template>
   </div>
 </template>
@@ -45,6 +45,7 @@
 <script>
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 import { computed } from '@vue/composition-api'
+import ResourceTable from '../components/FilesList/ResourceTable.vue'
 
 import { buildResource } from '../helpers/resources'
 import FileActions from '../mixins/fileActions'
@@ -74,6 +75,7 @@ const visibilityObserver = new VisibilityObserver()
 
 export default {
   components: {
+    ResourceTable,
     QuickActions,
     ListLoader,
     Pagination,

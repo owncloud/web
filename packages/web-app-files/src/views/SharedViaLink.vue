@@ -12,7 +12,7 @@
           <span v-translate>There are no resources with a public link at the moment</span>
         </template>
       </no-content-message>
-      <oc-table-files
+      <resource-table
         v-else
         id="files-shared-via-link-table"
         v-model="selected"
@@ -37,13 +37,14 @@
             :folders="totalFilesCount.folders"
           />
         </template>
-      </oc-table-files>
+      </resource-table>
     </template>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
+import ResourceTable from '../components/FilesList/ResourceTable.vue'
 import {
   useFileListHeaderPosition,
   useStore,
@@ -72,7 +73,7 @@ import ContextActions from '../components/FilesList/ContextActions.vue'
 const visibilityObserver = new VisibilityObserver()
 
 export default {
-  components: { ListLoader, NoContentMessage, ListInfo, Pagination, ContextActions },
+  components: { ResourceTable, ListLoader, NoContentMessage, ListInfo, Pagination, ContextActions },
 
   mixins: [FileActions, MixinResources, MixinMountSideBar, MixinFilesListFilter],
 

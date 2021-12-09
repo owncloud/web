@@ -10,7 +10,7 @@ import { PeopleShareRoles, SharePermissions, ShareStatus, ShareType, ShareTypes 
 
 // Should we move this to ODS?
 export function getFileIcon(extension) {
-  const icon = fileIconMappings[extension]
+  const icon = fileIconMappings[extension.toLowerCase()]
 
   if (icon) {
     return icon
@@ -24,7 +24,7 @@ function _getFileExtension(name) {
   if (!extension) {
     return ''
   }
-  return extension.replace(/^(.)/, '').toLowerCase()
+  return extension.replace(/^(.)/, '')
 }
 
 export function buildResource(resource) {

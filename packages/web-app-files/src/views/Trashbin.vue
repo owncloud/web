@@ -12,7 +12,7 @@
           <span v-translate>You have no deleted files</span>
         </template>
       </no-content-message>
-      <oc-table-files
+      <resource-table
         v-else
         id="files-trashbin-table"
         v-model="selected"
@@ -36,7 +36,7 @@
             :folders="totalFilesCount.folders"
           />
         </template>
-      </oc-table-files>
+      </resource-table>
     </template>
   </div>
 </template>
@@ -44,6 +44,7 @@
 <script>
 import { mapGetters, mapMutations, mapState } from 'vuex'
 import { computed } from '@vue/composition-api'
+import ResourceTable from '../components/FilesList/ResourceTable.vue'
 
 import { buildDeletedResource, buildResource } from '../helpers/resources'
 import MixinFilesListFilter from '../mixins/filesListFilter'
@@ -66,7 +67,7 @@ import ContextActions from '../components/FilesList/ContextActions.vue'
 import { DavProperties } from 'web-pkg/src/constants'
 
 export default {
-  components: { ListLoader, NoContentMessage, ListInfo, Pagination, ContextActions },
+  components: { ResourceTable, ListLoader, NoContentMessage, ListInfo, Pagination, ContextActions },
 
   mixins: [MixinResources, MixinMountSideBar, MixinFilesListFilter],
 

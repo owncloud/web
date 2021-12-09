@@ -16,7 +16,7 @@
           <span v-translate>Drag files and folders here or use the "+ New" button to upload</span>
         </template>
       </no-content-message>
-      <oc-table-files
+      <resource-table
         v-else
         id="files-personal-table"
         v-model="selected"
@@ -52,7 +52,7 @@
             :size="totalFilesSize"
           />
         </template>
-      </oc-table-files>
+      </resource-table>
     </template>
   </div>
 </template>
@@ -81,6 +81,7 @@ import {
 } from '../composables'
 import { bus } from 'web-pkg/src/instance'
 
+import ResourceTable from '../components/FilesList/ResourceTable.vue'
 import QuickActions from '../components/FilesList/QuickActions.vue'
 import ListLoader from '../components/FilesList/ListLoader.vue'
 import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
@@ -98,6 +99,7 @@ const visibilityObserver = new VisibilityObserver()
 
 export default {
   components: {
+    ResourceTable,
     QuickActions,
     ListLoader,
     NoContentMessage,

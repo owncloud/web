@@ -9,7 +9,7 @@ const stubs = {
   'router-link': true,
   translate: true,
   'oc-pagination': true,
-  'oc-table-files': true,
+  'resource-table': true,
   'oc-spinner': true,
   'context-actions': true
 }
@@ -20,7 +20,7 @@ const selectors = {
 }
 
 const spinnerStub = 'oc-spinner-stub'
-const filesTableStub = 'oc-table-files-stub'
+const resourceTableStub = 'resource-table-stub'
 const paginationStub = 'oc-pagination-stub'
 const listInfoStub = 'list-info-stub'
 
@@ -32,7 +32,7 @@ describe('Favorites component', () => {
       const wrapper = getMountedWrapper({ loading: true })
 
       expect(wrapper.find(spinnerStub).exists()).toBeTruthy()
-      expect(wrapper.find(filesTableStub).exists()).toBeFalsy()
+      expect(wrapper.find(resourceTableStub).exists()).toBeFalsy()
     })
 
     it('shows only the files table when loading is finished', () => {
@@ -45,7 +45,7 @@ describe('Favorites component', () => {
       })
 
       expect(wrapper.find(spinnerStub).exists()).toBeFalsy()
-      expect(wrapper.find(filesTableStub).exists()).toBeTruthy()
+      expect(wrapper.find(resourceTableStub).exists()).toBeTruthy()
     })
   })
   describe('no content message', () => {
@@ -54,7 +54,7 @@ describe('Favorites component', () => {
       const wrapper = getMountedWrapper({ store, loading: false })
 
       expect(wrapper.find(selectors.noContentMessage).exists()).toBeTruthy()
-      expect(wrapper.find(filesTableStub).exists()).toBeFalsy()
+      expect(wrapper.find(resourceTableStub).exists()).toBeFalsy()
     })
 
     it('does not show the no content message if resources are marked as favorite', () => {
@@ -67,7 +67,7 @@ describe('Favorites component', () => {
       })
 
       expect(wrapper.find('#files-favorites-empty').exists()).toBeFalsy()
-      expect(wrapper.find(filesTableStub).exists()).toBeTruthy()
+      expect(wrapper.find(resourceTableStub).exists()).toBeTruthy()
     })
   })
   describe('files table', () => {
@@ -165,7 +165,7 @@ describe('Favorites component', () => {
 
     describe('pagination', () => {
       beforeEach(() => {
-        stubs['oc-table-files'] = false
+        stubs['resource-table'] = false
       })
 
       it('does not show any pagination when there is only one page', () => {
@@ -183,7 +183,7 @@ describe('Favorites component', () => {
 
     describe('list-info', () => {
       beforeEach(() => {
-        stubs['oc-table-files'] = false
+        stubs['resource-table'] = false
         stubs['list-info'] = true
       })
 

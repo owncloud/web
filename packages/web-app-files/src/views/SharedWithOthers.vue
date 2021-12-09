@@ -14,7 +14,7 @@
           </span>
         </template>
       </no-content-message>
-      <oc-table-files
+      <resource-table
         v-else
         id="files-shared-with-others-table"
         v-model="selected"
@@ -39,7 +39,7 @@
             :folders="totalFilesCount.folders"
           />
         </template>
-      </oc-table-files>
+      </resource-table>
     </template>
   </div>
 </template>
@@ -47,6 +47,7 @@
 <script>
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 import { computed } from '@vue/composition-api'
+import ResourceTable from '../components/FilesList/ResourceTable.vue'
 
 import { aggregateResourceShares } from '../helpers/resources'
 import FileActions from '../mixins/fileActions'
@@ -74,7 +75,7 @@ import ContextActions from '../components/FilesList/ContextActions.vue'
 const visibilityObserver = new VisibilityObserver()
 
 export default {
-  components: { ListLoader, NoContentMessage, ListInfo, Pagination, ContextActions },
+  components: { ResourceTable, ListLoader, NoContentMessage, ListInfo, Pagination, ContextActions },
 
   mixins: [FileActions, MixinResources, MixinMountSideBar, MixinFilesListFilter],
 

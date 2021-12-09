@@ -14,11 +14,7 @@
           >
             {{ formRelativeDateFromHTTP(item.fileInfo[DavProperty.LastModifiedDate]) }}
           </oc-td>
-          <oc-td
-            width="expand"
-            class="oc-text-muted uk-text-nowrap"
-            data-testid="file-versions-file-size"
-          >
+          <oc-td class="oc-text-muted uk-text-nowrap" data-testid="file-versions-file-size">
             {{ getResourceSize(item.fileInfo[DavProperty.ContentLength]) }}
           </oc-td>
           <oc-td width="shrink">

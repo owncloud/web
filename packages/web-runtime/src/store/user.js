@@ -101,11 +101,18 @@ const actions = {
         const userGroups = await client.users.getUserGroups(login.id)
         const user = await client.users.getUser(login.id)
 
+        let userEmail = ''
+        if (login && login.email) {
+          userEmail = login.email
+        } else if (user && user.email) {
+          userEmail = user.email
+        }
+
         context.commit('SET_USER', {
           id: login.id,
           username: login.username,
           displayname: login.displayname || login['display-name'],
-          email: !Object.keys(login.email).length ? '' : login.email,
+          email: userEmail,
           token,
           isAuthenticated: true,
           groups: userGroups

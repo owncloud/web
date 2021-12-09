@@ -16,7 +16,7 @@
           <span v-translate>Drag files and folders here or use the "+ New" button to upload</span>
         </template>
       </no-content-message>
-      <oc-table-files
+      <resource-table
         v-else
         id="files-public-files-table"
         v-model="selected"
@@ -42,13 +42,14 @@
             :size="totalFilesSize"
           />
         </template>
-      </oc-table-files>
+      </resource-table>
     </template>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions, mapMutations, mapState } from 'vuex'
+import ResourceTable from '../components/FilesList/ResourceTable.vue'
 import {
   useMutationSubscription,
   useFileListHeaderPosition,
@@ -118,6 +119,7 @@ const unauthenticatedUserReady = async (router, store) => {
 const visibilityObserver = new VisibilityObserver()
 export default {
   components: {
+    ResourceTable,
     ListInfo,
     Pagination,
     ListLoader,

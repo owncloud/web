@@ -1,5 +1,6 @@
 import quickActions, { canShare, openNewCollaboratorsPanel } from '../../quickActions'
-import { isTrashbinRoute } from '../../helpers/route'
+import { isSharedWithMeRoute, isTrashbinRoute } from '../../helpers/route'
+import { shareStatus } from '../../helpers/shareStatus'
 
 export default {
   computed: {
@@ -16,6 +17,12 @@ export default {
             }
             if (resources.length !== 1) {
               return false
+            }
+            if (isSharedWithMeRoute(this.$route)) {
+              if (resources[0].status !== shareStatus.accepted) {
+                return false
+              }
+              // FIXME: also check via capabilities if resharing is enabled + resharing is allowed on the share
             }
             return canShare(resources[0], this.$store)
           },

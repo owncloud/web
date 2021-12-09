@@ -9,7 +9,7 @@
           <span class="oc-text-initial">({{ pendingCount }})</span>
         </h2>
 
-        <oc-table-files
+        <resource-table
           id="files-shared-with-me-pending-table"
           v-model="pendingSelected"
           :data-test-share-status="ShareStatus.pending"
@@ -46,7 +46,10 @@
             </div>
           </template>
           <template #contextMenu="{ resource }">
-            <context-actions v-if="isResourceInSelection(resource)" :item="resource" />
+            <context-actions
+              v-if="isResourceInPendingSelection(resource)"
+              :items="pendingSelected"
+            />
           </template>
           <template v-if="pendingHasMore" #footer>
             <div class="uk-width-1-1 uk-text-center oc-mt">
@@ -63,7 +66,7 @@
               </oc-button>
             </div>
           </template>
-        </oc-table-files>
+        </resource-table>
       </div>
 
       <!-- Accepted or declined shares -->
@@ -91,7 +94,7 @@
           <span>{{ sharesEmptyMessage }}</span>
         </template>
       </no-content-message>
-      <oc-table-files
+      <resource-table
         v-else
         id="files-shared-with-me-shares-table"
         v-model="sharesSelected"
@@ -132,7 +135,7 @@
           </div>
         </template>
         <template #contextMenu="{ resource }">
-          <context-actions v-if="isResourceInSelection(resource)" :items="selected" />
+          <context-actions v-if="isResourceInSharesSelection(resource)" :items="sharesSelected" />
         </template>
         <template #footer>
           <list-info
@@ -142,13 +145,14 @@
             :folders="sharesCountFolders"
           />
         </template>
-      </oc-table-files>
+      </resource-table>
     </template>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
+import ResourceTable from '../components/FilesList/ResourceTable.vue'
 import { aggregateResourceShares } from '../helpers/resources'
 import FileActions from '../mixins/fileActions'
 import MixinAcceptShare from '../mixins/actions/acceptShare'
@@ -171,6 +175,7 @@ const visibilityObserver = new VisibilityObserver()
 
 export default {
   components: {
+    ResourceTable,
     ListLoader,
     NoContentMessage,
     ListInfo,
@@ -372,8 +377,12 @@ export default {
       this.showMorePending = !this.showMorePending
     },
 
-    isResourceInSelection(resource) {
-      return this.selected?.includes(resource)
+    isResourceInPendingSelection(resource) {
+      return this.pendingSelected?.includes(resource)
+    },
+
+    isResourceInSharesSelection(resource) {
+      return this.sharesSelected?.includes(resource)
     }
   }
 }
