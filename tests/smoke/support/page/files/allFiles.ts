@@ -127,21 +127,6 @@ export class AllFilesPage {
     if (folderPaths.length) {
       await cta.files.navigateToFolder({ page: page, path: folderPaths.join('/') })
     }
-<<<<<<< HEAD
-
-    await cta.files.sidebar.open({ page: page, resource: folderName })
-    await cta.files.sidebar.openPanel({ page: page, name: 'sharing' })
-
-    await page.addStyleTag({
-      content: `
-      *,
-      *::before,
-      *::after {
-      transition: none !important;
-      }
-      `
-    })
-=======
     switch (via) {
       case 'QUICK_ACTION':
         await page.click(
@@ -155,7 +140,6 @@ export class AllFilesPage {
         break
     }
     await page.click('.files-collaborators-open-add-share-dialog-button')
->>>>>>> origin/master
 
     for (const user of users) {
       const shareInputLocator = page.locator('#files-share-invite-input')
