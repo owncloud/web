@@ -15,6 +15,13 @@ const simpleOwnFile = {
   size: '740'
 }
 
+const simpleDeletedFile = {
+  type: 'file',
+  ownerId: 'bob',
+  ownerDisplayName: 'Bob',
+  ddate: 'Wed, 21 Oct 2015 09:29:00 GMT'
+}
+
 const localVue = createLocalVue()
 localVue.use(Vuex)
 localVue.use(AsyncComputed)
@@ -36,14 +43,22 @@ describe('FileInfo', () => {
     expect(wrapper.find(selectors.mdate).exists()).toBeTruthy()
   })
 
-  it('shows modify date tooltip', () => {
+  it('shows modification date info', () => {
     const tooltipStub = jest.fn()
-    createWrapper(simpleOwnFile, tooltipStub)
+    const wrapper = createWrapper(simpleOwnFile, tooltipStub)
     expect(tooltipStub).toHaveBeenCalledTimes(1)
+    expect(wrapper).toMatchSnapshot()
+  })
+
+  it('shows deletion date info', () => {
+    const tooltipStub = jest.fn()
+    const wrapper = createWrapper(simpleDeletedFile, tooltipStub, 'files-trashbin')
+    expect(tooltipStub).toHaveBeenCalledTimes(1)
+    expect(wrapper).toMatchSnapshot()
   })
 })
 
-function createWrapper(testResource, tooltipStub) {
+function createWrapper(testResource, tooltipStub, routeName) {
   return shallowMount(FileInfo, {
     store: new Vuex.Store({
       getters: {
@@ -70,10 +85,14 @@ function createWrapper(testResource, tooltipStub) {
     },
     mocks: {
       $route: {
-        name: 'some-route',
+        name: routeName || 'some-route',
         query: { page: 1 }
       },
       publicPage: () => false
+    },
+    methods: {
+      formDateFromRFC: () => 'ABSOLUTE_TIME',
+      formRelativeDateFromRFC: () => 'RELATIVE_TIME'
     },
     provide: {
       displayedItem: {
