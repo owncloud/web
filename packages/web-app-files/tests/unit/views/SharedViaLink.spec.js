@@ -1,15 +1,26 @@
 import { shallowMount, mount } from '@vue/test-utils'
-import { useTask } from 'vue-concurrency'
 import { getStore, localVue, createFile } from './views.setup.js'
 import FileActions from '@files/src/mixins/fileActions'
 import SharedViaLink from '@files/src/views/SharedViaLink.vue'
 
+const component = { ...SharedViaLink, mounted: jest.fn() }
+
+const resources = [
+  createFile({ id: 2147491323, type: 'file' }),
+  createFile({ id: 2147491324, type: 'file' })
+]
+
+const stubs = {
+  'resource-table': false,
+  'context-actions': true,
+  pagination: true,
+  'list-info': true
+}
+
 const $router = {
   afterEach: jest.fn(),
   currentRoute: {
-    query: {
-      name: null
-    }
+    query: {}
   }
 }
 
@@ -22,36 +33,13 @@ const $route = {
   }
 }
 
-const activeFilesCurrentPage = [createFile({ id: 2147491323, type: 'file' })]
-localVue.use(useTask)
-localVue.prototype.$client.requests = {
-  ocs: jest.fn(() => ({
-    status: 200,
-    json: jest.fn(() =>
-      Promise.resolve({
-        ocs: {
-          data: activeFilesCurrentPage
-        }
-      })
-    )
-  }))
-}
-
-const stubs = {
-  'router-link': true,
-  'no-content-message': true,
-  pagination: true,
-  'oc-table-files': false,
-  'context-actions': true,
-  'list-info': true
-}
+const listLoaderStub = 'list-loader-stub'
+const listInfoStub = 'list-info-stub'
+const contextActionsStub = 'context-actions-stub'
 
 const selectors = {
-  listLoader: '#files-list-progress',
   noContentMessage: '#files-shared-via-link-empty',
-  ocTableFiles: '#files-shared-via-link-table',
-  contextActions: 'context-actions-stub',
-  listInfo: 'list-info-stub'
+  ocTableFiles: '#files-shared-via-link-table'
 }
 
 describe('SharedViaLink view', () => {
@@ -64,38 +52,25 @@ describe('SharedViaLink view', () => {
     jest.clearAllMocks()
   })
 
-  describe.only('when the view is still loading', () => {
+  describe('when the view is still loading', () => {
     it('should show list-loader component', () => {
-      const store = createStore()
-      const wrapper = getWrapper(store)
-      const listLoader = wrapper.find(selectors.listLoader)
+      const wrapper = getShallowWrapper({ loading: true })
+      const listLoader = wrapper.find(listLoaderStub)
 
       expect(listLoader.exists()).toBeTruthy()
-      expect(wrapper).toMatchSnapshot()
     })
   })
 
   describe('when the view is not loading anymore', () => {
-    it.only('should not show list-loader component', async () => {
-      const store = createStore()
-      const wrapper = getWrapper(store)
-      // these are required to wait for all async tasks to resolve
-      // and loadResourcesTask.isRunning to be false
-      // or we can use fulsh-promises
-      await wrapper.vm.$nextTick()
-      await wrapper.vm.$nextTick()
-      await wrapper.vm.$nextTick()
-      await wrapper.vm.$nextTick()
-      await wrapper.vm.$nextTick()
-      expect(wrapper.find(selectors.listLoader).exists()).toBeFalsy()
+    it('should not show list-loader component', () => {
+      const wrapper = getShallowWrapper()
+      expect(wrapper.find(listLoaderStub).exists()).toBeFalsy()
     })
 
     describe('when there are no files to be displayed', () => {
       let wrapper
       beforeEach(async () => {
-        stubs['no-content-message'] = false
-        const store = createStore()
-        wrapper = getWrapper(store)
+        wrapper = getMountedWrapper({ stubs })
       })
 
       it('should show no-content-message component', () => {
@@ -104,6 +79,7 @@ describe('SharedViaLink view', () => {
         expect(noContentMessage.exists()).toBeTruthy()
         expect(wrapper).toMatchSnapshot()
       })
+
       it('should not show oc-table-files component', () => {
         expect(wrapper.find(selectors.ocTableFiles).exists()).toBeFalsy()
       })
@@ -111,9 +87,16 @@ describe('SharedViaLink view', () => {
 
     describe('when there are one or more files to be displayed', () => {
       let wrapper
-      beforeEach(async () => {
-        const store = createStore(activeFilesCurrentPage)
-        wrapper = getWrapper(store)
+      beforeEach(() => {
+        const store = createStore({
+          totalFilesCount: { files: resources.length, folders: 0 }
+        })
+        wrapper = getMountedWrapper({
+          store,
+          setup: {
+            paginatedResources: resources
+          }
+        })
       })
 
       it('should not show no-content-message component', () => {
@@ -123,15 +106,15 @@ describe('SharedViaLink view', () => {
         const ocTableFiles = wrapper.find(selectors.ocTableFiles)
 
         expect(ocTableFiles.exists()).toBeTruthy()
-        expect(ocTableFiles.props().resources).toMatchObject(activeFilesCurrentPage)
+        expect(ocTableFiles.props().resources).toMatchObject(resources)
         expect(ocTableFiles.props().areThumbnailsDisplayed).toBe(false)
         expect(ocTableFiles.props().headerPosition).toBe(0)
         expect(ocTableFiles.props().targetRoute).toMatchObject({ name: 'files-personal' })
       })
       it('should set props on list-info component', () => {
-        const listInfo = wrapper.find(selectors.listInfo)
+        const listInfo = wrapper.find(listInfoStub)
 
-        expect(listInfo.props().files).toEqual(activeFilesCurrentPage.length)
+        expect(listInfo.props().files).toEqual(resources.length)
         expect(listInfo.props().folders).toEqual(0)
       })
       it('should trigger the default action when a "fileClick" event gets emitted', () => {
@@ -144,56 +127,68 @@ describe('SharedViaLink view', () => {
         expect(spyTriggerDefaultAction).toHaveBeenCalledTimes(1)
       })
       it('should lazily load previews when a "rowMounted" event gets emitted', () => {
-        expect(spyRowMounted).toHaveBeenCalledTimes(activeFilesCurrentPage.length)
+        expect(spyRowMounted).toHaveBeenCalledTimes(resources.length)
       })
       it('should not show context actions', () => {
-        const contextActions = wrapper.find(selectors.contextActions)
+        const contextActions = wrapper.find(contextActionsStub)
 
         expect(contextActions.exists()).toBeFalsy()
       })
 
       describe('when a file is highlighted', () => {
-        it('should set props on context-actions component', async () => {
-          const store = createStore(activeFilesCurrentPage, activeFilesCurrentPage[0])
-          const wrapper = getWrapper(store)
-
-          const contextActions = wrapper.find(selectors.contextActions)
+        it('should set props on context-actions component', () => {
+          const selectedFiles = [resources[0]]
+          const store = createStore({
+            totalFilesCount: { files: resources.length, folders: 0 },
+            selectedFiles: selectedFiles
+          })
+          const wrapper = getMountedWrapper({
+            store: store,
+            setup: {
+              paginatedResources: resources
+            }
+          })
+          const contextActions = wrapper.find(contextActionsStub)
 
           expect(contextActions.exists()).toBeTruthy()
-          expect(contextActions.props().item).toMatchObject(activeFilesCurrentPage[0])
+          expect(contextActions.props().items).toMatchObject(selectedFiles)
         })
       })
     })
   })
 })
 
-function getWrapper(store) {
-  return mount(SharedViaLink, {
+function mountOptions(store, loading, setup = {}) {
+  return {
     localVue,
-    store,
+    store: store,
     stubs,
     mocks: {
       $route,
       $router
-    }
-  })
+    },
+    setup: () => ({
+      loadResourcesTask: {
+        isRunning: loading,
+        perform: jest.fn()
+      },
+      ...setup
+    })
+  }
 }
 
-function getShallowWrapper(store) {
-  return shallowMount(SharedViaLink, {
-    localVue,
-    store,
-    mocks: {
-      $route,
-      $router
-    }
-  })
+function getMountedWrapper({ store = createStore(), loading = false, setup, stubs } = {}) {
+  return mount(component, mountOptions(store, loading, setup))
 }
 
-function createStore(activeFilesCurrentPage = [], highlightedFile = null) {
+function getShallowWrapper({ store = createStore(), loading = false, setup, stubs } = {}) {
+  return shallowMount(component, mountOptions(store, loading, setup))
+}
+
+function createStore({ totalFilesCount, highlightedFile, selectedFiles } = {}) {
   return getStore({
-    highlightedFile: highlightedFile,
-    activeFilesCurrentPage,
-    totalFilesCount: { files: activeFilesCurrentPage.length, folders: 0 }
+    highlightedFile,
+    totalFilesCount,
+    selectedFiles
   })
 }
