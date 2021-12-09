@@ -533,7 +533,7 @@ export default {
   async loadPreview({ commit, rootGetters }, { resource, isPublic, dimensions, type }) {
     if (
       rootGetters.previewFileExtensions.length &&
-      !rootGetters.previewFileExtensions.includes(resource.extension)
+      !rootGetters.previewFileExtensions.includes(resource.extension.toLowerCase())
     ) {
       return
     }

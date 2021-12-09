@@ -24,7 +24,7 @@ export default {
               return false
             }
 
-            return resources[0].extension === 'pdf'
+            return resources[0].extension.toLowerCase() === 'pdf'
           },
           canBeDefault: true,
           componentType: 'oc-button',

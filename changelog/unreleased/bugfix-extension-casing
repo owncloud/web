@@ -1,0 +1,6 @@
+Bugfix: Extension casing
+
+We fixed file extensions always being shown in lowercase.
+
+https://github.com/owncloud/web/issues/5339
+https://github.com/owncloud/web/pull/6117
