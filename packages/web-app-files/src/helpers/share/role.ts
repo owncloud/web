@@ -81,7 +81,7 @@ export abstract class ShareRole {
   }
 }
 
-class CustomShareRole extends ShareRole {
+export class CustomShareRole extends ShareRole {
   get hasCustomPermissions(): boolean {
     return true
   }
@@ -92,40 +92,40 @@ class CustomShareRole extends ShareRole {
   }
 }
 
-class PeopleShareRole extends ShareRole {
+export class PeopleShareRole extends ShareRole {
   public description(allowSharing: boolean): string {
     return shareRoleDescriptions[this.bitmask(allowSharing)]
   }
 }
 
-class LinkShareRole extends ShareRole {
+export class LinkShareRole extends ShareRole {
   public description(allowSharing: boolean): string {
     return linkRoleDescriptions[this.bitmask(allowSharing)]
   }
 }
 
-const peopleRoleViewerFile = new PeopleShareRole(
+export const peopleRoleViewerFile = new PeopleShareRole(
   'viewer',
   false,
   $gettext('Viewer'),
   $gettext('viewer'),
   [SharePermissions.read, SharePermissions.share]
 )
-const peopleRoleViewerFolder = new PeopleShareRole(
+export const peopleRoleViewerFolder = new PeopleShareRole(
   'viewer',
   true,
   $gettext('Viewer'),
   $gettext('viewer'),
   [SharePermissions.read, SharePermissions.share]
 )
-const peopleRoleEditorFile = new PeopleShareRole(
+export const peopleRoleEditorFile = new PeopleShareRole(
   'editor',
   false,
   $gettext('Editor'),
   $gettext('editor'),
   [SharePermissions.read, SharePermissions.update, SharePermissions.share]
 )
-const peopleRoleEditorFolder = new PeopleShareRole(
+export const peopleRoleEditorFolder = new PeopleShareRole(
   'editor',
   true,
   $gettext('Editor'),
@@ -138,14 +138,14 @@ const peopleRoleEditorFolder = new PeopleShareRole(
     SharePermissions.share
   ]
 )
-const peopleRoleCustomFile = new CustomShareRole(
+export const peopleRoleCustomFile = new CustomShareRole(
   'custom',
   false,
   $gettext('Custom permissions'),
   $gettext('custom permissions'),
   [SharePermissions.read, SharePermissions.update, SharePermissions.share]
 )
-const peopleRoleCustomFolder = new CustomShareRole(
+export const peopleRoleCustomFolder = new CustomShareRole(
   'custom',
   true,
   $gettext('Custom permissions'),
@@ -158,35 +158,35 @@ const peopleRoleCustomFolder = new CustomShareRole(
     SharePermissions.share
   ]
 )
-const linkRoleViewerFile = new LinkShareRole(
+export const linkRoleViewerFile = new LinkShareRole(
   'viewer',
   false,
   $gettext('Viewer'),
   $gettext('viewer'),
   [SharePermissions.read]
 )
-const linkRoleViewerFolder = new LinkShareRole(
+export const linkRoleViewerFolder = new LinkShareRole(
   'viewer',
   true,
   $gettext('Viewer'),
   $gettext('viewer'),
   [SharePermissions.read]
 )
-const linkRoleContributorFolder = new LinkShareRole(
+export const linkRoleContributorFolder = new LinkShareRole(
   'contributor',
   true,
   $gettext('Contributor'),
   $gettext('contributor'),
   [SharePermissions.read, SharePermissions.create]
 )
-const linkRoleEditorFolder = new LinkShareRole(
+export const linkRoleEditorFolder = new LinkShareRole(
   'editor',
   true,
   $gettext('Editor'),
   $gettext('editor'),
   [SharePermissions.read, SharePermissions.update, SharePermissions.create, SharePermissions.delete]
 )
-const linkRoleUploaderFolder = new LinkShareRole(
+export const linkRoleUploaderFolder = new LinkShareRole(
   'uploader',
   true,
   $gettext('Uploader'),
@@ -195,7 +195,7 @@ const linkRoleUploaderFolder = new LinkShareRole(
 )
 
 export abstract class PeopleShareRoles {
-  private static readonly all = [
+  static readonly all = [
     peopleRoleViewerFile,
     peopleRoleViewerFolder,
     peopleRoleEditorFile,
@@ -221,7 +221,7 @@ export abstract class PeopleShareRoles {
 }
 
 export abstract class LinkShareRoles {
-  private static readonly all = [
+  static readonly all = [
     linkRoleViewerFile,
     linkRoleViewerFolder,
     linkRoleContributorFolder,
