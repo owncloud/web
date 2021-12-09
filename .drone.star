@@ -1340,6 +1340,10 @@ def acceptance(ctx):
                         # Copy files for upload
                         steps += copyFilesForUpload()
 
+                        # Wait for test-related services to be up
+                        steps += waitForBrowserService()
+                        steps += waitForMiddlewareService()
+
                         # run the acceptance tests
                         steps += runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, params["filterTags"], params["extraEnvironment"], browser, params["visualTesting"], params["screenShots"])
 
@@ -1543,6 +1547,15 @@ def browserService(alternateSuiteName, browser):
         }]
 
     return []
+
+def waitForBrowserService():
+    return [{
+        "name": "wait-for-browser-service",
+        "image": OC_CI_WAIT_FOR,
+        "commands": [
+            "wait-for -it selenium:4444 -t 300",
+        ],
+    }]
 
 def owncloudService():
     return [{
@@ -2875,6 +2888,15 @@ def middlewareService(ocis = False):
             "name": "gopath",
             "path": "/srv/app",
         }],
+    }]
+
+def waitForMiddlewareService():
+    return [{
+        "name": "wait-for-middleware-service",
+        "image": OC_CI_WAIT_FOR,
+        "commands": [
+            "wait-for -it middleware:3000 -t 300",
+        ],
     }]
 
 def pipelineDependsOn(pipeline, dependant_pipelines):
