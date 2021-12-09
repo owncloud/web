@@ -13,8 +13,7 @@ export class AllFilesPage {
   async navigate(): Promise<void> {
     const { page } = this.actor
 
-    const allFilesBtn = page.locator('a[href="#/files/list/all"]')
-    await allFilesBtn.click()
+    await page.locator('a[href="#/files/list/all"] .text').click()
   }
 
   async createFolder({ name }: { name: string }): Promise<void> {

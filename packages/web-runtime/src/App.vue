@@ -19,7 +19,7 @@
     <div v-else id="web-content" key="core-content" class="uk-flex uk-flex-stretch">
       <transition :name="appNavigationAnimation">
         <focus-trap v-if="isSidebarVisible" :active="isSidebarFixed && appNavigationVisible">
-          <oc-sidebar-nav
+          <sidebar-nav
             v-show="isSidebarVisible"
             id="web-nav-sidebar"
             v-touch:swipe.left="handleNavSwipe"
@@ -45,7 +45,7 @@
             </template>
             <template #nav>
               <oc-list>
-                <oc-sidebar-nav-item :class="toggleSidebarButtonClass">
+                <sidebar-nav-item :class="toggleSidebarButtonClass">
                   <oc-button
                     variation="inverse"
                     appearance="raw"
@@ -55,33 +55,33 @@
                   >
                     <oc-icon size="large" :name="toggleSidebarButtonIcon" />
                   </oc-button>
-                </oc-sidebar-nav-item>
-                <oc-sidebar-nav-item
+                </sidebar-nav-item>
+                <sidebar-nav-item
                   v-for="(link, index) in sidebarNavItems"
+                  :id="`nav-item-${index}`"
                   :key="link.route.path"
                   :target="link.route.path"
                   :active="link.active"
                   :icon="link.icon || link.iconMaterial"
                   :collapsed="navigation.closed"
-                  :id="`nav-item-${index}`"
                 >
-                  <span :class="{ 'text': true, 'text-invisible': navigation.closed }">
+                  <span :class="{ text: true, 'text-invisible': navigation.closed }">
                     {{ link.name }}
                   </span>
                   <span class="hover-blob" />
                   <span
                     v-if="index === 0"
-                    @click.prevent.stop
                     class="active-blob"
-                    id="nav-item-blob"
+                    :style="activeBlobStyle"
+                    @click.prevent.stop
                   />
-                </oc-sidebar-nav-item>
+                </sidebar-nav-item>
               </oc-list>
             </template>
             <template v-if="sidebar.sidebarFooterContentComponent" #footer>
               <component :is="sidebar.sidebarFooterContentComponent" />
             </template>
-          </oc-sidebar-nav>
+          </sidebar-nav>
         </focus-trap>
       </transition>
       <div class="uk-width-expand web-content-container">
@@ -137,7 +137,8 @@ import MessageBar from './components/MessageBar.vue'
 import SkipTo from './components/SkipTo.vue'
 import { FocusTrap } from 'focus-trap-vue'
 import { getBackendVersion, getWebVersion } from './container/versions'
-import ApplicationsMenu from './components/ApplicationsMenu.vue'
+import SidebarNav from './components/SidebarNav/SidebarNav.vue'
+import SidebarNavItem from './components/SidebarNav/SidebarNavItem.vue'
 
 export default {
   components: {
@@ -145,14 +146,16 @@ export default {
     TopBar,
     SkipTo,
     FocusTrap,
-    ApplicationsMenu
+    SidebarNav,
+    SidebarNavItem
   },
   data() {
     return {
       appNavigationVisible: false,
       $_notificationsInterval: null,
       windowWidth: 0,
-      announcement: ''
+      announcement: '',
+      activeBlobStyle: {}
     }
   },
   computed: {
@@ -288,10 +291,11 @@ export default {
     sidebarNavItems: {
       immediate: true,
       deep: true,
-      handler: function (sidebarNavItems, beforeNavItems) {
+      handler: function (sidebarNavItems) {
         sidebarNavItems.forEach((item, index) => {
-          if(!item.active) return
-          if(beforeNavItems) return this.animateBlob(index)
+          if (!item.active) return
+          const isRendered = Object.keys(this.activeBlobStyle).length !== 0
+          if (isRendered) return this.animateBlob(index)
           this.updateNavigationHighlight(sidebarNavItems)
         })
       }
@@ -356,23 +360,22 @@ export default {
     this.$nextTick(() => {
       window.addEventListener('resize', this.onResize)
       this.onResize()
-      this.updateNavigationHighlight()
     })
   },
 
   methods: {
     ...mapActions(['fetchNotifications', 'deleteMessage', 'openNavigation', 'closeNavigation']),
 
-    updateNavigationHighlight(sidebarNavItems=this.sidebarNavItems) {
+    updateNavigationHighlight(sidebarNavItems) {
       sidebarNavItems.forEach((item, index) => {
-        if(!item.active) return
+        if (!item.active) return
         setTimeout(() => {
           this.animateBlob(index, 0)
         }, 1)
       })
     },
     toggleSidebarButtonClick() {
-      if(this.navigation.closed) return this.openNavigation()
+      if (this.navigation.closed) return this.openNavigation()
       return this.closeNavigation()
     },
 
@@ -456,37 +459,33 @@ export default {
     },
 
     animateBlob(index, duration = 0.26) {
-      const currentElement = this.getNavigationElement(0);
-      const targetElement = this.getNavigationElement(index);
-      const distance = this.getDistanceBetweenElements(
-        currentElement,
-        targetElement
-      );
-      const blob =  document.getElementById("nav-item-blob");
-      const style = blob.style;
+      const currentElement = this.getNavigationElement(0)
+      const targetElement = this.getNavigationElement(index)
+      const distance = this.getDistanceBetweenElements(currentElement, targetElement)
 
-      style.setProperty("opacity", "1");
-      style.setProperty("transition-duration", `${duration}s`);
-      style.setProperty("transform", `translateY(${distance}px)`);
+      this.activeBlobStyle.opacity = 1
+      this.activeBlobStyle.transform = `translateY(${distance}px)`
+      this.activeBlobStyle['transition-duration'] = `${duration}s`
+      this.$forceUpdate()
     },
 
     getNavigationElement(index) {
-      return document.getElementById(`nav-item-${index}`);
+      return document.getElementById(`nav-item-${index}`)
     },
 
     getPositionAtCenter(element) {
-      const { top, left, width, height } = element.getBoundingClientRect();
+      const { top, left, width, height } = element.getBoundingClientRect()
       return {
         x: left + width / 2,
-        y: top + height / 2,
-      };
+        y: top + height / 2
+      }
     },
 
     getDistanceBetweenElements(a, b) {
-      const aPosition = this.getPositionAtCenter(a);
-      const bPosition = this.getPositionAtCenter(b);
-      return Math.hypot(aPosition.x - bPosition.x, aPosition.y - bPosition.y);
-    },
+      const aPosition = this.getPositionAtCenter(a)
+      const bPosition = this.getPositionAtCenter(b)
+      return Math.hypot(aPosition.x - bPosition.x, aPosition.y - bPosition.y)
+    }
   }
 }
 </script>
@@ -504,7 +503,7 @@ body,
 }
 
 #web-nav-sidebar {
-  transition: all 0.35s cubic-bezier(.34,.11,0,1.12);
+  transition: all 0.35s cubic-bezier(0.34, 0.11, 0, 1.12);
   .oc-icon {
     z-index: 2;
   }
@@ -537,10 +536,10 @@ body,
     opacity: 0;
     background: linear-gradient(90deg, #0869de 0%, #4e85c8 100%);
     z-index: 1;
-    transition: transform 0.3s cubic-bezier(.51,.06,.42,1.26);
+    transition: transform 0.3s cubic-bezier(0.51, 0.06, 0.42, 1.26);
     border-radius: 5px;
     &::before {
-      content: "";
+      content: '';
       position: absolute;
       top: 0;
       left: 0;
