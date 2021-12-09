@@ -1,0 +1,6 @@
+Bugfix: User email attribute initialization
+
+Until now, the user email would only be set if the user used it instead of a username in the login form.
+It now can also be set from the user webdav response as a fallback.
+
+https://github.com/owncloud/web/pull/6118
