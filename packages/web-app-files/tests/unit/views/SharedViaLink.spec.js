@@ -1,9 +1,17 @@
 import { shallowMount, mount } from '@vue/test-utils'
-import flushPromises from 'flush-promises'
+import { useTask } from 'vue-concurrency'
 import { getStore, localVue, createFile } from './views.setup.js'
-import MixinFilesListPagination from '@files/src/mixins/filesListPagination'
 import FileActions from '@files/src/mixins/fileActions'
 import SharedViaLink from '@files/src/views/SharedViaLink.vue'
+
+const $router = {
+  afterEach: jest.fn(),
+  currentRoute: {
+    query: {
+      name: null
+    }
+  }
+}
 
 const $route = {
   params: {
@@ -14,21 +22,19 @@ const $route = {
   }
 }
 
-const activeFilesCurrentPage = [createFile({ id: 1234, type: 'file' })]
-
+const activeFilesCurrentPage = [createFile({ id: 2147491323, type: 'file' })]
+localVue.use(useTask)
 localVue.prototype.$client.requests = {
-  ocs: jest.fn(() =>
-    Promise.resolve({
-      status: 200,
-      json: jest.fn(() =>
-        Promise.resolve({
-          ocs: {
-            data: activeFilesCurrentPage
-          }
-        })
-      )
-    })
-  )
+  ocs: jest.fn(() => ({
+    status: 200,
+    json: jest.fn(() =>
+      Promise.resolve({
+        ocs: {
+          data: activeFilesCurrentPage
+        }
+      })
+    )
+  }))
 }
 
 const stubs = {
@@ -41,7 +47,7 @@ const stubs = {
 }
 
 const selectors = {
-  listLoader: 'list-loader-stub',
+  listLoader: '#files-list-progress',
   noContentMessage: '#files-shared-via-link-empty',
   ocTableFiles: '#files-shared-via-link-table',
   contextActions: 'context-actions-stub',
@@ -49,9 +55,6 @@ const selectors = {
 }
 
 describe('SharedViaLink view', () => {
-  jest
-    .spyOn(MixinFilesListPagination.methods, '$_filesListPagination_updateCurrentPage')
-    .mockImplementation()
   const spyTriggerDefaultAction = jest
     .spyOn(FileActions.methods, '$_fileActions_triggerDefaultAction')
     .mockImplementation()
@@ -61,10 +64,10 @@ describe('SharedViaLink view', () => {
     jest.clearAllMocks()
   })
 
-  describe('when the view is still loading', () => {
+  describe.only('when the view is still loading', () => {
     it('should show list-loader component', () => {
       const store = createStore()
-      const wrapper = getShallowWrapper(store)
+      const wrapper = getWrapper(store)
       const listLoader = wrapper.find(selectors.listLoader)
 
       expect(listLoader.exists()).toBeTruthy()
@@ -73,11 +76,17 @@ describe('SharedViaLink view', () => {
   })
 
   describe('when the view is not loading anymore', () => {
-    it('should not show list-loader component', async () => {
+    it.only('should not show list-loader component', async () => {
       const store = createStore()
-      const wrapper = getShallowWrapper(store)
-      await flushPromises()
-
+      const wrapper = getWrapper(store)
+      // these are required to wait for all async tasks to resolve
+      // and loadResourcesTask.isRunning to be false
+      // or we can use fulsh-promises
+      await wrapper.vm.$nextTick()
+      await wrapper.vm.$nextTick()
+      await wrapper.vm.$nextTick()
+      await wrapper.vm.$nextTick()
+      await wrapper.vm.$nextTick()
       expect(wrapper.find(selectors.listLoader).exists()).toBeFalsy()
     })
 
@@ -87,7 +96,6 @@ describe('SharedViaLink view', () => {
         stubs['no-content-message'] = false
         const store = createStore()
         wrapper = getWrapper(store)
-        await flushPromises()
       })
 
       it('should show no-content-message component', () => {
@@ -106,7 +114,6 @@ describe('SharedViaLink view', () => {
       beforeEach(async () => {
         const store = createStore(activeFilesCurrentPage)
         wrapper = getWrapper(store)
-        await flushPromises()
       })
 
       it('should not show no-content-message component', () => {
@@ -149,7 +156,6 @@ describe('SharedViaLink view', () => {
         it('should set props on context-actions component', async () => {
           const store = createStore(activeFilesCurrentPage, activeFilesCurrentPage[0])
           const wrapper = getWrapper(store)
-          await flushPromises()
 
           const contextActions = wrapper.find(selectors.contextActions)
 
@@ -167,7 +173,8 @@ function getWrapper(store) {
     store,
     stubs,
     mocks: {
-      $route
+      $route,
+      $router
     }
   })
 }
@@ -177,7 +184,8 @@ function getShallowWrapper(store) {
     localVue,
     store,
     mocks: {
-      $route
+      $route,
+      $router
     }
   })
 }
