@@ -6,7 +6,7 @@
   "scripts": {
     "test:acceptance:oc10": "cucumber-js --require-module @babel/register --require-module @babel/polyfill --require setup.js --require stepDefinitions --format @cucumber/pretty-formatter -t \"${TEST_TAGS:-not @skip and not @skipOnOC10}\" -f json:report/cucumber_report.json",
     "test:acceptance:ocis": "NODE_TLS_REJECT_UNAUTHORIZED=0 RUN_ON_OCIS=true cucumber-js --require-module @babel/register --require-module @babel/polyfill --require setup.js --require stepDefinitions --format @cucumber/pretty-formatter -t \"${TEST_TAGS:-not @skip and not @skipOnOCIS and not @notToImplementOnOCIS}\" -f json:report/cucumber_report.json",
-    "test:acceptance:external": "cucumber-js --require-module @babel/register --require-module @babel/polyfill --format @cucumber/pretty-formatter ${CUCUMBER_OPTS} -t \"${TEST_TAGS:-not @skip}\""
+    "test:acceptance:external": "cucumber-js --require-module @babel/register --require-module @babel/polyfill --format @cucumber/pretty-formatter"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
