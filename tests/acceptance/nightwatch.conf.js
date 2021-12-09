@@ -40,6 +40,8 @@ const SCREENSHOTS = !!process.env.SCREENSHOTS
 const VISUAL_TEST = !!process.env.VISUAL_TEST
 const UPDATE_VRT_SCREENSHOTS = !!process.env.UPDATE_VRT_SCREENSHOTS
 
+const EXTERNAL_PAGE_OBJECTS = !!process.env.EXTERNAL_PAGE_OBJECTS
+
 const MIDDLEWARE_HOST = withHttp(
   process.env.MIDDLEWARE_HOST ||
     (RUN_ON_OCIS ? 'http://host.docker.internal:3000' : 'http://host.docker.internal:3001')
@@ -50,7 +52,7 @@ function generateScreenshotFilePath(nightwatchClient, basePath, imagePath) {
 }
 
 const config = {
-  page_objects_path: './pageObjects',
+  page_objects_path: ['./pageObjects'],
   custom_commands_path: ['./customCommands', 'node_modules/nightwatch-vrt/commands'],
   custom_assertions_path: ['node_modules/nightwatch-vrt/assertions'],
   test_settings: {
@@ -143,6 +145,10 @@ const config = {
 
 if (VISUAL_TEST) {
   process.env.SCREEN_RESOLUTION = '1280x1024'
+}
+
+if (EXTERNAL_PAGE_OBJECTS) {
+  config.page_objects_path.push(EXTERNAL_PAGE_OBJECTS)
 }
 
 module.exports = config
