@@ -6,7 +6,7 @@ import fileIconMappings from '../fileTypeIconMappings.json'
 import { getIndicators } from './statusIndicators'
 import { $gettext } from '../gettext'
 import { DavPermission, DavProperty } from 'web-pkg/src/constants'
-import { PeopleShareRoles, SharePermissions, ShareStatus, ShareType, ShareTypes } from './share'
+import { PeopleShareRoles, SharePermissions, ShareStatus, ShareTypes } from './share'
 
 // Should we move this to ODS?
 export function getFileIcon(extension) {
