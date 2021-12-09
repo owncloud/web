@@ -8,11 +8,19 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Extension casing: [#5339](https://github.com/owncloud/web/issues/5339)
 * Enhancement - Adopt oc-table-files from ods: [#6106](https://github.com/owncloud/web/pull/6106)
 * Enhancement - Update ODS to v12.0.0-alpha1: [#6106](https://github.com/owncloud/web/pull/6106)
 
 Details
 -------
+
+* Bugfix - Extension casing: [#5339](https://github.com/owncloud/web/issues/5339)
+
+   We fixed file extensions always being shown in lowercase.
+
+   https://github.com/owncloud/web/issues/5339
+   https://github.com/owncloud/web/pull/6117
 
 * Enhancement - Adopt oc-table-files from ods: [#6106](https://github.com/owncloud/web/pull/6106)
 
