@@ -384,7 +384,9 @@ module.exports = {
         const res = result.value
         resourceName = res.split('\n')
       })
-      const actualResourceName = client.globals.ocis ? resourceName[1] : resourceName[1] + resourceName[2]
+      const actualResourceName = client.globals.ocis
+        ? resourceName[1]
+        : resourceName[1] + resourceName[2]
       return actualResourceName
     },
     /**
