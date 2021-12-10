@@ -127,11 +127,15 @@
           >
             <template v-if="$_isNew">
               <oc-spinner :aria-label="$gettext('Creating Public Link')" size="small" />
-              <span v-translate data-testid="file-link-being-created" :aria-hidden="true">Creating</span>
+              <span v-translate data-testid="file-link-being-created" :aria-hidden="true"
+                >Creating</span
+              >
             </template>
             <template v-else>
               <oc-spinner :aria-label="$gettext('Saving Public Link')" size="small" />
-              <span v-translate data-testid="file-link-being-saved" :aria-hidden="true">Saving</span>
+              <span v-translate data-testid="file-link-being-saved" :aria-hidden="true"
+                >Saving</span
+              >
             </template>
           </oc-button>
           <template v-else>
