@@ -306,15 +306,20 @@ export default {
       this.loadData()
       this.refreshShareDetailsTree()
     },
-    sharesTreeLoading(current) {
+    sharesTree() {
       this.sharedItem = null
-      if (current !== false) return
+
       const sharePathParentOrCurrent = this.getParentSharePath(this.file.path, this.sharesTree)
-      if (sharePathParentOrCurrent === null) return
+      if (sharePathParentOrCurrent === null) {
+        return
+      }
       const userShares = this.sharesTree[sharePathParentOrCurrent]?.filter((s) =>
         userShareTypes.includes(s.shareType)
       )
-      if (userShares.length === 0) return
+      if (userShares.length === 0) {
+        return
+      }
+
       this.sharedItem = userShares[0]
       this.sharedByName = this.sharedItem.owner?.name
       this.sharedByDisplayName = this.sharedItem.owner?.displayName
