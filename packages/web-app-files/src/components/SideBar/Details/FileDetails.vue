@@ -225,13 +225,10 @@ export default {
       return this.$gettext('Shared by:')
     },
     hasTimestamp() {
-      return this.file.mdate?.length > 0 || this.file.sdate?.length > 0
+      return this.file.mdate?.length > 0
     },
     timestampTitle() {
-      if (this.file.mdate) {
-        return this.$gettext('Last modified:')
-      }
-      return this.$gettext('Shared:')
+      return this.$gettext('Last modified:')
     },
     ownerTitle() {
       return this.$gettext('Owner:')
@@ -265,12 +262,7 @@ export default {
       return this.$gettext('See all versions')
     },
     capitalizedTimestamp() {
-      let displayDate = ''
-      if (this.file.mdate) {
-        displayDate = this.formDateFromHTTP(this.file.mdate)
-      } else {
-        displayDate = this.formDateFromHTTP(this.file.sdate)
-      }
+      const displayDate = this.formDateFromHTTP(this.file.mdate)
       return upperFirst(displayDate)
     },
     hasAnyShares() {

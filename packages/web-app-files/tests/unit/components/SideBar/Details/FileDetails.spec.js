@@ -26,7 +26,7 @@ const sharedFolder = {
   type: 'folder',
   ownerId: 'einstein',
   ownerDisplayName: 'Einstein',
-  sdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
+  mdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
   size: '740',
   shareTypes: [0]
 }
@@ -46,7 +46,7 @@ const sharedFile = {
   ownerDisplayName: 'Einstein',
   preview: 'example.com/image',
   thumbnail: 'example.com/image',
-  sdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
+  mdate: 'Tue, 20 Oct 2015 06:15:00 GMT',
   size: '740',
   shareTypes: [0]
 }
