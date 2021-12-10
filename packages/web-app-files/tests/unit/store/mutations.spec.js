@@ -59,6 +59,22 @@ describe('vuex store mutations', () => {
     })
   })
 
+  describe('SHARESTREE_ADD', () => {
+    it('adds sharesTrees', () => {
+      const state = { sharesTree: {} }
+      mutations.SHARESTREE_ADD(state, { '/Shares': {} })
+      const sharesTreeBefore = state.sharesTree
+      mutations.SHARESTREE_ADD(state, { '/Shares/123.png': {} })
+      expect(state.sharesTree).toEqual({
+        '/Shares': {},
+        '/Shares/123.png': {}
+      })
+
+      // TODO: find a better way to test reactivity
+      expect(state.sharesTree).not.toStrictEqual(sharesTreeBefore)
+    })
+  })
+
   it('SET_HIDDEN_FILES_VISIBILITY', () => {
     const state = { areHiddenFilesShown: true }
     const { SET_HIDDEN_FILES_VISIBILITY } = mutations
