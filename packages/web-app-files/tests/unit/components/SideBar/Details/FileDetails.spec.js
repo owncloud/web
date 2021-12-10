@@ -40,6 +40,7 @@ const simpleOwnFile = {
 }
 
 const sharedFile = {
+  path: '/Shares/123.png',
   type: 'file',
   ownerId: 'einstein',
   ownerDisplayName: 'Einstein',
@@ -52,9 +53,11 @@ const sharedFile = {
 
 const formDateFromJSDate = jest.fn().mockImplementation(() => 'ABSOLUTE_TIME')
 const formDateFromHTTP = jest.fn().mockImplementation(() => 'ABSOLUTE_TIME')
+const refreshShareDetailsTree = jest.fn()
 beforeEach(() => {
   formDateFromJSDate.mockClear()
   formDateFromHTTP.mockClear()
+  refreshShareDetailsTree.mockReset()
 })
 
 describe('Details SideBar Panel', () => {
@@ -84,6 +87,36 @@ describe('Details SideBar Panel', () => {
       })
       it('with timestamp, size info, share info, share date and preview', () => {
         const wrapper = createWrapper(sharedFile)
+        expect(wrapper).toMatchSnapshot()
+      })
+
+      it('updates when the shareTree updates', async () => {
+        const wrapper = createWrapper(sharedFile)
+        expect(refreshShareDetailsTree).toBeCalledTimes(1)
+
+        // make sure this renders once when initial sharesTree become available
+        wrapper.vm.$store.state.Files.sharesTree = {
+          '/Shares': [{}]
+        }
+
+        await wrapper.vm.$nextTick
+        expect(wrapper).toMatchSnapshot()
+
+        // ... and renders again when the relevant shares become available
+        wrapper.vm.$store.state.Files.sharesTree = {
+          '/Shares': [{}],
+          '/Shares/123.png': [
+            {
+              shareType: 0,
+              owner: {
+                name: 'marie',
+                displayName: 'Marie Curie'
+              },
+              stime: 12345
+            }
+          ]
+        }
+        await wrapper.vm.$nextTick
         expect(wrapper).toMatchSnapshot()
       })
     })
@@ -149,7 +182,8 @@ function createWrapper(testResource, testVersions = [], testPreview, publicRoute
       {
         methods: {
           formDateFromJSDate,
-          formDateFromHTTP
+          formDateFromHTTP,
+          refreshShareDetailsTree
         }
       }
     ],

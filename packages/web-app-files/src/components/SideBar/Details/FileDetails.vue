@@ -366,7 +366,9 @@ export default {
       let currentPath = childPath
       while (currentPath !== '/') {
         const share = shares[currentPath]
-        if (share !== undefined && share[0] !== undefined) return currentPath
+        if (share !== undefined && share[0] !== undefined) {
+          return currentPath
+        }
         currentPath = path.dirname(currentPath)
       }
       return null
