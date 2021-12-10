@@ -15,6 +15,13 @@ const simpleOwnFile = {
   size: '740'
 }
 
+const simpleDeletedFile = {
+  type: 'file',
+  ownerId: 'bob',
+  ownerDisplayName: 'Bob',
+  ddate: 'Wed, 21 Oct 2015 09:29:00 GMT'
+}
+
 const localVue = createLocalVue()
 localVue.use(Vuex)
 localVue.use(AsyncComputed)
@@ -28,6 +35,13 @@ const selectors = {
   mdate: '[data-testid="files-info-mdate"]'
 }
 
+const formDateFromRFC = jest.fn()
+const formRelativeDateFromRFC = jest.fn()
+const resetDateMocks = () => {
+  formDateFromRFC.mockReset()
+  formRelativeDateFromRFC.mockReset()
+}
+
 describe('FileInfo', () => {
   it('shows file info', () => {
     const tooltipStub = jest.fn()
@@ -36,14 +50,41 @@ describe('FileInfo', () => {
     expect(wrapper.find(selectors.mdate).exists()).toBeTruthy()
   })
 
-  it('shows modify date tooltip', () => {
+  it('shows modification date info', () => {
+    resetDateMocks()
+    formDateFromRFC.mockImplementation(() => 'ABSOLUTE_MODIFICATION_TIME')
+    formRelativeDateFromRFC.mockImplementation(() => 'RELATIVE_MODIFICATION_TIME')
+
     const tooltipStub = jest.fn()
-    createWrapper(simpleOwnFile, tooltipStub)
+    const wrapper = createWrapper(simpleOwnFile, tooltipStub)
     expect(tooltipStub).toHaveBeenCalledTimes(1)
+    expect(formDateFromRFC).toHaveBeenCalledTimes(1)
+    expect(formDateFromRFC).toHaveBeenCalledWith('Wed, 21 Oct 2015 07:28:00 GMT')
+    expect(formRelativeDateFromRFC).toHaveBeenCalledTimes(1)
+    expect(formRelativeDateFromRFC).toHaveBeenCalledWith('Wed, 21 Oct 2015 07:28:00 GMT')
+
+    expect(wrapper).toMatchSnapshot()
+  })
+
+  it('shows deletion date info', () => {
+    resetDateMocks()
+    formDateFromRFC.mockImplementation(() => 'ABSOLUTE_DELETION_TIME')
+    formRelativeDateFromRFC.mockImplementation(() => 'RELATIVE_DELETION_TIME')
+
+    const tooltipStub = jest.fn()
+    const wrapper = createWrapper(simpleDeletedFile, tooltipStub, 'files-trashbin')
+
+    expect(tooltipStub).toHaveBeenCalledTimes(1)
+    expect(formDateFromRFC).toHaveBeenCalledTimes(1)
+    expect(formDateFromRFC).toHaveBeenCalledWith('Wed, 21 Oct 2015 09:29:00 GMT')
+    expect(formRelativeDateFromRFC).toHaveBeenCalledTimes(1)
+    expect(formRelativeDateFromRFC).toHaveBeenCalledWith('Wed, 21 Oct 2015 09:29:00 GMT')
+
+    expect(wrapper).toMatchSnapshot()
   })
 })
 
-function createWrapper(testResource, tooltipStub) {
+function createWrapper(testResource, tooltipStub, routeName) {
   return shallowMount(FileInfo, {
     store: new Vuex.Store({
       getters: {
@@ -68,9 +109,13 @@ function createWrapper(testResource, tooltipStub) {
     directives: {
       OcTooltip: tooltipStub
     },
+    methods: {
+      formDateFromRFC,
+      formRelativeDateFromRFC
+    },
     mocks: {
       $route: {
-        name: 'some-route',
+        name: routeName || 'some-route',
         query: { page: 1 }
       },
       publicPage: () => false

@@ -14,11 +14,11 @@
       <p class="oc-my-rm">
         <template v-if="file.size > -1">{{ getResourceSize(file.size) }},</template>
         <span
-          v-oc-tooltip="modificationTime"
+          v-oc-tooltip="timeData.time"
           data-testid="files-info-mdate"
           tabindex="0"
-          :aria-label="modificationTimeRelative + ' (' + modificationTime + ')'"
-          >{{ modificationTimeRelative }}</span
+          :aria-label="timeData.ariaLabel"
+          >{{ timeData.infoString }}</span
         >
       </p>
     </div>
@@ -56,19 +56,38 @@ export default {
   },
   computed: {
     ...mapGetters(['capabilities']),
-    modificationTime() {
-      if (this.isTrashbinRoute) {
-        return this.formDateFromRFC(this.file.ddate)
+    timeData() {
+      const interpolate = (obj) => {
+        obj.time = this.formDateFromRFC(obj.sourceTime)
+        obj.timeRelative = this.formRelativeDateFromRFC(obj.sourceTime)
+
+        obj.infoString = this.$gettextInterpolate(obj.infoString, obj)
+        obj.ariaLabel = this.$gettextInterpolate(obj.ariaLabel, obj)
+        return obj
       }
 
-      return this.formDateFromHTTP(this.file.mdate)
-    },
-    modificationTimeRelative() {
       if (this.isTrashbinRoute) {
-        return this.formRelativeDateFromRFC(this.file.ddate)
+        return interpolate({
+          sourceTime: this.file.ddate,
+          infoString: this.$pgettext('inline info about deletion date', 'deleted %{timeRelative}'),
+          ariaLabel: this.$pgettext(
+            'aria label for inline info about deletion date',
+            'deleted %{timeRelative} (%{time})'
+          )
+        })
       }
 
-      return this.formRelativeDateFromHTTP(this.file.mdate)
+      return interpolate({
+        sourceTime: this.file.mdate,
+        infoString: this.$pgettext(
+          'inline info about last modification date',
+          'modified %{timeRelative}'
+        ),
+        ariaLabel: this.$pgettext(
+          'aria label for inline info about last modification date',
+          'modified %{timeRelative} (%{time})'
+        )
+      })
     },
     isFavoritesEnabled() {
       return (
