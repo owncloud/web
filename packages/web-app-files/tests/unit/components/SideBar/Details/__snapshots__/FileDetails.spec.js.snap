@@ -1,0 +1,256 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Details SideBar Panel displays a resource of type file on a private page with timestamp, size info and (me) as owner 1`] = `
+<div id="oc-file-details-sidebar">
+  <div>
+    <!---->
+    <!---->
+    <table aria-label="Overview of the information about the selected file" class="details-table">
+      <tr data-testid="timestamp">
+        <th scope="col" class="oc-pr-s">Last modified:</th>
+        <td><span>ABSOLUTE_TIME</span></td>
+      </tr>
+      <!---->
+      <!---->
+      <!---->
+      <tr data-testid="ownerDisplayName">
+        <th scope="col" class="oc-pr-s">Owner:</th>
+        <td>
+          <p class="oc-m-rm">
+            Marie
+            <span data-msgid="(me)" data-current-language="en_US">(me)</span>
+            <!---->
+          </p>
+        </td>
+      </tr>
+      <tr data-testid="sizeInfo">
+        <th scope="col" class="oc-pr-s">Size:</th>
+        <td>740 B</td>
+      </tr>
+      <!---->
+    </table>
+  </div>
+</div>
+`;
+
+exports[`Details SideBar Panel displays a resource of type file on a private page with timestamp, size info, share info, share date and preview 1`] = `
+<div id="oc-file-details-sidebar">
+  <div>
+    <div data-testid="preview" class="details-preview uk-flex uk-flex-middle uk-flex-center oc-mb" style="background-image: none;">
+      <oc-spinner-stub></oc-spinner-stub>
+    </div>
+    <div data-testid="sharingInfo" class="uk-flex uk-flex-middle oc-my-m">
+      <oc-button-stub appearance="raw" aria-label="Show invited people" class="oc-mr-xs">
+        <oc-icon-stub name="group"></oc-icon-stub>
+      </oc-button-stub>
+      <!---->
+      <p class="oc-my-rm oc-mx-s">This file has been shared.</p>
+    </div>
+    <table aria-label="Overview of the information about the selected file" class="details-table">
+      <tr data-testid="timestamp">
+        <th scope="col" class="oc-pr-s">Shared:</th>
+        <td><span>ABSOLUTE_TIME</span></td>
+      </tr>
+      <tr data-testid="shared-date">
+        <th scope="col" class="oc-pr-s">Shared:</th>
+        <td><span>ABSOLUTE_TIME</span></td>
+      </tr>
+      <!---->
+      <!---->
+      <tr data-testid="ownerDisplayName">
+        <th scope="col" class="oc-pr-s">Owner:</th>
+        <td>
+          <p class="oc-m-rm">
+            Einstein
+            <!---->
+            <!---->
+          </p>
+        </td>
+      </tr>
+      <tr data-testid="sizeInfo">
+        <th scope="col" class="oc-pr-s">Size:</th>
+        <td>740 B</td>
+      </tr>
+      <!---->
+    </table>
+  </div>
+</div>
+`;
+
+exports[`Details SideBar Panel displays a resource of type file on a public page with owner, timestamp, size info, no share info and preview 1`] = `
+<div id="oc-file-details-sidebar">
+  <div>
+    <div data-testid="preview" class="details-preview uk-flex uk-flex-middle uk-flex-center oc-mb" style="background-image: none;">
+      <oc-spinner-stub></oc-spinner-stub>
+    </div>
+    <!---->
+    <table aria-label="Overview of the information about the selected file" class="details-table">
+      <tr data-testid="timestamp">
+        <th scope="col" class="oc-pr-s">Shared:</th>
+        <td><span>ABSOLUTE_TIME</span></td>
+      </tr>
+      <!---->
+      <!---->
+      <!---->
+      <tr data-testid="ownerDisplayName">
+        <th scope="col" class="oc-pr-s">Owner:</th>
+        <td>
+          <p class="oc-m-rm">
+            Einstein
+            <!---->
+            <!---->
+          </p>
+        </td>
+      </tr>
+      <tr data-testid="sizeInfo">
+        <th scope="col" class="oc-pr-s">Size:</th>
+        <td>740 B</td>
+      </tr>
+      <!---->
+    </table>
+  </div>
+</div>
+`;
+
+exports[`Details SideBar Panel displays a resource of type file on a public page with owner, timestap, size info, no share info and preview 1`] = `
+<div id="oc-file-details-sidebar">
+  <div>
+    <div data-testid="preview" class="details-preview uk-flex uk-flex-middle uk-flex-center oc-mb" style="background-image: none;">
+      <oc-spinner-stub></oc-spinner-stub>
+    </div>
+    <!---->
+    <table aria-label="Overview of the information about the selected file" class="details-table">
+      <tr data-testid="timestamp">
+        <th scope="col" class="oc-pr-s">Shared:</th>
+        <td><span>ABSOLUTE_TIME</span></td>
+      </tr>
+      <!---->
+      <!---->
+      <!---->
+      <tr data-testid="ownerDisplayName">
+        <th scope="col" class="oc-pr-s">Owner:</th>
+        <td>
+          <p class="oc-m-rm">
+            Einstein
+            <!---->
+            <!---->
+          </p>
+        </td>
+      </tr>
+      <tr data-testid="sizeInfo">
+        <th scope="col" class="oc-pr-s">Size:</th>
+        <td>740 B</td>
+      </tr>
+      <!---->
+    </table>
+  </div>
+</div>
+`;
+
+exports[`Details SideBar Panel displays a resource of type folder on a private page with timestamp, size info and (me) as owner 1`] = `
+<div id="oc-file-details-sidebar">
+  <div>
+    <!---->
+    <!---->
+    <table aria-label="Overview of the information about the selected file" class="details-table">
+      <tr data-testid="timestamp">
+        <th scope="col" class="oc-pr-s">Last modified:</th>
+        <td><span>ABSOLUTE_TIME</span></td>
+      </tr>
+      <!---->
+      <!---->
+      <!---->
+      <tr data-testid="ownerDisplayName">
+        <th scope="col" class="oc-pr-s">Owner:</th>
+        <td>
+          <p class="oc-m-rm">
+            Marie
+            <span data-msgid="(me)" data-current-language="en_US">(me)</span>
+            <!---->
+          </p>
+        </td>
+      </tr>
+      <tr data-testid="sizeInfo">
+        <th scope="col" class="oc-pr-s">Size:</th>
+        <td>740 B</td>
+      </tr>
+      <!---->
+    </table>
+  </div>
+</div>
+`;
+
+exports[`Details SideBar Panel displays a resource of type folder on a private page with timestamp, size info, share info and share date 1`] = `
+<div id="oc-file-details-sidebar">
+  <div>
+    <!---->
+    <div data-testid="sharingInfo" class="uk-flex uk-flex-middle oc-my-m">
+      <oc-button-stub appearance="raw" aria-label="Show invited people" class="oc-mr-xs">
+        <oc-icon-stub name="group"></oc-icon-stub>
+      </oc-button-stub>
+      <!---->
+      <p class="oc-my-rm oc-mx-s">This folder has been shared.</p>
+    </div>
+    <table aria-label="Overview of the information about the selected file" class="details-table">
+      <tr data-testid="timestamp">
+        <th scope="col" class="oc-pr-s">Shared:</th>
+        <td><span>ABSOLUTE_TIME</span></td>
+      </tr>
+      <tr data-testid="shared-date">
+        <th scope="col" class="oc-pr-s">Shared:</th>
+        <td><span>ABSOLUTE_TIME</span></td>
+      </tr>
+      <!---->
+      <!---->
+      <tr data-testid="ownerDisplayName">
+        <th scope="col" class="oc-pr-s">Owner:</th>
+        <td>
+          <p class="oc-m-rm">
+            Einstein
+            <!---->
+            <!---->
+          </p>
+        </td>
+      </tr>
+      <tr data-testid="sizeInfo">
+        <th scope="col" class="oc-pr-s">Size:</th>
+        <td>740 B</td>
+      </tr>
+      <!---->
+    </table>
+  </div>
+</div>
+`;
+
+exports[`Details SideBar Panel displays a resource of type folder on a public page with owner, timestamp, size info and no share info 1`] = `
+<div id="oc-file-details-sidebar">
+  <div>
+    <!---->
+    <!---->
+    <table aria-label="Overview of the information about the selected file" class="details-table">
+      <tr data-testid="timestamp">
+        <th scope="col" class="oc-pr-s">Shared:</th>
+        <td><span>ABSOLUTE_TIME</span></td>
+      </tr>
+      <!---->
+      <!---->
+      <!---->
+      <tr data-testid="ownerDisplayName">
+        <th scope="col" class="oc-pr-s">Owner:</th>
+        <td>
+          <p class="oc-m-rm">
+            Einstein
+            <!---->
+            <!---->
+          </p>
+        </td>
+      </tr>
+      <tr data-testid="sizeInfo">
+        <th scope="col" class="oc-pr-s">Size:</th>
+        <td>740 B</td>
+      </tr>
+      <!---->
+    </table>
+  </div>
+</div>
+`;
