@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Extension casing: [#5339](https://github.com/owncloud/web/issues/5339)
+* Bugfix - User email attribute initialization: [#6118](https://github.com/owncloud/web/pull/6118)
 * Enhancement - Adopt oc-table-files from ods: [#6106](https://github.com/owncloud/web/pull/6106)
 * Enhancement - Update ODS to v12.0.0-alpha1: [#6106](https://github.com/owncloud/web/pull/6106)
 
@@ -21,6 +22,13 @@ Details
 
    https://github.com/owncloud/web/issues/5339
    https://github.com/owncloud/web/pull/6117
+
+* Bugfix - User email attribute initialization: [#6118](https://github.com/owncloud/web/pull/6118)
+
+   Until now, the user email would only be set if the user used it instead of a username in the login
+   form. It now can also be set from the user webdav response as a fallback.
+
+   https://github.com/owncloud/web/pull/6118
 
 * Enhancement - Adopt oc-table-files from ods: [#6106](https://github.com/owncloud/web/pull/6106)
 
