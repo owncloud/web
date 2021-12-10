@@ -47,11 +47,11 @@ describe('Users can set expiration date when sharing via public link', () => {
   test('user can set a new expiration date', async () => {
     const component = renderComponent()
     const { findByTestId, baseElement, getByTestId, findByText, queryByTestId } = component
-    const addBtn = await findByTestId('files-file-link-add-btn')
+    const addBtn = await findByTestId('files-link-add-btn')
 
     expect(addBtn).toBeVisible()
     await fireEvent.click(addBtn)
-    expect(await findByTestId('new-file-link')).toBeVisible()
+    expect(await findByTestId('new-files-link')).toBeVisible()
     await fireEvent.update(baseElement.querySelector('#oc-files-file-link-name'), 'Public link')
 
     expect(getByTestId('recipient-datepicker')).toBeVisible()
@@ -62,11 +62,11 @@ describe('Users can set expiration date when sharing via public link', () => {
 
     expect(await findByText('Expires in 2 days')).toBeVisible()
 
-    const shareBtn = getByTestId('new-file-link-btn')
+    const shareBtn = getByTestId('new-files-link-btn')
     expect(shareBtn).toBeVisible()
     await fireEvent.click(shareBtn)
     await waitFor(() => {
-      return expect(queryByTestId('file-link-being-created')).toBe(null)
+      return expect(queryByTestId('files-link-being-created')).toBe(null)
     })
 
     const link = await findByTestId('files-link-id-1')
@@ -106,11 +106,11 @@ describe('Users can set expiration date when sharing via public link', () => {
 
     expect(await findByText('Expires in 4 days')).toBeVisible()
 
-    const shareBtn = getByTestId('save-file-link-btn')
+    const shareBtn = getByTestId('save-files-link-btn')
     expect(shareBtn).toBeVisible()
     await fireEvent.click(shareBtn)
     await waitFor(() => {
-      return expect(queryByTestId('file-link-being-saved')).toBe(null)
+      return expect(queryByTestId('files-link-being-saved')).toBe(null)
     })
 
     expect(
@@ -139,15 +139,15 @@ describe('Users can set expiration date when sharing via public link', () => {
     expect(editBtn).toBeVisible()
     await fireEvent.click(editBtn)
 
-    const removeExpiryDateBtn = getByTestId('file-link-remove-expiration-date')
+    const removeExpiryDateBtn = getByTestId('files-link-remove-expiration-date')
     expect(removeExpiryDateBtn).toBeVisible()
     await fireEvent.click(removeExpiryDateBtn)
 
-    const shareBtn = getByTestId('save-file-link-btn')
+    const shareBtn = getByTestId('save-files-link-btn')
     expect(shareBtn).toBeVisible()
     await fireEvent.click(shareBtn)
     await waitFor(() => {
-      return expect(queryByTestId('file-link-being-saved')).toBe(null)
+      return expect(queryByTestId('files-link-being-saved')).toBe(null)
     })
 
     expect(within(link).queryByTestId('files-link-id-1-expiration-date')).toBe(null)

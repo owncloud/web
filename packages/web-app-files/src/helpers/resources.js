@@ -262,7 +262,7 @@ function _buildLink(link) {
     password: !!(link.share_with && link.share_with_displayname),
     expiration:
       typeof link.expiration === 'string'
-        ? DateTime.fromFormat(link.expiration, 'yyyy-MM-dd HH:mm:ss').toFormat('yyyy-MM-dd') // @ TODO refactor this?
+        ? DateTime.fromFormat(link.expiration, 'yyyy-MM-dd HH:mm:ss').toFormat('yyyy-MM-dd')
         : null,
     itemSource: link.item_source,
     file: {
