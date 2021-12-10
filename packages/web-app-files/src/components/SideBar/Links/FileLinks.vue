@@ -18,6 +18,7 @@
             id="files-file-link-add"
             icon="add"
             variation="primary"
+            data-testid="files-file-link-add-btn"
             :aria-label="$_addButtonAriaLabel"
             @click="addNewLink"
           >
@@ -33,13 +34,14 @@
         />
         <transition-group
           class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm"
+          data-testid="file-links-list"
           :enter-active-class="$_transitionGroupEnter"
           :leave-active-class="$_transitionGroupLeave"
           name="custom-classes-transition"
           tag="ul"
         >
           <li v-for="link in links" :key="link.key">
-            <list-item :link="link" />
+            <list-item :data-testid="`files-link-id-${link.id}`" :link="link" />
           </li>
         </transition-group>
         <p

@@ -1,5 +1,5 @@
 <template>
-  <div class="oc-files-edit-public-link oc-files-file-link-form">
+  <div class="oc-files-edit-public-link oc-files-file-link-form" data-testid="new-file-link">
     <form @submit.prevent>
       <transition
         enter-active-class="uk-animation-slide-top-small"
@@ -72,6 +72,7 @@
           id="oc-files-file-link-expire-date-delete"
           class="oc-mt-s"
           appearance="raw"
+          data-testid="file-link-remove-expiration-date"
           @click="expireDate = null"
           v-text="$gettext('Remove expiration date')"
         />
@@ -126,17 +127,18 @@
           >
             <template v-if="$_isNew">
               <oc-spinner :aria-label="$gettext('Creating Public Link')" size="small" />
-              <span v-translate :aria-hidden="true">Creating</span>
+              <span v-translate data-testid="file-link-being-created" :aria-hidden="true">Creating</span>
             </template>
             <template v-else>
               <oc-spinner :aria-label="$gettext('Saving Public Link')" size="small" />
-              <span v-translate :aria-hidden="true">Saving</span>
+              <span v-translate data-testid="file-link-being-saved" :aria-hidden="true">Saving</span>
             </template>
           </oc-button>
           <template v-else>
             <oc-button
               v-if="$_isNew"
               id="oc-files-file-link-create"
+              data-testid="new-file-link-btn"
               :disabled="!$_isValid"
               variation="primary"
               appearance="filled"
@@ -147,6 +149,7 @@
             <oc-button
               v-else
               id="oc-files-file-link-save"
+              data-testid="save-file-link-btn"
               :disabled="!$_isValid || !$_hasChanges"
               variation="primary"
               appearance="filled"

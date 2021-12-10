@@ -33,6 +33,7 @@
           v-oc-tooltip="expirationDate"
           tabindex="0"
           class="oc-files-public-link-expires"
+          :data-testid="`files-link-id-${link.id}-expiration-date`"
           :aria-label="expirationDateRelative + ' (' + expirationDate + ')'"
         >
           <oc-icon name="text-calendar" />

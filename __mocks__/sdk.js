@@ -7,15 +7,16 @@ import fixtureSharedWithMeFiles from '../__fixtures__/sharedWithMeFiles'
 import fixtureDeletedFiles from '../__fixtures__/deletedFiles'
 import fixturePublicFiles from '../__fixtures__/publicFiles'
 import fixtureRecipients from '../__fixtures__/recipients'
+import { DateTime } from 'luxon'
 
 export default {
   files: {
     list: (path = '/') => fixtureFiles[path],
     getFavoriteFiles: () => fixtureFavoriteFiles,
-    fileInfo: path => fixtureFiles[path][0]
+    fileInfo: (path) => fixtureFiles[path][0]
   },
   users: {
-    getUser: id => fixtureUsers[id]
+    getUser: (id) => fixtureUsers[id]
   },
   requests: {
     ocs: ({ service, action, method }) => {
@@ -39,7 +40,7 @@ export default {
     PUBLIC_LINK_EXPIRATION: '{http://owncloud.org/ns}public-link-expiration',
     PUBLIC_LINK_SHARE_DATETIME: '{http://owncloud.org/ns}public-link-share-datetime',
     PUBLIC_LINK_SHARE_OWNER: '{http://owncloud.org/ns}public-link-share-owner',
-    list: path => fixturePublicFiles[path]
+    list: (path) => fixturePublicFiles[path]
   },
   shares: {
     getShares: () => Promise.resolve(),
@@ -68,8 +69,33 @@ export default {
       }),
     shareFileWithGroup: () => Promise.resolve(),
     updateShare: (id, params) => {
-      const share = {
-        shareInfo: {
+      let shareInfo
+
+      if (params.name === 'Public link') {
+        shareInfo = {
+          id: 1,
+          share_type: 3,
+          permissions: params.permissions,
+          stime: new Date().getTime(),
+          expiration: params.expirationDate,
+          uid_file_owner: 'alice', // TODO: get user dynamically
+          displayname_file_owner: 'alice', // TODO: get user dynamically
+          path: '/Documents',
+          item_type: 'folder', // TODO: get item type dynamically
+          item_source: 10,
+          file_source: 10,
+          file_parent: 6,
+          file_target: '/Documents',
+          token: 'token',
+          url: 'url',
+          name: 'Public link'
+        }
+
+        if (params.expireDate) {
+          shareInfo.expiration = DateTime.fromISO(params.expireDate).toFormat('yyyy-MM-dd HH:mm:ss')
+        }
+      } else {
+        shareInfo = {
           id,
           share_type: 0,
           uid_owner: 'alice', // TODO: get user dynamically
@@ -87,10 +113,42 @@ export default {
           share_with: 'bob', // TODO: get user dynamically
           share_with_displayname: 'bob' // TODO: get user dynamically
         }
+
+        if (params.expireDate) {
+          shareInfo.expiration = params.expireDate
+        }
+      }
+
+      const share = { shareInfo }
+
+      return Promise.resolve(share)
+    },
+    shareFileWithLink: (path, params) => {
+      const share = {
+        shareInfo: {
+          id: 1,
+          share_type: 3,
+          permissions: params.permissions,
+          stime: new Date().getTime(),
+          expiration: params.expirationDate,
+          uid_file_owner: 'alice', // TODO: get user dynamically
+          displayname_file_owner: 'alice', // TODO: get user dynamically
+          path,
+          item_type: 'folder', // TODO: get item type dynamically
+          item_source: 10,
+          file_source: 10,
+          file_parent: 6,
+          file_target: path,
+          token: 'token',
+          url: 'url',
+          name: 'Public link'
+        }
       }
 
       if (params.expireDate) {
-        share.shareInfo.expiration = params.expireDate
+        share.shareInfo.expiration = DateTime.fromISO(params.expireDate).toFormat(
+          'yyyy-MM-dd HH:mm:ss'
+        )
       }
 
       return Promise.resolve(share)
@@ -99,7 +157,7 @@ export default {
 }
 
 function getRecipients(query) {
-  const users = fixtureRecipients.users.filter(user => user.label.includes(query))
+  const users = fixtureRecipients.users.filter((user) => user.label.includes(query))
 
   return { exact: { users, groups: [], remotes: [] }, users: [], groups: [], remotes: [] }
 }

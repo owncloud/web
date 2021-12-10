@@ -5,6 +5,7 @@
       <oc-button
         v-oc-tooltip="editButtonLabel"
         :aria-label="editButtonLabel"
+        :data-testid="`files-link-id-${link.id}-btn-edit`"
         appearance="raw"
         class="oc-files-file-link-edit oc-mr-xs"
         @click="editLink"
