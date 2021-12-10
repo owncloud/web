@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Extension casing: [#5339](https://github.com/owncloud/web/issues/5339)
+* Bugfix - Context for dates in SideBar: [#5068](https://github.com/owncloud/web/issues/5068)
 * Bugfix - User email attribute initialization: [#6118](https://github.com/owncloud/web/pull/6118)
 * Enhancement - Adopt oc-table-files from ods: [#6106](https://github.com/owncloud/web/pull/6106)
 * Enhancement - Update ODS to v12.0.0-alpha1: [#6106](https://github.com/owncloud/web/pull/6106)
@@ -22,6 +23,17 @@ Details
 
    https://github.com/owncloud/web/issues/5339
    https://github.com/owncloud/web/pull/6117
+
+* Bugfix - Context for dates in SideBar: [#5068](https://github.com/owncloud/web/issues/5068)
+
+   We fixed dates in sidebar file info having no context. The sidebar is either showing the last
+   modification date or the deletion date. Before this change it wasn't obvious what kind of date
+   was showing. Especially when the file list was showing a completely different date (e.g., a
+   share date) it was confusing to the user to see a possibly different date here without
+   explanation.
+
+   https://github.com/owncloud/web/issues/5068
+   https://github.com/owncloud/web/pull/6119
 
 * Bugfix - User email attribute initialization: [#6118](https://github.com/owncloud/web/pull/6118)
 
