@@ -1,0 +1,5 @@
+Bugfix: Contextmenu on public links
+
+We fixed an issue of the contextmenu not being displayed for the files table on public links.
+
+https://github.com/owncloud/web/issues/6123
