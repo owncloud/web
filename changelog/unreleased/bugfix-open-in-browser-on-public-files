@@ -1,0 +1,7 @@
+Bugfix: Open in browser for public files
+
+We fixed opening publicly shared files in the browser.
+
+
+https://github.com/owncloud/web/issues/4615
+https://github.com/owncloud/web/pull/6133
