@@ -58,6 +58,7 @@ const mutations = {
     if (extension.newFileMenu) {
       extension.newFileMenu.ext = extension.extension
       extension.newFileMenu.action = editor
+      extension.newFileMenu.routes = extension.routes
       state.newFileHandlers.push(extension.newFileMenu)
     }
   },
