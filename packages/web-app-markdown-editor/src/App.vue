@@ -40,21 +40,17 @@ export default {
     MarkdownEditorAppBar
   },
   computed: {
-    ...mapGetters(['activeFile']),
     ...mapGetters('MarkdownEditor', ['currentContent', 'lastError']),
     renderedMarkdown() {
       return this.currentContent ? marked(this.currentContent, { sanitize: true }) : null
     }
   },
   mounted() {
-    if (this.activeFile.path === '') {
-      this.$router.push({
-        path: '/files'
-      })
-      return
-    }
+    // copied from packages/web-app-media-viewer/src/App.vue
+    // FIXME: where can/should we put this shared code?
+    const filePath = `/${this.$route.params.filePath.split('/').filter(Boolean).join('/')}`
     this.loadFile({
-      filePath: this.activeFile.path,
+      filePath,
       client: this.$client
     })
   },
