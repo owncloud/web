@@ -20,6 +20,7 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { basename, dirname } from 'path'
 
 export default {
   computed: {
@@ -36,10 +37,26 @@ export default {
         client: this.$client
       })
     },
-    closeApp() {
+
+    // copied from packages/web-app-media-viewer/src/mixins/loader.js
+    // FIXME: where can/should we put this shared code?
+    $_loader_navigateToContextRoute(contextRouteName, filePath) {
       this.$router.push({
-        path: '/files'
+        name: contextRouteName,
+        params: {
+          item: dirname(filePath) || '/'
+        },
+        query: {
+          scrollTo: basename(filePath)
+        }
       })
+    },
+
+    closeApp() {
+      this.$_loader_navigateToContextRoute(
+        this.$route.params.contextRouteName,
+        this.$route.params.filePath
+      )
     }
   }
 }

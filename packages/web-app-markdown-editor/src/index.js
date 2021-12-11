@@ -4,11 +4,14 @@ import store from './store.js'
 
 const routes = [
   {
-    path: '',
+    path: '/:contextRouteName/:filePath*',
     components: {
       app: App
     },
-    name: 'markdown-editor'
+    name: 'markdown-editor',
+    meta: {
+      patchCleanPath: true
+    }
   }
 ]
 
