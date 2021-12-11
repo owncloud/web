@@ -90,10 +90,10 @@ import { mapGetters, mapState, mapActions } from 'vuex'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { DavProperties } from 'web-pkg/src/constants'
 
-import MixinRoutes from '../../mixins/routes'
 import { buildResource } from '../../helpers/resources'
-import { isTrashbinRoute } from '../../helpers/route'
+import { isLocationCommonActive, isLocationSharesActive } from '../../router'
 import { computed } from '@vue/composition-api'
+
 import FileInfo from './FileInfo.vue'
 
 let visibilityObserver
@@ -101,7 +101,6 @@ let hiddenObserver
 
 export default {
   components: { FileInfo },
-  mixins: [MixinRoutes],
 
   provide() {
     return {
@@ -141,6 +140,7 @@ export default {
             capabilities: this.capabilities,
             highlightedFile: this.highlightedFile,
             route: this.$route,
+            router: this.$router,
             multipleSelection: this.areMultipleSelected,
             rootFolder: this.isRootFolder
           })
@@ -169,11 +169,9 @@ export default {
       return this.highlightedFile?.status === 0
     },
     isContentDisplayed() {
-      if (this.isSharedWithMeRoute) {
-        return this.isShareAccepted
-      }
-
-      return true
+      return isLocationSharesActive(this.$router, 'files-shares-with-me')
+        ? this.isShareAccepted
+        : true
     },
     sidebarAccordionsWarningMessage() {
       if (!this.isShareAccepted) {
@@ -287,7 +285,7 @@ export default {
         return
       }
 
-      if (isTrashbinRoute(this.$route)) {
+      if (isLocationCommonActive(this.$router, 'files-common-trash')) {
         this.selectedFile = this.highlightedFile
         return
       }

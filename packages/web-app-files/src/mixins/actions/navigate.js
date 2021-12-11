@@ -1,6 +1,12 @@
 import { isPublicFilesRoute, isSharedWithMeRoute, isTrashbinRoute } from '../../helpers/route'
 import { mapState } from 'vuex'
 import { isSameResource } from '../../helpers/resource'
+import {
+  createLocationShares,
+  createLocationSpaces,
+  isLocationCommonActive,
+  isLocationSharesActive
+} from '../../router'
 import { ShareStatus } from '../../helpers/share'
 
 export default {
@@ -14,7 +20,7 @@ export default {
           label: () =>
             this.$pgettext('Action in the files list row to open a folder', 'Open folder'),
           isEnabled: ({ resources }) => {
-            if (isTrashbinRoute(this.$route)) {
+            if (isLocationCommonActive(this.$router, 'files-common-trash')) {
               return false
             }
             if (resources.length !== 1) {
@@ -29,7 +35,10 @@ export default {
               return false
             }
 
-            if (isSharedWithMeRoute(this.$route) && resources[0].status !== ShareStatus.accepted) {
+            if (
+              isLocationSharesActive(this.$router, 'files-shares-with-me') &&
+              resources[0].status !== ShareStatus.accepted
+            ) {
               return false
             }
 
@@ -43,10 +52,9 @@ export default {
       ]
     },
     route() {
-      if (isPublicFilesRoute(this.$route)) {
-        return 'files-public-list'
-      }
-      return 'files-personal'
+      return isLocationSharesActive(this.$router, 'files-shares-public-files')
+        ? createLocationSpaces()
+        : createLocationShares('files-shares-public-files')
     }
   }
 }

@@ -1,15 +1,15 @@
 import { mount, createLocalVue } from '@vue/test-utils'
 import VueCompositionAPI from '@vue/composition-api'
 import Vuex from 'vuex'
-import VueRouter from 'vue-router'
 import GetTextPlugin from 'vue-gettext'
-
 import fileSideBars from '@files/src/fileSideBars'
 import stubs from '@/tests/unit/stubs'
 import Files from '@/__fixtures__/files'
+import merge from 'lodash-es/merge'
 import { buildResource, renameResource } from '@files/src/helpers/resources'
 
 import SideBar from '@files/src/components/SideBar/SideBar.vue'
+import { createLocationSpaces } from '../../../../src/router'
 
 const simpleOwnFolder = {
   type: 'folder',
@@ -23,7 +23,6 @@ function createWrapper({ item, selectedItems, mocks }) {
   const localVue = createLocalVue()
   localVue.use(Vuex)
   localVue.use(VueCompositionAPI)
-  localVue.use(VueRouter)
   localVue.use(GetTextPlugin, {
     translations: 'does-not-matter.json',
     silent: true
@@ -72,13 +71,22 @@ function createWrapper({ item, selectedItems, mocks }) {
         }
       }
     }),
-    router: new VueRouter(),
     localVue,
     stubs,
     directives: {
       'click-outside': jest.fn()
     },
-    mocks
+    mocks: merge(
+      {
+        $router: {
+          currentRoute: createLocationSpaces(),
+          resolve: (r) => {
+            return { href: r.name }
+          }
+        }
+      },
+      mocks
+    )
   })
 }
 

@@ -16,7 +16,7 @@
         :are-paths-displayed="true"
         :are-thumbnails-displayed="displayThumbnails"
         :resources="paginatedResources"
-        :target-route="targetRoute"
+        :target-route="resourceTargetLocation"
         :header-position="fileListHeaderY"
         :sort-by="sortBy"
         :sort-dir="sortDir"
@@ -74,6 +74,7 @@ import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
 import { DavProperties } from 'web-pkg/src/constants'
+import { createLocationSpaces } from '../router'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -135,6 +136,7 @@ export default {
       loadResourcesTask,
       paginatedResources,
       paginationPages,
+      resourceTargetLocation: createLocationSpaces(),
       paginationPage,
       handleSort,
       sortBy,
@@ -153,10 +155,6 @@ export default {
     ]),
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
     ...mapGetters(['user', 'configuration']),
-
-    targetRoute() {
-      return { name: 'files-personal' }
-    },
 
     selected: {
       get() {

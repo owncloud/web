@@ -1,5 +1,5 @@
 import { mapActions } from 'vuex'
-import { isTrashbinRoute } from '../../helpers/route'
+import { isLocationCommonActive } from '../../router'
 
 export default {
   computed: {
@@ -27,7 +27,9 @@ export default {
     async $_showActions_trigger() {
       // we don't have details in the trashbin, yet.
       // return hardcoded `actions-item` in all cases once we have them.
-      await this.openSidebarWithPanel(isTrashbinRoute(this.$route) ? null : 'actions-item')
+      await this.openSidebarWithPanel(
+        isLocationCommonActive(this.$router, 'files-common-trash') ? null : 'actions-item'
+      )
     }
   }
 }

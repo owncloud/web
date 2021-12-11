@@ -57,6 +57,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import Mixins from '../mixins'
 import { DavProperties } from 'web-pkg/src/constants'
+import { createLocationShares } from '../router'
 
 export default {
   mixins: [Mixins],
@@ -104,22 +105,18 @@ export default {
         .then((files) => {
           this.passwordRequired = false
           this.setPublicLinkPassword(password)
-          if (files[0].getProperty(this.$client.publicFiles.PUBLIC_LINK_PERMISSION) === '4') {
-            this.$router.push({
-              name: 'files-public-drop',
+          const publicOperationName =
+            files[0].getProperty(this.$client.publicFiles.PUBLIC_LINK_PERMISSION) === '4'
+              ? 'files-shares-public-drop'
+              : 'files-shares-public-files'
+
+          this.$router.push(
+            createLocationShares(publicOperationName, {
               params: {
                 item: this.$route.params.token
               }
             })
-
-            return
-          }
-          this.$router.push({
-            name: 'files-public-list',
-            params: {
-              item: this.$route.params.token
-            }
-          })
+          )
         })
         .catch((error) => {
           if (error.statusCode === 401) {

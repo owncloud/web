@@ -1,9 +1,12 @@
-import { checkRoute, isPublicFilesRoute } from '../../helpers/route'
-
 import {
   isDownloadAsArchiveAvailable,
   triggerDownloadAsArchive
 } from '../../helpers/download/downloadAsArchive'
+import {
+  isLocationCommonActive,
+  isLocationSharesActive,
+  isLocationSpacesActive
+} from '../../router'
 
 export default {
   computed: {
@@ -18,10 +21,9 @@ export default {
           },
           isEnabled: ({ resources }) => {
             if (
-              !checkRoute(
-                ['files-personal', 'files-public-list', 'files-favorites'],
-                this.$route.name
-              )
+              !isLocationSpacesActive(this.$router) &&
+              !isLocationSharesActive(this.$router, 'files-shares-public-files') &&
+              !isLocationCommonActive(this.$router, 'files-common-favorites')
             ) {
               return false
             }
@@ -50,7 +52,7 @@ export default {
     async $_downloadArchive_trigger({ resources }) {
       await triggerDownloadAsArchive({
         fileIds: resources.map((resource) => resource.fileId),
-        ...(isPublicFilesRoute(this.$route) && {
+        ...(isLocationSharesActive(this.$router, 'files-shares-public-files') && {
           publicToken: this.$route.params.item.split('/')[0]
         })
       }).catch((e) => {

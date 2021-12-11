@@ -48,6 +48,7 @@
           <translate>Password protected</translate>
         </oc-tag>
       </div>
+      test
       <div v-if="link.indirect">
         <oc-tag
           v-oc-tooltip="viaTooltip"
@@ -66,6 +67,7 @@
 <script>
 import { basename, dirname } from 'path'
 import Mixins from '../../../../mixins'
+import { createLocationSpaces } from '../../../../router'
 import CopyToClipboardButton from '../CopyToClipboardButton.vue'
 import { DateTime } from 'luxon'
 
@@ -117,16 +119,15 @@ export default {
 
     viaRouterParams() {
       const viaPath = this.link.path
-
-      return {
-        name: 'files-personal',
+      // toDo
+      return createLocationSpaces({
         params: {
           item: dirname(viaPath) || '/'
         },
         query: {
           scrollTo: basename(viaPath)
         }
-      }
+      })
     },
 
     viaTooltip() {

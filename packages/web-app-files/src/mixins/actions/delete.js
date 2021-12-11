@@ -1,6 +1,10 @@
 import MixinDeleteResources from '../../mixins/deleteResources'
-import { isPersonalRoute, isPublicFilesRoute, isTrashbinRoute } from '../../helpers/route'
 import { mapState } from 'vuex'
+import {
+  isLocationCommonActive,
+  isLocationSharesActive,
+  isLocationSpacesActive
+} from '../../router'
 
 export default {
   mixins: [MixinDeleteResources],
@@ -14,7 +18,10 @@ export default {
           label: () => this.$gettext('Delete'),
           handler: this.$_delete_trigger,
           isEnabled: ({ resources }) => {
-            if (!isPersonalRoute(this.$route) && !isPublicFilesRoute(this.$route)) {
+            if (
+              !isLocationSpacesActive(this.$router) &&
+              !isLocationSharesActive(this.$router, 'files-shares-public-files')
+            ) {
               return false
             }
             if (resources.length === 0) {
@@ -36,7 +43,7 @@ export default {
           label: () => this.$gettext('Delete'),
           handler: this.$_delete_trigger,
           isEnabled: ({ resources }) => {
-            if (!isTrashbinRoute(this.$route)) {
+            if (!isLocationCommonActive(this.$router, 'files-common-trash')) {
               return false
             }
             return resources.length > 0

@@ -84,6 +84,7 @@ import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
 import { DavProperties } from 'web-pkg/src/constants'
+import { createLocationShares } from '../router'
 
 // hacky, get rid asap, just a workaround
 const unauthenticatedUserReady = async (router, store) => {
@@ -183,12 +184,13 @@ export default {
 
         // Redirect to files drop if the link has role "uploader"
         if (resources[0].getProperty(ref.$client.publicFiles.PUBLIC_LINK_PERMISSION) === '4') {
-          ref.$router.push({
-            name: 'files-public-link',
-            params: {
-              token: ref.$route.params.item
-            }
-          })
+          ref.$router.push(
+            createLocationShares('files-shares-public-files', {
+              params: {
+                token: ref.$route.params.item
+              }
+            })
+          )
 
           return
         }
@@ -321,10 +323,11 @@ export default {
     },
 
     redirectToResolvePage() {
-      this.$router.push({
-        name: 'files-public-link',
-        params: { token: this.$route.params.item }
-      })
+      this.$router.push(
+        createLocationShares('files-shares-public-files', {
+          params: { token: this.$route.params.item }
+        })
+      )
     },
 
     isResourceInSelection(resource) {

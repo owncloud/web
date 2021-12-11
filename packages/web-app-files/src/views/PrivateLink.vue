@@ -25,6 +25,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { createLocationSpaces } from '../router'
 
 export default {
   data() {
@@ -57,15 +58,16 @@ export default {
         const lastSlash = path.lastIndexOf('/')
         const folder = path.substring(0, lastSlash).replace(/^(\/)/, '')
         const file = path.substring(lastSlash + 1)
-        this.$router.push({
-          name: 'files-personal',
-          params: {
-            item: folder || '/'
-          },
-          query: {
-            scrollTo: file
-          }
-        })
+        this.$router.push(
+          createLocationSpaces({
+            params: {
+              item: folder || '/'
+            },
+            query: {
+              scrollTo: file
+            }
+          })
+        )
       })
       .catch((error) => {
         this.errorMessage = error

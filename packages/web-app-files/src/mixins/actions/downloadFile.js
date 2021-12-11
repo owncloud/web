@@ -1,4 +1,8 @@
-import { checkRoute } from '../../helpers/route'
+import {
+  isLocationCommonActive,
+  isLocationSharesActive,
+  isLocationSpacesActive
+} from '../../router'
 
 export default {
   computed: {
@@ -13,10 +17,9 @@ export default {
           },
           isEnabled: ({ resources }) => {
             if (
-              !checkRoute(
-                ['files-personal', 'files-favorites', 'files-public-list'],
-                this.$route.name
-              )
+              !isLocationSpacesActive(this.$router) &&
+              !isLocationSharesActive(this.$router, 'files-shares-public-files') &&
+              !isLocationCommonActive(this.$router, 'files-common-favorites')
             ) {
               return false
             }

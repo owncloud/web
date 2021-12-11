@@ -13,7 +13,7 @@
       class="files-table"
       :class="{ 'files-table-squashed': false }"
       :resources="paginatedResources"
-      :target-route="{ name: 'files-personal' }"
+      :target-route="resourceTargetLocation"
       :are-paths-displayed="true"
       :are-thumbnails-displayed="displayThumbnails"
       :has-actions="false"
@@ -39,6 +39,7 @@
 import { useStore, useRouteQuery, usePagination, useDefaults } from '../../composables'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageType, ImageDimension } from '../../constants'
+import { createLocationSpaces } from '../../router'
 import NoContentMessage from '../FilesList/NoContentMessage.vue'
 import ResourceTable from '../FilesList/ResourceTable.vue'
 import debounce from 'lodash-es/debounce'
@@ -78,7 +79,8 @@ export default {
     return {
       paginatedResources,
       paginationPages,
-      paginationPage
+      paginationPage,
+      resourceTargetLocation: createLocationSpaces()
     }
   },
   computed: {

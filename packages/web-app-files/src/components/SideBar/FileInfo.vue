@@ -42,11 +42,11 @@
 import { mapGetters, mapActions } from 'vuex'
 import Mixins from '../../mixins'
 import MixinResources from '../../mixins/resources'
-import MixinRoutes from '../../mixins/routes'
+import { isLocationCommonActive, isLocationSharesActive } from '../../router'
 
 export default {
   name: 'FileInfo',
-  mixins: [Mixins, MixinResources, MixinRoutes],
+  mixins: [Mixins, MixinResources],
   inject: ['displayedItem'],
   props: {
     isContentDisplayed: {
@@ -66,7 +66,7 @@ export default {
         return obj
       }
 
-      if (this.isTrashbinRoute) {
+      if (isLocationCommonActive(this.$router, 'files-common-trash')) {
         return interpolate({
           sourceTime: this.file.ddate,
           infoString: this.$pgettext('inline info about deletion date', 'deleted %{timeRelative}'),
@@ -94,8 +94,8 @@ export default {
         this.capabilities.files &&
         this.capabilities.files.favorites &&
         this.isContentDisplayed &&
-        !this.isAnySharedWithRoute &&
-        !this.isTrashbinRoute
+        !isLocationSharesActive(this.$router, 'files-shares-with-me', 'files-shares-with-others') &&
+        !isLocationCommonActive(this.$router, 'files-common-trash')
       )
     },
 

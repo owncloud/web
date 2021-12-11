@@ -1,6 +1,7 @@
 import Vuex from 'vuex'
 import { mount, createLocalVue } from '@vue/test-utils'
 import Delete from '@files/src/mixins/actions/delete.js'
+import { createLocationSpaces } from '../../../../src/router'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -15,10 +16,14 @@ describe('delete', () => {
     return mount(Component, {
       localVue,
       mocks: {
-        $route: {
-          name: 'files-personal'
-        },
-        $router: []
+        $route: createLocationSpaces(),
+        $router: {
+          resolve: () => {
+            return {
+              href: 'href'
+            }
+          }
+        }
       }
     })
   }

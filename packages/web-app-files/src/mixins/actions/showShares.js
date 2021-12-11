@@ -1,5 +1,5 @@
 import quickActions, { canShare, openNewCollaboratorsPanel } from '../../quickActions'
-import { isSharedWithMeRoute, isTrashbinRoute } from '../../helpers/route'
+import { isLocationCommonActive, isLocationSharesActive } from '../../router'
 import { ShareStatus } from '../../helpers/share'
 
 export default {
@@ -12,13 +12,13 @@ export default {
           label: () => this.$gettext('Share'),
           handler: this.$_showShares_trigger,
           isEnabled: ({ resources }) => {
-            if (isTrashbinRoute(this.$route)) {
+            if (isLocationCommonActive(this.$router, 'files-common-trash')) {
               return false
             }
             if (resources.length !== 1) {
               return false
             }
-            if (isSharedWithMeRoute(this.$route)) {
+            if (isLocationSharesActive(this.$router, 'files-shares-with-me')) {
               if (resources[0].status !== ShareStatus.accepted) {
                 return false
               }

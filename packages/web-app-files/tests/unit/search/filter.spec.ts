@@ -2,6 +2,7 @@ import { createLocalVue } from '@vue/test-utils'
 import { FilterSearch } from '../../../src/search'
 import Vuex from 'vuex'
 import VueRouter from 'vue-router'
+import { createLocationSpaces } from '../../../src/router'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -56,14 +57,17 @@ describe('FilterProvider', () => {
   })
 
   it('is only available on certain routes', () => {
-    ;[{ route: 'foo' }, { route: 'files-personal', available: true }, { route: 'bar' }].forEach(
-      (v) => {
-        const search = new FilterSearch(store, {
-          currentRoute: { name: v.route }
-        } as unknown as VueRouter)
-        expect(search.available).toBe(!!v.available)
-      }
-    )
+    ;[
+      { route: { name: 'foo' } },
+      { route: createLocationSpaces(), available: true },
+      { route: { name: 'bar' } }
+    ].forEach((v) => {
+      const search = new FilterSearch(store, {
+        currentRoute: v.route,
+        resolve: (r) => ({ href: r.name })
+      } as unknown as VueRouter)
+      expect(search.available).toBe(!!v.available)
+    })
   })
 
   describe('FilterProvider previewSearch', () => {

@@ -12,7 +12,7 @@
     />
     <div class="files-topbar oc-py-s">
       <oc-breadcrumb
-        v-if="showBreadcrumb"
+        v-if="breadcrumbs.length"
         id="files-breadcrumb"
         data-testid="files-breadcrumbs"
         class="oc-p-s"
@@ -20,7 +20,7 @@
       >
         <template #contextMenu>
           <context-actions
-            v-if="currentFolder && showBreadcrumbContextMenu"
+            v-if="currentFolder && breadcrumbs.length > 1"
             :items="[currentFolder]"
           />
         </template>
@@ -118,15 +118,14 @@
 <script>
 import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
 import pathUtil from 'path'
-import isEmpty from 'lodash-es/isEmpty'
+import { useRouter } from '../../composables'
 
 import Mixins from '../../mixins'
 import MixinFileActions, { EDITOR_MODE_CREATE } from '../../mixins/fileActions'
-import MixinRoutes from '../../mixins/routes'
-import { checkRoute } from '../../helpers/route'
 import MixinScrollToResource from '../../mixins/filesListScrolling'
 import { buildResource } from '../../helpers/resources'
 import { bus } from 'web-pkg/src/instance'
+import { isLocationActive, isLocationSharesActive, isLocationSpacesActive } from '../../router'
 
 import BatchActions from './SelectedResources/BatchActions.vue'
 import FileDrop from './Upload/FileDrop.vue'
@@ -147,7 +146,13 @@ export default {
     ViewOptions,
     ContextActions
   },
-  mixins: [Mixins, MixinFileActions, MixinRoutes, MixinScrollToResource],
+  mixins: [Mixins, MixinFileActions, MixinScrollToResource],
+  setup() {
+    const router = useRouter()
+    return {
+      isSpacesLocation: isLocationSpacesActive(router)
+    }
+  },
   data: () => ({
     newFileAction: null,
     path: '',
@@ -183,11 +188,6 @@ export default {
       }
       return path + '/'
     },
-    currentPathSegments() {
-      // remove potential leading and trailing slash from current path (so that the resulting array doesn't start with an empty string)
-      const s = this.currentPath.replace(/^\/+/, '').replace(/\/+$/, '')
-      return isEmpty(s) ? [] : s.split('/')
-    },
     headers() {
       if (this.publicPage()) {
         const password = this.publicLinkPassword
@@ -214,60 +214,50 @@ export default {
     hasBulkActions() {
       return this.$route.meta.hasBulkActions === true
     },
-
-    showBreadcrumb() {
-      return this.isPublicFilesRoute || this.isPersonalRoute
-    },
     pageTitle() {
       const title = this.$route.meta.title
       return this.$gettext(title)
     },
 
     breadcrumbs() {
-      const pathSegments = this.currentPathSegments
-      const breadcrumbs = []
-      let baseUrl
-      const pathItems = []
-      if (this.isPersonalRoute) {
-        baseUrl = '/files/list/all/'
-        pathItems.push('/') // as of now we need to add the url encoded root path `/`, otherwise we'll land in the configured homeFolder
-        breadcrumbs.push({
-          text: this.$gettext('All files')
-        })
-
-        pathSegments.length < 1
-          ? (breadcrumbs[0].onClick = () =>
-              bus.publish('app.files.list.load', this.$route.params.item))
-          : (breadcrumbs[0].to = baseUrl + encodeURIComponent(pathUtil.join(...pathItems)))
-      } else {
-        baseUrl = '/files/public/list/'
-        pathItems.push(pathSegments.splice(0, 1)[0])
-        breadcrumbs.push({
-          text: this.$gettext('Public link'),
-          to: baseUrl + encodeURIComponent(pathUtil.join(...pathItems))
-        })
+      const isPublic = isLocationSharesActive(this.$router, 'files-shares-public-files')
+      const isSpaces = isLocationSpacesActive(this.$router)
+      if (!(isPublic || isSpaces)) {
+        return []
       }
 
-      for (let i = 0; i < pathSegments.length; i++) {
-        pathItems.push(pathSegments[i])
-        const to = baseUrl + encodeURIComponent(pathUtil.join(...pathItems))
+      const { params: routeParams, path: routePath } = this.$route
+      const { item: requestedItemPath = '' } = routeParams
+      const basePaths =
+        '/' +
+        decodeURIComponent(routePath)
+          .replace(requestedItemPath, '')
+          .split('/')
+          .filter(Boolean)
+          .join('/')
 
-        if (i === pathSegments.length - 1) {
-          breadcrumbs.push({
-            text: pathSegments[i],
-            onClick: () => bus.publish('app.files.list.load', this.$route.params.item)
+      return [basePaths, ...requestedItemPath.split('/').filter(Boolean)].reduce(
+        (acc, rawItem, i, rawItems) => {
+          const to = [(acc[i - 1] || {}).to, rawItem].filter(Boolean).join('/')
+          acc.push({
+            text: rawItem,
+            onClick: () => bus.publish('app.files.list.load', to.replace(basePaths, '') || '/'),
+            to
           })
 
-          continue
-        }
+          if (i === rawItems.length - 1) {
+            isPublic && acc.shift()
+            acc.length &&
+              (acc[0].text = isSpaces ? this.$gettext('All files') : this.$gettext('Public link'))
+            acc.length && delete acc[acc.length - 1].to
+          } else {
+            delete acc[i].onClick
+          }
 
-        breadcrumbs.push({
-          text: pathSegments[i],
-          to: i + 1 === pathSegments.length ? null : to
-        })
-      }
-
-      return breadcrumbs
+          return acc
+        },
+        []
+      )
     },
 
     hasFreeSpace() {
@@ -301,12 +291,10 @@ export default {
       return this.$gettextInterpolate(translated, { amount: this.selectedFiles.length })
     },
 
-    showBreadcrumbContextMenu() {
-      return this.currentPathSegments.length > 0
-    },
-
     newFileHandlersForRoute() {
-      return this.newFileHandlers.filter((handler) => checkRoute(handler.routes, this.$route.name))
+      return this.newFileHandlers.filter(({ action }) => {
+        return isLocationActive(this.$router, ...action.routes.map((name) => ({ name })))
+      })
     }
   },
 
@@ -376,7 +364,7 @@ export default {
         const path = pathUtil.join(this.currentPath, folderName)
 
         let resource
-        if (this.isPersonalRoute) {
+        if (this.isSpacesLocation) {
           await this.$client.files.createFolder(path)
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else {
@@ -392,7 +380,7 @@ export default {
         this.UPSERT_RESOURCE(resource)
         this.hideModal()
 
-        if (this.isPersonalRoute) {
+        if (this.isSpacesLocation) {
           this.loadIndicators({
             client: this.$client,
             currentFolder: this.currentFolder.path
@@ -455,7 +443,7 @@ export default {
       try {
         const path = pathUtil.join(this.currentPath, fileName)
         let resource
-        if (this.isPersonalRoute) {
+        if (this.isSpacesLocation) {
           await this.$client.files.putFileContents(path, '')
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else {
@@ -481,7 +469,7 @@ export default {
         this.UPSERT_RESOURCE(resource)
         this.hideModal()
 
-        if (this.isPersonalRoute) {
+        if (this.isSpacesLocation) {
           this.loadIndicators({
             client: this.$client,
             currentFolder: this.currentFolder.path
@@ -542,7 +530,7 @@ export default {
         await this.$nextTick()
 
         const path = pathUtil.join(this.currentPath, file)
-        let resource = this.isPersonalRoute
+        let resource = this.isSpacesLocation
           ? await this.$client.files.fileInfo(path, DavProperties.Default)
           : await this.$client.publicFiles.getFileInfo(
               path,
@@ -553,7 +541,7 @@ export default {
         resource = buildResource(resource)
         this.UPSERT_RESOURCE(resource)
 
-        if (this.isPersonalRoute) {
+        if (this.isSpacesLocation) {
           this.loadIndicators({
             client: this.$client,
             currentFolder: this.currentFolder.path,

@@ -34,6 +34,8 @@
 </template>
 
 <script>
+import merge from 'lodash-es/merge'
+
 export default {
   name: 'ActionMenuItem',
   props: {
@@ -61,12 +63,11 @@ export default {
     getComponentProps(action, resources) {
       if (action.componentType === 'router-link' && action.route) {
         return {
-          to: {
-            name: action.route,
+          to: merge({}, action.route, {
             params: {
               item: resources.map((resource) => resource.path)
             }
-          }
+          })
         }
       }
 

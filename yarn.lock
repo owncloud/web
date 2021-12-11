@@ -15186,10 +15186,10 @@ typescript@^4.3.2:
   languageName: node
   linkType: hard
 
-"vue-router@npm:^3.1.3":
-  version: 3.5.1
-  resolution: "vue-router@npm:3.5.1"
-  checksum: 9dca79789517d7e70fb26edb47187a46a2aa2fbdecd8c0a91bb2c8e333c44406bc2a8c39283ab02031651630871e28666a368cd79fcd258025f3521bee30eea9
+"vue-router@npm:^3.5.3":
+  version: 3.5.3
+  resolution: "vue-router@npm:3.5.3"
+  checksum: 7b2cc0d41ff2a8ec3da45761f29e14d0998119f47e4887f54e17eb534f7b4823acb778302891b0aa3a10c62ae8ba999393d7891cc08d36f02ea87aa268e2a36c
   languageName: node
   linkType: hard
 
@@ -15373,7 +15373,7 @@ typescript@^4.3.2:
     vue-inline-svg: ^2.0.0
     vue-meta: ^2.2.2
     vue-resize: ^0.4.5
-    vue-router: ^3.1.3
+    vue-router: ^3.5.3
     vue-scrollto: ^2.15.0
     vue-select: ^3.13.2
     vuex: ^3.6.2

@@ -7,11 +7,10 @@
 <script>
 import Mixins from '../../mixins'
 import MixinResources from '../../mixins/resources'
-import MixinRoutes from '../../mixins/routes'
 
 export default {
   name: 'NoSelection',
-  mixins: [Mixins, MixinResources, MixinRoutes],
+  mixins: [Mixins, MixinResources],
   title: ($gettext) => {
     return $gettext('Details')
   },

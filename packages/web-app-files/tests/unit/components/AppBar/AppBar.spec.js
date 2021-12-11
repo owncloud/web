@@ -5,6 +5,11 @@ import GetTextPlugin from 'vue-gettext'
 
 import stubs from '@/tests/unit/stubs'
 import AppBar from '@files/src/components/AppBar/AppBar'
+import {
+  createLocationCommon,
+  createLocationShares,
+  createLocationSpaces
+} from '../../../../src/router'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -28,12 +33,18 @@ const elSelector = {
   newDrawioFileBtn: '.new-file-btn-drawio'
 }
 
+const spacesDefaultLocation = createLocationSpaces()
+const sharesWithMeLocation = createLocationShares('files-shares-with-me')
+const sharesWithOthersLocation = createLocationShares('files-shares-with-others')
+const publicFilesLocation = createLocationShares('files-shares-public-files')
+const favoritesLocation = createLocationCommon('files-common-favorites')
+
 const routes = [
-  'files-personal',
-  'files-favorites',
-  'files-shared-with-others',
-  'files-shared-with-me',
-  'files-public-list'
+  spacesDefaultLocation.name,
+  favoritesLocation.name,
+  sharesWithOthersLocation.name,
+  sharesWithMeLocation.name,
+  publicFilesLocation.name
 ]
 
 const newFileHandlers = [
@@ -89,12 +100,12 @@ describe('AppBar component', () => {
     jest.clearAllMocks()
   })
 
-  describe.each(['files-personal', 'files-public-list'])('%s route', (page) => {
+  describe.each([spacesDefaultLocation.name, publicFilesLocation.name])('%s route', (page) => {
     const route = {
       name: page,
       params: {
         // item is the link token for public links (root of the public link) vs. empty for personal page (root of the home)
-        item: page === 'files-public-list' ? '6mfXfTtYHVxrlAu' : ''
+        item: page === publicFilesLocation.name ? '6mfXfTtYHVxrlAu' : ''
       },
       meta: {
         hasBulkActions: true,
@@ -239,7 +250,7 @@ describe('AppBar component', () => {
     })
   })
 
-  describe.each(['files-favorites', 'files-shared-with-others', 'files-shared-with-me'])(
+  describe.each([favoritesLocation.name, sharesWithOthersLocation.name, sharesWithMeLocation.name])(
     '%s page',
     (page) => {
       const route = {
@@ -308,6 +319,12 @@ function getWrapper(route = {}, store = {}) {
     localVue,
     mocks: {
       $route: route,
+      $router: {
+        currentRoute: route,
+        resolve: (r) => {
+          return { href: r.name }
+        }
+      },
       publicPage: jest.fn(() => false),
       isIE11: jest.fn(() => false)
     },
@@ -330,6 +347,12 @@ function getShallowWrapper(route = {}, store = {}) {
     localVue,
     mocks: {
       $route: route,
+      $router: {
+        currentRoute: route,
+        resolve: (r) => {
+          return { href: r.name }
+        }
+      },
       publicPage: jest.fn(() => false),
       isIE11: jest.fn(() => false)
     },

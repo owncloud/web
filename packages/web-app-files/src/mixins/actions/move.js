@@ -1,5 +1,10 @@
 import { canBeMoved } from '../../helpers/permissions'
-import { checkRoute, isPublicFilesRoute } from '../../helpers/route'
+import {
+  createLocationOperations,
+  isLocationCommonActive,
+  isLocationSharesActive,
+  isLocationSpacesActive
+} from '../../router'
 
 export default {
   computed: {
@@ -13,10 +18,9 @@ export default {
             this.$pgettext('Action in the files list row to initiate moving resources', 'Move'),
           isEnabled: ({ resources }) => {
             if (
-              !checkRoute(
-                ['files-personal', 'files-public-list', 'files-favorites'],
-                this.$route.name
-              )
+              !isLocationSpacesActive(this.$router) &&
+              !isLocationSharesActive(this.$router, 'files-shares-public-files') &&
+              !isLocationCommonActive(this.$router, 'files-common-favorites')
             ) {
               return false
             }
@@ -41,22 +45,24 @@ export default {
   },
   methods: {
     $_move_trigger({ resources }) {
-      const context = isPublicFilesRoute(this.$route) ? 'public' : 'private'
+      const context = isLocationSharesActive(this.$router, 'files-shares-public-files')
+        ? 'public'
+        : 'private'
       const item = this.currentFolder.path || this.homeFolder
-
-      return this.$router.push({
-        name: 'files-location-picker',
-        params: {
-          context,
-          item,
-          action: 'move'
-        },
-        query: {
-          resource: resources.map((resource) => {
-            return resource.path
-          })
-        }
-      })
+      return this.$router.push(
+        createLocationOperations('files-operations-location-picker', {
+          params: {
+            context,
+            item,
+            action: 'move'
+          },
+          query: {
+            resource: resources.map((resource) => {
+              return resource.path
+            })
+          }
+        })
+      )
     }
   }
 }

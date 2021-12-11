@@ -24,7 +24,6 @@
 </template>
 <script>
 import Mixins from './mixins'
-import MixinRoutes from './mixins/routes'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import AppBar from './components/AppBar/AppBar.vue'
 import ProgressBar from './components/Upload/ProgressBar.vue'
@@ -36,7 +35,7 @@ export default {
     ProgressBar,
     SideBar
   },
-  mixins: [Mixins, MixinRoutes],
+  mixins: [Mixins],
   data() {
     return {
       createFolder: false,

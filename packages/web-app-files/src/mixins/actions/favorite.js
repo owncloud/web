@@ -1,6 +1,6 @@
 import { mapActions } from 'vuex'
 
-import { checkRoute } from '../../helpers/route'
+import { isLocationCommonActive, isLocationSpacesActive } from '../../router'
 
 export default {
   inject: { displayedItem: { default: null } },
@@ -18,7 +18,10 @@ export default {
             return this.$gettext('Add to favorites')
           },
           isEnabled: ({ resources }) => {
-            if (!checkRoute(['files-personal', 'files-favorites'], this.$route.name)) {
+            if (
+              !isLocationSpacesActive(this.$router) &&
+              !isLocationCommonActive(this.$router, 'files-common-favorites')
+            ) {
               return false
             }
             if (resources.length !== 1) {
