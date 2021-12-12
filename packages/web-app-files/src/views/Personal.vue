@@ -126,6 +126,9 @@ export default {
     const { refresh: refreshFileListHeaderPosition, y: fileListHeaderY } =
       useFileListHeaderPosition()
 
+    const sortByPageQuery = useRouteQuery('sort-by')
+    const sortDirPageQuery = useRouteQuery('sort-dir')
+
     const storeItems = computed(() => store.getters['Files/activeFiles'])
     const fields = computed(() => {
       return determineSortFields(unref(storeItems)[0])
@@ -133,7 +136,9 @@ export default {
 
     const { sortBy, sortDir, items, handleSort } = useSort({
       items: storeItems,
-      fields: fields
+      fields: fields,
+      sortBy: sortByPageQuery,
+      sortDir: sortDirPageQuery
     })
 
     const paginationPageQuery = useRouteQuery('page', '1')
