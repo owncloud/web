@@ -12,7 +12,9 @@ export class AllFilesPage {
 
   async navigate(): Promise<void> {
     const { page } = this.actor
-    await page.click('a[href="#/files/list/all"]')
+    
+    const allFilesBtn = page.locator('a[href="#/files/list/all"]')
+    await allFilesBtn.click()
   }
 
   async createFolder({ name }: { name: string }): Promise<void> {
@@ -249,9 +251,8 @@ export class AllFilesPage {
     await cta.files.sidebar.open({ page: page, resource: resouceName })
     await cta.files.sidebar.openPanel({ page: page, name: 'versions' })
 
-    await page.waitForSelector('//*[@id="oc-file-versions-sidebar"]')
-    const elements = await page.$$('//*[@id="oc-file-versions-sidebar"]/table/tbody/tr')
-    return elements.length
+    const elements = page.locator('//*[@id="oc-file-versions-sidebar"]/table/tbody/tr')
+    return await elements.count()
   }
 
   async deleteResource({ resource }: { resource: string }): Promise<void> {
