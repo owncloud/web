@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Contextmenu on public links: [#6123](https://github.com/owncloud/web/issues/6123)
+* Bugfix - Inconsistencies in share expiry dates: [#6084](https://github.com/owncloud/web/pull/6084)
 * Bugfix - Extension casing: [#5339](https://github.com/owncloud/web/issues/5339)
 * Bugfix - File renaming: [#4893](https://github.com/owncloud/web/issues/4893)
 * Bugfix - Double escaping in progress bar: [#4214](https://github.com/owncloud/web/issues/4214)
@@ -25,6 +26,16 @@ Details
    We fixed an issue of the contextmenu not being displayed for the files table on public links.
 
    https://github.com/owncloud/web/issues/6123
+
+* Bugfix - Inconsistencies in share expiry dates: [#6084](https://github.com/owncloud/web/pull/6084)
+
+   * Share expiry dates now always refer to the end of the given day. This change allows users to
+   select the current day as expiry date. * Displayed expiry dates have been aligned to ensure
+   their consistency. * Existing expiry dates for public links can now be removed again. * We now
+   use the Luxon `DateTime` object more consistently across the code base (replacing
+   JavaScript's `new Date()).
+
+   https://github.com/owncloud/web/pull/6084
 
 * Bugfix - Extension casing: [#5339](https://github.com/owncloud/web/issues/5339)
 
