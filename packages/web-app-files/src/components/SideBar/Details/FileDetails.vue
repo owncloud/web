@@ -299,6 +299,7 @@ export default {
       this.refreshShareDetailsTree()
     },
     sharesTree() {
+      // missing early return
       this.sharedItem = null
 
       const sharePathParentOrCurrent = this.getParentSharePath(this.file.path, this.sharesTree)
@@ -356,6 +357,9 @@ export default {
     },
     getParentSharePath(childPath, shares) {
       let currentPath = childPath
+      if (!currentPath) {
+        return null
+      }
       while (currentPath !== '/') {
         const share = shares[currentPath]
         if (share !== undefined && share[0] !== undefined) {
