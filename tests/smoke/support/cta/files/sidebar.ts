@@ -25,7 +25,7 @@ export const openPanel = async ({
     await backElement.click()
   }
 
-  const panelOpenElement = await page.$(`#sidebar-panel-${name}-item-select`)
+  const panelOpenElement = await page.locator(`#sidebar-panel-${name}-item-select`)
   if (panelOpenElement) {
     await panelOpenElement.click()
   }
