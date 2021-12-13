@@ -18,6 +18,7 @@
             id="files-file-link-add"
             icon="add"
             variation="primary"
+            data-testid="files-link-add-btn"
             :aria-label="$_addButtonAriaLabel"
             @click="addNewLink"
           >
@@ -39,7 +40,7 @@
           tag="ul"
         >
           <li v-for="link in links" :key="link.key">
-            <list-item :link="link" />
+            <list-item :data-testid="`files-link-id-${link.id}`" :link="link" />
           </li>
         </transition-group>
         <p

@@ -1,0 +1,8 @@
+Bugfix: Inconsistencies in share expiry dates
+
+* Share expiry dates now always refer to the end of the given day. This change allows users to select the current day as expiry date.
+* Displayed expiry dates have been aligned to ensure their consistency.
+* Existing expiry dates for public links can now be removed again.
+* We now use the Luxon `DateTime` object more consistently across the code base (replacing JavaScript's `new Date()).
+
+https://github.com/owncloud/web/pull/6084
