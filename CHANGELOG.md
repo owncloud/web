@@ -8,7 +8,9 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Contextmenu on public links: [#6123](https://github.com/owncloud/web/issues/6123)
 * Bugfix - Extension casing: [#5339](https://github.com/owncloud/web/issues/5339)
+* Bugfix - File renaming: [#4893](https://github.com/owncloud/web/issues/4893)
 * Bugfix - Context for dates in SideBar: [#5068](https://github.com/owncloud/web/issues/5068)
 * Bugfix - User email attribute initialization: [#6118](https://github.com/owncloud/web/pull/6118)
 * Enhancement - Adopt oc-table-files from ods: [#6106](https://github.com/owncloud/web/pull/6106)
@@ -17,12 +19,26 @@ Summary
 Details
 -------
 
+* Bugfix - Contextmenu on public links: [#6123](https://github.com/owncloud/web/issues/6123)
+
+   We fixed an issue of the contextmenu not being displayed for the files table on public links.
+
+   https://github.com/owncloud/web/issues/6123
+
 * Bugfix - Extension casing: [#5339](https://github.com/owncloud/web/issues/5339)
 
    We fixed file extensions always being shown in lowercase.
 
    https://github.com/owncloud/web/issues/5339
    https://github.com/owncloud/web/pull/6117
+
+* Bugfix - File renaming: [#4893](https://github.com/owncloud/web/issues/4893)
+
+   We fixed the displayed file name not being properly updated in files list and sidebar after
+   renaming.
+
+   https://github.com/owncloud/web/issues/4893
+   https://github.com/owncloud/web/pull/6114
 
 * Bugfix - Context for dates in SideBar: [#5068](https://github.com/owncloud/web/issues/5068)
 
