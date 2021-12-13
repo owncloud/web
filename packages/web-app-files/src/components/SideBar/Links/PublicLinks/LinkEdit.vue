@@ -1,5 +1,5 @@
 <template>
-  <div class="oc-files-edit-public-link oc-files-file-link-form">
+  <div class="oc-files-edit-public-link oc-files-file-link-form" data-testid="new-files-link">
     <form @submit.prevent>
       <transition
         enter-active-class="uk-animation-slide-top-small"
@@ -72,6 +72,7 @@
           id="oc-files-file-link-expire-date-delete"
           class="oc-mt-s"
           appearance="raw"
+          data-testid="files-link-remove-expiration-date"
           @click="expireDate = null"
           v-text="$gettext('Remove expiration date')"
         />
@@ -126,17 +127,22 @@
           >
             <template v-if="$_isNew">
               <oc-spinner :aria-label="$gettext('Creating Public Link')" size="small" />
-              <span v-translate :aria-hidden="true">Creating</span>
+              <span v-translate data-testid="files-link-being-created" :aria-hidden="true"
+                >Creating</span
+              >
             </template>
             <template v-else>
               <oc-spinner :aria-label="$gettext('Saving Public Link')" size="small" />
-              <span v-translate :aria-hidden="true">Saving</span>
+              <span v-translate data-testid="files-link-being-saved" :aria-hidden="true"
+                >Saving</span
+              >
             </template>
           </oc-button>
           <template v-else>
             <oc-button
               v-if="$_isNew"
               id="oc-files-file-link-create"
+              data-testid="new-files-link-btn"
               :disabled="!$_isValid"
               variation="primary"
               appearance="filled"
@@ -147,6 +153,7 @@
             <oc-button
               v-else
               id="oc-files-file-link-save"
+              data-testid="save-files-link-btn"
               :disabled="!$_isValid || !$_hasChanges"
               variation="primary"
               appearance="filled"
@@ -162,11 +169,8 @@
 </template>
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
-
 import mixins from '../../../../mixins'
 import { DateTime } from 'luxon'
-import { addDays } from 'web-runtime/src/helpers/date'
-
 import RoleItem from '../../Shared/RoleItem.vue'
 import { LinkShareRoles, SharePermissions } from '../../../../helpers/share'
 
@@ -241,7 +245,7 @@ export default {
     },
 
     minExpirationDate() {
-      return addDays(new Date(), 1)
+      return DateTime.now().setLocale(this.$language.current).toJSDate()
     },
 
     maxExpirationDate() {
@@ -250,8 +254,7 @@ export default {
       }
 
       const days = parseInt(this.$_expirationDate.days, 10)
-
-      return addDays(new Date(), days)
+      return DateTime.now().setLocale(this.$language.current).plus({ days }).toJSDate()
     },
 
     $_expirationIsValid() {
@@ -326,7 +329,8 @@ export default {
         return null
       }
 
-      return addDays(new Date(), parseInt(this.$_expirationDate.days))
+      const days = parseInt(this.$_expirationDate.days)
+      return DateTime.now().setLocale(this.$language.current).plus({ days }).toJSDate()
     }
   },
   created() {
@@ -363,8 +367,12 @@ export default {
     $_addLink() {
       this.saving = true
 
+      const expireDate = DateTime.fromJSDate(this.expireDate)
+        .setLocale(this.$language.current)
+        .endOf('day')
+
       const params = {
-        expireDate: DateTime.fromJSDate(this.expireDate).endOf('day').toISODate(),
+        expireDate: expireDate.isValid ? expireDate.toFormat("yyyy-MM-dd'T'HH:mm:ssZZZ") : '',
         permissions: this.selectedRole.bitmask(false),
         name: this.name
       }
@@ -393,8 +401,12 @@ export default {
     $_updateLink() {
       this.saving = true
 
+      const expireDate = DateTime.fromJSDate(this.expireDate)
+        .setLocale(this.$language.current)
+        .endOf('day')
+
       const params = {
-        expireDate: DateTime.fromJSDate(this.expireDate).endOf('day').toISODate(),
+        expireDate: expireDate.isValid ? expireDate.toFormat("yyyy-MM-dd'T'HH:mm:ssZZZ") : '',
         permissions: this.selectedRole.bitmask(false),
         name: this.name
       }

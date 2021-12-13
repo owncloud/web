@@ -34,43 +34,48 @@ config = {
         "webUI": {
             "type": FULL,
             "suites": {
-                "oC10Basic": [
+                "oC10Basic1": [
                     "webUIAccount",
-                    "webUILogin",
-                    "webUIPreview",
-                    "webUIPrivateLinks",
-                ],
-                "oC10Locks": [
-                    "webUIWebdavLockProtection",
                     "webUIWebdavLocks",
                 ],
-                "oC10CreateDelete": [
+                "oC10Basic2": [
+                    "webUIPrivateLinks",
+                    "webUIWebdavLockProtection",
+                ],
+                "oC10FileOperations": [
                     "webUICreateFilesFolders",
                     "webUIDeleteFilesFolders",
-                ],
-                "oC10Rename": [
-                    "webUIRenameFiles",
-                    "webUIRenameFolders",
                 ],
                 "oC10SharingAccept": [
                     "webUISharingAcceptShares",
                     "webUISharingAcceptSharesToRoot",
+                    "webUISharingInternalUsersCollaborator",
                 ],
                 "oC10Files1": [
-                    "webUIFiles",
-                    "webUIFilesActionMenu",
                     "webUIFilesCopy",
-                    "webUIMarkdownEditor",
                     "webUIFavorites",
+                    "webUIMarkdownEditor",
                 ],
                 "oC10Files2": [
-                    "webUIFilesDetails",
                     "webUIFilesList",
                     "webUIFilesSearch",
-                ],
-                "oC10MoveUpload": [
-                    "webUIMoveFilesFolders",
+                    "webUIFilesActionMenu",
                     "webUIUpload",
+                ],
+                "oC10Files3": [
+                    "webUIRenameFiles",
+                    "webUILogin",
+                ],
+                "oC10Files4": [
+                    "webUIPreview",
+                    "webUIFilesDetails",
+                ],
+                "oC10Files5": [
+                    "webUIFiles",
+                    "webUIRenameFolders",
+                ],
+                "oC10Move": [
+                    "webUIMoveFilesFolders",
                     "webUIOperationsWithFolderShares",
                 ],
                 "oC10Resharing": [
@@ -78,16 +83,18 @@ config = {
                     "webUIResharing2",
                 ],
                 "oC10Sharing1": [
-                    "webUIRestrictSharing",
                     "webUISharingAutocompletion",
                     "webUISharingExpirationDate",
+                    "webUIRestrictSharing",
                 ],
-                "webUIResharingToRoot": "oC10ResharingToRoot",
+                "oC10Sharing2": [
+                    "webUIResharingToRoot",
+                    "webUISharingInternalUsersBlacklisted",
+                ],
                 "oC10SharingFilePerm": [
                     "webUISharingFilePermissionMultipleUsers",
                     "webUISharingFilePermissionsGroups",
                 ],
-                "webUISharingFolderAdvancedPermissionMultipleUsers": "oC10SharingFolderAdvPermMU",
                 "webUISharingFolderAdvancedPermissionsGroups": "oC10SharingFolderAdvPermsGrp",
                 "oC10SharingFolderPermissions": [
                     "webUISharingFolderPermissionMultipleUsers",
@@ -101,41 +108,42 @@ config = {
                     "webUISharingInternalGroupsToRoot",
                     "webUISharingInternalGroupsToRootEdgeCases",
                 ],
-                "oC10SharingIntGroupsSharingInd": [
-                    "webUISharingInternalGroupsSharingIndicator",
-                    "webUISharingInternalGroupsToRootSharingIndicator",
-                ],
-                "oC10SharingIntUsers": [
+                "oC10SharingIntUsers1": [
                     "webUISharingInternalUsers",
-                    "webUISharingInternalUsersCollaborator",
+                    "webUISharingInternalUsersToRootCollaborator",
+                ],
+                "oC10SharingIntUsers2": [
+                    "webUISharingInternalUsersToRoot",
+                    "webUISharingInternalUsersToRootShareWithPage",
+                ],
+                "oc10SharingIntUsers3": [
+                    "webUISharingInternalUsersToRootBlacklisted",
                     "webUISharingInternalUsersShareWithPage",
                 ],
-                "webUISharingInternalUsersBlacklisted": "oC10SharingIntUsersBlacklisted",
-                "oC10SharingIntUsersSharingInd": [
+                "oC10SharingSharingInd": [
+                    "webUISharingInternalGroupsSharingIndicator",
+                    "webUISharingInternalGroupsToRootSharingIndicator",
                     "webUISharingInternalUsersSharingIndicator",
                     "webUISharingInternalUsersToRootSharingIndicator",
                 ],
-                "oC10SharingIntUsersRoot1": [
-                    "webUISharingInternalUsersToRoot",
-                    "webUISharingInternalUsersToRootBlacklisted",
-                ],
-                "oC10SharingIntUsersRoot2": [
-                    "webUISharingInternalUsersToRootCollaborator",
+                "oC10SharingAndTrashbin": [
                     "webUISharingInternalUsersToRootPreviews",
-                    "webUISharingInternalUsersToRootShareWithPage",
-                ],
-                "webUISharingPermissionsUsers": "oC10SharingPermUsers",
-                "webUISharingPermissionToRoot": "oC10SharingPermToRoot",
-                "webUISharingPublicBasic": "oC10SharingPublicBasic",
-                "webUISharingPublicManagement": "oC10SharingPublicManagement",
-                "oC10SharingPubExpAndRoles": [
-                    "webUISharingPublicDifferentRoles",
-                    "webUISharingPublicExpire",
-                ],
-                "oC10Trashbin": [
                     "webUITrashbinDelete",
                     "webUITrashbinFilesFolders",
                     "webUITrashbinRestore",
+                ],
+                "oC10SharingPermission": [
+                    "webUISharingPermissionsUsers",
+                    "webUISharingFolderAdvancedPermissionMultipleUsers",
+                ],
+                "webUISharingPermissionToRoot": "oC10SharingPermToRoot",
+                "oC10SharingPublic1": [
+                    "webUISharingPublicBasic",
+                    "webUISharingPublicExpire",
+                ],
+                "oC10SharingPublic2": [
+                    "webUISharingPublicDifferentRoles",
+                    "webUISharingPublicManagement",
                 ],
             },
             "extraEnvironment": {
@@ -148,10 +156,8 @@ config = {
         "webUINotification": {
             "type": NOTIFICATIONS,
             "suites": {
-                "oC10NotificationBasic": [
+                "oC10Notification": [
                     "webUINotifications",
-                ],
-                "oC10SharingNotifications": [
                     "webUISharingNotifications",
                     "webUISharingNotificationsToRoot",
                 ],
@@ -215,16 +221,13 @@ config = {
                     "webUIRenameFiles",
                     "webUIRenameFolders",
                     "webUIRestrictSharing",
+                ],
+                "oC10XGAPortrait2": [
                     "webUISharingAcceptShares",
                     "webUISharingAcceptSharesToRoot",
                     "webUIMarkdownEditor",
-                    # The following suites may have all scenarios currently skipped.
-                    # The suites are listed here so that scenarios will run when
-                    # they are enabled.
                     "webUIWebdavLockProtection",
                     "webUIWebdavLocks",
-                ],
-                "oC10XGAPortrait2": [
                     "webUIMoveFilesFolders",
                     "webUIResharing1",
                     "webUIResharing2",
@@ -247,6 +250,8 @@ config = {
                     "webUISharingInternalUsersShareWithPage",
                     "webUISharingInternalUsersBlacklisted",
                     "webUISharingExpirationDate",
+                ],
+                "oC10XGAPortrait3": [
                     "webUISharingInternalUsersSharingIndicator",
                     "webUISharingInternalUsersToRoot",
                     "webUISharingInternalUsersToRootCollaborator",
@@ -309,17 +314,14 @@ config = {
                     "webUIRenameFiles",
                     "webUIRenameFolders",
                     "webUIRestrictSharing",
+                ],
+                "oC10iPhone2": [
                     "webUISharingAcceptShares",
                     "webUISharingAcceptSharesToRoot",
                     "webUIMarkdownEditor",
                     "webUISharingInternalUsersBlacklisted",
-                    # The following suites may have all scenarios currently skipped.
-                    # The suites are listed here so that scenarios will run when
-                    # they are enabled.
                     "webUIWebdavLockProtection",
                     "webUIWebdavLocks",
-                ],
-                "oC10iPhone2": [
                     "webUIMoveFilesFolders",
                     "webUIResharing1",
                     "webUIResharing2",
@@ -339,6 +341,8 @@ config = {
                     "webUISharingInternalGroupsToRootSharingIndicator",
                     "webUISharingInternalUsers",
                     "webUISharingExpirationDate",
+                ],
+                "oC10iPhone3": [
                     "webUISharingInternalUsersCollaborator",
                     "webUISharingInternalUsersShareWithPage",
                     "webUISharingInternalUsersSharingIndicator",
@@ -378,14 +382,9 @@ config = {
                     "webUIPrivateLinks",
                     "webUIPreview",
                     "webUIAccount",
-                    # The following suites may have all scenarios currently skipped.
-                    # The suites are listed here so that scenarios will run when
-                    # they are enabled.
-                ],
-                "oCISLocks": [
-                    "webUIWebdavLockProtection",
                     "webUIWebdavLocks",
                 ],
+                "webUIWebdavLockProtection": "oCISWebdavLockProtection",
                 "oCISRename": [
                     "webUIRenameFiles",
                     "webUIRenameFolders",
@@ -400,30 +399,32 @@ config = {
                     "webUICreateFilesFolders",
                     "webUIDeleteFilesFolders",
                     "webUIFiles",
-                    "webUIFilesActionMenu",
                     "webUIFilesCopy",
-                    "webUIFilesList",
-                    "webUIMarkdownEditor",
                 ],
                 "oCISFiles2": [
+                    "webUIFilesList",
+                    "webUIMarkdownEditor",
                     "webUIFilesDetails",
                     "webUIFilesSearch",
+                    "webUIFilesActionMenu",
                 ],
-                "oCISSharingIntGroups": [
+                "oCISSharingInternal1": [
                     "webUISharingInternalGroups",
                     "webUISharingInternalGroupsEdgeCases",
-                    "webUISharingInternalGroupsSharingIndicator",
-                ],
-                "oCISSharingIntUsers1": [
-                    "webUISharingInternalUsers",
                     "webUISharingAutocompletion",
-                    "webUISharingExpirationDate",
                 ],
-                "oCISSharingIntUsers2": [
+                "oCISSharingInternal2": [
+                    "webUISharingInternalUsers",
                     "webUISharingInternalUsersBlacklisted",
                     "webUISharingInternalUsersCollaborator",
-                    "webUISharingInternalUsersShareWithPage",
+                ],
+                "oCISSharingInternal3": [
+                    "webUISharingInternalGroupsSharingIndicator",
                     "webUISharingInternalUsersSharingIndicator",
+                    "webUISharingExpirationDate",
+                    "webUISharingInternalUsersShareWithPage",
+                    "webUIResharing1",
+                    "webUIOperationsWithFolderShares",
                 ],
                 "oCISSharingPerm1": [
                     "webUISharingPermissionsUsers",
@@ -438,26 +439,24 @@ config = {
                     "webUISharingFolderPermissionMultipleUsers",
                     "webUISharingFolderAdvancedPermissionMultipleUsers",
                 ],
-                "oCISResharing1": [
-                    "webUIResharing1",
+                "oCISSharingAndUpload": [
                     "webUIResharing2",
+                    "webUIUpload",
                 ],
-                "oCISSharingPublic": [
+                "oCISSharingPublic1": [
                     "webUISharingPublicBasic",
-                    "webUISharingPublicManagement",
-                ],
-                "oCISSharingPubExpAndRoles": [
-                    "webUISharingPublicDifferentRoles",
                     "webUISharingPublicExpire",
+                ],
+                "oCISSharingPublic2": [
+                    "webUISharingPublicDifferentRoles",
+                    "webUISharingPublicManagement",
                 ],
                 "oCISTrashbinUploadMoveJourney": [
                     "webUITrashbinDelete",
                     "webUITrashbinFilesFolders",
                     "webUITrashbinRestore",
-                    "webUIUpload",
                     "webUIMoveFilesFolders",
                     "webUIUserJourney",
-                    "webUIOperationsWithFolderShares",
                 ],
             },
             "extraEnvironment": {
@@ -518,13 +517,8 @@ config = {
                     "webUISharingAcceptSharesToRoot",
                     "webUIMarkdownEditor",
                     "webUISharingInternalUsersBlacklisted",
-                    # The following suites may have all scenarios currently skipped.
-                    # The suites are listed here so that scenarios will run when
-                    # they are enabled.
                     "webUIWebdavLockProtection",
                     "webUIWebdavLocks",
-                ],
-                "oC10IntegrationApp2": [
                     "webUIMoveFilesFolders",
                     "webUIResharing1",
                     "webUIResharing2",
@@ -542,6 +536,8 @@ config = {
                     "webUISharingInternalGroupsToRoot",
                     "webUISharingInternalGroupsToRootEdgeCases",
                     "webUISharingInternalGroupsToRootSharingIndicator",
+                ],
+                "oC10IntegrationApp2": [
                     "webUISharingInternalUsers",
                     "webUISharingExpirationDate",
                     "webUISharingInternalUsersCollaborator",
@@ -753,10 +749,10 @@ def beforePipelines(ctx):
            pipelinesDependsOn(yarnlint(ctx), yarnCache(ctx))
 
 def stagePipelines(ctx):
+    unit_test_pipelines = unitTests(ctx)
     smoke_pipelines = smokeTests(ctx)
     acceptance_pipelines = acceptance(ctx)
-
-    return smoke_pipelines + pipelinesDependsOn(acceptance_pipelines, smoke_pipelines)
+    return unit_test_pipelines + pipelinesDependsOn(smoke_pipelines, unit_test_pipelines) + pipelinesDependsOn(acceptance_pipelines, smoke_pipelines)
 
 def afterPipelines(ctx):
     return build(ctx) + notify()
@@ -1104,7 +1100,7 @@ def smokeTests(ctx):
             "OCIS": "true",
         },
         "commands": [
-            "sleep 10 && yarn test:smoke tests/smoke/features/",
+            "sleep 10 && yarn test:smoke:experimental tests/smoke/features/",
         ],
     }]
 
@@ -1116,7 +1112,7 @@ def smokeTests(ctx):
             "HEADLESS": "true",
         },
         "commands": [
-            "sleep 10 && yarn test:smoke tests/smoke/features/",
+            "sleep 10 && yarn test:smoke:experimental tests/smoke/features/",
         ],
     }]
 

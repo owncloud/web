@@ -164,7 +164,7 @@ describe('LinkInfo', () => {
 
       expect(linkExpiration.exists()).toBeTruthy()
       expect(linkExpiration.find('translate-stub').props().translateParams).toMatchObject({
-        expires: 'in 23 hours'
+        expires: 'in 1 day'
       })
     })
     it('should not be present if link does not have expiration', () => {
