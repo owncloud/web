@@ -225,13 +225,10 @@ export default {
       return this.$gettext('Shared by:')
     },
     hasTimestamp() {
-      return this.file.mdate?.length > 0 || this.file.sdate?.length > 0
+      return this.file.mdate?.length > 0
     },
     timestampTitle() {
-      if (this.file.mdate) {
-        return this.$gettext('Last modified:')
-      }
-      return this.$gettext('Shared:')
+      return this.$gettext('Last modified:')
     },
     ownerTitle() {
       return this.$gettext('Owner:')
@@ -265,12 +262,7 @@ export default {
       return this.$gettext('See all versions')
     },
     capitalizedTimestamp() {
-      let displayDate = ''
-      if (this.file.mdate) {
-        displayDate = this.formDateFromHTTP(this.file.mdate)
-      } else {
-        displayDate = this.formDateFromHTTP(this.file.sdate)
-      }
+      const displayDate = this.formDateFromHTTP(this.file.mdate)
       return upperFirst(displayDate)
     },
     hasAnyShares() {
@@ -306,15 +298,21 @@ export default {
       this.loadData()
       this.refreshShareDetailsTree()
     },
-    sharesTreeLoading(current) {
+    sharesTree() {
+      // missing early return
       this.sharedItem = null
-      if (current !== false) return
+
       const sharePathParentOrCurrent = this.getParentSharePath(this.file.path, this.sharesTree)
-      if (sharePathParentOrCurrent === null) return
+      if (sharePathParentOrCurrent === null) {
+        return
+      }
       const userShares = this.sharesTree[sharePathParentOrCurrent]?.filter((s) =>
         userShareTypes.includes(s.shareType)
       )
-      if (userShares.length === 0) return
+      if (userShares.length === 0) {
+        return
+      }
+
       this.sharedItem = userShares[0]
       this.sharedByName = this.sharedItem.owner?.name
       this.sharedByDisplayName = this.sharedItem.owner?.displayName
@@ -359,9 +357,14 @@ export default {
     },
     getParentSharePath(childPath, shares) {
       let currentPath = childPath
+      if (!currentPath) {
+        return null
+      }
       while (currentPath !== '/') {
         const share = shares[currentPath]
-        if (share !== undefined && share[0] !== undefined) return currentPath
+        if (share !== undefined && share[0] !== undefined) {
+          return currentPath
+        }
         currentPath = path.dirname(currentPath)
       }
       return null
