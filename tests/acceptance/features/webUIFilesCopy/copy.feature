@@ -35,7 +35,7 @@ Feature: copy files and folders
   @smokeTest @ocisSmokeTest
   Scenario: Copy multiple files at once
     Given user "Alice" has uploaded file "data.zip" to "data.zip"
-    And user "Alice" has created file "lorem.txt"
+    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
     And user "Alice" has uploaded file "new-data.zip" to "testapp.zip"
     And user "Alice" has created folder "simple-empty-folder"
     And user "Alice" has logged in using the webUI
