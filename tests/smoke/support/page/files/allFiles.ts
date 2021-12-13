@@ -95,7 +95,7 @@ export class AllFilesPage {
 
       const [download] = await Promise.all([
         page.waitForEvent('download'),
-        page.click('.oc-files-actions-download-file-trigger')
+        page.click('#oc-files-actions-sidebar .oc-files-actions-download-file-trigger')
       ])
 
       await cta.files.sidebar.close({ page: page })

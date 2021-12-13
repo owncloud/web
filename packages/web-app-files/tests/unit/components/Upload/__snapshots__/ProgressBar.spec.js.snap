@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ProgressBar component when a single file is uploaded should show correct progress value for one file but no file count 1`] = `
+<div class="files-upload-progress uk-clearfix oc-py-rm">
+  <div class="oc-m-rm uk-position-relative uk-width-expand">
+    <oc-progress-stub value="20" max="100" size="default" variation="primary" aria-hidden="true" class="uk-width-expand oc-m-rm"></oc-progress-stub> <span aria-hidden="true" class="uk-position-center oc-progress-text">
+      20 %
+    </span>
+    <oc-hidden-announcer-stub level="assertive" announcement=""></oc-hidden-announcer-stub>
+  </div>
+  <oc-grid-stub gutter="collapse" flex="true" aria-label="Click row to toggle upload progress details" class="oc-mt-s oc-mb-s oc-text-muted oc-cursor-pointer">
+    <oc-icon-stub name="expand_more" accessiblelabel="" type="span" size="medium" variation="passive" class="uk-width-auto"></oc-icon-stub>
+    <div class="uk-width-expand uk-text-truncate"><span id="files-upload-progress-single" translate-comment="Upload progress when only uploading one file shows the name of the file." data-msgid="
+        Uploading &quot;%{ fileName }&quot;
+      " data-current-language="en_US">
+        Uploading "lorem.txt"
+      </span></div>
+    <div class="uk-width-auto"><span id="files-upload-progress-expand-details" translate-comment="Show details panel of upload progress" data-msgid="
+        Show Details
+      " data-current-language="en_US">
+        Show Details
+      </span></div>
+  </oc-grid-stub>
+  <!---->
+</div>
+`;
+
+exports[`ProgressBar component when multiple files are uploaded should show total progress value but no file names 1`] = `
+<div class="files-upload-progress uk-clearfix oc-py-rm">
+  <div class="oc-m-rm uk-position-relative uk-width-expand">
+    <oc-progress-stub value="15" max="100" size="default" variation="primary" aria-hidden="true" class="uk-width-expand oc-m-rm"></oc-progress-stub> <span aria-hidden="true" class="uk-position-center oc-progress-text">
+      15 %
+    </span>
+    <oc-hidden-announcer-stub level="assertive" announcement=""></oc-hidden-announcer-stub>
+  </div>
+  <oc-grid-stub gutter="collapse" flex="true" aria-label="Click row to toggle upload progress details" class="oc-mt-s oc-mb-s oc-text-muted oc-cursor-pointer">
+    <oc-icon-stub name="expand_more" accessiblelabel="" type="span" size="medium" variation="passive" class="uk-width-auto"></oc-icon-stub>
+    <div class="uk-width-expand uk-text-truncate"><span id="files-upload-progress-multi" translate-n="2" translate-plural="Uploading %{ count } items" translate-comment="Upload progress when uploading multiple files only shows the number of uploads." data-msgid="
+        Uploading %{ count } item
+      " data-current-language="en_US">Uploading 2 items</span></div>
+    <div class="uk-width-auto"><span id="files-upload-progress-expand-details" translate-comment="Show details panel of upload progress" data-msgid="
+        Show Details
+      " data-current-language="en_US">
+        Show Details
+      </span></div>
+  </oc-grid-stub>
+  <!---->
+</div>
+`;

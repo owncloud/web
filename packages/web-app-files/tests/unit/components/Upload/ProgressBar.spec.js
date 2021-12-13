@@ -52,20 +52,8 @@ describe('ProgressBar component', () => {
       wrapper = getShallowWrapper(store)
     })
 
-    it('should show correct progress value', () => {
-      const ocProgressStub = wrapper.findComponent({ ref: selectors.ocProgress })
-      const ocProgressText = wrapper.find(selectors.ocProgressText)
-
-      expect(ocProgressStub.props().value).toEqual(items[0].progress)
-      expect(ocProgressText.text()).toBe(`${items[0].progress} %`)
-    })
-    it('should show uploading file name but not file count', () => {
-      const progressSingle = wrapper.find(selectors.progressSingle)
-      const progressMulti = wrapper.find(selectors.progressMulti)
-
-      expect(progressMulti.exists()).toBeFalsy()
-      expect(progressSingle.exists()).toBeTruthy()
-      expect(progressSingle.props().translateParams).toMatchObject({ fileName: items[0].name })
+    it('should show correct progress value for one file but no file count', async () => {
+      expect(wrapper).toMatchSnapshot()
     })
   })
 
@@ -77,21 +65,15 @@ describe('ProgressBar component', () => {
       wrapper = getShallowWrapper(store)
     })
 
-    it('should show total progress value', () => {
+    it('should show total progress value but no file names', () => {
+      // explicitly check progress computation as that is hard to verify/miss in snapshot updates
       const ocProgressStub = wrapper.findComponent({ ref: selectors.ocProgress })
       const ocProgressText = wrapper.find(selectors.ocProgressText)
       const totalProgress = items.reduce((total, item) => total + item.progress, 0) / items.length
-
       expect(ocProgressStub.props().value).toEqual(totalProgress)
       expect(ocProgressText.text()).toBe(`${totalProgress} %`)
-    })
-    it('should show uploading files count but not file names', () => {
-      const progressSingle = wrapper.find(selectors.progressSingle)
-      const progressMulti = wrapper.find(selectors.progressMulti)
 
-      expect(progressSingle.exists()).toBeFalsy()
-      expect(progressMulti.exists()).toBeTruthy()
-      expect(progressMulti.props().translateN).toEqual(items.length)
+      expect(wrapper).toMatchSnapshot()
     })
   })
 

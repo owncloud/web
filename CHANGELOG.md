@@ -8,12 +8,23 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Contextmenu on public links: [#6123](https://github.com/owncloud/web/issues/6123)
 * Bugfix - Extension casing: [#5339](https://github.com/owncloud/web/issues/5339)
+* Bugfix - File renaming: [#4893](https://github.com/owncloud/web/issues/4893)
+* Bugfix - Double escaping in progress bar: [#4214](https://github.com/owncloud/web/issues/4214)
+* Bugfix - Context for dates in SideBar: [#5068](https://github.com/owncloud/web/issues/5068)
+* Bugfix - User email attribute initialization: [#6118](https://github.com/owncloud/web/pull/6118)
 * Enhancement - Adopt oc-table-files from ods: [#6106](https://github.com/owncloud/web/pull/6106)
 * Enhancement - Update ODS to v12.0.0-alpha1: [#6106](https://github.com/owncloud/web/pull/6106)
 
 Details
 -------
+
+* Bugfix - Contextmenu on public links: [#6123](https://github.com/owncloud/web/issues/6123)
+
+   We fixed an issue of the contextmenu not being displayed for the files table on public links.
+
+   https://github.com/owncloud/web/issues/6123
 
 * Bugfix - Extension casing: [#5339](https://github.com/owncloud/web/issues/5339)
 
@@ -21,6 +32,39 @@ Details
 
    https://github.com/owncloud/web/issues/5339
    https://github.com/owncloud/web/pull/6117
+
+* Bugfix - File renaming: [#4893](https://github.com/owncloud/web/issues/4893)
+
+   We fixed the displayed file name not being properly updated in files list and sidebar after
+   renaming.
+
+   https://github.com/owncloud/web/issues/4893
+   https://github.com/owncloud/web/pull/6114
+
+* Bugfix - Double escaping in progress bar: [#4214](https://github.com/owncloud/web/issues/4214)
+
+   We fixed file names with special chars not being properly displayed in the upload progressbar.
+
+   https://github.com/owncloud/web/issues/4214
+   https://github.com/owncloud/web/pull/6131
+
+* Bugfix - Context for dates in SideBar: [#5068](https://github.com/owncloud/web/issues/5068)
+
+   We fixed dates in sidebar file info having no context. The sidebar is either showing the last
+   modification date or the deletion date. Before this change it wasn't obvious what kind of date
+   was showing. Especially when the file list was showing a completely different date (e.g., a
+   share date) it was confusing to the user to see a possibly different date here without
+   explanation.
+
+   https://github.com/owncloud/web/issues/5068
+   https://github.com/owncloud/web/pull/6119
+
+* Bugfix - User email attribute initialization: [#6118](https://github.com/owncloud/web/pull/6118)
+
+   Until now, the user email would only be set if the user used it instead of a username in the login
+   form. It now can also be set from the user webdav response as a fallback.
+
+   https://github.com/owncloud/web/pull/6118
 
 * Enhancement - Adopt oc-table-files from ods: [#6106](https://github.com/owncloud/web/pull/6106)
 

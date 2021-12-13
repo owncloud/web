@@ -27,6 +27,17 @@ function _getFileExtension(name) {
   return extension.replace(/^(.)/, '')
 }
 
+export function renameResource(resource, newName, newPath) {
+  const isFolder = resource.type === 'dir'
+  const extension = _getFileExtension(newName)
+
+  resource.name = newName
+  resource.path = '/' + newPath + newName
+  resource.extension = isFolder ? '' : extension
+
+  return resource
+}
+
 export function buildResource(resource) {
   const isFolder = resource.type === 'dir'
   const extension = _getFileExtension(resource.name)

@@ -1,0 +1,10 @@
+Bugfix: Context for dates in SideBar
+
+We fixed dates in sidebar file info having no context.
+The sidebar is either showing the last modification date or the deletion date.
+Before this change it wasn't obvious what kind of date was showing. Especially
+when the file list was showing a completely different date (e.g., a share date)
+it was confusing to the user to see a possibly different date here without explanation.
+
+https://github.com/owncloud/web/issues/5068
+https://github.com/owncloud/web/pull/6119

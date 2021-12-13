@@ -3,6 +3,7 @@ import pickBy from 'lodash-es/pickBy'
 import { DateTime } from 'luxon'
 import { set, has } from 'lodash-es'
 import { getIndicators } from '../helpers/statusIndicators'
+import { renameResource } from '../helpers/resources'
 
 export default {
   UPDATE_FILE_PROGRESS(state, file) {
@@ -114,8 +115,7 @@ export default {
       return f.id === file.id
     })
 
-    resources[fileIndex].name = newValue
-    resources[fileIndex].path = '/' + newPath + newValue
+    renameResource(resources[fileIndex], newValue, newPath)
 
     state.files = resources
   },
