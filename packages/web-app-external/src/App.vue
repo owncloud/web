@@ -60,7 +60,7 @@ export default {
   data: () => ({
     loading: false,
     loadingError: false,
-    errorMessage: false,
+    errorMessage: '',
     appUrl: '',
     method: '',
     formParameters: {}
@@ -124,8 +124,7 @@ export default {
     })
 
     if (response.status !== 200) {
-      const err = await response.json()
-      this.errorMessage = err.message
+      this.errorMessage = response.message
       this.loading = false
       this.loadingError = true
       console.error('Error fetching app information', response.status, this.errorMessage)
@@ -135,6 +134,7 @@ export default {
     const data = await response.json()
 
     if (!data.app_url || !data.method) {
+      this.errorMessage = this.$gettext('Error in app server response')
       this.loading = false
       this.loadingError = true
       console.error('Error in app server response')

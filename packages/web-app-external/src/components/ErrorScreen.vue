@@ -1,8 +1,7 @@
 <template>
   <div class="uk-text-center">
     <oc-icon size="xxlarge" name="warning" />
-    <h1 v-translate class="oc-text-lead">Error when loading the application</h1>
-    <p v-if="message">{{ message }}</p>
+    <p v-if="message" class="oc-text-lead">{{ message }}</p>
   </div>
 </template>
 
@@ -11,7 +10,7 @@ export default {
   name: 'ErrorScreen',
   props: {
     /**
-     * error message
+     * Error message passed from external app
      */
     message: {
       default: '',
