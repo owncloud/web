@@ -11,6 +11,7 @@ Summary
 * Bugfix - Contextmenu on public links: [#6123](https://github.com/owncloud/web/issues/6123)
 * Bugfix - Extension casing: [#5339](https://github.com/owncloud/web/issues/5339)
 * Bugfix - File renaming: [#4893](https://github.com/owncloud/web/issues/4893)
+* Bugfix - Double escaping in progress bar: [#4214](https://github.com/owncloud/web/issues/4214)
 * Bugfix - Context for dates in SideBar: [#5068](https://github.com/owncloud/web/issues/5068)
 * Bugfix - User email attribute initialization: [#6118](https://github.com/owncloud/web/pull/6118)
 * Enhancement - Adopt oc-table-files from ods: [#6106](https://github.com/owncloud/web/pull/6106)
@@ -39,6 +40,13 @@ Details
 
    https://github.com/owncloud/web/issues/4893
    https://github.com/owncloud/web/pull/6114
+
+* Bugfix - Double escaping in progress bar: [#4214](https://github.com/owncloud/web/issues/4214)
+
+   We fixed file names with special chars not being properly displayed in the upload progressbar.
+
+   https://github.com/owncloud/web/issues/4214
+   https://github.com/owncloud/web/pull/6131
 
 * Bugfix - Context for dates in SideBar: [#5068](https://github.com/owncloud/web/issues/5068)
 
