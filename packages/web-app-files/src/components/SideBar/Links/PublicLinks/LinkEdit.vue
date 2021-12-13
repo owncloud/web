@@ -20,14 +20,14 @@
       </div>
       <oc-select
         id="files-file-link-role-button"
-        v-model="selectedRole"
-        :options="availableRoles"
+        v-model="selectedRoleOption"
+        :options="availableRoleOptions"
         :clearable="false"
         :label="selectedRoleLabel"
         class="oc-mb files-file-link-role-button-wrapper"
       >
         <template #option="option">
-          <role-item :role="option" :allow-share-permission="false" />
+          <role-item :role="getRoleFromSelectOption(option)" :allow-share-permission="false" />
         </template>
         <template #no-options v-translate> No matching role found </template>
       </oc-select>
@@ -188,7 +188,7 @@ export default {
         mailTo: this.$gettext('Mail recipients'),
         mailBody: this.$gettext('Personal note')
       },
-      selectedRole: null
+      selectedRoleOption: null
     }
   },
   title: ($gettext) => {
@@ -198,6 +198,10 @@ export default {
     ...mapGetters('Files', ['highlightedFile']),
     ...mapGetters(['getToken', 'capabilities']),
     ...mapState('Files', ['publicLinkInEdit']),
+
+    selectedRole() {
+      return this.getRoleFromSelectOption(this.selectedRoleOption)
+    },
 
     $_isNew() {
       return !this.publicLinkInEdit.id
@@ -220,8 +224,10 @@ export default {
       return Object.keys(this.capabilities.files_sharing.public.send_mail).length > 0
     },
 
-    availableRoles() {
-      return LinkShareRoles.list(this.highlightedFile.isFolder)
+    availableRoleOptions() {
+      return LinkShareRoles.list(this.highlightedFile.isFolder).map((r) =>
+        this.convertRoleToSelectOption(r)
+      )
     },
 
     $_expirationDate() {
@@ -346,12 +352,12 @@ export default {
       if (permissions) {
         const role = LinkShareRoles.getByBitmask(permissions, this.highlightedFile.isFolder)
         if (role) {
-          this.selectedRole = role
+          this.selectedRoleOption = this.convertRoleToSelectOption(role)
           return
         }
       }
 
-      this.selectedRole = this.availableRoles[0]
+      this.selectedRoleOption = this.availableRoleOptions[0]
     },
 
     $_addLink() {
@@ -421,6 +427,17 @@ export default {
     removePassword: function () {
       this.password = ''
       this.hasPassword = false
+    },
+
+    getRoleFromSelectOption(option) {
+      return option.role
+    },
+
+    convertRoleToSelectOption(role) {
+      return {
+        role: role,
+        label: this.$gettext(role.label)
+      }
     }
   }
 }
