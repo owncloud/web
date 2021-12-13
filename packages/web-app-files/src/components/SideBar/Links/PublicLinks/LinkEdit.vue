@@ -448,6 +448,7 @@ export default {
     convertRoleToSelectOption(role) {
       return {
         role: role,
+        name: role.name,
         label: this.$gettext(role.label)
       }
     }

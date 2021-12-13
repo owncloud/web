@@ -6,6 +6,7 @@ import stubs from '@/tests/unit/stubs/index.js'
 import DesignSystem from 'owncloud-design-system'
 import { createLocalVue, mount, shallowMount } from '@vue/test-utils'
 import LinkEdit from '@files/src/components/SideBar/Links/PublicLinks/LinkEdit.vue'
+import { LinkShareRoles } from '../../../../../../src/helpers/share'
 
 const selectors = {
   linkNameInput: '#oc-files-file-link-name',
@@ -166,28 +167,22 @@ describe('LinkEdit', () => {
   })
 
   describe('role select field', () => {
-    it('should have four options if resource is folder', () => {
-      const wrapper = getMountedWrapper(createStore({ type: 'folder' }))
-      const roleSelectElement = wrapper.findComponent(VueSelect)
-      const actualOptions = roleSelectElement.props().options
+    it.each(['folder', 'file'])(
+      'should list all available link sharing roles according to resource type %s',
+      (type) => {
+        const wrapper = getMountedWrapper(createStore({ type }))
+        const roleSelectElement = wrapper.findComponent(VueSelect)
+        const actualOptions = roleSelectElement.props().options
 
-      expect(actualOptions.length).toBe(4)
-      expect(actualOptions[0].name).toBe('viewer')
-      expect(actualOptions[1].name).toBe('contributor')
-      expect(actualOptions[2].name).toBe('editor')
-      expect(actualOptions[3].name).toBe('uploader')
-    })
+        const linkShareRoles = LinkShareRoles.list(type === 'folder')
+        expect(actualOptions.length).toBe(linkShareRoles.length)
+        for (let i = 0; i < linkShareRoles.length; i++) {
+          expect(actualOptions[i].name).toBe(linkShareRoles[i].name)
+        }
+      }
+    )
 
-    it('should have single option if resource is not folder', () => {
-      const wrapper = getMountedWrapper()
-      const roleSelectElement = wrapper.findComponent(VueSelect)
-      const actualOptions = roleSelectElement.props().options
-
-      expect(actualOptions.length).toBe(1)
-      expect(actualOptions[0].name).toBe('viewer')
-    })
-
-    it('should not have clearable property', () => {
+    it('should not be clearable', () => {
       const wrapper = getMountedWrapper()
       const roleSelectElement = wrapper.findComponent(VueSelect)
 
@@ -197,18 +192,10 @@ describe('LinkEdit', () => {
     it('should set selected role when input is triggered', () => {
       const wrapper = getMountedWrapper(createStore({ type: 'folder' }))
       const roleSelectElement = wrapper.findComponent(VueSelect)
-      const roleToSet = {
-        name: 'editor',
-        label: 'Editor',
-        description: 'Recipients can view, download, edit, delete and upload contents.',
-        permissions: 15
-      }
 
-      expect(wrapper.vm.selectedRole.name).toBe('viewer')
-
-      roleSelectElement.vm.select(roleToSet)
-
-      expect(wrapper.vm.selectedRole).toMatchObject(roleToSet)
+      const option = roleSelectElement.vm.options[2]
+      roleSelectElement.vm.select(option)
+      expect(wrapper.vm.selectedRole.name).toBe(option.name)
     })
   })
 
@@ -520,7 +507,7 @@ function createStore({
         },
         getters: {
           highlightedFile: function () {
-            return { type: type }
+            return { type: type, isFolder: type === 'folder' }
           }
         },
         actions: mapActions
