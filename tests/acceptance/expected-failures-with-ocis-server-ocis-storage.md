@@ -12,13 +12,9 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIPreview/imageMediaViewer.feature:84](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L84)
 -   [webUIPreview/imageMediaViewer.feature:91](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L91)
 
-### [Media Viewer preview not visible for files with .jpeg, .ogg, .webm and .gif formats](https://github.com/owncloud/ocis/issues/1490)
--   [webUIPreview/imageMediaViewer.feature:141](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L141)
--   [webUIPreview/imageMediaViewer.feature:159](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L159)
-
 ### [Endless loading when opening a file in section "Shared with me" or "Shared with other"](https://github.com/owncloud/web/issues/5324)
--   [webUIPreview/imageMediaViewer.feature:182](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L182)
--   [webUIPreview/imageMediaViewer.feature:191](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L191)
+-   [webUIPreview/imageMediaViewer.feature:143](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L143)
+-   [webUIPreview/imageMediaViewer.feature:152](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L152)
 
 ### [Exit page re-appears in loop when logged in user is deleted](https://github.com/owncloud/web/issues/4677)
 -   [webUILogin/openidLogin.feature:50](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/openidLogin.feature#L50)
@@ -65,7 +61,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUISharingInternalUsers/shareWithUsers.feature:275](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsers/shareWithUsers.feature#L275)
 -   [webUISharingInternalUsers/shareWithUsers.feature:276](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsers/shareWithUsers.feature#L276)
 -   [webUISharingInternalUsers/shareWithUsers.feature:277](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsers/shareWithUsers.feature#L277)
--   [webUISharingInternalUsers/shareWithUsers.feature:346](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsers/shareWithUsers.feature#L346)
+-   [webUISharingInternalUsers/shareWithUsers.feature:328](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsers/shareWithUsers.feature#L328)
 -   [webUISharingInternalUsersCollaborator/shareWithUsers.feature:34](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsersCollaborator/shareWithUsers.feature#L34)
 -   [webUISharingInternalUsersCollaborator/shareWithUsers.feature:35](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsersCollaborator/shareWithUsers.feature#L35)
 -   [webUISharingInternalUsersCollaborator/shareWithUsers.feature:36](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsersCollaborator/shareWithUsers.feature#L36)

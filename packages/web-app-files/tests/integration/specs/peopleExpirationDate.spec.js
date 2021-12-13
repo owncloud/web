@@ -6,13 +6,11 @@ import merge from 'lodash-es/merge'
 import StoreFiles from '@files/src/store'
 import Store from '@runtime/src/store'
 import routes from '@files/src/routes'
-import { getDateInFuture } from '../helpers/date'
+import { getDateInFuture, navigateToDate } from '../helpers/date'
 // eslint-disable-next-line jest/no-mocks-import
 import sdkMock from '@/__mocks__/sdk'
 
 import FileShares from '@files/src/components/SideBar/Shares/FileShares.vue'
-
-const formatDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
 
 const existingShares = [
   {
@@ -471,42 +469,6 @@ function createStore(store) {
     },
     store
   )
-}
-
-async function navigateToDate(date, component, direction = 'right') {
-  if (['right', 'left'].indexOf(direction) < 0) {
-    return Promise.reject(new Error('invalid value for direction. Please use "left" or "right"'))
-  }
-  const { queryByText, baseElement, findByText } = component
-
-  while (true) {
-    const dateHeader = await queryByText(
-      date.toLocaleString('en', { month: 'long', year: 'numeric' })
-    )
-
-    if (!dateHeader) {
-      const nextMonthBtn = baseElement.querySelector(`.vc-arrow.is-${direction}`)
-      await userEvent.click(nextMonthBtn)
-    } else {
-      break
-    }
-  }
-
-  const dateSelector = document.evaluate(
-    `//span[contains(@class, "vc-day-content vc-focusable") and @tabindex="-1" and @aria-label="${date.toLocaleDateString(
-      'en',
-      formatDate
-    )}" and text()="${date.getDate()}"]`,
-    baseElement,
-    null,
-    XPathResult.FIRST_ORDERED_NODE_TYPE,
-    null
-  ).singleNodeValue
-
-  expect(
-    await findByText(date.toLocaleString('en', { month: 'long', year: 'numeric' }))
-  ).toBeVisible()
-  await userEvent.click(dateSelector)
 }
 
 function renderComponent({ store, mocks } = {}) {

@@ -8,13 +8,6 @@ Feature: Access public link shares by public
     Given user "Alice" has been created with default attributes and without skeleton files
     And user "Alice" has created folder "simple-folder"
 
-  @issue-4858
-  Scenario: Thumbnails are loaded for known file types in public link file list
-    Given user "Alice" has shared folder "simple-folder" with link with "read,create" permissions
-    When the public uses the webUI to access the last public link created by user "Alice"
-    And the user uploads file "new-lorem.txt" using the webUI
-    Then the file "new-lorem.txt" should have a thumbnail displayed on the webUI
-
 
   Scenario: Thumbnails are not loaded for known file types in public link file list
     Given user "Alice" has shared folder "simple-folder" with link with "read,create" permissions

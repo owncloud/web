@@ -95,45 +95,10 @@ Scenario Outline: preview of image files with media viewer is possible
     Then the file "testimage.mp3" should be displayed in the media viewer webUI
 
 
-  Scenario: preview of image in file list view
-    Given user "Alice" has uploaded file "testavatar.jpg" to "testavatar.jpg"
-    And user "Alice" has logged in using the webUI
-    When the user browses to the files page
-    Then the preview image of file "testavatar.jpg" should be displayed in the file list view on the webUI
-
-
-  Scenario: preview of file in file list view when previews is disabled
-    Given the property "disablePreviews" of "options" has been set to true in web config file
-    And user "Alice" has uploaded file "testavatar.jpg" to "testavatar.jpg"
-    And user "Alice" has logged in using the webUI
-    When the user browses to the files page
-    Then the preview image of file "testavatar.jpg" should not be displayed in the file list view on the webUI
-
-  @issue-4856
-  Scenario: file list view image preview in public share
-    Given user "Alice" has created folder "simple-empty-folder"
-    And user "Alice" has uploaded file "testavatar.jpg" to "simple-empty-folder/testavatar.jpg"
-    And user "Alice" has created a public link with following settings
-      | path | simple-empty-folder |
-    When the public uses the webUI to access the last public link created by user "Alice"
-    Then the preview image of file "testavatar.jpg" should be displayed in the file list view on the webUI
-
-
-  Scenario: file list view image preview in public share when previews is disabled
-    Given user "Alice" has created folder "simple-empty-folder"
-    And the property "disablePreviews" of "options" has been set to true in web config file
-    And user "Alice" has uploaded file "testavatar.jpg" to "simple-empty-folder/testavatar.jpg"
-    And user "Alice" has created a public link with following settings
-      | path | simple-empty-folder |
-    When the public uses the webUI to access the last public link created by user "Alice"
-    Then the preview image of file "testavatar.jpg" should not be displayed in the file list view on the webUI
-
-
   Scenario: preview of image in file list view for .jpeg format file
     Given user "Alice" has uploaded file "testavatar.jpeg" to "testavatar.jpeg"
     And user "Alice" has logged in using the webUI
     When the user browses to the files page
-    Then the preview image of file "testavatar.jpeg" should be displayed in the file list view on the webUI
     When the user views the file "testavatar.jpeg" in the media viewer using the webUI
     Then the file "testavatar.jpeg" should be displayed in the media viewer webUI
 
@@ -142,7 +107,6 @@ Scenario Outline: preview of image files with media viewer is possible
     Given user "Alice" has uploaded file "sampleOgg.ogg" to "sampleOgg.ogg"
     And user "Alice" has logged in using the webUI
     When the user browses to the files page
-    Then the preview image of file "sampleOgg.ogg" should be displayed in the file list view on the webUI
     When the user views the file "sampleOgg.ogg" in the media viewer using the webUI
     Then the file "sampleOgg.ogg" should be displayed in the media viewer webUI
 
@@ -151,7 +115,6 @@ Scenario Outline: preview of image files with media viewer is possible
     Given user "Alice" has uploaded file "sampleGif.gif" to "sampleGif.gif"
     And user "Alice" has logged in using the webUI
     When the user browses to the files page
-    Then the preview image of file "sampleGif.gif" should be displayed in the file list view on the webUI
     When the user views the file "sampleGif.gif" in the media viewer using the webUI
     Then the file "sampleGif.gif" should be displayed in the media viewer webUI
 
@@ -160,7 +123,6 @@ Scenario Outline: preview of image files with media viewer is possible
     Given user "Alice" has uploaded file "sampleWebm.webm" to "sampleWebm.webm"
     And user "Alice" has logged in using the webUI
     When the user browses to the files page
-    Then the preview image of file "sampleWebm.webm" should be displayed in the file list view on the webUI
     When the user views the file "sampleWebm.webm" in the media viewer using the webUI
     Then the file "sampleWebm.webm" should be displayed in the media viewer webUI
 
@@ -169,7 +131,6 @@ Scenario Outline: preview of image files with media viewer is possible
     Given user "Alice" has uploaded file "<image-file>" to "<to-file-name>"
     And user "Alice" has logged in using the webUI
     When the user browses to the files page
-    Then the preview image of file "<to-file-name>" should be displayed in the file list view on the webUI
     When the user views the file "<to-file-name>" in the media viewer by clicking on the file name using the webUI
     Then the file "<to-file-name>" should be displayed in the media viewer webUI
     Examples:

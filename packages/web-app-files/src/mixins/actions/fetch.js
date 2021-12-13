@@ -36,18 +36,15 @@ export default {
   },
   methods: {
     $_fetch_trigger({ resources, mimeType, isPublicFile }) {
-      if (isPublicFile) {
-        const url = resources[0].downloadURL
-        window.open(url, '_blank')
-        return
-      }
-
-      // FIXME: use presigned URL instead
-      const url = this.$client.helpers._webdavUrl + resources[0].path
+      let url
       const headers = new Headers()
-
-      headers.append('Authorization', 'Bearer ' + this.getToken)
-      headers.append('X-Requested-With', 'XMLHttpRequest')
+      if (isPublicFile) {
+        url = resources[0].downloadURL
+      } else {
+        url = this.$client.helpers._webdavUrl + resources[0].path
+        headers.append('Authorization', 'Bearer ' + this.getToken)
+        headers.append('X-Requested-With', 'XMLHttpRequest')
+      }
 
       fetch(url, {
         method: 'GET',

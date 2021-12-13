@@ -21,17 +21,18 @@
     >
       <oc-icon class="uk-width-auto" :name="expanded ? 'expand_less' : 'expand_more'" />
       <div class="uk-width-expand uk-text-truncate">
-        <translate
+        <span
           v-if="count === 1"
+          v-translate="{ fileName: inProgress[0].name }"
           id="files-upload-progress-single"
           key="upload-progress-single"
-          :translate-params="{ fileName: inProgress[0].name }"
           translate-comment="Upload progress when only uploading one file shows the name of the file."
         >
           Uploading "%{ fileName }"
-        </translate>
-        <translate
+        </span>
+        <span
           v-else
+          v-translate="{ count }"
           id="files-upload-progress-multi"
           key="upload-progress-multi"
           :translate-n="count"
@@ -39,25 +40,27 @@
           translate-comment="Upload progress when uploading multiple files only shows the number of uploads."
         >
           Uploading %{ count } item
-        </translate>
+        </span>
       </div>
       <div class="uk-width-auto">
-        <translate
+        <span
           v-if="expanded"
+          v-translate
           id="files-upload-progress-collapse-details"
           key="upload-progress-collapse-details"
           translate-comment="Hide details panel of upload progress"
         >
           Hide Details
-        </translate>
-        <translate
+        </span>
+        <span
           v-else
+          v-translate
           id="files-upload-progress-expand-details"
           key="upload-progress-expand-details"
           translate-comment="Show details panel of upload progress"
         >
           Show Details
-        </translate>
+        </span>
       </div>
     </oc-grid>
     <details-widget

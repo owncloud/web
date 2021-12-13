@@ -9,8 +9,11 @@ Summary
 -------
 
 * Bugfix - Contextmenu on public links: [#6123](https://github.com/owncloud/web/issues/6123)
+* Bugfix - Inconsistencies in share expiry dates: [#6084](https://github.com/owncloud/web/pull/6084)
 * Bugfix - Extension casing: [#5339](https://github.com/owncloud/web/issues/5339)
 * Bugfix - File renaming: [#4893](https://github.com/owncloud/web/issues/4893)
+* Bugfix - Open in browser for public files: [#4615](https://github.com/owncloud/web/issues/4615)
+* Bugfix - Double escaping in progress bar: [#4214](https://github.com/owncloud/web/issues/4214)
 * Bugfix - Context for dates in SideBar: [#5068](https://github.com/owncloud/web/issues/5068)
 * Bugfix - User email attribute initialization: [#6118](https://github.com/owncloud/web/pull/6118)
 * Enhancement - Adopt oc-table-files from ods: [#6106](https://github.com/owncloud/web/pull/6106)
@@ -24,6 +27,16 @@ Details
    We fixed an issue of the contextmenu not being displayed for the files table on public links.
 
    https://github.com/owncloud/web/issues/6123
+
+* Bugfix - Inconsistencies in share expiry dates: [#6084](https://github.com/owncloud/web/pull/6084)
+
+   * Share expiry dates now always refer to the end of the given day. This change allows users to
+   select the current day as expiry date. * Displayed expiry dates have been aligned to ensure
+   their consistency. * Existing expiry dates for public links can now be removed again. * We now
+   use the Luxon `DateTime` object more consistently across the code base (replacing
+   JavaScript's `new Date()).
+
+   https://github.com/owncloud/web/pull/6084
 
 * Bugfix - Extension casing: [#5339](https://github.com/owncloud/web/issues/5339)
 
@@ -39,6 +52,20 @@ Details
 
    https://github.com/owncloud/web/issues/4893
    https://github.com/owncloud/web/pull/6114
+
+* Bugfix - Open in browser for public files: [#4615](https://github.com/owncloud/web/issues/4615)
+
+   We fixed opening publicly shared files in the browser.
+
+   https://github.com/owncloud/web/issues/4615
+   https://github.com/owncloud/web/pull/6133
+
+* Bugfix - Double escaping in progress bar: [#4214](https://github.com/owncloud/web/issues/4214)
+
+   We fixed file names with special chars not being properly displayed in the upload progressbar.
+
+   https://github.com/owncloud/web/issues/4214
+   https://github.com/owncloud/web/pull/6131
 
 * Bugfix - Context for dates in SideBar: [#5068](https://github.com/owncloud/web/issues/5068)
 
