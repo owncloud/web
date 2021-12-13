@@ -1,4 +1,4 @@
-describe('NewCollaborator RecipientContainer', () => {
+describe('InviteCollaborator RecipientContainer', () => {
   describe('renders a recipient with a deselect button', () => {
     it.todo('different recipients for different shareTypes')
   })

@@ -9,7 +9,7 @@
         :userid="share.collaborator.name"
         :user-name="share.collaborator.displayName"
         :width="48"
-        class="sharee-avatar"
+        class="files-collaborators-collaborator-indicator"
       />
       <oc-avatar-item
         v-else
@@ -17,27 +17,36 @@
         icon-size="medium"
         :icon="shareTypeKey"
         :name="shareTypeKey"
-        class="sharee-avatar"
+        class="files-collaborators-collaborator-indicator"
       />
       <div class="oc-text-truncate">
         <p class="oc-text-bold oc-text-truncate oc-m-rm">
-          <span aria-hidden="true" class="collaborator-display-name" v-text="shareDisplayName" />
           <span
             aria-hidden="true"
-            class="collaborator-additional-info"
+            class="files-collaborators-collaborator-name"
+            v-text="shareDisplayName"
+          />
+          <span
+            v-if="shareAdditionalInfo"
+            aria-hidden="true"
+            class="files-collaborators-collaborator-additional-info"
             v-text="shareAdditionalInfo"
           />
           <span class="oc-invisible-sr" v-text="screenreaderShareDisplayName" />
         </p>
-        <p class="oc-m-rm collaborator-additional-info">
-          <span aria-hidden="true" class="share-type" v-text="shareTypeText" />
+        <p class="oc-m-rm">
+          <span
+            aria-hidden="true"
+            class="files-collaborators-collaborator-share-type"
+            v-text="shareTypeText"
+          />
           <span class="oc-invisible-sr" v-text="screenreaderShareDetails" />
         </p>
         <p v-if="hasExpirationDate" class="oc-mt-rm">
           <span
             v-oc-tooltip="expirationDate"
             aria-hidden="true"
-            class="collaborator-expiration"
+            class="files-collaborators-collaborator-expiration"
             data-testid="recipient-info-expiration-date"
             tabindex="0"
             v-text="shareExpirationText"
@@ -56,10 +65,11 @@
         :existing-permissions="share.customPermissions"
         :existing-role="share.role"
         :allow-share-permission="!isOcis"
+        class="files-collaborators-collaborator-role"
         @optionChange="shareRoleChanged"
       />
       <edit-dropdown
-        class="oc-ml-s"
+        class="oc-ml-s files-collaborators-collaborator-edit"
         :expiration-date="share.expires ? share.expires : null"
         :share-category="shareCategory"
         @expirationDateChanged="shareExpirationChanged"
@@ -97,7 +107,7 @@ export default {
   },
   computed: {
     ...mapGetters('Files', ['highlightedFile']),
-    ...mapGetters(['user', 'isOcis']),
+    ...mapGetters(['isOcis']),
 
     shareType() {
       return ShareTypes.getByValue(this.share.shareType)
@@ -128,15 +138,24 @@ export default {
     },
 
     shareAdditionalInfo() {
-      if (this.share.collaborator.additionalInfo === null) {
+      if (!this.share.collaborator.additionalInfo) {
         return
       }
       return ` (${this.share.collaborator.additionalInfo})`
     },
 
     screenreaderShareDisplayName() {
-      const translated = this.$gettext('Share receiver name: %{ shareName }')
-      return this.$gettextInterpolate(translated, { shareName: this.shareDisplayName })
+      const context = {
+        displayName: this.share.collaborator.displayName,
+        ...(this.share.collaborator.additionalInfo && {
+          additionalInfo: this.share.collaborator.additionalInfo
+        })
+      }
+      let translated = this.$gettext('Share receiver name: %{ displayName }')
+      if (this.shareAdditionalInfo) {
+        translated = this.$gettext('Share receiver name: %{ displayName } (%{ additionalInfo })')
+      }
+      return this.$gettextInterpolate(translated, context)
     },
 
     screenreaderShareDetails() {

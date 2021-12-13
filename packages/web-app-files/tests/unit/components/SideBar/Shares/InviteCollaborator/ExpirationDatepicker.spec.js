@@ -1,4 +1,4 @@
-describe('NewCollaborator ExpirationDatepicker', () => {
+describe('InviteCollaborator ExpirationDatepicker', () => {
   it.todo('only gets displayed if share expiration is supported')
   describe('when no expiration date is present', () => {
     it.todo('renders a button to open the datepicker and set an expiration date')
