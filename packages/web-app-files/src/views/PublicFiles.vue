@@ -30,7 +30,7 @@
         @rowMounted="rowMounted"
       >
         <template #contextMenu="{ resource }">
-          <context-actions v-if="isResourceInSelection(resource)" :item="resource" />
+          <context-actions v-if="isResourceInSelection(resource)" :items="[resource]" />
         </template>
         <template #footer>
           <pagination :pages="paginationPages" :current-page="paginationPage" />
