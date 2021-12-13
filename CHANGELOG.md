@@ -12,6 +12,7 @@ Summary
 * Bugfix - Inconsistencies in share expiry dates: [#6084](https://github.com/owncloud/web/pull/6084)
 * Bugfix - Extension casing: [#5339](https://github.com/owncloud/web/issues/5339)
 * Bugfix - File renaming: [#4893](https://github.com/owncloud/web/issues/4893)
+* Bugfix - Open in browser for public files: [#4615](https://github.com/owncloud/web/issues/4615)
 * Bugfix - Double escaping in progress bar: [#4214](https://github.com/owncloud/web/issues/4214)
 * Bugfix - Context for dates in SideBar: [#5068](https://github.com/owncloud/web/issues/5068)
 * Bugfix - User email attribute initialization: [#6118](https://github.com/owncloud/web/pull/6118)
@@ -51,6 +52,13 @@ Details
 
    https://github.com/owncloud/web/issues/4893
    https://github.com/owncloud/web/pull/6114
+
+* Bugfix - Open in browser for public files: [#4615](https://github.com/owncloud/web/issues/4615)
+
+   We fixed opening publicly shared files in the browser.
+
+   https://github.com/owncloud/web/issues/4615
+   https://github.com/owncloud/web/pull/6133
 
 * Bugfix - Double escaping in progress bar: [#4214](https://github.com/owncloud/web/issues/4214)
 
