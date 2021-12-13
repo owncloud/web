@@ -12,8 +12,6 @@ const { runOcc } = require('./helpers/occHelper')
 
 const codify = require('./helpers/codify')
 
-const ldap = require('./helpers/ldapHelper')
-
 const RUNNING_ON_CI = !!process.env.CI
 const RUNNING_ON_SAUCELABS = !!process.env.SAUCE_USERNAME
 
@@ -48,20 +46,6 @@ Before(function logSessionInfoOnSauceLabs() {
         console.log('  Link to saucelabs job: https://app.saucelabs.com/tests/' + session.sessionId)
       })
       .timeoutsAsyncScript(SAUCELABS_ASYNC_SCRIPT_TIMEOUT)
-  }
-})
-
-Before(function createLdapClient() {
-  if (client.globals.ldap) {
-    return ldap.createClient().then((ldapClient) => {
-      client.globals.ldapClient = ldapClient
-    })
-  }
-})
-
-After(function deleteLdapClient() {
-  if (client.globals.ldap && client.globals.ldapClient) {
-    return ldap.terminate(client.globals.ldapClient)
   }
 })
 

@@ -1,3 +1,4 @@
+const fetch = require('node-fetch')
 const { client } = require('nightwatch-api')
 
 const { BACKENDS } = require('./backendHelper')
@@ -92,28 +93,15 @@ module.exports = {
   createdRemoteUsers: {},
   createdGroups: [],
 
-  /**
-   *
-   * @param {string} userId
-   * @param {string} password
-   * @param {string} displayname
-   * @param {string} email
-   */
-  addUserToCreatedUsersList: function (userId, password, displayname = null, email = null) {
-    if (client.globals.default_backend === BACKENDS.remote) {
-      this.createdRemoteUsers[userId] = {
-        password,
-        displayname,
-        email
-      }
-    } else {
-      this.createdUsers[userId] = {
-        password: password,
-        displayname: displayname,
-        email: email
-      }
-    }
+  state: null,
+  fetchState: function () {
+    return fetch(client.globals.middlewareUrl + '/state')
+      .then((res) => res.json())
+      .then((data) => {
+        this.state = data
+      })
   },
+
   /**
    *
    * @param {string} userId
@@ -161,10 +149,13 @@ module.exports = {
    * @param {string} userId
    * @returns {string}
    */
-  getDisplayNameForUser: function (userId) {
+  getDisplayNameForUser: async function (userId, fetchState = true) {
+    if (fetchState) {
+      await this.fetchState()
+    }
     let user = {}
-    if (userId in this.createdUsers) {
-      user = this.createdUsers[userId]
+    if (userId in this.state.created_users) {
+      user = this.state.created_users[userId]
     } else if (userId in this.defaultUsers) {
       user = this.defaultUsers[userId]
     } else {
@@ -182,9 +173,10 @@ module.exports = {
    *
    * @param {string} displayName
    */
-  getUsernameFromDisplayname: function (displayName) {
-    for (const userid in this.createdUsers) {
-      if (this.createdUsers[userid].displayname === displayName) {
+  getUsernameFromDisplayname: async function (displayName) {
+    await this.fetchState()
+    for (const userid in this.state.created_users) {
+      if (this.state.created_users[userid].displayname === displayName) {
         return userid
       }
     }
@@ -244,12 +236,21 @@ module.exports = {
    *
    * @returns {module.exports.createdUsers|{}}
    */
-  getCreatedUsers: function (server = BACKENDS.local) {
+  getCreatedUsers: async function (server = BACKENDS.local) {
+    await this.fetchState()
+    for (const userId in this.state.created_users) {
+      this.state.created_users[userId].displayName = await this.getDisplayNameForUser(userId)
+    }
+
+    for (const userId in this.state.created_remote_users) {
+      this.state.created_remote_users[userId].displayName = await this.getDisplayNameForUser(userId)
+    }
+
     switch (server) {
       case BACKENDS.local:
-        return this.createdUsers
+        return this.state.created_users
       case BACKENDS.remote:
-        return this.createdRemoteUsers
+        return this.state.created_remote_users
       default:
         throw new Error('Invalid value for server. want = "REMOTE"/"LOCAL", got = ' + server)
     }
@@ -259,7 +260,8 @@ module.exports = {
    * @returns {Array}
    */
   getCreatedGroups: function () {
-    return this.createdGroups
+    this.fetchState()
+    return this.state.created_groups
   },
 
   resetCreatedUsers: function () {

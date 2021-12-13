@@ -2,7 +2,6 @@ const { client } = require('nightwatch-api')
 const { After, Before, Given, Then, When } = require('@cucumber/cucumber')
 const webdavHelper = require('../helpers/webdavHelper')
 const httpHelper = require('../helpers/httpHelper')
-const backendHelper = require('../helpers/backendHelper')
 const assert = require('assert')
 const fs = require('fs')
 const occHelper = require('../helpers/occHelper')
@@ -183,18 +182,6 @@ Given(
   }
 )
 
-Given(
-  'the setting {string} of app {string} has been set to {string} on remote server',
-  function (setting, app, value) {
-    return backendHelper.runOnRemoteBackend(occHelper.runOcc, [
-      'config:app:set',
-      app,
-      setting,
-      '--value=' + value
-    ])
-  }
-)
-
 Given('the administrator has cleared the versions for user {string}', function (userId) {
   if (client.globals.ocis) {
     // TODO: decide if we fail on OCIS when a scenario even tries to use this given step
@@ -222,10 +209,6 @@ const setTrustedServer = function (url) {
 
 Given('server {code} has been added as trusted server', function (server) {
   return setTrustedServer(server)
-})
-
-Given('server {code} has been added as trusted server on remote server', function (url) {
-  return backendHelper.runOnRemoteBackend(setTrustedServer, url)
 })
 
 After(async function (testCase) {

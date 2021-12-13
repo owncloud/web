@@ -100,7 +100,9 @@ module.exports = {
       if (shareWithGroup === true) {
         sharee = receiver
       } else {
-        sharee = client.globals.ocis ? userSettings.getUsernameFromDisplayname(receiver) : receiver
+        sharee = client.globals.ocis
+          ? await userSettings.getUsernameFromDisplayname(receiver)
+          : receiver
       }
 
       if (remoteShare) sharee = util.format('%s@%s', receiver, this.api.globals.remote_backend_url)
