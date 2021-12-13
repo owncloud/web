@@ -1,15 +1,18 @@
 import { Page } from 'playwright'
 
 export const open = async ({ page, resource }: { page: Page; resource: string }): Promise<void> => {
-  await page.click(
+  const showContextMenuBtn = page.locator(
     `//span[@data-test-resource-name="${resource}"]/ancestor::tr[contains(@class, "oc-tbody-tr")]//button[contains(@class, "resource-table-btn-action-dropdown")]`
   )
-  await page.waitForSelector('//*[@id="oc-files-context-menu"]')
-  await page.click('.oc-files-actions-show-details-trigger')
+  const detailsBtn = page.locator('.oc-files-actions-show-details-trigger')
+
+  await showContextMenuBtn.click()
+  await detailsBtn.click()
 }
 
 export const close = async ({ page }: { page: Page }): Promise<void> => {
-  await page.click('.sidebar-panel.is-active-sub-panel .header__close')
+  const closeSidebarPanelBtn = page.locator('.sidebar-panel.is-active-sub-panel .header__close')
+  await closeSidebarPanelBtn.click()
 }
 
 export const openPanel = async ({
