@@ -1,0 +1,6 @@
+Bugfix: Double escaping in progress bar
+
+We fixed file names with special chars not being properly displayed in the upload progressbar.
+
+https://github.com/owncloud/web/issues/4214
+https://github.com/owncloud/web/pull/6131
