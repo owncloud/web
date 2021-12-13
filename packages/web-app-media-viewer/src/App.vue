@@ -66,7 +66,7 @@
         >
           <oc-icon size="large" name="arrow-drop-left" />
         </oc-button>
-        <p v-if="!$_loader_folderLoading" class="oc-m-rm oc-light">
+        <p v-if="!isFolderLoading" class="oc-m-rm oc-light">
           <span aria-hidden="true" v-text="ariaHiddenFileCount" />
           <span class="oc-invisible-sr" v-text="screenreaderFileCount" />
         </p>
@@ -103,11 +103,17 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import Loader from './mixins/loader.js'
+import { useAppDefaultBehavior } from 'web-pkg/src/app/useAppDefaultBehavior'
 
 export default {
   name: 'Mediaviewer',
-  mixins: [Loader],
+  setup() {
+    return {
+      ...useAppDefaultBehavior({
+        appName: 'media'
+      })
+    }
+  },
   data() {
     return {
       loading: true,
@@ -122,7 +128,6 @@ export default {
   },
 
   computed: {
-    ...mapGetters('Files', ['activeFiles']),
     ...mapGetters(['getToken', 'capabilities']),
 
     pageTitle() {
@@ -146,6 +151,10 @@ export default {
       })
     },
     mediaFiles() {
+      if (!this.activeFiles) {
+        return []
+      }
+
       return this.activeFiles.filter((file) => {
         return file.extension.toLowerCase().match(/(png|jpg|jpeg|gif|mp4|webm|ogg)/)
       })
@@ -182,10 +191,10 @@ export default {
         a: 1
       }
 
-      return this.$_loader_getDavFilePath(this.activeMediaFile, query)
+      return this.getUrlForResource(this.activeMediaFile, query)
     },
     rawMediaUrl() {
-      return this.$_loader_getDavFilePath(this.activeMediaFile)
+      return this.getUrlForResource(this.activeMediaFile)
     },
 
     videoExtensions() {
@@ -216,9 +225,8 @@ export default {
   async mounted() {
     // keep a local history for this component
     window.addEventListener('popstate', this.handleLocalHistoryEvent)
-    const filePath = `/${this.$route.params.filePath.split('/').filter(Boolean).join('/')}`
-    await this.$_loader_loadItems(filePath)
-    this.setCurrentFile(filePath)
+    await this.loadFolderForFileContext(this.currentFileContext)
+    this.setCurrentFile(this.currentFileContext.path)
     this.$refs.mediaviewer.focus()
   },
 
@@ -305,7 +313,7 @@ export default {
         return
       }
 
-      return this.downloadFile(this.mediaFiles[this.activeIndex], this.$_loader_publicContext)
+      return this.downloadFile(this.mediaFiles[this.activeIndex], this.isPublicContext)
     },
     next() {
       if (this.loading) {
@@ -332,12 +340,6 @@ export default {
       }
       this.activeIndex--
       this.updateLocalHistory()
-    },
-    closeApp() {
-      this.$_loader_navigateToContextRoute(
-        this.$route.params.contextRouteName,
-        this.$route.params.filePath
-      )
     }
   }
 }

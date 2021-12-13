@@ -1,5 +1,5 @@
 import { ref, computed, ComputedRef, unref } from '@vue/composition-api'
-import { MaybeRef } from '../utils'
+import { MaybeRef } from 'web-pkg/src/utils'
 
 interface PaginationOptions<T> {
   page: MaybeRef<number>
