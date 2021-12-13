@@ -12,6 +12,9 @@
     "draw-io",
     "search"
   ],
+  "options": {
+    "disablePreviews": true
+  },
   "applications" : [
     {
       "title": {
