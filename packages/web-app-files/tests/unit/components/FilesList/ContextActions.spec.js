@@ -25,7 +25,7 @@ const mockMenuSections = [
     name: 'context',
     items: [
       {
-        icon: 'text',
+        icon: 'file-text',
         canBeDefault: true,
         handler: jest.fn(),
         label: () => 'Open in editor',
@@ -45,7 +45,7 @@ const mockMenuSections = [
         }
       }),
       {
-        icon: 'file_download',
+        icon: 'download',
         canBeDefault: true,
         handler: jest.fn(),
         label: () => 'Download',
@@ -54,7 +54,7 @@ const mockMenuSections = [
         class: 'oc-files-actions-download-file-trigger'
       },
       {
-        icon: 'link-add',
+        icon: 'links',
         handler: jest.fn(),
         label: () => 'Create link',
         componentType: 'oc-button',
@@ -62,7 +62,7 @@ const mockMenuSections = [
         class: 'oc-files-actions-create-public-link-trigger'
       },
       {
-        icon: 'group-add',
+        icon: 'group',
         handler: jest.fn(),
         label: () => 'Share',
         componentType: 'oc-button',
@@ -75,7 +75,7 @@ const mockMenuSections = [
     name: 'actions',
     items: [
       {
-        icon: 'edit',
+        icon: 'pencil',
         handler: jest.fn(),
         label: () => 'Edit',
         componentType: 'oc-button',
@@ -83,7 +83,7 @@ const mockMenuSections = [
         class: 'oc-files-actions-rename-trigger'
       },
       {
-        icon: 'folder-move',
+        icon: 'folder-shared',
         handler: jest.fn(),
         label: () => 'Move',
         componentType: 'oc-button',
@@ -91,7 +91,7 @@ const mockMenuSections = [
         class: 'oc-files-actions-move-trigger'
       },
       {
-        icon: 'file_copy',
+        icon: 'file-copy',
         handler: jest.fn(),
         label: () => 'Copy',
         componentType: 'oc-button',
@@ -99,7 +99,7 @@ const mockMenuSections = [
         class: 'oc-files-actions-copy-trigger'
       },
       {
-        icon: 'delete',
+        icon: 'delete-bin-5',
         handler: jest.fn(),
         label: () => 'Delete',
         componentType: 'oc-button',
@@ -120,7 +120,7 @@ const mockMenuSections = [
     name: 'sidebar',
     items: [
       {
-        icon: 'info_outline',
+        icon: 'information',
         handler: jest.fn(),
         label: () => 'Details',
         componentType: 'oc-button',

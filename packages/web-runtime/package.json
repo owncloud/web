@@ -5,7 +5,7 @@
   "license": "AGPL-3.0",
   "dependencies": {
     "@popperjs/core": "^2.4.0",
-    "@vue/composition-api": "^1.2.4",
+    "@vue/composition-api": "^1.4.3",
     "easygettext": "^2.16.1",
     "filesize": "^8.0.0",
     "focus-trap": "^6.4.0",
@@ -14,7 +14,7 @@
     "lodash-es": "^4.17.21",
     "luxon": "^2.0.0",
     "oidc-client": "1.11.5",
-    "owncloud-design-system": "12.0.0-alpha4",
+    "owncloud-design-system": "12.0.0-alpha6",
     "owncloud-sdk": "1.0.0-2296",
     "p-queue": "^6.1.1",
     "popper-max-size-modifier": "^0.2.0",

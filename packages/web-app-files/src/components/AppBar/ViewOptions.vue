@@ -10,7 +10,7 @@
       appearance="raw"
       class="oc-py-s oc-mb-xs"
     >
-      <oc-icon name="tune" />
+      <oc-icon name="list-settings" fill-type="line" />
     </oc-button>
     <oc-button
       id="files-toggle-sidebar"
@@ -21,7 +21,7 @@
       class="oc-ml-s oc-py-s oc-mb-xs"
       @click.stop="toggleSidebar"
     >
-      <oc-icon :name="toggleIcon" />
+      <oc-icon :name="toggleIcon" fill-type="line" />
     </oc-button>
     <oc-drop
       drop-id="files-view-options-drop"
@@ -83,7 +83,7 @@ export default {
     },
 
     toggleIcon() {
-      return this.sidebarClosed ? 'chevron_double_left' : 'chevron_double_right'
+      return this.sidebarClosed ? 'arrow-left-circle' : 'arrow-right-circle'
     },
 
     hiddenFilesShownModel: {

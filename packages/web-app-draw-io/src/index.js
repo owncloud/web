@@ -15,7 +15,7 @@ const routes = [
 const appInfo = {
   name: 'Draw.io',
   id: 'draw-io',
-  icon: 'grid_on',
+  icon: 'grid',
   extensions: [
     {
       extension: 'drawio',

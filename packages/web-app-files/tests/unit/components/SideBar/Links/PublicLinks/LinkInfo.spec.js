@@ -104,10 +104,10 @@ describe('LinkInfo', () => {
 
   describe('link role', () => {
     it.each([
-      { role: 'Viewer', icon: 'remove_red_eye' },
-      { role: 'Editor', icon: 'edit' },
-      { role: 'Contributor', icon: 'edit' },
-      { role: 'Uploader', icon: 'file_upload' },
+      { role: 'Viewer', icon: 'eye' },
+      { role: 'Editor', icon: 'pencil' },
+      { role: 'Contributor', icon: 'pencil' },
+      { role: 'Uploader', icon: 'file-add' },
       { role: '*', icon: 'key' }
     ])('should set different role tag icon for different role types', (dataSet) => {
       const wrapper = getShallowWrapper({

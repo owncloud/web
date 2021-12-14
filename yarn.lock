@@ -2741,14 +2741,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vue/composition-api@npm:^1.2.4":
-  version: 1.2.4
-  resolution: "@vue/composition-api@npm:1.2.4"
+"@vue/composition-api@npm:^1.4.3":
+  version: 1.4.3
+  resolution: "@vue/composition-api@npm:1.4.3"
   dependencies:
-    tslib: ^2.3.0
+    tslib: ^2.3.1
   peerDependencies:
     vue: ">= 2.5 < 3"
-  checksum: a38651fe05b135cbddccf17090aeed4ef1b12e2f8da613778cf788fd18bf92292888ffad422d91b634af11008e843ca815ab1048b3806af0511ac0a7a88e2c8b
+  checksum: 638d9be202543dd9d589fe7c75e4afbffa115d2843a31abd4fec41e942e667f042f599f692f483f30ac31dc5499e5a8cfbafe75a8827cdb55e461716fad97550
   languageName: node
   linkType: hard
 
@@ -8782,12 +8782,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-mock-axios@npm:^4.4.0":
-  version: 4.4.0
-  resolution: "jest-mock-axios@npm:4.4.0"
+"jest-mock-axios@npm:^4.5.0":
+  version: 4.5.0
+  resolution: "jest-mock-axios@npm:4.5.0"
   dependencies:
     synchronous-promise: ^2.0.15
-  checksum: a49c4ca51d9a33ca07dfc40d288fcdada0ab92a571b4d0188996c8351c6904cf885c1f665c8a641b31b85fac7dc6cc2c7058fefe816600230da9cdfe8341bcb5
+  checksum: 913da820bd5252c8832e26f3853e19f966cb46cd12368ffee8ceb3143188bad66a6d1af89f39affe0a4e7941ff4b7442889320782915e6f9470b1371872c8a93
   languageName: node
   linkType: hard
 
@@ -10878,11 +10878,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"owncloud-design-system@npm:12.0.0-alpha4":
-  version: 12.0.0-alpha4
-  resolution: "owncloud-design-system@npm:12.0.0-alpha4"
+"owncloud-design-system@npm:12.0.0-alpha6":
+  version: 12.0.0-alpha6
+  resolution: "owncloud-design-system@npm:12.0.0-alpha6"
   peerDependencies:
     "@popperjs/core": ^2.4.0
+    "@vue/composition-api": ^1.4.3
     filesize: ^8.0.0
     focus-trap: ^6.4.0
     focus-trap-vue: ^1.1.1
@@ -10897,7 +10898,7 @@ __metadata:
     vue-inline-svg: ^2.0.0
     vue-select: ^3.12.0
     webfontloader: ^1.6.28
-  checksum: 162a6f59b72aa2a2bbf033df0663cb43ab570948bba8ae42f8d3cf66e7a99dc4e591d9a32c7bebac86cb64994e14f5190a88a256aff78769523095f286a71601
+  checksum: b5c90cccaa840bc1a95375a444a0317e6cb72ffcf977c2ef836d51597bce2e065404b9d19977db15802822870665adb6b4721c2ae39e7f7458fdd6c764046dec
   languageName: node
   linkType: hard
 
@@ -13181,7 +13182,7 @@ __metadata:
     jest: ^26.6.3
     jest-axe: ^4.1.0
     jest-fetch-mock: ^3.0.3
-    jest-mock-axios: ^4.4.0
+    jest-mock-axios: ^4.5.0
     jest-serializer-vue: ^2.0.2
     jest-svg-transformer: ^1.0.0
     join-path: ^1.1.1
@@ -14607,7 +14608,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.0.3, tslib@npm:^2.2.0, tslib@npm:^2.3.0":
+"tslib@npm:^2.0.3, tslib@npm:^2.2.0, tslib@npm:^2.3.1":
   version: 2.3.1
   resolution: "tslib@npm:2.3.1"
   checksum: de17a98d4614481f7fcb5cd53ffc1aaf8654313be0291e1bfaee4b4bb31a20494b7d218ff2e15017883e8ea9626599b3b0e0229c18383ba9dce89da2adf15cb9
@@ -15343,7 +15344,7 @@ typescript@^4.3.2:
   dependencies:
     "@popperjs/core": ^2.4.0
     "@types/luxon": ^2.0.8
-    "@vue/composition-api": ^1.2.4
+    "@vue/composition-api": ^1.4.3
     easygettext: ^2.16.1
     filesize: ^8.0.0
     focus-trap: ^6.4.0
@@ -15352,7 +15353,7 @@ typescript@^4.3.2:
     lodash-es: ^4.17.21
     luxon: ^2.0.0
     oidc-client: 1.11.5
-    owncloud-design-system: 12.0.0-alpha4
+    owncloud-design-system: 12.0.0-alpha6
     owncloud-sdk: 1.0.0-2296
     p-queue: ^6.1.1
     popper-max-size-modifier: ^0.2.0

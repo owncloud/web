@@ -12,12 +12,12 @@ const meta = {
   'draw-io': {
     name: 'Draw.io',
     id: 'draw-io',
-    icon: 'grid_on'
+    icon: 'grid'
   },
   'markdown-editor': {
     name: 'MarkdownEditor',
     id: 'markdown-editor',
-    icon: 'text'
+    icon: 'file-text'
   }
 }
 
@@ -63,12 +63,12 @@ const sideBars = [
   {
     app: 'details-item',
     enabled: jest.fn(),
-    icon: 'info_outline'
+    icon: 'information'
   },
   {
     app: 'actions-item',
     enabled: jest.fn(),
-    icon: 'info_outline'
+    icon: 'information'
   }
 ]
 
@@ -87,7 +87,7 @@ exports.apps = {
 const fileActions = {
   download: {
     name: 'download-file',
-    icon: 'file_download',
+    icon: 'file-download',
     handler: jest.fn(),
     label: () => 'Download',
     componentType: 'oc-button',
@@ -96,7 +96,7 @@ const fileActions = {
   },
   copy: {
     name: 'copy',
-    icon: 'file_copy',
+    icon: 'file-copy',
     handler: jest.fn(),
     label: () => 'Copy',
     componentType: 'oc-button',
@@ -105,7 +105,7 @@ const fileActions = {
   },
   rename: {
     name: 'rename',
-    icon: 'edit',
+    icon: 'pencil',
     handler: jest.fn(),
     label: () => 'Rename',
     componentType: 'oc-button',
@@ -114,7 +114,7 @@ const fileActions = {
   },
   move: {
     name: 'move',
-    icon: 'folder-move',
+    icon: 'folder-shared',
     handler: jest.fn(),
     label: () => 'Move',
     componentType: 'oc-button',
@@ -123,7 +123,7 @@ const fileActions = {
   },
   delete: {
     name: 'delete',
-    icon: 'delete',
+    icon: 'delete-bin-5',
     handler: jest.fn(),
     label: () => 'Delete',
     componentType: 'oc-button',

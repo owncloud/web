@@ -11,7 +11,7 @@ export default {
       return [
         {
           name: 'copy',
-          icon: 'file_copy',
+          icon: 'file-copy-2',
           handler: this.$_copy_trigger,
           label: () =>
             this.$pgettext('Action in the files list row to initiate copying resources', 'Copy'),

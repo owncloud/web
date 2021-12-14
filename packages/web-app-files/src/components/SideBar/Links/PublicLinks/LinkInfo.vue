@@ -55,7 +55,7 @@
           class="oc-files-file-link-via"
           :to="viaRouterParams"
         >
-          <oc-icon name="exit_to_app" />
+          <oc-icon name="close" />
           <span class="uk-text-truncate files-file-links-link-via-label" v-text="viaLabel" />
         </oc-tag>
       </div>
@@ -90,16 +90,16 @@ export default {
     roleTagIcon() {
       switch (this.link.description) {
         case 'Viewer':
-          return 'remove_red_eye'
+          return 'eye'
 
         case 'Contributor':
-          return 'edit'
+          return 'pencil'
 
         case 'Editor':
-          return 'edit'
+          return 'pencil'
 
         case 'Uploader':
-          return 'file_upload'
+          return 'file-add'
 
         default:
           return 'key'

@@ -26,7 +26,7 @@
                 :aria-label="$gettext('Restore older version')"
                 @click="revertVersion(item)"
               >
-                <oc-icon name="restore" />
+                <oc-icon name="restart" fill-type="line" />
               </oc-button>
             </div>
           </oc-td>
@@ -39,7 +39,7 @@
                 :aria-label="$gettext('Download older version')"
                 @click="downloadVersion(item)"
               >
-                <oc-icon name="cloud_download" />
+                <oc-icon name="download-cloud" fill-type="line" />
               </oc-button>
             </div>
           </oc-td>

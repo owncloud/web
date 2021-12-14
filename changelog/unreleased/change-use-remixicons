@@ -1,0 +1,7 @@
+Change: Use remixicons for redesign
+
+We've switched the iconset to remixicons to
+fit the new design.
+
+https://github.com/owncloud/web/pull/6142
+https://github.com/owncloud/web/issues/6100

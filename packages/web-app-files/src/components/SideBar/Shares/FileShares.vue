@@ -25,7 +25,7 @@
             :is-tooltip-displayed="false"
             class="sharee-avatars"
           />
-          <oc-icon v-else name="chevron_up" />
+          <oc-icon v-else name="arrow-up-s" />
         </oc-button>
       </div>
       <template v-if="showShareesList && hasSharees">

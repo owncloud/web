@@ -23,7 +23,7 @@
         "fr": "Fichiers",
         "zh_CN": "文件"
       },
-      "icon": "switch_ui",
+      "icon": "swap-box",
       "url": "http://owncloud/index.php/apps/files"
     },
     {

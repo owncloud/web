@@ -43,7 +43,7 @@
                 class="file-row-share-decline oc-ml-s"
                 @click.stop="$_declineShare_trigger({ resources: [resource] })"
               >
-                <oc-icon size="small" name="not_interested" />
+                <oc-icon size="small" name="forbid" />
                 <translate>Decline</translate>
               </oc-button>
             </div>
@@ -65,7 +65,10 @@
                 @click="togglePendingShowMore"
               >
                 {{ pendingToggleMoreLabel }}
-                <oc-icon :name="'chevron_' + (showMorePending ? 'up' : 'down')" />
+                <oc-icon
+                  :name="'arrow-' + (showMorePending ? 'up' : 'down') + '-s'"
+                  fill-type="line"
+                />
               </oc-button>
             </div>
           </template>
@@ -135,7 +138,7 @@
               class="file-row-share-status-decline"
               @click.stop="$_declineShare_trigger({ resources: [resource] })"
             >
-              <oc-icon size="small" name="not_interested" />
+              <oc-icon size="small" name="forbid" />
               <translate>Decline</translate>
             </oc-button>
           </div>

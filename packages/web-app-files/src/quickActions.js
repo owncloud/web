@@ -55,14 +55,16 @@ export default {
   collaborators: {
     id: 'collaborators',
     label: ($gettext) => $gettext('Add people'),
-    icon: 'group-add',
+    icon: 'group',
+    iconFillType: 'fill',
     handler: openNewCollaboratorsPanel,
     displayed: canShare
   },
   publicLink: {
     id: 'public-link',
     label: ($gettext) => $gettext('Create and copy public link'),
-    icon: 'link-add',
+    icon: 'link',
+    iconFillType: 'none',
     handler: createPublicLink,
     displayed: canShare
   }
