@@ -1,5 +1,5 @@
 <template>
-  <div id="new-collaborators-form">
+  <div id="new-collaborators-form" data-testid="new-collaborators-form">
     <oc-select
       id="files-share-invite-input"
       ref="ocSharingAutocomplete"

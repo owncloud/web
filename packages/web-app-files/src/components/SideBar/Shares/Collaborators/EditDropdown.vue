@@ -21,6 +21,7 @@
           >
             <template #default="{ togglePopover }">
               <oc-button
+                data-testid="collaborator-set-expiration-btn"
                 class="files-collaborators-expiration-button"
                 appearance="raw"
                 @click="togglePopover"
@@ -83,7 +84,10 @@ export default {
         result.push({
           title: this.$gettext('Remove expiration date'),
           method: this.removeExpirationDate,
-          class: 'remove-expiration-date'
+          class: 'remove-expiration-date',
+          additionalAttributes: {
+            'data-testid': 'collaborator-remove-expiration-btn'
+          }
         })
       }
       return [
@@ -93,7 +97,8 @@ export default {
           method: this.removeShare,
           class: 'remove-share',
           additionalAttributes: {
-            variation: 'danger'
+            variation: 'danger',
+            'data-testid': 'collaborator-remove-share-btn'
           }
         }
       ]

@@ -70,6 +70,7 @@
       />
       <edit-dropdown
         class="oc-ml-s files-collaborators-collaborator-edit"
+        data-testid="collaborator-edit"
         :expiration-date="share.expires ? share.expires : null"
         :share-category="shareCategory"
         @expirationDateChanged="shareExpirationChanged"
