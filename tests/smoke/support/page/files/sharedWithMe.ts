@@ -14,21 +14,21 @@ export class SharedWithMePage {
 
   async acceptShare({ name }: { name: string }): Promise<void> {
     const { page } = this.actor
+    const acceptShareButton = page.locator(
+      `//*[@data-test-resource-name="${name}"]/ancestor::tr//button[contains(@class, "file-row-share-status-accept")]`
+    )
 
-    await page
-      .locator(
-        `//*[@data-test-resource-name="${name}"]/ancestor::tr//button[contains(@class, "file-row-share-status-accept")]`
-      )
-      .click()
+    await acceptShareButton.click()
+    await page.waitForResponse((resp) => resp.url().includes('shares') && resp.status() === 200)
   }
 
   async declineShare({ name }: { name: string }): Promise<void> {
     const { page } = this.actor
+    const declineShareButton = page.locator(
+      `//*[@data-test-resource-name="${name}"]/ancestor::tr//button[contains(@class, "file-row-share-decline")]`
+    )
 
-    await page
-      .locator(
-        `//*[@data-test-resource-name="${name}"]/ancestor::tr//button[contains(@class, "file-row-share-decline")]`
-      )
-      .click()
+    await declineShareButton.click()
+    await page.waitForResponse((resp) => resp.url().includes('shares') && resp.status() === 200)
   }
 }

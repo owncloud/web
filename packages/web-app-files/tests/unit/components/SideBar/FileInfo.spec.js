@@ -109,10 +109,14 @@ function createWrapper(testResource, tooltipStub, routeName) {
     directives: {
       OcTooltip: tooltipStub
     },
-    methods: {
-      formDateFromRFC,
-      formRelativeDateFromRFC
-    },
+    mixins: [
+      {
+        methods: {
+          formDateFromRFC,
+          formRelativeDateFromRFC
+        }
+      }
+    ],
     mocks: {
       $route: {
         name: routeName || 'some-route',

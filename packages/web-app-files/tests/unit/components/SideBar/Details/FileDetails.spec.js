@@ -14,19 +14,6 @@ localVue.use(GetTextPlugin, {
 })
 const OcTooltip = jest.fn()
 
-const selectors = {
-  noContentText: '[data-testid="noContentText"]',
-  timestamp: '[data-testid="timestamp"]',
-  ownerName: '[data-testid="ownerDisplayName"]',
-  sharingInfo: '[data-testid="sharingInfo"]',
-  sizeInfo: '[data-testid="sizeInfo"]',
-  versionsInfo: '[data-testid="versionsInfo"]',
-  previewImgContainer: '[data-testid="preview"]',
-  sharedBy: '[data-testid="shared-by"]',
-  sharedVia: '[data-testid="shared-via"]',
-  sharedDate: '[data-testid="shared-date"]'
-}
-
 const simpleOwnFolder = {
   type: 'folder',
   ownerId: 'marie',
@@ -39,7 +26,7 @@ const sharedFolder = {
   type: 'folder',
   ownerId: 'einstein',
   ownerDisplayName: 'Einstein',
-  sdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
+  mdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
   size: '740',
   shareTypes: [0]
 }
@@ -53,55 +40,42 @@ const simpleOwnFile = {
 }
 
 const sharedFile = {
+  path: '/Shares/123.png',
   type: 'file',
   ownerId: 'einstein',
   ownerDisplayName: 'Einstein',
   preview: 'example.com/image',
   thumbnail: 'example.com/image',
-  sdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
+  mdate: 'Tue, 20 Oct 2015 06:15:00 GMT',
   size: '740',
   shareTypes: [0]
 }
+
+const formDateFromJSDate = jest.fn().mockImplementation(() => 'ABSOLUTE_TIME')
+const formDateFromHTTP = jest.fn().mockImplementation(() => 'ABSOLUTE_TIME')
+const refreshShareDetailsTree = jest.fn()
+beforeEach(() => {
+  formDateFromJSDate.mockClear()
+  formDateFromHTTP.mockClear()
+  refreshShareDetailsTree.mockReset()
+})
 
 describe('Details SideBar Panel', () => {
   describe('displays a resource of type folder', () => {
     describe('on a private page', () => {
       it('with timestamp, size info and (me) as owner', () => {
         const wrapper = createWrapper(simpleOwnFolder)
-        expect(wrapper.find(selectors.noContentText).exists()).toBeFalsy()
-        expect(wrapper.find(selectors.timestamp).exists()).toBeTruthy()
-        expect(wrapper.find(selectors.ownerName).exists()).toBeTruthy()
-        expect(wrapper.find(selectors.ownerName).text()).toContain('(me)')
-        expect(wrapper.find(selectors.sizeInfo).exists()).toBeTruthy()
-        expect(wrapper.find(selectors.sharingInfo).exists()).toBeFalsy()
-        expect(wrapper.find(selectors.versionsInfo).exists()).toBeFalsy()
-        expect(wrapper.find(selectors.previewImgContainer).exists()).toBeFalsy()
+        expect(wrapper).toMatchSnapshot()
       })
       it('with timestamp, size info, share info and share date', () => {
         const wrapper = createWrapper(sharedFolder)
-        expect(wrapper.find(selectors.noContentText).exists()).toBeFalsy()
-        expect(wrapper.find(selectors.timestamp).exists()).toBeTruthy()
-        expect(wrapper.find(selectors.ownerName).exists()).toBeTruthy()
-        expect(wrapper.find(selectors.ownerName).text()).not.toContain('(me)')
-        expect(wrapper.find(selectors.sizeInfo).exists()).toBeTruthy()
-        expect(wrapper.find(selectors.sharingInfo).exists()).toBeTruthy()
-        expect(wrapper.find(selectors.versionsInfo).exists()).toBeFalsy()
-        expect(wrapper.find(selectors.previewImgContainer).exists()).toBeFalsy()
+        expect(wrapper).toMatchSnapshot()
       })
     })
     describe('on a public page', () => {
       it('with owner, timestamp, size info and no share info', () => {
         const wrapper = createWrapper(sharedFolder, [], null, true)
-        expect(wrapper.find(selectors.noContentText).exists()).toBeFalsy()
-        expect(wrapper.find(selectors.timestamp).exists()).toBeTruthy()
-        expect(wrapper.find(selectors.ownerName).exists()).toBeTruthy()
-        expect(wrapper.find(selectors.ownerName).text()).not.toContain('(me)')
-        expect(wrapper.find(selectors.sizeInfo).exists()).toBeTruthy()
-        expect(wrapper.find(selectors.sharingInfo).exists()).toBeFalsy()
-        expect(wrapper.find(selectors.versionsInfo).exists()).toBeFalsy()
-        expect(wrapper.find(selectors.previewImgContainer).exists()).toBeFalsy()
-        expect(wrapper.find(selectors.sharedBy).exists()).toBeFalsy()
-        expect(wrapper.find(selectors.sharedDate).exists()).toBeFalsy()
+        expect(wrapper).toMatchSnapshot()
       })
     })
   })
@@ -109,49 +83,51 @@ describe('Details SideBar Panel', () => {
     describe('on a private page', () => {
       it('with timestamp, size info and (me) as owner', () => {
         const wrapper = createWrapper(simpleOwnFile)
-        expect(wrapper.find(selectors.noContentText).exists()).toBeFalsy()
-        expect(wrapper.find(selectors.timestamp).exists()).toBeTruthy()
-        expect(wrapper.find(selectors.ownerName).exists()).toBeTruthy()
-        expect(wrapper.find(selectors.ownerName).text()).toContain('(me)')
-        expect(wrapper.find(selectors.sizeInfo).exists()).toBeTruthy()
-        expect(wrapper.find(selectors.sharingInfo).exists()).toBeFalsy()
-        expect(wrapper.find(selectors.versionsInfo).exists()).toBeFalsy()
-        expect(wrapper.find(selectors.previewImgContainer).exists()).toBeFalsy()
+        expect(wrapper).toMatchSnapshot()
       })
       it('with timestamp, size info, share info, share date and preview', () => {
         const wrapper = createWrapper(sharedFile)
-        expect(wrapper.find(selectors.noContentText).exists()).toBeFalsy()
-        expect(wrapper.find(selectors.timestamp).exists()).toBeTruthy()
-        expect(wrapper.find(selectors.ownerName).exists()).toBeTruthy()
-        expect(wrapper.find(selectors.ownerName).text()).not.toContain('(me)')
-        expect(wrapper.find(selectors.sizeInfo).exists()).toBeTruthy()
-        expect(wrapper.find(selectors.sharingInfo).exists()).toBeTruthy()
-        expect(wrapper.find(selectors.versionsInfo).exists()).toBeFalsy()
-        expect(wrapper.find(selectors.previewImgContainer).exists()).toBeTruthy()
+        expect(wrapper).toMatchSnapshot()
+      })
+
+      it('updates when the shareTree updates', async () => {
+        const wrapper = createWrapper(sharedFile)
+        expect(refreshShareDetailsTree).toBeCalledTimes(1)
+
+        // make sure this renders once when initial sharesTree become available
+        wrapper.vm.$store.state.Files.sharesTree = {
+          '/Shares': [{}]
+        }
+
+        await wrapper.vm.$nextTick
+        expect(wrapper).toMatchSnapshot()
+
+        // ... and renders again when the relevant shares become available
+        wrapper.vm.$store.state.Files.sharesTree = {
+          '/Shares': [{}],
+          '/Shares/123.png': [
+            {
+              shareType: 0,
+              owner: {
+                name: 'marie',
+                displayName: 'Marie Curie'
+              },
+              stime: 12345
+            }
+          ]
+        }
+        await wrapper.vm.$nextTick
+        expect(wrapper).toMatchSnapshot()
       })
     })
     describe('on a public page', () => {
       it('with owner, timestap, size info, no share info and preview', () => {
         const wrapper = createWrapper(sharedFile, [], null, true)
-        expect(wrapper.find(selectors.noContentText).exists()).toBeFalsy()
-        expect(wrapper.find(selectors.timestamp).exists()).toBeTruthy()
-        expect(wrapper.find(selectors.ownerName).exists()).toBeTruthy()
-        expect(wrapper.find(selectors.ownerName).text()).not.toContain('(me)')
-        expect(wrapper.find(selectors.sizeInfo).exists()).toBeTruthy()
-        expect(wrapper.find(selectors.sharingInfo).exists()).toBeFalsy()
-        expect(wrapper.find(selectors.versionsInfo).exists()).toBeFalsy()
-        expect(wrapper.find(selectors.previewImgContainer).exists()).toBeTruthy()
+        expect(wrapper).toMatchSnapshot()
       })
       it('with owner, timestamp, size info, no share info and preview', () => {
         const wrapper = createWrapper(sharedFile, [], null, true)
-        expect(wrapper.find(selectors.noContentText).exists()).toBeFalsy()
-        expect(wrapper.find(selectors.timestamp).exists()).toBeTruthy()
-        expect(wrapper.find(selectors.ownerName).exists()).toBeTruthy()
-        expect(wrapper.find(selectors.ownerName).text()).not.toContain('(me)')
-        expect(wrapper.find(selectors.sizeInfo).exists()).toBeTruthy()
-        expect(wrapper.find(selectors.sharingInfo).exists()).toBeFalsy()
-        expect(wrapper.find(selectors.versionsInfo).exists()).toBeFalsy()
-        expect(wrapper.find(selectors.previewImgContainer).exists()).toBeTruthy()
+        expect(wrapper).toMatchSnapshot()
       })
     })
   })
@@ -168,6 +144,9 @@ function createWrapper(testResource, testVersions = [], testPreview, publicRoute
       modules: {
         Files: {
           namespaced: true,
+          state: {
+            sharesTree: {}
+          },
           getters: {
             highlightedFile: function () {
               return testResource
@@ -177,6 +156,9 @@ function createWrapper(testResource, testVersions = [], testPreview, publicRoute
             },
             sharesTreeLoading: function () {
               return false
+            },
+            sharesTree: function (state) {
+              return state.sharesTree
             }
           },
           actions: {
@@ -196,6 +178,15 @@ function createWrapper(testResource, testVersions = [], testPreview, publicRoute
     directives: {
       OcTooltip
     },
+    mixins: [
+      {
+        methods: {
+          formDateFromJSDate,
+          formDateFromHTTP,
+          refreshShareDetailsTree
+        }
+      }
+    ],
     mocks: {
       $route: {
         meta: {
