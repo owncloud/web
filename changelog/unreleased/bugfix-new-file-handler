@@ -1,0 +1,5 @@
+Bugfix: Ensure route config is honored for new file handlers
+
+Only display the new file entries for the routes it belongs to.
+
+https://github.com/owncloud/web/pull/6135
