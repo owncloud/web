@@ -1,6 +1,5 @@
 import App from '../../src/App.vue'
 import { shallowMount, createLocalVue } from '@vue/test-utils'
-import fetchMock from 'jest-fetch-mock'
 import Vuex from 'vuex'
 import GetTextPlugin from 'vue-gettext'
 
@@ -85,7 +84,6 @@ describe('The app provider extension', () => {
 
   afterEach(() => {
     jest.clearAllMocks()
-    fetchMock.resetMocks()
   })
 
   it('should show a loading spinner while loading', async () => {
@@ -102,14 +100,26 @@ describe('The app provider extension', () => {
     expect(wrapper).toMatchSnapshot()
   })
   it('should show a meaningful message if an error occurs during loading', async () => {
-    fetchMock.mockReject(new Error('fake error message'))
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        ok: false,
+        status: 500,
+        message: 'We encountered an internal error'
+      })
+    )
     const wrapper = createShallowMountWrapper()
     await wrapper.vm.$nextTick()
     await wrapper.vm.$nextTick()
     expect(wrapper).toMatchSnapshot()
   })
   it('should fail for unauthenticated users', async () => {
-    fetchMock.mockResponseOnce({ status: 401 })
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        ok: true,
+        status: 401,
+        message: 'Login Required'
+      })
+    )
     const wrapper = createShallowMountWrapper()
     await wrapper.vm.$nextTick()
     await wrapper.vm.$nextTick()

@@ -216,8 +216,12 @@ export default {
         return []
       }
 
+      const filteredMimeTypes = this.mimeTypes.find((t) => t.mime_type === mimeType)
+      if (filteredMimeTypes === undefined) {
+        return []
+      }
       const { app_providers: appProviders = [], default_application: defaultApplication } =
-        this.mimeTypes.find((t) => t.mime_type === mimeType)
+        filteredMimeTypes
 
       return appProviders.map((app) => {
         const label = this.$gettext('Open in %{ appName }')

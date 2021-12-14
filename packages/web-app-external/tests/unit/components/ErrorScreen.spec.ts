@@ -17,6 +17,9 @@ describe('The external app error screen component', () => {
       localVue,
       stubs: {
         OcIcon: true
+      },
+      propsData: {
+        message: 'Error when loading the application'
       }
     })
     expect(wrapper).toMatchSnapshot()

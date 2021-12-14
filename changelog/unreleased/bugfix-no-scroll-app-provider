@@ -1,0 +1,6 @@
+Bugfix: Do not scroll on apps open in app provider
+
+Apps opened from the app provider were taking more than the window size, prompting the use of the scrollbar.
+
+https://github.com/owncloud/web/issues/5960
+https://github.com/owncloud/web/pull/6003

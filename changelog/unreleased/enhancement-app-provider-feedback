@@ -1,0 +1,5 @@
+Enhancement: Show errors when failing to open app in app provider
+
+The error message provided by wopi is now displayed to the user, giving some context on why it failed to open a file.
+
+https://github.com/owncloud/web/pull/6003

@@ -1,0 +1,6 @@
+Bugfix: Show context menu for all file extensions
+
+The context menu was failing to build for file extensions that did not have a match in the apps from the app provider.
+
+https://github.com/owncloud/web/issues/6002
+https://github.com/owncloud/web/pull/6003
