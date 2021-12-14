@@ -137,7 +137,7 @@ export default {
 
       const modal = {
         variation: isVersioningEnabled ? 'passive' : 'danger',
-        icon: 'cloud_upload',
+        icon: 'upload-cloud',
         title,
         message: isVersioningEnabled
           ? this.$gettext('Do you want to create a new version?')

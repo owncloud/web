@@ -9,7 +9,7 @@ exports[`ProgressBar component when a single file is uploaded should show correc
     <oc-hidden-announcer-stub level="assertive" announcement=""></oc-hidden-announcer-stub>
   </div>
   <oc-grid-stub gutter="collapse" flex="true" aria-label="Click row to toggle upload progress details" class="oc-mt-s oc-mb-s oc-text-muted oc-cursor-pointer">
-    <oc-icon-stub name="expand_more" accessiblelabel="" type="span" size="medium" variation="passive" class="uk-width-auto"></oc-icon-stub>
+    <oc-icon-stub name="arrow-down-s" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" class="uk-width-auto"></oc-icon-stub>
     <div class="uk-width-expand uk-text-truncate"><span id="files-upload-progress-single" translate-comment="Upload progress when only uploading one file shows the name of the file." data-msgid="
         Uploading &quot;%{ fileName }&quot;
       " data-current-language="en_US">
@@ -34,7 +34,7 @@ exports[`ProgressBar component when multiple files are uploaded should show tota
     <oc-hidden-announcer-stub level="assertive" announcement=""></oc-hidden-announcer-stub>
   </div>
   <oc-grid-stub gutter="collapse" flex="true" aria-label="Click row to toggle upload progress details" class="oc-mt-s oc-mb-s oc-text-muted oc-cursor-pointer">
-    <oc-icon-stub name="expand_more" accessiblelabel="" type="span" size="medium" variation="passive" class="uk-width-auto"></oc-icon-stub>
+    <oc-icon-stub name="arrow-down-s" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" class="uk-width-auto"></oc-icon-stub>
     <div class="uk-width-expand uk-text-truncate"><span id="files-upload-progress-multi" translate-n="2" translate-plural="Uploading %{ count } items" translate-comment="Upload progress when uploading multiple files only shows the number of uploads." data-msgid="
         Uploading %{ count } item
       " data-current-language="en_US">Uploading 2 items</span></div>

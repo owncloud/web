@@ -193,7 +193,7 @@ export default {
 
       const modal = {
         variation: 'danger',
-        icon: 'warning',
+        icon: 'alarm-warning',
         title: this.$_deleteResources_dialogTitle,
         message: this.$_deleteResources_dialogMessage,
         cancelText: this.$gettext('Cancel'),

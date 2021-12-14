@@ -19,7 +19,7 @@
             @vdropzone-file-added="dropZoneFileAdded"
           >
             <div class="uk-flex uk-flex-middle uk-flex-center uk-placeholder">
-              <oc-icon name="file_upload" />
+              <oc-icon name="file-upload" />
               <translate>Drop files here to upload or click to select file</translate>
             </div>
           </vue-dropzone>
@@ -39,13 +39,13 @@
                 <oc-td width="shrink" class="oc-pr-rm uk-preserve-width">
                   <oc-icon
                     v-if="file.status === 'done'"
-                    name="ready"
+                    name="checkbox-circle"
                     size="small"
                     variation="success"
                   />
                   <oc-icon
                     v-if="file.status === 'error'"
-                    name="info"
+                    name="information"
                     size="small"
                     variation="danger"
                   />

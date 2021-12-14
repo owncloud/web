@@ -8,7 +8,7 @@ export default {
       return [
         {
           name: 'restore',
-          icon: 'restore',
+          icon: 'arrow-go-back',
           label: () => this.$gettext('Restore'),
           handler: this.$_restore_trigger,
           isEnabled: ({ resources }) => {

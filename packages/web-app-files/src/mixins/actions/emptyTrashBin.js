@@ -8,7 +8,7 @@ export default {
       return [
         {
           name: 'empty-trash-bin',
-          icon: 'delete',
+          icon: 'delete-bin-5',
           label: () => this.$gettext('Empty trash bin'),
           handler: this.$_emptyTrashBin_trigger,
           isEnabled: ({ resources }) => {

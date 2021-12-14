@@ -27,7 +27,7 @@
           >
             Expires %{expires}
           </translate>
-          <oc-icon v-if="!dateCurrent" name="expand_more" />
+          <oc-icon v-if="!dateCurrent" name="arrow-down-s" />
         </oc-button>
       </template>
     </oc-datepicker>

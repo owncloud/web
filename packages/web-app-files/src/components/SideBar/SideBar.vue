@@ -34,7 +34,7 @@
             :aria-label="accessibleLabelBack"
             @click="closePanel"
           >
-            <oc-icon name="chevron_left" />
+            <oc-icon name="arrow-left-s" fill-type="line" />
             {{ defaultPanel.component.title($gettext) }}
           </oc-button>
 
@@ -74,7 +74,7 @@
               >
                 <oc-icon :name="panelSelect.icon" />
                 {{ panelSelect.component.title($gettext) }}
-                <oc-icon name="chevron_right" />
+                <oc-icon name="arrow-right-s" fill-type="line" />
               </oc-button>
             </div>
           </template>

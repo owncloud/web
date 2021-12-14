@@ -1,6 +1,6 @@
 <template>
   <div id="oc-no-selection" class="uk-text-center oc-mt-xl">
-    <oc-icon size="xxlarge" name="select_items" />
+    <oc-icon size="xxlarge" name="drag-drop" fill-type="line" />
     <p data-testid="selectedFilesText" v-text="selectedFilesString" />
   </div>
 </template>

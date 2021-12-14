@@ -10,7 +10,7 @@ export default {
       return [
         {
           name: 'delete-file',
-          icon: 'file_download',
+          icon: 'file-download',
           handler: this.$_downloadFile_trigger,
           label: () => {
             return this.$gettext('Download')

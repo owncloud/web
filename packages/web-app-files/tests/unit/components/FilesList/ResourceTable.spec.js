@@ -1,5 +1,6 @@
 import merge from 'lodash-es/merge'
 import { mount, createLocalVue } from '@vue/test-utils'
+import VueCompositionAPI from '@vue/composition-api'
 import { DateTime } from 'luxon'
 import DesignSystem from 'owncloud-design-system'
 
@@ -79,7 +80,7 @@ const resourcesWithAllFields = [
     id: 'notes',
     name: 'notes.txt',
     path: '/Documents/notes.txt',
-    icon: 'text',
+    icon: 'file-text',
     indicators,
     type: 'file',
     size: 'big',
@@ -239,6 +240,7 @@ describe('ResourceTable', () => {
 function getMountedWrapper(options = {}) {
   const localVue = createLocalVue()
   localVue.use(DesignSystem)
+  localVue.use(VueCompositionAPI)
   localVue.prototype.$gettextInterpolate = jest.fn()
   localVue.prototype.$ngettext = jest.fn()
 

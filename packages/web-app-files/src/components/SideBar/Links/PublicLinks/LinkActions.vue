@@ -10,7 +10,7 @@
         class="oc-files-file-link-edit oc-mr-xs"
         @click="editLink"
       >
-        <oc-icon name="edit" />
+        <oc-icon name="pencil" />
       </oc-button>
       <oc-button
         v-oc-tooltip="deleteButtonLabel"
@@ -19,7 +19,7 @@
         class="oc-files-file-link-delete"
         @click="$_removeLink"
       >
-        <oc-icon name="delete" />
+        <oc-icon name="delete-bin-5" />
       </oc-button>
     </template>
   </div>

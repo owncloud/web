@@ -10,7 +10,7 @@
       :class="`files-quick-action-${action.id}`"
       @click="action.handler({ item, client: $client, store: $store, $gettext })"
     >
-      <oc-icon :name="action.icon" class="uk-flex" />
+      <oc-icon :name="action.icon" :fill-type="action.iconFillType" class="uk-flex" />
     </oc-button>
   </div>
 </template>

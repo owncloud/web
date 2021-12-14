@@ -2,7 +2,7 @@
   <ul class="uk-list uk-list-divider oc-ml-rm oc-mr-rm">
     <li v-for="item in items" :key="item.id">
       <div class="uk-flex uk-flex-middle">
-        <oc-icon name="file_copy" class="oc-mr-s" />
+        <oc-icon name="file-copy2" class="oc-mr-s" />
         <div class="uk-width-expand">
           <div class="uk-flex">
             <div class="oc-text-bold uk-width-expand uk-text-truncate upload-details-item-name">

@@ -83,7 +83,7 @@
                       justify-content="left"
                       @click="showCreateResourceModal"
                     >
-                      <oc-icon name="create_new_folder" />
+                      <oc-icon name="folder-add" />
                       <translate>New folder…</translate>
                     </oc-button>
                   </div>

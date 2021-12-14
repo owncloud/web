@@ -22,7 +22,7 @@
         "fr": "Fichiers",
         "zh_CN": "文件"
       },
-      "icon": "switch_ui",
+      "icon": "swap-box",
       "url": "http://host.docker.internal:8080/index.php/apps/files"
     },
     {

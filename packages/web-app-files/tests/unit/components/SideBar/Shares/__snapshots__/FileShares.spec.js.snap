@@ -22,7 +22,7 @@ exports[`FileShares if there are collaborators present renders sharedWithLabel a
   <div class="avatars-wrapper uk-flex uk-flex-middle uk-flex-between">
     <h4 class="oc-text-initial oc-text-bold oc-mb-rm">Shared with</h4>
     <oc-button-stub type="button" size="medium" arialabel="Collapse list of invited people" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" data-testid="collaborators-show-people">
-      <oc-icon-stub name="chevron_up" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
+      <oc-icon-stub name="arrow-up-s" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
     </oc-button-stub>
   </div>
   <transition-group-stub tag="ul" name="custom-classes-transition" id="files-collaborators-list" aria-label="Share receivers" class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm">

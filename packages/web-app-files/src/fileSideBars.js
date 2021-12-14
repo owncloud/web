@@ -12,7 +12,7 @@ export default [
   // Only allow `actions` panel on trashbin route for now.
   ({ rootFolder }) => ({
     app: 'no-selection-item',
-    icon: 'info_outline',
+    icon: 'questionnaire-line',
     component: NoSelection,
     default: () => true,
     get enabled() {
@@ -21,7 +21,7 @@ export default [
   }),
   ({ router, multipleSelection, rootFolder }) => ({
     app: 'details-item',
-    icon: 'info_outline',
+    icon: 'questionnaire-line',
     component: FileDetails,
     default: !isLocationCommonActive(router, 'files-common-trash'),
     get enabled() {
@@ -32,7 +32,7 @@ export default [
   }),
   ({ multipleSelection, rootFolder }) => ({
     app: 'details-multiple-item',
-    icon: 'info_outline',
+    icon: 'questionnaire-line',
     component: FileDetailsMultiple,
     default: () => true,
     get enabled() {
@@ -42,7 +42,7 @@ export default [
   ({ router, multipleSelection, rootFolder }) => ({
     app: 'actions-item',
     component: FileActions,
-    icon: 'slideshow',
+    icon: 'slideshow-2',
     default: isLocationCommonActive(router, 'files-common-trash'),
     get enabled() {
       return !multipleSelection && !rootFolder
@@ -66,7 +66,7 @@ export default [
   }),
   ({ capabilities, router, multipleSelection, rootFolder }) => ({
     app: 'links-item',
-    icon: 'link',
+    icon: 'links',
     component: FileLinks,
     get enabled() {
       if (multipleSelection || rootFolder) return false
@@ -82,7 +82,7 @@ export default [
   }),
   ({ capabilities, highlightedFile, router, multipleSelection, rootFolder }) => ({
     app: 'versions-item',
-    icon: 'file_version',
+    icon: 'git-branch-line',
     component: FileVersions,
     get enabled() {
       if (multipleSelection || rootFolder) return false

@@ -113,7 +113,7 @@
             resetDropPosition(`context-menu-drop-ref-${resourceDomSelector(item)}`, $event, item)
           "
         >
-          <oc-icon name="more_vert" />
+          <oc-icon name="more-2" />
         </oc-button>
         <oc-drop
           :ref="`context-menu-drop-ref-${resourceDomSelector(item)}`"
