@@ -262,8 +262,6 @@ Feature: deleting files and folders
       | fo.      |
       | fo.1     |
       | fo...1.. |
-      | ...      |
-      | ..fo     |
       | fo.xyz   |
     And the user has reloaded the current page of the webUI
     When the user batch deletes these files using the webUI
@@ -271,14 +269,10 @@ Feature: deleting files and folders
       | fo.      |
       | fo.1     |
       | fo...1.. |
-      | ...      |
-      | ..fo     |
       | fo.xyz   |
     Then as "Alice" these folders should not be listed on the webUI
       | folders  |
       | fo.      |
       | fo.1     |
       | fo...1.. |
-      | ...      |
-      | ..fo     |
       | fo.xyz   |
