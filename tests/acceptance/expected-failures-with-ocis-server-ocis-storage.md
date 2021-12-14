@@ -45,10 +45,10 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIResharing1/reshareUsers.feature:230](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIResharing1/reshareUsers.feature#L230)
 
 ### [file_path property is not unique for a share created with same resource name i.e already present in sharee](https://github.com/owncloud/ocis/issues/2249)
--   [webUIRenameFiles/renameFiles.feature:205](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIRenameFiles/renameFiles.feature#L205)
+-   [webUIRenameFiles/renameFiles.feature:199](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIRenameFiles/renameFiles.feature#L199)
 
 ### [when sharer renames the shared resource, sharee get the updated name](https://github.com/owncloud/ocis/issues/2256)
--   [webUIRenameFiles/renameFiles.feature:230](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIRenameFiles/renameFiles.feature#L230)
+-   [webUIRenameFiles/renameFiles.feature:224](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIRenameFiles/renameFiles.feature#L224)
 
 ### [Viewer cannot share a shared resource](https://github.com/owncloud/ocis/issues/2260)
 -   [webUISharingInternalUsers/shareWithUsers.feature:52](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsers/shareWithUsers.feature#L52)

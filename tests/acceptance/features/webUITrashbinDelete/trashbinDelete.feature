@@ -109,16 +109,12 @@ Feature: files and folders can be deleted from the trashbin
       | fo.      |
       | fo.1     |
       | fo...1.. |
-      | ...      |
-      | ..fo     |
       | fo.xyz   |
     And the following folders have been deleted by user "Alice"
       | name     |
       | fo.      |
       | fo.1     |
       | fo...1.. |
-      | ...      |
-      | ..fo     |
       | fo.xyz   |
     And the user has browsed to the trashbin page
     And the user has reloaded the current page of the webUI
@@ -127,8 +123,6 @@ Feature: files and folders can be deleted from the trashbin
       | fo.      |
       | fo.1     |
       | fo...1.. |
-      | ...      |
-      | ..fo     |
       | fo.xyz   |
     Then the deleted elements should not be listed on the webUI
     And the deleted elements should not be listed on the webUI after a page reload

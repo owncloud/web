@@ -282,16 +282,12 @@ Feature: Restore deleted files/folders
       | fo.      |
       | fo.1     |
       | fo...1.. |
-      | ...      |
-      | ..fo     |
       | fo.xyz   |
     And the following folders have been deleted by user "Alice"
       | name     |
       | fo.      |
       | fo.1     |
       | fo...1.. |
-      | ...      |
-      | ..fo     |
       | fo.xyz   |
     And the user has browsed to the trashbin page
     When the user marks these files for batch action using the webUI
@@ -299,8 +295,6 @@ Feature: Restore deleted files/folders
       | fo.      |
       | fo.1     |
       | fo...1.. |
-      | ...      |
-      | ..fo     |
       | fo.xyz   |
     And the user batch restores the marked files using the webUI
     And the user reloads the current page of the webUI
@@ -309,8 +303,6 @@ Feature: Restore deleted files/folders
       | fo.      |
       | fo.1     |
       | fo...1.. |
-      | ...      |
-      | ..fo     |
       | fo.xyz   |
     When the user browses to the files page
     Then the following folders should be listed on the webUI
@@ -318,7 +310,4 @@ Feature: Restore deleted files/folders
       | fo.      |
       | fo.1     |
       | fo...1.. |
-      | ...      |
-      | ..fo     |
       | fo.xyz   |
-

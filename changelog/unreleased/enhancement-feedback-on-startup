@@ -1,0 +1,6 @@
+Enhancement: Show feedback on startup
+
+Instead of displaying an empty page while all components load, display a spiner.
+Also show an error message if there was an error.
+
+https://github.com/owncloud/web/pull/5985

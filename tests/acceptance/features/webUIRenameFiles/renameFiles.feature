@@ -125,12 +125,6 @@ Feature: rename files
     And file "data.zip" should be listed on the webUI
     And file "<filename>" should not be listed on the webUI
 
-  @skipOnOC10
-  # .htaccess is a valid file name on OCIS
-  Scenario: Rename a file to .htaccess on OCIS
-    When the user renames file "data.zip" to ".htaccess" using the webUI
-    Then file "data.zip" should not be listed on the webUI
-    And file ".htaccess" should be listed on the webUI
 
   Scenario Outline: Rename a file/folder using forward slash in its name
     When the user tries to rename file "<from_file_name>" to "<to_file_name>" using the webUI
