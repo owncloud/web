@@ -307,7 +307,7 @@ export default {
 
   created() {
     // Storage returns a string so we need to convert it into a boolean
-    const areHiddenFilesShown = window.localStorage.getItem('oc_hiddenFilesShown') || 'true'
+    const areHiddenFilesShown = window.localStorage.getItem('oc_hiddenFilesShown') || 'false'
     const areHiddenFilesShownBoolean = areHiddenFilesShown === 'true'
 
     if (areHiddenFilesShownBoolean !== this.areHiddenFilesShown) {
