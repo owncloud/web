@@ -1,0 +1,6 @@
+Enhancement: MarkdownEditor and MediaViewer can be default
+
+We have updated the extension handlers of two internal 
+apps to be able to be used as default actions.
+
+https://github.com/owncloud/web/pull/6148

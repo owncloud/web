@@ -1,5 +1,4 @@
 import translations from '../l10n/translations'
-
 import App from './App.vue'
 
 // just a dummy function to trick gettext tools
@@ -32,6 +31,12 @@ const routesForFileExtensions = [
   'files-public-list'
 ]
 
+const fileExtensionConfig = {
+  canBeDefault: true,
+  routeName,
+  routes: routesForFileExtensions
+}
+
 const appInfo = {
   name: 'Mediaviewer',
   id: 'mediaviewer',
@@ -39,38 +44,31 @@ const appInfo = {
   extensions: [
     {
       extension: 'png',
-      routeName,
-      routes: routesForFileExtensions
+      ...fileExtensionConfig
     },
     {
       extension: 'jpg',
-      routeName,
-      routes: routesForFileExtensions
+      ...fileExtensionConfig
     },
     {
       extension: 'jpeg',
-      routeName,
-      routes: routesForFileExtensions
+      ...fileExtensionConfig
     },
     {
       extension: 'gif',
-      routeName,
-      routes: routesForFileExtensions
+      ...fileExtensionConfig
     },
     {
       extension: 'mp4',
-      routeName,
-      routes: routesForFileExtensions
+      ...fileExtensionConfig
     },
     {
       extension: 'webm',
-      routeName,
-      routes: routesForFileExtensions
+      ...fileExtensionConfig
     },
     {
       extension: 'ogg',
-      routeName,
-      routes: routesForFileExtensions
+      ...fileExtensionConfig
     }
   ]
 }
