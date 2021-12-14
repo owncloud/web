@@ -1,0 +1,8 @@
+Bugfix: Separate public route for external apps 
+
+Ensures that users are redirected to the idp to authenticate, whever trying
+to open a non public link file via the app provider
+
+https://github.com/owncloud/web/issues/6069
+https://github.com/owncloud/web/issues/6045
+https://github.com/owncloud/web/pull/6151
