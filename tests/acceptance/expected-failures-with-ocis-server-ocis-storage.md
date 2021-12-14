@@ -200,7 +200,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:295](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L295)
 -   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:304](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L304)
 -   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:313](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L313)
--   [webUIFilesCopy/copy.feature:98](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesCopy/copy.feature#L98)
 -   [webUIMoveFilesFolders/moveFiles.feature:97](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIMoveFilesFolders/moveFiles.feature#L97)
 -   [webUIMoveFilesFolders/moveFolders.feature:72](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIMoveFilesFolders/moveFolders.feature#L72)
 -   [webUIFilesActionMenu/versions.feature:90](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesActionMenu/versions.feature#L90)
