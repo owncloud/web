@@ -14,6 +14,7 @@ Summary
 * Bugfix - Show extension image: [#5985](https://github.com/owncloud/web/pull/5985)
 * Bugfix - File renaming: [#4893](https://github.com/owncloud/web/issues/4893)
 * Bugfix - Hidden files hidden by default: [#5985](https://github.com/owncloud/web/pull/5985)
+* Bugfix - Ensure route config is honored for new file handlers: [#6135](https://github.com/owncloud/web/pull/6135)
 * Bugfix - Open in browser for public files: [#4615](https://github.com/owncloud/web/issues/4615)
 * Bugfix - Order extensions and default: [#5985](https://github.com/owncloud/web/pull/5985)
 * Bugfix - Double escaping in progress bar: [#4214](https://github.com/owncloud/web/issues/4214)
@@ -71,6 +72,12 @@ Details
    Hide hidden files (files started with ".") by default, similar to oc10
 
    https://github.com/owncloud/web/pull/5985
+
+* Bugfix - Ensure route config is honored for new file handlers: [#6135](https://github.com/owncloud/web/pull/6135)
+
+   Only display the new file entries for the routes it belongs to.
+
+   https://github.com/owncloud/web/pull/6135
 
 * Bugfix - Open in browser for public files: [#4615](https://github.com/owncloud/web/issues/4615)
 
