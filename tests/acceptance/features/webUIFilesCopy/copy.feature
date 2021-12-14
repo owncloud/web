@@ -4,7 +4,9 @@ Feature: copy files and folders
   So that I can work safely on a copy without changing the original
 
   Background:
-    Given user "Alice" has been created with default attributes and without skeleton files
+    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
+    And the administrator has set the default folder for received shares to "Shares"
+    And user "Alice" has been created with default attributes and without skeleton files
 
   @smokeTest @ocisSmokeTest
   Scenario: copy a file and a folder into a folder
@@ -86,13 +88,14 @@ Feature: copy files and folders
 
   Scenario: copy a file into another folder with no change permission
     Given user "Alice" has created file "lorem.txt"
-    And user "Alice" has created folder "simple-folder"
     And user "Brian" has been created with default attributes and without skeleton files
     And user "Brian" has created folder "simple-folder"
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions
+    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian"
     And user "Alice" has logged in using the webUI
-    When the user tries to copy file "lorem.txt" into folder "simple-folder" using the webUI
-    Then as "Alice" file "simple-folder/lorem.txt" should not exist
+    When the user tries to copy file "lorem.txt" into folder "Shares/simple-folder" using the webUI
+    Then as "Alice" file "Shares/simple-folder/lorem.txt" should not exist
+
 
   @issue-ocis-1328
   Scenario: copy a folder into another folder with no change permission
@@ -100,9 +103,10 @@ Feature: copy files and folders
     And user "Brian" has been created with default attributes and without skeleton files
     And user "Brian" has created folder "simple-folder"
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions
+    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian"
     And user "Alice" has logged in using the webUI
-    When the user tries to copy folder "simple-empty-folder" into folder "simple-folder" using the webUI
-    Then as "Alice" file "simple-folder/simple-empty-folder" should not exist
+    When the user tries to copy folder "simple-empty-folder" into folder "Shares/simple-folder" using the webUI
+    Then as "Alice" file "Shares/simple-folder/simple-empty-folder" should not exist
 
 
   Scenario: copy a folder into the same folder
