@@ -154,7 +154,7 @@ export default {
           // likely missing password, redirect to public link password prompt
           if (error.statusCode === 401) {
             this.$router.push(
-              createLocationShares('files-shares-public-files', {
+              createLocationShares('files-shares-public-link', {
                 params: {
                   token: this.publicLinkToken
                 }

@@ -41,13 +41,13 @@ const router = new Router({
     {
       path: '/f/:fileId',
       name: 'privateLink',
-      redirect: '/files/private-link/:fileId',
+      redirect: '/files/shares/private/link/:fileId',
       meta: { hideHeadbar: true, title: $gettext('Private link') }
     },
     {
       path: '/s/:token',
       name: 'publicLink',
-      redirect: '/files/public-link/:token',
+      redirect: '/files/shares/public/link/:token',
       meta: { auth: false, hideHeadbar: true, title: $gettext('Public link') }
     },
     {

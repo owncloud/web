@@ -185,7 +185,7 @@ export default {
         // Redirect to files drop if the link has role "uploader"
         if (resources[0].getProperty(ref.$client.publicFiles.PUBLIC_LINK_PERMISSION) === '4') {
           ref.$router.push(
-            createLocationShares('files-shares-public-files', {
+            createLocationShares('files-shares-public-link', {
               params: {
                 token: ref.$route.params.item
               }
@@ -324,7 +324,7 @@ export default {
 
     redirectToResolvePage() {
       this.$router.push(
-        createLocationShares('files-shares-public-files', {
+        createLocationShares('files-shares-public-link', {
           params: { token: this.$route.params.item }
         })
       )
