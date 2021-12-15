@@ -142,10 +142,8 @@ import { DateTime } from 'luxon'
 import maxSize from 'popper-max-size-modifier'
 import { EVENT_TROW_MOUNTED, EVENT_FILE_DROPPED } from '../../constants'
 
-const unixDate = (date) => {
-  // FIXME:
-  // return DateTime.fromJSDate(new Date(date)).setLocale(this.currentLanguage).valueOf()
-  return DateTime.fromJSDate(new Date(date)).valueOf()
+const dateSortValue = (date) => {
+  return DateTime.fromRFC2822(date).toUTC().valueOf()
 }
 
 export const determineSortFields = (firstResource) => {
@@ -176,15 +174,15 @@ export const determineSortFields = (firstResource) => {
     },
     {
       name: 'mdate',
-      sortable: (date) => unixDate(date)
+      sortable: (date) => dateSortValue(date)
     },
     {
       name: 'sdate',
-      sortable: (date) => unixDate(date)
+      sortable: (date) => dateSortValue(date)
     },
     {
       name: 'ddate',
-      sortable: (date) => unixDate(date)
+      sortable: (date) => dateSortValue(date)
     }
   ].filter((field) => Object.prototype.hasOwnProperty.call(firstResource, field.name))
 }
