@@ -186,7 +186,7 @@ export default {
     }
   },
   SHARESTREE_ADD(state, sharesTree) {
-    Object.assign(state.sharesTree, sharesTree)
+    state.sharesTree = Object.assign({}, state.sharesTree, sharesTree)
   },
   SHARESTREE_ERROR(state, error) {
     state.sharesTreeError = error

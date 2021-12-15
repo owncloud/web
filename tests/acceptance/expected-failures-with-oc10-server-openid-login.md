@@ -12,10 +12,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIPreview/imageMediaViewer.feature:84](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L84)
 -   [webUIPreview/imageMediaViewer.feature:91](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L91)
 
-### [Media Viewer preview not visible for files with .ogg and .webm formats](https://github.com/owncloud/web/issues/4667)
--   [webUIPreview/imageMediaViewer.feature:141](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L141)
--   [webUIPreview/imageMediaViewer.feature:159](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L159)
-
 ### [WebUI Login](https://github.com/owncloud/web/issues/4677)
 -   [webUILogin/openidLogin.feature:62](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/openidLogin.feature#L62)
 

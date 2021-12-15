@@ -11,12 +11,22 @@ Summary
 * Bugfix - Contextmenu on public links: [#6123](https://github.com/owncloud/web/issues/6123)
 * Bugfix - Inconsistencies in share expiry dates: [#6084](https://github.com/owncloud/web/pull/6084)
 * Bugfix - Extension casing: [#5339](https://github.com/owncloud/web/issues/5339)
+* Bugfix - Show extension image: [#5985](https://github.com/owncloud/web/pull/5985)
 * Bugfix - File renaming: [#4893](https://github.com/owncloud/web/issues/4893)
+* Bugfix - Hidden files hidden by default: [#5985](https://github.com/owncloud/web/pull/5985)
+* Bugfix - Ensure route config is honored for new file handlers: [#6135](https://github.com/owncloud/web/pull/6135)
+* Bugfix - Show context menu for all file extensions: [#6002](https://github.com/owncloud/web/issues/6002)
+* Bugfix - Do not scroll on apps open in app provider: [#5960](https://github.com/owncloud/web/issues/5960)
 * Bugfix - Open in browser for public files: [#4615](https://github.com/owncloud/web/issues/4615)
+* Bugfix - Order extensions and default: [#5985](https://github.com/owncloud/web/pull/5985)
 * Bugfix - Double escaping in progress bar: [#4214](https://github.com/owncloud/web/issues/4214)
 * Bugfix - Context for dates in SideBar: [#5068](https://github.com/owncloud/web/issues/5068)
 * Bugfix - User email attribute initialization: [#6118](https://github.com/owncloud/web/pull/6118)
 * Enhancement - Adopt oc-table-files from ods: [#6106](https://github.com/owncloud/web/pull/6106)
+* Enhancement - Show errors when failing to open app in app provider: [#6003](https://github.com/owncloud/web/pull/6003)
+* Enhancement - Build options: [#5985](https://github.com/owncloud/web/pull/5985)
+* Enhancement - MarkdownEditor and MediaViewer can be default: [#6148](https://github.com/owncloud/web/pull/6148)
+* Enhancement - Show feedback on startup: [#5985](https://github.com/owncloud/web/pull/5985)
 * Enhancement - Update ODS to v12.0.0-alpha1: [#6106](https://github.com/owncloud/web/pull/6106)
 
 Details
@@ -45,6 +55,13 @@ Details
    https://github.com/owncloud/web/issues/5339
    https://github.com/owncloud/web/pull/6117
 
+* Bugfix - Show extension image: [#5985](https://github.com/owncloud/web/pull/5985)
+
+   Allow extensions to set an image as its logo, instead of an icon. If `img` is set, it will take
+   precedence over `icon`.
+
+   https://github.com/owncloud/web/pull/5985
+
 * Bugfix - File renaming: [#4893](https://github.com/owncloud/web/issues/4893)
 
    We fixed the displayed file name not being properly updated in files list and sidebar after
@@ -53,12 +70,47 @@ Details
    https://github.com/owncloud/web/issues/4893
    https://github.com/owncloud/web/pull/6114
 
+* Bugfix - Hidden files hidden by default: [#5985](https://github.com/owncloud/web/pull/5985)
+
+   Hide hidden files (files started with ".") by default, similar to oc10
+
+   https://github.com/owncloud/web/pull/5985
+
+* Bugfix - Ensure route config is honored for new file handlers: [#6135](https://github.com/owncloud/web/pull/6135)
+
+   Only display the new file entries for the routes it belongs to.
+
+   https://github.com/owncloud/web/pull/6135
+
+* Bugfix - Show context menu for all file extensions: [#6002](https://github.com/owncloud/web/issues/6002)
+
+   The context menu was failing to build for file extensions that did not have a match in the apps
+   from the app provider.
+
+   https://github.com/owncloud/web/issues/6002
+   https://github.com/owncloud/web/pull/6003
+
+* Bugfix - Do not scroll on apps open in app provider: [#5960](https://github.com/owncloud/web/issues/5960)
+
+   Apps opened from the app provider were taking more than the window size, prompting the use of the
+   scrollbar.
+
+   https://github.com/owncloud/web/issues/5960
+   https://github.com/owncloud/web/pull/6003
+
 * Bugfix - Open in browser for public files: [#4615](https://github.com/owncloud/web/issues/4615)
 
    We fixed opening publicly shared files in the browser.
 
    https://github.com/owncloud/web/issues/4615
    https://github.com/owncloud/web/pull/6133
+
+* Bugfix - Order extensions and default: [#5985](https://github.com/owncloud/web/pull/5985)
+
+   Ensure the default extensions are displayed first. Ensure that extensions can be set as
+   default or not.
+
+   https://github.com/owncloud/web/pull/5985
 
 * Bugfix - Double escaping in progress bar: [#4214](https://github.com/owncloud/web/issues/4214)
 
@@ -93,6 +145,34 @@ Details
 
    https://github.com/owncloud/web/pull/6106
    https://github.com/owncloud/owncloud-design-system/pull/1817
+
+* Enhancement - Show errors when failing to open app in app provider: [#6003](https://github.com/owncloud/web/pull/6003)
+
+   The error message provided by wopi is now displayed to the user, giving some context on why it
+   failed to open a file.
+
+   https://github.com/owncloud/web/pull/6003
+
+* Enhancement - Build options: [#5985](https://github.com/owncloud/web/pull/5985)
+
+   Configure the startup title (displayed before the configuration is loaded) via env variable
+   TITLE. Make the source map generation optional with the env variable SOURCE_MAP.
+
+   https://github.com/owncloud/web/pull/5985
+
+* Enhancement - MarkdownEditor and MediaViewer can be default: [#6148](https://github.com/owncloud/web/pull/6148)
+
+   We have updated the extension handlers of two internal apps to be able to be used as default
+   actions.
+
+   https://github.com/owncloud/web/pull/6148
+
+* Enhancement - Show feedback on startup: [#5985](https://github.com/owncloud/web/pull/5985)
+
+   Instead of displaying an empty page while all components load, display a spiner. Also show an
+   error message if there was an error.
+
+   https://github.com/owncloud/web/pull/5985
 
 * Enhancement - Update ODS to v12.0.0-alpha1: [#6106](https://github.com/owncloud/web/pull/6106)
 

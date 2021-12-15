@@ -254,20 +254,6 @@ Feature: Sharing files and folders with internal users
       | Custom permissions | Custom permissions | read                            | read              |
 
 
-  Scenario: file list view image preview in file share
-    Given user "Alice" has uploaded file "testavatar.jpg" to "testavatar.jpg"
-    And user "Alice" has shared file "testavatar.jpg" with user "Brian"
-    When user "Brian" logs in using the webUI
-    Then the preview image of file "testavatar.jpg" should be displayed in the file list view on the webUI
-
-
-  Scenario: file list view image preview in file share when previews is disabled
-    Given the property "disablePreviews" of "options" has been set to true in web config file
-    And user "Alice" has uploaded file "testavatar.jpg" to "testavatar.jpg"
-    And user "Alice" has shared file "testavatar.jpg" with user "Brian"
-    When user "Brian" logs in using the webUI
-    Then the preview image of file "testavatar.jpg" should not be displayed in the file list view on the webUI
-
   @disablePreviews
   Scenario: sharing file after renaming it is possible
     Given user "Alice" has uploaded file with content "test" to "lorem.txt"

@@ -8,9 +8,12 @@ export const navigateToFolder = async ({
   path: string
 }): Promise<void> => {
   const paths = path.split('/')
-
   for (const name of paths) {
-    await page.click(`[data-test-resource-name="${name}"]`)
+    const resource = page.locator(`[data-test-resource-name="${name}"]`)
+    await resource.click()
+    await page.waitForResponse(
+      (resp) => resp.url().includes(encodeURIComponent(name)) && resp.status() === 200
+    )
   }
 }
 
@@ -32,7 +35,6 @@ export const resourceExists = async ({
   timeout?: number
 }): Promise<boolean> => {
   let exist = true
-
   await page.waitForSelector(`[data-test-resource-name="${name}"]`, { timeout }).catch((e) => {
     if (!(e instanceof errors.TimeoutError)) {
       throw e

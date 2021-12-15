@@ -9,6 +9,9 @@
     "response_type": "code",
     "scope": "openid profile email"
   },
+  "options": {
+    "disablePreviews": true
+  },
   "apps": [
     "files",
     "draw-io",

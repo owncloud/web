@@ -23,18 +23,18 @@
       <div class="uk-width-expand uk-text-truncate">
         <span
           v-if="count === 1"
-          v-translate="{ fileName: inProgress[0].name }"
           id="files-upload-progress-single"
           key="upload-progress-single"
+          v-translate="{ fileName: inProgress[0].name }"
           translate-comment="Upload progress when only uploading one file shows the name of the file."
         >
           Uploading "%{ fileName }"
         </span>
         <span
           v-else
-          v-translate="{ count }"
           id="files-upload-progress-multi"
           key="upload-progress-multi"
+          v-translate="{ count }"
           :translate-n="count"
           translate-plural="Uploading %{ count } items"
           translate-comment="Upload progress when uploading multiple files only shows the number of uploads."
@@ -45,18 +45,18 @@
       <div class="uk-width-auto">
         <span
           v-if="expanded"
-          v-translate
           id="files-upload-progress-collapse-details"
           key="upload-progress-collapse-details"
+          v-translate
           translate-comment="Hide details panel of upload progress"
         >
           Hide Details
         </span>
         <span
           v-else
-          v-translate
           id="files-upload-progress-expand-details"
           key="upload-progress-expand-details"
+          v-translate
           translate-comment="Show details panel of upload progress"
         >
           Show Details

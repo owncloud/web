@@ -12,4 +12,14 @@ describe('cloneStateObject', () => {
     expect(cloned.id).toBe('1')
     expect(cloned.frozen).toBe('updated')
   })
+
+  it('clones null', () => {
+    expect(cloneStateObject(null)).toStrictEqual(null)
+  })
+
+  it('throws an error when "undefined" is cloned', () => {
+    expect(() => {
+      cloneStateObject(undefined)
+    }).toThrowError('cloneStateObject: cannot clone "undefined"')
+  })
 })

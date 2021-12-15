@@ -88,7 +88,7 @@
                     </oc-button>
                   </div>
                 </li>
-                <li v-for="(newFileHandler, key) in newFileHandlers" :key="key">
+                <li v-for="(newFileHandler, key) in newFileHandlersForRoute" :key="key">
                   <div>
                     <oc-button
                       appearance="raw"
@@ -123,6 +123,7 @@ import isEmpty from 'lodash-es/isEmpty'
 import Mixins from '../../mixins'
 import MixinFileActions, { EDITOR_MODE_CREATE } from '../../mixins/fileActions'
 import MixinRoutes from '../../mixins/routes'
+import { checkRoute } from '../../helpers/route'
 import MixinScrollToResource from '../../mixins/filesListScrolling'
 import { buildResource } from '../../helpers/resources'
 import { bus } from 'web-pkg/src/instance'
@@ -302,12 +303,16 @@ export default {
 
     showBreadcrumbContextMenu() {
       return this.currentPathSegments.length > 0
+    },
+
+    newFileHandlersForRoute() {
+      return this.newFileHandlers.filter((handler) => checkRoute(handler.routes, this.$route.name))
     }
   },
 
   created() {
     // Storage returns a string so we need to convert it into a boolean
-    const areHiddenFilesShown = window.localStorage.getItem('oc_hiddenFilesShown') || 'true'
+    const areHiddenFilesShown = window.localStorage.getItem('oc_hiddenFilesShown') || 'false'
     const areHiddenFilesShownBoolean = areHiddenFilesShown === 'true'
 
     if (areHiddenFilesShownBoolean !== this.areHiddenFilesShown) {

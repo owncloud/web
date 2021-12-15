@@ -5,7 +5,15 @@
     "url": "http://host.docker.internal:8080/index.php/apps/oauth2/api/v1/token",
     "authUrl": "http://host.docker.internal:8080/index.php/apps/oauth2/authorize"
   },
-  "apps": ["files", "media-viewer", "markdown-editor", "search"],
+  "apps": [
+    "files",
+    "media-viewer",
+    "markdown-editor",
+    "search"
+  ],
+  "options": {
+    "disablePreviews": true
+  },
   "applications": [
     {
       "title": {

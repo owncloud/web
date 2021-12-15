@@ -6,5 +6,8 @@
  * @return {Object} Copied object
  */
 export function cloneStateObject(state: unknown): any {
+  if (state === undefined) {
+    throw new Error('cloneStateObject: cannot clone "undefined"')
+  }
   return JSON.parse(JSON.stringify(state))
 }

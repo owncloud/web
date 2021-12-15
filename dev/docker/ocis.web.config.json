@@ -10,12 +10,13 @@
     "scope": "openid profile email"
   },
   "options": {
-    "hideSearchBar": true
+    "hideSearchBar": true,
+    "disablePreviews": true
   },
   "apps": [
-    "files", 
-    "markdown-editor", 
-    "media-viewer", 
+    "files",
+    "markdown-editor",
+    "media-viewer",
     "search",
     "external"
   ],

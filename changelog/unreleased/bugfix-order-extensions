@@ -1,0 +1,6 @@
+Bugfix: Order extensions and default
+
+Ensure the default extensions are displayed first.
+Ensure that extensions can be set as default or not.
+
+https://github.com/owncloud/web/pull/5985

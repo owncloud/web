@@ -1313,13 +1313,6 @@ When(
     await _setFilesTableSort(column, false)
   }
 )
-Then('the file {string} should have a thumbnail displayed on the webUI', async function (resource) {
-  const iconUrl = await client.page.FilesPageElement.filesList().getResourceThumbnail(
-    resource,
-    'file'
-  )
-  assert.ok(iconUrl, 'Icon URL expected to be set when thumbnail is displayed')
-})
 Then(
   'the file {string} should have a file type icon displayed on the webUI',
   async function (resource) {

@@ -271,6 +271,9 @@ export class AllFilesPage {
     }
     await page.click('button.oc-files-actions-delete-trigger')
     await page.click('.oc-modal-body-actions-confirm')
+    await page.waitForResponse(
+      (resp) => resp.url().includes(encodeURIComponent(resouceName)) && resp.status() === 204
+    )
 
     await page.goto(startUrl)
   }

@@ -10,35 +10,77 @@
     <link href="<%- data.bundle.css[s] %>" rel="stylesheet">
   <% }); %>
   <script src="js/require.js"></script>
-  <noscript>
-    <style>
-      #enable-js-banner {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        padding: 0.5rem;
-        background-color: #467391;
-      }
-      #banner-content {
-        color: white;
-      }
-    </style>
-  </noscript>
+  <style>
+    .splash-banner {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      padding: 0.5rem;
+      height: 100%;
+    }
+    #splash-loading{
+      height: 100%;
+    }
+    .splash-loading-hide {
+      display: none;
+    }
+    #loading {
+      display: inline-block;
+      width: 50px;
+      height: 50px;
+      border: 2px solid #4c5f79;
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 1s ease-in-out infinite;
+      -webkit-animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { -webkit-transform: rotate(360deg); }
+    }
+    @-webkit-keyframes spin {
+      to { -webkit-transform: rotate(360deg); }
+    }
+  </style>
 </head>
 <body>
+  <div id="splash-loading" class="splash-banner splash-loading-hide">
+    <div id="loading"></div>
+  </div>
   <div id="owncloud"></div>
   <noscript>
-    <div id="enable-js-banner"><h3 id="banner-content">Please enable JavaScript</h3></div>
+    <div class="splash-banner"><h3>Please enable JavaScript</h3></div>
   </noscript>
   <script>
-    requirejs.config({
-      baseUrl: <%- JSON.stringify(data.roots.js) %>,
-      paths: <%- JSON.stringify(data.bundle.js) %>
-    })
+    var loader = document.getElementById('splash-loading')
+    var loaderTimer = setTimeout(function () {  
+      loader.classList.remove('splash-loading-hide')
+    }, 1000);
 
-    requirejs(['web-runtime'], function (runtime) {
-      runtime.bootstrap('config.json').then(runtime.renderSuccess).catch(runtime.renderFailure)
-    })
+    function displayError() {
+      loader.classList.remove('splash-loading-hide')
+      loader.innerHTML = "<h3>Oops. Something went wrong.</h3>"
+    }
+
+    if (typeof requirejs === 'undefined') {
+      displayError()
+    } else {
+      requirejs.config({
+        baseUrl: <%- JSON.stringify(data.roots.js) %>,
+        paths: <%- JSON.stringify(data.bundle.js) %>
+      })
+
+      requirejs(['web-runtime'], function (runtime) {
+        clearTimeout(loaderTimer)
+        document.getElementById('splash-loading').classList.add('splash-loading-hide')
+        runtime.bootstrap('config.json').then(runtime.renderSuccess).catch(runtime.renderFailure)
+      }, function(e) {
+        displayError()
+        throw e
+      })
+    }
+    
   </script>
 </body>
 </html>

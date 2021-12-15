@@ -12,13 +12,9 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIPreview/imageMediaViewer.feature:84](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L84)
 -   [webUIPreview/imageMediaViewer.feature:91](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L91)
 
-### [Media Viewer preview not visible for files with .ogg and .webm formats](https://github.com/owncloud/web/issues/4667)
--   [webUIPreview/imageMediaViewer.feature:141](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L141)
--   [webUIPreview/imageMediaViewer.feature:159](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L159)
-
 ### [Endless loading when opening a file in section "Shared with me" or "Shared with other"](https://github.com/owncloud/web/issues/5324)
--   [webUIPreview/imageMediaViewer.feature:182](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L182)
--   [webUIPreview/imageMediaViewer.feature:191](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L191)
+-   [webUIPreview/imageMediaViewer.feature:143](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L143)
+-   [webUIPreview/imageMediaViewer.feature:152](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L152)
 
 ### [webUILogin/adminBlocksUser.feature:20 behaves differently on CI](https://github.com/owncloud/web/issues/4743)
 -   [webUILogin/adminBlocksUser.feature:20](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/adminBlocksUser.feature#L120)
