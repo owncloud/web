@@ -18,11 +18,12 @@
             :locale="$language.current"
             :is-required="isExpirationDateEnforced"
             class="files-recipient-expiration-datepicker"
+            data-testid="recipient-datepicker"
           >
             <template #default="{ togglePopover }">
               <oc-button
-                data-testid="collaborator-set-expiration-btn"
                 class="files-collaborators-expiration-button"
+                data-testid="recipient-datepicker-btn"
                 appearance="raw"
                 @click="togglePopover"
               >

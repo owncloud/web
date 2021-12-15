@@ -54,6 +54,7 @@
         v-else
         id="new-collaborators-form-create-button"
         key="new-collaborator-save-button"
+        data-testid="new-collaborators-form-create-button"
         :disabled="!$_isValid"
         variation="primary"
         appearance="filled"
