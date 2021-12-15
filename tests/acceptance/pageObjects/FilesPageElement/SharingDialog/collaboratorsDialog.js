@@ -161,7 +161,7 @@ module.exports = {
   elements: {
     collaboratorInformationByCollaboratorName: {
       selector:
-        '//span[contains(@class, "collaborator-display-name") and contains(text(),"%s")]/ancestor::div[contains(@class, "files-collaborators-collaborator")]',
+        '//span[contains(@class, "files-collaborators-collaborator-name") and contains(text(),"%s")]/ancestor::div[contains(@class, "files-collaborators-collaborator")]',
       locateStrategy: 'xpath'
     },
     deleteShareButton: {
@@ -199,7 +199,7 @@ module.exports = {
     },
     collaboratorInformationSubName: {
       // within collaboratorsListItem
-      selector: '.collaborator-display-name'
+      selector: '.files-collaborators-collaborator-name'
     },
     collaboratorInformationSubRole: {
       // within collaboratorsListItem
@@ -207,10 +207,10 @@ module.exports = {
     },
     collaboratorInformationSubAdditionalInfo: {
       // within collaboratorsListItem
-      selector: '.collaborator-additional-info'
+      selector: '.files-collaborators-collaborator-additional-info'
     },
     collaboratorShareType: {
-      selector: '.share-type'
+      selector: '.files-collaborators-collaborator-share-type'
     },
     collaboratorExpirationInfo: {
       selector:

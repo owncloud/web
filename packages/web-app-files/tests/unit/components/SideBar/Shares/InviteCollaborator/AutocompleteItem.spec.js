@@ -1,22 +1,16 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils'
 import Vuex from 'vuex'
-import AutocompleteItem from 'packages/web-app-files/src/components/SideBar/Shares/Collaborators/AutocompleteItem.vue'
+import AutocompleteItem from 'packages/web-app-files/src/components/SideBar/Shares/InviteCollaborator/AutocompleteItem.vue'
 import stubs from '../../../../../../../../tests/unit/stubs'
+import { ShareTypes } from '../../../../../../src/helpers/share'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
 
 describe('AutocompleteItem component', () => {
-  it.each`
-    shareType | classSuffix
-    ${0}      | ${'user'}
-    ${1}      | ${'group'}
-    ${3}      | ${'group'}
-    ${4}      | ${'group'}
-    ${6}      | ${'remote'}
-  `('sets the correct collaborator class', ({ shareType, classSuffix }) => {
-    const wrapper = createWrapper({ shareType: shareType })
-    expect(wrapper.find('div').classes()).toContain('files-collaborators-search-' + classSuffix)
+  it.each(ShareTypes.all)('sets a class that reflects the share type', (shareType) => {
+    const wrapper = createWrapper({ shareType: shareType.value })
+    expect(wrapper.find('div').classes()).toContain(`files-collaborators-search-${shareType.key}`)
   })
   describe('displays the correct image/icon according to the shareType', () => {
     it('should display users avatar for user shares', () => {
@@ -76,17 +70,22 @@ describe('AutocompleteItem component', () => {
   })
 })
 
-function createWrapper({ shareType, shareWithAdditionalInfo, shareWith, label }) {
+function createWrapper({
+  shareType = ShareTypes.user.value,
+  shareWithAdditionalInfo,
+  shareWith,
+  label
+}) {
   return shallowMount(AutocompleteItem, {
     store: new Vuex.Store({}),
     propsData: {
       item: {
         value: {
-          shareType: shareType,
-          shareWith: shareWith,
-          shareWithAdditionalInfo: shareWithAdditionalInfo
+          shareType,
+          shareWith,
+          shareWithAdditionalInfo
         },
-        label: label
+        label
       }
     },
     localVue,

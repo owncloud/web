@@ -28,7 +28,7 @@
             :class="{ selected: isSelectedRole(role) }"
             @click="selectRole(role)"
           >
-            <role-item :role="role" :allow-share-permission="!isOcis" />
+            <role-item :role="role" :allow-share-permission="allowSharePermission" />
             <oc-icon v-if="isSelectedRole(role)" name="check" />
           </oc-button>
         </li>
@@ -78,7 +78,6 @@
 import get from 'lodash-es/get'
 import RoleItem from '../Shared/RoleItem.vue'
 import { PeopleShareRoles, SharePermissions, ShareRole } from '../../../helpers/share'
-import { mapGetters } from 'vuex'
 
 export default {
   name: 'RoleDropdown',
@@ -115,7 +114,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['isOcis']),
     roleButtonId() {
       if (this.shareId) {
         return `files-collaborators-role-button-${this.shareId}`
@@ -160,11 +158,7 @@ export default {
 
   methods: {
     applyRoleAndPermissions() {
-      if (this.existingRole) {
-        this.selectedRole = this.existingRole
-      } else {
-        this.selectedRole = PeopleShareRoles.list(this.resource.isFolder)[0]
-      }
+      this.selectedRole = this.existingRole || PeopleShareRoles.list(this.resource.isFolder)[0]
       if (this.selectedRole.hasCustomPermissions) {
         this.customPermissions = this.existingPermissions
       } else {
