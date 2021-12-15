@@ -2,11 +2,7 @@
   <div id="oc-files-sharing-sidebar" class="uk-position-relative">
     <oc-loader v-if="sharesLoading" :aria-label="$gettext('Loading people list')" />
     <template v-else>
-      <invite-collaborator-form
-        v-if="$_ocCollaborators_canShare"
-        key="new-collaborator"
-        class="oc-my-s"
-      />
+      <invite-collaborator-form v-if="currentUserCanShare" key="new-collaborator" class="oc-my-s" />
       <p
         v-else
         key="no-reshare-permissions-message"
@@ -32,7 +28,7 @@
           <oc-icon v-else name="chevron_up" />
         </oc-button>
       </div>
-      <template v-if="showShareesList || collaboratorsAvatar.length === 0">
+      <template v-if="showShareesList && hasSharees">
         <transition-group
           id="files-collaborators-list"
           class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm"
@@ -190,7 +186,7 @@ export default {
       return allShares
     },
 
-    $_ocCollaborators_canShare() {
+    currentUserCanShare() {
       return this.highlightedFile.canShare()
     },
     noResharePermsMessage() {
@@ -229,10 +225,8 @@ export default {
     ...mapActions('Files', [
       'loadCurrentFileOutgoingShares',
       'loadSharesTree',
-      'sharesClearState',
       'deleteShare',
-      'loadIncomingShares',
-      'incomingSharesClearState'
+      'loadIncomingShares'
     ]),
     $_isCollaboratorShare(collaborator) {
       return ShareTypes.containsAnyValue(ShareTypes.authenticated, [collaborator.shareType])

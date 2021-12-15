@@ -18,10 +18,6 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
         <th scope="col" class="oc-pr-s">Last modified:</th>
         <td><span>ABSOLUTE_TIME</span></td>
       </tr>
-      <tr data-testid="shared-date">
-        <th scope="col" class="oc-pr-s">Shared:</th>
-        <td><span>ABSOLUTE_TIME</span></td>
-      </tr>
       <!---->
       <!---->
       <tr data-testid="ownerDisplayName">
@@ -62,10 +58,6 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
         <th scope="col" class="oc-pr-s">Last modified:</th>
         <td><span>ABSOLUTE_TIME</span></td>
       </tr>
-      <tr data-testid="shared-date">
-        <th scope="col" class="oc-pr-s">Shared:</th>
-        <td><span>ABSOLUTE_TIME</span></td>
-      </tr>
       <!---->
       <tr data-testid="shared-by">
         <th scope="col" class="oc-pr-s">Shared by:</th>
@@ -101,7 +93,6 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
         <th scope="col" class="oc-pr-s">Last modified:</th>
         <td><span>ABSOLUTE_TIME</span></td>
       </tr>
-      <!---->
       <!---->
       <!---->
       <tr data-testid="ownerDisplayName">
@@ -142,10 +133,6 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
         <th scope="col" class="oc-pr-s">Last modified:</th>
         <td><span>ABSOLUTE_TIME</span></td>
       </tr>
-      <tr data-testid="shared-date">
-        <th scope="col" class="oc-pr-s">Shared:</th>
-        <td><span>ABSOLUTE_TIME</span></td>
-      </tr>
       <!---->
       <!---->
       <tr data-testid="ownerDisplayName">
@@ -182,7 +169,6 @@ exports[`Details SideBar Panel displays a resource of type file on a public page
       </tr>
       <!---->
       <!---->
-      <!---->
       <tr data-testid="ownerDisplayName">
         <th scope="col" class="oc-pr-s">Owner:</th>
         <td>
@@ -217,7 +203,6 @@ exports[`Details SideBar Panel displays a resource of type file on a public page
       </tr>
       <!---->
       <!---->
-      <!---->
       <tr data-testid="ownerDisplayName">
         <th scope="col" class="oc-pr-s">Owner:</th>
         <td>
@@ -248,7 +233,6 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
         <th scope="col" class="oc-pr-s">Last modified:</th>
         <td><span>ABSOLUTE_TIME</span></td>
       </tr>
-      <!---->
       <!---->
       <!---->
       <tr data-testid="ownerDisplayName">
@@ -287,10 +271,6 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
         <th scope="col" class="oc-pr-s">Last modified:</th>
         <td><span>ABSOLUTE_TIME</span></td>
       </tr>
-      <tr data-testid="shared-date">
-        <th scope="col" class="oc-pr-s">Shared:</th>
-        <td><span>ABSOLUTE_TIME</span></td>
-      </tr>
       <!---->
       <!---->
       <tr data-testid="ownerDisplayName">
@@ -323,7 +303,6 @@ exports[`Details SideBar Panel displays a resource of type folder on a public pa
         <th scope="col" class="oc-pr-s">Last modified:</th>
         <td><span>ABSOLUTE_TIME</span></td>
       </tr>
-      <!---->
       <!---->
       <!---->
       <tr data-testid="ownerDisplayName">

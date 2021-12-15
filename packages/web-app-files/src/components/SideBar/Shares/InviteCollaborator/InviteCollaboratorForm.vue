@@ -58,7 +58,7 @@
         variation="primary"
         appearance="filled"
         @click="share"
-        v-text="$gettext('Share')"
+        v-text="$gettext('Create shares')"
       />
     </div>
     <oc-hidden-announcer level="assertive" :announcement="announcement" />

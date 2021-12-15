@@ -207,14 +207,6 @@ export default {
         context.commit('INCOMING_SHARES_LOADING', false)
       })
   },
-  sharesClearState(context, payload) {
-    context.commit('CURRENT_FILE_OUTGOING_SHARES_SET', [])
-    context.commit('CURRENT_FILE_OUTGOING_SHARES_ERROR', null)
-  },
-  incomingSharesClearState(context, payload) {
-    context.commit('INCOMING_SHARES_LOAD', [])
-    context.commit('INCOMING_SHARES_ERROR', null)
-  },
   changeShare({ commit, getters, rootGetters }, { client, share, permissions, expirationDate }) {
     const params = {
       permissions: permissions,
