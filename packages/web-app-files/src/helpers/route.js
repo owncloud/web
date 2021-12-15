@@ -5,7 +5,7 @@
  * @returns {Boolean}
  */
 export function checkRoute(routes, currentRoute) {
-  return routes.indexOf(currentRoute) > -1
+  return routes ? routes.indexOf(currentRoute) > -1 : true
 }
 
 export function isPersonalRoute(route) {

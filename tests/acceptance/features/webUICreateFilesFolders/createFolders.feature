@@ -75,16 +75,12 @@ Feature: create folders
       | fo.      |
       | fo.1     |
       | fo...1.. |
-      | ...      |
-      | ..fo     |
       | fo.xyz   |
     Then the following folders should be listed on the webUI
       | folders  |
       | fo.      |
       | fo.1     |
       | fo...1.. |
-      | ...      |
-      | ..fo     |
       | fo.xyz   |
 
 

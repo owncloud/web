@@ -31,14 +31,10 @@ describe('ActionMenuItem component', () => {
   })
   it('renders an image if there is one defined in the action', () => {
     const action = { ...fileActions.download, img: 'https://owncloud.tld/img.png' }
-    const wrapper1 = getShallowWrapper(action)
-    expect(wrapper1.find(selectors.icon).exists()).toBeTruthy()
-    expect(wrapper1.find(selectors.icon).attributes().name).toBe(action.icon)
-    delete action.icon
-    const wrapper2 = getShallowWrapper(action)
-    expect(wrapper2.find(selectors.icon).exists()).toBeFalsy()
-    expect(wrapper2.find(selectors.img).exists()).toBeTruthy()
-    expect(wrapper2.find(selectors.img).attributes().src).toBe(action.img)
+    const wrapper = getShallowWrapper(action)
+    expect(wrapper.find(selectors.icon).exists()).toBeFalsy()
+    expect(wrapper.find(selectors.img).exists()).toBeTruthy()
+    expect(wrapper.find(selectors.img).attributes().src).toBe(action.img)
   })
   it('renders the action label', () => {
     const action = fileActions.download

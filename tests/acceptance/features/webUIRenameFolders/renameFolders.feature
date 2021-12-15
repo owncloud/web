@@ -113,12 +113,6 @@ Feature: rename folders
     Then the error message with header 'Error while renaming "simple-folder" to ".htaccess"' should be displayed on the webUI
     And folder "simple-folder" should be listed on the webUI
 
-  @skipOnOC10
-  # .htaccess is a valid folder name on OCIS
-  Scenario: Rename a folder to .htaccess on OCIS
-    When the user renames folder "simple-folder" to ".htaccess" using the webUI
-    Then folder ".htaccess" should be listed on the webUI
-
 
   Scenario: Rename a folder putting a name of a file which already exists
     When the user tries to rename folder "simple-folder" to "lorem.txt" using the webUI
@@ -166,6 +160,4 @@ Feature: rename folders
       | to_name  |
       | fo.      |
       | fo.1     |
-      | ..fo     |
       | fo.xyz   |
-

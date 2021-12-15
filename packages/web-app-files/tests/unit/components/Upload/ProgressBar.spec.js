@@ -52,7 +52,7 @@ describe('ProgressBar component', () => {
       wrapper = getShallowWrapper(store)
     })
 
-    it('should show correct progress value for one file but no file count', async () => {
+    it('should show correct progress value for one file but no file count', () => {
       expect(wrapper).toMatchSnapshot()
     })
   })
