@@ -13,7 +13,7 @@ localVue.use(GetTextPlugin, {
 localVue.prototype.$client.publicFiles = {
   PUBLIC_LINK_SHARE_OWNER: 'admin',
   // function is mocked because it should return a promise with a list of resources
-  list: async () => [{ getProperty: jest.fn((val) => val) }],
+  list: () => [{ getProperty: jest.fn((val) => val) }],
   // function takes token as an argument and is mocked because it should return some public link url
   getFileUrl: (token) => `http://some-url/${token}`,
   putFileContents: jest.fn()
