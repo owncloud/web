@@ -45,11 +45,19 @@ const existingSharesWithoutExpiration = [
   }
 ]
 
-const testIds = {
-  inviteForm: 'new-collaborators-form',
-  inviteFormCreateBtn: 'new-collaborators-form-create-button',
-  autocompleteItemBob: 'recipient-autocomplete-item-bob',
-  selectItemBob: 'recipient-container-bob',
+const selectors = {
+  inviteForm: {
+    container: 'new-collaborators-form',
+    createBtn: 'new-collaborators-form-create-button',
+    input: '#files-share-invite-input'
+  },
+  autocomplete: {
+    list: '#vs1__listbox',
+    itemBob: 'recipient-autocomplete-item-bob'
+  },
+  selectedRecipient: {
+    bob: 'recipient-container-bob'
+  },
   listItem: {
     container: 'collaborator-item-bob',
     expiration: 'recipient-info-expiration-date',
@@ -57,8 +65,10 @@ const testIds = {
     setExpirationBtn: 'collaborator-set-expiration-btn',
     removeExpirationBtn: 'collaborator-remove-expiration-btn'
   },
-  datepicker: 'recipient-datepicker',
-  datepickerBtn: 'recipient-datepicker-btn'
+  datepicker: {
+    container: 'recipient-datepicker',
+    triggerBtn: 'recipient-datepicker-btn'
+  }
 }
 
 describe('Users can set expiration date when sharing with users or groups', () => {
@@ -73,19 +83,21 @@ describe('Users can set expiration date when sharing with users or groups', () =
       const { findByTestId, baseElement, getByTestId, findByText } = component
 
       // search for `bob` in invite form
-      expect(await findByTestId(testIds.inviteForm)).toBeVisible()
-      await fireEvent.update(baseElement.querySelector('#files-share-invite-input'), 'bob')
-      await waitFor(() => expect(baseElement.querySelector('#vs1__listbox')).toBeVisible())
+      expect(await findByTestId(selectors.inviteForm.container)).toBeVisible()
+      await fireEvent.update(baseElement.querySelector(selectors.inviteForm.input), 'bob')
+      await waitFor(() =>
+        expect(baseElement.querySelector(selectors.autocomplete.list)).toBeVisible()
+      )
 
       // select user `bob` in autocomplete
-      const userInAutocomplete = await findByTestId(testIds.autocompleteItemBob)
+      const userInAutocomplete = await findByTestId(selectors.autocomplete.itemBob)
       expect(userInAutocomplete).toBeVisible()
       userEvent.click(userInAutocomplete)
-      expect(await findByTestId(testIds.selectItemBob)).toBeVisible()
+      expect(await findByTestId(selectors.selectedRecipient.bob)).toBeVisible()
 
       // trigger date picker
-      expect(getByTestId(testIds.datepicker)).toBeVisible()
-      await fireEvent.click(getByTestId(testIds.datepickerBtn))
+      expect(getByTestId(selectors.datepicker.container)).toBeVisible()
+      await fireEvent.click(getByTestId(selectors.datepicker.triggerBtn))
 
       // select an expiration date
       const newDate = getDateInFuture(2)
@@ -93,18 +105,18 @@ describe('Users can set expiration date when sharing with users or groups', () =
       expect(await findByText('Expires in 2 days')).toBeVisible()
 
       // create the invite
-      const shareBtn = getByTestId(testIds.inviteFormCreateBtn)
+      const shareBtn = getByTestId(selectors.inviteForm.createBtn)
       expect(shareBtn).toBeVisible()
       expect(shareBtn).not.toBeDisabled()
       await fireEvent.click(shareBtn)
       await waitFor(() => {
-        return expect(baseElement.querySelector('#files-share-invite-input').text()).toBeEmpty()
+        return expect(baseElement.querySelector(selectors.inviteForm.input).text()).toBeEmpty()
       })
 
       // validate the expiration date in newly created share
-      expect(await findByTestId(testIds.listItem.container)).toBeVisible()
+      expect(await findByTestId(selectors.listItem.container)).toBeVisible()
       expect(
-        within(getByTestId(testIds.listItem.expiration)).getByText('Expires in 2 days')
+        within(getByTestId(selectors.listItem.expiration)).getByText('Expires in 2 days')
       ).toBeVisible()
     })
 
@@ -132,32 +144,34 @@ describe('Users can set expiration date when sharing with users or groups', () =
       })
 
       // search for `bob` in invite form
-      expect(await findByTestId(testIds.inviteForm)).toBeVisible()
-      await fireEvent.update(baseElement.querySelector('#files-share-invite-input'), 'bob')
-      await waitFor(() => expect(baseElement.querySelector('#vs1__listbox')).toBeVisible())
+      expect(await findByTestId(selectors.inviteForm.container)).toBeVisible()
+      await fireEvent.update(baseElement.querySelector(selectors.inviteForm.input), 'bob')
+      await waitFor(() =>
+        expect(baseElement.querySelector(selectors.autocomplete.list)).toBeVisible()
+      )
 
       // select user `bob` in autocomplete
-      const userInAutocomplete = await findByTestId(testIds.autocompleteItemBob)
+      const userInAutocomplete = await findByTestId(selectors.autocomplete.itemBob)
       expect(userInAutocomplete).toBeVisible()
       userEvent.click(userInAutocomplete)
-      expect(await findByTestId(testIds.selectItemBob)).toBeVisible()
+      expect(await findByTestId(selectors.selectedRecipient.bob)).toBeVisible()
 
       // validate that default expiration gets preselected
       expect(await findByText('Expires in 4 days')).toBeVisible()
 
       // create the invite
-      const shareBtn = getByTestId(testIds.inviteFormCreateBtn)
+      const shareBtn = getByTestId(selectors.inviteForm.createBtn)
       expect(shareBtn).toBeVisible()
       expect(shareBtn).not.toBeDisabled()
       await fireEvent.click(shareBtn)
       await waitFor(() => {
-        return expect(baseElement.querySelector('#files-share-invite-input').text()).toBeEmpty()
+        return expect(baseElement.querySelector(selectors.inviteForm.input).text()).toBeEmpty()
       })
 
       // validate the expiration date in newly created share
-      expect(await findByTestId(testIds.listItem.container)).toBeVisible()
+      expect(await findByTestId(selectors.listItem.container)).toBeVisible()
       expect(
-        within(getByTestId(testIds.listItem.expiration)).getByText('Expires in 4 days')
+        within(getByTestId(selectors.listItem.expiration)).getByText('Expires in 4 days')
       ).toBeVisible()
     })
 
@@ -186,19 +200,21 @@ describe('Users can set expiration date when sharing with users or groups', () =
       const { findByTestId, baseElement, getByTestId, findByText } = component
 
       // search for `bob` in invite form
-      expect(await findByTestId(testIds.inviteForm)).toBeVisible()
-      await fireEvent.update(baseElement.querySelector('#files-share-invite-input'), 'bob')
-      await waitFor(() => expect(baseElement.querySelector('#vs1__listbox')).toBeVisible())
+      expect(await findByTestId(selectors.inviteForm.container)).toBeVisible()
+      await fireEvent.update(baseElement.querySelector(selectors.inviteForm.input), 'bob')
+      await waitFor(() =>
+        expect(baseElement.querySelector(selectors.autocomplete.list)).toBeVisible()
+      )
 
       // select user `bob` in autocomplete
-      const userInAutocomplete = await findByTestId(testIds.autocompleteItemBob)
+      const userInAutocomplete = await findByTestId(selectors.autocomplete.itemBob)
       expect(userInAutocomplete).toBeVisible()
       await userEvent.click(userInAutocomplete)
-      expect(await findByTestId(testIds.selectItemBob)).toBeVisible()
+      expect(await findByTestId(selectors.selectedRecipient.bob)).toBeVisible()
 
       // trigger date picker
-      expect(getByTestId(testIds.datepicker)).toBeVisible()
-      await fireEvent.click(getByTestId(testIds.datepickerBtn))
+      expect(getByTestId(selectors.datepicker.container)).toBeVisible()
+      await fireEvent.click(getByTestId(selectors.datepicker.triggerBtn))
 
       // select an expiration date
       const newDate = getDateInFuture(2)
@@ -206,18 +222,18 @@ describe('Users can set expiration date when sharing with users or groups', () =
       expect(await findByText('Expires in 2 days')).toBeVisible()
 
       // create the invite
-      const shareBtn = getByTestId(testIds.inviteFormCreateBtn)
+      const shareBtn = getByTestId(selectors.inviteForm.createBtn)
       expect(shareBtn).toBeVisible()
       expect(shareBtn).not.toBeDisabled()
       await fireEvent.click(shareBtn)
       await waitFor(() => {
-        return expect(baseElement.querySelector('#files-share-invite-input').text()).toBeEmpty()
+        return expect(baseElement.querySelector(selectors.inviteForm.input).text()).toBeEmpty()
       })
 
       // validate the expiration date in newly created share
-      expect(await findByTestId(testIds.listItem.container)).toBeVisible()
+      expect(await findByTestId(selectors.listItem.container)).toBeVisible()
       expect(
-        within(getByTestId(testIds.listItem.expiration)).getByText('Expires in 2 days')
+        within(getByTestId(selectors.listItem.expiration)).getByText('Expires in 2 days')
       ).toBeVisible()
     })
   })
@@ -253,18 +269,18 @@ describe('Users can set expiration date when sharing with users or groups', () =
         const { findByTestId, getByTestId } = component
 
         // validate pre-test expiration state
-        const recipientBob = await findByTestId(testIds.listItem.container)
+        const recipientBob = await findByTestId(selectors.listItem.container)
         expect(recipientBob).toBeVisible()
         expect(within(recipientBob).getByText('Expires in 2 days')).toBeVisible()
 
         // click edit dropdown
-        const editRecipientBtn = await within(recipientBob).getByTestId(testIds.listItem.editBtn)
+        const editRecipientBtn = await within(recipientBob).getByTestId(selectors.listItem.editBtn)
         expect(editRecipientBtn).toBeVisible()
         await fireEvent.click(editRecipientBtn)
 
         // trigger date picker
         const editExpirationBtn = await within(recipientBob).findByTestId(
-          testIds.listItem.setExpirationBtn
+          selectors.listItem.setExpirationBtn
         )
         expect(editExpirationBtn).toBeVisible()
         await fireEvent.click(editExpirationBtn)
@@ -274,9 +290,9 @@ describe('Users can set expiration date when sharing with users or groups', () =
         await navigateToDate(newDate, component)
 
         // validate the expiration date after editing
-        expect(await findByTestId(testIds.listItem.container)).toBeVisible()
+        expect(await findByTestId(selectors.listItem.container)).toBeVisible()
         expect(
-          within(getByTestId(testIds.listItem.expiration)).getByText('Expires in 4 days')
+          within(getByTestId(selectors.listItem.expiration)).getByText('Expires in 4 days')
         ).toBeVisible()
       }
     )
@@ -295,24 +311,24 @@ describe('Users can set expiration date when sharing with users or groups', () =
       })
 
       // validate pre-test expiration state
-      const recipientBob = await findByTestId(testIds.listItem.container)
+      const recipientBob = await findByTestId(selectors.listItem.container)
       expect(recipientBob).toBeVisible()
       expect(within(recipientBob).getByText('Expires in 2 days')).toBeVisible()
 
       // click edit dropdown
-      const editRecipientBtn = await within(recipientBob).getByTestId(testIds.listItem.editBtn)
+      const editRecipientBtn = await within(recipientBob).getByTestId(selectors.listItem.editBtn)
       expect(editRecipientBtn).toBeVisible()
       await fireEvent.click(editRecipientBtn)
 
       // trigger expiration removal
       const removeExpirationBtn = await within(recipientBob).findByTestId(
-        testIds.listItem.removeExpirationBtn
+        selectors.listItem.removeExpirationBtn
       )
       expect(removeExpirationBtn).toBeVisible()
       await fireEvent.click(removeExpirationBtn)
 
       // validate the missing expiration date after editing
-      expect(within(recipientBob).getByTestId(testIds.listItem.expiration)).toBe(null)
+      expect(within(recipientBob).getByTestId(selectors.listItem.expiration)).toBe(null)
     })
 
     test('user can edit expiration date within enforced maximum date', async () => {
@@ -349,18 +365,18 @@ describe('Users can set expiration date when sharing with users or groups', () =
       const { findByTestId, getByTestId } = component
 
       // validate pre-test expiration state
-      const recipientBob = await findByTestId(testIds.listItem.container)
+      const recipientBob = await findByTestId(selectors.listItem.container)
       expect(recipientBob).toBeVisible()
       expect(within(recipientBob).getByText('Expires in 2 days')).toBeVisible()
 
       // click edit dropdown
-      const editRecipientBtn = await within(recipientBob).getByTestId(testIds.listItem.editBtn)
+      const editRecipientBtn = await within(recipientBob).getByTestId(selectors.listItem.editBtn)
       expect(editRecipientBtn).toBeVisible()
       await fireEvent.click(editRecipientBtn)
 
       // trigger date picker
       const editExpirationBtn = await within(recipientBob).findByTestId(
-        testIds.listItem.setExpirationBtn
+        selectors.listItem.setExpirationBtn
       )
       expect(editExpirationBtn).toBeVisible()
       await fireEvent.click(editExpirationBtn)
@@ -370,9 +386,9 @@ describe('Users can set expiration date when sharing with users or groups', () =
       await navigateToDate(newDate, component)
 
       // validate the expiration date after editing
-      expect(await findByTestId(testIds.listItem.container)).toBeVisible()
+      expect(await findByTestId(selectors.listItem.container)).toBeVisible()
       expect(
-        within(getByTestId(testIds.listItem.expiration)).getByText('Expires in 4 days')
+        within(getByTestId(selectors.listItem.expiration)).getByText('Expires in 4 days')
       ).toBeVisible()
     })
 
@@ -409,7 +425,7 @@ describe('Users can set expiration date when sharing with users or groups', () =
       })
 
       // validate pre-test expiration state is untouched
-      const recipientBob = await findByTestId(testIds.listItem.container)
+      const recipientBob = await findByTestId(selectors.listItem.container)
       expect(recipientBob).toBeVisible()
       expect(within(recipientBob).getByText('Expires in 2 days')).toBeVisible()
     })
