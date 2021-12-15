@@ -15,7 +15,7 @@ localVue.use(GetTextPlugin, {
 })
 
 const user = Users.admin
-const collaborators = Collaborators
+const collaborators = [Collaborators[0], Collaborators[1]]
 
 const selectors = {
   showCollaboratorButton: 'button[data-testid="collaborators-show-people"]',

@@ -80,5 +80,67 @@ export default [
     role: peopleRoleViewerFile,
     path: "/Neuer Ordner-'singe'",
     key: "collaborator-51a8aafe-cd40-4d0a-8566-87a1149b7fea"
+  },
+  {
+    shareType: 4,
+    id: "51a8aafe-cd40-4d0a-8566-87a1149b7fea",
+    collaborator: {
+      name: "guest-user",
+      displayName: "guest-user",
+      additionalInfo: null
+    },
+    owner: {
+      name: "admin",
+      displayName: "Admin",
+      additionalInfo: "admin@example.org"
+    },
+    fileOwner: {
+      name: "admin",
+      displayName: "Admin",
+      additionalInfo: "admin@example.org"
+    },
+    stime: "1639570515",
+    permissions: 1,
+    customPermissions: [
+      {
+        _key: "read",
+        _bit: 1,
+        _label: "Read"
+      }
+    ],
+    role: peopleRoleViewerFile,
+    path: "/Neuer Ordner-'singe'",
+    key: "collaborator-51a8aafe-cd40-4d0a-8566-87a1149b7fea"
+  },
+  {
+    shareType: 6,
+    id: "51a8aafe-cd40-4d0a-8566-87a1149b7fea",
+    collaborator: {
+      name: "remote-user",
+      displayName: "remote-user",
+      additionalInfo: null
+    },
+    owner: {
+      name: "admin",
+      displayName: "Admin",
+      additionalInfo: "admin@example.org"
+    },
+    fileOwner: {
+      name: "admin",
+      displayName: "Admin",
+      additionalInfo: "admin@example.org"
+    },
+    stime: "1639570515",
+    permissions: 1,
+    customPermissions: [
+      {
+        _key: "read",
+        _bit: 1,
+        _label: "Read"
+      }
+    ],
+    role: peopleRoleViewerFile,
+    path: "/Neuer Ordner-'singe'",
+    key: "collaborator-51a8aafe-cd40-4d0a-8566-87a1149b7fea"
   }
 ]
