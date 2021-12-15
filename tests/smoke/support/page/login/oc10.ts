@@ -2,6 +2,7 @@ import { Actor, User } from '../../types'
 /* eslint-disable-next-line */
 import type {LoginAdapter} from './index'
 
+// Touch some files in the smoke tests to demonstrate 6153
 export class Oc10LoginAdapter implements LoginAdapter {
   private readonly actor: Actor
 

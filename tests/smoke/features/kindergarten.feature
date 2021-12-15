@@ -3,6 +3,7 @@ Feature: Kindergarten can use web to organize a day
   As a kindergarten operator named Alice
   I want to manage all file related operations by using ownCloud WEB
   So that i'm sure all parents are informed and have the latest information in a easy and secure way
+  Touch some files in the smoke tests to demonstrate 6153
 
   Background:
     Given following users have been created
@@ -32,7 +33,7 @@ Feature: Kindergarten can use web to organize a day
       | lorem.txt         | groups/Teddy Bear Daycare/meal plan  |
       | lorem-big.txt     | groups/Teddy Bear Daycare/meal plan  |
     # Implementation of sharing with different roles is currently broken
-    # since we switched to bulk creating of shares with a single dropdown 
+    # since we switched to bulk creating of shares with a single dropdown
     Then "Alice" shares the following resources via the sidebar panel
       | resource                             | user  | role   |
       | groups/Pre-Schools Pirates/meal plan | Brian | editor |
