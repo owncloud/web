@@ -10,7 +10,7 @@ export enum SortDir {
 
 interface SortField {
   name: MaybeRef<string>
-  sortable?: MaybeRef<boolean>
+  sortable?: MaybeRef<boolean | Function>
 }
 
 interface SortOptions<T> {
