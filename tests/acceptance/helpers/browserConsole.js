@@ -1,5 +1,6 @@
 const { client } = require('nightwatch-api')
 
+// Touch to demonstrate issue-6150
 function cleanupLogMessage(message) {
   return message.replace(/\\u003C/gi, '').replace(/\\n/g, '\n') // revive newlines
 }

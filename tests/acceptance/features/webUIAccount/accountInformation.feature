@@ -2,6 +2,7 @@ Feature: View account information
   As a user
   I would like to view my account information
   So that I can verify and use my account details correctly
+  Touch to demonstrate issue-6150
 
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files

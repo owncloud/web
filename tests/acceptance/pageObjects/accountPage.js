@@ -1,5 +1,6 @@
 const { join } = require('../helpers/path')
 
+// Touch to demonstrate issue-6150
 module.exports = {
   url: function () {
     return join(this.api.launchUrl, '/index.html#/account/')
