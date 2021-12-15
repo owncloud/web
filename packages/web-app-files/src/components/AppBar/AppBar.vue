@@ -292,9 +292,9 @@ export default {
     },
 
     newFileHandlersForRoute() {
-      return this.newFileHandlers.filter(({ action }) => {
-        return isLocationActive(this.$router, ...action.routes.map((name) => ({ name })))
-      })
+      return this.newFileHandlers.filter(({ routes = [] }) =>
+        isLocationActive(this.$router, ...routes.map((name) => ({ name })))
+      )
     }
   },
 

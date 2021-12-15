@@ -74,6 +74,16 @@ export const buildRoutes = (): RouteConfig[] =>
     },
     {
       path: '/private-link/:fileId',
+      meta: {
+        auth: false
+      },
       redirect: (to) => createLocationShares('files-shares-private-link', to)
+    },
+    {
+      path: '/public-link/:token',
+      meta: {
+        auth: false
+      },
+      redirect: (to) => createLocationShares('files-shares-public-link', to)
     }
   ].map(deprecatedRedirect)

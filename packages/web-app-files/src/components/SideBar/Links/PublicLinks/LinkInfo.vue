@@ -48,7 +48,6 @@
           <translate>Password protected</translate>
         </oc-tag>
       </div>
-      test
       <div v-if="link.indirect">
         <oc-tag
           v-oc-tooltip="viaTooltip"

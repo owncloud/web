@@ -15,7 +15,7 @@ export const isLocationActive = (
   ...comparatives: [Location, ...Location[]]
 ): boolean => {
   const { href: currentHref } = router.resolve(router.currentRoute)
-  return (comparatives || [])
+  return comparatives
     .map((comparative) => {
       const { href: comparativeHref } = router.resolve(comparative)
       return currentHref.startsWith(comparativeHref)

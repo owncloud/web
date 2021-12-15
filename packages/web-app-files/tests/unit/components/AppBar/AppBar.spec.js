@@ -53,9 +53,9 @@ const newFileHandlers = [
     action: {
       app: 'markdown-editor',
       newTab: false,
-      extension: 'txt',
-      routes
+      extension: 'txt'
     },
+    routes,
     menuTitle: () => 'New plain text file...'
   },
   {
@@ -63,9 +63,9 @@ const newFileHandlers = [
     action: {
       app: 'markdown-editor',
       newTab: false,
-      extension: 'md',
-      routes
+      extension: 'md'
     },
+    routes,
     menuTitle: () => 'New mark-down file...'
   },
   {
@@ -74,9 +74,9 @@ const newFileHandlers = [
       app: 'draw-io',
       newTab: true,
       routeName: 'draw-io-edit',
-      extension: 'drawio',
-      routes
+      extension: 'drawio'
     },
+    routes,
     menuTitle: () => 'New draw.io document...'
   }
 ]
