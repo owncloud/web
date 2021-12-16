@@ -124,6 +124,16 @@ export class AllFilesPage {
     const folderPaths = folder.split('/')
     const folderName = folderPaths.pop()
 
+    await page.addStyleTag({
+      content: `
+      *,
+      *::before,
+      *::after {
+      transition: none !important;
+      }
+      `
+    })
+
     if (folderPaths.length) {
       await cta.files.navigateToFolder({ page: page, path: folderPaths.join('/') })
     }
@@ -139,7 +149,6 @@ export class AllFilesPage {
         await cta.files.sidebar.openPanel({ page: page, name: 'sharing' })
         break
     }
-    await page.click('.files-collaborators-open-add-share-dialog-button')
 
     for (const user of users) {
       const shareInputLocator = page.locator('#files-share-invite-input')
@@ -299,13 +308,12 @@ export class AllFilesPage {
     await cta.files.sidebar.open({ page: page, resource: folderName })
     await cta.files.sidebar.openPanel({ page: page, name: 'sharing' })
 
-    await (await page.waitForSelector('//*[@data-testid="collaborators-show-people"]')).click()
-
     for (const user of users) {
-      await page.click(`//*[@data-testid="recipient-${user.id}-btn-edit"]`)
-      await page.click('//*[@id="files-collaborators-role-button"]')
-      await page.click(`//*[@id="files-role-${role}"]`)
-      await page.click('//*[@data-testid="recipient-edit-btn-save"]')
+      const userColumn = `//*[@data-testid="collaborator-item-${user.id}"]`
+      await page.click(`${userColumn}//button[contains(@class,"files-recipient-role-select-btn")]`)
+      await page.click(
+        `${userColumn}//ul[contains(@class,"files-recipient-role-drop-list")]//button[@id="files-recipient-role-drop-btn-${role}"]`
+      )
     }
     await page.goto(startUrl)
   }
@@ -323,11 +331,14 @@ export class AllFilesPage {
     await cta.files.sidebar.open({ page: page, resource: folderName })
     await cta.files.sidebar.openPanel({ page: page, name: 'sharing' })
 
-    await page.click('//*[@data-testid="collaborators-show-people"]')
-
     for (const user of users) {
-      const deleteButton = `//*[@data-testid="collaborator-item-${user.id}"]//button[contains(@class,"files-collaborators-collaborator-delete")]`
-      await page.click(deleteButton)
+      const userColumn = `//*[@data-testid="collaborator-item-${user.id}"]`
+      await page.click(
+        `${userColumn}//button[contains(@class,"collaborator-edit-dropdown-options-btn")]`
+      )
+      await page.click(
+        `${userColumn}//ul[contains(@class,"collaborator-edit-dropdown-options-list")]//button[contains(@class,"remove-share")]`
+      )
     }
     await page.goto(startUrl)
   }
