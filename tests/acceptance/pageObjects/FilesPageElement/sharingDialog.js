@@ -264,16 +264,16 @@ module.exports = {
       await collaboratorDialog.expandShareRoleDropdown(collaborator)
       await this.selectRole('Custom permissions')
 
-      const requiredPermissionArray = this.getArrayFromPermissionString(requiredPermissions)
+      const requiredPermissionsArray = this.getArrayFromPermissionString(requiredPermissions)
       const sharePermissions = await this.getSharePermissions()
       const sharePermissionsArray = Object.keys(sharePermissions).filter(
         (key) => sharePermissions[key]
       )
 
-      for (const permission in COLLABORATOR_PERMISSION_ARRAY) {
+      for (const permission of COLLABORATOR_PERMISSION_ARRAY) {
         if (
           sharePermissionsArray.includes(permission) !==
-          requiredPermissionArray.includes(permission)
+          requiredPermissionsArray.includes(permission)
         ) {
           await this.toggleSinglePermission(permission)
         }
@@ -595,7 +595,7 @@ module.exports = {
       selector: '#files-recipient-role-drop-btn-editor'
     },
     shareRoleCustomPermissions: {
-      selector: '#files-recipient-role-drop-btn-advancedRole'
+      selector: '#files-recipient-role-drop-btn-custom'
     },
     newCollaboratorItems: {
       selector:
