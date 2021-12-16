@@ -15,7 +15,7 @@ export const isLocationOperationsActive =
 export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
   {
     name: locationLocationPicker.name,
-    path: `/ops/location-picker/:context/:action/:item*`,
+    path: '/ops/location-picker/:context/:action/:item*',
     components: {
       app: components.LocationPicker
     },

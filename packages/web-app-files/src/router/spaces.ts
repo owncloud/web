@@ -17,11 +17,11 @@ export const isLocationSpacesActive = isLocationActiveDirector(createLocationSpa
 
 export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
   {
-    path: `/spaces`,
+    path: '/spaces',
     redirect: (to) => createLocationSpaces(to)
   },
   {
-    path: `/spaces/:namespace`,
+    path: '/spaces/:namespace',
     components: {
       app: components.App
     },
@@ -33,7 +33,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         component: components.Personal,
         meta: {
           hasBulkActions: true,
-          title: $gettext(`All files`),
+          title: $gettext('All files'),
           patchCleanPath: true
         }
       }

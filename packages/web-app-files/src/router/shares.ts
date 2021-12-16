@@ -34,7 +34,7 @@ export const isLocationSharesActive = isLocationActiveDirector<shareTypes>(
 
 export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
   {
-    path: `/shares/public`,
+    path: '/shares/public',
     components: {
       app: components.App
     },
@@ -57,7 +57,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
   },
   {
     name: locationSharesPublicLink.name,
-    path: `/shares/public/link/:token`,
+    path: '/shares/public/link/:token',
     components: {
       fullscreen: components.PublicLink
     },
@@ -69,7 +69,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
   },
   {
     name: locationSharesPublicDrop.name,
-    path: `/shares/public/drop/:token`,
+    path: '/shares/public/drop/:token',
     components: {
       app: components.FilesDrop
     },
@@ -77,14 +77,14 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
   },
   {
     name: locationSharesPrivateLink.name,
-    path: `/shares/private/link/:fileId`,
+    path: '/shares/private/link/:fileId',
     components: {
       fullscreen: components.PrivateLink
     },
     meta: { hideHeadbar: true, title: $gettext('Resolving private link') }
   },
   {
-    path: `/shares`,
+    path: '/shares',
     components: {
       app: components.App
     },

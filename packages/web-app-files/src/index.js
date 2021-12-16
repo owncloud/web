@@ -35,35 +35,35 @@ const appInfo = {
 }
 const navItems = [
   {
-    name: $gettext(`All files`),
+    name: $gettext('All files'),
     iconMaterial: appInfo.icon,
     route: {
       path: `/${appInfo.id}/spaces/`
     }
   },
   {
-    name: $gettext(`Shared with me`),
+    name: $gettext('Shared with me'),
     iconMaterial: 'shared-with-me',
     route: {
       path: `/${appInfo.id}/shares/with-me`
     }
   },
   {
-    name: $gettext(`Shared with others`),
+    name: $gettext('Shared with others'),
     iconMaterial: 'shared-with-others',
     route: {
       path: `/${appInfo.id}/shares/with-others`
     }
   },
   {
-    name: $gettext(`Shared via link`),
+    name: $gettext('Shared via link'),
     iconMaterial: 'link',
     route: {
       path: `/${appInfo.id}/shares/via-link`
     }
   },
   {
-    name: $gettext(`Deleted files`),
+    name: $gettext('Deleted files'),
     iconMaterial: 'delete',
     route: {
       path: `/${appInfo.id}/trash`
@@ -73,7 +73,7 @@ const navItems = [
     }
   },
   {
-    name: $gettext(`Favorites`),
+    name: $gettext('Favorites'),
     iconMaterial: 'star',
     route: {
       path: `/${appInfo.id}/favorites`
