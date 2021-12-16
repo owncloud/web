@@ -169,6 +169,11 @@ module.exports = {
         return this.click('@publicLinkDeleteExpirationDateButton')
       }
       const dateToSet = new Date(Date.parse(value))
+      client.execute(
+        `document.querySelector('#oc-files-file-link-expire-date').__vue__.$refs.calendar.move(new Date(Date.parse('${value}')))`,
+        []
+      )
+
       if (shareType === 'collaborator' || shareType === 'link') {
         const disabled = await this.isExpiryDateDisabled(dateToSet)
         if (disabled) {
