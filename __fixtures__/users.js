@@ -1,5 +1,5 @@
 export default {
-  admin: {
+  alice: {
     quota: {
       free: 37883293696,
       used: 7546347,
@@ -8,11 +8,11 @@ export default {
       definition: 'default'
     },
     email: {},
-    id: 'admin',
-    name: 'admin',
-    displayname: 'Admin',
-    additionalInfo: "admin@example.org",
-    home: '/mnt/data/files/admin',
+    id: 'alice',
+    name: 'alice',
+    displayname: 'Alice Hansen',
+    additionalInfo: "alice@example.org",
+    home: '/mnt/data/files/alice',
     two_factor_auth_enabled: 'false'
   }
 }
