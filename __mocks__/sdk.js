@@ -73,7 +73,7 @@ export default {
 
       if (params.name === 'Public link') {
         shareInfo = {
-          id: '1',
+          id: 1,
           share_type: 3,
           permissions: params.permissions,
           stime: new Date().getTime(),
