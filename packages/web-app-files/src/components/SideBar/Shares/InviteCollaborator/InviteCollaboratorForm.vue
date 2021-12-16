@@ -47,8 +47,8 @@
       />
       <expiration-datepicker @optionChange="collaboratorExpiryChanged" />
       <oc-button v-if="saving" key="new-collaborator-saving-button" :disabled="true">
-        <oc-spinner :aria-label="$gettext('Creating shares')" size="small" />
-        <span v-translate :aria-hidden="true">Creating shares</span>
+        <oc-spinner :aria-label="$gettext('Creating share')" size="small" />
+        <span v-translate :aria-hidden="true">Share</span>
       </oc-button>
       <oc-button
         v-else
@@ -59,7 +59,7 @@
         variation="primary"
         appearance="filled"
         @click="share"
-        v-text="$gettext('Create shares')"
+        v-text="$gettext('Share')"
       />
     </div>
     <oc-hidden-announcer level="assertive" :announcement="announcement" />

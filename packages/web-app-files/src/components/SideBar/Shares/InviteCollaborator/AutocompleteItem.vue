@@ -31,8 +31,8 @@
       <span class="oc-text-bold files-collaborators-autocomplete-username" v-text="item.label" />
       <span
         v-if="item.value.shareWithAdditionalInfo"
-        class="oc-text-muted files-collaborators-autocomplete-additional-info"
-        v-text="item.value.shareWithAdditionalInfo"
+        class="files-collaborators-autocomplete-additional-info"
+        v-text="`(${item.value.shareWithAdditionalInfo})`"
       />
       <div class="files-collaborators-autocomplete-share-type" v-text="$gettext(shareType.label)" />
     </div>

@@ -1,9 +1,9 @@
 <template>
   <div
     :data-testid="`collaborator-item-${share.collaborator.name}`"
-    class="files-collaborators-collaborator uk-flex oc-py-xs"
+    class="files-collaborators-collaborator uk-flex uk-flex-middle oc-py-xs"
   >
-    <div class="uk-width-2-3 uk-flex uk-flex-start" style="gap: 10px">
+    <div class="uk-width-2-3 uk-flex uk-flex-middle" style="gap: 10px">
       <avatar-image
         v-if="isUser"
         :userid="share.collaborator.name"
@@ -20,7 +20,7 @@
         class="files-collaborators-collaborator-indicator"
       />
       <div class="oc-text-truncate">
-        <p class="oc-text-bold oc-text-truncate oc-m-rm">
+        <p v-oc-tooltip="shareDisplayNameTooltip" class="oc-text-bold oc-text-truncate oc-m-rm">
           <span
             aria-hidden="true"
             class="files-collaborators-collaborator-name"
@@ -42,7 +42,7 @@
           />
           <span class="oc-invisible-sr" v-text="screenreaderShareDetails" />
         </p>
-        <p v-if="hasExpirationDate" class="oc-mt-rm">
+        <p v-if="hasExpirationDate" class="oc-m-rm">
           <span
             v-oc-tooltip="expirationDate"
             aria-hidden="true"
@@ -69,7 +69,7 @@
         @optionChange="shareRoleChanged"
       />
       <edit-dropdown
-        class="oc-ml-s files-collaborators-collaborator-edit"
+        class="files-collaborators-collaborator-edit"
         data-testid="collaborator-edit"
         :expiration-date="share.expires ? share.expires : null"
         :share-category="shareCategory"
@@ -143,6 +143,10 @@ export default {
         return
       }
       return ` (${this.share.collaborator.additionalInfo})`
+    },
+
+    shareDisplayNameTooltip() {
+      return this.shareDisplayName + (this.shareAdditionalInfo || '')
     },
 
     screenreaderShareDisplayName() {

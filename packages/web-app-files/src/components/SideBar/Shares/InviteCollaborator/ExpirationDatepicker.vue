@@ -1,5 +1,5 @@
 <template>
-  <div v-if="expirationSupported">
+  <div v-if="expirationSupported" class="uk-flex uk-flex-middle uk-flex-nowrap">
     <oc-datepicker
       v-model="enteredExpirationDate"
       :min-date="minExpirationDate"
