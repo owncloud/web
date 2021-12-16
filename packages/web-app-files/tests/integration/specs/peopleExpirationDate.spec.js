@@ -8,42 +8,42 @@ import Store from '@runtime/src/store'
 import routes from '@files/src/routes'
 import { getDateInFuture, navigateToDate } from '../helpers/date'
 // eslint-disable-next-line jest/no-mocks-import
-import sdkMock from '@/__mocks__/sdk'
+// import sdkMock from '@/__mocks__/sdk'
 
 import FileShares from '@files/src/components/SideBar/Shares/FileShares.vue'
 
-const existingShares = [
-  {
-    shareInfo: {
-      id: '1',
-      share_type: 0,
-      uid_owner: 'alice',
-      displayname_owner: 'alice',
-      permissions: 16,
-      stime: new Date().getTime(),
-      expiration: getDateInFuture(2).toISOString(),
-      uid_file_owner: 'alice',
-      displayname_file_owner: 'alice',
-      path: '/Documents',
-      item_type: 'folder',
-      item_source: 10,
-      file_source: 10,
-      file_parent: 6,
-      file_target: '/Documents',
-      share_with: 'bob',
-      share_with_displayname: 'bob'
-    }
-  }
-]
+// const existingShares = [
+//   {
+//     shareInfo: {
+//       id: '1',
+//       share_type: 0,
+//       uid_owner: 'alice',
+//       displayname_owner: 'alice',
+//       permissions: 16,
+//       stime: new Date().getTime(),
+//       expiration: getDateInFuture(2).toISOString(),
+//       uid_file_owner: 'alice',
+//       displayname_file_owner: 'alice',
+//       path: '/Documents',
+//       item_type: 'folder',
+//       item_source: 10,
+//       file_source: 10,
+//       file_parent: 6,
+//       file_target: '/Documents',
+//       share_with: 'bob',
+//       share_with_displayname: 'bob'
+//     }
+//   }
+// ]
 
-const existingSharesWithoutExpiration = [
-  {
-    shareInfo: {
-      ...existingShares[0].shareInfo,
-      expiration: null
-    }
-  }
-]
+// const existingSharesWithoutExpiration = [
+//   {
+//     shareInfo: {
+//       ...existingShares[0].shareInfo,
+//       expiration: null
+//     }
+//   }
+// ]
 
 const selectors = {
   inviteForm: {
@@ -304,7 +304,6 @@ describe('Users can set expiration date when sharing with users or groups', () =
   //   test.todo('enforced expiration date for groups does not affect user shares')
   //   test.todo('enforced expiration date for users does not affect group shares')
   // })
-
 })
 
 function createStore(store) {
@@ -391,21 +390,21 @@ async function selectUser(user, component) {
   expect(await findByTestId(selectors.selectedRecipient.containerPrefix + user)).toBeVisible()
 }
 
-async function showEditDropdown(user, component) {
-  const listItem = await getListItem(user, component)
-  const editRecipientBtn = await within(listItem).getByTestId(selectors.listItem.editBtn)
-  expect(editRecipientBtn).toBeVisible()
-  await fireEvent.click(editRecipientBtn)
-}
-
-async function removeExpiration(user, component) {
-  const listItem = await getListItem(user, component)
-  const removeExpirationBtn = await within(listItem).findByTestId(
-    selectors.listItem.removeExpirationBtn
-  )
-  expect(removeExpirationBtn).toBeVisible()
-  await fireEvent.click(removeExpirationBtn)
-}
+// async function showEditDropdown(user, component) {
+//   const listItem = await getListItem(user, component)
+//   const editRecipientBtn = await within(listItem).getByTestId(selectors.listItem.editBtn)
+//   expect(editRecipientBtn).toBeVisible()
+//   await fireEvent.click(editRecipientBtn)
+// }
+//
+// async function removeExpiration(user, component) {
+//   const listItem = await getListItem(user, component)
+//   const removeExpirationBtn = await within(listItem).findByTestId(
+//     selectors.listItem.removeExpirationBtn
+//   )
+//   expect(removeExpirationBtn).toBeVisible()
+//   await fireEvent.click(removeExpirationBtn)
+// }
 
 async function triggerDatePicker(component) {
   const { getByTestId } = component
