@@ -379,8 +379,8 @@ module.exports = {
      */
     getExpirationDate: async function () {
       let expirationDate
-      await this.waitForElementVisible('@expirationDateField')
-      await this.getAttribute('@expirationDateField', 'value', (result) => {
+      await this.waitForElementVisible('@expirationDateFieldWrapper')
+      await this.getAttribute('@expirationDateFieldWrapper', 'value', (result) => {
         const date = new Date(result.value)
         const dateString =
           date.getFullYear() +
@@ -395,6 +395,9 @@ module.exports = {
     }
   },
   elements: {
+    expirationDateFieldWrapper: {
+      selector: '#oc-files-file-link-expire-date'
+    },
     expirationDateField: {
       selector: '#files-links-expiration-btn'
     },

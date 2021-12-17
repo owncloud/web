@@ -50,9 +50,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUITags/createTags.feature:79](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITags/createTags.feature#L79)
 
 ### [When a user shares folder to a group, the sharer is shown as group in group member's sharing-sidebar](https://github.com/owncloud/web/issues/5216)
--   [webUISharingInternalGroupsEdgeCases/shareWithGroupsEdgeCases.feature:41](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroupsEdgeCases/shareWithGroupsEdgeCases.feature#L41)
 -   [webUISharingInternalGroupsEdgeCases/shareWithGroupsEdgeCases.feature:42](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroupsEdgeCases/shareWithGroupsEdgeCases.feature#L42)
--   [webUISharingInternalGroupsToRootEdgeCases/shareWithGroupsEdgeCases.feature:36](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroupsToRootEdgeCases/shareWithGroupsEdgeCases.feature#L36)
 -   [webUISharingInternalGroupsToRootEdgeCases/shareWithGroupsEdgeCases.feature:37](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroupsToRootEdgeCases/shareWithGroupsEdgeCases.feature#L37)
 
 ### [File link in notifications seems to not work](https://github.com/owncloud/web/issues/5227)
