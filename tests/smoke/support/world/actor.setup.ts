@@ -1,7 +1,7 @@
 import { Browser, chromium, firefox, LaunchOptions, webkit } from 'playwright'
-import { AfterAll, BeforeAll } from '@cucumber/cucumber'
+import { AfterAll, BeforeAll, After, ITestCaseHookParameter, Status } from '@cucumber/cucumber'
 import { config } from '../config'
-
+import { World } from '../world'
 export let browser: Browser
 
 const browserOptions: LaunchOptions = {
@@ -23,4 +23,11 @@ BeforeAll(async (): Promise<void> => {
     chromium: async (): Promise<Browser> => await chromium.launch(browserOptions)
   }[config.browser]()
 })
+
+After(async function (this: World, { result }: ITestCaseHookParameter) {
+  if (result.status !== Status.PASSED) {
+    await this.actorContinent.get({ id: this.actorContinent.active }).beforeClose()
+  }
+})
+
 AfterAll(() => browser && browser.close())
