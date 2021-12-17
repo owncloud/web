@@ -1,5 +1,6 @@
 const util = require('util')
 const timeoutHelper = require('../../../helpers/timeoutHelper')
+const { client } = require('nightwatch-api')
 
 module.exports = {
   commands: {
@@ -39,6 +40,22 @@ module.exports = {
       )
       const editDropdownSelector = informationSelector + this.elements.editDropdown.selector
       return this.useXpath().waitForElementVisible(editDropdownSelector).click(editDropdownSelector)
+    },
+    expandExpirationDatePicker: function (collaborator) {
+      if (!collaborator) {
+        this.waitForElementVisible('@expirationDatePickerTrigger').click(
+          '@expirationDatePickerTrigger'
+        )
+        return client.page.FilesPageElement.expirationDatePicker()
+      }
+      const informationSelector = util.format(
+        this.elements.collaboratorInformationByCollaboratorName.selector,
+        collaborator
+      )
+      const editExpirationSelector =
+        informationSelector + this.elements.expirationDatePickerTrigger.selector
+      this.useXpath().waitForElementVisible(editExpirationSelector).click(editExpirationSelector)
+      return client.page.FilesPageElement.expirationDatePicker()
     },
     hasCollaboratorsList: async function () {
       let isVisible = false
@@ -231,6 +248,10 @@ module.exports = {
     collaboratorExpirationInfo: {
       selector:
         '//p[contains(@class, "files-collaborators-collaborator-name") and text()="%s"]/../..//span[contains(@class, "files-collaborators-collaborator-expires")]',
+      locateStrategy: 'xpath'
+    },
+    expirationDatePickerTrigger: {
+      selector: '//button[contains(@class, "files-collaborators-expiration-button")]',
       locateStrategy: 'xpath'
     }
   }

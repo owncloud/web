@@ -166,9 +166,9 @@ module.exports = {
 
       if (days) {
         const dateToSet = calculateDate(days)
-        const isExpiryDateChanged = await this.openExpirationDatePicker().setExpirationDate(
-          dateToSet
-        )
+        const isExpiryDateChanged = await collaboratorDialog
+          .expandExpirationDatePicker('')
+          .setExpirationDate(dateToSet)
         if (!isExpiryDateChanged) {
           console.log('WARNING: Cannot create share with disabled expiration date!')
           return
@@ -479,23 +479,12 @@ module.exports = {
     changeCollaboratorExpiryDate: async function (collaborator, days) {
       await collaboratorDialog.expandShareEditDropdown(collaborator)
       const dateToSet = calculateDate(days)
-      const isExpiryDateChanged = await this.openExpirationDatePicker().setExpirationDate(dateToSet)
+      const isExpiryDateChanged = await collaboratorDialog
+        .expandExpirationDatePicker(collaborator)
+        .setExpirationDate(dateToSet)
       if (!isExpiryDateChanged) {
         console.log('WARNING: Cannot create share with disabled expiration date!')
       }
-    },
-    /**
-     * opens expiration date field on the webUI
-     * @return {*}
-     */
-    openExpirationDatePicker: function () {
-      this.useCss()
-        .waitForElementVisible(
-          '@expirationDateField',
-          this.api.globals.waitForNegativeConditionTimeout
-        )
-        .click('@expirationDateField')
-      return client.page.FilesPageElement.expirationDatePicker()
     },
     /**
      * extracts set value in expiration date field
@@ -653,9 +642,6 @@ module.exports = {
     collaboratorsListItemName: {
       selector: '//span[contains(@class, "files-collaborators-collaborator-name") and text()="%s"]',
       locateStrategy: 'xpath'
-    },
-    expirationDateField: {
-      selector: '.files-collaborators-expiration-button'
     },
     requiredLabelInCollaboratorsExpirationDate: {
       selector:
