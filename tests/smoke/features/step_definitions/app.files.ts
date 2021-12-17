@@ -141,13 +141,6 @@ When(
 
     for (const share of shares) {
       await sharedWithMePage.acceptShare({ name: share })
-
-      // make sure that the folder "Shares" is exist, when test is falling in the CI
-      if (!config.ocis) {
-        allFilesPage.navigate()
-        const folderExists = await allFilesPage.resourceExist({ name: 'Shares' })
-        console.log('folder Shares is exist?', folderExists)
-      }
     }
   }
 )
