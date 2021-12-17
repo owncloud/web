@@ -154,7 +154,7 @@ export default {
     },
 
     groupExpirationDate() {
-      return this.capabilities.files_sharing.group.expire_date
+      return this.capabilities.files_sharing.group?.expire_date
     },
 
     defaultExpirationDate() {
