@@ -153,7 +153,7 @@ Feature: Shares in share-with pages
     Then user "Brian Murphy" should be listed with additional info "<additional-info-result>" in the collaborators list on the webUI
     Examples:
       | additional-info-field | additional-info-result |
-      | id                    | Brian                  |
+      | id                    | (Brian)                  |
       | email                 | (brian@example.org)    |
 
   @issue-ocis-1328
