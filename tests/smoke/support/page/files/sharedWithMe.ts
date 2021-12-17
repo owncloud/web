@@ -1,4 +1,6 @@
 import { Actor } from '../../types'
+import { cta } from '../../cta'
+import path from 'path'
 
 export class SharedWithMePage {
   private readonly actor: Actor
@@ -21,6 +23,19 @@ export class SharedWithMePage {
       )
       .click()
     await page.waitForResponse((resp) => resp.url().includes('shares') && resp.status() === 200)
+
+    /**
+     * the next part exists to trick the backend, in some cases accepting a share can take longer in the backend.
+     * therefore we're waiting for the resource to exist, navigate into it (if resource is a folder) to be really sure its there and then come back.
+     * If the logic is needed more often it can be refactored into a shared helper.
+     */
+    await page
+      .locator(`#files-shared-with-me-shares-table [data-test-resource-name="${name}"]`)
+      .waitFor()
+    if (!path.extname(name)) {
+      await cta.files.navigateToFolder({ page, path: name })
+      await this.navigate()
+    }
   }
 
   async declineShare({ name }: { name: string }): Promise<void> {
