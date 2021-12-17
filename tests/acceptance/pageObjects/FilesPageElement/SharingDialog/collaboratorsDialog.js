@@ -8,21 +8,12 @@ module.exports = {
      * @returns {Promise.<string[]>} Array of autocomplete webElementIds
      */
     deleteShareWithUserGroup: function (collaborator) {
-      const informationSelector = util.format(
-        this.elements.collaboratorInformationByCollaboratorName.selector,
-        collaborator
-      )
-      const dropDown = informationSelector + this.elements.editDropdown.selector
+      this.expandShareEditDropdown(collaborator)
       const deleteSelector = this.elements.deleteShareButton.selector
-
       return this.useXpath()
-        .waitForElementVisible(dropDown)
-        .waitForAnimationToFinish() // wait for animation of share sliding out
-        .click(dropDown)
         .waitForElementVisible(deleteSelector)
         .waitForAnimationToFinish() // wait for animation of share sliding out
         .click(deleteSelector)
-        .waitForElementNotPresent(informationSelector)
     },
     /**
      * Open the role selection dialog for a new share or for editing the given collaborator
@@ -40,6 +31,30 @@ module.exports = {
       )
       const editRoleSelector = informationSelector + this.elements.editShareRoleButton.selector
       return this.useXpath().waitForElementVisible(editRoleSelector).click(editRoleSelector)
+    },
+    expandShareEditDropdown: function (collaborator) {
+      const informationSelector = util.format(
+        this.elements.collaboratorInformationByCollaboratorName.selector,
+        collaborator
+      )
+      const editDropdownSelector = informationSelector + this.elements.editDropdown.selector
+      return this.useXpath().waitForElementVisible(editDropdownSelector).click(editDropdownSelector)
+    },
+    hasCollaboratorsList: async function () {
+      let isVisible = false
+      const element = this.elements.collaboratorsList
+      await this.isVisible(
+        {
+          locateStrategy: element.locateStrategy,
+          selector: element.selector,
+          timeout: timeoutHelper.parseTimeout(this.api.globals.waitForNegativeConditionTimeout)
+        },
+        (result) => {
+          console.log(result)
+          isVisible = result.status !== -1
+        }
+      )
+      return isVisible
     },
     /**
      *
@@ -191,7 +206,8 @@ module.exports = {
     },
     collaboratorsList: {
       // container around collaborator list items
-      selector: '#files-collaborators-list'
+      selector: '#files-collaborators-list',
+      locateStrategy: 'css selector'
     },
     collaboratorsListItem: {
       // addresses users and groups

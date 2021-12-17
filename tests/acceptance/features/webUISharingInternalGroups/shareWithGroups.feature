@@ -225,20 +225,20 @@ Feature: Sharing files and folders with internal groups
 
 
 
-  @issue-2898
-  Scenario: see resource owner of parent group shares in collaborators list
-    Given user "Alice" has created folder "simple-folder"
-    And user "Alice" has created folder "simple-folder/simple-empty-folder"
-    And user "Alice" has shared folder "simple-folder" with group "grp1"
-    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
-    And user "Brian" has shared folder "Shares/simple-folder" with user "Carol"
-    And user "Carol" has accepted the share "Shares/simple-folder" offered by user "Brian"
-    And user "Carol" has logged in using the webUI
-    And the user opens folder "Shares" using the webUI
-    And the user opens folder "simple-folder" using the webUI
-    When the user opens the share dialog for folder "simple-empty-folder" using the webUI
-    # Then user "Alice Hansen" should be listed as "Owner" reshared through "Brian Murphy" via "simple-folder" in the collaborators list on the webUI
-    And the current collaborators list should have order "Alice Hansen,Carol King"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   Scenario: share a folder with other group and then it should be listed on Shared with Others page

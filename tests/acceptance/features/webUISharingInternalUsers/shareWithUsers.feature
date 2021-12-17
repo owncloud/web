@@ -204,9 +204,9 @@ Feature: Sharing files and folders with internal users
     And the user has opened folder "Shares"
     And the user has opened folder "simple-folder"
     When the user opens the details dialog for folder "simple-empty-folder" using the webUI
-    Then the shared-via path in the details dialog should be "/simple-folder"
+    Then the shared-via path in the details dialog should be "/Shares/simple-folder"
     When the user opens the details dialog for file "lorem.txt" using the webUI
-    Then the shared-via path in the details dialog should be "/simple-folder"
+    Then the shared-via path in the details dialog should be "/Shares/simple-folder"
 
 
 

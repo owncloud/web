@@ -299,7 +299,7 @@ const assertCollaboratorslistContains = function (
         assert.strictEqual(`Shared by ${resharedThrough}`, share.resharer)
       }
       if (additionalInfo) {
-        assert.strictEqual(`(${additionalInfo})`, share.additionalInfo)
+        assert.strictEqual(`${additionalInfo}`, share.additionalInfo)
       }
     })
 }
@@ -1092,12 +1092,8 @@ Then(
     const api = client.page.FilesPageElement
     await api.filesList().openSharingDialog(resource)
 
-    const count = (await api.SharingDialog.collaboratorsDialog().getCollaboratorsList({})).length
-    assert.strictEqual(
-      count,
-      0,
-      `Expected to have no collaborators for '${resource}', Found: ${count}`
-    )
+    const visible = await api.SharingDialog.collaboratorsDialog().hasCollaboratorsList()
+    assert.strictEqual(visible, false, 'Expected collaborators list to not exist, but it did')
   }
 )
 

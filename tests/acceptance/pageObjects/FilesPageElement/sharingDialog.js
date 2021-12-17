@@ -477,8 +477,7 @@ module.exports = {
      * @return {Promise<*>}
      */
     changeCollaboratorExpiryDate: async function (collaborator, days) {
-      // FIXME: clickEditShare doesn't exist, yet.
-      await collaboratorDialog.clickEditShare(collaborator)
+      await collaboratorDialog.expandShareEditDropdown(collaborator)
       const dateToSet = calculateDate(days)
       const isExpiryDateChanged = await this.openExpirationDatePicker().setExpirationDate(dateToSet)
       if (!isExpiryDateChanged) {
