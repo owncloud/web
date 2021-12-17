@@ -13,7 +13,9 @@
           <span v-translate>There are no resources in this folder</span>
         </template>
         <template v-if="currentFolder.canCreate()" #callToAction>
-          <span v-translate>Drag files and folders here or use the "+ New" button to upload</span>
+          <span v-translate data-testid="public-files-call-to-action">
+            Drag files and folders here or use the "+ New" button to upload
+          </span>
         </template>
       </no-content-message>
       <resource-table
