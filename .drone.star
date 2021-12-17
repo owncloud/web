@@ -1119,7 +1119,7 @@ def smokeTests(ctx):
     services = databaseService(db) + owncloudService() + webService()
 
     stepsClassic = \
-        skipIfUnchanged(ctx, "unit-tests") + \
+        skipIfUnchanged(ctx, "smoke-tests") + \
         restoreBuildArtifactCache(ctx, "yarn", ".yarn") + \
         restoreBuildArtifactCache(ctx, "playwright", ".playwright") + \
         installYarn() + \
@@ -1135,7 +1135,7 @@ def smokeTests(ctx):
         smoke_test_occ
 
     stepsInfinite = \
-        skipIfUnchanged(ctx, "unit-tests") + \
+        skipIfUnchanged(ctx, "smoke-tests") + \
         restoreBuildArtifactCache(ctx, "yarn", ".yarn") + \
         restoreBuildArtifactCache(ctx, "playwright", ".playwright") + \
         restoreBuildArtifactCache(ctx, "web-dist", "dist") + \
@@ -2959,10 +2959,25 @@ def skipIfUnchanged(ctx, type):
             "^__mocks__/.*",
             "^packages/.*/tests/.*",
             "^tests/integration/.*",
+            "^tests/smoke/.*",
             "^tests/unit/.*",
         ]
         skip_step["settings"] = {
             "ALLOW_SKIP_CHANGED": base_skip_steps + acceptance_skip_steps,
+        }
+        return [skip_step]
+
+    if type == "smoke-tests":
+        smoke_skip_steps = [
+            "^__fixtures__/.*",
+            "^__mocks__/.*",
+            "^packages/.*/tests/.*",
+            "^tests/acceptance/.*",
+            "^tests/integration/.*",
+            "^tests/unit/.*",
+        ]
+        skip_step["settings"] = {
+            "ALLOW_SKIP_CHANGED": base_skip_steps + smoke_skip_steps,
         }
         return [skip_step]
 

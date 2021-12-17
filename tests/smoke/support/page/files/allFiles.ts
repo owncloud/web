@@ -12,7 +12,9 @@ export class AllFilesPage {
 
   async navigate(): Promise<void> {
     const { page } = this.actor
-    await page.click('a[href="#/files/list/all"]')
+
+    const allFilesBtn = page.locator('a[href="#/files/list/all"]')
+    await allFilesBtn.click()
   }
 
   async createFolder({ name }: { name: string }): Promise<void> {
@@ -31,7 +33,12 @@ export class AllFilesPage {
         await page.click('#new-file-menu-btn')
         await page.click('#new-folder-btn')
         await page.fill('.oc-modal input', folderName)
-        await page.click('.oc-modal-body-actions-confirm')
+        await Promise.all([
+          page.waitForResponse(
+            (resp) => resp.status() === 201 && resp.request().method() === 'MKCOL'
+          ),
+          page.locator('.oc-modal-body-actions-confirm').click()
+        ])
       }
 
       await cta.files.navigateToFolder({ page: page, path: folderName })
@@ -84,6 +91,9 @@ export class AllFilesPage {
     const { page } = this.actor
     const startUrl = page.url()
     const downloads = []
+    const sidebarActionsDownloadBtn = page.locator(
+      '#oc-files-actions-sidebar .oc-files-actions-download-file-trigger'
+    )
 
     if (folder) {
       await cta.files.navigateToFolder({ page: page, path: folder })
@@ -95,7 +105,7 @@ export class AllFilesPage {
 
       const [download] = await Promise.all([
         page.waitForEvent('download'),
-        page.click('#oc-files-actions-sidebar .oc-files-actions-download-file-trigger')
+        sidebarActionsDownloadBtn.click()
       ])
 
       await cta.files.sidebar.close({ page: page })
@@ -123,6 +133,9 @@ export class AllFilesPage {
     const startUrl = page.url()
     const folderPaths = folder.split('/')
     const folderName = folderPaths.pop()
+    const addPeopleQuickAction = page.locator(
+      `//*[@data-test-resource-name="${folderName}"]/ancestor::tr//button[contains(@class, "files-quick-action-collaborators")]`
+    )
 
     await page.addStyleTag({
       content: `
@@ -139,9 +152,7 @@ export class AllFilesPage {
     }
     switch (via) {
       case 'QUICK_ACTION':
-        await page.click(
-          `//*[@data-test-resource-name="${folderName}"]/ancestor::tr//button[contains(@class, "files-quick-action-collaborators")]`
-        )
+        await addPeopleQuickAction.click()
         break
 
       case 'SIDEBAR_PANEL':
@@ -188,7 +199,17 @@ export class AllFilesPage {
     await page.click(`//*[@data-test-resource-name="${resourceBase}"]`, { button: 'right' })
     await page.click('.oc-files-actions-rename-trigger')
     await page.fill('.oc-text-input', newName)
-    await page.click('.oc-modal-body-actions-confirm')
+
+    await Promise.all([
+      page.waitForResponse(
+        (resp) =>
+          resp.url().endsWith(resourceBase) &&
+          resp.status() === 201 &&
+          resp.request().method() === 'MOVE'
+      ),
+      page.locator('.oc-modal-body-actions-confirm').click()
+    ])
+
     await cta.files.waitForResources({
       page: page,
       names: [newName]
@@ -221,7 +242,16 @@ export class AllFilesPage {
       await cta.files.navigateToFolder({ page: page, path: newLocation })
     }
 
-    await page.click('#location-picker-btn-confirm')
+    await Promise.all([
+      page.waitForResponse(
+        (resp) =>
+          resp.url().endsWith(resourceBase) &&
+          resp.status() === 201 &&
+          resp.request().method() === action.toUpperCase()
+      ),
+      page.locator('#location-picker-btn-confirm').click()
+    ])
+
     await cta.files.waitForResources({
       page: page,
       names: [resourceBase]
@@ -258,9 +288,8 @@ export class AllFilesPage {
     await cta.files.sidebar.open({ page: page, resource: resouceName })
     await cta.files.sidebar.openPanel({ page: page, name: 'versions' })
 
-    await page.waitForSelector('//*[@id="oc-file-versions-sidebar"]')
-    const elements = await page.$$('//*[@id="oc-file-versions-sidebar"]/table/tbody/tr')
-    return elements.length
+    const elements = page.locator('//*[@id="oc-file-versions-sidebar"]/table/tbody/tr')
+    return await elements.count()
   }
 
   async deleteResource({ resource }: { resource: string }): Promise<void> {
@@ -333,12 +362,21 @@ export class AllFilesPage {
 
     for (const user of users) {
       const userColumn = `//*[@data-testid="collaborator-item-${user.id}"]`
-      await page.click(
-        `${userColumn}//button[contains(@class,"collaborator-edit-dropdown-options-btn")]`
-      )
-      await page.click(
-        `${userColumn}//ul[contains(@class,"collaborator-edit-dropdown-options-list")]//button[contains(@class,"remove-share")]`
-      )
+
+      await Promise.all([
+        page.waitForResponse(
+          (resp) =>
+            resp.url().includes('shares') &&
+            resp.status() === 200 &&
+            resp.request().method() === 'DELETE'
+        ),
+        page.click(
+          `${userColumn}//button[contains(@class,"collaborator-edit-dropdown-options-btn")]`
+        ),
+        page.click(
+          `${userColumn}//ul[contains(@class,"collaborator-edit-dropdown-options-list")]//button[contains(@class,"remove-share")]`
+        )
+      ])
     }
     await page.goto(startUrl)
   }
