@@ -128,7 +128,8 @@ export const getStore = function ({
           SET_CURRENT_FOLDER: () => {},
           REMOVE_FILE: () => {},
           REMOVE_FILE_FROM_SEARCHED: () => {},
-          REMOVE_FILE_SELECTION: () => {}
+          REMOVE_FILE_SELECTION: () => {},
+          SET_FILE_SELECTION: () => {}
         },
         actions: {
           loadIndicators: () => {}
