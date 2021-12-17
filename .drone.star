@@ -1098,9 +1098,10 @@ def smokeTests(ctx):
             "BASE_URL_OCIS": "ocis:9200",
             "HEADLESS": "true",
             "OCIS": "true",
+            "RETRY": "1",
         },
         "commands": [
-            "sleep 10 && yarn test:smoke tests/smoke/features/",
+            "sleep 10 && yarn test:e2e:cucumber tests/e2e/cucumber/",
         ],
     }]
 
@@ -1110,9 +1111,10 @@ def smokeTests(ctx):
         "environment": {
             "BASE_URL_OCC": "owncloud",
             "HEADLESS": "true",
+            "RETRY": "1",
         },
         "commands": [
-            "sleep 10 && yarn test:smoke tests/smoke/features/",
+            "sleep 10 && yarn test:e2e:cucumber tests/e2e/cucumber/",
         ],
     }]
 
