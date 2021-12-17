@@ -13,8 +13,7 @@ export class AllFilesPage {
   async navigate(): Promise<void> {
     const { page } = this.actor
 
-    const allFilesBtn = page.locator('a[href="#/files/list/all"]')
-    await allFilesBtn.click()
+    await page.locator('a[href="#/files/list/all"]').click()
   }
 
   async createFolder({ name }: { name: string }): Promise<void> {
@@ -30,9 +29,9 @@ export class AllFilesPage {
       })
 
       if (!folderExists) {
-        await page.click('#new-file-menu-btn')
-        await page.click('#new-folder-btn')
-        await page.fill('.oc-modal input', folderName)
+        await page.locator('#new-file-menu-btn').click()
+        await page.locator('#new-folder-btn').click()
+        await page.locator('.oc-modal input').fill(folderName)
         await Promise.all([
           page.waitForResponse(
             (resp) => resp.status() === 201 && resp.request().method() === 'MKCOL'
@@ -64,17 +63,14 @@ export class AllFilesPage {
       await cta.files.navigateToFolder({ page: page, path: folder })
     }
 
-    await page.click('#new-file-menu-btn')
-    await page.setInputFiles(
-      '#fileUploadInput',
-      files.map((file) => file.path)
-    )
+    await page.locator('#new-file-menu-btn').click()
+    await page.locator('#fileUploadInput').setInputFiles(files.map((file) => file.path))
 
     if (newVersion) {
       const fileName = files.map((file) => path.basename(file.name))
       await Promise.all([
         page.waitForResponse((resp) => resp.url().endsWith(fileName[0]) && resp.status() === 204),
-        page.click('.oc-modal-body-actions-confirm')
+        page.locator('.oc-modal-body-actions-confirm').click()
       ])
     }
 
@@ -84,7 +80,7 @@ export class AllFilesPage {
     })
 
     await page.goto(startUrl)
-    await page.click('body')
+    await page.locator('body').click()
   }
 
   async downloadFiles({ names, folder }: { names: string[]; folder: string }): Promise<Download[]> {
@@ -133,9 +129,6 @@ export class AllFilesPage {
     const startUrl = page.url()
     const folderPaths = folder.split('/')
     const folderName = folderPaths.pop()
-    const addPeopleQuickAction = page.locator(
-      `//*[@data-test-resource-name="${folderName}"]/ancestor::tr//button[contains(@class, "files-quick-action-collaborators")]`
-    )
 
     await page.addStyleTag({
       content: `
@@ -152,7 +145,11 @@ export class AllFilesPage {
     }
     switch (via) {
       case 'QUICK_ACTION':
-        await addPeopleQuickAction.click()
+        await page
+          .locator(
+            `//*[@data-test-resource-name="${folderName}"]/ancestor::tr//button[contains(@class, "files-quick-action-collaborators")]`
+          )
+          .click()
         break
 
       case 'SIDEBAR_PANEL':
@@ -160,6 +157,7 @@ export class AllFilesPage {
         await cta.files.sidebar.openPanel({ page: page, name: 'sharing' })
         break
     }
+    await page.locator('.files-collaborators-open-add-share-dialog-button').click()
 
     for (const user of users) {
       const shareInputLocator = page.locator('#files-share-invite-input')
@@ -169,13 +167,13 @@ export class AllFilesPage {
       ])
       await shareInputLocator.focus()
       await page.waitForSelector('.vs--open')
-      await page.press('#files-share-invite-input', 'Enter')
+      await page.locator('#files-share-invite-input').press('Enter')
 
-      await page.click('//*[@id="files-collaborators-role-button-new"]')
-      await page.click(`//*[@id="files-role-${role}"]`)
+      await page.locator('//*[@id="files-collaborators-role-button"]').click()
+      await page.locator(`//*[@id="files-role-${role}"]`).click()
     }
 
-    await page.click('#new-collaborators-form-create-button')
+    await page.locator('#files-collaborators-collaborator-save-new-share-button').click()
     await cta.files.sidebar.close({ page: page })
 
     await page.goto(startUrl)
@@ -196,9 +194,9 @@ export class AllFilesPage {
       await cta.files.navigateToFolder({ page: page, path: resourceDir })
     }
 
-    await page.click(`//*[@data-test-resource-name="${resourceBase}"]`, { button: 'right' })
-    await page.click('.oc-files-actions-rename-trigger')
-    await page.fill('.oc-text-input', newName)
+    await page.locator(`//*[@data-test-resource-name="${resourceBase}"]`).click({ button: 'right' })
+    await page.locator('.oc-files-actions-rename-trigger').click()
+    await page.locator('.oc-text-input').fill(newName)
 
     await Promise.all([
       page.waitForResponse(
@@ -234,9 +232,9 @@ export class AllFilesPage {
       await cta.files.navigateToFolder({ page: page, path: resourceDir })
     }
 
-    await page.click(`//*[@data-test-resource-name="${resourceBase}"]`, { button: 'right' })
-    await page.click(`.oc-files-actions-${action}-trigger`)
-    await page.click('//ol[@class="oc-breadcrumb-list"]/li/*[1]')
+    await page.locator(`//*[@data-test-resource-name="${resourceBase}"]`).click({ button: 'right' })
+    await page.locator(`.oc-files-actions-${action}-trigger`).first().click()
+    await page.locator('//ol[@class="oc-breadcrumb-list"]/li/*[1]').first().click()
 
     if (newLocation !== 'All files') {
       await cta.files.navigateToFolder({ page: page, path: newLocation })
@@ -302,13 +300,15 @@ export class AllFilesPage {
       await cta.files.navigateToFolder({ page: page, path: folderPaths.join('/') })
     }
 
-    const resourceCheckbox = `//*[@data-test-resource-name="${resouceName}"]//ancestor::tr//input`
+    const resourceCheckbox = page.locator(
+      `//*[@data-test-resource-name="${resouceName}"]//ancestor::tr//input`
+    )
 
-    if (!(await page.isChecked(resourceCheckbox))) {
-      await page.check(resourceCheckbox)
+    if (!(await resourceCheckbox.isChecked())) {
+      await resourceCheckbox.check()
     }
-    await page.click('button.oc-files-actions-delete-trigger')
-    await page.click('.oc-modal-body-actions-confirm')
+    await page.locator('button.oc-files-actions-delete-trigger').first().click()
+    await page.locator('.oc-modal-body-actions-confirm').click()
     await page.waitForResponse(
       (resp) => resp.url().includes(encodeURIComponent(resouceName)) && resp.status() === 204
     )
@@ -338,11 +338,18 @@ export class AllFilesPage {
     await cta.files.sidebar.openPanel({ page: page, name: 'sharing' })
 
     for (const user of users) {
+<<<<<<< HEAD
       const userColumn = `//*[@data-testid="collaborator-user-item-${user.id}"]`
       await page.click(`${userColumn}//button[contains(@class,"files-recipient-role-select-btn")]`)
       await page.click(
         `${userColumn}//ul[contains(@class,"files-recipient-role-drop-list")]//button[@id="files-recipient-role-drop-btn-${role}"]`
       )
+=======
+      await page.locator(`//*[@data-testid="recipient-${user.id}-btn-edit"]`).click()
+      await page.locator('//*[@id="files-collaborators-role-button"]').click()
+      await page.locator(`//*[@id="files-role-${role}"]`).click()
+      await page.locator('//*[@data-testid="recipient-edit-btn-save"]').click()
+>>>>>>> 7305909f3 (prefer locators api over others)
     }
     await page.goto(startUrl)
   }
@@ -360,9 +367,14 @@ export class AllFilesPage {
     await cta.files.sidebar.open({ page: page, resource: folderName })
     await cta.files.sidebar.openPanel({ page: page, name: 'sharing' })
 
+<<<<<<< HEAD
     for (const user of users) {
       const userColumn = `//*[@data-testid="collaborator-user-item-${user.id}"]`
+=======
+    await page.locator('//*[@data-testid="collaborators-show-people"]').click()
+>>>>>>> 7305909f3 (prefer locators api over others)
 
+    for (const user of users) {
       await Promise.all([
         page.waitForResponse(
           (resp) =>
@@ -370,12 +382,11 @@ export class AllFilesPage {
             resp.status() === 200 &&
             resp.request().method() === 'DELETE'
         ),
-        page.click(
-          `${userColumn}//button[contains(@class,"collaborator-edit-dropdown-options-btn")]`
-        ),
-        page.click(
-          `${userColumn}//ul[contains(@class,"collaborator-edit-dropdown-options-list")]//button[contains(@class,"remove-share")]`
-        )
+        page
+          .locator(
+            `//*[@data-testid="collaborator-item-${user.id}"]//button[contains(@class,"files-collaborators-collaborator-delete")]`
+          )
+          .click()
       ])
     }
     await page.goto(startUrl)

@@ -1,6 +1,5 @@
 import { Actor, User } from '../../types'
-/* eslint-disable-next-line */
-import type {LoginAdapter} from './index'
+import { LoginAdapter } from './login'
 
 export class Oc10LoginAdapter implements LoginAdapter {
   private readonly actor: Actor
@@ -13,9 +12,9 @@ export class Oc10LoginAdapter implements LoginAdapter {
     const { page } = this.actor
     const { id, password } = user
 
-    await page.fill('input[name="user"]', id)
-    await page.fill('input[name="password"]', password)
-    await page.click('#submit')
+    await page.locator('input[name="user"]').fill(id)
+    await page.locator('input[name="password"]').fill(password)
+    await page.locator('#submit').click()
 
     try {
       // if current client is not trusted we need to allow it,

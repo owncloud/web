@@ -9,11 +9,7 @@ export const navigateToFolder = async ({
 }): Promise<void> => {
   const paths = path.split('/')
   for (const name of paths) {
-    const resource = page.locator(`[data-test-resource-name="${name}"]`)
-    await resource.click()
-    await page.waitForResponse(
-      (resp) => resp.url().includes(encodeURIComponent(name)) && resp.status() === 200
-    )
+    await page.locator(`[data-test-resource-name="${name}"]`).click()
   }
 }
 

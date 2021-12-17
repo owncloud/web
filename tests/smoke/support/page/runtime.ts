@@ -9,15 +9,14 @@ export class RuntimePage {
 
   async navigateToApp({ name }: { name: string }): Promise<void> {
     const { page } = this.actor
-    const element = await page.waitForSelector('#_appSwitcherButton')
-    await element.click()
-    await page.click(`a[href="#/${name}"]`)
+    await page.locator('#_appSwitcherButton').click()
+    await page.locator(`a[href="#/${name}"]`).click()
   }
 
   async logout(): Promise<void> {
     const { page } = this.actor
 
-    await page.click('#_userMenuButton')
-    await page.click('#oc-topbar-account-logout')
+    await page.locator('#_userMenuButton').click()
+    await page.locator('#oc-topbar-account-logout').click()
   }
 }

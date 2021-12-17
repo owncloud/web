@@ -2,10 +2,7 @@ import { config } from '../../config'
 import { Oc10LoginAdapter } from './oc10'
 import { OcisLoginAdapter } from './ocis'
 import { Actor, User } from '../../types'
-
-export interface LoginAdapter {
-  login({ user }: { user: User }): Promise<void>
-}
+import { LoginAdapter } from './login'
 
 export class LoginPage {
   private readonly actor: Actor

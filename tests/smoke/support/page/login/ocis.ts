@@ -1,6 +1,5 @@
 import { Actor, User } from '../../types'
-/* eslint-disable-next-line */
-import type { LoginAdapter } from './index'
+import { LoginAdapter } from './login'
 
 export class OcisLoginAdapter implements LoginAdapter {
   private readonly actor: Actor
@@ -13,8 +12,8 @@ export class OcisLoginAdapter implements LoginAdapter {
     const { page } = this.actor
     const { id, password } = user
 
-    await page.fill('#oc-login-username', id)
-    await page.fill('#oc-login-password', password)
-    await page.click('button[type="submit"]')
+    await page.locator('#oc-login-username').fill(id)
+    await page.locator('#oc-login-password').fill(password)
+    await page.locator('button[type="submit"]').click()
   }
 }
