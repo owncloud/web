@@ -1,12 +1,12 @@
 module.exports = {
   smoke: `
-  --require ./tests/smoke/**/*.ts
+  --require ./tests/e2e/**/*.ts
   --require-module ts-node/register
   --format @cucumber/pretty-formatter
   --publish-quiet
   --format-options ${JSON.stringify({
     snippetInterface: 'async-await',
-    snippetSyntax: './tests/smoke/support/cucumber/snippets-syntax.js'
+    snippetSyntax: './tests/e2e/cucumber/environment/snippets-syntax.js'
   })}
   `
 }

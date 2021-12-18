@@ -1,5 +1,7 @@
 import { DataTable, Given, Then, When } from '@cucumber/cucumber'
-import { FilesPage, World, config } from '../../support'
+import { World } from '../environment'
+import { config } from '../../config'
+import { FilesPage } from '../../support'
 import { expect } from '@playwright/test'
 
 When(
@@ -135,7 +137,7 @@ When(
     // Todo: implement explicit step definition for *.navigate()
 
     const actor = this.actorContinent.get({ id: stepUser })
-    const { sharedWithMe: sharedWithMePage, allFiles: allFilesPage } = new FilesPage({ actor })
+    const { sharedWithMe: sharedWithMePage } = new FilesPage({ actor })
     const shares = stepTable.raw().map((f) => f[0])
     await sharedWithMePage.navigate()
 

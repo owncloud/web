@@ -1,5 +1,7 @@
 import { Given } from '@cucumber/cucumber'
-import { World, config, LoginPage, RuntimePage } from '../../support'
+import { World } from '../environment'
+import { config } from '../../config'
+import { LoginPage, RuntimePage } from '../../support'
 
 Given('{string} has logged in', async function (this: World, stepUser: string): Promise<void> {
   const user = this.userContinent.get({ id: stepUser })

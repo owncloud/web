@@ -1,8 +1,8 @@
 import { User } from '../types'
-import { userStore } from '../store'
+import { store } from '../store'
 
-export class UserContinent {
-  private store = userStore
+export class UserEnvironment {
+  private store = store.userStore
 
   get({ id }: { id: string }): User {
     if (!this.store.has(id)) {

@@ -1,9 +1,9 @@
 import fs from 'fs'
 import path from 'path'
-import { config } from '../config'
+import { config } from '../../config'
 import { File } from '../types'
 
-export class FileContinent {
+export class FileEnvironment {
   get({ name }: { name: string }): File {
     const relPath = path.join(config.assets, name)
 

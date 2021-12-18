@@ -266,12 +266,10 @@ export class AllFilesPage {
       await cta.files.navigateToFolder({ page: page, path: folderPaths.join('/') })
     }
 
-    const resourceExists = await cta.files.resourceExists({
+    return await cta.files.resourceExists({
       page: page,
       name: resouceName
     })
-
-    return resourceExists
   }
 
   async numberOfVersions({ resource }: { resource: string }): Promise<number> {

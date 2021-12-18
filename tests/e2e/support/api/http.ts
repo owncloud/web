@@ -1,7 +1,7 @@
 import join from 'join-path'
 import fetch, { BodyInit, Response } from 'node-fetch'
 import { User } from '../types'
-import { config } from '../config'
+import { config } from '../../config'
 import _ from 'lodash'
 
 export const request = async ({

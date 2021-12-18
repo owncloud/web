@@ -1,4 +1,4 @@
-import { config } from '../../config'
+import { config } from '../../../config'
 import { Oc10LoginAdapter } from './oc10'
 import { OcisLoginAdapter } from './ocis'
 import { Actor, User } from '../../types'

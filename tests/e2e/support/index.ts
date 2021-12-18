@@ -1,5 +1,5 @@
 export { api } from './api'
 export { cta } from './cta'
+export { store } from './store'
+export * from './environment'
 export * from './page'
-export { config } from './config'
-export { World } from './world'

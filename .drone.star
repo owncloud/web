@@ -1100,7 +1100,7 @@ def smokeTests(ctx):
             "OCIS": "true",
         },
         "commands": [
-            "sleep 10 && yarn test:smoke tests/smoke/features/",
+            "sleep 10 && yarn test:e2e:cucumber tests/e2e/cucumber/",
         ],
     }]
 
@@ -1112,7 +1112,7 @@ def smokeTests(ctx):
             "HEADLESS": "true",
         },
         "commands": [
-            "sleep 10 && yarn test:smoke tests/smoke/features/",
+            "sleep 10 && yarn test:e2e:cucumber tests/e2e/cucumber/",
         ],
     }]
 
@@ -2964,7 +2964,7 @@ def skipIfUnchanged(ctx, type):
             "^__mocks__/.*",
             "^packages/.*/tests/.*",
             "^tests/integration/.*",
-            "^tests/smoke/.*",
+            "^tests/e2e/.*",
             "^tests/unit/.*",
         ]
         skip_step["settings"] = {

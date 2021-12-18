@@ -1,5 +1,6 @@
 import { When } from '@cucumber/cucumber'
-import { World, RuntimePage } from '../../support'
+import { World } from '../environment'
+import { RuntimePage } from '../../support'
 
 When(
   '{string} opens the {string} app',
