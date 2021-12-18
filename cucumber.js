@@ -1,6 +1,7 @@
 module.exports = {
   smoke: `
   --require ./tests/e2e/**/*.ts
+  --retry 1
   --require-module ts-node/register
   --format @cucumber/pretty-formatter
   --publish-quiet

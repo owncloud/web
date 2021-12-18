@@ -55,11 +55,17 @@ After(async function (this: World, { result }: ITestCaseHookParameter) {
   if (!result) {
     return
   }
-  const activeActor = this.actorsEnvironment.activeActor
+
   await this.attach(`Status: ${result?.status}. Duration:${result.duration?.seconds}s`)
 
   if (result.status !== Status.PASSED) {
-    await activeActor.close()
+    if (result.willBeRetried) {
+      config.recordVideo = true
+      config.recordHar = true
+      config.recordTracing = true
+    }
+
+    await this.actorsEnvironment.close()
   }
 })
 

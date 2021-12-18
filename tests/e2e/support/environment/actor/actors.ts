@@ -33,6 +33,12 @@ export class ActorsEnvironment {
     const actor = new ActorEnvironment({ id, ...this.options })
     await actor.setup()
 
+    actor.on('closed', () => this.store.delete(id))
+
     return this.store.set(id, actor).get(id)
+  }
+
+  public async close(): Promise<void> {
+    await Promise.all([...this.store.values()].map((actor) => actor.close()))
   }
 }

@@ -3,14 +3,20 @@ import { ActorOptions, buildBrowserContextOptions } from './shared'
 import { BrowserContext, Page } from 'playwright'
 import { DateTime } from 'luxon'
 import path from 'path'
+import events from 'node:events'
 
-export class ActorEnvironment implements Actor {
+export declare interface ActorEnvironment {
+  on(event: 'closed', listener: () => void): this
+}
+
+export class ActorEnvironment extends events.EventEmitter implements Actor {
   private readonly uuid: string
   private readonly options: ActorOptions
   public context: BrowserContext
   public page: Page
 
   constructor(options: ActorOptions) {
+    super()
     this.uuid = [DateTime.now().toFormat('yyyy-M-d-hh-mm-ss'), options.id].join('-')
     this.options = options
   }
@@ -29,12 +35,14 @@ export class ActorEnvironment implements Actor {
 
   async close(): Promise<void> {
     if (this.options.context.recordTracing) {
-      await this.context.tracing.stop({
+      await this.context?.tracing.stop({
         path: path.join(this.options.context.recordDir, 'tracing', `${this.uuid}.zip`)
       })
     }
 
-    await this.page.close()
-    await this.context.close()
+    await this.page?.close()
+    await this.context?.close()
+
+    this.emit('closed')
   }
 }
