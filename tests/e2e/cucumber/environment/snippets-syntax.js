@@ -30,7 +30,7 @@ TypeScriptSnippetSyntax.prototype.build = function ({
   }
 
   const implementation = [
-    'const { feature, actorContinent, userContinent, fileContinent } = this\n',
+    'const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this\n',
     'await new Promise(resolve => setTimeout(resolve, 10))'
   ]
     .map((str) => `  ${str}`)

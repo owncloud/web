@@ -6,8 +6,8 @@ import { api } from '../../support'
 Given(
   'following users have been created',
   async function (this: World, stepUsers: DataTable): Promise<void> {
-    const users = stepUsers.raw().map((u) => this.userContinent.get({ id: u[0] }))
-    const admin = this.userContinent.get({ id: 'admin' })
+    const users = stepUsers.raw().map((u) => this.usersEnvironment.getUser({ id: u[0] }))
+    const admin = this.usersEnvironment.getUser({ id: 'admin' })
 
     for (const user of users) {
       await api.user.deleteUser({ user, admin })
@@ -19,7 +19,7 @@ Given(
 Given(
   'admin set the default folder for received shares to {string}',
   async function (this: World, value: string): Promise<void> {
-    const user = this.userContinent.get({ id: 'admin' })
+    const user = this.usersEnvironment.getUser({ id: 'admin' })
 
     if (!config.ocis) {
       await api.config.setShareFolder({ value, user })
@@ -34,7 +34,7 @@ Given(
       return
     }
 
-    const user = this.userContinent.get({ id: 'admin' })
+    const user = this.usersEnvironment.getUser({ id: 'admin' })
 
     await api.config.disableShareAutoAccept({
       user,

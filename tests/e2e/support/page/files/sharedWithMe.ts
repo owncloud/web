@@ -1,5 +1,5 @@
 import { Actor } from '../../types'
-import { cta } from '../../cta'
+import { filesCta } from '../../cta'
 import path from 'path'
 
 export class SharedWithMePage {
@@ -33,7 +33,7 @@ export class SharedWithMePage {
       .locator(`#files-shared-with-me-shares-table [data-test-resource-name="${name}"]`)
       .waitFor()
     if (!path.extname(name)) {
-      await cta.files.navigateToFolder({ page, path: name })
+      await filesCta.navigateToFolder({ page, path: name })
       await this.navigate()
     }
   }

@@ -1,5 +1,5 @@
-export { api } from './api'
-export { cta } from './cta'
-export { store } from './store'
+export * as api from './api'
+export * as cta from './cta'
+export * as store from './store'
 export * from './environment'
 export * from './page'

@@ -3,8 +3,8 @@ import path from 'path'
 import { config } from '../../config'
 import { File } from '../types'
 
-export class FileEnvironment {
-  get({ name }: { name: string }): File {
+export class FilesEnvironment {
+  getFile({ name }: { name: string }): File {
     const relPath = path.join(config.assets, name)
 
     if (!fs.existsSync(relPath)) {

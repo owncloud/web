@@ -52,8 +52,14 @@ BeforeAll(async (): Promise<void> => {
 })
 
 After(async function (this: World, { result }: ITestCaseHookParameter) {
+  if (!result) {
+    return
+  }
+  const activeActor = this.actorsEnvironment.activeActor
+  await this.attach(`Status: ${result?.status}. Duration:${result.duration?.seconds}s`)
+
   if (result.status !== Status.PASSED) {
-    await this.actorContinent.get({ id: this.actorContinent.active }).beforeClose()
+    await activeActor.close()
   }
 })
 

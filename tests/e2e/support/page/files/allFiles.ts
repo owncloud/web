@@ -1,6 +1,6 @@
 import { Download } from 'playwright'
 import { User, Actor, File } from '../../types'
-import { cta } from '../../cta'
+import { filesCta } from '../../cta'
 import path from 'path'
 
 export class AllFilesPage {
@@ -23,7 +23,7 @@ export class AllFilesPage {
     const startUrl = page.url()
 
     for (const folderName of paths) {
-      const folderExists = await cta.files.resourceExists({
+      const folderExists = await filesCta.resourceExists({
         page: page,
         name: folderName
       })
@@ -40,7 +40,7 @@ export class AllFilesPage {
         ])
       }
 
-      await cta.files.navigateToFolder({ page: page, path: folderName })
+      await filesCta.navigateToFolder({ page: page, path: folderName })
     }
 
     await page.goto(startUrl)
@@ -60,7 +60,7 @@ export class AllFilesPage {
     const startUrl = page.url()
 
     if (folder) {
-      await cta.files.navigateToFolder({ page: page, path: folder })
+      await filesCta.navigateToFolder({ page: page, path: folder })
     }
 
     await page.locator('#new-file-menu-btn').click()
@@ -74,7 +74,7 @@ export class AllFilesPage {
       ])
     }
 
-    await cta.files.waitForResources({
+    await filesCta.waitForResources({
       page: page,
       names: files.map((file) => path.basename(file.name))
     })
@@ -92,19 +92,19 @@ export class AllFilesPage {
     )
 
     if (folder) {
-      await cta.files.navigateToFolder({ page: page, path: folder })
+      await filesCta.navigateToFolder({ page: page, path: folder })
     }
 
     for (const name of names) {
-      await cta.files.sidebar.open({ page: page, resource: name })
-      await cta.files.sidebar.openPanel({ page: page, name: 'actions' })
+      await filesCta.sidebar.open({ page: page, resource: name })
+      await filesCta.sidebar.openPanel({ page: page, name: 'actions' })
 
       const [download] = await Promise.all([
         page.waitForEvent('download'),
         sidebarActionsDownloadBtn.click()
       ])
 
-      await cta.files.sidebar.close({ page: page })
+      await filesCta.sidebar.close({ page: page })
 
       downloads.push(download)
     }
@@ -141,7 +141,7 @@ export class AllFilesPage {
     })
 
     if (folderPaths.length) {
-      await cta.files.navigateToFolder({ page: page, path: folderPaths.join('/') })
+      await filesCta.navigateToFolder({ page: page, path: folderPaths.join('/') })
     }
     switch (via) {
       case 'QUICK_ACTION':
@@ -153,8 +153,8 @@ export class AllFilesPage {
         break
 
       case 'SIDEBAR_PANEL':
-        await cta.files.sidebar.open({ page: page, resource: folderName })
-        await cta.files.sidebar.openPanel({ page: page, name: 'sharing' })
+        await filesCta.sidebar.open({ page: page, resource: folderName })
+        await filesCta.sidebar.openPanel({ page: page, name: 'sharing' })
         break
     }
     await page.locator('.files-collaborators-open-add-share-dialog-button').click()
@@ -174,7 +174,7 @@ export class AllFilesPage {
     }
 
     await page.locator('#files-collaborators-collaborator-save-new-share-button').click()
-    await cta.files.sidebar.close({ page: page })
+    await filesCta.sidebar.close({ page: page })
 
     await page.goto(startUrl)
   }
@@ -191,7 +191,7 @@ export class AllFilesPage {
     const { dir: resourceDir, base: resourceBase } = path.parse(resource)
 
     if (resourceDir) {
-      await cta.files.navigateToFolder({ page: page, path: resourceDir })
+      await filesCta.navigateToFolder({ page: page, path: resourceDir })
     }
 
     await page.locator(`//*[@data-test-resource-name="${resourceBase}"]`).click({ button: 'right' })
@@ -208,7 +208,7 @@ export class AllFilesPage {
       page.locator('.oc-modal-body-actions-confirm').click()
     ])
 
-    await cta.files.waitForResources({
+    await filesCta.waitForResources({
       page: page,
       names: [newName]
     })
@@ -229,7 +229,7 @@ export class AllFilesPage {
     const { dir: resourceDir, base: resourceBase } = path.parse(resource)
 
     if (resourceDir) {
-      await cta.files.navigateToFolder({ page: page, path: resourceDir })
+      await filesCta.navigateToFolder({ page: page, path: resourceDir })
     }
 
     await page.locator(`//*[@data-test-resource-name="${resourceBase}"]`).click({ button: 'right' })
@@ -237,7 +237,7 @@ export class AllFilesPage {
     await page.locator('//ol[@class="oc-breadcrumb-list"]/li/*[1]').first().click()
 
     if (newLocation !== 'All files') {
-      await cta.files.navigateToFolder({ page: page, path: newLocation })
+      await filesCta.navigateToFolder({ page: page, path: newLocation })
     }
 
     await Promise.all([
@@ -250,7 +250,7 @@ export class AllFilesPage {
       page.locator('#location-picker-btn-confirm').click()
     ])
 
-    await cta.files.waitForResources({
+    await filesCta.waitForResources({
       page: page,
       names: [resourceBase]
     })
@@ -263,10 +263,10 @@ export class AllFilesPage {
     const resouceName = folderPaths.pop()
 
     if (folderPaths.length) {
-      await cta.files.navigateToFolder({ page: page, path: folderPaths.join('/') })
+      await filesCta.navigateToFolder({ page: page, path: folderPaths.join('/') })
     }
 
-    return await cta.files.resourceExists({
+    return await filesCta.resourceExists({
       page: page,
       name: resouceName
     })
@@ -278,11 +278,11 @@ export class AllFilesPage {
     const resouceName = folderPaths.pop()
 
     if (folderPaths.length) {
-      await cta.files.navigateToFolder({ page: page, path: folderPaths.join('/') })
+      await filesCta.navigateToFolder({ page: page, path: folderPaths.join('/') })
     }
 
-    await cta.files.sidebar.open({ page: page, resource: resouceName })
-    await cta.files.sidebar.openPanel({ page: page, name: 'versions' })
+    await filesCta.sidebar.open({ page: page, resource: resouceName })
+    await filesCta.sidebar.openPanel({ page: page, name: 'versions' })
 
     const elements = page.locator('//*[@id="oc-file-versions-sidebar"]/table/tbody/tr')
     return await elements.count()
@@ -295,7 +295,7 @@ export class AllFilesPage {
     const resouceName = folderPaths.pop()
 
     if (folderPaths.length) {
-      await cta.files.navigateToFolder({ page: page, path: folderPaths.join('/') })
+      await filesCta.navigateToFolder({ page: page, path: folderPaths.join('/') })
     }
 
     const resourceCheckbox = page.locator(
@@ -329,11 +329,11 @@ export class AllFilesPage {
     const folderName = folderPaths.pop()
 
     if (folderPaths.length) {
-      await cta.files.navigateToFolder({ page: page, path: folderPaths.join('/') })
+      await filesCta.navigateToFolder({ page: page, path: folderPaths.join('/') })
     }
 
-    await cta.files.sidebar.open({ page: page, resource: folderName })
-    await cta.files.sidebar.openPanel({ page: page, name: 'sharing' })
+    await filesCta.sidebar.open({ page: page, resource: folderName })
+    await filesCta.sidebar.openPanel({ page: page, name: 'sharing' })
 
     for (const user of users) {
 <<<<<<< HEAD
@@ -359,11 +359,11 @@ export class AllFilesPage {
     const folderName = folderPaths.pop()
 
     if (folderPaths.length) {
-      await cta.files.navigateToFolder({ page: page, path: folderPaths.join('/') })
+      await filesCta.navigateToFolder({ page: page, path: folderPaths.join('/') })
     }
 
-    await cta.files.sidebar.open({ page: page, resource: folderName })
-    await cta.files.sidebar.openPanel({ page: page, name: 'sharing' })
+    await filesCta.sidebar.open({ page: page, resource: folderName })
+    await filesCta.sidebar.openPanel({ page: page, name: 'sharing' })
 
 <<<<<<< HEAD
     for (const user of users) {

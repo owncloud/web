@@ -1,10 +1,10 @@
 import { User } from '../types'
-import { store } from '../store'
+import { userStore } from '../store'
 
-export class UserEnvironment {
-  private store = store.userStore
+export class UsersEnvironment {
+  private store = userStore
 
-  get({ id }: { id: string }): User {
+  getUser({ id }: { id: string }): User {
     if (!this.store.has(id)) {
       throw new Error(`user with id '${id}' not found`)
     }

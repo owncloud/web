@@ -1,7 +1,2 @@
-import { userStore } from './user'
-import { actorStore } from './actor'
-
-export const store = {
-  actorStore,
-  userStore
-}
+export { userStore } from './user'
+export { actorStore } from './actor'

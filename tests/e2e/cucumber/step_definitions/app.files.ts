@@ -7,7 +7,7 @@ import { expect } from '@playwright/test'
 When(
   '{string} navigates to the files page',
   async function (this: World, stepUser: string): Promise<void> {
-    const actor = this.actorContinent.get({ id: stepUser })
+    const actor = this.actorsEnvironment.getActor({ id: stepUser })
     const { allFiles: allFilesPage } = new FilesPage({ actor })
 
     await allFilesPage.navigate()
@@ -17,7 +17,7 @@ When(
 When(
   '{string} navigates to the shared with me page',
   async function (this: World, stepUser: string): Promise<void> {
-    const actor = this.actorContinent.get({ id: stepUser })
+    const actor = this.actorsEnvironment.getActor({ id: stepUser })
     const { sharedWithMe: sharedWithMePage } = new FilesPage({ actor })
 
     await sharedWithMePage.navigate()
@@ -27,7 +27,7 @@ When(
 When(
   '{string} creates the following folder(s)',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
-    const actor = this.actorContinent.get({ id: stepUser })
+    const actor = this.actorsEnvironment.getActor({ id: stepUser })
     const { allFiles: allFilesPage } = new FilesPage({ actor })
     const folders = stepTable.raw().map((f) => f[0])
 
@@ -40,7 +40,7 @@ When(
 When(
   '{string} uploads the following resource(s)',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
-    const actor = this.actorContinent.get({ id: stepUser })
+    const actor = this.actorsEnvironment.getActor({ id: stepUser })
     const { allFiles: allFilesPage } = new FilesPage({ actor })
 
     await allFilesPage.navigate()
@@ -52,7 +52,7 @@ When(
         acc[to] = []
       }
 
-      acc[to].push(this.fileContinent.get({ name: resource }))
+      acc[to].push(this.filesEnvironment.getFile({ name: resource }))
 
       return acc
     }, {})
@@ -72,7 +72,7 @@ When(
     actionType: string,
     stepTable: DataTable
   ) {
-    const actor = this.actorContinent.get({ id: stepUser })
+    const actor = this.actorsEnvironment.getActor({ id: stepUser })
     const { allFiles: allFilesPage } = new FilesPage({ actor })
 
     const shareInfo = stepTable.hashes().reduce((acc, stepRow) => {
@@ -82,7 +82,7 @@ When(
         acc[resource] = { users: [], role: '' }
       }
 
-      acc[resource].users.push(this.userContinent.get({ id: user }))
+      acc[resource].users.push(this.usersEnvironment.getUser({ id: user }))
       acc[resource].role = role
 
       return acc
@@ -102,7 +102,7 @@ When(
 Given(
   '{string} downloads the following file(s)',
   async function (this: World, stepUser: string, stepTable: DataTable) {
-    const actor = this.actorContinent.get({ id: stepUser })
+    const actor = this.actorsEnvironment.getActor({ id: stepUser })
     const { allFiles: allFilesPage } = new FilesPage({ actor })
 
     await allFilesPage.navigate()
@@ -136,7 +136,7 @@ When(
   async function (this: World, stepUser: string, stepTable: DataTable) {
     // Todo: implement explicit step definition for *.navigate()
 
-    const actor = this.actorContinent.get({ id: stepUser })
+    const actor = this.actorsEnvironment.getActor({ id: stepUser })
     const { sharedWithMe: sharedWithMePage } = new FilesPage({ actor })
     const shares = stepTable.raw().map((f) => f[0])
     await sharedWithMePage.navigate()
@@ -150,7 +150,7 @@ When(
 When(
   '{string} renames the following resource(s)',
   async function (this: World, stepUser: string, stepTable: DataTable) {
-    const actor = this.actorContinent.get({ id: stepUser })
+    const actor = this.actorsEnvironment.getActor({ id: stepUser })
     const { allFiles: allFilesPage } = new FilesPage({ actor })
 
     await allFilesPage.navigate()
@@ -170,7 +170,7 @@ When(
     _: string,
     stepTable: DataTable
   ): Promise<void> {
-    const actor = this.actorContinent.get({ id: stepUser })
+    const actor = this.actorsEnvironment.getActor({ id: stepUser })
     const { allFiles: allFilesPage } = new FilesPage({ actor })
 
     await allFilesPage.navigate()
@@ -188,7 +188,7 @@ When(
 When(
   '{string} creates new version(s) of the following file(s)',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
-    const actor = this.actorContinent.get({ id: stepUser })
+    const actor = this.actorsEnvironment.getActor({ id: stepUser })
     const { allFiles: allFilesPage } = new FilesPage({ actor })
     const uploadInfo = stepTable.hashes().reduce((acc, stepRow) => {
       const { to, resource } = stepRow
@@ -197,7 +197,7 @@ When(
         acc[to] = []
       }
 
-      acc[to].push(this.fileContinent.get({ name: resource }))
+      acc[to].push(this.filesEnvironment.getFile({ name: resource }))
 
       return acc
     }, {})
@@ -211,7 +211,7 @@ When(
 When(
   '{string} declines the following resource share(s)',
   async function (this: World, stepUser: string, stepTable: DataTable) {
-    const actor = this.actorContinent.get({ id: stepUser })
+    const actor = this.actorsEnvironment.getActor({ id: stepUser })
     const { sharedWithMe: sharedWithMePage } = new FilesPage({ actor })
     const shares = stepTable.raw().map((f) => f[0])
 
@@ -230,7 +230,7 @@ Then(
     actionType: string,
     stepTable: DataTable
   ) {
-    const actor = this.actorContinent.get({ id: stepUser })
+    const actor = this.actorsEnvironment.getActor({ id: stepUser })
     const { allFiles: allFilesPage } = new FilesPage({ actor })
     const resources = stepTable.raw().map((f) => f[0])
 
@@ -253,7 +253,7 @@ Then(
 Then(
   '{string} ensures that the resource {string} has {int} version(s)',
   async function (this: World, stepUser: string, resource: string, countOfVersion: number) {
-    const actor = this.actorContinent.get({ id: stepUser })
+    const actor = this.actorsEnvironment.getActor({ id: stepUser })
     const { allFiles: allFilesPage } = new FilesPage({ actor })
 
     // skipped in Oc10, since the version number in Oc10 is no more than 1
@@ -267,7 +267,7 @@ Then(
 When(
   '{string} deletes the following resource(s)',
   async function (this: World, stepUser: string, stepTable: DataTable) {
-    const actor = this.actorContinent.get({ id: stepUser })
+    const actor = this.actorsEnvironment.getActor({ id: stepUser })
     const { allFiles: allFilesPage } = new FilesPage({ actor })
     const resources = stepTable.raw().map((f) => f[0])
 
@@ -280,7 +280,7 @@ When(
 When(
   '{string} changes the shared resource recipient role for the following resource(s)',
   async function (this: World, stepUser: string, stepTable: DataTable) {
-    const actor = this.actorContinent.get({ id: stepUser })
+    const actor = this.actorsEnvironment.getActor({ id: stepUser })
     const { allFiles: allFilesPage } = new FilesPage({ actor })
 
     const shareInfo = stepTable.hashes().reduce((acc, stepRow) => {
@@ -290,7 +290,7 @@ When(
         acc[resource] = { users: [], role: '' }
       }
 
-      acc[resource].users.push(this.userContinent.get({ id: user }))
+      acc[resource].users.push(this.usersEnvironment.getUser({ id: user }))
       acc[resource].role = role
 
       return acc
@@ -309,7 +309,7 @@ When(
 When(
   '{string} removes following collaborator(s) from the share(s)',
   async function (this: World, stepUser: string, stepTable: DataTable) {
-    const actor = this.actorContinent.get({ id: stepUser })
+    const actor = this.actorsEnvironment.getActor({ id: stepUser })
     const { allFiles: allFilesPage } = new FilesPage({ actor })
 
     const shareInfo = stepTable.hashes().reduce((acc, stepRow) => {
@@ -317,7 +317,7 @@ When(
 
       acc[resource] = []
 
-      acc[resource].push(this.userContinent.get({ id: user }))
+      acc[resource].push(this.usersEnvironment.getUser({ id: user }))
 
       return acc
     }, {})

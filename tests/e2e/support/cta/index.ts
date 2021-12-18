@@ -1,5 +1,1 @@
-import * as files from './files'
-
-export const cta = {
-  files
-}
+export * as filesCta from './files'

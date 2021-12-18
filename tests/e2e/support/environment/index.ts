@@ -1,3 +1,3 @@
-export { UserEnvironment } from './user'
-export { ActorEnvironment } from './actor'
-export { FileEnvironment } from './file'
+export { UsersEnvironment } from './user'
+export { ActorsEnvironment } from './actor'
+export { FilesEnvironment } from './file'

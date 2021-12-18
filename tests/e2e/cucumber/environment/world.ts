@@ -1,7 +1,7 @@
 import { World as CucumberWorld, IWorldOptions } from '@cucumber/cucumber'
 import { Pickle } from '@cucumber/messages'
 import { config } from '../../config'
-import { ActorEnvironment, UserEnvironment, FileEnvironment } from '../../support'
+import { ActorsEnvironment, UsersEnvironment, FilesEnvironment } from '../../support'
 import { state } from './shared'
 
 interface WorldOptions extends IWorldOptions {
@@ -10,15 +10,15 @@ interface WorldOptions extends IWorldOptions {
 
 export class World extends CucumberWorld {
   feature: Pickle
-  actorContinent: ActorEnvironment
-  userContinent: UserEnvironment
-  fileContinent: FileEnvironment
+  actorsEnvironment: ActorsEnvironment
+  usersEnvironment: UsersEnvironment
+  filesEnvironment: FilesEnvironment
 
   constructor(options: WorldOptions) {
     super(options)
-    this.userContinent = new UserEnvironment()
-    this.fileContinent = new FileEnvironment()
-    this.actorContinent = new ActorEnvironment({
+    this.usersEnvironment = new UsersEnvironment()
+    this.filesEnvironment = new FilesEnvironment()
+    this.actorsEnvironment = new ActorsEnvironment({
       context: {
         acceptDownloads: config.acceptDownloads,
         recordDir: config.recordDir,

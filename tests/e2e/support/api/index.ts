@@ -1,9 +1,3 @@
-import * as http from './http'
-import * as user from './user'
-import * as config from './config'
-
-export const api = {
-  http,
-  user,
-  config
-}
+export * as http from './http'
+export * as user from './user'
+export * as config from './config'
