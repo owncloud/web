@@ -8,6 +8,7 @@ import {
   After,
   Status
 } from '@cucumber/cucumber'
+import pinio from 'pino'
 
 import { config } from '../../config'
 import { api, store } from '../../support'
@@ -16,8 +17,17 @@ import { state } from './shared'
 import { Browser, chromium, firefox, webkit } from 'playwright'
 
 export { World }
+const logger = pinio({
+  level: config.logLevel,
+  transport: {
+    target: 'pino-pretty',
+    options: {
+      colorize: true
+    }
+  }
+})
 
-setDefaultTimeout(process.env.PWDEBUG ? -1 : 60 * 1000)
+setDefaultTimeout(config.debug ? -1 : 60 * 1000)
 
 BeforeAll(async function () {
   if (config.ocis) {
@@ -29,6 +39,31 @@ BeforeAll(async function () {
 
 Before(function (this: World, { pickle }: ITestCaseHookParameter) {
   this.feature = pickle
+  this.actorsEnvironment.on('console', async (actorId, message): Promise<void> => {
+    const msg = {
+      actor: actorId,
+      text: message.text(),
+      type: message.type(),
+      args: message.args(),
+      location: message.location()
+    }
+    await this.attach(JSON.stringify(msg), 'application/json')
+
+    switch (message.type()) {
+      case 'debug':
+        logger.debug(msg)
+        break
+      case 'info':
+        logger.info(msg)
+        break
+      case 'error':
+        logger.error(msg)
+        break
+      case 'warning':
+        logger.warn(msg)
+        break
+    }
+  })
 })
 
 BeforeAll(async (): Promise<void> => {
@@ -60,9 +95,9 @@ After(async function (this: World, { result }: ITestCaseHookParameter) {
 
   if (result.status !== Status.PASSED) {
     if (result.willBeRetried) {
-      config.recordVideo = true
-      config.recordHar = true
-      config.recordTracing = true
+      config.reportVideo = true
+      config.reportHar = true
+      config.reportTracing = true
     }
 
     await this.actorsEnvironment.close()

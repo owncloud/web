@@ -23,7 +23,7 @@ dist
 .DS_Store
 .envrc
 
-recordings
+reports
 tests/reports
 tests/ocis
 tests/testing-app

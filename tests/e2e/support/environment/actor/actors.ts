@@ -2,18 +2,20 @@ import { Actor } from '../../types'
 import { ActorsOptions } from './shared'
 import { ActorEnvironment } from './actor'
 import { actorStore } from '../../store'
+import EventEmitter from 'events'
+import { ConsoleMessage } from 'playwright'
 
-export class ActorsEnvironment {
+export declare interface ActorsEnvironment {
+  on(event: 'console', listener: (actorId: string, consoleMessage: ConsoleMessage) => void): this
+}
+
+export class ActorsEnvironment extends EventEmitter {
   private store = actorStore
-  private activeActorId: string
   private readonly options: ActorsOptions
 
   constructor(options: ActorsOptions) {
+    super()
     this.options = options
-  }
-
-  public get activeActor(): Actor {
-    return this.getActor({ id: this.activeActorId })
   }
 
   public getActor({ id }: { id: string }): Actor {
@@ -21,7 +23,6 @@ export class ActorsEnvironment {
       throw new Error(`Actor '${id}' does not exist.`)
     }
 
-    this.activeActorId = id
     return this.store.get(id)
   }
 
@@ -32,8 +33,10 @@ export class ActorsEnvironment {
 
     const actor = new ActorEnvironment({ id, ...this.options })
     await actor.setup()
-
     actor.on('closed', () => this.store.delete(id))
+    actor.page.on('console', (message) => {
+      this.emit('console', id, message)
+    })
 
     return this.store.set(id, actor).get(id)
   }

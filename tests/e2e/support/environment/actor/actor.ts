@@ -3,13 +3,13 @@ import { ActorOptions, buildBrowserContextOptions } from './shared'
 import { BrowserContext, Page } from 'playwright'
 import { DateTime } from 'luxon'
 import path from 'path'
-import events from 'node:events'
+import EventEmitter from 'events'
 
 export declare interface ActorEnvironment {
   on(event: 'closed', listener: () => void): this
 }
 
-export class ActorEnvironment extends events.EventEmitter implements Actor {
+export class ActorEnvironment extends EventEmitter implements Actor {
   private readonly uuid: string
   private readonly options: ActorOptions
   public context: BrowserContext
@@ -26,7 +26,7 @@ export class ActorEnvironment extends events.EventEmitter implements Actor {
       buildBrowserContextOptions(this.uuid, this.options.context)
     )
 
-    if (this.options.context.recordTracing) {
+    if (this.options.context.reportTracing) {
       await this.context.tracing.start({ screenshots: true, snapshots: true, sources: true })
     }
 
@@ -34,9 +34,9 @@ export class ActorEnvironment extends events.EventEmitter implements Actor {
   }
 
   async close(): Promise<void> {
-    if (this.options.context.recordTracing) {
+    if (this.options.context.reportTracing) {
       await this.context?.tracing.stop({
-        path: path.join(this.options.context.recordDir, 'tracing', `${this.uuid}.zip`)
+        path: path.join(this.options.context.reportDir, 'playwright', 'tracing', `${this.uuid}.zip`)
       })
     }
 

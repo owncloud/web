@@ -21,10 +21,10 @@ export class World extends CucumberWorld {
     this.actorsEnvironment = new ActorsEnvironment({
       context: {
         acceptDownloads: config.acceptDownloads,
-        recordDir: config.recordDir,
-        recordHar: config.recordHar,
-        recordTracing: config.recordTracing,
-        recordVideo: config.recordVideo
+        reportDir: config.reportDir,
+        reportHar: config.reportHar,
+        reportTracing: config.reportTracing,
+        reportVideo: config.reportVideo
       },
       browser: state.browser
     })

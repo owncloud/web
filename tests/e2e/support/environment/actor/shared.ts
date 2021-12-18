@@ -5,10 +5,10 @@ export interface ActorsOptions {
   browser: Browser
   context: {
     acceptDownloads: boolean
-    recordDir: string
-    recordVideo: boolean
-    recordHar: boolean
-    recordTracing: boolean
+    reportDir: string
+    reportVideo: boolean
+    reportHar: boolean
+    reportTracing: boolean
   }
 }
 
@@ -25,15 +25,15 @@ export const buildBrowserContextOptions = (
     ignoreHTTPSErrors: true
   }
 
-  if (options.recordVideo) {
+  if (options.reportVideo) {
     contextOptions.recordVideo = {
-      dir: path.join(options.recordDir, 'video')
+      dir: path.join(options.reportDir, 'playwright', 'video')
     }
   }
 
-  if (options.recordHar) {
+  if (options.reportHar) {
     contextOptions.recordHar = {
-      path: path.join(options.recordDir, 'har', `${uuid}.har`)
+      path: path.join(options.reportDir, 'playwright', 'har', `${uuid}.har`)
     }
   }
 
