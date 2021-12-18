@@ -2,6 +2,7 @@ import { store } from '../store'
 import { Actor } from '../types'
 import path from 'path'
 import { Browser, BrowserContextOptions } from 'playwright'
+import { DateTime } from 'luxon'
 
 interface continentOptions {
   browser: Browser
@@ -25,13 +26,13 @@ const buildBrowserContextOptions = (
 
   if (options.recordVideo) {
     contextOptions.recordVideo = {
-      dir: options.recordDir
+      dir: path.join(options.recordDir, 'video')
     }
   }
 
   if (options.recordHar) {
     contextOptions.recordHar = {
-      path: path.join(options.recordDir, `${uuid}.har`)
+      path: path.join(options.recordDir, 'har', `${uuid}.har`)
     }
   }
 
@@ -65,7 +66,7 @@ export class ActorEnvironment {
       return this.get({ id })
     }
 
-    const uuid = [Date.now(), id].join('-')
+    const uuid = [DateTime.now().toFormat('yyyy-M-d-hh-mm-ss'), id].join('-')
     const context = await this.options.browser.newContext(
       buildBrowserContextOptions(uuid, this.options.context)
     )
@@ -80,7 +81,7 @@ export class ActorEnvironment {
 
       if (this.options.context.recordTracing) {
         await context.tracing.stop({
-          path: path.join(this.options.context.recordDir, `${uuid}.trace.zip`)
+          path: path.join(this.options.context.recordDir, 'tracing', `${uuid}.zip`)
         })
       }
     }
