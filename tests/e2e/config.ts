@@ -25,7 +25,7 @@ export const config = {
   slowMo: parseInt(process.env.SLOW_MO) || 0,
   headless: process.env.HEADLESS === 'true',
   acceptDownloads: process.env.DOWNLOADS !== 'false',
-  browser: process.env.BROWSER ?? 'chromium',
+  browser: process.env.BROWSER ?? 'chrome',
   recordDir: process.env.RECORD_DIR || 'recordings',
   recordVideo: process.env.RECORD_VIDEO === 'true',
   recordHar: process.env.RECORD_HAR === 'true',

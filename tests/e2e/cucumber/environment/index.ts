@@ -13,7 +13,7 @@ import { config } from '../../config'
 import { api, store } from '../../support'
 import { World } from './world'
 import { state } from './shared'
-import { chromium, firefox, webkit } from 'playwright'
+import { Browser, chromium, firefox, webkit } from 'playwright'
 
 export { World }
 
@@ -32,7 +32,7 @@ Before(function (this: World, { pickle }: ITestCaseHookParameter) {
 })
 
 BeforeAll(async (): Promise<void> => {
-  state.browser = await { chromium, webkit, firefox }[config.browser].launch({
+  const browserConfiguration = {
     slowMo: config.slowMo,
     args: ['--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'],
     firefoxUserPrefs: {
@@ -40,7 +40,15 @@ BeforeAll(async (): Promise<void> => {
       'media.navigator.permission.disabled': true
     },
     headless: config.headless
-  })
+  }
+
+  state.browser = await {
+    firefox: async (): Promise<Browser> => await firefox.launch(browserConfiguration),
+    webkit: async (): Promise<Browser> => await webkit.launch(browserConfiguration),
+    chrome: async (): Promise<Browser> =>
+      await chromium.launch({ ...browserConfiguration, channel: 'chrome' }),
+    chromium: async (): Promise<Browser> => await chromium.launch(browserConfiguration)
+  }[config.browser]()
 })
 
 After(async function (this: World, { result }: ITestCaseHookParameter) {
