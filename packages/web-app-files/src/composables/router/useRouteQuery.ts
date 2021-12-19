@@ -15,7 +15,7 @@ export const useRouteQuery = (name: string, defaultValue?: QueryValue): Ref<Quer
         return router.currentRoute.query[name] || defaultValue
       },
       async set(v) {
-        if(router.currentRoute.query[name] === v) {
+        if (router.currentRoute.query[name] === v) {
           return
         }
         await router.replace({

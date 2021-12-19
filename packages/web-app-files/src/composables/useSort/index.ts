@@ -32,9 +32,7 @@ export function useSort<T>(options: SortOptions<T>): SortResult<T> {
   const sortDirRef = ref(options.sortDir)
 
   const sortBy = computed(() => unref(sortByRef) || firstSortableField(unref(fields)))
-  const sortDir = computed(() =>
-    unref(sortDirRef) === SortDir.Desc ? SortDir.Desc : SortDir.Asc
-  )
+  const sortDir = computed(() => (unref(sortDirRef) === SortDir.Desc ? SortDir.Desc : SortDir.Asc))
   const fields = options.fields
 
   const items = computed<Array<T>>(() => {
