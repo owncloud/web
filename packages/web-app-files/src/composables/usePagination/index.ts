@@ -24,7 +24,7 @@ export function usePagination<T>(options: PaginationOptions<T>): PaginationResul
     const start = (page.value - 1) * perPage.value
     const end = start + perPage.value
 
-    return unref(options.items).slice(start, end)
+    return unref(unref(options.items)).slice(start, end)
   })
 
   return {
