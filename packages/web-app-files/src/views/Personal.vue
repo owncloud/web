@@ -129,7 +129,7 @@ export default {
     const sortByPageQuery = useRouteQuery('sort-by')
     const sortDirPageQuery = useRouteQuery('sort-dir')
 
-    const storeItems = computed(() => store.getters['Files/activeFiles'])
+    const storeItems = computed(() => store.getters['Files/activeFiles'] || [])
     const fields = computed(() => {
       return determineSortFields(unref(storeItems)[0])
     })
