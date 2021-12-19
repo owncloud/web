@@ -36,8 +36,8 @@ $ OPTION_1=foo OPTION_2=bar yarn test:e2e:cucumber ...
 
 This package is still in an early stage, design could change over time.
 
-### Support
-`./tests/e2e/support`
+### Cucumber
+`./tests/e2e/cucumber`
 [Gherkin features](https://cucumber.io/docs/gherkin/reference/) and corresponding [Cucumber step definitions](https://cucumber.io/docs/cucumber/step-definitions/) placed in there, at the moment this si the only test implementation that can be used.
 
 ### Support

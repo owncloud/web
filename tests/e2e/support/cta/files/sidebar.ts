@@ -22,12 +22,12 @@ export const openPanel = async ({
 }): Promise<void> => {
   await page.waitForSelector('//*[@id="sidebar-panel-details-item"]')
 
-  const backElement = await page.locator('.sidebar-panel.is-active .header__back')
+  const backElement = page.locator('.sidebar-panel.is-active .header__back')
   if (await backElement.count()) {
     await backElement.click()
   }
 
-  const panelOpenElement = await page.locator(`#sidebar-panel-${name}-item-select`)
+  const panelOpenElement = page.locator(`#sidebar-panel-${name}-item-select`)
   if (await panelOpenElement.count()) {
     await panelOpenElement.click()
   }
