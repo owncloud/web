@@ -17,7 +17,7 @@ export function usePagination<T>(options: PaginationOptions<T>): PaginationResul
   const perPage = ref(options.perPage)
   const total = computed(() => Math.ceil(unref(options.items).length / perPage.value) || 1)
   const items = computed(() => {
-    if (!perPage.value) {
+    if (!unref(perPage)) {
       return unref(options.items)
     }
 
