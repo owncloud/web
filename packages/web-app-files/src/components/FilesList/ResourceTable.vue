@@ -317,15 +317,23 @@ export default {
       required: false,
       default: false
     },
+    /**
+     * Show that the table is sorted by this column (no actual sorting takes place)
+     */
     sortBy: {
       type: String,
       required: false
     },
-
-    // FIXME: asc or desc
+    /**
+     * Show that the table is sorted ascendingly/descendingly (no actual sorting takes place)
+     */
     sortDir: {
       type: String,
-      required: false
+      required: false,
+      default: undefined,
+      validator: (value) => {
+        return ["asc", "desc"].includes(value)
+      }
     }
   },
   data() {
