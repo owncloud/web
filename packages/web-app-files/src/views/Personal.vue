@@ -96,7 +96,7 @@ import ContextActions from '../components/FilesList/ContextActions.vue'
 import { DavProperties } from 'web-pkg/src/constants'
 import { basename, join } from 'path'
 import PQueue from 'p-queue'
-import { nextTick, computed, unref, ref } from '@vue/composition-api'
+import { nextTick, computed, unref } from '@vue/composition-api'
 import { useTask } from 'vue-concurrency'
 
 const visibilityObserver = new VisibilityObserver()
