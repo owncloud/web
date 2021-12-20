@@ -141,6 +141,7 @@
 import { DateTime } from 'luxon'
 import maxSize from 'popper-max-size-modifier'
 import { EVENT_TROW_MOUNTED, EVENT_FILE_DROPPED } from '../../constants'
+import { SortDir } from '../../composables'
 
 const dateSortValue = (date) => {
   return DateTime.fromRFC2822(date).toUTC().valueOf()
@@ -154,35 +155,43 @@ export const determineSortFields = (firstResource) => {
   return [
     {
       name: 'name',
-      sortable: true
+      sortable: true,
+      sortDir: SortDir.Asc
     },
     {
       name: 'size',
-      sortable: true
+      sortable: true,
+      sortDir: SortDir.Desc
     },
     {
       name: 'sharedWith',
-      sortable: true
+      sortable: true,
+      sortDir: SortDir.Asc
     },
     {
       name: 'status',
-      sortable: true
+      sortable: true,
+      sortDir: SortDir.Asc
     },
     {
       name: 'owner',
-      sortable: 'displayName'
+      sortable: 'displayName',
+      sortDir: SortDir.Asc
     },
     {
       name: 'mdate',
-      sortable: (date) => dateSortValue(date)
+      sortable: (date) => dateSortValue(date),
+      sortDir: SortDir.Desc
     },
     {
       name: 'sdate',
-      sortable: (date) => dateSortValue(date)
+      sortable: (date) => dateSortValue(date),
+      sortDir: SortDir.Desc
     },
     {
       name: 'ddate',
-      sortable: (date) => dateSortValue(date)
+      sortable: (date) => dateSortValue(date),
+      sortDir: SortDir.Desc
     }
   ].filter((field) => Object.prototype.hasOwnProperty.call(firstResource, field.name))
 }
@@ -332,7 +341,7 @@ export default {
       required: false,
       default: undefined,
       validator: (value) => {
-        return ["asc", "desc"].includes(value)
+        return value === undefined || [SortDir.Asc, SortDir.Desc].includes(value)
       }
     }
   },
@@ -445,8 +454,10 @@ export default {
         ]
           .filter((field) => Object.prototype.hasOwnProperty.call(firstResource, field.name))
           .map((field) => {
+            const sortField = sortFields.find((f) => f.name === field.name)
             Object.assign(field, {
-              sortable: sortFields.find((f) => f.name === field.name).sortable
+              sortable: sortField.sortable,
+              sortDir: sortField.sortDir
             })
             return field
           })

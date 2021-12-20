@@ -11,6 +11,7 @@ export enum SortDir {
 interface SortField {
   name: MaybeRef<string>
   sortable?: MaybeRef<boolean | Function>
+  sortDir?: MaybeRef<string>
 }
 
 interface SortOptions<T> {
@@ -32,7 +33,9 @@ export function useSort<T>(options: SortOptions<T>): SortResult<T> {
   const sortDirRef = ref(options.sortDir)
 
   const sortBy = computed(() => unref(sortByRef) || firstSortableField(unref(fields)))
-  const sortDir = computed(() => (unref(sortDirRef) === SortDir.Desc ? SortDir.Desc : SortDir.Asc))
+  const sortDir = computed(
+    () => unref(sortDirRef) || defaultSortDirection(unref(sortBy), unref(fields))
+  )
   const fields = options.fields
 
   const items = computed<Array<T>>(() => {
@@ -61,6 +64,14 @@ const firstSortableField = (fields) => {
     return sortableFields[0]
   }
   return null
+}
+
+const defaultSortDirection = (name, fields) => {
+  const sortField = fields.find((f) => f.name === name)
+  if (sortField && sortField.sortDir) {
+    return sortField.sortDir
+  }
+  return SortDir.Desc
 }
 
 const sortHelper = (items, fields, sortBy, sortDir) => {
