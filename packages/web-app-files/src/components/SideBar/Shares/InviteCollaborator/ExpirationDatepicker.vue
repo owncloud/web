@@ -1,11 +1,11 @@
 <template>
-  <div v-if="expirationSupported" class="uk-flex uk-flex-middle uk-flex-nowrap">
+  <div v-if="available" class="uk-flex uk-flex-middle uk-flex-nowrap">
     <oc-datepicker
-      v-model="enteredExpirationDate"
-      :min-date="minExpirationDate"
-      :max-date="maxExpirationDate"
-      :locale="$language.current"
-      :is-required="expirationDateEnforced"
+      v-model="dateCurrent"
+      :min-date="dateMin"
+      :max-date="dateMax"
+      :locale="language.current"
+      :is-required="enforced"
       class="files-recipient-expiration-datepicker"
       data-testid="recipient-datepicker"
     >
@@ -17,141 +17,146 @@
           gap-size="none"
           @click="togglePopover"
         >
-          <translate v-if="!enteredExpirationDate" key="no-expiration-date-label"
+          <translate v-if="!dateCurrent" key="no-expiration-date-label"
             >Set expiration date</translate
           >
           <translate
             v-else
             key="set-expiration-date-label"
-            :translate-params="{ expires: relativeExpirationDate }"
+            :translate-params="{ expires: dateExpire }"
           >
             Expires %{expires}
           </translate>
-          <oc-icon v-if="!enteredExpirationDate" name="expand_more" />
+          <oc-icon v-if="!dateCurrent" name="expand_more" />
         </oc-button>
       </template>
     </oc-datepicker>
     <oc-button
-      v-if="!expirationDateEnforced && enteredExpirationDate"
+      v-if="!enforced && dateCurrent"
       class="recipient-edit-expiration-btn-remove"
       appearance="raw"
-      :aria-label="$gettext('Remove expiration date')"
-      @click="clearExpirationDate"
+      :aria-label="gettext('Remove expiration date')"
+      @click="dateCurrent = null"
     >
       <oc-icon name="close" />
     </oc-button>
   </div>
 </template>
 
-<script>
-import { mapGetters } from 'vuex'
+<script lang="ts">
 import { DateTime } from 'luxon'
+import {
+  computed,
+  getCurrentInstance,
+  watch,
+  defineComponent,
+  customRef
+} from '@vue/composition-api'
+import { useStore } from '../../../../composables'
+import { ShareTypes } from '../../../../helpers/share'
 
-export default {
-  name: 'ExpirationDatepicker',
+export default defineComponent({
+  name: 'DateCurrentpicker',
   props: {
-    expirationDate: {
-      type: Date,
+    shareTypes: {
+      type: Array,
       required: false,
-      default: undefined
+      default: () => []
     }
   },
 
-  data() {
-    return {
-      enteredExpirationDate: null
-    }
-  },
+  setup(props, { emit }) {
+    const vm = getCurrentInstance().proxy
+    const language = computed(() => vm.$language)
+    const gettext = computed(() => vm.$gettext)
+    const store = useStore()
+    const capabilities = computed(() => store.getters.capabilities)
+    const optionsUser = computed(() => capabilities.value.files_sharing.user?.expire_date)
+    const optionsGroup = computed(() => capabilities.value.files_sharing.group?.expire_date)
+    const available = computed(() => optionsUser.value || optionsGroup.value)
+    const enforced = computed(() => optionsUser.value?.enforced || optionsGroup.value?.enforced)
+    const dateMin = DateTime.now().setLocale(language.value.current).toJSDate()
+    const dateDefault = computed(() => {
+      const hasUserCollaborators = props.shareTypes.includes(ShareTypes.user.value)
+      const hasGroupCollaborators = props.shareTypes.includes(ShareTypes.group.value)
+      const userMaxExpirationDays = parseInt(optionsUser.value?.days)
+      const groupMaxExpirationDays = parseInt(optionsGroup.value?.days)
 
-  computed: {
-    ...mapGetters(['capabilities']),
-
-    expirationSupported() {
-      return this.userExpirationDate && this.groupExpirationDate
-    },
-
-    defaultExpirationDateSet() {
-      return this.userExpirationDate.enabled || this.groupExpirationDate.enabled
-    },
-
-    userExpirationDate() {
-      return this.capabilities.files_sharing.user.expire_date
-    },
-
-    groupExpirationDate() {
-      return this.capabilities.files_sharing.group.expire_date
-    },
-
-    defaultExpirationDate() {
-      if (!this.defaultExpirationDateSet) {
+      if (!(optionsUser.value?.enabled || optionsGroup.value?.enabled)) {
         return null
       }
 
-      const userMaxExpirationDays = parseInt(this.userExpirationDate.days, 10)
-      const groupMaxExpirationDays = parseInt(this.groupExpirationDate.days, 10)
       let days = 0
-
-      if (userMaxExpirationDays && groupMaxExpirationDays) {
+      if (
+        userMaxExpirationDays &&
+        hasUserCollaborators &&
+        groupMaxExpirationDays &&
+        hasGroupCollaborators
+      ) {
         days = Math.min(userMaxExpirationDays, groupMaxExpirationDays)
-      } else {
-        days = userMaxExpirationDays || groupMaxExpirationDays
+      } else if (userMaxExpirationDays && hasUserCollaborators) {
+        days = userMaxExpirationDays
+      } else if (groupMaxExpirationDays && hasGroupCollaborators) {
+        days = groupMaxExpirationDays
       }
 
-      return DateTime.now().setLocale(this.$language.current).plus({ days }).toJSDate()
-    },
-
-    expirationDateEnforced() {
-      return this.userExpirationDate.enforced || this.groupExpirationDate.enforced
-    },
-
-    maxExpirationDate() {
-      if (!this.expirationDateEnforced) {
+      if (!days) {
         return null
       }
 
-      return this.defaultExpirationDate
-    },
+      return DateTime.now().setLocale(language.value.current).plus({ days }).toJSDate()
+    })
+    const dateMax = computed(() => (enforced.value ? dateDefault.value : null))
+    const dateCurrent = customRef<Date>((track, trigger) => {
+      let date = null
+      return {
+        get() {
+          track()
+          return date || dateDefault.value
+        },
+        set(val) {
+          date = val
 
-    minExpirationDate() {
-      return DateTime.now().setLocale(this.$language.current).toJSDate()
-    },
+          const dateCurrent = DateTime.fromJSDate(val)
+            .setLocale(language.value.current)
+            .endOf('day')
+          emit('optionChange', {
+            expirationDate: dateCurrent.isValid
+              ? dateCurrent.toFormat("yyyy-MM-dd'T'HH:mm:ssZZZ")
+              : null
+          })
 
-    relativeExpirationDate() {
-      return DateTime.fromJSDate(this.enteredExpirationDate)
-        .setLocale(this.$language.current)
+          trigger()
+        }
+      }
+    })
+    const dateExpire = computed(() =>
+      DateTime.fromJSDate(dateCurrent.value)
+        .setLocale(language.value.current)
         .endOf('day')
         .toRelative()
-    }
-  },
+    )
 
-  mounted() {
-    if (this.expirationSupported && this.defaultExpirationDateSet) {
-      this.enteredExpirationDate = this.defaultExpirationDate
-    }
-  },
+    watch(dateMax, (val) => {
+      if (!val || dateCurrent.value < val) {
+        return
+      }
 
-  watch: {
-    enteredExpirationDate: {
-      handler: 'publishChange'
-    }
-  },
+      dateCurrent.value = val
+    })
 
-  methods: {
-    publishChange() {
-      const expirationDate = DateTime.fromJSDate(this.enteredExpirationDate)
-        .setLocale(this.$language.current)
-        .endOf('day')
-      this.$emit('optionChange', {
-        expirationDate: expirationDate.isValid
-          ? expirationDate.toFormat("yyyy-MM-dd'T'HH:mm:ssZZZ")
-          : null
-      })
-    },
-    clearExpirationDate() {
-      this.enteredExpirationDate = null
+    return {
+      language,
+      gettext,
+      enforced,
+      available,
+      dateCurrent,
+      dateMin,
+      dateMax,
+      dateExpire
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

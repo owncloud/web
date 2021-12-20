@@ -1,6 +1,6 @@
 <template>
   <div
-    :data-testid="`collaborator-item-${share.collaborator.name}`"
+    :data-testid="`collaborator-${isUser ? 'user' : 'group'}-item-${share.collaborator.name}`"
     class="files-collaborators-collaborator uk-flex uk-flex-middle oc-py-xs"
   >
     <div class="uk-width-2-3 uk-flex uk-flex-middle" style="gap: 10px">

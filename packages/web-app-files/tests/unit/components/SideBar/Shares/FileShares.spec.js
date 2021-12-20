@@ -19,7 +19,7 @@ const collaborators = [Collaborators[0], Collaborators[1]]
 
 const selectors = {
   showCollaboratorButton: 'button[data-testid="collaborators-show-people"]',
-  firstCollaboratorListItem: `div[data-testid="collaborator-item-${Collaborators[0].collaborator.name}"]`
+  firstCollaboratorListItem: `div[data-testid="collaborator-user-item-${Collaborators[0].collaborator.name}"]`
 }
 
 describe('FileShares', () => {

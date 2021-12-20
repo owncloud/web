@@ -338,7 +338,7 @@ export class AllFilesPage {
     await cta.files.sidebar.openPanel({ page: page, name: 'sharing' })
 
     for (const user of users) {
-      const userColumn = `//*[@data-testid="collaborator-item-${user.id}"]`
+      const userColumn = `//*[@data-testid="collaborator-user-item-${user.id}"]`
       await page.click(`${userColumn}//button[contains(@class,"files-recipient-role-select-btn")]`)
       await page.click(
         `${userColumn}//ul[contains(@class,"files-recipient-role-drop-list")]//button[@id="files-recipient-role-drop-btn-${role}"]`
@@ -361,7 +361,7 @@ export class AllFilesPage {
     await cta.files.sidebar.openPanel({ page: page, name: 'sharing' })
 
     for (const user of users) {
-      const userColumn = `//*[@data-testid="collaborator-item-${user.id}"]`
+      const userColumn = `//*[@data-testid="collaborator-user-item-${user.id}"]`
 
       await Promise.all([
         page.waitForResponse(

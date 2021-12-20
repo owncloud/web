@@ -1,0 +1,7 @@
+Enhancement: Respect share max, min and enforced expiration date
+
+if the expiration date max and/or enforcement is supported (defined by the capabilities) the UI now handles the different cases and respects the backend settings.
+In oc10 there are options to enforce the maximum available date for group and user shares, this is now considered in the UI and updates dynamically in both cases.
+
+https://github.com/owncloud/web/pull/6176
+https://github.com/owncloud/web/pull/6039

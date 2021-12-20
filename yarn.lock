@@ -2357,6 +2357,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/luxon@npm:^2.0.8":
+  version: 2.0.8
+  resolution: "@types/luxon@npm:2.0.8"
+  checksum: 630d069a5a719c7512cb8805bcec6bac7f9aa5d434edf2159ba6dfb22eb8de982232a6d3621acd66f6ca2d1d6b0e8b40f9c8dafbbad654eb8cc01229f528ae45
+  languageName: node
+  linkType: hard
+
 "@types/minimatch@npm:*, @types/minimatch@npm:^3.0.3":
   version: 3.0.4
   resolution: "@types/minimatch@npm:3.0.4"
@@ -15085,6 +15092,7 @@ typescript@^4.3.2:
   resolution: "web-runtime@workspace:packages/web-runtime"
   dependencies:
     "@popperjs/core": ^2.4.0
+    "@types/luxon": ^2.0.8
     "@vue/composition-api": ^1.2.4
     easygettext: ^2.16.1
     filesize: ^8.0.0

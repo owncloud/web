@@ -59,7 +59,7 @@ const selectors = {
     containerPrefix: 'recipient-container-'
   },
   listItem: {
-    containerPrefix: 'collaborator-item-',
+    containerPrefix: 'collaborator-user-item-',
     expiration: 'recipient-info-expiration-date',
     editBtn: 'collaborator-edit',
     removeExpirationBtn: 'collaborator-remove-expiration-btn'
