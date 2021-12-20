@@ -9,9 +9,9 @@ Feature: download files
 
 
   Scenario: Try to download file and folder that used to exist but does not anymore
-    Given user "Alice" has created file "lorem.txt"
+    Given user "Alice" has created file "lorem.txt" in the server
     And the user has browsed to the files page
-    And the following files have been deleted by user "Alice"
+    And the following files have been deleted by user "Alice" in the server
       | name      |
       | lorem.txt |
     When the user downloads file "lorem.txt" using the webUI
@@ -22,7 +22,7 @@ Feature: download files
 
 
   Scenario: download file with comma in the filename
-    Given user "Alice" has created file "sample,1.txt"
+    Given user "Alice" has created file "sample,1.txt" in the server
     When the user has browsed to the files page
     And the user downloads file "sample,1.txt" using the webUI
     Then no message should be displayed on the webUI

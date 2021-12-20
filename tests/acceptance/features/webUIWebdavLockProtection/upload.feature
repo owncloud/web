@@ -8,9 +8,9 @@ Feature: Locks
     Given these users have been created with default attributes and without skeleton files in the server:
       | username       |
       | brand-new-user |
-    And user "brand-new-user" has created folder "simple-folder"
-    And user "brand-new-user" has uploaded file with content "file inside locked folder" to "simple-folder/lorem.txt"
-    And user "brand-new-user" has uploaded file with content "locked file" to "lorem.txt"
+    And user "brand-new-user" has created folder "simple-folder" in the server
+    And user "brand-new-user" has uploaded file with content "file inside locked folder" to "simple-folder/lorem.txt" in the server
+    And user "brand-new-user" has uploaded file with content "locked file" to "lorem.txt" in the server
     And user "brand-new-user" has logged in using the webUI
 
   @issue-5417
@@ -42,7 +42,7 @@ Feature: Locks
       """
       The file lorem.txt is currently locked, please try again later
       """
-    And the content of file "simple-folder/lorem.txt" for user "brand-new-user" should be "file inside locked folder"
+    And the content of file "simple-folder/lorem.txt" for user "brand-new-user" should be "file inside locked folder" in the server
     When the user browses to the files page
     Then file "simple-folder" should be marked as locked on the webUI
     And file "simple-folder" should be marked as locked by user "brand-new-user" in the locks tab of the details panel on the webUI
@@ -84,7 +84,7 @@ Feature: Locks
       """
       The file lorem.txt is currently locked, please try again later
       """
-    And the content of file "simple-folder/lorem.txt" for user "brand-new-user" should be "file inside locked folder"
+    And the content of file "simple-folder/lorem.txt" for user "brand-new-user" should be "file inside locked folder" in the server
     Examples:
       | lockscope |
       | exclusive |

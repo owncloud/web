@@ -22,8 +22,8 @@ Feature: restrict resharing
   @smokeTest @issue-2447
   Scenario: disable resharing and check if the received resource can be reshared
     Given the setting "shareapi_allow_resharing" of app "core" has been set to "no"
-    And user "Brian" has created folder "simple-folder"
-    And user "Brian" has uploaded file "lorem.txt" to "simple-folder/lorem.txt"
+    And user "Brian" has created folder "simple-folder" in the server
+    And user "Brian" has uploaded file "lorem.txt" to "simple-folder/lorem.txt" in the server
     And user "Brian" has shared folder "simple-folder" with user "Alice"
     And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian"
     And user "Alice" has favorited element "/Shares/simple-folder"
@@ -41,7 +41,7 @@ Feature: restrict resharing
   @smokeTest
   Scenario: disable resharing and check if the received resource from group share can be reshared
     Given the setting "shareapi_allow_resharing" of app "core" has been set to "no"
-    And user "Carol" has uploaded file "lorem.txt" to "lorem.txt"
+    And user "Carol" has uploaded file "lorem.txt" to "lorem.txt" in the server
     And user "Carol" has shared file "lorem.txt" with group "grp1"
     And user "Alice" has accepted the share "Shares/lorem.txt" offered by user "Carol"
     And user "Brian" has accepted the share "Shares/lorem.txt" offered by user "Carol"

@@ -9,8 +9,8 @@ Feature: Create public link shares
 
   @smokeTest @ocisSmokeTest @issue-ocis-reva-383
   Scenario: simple folder sharing by public link
-    Given user "Alice" has created folder "simple-folder"
-    And user "Alice" has created file "simple-folder/lorem.txt"
+    Given user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has created file "simple-folder/lorem.txt" in the server
     And user "Alice" has logged in using the webUI
     When the user creates a new public link for resource "simple-folder" using the webUI
     Then user "Alice" should have a share with these details:
@@ -26,7 +26,7 @@ Feature: Create public link shares
 
   @smokeTest @ocisSmokeTest @issue-ocis-reva-383
   Scenario: simple file sharing by public link
-    Given user "Alice" has created file "lorem.txt"
+    Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has logged in using the webUI
     When the user creates a new public link for resource "lorem.txt" using the webUI
     Then user "Alice" should have a share with these details:
@@ -43,8 +43,8 @@ Feature: Create public link shares
   @skipOnOC10 @issue-ocis-reva-383
   # When this issue is fixed delete this scenario and use the one above
   Scenario: simple folder sharing by public link (ocis bug demonstration)
-    Given user "Alice" has created folder "simple-folder"
-    And user "Alice" has created file "simple-folder/lorem.txt"
+    Given user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has created file "simple-folder/lorem.txt" in the server
     And user "Alice" has logged in using the webUI
     When the user creates a new public link for resource "simple-folder" using the webUI
     Then user "Alice" should have a share with these details:
@@ -60,7 +60,7 @@ Feature: Create public link shares
   @skipOnOC10 @issue-ocis-reva-383
   # When this issue is fixed delete this scenario and use the one above
   Scenario: simple file sharing by public link (ocis bug demonstration)
-    Given user "Alice" has created file "lorem.txt"
+    Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has logged in using the webUI
     When the user creates a new public link for resource "lorem.txt" using the webUI
     Then user "Alice" should have a share with these details:
@@ -75,9 +75,9 @@ Feature: Create public link shares
 
   @issue-ocis-reva-389
   Scenario: user shares a public link with folder longer than 64 chars and shorter link name
-    Given user "Alice" has created folder "simple-folder"
-    And user "Alice" has created file "simple-folder/lorem.txt"
-    And user "Alice" has renamed folder "simple-folder" to "aquickbrownfoxjumpsoveraverylazydogaquickbrownfoxjumpsoveralazydog"
+    Given user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has created file "simple-folder/lorem.txt" in the server
+    And user "Alice" has renamed folder "simple-folder" to "aquickbrownfoxjumpsoveraverylazydogaquickbrownfoxjumpsoveralazydog" in the server
     And user "Alice" has logged in using the webUI
     When the user creates a new public link for folder "aquickbrownfoxjumpsoveraverylazydogaquickbrownfoxjumpsoveralazydog" using the webUI with
       | name | short_linkname |
@@ -86,9 +86,9 @@ Feature: Create public link shares
 
   @issue-5302
   Scenario: share two files with same name but different paths by public link
-    Given user "Alice" has created folder "simple-folder"
-    And user "Alice" has created file "simple-folder/lorem.txt"
-    And user "Alice" has created file "lorem.txt"
+    Given user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has created file "simple-folder/lorem.txt" in the server
+    And user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has logged in using the webUI
     When the user creates a new public link for file "lorem.txt" using the webUI
     And the user opens folder "simple-folder" using the webUI
@@ -102,7 +102,7 @@ Feature: Create public link shares
 
 
   Scenario: user creates a multiple public link of a file and delete the first link
-    Given user "Alice" has created file "lorem.txt"
+    Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has created a public link with following settings
       | path | lorem.txt  |
       | name | first-name |
@@ -120,7 +120,7 @@ Feature: Create public link shares
 
 
   Scenario: user creates a multiple public link of a file and delete the second link
-    Given user "Alice" has created file "lorem.txt"
+    Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has created a public link with following settings
       | path | lorem.txt  |
       | name | first-name |
@@ -138,7 +138,7 @@ Feature: Create public link shares
 
 
   Scenario: user creates a multiple public link of a file and delete the third link
-    Given user "Alice" has created file "lorem.txt"
+    Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has created a public link with following settings
       | path | lorem.txt  |
       | name | first-name |
@@ -156,7 +156,7 @@ Feature: Create public link shares
 
 
   Scenario Outline: user creates multiple public links with same name for the same file/folder
-    Given user "Alice" has created <element> "<name>"
+    Given user "Alice" has created <element> "<name>" in the server
     And user "Alice" has logged in using the webUI
     When the user creates a new public link for <element> "<name>" using the webUI with
       | name | same_link_name |
@@ -170,7 +170,7 @@ Feature: Create public link shares
 
 
   Scenario: User can create a public link via quick action
-    Given user "Alice" has created folder "simple-folder"
+    Given user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has logged in using the webUI
     When the user creates a public link via quick action for resource "simple-folder" using the webUI
     Then user "Alice" should have a share with these details:
@@ -191,7 +191,7 @@ Feature: Create public link shares
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And the administrator has set the default folder for received shares to "Shares"
     And user "Brian" has been created with default attributes and without skeleton files in the server
-    And user "Brian" has created folder "simple-folder"
+    And user "Brian" has created folder "simple-folder" in the server
     And user "Carol" has been created with default attributes and without skeleton files in the server
     And user "Brian" has shared folder "simple-folder" with user "Alice"
     And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian"

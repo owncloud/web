@@ -23,7 +23,7 @@ Feature: Sharing files with internal groups with permissions
     Given user "user0" has been created with default attributes and without skeleton files in the server
     And group "grp2" has been created in the server
     And user "Brian" has been added to group "grp2" in the server
-    And user "Alice" has created file "lorem.txt"
+    And user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has logged in using the webUI
     When the user opens the share dialog for file "lorem.txt" using the webUI
 

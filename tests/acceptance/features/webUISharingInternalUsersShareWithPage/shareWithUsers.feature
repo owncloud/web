@@ -10,13 +10,13 @@ Feature: Shares in share-with pages
       | username |
       | Alice    |
       | Brian    |
-    And user "Brian" has created folder "simple-folder"
+    And user "Brian" has created folder "simple-folder" in the server
 
   @issue-4192
   Scenario: share a folder with other user and then it should be listed on Shared with You for other user
-    Given user "Brian" has created file "lorem.txt"
-    And user "Brian" has renamed folder "simple-folder" to "new-simple-folder"
-    And user "Brian" has renamed file "lorem.txt" to "ipsum.txt"
+    Given user "Brian" has created file "lorem.txt" in the server
+    And user "Brian" has renamed folder "simple-folder" to "new-simple-folder" in the server
+    And user "Brian" has renamed file "lorem.txt" to "ipsum.txt" in the server
     And user "Brian" has shared file "ipsum.txt" with user "Alice"
     And user "Alice" has accepted the share "Shares/ipsum.txt" offered by user "Brian"
     And user "Brian" has shared folder "new-simple-folder" with user "Alice"
@@ -29,7 +29,7 @@ Feature: Shares in share-with pages
 
   Scenario: share a folder with other user and then it should be listed on Shared with Others page
     Given user "Carol" has been created with default attributes and without skeleton files in the server
-    And user "Brian" has created file "lorem.txt"
+    And user "Brian" has created file "lorem.txt" in the server
     And user "Brian" has logged in using the webUI
     And user "Brian" has shared file "lorem.txt" with user "Alice"
     And user "Alice" has accepted the share "Shares/lorem.txt" offered by user "Brian"
@@ -45,8 +45,8 @@ Feature: Shares in share-with pages
 
   @issue-2480
   Scenario: check file with same name but different paths are displayed correctly in shared with others page
-    Given user "Brian" has created file "lorem.txt"
-    And user "Brian" has created file "simple-folder/lorem.txt"
+    Given user "Brian" has created file "lorem.txt" in the server
+    And user "Brian" has created file "simple-folder/lorem.txt" in the server
     And user "Brian" has shared file "lorem.txt" with user "Alice"
     And user "Brian" has shared file "simple-folder/lorem.txt" with user "Alice"
     And user "Brian" has logged in using the webUI
@@ -57,8 +57,8 @@ Feature: Shares in share-with pages
 
 
   Scenario: send share shows up on shared-with-others page
-    Given user "Alice" has created folder "simple-folder"
-    And user "Alice" has created file "data.zip"
+    Given user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has created file "data.zip" in the server
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Alice" has logged in using the webUI
     When the user browses to the shared-with-others page using the webUI
@@ -67,8 +67,8 @@ Feature: Shares in share-with pages
 
 
   Scenario: received share shows up on shared-with-me page
-    Given user "Alice" has created folder "simple-folder"
-    And user "Alice" has created file "data.zip"
+    Given user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has created file "data.zip" in the server
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
     And user "Brian" has logged in using the webUI
@@ -78,10 +78,10 @@ Feature: Shares in share-with pages
 
   @issue-4170
   Scenario: clicking a folder on shared-with-me page jumps to the main file list inside the folder
-    Given user "Alice" has created folder "simple-folder"
+    Given user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
-    And user "Alice" has created file "simple-folder/collaborate-on-this.txt"
+    And user "Alice" has created file "simple-folder/collaborate-on-this.txt" in the server
     And user "Brian" has logged in using the webUI
     When the user browses to the shared-with-me page
     And the user opens folder "simple-folder" using the webUI
@@ -89,7 +89,7 @@ Feature: Shares in share-with pages
 
   @issue-ocis-2266
   Scenario: unsharing an entry on the shared-with-me page unshares from self
-    Given user "Alice" has created folder "simple-folder"
+    Given user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
     And user "Brian" has logged in using the webUI
@@ -101,8 +101,8 @@ Feature: Shares in share-with pages
 
   @issue-4582 @issue-ocis-2266
   Scenario: unsharing multiple entries on the shared-with-me page
-    Given user "Alice" has created folder "simple-folder"
-    And user "Alice" has created file "lorem.txt"
+    Given user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
     And user "Alice" has shared file "lorem.txt" with user "Brian"
@@ -146,7 +146,7 @@ Feature: Shares in share-with pages
   @issue-ocis-1328
   Scenario Outline: collaborators list contains additional info when enabled
     Given the setting "user_additional_info_field" of app "core" has been set to "<additional-info-field>"
-    And user "Alice" has created folder "simple-folder"
+    And user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     When user "Alice" has logged in using the webUI
     And the user opens the share dialog for folder "simple-folder" using the webUI
@@ -159,7 +159,7 @@ Feature: Shares in share-with pages
   @issue-ocis-1328
   Scenario: collaborators list does not contain additional info when disabled
     Given the setting "user_additional_info_field" of app "core" has been set to ""
-    And user "Alice" has created folder "simple-folder"
+    And user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     When user "Alice" has logged in using the webUI
     And the user opens the share dialog for folder "simple-folder" using the webUI
@@ -197,7 +197,7 @@ Feature: Shares in share-with pages
 
 
   Scenario: share a file with another internal user via collaborators quick action
-    Given user "Alice" has created folder "simple-folder"
+    Given user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has logged in using the webUI
     When the user shares resource "simple-folder" with user "Brian Murphy" using the quick action on the webUI
     And user "Brian" accepts the share "Shares/simple-folder" offered by user "Alice" using the sharing API

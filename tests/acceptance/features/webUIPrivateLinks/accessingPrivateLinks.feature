@@ -3,7 +3,7 @@ Feature: Access private link
 
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files in the server
-    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
+    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt" in the server
 
   @smokeTest @ocisSmokeTest
   Scenario: Copy and access private link

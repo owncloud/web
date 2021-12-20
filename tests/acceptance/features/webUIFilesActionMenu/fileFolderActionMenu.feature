@@ -5,14 +5,14 @@ Feature: User can see the file or folder actions menu options
 
 Background: prepare user and files
     Given user "Alice" has been created with default attributes and without skeleton files in the server
-    And user "Alice" has created folder "simple-folder"
-    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
-    And user "Alice" has uploaded file "testavatar.png" to "testavatar.png"
+    And user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt" in the server
+    And user "Alice" has uploaded file "testavatar.png" to "testavatar.png" in the server
     And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
 
   Scenario: observe different actions menu options on selecting different file types
-    Given user "Alice" has uploaded file with content "pdf file" to "lorem.pdf"
+    Given user "Alice" has uploaded file with content "pdf file" to "lorem.pdf" in the server
     And the user has reloaded the current page of the webUI
     When the user opens the actions sidebar panel of file "lorem.txt" on the webUI
     Then the app-sidebar for file "lorem.txt" should be visible on the webUI

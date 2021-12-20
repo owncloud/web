@@ -15,7 +15,7 @@ Feature: Sharing files with internal groups with permissions
       | grp1      |
     And user "Alice" has been added to group "grp1" in the server
     And user "Brian" has been added to group "grp1" in the server
-    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
+    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt" in the server
 
 
   Scenario Outline: share a file with multiple users with different roles and permissions

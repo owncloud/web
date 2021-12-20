@@ -6,9 +6,9 @@ Feature: File Upload
 
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files in the server
-    And user "Alice" has created folder "simple-folder"
-    And user "Alice" has uploaded file with content "initial content" to "lorem.txt"
-    And user "Alice" has uploaded file with content "initial content" to "simple-folder/lorem.txt"
+    And user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has uploaded file with content "initial content" to "lorem.txt" in the server
+    And user "Alice" has uploaded file with content "initial content" to "simple-folder/lorem.txt" in the server
     And user "Alice" has logged in using the webUI
 
   @smokeTest  @ocisSmokeTest
@@ -46,7 +46,7 @@ Feature: File Upload
 
   @smokeTest @ocisSmokeTest
   Scenario: Upload of a folder inside a subdirectory
-    Given user "Alice" has created folder "simple-empty-folder"
+    Given user "Alice" has created folder "simple-empty-folder" in the server
     And the user has reloaded the current page of the webUI
     When the user browses to the folder "simple-empty-folder" on the files page
     And the user uploads folder "PARENT" using the webUI
@@ -113,7 +113,7 @@ Feature: File Upload
     Then no dialog should be displayed on the webUI
     And no message should be displayed on the webUI
     And file "lorem.txt" should be listed on the webUI
-    And the content of "lorem.txt" should not have changed
+    And the content of "lorem.txt" should not have changed in the server
     And file "lorem (2).txt" should be listed on the webUI
     And as "Alice" the content of "lorem (2).txt" should be the same as the content of local file "lorem.txt"
 
@@ -124,7 +124,7 @@ Feature: File Upload
     Then no dialog should be displayed on the webUI
     And no message should be displayed on the webUI
     And file "lorem.txt" should be listed on the webUI
-    And the content of "lorem.txt" should not have changed
+    And the content of "lorem.txt" should not have changed in the server
     And file "lorem (2).txt" should not be listed on the webUI
 
   @disablePreviews
@@ -144,7 +144,7 @@ Feature: File Upload
     Then no dialog should be displayed on the webUI
     And no message should be displayed on the webUI
     And file "lorem.txt" should be listed on the webUI
-    And the content of "lorem.txt" should not have changed
+    And the content of "lorem.txt" should not have changed in the server
     And file "lorem (2).txt" should be listed on the webUI
     And as "Alice" the content of "lorem (2).txt" should be the same as the content of local file "lorem.txt"
 

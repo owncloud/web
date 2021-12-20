@@ -18,9 +18,9 @@ Feature: Federation Sharing - sharing with users on other cloud storages
 
 
   Scenario: test the single steps of sharing a folder to a remote server
-    Given user "Alice" has created folder "simple-folder"
-    And user "Alice" has created folder "simple-empty-folder"
-    And user "Alice" has created file "simple-folder/lorem.txt"
+    Given user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has created folder "simple-empty-folder" in the server
+    And user "Alice" has created file "simple-folder/lorem.txt" in the server
     And the user has reloaded the current page of the webUI
     When the user shares folder "simple-folder" with remote user "Alice" as "Editor" using the webUI
     And the user shares folder "simple-empty-folder" with remote user "Alice" as "Editor" using the webUI
@@ -85,7 +85,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
 
 
   Scenario: share a folder with an remote user with "Viewer" role
-    Given user "Alice" has created folder "simple-empty-folder"
+    Given user "Alice" has created folder "simple-empty-folder" in the server
     And the user has reloaded the current page of the webUI
     When the user shares folder "simple-empty-folder" with remote user "Alice" as "Viewer" using the webUI
     Then user "Alice" should have shared a folder "simple-empty-folder" with these details:
@@ -219,7 +219,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
 
 
   Scenario: test sharing long file names with federation share
-    Given user "Alice" has uploaded file with content "secret" to "averylongfilenamefortestingthatfileswithlongfilenamescannotbeshared.txt"
+    Given user "Alice" has uploaded file with content "secret" to "averylongfilenamefortestingthatfileswithlongfilenamescannotbeshared.txt" in the server
     And the user has reloaded the current page of the webUI
     When the user shares file "averylongfilenamefortestingthatfileswithlongfilenamescannotbeshared.txt" with remote user "Alice" as "Viewer" using the webUI
     Then as "Alice" file "averylongfilenamefortestingthatfileswithlongfilenamescannotbeshared.txt" should exist on remote server
@@ -290,10 +290,10 @@ Feature: Federation Sharing - sharing with users on other cloud storages
 
   @issue-2060
   Scenario: sharing indicator of items inside a shared folder two levels down
-    Given user "Alice" has created folder "/simple-folder"
-    And user "Alice" has created folder "/simple-folder/simple-empty-folder"
-    And user "Alice" has created folder "/simple-folder/simple-empty-folder/new-folder"
-    And user "Alice" has uploaded file with content "test" to "/simple-folder/simple-empty-folder/lorem.txt"
+    Given user "Alice" has created folder "/simple-folder" in the server
+    And user "Alice" has created folder "/simple-folder/simple-empty-folder" in the server
+    And user "Alice" has created folder "/simple-folder/simple-empty-folder/new-folder" in the server
+    And user "Alice" has uploaded file with content "test" to "/simple-folder/simple-empty-folder/lorem.txt" in the server
     And the user has reloaded the current page of the webUI
     When the user shares folder "simple-folder" with remote user "Alice" as "Editor" using the webUI
     And the user opens folder "/" directly on the webUI
@@ -314,9 +314,9 @@ Feature: Federation Sharing - sharing with users on other cloud storages
   Scenario: sharing indicator of items inside a re-shared folder
     Given user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Carol" has been created with default attributes and without skeleton files in the server
-    And user "Alice" has created folder "simple-folder"
-    And user "Alice" has created folder "simple-folder/simple-empty-folder"
-    And user "Alice" has created file "simple-folder/lorem.txt"
+    And user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
+    And user "Alice" has created file "simple-folder/lorem.txt" in the server
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     And the user re-logs in as "Brian" using the webUI
     And user "Brian" has shared folder "simple-folder" with user "Carol"
@@ -335,9 +335,9 @@ Feature: Federation Sharing - sharing with users on other cloud storages
   @issue-2060
   Scenario: sharing indicator of items inside a re-shared subfolder
     Given user "Brian" has been created with default attributes and without skeleton files in the server
-    And user "Alice" has created folder "simple-folder"
-    And user "Alice" has created folder "simple-folder/simple-empty-folder"
-    And user "Alice" has created file "simple-folder/lorem.txt"
+    And user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
+    And user "Alice" has created file "simple-folder/lorem.txt" in the server
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     When the user re-logs in as "Brian" using the webUI
     And the user opens folder "simple-folder" using the webUI
@@ -354,7 +354,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
 
   @issue-2060
   Scenario: sharing indicator for file uploaded inside a shared folder
-    Given user "Alice" has created folder "simple-empty-folder"
+    Given user "Alice" has created folder "simple-empty-folder" in the server
     And the user has reloaded the current page of the webUI
     When the user shares folder "simple-empty-folder" with remote user "Alice" as "Editor" using the webUI
     And the user opens folder "simple-empty-folder" using the webUI
@@ -365,7 +365,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
 
   @issue-2060
   Scenario: sharing indicator for folder created inside a shared folder
-    Given user "Alice" has created folder "simple-empty-folder"
+    Given user "Alice" has created folder "simple-empty-folder" in the server
     And the user has reloaded the current page of the webUI
     When the user shares folder "simple-empty-folder" with remote user "Alice" as "Editor" using the webUI
     And the user opens folder "simple-empty-folder" using the webUI
@@ -376,7 +376,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
 
   @issue-2939
   Scenario: sharing indicator for federated shares stays up to date
-    Given user "Alice" has created folder "simple-folder"
+    Given user "Alice" has created folder "simple-folder" in the server
     And the user has reloaded the current page of the webUI
     When the user shares folder "simple-folder" with remote user "Alice" as "Editor" using the webUI
     Then the following resources should have share indicators on the webUI
@@ -389,9 +389,9 @@ Feature: Federation Sharing - sharing with users on other cloud storages
 
   @issue-2897
   Scenario: sharing details inside folder shared using federated sharing ("via" info)
-    Given user "Alice" has created folder "simple-folder"
-    And user "Alice" has created folder "/simple-folder/sub-folder"
-    And user "Alice" has uploaded file with content "test" to "/simple-folder/textfile.txt"
+    Given user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has created folder "/simple-folder/sub-folder" in the server
+    And user "Alice" has uploaded file with content "test" to "/simple-folder/textfile.txt" in the server
     And the user has reloaded the current page of the webUI
     When the user shares folder "simple-folder" with remote user "Alice" as "Editor" using the webUI
     And the user opens folder "simple-folder" using the webUI

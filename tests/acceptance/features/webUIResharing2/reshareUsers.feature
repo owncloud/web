@@ -12,7 +12,7 @@ Feature: Resharing shared files with different permissions
       | Alice    |
       | Brian    |
       | Carol    |
-    And user "Brian" has created folder "simple-folder"
+    And user "Brian" has created folder "simple-folder" in the server
 
   @issue-ocis-1922
   Scenario: Reshare a folder without share permissions using API and check if it is listed on the collaborators list for original owner

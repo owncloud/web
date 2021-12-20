@@ -9,8 +9,8 @@ Feature: Sharing folders with multiple internal users using advanced permissions
       | username |
       | Alice    |
       | Brian    |
-    And user "Alice" has created folder "simple-folder"
-    And user "Alice" has uploaded file "lorem.txt" to "simple-folder/lorem.txt"
+    And user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has uploaded file "lorem.txt" to "simple-folder/lorem.txt" in the server
 
   Scenario Outline: share a folder with multiple users using role as advanced permissions role and different extra permissions
     Given these users have been created with default attributes and without skeleton files in the server:

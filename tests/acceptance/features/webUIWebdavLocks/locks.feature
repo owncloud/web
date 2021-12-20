@@ -8,12 +8,12 @@ Feature: Locks
     Given these users have been created with default attributes and without skeleton files in the server:
       | username       | displayname |
       | brand-new-user | New User    |
-    And user "brand-new-user" has created folder "simple-folder"
-    And user "brand-new-user" has created folder "simple-empty-folder"
-    And user "brand-new-user" has created file "simple-folder/lorem.txt"
-    And user "brand-new-user" has created file "lorem.txt"
-    And user "brand-new-user" has uploaded file "data.zip" to "data.zip"
-    And user "brand-new-user" has uploaded file "data.zip" to "data.tar.gz"
+    And user "brand-new-user" has created folder "simple-folder" in the server
+    And user "brand-new-user" has created folder "simple-empty-folder" in the server
+    And user "brand-new-user" has created file "simple-folder/lorem.txt" in the server
+    And user "brand-new-user" has created file "lorem.txt" in the server
+    And user "brand-new-user" has uploaded file "data.zip" to "data.zip" in the server
+    And user "brand-new-user" has uploaded file "data.zip" to "data.tar.gz" in the server
     And user "brand-new-user" has logged in using the webUI
 
   @issue-5417
@@ -145,10 +145,10 @@ Feature: Locks
     Given these users have been created with default attributes and without skeleton files in the server:
       | username |
       | sharer   |
-    And user "sharer" has created folder "simple-folder"
-    And user "sharer" has created folder "simple-empty-folder"
-    And user "sharer" has uploaded file "data.zip" to "data.zip"
-    And user "sharer" has uploaded file "data.zip" to "data.tar.gz"
+    And user "sharer" has created folder "simple-folder" in the server
+    And user "sharer" has created folder "simple-empty-folder" in the server
+    And user "sharer" has uploaded file "data.zip" to "data.zip" in the server
+    And user "sharer" has uploaded file "data.zip" to "data.tar.gz" in the server
     And user "sharer" has locked folder "simple-folder" setting following properties
       | lockscope | shared |
     And user "sharer" has locked file "data.zip" setting following properties
@@ -177,8 +177,8 @@ Feature: Locks
       | sharer    |
       | receiver  |
       | receiver2 |
-    And user "sharer" has uploaded file "data.zip" to "data.zip"
-    And user "sharer" has uploaded file "data.zip" to "data.tar.gz"
+    And user "sharer" has uploaded file "data.zip" to "data.zip" in the server
+    And user "sharer" has uploaded file "data.zip" to "data.tar.gz" in the server
     And group "receiver-group" has been created in the server
     And user "receiver2" has been added to group "receiver-group" in the server
     And user "sharer" has shared file "data.zip" with user "receiver"
@@ -211,8 +211,8 @@ Feature: Locks
 
   @issue-5417
   Scenario: setting a lock on a folder shows the symbols at the sub-elements
-    Given user "brand-new-user" has created folder "simple-folder/simple-empty-folder"
-    And user "brand-new-user" has uploaded file "data.zip" to "simple-folder/data.zip"
+    Given user "brand-new-user" has created folder "simple-folder/simple-empty-folder" in the server
+    And user "brand-new-user" has uploaded file "data.zip" to "simple-folder/data.zip" in the server
     And user "brand-new-user" has locked folder "simple-folder" setting following properties
       | lockscope | shared |
     When the user opens folder "simple-folder" using the webUI
@@ -223,8 +223,8 @@ Feature: Locks
 
   @issue-5417
   Scenario: setting a depth:0 lock on a folder does not show the symbols at the sub-elements
-    Given user "brand-new-user" has created folder "simple-folder/simple-empty-folder"
-    And user "brand-new-user" has uploaded file "data.zip" to "simple-folder/data.zip"
+    Given user "brand-new-user" has created folder "simple-folder/simple-empty-folder" in the server
+    And user "brand-new-user" has uploaded file "data.zip" to "simple-folder/data.zip" in the server
     And user "brand-new-user" has locked folder "simple-folder" setting following properties
       | depth | 0 |
     When the user browses to the files page
@@ -238,7 +238,7 @@ Feature: Locks
     Given these users have been created with default attributes and without skeleton files in the server:
       | username |
       | sharer   |
-    And user "sharer" has created folder "/to-share-folder"
+    And user "sharer" has created folder "/to-share-folder" in the server
     And user "sharer" has locked folder "to-share-folder" setting following properties
       | lockscope | <lockscope> |
     And user "sharer" has shared folder "to-share-folder" with user "brand-new-user"
@@ -259,7 +259,7 @@ Feature: Locks
     Given these users have been created with default attributes and without skeleton files in the server:
       | username |
       | sharer   |
-    And user "sharer" has created folder "/to-share-folder"
+    And user "sharer" has created folder "/to-share-folder" in the server
     And user "sharer" has locked folder "to-share-folder" setting following properties
       | lockscope | <lockscope> |
     And user "sharer" has shared folder "to-share-folder" with user "brand-new-user"
@@ -279,7 +279,7 @@ Feature: Locks
     Given these users have been created with default attributes and without skeleton files in the server:
       | username |
       | sharer   |
-    And user "sharer" has created folder "/to-share-folder"
+    And user "sharer" has created folder "/to-share-folder" in the server
     And user "sharer" has locked folder "to-share-folder" setting following properties
       | lockscope | <lockscope> |
     And user "sharer" has shared folder "to-share-folder" with user "brand-new-user"
@@ -303,8 +303,8 @@ Feature: Locks
     Given these users have been created with default attributes and without skeleton files in the server:
       | username |
       | sharer   |
-    And user "sharer" has created folder "/parent"
-    And user "sharer" has created folder "/parent/subfolder"
+    And user "sharer" has created folder "/parent" in the server
+    And user "sharer" has created folder "/parent/subfolder" in the server
     And user "sharer" has locked folder "parent" setting following properties
       | lockscope | <lockscope> |
     And user "sharer" has shared folder "parent" with user "brand-new-user"
@@ -328,8 +328,8 @@ Feature: Locks
     Given these users have been created with default attributes and without skeleton files in the server:
       | username |
       | sharer   |
-    And user "sharer" has created file "lorem.txt"
-    And user "sharer" has created folder "simple-folder"
+    And user "sharer" has created file "lorem.txt" in the server
+    And user "sharer" has created folder "simple-folder" in the server
     And user "sharer" has locked file "lorem.txt" setting following properties
       | lockscope | <lockscope> |
     And user "sharer" has locked folder "simple-folder" setting following properties

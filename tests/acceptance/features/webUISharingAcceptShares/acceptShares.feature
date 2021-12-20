@@ -17,7 +17,7 @@ Feature: accept/decline shares coming from internal users
     Given these groups have been created in the server:
       | groupname |
       | grp1      |
-    And user "Alice" has created folder "/simple-folder"
+    And user "Alice" has created folder "/simple-folder" in the server
     And user "Brian" has been added to group "grp1" in the server
     And user "Alice" has shared folder "/simple-folder" with user "Brian"
     And user "Alice" has shared folder "/simple-folder" with group "grp1"
@@ -33,7 +33,7 @@ Feature: accept/decline shares coming from internal users
     Given these groups have been created in the server:
       | groupname |
       | grp1      |
-    And user "Alice" has created folder "/simple-folder"
+    And user "Alice" has created folder "/simple-folder" in the server
     And user "Brian" has been added to group "grp1" in the server
     And user "Alice" has shared folder "/simple-folder" with user "Brian"
     And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
@@ -51,8 +51,8 @@ Feature: accept/decline shares coming from internal users
     Given these groups have been created in the server:
       | groupname |
       | grp1      |
-    And user "Alice" has uploaded file "testavatar.jpg" to "testimage.jpg"
-    And user "Alice" has created folder "/simple-folder"
+    And user "Alice" has uploaded file "testavatar.jpg" to "testimage.jpg" in the server
+    And user "Alice" has created folder "/simple-folder" in the server
     And user "Brian" has been added to group "grp1" in the server
     And user "Alice" has shared folder "/simple-folder" with user "Brian"
     And user "Alice" has shared file "/testimage.jpg" with group "grp1"
@@ -70,8 +70,8 @@ Feature: accept/decline shares coming from internal users
 
 
   Scenario: User receives files when auto accept share is disabled
-    Given user "Alice" has created file "toshare.txt"
-    And user "Alice" has uploaded file with content "test" to "toshare.txt"
+    Given user "Alice" has created file "toshare.txt" in the server
+    And user "Alice" has uploaded file with content "test" to "toshare.txt" in the server
     And user "Alice" has shared file "toshare.txt" with user "Brian"
     When the user browses to the shared-with-me page
     Then file "toshare.txt" shared by "Alice Hansen" should be in "Pending" state on the webUI
@@ -82,8 +82,8 @@ Feature: accept/decline shares coming from internal users
 
   Scenario: receive shares with same name from different users
     Given user "Carol" has been created with default attributes and without skeleton files in the server
-    And user "Carol" has created file "lorem.txt"
-    And user "Alice" has created file "lorem.txt"
+    And user "Carol" has created file "lorem.txt" in the server
+    And user "Alice" has created file "lorem.txt" in the server
     And user "Carol" has shared file "lorem.txt" with user "Brian"
     And user "Alice" has shared file "lorem.txt" with user "Brian"
     When the user browses to the shared-with-me page
@@ -92,10 +92,10 @@ Feature: accept/decline shares coming from internal users
 
   @ocisSmokeTest
   Scenario: decline an offered (pending) share
-    Given user "Alice" has created file "toshare.txt"
-    And user "Alice" has created file "anotherfile.txt"
-    And user "Alice" has uploaded file with content "test" to "toshare.txt"
-    And user "Alice" has uploaded file with content "test" to "anotherfile.txt"
+    Given user "Alice" has created file "toshare.txt" in the server
+    And user "Alice" has created file "anotherfile.txt" in the server
+    And user "Alice" has uploaded file with content "test" to "toshare.txt" in the server
+    And user "Alice" has uploaded file with content "test" to "anotherfile.txt" in the server
     And user "Alice" has shared file "toshare.txt" with user "Brian"
     And user "Alice" has shared file "anotherfile.txt" with user "Brian"
     When the user browses to the shared-with-me page in accepted shares view
@@ -109,10 +109,10 @@ Feature: accept/decline shares coming from internal users
 
   @ocisSmokeTest
   Scenario: accept an offered (pending) share
-    Given user "Alice" has created file "toshare.txt"
-    And user "Alice" has created file "anotherfile.txt"
-    And user "Alice" has uploaded file with content "test" to "toshare.txt"
-    And user "Alice" has uploaded file with content "test" to "anotherfile.txt"
+    Given user "Alice" has created file "toshare.txt" in the server
+    And user "Alice" has created file "anotherfile.txt" in the server
+    And user "Alice" has uploaded file with content "test" to "toshare.txt" in the server
+    And user "Alice" has uploaded file with content "test" to "anotherfile.txt" in the server
     And user "Alice" has shared file "toshare.txt" with user "Brian"
     And user "Alice" has shared file "anotherfile.txt" with user "Brian"
     And the user has browsed to the shared-with-me page
@@ -127,8 +127,8 @@ Feature: accept/decline shares coming from internal users
 
 
   Scenario: accept a previously declined share
-    Given user "Alice" has created file "lorem.txt"
-    And user "Alice" has uploaded file "testavatar.jpg" to "testimage.jpg"
+    Given user "Alice" has created file "lorem.txt" in the server
+    And user "Alice" has uploaded file "testavatar.jpg" to "testimage.jpg" in the server
     And user "Alice" has shared file "lorem.txt" with user "Brian"
     And user "Alice" has shared file "testimage.jpg" with user "Brian"
     And user "Brian" has declined the share "Shares/lorem.txt" offered by user "Alice"
@@ -144,8 +144,8 @@ Feature: accept/decline shares coming from internal users
 
   @issue-4102 @issue-5531
   Scenario: delete an accepted share
-    Given user "Alice" has created file "lorem.txt"
-    And user "Alice" has uploaded file "testavatar.jpg" to "testimage.jpg"
+    Given user "Alice" has created file "lorem.txt" in the server
+    And user "Alice" has uploaded file "testavatar.jpg" to "testimage.jpg" in the server
     And user "Alice" has shared file "lorem.txt" with user "Brian"
     And user "Alice" has shared file "testimage.jpg" with user "Brian"
     And the user has browsed to the shared-with-me page
@@ -161,9 +161,9 @@ Feature: accept/decline shares coming from internal users
 
   @issue-3101 @issue-4102
   Scenario: Decline multiple accepted shares at once from shared with me page
-    Given user "Alice" has created file "lorem.txt"
-    And user "Alice" has created file "data.zip"
-    And user "Alice" has created folder "simple-folder"
+    Given user "Alice" has created file "lorem.txt" in the server
+    And user "Alice" has created file "data.zip" in the server
+    And user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Alice" has shared file "lorem.txt" with user "Brian"
     And user "Alice" has shared file "data.zip" with user "Brian"
@@ -183,7 +183,7 @@ Feature: accept/decline shares coming from internal users
 
   @issue-4102 @issue-5531
   Scenario: shared file status is changed to declined when user deletes the file
-    Given user "Alice" has created file "lorem.txt"
+    Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has shared file "lorem.txt" with user "Brian"
     And user "Brian" has accepted the share "Shares/lorem.txt" offered by user "Alice"
     And the user has reloaded the current page of the webUI
@@ -194,10 +194,10 @@ Feature: accept/decline shares coming from internal users
 
   @ocis-issue-714 @issue-5532
   Scenario: the deleted shared file is restored back to all files list when accepted from the shared with me file list
-    Given user "Alice" has created file "lorem.txt"
+    Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has shared file "lorem.txt" with user "Brian"
     And user "Brian" has accepted the share "Shares/lorem.txt" offered by user "Alice"
-    And the following files have been deleted by user "Brian"
+    And the following files have been deleted by user "Brian" in the server
       | name             |
       | Shares/lorem.txt |
     When the user browses to the shared-with-me page in declined shares view
@@ -211,11 +211,11 @@ Feature: accept/decline shares coming from internal users
   @ocis-issue-713
   Scenario: receive shares with same name from different users, accept one by one
     Given user "Carol" has been created with default attributes and without skeleton files in the server
-    And user "Carol" has created folder "/simple-folder"
-    And user "Carol" has created folder "/simple-folder/from_Carol"
+    And user "Carol" has created folder "/simple-folder" in the server
+    And user "Carol" has created folder "/simple-folder/from_Carol" in the server
     And user "Carol" has shared folder "/simple-folder" with user "Brian"
-    And user "Alice" has created folder "/simple-folder"
-    And user "Alice" has created folder "/simple-folder/from_Alice"
+    And user "Alice" has created folder "/simple-folder" in the server
+    And user "Alice" has created folder "/simple-folder/from_Alice" in the server
     And user "Alice" has shared folder "/simple-folder" with user "Brian"
     And the user has browsed to the shared-with-me page
     When the user accepts share "simple-folder" offered by user "Alice Hansen" using the webUI
@@ -230,7 +230,7 @@ Feature: accept/decline shares coming from internal users
     Given these groups have been created in the server:
       | groupname |
       | grp1      |
-    And user "Alice" has created folder "/simple-folder"
+    And user "Alice" has created folder "/simple-folder" in the server
     And user "Brian" has been added to group "grp1" in the server
     And user "Alice" has shared folder "/simple-folder" with user "Brian"
     And user "Alice" has shared folder "/simple-folder" with group "grp1"

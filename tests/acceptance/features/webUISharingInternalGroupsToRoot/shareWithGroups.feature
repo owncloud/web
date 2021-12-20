@@ -19,7 +19,7 @@ Feature: Sharing files and folders with internal groups
 
 
   Scenario: share a folder with multiple collaborators and check collaborator list order
-    Given user "Carol" has created folder "simple-folder"
+    Given user "Carol" has created folder "simple-folder" in the server
     And user "Carol" has logged in using the webUI
     When the user shares folder "simple-folder" with group "grp11" as "Viewer" using the webUI
     And the user shares folder "simple-folder" with user "Brian Murphy" as "Viewer" using the webUI
@@ -29,9 +29,9 @@ Feature: Sharing files and folders with internal groups
 
 
   Scenario Outline: share a file & folder with another internal user
-    Given user "Carol" has created folder "simple-folder"
-    And user "Carol" has created file "simple-folder/lorem.txt"
-    And user "Carol" has uploaded file "testavatar.jpg" to "testavatar.jpg"
+    Given user "Carol" has created folder "simple-folder" in the server
+    And user "Carol" has created file "simple-folder/lorem.txt" in the server
+    And user "Carol" has uploaded file "testavatar.jpg" to "testavatar.jpg" in the server
     And user "Carol" has logged in using the webUI
     When the user shares folder "simple-folder" with group "grp1" as "<set-role>" using the webUI
     And the user shares file "testavatar.jpg" with group "grp1" as "<set-role>" using the webUI
@@ -72,7 +72,7 @@ Feature: Sharing files and folders with internal groups
 
 
   Scenario: share a file with an internal group a member overwrites and unshares the file
-    Given user "Carol" has created file "new-lorem.txt"
+    Given user "Carol" has created file "new-lorem.txt" in the server
     And user "Carol" has logged in using the webUI
     When the user shares file "new-lorem.txt" with group "grp1" as "Editor" using the webUI
     And the user re-logs in as "Alice" using the webUI
@@ -93,9 +93,9 @@ Feature: Sharing files and folders with internal groups
 
 
   Scenario: share a folder with an internal group and a member uploads, overwrites and deletes files
-    Given user "Carol" has created folder "new-simple-folder"
-    And user "Carol" has created file "new-simple-folder/lorem.txt"
-    And user "Carol" has uploaded file "data.zip" to "new-simple-folder/data.zip"
+    Given user "Carol" has created folder "new-simple-folder" in the server
+    And user "Carol" has created file "new-simple-folder/lorem.txt" in the server
+    And user "Carol" has uploaded file "data.zip" to "new-simple-folder/data.zip" in the server
     And user "Carol" has logged in using the webUI
     When the user shares folder "new-simple-folder" with group "grp1" as "Editor" using the webUI
     And the user re-logs in as "Alice" using the webUI
@@ -126,8 +126,8 @@ Feature: Sharing files and folders with internal groups
 
 
   Scenario: share a folder with an internal group and a member unshares the folder
-    Given user "Carol" has created folder "new-simple-folder"
-    And user "Carol" has uploaded file "lorem.txt" to "new-simple-folder/lorem.txt"
+    Given user "Carol" has created folder "new-simple-folder" in the server
+    And user "Carol" has uploaded file "lorem.txt" to "new-simple-folder/lorem.txt" in the server
     And user "Carol" has logged in using the webUI
     When the user shares folder "new-simple-folder" with group "grp1" as "Editor" using the webUI
     # unshare the received shared folder and check it is gone
@@ -149,7 +149,7 @@ Feature: Sharing files and folders with internal groups
 
 
   Scenario: user shares the file/folder with a group and delete the share with group
-    Given user "Alice" has created file "lorem.txt"
+    Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has logged in using the webUI
     And user "Alice" has shared file "lorem.txt" with group "grp1"
     When the user opens the share dialog for file "lorem.txt" using the webUI
@@ -162,7 +162,7 @@ Feature: Sharing files and folders with internal groups
 
   Scenario: user shares the file/folder with multiple internal users and delete the share with one user
     Given group "grp2" has been created in the server
-    And user "Alice" has created file "lorem.txt"
+    And user "Alice" has created file "lorem.txt" in the server
     And user "Carol" has been added to group "grp2" in the server
     And user "Alice" has logged in using the webUI
     And user "Alice" has shared file "lorem.txt" with group "grp1"
@@ -181,7 +181,7 @@ Feature: Sharing files and folders with internal groups
   Scenario: Auto-completion for a group that is excluded from receiving shares
     Given group "system-group" has been created in the server
     And the administrator has excluded group "system-group" from receiving shares
-    And user "Alice" has created folder "simple-folder"
+    And user "Alice" has created folder "simple-folder" in the server
     When the user re-logs in as "Alice" using the webUI
     And the user browses to the files page
     And the user opens the share dialog for folder "simple-folder" using the webUI
@@ -216,7 +216,7 @@ Feature: Sharing files and folders with internal groups
 
 
   Scenario: share a folder with other group and then it should be listed on Shared with Others page
-    Given user "Alice" has created folder "/simple-folder"
+    Given user "Alice" has created folder "/simple-folder" in the server
     And user "Alice" has logged in using the webUI
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Alice" has shared folder "simple-folder" with group "grp1"
@@ -227,7 +227,7 @@ Feature: Sharing files and folders with internal groups
 
 
   Scenario: change existing expiration date of an existing share with another internal group
-    Given user "Carol" has created file "lorem.txt"
+    Given user "Carol" has created file "lorem.txt" in the server
     And user "Carol" has created a new share with following settings
       | path            | lorem.txt |
       | shareTypeString | group     |
@@ -249,7 +249,7 @@ Feature: Sharing files and folders with internal groups
   Scenario: share a resource with another internal group with default expiration date
     Given the setting "shareapi_default_expire_date_group_share" of app "core" has been set to "yes"
     And the setting "shareapi_expire_after_n_days_group_share" of app "core" has been set to "42"
-    And user "Carol" has created file "lorem.txt"
+    And user "Carol" has created file "lorem.txt" in the server
     And user "Carol" has logged in using the webUI
     When the user shares folder "lorem.txt" with group "grp1" as "Viewer" using the webUI
     Then user "Carol" should have a share with these details:
@@ -267,7 +267,7 @@ Feature: Sharing files and folders with internal groups
     Given the setting "shareapi_default_expire_date_group_share" of app "core" has been set to "yes"
     And the setting "shareapi_enforce_expire_date_group_share" of app "core" has been set to "yes"
     And the setting "shareapi_expire_after_n_days_group_share" of app "core" has been set to "5"
-    And user "Carol" has created <element> "<shared-resource>"
+    And user "Carol" has created <element> "<shared-resource>" in the server
     And user "Carol" has logged in using the webUI
     When the user tries to share resource "<shared-resource>" with group "grp1" which expires in "+6" days using the webUI
     Then user "Alice" should not have created any shares

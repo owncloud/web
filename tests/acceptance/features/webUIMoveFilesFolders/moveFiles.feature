@@ -5,8 +5,8 @@ Feature: move files
 
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files in the server
-    And user "Alice" has created folder "simple-folder"
-    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
+    And user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt" in the server
 
 
   Scenario: An attempt to move a file into a sub-folder using rename is not allowed
@@ -19,9 +19,9 @@ Feature: move files
   @smokeTest @ocisSmokeTest
   Scenario: move a file into a folder
     Given user "Alice" has logged in using the webUI
-    And user "Alice" has uploaded file "data.tar.gz" to "data.tar.gz"
-    And user "Alice" has uploaded file "strängé filename (duplicate #2 &).txt" to "strängé filename (duplicate #2 &).txt"
-    And user "Alice" has created folder "strängé नेपाली folder empty"
+    And user "Alice" has uploaded file "data.tar.gz" to "data.tar.gz" in the server
+    And user "Alice" has uploaded file "strängé filename (duplicate #2 &).txt" to "strängé filename (duplicate #2 &).txt" in the server
+    And user "Alice" has created folder "strängé नेपाली folder empty" in the server
     And the user has reloaded the current page of the webUI
     When the user moves file "lorem.txt" into folder "simple-folder" using the webUI
     Then breadcrumb for folder "simple-folder" should be displayed on the webUI
@@ -42,7 +42,7 @@ Feature: move files
 
   Scenario: move a file into a folder where a file with the same name already exists
     Given user "Alice" has logged in using the webUI
-    And user "Alice" has uploaded file "lorem.txt" to "simple-folder/lorem.txt"
+    And user "Alice" has uploaded file "lorem.txt" to "simple-folder/lorem.txt" in the server
     And the user has browsed to the files page
     When the user tries to move file "lorem.txt" into folder "simple-folder" using the webUI
     Then the error message with header 'Failed to move "lorem.txt"' should be displayed on the webUI
@@ -50,8 +50,8 @@ Feature: move files
    @smokeTest @ocisSmokeTest  @disablePreviews
   Scenario: Move multiple files at once
     Given user "Alice" has logged in using the webUI
-    And user "Alice" has uploaded file "data.zip" to "data.zip"
-    And user "Alice" has uploaded file "data.zip" to "testapp.zip"
+    And user "Alice" has uploaded file "data.zip" to "data.zip" in the server
+    And user "Alice" has uploaded file "data.zip" to "testapp.zip" in the server
     And the user has reloaded the current page of the webUI
     When the user batch moves these files into folder "simple-folder" using the webUI
       | file_name   |
@@ -83,8 +83,8 @@ Feature: move files
 
 
   Scenario: move files on a public share
-    Given user "Alice" has uploaded file "data.zip" to "simple-folder/data.zip"
-    And user "Alice" has created folder "simple-folder/simple-empty-folder"
+    Given user "Alice" has uploaded file "data.zip" to "simple-folder/data.zip" in the server
+    And user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
     And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
     And the public uses the webUI to access the last public link created by user "Alice"
     And the user moves file "data.zip" into folder "simple-empty-folder" using the webUI
@@ -96,7 +96,7 @@ Feature: move files
   @issue-ocis-1328
   Scenario: move a file into another folder with no change permission
     Given user "Brian" has been created with default attributes and without skeleton files in the server
-    And user "Brian" has created folder "simple-folder"
+    And user "Brian" has created folder "simple-folder" in the server
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions
     And user "Alice" has logged in using the webUI
     When the user tries to move file "lorem.txt" into folder "simple-folder (2)" using the webUI
@@ -113,8 +113,8 @@ Feature: move files
 
   Scenario: cancel moving of multiple files at once
     Given user "Alice" has logged in using the webUI
-    And user "Alice" has uploaded file "data.zip" to "data.zip"
-    And user "Alice" has uploaded file "data.zip" to "testapp.zip"
+    And user "Alice" has uploaded file "data.zip" to "data.zip" in the server
+    And user "Alice" has uploaded file "data.zip" to "testapp.zip" in the server
     And the user has browsed to the files page
     When the user marks these files for batch action using the webUI
       | file_name   |
@@ -140,11 +140,11 @@ Feature: move files
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And the administrator has set the default folder for received shares to "Shares"
     And user "Brian" has been created with default attributes and without skeleton files in the server
-    And user "Alice" has uploaded file with content "test content" to "simple-folder/testFile.txt"
+    And user "Alice" has uploaded file with content "test content" to "simple-folder/testFile.txt" in the server
     And user "Alice" has shared folder "/simple-folder" with user "Brian"
     And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
     And user "Brian" has logged in using the webUI
-    And user "Brian" has created folder "/Shares/testFolder"
+    And user "Brian" has created folder "/Shares/testFolder" in the server
     And the user has opened folder "Shares"
     And the user has opened folder "simple-folder"
     When the user batch moves these files into folder "/Shares/testFolder" using the webUI

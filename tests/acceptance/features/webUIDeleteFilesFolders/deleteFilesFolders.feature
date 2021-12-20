@@ -10,14 +10,14 @@ Feature: deleting files and folders
 
   @smokeTest @ocisSmokeTest @disablePreviews
   Scenario: Delete files & folders one by one and check its existence after page reload
-    Given user "Alice" has created folder "simple-empty-folder"
-    And user "Alice" has created folder "simple-folder"
-    And user "Alice" has created file "lorem.txt"
-    And user "Alice" has created file "lorem-big.txt"
-    And user "Alice" has created folder "strängé नेपाली folder"
-    And user "Alice" has created file "strängé filename (duplicate #2 &).txt"
-    And user "Alice" has created file "sample,1.txt"
-    And user "Alice" has created folder "Sample,Folder,With,Comma"
+    Given user "Alice" has created folder "simple-empty-folder" in the server
+    And user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has created file "lorem.txt" in the server
+    And user "Alice" has created file "lorem-big.txt" in the server
+    And user "Alice" has created folder "strängé नेपाली folder" in the server
+    And user "Alice" has created file "strängé filename (duplicate #2 &).txt" in the server
+    And user "Alice" has created file "sample,1.txt" in the server
+    And user "Alice" has created folder "Sample,Folder,With,Comma" in the server
     And the user has reloaded the current page of the webUI
     When the user deletes the following elements using the webUI
       | name                                  |
@@ -42,7 +42,7 @@ Feature: deleting files and folders
 
 
   Scenario Outline: Delete a file with problematic characters
-    Given user "Alice" has created file <file_name>
+    Given user "Alice" has created file <file_name> in the server
     When the user reloads the current page of the webUI
     And the user deletes file <file_name> using the webUI
     Then file <file_name> should not be listed on the webUI
@@ -57,9 +57,9 @@ Feature: deleting files and folders
 
   @smokeTest @issue-4582 @disablePreviews @skipOnOC10 @issue-core-38221
   Scenario: Delete multiple files at once
-    Given user "Alice" has uploaded file "data.zip" to "data.zip"
-    And user "Alice" has created file "lorem.txt"
-    And user "Alice" has created folder "simple-folder"
+    Given user "Alice" has uploaded file "data.zip" to "data.zip" in the server
+    And user "Alice" has created file "lorem.txt" in the server
+    And user "Alice" has created folder "simple-folder" in the server
     And the user has reloaded the current page of the webUI
     When the user batch deletes these files using the webUI
       | name          |
@@ -75,9 +75,9 @@ Feature: deleting files and folders
 
   @skipOnOC10 @issue-4582
   Scenario: Delete all files at once
-    Given user "Alice" has uploaded file "data.zip" to "data.zip"
-    And user "Alice" has created file "lorem.txt"
-    And user "Alice" has created folder "simple-folder"
+    Given user "Alice" has uploaded file "data.zip" to "data.zip" in the server
+    And user "Alice" has created file "lorem.txt" in the server
+    And user "Alice" has created folder "simple-folder" in the server
     And the user has browsed to the files page
     When the user marks all files for batch action using the webUI
     And the user batch deletes the marked files using the webUI
@@ -87,9 +87,9 @@ Feature: deleting files and folders
 
   @ocis-reva-issue-106 @ocis-reve-issue-442 @skipOnOC10 @issue-4582
   Scenario: Delete all except for a few files at once
-    Given user "Alice" has uploaded file "data.zip" to "data.zip"
-    And user "Alice" has created file "lorem.txt"
-    And user "Alice" has created folder "simple-folder"
+    Given user "Alice" has uploaded file "data.zip" to "data.zip" in the server
+    And user "Alice" has created file "lorem.txt" in the server
+    And user "Alice" has created folder "simple-folder" in the server
     And the user has reloaded the current page of the webUI
     When the user marks all files for batch action using the webUI
     And the user unmarks these files for batch action using the webUI
@@ -120,7 +120,7 @@ Feature: deleting files and folders
 
 
   Scenario: Delete the last file in a folder
-    Given user "Alice" has created file "zzzz-must-be-last-file-in-folder.txt"
+    Given user "Alice" has created file "zzzz-must-be-last-file-in-folder.txt" in the server
     And the user has reloaded the current page of the webUI
     When the user deletes file "zzzz-must-be-last-file-in-folder.txt" using the webUI
     Then as "Alice" file "zzzz-must-be-last-file-in-folder.txt" should not exist
@@ -129,10 +129,10 @@ Feature: deleting files and folders
 
   @issue-5017 @systemtags-app-required
   Scenario: delete files from tags page
-    Given user "Alice" has created file "lorem.txt"
+    Given user "Alice" has created file "lorem.txt" in the server
     And the user has reloaded the current page of the webUI
-    And user "Alice" has created a "normal" tag with name "lorem"
-    And user "Alice" has added tag "lorem" to file "/lorem.txt"
+    And user "Alice" has created a "normal" tag with name "lorem" in the server
+    And user "Alice" has added tag "lorem" to file "/lorem.txt" in the server
     When the user browses to the tags page
     And the user searches for tag "lorem" using the webUI
     Then file "lorem.txt" should be listed on the webUI
@@ -144,10 +144,10 @@ Feature: deleting files and folders
 
 
   Scenario: delete a file on a public share
-    Given user "Alice" has created folder "simple-folder"
-    And user "Alice" has created file "simple-folder/lorem.txt"
-    And user "Alice" has created folder "simple-folder/simple-empty-folder"
-    And user "Alice" has created folder "simple-folder/strängé filename (duplicate #2 &).txt"
+    Given user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has created file "simple-folder/lorem.txt" in the server
+    And user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
+    And user "Alice" has created folder "simple-folder/strängé filename (duplicate #2 &).txt" in the server
     And the user has reloaded the current page of the webUI
     And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
     When the public uses the webUI to access the last public link created by user "Alice"
@@ -165,8 +165,8 @@ Feature: deleting files and folders
 
 
   Scenario: delete a file on a public share with problematic characters
-    Given user "Alice" has created file "lorem.txt"
-    And user "Alice" has created folder "simple-folder"
+    Given user "Alice" has created file "lorem.txt" in the server
+    And user "Alice" has created folder "simple-folder" in the server
     And the user has reloaded the current page of the webUI
     And user "Alice" has renamed the following file
       | from-name-parts | to-name-parts   |
@@ -200,10 +200,10 @@ Feature: deleting files and folders
 
   @issue-4582
   Scenario: Delete multiple files at once on a public share
-    Given user "Alice" has created folder "simple-folder"
-    And user "Alice" has created file "simple-folder/data.zip"
-    And user "Alice" has created file "simple-folder/lorem.txt"
-    And user "Alice" has created file "simple-folder/simple-empty-folder"
+    Given user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has created file "simple-folder/data.zip" in the server
+    And user "Alice" has created file "simple-folder/lorem.txt" in the server
+    And user "Alice" has created file "simple-folder/simple-empty-folder" in the server
     And the user has reloaded the current page of the webUI
     And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
     When the public uses the webUI to access the last public link created by user "Alice"
@@ -222,8 +222,8 @@ Feature: deleting files and folders
   Scenario: Delete a file and folder from shared with me page
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And user "Brian" has been created with default attributes and without skeleton files in the server
-    And user "Brian" has created folder "simple-folder"
-    And user "Brian" has created file "lorem.txt"
+    And user "Brian" has created folder "simple-folder" in the server
+    And user "Brian" has created file "lorem.txt" in the server
     And user "Brian" has shared folder "simple-folder" with user "Alice"
     And user "Brian" has shared file "lorem.txt" with user "Alice"
     And the user has browsed to the shared-with-me page
@@ -237,10 +237,10 @@ Feature: deleting files and folders
 
 
   Scenario: Try to delete file and folder that used to exist but does not anymore
-    Given user "Alice" has created folder "simple-folder"
-    And user "Alice" has created file "lorem.txt"
+    Given user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has created file "lorem.txt" in the server
     And the user has browsed to the files page
-    And the following files have been deleted by user "Alice"
+    And the following files have been deleted by user "Alice" in the server
       | name          |
       | lorem.txt     |
       | simple-folder |
@@ -257,7 +257,7 @@ Feature: deleting files and folders
 
 
   Scenario: Delete folder with dot in the name
-    Given user "Alice" has created the following folders
+    Given user "Alice" has created the following folders in the server
       | folders  |
       | fo.      |
       | fo.1     |

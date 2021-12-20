@@ -5,8 +5,8 @@ Feature: move folders
 
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files in the server
-    And user "Alice" has created folder "simple-folder"
-    And user "Alice" has created folder "simple-empty-folder"
+    And user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has created folder "simple-empty-folder" in the server
 
 
   Scenario: An attempt to move a folder into a sub-folder using rename is not allowed
@@ -18,7 +18,7 @@ Feature: move folders
 
   @smokeTest @ocisSmokeTest
   Scenario: move a folder into another folder
-    Given user "Alice" has created folder "strängé नेपाली folder"
+    Given user "Alice" has created folder "strängé नेपाली folder" in the server
     And user "Alice" has logged in using the webUI
     And the user has reloaded the current page of the webUI
     When the user moves folder "simple-folder" into folder "simple-empty-folder" using the webUI
@@ -31,7 +31,7 @@ Feature: move folders
 
 
   Scenario: move a folder into another folder where a folder with the same name already exists
-    Given user "Alice" has created folder "simple-folder/simple-empty-folder"
+    Given user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
     And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
     When the user tries to move folder "simple-empty-folder" into folder "simple-folder" using the webUI
@@ -39,7 +39,7 @@ Feature: move folders
 
   @smokeTest
   Scenario: Move multiple folders at once
-    Given user "Alice" has created folder "strängé नेपाली folder"
+    Given user "Alice" has created folder "strängé नेपाली folder" in the server
     And user "Alice" has logged in using the webUI
     And the user has reloaded the current page of the webUI
     When the user batch moves these folders into folder "simple-empty-folder" using the webUI
@@ -71,7 +71,7 @@ Feature: move folders
   @issue-ocis-1328
   Scenario: move a folder into another folder with no change permission
     Given user "Brian" has been created with default attributes and without skeleton files in the server
-    And user "Brian" has created folder "/simple-folder"
+    And user "Brian" has created folder "/simple-folder" in the server
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions
     And user "Alice" has logged in using the webUI
     When the user tries to move folder "simple-empty-folder" into folder "simple-folder (2)" using the webUI
@@ -86,7 +86,7 @@ Feature: move folders
 
 
   Scenario: move a folder into another folder with same name
-    Given user "Alice" has created folder "simple-folder/simple-empty-folder"
+    Given user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
     And user "Alice" has logged in using the webUI
     When the user moves folder "simple-empty-folder" into folder "simple-folder/simple-empty-folder" using the webUI
     Then breadcrumb for folder "simple-empty-folder" should be displayed on the webUI

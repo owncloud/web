@@ -9,12 +9,12 @@ Feature: Shares in share-with pages
       | username |
       | Alice    |
       | Brian    |
-    And user "Alice" has created folder "simple-folder"
+    And user "Alice" has created folder "simple-folder" in the server
 
   Scenario: share a folder with other user and then it should be listed on Shared with You for other user
-    Given user "Alice" has created file "lorem.txt"
-    And user "Alice" has renamed folder "simple-folder" to "new-simple-folder"
-    And user "Alice" has renamed file "lorem.txt" to "ipsum.txt"
+    Given user "Alice" has created file "lorem.txt" in the server
+    And user "Alice" has renamed folder "simple-folder" to "new-simple-folder" in the server
+    And user "Alice" has renamed file "lorem.txt" to "ipsum.txt" in the server
     And user "Alice" has shared file "ipsum.txt" with user "Brian"
     And user "Alice" has shared folder "new-simple-folder" with user "Brian"
     And user "Brian" has logged in using the webUI
@@ -25,7 +25,7 @@ Feature: Shares in share-with pages
 
   Scenario: share a folder with other user and then it should be listed on Shared with Others page
     Given user "Carol" has been created with default attributes and without skeleton files in the server
-    And user "Alice" has created file "lorem.txt"
+    And user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has logged in using the webUI
     And user "Alice" has shared file "lorem.txt" with user "Brian"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
@@ -38,8 +38,8 @@ Feature: Shares in share-with pages
 
   @issue-2480
   Scenario: check file with same name but different paths are displayed correctly in shared with others page
-    Given user "Alice" has created file "lorem.txt"
-    And user "Alice" has created file "simple-folder/lorem.txt"
+    Given user "Alice" has created file "lorem.txt" in the server
+    And user "Alice" has created file "simple-folder/lorem.txt" in the server
     And user "Alice" has shared file "lorem.txt" with user "Brian"
     And user "Alice" has shared file "simple-folder/lorem.txt" with user "Brian"
     And user "Alice" has logged in using the webUI
@@ -50,7 +50,7 @@ Feature: Shares in share-with pages
 
 
   Scenario: send share shows up on shared-with-others page
-    Given user "Alice" has uploaded file "data.zip" to "data.zip"
+    Given user "Alice" has uploaded file "data.zip" to "data.zip" in the server
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Alice" has logged in using the webUI
     When the user browses to the shared-with-others page using the webUI
@@ -59,7 +59,7 @@ Feature: Shares in share-with pages
 
 
   Scenario: received share shows up on shared-with-me page
-    Given user "Alice" has uploaded file "data.zip" to "data.zip"
+    Given user "Alice" has uploaded file "data.zip" to "data.zip" in the server
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Brian" has logged in using the webUI
     When the user browses to the shared-with-me page
@@ -69,7 +69,7 @@ Feature: Shares in share-with pages
 
   Scenario: clicking a folder on shared-with-me page jumps to the main file list inside the folder
     Given user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Alice" has created file "simple-folder/collaborate-on-this.txt"
+    And user "Alice" has created file "simple-folder/collaborate-on-this.txt" in the server
     And user "Brian" has logged in using the webUI
     When the user browses to the shared-with-me page
     And the user opens folder "simple-folder" using the webUI
@@ -111,7 +111,7 @@ Feature: Shares in share-with pages
 
   @skipOnOC10 @issue-4582
   Scenario: deleting multiple entries on the shared-with-me page
-    Given user "Alice" has created file "lorem.txt"
+    Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Alice" has shared file "lorem.txt" with user "Brian"
     And user "Brian" has logged in using the webUI

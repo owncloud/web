@@ -8,8 +8,8 @@ Feature: access breadcrumb
 
 
   Scenario: Breadcrumb navigation should not happen on last segment
-    Given user "Alice" has created folder "simple-folder"
-    And user "Alice" has created folder "simple-folder/subfolder"
+    Given user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has created folder "simple-folder/subfolder" in the server
     And user "Alice" has logged in using the webUI
     When the user opens folder "simple-folder" using the webUI
     And the user opens folder "subfolder" using the webUI
@@ -19,8 +19,8 @@ Feature: access breadcrumb
 
 
   Scenario: Select breadcrumb inside folder with problematic name
-    Given user "Alice" has created folder "folder%2Fwith%2FSlashes"
-    And user "Alice" has created folder "folder%2Fwith%2FSlashes/subfolder"
+    Given user "Alice" has created folder "folder%2Fwith%2FSlashes" in the server
+    And user "Alice" has created folder "folder%2Fwith%2FSlashes/subfolder" in the server
     And user "Alice" has logged in using the webUI
     When the user opens folder "folder%2Fwith%2FSlashes" using the webUI
     And the user opens folder "subfolder" using the webUI
@@ -29,7 +29,7 @@ Feature: access breadcrumb
 
 
   Scenario: Reload webUI inside the problematic folder
-    Given user "Alice" has created folder "folder%2Fwith%2FSlashes"
+    Given user "Alice" has created folder "folder%2Fwith%2FSlashes" in the server
     And user "Alice" has logged in using the webUI
     When the user opens folder "folder%2Fwith%2FSlashes" using the webUI
     And the user reloads the current page of the webUI
@@ -37,8 +37,8 @@ Feature: access breadcrumb
 
 
   Scenario: breadcrumb for double quotes
-    Given user "Alice" has created folder "\'single-double quotes\""
-    And user "Alice" has created folder "\'single-double quotes\"/\"inner\" double quotes"
+    Given user "Alice" has created folder "\'single-double quotes\"" in the server
+    And user "Alice" has created folder "\'single-double quotes\"/\"inner\" double quotes" in the server
     And user "Alice" has logged in using the webUI
     When the user opens folder "\'single-double quotes\"" using the webUI
     And the user opens folder "\"inner\" double quotes" using the webUI

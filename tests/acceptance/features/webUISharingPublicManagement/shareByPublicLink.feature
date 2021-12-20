@@ -6,7 +6,7 @@ Feature: Public link share management
 
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files in the server
-    And user "Alice" has created folder "/simple-folder"
+    And user "Alice" has created folder "/simple-folder" in the server
 
   @ocisSmokeTest
   Scenario: public link share shows up on shared-with-others page
@@ -30,17 +30,17 @@ Feature: Public link share management
   @issue-5321
   Scenario: mount public link
     Given user "Brian" has been created with default attributes and without skeleton files in the server
-    And user "Alice" has uploaded file with content "Alice file" to "simple-folder/lorem.txt"
+    And user "Alice" has uploaded file with content "Alice file" to "simple-folder/lorem.txt" in the server
     And user "Alice" has created a public link with following settings
       | path        | simple-folder                |
       | name        | Public-link                  |
       | permissions | read, update, create, delete |
     When the public uses the webUI to access the last public link created by user "Alice"
-    And the public adds the public link to "%remote_server%" as user "Brian" with password "%alt2%" using the webUI
+    And the public adds the public link to "%remote_server%" as user "Brian" with password "%alt2%" using the webUI in the server
     Then folder "simple-folder" should be listed on the webUI
     When the user opens folder "simple-folder" using the webUI
     Then file "lorem.txt" should be listed on the webUI
-    And the content of file "simple-folder/lorem.txt" for user "Brian" should be "Alice file"
+    And the content of file "simple-folder/lorem.txt" for user "Brian" should be "Alice file" in the server
     When the user uploads overwriting file "lorem.txt" using the webUI
     Then file "lorem.txt" should be listed on the webUI
     And as "Brian" the content of "simple-folder/lorem.txt" should be the same as the content of local file "lorem.txt"
@@ -65,7 +65,7 @@ Feature: Public link share management
 
 
   Scenario: user cancel removes operation for the public link of a file
-    Given user "Alice" has created file "lorem.txt"
+    Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has logged in using the webUI
     And user "Alice" has created a public link with following settings
       | path        | lorem.txt   |
@@ -76,7 +76,7 @@ Feature: Public link share management
 
   @ocisSmokeTest
   Scenario: user browses to public link share using copy link button
-    Given user "Alice" has created file "simple-folder/lorem.txt"
+    Given user "Alice" has created file "simple-folder/lorem.txt" in the server
     And user "Alice" has created a public link with following settings
       | path        | simple-folder |
       | name        | Public-link   |
@@ -88,7 +88,7 @@ Feature: Public link share management
 
   @issue-2090
   Scenario: access details dialog of public share and check the tabs displayed
-    Given user "Alice" has created file "simple-folder/lorem.txt"
+    Given user "Alice" has created file "simple-folder/lorem.txt" in the server
     And user "Alice" has logged in using the webUI
     When the user creates a new public link for folder "simple-folder" using the webUI with
       | role | Editor |
@@ -106,8 +106,8 @@ Feature: Public link share management
 
   @issue-2897
   Scenario: sharing details of indirect items inside a shared folder
-    Given user "Alice" has created folder "/simple-folder/sub-folder"
-    And user "Alice" has uploaded file with content "test" to "/simple-folder/textfile.txt"
+    Given user "Alice" has created folder "/simple-folder/sub-folder" in the server
+    And user "Alice" has uploaded file with content "test" to "/simple-folder/textfile.txt" in the server
     And user "Alice" has created a public link with following settings
       | path | /simple-folder |
       | name | Public Link    |
@@ -117,8 +117,8 @@ Feature: Public link share management
 
   @issue-2897
   Scenario: sharing details of multiple indirect public link shares
-    Given user "Alice" has created folder "/simple-folder/sub-folder"
-    And user "Alice" has uploaded file with content "test" to "/simple-folder/sub-folder/textfile.txt"
+    Given user "Alice" has created folder "/simple-folder/sub-folder" in the server
+    And user "Alice" has uploaded file with content "test" to "/simple-folder/sub-folder/textfile.txt" in the server
     And user "Alice" has created a public link with following settings
       | path | /simple-folder |
       | name | Public Link    |
@@ -132,7 +132,7 @@ Feature: Public link share management
 
   @issue-3040 @issue-3841 @issue-ocis-reva-372
   Scenario: sharing details of indirect link share in "favorites" file lists
-    Given user "Alice" has created folder "/simple-folder/simple-empty-folder"
+    Given user "Alice" has created folder "/simple-folder/simple-empty-folder" in the server
     And user "Alice" has created a public link with following settings
       | path | /simple-folder |
       | name | Public Link    |
@@ -157,7 +157,7 @@ Feature: Public link share management
 
   @issue-product-130
   Scenario: User can attempt to upload a file in public link
-    Given user "Alice" has created file "lorem.txt"
+    Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has created a public link with following settings
       | path        | lorem.txt   |
       | name        | public link |
@@ -168,7 +168,7 @@ Feature: Public link share management
 
 
   Scenario: Shared via link page is displayed
-    Given user "Alice" has created file "lorem.txt"
+    Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has created a public link with following settings
       | path        | lorem.txt             |
       | name        | Public-link           |

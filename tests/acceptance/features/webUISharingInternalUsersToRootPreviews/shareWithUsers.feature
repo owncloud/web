@@ -10,9 +10,9 @@ Feature: Sharing details and preview of files
   @issue-2897
   Scenario: sharing details of items inside a shared folder ("via" info)
     Given user "Carol" has been created with default attributes and without skeleton files in the server
-    And user "Alice" has created folder "simple-folder"
-    And user "Alice" has created folder "simple-folder/simple-empty-folder"
-    And user "Alice" has uploaded file with content "test" to "/simple-folder/lorem.txt"
+    And user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
+    And user "Alice" has uploaded file with content "test" to "/simple-folder/lorem.txt" in the server
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Alice" has logged in using the webUI
     And the user opens folder "simple-folder" using the webUI
@@ -24,9 +24,9 @@ Feature: Sharing details and preview of files
   @issue-2897
   Scenario: sharing details of items inside a re-shared folder ("via" info)
     Given user "Carol" has been created with default attributes and without skeleton files in the server
-    And user "Alice" has created folder "simple-folder"
-    And user "Alice" has created folder "simple-folder/simple-empty-folder"
-    And user "Alice" has uploaded file with content "test" to "/simple-folder/lorem.txt"
+    And user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
+    And user "Alice" has uploaded file with content "test" to "/simple-folder/lorem.txt" in the server
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Brian" has shared folder "simple-folder" with user "Carol"
     And user "Brian" has logged in using the webUI
@@ -52,7 +52,7 @@ Feature: Sharing details and preview of files
 
 
   Scenario: file list view image preview in file share
-    Given user "Alice" has uploaded file "testavatar.jpg" to "testavatar.jpg"
+    Given user "Alice" has uploaded file "testavatar.jpg" to "testavatar.jpg" in the server
     And user "Alice" has shared file "testavatar.jpg" with user "Brian"
     When user "Brian" logs in using the webUI
     Then the preview image of file "testavatar.jpg" should be displayed in the file list view on the webUI
@@ -60,7 +60,7 @@ Feature: Sharing details and preview of files
 
   Scenario: file list view image preview in file share when previews is disabled
     Given the property "disablePreviews" of "options" has been set to true in web config file
-    And user "Alice" has uploaded file "testavatar.jpg" to "testavatar.jpg"
+    And user "Alice" has uploaded file "testavatar.jpg" to "testavatar.jpg" in the server
     And user "Alice" has shared file "testavatar.jpg" with user "Brian"
     When user "Brian" logs in using the webUI
     Then the preview image of file "testavatar.jpg" should not be displayed in the file list view on the webUI

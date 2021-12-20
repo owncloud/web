@@ -8,11 +8,11 @@ Feature: Unlock locked files and folders
     Given these users have been created with default attributes and without skeleton files in the server:
       | username       |
       | brand-new-user |
-    And user "brand-new-user" has created folder "simple-folder"
-    And user "brand-new-user" has created folder "simple-empty-folder"
-    And user "brand-new-user" has created file "simple-folder/lorem.txt"
-    And user "brand-new-user" has created folder "simple-folder/simple-empty-folder"
-    And user "brand-new-user" has created file "lorem.txt"
+    And user "brand-new-user" has created folder "simple-folder" in the server
+    And user "brand-new-user" has created folder "simple-empty-folder" in the server
+    And user "brand-new-user" has created file "simple-folder/lorem.txt" in the server
+    And user "brand-new-user" has created folder "simple-folder/simple-empty-folder" in the server
+    And user "brand-new-user" has created file "lorem.txt" in the server
     And user "brand-new-user" has logged in using the webUI
 
   @issue-5417
@@ -84,7 +84,7 @@ Feature: Unlock locked files and folders
       | username  |
       | receiver1 |
       | receiver2 |
-    And user "brand-new-user" has created folder "/FOLDER_TO_SHARE"
+    And user "brand-new-user" has created folder "/FOLDER_TO_SHARE" in the server
     And user "brand-new-user" has shared file "/lorem.txt" with user "receiver1"
     And user "brand-new-user" has shared folder "/FOLDER_TO_SHARE" with user "receiver1"
     And user "brand-new-user" has shared file "/lorem.txt" with user "receiver2"
@@ -117,7 +117,7 @@ Feature: Unlock locked files and folders
       | username  |
       | receiver1 |
       | receiver2 |
-    And user "brand-new-user" has created folder "/FOLDER_TO_SHARE"
+    And user "brand-new-user" has created folder "/FOLDER_TO_SHARE" in the server
     And user "brand-new-user" has shared file "/lorem.txt" with user "receiver1"
     And user "brand-new-user" has shared folder "/FOLDER_TO_SHARE" with user "receiver1"
     And user "brand-new-user" has shared file "/lorem.txt" with user "receiver2"
@@ -150,7 +150,7 @@ Feature: Unlock locked files and folders
       | username  |
       | receiver1 |
       | receiver2 |
-    And user "brand-new-user" has created folder "/FOLDER_TO_SHARE"
+    And user "brand-new-user" has created folder "/FOLDER_TO_SHARE" in the server
     And user "brand-new-user" has shared file "/lorem.txt" with user "receiver1"
     And user "brand-new-user" has shared folder "/FOLDER_TO_SHARE" with user "receiver1"
     And user "brand-new-user" has shared file "/lorem.txt" with user "receiver2"

@@ -12,14 +12,14 @@ Feature: Mark file as favorite
 
   @smokeTest
   Scenario: mark files as favorites
-    Given user "Alice" has uploaded file "data.tar.gz" to "data.tar.gz"
-    And user "Alice" has uploaded file "data.zip" to "data.zip"
+    Given user "Alice" has uploaded file "data.tar.gz" to "data.tar.gz" in the server
+    And user "Alice" has uploaded file "data.zip" to "data.zip" in the server
     And the user has reloaded the current page of the webUI
     When the user marks file "data.tar.gz" as favorite using the webUI
     And the user marks file "data.zip" as favorite using the webUI
-    Then as user "Alice" file "data.tar.gz" should be marked as favorite
+    Then as user "Alice" file "data.tar.gz" should be marked as favorite in the server
     And file "data.tar.gz" should be marked as favorite on the webUI
-    And as user "Alice" file "data.zip" should be marked as favorite
+    And as user "Alice" file "data.zip" should be marked as favorite in the server
     And file "data.zip" should be marked as favorite on the webUI
     When the user browses to the favorites page
     Then the count of files and folders shown on the webUI should be 2
@@ -28,14 +28,14 @@ Feature: Mark file as favorite
 
 
   Scenario: mark folders as favorites
-    Given user "Alice" has created folder "simple-folder"
-    And user "Alice" has created folder "strängé नेपाली folder"
+    Given user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has created folder "strängé नेपाली folder" in the server
     And the user has reloaded the current page of the webUI
     When the user marks folder "simple-folder" as favorite using the webUI
     And the user marks folder "strängé नेपाली folder" as favorite using the webUI
-    Then as user "Alice" folder "simple-folder" should be marked as favorite
+    Then as user "Alice" folder "simple-folder" should be marked as favorite in the server
     And folder "simple-folder" should be marked as favorite on the webUI
-    And as user "Alice" folder "strängé नेपाली folder" should be marked as favorite
+    And as user "Alice" folder "strängé नेपाली folder" should be marked as favorite in the server
     And folder "strängé नेपाली folder" should be marked as favorite on the webUI
     When the user browses to the favorites page
     Then the count of files and folders shown on the webUI should be 2
@@ -44,15 +44,15 @@ Feature: Mark file as favorite
 
 
   Scenario: mark files/folders as favorites using the sidebar
-    Given user "Alice" has created folder "simple-folder"
-    And user "Alice" has uploaded file "data.zip" to "data.zip"
+    Given user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has uploaded file "data.zip" to "data.zip" in the server
     And the user has reloaded the current page of the webUI
     When the user marks folder "simple-folder" as favorite using the webUI sidebar
     And the user marks file "data.zip" as favorite using the webUI sidebar
     Then folder "simple-folder" should be marked as favorite on the webUI
-    And as user "Alice" folder "simple-folder" should be marked as favorite
+    And as user "Alice" folder "simple-folder" should be marked as favorite in the server
     And file "data.zip" should be marked as favorite on the webUI
-    And as user "Alice" file "data.zip" should be marked as favorite
+    And as user "Alice" file "data.zip" should be marked as favorite in the server
 
 
   Scenario: navigate to an empty favorites page
@@ -63,7 +63,7 @@ Feature: Mark file as favorite
 
 
   Scenario: navigate to the favorites page using the menu
-    Given user "Alice" has uploaded file "data.zip" to "data.zip"
+    Given user "Alice" has uploaded file "data.zip" to "data.zip" in the server
     And the user has reloaded the current page of the webUI
     And user "Alice" has favorited element "data.zip"
     When the user browses to the favorites page using the webUI
@@ -72,7 +72,7 @@ Feature: Mark file as favorite
 
 
   Scenario: navigate to the favorites page and back to files page using the menu
-    Given user "Alice" has uploaded file "data.zip" to "data.zip"
+    Given user "Alice" has uploaded file "data.zip" to "data.zip" in the server
     And the user has browsed to the favorites page using the webUI
     When the user browses to the files page using the webUI
     Then file "data.zip" should be listed on the webUI
@@ -84,13 +84,13 @@ Feature: Mark file as favorite
 
 
   Scenario: mark files with same name and different path as favorites and list them in favourites page
-    Given user "Alice" has created file "lorem.txt"
-    And user "Alice" has created folder "simple-empty-folder"
-    And user "Alice" has created folder "simple-folder"
-    And user "Alice" has created file "simple-folder/lorem.txt"
-    And user "Alice" has created folder "simple-folder/simple-empty-folder"
-    And user "Alice" has created folder "strängé नेपाली folder"
-    And user "Alice" has created file "strängé नेपाली folder/lorem.txt"
+    Given user "Alice" has created file "lorem.txt" in the server
+    And user "Alice" has created folder "simple-empty-folder" in the server
+    And user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has created file "simple-folder/lorem.txt" in the server
+    And user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
+    And user "Alice" has created folder "strängé नेपाली folder" in the server
+    And user "Alice" has created file "strängé नेपाली folder/lorem.txt" in the server
     And the user has reloaded the current page of the webUI
     When the user marks file "lorem.txt" as favorite using the webUI
     And the user marks folder "simple-empty-folder" as favorite using the webUI
@@ -109,10 +109,10 @@ Feature: Mark file as favorite
 
 
   Scenario: Try to favorite file and folder that used to exist but does not anymore
-    Given user "Alice" has created file "lorem.txt"
-    And user "Alice" has created folder "simple-folder"
+    Given user "Alice" has created file "lorem.txt" in the server
+    And user "Alice" has created folder "simple-folder" in the server
     And the user has browsed to the files page
-    And the following files have been deleted by user "Alice"
+    And the following files have been deleted by user "Alice" in the server
       | name          |
       | lorem.txt     |
       | simple-folder |
@@ -128,14 +128,14 @@ Feature: Mark file as favorite
 
 
   Scenario: Favourite files and folders with comma in the names
-    Given user "Alice" has created file "sample,1.txt"
-    And user "Alice" has created folder "Sample,Folder,With,Comma"
+    Given user "Alice" has created file "sample,1.txt" in the server
+    And user "Alice" has created folder "Sample,Folder,With,Comma" in the server
     And the user has reloaded the current page of the webUI
     When the user marks file "sample,1.txt" as favorite using the webUI
     And the user marks folder "Sample,Folder,With,Comma" as favorite using the webUI
-    Then as user "Alice" file "sample,1.txt" should be marked as favorite
+    Then as user "Alice" file "sample,1.txt" should be marked as favorite in the server
     And file "sample,1.txt" should be marked as favorite on the webUI
-    And as user "Alice" folder "Sample,Folder,With,Comma" should be marked as favorite
+    And as user "Alice" folder "Sample,Folder,With,Comma" should be marked as favorite in the server
     And folder "Sample,Folder,With,Comma" should be marked as favorite on the webUI
     When the user browses to the favorites page
     Then the count of files and folders shown on the webUI should be 2

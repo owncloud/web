@@ -6,15 +6,15 @@ Feature: files and folders can be deleted from the trashbin
 
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files in the server
-    Given user "Alice" has created file "lorem.txt"
-    Given user "Alice" has created file "lorem-big.txt"
-    And user "Alice" has created file "sample,1.txt"
-    And user "Alice" has created folder "simple-folder"
-    And user "Alice" has created folder "Folder,With,Comma"
-    And user "Alice" has created file "simple-folder/lorem.txt"
-    And user "Alice" has created file "simple-folder/lorem-big.txt"
-    And user "Alice" has uploaded file "data.zip" to "data.zip"
-    And the following files have been deleted by user "Alice"
+    Given user "Alice" has created file "lorem.txt" in the server
+    Given user "Alice" has created file "lorem-big.txt" in the server
+    And user "Alice" has created file "sample,1.txt" in the server
+    And user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has created folder "Folder,With,Comma" in the server
+    And user "Alice" has created file "simple-folder/lorem.txt" in the server
+    And user "Alice" has created file "simple-folder/lorem-big.txt" in the server
+    And user "Alice" has uploaded file "data.zip" to "data.zip" in the server
+    And the following files have been deleted by user "Alice" in the server
       | name              |
       | lorem.txt         |
       | simple-folder     |
@@ -104,13 +104,13 @@ Feature: files and folders can be deleted from the trashbin
 
 
   Scenario: Delete folders with dot in the name from trashbin
-    Given user "Alice" has created the following folders
+    Given user "Alice" has created the following folders in the server
       | folders  |
       | fo.      |
       | fo.1     |
       | fo...1.. |
       | fo.xyz   |
-    And the following folders have been deleted by user "Alice"
+    And the following folders have been deleted by user "Alice" in the server
       | name     |
       | fo.      |
       | fo.1     |

@@ -9,7 +9,7 @@ Feature: Sharing files with multiple internal users with different permissions
       | username |
       | Alice    |
       | Brian    |
-    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
+    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt" in the server
 
 
   Scenario Outline: share a file with multiple users with different roles and permissions

@@ -24,7 +24,7 @@ Feature: Autocompletion of share-with names
     Given these users have been created without initialization and without skeleton files in the server:
       | username   | password  | displayname | email             |
       | <username> | %regular% | SpecialUser | usrmail@oc.com.np |
-    And user "regularuser" has created file "data.zip"
+    And user "regularuser" has created file "data.zip" in the server
     And user "regularuser" has logged in using the webUI
     And the user has browsed to the files page
     And the user has opened the share dialog for file "data.zip"
@@ -43,7 +43,7 @@ Feature: Autocompletion of share-with names
     Given these users have been created without initialization and without skeleton files in the server:
       | username  | password  | displayname   | email             |
       | normalusr | %regular% | <displayName> | msrmail@oc.com.np |
-    And user "regularuser" has created file "data.zip"
+    And user "regularuser" has created file "data.zip" in the server
     And user "regularuser" has logged in using the webUI
     And the user has browsed to the files page
     And the user has opened the share dialog for file "data.zip"
@@ -61,7 +61,7 @@ Feature: Autocompletion of share-with names
     Given these groups have been created in the server:
       | groupname |
       | <group>   |
-    And user "regularuser" has created file "data.zip"
+    And user "regularuser" has created file "data.zip" in the server
     And user "regularuser" has logged in using the webUI
     And the user has browsed to the files page
     And the user has opened the share dialog for file "data.zip"

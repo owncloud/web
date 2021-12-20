@@ -8,10 +8,10 @@ Feature: Locks
     Given these users have been created with default attributes and without skeleton files in the server:
       | username       |
       | brand-new-user |
-    And user "brand-new-user" has created folder "simple-folder"
-    And user "brand-new-user" has created folder "simple-empty-folder"
-    And user "brand-new-user" has created file "simple-folder/lorem.txt"
-    And user "brand-new-user" has created file "lorem.txt"
+    And user "brand-new-user" has created folder "simple-folder" in the server
+    And user "brand-new-user" has created folder "simple-empty-folder" in the server
+    And user "brand-new-user" has created file "simple-folder/lorem.txt" in the server
+    And user "brand-new-user" has created file "lorem.txt" in the server
     And user "brand-new-user" has logged in using the webUI
 
   @issue-5417
@@ -125,7 +125,7 @@ Feature: Locks
 
   @issue-ocis-1284
   Scenario Outline: moving a locked file into an other folder in a public share
-    Given user "brand-new-user" has created folder "simple-folder/simple-empty-folder"
+    Given user "brand-new-user" has created folder "simple-folder/simple-empty-folder" in the server
     And user "brand-new-user" has locked file "simple-folder/lorem.txt" setting following properties
       | lockscope | <lockscope> |
     And user "brand-new-user" has created a public link with following settings

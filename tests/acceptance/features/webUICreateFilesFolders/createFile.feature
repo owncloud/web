@@ -5,7 +5,7 @@ Feature: create files
 
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files in the server
-    And user "Alice" has created file "/lorem.txt"
+    And user "Alice" has created file "/lorem.txt" in the server
     And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
 
@@ -29,7 +29,7 @@ Feature: create files
 
   @issue-2882
   Scenario: redirect to subfolder after closing the text editor
-    Given user "Alice" has created folder "parent-folder"
+    Given user "Alice" has created folder "parent-folder" in the server
     When the user reloads the current page of the webUI
     And the user opens folder "parent-folder" using the webUI
     Then there should be no resources listed on the webUI

@@ -10,10 +10,10 @@ Feature: copy files and folders
 
   @smokeTest @ocisSmokeTest
   Scenario: copy a file and a folder into a folder
-    Given user "Alice" has uploaded file "data.zip" to "data.zip"
-    And user "Alice" has created folder "simple-empty-folder"
-    And user "Alice" has created folder "simple-folder"
-    And user "Alice" has created folder "strängé नेपाली folder empty"
+    Given user "Alice" has uploaded file "data.zip" to "data.zip" in the server
+    And user "Alice" has created folder "simple-empty-folder" in the server
+    And user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has created folder "strängé नेपाली folder empty" in the server
     And user "Alice" has logged in using the webUI
     And the user reloads the current page of the webUI
     When the user copies file "data.zip" into folder "simple-empty-folder" using the webUI
@@ -26,9 +26,9 @@ Feature: copy files and folders
 
 
   Scenario: copy a file into a folder where a file with the same name already exists
-    Given user "Alice" has created file "strängé filename (duplicate #2 &).txt"
-    And user "Alice" has created folder "strängé नेपाली folder"
-    And user "Alice" has created file "strängé नेपाली folder/strängé filename (duplicate #2 &).txt"
+    Given user "Alice" has created file "strängé filename (duplicate #2 &).txt" in the server
+    And user "Alice" has created folder "strängé नेपाली folder" in the server
+    And user "Alice" has created file "strängé नेपाली folder/strängé filename (duplicate #2 &).txt" in the server
     And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
     When the user tries to copy file "strängé filename (duplicate #2 &).txt" into folder "strängé नेपाली folder" using the webUI
@@ -36,10 +36,10 @@ Feature: copy files and folders
 
   @smokeTest @ocisSmokeTest
   Scenario: Copy multiple files at once
-    Given user "Alice" has uploaded file "data.zip" to "data.zip"
-    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
-    And user "Alice" has uploaded file "new-data.zip" to "testapp.zip"
-    And user "Alice" has created folder "simple-empty-folder"
+    Given user "Alice" has uploaded file "data.zip" to "data.zip" in the server
+    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt" in the server
+    And user "Alice" has uploaded file "new-data.zip" to "testapp.zip" in the server
+    And user "Alice" has created folder "simple-empty-folder" in the server
     And user "Alice" has logged in using the webUI
     And the user has reloaded the current page of the webUI
     When the user batch copies these files into folder "simple-empty-folder" using the webUI
@@ -56,8 +56,8 @@ Feature: copy files and folders
 
 
   Scenario Outline: copy a file into a folder (problematic characters)
-    Given user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
-    And user "Alice" has created folder "simple-empty-folder"
+    Given user "Alice" has uploaded file "lorem.txt" to "lorem.txt" in the server
+    And user "Alice" has created folder "simple-empty-folder" in the server
     And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
     When the user renames file "lorem.txt" to <file_name> using the webUI
@@ -74,9 +74,9 @@ Feature: copy files and folders
 
   @issue-3755
   Scenario: copy files on a public share
-    Given user "Alice" has created folder "simple-folder"
-    And user "Alice" has created folder "simple-folder/simple-empty-folder"
-    And user "Alice" has uploaded file "data.zip" to "simple-folder/data.zip"
+    Given user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
+    And user "Alice" has uploaded file "data.zip" to "simple-folder/data.zip" in the server
     And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
     And the public uses the webUI to access the last public link created by user "Alice"
     And the user copies file "data.zip" into folder "simple-empty-folder" using the webUI
@@ -87,9 +87,9 @@ Feature: copy files and folders
 
 
   Scenario: copy a file into another folder with no change permission
-    Given user "Alice" has created file "lorem.txt"
-    And user "Brian" has been created with default attributes and without skeleton files in the server
-    And user "Brian" has created folder "simple-folder"
+    Given user "Alice" has created file "lorem.txt" in the server
+    And user "Brian" has been created with default attributes and without skeleton files in the server 
+    And user "Brian" has created folder "simple-folder" in the server
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions
     And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian"
     And user "Alice" has logged in using the webUI
@@ -99,9 +99,9 @@ Feature: copy files and folders
 
   @issue-ocis-1328
   Scenario: copy a folder into another folder with no change permission
-    Given user "Alice" has created folder "simple-empty-folder"
+    Given user "Alice" has created folder "simple-empty-folder" in the server
     And user "Brian" has been created with default attributes and without skeleton files in the server
-    And user "Brian" has created folder "simple-folder"
+    And user "Brian" has created folder "simple-folder" in the server
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions
     And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian"
     And user "Alice" has logged in using the webUI
@@ -110,7 +110,7 @@ Feature: copy files and folders
 
 
   Scenario: copy a folder into the same folder
-    Given user "Alice" has created folder "simple-empty-folder"
+    Given user "Alice" has created folder "simple-empty-folder" in the server
     And user "Alice" has logged in using the webUI
     When the user tries to copy folder "simple-empty-folder" into folder "simple-empty-folder" using the webUI
     Then the error message with header 'Failed to copy "simple-empty-folder"' should be displayed on the webUI
@@ -118,9 +118,9 @@ Feature: copy files and folders
 
 
   Scenario: copy a folder into another folder with same name
-    Given user "Alice" has created folder "simple-empty-folder"
-    And user "Alice" has created folder "folder with space"
-    And user "Alice" has created folder "folder with space/simple-empty-folder"
+    Given user "Alice" has created folder "simple-empty-folder" in the server
+    And user "Alice" has created folder "folder with space" in the server
+    And user "Alice" has created folder "folder with space/simple-empty-folder" in the server
     And user "Alice" has logged in using the webUI
     When the user copies folder "simple-empty-folder" into folder "folder with space/simple-empty-folder" using the webUI
     Then breadcrumb for folder "folder with space" should be displayed on the webUI
@@ -129,8 +129,8 @@ Feature: copy files and folders
     And as "Alice" folder "simple-empty-folder" should exist
 
   Scenario: cancel copying a file
-    Given user "Alice" has uploaded file "data.zip" to "data.zip"
-    And user "Alice" has created folder "simple-empty-folder"
+    Given user "Alice" has uploaded file "data.zip" to "data.zip" in the server
+    And user "Alice" has created folder "simple-empty-folder" in the server
     And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
     When the user selects copy action for folder "data.zip" using the webUI
@@ -140,10 +140,10 @@ Feature: copy files and folders
     But  file "data.zip" should not be listed in the folder "simple-empty-folder" on the webUI
 
   Scenario: cancel copying of multiple files at once
-    Given user "Alice" has uploaded file "data.zip" to "data.zip"
-    And user "Alice" has uploaded file "new-data.zip" to "testapp.zip"
-    And user "Alice" has created file "lorem.txt"
-    And user "Alice" has created folder "simple-empty-folder"
+    Given user "Alice" has uploaded file "data.zip" to "data.zip" in the server
+    And user "Alice" has uploaded file "new-data.zip" to "testapp.zip" in the server
+    And user "Alice" has created file "lorem.txt" in the server
+    And user "Alice" has created folder "simple-empty-folder" in the server
     And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
     When the user marks these files for batch action using the webUI

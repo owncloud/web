@@ -8,9 +8,9 @@ Feature: disable sharing
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And the administrator has set the default folder for received shares to "Shares"
     And user "Alice" has been created with default attributes and without skeleton files in the server
-    And user "Alice" has created folder "simple-folder"
-    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
-    And user "Alice" has uploaded file "lorem.txt" to "simple-folder/lorem.txt"
+    And user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt" in the server
+    And user "Alice" has uploaded file "lorem.txt" to "simple-folder/lorem.txt" in the server
 
   @smokeTest
   Scenario: Users tries to share via WebUI when Sharing is disabled

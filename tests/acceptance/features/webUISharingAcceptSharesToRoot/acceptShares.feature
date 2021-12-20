@@ -13,7 +13,7 @@ Feature: accept/decline shares coming from internal users
 
   Scenario: reject a share that you received as user and as group member
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
-    And user "Alice" has created folder "/simple-folder"
+    And user "Alice" has created folder "/simple-folder" in the server
     And these groups have been created in the server:
       | groupname |
       | grp1      |
@@ -30,8 +30,8 @@ Feature: accept/decline shares coming from internal users
   @issue-2512
   Scenario: reshare a share that you received to a group that you are member of
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
-    And user "Alice" has created folder "/simple-folder"
-    And user "Brian" has created folder "/simple-folder"
+    And user "Alice" has created folder "/simple-folder" in the server
+    And user "Brian" has created folder "/simple-folder" in the server
     And these groups have been created in the server:
       | groupname |
       | grp1      |
@@ -49,8 +49,8 @@ Feature: accept/decline shares coming from internal users
   @smokeTest
   Scenario: unshare an accepted share on the "All files" page
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
-    And user "Alice" has created folder "/simple-folder"
-    And user "Alice" has uploaded file "testavatar.jpg" to "/testimage.jpg"
+    And user "Alice" has created folder "/simple-folder" in the server
+    And user "Alice" has uploaded file "testavatar.jpg" to "/testimage.jpg" in the server
     And these groups have been created in the server:
       | groupname |
       | grp1      |
@@ -71,8 +71,8 @@ Feature: accept/decline shares coming from internal users
   @smokeTest
   Scenario: Auto-accept shares
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "yes"
-    And user "Alice" has created folder "/simple-folder"
-    And user "Alice" has uploaded file "testavatar.jpg" to "/testimage.jpg"
+    And user "Alice" has created folder "/simple-folder" in the server
+    And user "Alice" has uploaded file "testavatar.jpg" to "/testimage.jpg" in the server
     And these groups have been created in the server:
       | groupname |
       | grp1      |
@@ -88,8 +88,8 @@ Feature: accept/decline shares coming from internal users
 
   Scenario: decline auto-accepted shares
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "yes"
-    And user "Alice" has created folder "/simple-folder"
-    And user "Alice" has uploaded file "testavatar.jpg" to "/testimage.jpg"
+    And user "Alice" has created folder "/simple-folder" in the server
+    And user "Alice" has uploaded file "testavatar.jpg" to "/testimage.jpg" in the server
     And these groups have been created in the server:
       | groupname |
       | grp1      |
@@ -107,8 +107,8 @@ Feature: accept/decline shares coming from internal users
 
   Scenario: unshare auto-accepted shares
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "yes"
-    And user "Alice" has created folder "/simple-folder"
-    And user "Alice" has uploaded file "testavatar.jpg" to "/testimage.jpg"
+    And user "Alice" has created folder "/simple-folder" in the server
+    And user "Alice" has uploaded file "testavatar.jpg" to "/testimage.jpg" in the server
     And these groups have been created in the server:
       | groupname |
       | grp1      |
@@ -127,9 +127,9 @@ Feature: accept/decline shares coming from internal users
 
   Scenario: unshare renamed shares
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "yes"
-    And user "Alice" has created folder "/simple-folder"
+    And user "Alice" has created folder "/simple-folder" in the server
     And user "Alice" has shared folder "simple-folder" with user "Brian" with "create, read, share, update" permissions
-    And user "Brian" has renamed folder "simple-folder" to "simple-folder-renamed"
+    And user "Brian" has renamed folder "simple-folder" to "simple-folder-renamed" in the server
     And the user has reloaded the current page of the webUI
     When the user deletes folder "simple-folder-renamed" using the webUI
     Then folder "simple-folder-renamed" should not be listed on the webUI
@@ -138,11 +138,11 @@ Feature: accept/decline shares coming from internal users
 
   Scenario: unshare moved shares
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "yes"
-    And user "Alice" has created folder "/simple-folder"
-    And user "Brian" has created folder "/simple-folder"
-    And user "Brian" has created folder "/simple-folder/shared"
+    And user "Alice" has created folder "/simple-folder" in the server
+    And user "Brian" has created folder "/simple-folder" in the server
+    And user "Brian" has created folder "/simple-folder/shared" in the server
     And user "Alice" has shared folder "simple-folder" with user "Brian" with "create, read, share, update" permissions
-    And user "Brian" has moved folder "/simple-folder (2)" to "/simple-folder/shared"
+    And user "Brian" has moved folder "/simple-folder (2)" to "/simple-folder/shared" in the server
     And the user has reloaded the current page of the webUI
     When the user opens folder "simple-folder" using the webUI
     And the user deletes folder "shared" using the webUI
@@ -152,9 +152,9 @@ Feature: accept/decline shares coming from internal users
 
   Scenario: unshare renamed shares, accept it again
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "yes"
-    And user "Alice" has created folder "/simple-folder"
+    And user "Alice" has created folder "/simple-folder" in the server
     And user "Alice" has shared folder "/simple-folder" with user "Brian"
-    And user "Brian" has renamed folder "/simple-folder" to "/simple-folder-renamed"
+    And user "Brian" has renamed folder "/simple-folder" to "/simple-folder-renamed" in the server
     And the user has reloaded the current page of the webUI
     When the user deletes folder "simple-folder-renamed" using the webUI
     And the user browses to the shared-with-me page in declined shares view
@@ -166,7 +166,7 @@ Feature: accept/decline shares coming from internal users
 
   Scenario: User receives files when auto accept share is disabled
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
-    And user "Alice" has created file "lorem.txt"
+    And user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has shared file "lorem.txt" with user "Brian"
     When the user browses to the shared-with-me page
     Then file "lorem.txt" shared by "Alice Hansen" should be in "Pending" state on the webUI
@@ -175,7 +175,7 @@ Feature: accept/decline shares coming from internal users
 
   Scenario: shared file is in pending state when the Automatically accept incoming shares is disabled
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
-    And user "Alice" has created file "lorem.txt"
+    And user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has shared file "lorem.txt" with user "Brian"
     When the user browses to the shared-with-me page
     Then file "lorem.txt" shared by "Alice Hansen" should be in "Pending" state on the webUI
@@ -185,8 +185,8 @@ Feature: accept/decline shares coming from internal users
   Scenario: receive shares with same name from different users
     Given user "Carol" has been created with default attributes and without skeleton files in the server
     And the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
-    And user "Alice" has created file "lorem.txt"
-    And user "Carol" has created file "lorem.txt"
+    And user "Alice" has created file "lorem.txt" in the server
+    And user "Carol" has created file "lorem.txt" in the server
     And user "Carol" has shared file "lorem.txt" with user "Brian"
     And user "Alice" has shared file "lorem.txt" with user "Brian"
     When the user browses to the shared-with-me page
@@ -195,8 +195,8 @@ Feature: accept/decline shares coming from internal users
 
   Scenario: decline an offered (pending) share
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
-    And user "Alice" has created file "lorem.txt"
-    And user "Alice" has created file "testimage.jpg"
+    And user "Alice" has created file "lorem.txt" in the server
+    And user "Alice" has created file "testimage.jpg" in the server
     And user "Alice" has shared file "lorem.txt" with user "Brian"
     And user "Alice" has shared file "testimage.jpg" with user "Brian"
     When the user browses to the shared-with-me page in accepted shares view
@@ -210,8 +210,8 @@ Feature: accept/decline shares coming from internal users
 
   Scenario: accept an offered (pending) share
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
-    And user "Alice" has created file "lorem.txt"
-    And user "Alice" has created file "testimage.jpg"
+    And user "Alice" has created file "lorem.txt" in the server
+    And user "Alice" has created file "testimage.jpg" in the server
     And user "Alice" has shared file "lorem.txt" with user "Brian"
     And user "Alice" has shared file "testimage.jpg" with user "Brian"
     When the user browses to the shared-with-me page in accepted shares view
@@ -224,8 +224,8 @@ Feature: accept/decline shares coming from internal users
 
   Scenario: accept a previously declined share
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
-    And user "Alice" has created file "lorem.txt"
-    And user "Alice" has created file "testimage.jpg"
+    And user "Alice" has created file "lorem.txt" in the server
+    And user "Alice" has created file "testimage.jpg" in the server
     And user "Alice" has shared file "lorem.txt" with user "Brian"
     And user "Alice" has shared file "testimage.jpg" with user "Brian"
     And user "Brian" has declined the share "lorem.txt" offered by user "Alice"
@@ -240,8 +240,8 @@ Feature: accept/decline shares coming from internal users
 
   Scenario: delete an accepted share
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
-    And user "Alice" has created file "lorem.txt"
-    And user "Alice" has created file "testimage.jpg"
+    And user "Alice" has created file "lorem.txt" in the server
+    And user "Alice" has created file "testimage.jpg" in the server
     And user "Alice" has shared file "lorem.txt" with user "Brian"
     And user "Alice" has shared file "testimage.jpg" with user "Brian"
     And the user has browsed to the shared-with-me page
@@ -258,9 +258,9 @@ Feature: accept/decline shares coming from internal users
   Scenario: Decline multiple accepted shares at once from shared with me page
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And user "Alice" has been created with default attributes and without skeleton files in the server
-    And user "Alice" has created file "lorem.txt"
-    And user "Alice" has created file "data.zip"
-    And user "Alice" has created file "simple-folder"
+    And user "Alice" has created file "lorem.txt" in the server
+    And user "Alice" has created file "data.zip" in the server
+    And user "Alice" has created file "simple-folder" in the server
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Alice" has shared file "lorem.txt" with user "Brian"
     And user "Alice" has shared file "data.zip" with user "Brian"
@@ -279,7 +279,7 @@ Feature: accept/decline shares coming from internal users
     And folder "simple-folder" shared by "Alice Hansen" should be in "Declined" state on the webUI
 
   Scenario: shared file status is changed to declined when user deletes the file
-    Given user "Alice" has created file "lorem.txt"
+    Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has shared file "lorem.txt" with user "Brian"
     And the user has reloaded the current page of the webUI
     When the user deletes file "lorem.txt" using the webUI
@@ -287,10 +287,10 @@ Feature: accept/decline shares coming from internal users
     Then file "lorem.txt" shared by "Alice Hansen" should be in "Declined" state on the webUI
 
   Scenario: the deleted shared file is restored back to all files list when accepted from the shared with me file list
-    Given user "Alice" has created file "lorem.txt"
+    Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has shared file "lorem.txt" with user "Brian"
-    And the following files have been deleted by user "Brian"
-      | name          |
+    And the following files have been deleted by user "Brian" in the server
+      | name      |
       | lorem.txt |
     When the user browses to the shared-with-me page in declined shares view
     And the user accepts share "lorem.txt" offered by user "Alice Hansen" using the webUI
@@ -302,11 +302,11 @@ Feature: accept/decline shares coming from internal users
   Scenario: receive shares with same name from different users, accept one by one
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And user "Carol" has been created with default attributes and without skeleton files in the server
-    And user "Carol" has created folder "/simple-folder"
-    And user "Carol" has created folder "/simple-folder/from_Carol"
+    And user "Carol" has created folder "/simple-folder" in the server
+    And user "Carol" has created folder "/simple-folder/from_Carol" in the server
     And user "Carol" has shared folder "/simple-folder" with user "Brian"
-    And user "Alice" has created folder "/simple-folder"
-    And user "Alice" has created folder "/simple-folder/from_Alice"
+    And user "Alice" has created folder "/simple-folder" in the server
+    And user "Alice" has created folder "/simple-folder/from_Alice" in the server
     And user "Alice" has shared folder "/simple-folder" with user "Brian"
     And the user has browsed to the shared-with-me page
     When the user accepts share "simple-folder" offered by user "Alice Hansen" using the webUI
@@ -318,7 +318,7 @@ Feature: accept/decline shares coming from internal users
 
   Scenario: accept a share that you received as user and as group member
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
-    And  user "Alice" has created folder "/simple-folder"
+    And  user "Alice" has created folder "/simple-folder" in the server
     And these groups have been created in the server:
       | groupname |
       | grp1      |

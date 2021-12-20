@@ -31,7 +31,7 @@ Feature: create folders
 
 
   Scenario: Try to create a folder with existing name
-    Given user "Alice" has created folder "simple-folder"
+    Given user "Alice" has created folder "simple-folder" in the server
     And the user has reloaded the current page of the webUI
     When the user tries to create a folder with the invalid name "simple-folder" using the webUI
     Then the error message 'simple-folder already exists' should be displayed on the webUI dialog prompt
@@ -57,7 +57,7 @@ Feature: create folders
 
 
   Scenario: Create a folder in a public share
-    Given user "Alice" has created folder "simple-empty-folder"
+    Given user "Alice" has created folder "simple-empty-folder" in the server
     And user "Alice" has shared folder "simple-empty-folder" with link with "read,create" permissions
     When the public uses the webUI to access the last public link created by user "Alice"
     And the user creates a folder with the name "top-folder" using the webUI
