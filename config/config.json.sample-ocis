@@ -10,7 +10,6 @@
     "scope": "openid profile email"
   },
   "apps": [
-    "external",
     "files",
     "media-viewer",
     "search",

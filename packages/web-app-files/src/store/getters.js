@@ -1,4 +1,4 @@
-import { shareTypes, userShareTypes } from '../helpers/shareTypes'
+import { ShareTypes } from '../helpers/share'
 
 export default {
   inProgress: (state) => {
@@ -41,12 +41,12 @@ export default {
   },
   currentFileOutgoingCollaborators: (state) => {
     return state.currentFileOutgoingShares.filter((share) => {
-      return userShareTypes.includes(share.shareType)
+      return ShareTypes.containsAnyValue(ShareTypes.authenticated, [share.shareType])
     })
   },
   currentFileOutgoingLinks: (state) => {
     return state.currentFileOutgoingShares.filter((share) => {
-      return share.shareType === shareTypes.link
+      return ShareTypes.containsAnyValue(ShareTypes.unauthenticated, [share.shareType])
     })
   },
   currentFileOutgoingSharesLoading: (state) => {

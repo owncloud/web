@@ -3,6 +3,8 @@ import { createLocalVue, mount, shallowMount } from '@vue/test-utils'
 import GetTextPlugin from 'vue-gettext'
 import Vuex from 'vuex'
 import DesignSystem from 'owncloud-design-system'
+import Users from '@/__fixtures__/users'
+import Collaborators from '@/__fixtures__/collaborators'
 
 const localVue = createLocalVue()
 localVue.use(DesignSystem)
@@ -12,248 +14,98 @@ localVue.use(GetTextPlugin, {
   silent: true
 })
 
+const user = Users.admin
+const collaborators = [Collaborators[0], Collaborators[1]]
+
 const selectors = {
-  addPeopleButton: '.files-collaborators-open-add-share-dialog-button',
-  ocAvatarsStub: 'oc-avatars-stub',
-  ownerAsSelfRow: 'show-collaborator-stub[aria-describedby="collaborator-as-fileowner"]',
-  ownerRow: 'show-collaborator-stub[aria-describedby="original-sharing-user"]',
-  collaboratorsRow: 'show-collaborator-stub:not([aria-describedby])',
-  addCollaboratorDialog: '.files-collaborators-collaborator-add-dialog',
-  cannotSharePermissionMsg: 'p[data-testid="files-collaborators-no-reshare-permissions-message"]',
-  collaboratorAsOwner: 'p#collaborator-as-fileowner',
-  sharedWithLabel: '.shared-with-label',
-  showCollaboratorButtonStub: 'oc-button-stub[arialabel="Show all invited people"]',
-  showCollaboratorButton: 'button[aria-label="Show all invited people"]'
+  showCollaboratorButton: 'button[data-testid="collaborators-show-people"]',
+  firstCollaboratorListItem: `div[data-testid="collaborator-item-${Collaborators[0].collaborator.name}"]`
 }
 
 describe('FileShares', () => {
-  describe('Add People Button', () => {
-    it('should render add people button', () => {
-      const wrapper = getShallowMountedWrapper({ user: 'user0', collaborators: [] })
+  it('renders loading spinner while loading', () => {
+    const wrapper = getShallowMountedWrapper(
+      {
+        user
+      },
+      true
+    )
+    expect(wrapper).toMatchSnapshot()
+  })
 
-      const addPeopleButton = wrapper.find(selectors.addPeopleButton)
-      expect(addPeopleButton.exists()).toBe(true)
-      expect(addPeopleButton.text()).toBe('Add people')
-    })
-
-    it('should set current view to "newCollaborator" and open "addCollaborators" dialog if clicked', async () => {
-      const wrapper = getMountedWrapper({ user: 'user0', collaborators: [] })
-      const addPeopleButton = wrapper.find(selectors.addPeopleButton)
-
-      expect(wrapper.vm.currentView).toBe('showCollaborators')
-      await addPeopleButton.trigger('click')
-      expect(wrapper.vm.currentView).toBe('newCollaborator')
-
-      const addCollaborator = wrapper.find(selectors.addCollaboratorDialog)
-      expect(addCollaborator.exists()).toBe(true)
+  describe('if currentUser can share', () => {
+    it('initially renders add people dialog', () => {
+      const wrapper = getShallowMountedWrapper({
+        user
+      })
+      expect(wrapper).toMatchSnapshot()
     })
   })
 
-  describe('Collaborators List', () => {
-    describe('without any collaborators', () => {
-      describe('owner views the shares sidebar', () => {
-        it('should show the user as owner message', () => {
-          const wrapper = getShallowMountedWrapper({ user: 'user0', outgoingCollaborators: [] })
-
-          const ownerMsg = wrapper.find(selectors.collaboratorAsOwner)
-          expect(ownerMsg.exists()).toBe(true)
-          expect(ownerMsg.text()).toBe('You are the file owner')
-        })
-
-        it('should render the file owner as collaborator', () => {
-          const wrapper = getShallowMountedWrapper({ user: 'user0', outgoingCollaborators: [] })
-
-          const owner = wrapper.find(selectors.ownerAsSelfRow)
-          expect(owner.exists()).toBe(true)
-
-          expect(owner.props()).toMatchObject({
-            collaborator: {
-              collaborator: { name: 'user0', displayName: 'User Zero' },
-              shareType: 0,
-              role: { name: 'owner' }
-            },
-            modifiable: false,
-            firstColumn: true
-          })
-
-          const collaborators = wrapper.findAll(selectors.collaboratorsRow)
-          expect(collaborators.length).toBe(0)
-        })
-
-        it('should show cannot share permission if the owner cannot share', () => {
-          const wrapper = getShallowMountedWrapper({
-            user: 'user0',
-            outgoingCollaborators: [],
-            canShare: false
-          })
-
-          const noShareMsg = wrapper.find(selectors.cannotSharePermissionMsg)
-          expect(noShareMsg.exists()).toBe(true)
-          expect(noShareMsg.text()).toBe("You don't have permission to share this file.")
-        })
+  describe('if currentUser can not share', () => {
+    it('initially renders no share permission message', () => {
+      const wrapper = getShallowMountedWrapper({
+        user,
+        canShare: false
       })
+      expect(wrapper).toMatchSnapshot()
+    })
+  })
+
+  describe('if there are no collaborators', () => {
+    it('does not render avatar wrapper or collaborator list', () => {
+      const wrapper = getShallowMountedWrapper({
+        user
+      })
+      expect(wrapper).toMatchSnapshot()
+    })
+  })
+
+  describe('if there are collaborators present', () => {
+    it('renders sharedWithLabel and sharee list', () => {
+      const wrapper = getShallowMountedWrapper({
+        user,
+        outgoingCollaborators: collaborators
+      })
+      expect(wrapper).toMatchSnapshot()
     })
 
-    describe('with Collaborators', () => {
-      describe('owner views the shares panel', () => {
-        it('should display the avatars of the sharees as file collaborators', () => {
-          const wrapper = getShallowMountedWrapper({
-            user: 'user0',
-            outgoingCollaborators: [{ username: 'user1' }, { username: 'user2' }]
-          })
-
-          wrapper.setData({ showShareesList: true })
-          const exptectedSharees = [
-            {
-              id: 'user1',
-              additionalInfo: null,
-              name: 'user1',
-              displayName: 'User One',
-              displayname: 'User One',
-              shareType: 0
-            },
-            {
-              id: 'user2',
-              additionalInfo: null,
-              name: 'user2',
-              displayName: 'User Two',
-              displayname: 'User Two',
-              shareType: 0
-            }
-          ]
-
-          const avatars = wrapper.find(selectors.ocAvatarsStub)
-          expect(avatars.exists()).toBe(true)
-          expect(avatars.props('items')).toMatchObject(exptectedSharees)
-        })
-
-        it('should show the shared with label if there are collaborators', () => {
-          const wrapper = getShallowMountedWrapper({
-            user: 'user0',
-            outgoingCollaborators: [{ username: 'user1' }, { username: 'user2' }]
-          })
-
-          const sharedWithLabel = wrapper.find(selectors.sharedWithLabel)
-          expect(sharedWithLabel).toMatchSnapshot()
-        })
-
-        it('should show the show collaborators button if there are collaborators', () => {
-          const wrapper = getShallowMountedWrapper({
-            user: 'user0',
-            outgoingCollaborators: [{ username: 'user1' }, { username: 'user2' }]
-          })
-          const button = wrapper.find(selectors.showCollaboratorButtonStub)
-          expect(button.exists()).toBe(true)
-        })
-
-        it('should show the collaborators list when show collaborators button if there are collaborators', async () => {
-          const wrapper = getMountedWrapper({
-            user: 'user0',
-            outgoingCollaborators: [{ username: 'user1' }, { username: 'user2' }]
-          })
-          expect(wrapper.vm.showShareesList).toBe(false)
-
-          const button = wrapper.find(selectors.showCollaboratorButton)
-          await button.trigger('click')
-
-          expect(wrapper.vm.showShareesList).toBe(true)
-        })
-
-        it('should not show the collaborators when showSharees is set to true', async () => {
-          const wrapper = getMountedWrapper({
-            user: 'user0',
-            outgoingCollaborators: [{ username: 'user1' }, { username: 'user2' }]
-          })
-          await wrapper.setData({ showShareesList: true })
-          const avatars = wrapper.find(selectors.ocAvatarsStub)
-          expect(avatars.exists()).toBe(false)
-        })
-
-        it('should render the file collaborators', async () => {
-          const wrapper = getShallowMountedWrapper({
-            user: 'user0',
-            outgoingCollaborators: [{ username: 'user1' }, { username: 'user2' }]
-          })
-          await wrapper.setData({ showShareesList: true })
-          const collaborators = wrapper.findAll(selectors.collaboratorsRow)
-          expect(collaborators.length).toBe(2)
-
-          const collaborator1 = collaborators.at(0)
-          expect(collaborator1.props()).toMatchObject({
-            collaborator: {
-              collaborator: { name: 'user1', displayName: 'User One' },
-              shareType: 0,
-              role: roles.viewer
-            },
-            modifiable: true,
-            firstColumn: true
-          })
-
-          const collaborator2 = collaborators.at(1)
-          expect(collaborator2.props()).toMatchObject({
-            collaborator: {
-              collaborator: { name: 'user2', displayName: 'User Two' },
-              shareType: 0,
-              role: roles.viewer
-            },
-            modifiable: true,
-            firstColumn: true
-          })
-        })
+    it('can toggle the collaborators list by clicking the avatar wrapper button', async () => {
+      const wrapper = getMountedWrapper({
+        user,
+        outgoingCollaborators: collaborators
       })
+      const button = wrapper.find(selectors.showCollaboratorButton)
+      expect(wrapper.vm.showShareesList).toBe(true)
+      await button.trigger('click')
+      expect(wrapper.vm.showShareesList).toBe(false)
+      await button.trigger('click')
+      expect(wrapper.vm.showShareesList).toBe(true)
+    })
 
-      describe('sharee views the shares panel', () => {
-        it('should show the owner in the collaborators list', () => {
-          const wrapper = getShallowMountedWrapper({
-            user: 'user1',
-            incomingCollaborators: [
-              {
-                fileOwner: 'user0',
-                username: 'user1'
-              }
-            ]
-          })
-
-          const owner = wrapper.find(selectors.ownerRow)
-          expect(owner.exists()).toBe(true)
-
-          expect(owner.props()).toMatchObject({
-            collaborator: {
-              collaborator: { name: 'user0', displayName: 'User Zero' },
-              shareType: 0,
-              role: { name: 'owner' }
-            },
-            modifiable: false,
-            firstColumn: true
-          })
-        })
-
-        it('should render the sharee as file collaborators', () => {
-          const wrapper = getShallowMountedWrapper({
-            user: 'user1',
-            incomingCollaborators: [
-              {
-                fileOwner: 'user0',
-                username: 'user1'
-              }
-            ]
-          })
-
-          const collaborators = wrapper.findAll(selectors.collaboratorsRow)
-          expect(collaborators.length).toBe(1)
-
-          const collaborator1 = collaborators.at(0)
-          expect(collaborator1.props()).toMatchObject({
-            collaborator: {
-              collaborator: { name: 'user1', displayName: 'User One' },
-              shareType: 0,
-              role: roles.viewer
-            },
-            modifiable: false,
-            firstColumn: true
-          })
-        })
+    it('reacts on delete events by collaborator list items', async () => {
+      const spyOnCollaboratorDelete = jest
+        .spyOn(FileShares.methods, '$_ocCollaborators_deleteShare')
+        .mockImplementation()
+      const wrapper = getMountedWrapper({
+        user,
+        outgoingCollaborators: collaborators
       })
+      wrapper.find(selectors.firstCollaboratorListItem).vm.$emit('onDelete')
+      await wrapper.vm.$nextTick()
+      expect(spyOnCollaboratorDelete).toHaveBeenCalledTimes(1)
+    })
+    it('reloads shares if highlighted file is changed', async () => {
+      const spyOnReloadShares = jest
+        .spyOn(FileShares.methods, '$_reloadShares')
+        .mockImplementation()
+      const wrapper = getMountedWrapper({
+        user,
+        outgoingCollaborators: collaborators
+      })
+      wrapper.vm.$store.commit('Files/SET_HIGHLIGHTED_FILE', { name: 'testfile2' })
+      await wrapper.vm.$nextTick()
+      expect(spyOnReloadShares).toHaveBeenCalledTimes(1)
     })
   })
 })
@@ -273,6 +125,7 @@ function getResource({
     extension: extension,
     path: type === 'file' ? `/${filename}.${extension}` : `/${filename}`,
     type,
+    isFolder: type === 'folder',
     mdate: 'Mon, 12 Jul 2021 11:04:33 GMT',
     size: '163',
     indicators: [],
@@ -281,8 +134,8 @@ function getResource({
     etag: '"89128c0e8122002db57bd19c9ec33004"',
     shareTypes: [],
     downloadURL: '',
-    ownerDisplayName: displayNames[owner],
-    ownerId: owner,
+    ownerDisplayName: owner.displayname,
+    ownerId: owner.id,
     canDownload: () => true,
     isReceivedShare: () => true,
     canBeDeleted: () => true,
@@ -291,7 +144,7 @@ function getResource({
   }
 }
 
-const storeOptions = (data) => {
+const storeOptions = (data, isInLoadingState) => {
   let {
     user,
     outgoingCollaborators = [],
@@ -303,70 +156,43 @@ const storeOptions = (data) => {
     owner = user
   }
 
-  const buildCollaboratorsArray = (collaborator, idx) => {
-    let {
-      username,
-      fileOwner,
-      owner,
-      permissions = 17,
-      shareType = 0,
-      role = 'viewer'
-    } = collaborator
-
-    if (!owner) {
-      owner = fileOwner
-    }
-
-    return {
-      id: idx,
-      key: 'collaborator-' + idx,
-      collaborator: userObj(username),
-      fileOwner: userObj(fileOwner),
-      owner: userObj(owner),
-      permissions: permissions || 17,
-      shareType: shareType || 0,
-      customPermissions: {},
-      role: roles[role]
-    }
-  }
-  const outgoingCollaboratorsArray = outgoingCollaborators.map(buildCollaboratorsArray)
-  const incomingCollaboratorsArray = incomingCollaborators.map(buildCollaboratorsArray)
-
   const storeOpts = {
     state: {
-      user: userObj(user)
+      user
     },
     modules: {
       Files: {
         state: {
-          incomingShares: incomingCollaboratorsArray,
-          incomingSharesLoading: false,
-          sharesTree: [],
-          appSidebarAccordionContext: {}
+          incomingShares: incomingCollaborators,
+          incomingSharesLoading: isInLoadingState,
+          sharesTree: []
         },
         namespaced: true,
         getters: {
           highlightedFile: () => {
             return getResource({ filename: 'testfile', extension: 'jpg', type: 'file', canShare })
           },
-          currentFileOutgoingCollaborators: () => outgoingCollaboratorsArray,
+          currentFileOutgoingCollaborators: () => outgoingCollaborators,
           currentFileOutgoingSharesLoading: () => false,
           sharesTreeLoading: () => false
         },
         actions: {
           loadCurrentFileOutgoingShares: jest.fn(),
-          loadSharesTree: jest.fn(),
-          sharesClearState: jest.fn(),
-          deleteShare: jest.fn(),
           loadIncomingShares: jest.fn(),
-          incomingSharesclearState: jest.fn()
+          loadSharesTree: jest.fn(),
+          deleteShare: jest.fn()
         },
-        mutations: {}
+        mutations: {
+          SET_HIGHLIGHTED_FILE(state, file) {
+            const newFile = getResource(file)
+            state.highlightedFile = newFile
+          }
+        }
       }
     },
     getters: {
       isOcis: () => false,
-      user: () => userObj(user),
+      user: () => user,
       capabilities: () => {
         return {
           files_sharing: {
@@ -391,10 +217,10 @@ const storeOptions = (data) => {
   return storeOpts
 }
 
-function getMountedWrapper(data) {
+function getMountedWrapper(data, loading = false) {
   return mount(FileShares, {
     localVue,
-    store: createStore(data),
+    store: createStore(data, loading),
     stubs: {
       'oc-button': false,
       'oc-icon': true,
@@ -404,35 +230,10 @@ function getMountedWrapper(data) {
   })
 }
 
-const roles = {
-  viewer: {
-    description: 'Download, preview and share',
-    label: 'Viewer',
-    name: 'viewer',
-    permissions: ['read', 'share']
-  }
-}
-
-const displayNames = {
-  user0: 'User Zero',
-  user1: 'User One',
-  user2: 'User Two'
-}
-
-const userObj = (name) => {
-  return {
-    id: name,
-    additionalInfo: null,
-    name,
-    displayName: displayNames[name],
-    displayname: displayNames[name] // FIXME: some values use different property name for display name
-  }
-}
-
-function getShallowMountedWrapper(data) {
+function getShallowMountedWrapper(data, loading = false) {
   return shallowMount(FileShares, {
     localVue,
-    store: createStore(data),
+    store: createStore(data, loading),
     stubs: {
       'oc-button': true,
       'oc-icon': true,
@@ -441,6 +242,6 @@ function getShallowMountedWrapper(data) {
   })
 }
 
-function createStore(data) {
-  return new Vuex.Store(storeOptions(data))
+function createStore(data, loading) {
+  return new Vuex.Store(storeOptions(data, loading))
 }

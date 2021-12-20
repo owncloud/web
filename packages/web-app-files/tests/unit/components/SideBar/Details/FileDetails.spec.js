@@ -4,6 +4,7 @@ import FileDetails from 'packages/web-app-files/src/components/SideBar/Details/F
 import stubs from '../../../../../../../tests/unit/stubs'
 import GetTextPlugin from 'vue-gettext'
 import AsyncComputed from 'vue-async-computed'
+import { ShareTypes } from '../../../../../src/helpers/share'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -28,7 +29,7 @@ const sharedFolder = {
   ownerDisplayName: 'Einstein',
   mdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
   size: '740',
-  shareTypes: [0]
+  shareTypes: [ShareTypes.user.value]
 }
 
 const simpleOwnFile = {
@@ -48,7 +49,7 @@ const sharedFile = {
   thumbnail: 'example.com/image',
   mdate: 'Tue, 20 Oct 2015 06:15:00 GMT',
   size: '740',
-  shareTypes: [0]
+  shareTypes: [ShareTypes.user.value]
 }
 
 const formDateFromJSDate = jest.fn().mockImplementation(() => 'ABSOLUTE_TIME')

@@ -1,77 +1,67 @@
 <template>
-  <div class="files-collaborators-collaborator-add-dialog" data-testid="new-collaborator">
-    <div class="oc-mb">
-      <oc-select
-        id="files-share-invite-input"
-        ref="ocSharingAutocomplete"
-        v-model="selectedCollaborators"
-        :options="autocompleteResults"
-        :loading="searchInProgress"
-        :multiple="true"
-        :filter="filterRecipients"
-        :label="selectedCollaboratorsLabel"
-        aria-describedby="files-share-invite-hint"
-        :dropdown-should-open="
-          ({ open, search }) => open && search.length >= minSearchLength && !searchInProgress
-        "
-        @search:input="onSearch"
-        @input="onInviteInput"
-      >
-        <template #option="option">
-          <autocomplete-item :item="option" />
-        </template>
-        <template #no-options>
-          <translate> No users or groups found. </translate>
-        </template>
-        <template #selected-option-container="{ option, deselect }">
-          <recipient-container
-            :key="option.value.shareWith"
-            :recipient="option"
-            :deselect="deselect"
-          />
-        </template>
-        <template #open-indicator>
-          <!-- Empty to hide the caret -->
-          <span />
-        </template>
-      </oc-select>
-      <p
-        id="files-share-invite-hint"
-        class="oc-mt-xs oc-mb-rm oc-text-meta"
-        v-text="inviteDescriptionMessage"
+  <div id="new-collaborators-form" data-testid="new-collaborators-form">
+    <oc-select
+      id="files-share-invite-input"
+      ref="ocSharingAutocomplete"
+      v-model="selectedCollaborators"
+      :options="autocompleteResults"
+      :loading="searchInProgress"
+      :multiple="true"
+      :filter="filterRecipients"
+      :label="selectedCollaboratorsLabel"
+      aria-describedby="files-share-invite-hint"
+      :dropdown-should-open="
+        ({ open, search }) => open && search.length >= minSearchLength && !searchInProgress
+      "
+      @search:input="onSearch"
+      @input="resetFocusOnInvite"
+    >
+      <template #option="option">
+        <autocomplete-item :item="option" />
+      </template>
+      <template #no-options>
+        <translate> No users or groups found. </translate>
+      </template>
+      <template #selected-option-container="{ option, deselect }">
+        <recipient-container
+          :key="option.value.shareWith"
+          :recipient="option"
+          :deselect="deselect"
+        />
+      </template>
+      <template #open-indicator>
+        <!-- Empty to hide the caret -->
+        <span />
+      </template>
+    </oc-select>
+    <p
+      id="files-share-invite-hint"
+      class="oc-mt-xs oc-text-meta"
+      v-text="inviteDescriptionMessage"
+    />
+    <div class="uk-flex uk-flex-middle uk-flex-between oc-mb-l">
+      <role-dropdown
+        :resource="highlightedFile"
+        :allow-share-permission="!isOcis"
+        @optionChange="collaboratorRoleChanged"
+      />
+      <expiration-datepicker @optionChange="collaboratorExpiryChanged" />
+      <oc-button v-if="saving" key="new-collaborator-saving-button" :disabled="true">
+        <oc-spinner :aria-label="$gettext('Creating share')" size="small" />
+        <span v-translate :aria-hidden="true">Share</span>
+      </oc-button>
+      <oc-button
+        v-else
+        id="new-collaborators-form-create-button"
+        key="new-collaborator-save-button"
+        data-testid="new-collaborators-form-create-button"
+        :disabled="!$_isValid"
+        variation="primary"
+        appearance="filled"
+        @click="share"
+        v-text="$gettext('Share')"
       />
     </div>
-    <collaborators-edit-options class="oc-mb" @optionChange="collaboratorOptionChanged" />
-    <oc-grid gutter="small" class="oc-mb">
-      <div>
-        <oc-button
-          key="new-collaborator-cancel-button"
-          :disabled="saving"
-          class="files-collaborators-collaborator-cancel"
-          @click="$_ocCollaborators_newCollaboratorsCancel"
-        >
-          <translate>Cancel</translate>
-        </oc-button>
-      </div>
-      <div>
-        <oc-button v-if="saving" key="new-collaborator-saving-button" :disabled="true">
-          <oc-spinner :aria-label="$gettext('Adding People')" size="small" />
-          <span v-translate :aria-hidden="true">Adding People</span>
-        </oc-button>
-        <oc-button
-          v-else
-          id="files-collaborators-collaborator-save-new-share-button"
-          key="new-collaborator-save-button"
-          data-testid="new-collaborator-share-btn"
-          :disabled="!$_isValid"
-          variation="primary"
-          appearance="filled"
-          @click="share"
-        >
-          <translate>Share</translate>
-        </oc-button>
-      </div>
-    </oc-grid>
     <oc-hidden-announcer level="assertive" :announcement="announcement" />
   </div>
 </template>
@@ -81,22 +71,21 @@ import debounce from 'lodash-es/debounce'
 import PQueue from 'p-queue'
 
 import { mapActions, mapGetters } from 'vuex'
-import Mixins from '../../../../mixins/collaborators'
-import { roleToBitmask } from '../../../../helpers/collaborators'
-import { shareTypes } from '../../../../helpers/shareTypes'
 
 import AutocompleteItem from './AutocompleteItem.vue'
-import CollaboratorsEditOptions from './CollaboratorsEditOptions.vue'
+import RoleDropdown from '../RoleDropdown.vue'
 import RecipientContainer from './RecipientContainer.vue'
+import ExpirationDatepicker from './ExpirationDatepicker.vue'
+import { PeopleShareRoles, SharePermissions, ShareTypes } from '../../../../helpers/share'
 
 export default {
-  name: 'NewCollaborator',
+  name: 'InviteCollaboratorForm',
   components: {
     AutocompleteItem,
-    CollaboratorsEditOptions,
-    RecipientContainer
+    RoleDropdown,
+    RecipientContainer,
+    ExpirationDatepicker
   },
-  mixins: [Mixins],
   data() {
     return {
       autocompleteResults: [],
@@ -104,7 +93,7 @@ export default {
       searchInProgress: false,
       selectedCollaborators: [],
       selectedRole: null,
-      additionalPermissions: null,
+      customPermissions: null,
       saving: false,
       expirationDate: null,
       searchQuery: ''
@@ -113,7 +102,7 @@ export default {
   computed: {
     ...mapGetters('Files', ['currentFileOutgoingCollaborators', 'highlightedFile']),
     ...mapGetters(['user']),
-    ...mapGetters(['configuration']),
+    ...mapGetters(['configuration', 'isOcis']),
 
     inviteDescriptionMessage() {
       return this.$gettext('Add new person by name, email or federation IDs')
@@ -135,17 +124,12 @@ export default {
     }
   },
   mounted() {
-    this.focusInviteInput()
-
     this.fetchRecipients = debounce(this.fetchRecipients, 500)
+    this.selectedRole = PeopleShareRoles.list(this.highlightedFile.isFolder)[0]
   },
 
   methods: {
     ...mapActions('Files', ['addShare']),
-
-    close() {
-      this.$emit('close')
-    },
 
     async fetchRecipients(query) {
       try {
@@ -214,7 +198,7 @@ export default {
 
       return recipients.filter(
         (recipient) =>
-          recipient.value.shareType === shareTypes.remote ||
+          recipient.value.shareType === ShareTypes.remote.value ||
           recipient.label.toLocaleLowerCase().indexOf(query.toLocaleLowerCase()) > -1 ||
           recipient.value.shareWith.toLocaleLowerCase().indexOf(query.toLocaleLowerCase()) > -1 ||
           (recipient.value.shareWithAdditionalInfo || '')
@@ -222,11 +206,16 @@ export default {
             .indexOf(query.toLocaleLowerCase()) > -1
       )
     },
-    $_ocCollaborators_newCollaboratorsCancel() {
-      this.selectedCollaborators = []
-      this.saving = false
-      this.close()
+
+    collaboratorRoleChanged({ role, permissions }) {
+      this.selectedRole = role
+      this.customPermissions = permissions
     },
+
+    collaboratorExpiryChanged({ expirationDate }) {
+      this.expirationDate = expirationDate
+    },
+
     async share() {
       this.saving = true
 
@@ -234,48 +223,34 @@ export default {
       const savePromises = []
       this.selectedCollaborators.forEach((collaborator) => {
         savePromises.push(
-          saveQueue.add(() =>
+          saveQueue.add(() => {
+            const bitmask = this.selectedRole.hasCustomPermissions
+              ? SharePermissions.permissionsToBitmask(this.customPermissions)
+              : SharePermissions.permissionsToBitmask(this.selectedRole.permissions(!this.isOcis))
             this.addShare({
               client: this.$client,
               path: this.highlightedFile.path,
               $gettext: this.$gettext,
               shareWith: collaborator.value.shareWith,
               shareType: collaborator.value.shareType,
-              permissions: roleToBitmask(this.selectedRole, this.additionalPermissions),
+              permissions: bitmask,
               expirationDate: this.expirationDate
             })
-          )
+          })
         )
       })
 
       await Promise.all(savePromises)
-      this.$_ocCollaborators_newCollaboratorsCancel()
-    },
-    $_ocCollaborators_removeFromSelection(collaborator) {
-      this.selectedCollaborators = this.selectedCollaborators.filter((selectedCollaborator) => {
-        return collaborator !== selectedCollaborator
-      })
     },
 
-    focusInviteInput() {
+    resetFocusOnInvite() {
+      this.autocompleteResults = []
       this.$nextTick(() => {
         const inviteInput = document.getElementById('files-share-invite-input')
 
         inviteInput.focus()
       })
-    },
-
-    onInviteInput() {
-      this.autocompleteResults = []
-      this.focusInviteInput()
     }
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.files-share-invite-recipient {
-  margin: 4px 2px 0;
-  padding: 0 0.25em;
-}
-</style>

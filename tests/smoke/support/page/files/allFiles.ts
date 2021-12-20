@@ -137,6 +137,16 @@ export class AllFilesPage {
       `//*[@data-test-resource-name="${folderName}"]/ancestor::tr//button[contains(@class, "files-quick-action-collaborators")]`
     )
 
+    await page.addStyleTag({
+      content: `
+      *,
+      *::before,
+      *::after {
+      transition: none !important;
+      }
+      `
+    })
+
     if (folderPaths.length) {
       await cta.files.navigateToFolder({ page: page, path: folderPaths.join('/') })
     }
@@ -150,7 +160,6 @@ export class AllFilesPage {
         await cta.files.sidebar.openPanel({ page: page, name: 'sharing' })
         break
     }
-    await page.click('.files-collaborators-open-add-share-dialog-button')
 
     for (const user of users) {
       const shareInputLocator = page.locator('#files-share-invite-input')
@@ -162,11 +171,11 @@ export class AllFilesPage {
       await page.waitForSelector('.vs--open')
       await page.press('#files-share-invite-input', 'Enter')
 
-      await page.click('//*[@id="files-collaborators-role-button"]')
+      await page.click('//*[@id="files-collaborators-role-button-new"]')
       await page.click(`//*[@id="files-role-${role}"]`)
     }
 
-    await page.click('#files-collaborators-collaborator-save-new-share-button')
+    await page.click('#new-collaborators-form-create-button')
     await cta.files.sidebar.close({ page: page })
 
     await page.goto(startUrl)
@@ -328,13 +337,12 @@ export class AllFilesPage {
     await cta.files.sidebar.open({ page: page, resource: folderName })
     await cta.files.sidebar.openPanel({ page: page, name: 'sharing' })
 
-    await (await page.waitForSelector('//*[@data-testid="collaborators-show-people"]')).click()
-
     for (const user of users) {
-      await page.click(`//*[@data-testid="recipient-${user.id}-btn-edit"]`)
-      await page.click('//*[@id="files-collaborators-role-button"]')
-      await page.click(`//*[@id="files-role-${role}"]`)
-      await page.click('//*[@data-testid="recipient-edit-btn-save"]')
+      const userColumn = `//*[@data-testid="collaborator-item-${user.id}"]`
+      await page.click(`${userColumn}//button[contains(@class,"files-recipient-role-select-btn")]`)
+      await page.click(
+        `${userColumn}//ul[contains(@class,"files-recipient-role-drop-list")]//button[@id="files-recipient-role-drop-btn-${role}"]`
+      )
     }
     await page.goto(startUrl)
   }
@@ -352,12 +360,8 @@ export class AllFilesPage {
     await cta.files.sidebar.open({ page: page, resource: folderName })
     await cta.files.sidebar.openPanel({ page: page, name: 'sharing' })
 
-    await page.click('//*[@data-testid="collaborators-show-people"]')
-
     for (const user of users) {
-      const deleteButton = page.locator(
-        `//*[@data-testid="collaborator-item-${user.id}"]//button[contains(@class,"files-collaborators-collaborator-delete")]`
-      )
+      const userColumn = `//*[@data-testid="collaborator-item-${user.id}"]`
 
       await Promise.all([
         page.waitForResponse(
@@ -366,7 +370,12 @@ export class AllFilesPage {
             resp.status() === 200 &&
             resp.request().method() === 'DELETE'
         ),
-        deleteButton.click()
+        page.click(
+          `${userColumn}//button[contains(@class,"collaborator-edit-dropdown-options-btn")]`
+        ),
+        page.click(
+          `${userColumn}//ul[contains(@class,"collaborator-edit-dropdown-options-list")]//button[contains(@class,"remove-share")]`
+        )
       ])
     }
     await page.goto(startUrl)

@@ -1,5 +1,5 @@
 import { buildSharedResource } from '../resources'
-import { shareStatus } from '../shareStatus'
+import { ShareStatus } from './status'
 
 export async function triggerShareAction(resource, status, allowReSharing, $client) {
   const method = _getRequestMethod(status)
@@ -33,9 +33,9 @@ export async function triggerShareAction(resource, status, allowReSharing, $clie
 
 function _getRequestMethod(status) {
   switch (status) {
-    case shareStatus.accepted:
+    case ShareStatus.accepted:
       return 'POST'
-    case shareStatus.declined:
+    case ShareStatus.declined:
       return 'DELETE'
     default:
       return null

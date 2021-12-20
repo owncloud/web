@@ -86,28 +86,28 @@ Feature: Shares in share-with pages
     Then folder "simple-folder" shared by "Alice Hansen" should be in "Declined" state on the webUI
     And as "Brian" folder "simple-folder" should not exist
 
-  @issue-2898
-  Scenario: see resource owner for direct shares in "shared with me"
-    Given user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has logged in using the webUI
-    When the user browses to the shared-with-me page
-    And the user opens the share dialog for folder "simple-folder" using the webUI
-    Then user "Alice Hansen" should be listed as "Owner" in the collaborators list on the webUI
 
-  @issue-3040
-  Scenario: see resource owner of parent shares in "shared with others" and "favorites" list
-    Given user "Carol" has been created with default attributes and without skeleton files
-    And user "Alice" has created folder "simple-folder/simple-empty-folder"
-    And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has shared folder "simple-folder/simple-empty-folder" with user "Carol"
-    And user "Brian" has favorited element "simple-folder/simple-empty-folder"
-    And user "Brian" has logged in using the webUI
-    When the user browses to the shared-with-others page
-    And the user opens the share dialog for folder "simple-empty-folder" using the webUI
-    Then user "Alice Hansen" should be listed as "Owner" via "simple-folder" in the collaborators list on the webUI
-    When the user browses to the favorites page using the webUI
-    And the user opens the share dialog for folder "simple-folder/simple-empty-folder" using the webUI
-    Then user "Alice Hansen" should be listed as "Owner" via "simple-folder" in the collaborators list on the webUI
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   @skipOnOC10 @issue-4582
   Scenario: deleting multiple entries on the shared-with-me page

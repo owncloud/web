@@ -20,10 +20,10 @@ Feature: Resharing shared files with different permissions
     And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian"
     And user "Alice" has logged in using the webUI
     And the user opens folder "Shares" using the webUI
-    When the user shares folder "simple-folder" with user "Carol King" as "Viewer" with permissions "," using the webUI
+    When the user shares folder "simple-folder" with user "Carol King" as "Custom permissions" with permissions "," using the webUI
     And user "Carol" accepts the share "Shares/simple-folder" offered by user "Alice" using the sharing API
     And the user re-logs in as "Brian" using the webUI
-    Then user "Carol King" should be listed as "Viewer" in the collaborators list for folder "simple-folder" on the webUI
+    Then user "Carol King" should be listed as "Custom permissions" in the collaborators list for folder "simple-folder" on the webUI
     And no custom permissions should be set for collaborator "Carol King" for folder "simple-folder" on the webUI
     And user "Alice Hansen" should be listed as "Viewer" in the collaborators list for folder "simple-folder" on the webUI
     And user "Alice" should have received a share with these details:
@@ -39,7 +39,7 @@ Feature: Resharing shared files with different permissions
       | share_with  | Carol                 |
       | file_target | /Shares/simple-folder |
       | item_type   | folder                |
-      | permissions | read, share           |
+      | permissions | read                  |
 
   @skipOnOC10 @issue-ocis-2260
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
@@ -151,9 +151,9 @@ Feature: Resharing shared files with different permissions
     And user "Carol" accepts the share "Shares/simple-folder" offered by user "Alice" using the sharing API
     And the user re-logs in as "Carol" using the webUI
     And the user opens folder "Shares" using the webUI
-    And the user opens the share dialog for folder "simple-folder" using the webUI
-    Then the current collaborators list should have order "Brian Murphy,Carol King"
-    And user "Brian Murphy" should be listed as "Owner" reshared through "Alice Hansen" in the collaborators list on the webUI
+    And the collaborators list for folder "simple-folder" should be empty
+    # Then the current collaborators list should have order "Brian Murphy,Carol King"
+    # And user "Brian Murphy" should be listed as "Owner" reshared through "Alice Hansen" in the collaborators list on the webUI
     And user "Carol" should have received a share with these details:
       | field       | value                 |
       | uid_owner   | Alice                 |
@@ -254,21 +254,4 @@ Feature: Resharing shared files with different permissions
     When user "Brian" has logged in using the webUI
     And the user opens the share dialog for folder "simple-folder" using the webUI
     Then user "Alice Hansen" should be listed as "Editor" in the collaborators list on the webUI
-    And user "Carol King" should be listed as "Editor" reshared through "Alice Hansen" in the collaborators list on the webUI
-
-  @issue-5642
-  Scenario: Share recipient sees resharer in collaborators list
-    Given user "David" has been created with default attributes and without skeleton files
-    And group "Davidgrp" has been created
-    And user "David" has been added to group "Davidgrp"
-    And user "Brian" has shared folder "simple-folder" with user "Alice"
-    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian"
-    And user "Brian" has shared folder "simple-folder" with user "Carol"
-    And user "Carol" has accepted the share "Shares/simple-folder" offered by user "Brian"
-    And user "Alice" has shared folder "/Shares/simple-folder" with user "David"
-    And user "Carol" has shared folder "/Shares/simple-folder" with group "Davidgrp"
-    And user "David" has accepted the share "Shares/simple-folder" offered by user "Alice"
-    When user "David" has logged in using the webUI
-    And the user opens folder "Shares" using the webUI
-    And the user opens the share dialog for folder "simple-folder" using the webUI
-    Then user "Brian Murphy" should be listed as "Owner" reshared through "Alice Hansen, Carol King" in the collaborators list on the webUI
+    And user "Carol King" should be listed as "Editor" in the collaborators list on the webUI

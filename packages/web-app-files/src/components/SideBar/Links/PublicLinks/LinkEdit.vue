@@ -20,14 +20,14 @@
       </div>
       <oc-select
         id="files-file-link-role-button"
-        v-model="selectedRole"
-        :options="roles"
+        v-model="selectedRoleOption"
+        :options="availableRoleOptions"
         :clearable="false"
         :label="selectedRoleLabel"
         class="oc-mb files-file-link-role-button-wrapper"
       >
         <template #option="option">
-          <role-item :role="option" />
+          <role-item :role="getRoleFromSelectOption(option)" :allow-share-permission="false" />
         </template>
         <template #no-options v-translate> No matching role found </template>
       </oc-select>
@@ -169,12 +169,10 @@
 </template>
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
-
 import mixins from '../../../../mixins'
 import { DateTime } from 'luxon'
-import publicLinkRoles from '../../../../helpers/publicLinkRolesDefinition'
-
 import RoleItem from '../../Shared/RoleItem.vue'
+import { LinkShareRoles, SharePermissions } from '../../../../helpers/share'
 
 export default {
   components: {
@@ -194,7 +192,7 @@ export default {
         mailTo: this.$gettext('Mail recipients'),
         mailBody: this.$gettext('Personal note')
       },
-      selectedRole: null
+      selectedRoleOption: null
     }
   },
   title: ($gettext) => {
@@ -205,16 +203,12 @@ export default {
     ...mapGetters(['getToken', 'capabilities']),
     ...mapState('Files', ['publicLinkInEdit']),
 
+    selectedRole() {
+      return this.getRoleFromSelectOption(this.selectedRoleOption)
+    },
+
     $_isNew() {
       return !this.publicLinkInEdit.id
-    },
-
-    $_isFolder() {
-      return this.highlightedFile.type === 'folder'
-    },
-
-    $_isFile() {
-      return !this.$_isFolder
     },
 
     $_hasChanges() {
@@ -223,7 +217,7 @@ export default {
       return (
         expireDateNow !== expireDateBefore ||
         this.name !== this.publicLinkInEdit.name ||
-        this.selectedRole.permissions !== this.publicLinkInEdit.permissions ||
+        this.selectedRole.bitmask(false) !== this.publicLinkInEdit.permissions ||
         (this.publicLinkInEdit.hasPassword
           ? this.password !== null
           : this.password !== null && this.password.trim().length > 0)
@@ -234,12 +228,10 @@ export default {
       return Object.keys(this.capabilities.files_sharing.public.send_mail).length > 0
     },
 
-    roles() {
-      const $gettext = this.$gettext
-      return publicLinkRoles({
-        $gettext,
-        isFolder: this.$_isFolder
-      })
+    availableRoleOptions() {
+      return LinkShareRoles.list(this.highlightedFile.isFolder).map((r) =>
+        this.convertRoleToSelectOption(r)
+      )
     },
 
     $_expirationDate() {
@@ -282,17 +274,25 @@ export default {
     },
 
     $_passwordEnforced() {
-      const permissions = parseInt(this.selectedRole.permissions, 10)
       const password = this.capabilities.files_sharing.public.password.enforced_for
 
-      if (permissions === 1 && password.read_only === '1') {
-        return true
+      if (password.read_only === '1') {
+        return (
+          this.selectedRole.hasPermission(SharePermissions.read) &&
+          !this.selectedRole.hasPermission(SharePermissions.create)
+        )
       }
-      if (permissions === 4 && password.upload_only === '1') {
-        return true
+      if (password.upload_only === '1') {
+        return (
+          !this.selectedRole.hasPermission(SharePermissions.read) &&
+          this.selectedRole.hasPermission(SharePermissions.create)
+        )
       }
-      if (permissions >= 5 && password.read_write === '1') {
-        return true
+      if (password.read_write === '1') {
+        return (
+          this.selectedRole.hasPermission(SharePermissions.read) &&
+          this.selectedRole.hasPermission(SharePermissions.create)
+        )
       }
 
       return false
@@ -351,19 +351,17 @@ export default {
     ...mapActions('Files', ['addLink', 'updateLink']),
 
     setRole() {
-      const permissions = parseInt(this.publicLinkInEdit.permissions, 10)
+      const permissions = parseInt(this.publicLinkInEdit.permissions)
 
       if (permissions) {
-        const role = this.roles.find((r) => r.permissions === permissions)
-
+        const role = LinkShareRoles.getByBitmask(permissions, this.highlightedFile.isFolder)
         if (role) {
-          this.selectedRole = role
-
+          this.selectedRoleOption = this.convertRoleToSelectOption(role)
           return
         }
       }
 
-      this.selectedRole = this.roles[0]
+      this.selectedRoleOption = this.availableRoleOptions[0]
     },
 
     $_addLink() {
@@ -375,7 +373,7 @@ export default {
 
       const params = {
         expireDate: expireDate.isValid ? expireDate.toFormat("yyyy-MM-dd'T'HH:mm:ssZZZ") : '',
-        permissions: this.selectedRole.permissions,
+        permissions: this.selectedRole.bitmask(false),
         name: this.name
       }
 
@@ -409,7 +407,7 @@ export default {
 
       const params = {
         expireDate: expireDate.isValid ? expireDate.toFormat("yyyy-MM-dd'T'HH:mm:ssZZZ") : '',
-        permissions: this.selectedRole.permissions,
+        permissions: this.selectedRole.bitmask(false),
         name: this.name
       }
 
@@ -441,6 +439,18 @@ export default {
     removePassword: function () {
       this.password = ''
       this.hasPassword = false
+    },
+
+    getRoleFromSelectOption(option) {
+      return option.role
+    },
+
+    convertRoleToSelectOption(role) {
+      return {
+        role: role,
+        name: role.name,
+        label: this.$gettext(role.label)
+      }
     }
   }
 }

@@ -1,0 +1,10 @@
+Enhancement: Simplify people sharing sidebar  
+
+We have reworked the people sharing sidebar to not be split into 
+show/edit/create panels. The create form now is fixed to the top 
+with the sharees list below and editing happening in-line.
+
+https://github.com/owncloud/web/pull/6039
+https://github.com/owncloud/web/issues/5923
+https://github.com/owncloud/web/issues/5608
+https://github.com/owncloud/web/issues/5797

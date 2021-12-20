@@ -24,7 +24,7 @@ Feature: Sharing files and folders with internal groups
     And the user shares folder "simple-folder" with user "Brian Murphy" as "Viewer" using the webUI
     And the user shares folder "simple-folder" with group "grp1" as "Viewer" using the webUI
     And the user shares folder "simple-folder" with user "Alice Hansen" as "Viewer" using the webUI
-    Then the current collaborators list should have order "Carol King,Alice Hansen,Brian Murphy,grp1,grp11"
+    Then the current collaborators list should have order "Alice Hansen,Brian Murphy,grp1,grp11"
 
   @issue-ocis-1922
   Scenario Outline: share a file & folder with another internal user
@@ -204,41 +204,41 @@ Feature: Sharing files and folders with internal groups
     When the user re-logs in as "Alice" using the webUI
     And the user browses to the files page
     And the user opens the share dialog for folder "simple-folder" using the webUI
-    And the user opens the share creation dialog on the webUI
+
     And the user types "system-group" in the share-with-field
     Then the autocomplete list should not be displayed on the webUI
 
-  @issue-2897 @issue-ocis-1231 @issue-ocis-1277
-  Scenario: sharing details of items inside a shared folder shared with user and group
-    Given user "Carol" has created folder "/simple-folder"
-    And user "Carol" has created folder "/simple-folder/sub-folder"
-    And user "Carol" has created file "/simple-folder/sub-folder/lorem.txt"
-    And user "Carol" has uploaded file with content "test" to "/simple-folder/sub-folder/lorem.txt"
-    And user "Carol" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Carol"
-    And user "Carol" has shared folder "/simple-folder/sub-folder" with group "grp1"
-    And user "Alice" has accepted the share "Shares/sub-folder" offered by user "Carol"
-    And user "Brian" has accepted the share "Shares/sub-folder" offered by user "Carol"
-    And user "Carol" has logged in using the webUI
-    When the user opens folder "simple-folder/sub-folder" directly on the webUI
-    And the user opens the share dialog for file "lorem.txt" using the webUI
-    Then user "Brian Murphy" should be listed as "Editor" via "simple-folder" in the collaborators list on the webUI
-    And group "grp1" should be listed as "Editor" via "sub-folder" in the collaborators list on the webUI
 
-  @issue-2898
-  Scenario: see resource owner of parent group shares in collaborators list
-    Given user "Alice" has created folder "simple-folder"
-    And user "Alice" has created folder "simple-folder/simple-empty-folder"
-    And user "Alice" has shared folder "simple-folder" with group "grp1"
-    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
-    And user "Brian" has shared folder "Shares/simple-folder" with user "Carol"
-    And user "Carol" has accepted the share "Shares/simple-folder" offered by user "Brian"
-    And user "Carol" has logged in using the webUI
-    And the user opens folder "Shares" using the webUI
-    And the user opens folder "simple-folder" using the webUI
-    When the user opens the share dialog for folder "simple-empty-folder" using the webUI
-    Then user "Alice Hansen" should be listed as "Owner" reshared through "Brian Murphy" via "simple-folder" in the collaborators list on the webUI
-    And the current collaborators list should have order "Alice Hansen,Carol King"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   Scenario: share a folder with other group and then it should be listed on Shared with Others page
@@ -301,8 +301,7 @@ Feature: Sharing files and folders with internal groups
     And user "Carol" has created folder "simple-folder"
     And user "Carol" has logged in using the webUI
     When the user tries to share resource "<shared-resource>" with group "grp1" which expires in "+6" days using the webUI
-    Then the expiration date shown on the webUI should be "+5" days
-    And user "Alice" should not have created any shares
+    Then user "Alice" should not have created any shares
     Examples:
       | shared-resource |
       | lorem.txt       |

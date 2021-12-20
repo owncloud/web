@@ -1,7 +1,7 @@
 import Vuex from 'vuex'
 import { mount, createLocalVue } from '@vue/test-utils'
 import acceptShare from '@files/src/mixins/actions/acceptShare.js'
-import { shareStatus } from '@files/src/helpers/shareStatus.js'
+import { ShareStatus } from '@files/src/helpers/share'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -28,9 +28,9 @@ describe('acceptShare', () => {
   describe('computed property "$_acceptShare_items"', () => {
     describe('isEnabled property of returned element', () => {
       it.each([
-        { resources: [{ status: shareStatus.pending }], expectedStatus: true },
-        { resources: [{ status: shareStatus.declined }], expectedStatus: true },
-        { resources: [{ status: shareStatus.accepted }], expectedStatus: false }
+        { resources: [{ status: ShareStatus.pending }], expectedStatus: true },
+        { resources: [{ status: ShareStatus.declined }], expectedStatus: true },
+        { resources: [{ status: ShareStatus.accepted }], expectedStatus: false }
       ])(
         'should be set according to the resource share status if the route name is "files-shared-with-me"',
         (inputData) => {
@@ -43,9 +43,9 @@ describe('acceptShare', () => {
         }
       )
       it.each([
-        { status: shareStatus.pending },
-        { status: shareStatus.declined },
-        { status: shareStatus.accepted }
+        { status: ShareStatus.pending },
+        { status: ShareStatus.declined },
+        { status: ShareStatus.accepted }
       ])(
         'should be set as false if the route name is other than "files-shared-with-me"',
         (resource) => {

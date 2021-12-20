@@ -32,6 +32,21 @@ When(
   }
 )
 
+Then(
+  'the link expiration date shown on the webUI should be {string} days',
+  async function (expectedDays) {
+    const expectedDate = sharingHelper.calculateDate(expectedDays)
+    const expectedDateString = expectedDate.toString()
+    const dateStringFromInputField =
+      await client.page.FilesPageElement.publicLinksDialog().getExpirationDate()
+    assert.strictEqual(
+      dateStringFromInputField,
+      expectedDateString,
+      `Expected: Expiration date field with ${expectedDateString}, but found ${dateStringFromInputField}`
+    )
+  }
+)
+
 When(
   'the public uses the webUI to access the last public link created by user {string}',
   async function (linkCreator) {
@@ -194,10 +209,8 @@ When(
     await api.publicLinksDialog().clickLinkEditBtn(linkName)
     const value = sharingHelper.calculateDate(pastDate)
     const dateToSet = new Date(Date.parse(value))
-    const isDisabled = await api
-      .sharingDialog()
-      .openExpirationDatePicker()
-      .isExpiryDateDisabled(dateToSet)
+    await api.publicLinksDialog().openExpirationDatePicker()
+    const isDisabled = await api.expirationDatePicker().isExpiryDateDisabled(dateToSet)
     return assert.ok(isDisabled, 'Expected expiration date to be disabled but found not disabled')
   }
 )
