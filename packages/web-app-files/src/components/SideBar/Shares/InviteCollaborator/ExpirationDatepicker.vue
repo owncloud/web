@@ -124,6 +124,12 @@ export default {
     }
   },
 
+  mounted() {
+    if (this.expirationSupported && this.defaultExpirationDateSet) {
+      this.enteredExpirationDate = this.defaultExpirationDate
+    }
+  },
+
   watch: {
     enteredExpirationDate: {
       handler: 'publishChange'
