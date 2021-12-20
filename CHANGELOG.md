@@ -1,3 +1,37 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v4.7.0...master
+
+Summary
+-------
+
+* Enhancement - Edit people shares without changing the panel: [#6039](https://github.com/owncloud/web/pull/6039)
+* Enhancement - Simplify people sharing sidebar: [#6039](https://github.com/owncloud/web/pull/6039)
+
+Details
+-------
+
+* Enhancement - Edit people shares without changing the panel: [#6039](https://github.com/owncloud/web/pull/6039)
+
+   We have reworked the full list view of sharees in the right sidebar for better overview and
+   faster editing.
+
+   https://github.com/owncloud/web/issues/5763
+   https://github.com/owncloud/web/pull/6039
+
+* Enhancement - Simplify people sharing sidebar: [#6039](https://github.com/owncloud/web/pull/6039)
+
+   We have reworked the people sharing sidebar to not be split into show/edit/create panels. The
+   create form now is fixed to the top with the sharees list below and editing happening in-line.
+
+   https://github.com/owncloud/web/issues/5923
+   https://github.com/owncloud/web/issues/5608
+   https://github.com/owncloud/web/issues/5797
+   https://github.com/owncloud/web/pull/6039
+
 Changelog for ownCloud Web [4.7.0] (2021-12-16)
 =======================================
 The following sections list the changes in ownCloud web 4.7.0 relevant to
