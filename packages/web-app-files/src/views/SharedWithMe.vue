@@ -20,6 +20,9 @@
           :target-route="targetRoute"
           :are-resources-clickable="false"
           :header-position="fileListHeaderY"
+          :sort-by="sortBy"
+          :sort-dir="sortDir"
+          @sort="handleSort"
         >
           <template #status="{ resource }">
             <div
@@ -105,8 +108,11 @@
         :resources="shares"
         :target-route="targetRoute"
         :header-position="fileListHeaderY"
+        :sort-by="sortBy"
+        :sort-dir="sortDir"
         @fileClick="$_fileActions_triggerDefaultAction"
         @rowMounted="rowMounted"
+        @sort="handleSort"
       >
         <template #status="{ resource }">
           <div
@@ -152,7 +158,7 @@
 
 <script>
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
-import ResourceTable from '../components/FilesList/ResourceTable.vue'
+import ResourceTable, { determineSortFields } from '../components/FilesList/ResourceTable.vue'
 import { aggregateResourceShares } from '../helpers/resources'
 import FileActions from '../mixins/fileActions'
 import MixinAcceptShare from '../mixins/actions/acceptShare'
@@ -161,7 +167,7 @@ import MixinFilesListFilter from '../mixins/filesListFilter'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../constants'
-import { useFileListHeaderPosition } from '../composables'
+import { useFileListHeaderPosition, useRouteQuery, useSort, useStore } from '../composables'
 import debounce from 'lodash-es/debounce'
 
 import ListLoader from '../components/FilesList/ListLoader.vue'
@@ -170,6 +176,7 @@ import ListInfo from '../components/FilesList/ListInfo.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
 import { useTask } from 'vue-concurrency'
 import { ShareStatus } from '../helpers/share'
+import { computed, unref } from '@vue/composition-api'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -191,7 +198,23 @@ export default {
   ],
 
   setup() {
+    const store = useStore()
     const { y: fileListHeaderY } = useFileListHeaderPosition()
+
+    const sortByPageQuery = useRouteQuery('sort-by')
+    const sortDirPageQuery = useRouteQuery('sort-dir')
+
+    const storeItems = computed(() => store.getters['Files/activeFiles'] || [])
+    const fields = computed(() => {
+      return determineSortFields(unref(storeItems)[0])
+    })
+
+    const { sortBy, sortDir, items, handleSort } = useSort({
+      items: storeItems,
+      fields: fields,
+      sortBy: sortByPageQuery,
+      sortDir: sortDirPageQuery
+    })
 
     const loadResourcesTask = useTask(function* (signal, ref) {
       ref.CLEAR_CURRENT_FILES_LIST()
@@ -218,7 +241,7 @@ export default {
       ref.LOAD_FILES({ currentFolder: null, files: resources })
     })
 
-    return { fileListHeaderY, loadResourcesTask }
+    return { fileListHeaderY, loadResourcesTask, handleSort, sortBy, sortDir, sortedItems: items }
   },
 
   data: () => ({
@@ -227,7 +250,7 @@ export default {
   }),
 
   computed: {
-    ...mapGetters('Files', ['activeFiles', 'selectedFiles']),
+    ...mapGetters('Files', ['selectedFiles']),
     ...mapGetters(['isOcis', 'configuration', 'getToken']),
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
@@ -264,7 +287,7 @@ export default {
       return this.pending.length
     },
     pending() {
-      return this.activeFiles.filter((file) => file.status === ShareStatus.pending)
+      return this.sortedItems.filter((file) => file.status === ShareStatus.pending)
     },
 
     // accepted or declined shares
@@ -305,7 +328,7 @@ export default {
       return this.shares.filter((s) => s.type === 'folder').length
     },
     shares() {
-      return this.activeFiles.filter((file) => file.status === this.viewMode)
+      return this.sortedItems.filter((file) => file.status === this.viewMode)
     },
     sharesOtherViewMode() {
       return this.viewMode === ShareStatus.accepted ? ShareStatus.declined : ShareStatus.accepted
