@@ -174,6 +174,11 @@ module.exports = {
           `document.querySelector('#oc-files-file-link-expire-date').__vue__.$refs.calendar.move(new Date(Date.parse('${value}')))`,
           []
         )
+      } else {
+        client.execute(
+          `document.querySelector('.files-recipient-expiration-datepicker').__vue__.$refs.calendar.move(new Date(Date.parse('${value}')))`,
+          []
+        )
       }
 
       if (shareType === 'collaborator' || shareType === 'link') {
