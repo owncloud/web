@@ -52,7 +52,7 @@ const mutations = {
       routes: extension.routes || [],
       extension: extension.extension,
       handler: extension.handler,
-      canBeDefault: extension.canBeDefault === true
+      canBeDefault: extension.canBeDefault !== false
     }
 
     state.fileEditors.push(editor)
