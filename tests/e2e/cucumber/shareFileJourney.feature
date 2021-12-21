@@ -20,7 +20,7 @@ Feature: share file
       | testavatar.jpeg | folder_to_shared |
     And "Alice" shares the following resource via the quick action
       | resource                         | user  | role   |
-      | folder_to_shared/testavatar.jpeg | Brian | viewer |
+      | folder_to_shared/testavatar1.jpeg | Brian | viewer |
     Given "Brian" has logged in
     When "Brian" opens the "files" app
     And "Brian" accepts the following resource

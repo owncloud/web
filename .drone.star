@@ -1074,6 +1074,7 @@ def unitTests(ctx):
 def smokeTests(ctx):
     db = "mysql:5.5"
     logLevel = "2"
+    name = "smoke-tests"
 
     smoke_workspace = {
         "base": dir["base"],
@@ -1132,7 +1133,9 @@ def smokeTests(ctx):
         fixPermissions() + \
         waitForOwncloudService() + \
         copyFilesForUpload() + \
-        smoke_test_occ
+        smoke_test_occ + \
+        buildGithubCommentForBuildStopped(name) + \
+        githubComment(name) 
 
     stepsInfinite = \
         skipIfUnchanged(ctx, "smoke-tests") + \
@@ -1145,7 +1148,11 @@ def smokeTests(ctx):
         ocisService() + \
         getSkeletonFiles() + \
         copyFilesForUpload() + \
-        smoke_test_ocis
+        smoke_test_ocis + \
+        buildGithubCommentForBuildStopped(name) + \
+        githubComment(name) + \
+        uploadScreenshots() + \
+        buildGithubComment(name)
 
     smoke_trigger = {
         "ref": [
@@ -1351,8 +1358,8 @@ def acceptance(ctx):
                         if (isLocalBrowser(browser) and params["screenShots"]):
                             steps += uploadScreenshots() + buildGithubComment(suiteName)
 
-                        if (params["earlyFail"]):
-                            steps += buildGithubCommentForBuildStopped(suiteName)
+                    if (params["earlyFail"]):
+                        steps += buildGithubCommentForBuildStopped(suiteName)
 
                         # Upload the screenshots to github comment
                         steps += githubComment(alternateSuiteName)
@@ -2538,9 +2545,9 @@ def uploadScreenshots():
                 "from_secret": "cache_s3_endpoint",
             },
             "path_style": True,
-            "source": "%s/tests/reports/screenshots/**/*" % dir["web"],
-            "strip_prefix": "%s/tests/reports/screenshots" % dir["web"],
-            "target": "/web/screenshots/${DRONE_BUILD_NUMBER}",
+            "source": "%s/tests/reports/e2e/playwright/tracing" % dir["web"],
+            "strip_prefix": "%s/tests/reports/e2e/playwright/tracing" % dir["web"],
+            "target": "/web/tracing/${DRONE_BUILD_NUMBER}",
         },
         "environment": {
             "AWS_ACCESS_KEY_ID": {
@@ -2686,9 +2693,9 @@ def buildGithubComment(suite):
         "name": "build-github-comment",
         "image": OC_UBUNTU,
         "commands": [
-            "cd %s/tests/reports/screenshots/" % dir["web"],
+            "cd %s/tests/reports/e2e/playwright/tracing/" % dir["web"],
             'echo "<details><summary>:boom: The acceptance tests failed. Please find the screenshots inside ...</summary>\\n\\n<p>\\n\\n" >> %s/comments.file' % dir["web"],
-            'for f in *.png; do echo "### $f\n" \'!\'"[$f]($CACHE_ENDPOINT/owncloud/web/screenshots/${DRONE_BUILD_NUMBER}/$f) \n" >> %s/comments.file; done' % dir["web"],
+            'for f in *.png; do echo "### $f\n" \'!\'"[$f]($CACHE_ENDPOINT/owncloud/web/tracing/${DRONE_BUILD_NUMBER}/$f) \n" >> %s/comments.file; done' % dir["web"],
             'echo "\n</p></details>" >> %s/comments.file' % dir["web"],
             "more %s/comments.file" % dir["web"],
         ],
