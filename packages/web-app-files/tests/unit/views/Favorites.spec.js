@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import { createFile, localVue, getStore } from './views.setup'
-import Favorites from 'packages/web-app-files/src/views/Favorites.vue'
+import Favorites from '../../../src/views/Favorites.vue'
 
 import VueRouter from 'vue-router'
 localVue.use(VueRouter)

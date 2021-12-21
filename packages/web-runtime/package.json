@@ -45,5 +45,8 @@
     "vuex-router-sync": "^5.0.0",
     "web-pkg": "*",
     "webfontloader": "^1.6.28"
+  },
+  "devDependencies": {
+    "@types/luxon": "^2.0.8"
   }
 }

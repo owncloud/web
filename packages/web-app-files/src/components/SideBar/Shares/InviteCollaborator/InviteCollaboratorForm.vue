@@ -45,7 +45,10 @@
         :allow-share-permission="!isOcis"
         @optionChange="collaboratorRoleChanged"
       />
-      <expiration-datepicker @optionChange="collaboratorExpiryChanged" />
+      <expiration-datepicker
+        :share-types="selectedCollaborators.map((c) => c.value.shareType)"
+        @optionChange="collaboratorExpiryChanged"
+      />
       <oc-button v-if="saving" key="new-collaborator-saving-button" :disabled="true">
         <oc-spinner :aria-label="$gettext('Creating share')" size="small" />
         <span v-translate :aria-hidden="true">Share</span>
