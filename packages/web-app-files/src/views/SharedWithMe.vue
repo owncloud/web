@@ -16,13 +16,13 @@
           class="files-table"
           :class="{ 'files-table-squashed': !sidebarClosed }"
           :are-thumbnails-displayed="displayThumbnails"
-          :resources="showMorePending ? pending : pending.slice(0, 3)"
+          :resources="showMorePending ? pendingItems : pendingItems.slice(0, 3)"
           :target-route="targetRoute"
           :are-resources-clickable="false"
           :header-position="fileListHeaderY"
-          :sort-by="sortBy"
-          :sort-dir="sortDir"
-          @sort="handleSort"
+          :sort-by="pendingSortBy"
+          :sort-dir="pendingSortDir"
+          @sort="pendingHandleSort"
         >
           <template #status="{ resource }">
             <div
@@ -105,14 +105,14 @@
         class="files-table"
         :class="{ 'files-table-squashed': !sidebarClosed }"
         :are-thumbnails-displayed="displayThumbnails"
-        :resources="shares"
+        :resources="sharesItems"
         :target-route="targetRoute"
         :header-position="fileListHeaderY"
-        :sort-by="sortBy"
-        :sort-dir="sortDir"
+        :sort-by="sharesSortBy"
+        :sort-dir="sharesSortDir"
         @fileClick="$_fileActions_triggerDefaultAction"
         @rowMounted="rowMounted"
-        @sort="handleSort"
+        @sort="sharesHandleSort"
       >
         <template #status="{ resource }">
           <div
@@ -200,20 +200,47 @@ export default {
   setup() {
     const store = useStore()
     const { y: fileListHeaderY } = useFileListHeaderPosition()
-
-    const sortByPageQuery = useRouteQuery('sort-by')
-    const sortDirPageQuery = useRouteQuery('sort-dir')
-
     const storeItems = computed(() => store.getters['Files/activeFiles'] || [])
     const fields = computed(() => {
       return determineSortFields(unref(storeItems)[0])
     })
 
-    const { sortBy, sortDir, items, handleSort } = useSort({
-      items: storeItems,
+    const viewMode = computed(() => unref(useRouteQuery('view-mode')) || ShareStatus.accepted)
+
+    // pending shares
+    const pendingSortByPageQuery = useRouteQuery('pending-sort-by')
+    const pendingSortDirPageQuery = useRouteQuery('pending-sort-dir')
+    const pending = computed(() =>
+      unref(storeItems).filter((item) => item.status === ShareStatus.pending)
+    )
+    const {
+      sortBy: pendingSortBy,
+      sortDir: pendingSortDir,
+      items: pendingItems,
+      handleSort: pendingHandleSort
+    } = useSort({
+      items: pending,
       fields: fields,
-      sortBy: sortByPageQuery,
-      sortDir: sortDirPageQuery
+      sortBy: pendingSortByPageQuery,
+      sortDir: pendingSortDirPageQuery
+    })
+
+    // shares depending on view mode
+    const sharesSortByPageQuery = useRouteQuery('shares-sort-by')
+    const sharesSortDirPageQuery = useRouteQuery('shares-sort-dir')
+    const shares = computed(() =>
+      unref(storeItems).filter((item) => item.status === unref(viewMode))
+    )
+    const {
+      sortBy: sharesSortBy,
+      sortDir: sharesSortDir,
+      items: sharesItems,
+      handleSort: sharesHandleSort
+    } = useSort({
+      items: shares,
+      fields: fields,
+      sortBy: sharesSortByPageQuery,
+      sortDir: sharesSortDirPageQuery
     })
 
     const loadResourcesTask = useTask(function* (signal, ref) {
@@ -241,7 +268,18 @@ export default {
       ref.LOAD_FILES({ currentFolder: null, files: resources })
     })
 
-    return { fileListHeaderY, loadResourcesTask, handleSort, sortBy, sortDir, sortedItems: items }
+    return {
+      fileListHeaderY,
+      loadResourcesTask,
+      pendingHandleSort,
+      pendingSortBy,
+      pendingSortDir,
+      pendingItems,
+      sharesHandleSort,
+      sharesSortBy,
+      sharesSortDir,
+      sharesItems
+    }
   },
 
   data: () => ({
@@ -284,10 +322,7 @@ export default {
       return this.pendingCount > 0
     },
     pendingCount() {
-      return this.pending.length
-    },
-    pending() {
-      return this.sortedItems.filter((file) => file.status === ShareStatus.pending)
+      return this.pendingItems.length
     },
 
     // accepted or declined shares
@@ -319,16 +354,13 @@ export default {
       return this.sharesCount > 0
     },
     sharesCount() {
-      return this.shares.length
+      return this.sharesItems.length
     },
     sharesCountFiles() {
-      return this.shares.filter((s) => s.type !== 'folder').length
+      return this.sharesItems.filter((s) => s.type !== 'folder').length
     },
     sharesCountFolders() {
-      return this.shares.filter((s) => s.type === 'folder').length
-    },
-    shares() {
-      return this.sortedItems.filter((file) => file.status === this.viewMode)
+      return this.sharesItems.filter((s) => s.type === 'folder').length
     },
     sharesOtherViewMode() {
       return this.viewMode === ShareStatus.accepted ? ShareStatus.declined : ShareStatus.accepted
