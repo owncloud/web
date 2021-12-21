@@ -163,7 +163,6 @@ describe('SharedWithMe page', () => {
       })
       it('should not show a "no content" message', async () => {
         const noContentMessage = await wrapper.find(selectors.sharesNoContentMessage)
-        console.log(wrapper.html())
         expect(noContentMessage.exists()).toBeFalsy()
       })
       it('should show the declined shares list', () => {
@@ -186,6 +185,7 @@ function mountOptions({
   loading = false,
   viewMode = ShareStatus.accepted
 } = {}) {
+  const query = { page: 1, 'view-mode': viewMode }
   return {
     localVue,
     store,
@@ -193,15 +193,16 @@ function mountOptions({
     mocks: {
       $route: {
         name: 'some-route',
-        query: { page: 1, 'view-mode': viewMode }
+        query
       },
-      $router: getRouter()
+      $router: getRouter({ query })
     },
     setup: () => ({
       loadResourcesTask: {
         isRunning: loading,
         perform: jest.fn()
-      }
+      },
+      handleSort: jest.fn()
     })
   }
 }

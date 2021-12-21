@@ -35,10 +35,10 @@ localVue.use(GetTextPlugin, {
   silent: true
 })
 
-export const getRouter = () => ({
+export const getRouter = ({ query = {} }) => ({
   afterEach: jest.fn(),
   currentRoute: {
-    query: {}
+    query
   }
 })
 

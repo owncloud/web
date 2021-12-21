@@ -158,7 +158,7 @@ function mountOptions(store, loading, setup = {}) {
     stubs,
     mocks: {
       $route,
-      $router: getRouter()
+      $router: getRouter({})
     },
     setup: () => ({
       loadResourcesTask: {

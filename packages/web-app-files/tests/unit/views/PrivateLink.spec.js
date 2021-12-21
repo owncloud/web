@@ -99,7 +99,7 @@ function getShallowWrapper(loading = false) {
     store: createStore(),
     mocks: {
       $route,
-      $router: getRouter()
+      $router: getRouter({})
     },
     data() {
       return {

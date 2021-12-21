@@ -269,6 +269,7 @@ export default {
     })
 
     return {
+      viewMode,
       fileListHeaderY,
       loadResourcesTask,
       pendingHandleSort,
@@ -291,13 +292,6 @@ export default {
     ...mapGetters('Files', ['selectedFiles']),
     ...mapGetters(['isOcis', 'configuration', 'getToken']),
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
-
-    viewMode() {
-      if (Object.prototype.hasOwnProperty.call(this.$route.query, 'view-mode')) {
-        return parseInt(this.$route.query['view-mode'])
-      }
-      return ShareStatus.accepted
-    },
 
     // pending shares
     pendingSelected: {
