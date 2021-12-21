@@ -1,5 +1,4 @@
 import Vuex from 'vuex'
-import VueRouter from 'vue-router'
 import GetTextPlugin from 'vue-gettext'
 import { mount } from '@vue/test-utils'
 import { localVue } from './views.setup'
@@ -12,7 +11,6 @@ localVue.use(GetTextPlugin, {
   translations: 'does-not-matter.json',
   silent: true
 })
-localVue.use(VueRouter)
 
 const configuration = {
   options: {
@@ -33,15 +31,6 @@ localVue.prototype.$client = {
     getUser: jest.fn(() => user)
   }
 }
-
-const router = new VueRouter({
-  routes: [
-    {
-      path: '/',
-      name: 'files-personal'
-    }
-  ]
-})
 
 jest.unmock('axios')
 
@@ -222,7 +211,10 @@ function createWrapper(selectedFiles = [resourceForestJpg]) {
       }
     }),
     localVue,
-    router,
+    mocks: {
+      $route: {},
+      $router: {}
+    },
     stubs: stubs
   })
 }
