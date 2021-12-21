@@ -9,6 +9,7 @@ Summary
 -------
 
 * Enhancement - Edit people shares without changing the panel: [#6039](https://github.com/owncloud/web/pull/6039)
+* Enhancement - Respect share max, min and enforced expiration date: [#6176](https://github.com/owncloud/web/pull/6176)
 * Enhancement - Simplify people sharing sidebar: [#6039](https://github.com/owncloud/web/pull/6039)
 
 Details
@@ -20,6 +21,16 @@ Details
    faster editing.
 
    https://github.com/owncloud/web/issues/5763
+   https://github.com/owncloud/web/pull/6039
+
+* Enhancement - Respect share max, min and enforced expiration date: [#6176](https://github.com/owncloud/web/pull/6176)
+
+   If the expiration date max and/or enforcement is supported (defined by the capabilities) the
+   UI now handles the different cases and respects the backend settings. In oc10 there are options
+   to enforce the maximum available date for group and user shares, this is now considered in the UI
+   and updates dynamically in both cases.
+
+   https://github.com/owncloud/web/pull/6176
    https://github.com/owncloud/web/pull/6039
 
 * Enhancement - Simplify people sharing sidebar: [#6039](https://github.com/owncloud/web/pull/6039)
