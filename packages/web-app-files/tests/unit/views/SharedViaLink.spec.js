@@ -1,5 +1,5 @@
 import { shallowMount, mount } from '@vue/test-utils'
-import { getStore, localVue, createFile } from './views.setup.js'
+import { getStore, getRouter, localVue, createFile } from './views.setup.js'
 import FileActions from '@files/src/mixins/fileActions'
 import SharedViaLink from '@files/src/views/SharedViaLink.vue'
 
@@ -15,13 +15,6 @@ const stubs = {
   'context-actions': true,
   pagination: true,
   'list-info': true
-}
-
-const $router = {
-  afterEach: jest.fn(),
-  currentRoute: {
-    query: {}
-  }
 }
 
 const $route = {
@@ -165,7 +158,7 @@ function mountOptions(store, loading, setup = {}) {
     stubs,
     mocks: {
       $route,
-      $router
+      $router: getRouter()
     },
     setup: () => ({
       loadResourcesTask: {

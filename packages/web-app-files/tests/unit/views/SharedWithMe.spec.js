@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import { localVue, getStore } from './views.setup'
+import { localVue, getStore, getRouter } from './views.setup'
 import SharedWithMe from '@files/src/views/SharedWithMe.vue'
 import { ShareStatus, ShareTypes } from '@files/src/helpers/share'
 
@@ -161,8 +161,10 @@ describe('SharedWithMe page', () => {
         }),
         viewMode: ShareStatus.declined
       })
-      it('should not show a "no content" message', () => {
-        expect(wrapper.find(selectors.sharesNoContentMessage).exists()).toBeFalsy()
+      it('should not show a "no content" message', async () => {
+        const noContentMessage = await wrapper.find(selectors.sharesNoContentMessage)
+        console.log(wrapper.html())
+        expect(noContentMessage.exists()).toBeFalsy()
       })
       it('should show the declined shares list', () => {
         expect(wrapper.find(selectors.sharesTable).exists()).toBeTruthy()
@@ -192,7 +194,8 @@ function mountOptions({
       $route: {
         name: 'some-route',
         query: { page: 1, 'view-mode': viewMode }
-      }
+      },
+      $router: getRouter()
     },
     setup: () => ({
       loadResourcesTask: {

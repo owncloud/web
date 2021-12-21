@@ -100,16 +100,16 @@ describe('useSort', () => {
 
         const { items, sortBy, sortDir } = useSort(input)
         expect(unref(sortBy)).toEqual('time')
-        expect(unref(sortDir)).toEqual(SortDir.Asc)
+        expect(unref(sortDir)).toEqual(SortDir.Desc)
         expect(items.value.map((i) => i.name)).toMatchObject([
-          'b.png',
-          'c.png',
-          'a.png',
-          'Dir4',
-          'Dir1',
-          'A.png',
+          'dir3',
           'dir2',
-          'dir3'
+          'A.png',
+          'Dir1',
+          'Dir4',
+          'a.png',
+          'c.png',
+          'b.png'
         ])
       })
     })
