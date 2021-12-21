@@ -185,7 +185,7 @@ export function buildSharedResource(share, incomingShares = false, allowSharePer
     type: share.item_type,
     mimeType: share.state === 0 ? share.mimetype : '',
     isFolder,
-    sdate: share.stime * 1000,
+    sdate: DateTime.fromSeconds(share.stime).toRFC2822(),
     indicators: []
   }
 
