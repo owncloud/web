@@ -1,7 +1,5 @@
-import { ref, computed, ComputedRef, unref, Ref, isRef } from '@vue/composition-api'
+import { ref, computed, ComputedRef, unref } from '@vue/composition-api'
 import { MaybeRef, MaybeReadonlyRef } from '../utils'
-
-import orderBy from 'lodash-es/orderBy'
 
 export enum SortDir {
   Desc = 'desc',
@@ -10,6 +8,7 @@ export enum SortDir {
 
 interface SortField {
   name: MaybeRef<string>
+  // eslint-disable-next-line @typescript-eslint/ban-types
   sortable?: MaybeRef<boolean | Function>
   sortDir?: MaybeRef<string>
 }
@@ -25,6 +24,7 @@ interface SortResult<T> {
   items: ComputedRef<Array<T>>
   sortBy: ComputedRef<string>
   sortDir: ComputedRef<SortDir>
+  // eslint-disable-next-line @typescript-eslint/ban-types
   handleSort: Function
 }
 
