@@ -1,6 +1,6 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils'
 import Vuex from 'vuex'
-import AutocompleteItem from 'packages/web-app-files/src/components/SideBar/Shares/InviteCollaborator/AutocompleteItem.vue'
+import AutocompleteItem from '../../../../../../src/components/SideBar/Shares/InviteCollaborator/AutocompleteItem.vue'
 import stubs from '../../../../../../../../tests/unit/stubs'
 import { ShareTypes } from '../../../../../../src/helpers/share'
 

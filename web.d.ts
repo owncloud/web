@@ -1,6 +1,5 @@
 declare module 'vue/types/web' {
-  import { ILanguageComponent } from 'vue/types/vue'
-  interface Vue extends ILanguageComponent {
+  interface Vue {
     [key: string]: any
   }
 }

@@ -1,6 +1,6 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils'
 import Vuex from 'vuex'
-import FileDetailsMultiple from 'packages/web-app-files/src/components/SideBar/Details/FileDetailsMultiple.vue'
+import FileDetailsMultiple from '../../../../../src/components/SideBar/Details/FileDetailsMultiple.vue'
 import stubs from '../../../../../../../tests/unit/stubs'
 import GetTextPlugin from 'vue-gettext'
 import AsyncComputed from 'vue-async-computed'

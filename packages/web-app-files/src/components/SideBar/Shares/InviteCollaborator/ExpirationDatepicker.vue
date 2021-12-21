@@ -116,16 +116,6 @@ export default defineComponent({
         },
         set(val) {
           date = val
-
-          const dateCurrent = DateTime.fromJSDate(val)
-            .setLocale(language.value.current)
-            .endOf('day')
-          emit('optionChange', {
-            expirationDate: dateCurrent.isValid
-              ? dateCurrent.toFormat("yyyy-MM-dd'T'HH:mm:ssZZZ")
-              : null
-          })
-
           trigger()
         }
       }
@@ -136,6 +126,15 @@ export default defineComponent({
         .endOf('day')
         .toRelative()
     )
+
+    watch(dateCurrent, (val) => {
+      const dateCurrent = DateTime.fromJSDate(val).setLocale(language.value.current).endOf('day')
+      emit('optionChange', {
+        expirationDate: dateCurrent.isValid
+          ? dateCurrent.toFormat("yyyy-MM-dd'T'HH:mm:ssZZZ")
+          : null
+      })
+    })
 
     watch(dateMax, (val) => {
       if (!val || dateCurrent.value < val) {

@@ -145,22 +145,44 @@ describe('InviteCollaborator ExpirationDatepicker', () => {
 
   it('emits an event if date changes', async () => {
     const wrapper = createWrapper(asCapabilitiesGetter(enabledCapabilities))
-    const manualDate = DateTime.now().plus({ days: 5 })
     const checker = jest.fn()
     wrapper.vm.$on('optionChange', checker as any)
-    wrapper.setData({ dateCurrent: manualDate.toJSDate() })
 
+    expect(checker).toBeCalledTimes(0)
+
+    await wrapper.setProps({ shareTypes: [ShareTypes.user.value] })
+    await nextTick()
     expect(checker).toBeCalledTimes(1)
-    expect(manualDate.toISODate()).toBe(
-      DateTime.fromISO(checker.mock.calls[0][0].expirationDate).toISODate()
+    expect(DateTime.fromISO(checker.mock.calls[0][0].expirationDate).toISODate()).toBe(
+      DateTime.now().plus({ days: enabledCapabilities.user.expire_date.days }).toISODate()
     )
 
-    wrapper.vm.$store.hotUpdate(asCapabilitiesGetter(enforcedCapabilities))
-    await wrapper.setProps({ shareTypes: [ShareTypes.group.value, ShareTypes.user.value] })
+    await wrapper.setProps({ shareTypes: [ShareTypes.group.value] })
     await nextTick()
     expect(checker).toBeCalledTimes(2)
-    expect(
-      DateTime.now().plus({ days: enforcedCapabilities.user.expire_date.days }).toISODate()
-    ).toBe(DateTime.fromISO(checker.mock.calls[1][0].expirationDate).toISODate())
+    expect(DateTime.fromISO(checker.mock.calls[1][0].expirationDate).toISODate()).toBe(
+      DateTime.now().plus({ days: enabledCapabilities.group.expire_date.days }).toISODate()
+    )
+
+    await wrapper.setProps({ shareTypes: [] })
+    await nextTick()
+    expect(checker).toBeCalledTimes(3)
+    expect(checker.mock.calls[2][0].expirationDate).toBe(null)
+
+    const manualDate = DateTime.now().plus({ days: 5 })
+    wrapper.setData({ dateCurrent: manualDate.toJSDate() })
+    await nextTick()
+    expect(checker).toBeCalledTimes(4)
+    expect(DateTime.fromISO(checker.mock.calls[3][0].expirationDate).toISODate()).toBe(
+      manualDate.toISODate()
+    )
+
+    wrapper.setData({ dateCurrent: null })
+    await wrapper.setProps({ shareTypes: [ShareTypes.user.value, ShareTypes.group.value] })
+    await nextTick()
+    expect(checker).toBeCalledTimes(5)
+    expect(DateTime.fromISO(checker.mock.calls[4][0].expirationDate).toISODate()).toBe(
+      DateTime.now().plus({ days: enabledCapabilities.user.expire_date.days }).toISODate()
+    )
   })
 })
