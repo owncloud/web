@@ -4,14 +4,28 @@ import VueRouter from 'vue-router'
 import { mount, VueClass } from '@vue/test-utils'
 import { localVue } from './views.setup'
 
-const router = new VueRouter({
-  routes: [
-    {
-      path: '/',
-      name: 'files-personal'
-    }
-  ]
-})
+const $route = {
+  name: 'files-personal',
+  params: { page: 1 }
+}
+
+const $router = {
+  afterEach: jest.fn(),
+  currentRoute: {
+    query: {}
+  }
+}
+
+const stubs = {
+  'list-loader': true,
+  'not-found-message': true,
+  'no-content-message': true,
+  'quick-actions': true,
+  'oc-resource': true,
+  'context-actions': true,
+  pagination: true,
+  'list-info': true
+}
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = () => {}
@@ -70,18 +84,13 @@ export const accentuatesTableRowTest = async <V extends Vue>(
     {
       attachTo: document.body,
       localVue,
-      router,
       store,
-      stubs: {
-        'list-loader': true,
-        'not-found-message': true,
-        'no-content-message': true,
-        'quick-actions': true,
-        'oc-resource': true,
-        'context-actions': true,
-        pagination: true,
-        'list-info': true
+      mocks: {
+        $route,
+        $router
       },
+
+      stubs: stubs,
       computed: {
         displayThumbnails: () => false,
         folderNotFound: () => false,
