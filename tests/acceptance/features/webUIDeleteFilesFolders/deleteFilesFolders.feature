@@ -4,7 +4,7 @@ Feature: deleting files and folders
   So that I can keep my filing system clean and tidy
 
   Background:
-    Given user "Alice" has been created with default attributes and without skeleton files
+    Given user "Alice" has been created with default attributes and without skeleton files in the server
     And user "Alice" has logged in using the webUI
     And the user reloads the current page of the webUI
 
@@ -221,7 +221,7 @@ Feature: deleting files and folders
   @issue-5435
   Scenario: Delete a file and folder from shared with me page
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
-    And user "Brian" has been created with default attributes and without skeleton files
+    And user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Brian" has created folder "simple-folder"
     And user "Brian" has created file "lorem.txt"
     And user "Brian" has shared folder "simple-folder" with user "Alice"

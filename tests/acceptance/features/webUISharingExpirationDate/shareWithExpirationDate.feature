@@ -5,7 +5,7 @@ Feature: Sharing files and folders with internal users with expiry date
   So that I don't have to remember to unshare
 
   Background:
-    Given these users have been created with default attributes and without skeleton files:
+    Given these users have been created with default attributes and without skeleton files in the server:
       | username |
       | Alice    |
       | Brian    |

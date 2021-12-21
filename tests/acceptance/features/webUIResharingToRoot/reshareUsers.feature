@@ -5,7 +5,7 @@ Feature: Resharing shared files with different permissions
   So that I can control the access on those files/folders by other collaborators
 
   Background:
-    Given these users have been created with default attributes and without skeleton files:
+    Given these users have been created with default attributes and without skeleton files in the server:
       | username |
       | Alice    |
       | Brian    |

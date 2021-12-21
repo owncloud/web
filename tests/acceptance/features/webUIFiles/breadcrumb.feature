@@ -4,7 +4,7 @@ Feature: access breadcrumb
   So that I can access resources with ease
 
   Background:
-    Given user "Alice" has been created with default attributes and without skeleton files
+    Given user "Alice" has been created with default attributes and without skeleton files in the server
 
 
   Scenario: Breadcrumb navigation should not happen on last segment

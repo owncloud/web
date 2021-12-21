@@ -4,7 +4,7 @@ Feature: Session storage for public link
   So that I can easily access my files
 
   Background:
-    Given user "Alice" has been created with default attributes and without skeleton files
+    Given user "Alice" has been created with default attributes and without skeleton files in the server
 
 
   Scenario: Public accesses the public link files page and refreshes the page

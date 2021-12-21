@@ -4,7 +4,7 @@ Feature: create files
   So that I can organize my data
 
   Background:
-    Given user "Alice" has been created with default attributes and without skeleton files
+    Given user "Alice" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created file "/lorem.txt"
     And user "Alice" has logged in using the webUI
     And the user has browsed to the files page

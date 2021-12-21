@@ -2,14 +2,14 @@
 Feature: Sharing details and preview of files
 
   Background:
-    Given these users have been created with default attributes and without skeleton files:
+    Given these users have been created with default attributes and without skeleton files in the server:
       | username |
       | Alice    |
       | Brian    |
 
   @issue-2897
   Scenario: sharing details of items inside a shared folder ("via" info)
-    Given user "Carol" has been created with default attributes and without skeleton files
+    Given user "Carol" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created folder "simple-folder"
     And user "Alice" has created folder "simple-folder/simple-empty-folder"
     And user "Alice" has uploaded file with content "test" to "/simple-folder/lorem.txt"
@@ -23,7 +23,7 @@ Feature: Sharing details and preview of files
 
   @issue-2897
   Scenario: sharing details of items inside a re-shared folder ("via" info)
-    Given user "Carol" has been created with default attributes and without skeleton files
+    Given user "Carol" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created folder "simple-folder"
     And user "Alice" has created folder "simple-folder/simple-empty-folder"
     And user "Alice" has uploaded file with content "test" to "/simple-folder/lorem.txt"

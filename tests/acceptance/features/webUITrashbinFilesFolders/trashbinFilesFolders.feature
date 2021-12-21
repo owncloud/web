@@ -5,7 +5,7 @@ Feature: files and folders exist in the trashbin after being deleted
   So that I can recover data easily
 
   Background:
-    Given user "Alice" has been created with default attributes and without skeleton files
+    Given user "Alice" has been created with default attributes and without skeleton files in the server
     And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
     And user "Alice" has uploaded file "lorem-big.txt" to "lorem-big.txt"
     And user "Alice" has uploaded file "new-lorem.txt" to "textfile0.txt"

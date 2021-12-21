@@ -5,23 +5,23 @@ Feature: Sharing files with internal groups with permissions
   So that I can control the access on those files by other users on the group
 
   Background:
-    Given these users have been created with default attributes and without skeleton files:
+    Given these users have been created with default attributes and without skeleton files in the server:
       | username |
       | Alice    |
       | Brian    |
       | Carol    |
-    And these groups have been created:
+    And these groups have been created in the server:
       | groupname |
       | grp1      |
-    And user "Alice" has been added to group "grp1"
-    And user "Brian" has been added to group "grp1"
+    And user "Alice" has been added to group "grp1" in the server
+    And user "Brian" has been added to group "grp1" in the server
     And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
 
 
   Scenario Outline: share a file with multiple users with different roles and permissions
-    Given user "user0" has been created with default attributes and without skeleton files
-    And group "grp2" has been created
-    And user "Brian" has been added to group "grp2"
+    Given user "user0" has been created with default attributes and without skeleton files in the server
+    And group "grp2" has been created in the server
+    And user "Brian" has been added to group "grp2" in the server
     And user "Alice" has logged in using the webUI
     When the user opens the share dialog for file "lorem.txt" using the webUI
 

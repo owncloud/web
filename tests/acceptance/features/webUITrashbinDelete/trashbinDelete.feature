@@ -5,7 +5,7 @@ Feature: files and folders can be deleted from the trashbin
   So that I can control my trashbin space and which files are kept in that space
 
   Background:
-    Given user "Alice" has been created with default attributes and without skeleton files
+    Given user "Alice" has been created with default attributes and without skeleton files in the server
     Given user "Alice" has created file "lorem.txt"
     Given user "Alice" has created file "lorem-big.txt"
     And user "Alice" has created file "sample,1.txt"

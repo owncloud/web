@@ -5,7 +5,7 @@ Feature: Shares in share-with pages
   So that I can know what is shared with me and by me
 
   Background:
-    Given these users have been created with default attributes and without skeleton files:
+    Given these users have been created with default attributes and without skeleton files in the server:
       | username |
       | Alice    |
       | Brian    |
@@ -24,7 +24,7 @@ Feature: Shares in share-with pages
 
 
   Scenario: share a folder with other user and then it should be listed on Shared with Others page
-    Given user "Carol" has been created with default attributes and without skeleton files
+    Given user "Carol" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created file "lorem.txt"
     And user "Alice" has logged in using the webUI
     And user "Alice" has shared file "lorem.txt" with user "Brian"

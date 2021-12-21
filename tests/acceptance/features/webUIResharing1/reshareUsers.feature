@@ -7,7 +7,7 @@ Feature: Resharing shared files with different permissions
   Background:
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And the administrator has set the default folder for received shares to "Shares"
-    And these users have been created with default attributes and without skeleton files:
+    And these users have been created with default attributes and without skeleton files in the server:
       | username |
       | Alice    |
       | Brian    |

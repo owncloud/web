@@ -5,7 +5,7 @@ Feature: Sharing files and folders with internal users with different permission
   So that I can control the access on those files/folders by other collaborators
 
   Background:
-    Given these users have been created with default attributes and without skeleton files:
+    Given these users have been created with default attributes and without skeleton files in the server:
       | username |
       | Alice    |
       | Brian    |
@@ -155,7 +155,7 @@ Feature: Sharing files and folders with internal users with different permission
 
 
   Scenario: Resource owner upgrades share permissions of a re-share
-    Given user "Carol" has been created with default attributes and without skeleton files
+    Given user "Carol" has been created with default attributes and without skeleton files in the server
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share, delete" permissions
     And user "Alice" has shared folder "simple-folder" with user "Carol" with "read, delete" permissions
     And user "Brian" has logged in using the webUI
@@ -171,7 +171,7 @@ Feature: Sharing files and folders with internal users with different permission
 
 
   Scenario: User is not allowed to reshare sub-folder with more permissions
-    Given user "Carol" has been created with default attributes and without skeleton files
+    Given user "Carol" has been created with default attributes and without skeleton files in the server
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share, delete" permissions
     And user "Alice" has logged in using the webUI
     When the user browses to the folder "simple-folder" on the files page
@@ -181,7 +181,7 @@ Feature: Sharing files and folders with internal users with different permission
 
 
   Scenario: User is not allowed to update permissions of a reshared sub-folder to higher permissions than what user has received
-    Given user "Carol" has been created with default attributes and without skeleton files
+    Given user "Carol" has been created with default attributes and without skeleton files in the server
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share, delete, update" permissions
     And user "Alice" has shared folder "simple-folder" with user "Carol" with "share, delete" permissions
     And user "Alice" has logged in using the webUI
@@ -192,7 +192,7 @@ Feature: Sharing files and folders with internal users with different permission
 
 
   Scenario: User is allowed to update permissions of a reshared sub-folder within the permissions that the user has received
-    Given user "Carol" has been created with default attributes and without skeleton files
+    Given user "Carol" has been created with default attributes and without skeleton files in the server
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "all" permissions
     And user "Alice" has shared folder "simple-folder" with user "Carol" with "share, delete" permissions
     And user "Alice" has logged in using the webUI

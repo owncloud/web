@@ -7,7 +7,7 @@ Feature: Display notifications when receiving a share and follow embedded links
   Background:
     Given app "notifications" has been enabled
     And the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
-    And these users have been created with default attributes and without skeleton files:
+    And these users have been created with default attributes and without skeleton files in the server:
       | username |
       | Alice    |
       | Brian    |

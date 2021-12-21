@@ -2,7 +2,7 @@ Feature: Access private link
   As a user I want to directly access item which I have received private link for
 
   Background:
-    Given user "Alice" has been created with default attributes and without skeleton files
+    Given user "Alice" has been created with default attributes and without skeleton files in the server
     And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
 
   @smokeTest @ocisSmokeTest
@@ -23,7 +23,7 @@ Feature: Access private link
 
 
   Scenario: Access private link as a collaborator
-    Given user "Brian" has been created with default attributes and without skeleton files
+    Given user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Alice" has shared file "lorem.txt" with user "Brian" with "read" permissions
     And user "Brian" has logged in using the webUI
     When the user navigates to the private link created by user "Alice" for file "lorem.txt"
@@ -33,7 +33,7 @@ Feature: Access private link
 
   @issue-3243
   Scenario: Access the private link as an user that does not have permissions to see the file
-    Given user "Brian" has been created with default attributes and without skeleton files
+    Given user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Brian" has logged in using the webUI
     When the user navigates to the private link created by user "Alice" for file "lorem.txt"
     Then the user should see the following error message on the login card dialog

@@ -7,20 +7,20 @@ Feature: Autocompletion of share-with names
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And the administrator has set the default folder for received shares to "Shares"
     # Users that are in the special known users already
-    And these users have been created with default attributes and without skeleton files but not initialized:
+    And these users have been created with default attributes and without skeleton files in the server but not initialized:
       | username    |
       | Alice       |
       | Carol       |
       | usergrp     |
       | regularuser |
     # Some extra users to make the share autocompletion interesting
-    And these users have been created without initialization and without skeleton files:
+    And these users have been created without initialization and without skeleton files in the server:
       | username  | password  | displayname     | email          |
       | two       | %regular% | Brian Murphy    | u2@oc.com.np   |
       | u444      | %regular% | Four            | u3@oc.com.np   |
       | five      | %regular% | User Group      | five@oc.com.np |
       | usersmith | %regular% | John Finn Smith | js@oc.com.np   |
-    And these groups have been created:
+    And these groups have been created in the server:
       | groupname     |
       | finance1      |
       | finance2      |
@@ -89,7 +89,7 @@ Feature: Autocompletion of share-with names
     And user "regularuser" has created folder "simple-folder"
     And user "regularuser" has logged in using the webUI
     And the user has browsed to the files page
-    And these users have been created without initialization and without skeleton files:
+    And these users have been created without initialization and without skeleton files in the server:
       | username | password | displayname | email        |
       | use      | %alt1%   | Use         | uz@oc.com.np |
     And the user has opened the share dialog for folder "simple-folder"
@@ -101,7 +101,7 @@ Feature: Autocompletion of share-with names
   Scenario: autocomplete short group names when completely typed
     Given the administrator has set the minimum characters for sharing autocomplete to "2"
     And user "regularuser" has created folder "simple-folder"
-    And these groups have been created:
+    And these groups have been created in the server:
       | groupname |
       | fi        |
     And user "regularuser" has logged in using the webUI

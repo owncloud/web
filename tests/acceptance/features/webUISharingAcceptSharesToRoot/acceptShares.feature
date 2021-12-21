@@ -5,7 +5,7 @@ Feature: accept/decline shares coming from internal users
   So that I can keep my file system clean
 
   Background:
-    Given these users have been created with default attributes and without skeleton files:
+    Given these users have been created with default attributes and without skeleton files in the server:
       | username |
       | Alice    |
       | Brian    |
@@ -14,10 +14,10 @@ Feature: accept/decline shares coming from internal users
   Scenario: reject a share that you received as user and as group member
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And user "Alice" has created folder "/simple-folder"
-    And these groups have been created:
+    And these groups have been created in the server:
       | groupname |
       | grp1      |
-    And user "Brian" has been added to group "grp1"
+    And user "Brian" has been added to group "grp1" in the server
     And user "Alice" has shared folder "/simple-folder" with user "Brian"
     And user "Alice" has shared folder "/simple-folder" with group "grp1"
     When the user browses to the shared-with-me page in accepted shares view
@@ -32,10 +32,10 @@ Feature: accept/decline shares coming from internal users
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And user "Alice" has created folder "/simple-folder"
     And user "Brian" has created folder "/simple-folder"
-    And these groups have been created:
+    And these groups have been created in the server:
       | groupname |
       | grp1      |
-    And user "Brian" has been added to group "grp1"
+    And user "Brian" has been added to group "grp1" in the server
     And user "Alice" has shared folder "/simple-folder" with user "Brian"
     And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
     And the user has browsed to the files page
@@ -51,10 +51,10 @@ Feature: accept/decline shares coming from internal users
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And user "Alice" has created folder "/simple-folder"
     And user "Alice" has uploaded file "testavatar.jpg" to "/testimage.jpg"
-    And these groups have been created:
+    And these groups have been created in the server:
       | groupname |
       | grp1      |
-    And user "Brian" has been added to group "grp1"
+    And user "Brian" has been added to group "grp1" in the server
     And user "Alice" has shared folder "/simple-folder" with user "Brian"
     And user "Alice" has shared folder "/testimage.jpg" with group "grp1"
     And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
@@ -73,10 +73,10 @@ Feature: accept/decline shares coming from internal users
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "yes"
     And user "Alice" has created folder "/simple-folder"
     And user "Alice" has uploaded file "testavatar.jpg" to "/testimage.jpg"
-    And these groups have been created:
+    And these groups have been created in the server:
       | groupname |
       | grp1      |
-    And user "Brian" has been added to group "grp1"
+    And user "Brian" has been added to group "grp1" in the server
     And user "Alice" has shared folder "/simple-folder" with group "grp1"
     And user "Alice" has shared folder "/testimage.jpg" with user "Brian"
     When the user reloads the current page of the webUI
@@ -90,10 +90,10 @@ Feature: accept/decline shares coming from internal users
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "yes"
     And user "Alice" has created folder "/simple-folder"
     And user "Alice" has uploaded file "testavatar.jpg" to "/testimage.jpg"
-    And these groups have been created:
+    And these groups have been created in the server:
       | groupname |
       | grp1      |
-    And user "Brian" has been added to group "grp1"
+    And user "Brian" has been added to group "grp1" in the server
     And user "Alice" has shared folder "/simple-folder" with group "grp1"
     And user "Alice" has shared folder "/testimage.jpg" with user "Brian"
     And the user has browsed to the files page
@@ -109,10 +109,10 @@ Feature: accept/decline shares coming from internal users
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "yes"
     And user "Alice" has created folder "/simple-folder"
     And user "Alice" has uploaded file "testavatar.jpg" to "/testimage.jpg"
-    And these groups have been created:
+    And these groups have been created in the server:
       | groupname |
       | grp1      |
-    And user "Brian" has been added to group "grp1"
+    And user "Brian" has been added to group "grp1" in the server
     And user "Alice" has shared folder "/simple-folder" with group "grp1"
     And user "Alice" has shared folder "/testimage.jpg" with user "Brian"
     And the user has browsed to the shared-with-me page
@@ -183,7 +183,7 @@ Feature: accept/decline shares coming from internal users
     Then file "lorem.txt" should not be listed on the webUI
 
   Scenario: receive shares with same name from different users
-    Given user "Carol" has been created with default attributes and without skeleton files
+    Given user "Carol" has been created with default attributes and without skeleton files in the server
     And the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And user "Alice" has created file "lorem.txt"
     And user "Carol" has created file "lorem.txt"
@@ -257,7 +257,7 @@ Feature: accept/decline shares coming from internal users
   @issue-3101
   Scenario: Decline multiple accepted shares at once from shared with me page
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
-    And user "Alice" has been created with default attributes and without skeleton files
+    And user "Alice" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created file "lorem.txt"
     And user "Alice" has created file "data.zip"
     And user "Alice" has created file "simple-folder"
@@ -301,7 +301,7 @@ Feature: accept/decline shares coming from internal users
 
   Scenario: receive shares with same name from different users, accept one by one
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
-    And user "Carol" has been created with default attributes and without skeleton files
+    And user "Carol" has been created with default attributes and without skeleton files in the server
     And user "Carol" has created folder "/simple-folder"
     And user "Carol" has created folder "/simple-folder/from_Carol"
     And user "Carol" has shared folder "/simple-folder" with user "Brian"
@@ -319,10 +319,10 @@ Feature: accept/decline shares coming from internal users
   Scenario: accept a share that you received as user and as group member
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And  user "Alice" has created folder "/simple-folder"
-    And these groups have been created:
+    And these groups have been created in the server:
       | groupname |
       | grp1      |
-    And user "Brian" has been added to group "grp1"
+    And user "Brian" has been added to group "grp1" in the server
     And user "Alice" has shared folder "/simple-folder" with user "Brian"
     And user "Alice" has shared folder "/simple-folder" with group "grp1"
     And the user has browsed to the shared-with-me page

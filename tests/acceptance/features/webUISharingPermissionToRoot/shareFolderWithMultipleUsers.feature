@@ -5,7 +5,7 @@ Feature: Sharing folders with multiple internal users with different permissions
   So that I can control the access on those folders by other collaborators
 
   Background:
-    Given these users have been created with default attributes and without skeleton files:
+    Given these users have been created with default attributes and without skeleton files in the server:
       | username |
       | Alice    |
       | Brian    |
@@ -14,7 +14,7 @@ Feature: Sharing folders with multiple internal users with different permissions
 
 
   Scenario Outline: share a folder with multiple users with different roles and permissions
-    Given these users have been created with default attributes and without skeleton files:
+    Given these users have been created with default attributes and without skeleton files in the server:
       | username |
       | user0    |
       | Carol    |

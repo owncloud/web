@@ -5,7 +5,7 @@ Feature: Sharing files and folders with internal users
   So that those users can access the files and folders
 
   Background:
-    Given these users have been created with default attributes and without skeleton files:
+    Given these users have been created with default attributes and without skeleton files in the server:
       | username |
       | Alice    |
       | Brian    |
@@ -33,7 +33,7 @@ Feature: Sharing files and folders with internal users
 
   @issue-2060
   Scenario: sharing indicator of items inside a re-shared folder
-    Given user "Carol" has been created with default attributes and without skeleton files
+    Given user "Carol" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created folder "/simple-folder/simple-empty-folder"
     And user "Alice" has created file "/simple-folder/lorem.txt"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
@@ -50,7 +50,7 @@ Feature: Sharing files and folders with internal users
 
   @issue-2060
   Scenario: sharing indicator of items inside a re-shared subfolder
-    Given user "Carol" has been created with default attributes and without skeleton files
+    Given user "Carol" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created folder "/simple-folder/simple-empty-folder"
     And user "Alice" has created file "/simple-folder/lorem.txt"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
@@ -116,8 +116,8 @@ Feature: Sharing files and folders with internal users
 
   @issue-2939
   Scenario: sharing indicator for user shares stays up to date
-    Given user "Carol" has been created with default attributes and without skeleton files
-    And user "David" has been created with default attributes and without skeleton files
+    Given user "Carol" has been created with default attributes and without skeleton files in the server
+    And user "David" has been created with default attributes and without skeleton files in the server
     And user "Alice" has uploaded file "testavatar.png" to "simple-folder/testimage.png"
     When user "Alice" has logged in using the webUI
     Then the following resources should not have share indicators on the webUI

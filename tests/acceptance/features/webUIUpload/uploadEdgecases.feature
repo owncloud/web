@@ -7,7 +7,7 @@ Feature: File Upload
   that is not academically correct but saves a lot of time
 
   Background:
-    Given user "Alice" has been created with default attributes and without skeleton files
+    Given user "Alice" has been created with default attributes and without skeleton files in the server
     And user "Alice" has logged in using the webUI
     And the user browses to the files page
 

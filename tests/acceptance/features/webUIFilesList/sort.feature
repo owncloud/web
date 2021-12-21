@@ -5,7 +5,7 @@ Feature: Sort files/folders
   So that I can make the file/folder list more clear
 
   Background:
-    Given user "Alice" has been created with default attributes and without skeleton files
+    Given user "Alice" has been created with default attributes and without skeleton files in the server
     And user "Alice" has logged in using the webUI
     And user "Alice" has created folder "test_sort"
     And user "Alice" has created the following folders

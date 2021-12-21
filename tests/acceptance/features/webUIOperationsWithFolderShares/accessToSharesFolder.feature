@@ -7,8 +7,8 @@ Feature: Upload into a folder Shares
   Background:
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And the administrator has set the default folder for received shares to "Shares"
-    And user "Alice" has been created with default attributes and without skeleton files
-    And user "Brian" has been created with default attributes and without skeleton files
+    And user "Alice" has been created with default attributes and without skeleton files in the server
+    And user "Brian" has been created with default attributes and without skeleton files in the server
 
   @issue-ocis-2322 
   Scenario: the Shares folder does not exist if no share has been accepted
@@ -66,7 +66,7 @@ Feature: Upload into a folder Shares
 
   @issue-ocis-2322 @notToImplementOnOCIS
   Scenario: create a new folder into a folder Shares in oc10
-    Given user "Brian" has been created with default attributes and without skeleton files
+    Given user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Brian" has created file "lorem.txt"
     And user "Brian" has shared file "lorem.txt" with user "Alice" with "all" permissions
     And user "Alice" has accepted the share "Shares/lorem.txt" offered by user "Brian"

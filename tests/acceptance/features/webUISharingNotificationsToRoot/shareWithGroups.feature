@@ -6,16 +6,16 @@ Feature: Sharing files and folders with internal groups
 
   Background:
     Given app "notifications" has been enabled
-    And these users have been created with default attributes and without skeleton files:
+    And these users have been created with default attributes and without skeleton files in the server:
       | username |
       | Alice    |
       | Brian    |
       | Carol    |
-    And these groups have been created:
+    And these groups have been created in the server:
       | groupname |
       | grp1      |
-    And user "Alice" has been added to group "grp1"
-    And user "Brian" has been added to group "grp1"
+    And user "Alice" has been added to group "grp1" in the server
+    And user "Brian" has been added to group "grp1" in the server
     And user "Brian" has logged in using the webUI
     And user "Carol" has created folder "simple-folder"
     And user "Carol" has uploaded file "data.zip" to "data.zip"

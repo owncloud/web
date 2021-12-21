@@ -6,7 +6,7 @@ Feature: Mark file as favorite
   So that I can find my favorite file/folder easily
 
   Background:
-    Given user "Alice" has been created with default attributes and without skeleton files
+    Given user "Alice" has been created with default attributes and without skeleton files in the server
     And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
 
