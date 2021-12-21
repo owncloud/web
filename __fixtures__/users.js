@@ -8,7 +8,10 @@ export default {
       definition: 'default'
     },
     email: {},
-    displayname: 'alice',
+    id: 'alice',
+    name: 'alice',
+    displayname: 'Alice Hansen',
+    additionalInfo: "alice@example.org",
     home: '/mnt/data/files/alice',
     two_factor_auth_enabled: 'false'
   }

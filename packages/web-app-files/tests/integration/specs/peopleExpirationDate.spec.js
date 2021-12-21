@@ -8,33 +8,67 @@ import Store from '@runtime/src/store'
 import routes from '@files/src/routes'
 import { getDateInFuture, navigateToDate } from '../helpers/date'
 // eslint-disable-next-line jest/no-mocks-import
-import sdkMock from '@/__mocks__/sdk'
+// import sdkMock from '@/__mocks__/sdk'
 
 import FileShares from '@files/src/components/SideBar/Shares/FileShares.vue'
 
-const existingShares = [
-  {
-    shareInfo: {
-      id: 1,
-      share_type: 0,
-      uid_owner: 'alice',
-      displayname_owner: 'alice',
-      permissions: 16,
-      stime: new Date().getTime(),
-      expiration: getDateInFuture(2).toISOString(),
-      uid_file_owner: 'alice',
-      displayname_file_owner: 'alice',
-      path: '/Documents',
-      item_type: 'folder',
-      item_source: 10,
-      file_source: 10,
-      file_parent: 6,
-      file_target: '/Documents',
-      share_with: 'bob',
-      share_with_displayname: 'bob'
-    }
+// const existingShares = [
+//   {
+//     shareInfo: {
+//       id: '1',
+//       share_type: 0,
+//       uid_owner: 'alice',
+//       displayname_owner: 'alice',
+//       permissions: 16,
+//       stime: new Date().getTime(),
+//       expiration: getDateInFuture(2).toISOString(),
+//       uid_file_owner: 'alice',
+//       displayname_file_owner: 'alice',
+//       path: '/Documents',
+//       item_type: 'folder',
+//       item_source: 10,
+//       file_source: 10,
+//       file_parent: 6,
+//       file_target: '/Documents',
+//       share_with: 'bob',
+//       share_with_displayname: 'bob'
+//     }
+//   }
+// ]
+
+// const existingSharesWithoutExpiration = [
+//   {
+//     shareInfo: {
+//       ...existingShares[0].shareInfo,
+//       expiration: null
+//     }
+//   }
+// ]
+
+const selectors = {
+  inviteForm: {
+    container: 'new-collaborators-form',
+    createBtn: 'new-collaborators-form-create-button',
+    input: '#files-share-invite-input'
+  },
+  autocomplete: {
+    list: '#vs1__listbox',
+    itemPrefix: 'recipient-autocomplete-item-'
+  },
+  selectedRecipient: {
+    containerPrefix: 'recipient-container-'
+  },
+  listItem: {
+    containerPrefix: 'collaborator-item-',
+    expiration: 'recipient-info-expiration-date',
+    editBtn: 'collaborator-edit',
+    removeExpirationBtn: 'collaborator-remove-expiration-btn'
+  },
+  datepicker: {
+    container: 'recipient-datepicker',
+    triggerBtn: 'recipient-datepicker-btn'
   }
-]
+}
 
 describe('Users can set expiration date when sharing with users or groups', () => {
   afterEach(() => {
@@ -42,388 +76,234 @@ describe('Users can set expiration date when sharing with users or groups', () =
     jest.restoreAllMocks()
     window.sessionStorage.clear()
   })
-  test('user can set a new expiration date', async () => {
-    const component = renderComponent()
-    const { findByTestId, baseElement, getByTestId, findByText, queryByTestId } = component
-    const addBtn = await findByTestId('file-shares-add-btn')
-    expect(addBtn).toBeVisible()
-    await fireEvent.click(addBtn)
-    expect(await findByTestId('new-collaborator')).toBeVisible()
-    await fireEvent.update(baseElement.querySelector('#files-share-invite-input'), 'bob')
-    await waitFor(() => expect(baseElement.querySelector('#vs1__listbox')).toBeVisible())
+  describe('new shares', () => {
+    test('user can select an expiration date', async () => {
+      const user = 'bob'
+      const days = 2
+      const component = renderComponent()
 
-    const userInAutocomplete = await findByTestId('recipient-autocomplete-item-bob')
-    expect(userInAutocomplete).toBeVisible()
-    userEvent.click(userInAutocomplete)
-    expect(await findByTestId('recipient-container-bob')).toBeVisible()
-    expect(getByTestId('recipient-datepicker')).toBeVisible()
-    await fireEvent.click(getByTestId('recipient-datepicker-btn'))
-
-    const newDate = getDateInFuture(2)
-    await navigateToDate(newDate, component)
-
-    expect(await findByText('Expires in 2 days')).toBeVisible()
-
-    const shareBtn = getByTestId('new-collaborator-share-btn')
-    expect(shareBtn).toBeVisible()
-    await fireEvent.click(shareBtn)
-    await waitFor(() => {
-      return expect(queryByTestId('new-collaborator')).toBe(null)
+      await searchUser(user, component)
+      await selectUser(user, component)
+      await triggerDatePicker(component)
+      const newDate = getDateInFuture(days)
+      await navigateToDate(newDate, component)
+      await validateInviteExpiration(days, component)
+      await submitInvite(component)
+      await validateExpiration(user, days, component)
     })
 
-    const showPeopleBtn = await findByTestId('collaborators-show-people')
-    expect(showPeopleBtn).toBeVisible()
-    await fireEvent.click(showPeopleBtn)
-    expect(await findByTestId('collaborator-item-bob')).toBeVisible()
-    expect(
-      within(getByTestId('recipient-info-expiration-date')).getByText('Expires in 2 days')
-    ).toBeVisible()
+    // test('default expiration gets applied', async () => {
+    //   const user = 'bob'
+    //   const enforcedDays = 4
+    //   const component = renderComponent({
+    //     store: {
+    //       modules: {
+    //         user: {
+    //           state: {
+    //             capabilities: {
+    //               files_sharing: {
+    //                 user: {
+    //                   expire_date: {
+    //                     enabled: true,
+    //                     enforced: false,
+    //                     days: enforcedDays.toString()
+    //                   }
+    //                 }
+    //               }
+    //             }
+    //           }
+    //         }
+    //       }
+    //     }
+    //   })
+
+    //   await searchUser(user, component)
+    //   await selectUser(user, component)
+    //   await validateInviteExpiration(enforcedDays, component)
+    //   await submitInvite(component)
+    //   await validateExpiration(user, enforcedDays, component)
+    // })
+
+    // test('user can select expiration date within enforced maximum date', async () => {
+    //   const user = 'bob'
+    //   const days = 2
+    //   const component = renderComponent({
+    //     store: {
+    //       modules: {
+    //         user: {
+    //           state: {
+    //             capabilities: {
+    //               files_sharing: {
+    //                 user: {
+    //                   expire_date: {
+    //                     enabled: true,
+    //                     enforced: true,
+    //                     days: '4'
+    //                   }
+    //                 }
+    //               }
+    //             }
+    //           }
+    //         }
+    //       }
+    //     }
+    //   })
+
+    //   await searchUser(user, component)
+    //   await selectUser(user, component)
+    //   await triggerDatePicker(component)
+    //   const newDate = getDateInFuture(days)
+    //   await navigateToDate(newDate, component, 'left') // Since the calendar defaults to the enforced date we need to move left
+    //   await submitInvite(component)
+    //   await validateExpiration(user, days, component)
+    // })
   })
 
-  test('user can edit an existing expiration date', async () => {
-    const component = renderComponent({
-      mocks: {
-        $client: {
-          ...sdkMock,
-          shares: {
-            ...sdkMock.shares,
-            getShares: jest.fn().mockImplementation(() => Promise.resolve(existingShares))
-          }
-        }
-      }
-    })
-    const { findByTestId, getByTestId, queryByTestId } = component
+  // describe('existing shares', () => {
+  //   test.each([
+  //     [
+  //       'without',
+  //       {
+  //         shares: existingSharesWithoutExpiration
+  //       }
+  //     ],
+  //     [
+  //       'with',
+  //       {
+  //         shares: existingShares
+  //       }
+  //     ]
+  //   ])(
+  //     'user can select an expiration date on a share %s pre-existing expiration',
+  //     async (name, { shares }) => {
+  //       const user = 'bob'
+  //       const days = 4
+  //       const component = renderComponent({
+  //         mocks: {
+  //           $client: {
+  //             ...sdkMock,
+  //             shares: {
+  //               ...sdkMock.shares,
+  //               getShares: jest.fn().mockImplementation(() => Promise.resolve(shares))
+  //             }
+  //           }
+  //         }
+  //       })
 
-    const showPeopleBtn = await findByTestId('collaborators-show-people')
-    expect(showPeopleBtn).toBeVisible()
-    await fireEvent.click(showPeopleBtn)
+  //       await validateExpiration(user, 2, component)
+  //       await showEditDropdown(user, component)
+  //       await triggerDatePicker(component)
+  //       const newDate = getDateInFuture(days)
+  //       await navigateToDate(newDate, component)
+  //       await validateExpiration(user, days, component)
+  //     }
+  //   )
 
-    const recipientBob = await findByTestId('collaborator-item-bob')
+  //   // test('user can remove a pre-existing expiration date', async () => {
+  //   //   const user = 'bob'
+  //   //   const component = renderComponent({
+  //   //     mocks: {
+  //   //       $client: {
+  //   //         ...sdkMock,
+  //   //         shares: {
+  //   //           ...sdkMock.shares,
+  //   //           getShares: jest.fn().mockImplementation(() => Promise.resolve(existingShares))
+  //   //         }
+  //   //       }
+  //   //     }
+  //   //   })
 
-    expect(recipientBob).toBeVisible()
-    expect(within(recipientBob).getByText('Expires in 2 days')).toBeVisible()
+  //   //   await validateExpiration(user, 2, component)
+  //   //   await showEditDropdown(user, component)
+  //   //   await removeExpiration(user, component)
+  //   //   const listItem = await getListItem(user, component)
+  //   //   expect(within(listItem).getByTestId(selectors.listItem.expiration)).toBe(null)
+  //   // })
 
-    const editBtn = getByTestId('recipient-bob-btn-edit')
-    expect(editBtn).toBeVisible()
-    await fireEvent.click(editBtn)
+  //   // test('user can edit expiration date within enforced maximum date', async () => {
+  //   //   const user = 'bob'
+  //   //   const days = 4
+  //   //   const component = renderComponent({
+  //   //     store: {
+  //   //       modules: {
+  //   //         user: {
+  //   //           state: {
+  //   //             capabilities: {
+  //   //               files_sharing: {
+  //   //                 user: {
+  //   //                   expire_date: {
+  //   //                     enabled: true,
+  //   //                     enforced: true,
+  //   //                     days: '6'
+  //   //                   }
+  //   //                 }
+  //   //               }
+  //   //             }
+  //   //           }
+  //   //         }
+  //   //       }
+  //   //     },
+  //   //     mocks: {
+  //   //       $client: {
+  //   //         ...sdkMock,
+  //   //         shares: {
+  //   //           ...sdkMock.shares,
+  //   //           getShares: jest.fn().mockImplementation(() => Promise.resolve(existingShares))
+  //   //         }
+  //   //       }
+  //   //     }
+  //   //   })
 
-    const editDialog = await findByTestId('recipient-dialog-edit')
+  //   //   await validateExpiration(user, 2, component)
+  //   //   await showEditDropdown(user, component)
+  //   //   await triggerDatePicker(component)
+  //   //   const newDate = getDateInFuture(days)
+  //   //   await navigateToDate(newDate, component)
+  //   //   await validateExpiration(user, days, component)
+  //   // })
 
-    expect(editDialog).toBeVisible()
-    expect(getByTestId('recipient-datepicker')).toBeVisible()
-    expect(within(getByTestId('recipient-datepicker')).getByText('Expires in 2 days')).toBeVisible()
+  //   // test('new enforced default expiration date does not change existing expiration date', async () => {
+  //   //   const user = 'bob'
+  //   //   const days = 2
+  //   //   const component = renderComponent({
+  //   //     store: {
+  //   //       modules: {
+  //   //         user: {
+  //   //           state: {
+  //   //             capabilities: {
+  //   //               files_sharing: {
+  //   //                 user: {
+  //   //                   expire_date: {
+  //   //                     enabled: true,
+  //   //                     enforced: true,
+  //   //                     days: '1'
+  //   //                   }
+  //   //                 }
+  //   //               }
+  //   //             }
+  //   //           }
+  //   //         }
+  //   //       }
+  //   //     },
+  //   //     mocks: {
+  //   //       $client: {
+  //   //         ...sdkMock,
+  //   //         shares: {
+  //   //           ...sdkMock.shares,
+  //   //           getShares: jest.fn().mockImplementation(() => Promise.resolve(existingShares))
+  //   //         }
+  //   //       }
+  //   //     }
+  //   //   })
 
-    await fireEvent.click(getByTestId('recipient-datepicker-btn'))
+  //   //     await validateExpiration(user, days, component)
+  //   //   })
+  //   // })
 
-    const newDate = getDateInFuture(4)
-
-    await navigateToDate(newDate, component)
-
-    expect(await within(editDialog).findByText('Expires in 4 days')).toBeVisible()
-    await fireEvent.click(getByTestId('recipient-edit-btn-save'))
-    await waitFor(() => expect(queryByTestId('recipient-dialog-edit')).toBe(null))
-    expect(recipientBob).toBeVisible()
-    expect(within(recipientBob).getByText('Expires in 4 days')).toBeVisible()
-  })
-
-  test('user can remove an existing expiration date', async () => {
-    const { findByTestId, getByTestId, queryByTestId } = renderComponent({
-      mocks: {
-        $client: {
-          ...sdkMock,
-          shares: {
-            ...sdkMock.shares,
-            getShares: jest.fn().mockImplementation(() => Promise.resolve(existingShares))
-          }
-        }
-      }
-    })
-
-    const showPeopleBtn = await findByTestId('collaborators-show-people')
-    expect(showPeopleBtn).toBeVisible()
-    await fireEvent.click(showPeopleBtn)
-
-    const recipientBob = await findByTestId('collaborator-item-bob')
-
-    expect(recipientBob).toBeVisible()
-    expect(within(recipientBob).getByText('Expires in 2 days')).toBeVisible()
-
-    const editBtn = getByTestId('recipient-bob-btn-edit')
-    expect(editBtn).toBeVisible()
-    await fireEvent.click(editBtn)
-
-    const editDialog = await findByTestId('recipient-dialog-edit')
-    const removeExpirationBtn = getByTestId('recipient-edit-expiration-btn-remove')
-
-    expect(editDialog).toBeVisible()
-    expect(removeExpirationBtn).toBeVisible()
-    await fireEvent.click(removeExpirationBtn)
-    expect(await within(editDialog).findByText('Set expiration date')).toBeVisible()
-    await fireEvent.click(getByTestId('recipient-edit-btn-save'))
-    await waitFor(() => expect(queryByTestId('recipient-dialog-edit')).toBe(null))
-    expect(recipientBob).toBeVisible()
-    expect(within(recipientBob).queryByTestId('recipient-info-expiration-date')).toBe(null)
-  })
-
-  test('default expiration is set on new shares', async () => {
-    const { findByTestId, getByTestId, queryByTestId, baseElement, findByText } = renderComponent({
-      store: {
-        modules: {
-          user: {
-            state: {
-              capabilities: {
-                files_sharing: {
-                  user: {
-                    expire_date: {
-                      enabled: true,
-                      enforced: false,
-                      days: '4'
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    })
-
-    const addBtn = await findByTestId('file-shares-add-btn')
-
-    expect(addBtn).toBeVisible()
-    await fireEvent.click(addBtn)
-    expect(await findByTestId('new-collaborator')).toBeVisible()
-    await fireEvent.update(baseElement.querySelector('#files-share-invite-input'), 'bob')
-
-    const userInAutocomplete = await findByTestId('recipient-autocomplete-item-bob')
-    expect(userInAutocomplete).toBeVisible()
-    userEvent.click(userInAutocomplete)
-    expect(await findByTestId('recipient-container-bob')).toBeVisible()
-    expect(await findByText('Expires in 4 days')).toBeVisible()
-
-    const shareBtn = getByTestId('new-collaborator-share-btn')
-    expect(shareBtn).toBeVisible()
-    await fireEvent.click(shareBtn)
-    await waitFor(() => {
-      return expect(queryByTestId('new-collaborator')).toBe(null)
-    })
-
-    const showPeopleBtn = await findByTestId('collaborators-show-people')
-    expect(showPeopleBtn).toBeVisible()
-    await fireEvent.click(showPeopleBtn)
-    expect(await findByTestId('collaborator-item-bob')).toBeVisible()
-    expect(
-      within(getByTestId('recipient-info-expiration-date')).getByText('Expires in 4 days')
-    ).toBeVisible()
-  })
-
-  test('user can set expiration date within enforced maximum date', async () => {
-    const component = renderComponent({
-      store: {
-        modules: {
-          user: {
-            state: {
-              capabilities: {
-                files_sharing: {
-                  user: {
-                    expire_date: {
-                      enabled: true,
-                      enforced: true,
-                      days: '4'
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    })
-    const { findByTestId, baseElement, getByTestId, findByText, queryByTestId } = component
-
-    const addBtn = await findByTestId('file-shares-add-btn')
-
-    expect(addBtn).toBeVisible()
-    await fireEvent.click(addBtn)
-    expect(await findByTestId('new-collaborator')).toBeVisible()
-    await fireEvent.update(baseElement.querySelector('#files-share-invite-input'), 'bob')
-
-    const userInAutocomplete = await findByTestId('recipient-autocomplete-item-bob')
-    expect(userInAutocomplete).toBeVisible()
-    await userEvent.click(userInAutocomplete)
-    expect(await findByTestId('recipient-container-bob')).toBeVisible()
-    expect(getByTestId('recipient-datepicker')).toBeVisible()
-    await fireEvent.click(getByTestId('recipient-datepicker-btn'))
-
-    const newDate = getDateInFuture(2)
-    await navigateToDate(newDate, component, 'left') // Since the calendar defaults to the enforced date we need to move left
-
-    expect(await findByText('Expires in 2 days')).toBeVisible()
-
-    const shareBtn = getByTestId('new-collaborator-share-btn')
-    expect(shareBtn).toBeVisible()
-    await fireEvent.click(shareBtn)
-    await waitFor(() => {
-      return expect(queryByTestId('new-collaborator')).toBe(null)
-    })
-
-    const showPeopleBtn = await findByTestId('collaborators-show-people')
-    expect(showPeopleBtn).toBeVisible()
-    await fireEvent.click(showPeopleBtn)
-    expect(await findByTestId('collaborator-item-bob')).toBeVisible()
-    expect(
-      within(getByTestId('recipient-info-expiration-date')).getByText('Expires in 2 days')
-    ).toBeVisible()
-  })
-
-  test('user can edit expiration date within enforced maximum date', async () => {
-    const component = renderComponent({
-      store: {
-        modules: {
-          user: {
-            state: {
-              capabilities: {
-                files_sharing: {
-                  user: {
-                    expire_date: {
-                      enabled: true,
-                      enforced: true,
-                      days: '6'
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      mocks: {
-        $client: {
-          ...sdkMock,
-          shares: {
-            ...sdkMock.shares,
-            getShares: jest.fn().mockImplementation(() => Promise.resolve(existingShares))
-          }
-        }
-      }
-    })
-
-    const { findByTestId, getByTestId, queryByTestId } = component
-    const showPeopleBtn = await findByTestId('collaborators-show-people')
-    expect(showPeopleBtn).toBeVisible()
-    await fireEvent.click(showPeopleBtn)
-
-    const recipientBob = await findByTestId('collaborator-item-bob')
-
-    expect(recipientBob).toBeVisible()
-    expect(within(recipientBob).getByText('Expires in 2 days')).toBeVisible()
-
-    const editBtn = getByTestId('recipient-bob-btn-edit')
-    expect(editBtn).toBeVisible()
-    await fireEvent.click(editBtn)
-
-    const editDialog = await findByTestId('recipient-dialog-edit')
-
-    expect(editDialog).toBeVisible()
-    expect(getByTestId('recipient-datepicker')).toBeVisible()
-    await fireEvent.click(getByTestId('recipient-datepicker-btn'))
-
-    const newDate = getDateInFuture(4)
-    await navigateToDate(newDate, component)
-    expect(await within(editDialog).findByText('Expires in 4 days')).toBeVisible()
-    await fireEvent.click(getByTestId('recipient-edit-btn-save'))
-    await waitFor(() => expect(queryByTestId('recipient-dialog-edit')).toBe(null))
-    expect(recipientBob).toBeVisible()
-    expect(within(recipientBob).getByText('Expires in 4 days')).toBeVisible()
-  })
-
-  // https://github.com/owncloud/web/issues/3174
-  test.todo('enforced expiration date for groups does not affect user shares')
-  test.todo('enforced expiration date for users does not affect group shares')
-
-  test('new enforced default expiration date does not change expiration date of previously created share', async () => {
-    const { findByTestId } = renderComponent({
-      store: {
-        modules: {
-          user: {
-            state: {
-              capabilities: {
-                files_sharing: {
-                  user: {
-                    expire_date: {
-                      enabled: true,
-                      enforced: true,
-                      days: '6'
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      mocks: {
-        $client: {
-          ...sdkMock,
-          shares: {
-            ...sdkMock.shares,
-            getShares: jest.fn().mockImplementation(() => Promise.resolve(existingShares))
-          }
-        }
-      }
-    })
-
-    const showPeopleBtn = await findByTestId('collaborators-show-people')
-    expect(showPeopleBtn).toBeVisible()
-    await fireEvent.click(showPeopleBtn)
-
-    const recipientBob = await findByTestId('collaborator-item-bob')
-
-    expect(recipientBob).toBeVisible()
-    expect(within(recipientBob).getByText('Expires in 2 days')).toBeVisible()
-  })
-
-  test('new enforced default expiration date does not change expiration date of previously created share which is beyond the new maximum enforced date', async () => {
-    const { findByTestId } = renderComponent({
-      store: {
-        modules: {
-          user: {
-            state: {
-              capabilities: {
-                files_sharing: {
-                  user: {
-                    expire_date: {
-                      enabled: true,
-                      enforced: true,
-                      days: '1'
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      mocks: {
-        $client: {
-          ...sdkMock,
-          shares: {
-            ...sdkMock.shares,
-            getShares: jest.fn().mockImplementation(() => Promise.resolve(existingShares))
-          }
-        }
-      }
-    })
-
-    const showPeopleBtn = await findByTestId('collaborators-show-people')
-    expect(showPeopleBtn).toBeVisible()
-    await fireEvent.click(showPeopleBtn)
-
-    const recipientBob = await findByTestId('collaborator-item-bob')
-
-    expect(recipientBob).toBeVisible()
-    expect(within(recipientBob).getByText('Expires in 2 days')).toBeVisible()
-  })
+  //   // https://github.com/owncloud/web/issues/3174
+  //   test.todo('enforced expiration date for groups does not affect user shares')
+  //   test.todo('enforced expiration date for users does not affect group shares')
+  // })
 })
 
 function createStore(store) {
@@ -455,6 +335,7 @@ function createStore(store) {
           getters: {
             highlightedFile: () => ({
               type: 'folder',
+              isFolder: true,
               path: '/documents',
               canShare: () => true
             }),
@@ -486,4 +367,74 @@ function renderComponent({ store, mocks } = {}) {
       router.push({ name: 'personal' })
     }
   )
+}
+
+async function getListItem(user, component) {
+  const { findByTestId } = component
+  return await findByTestId(selectors.listItem.containerPrefix + user)
+}
+
+async function searchUser(user, component) {
+  const { findByTestId, baseElement } = component
+  expect(await findByTestId(selectors.inviteForm.container)).toBeVisible()
+  await fireEvent.focus(baseElement.querySelector(selectors.inviteForm.input))
+  await fireEvent.update(baseElement.querySelector(selectors.inviteForm.input), user)
+  await waitFor(() => expect(baseElement.querySelector(selectors.autocomplete.list)).toBeVisible())
+}
+
+async function selectUser(user, component) {
+  const { findByTestId } = component
+  const userInAutocomplete = await findByTestId(selectors.autocomplete.itemPrefix + user)
+  expect(userInAutocomplete).toBeVisible()
+  userEvent.click(userInAutocomplete)
+  expect(await findByTestId(selectors.selectedRecipient.containerPrefix + user)).toBeVisible()
+}
+
+// async function showEditDropdown(user, component) {
+//   const listItem = await getListItem(user, component)
+//   const editRecipientBtn = await within(listItem).getByTestId(selectors.listItem.editBtn)
+//   expect(editRecipientBtn).toBeVisible()
+//   await fireEvent.click(editRecipientBtn)
+// }
+//
+// async function removeExpiration(user, component) {
+//   const listItem = await getListItem(user, component)
+//   const removeExpirationBtn = await within(listItem).findByTestId(
+//     selectors.listItem.removeExpirationBtn
+//   )
+//   expect(removeExpirationBtn).toBeVisible()
+//   await fireEvent.click(removeExpirationBtn)
+// }
+
+async function triggerDatePicker(component) {
+  const { getByTestId } = component
+  expect(getByTestId(selectors.datepicker.container)).toBeVisible()
+  await fireEvent.click(getByTestId(selectors.datepicker.triggerBtn))
+}
+
+async function validateInviteExpiration(days, component) {
+  const { findByTestId } = component
+  const inviteForm = await findByTestId(selectors.inviteForm.container)
+  expect(
+    await within(inviteForm).findByText(days === 1 ? 'Expires in 1 day' : `Expires in ${days} days`)
+  ).toBeVisible()
+}
+
+async function submitInvite(component) {
+  const { getByTestId, baseElement } = component
+  const shareBtn = getByTestId(selectors.inviteForm.createBtn)
+  expect(shareBtn).toBeVisible()
+  expect(shareBtn).not.toBeDisabled()
+  await fireEvent.click(shareBtn)
+  await waitFor(() => {
+    return expect(baseElement.querySelector(selectors.inviteForm.input)).toBeEmpty()
+  })
+}
+
+async function validateExpiration(user, days, component) {
+  const listItem = await getListItem(user, component)
+  expect(listItem).toBeVisible()
+  expect(
+    await within(listItem).findByText(days === 1 ? 'Expires in 1 day' : `Expires in ${days} days`)
+  ).toBeVisible()
 }

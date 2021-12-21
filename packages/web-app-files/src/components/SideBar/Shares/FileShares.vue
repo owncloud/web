@@ -1,124 +1,62 @@
 <template>
   <div id="oc-files-sharing-sidebar" class="uk-position-relative">
-    <div
-      v-show="currentView === VIEW_SHOW"
-      :key="VIEW_SHOW"
-      :aria-hidden="currentView !== VIEW_SHOW"
-    >
-      <oc-loader v-if="sharesLoading" :aria-label="$gettext('Loading people list')" />
-      <template v-else>
-        <div v-if="$_ocCollaborators_canShare" class="oc-mt-s oc-mb-s">
-          <oc-button
-            ref="addCollaborators"
-            data-testid="file-shares-add-btn"
-            variation="primary"
-            class="files-collaborators-open-add-share-dialog-button"
-            @click="$_ocCollaborators_addShare"
-          >
-            <oc-icon name="add" />
-            <translate>Add people</translate>
-          </oc-button>
-        </div>
-        <p
-          v-else
-          key="no-reshare-permissions-message"
-          data-testid="files-collaborators-no-reshare-permissions-message"
-          v-text="noResharePermsMessage"
-        />
-        <div v-if="hasSharees" class="avatars-wrapper">
-          <h4 class="shared-with-label" v-text="sharedWithLabel" />
-          <oc-button
-            v-oc-tooltip="sharedWithTooltip"
-            data-testid="collaborators-show-people"
-            appearance="raw"
-            :aria-label="sharedWithTooltip"
-            @click="onClickSharedWith"
-          >
-            <oc-avatars
-              v-if="!showShareesList"
-              :items="collaboratorsAvatar"
-              :stacked="true"
-              :is-tooltip-displayed="false"
-              class="sharee-avatars"
+    <oc-loader v-if="sharesLoading" :aria-label="$gettext('Loading people list')" />
+    <template v-else>
+      <invite-collaborator-form v-if="currentUserCanShare" key="new-collaborator" class="oc-my-s" />
+      <p
+        v-else
+        key="no-reshare-permissions-message"
+        data-testid="files-collaborators-no-reshare-permissions-message"
+        v-text="noResharePermsMessage"
+      />
+      <div v-if="hasSharees" class="avatars-wrapper uk-flex uk-flex-middle uk-flex-between">
+        <h4 class="oc-text-initial oc-text-bold oc-mb-rm" v-text="sharedWithLabel" />
+        <oc-button
+          v-oc-tooltip="sharedWithTooltip"
+          data-testid="collaborators-show-people"
+          appearance="raw"
+          :aria-label="sharedWithTooltip"
+          @click="toggleShareeList"
+        >
+          <oc-avatars
+            v-if="!showShareesList"
+            :items="collaboratorsAvatar"
+            :stacked="true"
+            :is-tooltip-displayed="false"
+            class="sharee-avatars"
+          />
+          <oc-icon v-else name="chevron_up" />
+        </oc-button>
+      </div>
+      <template v-if="showShareesList && hasSharees">
+        <transition-group
+          id="files-collaborators-list"
+          class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm"
+          name="custom-classes-transition"
+          tag="ul"
+          :aria-label="$gettext('Share receivers')"
+        >
+          <li v-for="collaborator in collaborators" :key="collaborator.key">
+            <collaborator-list-item
+              :share="collaborator"
+              :modifiable="!collaborator.indirect"
+              @onDelete="$_ocCollaborators_deleteShare"
             />
-            <oc-icon v-else name="chevron_up" />
-          </oc-button>
-        </div>
-        <template v-if="showShareesList || collaboratorsAvatar.length === 0">
-          <template v-if="$_ownerAsCollaborator">
-            <p id="original-sharing-user" v-translate class="oc-invisible-sr">File owner</p>
-            <show-collaborator
-              :collaborator="$_ownerAsCollaborator"
-              aria-describedby="original-sharing-user"
-            />
-            <hr />
-            <show-collaborator :collaborator="$_currentUserAsCollaborator" />
-          </template>
-          <template v-else>
-            <p id="collaborator-as-fileowner" v-translate class="oc-invisible-sr">
-              You are the file owner
-            </p>
-            <show-collaborator
-              :collaborator="$_currentUserAsCollaborator"
-              aria-describedby="collaborator-as-fileowner"
-            />
-          </template>
-          <hr v-if="collaborators.length > 0" class="oc-mt-s oc-mb-s" />
-          <transition-group
-            id="files-collaborators-list"
-            class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm"
-            :enter-active-class="$_transitionGroupEnter"
-            :leave-active-class="$_transitionGroupLeave"
-            name="custom-classes-transition"
-            tag="ul"
-            :aria-label="$gettext('Share receivers')"
-          >
-            <li v-for="collaborator in collaborators" :key="collaborator.key">
-              <show-collaborator
-                :collaborator="collaborator"
-                :modifiable="!collaborator.indirect"
-                @onDelete="$_ocCollaborators_deleteShare"
-                @onEdit="$_ocCollaborators_editShare"
-              />
-            </li>
-          </transition-group>
-        </template>
+          </li>
+        </transition-group>
       </template>
-    </div>
-
-    <new-collaborator
-      v-if="$_ocCollaborators_canShare && currentView === VIEW_NEW"
-      key="new-collaborator"
-      @close="$_ocCollaborators_showList"
-      @beforeDestroy="toggleCollaboratorNew"
-      @mounted="toggleCollaboratorNew"
-    />
-    <edit-collaborator
-      v-if="$_ocCollaborators_canShare && currentView === VIEW_EDIT"
-      key="edit-collaborator"
-      :collaborator="currentShare"
-      @close="$_ocCollaborators_showList"
-      @beforeDestroy="toggleCollaboratorEdit"
-      @mounted="toggleCollaboratorEdit"
-    />
+    </template>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
-import Mixins from '../../../mixins/collaborators'
 import { textUtils } from '../../../helpers/textUtils'
-import { shareTypes, userShareTypes } from '../../../helpers/shareTypes'
 import { getParentPaths } from '../../../helpers/path'
 import { dirname } from 'path'
-import { bitmaskToRole, permissionsBitmask } from '../../../helpers/collaborators'
-import EditCollaborator from './Collaborators/EditCollaborator.vue'
-import NewCollaborator from './Collaborators/NewCollaborator.vue'
-import ShowCollaborator from './Collaborators/ShowCollaborator.vue'
-
-const VIEW_SHOW = 'showCollaborators'
-const VIEW_EDIT = 'editCollaborator'
-const VIEW_NEW = 'newCollaborator'
+import InviteCollaboratorForm from './InviteCollaborator/InviteCollaboratorForm.vue'
+import CollaboratorListItem from './Collaborators/ListItem.vue'
+import { ShareTypes } from '../../../helpers/share'
 
 export default {
   title: ($gettext) => {
@@ -126,22 +64,13 @@ export default {
   },
   name: 'FileShares',
   components: {
-    EditCollaborator,
-    NewCollaborator,
-    ShowCollaborator
+    InviteCollaboratorForm,
+    CollaboratorListItem
   },
-  mixins: [Mixins],
   data() {
     return {
       currentShare: null,
-      transitionGroupActive: false,
-
-      // panel types
-      VIEW_SHOW,
-      VIEW_EDIT,
-      VIEW_NEW,
-      currentView: VIEW_SHOW,
-      showShareesList: false
+      showShareesList: true
     }
   },
   computed: {
@@ -151,18 +80,8 @@ export default {
       'currentFileOutgoingSharesLoading',
       'sharesTreeLoading'
     ]),
-    ...mapGetters(['isOcis']),
     ...mapState('Files', ['incomingShares', 'incomingSharesLoading', 'sharesTree']),
     ...mapState(['user']),
-
-    $_transitionGroupEnter() {
-      return this.transitionGroupActive ? 'uk-animation-slide-left-medium' : ''
-    },
-    $_transitionGroupLeave() {
-      return this.transitionGroupActive
-        ? 'uk-animation-slide-right-medium uk-animation-reverse'
-        : ''
-    },
 
     sharedWithLabel() {
       return this.$gettext('Shared with')
@@ -186,29 +105,6 @@ export default {
       )
     },
 
-    $_currentUserAsCollaborator() {
-      const permissions = this.currentUsersPermissions
-      const isFolder = this.highlightedFile.type === 'folder'
-      let role = { name: '' }
-
-      if (permissions > 0) {
-        role = bitmaskToRole(permissions, isFolder, !this.isOcis)
-      } else {
-        role.name = 'owner'
-      }
-
-      return {
-        collaborator: {
-          name: this.user.id,
-          displayName: this.user.displayname,
-          additionalInfo: null
-        },
-        owner: {},
-        fileOwner: {},
-        shareType: shareTypes.user,
-        role
-      }
-    },
     collaboratorsAvatar() {
       return this.collaborators.map((c) => {
         return {
@@ -216,34 +112,6 @@ export default {
           shareType: c.shareType
         }
       })
-    },
-
-    $_ownerAsCollaborator() {
-      if (!this.$_allIncomingShares.length) {
-        return null
-      }
-      const firstShare = this.$_allIncomingShares[0]
-      const ownerAsCollaborator = {
-        ...firstShare,
-        collaborator: firstShare.fileOwner,
-        owner: {},
-        fileOwner: {},
-        key: 'owner-' + firstShare.id,
-        role: this.ownerRole
-      }
-
-      const resharers = new Map()
-      this.$_allIncomingShares.forEach((share) => {
-        if (share.owner.name !== ownerAsCollaborator.collaborator.name) {
-          resharers.set(share.owner.name, share.owner)
-        }
-      })
-
-      // make them unique then sort
-      ownerAsCollaborator.resharers = Array.from(resharers.values()).sort(
-        this.collaboratorsComparator.bind(this)
-      )
-      return ownerAsCollaborator
     },
 
     /**
@@ -318,7 +186,7 @@ export default {
       return allShares
     },
 
-    $_ocCollaborators_canShare() {
+    currentUserCanShare() {
       return this.highlightedFile.canShare()
     },
     noResharePermsMessage() {
@@ -329,7 +197,7 @@ export default {
 
     currentUsersPermissions() {
       if (this.$_allIncomingShares.length > 0) {
-        let permissions = permissionsBitmask.read
+        let permissions = 0
 
         for (const share of this.$_allIncomingShares) {
           permissions |= share.permissions
@@ -342,13 +210,11 @@ export default {
     }
   },
   watch: {
-    // Do not reload shares if we are starting with different panel than 'show'
     highlightedFile: {
       handler: function (newItem, oldItem) {
-        if (oldItem !== newItem && this.currentView === VIEW_SHOW) {
-          this.transitionGroupActive = false
+        if (oldItem !== newItem) {
           this.$_reloadShares()
-          this.showShareesList = false
+          this.showShareesList = true
         }
       },
       immediate: true
@@ -359,16 +225,11 @@ export default {
     ...mapActions('Files', [
       'loadCurrentFileOutgoingShares',
       'loadSharesTree',
-      'sharesClearState',
       'deleteShare',
-      'loadIncomingShares',
-      'incomingSharesClearState'
+      'loadIncomingShares'
     ]),
-    onClickSharedWith() {
-      this.showShareesList = !this.showShareesList
-    },
     $_isCollaboratorShare(collaborator) {
-      return userShareTypes.includes(collaborator.shareType)
+      return ShareTypes.containsAnyValue(ShareTypes.authenticated, [collaborator.shareType])
     },
     collaboratorsComparator(c1, c2) {
       // Sorted by: type, direct, display name, creation date
@@ -376,8 +237,8 @@ export default {
       const c2DisplayName = c2.collaborator ? c2.collaborator.displayName : c2.displayName
       const name1 = c1DisplayName.toLowerCase().trim()
       const name2 = c2DisplayName.toLowerCase().trim()
-      const c1UserShare = c1.shareType === shareTypes.user || c1.shareType === shareTypes.remote
-      const c2UserShare = c2.shareType === shareTypes.user || c1.shareType === shareTypes.remote
+      const c1UserShare = ShareTypes.containsAnyValue(ShareTypes.individuals, [c1.shareType])
+      const c2UserShare = ShareTypes.containsAnyValue(ShareTypes.individuals, [c2.shareType])
       const c1DirectShare = !c1.indirect
       const c2DirectShare = !c2.indirect
 
@@ -395,49 +256,17 @@ export default {
 
       return c1UserShare ? -1 : 1
     },
-    $_ocCollaborators_addShare() {
-      this.transitionGroupActive = true
-      this.currentView = VIEW_NEW
-    },
-    $_ocCollaborators_editShare(share) {
-      this.currentShare = share
-      this.currentView = VIEW_EDIT
-    },
-    toggleCollaboratorNew(component, event) {
-      this.toggleCollaborator(component, event, '#oc-sharing-autocomplete')
-    },
-    toggleCollaboratorEdit(component, event) {
-      this.toggleCollaborator(component, event, '#collaborator-edit-hint')
-    },
-    toggleCollaborator(component, event, selector) {
-      this.focus({
-        from: document.activeElement,
-        to: component.$el.querySelector(selector),
-        revert: event === 'beforeDestroy'
-      })
+    toggleShareeList() {
+      this.showShareesList = !this.showShareesList
     },
     $_ocCollaborators_deleteShare(share) {
-      this.transitionGroupActive = true
       this.deleteShare({
         client: this.$client,
         share: share,
         resource: this.highlightedFile
       })
     },
-    $_ocCollaborators_showList() {
-      this.currentView = VIEW_SHOW
-      this.currentShare = null
-    },
-    $_ocCollaborators_isUser(collaborator) {
-      return (
-        collaborator.shareType === shareTypes.user || collaborator.shareType === shareTypes.remote
-      )
-    },
-    $_ocCollaborators_isGroup(collaborator) {
-      return collaborator.shareType === shareTypes.group
-    },
     $_reloadShares() {
-      this.$_ocCollaborators_showList()
       this.loadCurrentFileOutgoingShares({
         client: this.$client,
         path: this.highlightedFile.path,
@@ -460,18 +289,6 @@ export default {
 
 <style>
 .avatars-wrapper {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
   height: 40px;
-}
-.shared-with-label {
-  margin: 0;
-  font-size: 0.9rem;
-  font-weight: 600;
-}
-.sharee-avatars {
-  justify-self: flex-end;
 }
 </style>

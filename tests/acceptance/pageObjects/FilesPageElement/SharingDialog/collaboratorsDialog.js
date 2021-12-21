@@ -1,5 +1,6 @@
 const util = require('util')
 const timeoutHelper = require('../../../helpers/timeoutHelper')
+const { client } = require('nightwatch-api')
 
 module.exports = {
   commands: {
@@ -8,49 +9,75 @@ module.exports = {
      * @returns {Promise.<string[]>} Array of autocomplete webElementIds
      */
     deleteShareWithUserGroup: function (collaborator) {
-      const informationSelector = util.format(
-        this.elements.collaboratorInformationByCollaboratorName.selector,
-        collaborator
-      )
-      const deleteSelector = informationSelector + this.elements.deleteShareButton.selector
+      this.expandShareEditDropdown(collaborator)
+      const deleteSelector = this.elements.deleteShareButton.selector
       return this.useXpath()
         .waitForElementVisible(deleteSelector)
         .waitForAnimationToFinish() // wait for animation of share sliding out
         .click(deleteSelector)
-        .waitForElementNotPresent(informationSelector)
     },
     /**
-     * Clicks the button to add a new collaborator
-     */
-    clickCreateShare: function () {
-      return this.useXpath()
-        .waitForElementVisible('@createShareButton')
-        .click('@createShareButton')
-        .waitForElementVisible('@createShareDialog')
-        .waitForAnimationToFinish() // wait for animation of share sliding in
-        .useCss()
-    },
-    /**
+     * Open the role selection dialog for a new share or for editing the given collaborator
      *
-     * @param {string} collaborator
+     * @param {string | null} collaborator
      */
-    clickEditShare: function (collaborator) {
+    expandShareRoleDropdown: function (collaborator = null) {
+      if (!collaborator) {
+        return this.waitForElementVisible('@newShareRoleButton').click('@newShareRoleButton')
+      }
+
       const informationSelector = util.format(
         this.elements.collaboratorInformationByCollaboratorName.selector,
         collaborator
       )
-      const editSelector = informationSelector + this.elements.editShareButton.selector
-      return this.useXpath()
-        .waitForElementVisible(editSelector)
-        .click(editSelector)
-        .waitForElementVisible('@editShareDialog')
-        .useCss()
+      const editRoleSelector = informationSelector + this.elements.editShareRoleButton.selector
+      return this.useXpath().waitForElementVisible(editRoleSelector).click(editRoleSelector)
+    },
+    expandShareEditDropdown: function (collaborator) {
+      const informationSelector = util.format(
+        this.elements.collaboratorInformationByCollaboratorName.selector,
+        collaborator
+      )
+      const editDropdownSelector = informationSelector + this.elements.editDropdown.selector
+      return this.useXpath().waitForElementVisible(editDropdownSelector).click(editDropdownSelector)
+    },
+    expandExpirationDatePicker: function (collaborator) {
+      if (!collaborator) {
+        this.waitForElementVisible('@expirationDatePickerTrigger').click(
+          '@expirationDatePickerTrigger'
+        )
+        return client.page.FilesPageElement.expirationDatePicker()
+      }
+      const informationSelector = util.format(
+        this.elements.collaboratorInformationByCollaboratorName.selector,
+        collaborator
+      )
+      const editExpirationSelector =
+        informationSelector + this.elements.expirationDatePickerTrigger.selector
+      this.useXpath().waitForElementVisible(editExpirationSelector).click(editExpirationSelector)
+      return client.page.FilesPageElement.expirationDatePicker()
+    },
+    hasCollaboratorsList: async function () {
+      let isVisible = false
+      const element = this.elements.collaboratorsList
+      await this.isVisible(
+        {
+          locateStrategy: element.locateStrategy,
+          selector: element.selector,
+          timeout: timeoutHelper.parseTimeout(this.api.globals.waitForNegativeConditionTimeout)
+        },
+        (result) => {
+          console.log(result)
+          isVisible = result.status !== -1
+        }
+      )
+      return isVisible
     },
     /**
      *
      * @param {Object.<String,Object>} subSelectors Map of arbitrary attribute name to selector to query
      * inside the collaborator element, defaults to all when null
-     * @param filterDisplayName
+     * @param filterDisplayName Instead of reading the full list of sharees, only grab the one sharee that matches the given display name
      * @param timeout
      * @returns {Promise.<string[]>} Array of users/groups in share list
      */
@@ -60,18 +87,19 @@ module.exports = {
       timeout = null
     ) {
       let results = []
-      let informationSelector = {
-        selector: '@collaboratorsInformation'
+
+      let listItemSelector = {
+        selector: this.elements.collaboratorsListItem.selector
       }
       timeout = timeoutHelper.parseTimeout(timeout)
       if (filterDisplayName !== null) {
-        informationSelector = {
+        listItemSelector = {
           selector: util.format(
             this.elements.collaboratorInformationByCollaboratorName.selector,
             filterDisplayName
           ),
           locateStrategy: this.elements.collaboratorInformationByCollaboratorName.locateStrategy,
-          timeout: timeout
+          timeout
         }
       }
 
@@ -80,22 +108,25 @@ module.exports = {
           displayName: this.elements.collaboratorInformationSubName,
           role: this.elements.collaboratorInformationSubRole,
           additionalInfo: this.elements.collaboratorInformationSubAdditionalInfo,
-          viaLabel: this.elements.collaboratorInformationSubVia,
-          resharer: this.elements.collaboratorInformationSubResharer,
           shareType: this.elements.collaboratorShareType
         }
       }
 
-      let collaboratorsElementIds = null
-      await this.waitForElementPresent(informationSelector).api.elements(
+      let listItemElementIds = []
+      await this.waitForElementPresent('@collaboratorsList').api.elements(
         'css selector',
-        this.elements.collaboratorsInformation,
+        listItemSelector,
         (result) => {
-          collaboratorsElementIds = result.value.map((item) => item[Object.keys(item)[0]])
+          if (result.status === -1) {
+            return
+          }
+          listItemElementIds = listItemElementIds.concat(
+            result.value.map((item) => item[Object.keys(item)[0]])
+          )
         }
       )
 
-      results = collaboratorsElementIds.map(async (collaboratorElementId) => {
+      results = listItemElementIds.map(async (collaboratorElementId) => {
         const collaboratorResult = {}
         for (const attrName in subSelectors) {
           let attrElementId = null
@@ -162,54 +193,54 @@ module.exports = {
   elements: {
     collaboratorInformationByCollaboratorName: {
       selector:
-        '//p[contains(@class, "files-collaborators-collaborator-name") and normalize-space()="%s"]/ancestor::*[contains(concat(" ", @class, " "), " files-collaborators-collaborator ")]',
+        '//span[contains(@class, "files-collaborators-collaborator-name") and contains(text(),"%s")]/ancestor::div[contains(@class, "files-collaborators-collaborator")]',
       locateStrategy: 'xpath'
     },
     deleteShareButton: {
       // within collaboratorInformationByCollaboratorName
-      selector: '//*[contains(@class, "files-collaborators-collaborator-delete")]',
-      locateStrategy: 'xpath'
-    },
-    createShareButton: {
-      selector: '//*[contains(@class, "files-collaborators-open-add-share-dialog-button")]',
+      selector: '//button[contains(@class, "remove-share")]',
       locateStrategy: 'xpath'
     },
     createShareDialog: {
-      selector: '//*[contains(@class, "files-collaborators-collaborator-add-dialog")]',
+      selector: '#new-collaborators-form'
+    },
+    newShareRoleButton: {
+      selector: '#files-collaborators-role-button-new'
+    },
+    editShareRoleButton: {
+      // within collaboratorInformationByCollaboratorName
+      selector: '//button[contains(@class, "files-recipient-role-select-btn")]',
       locateStrategy: 'xpath'
     },
-    editShareButton: {
+    editDropdown: {
       // within collaboratorInformationByCollaboratorName
-      selector: '//*[contains(@class, "files-collaborators-collaborator-edit")]',
+      selector: '//button[contains(@class, "collaborator-edit-dropdown-options-btn")]',
       locateStrategy: 'xpath'
     },
     editShareDialog: {
       selector: '//*[contains(@class, "files-collaborators-collaborator-edit-dialog")]',
       locateStrategy: 'xpath'
     },
-    collaboratorsInformation: {
+    collaboratorsList: {
+      // container around collaborator list items
+      selector: '#files-collaborators-list',
+      locateStrategy: 'css selector'
+    },
+    collaboratorsListItem: {
       // addresses users and groups
       selector: '.files-collaborators-collaborator'
     },
     collaboratorInformationSubName: {
-      // within collaboratorsInformation
+      // within collaboratorsListItem
       selector: '.files-collaborators-collaborator-name'
     },
     collaboratorInformationSubRole: {
-      // within collaboratorsInformation
-      selector: '.files-collaborators-collaborator-role'
+      // within collaboratorsListItem
+      selector: '.files-recipient-role-select-btn:first-child'
     },
     collaboratorInformationSubAdditionalInfo: {
-      // within collaboratorsInformation
+      // within collaboratorsListItem
       selector: '.files-collaborators-collaborator-additional-info'
-    },
-    collaboratorInformationSubVia: {
-      // within collaboratorsInformation
-      selector: '.files-collaborators-collaborator-via-label'
-    },
-    collaboratorInformationSubResharer: {
-      // within collaboratorsInformation
-      selector: '.files-collaborators-collaborator-reshare-information'
     },
     collaboratorShareType: {
       selector: '.files-collaborators-collaborator-share-type'
@@ -217,6 +248,10 @@ module.exports = {
     collaboratorExpirationInfo: {
       selector:
         '//p[contains(@class, "files-collaborators-collaborator-name") and text()="%s"]/../..//span[contains(@class, "files-collaborators-collaborator-expires")]',
+      locateStrategy: 'xpath'
+    },
+    expirationDatePickerTrigger: {
+      selector: '//button[contains(@class, "files-collaborators-expiration-button")]',
       locateStrategy: 'xpath'
     }
   }

@@ -5,6 +5,18 @@ const sharingHelper = require('../../helpers/sharingHelper')
 module.exports = {
   commands: {
     /**
+     * opens expiration date field on the webUI
+     * @return {*}
+     */
+    openExpirationDatePicker: function () {
+      this.useCss()
+        .waitForElementVisible(
+          '@expirationDateField',
+          this.api.globals.waitForNegativeConditionTimeout
+        )
+        .click('@expirationDateField')
+    },
+    /**
      * clicks the edit button of public link
      *
      * @param linkName Name of the public link
@@ -75,7 +87,7 @@ module.exports = {
      * @param value values for the different fields to be set
      * @returns {*|Promise<void>|exports}
      */
-    setPublicLinkForm: function (key, value) {
+    setPublicLinkForm: async function (key, value) {
       if (key === 'role') {
         return this.setPublicLinkRole(value)
       } else if (key === 'name') {
@@ -84,9 +96,11 @@ module.exports = {
         return this.setPublicLinkPassword(value)
       } else if (key === 'expireDate') {
         value = sharingHelper.calculateDate(value)
-        return this.api.page.FilesPageElement.sharingDialog()
-          .openExpirationDatePicker()
-          .setExpirationDate(value, 'link')
+        await this.openExpirationDatePicker()
+        return this.api.page.FilesPageElement.expirationDatePicker().setExpirationDate(
+          value,
+          'link'
+        )
       }
       return this
     },
@@ -358,9 +372,35 @@ module.exports = {
       return this.waitForElementVisible('@privateLinkURLCopyButton').click(
         '@privateLinkURLCopyButton'
       )
+    },
+    /**
+     * extracts set value in expiration date trigger button
+     * @return {Promise<*>}
+     */
+    getExpirationDate: async function () {
+      let expirationDate
+      await this.waitForElementVisible('@expirationDateFieldWrapper')
+      await this.getAttribute('@expirationDateFieldWrapper', 'value', (result) => {
+        const date = new Date(result.value)
+        const dateString =
+          date.getFullYear() +
+          '-' +
+          String(date.getMonth() + 1).padStart(2, '0') +
+          '-' +
+          String(date.getDate()).padStart(2, '0') +
+          ' 00:00:00'
+        expirationDate = dateString
+      })
+      return expirationDate
     }
   },
   elements: {
+    expirationDateFieldWrapper: {
+      selector: '#oc-files-file-link-expire-date'
+    },
+    expirationDateField: {
+      selector: '#files-links-expiration-btn'
+    },
     publicLinkContainer: {
       selector: '//*[@id="oc-files-file-link"]',
       locateStrategy: 'xpath'

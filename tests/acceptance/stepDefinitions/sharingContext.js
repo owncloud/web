@@ -225,16 +225,6 @@ Given(
   }
 )
 
-When(
-  'the user tries to edit the collaborator {string} of file/folder/resource {string} changing following',
-  async function (collaborator, resource, dataTable) {
-    const settings = dataTable.rowsHash()
-    const api = client.page.FilesPageElement
-    await api.filesList().openSharingDialog(resource)
-    return api.sharingDialog().changeCollaboratorSettings(collaborator, settings)
-  }
-)
-
 Then(
   'the user should see an error message on the collaborator share dialog saying {string}',
   async function (expectedMessage) {
@@ -273,12 +263,14 @@ const createPublicLink = function (sharer, data) {
  * @param {string} type user|group
  * @param {string} name
  * @param {string} role
+ * @param {string} resharedThrough
+ * @param {string} additionalInfo
  * @returns {Promise}
  */
 const assertCollaboratorslistContains = function (
   type,
   name,
-  { role = null, via = null, resharedThrough = null, additionalInfo = null }
+  { role = undefined, resharedThrough = undefined, additionalInfo = undefined }
 ) {
   if (type !== 'user' && type !== 'group' && type !== 'remote user') {
     throw new Error(`illegal type "${type}"`)
@@ -300,17 +292,14 @@ const assertCollaboratorslistContains = function (
         )
       }
 
-      if (role !== null) {
+      if (role) {
         assert.strictEqual(role, share.role)
       }
-      if (via !== null) {
-        assert.strictEqual('Via ' + via, share.viaLabel)
+      if (resharedThrough) {
+        assert.strictEqual(`Shared by ${resharedThrough}`, share.resharer)
       }
-      if (resharedThrough !== null) {
-        assert.strictEqual('Shared by ' + resharedThrough, share.resharer)
-      }
-      if (additionalInfo !== null) {
-        assert.strictEqual(additionalInfo, share.additionalInfo)
+      if (additionalInfo) {
+        assert.strictEqual(`${additionalInfo}`, share.additionalInfo)
       }
     })
 }
@@ -321,11 +310,21 @@ const assertCollaboratorslistContains = function (
  * @param {string} name
  * @returns {Promise}
  */
-const assertCollaboratorslistDoesNotContain = function (type, name) {
+const assertCollaboratorslistDoesNotContain = async function (type, name) {
   if (type !== 'user' && type !== 'group') {
     throw new Error('illegal type')
   }
   const collaboratorsDialog = client.page.FilesPageElement.SharingDialog.collaboratorsDialog()
+
+  // check if fileslist is not present because it's empty
+  try {
+    await client.waitForElementNotPresent({
+      selector: '#files-collaborators-list',
+      locateStrategy: 'css'
+    })
+    return
+  } catch (e) {}
+
   return collaboratorsDialog
     .getCollaboratorsList(
       {
@@ -594,14 +593,6 @@ Given(
   }
 )
 
-When('the user opens the share creation dialog on the webUI', function () {
-  return client.page.FilesPageElement.SharingDialog.collaboratorsDialog().clickCreateShare()
-})
-
-When('the user cancels the share creation dialog on the webUI', function () {
-  return client.page.FilesPageElement.sharingDialog().clickCancel()
-})
-
 When('the user types {string} in the share-with-field', async function (input) {
   return await client.page.FilesPageElement.sharingDialog().enterAutoComplete(input)
 })
@@ -620,7 +611,7 @@ When(
   async function (collaborator, resource) {
     const api = client.page.FilesPageElement
     await api.filesList().openSharingDialog(resource)
-    return api.sharingDialog().disableAllCustomPermissions(collaborator)
+    return api.sharingDialog().changeCustomPermissionsTo(collaborator)
   }
 )
 
@@ -717,13 +708,7 @@ When(
   async function (role, permissions, usersTable) {
     const users = usersTable.hashes()
     const dialog = client.page.FilesPageElement.sharingDialog()
-
-    for (const { collaborator, type } of users) {
-      await dialog.selectCollaboratorForShare(collaborator, type === 'group')
-    }
-
-    await dialog.selectRoleForNewCollaborator(role)
-    await dialog.selectPermissionsOnPendingShare(permissions)
+    await dialog.shareWithUsersOrGroups(users, role, permissions, false)
   }
 )
 
@@ -845,14 +830,6 @@ Then(
       })
   }
 )
-
-When('the user selects role {string}', function (role) {
-  return client.page.FilesPageElement.sharingDialog().selectRoleForNewCollaborator(role)
-})
-
-When('the user confirms the share', function () {
-  return client.page.FilesPageElement.sharingDialog().confirmShare()
-})
 
 Then('the users own name should not be listed in the autocomplete list on the webUI', function () {
   const currentUserDisplayName = userSettings.getDisplayNameForUser(client.globals.currentUser)
@@ -1000,31 +977,9 @@ Then(
 )
 
 Then(
-  'remote user {string} should be listed as {string} via {string} in the collaborators list on the webUI',
-  function (user, role, via) {
-    user = util.format('%s@%s', user, client.globals.remote_backend_url)
-    return assertCollaboratorslistContains('remote user', user, { role, via })
-  }
-)
-
-Then(
-  'user {string} should be listed as {string} via {string} in the collaborators list on the webUI',
-  function (user, role, via) {
-    return assertCollaboratorslistContains('user', user, { role, via })
-  }
-)
-
-Then(
   'user {string} should be listed as {string} reshared through {string} in the collaborators list on the webUI',
   function (user, role, resharedThrough) {
     return assertCollaboratorslistContains('user', user, { role, resharedThrough })
-  }
-)
-
-Then(
-  'user {string} should be listed as {string} reshared through {string} via {string} in the collaborators list on the webUI',
-  function (user, role, resharedThrough, via) {
-    return assertCollaboratorslistContains('user', user, { role, resharedThrough, via })
   }
 )
 
@@ -1054,13 +1009,6 @@ Then(
   'group {string} should be listed as {string} in the collaborators list on the webUI',
   function (group, role) {
     return assertCollaboratorslistContains('group', group, { role })
-  }
-)
-
-Then(
-  'group {string} should be listed as {string} via {string} in the collaborators list on the webUI',
-  function (group, role, via) {
-    return assertCollaboratorslistContains('group', group, { role, via })
   }
 )
 
@@ -1144,12 +1092,8 @@ Then(
     const api = client.page.FilesPageElement
     await api.filesList().openSharingDialog(resource)
 
-    const count = (await api.SharingDialog.collaboratorsDialog().getCollaboratorsList({})).length
-    assert.strictEqual(
-      count,
-      0,
-      `Expected to have no collaborators for '${resource}', Found: ${count}`
-    )
+    const visible = await api.SharingDialog.collaboratorsDialog().hasCollaboratorsList()
+    assert.strictEqual(visible, false, 'Expected collaborators list to not exist, but it did')
   }
 )
 
@@ -1349,7 +1293,7 @@ Then(
 )
 
 Then(
-  'the expiration date shown on the webUI should be {string} days',
+  'the share expiration date shown on the webUI should be {string} days',
   async function (expectedDays) {
     const expectedDate = sharingHelper.calculateDate(expectedDays)
     const expectedDateString = expectedDate.toString()

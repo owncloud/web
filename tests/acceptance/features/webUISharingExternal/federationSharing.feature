@@ -398,7 +398,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
       | simple-folder |
 
   @issue-2897
-  Scenario: sharing details inside folder shared using federated sharing
+  Scenario: sharing details inside folder shared using federated sharing ("via" info)
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has created folder "/simple-folder/sub-folder"
     And user "Alice" has uploaded file with content "test" to "/simple-folder/textfile.txt"
@@ -406,25 +406,25 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And user "Alice" from server "REMOTE" has accepted the last pending share
     And the user has reloaded the current page of the webUI
     When the user opens folder "simple-folder" using the webUI
-    And the user opens the share dialog for folder "sub-folder" using the webUI
-    Then remote user "Alice" should be listed as "Editor" via "simple-folder" in the collaborators list on the webUI
-    When the user opens the share dialog for file "textfile.txt" using the webUI
-    Then remote user "Alice" should be listed as "Editor" via "simple-folder" in the collaborators list on the webUI
+    And the user opens the details dialog for folder "sub-folder" using the webUI
+    Then the shared-via path in the details dialog should be "/simple-folder"
+    When the user opens the details dialog for file "textfile.txt" using the webUI
+    Then the shared-via path in the details dialog should be "/simple-folder"
 
-  @issue-2897
-  Scenario: sharing details of items inside a shared folder shared with local user and federated user
-    Given user "Brian" has been created with default attributes and without skeleton files
-    And user "Alice" has created folder "simple-folder"
-    And user "Alice" has created folder "/simple-folder/sub-folder"
-    And user "Alice" has uploaded file with content "test" to "/simple-folder/sub-folder/textfile.txt"
-    And user "Alice" has shared folder "simple-folder" with user "Alice@%remote_backend_url%" with "all" permissions
-    And user "Alice" from server "REMOTE" has accepted the last pending share
-    And user "Alice" has shared folder "simple-folder/sub-folder" with user "Brian"
-    And the user has reloaded the current page of the webUI
-    When the user opens folder "simple-folder/sub-folder" directly on the webUI
-    And the user opens the share dialog for file "textfile.txt" using the webUI
-    Then remote user "Alice" should be listed as "Editor" via "simple-folder" in the collaborators list on the webUI
-    And user "Brian Murphy" should be listed as "Editor" via "sub-folder" in the collaborators list on the webUI
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   @issue-4246
   Scenario: accepting folder shared by remote user is listed in shared-with-me page

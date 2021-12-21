@@ -39,15 +39,15 @@ Feature: Sharing files and folders with internal users
       | entry_name    |
       | simple-folder |
       | testimage.jpg |
-    When the user opens the share dialog for file "simple-folder" using the webUI
-    Then user "Brian Murphy" should be listed as "Owner" in the collaborators list on the webUI
-    When the user opens the share dialog for file "testimage.jpg" using the webUI
-    Then user "Brian Murphy" should be listed as "Owner" in the collaborators list on the webUI
+    # When the user opens the share dialog for file "simple-folder" using the webUI
+    # Then user "Brian Murphy" should be listed as "Owner" in the collaborators list on the webUI
+    # When the user opens the share dialog for file "testimage.jpg" using the webUI
+    # Then user "Brian Murphy" should be listed as "Owner" in the collaborators list on the webUI
     Examples:
       | set-role             | expected-role        | permissions-folder              | permissions-file  |
       | Viewer               | Viewer               | read,share                      | read,share        |
       | Editor               | Editor               | read,update,create,delete,share | read,update,share |
-      | Custom permissions | Custom permissions | read                            | read              |
+      | Custom permissions   | Custom permissions   | read                            | read              |
 
   @disablePreviews
   Scenario: share a file with another internal user who overwrites and unshares the file
@@ -176,7 +176,7 @@ Feature: Sharing files and folders with internal users
     And as "Alice" folder "simple-folder" should not exist
 
   @issue-2897 @disablePreviews
-  Scenario: sharing details of items inside a shared folder
+  Scenario: sharing details of items inside a shared folder ("via" info)
     Given user "Carol" has been created with default attributes and without skeleton files
     And user "Alice" has created folder "simple-folder"
     And user "Alice" has created folder "simple-folder/simple-empty-folder"
@@ -184,13 +184,13 @@ Feature: Sharing files and folders with internal users
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Alice" has logged in using the webUI
     And the user opens folder "simple-folder" using the webUI
-    When the user opens the share dialog for folder "simple-empty-folder" using the webUI
-    Then user "Brian Murphy" should be listed as "Editor" via "simple-folder" in the collaborators list on the webUI
-    When the user opens the share dialog for file "lorem.txt" using the webUI
-    Then user "Brian Murphy" should be listed as "Editor" via "simple-folder" in the collaborators list on the webUI
+    When the user opens the details dialog for folder "simple-empty-folder" using the webUI
+    Then the shared-via path in the details dialog should be "/simple-folder"
+    When the user opens the details dialog for file "lorem.txt" using the webUI
+    Then the shared-via path in the details dialog should be "/simple-folder"
 
   @issue-2897 @disablePreviews
-  Scenario: sharing details of items inside a re-shared folder
+  Scenario: sharing details of items inside a re-shared folder ("via" info)
     Given user "Carol" has been created with default attributes and without skeleton files
     And user "Alice" has created folder "simple-folder"
     And user "Alice" has created folder "simple-folder/simple-empty-folder"
@@ -199,24 +199,25 @@ Feature: Sharing files and folders with internal users
     And user "Brian" has shared folder "simple-folder" with user "Carol"
     And user "Brian" has logged in using the webUI
     And the user opens folder "simple-folder" using the webUI
-    When the user opens the share dialog for folder "simple-empty-folder" using the webUI
-    Then user "Carol King" should be listed as "Editor" via "simple-folder" in the collaborators list on the webUI
-    When the user opens the share dialog for file "lorem.txt" using the webUI
-    Then user "Carol King" should be listed as "Editor" via "simple-folder" in the collaborators list on the webUI
+    When the user opens the details dialog for folder "simple-empty-folder" using the webUI
+    Then the shared-via path in the details dialog should be "/simple-folder"
+    When the user opens the details dialog for file "lorem.txt" using the webUI
+    Then the shared-via path in the details dialog should be "/simple-folder"
 
-  @issue-2897 @disablePreviews
-  Scenario: sharing details of items inside a shared folder shared with multiple users
-    Given user "Carol" has been created with default attributes and without skeleton files
-    And user "Alice" has created folder "simple-folder"
-    And user "Alice" has created folder "/simple-folder/sub-folder"
-    And user "Alice" has uploaded file with content "test" to "/simple-folder/sub-folder/lorem.txt"
-    And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Alice" has shared folder "simple-folder/sub-folder" with user "Carol"
-    And user "Alice" has logged in using the webUI
-    And the user opens folder "simple-folder/sub-folder" directly on the webUI
-    When the user opens the share dialog for file "lorem.txt" using the webUI
-    Then user "Brian Murphy" should be listed as "Editor" via "simple-folder" in the collaborators list on the webUI
-    And user "Carol King" should be listed as "Editor" via "sub-folder" in the collaborators list on the webUI
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   @disablePreviews
   Scenario Outline: Share files/folders with special characters in their name

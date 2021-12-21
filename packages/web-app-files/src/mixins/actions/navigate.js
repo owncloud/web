@@ -1,7 +1,7 @@
 import { isPublicFilesRoute, isSharedWithMeRoute, isTrashbinRoute } from '../../helpers/route'
 import { mapState } from 'vuex'
 import { isSameResource } from '../../helpers/resource'
-import { shareStatus } from '../../helpers/shareStatus'
+import { ShareStatus } from '../../helpers/share'
 
 export default {
   computed: {
@@ -29,7 +29,7 @@ export default {
               return false
             }
 
-            if (isSharedWithMeRoute(this.$route) && resources[0].status !== shareStatus.accepted) {
+            if (isSharedWithMeRoute(this.$route) && resources[0].status !== ShareStatus.accepted) {
               return false
             }
 

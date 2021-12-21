@@ -1100,7 +1100,7 @@ def smokeTests(ctx):
             "OCIS": "true",
         },
         "commands": [
-            "sleep 10 && yarn test:smoke:experimental tests/smoke/features/",
+            "sleep 10 && yarn test:smoke tests/smoke/features/",
         ],
     }]
 
@@ -1112,7 +1112,7 @@ def smokeTests(ctx):
             "HEADLESS": "true",
         },
         "commands": [
-            "sleep 10 && yarn test:smoke:experimental tests/smoke/features/",
+            "sleep 10 && yarn test:smoke tests/smoke/features/",
         ],
     }]
 

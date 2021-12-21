@@ -10,16 +10,20 @@ const fileActionsMenu = client.page.FilesPageElement.fileActionsMenu()
 module.exports = {
   commands: {
     /**
+     * @param resource
+     * @returns {Promise<void>}
+     */
+    openDetailsDialog: async function (resource) {
+      await this.openSideBar(resource)
+      await appSideBar.activatePanel('details')
+    },
+    /**
      * @param {string} resource
      * @return {Promise<*>}
      */
     openSharingDialog: async function (resource) {
       await this.openSideBar(resource)
       await appSideBar.activatePanel('people')
-      return await this.click({
-        selector: '@sharedWithToggleButton',
-        timeout: 200
-      })
     },
     /**
      * @param {string} resource
@@ -84,6 +88,16 @@ module.exports = {
       await this.openFileActionsMenu(fromName, elementType)
       await fileActionsMenu.rename(toName, expectToSucceed)
       return this
+    },
+    renameFileFromContextMenu: async function (
+      fromName,
+      toName,
+      expectToSucceed = true,
+      elementType = 'any'
+    ) {
+      await this.openContextMenu(fromName, elementType)
+      await contextMenu.selectRenameFile()
+      return await fileActionsMenu.rename(toName, expectToSucceed)
     },
     /**
      * @param {string} resource
@@ -341,9 +355,10 @@ module.exports = {
      * @param {string} elementType (file|folder)
      */
     waitForFileVisible: async function (fileName, elementType = 'any') {
+      await this.checkFileName(fileName, elementType)
       const rowSelector = this.getFileRowSelectorByFileName(fileName, elementType)
-
       await appSideBar.closeSidebarIfOpen()
+
       let rowElementId = null
       await this.waitForElementPresent(
         { selector: rowSelector, locateStrategy: 'xpath' },
@@ -362,9 +377,32 @@ module.exports = {
       await this.api.elementIdLocation(firstRowElementId, (result) => {
         offset -= result.value.y
       })
-
       this.api.execute('scrollTo(0,' + offset + ')')
-      return this
+    },
+    checkFileName: async function (fileName, elementType = 'any') {
+      const fileSelector = this.getFileSelectorByFileName(fileName, elementType)
+      // res.value return file/folder name and file extension in different row
+      // res.status return -1 if res return error otherwise return
+      let resourceName = null
+      let status = null
+      let error = null
+      await this.getText('xpath', fileSelector, (res) => {
+        status = res.status
+        const result = res.value
+        if (status === 0) {
+          resourceName = result.split('\n').join('')
+        } else if (status === -1) {
+          error = res.value.error
+        }
+      })
+      if (error !== null) {
+        assert.fail(error)
+      }
+      assert.strictEqual(
+        fileName,
+        resourceName,
+        `Expected file name to be "${fileName}" but found "${resourceName}"`
+      )
     },
     /**
      *
@@ -396,6 +434,21 @@ module.exports = {
       }
       const type = xpathHelper.buildXpathLiteral(elementType)
       return util.format(this.elements.fileLinkInFileRow.selector, name, path, type)
+    },
+    /**
+     *
+     * @param {string} Name of the file/folder/resource
+     * @param {string} elementType
+     * @returns {string}
+     */
+    getFileSelectorByFileName: function (fileName, elementType = 'any') {
+      const name = xpathHelper.buildXpathLiteral(fileName)
+      const path = xpathHelper.buildXpathLiteral('/' + fileName)
+      if (elementType === 'any') {
+        return util.format(this.elements.fileNameResourcePathAnyType.selector, name, path)
+      }
+      const type = xpathHelper.buildXpathLiteral(elementType)
+      return util.format(this.elements.fileNameResourcePath.selector, name, path, type)
     },
     /**
      * checks whether the element is listed or not on the filesList
@@ -637,6 +690,15 @@ module.exports = {
     },
     fileRow: {
       selector: '.files-table .oc-tbody-tr'
+    },
+    fileNameResourcePathAnyType: {
+      selector: `//span[contains(@class, "oc-resource-name") and (@data-test-resource-name=%s or @data-test-resource-path=%s)]`,
+      locateStrategy: 'xpath'
+    },
+    fileNameResourcePath: {
+      selector:
+        '//span[contains(@class, "oc-resource-name") and (@data-test-resource-name=%s or @data-test-resource-path=%s) and @data-test-resource-type=%s]',
+      locateStrategy: 'xpath'
     },
     fileRowByResourcePathAnyType: {
       selector: `//span[contains(@class, "oc-resource-name") and (@data-test-resource-name=%s or @data-test-resource-path=%s)]/ancestor::tr[contains(@class, "oc-tbody-tr")]`,

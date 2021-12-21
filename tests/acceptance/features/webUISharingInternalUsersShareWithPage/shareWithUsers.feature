@@ -116,32 +116,32 @@ Feature: Shares in share-with pages
     And the user browses to the shared-with-me page in declined shares view
     Then the unshared elements should be in declined state on the webUI
 
-  @issue-3040 @issue-4113 @ocis-reva-issue-39
-  Scenario: see resource owner of parent shares in "shared with others" and "favorites" list
-    Given user "Alice" has created folder "simple-folder"
-    And user "Alice" has created folder "simple-folder/simple-empty-folder"
-    And user "Carol" has been created with default attributes and without skeleton files
-    And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
-    And user "Brian" has shared folder "Shares/simple-folder/simple-empty-folder" with user "Carol"
-    And user "Brian" has favorited element "Shares/simple-folder/simple-empty-folder"
-    And user "Brian" has logged in using the webUI
-    When the user browses to the shared-with-others page
-    And the user opens the share dialog for folder "simple-empty-folder" using the webUI
-    Then user "Alice Hansen" should be listed as "Owner" via "simple-folder" in the collaborators list on the webUI
-    When the user browses to the favorites page using the webUI
-    And the user opens the share dialog for folder "…/simple-folder/simple-empty-folder" using the webUI
-    Then user "Alice Hansen" should be listed as "Owner" via "simple-folder" in the collaborators list on the webUI
 
-  @issue-2898 @ocis-issue-891
-  Scenario: see resource owner for direct shares in "shared with me"
-    Given user "Alice" has created folder "simple-folder"
-    And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
-    And user "Brian" has logged in using the webUI
-    When the user browses to the shared-with-me page
-    And the user opens the share dialog for folder "simple-folder" using the webUI
-    Then user "Alice Hansen" should be listed as "Owner" in the collaborators list on the webUI
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   @issue-ocis-1328
   Scenario Outline: collaborators list contains additional info when enabled
@@ -153,8 +153,8 @@ Feature: Shares in share-with pages
     Then user "Brian Murphy" should be listed with additional info "<additional-info-result>" in the collaborators list on the webUI
     Examples:
       | additional-info-field | additional-info-result |
-      | id                    | Brian                  |
-      | email                 | brian@example.org      |
+      | id                    | (Brian)                  |
+      | email                 | (brian@example.org)    |
 
   @issue-ocis-1328
   Scenario: collaborators list does not contain additional info when disabled
@@ -166,35 +166,35 @@ Feature: Shares in share-with pages
     Then user "Brian Murphy" should be listed without additional info in the collaborators list on the webUI
 
 
-  Scenario: collaborators list contains the current user when they are an owner
-    Given user "Alice" has created folder "simple-folder"
-    And user "Alice" has shared folder "simple-folder" with user "Brian"
-    When user "Alice" has logged in using the webUI
-    And the user opens the share dialog for folder "simple-folder" using the webUI
-    Then user "Alice Hansen" should be listed with additional info "(me)" in the collaborators list on the webUI
 
 
-  Scenario: collaborators list contains the current user when they are a receiver of the resource
-    Given user "Alice" has created folder "simple-folder"
-    And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
-    And user "Brian" has logged in using the webUI
-    When the user opens folder "Shares" using the webUI
-    And the user opens the share dialog for folder "simple-folder" using the webUI
-    Then user "Brian Murphy" should be listed with additional info "(me)" in the collaborators list on the webUI
 
-  @issue-ocis-1289
-  Scenario: current user should see the highest role in their entry in collaborators list
-    Given group "grp1" has been created
-    And user "Brian" has been added to group "grp1"
-    And user "Alice" has created folder "simple-folder"
-    And user "Alice" has shared folder "simple-folder" with user "Brian" with "read" permission
-    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
-    And user "Alice" has shared folder "simple-folder" with group "grp1" with "read,update,create,delete" permissions
-    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
-    When user "Brian" logs in using the webUI
-    And the user opens folder "Shares" using the webUI
-    Then user "Brian Murphy" should be listed as "Custom permissions" in the collaborators list for folder "simple-folder (2)" on the webUI
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   Scenario: share a file with another internal user via collaborators quick action
     Given user "Alice" has created folder "simple-folder"

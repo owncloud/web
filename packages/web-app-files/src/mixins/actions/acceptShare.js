@@ -1,9 +1,9 @@
 import { triggerShareAction } from '../../helpers/share/triggerShareAction'
 
 import { isSharedWithMeRoute } from '../../helpers/route'
-import { shareStatus } from '../../helpers/shareStatus'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import PQueue from 'p-queue'
+import { ShareStatus } from '../../helpers/share'
 
 export default {
   computed: {
@@ -25,7 +25,7 @@ export default {
             }
 
             const acceptDisabled = resources.some((resource) => {
-              return resource.status === shareStatus.accepted
+              return resource.status === ShareStatus.accepted
             })
             return !acceptDisabled
           },
@@ -49,7 +49,7 @@ export default {
             try {
               const share = await triggerShareAction(
                 resource,
-                shareStatus.accepted,
+                ShareStatus.accepted,
                 !this.isOcis,
                 this.$client
               )

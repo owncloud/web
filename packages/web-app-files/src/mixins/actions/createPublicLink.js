@@ -1,6 +1,6 @@
 import quickActions, { canShare, createPublicLink } from '../../quickActions'
 import { isSharedWithMeRoute } from '../../helpers/route'
-import { shareStatus } from '../../helpers/shareStatus'
+import { ShareStatus } from '../../helpers/share'
 
 export default {
   computed: {
@@ -16,7 +16,7 @@ export default {
               return false
             }
             if (isSharedWithMeRoute(this.$route)) {
-              if (resources[0].status !== shareStatus.accepted) {
+              if (resources[0].status !== ShareStatus.accepted) {
                 return false
               }
               // FIXME: also check via capabilities if resharing is enabled + resharing is allowed on the share

@@ -48,7 +48,7 @@ export default {
     shareFileWithUser: (path, id, params) =>
       Promise.resolve({
         shareInfo: {
-          id: 1,
+          id: '1',
           share_type: 0,
           uid_owner: 'alice', // TODO: get user dynamically
           displayname_owner: 'alice', // TODO: get user dynamically
@@ -126,7 +126,7 @@ export default {
     shareFileWithLink: (path, params) => {
       const share = {
         shareInfo: {
-          id: 1,
+          id: '1',
           share_type: 3,
           permissions: params.permissions,
           stime: new Date().getTime(),

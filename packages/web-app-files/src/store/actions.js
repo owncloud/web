@@ -2,12 +2,12 @@ import PQueue from 'p-queue'
 
 import { getParentPaths } from '../helpers/path'
 import { dirname } from 'path'
-import { shareTypes } from '../helpers/shareTypes'
 import { buildResource, buildShare, buildCollaboratorShare } from '../helpers/resources'
 import { $gettext, $gettextInterpolate } from '../gettext'
 import { loadPreview } from '../helpers/resource'
 import { avatarUrl } from '../helpers/user'
 import { has } from 'lodash-es'
+import { ShareTypes } from '../helpers/share'
 
 export default {
   updateFileProgress({ commit }, progress) {
@@ -207,18 +207,7 @@ export default {
         context.commit('INCOMING_SHARES_LOADING', false)
       })
   },
-  sharesClearState(context, payload) {
-    context.commit('CURRENT_FILE_OUTGOING_SHARES_SET', [])
-    context.commit('CURRENT_FILE_OUTGOING_SHARES_ERROR', null)
-  },
-  incomingSharesClearState(context, payload) {
-    context.commit('INCOMING_SHARES_LOAD', [])
-    context.commit('INCOMING_SHARES_ERROR', null)
-  },
-  changeShare(
-    { commit, getters, rootGetters },
-    { client, share, role, permissions, expirationDate }
-  ) {
+  changeShare({ commit, getters, rootGetters }, { client, share, permissions, expirationDate }) {
     const params = {
       permissions: permissions,
       expireDate: expirationDate
@@ -248,7 +237,7 @@ export default {
     })
   },
   addShare(context, { client, path, shareWith, shareType, permissions, expirationDate }) {
-    if (shareType === shareTypes.group) {
+    if (shareType === ShareTypes.group.value) {
       client.shares
         .shareFileWithGroup(path, shareWith, {
           permissions: permissions,
@@ -283,7 +272,7 @@ export default {
       return
     }
 
-    const remoteShare = shareType === shareTypes.remote
+    const remoteShare = shareType === ShareTypes.remote.value
     client.shares
       .shareFileWithUser(path, shareWith, {
         permissions: permissions,

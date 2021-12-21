@@ -1,4 +1,4 @@
-# WEB-Smoke-Tests (EXPERIMENTAL POC)
+# WEB-Smoke-Tests
 
 Use with care, the smoke-test package introduces many new concepts and is still under heavy development.
 
@@ -37,7 +37,7 @@ Please make sure to point http://host.docker.internal/ to 127.0.0.1 by adding it
 ```shell
 $ yarn && yarn build:w
 $ docker-compose up oc10 ocis
-$ yarn test:smoke:experimental tests/smoke/features/kindergarten.feature
+$ yarn test:smoke tests/smoke/features/kindergarten.feature
 ```
 
 ## Available options
@@ -45,7 +45,7 @@ $ yarn test:smoke:experimental tests/smoke/features/kindergarten.feature
 To run the tests with below options, you have to set them as environment variable in you shell.
 
 ```shell
-$ OPTION_1=foo OPTION_2=bar yarn test:smoke:experimental ...
+$ OPTION_1=foo OPTION_2=bar yarn test:smoke ...
 ```
 
 * **OCIS=boolean**

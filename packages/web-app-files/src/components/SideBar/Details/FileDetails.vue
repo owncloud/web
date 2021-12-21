@@ -55,12 +55,6 @@
             <span v-else v-text="capitalizedTimestamp" />
           </td>
         </tr>
-        <tr v-if="showShareDate" data-testid="shared-date">
-          <th scope="col" class="oc-pr-s" v-text="shareDateLabel" />
-          <td>
-            <span v-text="displayShareDate" />
-          </td>
-        </tr>
         <tr v-if="showSharedVia" data-testid="shared-via">
           <th scope="col" class="oc-pr-s" v-text="sharedViaLabel" />
           <td>
@@ -112,13 +106,12 @@
 import Mixins from '../../../mixins'
 import MixinResources from '../../../mixins/resources'
 import MixinRoutes from '../../../mixins/routes'
-import { shareTypes, userShareTypes } from '../../../helpers/shareTypes'
 import { mapActions, mapGetters } from 'vuex'
 import { ImageDimension } from '../../../constants'
 import { loadPreview } from '../../../helpers/resource'
-import intersection from 'lodash-es/intersection'
 import upperFirst from 'lodash-es/upperFirst'
 import path from 'path'
+import { ShareTypes } from '../../../helpers/share'
 
 export default {
   name: 'FileDetails',
@@ -198,15 +191,8 @@ export default {
         this.sharedParentDir !== null
       )
     },
-    showShareDate() {
-      return this.showShares && !this.sharesTreeLoading
-    },
     showShares() {
       return this.hasAnyShares && !this.isPublicPage
-    },
-    displayShareDate() {
-      const date = this.formDateFromJSDate(new Date(this.sharedTime * 1000))
-      return upperFirst(date)
     },
     detailSharingInformation() {
       const isFolder = this.file.type === 'folder'
@@ -274,14 +260,14 @@ export default {
     },
     hasPeopleShares() {
       return (
-        intersection(this.file.shareTypes, userShareTypes).length > 0 ||
+        ShareTypes.containsAnyValue(ShareTypes.authenticated, this.file.shareTypes) ||
         this.file.indicators?.filter((e) => e.icon === 'group').length > 0 ||
         this.sharedItem !== null
       )
     },
     hasLinkShares() {
       return (
-        this.file.shareTypes.includes(shareTypes.link) ||
+        ShareTypes.containsAnyValue(ShareTypes.unauthenticated, this.file.shareTypes) ||
         this.file.indicators?.filter((e) => e.icon === 'link').length > 0
       )
     },
@@ -307,7 +293,7 @@ export default {
         return
       }
       const userShares = this.sharesTree[sharePathParentOrCurrent]?.filter((s) =>
-        userShareTypes.includes(s.shareType)
+        ShareTypes.containsAnyValue(ShareTypes.individuals, [s.shareType])
       )
       if (userShares.length === 0) {
         return

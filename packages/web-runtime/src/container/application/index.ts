@@ -39,7 +39,8 @@ export const buildApplication = async ({
       (app) => resolve(app),
       (err) => reject(err)
     )
-  ).catch(() => {
+  ).catch((e) => {
+    console.error(e)
     throw new RuntimeError('cannot load application', applicationPath)
   })
 

@@ -6,7 +6,8 @@ module.exports = {
      */
     ContextMenuItem: Object.freeze({
       showDetails: 'detailsButton',
-      showActions: 'actionsButton'
+      showActions: 'actionsButton',
+      selectRenameFile: 'renameButton'
     }),
 
     /**
@@ -38,6 +39,9 @@ module.exports = {
       await this.clickMenuItem(this.ContextMenuItem.showActions)
       await this.waitForAnimationToFinish() // wait for sidebar animation to finish
       return this
+    },
+    selectRenameFile: function () {
+      return this.clickMenuItem(this.ContextMenuItem.selectRenameFile)
     }
   },
   elements: {
@@ -47,6 +51,10 @@ module.exports = {
     },
     actionsButton: {
       selector: '//button[contains(@class, "oc-files-actions-show-actions-trigger")]',
+      locateStrategy: 'xpath'
+    },
+    renameButton: {
+      selector: '//button[contains(@class, "oc-files-actions-rename-trigger")]',
       locateStrategy: 'xpath'
     }
   }

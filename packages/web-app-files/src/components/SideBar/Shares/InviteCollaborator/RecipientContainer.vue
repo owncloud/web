@@ -19,9 +19,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
-
-import { shareTypes } from '../../../../helpers/shareTypes'
-import { avatarUrl } from '../../../../helpers/user/avatarUrl'
+import { avatarUrl } from '../../../../helpers/user'
+import { ShareTypes } from '../../../../helpers/share'
 
 export default {
   props: {
@@ -41,7 +40,7 @@ export default {
       formattedRecipient: {
         name: this.recipient.label,
         icon: this.getRecipientIcon(),
-        hasAvatar: this.recipient.value.shareType === shareTypes.user,
+        hasAvatar: this.recipient.value.shareType === ShareTypes.user.value,
         isLoadingAvatar: true
       }
     }
@@ -60,16 +59,14 @@ export default {
   async created() {
     if (
       this.capabilities.files_sharing.user.profile_picture &&
-      this.recipient.value.shareType === shareTypes.user
+      this.recipient.value.shareType === ShareTypes.user.value
     ) {
       try {
-        const avatar = await avatarUrl({
+        this.formattedRecipient.avatar = await avatarUrl({
           server: this.configuration.server,
           username: this.recipient.value.shareWith,
           token: this.getToken
         })
-
-        this.formattedRecipient.avatar = avatar
       } catch (error) {
         console.error(error)
       }
@@ -81,19 +78,19 @@ export default {
   methods: {
     getRecipientIcon() {
       switch (this.recipient.value.shareType) {
-        case shareTypes.group:
+        case ShareTypes.group.value:
           return {
             name: 'group',
             label: this.$gettext('Group')
           }
 
-        case shareTypes.guest:
+        case ShareTypes.guest.value:
           return {
             name: 'user_remote',
             label: this.$gettext('Guest user')
           }
 
-        case shareTypes.remote:
+        case ShareTypes.remote.value:
           return {
             name: 'user_remote',
             label: this.$gettext('Remote user')
@@ -109,3 +106,10 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.files-share-invite-recipient {
+  margin: 4px 2px 0;
+  padding: 0 0.25em;
+}
+</style>

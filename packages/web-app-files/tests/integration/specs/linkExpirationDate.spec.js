@@ -156,6 +156,7 @@ describe('Users can set expiration date when sharing via public link', () => {
 
 const getTestFolder = () => ({
   type: 'folder',
+  isFolder: true,
   ownerId: 'alice',
   ownerDisplayName: 'alice',
   mdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
