@@ -331,7 +331,8 @@ export default {
      */
     sortBy: {
       type: String,
-      required: false
+      required: false,
+      default: undefined
     },
     /**
      * Show that the table is sorted ascendingly/descendingly (no actual sorting takes place)
