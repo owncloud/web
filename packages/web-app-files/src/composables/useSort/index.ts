@@ -40,7 +40,7 @@ export function useSort<T>(options: SortOptions<T>): SortResult<T> {
 
   const items = computed<Array<T>>(() => {
     if (!unref(sortBy)) {
-      return options.items
+      return unref(options.items)
     }
     return sortHelper(unref(options.items), unref(fields), unref(sortBy), unref(sortDir))
   })
