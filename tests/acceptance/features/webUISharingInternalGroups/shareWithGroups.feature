@@ -4,7 +4,7 @@ Feature: Sharing files and folders with internal groups
   So that those groups can access the files and folders
 
   Background:
-    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
+    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no" in the server
     And the administrator has set the default folder for received shares to "Shares" in the server
     And these users have been created with default attributes and without skeleton files in the server:
       | username |
@@ -275,8 +275,8 @@ Feature: Sharing files and folders with internal groups
 
   @issue-ocis-1317 @issue-ocis-1250
   Scenario: share a resource with another internal group with default expiration date
-    Given the setting "shareapi_default_expire_date_group_share" of app "core" has been set to "yes"
-    And the setting "shareapi_expire_after_n_days_group_share" of app "core" has been set to "42"
+    Given the setting "shareapi_default_expire_date_group_share" of app "core" has been set to "yes" in the server
+    And the setting "shareapi_expire_after_n_days_group_share" of app "core" has been set to "42" in the server
     And user "Carol" has created file "lorem.txt" in the server
     And user "Carol" has logged in using the webUI
     When the user shares folder "lorem.txt" with group "grp1" as "Viewer" using the webUI
@@ -294,9 +294,9 @@ Feature: Sharing files and folders with internal groups
 
   @issue-ocis-1250
   Scenario Outline: share a resource with another internal group with expiration date beyond maximum enforced expiration date
-    Given the setting "shareapi_default_expire_date_group_share" of app "core" has been set to "yes"
-    And the setting "shareapi_enforce_expire_date_group_share" of app "core" has been set to "yes"
-    And the setting "shareapi_expire_after_n_days_group_share" of app "core" has been set to "5"
+    Given the setting "shareapi_default_expire_date_group_share" of app "core" has been set to "yes" in the server
+    And the setting "shareapi_enforce_expire_date_group_share" of app "core" has been set to "yes" in the server
+    And the setting "shareapi_expire_after_n_days_group_share" of app "core" has been set to "5" in the server
     And user "Carol" has created file "lorem.txt" in the server
     And user "Carol" has created folder "simple-folder" in the server
     And user "Carol" has logged in using the webUI

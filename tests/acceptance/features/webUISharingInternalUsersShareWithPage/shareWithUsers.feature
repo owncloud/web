@@ -4,7 +4,7 @@ Feature: Shares in share-with pages
   So that I can know what is shared with me and by me
 
   Background:
-    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
+    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no" in the server
     And the administrator has set the default folder for received shares to "Shares" in the server
     And these users have been created with default attributes and without skeleton files in the server:
       | username |
@@ -145,7 +145,7 @@ Feature: Shares in share-with pages
 
   @issue-ocis-1328
   Scenario Outline: collaborators list contains additional info when enabled
-    Given the setting "user_additional_info_field" of app "core" has been set to "<additional-info-field>"
+    Given the setting "user_additional_info_field" of app "core" has been set to "<additional-info-field>" in the server
     And user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
     When user "Alice" has logged in using the webUI
@@ -158,7 +158,7 @@ Feature: Shares in share-with pages
 
   @issue-ocis-1328
   Scenario: collaborators list does not contain additional info when disabled
-    Given the setting "user_additional_info_field" of app "core" has been set to ""
+    Given the setting "user_additional_info_field" of app "core" has been set to "" in the server
     And user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
     When user "Alice" has logged in using the webUI

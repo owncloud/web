@@ -34,7 +34,7 @@ Feature: Share by public link
 
   @issue-ocis-1328
   Scenario Outline: auto set expiration date on public link (with default amount of expiry days)
-    Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes"
+    Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes" in the server
     And user "Alice" has created <element> "<shared-resource>" in the server
     And user "Alice" has logged in using the webUI
     When the user creates a new public link for resource "<shared-resource>" using the webUI
@@ -53,8 +53,8 @@ Feature: Share by public link
 
   @issue-ocis-1328
   Scenario Outline: auto set expiration date on public link (with set amount expiry days)
-    Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes"
-    And the setting "shareapi_expire_after_n_days" of app "core" has been set to "42"
+    Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes" in the server
+    And the setting "shareapi_expire_after_n_days" of app "core" has been set to "42" in the server
     And user "Alice" has created <element> "<shared-resource>" in the server
     And user "Alice" has logged in using the webUI
     When the user creates a new public link for resource "<shared-resource>" using the webUI
@@ -73,9 +73,9 @@ Feature: Share by public link
 
   @issue-ocis-1328
   Scenario: expiry date is set to enforced max expiry date when creating a public link to a date that is past the enforced max expiry date
-    Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes"
-    And the setting "shareapi_expire_after_n_days" of app "core" has been set to "7"
-    And the setting "shareapi_enforce_expire_date" of app "core" has been set to "yes"
+    Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes" in the server
+    And the setting "shareapi_expire_after_n_days" of app "core" has been set to "7" in the server
+    And the setting "shareapi_enforce_expire_date" of app "core" has been set to "yes" in the server
     And user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has logged in using the webUI
     When the user tries to create a new public link for resource "simple-folder" which expires in "+15" days using the webUI
@@ -84,8 +84,8 @@ Feature: Share by public link
 
   @issue-ocis-1328
   Scenario: user cannot change the expiry date of an existing public link to a date that is past the enforced max expiry date
-    Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes"
-    And the setting "shareapi_enforce_expire_date" of app "core" has been set to "yes"
+    Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes" in the server
+    And the setting "shareapi_enforce_expire_date" of app "core" has been set to "yes" in the server
     And user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has created a public link with following settings in the server
       | path       | lorem.txt   |
@@ -104,16 +104,16 @@ Feature: Share by public link
 
   @issue-ocis-1328
   Scenario: user cannot change the expiry date on existing public link to a date past the enforced max expiry date once max expiry date is changed
-    Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes"
-    And the setting "shareapi_expire_after_n_days" of app "core" has been set to "16"
-    And the setting "shareapi_enforce_expire_date" of app "core" has been set to "yes"
+    Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes" in the server
+    And the setting "shareapi_expire_after_n_days" of app "core" has been set to "16" in the server
+    And the setting "shareapi_enforce_expire_date" of app "core" has been set to "yes" in the server
     And user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has created a public link with following settings in the server
       | path       | lorem.txt   |
       | name       | Public link |
       | expireDate | +16         |
     And user "Alice" has logged in using the webUI
-    And the setting "shareapi_expire_after_n_days" of app "core" has been set to "7"
+    And the setting "shareapi_expire_after_n_days" of app "core" has been set to "7" in the server
     When the user edits the public link named "Public link" of file "lorem.txt" changing following
       | expireDate | +15 |
     Then the user should see an error message on the public link share dialog saying "Cannot set expiration date more than 7 days in the future"
@@ -128,8 +128,8 @@ Feature: Share by public link
 
   @issue-ocis-1328
   Scenario: user can set an expiry date when creating a public link to a date that is before the enforced max expiry date
-    Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes"
-    And the setting "shareapi_enforce_expire_date" of app "core" has been set to "yes"
+    Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes" in the server
+    And the setting "shareapi_enforce_expire_date" of app "core" has been set to "yes" in the server
     And user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has logged in using the webUI
     When the user creates a new public link for resource "lorem.txt" using the webUI with
@@ -145,8 +145,8 @@ Feature: Share by public link
 
   @issue-ocis-1328
   Scenario: user can change the expiry date of an existing public link to a date that is before the enforced max expiry date
-    Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes"
-    And the setting "shareapi_enforce_expire_date" of app "core" has been set to "yes"
+    Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes" in the server
+    And the setting "shareapi_enforce_expire_date" of app "core" has been set to "yes" in the server
     And user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has created a public link with following settings in the server
       | path       | lorem.txt   |

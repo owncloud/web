@@ -64,7 +64,7 @@ Feature: Shares collaborator list
 
 
   Scenario Outline: collaborators list contains additional info when enabled
-    Given the setting "user_additional_info_field" of app "core" has been set to "<additional-info-field>"
+    Given the setting "user_additional_info_field" of app "core" has been set to "<additional-info-field>" in the server
     And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
     When user "Alice" has logged in using the webUI
     And the user opens the share dialog for folder "simple-folder" using the webUI
@@ -76,7 +76,7 @@ Feature: Shares collaborator list
 
 
   Scenario: collaborators list does not contain additional info when disabled
-    Given the setting "user_additional_info_field" of app "core" has been set to ""
+    Given the setting "user_additional_info_field" of app "core" has been set to "" in the server
     And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
     When user "Alice" has logged in using the webUI
     And the user opens the share dialog for folder "simple-folder" using the webUI
@@ -107,7 +107,7 @@ Feature: Shares collaborator list
 
 
   Scenario: share a file with another internal user via collaborators quick action
-    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "yes"
+    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "yes" in the server
     And user "Alice" has logged in using the webUI
     When the user shares resource "simple-folder" with user "Brian Murphy" using the quick action on the webUI
     Then user "Brian Murphy" should be listed as "Viewer" in the collaborators list for folder "simple-folder" on the webUI

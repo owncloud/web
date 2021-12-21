@@ -234,7 +234,7 @@ Feature: deleting files and folders
 
   @issue-5435
   Scenario: Delete a file and folder from shared with me page
-    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
+    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no" in the server
     And user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Brian" has created folder "simple-folder" in the server
     And user "Brian" has created file "lorem.txt" in the server

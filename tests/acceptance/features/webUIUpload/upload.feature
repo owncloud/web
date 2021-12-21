@@ -118,7 +118,7 @@ Feature: File Upload
 
   @smokeTest @disablePreviews @issue-ocis-reva-54
   Scenario: overwrite an existing file when versioning is disabled
-    Given the app "files_versions" has been disabled
+    Given the app "files_versions" has been disabled in the server
     When the user uploads overwriting file "lorem.txt" using the webUI
     Then no message should be displayed on the webUI
     And file "lorem.txt" should be listed on the webUI

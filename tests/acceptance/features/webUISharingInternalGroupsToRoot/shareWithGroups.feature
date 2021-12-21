@@ -247,8 +247,8 @@ Feature: Sharing files and folders with internal groups
 
 
   Scenario: share a resource with another internal group with default expiration date
-    Given the setting "shareapi_default_expire_date_group_share" of app "core" has been set to "yes"
-    And the setting "shareapi_expire_after_n_days_group_share" of app "core" has been set to "42"
+    Given the setting "shareapi_default_expire_date_group_share" of app "core" has been set to "yes" in the server
+    And the setting "shareapi_expire_after_n_days_group_share" of app "core" has been set to "42" in the server
     And user "Carol" has created file "lorem.txt" in the server
     And user "Carol" has logged in using the webUI
     When the user shares file "lorem.txt" with group "grp1" as "Viewer" using the webUI
@@ -264,9 +264,9 @@ Feature: Sharing files and folders with internal groups
 
 
   Scenario Outline: share a resource with another internal group with expiration date beyond maximum enforced expiration date
-    Given the setting "shareapi_default_expire_date_group_share" of app "core" has been set to "yes"
-    And the setting "shareapi_enforce_expire_date_group_share" of app "core" has been set to "yes"
-    And the setting "shareapi_expire_after_n_days_group_share" of app "core" has been set to "5"
+    Given the setting "shareapi_default_expire_date_group_share" of app "core" has been set to "yes" in the server
+    And the setting "shareapi_enforce_expire_date_group_share" of app "core" has been set to "yes" in the server
+    And the setting "shareapi_expire_after_n_days_group_share" of app "core" has been set to "5" in the server
     And user "Carol" has created <element> "<shared-resource>" in the server
     And user "Carol" has logged in using the webUI
     When the user tries to share resource "<shared-resource>" with group "grp1" which expires in "+6" days using the webUI

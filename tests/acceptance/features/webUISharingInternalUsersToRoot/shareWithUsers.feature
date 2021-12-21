@@ -12,7 +12,7 @@ Feature: Sharing files and folders with internal users
 
   @smokeTest @disablePreviews
   Scenario Outline: share a file & folder with another internal user
-    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "yes"
+    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "yes" in the server
     And user "Brian" has created folder "simple-folder" in the server
     And user "Brian" has created file "simple-folder/lorem.txt" in the server
     And user "Brian" has uploaded file "testavatar.jpg" to "testimage.jpg" in the server
@@ -221,7 +221,7 @@ Feature: Sharing files and folders with internal users
 
   @disablePreviews
   Scenario Outline: Share files/folders with special characters in their name
-    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "yes"
+    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "yes" in the server
     And user "Brian" has created folder "Sample,Folder,With,Comma" in the server
     And user "Brian" has created file "sample,1.txt" in the server
     And user "Brian" has logged in using the webUI
