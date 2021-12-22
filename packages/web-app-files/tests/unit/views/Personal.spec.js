@@ -96,6 +96,60 @@ const resourcesFiles = [resourceForestJpg, resourceNotesTxt]
 const resourcesFolders = [resourceDocumentsFolder, resourcePdfsFolder]
 const resources = [...resourcesFiles, ...resourcesFolders]
 
+describe('Personal view', () => {
+  describe('file move with drag & drop', () => {
+    it('should exit if target is also selected', async () => {
+      const spyOnGetFolderItems = jest.spyOn(Personal.methods, 'fetchResources')
+      const wrapper = createWrapper([resourceForestJpg, resourcePdfsFolder])
+      await wrapper.vm.fileDropped(resourcePdfsFolder.id)
+      expect(spyOnGetFolderItems).not.toBeCalled()
+      spyOnGetFolderItems.mockReset()
+    })
+    it('should exit if target is not a folder', async () => {
+      const spyOnGetFolderItems = jest.spyOn(Personal.methods, 'fetchResources')
+      const wrapper = createWrapper([resourceDocumentsFolder])
+      await wrapper.vm.fileDropped(resourceForestJpg.id)
+      expect(spyOnGetFolderItems).not.toBeCalled()
+      spyOnGetFolderItems.mockReset()
+    })
+    it('should not move file if resource is already in target', async () => {
+      const spyOnGetFolderItems = jest
+        .spyOn(Personal.methods, 'fetchResources')
+        .mockResolvedValueOnce([resourceDocumentsFolder])
+      const spyOnMoveFiles = jest.spyOn(localVue.prototype.$client.files, 'move')
+
+      const wrapper = createWrapper([resourceDocumentsFolder])
+      await wrapper.vm.fileDropped(resourcePdfsFolder.id)
+      expect(spyOnMoveFiles).not.toBeCalled()
+
+      spyOnMoveFiles.mockReset()
+      spyOnGetFolderItems.mockReset()
+    })
+    it('should move a file', async () => {
+      const spyOnGetFolderItems = jest
+        .spyOn(Personal.methods, 'fetchResources')
+        .mockResolvedValueOnce([])
+      const spyOnMoveFilesMove = jest
+        .spyOn(localVue.prototype.$client.files, 'move')
+        .mockImplementation()
+
+      const wrapper = createWrapper([resourceDocumentsFolder])
+      await wrapper.vm.fileDropped(resourcePdfsFolder.id)
+      expect(spyOnMoveFilesMove).toBeCalled()
+
+      spyOnMoveFilesMove.mockReset()
+      spyOnGetFolderItems.mockReset()
+    })
+  })
+
+  describe('accentuate new files and folders', () => {
+    // eslint-disable-next-line jest/expect-expect
+    it('accentuates table row for new files, folders and versions [Files/UPSERT_RESOURCE]', async () => {
+      await accentuatesTableRowTest(Personal)
+    })
+  })
+})
+
 function createWrapper(selectedFiles = [resourceForestJpg]) {
   jest
     .spyOn(MixinAccessibleBreadcrumb.methods, 'accessibleBreadcrumb_focusAndAnnounceBreadcrumb')
@@ -109,7 +163,8 @@ function createWrapper(selectedFiles = [resourceForestJpg]) {
       loadResourcesTask: {
         isRunning: false,
         perform: jest.fn()
-      }
+      },
+      handleSort: jest.fn()
     })
   }
   return mount(component, {
@@ -171,57 +226,3 @@ function createWrapper(selectedFiles = [resourceForestJpg]) {
     stubs: stubs
   })
 }
-
-describe('Personal view', () => {
-  describe('file move with drag & drop', () => {
-    it('should exit if target is also selected', async () => {
-      const spyOnGetFolderItems = jest.spyOn(Personal.methods, 'fetchResources')
-      const wrapper = createWrapper([resourceForestJpg, resourcePdfsFolder])
-      await wrapper.vm.fileDropped(resourcePdfsFolder.id)
-      expect(spyOnGetFolderItems).not.toBeCalled()
-      spyOnGetFolderItems.mockReset()
-    })
-    it('should exit if target is not a folder', async () => {
-      const spyOnGetFolderItems = jest.spyOn(Personal.methods, 'fetchResources')
-      const wrapper = createWrapper([resourceDocumentsFolder])
-      await wrapper.vm.fileDropped(resourceForestJpg.id)
-      expect(spyOnGetFolderItems).not.toBeCalled()
-      spyOnGetFolderItems.mockReset()
-    })
-    it('should not move file if resource is already in target', async () => {
-      const spyOnGetFolderItems = jest
-        .spyOn(Personal.methods, 'fetchResources')
-        .mockResolvedValueOnce([resourceDocumentsFolder])
-      const spyOnMoveFiles = jest.spyOn(localVue.prototype.$client.files, 'move')
-
-      const wrapper = createWrapper([resourceDocumentsFolder])
-      await wrapper.vm.fileDropped(resourcePdfsFolder.id)
-      expect(spyOnMoveFiles).not.toBeCalled()
-
-      spyOnMoveFiles.mockReset()
-      spyOnGetFolderItems.mockReset()
-    })
-    it('should move a file', async () => {
-      const spyOnGetFolderItems = jest
-        .spyOn(Personal.methods, 'fetchResources')
-        .mockResolvedValueOnce([])
-      const spyOnMoveFilesMove = jest
-        .spyOn(localVue.prototype.$client.files, 'move')
-        .mockImplementation()
-
-      const wrapper = createWrapper([resourceDocumentsFolder])
-      await wrapper.vm.fileDropped(resourcePdfsFolder.id)
-      expect(spyOnMoveFilesMove).toBeCalled()
-
-      spyOnMoveFilesMove.mockReset()
-      spyOnGetFolderItems.mockReset()
-    })
-  })
-
-  describe('accentuate new files and folders', () => {
-    // eslint-disable-next-line jest/expect-expect
-    it('accentuates table row for new files, folders and versions [Files/UPSERT_RESOURCE]', async () => {
-      await accentuatesTableRowTest(Personal)
-    })
-  })
-})

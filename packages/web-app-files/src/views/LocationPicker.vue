@@ -54,6 +54,9 @@
             :has-actions="false"
             :is-selectable="false"
             :header-position="fileListHeaderY"
+            :sort-by="sortBy"
+            :sort-dir="sortDir"
+            @sort="handleSort"
           >
             <template #footer>
               <pagination :pages="paginationPages" :current-page="paginationPage" />
@@ -74,10 +77,10 @@
 
 <script>
 import { mapMutations, mapState, mapActions, mapGetters } from 'vuex'
-import { computed } from '@vue/composition-api'
+import { computed, unref } from '@vue/composition-api'
 
 import { basename, join } from 'path'
-import ResourceTable from '../components/FilesList/ResourceTable.vue'
+import ResourceTable, { determineSortFields } from '../components/FilesList/ResourceTable.vue'
 import { batchActions } from '../helpers/batchActions'
 import { cloneStateObject } from '../helpers/store'
 import MixinsGeneral from '../mixins'
@@ -88,7 +91,8 @@ import {
   useStore,
   useRouteQuery,
   usePagination,
-  useDefaults
+  useDefaults,
+  useSort
 } from '../composables'
 import { useTask } from 'vue-concurrency'
 
@@ -120,13 +124,31 @@ export default {
     const { pagination: paginationDefaults } = useDefaults()
     const { refresh: refreshFileListHeaderPosition, y: fileListHeaderY } =
       useFileListHeaderPosition()
+
+    const sortByPageQuery = useRouteQuery('sort-by')
+    const sortDirPageQuery = useRouteQuery('sort-dir')
+
+    const storeItems = computed(() => store.getters['Files/activeFiles'] || [])
+    const fields = computed(() => {
+      return determineSortFields(unref(storeItems)[0])
+    })
+
+    const { sortBy, sortDir, items, handleSort } = useSort({
+      items: storeItems,
+      fields: fields,
+      sortBy: sortByPageQuery,
+      sortDir: sortDirPageQuery
+    })
+
     const paginationPageQuery = useRouteQuery('page', '1')
     const paginationPage = computed(() => parseInt(String(paginationPageQuery.value)))
     const paginationPerPageQuery = useRouteQuery('items-per-page', paginationDefaults.perPage.value)
     const { items: paginatedResources, total: paginationPages } = usePagination({
       page: paginationPage,
       perPage: computed(() => parseInt(String(paginationPerPageQuery.value))),
-      items: computed(() => store.getters['Files/activeFiles'])
+      items,
+      sortDir,
+      sortBy
     })
 
     const navigateToTargetTask = useTask(function* (signal, ref, target) {
@@ -153,7 +175,10 @@ export default {
       navigateToTargetTask,
       paginatedResources,
       paginationPages,
-      paginationPage
+      paginationPage,
+      handleSort,
+      sortBy,
+      sortDir
     }
   },
 

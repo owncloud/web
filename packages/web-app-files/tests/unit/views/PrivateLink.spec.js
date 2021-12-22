@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils'
-import { getStore, localVue } from './views.setup'
+import { getRouter, getStore, localVue } from './views.setup'
 import PrivateLink from '@files/src/views/PrivateLink.vue'
 
 localVue.prototype.$client.files = {
@@ -99,7 +99,7 @@ function getShallowWrapper(loading = false) {
     store: createStore(),
     mocks: {
       $route,
-      $router: []
+      $router: getRouter({})
     },
     data() {
       return {

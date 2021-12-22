@@ -35,6 +35,13 @@ localVue.use(GetTextPlugin, {
   silent: true
 })
 
+export const getRouter = ({ query = {} }) => ({
+  afterEach: jest.fn(),
+  currentRoute: {
+    query
+  }
+})
+
 export const getStore = function ({
   highlightedFile = null,
   disablePreviews = true,

@@ -136,6 +136,9 @@ function createWrapper({
       'role-dropdown': true,
       'edit-dropdown': true,
       translate: false
+    },
+    directives: {
+      'oc-tooltip': jest.fn()
     }
   })
 }

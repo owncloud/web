@@ -1,0 +1,6 @@
+Bugfix: Sort before pagination
+
+We've extracted the sorting logic from the [OcTable component](https://owncloud.design/#/oC%20Components/OcTable) and moved it to the data preprocessing steps in web. This way we won't sort the current page anymore, but sort the whole data of the current folder and then only show the current page from that sorted data.
+
+https://github.com/owncloud/web/issues/5687
+https://github.com/owncloud/web/pull/6136
