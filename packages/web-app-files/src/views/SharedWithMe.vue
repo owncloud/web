@@ -205,7 +205,9 @@ export default {
       return determineSortFields(unref(storeItems)[0])
     })
 
-    const viewMode = computed(() => unref(useRouteQuery('view-mode')) || ShareStatus.accepted)
+    const viewMode = computed(() =>
+      parseInt(String(unref(useRouteQuery('view-mode', ShareStatus.accepted.toString()))))
+    )
 
     // pending shares
     const pendingSortByPageQuery = useRouteQuery('pending-sort-by')
