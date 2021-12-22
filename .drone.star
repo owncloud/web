@@ -2545,8 +2545,8 @@ def uploadScreenshots():
                 "from_secret": "cache_s3_endpoint",
             },
             "path_style": True,
-            "source": "%s/tests/reports/e2e/playwright/tracing/**/*" % dir["web"],
-            "strip_prefix": "%s/tests/reports/e2e/playwright/tracing" % dir["web"],
+            "source": "%s/reports/e2e/playwright/tracing/**/*" % dir["web"],
+            "strip_prefix": "%s/reports/e2e/playwright/tracing" % dir["web"],
             "target": "/web/tracing/${DRONE_BUILD_NUMBER}",
         },
         "environment": {
