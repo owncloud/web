@@ -5,7 +5,7 @@ Feature: Share by public link
   So that I don't have to remember to unshare
 
   Background:
-    Given user "Alice" has been created with default attributes and without skeleton files
+    Given user "Alice" has been created with default attributes and without skeleton files in the server
 
 
   Scenario: user changes the expiration date of an already existing public link using webUI

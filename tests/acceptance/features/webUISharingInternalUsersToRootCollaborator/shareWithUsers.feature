@@ -5,7 +5,7 @@ Feature: Shares collaborator list
   So that I can know the collaborators of a shared resource
 
   Background:
-    Given these users have been created with default attributes and without skeleton files:
+    Given these users have been created with default attributes and without skeleton files in the server:
       | username |
       | Alice    |
       | Brian    |

@@ -9,7 +9,7 @@ Feature: Share by public link with different roles
   So that public sharing is limited according to organization policy
 
   Background:
-    Given user "Alice" has been created with default attributes and without skeleton files
+    Given user "Alice" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created folder "simple-folder"
 
   @smokeTest @ocisSmokeTest @issue-ocis-reva-383

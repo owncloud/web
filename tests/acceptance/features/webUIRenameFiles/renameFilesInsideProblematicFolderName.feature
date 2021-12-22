@@ -4,7 +4,7 @@ Feature: Renaming files inside a folder with problematic name
   So that I can recognize my file easily
 
   Background:
-    Given user "Alice" has been created with default attributes and without skeleton files
+    Given user "Alice" has been created with default attributes and without skeleton files in the server
 
 
   Scenario Outline: Rename the existing file inside a problematic folder

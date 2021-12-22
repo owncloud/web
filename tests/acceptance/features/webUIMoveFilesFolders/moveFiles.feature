@@ -4,7 +4,7 @@ Feature: move files
   So that I can organise my data structure
 
   Background:
-    Given user "Alice" has been created with default attributes and without skeleton files
+    Given user "Alice" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created folder "simple-folder"
     And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
 
@@ -95,7 +95,7 @@ Feature: move files
 
   @issue-ocis-1328
   Scenario: move a file into another folder with no change permission
-    Given user "Brian" has been created with default attributes and without skeleton files
+    Given user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Brian" has created folder "simple-folder"
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions
     And user "Alice" has logged in using the webUI
@@ -139,7 +139,7 @@ Feature: move files
   Scenario: sharee moves a file shared by sharer into another folder
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And the administrator has set the default folder for received shares to "Shares"
-    And user "Brian" has been created with default attributes and without skeleton files
+    And user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Alice" has uploaded file with content "test content" to "simple-folder/testFile.txt"
     And user "Alice" has shared folder "/simple-folder" with user "Brian"
     And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"

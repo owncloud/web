@@ -5,7 +5,7 @@ Feature: Locks
 
   Background:
     #do not set email, see bugs in https://github.com/owncloud/core/pull/32250#issuecomment-434615887
-    Given these users have been created with default attributes and without skeleton files:
+    Given these users have been created with default attributes and without skeleton files in the server:
       | username       | displayname |
       | brand-new-user | New User    |
     And user "brand-new-user" has created folder "simple-folder"
@@ -51,7 +51,7 @@ Feature: Locks
 
   @issue-5417
   Scenario: setting a lock shows the display name of a user in the locking details (user has set email address)
-    Given these users have been created with default attributes and without skeleton files:
+    Given these users have been created with default attributes and without skeleton files in the server:
       | username               | displayname   | email       |
       | user-with-display-name | My fancy name | mail@oc.org |
     And user "user-with-display-name" has locked folder "simple-folder" setting following properties
@@ -64,7 +64,7 @@ Feature: Locks
 
   @issue-5417
   Scenario: setting a lock shows the user name of a user in the locking details (user has set email address)
-    Given these users have been created with default attributes and without skeleton files:
+    Given these users have been created with default attributes and without skeleton files in the server:
       | username        | email       |
       | user-with-email | mail@oc.org |
     And user "user-with-email" has locked folder "simple-folder" setting following properties
@@ -95,7 +95,7 @@ Feature: Locks
 
   @issue-5417
   Scenario: setting a lock shows the lock symbols at the correct files/folders on the shared-with-others page
-    Given these users have been created with default attributes and without skeleton files:
+    Given these users have been created with default attributes and without skeleton files in the server:
       | username |
       | receiver |
     And user "brand-new-user" has locked folder "simple-folder" setting following properties
@@ -142,7 +142,7 @@ Feature: Locks
 
   @issue-5417
   Scenario: setting a lock shows the lock symbols at the correct files/folders on the shared-with-you page
-    Given these users have been created with default attributes and without skeleton files:
+    Given these users have been created with default attributes and without skeleton files in the server:
       | username |
       | sharer   |
     And user "sharer" has created folder "simple-folder"
@@ -172,15 +172,15 @@ Feature: Locks
 
   @issue-5417
   Scenario: lock set on a shared file shows the lock information for all involved users
-    Given these users have been created with default attributes and without skeleton files:
+    Given these users have been created with default attributes and without skeleton files in the server:
       | username  |
       | sharer    |
       | receiver  |
       | receiver2 |
     And user "sharer" has uploaded file "data.zip" to "data.zip"
     And user "sharer" has uploaded file "data.zip" to "data.tar.gz"
-    And group "receiver-group" has been created
-    And user "receiver2" has been added to group "receiver-group"
+    And group "receiver-group" has been created in the server
+    And user "receiver2" has been added to group "receiver-group" in the server
     And user "sharer" has shared file "data.zip" with user "receiver"
     And user "sharer" has shared file "data.tar.gz" with group "receiver-group"
     And user "receiver" has shared file "data.zip" with user "brand-new-user"
@@ -235,7 +235,7 @@ Feature: Locks
 
   @issue-5417
   Scenario Outline: decline locked folder
-    Given these users have been created with default attributes and without skeleton files:
+    Given these users have been created with default attributes and without skeleton files in the server:
       | username |
       | sharer   |
     And user "sharer" has created folder "/to-share-folder"
@@ -256,7 +256,7 @@ Feature: Locks
 
   @issue-5417
   Scenario Outline: accept previously declined locked folder
-    Given these users have been created with default attributes and without skeleton files:
+    Given these users have been created with default attributes and without skeleton files in the server:
       | username |
       | sharer   |
     And user "sharer" has created folder "/to-share-folder"
@@ -276,7 +276,7 @@ Feature: Locks
 
   @issue-5417
   Scenario Outline: accept previously declined locked folder but create a folder with same name in between
-    Given these users have been created with default attributes and without skeleton files:
+    Given these users have been created with default attributes and without skeleton files in the server:
       | username |
       | sharer   |
     And user "sharer" has created folder "/to-share-folder"
@@ -300,7 +300,7 @@ Feature: Locks
 
   @issue-5417
   Scenario Outline: creating a subfolder structure that is the same as the structure of a declined & locked share
-    Given these users have been created with default attributes and without skeleton files:
+    Given these users have been created with default attributes and without skeleton files in the server:
       | username |
       | sharer   |
     And user "sharer" has created folder "/parent"
@@ -325,7 +325,7 @@ Feature: Locks
 
   @issue-5417
   Scenario Outline: unsharing a locked file/folder
-    Given these users have been created with default attributes and without skeleton files:
+    Given these users have been created with default attributes and without skeleton files in the server:
       | username |
       | sharer   |
     And user "sharer" has created file "lorem.txt"

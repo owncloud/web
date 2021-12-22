@@ -353,11 +353,11 @@ const assertCollaboratorslistDoesNotContain = async function (type, name) {
  * @param {string} pattern
  * @return {string[]} groupMatchingPattern
  */
-const getUsersMatchingPattern = function (pattern) {
+const getUsersMatchingPattern = async function (pattern) {
   // check if all created users that contain the pattern either in the display name or the username
   // are listed in the autocomplete list
   // in both cases the display name should be listed
-  const users = userSettings.getCreatedUsers()
+  const users = await userSettings.getCreatedUsers()
   const usersID = Object.keys(users)
   return usersID
     .filter((id) => users[id].displayname.toLowerCase().includes(pattern) || id.includes(pattern))
@@ -370,8 +370,8 @@ const getUsersMatchingPattern = function (pattern) {
  * @param {string} pattern
  * @return {string[]} groupMatchingPattern
  */
-const getGroupsMatchingPattern = function (pattern) {
-  const groups = userSettings.getCreatedGroups()
+const getGroupsMatchingPattern = async function (pattern) {
+  const groups = await userSettings.getCreatedGroups()
   const groupMatchingPattern = groups.filter((group) => group.toLowerCase().includes(pattern))
   return groupMatchingPattern
 }
@@ -390,13 +390,15 @@ const assertUsersGroupsWithPatternInAutocompleteListExcluding = async function (
   userOrGroup
 ) {
   const sharingDialog = client.page.FilesPageElement.sharingDialog()
-  const currentUserDisplayName = userSettings.getDisplayNameForUser(client.globals.currentUser)
-  const usersMatchingPattern = getUsersMatchingPattern(pattern).filter((displayName) => {
+  const currentUserDisplayName = await userSettings.getDisplayNameForUser(
+    client.globals.currentUser
+  )
+  let usersMatchingPattern = await getUsersMatchingPattern(pattern)
+  usersMatchingPattern = usersMatchingPattern.filter((displayName) => {
     return displayName !== currentUserDisplayName && displayName !== alreadySharedUserOrGroup
   })
-  const groupMatchingPattern = getGroupsMatchingPattern(pattern).filter(
-    (group) => group !== alreadySharedUserOrGroup
-  )
+  let groupMatchingPattern = await getGroupsMatchingPattern(pattern)
+  groupMatchingPattern = groupMatchingPattern.filter((group) => group !== alreadySharedUserOrGroup)
 
   if (usersMatchingPattern.length + groupMatchingPattern.length > 5) {
     await sharingDialog.displayAllCollaboratorsAutocompleteResults()
@@ -737,17 +739,20 @@ Then(
   'all users and groups that contain the string {string} in their name should be listed in the autocomplete list on the webUI',
   async function (pattern) {
     const sharingDialog = client.page.FilesPageElement.sharingDialog()
-    const currentUserDisplayName = userSettings.getDisplayNameForUser(client.globals.currentUser)
+    const currentUserDisplayName = await userSettings.getDisplayNameForUser(
+      client.globals.currentUser
+    )
 
     // check if all created users that contain the pattern either in the display name or the username
     // are listed in the autocomplete list
     // in both cases the display name should be listed
-    const usersMatchingPattern = getUsersMatchingPattern(pattern).filter((displayName) => {
+    let usersMatchingPattern = await getUsersMatchingPattern(pattern)
+    usersMatchingPattern = usersMatchingPattern.filter((displayName) => {
       return displayName !== currentUserDisplayName
     })
 
     // check if every created group that contains the pattern is listed in the autocomplete list
-    const groupMatchingPattern = getGroupsMatchingPattern(pattern)
+    const groupMatchingPattern = await getGroupsMatchingPattern(pattern)
 
     if (usersMatchingPattern.length + groupMatchingPattern.length > 5) {
       await sharingDialog.displayAllCollaboratorsAutocompleteResults()
@@ -783,15 +788,19 @@ Then(
 
 Then(
   'only users and groups that contain the string {string} in their name or displayname should be listed in the autocomplete list on the webUI',
-  function (pattern) {
+  async function (pattern) {
+    const createdUsers = await userSettings.getCreatedUsers()
+    const createdGroups = await userSettings.getCreatedGroups()
+
+    console.log(createdUsers, createdGroups)
     return client.page.FilesPageElement.sharingDialog()
       .getShareAutocompleteItemsList()
       .then((itemsList) => {
         itemsList.forEach((item) => {
           const displayedName = item.split('\n')[0]
           let found = false
-          for (const userId in userSettings.getCreatedUsers()) {
-            const userDisplayName = userSettings.getDisplayNameForUser(userId)
+          for (const userId in createdUsers) {
+            const userDisplayName = createdUsers[userId].displayname
             if (
               userDisplayName === displayedName &&
               (userDisplayName.toLowerCase().includes(pattern) ||
@@ -800,7 +809,7 @@ Then(
               found = true
             }
           }
-          userSettings.getCreatedGroups().forEach(function (groupId) {
+          createdGroups.forEach(function (groupId) {
             if (displayedName === groupId && groupId.toLowerCase().includes(pattern)) {
               found = true
             }
@@ -831,21 +840,26 @@ Then(
   }
 )
 
-Then('the users own name should not be listed in the autocomplete list on the webUI', function () {
-  const currentUserDisplayName = userSettings.getDisplayNameForUser(client.globals.currentUser)
-  return client.page.FilesPageElement.sharingDialog()
-    .getShareAutocompleteItemsList()
-    .then((itemsList) => {
-      itemsList.forEach((item) => {
-        const displayedName = item.split('\n')[0]
-        assert.notStrictEqual(
-          displayedName,
-          currentUserDisplayName,
-          `Users own name: ${currentUserDisplayName} was not expected to be listed in the autocomplete list but was`
-        )
+Then(
+  'the users own name should not be listed in the autocomplete list on the webUI',
+  async function () {
+    const currentUserDisplayName = await userSettings.getDisplayNameForUser(
+      client.globals.currentUser
+    )
+    return client.page.FilesPageElement.sharingDialog()
+      .getShareAutocompleteItemsList()
+      .then((itemsList) => {
+        itemsList.forEach((item) => {
+          const displayedName = item.split('\n')[0]
+          assert.notStrictEqual(
+            displayedName,
+            currentUserDisplayName,
+            `Users own name: ${currentUserDisplayName} was not expected to be listed in the autocomplete list but was`
+          )
+        })
       })
-    })
-})
+  }
+)
 
 Then(
   '{string} {string} should not be listed in the autocomplete list on the webUI',
@@ -1332,20 +1346,5 @@ Given(
       throw Error(`Cannot set ${folder} as default share received folder in OCIS`)
     }
     return runOcc([`config:system:set share_folder --value=${folder}`])
-  }
-)
-
-Given(
-  'the administrator has set the default folder for received shares to {string} on remote server',
-  function (folder) {
-    if (client.globals.ocis) {
-      if (folder === 'Shares') {
-        return
-      }
-      throw Error(`Cannot set ${folder} as default share received folder in OCIS`)
-    }
-    return backendHelper.runOnRemoteBackend(runOcc, [
-      [`config:system:set share_folder --value=${folder}`]
-    ])
   }
 )

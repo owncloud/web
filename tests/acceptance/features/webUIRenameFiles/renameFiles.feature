@@ -4,7 +4,7 @@ Feature: rename files
   So that I can organise my data structure
 
   Background:
-    Given user "Alice" has been created with default attributes and without skeleton files
+    Given user "Alice" has been created with default attributes and without skeleton files in the server
     And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
     And user "Alice" has uploaded file "data.zip" to "data.zip"
     And user "Alice" has uploaded file "lorem-big.txt" to "lorem-big.txt"
@@ -197,7 +197,7 @@ Feature: rename files
 
   @issue-2249
   Scenario: Rename a file and folder in shared with me page
-    Given user "Brian" has been created with default attributes and without skeleton files
+    Given user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Brian" has created folder "simple-folder"
     And user "Brian" has uploaded file "lorem.txt" to "simple-folder/lorem.txt"
     And user "Brian" has uploaded file "lorem.txt" to "lorem.txt"
@@ -222,7 +222,7 @@ Feature: rename files
 
   @issue-ocis-2256
   Scenario: Rename a file and folder in shared with others page
-    Given user "Brian" has been created with default attributes and without skeleton files
+    Given user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created folder "simple-folder"
     And user "Alice" has shared file "lorem.txt" with user "Brian"
     And user "Alice" has shared folder "simple-folder" with user "Brian"

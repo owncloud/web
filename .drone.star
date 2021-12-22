@@ -1285,7 +1285,7 @@ def acceptance(ctx):
                             steps += restoreBuildArtifactCache(ctx, "web-dist", "dist")
                             steps += setupServerConfigureWeb(params["logLevel"])
 
-                        services = browserService(alternateSuiteName, browser) + middlewareService(params["runningOnOCIS"])
+                        services = browserService(alternateSuiteName, browser) + middlewareService(params["runningOnOCIS"], params["federatedServerNeeded"])
 
                         if (params["runningOnOCIS"]):
                             # Services and steps required for running tests with oCIS
@@ -2862,20 +2862,25 @@ def checkStarlark():
         },
     }]
 
-def middlewareService(ocis = False):
+def middlewareService(ocis = False, federatedServer = False):
+    environment = {
+        "BACKEND_HOST": "https://ocis:9200" if ocis else "http://owncloud",
+        "OCIS_REVA_DATA_ROOT": "/srv/app/tmp/ocis/storage/owncloud/",
+        "RUN_ON_OCIS": "true" if ocis else "false",
+        "HOST": "middleware",
+        "REMOTE_UPLOAD_DIR": "/filesForUpload",
+        "NODE_TLS_REJECT_UNAUTHORIZED": "0",
+        "MIDDLEWARE_HOST": "middleware",
+    }
+
+    if (federatedServer):
+        environment["REMOTE_BACKEND_HOST"] = "http://federated"
+
     return [{
         "name": "middleware",
         "image": "owncloud/owncloud-test-middleware",
         "pull": "always",
-        "environment": {
-            "BACKEND_HOST": "https://ocis:9200" if ocis else "http://owncloud",
-            "OCIS_REVA_DATA_ROOT": "/srv/app/tmp/ocis/storage/owncloud/",
-            "RUN_ON_OCIS": "true" if ocis else "false",
-            "HOST": "middleware",
-            "REMOTE_UPLOAD_DIR": "/filesForUpload",
-            "NODE_TLS_REJECT_UNAUTHORIZED": "0",
-            "MIDDLEWARE_HOST": "middleware",
-        },
+        "environment": environment,
         "volumes": [{
             "name": "uploads",
             "path": "/filesForUpload",

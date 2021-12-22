@@ -4,7 +4,7 @@ Feature: rename folders
   So that I can organise my data structure
 
   Background:
-    Given user "Alice" has been created with default attributes and without skeleton files
+    Given user "Alice" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created folder "simple-folder"
     And user "Alice" has created folder "simple-empty-folder"
     And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"

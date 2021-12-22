@@ -5,7 +5,7 @@ Feature: Unlock locked files and folders
 
   Background:
     #do not set email, see bugs in https://github.com/owncloud/core/pull/32250#issuecomment-434615887
-    Given these users have been created with default attributes and without skeleton files:
+    Given these users have been created with default attributes and without skeleton files in the server:
       | username       |
       | brand-new-user |
     And user "brand-new-user" has created folder "simple-folder"
@@ -28,7 +28,7 @@ Feature: Unlock locked files and folders
 
   @issue-5417
   Scenario: unlocking file/folder after the display name has been changed deletes the lock symbols
-    Given these users have been created with default attributes and without skeleton files:
+    Given these users have been created with default attributes and without skeleton files in the server:
       | username               | displayname   |
       | user-with-display-name | My fancy name |
     And user "user-with-display-name" has locked folder "simple-folder" setting following properties
@@ -80,7 +80,7 @@ Feature: Unlock locked files and folders
 
   @issue-5417
   Scenario: deleting the first lock of the multiple locks of shared file/folder
-    Given these users have been created with default attributes and without skeleton files:
+    Given these users have been created with default attributes and without skeleton files in the server:
       | username  |
       | receiver1 |
       | receiver2 |
@@ -113,7 +113,7 @@ Feature: Unlock locked files and folders
 
   @issue-5417
   Scenario: deleting the second lock of the multiple locks of shared file/folder
-    Given these users have been created with default attributes and without skeleton files:
+    Given these users have been created with default attributes and without skeleton files in the server:
       | username  |
       | receiver1 |
       | receiver2 |
@@ -146,7 +146,7 @@ Feature: Unlock locked files and folders
 
   @issue-5417
   Scenario: deleting the last lock of the multiple locks of shared file/folder
-    Given these users have been created with default attributes and without skeleton files:
+    Given these users have been created with default attributes and without skeleton files in the server:
       | username  |
       | receiver1 |
       | receiver2 |
@@ -179,7 +179,7 @@ Feature: Unlock locked files and folders
 
   @issue-5417
   Scenario Outline: deleting a lock that was created by an other user
-    Given these users have been created with default attributes and without skeleton files:
+    Given these users have been created with default attributes and without skeleton files in the server:
       | username  |
       | receiver1 |
     And user "brand-new-user" has shared file "/lorem.txt" with user "receiver1"

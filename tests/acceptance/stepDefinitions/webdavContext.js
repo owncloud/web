@@ -1,7 +1,6 @@
 const { Given, Then } = require('@cucumber/cucumber')
 require('url-search-params-polyfill')
 const httpHelper = require('../helpers/httpHelper')
-const backendHelper = require('../helpers/backendHelper')
 const webdavHelper = require('../helpers/webdavHelper')
 const { client } = require('nightwatch-api')
 const { xml2js } = require('xml-js')
@@ -102,23 +101,9 @@ Then('as {string} file/folder {string} should not exist', function (userId, elem
 })
 
 Then(
-  'as {string} file/folder {string} should not exist on remote server',
-  function (userId, element) {
-    return backendHelper.runOnRemoteBackend(fileShouldNotExist, userId, element)
-  }
-)
-
-Then(
   /^as "([^"]*)" (file|folder) "([^"]*)" should exist$/,
   function (userId, resourceType, element) {
     return fileOrFolderShouldExist(userId, element, resourceType)
-  }
-)
-
-Then(
-  /^as "([^"]*)" (file|folder) "([^"]*)" should exist on remote server$/,
-  function (userId, resourceType, element) {
-    return backendHelper.runOnRemoteBackend(fileOrFolderShouldExist, userId, element, resourceType)
   }
 )
 

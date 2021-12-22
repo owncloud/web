@@ -6,7 +6,7 @@ Feature: Search
   So that I can find needed files quickly
 
   Background:
-    Given these users have been created with default attributes and without skeleton files:
+    Given these users have been created with default attributes and without skeleton files in the server:
       | username |
       | Alice    |
       | user0    |
@@ -101,7 +101,7 @@ Feature: Search
 
 
   Scenario: Search for a re-shared file
-    Given user "Brian" has been created with default attributes and without skeleton files
+    Given user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Brian" has uploaded file "lorem.txt" to "lorem.txt"
     And user "Brian" has shared file "/lorem.txt" with user "user0"
     And user "user0" has shared file "/lorem.txt" with user "Alice"

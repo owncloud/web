@@ -7,14 +7,14 @@ Feature: Sharing files and folders with internal groups
   Background:
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And the administrator has set the default folder for received shares to "Shares"
-    And these users have been created with default attributes and without skeleton files:
+    And these users have been created with default attributes and without skeleton files in the server:
       | username |
       | Alice    |
       | Brian    |
       | Carol    |
-    And group "grp1" has been created
-    And user "Alice" has been added to group "grp1"
-    And user "Brian" has been added to group "grp1"
+    And group "grp1" has been created in the server
+    And user "Alice" has been added to group "grp1" in the server
+    And user "Brian" has been added to group "grp1" in the server
 
   @issue-2060
   Scenario: sharing indicator of items inside a shared folder two levels down
@@ -134,7 +134,7 @@ Feature: Sharing files and folders with internal groups
 
   @issue-2939
   Scenario: sharing indicator for group shares stays up to date
-    Given these groups have been created:
+    Given these groups have been created in the server:
       | groupname |
       | grp2      |
       | grp3      |

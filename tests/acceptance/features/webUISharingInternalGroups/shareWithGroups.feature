@@ -6,18 +6,18 @@ Feature: Sharing files and folders with internal groups
   Background:
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And the administrator has set the default folder for received shares to "Shares"
-    And these users have been created with default attributes and without skeleton files:
+    And these users have been created with default attributes and without skeleton files in the server:
       | username |
       | Alice    |
       | Brian    |
       | Carol    |
-    And group "grp1" has been created
-    And user "Alice" has been added to group "grp1"
-    And user "Brian" has been added to group "grp1"
+    And group "grp1" has been created in the server
+    And user "Alice" has been added to group "grp1" in the server
+    And user "Brian" has been added to group "grp1" in the server
 
 
   Scenario: share a folder with multiple collaborators and check collaborator list order
-    Given group "grp11" has been created
+    Given group "grp11" has been created in the server
     And user "Carol" has created folder "simple-folder"
     And user "Carol" has logged in using the webUI
     When the user shares folder "simple-folder" with group "grp11" as "Viewer" using the webUI
@@ -178,9 +178,9 @@ Feature: Sharing files and folders with internal groups
 
   @issue-ocis-1277
   Scenario: user shares the file/folder with multiple internal users and delete the share with one user
-    Given group "grp2" has been created
+    Given group "grp2" has been created in the server
     And user "Alice" has created file "lorem.txt"
-    And user "Carol" has been added to group "grp2"
+    And user "Carol" has been added to group "grp2" in the server
     And user "Alice" has logged in using the webUI
     And user "Alice" has shared file "lorem.txt" with group "grp1"
     And user "Brian" has accepted the share "Shares/lorem.txt" offered by user "Alice"
@@ -198,7 +198,7 @@ Feature: Sharing files and folders with internal groups
 
   @issue-ocis-1317
   Scenario: Auto-completion for a group that is excluded from receiving shares
-    Given group "system-group" has been created
+    Given group "system-group" has been created in the server
     And user "Alice" has created folder "simple-folder"
     And the administrator has excluded group "system-group" from receiving shares
     When the user re-logs in as "Alice" using the webUI

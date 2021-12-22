@@ -5,7 +5,7 @@ Feature: Sharing files and folders with internal users
   So that those users can access the files and folders
 
   Background:
-    Given these users have been created with default attributes and without skeleton files:
+    Given these users have been created with default attributes and without skeleton files in the server:
       | username |
       | Alice    |
       | Brian    |
@@ -136,7 +136,7 @@ Feature: Sharing files and folders with internal users
 
   @disablePreviews
   Scenario: user shares the file/folder with multiple internal users and delete the share with one user
-    Given user "Carol" has been created with default attributes and without skeleton files
+    Given user "Carol" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created file "lorem.txt"
     And user "Alice" has logged in using the webUI
     And user "Alice" has shared file "lorem.txt" with user "Brian"
@@ -177,7 +177,7 @@ Feature: Sharing files and folders with internal users
 
   @issue-2897 @disablePreviews
   Scenario: sharing details of items inside a shared folder ("via" info)
-    Given user "Carol" has been created with default attributes and without skeleton files
+    Given user "Carol" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created folder "simple-folder"
     And user "Alice" has created folder "simple-folder/simple-empty-folder"
     And user "Alice" has uploaded file with content "test" to "/simple-folder/lorem.txt"
@@ -191,7 +191,7 @@ Feature: Sharing files and folders with internal users
 
   @issue-2897 @disablePreviews
   Scenario: sharing details of items inside a re-shared folder ("via" info)
-    Given user "Carol" has been created with default attributes and without skeleton files
+    Given user "Carol" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created folder "simple-folder"
     And user "Alice" has created folder "simple-folder/simple-empty-folder"
     And user "Alice" has uploaded file with content "test" to "/simple-folder/lorem.txt"

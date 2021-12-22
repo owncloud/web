@@ -5,7 +5,7 @@ Feature: Public link share indicator
   So that I can know with resources are shared
 
   Background:
-    Given user "Alice" has been created with default attributes and without skeleton files
+    Given user "Alice" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created folder "/simple-folder"
 
   @issue-2060
@@ -45,7 +45,7 @@ Feature: Public link share indicator
 
   @issue-2060
   Scenario: sharing indicators public link and collaborators inside a shared folder
-    Given user "Brian" has been created with default attributes and without skeleton files
+    Given user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created folder "/simple-folder/sub-folder"
     And user "Alice" has uploaded file with content "test" to "/simple-folder/textfile.txt"
     And user "Alice" has shared folder "simple-folder" with link with "read" permissions
@@ -62,7 +62,7 @@ Feature: Public link share indicator
 
   @issue-2060
   Scenario: sharing indicators public link from reshare
-    Given user "Brian" has been created with default attributes and without skeleton files
+    Given user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created folder "/simple-folder/sub-folder"
     And user "Alice" has uploaded file with content "test" to "/simple-folder/textfile.txt"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
@@ -79,7 +79,7 @@ Feature: Public link share indicator
 
   @issue-2060
   Scenario: sharing indicators public link from child of reshare
-    Given user "Brian" has been created with default attributes and without skeleton files
+    Given user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created folder "/simple-folder/sub-folder"
     And user "Alice" has uploaded file with content "test" to "/simple-folder/textfile.txt"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
@@ -96,8 +96,8 @@ Feature: Public link share indicator
 
   @issue-2060
   Scenario: no sharing indicator visible in file list from public link
-    Given user "Brian" has been created with default attributes and without skeleton files
-    And user "Carol" has been created with default attributes and without skeleton files
+    Given user "Brian" has been created with default attributes and without skeleton files in the server
+    And user "Carol" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created folder "simple-folder/simple-empty-folder"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Brian" has shared folder "simple-folder/simple-empty-folder" with user "Carol"
@@ -108,7 +108,7 @@ Feature: Public link share indicator
 
   @issue-2939
   Scenario: sharing indicator for link shares stays up to date
-    Given user "Brian" has been created with default attributes and without skeleton files
+    Given user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Alice" has uploaded file "testavatar.png" to "simple-folder/testimage.png"
     When user "Alice" has logged in using the webUI
     Then the following resources should not have share indicators on the webUI

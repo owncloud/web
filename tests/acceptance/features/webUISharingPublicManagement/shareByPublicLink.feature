@@ -5,7 +5,7 @@ Feature: Public link share management
   So that I can manage and organize the shares
 
   Background:
-    Given user "Alice" has been created with default attributes and without skeleton files
+    Given user "Alice" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created folder "/simple-folder"
 
   @ocisSmokeTest
@@ -29,7 +29,7 @@ Feature: Public link share management
 
   @issue-5321
   Scenario: mount public link
-    Given user "Brian" has been created with default attributes and without skeleton files
+    Given user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Alice" has uploaded file with content "Alice file" to "simple-folder/lorem.txt"
     And user "Alice" has created a public link with following settings
       | path        | simple-folder                |
