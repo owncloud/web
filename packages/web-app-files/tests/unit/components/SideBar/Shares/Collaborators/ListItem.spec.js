@@ -1,6 +1,6 @@
 import { createLocalVue, mount } from '@vue/test-utils'
 import Vuex from 'vuex'
-import ListItem from 'packages/web-app-files/src/components/SideBar/Shares/Collaborators/ListItem.vue'
+import ListItem from '../../../../../../src/components/SideBar/Shares/Collaborators/ListItem.vue'
 import stubs from '../../../../../../../../tests/unit/stubs'
 import GetTextPlugin from 'vue-gettext'
 import { peopleRoleViewerFolder, ShareTypes } from '../../../../../../src/helpers/share'
@@ -136,6 +136,9 @@ function createWrapper({
       'role-dropdown': true,
       'edit-dropdown': true,
       translate: false
+    },
+    directives: {
+      'oc-tooltip': jest.fn()
     }
   })
 }

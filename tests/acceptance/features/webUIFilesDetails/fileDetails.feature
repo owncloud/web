@@ -4,7 +4,7 @@ Feature: User can open the details panel for any file or folder
   So that the details of the file or folder are visible to me
 
   Background:
-    Given these users have been created with default attributes and without skeleton files:
+    Given these users have been created with default attributes and without skeleton files in the server:
       | username |
       | Alice    |
       | Brian    |

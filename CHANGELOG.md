@@ -8,11 +8,33 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Editor default handling: [#6186](https://github.com/owncloud/web/pull/6186)
+* Bugfix - Sort before pagination: [#5687](https://github.com/owncloud/web/issues/5687)
 * Enhancement - Edit people shares without changing the panel: [#6039](https://github.com/owncloud/web/pull/6039)
+* Enhancement - Respect share max, min and enforced expiration date: [#6176](https://github.com/owncloud/web/pull/6176)
 * Enhancement - Simplify people sharing sidebar: [#6039](https://github.com/owncloud/web/pull/6039)
 
 Details
 -------
+
+* Bugfix - Editor default handling: [#6186](https://github.com/owncloud/web/pull/6186)
+
+   Editor apps that don't provide the information about whether or not they are a default editor
+   were not recognized as default editors when left-clicking a file in the file list. We've
+   changed the default behaviour so that editors are capable of being the default editor unless
+   explicitly disabled.
+
+   https://github.com/owncloud/web/pull/6186
+
+* Bugfix - Sort before pagination: [#5687](https://github.com/owncloud/web/issues/5687)
+
+   We've extracted the sorting logic from the [OcTable
+   component](https://owncloud.design/#/oC%20Components/OcTable) and moved it to the data
+   preprocessing steps in web. This way we won't sort the current page anymore, but sort the whole
+   data of the current folder and then only show the current page from that sorted data.
+
+   https://github.com/owncloud/web/issues/5687
+   https://github.com/owncloud/web/pull/6136
 
 * Enhancement - Edit people shares without changing the panel: [#6039](https://github.com/owncloud/web/pull/6039)
 
@@ -20,6 +42,16 @@ Details
    faster editing.
 
    https://github.com/owncloud/web/issues/5763
+   https://github.com/owncloud/web/pull/6039
+
+* Enhancement - Respect share max, min and enforced expiration date: [#6176](https://github.com/owncloud/web/pull/6176)
+
+   If the expiration date max and/or enforcement is supported (defined by the capabilities) the
+   UI now handles the different cases and respects the backend settings. In oc10 there are options
+   to enforce the maximum available date for group and user shares, this is now considered in the UI
+   and updates dynamically in both cases.
+
+   https://github.com/owncloud/web/pull/6176
    https://github.com/owncloud/web/pull/6039
 
 * Enhancement - Simplify people sharing sidebar: [#6039](https://github.com/owncloud/web/pull/6039)

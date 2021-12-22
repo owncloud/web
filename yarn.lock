@@ -2357,6 +2357,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/luxon@npm:^2.0.8":
+  version: 2.0.8
+  resolution: "@types/luxon@npm:2.0.8"
+  checksum: 630d069a5a719c7512cb8805bcec6bac7f9aa5d434edf2159ba6dfb22eb8de982232a6d3621acd66f6ca2d1d6b0e8b40f9c8dafbbad654eb8cc01229f528ae45
+  languageName: node
+  linkType: hard
+
 "@types/minimatch@npm:*, @types/minimatch@npm:^3.0.3":
   version: 3.0.4
   resolution: "@types/minimatch@npm:3.0.4"
@@ -10731,9 +10738,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"owncloud-design-system@npm:12.0.0-alpha1":
-  version: 12.0.0-alpha1
-  resolution: "owncloud-design-system@npm:12.0.0-alpha1"
+"owncloud-design-system@npm:12.0.0-alpha3":
+  version: 12.0.0-alpha3
+  resolution: "owncloud-design-system@npm:12.0.0-alpha3"
   peerDependencies:
     "@popperjs/core": ^2.4.0
     filesize: ^8.0.0
@@ -10750,7 +10757,7 @@ __metadata:
     vue-inline-svg: ^2.0.0
     vue-select: ^3.12.0
     webfontloader: ^1.6.28
-  checksum: 6df97479a7204ff856134c56f66f483f087c5cc5d30c8e8898c43747318bcc88917c747b883a985aa0d453977d6a52a7df49ba45408312f4ce79e901c255a84a
+  checksum: 1fa02a2851bf0b8d11e1efe435fae4943d0afe1828255dbe96d6e50dc2a4bb77294d25fbc37bbe3118669ea96e0d86a6e26bf41fe19baa0e6f6f12d8e8ccd4d3
   languageName: node
   linkType: hard
 
@@ -15085,6 +15092,7 @@ typescript@^4.3.2:
   resolution: "web-runtime@workspace:packages/web-runtime"
   dependencies:
     "@popperjs/core": ^2.4.0
+    "@types/luxon": ^2.0.8
     "@vue/composition-api": ^1.2.4
     easygettext: ^2.16.1
     filesize: ^8.0.0
@@ -15094,7 +15102,7 @@ typescript@^4.3.2:
     lodash-es: ^4.17.21
     luxon: ^2.0.0
     oidc-client: 1.11.5
-    owncloud-design-system: 12.0.0-alpha1
+    owncloud-design-system: 12.0.0-alpha3
     owncloud-sdk: 1.0.0-2296
     p-queue: ^6.1.1
     popper-max-size-modifier: ^0.2.0

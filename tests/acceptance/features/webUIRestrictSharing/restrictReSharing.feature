@@ -8,16 +8,16 @@ Feature: restrict resharing
   Background:
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And the administrator has set the default folder for received shares to "Shares"
-    And these users have been created with default attributes and without skeleton files:
+    And these users have been created with default attributes and without skeleton files in the server:
       | username |
       | Alice    |
       | Brian    |
       | Carol    |
-    And these groups have been created:
+    And these groups have been created in the server:
       | groupname |
       | grp1      |
-    And user "Alice" has been added to group "grp1"
-    And user "Brian" has been added to group "grp1"
+    And user "Alice" has been added to group "grp1" in the server
+    And user "Brian" has been added to group "grp1" in the server
 
   @smokeTest @issue-2447
   Scenario: disable resharing and check if the received resource can be reshared

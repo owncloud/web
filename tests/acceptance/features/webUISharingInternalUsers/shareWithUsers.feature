@@ -6,7 +6,7 @@ Feature: Sharing files and folders with internal users
   Background:
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And the administrator has set the default folder for received shares to "Shares"
-    And these users have been created with default attributes and without skeleton files:
+    And these users have been created with default attributes and without skeleton files in the server:
       | username |
       | Alice    |
       | Brian    |
@@ -135,7 +135,7 @@ Feature: Sharing files and folders with internal users
 
   @issue-ocis-2260 @disablePreviews
   Scenario: user shares the file/folder with multiple internal users and delete the share with one user
-    Given user "Carol" has been created with default attributes and without skeleton files
+    Given user "Carol" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created file "lorem.txt"
     And user "Alice" has logged in using the webUI
     And user "Alice" has shared file "lorem.txt" with user "Brian"
@@ -180,7 +180,7 @@ Feature: Sharing files and folders with internal users
   Scenario: sharing details of items inside a shared folder ("via" info)
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has created folder "simple-folder/simple-empty-folder"
-    And user "Carol" has been created with default attributes and without skeleton files
+    And user "Carol" has been created with default attributes and without skeleton files in the server
     And user "Alice" has uploaded file with content "test" to "/simple-folder/lorem.txt"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Alice" has logged in using the webUI
@@ -195,7 +195,7 @@ Feature: Sharing files and folders with internal users
   Scenario: sharing details of items inside a re-shared folder ("via" info)
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has created folder "simple-folder/simple-empty-folder"
-    And user "Carol" has been created with default attributes and without skeleton files
+    And user "Carol" has been created with default attributes and without skeleton files in the server
     And user "Alice" has uploaded file with content "test" to "/simple-folder/lorem.txt"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
@@ -340,7 +340,7 @@ Feature: Sharing files and folders with internal users
 
 
   Scenario: Sharing the share_folder to user is not possible
-    Given user "Carol" has been created with default attributes and without skeleton files
+    Given user "Carol" has been created with default attributes and without skeleton files in the server
     And user "Brian" has shared folder "simple-folder" with user "Alice"
     And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian"
     And user "Alice" has logged in using the webUI

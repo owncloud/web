@@ -10,11 +10,14 @@
     :hover="hover"
     :item-dom-selector="resourceDomSelector"
     :selection="selection"
+    :sort-by="sortBy"
+    :sort-dir="sortDir"
     @highlight="fileClicked"
     @rowMounted="rowMounted"
     @contextmenuClicked="showContextMenu"
     @itemDropped="fileDropped"
     @itemDragged="fileDragged"
+    @sort="sort"
   >
     <template #selectHeader>
       <div class="resource-table-select-all">
@@ -138,6 +141,60 @@
 import { DateTime } from 'luxon'
 import maxSize from 'popper-max-size-modifier'
 import { EVENT_TROW_MOUNTED, EVENT_FILE_DROPPED } from '../../constants'
+import { SortDir } from '../../composables'
+
+const dateSortValue = (date) => {
+  return DateTime.fromRFC2822(date).toUTC().valueOf()
+}
+
+export const determineSortFields = (firstResource) => {
+  if (!firstResource) {
+    return []
+  }
+
+  return [
+    {
+      name: 'name',
+      sortable: true,
+      sortDir: SortDir.Asc
+    },
+    {
+      name: 'size',
+      sortable: true,
+      sortDir: SortDir.Desc
+    },
+    {
+      name: 'sharedWith',
+      sortable: true,
+      sortDir: SortDir.Asc
+    },
+    {
+      name: 'status',
+      sortable: true,
+      sortDir: SortDir.Asc
+    },
+    {
+      name: 'owner',
+      sortable: 'displayName',
+      sortDir: SortDir.Asc
+    },
+    {
+      name: 'mdate',
+      sortable: (date) => dateSortValue(date),
+      sortDir: SortDir.Desc
+    },
+    {
+      name: 'sdate',
+      sortable: (date) => dateSortValue(date),
+      sortDir: SortDir.Desc
+    },
+    {
+      name: 'ddate',
+      sortable: (date) => dateSortValue(date),
+      sortDir: SortDir.Desc
+    }
+  ].filter((field) => Object.prototype.hasOwnProperty.call(firstResource, field.name))
+}
 
 export default {
   model: {
@@ -268,6 +325,25 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    /**
+     * Show that the table is sorted by this column (no actual sorting takes place)
+     */
+    sortBy: {
+      type: String,
+      required: false,
+      default: undefined
+    },
+    /**
+     * Show that the table is sorted ascendingly/descendingly (no actual sorting takes place)
+     */
+    sortDir: {
+      type: String,
+      required: false,
+      default: undefined,
+      validator: (value) => {
+        return value === undefined || [SortDir.Asc, SortDir.Desc].includes(value)
+      }
     }
   },
   data() {
@@ -311,6 +387,7 @@ export default {
           width: 'shrink'
         })
       }
+      const sortFields = determineSortFields(firstResource)
       fields.push(
         ...[
           {
@@ -318,40 +395,35 @@ export default {
             title: this.$gettext('Name'), // How do we get the translations here?
             type: 'slot',
             width: 'expand',
-            wrap: 'truncate',
-            sortable: true
+            wrap: 'truncate'
           },
           {
             name: 'size',
             title: this.$gettext('Size'),
             type: 'slot',
             alignH: 'right',
-            wrap: 'nowrap',
-            sortable: true
+            wrap: 'nowrap'
           },
           {
             name: 'sharedWith',
             title: this.$gettext('Shared with'),
             type: 'slot',
             alignH: 'right',
-            wrap: 'nowrap',
-            sortable: true
+            wrap: 'nowrap'
           },
           {
             name: 'status',
             title: this.$gettext('Status'),
             type: 'slot',
             alignH: 'right',
-            wrap: 'nowrap',
-            sortable: true
+            wrap: 'nowrap'
           },
           {
             name: 'owner',
             title: this.$gettext('Share owner'),
             type: 'slot',
             alignH: 'right',
-            wrap: 'nowrap',
-            sortable: 'displayName'
+            wrap: 'nowrap'
           },
           {
             name: 'mdate',
@@ -359,7 +431,6 @@ export default {
             type: 'slot',
             alignH: 'right',
             wrap: 'nowrap',
-            sortable: (date) => this.unixDate(date),
             accessibleLabelCallback: (item) =>
               this.formatDateRelative(item.mdate) + ' (' + this.formatDate(item.mdate) + ')'
           },
@@ -369,7 +440,6 @@ export default {
             type: 'slot',
             alignH: 'right',
             wrap: 'nowrap',
-            sortable: (date) => this.unixDate(date),
             accessibleLabelCallback: (item) =>
               this.formatDateRelative(item.sdate) + ' (' + this.formatDate(item.sdate) + ')'
           },
@@ -379,11 +449,19 @@ export default {
             type: 'slot',
             alignH: 'right',
             wrap: 'nowrap',
-            sortable: (date) => this.unixDate(date),
             accessibleLabelCallback: (item) =>
               this.formatDateRelative(item.ddate) + ' (' + this.formatDate(item.ddate) + ')'
           }
-        ].filter((field) => Object.prototype.hasOwnProperty.call(firstResource, field.name))
+        ]
+          .filter((field) => Object.prototype.hasOwnProperty.call(firstResource, field.name))
+          .map((field) => {
+            const sortField = sortFields.find((f) => f.name === field.name)
+            Object.assign(field, {
+              sortable: sortField.sortable,
+              sortDir: sortField.sortDir
+            })
+            return field
+          })
       )
       if (this.hasActions) {
         fields.push({
@@ -418,6 +496,9 @@ export default {
     },
     fileDropped(fileId) {
       this.$emit(EVENT_FILE_DROPPED, fileId)
+    },
+    sort(opts) {
+      this.$emit('sort', opts)
     },
     addSelectedResource(file) {
       const isSelected = this.selection.some((e) => e.id === file.id)
@@ -479,9 +560,6 @@ export default {
     },
     formatDateRelative(date) {
       return DateTime.fromJSDate(new Date(date)).setLocale(this.currentLanguage).toRelative()
-    },
-    unixDate(date) {
-      return DateTime.fromJSDate(new Date(date)).setLocale(this.currentLanguage).valueOf()
     },
     emitSelect(resources) {
       /**

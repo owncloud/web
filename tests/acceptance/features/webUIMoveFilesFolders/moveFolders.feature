@@ -4,7 +4,7 @@ Feature: move folders
   So that I can organise my data structure
 
   Background:
-    Given user "Alice" has been created with default attributes and without skeleton files
+    Given user "Alice" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created folder "simple-folder"
     And user "Alice" has created folder "simple-empty-folder"
 
@@ -70,7 +70,7 @@ Feature: move folders
 
   @issue-ocis-1328
   Scenario: move a folder into another folder with no change permission
-    Given user "Brian" has been created with default attributes and without skeleton files
+    Given user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Brian" has created folder "/simple-folder"
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions
     And user "Alice" has logged in using the webUI

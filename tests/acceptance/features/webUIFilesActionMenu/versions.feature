@@ -6,7 +6,7 @@ Feature: Versions of a file
   So that I can have more control over the files
 
   Background:
-    Given these users have been created with default attributes and without skeleton files:
+    Given these users have been created with default attributes and without skeleton files in the server:
       | username |
       | user0    |
       | Alice    |
@@ -77,7 +77,7 @@ Feature: Versions of a file
   Scenario: change the file content of a received shared file
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And the administrator has set the default folder for received shares to "Shares"
-    And user "Brian" has been created with default attributes and without skeleton files
+    And user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Brian" has created folder "simple-folder"
     And user "Brian" has uploaded file with content "a text file" to "simple-folder/lorem.txt"
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "all" permissions

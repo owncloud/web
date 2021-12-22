@@ -27,9 +27,12 @@
         :target-route="targetRoute"
         :header-position="fileListHeaderY"
         :drag-drop="true"
+        :sort-by="sortBy"
+        :sort-dir="sortDir"
         @fileDropped="fileDropped"
         @fileClick="$_fileActions_triggerDefaultAction"
         @rowMounted="rowMounted"
+        @sort="handleSort"
       >
         <template #quickActions="{ resource }">
           <quick-actions
@@ -77,11 +80,12 @@ import {
   useStore,
   useRouteQuery,
   usePagination,
+  useSort,
   useDefaults
 } from '../composables'
 import { bus } from 'web-pkg/src/instance'
 
-import ResourceTable from '../components/FilesList/ResourceTable.vue'
+import ResourceTable, { determineSortFields } from '../components/FilesList/ResourceTable.vue'
 import QuickActions from '../components/FilesList/QuickActions.vue'
 import ListLoader from '../components/FilesList/ListLoader.vue'
 import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
@@ -92,7 +96,7 @@ import ContextActions from '../components/FilesList/ContextActions.vue'
 import { DavProperties } from 'web-pkg/src/constants'
 import { basename, join } from 'path'
 import PQueue from 'p-queue'
-import { nextTick, computed } from '@vue/composition-api'
+import { nextTick, computed, unref } from '@vue/composition-api'
 import { useTask } from 'vue-concurrency'
 
 const visibilityObserver = new VisibilityObserver()
@@ -121,13 +125,31 @@ export default {
     const { pagination: paginationDefaults } = useDefaults()
     const { refresh: refreshFileListHeaderPosition, y: fileListHeaderY } =
       useFileListHeaderPosition()
+
+    const sortByPageQuery = useRouteQuery('sort-by')
+    const sortDirPageQuery = useRouteQuery('sort-dir')
+
+    const storeItems = computed(() => store.getters['Files/activeFiles'] || [])
+    const fields = computed(() => {
+      return determineSortFields(unref(storeItems)[0])
+    })
+
+    const { sortBy, sortDir, items, handleSort } = useSort({
+      items: storeItems,
+      fields: fields,
+      sortBy: sortByPageQuery,
+      sortDir: sortDirPageQuery
+    })
+
     const paginationPageQuery = useRouteQuery('page', '1')
     const paginationPage = computed(() => parseInt(String(paginationPageQuery.value)))
     const paginationPerPageQuery = useRouteQuery('items-per-page', paginationDefaults.perPage.value)
     const { items: paginatedResources, total: paginationPages } = usePagination({
       page: paginationPage,
       perPage: computed(() => parseInt(String(paginationPerPageQuery.value))),
-      items: computed(() => store.getters['Files/activeFiles'])
+      items,
+      sortDir,
+      sortBy
     })
 
     useMutationSubscription(['Files/UPSERT_RESOURCE'], async ({ payload }) => {
@@ -175,7 +197,10 @@ export default {
       loadResourcesTask,
       paginatedResources,
       paginationPages,
-      paginationPage
+      paginationPage,
+      handleSort,
+      sortBy,
+      sortDir
     }
   },
 

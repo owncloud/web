@@ -6,7 +6,7 @@ Feature: copy files and folders
   Background:
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And the administrator has set the default folder for received shares to "Shares"
-    And user "Alice" has been created with default attributes and without skeleton files
+    And user "Alice" has been created with default attributes and without skeleton files in the server
 
   @smokeTest @ocisSmokeTest
   Scenario: copy a file and a folder into a folder
@@ -88,7 +88,7 @@ Feature: copy files and folders
 
   Scenario: copy a file into another folder with no change permission
     Given user "Alice" has created file "lorem.txt"
-    And user "Brian" has been created with default attributes and without skeleton files
+    And user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Brian" has created folder "simple-folder"
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions
     And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian"
@@ -100,7 +100,7 @@ Feature: copy files and folders
   @issue-ocis-1328
   Scenario: copy a folder into another folder with no change permission
     Given user "Alice" has created folder "simple-empty-folder"
-    And user "Brian" has been created with default attributes and without skeleton files
+    And user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Brian" has created folder "simple-folder"
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions
     And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian"

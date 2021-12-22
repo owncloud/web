@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import merge from 'lodash-es/merge'
 import { mount, createLocalVue } from '@vue/test-utils'
 import { DateTime } from 'luxon'
 import DesignSystem from 'owncloud-design-system'
@@ -119,34 +119,6 @@ const resourcesWithAllFields = [
   }
 ]
 
-function getMountedWrapper(options = {}) {
-  const localVue = createLocalVue()
-  localVue.use(DesignSystem)
-  localVue.prototype.$gettextInterpolate = jest.fn()
-  localVue.prototype.$ngettext = jest.fn()
-
-  return mount(
-    ResourceTable,
-    _.merge(
-      {
-        propsData: {
-          resources: resourcesWithAllFields,
-          selection: [],
-          slots: {
-            status: "<div class='status-slot'>Hello world!</div>"
-          },
-          hover: false
-        },
-        stubs: {
-          'router-link': true
-        },
-        localVue
-      },
-      options
-    )
-  )
-}
-
 describe('ResourceTable', () => {
   const spyDisplayPositionedDropdown = jest
     .spyOn(ResourceTable.methods, 'displayPositionedDropdown')
@@ -263,3 +235,31 @@ describe('ResourceTable', () => {
     })
   })
 })
+
+function getMountedWrapper(options = {}) {
+  const localVue = createLocalVue()
+  localVue.use(DesignSystem)
+  localVue.prototype.$gettextInterpolate = jest.fn()
+  localVue.prototype.$ngettext = jest.fn()
+
+  return mount(
+    ResourceTable,
+    merge(
+      {
+        propsData: {
+          resources: resourcesWithAllFields,
+          selection: [],
+          slots: {
+            status: "<div class='status-slot'>Hello world!</div>"
+          },
+          hover: false
+        },
+        stubs: {
+          'router-link': true
+        },
+        localVue
+      },
+      options
+    )
+  )
+}

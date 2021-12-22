@@ -6,7 +6,7 @@ Feature: accept/decline shares coming from internal users
   Background:
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And the administrator has set the default folder for received shares to "Shares"
-    And these users have been created with default attributes and without skeleton files:
+    And these users have been created with default attributes and without skeleton files in the server:
       | username |
       | Alice    |
       | Brian    |
@@ -14,11 +14,11 @@ Feature: accept/decline shares coming from internal users
 
  @issue-ocis-1950
   Scenario: reject a share that you received as user and as group member
-    Given these groups have been created:
+    Given these groups have been created in the server:
       | groupname |
       | grp1      |
     And user "Alice" has created folder "/simple-folder"
-    And user "Brian" has been added to group "grp1"
+    And user "Brian" has been added to group "grp1" in the server
     And user "Alice" has shared folder "/simple-folder" with user "Brian"
     And user "Alice" has shared folder "/simple-folder" with group "grp1"
     And the user has browsed to the shared-with-me page
@@ -30,11 +30,11 @@ Feature: accept/decline shares coming from internal users
 
   @issue-2512 @issue-4102
   Scenario: reshare a share that you received to a group that you are member of
-    Given these groups have been created:
+    Given these groups have been created in the server:
       | groupname |
       | grp1      |
     And user "Alice" has created folder "/simple-folder"
-    And user "Brian" has been added to group "grp1"
+    And user "Brian" has been added to group "grp1" in the server
     And user "Alice" has shared folder "/simple-folder" with user "Brian"
     And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
     And the user has browsed to the files page
@@ -48,12 +48,12 @@ Feature: accept/decline shares coming from internal users
 
   @issue-4102 @issue-5531
   Scenario: unshare accepted shares from "All files" page
-    Given these groups have been created:
+    Given these groups have been created in the server:
       | groupname |
       | grp1      |
     And user "Alice" has uploaded file "testavatar.jpg" to "testimage.jpg"
     And user "Alice" has created folder "/simple-folder"
-    And user "Brian" has been added to group "grp1"
+    And user "Brian" has been added to group "grp1" in the server
     And user "Alice" has shared folder "/simple-folder" with user "Brian"
     And user "Alice" has shared file "/testimage.jpg" with group "grp1"
     And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
@@ -81,7 +81,7 @@ Feature: accept/decline shares coming from internal users
 
 
   Scenario: receive shares with same name from different users
-    Given user "Carol" has been created with default attributes and without skeleton files
+    Given user "Carol" has been created with default attributes and without skeleton files in the server
     And user "Carol" has created file "lorem.txt"
     And user "Alice" has created file "lorem.txt"
     And user "Carol" has shared file "lorem.txt" with user "Brian"
@@ -210,7 +210,7 @@ Feature: accept/decline shares coming from internal users
 
   @ocis-issue-713
   Scenario: receive shares with same name from different users, accept one by one
-    Given user "Carol" has been created with default attributes and without skeleton files
+    Given user "Carol" has been created with default attributes and without skeleton files in the server
     And user "Carol" has created folder "/simple-folder"
     And user "Carol" has created folder "/simple-folder/from_Carol"
     And user "Carol" has shared folder "/simple-folder" with user "Brian"
@@ -227,11 +227,11 @@ Feature: accept/decline shares coming from internal users
 
   @issue-ocis-1950
   Scenario: accept a share that you received as user and as group member
-    Given these groups have been created:
+    Given these groups have been created in the server:
       | groupname |
       | grp1      |
     And user "Alice" has created folder "/simple-folder"
-    And user "Brian" has been added to group "grp1"
+    And user "Brian" has been added to group "grp1" in the server
     And user "Alice" has shared folder "/simple-folder" with user "Brian"
     And user "Alice" has shared folder "/simple-folder" with group "grp1"
     And the user has browsed to the shared-with-me page

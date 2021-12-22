@@ -5,7 +5,7 @@ Feature: Sharing folders with multiple internal users using advanced permissions
   So that I can control the access on those folders by other collaborators
 
   Background:
-    Given these users have been created with default attributes and without skeleton files:
+    Given these users have been created with default attributes and without skeleton files in the server:
       | username |
       | Alice    |
       | Brian    |
@@ -13,7 +13,7 @@ Feature: Sharing folders with multiple internal users using advanced permissions
     And user "Alice" has uploaded file "lorem.txt" to "simple-folder/lorem.txt"
 
   Scenario Outline: share a folder with multiple users using role as advanced permissions role and different extra permissions
-    Given these users have been created with default attributes and without skeleton files:
+    Given these users have been created with default attributes and without skeleton files in the server:
       | username |
       | user0    |
       | Carol    |

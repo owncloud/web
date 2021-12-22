@@ -6,7 +6,7 @@ Feature: display notifications on the webUI
   So that I can stay informed
 
   Background:
-    Given user "Alice" has been created with default attributes and without skeleton files
+    Given user "Alice" has been created with default attributes and without skeleton files in the server
     And user "Alice" has logged in using the webUI
 
 

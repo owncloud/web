@@ -5,7 +5,7 @@ Feature: browse directly to details tab
   So that I can see the details immediately without needing to click in the UI
 
   Background:
-    Given user "Alice" has been created with default attributes and without skeleton files
+    Given user "Alice" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created folder "simple-folder"
     And user "Alice" has created file "simple-folder/lorem.txt"
     And user "Alice" has logged in using the webUI

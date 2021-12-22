@@ -4,10 +4,10 @@ Feature: view profile
   So that I can remove access to files and resources for a user, without actually deleting the files and resources
 
   Background:
-    Given user "Alice" has been created with default attributes and without skeleton files
+    Given user "Alice" has been created with default attributes and without skeleton files in the server
     And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
-    And user "Alice" has been blocked by admin
+    And user "Alice" has been blocked by admin in the server
 
   @openIdLogin
   Scenario: the user session of a blocked user is cleared properly using openid authentication

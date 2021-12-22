@@ -17,7 +17,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And server "%backend_url%" has been added as trusted server on remote server
     And server "%remote_backend_url%" has been added as trusted server on remote server
     And user "Alice" has been created with default attributes and without skeleton files on remote server
-    And user "Alice" has been created with default attributes and without skeleton files
+    And user "Alice" has been created with default attributes and without skeleton files in the server
     And user "Alice" has logged in using the webUI
 
 
@@ -173,7 +173,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
 
 
   Scenario: test resharing folder with "Viewer" role
-    Given user "Brian" has been created with default attributes and without skeleton files
+    Given user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created folder "simple-folder" on remote server
     And user "Alice" has created file "simple-folder/lorem.txt" on remote server
     And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server
@@ -315,8 +315,8 @@ Feature: Federation Sharing - sharing with users on other cloud storages
 
   @issue-2060
   Scenario: sharing indicator of items inside a re-shared folder
-    Given user "Brian" has been created with default attributes and without skeleton files
-    And user "Carol" has been created with default attributes and without skeleton files
+    Given user "Brian" has been created with default attributes and without skeleton files in the server
+    And user "Carol" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created folder "simple-folder"
     And user "Alice" has created folder "simple-folder/simple-empty-folder"
     And user "Alice" has created file "simple-folder/lorem.txt"
@@ -339,8 +339,8 @@ Feature: Federation Sharing - sharing with users on other cloud storages
 
   @issue-2060
   Scenario: sharing indicator of items inside a re-shared subfolder
-    Given user "Brian" has been created with default attributes and without skeleton files
-    And user "Carol" has been created with default attributes and without skeleton files
+    Given user "Brian" has been created with default attributes and without skeleton files in the server
+    And user "Carol" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created folder "simple-folder"
     And user "Alice" has created folder "simple-folder/simple-empty-folder"
     And user "Alice" has created file "simple-folder/lorem.txt"

@@ -4,8 +4,8 @@ Feature: User Journey 1
   I would like to do basic file operations
 
   Background:
-    Given user "Alice" has been created with default attributes and without skeleton files
-    And user "Brian" has been created with default attributes and without skeleton files
+    Given user "Alice" has been created with default attributes and without skeleton files in the server
+    And user "Brian" has been created with default attributes and without skeleton files in the server
 
   @journey
   Scenario: simple upload of a file that does not exist before

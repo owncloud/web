@@ -5,17 +5,17 @@ Feature: Sharing files and folders with internal groups
   So that those groups can access the files and folders
 
   Background:
-    Given these users have been created with default attributes and without skeleton files:
+    Given these users have been created with default attributes and without skeleton files in the server:
       | username |
       | Alice    |
       | Brian    |
       | Carol    |
-    And these groups have been created:
+    And these groups have been created in the server:
       | groupname |
       | grp1      |
       | grp11     |
-    And user "Alice" has been added to group "grp1"
-    And user "Brian" has been added to group "grp1"
+    And user "Alice" has been added to group "grp1" in the server
+    And user "Brian" has been added to group "grp1" in the server
 
 
   Scenario: share a folder with multiple collaborators and check collaborator list order
@@ -161,9 +161,9 @@ Feature: Sharing files and folders with internal groups
 
 
   Scenario: user shares the file/folder with multiple internal users and delete the share with one user
-    Given group "grp2" has been created
+    Given group "grp2" has been created in the server
     And user "Alice" has created file "lorem.txt"
-    And user "Carol" has been added to group "grp2"
+    And user "Carol" has been added to group "grp2" in the server
     And user "Alice" has logged in using the webUI
     And user "Alice" has shared file "lorem.txt" with group "grp1"
     And user "Alice" has shared file "lorem.txt" with group "grp2"
@@ -179,7 +179,7 @@ Feature: Sharing files and folders with internal groups
 
 
   Scenario: Auto-completion for a group that is excluded from receiving shares
-    Given group "system-group" has been created
+    Given group "system-group" has been created in the server
     And the administrator has excluded group "system-group" from receiving shares
     And user "Alice" has created folder "simple-folder"
     When the user re-logs in as "Alice" using the webUI

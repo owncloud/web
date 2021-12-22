@@ -5,17 +5,17 @@ Feature: Sharing files and folders with internal groups
   So that those groups can access the files and folders
 
   Background:
-    Given these users have been created with default attributes and without skeleton files:
+    Given these users have been created with default attributes and without skeleton files in the server:
       | username |
       | Alice    |
       | Brian    |
       | Carol    |
-    And these groups have been created:
+    And these groups have been created in the server:
       | groupname |
       | grp1      |
       | grp11     |
-    And user "Alice" has been added to group "grp1"
-    And user "Brian" has been added to group "grp1"
+    And user "Alice" has been added to group "grp1" in the server
+    And user "Brian" has been added to group "grp1" in the server
     And user "Alice" has created folder "simple-folder"
 
   @issue-2060
@@ -122,7 +122,7 @@ Feature: Sharing files and folders with internal groups
 
   @issue-2939
   Scenario: sharing indicator for group shares stays up to date
-    Given these groups have been created:
+    Given these groups have been created in the server:
       | groupname |
       | grp2      |
       | grp3      |

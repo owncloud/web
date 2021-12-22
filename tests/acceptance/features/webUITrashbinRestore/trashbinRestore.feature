@@ -5,7 +5,7 @@ Feature: Restore deleted files/folders
   So that I can recover accidentally deleted files/folders in ownCloud
 
   Background:
-    Given user "Alice" has been created with default attributes and without skeleton files
+    Given user "Alice" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created file "sample,1.txt"
     And user "Alice" has created folder "Folder,With,Comma"
     And user "Alice" has logged in using the webUI
@@ -260,7 +260,7 @@ Feature: Restore deleted files/folders
   Scenario: delete and restore a file inside a received shared folder
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And the administrator has set the default folder for received shares to "Shares"
-    And user "Carol" has been created with default attributes and without skeleton files
+    And user "Carol" has been created with default attributes and without skeleton files in the server
     And user "Carol" has created folder "folder-to-share"
     And user "Carol" has uploaded file with content "does-not-matter" to "folder-to-share/fileToShare.txt"
     And user "Carol" has shared folder "folder-to-share" with user "Alice"

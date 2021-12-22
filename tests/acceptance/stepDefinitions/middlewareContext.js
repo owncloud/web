@@ -2,23 +2,30 @@ const { After, Before, Given } = require('@cucumber/cucumber')
 const fetch = require('node-fetch')
 const { client } = require('nightwatch-api')
 
-function handler(statement1, statement2) {
+function handler(statement1, statement2, table = undefined) {
   let statement = ''
   if (statement1) {
     statement = statement + statement1.trim()
   }
 
-  if (statement1 && statement2) {
+  if (statement1 && statement2 && statement2 !== ':') {
     statement = statement + ' '
   }
 
   if (statement2) {
     statement = statement + statement2.trim()
   }
+  const data = {
+    step: 'Given ' + statement
+  }
+
+  if (table) {
+    data.table = table
+  }
 
   return fetch(client.globals.middlewareUrl + '/execute', {
     method: 'POST',
-    body: JSON.stringify({ step: 'Given ' + statement }),
+    body: JSON.stringify(data),
     headers: {
       'Content-Type': 'application/json'
     }
@@ -32,7 +39,6 @@ function handler(statement1, statement2) {
       }
     })
     .catch((err) => {
-      console.error(err)
       return Promise.reject(err)
     })
 }
@@ -57,4 +63,16 @@ After(function () {
   })
 })
 
-Given(/^(.*)in the server(.*)$/, handler)
+Given(/^((?!these).*)(in the server|on remote server)(.*)$/, (st1, st2, st3) => {
+  if (st2 === 'on remote server') {
+    st1 = st1 + st2
+  }
+  return handler(st1, st3)
+})
+
+Given(/^(.*these.*)(in the server|on remote server)(.*)$/, (st1, st2, st3, table) => {
+  if (st2 === 'on remote server') {
+    st1 = st1 + st2
+  }
+  return handler(st1, st3, table.raw())
+})

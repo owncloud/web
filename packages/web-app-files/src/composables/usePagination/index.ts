@@ -17,14 +17,14 @@ export function usePagination<T>(options: PaginationOptions<T>): PaginationResul
   const perPage = ref(options.perPage)
   const total = computed(() => Math.ceil(unref(options.items).length / perPage.value) || 1)
   const items = computed(() => {
-    if (!perPage.value) {
+    if (!unref(perPage)) {
       return unref(options.items)
     }
 
     const start = (page.value - 1) * perPage.value
     const end = start + perPage.value
 
-    return unref(options.items).slice(start, end)
+    return unref(unref(options.items)).slice(start, end)
   })
 
   return {

@@ -9,7 +9,7 @@ Feature: login users
   So that unauthorised access is impossible
 
   Background:
-    Given user "Alice" has been created with default attributes and without skeleton files
+    Given user "Alice" has been created with default attributes and without skeleton files in the server
 
   @ocisSmokeTest
   Scenario: admin login
@@ -42,14 +42,14 @@ Feature: login users
   Scenario: the user session of a deleted user is cleared properly
     Given user "Alice" has logged in using the webUI
     And the user has browsed to the files page
-    And user "Alice" has been deleted
+    And user "Alice" has been deleted in the server
     When the user reloads the current page of the webUI
     Then the user should be redirected to the owncloud login page
 
 
   Scenario: the user session of a deleted user should not be valid for newly created user of same name
     Given user "Alice" has logged in using the webUI
-    And user "Alice" has been deleted
-    And user "Alice" has been created with default attributes and without skeleton files
+    And user "Alice" has been deleted in the server
+    And user "Alice" has been created with default attributes and without skeleton files in the server
     When the user reloads the current page of the webUI
     Then the user should be redirected to the owncloud login page
