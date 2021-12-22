@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Editor default handling: [#6186](https://github.com/owncloud/web/pull/6186)
 * Bugfix - Sort before pagination: [#5687](https://github.com/owncloud/web/issues/5687)
 * Enhancement - Edit people shares without changing the panel: [#6039](https://github.com/owncloud/web/pull/6039)
 * Enhancement - Respect share max, min and enforced expiration date: [#6176](https://github.com/owncloud/web/pull/6176)
@@ -15,6 +16,15 @@ Summary
 
 Details
 -------
+
+* Bugfix - Editor default handling: [#6186](https://github.com/owncloud/web/pull/6186)
+
+   Editor apps that don't provide the information about whether or not they are a default editor
+   were not recognized as default editors when left-clicking a file in the file list. We've
+   changed the default behaviour so that editors are capable of being the default editor unless
+   explicitly disabled.
+
+   https://github.com/owncloud/web/pull/6186
 
 * Bugfix - Sort before pagination: [#5687](https://github.com/owncloud/web/issues/5687)
 
