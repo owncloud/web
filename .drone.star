@@ -2693,7 +2693,7 @@ def buildGithubComment(suite):
         "name": "build-github-comment",
         "image": OC_UBUNTU,
         "commands": [
-            "cd %s/tests/reports/e2e/playwright/tracing/" % dir["web"],
+            "cd %s/reports/e2e/playwright/tracing/" % dir["web"],
             'echo "<details><summary>:boom: The acceptance tests failed. Please find the screenshots inside ...</summary>\\n\\n<p>\\n\\n" >> %s/comments.file' % dir["web"],
             'for f in *.zip; do echo "### $f\n" \'!\'"[$f]($CACHE_ENDPOINT/owncloud/web/tracing/${DRONE_BUILD_NUMBER}/$f) \n" >> %s/comments.file; done' % dir["web"],
             'echo "\n</p></details>" >> %s/comments.file' % dir["web"],
