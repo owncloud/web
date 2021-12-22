@@ -8,12 +8,23 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Sort before pagination: [#5687](https://github.com/owncloud/web/issues/5687)
 * Enhancement - Edit people shares without changing the panel: [#6039](https://github.com/owncloud/web/pull/6039)
 * Enhancement - Respect share max, min and enforced expiration date: [#6176](https://github.com/owncloud/web/pull/6176)
 * Enhancement - Simplify people sharing sidebar: [#6039](https://github.com/owncloud/web/pull/6039)
 
 Details
 -------
+
+* Bugfix - Sort before pagination: [#5687](https://github.com/owncloud/web/issues/5687)
+
+   We've extracted the sorting logic from the [OcTable
+   component](https://owncloud.design/#/oC%20Components/OcTable) and moved it to the data
+   preprocessing steps in web. This way we won't sort the current page anymore, but sort the whole
+   data of the current folder and then only show the current page from that sorted data.
+
+   https://github.com/owncloud/web/issues/5687
+   https://github.com/owncloud/web/pull/6136
 
 * Enhancement - Edit people shares without changing the panel: [#6039](https://github.com/owncloud/web/pull/6039)
 
