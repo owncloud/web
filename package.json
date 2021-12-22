@@ -98,7 +98,7 @@
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-copy-watch": "^0.0.1",
     "rollup-plugin-delete": "^2.0.0",
-    "rollup-plugin-gzip": "^2.5.0",
+    "rollup-plugin-gzip": "^3.0.0",
     "rollup-plugin-livereload": "^2.0.0",
     "rollup-plugin-modify": "^3.0.0",
     "rollup-plugin-node-globals": "^1.4.0",
