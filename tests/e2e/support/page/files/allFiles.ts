@@ -336,18 +336,10 @@ export class AllFilesPage {
     await filesCta.sidebar.openPanel({ page: page, name: 'sharing' })
 
     for (const user of users) {
-<<<<<<< HEAD
-      const userColumn = `//*[@data-testid="collaborator-user-item-${user.id}"]`
-      await page.click(`${userColumn}//button[contains(@class,"files-recipient-role-select-btn")]`)
-      await page.click(
-        `${userColumn}//ul[contains(@class,"files-recipient-role-drop-list")]//button[@id="files-recipient-role-drop-btn-${role}"]`
-      )
-=======
       await page.locator(`//*[@data-testid="recipient-${user.id}-btn-edit"]`).click()
       await page.locator('//*[@id="files-collaborators-role-button"]').click()
       await page.locator(`//*[@id="files-role-${role}"]`).click()
       await page.locator('//*[@data-testid="recipient-edit-btn-save"]').click()
->>>>>>> 7305909f3 (prefer locators api over others)
     }
     await page.goto(startUrl)
   }
@@ -365,12 +357,7 @@ export class AllFilesPage {
     await filesCta.sidebar.open({ page: page, resource: folderName })
     await filesCta.sidebar.openPanel({ page: page, name: 'sharing' })
 
-<<<<<<< HEAD
-    for (const user of users) {
-      const userColumn = `//*[@data-testid="collaborator-user-item-${user.id}"]`
-=======
     await page.locator('//*[@data-testid="collaborators-show-people"]').click()
->>>>>>> 7305909f3 (prefer locators api over others)
 
     for (const user of users) {
       await Promise.all([
