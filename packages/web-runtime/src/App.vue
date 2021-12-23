@@ -117,6 +117,7 @@ import TopBar from './components/TopBar.vue'
 import MessageBar from './components/MessageBar.vue'
 import SkipTo from './components/SkipTo.vue'
 import { FocusTrap } from 'focus-trap-vue'
+import { getBackendVersion, getWebVersion } from './container/versions'
 
 export default {
   components: {
@@ -304,6 +305,13 @@ export default {
     if (this.favicon) {
       metaInfo.link = [{ rel: 'icon', href: this.favicon }]
     }
+    const metaGenerator = {
+      name: 'generator',
+      content: [getWebVersion(), getBackendVersion({ store: this.$store })]
+        .filter(Boolean)
+        .join(', ')
+    }
+    metaInfo.meta = [metaGenerator]
     return metaInfo
   },
 

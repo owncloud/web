@@ -23,6 +23,7 @@ import ts from 'rollup-plugin-ts'
 
 const production = !process.env.ROLLUP_WATCH
 const sourcemap = process.env.SOURCE_MAP === 'true'
+const { version } = require('./package.json')
 
 const plugins = [
   del({
@@ -53,6 +54,7 @@ const plugins = [
   }),
   modify({
     'process.env.NODE_ENV': JSON.stringify(production ? 'production' : 'development'),
+    'process.env.PACKAGE_VERSION': JSON.stringify(version),
     // todo: owncloud-sdk _makeOCSrequest has no catch
     // this is required if a network error for example 'blocked by CORS' happened
     'l(o.instance+p,{method:e,body:d.body,headers:h})':
@@ -83,7 +85,7 @@ const plugins = [
     ]
   }),
   html({
-    title: process.env.TITLE || "ownCloud",
+    title: process.env.TITLE || 'ownCloud',
     attributes: {
       html: { lang: 'en' },
       link: [],
@@ -124,7 +126,7 @@ const plugins = [
                 if (!Object.hasOwnProperty.call(acc, c)) {
                   acc[c] = {}
                 }
-                files[c].forEach(f => {
+                files[c].forEach((f) => {
                   const fp = path.parse(f.fileName)
                   acc[c][
                     production ? fp.name.substr(0, fp.name.lastIndexOf('-')) || fp.name : fp.name
@@ -203,12 +205,12 @@ export default {
     chunkFileNames: path.join('js', 'chunks', production ? '[name]-[hash].js' : '[name].js'),
     entryFileNames: path.join('js', production ? '[name]-[hash].js' : '[name].js')
   },
-  manualChunks: id => {
+  manualChunks: (id) => {
     if (id.includes('node_modules')) {
       return 'vendor'
     }
   },
-  onwarn: warning => {
+  onwarn: (warning) => {
     if (warning.code !== 'CIRCULAR_DEPENDENCY') {
       console.error(`(!) ${warning.message}`)
     }
