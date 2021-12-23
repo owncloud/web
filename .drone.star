@@ -1,3 +1,8 @@
+OC_CI_ALPINE = "owncloudci/alpine:latest"
+OC_CI_WAIT_FOR = "owncloudci/wait-for:latest"
+OC_CI_NODEJS = "owncloudci/nodejs:14"
+OC_UBUNTU = "owncloud/ubuntu:20.04"
+
 # UI Test suite types
 FULL = 1
 FEDERATED = 2
@@ -3156,3 +3161,15 @@ def pipelineSanityChecks(ctx, pipelines):
 
     for image in images.keys():
         print(" %sx\t%s" % (images[image], image))
+
+def waitForServer(federatedServerNeeded):
+    return [{
+        "name": "wait-for-server",
+        "image": OC_CI_WAIT_FOR,
+        "pull": "always",
+        "commands": [
+            "wait-for -it server:80 -t 600",
+        ] + ([
+            "wait-for -it federated:80 -t 600",
+        ] if federatedServerNeeded else []),
+    }]
