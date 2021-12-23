@@ -165,12 +165,12 @@ export const determineSortFields = (firstResource) => {
     },
     {
       name: 'sharedWith',
-      sortable: true,
-      sortDir: SortDir.Asc
-    },
-    {
-      name: 'status',
-      sortable: true,
+      sortable: (sharedWith) => {
+        if (sharedWith.length > 0) {
+          return sharedWith[0].displayName
+        }
+        return false
+      },
       sortDir: SortDir.Asc
     },
     {
@@ -456,10 +456,12 @@ export default {
           .filter((field) => Object.prototype.hasOwnProperty.call(firstResource, field.name))
           .map((field) => {
             const sortField = sortFields.find((f) => f.name === field.name)
-            Object.assign(field, {
-              sortable: sortField.sortable,
-              sortDir: sortField.sortDir
-            })
+            if (sortField) {
+              Object.assign(field, {
+                sortable: sortField.sortable,
+                sortDir: sortField.sortDir
+              })
+            }
             return field
           })
       )
