@@ -21,7 +21,7 @@
     "lint": "eslint '{packages,tests}/**/*.{js,ts,vue}' --color",
     "serve": "SERVER=true yarn build:w",
     "test:integration": "jest --config ./tests/integration/config/jest.config.js",
-    "test:smoke": "NODE_TLS_REJECT_UNAUTHORIZED=0 cucumber-js --profile=smoke",
+    "test:e2e:cucumber": "NODE_TLS_REJECT_UNAUTHORIZED=0 cucumber-js --profile=e2e",
     "test:unit": "jest --coverage --config ./tests/unit/config/jest.config.js"
   },
   "browserslist": [
@@ -88,6 +88,8 @@
     "join-path": "^1.1.1",
     "lodash": "^4.17.21",
     "node-fetch": "^2.6.1",
+    "pino": "^7.5.1",
+    "pino-pretty": "^7.3.0",
     "playwright": "^1.17.1",
     "postcss": "^8.3.6",
     "prettier": "^2.3.2",
