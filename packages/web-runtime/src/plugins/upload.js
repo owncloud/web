@@ -1,11 +1,11 @@
-import tus from 'tus-js-client'
+import { isSupported, Upload } from 'tus-js-client'
 
 export default {
   install(Vue) {
     Vue.mixin({
       computed: {
         browserSupportsChunked() {
-          return tus.isSupported
+          return isSupported
         }
       },
       methods: {
@@ -20,7 +20,7 @@ export default {
             if (file.lastModified) {
               mtime = file.lastModified / 1000
             }
-            const upload = new tus.Upload(file, {
+            const upload = new Upload(file, {
               endpoint: this.$client.files.getFileUrlV2(path),
               headers: headers,
               chunkSize: options.chunkSize || Infinity,
@@ -46,6 +46,13 @@ export default {
               onSuccess: () => {
                 resolve(`File ${upload.file.name} was successfully uploaded`)
               }
+            })
+
+            upload.findPreviousUploads().then((previousUploads) => {
+              if (previousUploads.length === 0) {
+                return
+              }
+              upload.resumeFromPreviousUpload(previousUploads[0])
             })
 
             upload.start()
