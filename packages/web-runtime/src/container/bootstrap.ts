@@ -9,6 +9,7 @@ import OwnCloud from 'owncloud-sdk'
 import { sync as routerSync } from 'vuex-router-sync'
 import getTextPlugin from 'vue-gettext'
 import set from 'lodash-es/set'
+import { getBackendVersion, getWebVersion } from './versions'
 
 /**
  * fetch runtime configuration, this step is optional, all later steps can use a static
@@ -238,4 +239,19 @@ export const announceDefaults = ({
   ])
 
   routerSync(store, router)
+}
+
+/**
+ * announce some version numbers
+ *
+ * @param store
+ */
+export const announceVersions = ({ store }: { store: Store<unknown> }): void => {
+  const versions = [getWebVersion(), getBackendVersion({ store })].filter(Boolean)
+  versions.forEach((version) => {
+    console.log(
+      `%c ${version} `,
+      'background-color: #041E42; color: #FFFFFF; font-weight: bold; border: 1px solid #FFFFFF; padding: 5px;'
+    )
+  })
 }

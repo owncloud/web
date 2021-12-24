@@ -1,0 +1,6 @@
+Enhancement: Print version numbers
+
+The package version of the web UI and the version of the backend (if available) now get printed to the browser console and get set as meta generator tag in the html head. This makes it possible to easily reference versions in bug reports.
+
+https://github.com/owncloud/web/issues/5954
+https://github.com/owncloud/web/pull/6190
