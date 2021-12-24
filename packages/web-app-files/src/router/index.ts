@@ -37,8 +37,6 @@ const buildRoutes = (components: RouteComponents): RouteConfig[] => [
   ...buildDeprecatedRoutes()
 ]
 
-// const isLocationOf = isLocationActiveCreator<locationTypes>(createLocationFor)
-
 export {
   createLocationCommon,
   createLocationShares,

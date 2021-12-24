@@ -118,7 +118,6 @@ export default {
 
     viaRouterParams() {
       const viaPath = this.link.path
-      // toDo
       return createLocationSpaces({
         params: {
           item: dirname(viaPath) || '/'
