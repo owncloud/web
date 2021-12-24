@@ -1,3 +1,27 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v4.8.0...master
+
+Summary
+-------
+
+* Enhancement - Print version numbers: [#5954](https://github.com/owncloud/web/issues/5954)
+
+Details
+-------
+
+* Enhancement - Print version numbers: [#5954](https://github.com/owncloud/web/issues/5954)
+
+   The package version of the web UI and the version of the backend (if available) now get printed to
+   the browser console and get set as meta generator tag in the html head. This makes it possible to
+   easily reference versions in bug reports.
+
+   https://github.com/owncloud/web/issues/5954
+   https://github.com/owncloud/web/pull/6190
+
 Changelog for ownCloud Web [4.8.0] (2021-12-22)
 =======================================
 The following sections list the changes in ownCloud web 4.8.0 relevant to
