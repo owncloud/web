@@ -1,5 +1,5 @@
 import quickActions, { canShare, createPublicLink } from '../../quickActions'
-import { ShareStatus } from '../../helpers/shareStatus'
+import { ShareStatus } from '../../helpers/share'
 import { isLocationSharesActive } from '../../router'
 
 export default {

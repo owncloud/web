@@ -1,8 +1,8 @@
 import { triggerShareAction } from '../../helpers/share/triggerShareAction'
-import { ShareStatus } from '../../helpers/shareStatus'
+import { isLocationSharesActive } from '../../router'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import PQueue from 'p-queue'
-import { isLocationSharesActive } from '../../router'
+import { ShareStatus } from '../../helpers/share'
 
 export default {
   computed: {

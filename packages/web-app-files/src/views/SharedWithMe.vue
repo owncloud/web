@@ -16,8 +16,6 @@
           class="files-table"
           :class="{ 'files-table-squashed': !sidebarClosed }"
           :are-thumbnails-displayed="displayThumbnails"
-          :resources="showMorePending ? pending : pending.slice(0, 3)"
-          :target-route="resourceTargetLocation"
           :resources="showMorePending ? pendingItems : pendingItems.slice(0, 3)"
           :target-route="targetRoute"
           :are-resources-clickable="false"

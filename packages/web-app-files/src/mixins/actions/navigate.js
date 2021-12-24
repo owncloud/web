@@ -1,4 +1,3 @@
-import { isPublicFilesRoute, isSharedWithMeRoute, isTrashbinRoute } from '../../helpers/route'
 import { mapState } from 'vuex'
 import { isSameResource } from '../../helpers/resource'
 import {

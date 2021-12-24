@@ -1,5 +1,6 @@
 import { shallowMount, mount } from '@vue/test-utils'
 import { getStore, getRouter, localVue, createFile } from './views.setup.js'
+import { createLocationSpaces } from '../../../src/router'
 import FileActions from '@files/src/mixins/fileActions'
 import SharedViaLink from '@files/src/views/SharedViaLink.vue'
 
@@ -102,7 +103,7 @@ describe('SharedViaLink view', () => {
         expect(ocTableFiles.props().resources).toMatchObject(resources)
         expect(ocTableFiles.props().areThumbnailsDisplayed).toBe(false)
         expect(ocTableFiles.props().headerPosition).toBe(0)
-        expect(ocTableFiles.props().targetRoute).toMatchObject({ name: 'files-personal' })
+        expect(ocTableFiles.props().targetRoute).toMatchObject(createLocationSpaces())
       })
       it('should set props on list-info component', () => {
         const listInfo = wrapper.find(listInfoStub)
