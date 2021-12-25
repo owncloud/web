@@ -1,5 +1,6 @@
-OC_CI_ALPINE = "owncloudci/alpine:latest"
-OC_CI_WAIT_FOR = "owncloudci/wait-for:latest"
+waitForEmailService(testConfig["emailNeeded"]) +
+                             fixPermissions(testConfig["phpVersion"], testConfig["federatedServerNeeded"], params["selUserNeeded"]) +
+                             waitForBrowserService(testConfig["browser"]) +
 OC_CI_NODEJS = "owncloudci/nodejs:14"
 OC_UBUNTU = "owncloud/ubuntu:20.04"
 
@@ -3173,3 +3174,15 @@ def waitForServer(federatedServerNeeded):
             "wait-for -it federated:80 -t 600",
         ] if federatedServerNeeded else []),
     }]
+
+def waitForEmailService(emailNeeded):
+    if emailNeeded:
+        return [{
+            "name": "wait-for-email",
+            "image": OC_CI_WAIT_FOR,
+            "commands": [
+                "wait-for -it email:8025 -t 600",
+            ],
+        }]
+
+    return []
