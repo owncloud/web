@@ -6788,6 +6788,7 @@ __metadata:
     copy-to-clipboard: ^3.3.1
     filter-obj: ^2.0.1
     semver: ^6.1.0
+    typescript-axios: "file:../../libre-graph-api-typescript-axios"
     vue2-dropzone: ^3.6.0
   languageName: unknown
   linkType: soft
@@ -14851,6 +14852,13 @@ __metadata:
   version: 0.0.6
   resolution: "typedarray@npm:0.0.6"
   checksum: 33b39f3d0e8463985eeaeeacc3cb2e28bc3dfaf2a5ed219628c0b629d5d7b810b0eb2165f9f607c34871d5daa92ba1dc69f49051cf7d578b4cbd26c340b9d1b1
+  languageName: node
+  linkType: hard
+
+"typescript-axios@file:../../libre-graph-api-typescript-axios::locator=files%40workspace%3Apackages%2Fweb-app-files":
+  version: 0.0.0
+  resolution: "typescript-axios@file:../../libre-graph-api-typescript-axios#../../libre-graph-api-typescript-axios::hash=4ad935&locator=files%40workspace%3Apackages%2Fweb-app-files"
+  checksum: 9a75838296517619c068120983de8c2c596d15bcd8b6869a24ebcb3cbaede6d060c0f398e06facc08ab6926ef0cfaa934b0b6f2890853465739090101c65cb7e
   languageName: node
   linkType: hard
 

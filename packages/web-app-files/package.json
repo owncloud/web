@@ -8,6 +8,7 @@
     "copy-to-clipboard": "^3.3.1",
     "filter-obj": "^2.0.1",
     "semver": "^6.1.0",
+    "typescript-axios": "file:../../libre-graph-api-typescript-axios",
     "vue2-dropzone": "^3.6.0"
   }
 }

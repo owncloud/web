@@ -78,6 +78,14 @@ const navItems = [
     }
   },
   {
+    name: $gettext('Spaces'),
+    iconMaterial: 'space',
+    route: {
+      name: 'files-spaces',
+      path: `/${appInfo.id}/list/spaces`
+    }
+  },
+  {
     name: $gettext('Deleted files'),
     iconMaterial: 'delete-bin-5',
     fillType: 'fill',
