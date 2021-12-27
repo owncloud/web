@@ -22,7 +22,6 @@
           <sidebar-nav
             v-show="isSidebarVisible"
             id="web-nav-sidebar"
-            v-touch:swipe.left="handleNavSwipe"
             class="oc-app-navigation"
             :accessible-label-header="$gettext('Sidebar header')"
             :accessible-label-nav="$gettext('Sidebar navigation menu')"

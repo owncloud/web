@@ -15244,13 +15244,6 @@ typescript@^4.3.2:
   languageName: node
   linkType: hard
 
-"vue2-touch-events@npm:^3.2.2":
-  version: 3.2.2
-  resolution: "vue2-touch-events@npm:3.2.2"
-  checksum: 6816a5edc6ffcbcbdf64d271bbee90f9674e31e2b94b96350b0e144f14cff3450ce106acb2c59a8c8d7c118cabe0e87327ee2e69307735a808a5f7be049b68e1
-  languageName: node
-  linkType: hard
-
 "vue@npm:^2.6.10":
   version: 2.6.14
   resolution: "vue@npm:2.6.14"
@@ -15383,7 +15376,6 @@ typescript@^4.3.2:
     vue-router: ^3.1.3
     vue-scrollto: ^2.15.0
     vue-select: ^3.13.2
-    vue2-touch-events: ^3.2.2
     vuex: ^3.6.2
     vuex-extensions: ^1.1.5
     vuex-persist: 3.1.3
