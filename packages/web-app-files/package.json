@@ -6,7 +6,7 @@
   "dependencies": {
     "@types/semver": "^7.3.8",
     "copy-to-clipboard": "^3.3.1",
-    "filter-obj": "^2.0.1",
+    "filter-obj": "^3.0.0",
     "semver": "^6.1.0",
     "vue2-dropzone": "^3.6.0"
   }
