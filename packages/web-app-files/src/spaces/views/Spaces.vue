@@ -29,6 +29,34 @@
             </span>
           </span>
         </a>
+        <a v-for="space in spaces" :key="space.id" href="#">
+          <span class="spaces-list-card oc-border uk-card uk-card-default">
+            <span class="uk-card-media-top oc-border-b">
+              <img
+                :src="space.image ? space.image : defaultImg"
+                :class="{ 'spaces-list-default-img': !space.image }"
+                :alt="$gettext('Space image')"
+              />
+            </span>
+            <span class="uk-card-body">
+              <h3 class="uk-card-title">Another Space</h3>
+            </span>
+          </span>
+        </a>
+        <a v-for="space in spaces" :key="space.id" href="#">
+          <span class="spaces-list-card oc-border uk-card uk-card-default">
+            <span class="uk-card-media-top oc-border-b">
+              <img
+                :src="space.image ? space.image : defaultImg"
+                :class="{ 'spaces-list-default-img': !space.image }"
+                :alt="$gettext('Space image')"
+              />
+            </span>
+            <span class="uk-card-body">
+              <h3 class="uk-card-title">Lorem</h3>
+            </span>
+          </span>
+        </a>
       </div>
       <div v-else>
         <no-content-message id="files-spaces-empty" class="files-empty" icon="space">
@@ -110,7 +138,7 @@ export default {
 <style lang="scss">
 .spaces-list {
   &-card {
-    box-shadow: none;
+    box-shadow: none !important;
   }
 
   .uk-card-media-top {
