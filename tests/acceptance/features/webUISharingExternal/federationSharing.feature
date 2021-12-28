@@ -5,7 +5,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
   So that other users have access to these files
 
   Background:
-    Given app "notifications" has been enabled in the server
+    Given app "notifications" has been "enabled" in the server
     And the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "no" on remote server
     And the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "no"
     And the setting "shareapi_auto_accept_share" of app "core" has been set to "no" on remote server
