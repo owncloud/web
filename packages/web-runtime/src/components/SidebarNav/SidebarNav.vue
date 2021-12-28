@@ -1,97 +1,109 @@
-<template functional>
-  <div
-    :ref="data.ref"
-    class="oc-sidebar"
-    :class="[data.staticClass, data.class]"
-    v-bind="data.attrs"
-  >
-    <header
-      v-if="slots().header"
-      class="oc-sidebar-header uk-flex uk-flex-middle"
-      :aria-label="props.accessibleLabelHeader"
+<template>
+  <div id="web-nav-sidebar" :class="sidebarClasses">
+    <oc-button
+      variation="inverse"
+      appearance="raw"
+      :class="toggleSidebarButtonClass"
+      class="toggle-sidebar-button oc-py-s"
+      :aria-label="$gettext('Toggle sidebar')"
+      @click="toggleSidebarButtonClick"
     >
-      <!-- @slot Header of the sidebar -->
-      <slot name="header" />
-    </header>
-    <nav v-if="slots().nav" class="oc-sidebar-nav" :aria-label="props.accessibleLabelNav">
-      <!-- @slot Main content of the sidebar -->
-      <slot name="nav" />
+      <oc-icon size="large" :name="toggleSidebarButtonIcon" />
+    </oc-button>
+    <nav
+      class="oc-sidebar-nav oc-my-l oc-px-xs"
+      :aria-label="$gettext('Sidebar top navigation menu')"
+    >
+      <oc-list>
+        <sidebar-nav-item
+          v-for="(link, index) in navItems"
+          :id="`nav-item-${index}`"
+          :key="link.route.path"
+          :target="link.route.path"
+          :active="link.active"
+          :icon="link.icon || link.iconMaterial"
+          :name="link.name"
+          :collapsed="navigation.closed"
+        />
+      </oc-list>
     </nav>
-    <footer
-      v-if="slots().footer"
-      class="oc-sidebar-footer"
-      :aria-label="props.accessibleLabelFooter"
-    >
-      <!-- @slot Footer of the sidebar -->
-      <slot name="footer" />
-    </footer>
+    <!-- @slot bottom content of the sidebar -->
+    <slot name="bottom" />
   </div>
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
+import SidebarNavItem from './SidebarNavItem.vue'
+
 export default {
+  components: {
+    SidebarNavItem
+  },
   props: {
-    /**
-     * Accessible label for the header inside the sidebar
-     */
-    accessibleLabelHeader: {
-      type: String,
+    navItems: {
+      type: Array,
       required: true
+    }
+  },
+  computed: {
+    ...mapState(['sidebar', 'navigation']),
+
+    sidebarClasses() {
+      if (this.navigation.closed) {
+        return 'uk-visible@l oc-app-navigation-collapsed'
+      }
+      return 'uk-visible@l'
     },
-    /**
-     * Accessible label for the navigation inside the sidebar
-     */
-    accessibleLabelNav: {
-      type: String,
-      required: true
+
+    toggleSidebarButtonClass() {
+      return this.navigation.closed
+        ? 'toggle-sidebar-button-collapsed'
+        : 'toggle-sidebar-button-expanded oc-pr-s'
     },
-    /**
-     * Accessible label for the footer inside the sidebar
-     */
-    accessibleLabelFooter: {
-      type: String,
-      required: true
+
+    toggleSidebarButtonIcon() {
+      return this.navigation.closed ? 'chevron_right' : 'chevron_left'
+    }
+  },
+  methods: {
+    ...mapActions(['openNavigation', 'closeNavigation']),
+
+    toggleSidebarButtonClick() {
+      if (this.navigation.closed) return this.openNavigation()
+      return this.closeNavigation()
     }
   }
 }
 </script>
 
 <style lang="scss">
-.oc-sidebar {
-  background-color: var(--oc-color-swatch-brand-default);
-  box-sizing: border-box;
+#web-nav-sidebar {
+  background-color: #2d2d2d;
+  border-top-left-radius: 15px;
+  border-bottom-left-radius: 15px;
+  // box-shadow: 5px 0px 25px rgba(0, 0, 0, 0.3);
   color: var(--oc-color-text-inverse);
   display: flex;
   flex-direction: column;
-  overflow: hidden auto;
+  position: sticky;
+  top: 0;
+  transition: all 0.35s cubic-bezier(0.34, 0.11, 0, 1.12);
   width: var(--oc-size-width-medium);
-  background-color: #202020;
-  overflow: visible;
-  z-index: var(--oc-z-index-modal);
 
-  &-header {
-    padding: 0 var(--oc-space-medium);
-    height: 64px;
-    flex-shrink: 0;
-  }
-
-  &-nav {
-    flex: auto;
-    margin-bottom: var(--oc-space-large);
-    background-color: #2d2d2d;
-    border-radius: 15px;
-    padding-top: var(--oc-space-large);
-    margin-left: var(--oc-space-small);
-    box-shadow: 5px 0px 25px rgba(0, 0, 0, 0.3);
-  }
-
-  &-footer {
-    padding: 0 var(--oc-space-medium);
-
-    p {
-      color: inherit;
-      margin-bottom: 0;
+  .toggle-sidebar-button {
+    transition: all 0.2s ease-out;
+    &:hover {
+      border-top-left-radius: 15px;
+      background: #383838;
     }
   }
+  .toggle-sidebar-button-expanded {
+    justify-content: flex-end !important;
+  }
+}
+
+.oc-app-navigation-collapsed {
+  width: 75px !important;
 }
 </style>

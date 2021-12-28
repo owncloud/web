@@ -3,20 +3,18 @@
     <oc-button
       id="_userMenuButton"
       ref="menuButton"
-      class="oc-topbar-personal uk-height-1-1 oc-pr-xs oc-mr-m"
+      class="oc-topbar-personal uk-height-1-1"
       appearance="raw"
       variation="inverse"
       :aria-label="$gettext('User Menu')"
     >
-      <oc-grid flex>
-        <avatar-image
-          class="oc-topbar-personal-avatar uk-flex-inline uk-flex-center uk-flex-middle oc-px-s"
-          :width="24"
-          :userid="userId"
-          :user-name="userDisplayName"
-        />
-        <div class="oc-topbar-personal-label oc-text-bold oc-ml-rm" v-text="userDisplayName" />
-      </oc-grid>
+      <avatar-image
+        class="oc-topbar-personal-avatar uk-flex-inline uk-flex-center uk-flex-middle"
+        :width="24"
+        :userid="userId"
+        :user-name="userDisplayName"
+      />
+      <div class="oc-topbar-personal-label oc-text-bold" v-text="userDisplayName" />
     </oc-button>
     <oc-drop
       ref="menu"

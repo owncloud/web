@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`OcSidebarNav renders navItem with toolTip if collapsed 1`] = `
+<li class="oc-sidebar-nav-item oc-pb-xs oc-px-s">
+  <router-link-stub id="123" to="/files/list/all" class="oc-sidebar-nav-item-link"><span class="oc-icon oc-icon-m oc-icon-inverse" aria-hidden="true"><!----></span> <span class="oc-ml-m text text-invisible">All files</span></router-link-stub>
+</li>
+`;
+
+exports[`OcSidebarNav renders navItem without toolTip if expanded 1`] = `
+<li class="oc-sidebar-nav-item oc-pb-xs oc-px-s">
+  <router-link-stub id="123" to="/files/list/all" class="oc-sidebar-nav-item-link"><span class="oc-icon oc-icon-m oc-icon-inverse" aria-hidden="true"><!----></span> <span class="oc-ml-m text">All files</span></router-link-stub>
+</li>
+`;

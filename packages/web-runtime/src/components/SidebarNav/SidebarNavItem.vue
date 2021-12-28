@@ -1,44 +1,24 @@
-<template functional>
-  <li
-    v-bind="data.attrs"
-    :ref="data.ref"
-    :class="[
-      'oc-sidebar-nav-item',
-      'oc-pb-xs',
-      'oc-pl-s',
-      'oc-pr-s',
-      { 'oc-sidebar-nav-item-isolated': props.isolate },
-      { 'oc-sidebar-nav-item-parent': slots().subnav },
-      data.staticClass,
-      data.class
-    ]"
-    :aria-current="props.active ? 'page' : null"
-  >
+<template>
+  <li class="oc-sidebar-nav-item oc-pb-xs oc-px-s" :aria-current="active ? 'page' : null">
     <router-link
-      v-if="props.target"
-      :id="props.id"
-      :class="['oc-sidebar-nav-item-link', { active: props.active }]"
-      :to="props.target"
+      :id="id"
+      v-oc-tooltip="toolTip"
+      :class="['oc-sidebar-nav-item-link', { active: active }]"
+      :to="target"
     >
-      <oc-icon
-        :class="{ 'oc-sidebar-nav-item-icon': !props.collapsed }"
-        :name="props.icon"
-        variation="inverse"
-        aria-hidden="true"
-      />
-      <slot name="default" />
+      <oc-icon :name="icon" variation="inverse" aria-hidden="true" />
+      <span class="oc-ml-m text" :class="{ 'text-invisible': collapsed }" v-text="name" />
     </router-link>
-    <oc-button v-else appearance="raw" @click="$emit('click', $event)">
-      <slot name="default" />
-    </oc-button>
-    <oc-list v-if="slots().subnav" class="oc-sidebar-nav-item-list">
-      <slot name="subnav" />
-    </oc-list>
   </li>
 </template>
 <script>
 export default {
   props: {
+    name: {
+      type: String,
+      required: false,
+      default: ''
+    },
     active: {
       type: Boolean,
       required: false,
@@ -54,11 +34,6 @@ export default {
       required: true,
       default: ''
     },
-    isolate: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
     collapsed: {
       type: Boolean,
       required: false,
@@ -69,58 +44,49 @@ export default {
       required: false,
       default: ''
     }
+  },
+  computed: {
+    toolTip() {
+      if (this.collapsed) {
+        return this.$gettext(`Navigate to ${this.name} page`)
+      } else {
+        return ''
+      }
+    }
   }
 }
 </script>
 
 <style lang="scss">
-.oc-sidebar-nav-item {
-  &-link {
-    position: relative;
-    align-items: center;
-    -webkit-user-drag: none;
-    color: var(--oc-color-border);
-    display: flex;
-    font-weight: 400;
-    padding: var(--oc-space-small) var(--oc-space-small);
-    border-radius: 5px;
-    white-space: nowrap;
-    user-select: none;
+.oc-sidebar-nav-item-link {
+  align-items: center;
+  color: var(--oc-color-border);
+  display: flex;
+  font-weight: 400;
+  padding: var(--oc-space-small) var(--oc-space-small);
+  border-radius: 5px;
+  white-space: nowrap;
+  user-select: none;
 
-    &.active {
-      color: var(--oc-color-text-inverse);
-      border: 0px;
-    }
-
-    .oc-icon > svg {
-      fill: var(--oc-color-border) !important;
-    }
-
-    &.active > .oc-icon > svg {
-      fill: var(--oc-color-text-inverse) !important;
-    }
-
-    &:hover {
-      text-decoration: none;
-      color: var(--oc-color-text-inverse);
-    }
-
-    &.active {
-      cursor: default;
-    }
+  .text {
+    opacity: 1;
+    transition: all 0.35s ease-out;
+  }
+  .text-invisible {
+    opacity: 0 !important;
+    transition: 0s;
   }
 
-  &-icon {
-    margin-right: var(--oc-space-medium);
+  &.active {
+    background: linear-gradient(90deg, #0869de 0%, #4e85c8 100%);
+    cursor: default;
   }
-
-  &-isolated {
-    margin-top: var(--oc-space-medium);
+  &:hover {
+    color: var(--oc-color-text-inverse);
+    text-decoration: none;
   }
-
-  &-list &-link {
-    font-size: 0.875rem;
-    padding-left: var(--oc-space-large);
+  &:not(.active):hover {
+    background: #383838;
   }
 }
 </style>

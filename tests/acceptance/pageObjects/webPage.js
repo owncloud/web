@@ -308,7 +308,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     appNavigation: {
-      selector: '.oc-app-navigation'
+      selector: '#web-nav-sidebar'
     },
     filelink: {
       selector:

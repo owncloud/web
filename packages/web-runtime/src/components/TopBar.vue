@@ -1,23 +1,19 @@
 <template>
   <header
     id="oc-topbar"
-    class="uk-flex uk-flex-middle uk-flex-between oc-mx-m"
+    class="uk-flex uk-flex-middle uk-flex-between oc-px-m"
     :aria-label="$gettext('Top bar')"
   >
-    <div class="gap-15 uk-flex uk-flex-middle uk-flex-between">
-      <applications-menu
-        v-if="applicationsList.length > 0"
-        class="application-menu"
-        :applications-list="applicationsList"
-      />
-      <router-link ref="navigationSidebarLogo" to="/" class="oc-ml-m">
+    <div class="gap-30 uk-flex uk-flex-middle uk-flex-between">
+      <applications-menu v-if="applicationsList.length > 0" :applications-list="applicationsList" />
+      <router-link ref="navigationSidebarLogo" to="/">
         <oc-img :src="logoImage" :alt="sidebarLogoAlt" />
       </router-link>
     </div>
     <div class="portal-wrapper">
       <portal-target name="app.runtime.header" multiple></portal-target>
     </div>
-    <div class="gap-15 uk-flex uk-flex-middle uk-flex-between">
+    <div class="gap-30 uk-flex uk-flex-middle uk-flex-between">
       <feedback-link v-if="isFeedbackLinkEnabled" />
       <notifications v-if="activeNotifications.length" />
       <user-menu
@@ -84,16 +80,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.gap-15 {
-  gap: 15px;
+.gap-30 {
+  gap: 30px;
 }
 #oc-topbar {
-  position: absolute;
-  height: 64px;
-  left: 0;
-  z-index: 9999;
+  height: 60px;
+  position: sticky;
+  z-index: 2;
   img {
-    margin: 0 !important;
     height: 42px;
     image-rendering: auto;
     image-rendering: crisp-edges;
@@ -101,8 +95,5 @@ export default {
     image-rendering: -webkit-optimize-contrast;
     user-select: none;
   }
-}
-.application-menu {
-  margin-left: 25px;
 }
 </style>

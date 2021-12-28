@@ -16,87 +16,21 @@
     <template v-else-if="!showHeader">
       <router-view name="fullscreen" />
     </template>
-    <div v-else id="web-content" key="core-content" class="uk-flex uk-flex-stretch">
-      <transition :name="appNavigationAnimation">
-        <focus-trap v-if="isSidebarVisible" :active="isSidebarFixed && appNavigationVisible">
-          <sidebar-nav
-            v-show="isSidebarVisible"
-            id="web-nav-sidebar"
-            class="oc-app-navigation"
-            :accessible-label-header="$gettext('Sidebar header')"
-            :accessible-label-nav="$gettext('Sidebar navigation menu')"
-            :accessible-label-footer="$gettext('Sidebar footer')"
-            :class="sidebarClasses"
-          >
-            <template #header>
-              <div class="uk-text-center">
-                <oc-button
-                  v-if="isSidebarFixed"
-                  variation="inverse"
-                  appearance="raw"
-                  class="web-sidebar-btn-close"
-                  :aria-label="$gettext('Close sidebar')"
-                  @click="toggleAppNavigationVisibility"
-                >
-                  <oc-icon name="close" />
-                </oc-button>
-              </div>
-            </template>
-            <template #nav>
-              <oc-list>
-                <sidebar-nav-item :class="toggleSidebarButtonClass">
-                  <oc-button
-                    variation="inverse"
-                    appearance="raw"
-                    class="toggle-sidebar-button"
-                    :aria-label="$gettext('Toggle sidebar')"
-                    @click="toggleSidebarButtonClick"
-                  >
-                    <oc-icon size="large" :name="toggleSidebarButtonIcon" />
-                  </oc-button>
-                </sidebar-nav-item>
-                <sidebar-nav-item
-                  v-for="(link, index) in sidebarNavItems"
-                  :id="`nav-item-${index}`"
-                  :key="link.route.path"
-                  :target="link.route.path"
-                  :active="link.active"
-                  :icon="link.icon || link.iconMaterial"
-                  :collapsed="navigation.closed"
-                >
-                  <span :class="{ text: true, 'text-invisible': navigation.closed }">
-                    {{ link.name }}
-                  </span>
-                  <span class="hover-blob" />
-                  <span
-                    v-if="index === 0"
-                    class="active-blob"
-                    :style="activeBlobStyle"
-                    @click.prevent.stop
-                  />
-                </sidebar-nav-item>
-              </oc-list>
-            </template>
-            <template v-if="sidebar.sidebarFooterContentComponent" #footer>
-              <component :is="sidebar.sidebarFooterContentComponent" />
-            </template>
-          </sidebar-nav>
-        </focus-trap>
-      </transition>
-      <div class="uk-width-expand web-content-container">
-        <top-bar
-          v-if="!publicPage() && !$route.meta.verbose"
-          id="oc-topbar"
-          class="uk-width-expand"
-          :applications-list="applicationsList"
-          :active-notifications="activeNotifications"
-          :user-id="user.username || user.id"
-          :user-display-name="user.displayname"
-          @toggleAppNavigationVisibility="toggleAppNavigationVisibility"
-        />
-        <div id="main">
-          <message-bar :active-messages="activeMessages" @deleteMessage="$_deleteMessage" />
-          <router-view class="oc-app-container" name="app" />
+    <div v-else id="web-content">
+      <top-bar
+        v-if="!publicPage() && !$route.meta.verbose"
+        :applications-list="applicationsList"
+        :active-notifications="activeNotifications"
+        :user-id="user.username || user.id"
+        :user-display-name="user.displayname"
+      />
+      <div id="main">
+        <message-bar :active-messages="activeMessages" @deleteMessage="$_deleteMessage" />
+        <div id="main-app-area" class="oc-my-m oc-mx-s uk-flex">
+          <transition>
+            <sidebar-nav :nav-items="sidebarNavItems" />
+          </transition>
+          <router-view class="oc-app-container uk-width-1-1 oc-py-s oc-ps-s" name="app" />
         </div>
       </div>
     </div>
@@ -134,23 +68,18 @@ import { mapGetters, mapState, mapActions } from 'vuex'
 import TopBar from './components/TopBar.vue'
 import MessageBar from './components/MessageBar.vue'
 import SkipTo from './components/SkipTo.vue'
-import { FocusTrap } from 'focus-trap-vue'
 import { getBackendVersion, getWebVersion } from './container/versions'
 import SidebarNav from './components/SidebarNav/SidebarNav.vue'
-import SidebarNavItem from './components/SidebarNav/SidebarNavItem.vue'
 
 export default {
   components: {
     MessageBar,
     TopBar,
     SkipTo,
-    FocusTrap,
-    SidebarNav,
-    SidebarNavItem
+    SidebarNav
   },
   data() {
     return {
-      appNavigationVisible: false,
       $_notificationsInterval: null,
       windowWidth: 0,
       announcement: '',
@@ -158,7 +87,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['route', 'user', 'modal', 'sidebar', 'navigation']),
+    ...mapState(['route', 'user', 'modal', 'sidebar']),
     ...mapGetters([
       'configuration',
       'activeNotifications',
@@ -219,7 +148,6 @@ export default {
 
         return item.enabled(this.capabilities)
       })
-
       return items.map((item) => ({
         ...item,
         name: this.$gettext(item.name),
@@ -227,37 +155,8 @@ export default {
       }))
     },
 
-    sidebarClasses() {
-      if (this.appNavigationVisible) {
-        return ''
-      }
-      if (this.navigation.closed) {
-        return 'uk-visible@l oc-app-navigation-collapsed'
-      }
-      return 'uk-visible@l'
-    },
-
-    isSidebarFixed() {
-      return this.windowWidth <= 960
-    },
-
     isSidebarVisible() {
-      if (this.sidebarNavItems.length === 0) {
-        return false
-      }
-      return this.windowWidth >= 1200 || this.appNavigationVisible
-    },
-
-    appNavigationAnimation() {
-      if (this.windowWidth > 1200) {
-        return null
-      }
-
-      if (this.windowWidth > 960) {
-        return 'push-right'
-      }
-
-      return 'fade'
+      return this.sidebarNavItems.length && this.windowWidth >= 1200
     },
 
     selectedLanguage() {
@@ -266,16 +165,6 @@ export default {
         bundle: 'profile',
         setting: 'language'
       })
-    },
-
-    toggleSidebarButtonClass() {
-      return this.navigation.closed
-        ? 'web-sidebar-btn-toggle-collapsed'
-        : 'web-sidebar-btn-toggle-expanded oc-pr-s'
-    },
-
-    toggleSidebarButtonIcon() {
-      return this.navigation.closed ? 'chevron_right' : 'chevron_left'
     }
   },
   watch: {
@@ -284,19 +173,6 @@ export default {
       handler: function (to) {
         this.announceRouteChange(to)
         document.title = this.extractPageTitleFromRoute(to)
-        this.appNavigationVisible = false
-      }
-    },
-    sidebarNavItems: {
-      immediate: true,
-      deep: true,
-      handler: function (sidebarNavItems) {
-        sidebarNavItems.forEach((item, index) => {
-          if (!item.active) return
-          const isRendered = Object.keys(this.activeBlobStyle).length !== 0
-          if (isRendered) return this.animateBlob(index)
-          this.updateNavigationHighlight(sidebarNavItems)
-        })
       }
     },
     capabilities: {
@@ -363,39 +239,12 @@ export default {
   },
 
   methods: {
-    ...mapActions(['fetchNotifications', 'deleteMessage', 'openNavigation', 'closeNavigation']),
-
-    updateNavigationHighlight(sidebarNavItems) {
-      sidebarNavItems.forEach((item, index) => {
-        if (!item.active) return
-        setTimeout(() => {
-          this.animateBlob(index, 0)
-        }, 1)
-      })
-    },
-    toggleSidebarButtonClick() {
-      if (this.navigation.closed) return this.openNavigation()
-      return this.closeNavigation()
-    },
+    ...mapActions(['fetchNotifications', 'deleteMessage']),
 
     focusModal(component, event) {
       this.focus({
         revert: event === 'beforeDestroy'
       })
-    },
-
-    hideAppNavigation() {
-      this.appNavigationVisible = false
-    },
-
-    toggleAppNavigationVisibility() {
-      this.appNavigationVisible = !this.appNavigationVisible
-
-      if (this.appNavigationVisible) {
-        this.$nextTick(() => {
-          this.$refs.navigationSidebarLogo.$el.focus()
-        })
-      }
     },
 
     $_updateNotifications() {
@@ -410,22 +259,7 @@ export default {
     },
 
     onResize() {
-      const width = window.innerWidth
-
-      // Reset navigation visibility in case of switching back to permanently visible sidebar
-      if (width >= 1200) {
-        this.appNavigationVisible = false
-      }
-
-      this.windowWidth = width
-    },
-
-    handleNavSwipe() {
-      if (this.windowWidth <= 960 || this.windowWidth > 1200) {
-        return
-      }
-
-      this.appNavigationVisible = false
+      this.windowWidth = window.innerWidth
     },
 
     announceRouteChange(route) {
@@ -455,35 +289,6 @@ export default {
       }
 
       return titleSegments.join(' - ')
-    },
-
-    animateBlob(index, duration = 0.26) {
-      const currentElement = this.getNavigationElement(0)
-      const targetElement = this.getNavigationElement(index)
-      const distance = this.getDistanceBetweenElements(currentElement, targetElement)
-
-      this.activeBlobStyle.opacity = 1
-      this.activeBlobStyle.transform = `translateY(${distance}px)`
-      this.activeBlobStyle['transition-duration'] = `${duration}s`
-      this.$forceUpdate()
-    },
-
-    getNavigationElement(index) {
-      return document.getElementById(`nav-item-${index}`)
-    },
-
-    getPositionAtCenter(element) {
-      const { top, left, width, height } = element.getBoundingClientRect()
-      return {
-        x: left + width / 2,
-        y: top + height / 2
-      }
-    },
-
-    getDistanceBetweenElements(a, b) {
-      const aPosition = this.getPositionAtCenter(a)
-      const bPosition = this.getPositionAtCenter(b)
-      return Math.hypot(aPosition.x - bPosition.x, aPosition.y - bPosition.y)
     }
   }
 }
@@ -498,110 +303,18 @@ body,
 }
 
 #web {
-  background-color: var(--oc-color-background-default);
-}
-
-#web-nav-sidebar {
-  transition: all 0.35s cubic-bezier(0.34, 0.11, 0, 1.12);
-  .oc-icon {
-    z-index: 2;
-  }
-  .text {
-    z-index: 2;
-    opacity: 1;
-    transition: all 0.35s ease-out;
-    overflow: hidden;
-  }
-  .text-invisible {
-    opacity: 0 !important;
-    transition: 0s;
-    margin-left: var(--oc-space-medium) !important;
-  }
-  .toggle-sidebar-button {
-    padding: 4px;
-    border-radius: 5px;
-    transition: all 0.2s ease-out;
-    &:hover {
-      background: #383838;
-    }
-  }
-  .active-blob {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border: 0;
-    opacity: 0;
-    background: linear-gradient(90deg, #0869de 0%, #4e85c8 100%);
-    z-index: 1;
-    transition: transform 0.3s cubic-bezier(0.51, 0.06, 0.42, 1.26);
-    border-radius: 5px;
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      bottom: 0;
-      width: 44px;
-      box-shadow: 2px 0px 6px rgba(0, 0, 0, 0.14);
-    }
-  }
-  .hover-blob {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border: 0;
-    z-index: 0;
-    transition: all 0.2s ease-out;
-  }
-  .hover-blob:hover,
-  .text:hover + .hover-blob,
-  .oc-icon:hover ~ .hover-blob {
-    background-color: #202020;
-    border-radius: 5px;
-  }
-  .icon-expanded {
-    margin-right: var(--oc-space-medium);
-  }
-}
-
-#oc-topbar {
-  position: sticky;
-  top: 0;
-  height: 60px;
-  z-index: 2;
   background-color: #202020;
-  margin-left: 0px !important;
 }
 
-.web-content-container {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: max-content 1fr;
-  gap: 0px 0px;
-  grid-template-areas:
-    'header'
-    'main';
+.oc-app-container {
+  min-height: 85vh;
+  max-height: 85vh !important;
+  overflow-y: scroll;
 }
 
-#main {
-  position: relative;
-  grid-area: main;
-  overflow-y: auto;
-  margin-top: 64px;
-}
-
-.oc-app-navigation-collapsed {
-  width: 75px !important;
-}
-
-.oc-app-navigation {
-  position: sticky;
-  top: 0;
-  z-index: 1;
+#main-app-area {
+  background-color: var(--oc-color-background-default);
+  border-radius: 15px;
 }
 
 .loading-overlay {
@@ -619,40 +332,5 @@ body,
       border-bottom: 10px solid transparent;
     }
   }
-}
-
-@media only screen and (max-width: 960px) {
-  #web-nav-sidebar {
-    height: 100%;
-    left: 0;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 3;
-  }
-}
-
-.web-sidebar-btn-close {
-  position: absolute;
-  right: var(--oc-space-medium);
-  top: var(--oc-space-medium);
-  z-index: 3;
-}
-
-.web-sidebar-btn-apps {
-  position: absolute;
-  left: var(--oc-space-medium);
-  top: calc(var(--oc-space-medium) + 9px);
-  z-index: 3;
-  margin-left: var(--oc-space-small);
-}
-.web-sidebar-btn-toggle-expanded {
-  text-align: right;
-  float: right;
-  width: 100%;
-  display: block;
-}
-.web-sidebar-btn-toggle-collapsed {
-  text-align: center;
 }
 </style>
