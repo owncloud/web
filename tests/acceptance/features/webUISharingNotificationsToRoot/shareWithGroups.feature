@@ -5,7 +5,7 @@ Feature: Sharing files and folders with internal groups
   So that those groups can access the files and folders
 
   Background:
-    Given app "notifications" has been enabled
+    Given app "notifications" has been enabled in the server
     And these users have been created with default attributes and without skeleton files in the server:
       | username |
       | Alice    |
