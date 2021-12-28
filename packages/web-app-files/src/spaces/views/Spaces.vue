@@ -29,34 +29,6 @@
             </span>
           </span>
         </a>
-        <a v-for="space in spaces" :key="space.id" href="#">
-          <span class="spaces-list-card oc-border uk-card uk-card-default">
-            <span class="uk-card-media-top oc-border-b">
-              <img
-                :src="space.image ? space.image : defaultImg"
-                :class="{ 'spaces-list-default-img': !space.image }"
-                :alt="$gettext('Space image')"
-              />
-            </span>
-            <span class="uk-card-body">
-              <h3 class="uk-card-title">Another Space</h3>
-            </span>
-          </span>
-        </a>
-        <a v-for="space in spaces" :key="space.id" href="#">
-          <span class="spaces-list-card oc-border uk-card uk-card-default">
-            <span class="uk-card-media-top oc-border-b">
-              <img
-                :src="space.image ? space.image : defaultImg"
-                :class="{ 'spaces-list-default-img': !space.image }"
-                :alt="$gettext('Space image')"
-              />
-            </span>
-            <span class="uk-card-body">
-              <h3 class="uk-card-title">Lorem</h3>
-            </span>
-          </span>
-        </a>
       </div>
       <div v-else>
         <no-content-message id="files-spaces-empty" class="files-empty" icon="space">
@@ -70,66 +42,34 @@
 </template>
 
 <script>
-import { MeDrivesApi, Configuration } from 'typescript-axios'
-import axios from 'axios'
 import NoContentMessage from '../../components/FilesList/NoContentMessage.vue'
-import { mapGetters } from 'vuex'
-import { useTask } from 'vue-concurrency'
+import { ref, onMounted } from '@vue/composition-api'
+import { useStore } from '../../composables'
+import { spacesSDK } from '../sdk'
 
 export default {
   components: {
     NoContentMessage
   },
   setup() {
-    const loadSpacesTask = useTask(function* (signal, ref) {
-      ref.spaces = ref.loadSpaces()
+    const store = useStore()
+    const spaces = ref([])
+    const defaultImg = store.getters.configuration.theme.spaces?.defaultImg
+    const localSDK = spacesSDK(store.getters.configuration.server, store.getters.getToken)
+
+    onMounted(async () => {
+      const myDrives = (await localSDK.drives.listMyDrives()).data?.value
+
+      if (!myDrives) {
+        return
+      }
+
+      spaces.value = myDrives.filter((drive) => drive.driveType === 'project')
     })
 
     return {
-      loadSpacesTask
-    }
-  },
-
-  data: function () {
-    return {
-      spaces: []
-    }
-  },
-  computed: {
-    ...mapGetters(['configuration', 'getToken']),
-
-    defaultImg() {
-      return this.configuration.theme.spaces.defaultImg
-    }
-  },
-  created() {
-    this.loadSpacesTask.perform(this)
-  },
-  methods: {
-    async loadSpaces() {
-      const basePath = 'https://localhost:9200/graph/v1.0'
-      const drivesConfig = new Configuration({
-        basePath
-      })
-
-      const axiosClient = axios.create({
-        headers: {
-          authorization: 'Bearer ' + this.getToken,
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-      })
-
-      axiosClient.interceptors.request.use((config) => {
-        config.headers['Content-Type'] = 'application/x-www-form-urlencoded'
-        return config
-      })
-
-      const meDrivesApi = new MeDrivesApi(drivesConfig, basePath, axiosClient)
-      const meDrives = (await meDrivesApi.listMyDrives())?.data?.value
-
-      if (meDrives) {
-        this.spaces = meDrives.filter((drive) => drive.driveType === 'project')
-      }
+      spaces,
+      defaultImg
     }
   }
 }
@@ -146,6 +86,7 @@ export default {
     width: 100%;
     background-color: var(--oc-color-background-muted);
   }
+
   .uk-card-media-top img {
     max-height: 150px;
   }
