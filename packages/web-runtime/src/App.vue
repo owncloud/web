@@ -28,7 +28,7 @@
         <message-bar :active-messages="activeMessages" @deleteMessage="$_deleteMessage" />
         <div id="main-app-area" class="oc-my-m oc-mx-s uk-flex">
           <transition>
-            <sidebar-nav :nav-items="sidebarNavItems" />
+            <sidebar-nav v-if="isSidebarVisible" :nav-items="sidebarNavItems" />
           </transition>
           <router-view class="oc-app-container uk-width-1-1 oc-py-s oc-ps-s" name="app" />
         </div>

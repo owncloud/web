@@ -14,7 +14,7 @@
         :userid="userId"
         :user-name="userDisplayName"
       />
-      <div class="oc-topbar-personal-label oc-text-bold" v-text="userDisplayName" />
+      <div class="oc-topbar-personal-label oc-text-bold oc-visible@s" v-text="userDisplayName" />
     </oc-button>
     <oc-drop
       ref="menu"

@@ -2,7 +2,7 @@
 
 exports[`Top Bar component Displays applications menu 1`] = `
 <header id="oc-topbar" aria-label="Top bar" class="uk-flex uk-flex-middle uk-flex-between oc-px-m">
-  <div class="gap-30 uk-flex uk-flex-middle uk-flex-between">
+  <div class="topbar-gap uk-flex uk-flex-middle uk-flex-between">
     <applications-menu-stub applicationslist="testApp"></applications-menu-stub>
     <router-link-stub to="/">
       <oc-img-stub src=""></oc-img-stub>
@@ -11,7 +11,7 @@ exports[`Top Bar component Displays applications menu 1`] = `
   <div class="portal-wrapper">
     <portal-target-stub name="app.runtime.header" multiple=""></portal-target-stub>
   </div>
-  <div class="gap-30 uk-flex uk-flex-middle uk-flex-between">
+  <div class="topbar-gap uk-flex uk-flex-middle uk-flex-between">
     <feedback-link-stub></feedback-link-stub>
     <!---->
     <user-menu-stub userid="einstein" userdisplayname="Albert Einstein" applicationslist="testApp"></user-menu-stub>

@@ -1,5 +1,5 @@
 <template>
-  <main id="markdown-editor">
+  <main id="markdown-editor" class="oc-mx-s oc-my-s">
     <markdown-editor-app-bar />
     <oc-notifications>
       <oc-notification-message

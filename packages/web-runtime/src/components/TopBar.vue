@@ -4,7 +4,7 @@
     class="uk-flex uk-flex-middle uk-flex-between oc-px-m"
     :aria-label="$gettext('Top bar')"
   >
-    <div class="gap-30 uk-flex uk-flex-middle uk-flex-between">
+    <div class="topbar-gap uk-flex uk-flex-middle uk-flex-between">
       <applications-menu v-if="applicationsList.length > 0" :applications-list="applicationsList" />
       <router-link ref="navigationSidebarLogo" to="/">
         <oc-img :src="logoImage" :alt="sidebarLogoAlt" />
@@ -13,7 +13,7 @@
     <div class="portal-wrapper">
       <portal-target name="app.runtime.header" multiple></portal-target>
     </div>
-    <div class="gap-30 uk-flex uk-flex-middle uk-flex-between">
+    <div class="topbar-gap uk-flex uk-flex-middle uk-flex-between">
       <feedback-link v-if="isFeedbackLinkEnabled" />
       <notifications v-if="activeNotifications.length" />
       <user-menu
@@ -79,10 +79,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.gap-30 {
-  gap: 30px;
-}
+<style lang="scss">
 #oc-topbar {
   height: 60px;
   position: sticky;
@@ -94,6 +91,14 @@ export default {
     image-rendering: pixelated;
     image-rendering: -webkit-optimize-contrast;
     user-select: none;
+  }
+  .topbar-gap {
+    gap: 30px;
+  }
+  @media only screen and (max-width: 960px) {
+    .topbar-gap {
+      gap: 0.5rem;
+    }
   }
 }
 </style>

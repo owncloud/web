@@ -1,7 +1,6 @@
 <template>
   <li class="oc-sidebar-nav-item oc-pb-xs oc-px-s" :aria-current="active ? 'page' : null">
     <router-link
-      :id="id"
       v-oc-tooltip="toolTip"
       :class="['oc-sidebar-nav-item-link', { active: active }]"
       :to="target"
@@ -38,11 +37,6 @@ export default {
       type: Boolean,
       required: false,
       default: false
-    },
-    id: {
-      type: String,
-      required: false,
-      default: ''
     }
   },
   computed: {

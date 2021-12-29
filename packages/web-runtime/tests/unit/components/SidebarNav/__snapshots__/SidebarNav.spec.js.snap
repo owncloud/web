@@ -6,11 +6,11 @@ exports[`OcSidebarNav renders navItems into a list 1`] = `
   </button>
   <nav aria-label="Sidebar top navigation menu" class="oc-sidebar-nav oc-my-l oc-px-xs">
     <oc-list-stub>
-      <sidebar-nav-item-stub name="All files" active="true" target="/files/list/all" icon="folder" id="nav-item-0"></sidebar-nav-item-stub>
-      <sidebar-nav-item-stub name="Shared with me" target="/files/list/shared-with-me" icon="shared-with-me" id="nav-item-1"></sidebar-nav-item-stub>
-      <sidebar-nav-item-stub name="Shared with others" target="/files/list/shared-with-others" icon="shared-with-others" id="nav-item-2"></sidebar-nav-item-stub>
-      <sidebar-nav-item-stub name="Shared via link" target="/files/list/shared-via-link" icon="link" id="nav-item-3"></sidebar-nav-item-stub>
-      <sidebar-nav-item-stub name="Deleted files" target="/files/list/trash-bin" icon="delete" id="nav-item-4"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub name="All files" active="true" target="/files/list/all" icon="folder"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub name="Shared with me" target="/files/list/shared-with-me" icon="shared-with-me"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub name="Shared with others" target="/files/list/shared-with-others" icon="shared-with-others"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub name="Shared via link" target="/files/list/shared-via-link" icon="link"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub name="Deleted files" target="/files/list/trash-bin" icon="delete"></sidebar-nav-item-stub>
     </oc-list-stub>
   </nav> <span class="footer">Footer</span>
 </div>
@@ -22,11 +22,11 @@ exports[`OcSidebarNav toggles back into open state upon button click 1`] = `
   </button>
   <nav aria-label="Sidebar top navigation menu" class="oc-sidebar-nav oc-my-l oc-px-xs">
     <oc-list-stub>
-      <sidebar-nav-item-stub name="All files" active="true" target="/files/list/all" icon="folder" id="nav-item-0"></sidebar-nav-item-stub>
-      <sidebar-nav-item-stub name="Shared with me" target="/files/list/shared-with-me" icon="shared-with-me" id="nav-item-1"></sidebar-nav-item-stub>
-      <sidebar-nav-item-stub name="Shared with others" target="/files/list/shared-with-others" icon="shared-with-others" id="nav-item-2"></sidebar-nav-item-stub>
-      <sidebar-nav-item-stub name="Shared via link" target="/files/list/shared-via-link" icon="link" id="nav-item-3"></sidebar-nav-item-stub>
-      <sidebar-nav-item-stub name="Deleted files" target="/files/list/trash-bin" icon="delete" id="nav-item-4"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub name="All files" active="true" target="/files/list/all" icon="folder"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub name="Shared with me" target="/files/list/shared-with-me" icon="shared-with-me"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub name="Shared with others" target="/files/list/shared-with-others" icon="shared-with-others"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub name="Shared via link" target="/files/list/shared-via-link" icon="link"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub name="Deleted files" target="/files/list/trash-bin" icon="delete"></sidebar-nav-item-stub>
     </oc-list-stub>
   </nav> <span class="footer">Footer</span>
 </div>
@@ -38,11 +38,11 @@ exports[`OcSidebarNav toggles into closed state upon button click 1`] = `
   </button>
   <nav aria-label="Sidebar top navigation menu" class="oc-sidebar-nav oc-my-l oc-px-xs">
     <oc-list-stub>
-      <sidebar-nav-item-stub name="All files" active="true" target="/files/list/all" icon="folder" id="nav-item-0" collapsed="true"></sidebar-nav-item-stub>
-      <sidebar-nav-item-stub name="Shared with me" target="/files/list/shared-with-me" icon="shared-with-me" id="nav-item-1" collapsed="true"></sidebar-nav-item-stub>
-      <sidebar-nav-item-stub name="Shared with others" target="/files/list/shared-with-others" icon="shared-with-others" id="nav-item-2" collapsed="true"></sidebar-nav-item-stub>
-      <sidebar-nav-item-stub name="Shared via link" target="/files/list/shared-via-link" icon="link" id="nav-item-3" collapsed="true"></sidebar-nav-item-stub>
-      <sidebar-nav-item-stub name="Deleted files" target="/files/list/trash-bin" icon="delete" id="nav-item-4" collapsed="true"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub name="All files" active="true" target="/files/list/all" icon="folder" collapsed="true"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub name="Shared with me" target="/files/list/shared-with-me" icon="shared-with-me" collapsed="true"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub name="Shared with others" target="/files/list/shared-with-others" icon="shared-with-others" collapsed="true"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub name="Shared via link" target="/files/list/shared-via-link" icon="link" collapsed="true"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub name="Deleted files" target="/files/list/trash-bin" icon="delete" collapsed="true"></sidebar-nav-item-stub>
     </oc-list-stub>
   </nav> <span class="footer">Footer</span>
 </div>
