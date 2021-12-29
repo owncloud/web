@@ -58,7 +58,8 @@ export const getStore = function ({
   loginLogo = '',
   davProperties = [],
   publicLinkPassword = null,
-  slogan = null
+  slogan = null,
+  user = null
 } = {}) {
   return createStore(Vuex.Store, {
     state: {
@@ -83,20 +84,28 @@ export const getStore = function ({
       }),
       getToken: () => '',
       isOcis: () => true,
-      homeFolder: () => '/'
+      homeFolder: () => '/',
+      user: () => user
+    },
+    mutations: {
+      SET_QUOTA: () => {}
+    },
+    actions: {
+      showMessage: () => {}
     },
     modules: {
       Files: {
         state: {
           resource: null,
           filesPageLimit: 100,
-          files: []
+          files: [],
+          activeFiles: activeFiles
         },
         getters: {
           totalFilesCount: () => totalFilesCount,
           totalFilesSize: () => totalFilesSize,
           selectedFiles: () => selectedFiles,
-          activeFiles: () => activeFiles,
+          activeFiles: (state) => state.activeFiles,
           inProgress: () => inProgress,
           highlightedFile: () => highlightedFile,
           currentFolder: () => currentFolder,
@@ -108,9 +117,20 @@ export const getStore = function ({
           UPDATE_RESOURCE: (state, resource) => {
             state.resource = resource
           },
+          UPSERT_RESOURCE: (state, resource) => {
+            state.activeFiles.push(resource)
+          },
           CLEAR_FILES_SEARCHED: () => {},
           CLEAR_CURRENT_FILES_LIST: () => {},
-          LOAD_FILES: () => {}
+          LOAD_FILES: () => {},
+          SET_FILES_PAGE_LIMIT: () => {},
+          SET_CURRENT_FOLDER: () => {},
+          REMOVE_FILE: () => {},
+          REMOVE_FILE_FROM_SEARCHED: () => {},
+          REMOVE_FILE_SELECTION: () => {}
+        },
+        actions: {
+          loadIndicators: () => {}
         },
         namespaced: true,
         modules: {
