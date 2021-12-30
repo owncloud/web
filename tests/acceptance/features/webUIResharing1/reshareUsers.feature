@@ -237,7 +237,7 @@ Feature: Resharing shared files with different permissions
     And user "Alice" has favorited element "/Shares/lorem.txt"
     And user "Alice" has logged in using the webUI
     When the user browses to the favorites page using the webUI
-    And the user shares folder "Shares/simple-folder" with user "Carol King" as "Editor" using the webUI
+    And the user shares folder "simple-folder" with user "Carol King" as "Editor" using the webUI
     And the user shares file "Shares/lorem.txt" with user "Carol King" as "Editor" using the webUI
     And user "Carol" accepts the share "Shares/simple-folder" offered by user "Alice" using the sharing API
     And user "Carol" accepts the share "Shares/lorem.txt" offered by user "Alice" using the sharing API

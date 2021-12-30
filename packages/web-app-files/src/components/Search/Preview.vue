@@ -82,14 +82,5 @@ export default {
   button {
     font-size: 0.8rem;
   }
-
-  .oc-icon,
-  .oc-icon > svg,
-  img {
-    height: 24px;
-    max-height: 24px;
-    max-width: 24px;
-    width: 24px;
-  }
 }
 </style>
