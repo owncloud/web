@@ -5,7 +5,7 @@
     :aria-label="$gettext('Top bar')"
   >
     <div class="topbar-gap uk-flex uk-flex-middle uk-flex-between">
-      <applications-menu v-if="applicationsList.length > 0" :applications-list="applicationsList" />
+      <applications-menu v-if="applicationsList.length" :applications-list="applicationsList" />
       <router-link ref="navigationSidebarLogo" to="/">
         <oc-img :src="logoImage" :alt="sidebarLogoAlt" />
       </router-link>
@@ -41,9 +41,6 @@ export default {
     UserMenu
   },
   props: {
-    sidebarLogoAlt() {
-      return this.$gettext('Navigate to all files page')
-    },
     userId: {
       type: String,
       required: false,
@@ -67,6 +64,10 @@ export default {
   },
   computed: {
     ...mapGetters(['configuration']),
+
+    sidebarLogoAlt() {
+      return this.$gettext('Navigate to all files page')
+    },
 
     logoImage() {
       return this.configuration.theme.logo.sidebar

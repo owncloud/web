@@ -74,7 +74,6 @@ When(
   ) {
     const actor = this.actorsEnvironment.getActor({ id: stepUser })
     const { allFiles: allFilesPage } = new FilesPage({ actor })
-    // await allFilesPage.navigate()
 
     const shareInfo = stepTable.hashes().reduce((acc, stepRow) => {
       const { user, resource, role } = stepRow

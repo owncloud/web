@@ -5,7 +5,7 @@ exports[`Top Bar component Displays applications menu 1`] = `
   <div class="topbar-gap uk-flex uk-flex-middle uk-flex-between">
     <applications-menu-stub applicationslist="testApp"></applications-menu-stub>
     <router-link-stub to="/">
-      <oc-img-stub src=""></oc-img-stub>
+      <oc-img-stub src="" alt="Navigate to all files page"></oc-img-stub>
     </router-link-stub>
   </div>
   <div class="portal-wrapper">

@@ -1,5 +1,8 @@
 <template>
-  <div id="web-nav-sidebar" :class="sidebarClasses">
+  <div
+    id="web-nav-sidebar"
+    :class="['uk-visible@l', { 'oc-app-navigation-collapsed': navigation.closed }]"
+  >
     <oc-button
       variation="inverse"
       appearance="raw"
@@ -48,13 +51,6 @@ export default {
   computed: {
     ...mapState(['sidebar', 'navigation']),
 
-    sidebarClasses() {
-      if (this.navigation.closed) {
-        return 'uk-visible@l oc-app-navigation-collapsed'
-      }
-      return 'uk-visible@l'
-    },
-
     toggleSidebarButtonClass() {
       return this.navigation.closed
         ? 'toggle-sidebar-button-collapsed'
@@ -69,8 +65,7 @@ export default {
     ...mapActions(['openNavigation', 'closeNavigation']),
 
     toggleSidebarButtonClick() {
-      if (this.navigation.closed) return this.openNavigation()
-      return this.closeNavigation()
+      return this.navigation.closed ? this.openNavigation() : this.closeNavigation()
     }
   }
 }
@@ -81,7 +76,6 @@ export default {
   background-color: #2d2d2d;
   border-top-left-radius: 15px;
   border-bottom-left-radius: 15px;
-  // box-shadow: 5px 0px 25px rgba(0, 0, 0, 0.3);
   color: var(--oc-color-text-inverse);
   display: flex;
   flex-direction: column;

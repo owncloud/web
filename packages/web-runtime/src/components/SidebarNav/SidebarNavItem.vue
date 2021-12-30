@@ -15,8 +15,7 @@ export default {
   props: {
     name: {
       type: String,
-      required: false,
-      default: ''
+      required: true
     },
     active: {
       type: Boolean,
@@ -30,8 +29,7 @@ export default {
     },
     icon: {
       type: String,
-      required: true,
-      default: ''
+      required: true
     },
     collapsed: {
       type: Boolean,
@@ -41,11 +39,7 @@ export default {
   },
   computed: {
     toolTip() {
-      if (this.collapsed) {
-        return this.$gettext(`Navigate to ${this.name} page`)
-      } else {
-        return ''
-      }
+      return this.collapsed ? this.$gettext(`Navigate to ${this.name} page`) : ''
     }
   }
 }
