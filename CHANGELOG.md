@@ -1,3 +1,53 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v4.9.0...master
+
+Summary
+-------
+
+* Enhancement - Redesign main layout: [#6036](https://github.com/owncloud/web/issues/6036)
+* Enhancement - Update ODS to v12.0.0-alpha5: [#6086](https://github.com/owncloud/web/pull/6086)
+
+Details
+-------
+
+* Enhancement - Redesign main layout: [#6036](https://github.com/owncloud/web/issues/6036)
+
+   We've started to implement the redesign by adjusting the sidebar, topbar and appswitcher.
+   While doing so, we also removed the `vue2-touch-events` dependency.
+
+   https://github.com/owncloud/web/issues/6036
+   https://github.com/owncloud/web/pull/6086
+
+* Enhancement - Update ODS to v12.0.0-alpha5: [#6086](https://github.com/owncloud/web/pull/6086)
+
+   We updated the ownCloud Design System to version 12.0.0-alpha5. Please refer to the full
+   changelog in the ODS release (linked) for more details. Summary:
+
+   - Change - Do not sort in OcTable:
+   https://github.com/owncloud/owncloud-design-system/pull/1825 - Change - Remove
+   OcAppSideBar component:
+   https://github.com/owncloud/owncloud-design-system/pull/1810 - Change - Remove
+   OcAppBar component: https://github.com/owncloud/owncloud-design-system/pull/1810 -
+   Change - Remove oc-table-files from ods:
+   https://github.com/owncloud/owncloud-design-system/pull/1817 - Change - Move
+   OcSidebarNav and OcSidebarNavItem to web:
+   https://github.com/owncloud/owncloud-design-system/pull/6036 - Change - Remove unused
+   props for unstyled components:
+   https://github.com/owncloud/owncloud-design-system/pull/1795 - Enhancement - Fix
+   OcAvatar line-height: https://github.com/owncloud/owncloud-design-system/pull/1810
+   - Enhancement - Adjust OcSearchBar to new design:
+   https://github.com/owncloud/owncloud-design-system/pull/1810 - Enhancement - Add svg
+   icon for spaces: https://github.com/owncloud/owncloud-design-system/pull/1846 -
+   Bugfix - Rename GhostElement:
+   https://github.com/owncloud/owncloud-design-system/pull/1845
+
+   https://github.com/owncloud/web/pull/6086
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v12.0.0-alpha5
+
 Changelog for ownCloud Web [4.9.0] (2021-12-24)
 =======================================
 The following sections list the changes in ownCloud web 4.9.0 relevant to
