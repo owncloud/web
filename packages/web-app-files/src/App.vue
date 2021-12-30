@@ -110,8 +110,6 @@ main {
 }
 
 .files-list-wrapper {
-  height: 100%;
-  max-height: 100%;
   overflow-y: auto;
   display: grid;
   grid-template-columns: 1fr;

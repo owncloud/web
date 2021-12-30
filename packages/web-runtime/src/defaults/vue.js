@@ -11,7 +11,6 @@ import VueEvents from 'vue-events'
 import VueScrollTo from 'vue-scrollto'
 import VueResize from 'vue-resize'
 import VueMeta from 'vue-meta'
-import Vue2TouchEvents from 'vue2-touch-events'
 import PortalVue from 'portal-vue'
 import AsyncComputed from 'vue-async-computed'
 import { Drag, Drop } from 'vue-drag-drop'
@@ -31,7 +30,6 @@ Vue.use(VueMeta, {
   refreshOnceOnNavigation: true
 })
 Vue.use(ChunkedUpload)
-Vue.use(Vue2TouchEvents)
 Vue.use(PortalVue)
 Vue.use(AsyncComputed)
 

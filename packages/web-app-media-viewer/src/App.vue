@@ -359,9 +359,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#mediaviewer {
-  min-height: 100vh;
-}
 .media-viewer-player {
   max-width: 90vw;
   height: 70vh;

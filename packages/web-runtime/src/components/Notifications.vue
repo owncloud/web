@@ -6,7 +6,7 @@
       appearance="raw"
       :aria-label="notificationsLabel"
     >
-      <oc-icon class="oc-cursor-pointer uk-flex uk-flex-middle" name="bell" />
+      <oc-icon variation="inverse" class="oc-cursor-pointer uk-flex uk-flex-middle" name="bell" />
     </oc-button>
     <oc-drop
       id="oc-notification-drop"

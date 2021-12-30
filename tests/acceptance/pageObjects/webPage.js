@@ -278,7 +278,7 @@ module.exports = {
       selector: '.oc-app-navigation-toggle'
     },
     menuItem: {
-      selector: '//nav[contains(@class, "oc-sidebar-nav")]/ul/li/a[contains(text(),"%s")]',
+      selector: '//nav[contains(@class, "oc-sidebar-nav")]/ul/li/a/span[contains(text(),"%s")]',
       locateStrategy: 'xpath'
     },
     logoutMenuItem: {
@@ -308,7 +308,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     appNavigation: {
-      selector: '.oc-app-navigation'
+      selector: '#web-nav-sidebar'
     },
     filelink: {
       selector:

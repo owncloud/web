@@ -1,0 +1,8 @@
+Enhancement: Redesign main layout
+
+We've started to implement the redesign by adjusting the sidebar,
+topbar and appswitcher.
+While doing so, we also removed the `vue2-touch-events` dependency.
+
+https://github.com/owncloud/web/issues/6036
+https://github.com/owncloud/web/pull/6086

@@ -1,9 +1,9 @@
 module.exports = {
   commands: {
-    getUserProfileName: async function () {
+    getUserProfileAvatar: async function () {
       let userInfo
-      await this.waitForElementVisible('@userProfileName').api.element(
-        '@userProfileName',
+      await this.waitForElementVisible('@userProfileAvatar').api.element(
+        '@userProfileAvatar',
         (result) => {
           this.api.elementIdText(result.value.ELEMENT, (text) => {
             userInfo = text.value
@@ -17,8 +17,8 @@ module.exports = {
     }
   },
   elements: {
-    userProfileName: {
-      selector: '.oc-topbar-personal-label'
+    userProfileAvatar: {
+      selector: '.oc-topbar-personal-avatar'
     },
     manageAccount: {
       selector: '#oc-topbar-account-manage'

@@ -234,9 +234,8 @@ Then(
     const { allFiles: allFilesPage } = new FilesPage({ actor })
     const resources = stepTable.raw().map((f) => f[0])
 
-    await allFilesPage.navigate()
-
     for (const resource of resources) {
+      await allFilesPage.navigate()
       const resourceExist = await allFilesPage.resourceExist({ name: resource })
 
       if (actionType === 'exist' && !resourceExist) {
@@ -244,9 +243,8 @@ Then(
       } else if (actionType === 'does not exist' && resourceExist) {
         throw new Error(`resource was found: "${resource}"`)
       }
-
-      await allFilesPage.navigate()
     }
+    await allFilesPage.navigate()
   }
 )
 
