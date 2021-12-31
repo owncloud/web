@@ -1,0 +1,6 @@
+Enhancement: Lazy resource table cells
+
+ODS introduced lazy loadable table cells, this feature is now also part of web and enabled by default.
+To disable the feature set the displayResourcesLazy option to false.
+
+https://github.com/owncloud/web/pull/6204

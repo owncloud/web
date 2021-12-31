@@ -45,6 +45,7 @@ export const getRouter = ({ query = {} }) => ({
 export const getStore = function ({
   highlightedFile = null,
   disablePreviews = true,
+
   currentPage = null,
   activeFiles = [],
   pages = null,

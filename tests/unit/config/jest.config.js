@@ -15,6 +15,7 @@ module.exports = {
     '\\.(css|less)$': '<rootDir>/tests/unit/stubs/empty.js',
     '^@/(.*)$': '<rootDir>/$1',
     '^@files/(.*)$': '<rootDir>/packages/web-app-files/$1',
+    '@vue/composition-api': '<rootDir>/node_modules/@vue/composition-api',
     'core-js': '<rootDir>/node_modules/core-js'
   },
   transformIgnorePatterns: ['<rootDir>/node_modules/(?!lodash-es)'],
