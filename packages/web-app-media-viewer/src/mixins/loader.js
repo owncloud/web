@@ -13,7 +13,7 @@ export default {
     ...mapGetters('Files', ['publicLinkPassword']),
     ...mapGetters(['configuration']),
     $_loader_publicContext() {
-      return this.$route.params.contextRouteName === 'files-shares-public-files'
+      return this.$route.params.contextRouteName === 'files-public-files'
     },
     $_loader_folderLoading() {
       return this.$_internal_loader_folderLoading

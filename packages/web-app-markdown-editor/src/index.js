@@ -19,7 +19,7 @@ const fileExtensionConfig = {
     'files-common-favorites',
     'files-shares-with-others',
     'files-shares-with-me',
-    'files-shares-public-files'
+    'files-public-files'
   ]
 }
 

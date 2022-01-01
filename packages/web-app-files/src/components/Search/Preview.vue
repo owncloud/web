@@ -38,7 +38,7 @@ export default {
   },
   setup() {
     return {
-      resourceTargetLocation: createLocationSpaces()
+      resourceTargetLocation: createLocationSpaces('files-spaces-personal-home')
     }
   },
   data() {

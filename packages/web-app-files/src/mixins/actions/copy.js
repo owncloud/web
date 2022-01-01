@@ -1,7 +1,7 @@
 import {
   createLocationOperations,
   isLocationCommonActive,
-  isLocationSharesActive,
+  isLocationPublicActive,
   isLocationSpacesActive
 } from '../../router'
 
@@ -17,8 +17,8 @@ export default {
             this.$pgettext('Action in the files list row to initiate copying resources', 'Copy'),
           isEnabled: ({ resources }) => {
             if (
-              !isLocationSpacesActive(this.$router) &&
-              !isLocationSharesActive(this.$router, 'files-shares-public-files') &&
+              !isLocationSpacesActive(this.$router, 'files-spaces-personal-home') &&
+              !isLocationPublicActive(this.$router, 'files-public-files') &&
               !isLocationCommonActive(this.$router, 'files-common-favorites')
             ) {
               return false
@@ -27,7 +27,7 @@ export default {
               return false
             }
 
-            if (isLocationSharesActive(this.$router, 'files-shares-public-files')) {
+            if (isLocationPublicActive(this.$router, 'files-public-files')) {
               return this.currentFolder.canCreate()
             }
 
@@ -43,7 +43,7 @@ export default {
   },
   methods: {
     $_copy_trigger({ resources }) {
-      const context = isLocationSharesActive(this.$router, 'files-shares-public-files')
+      const context = isLocationPublicActive(this.$router, 'files-public-files')
         ? 'public'
         : 'private'
       const item = this.currentFolder.path || this.homeFolder

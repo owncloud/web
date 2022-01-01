@@ -17,7 +17,10 @@ export const isLocationActive = (
   const { href: currentHref } = router.resolve(router.currentRoute)
   return comparatives
     .map((comparative) => {
-      const { href: comparativeHref } = router.resolve(comparative)
+      const { href: comparativeHref } = router.resolve({
+        ...comparative
+        // ...(comparative.name && { name: resolveRouteName(comparative.name) })
+      })
       return currentHref.startsWith(comparativeHref)
     })
     .some(Boolean)
@@ -56,8 +59,8 @@ export const isLocationActiveDirector = <T extends string>(
  *
  * @param route
  */
-export const isRoutePublic = (route: { meta?: RouteMeta }): boolean => {
-  return !get(route, 'meta.auth', true)
+export const isAuthenticatedRoute = (route: { meta?: RouteMeta }): boolean => {
+  return get(route, 'meta.auth', true) === true
 }
 
 /**

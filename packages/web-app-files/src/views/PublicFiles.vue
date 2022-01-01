@@ -84,7 +84,7 @@ import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
 import { DavProperties } from 'web-pkg/src/constants'
-import { createLocationShares } from '../router'
+import { createLocationOperations, createLocationShares } from '../router'
 
 // hacky, get rid asap, just a workaround
 const unauthenticatedUserReady = async (router, store) => {
@@ -324,7 +324,7 @@ export default {
 
     redirectToResolvePage() {
       this.$router.push(
-        createLocationShares('files-shares-public-link', {
+        createLocationOperations('files-operations-resolver-public-link', {
           params: { token: this.$route.params.item }
         })
       )

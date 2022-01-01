@@ -1,9 +1,10 @@
 import { mapState } from 'vuex'
 import { isSameResource } from '../../helpers/resource'
 import {
-  createLocationShares,
+  createLocationPublic,
   createLocationSpaces,
   isLocationCommonActive,
+  isLocationPublicActive,
   isLocationSharesActive
 } from '../../router'
 import { ShareStatus } from '../../helpers/share'
@@ -51,9 +52,9 @@ export default {
       ]
     },
     route() {
-      return isLocationSharesActive(this.$router, 'files-shares-public-files')
-        ? createLocationSpaces()
-        : createLocationShares('files-shares-public-files')
+      return isLocationPublicActive(this.$router, 'files-public-files')
+        ? createLocationSpaces('files-spaces-personal-home')
+        : createLocationPublic('files-public-files')
     }
   }
 }

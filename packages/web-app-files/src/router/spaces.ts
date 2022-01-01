@@ -2,9 +2,11 @@ import { Location, RouteConfig } from 'vue-router'
 import { RouteComponents } from './router'
 import { createLocation, isLocationActiveDirector, $gettext } from './utils'
 
-export const createLocationSpaces = (location = {}): Location =>
+type shareTypes = 'files-spaces-personal-home'
+
+export const createLocationSpaces = (name: shareTypes, location = {}): Location =>
   createLocation(
-    'files-spaces-storage',
+    name,
     {
       params: {
         storage: 'home',
@@ -13,22 +15,24 @@ export const createLocationSpaces = (location = {}): Location =>
     },
     location
   )
-export const isLocationSpacesActive = isLocationActiveDirector(createLocationSpaces())
+export const isLocationSpacesActive = isLocationActiveDirector<shareTypes>(
+  createLocationSpaces('files-spaces-personal-home')
+)
 
 export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
   {
     path: '/spaces',
-    redirect: (to) => createLocationSpaces(to)
+    redirect: (to) => createLocationSpaces('files-spaces-personal-home', to)
   },
   {
     path: '/spaces/:namespace',
     components: {
       app: components.App
     },
-    redirect: (to) => createLocationSpaces(to),
+    redirect: (to) => createLocationSpaces('files-spaces-personal-home', to),
     children: [
       {
-        name: createLocationSpaces().name,
+        name: createLocationSpaces('files-spaces-personal-home').name,
         path: ':storage/:item*',
         component: components.Personal,
         meta: {

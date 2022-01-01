@@ -59,7 +59,7 @@ export default {
         const folder = path.substring(0, lastSlash).replace(/^(\/)/, '')
         const file = path.substring(lastSlash + 1)
         this.$router.push(
-          createLocationSpaces({
+          createLocationSpaces('files-spaces-personal-home', {
             params: {
               item: folder || '/'
             },

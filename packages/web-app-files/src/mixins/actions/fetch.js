@@ -1,4 +1,4 @@
-import { isLocationCommonActive, isLocationSpacesActive } from '../../router'
+import { isLocationCommonActive, isLocationPublicActive } from '../../router'
 
 export default {
   computed: {
@@ -11,7 +11,7 @@ export default {
             this.$_fetch_trigger({
               resources,
               mimeType: 'application/pdf',
-              isPublicFile: isLocationSpacesActive(this.$router, 'files-shares-public-files')
+              isPublicFile: isLocationPublicActive(this.$router, 'files-public-files')
             }),
           label: () => {
             return this.$gettext('Open in browser')

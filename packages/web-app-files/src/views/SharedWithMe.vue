@@ -272,7 +272,7 @@ export default {
     })
 
     return {
-      resourceTargetLocation: createLocationSpaces(),
+      resourceTargetLocation: createLocationSpaces('files-spaces-personal-home'),
       viewMode,
       fileListHeaderY,
       loadResourcesTask,

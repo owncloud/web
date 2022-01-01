@@ -2,7 +2,7 @@ import { canBeMoved } from '../../helpers/permissions'
 import {
   createLocationOperations,
   isLocationCommonActive,
-  isLocationSharesActive,
+  isLocationPublicActive,
   isLocationSpacesActive
 } from '../../router'
 
@@ -18,8 +18,8 @@ export default {
             this.$pgettext('Action in the files list row to initiate moving resources', 'Move'),
           isEnabled: ({ resources }) => {
             if (
-              !isLocationSpacesActive(this.$router) &&
-              !isLocationSharesActive(this.$router, 'files-shares-public-files') &&
+              !isLocationSpacesActive(this.$router, 'files-spaces-personal-home') &&
+              !isLocationPublicActive(this.$router, 'files-public-files') &&
               !isLocationCommonActive(this.$router, 'files-common-favorites')
             ) {
               return false
@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     $_move_trigger({ resources }) {
-      const context = isLocationSharesActive(this.$router, 'files-shares-public-files')
+      const context = isLocationPublicActive(this.$router, 'files-public-files')
         ? 'public'
         : 'private'
       const item = this.currentFolder.path || this.homeFolder

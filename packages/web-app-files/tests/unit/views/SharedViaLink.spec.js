@@ -103,7 +103,9 @@ describe('SharedViaLink view', () => {
         expect(ocTableFiles.props().resources).toMatchObject(resources)
         expect(ocTableFiles.props().areThumbnailsDisplayed).toBe(false)
         expect(ocTableFiles.props().headerPosition).toBe(0)
-        expect(ocTableFiles.props().targetRoute).toMatchObject(createLocationSpaces())
+        expect(ocTableFiles.props().targetRoute).toMatchObject(
+          createLocationSpaces('files-spaces-personal-home')
+        )
       })
       it('should set props on list-info component', () => {
         const listInfo = wrapper.find(listInfoStub)

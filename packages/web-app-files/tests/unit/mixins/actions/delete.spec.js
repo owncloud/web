@@ -16,7 +16,7 @@ describe('delete', () => {
     return mount(Component, {
       localVue,
       mocks: {
-        $route: createLocationSpaces(),
+        $route: createLocationSpaces('files-spaces-personal-home'),
         $router: {
           resolve: () => {
             return {

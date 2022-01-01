@@ -42,6 +42,16 @@ const navItems = [
     }
   },
   {
+    name: $gettext('Favorites'),
+    iconMaterial: 'star',
+    route: {
+      path: `/${appInfo.id}/favorites`
+    },
+    enabled(capabilities) {
+      return capabilities.files && capabilities.files.favorites
+    }
+  },
+  {
     name: $gettext('Shared with me'),
     iconMaterial: 'shared-with-me',
     route: {
@@ -70,16 +80,6 @@ const navItems = [
     },
     enabled(capabilities) {
       return capabilities.dav && capabilities.dav.trashbin === '1.0'
-    }
-  },
-  {
-    name: $gettext('Favorites'),
-    iconMaterial: 'star',
-    route: {
-      path: `/${appInfo.id}/favorites`
-    },
-    enabled(capabilities) {
-      return capabilities.files && capabilities.files.favorites
     }
   }
 ]

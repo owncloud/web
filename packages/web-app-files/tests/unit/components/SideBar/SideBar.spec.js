@@ -79,7 +79,7 @@ function createWrapper({ item, selectedItems, mocks }) {
     mocks: merge(
       {
         $router: {
-          currentRoute: createLocationSpaces(),
+          currentRoute: createLocationSpaces('files-spaces-personal-home'),
           resolve: (r) => {
             return { href: r.name }
           }

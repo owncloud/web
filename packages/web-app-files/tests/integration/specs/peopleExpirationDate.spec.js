@@ -390,7 +390,7 @@ function renderComponent({ store, mocks } = {}) {
       mocks
     },
     (vue, store, router) => {
-      router.push(createLocationSpaces())
+      router.push(createLocationSpaces('files-spaces-personal-home'))
     }
   )
 }

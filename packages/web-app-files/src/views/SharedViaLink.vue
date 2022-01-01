@@ -143,7 +143,7 @@ export default {
       paginatedResources,
       paginationPages,
       paginationPage,
-      resourceTargetLocation: createLocationSpaces(),
+      resourceTargetLocation: createLocationSpaces('files-spaces-personal-home'),
       handleSort,
       sortBy,
       sortDir

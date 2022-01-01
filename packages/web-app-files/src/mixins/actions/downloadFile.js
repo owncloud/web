@@ -1,6 +1,6 @@
 import {
   isLocationCommonActive,
-  isLocationSharesActive,
+  isLocationPublicActive,
   isLocationSpacesActive
 } from '../../router'
 
@@ -17,8 +17,8 @@ export default {
           },
           isEnabled: ({ resources }) => {
             if (
-              !isLocationSpacesActive(this.$router) &&
-              !isLocationSharesActive(this.$router, 'files-shares-public-files') &&
+              !isLocationSpacesActive(this.$router, 'files-spaces-personal-home') &&
+              !isLocationPublicActive(this.$router, 'files-public-files') &&
               !isLocationCommonActive(this.$router, 'files-common-favorites')
             ) {
               return false

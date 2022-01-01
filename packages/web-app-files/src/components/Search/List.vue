@@ -80,7 +80,7 @@ export default {
       paginatedResources,
       paginationPages,
       paginationPage,
-      resourceTargetLocation: createLocationSpaces()
+      resourceTargetLocation: createLocationSpaces('files-spaces-personal-home')
     }
   },
   computed: {

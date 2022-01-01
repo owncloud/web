@@ -7,6 +7,7 @@ import stubs from '@/tests/unit/stubs'
 import AppBar from '@files/src/components/AppBar/AppBar'
 import {
   createLocationCommon,
+  createLocationPublic,
   createLocationShares,
   createLocationSpaces
 } from '../../../../src/router'
@@ -33,10 +34,10 @@ const elSelector = {
   newDrawioFileBtn: '.new-file-btn-drawio'
 }
 
-const spacesDefaultLocation = createLocationSpaces()
+const spacesDefaultLocation = createLocationSpaces('files-spaces-personal-home')
 const sharesWithMeLocation = createLocationShares('files-shares-with-me')
 const sharesWithOthersLocation = createLocationShares('files-shares-with-others')
-const publicFilesLocation = createLocationShares('files-shares-public-files')
+const publicFilesLocation = createLocationPublic('files-public-files')
 const favoritesLocation = createLocationCommon('files-common-favorites')
 
 const routes = [

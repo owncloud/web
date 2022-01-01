@@ -14,23 +14,29 @@ import {
   isLocationOperationsActive
 } from './operations'
 import {
+  buildRoutes as buildPublicRoutes,
+  createLocationPublic,
+  isLocationPublicActive
+} from './public'
+import {
   buildRoutes as buildCommonRoutes,
   isLocationCommonActive,
   createLocationCommon
 } from './common'
-import { isRoutePublic, isLocationActive } from './utils'
-import { buildRoutes as buildDeprecatedRoutes } from './deprecated'
+import { isAuthenticatedRoute } from './utils'
+import { buildRoutes as buildDeprecatedRoutes, isLocationActive } from './deprecated'
 import { RouteComponents } from './router'
 import { RouteConfig } from 'vue-router'
 
 const ROOT_ROUTE = {
   path: '/',
-  redirect: (to) => createLocationSpaces(to)
+  redirect: (to) => createLocationSpaces('files-spaces-personal-home', to)
 }
 
 const buildRoutes = (components: RouteComponents): RouteConfig[] => [
   ROOT_ROUTE,
   ...buildSharesRoutes(components),
+  ...buildPublicRoutes(components),
   ...buildSpacesRoutes(components),
   ...buildOperationsRoutes(components),
   ...buildCommonRoutes(components),
@@ -42,11 +48,13 @@ export {
   createLocationShares,
   createLocationSpaces,
   createLocationOperations,
+  createLocationPublic,
   isLocationOperationsActive,
   isLocationCommonActive,
   isLocationSharesActive,
   isLocationSpacesActive,
+  isLocationPublicActive,
   isLocationActive,
-  isRoutePublic,
+  isAuthenticatedRoute,
   buildRoutes
 }

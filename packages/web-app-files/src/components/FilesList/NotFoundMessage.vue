@@ -38,9 +38,9 @@
 <script>
 import { useRouter, useStore } from '../../composables'
 import {
-  createLocationShares,
+  createLocationPublic,
   createLocationSpaces,
-  isLocationSharesActive,
+  isLocationPublicActive,
   isLocationSpacesActive
 } from '../../router'
 
@@ -51,12 +51,12 @@ export default {
     const store = useStore()
 
     return {
-      showPublicLinkButton: isLocationSharesActive(router, 'files-shares-public-files'),
-      showHomeButton: isLocationSpacesActive(router),
-      homeRoute: createLocationSpaces({
+      showPublicLinkButton: isLocationPublicActive(router, 'files-public-files'),
+      showHomeButton: isLocationSpacesActive(router, 'files-spaces-personal-home'),
+      homeRoute: createLocationSpaces('files-spaces-personal-home', {
         params: { item: store.getters.homeFolder }
       }),
-      publicLinkRoute: createLocationShares('files-shares-public-files', {
+      publicLinkRoute: createLocationPublic('files-public-files', {
         params: { item: router.currentRoute.params?.item?.split('/')[0] }
       })
     }

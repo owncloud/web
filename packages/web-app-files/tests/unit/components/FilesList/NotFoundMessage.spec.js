@@ -4,7 +4,7 @@ import DesignSystem from 'owncloud-design-system'
 import stubs from '../../../../../../tests/unit/stubs/index.js'
 import { createLocalVue, mount, shallowMount } from '@vue/test-utils'
 import NotFoundMessage from '../../../../src/components/FilesList/NotFoundMessage.vue'
-import { createLocationShares, createLocationSpaces } from '../../../../src/router'
+import { createLocationPublic, createLocationSpaces } from '../../../../src/router'
 
 const localVue = createLocalVue()
 localVue.use(CompositionAPI)
@@ -16,9 +16,9 @@ const selectors = {
   reloadLinkButton: '#files-list-not-found-button-reload-link'
 }
 
-const spacesLocation = createLocationSpaces()
+const spacesLocation = createLocationSpaces('files-spaces-personal-home')
 function publicLocation(item) {
-  return createLocationShares('files-shares-public-files', {
+  return createLocationPublic('files-public-files', {
     params: {
       item: item
     }

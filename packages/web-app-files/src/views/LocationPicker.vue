@@ -100,7 +100,7 @@ import ListLoader from '../components/FilesList/ListLoader.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
 import { DavProperties } from 'web-pkg/src/constants'
-import { createLocationShares, createLocationSpaces } from '../router'
+import { createLocationPublic, createLocationSpaces } from '../router'
 
 export default {
   metaInfo() {
@@ -357,8 +357,8 @@ export default {
     leaveLocationPicker(target) {
       this.$router.push(
         this.isPublicContext
-          ? createLocationShares('files-shares-public-files', { params: { item: target } })
-          : createLocationSpaces({ params: { item: target || '/' } })
+          ? createLocationPublic('files-public-files', { params: { item: target } })
+          : createLocationSpaces('files-spaces-personal-home', { params: { item: target || '/' } })
       )
     },
 

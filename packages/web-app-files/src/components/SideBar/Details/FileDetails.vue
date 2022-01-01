@@ -111,7 +111,7 @@ import { ImageDimension } from '../../../constants'
 import { loadPreview } from '../../../helpers/resource'
 import upperFirst from 'lodash-es/upperFirst'
 import path from 'path'
-import { createLocationSpaces, isRoutePublic } from '../../../router'
+import { createLocationSpaces, isAuthenticatedRoute } from '../../../router'
 import { ShareTypes } from '../../../helpers/share'
 
 export default {
@@ -122,7 +122,9 @@ export default {
   setup() {
     const sharedParentDir = ref('')
     const sharedParentRoute = computed(() =>
-      createLocationSpaces({ params: { item: sharedParentDir.value } })
+      createLocationSpaces('files-spaces-personal-home', {
+        params: { item: sharedParentDir.value }
+      })
     )
 
     return {
@@ -196,7 +198,7 @@ export default {
       )
     },
     showShares() {
-      return this.hasAnyShares && !isRoutePublic(this.$route)
+      return this.hasAnyShares && isAuthenticatedRoute(this.$route)
     },
     detailSharingInformation() {
       const isFolder = this.file.type === 'folder'
@@ -243,7 +245,7 @@ export default {
       if (this.file.type === 'folder') {
         return
       }
-      return this.versions.length > 0 && !isRoutePublic(this.$route)
+      return this.versions.length > 0 && isAuthenticatedRoute(this.$route)
     },
     versionsTitle() {
       return this.$gettext('Versions:')
@@ -324,7 +326,7 @@ export default {
         await new Promise((resolve) => setTimeout(resolve, 500))
         return loadPreview({
           resource: this.file,
-          isPublic: isRoutePublic(this.$route),
+          isPublic: !isAuthenticatedRoute(this.$route),
           dimensions: ImageDimension.Preview,
           server: this.configuration.server,
           userId: this.user.id,
@@ -371,7 +373,7 @@ export default {
     async loadData() {
       this.loading = true
       const calls = []
-      if (this.file.type === 'file' && !isRoutePublic(this.$route)) {
+      if (this.file.type === 'file' && isAuthenticatedRoute(this.$route)) {
         calls.push(this.loadVersions({ client: this.$client, fileId: this.file.id }))
       }
       await Promise.all(calls.map((p) => p.catch((e) => e)))

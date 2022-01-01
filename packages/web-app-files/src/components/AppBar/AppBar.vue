@@ -125,7 +125,7 @@ import MixinFileActions, { EDITOR_MODE_CREATE } from '../../mixins/fileActions'
 import MixinScrollToResource from '../../mixins/filesListScrolling'
 import { buildResource } from '../../helpers/resources'
 import { bus } from 'web-pkg/src/instance'
-import { isLocationActive, isLocationSharesActive, isLocationSpacesActive } from '../../router'
+import { isLocationActive, isLocationPublicActive, isLocationSpacesActive } from '../../router'
 
 import BatchActions from './SelectedResources/BatchActions.vue'
 import FileDrop from './Upload/FileDrop.vue'
@@ -150,7 +150,7 @@ export default {
   setup() {
     const router = useRouter()
     return {
-      isSpacesLocation: isLocationSpacesActive(router)
+      isSpacesLocation: isLocationSpacesActive(router, 'files-spaces-personal-home')
     }
   },
   data: () => ({
@@ -220,8 +220,8 @@ export default {
     },
 
     breadcrumbs() {
-      const isPublic = isLocationSharesActive(this.$router, 'files-shares-public-files')
-      const isSpaces = isLocationSpacesActive(this.$router)
+      const isPublic = isLocationPublicActive(this.$router, 'files-public-files')
+      const isSpaces = isLocationSpacesActive(this.$router, 'files-spaces-personal-home')
       if (!(isPublic || isSpaces)) {
         return []
       }

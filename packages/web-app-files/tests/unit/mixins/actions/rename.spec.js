@@ -23,7 +23,7 @@ describe('rename', () => {
       localVue,
       mocks: {
         $router: {
-          currentRoute: createLocationSpaces(),
+          currentRoute: createLocationSpaces('files-spaces-personal-home'),
           resolve: (r) => {
             return { href: r.name }
           }

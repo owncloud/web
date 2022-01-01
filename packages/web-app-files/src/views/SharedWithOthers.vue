@@ -149,7 +149,7 @@ export default {
       handleSort,
       sortBy,
       sortDir,
-      resourceTargetLocation: createLocationSpaces()
+      resourceTargetLocation: createLocationSpaces('files-spaces-personal-home')
     }
   },
 

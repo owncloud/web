@@ -78,7 +78,7 @@ import vue2DropZone from 'vue2-dropzone'
 import { mapGetters } from 'vuex'
 import Mixins from '../mixins.js'
 import { DavProperties } from 'web-pkg/src/constants'
-import { createLocationShares } from '../router'
+import { createLocationOperations, createLocationPublic } from '../router'
 
 export default {
   components: {
@@ -142,7 +142,7 @@ export default {
         .then((files) => {
           if (files[0].getProperty(this.$client.publicFiles.PUBLIC_LINK_SHARE_DATETIME !== '4')) {
             this.$router.push(
-              createLocationShares('files-shares-public-files', {
+              createLocationPublic('files-public-files', {
                 params: { item: this.publicLinkToken }
               })
             )
@@ -154,7 +154,7 @@ export default {
           // likely missing password, redirect to public link password prompt
           if (error.statusCode === 401) {
             this.$router.push(
-              createLocationShares('files-shares-public-link', {
+              createLocationOperations('files-operations-resolver-public-link', {
                 params: {
                   token: this.publicLinkToken
                 }

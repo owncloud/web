@@ -1,7 +1,7 @@
 import get from 'lodash-es/get'
 import { mapGetters, mapActions, mapState } from 'vuex'
 
-import { isLocationActive, isRoutePublic } from '../router'
+import { isAuthenticatedRoute, isLocationActive } from '../router'
 import AcceptShare from './actions/acceptShare'
 import Copy from './actions/copy'
 import DeclineShare from './actions/declineShare'
@@ -251,7 +251,7 @@ export default {
         },
         // public-token retrieval is weak, same as packages/web-app-files/src/index.js:106
         query: {
-          ...(isRoutePublic(this.$route) && {
+          ...(!isAuthenticatedRoute(this.$route) && {
             'public-token': (this.$route.params.item || '').split('/')[0]
           })
         }

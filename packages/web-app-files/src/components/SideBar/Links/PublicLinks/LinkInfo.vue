@@ -118,7 +118,7 @@ export default {
 
     viaRouterParams() {
       const viaPath = this.link.path
-      return createLocationSpaces({
+      return createLocationSpaces('files-spaces-personal-home', {
         params: {
           item: dirname(viaPath) || '/'
         },

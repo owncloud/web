@@ -198,7 +198,7 @@ export default {
       loadResourcesTask,
       paginatedResources,
       paginationPages,
-      resourceTargetLocation: createLocationSpaces(),
+      resourceTargetLocation: createLocationSpaces('files-spaces-personal-home'),
       paginationPage,
       handleSort,
       sortBy,
