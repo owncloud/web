@@ -49,7 +49,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
   },
   {
     name: locationResolverPrivateLink.name,
-    path: '/shares/resolver/private-link/:fileId',
+    path: '/ops/resolver/private-link/:fileId',
     components: {
       fullscreen: components.PrivateLink
     },
