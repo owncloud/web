@@ -1074,6 +1074,7 @@ def unitTests(ctx):
 def smokeTests(ctx):
     db = "mysql:5.5"
     logLevel = "2"
+    name = "smoke-tests"
 
     smoke_workspace = {
         "base": dir["base"],
@@ -1099,6 +1100,7 @@ def smokeTests(ctx):
             "HEADLESS": "true",
             "OCIS": "true",
             "RETRY": "1",
+            "REPORT_TRACING": "true",
         },
         "commands": [
             "sleep 10 && yarn test:e2e:cucumber tests/e2e/cucumber/",
@@ -1147,7 +1149,10 @@ def smokeTests(ctx):
         ocisService() + \
         getSkeletonFiles() + \
         copyFilesForUpload() + \
-        smoke_test_ocis
+        smoke_test_ocis + \
+        uploadScreenshots() + \
+        buildGithubComment(name) + \
+        githubComment(name)
 
     smoke_trigger = {
         "ref": [
@@ -2540,9 +2545,9 @@ def uploadScreenshots():
                 "from_secret": "cache_s3_endpoint",
             },
             "path_style": True,
-            "source": "%s/tests/reports/screenshots/**/*" % dir["web"],
-            "strip_prefix": "%s/tests/reports/screenshots" % dir["web"],
-            "target": "/web/screenshots/${DRONE_BUILD_NUMBER}",
+            "source": "%s/reports/e2e/playwright/tracing/**/*" % dir["web"],
+            "strip_prefix": "%s/reports/e2e/playwright/tracing" % dir["web"],
+            "target": "/web/tracing/${DRONE_BUILD_NUMBER}",
         },
         "environment": {
             "AWS_ACCESS_KEY_ID": {
@@ -2688,9 +2693,10 @@ def buildGithubComment(suite):
         "name": "build-github-comment",
         "image": OC_UBUNTU,
         "commands": [
-            "cd %s/tests/reports/screenshots/" % dir["web"],
-            'echo "<details><summary>:boom: The acceptance tests failed. Please find the screenshots inside ...</summary>\\n\\n<p>\\n\\n" >> %s/comments.file' % dir["web"],
-            'for f in *.png; do echo "### $f\n" \'!\'"[$f]($CACHE_ENDPOINT/owncloud/web/screenshots/${DRONE_BUILD_NUMBER}/$f) \n" >> %s/comments.file; done' % dir["web"],
+            "cd %s/reports/e2e/playwright/tracing/" % dir["web"],
+            "ls -laR %s/reports/e2e/playwright/tracing" % dir["web"],
+            'echo "<details><summary>:boom: The e2e tests failed. Please open an error trace in console ...</summary>\\n\\n<p>\\n\\n" >> %s/comments.file' % dir["web"],
+            'for f in *.zip; do echo "## npx playwright show-trace https://cache.owncloud.com/owncloud/web/tracing/${DRONE_BUILD_NUMBER}/$f \n" >> %s/comments.file; done' % dir["web"],
             'echo "\n</p></details>" >> %s/comments.file' % dir["web"],
             "more %s/comments.file" % dir["web"],
         ],

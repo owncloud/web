@@ -17,7 +17,7 @@ Feature: share file
       | folder_to_shared |
     And "Alice" uploads the following resource
       | resource        | to               |
-      | testavatar.jpeg | folder_to_shared |
+      | testavatar1.jpeg | folder_to_shared |
     And "Alice" shares the following resource via the quick action
       | resource                         | user  | role   |
       | folder_to_shared/testavatar.jpeg | Brian | viewer |
