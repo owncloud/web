@@ -26,7 +26,7 @@
       "url": "http://host.docker.internal:8080/index.php/apps/files"
     },
     {
-      "icon": "application",
+      "icon": "settings-4",
       "menu": "user",
       "target": "_self",
       "title": {

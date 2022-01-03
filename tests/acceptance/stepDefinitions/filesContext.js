@@ -1309,16 +1309,6 @@ When(
     await _setFilesTableSort(column, false)
   }
 )
-Then(
-  'the file {string} should have a file type icon displayed on the webUI',
-  async function (resource) {
-    const iconUrl = await client.page.FilesPageElement.filesList().getResourceThumbnail(
-      resource,
-      'file'
-    )
-    assert.strictEqual(null, iconUrl, 'No icon URL expected when file type icon is displayed')
-  }
-)
 
 Then('quick action {string} should be displayed on the webUI', function (action) {
   return client.page.FilesPageElement.filesRow().isQuickActionVisible(action)

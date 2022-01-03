@@ -36,7 +36,7 @@
             gap-size="xsmall"
             justify-content="left"
           >
-            <oc-icon name="portrait" />
+            <oc-icon name="profile" fill-type="line" />
             <translate>Profile</translate>
           </oc-button>
         </li>
@@ -73,7 +73,7 @@
             justify-content="left"
             @click="logout"
           >
-            <oc-icon name="sign-out" />
+            <oc-icon name="logout-box-r" fill-type="line" />
             <translate>Log out</translate>
           </oc-button>
         </li>

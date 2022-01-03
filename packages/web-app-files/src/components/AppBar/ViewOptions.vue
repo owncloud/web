@@ -83,7 +83,7 @@ export default {
     },
 
     toggleIcon() {
-      return this.sidebarClosed ? 'arrow-left-circle' : 'arrow-right-circle'
+      return this.sidebarClosed ? 'arrow-drop-left' : 'arrow-drop-right'
     },
 
     hiddenFilesShownModel: {

@@ -9,11 +9,11 @@ Feature: Access public link shares by public
     And user "Alice" has created folder "simple-folder"
 
 
-  Scenario: Thumbnails are not loaded for known file types in public link file list
-    Given user "Alice" has shared folder "simple-folder" with link with "read,create" permissions
-    When the public uses the webUI to access the last public link created by user "Alice"
-    And the user uploads file "new-data.zip" using the webUI
-    Then the file "new-data.zip" should have a file type icon displayed on the webUI
+
+
+
+
+
 
   Scenario: public should be able to access a public link with correct password
     Given user "Alice" has created file "simple-folder/lorem.txt"

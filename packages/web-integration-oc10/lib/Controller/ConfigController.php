@@ -117,7 +117,7 @@ class ConfigController extends Controller {
             $apps[] = [
                 'title' => $titles,
                 'url' => $serverUrl . $navigationEntry['href'],
-                'icon' => 'extension',
+                'icon' => 'swap-box',
             ];
         }
 

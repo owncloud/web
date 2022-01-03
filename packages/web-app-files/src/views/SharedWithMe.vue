@@ -43,7 +43,7 @@
                 class="file-row-share-decline oc-ml-s"
                 @click.stop="$_declineShare_trigger({ resources: [resource] })"
               >
-                <oc-icon size="small" name="forbid" />
+                <oc-icon size="small" name="close" />
                 <translate>Decline</translate>
               </oc-button>
             </div>
@@ -138,7 +138,7 @@
               class="file-row-share-status-decline"
               @click.stop="$_declineShare_trigger({ resources: [resource] })"
             >
-              <oc-icon size="small" name="forbid" />
+              <oc-icon size="small" name="close" />
               <translate>Decline</translate>
             </oc-button>
           </div>
