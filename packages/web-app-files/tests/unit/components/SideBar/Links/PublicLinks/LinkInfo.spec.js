@@ -203,7 +203,7 @@ describe('LinkInfo', () => {
 
       expect(linkDirectTag.exists()).toBeTruthy()
       expect(linkDirectTag.props().to).toMatchObject({
-        name: 'files-personal',
+        name: 'files-spaces-personal-home',
         params: { item: '/' },
         query: { scrollTo: 'some-path' }
       })

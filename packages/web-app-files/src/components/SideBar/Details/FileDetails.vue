@@ -103,31 +103,45 @@
   </div>
 </template>
 <script>
+import { computed, ref } from '@vue/composition-api'
 import Mixins from '../../../mixins'
 import MixinResources from '../../../mixins/resources'
-import MixinRoutes from '../../../mixins/routes'
 import { mapActions, mapGetters } from 'vuex'
 import { ImageDimension } from '../../../constants'
 import { loadPreview } from '../../../helpers/resource'
 import upperFirst from 'lodash-es/upperFirst'
 import path from 'path'
+import { createLocationSpaces, isAuthenticatedRoute } from '../../../router'
 import { ShareTypes } from '../../../helpers/share'
 
 export default {
   name: 'FileDetails',
-  mixins: [Mixins, MixinResources, MixinRoutes],
+  mixins: [Mixins, MixinResources],
+
+  inject: ['displayedItem'],
+  setup() {
+    const sharedParentDir = ref('')
+    const sharedParentRoute = computed(() =>
+      createLocationSpaces('files-spaces-personal-home', {
+        params: { item: sharedParentDir.value }
+      })
+    )
+
+    return {
+      sharedParentDir,
+      sharedParentRoute
+    }
+  },
+
   title: ($gettext) => {
     return $gettext('Details')
   },
-
-  inject: ['displayedItem'],
 
   data: () => ({
     loading: false,
     sharedByName: '',
     sharedByDisplayName: '',
     sharedTime: 0,
-    sharedParentDir: null,
     sharedItem: null
   }),
   computed: {
@@ -166,14 +180,6 @@ export default {
         true
       )
     },
-    sharedParentRoute() {
-      return {
-        name: 'files-personal',
-        params: {
-          item: this.sharedParentDir || '/'
-        }
-      }
-    },
     showSharedBy() {
       return (
         this.showShares &&
@@ -192,7 +198,7 @@ export default {
       )
     },
     showShares() {
-      return this.hasAnyShares && !this.isPublicPage
+      return this.hasAnyShares && isAuthenticatedRoute(this.$route)
     },
     detailSharingInformation() {
       const isFolder = this.file.type === 'folder'
@@ -239,7 +245,7 @@ export default {
       if (this.file.type === 'folder') {
         return
       }
-      return this.versions.length > 0 && !this.isPublicPage
+      return this.versions.length > 0 && isAuthenticatedRoute(this.$route)
     },
     versionsTitle() {
       return this.$gettext('Versions:')
@@ -320,7 +326,7 @@ export default {
         await new Promise((resolve) => setTimeout(resolve, 500))
         return loadPreview({
           resource: this.file,
-          isPublic: this.isPublicPage,
+          isPublic: !isAuthenticatedRoute(this.$route),
           dimensions: ImageDimension.Preview,
           server: this.configuration.server,
           userId: this.user.id,
@@ -367,7 +373,7 @@ export default {
     async loadData() {
       this.loading = true
       const calls = []
-      if (this.file.type === 'file' && !this.isPublicPage) {
+      if (this.file.type === 'file' && isAuthenticatedRoute(this.$route)) {
         calls.push(this.loadVersions({ client: this.$client, fileId: this.file.id }))
       }
       await Promise.all(calls.map((p) => p.catch((e) => e)))

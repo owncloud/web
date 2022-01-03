@@ -21,11 +21,11 @@ const injectExtensions = async (api) => {
       }
     },
     routes: [
-      'files-personal',
-      'files-favorites',
-      'files-shared-with-others',
-      'files-shared-with-me',
-      'files-public-list'
+      'files-spaces-storage',
+      'files-common-favorites',
+      'files-shares-with-others',
+      'files-shares-with-me',
+      'files-public-files'
     ]
   })
 }

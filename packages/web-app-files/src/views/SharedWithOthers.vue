@@ -22,7 +22,7 @@
         :class="{ 'files-table-squashed': !sidebarClosed }"
         :are-thumbnails-displayed="displayThumbnails"
         :resources="paginatedResources"
-        :target-route="targetRoute"
+        :target-route="resourceTargetLocation"
         :header-position="fileListHeaderY"
         :sort-by="sortBy"
         :sort-dir="sortDir"
@@ -75,6 +75,7 @@ import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
+import { createLocationSpaces } from '../router'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -147,7 +148,8 @@ export default {
       paginationPage,
       handleSort,
       sortBy,
-      sortDir
+      sortDir,
+      resourceTargetLocation: createLocationSpaces('files-spaces-personal-home')
     }
   },
 
@@ -169,10 +171,6 @@ export default {
 
     isEmpty() {
       return this.paginatedResources.length < 1
-    },
-
-    targetRoute() {
-      return { name: 'files-personal' }
     },
 
     displayThumbnails() {

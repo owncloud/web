@@ -3,13 +3,40 @@ import { render, fireEvent, waitFor, within } from '@testing-library/vue'
 import merge from 'lodash-es/merge'
 import StoreFiles from '@files/src/store'
 import Store from '@runtime/src/store'
-import routes from '@files/src/routes'
+import App from '@files/src/App.vue'
+import Favorites from '@files/src/views/Favorites.vue'
+import FilesDrop from '@files/src/views/FilesDrop.vue'
+import LocationPicker from '@files/src/views/LocationPicker.vue'
+import PrivateLink from '@files/src/views/PrivateLink.vue'
+import PublicFiles from '@files/src/views/PublicFiles.vue'
+import PublicLink from '@files/src/views/PublicLink.vue'
+import Personal from '@files/src/views/Personal.vue'
+import SharedWithMe from '@files/src/views/SharedWithMe.vue'
+import SharedWithOthers from '@files/src/views/SharedWithOthers.vue'
+import SharedViaLink from '@files/src/views/SharedViaLink.vue'
+import Trashbin from '@files/src/views/Trashbin.vue'
+import { buildRoutes, createLocationSpaces } from '@files/src/router'
 import fileSideBars from '@files/src/fileSideBars'
 import { getDateInFuture, navigateToDate } from '../helpers/date'
 // eslint-disable-next-line jest/no-mocks-import
 import sdkMock from '@/__mocks__/sdk'
 import { DateTime } from 'luxon'
 import FileLinks from '@files/src/components/SideBar/Links/FileLinks.vue'
+
+const routes = buildRoutes({
+  App,
+  Favorites,
+  Personal,
+  FilesDrop,
+  LocationPicker,
+  PrivateLink,
+  PublicFiles,
+  PublicLink,
+  SharedViaLink,
+  SharedWithMe,
+  SharedWithOthers,
+  Trashbin
+})
 
 const existingShares = [
   {
@@ -243,7 +270,7 @@ function renderComponent({ store, mocks } = {}) {
       mocks
     },
     (vue, store, router) => {
-      router.push({ name: 'personal' })
+      router.push(createLocationSpaces())
     }
   )
 }

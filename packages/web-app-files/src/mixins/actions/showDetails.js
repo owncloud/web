@@ -1,5 +1,5 @@
 import { mapActions } from 'vuex'
-import { isTrashbinRoute } from '../../helpers/route'
+import { isLocationCommonActive } from '../../router'
 
 export default {
   computed: {
@@ -13,7 +13,7 @@ export default {
           // we don't have details in the trashbin, yet.
           // remove trashbin route rule once we have them.
           isEnabled: ({ resources }) => {
-            if (isTrashbinRoute(this.$route)) {
+            if (isLocationCommonActive(this.$router, 'files-common-trash')) {
               return false
             }
             return resources.length > 0

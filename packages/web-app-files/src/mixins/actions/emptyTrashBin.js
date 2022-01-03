@@ -1,5 +1,5 @@
-import { isTrashbinRoute } from '../../helpers/route'
 import { mapActions, mapGetters } from 'vuex'
+import { isLocationCommonActive } from '../../router'
 
 export default {
   computed: {
@@ -12,7 +12,7 @@ export default {
           label: () => this.$gettext('Empty trash bin'),
           handler: this.$_emptyTrashBin_trigger,
           isEnabled: ({ resources }) => {
-            if (!isTrashbinRoute(this.$route)) {
+            if (!isLocationCommonActive(this.$router, 'files-common-trash')) {
               return false
             }
             // empty trash bin is not available for individual resources, but only for the trash bin as a whole

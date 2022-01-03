@@ -7,9 +7,35 @@ import Store from '@runtime/src/store'
 import fileSideBars from '@files/src/fileSideBars'
 import SharedFiles from '@/__fixtures__/sharedFiles'
 import { buildSharedResource } from '@files/src/helpers/resources'
-import routes from '@files/src/routes'
-
+import App from '@files/src/App.vue'
+import Favorites from '@files/src/views/Favorites.vue'
+import FilesDrop from '@files/src/views/FilesDrop.vue'
+import LocationPicker from '@files/src/views/LocationPicker.vue'
+import PrivateLink from '@files/src/views/PrivateLink.vue'
+import PublicFiles from '@files/src/views/PublicFiles.vue'
+import PublicLink from '@files/src/views/PublicLink.vue'
+import Personal from '@files/src/views/Personal.vue'
+import SharedWithMe from '@files/src/views/SharedWithMe.vue'
+import SharedWithOthers from '@files/src/views/SharedWithOthers.vue'
+import SharedViaLink from '@files/src/views/SharedViaLink.vue'
+import Trashbin from '@files/src/views/Trashbin.vue'
+import { buildRoutes, createLocationShares } from '@files/src/router'
 import Sidebar from '@files/src/components/SideBar/SideBar.vue'
+
+const routes = buildRoutes({
+  App,
+  Favorites,
+  Personal,
+  FilesDrop,
+  LocationPicker,
+  PrivateLink,
+  PublicFiles,
+  PublicLink,
+  SharedViaLink,
+  SharedWithMe,
+  SharedWithOthers,
+  Trashbin
+})
 
 const store = {
   ...Store,
@@ -60,7 +86,7 @@ describe('Files sidebar', () => {
       (vue, store, router) => {
         vue.directive('click-outside', () => {})
         vue.directive('translate', () => {})
-        router.push({ name: 'shared-with-me' })
+        router.push(createLocationShares('files-shares-with-me'))
       }
     )
 

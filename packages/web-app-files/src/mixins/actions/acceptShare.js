@@ -1,9 +1,9 @@
 import { triggerShareAction } from '../../helpers/share/triggerShareAction'
 
-import { isSharedWithMeRoute } from '../../helpers/route'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import PQueue from 'p-queue'
 import { ShareStatus } from '../../helpers/share'
+import { isLocationSharesActive } from '../../router'
 
 export default {
   computed: {
@@ -17,7 +17,7 @@ export default {
           label: ({ resources }) =>
             this.$ngettext('Accept share', 'Accept shares', resources.length),
           isEnabled: ({ resources }) => {
-            if (!isSharedWithMeRoute(this.$route)) {
+            if (!isLocationSharesActive(this.$router, 'files-shares-with-me')) {
               return false
             }
             if (resources.length === 0) {

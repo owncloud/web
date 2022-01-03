@@ -1,9 +1,9 @@
 import { mapActions, mapGetters } from 'vuex'
 
-import { isTrashbinRoute } from '../../helpers/route'
 import { isSameResource } from '../../helpers/resource'
 import { getParentPaths } from '../../helpers/path'
 import { buildResource } from '../../helpers/resources'
+import { isLocationCommonActive } from '../../router'
 
 export default {
   computed: {
@@ -19,7 +19,7 @@ export default {
           },
           handler: this.$_rename_trigger,
           isEnabled: ({ resources }) => {
-            if (isTrashbinRoute(this.$route)) {
+            if (isLocationCommonActive(this.$router, 'files-common-trash')) {
               return false
             }
             if (resources.length !== 1) {

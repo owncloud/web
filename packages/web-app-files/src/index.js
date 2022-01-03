@@ -1,3 +1,15 @@
+import App from './App.vue'
+import Favorites from './views/Favorites.vue'
+import FilesDrop from './views/FilesDrop.vue'
+import LocationPicker from './views/LocationPicker.vue'
+import PrivateLink from './views/PrivateLink.vue'
+import PublicFiles from './views/PublicFiles.vue'
+import PublicLink from './views/PublicLink.vue'
+import Personal from './views/Personal.vue'
+import SharedWithMe from './views/SharedWithMe.vue'
+import SharedWithOthers from './views/SharedWithOthers.vue'
+import SharedViaLink from './views/SharedViaLink.vue'
+import Trashbin from './views/Trashbin.vue'
 import translations from '../l10n/translations.json'
 import quickActions from './quickActions'
 import store from './store'
@@ -5,7 +17,7 @@ import { FilterSearch, SDKSearch } from './search'
 import { bus } from 'web-pkg/src/instance'
 import { archiverService, Registry } from './services'
 import fileSideBars from './fileSideBars'
-import routes from './routes'
+import { buildRoutes } from './router'
 import get from 'lodash-es/get'
 
 // just a dummy function to trick gettext tools
@@ -26,16 +38,14 @@ const navItems = [
     name: $gettext('All files'),
     iconMaterial: appInfo.icon,
     route: {
-      name: 'files-personal',
-      path: `/${appInfo.id}/list/all`
+      path: `/${appInfo.id}/spaces/`
     }
   },
   {
     name: $gettext('Favorites'),
     iconMaterial: 'star',
     route: {
-      name: 'files-favorites',
-      path: `/${appInfo.id}/list/favorites`
+      path: `/${appInfo.id}/favorites`
     },
     enabled(capabilities) {
       return capabilities.files && capabilities.files.favorites
@@ -45,35 +55,31 @@ const navItems = [
     name: $gettext('Shared with me'),
     iconMaterial: 'shared-with-me',
     route: {
-      name: 'files-shared-with-me',
-      path: `/${appInfo.id}/list/shared-with-me`
+      path: `/${appInfo.id}/shares/with-me`
     }
   },
   {
     name: $gettext('Shared with others'),
     iconMaterial: 'shared-with-others',
     route: {
-      name: 'files-shared-with-others',
-      path: `/${appInfo.id}/list/shared-with-others`
+      path: `/${appInfo.id}/shares/with-others`
     }
   },
   {
     name: $gettext('Shared via link'),
     iconMaterial: 'link',
     route: {
-      name: 'files-shared-via-link',
-      path: `/${appInfo.id}/list/shared-via-link`
+      path: `/${appInfo.id}/shares/via-link`
     }
   },
   {
     name: $gettext('Deleted files'),
     iconMaterial: 'delete',
+    route: {
+      path: `/${appInfo.id}/trash`
+    },
     enabled(capabilities) {
       return capabilities.dav && capabilities.dav.trashbin === '1.0'
-    },
-    route: {
-      name: 'files-trashbin',
-      path: `/${appInfo.id}/list/trash-bin`
     }
   }
 ]
@@ -81,7 +87,20 @@ const navItems = [
 export default {
   appInfo,
   store,
-  routes,
+  routes: buildRoutes({
+    App,
+    Favorites,
+    Personal,
+    FilesDrop,
+    LocationPicker,
+    PrivateLink,
+    PublicFiles,
+    PublicLink,
+    SharedViaLink,
+    SharedWithMe,
+    SharedWithOthers,
+    Trashbin
+  }),
   navItems,
   quickActions,
   translations,

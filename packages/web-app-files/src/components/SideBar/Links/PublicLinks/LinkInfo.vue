@@ -66,6 +66,7 @@
 <script>
 import { basename, dirname } from 'path'
 import Mixins from '../../../../mixins'
+import { createLocationSpaces } from '../../../../router'
 import CopyToClipboardButton from '../CopyToClipboardButton.vue'
 import { DateTime } from 'luxon'
 
@@ -117,16 +118,14 @@ export default {
 
     viaRouterParams() {
       const viaPath = this.link.path
-
-      return {
-        name: 'files-personal',
+      return createLocationSpaces('files-spaces-personal-home', {
         params: {
           item: dirname(viaPath) || '/'
         },
         query: {
           scrollTo: basename(viaPath)
         }
-      }
+      })
     },
 
     viaTooltip() {

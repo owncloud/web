@@ -1,8 +1,8 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 import { cloneStateObject } from '../helpers/store'
 import { isSameResource } from '../helpers/resource'
-import { isTrashbinRoute } from '../helpers/route'
 import PQueue from 'p-queue'
+import { isLocationCommonActive } from '../router'
 
 export default {
   data: () => ({
@@ -16,7 +16,7 @@ export default {
     ...mapGetters(['user']),
 
     $_deleteResources_isInTrashbin() {
-      return isTrashbinRoute(this.$route)
+      return isLocationCommonActive(this.$router, 'files-common-trash')
     },
 
     $_deleteResources_resources() {
