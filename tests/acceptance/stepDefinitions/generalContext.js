@@ -1,24 +1,12 @@
 const { client } = require('nightwatch-api')
 const { After, Before, Given, Then, When } = require('@cucumber/cucumber')
-const webdavHelper = require('../helpers/webdavHelper')
 const httpHelper = require('../helpers/httpHelper')
 const assert = require('assert')
+const path = require('path')
 const fs = require('fs')
 const occHelper = require('../helpers/occHelper')
 
 let initialConfigJsonSettings
-const createdFiles = []
-
-Given(
-  'a file with the size of {string} bytes and the name {string} has been created locally',
-  function (size, name) {
-    const fullPathOfLocalFile = path.join(client.globals.filesForUpload, name)
-    const fh = fs.openSync(fullPathOfLocalFile, 'w')
-    fs.writeSync(fh, 'A', Math.max(0, size - 1))
-    fs.closeSync(fh)
-    createdFiles.push(fullPathOfLocalFile)
-  }
-)
 
 const getConfigJsonContent = function (fullPathOfConfigFile) {
   if (!fs.existsSync(fullPathOfConfigFile)) {
@@ -132,46 +120,6 @@ Then('no message should be displayed on the webUI', async function () {
   assert.strictEqual(hasMessage, false, 'Expected no messages but a message is displayed.')
   return this
 })
-
-Then(
-  'as {string} the content of {string} should be the same as the content of local file {string}',
-  async function (userId, remoteFile, localFile) {
-    const fullPathOfLocalFile = path.join(client.globals.filesForUpload, localFile)
-    const body = await webdavHelper.download(userId, remoteFile)
-
-    assertContentOfLocalFileIs(fullPathOfLocalFile, body)
-
-    return this
-  }
-)
-
-Then(
-  'as {string} the content of {string} should not be the same as the content of local file {string}',
-  async function (userId, remoteFile, localFile) {
-    const fullPathOfLocalFile = path.join(client.globals.filesForUpload, localFile)
-    const body = await webdavHelper.download(userId, remoteFile)
-
-    assertContentOfLocalFileIsNot(fullPathOfLocalFile, body)
-  }
-)
-
-const assertContentOfLocalFileIs = function (fullPathOfLocalFile, actualContent) {
-  const expectedContent = fs.readFileSync(fullPathOfLocalFile, { encoding: 'utf-8' })
-  return assert.strictEqual(
-    actualContent,
-    expectedContent,
-    'asserting content of local file "' + fullPathOfLocalFile + '"'
-  )
-}
-
-const assertContentOfLocalFileIsNot = function (fullPathOfLocalFile, actualContent) {
-  const expectedContent = fs.readFileSync(fullPathOfLocalFile, { encoding: 'utf-8' })
-  return assert.notStrictEqual(
-    actualContent,
-    expectedContent,
-    'asserting content of local file "' + fullPathOfLocalFile + '"'
-  )
-}
 
 Given(
   'the setting {string} of app {string} has been set to {string}',
@@ -316,14 +264,6 @@ After(async function (testCase) {
     return
   }
   console.log('\n  Result: ' + testCase.result.status + '\n')
-
-  createdFiles.forEach((fileName) => {
-    try {
-      fs.unlinkSync(fileName)
-    } catch (err) {
-      console.info(err.message)
-    }
-  })
 
   // clear file locks
   const body = new URLSearchParams()

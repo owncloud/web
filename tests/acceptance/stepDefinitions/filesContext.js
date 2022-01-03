@@ -190,26 +190,43 @@ Then('breadcrumb for folder {string} should be displayed on the webUI', function
   return assertBreadcrumbIsDisplayedFor(resource, true, true)
 })
 
+const isRemoteUploadDirSet = () => {
+  return !!process.env.REMOTE_UPLOAD_DIR
+}
+
 When('the user/public uploads file {string} using the webUI', function (element) {
   const uploadPath = path.join(client.globals.mountedUploadDir, element)
   return client.page.personalPage().uploadFile(uploadPath)
 })
 
 When('the user uploads a created file {string} using the webUI', function (element) {
-  const filePath = path.join(client.globals.filesForUpload, element)
-  return client.uploadRemote(filePath, function (uploadPath) {
-    client.page.personalPage().uploadFile(uploadPath)
-  })
+  if (isRemoteUploadDirSet()) {
+    const filePath = path.join(client.globals.filesForUpload, element)
+    return client.uploadRemote(filePath, function (uploadPath) {
+      client.page.personalPage().uploadFile(uploadPath)
+    })
+  } else {
+    const uploadPath = path.join(client.globals.mountedUploadDir, element)
+    return client.page.personalPage().uploadFile(uploadPath)
+  }
 })
 
 When('the user uploads a created file {string} with overwrite using the webUI', function (element) {
-  const filePath = path.join(client.globals.filesForUpload, element)
-  return client.uploadRemote(filePath, function (uploadPath) {
+  if (isRemoteUploadDirSet()) {
+    const filePath = path.join(client.globals.filesForUpload, element)
+    return client.uploadRemote(filePath, function (uploadPath) {
+      client.page
+        .personalPage()
+        .selectFileForUpload(uploadPath)
+        .then(() => client.page.personalPage().confirmFileOverwrite())
+    })
+  } else {
+    const uploadPath = path.join(client.globals.mountedUploadDir)
     client.page
       .personalPage()
       .selectFileForUpload(uploadPath)
       .then(() => client.page.personalPage().confirmFileOverwrite())
-  })
+  }
 })
 
 When('the public uploads file/folder {string} in files-drop page', function (element) {
@@ -1084,6 +1101,19 @@ When('the user uploads overwriting file {string} using the webUI', async functio
   const uploadPath = path.join(client.globals.mountedUploadDir, file)
   await client.page.personalPage().selectFileForUpload(uploadPath)
   await client.page.personalPage().confirmFileOverwrite()
+  // if (isRemoteUploadDirSet()) {
+  //   const filePath = path.join(client.globals.filesForUpload, file)
+  //   return client.uploadRemote(filePath, function (uploadPath) {
+  //     client.page
+  //       .personalPage()
+  //       .selectFileForUpload(uploadPath)
+  //       .then(() => client.page.personalPage().confirmFileOverwrite())
+  //   })
+  // } else {
+  //   const uploadPath = path.join(client.globals.mountedUploadDir, file)
+  //   await client.page.personalPage().selectFileForUpload(uploadPath)
+  //   await client.page.personalPage().confirmFileOverwrite()
+  // }
 
   return this
 })

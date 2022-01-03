@@ -58,8 +58,8 @@ services:
       - 4444:4444
       - 5900:5900
     volumes:
-      - uploads:/uploads:ro
       - /dev/shm:/dev/shm
+      - uploads:/uploads:ro
     extra_hosts:
       - host.docker.internal:${DOCKER_HOST:-host-gateway}
     environment:
@@ -82,6 +82,7 @@ services:
       MIDDLEWARE_HOST: "0.0.0.0"
       RUN_ON_OCIS: 'false'
       BACKEND_HOST: "http://host.docker.internal:8080"
+      REMOTE_UPLOAD_DIR: "/uploads"
 
   middleware-ocis:
     image: owncloud/owncloud-test-middleware:latest
@@ -90,6 +91,10 @@ services:
       - host.docker.internal:${DOCKER_HOST:-host-gateway}
     ports:
       - "3000:3000"
+    command: "sh -c /middleware.entrypoint.sh"
+    volumes:
+      - uploads:/uploads
+      - ./dev/docker/middleware.entrypoint.sh:/middleware.entrypoint.sh
     environment:
       MIDDLEWARE_PORT: 3000
       MIDDLEWARE_HOST: "0.0.0.0"

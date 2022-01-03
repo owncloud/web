@@ -241,8 +241,8 @@ Feature: Share by public link with different roles
     Then the following files should be listed on the files-drop page:
       | 'single'quotes.txt |
       | new-lorem.txt      |
-    And as "Alice" the content of "simple-folder/'single'quotes.txt" should be the same as the content of local file "'single'quotes.txt"
-    And as "Alice" the content of "simple-folder/new-lorem.txt" should be the same as the content of local file "new-lorem.txt"
+    And as "Alice" the content of "simple-folder/'single'quotes.txt" should be the same as the content of local file "'single'quotes.txt" in the server
+    And as "Alice" the content of "simple-folder/new-lorem.txt" should be the same as the content of local file "new-lorem.txt" in the server
 
   @issue-2443
   Scenario: creating a public link with "Uploader" role makes it possible to upload a folder
@@ -260,7 +260,7 @@ Feature: Share by public link with different roles
     And the public uploads file "'single'quotes.txt" in files-drop page
     Then the following files should be listed on the files-drop page:
       | 'single'quotes.txt |
-    And as "Alice" the content of "simple-folder/'single'quotes.txt" should be the same as the content of local file "'single'quotes.txt"
+    And as "Alice" the content of "simple-folder/'single'quotes.txt" should be the same as the content of local file "'single'quotes.txt" in the server
 
   @issue-ocis-723
   Scenario: creating a public link with "Uploader" role makes it possible to upload multiple files via files-drop page even with password set
@@ -271,8 +271,8 @@ Feature: Share by public link with different roles
     Then the following files should be listed on the files-drop page:
       | 'single'quotes.txt |
       | new-lorem.txt      |
-    And as "Alice" the content of "simple-folder/'single'quotes.txt" should be the same as the content of local file "'single'quotes.txt"
-    And as "Alice" the content of "simple-folder/new-lorem.txt" should be the same as the content of local file "new-lorem.txt"
+    And as "Alice" the content of "simple-folder/'single'quotes.txt" should be the same as the content of local file "'single'quotes.txt" in the server
+    And as "Alice" the content of "simple-folder/new-lorem.txt" should be the same as the content of local file "new-lorem.txt" in the server
 
   @issue-ocis-1328
   Scenario: user tries to create a public link with Viewer role without entering share password while enforce password on read only public share is enforced

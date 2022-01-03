@@ -16,7 +16,7 @@ Feature: File Upload
     When the user uploads file "new-lorem.txt" using the webUI
     Then no message should be displayed on the webUI
     And file "new-lorem.txt" should be listed on the webUI
-    And as "Alice" the content of "new-lorem.txt" should be the same as the content of local file "new-lorem.txt"
+    And as "Alice" the content of "new-lorem.txt" in the server should be the same as the content of local file "new-lorem.txt"
 
   @smokeTest @ocisSmokeTest
   Scenario: simple upload of a folder that does not exist before
@@ -63,20 +63,20 @@ Feature: File Upload
 
   @smokeTest @ocisSmokeTest
   Scenario: uploading a big file (when chunking is implemented this upload should be chunked)
-    Given a file with the size of "30000000" bytes and the name "big-video.mp4" has been created locally
+    Given a file with the size of "30000000" bytes and the name "big-video.mp4" has been created locally in the server
     When the user uploads a created file "big-video.mp4" using the webUI
     Then no message should be displayed on the webUI
     And file "big-video.mp4" should be listed on the webUI
-    And as "Alice" the content of "big-video.mp4" should be the same as the content of local file "big-video.mp4"
+    And as "Alice" the content of "big-video.mp4" should be the same as the content of local file "big-video.mp4" in the server
 
   @skipOnFIREFOX
   Scenario: conflict with a big file (when chunking is implemented this upload should be chunked)
-    Given a file with the size of "30000000" bytes and the name "big-video.mp4" has been created locally
+    Given a file with the size of "30000000" bytes and the name "big-video.mp4" has been created locally in the server
     When the user renames file "lorem.txt" to "big-video.mp4" using the webUI
     And the user reloads the current page of the webUI
     And the user uploads a created file "big-video.mp4" with overwrite using the webUI
     Then file "big-video.mp4" should be listed on the webUI
-    And as "Alice" the content of "big-video.mp4" should be the same as the content of local file "big-video.mp4"
+    And as "Alice" the content of "big-video.mp4" should be the same as the content of local file "big-video.mp4" in the server
 
 
   Scenario: upload a new file into a sub folder
@@ -84,14 +84,14 @@ Feature: File Upload
     And the user uploads file "new-lorem.txt" using the webUI
     Then no message should be displayed on the webUI
     And file "new-lorem.txt" should be listed on the webUI
-    And as "Alice" the content of "simple-folder/new-lorem.txt" should be the same as the content of local file "new-lorem.txt"
+    And as "Alice" the content of "simple-folder/new-lorem.txt" should be the same as the content of local file "new-lorem.txt" in the server
 
   @smokeTest @disablePreviews
   Scenario: overwrite an existing file
     When the user uploads overwriting file "lorem.txt" using the webUI
     Then no message should be displayed on the webUI
     And file "lorem.txt" should be listed on the webUI
-    And as "Alice" the content of "lorem.txt" should be the same as the content of local file "lorem.txt"
+    And as "Alice" the content of "lorem.txt" should be the same as the content of local file "lorem.txt" in the server
     And the versions list for resource "lorem.txt" should contain 1 entry
     But file "lorem (2).txt" should not be listed on the webUI
 
@@ -101,7 +101,7 @@ Feature: File Upload
     When the user uploads overwriting file "lorem.txt" using the webUI
     Then no message should be displayed on the webUI
     And file "lorem.txt" should be listed on the webUI
-    And as "Alice" the content of "lorem.txt" should be the same as the content of local file "lorem.txt"
+    And as "Alice" the content of "lorem.txt" should be the same as the content of local file "lorem.txt" in the server
     But file "lorem (2).txt" should not be listed on the webUI
 
   @issue-5106
@@ -115,7 +115,7 @@ Feature: File Upload
     And file "lorem.txt" should be listed on the webUI
     And the content of "lorem.txt" should not have changed in the server
     And file "lorem (2).txt" should be listed on the webUI
-    And as "Alice" the content of "lorem (2).txt" should be the same as the content of local file "lorem.txt"
+    And as "Alice" the content of "lorem (2).txt" should be the same as the content of local file "lorem.txt" in the server
 
   @issue-5106
   Scenario: cancel conflict dialog
@@ -132,7 +132,7 @@ Feature: File Upload
     When the user opens folder "simple-folder" using the webUI
     And the user uploads overwriting file "lorem.txt" using the webUI
     Then file "lorem.txt" should be listed on the webUI
-    And as "Alice" the content of "simple-folder/lorem.txt" should be the same as the content of local file "lorem.txt"
+    And as "Alice" the content of "simple-folder/lorem.txt" should be the same as the content of local file "lorem.txt" in the server
 
   @issue-5106
   Scenario: keep new and existing file in a sub-folder
@@ -146,7 +146,7 @@ Feature: File Upload
     And file "lorem.txt" should be listed on the webUI
     And the content of "lorem.txt" should not have changed in the server
     And file "lorem (2).txt" should be listed on the webUI
-    And as "Alice" the content of "lorem (2).txt" should be the same as the content of local file "lorem.txt"
+    And as "Alice" the content of "lorem (2).txt" should be the same as the content of local file "lorem.txt" in the server
 
   @issue-ocis-2258 @disablePreviews
   Scenario: upload overwriting a file into a public share
@@ -154,14 +154,14 @@ Feature: File Upload
     When the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
     And the user uploads overwriting file "lorem.txt" using the webUI
     Then file "lorem.txt" should be listed on the webUI
-    And as "Alice" the content of "simple-folder/lorem.txt" should be the same as the content of local file "lorem.txt"
+    And as "Alice" the content of "simple-folder/lorem.txt" should be the same as the content of local file "lorem.txt" in the server
 
 
   Scenario: upload a file with comma in the filename
     When the user uploads file "file,with,comma,.txt" using the webUI
     Then no message should be displayed on the webUI
     And file "file,with,comma,.txt" should be listed on the webUI
-    And as "Alice" the content of "file,with,comma,.txt" should be the same as the content of local file "file,with,comma,.txt"
+    And as "Alice" the content of "file,with,comma,.txt" should be the same as the content of local file "file,with,comma,.txt" in the server
 
 
   Scenario: simple upload of a folder, with comma in its name, that does not exist before

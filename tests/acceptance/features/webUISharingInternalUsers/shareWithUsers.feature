@@ -62,16 +62,16 @@ Feature: Sharing files and folders with internal users
     And user "Alice" has accepted the share "Shares/new-lorem.txt" offered by user "Brian" in the server
     When the user re-logs in as "Alice" using the webUI
     And the user opens folder "Shares" using the webUI
-    Then as "Alice" the content of "Shares/new-lorem.txt" should not be the same as the content of local file "new-lorem.txt"
+    Then as "Alice" the content of "Shares/new-lorem.txt" should not be the same as the content of local file "new-lorem.txt" in the server
     # overwrite the received shared file
     When the user uploads overwriting file "new-lorem.txt" using the webUI
     Then file "new-lorem.txt" should be listed on the webUI
-    And as "Alice" the content of "Shares/new-lorem.txt" should be the same as the content of local file "new-lorem.txt"
+    And as "Alice" the content of "Shares/new-lorem.txt" should be the same as the content of local file "new-lorem.txt" in the server
     # unshare the received shared file
     When the user deletes file "new-lorem.txt" using the webUI
     Then file "new-lorem.txt" should not be listed on the webUI
     # check that the original file owner can still see the file
-    And as "Brian" the content of "new-lorem.txt" should be the same as the content of local file "new-lorem.txt"
+    And as "Brian" the content of "new-lorem.txt" should be the same as the content of local file "new-lorem.txt" in the server
 
   @disablePreviews
   Scenario: share a folder with another internal user who uploads, overwrites and deletes files
@@ -84,14 +84,14 @@ Feature: Sharing files and folders with internal users
     And the user browses to the folder "Shares" on the files page
     And the user reloads the current page of the webUI
     And the user opens folder "simple-folder" using the webUI
-    Then as "Alice" the content of "Shares/simple-folder/lorem.txt" should not be the same as the content of local file "lorem.txt"
+    Then as "Alice" the content of "Shares/simple-folder/lorem.txt" should not be the same as the content of local file "lorem.txt" in the server
     # overwrite an existing file in the received share
     When the user uploads overwriting file "lorem.txt" using the webUI
     Then file "lorem.txt" should be listed on the webUI
-    And as "Alice" the content of "Shares/simple-folder/lorem.txt" should be the same as the content of local file "lorem.txt"
+    And as "Alice" the content of "Shares/simple-folder/lorem.txt" should be the same as the content of local file "lorem.txt" in the server
     # upload a new file into the received share
     When the user uploads file "new-lorem.txt" using the webUI
-    Then as "Alice" the content of "Shares/simple-folder/new-lorem.txt" should be the same as the content of local file "new-lorem.txt"
+    Then as "Alice" the content of "Shares/simple-folder/new-lorem.txt" should be the same as the content of local file "new-lorem.txt" in the server
     # delete a file in the received share
     When the user deletes file "data.zip" using the webUI
     Then file "data.zip" should not be listed on the webUI
@@ -99,9 +99,9 @@ Feature: Sharing files and folders with internal users
     When the user re-logs in as "Brian" using the webUI
     And the user opens folder "simple-folder" using the webUI
     Then file "lorem.txt" should be listed on the webUI
-    And as "Brian" the content of "simple-folder/lorem.txt" should be the same as the content of local file "lorem.txt"
+    And as "Brian" the content of "simple-folder/lorem.txt" should be the same as the content of local file "lorem.txt" in the server
     And file "new-lorem.txt" should be listed on the webUI
-    And as "Brian" the content of "simple-folder/new-lorem.txt" should be the same as the content of local file "new-lorem.txt"
+    And as "Brian" the content of "simple-folder/new-lorem.txt" should be the same as the content of local file "new-lorem.txt" in the server
     But file "data.zip" should not be listed on the webUI
 
   @issue-product-270 @disablePreviews
