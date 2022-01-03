@@ -23,12 +23,8 @@ export function createPublicLink(ctx) {
           ctx.store.dispatch('showMessage', {
             title: ctx.$gettext('Public link created'),
             desc: ctx.$gettext(
-              'Public link has been successfully created and copied into your clipboard.'
-            ),
-            status: 'success',
-            autoClose: {
-              enabled: true
-            }
+              'Public link was created successfully and copied into your clipboard.'
+            )
           })
         })
         resolve()

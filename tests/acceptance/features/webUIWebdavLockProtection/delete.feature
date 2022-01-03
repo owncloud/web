@@ -21,7 +21,7 @@ Feature: Locks
     When the user tries to delete folder "lorem.txt" using the webUI
     Then notifications should be displayed on the webUI with the text
       """
-      Error while deleting "lorem.txt" - the file is locked
+      Failed to delete "lorem.txt" - the file is locked
       """
     When the user reloads the current page of the webUI
     Then file "lorem.txt" should be listed on the webUI
@@ -41,7 +41,7 @@ Feature: Locks
     When the user tries to delete folder "lorem.txt" using the webUI
     Then notifications should be displayed on the webUI with the text
       """
-      Error while deleting "lorem.txt" - the file is locked
+      Failed to delete "lorem.txt" - the file is locked
       """
     When the user reloads the current page of the webUI
     Then file "lorem.txt" should be listed on the webUI
@@ -64,7 +64,7 @@ Feature: Locks
     And the user tries to delete folder "lorem.txt" using the webUI
     Then notifications should be displayed on the webUI with the text
       """
-      Error while deleting "lorem.txt" - the file is locked
+      Failed to delete "lorem.txt" - the file is locked
       """
     When the user reloads the current page of the webUI
     Then file "lorem.txt" should be listed on the webUI

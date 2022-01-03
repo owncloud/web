@@ -122,7 +122,6 @@ import { useRouter } from '../../composables'
 
 import Mixins from '../../mixins'
 import MixinFileActions, { EDITOR_MODE_CREATE } from '../../mixins/fileActions'
-import MixinScrollToResource from '../../mixins/filesListScrolling'
 import { buildResource } from '../../helpers/resources'
 import { bus } from 'web-pkg/src/instance'
 import { isLocationActive, isLocationPublicActive, isLocationSpacesActive } from '../../router'
@@ -146,7 +145,7 @@ export default {
     ViewOptions,
     ContextActions
   },
-  mixins: [Mixins, MixinFileActions, MixinScrollToResource],
+  mixins: [Mixins, MixinFileActions],
   setup() {
     const router = useRouter()
     return {
@@ -309,12 +308,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('Files', [
-      'updateFileProgress',
-      'removeFilesFromTrashbin',
-      'loadIndicators',
-      'setFileSelection'
-    ]),
+    ...mapActions('Files', ['updateFileProgress', 'removeFilesFromTrashbin', 'loadIndicators']),
     ...mapActions(['openFile', 'showMessage', 'createModal', 'setModalInputErrorMessage']),
     ...mapMutations('Files', ['UPSERT_RESOURCE', 'SET_HIDDEN_FILES_VISIBILITY']),
     ...mapMutations(['SET_QUOTA']),
@@ -387,14 +381,18 @@ export default {
           })
         }
 
-        setTimeout(() => {
-          this.setFileSelection([resource])
-          this.scrollToResource(resource)
+        this.showMessage({
+          title: this.$gettextInterpolate(
+            this.$gettext('"%{folderName}" was created successfully'),
+            {
+              folderName
+            }
+          )
         })
       } catch (error) {
+        console.error(error)
         this.showMessage({
-          title: this.$gettext('Creating folder failed…'),
-          desc: error,
+          title: this.$gettext('Failed to create folder'),
           status: 'danger'
         })
       }
@@ -476,14 +474,15 @@ export default {
           })
         }
 
-        setTimeout(() => {
-          this.setFileSelection([resource])
-          this.scrollToResource(resource)
+        this.showMessage({
+          title: this.$gettextInterpolate(this.$gettext('"%{fileName}" was created successfully'), {
+            fileName
+          })
         })
       } catch (error) {
+        console.error(error)
         this.showMessage({
-          title: this.$gettext('Creating file failed…'),
-          desc: error,
+          title: this.$gettext('Failed to create file'),
           status: 'danger'
         })
       }
@@ -558,9 +557,9 @@ export default {
     },
 
     onFileError(error) {
+      console.error(error)
       this.showMessage({
-        title: this.$gettext('File upload failed…'),
-        desc: error.message,
+        title: this.$gettext('Failed to upload'),
         status: 'danger'
       })
     },

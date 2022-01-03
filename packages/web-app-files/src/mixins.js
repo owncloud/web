@@ -24,12 +24,7 @@ export default {
     ...mapGetters(['getToken', 'capabilities', 'configuration'])
   },
   methods: {
-    ...mapActions('Files', [
-      'resetSearch',
-      'addFileToProgress',
-      'removeFileSelection',
-      'removeFileFromProgress'
-    ]),
+    ...mapActions('Files', ['resetSearch', 'addFileToProgress', 'removeFileFromProgress']),
     ...mapActions(['showMessage', 'createModal', 'hideModal']),
 
     formDateFromJSDate(date, format = DateTime.DATETIME_FULL) {
@@ -122,13 +117,13 @@ export default {
     },
 
     displayOverwriteDialog() {
-      const translated = this.$gettext('File %{file} already exists')
+      const translated = this.$gettext('File "%{file}" already exists')
       const isVersioningEnabled =
         !this.publicPage() && this.capabilities.files && this.capabilities.files.versioning
       // TODO: Handle properly case of multiple existing files
       const title =
         this.existingResources.length > 1
-          ? this.$gettext('Multiple files already exists')
+          ? this.$gettext('Multiple files already exist')
           : this.$gettextInterpolate(
               translated,
               { file: this.existingResources[0].file.name },
@@ -169,14 +164,11 @@ export default {
           if (exists) {
             this.showMessage({
               title: this.$gettextInterpolate(
-                this.$gettext('Folder %{folder} already exists.'),
+                this.$gettext('Folder "%{folder}" already exists.'),
                 { folder: item.name },
                 true
               ),
-              status: 'danger',
-              autoClose: {
-                enabled: true
-              }
+              status: 'danger'
             })
 
             continue
@@ -245,12 +237,9 @@ export default {
     $_ocUpload_addDirectoryToQueue(e) {
       if (this.isIE11()) {
         this.showMessage({
-          title: this.$gettext('Upload failed'),
+          title: this.$gettext('Failed to upload'),
           desc: this.$gettext('Upload of a folder is not supported in Internet Explorer.'),
-          status: 'danger',
-          autoClose: {
-            enabled: true
-          }
+          status: 'danger'
         })
         return
       }
@@ -266,14 +255,11 @@ export default {
       if (directoryExists) {
         this.showMessage({
           title: this.$gettextInterpolate(
-            this.$gettext('Folder %{folder} already exists.'),
+            this.$gettext('Folder "%{folder}" already exists.'),
             { folder: directoryName },
             true
           ),
-          status: 'danger',
-          autoClose: {
-            enabled: true
-          }
+          status: 'danger'
         })
       } else {
         // Get folder structure

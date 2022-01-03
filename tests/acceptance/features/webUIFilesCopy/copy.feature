@@ -32,7 +32,7 @@ Feature: copy files and folders
     And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
     When the user tries to copy file "strängé filename (duplicate #2 &).txt" into folder "strängé नेपाली folder" using the webUI
-    Then the error message with header 'An error occurred while copying strängé filename (duplicate #2 &).txt' should be displayed on the webUI
+    Then the error message with header 'Failed to copy "strängé filename (duplicate #2 &).txt"' should be displayed on the webUI
 
   @smokeTest @ocisSmokeTest
   Scenario: Copy multiple files at once
@@ -113,7 +113,7 @@ Feature: copy files and folders
     Given user "Alice" has created folder "simple-empty-folder"
     And user "Alice" has logged in using the webUI
     When the user tries to copy folder "simple-empty-folder" into folder "simple-empty-folder" using the webUI
-    Then the error message with header 'An error occurred while copying simple-empty-folder' should be displayed on the webUI
+    Then the error message with header 'Failed to copy "simple-empty-folder"' should be displayed on the webUI
     And as "Alice" file "simple-empty-folder/simple-empty-folder" should not exist
 
 

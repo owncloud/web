@@ -59,8 +59,8 @@ export default {
         console.error(e)
         this.showMessage({
           title: this.$ngettext(
-            'Error downloading the selected folder.', // on single selection only available for folders
-            'Error downloading the selected files.', // on multi selection available for files+folders
+            'Failed to download the selected folder.', // on single selection only available for folders
+            'Failed to download the selected files.', // on multi selection available for files+folders
             this.selectedFiles.length
           ),
           status: 'danger'

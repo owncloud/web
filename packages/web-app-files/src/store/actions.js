@@ -28,15 +28,6 @@ export default {
     files = files.map(buildResource)
     context.commit('LOAD_FILES', { currentFolder, files })
   },
-  setFileSelection(context, files) {
-    context.commit('SET_FILE_SELECTION', files)
-  },
-  addFileSelection(context, file) {
-    context.commit('ADD_FILE_SELECTION', file)
-  },
-  removeFileSelection(context, file) {
-    context.commit('REMOVE_FILE_SELECTION', file)
-  },
   toggleFileSelection(context, file) {
     if (context.state.selectedIds.includes(file.id)) {
       context.commit('REMOVE_FILE_SELECTION', file)
@@ -78,7 +69,7 @@ export default {
           context.commit('REMOVE_FILE_FROM_SEARCHED', file)
         })
         .catch((error) => {
-          let translated = $gettext('Error while deleting "%{file}"')
+          let translated = $gettext('Failed to delete "%{file}"')
           if (error.statusCode === 423) {
             if (firstRun) {
               return context.dispatch('deleteFiles', {
@@ -89,17 +80,14 @@ export default {
               })
             }
 
-            translated = $gettext('Error while deleting "%{file}" - the file is locked')
+            translated = $gettext('Failed to delete "%{file}" - the file is locked')
           }
           const title = $gettextInterpolate(translated, { file: file.name }, true)
           context.dispatch(
             'showMessage',
             {
               title: title,
-              status: 'danger',
-              autoClose: {
-                enabled: true
-              }
+              status: 'danger'
             },
             { root: true }
           )
@@ -261,10 +249,7 @@ export default {
             {
               title: $gettext('Error while sharing.'),
               desc: e,
-              status: 'danger',
-              autoClose: {
-                enabled: true
-              }
+              status: 'danger'
             },
             { root: true }
           )
@@ -297,10 +282,7 @@ export default {
           {
             title: $gettext('Error while sharing.'),
             desc: e,
-            status: 'danger',
-            autoClose: {
-              enabled: true
-            }
+            status: 'danger'
           },
           { root: true }
         )

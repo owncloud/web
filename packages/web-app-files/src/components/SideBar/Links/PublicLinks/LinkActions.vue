@@ -84,10 +84,7 @@ export default {
       this.removeLink({ client, share, resource })
 
       this.showMessage({
-        title: this.$gettext('Public link was successfully deleted'),
-        autoClose: {
-          enabled: true
-        }
+        title: this.$gettext('Public link was deleted successfully')
       })
     },
 

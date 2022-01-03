@@ -61,11 +61,7 @@ export default {
       this.clipboardSuccessHandler()
       this.showMessage({
         title: this.successMsgTitle,
-        desc: this.successMsgText,
-        status: 'success',
-        autoClose: {
-          enabled: true
-        }
+        desc: this.successMsgText
       })
     },
     clipboardSuccessHandler() {

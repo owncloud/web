@@ -1,0 +1,6 @@
+Enhancement: File selection simplification
+
+When creating a file or folder the created item is neither selected nor scrolled to anymore. This enhances usability because the selection model doesn't get altered to a single item selection anymore and allows to create items and adding them to a preselected set of resources. It also fixes an accessibility violation as the selection model (and with it the current page in it's entirety) is not altered anymore without announcement.
+
+https://github.com/owncloud/web/issues/5967
+https://github.com/owncloud/web/pull/6208

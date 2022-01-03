@@ -71,8 +71,8 @@ export default {
 
       this.showMessage({
         title: this.$ngettext(
-          'Error while declining the selected share.',
-          'Error while declining selected shares.',
+          'Failed to decline the selected share.',
+          'Failed to decline selected shares.',
           resources.length
         ),
         status: 'danger'
