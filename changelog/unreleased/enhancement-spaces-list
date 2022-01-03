@@ -1,0 +1,6 @@
+Enhancement: Implement spaces list
+
+We added a new route that lists all available spaces of type "project".
+
+https://github.com/owncloud/web/pull/6199
+https://github.com/owncloud/web/issues/6104

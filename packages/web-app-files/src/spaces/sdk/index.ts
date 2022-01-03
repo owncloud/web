@@ -24,9 +24,7 @@ export const spacesSDK = (baseURI: string, token: string): any => {
 
   return {
     drives: {
-      listMyDrives: (): AxiosPromise<CollectionOfDrives> => {
-        return meDrivesApi.listMyDrives()
-      }
+      listMyDrives: (): AxiosPromise<CollectionOfDrives> => meDrivesApi.listMyDrives()
     }
   }
 }
