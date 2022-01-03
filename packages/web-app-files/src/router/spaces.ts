@@ -2,9 +2,9 @@ import { Location, RouteConfig } from 'vue-router'
 import { RouteComponents } from './router'
 import { createLocation, isLocationActiveDirector, $gettext } from './utils'
 
-type shareTypes = 'files-spaces-personal-home'
+type spaceTypes = 'files-spaces-personal-home' | 'files-spaces-projects'
 
-export const createLocationSpaces = (name: shareTypes, location = {}): Location =>
+export const createLocationSpaces = (name: spaceTypes, location = {}): Location =>
   createLocation(
     name,
     {
@@ -15,14 +15,40 @@ export const createLocationSpaces = (name: shareTypes, location = {}): Location 
     },
     location
   )
-export const isLocationSpacesActive = isLocationActiveDirector<shareTypes>(
-  createLocationSpaces('files-spaces-personal-home')
+
+export const createLocationSpacesProjects = (name: spaceTypes, location = {}): Location =>
+  createLocation(name, location)
+
+const locationSpacesPersonalHome = createLocationSpaces('files-spaces-personal-home')
+const locationSpacesProjects = createLocationSpacesProjects('files-spaces-projects')
+
+export const isLocationSpacesActive = isLocationActiveDirector<spaceTypes>(
+  locationSpacesPersonalHome,
+  locationSpacesProjects
 )
 
 export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
   {
     path: '/spaces',
     redirect: (to) => createLocationSpaces('files-spaces-personal-home', to)
+  },
+  {
+    path: '/spaces/projects',
+    components: {
+      app: components.App
+    },
+    children: [
+      {
+        name: locationSpacesProjects.name,
+        path: '',
+        component: components.Spaces,
+        meta: {
+          hideFilelistActions: true,
+          hasBulkActions: true,
+          title: $gettext('Spaces')
+        }
+      }
+    ]
   },
   {
     path: '/spaces/:namespace',
@@ -32,7 +58,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
     redirect: (to) => createLocationSpaces('files-spaces-personal-home', to),
     children: [
       {
-        name: createLocationSpaces('files-spaces-personal-home').name,
+        name: locationSpacesPersonalHome.name,
         path: ':storage/:item*',
         component: components.Personal,
         meta: {

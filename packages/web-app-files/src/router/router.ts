@@ -16,5 +16,6 @@ export interface RouteComponents {
   SharedWithMe: any
   SharedWithOthers: any
   SharedViaLink: any
+  Spaces: any
   Trashbin: any
 }

@@ -9,6 +9,7 @@ import Personal from './views/Personal.vue'
 import SharedWithMe from './views/SharedWithMe.vue'
 import SharedWithOthers from './views/SharedWithOthers.vue'
 import SharedViaLink from './views/SharedViaLink.vue'
+import Spaces from './spaces/views/Spaces.vue'
 import Trashbin from './views/Trashbin.vue'
 import translations from '../l10n/translations.json'
 import quickActions from './quickActions'
@@ -81,8 +82,7 @@ const navItems = [
     name: $gettext('Spaces'),
     iconMaterial: 'space',
     route: {
-      name: 'files-spaces',
-      path: `/${appInfo.id}/list/spaces`
+      path: `/${appInfo.id}/spaces/projects`
     }
   },
   {
@@ -113,6 +113,7 @@ export default {
     SharedViaLink,
     SharedWithMe,
     SharedWithOthers,
+    Spaces,
     Trashbin
   }),
   navItems,
