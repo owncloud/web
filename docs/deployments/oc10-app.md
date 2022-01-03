@@ -83,8 +83,8 @@ There are a few config values which need to be set in order for ownCloud Web to 
     {
       "title": {
         "en": "Classic Design",
-        "de": "Dateien",
-        "fr": "Fichiers",
+        "de": "Klassisches Design",
+        "fr": "Design classique",
         "zh_CN": "文件"
       },
       "icon": "switch_ui",
