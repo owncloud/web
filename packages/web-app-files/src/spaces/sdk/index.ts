@@ -1,8 +1,7 @@
-import { listMyDrives } from './drives'
-import axios from 'axios'
-import { Configuration } from './generated'
+import axios, { AxiosPromise } from 'axios'
+import { CollectionOfDrives, Configuration, MeDrivesApi } from './generated'
 
-export const spacesSDK = (baseURI, token) => {
+export const spacesSDK = (baseURI: string, token: string): any => {
   const basePath = new URL('/graph/v1.0', baseURI).href
 
   const config = new Configuration({
@@ -21,10 +20,12 @@ export const spacesSDK = (baseURI, token) => {
     return config
   })
 
+  const meDrivesApi = new MeDrivesApi(config, config.basePath, axiosClient)
+
   return {
     drives: {
-      listMyDrives: () => {
-        return listMyDrives(axiosClient, config)
+      listMyDrives: (): AxiosPromise<CollectionOfDrives> => {
+        return meDrivesApi.listMyDrives()
       }
     }
   }
