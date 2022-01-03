@@ -1,17 +1,39 @@
-import Vuex from 'vuex'
 import Vue from 'vue'
-import VueRouter from 'vue-router'
 import { mount, VueClass } from '@vue/test-utils'
-import { localVue } from './views.setup'
+import { localVue, getStore } from './views.setup'
 
-const router = new VueRouter({
-  routes: [
-    {
-      path: '/',
-      name: 'files-personal'
-    }
-  ]
-})
+const $route = {
+  name: 'files-personal',
+  params: { page: 1 }
+}
+
+const $router = {
+  afterEach: jest.fn(),
+  currentRoute: {
+    query: {}
+  }
+}
+
+const stubs = {
+  'list-loader': true,
+  'not-found-message': true,
+  'no-content-message': true,
+  'quick-actions': true,
+  'oc-resource': true,
+  'context-actions': true,
+  pagination: true,
+  'list-info': true
+}
+
+const forestJpg = {
+  id: 'forest',
+  name: 'forest.jpg',
+  path: 'images/nature/forest.jpg',
+  thumbnail: 'https://cdn.pixabay.com/photo/2015/09/09/16/05/forest-931706_960_720.jpg',
+  type: 'file',
+  size: '111000234',
+  mdate: 'Thu, 01 Jul 2021 08:34:04 GMT'
+}
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = () => {}
@@ -22,41 +44,13 @@ export const accentuatesTableRowTest = async <V extends Vue>(
 ): Promise<void> => {
   jest.useFakeTimers()
 
-  const store = new Vuex.Store({
-    modules: {
-      Files: {
-        modules: {
-          sidebar: {
-            state: {
-              closed: false
-            },
-            namespaced: true
-          }
-        },
-        state: {
-          activeFiles: [
-            {
-              id: 'forest',
-              name: 'forest.jpg',
-              path: 'images/nature/forest.jpg',
-              thumbnail: 'https://cdn.pixabay.com/photo/2015/09/09/16/05/forest-931706_960_720.jpg',
-              type: 'file',
-              size: '111000234',
-              mdate: 'Thu, 01 Jul 2021 08:34:04 GMT'
-            }
-          ]
-        },
-        mutations: {
-          UPSERT_RESOURCE: (state, resource) => {
-            state.activeFiles.push(resource)
-          }
-        },
-        getters: {
-          inProgress: () => 0,
-          activeFiles: (state) => state.activeFiles
-        },
-        namespaced: true
-      }
+  const store = getStore({
+    inProgress: 0,
+    activeFiles: [forestJpg],
+    totalFilesSize: 0,
+    totalFilesCount: {
+      files: 1,
+      folders: 0
     }
   })
   const wrapper = mount(
@@ -70,31 +64,16 @@ export const accentuatesTableRowTest = async <V extends Vue>(
     {
       attachTo: document.body,
       localVue,
-      router,
       store,
-      stubs: {
-        'list-loader': true,
-        'not-found-message': true,
-        'no-content-message': true,
-        'quick-actions': true,
-        'oc-resource': true,
-        'context-actions': true,
-        pagination: true,
-        'list-info': true
+      mocks: {
+        $route,
+        $router
       },
+      stubs: stubs,
       computed: {
         displayThumbnails: () => false,
         folderNotFound: () => false,
-        isEmpty: () => false,
-        selected: () => [],
-        totalFilesSize: () => 0,
-        app: () => ({
-          quickActions: {}
-        }),
-        totalFilesCount: () => ({
-          files: 1,
-          folders: 0
-        })
+        isEmpty: () => false
       },
       mixins: [
         {

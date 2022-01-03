@@ -1,9 +1,6 @@
-import Vuex from 'vuex'
-import VueRouter from 'vue-router'
 import GetTextPlugin from 'vue-gettext'
 import { mount } from '@vue/test-utils'
-import { localVue } from './views.setup'
-import { createStore } from 'vuex-extensions'
+import { getStore, localVue } from './views.setup'
 import Personal from '@files/src/views/Personal.vue'
 import MixinAccessibleBreadcrumb from '@files/src/mixins/accessibleBreadcrumb'
 import { accentuatesTableRowTest } from './views.shared'
@@ -12,13 +9,7 @@ localVue.use(GetTextPlugin, {
   translations: 'does-not-matter.json',
   silent: true
 })
-localVue.use(VueRouter)
 
-const configuration = {
-  options: {
-    disablePreviews: true
-  }
-}
 const user = {
   id: 1,
   quota: 1
@@ -33,15 +24,6 @@ localVue.prototype.$client = {
     getUser: jest.fn(() => user)
   }
 }
-
-const router = new VueRouter({
-  routes: [
-    {
-      path: '/',
-      name: 'files-personal'
-    }
-  ]
-})
 
 jest.unmock('axios')
 
@@ -168,61 +150,17 @@ function createWrapper(selectedFiles = [resourceForestJpg]) {
     })
   }
   return mount(component, {
-    store: createStore(Vuex.Store, {
-      state: {
-        app: { quickActions: {} }
-      },
-      getters: {
-        configuration: () => configuration,
-        homeFolder: () => '/',
-        user: () => user
-      },
-      mutations: {
-        SET_QUOTA: () => {}
-      },
-      actions: {
-        showMessage: () => {}
-      },
-      modules: {
-        Files: {
-          modules: {
-            sidebar: {
-              state: {
-                closed: false
-              },
-              namespaced: true
-            }
-          },
-          state: {
-            resource: null,
-            currentPage: 1
-          },
-          getters: {
-            inProgress: () => [null],
-            currentFolder: () => '/',
-            pages: () => 4,
-            selectedFiles: () => [...selectedFiles],
-            highlightedFile: () => resourceForestJpg
-          },
-          actions: {
-            loadIndicators: () => {}
-          },
-          mutations: {
-            SET_FILES_PAGE_LIMIT: () => {},
-            CLEAR_FILES_SEARCHED: () => {},
-            SET_CURRENT_FOLDER: () => {},
-            LOAD_FILES: () => {},
-            CLEAR_CURRENT_FILES_LIST: () => {},
-            REMOVE_FILE: () => {},
-            REMOVE_FILE_FROM_SEARCHED: () => {},
-            REMOVE_FILE_SELECTION: () => {}
-          },
-          namespaced: true
-        }
-      }
+    store: getStore({
+      selectedFiles: [...selectedFiles],
+      highlightedFile: resourceForestJpg,
+      pages: 4,
+      inProgress: [null]
     }),
     localVue,
-    router,
+    mocks: {
+      $route: {},
+      $router: {}
+    },
     stubs: stubs
   })
 }
