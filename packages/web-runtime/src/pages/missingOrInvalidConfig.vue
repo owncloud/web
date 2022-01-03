@@ -23,6 +23,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { getBackendVersion, getWebVersion } from '../container/versions'
 
 export default {
   name: 'MissingConfigPage',
@@ -36,7 +37,26 @@ export default {
 
     logoImg() {
       return this.configuration.theme.logo.login
+    },
+
+    favicon() {
+      return this.configuration.theme.logo.favicon
     }
+  },
+
+  metaInfo() {
+    const metaInfo = {}
+    if (this.favicon) {
+      metaInfo.link = [{ rel: 'icon', href: this.favicon }]
+    }
+    const metaGenerator = {
+      name: 'generator',
+      content: [getWebVersion(), getBackendVersion({ store: this.$store })]
+        .filter(Boolean)
+        .join(', ')
+    }
+    metaInfo.meta = [metaGenerator]
+    return metaInfo
   }
 }
 </script>

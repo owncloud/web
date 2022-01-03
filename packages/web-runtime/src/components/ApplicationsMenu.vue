@@ -5,10 +5,11 @@
       ref="menubutton"
       v-oc-tooltip="applicationSwitcherLabel"
       appearance="raw"
+      variation="inverse"
       class="oc-topbar-menu-burger"
       :aria-label="applicationSwitcherLabel"
     >
-      <oc-icon name="apps" class="uk-flex" />
+      <oc-icon name="apps" size="large" class="uk-flex" />
     </oc-button>
     <oc-drop
       ref="menu"
@@ -17,18 +18,34 @@
       mode="click"
       :options="{ pos: 'bottom-right', delayHide: 0 }"
       class="uk-width-large"
-      close-on-click
       padding-size="small"
+      close-on-click
     >
-      <ul class="uk-grid-small uk-text-center" uk-grid>
-        <li v-for="(n, nid) in menuItems" :key="`apps-menu-${nid}`" class="uk-width-1-3">
-          <a v-if="n.url" key="apps-menu-external-link" :target="n.target" :href="n.url">
-            <oc-icon :name="n.iconMaterial" size="xlarge" />
-            <span class="uk-display-block" v-text="$gettext(n.title)" />
+      <ul class="oc-p-xs">
+        <li
+          v-for="(n, nid) in menuItems"
+          :key="`apps-menu-${nid}`"
+          style="list-style: none"
+          class="oc-pt-s oc-pb-s"
+        >
+          <a
+            v-if="n.url"
+            key="apps-menu-external-link"
+            :target="n.target"
+            :href="n.url"
+            style="display: inline-flex; vertical-align: top; gap: 10px"
+          >
+            <oc-icon :name="n.iconMaterial" size="medium" />
+            <span v-text="$gettext(n.title)" />
           </a>
-          <router-link v-else key="apps-menu-internal-link" :to="n.path">
-            <oc-icon :name="n.iconMaterial" size="xlarge" />
-            <span class="uk-display-block" v-text="$gettext(n.title)" />
+          <router-link
+            v-else
+            key="apps-menu-internal-link"
+            :to="n.path"
+            style="display: inline-flex; vertical-align: top; gap: 10px"
+          >
+            <oc-icon :name="n.iconMaterial" size="medium" />
+            <span v-text="$gettext(n.title)" />
           </router-link>
         </li>
       </ul>

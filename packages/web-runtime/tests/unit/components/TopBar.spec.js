@@ -7,7 +7,12 @@ const localVue = createLocalVue()
 localVue.use(Vuex)
 
 const feedbackButtonPresent = (enabled) => ({
-  options: { disableFeedbackLink: !enabled }
+  options: { disableFeedbackLink: !enabled },
+  theme: {
+    logo: {
+      sidebar: ''
+    }
+  }
 })
 
 const defaultRoute = () => ({
@@ -38,24 +43,5 @@ describe('Top Bar component', () => {
 
     expect(wrapper.html().indexOf('applications-menu-stub')).toBeGreaterThan(-1)
     expect(wrapper).toMatchSnapshot()
-  })
-
-  it('Emits toggle of app navigation visibility', async () => {
-    const wrapper = shallowMount(TopBar, {
-      store: new Vuex.Store({
-        getters: {
-          configuration: () => feedbackButtonPresent(true)
-        }
-      }),
-      localVue,
-      stubs,
-      mocks: {
-        $route: defaultRoute()
-      }
-    })
-
-    wrapper.find('.oc-app-navigation-toggle').vm.$emit('click')
-    await wrapper.vm.$nextTick()
-    expect(wrapper.emitted().toggleAppNavigationVisibility).toBeTruthy()
   })
 })

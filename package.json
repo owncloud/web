@@ -1,5 +1,5 @@
 {
-  "version": "4.7.0",
+  "version": "4.9.0",
   "private": true,
   "homepage": "https://github.com/owncloud/web",
   "license": "AGPL-3.0",
@@ -21,7 +21,7 @@
     "lint": "eslint '{packages,tests}/**/*.{js,ts,vue}' --color",
     "serve": "SERVER=true yarn build:w",
     "test:integration": "jest --config ./tests/integration/config/jest.config.js",
-    "test:smoke": "NODE_TLS_REJECT_UNAUTHORIZED=0 cucumber-js --profile=smoke",
+    "test:e2e:cucumber": "NODE_TLS_REJECT_UNAUTHORIZED=0 cucumber-js --profile=e2e",
     "test:unit": "jest --coverage --config ./tests/unit/config/jest.config.js"
   },
   "browserslist": [
@@ -35,11 +35,11 @@
     "vue": "^2.6.10"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.10",
-    "@babel/eslint-parser": "^7.16.3",
+    "@babel/core": "^7.16.5",
+    "@babel/eslint-parser": "^7.16.5",
     "@babel/polyfill": "^7.12.1",
-    "@babel/preset-env": "^7.14.7",
-    "@babel/register": "^7.13.16",
+    "@babel/preset-env": "^7.16.5",
+    "@babel/register": "^7.16.5",
     "@cucumber/cucumber": "^7.3.1",
     "@cucumber/messages": "^17.1.1",
     "@cucumber/pretty-formatter": "^1.0.0-alpha.1",
@@ -88,6 +88,8 @@
     "join-path": "^1.1.1",
     "lodash": "^4.17.21",
     "node-fetch": "^2.6.1",
+    "pino": "^7.5.1",
+    "pino-pretty": "^7.3.0",
     "playwright": "^1.17.1",
     "postcss": "^8.3.6",
     "prettier": "^2.3.2",
@@ -99,7 +101,7 @@
     "rollup-plugin-copy-watch": "^0.0.1",
     "rollup-plugin-delete": "^2.0.0",
     "rollup-plugin-gzip": "^2.5.0",
-    "rollup-plugin-livereload": "^2.0.0",
+    "rollup-plugin-livereload": "^2.0.5",
     "rollup-plugin-modify": "^3.0.0",
     "rollup-plugin-node-globals": "^1.4.0",
     "rollup-plugin-node-resolve": "^5.2.0",

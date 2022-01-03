@@ -1,21 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ApplicationsMenu component shoud set aria-label prop on switcher button 1`] = `
-<oc-button-stub type="button" size="medium" arialabel="Application Switcher" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="_appSwitcherButton" class="oc-topbar-menu-burger">
-  <oc-icon-stub name="apps" accessiblelabel="" type="span" size="medium" variation="passive" class="uk-flex"></oc-icon-stub>
+<oc-button-stub type="button" size="medium" arialabel="Application Switcher" variation="inverse" appearance="raw" justifycontent="center" gapsize="medium" id="_appSwitcherButton" class="oc-topbar-menu-burger">
+  <oc-icon-stub name="apps" accessiblelabel="" type="span" size="large" variation="passive" class="uk-flex"></oc-icon-stub>
 </oc-button-stub>
 `;
 
 exports[`ApplicationsMenu component should show app menus 1`] = `
 <oc-drop-stub dropid="app-switcher-dropdown" toggle="#_appSwitcherButton" position="bottom-start" mode="click" closeonclick="true" paddingsize="small" options="[object Object]" class="uk-width-large">
-  <ul uk-grid="" class="uk-grid-small uk-text-center">
-    <li class="uk-width-1-3">
-      <router-link-stub to="/files" tag="a" ariacurrentvalue="page" event="click">
-        <oc-icon-stub name="folder" accessiblelabel="" type="span" size="xlarge" variation="passive"></oc-icon-stub> <span class="uk-display-block">Files</span>
+  <ul class="oc-p-xs">
+    <li class="oc-pt-s oc-pb-s" style="list-style: none;">
+      <router-link-stub to="/files" tag="a" ariacurrentvalue="page" event="click" style="display: inline-flex; vertical-align: top; gap: 10px;">
+        <oc-icon-stub name="folder" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span>Files</span>
       </router-link-stub>
     </li>
-    <li class="uk-width-1-3"><a target="_blank" href="http://some.org">
-        <oc-icon-stub name="some-icon" accessiblelabel="" type="span" size="xlarge" variation="passive"></oc-icon-stub> <span class="uk-display-block">External</span>
+    <li class="oc-pt-s oc-pb-s" style="list-style: none;"><a target="_blank" href="http://some.org" style="display: inline-flex; vertical-align: top; gap: 10px;">
+        <oc-icon-stub name="some-icon" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span>External</span>
       </a></li>
   </ul>
 </oc-drop-stub>

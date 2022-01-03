@@ -16,6 +16,7 @@ import {
   announceStore,
   announceTheme,
   announceTranslations,
+  announceVersions,
   applicationStore
 } from './container'
 
@@ -37,6 +38,7 @@ export const bootstrap = async (configurationPath: string): Promise<void> => {
 }
 
 export const renderSuccess = (): void => {
+  announceVersions({ store })
   const applications = Array.from(applicationStore.values())
   const instance = new Vue({
     el: '#owncloud',
@@ -64,6 +66,7 @@ export const renderSuccess = (): void => {
 }
 
 export const renderFailure = async (err: Error): Promise<void> => {
+  announceVersions({ store })
   await announceTranslations({ vue: Vue, supportedLanguages, translations })
   await announceTheme({ store, vue: Vue, designSystem })
   console.error(err)

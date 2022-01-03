@@ -1,5 +1,5 @@
 <template>
-  <span>
+  <span class="uk-flex uk-flex-middle">
     <oc-button :id="editShareBtnId" class="collaborator-edit-dropdown-options-btn" appearance="raw">
       <oc-icon name="more_vert" />
     </oc-button>

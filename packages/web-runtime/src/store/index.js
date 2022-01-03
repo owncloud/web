@@ -17,10 +17,11 @@ const vuexPersistInSession = new VuexPersistence({
   // Browser tab independent storage which gets deleted after the tab is closed
   storage: window.sessionStorage,
   reducer: (state) => {
-    const { userReady, ...user } = state.user
+    const { user, navigation, router } = state
     return {
       user,
-      router: state.router
+      navigation,
+      router
     }
   }
 })

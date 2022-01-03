@@ -10,7 +10,7 @@ const backends = Object.freeze({
 
 const visualElements = Object.freeze({
   topBar: '#oc-topbar',
-  sideBar: '.oc-app-navigation'
+  sideBar: '#web-nav-sidebar'
 })
 
 const getImgPath = function (key) {
