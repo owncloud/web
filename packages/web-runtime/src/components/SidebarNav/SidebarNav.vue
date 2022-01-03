@@ -11,7 +11,7 @@
       :aria-label="$gettext('Toggle sidebar')"
       @click="toggleSidebarButtonClick"
     >
-      <oc-icon size="large" :name="toggleSidebarButtonIcon" />
+      <oc-icon size="large" fill-type="line" :name="toggleSidebarButtonIcon" />
     </oc-button>
     <nav
       class="oc-sidebar-nav oc-my-l oc-px-xs"
@@ -24,6 +24,7 @@
           :target="link.route.path"
           :active="link.active"
           :icon="link.icon || link.iconMaterial"
+          :fill-type="link.fillType"
           :name="link.name"
           :collapsed="navigation.closed"
         />
@@ -58,7 +59,7 @@ export default {
     },
 
     toggleSidebarButtonIcon() {
-      return this.navigation.closed ? 'chevron_right' : 'chevron_left'
+      return this.navigation.closed ? 'arrow-drop-right' : 'arrow-drop-left'
     }
   },
   methods: {

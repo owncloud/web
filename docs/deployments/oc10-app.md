@@ -91,7 +91,7 @@ There are a few config values which need to be set in order for ownCloud Web to 
       "url": "https://<your-owncloud-server>/index.php/apps/files"
     },
     {
-      "icon": "application",
+      "icon": "settings-4",
       "menu": "user",
       "target": "_self",
       "title": {
@@ -152,7 +152,7 @@ To add new elements in the app switcher, paste the following into the `applicati
         "en": "Custom Groups",
         "de": "Benutzerdefinierte Gruppen" 
       },
-      "icon": "application",
+      "icon": "settings-4",
       "url": "https://<your-owncloud-server>/settings/personal?sectionid=customgroups"
     }
 ```
@@ -166,7 +166,7 @@ Just like adding links to the app switcher, you can also add links to the user m
 
 ```json
     {
-      "icon": "application",
+      "icon": "settings-4",
       "menu": "user",
       "target": "_self",
       "title": {

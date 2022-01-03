@@ -95,7 +95,7 @@ describe('Notification component', () => {
 
       expect(bell.exists()).toBeTruthy()
       expect(bell.find(selectors.ocIconStub).exists()).toBeTruthy()
-      expect(bell.find(selectors.ocIconStub).attributes('name')).toBe('bell')
+      expect(bell.find(selectors.ocIconStub).attributes('name')).toBe('notification-3')
       expect(bell.attributes('aria-label')).toBe('Notifications')
     })
   })

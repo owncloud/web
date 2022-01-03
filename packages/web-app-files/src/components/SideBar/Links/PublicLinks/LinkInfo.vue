@@ -36,7 +36,7 @@
           :data-testid="`files-link-id-${link.id}-expiration-date`"
           :aria-label="expirationDateRelative + ' (' + expirationDate + ')'"
         >
-          <oc-icon name="text-calendar" />
+          <oc-icon name="calendar-2" fill-type="line" />
           <translate :translate-params="{ expires: expirationDateRelative }">
             Expires %{expires}
           </translate>

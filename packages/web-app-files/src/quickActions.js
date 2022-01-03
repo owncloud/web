@@ -63,8 +63,8 @@ export default {
   publicLink: {
     id: 'public-link',
     label: ($gettext) => $gettext('Create and copy public link'),
-    icon: 'link',
-    iconFillType: 'none',
+    icon: 'links',
+    iconFillType: 'fill',
     handler: createPublicLink,
     displayed: canShare
   }

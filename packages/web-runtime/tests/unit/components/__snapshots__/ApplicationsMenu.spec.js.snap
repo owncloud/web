@@ -2,7 +2,7 @@
 
 exports[`ApplicationsMenu component shoud set aria-label prop on switcher button 1`] = `
 <oc-button-stub type="button" size="medium" arialabel="Application Switcher" variation="inverse" appearance="raw" justifycontent="center" gapsize="medium" id="_appSwitcherButton" class="oc-topbar-menu-burger">
-  <oc-icon-stub name="apps" filltype="fill" accessiblelabel="" type="span" size="large" variation="passive" class="uk-flex"></oc-icon-stub>
+  <oc-icon-stub name="grid" filltype="fill" accessiblelabel="" type="span" size="large" variation="passive" class="uk-flex"></oc-icon-stub>
 </oc-button-stub>
 `;
 

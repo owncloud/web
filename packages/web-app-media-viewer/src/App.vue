@@ -67,7 +67,7 @@
           :aria-label="$gettext('Show previous media file in folder')"
           @click="prev"
         >
-          <oc-icon size="large" name="chevron_left" />
+          <oc-icon size="large" name="arrow-drop-left" />
         </oc-button>
         <p v-if="!$_loader_folderLoading" class="oc-m-rm oc-light">
           <span aria-hidden="true" v-text="ariaHiddenFileCount" />
@@ -80,7 +80,7 @@
           :aria-label="$gettext('Show next media file in folder')"
           @click="next"
         >
-          <oc-icon size="large" name="chevron_right" />
+          <oc-icon size="large" name="arrow-drop-right" />
         </oc-button>
         <oc-button
           class="media-viewer-controls-download"
@@ -89,7 +89,7 @@
           :aria-label="$gettext('Download currently viewed file')"
           @click="downloadMedium"
         >
-          <oc-icon size="large" name="file_download" />
+          <oc-icon size="large" name="file-download" fill-type="line" />
         </oc-button>
         <oc-button
           class="media-viewer-controls-close"

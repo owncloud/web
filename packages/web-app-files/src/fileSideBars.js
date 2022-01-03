@@ -82,7 +82,7 @@ export default [
   }),
   ({ capabilities, highlightedFile, router, multipleSelection, rootFolder }) => ({
     app: 'versions-item',
-    icon: 'git-branch-line',
+    icon: 'git-branch',
     component: FileVersions,
     get enabled() {
       if (multipleSelection || rootFolder) return false

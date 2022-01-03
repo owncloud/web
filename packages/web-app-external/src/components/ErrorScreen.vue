@@ -1,6 +1,6 @@
 <template>
   <div class="uk-text-center">
-    <oc-icon size="xxlarge" name="alarm-warning" />
+    <oc-icon size="xxlarge" name="error-warning" fill-type="line" />
     <p v-if="message" class="oc-text-lead">{{ message }}</p>
   </div>
 </template>

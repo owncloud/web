@@ -5,7 +5,7 @@
       :class="['oc-sidebar-nav-item-link', { active: active }]"
       :to="target"
     >
-      <oc-icon :name="icon" variation="inverse" aria-hidden="true" />
+      <oc-icon :name="icon" :fill-type="fillType" variation="inverse" aria-hidden="true" />
       <span class="oc-ml-m text" :class="{ 'text-invisible': collapsed }" v-text="name" />
     </router-link>
   </li>
@@ -30,6 +30,11 @@ export default {
     icon: {
       type: String,
       required: true
+    },
+    fillType: {
+      type: String,
+      required: false,
+      default: 'fill'
     },
     collapsed: {
       type: Boolean,
