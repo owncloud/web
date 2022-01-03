@@ -112,13 +112,13 @@ Feature: File Upload
     When the user uploads overwriting file "new-lorem.txt" using the webUI
     Then the following error message should be displayed on the webUI
       """
-      File upload failed…
-      PUT is not allowed on non-files.
+      Failed to upload
       """
     # Then the following error message should be displayed on the webUI
     #   """
     #   (Any nice error message)
     #   """
+
 
   # When this issue is fixed merge with the scenario above
   @issue-3015 @skipOnOC10 @issue-ocis-reva-200
@@ -128,8 +128,7 @@ Feature: File Upload
     When the user uploads overwriting file "new-lorem.txt" using the webUI
     Then the following error message should be displayed on the webUI
       """
-      File upload failed…
-      Unknown error
+      Failed to upload
       """
     # Then the following error message should be displayed on the webUI
     #   """

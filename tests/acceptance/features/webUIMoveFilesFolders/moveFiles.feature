@@ -45,7 +45,7 @@ Feature: move files
     And user "Alice" has uploaded file "lorem.txt" to "simple-folder/lorem.txt"
     And the user has browsed to the files page
     When the user tries to move file "lorem.txt" into folder "simple-folder" using the webUI
-    Then the error message with header 'An error occurred while moving lorem.txt' should be displayed on the webUI
+    Then the error message with header 'Failed to move "lorem.txt"' should be displayed on the webUI
 
    @smokeTest @ocisSmokeTest  @disablePreviews
   Scenario: Move multiple files at once

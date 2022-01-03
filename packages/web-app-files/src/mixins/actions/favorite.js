@@ -52,14 +52,11 @@ export default {
           }
         })
         .catch(() => {
-          const translated = this.$gettext('Error while starring "%{file}"')
+          const translated = this.$gettext('Failed to change favorite state of "%{file}"')
           const title = this.$gettextInterpolate(translated, { file: resources[0].name }, true)
           this.showMessage({
             title: title,
-            status: 'danger',
-            autoClose: {
-              enabled: true
-            }
+            status: 'danger'
           })
         })
     }

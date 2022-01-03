@@ -109,7 +109,7 @@ Feature: rename files
   # these are invalid file names on all implementations
   Scenario Outline: Try to rename a file using forbidden characters
     When the user tries to rename file "data.zip" to "<filename>" using the webUI
-    Then the error message with header 'Error while renaming "data.zip" to "<filename>"' should be displayed on the webUI
+    Then the error message with header 'Failed to rename "data.zip" to "<filename>"' should be displayed on the webUI
     And file "data.zip" should be listed on the webUI
     And file "<filename>" should not be listed on the webUI
     Examples:
@@ -121,7 +121,7 @@ Feature: rename files
   # .htaccess is an invalid file name on oC10
   Scenario: Try to rename a file to .htaccess on oC10
     When the user tries to rename file "data.zip" to ".htaccess" using the webUI
-    Then the error message with header 'Error while renaming "data.zip" to ".htaccess"' should be displayed on the webUI
+    Then the error message with header 'Failed to rename "data.zip" to ".htaccess"' should be displayed on the webUI
     And file "data.zip" should be listed on the webUI
     And file "<filename>" should not be listed on the webUI
 
@@ -172,7 +172,7 @@ Feature: rename files
   # This is valid file name for ocis
   Scenario: Rename a file to .part (on oc10)
     When the user tries to rename file "data.zip" to "data.part" using the webUI
-    Then the error message with header 'Error while renaming "data.zip" to "data.part"' should be displayed on the webUI
+    Then the error message with header 'Failed to rename "data.zip" to "data.part"' should be displayed on the webUI
 
   @skipOnOC10
   Scenario: Rename a file to .part
@@ -260,7 +260,7 @@ Feature: rename files
       | name      |
       | lorem.txt |
     When the user tries to rename file "lorem.txt" to "new-lorem.txt" using the webUI
-    Then the error message with header 'Error while renaming "lorem.txt" to "new-lorem.txt"' should be displayed on the webUI
+    Then the error message with header 'Failed to rename "lorem.txt" to "new-lorem.txt"' should be displayed on the webUI
     When the user reloads the current page of the webUI
     Then file "lorem.txt" should not be listed on the webUI
     And file "new-lorem.txt" should not be listed on the webUI

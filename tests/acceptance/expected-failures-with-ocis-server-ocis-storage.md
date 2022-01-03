@@ -316,7 +316,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUITrashbinRestore/trashbinRestore.feature:138](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITrashbinRestore/trashbinRestore.feature#L138)
 
 ### [Conflict / overwrite issues with TUS](https://github.com/owncloud/ocis/issues/1294)
--   [webUIUpload/uploadEdgecases.feature:109](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/uploadEdgecases.feature#L109)
 -   [webUIUpload/uploadFileGreaterThanQuotaSize.feature:12](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/uploadFileGreaterThanQuotaSize.feature#L12)
 
 ### [restoring a file deleted from a received shared folder is not possible](https://github.com/owncloud/ocis/issues/1124)

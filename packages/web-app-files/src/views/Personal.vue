@@ -350,8 +350,8 @@ export default {
       if (errors.length === 0) {
         const count = selected.length
         title = this.$ngettext(
-          'Successfully moved %{count} item',
-          'Successfully moved %{count} items',
+          '%{count} item was moved successfully',
+          '%{count} items were moved successfully',
           count
         )
         this.showMessage({
@@ -362,24 +362,17 @@ export default {
       }
 
       if (errors.length === 1) {
-        title = this.$gettext('An error occurred while moving %{resource}')
+        title = this.$gettext('Failed to move "%{resourceName}"')
         this.showMessage({
-          title: this.$gettextInterpolate(title, { resource: errors[0].resourceName }, true),
-          desc: errors[0].message,
+          title: this.$gettextInterpolate(title, { resourceName: errors[0].resourceName }, true),
           status: 'danger'
         })
         return
       }
 
-      title = this.$gettext('An error occurred while moving several resources')
-      const desc = this.$ngettext(
-        '%{count} resource could not be moved',
-        '%{count} resources could not be moved',
-        errors.length
-      )
+      title = this.$gettext('Failed to move %{count} resources')
       this.showMessage({
-        title,
-        desc: this.$gettextInterpolate(desc, { count: errors.length }, false),
+        title: this.$gettextInterpolate(title, { count: errors.length }),
         status: 'danger'
       })
     },

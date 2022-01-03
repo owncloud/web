@@ -99,12 +99,9 @@ export default {
         .clearTrashBin(resource.id)
         .then(() => {
           this.removeFilesFromTrashbin([resource])
-          const translated = this.$gettext('%{file} was successfully deleted')
+          const translated = this.$gettext('"%{file}" was deleted successfully')
           this.showMessage({
-            title: this.$gettextInterpolate(translated, { file: resource.name }, true),
-            autoClose: {
-              enabled: true
-            }
+            title: this.$gettextInterpolate(translated, { file: resource.name }, true)
           })
         })
         .catch((error) => {
@@ -117,14 +114,11 @@ export default {
             return
           }
 
-          const translated = this.$gettext('Deletion of %{file} failed')
+          const translated = this.$gettext('Failed to delete "%{file}"')
           this.showMessage({
             title: this.$gettextInterpolate(translated, { file: resource.name }, true),
             desc: error.message,
-            status: 'danger',
-            autoClose: {
-              enabled: true
-            }
+            status: 'danger'
           })
         })
     },

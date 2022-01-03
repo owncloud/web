@@ -44,7 +44,7 @@ export default {
               },
 
               onSuccess: () => {
-                resolve(`File ${upload.file.name} was successfully uploaded`)
+                resolve(`File ${upload.file.name} was uploaded successfully`)
               }
             })
 

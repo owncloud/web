@@ -22,7 +22,7 @@ Feature: Locks
     When the user tries to move file "lorem.txt" into folder "simple-empty-folder" using the webUI
     Then notifications should be displayed on the webUI with the text
       """
-      An error occurred while moving lorem.txt
+      Failed to move "lorem.txt"
       """
     When the user browses to the files page
     Then file "lorem.txt" should be listed on the webUI
@@ -43,7 +43,7 @@ Feature: Locks
     When the user tries to move file "lorem.txt" into folder "simple-folder" using the webUI
     Then notifications should be displayed on the webUI with the text
       """
-      An error occurred while moving lorem.txt
+      Failed to move "lorem.txt"
       """
     When the user browses to the files page
     Then file "lorem.txt" should be listed on the webUI
@@ -65,7 +65,7 @@ Feature: Locks
     When the user tries to move file "lorem.txt" into folder "simple-empty-folder" using the webUI
     Then notifications should be displayed on the webUI with the text
       """
-      An error occurred while moving lorem.txt
+      Failed to move "lorem.txt"
       """
     When the user browses to the files page
     Then file "lorem.txt" should be listed on the webUI
@@ -87,7 +87,7 @@ Feature: Locks
     When the user tries to rename file "lorem.txt" to "a-renamed-file.txt" using the webUI
     Then notifications should be displayed on the webUI with the text
       """
-      Error while renaming "lorem.txt" to "a-renamed-file.txt" - the file is locked
+      Failed to move "lorem.txt" to "a-renamed-file.txt" - the file is locked
       """
     When the user closes rename dialog
     And the user reloads the current page of the webUI
@@ -112,7 +112,7 @@ Feature: Locks
     And the user tries to rename file "lorem.txt" to "a-renamed-file.txt" using the webUI
     Then notifications should be displayed on the webUI with the text
       """
-      Error while renaming "lorem.txt" to "a-renamed-file.txt" - the file is locked
+      Failed to rename "lorem.txt" to "a-renamed-file.txt" - the file is locked
       """
     When the user closes rename dialog
     And the user reloads the current page of the webUI
@@ -135,7 +135,7 @@ Feature: Locks
     And the user tries to move file "lorem.txt" into folder "simple-empty-folder" using the webUI
     Then notifications should be displayed on the webUI with the text
       """
-      An error occurred while moving lorem.txt
+      Failed to move "lorem.txt"
       """
     When the user browses to the files page
     Then file "lorem.txt" should be listed on the webUI

@@ -102,15 +102,15 @@ Feature: rename folders
     Then the error message with header '<alert_message>' should be displayed on the webUI
     And folder "simple-folder" should be listed on the webUI
     Examples:
-      | from_name       | to_name           | alert_message                                             |
-      | "simple-folder" | "simple\folder"   | Error while renaming "simple-folder" to "simple\folder"   |
-      | "simple-folder" | "\\simple-folder" | Error while renaming "simple-folder" to "\\simple-folder" |
+      | from_name       | to_name           | alert_message                                         |
+      | "simple-folder" | "simple\folder"   | Failed to rename "simple-folder" to "simple\folder"   |
+      | "simple-folder" | "\\simple-folder" | Failed to rename "simple-folder" to "\\simple-folder" |
 
   @notToImplementOnOCIS
   # .htaccess is an invalid folder name on oC10
   Scenario: Try to rename a folder to .htaccess on oC10
     When the user tries to rename folder "simple-folder" to ".htaccess" using the webUI
-    Then the error message with header 'Error while renaming "simple-folder" to ".htaccess"' should be displayed on the webUI
+    Then the error message with header 'Failed to rename "simple-folder" to ".htaccess"' should be displayed on the webUI
     And folder "simple-folder" should be listed on the webUI
 
 
@@ -132,7 +132,7 @@ Feature: rename folders
   # This is valid file name for ocis
   Scenario: Rename a folder to .part (on oc10)
     When the user tries to rename folder "simple-folder" to "simple.part" using the webUI
-    Then the error message with header 'Error while renaming "simple-folder" to "simple.part"' should be displayed on the webUI
+    Then the error message with header 'Failed to rename "simple-folder" to "simple.part"' should be displayed on the webUI
 
   @skipOnOC10
   Scenario: Rename a folder to .part (on ocis)
@@ -145,7 +145,7 @@ Feature: rename folders
       | name          |
       | simple-folder |
     When the user tries to rename folder "simple-folder" to "new-simple-folder" using the webUI
-    Then the error message with header 'Error while renaming "simple-folder" to "new-simple-folder"' should be displayed on the webUI
+    Then the error message with header 'Failed to rename "simple-folder" to "new-simple-folder"' should be displayed on the webUI
     When the user reloads the current page of the webUI
     Then folder "simple-folder" should not be listed on the webUI
     And folder "new-simple-folder" should not be listed on the webUI

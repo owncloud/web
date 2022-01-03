@@ -183,7 +183,7 @@ Feature: Create public link shares
     And the following success message should be displayed on the webUI
       """
       Public link created
-      Public link has been successfully created and copied into your clipboard.
+      Public link was created successfully and copied into your clipboard.
       """
 
 

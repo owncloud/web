@@ -72,8 +72,8 @@ export default {
 
       this.showMessage({
         title: this.$ngettext(
-          'Error while accepting the selected share.',
-          'Error while accepting selected shares.',
+          'Failed to accept the selected share.',
+          'Failed to accept selected shares.',
           resources.length
         ),
         status: 'danger'
