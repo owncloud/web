@@ -390,7 +390,7 @@ async function assertNoResourcesListed() {
   })
 
   // only check empty message in regular file lists, not files drop page
-  if (currentUrl.indexOf('/files-drop/') === -1) {
+  if (currentUrl.indexOf('/public/drop/') === -1) {
     await client.page.FilesPageElement.filesList().waitForNoContentMessageVisible()
     return
   }

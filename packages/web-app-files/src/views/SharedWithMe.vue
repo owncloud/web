@@ -106,7 +106,7 @@
         :class="{ 'files-table-squashed': !sidebarClosed }"
         :are-thumbnails-displayed="displayThumbnails"
         :resources="sharesItems"
-        :target-route="targetRoute"
+        :target-route="resourceTargetLocation"
         :header-position="fileListHeaderY"
         :sort-by="sharesSortBy"
         :sort-dir="sharesSortDir"
@@ -177,6 +177,7 @@ import ContextActions from '../components/FilesList/ContextActions.vue'
 import { useTask } from 'vue-concurrency'
 import { ShareStatus } from '../helpers/share'
 import { computed, unref } from '@vue/composition-api'
+import { createLocationSpaces } from '../router'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -271,6 +272,7 @@ export default {
     })
 
     return {
+      resourceTargetLocation: createLocationSpaces('files-spaces-personal-home'),
       viewMode,
       fileListHeaderY,
       loadResourcesTask,
@@ -372,11 +374,6 @@ export default {
           'view-mode': this.sharesOtherViewMode
         }
       }
-    },
-
-    // misc
-    targetRoute() {
-      return { name: 'files-personal' }
     },
     displayThumbnails() {
       return !this.configuration.options.disablePreviews

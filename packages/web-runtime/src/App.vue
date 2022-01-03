@@ -148,11 +148,17 @@ export default {
 
         return item.enabled(this.capabilities)
       })
-      return items.map((item) => ({
-        ...item,
-        name: this.$gettext(item.name),
-        active: this.$route.name === item.route.name
-      }))
+
+      const { href: currentHref } = this.$router.resolve(this.$route)
+      return items.map((item) => {
+        const { href: comparativeHref } = this.$router.resolve(item.route)
+
+        return {
+          ...item,
+          name: this.$gettext(item.name),
+          active: currentHref.startsWith(comparativeHref)
+        }
+      })
     },
 
     isSidebarVisible() {

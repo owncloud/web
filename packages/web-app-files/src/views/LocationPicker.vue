@@ -84,7 +84,6 @@ import ResourceTable, { determineSortFields } from '../components/FilesList/Reso
 import { batchActions } from '../helpers/batchActions'
 import { cloneStateObject } from '../helpers/store'
 import MixinsGeneral from '../mixins'
-import MixinRoutes from '../mixins/routes'
 import MixinFilesListFilter from '../mixins/filesListFilter'
 import {
   useFileListHeaderPosition,
@@ -101,6 +100,7 @@ import ListLoader from '../components/FilesList/ListLoader.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
 import { DavProperties } from 'web-pkg/src/constants'
+import { createLocationPublic, createLocationSpaces } from '../router'
 
 export default {
   metaInfo() {
@@ -117,7 +117,7 @@ export default {
     Pagination
   },
 
-  mixins: [MixinsGeneral, MixinRoutes, MixinFilesListFilter],
+  mixins: [MixinsGeneral, MixinFilesListFilter],
 
   setup() {
     const store = useStore()
@@ -355,12 +355,11 @@ export default {
     },
 
     leaveLocationPicker(target) {
-      if (this.isPublicContext) {
-        this.$router.push({ name: 'files-public-list', params: { item: target } })
-        return
-      }
-
-      this.$router.push({ name: 'files-personal', params: { item: target || '/' } })
+      this.$router.push(
+        this.isPublicContext
+          ? createLocationPublic('files-public-files', { params: { item: target } })
+          : createLocationSpaces('files-spaces-personal-home', { params: { item: target || '/' } })
+      )
     },
 
     isRowDisabled(resource) {

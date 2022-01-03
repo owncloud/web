@@ -24,7 +24,7 @@
         :class="{ 'files-table-squashed': !sidebarClosed }"
         :are-thumbnails-displayed="displayThumbnails"
         :resources="paginatedResources"
-        :target-route="targetRoute"
+        :target-route="resourceTargetLocation"
         :header-position="fileListHeaderY"
         :drag-drop="true"
         :sort-by="sortBy"
@@ -98,6 +98,7 @@ import { basename, join } from 'path'
 import PQueue from 'p-queue'
 import { nextTick, computed, unref } from '@vue/composition-api'
 import { useTask } from 'vue-concurrency'
+import { createLocationSpaces } from '../router'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -197,6 +198,7 @@ export default {
       loadResourcesTask,
       paginatedResources,
       paginationPages,
+      resourceTargetLocation: createLocationSpaces('files-spaces-personal-home'),
       paginationPage,
       handleSort,
       sortBy,
@@ -232,10 +234,6 @@ export default {
 
     folderNotFound() {
       return this.currentFolder === null
-    },
-
-    targetRoute() {
-      return { name: this.$route.name }
     },
 
     displayThumbnails() {

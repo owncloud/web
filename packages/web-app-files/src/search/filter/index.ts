@@ -4,6 +4,7 @@ import { EventBus } from 'web-pkg/src/event'
 import { filterResources } from '../../helpers/resource'
 import { Store } from 'vuex'
 import VueRouter from 'vue-router'
+import { isLocationSpacesActive } from '../../router'
 
 function $gettext(msg) {
   return msg
@@ -43,6 +44,6 @@ export default class Provider extends EventBus implements SearchProvider {
   }
 
   public get available(): boolean {
-    return ['files-personal'].includes(this.router.currentRoute.name)
+    return isLocationSpacesActive(this.router, 'files-spaces-personal-home')
   }
 }

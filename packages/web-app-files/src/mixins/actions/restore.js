@@ -1,6 +1,6 @@
 import { mapActions } from 'vuex'
-import { isTrashbinRoute } from '../../helpers/route'
 import PQueue from 'p-queue'
+import { isLocationCommonActive } from '../../router'
 
 export default {
   computed: {
@@ -12,7 +12,7 @@ export default {
           label: () => this.$gettext('Restore'),
           handler: this.$_restore_trigger,
           isEnabled: ({ resources }) => {
-            if (!isTrashbinRoute(this.$route)) {
+            if (!isLocationCommonActive(this.$router, 'files-common-trash')) {
               return false
             }
             return resources.length > 0

@@ -23,14 +23,19 @@ const announceRoutes = (applicationId: string, router: VueRouter, routes: RouteC
   if (!isArray(routes)) {
     throw new ApiError("routes can't be blank")
   }
-
+  const namespaceRouteName = (name: string) => {
+    return name.startsWith(`${applicationId}-`) ? name : `${applicationId}-${name}`
+  }
   const applicationRoutes = routes.map((applicationRoute) => {
     if (!isObject(applicationRoute)) {
       throw new ApiError("route can't be blank", applicationRoute)
     }
 
     const route = clone(applicationRoute)
-    route.name = applicationId === route.name ? route.name : `${applicationId}-${route.name}`
+    if (route.name) {
+      route.name = applicationId === route.name ? route.name : namespaceRouteName(route.name)
+    }
+
     route.path = `/${encodeURI(applicationId)}${route.path}`
 
     if (route.children) {
@@ -40,14 +45,15 @@ const announceRoutes = (applicationId: string, router: VueRouter, routes: RouteC
         }
 
         const r = clone(childRoute)
-        r.name = `${applicationId}-${childRoute.name}`
+        if (childRoute.name) {
+          r.name = namespaceRouteName(childRoute.name)
+        }
         return r
       })
     }
 
     return route
   })
-
   router.addRoutes(applicationRoutes)
 }
 

@@ -72,7 +72,7 @@ describe('FileInfo', () => {
     formRelativeDateFromRFC.mockImplementation(() => 'RELATIVE_DELETION_TIME')
 
     const tooltipStub = jest.fn()
-    const wrapper = createWrapper(simpleDeletedFile, tooltipStub, 'files-trashbin')
+    const wrapper = createWrapper(simpleDeletedFile, tooltipStub, 'files-common-trash')
 
     expect(tooltipStub).toHaveBeenCalledTimes(1)
     expect(formDateFromRFC).toHaveBeenCalledTimes(1)
@@ -105,7 +105,9 @@ function createWrapper(testResource, tooltipStub, routeName) {
       }
     }),
     localVue,
-    stubs: { OcResourceName: true, ...stubs },
+    stubs: {
+      ...stubs
+    },
     directives: {
       OcTooltip: tooltipStub
     },
@@ -118,9 +120,12 @@ function createWrapper(testResource, tooltipStub, routeName) {
       }
     ],
     mocks: {
-      $route: {
-        name: routeName || 'some-route',
-        query: { page: 1 }
+      $router: {
+        currentRoute: {
+          name: routeName || 'some-route',
+          query: { page: 1 }
+        },
+        resolve: (r) => ({ href: r.name })
       },
       publicPage: () => false
     },

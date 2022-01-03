@@ -1,5 +1,3 @@
-import { isTrashbinRoute } from './helpers/route'
-
 import FileDetails from './components/SideBar/Details/FileDetails.vue'
 import FileDetailsMultiple from './components/SideBar/Details/FileDetailsMultiple.vue'
 import FileActions from './components/SideBar/Actions/FileActions.vue'
@@ -7,6 +5,7 @@ import FileVersions from './components/SideBar/Versions/FileVersions.vue'
 import FileShares from './components/SideBar/Shares/FileShares.vue'
 import FileLinks from './components/SideBar/Links/FileLinks.vue'
 import NoSelection from './components/SideBar/NoSelection.vue'
+import { isLocationCommonActive } from './router'
 
 export default [
   // We don't have file details in the trashbin, yet.
@@ -20,13 +19,15 @@ export default [
       return rootFolder
     }
   }),
-  ({ route, multipleSelection, rootFolder }) => ({
+  ({ router, multipleSelection, rootFolder }) => ({
     app: 'details-item',
     icon: 'info_outline',
     component: FileDetails,
-    default: !isTrashbinRoute(route),
+    default: !isLocationCommonActive(router, 'files-common-trash'),
     get enabled() {
-      return !isTrashbinRoute(route) && !multipleSelection && !rootFolder
+      return (
+        !isLocationCommonActive(router, 'files-common-trash') && !multipleSelection && !rootFolder
+      )
     }
   }),
   ({ multipleSelection, rootFolder }) => ({
@@ -38,22 +39,22 @@ export default [
       return multipleSelection && !rootFolder
     }
   }),
-  ({ route, multipleSelection, rootFolder }) => ({
+  ({ router, multipleSelection, rootFolder }) => ({
     app: 'actions-item',
     component: FileActions,
     icon: 'slideshow',
-    default: isTrashbinRoute(route),
+    default: isLocationCommonActive(router, 'files-common-trash'),
     get enabled() {
       return !multipleSelection && !rootFolder
     }
   }),
-  ({ capabilities, route, multipleSelection, rootFolder }) => ({
+  ({ capabilities, router, multipleSelection, rootFolder }) => ({
     app: 'sharing-item',
     icon: 'group',
     component: FileShares,
     get enabled() {
       if (multipleSelection || rootFolder) return false
-      if (isTrashbinRoute(route)) {
+      if (isLocationCommonActive(router, 'files-common-trash')) {
         return false
       }
 
@@ -63,13 +64,13 @@ export default [
       return false
     }
   }),
-  ({ capabilities, route, multipleSelection, rootFolder }) => ({
+  ({ capabilities, router, multipleSelection, rootFolder }) => ({
     app: 'links-item',
     icon: 'link',
     component: FileLinks,
     get enabled() {
       if (multipleSelection || rootFolder) return false
-      if (isTrashbinRoute(route)) {
+      if (isLocationCommonActive(router, 'files-common-trash')) {
         return false
       }
 
@@ -79,13 +80,13 @@ export default [
       return false
     }
   }),
-  ({ capabilities, highlightedFile, route, multipleSelection, rootFolder }) => ({
+  ({ capabilities, highlightedFile, router, multipleSelection, rootFolder }) => ({
     app: 'versions-item',
     icon: 'file_version',
     component: FileVersions,
     get enabled() {
       if (multipleSelection || rootFolder) return false
-      if (isTrashbinRoute(route)) {
+      if (isLocationCommonActive(router, 'files-common-trash')) {
         return false
       }
       return !!capabilities.core && highlightedFile && highlightedFile.type !== 'folder'

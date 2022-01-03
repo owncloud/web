@@ -36,39 +36,29 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import MixinRoutes from '../../mixins/routes'
+import { useRouter, useStore } from '../../composables'
+import {
+  createLocationPublic,
+  createLocationSpaces,
+  isLocationPublicActive,
+  isLocationSpacesActive
+} from '../../router'
 
 export default {
   name: 'NotFoundMessage',
-  mixins: [MixinRoutes],
-  computed: {
-    ...mapGetters(['homeFolder', 'configuration']),
-    showHomeButton() {
-      return this.isPersonalRoute
-    },
+  setup() {
+    const router = useRouter()
+    const store = useStore()
 
-    homeRoute() {
-      return {
-        name: 'files-personal',
-        params: {
-          item: this.homeFolder
-        }
-      }
-    },
-
-    showPublicLinkButton() {
-      return this.isPublicFilesRoute
-    },
-
-    publicLinkRoute() {
-      const item = this.$route.params.item.replace(/^\/+/, '')
-      return {
-        name: 'files-public-list',
-        params: {
-          item: item.split('/')[0]
-        }
-      }
+    return {
+      showPublicLinkButton: isLocationPublicActive(router, 'files-public-files'),
+      showHomeButton: isLocationSpacesActive(router, 'files-spaces-personal-home'),
+      homeRoute: createLocationSpaces('files-spaces-personal-home', {
+        params: { item: store.getters.homeFolder }
+      }),
+      publicLinkRoute: createLocationPublic('files-public-files', {
+        params: { item: router.currentRoute.params?.item?.split('/')[0] }
+      })
     }
   }
 }

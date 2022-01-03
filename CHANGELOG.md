@@ -8,11 +8,26 @@ ownCloud admins and users.
 Summary
 -------
 
+* Enhancement - Reorganize urls: [#6137](https://github.com/owncloud/web/pull/6137)
 * Enhancement - Redesign main layout: [#6036](https://github.com/owncloud/web/issues/6036)
 * Enhancement - Update ODS to v12.0.0-alpha5: [#6086](https://github.com/owncloud/web/pull/6086)
 
 Details
 -------
+
+* Enhancement - Reorganize urls: [#6137](https://github.com/owncloud/web/pull/6137)
+
+   With the [global-url-format
+   ADR](https://github.com/owncloud/ocis/blob/master/docs/ocis/adr/0011-global-url-format.md)
+   we've decided how the internal and external URL schema should look like.
+
+   To have a human understandable structure we've decided to also rethink how the overall
+   structure should look like. This PR introduces the new schema and takes care that existing
+   routes still work by redirecting them.
+
+   https://github.com/owncloud/web/issues/6085
+   https://github.com/owncloud/web/pull/6137
+   https://github.com/owncloud/ocis/blob/master/docs/ocis/adr/0011-global-url-format.md
 
 * Enhancement - Redesign main layout: [#6036](https://github.com/owncloud/web/issues/6036)
 

@@ -3,7 +3,7 @@
     <oc-resource
       :resource="resource"
       :is-path-displayed="true"
-      :target-route="{ name: 'files-personal' }"
+      :target-route="resourceTargetLocation"
     />
   </div>
 </template>
@@ -16,6 +16,7 @@ import { loadPreview } from '../../helpers/resource'
 import debounce from 'lodash-es/debounce'
 import Vue from 'vue'
 import { mapGetters } from 'vuex'
+import { createLocationSpaces } from '../../router'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -33,6 +34,11 @@ export default {
       default: function () {
         return {}
       }
+    }
+  },
+  setup() {
+    return {
+      resourceTargetLocation: createLocationSpaces('files-spaces-personal-home')
     }
   },
   data() {

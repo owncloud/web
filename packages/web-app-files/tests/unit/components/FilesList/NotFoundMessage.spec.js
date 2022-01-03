@@ -1,10 +1,13 @@
 import Vuex from 'vuex'
+import CompositionAPI from '@vue/composition-api'
 import DesignSystem from 'owncloud-design-system'
 import stubs from '../../../../../../tests/unit/stubs/index.js'
 import { createLocalVue, mount, shallowMount } from '@vue/test-utils'
 import NotFoundMessage from '../../../../src/components/FilesList/NotFoundMessage.vue'
+import { createLocationPublic, createLocationSpaces } from '../../../../src/router'
 
 const localVue = createLocalVue()
+localVue.use(CompositionAPI)
 localVue.use(DesignSystem)
 localVue.use(Vuex)
 
@@ -13,15 +16,13 @@ const selectors = {
   reloadLinkButton: '#files-list-not-found-button-reload-link'
 }
 
-const filesPersonalRoute = { name: 'files-personal' }
-
-function publicLinkRoute(item) {
-  return {
-    name: 'files-public-list',
+const spacesLocation = createLocationSpaces('files-spaces-personal-home')
+function publicLocation(item) {
+  return createLocationPublic('files-public-files', {
     params: {
       item: item
     }
-  }
+  })
 }
 
 const store = new Vuex.Store({
@@ -38,7 +39,15 @@ function getWrapper(route) {
     store: store,
     stubs: stubs,
     mocks: {
-      $route: route
+      $route: route,
+      $router: {
+        resolve: (r) => {
+          return {
+            href: r.name
+          }
+        },
+        currentRoute: route
+      }
     }
   })
 }
@@ -49,14 +58,22 @@ function getMountedWrapper(route) {
     store: store,
     stubs: stubs,
     mocks: {
-      $route: route
+      $route: route,
+      $router: {
+        resolve: (r) => {
+          return {
+            href: r.name
+          }
+        },
+        currentRoute: route
+      }
     }
   })
 }
 
 describe('NotFoundMessage', () => {
   describe('when user on personal route', () => {
-    const wrapper = getWrapper(filesPersonalRoute)
+    const wrapper = getWrapper(spacesLocation)
 
     it('should show home button', () => {
       const homeButton = wrapper.find(selectors.homeButton)
@@ -73,16 +90,16 @@ describe('NotFoundMessage', () => {
     })
 
     it('should have property route to home', () => {
-      const wrapper = getMountedWrapper(filesPersonalRoute)
+      const wrapper = getMountedWrapper(spacesLocation)
       const homeButton = wrapper.find(selectors.homeButton)
 
-      expect(homeButton.props().to.name).toBe('files-personal')
+      expect(homeButton.props().to.name).toBe(spacesLocation.name)
       expect(homeButton.props().to.params.item).toBe('home')
     })
   })
 
   describe('when user on public link route', () => {
-    const wrapper = getWrapper(publicLinkRoute('parent'))
+    const wrapper = getWrapper(publicLocation('parent'))
 
     it('should show reload link button', () => {
       const reloadLinkButton = wrapper.find(selectors.reloadLinkButton)
@@ -99,10 +116,11 @@ describe('NotFoundMessage', () => {
     })
 
     it('should have property route to files public list', () => {
-      const wrapper = getMountedWrapper(publicLinkRoute('parent/sub'))
+      const location = publicLocation('parent/sub')
+      const wrapper = getMountedWrapper(location)
       const reloadLinkButton = wrapper.find(selectors.reloadLinkButton)
 
-      expect(reloadLinkButton.props().to.name).toBe('files-public-list')
+      expect(reloadLinkButton.props().to.name).toBe(location.name)
       expect(reloadLinkButton.props().to.params.item).toBe('parent')
     })
   })

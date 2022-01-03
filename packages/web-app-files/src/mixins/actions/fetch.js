@@ -1,4 +1,4 @@
-import { isPublicFilesRoute } from '../../helpers/route'
+import { isLocationCommonActive, isLocationPublicActive } from '../../router'
 
 export default {
   computed: {
@@ -11,13 +11,13 @@ export default {
             this.$_fetch_trigger({
               resources,
               mimeType: 'application/pdf',
-              isPublicFile: isPublicFilesRoute(this.$route)
+              isPublicFile: isLocationPublicActive(this.$router, 'files-public-files')
             }),
           label: () => {
             return this.$gettext('Open in browser')
           },
           isEnabled: ({ resources }) => {
-            if (this.isTrashbinRoute) {
+            if (isLocationCommonActive(this.$router, 'files-common-trash')) {
               return false
             }
             if (resources.length !== 1) {

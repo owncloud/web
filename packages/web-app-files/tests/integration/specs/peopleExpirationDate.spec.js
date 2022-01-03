@@ -2,15 +2,41 @@ import '@testing-library/jest-dom'
 import { render, fireEvent, waitFor, within } from '@testing-library/vue'
 import userEvent from '@testing-library/user-event'
 import merge from 'lodash-es/merge'
-
+import App from '@files/src/App.vue'
 import StoreFiles from '@files/src/store'
 import Store from '@runtime/src/store'
-import routes from '@files/src/routes'
+import Favorites from '@files/src/views/Favorites.vue'
+import FilesDrop from '@files/src/views/FilesDrop.vue'
+import LocationPicker from '@files/src/views/LocationPicker.vue'
+import PrivateLink from '@files/src/views/PrivateLink.vue'
+import PublicFiles from '@files/src/views/PublicFiles.vue'
+import PublicLink from '@files/src/views/PublicLink.vue'
+import Personal from '@files/src/views/Personal.vue'
+import SharedWithMe from '@files/src/views/SharedWithMe.vue'
+import SharedWithOthers from '@files/src/views/SharedWithOthers.vue'
+import SharedViaLink from '@files/src/views/SharedViaLink.vue'
+import Trashbin from '@files/src/views/Trashbin.vue'
+import { buildRoutes, createLocationSpaces } from '../../../src/router'
 import { getDateInFuture, navigateToDate } from '../helpers/date'
+
 // eslint-disable-next-line jest/no-mocks-import
 // import sdkMock from '@/__mocks__/sdk'
 
 import FileShares from '@files/src/components/SideBar/Shares/FileShares.vue'
+const routes = buildRoutes({
+  App,
+  Favorites,
+  Personal,
+  FilesDrop,
+  LocationPicker,
+  PrivateLink,
+  PublicFiles,
+  PublicLink,
+  SharedViaLink,
+  SharedWithMe,
+  SharedWithOthers,
+  Trashbin
+})
 
 // const existingShares = [
 //   {
@@ -364,7 +390,7 @@ function renderComponent({ store, mocks } = {}) {
       mocks
     },
     (vue, store, router) => {
-      router.push({ name: 'personal' })
+      router.push(createLocationSpaces('files-spaces-personal-home'))
     }
   )
 }

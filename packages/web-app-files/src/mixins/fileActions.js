@@ -1,7 +1,7 @@
 import get from 'lodash-es/get'
 import { mapGetters, mapActions, mapState } from 'vuex'
 
-import { checkRoute } from '../helpers/route'
+import { isAuthenticatedRoute, isLocationActive } from '../router'
 import AcceptShare from './actions/acceptShare'
 import Copy from './actions/copy'
 import DeclineShare from './actions/declineShare'
@@ -86,7 +86,10 @@ export default {
               if (resources.length !== 1) {
                 return false
               }
-              if (Array.isArray(editor.routes) && !checkRoute(editor.routes, this.$route.name)) {
+              if (
+                Array.isArray(editor.routes) &&
+                !isLocationActive(this.$router, ...editor.routes.map((name) => ({ name })))
+              ) {
                 return false
               }
 
@@ -248,7 +251,7 @@ export default {
         },
         // public-token retrieval is weak, same as packages/web-app-files/src/index.js:106
         query: {
-          ...(this.isPublicPage && {
+          ...(!isAuthenticatedRoute(this.$route) && {
             'public-token': (this.$route.params.item || '').split('/')[0]
           })
         }
