@@ -4,15 +4,15 @@ Feature: share file
   I also want to check that Alice can change the role to the share and can delete share
 
   Background:
-    Given following users have been created
+    Given the following users have been created
       | Alice |
       | Brian |
-    And admin set the default folder for received shares to "Shares"
-    And admin disables auto accepting of the shares
+    And the default folder for received shares has been set to "Shares"
+    And auto-accept shares has been disabled
 
   Scenario: Alice shares file to Brian
-    Given "Alice" has logged in
-    When "Alice" opens the "files" app
+    When "Alice" logs in
+    And "Alice" opens the "files" app
     And "Alice" creates the following folder
       | folder_to_shared |
     And "Alice" uploads the following resource
@@ -21,12 +21,12 @@ Feature: share file
     And "Alice" shares the following resource via the quick action
       | resource                         | user  | role   |
       | folder_to_shared/testavatar.jpeg | Brian | viewer |
-    Given "Brian" has logged in
-    When "Brian" opens the "files" app
+    And "Brian" logs in
+    And "Brian" opens the "files" app
     And "Brian" accepts the following resource
       | testavatar.jpeg |
     And "Brian" copies the following resource
-      | resource               | to       |
+      | resource               | to        |
       | Shares/testavatar.jpeg | All files |
     And "Brian" downloads the following file
       | resource        | from   |
@@ -38,13 +38,13 @@ Feature: share file
     And "Brian" renames the following resource
       | resource               | as                  |
       | Shares/testavatar.jpeg | testavatar_new.jpeg |
-    And "Alice" removes following collaborator from the share
+    And "Alice" removes the following collaborator from the share
       | resource                         | user  |
       | folder_to_shared/testavatar.jpeg | Brian |
-    And "Alice" has logged out
+    And "Alice" logs out
     When "Brian" opens the "files" app
-    Then "Brian" ensures that the following resource does not exist
+    Then "Brian" should not see the following resource
       | Shares/testavatar_new.jpeg |
-    And "Brian" ensures that the following resource exist
+    But "Brian" should see the following resource
       | testavatar.jpeg |
-    And "Brian" has logged out
+    And "Brian" logs out
