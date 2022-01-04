@@ -83,6 +83,9 @@ const navItems = [
     iconMaterial: 'space',
     route: {
       path: `/${appInfo.id}/spaces/projects`
+    },
+    enabled(capabilities) {
+      return capabilities.core.status.productname !== 'ownCloud'
     }
   },
   {

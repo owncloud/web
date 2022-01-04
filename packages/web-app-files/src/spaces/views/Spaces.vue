@@ -11,7 +11,7 @@
       <list-loader v-if="loadSpacesTask.isRunning" />
       <template v-else>
         <div
-          v-if="!!spaces.length"
+          v-if="spaces.length"
           class="
             uk-grid-match uk-grid-column-small uk-grid-row-large uk-text-center uk-child-width-1-3@s
           "
@@ -21,7 +21,7 @@
             <span class="spaces-list-card oc-border uk-card uk-card-default">
               <span class="uk-card-media-top oc-border-b">
                 <img
-                  :src="space.image ? space.image : defaultImg"
+                  :src="space.image || defaultImg"
                   :class="{ 'spaces-list-default-img': !space.image }"
                   :alt="$gettext('Space image')"
                 />
@@ -35,7 +35,7 @@
         <div v-else>
           <no-content-message id="files-spaces-empty" class="files-empty" icon="space">
             <template #message>
-              <span v-translate>You don't have any spaces currently</span>
+              <span v-translate>You don't have access to any spaces</span>
             </template>
           </no-content-message>
         </div>
