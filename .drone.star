@@ -749,9 +749,9 @@ def beforePipelines(ctx):
            pipelinesDependsOn(yarnlint(ctx), yarnCache(ctx))
 
 def stagePipelines(ctx):
-    unit_test_pipelines = unitTests(ctx)
+    unit_test_pipelines = []
     e2e_pipelines = e2eTests(ctx)
-    acceptance_pipelines = acceptance(ctx)
+    acceptance_pipelines = []
     return unit_test_pipelines + pipelinesDependsOn(e2e_pipelines, unit_test_pipelines) + pipelinesDependsOn(acceptance_pipelines, e2e_pipelines)
 
 def afterPipelines(ctx):
@@ -1099,6 +1099,7 @@ def e2eTests(ctx):
             "HEADLESS": "true",
             "OCIS": "true",
             "RETRY": "1",
+            "MIDDLEWARE_HOST": "middleware:3000",
         },
         "commands": [
             "sleep 10 && yarn test:e2e:cucumber tests/e2e/cucumber/",
@@ -1112,13 +1113,20 @@ def e2eTests(ctx):
             "BASE_URL_OCC": "owncloud",
             "HEADLESS": "true",
             "RETRY": "1",
+            "MIDDLEWARE_HOST": "http://middleware:3000",
+            "REMOTE_UPLOAD_DIR": "/filesForUpload",
         },
         "commands": [
+            "ls /filesForUpload",
             "sleep 10 && yarn test:e2e:cucumber tests/e2e/cucumber/",
         ],
+        "volumes": [{
+            "name": "uploads",
+            "path": "/filesForUpload",
+        }],
     }]
 
-    services = databaseService(db) + owncloudService() + webService()
+    services = databaseService(db) + owncloudService() + webService() + middlewareService()
 
     stepsClassic = \
         skipIfUnchanged(ctx, "e2e-tests") + \
@@ -1133,7 +1141,7 @@ def e2eTests(ctx):
         setUpOauth2(True, True) + \
         fixPermissions() + \
         waitForOwncloudService() + \
-        copyFilesForUpload() + \
+        waitForMiddlewareService() + \
         e2e_test_occ
 
     stepsInfinite = \
@@ -1146,7 +1154,7 @@ def e2eTests(ctx):
         getOcis() + \
         ocisService() + \
         getSkeletonFiles() + \
-        copyFilesForUpload() + \
+        waitForMiddlewareService() + \
         e2e_test_ocis
 
     e2e_trigger = {
@@ -2318,7 +2326,7 @@ def copyFilesForUpload():
         }],
         "commands": [
             "ls -la /filesForUpload",
-            "cp -a %s/tests/acceptance/filesForUpload/. /filesForUpload" % dir["web"],
+            "cp -a /usr/src/app/filesForUpload /filesForUpload",
             "ls -la /filesForUpload",
         ],
     }]
@@ -2870,9 +2878,9 @@ def middlewareService(ocis = False, federatedServer = False):
         "OCIS_REVA_DATA_ROOT": "/srv/app/tmp/ocis/storage/owncloud/",
         "RUN_ON_OCIS": "true" if ocis else "false",
         "HOST": "middleware",
+        "MIDDLEWARE_HOST": "middleware",
         "REMOTE_UPLOAD_DIR": "/filesForUpload",
         "NODE_TLS_REJECT_UNAUTHORIZED": "0",
-        "MIDDLEWARE_HOST": "middleware",
     }
 
     if (federatedServer):
@@ -2881,6 +2889,7 @@ def middlewareService(ocis = False, federatedServer = False):
     return [{
         "name": "middleware",
         "image": "owncloud/owncloud-test-middleware:1.0.0",
+        "image": OC_CI_NODEJS,
         "pull": "always",
         "environment": environment,
         "volumes": [{
@@ -2890,6 +2899,15 @@ def middlewareService(ocis = False, federatedServer = False):
             "name": "gopath",
             "path": "/srv/app",
         }],
+        "commands": [
+            "pwd",
+            "ls",
+            "git clone --branch fileForUplad  https://github.com/owncloud/owncloud-test-middleware.git /oc-middleware",
+            "cp -r /oc-middleware/filesForUpload/* /filesForUpload",
+            "cd /oc-middleware",
+            "yarn install",
+            "yarn start",
+        ],
     }]
 
 def waitForMiddlewareService():

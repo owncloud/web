@@ -11,6 +11,9 @@ export class OcisLoginAdapter implements LoginAdapter {
   async login({ user }: { user: User }): Promise<void> {
     const { page } = this.actor
     const { id, password } = user
+    console.log('==========================================')
+    console.log(id, password)
+    console.log('==========================================')
 
     await page.locator('#oc-login-username').fill(id)
     await page.locator('#oc-login-password').fill(password)
