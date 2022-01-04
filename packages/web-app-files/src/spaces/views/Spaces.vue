@@ -2,7 +2,7 @@
   <div class="oc-p-s">
     <h2 class="" v-text="$gettext('Spaces')"></h2>
     <div class="">
-      <span v-text="$gettext('Access all project related files on one place.')"></span>
+      <span v-text="$gettext('Access all project related files in one place.')"></span>
       <a href="#" v-text="$gettext('Learn more about spaces.')"></a>
       <h3 v-text="$gettext('Your spaces')"></h3>
       <hr class="uk-margin-bottom" />

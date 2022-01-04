@@ -85,7 +85,7 @@ const navItems = [
       path: `/${appInfo.id}/spaces/projects`
     },
     enabled(capabilities) {
-      return capabilities.core.status.productname !== 'ownCloud'
+      return capabilities.spaces.enabled === true
     }
   },
   {
