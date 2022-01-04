@@ -96,11 +96,6 @@ export default {
       type: String,
       required: true
     },
-    userEmail: {
-      type: String,
-      required: false,
-      default: null
-    },
     applicationsList: {
       type: Array,
       required: false,
@@ -112,32 +107,18 @@ export default {
       return this.navigation_getMenuItems(['user'])
     }
   },
-  watch: {
-    visible(val) {
-      if (val) {
-        this.focusFirstLink()
-      } else {
-        this.$emit('closed')
-      }
-    }
+  mounted() {
+    this.$refs.menu.tippy.setProps({
+      onHidden: () => this.$refs.menuButton.$el.focus(),
+      onShown: () => this.$refs.menu.$el.querySelector('a:first-of-type').focus()
+    })
   },
   methods: {
     logout() {
-      this.visible = false
       // Use timeout to leave enough time for the dropdown to be hidden
       setTimeout(() => {
         this.$store.dispatch('logout')
       })
-    },
-    focusFirstLink() {
-      /*
-       * Delay for two reasons:
-       * - for screen readers Virtual buffer
-       * - to outsmart uikit's focus management
-       */
-      setTimeout(() => {
-        this.$refs.menuButton.$el.querySelector('a:first-of-type').focus()
-      }, 500)
     }
   }
 }

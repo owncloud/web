@@ -55,7 +55,6 @@
 
 <script>
 import NavigationMixin from '../mixins/navigationMixin'
-import UiKit from 'uikit'
 
 export default {
   mixins: [NavigationMixin],
@@ -75,33 +74,10 @@ export default {
     }
   },
   mounted() {
-    UiKit.util.on('#app-switcher-dropdown', 'shown', () => {
-      this.focusFirstLink()
+    this.$refs.menu.tippy.setProps({
+      onHidden: () => this.$refs.menubutton.$el.focus(),
+      onShown: () => this.$refs.menu.$el.querySelector('a:first-of-type').focus()
     })
-
-    UiKit.util.on('#app-switcher-dropdown', 'hidden', () => {
-      this.$emit('closed')
-      this.focusMenuButton()
-    })
-  },
-  methods: {
-    logout() {
-      this.visible = false
-      this.$store.dispatch('logout')
-    },
-    focusFirstLink() {
-      /*
-       * Delay for two reasons:
-       * - for screen readers Virtual buffer
-       * - to outsmart uikit's focus management
-       */
-      setTimeout(() => {
-        this.$refs.menu.$el.querySelector('a:first-of-type').focus()
-      }, 500)
-    },
-    focusMenuButton() {
-      this.$refs.menubutton.$el.focus()
-    }
   }
 }
 </script>
