@@ -12,7 +12,8 @@
     "search"
   ],
   "options": {
-    "disablePreviews": true
+    "disablePreviews": true,
+    "displayResourcesLazy": false
   },
   "applications": [
     {
