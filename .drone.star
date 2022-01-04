@@ -750,9 +750,9 @@ def beforePipelines(ctx):
 
 def stagePipelines(ctx):
     unit_test_pipelines = unitTests(ctx)
-    smoke_pipelines = smokeTests(ctx)
+    e2e_pipelines = e2eTests(ctx)
     acceptance_pipelines = acceptance(ctx)
-    return unit_test_pipelines + pipelinesDependsOn(smoke_pipelines, unit_test_pipelines) + pipelinesDependsOn(acceptance_pipelines, smoke_pipelines)
+    return unit_test_pipelines + pipelinesDependsOn(e2e_pipelines, unit_test_pipelines) + pipelinesDependsOn(acceptance_pipelines, e2e_pipelines)
 
 def afterPipelines(ctx):
     return build(ctx) + notify()
@@ -1071,17 +1071,17 @@ def unitTests(ctx):
         },
     }]
 
-def smokeTests(ctx):
+def e2eTests(ctx):
     db = "mysql:5.5"
     logLevel = "2"
     name = "smoke-tests"
 
-    smoke_workspace = {
+    e2e_workspace = {
         "base": dir["base"],
         "path": config["app"],
     }
 
-    smoke_volumes = [{
+    e2e_volumes = [{
         "name": "uploads",
         "temp": {},
     }, {
@@ -1092,8 +1092,8 @@ def smokeTests(ctx):
         "temp": {},
     }]
 
-    smoke_test_ocis = [{
-        "name": "smoke-tests",
+    e2e_test_ocis = [{
+        "name": "e2e-tests",
         "image": OC_CI_NODEJS,
         "environment": {
             "BASE_URL_OCIS": "ocis:9200",
@@ -1107,8 +1107,8 @@ def smokeTests(ctx):
         ],
     }]
 
-    smoke_test_occ = [{
-        "name": "smoke-tests",
+    e2e_test_occ = [{
+        "name": "e2e-tests",
         "image": OC_CI_NODEJS,
         "environment": {
             "BASE_URL_OCC": "owncloud",
@@ -1123,7 +1123,7 @@ def smokeTests(ctx):
     services = databaseService(db) + owncloudService() + webService()
 
     stepsClassic = \
-        skipIfUnchanged(ctx, "smoke-tests") + \
+        skipIfUnchanged(ctx, "e2e-tests") + \
         restoreBuildArtifactCache(ctx, "yarn", ".yarn") + \
         restoreBuildArtifactCache(ctx, "playwright", ".playwright") + \
         installYarn() + \
@@ -1136,10 +1136,10 @@ def smokeTests(ctx):
         fixPermissions() + \
         waitForOwncloudService() + \
         copyFilesForUpload() + \
-        smoke_test_occ
+        e2e_test_occ
 
     stepsInfinite = \
-        skipIfUnchanged(ctx, "smoke-tests") + \
+        skipIfUnchanged(ctx, "e2e-tests") + \
         restoreBuildArtifactCache(ctx, "yarn", ".yarn") + \
         restoreBuildArtifactCache(ctx, "playwright", ".playwright") + \
         restoreBuildArtifactCache(ctx, "web-dist", "dist") + \
@@ -1149,12 +1149,12 @@ def smokeTests(ctx):
         ocisService() + \
         getSkeletonFiles() + \
         copyFilesForUpload() + \
-        smoke_test_ocis + \
+        e2e_test_ocis + \
         uploadScreenshots() + \
         buildGithubComment(name) + \
         githubComment(name)
 
-    smoke_trigger = {
+    e2e_trigger = {
         "ref": [
             "refs/heads/master",
             "refs/tags/**",
@@ -1166,23 +1166,23 @@ def smokeTests(ctx):
         {
             "kind": "pipeline",
             "type": "docker",
-            "name": "smoke-tests OC10",
-            "workspace": smoke_workspace,
+            "name": "e2e-tests OC10",
+            "workspace": e2e_workspace,
             "steps": stepsClassic,
             "services": services,
             "depends_on": [],
-            "trigger": smoke_trigger,
-            "volumes": smoke_volumes,
+            "trigger": e2e_trigger,
+            "volumes": e2e_volumes,
         },
         {
             "kind": "pipeline",
             "type": "docker",
-            "name": "smoke-tests oCIS",
-            "workspace": smoke_workspace,
+            "name": "e2e-tests oCIS",
+            "workspace": e2e_workspace,
             "steps": stepsInfinite,
             "depends_on": ["cache-ocis"],
-            "trigger": smoke_trigger,
-            "volumes": smoke_volumes,
+            "trigger": e2e_trigger,
+            "volumes": e2e_volumes,
         },
     ]
 
@@ -2972,7 +2972,7 @@ def skipIfUnchanged(ctx, type):
             "^__mocks__/.*",
             "^packages/.*/tests/.*",
             "^tests/integration/.*",
-            "^tests/smoke/.*",
+            "^tests/e2e/.*",
             "^tests/unit/.*",
         ]
         skip_step["settings"] = {
@@ -2980,8 +2980,8 @@ def skipIfUnchanged(ctx, type):
         }
         return [skip_step]
 
-    if type == "smoke-tests":
-        smoke_skip_steps = [
+    if type == "e2e-tests":
+        e2e_skip_steps = [
             "^__fixtures__/.*",
             "^__mocks__/.*",
             "^packages/.*/tests/.*",
@@ -2990,7 +2990,7 @@ def skipIfUnchanged(ctx, type):
             "^tests/unit/.*",
         ]
         skip_step["settings"] = {
-            "ALLOW_SKIP_CHANGED": base_skip_steps + smoke_skip_steps,
+            "ALLOW_SKIP_CHANGED": base_skip_steps + e2e_skip_steps,
         }
         return [skip_step]
 
