@@ -9,6 +9,7 @@ Summary
 -------
 
 * Change - Use remixicons for redesign: [#6142](https://github.com/owncloud/web/pull/6142)
+* Enhancement - File selection simplification: [#5967](https://github.com/owncloud/web/issues/5967)
 * Enhancement - Reorganize urls: [#6137](https://github.com/owncloud/web/pull/6137)
 * Enhancement - Redesign main layout: [#6036](https://github.com/owncloud/web/issues/6036)
 * Enhancement - Update ODS to v12.0.0-alpha7: [#6086](https://github.com/owncloud/web/pull/6086)
@@ -22,6 +23,17 @@ Details
 
    https://github.com/owncloud/web/issues/6100
    https://github.com/owncloud/web/pull/6142
+
+* Enhancement - File selection simplification: [#5967](https://github.com/owncloud/web/issues/5967)
+
+   When creating a file or folder the created item is neither selected nor scrolled to anymore.
+   This enhances usability because the selection model doesn't get altered to a single item
+   selection anymore and allows to create items and adding them to a preselected set of resources.
+   It also fixes an accessibility violation as the selection model (and with it the current page in
+   it's entirety) is not altered anymore without announcement.
+
+   https://github.com/owncloud/web/issues/5967
+   https://github.com/owncloud/web/pull/6208
 
 * Enhancement - Reorganize urls: [#6137](https://github.com/owncloud/web/pull/6137)
 

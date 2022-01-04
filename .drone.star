@@ -1074,7 +1074,7 @@ def unitTests(ctx):
 def e2eTests(ctx):
     db = "mysql:5.5"
     logLevel = "2"
-    name = "smoke-tests"
+    name = "e2e-tests"
 
     e2e_workspace = {
         "base": dir["base"],
@@ -1114,6 +1114,7 @@ def e2eTests(ctx):
             "BASE_URL_OCC": "owncloud",
             "HEADLESS": "true",
             "RETRY": "1",
+            "REPORT_TRACING": "true",
         },
         "commands": [
             "sleep 10 && yarn test:e2e:cucumber tests/e2e/cucumber/",
@@ -1136,7 +1137,10 @@ def e2eTests(ctx):
         fixPermissions() + \
         waitForOwncloudService() + \
         copyFilesForUpload() + \
-        e2e_test_occ
+        e2e_test_occ + \
+        uploadErrorTrace() + \
+        buildGithubCommentForE2ETests(name) + \
+        githubComment(name)
 
     stepsInfinite = \
         skipIfUnchanged(ctx, "e2e-tests") + \
@@ -1150,8 +1154,8 @@ def e2eTests(ctx):
         getSkeletonFiles() + \
         copyFilesForUpload() + \
         e2e_test_ocis + \
-        uploadScreenshots() + \
-        buildGithubComment(name) + \
+        uploadErrorTrace() + \
+        buildGithubCommentForE2ETests("e2e-tests oCIS") + \
         githubComment(name)
 
     e2e_trigger = {
@@ -2545,9 +2549,9 @@ def uploadScreenshots():
                 "from_secret": "cache_s3_endpoint",
             },
             "path_style": True,
-            "source": "%s/reports/e2e/playwright/tracing/**/*" % dir["web"],
-            "strip_prefix": "%s/reports/e2e/playwright/tracing" % dir["web"],
-            "target": "/web/tracing/${DRONE_BUILD_NUMBER}",
+            "source": "%s/tests/reports/screenshots/**/*" % dir["web"],
+            "strip_prefix": "%s/tests/reports/screenshots" % dir["web"],
+            "target": "/web/screenshots/${DRONE_BUILD_NUMBER}",
         },
         "environment": {
             "AWS_ACCESS_KEY_ID": {
@@ -2693,10 +2697,9 @@ def buildGithubComment(suite):
         "name": "build-github-comment",
         "image": OC_UBUNTU,
         "commands": [
-            "cd %s/reports/e2e/playwright/tracing/" % dir["web"],
-            "ls -laR %s/reports/e2e/playwright/tracing" % dir["web"],
-            'echo "<details><summary>:boom: The e2e tests failed. Please open an error trace in console ...</summary>\\n\\n<p>\\n\\n" >> %s/comments.file' % dir["web"],
-            'for f in *.zip; do echo "## npx playwright show-trace https://cache.owncloud.com/owncloud/web/tracing/${DRONE_BUILD_NUMBER}/$f \n" >> %s/comments.file; done' % dir["web"],
+            "cd %s/tests/reports/screenshots/" % dir["web"],
+            'echo "<details><summary>:boom: The acceptance tests failed. Please find the screenshots inside ...</summary>\\n\\n<p>\\n\\n" >> %s/comments.file' % dir["web"],
+            'for f in *.png; do echo "### $f\n" \'!\'"[$f]($CACHE_ENDPOINT/owncloud/web/screenshots/${DRONE_BUILD_NUMBER}/$f \n" >> %s/comments.file; done' % dir["web"],
             'echo "\n</p></details>" >> %s/comments.file' % dir["web"],
             "more %s/comments.file" % dir["web"],
         ],
@@ -3162,3 +3165,63 @@ def pipelineSanityChecks(ctx, pipelines):
 
     for image in images.keys():
         print(" %sx\t%s" % (images[image], image))
+
+def uploadErrorTrace():
+    return [{
+        "name": "upload-trace",
+        "image": "plugins/s3",
+        "pull": "if-not-exists",
+        "settings": {
+            "bucket": "owncloud",
+            "endpoint": {
+                "from_secret": "cache_s3_endpoint",
+            },
+            "path_style": True,
+            "source": "%s/reports/e2e/playwright/tracing/**/*" % dir["web"],
+            "strip_prefix": "%s/reports/e2e/playwright/tracing" % dir["web"],
+            "target": "/web/tracing/${DRONE_BUILD_NUMBER}",
+        },
+        "environment": {
+            "AWS_ACCESS_KEY_ID": {
+                "from_secret": "cache_s3_access_key",
+            },
+            "AWS_SECRET_ACCESS_KEY": {
+                "from_secret": "cache_s3_secret_key",
+            },
+        },
+        "when": {
+            "status": [
+                "failure",
+            ],
+            "event": [
+                "pull_request",
+            ],
+        },
+    }]
+
+def buildGithubCommentForE2ETests(suite):
+    return [{
+        "name": "build-github-comment-for-E2E-tests",
+        "image": OC_UBUNTU,
+        "commands": [
+            "cd %s/reports/e2e/playwright/tracing/" % dir["web"],
+            'echo "<details><summary>:boom: The e2e tests failed. Please open an error trace in console ...</summary>\\n\\n<p>\\n\\n" >> %s/comments.file' % dir["web"],
+            'for f in *.zip; do echo "#### npx playwright show-trace https://cache.owncloud.com/owncloud/web/tracing/${DRONE_BUILD_NUMBER}/$f \n" >> %s/comments.file; done' % dir["web"],
+            'echo "\n</p></details>" >> %s/comments.file' % dir["web"],
+            "more %s/comments.file" % dir["web"],
+        ],
+        "environment": {
+            "TEST_CONTEXT": suite,
+            "CACHE_ENDPOINT": {
+                "from_secret": "cache_s3_endpoint",
+            },
+        },
+        "when": {
+            "status": [
+                "failure",
+            ],
+            "event": [
+                "pull_request",
+            ],
+        },
+    }]
