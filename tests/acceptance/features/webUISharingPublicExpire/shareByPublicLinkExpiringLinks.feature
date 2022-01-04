@@ -17,7 +17,7 @@ Feature: Share by public link
     And user "Alice" has logged in using the webUI
     When the user edits the public link named "Public link" of file "lorem.txt" changing following
       | expireDate | 2038 July 21 |
-    Then the fields of the last public link share response of user "Alice" should include in the server
+    Then the last public link share response of user "Alice" should include the following fields in the server
       | expireDate | 2038-07-21 |
 
 
