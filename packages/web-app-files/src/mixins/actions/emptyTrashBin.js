@@ -41,7 +41,10 @@ export default {
         .catch((error) => {
           console.error(error)
           this.showMessage({
-            title: this.$gettext('Could not delete files'),
+            title: this.$pgettext(
+              'Error message in case clearing the trash bin fails',
+              'Failed to delete all files permanently'
+            ),
             status: 'danger'
           })
         })

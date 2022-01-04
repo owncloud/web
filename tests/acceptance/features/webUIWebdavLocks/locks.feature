@@ -340,12 +340,12 @@ Feature: Locks
     And the user deletes file "lorem (2).txt" using the webUI
     Then notifications should be displayed on the webUI with the text
       """
-      Error while deleting "lorem (2).txt" - the file is locked
+      Failed to delete "lorem (2).txt" - the file is locked
       """
     When the user deletes folder "simple-folder (2)" using the webUI
     Then notifications should be displayed on the webUI with the text
       """
-      Error while deleting "simple-folder (2)" - the file is locked
+      Failed to delete "simple-folder (2)" - the file is locked
       """
     And file "lorem (2).txt" should be listed on the webUI
     And folder "simple-folder (2)" should be listed on the webUI

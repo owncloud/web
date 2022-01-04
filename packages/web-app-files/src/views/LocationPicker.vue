@@ -422,15 +422,14 @@ export default {
 
       // Display error messages
       let title = ''
-      let desc = ''
       if (errors.length === 1) {
         switch (this.currentAction) {
           case batchActions.move: {
-            title = this.$gettext('An error occurred while moving %{resource}')
+            title = this.$gettext('Failed to move "%{resourceName}"')
             break
           }
           case batchActions.copy: {
-            title = this.$gettext('An error occurred while copying %{resource}')
+            title = this.$gettext('Failed to copy "%{resourceName}"')
             break
           }
           default:
@@ -438,8 +437,7 @@ export default {
         }
 
         this.showMessage({
-          title: this.$gettextInterpolate(title, { resource: errors[0].resource }, true),
-          desc: errors[0].message,
+          title: this.$gettextInterpolate(title, { resourceName: errors[0].resource }, true),
           status: 'danger'
         })
 
@@ -448,21 +446,11 @@ export default {
 
       switch (this.currentAction) {
         case batchActions.move: {
-          title = this.$gettext('An error occurred while moving several resources')
-          desc = this.$ngettext(
-            '%{count} resource could not be moved',
-            '%{count} resources could not be moved',
-            errors.length
-          )
+          title = this.$gettext('Failed to move %{count} resources')
           break
         }
         case batchActions.copy: {
-          title = this.$gettext('An error occurred while copying several resources')
-          desc = this.$ngettext(
-            '%{count} resource could not be copied',
-            '%{count} resources could not be copied',
-            errors.length
-          )
+          title = this.$gettext('Failed to copy %{count} resources')
           break
         }
         default:
@@ -470,8 +458,7 @@ export default {
       }
 
       this.showMessage({
-        title,
-        desc: this.$gettextInterpolate(desc, { count: errors.length }, false),
+        title: this.$gettextInterpolate(title, { count: errors.length }),
         status: 'danger'
       })
     }

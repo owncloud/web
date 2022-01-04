@@ -161,15 +161,15 @@ export default {
         })
         .catch((error) => {
           this.toggleModalConfirmButton()
-          let translated = this.$gettext('Error while renaming "%{file}" to "%{newName}"')
+          let translated = this.$gettext('Failed to rename "%{file}" to "%{newName}"')
           if (error.statusCode === 423) {
             translated = this.$gettext(
-              'Error while renaming "%{file}" to "%{newName}" - the file is locked'
+              'Failed to rename "%{file}" to "%{newName}" - the file is locked'
             )
           }
           const title = this.$gettextInterpolate(translated, { file: resource.name, newName }, true)
           this.showMessage({
-            title: title,
+            title,
             status: 'danger'
           })
         })

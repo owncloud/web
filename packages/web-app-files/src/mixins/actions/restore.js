@@ -68,7 +68,7 @@ export default {
         let translated
         const translateParams = {}
         if (failedResources.length === 1) {
-          translated = this.$gettext('Failed to restore %{resource}')
+          translated = this.$gettext('Failed to restore "%{resource}"')
           translateParams.resource = failedResources[0].name
         } else {
           translated = this.$gettext('Failed to restore %{resourceCount} files')
