@@ -185,7 +185,7 @@ Feature: Edit public link shares
       | name        | Public-link |
       | permissions | read        |
     When the user removes the public link named "Public-link" of file "lorem.txt" using the webUI
-    Then user "Alice" should not have any public link
+    Then user "Alice" should not have any public link in the server
 
 
   Scenario: user edits the permission of an already existing public link from read-write to read-create
