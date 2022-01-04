@@ -1,0 +1,6 @@
+Bugfix: Focus management in topbar
+
+We've fixed issues with focus management upon opening and closing 
+the dropdown menus in the ApplicationSwitcher and Usermenu component.
+
+https://github.com/owncloud/web/pull/6214
