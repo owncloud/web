@@ -72,7 +72,7 @@ Feature: Public link share management
       | name        | Public-link |
       | permissions | read        |
     When the user cancels remove the public link named "Public-link" of file "lorem.txt" using the webUI
-    Then user "Alice" should have some public shares
+    Then user "Alice" should have some public shares in the server
 
   @ocisSmokeTest
   Scenario: user browses to public link share using copy link button
