@@ -8,12 +8,20 @@ ownCloud admins and users.
 Summary
 -------
 
+* Change - Use remixicons for redesign: [#6142](https://github.com/owncloud/web/pull/6142)
 * Enhancement - Reorganize urls: [#6137](https://github.com/owncloud/web/pull/6137)
 * Enhancement - Redesign main layout: [#6036](https://github.com/owncloud/web/issues/6036)
-* Enhancement - Update ODS to v12.0.0-alpha5: [#6086](https://github.com/owncloud/web/pull/6086)
+* Enhancement - Update ODS to v12.0.0-alpha7: [#6086](https://github.com/owncloud/web/pull/6086)
 
 Details
 -------
+
+* Change - Use remixicons for redesign: [#6142](https://github.com/owncloud/web/pull/6142)
+
+   We've switched the iconset to remixicons to fit the new design.
+
+   https://github.com/owncloud/web/issues/6100
+   https://github.com/owncloud/web/pull/6142
 
 * Enhancement - Reorganize urls: [#6137](https://github.com/owncloud/web/pull/6137)
 
@@ -37,9 +45,9 @@ Details
    https://github.com/owncloud/web/issues/6036
    https://github.com/owncloud/web/pull/6086
 
-* Enhancement - Update ODS to v12.0.0-alpha5: [#6086](https://github.com/owncloud/web/pull/6086)
+* Enhancement - Update ODS to v12.0.0-alpha7: [#6086](https://github.com/owncloud/web/pull/6086)
 
-   We updated the ownCloud Design System to version 12.0.0-alpha5. Please refer to the full
+   We updated the ownCloud Design System to version 12.0.0-alpha7. Please refer to the full
    changelog in the ODS release (linked) for more details. Summary:
 
    - Change - Do not sort in OcTable:
@@ -61,7 +69,8 @@ Details
    https://github.com/owncloud/owncloud-design-system/pull/1845
 
    https://github.com/owncloud/web/pull/6086
-   https://github.com/owncloud/owncloud-design-system/releases/tag/v12.0.0-alpha5
+   https://github.com/owncloud/web/pull/6142
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v12.0.0-alpha7
 
 Changelog for ownCloud Web [4.9.0] (2021-12-24)
 =======================================
