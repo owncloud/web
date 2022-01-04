@@ -2,7 +2,7 @@
   <div id="oc-file-details-multiple-sidebar">
     <div class="files-preview oc-mb">
       <div class="files-preview-body">
-        <oc-icon class="preview-icon" size="xxlarge" variation="passive" name="file_copy" />
+        <oc-icon class="preview-icon" size="xxlarge" variation="passive" name="file-copy" />
         <p class="preview-text" data-testid="selectedFilesText" v-text="selectedFilesString" />
       </div>
     </div>

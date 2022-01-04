@@ -26,7 +26,7 @@ const fileExtensionConfig = {
 const appInfo = {
   name: 'MarkdownEditor',
   id: 'markdown-editor',
-  icon: 'text',
+  icon: 'file-text',
   isFileEditor: true,
   extensions: [
     {

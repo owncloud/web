@@ -51,7 +51,7 @@ describe('mixins', () => {
       { type: false, extension: 'tar.bz2' },
       { type: '0', extension: 'tar.bz2' }
     ])('should return the icon for a known file extension, regardless of the type', (inputData) => {
-      expect(mixins.methods.fileTypeIcon(inputData)).toEqual('package-x-generic')
+      expect(mixins.methods.fileTypeIcon(inputData)).toEqual('file-zip')
     })
   })
 

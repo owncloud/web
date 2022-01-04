@@ -23,7 +23,7 @@
           :class="{ selected: activeProvider ? provider.id === activeProvider.id : false }"
           @click="activateProvider(provider)"
         >
-          <oc-icon name="search" accessible-label="Search" />
+          <oc-icon name="search" fill-type="line" accessible-label="Search" />
           <span class="term">{{ term | truncate }}</span>
           <button v-if="provider.label" class="label">{{ provider.label }}</button>
         </li>

@@ -63,7 +63,7 @@
               >
                 Expires %{expires}
               </translate>
-              <oc-icon name="expand_more" />
+              <oc-icon name="arrow-down-s" fill-type="line" />
             </oc-button>
           </template>
         </oc-datepicker>

@@ -84,10 +84,10 @@ describe('ProgressBar component', () => {
       store = createStore(items)
       wrapper = getShallowWrapper(store)
     })
-    it('should have "expand_more" as oc-icon name', () => {
+    it('should have "arrow-down-s" as oc-icon name', () => {
       const ocIcon = wrapper.find(selectors.ocIcon)
 
-      expect(ocIcon.props().name).toEqual('expand_more')
+      expect(ocIcon.props().name).toEqual('arrow-down-s')
     })
     it('should show the text "Show Details"', () => {
       const showDetails = wrapper.find(selectors.showDetails)
@@ -117,10 +117,10 @@ describe('ProgressBar component', () => {
       store = createStore(items)
       wrapper = getShallowWrapper(store, true)
     })
-    it('should change oc-icon name to "expand_less"', () => {
+    it('should change oc-icon name to "arrow-up-s"', () => {
       const ocIcon = wrapper.find(selectors.ocIcon)
 
-      expect(ocIcon.props().name).toEqual('expand_less')
+      expect(ocIcon.props().name).toEqual('arrow-up-s')
     })
     it('should show the text "Hide Details"', () => {
       const showDetails = wrapper.find(selectors.showDetails)

@@ -7,7 +7,7 @@ export default {
       return [
         {
           name: 'show-details',
-          icon: 'info_outline',
+          icon: 'information',
           label: () => this.$gettext('Details'),
           handler: this.$_showDetails_trigger,
           // we don't have details in the trashbin, yet.

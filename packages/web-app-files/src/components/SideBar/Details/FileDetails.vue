@@ -36,7 +36,7 @@
           :aria-label="linkSharesLabel"
           @click="expandLinksPanel"
         >
-          <oc-icon name="link" />
+          <oc-icon name="links" />
         </oc-button>
         <p class="oc-my-rm oc-mx-s" v-text="detailSharingInformation" />
       </div>

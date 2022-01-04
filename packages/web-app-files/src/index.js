@@ -37,6 +37,7 @@ const navItems = [
   {
     name: $gettext('All files'),
     iconMaterial: appInfo.icon,
+    fillType: 'fill',
     route: {
       path: `/${appInfo.id}/spaces/`
     }
@@ -44,6 +45,7 @@ const navItems = [
   {
     name: $gettext('Favorites'),
     iconMaterial: 'star',
+    fillType: 'fill',
     route: {
       path: `/${appInfo.id}/favorites`
     },
@@ -54,6 +56,7 @@ const navItems = [
   {
     name: $gettext('Shared with me'),
     iconMaterial: 'shared-with-me',
+    fillType: 'none',
     route: {
       path: `/${appInfo.id}/shares/with-me`
     }
@@ -61,6 +64,7 @@ const navItems = [
   {
     name: $gettext('Shared with others'),
     iconMaterial: 'shared-with-others',
+    fillType: 'none',
     route: {
       path: `/${appInfo.id}/shares/with-others`
     }
@@ -68,13 +72,15 @@ const navItems = [
   {
     name: $gettext('Shared via link'),
     iconMaterial: 'link',
+    fillType: 'none',
     route: {
       path: `/${appInfo.id}/shares/via-link`
     }
   },
   {
     name: $gettext('Deleted files'),
-    iconMaterial: 'delete',
+    iconMaterial: 'delete-bin-5',
+    fillType: 'fill',
     route: {
       path: `/${appInfo.id}/trash`
     },

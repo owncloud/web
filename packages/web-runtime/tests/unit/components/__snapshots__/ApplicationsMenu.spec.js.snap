@@ -2,7 +2,7 @@
 
 exports[`ApplicationsMenu component shoud set aria-label prop on switcher button 1`] = `
 <oc-button-stub type="button" size="medium" arialabel="Application Switcher" variation="inverse" appearance="raw" justifycontent="center" gapsize="medium" id="_appSwitcherButton" class="oc-topbar-menu-burger">
-  <oc-icon-stub name="apps" accessiblelabel="" type="span" size="large" variation="passive" class="uk-flex"></oc-icon-stub>
+  <oc-icon-stub name="grid" filltype="fill" accessiblelabel="" type="span" size="large" variation="passive" class="uk-flex"></oc-icon-stub>
 </oc-button-stub>
 `;
 
@@ -11,11 +11,11 @@ exports[`ApplicationsMenu component should show app menus 1`] = `
   <ul class="oc-p-xs">
     <li class="oc-pt-s oc-pb-s" style="list-style: none;">
       <router-link-stub to="/files" tag="a" ariacurrentvalue="page" event="click" style="display: inline-flex; vertical-align: top; gap: 10px;">
-        <oc-icon-stub name="folder" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span>Files</span>
+        <oc-icon-stub name="folder" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span>Files</span>
       </router-link-stub>
     </li>
     <li class="oc-pt-s oc-pb-s" style="list-style: none;"><a target="_blank" href="http://some.org" style="display: inline-flex; vertical-align: top; gap: 10px;">
-        <oc-icon-stub name="some-icon" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span>External</span>
+        <oc-icon-stub name="some-icon" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub> <span>External</span>
       </a></li>
   </ul>
 </oc-drop-stub>

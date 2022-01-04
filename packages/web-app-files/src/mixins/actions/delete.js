@@ -14,7 +14,7 @@ export default {
       return [
         {
           name: 'delete',
-          icon: 'delete',
+          icon: 'delete-bin-5',
           label: () => this.$gettext('Delete'),
           handler: this.$_delete_trigger,
           isEnabled: ({ resources }) => {
@@ -39,7 +39,7 @@ export default {
         {
           // this menu item is ONLY for the trashbin (permanently delete a file/folder)
           name: 'delete-permanent',
-          icon: 'delete',
+          icon: 'delete-bin-5',
           label: () => this.$gettext('Delete'),
           handler: this.$_delete_trigger,
           isEnabled: ({ resources }) => {

@@ -8,7 +8,7 @@
     >
       <span v-if="!existingRole" v-text="inviteLabel" />
       <span v-else>{{ $gettext(selectedRole.label) }}</span>
-      <oc-icon name="expand_more" />
+      <oc-icon name="arrow-down-s" />
     </oc-button>
     <oc-drop
       ref="rolesDrop"

@@ -13,7 +13,7 @@ export default {
       return [
         {
           name: 'rename',
-          icon: 'edit',
+          icon: 'pencil',
           label: () => {
             return this.$gettext('Rename')
           },

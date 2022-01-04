@@ -12,7 +12,7 @@ export default {
       return [
         {
           name: 'move',
-          icon: 'folder-move',
+          icon: 'folder-shared',
           handler: this.$_move_trigger,
           label: () =>
             this.$pgettext('Action in the files list row to initiate moving resources', 'Move'),

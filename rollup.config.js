@@ -81,7 +81,8 @@ const plugins = [
         src: `./config/${production ? 'config.dist.json' : 'config.json'}`,
         dest: 'dist'
       },
-      { src: 'node_modules/requirejs/require.js', dest: 'dist/js' }
+      { src: 'node_modules/requirejs/require.js', dest: 'dist/js' },
+      { src: 'node_modules/owncloud-design-system/dist/system/icons', dest: 'dist/' }
     ]
   }),
   html({

@@ -8,10 +8,10 @@
     <oc-icon
       v-if="copied"
       key="oc-copy-to-clipboard-copied"
-      name="ready"
+      name="checkbox-circle"
       class="_clipboard-success-animation"
     />
-    <oc-icon v-else key="oc-copy-to-clipboard-copy" name="copy_to_clipboard" />
+    <oc-icon v-else key="oc-copy-to-clipboard-copy" name="clipboard" />
   </oc-button>
 </template>
 
