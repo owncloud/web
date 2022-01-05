@@ -68,7 +68,7 @@
       />
     </template>
     <template #size="{ item }">
-      <oc-resource-size :size="item.size" />
+      <oc-resource-size :size="item.size || Number.NaN" />
     </template>
     <template #mdate="{ item }">
       <span
