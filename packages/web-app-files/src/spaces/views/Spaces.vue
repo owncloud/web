@@ -1,17 +1,26 @@
 <template>
   <div class="oc-p-s">
-    <h2 class="" v-text="$gettext('Spaces')"></h2>
-    <div class="">
-      <span v-text="$gettext('Access all project related files in one place.')"></span>
-      <a href="#" v-text="$gettext('Learn more about spaces.')"></a>
-      <h3 v-text="$gettext('Your spaces')"></h3>
-      <hr class="uk-margin-bottom" />
+    <h2 v-text="$gettext('Spaces')" />
+    <div>
+      <span v-text="$gettext('Access all project related files in one place.')" />
+      <a href="#" v-text="$gettext('Learn more about spaces.')" />
+      <h3 v-text="$gettext('Your spaces')" />
+      <hr class="oc-mb-s" />
     </div>
-    <div class="spaces-list uk-container uk-container-expand uk-padding-remove">
-      <list-loader v-if="loadSpacesTask.isRunning" />
-      <template v-else>
+    <list-loader v-if="loadSpacesTask.isRunning" />
+    <template v-else>
+      <no-content-message
+        v-if="!spaces.length"
+        id="files-spaces-empty"
+        class="files-empty"
+        icon="layout-grid"
+      >
+        <template #message>
+          <span v-translate>You don't have access to any spaces</span>
+        </template>
+      </no-content-message>
+      <div v-else class="spaces-list">
         <div
-          v-if="spaces.length"
           class="
             uk-grid-match uk-grid-column-small uk-grid-row-large uk-text-center uk-child-width-1-3@s
           "
@@ -22,8 +31,8 @@
               <span class="uk-card-media-top oc-border-b">
                 <img
                   :src="space.image || defaultImg"
-                  :class="{ 'spaces-list-default-img': !space.image }"
-                  :alt="$gettext('Space image')"
+                  :class="{ 'oc-px-m': !space.image, 'oc-py-m': !space.image }"
+                  alt=""
                 />
               </span>
               <span class="uk-card-body">
@@ -32,15 +41,8 @@
             </span>
           </a>
         </div>
-        <div v-else>
-          <no-content-message id="files-spaces-empty" class="files-empty" icon="space">
-            <template #message>
-              <span v-translate>You don't have access to any spaces</span>
-            </template>
-          </no-content-message>
-        </div>
-      </template>
-    </div>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -85,6 +87,10 @@ export default {
 </script>
 
 <style lang="scss">
+#files-spaces-empty {
+  height: 50vh;
+}
+
 .spaces-list {
   &-card {
     box-shadow: none !important;
@@ -98,10 +104,6 @@ export default {
 
   .uk-card-media-top img {
     max-height: 150px;
-  }
-
-  &-default-img {
-    padding: 40px;
   }
 }
 </style>

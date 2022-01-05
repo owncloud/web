@@ -109,7 +109,7 @@
           <size-info v-if="hasBulkActions && selectedFiles.length > 0" class="oc-mr oc-visible@l" />
           <batch-actions v-if="hasBulkActions" />
         </div>
-        <view-options />
+        <view-options v-if="!hideViewOptions" />
       </div>
     </div>
   </div>
@@ -212,6 +212,9 @@ export default {
     },
     hasBulkActions() {
       return this.$route.meta.hasBulkActions === true
+    },
+    hideViewOptions() {
+      return this.$route.meta.hideViewOptions === true
     },
     pageTitle() {
       const title = this.$route.meta.title

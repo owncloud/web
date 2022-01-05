@@ -40,7 +40,7 @@ const navItems = [
     iconMaterial: appInfo.icon,
     fillType: 'fill',
     route: {
-      path: `/${appInfo.id}/spaces/`
+      path: `/${appInfo.id}/spaces/personal/`
     }
   },
   {
@@ -80,7 +80,7 @@ const navItems = [
   },
   {
     name: $gettext('Spaces'),
-    iconMaterial: 'space',
+    iconMaterial: 'layout-grid',
     route: {
       path: `/${appInfo.id}/spaces/projects`
     },
