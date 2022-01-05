@@ -15,8 +15,9 @@
     </div>
     <div class="topbar-gap uk-flex uk-flex-middle uk-flex-between">
       <feedback-link v-if="isFeedbackLinkEnabled" />
-      <notifications v-if="activeNotifications.length" />
+      <notifications v-if="isNotificationBellEnabled" />
       <user-menu
+        v-if="isUserMenuEnabled"
         :user-id="userId"
         :user-display-name="userDisplayName"
         :applications-list="applicationsList"
@@ -63,7 +64,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['configuration']),
+    ...mapGetters(['configuration', 'user']),
 
     sidebarLogoAlt() {
       return this.$gettext('Navigate to all files page')
@@ -75,6 +76,14 @@ export default {
 
     isFeedbackLinkEnabled() {
       return !this.configuration.options.disableFeedbackLink
+    },
+
+    isNotificationBellEnabled() {
+      return this.user?.id && this.activeNotifications.length
+    },
+
+    isUserMenuEnabled() {
+      return this.user?.id
     }
   }
 }
