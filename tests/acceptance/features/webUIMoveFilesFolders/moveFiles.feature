@@ -85,7 +85,7 @@ Feature: move files
   Scenario: move files on a public share
     Given user "Alice" has uploaded file "data.zip" to "simple-folder/data.zip" in the server
     And user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
-    And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
+    And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions in the server
     And the public uses the webUI to access the last public link created by user "Alice"
     And the user moves file "data.zip" into folder "simple-empty-folder" using the webUI
     Then breadcrumb for folder "simple-empty-folder" should be displayed on the webUI
@@ -97,7 +97,7 @@ Feature: move files
   Scenario: move a file into another folder with no change permission
     Given user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Brian" has created folder "simple-folder" in the server
-    And user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions
+    And user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions in the server
     And user "Alice" has logged in using the webUI
     When the user tries to move file "lorem.txt" into folder "simple-folder (2)" using the webUI
     Then as "Alice" file "simple-folder (2)/lorem.txt" should not exist
@@ -138,11 +138,11 @@ Feature: move files
   @issue-ocis-873
   Scenario: sharee moves a file shared by sharer into another folder
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
-    And the administrator has set the default folder for received shares to "Shares"
+    And the administrator has set the default folder for received shares to "Shares" in the server
     And user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Alice" has uploaded file with content "test content" to "simple-folder/testFile.txt" in the server
-    And user "Alice" has shared folder "/simple-folder" with user "Brian"
-    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
+    And user "Alice" has shared folder "/simple-folder" with user "Brian" in the server
+    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice" in the server
     And user "Brian" has logged in using the webUI
     And user "Brian" has created folder "/Shares/testFolder" in the server
     And the user has opened folder "Shares"

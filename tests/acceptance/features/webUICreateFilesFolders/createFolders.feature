@@ -58,7 +58,7 @@ Feature: create folders
 
   Scenario: Create a folder in a public share
     Given user "Alice" has created folder "simple-empty-folder" in the server
-    And user "Alice" has shared folder "simple-empty-folder" with link with "read,create" permissions
+    And user "Alice" has shared folder "simple-empty-folder" with link with "read,create" permissions in the server
     When the public uses the webUI to access the last public link created by user "Alice"
     And the user creates a folder with the name "top-folder" using the webUI
     And the user opens folder "top-folder" using the webUI

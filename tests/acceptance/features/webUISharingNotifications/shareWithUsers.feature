@@ -6,7 +6,7 @@ Feature: Sharing files and folders with internal users
 
   Background:
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
-    And the administrator has set the default folder for received shares to "Shares"
+    And the administrator has set the default folder for received shares to "Shares" in the server
     And app "notifications" has been "enabled" in the server
     And these users have been created with default attributes and without skeleton files in the server:
       | username |
@@ -19,8 +19,8 @@ Feature: Sharing files and folders with internal users
 
   @smokeTest
   Scenario: notifications about new share is displayed when auto-accepting is disabled
-    Given user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Alice" has shared folder "data.zip" with user "Brian"
+    Given user "Alice" has shared folder "simple-folder" with user "Brian" in the server
+    And user "Alice" has shared folder "data.zip" with user "Brian" in the server
     When user "Brian" logs in using the webUI
     Then the user should see the notification bell on the webUI
     And the user should see 2 notifications on the webUI with these details
@@ -30,16 +30,16 @@ Feature: Sharing files and folders with internal users
 
   @smokeTest
   Scenario: Notification is gone after accepting a share
-    Given user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Alice" has shared folder "simple-empty-folder" with user "Brian"
+    Given user "Alice" has shared folder "simple-folder" with user "Brian" in the server
+    And user "Alice" has shared folder "simple-empty-folder" with user "Brian" in the server
     When user "Brian" logs in using the webUI
     And the user accepts all shares displayed in the notifications on the webUI
     Then the user should have no notifications
 
   @smokeTest
   Scenario: accept an offered share
-    Given user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Alice" has shared folder "simple-empty-folder" with user "Brian"
+    Given user "Alice" has shared folder "simple-folder" with user "Brian" in the server
+    And user "Alice" has shared folder "simple-empty-folder" with user "Brian" in the server
     When user "Brian" logs in using the webUI
     And the user accepts all shares displayed in the notifications on the webUI
     And the user browses to the folder "Shares" on the files page
@@ -51,8 +51,8 @@ Feature: Sharing files and folders with internal users
 
   @smokeTest
   Scenario: reject an offered share
-    Given user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Alice" has shared folder "simple-empty-folder" with user "Brian"
+    Given user "Alice" has shared folder "simple-folder" with user "Brian" in the server
+    And user "Alice" has shared folder "simple-empty-folder" with user "Brian" in the server
     When user "Brian" logs in using the webUI
     And the user declines all shares displayed in the notifications on the webUI
     Then folder "Shares" should not be listed on the webUI

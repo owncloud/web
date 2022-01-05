@@ -15,8 +15,8 @@ Feature: Shares in share-with pages
     Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has renamed folder "simple-folder" to "new-simple-folder" in the server
     And user "Alice" has renamed file "lorem.txt" to "ipsum.txt" in the server
-    And user "Alice" has shared file "ipsum.txt" with user "Brian"
-    And user "Alice" has shared folder "new-simple-folder" with user "Brian"
+    And user "Alice" has shared file "ipsum.txt" with user "Brian" in the server
+    And user "Alice" has shared folder "new-simple-folder" with user "Brian" in the server
     And user "Brian" has logged in using the webUI
     When the user browses to the shared-with-me page
     Then file "ipsum.txt" should be listed on the webUI
@@ -27,9 +27,9 @@ Feature: Shares in share-with pages
     Given user "Carol" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has logged in using the webUI
-    And user "Alice" has shared file "lorem.txt" with user "Brian"
-    And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Alice" has shared folder "simple-folder" with user "Carol"
+    And user "Alice" has shared file "lorem.txt" with user "Brian" in the server
+    And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
+    And user "Alice" has shared folder "simple-folder" with user "Carol" in the server
     When the user browses to the shared-with-others page
     Then the following resources should have the following collaborators
       | fileName      | expectedCollaborators     |
@@ -40,8 +40,8 @@ Feature: Shares in share-with pages
   Scenario: check file with same name but different paths are displayed correctly in shared with others page
     Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has created file "simple-folder/lorem.txt" in the server
-    And user "Alice" has shared file "lorem.txt" with user "Brian"
-    And user "Alice" has shared file "simple-folder/lorem.txt" with user "Brian"
+    And user "Alice" has shared file "lorem.txt" with user "Brian" in the server
+    And user "Alice" has shared file "simple-folder/lorem.txt" with user "Brian" in the server
     And user "Alice" has logged in using the webUI
     When the user browses to the shared-with-others page
     Then file "lorem.txt" should be listed on the webUI
@@ -51,7 +51,7 @@ Feature: Shares in share-with pages
 
   Scenario: send share shows up on shared-with-others page
     Given user "Alice" has uploaded file "data.zip" to "data.zip" in the server
-    And user "Alice" has shared folder "simple-folder" with user "Brian"
+    And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
     And user "Alice" has logged in using the webUI
     When the user browses to the shared-with-others page using the webUI
     Then folder "simple-folder" should be listed on the webUI
@@ -60,7 +60,7 @@ Feature: Shares in share-with pages
 
   Scenario: received share shows up on shared-with-me page
     Given user "Alice" has uploaded file "data.zip" to "data.zip" in the server
-    And user "Alice" has shared folder "simple-folder" with user "Brian"
+    And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
     And user "Brian" has logged in using the webUI
     When the user browses to the shared-with-me page
     Then folder "simple-folder" should be listed on the webUI
@@ -68,7 +68,7 @@ Feature: Shares in share-with pages
 
 
   Scenario: clicking a folder on shared-with-me page jumps to the main file list inside the folder
-    Given user "Alice" has shared folder "simple-folder" with user "Brian"
+    Given user "Alice" has shared folder "simple-folder" with user "Brian" in the server
     And user "Alice" has created file "simple-folder/collaborate-on-this.txt" in the server
     And user "Brian" has logged in using the webUI
     When the user browses to the shared-with-me page
@@ -77,7 +77,7 @@ Feature: Shares in share-with pages
 
 
   Scenario: unsharing an entry on the shared-with-me page results in declined share
-    Given user "Alice" has shared folder "simple-folder" with user "Brian"
+    Given user "Alice" has shared folder "simple-folder" with user "Brian" in the server
     And user "Brian" has logged in using the webUI
     When the user browses to the shared-with-me page in accepted shares view
     And the user unshares folder "simple-folder" using the webUI
@@ -112,8 +112,8 @@ Feature: Shares in share-with pages
   @skipOnOC10 @issue-4582
   Scenario: deleting multiple entries on the shared-with-me page
     Given user "Alice" has created file "lorem.txt" in the server
-    And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Alice" has shared file "lorem.txt" with user "Brian"
+    And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
+    And user "Alice" has shared file "lorem.txt" with user "Brian" in the server
     And user "Brian" has logged in using the webUI
     And the user browses to the shared-with-me page
     When the user batch unshares these files using the webUI

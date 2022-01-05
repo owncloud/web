@@ -24,7 +24,7 @@ Feature: Access private link
 
   Scenario: Access private link as a collaborator
     Given user "Brian" has been created with default attributes and without skeleton files in the server
-    And user "Alice" has shared file "lorem.txt" with user "Brian" with "read" permissions
+    And user "Alice" has shared file "lorem.txt" with user "Brian" with "read" permissions in the server
     And user "Brian" has logged in using the webUI
     When the user navigates to the private link created by user "Alice" for file "lorem.txt"
     And the private link resolved successfully

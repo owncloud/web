@@ -36,14 +36,14 @@ Feature: Sharing files with multiple internal users with different permissions
     And custom permissions "<displayed-permissions>" should be set for user "Carol King" for file "lorem.txt" on the webUI
     And user "Brian Murphy" should be listed as "<displayed-role>" in the collaborators list for file "lorem.txt" on the webUI
     And user "Carol King" should be listed as "<displayed-role>" in the collaborators list for file "lorem.txt" on the webUI
-    And user "Brian" should have received a share with these details:
+    And user "Brian" should have received a share with these details in the server:
       | field       | value                |
       | uid_owner   | Alice                |
       | share_with  | Brian                |
       | file_target | /lorem.txt           |
       | item_type   | file                 |
       | permissions | <actual-permissions> |
-    And user "Carol" should have received a share with these details:
+    And user "Carol" should have received a share with these details in the server:
       | field       | value                |
       | uid_owner   | Alice                |
       | share_with  | Carol                |

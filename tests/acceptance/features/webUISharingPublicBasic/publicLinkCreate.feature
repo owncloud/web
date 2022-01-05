@@ -13,7 +13,7 @@ Feature: Create public link shares
     And user "Alice" has created file "simple-folder/lorem.txt" in the server
     And user "Alice" has logged in using the webUI
     When the user creates a new public link for resource "simple-folder" using the webUI
-    Then user "Alice" should have a share with these details:
+    Then user "Alice" should have a share with these details in the server:
       | field       | value              |
       | share_type  | public_link        |
       | uid_owner   | Alice              |
@@ -29,7 +29,7 @@ Feature: Create public link shares
     Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has logged in using the webUI
     When the user creates a new public link for resource "lorem.txt" using the webUI
-    Then user "Alice" should have a share with these details:
+    Then user "Alice" should have a share with these details in the server:
       | field       | value              |
       | share_type  | public_link        |
       | uid_owner   | Alice              |
@@ -47,7 +47,7 @@ Feature: Create public link shares
     And user "Alice" has created file "simple-folder/lorem.txt" in the server
     And user "Alice" has logged in using the webUI
     When the user creates a new public link for resource "simple-folder" using the webUI
-    Then user "Alice" should have a share with these details:
+    Then user "Alice" should have a share with these details in the server:
       | field       | value              |
       | share_type  | public_link        |
       | uid_owner   | Alice              |
@@ -63,7 +63,7 @@ Feature: Create public link shares
     Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has logged in using the webUI
     When the user creates a new public link for resource "lorem.txt" using the webUI
-    Then user "Alice" should have a share with these details:
+    Then user "Alice" should have a share with these details in the server:
       | field       | value              |
       | share_type  | public_link        |
       | uid_owner   | Alice              |
@@ -103,13 +103,13 @@ Feature: Create public link shares
 
   Scenario: user creates a multiple public link of a file and delete the first link
     Given user "Alice" has created file "lorem.txt" in the server
-    And user "Alice" has created a public link with following settings
+    And user "Alice" has created a public link with following settings in the server
       | path | lorem.txt  |
       | name | first-name |
-    And user "Alice" has created a public link with following settings
+    And user "Alice" has created a public link with following settings in the server
       | path | lorem.txt   |
       | name | second-name |
-    And user "Alice" has created a public link with following settings
+    And user "Alice" has created a public link with following settings in the server
       | path | lorem.txt  |
       | name | third-name |
     And user "Alice" has logged in using the webUI
@@ -121,13 +121,13 @@ Feature: Create public link shares
 
   Scenario: user creates a multiple public link of a file and delete the second link
     Given user "Alice" has created file "lorem.txt" in the server
-    And user "Alice" has created a public link with following settings
+    And user "Alice" has created a public link with following settings in the server
       | path | lorem.txt  |
       | name | first-name |
-    And user "Alice" has created a public link with following settings
+    And user "Alice" has created a public link with following settings in the server
       | path | lorem.txt   |
       | name | second-name |
-    And user "Alice" has created a public link with following settings
+    And user "Alice" has created a public link with following settings in the server
       | path | lorem.txt  |
       | name | third-name |
     And user "Alice" has logged in using the webUI
@@ -139,13 +139,13 @@ Feature: Create public link shares
 
   Scenario: user creates a multiple public link of a file and delete the third link
     Given user "Alice" has created file "lorem.txt" in the server
-    And user "Alice" has created a public link with following settings
+    And user "Alice" has created a public link with following settings in the server
       | path | lorem.txt  |
       | name | first-name |
-    And user "Alice" has created a public link with following settings
+    And user "Alice" has created a public link with following settings in the server
       | path | lorem.txt   |
       | name | second-name |
-    And user "Alice" has created a public link with following settings
+    And user "Alice" has created a public link with following settings in the server
       | path | lorem.txt  |
       | name | third-name |
     And user "Alice" has logged in using the webUI
@@ -173,7 +173,7 @@ Feature: Create public link shares
     Given user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has logged in using the webUI
     When the user creates a public link via quick action for resource "simple-folder" using the webUI
-    Then user "Alice" should have a share with these details:
+    Then user "Alice" should have a share with these details in the server:
       | field       | value             |
       | share_type  | public_link       |
       | uid_owner   | Alice             |
@@ -189,12 +189,12 @@ Feature: Create public link shares
 
   Scenario: Sharing the share_folder as public link is not possible
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
-    And the administrator has set the default folder for received shares to "Shares"
+    And the administrator has set the default folder for received shares to "Shares" in the server
     And user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Brian" has created folder "simple-folder" in the server
     And user "Carol" has been created with default attributes and without skeleton files in the server
-    And user "Brian" has shared folder "simple-folder" with user "Alice"
-    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian"
+    And user "Brian" has shared folder "simple-folder" with user "Alice" in the server
+    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian" in the server
     And user "Alice" has logged in using the webUI
     And the user opens the link share dialog for folder "Shares" using the webUI
     Then the link share permission denied message should be displayed in the sharing dialog on the webUI

@@ -94,7 +94,7 @@ Feature: Search
 
   Scenario: Search for a shared file
     Given user "user0" has uploaded file "lorem.txt" to "lorem.txt" in the server
-    And user "user0" has shared file "/lorem.txt" with user "Alice"
+    And user "user0" has shared file "/lorem.txt" with user "Alice" in the server
     When the user reloads the current page of the webUI
     And the user searches for "lorem" using the webUI
     Then file "lorem.txt" should be listed on the webUI
@@ -103,8 +103,8 @@ Feature: Search
   Scenario: Search for a re-shared file
     Given user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Brian" has uploaded file "lorem.txt" to "lorem.txt" in the server
-    And user "Brian" has shared file "/lorem.txt" with user "user0"
-    And user "user0" has shared file "/lorem.txt" with user "Alice"
+    And user "Brian" has shared file "/lorem.txt" with user "user0" in the server
+    And user "user0" has shared file "/lorem.txt" with user "Alice" in the server
     When the user reloads the current page of the webUI
     And the user searches for "lorem" using the webUI
     Then file "lorem.txt" should be listed on the webUI
@@ -113,7 +113,7 @@ Feature: Search
   Scenario: Search for a shared folder
     Given user "user0" has created folder "simple-folder" in the server
     And user "user0" has uploaded file "lorem.txt" to "simple-folder/lorem.txt" in the server
-    And user "user0" has shared folder "simple-folder" with user "Alice"
+    And user "user0" has shared folder "simple-folder" with user "Alice" in the server
     When the user reloads the current page of the webUI
     And the user searches for "simple" using the webUI
     Then folder "simple-folder" should be listed on the webUI

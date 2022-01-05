@@ -18,8 +18,8 @@ Feature: Sharing files and folders with internal users
   @smokeTest
   Scenario: notifications about new share is displayed when auto-accepting is disabled
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
-    And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Alice" has shared folder "data.zip" with user "Brian"
+    And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
+    And user "Alice" has shared folder "data.zip" with user "Brian" in the server
     When user "Brian" logs in using the webUI
     Then the user should see the notification bell on the webUI
     And the user should see 2 notifications on the webUI with these details
@@ -30,8 +30,8 @@ Feature: Sharing files and folders with internal users
   @smokeTest
   Scenario: Notification is gone after accepting a share
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
-    And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Alice" has shared folder "simple-empty-folder" with user "Brian"
+    And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
+    And user "Alice" has shared folder "simple-empty-folder" with user "Brian" in the server
     When user "Brian" logs in using the webUI
     And the user accepts all shares displayed in the notifications on the webUI
     Then the user should have no notifications
@@ -39,8 +39,8 @@ Feature: Sharing files and folders with internal users
   @smokeTest
   Scenario: accept an offered share
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
-    And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Alice" has shared folder "simple-empty-folder" with user "Brian"
+    And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
+    And user "Alice" has shared folder "simple-empty-folder" with user "Brian" in the server
     When user "Brian" logs in using the webUI
     And the user accepts all shares displayed in the notifications on the webUI
     Then folder "simple-folder" should be listed on the webUI
@@ -52,8 +52,8 @@ Feature: Sharing files and folders with internal users
   @smokeTest
   Scenario: reject an offered share
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
-    And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Alice" has shared folder "simple-empty-folder" with user "Brian"
+    And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
+    And user "Alice" has shared folder "simple-empty-folder" with user "Brian" in the server
     When user "Brian" logs in using the webUI
     And the user declines all shares displayed in the notifications on the webUI
     Then folder "simple-folder" should not be listed on the webUI

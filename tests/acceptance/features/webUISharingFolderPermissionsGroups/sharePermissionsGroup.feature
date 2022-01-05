@@ -6,7 +6,7 @@ Feature: Sharing folders with internal groups with different roles and permissio
 
   Background:
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
-    And the administrator has set the default folder for received shares to "Shares"
+    And the administrator has set the default folder for received shares to "Shares" in the server
     And these users have been created with default attributes and without skeleton files in the server:
       | username |
       | Alice    |
@@ -34,20 +34,20 @@ Feature: Sharing folders with internal groups with different roles and permissio
     And the user removes "grp1" as a collaborator from the share
     Then group "grp1" should not be visible in the collaborators selected options in the webUI
     When the user shares with the selected collaborators
-    And user "Brian" accepts the share "Shares/simple-folder" offered by user "Alice" using the sharing API
-    And user "Carol" accepts the share "Shares/simple-folder" offered by user "Alice" using the sharing API
+    And user "Brian" accepts the share "Shares/simple-folder" offered by user "Alice" using the sharing API in the server
+    And user "Carol" accepts the share "Shares/simple-folder" offered by user "Alice" using the sharing API in the server
     Then custom permissions "<displayed-permissions>" should be set for user "grp2" for folder "simple-folder" on the webUI
     And custom permissions "<displayed-permissions>" should be set for user "Carol King" for folder "simple-folder" on the webUI
     And group "grp2" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
     And user "Carol King" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
-    And user "Brian" should have received a share with these details:
+    And user "Brian" should have received a share with these details in the server:
       | field       | value                 |
       | uid_owner   | Alice                 |
       | share_with  | grp2                  |
       | file_target | /Shares/simple-folder |
       | item_type   | folder                |
       | permissions | <actual-permissions>  |
-    And user "Carol" should have received a share with these details:
+    And user "Carol" should have received a share with these details in the server:
       | field       | value                 |
       | uid_owner   | Alice                 |
       | share_with  | Carol                 |

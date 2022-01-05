@@ -6,7 +6,7 @@ Feature: disable sharing
 
   Background:
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
-    And the administrator has set the default folder for received shares to "Shares"
+    And the administrator has set the default folder for received shares to "Shares" in the server
     And user "Alice" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has uploaded file "lorem.txt" to "lorem.txt" in the server
@@ -31,10 +31,10 @@ Feature: disable sharing
   @issue-2459
   Scenario: Check file presence in shared-with-me page when sharing is disabled
     Given user "Brian" has been created with default attributes and without skeleton files in the server
-    And user "Alice" has shared file "lorem.txt" with user "Brian"
-    And user "Brian" has accepted the share "Shares/lorem.txt" offered by user "Alice"
-    And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
+    And user "Alice" has shared file "lorem.txt" with user "Brian" in the server
+    And user "Brian" has accepted the share "Shares/lorem.txt" offered by user "Alice" in the server
+    And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
+    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice" in the server
     And the setting "shareapi_enabled" of app "core" has been set to "no"
     When user "Brian" logs in using the webUI
     And the user opens folder "Shares" using the webUI
@@ -48,8 +48,8 @@ Feature: disable sharing
   @issue-2459
   Scenario: Check file presence in shared-with-others page when Sharing is disabled
     Given user "Brian" has been created with default attributes and without skeleton files in the server
-    And user "Alice" has shared file "lorem.txt" with user "Brian"
-    And user "Alice" has shared folder "simple-folder" with user "Brian"
+    And user "Alice" has shared file "lorem.txt" with user "Brian" in the server
+    And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
     And the setting "shareapi_enabled" of app "core" has been set to "no"
     When user "Alice" logs in using the webUI
     #    Then the link for "shared-with-others" page should not be available in files page menu

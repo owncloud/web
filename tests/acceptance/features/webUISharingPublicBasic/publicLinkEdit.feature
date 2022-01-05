@@ -11,7 +11,7 @@ Feature: Edit public link shares
   Scenario Outline: user tries to change the role of an existing public link role without entering share password while enforce password for that role is enforced
     Given the setting "<setting-name>" of app "core" has been set to "yes"
     And user "Alice" has created folder "simple-folder" in the server
-    And user "Alice" has created a public link with following settings
+    And user "Alice" has created a public link with following settings in the server
       | path        | simple-folder         |
       | name        | Public-link           |
       | permissions | <initial-permissions> |
@@ -19,7 +19,7 @@ Feature: Edit public link shares
     When the user tries to edit the public link named "Public-link" of folder "simple-folder" changing following
       | role | <role> |
     Then the user should see an error message on the public link share dialog saying "Passwords are enforced for link shares"
-    And user "Alice" should have a share with these details:
+    And user "Alice" should have a share with these details in the server:
       | field       | value                 |
       | share_type  | public_link           |
       | uid_owner   | Alice                 |
@@ -36,7 +36,7 @@ Feature: Edit public link shares
   Scenario Outline: user tries to delete the password of an existing public link role while enforce password for that role is enforced
     Given the setting "<setting-name>" of app "core" has been set to "yes"
     And user "Alice" has created folder "simple-folder" in the server
-    And user "Alice" has created a public link with following settings
+    And user "Alice" has created a public link with following settings in the server
       | path        | simple-folder         |
       | name        | Public-link           |
       | permissions | <initial-permissions> |
@@ -45,7 +45,7 @@ Feature: Edit public link shares
     When the user tries to edit the public link named "Public-link" of folder "simple-folder" changing following
       | password |  |
     Then the user should see an error message on the public link share dialog saying "Passwords are enforced for link shares"
-    And user "Alice" should have a share with these details:
+    And user "Alice" should have a share with these details in the server:
       | field       | value                 |
       | share_type  | public_link           |
       | uid_owner   | Alice                 |
@@ -62,7 +62,7 @@ Feature: Edit public link shares
   Scenario Outline: user changes the role of an existing public link role without entering share password while enforce password for the original role is enforced
     Given the setting "<setting-name>" of app "core" has been set to "yes"
     And user "Alice" has created folder "simple-folder" in the server
-    And user "Alice" has created a public link with following settings
+    And user "Alice" has created a public link with following settings in the server
       | path        | simple-folder         |
       | name        | Public-link           |
       | permissions | <initial-permissions> |
@@ -71,7 +71,7 @@ Feature: Edit public link shares
     When the user edits the public link named "Public-link" of folder "simple-folder" changing following
       | role     | <role> |
       | password |        |
-    Then user "Alice" should have a share with these details:
+    Then user "Alice" should have a share with these details in the server:
       | field       | value                  |
       | share_type  | public_link            |
       | uid_owner   | Alice                  |
@@ -88,7 +88,7 @@ Feature: Edit public link shares
   Scenario: user edits a public link and does not save the changes
     Given the setting "shareapi_allow_public_notification" of app "core" has been set to "yes"
     And user "Alice" has created folder "simple-folder" in the server
-    And user "Alice" has created a public link with following settings
+    And user "Alice" has created a public link with following settings in the server
       | path     | simple-folder    |
       | name     | test_public_link |
       | password | pass123          |
@@ -115,7 +115,7 @@ Feature: Edit public link shares
   Scenario: user edits the password of an already existing public link
     Given user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has created file "simple-folder/lorem.txt" in the server
-    And user "Alice" has created a public link with following settings
+    And user "Alice" has created a public link with following settings in the server
       | path        | simple-folder                |
       | name        | Public-link                  |
       | permissions | read, update, create, delete |
@@ -129,8 +129,8 @@ Feature: Edit public link shares
   @issue-3830
   Scenario: user edits the password of an already existing public link and tries to access with old password
     Given user "Alice" has created folder "simple-folder" in the server
-    And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123"
-    And user "Alice" has created a public link with following settings
+    And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123" in the server
+    And user "Alice" has created a public link with following settings in the server
       | path        | simple-folder                |
       | name        | Public-link                  |
       | permissions | read, update, create, delete |
@@ -145,7 +145,7 @@ Feature: Edit public link shares
   Scenario: user edits the permission of an already existing public link from read-write to read
     Given user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has created file "simple-folder/lorem.txt" in the server
-    And user "Alice" has created a public link with following settings
+    And user "Alice" has created a public link with following settings in the server
       | path        | simple-folder                |
       | name        | Public-link                  |
       | permissions | read, update, create, delete |
@@ -161,7 +161,7 @@ Feature: Edit public link shares
     Given user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
     And user "Alice" has created file "simple-folder/lorem.txt" in the server
-    And user "Alice" has created a public link with following settings
+    And user "Alice" has created a public link with following settings in the server
       | path        | simple-folder |
       | name        | Public-link   |
       | permissions | read          |
@@ -180,7 +180,7 @@ Feature: Edit public link shares
   Scenario: user removes the public link of a file using webUI
     Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has logged in using the webUI
-    And user "Alice" has created a public link with following settings
+    And user "Alice" has created a public link with following settings in the server
       | path        | lorem.txt   |
       | name        | Public-link |
       | permissions | read        |
@@ -191,7 +191,7 @@ Feature: Edit public link shares
   Scenario: user edits the permission of an already existing public link from read-write to read-create
     Given user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has created file "simple-folder/simple.txt" in the server
-    And user "Alice" has created a public link with following settings
+    And user "Alice" has created a public link with following settings in the server
       | path        | simple-folder                |
       | name        | Public-link                  |
       | permissions | read, update, create, delete |
@@ -206,7 +206,7 @@ Feature: Edit public link shares
 
   Scenario: assign password to already created public share
     Given user "Alice" has created file "lorem.txt" in the server
-    And user "Alice" has created a public link with following settings
+    And user "Alice" has created a public link with following settings in the server
       | path        | lorem.txt             |
       | name        | Public-link           |
     And user "Alice" has logged in using the webUI

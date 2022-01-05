@@ -11,19 +11,19 @@ Feature: Public link share management
   @ocisSmokeTest
   Scenario: public link share shows up on shared-with-others page
     Given user "Alice" has logged in using the webUI
-    And user "Alice" has shared folder "simple-folder" with link with "read" permissions
+    And user "Alice" has shared folder "simple-folder" with link with "read" permissions in the server
     When the user browses to the shared-with-others page using the webUI
     Then the resource "simple-folder" should have the token of last link in the people column on the webUI
 
 
   Scenario: opening public-link page of the files-drop link protected with password should redirect to files-drop page
-    Given user "Alice" has shared folder "simple-folder" with link with "create" permissions and password "pass123"
+    Given user "Alice" has shared folder "simple-folder" with link with "create" permissions and password "pass123" in the server
     When the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
     Then the user should be redirected to the files-drop page
 
 
   Scenario: opening public-link page of the files-drop link without password set should redirect to files-drop page
-    Given user "Alice" has shared folder "simple-folder" with link with "create" permissions
+    Given user "Alice" has shared folder "simple-folder" with link with "create" permissions in the server
     When the public uses the webUI to access the last public link created by user "Alice"
     Then the user should be redirected to the files-drop page
 
@@ -31,7 +31,7 @@ Feature: Public link share management
   Scenario: mount public link
     Given user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Alice" has uploaded file with content "Alice file" to "simple-folder/lorem.txt" in the server
-    And user "Alice" has created a public link with following settings
+    And user "Alice" has created a public link with following settings in the server
       | path        | simple-folder                |
       | name        | Public-link                  |
       | permissions | read, update, create, delete |
@@ -48,11 +48,11 @@ Feature: Public link share management
   @issue-ocis-1328
   Scenario: user shares a file through public link and then it appears in a shared-with-others page
     Given the setting "shareapi_allow_public_notification" of app "core" has been set to "yes"
-    And user "Alice" has created a public link with following settings
+    And user "Alice" has created a public link with following settings in the server
       | path        | simple-folder                |
       | name        | link-editor                  |
       | permissions | read, update, create, delete |
-    And user "Alice" has created a public link with following settings
+    And user "Alice" has created a public link with following settings in the server
       | path        | simple-folder |
       | name        | link-viewer   |
       | permissions | read          |
@@ -67,7 +67,7 @@ Feature: Public link share management
   Scenario: user cancel removes operation for the public link of a file
     Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has logged in using the webUI
-    And user "Alice" has created a public link with following settings
+    And user "Alice" has created a public link with following settings in the server
       | path        | lorem.txt   |
       | name        | Public-link |
       | permissions | read        |
@@ -77,7 +77,7 @@ Feature: Public link share management
   @ocisSmokeTest
   Scenario: user browses to public link share using copy link button
     Given user "Alice" has created file "simple-folder/lorem.txt" in the server
-    And user "Alice" has created a public link with following settings
+    And user "Alice" has created a public link with following settings in the server
       | path        | simple-folder |
       | name        | Public-link   |
       | permissions | read          |
@@ -108,7 +108,7 @@ Feature: Public link share management
   Scenario: sharing details of indirect items inside a shared folder
     Given user "Alice" has created folder "/simple-folder/sub-folder" in the server
     And user "Alice" has uploaded file with content "test" to "/simple-folder/textfile.txt" in the server
-    And user "Alice" has created a public link with following settings
+    And user "Alice" has created a public link with following settings in the server
       | path | /simple-folder |
       | name | Public Link    |
     And user "Alice" has logged in using the webUI
@@ -119,10 +119,10 @@ Feature: Public link share management
   Scenario: sharing details of multiple indirect public link shares
     Given user "Alice" has created folder "/simple-folder/sub-folder" in the server
     And user "Alice" has uploaded file with content "test" to "/simple-folder/sub-folder/textfile.txt" in the server
-    And user "Alice" has created a public link with following settings
+    And user "Alice" has created a public link with following settings in the server
       | path | /simple-folder |
       | name | Public Link    |
-    And user "Alice" has created a public link with following settings
+    And user "Alice" has created a public link with following settings in the server
       | path | /simple-folder/sub-folder      |
       | name | strängé लिंक नाम (#2 &).नेपाली |
     And user "Alice" has logged in using the webUI
@@ -133,10 +133,10 @@ Feature: Public link share management
   @issue-3040 @issue-3841 @issue-ocis-reva-372
   Scenario: sharing details of indirect link share in "favorites" file lists
     Given user "Alice" has created folder "/simple-folder/simple-empty-folder" in the server
-    And user "Alice" has created a public link with following settings
+    And user "Alice" has created a public link with following settings in the server
       | path | /simple-folder |
       | name | Public Link    |
-    And user "Alice" has created a public link with following settings
+    And user "Alice" has created a public link with following settings in the server
       | path | /simple-folder/simple-empty-folder |
       | name | Public Link Sub                    |
     And user "Alice" has favorited element "simple-folder/simple-empty-folder"
@@ -150,7 +150,7 @@ Feature: Public link share management
 
   @issue-ocis-reva-243
   Scenario: token is shown for links without a name
-    When user "Alice" has created a public link with following settings
+    When user "Alice" has created a public link with following settings in the server
       | path | /simple-folder |
     And user "Alice" logs in using the webUI
     Then a public link with the last created link share token as name should be listed for resource "simple-folder" on the webUI
@@ -158,7 +158,7 @@ Feature: Public link share management
   @issue-product-130
   Scenario: User can attempt to upload a file in public link
     Given user "Alice" has created file "lorem.txt" in the server
-    And user "Alice" has created a public link with following settings
+    And user "Alice" has created a public link with following settings in the server
       | path        | lorem.txt   |
       | name        | public link |
       | permissions | read        |
@@ -169,7 +169,7 @@ Feature: Public link share management
 
   Scenario: Shared via link page is displayed
     Given user "Alice" has created file "lorem.txt" in the server
-    And user "Alice" has created a public link with following settings
+    And user "Alice" has created a public link with following settings in the server
       | path        | lorem.txt             |
       | name        | Public-link           |
     And user "Alice" has logged in using the webUI
