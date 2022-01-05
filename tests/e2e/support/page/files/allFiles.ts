@@ -13,7 +13,7 @@ export class AllFilesPage {
   async navigate(): Promise<void> {
     const { page } = this.actor
 
-    const allFilesBtn = page.locator('a[href="#/files/spaces/"] .text')
+    const allFilesBtn = page.locator('a[href="#/files/spaces/personal/"] .text')
     await allFilesBtn.click()
   }
 
