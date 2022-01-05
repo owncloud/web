@@ -15,15 +15,9 @@ const selectors = {
   spacesList: '.spaces-list'
 }
 
-const spacesDefaultImg = 'spaces.svg'
-
 beforeEach(mockAxios.reset)
 
 describe('Spaces component', () => {
-  it('sets a default image for spaces', () => {
-    const wrapper = getMountedWrapper()
-    expect(wrapper.vm.defaultImg).toEqual(spacesDefaultImg)
-  })
   it('should show a "no content" message', async () => {
     mockAxios.request.mockImplementationOnce(() => {
       return Promise.resolve({
@@ -61,14 +55,9 @@ function getMountedWrapper() {
     router: new VueRouter(),
     store: createStore(Vuex.Store, {
       getters: {
-        configuration: jest.fn(() => ({
-          server: 'https://example.com/',
-          theme: {
-            spaces: {
-              defaultImg: spacesDefaultImg
-            }
-          }
-        }))
+        configuration: () => ({
+          server: 'https://example.com/'
+        })
       }
     })
   })

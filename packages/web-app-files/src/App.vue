@@ -6,7 +6,7 @@
       class="files-list-wrapper oc-width-expand"
       @dragover="$_ocApp_dragOver"
     >
-      <app-bar id="files-app-bar" />
+      <app-bar v-if="!hideAppBar" id="files-app-bar" />
       <progress-bar v-show="$_uploadProgressVisible" id="files-upload-progress" class="oc-p-s" />
       <router-view id="files-view" />
     </div>
@@ -55,6 +55,9 @@ export default {
     },
     showSidebar() {
       return !this.sidebarClosed
+    },
+    hideAppBar() {
+      return this.$route.meta.hideAppBar === true
     }
   },
   watch: {

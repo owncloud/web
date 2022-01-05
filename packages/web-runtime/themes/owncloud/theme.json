@@ -13,9 +13,6 @@
     "loginPage": {
       "autoRedirect": true,
       "backgroundImg": "themes/owncloud/assets/loginBackground.jpg"
-    },
-    "spaces": {
-      "defaultImg": "themes/owncloud/assets/spacesDefault.svg"
     }
   }
 }

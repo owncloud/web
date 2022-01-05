@@ -1,12 +1,10 @@
 <template>
   <div class="oc-p-s">
     <h2 v-text="$gettext('Spaces')" />
-    <div>
-      <span v-text="$gettext('Access all project related files in one place.')" />
-      <a href="#" v-text="$gettext('Learn more about spaces.')" />
-      <h3 v-text="$gettext('Your spaces')" />
-      <hr class="oc-mb-s" />
-    </div>
+    <span v-text="$gettext('Access all project related files in one place.')" />
+    <a href="#" v-text="$gettext('Learn more about spaces.')" />
+    <h3 v-text="$gettext('Your spaces')" />
+    <hr class="oc-mb-s" />
     <list-loader v-if="loadSpacesTask.isRunning" />
     <template v-else>
       <no-content-message
@@ -29,14 +27,11 @@
           <a v-for="space in spaces" :key="space.id" href="#">
             <span class="spaces-list-card oc-border uk-card uk-card-default">
               <span class="uk-card-media-top oc-border-b">
-                <img
-                  :src="space.image || defaultImg"
-                  :class="{ 'oc-px-m': !space.image, 'oc-py-m': !space.image }"
-                  alt=""
-                />
+                <img v-if="space.image" :src="space.image" alt="" />
+                <oc-icon v-else name="layout-grid" size="xxlarge" class="oc-px-m oc-py-m" />
               </span>
               <span class="uk-card-body">
-                <h3 class="uk-card-title">{{ space.name }}</h3>
+                <span class="uk-card-title" v-text="space.name" />
               </span>
             </span>
           </a>
@@ -62,7 +57,6 @@ export default {
   setup() {
     const store = useStore()
     const spaces = ref([])
-    const defaultImg = store.getters.configuration.theme.spaces?.defaultImg
 
     const loadSpacesTask = useTask(function* (signal) {
       const localSDK = spacesSDK(store.getters.configuration.server, store.getters.getToken)
@@ -79,7 +73,6 @@ export default {
 
     return {
       spaces,
-      defaultImg,
       loadSpacesTask
     }
   }
@@ -100,9 +93,6 @@ export default {
     display: inline-block;
     width: 100%;
     background-color: var(--oc-color-background-muted);
-  }
-
-  .uk-card-media-top img {
     max-height: 150px;
   }
 }
