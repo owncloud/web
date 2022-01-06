@@ -64,6 +64,15 @@ describe('User can navigate in files list using pagination', () => {
     window.localStorage.setItem('oc_filesPageLimit', '2')
     store = merge({}, Store, {
       modules: {
+        config: {
+          getters: {
+            configuration: () => ({
+              options: {
+                disablePreviews: true
+              }
+            })
+          }
+        },
         user: {
           state: {
             id: 'alice'
@@ -72,7 +81,6 @@ describe('User can navigate in files list using pagination', () => {
         Files: StoreFiles
       }
     })
-
     const appBar = document.createElement('div')
     const breadcrumbs = document.createElement('div')
     const breadcrumbItem = document.createElement('div')

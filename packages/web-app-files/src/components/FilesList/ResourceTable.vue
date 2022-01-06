@@ -140,6 +140,7 @@
 <script>
 import { DateTime } from 'luxon'
 import maxSize from 'popper-max-size-modifier'
+import { mapGetters } from 'vuex'
 import { EVENT_TROW_MOUNTED, EVENT_FILE_DROPPED } from '../../constants'
 import { SortDir } from '../../composables'
 
@@ -354,6 +355,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['configuration']),
     popperOptions() {
       return {
         modifiers: [
@@ -474,6 +476,17 @@ export default {
           wrap: 'nowrap'
         })
       }
+
+      if (this.configuration?.options?.displayResourcesLazy) {
+        fields.forEach((field) =>
+          Object.assign(field, {
+            lazy: {
+              delay: 250
+            }
+          })
+        )
+      }
+
       return fields
     },
     areAllResourcesSelected() {
@@ -647,6 +660,7 @@ export default {
     top: 50%;
     transform: translateY(-50%);
   }
+
   &-actions {
     align-items: center;
     display: flex;
@@ -654,6 +668,7 @@ export default {
     gap: var(--oc-space-xsmall);
     justify-content: flex-end;
   }
+
   &-select-all {
     align-items: center;
     display: flex;

@@ -7,6 +7,9 @@
     "url": "http://owncloud/index.php/apps/oauth2/api/v1/token",
     "authUrl": "http://owncloud/index.php/apps/oauth2/authorize"
   },
+  "options": {
+    "displayResourcesLazy": false
+  },
   "apps": [
     "files",
     "draw-io",

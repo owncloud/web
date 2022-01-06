@@ -43,6 +43,7 @@ const plugins = [
   builtins({ crypto: true }),
   resolve({
     include: 'node_modules/**',
+    dedupe: ['@vue/composition-api'],
     browser: true,
     preferBuiltins: false
   }),

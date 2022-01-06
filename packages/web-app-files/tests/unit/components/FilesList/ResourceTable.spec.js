@@ -1,10 +1,11 @@
 import merge from 'lodash-es/merge'
 import { mount, createLocalVue } from '@vue/test-utils'
-import VueCompositionAPI from '@vue/composition-api'
 import { DateTime } from 'luxon'
 import DesignSystem from 'owncloud-design-system'
-
+import VueCompositionAPI from '@vue/composition-api'
 import ResourceTable from '../../../../src/components/FilesList/ResourceTable.vue'
+import { createStore } from 'vuex-extensions'
+import Vuex from 'vuex'
 
 const getCurrentDate = () => {
   return DateTime.fromJSDate(new Date()).minus({ days: 1 }).toFormat('EEE, dd MMM yyyy HH:mm:ss')
@@ -240,6 +241,7 @@ describe('ResourceTable', () => {
 function getMountedWrapper(options = {}) {
   const localVue = createLocalVue()
   localVue.use(DesignSystem)
+  localVue.use(Vuex)
   localVue.use(VueCompositionAPI)
   localVue.prototype.$gettextInterpolate = jest.fn()
   localVue.prototype.$ngettext = jest.fn()
@@ -248,6 +250,11 @@ function getMountedWrapper(options = {}) {
     ResourceTable,
     merge(
       {
+        store: createStore(Vuex.Store, {
+          getters: {
+            configuration: () => {}
+          }
+        }),
         propsData: {
           resources: resourcesWithAllFields,
           selection: [],

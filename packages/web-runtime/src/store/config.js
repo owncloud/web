@@ -38,6 +38,7 @@ const state = {
     defaultExtension: 'files',
     homeFolder: '',
     disablePreviews: false,
+    displayResourcesLazy: true,
     previewFileExtensions: [],
     sharingRecipientsPerPage: 200
   }

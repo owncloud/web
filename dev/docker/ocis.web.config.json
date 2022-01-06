@@ -11,7 +11,8 @@
   },
   "options": {
     "hideSearchBar": true,
-    "disablePreviews": true
+    "disablePreviews": true,
+    "displayResourcesLazy": false
   },
   "apps": [
     "files",
