@@ -11,6 +11,7 @@ Summary
 * Change - Use remixicons for redesign: [#6142](https://github.com/owncloud/web/pull/6142)
 * Enhancement - File selection simplification: [#5967](https://github.com/owncloud/web/issues/5967)
 * Enhancement - Reorganize urls: [#6137](https://github.com/owncloud/web/pull/6137)
+* Enhancement - Lazy resource table cells: [#6204](https://github.com/owncloud/web/pull/6204)
 * Enhancement - Redesign main layout: [#6036](https://github.com/owncloud/web/issues/6036)
 * Enhancement - Update ODS to v12.0.0-alpha7: [#6086](https://github.com/owncloud/web/pull/6086)
 
@@ -48,6 +49,13 @@ Details
    https://github.com/owncloud/web/issues/6085
    https://github.com/owncloud/web/pull/6137
    https://github.com/owncloud/ocis/blob/master/docs/ocis/adr/0011-global-url-format.md
+
+* Enhancement - Lazy resource table cells: [#6204](https://github.com/owncloud/web/pull/6204)
+
+   ODS introduced lazy loadable table cells, this feature is now also part of web and enabled by
+   default. To disable the feature set the displayResourcesLazy option to false.
+
+   https://github.com/owncloud/web/pull/6204
 
 * Enhancement - Redesign main layout: [#6036](https://github.com/owncloud/web/issues/6036)
 
