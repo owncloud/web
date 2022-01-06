@@ -41,7 +41,7 @@ reporter.generate({
     'web-version': pkg.version,
     platform: os.platform(),
     repository: `${repoInfo.branch}`,
-    ...(backendVersion && { [`${backendName}-verison`]: backendVersion }),
+    ...(backendVersion && { [`${backendName}-version`]: backendVersion }),
     ...(environment && { environment: environment })
   }
 })
