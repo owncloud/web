@@ -12,7 +12,7 @@ Feature: Sharing files and folders with internal users with expiry date
 
   @notToImplementOnOCIS
   Scenario: share a file with another internal user which should expire after 2 days
-    Given user "Alice" has uploaded file "testavatar.jpg" to "testimage.jpg"
+    Given user "Alice" has uploaded file "testavatar.jpg" to "testimage.jpg" in the server
     And user "Alice" has logged in using the webUI
     When the user shares file "testimage.jpg" with user "Brian Murphy" which expires in "+2" days using the webUI
     Then user "Brian" should have received a share with target "testimage.jpg" and expiration date in 2 days
@@ -20,7 +20,7 @@ Feature: Sharing files and folders with internal users with expiry date
   @issue-4169
   Scenario: share a file with another internal user which should expire after 2 days with shares mounted in "Shares"
     Given the administrator has set the default folder for received shares to "Shares"
-    And user "Alice" has uploaded file "testavatar.jpg" to "testimage.jpg"
+    And user "Alice" has uploaded file "testavatar.jpg" to "testimage.jpg" in the server
     And user "Alice" has logged in using the webUI
     When the user shares file "testimage.jpg" with user "Brian Murphy" which expires in "+2" days using the webUI
     Then user "Brian" should have received a share with target "Shares/testimage.jpg" and expiration date in 2 days

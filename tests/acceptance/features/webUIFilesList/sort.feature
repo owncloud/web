@@ -7,8 +7,8 @@ Feature: Sort files/folders
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files in the server
     And user "Alice" has logged in using the webUI
-    And user "Alice" has created folder "test_sort"
-    And user "Alice" has created the following folders
+    And user "Alice" has created folder "test_sort" in the server
+    And user "Alice" has created the following folders in the server
       | entry_name     |
       | test_sort/a    |
       | test_sort/a 文件 |
@@ -16,7 +16,7 @@ Feature: Sort files/folders
       | test_sort/1    |
       | test_sort/2    |
       | test_sort/z    |
-    And user "Alice" has created the following files
+    And user "Alice" has created the following files in the server
       | entry_name                |
       | test_sort/a.txt           |
       | test_sort/a space.txt     |

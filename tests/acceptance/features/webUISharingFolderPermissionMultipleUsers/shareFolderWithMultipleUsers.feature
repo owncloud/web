@@ -19,7 +19,7 @@ Feature: Sharing folders with multiple internal users with different permissions
       | user0    |
       | Carol    |
       | David    |
-    And user "Alice" has created folder "simple-folder"
+    And user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has logged in using the webUI
     When the user opens the share dialog for folder "simple-folder" using the webUI
 

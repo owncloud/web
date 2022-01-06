@@ -22,8 +22,8 @@ Feature: Sharing files and folders with internal groups
 
 
   Scenario: notifications about new share is displayed
-    Given user "Carol" has created folder "simple-folder"
-    And user "Carol" has uploaded file "data.zip" to "data.zip"
+    Given user "Carol" has created folder "simple-folder" in the server
+    And user "Carol" has uploaded file "data.zip" to "data.zip" in the server
     And user "Carol" has shared folder "/simple-folder" with group "grp1"
     And user "Carol" has shared folder "/data.zip" with group "grp1"
     When the user reloads the current page of the webUI

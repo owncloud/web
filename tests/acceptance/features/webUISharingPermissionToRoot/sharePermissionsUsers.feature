@@ -9,10 +9,10 @@ Feature: Sharing files and folders with internal users with different permission
       | username |
       | Alice    |
       | Brian    |
-    And user "Brian" has created folder "simple-folder"
-    And user "Brian" has created folder "simple-folder/simple-empty-folder"
-    And user "Brian" has uploaded file "lorem.txt" to "simple-folder/lorem.txt"
-    And user "Brian" has uploaded file "lorem.txt" to "lorem.txt"
+    And user "Brian" has created folder "simple-folder" in the server
+    And user "Brian" has created folder "simple-folder/simple-empty-folder" in the server
+    And user "Brian" has uploaded file "lorem.txt" to "simple-folder/lorem.txt" in the server
+    And user "Brian" has uploaded file "lorem.txt" to "lorem.txt" in the server
 
   Scenario: Change permissions of the previously shared folder to share, update
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, update" permissions

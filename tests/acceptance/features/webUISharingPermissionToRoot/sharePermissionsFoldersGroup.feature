@@ -15,8 +15,8 @@ Feature: Sharing folders with internal groups with different roles and permissio
       | grp1      |
     And user "Alice" has been added to group "grp1" in the server
     And user "Brian" has been added to group "grp1" in the server
-    And user "Alice" has created folder "simple-folder"
-    And user "Alice" has uploaded file "lorem.txt" to "simple-folder/lorem.txt"
+    And user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has uploaded file "lorem.txt" to "simple-folder/lorem.txt" in the server
 
   @issue-1837
   Scenario Outline: share a folder with multiple users with different roles and permissions

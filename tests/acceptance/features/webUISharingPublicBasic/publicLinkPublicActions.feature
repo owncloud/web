@@ -6,7 +6,7 @@ Feature: Access public link shares by public
 
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files in the server
-    And user "Alice" has created folder "simple-folder"
+    And user "Alice" has created folder "simple-folder" in the server
 
 
 
@@ -16,7 +16,7 @@ Feature: Access public link shares by public
 
 
   Scenario: public should be able to access a public link with correct password
-    Given user "Alice" has created file "simple-folder/lorem.txt"
+    Given user "Alice" has created file "simple-folder/lorem.txt" in the server
     And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123"
     When the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
     Then file "lorem.txt" should be listed on the webUI
@@ -42,9 +42,9 @@ Feature: Access public link shares by public
 
   @skipOnOC10 @issue-4582
   Scenario: public batch deletes resources in the public link
-    Given user "Alice" has uploaded file "data.zip" to "simple-folder/data.zip"
-    And user "Alice" has created folder "simple-folder/simple-empty-folder"
-    And user "Alice" has created file "simple-folder/lorem.txt"
+    Given user "Alice" has uploaded file "data.zip" to "simple-folder/data.zip" in the server
+    And user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
+    And user "Alice" has created file "simple-folder/lorem.txt" in the server
     And user "Alice" has created a public link with following settings
       | path        | /simple-folder               |
       | name        | public link                  |
@@ -65,9 +65,9 @@ Feature: Access public link shares by public
 
 
   Scenario: files are not selected initially in the public share
-    Given user "Alice" has uploaded file "data.zip" to "simple-folder/data.zip"
-    And user "Alice" has created folder "simple-folder/simple-empty-folder"
-    And user "Alice" has created file "simple-folder/lorem.txt"
+    Given user "Alice" has uploaded file "data.zip" to "simple-folder/data.zip" in the server
+    And user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
+    And user "Alice" has created file "simple-folder/lorem.txt" in the server
     And user "Alice" has created a public link with following settings
       | path | /simple-folder |
       | name | public link    |
@@ -80,9 +80,9 @@ Feature: Access public link shares by public
 
 
   Scenario: public selects files and clear the selection in the public share
-    Given user "Alice" has uploaded file "data.zip" to "simple-folder/data.zip"
-    And user "Alice" has created folder "simple-folder/simple-empty-folder"
-    And user "Alice" has created file "simple-folder/lorem.txt"
+    Given user "Alice" has uploaded file "data.zip" to "simple-folder/data.zip" in the server
+    And user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
+    And user "Alice" has created file "simple-folder/lorem.txt" in the server
     And user "Alice" has created a public link with following settings
       | path | /simple-folder |
       | name | public link    |

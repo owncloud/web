@@ -6,11 +6,8 @@ const webdav = require('../helpers/webdavHelper')
 const _ = require('lodash')
 const loginHelper = require('../helpers/loginHelper')
 const xpathHelper = require('../helpers/xpath')
-const { move } = require('../helpers/webdavHelper')
 const path = require('../helpers/path')
 const util = require('util')
-const { download } = require('../helpers/webdavHelper')
-const fs = require('fs')
 const sharingHelper = require('../helpers/sharingHelper')
 const { SHARE_STATE } = require('../helpers/sharingHelper')
 const appSideBar = client.page.FilesPageElement.appSideBar()
@@ -103,23 +100,6 @@ When('the user opens folder {string} directly on the webUI', async function (fol
   await client.page.personalPage().navigateAndWaitTillLoaded(folder)
 })
 
-Given(
-  'user {string} has uploaded file with content {string} to {string}',
-  async function (user, content, filename) {
-    await webdav.createFile(user, filename, content)
-    return this
-  }
-)
-
-Given(
-  'user {string} has uploaded file {string} to {string}',
-  async function (user, source, filename) {
-    const filePath = path.join(client.globals.filesForUpload, source)
-    const content = fs.readFileSync(filePath)
-    await webdav.createFile(user, filename, content)
-  }
-)
-
 When(
   'the user browses to display the {string} details of file {string}',
   async function (accordionItem, filename) {
@@ -130,13 +110,6 @@ When(
     await client.waitForOutstandingAjaxCalls()
 
     return client
-  }
-)
-
-Given(
-  'user {string} has moved file/folder {string} to {string}',
-  function (user, fromName, toName) {
-    return move(user, fromName, toName)
   }
 )
 
@@ -215,17 +188,6 @@ Then(
 Then('breadcrumb for folder {string} should be displayed on the webUI', function (resource) {
   return assertBreadcrumbIsDisplayedFor(resource, true, true)
 })
-
-Given(
-  'the following files/folders/resources have been deleted by user {string}',
-  async function (user, table) {
-    const filesToDelete = table.hashes()
-    for (const entry of filesToDelete) {
-      await webdav.delete(user, entry.name)
-    }
-    return client
-  }
-)
 
 When('the user/public uploads file {string} using the webUI', function (element) {
   const uploadPath = path.join(client.globals.mountedUploadDir, element)
@@ -497,18 +459,6 @@ Then('the shared-via path in the details dialog should be {string}', async funct
   assert.strictEqual(actualPath, expectedPath)
   return this
 })
-
-Then(
-  'the content of file {string} for user {string} should be {string}',
-  async function (file, user, content) {
-    const remote = await download(user, file)
-    return client.assert.strictEqual(
-      remote,
-      content,
-      `Failed asserting remote file ${file} is same as content ${content} for user${user}`
-    )
-  }
-)
 
 When('the user restores the file to last version using the webUI', function () {
   return client.page.FilesPageElement.versionsDialog().restoreToPreviousVersion()
@@ -908,26 +858,6 @@ Then(
   }
 )
 
-Then(
-  'as user {string} file/folder {string} should be marked as favorite',
-  async function (userId, path) {
-    let isFavorite = await webdav.getProperties(path, userId, ['oc:favorite'])
-    isFavorite = isFavorite['oc:favorite']
-
-    return assert.strictEqual(isFavorite, '1', `${path} expected to be favorite but was not`)
-  }
-)
-
-Then(
-  'as user {string} file/folder {string} should not be marked as favorite',
-  async function (userId, path) {
-    let isFavorite = await webdav.getProperties(path, userId, ['oc:favorite'])
-    isFavorite = isFavorite['oc:favorite']
-
-    return assert.strictEqual(isFavorite, '0', `not expected ${path} to be favorite but was`)
-  }
-)
-
 Then('file/folder {string} should be marked as favorite on the webUI', async function (path) {
   const selector = client.page.FilesPageElement.appSideBar().elements.fileInfoFavoriteShining
   await client.page.FilesPageElement.filesList().openSideBar(path)
@@ -1040,18 +970,6 @@ Then('the deleted elements should be listed on the webUI', function () {
   return assertDeletedElementsAreListed()
 })
 
-Given('user {string} has renamed the following files', function (userId, table) {
-  return Promise.all(
-    table.hashes().map((row) => {
-      return webdav.move(userId, row['from-name-parts'], row['to-name-parts'])
-    })
-  )
-})
-
-Given('user {string} has renamed file/folder {string} to {string}', webdav.move)
-
-Given('user {string} has created folder {string}', webdav.createFolder)
-
 Then(
   'file/folder {string} should not be listed in shared-with-others page on the webUI',
   async function (filename) {
@@ -1073,24 +991,6 @@ Then(
     return client
   }
 )
-
-Given('user {string} has created file {string}', function (userId, fileName) {
-  return webdav.createFile(userId, fileName, '')
-})
-
-Given('user {string} has created the following folders', async function (userId, entryList) {
-  for (const entry of entryList.rows()) {
-    await webdav.createFolder(userId, entry[0])
-  }
-  return client
-})
-
-Given('user {string} has created the following files', async function (userId, entryList) {
-  for (const entry of entryList.rows()) {
-    await webdav.createFile(userId, entry[0])
-  }
-  return client
-})
 
 When('the user/public creates the following folders using the webUI', async function (entryList) {
   for (const entry of entryList.rows()) {

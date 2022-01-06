@@ -18,7 +18,7 @@ Feature: Sharing files with multiple internal users with different permissions
       | user0    |
       | Carol    |
       | David    |
-    And user "Alice" has created file "lorem.txt"
+    And user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has logged in using the webUI
     When the user opens the share dialog for file "lorem.txt" using the webUI
 

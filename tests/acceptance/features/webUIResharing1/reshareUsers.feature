@@ -12,7 +12,7 @@ Feature: Resharing shared files with different permissions
       | Alice    |
       | Brian    |
       | Carol    |
-    And user "Brian" has created folder "simple-folder"
+    And user "Brian" has created folder "simple-folder" in the server
 
   @issue-ocis-2260
   Scenario: share a folder with another user with share permissions and reshare without share permissions to different user, and check if user is displayed for original sharer
@@ -113,7 +113,7 @@ Feature: Resharing shared files with different permissions
 
 
   Scenario: share a file without share permissions and check if another user can reshare
-    Given user "Brian" has created file "lorem.txt"
+    Given user "Brian" has created file "lorem.txt" in the server
     And user "Brian" has shared file "lorem.txt" with user "Alice" with "read" permissions
     And user "Alice" has accepted the share "Shares/lorem.txt" offered by user "Brian"
     When user "Alice" logs in using the webUI
@@ -132,7 +132,7 @@ Feature: Resharing shared files with different permissions
 
 
   Scenario: share a received file without share permissions and check if another user can reshare
-    Given user "Brian" has created file "lorem.txt"
+    Given user "Brian" has created file "lorem.txt" in the server
     And user "Brian" has shared file "lorem.txt" with user "Alice" with "all" permissions
     And user "Alice" has accepted the share "Shares/lorem.txt" offered by user "Brian"
     And user "Alice" has shared folder "/Shares/lorem.txt" with user "Carol" with "read" permissions
@@ -196,7 +196,7 @@ Feature: Resharing shared files with different permissions
 
 
   Scenario: Reshare a file and folder from shared with me page
-    Given user "Brian" has created file "lorem.txt"
+    Given user "Brian" has created file "lorem.txt" in the server
     And user "Brian" has shared folder "simple-folder" with user "Alice"
     And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian"
     And user "Brian" has shared file "lorem.txt" with user "Alice"
@@ -212,7 +212,7 @@ Feature: Resharing shared files with different permissions
 
 
   Scenario: Reshare a file and folder from shared with others page
-    Given user "Brian" has created file "lorem.txt"
+    Given user "Brian" has created file "lorem.txt" in the server
     And user "Brian" has shared folder "simple-folder" with user "Alice"
     And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian"
     And user "Brian" has shared file "lorem.txt" with user "Alice"
@@ -228,7 +228,7 @@ Feature: Resharing shared files with different permissions
 
   @issue-ocis-1330
   Scenario: Reshare a file and folder from favorites page
-    Given user "Brian" has created file "lorem.txt"
+    Given user "Brian" has created file "lorem.txt" in the server
     And user "Brian" has shared folder "simple-folder" with user "Alice"
     And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian"
     And user "Brian" has shared file "lorem.txt" with user "Alice"
@@ -246,7 +246,7 @@ Feature: Resharing shared files with different permissions
 
   @issue-product-270
   Scenario: Resource owner sees resharer in collaborators list
-    Given user "Brian" has created file "lorem.txt"
+    Given user "Brian" has created file "lorem.txt" in the server
     And user "Brian" has shared folder "simple-folder" with user "Alice"
     And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian"
     And user "Alice" has shared folder "/Shares/simple-folder" with user "Carol"

@@ -10,16 +10,16 @@ Feature: Search
       | username |
       | Alice    |
       | user0    |
-    And user "Alice" has created the following folders
+    And user "Alice" has created the following folders in the server
       | entry_name            |
       | simple-folder         |
       | simple-empty-folder   |
       | strängé नेपाली folder |
-    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
-    And user "Alice" has uploaded file "zzzz-must-be-last-file-in-folder.txt" to "zzzz-must-be-last-file-in-folder.txt"
-    And user "Alice" has uploaded file "lorem.txt" to "simple-folder/lorem.txt"
-    And user "Alice" has uploaded file "lorem-big.txt" to "lorem-big.txt"
-    And user "Alice" has uploaded file "data.zip" to "data.zip"
+    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt" in the server
+    And user "Alice" has uploaded file "zzzz-must-be-last-file-in-folder.txt" to "zzzz-must-be-last-file-in-folder.txt" in the server
+    And user "Alice" has uploaded file "lorem.txt" to "simple-folder/lorem.txt" in the server
+    And user "Alice" has uploaded file "lorem-big.txt" to "lorem-big.txt" in the server
+    And user "Alice" has uploaded file "data.zip" to "data.zip" in the server
     And user "Alice" has logged in using the webUI
     And the user has reloaded the current page of the webUI
 
@@ -93,7 +93,7 @@ Feature: Search
 
 
   Scenario: Search for a shared file
-    Given user "user0" has uploaded file "lorem.txt" to "lorem.txt"
+    Given user "user0" has uploaded file "lorem.txt" to "lorem.txt" in the server
     And user "user0" has shared file "/lorem.txt" with user "Alice"
     When the user reloads the current page of the webUI
     And the user searches for "lorem" using the webUI
@@ -102,7 +102,7 @@ Feature: Search
 
   Scenario: Search for a re-shared file
     Given user "Brian" has been created with default attributes and without skeleton files in the server
-    And user "Brian" has uploaded file "lorem.txt" to "lorem.txt"
+    And user "Brian" has uploaded file "lorem.txt" to "lorem.txt" in the server
     And user "Brian" has shared file "/lorem.txt" with user "user0"
     And user "user0" has shared file "/lorem.txt" with user "Alice"
     When the user reloads the current page of the webUI
@@ -111,8 +111,8 @@ Feature: Search
 
 
   Scenario: Search for a shared folder
-    Given user "user0" has created folder "simple-folder"
-    And user "user0" has uploaded file "lorem.txt" to "simple-folder/lorem.txt"
+    Given user "user0" has created folder "simple-folder" in the server
+    And user "user0" has uploaded file "lorem.txt" to "simple-folder/lorem.txt" in the server
     And user "user0" has shared folder "simple-folder" with user "Alice"
     When the user reloads the current page of the webUI
     And the user searches for "simple" using the webUI
@@ -137,23 +137,23 @@ Feature: Search
 
 
   Scenario: Search for files with difficult names
-    Given user "Alice" has uploaded file with content "does-not-matter" to "/strängéनेपालीloremfile.txt"
+    Given user "Alice" has uploaded file with content "does-not-matter" to "/strängéनेपालीloremfile.txt" in the server
     And the user has reloaded the current page of the webUI
     When the user searches for "lorem" using the webUI
     Then file "strängéनेपालीloremfile.txt" should be listed on the webUI
 
 
   Scenario: Search for files with difficult names and difficult search phrase
-    Given user "Alice" has uploaded file with content "does-not-matter" to "/strängéनेपालीloremfile.txt"
+    Given user "Alice" has uploaded file with content "does-not-matter" to "/strängéनेपालीloremfile.txt" in the server
     And the user has reloaded the current page of the webUI
     When the user searches for "strängéनेपाली" using the webUI
     Then file "strängéनेपालीloremfile.txt" should be listed on the webUI
 
   @issue-1726
   Scenario: Search for deleted folder in the trashbin
-    Given user "Alice" has created folder "deleted folder"
-    And user "Alice" has created folder "not deleted folder"
-    And the following files have been deleted by user "Alice"
+    Given user "Alice" has created folder "deleted folder" in the server
+    And user "Alice" has created folder "not deleted folder" in the server
+    And the following files have been deleted by user "Alice" in the server
       | name           |
       | deleted folder |
     When the user browses to the trashbin page
@@ -163,8 +163,8 @@ Feature: Search
 
   @issue-1726
   Scenario: Search for favorited folder in favorites page
-    Given user "Alice" has created folder "favorite folder"
-    And user "Alice" has created folder "not favorite folder"
+    Given user "Alice" has created folder "favorite folder" in the server
+    And user "Alice" has created folder "not favorite folder" in the server
     And user "Alice" has favorited element "favorite folder"
     When the user browses to the favorites page
     And the user searches for "favorite" using the webUI
@@ -173,7 +173,7 @@ Feature: Search
 
 
   Scenario: Delete file from search list
-    Given user "Alice" has uploaded file with content "uploaded content" to "file-to-delete.txt"
+    Given user "Alice" has uploaded file with content "uploaded content" to "file-to-delete.txt" in the server
     When the user reloads the current page of the webUI
     When the user searches for "file-to" using the webUI
     And the user deletes file "file-to-delete.txt" using the webUI
@@ -183,8 +183,8 @@ Feature: Search
 
 
   Scenario: Search for files/folders with comma in their name
-    Given user "Alice" has uploaded file with content "A file with comma" to "file,with,comma.txt"
-    And user "Alice" has created folder "C,O,M,M,A"
+    Given user "Alice" has uploaded file with content "A file with comma" to "file,with,comma.txt" in the server
+    And user "Alice" has created folder "C,O,M,M,A" in the server
     When the user reloads the current page of the webUI
     And the user searches for "," using the webUI
     Then file "file,with,comma.txt" should be listed on the webUI

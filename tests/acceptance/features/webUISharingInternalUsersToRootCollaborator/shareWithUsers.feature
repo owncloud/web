@@ -9,7 +9,7 @@ Feature: Shares collaborator list
       | username |
       | Alice    |
       | Brian    |
-    And user "Alice" has created folder "simple-folder"
+    And user "Alice" has created folder "simple-folder" in the server
 
   Scenario Outline: change the collaborators of a file & folder
     Given user "Alice" has logged in using the webUI

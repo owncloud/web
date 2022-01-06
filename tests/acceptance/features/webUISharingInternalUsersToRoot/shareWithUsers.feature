@@ -13,9 +13,9 @@ Feature: Sharing files and folders with internal users
   @smokeTest @disablePreviews
   Scenario Outline: share a file & folder with another internal user
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "yes"
-    And user "Brian" has created folder "simple-folder"
-    And user "Brian" has created file "simple-folder/lorem.txt"
-    And user "Brian" has uploaded file "testavatar.jpg" to "testimage.jpg"
+    And user "Brian" has created folder "simple-folder" in the server
+    And user "Brian" has created file "simple-folder/lorem.txt" in the server
+    And user "Brian" has uploaded file "testavatar.jpg" to "testimage.jpg" in the server
     And user "Brian" has logged in using the webUI
     When the user shares folder "simple-folder" with user "Alice Hansen" as "<set-role>" using the webUI
     And the user shares file "testimage.jpg" with user "Alice Hansen" as "<set-role>" using the webUI
@@ -51,7 +51,7 @@ Feature: Sharing files and folders with internal users
 
   @disablePreviews
   Scenario: share a file with another internal user who overwrites and unshares the file
-    Given user "Brian" has created file "new-lorem.txt"
+    Given user "Brian" has created file "new-lorem.txt" in the server
     And user "Brian" has logged in using the webUI
     And user "Brian" has shared file "new-lorem.txt" with user "Alice" with "all" permissions
     When the user re-logs in as "Alice" using the webUI
@@ -68,9 +68,9 @@ Feature: Sharing files and folders with internal users
 
   @disablePreviews
   Scenario: share a folder with another internal user who uploads, overwrites and deletes files
-    Given user "Brian" has created folder "new-simple-folder"
-    And user "Brian" has created file "new-simple-folder/lorem.txt"
-    And user "Brian" has uploaded file "data.zip" to "new-simple-folder/data.zip"
+    Given user "Brian" has created folder "new-simple-folder" in the server
+    And user "Brian" has created file "new-simple-folder/lorem.txt" in the server
+    And user "Brian" has uploaded file "data.zip" to "new-simple-folder/data.zip" in the server
     And user "Brian" has logged in using the webUI
     When the user shares folder "new-simple-folder" with user "Alice Hansen" as "Editor" using the webUI
     And the user re-logs in as "Alice" using the webUI
@@ -97,8 +97,8 @@ Feature: Sharing files and folders with internal users
 
   @disablePreviews
   Scenario: share a folder with another internal user who unshares the folder
-    Given user "Brian" has created folder "new-simple-folder"
-    And user "Brian" has uploaded file "lorem.txt" to "new-simple-folder/lorem.txt"
+    Given user "Brian" has created folder "new-simple-folder" in the server
+    And user "Brian" has uploaded file "lorem.txt" to "new-simple-folder/lorem.txt" in the server
     And user "Brian" has logged in using the webUI
     When the user shares folder "new-simple-folder" with user "Alice Hansen" as "Editor" using the webUI
     # unshare the received shared folder and check it is gone
@@ -113,8 +113,8 @@ Feature: Sharing files and folders with internal users
 
   @disablePreviews
   Scenario: share a folder with another internal user and prohibit deleting
-    Given user "Brian" has created folder "simple-folder"
-    And user "Brian" has created file "simple-folder/lorem.txt"
+    Given user "Brian" has created folder "simple-folder" in the server
+    And user "Brian" has created file "simple-folder/lorem.txt" in the server
     And user "Brian" has logged in using the webUI
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "create, read, share" permissions
     When the user re-logs in as "Alice" using the webUI
@@ -123,7 +123,7 @@ Feature: Sharing files and folders with internal users
 
   @disablePreviews
   Scenario: user shares the file/folder with another internal user and delete the share with user
-    Given user "Alice" has created file "lorem.txt"
+    Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has logged in using the webUI
     And user "Alice" has shared file "lorem.txt" with user "Brian"
     When the user opens the share dialog for file "lorem.txt" using the webUI
@@ -137,7 +137,7 @@ Feature: Sharing files and folders with internal users
   @disablePreviews
   Scenario: user shares the file/folder with multiple internal users and delete the share with one user
     Given user "Carol" has been created with default attributes and without skeleton files in the server
-    And user "Alice" has created file "lorem.txt"
+    And user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has logged in using the webUI
     And user "Alice" has shared file "lorem.txt" with user "Brian"
     And user "Alice" has shared file "lorem.txt" with user "Carol"
@@ -155,10 +155,10 @@ Feature: Sharing files and folders with internal users
 
   @disablePreviews
   Scenario: Try to share file and folder that used to exist but does not anymore
-    Given user "Alice" has created folder "simple-folder"
-    And user "Alice" has created file "lorem.txt"
+    Given user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has logged in using the webUI
-    And the following files have been deleted by user "Alice"
+    And the following files have been deleted by user "Alice" in the server
       | name          |
       | lorem.txt     |
       | simple-folder |
@@ -178,9 +178,9 @@ Feature: Sharing files and folders with internal users
   @issue-2897 @disablePreviews
   Scenario: sharing details of items inside a shared folder ("via" info)
     Given user "Carol" has been created with default attributes and without skeleton files in the server
-    And user "Alice" has created folder "simple-folder"
-    And user "Alice" has created folder "simple-folder/simple-empty-folder"
-    And user "Alice" has uploaded file with content "test" to "/simple-folder/lorem.txt"
+    And user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
+    And user "Alice" has uploaded file with content "test" to "/simple-folder/lorem.txt" in the server
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Alice" has logged in using the webUI
     And the user opens folder "simple-folder" using the webUI
@@ -192,9 +192,9 @@ Feature: Sharing files and folders with internal users
   @issue-2897 @disablePreviews
   Scenario: sharing details of items inside a re-shared folder ("via" info)
     Given user "Carol" has been created with default attributes and without skeleton files in the server
-    And user "Alice" has created folder "simple-folder"
-    And user "Alice" has created folder "simple-folder/simple-empty-folder"
-    And user "Alice" has uploaded file with content "test" to "/simple-folder/lorem.txt"
+    And user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
+    And user "Alice" has uploaded file with content "test" to "/simple-folder/lorem.txt" in the server
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Brian" has shared folder "simple-folder" with user "Carol"
     And user "Brian" has logged in using the webUI
@@ -222,8 +222,8 @@ Feature: Sharing files and folders with internal users
   @disablePreviews
   Scenario Outline: Share files/folders with special characters in their name
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "yes"
-    And user "Brian" has created folder "Sample,Folder,With,Comma"
-    And user "Brian" has created file "sample,1.txt"
+    And user "Brian" has created folder "Sample,Folder,With,Comma" in the server
+    And user "Brian" has created file "sample,1.txt" in the server
     And user "Brian" has logged in using the webUI
     When the user shares folder "Sample,Folder,With,Comma" with user "Alice Hansen" as "<set-role>" using the webUI
     And the user shares file "sample,1.txt" with user "Alice Hansen" as "<set-role>" using the webUI
@@ -256,7 +256,7 @@ Feature: Sharing files and folders with internal users
 
   @disablePreviews
   Scenario: sharing file after renaming it is possible
-    Given user "Alice" has uploaded file with content "test" to "lorem.txt"
+    Given user "Alice" has uploaded file with content "test" to "lorem.txt" in the server
     And user "Alice" has logged in using the webUI
     And the user has renamed file "lorem.txt" to "new-lorem.txt"
     When the user shares resource "new-lorem.txt" with user "Brian Murphy" using the quick action on the webUI

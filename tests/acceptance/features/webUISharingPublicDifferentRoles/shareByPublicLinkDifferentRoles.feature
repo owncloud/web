@@ -10,11 +10,11 @@ Feature: Share by public link with different roles
 
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files in the server
-    And user "Alice" has created folder "simple-folder"
+    And user "Alice" has created folder "simple-folder" in the server
 
   @smokeTest @ocisSmokeTest @issue-ocis-reva-383
   Scenario Outline: simple sharing by public link with different roles
-    Given user "Alice" has created file "simple-folder/lorem.txt"
+    Given user "Alice" has created file "simple-folder/lorem.txt" in the server
     And user "Alice" has logged in using the webUI
     When the user creates a new public link for folder "simple-folder" using the webUI with
       | role | <role> |
@@ -37,7 +37,7 @@ Feature: Share by public link with different roles
   @skipOnOC10 @issue-ocis-reva-383
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
   Scenario Outline: simple sharing by public link with different roles (ocis bug demonstration)
-    Given user "Alice" has created file "simple-folder/lorem.txt"
+    Given user "Alice" has created file "simple-folder/lorem.txt" in the server
     And user "Alice" has logged in using the webUI
     When the user creates a new public link for folder "simple-folder" using the webUI with
       | role | <role> |
@@ -58,7 +58,7 @@ Feature: Share by public link with different roles
 
   @issue-ocis-reva-383
   Scenario: sharing by public link with "Uploader" role
-    Given user "Alice" has created file "simple-folder/fileInside"
+    Given user "Alice" has created file "simple-folder/fileInside" in the server
     And user "Alice" has logged in using the webUI
     And the user creates a new public link for folder "simple-folder" using the webUI with
       | role | Uploader |
@@ -91,10 +91,10 @@ Feature: Share by public link with different roles
 
   @issue-4582 @disablePreviews
   Scenario: creating a public link with "Editor" role makes it possible to delete files via the link
-    Given user "Alice" has created the following folders
+    Given user "Alice" has created the following folders in the server
       | entry_name                        |
       | simple-folder/simple-empty-folder |
-    And user "Alice" has created the following files
+    And user "Alice" has created the following files in the server
       | entry_name                                          |
       | simple-folder/lorem.txt                             |
       | simple-folder/strängé filename (duplicate #2 &).txt |
@@ -112,10 +112,10 @@ Feature: Share by public link with different roles
 
   @issue-4582 @disablePreviews
   Scenario: creating a public link with "Editor" role makes it possible to delete files via the link even with password set
-    Given user "Alice" has created the following folders
+    Given user "Alice" has created the following folders in the server
       | entry_name                        |
       | simple-folder/simple-empty-folder |
-    And user "Alice" has created the following files
+    And user "Alice" has created the following files in the server
       | entry_name                                          |
       | simple-folder/lorem.txt                             |
       | simple-folder/strängé filename (duplicate #2 &).txt |
@@ -132,7 +132,7 @@ Feature: Share by public link with different roles
 
   @issue-ocis-270
   Scenario: creating a public link with "Viewer" role only makes it impossible to delete files via the link
-    Given user "Alice" has created file "simple-folder/lorem.txt"
+    Given user "Alice" has created file "simple-folder/lorem.txt" in the server
     And user "Alice" has shared folder "simple-folder" with link with "read" permissions
     When the public uses the webUI to access the last public link created by user "Alice"
     Then it should not be possible to delete file "lorem.txt" using the webUI
@@ -147,7 +147,7 @@ Feature: Share by public link with different roles
 
 
   Scenario: creating a public link with "Editor" role makes it possible to upload a file inside a subdirectory with password set
-    Given user "Alice" has created folder "simple-folder/simple-empty-folder"
+    Given user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
     And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123"
     When the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
     And the user opens folder "simple-empty-folder" using the webUI
@@ -167,7 +167,7 @@ Feature: Share by public link with different roles
 
 
   Scenario: creating a public link with "Editor" role makes it possible to upload a folder inside a subdirectory
-    Given user "Alice" has created folder "simple-folder/simple-empty-folder"
+    Given user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
     And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
     When the public uses the webUI to access the last public link created by user "Alice"
     And the user opens folder "simple-empty-folder" using the webUI
@@ -187,7 +187,7 @@ Feature: Share by public link with different roles
 
 
   Scenario: creating a public link with "Editor" role makes it possible to upload files inside a subdirectory
-    Given user "Alice" has created folder "simple-folder/simple-empty-folder"
+    Given user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
     And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
     When the public uses the webUI to access the last public link created by user "Alice"
     And the user opens folder "simple-empty-folder" using the webUI
@@ -207,7 +207,7 @@ Feature: Share by public link with different roles
 
 
   Scenario: creating a public link with "Editor" role makes it possible to upload a folder inside a sub-directory even with password set
-    Given user "Alice" has created folder "simple-folder/simple-empty-folder"
+    Given user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
     And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123"
     When the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
     And the user opens folder "simple-empty-folder" using the webUI

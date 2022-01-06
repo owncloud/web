@@ -18,7 +18,7 @@ Feature: Sharing files and folders with internal groups
 
   Scenario: share a folder with multiple collaborators and check collaborator list order
     Given group "grp11" has been created in the server
-    And user "Carol" has created folder "simple-folder"
+    And user "Carol" has created folder "simple-folder" in the server
     And user "Carol" has logged in using the webUI
     When the user shares folder "simple-folder" with group "grp11" as "Viewer" using the webUI
     And the user shares folder "simple-folder" with user "Brian Murphy" as "Viewer" using the webUI
@@ -28,9 +28,9 @@ Feature: Sharing files and folders with internal groups
 
   @issue-ocis-1922
   Scenario Outline: share a file & folder with another internal user
-    Given user "Carol" has created folder "simple-folder"
-    And user "Carol" has created file "simple-folder/lorem.txt"
-    And user "Carol" has created file "testimage.jpg"
+    Given user "Carol" has created folder "simple-folder" in the server
+    And user "Carol" has created file "simple-folder/lorem.txt" in the server
+    And user "Carol" has created file "testimage.jpg" in the server
     And user "Carol" has logged in using the webUI
     When the user shares folder "simple-folder" with group "grp1" as "<set-role>" using the webUI
     And the user shares file "testimage.jpg" with group "grp1" as "<set-role>" using the webUI
@@ -75,7 +75,7 @@ Feature: Sharing files and folders with internal groups
 
   @issue-4102 @issue-ocis-2267
   Scenario: share a file with an internal group a member overwrites and unshares the file
-    Given user "Carol" has created file "lorem.txt"
+    Given user "Carol" has created file "lorem.txt" in the server
     And user "Carol" has logged in using the webUI
     When the user renames file "lorem.txt" to "new-lorem.txt" using the webUI
     And the user shares file "new-lorem.txt" with group "grp1" as "Editor" using the webUI
@@ -98,9 +98,9 @@ Feature: Sharing files and folders with internal groups
 
   @issue-ocis-1943
   Scenario: share a folder with an internal group and a member uploads, overwrites and deletes files
-    Given user "Carol" has created folder "simple-folder"
-    And user "Carol" has created file "simple-folder/lorem.txt"
-    And user "Carol" has created file "simple-folder/data.zip"
+    Given user "Carol" has created folder "simple-folder" in the server
+    And user "Carol" has created file "simple-folder/lorem.txt" in the server
+    And user "Carol" has created file "simple-folder/data.zip" in the server
     And user "Carol" has logged in using the webUI
     When the user renames folder "simple-folder" to "new-simple-folder" using the webUI
     And the user shares folder "new-simple-folder" with group "grp1" as "Editor" using the webUI
@@ -136,8 +136,8 @@ Feature: Sharing files and folders with internal groups
 
   @issue-4102
   Scenario: share a folder with an internal group and a member unshares the folder
-    Given user "Carol" has created folder "simple-folder"
-    And user "Carol" has uploaded file with content "lorem content" to "simple-folder/lorem.txt"
+    Given user "Carol" has created folder "simple-folder" in the server
+    And user "Carol" has uploaded file with content "lorem content" to "simple-folder/lorem.txt" in the server
     And user "Carol" has logged in using the webUI
     When the user renames folder "simple-folder" to "new-simple-folder" using the webUI
     And the user shares folder "new-simple-folder" with group "grp1" as "Editor" using the webUI
@@ -154,17 +154,17 @@ Feature: Sharing files and folders with internal groups
     Then folder "new-simple-folder" should be listed on the webUI
     When the user opens folder "new-simple-folder" using the webUI
     Then file "lorem.txt" should be listed on the webUI
-    And the content of file "/Shares/new-simple-folder/lorem.txt" for user "Brian" should be "lorem content"
+    And the content of file "/Shares/new-simple-folder/lorem.txt" for user "Brian" should be "lorem content" in the server
     # check that the folder is still visible for the share owner
     When the user re-logs in as "Carol" using the webUI
     Then folder "new-simple-folder" should be listed on the webUI
     When the user opens folder "new-simple-folder" using the webUI
     Then file "lorem.txt" should be listed on the webUI
-    And the content of file "/new-simple-folder/lorem.txt" for user "Carol" should be "lorem content"
+    And the content of file "/new-simple-folder/lorem.txt" for user "Carol" should be "lorem content" in the server
 
   @issue-ocis-1277
   Scenario: user shares the file/folder with a group and delete the share with group
-    Given user "Alice" has created file "lorem.txt"
+    Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has logged in using the webUI
     And user "Alice" has shared file "lorem.txt" with group "grp1"
     And user "Brian" has accepted the share "Shares/lorem.txt" offered by user "Alice"
@@ -179,7 +179,7 @@ Feature: Sharing files and folders with internal groups
   @issue-ocis-1277
   Scenario: user shares the file/folder with multiple internal users and delete the share with one user
     Given group "grp2" has been created in the server
-    And user "Alice" has created file "lorem.txt"
+    And user "Alice" has created file "lorem.txt" in the server
     And user "Carol" has been added to group "grp2" in the server
     And user "Alice" has logged in using the webUI
     And user "Alice" has shared file "lorem.txt" with group "grp1"
@@ -199,7 +199,7 @@ Feature: Sharing files and folders with internal groups
   @issue-ocis-1317
   Scenario: Auto-completion for a group that is excluded from receiving shares
     Given group "system-group" has been created in the server
-    And user "Alice" has created folder "simple-folder"
+    And user "Alice" has created folder "simple-folder" in the server
     And the administrator has excluded group "system-group" from receiving shares
     When the user re-logs in as "Alice" using the webUI
     And the user browses to the files page
@@ -242,7 +242,7 @@ Feature: Sharing files and folders with internal groups
 
 
   Scenario: share a folder with other group and then it should be listed on Shared with Others page
-    Given user "Alice" has created folder "simple-folder"
+    Given user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has logged in using the webUI
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Alice" has shared folder "simple-folder" with group "grp1"
@@ -253,7 +253,7 @@ Feature: Sharing files and folders with internal groups
 
   @issue-ocis-1250
   Scenario: change existing expiration date of an existing share with another internal group
-    Given user "Carol" has created file "lorem.txt"
+    Given user "Carol" has created file "lorem.txt" in the server
     And user "Carol" has created a new share with following settings
       | path            | lorem.txt |
       | shareTypeString | group     |
@@ -277,7 +277,7 @@ Feature: Sharing files and folders with internal groups
   Scenario: share a resource with another internal group with default expiration date
     Given the setting "shareapi_default_expire_date_group_share" of app "core" has been set to "yes"
     And the setting "shareapi_expire_after_n_days_group_share" of app "core" has been set to "42"
-    And user "Carol" has created file "lorem.txt"
+    And user "Carol" has created file "lorem.txt" in the server
     And user "Carol" has logged in using the webUI
     When the user shares folder "lorem.txt" with group "grp1" as "Viewer" using the webUI
     And user "Alice" accepts the share "Shares/lorem.txt" offered by user "Carol" using the sharing API
@@ -297,8 +297,8 @@ Feature: Sharing files and folders with internal groups
     Given the setting "shareapi_default_expire_date_group_share" of app "core" has been set to "yes"
     And the setting "shareapi_enforce_expire_date_group_share" of app "core" has been set to "yes"
     And the setting "shareapi_expire_after_n_days_group_share" of app "core" has been set to "5"
-    And user "Carol" has created file "lorem.txt"
-    And user "Carol" has created folder "simple-folder"
+    And user "Carol" has created file "lorem.txt" in the server
+    And user "Carol" has created folder "simple-folder" in the server
     And user "Carol" has logged in using the webUI
     When the user tries to share resource "<shared-resource>" with group "grp1" which expires in "+6" days using the webUI
     Then user "Alice" should not have created any shares

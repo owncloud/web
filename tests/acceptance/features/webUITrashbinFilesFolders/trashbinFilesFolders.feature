@@ -6,17 +6,17 @@ Feature: files and folders exist in the trashbin after being deleted
 
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files in the server
-    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
-    And user "Alice" has uploaded file "lorem-big.txt" to "lorem-big.txt"
-    And user "Alice" has uploaded file "new-lorem.txt" to "textfile0.txt"
-    And user "Alice" has uploaded file "testavatar.png" to "testimage.png"
-    And user "Alice" has created file "sample,1.txt"
-    And user "Alice" has created file "strängé filename (duplicate #2 &).txt"
-    And user "Alice" has created folder "Folder,With,Comma"
-    And user "Alice" has created folder "strängé नेपाली folder"
-    And user "Alice" has created folder "simple-folder"
-    And user "Alice" has uploaded file "lorem.txt" to "simple-folder/lorem.txt"
-    And user "Alice" has uploaded file "lorem.txt" to "strängé नेपाली folder/lorem.txt"
+    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt" in the server
+    And user "Alice" has uploaded file "lorem-big.txt" to "lorem-big.txt" in the server
+    And user "Alice" has uploaded file "new-lorem.txt" to "textfile0.txt" in the server
+    And user "Alice" has uploaded file "testavatar.png" to "testimage.png" in the server
+    And user "Alice" has created file "sample,1.txt" in the server
+    And user "Alice" has created file "strängé filename (duplicate #2 &).txt" in the server
+    And user "Alice" has created folder "Folder,With,Comma" in the server
+    And user "Alice" has created folder "strängé नेपाली folder" in the server
+    And user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has uploaded file "lorem.txt" to "simple-folder/lorem.txt" in the server
+    And user "Alice" has uploaded file "lorem.txt" to "strängé नेपाली folder/lorem.txt" in the server
     And user "Alice" has logged in using the webUI
 
   @smokeTest @ocisSmokeTest @ocis-reva-issue-111 @skipOnOCIS @issue-product-186 @disablePreviews
@@ -36,7 +36,7 @@ Feature: files and folders exist in the trashbin after being deleted
 
   @ocis-reva-issue-111 @skipOnOCIS @issue-product-183 @issue-product-186 @disablePreviews
   Scenario: Delete a file with problematic characters and check it is in the trashbin
-    Given user "Alice" has renamed the following files
+    Given user "Alice" has renamed the following files in the server
       | from-name-parts | to-name-parts   |
       | lorem.txt       | 'single'        |
       | lorem-big.txt   | "double" quotes |
@@ -80,8 +80,8 @@ Feature: files and folders exist in the trashbin after being deleted
 
   @skipOnOCIS @issue-1725 @issue-1910 @issue-product-186
   Scenario: Delete an empty folder and check it is in the trashbin
-    Given user "Alice" has created folder "my-empty-folder"
-    And user "Alice" has created folder "my-other-empty-folder"
+    Given user "Alice" has created folder "my-empty-folder" in the server
+    And user "Alice" has created folder "my-other-empty-folder" in the server
     When the user reloads the current page of the webUI
     And the user deletes folder "my-empty-folder" using the webUI
     Then as "Alice" folder "my-empty-folder" should exist in the trashbin
@@ -123,7 +123,7 @@ Feature: files and folders exist in the trashbin after being deleted
 
 
   Scenario: Delete folders with dot in the name and check they are in the trashbin
-    Given user "Alice" has created the following folders
+    Given user "Alice" has created the following folders in the server
       | folders  |
       | fo.      |
       | fo.1     |
@@ -131,7 +131,7 @@ Feature: files and folders exist in the trashbin after being deleted
       | ...      |
       | ..fo     |
       | fo.xyz   |
-    And the following folders have been deleted by user "Alice"
+    And the following folders have been deleted by user "Alice" in the server
       | name     |
       | fo.      |
       | fo.1     |

@@ -5,9 +5,9 @@ Feature: rename folders
 
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files in the server
-    And user "Alice" has created folder "simple-folder"
-    And user "Alice" has created folder "simple-empty-folder"
-    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
+    And user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has created folder "simple-empty-folder" in the server
+    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt" in the server
     And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
 
@@ -27,7 +27,7 @@ Feature: rename folders
 
 
   Scenario Outline: Rename a folder that has special characters in its name
-    Given user "Alice" has created folder <from_name>
+    Given user "Alice" has created folder <from_name> in the server
     And the user has reloaded the current page of the webUI
     When the user renames folder <from_name> to <to_name> using the webUI
     Then folder <to_name> should be listed on the webUI
@@ -141,7 +141,7 @@ Feature: rename folders
 
   Scenario: User tries to rename a folder that used to exist but does not anymore
     Given the user has browsed to the files page
-    And the following files have been deleted by user "Alice"
+    And the following files have been deleted by user "Alice" in the server
       | name          |
       | simple-folder |
     When the user tries to rename folder "simple-folder" to "new-simple-folder" using the webUI

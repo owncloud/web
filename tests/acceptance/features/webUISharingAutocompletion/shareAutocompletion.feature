@@ -30,7 +30,7 @@ Feature: Autocompletion of share-with names
 
   @smokeTest @issue-ocis-1961
   Scenario: autocompletion of regular existing users
-    Given user "regularuser" has created folder "simple-folder"
+    Given user "regularuser" has created folder "simple-folder" in the server
     And user "regularuser" has logged in using the webUI
 
     And the user has opened the share dialog for folder "simple-folder"
@@ -42,7 +42,7 @@ Feature: Autocompletion of share-with names
 
   @smokeTest @issue-ocis-1961
   Scenario: autocompletion of regular existing groups
-    Given user "regularuser" has created folder "simple-folder"
+    Given user "regularuser" has created folder "simple-folder" in the server
     And user "regularuser" has logged in using the webUI
 
     And the user has opened the share dialog for folder "simple-folder"
@@ -54,7 +54,7 @@ Feature: Autocompletion of share-with names
 
   @issue-ocis-1675
   Scenario: autocompletion for a pattern that does not match any user or group
-    Given user "regularuser" has created folder "simple-folder"
+    Given user "regularuser" has created folder "simple-folder" in the server
     And user "regularuser" has logged in using the webUI
     And the user has browsed to the files page
     And the user has opened the share dialog for folder "simple-folder"
@@ -64,7 +64,7 @@ Feature: Autocompletion of share-with names
 
   @issue-ocis-1675
   Scenario: autocompletion when minimum characters is the default (2) and not enough characters are typed
-    Given user "regularuser" has created folder "simple-folder"
+    Given user "regularuser" has created folder "simple-folder" in the server
     And user "regularuser" has logged in using the webUI
     And the user has browsed to the files page
     And the user has opened the share dialog for folder "simple-folder"
@@ -75,7 +75,7 @@ Feature: Autocompletion of share-with names
   @issue-ocis-1675 @issue-ocis-1317
   Scenario: autocompletion when minimum characters is increased and not enough characters are typed
     Given the administrator has set the minimum characters for sharing autocomplete to "4"
-    And user "regularuser" has created folder "simple-folder"
+    And user "regularuser" has created folder "simple-folder" in the server
     And user "regularuser" has logged in using the webUI
     And the user has browsed to the files page
     And the user has opened the share dialog for folder "simple-folder"
@@ -86,7 +86,7 @@ Feature: Autocompletion of share-with names
   @issue-ocis-1961
   Scenario: autocomplete short user/display names when completely typed
     Given the administrator has set the minimum characters for sharing autocomplete to "3"
-    And user "regularuser" has created folder "simple-folder"
+    And user "regularuser" has created folder "simple-folder" in the server
     And user "regularuser" has logged in using the webUI
     And the user has browsed to the files page
     And these users have been created without initialization and without skeleton files in the server:
@@ -100,7 +100,7 @@ Feature: Autocompletion of share-with names
   @issue-ocis-1961
   Scenario: autocomplete short group names when completely typed
     Given the administrator has set the minimum characters for sharing autocomplete to "2"
-    And user "regularuser" has created folder "simple-folder"
+    And user "regularuser" has created folder "simple-folder" in the server
     And these groups have been created in the server:
       | groupname |
       | fi        |
@@ -114,7 +114,7 @@ Feature: Autocompletion of share-with names
   @issue-ocis-1675 @issue-ocis-1317
   Scenario: autocompletion when increasing the minimum characters for sharing autocomplete
     Given the administrator has set the minimum characters for sharing autocomplete to "3"
-    And user "regularuser" has created folder "simple-folder"
+    And user "regularuser" has created folder "simple-folder" in the server
     And user "regularuser" has logged in using the webUI
     And the user has browsed to the files page
     And the user has opened the share dialog for folder "simple-folder"
@@ -126,7 +126,7 @@ Feature: Autocompletion of share-with names
 
   @issue-ocis-1675
   Scenario: autocompletion of a pattern that matches regular existing users but also a user with whom the item is already shared (folder)
-    Given user "regularuser" has created folder "simple-folder"
+    Given user "regularuser" has created folder "simple-folder" in the server
     And user "regularuser" has logged in using the webUI
     And the user has browsed to the files page
     And user "regularuser" has shared folder "simple-folder" with user "Alice"
@@ -139,7 +139,7 @@ Feature: Autocompletion of share-with names
 
   @issue-ocis-1675
   Scenario: autocompletion of a pattern that matches regular existing users but also a user with whom the item is already shared (file)
-    Given user "regularuser" has created file "data.zip"
+    Given user "regularuser" has created file "data.zip" in the server
     And user "regularuser" has logged in using the webUI
     And the user has browsed to the files page
     And user "regularuser" has shared file "data.zip" with user "usergrp"
@@ -153,7 +153,7 @@ Feature: Autocompletion of share-with names
   @issue-ocis-1675 @issue-ocis-1317
   Scenario: autocompletion of a pattern that matches regular existing groups but also a group with whom the item is already shared (folder)
     Given the administrator has set the minimum characters for sharing autocomplete to "2"
-    And user "regularuser" has created folder "simple-folder"
+    And user "regularuser" has created folder "simple-folder" in the server
     And user "regularuser" has logged in using the webUI
     And the user has browsed to the files page
     And user "regularuser" has shared folder "simple-folder" with group "finance1"
@@ -167,7 +167,7 @@ Feature: Autocompletion of share-with names
   @issue-ocis-1675 @issue-ocis-1317
   Scenario: autocompletion of a pattern that matches regular existing groups but also a group with whom the item is already shared (file)
     Given the administrator has set the minimum characters for sharing autocomplete to "2"
-    And user "regularuser" has created file "data.zip"
+    And user "regularuser" has created file "data.zip" in the server
     And user "regularuser" has logged in using the webUI
     And the user has browsed to the files page
     And user "regularuser" has shared file "data.zip" with group "finance1"

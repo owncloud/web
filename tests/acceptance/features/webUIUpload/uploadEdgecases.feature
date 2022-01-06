@@ -27,7 +27,7 @@ Feature: File Upload
 
   @smokeTest @ocisSmokeTest
   Scenario Outline: upload a new file into a sub folder
-    Given user "Alice" has created folder "<folder-to-upload-to>"
+    Given user "Alice" has created folder "<folder-to-upload-to>" in the server
     And the user has reloaded the current page of the webUI
     And a file with the size of "3000" bytes and the name "0" has been created locally
     When the user opens folder "<folder-to-upload-to>" using the webUI
@@ -67,19 +67,19 @@ Feature: File Upload
   Scenario: keep new and existing file
     When the user uploads file "'single'quotes.txt" keeping both new and existing files using the webUI
     Then file "'single'quotes.txt" should be listed on the webUI
-    And the content of "'single'quotes.txt" should not have changed
+    And the content of "'single'quotes.txt" should not have changed in the server
     And file "'single'quotes (2).txt" should be listed on the webUI
     And as "Alice" the content of "'single'quotes (2).txt" should be the same as the content of local file "'single'quotes.txt"
 
     When the user uploads file "strängé filename (duplicate #2 &).txt" keeping both new and existing files using the webUI
     Then file "strängé filename (duplicate #2 &).txt" should be listed on the webUI
-    And the content of "strängé filename (duplicate #2 &).txt" should not have changed
+    And the content of "strängé filename (duplicate #2 &).txt" should not have changed in the server
     And file "strängé filename (duplicate #2 &) (2).txt" should be listed on the webUI
     And as "Alice" the content of "strängé filename (duplicate #2 &) (2).txt" should be the same as the content of local file "strängé filename (duplicate #2 &).txt"
 
     When the user uploads file "zzzz-must-be-last-file-in-folder.txt" keeping both new and existing files using the webUI
     Then file "zzzz-must-be-last-file-in-folder.txt" should be listed on the webUI
-    And the content of "zzzz-must-be-last-file-in-folder.txt" should not have changed
+    And the content of "zzzz-must-be-last-file-in-folder.txt" should not have changed in the server
     And file "zzzz-must-be-last-file-in-folder (2).txt" should be listed on the webUI
     And as "Alice" the content of "zzzz-must-be-last-file-in-folder (2).txt" should be the same as the content of local file "zzzz-must-be-last-file-in-folder.txt"
 
@@ -97,7 +97,7 @@ Feature: File Upload
 
   # upload into "simple-folder" because there is already a folder called "0" in the root
   Scenario: Upload a big file called "0" (when chunking in implemented that upload should be chunked)
-    Given user "Alice" has created folder "simple-folder"
+    Given user "Alice" has created folder "simple-folder" in the server
     And the user has browsed to the files page
     And a file with the size of "30000000" bytes and the name "0" has been created locally
     When the user opens folder "simple-folder" using the webUI
@@ -107,7 +107,7 @@ Feature: File Upload
 
   @issue-3015 @issue-ocis-reva-200
   Scenario: Upload a file with the same name as already existing folder
-    Given user "Alice" has created folder "new-lorem.txt"
+    Given user "Alice" has created folder "new-lorem.txt" in the server
     And the user has reloaded the current page of the webUI
     When the user uploads overwriting file "new-lorem.txt" using the webUI
     Then the following error message should be displayed on the webUI
@@ -123,7 +123,7 @@ Feature: File Upload
   # When this issue is fixed merge with the scenario above
   @issue-3015 @skipOnOC10 @issue-ocis-reva-200
   Scenario: Upload a file with the same name as already existing folder (ocis bug demonstration)
-    Given user "Alice" has created folder "new-lorem.txt"
+    Given user "Alice" has created folder "new-lorem.txt" in the server
     And the user has reloaded the current page of the webUI
     When the user uploads overwriting file "new-lorem.txt" using the webUI
     Then the following error message should be displayed on the webUI

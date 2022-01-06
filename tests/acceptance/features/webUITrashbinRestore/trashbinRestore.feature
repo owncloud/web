@@ -6,13 +6,13 @@ Feature: Restore deleted files/folders
 
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files in the server
-    And user "Alice" has created file "sample,1.txt"
-    And user "Alice" has created folder "Folder,With,Comma"
+    And user "Alice" has created file "sample,1.txt" in the server
+    And user "Alice" has created folder "Folder,With,Comma" in the server
     And user "Alice" has logged in using the webUI
 
   @smokeTest @ocisSmokeTest
   Scenario: Restore files
-    Given user "Alice" has uploaded file "data.zip" to "data.zip"
+    Given user "Alice" has uploaded file "data.zip" to "data.zip" in the server
     And the user has reloaded the current page of the webUI
     When the user deletes file "data.zip" using the webUI
     And the user deletes file "sample,1.txt" using the webUI
@@ -28,7 +28,7 @@ Feature: Restore deleted files/folders
 
 
   Scenario: Restore folder
-    Given user "Alice" has created folder "folder with space"
+    Given user "Alice" has created folder "folder with space" in the server
     And the user has browsed to the files page
     When the user deletes folder "folder with space" using the webUI
     And the user deletes folder "Folder,With,Comma" using the webUI
@@ -44,11 +44,11 @@ Feature: Restore deleted files/folders
 
   @smokeTest @issue-1502
   Scenario: Select some trashbin files and restore them in a batch
-    Given user "Alice" has created folder "simple-folder"
-    And user "Alice" has uploaded file "data.zip" to "data.zip"
-    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
-    And user "Alice" has uploaded file "lorem-big.txt" to "lorem-big.txt"
-    And the following files have been deleted by user "Alice"
+    Given user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has uploaded file "data.zip" to "data.zip" in the server
+    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt" in the server
+    And user "Alice" has uploaded file "lorem-big.txt" to "lorem-big.txt" in the server
+    And the following files have been deleted by user "Alice" in the server
       | name              |
       | data.zip          |
       | lorem.txt         |
@@ -82,11 +82,11 @@ Feature: Restore deleted files/folders
 
   @issue-1502
   Scenario: Select all except for some trashbin files and restore them in a batch
-    Given user "Alice" has created folder "simple-folder"
-    And user "Alice" has uploaded file "data.zip" to "data.zip"
-    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
-    And user "Alice" has uploaded file "lorem-big.txt" to "lorem-big.txt"
-    And the following files have been deleted by user "Alice"
+    Given user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has uploaded file "data.zip" to "data.zip" in the server
+    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt" in the server
+    And user "Alice" has uploaded file "lorem-big.txt" to "lorem-big.txt" in the server
+    And the following files have been deleted by user "Alice" in the server
       | name          |
       | data.zip      |
       | lorem.txt     |
@@ -113,11 +113,11 @@ Feature: Restore deleted files/folders
 
   @skipOnOC10 @issue-core-38039
   Scenario: Select all trashbin files and restore them in a batch
-    Given user "Alice" has created folder "simple-folder"
-    And user "Alice" has uploaded file "data.zip" to "data.zip"
-    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
-    And user "Alice" has uploaded file "lorem-big.txt" to "lorem-big.txt"
-    And the following files have been deleted by user "Alice"
+    Given user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has uploaded file "data.zip" to "data.zip" in the server
+    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt" in the server
+    And user "Alice" has uploaded file "lorem-big.txt" to "lorem-big.txt" in the server
+    And the following files have been deleted by user "Alice" in the server
       | name          |
       | data.zip      |
       | lorem.txt     |
@@ -136,12 +136,12 @@ Feature: Restore deleted files/folders
 
   @issue-1753 @issue-product-186
   Scenario: Restore a file from trashbin whose parent folder is renamed
-    Given user "Alice" has created folder "simple-folder"
-    And user "Alice" has created file "simple-folder/file-to-delete-and-restore"
-    And the following files have been deleted by user "Alice"
+    Given user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has created file "simple-folder/file-to-delete-and-restore" in the server
+    And the following files have been deleted by user "Alice" in the server
       | name                                     |
       | simple-folder/file-to-delete-and-restore |
-    And user "Alice" has renamed folder "simple-folder" to "simple-folder-renamed"
+    And user "Alice" has renamed folder "simple-folder" to "simple-folder-renamed" in the server
     When the user browses to the trashbin page
     And the user restores file "simple-folder/file-to-delete-and-restore" from the trashbin using the webUI
     Then the following error message should be displayed on the webUI
@@ -158,12 +158,12 @@ Feature: Restore deleted files/folders
 
   @skipOnOC10 @issue-product-186 @issue-ocis-1057
   Scenario: Restore a file from trashbin whose parent folder is renamed (ocis bug demonstration)
-    Given user "Alice" has created folder "simple-folder"
-    And user "Alice" has created file "simple-folder/file-to-delete-and-restore"
-    And the following files have been deleted by user "Alice"
+    Given user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has created file "simple-folder/file-to-delete-and-restore" in the server
+    And the following files have been deleted by user "Alice" in the server
       | name                                     |
       | simple-folder/file-to-delete-and-restore |
-    And user "Alice" has renamed folder "simple-folder" to "simple-folder-renamed"
+    And user "Alice" has renamed folder "simple-folder" to "simple-folder-renamed" in the server
     When the user browses to the trashbin page
     And the user restores file "simple-folder/file-to-delete-and-restore" from the trashbin using the webUI
     Then the following error message should be displayed on the webUI
@@ -179,9 +179,9 @@ Feature: Restore deleted files/folders
 
   @issue-1753 @skipOnOCIS @issue-product-186
   Scenario: Restore a file from trashbin without restoring the parent folder (bug demonstration)
-    Given user "Alice" has created folder "simple-folder"
-    And user "Alice" has created file "simple-folder/file-to-delete-and-restore"
-    And the following files have been deleted by user "Alice"
+    Given user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has created file "simple-folder/file-to-delete-and-restore" in the server
+    And the following files have been deleted by user "Alice" in the server
       | name                                     |
       | simple-folder/file-to-delete-and-restore |
       | simple-folder                            |
@@ -200,9 +200,9 @@ Feature: Restore deleted files/folders
 
   @skipOnOC10 @issue-product-186 @issue-ocis-1057
   Scenario: Restore a file from trashbin without restoring the parent folder (ocis bug demonstration)
-    Given user "Alice" has created folder "simple-folder"
-    And user "Alice" has created file "simple-folder/file-to-delete-and-restore"
-    And the following files have been deleted by user "Alice"
+    Given user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has created file "simple-folder/file-to-delete-and-restore" in the server
+    And the following files have been deleted by user "Alice" in the server
       | name                                     |
       | simple-folder/file-to-delete-and-restore |
       | simple-folder                            |
@@ -220,12 +220,12 @@ Feature: Restore deleted files/folders
 
   @issue-1723
   Scenario: Delete and restore a file that has the same name like a deleted folder
-    Given user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
-    And the following files have been deleted by user "Alice"
+    Given user "Alice" has uploaded file "lorem.txt" to "lorem.txt" in the server
+    And the following files have been deleted by user "Alice" in the server
       | name      |
       | lorem.txt |
-    And user "Alice" has created folder "lorem.txt"
-    And the following folders have been deleted by user "Alice"
+    And user "Alice" has created folder "lorem.txt" in the server
+    And the following folders have been deleted by user "Alice" in the server
       | name      |
       | lorem.txt |
     When the user browses to the trashbin page
@@ -239,12 +239,12 @@ Feature: Restore deleted files/folders
 
 
   Scenario: Delete and restore a folder that has the same name like a deleted file
-    Given user "Alice" has created file "lorem.txt"
-    And the following files have been deleted by user "Alice"
+    Given user "Alice" has created file "lorem.txt" in the server
+    And the following files have been deleted by user "Alice" in the server
       | name      |
       | lorem.txt |
-    And user "Alice" has created folder "lorem.txt"
-    And the following folders have been deleted by user "Alice"
+    And user "Alice" has created folder "lorem.txt" in the server
+    And the following folders have been deleted by user "Alice" in the server
       | name      |
       | lorem.txt |
     When the user browses to the trashbin page
@@ -261,8 +261,8 @@ Feature: Restore deleted files/folders
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And the administrator has set the default folder for received shares to "Shares"
     And user "Carol" has been created with default attributes and without skeleton files in the server
-    And user "Carol" has created folder "folder-to-share"
-    And user "Carol" has uploaded file with content "does-not-matter" to "folder-to-share/fileToShare.txt"
+    And user "Carol" has created folder "folder-to-share" in the server
+    And user "Carol" has uploaded file with content "does-not-matter" to "folder-to-share/fileToShare.txt" in the server
     And user "Carol" has shared folder "folder-to-share" with user "Alice"
     And user "Alice" has accepted the share "Shares/folder-to-share" offered by user "Carol"
     And the user has reloaded the current page of the webUI
@@ -277,13 +277,13 @@ Feature: Restore deleted files/folders
 
   @issue-1502
   Scenario: Delete and restore folders with dot in the name
-    Given user "Alice" has created the following folders
+    Given user "Alice" has created the following folders in the server
       | folders  |
       | fo.      |
       | fo.1     |
       | fo...1.. |
       | fo.xyz   |
-    And the following folders have been deleted by user "Alice"
+    And the following folders have been deleted by user "Alice" in the server
       | name     |
       | fo.      |
       | fo.1     |

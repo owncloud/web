@@ -21,7 +21,7 @@ Feature: Sharing folders with internal groups with different roles and permissio
   @issue-1837
   Scenario Outline: share a folder with multiple users with different roles and permissions
     Given group "grp2" has been created in the server
-    And user "Alice" has created folder "simple-folder"
+    And user "Alice" has created folder "simple-folder" in the server
     And user "Brian" has been added to group "grp2" in the server
     And user "Alice" has logged in using the webUI
     When the user opens the share dialog for folder "simple-folder" using the webUI

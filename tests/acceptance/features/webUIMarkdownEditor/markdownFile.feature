@@ -5,7 +5,7 @@ Feature: create markdown files
 
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files in the server
-    And user "Alice" has uploaded file with content "simple markdown file" to "simple.md"
+    And user "Alice" has uploaded file with content "simple markdown file" to "simple.md" in the server
     And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
 
@@ -54,14 +54,14 @@ Feature: create markdown files
 
   @disablePreviews
   Scenario: open text file in markdown editor
-    Given user "Alice" has uploaded file with content "test" to "lorem.txt"
+    Given user "Alice" has uploaded file with content "test" to "lorem.txt" in the server
     And the user has reloaded the current page of the webUI
     When the user opens file "lorem.txt" in the markdown editor webUI
     Then the file "lorem.txt" should be displayed in the markdown editor webUI
 
   @disablePreviews
   Scenario Outline: preview of files with markdown editor by clicking the action menu option
-    Given user "Alice" has uploaded file with content "test" to "lorem.txt"
+    Given user "Alice" has uploaded file with content "test" to "lorem.txt" in the server
     And the user has reloaded the current page of the webUI
     When the user opens file "<file>" in the markdown editor using the action menu option on the webUI
     Then the file "<file>" should be displayed in the markdown editor webUI

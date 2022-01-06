@@ -10,7 +10,7 @@ Feature: Resharing shared files with different permissions
       | Alice    |
       | Brian    |
       | Carol    |
-    And user "Brian" has created folder "simple-folder"
+    And user "Brian" has created folder "simple-folder" in the server
 
 
   Scenario: Reshare a folder without share permissions using API and check if it is listed on the collaborators list for original owner
@@ -136,7 +136,7 @@ Feature: Resharing shared files with different permissions
 
 
   Scenario: share a file without share permissions and check if another user can reshare
-    Given user "Brian" has created file "lorem.txt"
+    Given user "Brian" has created file "lorem.txt" in the server
     And user "Brian" has shared file "lorem.txt" with user "Alice" with "read" permissions
     When user "Alice" logs in using the webUI
     Then the user should not be able to share resource "lorem.txt" using the webUI
@@ -150,7 +150,7 @@ Feature: Resharing shared files with different permissions
 
 
   Scenario: share a received file without share permissions and check if another user can reshare
-    Given user "Brian" has created file "lorem.txt"
+    Given user "Brian" has created file "lorem.txt" in the server
     And user "Brian" has shared file "lorem.txt" with user "Alice" with "all" permissions
     And user "Alice" has shared file "lorem.txt" with user "Carol" with "read" permissions
     When user "Carol" logs in using the webUI
@@ -202,7 +202,7 @@ Feature: Resharing shared files with different permissions
 
 
   Scenario: Reshare a file and folder from shared with me page
-    Given user "Brian" has created file "lorem.txt"
+    Given user "Brian" has created file "lorem.txt" in the server
     And user "Brian" has shared folder "simple-folder" with user "Alice"
     And user "Brian" has shared file "lorem.txt" with user "Alice"
     And user "Alice" has logged in using the webUI
@@ -214,7 +214,7 @@ Feature: Resharing shared files with different permissions
 
 
   Scenario: Reshare a file and folder from shared with others page
-    Given user "Brian" has created file "lorem.txt"
+    Given user "Brian" has created file "lorem.txt" in the server
     And user "Brian" has shared folder "simple-folder" with user "Alice"
     And user "Brian" has shared file "lorem.txt" with user "Alice"
     And user "Brian" has logged in using the webUI
@@ -226,7 +226,7 @@ Feature: Resharing shared files with different permissions
 
 
   Scenario: Reshare a file and folder from favorites page
-    Given user "Brian" has created file "lorem.txt"
+    Given user "Brian" has created file "lorem.txt" in the server
     And user "Brian" has shared folder "simple-folder" with user "Alice"
     And user "Brian" has shared file "lorem.txt" with user "Alice"
     And user "Alice" has favorited element "simple-folder"

@@ -23,8 +23,8 @@ Feature: restrict Sharing
     And user "Brian" has been added to group "grp1" in the server
     And user "Carol" has been added to group "grp2" in the server
     And user "Alison" has been added to group "grp2" in the server
-    And user "Brian" has created folder "simple-folder"
-    And user "Brian" has uploaded file "lorem.txt" to "simple-folder/lorem.txt"
+    And user "Brian" has created folder "simple-folder" in the server
+    And user "Brian" has uploaded file "lorem.txt" to "simple-folder/lorem.txt" in the server
     And user "Brian" has logged in using the webUI
 
   @smokeTest

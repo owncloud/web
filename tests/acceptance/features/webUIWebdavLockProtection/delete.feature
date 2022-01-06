@@ -8,9 +8,9 @@ Feature: Locks
     Given these users have been created with default attributes and without skeleton files in the server:
       | username       |
       | brand-new-user |
-    And user "brand-new-user" has created folder "simple-folder"
-    And user "brand-new-user" has created file "simple-folder/lorem.txt"
-    And user "brand-new-user" has created file "lorem.txt"
+    And user "brand-new-user" has created folder "simple-folder" in the server
+    And user "brand-new-user" has created file "simple-folder/lorem.txt" in the server
+    And user "brand-new-user" has created file "lorem.txt" in the server
     And user "brand-new-user" has logged in using the webUI
 
   @issue-5417

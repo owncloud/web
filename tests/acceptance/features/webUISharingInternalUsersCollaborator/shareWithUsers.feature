@@ -10,7 +10,7 @@ Feature: Shares collaborator list
       | username |
       | Alice    |
       | Brian    |
-    And user "Brian" has created folder "simple-folder"
+    And user "Brian" has created folder "simple-folder" in the server
 
   @issue-ocis-2260
   Scenario Outline: change the collaborators of a file & folder
