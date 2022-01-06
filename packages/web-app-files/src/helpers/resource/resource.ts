@@ -2,4 +2,6 @@
 // TODO: add more fields to the resource interface. Extend into different resource types: FileResource, FolderResource, ShareResource, IncomingShareResource, OutgoingShareResource, ...
 export interface Resource {
   id: number | string
+  path: string
+  downloadURL?: string
 }

@@ -1,5 +1,5 @@
 import { ref, computed, ComputedRef, unref } from '@vue/composition-api'
-import { MaybeRef, MaybeReadonlyRef } from '../utils'
+import { MaybeRef, MaybeReadonlyRef } from 'web-pkg/src/utils'
 
 export enum SortDir {
   Desc = 'desc',

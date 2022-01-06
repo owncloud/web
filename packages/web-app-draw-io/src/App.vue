@@ -21,14 +21,14 @@ import { basename } from 'path'
 import queryString from 'query-string'
 import { DateTime } from 'luxon'
 import { DavPermission, DavProperty } from 'web-pkg/src/constants'
-import { useAppDefaultBehavior } from 'web-pkg/src/app/useAppDefaultBehavior'
+import { useAppDefaults } from 'web-pkg/src/composables/useAppDefaults'
 
 export default {
   name: 'DrawIoEditor',
   setup() {
     return {
-      ...useAppDefaultBehavior({
-        appName: 'draw-io'
+      ...useAppDefaults({
+        applicationName: 'draw-io'
       })
     }
   },
@@ -46,7 +46,7 @@ export default {
         url = 'https://embed.diagrams.net',
         theme = 'minimal',
         autosave = false
-      } = this.appConfig
+      } = this.applicationConfig
       return { url, theme, autosave: autosave ? 1 : 0 }
     },
     iframeSource() {
