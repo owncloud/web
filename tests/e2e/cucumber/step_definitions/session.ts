@@ -9,7 +9,6 @@ async function LogInUser(this: World, stepUser: string): Promise<void> {
   const loginPage = new LoginPage({ actor })
 
   await actor.page.goto(config.frontendUrl)
-  console.log(user)
   await loginPage.login({ user })
 }
 
