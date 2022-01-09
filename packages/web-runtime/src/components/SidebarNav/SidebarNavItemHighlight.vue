@@ -76,4 +76,13 @@ export default {
   border-radius: 5px;
   z-index: -1;
 }
+#highlighter::before {
+	content: "";
+	position: absolute;
+	width: 45px;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	box-shadow: 2px 0px 6px rgba(0, 0, 0, 0.14);
+}
 </style>
