@@ -67,6 +67,7 @@ export default {
   align-items: center;
   color: var(--oc-color-border);
   display: flex;
+  font-size: 16px;
   font-weight: 400;
   padding: var(--oc-space-small) var(--oc-space-small);
   border-radius: 5px;
@@ -75,7 +76,8 @@ export default {
 
   .text {
     opacity: 1;
-    transition: all 0.35s ease-out;
+    transition: all 0s;
+    transition-delay: 0.1s;
   }
   .text-invisible {
     opacity: 0 !important;
@@ -83,7 +85,9 @@ export default {
   }
   &.active {
     cursor: default;
-    color: var(--oc-color-border);
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
     text-decoration: none;
   }
   &:not(.active):hover {
