@@ -2,19 +2,31 @@
   <li class="oc-sidebar-nav-item oc-pb-xs oc-px-s" :aria-current="active ? 'page' : null">
     <router-link
       v-oc-tooltip="toolTip"
-      :class="['oc-sidebar-nav-item-link', { active: active }]"
+      :class="['oc-sidebar-nav-item-link']"
       :to="target"
+      :data-nav-id="index"
+      @click.native="$refs.highlighter.goTo(index)"
     >
       <oc-icon :name="icon" :fill-type="fillType" variation="inverse" aria-hidden="true" />
       <span class="oc-ml-m text" :class="{ 'text-invisible': collapsed }" v-text="name" />
+      <sidebar-nav-item-highlight :index="index" :active="this.active" ref="highlighter" />
     </router-link>
   </li>
 </template>
 <script>
+import SidebarNavItemHighlight from './SidebarNavItemHighlight.vue'
+
 export default {
+  components: {
+    SidebarNavItemHighlight
+  },
   props: {
     name: {
       type: String,
+      required: true
+    },
+    index: {
+      type: Number,
       required: true
     },
     active: {
@@ -46,12 +58,13 @@ export default {
     toolTip() {
       return this.collapsed ? this.$gettext(`Navigate to ${this.name} page`) : ''
     }
-  }
+  },
 }
 </script>
 
 <style lang="scss">
 .oc-sidebar-nav-item-link {
+  position: relative;
   align-items: center;
   color: var(--oc-color-border);
   display: flex;

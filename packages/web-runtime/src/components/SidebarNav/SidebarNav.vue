@@ -19,7 +19,8 @@
     >
       <oc-list>
         <sidebar-nav-item
-          v-for="link in navItems"
+          v-for="(link, index) in navItems"
+          :index="index"
           :key="link.route.path"
           :target="link.route.path"
           :active="link.active"
