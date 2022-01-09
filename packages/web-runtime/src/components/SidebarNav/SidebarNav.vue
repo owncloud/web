@@ -20,8 +20,8 @@
       <oc-list>
         <sidebar-nav-item
           v-for="(link, index) in navItems"
-          :index="index"
           :key="link.route.path"
+          :index="index"
           :target="link.route.path"
           :active="link.active"
           :icon="link.icon || link.iconMaterial"

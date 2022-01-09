@@ -2,14 +2,13 @@
   <li class="oc-sidebar-nav-item oc-pb-xs oc-px-s" :aria-current="active ? 'page' : null">
     <router-link
       v-oc-tooltip="toolTip"
-      :class="['oc-sidebar-nav-item-link']"
+      :class="['oc-sidebar-nav-item-link', { active: active }]"
       :to="target"
       :data-nav-id="index"
-      @click.native="$refs.highlighter.goTo(index)"
     >
       <oc-icon :name="icon" :fill-type="fillType" variation="inverse" aria-hidden="true" />
       <span class="oc-ml-m text" :class="{ 'text-invisible': collapsed }" v-text="name" />
-      <sidebar-nav-item-highlight :index="index" :active="this.active" ref="highlighter" />
+      <sidebar-nav-item-highlight :index="index" :active="active" />
     </router-link>
   </li>
 </template>
@@ -58,7 +57,7 @@ export default {
     toolTip() {
       return this.collapsed ? this.$gettext(`Navigate to ${this.name} page`) : ''
     }
-  },
+  }
 }
 </script>
 
@@ -82,12 +81,12 @@ export default {
     opacity: 0 !important;
     transition: 0s;
   }
-
   &.active {
-    background: linear-gradient(90deg, #0869de 0%, #4e85c8 100%);
     cursor: default;
+    color: var(--oc-color-border);
+    text-decoration: none;
   }
-  &:hover {
+  &:not(.active):hover {
     color: var(--oc-color-text-inverse);
   }
   &:not(.active):hover {
