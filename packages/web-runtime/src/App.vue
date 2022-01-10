@@ -328,7 +328,7 @@ body {
   }
   #web-content-main {
     flex-grow: 1;
-    overflow-y: scroll;
+    overflow-y: hidden;
 
     .app-container {
       height: 100%;
