@@ -15,7 +15,17 @@ const appInfo = {
 const routes = [
   {
     name: 'apps',
-    path: '/:file_id/:app?',
+    path: '/edit/:file_id/:app?',
+    components: {
+      app: App
+    },
+    meta: {
+      title: $gettext('External app')
+    }
+  },
+  {
+    name: 'apps-public',
+    path: '/public/:file_id/:app?',
     components: {
       app: App
     },

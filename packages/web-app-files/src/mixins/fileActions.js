@@ -1,7 +1,7 @@
 import get from 'lodash-es/get'
 import { mapGetters, mapActions, mapState } from 'vuex'
 
-import { isAuthenticatedRoute, isLocationActive } from '../router'
+import { isAuthenticatedRoute, isLocationActive, isLocationPublicActive } from '../router' 
 import AcceptShare from './actions/acceptShare'
 import Copy from './actions/copy'
 import DeclineShare from './actions/declineShare'
@@ -243,8 +243,9 @@ export default {
     },
 
     $_fileActions_openLink(appName, resourceId) {
+      const isPublic = isLocationPublicActive(this.$router, 'files-public-files')
       const routeData = this.$router.resolve({
-        name: 'external-apps',
+        name: 'external-apps' + (isPublic ? '-public' : ''),
         params: {
           file_id: resourceId,
           app: appName
