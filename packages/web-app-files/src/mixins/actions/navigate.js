@@ -8,6 +8,7 @@ import {
   isLocationSharesActive
 } from '../../router'
 import { ShareStatus } from '../../helpers/share'
+import merge from 'lodash-es/merge'
 
 export default {
   computed: {
@@ -46,15 +47,21 @@ export default {
           },
           canBeDefault: true,
           componentType: 'router-link',
-          route: this.route,
+          route: ({ resources }) => {
+            return merge({}, this.routeName, {
+              params: {
+                item: resources[0].path
+              }
+            })
+          },
           class: 'oc-files-actions-navigate-trigger'
         }
       ]
     },
-    route() {
+    routeName() {
       return isLocationPublicActive(this.$router, 'files-public-files')
-        ? createLocationSpaces('files-spaces-personal-home')
-        : createLocationPublic('files-public-files')
+        ? createLocationPublic('files-public-files')
+        : createLocationSpaces('files-spaces-personal-home')
     }
   }
 }
