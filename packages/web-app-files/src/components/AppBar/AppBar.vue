@@ -531,6 +531,9 @@ export default {
       this.fileFolderCreationLoading = false
     },
     async addAppProviderFile(fileName) {
+      if (fileName === '') {
+        return
+      }
       try {
         const parent = this.currentFolder.fileId
         const publicToken = (this.$router.currentRoute.params.item || '').split('/')[0]
@@ -569,7 +572,7 @@ export default {
 
         const path = pathUtil.join(this.currentPath, fileName)
         let resource
-        if (this.isPersonalRoute) {
+        if (this.isSpacesLocation) {
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else {
           resource = await this.$client.publicFiles.getFileInfo(
@@ -579,25 +582,30 @@ export default {
           )
         }
         resource = buildResource(resource)
-        this.UPSERT_RESOURCE(resource)
+
         this.$_fileActions_triggerDefaultAction(resource)
+
+        this.UPSERT_RESOURCE(resource)
         this.hideModal()
-        if (this.isPersonalRoute) {
+
+        if (this.isSpacesLocation) {
           this.loadIndicators({
             client: this.$client,
             currentFolder: this.currentFolder.path
           })
         }
-        setTimeout(() => {
-          this.setFileSelection([resource])
-          this.scrollToResource(resource)
+
+        this.showMessage({
+          title: this.$gettextInterpolate(this.$gettext('"%{fileName}" was created successfully'), {
+            fileName
+          })
         })
       } catch (error) {
+        console.error(error)
         this.showMessage({
-          title: this.$gettext('Creating file failed…'),
+          title: this.$gettext('Failed to create file'),
           status: 'danger'
         })
-        console.error(error)
       }
     },
     checkNewFileName(fileName) {
