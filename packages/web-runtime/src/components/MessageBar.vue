@@ -7,7 +7,7 @@
         :title="$gettext(item.title)"
         :message="$gettext(item.desc)"
         :status="item.status"
-        class="uk-width-large"
+        class="oc-width-large"
         @close="deleteMessage(item)"
       />
     </transition-group>

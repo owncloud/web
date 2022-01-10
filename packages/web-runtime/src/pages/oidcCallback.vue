@@ -1,11 +1,10 @@
 <template>
   <div
-    class="oc-login"
+    class="oc-login oc-height-viewport"
     :style="{ backgroundImage: 'url(' + backgroundImg + ')' }"
-    uk-height-viewport
   >
     <h1 class="oc-invisible-sr">{{ pageTitle }}</h1>
-    <div class="oc-login-card uk-position-center">
+    <div class="oc-login-card oc-position-center">
       <img class="oc-login-logo" :src="logoImg" alt="" :aria-hidden="true" />
       <div v-show="error" class="oc-login-card-body">
         <h2 v-translate class="oc-login-card-title">Authentication failed</h2>

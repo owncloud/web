@@ -1,7 +1,7 @@
 <template>
   <div
     id="web-nav-sidebar"
-    :class="['uk-visible@l', { 'oc-app-navigation-collapsed': navigation.closed }]"
+    :class="['oc-visible@l', { 'oc-app-navigation-collapsed': navigation.closed }]"
   >
     <oc-button
       variation="inverse"

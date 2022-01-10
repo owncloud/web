@@ -2,12 +2,12 @@
 
 exports[`ApplicationsMenu component shoud set aria-label prop on switcher button 1`] = `
 <oc-button-stub type="button" size="medium" arialabel="Application Switcher" variation="inverse" appearance="raw" justifycontent="center" gapsize="medium" id="_appSwitcherButton" class="oc-topbar-menu-burger">
-  <oc-icon-stub name="grid" filltype="fill" accessiblelabel="" type="span" size="large" variation="passive" class="uk-flex"></oc-icon-stub>
+  <oc-icon-stub name="grid" filltype="fill" accessiblelabel="" type="span" size="large" variation="passive" class="oc-flex"></oc-icon-stub>
 </oc-button-stub>
 `;
 
 exports[`ApplicationsMenu component should show app menus 1`] = `
-<oc-drop-stub dropid="app-switcher-dropdown" toggle="#_appSwitcherButton" position="bottom-start" mode="click" closeonclick="true" paddingsize="small" options="[object Object]" class="uk-width-large">
+<oc-drop-stub dropid="app-switcher-dropdown" toggle="#_appSwitcherButton" position="bottom-start" mode="click" closeonclick="true" paddingsize="small" options="[object Object]" class="oc-width-large">
   <ul class="oc-p-xs">
     <li class="oc-pt-s oc-pb-s" style="list-style: none;">
       <router-link-stub to="/files" tag="a" ariacurrentvalue="page" event="click" style="display: inline-flex; vertical-align: top; gap: 10px;">

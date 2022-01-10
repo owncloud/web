@@ -6,7 +6,7 @@
     </skip-to>
     <div
       v-if="user.isAuthenticated && !user.userReady"
-      class="loading-overlay uk-flex uk-flex-middle uk-flex-center"
+      class="loading-overlay oc-flex oc-flex-middle oc-flex-center"
       :style="{
         backgroundImage: 'url(' + configuration.theme.loginPage.backgroundImg + ')'
       }"
@@ -27,7 +27,7 @@
       </div>
       <div id="web-content-main" class="oc-px-s oc-pb-s">
         <message-bar :active-messages="activeMessages" @deleteMessage="$_deleteMessage" />
-        <div class="app-container uk-flex">
+        <div class="app-container oc-flex">
           <transition>
             <sidebar-nav
               v-if="isSidebarVisible"
@@ -36,18 +36,14 @@
             />
           </transition>
           <router-view
-            class="app-content uk-width-1-1 oc-py-s"
+            class="app-content oc-width-1-1 oc-py-s"
             :class="{ 'app-content-standalone': !isSidebarVisible }"
             name="app"
           />
         </div>
       </div>
     </div>
-    <transition
-      enter-active-class="uk-animation-fade uk-animation-fast"
-      leave-active-class="uk-animation-fade uk-animation-reverse uk-animation-fast"
-      name="custom-classes-transition"
-    >
+    <transition name="custom-classes-transition">
       <oc-modal
         v-if="modal.displayed"
         :variation="modal.variation"
@@ -309,6 +305,10 @@ export default {
 }
 </script>
 <style lang="scss">
+body {
+  margin: 0;
+}
+
 #web {
   background-color: #202020;
   height: 100vh;

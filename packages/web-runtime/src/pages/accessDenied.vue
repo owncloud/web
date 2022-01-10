@@ -1,13 +1,12 @@
 <template>
   <div
-    class="oc-login"
-    uk-height-viewport
+    class="oc-login oc-height-viewport"
     :style="{ backgroundImage: 'url(' + backgroundImg + ')' }"
   >
     <h1 class="oc-invisible-sr">{{ pageTitle }}</h1>
-    <div class="oc-login-card uk-position-center">
+    <div class="oc-login-card oc-position-center">
       <img class="oc-login-logo" :src="logoImg" alt="" :aria-hidden="true" />
-      <div class="oc-login-card-body uk-width-large">
+      <div class="oc-login-card-body oc-width-large">
         <h3 class="oc-login-card-title">
           <span v-translate>Login Error</span>
         </h3>
@@ -20,7 +19,7 @@
           this browser with your current user.
         </div>
       </div>
-      <div class="oc-login-card-footer uk-width-large">
+      <div class="oc-login-card-footer oc-width-large">
         <p>
           {{ helpDeskText }}
           <a v-if="helpDeskLink" :href="helpDeskLink" v-text="helpDeskLinkText" />

@@ -1,10 +1,10 @@
 <template>
   <header
     id="oc-topbar"
-    class="uk-flex uk-flex-middle uk-flex-between oc-px-m"
+    class="oc-flex oc-flex-middle oc-flex-between oc-px-m"
     :aria-label="$gettext('Top bar')"
   >
-    <div class="topbar-gap uk-flex uk-flex-middle uk-flex-between">
+    <div class="topbar-gap oc-flex oc-flex-middle oc-flex-between">
       <applications-menu v-if="applicationsList.length" :applications-list="applicationsList" />
       <router-link ref="navigationSidebarLogo" to="/">
         <oc-img :src="logoImage" :alt="sidebarLogoAlt" />
@@ -13,7 +13,7 @@
     <div class="portal-wrapper">
       <portal-target name="app.runtime.header" multiple></portal-target>
     </div>
-    <div class="topbar-gap uk-flex uk-flex-middle uk-flex-between">
+    <div class="topbar-gap oc-flex oc-flex-middle oc-flex-between">
       <feedback-link v-if="isFeedbackLinkEnabled" />
       <notifications v-if="isNotificationBellEnabled" />
       <user-menu

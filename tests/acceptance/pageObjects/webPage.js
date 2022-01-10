@@ -236,11 +236,11 @@ module.exports = {
   elements: {
     message: {
       selector:
-        '//*[contains(@class, "uk-notification-message")]/div/div[contains(@class, "oc-notification-message-title")]',
+        '//*[contains(@class, "oc-notification-message")]/div/div[contains(@class, "oc-notification-message-title")]',
       locateStrategy: 'xpath'
     },
     messages: {
-      selector: '//*[contains(@class, "uk-notification-message")]',
+      selector: '//*[contains(@class, "oc-notification-message")]',
       locateStrategy: 'xpath'
     },
     clearErrorMessage: {

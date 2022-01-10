@@ -60,6 +60,7 @@ export default {
   border-radius: 5px;
   white-space: nowrap;
   user-select: none;
+  text-decoration: none;
 
   .text {
     opacity: 1;
@@ -76,7 +77,6 @@ export default {
   }
   &:hover {
     color: var(--oc-color-text-inverse);
-    text-decoration: none;
   }
   &:not(.active):hover {
     background: #383838;

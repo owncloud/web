@@ -15,7 +15,7 @@
       @clear="resetProvider"
     />
     <div v-if="optionsVisible && term" id="files-global-search-options" ref="options">
-      <ul class="uk-list uk-list-divider">
+      <ul class="oc-list oc-list-divider">
         <li
           v-for="provider in availableProviders"
           :key="provider.id"

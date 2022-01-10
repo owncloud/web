@@ -1,5 +1,5 @@
 <template>
-  <div v-if="available" class="uk-flex uk-flex-middle uk-flex-nowrap">
+  <div v-if="available" class="oc-flex oc-flex-middle oc-flex-nowrap">
     <oc-datepicker
       v-model="dateCurrent"
       :min-date="dateMin"

@@ -1,5 +1,5 @@
 <template>
-  <div id="oc-files-file-link" class="uk-position-relative">
+  <div id="oc-files-file-link" class="oc-position-relative">
     <div
       v-show="currentView === VIEW_SHOW"
       :key="VIEW_SHOW"
@@ -33,9 +33,7 @@
           v-text="noResharePermsMessage"
         />
         <transition-group
-          class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm"
-          :enter-active-class="$_transitionGroupEnter"
-          :leave-active-class="$_transitionGroupLeave"
+          class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm"
           name="custom-classes-transition"
           tag="ul"
         >
@@ -55,11 +53,7 @@
       </template>
     </div>
     <div v-if="currentView === VIEW_EDIT" :key="VIEW_EDIT">
-      <transition
-        enter-active-class="uk-animation-slide-right uk-animation-fast"
-        leave-active-class="uk-animation-slide-right uk-animation-reverse uk-animation-fast"
-        name="custom-classes-transition"
-      >
+      <transition name="custom-classes-transition">
         <link-edit />
       </transition>
     </div>
@@ -113,13 +107,6 @@ export default {
     ]),
     ...mapGetters(['capabilities']),
     ...mapState('Files', ['sharesTree']),
-
-    $_transitionGroupEnter() {
-      return 'uk-animation-slide-left-medium'
-    },
-    $_transitionGroupLeave() {
-      return 'uk-animation-slide-right-medium uk-animation-reverse'
-    },
 
     canCreatePublicLinks() {
       return this.highlightedFile.canShare()

@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`The external app loading screen component displays a spinner and a paragraph 1`] = `
-<div class="uk-text-center">
+<div class="oc-text-center">
   <ocspinner-stub size="xlarge"></ocspinner-stub>
   <p class="oc-invisible" data-msgid="Loading app" data-current-language="en_US">Loading app</p>
 </div>

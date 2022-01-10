@@ -3,9 +3,9 @@
 exports[`PrivateLink view when the page has loaded successfully should display the page title 1`] = `<h1 class="oc-invisible-sr">Resolving private link</h1>`;
 
 exports[`PrivateLink view when the view has finished loading and there was no error should not display the loading text and the error message 1`] = `
-<div uk-height-viewport="" class="oc-login" style="background-image: url(assets/loginBackground.jpg);">
+<div oc-height-viewport="" class="oc-login" style="background-image: url(assets/loginBackground.jpg);">
   <h1 class="oc-invisible-sr">Resolving private link</h1>
-  <div class="oc-login-card uk-position-center"><img src="assets/logo.svg" alt="" aria-hidden="true" class="oc-login-logo">
+  <div class="oc-login-card oc-position-center"><img src="assets/logo.svg" alt="" aria-hidden="true" class="oc-login-logo">
     <!---->
     <!---->
   </div>

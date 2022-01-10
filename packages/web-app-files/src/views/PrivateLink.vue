@@ -1,11 +1,10 @@
 <template>
   <div
-    class="oc-login"
-    uk-height-viewport
+    class="oc-login oc-height-viewport"
     :style="{ backgroundImage: 'url(' + backgroundImg + ')' }"
   >
     <h1 class="oc-invisible-sr">{{ pageTitle }}</h1>
-    <div class="oc-login-card uk-position-center">
+    <div class="oc-login-card oc-position-center">
       <img class="oc-login-logo" :src="logoImg" alt="" :aria-hidden="true" />
       <div v-if="loading" class="oc-login-card-body">
         <h2 class="oc-login-card-title">

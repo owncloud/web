@@ -1,11 +1,7 @@
 <template>
   <div class="oc-files-edit-public-link oc-files-file-link-form" data-testid="new-files-link">
     <form @submit.prevent>
-      <transition
-        enter-active-class="uk-animation-slide-top-small"
-        leave-active-class="uk-animation-slide-top-small uk-animation-reverse"
-        name="custom-classes-transition"
-      >
+      <transition name="custom-classes-transition">
         <oc-alert v-if="errors" class="oc-files-file-link-error-alert" variation="danger">
           {{ errors }}
         </oc-alert>
@@ -48,7 +44,7 @@
             <oc-button
               id="files-links-expiration-btn"
               data-testid="recipient-datepicker-btn"
-              class="uk-width-1-1 expiration-dialog-btn"
+              class="oc-width-1-1 expiration-dialog-btn"
               justify-content="space-between"
               gap-size="xsmall"
               @click="togglePopover"
@@ -96,74 +92,68 @@
       <!-- @TODO: Enable Mail API to use the following
                   ++++++++++++++++++++++++++++++++++++
         <template v-if="$_sendMailEnabled">
-            <h4 class="oc-mt-top uk-heading-divider">
+            <h4 class="oc-mt-top oc-heading-divider">
                 Send mail notification
             </h4>
             <div class="oc-mb">
-                <input type="text" class="uk-input" :placeholder="placeholder.mailTo" />
+                <input type="text" class="oc-input" :placeholder="placeholder.mailTo" />
             </div>
             <div class="oc-mb">
-                <textarea class="uk-textarea" :placeholder="placeholder.mailBody rows="4"></textarea>
+                <textarea class="oc-textarea" :placeholder="placeholder.mailBody rows="4"></textarea>
             </div>
             <div class="oc-mb">
-                <label><input type="checkbox" class="uk-checkbox oc-mr-s" v-translate>Send a copy to myself</label>
+                <label><input type="checkbox" class="oc-checkbox oc-mr-s" v-translate>Send a copy to myself</label>
             </div>
         </template>
         -->
       <hr class="divider" />
-      <oc-grid class="oc-mb" gutter="small">
-        <div>
-          <oc-button id="oc-files-file-link-cancel" :disabled="saving" @click="$_closeForm">
-            <translate>Cancel</translate>
-          </oc-button>
-        </div>
-        <div>
+      <div class="oc-mb">
+        <oc-button id="oc-files-file-link-cancel" :disabled="saving" @click="$_closeForm">
+          <translate>Cancel</translate>
+        </oc-button>
+        <oc-button
+          v-if="saving"
+          id="oc-files-file-link-saving"
+          variation="primary"
+          appearance="filled"
+          disabled
+        >
+          <template v-if="$_isNew">
+            <oc-spinner :aria-label="$gettext('Creating Public Link')" size="small" />
+            <span v-translate data-testid="files-link-being-created" :aria-hidden="true"
+              >Creating</span
+            >
+          </template>
+          <template v-else>
+            <oc-spinner :aria-label="$gettext('Saving Public Link')" size="small" />
+            <span v-translate data-testid="files-link-being-saved" :aria-hidden="true">Saving</span>
+          </template>
+        </oc-button>
+        <template v-else>
           <oc-button
-            v-if="saving"
-            id="oc-files-file-link-saving"
+            v-if="$_isNew"
+            id="oc-files-file-link-create"
+            data-testid="new-files-link-btn"
+            :disabled="!$_isValid"
             variation="primary"
             appearance="filled"
-            disabled
+            @click="$_addLink"
           >
-            <template v-if="$_isNew">
-              <oc-spinner :aria-label="$gettext('Creating Public Link')" size="small" />
-              <span v-translate data-testid="files-link-being-created" :aria-hidden="true"
-                >Creating</span
-              >
-            </template>
-            <template v-else>
-              <oc-spinner :aria-label="$gettext('Saving Public Link')" size="small" />
-              <span v-translate data-testid="files-link-being-saved" :aria-hidden="true"
-                >Saving</span
-              >
-            </template>
+            <translate>Create</translate>
           </oc-button>
-          <template v-else>
-            <oc-button
-              v-if="$_isNew"
-              id="oc-files-file-link-create"
-              data-testid="new-files-link-btn"
-              :disabled="!$_isValid"
-              variation="primary"
-              appearance="filled"
-              @click="$_addLink"
-            >
-              <translate>Create</translate>
-            </oc-button>
-            <oc-button
-              v-else
-              id="oc-files-file-link-save"
-              data-testid="save-files-link-btn"
-              :disabled="!$_isValid || !$_hasChanges"
-              variation="primary"
-              appearance="filled"
-              @click="$_updateLink"
-            >
-              <translate>Save</translate>
-            </oc-button>
-          </template>
-        </div>
-      </oc-grid>
+          <oc-button
+            v-else
+            id="oc-files-file-link-save"
+            data-testid="save-files-link-btn"
+            :disabled="!$_isValid || !$_hasChanges"
+            variation="primary"
+            appearance="filled"
+            @click="$_updateLink"
+          >
+            <translate>Save</translate>
+          </oc-button>
+        </template>
+      </div>
     </form>
   </div>
 </template>

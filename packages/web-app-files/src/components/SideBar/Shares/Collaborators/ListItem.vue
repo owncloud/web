@@ -1,9 +1,9 @@
 <template>
   <div
     :data-testid="`collaborator-${isUser ? 'user' : 'group'}-item-${share.collaborator.name}`"
-    class="files-collaborators-collaborator uk-flex uk-flex-middle oc-py-xs"
+    class="files-collaborators-collaborator oc-flex oc-flex-middle oc-py-xs"
   >
-    <div class="uk-width-2-3 uk-flex uk-flex-middle" style="gap: 10px">
+    <div class="oc-width-2-3 oc-flex oc-flex-middle" style="gap: 10px">
       <avatar-image
         v-if="isUser"
         :userid="share.collaborator.name"
@@ -57,7 +57,7 @@
     </div>
     <div
       v-if="canEditOrDelete"
-      class="uk-width-1-3 uk-flex uk-flex-nowrap uk-flex-right uk-flex-middle"
+      class="oc-width-1-3 oc-flex oc-flex-nowrap oc-flex-right oc-flex-middle"
     >
       <role-dropdown
         :resource="highlightedFile"

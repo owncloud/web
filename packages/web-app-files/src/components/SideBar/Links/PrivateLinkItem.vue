@@ -2,8 +2,8 @@
   <div class="oc-files-private-link-item" data-testid="files-sidebar-private-link">
     <h4 v-translate class="oc-text-bold oc-m-rm oc-text-initial">Private Link</h4>
     <p v-translate class="oc-text-muted oc-my-rm">Only invited people can use this link.</p>
-    <div class="uk-width-1-1 uk-flex uk-flex-middle">
-      <a :href="link" target="_blank" class="uk-text-truncate" v-text="link" />
+    <div class="oc-width-1-1 oc-flex oc-flex-middle">
+      <a :href="link" target="_blank" class="oc-text-truncate" v-text="link" />
       <copy-to-clipboard-button
         class="oc-files-private-link-copy-url oc-ml-xs"
         :value="link"

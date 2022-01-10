@@ -1,5 +1,5 @@
 <template>
-  <oc-list class="oc-files-appbar-batch-actions uk-width-1-1">
+  <oc-list class="oc-files-appbar-batch-actions oc-width-1-1">
     <action-menu-item
       v-for="(action, i) in menuItemsBatchActions"
       :key="`batch-action-${i}`"

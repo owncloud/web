@@ -3,13 +3,13 @@
     <oc-button
       id="_userMenuButton"
       ref="menuButton"
-      class="oc-topbar-personal uk-height-1-1"
+      class="oc-topbar-personal oc-height-1-1"
       appearance="raw"
       variation="inverse"
       :aria-label="$gettext('User Menu')"
     >
       <avatar-image
-        class="oc-topbar-personal-avatar uk-flex-inline uk-flex-center uk-flex-middle"
+        class="oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle"
         :width="24"
         :userid="userId"
         :user-name="userDisplayName"
@@ -23,11 +23,11 @@
       mode="click"
       close-on-click
       :options="{ pos: 'bottom-right', delayHide: 0 }"
-      class="uk-width-auto"
+      class="oc-width-auto"
       padding-size="small"
     >
-      <ul class="uk-list">
-        <li class="uk-text-nowrap">
+      <ul class="oc-list">
+        <li class="oc-text-nowrap">
           <oc-button
             id="oc-topbar-account-manage"
             type="router-link"

@@ -1,8 +1,8 @@
 <template>
   <main
-    class="uk-height-1-1"
+    class="oc-height-1-1"
     :class="{
-      'uk-flex uk-flex-center uk-flex-middle': loading || loadingError
+      'oc-flex oc-flex-center oc-flex-middle': loading || loadingError
     }"
   >
     <h1 class="oc-invisible-sr" v-text="pageTitle" />
@@ -11,17 +11,17 @@
     <iframe
       v-if="appUrl && method === 'GET'"
       :src="appUrl"
-      class="uk-width-1-1 uk-height-1-1"
+      class="oc-width-1-1 oc-height-1-1"
       :title="iFrameTitle"
     />
-    <div v-if="appUrl && method === 'POST' && formParameters" class="uk-height-1-1">
+    <div v-if="appUrl && method === 'POST' && formParameters" class="oc-height-1-1">
       <form :action="appUrl" target="app-iframe" method="post">
         <input ref="subm" type="submit" :value="formParameters" class="oc-hidden" />
         <div v-for="(item, key, index) in formParameters" :key="index">
           <input :name="key" :value="item" type="hidden" />
         </div>
       </form>
-      <iframe name="app-iframe" class="uk-width-1-1 uk-height-1-1" :title="iFrameTitle" />
+      <iframe name="app-iframe" class="oc-width-1-1 oc-height-1-1" :title="iFrameTitle" />
     </div>
   </main>
 </template>

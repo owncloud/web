@@ -3,7 +3,7 @@
     gutter="small"
     class="
       files-file-links-link files-file-links-link-table-row-info
-      uk-flex uk-flex-top uk-flex-between
+      oc-flex oc-flex-top oc-flex-between
     "
   >
     <link-info :link="link" />

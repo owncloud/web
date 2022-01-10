@@ -25,7 +25,7 @@
         <pagination :pages="paginationPages" :current-page="paginationPage" />
         <list-info
           v-if="paginatedResources.length > 0"
-          class="uk-width-1-1 oc-my-s"
+          class="oc-width-1-1 oc-my-s"
           :files="totalFilesCount.files"
           :folders="totalFilesCount.folders"
           :size="totalFilesSize"
