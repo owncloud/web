@@ -1,6 +1,6 @@
 const { program, Option } = require('commander')
 const getRepoInfo = require('git-repo-info')
-const pkg = require('../../../package.json')
+const pkg = require('../../../../package.json')
 const reporter = require('cucumber-html-reporter')
 const os = require('os')
 
@@ -16,12 +16,12 @@ program
   .option(
     '--report-location <path>',
     'location where the report gets generated to',
-    'tests/report/cucumber_report.html'
+    'reports/e2e/cucumber/releaseReport/cucumber_report.html'
   )
   .option(
     '--report-input <path>',
     'location of generated cucumber json',
-    'tests/report/cucumber_report.json'
+    'tests/e2e/cucumber/reportGenerator/cucumber_report.json'
   )
 
 program.parse()
