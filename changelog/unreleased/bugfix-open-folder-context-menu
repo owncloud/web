@@ -1,0 +1,6 @@
+Bugfix: Open folder from context menu
+
+We fixed a bug in the context menu that prevented correct folder navigation ("Open folder").
+
+https://github.com/owncloud/web/issues/6187
+https://github.com/owncloud/web/pull/6232
