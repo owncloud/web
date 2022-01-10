@@ -108,7 +108,7 @@
                       <oc-button
                         appearance="raw"
                         justify-content="left"
-                        :class="['uk-width-1-1']"
+                        :class="['oc-width-1-1']"
                         @click="showCreateResourceModal(false, mimetype.ext, false, true)"
                       >
                         <oc-icon :name="mimetype.icon || 'file'" />
@@ -530,6 +530,9 @@ export default {
       this.fileFolderCreationLoading = false
     },
     async addAppProviderFile(fileName) {
+      if (fileName === '') {
+        return
+      }
       try {
         const parent = this.currentFolder.fileId
         const publicToken = (this.$router.currentRoute.params.item || '').split('/')[0]
@@ -577,9 +580,10 @@ export default {
           )
         }
         resource = buildResource(resource)
-        this.UPSERT_RESOURCE(resource)
         this.$_fileActions_triggerDefaultAction(resource)
+        this.UPSERT_RESOURCE(resource)
         this.hideModal()
+
         if (this.isPersonalLocation) {
           this.loadIndicators({
             client: this.$client,
