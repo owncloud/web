@@ -67,7 +67,7 @@ After(function () {
 })
 
 Given(
-  /^((?!these).*)(in the server|on remote server)(.*)$/,
+  /^((?:(?!these|following).)*\S)\s(in the server|on remote server)(.*)$/,
   (st1: string, st2: string, st3: string) => {
     if (st2 === 'on remote server') {
       st1 = st1 + st2
@@ -77,7 +77,7 @@ Given(
 )
 
 Given(
-  /^(.*these.*)(in the server|on remote server)(.*)$/,
+  /^(.*(?=these|following).*\S)\s(in the server|on remote server)(.*)$/,
   (st1: string, st2: string, st3: string, table: DataTable) => {
     if (st2 === 'on remote server') {
       st1 = st1 + st2

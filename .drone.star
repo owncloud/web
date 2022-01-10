@@ -1347,9 +1347,6 @@ def acceptance(ctx):
 
                                 services += owncloudFederatedService() + databaseServiceForFederation(db, federationDbSuffix)
 
-                        # Copy files for upload
-                        # steps += copyFilesForUpload()
-
                         # Wait for test-related services to be up
                         steps += waitForBrowserService()
                         steps += waitForMiddlewareService()
@@ -2897,7 +2894,7 @@ def middlewareService(ocis = False, federatedServer = False):
 
     return [{
         "name": "middleware",
-        "image": "kiranparajuli589/oc-middleware",
+        "image": "owncloud/owncloud-test-middleware:1.1.0",
         "pull": "always",
         "environment": environment,
         "volumes": [{
