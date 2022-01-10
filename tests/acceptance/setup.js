@@ -35,7 +35,7 @@ Before(function startDriverOnLocal() {
   return RUNNING_ON_CI || startWebDriver({ env })
 })
 
-BeforeAll(function createSessionForEnv() {
+Before(function createSessionForEnv() {
   return createSession({ env })
 })
 
