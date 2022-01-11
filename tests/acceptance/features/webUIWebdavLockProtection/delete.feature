@@ -15,7 +15,7 @@ Feature: Locks
 
   @issue-5417
   Scenario Outline: deleting a locked file
-    Given user "brand-new-user" has locked folder "lorem.txt" setting following properties
+    Given user "brand-new-user" has locked folder "lorem.txt" setting the following properties in the server
       | lockscope | <lockscope> |
     And the user has browsed to the files page
     When the user tries to delete folder "lorem.txt" using the webUI
@@ -34,7 +34,7 @@ Feature: Locks
 
   @issue-5417
   Scenario Outline: deleting a file in a locked folder
-    Given user "brand-new-user" has locked folder "simple-folder" setting following properties
+    Given user "brand-new-user" has locked folder "simple-folder" setting the following properties in the server
       | lockscope | <lockscope> |
     And the user has browsed to the files page
     And the user has opened folder "simple-folder"
@@ -55,7 +55,7 @@ Feature: Locks
 
   @issue-ocis-1284
   Scenario Outline: deleting a file in a public share of a locked folder
-    Given user "brand-new-user" has locked folder "simple-folder" setting following properties
+    Given user "brand-new-user" has locked folder "simple-folder" setting the following properties in the server
       | lockscope | <lockscope> |
     And user "brand-new-user" has created a public link with following settings
       | path        | simple-folder                |

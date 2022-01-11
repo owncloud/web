@@ -168,7 +168,7 @@ Feature: deleting files and folders
     Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has created folder "simple-folder" in the server
     And the user has reloaded the current page of the webUI
-    And user "Alice" has renamed the following file
+    And user "Alice" has renamed the following file in the server
       | from-name-parts | to-name-parts   |
       | lorem.txt       | simple-folder/  |
       |                 | 'single'        |

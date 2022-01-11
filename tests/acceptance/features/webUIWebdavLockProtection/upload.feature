@@ -15,7 +15,7 @@ Feature: Locks
 
   @issue-5417
   Scenario Outline: uploading a file, trying to overwrite a locked file
-    Given user "brand-new-user" has locked file "lorem.txt" setting following properties
+    Given user "brand-new-user" has locked file "lorem.txt" setting the following properties in the server
       | lockscope | <lockscope> |
     And the user has browsed to the files page
     When the user uploads overwriting file "lorem.txt" using the webUI
@@ -33,7 +33,7 @@ Feature: Locks
 
   @issue-5417
   Scenario Outline: uploading a file, trying to overwrite a file in a locked folder
-    Given user "brand-new-user" has locked folder "simple-folder" setting following properties
+    Given user "brand-new-user" has locked folder "simple-folder" setting the following properties in the server
       | lockscope | <lockscope> |
     And the user has browsed to the files page
     And the user has opened folder "simple-folder"
@@ -53,7 +53,7 @@ Feature: Locks
 
   @issue-5417
   Scenario Outline: uploading a new file into a locked folder
-    Given user "brand-new-user" has locked folder "simple-folder" setting following properties
+    Given user "brand-new-user" has locked folder "simple-folder" setting the following properties in the server
       | lockscope | <lockscope> |
     And the user has browsed to the files page
     And the user has opened folder "simple-folder"
@@ -73,7 +73,7 @@ Feature: Locks
 
   @issue-5741 @issue-ocis-1284
   Scenario Outline: uploading a file, trying to overwrite a file in a locked folder in a public share
-    Given user "brand-new-user" has locked folder "simple-folder" setting following properties
+    Given user "brand-new-user" has locked folder "simple-folder" setting the following properties in the server
       | lockscope | <lockscope> |
     And user "brand-new-user" has created a public link with following settings
       | path        | simple-folder                |

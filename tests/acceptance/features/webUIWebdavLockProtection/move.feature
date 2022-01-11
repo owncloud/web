@@ -16,7 +16,7 @@ Feature: Locks
 
   @issue-5417
   Scenario Outline: moving a locked file
-    Given user "brand-new-user" has locked file "lorem.txt" setting following properties
+    Given user "brand-new-user" has locked file "lorem.txt" setting the following properties in the server
       | lockscope | <lockscope> |
     And the user has browsed to the files page
     When the user tries to move file "lorem.txt" into folder "simple-empty-folder" using the webUI
@@ -37,7 +37,7 @@ Feature: Locks
 
   @issue-5417
   Scenario Outline: moving a file trying to overwrite a locked file
-    Given user "brand-new-user" has locked file "/simple-folder/lorem.txt" setting following properties
+    Given user "brand-new-user" has locked file "/simple-folder/lorem.txt" setting the following properties in the server
       | lockscope | <lockscope> |
     And the user has browsed to the files page
     When the user tries to move file "lorem.txt" into folder "simple-folder" using the webUI
@@ -59,7 +59,7 @@ Feature: Locks
 
   @issue-5417
   Scenario Outline: moving a file into a locked folder
-    Given user "brand-new-user" has locked file "/simple-empty-folder" setting following properties
+    Given user "brand-new-user" has locked file "/simple-empty-folder" setting the following properties in the server
       | lockscope | <lockscope> |
     And the user has browsed to the files page
     When the user tries to move file "lorem.txt" into folder "simple-empty-folder" using the webUI
@@ -81,7 +81,7 @@ Feature: Locks
 
   @issue-5417
   Scenario Outline: renaming of a locked file
-    Given user "brand-new-user" has locked file "lorem.txt" setting following properties
+    Given user "brand-new-user" has locked file "lorem.txt" setting the following properties in the server
       | lockscope | <lockscope> |
     And the user has browsed to the files page
     When the user tries to rename file "lorem.txt" to "a-renamed-file.txt" using the webUI
@@ -103,7 +103,7 @@ Feature: Locks
 
   @issue-ocis-1284
   Scenario Outline: renaming a file in a public share of a locked folder
-    Given user "brand-new-user" has locked folder "simple-folder" setting following properties
+    Given user "brand-new-user" has locked folder "simple-folder" setting the following properties in the server
       | lockscope | <lockscope> |
     And user "brand-new-user" has created a public link with following settings
       | path        | simple-folder                |
@@ -126,7 +126,7 @@ Feature: Locks
   @issue-ocis-1284
   Scenario Outline: moving a locked file into an other folder in a public share
     Given user "brand-new-user" has created folder "simple-folder/simple-empty-folder" in the server
-    And user "brand-new-user" has locked file "simple-folder/lorem.txt" setting following properties
+    And user "brand-new-user" has locked file "simple-folder/lorem.txt" setting the following properties in the server
       | lockscope | <lockscope> |
     And user "brand-new-user" has created a public link with following settings
       | path        | simple-folder                |
