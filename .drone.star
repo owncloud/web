@@ -2880,7 +2880,7 @@ def middlewareService(ocis = False, federatedServer = False):
 
     return [{
         "name": "middleware",
-        "image": "owncloud/owncloud-test-middleware",
+        "image": "owncloud/owncloud-test-middleware:1.0.0",
         "pull": "always",
         "environment": environment,
         "volumes": [{
