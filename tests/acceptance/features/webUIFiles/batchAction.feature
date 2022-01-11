@@ -8,7 +8,7 @@ Feature: Visibility of the batch actions menu
       | username |
       | Alice    |
       | Brian    |
-    And user "Alice" has created folder "simple-folder"  in the server
+    And user "Alice" has created folder "simple-folder" in the server
 
 
   Scenario: View batch action menu for a folder on the all files page
@@ -22,7 +22,7 @@ Feature: Visibility of the batch actions menu
 
 
   Scenario: View batch action menu for a file on the all files page
-    Given user "Alice" has created file "lorem.txt"  in the server
+    Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has logged in using the webUI
     When the user marks the file "lorem.txt" using the webUI
     Then the following batch action buttons should be visible
@@ -34,7 +34,7 @@ Feature: Visibility of the batch actions menu
 
 
   Scenario: View batch action menu when selecting both file and folder on the all files page
-    Given user "Alice" has created file "lorem.txt"  in the server
+    Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has logged in using the webUI
     When the user marks these files for batch action using the webUI
       | name          |
@@ -111,7 +111,7 @@ Feature: Visibility of the batch actions menu
 
 
   Scenario: View batch action menu for a folder on the trashbin page
-    Given the following folders have been deleted by user "Alice"  in the server
+    Given the following folders have been deleted by user "Alice" in the server
       | name          |
       | simple-folder |
     And user "Alice" has logged in using the webUI
