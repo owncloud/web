@@ -27,12 +27,12 @@ Feature: deleting files and folders
       | strängé filename (duplicate #2 &).txt |
       | sample,1.txt                          |
       | Sample,Folder,With,Comma              |
-    Then as "Alice" folder "simple-folder" should not exist
-    And as "Alice" file "lorem.txt" should not exist
-    And as "Alice" folder "strängé नेपाली folder" should not exist
-    And as "Alice" file "strängé filename (duplicate #2 &).txt" should not exist
-    And as "Alice" file "sample,1.txt" should not exist
-    And as "Alice" folder "Sample,Folder,With,Comma" should not exist
+    Then as "Alice" folder "simple-folder" should not exist in the server
+    And as "Alice" file "lorem.txt" should not exist in the server
+    And as "Alice" folder "strängé नेपाली folder" should not exist in the server
+    And as "Alice" file "strängé filename (duplicate #2 &).txt" should not exist in the server
+    And as "Alice" file "sample,1.txt" should not exist in the server
+    And as "Alice" folder "Sample,Folder,With,Comma" should not exist in the server
     And no message should be displayed on the webUI
     And the deleted elements should not be listed on the webUI
     But folder "simple-empty-folder" should be listed on the webUI
@@ -66,9 +66,9 @@ Feature: deleting files and folders
       | data.zip      |
       | lorem.txt     |
       | simple-folder |
-    Then as "Alice" file "data.zip" should not exist
-    And as "Alice" file "lorem.txt" should not exist
-    And as "Alice" folder "simple-folder" should not exist
+    Then as "Alice" file "data.zip" should not exist in the server
+    And as "Alice" file "lorem.txt" should not exist in the server
+    And as "Alice" folder "simple-folder" should not exist in the server
     And the deleted elements should not be listed on the webUI
     And the deleted elements should not be listed on the webUI after a page reload
     And no message should be displayed on the webUI
@@ -97,12 +97,12 @@ Feature: deleting files and folders
       | lorem.txt     |
       | simple-folder |
     And the user batch deletes the marked files using the webUI
-    Then as "Alice" file "lorem.txt" should exist
-    And as "Alice" folder "simple-folder" should exist
+    Then as "Alice" file "lorem.txt" should exist in the server
+    And as "Alice" folder "simple-folder" should exist in the server
     And folder "simple-folder" should be listed on the webUI
     And file "lorem.txt" should be listed on the webUI
     # Check just an example of a file that should not exist any more
-    But as "Alice" file "data.zip" should not exist
+    But as "Alice" file "data.zip" should not exist in the server
     And file "data.zip" should not be listed on the webUI
     And the count of files and folders shown on the webUI should be 2
     And no message should be displayed on the webUI
@@ -112,9 +112,9 @@ Feature: deleting files and folders
     When the user creates a folder with the name "my-empty-folder" using the webUI
     And the user creates a folder with the name "my-other-empty-folder" using the webUI
     And the user deletes folder "my-empty-folder" using the webUI
-    Then as "Alice" folder "my-other-empty-folder" should exist
+    Then as "Alice" folder "my-other-empty-folder" should exist in the server
     And folder "my-other-empty-folder" should be listed on the webUI
-    But as "Alice" folder "my-empty-folder" should not exist
+    But as "Alice" folder "my-empty-folder" should not exist in the server
     And folder "my-empty-folder" should not be listed on the webUI
     And no message should be displayed on the webUI
 
@@ -123,7 +123,7 @@ Feature: deleting files and folders
     Given user "Alice" has created file "zzzz-must-be-last-file-in-folder.txt" in the server
     And the user has reloaded the current page of the webUI
     When the user deletes file "zzzz-must-be-last-file-in-folder.txt" using the webUI
-    Then as "Alice" file "zzzz-must-be-last-file-in-folder.txt" should not exist
+    Then as "Alice" file "zzzz-must-be-last-file-in-folder.txt" should not exist in the server
     And file "zzzz-must-be-last-file-in-folder.txt" should not be listed on the webUI
     And no message should be displayed on the webUI
 
@@ -137,7 +137,7 @@ Feature: deleting files and folders
     And the user searches for tag "lorem" using the webUI
     Then file "lorem.txt" should be listed on the webUI
     When the user deletes file "lorem.txt" using the webUI
-    Then as "Alice" file "lorem.txt" should not exist
+    Then as "Alice" file "lorem.txt" should not exist in the server
     And file "lorem.txt" should not be listed on the webUI
     When the user browses to the files page
     Then file "lorem.txt" should not be listed on the webUI
@@ -156,9 +156,9 @@ Feature: deleting files and folders
       | simple-empty-folder                   |
       | lorem.txt                             |
       | strängé filename (duplicate #2 &).txt |
-    Then as "Alice" file "simple-folder/lorem.txt" should not exist
-    And as "Alice" folder "simple-folder/simple-empty-folder" should not exist
-    And as "Alice" file "simple-folder/strängé filename (duplicate #2 &).txt" should not exist
+    Then as "Alice" file "simple-folder/lorem.txt" should not exist in the server
+    And as "Alice" folder "simple-folder/simple-empty-folder" should not exist in the server
+    And as "Alice" file "simple-folder/strängé filename (duplicate #2 &).txt" should not exist in the server
     And the deleted elements should not be listed on the webUI
     And no message should be displayed on the webUI
     And the deleted elements should not be listed on the webUI after a page reload
@@ -212,9 +212,9 @@ Feature: deleting files and folders
       | data.zip            |
       | lorem.txt           |
       | simple-empty-folder |
-    Then as "Alice" file "simple-folder/data.zip" should not exist
-    And as "Alice" file "simple-folder/lorem.txt" should not exist
-    And as "Alice" folder "simple-folder/simple-empty-folder" should not exist
+    Then as "Alice" file "simple-folder/data.zip" should not exist in the server
+    And as "Alice" file "simple-folder/lorem.txt" should not exist in the server
+    And as "Alice" folder "simple-folder/simple-empty-folder" should not exist in the server
     And the deleted elements should not be listed on the webUI
     And the deleted elements should not be listed on the webUI after a page reload
 
@@ -231,8 +231,8 @@ Feature: deleting files and folders
     When the user accepts share "lorem.txt" offered by user "Brian Murphy" using the webUI
     When the user unshares folder "simple-folder" using the webUI
     And the user unshares file "lorem.txt" using the webUI
-    Then as "Alice" folder "simple-folder" should not exist
-    And as "Alice" file "lorem.txt" should not exist
+    Then as "Alice" folder "simple-folder" should not exist in the server
+    And as "Alice" file "lorem.txt" should not exist in the server
     And no message should be displayed on the webUI
 
 
@@ -252,8 +252,8 @@ Feature: deleting files and folders
     When the user reloads the current page of the webUI
     Then file "lorem.txt" should not be listed on the webUI
     And folder "simple-folder" should not be listed on the webUI
-    And as "Alice" file "lorem.txt" should not exist
-    And as "Alice" folder "simple-folder" should not exist
+    And as "Alice" file "lorem.txt" should not exist in the server
+    And as "Alice" folder "simple-folder" should not exist in the server
 
 
   Scenario: Delete folder with dot in the name

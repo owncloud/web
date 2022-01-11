@@ -84,7 +84,7 @@ Feature: Shares in share-with pages
     And the user closes the app-sidebar using the webUI
     And the user browses to the shared-with-me page in declined shares view
     Then folder "simple-folder" shared by "Alice Hansen" should be in "Declined" state on the webUI
-    And as "Brian" folder "simple-folder" should not exist
+    And as "Brian" folder "simple-folder" should not exist in the server
 
 
 

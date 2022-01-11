@@ -49,7 +49,7 @@ Feature: Visibility of the batch actions menu
   @skipOnOCIS
   Scenario: View batch action menu for a folder on the favorites page
     Given user "Alice" has logged in using the webUI
-    And user "Alice" has favorited element "simple-folder"
+    And user "Alice" has favorited element "simple-folder" in the server
     And the user has browsed to the favorites page
     When the user marks the folder "simple-folder" using the webUI
     Then the following batch action buttons should not be visible

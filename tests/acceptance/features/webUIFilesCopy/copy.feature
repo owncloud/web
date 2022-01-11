@@ -82,8 +82,8 @@ Feature: copy files and folders
     And the user copies file "data.zip" into folder "simple-empty-folder" using the webUI
     Then breadcrumb for folder "simple-empty-folder" should be displayed on the webUI
     And file "data.zip" should be listed on the webUI
-    And as "Alice" file "simple-folder/simple-empty-folder/data.zip" should exist
-    And as "Alice" file "simple-folder/data.zip" should exist
+    And as "Alice" file "simple-folder/simple-empty-folder/data.zip" should exist in the server
+    And as "Alice" file "simple-folder/data.zip" should exist in the server
 
 
   Scenario: copy a file into another folder with no change permission
@@ -94,7 +94,7 @@ Feature: copy files and folders
     And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian" in the server
     And user "Alice" has logged in using the webUI
     When the user tries to copy file "lorem.txt" into folder "Shares/simple-folder" using the webUI
-    Then as "Alice" file "Shares/simple-folder/lorem.txt" should not exist
+    Then as "Alice" file "Shares/simple-folder/lorem.txt" should not exist in the server
 
 
   @issue-ocis-1328
@@ -106,7 +106,7 @@ Feature: copy files and folders
     And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian" in the server
     And user "Alice" has logged in using the webUI
     When the user tries to copy folder "simple-empty-folder" into folder "Shares/simple-folder" using the webUI
-    Then as "Alice" file "Shares/simple-folder/simple-empty-folder" should not exist
+    Then as "Alice" file "Shares/simple-folder/simple-empty-folder" should not exist in the server
 
 
   Scenario: copy a folder into the same folder
@@ -114,7 +114,7 @@ Feature: copy files and folders
     And user "Alice" has logged in using the webUI
     When the user tries to copy folder "simple-empty-folder" into folder "simple-empty-folder" using the webUI
     Then the error message with header 'Failed to copy "simple-empty-folder"' should be displayed on the webUI
-    And as "Alice" file "simple-empty-folder/simple-empty-folder" should not exist
+    And as "Alice" file "simple-empty-folder/simple-empty-folder" should not exist in the server
 
 
   Scenario: copy a folder into another folder with same name
@@ -125,8 +125,8 @@ Feature: copy files and folders
     When the user copies folder "simple-empty-folder" into folder "folder with space/simple-empty-folder" using the webUI
     Then breadcrumb for folder "folder with space" should be displayed on the webUI
     And folder "simple-empty-folder" should be listed on the webUI
-    And as "Alice" folder "folder with space/simple-empty-folder/simple-empty-folder" should exist
-    And as "Alice" folder "simple-empty-folder" should exist
+    And as "Alice" folder "folder with space/simple-empty-folder/simple-empty-folder" should exist in the server
+    And as "Alice" folder "simple-empty-folder" should exist in the server
 
   Scenario: cancel copying a file
     Given user "Alice" has uploaded file "data.zip" to "data.zip" in the server

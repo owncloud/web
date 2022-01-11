@@ -173,8 +173,8 @@ Feature: Sharing files and folders with internal groups
     When the user deletes "grp1" as collaborator for the current file using the webUI
     Then group "grp1" should not be listed in the collaborators list on the webUI
     And file "lorem.txt" should not be listed in shared-with-others page on the webUI
-    And as "Brian" file "/Shares/lorem.txt" should not exist
-    And as "Brian" file "lorem (2).txt" should not exist
+    And as "Brian" file "/Shares/lorem.txt" should not exist in the server
+    And as "Brian" file "lorem (2).txt" should not exist in the server
 
   @issue-ocis-1277
   Scenario: user shares the file/folder with multiple internal users and delete the share with one user
@@ -193,8 +193,8 @@ Feature: Sharing files and folders with internal groups
     Then group "grp1" should not be listed in the collaborators list on the webUI
     And group "grp2" should be listed as "Editor" in the collaborators list on the webUI
     And file "lorem.txt" should be listed in shared-with-others page on the webUI
-    And as "Brian" file "/Shares/lorem.txt" should not exist
-    But as "Carol" file "/Shares/lorem.txt" should exist
+    And as "Brian" file "/Shares/lorem.txt" should not exist in the server
+    But as "Carol" file "/Shares/lorem.txt" should exist in the server
 
   @issue-ocis-1317
   Scenario: Auto-completion for a group that is excluded from receiving shares

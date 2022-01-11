@@ -143,7 +143,7 @@ Feature: Share by public link with different roles
     When the public uses the webUI to access the last public link created by user "Alice"
     And the user uploads file "new-lorem.txt" using the webUI
     Then file "new-lorem.txt" should be listed on the webUI
-    And as "Alice" file "simple-folder/new-lorem.txt" should exist
+    And as "Alice" file "simple-folder/new-lorem.txt" should exist in the server
 
 
   Scenario: creating a public link with "Editor" role makes it possible to upload a file inside a subdirectory with password set
@@ -153,7 +153,7 @@ Feature: Share by public link with different roles
     And the user opens folder "simple-empty-folder" using the webUI
     And the user uploads file "new-lorem.txt" using the webUI
     Then file "new-lorem.txt" should be listed on the webUI
-    And as "Alice" file "simple-folder/simple-empty-folder/new-lorem.txt" should exist
+    And as "Alice" file "simple-folder/simple-empty-folder/new-lorem.txt" should exist in the server
 
 
   Scenario: creating a public link with "Editor" role makes it possible to upload a folder
@@ -163,7 +163,7 @@ Feature: Share by public link with different roles
     Then folder "PARENT" should be listed on the webUI
     And folder "CHILD" should be listed in the folder "PARENT" on the webUI
     And file "child.txt" should be listed in the folder "CHILD" on the webUI
-    And as "Alice" file "simple-folder/PARENT/CHILD/child.txt" should exist
+    And as "Alice" file "simple-folder/PARENT/CHILD/child.txt" should exist in the server
 
 
   Scenario: creating a public link with "Editor" role makes it possible to upload a folder inside a subdirectory
@@ -175,7 +175,7 @@ Feature: Share by public link with different roles
     Then folder "PARENT" should be listed on the webUI
     And folder "CHILD" should be listed in the folder "PARENT" on the webUI
     And file "child.txt" should be listed in the folder "CHILD" on the webUI
-    And as "Alice" file "simple-folder/simple-empty-folder/PARENT/CHILD/child.txt" should exist
+    And as "Alice" file "simple-folder/simple-empty-folder/PARENT/CHILD/child.txt" should exist in the server
 
 
   Scenario: creating a public link with "Editor" role makes it possible to upload files via the link even with password set
@@ -183,7 +183,7 @@ Feature: Share by public link with different roles
     When the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
     And the user uploads file "new-lorem.txt" using the webUI
     Then file "new-lorem.txt" should be listed on the webUI
-    And as "Alice" file "simple-folder/new-lorem.txt" should exist
+    And as "Alice" file "simple-folder/new-lorem.txt" should exist in the server
 
 
   Scenario: creating a public link with "Editor" role makes it possible to upload files inside a subdirectory
@@ -193,7 +193,7 @@ Feature: Share by public link with different roles
     And the user opens folder "simple-empty-folder" using the webUI
     And the user uploads file "new-lorem.txt" using the webUI
     Then file "new-lorem.txt" should be listed on the webUI
-    And as "Alice" file "simple-folder/simple-empty-folder/new-lorem.txt" should exist
+    And as "Alice" file "simple-folder/simple-empty-folder/new-lorem.txt" should exist in the server
 
 
   Scenario: creating a public link with "Editor" role makes it possible to upload a folder even with password set
@@ -203,7 +203,7 @@ Feature: Share by public link with different roles
     Then folder "PARENT" should be listed on the webUI
     And folder "CHILD" should be listed in the folder "PARENT" on the webUI
     And file "child.txt" should be listed in the folder "CHILD" on the webUI
-    And as "Alice" file "simple-folder/PARENT/CHILD/child.txt" should exist
+    And as "Alice" file "simple-folder/PARENT/CHILD/child.txt" should exist in the server
 
 
   Scenario: creating a public link with "Editor" role makes it possible to upload a folder inside a sub-directory even with password set
@@ -215,7 +215,7 @@ Feature: Share by public link with different roles
     Then folder "PARENT" should be listed on the webUI
     And folder "CHILD" should be listed in the folder "PARENT" on the webUI
     And file "child.txt" should be listed in the folder "CHILD" on the webUI
-    And as "Alice" file "simple-folder/simple-empty-folder/PARENT/CHILD/child.txt" should exist
+    And as "Alice" file "simple-folder/simple-empty-folder/PARENT/CHILD/child.txt" should exist in the server
 
   @issue-ocis-723
   Scenario: creating a public link with "Viewer" role makes it impossible to create files via the link even with password set
@@ -230,7 +230,7 @@ Feature: Share by public link with different roles
     And the public uploads file "new-lorem.txt" in files-drop page
     Then the following files should be listed on the files-drop page:
       | new-lorem.txt |
-    And as "Alice" file "simple-folder/new-lorem.txt" should exist
+    And as "Alice" file "simple-folder/new-lorem.txt" should exist in the server
 
 
   Scenario: creating a public link with "Uploader" role makes it possible to upload multiple files via files-drop page
@@ -251,7 +251,7 @@ Feature: Share by public link with different roles
     And the public uploads folder "FOLDER" in files-drop page
     Then the following files should be listed on the files-drop page:
       | FOLDER |
-    And as "Alice" folder "simple-folder/FOLDER" should exist
+    And as "Alice" folder "simple-folder/FOLDER" should exist in the server
 
   @issue-ocis-723
   Scenario: creating a public link with "Uploader" role makes it possible to create files through files-drop page even with password set

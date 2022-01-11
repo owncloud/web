@@ -90,8 +90,8 @@ Feature: move files
     And the user moves file "data.zip" into folder "simple-empty-folder" using the webUI
     Then breadcrumb for folder "simple-empty-folder" should be displayed on the webUI
     And file "data.zip" should be listed on the webUI
-    And as "Alice" file "simple-folder/simple-empty-folder/data.zip" should exist
-    But as "Alice" file "simple-folder/data.zip" should not exist
+    And as "Alice" file "simple-folder/simple-empty-folder/data.zip" should exist in the server
+    But as "Alice" file "simple-folder/data.zip" should not exist in the server
 
   @issue-ocis-1328
   Scenario: move a file into another folder with no change permission
@@ -100,7 +100,7 @@ Feature: move files
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions in the server
     And user "Alice" has logged in using the webUI
     When the user tries to move file "lorem.txt" into folder "simple-folder (2)" using the webUI
-    Then as "Alice" file "simple-folder (2)/lorem.txt" should not exist
+    Then as "Alice" file "simple-folder (2)/lorem.txt" should not exist in the server
 
   Scenario: cancel moving a file
     Given user "Alice" has logged in using the webUI
@@ -151,4 +151,4 @@ Feature: move files
       | file_name    |
       | testFile.txt |
     Then breadcrumb for folder "Shares" should be displayed on the webUI
-    And as "Brian" file "/Shares/testFolder/testFile.txt" should exist
+    And as "Brian" file "/Shares/testFolder/testFile.txt" should exist in the server

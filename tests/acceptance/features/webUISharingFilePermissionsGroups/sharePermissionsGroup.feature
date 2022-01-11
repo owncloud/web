@@ -56,7 +56,7 @@ Feature: Sharing files with internal groups with permissions
       | item_type   | file                 |
       | permissions | <actual-permissions> |
     But group "grp1" should not be listed in the collaborators list on the webUI
-    And as "Alice" file "/Shares/lorem.txt" should not exist
+    And as "Alice" file "/Shares/lorem.txt" should not exist in the server
     Examples:
       | role                 | displayed-role       | extra-permissions | displayed-permissions | actual-permissions  |
       | Viewer               | Viewer               | ,                 | ,                     | read, share         |

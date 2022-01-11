@@ -52,9 +52,9 @@ Feature: Sharing folders with multiple internal users using advanced permissions
       | item_type   | folder                |
       | permissions | <actual-permissions>  |
     But user "Regular User" should not be listed in the collaborators list on the webUI
-    And as "user0" folder "/Shares/simple-folder" should not exist
+    And as "user0" folder "/Shares/simple-folder" should not exist in the server
     And user "David Lopez" should not be listed in the collaborators list on the webUI
-    And as "David" folder "/Shares/simple-folder" should not exist
+    And as "David" folder "/Shares/simple-folder" should not exist in the server
     Examples:
       | role                 | displayed-role     | extra-permissions     | displayed-permissions | actual-permissions          |
       | Custom permissions   | Custom permissions | delete                | delete                | read, delete                |

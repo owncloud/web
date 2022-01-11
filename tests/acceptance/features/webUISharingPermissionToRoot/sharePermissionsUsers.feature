@@ -177,7 +177,7 @@ Feature: Sharing files and folders with internal users with different permission
     When the user browses to the folder "simple-folder" on the files page
     And the user shares folder "simple-empty-folder" with user "Carol King" as "Custom permissions" with permissions "share, delete, update" using the webUI
     Then the error message with header "Error while sharing." should be displayed on the webUI
-    And as "Carol" folder "simple-empty-folder" should not exist
+    And as "Carol" folder "simple-empty-folder" should not exist in the server
 
 
   Scenario: User is not allowed to update permissions of a reshared sub-folder to higher permissions than what user has received
@@ -188,7 +188,7 @@ Feature: Sharing files and folders with internal users with different permission
     When the user browses to the folder "simple-folder" on the files page
     And the user shares folder "simple-empty-folder" with user "Carol King" as "Custom permissions" with permissions "share, delete, update, create" using the webUI
     Then the error message with header "Error while sharing." should be displayed on the webUI
-    And as "Carol" folder "simple-empty-folder" should not exist
+    And as "Carol" folder "simple-empty-folder" should not exist in the server
 
 
   Scenario: User is allowed to update permissions of a reshared sub-folder within the permissions that the user has received

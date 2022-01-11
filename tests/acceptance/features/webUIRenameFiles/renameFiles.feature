@@ -192,8 +192,8 @@ Feature: rename files
     When the user reloads the current page of the webUI
     Then file "a-renamed-file.txt" should be listed on the webUI
     But file "lorem.txt" should not be listed on the webUI
-    And as "Alice" file "simple-folder/a-renamed-file.txt" should exist
-    And as "Alice" file "simple-folder/lorem.txt" should not exist
+    And as "Alice" file "simple-folder/a-renamed-file.txt" should exist in the server
+    And as "Alice" file "simple-folder/lorem.txt" should not exist in the server
 
   @issue-2249
   Scenario: Rename a file and folder in shared with me page
@@ -215,10 +215,10 @@ Feature: rename files
     When the user browses to the files page
     Then file "renamed-file.txt" should be listed on the webUI
     And folder "renamed-folder" should be listed on the webUI
-    And as "Alice" file "renamed-file.txt" should exist
-    And as "Alice" folder "renamed-folder" should exist
-    And as "Brian" file "lorem.txt" should exist
-    And as "Brian" folder "simple-folder" should exist
+    And as "Alice" file "renamed-file.txt" should exist in the server
+    And as "Alice" folder "renamed-folder" should exist in the server
+    And as "Brian" file "lorem.txt" should exist in the server
+    And as "Brian" folder "simple-folder" should exist in the server
 
   @issue-ocis-2256
   Scenario: Rename a file and folder in shared with others page
@@ -237,16 +237,16 @@ Feature: rename files
     When the user browses to the files page
     Then file "renamed-file.txt" should be listed on the webUI
     And folder "renamed-folder" should be listed on the webUI
-    And as "Alice" file "renamed-file.txt" should exist
-    And as "Alice" folder "renamed-folder" should exist
-    And as "Brian" file "lorem.txt" should exist
-    And as "Brian" folder "simple-folder" should exist
+    And as "Alice" file "renamed-file.txt" should exist in the server
+    And as "Alice" folder "renamed-folder" should exist in the server
+    And as "Brian" file "lorem.txt" should exist in the server
+    And as "Brian" folder "simple-folder" should exist in the server
 
   @issue-ocis-1330
   Scenario: Rename a file and folder in favorites page
     Given user "Alice" has created folder "simple-folder" in the server
-    And user "Alice" has favorited element "lorem.txt"
-    And user "Alice" has favorited element "simple-folder"
+    And user "Alice" has favorited element "lorem.txt" in the server
+    And user "Alice" has favorited element "simple-folder" in the server
     When the user browses to the favorites page
     And the user renames file "lorem.txt" to "renamed-file.txt" using the webUI
     And the user renames folder "simple-folder" to "renamed-folder" using the webUI
@@ -264,8 +264,8 @@ Feature: rename files
     When the user reloads the current page of the webUI
     Then file "lorem.txt" should not be listed on the webUI
     And file "new-lorem.txt" should not be listed on the webUI
-    And as "Alice" file "lorem.txt" should not exist
-    And as "Alice" file "new-lorem.txt" should not exist
+    And as "Alice" file "lorem.txt" should not exist in the server
+    And as "Alice" file "new-lorem.txt" should not exist in the server
 
 
   Scenario: Rename file extension through context-menu without reload

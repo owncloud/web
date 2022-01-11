@@ -38,7 +38,7 @@ Feature: Access public link shares by public
     Then folder "public-created-folder" should be listed on the webUI
     When the public reloads the current page of the webUI
     Then folder "public-created-folder" should be listed on the webUI
-    And as "Alice" folder "/simple-folder/public-created-folder" should exist
+    And as "Alice" folder "/simple-folder/public-created-folder" should exist in the server
 
   @skipOnOC10 @issue-4582
   Scenario: public batch deletes resources in the public link
@@ -59,9 +59,9 @@ Feature: Access public link shares by public
     Then file "data.zip" should not be listed on the webUI
     And folder "simple-empty-folder" should not be listed on the webUI
     And file "lorem.txt" should not be listed on the webUI
-    And as "Alice" folder "/simple-folder/simple-empty-folder" should not exist
-    And as "Alice" file "/simple-folder/lorem.txt" should not exist
-    And as "Alice" file "/simple-folder/data.zip" should not exist
+    And as "Alice" folder "/simple-folder/simple-empty-folder" should not exist in the server
+    And as "Alice" file "/simple-folder/lorem.txt" should not exist in the server
+    And as "Alice" file "/simple-folder/data.zip" should not exist in the server
 
 
   Scenario: files are not selected initially in the public share

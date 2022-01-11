@@ -139,7 +139,7 @@ Feature: Public link share management
     And user "Alice" has created a public link with following settings in the server
       | path | /simple-folder/simple-empty-folder |
       | name | Public Link Sub                    |
-    And user "Alice" has favorited element "simple-folder/simple-empty-folder"
+    And user "Alice" has favorited element "simple-folder/simple-empty-folder" in the server
     And user "Alice" has logged in using the webUI
     When the user browses to the shared-with-others page
     And the user opens the share dialog for folder "simple-folder/simple-empty-folder" using the webUI

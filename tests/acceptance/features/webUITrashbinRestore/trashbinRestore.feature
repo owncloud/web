@@ -150,10 +150,10 @@ Feature: Restore deleted files/folders
      """
     #And a success message "file-to-delete-and-restore was restored successfully" should be displayed on the webUI
     #And as "Alice" the file with original path "simple-folder/file-to-delete-and-restore" should not exist in the trashbin
-    And as "Alice" the file with original path "simple-folder/file-to-delete-and-restore" should exist in the trashbin
-    And as "Alice" file "simple-folder-renamed/file-to-delete-and-restore" should not exist
+    And as "Alice" the file with original path "simple-folder/file-to-delete-and-restore" should exist in the trashbin in the server
+    And as "Alice" file "simple-folder-renamed/file-to-delete-and-restore" should not exist in the server
     #And as "Alice" file "simple-folder-renamed/file-to-delete-and-restore" should exist
-    And as "Alice" file "simple-folder/file-to-delete-and-restore" should not exist
+    And as "Alice" file "simple-folder/file-to-delete-and-restore" should not exist in the server
 
 
   @skipOnOC10 @issue-product-186 @issue-ocis-1057
@@ -172,9 +172,9 @@ Feature: Restore deleted files/folders
       """
     #And a success message "file-to-delete-and-restore was restored successfully" should be displayed on the webUI
     #And as "Alice" the file with original path "simple-folder/file-to-delete-and-restore" should not exist in the trashbin
-    And as "Alice" file "simple-folder-renamed/file-to-delete-and-restore" should not exist
+    And as "Alice" file "simple-folder-renamed/file-to-delete-and-restore" should not exist in the server
     #And as "Alice" file "simple-folder-renamed/file-to-delete-and-restore" should exist
-    And as "Alice" file "simple-folder/file-to-delete-and-restore" should not exist
+    And as "Alice" file "simple-folder/file-to-delete-and-restore" should not exist in the server
 
 
   @issue-1753 @skipOnOCIS @issue-product-186
@@ -193,8 +193,8 @@ Feature: Restore deleted files/folders
      """
     #And a success message "file-to-delete-and-restore was restored successfully" should be displayed on the webUI
     #And as "Alice" the file with original path "simple-folder/file-to-delete-and-restore" should not exist in the trashbin
-    And as "Alice" the file with original path "simple-folder/file-to-delete-and-restore" should exist in the trashbin
-    And as "Alice" file "simple-folder/file-to-delete-and-restore" should not exist
+    And as "Alice" the file with original path "simple-folder/file-to-delete-and-restore" should exist in the trashbin in the server
+    And as "Alice" file "simple-folder/file-to-delete-and-restore" should not exist in the server
     #And as "Alice" file "simple-folder/file-to-delete-and-restore" should exist
 
 
@@ -214,7 +214,7 @@ Feature: Restore deleted files/folders
       """
     #And a success message "file-to-delete-and-restore was restored successfully" should be displayed on the webUI
     #And as "Alice" the file with original path "simple-folder/file-to-delete-and-restore" should not exist in the trashbin
-    And as "Alice" file "simple-folder/file-to-delete-and-restore" should not exist
+    And as "Alice" file "simple-folder/file-to-delete-and-restore" should not exist in the server
     #And as "Alice" file "simple-folder/file-to-delete-and-restore" should exist
 
 
@@ -270,10 +270,10 @@ Feature: Restore deleted files/folders
     And the user opens folder "folder-to-share" using the webUI
     And the user deletes file "fileToShare.txt" using the webUI
     And the user browses to the trashbin page
-    Then as "Alice" file "fileToShare.txt" should exist in the trashbin
+    Then as "Alice" file "fileToShare.txt" should exist in the trashbin in the server
     When the user restores file "…/folder-to-share/fileToShare.txt" from the trashbin using the webUI
     Then the success message with header "fileToShare.txt was restored successfully" should be displayed on the webUI
-    And as "Alice" file "/Shares/folder-to-share/fileToShare.txt" should exist
+    And as "Alice" file "/Shares/folder-to-share/fileToShare.txt" should exist in the server
 
   @issue-1502
   Scenario: Delete and restore folders with dot in the name
