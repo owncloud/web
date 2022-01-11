@@ -11,6 +11,7 @@ const util = require('util')
 const sharingHelper = require('../helpers/sharingHelper')
 const { SHARE_STATE } = require('../helpers/sharingHelper')
 const appSideBar = client.page.FilesPageElement.appSideBar()
+const appBarActions = client.page.appBarActions()
 
 let deletedElements
 let unsharedElements
@@ -1433,3 +1434,36 @@ function assertIncludesMessage(messageArr, message) {
     return false
   }
 }
+
+When('the user marks the file/folder {string} using the webUI', function (fileName) {
+  return client.page.FilesPageElement.filesList().toggleFileOrFolderCheckbox('enable', fileName)
+})
+
+Then('the following batch action buttons should not be visible', async function (dataTable) {
+  const batchButtons = dataTable.hashes()
+  for (const batchButton of batchButtons) {
+    const isBatchButtonVisible = await appBarActions.isBatchActionButtonVisible(
+      batchButton.buttonName,
+      false
+    )
+    assert.strictEqual(
+      isBatchButtonVisible,
+      false,
+      `Expected "${batchButton.buttonName}" action button not to be visible but was`
+    )
+  }
+})
+
+Then('the following batch action buttons should be visible', async function (dataTable) {
+  const batchButtons = dataTable.hashes()
+  for (const batchButton of batchButtons) {
+    const isBatchButtonVisible = await appBarActions.isBatchActionButtonVisible(
+      batchButton.buttonName
+    )
+    assert.strictEqual(
+      isBatchButtonVisible,
+      true,
+      `Expected "${batchButton.buttonName}" action button to be visible but was not`
+    )
+  }
+})
