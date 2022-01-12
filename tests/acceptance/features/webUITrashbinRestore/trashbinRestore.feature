@@ -143,7 +143,7 @@ Feature: Restore deleted files/folders
       | simple-folder/file-to-delete-and-restore |
     And user "Alice" has renamed folder "simple-folder" to "simple-folder-renamed" in the server
     When the user browses to the trashbin page
-    And the user restores file "file-to-delete-and-restore" from the trashbin using the webUI
+    And the user restores file "simple-folder/file-to-delete-and-restore" from the trashbin using the webUI
     Then the following error message should be displayed on the webUI
      """
      Failed to restore "file-to-delete-and-restore"
@@ -165,7 +165,7 @@ Feature: Restore deleted files/folders
       | simple-folder/file-to-delete-and-restore |
     And user "Alice" has renamed folder "simple-folder" to "simple-folder-renamed" in the server
     When the user browses to the trashbin page
-    And the user restores file "file-to-delete-and-restore" from the trashbin using the webUI
+    And the user restores file "simple-folder/file-to-delete-and-restore" from the trashbin using the webUI
     Then the following error message should be displayed on the webUI
       """
       Failed to restore "file-to-delete-and-restore"
@@ -186,7 +186,7 @@ Feature: Restore deleted files/folders
       | simple-folder/file-to-delete-and-restore |
       | simple-folder                            |
     When the user browses to the trashbin page
-    And the user restores file "file-to-delete-and-restore" from the trashbin using the webUI
+    And the user restores file "simple-folder/file-to-delete-and-restore" from the trashbin using the webUI
     Then the following error message should be displayed on the webUI
      """
      Failed to restore "file-to-delete-and-restore"
@@ -207,7 +207,7 @@ Feature: Restore deleted files/folders
       | simple-folder/file-to-delete-and-restore |
       | simple-folder                            |
     When the user browses to the trashbin page
-    And the user restores file "file-to-delete-and-restore" from the trashbin using the webUI
+    And the user restores file "simple-folder/file-to-delete-and-restore" from the trashbin using the webUI
     Then the following error message should be displayed on the webUI
       """
       Failed to restore "file-to-delete-and-restore"
@@ -271,7 +271,7 @@ Feature: Restore deleted files/folders
     And the user deletes file "fileToShare.txt" using the webUI
     And the user browses to the trashbin page
     Then as "Alice" file "fileToShare.txt" should exist in the trashbin
-    When the user restores file "fileToShare.txt" from the trashbin using the webUI
+    When the user restores file "…/folder-to-share/fileToShare.txt" from the trashbin using the webUI
     Then the success message with header "fileToShare.txt was restored successfully" should be displayed on the webUI
     And as "Alice" file "/Shares/folder-to-share/fileToShare.txt" should exist
 

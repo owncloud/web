@@ -36,7 +36,7 @@ Feature: restrict resharing
     Then the error message with header "Error while sharing." should be displayed on the webUI
     And as "Carol" folder "simple-folder" should not exist
     When the user browses to the favorites page
-    Then the user should not be able to share folder "simple-folder" using the webUI
+    Then the user should not be able to share folder "Shares/simple-folder" using the webUI
 
   @smokeTest
   Scenario: disable resharing and check if the received resource from group share can be reshared
