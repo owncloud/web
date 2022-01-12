@@ -32,13 +32,13 @@ describe('ApplicationsMenu component', () => {
     .spyOn(ApplicationsMenu.mixins[0].methods, 'navigation_getMenuItems')
     .mockImplementation(() => [
       {
-        iconMaterial: 'folder',
+        icon: 'folder',
         iconUrl: undefined,
         title: 'Files',
         path: '/files'
       },
       {
-        iconMaterial: 'some-icon',
+        icon: 'some-icon',
         iconUrl: undefined,
         title: 'External',
         url: 'http://some.org',

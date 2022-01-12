@@ -50,7 +50,7 @@
             :target="n.target"
             :href="n.url"
           >
-            <oc-icon :name="n.iconMaterial" />
+            <oc-icon :name="n.icon" />
             <translate>{{ n.title }}</translate>
           </oc-button>
           <oc-button
@@ -61,7 +61,7 @@
             justify-content="left"
             :to="{ path: n.path }"
           >
-            <oc-icon :name="n.iconMaterial" />
+            <oc-icon :name="n.icon" />
             <translate>{{ n.title }}</translate>
           </oc-button>
         </li>

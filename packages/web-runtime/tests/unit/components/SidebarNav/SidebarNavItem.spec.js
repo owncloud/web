@@ -15,7 +15,7 @@ const propsData = {
   name: exampleNavItem.name,
   active: false,
   target: exampleNavItem.route.path,
-  icon: exampleNavItem.iconMaterial,
+  icon: exampleNavItem.icon,
   id: '123'
 }
 

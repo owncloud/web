@@ -28,11 +28,11 @@
       <ul class="oc-my-rm oc-px-rm">
         <li v-for="(n, nid) in menuItems" :key="`apps-menu-${nid}`" class="list-item oc-p-s">
           <a v-if="n.url" key="apps-menu-external-link" :target="n.target" :href="n.url">
-            <oc-icon :name="n.iconMaterial" size="large" />
+            <oc-icon :name="n.icon" size="large" />
             <span class="link-text" v-text="$gettext(n.title)" />
           </a>
           <router-link v-else key="apps-menu-internal-link" :to="n.path">
-            <oc-icon :name="n.iconMaterial" size="large" />
+            <oc-icon :name="n.icon" size="large" />
             <span class="link-text" v-text="$gettext(n.title)" />
           </router-link>
         </li>

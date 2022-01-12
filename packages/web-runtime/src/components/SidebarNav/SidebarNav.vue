@@ -24,7 +24,7 @@
           :index="index"
           :target="link.route.path"
           :active="link.active"
-          :icon="link.icon || link.iconMaterial"
+          :icon="link.icon"
           :fill-type="link.fillType"
           :name="link.name"
           :collapsed="navigation.closed"

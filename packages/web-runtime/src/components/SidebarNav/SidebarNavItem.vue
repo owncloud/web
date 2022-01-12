@@ -55,7 +55,12 @@ export default {
   },
   computed: {
     toolTip() {
-      return this.collapsed ? this.$gettext(`Navigate to ${this.name} page`) : ''
+      const value = this.collapsed ? this.$gettext(`Navigate to ${this.name} page`) : ''
+      return {
+        content: value,
+        placement: 'right',
+        arrow: false
+      }
     }
   }
 }

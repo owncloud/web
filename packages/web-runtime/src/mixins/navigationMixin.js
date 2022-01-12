@@ -32,23 +32,23 @@ export default {
           // TODO: move language resolution to a common function
           // FIXME: need to handle logic for variants like en_US vs en_GB
           let title = item.title ? item.title.en : item.name
-          let iconMaterial
+          let icon
           let iconUrl
           if (item.title && item.title[lang]) {
             title = item.title[lang]
           }
 
           if (!item.icon) {
-            iconMaterial = 'deprecated' // "broken" icon
+            icon = 'deprecated' // "broken" icon
           } else if (item.icon.indexOf('.') < 0) {
             // not a file name or URL, treat as a material icon name instead
-            iconMaterial = item.icon
+            icon = item.icon
           } else {
             iconUrl = item.icon
           }
 
           const app = {
-            iconMaterial: iconMaterial,
+            icon: icon,
             iconUrl: iconUrl,
             title: title
           }
