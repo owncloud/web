@@ -1074,6 +1074,10 @@ def unitTests(ctx):
 def e2eTests(ctx):
     db = "mysql:5.5"
     logLevel = "2"
+    reportTracing = "false"
+
+    if ("with-tracing" in ctx.build.title.lower()):
+        reportTracing = "true"
 
     e2e_workspace = {
         "base": dir["base"],
@@ -1099,6 +1103,7 @@ def e2eTests(ctx):
             "HEADLESS": "true",
             "OCIS": "true",
             "RETRY": "1",
+            "REPORT_TRACING": reportTracing,
         },
         "commands": [
             "sleep 10 && yarn test:e2e:cucumber tests/e2e/cucumber/",
@@ -1112,6 +1117,7 @@ def e2eTests(ctx):
             "BASE_URL_OCC": "owncloud",
             "HEADLESS": "true",
             "RETRY": "1",
+            "REPORT_TRACING": reportTracing,
         },
         "commands": [
             "sleep 10 && yarn test:e2e:cucumber tests/e2e/cucumber/",
@@ -1134,7 +1140,10 @@ def e2eTests(ctx):
         fixPermissions() + \
         waitForOwncloudService() + \
         copyFilesForUpload() + \
-        e2e_test_occ
+        e2e_test_occ + \
+        uploadTracingResult() + \
+        publishTracingResult("e2e-tests oC10") + \
+        githubComment("e2e-tests oC10")
 
     stepsInfinite = \
         skipIfUnchanged(ctx, "e2e-tests") + \
@@ -1147,7 +1156,10 @@ def e2eTests(ctx):
         ocisService() + \
         getSkeletonFiles() + \
         copyFilesForUpload() + \
-        e2e_test_ocis
+        e2e_test_ocis + \
+        uploadTracingResult() + \
+        publishTracingResult("e2e-tests oCIS") + \
+        githubComment("e2e-tests oCIS")
 
     e2e_trigger = {
         "ref": [
@@ -1156,10 +1168,6 @@ def e2eTests(ctx):
             "refs/pull/**",
         ],
     }
-
-    if ("with-tracing" in ctx.build.title.lower()):
-        stepsInfinite += uploadTracingResult() + publishTracingResult("e2e-tests oCIS") + githubComment("e2e-tests oCIS")
-        stepsClassic += uploadTracingResult() + publishTracingResult("e2e-tests oC10") + githubComment("e2e-tests oC10")
 
     return [
         {
@@ -3187,6 +3195,7 @@ def uploadTracingResult():
         "when": {
             "status": [
                 "failure",
+                "success",
             ],
             "event": [
                 "pull_request",
@@ -3214,6 +3223,7 @@ def publishTracingResult(suite):
         "when": {
             "status": [
                 "failure",
+                "success",
             ],
             "event": [
                 "pull_request",
