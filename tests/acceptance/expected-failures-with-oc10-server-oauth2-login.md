@@ -195,6 +195,3 @@ Other free text and markdown formatting can be used elsewhere in the document if
 
 ### [downloading an old version of a file returns 501](https://github.com/owncloud/ocis/issues/2261)
 -   [webUIFilesActionMenu/versions.feature:107](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesActionMenu/versions.feature#L107)
-
-### [Cannot determine share source path when sharing same name file from different path in shared-with pages](https://github.com/owncloud/web/issues/5302)
--   [webUISharingPublicBasic/publicLinkCreate.feature:88](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesActionMenu/versions.feature#L88)
