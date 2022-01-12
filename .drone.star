@@ -1141,7 +1141,7 @@ def e2eTests(ctx):
         waitForOwncloudService() + \
         copyFilesForUpload() + \
         e2e_test_occ + \
-        uploadTracingResult() + \
+        uploadTracingResult(ctx) + \
         publishTracingResult("e2e-tests oC10") + \
         githubComment("e2e-tests oC10")
 
@@ -1157,7 +1157,7 @@ def e2eTests(ctx):
         getSkeletonFiles() + \
         copyFilesForUpload() + \
         e2e_test_ocis + \
-        uploadTracingResult() + \
+        uploadTracingResult(ctx) + \
         publishTracingResult("e2e-tests oCIS") + \
         githubComment("e2e-tests oCIS")
 
@@ -3169,7 +3169,11 @@ def pipelineSanityChecks(ctx, pipelines):
     for image in images.keys():
         print(" %sx\t%s" % (images[image], image))
 
-def uploadTracingResult():
+def uploadTracingResult(ctx):
+    status = ["failure",]
+    if ("with-tracing" in ctx.build.title.lower()):
+        status = ["failure", "success",]
+        
     return [{
         "name": "upload-tracing-result",
         "image": "plugins/s3",
@@ -3193,10 +3197,7 @@ def uploadTracingResult():
             },
         },
         "when": {
-            "status": [
-                "failure",
-                "success",
-            ],
+            "status": status,
             "event": [
                 "pull_request",
             ],
@@ -3209,7 +3210,7 @@ def publishTracingResult(suite):
         "image": OC_UBUNTU,
         "commands": [
             "cd %s/reports/e2e/playwright/tracing/" % dir["web"],
-            'echo "<details><summary>:boom: The e2e tests failed. Please open an error trace in console ...</summary>\\n\\n<p>\\n\\n" >> %s/comments.file' % dir["web"],
+            'echo "<details><summary>:boom: To see the trace, please open the link in the console ...</summary>\\n\\n<p>\\n\\n" >> %s/comments.file' % dir["web"],
             'for f in *.zip; do echo "#### npx playwright show-trace https://cache.owncloud.com/owncloud/web/tracing/${DRONE_BUILD_NUMBER}/$f \n" >> %s/comments.file; done' % dir["web"],
             'echo "\n</p></details>" >> %s/comments.file' % dir["web"],
             "more %s/comments.file" % dir["web"],

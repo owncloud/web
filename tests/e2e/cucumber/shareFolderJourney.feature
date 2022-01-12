@@ -19,7 +19,7 @@ Feature: share folder with file
       | resource  | to               |
       | lorem.txt | folder_to_shared |
     Then "Alice" should see the following resource
-      | folder_to_shared/lorem.txt |
+      | folder_to_shared/lorem1.txt |
     When "Alice" shares the following resource via the sidebar panel
       | resource         | user  | role   |
       | folder_to_shared | Brian | editor |
