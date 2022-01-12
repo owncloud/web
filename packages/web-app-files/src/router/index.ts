@@ -28,13 +28,7 @@ import { buildRoutes as buildDeprecatedRoutes, isLocationActive } from './deprec
 import { RouteComponents } from './router'
 import { RouteConfig } from 'vue-router'
 
-const ROOT_ROUTE = {
-  path: '/',
-  redirect: (to) => createLocationSpaces('files-spaces-personal-home', to)
-}
-
 const buildRoutes = (components: RouteComponents): RouteConfig[] => [
-  ROOT_ROUTE,
   ...buildSharesRoutes(components),
   ...buildPublicRoutes(components),
   ...buildSpacesRoutes(components),

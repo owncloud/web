@@ -9,58 +9,41 @@ export const createLocationSpaces = (name: spaceTypes, location = {}): Location 
     name,
     {
       params: {
-        storage: 'home',
-        namespace: 'personal'
+        ...(name === 'files-spaces-personal-home' && { storage: 'home' })
       }
     },
     location
   )
 
-export const createLocationSpacesProjects = (name: spaceTypes, location = {}): Location =>
-  createLocation(name, location)
-
+const locationSpacesProjects = createLocationSpaces('files-spaces-projects')
 const locationSpacesPersonalHome = createLocationSpaces('files-spaces-personal-home')
-const locationSpacesProjects = createLocationSpacesProjects('files-spaces-projects')
 
 export const isLocationSpacesActive = isLocationActiveDirector<spaceTypes>(
-  locationSpacesPersonalHome,
-  locationSpacesProjects
+  locationSpacesProjects,
+  locationSpacesPersonalHome
 )
 
 export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
   {
     path: '/spaces',
-    redirect: (to) => createLocationSpaces('files-spaces-personal-home', to)
-  },
-  {
-    path: '/spaces/projects',
     components: {
       app: components.App
     },
     children: [
       {
+        path: 'projects',
         name: locationSpacesProjects.name,
-        path: '',
-        component: components.Spaces,
+        component: components.Spaces?.Projects,
         meta: {
           hideFilelistActions: true,
           hasBulkActions: true,
           hideAppBar: true,
           title: $gettext('Spaces')
         }
-      }
-    ]
-  },
-  {
-    path: '/spaces/:namespace',
-    components: {
-      app: components.App
-    },
-    redirect: (to) => createLocationSpaces('files-spaces-personal-home', to),
-    children: [
+      },
       {
+        path: 'personal/:storage/:item*',
         name: locationSpacesPersonalHome.name,
-        path: ':storage/:item*',
         component: components.Personal,
         meta: {
           hasBulkActions: true,

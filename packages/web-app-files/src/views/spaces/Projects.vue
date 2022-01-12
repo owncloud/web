@@ -44,9 +44,9 @@
 <script>
 import NoContentMessage from '../../components/FilesList/NoContentMessage.vue'
 import ListLoader from '../../components/FilesList/ListLoader.vue'
+import { client } from 'web-client'
 import { ref } from '@vue/composition-api'
 import { useStore } from '../../composables'
-import { spacesSDK } from '../sdk'
 import { useTask } from 'vue-concurrency'
 
 export default {
@@ -57,16 +57,11 @@ export default {
   setup() {
     const store = useStore()
     const spaces = ref([])
+    const { graph } = client(store.getters.configuration.server, store.getters.getToken)
 
-    const loadSpacesTask = useTask(function* (signal) {
-      const localSDK = spacesSDK(store.getters.configuration.server, store.getters.getToken)
-      const myDrives = (yield localSDK.drives.listMyDrives()).data?.value
-
-      if (!myDrives) {
-        return
-      }
-
-      spaces.value = myDrives.filter((drive) => drive.driveType === 'project')
+    const loadSpacesTask = useTask(function* () {
+      const response = yield graph.drives.listMyDrives()
+      spaces.value = (response.data?.value || []).filter((drive) => drive.driveType === 'project')
     })
 
     loadSpacesTask.perform()

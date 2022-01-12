@@ -9,7 +9,7 @@ import Personal from './views/Personal.vue'
 import SharedWithMe from './views/SharedWithMe.vue'
 import SharedWithOthers from './views/SharedWithOthers.vue'
 import SharedViaLink from './views/SharedViaLink.vue'
-import Spaces from './spaces/views/Spaces.vue'
+import SpaceProjects from './views/spaces/Projects.vue'
 import Trashbin from './views/Trashbin.vue'
 import translations from '../l10n/translations.json'
 import quickActions from './quickActions'
@@ -40,7 +40,7 @@ const navItems = [
     iconMaterial: appInfo.icon,
     fillType: 'fill',
     route: {
-      path: `/${appInfo.id}/spaces/personal/`
+      path: `/${appInfo.id}/spaces/personal/home`
     }
   },
   {
@@ -116,7 +116,9 @@ export default {
     SharedViaLink,
     SharedWithMe,
     SharedWithOthers,
-    Spaces,
+    Spaces: {
+      Projects: SpaceProjects
+    },
     Trashbin
   }),
   navItems,

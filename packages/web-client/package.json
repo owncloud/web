@@ -1,0 +1,11 @@
+{
+  "name": "web-client",
+  "private": true,
+  "version": "0.0.0",
+  "description": "ownCloud web client",
+  "license": "AGPL-3.0",
+  "main": "src/index.ts",
+  "scripts": {
+    "generate-openapi": "rm -rf src/generated && docker run --rm -v \"${PWD}/src:/local\" openapitools/openapi-generator-cli generate -i https://raw.githubusercontent.com/owncloud/libre-graph-api/main/api/openapi-spec/v0.0.yaml  -g typescript-axios -o /local/generated"
+  }
+}

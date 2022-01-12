@@ -1,12 +1,10 @@
 import { mount } from '@vue/test-utils'
-import { localVue } from '../views/views.setup'
+import { localVue } from '../views.setup'
 import { createStore } from 'vuex-extensions'
-
-import Spaces from '../../../src/spaces/views/Spaces.vue'
-
+import mockAxios from 'jest-mock-axios'
+import SpaceProjects from '../../../../src/views/spaces/Projects.vue'
 import VueRouter from 'vue-router'
 import Vuex from 'vuex'
-import mockAxios from 'jest-mock-axios'
 
 localVue.use(VueRouter)
 
@@ -50,7 +48,7 @@ describe('Spaces component', () => {
 })
 
 function getMountedWrapper() {
-  return mount(Spaces, {
+  return mount(SpaceProjects, {
     localVue,
     router: new VueRouter(),
     store: createStore(Vuex.Store, {
