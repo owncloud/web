@@ -80,7 +80,7 @@ export default {
   }
 
   @media only screen and (min-width: 1200px) {
-    left: 300px;
+    left: 258px;
     width: calc(100% - 300px);
   }
 }
