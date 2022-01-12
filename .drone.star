@@ -1142,7 +1142,7 @@ def e2eTests(ctx):
         copyFilesForUpload() + \
         e2e_test_occ + \
         uploadTracingResult(ctx) + \
-        publishTracingResult("e2e-tests oC10") + \
+        publishTracingResult(ctx, "e2e-tests oC10") + \
         githubComment("e2e-tests oC10")
 
     stepsInfinite = \
@@ -1158,7 +1158,7 @@ def e2eTests(ctx):
         copyFilesForUpload() + \
         e2e_test_ocis + \
         uploadTracingResult(ctx) + \
-        publishTracingResult("e2e-tests oCIS") + \
+        publishTracingResult(ctx, "e2e-tests oCIS") + \
         githubComment("e2e-tests oCIS")
 
     e2e_trigger = {
@@ -3204,7 +3204,11 @@ def uploadTracingResult(ctx):
         },
     }]
 
-def publishTracingResult(suite):
+def publishTracingResult(ctx, suite):
+    status = ["failure"]
+    if ("with-tracing" in ctx.build.title.lower()):
+        status = ["failure", "success"]
+
     return [{
         "name": "publish-tracing-result",
         "image": OC_UBUNTU,
@@ -3222,10 +3226,7 @@ def publishTracingResult(suite):
             },
         },
         "when": {
-            "status": [
-                "failure",
-                "success",
-            ],
+            "status": status,
             "event": [
                 "pull_request",
             ],
