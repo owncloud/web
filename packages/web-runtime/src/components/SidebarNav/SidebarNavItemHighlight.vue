@@ -79,7 +79,7 @@ export default {
 #highlighter::before {
 	content: "";
 	position: absolute;
-	width: 45px;
+	width: 40px;
 	top: 0;
 	bottom: 0;
 	left: 0;

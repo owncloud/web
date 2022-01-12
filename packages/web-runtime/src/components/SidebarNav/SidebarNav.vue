@@ -101,6 +101,6 @@ export default {
 }
 
 .oc-app-navigation-collapsed {
-  width: 75px !important;
+  width: 65px !important;
 }
 </style>
