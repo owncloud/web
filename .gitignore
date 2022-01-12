@@ -70,8 +70,8 @@ comments.file
 .drone.yml
 
 # Themes
-/packages/web-runtime/themes/**
-!/packages/web-runtime/themes/owncloud/**
+/packages/web-runtime/themes/*
+!/packages/web-runtime/themes/owncloud/
 
 # Report for tests
 tests/report/cucumber_report.json
