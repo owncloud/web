@@ -3170,10 +3170,10 @@ def pipelineSanityChecks(ctx, pipelines):
         print(" %sx\t%s" % (images[image], image))
 
 def uploadTracingResult(ctx):
-    status = ["failure",]
+    status = ["failure"]
     if ("with-tracing" in ctx.build.title.lower()):
-        status = ["failure", "success",]
-        
+        status = ["failure", "success"]
+
     return [{
         "name": "upload-tracing-result",
         "image": "plugins/s3",
