@@ -16,6 +16,7 @@ Summary
 * Enhancement - Reorganize urls: [#6137](https://github.com/owncloud/web/pull/6137)
 * Enhancement - Lazy resource table cells: [#6204](https://github.com/owncloud/web/pull/6204)
 * Enhancement - Redesign main layout: [#6036](https://github.com/owncloud/web/issues/6036)
+* Enhancement - Implement spaces list: [#6199](https://github.com/owncloud/web/pull/6199)
 * Enhancement - Update ODS to v12.0.0-alpha10: [#6086](https://github.com/owncloud/web/pull/6086)
 
 Details
@@ -90,6 +91,13 @@ Details
    https://github.com/owncloud/web/issues/6036
    https://github.com/owncloud/web/pull/6086
    https://github.com/owncloud/web/pull/6222
+
+* Enhancement - Implement spaces list: [#6199](https://github.com/owncloud/web/pull/6199)
+
+   We added a new route that lists all available spaces of type "project".
+
+   https://github.com/owncloud/web/issues/6104
+   https://github.com/owncloud/web/pull/6199
 
 * Enhancement - Update ODS to v12.0.0-alpha10: [#6086](https://github.com/owncloud/web/pull/6086)
 
