@@ -34,7 +34,7 @@
             :nav-items="sidebarNavItems"
           />
           <router-view
-            class="app-content oc-width-1-1 oc-py-s"
+            class="app-content oc-width-1-1"
             :class="{ 'app-content-standalone': !isSidebarVisible }"
             name="app"
           />
@@ -342,6 +342,8 @@ body {
         background-color: var(--oc-color-background-default);
         border-top-right-radius: 15px;
         border-bottom-right-radius: 15px;
+        padding-top: 15px;
+        padding-bottom: 15px;
 
         &-standalone {
           border-radius: 15px;
