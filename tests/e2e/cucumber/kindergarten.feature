@@ -5,10 +5,11 @@ Feature: Kindergarten can use web to organize a day
   So that i'm sure all parents are informed and have the latest information in a easy and secure way
 
   Background:
-    Given the following users have been created
-      | Alice |
-      | Brian |
-      | Carol |
+    Given these users have been created with default attributes and without skeleton files in the server:
+      | username |
+      | Alice    |
+      | Brian    |
+      | Carol    |
     And the default folder for received shares has been set to "Shares"
     And auto-accept shares has been disabled
 
