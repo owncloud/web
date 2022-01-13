@@ -9,6 +9,7 @@ import Personal from './views/Personal.vue'
 import SharedWithMe from './views/SharedWithMe.vue'
 import SharedWithOthers from './views/SharedWithOthers.vue'
 import SharedViaLink from './views/SharedViaLink.vue'
+import SpaceProjects from './views/spaces/Projects.vue'
 import Trashbin from './views/Trashbin.vue'
 import translations from '../l10n/translations.json'
 import quickActions from './quickActions'
@@ -39,7 +40,7 @@ const navItems = [
     iconMaterial: appInfo.icon,
     fillType: 'fill',
     route: {
-      path: `/${appInfo.id}/spaces/`
+      path: `/${appInfo.id}/spaces/personal/home`
     }
   },
   {
@@ -78,6 +79,16 @@ const navItems = [
     }
   },
   {
+    name: $gettext('Spaces'),
+    iconMaterial: 'layout-grid',
+    route: {
+      path: `/${appInfo.id}/spaces/projects`
+    },
+    enabled(capabilities) {
+      return capabilities.spaces && capabilities.spaces.enabled === true
+    }
+  },
+  {
     name: $gettext('Deleted files'),
     iconMaterial: 'delete-bin-5',
     fillType: 'fill',
@@ -105,6 +116,9 @@ export default {
     SharedViaLink,
     SharedWithMe,
     SharedWithOthers,
+    Spaces: {
+      Projects: SpaceProjects
+    },
     Trashbin
   }),
   navItems,

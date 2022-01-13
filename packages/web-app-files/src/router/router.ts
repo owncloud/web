@@ -1,3 +1,5 @@
+import Vue, { ComponentOptions } from 'vue'
+
 /**
  * we need to inject the vue files into the route builders,
  * this is because we also import the provided helpers from other js|ts files
@@ -5,16 +7,19 @@
  * into js files which then again get imported by other vue files...
  */
 export interface RouteComponents {
-  App: any
-  Favorites: any
-  FilesDrop: any
-  LocationPicker: any
-  PrivateLink: any
-  PublicFiles: any
-  Personal: any
-  PublicLink: any
-  SharedWithMe: any
-  SharedWithOthers: any
-  SharedViaLink: any
-  Trashbin: any
+  App: ComponentOptions<Vue>
+  Favorites: ComponentOptions<Vue>
+  FilesDrop: ComponentOptions<Vue>
+  LocationPicker: ComponentOptions<Vue>
+  PrivateLink: ComponentOptions<Vue>
+  PublicFiles: ComponentOptions<Vue>
+  Personal: ComponentOptions<Vue>
+  PublicLink: ComponentOptions<Vue>
+  SharedWithMe: ComponentOptions<Vue>
+  SharedWithOthers: ComponentOptions<Vue>
+  SharedViaLink: ComponentOptions<Vue>
+  Spaces: {
+    Projects: ComponentOptions<Vue>
+  }
+  Trashbin: ComponentOptions<Vue>
 }
