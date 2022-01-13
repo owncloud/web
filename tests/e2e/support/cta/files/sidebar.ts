@@ -37,10 +37,10 @@ export const openPanel = async ({
   const panelSelector = page.locator(`#sidebar-panel-${name}-item-select`)
   const nextPanel = page.locator(`#sidebar-panel-${name}-item`)
   if (await panelSelector.count()) {
-    await panelSelector.click()
     await Promise.all([
       locatorUtils.waitForEvent(nextPanel, 'focus'),
-      locatorUtils.waitForEvent(nextPanel, 'transitionend')
+      locatorUtils.waitForEvent(nextPanel, 'transitionend'),
+      panelSelector.click()
     ])
   }
 }

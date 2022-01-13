@@ -1075,6 +1075,10 @@ def unitTests(ctx):
 def e2eTests(ctx):
     db = "mysql:5.5"
     logLevel = "2"
+    reportTracing = "false"
+
+    if ("with-tracing" in ctx.build.title.lower()):
+        reportTracing = "true"
 
     e2e_workspace = {
         "base": dir["base"],
@@ -1102,6 +1106,7 @@ def e2eTests(ctx):
             "RETRY": "1",
             "MIDDLEWARE_HOST": "http://middleware:3000",
             "REMOTE_UPLOAD_DIR": "/usr/src/app/filesForUpload",
+            "REPORT_TRACING": reportTracing,
         },
         "commands": [
             "sleep 10 && yarn test:e2e:cucumber tests/e2e/cucumber/",
@@ -1121,6 +1126,7 @@ def e2eTests(ctx):
             "RETRY": "1",
             "MIDDLEWARE_HOST": "http://middleware:3000",
             "REMOTE_UPLOAD_DIR": "/usr/src/app/filesForUpload",
+            "REPORT_TRACING": reportTracing,
         },
         "commands": [
             "sleep 10 && yarn test:e2e:cucumber tests/e2e/cucumber/",
@@ -1147,7 +1153,10 @@ def e2eTests(ctx):
         fixPermissions() + \
         waitForOwncloudService() + \
         waitForMiddlewareService() + \
-        e2e_test_occ
+        e2e_test_occ + \
+        uploadTracingResult(ctx) + \
+        publishTracingResult(ctx, "e2e-tests oC10") + \
+        githubComment("e2e-tests oC10")
 
     stepsInfinite = \
         skipIfUnchanged(ctx, "e2e-tests") + \
@@ -1160,7 +1169,10 @@ def e2eTests(ctx):
         ocisService() + \
         getSkeletonFiles() + \
         waitForMiddlewareService() + \
-        e2e_test_ocis
+        e2e_test_ocis + \
+        uploadTracingResult(ctx) + \
+        publishTracingResult(ctx, "e2e-tests oCIS") + \
+        githubComment("e2e-tests oCIS")
 
     e2e_trigger = {
         "ref": [
@@ -3168,3 +3180,67 @@ def pipelineSanityChecks(ctx, pipelines):
 
     for image in images.keys():
         print(" %sx\t%s" % (images[image], image))
+
+def uploadTracingResult(ctx):
+    status = ["failure"]
+    if ("with-tracing" in ctx.build.title.lower()):
+        status = ["failure", "success"]
+
+    return [{
+        "name": "upload-tracing-result",
+        "image": "plugins/s3",
+        "pull": "if-not-exists",
+        "settings": {
+            "bucket": "owncloud",
+            "endpoint": {
+                "from_secret": "cache_s3_endpoint",
+            },
+            "path_style": True,
+            "source": "%s/reports/e2e/playwright/tracing/**/*" % dir["web"],
+            "strip_prefix": "%s/reports/e2e/playwright/tracing" % dir["web"],
+            "target": "/web/tracing/${DRONE_BUILD_NUMBER}",
+        },
+        "environment": {
+            "AWS_ACCESS_KEY_ID": {
+                "from_secret": "cache_s3_access_key",
+            },
+            "AWS_SECRET_ACCESS_KEY": {
+                "from_secret": "cache_s3_secret_key",
+            },
+        },
+        "when": {
+            "status": status,
+            "event": [
+                "pull_request",
+            ],
+        },
+    }]
+
+def publishTracingResult(ctx, suite):
+    status = ["failure"]
+    if ("with-tracing" in ctx.build.title.lower()):
+        status = ["failure", "success"]
+
+    return [{
+        "name": "publish-tracing-result",
+        "image": OC_UBUNTU,
+        "commands": [
+            "cd %s/reports/e2e/playwright/tracing/" % dir["web"],
+            'echo "<details><summary>:boom: To see the trace, please open the link in the console ...</summary>\\n\\n<p>\\n\\n" >> %s/comments.file' % dir["web"],
+            'for f in *.zip; do echo "#### npx playwright show-trace https://cache.owncloud.com/owncloud/web/tracing/${DRONE_BUILD_NUMBER}/$f \n" >> %s/comments.file; done' % dir["web"],
+            'echo "\n</p></details>" >> %s/comments.file' % dir["web"],
+            "more %s/comments.file" % dir["web"],
+        ],
+        "environment": {
+            "TEST_CONTEXT": suite,
+            "CACHE_ENDPOINT": {
+                "from_secret": "cache_s3_endpoint",
+            },
+        },
+        "when": {
+            "status": status,
+            "event": [
+                "pull_request",
+            ],
+        },
+    }]
