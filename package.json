@@ -44,7 +44,7 @@
     "@cucumber/messages": "^17.1.1",
     "@cucumber/pretty-formatter": "^1.0.0-alpha.1",
     "@erquhart/rollup-plugin-node-builtins": "^2.1.5",
-    "@playwright/test": "^1.17.1",
+    "@playwright/test": "^1.17.2",
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-html": "^0.2.0",
     "@rollup/plugin-json": "^4.1.0",
