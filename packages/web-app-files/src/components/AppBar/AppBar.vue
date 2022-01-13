@@ -54,7 +54,7 @@
               padding-size="small"
             >
               <ul class="oc-list">
-                <li>
+                <li class="oc-my-xs">
                   <file-upload
                     :path="currentPath"
                     :headers="headers"
