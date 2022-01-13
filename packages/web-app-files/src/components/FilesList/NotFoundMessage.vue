@@ -1,10 +1,10 @@
 <template>
   <div
     id="files-list-not-found-message"
-    class="uk-text-center uk-flex-middle uk-flex uk-flex-center uk-flex-column"
+    class="oc-text-center oc-flex-middle oc-flex oc-flex-center oc-flex-column"
   >
     <oc-icon name="cloud" type="div" size="xxlarge" />
-    <div class="oc-text-muted uk-text-large">
+    <div class="oc-text-muted oc-text-large">
       <translate>Resource not found</translate>
     </div>
     <div class="oc-text-muted">

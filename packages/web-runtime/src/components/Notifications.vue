@@ -1,5 +1,5 @@
 <template>
-  <div id="oc-notification" class="uk-flex uk-flex-middle">
+  <div id="oc-notification" class="oc-flex oc-flex-middle">
     <oc-button
       id="oc-notification-bell"
       v-oc-tooltip="notificationsLabel"
@@ -8,7 +8,7 @@
     >
       <oc-icon
         variation="inverse"
-        class="oc-cursor-pointer uk-flex uk-flex-middle"
+        class="oc-cursor-pointer oc-flex oc-flex-middle"
         name="notification-3"
         fill-type="line"
       />
@@ -19,16 +19,16 @@
       toggle="#oc-notification-bell"
       mode="click"
       :options="{ pos: 'bottom-right', delayHide: 0 }"
-      class="uk-overflow-auto uk-width-3-4 uk-width-large@s"
+      class="oc-overflow-auto oc-width-3-4 oc-width-large@s"
       padding-size="small"
     >
-      <div v-for="(el, index) in activeNotifications" :key="index" class="uk-width-1-1">
+      <div v-for="(el, index) in activeNotifications" :key="index" class="oc-width-1-1">
         <h4 v-text="el.subject" />
-        <p v-if="el.message" class="uk-text-small">{{ el.message }}</p>
+        <p v-if="el.message" class="oc-text-small">{{ el.message }}</p>
         <p>
-          <a v-if="el.link" :href="el.link" class="uk-link" target="_blank">{{ el.link }}</a>
+          <a v-if="el.link" :href="el.link" target="_blank">{{ el.link }}</a>
         </p>
-        <div class="uk-button-group uk-width-1-1 uk-flex-right">
+        <div class="oc-width-1-1 oc-flex-right">
           <template v-if="el.actions.length !== 0">
             <oc-button
               v-for="(action, actionIndex) in el.actions"

@@ -189,7 +189,6 @@ export default {
     a:hover,
     button,
     button:hover {
-      text-decoration: none;
       text-align: left;
       color: var(--oc-color-swatch-passive-default);
       display: inline-flex;

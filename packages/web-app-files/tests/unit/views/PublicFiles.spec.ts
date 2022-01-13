@@ -1,6 +1,5 @@
 import { accentuatesTableRowTest } from './views.shared'
 import PublicFiles from '@files/src/views/PublicFiles.vue'
-import { localVue } from './views.setup'
 
 describe('PublicFiles view', () => {
   describe('accentuate new files and folders', () => {

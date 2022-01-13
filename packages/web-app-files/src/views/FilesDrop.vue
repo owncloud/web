@@ -1,15 +1,15 @@
 <template>
-  <div id="files-drop-container" class="uk-height-1-1 uk-flex uk-flex-column uk-flex-between">
+  <div id="files-drop-container" class="oc-height-1-1 oc-flex oc-flex-column oc-flex-between">
     <h1 class="oc-invisible-sr">{{ pageTitle }}</h1>
-    <div class="oc-p uk-height-1-1">
-      <div v-if="loading" key="loading-drop" class="uk-flex uk-flex-column uk-flex-middle">
+    <div class="oc-p oc-height-1-1">
+      <div v-if="loading" key="loading-drop" class="oc-flex oc-flex-column oc-flex-middle">
         <h2 class="oc-login-card-title">
           <translate>Loading public link…</translate>
         </h2>
         <oc-spinner :aria-hidden="true" />
       </div>
-      <div v-else key="loaded-drop" class="uk-flex uk-flex-column uk-flex-middle uk-height-1-1">
-        <div class="uk-text-center uk-width-1-1 uk-width-xxlarge@m">
+      <div v-else key="loaded-drop" class="oc-flex oc-flex-column oc-flex-middle oc-height-1-1">
+        <div class="oc-text-center oc-width-1-1 oc-width-xxlarge@m">
           <h2 v-text="title" />
           <vue-dropzone
             id="oc-dropzone"
@@ -18,7 +18,7 @@
             :include-styling="false"
             @vdropzone-file-added="dropZoneFileAdded"
           >
-            <div class="uk-flex uk-flex-middle uk-flex-center uk-placeholder">
+            <div class="oc-flex oc-flex-middle oc-flex-center">
               <oc-icon name="file-upload" />
               <translate>Drop files here to upload or click to select file</translate>
             </div>
@@ -26,17 +26,17 @@
           <div id="previews" hidden />
         </div>
         <div
-          class="uk-flex uk-flex-center uk-overflow-auto uk-width-1-1"
+          class="oc-flex oc-flex-center oc-overflow-auto oc-width-1-1"
           :class="{ 'files-empty': !getUploadedFiles }"
         >
-          <oc-table-simple v-if="getUploadedFiles" class="uk-width-1-1 uk-width-xxlarge@m">
+          <oc-table-simple v-if="getUploadedFiles" class="oc-width-1-1 oc-width-xxlarge@m">
             <oc-tbody>
               <oc-tr v-for="(file, key) in getUploadedFiles" :key="key">
                 <oc-td class="oc-pl-rm" v-text="file.name" />
-                <oc-td width="shrink" class="uk-text-nowrap oc-text-muted">
+                <oc-td width="shrink" class="oc-text-nowrap oc-text-muted">
                   <oc-resource-size :size="file.size" />
                 </oc-td>
-                <oc-td width="shrink" class="oc-pr-rm uk-preserve-width">
+                <oc-td width="shrink" class="oc-pr-rm">
                   <oc-icon
                     v-if="file.status === 'done'"
                     name="checkbox-circle"
@@ -59,7 +59,7 @@
             </oc-tbody>
           </oc-table-simple>
         </div>
-        <div v-if="errorMessage" class="uk-text-center">
+        <div v-if="errorMessage" class="oc-text-center">
           <h2>
             <translate>An error occurred while loading the public link</translate>
           </h2>
@@ -67,7 +67,7 @@
         </div>
       </div>
     </div>
-    <div class="uk-text-center">
+    <div class="oc-text-center">
       <p v-text="configuration.theme.general.slogan" />
     </div>
   </div>

@@ -3,7 +3,7 @@
     data-testid="files-sidebar"
     :class="{
       'has-active-sub-panel': !!activeAvailablePanelName,
-      'uk-flex uk-flex-center uk-flex-middle': loading
+      'oc-flex oc-flex-center oc-flex-middle': loading
     }"
   >
     <oc-spinner v-if="loading" />

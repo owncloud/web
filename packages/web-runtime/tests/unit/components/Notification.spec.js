@@ -10,9 +10,9 @@ const testData = {
     ocIconStub: 'oc-icon-stub',
     actionButton: '.oc-ml-s',
     resolveNotificationButton: '#resolve-notification-button',
-    link: '.uk-link',
+    link: '.oc-width-1-1 > p > a',
     subject: 'h4',
-    message: '.uk-text-small'
+    message: '.oc-text-small'
   },
   notifications: {
     emptyActions: [

@@ -1,5 +1,9 @@
 <template>
-  <nav :aria-label="$gettext('Main navigation')" class="uk-flex uk-flex-middle">
+  <nav
+    id="applications-menu"
+    :aria-label="$gettext('Main navigation')"
+    class="oc-flex oc-flex-middle"
+  >
     <oc-button
       id="_appSwitcherButton"
       ref="menubutton"
@@ -9,43 +13,27 @@
       class="oc-topbar-menu-burger"
       :aria-label="applicationSwitcherLabel"
     >
-      <oc-icon name="grid" size="large" class="uk-flex" />
+      <oc-icon name="grid" size="large" class="oc-flex" />
     </oc-button>
     <oc-drop
       ref="menu"
       drop-id="app-switcher-dropdown"
       toggle="#_appSwitcherButton"
       mode="click"
+      class="oc-width-auto"
       :options="{ pos: 'bottom-right', delayHide: 0 }"
-      class="uk-width-large"
       padding-size="small"
       close-on-click
     >
-      <ul class="oc-p-xs">
-        <li
-          v-for="(n, nid) in menuItems"
-          :key="`apps-menu-${nid}`"
-          style="list-style: none"
-          class="oc-pt-s oc-pb-s"
-        >
-          <a
-            v-if="n.url"
-            key="apps-menu-external-link"
-            :target="n.target"
-            :href="n.url"
-            style="display: inline-flex; vertical-align: top; gap: 10px"
-          >
-            <oc-icon :name="n.iconMaterial" size="medium" />
-            <span v-text="$gettext(n.title)" />
+      <ul class="oc-my-rm oc-px-rm">
+        <li v-for="(n, nid) in menuItems" :key="`apps-menu-${nid}`" class="list-item oc-p-s">
+          <a v-if="n.url" key="apps-menu-external-link" :target="n.target" :href="n.url">
+            <oc-icon :name="n.iconMaterial" size="large" />
+            <span class="link-text" v-text="$gettext(n.title)" />
           </a>
-          <router-link
-            v-else
-            key="apps-menu-internal-link"
-            :to="n.path"
-            style="display: inline-flex; vertical-align: top; gap: 10px"
-          >
-            <oc-icon :name="n.iconMaterial" size="medium" />
-            <span v-text="$gettext(n.title)" />
+          <router-link v-else key="apps-menu-internal-link" :to="n.path">
+            <oc-icon :name="n.iconMaterial" size="large" />
+            <span class="link-text" v-text="$gettext(n.title)" />
           </router-link>
         </li>
       </ul>
@@ -55,7 +43,6 @@
 
 <script>
 import NavigationMixin from '../mixins/navigationMixin'
-import UiKit from 'uikit'
 
 export default {
   mixins: [NavigationMixin],
@@ -75,33 +62,27 @@ export default {
     }
   },
   mounted() {
-    UiKit.util.on('#app-switcher-dropdown', 'shown', () => {
-      this.focusFirstLink()
+    this.$refs.menu?.tippy?.setProps({
+      onHidden: () => this.$refs.menubutton.$el.focus(),
+      onShown: () => this.$refs.menu.$el.querySelector('a:first-of-type').focus()
     })
-
-    UiKit.util.on('#app-switcher-dropdown', 'hidden', () => {
-      this.$emit('closed')
-      this.focusMenuButton()
-    })
-  },
-  methods: {
-    logout() {
-      this.visible = false
-      this.$store.dispatch('logout')
-    },
-    focusFirstLink() {
-      /*
-       * Delay for two reasons:
-       * - for screen readers Virtual buffer
-       * - to outsmart uikit's focus management
-       */
-      setTimeout(() => {
-        this.$refs.menu.$el.querySelector('a:first-of-type').focus()
-      }, 500)
-    },
-    focusMenuButton() {
-      this.$refs.menubutton.$el.focus()
-    }
   }
 }
 </script>
+
+<style lang="scss">
+#applications-menu {
+  .list-item {
+    display: inline-flex;
+    list-style: none;
+    gap: 10px;
+
+    a {
+      text-align: center;
+      .link-text {
+        display: block;
+      }
+    }
+  }
+}
+</style>

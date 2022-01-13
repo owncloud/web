@@ -1,5 +1,5 @@
 <template>
-  <div class="uk-text-center">
+  <div class="oc-text-center">
     <oc-progress :value="quota.relative" :max="100" size="small" class="oc-mb-xs" />
     <translate
       class="oc-light"

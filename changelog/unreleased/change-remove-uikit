@@ -1,0 +1,7 @@
+Change: Remove UiKit
+
+The ownCloud design system has dropped the underlying UiKit library, which 
+we've also removed from the web codebase to reduce the overall bundle size.
+
+https://github.com/owncloud/web/issues/6103
+https://github.com/owncloud/web/pull/6213

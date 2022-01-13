@@ -1,5 +1,5 @@
 <template functional>
-  <div class="uk-flex uk-flex-middle uk-flex-center uk-height-1-1">
+  <div class="oc-flex oc-flex-middle oc-flex-center oc-height-1-1">
     <oc-spinner id="files-list-progress" size="large" :aria-hidden="true" aria-label="" />
   </div>
 </template>

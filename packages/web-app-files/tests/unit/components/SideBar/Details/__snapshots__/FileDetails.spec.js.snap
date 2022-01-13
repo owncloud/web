@@ -3,10 +3,10 @@
 exports[`Details SideBar Panel displays a resource of type file on a private page updates when the shareTree updates 1`] = `
 <div id="oc-file-details-sidebar">
   <div>
-    <div data-testid="preview" class="details-preview uk-flex uk-flex-middle uk-flex-center oc-mb" style="background-image: none;">
+    <div data-testid="preview" class="details-preview oc-flex oc-flex-middle oc-flex-center oc-mb" style="background-image: none;">
       <oc-spinner-stub></oc-spinner-stub>
     </div>
-    <div data-testid="sharingInfo" class="uk-flex uk-flex-middle oc-my-m">
+    <div data-testid="sharingInfo" class="oc-flex oc-flex-middle oc-my-m">
       <oc-button-stub appearance="raw" aria-label="Show invited people" class="oc-mr-xs">
         <oc-icon-stub name="group"></oc-icon-stub>
       </oc-button-stub>
@@ -48,10 +48,10 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
 exports[`Details SideBar Panel displays a resource of type file on a private page updates when the shareTree updates 2`] = `
 <div id="oc-file-details-sidebar">
   <div>
-    <div data-testid="preview" class="details-preview uk-flex uk-flex-middle uk-flex-center oc-mb" style="background-image: none;">
+    <div data-testid="preview" class="details-preview oc-flex oc-flex-middle oc-flex-center oc-mb" style="background-image: none;">
       <oc-spinner-stub></oc-spinner-stub>
     </div>
-    <div data-testid="sharingInfo" class="uk-flex uk-flex-middle oc-my-m">
+    <div data-testid="sharingInfo" class="oc-flex oc-flex-middle oc-my-m">
       <oc-button-stub appearance="raw" aria-label="Show invited people" class="oc-mr-xs">
         <oc-icon-stub name="group"></oc-icon-stub>
       </oc-button-stub>
@@ -128,10 +128,10 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
 exports[`Details SideBar Panel displays a resource of type file on a private page with timestamp, size info, share info, share date and preview 1`] = `
 <div id="oc-file-details-sidebar">
   <div>
-    <div data-testid="preview" class="details-preview uk-flex uk-flex-middle uk-flex-center oc-mb" style="background-image: none;">
+    <div data-testid="preview" class="details-preview oc-flex oc-flex-middle oc-flex-center oc-mb" style="background-image: none;">
       <oc-spinner-stub></oc-spinner-stub>
     </div>
-    <div data-testid="sharingInfo" class="uk-flex uk-flex-middle oc-my-m">
+    <div data-testid="sharingInfo" class="oc-flex oc-flex-middle oc-my-m">
       <oc-button-stub appearance="raw" aria-label="Show invited people" class="oc-mr-xs">
         <oc-icon-stub name="group"></oc-icon-stub>
       </oc-button-stub>
@@ -173,7 +173,7 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
 exports[`Details SideBar Panel displays a resource of type file on a public page with owner, timestamp, size info, no share info and preview 1`] = `
 <div id="oc-file-details-sidebar">
   <div>
-    <div data-testid="preview" class="details-preview uk-flex uk-flex-middle uk-flex-center oc-mb" style="background-image: none;">
+    <div data-testid="preview" class="details-preview oc-flex oc-flex-middle oc-flex-center oc-mb" style="background-image: none;">
       <oc-spinner-stub></oc-spinner-stub>
     </div>
     <!---->
@@ -207,7 +207,7 @@ exports[`Details SideBar Panel displays a resource of type file on a public page
 exports[`Details SideBar Panel displays a resource of type file on a public page with owner, timestap, size info, no share info and preview 1`] = `
 <div id="oc-file-details-sidebar">
   <div>
-    <div data-testid="preview" class="details-preview uk-flex uk-flex-middle uk-flex-center oc-mb" style="background-image: none;">
+    <div data-testid="preview" class="details-preview oc-flex oc-flex-middle oc-flex-center oc-mb" style="background-image: none;">
       <oc-spinner-stub></oc-spinner-stub>
     </div>
     <!---->
@@ -274,7 +274,7 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
 <div id="oc-file-details-sidebar">
   <div>
     <!---->
-    <div data-testid="sharingInfo" class="uk-flex uk-flex-middle oc-my-m">
+    <div data-testid="sharingInfo" class="oc-flex oc-flex-middle oc-my-m">
       <oc-button-stub appearance="raw" aria-label="Show invited people" class="oc-mr-xs">
         <oc-icon-stub name="group"></oc-icon-stub>
       </oc-button-stub>

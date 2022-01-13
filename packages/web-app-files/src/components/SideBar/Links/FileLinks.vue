@@ -1,5 +1,5 @@
 <template>
-  <div id="oc-files-file-link" class="uk-position-relative">
+  <div id="oc-files-file-link" class="oc-position-relative">
     <div
       v-show="currentView === VIEW_SHOW"
       :key="VIEW_SHOW"
@@ -32,17 +32,11 @@
           class="oc-mt-s"
           v-text="noResharePermsMessage"
         />
-        <transition-group
-          class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm"
-          :enter-active-class="$_transitionGroupEnter"
-          :leave-active-class="$_transitionGroupLeave"
-          name="custom-classes-transition"
-          tag="ul"
-        >
+        <ul class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm">
           <li v-for="link in links" :key="link.key">
             <list-item :data-testid="`files-link-id-${link.id}`" :link="link" />
           </li>
-        </transition-group>
+        </ul>
         <p
           v-if="$_noPublicLinks && canCreatePublicLinks"
           id="oc-file-links-no-results"
@@ -55,13 +49,7 @@
       </template>
     </div>
     <div v-if="currentView === VIEW_EDIT" :key="VIEW_EDIT">
-      <transition
-        enter-active-class="uk-animation-slide-right uk-animation-fast"
-        leave-active-class="uk-animation-slide-right uk-animation-reverse uk-animation-fast"
-        name="custom-classes-transition"
-      >
-        <link-edit />
-      </transition>
+      <link-edit />
     </div>
   </div>
 </template>
@@ -113,13 +101,6 @@ export default {
     ]),
     ...mapGetters(['capabilities']),
     ...mapState('Files', ['sharesTree']),
-
-    $_transitionGroupEnter() {
-      return 'uk-animation-slide-left-medium'
-    },
-    $_transitionGroupLeave() {
-      return 'uk-animation-slide-right-medium uk-animation-reverse'
-    },
 
     canCreatePublicLinks() {
       return this.highlightedFile.canShare()

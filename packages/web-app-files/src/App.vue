@@ -1,9 +1,9 @@
 <template>
-  <main id="files" class="uk-flex uk-height-1-1">
+  <main id="files" class="oc-flex oc-height-1-1">
     <div
       ref="filesListWrapper"
       tabindex="-1"
-      class="files-list-wrapper uk-width-expand"
+      class="files-list-wrapper oc-width-expand"
       @dragover="$_ocApp_dragOver"
     >
       <app-bar id="files-app-bar" />
@@ -15,7 +15,7 @@
       id="files-sidebar"
       ref="filesSidebar"
       tabindex="-1"
-      class="uk-width-1-1 uk-width-1-3@m uk-width-1-4@xl"
+      class="oc-width-1-1 oc-width-1-3@m oc-width-1-4@xl"
       @beforeDestroy="focusSideBar"
       @mounted="focusSideBar"
       @fileChanged="focusSideBar"

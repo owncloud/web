@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`RoleDropdown for file shares when an existing role is present renders a button with existing role if given for resource type file 1`] = `
-<span class="uk-flex uk-flex-middle"><oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="center" gapsize="none" id="files-collaborators-role-button-new" class="files-recipient-role-select-btn"><span>Viewer</span>
+<span class="oc-flex oc-flex-middle"><oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="center" gapsize="none" id="files-collaborators-role-button-new" class="files-recipient-role-select-btn"><span>Viewer</span>
 <oc-icon-stub name="arrow-down-s" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
 </oc-button-stub>
 <oc-drop-stub dropid="oc-drop-17" toggle="#files-collaborators-role-button-new" position="bottom-start" mode="click" closeonclick="true" paddingsize="remove">
@@ -54,7 +54,7 @@ exports[`RoleDropdown for file shares when an existing role is present renders a
 `;
 
 exports[`RoleDropdown for file shares when an existing role is present renders a button with existing role if given for resource type folder 1`] = `
-<span class="uk-flex uk-flex-middle"><oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="center" gapsize="none" id="files-collaborators-role-button-new" class="files-recipient-role-select-btn"><span>Viewer</span>
+<span class="oc-flex oc-flex-middle"><oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="center" gapsize="none" id="files-collaborators-role-button-new" class="files-recipient-role-select-btn"><span>Viewer</span>
 <oc-icon-stub name="arrow-down-s" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
 </oc-button-stub>
 <oc-drop-stub dropid="oc-drop-15" toggle="#files-collaborators-role-button-new" position="bottom-start" mode="click" closeonclick="true" paddingsize="remove">
@@ -107,7 +107,7 @@ exports[`RoleDropdown for file shares when an existing role is present renders a
 `;
 
 exports[`RoleDropdown for file shares when no existing role is present renders a button with invite text if no existing role given for resource type file 1`] = `
-<span class="uk-flex uk-flex-middle"><oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="center" gapsize="none" id="files-collaborators-role-button-new" class="files-recipient-role-select-btn"><span>Invite as viewer</span>
+<span class="oc-flex oc-flex-middle"><oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="center" gapsize="none" id="files-collaborators-role-button-new" class="files-recipient-role-select-btn"><span>Invite as viewer</span>
 <oc-icon-stub name="arrow-down-s" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
 </oc-button-stub>
 <oc-drop-stub dropid="oc-drop-5" toggle="#files-collaborators-role-button-new" position="bottom-start" mode="click" closeonclick="true" paddingsize="remove">
@@ -154,7 +154,7 @@ exports[`RoleDropdown for file shares when no existing role is present renders a
 `;
 
 exports[`RoleDropdown for file shares when no existing role is present renders a button with invite text if no existing role given for resource type folder 1`] = `
-<span class="uk-flex uk-flex-middle"><oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="center" gapsize="none" id="files-collaborators-role-button-new" class="files-recipient-role-select-btn"><span>Invite as viewer</span>
+<span class="oc-flex oc-flex-middle"><oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="center" gapsize="none" id="files-collaborators-role-button-new" class="files-recipient-role-select-btn"><span>Invite as viewer</span>
 <oc-icon-stub name="arrow-down-s" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
 </oc-button-stub>
 <oc-drop-stub dropid="oc-drop-3" toggle="#files-collaborators-role-button-new" position="bottom-start" mode="click" closeonclick="true" paddingsize="remove">

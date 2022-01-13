@@ -1,5 +1,5 @@
 <template>
-  <span v-if="selectedRole" class="uk-flex uk-flex-middle">
+  <span v-if="selectedRole" class="oc-flex oc-flex-middle">
     <oc-button
       :id="roleButtonId"
       class="files-recipient-role-select-btn"

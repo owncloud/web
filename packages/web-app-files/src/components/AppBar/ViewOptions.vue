@@ -27,7 +27,7 @@
       drop-id="files-view-options-drop"
       toggle="#files-view-options-btn"
       mode="click"
-      class="uk-width-auto"
+      class="oc-width-auto"
       padding-size="small"
     >
       <oc-list>

@@ -1,5 +1,5 @@
 <template>
-  <div id="oc-files-sharing-sidebar" class="uk-position-relative">
+  <div id="oc-files-sharing-sidebar" class="oc-position-relative">
     <oc-loader v-if="sharesLoading" :aria-label="$gettext('Loading people list')" />
     <template v-else>
       <invite-collaborator-form v-if="currentUserCanShare" key="new-collaborator" class="oc-my-s" />
@@ -9,8 +9,8 @@
         data-testid="files-collaborators-no-reshare-permissions-message"
         v-text="noResharePermsMessage"
       />
-      <div v-if="hasSharees" class="avatars-wrapper uk-flex uk-flex-middle uk-flex-between">
-        <h4 class="oc-text-initial oc-text-bold oc-mb-rm" v-text="sharedWithLabel" />
+      <div v-if="hasSharees" class="avatars-wrapper oc-flex oc-flex-middle oc-flex-between">
+        <h4 class="oc-text-initial oc-text-bold oc-my-rm" v-text="sharedWithLabel" />
         <oc-button
           v-oc-tooltip="sharedWithTooltip"
           data-testid="collaborators-show-people"
@@ -29,11 +29,9 @@
         </oc-button>
       </div>
       <template v-if="showShareesList && hasSharees">
-        <transition-group
+        <ul
           id="files-collaborators-list"
-          class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm"
-          name="custom-classes-transition"
-          tag="ul"
+          class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm"
           :aria-label="$gettext('Share receivers')"
         >
           <li v-for="collaborator in collaborators" :key="collaborator.key">
@@ -43,7 +41,7 @@
               @onDelete="$_ocCollaborators_deleteShare"
             />
           </li>
-        </transition-group>
+        </ul>
       </template>
     </template>
   </div>

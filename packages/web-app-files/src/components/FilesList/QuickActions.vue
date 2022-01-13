@@ -1,5 +1,5 @@
 <template>
-  <div class="uk-flex">
+  <div class="oc-flex">
     <oc-button
       v-for="action in filteredActions"
       :key="action.label($gettext)"
@@ -10,7 +10,7 @@
       :class="`files-quick-action-${action.id}`"
       @click="action.handler({ item, client: $client, store: $store, $gettext })"
     >
-      <oc-icon :name="action.icon" :fill-type="action.iconFillType" class="uk-flex" />
+      <oc-icon :name="action.icon" :fill-type="action.iconFillType" class="oc-flex" />
     </oc-button>
   </div>
 </template>

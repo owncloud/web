@@ -1,5 +1,5 @@
 <template>
-  <div class="uk-flex uk-flex-middle uk-text-nowrap">
+  <div class="oc-flex oc-flex-middle oc-text-nowrap">
     <translate
       v-if="selectedResourcesSize !== '?'"
       key="multiple-select-info-with-size"

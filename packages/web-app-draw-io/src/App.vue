@@ -3,7 +3,7 @@
     <oc-spinner
       v-if="loading"
       :aria-label="$gettext('Loading media')"
-      class="uk-position-center"
+      class="oc-position-center"
       size="xlarge"
     />
     <iframe

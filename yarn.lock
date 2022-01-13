@@ -372,7 +372,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/parser@npm:^7.1.0, @babel/parser@npm:^7.12.0, @babel/parser@npm:^7.12.5, @babel/parser@npm:^7.13.9, @babel/parser@npm:^7.16.0, @babel/parser@npm:^7.16.5, @babel/parser@npm:^7.6.0, @babel/parser@npm:^7.9.6":
+"@babel/parser@npm:7.16.4":
+  version: 7.16.4
+  resolution: "@babel/parser@npm:7.16.4"
+  bin:
+    parser: ./bin/babel-parser.js
+  checksum: ce0a8f92f440f2a12bc932f070a7b60c5133bf8a63f461841f9e39af0194f573707959d606c6fad1a2fd496a45148553afd9b74d3b8dd36cdb7861598d1f3e36
+  languageName: node
+  linkType: hard
+
+"@babel/parser@npm:^7.1.0, @babel/parser@npm:^7.12.0, @babel/parser@npm:^7.13.9, @babel/parser@npm:^7.16.0, @babel/parser@npm:^7.16.5, @babel/parser@npm:^7.6.0, @babel/parser@npm:^7.9.6":
   version: 7.16.6
   resolution: "@babel/parser@npm:7.16.6"
   bin:
@@ -1940,9 +1949,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@playwright/test@npm:^1.17.1":
-  version: 1.17.1
-  resolution: "@playwright/test@npm:1.17.1"
+"@playwright/test@npm:^1.17.2":
+  version: 1.17.2
+  resolution: "@playwright/test@npm:1.17.2"
   dependencies:
     "@babel/code-frame": ^7.14.5
     "@babel/core": ^7.14.8
@@ -1961,7 +1970,7 @@ __metadata:
     "@babel/plugin-syntax-optional-catch-binding": ^7.8.3
     "@babel/plugin-transform-modules-commonjs": ^7.14.5
     "@babel/preset-typescript": ^7.14.5
-    colors: ^1.4.0
+    colors: 1.4.0
     commander: ^8.2.0
     debug: ^4.1.1
     expect: =27.2.5
@@ -1973,7 +1982,7 @@ __metadata:
     open: ^8.3.0
     pirates: ^4.0.1
     pixelmatch: ^5.2.1
-    playwright-core: =1.17.1
+    playwright-core: =1.17.2
     pngjs: ^5.0.0
     rimraf: ^3.0.2
     source-map-support: ^0.4.18
@@ -1981,7 +1990,7 @@ __metadata:
     yazl: ^2.5.1
   bin:
     playwright: cli.js
-  checksum: ed13a14f16e1521a799ffdfbc560419243be05d3f29c7474795f5fc6622a95209a4fa47b97a081432efc65efa3e1f2c4a2d2fd91e1aace08966d1fa1c73000e8
+  checksum: dd6ffc0794989373c4c86199eb7b2e7405688bc089d213d9554daccf7651e7cb418f679316e625f97444a4cbee8c3d63e57a93d78c23c7f864297647bb32ecdc
   languageName: node
   linkType: hard
 
@@ -3328,21 +3337,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"autoprefixer@npm:^10.2.4":
-  version: 10.4.0
-  resolution: "autoprefixer@npm:10.4.0"
+"autoprefixer@npm:^10.4.2":
+  version: 10.4.2
+  resolution: "autoprefixer@npm:10.4.2"
   dependencies:
-    browserslist: ^4.17.5
-    caniuse-lite: ^1.0.30001272
-    fraction.js: ^4.1.1
+    browserslist: ^4.19.1
+    caniuse-lite: ^1.0.30001297
+    fraction.js: ^4.1.2
     normalize-range: ^0.1.2
     picocolors: ^1.0.0
-    postcss-value-parser: ^4.1.0
+    postcss-value-parser: ^4.2.0
   peerDependencies:
     postcss: ^8.1.0
   bin:
     autoprefixer: bin/autoprefixer
-  checksum: 7d511c64daeaa13c7888b40b0394cd891fab1852a1f60165330c9e49ab70ac29ad1e3386665d86361661cf2bbe90cea42b78ea73cb77b373ffe30a8f4973a955
+  checksum: dbd13e641eaa7d7e3121769c22cc439222f1a9d0371a583d12300849de7287ece1e793767ff9902842dbfd56c4b7c19ed9fe1947c9f343ba2f4f3519dbddfdef
   languageName: node
   linkType: hard
 
@@ -4202,10 +4211,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30001219, caniuse-lite@npm:^1.0.30001228, caniuse-lite@npm:^1.0.30001272, caniuse-lite@npm:^1.0.30001286":
-  version: 1.0.30001292
-  resolution: "caniuse-lite@npm:1.0.30001292"
-  checksum: 930d02514769243f26033919f56536a307db83bba933374e6955c6678878fe8a8105051796868947d230f31d237b782fa2cf7390b84b69b555077add12469966
+"caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30001219, caniuse-lite@npm:^1.0.30001228, caniuse-lite@npm:^1.0.30001286, caniuse-lite@npm:^1.0.30001297":
+  version: 1.0.30001299
+  resolution: "caniuse-lite@npm:1.0.30001299"
+  checksum: c770f60ebf3e0cc8043ba4db0ebec12d7a595a6b50cb4437c3c5c55b04de9d2413f711f2828be761e8c37bb46b927a8abe6b199b8f0ffc1a34af0ebdee84be27
   languageName: node
   linkType: hard
 
@@ -4592,7 +4601,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"colors@npm:^1.1.2, colors@npm:^1.4.0":
+"colors@npm:1.4.0, colors@npm:^1.1.2, colors@npm:^1.4.0":
   version: 1.4.0
   resolution: "colors@npm:1.4.0"
   checksum: 98aa2c2418ad87dedf25d781be69dc5fc5908e279d9d30c34d8b702e586a0474605b3a189511482b9d5ed0d20c867515d22749537f7bc546256c6014f3ebdcec
@@ -5487,11 +5496,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"depcheck@npm:^1.4.2":
-  version: 1.4.2
-  resolution: "depcheck@npm:1.4.2"
+"depcheck@npm:^1.4.3":
+  version: 1.4.3
+  resolution: "depcheck@npm:1.4.3"
   dependencies:
-    "@babel/parser": ^7.12.5
+    "@babel/parser": 7.16.4
     "@babel/traverse": ^7.12.5
     "@vue/compiler-sfc": ^3.0.5
     camelcase: ^6.2.0
@@ -5516,7 +5525,7 @@ __metadata:
     yargs: ^16.1.0
   bin:
     depcheck: bin/depcheck.js
-  checksum: a4fce9a0e35fa09cfb4b46f8aadde4e4f808e42bc5a9523cf70d9f52195702a2608cfa759fd96d9077f11c3bd78f77be4a4ca3f1ee0356ff3e71667bd00e6afa
+  checksum: 122631cab325707a55e26a8b530eb72c893bd481194100b1853ac2bc944b61320eb0e1ea0ff7e71724009cdfbd4057381d7bf868b9c5aad0c4207ac0bdca5e48
   languageName: node
   linkType: hard
 
@@ -6703,13 +6712,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastify-warning@npm:^0.2.0":
-  version: 0.2.0
-  resolution: "fastify-warning@npm:0.2.0"
-  checksum: c19ebccf54a3122877d2248400772ca98bacbabdf97826211ede29246c640d47431a2eebed1f52f9421139ed5e52e42d3bd4aefc46e27b6f34add3507529fd97
-  languageName: node
-  linkType: hard
-
 "fastparse@npm:^1.1.2":
   version: 1.1.2
   resolution: "fastparse@npm:1.1.2"
@@ -7009,10 +7011,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fraction.js@npm:^4.1.1":
-  version: 4.1.1
-  resolution: "fraction.js@npm:4.1.1"
-  checksum: e5a1f81d73e32aabf4fbd6581a7b3dfabd9a449ceb97c7e71ed2931dd0607095622341100d7819741eb9b435eb4e0d4a040a69e411dc943fa9b3a3872f3a2e0f
+"fraction.js@npm:^4.1.2":
+  version: 4.1.2
+  resolution: "fraction.js@npm:4.1.2"
+  checksum: a67eff2b599cb6546b77ce9c913bd0cccd646e1a525c793ba4e0bf5a399fc403f379227fca83423a6ea79d01e35c2f2b0f141ffa1d09e41377041268a53fb150
   languageName: node
   linkType: hard
 
@@ -9917,10 +9919,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"luxon@npm:^2.0.0":
-  version: 2.0.2
-  resolution: "luxon@npm:2.0.2"
-  checksum: eb2e366cf41a129704ae3213e0aea3e1504390af2a84322a5bbb6a22c92d96c7cb70e58b941a109c5e1bfbed51784d08130278feeee6cdf169940af90a68ded5
+"luxon@npm:^2.3.0":
+  version: 2.3.0
+  resolution: "luxon@npm:2.3.0"
+  checksum: 3d00e1b812a31082cf0d97e844d7354c93891fbd14795756f396ee5656387e21d2c862edb841516114eb391f8314a6cf3848799acc6d59cf9560c88c909b91f0
   languageName: node
   linkType: hard
 
@@ -10949,9 +10951,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"owncloud-design-system@npm:12.0.0-alpha8":
-  version: 12.0.0-alpha8
-  resolution: "owncloud-design-system@npm:12.0.0-alpha8"
+"owncloud-design-system@npm:12.0.0-alpha10":
+  version: 12.0.0-alpha10
+  resolution: "owncloud-design-system@npm:12.0.0-alpha10"
   peerDependencies:
     "@popperjs/core": ^2.4.0
     "@vue/composition-api": ^1.4.3
@@ -10963,13 +10965,12 @@ __metadata:
     postcss-import: ^12.0.1
     postcss-url: ^9.0.0
     tippy.js: ^6.3.7
-    uikit: 3.5.16
     v-calendar: ^2.3.2
     vue: ^2.6.11
     vue-inline-svg: ^2.0.0
     vue-select: ^3.12.0
     webfontloader: ^1.6.28
-  checksum: 91da86a96569d0141b47fb39b075ff3ef2300557e1f34d0727a357c142e44e70e26f2b5f7a2d0db1e67623698c49d9b00a7884077cb9a6f6a1528b44c58a7691
+  checksum: 1e3ebcbcccbcc061a18f6f1f4c6db592165ad52bd56ef54f57bc7e41fb2275f77fa451a145d51a4c5c57ab75e425e38e8a0a517b172add4ca9bf1923c08c86c5
   languageName: node
   linkType: hard
 
@@ -11356,16 +11357,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pino@npm:^7.5.1":
-  version: 7.5.1
-  resolution: "pino@npm:7.5.1"
+"pino@npm:^7.6.3":
+  version: 7.6.3
+  resolution: "pino@npm:7.6.3"
   dependencies:
     fast-redact: ^3.0.0
-    fastify-warning: ^0.2.0
-    get-caller-file: ^2.0.5
     on-exit-leak-free: ^0.2.0
     pino-abstract-transport: v0.5.0
     pino-std-serializers: ^4.0.0
+    process-warning: ^1.0.0
     quick-format-unescaped: ^4.0.3
     real-require: ^0.1.0
     safe-stable-stringify: ^2.1.0
@@ -11373,7 +11373,7 @@ __metadata:
     thread-stream: ^0.13.0
   bin:
     pino: bin.js
-  checksum: 2f71ebadb08dd8a9d6cd82e9dd67c3be1f16756ec977aa8b5e65d28e8b70d7512543c071fe011cf187dcdb9d8b8aea434881a452a34d79040e44de54078a58b7
+  checksum: d179e1178ebb5bf601745cf3870633f70f29ba14b512fa7949a4f4820eb27069477a2e4bbaf6cf5f9199e5b319d2f218865c74e7b8ace2711f1201e399771e56
   languageName: node
   linkType: hard
 
@@ -11456,6 +11456,32 @@ __metadata:
   bin:
     playwright: cli.js
   checksum: 916da00f06b159cc8d238f109c298ee49f660b132e60ca43c5fcd3a86626a186ac224c3ac257d26e37fa45ba10fa4b0092eaed09560e4e130cae4f452cc7eec2
+  languageName: node
+  linkType: hard
+
+"playwright-core@npm:=1.17.2":
+  version: 1.17.2
+  resolution: "playwright-core@npm:1.17.2"
+  dependencies:
+    commander: ^8.2.0
+    debug: ^4.1.1
+    extract-zip: ^2.0.1
+    https-proxy-agent: ^5.0.0
+    jpeg-js: ^0.4.2
+    mime: ^2.4.6
+    pngjs: ^5.0.0
+    progress: ^2.0.3
+    proper-lockfile: ^4.1.1
+    proxy-from-env: ^1.1.0
+    rimraf: ^3.0.2
+    socks-proxy-agent: ^6.1.0
+    stack-utils: ^2.0.3
+    ws: ^7.4.6
+    yauzl: ^2.10.0
+    yazl: ^2.5.1
+  bin:
+    playwright: cli.js
+  checksum: d7d648eebd2529acecae3d1fa09fbb96b0101f26a33a4109ac70073c686cde7ad49706fcc65d610e30a945c17c9aa5b15d0f190fd64bc001dd08a80f38dafd3a
   languageName: node
   linkType: hard
 
@@ -11990,10 +12016,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-value-parser@npm:^4.0.2, postcss-value-parser@npm:^4.1.0":
-  version: 4.1.0
-  resolution: "postcss-value-parser@npm:4.1.0"
-  checksum: 68a9ea27c780fa3cc350be37b47cc46385c61dd9627990909230e0e9c3debf6d5beb49006bd743a2e506cdd6fa7d07637f2d9504a394f67cc3011d1ff0134886
+"postcss-value-parser@npm:^4.0.2, postcss-value-parser@npm:^4.1.0, postcss-value-parser@npm:^4.2.0":
+  version: 4.2.0
+  resolution: "postcss-value-parser@npm:4.2.0"
+  checksum: 819ffab0c9d51cf0acbabf8996dffbfafbafa57afc0e4c98db88b67f2094cb44488758f06e5da95d7036f19556a4a732525e84289a425f4f6fd8e412a9d7442f
   languageName: node
   linkType: hard
 
@@ -12140,6 +12166,13 @@ __metadata:
   version: 2.0.1
   resolution: "process-nextick-args@npm:2.0.1"
   checksum: 1d38588e520dab7cea67cbbe2efdd86a10cc7a074c09657635e34f035277b59fbb57d09d8638346bf7090f8e8ebc070c96fa5fd183b777fff4f5edff5e9466cf
+  languageName: node
+  linkType: hard
+
+"process-warning@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "process-warning@npm:1.0.0"
+  checksum: c708a03241deec3cabaeee39c4f9ee8c4d71f1c5ef9b746c8252cdb952a6059068cfcdaf348399775244cbc441b6ae5e26a9c87ed371f88335d84f26d19180f9
   languageName: node
   linkType: hard
 
@@ -13215,7 +13248,7 @@ __metadata:
     "@cucumber/messages": ^17.1.1
     "@cucumber/pretty-formatter": ^1.0.0-alpha.1
     "@erquhart/rollup-plugin-node-builtins": ^2.1.5
-    "@playwright/test": ^1.17.1
+    "@playwright/test": ^1.17.2
     "@rollup/plugin-commonjs": ^17.0.0
     "@rollup/plugin-html": ^0.2.0
     "@rollup/plugin-json": ^4.1.0
@@ -13232,13 +13265,13 @@ __metadata:
     "@typescript-eslint/eslint-plugin": ^4.28.3
     "@typescript-eslint/parser": ^4.28.3
     "@vue/test-utils": ^1.2.2
-    autoprefixer: ^10.2.4
+    autoprefixer: ^10.4.2
     babel-core: ^7.0.0-bridge.0
     babel-jest: ^27.0.6
     commander: ^8.3.0
     core-js: ^3.19.1
     cucumber-html-reporter: ^5.5.0
-    depcheck: ^1.4.2
+    depcheck: ^1.4.3
     ejs: ^3.1.5
     eslint: ^7.30.0
     eslint-config-prettier: ^6.10.0
@@ -13262,7 +13295,7 @@ __metadata:
     join-path: ^1.1.1
     lodash: ^4.17.21
     node-fetch: ^2.6.1
-    pino: ^7.5.1
+    pino: ^7.6.3
     pino-pretty: ^7.3.0
     playwright: ^1.17.1
     postcss: ^8.3.6
@@ -14848,13 +14881,6 @@ typescript@^4.3.2:
   languageName: node
   linkType: hard
 
-"uikit@npm:3.5.16":
-  version: 3.5.16
-  resolution: "uikit@npm:3.5.16"
-  checksum: 25ad7958567666c82b7e876af34ba56747e2649d296efcfe845560c871a36af4c6ea3adde5e7f2cb588efe62b92fa34fced68989c1aa3a3be3981249d5ad8a2e
-  languageName: node
-  linkType: hard
-
 "unbox-primitive@npm:^1.0.1":
   version: 1.0.1
   resolution: "unbox-primitive@npm:1.0.1"
@@ -15432,9 +15458,9 @@ typescript@^4.3.2:
     focus-trap-vue: ^1.1.1
     fuse.js: ^6.4.6
     lodash-es: ^4.17.21
-    luxon: ^2.0.0
+    luxon: ^2.3.0
     oidc-client: 1.11.5
-    owncloud-design-system: 12.0.0-alpha8
+    owncloud-design-system: 12.0.0-alpha10
     owncloud-sdk: 1.0.0-2296
     p-queue: ^6.1.1
     popper-max-size-modifier: ^0.2.0
@@ -15444,7 +15470,6 @@ typescript@^4.3.2:
     query-string: ^6.8.3
     tippy.js: ^6.3.7
     tus-js-client: ^2.3.0
-    uikit: 3.5.16
     v-calendar: ^2.3.2
     vue: ^2.6.10
     vue-async-computed: ^3.9.0

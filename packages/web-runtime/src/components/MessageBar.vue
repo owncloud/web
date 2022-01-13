@@ -1,16 +1,14 @@
 <template>
   <oc-notifications>
-    <transition-group name="oc-alerts-transition" tag="div">
-      <oc-notification-message
-        v-for="item in $_ocMessages_limited"
-        :key="item.id"
-        :title="$gettext(item.title)"
-        :message="$gettext(item.desc)"
-        :status="item.status"
-        class="uk-width-large"
-        @close="deleteMessage(item)"
-      />
-    </transition-group>
+    <oc-notification-message
+      v-for="item in $_ocMessages_limited"
+      :key="item.id"
+      :title="$gettext(item.title)"
+      :message="$gettext(item.desc)"
+      :status="item.status"
+      class="oc-width-large"
+      @close="deleteMessage(item)"
+    />
   </oc-notifications>
 </template>
 

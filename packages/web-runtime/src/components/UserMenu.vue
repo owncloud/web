@@ -3,13 +3,13 @@
     <oc-button
       id="_userMenuButton"
       ref="menuButton"
-      class="oc-topbar-personal uk-height-1-1"
+      class="oc-topbar-personal oc-height-1-1"
       appearance="raw"
       variation="inverse"
       :aria-label="$gettext('User Menu')"
     >
       <avatar-image
-        class="oc-topbar-personal-avatar uk-flex-inline uk-flex-center uk-flex-middle"
+        class="oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle"
         :width="24"
         :userid="userId"
         :user-name="userDisplayName"
@@ -23,11 +23,11 @@
       mode="click"
       close-on-click
       :options="{ pos: 'bottom-right', delayHide: 0 }"
-      class="uk-width-auto"
+      class="oc-width-auto"
       padding-size="small"
     >
-      <ul class="uk-list">
-        <li class="uk-text-nowrap">
+      <ul class="oc-list">
+        <li class="oc-text-nowrap">
           <oc-button
             id="oc-topbar-account-manage"
             type="router-link"
@@ -96,11 +96,6 @@ export default {
       type: String,
       required: true
     },
-    userEmail: {
-      type: String,
-      required: false,
-      default: null
-    },
     applicationsList: {
       type: Array,
       required: false,
@@ -112,32 +107,18 @@ export default {
       return this.navigation_getMenuItems(['user'])
     }
   },
-  watch: {
-    visible(val) {
-      if (val) {
-        this.focusFirstLink()
-      } else {
-        this.$emit('closed')
-      }
-    }
+  mounted() {
+    this.$refs.menu?.tippy?.setProps({
+      onHidden: () => this.$refs.menuButton.$el.focus(),
+      onShown: () => this.$refs.menu.$el.querySelector('a:first-of-type').focus()
+    })
   },
   methods: {
     logout() {
-      this.visible = false
       // Use timeout to leave enough time for the dropdown to be hidden
       setTimeout(() => {
         this.$store.dispatch('logout')
       })
-    },
-    focusFirstLink() {
-      /*
-       * Delay for two reasons:
-       * - for screen readers Virtual buffer
-       * - to outsmart uikit's focus management
-       */
-      setTimeout(() => {
-        this.$refs.menuButton.$el.querySelector('a:first-of-type').focus()
-      }, 500)
     }
   }
 }

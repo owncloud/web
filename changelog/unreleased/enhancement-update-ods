@@ -1,18 +1,30 @@
-Enhancement: Update ODS to v12.0.0-alpha7
+Enhancement: Update ODS to v12.0.0-alpha10
 
-We updated the ownCloud Design System to version 12.0.0-alpha7. Please refer to the full changelog in the ODS release (linked) for more details. Summary:
+We updated the ownCloud Design System to version 12.0.0-alpha10. Please refer to the full changelog in the ODS release (linked) for more details. Summary:
 
 - Change - Do not sort in OcTable: https://github.com/owncloud/owncloud-design-system/pull/1825
 - Change - Remove OcAppSideBar component: https://github.com/owncloud/owncloud-design-system/pull/1810
 - Change - Remove OcAppBar component: https://github.com/owncloud/owncloud-design-system/pull/1810
+- Change - Remove implicit ODS registration: https://github.com/owncloud/owncloud-design-system/pull/1848
 - Change - Remove oc-table-files from ods: https://github.com/owncloud/owncloud-design-system/pull/1817
-- Change - Move OcSidebarNav and OcSidebarNavItem to web: https://github.com/owncloud/owncloud-design-system/pull/6036
+- Change - Remove OcGrid options: https://github.com/owncloud/owncloud-design-system/pull/1658
+- Change - Move OcSidebarNav and OcSidebarNavItem to web: https://github.com/owncloud/web/issues/6036
+- Change - Remove UiKit: https://github.com/owncloud/owncloud-design-system/pull/1658
 - Change - Remove unused props for unstyled components: https://github.com/owncloud/owncloud-design-system/pull/1795
+- Change - Use remixicons for redesign: https://github.com/owncloud/owncloud-design-system/pull/1826
+- Enhancement - Make Vue-Composition-API available: https://github.com/owncloud/owncloud-design-system/pull/1848
 - Enhancement - Fix OcAvatar line-height: https://github.com/owncloud/owncloud-design-system/pull/1810
-- Enhancement - Adjust OcSearchBar to new design: https://github.com/owncloud/owncloud-design-system/pull/1810
+- Enhancement - Add option to render table cells lazy: https://github.com/owncloud/owncloud-design-system/pull/1848
+- Enhancement - Show path / parent folder to distinguish files: https://github.com/owncloud/web/issues/5953
+- Enhancement - Adjust OcSearchBar to new design: https://github.com/owncloud/owncloud-design-system/pull/1810/
+- Enhancement - Sizes: https://github.com/owncloud/owncloud-design-system/pull/1858
 - Enhancement - Add svg icon for spaces: https://github.com/owncloud/owncloud-design-system/pull/1846
+- Enhancement - Use Roboto font: https://github.com/owncloud/owncloud-design-system/pull/1876
+- Bugfix - OcNotification positioning: https://github.com/owncloud/owncloud-design-system/pull/1658
 - Bugfix - Rename GhostElement: https://github.com/owncloud/owncloud-design-system/pull/1845
+- Bugfix - OcTooltip isn't reactive: https://github.com/owncloud/owncloud-design-system/pull/1863
 
 https://github.com/owncloud/web/pull/6086
 https://github.com/owncloud/web/pull/6142
-https://github.com/owncloud/owncloud-design-system/releases/tag/v12.0.0-alpha7
+https://github.com/owncloud/web/pull/6213
+https://github.com/owncloud/owncloud-design-system/releases/tag/v12.0.0-alpha10

@@ -6,7 +6,7 @@
     </skip-to>
     <div
       v-if="user.isAuthenticated && !user.userReady"
-      class="loading-overlay uk-flex uk-flex-middle uk-flex-center"
+      class="loading-overlay oc-flex oc-flex-middle oc-flex-center"
       :style="{
         backgroundImage: 'url(' + configuration.theme.loginPage.backgroundImg + ')'
       }"
@@ -27,49 +27,41 @@
       </div>
       <div id="web-content-main" class="oc-px-s oc-pb-s">
         <message-bar :active-messages="activeMessages" @deleteMessage="$_deleteMessage" />
-        <div class="app-container uk-flex">
-          <transition>
-            <sidebar-nav
-              v-if="isSidebarVisible"
-              class="app-navigation"
-              :nav-items="sidebarNavItems"
-            />
-          </transition>
+        <div class="app-container oc-flex">
+          <sidebar-nav
+            v-if="isSidebarVisible"
+            class="app-navigation"
+            :nav-items="sidebarNavItems"
+          />
           <router-view
-            class="app-content uk-width-1-1 oc-py-s"
+            class="app-content oc-width-1-1 oc-py-s"
             :class="{ 'app-content-standalone': !isSidebarVisible }"
             name="app"
           />
         </div>
       </div>
     </div>
-    <transition
-      enter-active-class="uk-animation-fade uk-animation-fast"
-      leave-active-class="uk-animation-fade uk-animation-reverse uk-animation-fast"
-      name="custom-classes-transition"
-    >
-      <oc-modal
-        v-if="modal.displayed"
-        :variation="modal.variation"
-        :icon="modal.icon"
-        :title="modal.title"
-        :message="modal.message"
-        :has-input="modal.hasInput"
-        :input-label="modal.inputLabel"
-        :input-disabled="modal.inputDisabled"
-        :input-value="modal.inputValue"
-        :input-description="modal.inputDescription"
-        :input-error="modal.inputError"
-        :button-cancel-text="modal.cancelText"
-        :button-confirm-text="modal.confirmText"
-        :button-confirm-disabled="modal.confirmDisabled || !!modal.inputError"
-        @cancel="modal.onCancel"
-        @confirm="modal.onConfirm"
-        @input="modal.onInput"
-        @mounted="focusModal"
-        @beforeDestroy="focusModal"
-      />
-    </transition>
+    <oc-modal
+      v-if="modal.displayed"
+      :variation="modal.variation"
+      :icon="modal.icon"
+      :title="modal.title"
+      :message="modal.message"
+      :has-input="modal.hasInput"
+      :input-label="modal.inputLabel"
+      :input-disabled="modal.inputDisabled"
+      :input-value="modal.inputValue"
+      :input-description="modal.inputDescription"
+      :input-error="modal.inputError"
+      :button-cancel-text="modal.cancelText"
+      :button-confirm-text="modal.confirmText"
+      :button-confirm-disabled="modal.confirmDisabled || !!modal.inputError"
+      @cancel="modal.onCancel"
+      @confirm="modal.onConfirm"
+      @input="modal.onInput"
+      @mounted="focusModal"
+      @beforeDestroy="focusModal"
+    />
   </div>
 </template>
 <script>
@@ -309,6 +301,10 @@ export default {
 }
 </script>
 <style lang="scss">
+body {
+  margin: 0;
+}
+
 #web {
   background-color: #202020;
   height: 100vh;

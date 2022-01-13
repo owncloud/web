@@ -39,7 +39,7 @@
       class="oc-mt-xs oc-text-meta"
       v-text="inviteDescriptionMessage"
     />
-    <div class="uk-flex uk-flex-middle uk-flex-between oc-mb-l">
+    <div class="oc-flex oc-flex-middle oc-flex-between oc-mb-l">
       <role-dropdown
         :resource="highlightedFile"
         :allow-share-permission="!isOcis"

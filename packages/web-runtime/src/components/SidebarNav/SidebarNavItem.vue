@@ -76,7 +76,6 @@ export default {
   }
   &:hover {
     color: var(--oc-color-text-inverse);
-    text-decoration: none;
   }
   &:not(.active):hover {
     background: #383838;

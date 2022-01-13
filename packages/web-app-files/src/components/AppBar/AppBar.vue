@@ -29,7 +29,7 @@
       <div class="files-app-bar-actions">
         <div
           v-if="showActions || selectedFiles.length > 0 || hasBulkActions"
-          class="uk-flex-1 uk-flex uk-flex-start"
+          class="oc-flex-1 oc-flex oc-flex-start"
         >
           <template v-if="showActions && areDefaultActionsVisible">
             <oc-button
@@ -53,7 +53,7 @@
               :options="{ delayHide: 0 }"
               padding-size="small"
             >
-              <ul class="uk-list">
+              <ul class="oc-list">
                 <li>
                   <file-upload
                     :path="currentPath"
@@ -79,7 +79,7 @@
                     <oc-button
                       id="new-folder-btn"
                       appearance="raw"
-                      class="uk-width-1-1"
+                      class="oc-width-1-1"
                       justify-content="left"
                       @click="showCreateResourceModal"
                     >
@@ -93,7 +93,7 @@
                     <oc-button
                       appearance="raw"
                       justify-content="left"
-                      :class="['new-file-btn-' + newFileHandler.ext, 'uk-width-1-1']"
+                      :class="['new-file-btn-' + newFileHandler.ext, 'oc-width-1-1']"
                       @click="
                         showCreateResourceModal(false, newFileHandler.ext, newFileHandler.action)
                       "
@@ -106,7 +106,7 @@
               </ul>
             </oc-drop>
           </template>
-          <size-info v-if="hasBulkActions && selectedFiles.length > 0" class="oc-mr uk-visible@l" />
+          <size-info v-if="hasBulkActions && selectedFiles.length > 0" class="oc-mr oc-visible@l" />
           <batch-actions v-if="hasBulkActions" />
         </div>
         <view-options />
