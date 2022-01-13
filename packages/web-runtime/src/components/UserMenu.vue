@@ -36,7 +36,7 @@
             gap-size="xsmall"
             justify-content="left"
           >
-            <oc-icon name="profile" fill-type="line" />
+            <oc-icon name="user" fill-type="line" />
             <translate>Profile</translate>
           </oc-button>
         </li>

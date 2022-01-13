@@ -55,16 +55,16 @@ const navItems = [
   },
   {
     name: $gettext('Shared with me'),
-    icon: 'shared-with-me',
-    fillType: 'none',
+    icon: 'share-forward',
+    fillType: 'fill',
     route: {
       path: `/${appInfo.id}/shares/with-me`
     }
   },
   {
     name: $gettext('Shared with others'),
-    icon: 'shared-with-others',
-    fillType: 'none',
+    icon: 'reply',
+    fillType: 'fill',
     route: {
       path: `/${appInfo.id}/shares/with-others`
     }

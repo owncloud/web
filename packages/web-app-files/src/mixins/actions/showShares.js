@@ -9,6 +9,7 @@ export default {
         {
           name: 'show-shares',
           icon: quickActions.collaborators.icon,
+          iconFillType: quickActions.collaborators.iconFillType,
           label: () => this.$gettext('Share'),
           handler: this.$_showShares_trigger,
           isEnabled: ({ resources }) => {

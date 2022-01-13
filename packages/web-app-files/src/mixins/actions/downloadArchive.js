@@ -14,7 +14,7 @@ export default {
       return [
         {
           name: 'download-archive',
-          icon: 'folder-download',
+          icon: 'inbox-archive',
           handler: this.$_downloadArchive_trigger,
           label: () => {
             return this.$gettext('Download')
