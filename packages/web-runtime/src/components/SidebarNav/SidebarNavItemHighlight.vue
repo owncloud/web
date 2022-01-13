@@ -77,12 +77,12 @@ export default {
   z-index: -1;
 }
 #highlighter::before {
-	content: "";
-	position: absolute;
-	width: 40px;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	box-shadow: 2px 0px 6px rgba(0, 0, 0, 0.14);
+  content: '';
+  position: absolute;
+  width: 40px;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.14);
 }
 </style>
