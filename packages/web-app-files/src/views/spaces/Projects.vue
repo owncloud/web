@@ -20,18 +20,22 @@
       <div v-else class="spaces-list">
         <div
           class="
-            uk-grid-match uk-grid-column-small uk-grid-row-large uk-text-center uk-child-width-1-3@s
+            oc-grid
+            oc-grid-match
+            oc-grid-column-small
+            oc-grid-row-large
+            oc-text-center
+            oc-child-width-1-3@s
           "
-          uk-grid
         >
-          <a v-for="space in spaces" :key="space.id" href="#">
-            <span class="spaces-list-card oc-border uk-card uk-card-default">
-              <span class="uk-card-media-top oc-border-b">
+          <a v-for="space in spaces" :key="space.id" href="#" class="oc-mb-m">
+            <span class="spaces-list-card oc-border oc-card oc-card-default">
+              <span class="oc-card-media-top oc-border-b">
                 <img v-if="space.image" :src="space.image" alt="" />
                 <oc-icon v-else name="layout-grid" size="xxlarge" class="oc-px-m oc-py-m" />
               </span>
-              <span class="uk-card-body">
-                <span class="uk-card-title" v-text="space.name" />
+              <span class="oc-card-body">
+                <span class="oc-card-title" v-text="space.name" />
               </span>
             </span>
           </a>
@@ -84,7 +88,7 @@ export default {
     box-shadow: none !important;
   }
 
-  .uk-card-media-top {
+  .oc-card-media-top {
     display: inline-block;
     width: 100%;
     background-color: var(--oc-color-background-muted);
