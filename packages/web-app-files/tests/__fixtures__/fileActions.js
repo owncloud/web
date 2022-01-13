@@ -154,7 +154,7 @@ const fileActions = {
   navigate: {
     name: 'navigate',
     icon: 'folder-open',
-    route: 'files-personal',
+    route: () => ({ name: 'files-personal' }),
     label: () => 'Open Folder',
     componentType: 'router-link',
     class: 'oc-files-actions-navigate-trigger',

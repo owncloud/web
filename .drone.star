@@ -1103,11 +1103,17 @@ def e2eTests(ctx):
             "HEADLESS": "true",
             "OCIS": "true",
             "RETRY": "1",
-            "REPORT_TRACING": reportTracing,
+            "MIDDLEWARE_HOST": "http://middleware:3000",
+            "REMOTE_UPLOAD_DIR": "/usr/src/app/filesForUpload",
+            "REPORT_TRACING": reportTracing,    
         },
         "commands": [
             "sleep 10 && yarn test:e2e:cucumber tests/e2e/cucumber/",
         ],
+        "volumes": [{
+            "name": "uploads",
+            "path": "/usr/src/app/filesForUpload",
+        }],
     }]
 
     e2e_test_occ = [{
@@ -1117,14 +1123,20 @@ def e2eTests(ctx):
             "BASE_URL_OCC": "owncloud",
             "HEADLESS": "true",
             "RETRY": "1",
+            "MIDDLEWARE_HOST": "http://middleware:3000",
+            "REMOTE_UPLOAD_DIR": "/usr/src/app/filesForUpload",
             "REPORT_TRACING": reportTracing,
         },
         "commands": [
             "sleep 10 && yarn test:e2e:cucumber tests/e2e/cucumber/",
         ],
+        "volumes": [{
+            "name": "uploads",
+            "path": "/usr/src/app/filesForUpload",
+        }],
     }]
 
-    services = databaseService(db) + owncloudService() + webService()
+    services = databaseService(db) + owncloudService() + webService() + middlewareService()
 
     stepsClassic = \
         skipIfUnchanged(ctx, "e2e-tests") + \
@@ -1140,6 +1152,7 @@ def e2eTests(ctx):
         fixPermissions() + \
         waitForOwncloudService() + \
         copyFilesForUpload() + \
+        waitForMiddlewareService() + \
         e2e_test_occ + \
         uploadTracingResult(ctx) + \
         publishTracingResult(ctx, "e2e-tests oC10") + \
@@ -1156,6 +1169,7 @@ def e2eTests(ctx):
         ocisService() + \
         getSkeletonFiles() + \
         copyFilesForUpload() + \
+        waitForMiddlewareService() + \
         e2e_test_ocis + \
         uploadTracingResult(ctx) + \
         publishTracingResult(ctx, "e2e-tests oCIS") + \
@@ -1187,6 +1201,7 @@ def e2eTests(ctx):
             "name": "e2e-tests oCIS",
             "workspace": e2e_workspace,
             "steps": stepsInfinite,
+            "services": middlewareService(True),
             "depends_on": ["cache-ocis"],
             "trigger": e2e_trigger,
             "volumes": e2e_volumes,
@@ -1345,9 +1360,6 @@ def acceptance(ctx):
                                 steps += fixPermissionsFederated() + waitForOwncloudFederatedService() + owncloudLogFederated()
 
                                 services += owncloudFederatedService() + databaseServiceForFederation(db, federationDbSuffix)
-
-                        # Copy files for upload
-                        steps += copyFilesForUpload()
 
                         # Wait for test-related services to be up
                         steps += waitForBrowserService()
@@ -2370,6 +2382,7 @@ def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnv
     environment["BACKEND_HOST"] = "http://owncloud"
     environment["COMMENTS_FILE"] = "/var/www/owncloud/web/comments.file"
     environment["MIDDLEWARE_HOST"] = "http://middleware:3000"
+    environment["REMOTE_UPLOAD_DIR"] = "/usr/src/app/filesForUpload"
 
     for env in extraEnvironment:
         environment[env] = extraEnvironment[env]
@@ -2379,6 +2392,7 @@ def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnv
         "image": OC_CI_NODEJS,
         "environment": environment,
         "commands": [
+            "ls /usr/src/app/filesForUpload",
             "cd %s/tests/acceptance && ./run.sh" % dir["web"],
         ],
         "volumes": [{
@@ -2387,6 +2401,9 @@ def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnv
         }, {
             "name": "configs",
             "path": "/srv/config",
+        }, {
+            "name": "uploads",
+            "path": "/usr/src/app/filesForUpload",
         }],
     }]
 
@@ -2881,8 +2898,7 @@ def middlewareService(ocis = False, federatedServer = False):
         "BACKEND_HOST": "https://ocis:9200" if ocis else "http://owncloud",
         "OCIS_REVA_DATA_ROOT": "/srv/app/tmp/ocis/storage/owncloud/",
         "RUN_ON_OCIS": "true" if ocis else "false",
-        "HOST": "middleware",
-        "REMOTE_UPLOAD_DIR": "/filesForUpload",
+        "REMOTE_UPLOAD_DIR": "/usr/src/app/filesForUpload",
         "NODE_TLS_REJECT_UNAUTHORIZED": "0",
         "MIDDLEWARE_HOST": "middleware",
     }
@@ -2892,12 +2908,12 @@ def middlewareService(ocis = False, federatedServer = False):
 
     return [{
         "name": "middleware",
-        "image": "owncloud/owncloud-test-middleware",
+        "image": "owncloud/owncloud-test-middleware:1.1.0",
         "pull": "always",
         "environment": environment,
         "volumes": [{
             "name": "uploads",
-            "path": "/filesForUpload",
+            "path": "/usr/src/app/filesForUpload",
         }, {
             "name": "gopath",
             "path": "/srv/app",

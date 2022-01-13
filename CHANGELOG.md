@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Open folder from context menu: [#6187](https://github.com/owncloud/web/issues/6187)
 * Change - Use remixicons for redesign: [#6142](https://github.com/owncloud/web/pull/6142)
 * Enhancement - File selection simplification: [#5967](https://github.com/owncloud/web/issues/5967)
 * Enhancement - Reorganize urls: [#6137](https://github.com/owncloud/web/pull/6137)
@@ -17,6 +18,13 @@ Summary
 
 Details
 -------
+
+* Bugfix - Open folder from context menu: [#6187](https://github.com/owncloud/web/issues/6187)
+
+   We fixed a bug in the context menu that prevented correct folder navigation ("Open folder").
+
+   https://github.com/owncloud/web/issues/6187
+   https://github.com/owncloud/web/pull/6232
 
 * Change - Use remixicons for redesign: [#6142](https://github.com/owncloud/web/pull/6142)
 
@@ -64,6 +72,7 @@ Details
 
    https://github.com/owncloud/web/issues/6036
    https://github.com/owncloud/web/pull/6086
+   https://github.com/owncloud/web/pull/6222
 
 * Enhancement - Update ODS to v12.0.0-alpha7: [#6086](https://github.com/owncloud/web/pull/6086)
 

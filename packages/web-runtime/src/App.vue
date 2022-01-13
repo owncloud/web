@@ -1,7 +1,7 @@
 <template>
   <div id="web">
     <oc-hidden-announcer :announcement="announcement" level="polite" />
-    <skip-to target="main">
+    <skip-to target="web-content-main">
       <translate>Skip to main</translate>
     </skip-to>
     <div
@@ -17,20 +17,29 @@
       <router-view name="fullscreen" />
     </template>
     <div v-else id="web-content">
-      <top-bar
-        v-if="!publicPage() && !$route.meta.verbose"
-        :applications-list="applicationsList"
-        :active-notifications="activeNotifications"
-        :user-id="user.username || user.id"
-        :user-display-name="user.displayname"
-      />
-      <div id="main">
+      <div id="web-content-header">
+        <top-bar
+          :applications-list="applicationsList"
+          :active-notifications="activeNotifications"
+          :user-id="user.username || user.id"
+          :user-display-name="user.displayname"
+        />
+      </div>
+      <div id="web-content-main" class="oc-px-s oc-pb-s">
         <message-bar :active-messages="activeMessages" @deleteMessage="$_deleteMessage" />
-        <div id="main-app-area" class="oc-my-m oc-mx-s uk-flex">
+        <div class="app-container uk-flex">
           <transition>
-            <sidebar-nav v-if="isSidebarVisible" :nav-items="sidebarNavItems" />
+            <sidebar-nav
+              v-if="isSidebarVisible"
+              class="app-navigation"
+              :nav-items="sidebarNavItems"
+            />
           </transition>
-          <router-view class="oc-app-container uk-width-1-1 oc-py-s oc-ps-s" name="app" />
+          <router-view
+            class="app-content uk-width-1-1 oc-py-s"
+            :class="{ 'app-content-standalone': !isSidebarVisible }"
+            name="app"
+          />
         </div>
       </div>
     </div>
@@ -300,27 +309,50 @@ export default {
 }
 </script>
 <style lang="scss">
-html,
-body,
-#web,
-#web-content {
-  height: 100%;
+#web {
+  background-color: #202020;
+  height: 100vh;
+  max-height: 100vh;
   overflow-y: hidden;
 }
 
-#web {
-  background-color: #202020;
-}
+#web-content {
+  display: flex;
+  flex-flow: column;
+  flex-wrap: nowrap;
+  height: 100vh;
 
-.oc-app-container {
-  min-height: 85vh;
-  max-height: 85vh !important;
-  overflow-y: scroll;
-}
+  #web-content-header,
+  #web-content-main {
+    flex-shrink: 1;
+    flex-basis: auto;
+  }
+  #web-content-header {
+    flex-grow: 0;
+  }
+  #web-content-main {
+    flex-grow: 1;
+    overflow-y: scroll;
 
-#main-app-area {
-  background-color: var(--oc-color-background-default);
-  border-radius: 15px;
+    .app-container {
+      height: 100%;
+
+      .app-navigation {
+        border-top-left-radius: 15px;
+        border-bottom-left-radius: 15px;
+      }
+
+      .app-content {
+        background-color: var(--oc-color-background-default);
+        border-top-right-radius: 15px;
+        border-bottom-right-radius: 15px;
+
+        &-standalone {
+          border-radius: 15px;
+        }
+      }
+    }
+  }
 }
 
 .loading-overlay {

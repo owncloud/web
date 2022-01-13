@@ -3,9 +3,12 @@ const withHttp = (url) => (/^https?:\/\//i.test(url) ? url : `http://${url}`)
 exports.config = {
   // environment
   ocis: process.env.OCIS === 'true',
-  assets: './tests/acceptance/filesForUpload',
+  assets: process.env.REMOTE_UPLOAD_DIR ?? './tests/acceptance/filesForUpload',
   baseUrlOcc: process.env.BASE_URL_OCC ?? 'host.docker.internal:8080',
   baseUrlOCis: process.env.BASE_URL_OCIS ?? 'host.docker.internal:9200',
+  baseUrlMiddleware:
+    process.env.MIDDLEWARE_HOST ??
+    (this.ocis ? 'http://host.docker.internal:3000' : 'http://host.docker.internal:3001'),
   get backendUrl() {
     return withHttp(
       process.env.BACKEND_HOST ||

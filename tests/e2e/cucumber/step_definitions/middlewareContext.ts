@@ -1,8 +1,10 @@
-const { After, Before, Given } = require('@cucumber/cucumber')
-const fetch = require('node-fetch')
-const { client } = require('nightwatch-api')
+import { Given, DataTable, After, Before } from '@cucumber/cucumber'
+import { config } from '../../config'
+import fetch from 'node-fetch'
 
-function handler(statement1, statement2, table = undefined) {
+const middlewareHost = config.baseUrlMiddleware
+
+function handler(statement1: string, statement2: string, table?: DataTable): Promise<any> {
   let statement = ''
   if (statement1) {
     statement = statement + statement1.trim()
@@ -16,14 +18,15 @@ function handler(statement1, statement2, table = undefined) {
     statement = statement + statement2.trim()
   }
   const data = {
-    step: 'Given ' + statement
+    step: 'Given ' + statement,
+    table: null
   }
 
   if (table) {
-    data.table = table
+    data.table = table.raw()
   }
 
-  return fetch(client.globals.middlewareUrl + '/execute', {
+  return fetch(middlewareHost + '/execute', {
     method: 'POST',
     body: JSON.stringify(data),
     headers: {
@@ -44,7 +47,7 @@ function handler(statement1, statement2, table = undefined) {
 }
 
 Before(function () {
-  return fetch(client.globals.middlewareUrl + '/init', {
+  return fetch(middlewareHost + '/init', {
     method: 'POST'
   })
     .then((res) => {
@@ -58,24 +61,27 @@ Before(function () {
 })
 
 After(function () {
-  return fetch(client.globals.middlewareUrl + '/cleanup', {
+  return fetch(middlewareHost + '/cleanup', {
     method: 'POST'
   })
 })
 
-Given(/^((?:(?!these|following).)*\S)\s(in the server|on remote server)(.*)$/, (st1, st2, st3) => {
-  if (st2 === 'on remote server') {
-    st1 = st1 + ' ' + st2
+Given(
+  /^((?:(?!these|following).)*\S)\s(in the server|on remote server)(.*)$/,
+  (st1: string, st2: string, st3: string) => {
+    if (st2 === 'on remote server') {
+      st1 = st1 + st2
+    }
+    return handler(st1, st3)
   }
-  return handler(st1, st3)
-})
+)
 
 Given(
   /^(.*(?=these|following).*\S)\s(in the server|on remote server)(.*)$/,
-  (st1, st2, st3, table) => {
+  (st1: string, st2: string, st3: string, table: DataTable) => {
     if (st2 === 'on remote server') {
-      st1 = st1 + ' ' + st2
+      st1 = st1 + st2
     }
-    return handler(st1, st3, table.raw())
+    return handler(st1, st3, table)
   }
 )
