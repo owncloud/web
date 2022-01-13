@@ -1,4 +1,4 @@
-Enhancement: Remove UiKit
+Change: Remove UiKit
 
 The ownCloud design system has dropped the underlying UiKit library, which 
 we've also removed from the web codebase to reduce the overall bundle size.

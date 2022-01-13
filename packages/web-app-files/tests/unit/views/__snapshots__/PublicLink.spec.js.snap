@@ -11,7 +11,7 @@ exports[`PublicLink theming options should display the configuration theme gener
 exports[`PublicLink theming options should display the logo image inside login card 1`] = `<img src="some-logo" alt="" aria-hidden="true" class="oc-login-logo">`;
 
 exports[`PublicLink theming options should have the background image and page-title set 1`] = `
-<div oc-height-viewport="" class="oc-login" style="background-image: url(some-image);">
+<div class="oc-login oc-height-viewport" style="background-image: url(some-image);">
   <h1 class="oc-invisible-sr">some page title</h1>
   <div class="oc-login-card oc-position-center"><img src="some-logo" alt="" aria-hidden="true" class="oc-login-logo">
     <div class="oc-login-card-body">

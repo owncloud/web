@@ -60,7 +60,6 @@ export default {
   border-radius: 5px;
   white-space: nowrap;
   user-select: none;
-  text-decoration: none;
 
   .text {
     opacity: 1;

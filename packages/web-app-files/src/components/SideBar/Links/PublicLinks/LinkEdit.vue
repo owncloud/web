@@ -1,11 +1,9 @@
 <template>
   <div class="oc-files-edit-public-link oc-files-file-link-form" data-testid="new-files-link">
     <form @submit.prevent>
-      <transition name="custom-classes-transition">
-        <oc-alert v-if="errors" class="oc-files-file-link-error-alert" variation="danger">
-          {{ errors }}
-        </oc-alert>
-      </transition>
+      <oc-alert v-if="errors" class="oc-files-file-link-error-alert" variation="danger">
+        {{ errors }}
+      </oc-alert>
       <div class="oc-mb">
         <oc-text-input
           id="oc-files-file-link-name"

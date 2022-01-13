@@ -112,3 +112,8 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+.account-page-info dd {
+  margin-left: 0;
+}
+</style>

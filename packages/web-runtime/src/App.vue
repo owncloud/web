@@ -28,13 +28,11 @@
       <div id="web-content-main" class="oc-px-s oc-pb-s">
         <message-bar :active-messages="activeMessages" @deleteMessage="$_deleteMessage" />
         <div class="app-container oc-flex">
-          <transition>
-            <sidebar-nav
-              v-if="isSidebarVisible"
-              class="app-navigation"
-              :nav-items="sidebarNavItems"
-            />
-          </transition>
+          <sidebar-nav
+            v-if="isSidebarVisible"
+            class="app-navigation"
+            :nav-items="sidebarNavItems"
+          />
           <router-view
             class="app-content oc-width-1-1 oc-py-s"
             :class="{ 'app-content-standalone': !isSidebarVisible }"
@@ -43,29 +41,27 @@
         </div>
       </div>
     </div>
-    <transition name="custom-classes-transition">
-      <oc-modal
-        v-if="modal.displayed"
-        :variation="modal.variation"
-        :icon="modal.icon"
-        :title="modal.title"
-        :message="modal.message"
-        :has-input="modal.hasInput"
-        :input-label="modal.inputLabel"
-        :input-disabled="modal.inputDisabled"
-        :input-value="modal.inputValue"
-        :input-description="modal.inputDescription"
-        :input-error="modal.inputError"
-        :button-cancel-text="modal.cancelText"
-        :button-confirm-text="modal.confirmText"
-        :button-confirm-disabled="modal.confirmDisabled || !!modal.inputError"
-        @cancel="modal.onCancel"
-        @confirm="modal.onConfirm"
-        @input="modal.onInput"
-        @mounted="focusModal"
-        @beforeDestroy="focusModal"
-      />
-    </transition>
+    <oc-modal
+      v-if="modal.displayed"
+      :variation="modal.variation"
+      :icon="modal.icon"
+      :title="modal.title"
+      :message="modal.message"
+      :has-input="modal.hasInput"
+      :input-label="modal.inputLabel"
+      :input-disabled="modal.inputDisabled"
+      :input-value="modal.inputValue"
+      :input-description="modal.inputDescription"
+      :input-error="modal.inputError"
+      :button-cancel-text="modal.cancelText"
+      :button-confirm-text="modal.confirmText"
+      :button-confirm-disabled="modal.confirmDisabled || !!modal.inputError"
+      @cancel="modal.onCancel"
+      @confirm="modal.onConfirm"
+      @input="modal.onInput"
+      @mounted="focusModal"
+      @beforeDestroy="focusModal"
+    />
   </div>
 </template>
 <script>

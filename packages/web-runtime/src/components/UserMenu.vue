@@ -108,7 +108,7 @@ export default {
     }
   },
   mounted() {
-    this.$refs.menu.tippy.setProps({
+    this.$refs.menu?.tippy?.setProps({
       onHidden: () => this.$refs.menuButton.$el.focus(),
       onShown: () => this.$refs.menu.$el.querySelector('a:first-of-type').focus()
     })

@@ -26,11 +26,7 @@
       close-on-click
     >
       <ul class="oc-my-rm oc-px-rm">
-        <li
-          v-for="(n, nid) in menuItems"
-          :key="`apps-menu-${nid}`"
-          class="list-item oc-py-s oc-px-s"
-        >
+        <li v-for="(n, nid) in menuItems" :key="`apps-menu-${nid}`" class="list-item oc-p-s">
           <a v-if="n.url" key="apps-menu-external-link" :target="n.target" :href="n.url">
             <oc-icon :name="n.iconMaterial" size="large" />
             <span class="link-text" v-text="$gettext(n.title)" />
@@ -66,7 +62,7 @@ export default {
     }
   },
   mounted() {
-    this.$refs.menu.tippy.setProps({
+    this.$refs.menu?.tippy?.setProps({
       onHidden: () => this.$refs.menubutton.$el.focus(),
       onShown: () => this.$refs.menu.$el.querySelector('a:first-of-type').focus()
     })
@@ -83,7 +79,6 @@ export default {
 
     a {
       text-align: center;
-      text-decoration: none;
       .link-text {
         display: block;
       }

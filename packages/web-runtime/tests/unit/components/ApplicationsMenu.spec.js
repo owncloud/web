@@ -1,12 +1,10 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import DesignSystem from 'owncloud-design-system'
 import GetText from 'vue-gettext'
-import VueRouter from 'vue-router'
 
 import ApplicationsMenu from 'web-runtime/src/components/ApplicationsMenu.vue'
 
 const localVue = createLocalVue()
-localVue.use(VueRouter)
 localVue.use(DesignSystem)
 localVue.use(GetText, {
   translations: 'does-not-matter',
@@ -29,11 +27,6 @@ const menuLinks = [
   }
 ]
 
-const selectors = {
-  appSwitcherButton: '#_appSwitcherButton',
-  ocDrop: 'oc-drop-stub'
-}
-
 describe('ApplicationsMenu component', () => {
   jest
     .spyOn(ApplicationsMenu.mixins[0].methods, 'navigation_getMenuItems')
@@ -53,32 +46,36 @@ describe('ApplicationsMenu component', () => {
       }
     ])
 
-  afterEach(() => {
-    jest.clearAllMocks()
-  })
-
-  let wrapper
-  beforeEach(() => {
-    wrapper = getShallowWrapper(menuLinks)
-  })
-
-  it('shoud set aria-label prop on switcher button', () => {
-    const appSwitcherButton = wrapper.find(selectors.appSwitcherButton)
-
-    expect(appSwitcherButton).toMatchSnapshot()
-  })
-  it('should show app menus', () => {
-    const ocDrop = wrapper.find(selectors.ocDrop)
-
-    expect(ocDrop).toMatchSnapshot()
+  it('should render navigation with button and menu items in dropdown', () => {
+    const wrapper = getWrapper(menuLinks)
+    expect(wrapper).toMatchSnapshot()
   })
 })
 
-function getShallowWrapper(applicationsList = []) {
+function getWrapper(applicationsList = []) {
   return shallowMount(ApplicationsMenu, {
     localVue,
     propsData: {
       applicationsList
+    },
+    stubs: {
+      'oc-button': true,
+      'oc-icon': true,
+      'oc-drop': true,
+      'router-link': true
+    },
+    directives: {
+      'oc-tooltip': jest.fn()
+    },
+    mocks: {
+      $route: {},
+      $router: {
+        resolve: () => {
+          return {
+            href: 'href'
+          }
+        }
+      }
     }
   })
 }

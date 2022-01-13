@@ -8,26 +8,24 @@
     @keydown.esc="closeApp"
   >
     <h1 class="oc-invisible-sr" v-text="pageTitle" />
-    <transition name="custom-classes-transition">
-      <div
-        v-show="!loading && activeMediaFileCached"
-        class="
-          oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-box-shadow-medium
-          media-viewer-player
-        "
-      >
-        <video v-if="medium.isVideo" :key="`media-video-${medium.id}`" controls preload>
-          <source :src="medium.url" :type="`video/${medium.ext}`" />
-        </video>
-        <img
-          v-else
-          :key="`media-image-${medium.id}`"
-          :src="medium.url"
-          :alt="medium.name"
-          :data-id="medium.id"
-        />
-      </div>
-    </transition>
+    <div
+      v-show="!loading && activeMediaFileCached"
+      class="
+        oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-box-shadow-medium
+        media-viewer-player
+      "
+    >
+      <video v-if="medium.isVideo" :key="`media-video-${medium.id}`" controls preload>
+        <source :src="medium.url" :type="`video/${medium.ext}`" />
+      </video>
+      <img
+        v-else
+        :key="`media-image-${medium.id}`"
+        :src="medium.url"
+        :alt="medium.name"
+        :data-id="medium.id"
+      />
+    </div>
     <div v-if="loading" class="oc-position-center">
       <oc-spinner :aria-label="$gettext('Loading media file')" size="xlarge" />
     </div>

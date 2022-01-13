@@ -41,7 +41,6 @@ export default {
 #oc-files-actions-sidebar {
   > li a,
   > li a:hover {
-    text-decoration: none;
     color: var(--oc-color-swatch-passive-default);
     display: inline-flex;
     gap: 10px;

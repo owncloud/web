@@ -10,7 +10,7 @@
         v-text="noResharePermsMessage"
       />
       <div v-if="hasSharees" class="avatars-wrapper oc-flex oc-flex-middle oc-flex-between">
-        <h4 class="oc-text-initial oc-text-bold oc-mb-rm" v-text="sharedWithLabel" />
+        <h4 class="oc-text-initial oc-text-bold oc-my-rm" v-text="sharedWithLabel" />
         <oc-button
           v-oc-tooltip="sharedWithTooltip"
           data-testid="collaborators-show-people"
@@ -29,11 +29,9 @@
         </oc-button>
       </div>
       <template v-if="showShareesList && hasSharees">
-        <transition-group
+        <ul
           id="files-collaborators-list"
           class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm"
-          name="custom-classes-transition"
-          tag="ul"
           :aria-label="$gettext('Share receivers')"
         >
           <li v-for="collaborator in collaborators" :key="collaborator.key">
@@ -43,7 +41,7 @@
               @onDelete="$_ocCollaborators_deleteShare"
             />
           </li>
-        </transition-group>
+        </ul>
       </template>
     </template>
   </div>

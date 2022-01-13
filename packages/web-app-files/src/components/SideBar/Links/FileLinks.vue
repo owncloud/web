@@ -32,15 +32,11 @@
           class="oc-mt-s"
           v-text="noResharePermsMessage"
         />
-        <transition-group
-          class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm"
-          name="custom-classes-transition"
-          tag="ul"
-        >
+        <ul class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm">
           <li v-for="link in links" :key="link.key">
             <list-item :data-testid="`files-link-id-${link.id}`" :link="link" />
           </li>
-        </transition-group>
+        </ul>
         <p
           v-if="$_noPublicLinks && canCreatePublicLinks"
           id="oc-file-links-no-results"
@@ -53,9 +49,7 @@
       </template>
     </div>
     <div v-if="currentView === VIEW_EDIT" :key="VIEW_EDIT">
-      <transition name="custom-classes-transition">
-        <link-edit />
-      </transition>
+      <link-edit />
     </div>
   </div>
 </template>
