@@ -1105,7 +1105,7 @@ def e2eTests(ctx):
             "RETRY": "1",
             "MIDDLEWARE_HOST": "http://middleware:3000",
             "REMOTE_UPLOAD_DIR": "/usr/src/app/filesForUpload",
-            "REPORT_TRACING": reportTracing,    
+            "REPORT_TRACING": reportTracing,
         },
         "commands": [
             "sleep 10 && yarn test:e2e:cucumber tests/e2e/cucumber/",
