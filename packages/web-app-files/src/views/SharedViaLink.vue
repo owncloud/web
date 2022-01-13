@@ -19,6 +19,7 @@
         class="files-table"
         :class="{ 'files-table-squashed': !sidebarClosed }"
         :are-thumbnails-displayed="displayThumbnails"
+        :are-paths-displayed="true"
         :resources="paginatedResources"
         :target-route="resourceTargetLocation"
         :header-position="fileListHeaderY"

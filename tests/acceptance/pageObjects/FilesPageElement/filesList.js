@@ -376,9 +376,8 @@ module.exports = {
       if (error !== null) {
         assert.fail(error)
       }
-      assert.strictEqual(
-        fileName,
-        resourceName,
+      assert.ok(
+        fileName.endsWith(resourceName),
         `Expected file name to be "${fileName}" but found "${resourceName}"`
       )
     },

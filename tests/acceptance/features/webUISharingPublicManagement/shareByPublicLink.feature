@@ -142,7 +142,7 @@ Feature: Public link share management
     And user "Alice" has favorited element "simple-folder/simple-empty-folder"
     And user "Alice" has logged in using the webUI
     When the user browses to the shared-with-others page
-    And the user opens the share dialog for folder "simple-empty-folder" using the webUI
+    And the user opens the share dialog for folder "simple-folder/simple-empty-folder" using the webUI
     Then a link named "Public Link" should be listed with role "Viewer" in the public link list of resource "simple-empty-folder" via "simple-folder" on the webUI
     And a link named "Public Link Sub" should be listed with role "Viewer" in the public link list of resource "simple-empty-folder" on the webUI
     When the user browses to the favorites page using the webUI

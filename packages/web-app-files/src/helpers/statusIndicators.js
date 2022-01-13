@@ -106,8 +106,8 @@ export const getIndicators = (resource, sharesTree) => {
       accessibleDescription: shareLinkDescribedBy(resource, sharesTree),
       label: $gettext('Show links'),
       visible: isLinkShare(resource, sharesTree),
-      icon: 'links',
-      fillType: 'fill',
+      icon: 'link',
+      fillType: 'none',
       target: 'links-item',
       type: isDirectLinkShare(resource) ? 'link-direct' : 'link-indirect',
       handler: indicatorHandler

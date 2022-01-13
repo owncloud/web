@@ -84,7 +84,7 @@ Feature: Create public link shares
     And the public uses the webUI to access the last public link created by user "Alice"
     Then file "lorem.txt" should be listed on the webUI
 
-  @issue-5302
+
   Scenario: share two files with same name but different paths by public link
     Given user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has created file "simple-folder/lorem.txt" in the server
