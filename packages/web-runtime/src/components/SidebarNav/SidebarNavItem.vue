@@ -55,7 +55,11 @@ export default {
   },
   computed: {
     toolTip() {
-      const value = this.collapsed ? this.$gettext(`Navigate to ${this.name} page`) : ''
+      const value = this.collapsed
+        ? this.$gettextInterpolate(this.$gettext('Navigate to %{ pageName } page'), {
+            pageName: this.name
+          })
+        : ''
       return {
         content: value,
         placement: 'right',
@@ -72,7 +76,7 @@ export default {
   align-items: center;
   color: var(--oc-color-border);
   display: flex;
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 400;
   padding: var(--oc-space-small) var(--oc-space-small);
   border-radius: 5px;
@@ -91,7 +95,7 @@ export default {
   &.active {
     cursor: default;
     color: white;
-    font-size: 15px;
+    font-size: 0.9375rem;
     font-weight: bold;
     text-decoration: none;
   }
