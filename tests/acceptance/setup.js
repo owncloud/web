@@ -12,8 +12,8 @@ const { runOcc } = require('./helpers/occHelper')
 
 const codify = require('./helpers/codify')
 
-const RUNNING_ON_CI = !!process.env.CI
-const RUNNING_ON_SAUCELABS = !!process.env.SAUCE_USERNAME
+const RUNNING_ON_CI = process.env.CI === 'true'
+const RUNNING_ON_SAUCELABS = process.env.SAUCE_USERNAME === 'true'
 
 const CUCUMBER_LOCAL_TIMEOUT = 60000
 const CUCUMBER_DRONE_TIMEOUT = 180000

@@ -212,20 +212,76 @@ Given('server {code} has been added as trusted server', function (server) {
   return setTrustedServer(server)
 })
 
+const getCurrentScenario = function (testCase) {
+  const scenarios = testCase.gherkinDocument.feature.children
+  const scenarioName = testCase.pickle.name
+
+  let currentScenario = null
+  for (const scenario of scenarios) {
+    if (
+      Object.prototype.hasOwnProperty.call(scenario, 'scenario') &&
+      scenario.scenario.name === scenarioName
+    ) {
+      currentScenario = scenario.scenario
+      break
+    }
+  }
+  return {
+    ...currentScenario,
+    ...testCase.pickle,
+    getLineNumber: () => currentScenario.location.line,
+    isScenarioOutline: () => currentScenario.keyword === 'Scenario Outline'
+  }
+}
+
+const getExpectedFails = function () {
+  let expectedFails = null
+  let expectedFailureFile = process.env.EXPECTED_FAILURES_FILE || ''
+  expectedFailureFile = path.parse(expectedFailureFile).base
+  try {
+    expectedFails = fs.readFileSync(expectedFailureFile, 'utf8')
+  } catch (err) {
+    console.error('Expected failures file not found!')
+  }
+  return expectedFails
+}
+
+const checkIfExpectedToFail = function (scenarioLine, expectedFails) {
+  const scenarioLineRegex = new RegExp(scenarioLine)
+  return scenarioLineRegex.test(expectedFails)
+}
+
 After(async function (testCase) {
   if (!client.globals.screenshots) {
     return
   }
-  if (testCase.result.status === 'failed' && !testCase.result.retried) {
-    console.log('saving screenshot of failed test')
-    const filename =
-      testCase.sourceLocation.uri
-        .replace('tests/acceptance/features/', '')
-        .replace('/', '-')
-        .replace('.', '-') +
-      '-' +
-      testCase.sourceLocation.line
-    await client.saveScreenshot('./tests/reports/screenshots/' + filename + '.png')
+  // Generate screenshots when the test fails on retry
+  if (testCase.result.status === 'FAILED' && !testCase.result.willBeRetried) {
+    const expectedFails = getExpectedFails()
+
+    const scenario = getCurrentScenario(testCase)
+    let featureFile = scenario.uri.replace('features/', '') + ':' + scenario.getLineNumber()
+    let expectedToFail = checkIfExpectedToFail(featureFile, expectedFails)
+    if (scenario.isScenarioOutline()) {
+      // scenario example id
+      const currentExampleId = scenario.astNodeIds[scenario.astNodeIds.length - 1]
+      // scenario examples
+      const examples = scenario.examples[0].tableBody
+      for (const example of examples) {
+        if (example.id === currentExampleId) {
+          featureFile = featureFile.replace(/:[0-9]*/, ':' + example.location.line)
+          if (!expectedToFail) {
+            expectedToFail = checkIfExpectedToFail(featureFile, expectedFails)
+          }
+          break
+        }
+      }
+    }
+    if (!expectedToFail) {
+      console.log('saving screenshot of failed test')
+      const filename = featureFile.replace('/', '-').replace('.', '_').replace(':', '-L')
+      await client.saveScreenshot('./reports/screenshots/' + filename + '.png')
+    }
   }
 })
 
