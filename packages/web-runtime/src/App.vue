@@ -163,7 +163,7 @@ export default {
     },
 
     isSidebarVisible() {
-      return this.sidebarNavItems.length && this.windowWidth >= 1200
+      return this.sidebarNavItems.length && this.windowWidth >= 640
     },
 
     selectedLanguage() {
