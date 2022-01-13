@@ -9,12 +9,14 @@ Summary
 -------
 
 * Bugfix - Open folder from context menu: [#6187](https://github.com/owncloud/web/issues/6187)
+* Bugfix - Focus management in topbar dropdowns: [#6213](https://github.com/owncloud/web/pull/6213)
+* Change - Remove UiKit: [#6103](https://github.com/owncloud/web/issues/6103)
 * Change - Use remixicons for redesign: [#6142](https://github.com/owncloud/web/pull/6142)
 * Enhancement - File selection simplification: [#5967](https://github.com/owncloud/web/issues/5967)
 * Enhancement - Reorganize urls: [#6137](https://github.com/owncloud/web/pull/6137)
 * Enhancement - Lazy resource table cells: [#6204](https://github.com/owncloud/web/pull/6204)
 * Enhancement - Redesign main layout: [#6036](https://github.com/owncloud/web/issues/6036)
-* Enhancement - Update ODS to v12.0.0-alpha7: [#6086](https://github.com/owncloud/web/pull/6086)
+* Enhancement - Update ODS to v12.0.0-alpha10: [#6086](https://github.com/owncloud/web/pull/6086)
 
 Details
 -------
@@ -25,6 +27,21 @@ Details
 
    https://github.com/owncloud/web/issues/6187
    https://github.com/owncloud/web/pull/6232
+
+* Bugfix - Focus management in topbar dropdowns: [#6213](https://github.com/owncloud/web/pull/6213)
+
+   We've fixed issues with focus management upon opening and closing the dropdown menus in the
+   ApplicationSwitcher and Usermenu.
+
+   https://github.com/owncloud/web/pull/6213
+
+* Change - Remove UiKit: [#6103](https://github.com/owncloud/web/issues/6103)
+
+   The ownCloud design system has dropped the underlying UiKit library, which we've also removed
+   from the web codebase to reduce the overall bundle size.
+
+   https://github.com/owncloud/web/issues/6103
+   https://github.com/owncloud/web/pull/6213
 
 * Change - Use remixicons for redesign: [#6142](https://github.com/owncloud/web/pull/6142)
 
@@ -74,9 +91,9 @@ Details
    https://github.com/owncloud/web/pull/6086
    https://github.com/owncloud/web/pull/6222
 
-* Enhancement - Update ODS to v12.0.0-alpha7: [#6086](https://github.com/owncloud/web/pull/6086)
+* Enhancement - Update ODS to v12.0.0-alpha10: [#6086](https://github.com/owncloud/web/pull/6086)
 
-   We updated the ownCloud Design System to version 12.0.0-alpha7. Please refer to the full
+   We updated the ownCloud Design System to version 12.0.0-alpha10. Please refer to the full
    changelog in the ODS release (linked) for more details. Summary:
 
    - Change - Do not sort in OcTable:
@@ -84,22 +101,39 @@ Details
    OcAppSideBar component:
    https://github.com/owncloud/owncloud-design-system/pull/1810 - Change - Remove
    OcAppBar component: https://github.com/owncloud/owncloud-design-system/pull/1810 -
-   Change - Remove oc-table-files from ods:
-   https://github.com/owncloud/owncloud-design-system/pull/1817 - Change - Move
-   OcSidebarNav and OcSidebarNavItem to web:
-   https://github.com/owncloud/owncloud-design-system/pull/6036 - Change - Remove unused
-   props for unstyled components:
-   https://github.com/owncloud/owncloud-design-system/pull/1795 - Enhancement - Fix
+   Change - Remove implicit ODS registration:
+   https://github.com/owncloud/owncloud-design-system/pull/1848 - Change - Remove
+   oc-table-files from ods:
+   https://github.com/owncloud/owncloud-design-system/pull/1817 - Change - Remove OcGrid
+   options: https://github.com/owncloud/owncloud-design-system/pull/1658 - Change - Move
+   OcSidebarNav and OcSidebarNavItem to web: https://github.com/owncloud/web/issues/6036
+   - Change - Remove UiKit: https://github.com/owncloud/owncloud-design-system/pull/1658
+   - Change - Remove unused props for unstyled components:
+   https://github.com/owncloud/owncloud-design-system/pull/1795 - Change - Use
+   remixicons for redesign:
+   https://github.com/owncloud/owncloud-design-system/pull/1826 - Enhancement - Make
+   Vue-Composition-API available:
+   https://github.com/owncloud/owncloud-design-system/pull/1848 - Enhancement - Fix
    OcAvatar line-height: https://github.com/owncloud/owncloud-design-system/pull/1810
-   - Enhancement - Adjust OcSearchBar to new design:
-   https://github.com/owncloud/owncloud-design-system/pull/1810 - Enhancement - Add svg
+   - Enhancement - Add option to render table cells lazy:
+   https://github.com/owncloud/owncloud-design-system/pull/1848 - Enhancement - Show
+   path / parent folder to distinguish files: https://github.com/owncloud/web/issues/5953 -
+   Enhancement - Adjust OcSearchBar to new design:
+   https://github.com/owncloud/owncloud-design-system/pull/1810/ - Enhancement - Sizes:
+   https://github.com/owncloud/owncloud-design-system/pull/1858 - Enhancement - Add svg
    icon for spaces: https://github.com/owncloud/owncloud-design-system/pull/1846 -
-   Bugfix - Rename GhostElement:
-   https://github.com/owncloud/owncloud-design-system/pull/1845
+   Enhancement - Use Roboto font:
+   https://github.com/owncloud/owncloud-design-system/pull/1876 - Bugfix -
+   OcNotification positioning:
+   https://github.com/owncloud/owncloud-design-system/pull/1658 - Bugfix - Rename
+   GhostElement: https://github.com/owncloud/owncloud-design-system/pull/1845 - Bugfix
+   - OcTooltip isn't reactive:
+   https://github.com/owncloud/owncloud-design-system/pull/1863
 
    https://github.com/owncloud/web/pull/6086
    https://github.com/owncloud/web/pull/6142
-   https://github.com/owncloud/owncloud-design-system/releases/tag/v12.0.0-alpha7
+   https://github.com/owncloud/web/pull/6213
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v12.0.0-alpha10
 
 Changelog for ownCloud Web [4.9.0] (2021-12-24)
 =======================================
