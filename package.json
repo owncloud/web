@@ -21,7 +21,7 @@
     "lint": "eslint '{packages,tests}/**/*.{js,ts,vue}' --color",
     "serve": "SERVER=true yarn build:w",
     "test:integration": "jest --config ./tests/integration/config/jest.config.js",
-    "test:e2e:cucumber": "NODE_TLS_REJECT_UNAUTHORIZED=0 cucumber-js --profile=e2e",
+    "test:e2e:cucumber": "NODE_TLS_REJECT_UNAUTHORIZED=0 cucumber-js --profile=e2e -f json:tests/e2e/cucumber/reportGenerator/cucumber_report.json",
     "test:unit": "jest --coverage --config ./tests/unit/config/jest.config.js"
   },
   "browserslist": [
@@ -64,7 +64,9 @@
     "autoprefixer": "^10.2.4",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^27.0.6",
+    "commander": "^8.3.0",
     "core-js": "^3.19.1",
+    "cucumber-html-reporter": "^5.5.0",
     "depcheck": "^1.4.2",
     "ejs": "^3.1.5",
     "eslint": "^7.30.0",
@@ -79,6 +81,7 @@
     "eslint-plugin-vuejs-accessibility": "^0.7.1",
     "focus-trap": "^6.4.0",
     "focus-trap-vue": "^1.1.1",
+    "git-repo-info": "^2.1.1",
     "jest": "^26.6.3",
     "jest-axe": "^4.1.0",
     "jest-fetch-mock": "^3.0.3",
