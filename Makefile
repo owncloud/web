@@ -66,3 +66,7 @@ l10n-read: node_modules
 .PHONY: l10n-write
 l10n-write: node_modules
 	make -C packages/web-runtime/l10n translations
+
+.PHONY: ci-format
+ci-format: $(BUILDIFIER)
+	$(BUILDIFIER) --mode=fix .drone.star
