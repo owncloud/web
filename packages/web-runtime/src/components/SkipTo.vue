@@ -33,7 +33,7 @@ export default {
   position: absolute;
   top: -100px;
   left: 0;
-  z-index: 4;
+  z-index: 6;
   -webkit-appearance: none;
   border: none;
   background-color: var(--oc-color-swatch-brand-default);

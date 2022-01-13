@@ -93,7 +93,7 @@ export default {
 #oc-topbar {
   height: 60px;
   position: sticky;
-  z-index: 2;
+  z-index: 5;
   img {
     height: 42px;
     image-rendering: auto;

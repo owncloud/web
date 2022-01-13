@@ -88,7 +88,7 @@ export default {
   top: 0;
   transition: all 0.35s cubic-bezier(0.34, 0.11, 0, 1.12);
   box-shadow: 5px 0 25px rgba(0, 0, 0, 0.3);
-  z-index: 3;
+  z-index: 4;
 
   .toggle-sidebar-button {
     transition: all 0.2s ease-out;
