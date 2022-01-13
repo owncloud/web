@@ -1,4 +1,4 @@
-Enhancement: Update ODS to v12.0.0-alpha10
+Enhancement: Update ODS to v12.0.0-alpha11
 
 We updated the ownCloud Design System to version 12.0.0-alpha10. Please refer to the full changelog in the ODS release (linked) for more details. Summary:
 
@@ -27,4 +27,5 @@ We updated the ownCloud Design System to version 12.0.0-alpha10. Please refer to
 https://github.com/owncloud/web/pull/6086
 https://github.com/owncloud/web/pull/6142
 https://github.com/owncloud/web/pull/6213
-https://github.com/owncloud/owncloud-design-system/releases/tag/v12.0.0-alpha10
+https://github.com/owncloud/web/pull/6228
+https://github.com/owncloud/owncloud-design-system/releases/tag/v12.0.0-alpha11
