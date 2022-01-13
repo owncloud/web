@@ -9,6 +9,7 @@ OC_CI_GOLANG = "owncloudci/golang:1.17"
 OC_CI_NODEJS = "owncloudci/nodejs:14"
 OC_CI_PHP = "owncloudci/php:7.4"
 OC_CI_WAIT_FOR = "owncloudci/wait-for:latest"
+OC_TESTING_MIDDLEWARE = "owncloud/owncloud-test-middleware:1.1.0"
 OC_UBUNTU = "owncloud/ubuntu:20.04"
 
 OC10_VERSION = "latest"
@@ -1610,7 +1611,6 @@ def waitForOwncloudFederatedService():
         "commands": [
             "wait-for -it federated:80 -t 300",
         ],
-        "pull": "always",
     }]
 
 def getDbName(db):
@@ -1749,7 +1749,6 @@ def yarnInstallTests():
     return [{
         "name": "yarn-install-tests",
         "image": OC_CI_NODEJS,
-        "pull": "always",
         "environment": {
             "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
         },
@@ -2894,8 +2893,7 @@ def middlewareService(ocis = False, federatedServer = False):
 
     return [{
         "name": "middleware",
-        "image": "owncloud/owncloud-test-middleware:1.1.0",
-        "pull": "always",
+        "image": OC_TESTING_MIDDLEWARE,
         "environment": environment,
         "volumes": [{
             "name": "uploads",
