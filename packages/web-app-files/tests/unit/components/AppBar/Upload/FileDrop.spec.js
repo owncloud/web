@@ -92,6 +92,11 @@ function createWrapper(options = {}) {
 
 function createStore(getters) {
   return new Vuex.Store({
+    state: {
+      navigation: {
+        closed: false
+      }
+    },
     modules: {
       Files: {
         namespaced: true,

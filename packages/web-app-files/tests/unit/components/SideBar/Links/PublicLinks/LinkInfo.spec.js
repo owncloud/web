@@ -107,7 +107,7 @@ describe('LinkInfo', () => {
       { role: 'Viewer', icon: 'eye' },
       { role: 'Editor', icon: 'pencil' },
       { role: 'Contributor', icon: 'pencil' },
-      { role: 'Uploader', icon: 'file-add' },
+      { role: 'Uploader', icon: 'upload' },
       { role: '*', icon: 'key' }
     ])('should set different role tag icon for different role types', (dataSet) => {
       const wrapper = getShallowWrapper({
