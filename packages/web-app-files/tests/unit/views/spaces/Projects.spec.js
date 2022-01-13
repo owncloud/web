@@ -44,6 +44,7 @@ describe('Spaces component', () => {
     await wrapper.vm.loadSpacesTask.last
 
     expect(wrapper.vm.spaces.length).toEqual(1)
+    expect(wrapper).toMatchSnapshot()
   })
 })
 
