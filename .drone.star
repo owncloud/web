@@ -1151,7 +1151,6 @@ def e2eTests(ctx):
         setUpOauth2(True, True) + \
         fixPermissions() + \
         waitForOwncloudService() + \
-        copyFilesForUpload() + \
         waitForMiddlewareService() + \
         e2e_test_occ + \
         uploadTracingResult(ctx) + \
@@ -1168,7 +1167,6 @@ def e2eTests(ctx):
         getOcis() + \
         ocisService() + \
         getSkeletonFiles() + \
-        copyFilesForUpload() + \
         waitForMiddlewareService() + \
         e2e_test_ocis + \
         uploadTracingResult(ctx) + \
