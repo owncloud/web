@@ -17,7 +17,7 @@ Summary
 * Enhancement - Lazy resource table cells: [#6204](https://github.com/owncloud/web/pull/6204)
 * Enhancement - Redesign main layout: [#6036](https://github.com/owncloud/web/issues/6036)
 * Enhancement - Implement spaces list: [#6199](https://github.com/owncloud/web/pull/6199)
-* Enhancement - Update ODS to v12.0.0-alpha10: [#6086](https://github.com/owncloud/web/pull/6086)
+* Enhancement - Update ODS to v12.0.0-alpha12: [#6086](https://github.com/owncloud/web/pull/6086)
 
 Details
 -------
@@ -91,6 +91,7 @@ Details
    https://github.com/owncloud/web/issues/6036
    https://github.com/owncloud/web/pull/6086
    https://github.com/owncloud/web/pull/6222
+   https://github.com/owncloud/web/pull/6228
 
 * Enhancement - Implement spaces list: [#6199](https://github.com/owncloud/web/pull/6199)
 
@@ -99,9 +100,9 @@ Details
    https://github.com/owncloud/web/issues/6104
    https://github.com/owncloud/web/pull/6199
 
-* Enhancement - Update ODS to v12.0.0-alpha10: [#6086](https://github.com/owncloud/web/pull/6086)
+* Enhancement - Update ODS to v12.0.0-alpha12: [#6086](https://github.com/owncloud/web/pull/6086)
 
-   We updated the ownCloud Design System to version 12.0.0-alpha10. Please refer to the full
+   We updated the ownCloud Design System to version 12.0.0-alpha12. Please refer to the full
    changelog in the ODS release (linked) for more details. Summary:
 
    - Change - Do not sort in OcTable:
@@ -141,7 +142,8 @@ Details
    https://github.com/owncloud/web/pull/6086
    https://github.com/owncloud/web/pull/6142
    https://github.com/owncloud/web/pull/6213
-   https://github.com/owncloud/owncloud-design-system/releases/tag/v12.0.0-alpha10
+   https://github.com/owncloud/web/pull/6228
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v12.0.0-alpha12
 
 Changelog for ownCloud Web [4.9.0] (2021-12-24)
 =======================================
