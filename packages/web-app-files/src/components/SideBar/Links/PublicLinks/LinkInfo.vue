@@ -24,7 +24,7 @@
     <oc-grid gutter="small">
       <div>
         <oc-tag class="oc-files-file-link-role">
-          <oc-icon :name="roleTagIcon" />
+          <oc-icon :name="roleTagIcon.name" :fill-type="roleTagIcon.fillType || 'fill'" />
           {{ link.description }}
         </oc-tag>
       </div>
@@ -90,19 +90,19 @@ export default {
     roleTagIcon() {
       switch (this.link.description) {
         case 'Viewer':
-          return 'eye'
+          return { name: 'eye' }
 
         case 'Contributor':
-          return 'pencil'
+          return { name: 'pencil' }
 
         case 'Editor':
-          return 'pencil'
+          return { name: 'pencil' }
 
         case 'Uploader':
-          return 'file-add'
+          return { name: 'upload', fillType: 'line' }
 
         default:
-          return 'key'
+          return { name: 'key' }
       }
     },
 

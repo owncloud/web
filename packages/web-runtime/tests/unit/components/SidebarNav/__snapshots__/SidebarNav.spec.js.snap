@@ -1,48 +1,48 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`OcSidebarNav renders navItems into a list 1`] = `
-<div id="web-nav-sidebar" class="oc-visible@l"><button aria-label="Toggle sidebar" class="toggle-sidebar-button oc-py-s oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-inverse oc-button-inverse-raw toggle-sidebar-button-expanded oc-pr-s">
+<div id="web-nav-sidebar" class="oc-app-navigation-expanded"><button aria-label="Toggle sidebar" class="toggle-sidebar-button oc-py-s oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-inverse oc-button-inverse-raw toggle-sidebar-button-expanded oc-pr-s">
     <oc-icon-stub name="arrow-drop-left" filltype="line" accessiblelabel="" type="span" size="large" variation="passive"></oc-icon-stub>
   </button>
   <nav aria-label="Sidebar top navigation menu" class="oc-sidebar-nav oc-my-l oc-px-xs">
     <oc-list-stub>
-      <sidebar-nav-item-stub name="All files" active="true" target="/files/list/all" icon="folder" filltype="fill"></sidebar-nav-item-stub>
-      <sidebar-nav-item-stub name="Shared with me" target="/files/list/shared-with-me" icon="shared-with-me" filltype="fill"></sidebar-nav-item-stub>
-      <sidebar-nav-item-stub name="Shared with others" target="/files/list/shared-with-others" icon="shared-with-others" filltype="fill"></sidebar-nav-item-stub>
-      <sidebar-nav-item-stub name="Shared via link" target="/files/list/shared-via-link" icon="link" filltype="fill"></sidebar-nav-item-stub>
-      <sidebar-nav-item-stub name="Deleted files" target="/files/list/trash-bin" icon="delete" filltype="fill"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub name="All files" index="0" active="true" target="/files/list/all" icon="folder" filltype="fill"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub name="Shared with me" index="1" target="/files/list/shared-with-me" icon="shared-with-me" filltype="fill"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub name="Shared with others" index="2" target="/files/list/shared-with-others" icon="shared-with-others" filltype="fill"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub name="Shared via link" index="3" target="/files/list/shared-via-link" icon="link" filltype="fill"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub name="Deleted files" index="4" target="/files/list/trash-bin" icon="delete" filltype="fill"></sidebar-nav-item-stub>
     </oc-list-stub>
   </nav> <span class="footer">Footer</span>
 </div>
 `;
 
 exports[`OcSidebarNav toggles back into open state upon button click 1`] = `
-<div id="web-nav-sidebar" class="oc-visible@l"><button aria-label="Toggle sidebar" class="toggle-sidebar-button oc-py-s oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-inverse oc-button-inverse-raw toggle-sidebar-button-expanded oc-pr-s">
+<div id="web-nav-sidebar" class="oc-app-navigation-expanded"><button aria-label="Toggle sidebar" class="toggle-sidebar-button oc-py-s oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-inverse oc-button-inverse-raw toggle-sidebar-button-expanded oc-pr-s">
     <oc-icon-stub name="arrow-drop-left" filltype="line" accessiblelabel="" type="span" size="large" variation="passive"></oc-icon-stub>
   </button>
   <nav aria-label="Sidebar top navigation menu" class="oc-sidebar-nav oc-my-l oc-px-xs">
     <oc-list-stub>
-      <sidebar-nav-item-stub name="All files" active="true" target="/files/list/all" icon="folder" filltype="fill"></sidebar-nav-item-stub>
-      <sidebar-nav-item-stub name="Shared with me" target="/files/list/shared-with-me" icon="shared-with-me" filltype="fill"></sidebar-nav-item-stub>
-      <sidebar-nav-item-stub name="Shared with others" target="/files/list/shared-with-others" icon="shared-with-others" filltype="fill"></sidebar-nav-item-stub>
-      <sidebar-nav-item-stub name="Shared via link" target="/files/list/shared-via-link" icon="link" filltype="fill"></sidebar-nav-item-stub>
-      <sidebar-nav-item-stub name="Deleted files" target="/files/list/trash-bin" icon="delete" filltype="fill"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub name="All files" index="0" active="true" target="/files/list/all" icon="folder" filltype="fill"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub name="Shared with me" index="1" target="/files/list/shared-with-me" icon="shared-with-me" filltype="fill"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub name="Shared with others" index="2" target="/files/list/shared-with-others" icon="shared-with-others" filltype="fill"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub name="Shared via link" index="3" target="/files/list/shared-via-link" icon="link" filltype="fill"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub name="Deleted files" index="4" target="/files/list/trash-bin" icon="delete" filltype="fill"></sidebar-nav-item-stub>
     </oc-list-stub>
   </nav> <span class="footer">Footer</span>
 </div>
 `;
 
 exports[`OcSidebarNav toggles into closed state upon button click 1`] = `
-<div id="web-nav-sidebar" class="oc-visible@l oc-app-navigation-collapsed"><button aria-label="Toggle sidebar" class="toggle-sidebar-button oc-py-s oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-inverse oc-button-inverse-raw toggle-sidebar-button-collapsed">
+<div id="web-nav-sidebar" class="oc-app-navigation-collapsed"><button aria-label="Toggle sidebar" class="toggle-sidebar-button oc-py-s oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-inverse oc-button-inverse-raw toggle-sidebar-button-collapsed">
     <oc-icon-stub name="arrow-drop-right" filltype="line" accessiblelabel="" type="span" size="large" variation="passive"></oc-icon-stub>
   </button>
   <nav aria-label="Sidebar top navigation menu" class="oc-sidebar-nav oc-my-l oc-px-xs">
     <oc-list-stub>
-      <sidebar-nav-item-stub name="All files" active="true" target="/files/list/all" icon="folder" filltype="fill" collapsed="true"></sidebar-nav-item-stub>
-      <sidebar-nav-item-stub name="Shared with me" target="/files/list/shared-with-me" icon="shared-with-me" filltype="fill" collapsed="true"></sidebar-nav-item-stub>
-      <sidebar-nav-item-stub name="Shared with others" target="/files/list/shared-with-others" icon="shared-with-others" filltype="fill" collapsed="true"></sidebar-nav-item-stub>
-      <sidebar-nav-item-stub name="Shared via link" target="/files/list/shared-via-link" icon="link" filltype="fill" collapsed="true"></sidebar-nav-item-stub>
-      <sidebar-nav-item-stub name="Deleted files" target="/files/list/trash-bin" icon="delete" filltype="fill" collapsed="true"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub name="All files" index="0" active="true" target="/files/list/all" icon="folder" filltype="fill" collapsed="true"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub name="Shared with me" index="1" target="/files/list/shared-with-me" icon="shared-with-me" filltype="fill" collapsed="true"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub name="Shared with others" index="2" target="/files/list/shared-with-others" icon="shared-with-others" filltype="fill" collapsed="true"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub name="Shared via link" index="3" target="/files/list/shared-via-link" icon="link" filltype="fill" collapsed="true"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub name="Deleted files" index="4" target="/files/list/trash-bin" icon="delete" filltype="fill" collapsed="true"></sidebar-nav-item-stub>
     </oc-list-stub>
   </nav> <span class="footer">Footer</span>
 </div>

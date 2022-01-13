@@ -223,7 +223,7 @@ export default {
         background-color: var(--oc-color-background-muted);
         border: 1px solid rgba(75, 94, 120, 0.6);
         top: -20px;
-        z-index: 9999;
+        z-index: var(--oc-z-index-modal);
         min-width: 252px !important;
       }
 

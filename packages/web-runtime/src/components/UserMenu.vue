@@ -36,7 +36,7 @@
             gap-size="xsmall"
             justify-content="left"
           >
-            <oc-icon name="profile" fill-type="line" />
+            <oc-icon name="user" fill-type="line" />
             <translate>Profile</translate>
           </oc-button>
         </li>
@@ -50,7 +50,7 @@
             :target="n.target"
             :href="n.url"
           >
-            <oc-icon :name="n.iconMaterial" />
+            <oc-icon :name="n.icon" />
             <translate>{{ n.title }}</translate>
           </oc-button>
           <oc-button
@@ -61,7 +61,7 @@
             justify-content="left"
             :to="{ path: n.path }"
           >
-            <oc-icon :name="n.iconMaterial" />
+            <oc-icon :name="n.icon" />
             <translate>{{ n.title }}</translate>
           </oc-button>
         </li>

@@ -1,6 +1,7 @@
 import { mount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import DesignSystem from 'owncloud-design-system'
+import GetTextPlugin from 'vue-gettext'
 
 import SidebarNavItem from 'web-runtime/src/components/SidebarNav/SidebarNavItem.vue'
 import sidebarNavItemFixtures from '../../../../../../__fixtures__/sidebarNavItems'
@@ -8,6 +9,10 @@ import sidebarNavItemFixtures from '../../../../../../__fixtures__/sidebarNavIte
 const localVue = createLocalVue()
 localVue.use(Vuex)
 localVue.use(DesignSystem)
+localVue.use(GetTextPlugin, {
+  translations: 'does-not-matter.json',
+  silent: true
+})
 
 const exampleNavItem = sidebarNavItemFixtures[0]
 
@@ -15,7 +20,7 @@ const propsData = {
   name: exampleNavItem.name,
   active: false,
   target: exampleNavItem.route.path,
-  icon: exampleNavItem.iconMaterial,
+  icon: exampleNavItem.icon,
   id: '123'
 }
 

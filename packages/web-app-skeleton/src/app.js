@@ -35,7 +35,7 @@ export default {
   navItems: [
     {
       name: 'skeleton',
-      iconMaterial: appInfo.icon,
+      icon: appInfo.icon,
       route: {
         path: `/${appInfo.id}/`
       }

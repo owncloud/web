@@ -9,6 +9,7 @@ export default {
         {
           name: 'create-public-link',
           icon: quickActions.publicLink.icon,
+          iconFillType: quickActions.publicLink.iconFillType,
           label: () => this.$gettext('Create & copy public link'),
           handler: this.$_createPublicLink_trigger,
           isEnabled: ({ resources }) => {

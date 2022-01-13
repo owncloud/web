@@ -1,7 +1,10 @@
 <template>
   <div
     id="web-nav-sidebar"
-    :class="['oc-visible@l', { 'oc-app-navigation-collapsed': navigation.closed }]"
+    :class="{
+      'oc-app-navigation-collapsed': navigation.closed,
+      'oc-app-navigation-expanded': !navigation.closed
+    }"
   >
     <oc-button
       variation="inverse"
@@ -19,11 +22,12 @@
     >
       <oc-list>
         <sidebar-nav-item
-          v-for="link in navItems"
+          v-for="(link, index) in navItems"
           :key="link.route.path"
+          :index="index"
           :target="link.route.path"
           :active="link.active"
-          :icon="link.icon || link.iconMaterial"
+          :icon="link.icon"
           :fill-type="link.fillType"
           :name="link.name"
           :collapsed="navigation.closed"
@@ -83,7 +87,8 @@ export default {
   position: sticky;
   top: 0;
   transition: all 0.35s cubic-bezier(0.34, 0.11, 0, 1.12);
-  width: var(--oc-size-width-medium);
+  box-shadow: 5px 0 25px rgba(0, 0, 0, 0.3);
+  z-index: 4;
 
   .toggle-sidebar-button {
     transition: all 0.2s ease-out;
@@ -97,7 +102,11 @@ export default {
   }
 }
 
+.oc-app-navigation-expanded {
+  // FIXME: width is set, but actual width of the sidebar is something around 260px (depending on the browser).
+  width: var(--oc-size-width-medium) !important;
+}
 .oc-app-navigation-collapsed {
-  width: 75px !important;
+  width: 65px !important;
 }
 </style>

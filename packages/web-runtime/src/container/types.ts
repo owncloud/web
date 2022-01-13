@@ -21,7 +21,7 @@ export interface ApplicationInformation {
  */
 export interface ApplicationNavigationItem {
   name?: string
-  iconMaterial?: string
+  icon?: string
   route?: {
     name?: string
     path?: string

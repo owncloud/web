@@ -42,7 +42,8 @@ export default [
   ({ router, multipleSelection, rootFolder }) => ({
     app: 'actions-item',
     component: FileActions,
-    icon: 'slideshow-2',
+    icon: 'slideshow-3',
+    iconFillType: 'line',
     default: isLocationCommonActive(router, 'files-common-trash'),
     get enabled() {
       return !multipleSelection && !rootFolder
@@ -66,7 +67,8 @@ export default [
   }),
   ({ capabilities, router, multipleSelection, rootFolder }) => ({
     app: 'links-item',
-    icon: 'links',
+    icon: 'link',
+    iconFillType: 'none',
     component: FileLinks,
     get enabled() {
       if (multipleSelection || rootFolder) return false

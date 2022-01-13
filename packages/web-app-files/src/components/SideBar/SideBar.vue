@@ -72,7 +72,7 @@
                 appearance="raw"
                 @click="openPanel(panelSelect.app)"
               >
-                <oc-icon :name="panelSelect.icon" />
+                <oc-icon :name="panelSelect.icon" :fill-type="panelSelect.iconFillType || 'fill'" />
                 {{ panelSelect.component.title($gettext) }}
                 <oc-icon name="arrow-right-s" fill-type="line" />
               </oc-button>

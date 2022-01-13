@@ -8,6 +8,7 @@ export default {
         {
           name: 'show-details',
           icon: 'information',
+          iconFillType: 'line',
           label: () => this.$gettext('Details'),
           handler: this.$_showDetails_trigger,
           // we don't have details in the trashbin, yet.

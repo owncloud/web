@@ -18,6 +18,7 @@
         v-else-if="action.icon"
         data-testid="action-icon"
         :name="action.icon"
+        :fill-type="action.iconFillType || 'fill'"
         size="medium"
       />
       <span class="oc-files-context-action-label" data-testid="action-label">{{
