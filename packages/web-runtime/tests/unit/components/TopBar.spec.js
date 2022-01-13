@@ -38,8 +38,6 @@ describe('Top Bar component', () => {
       localVue,
       stubs,
       propsData: {
-        userId,
-        userDisplayName: 'Albert Einstein',
         applicationsList: ['testApp']
       },
       mocks: {

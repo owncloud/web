@@ -19,8 +19,9 @@
       <notifications v-if="isNotificationBellEnabled" />
       <user-menu
         v-if="isUserMenuEnabled"
-        :user-id="userId"
-        :user-display-name="userDisplayName"
+        :user-id="user.username || user.id"
+        :user-display-name="user.displayname"
+        :user-email="user.email"
         :applications-list="applicationsList"
       />
     </div>
@@ -45,16 +46,6 @@ export default {
     UserMenu
   },
   props: {
-    userId: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    userDisplayName: {
-      type: String,
-      required: false,
-      default: ''
-    },
     applicationsList: {
       type: Array,
       required: false,

@@ -21,8 +21,6 @@
         <top-bar
           :applications-list="applicationsList"
           :active-notifications="activeNotifications"
-          :user-id="user.username || user.id"
-          :user-display-name="user.displayname"
         />
       </div>
       <div id="web-content-main" class="oc-px-s oc-pb-s">

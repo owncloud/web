@@ -18,18 +18,12 @@ describe('User Menu component', () => {
       stubs,
       propsData: {
         userId: 'einstein',
-        userDisplayName: 'Albert Einstein'
+        userDisplayName: 'Albert Einstein',
+        userEmail: 'test@test.de'
       }
     })
     it('displays the avatar', () => {
       expect(wrapper.find('.oc-topbar-personal-avatar').exists()).toBeTruthy()
-      expect(wrapper.find('.oc-topbar-personal-label').text()).toEqual('Albert Einstein')
-    })
-    it('displays the profile link', () => {
-      expect(wrapper.find('#oc-topbar-account-manage').exists()).toBeTruthy()
-    })
-    it('displays the logout button', () => {
-      expect(wrapper.find('#oc-topbar-account-logout').exists()).toBeTruthy()
     })
   })
   describe('when userId is empty', () => {
@@ -67,13 +61,6 @@ describe('User Menu component', () => {
       mocks: {
         $store: store
       }
-    })
-
-    it('does logout', () => {
-      wrapper.find('#oc-topbar-account-logout').trigger('click')
-      jest.runAllTimers()
-      expect(store.dispatch).toHaveBeenCalledWith('logout')
-      expect(wrapper.vm.visible).toBeFalsy()
     })
   })
 })
