@@ -1,0 +1,7 @@
+Enhancement: Show parent folder for resources
+
+We've added a visual hint for the parent folder of a resource in cases
+where it could be usefull.
+
+https://github.com/owncloud/web/pull/6226
+https://github.com/owncloud/web/issues/5953
