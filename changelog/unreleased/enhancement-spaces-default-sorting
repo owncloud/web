@@ -1,0 +1,6 @@
+Enhancement: Add default sorting to the spaces list
+
+Spaces will now be sorted by their name by default.
+
+https://github.com/owncloud/web/pull/6262
+https://github.com/owncloud/web/issues/6253

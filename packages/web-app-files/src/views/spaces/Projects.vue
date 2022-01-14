@@ -65,7 +65,9 @@ export default {
 
     const loadSpacesTask = useTask(function* () {
       const response = yield graph.drives.listMyDrives()
-      spaces.value = (response.data?.value || []).filter((drive) => drive.driveType === 'project')
+      spaces.value = (response.data?.value || [])
+        .filter((drive) => drive.driveType === 'project')
+        .sort((a, b) => a.name.localeCompare(b.name))
     })
 
     loadSpacesTask.perform()
