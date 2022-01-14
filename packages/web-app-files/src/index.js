@@ -80,7 +80,7 @@ const navItems = [
   },
   {
     name: $gettext('Spaces'),
-    iconMaterial: 'layout-grid',
+    icon: 'layout-grid',
     route: {
       path: `/${appInfo.id}/spaces/projects`
     },
