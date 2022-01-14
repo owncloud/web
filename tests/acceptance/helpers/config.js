@@ -1,30 +1,8 @@
-const httpHelper = require('./httpHelper')
 const occHelper = require('./occHelper')
 const { difference } = require('./objects')
 const _ = require('lodash')
 
 const config = {}
-
-async function setSkeletonDirectory(skeletonType) {
-  const directoryName = getActualSkeletonDir(skeletonType)
-
-  if (!directoryName) {
-    try {
-      await occHelper.runOcc(['config:system:get', 'skeletondirectory'])
-    } catch (e) {
-      if (e.toString().includes('400 undefined')) return
-    }
-    return await occHelper.runOcc(['config:system:delete', 'skeletondirectory'])
-  }
-
-  const data = JSON.stringify({ directory: directoryName })
-  const apiUrl = 'apps/testing/api/v1/testingskeletondirectory'
-  const resp = await httpHelper.postOCS(apiUrl, 'admin', data, {
-    'Content-Type': 'application/json'
-  })
-
-  httpHelper.checkStatus(resp, 'Could not set skeletondirectory.')
-}
 
 async function rollbackSystemConfigs(oldSysConfig, newSysConfig) {
   const configToChange = difference(newSysConfig, oldSysConfig)
@@ -76,10 +54,6 @@ exports.cacheConfigs = async function (server) {
   return config
 }
 
-exports.setConfigs = async function (skeletonType) {
-  await setSkeletonDirectory(skeletonType)
-}
-
 exports.rollbackConfigs = async function (server) {
   const newConfig = await getConfigs()
 
@@ -92,22 +66,3 @@ exports.rollbackConfigs = async function (server) {
   await rollbackSystemConfigs(initialSysConfig, systemConfig)
   await rollbackAppConfigs(initialAppConfig, appConfig)
 }
-
-const getActualSkeletonDir = function (skeletonType) {
-  let directoryName
-
-  switch (skeletonType) {
-    case 'large':
-      directoryName = 'webUISkeleton'
-      break
-    case 'small':
-      directoryName = 'apiSkeleton'
-      break
-    default:
-      directoryName = false
-      break
-  }
-  return directoryName
-}
-
-exports.getActualSkeletonDir = getActualSkeletonDir
