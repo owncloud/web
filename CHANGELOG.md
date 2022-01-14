@@ -17,6 +17,7 @@ Summary
 * Enhancement - Lazy resource table cells: [#6204](https://github.com/owncloud/web/pull/6204)
 * Enhancement - Redesign main layout: [#6036](https://github.com/owncloud/web/issues/6036)
 * Enhancement - Show parent folder for resources: [#6226](https://github.com/owncloud/web/pull/6226)
+* Enhancement - Add default sorting to the spaces list: [#6262](https://github.com/owncloud/web/pull/6262)
 * Enhancement - Implement spaces list: [#6199](https://github.com/owncloud/web/pull/6199)
 * Enhancement - Update ODS to v12.0.0-alpha12: [#6086](https://github.com/owncloud/web/pull/6086)
 
@@ -100,6 +101,13 @@ Details
 
    https://github.com/owncloud/web/issues/5953
    https://github.com/owncloud/web/pull/6226
+
+* Enhancement - Add default sorting to the spaces list: [#6262](https://github.com/owncloud/web/pull/6262)
+
+   Spaces will now be sorted by their name by default.
+
+   https://github.com/owncloud/web/issues/6253
+   https://github.com/owncloud/web/pull/6262
 
 * Enhancement - Implement spaces list: [#6199](https://github.com/owncloud/web/pull/6199)
 
