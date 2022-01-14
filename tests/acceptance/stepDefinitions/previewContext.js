@@ -14,8 +14,9 @@ Given(
 
 When(
   'the user/public views the file {string} in the media viewer using the webUI',
-  function (fileName) {
-    return mediaViewerPage.openMediaViewer(fileName)
+  async function (fileName) {
+    await mediaViewerPage.openMediaViewer(fileName)
+    return mediaViewerPage.waitForMediaViewerLoaded(fileName)
   }
 )
 

@@ -68,8 +68,8 @@ Feature: accept/decline shares coming from internal users
     Then folder "simple-folder" shared by "Alice Hansen" should be in "Declined" state on the webUI
     And file "testimage.jpg" shared by "Alice Hansen" should be in "Declined" state on the webUI
 
-
-  Scenario: User receives files when auto accept share is disabled
+  @skipOnOCIS
+  Scenario: User receives files when auto accept share is disabled - oC10 behavior
     Given user "Alice" has created file "toshare.txt" in the server
     And user "Alice" has uploaded file with content "test" to "toshare.txt" in the server
     And user "Alice" has shared file "toshare.txt" with user "Brian" in the server
@@ -77,7 +77,23 @@ Feature: accept/decline shares coming from internal users
     Then file "toshare.txt" shared by "Alice Hansen" should be in "Pending" state on the webUI
     When the user browses to the files page
     Then file "toshare.txt" should not be listed on the webUI
+    # On oC10, the Shares folder only appears after there is a received shared
+    # resource. So it should not exist at this point.
     And folder "Shares" should not be listed on the webUI
+
+  @skipOnOC10
+  Scenario: User receives files when auto accept share is disabled - oCIS behavior
+    Given user "Alice" has created file "toshare.txt" in the server
+    And user "Alice" has uploaded file with content "test" to "toshare.txt" in the server
+    And user "Alice" has shared file "toshare.txt" with user "Brian" in the server
+    When the user browses to the shared-with-me page
+    Then file "toshare.txt" shared by "Alice Hansen" should be in "Pending" state on the webUI
+    When the user browses to the files page
+    Then file "toshare.txt" should not be listed on the webUI
+    # The Shares folder always exists on oCIS, check inside it to see that the
+    # received shared file is not listed, because the share is pending.
+    When the user opens folder "Shares" using the webUI
+    Then file "toshare.txt" should not be listed on the webUI
 
 
   Scenario: receive shares with same name from different users

@@ -473,6 +473,7 @@ config = {
             "runningOnOCIS": True,
             "visualTesting": False,
             "filterTags": "not @skip and not @skipOnOCIS and not @notToImplementOnOCIS",
+            "screenShots": True,
         },
         "webUI-notifications-oc10-integration": {
             "type": NOTIFICATIONS,
