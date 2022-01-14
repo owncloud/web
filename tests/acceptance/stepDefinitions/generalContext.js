@@ -3,7 +3,6 @@ const { After, Before, Given, Then, When } = require('@cucumber/cucumber')
 const webdavHelper = require('../helpers/webdavHelper')
 const httpHelper = require('../helpers/httpHelper')
 const assert = require('assert')
-const path = require('path')
 const fs = require('fs')
 const occHelper = require('../helpers/occHelper')
 

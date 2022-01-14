@@ -58,8 +58,8 @@ services:
       - 4444:4444
       - 5900:5900
     volumes:
+      - uploads:/uploads:ro
       - /dev/shm:/dev/shm
-      - ./tests/acceptance/filesForUpload:/uploads:ro
     extra_hosts:
       - host.docker.internal:${DOCKER_HOST:-host-gateway}
     environment:
@@ -72,9 +72,11 @@ services:
       - host.docker.internal:${DOCKER_HOST:-host-gateway}
     ports:
       - "3001:3001"
+    command: "sh -c /middleware.entrypoint.sh"
     volumes:
+      - uploads:/uploads
+      - ./dev/docker/middleware.entrypoint.sh:/middleware.entrypoint.sh
       - /var/tmp/ocis:/var/tmp/ocis
-      - ./tests/acceptance/filesForUpload:/usr/src/app/filesForUpload
     environment:
       MIDDLEWARE_PORT: 3001
       MIDDLEWARE_HOST: "0.0.0.0"
@@ -88,8 +90,6 @@ services:
       - host.docker.internal:${DOCKER_HOST:-host-gateway}
     ports:
       - "3000:3000"
-    volumes:
-      - ./tests/acceptance/filesForUpload:/usr/src/app/filesForUpload
     environment:
       MIDDLEWARE_PORT: 3000
       MIDDLEWARE_HOST: "0.0.0.0"
@@ -106,3 +106,6 @@ services:
       - 6080:6080
     extra_hosts:
       - host.docker.internal:${DOCKER_HOST:-host-gateway}
+
+volumes:
+  uploads:

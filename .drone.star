@@ -1348,9 +1348,6 @@ def acceptance(ctx):
 
                                 services += owncloudFederatedService() + databaseServiceForFederation(db, federationDbSuffix)
 
-                        # Copy files for upload
-                        steps += copyFilesForUpload()
-
                         # Wait for test-related services to be up
                         steps += waitForBrowserService()
                         steps += waitForMiddlewareService()
@@ -2370,6 +2367,7 @@ def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnv
     environment["BACKEND_HOST"] = "http://owncloud"
     environment["COMMENTS_FILE"] = "/var/www/owncloud/web/comments.file"
     environment["MIDDLEWARE_HOST"] = "http://middleware:3000"
+    environment["REMOTE_UPLOAD_DIR"] = "/usr/src/app/filesForUpload"
 
     for env in extraEnvironment:
         environment[env] = extraEnvironment[env]
@@ -2379,6 +2377,7 @@ def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnv
         "image": OC_CI_NODEJS,
         "environment": environment,
         "commands": [
+            "ls /usr/src/app/filesForUpload",
             "cd %s/tests/acceptance && ./run.sh" % dir["web"],
         ],
         "volumes": [{
@@ -2387,6 +2386,9 @@ def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnv
         }, {
             "name": "configs",
             "path": "/srv/config",
+        }, {
+            "name": "uploads",
+            "path": "/usr/src/app/filesForUpload",
         }],
     }]
 
@@ -2881,8 +2883,7 @@ def middlewareService(ocis = False, federatedServer = False):
         "BACKEND_HOST": "https://ocis:9200" if ocis else "http://owncloud",
         "OCIS_REVA_DATA_ROOT": "/srv/app/tmp/ocis/storage/owncloud/",
         "RUN_ON_OCIS": "true" if ocis else "false",
-        "HOST": "middleware",
-        "REMOTE_UPLOAD_DIR": "/filesForUpload",
+        "REMOTE_UPLOAD_DIR": "/usr/src/app/filesForUpload",
         "NODE_TLS_REJECT_UNAUTHORIZED": "0",
         "MIDDLEWARE_HOST": "middleware",
     }
@@ -2900,6 +2901,9 @@ def middlewareService(ocis = False, federatedServer = False):
         }, {
             "name": "gopath",
             "path": "/srv/app",
+        }, {
+            "name": "uploads",
+            "path": "/usr/src/app/filesForUpload",
         }],
     }]
 
