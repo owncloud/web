@@ -16,6 +16,7 @@ Summary
 * Enhancement - Reorganize urls: [#6137](https://github.com/owncloud/web/pull/6137)
 * Enhancement - Lazy resource table cells: [#6204](https://github.com/owncloud/web/pull/6204)
 * Enhancement - Redesign main layout: [#6036](https://github.com/owncloud/web/issues/6036)
+* Enhancement - Show parent folder for resources: [#6226](https://github.com/owncloud/web/pull/6226)
 * Enhancement - Implement spaces list: [#6199](https://github.com/owncloud/web/pull/6199)
 * Enhancement - Update ODS to v12.0.0-alpha12: [#6086](https://github.com/owncloud/web/pull/6086)
 
@@ -92,6 +93,13 @@ Details
    https://github.com/owncloud/web/pull/6086
    https://github.com/owncloud/web/pull/6222
    https://github.com/owncloud/web/pull/6228
+
+* Enhancement - Show parent folder for resources: [#6226](https://github.com/owncloud/web/pull/6226)
+
+   We've added a visual hint for the parent folder of a resource in cases where it could be usefull.
+
+   https://github.com/owncloud/web/issues/5953
+   https://github.com/owncloud/web/pull/6226
 
 * Enhancement - Implement spaces list: [#6199](https://github.com/owncloud/web/pull/6199)
 
