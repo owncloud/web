@@ -18,9 +18,9 @@ Feature: Locks
 
   @issue-5417
   Scenario: setting a lock shows the lock symbols at the correct files/folders
-    Given user "brand-new-user" has locked folder "simple-folder" setting following properties
+    Given user "brand-new-user" has locked folder "simple-folder" setting the following properties in the server
       | lockscope | shared |
-    And user "brand-new-user" has locked file "data.zip" setting following properties
+    And user "brand-new-user" has locked file "data.zip" setting the following properties in the server
       | lockscope | exclusive |
     When the user browses to the files page
     Then folder "simple-folder" should be marked as locked on the webUI
@@ -30,9 +30,9 @@ Feature: Locks
 
   @issue-5417
   Scenario: setting a lock shows the display name of a user in the locking details
-    Given user "brand-new-user" has locked folder "simple-folder" setting following properties
+    Given user "brand-new-user" has locked folder "simple-folder" setting the following properties in the server
       | lockscope | shared |
-    And user "brand-new-user" has locked file "data.zip" setting following properties
+    And user "brand-new-user" has locked file "data.zip" setting the following properties in the server
       | lockscope | exclusive |
     When the user re-logs in as "brand-new-user" using the webUI
     Then folder "simple-folder" should be marked as locked by user "New User" in the locks tab of the details panel on the webUI
@@ -40,9 +40,9 @@ Feature: Locks
 
   @issue-5417
   Scenario: setting a lock shows the current changed display name of a user in the locking details
-    Given user "brand-new-user" has locked folder "simple-folder" setting following properties
+    Given user "brand-new-user" has locked folder "simple-folder" setting the following properties in the server
       | lockscope | shared |
-    And user "brand-new-user" has locked file "data.zip" setting following properties
+    And user "brand-new-user" has locked file "data.zip" setting the following properties in the server
       | lockscope | exclusive |
     And the administrator has changed the display name of user "brand-new-user" to "Old User"
     When the user re-logs in as "brand-new-user" using the webUI
@@ -54,9 +54,9 @@ Feature: Locks
     Given these users have been created with default attributes and without skeleton files in the server:
       | username               | displayname   | email       |
       | user-with-display-name | My fancy name | mail@oc.org |
-    And user "user-with-display-name" has locked folder "simple-folder" setting following properties
+    And user "user-with-display-name" has locked folder "simple-folder" setting the following properties in the server
       | lockscope | shared |
-    And user "user-with-display-name" has locked file "data.zip" setting following properties
+    And user "user-with-display-name" has locked file "data.zip" setting the following properties in the server
       | lockscope | exclusive |
     When the user re-logs in as "user-with-display-name" using the webUI
     Then folder "simple-folder" should be marked as locked by user "My fancy name (mail@oc.org)" in the locks tab of the details panel on the webUI
@@ -67,9 +67,9 @@ Feature: Locks
     Given these users have been created with default attributes and without skeleton files in the server:
       | username        | email       |
       | user-with-email | mail@oc.org |
-    And user "user-with-email" has locked folder "simple-folder" setting following properties
+    And user "user-with-email" has locked folder "simple-folder" setting the following properties in the server
       | lockscope | shared |
-    And user "user-with-email" has locked file "data.zip" setting following properties
+    And user "user-with-email" has locked file "data.zip" setting the following properties in the server
       | lockscope | exclusive |
     When the user re-logs in as "user-with-email" using the webUI
     Then folder "simple-folder" should be marked as locked by user "user-with-email (mail@oc.org)" in the locks tab of the details panel on the webUI
@@ -77,9 +77,9 @@ Feature: Locks
 
   @issue-5417
   Scenario: setting a lock shows the lock symbols at the correct files/folders on the favorites page
-    Given user "brand-new-user" has locked folder "simple-folder" setting following properties
+    Given user "brand-new-user" has locked folder "simple-folder" setting the following properties in the server
       | lockscope | shared |
-    And user "brand-new-user" has locked file "data.zip" setting following properties
+    And user "brand-new-user" has locked file "data.zip" setting the following properties in the server
       | lockscope | exclusive |
     When the user marks folder "simple-folder" as favorite using the webUI
     And the user marks folder "simple-empty-folder" as favorite using the webUI
@@ -98,9 +98,9 @@ Feature: Locks
     Given these users have been created with default attributes and without skeleton files in the server:
       | username |
       | receiver |
-    And user "brand-new-user" has locked folder "simple-folder" setting following properties
+    And user "brand-new-user" has locked folder "simple-folder" setting the following properties in the server
       | lockscope | shared |
-    And user "brand-new-user" has locked file "data.zip" setting following properties
+    And user "brand-new-user" has locked file "data.zip" setting the following properties in the server
       | lockscope | exclusive |
     And user "brand-new-user" has shared file "data.zip" with user "receiver"
     And user "brand-new-user" has shared file "data.tar.gz" with user "receiver"
@@ -116,9 +116,9 @@ Feature: Locks
 
   @issue-5417
   Scenario: setting a lock shows the lock symbols at the correct files/folders on the shared-by-link page
-    Given user "brand-new-user" has locked folder "simple-folder" setting following properties
+    Given user "brand-new-user" has locked folder "simple-folder" setting the following properties in the server
       | lockscope | shared |
-    And user "brand-new-user" has locked file "data.zip" setting following properties
+    And user "brand-new-user" has locked file "data.zip" setting the following properties in the server
       | lockscope | exclusive |
     And user "brand-new-user" has created a public link with following settings
       | path        | data.zip |
@@ -149,9 +149,9 @@ Feature: Locks
     And user "sharer" has created folder "simple-empty-folder" in the server
     And user "sharer" has uploaded file "data.zip" to "data.zip" in the server
     And user "sharer" has uploaded file "data.zip" to "data.tar.gz" in the server
-    And user "sharer" has locked folder "simple-folder" setting following properties
+    And user "sharer" has locked folder "simple-folder" setting the following properties in the server
       | lockscope | shared |
-    And user "sharer" has locked file "data.zip" setting following properties
+    And user "sharer" has locked file "data.zip" setting the following properties in the server
       | lockscope | exclusive |
     And user "sharer" has shared file "data.zip" with user "brand-new-user"
     And user "sharer" has shared file "data.tar.gz" with user "brand-new-user"
@@ -184,13 +184,13 @@ Feature: Locks
     And user "sharer" has shared file "data.zip" with user "receiver"
     And user "sharer" has shared file "data.tar.gz" with group "receiver-group"
     And user "receiver" has shared file "data.zip" with user "brand-new-user"
-    And user "sharer" has locked file "data.zip" setting following properties
+    And user "sharer" has locked file "data.zip" setting the following properties in the server
       | lockscope | shared |
-    And user "receiver" has locked file "data.zip" setting following properties
+    And user "receiver" has locked file "data.zip" setting the following properties in the server
       | lockscope | shared |
-    And user "brand-new-user" has locked file "data (2).zip" setting following properties
+    And user "brand-new-user" has locked file "data (2).zip" setting the following properties in the server
       | lockscope | shared |
-    And user "receiver2" has locked file "data.tar.gz" setting following properties
+    And user "receiver2" has locked file "data.tar.gz" setting the following properties in the server
       | lockscope | shared |
     When the user browses to the files page
     Then file "data (2).zip" should be marked as locked on the webUI
@@ -213,7 +213,7 @@ Feature: Locks
   Scenario: setting a lock on a folder shows the symbols at the sub-elements
     Given user "brand-new-user" has created folder "simple-folder/simple-empty-folder" in the server
     And user "brand-new-user" has uploaded file "data.zip" to "simple-folder/data.zip" in the server
-    And user "brand-new-user" has locked folder "simple-folder" setting following properties
+    And user "brand-new-user" has locked folder "simple-folder" setting the following properties in the server
       | lockscope | shared |
     When the user opens folder "simple-folder" using the webUI
     Then folder "simple-empty-folder" should be marked as locked on the webUI
@@ -225,7 +225,7 @@ Feature: Locks
   Scenario: setting a depth:0 lock on a folder does not show the symbols at the sub-elements
     Given user "brand-new-user" has created folder "simple-folder/simple-empty-folder" in the server
     And user "brand-new-user" has uploaded file "data.zip" to "simple-folder/data.zip" in the server
-    And user "brand-new-user" has locked folder "simple-folder" setting following properties
+    And user "brand-new-user" has locked folder "simple-folder" setting the following properties in the server
       | depth | 0 |
     When the user browses to the files page
     Then folder "simple-folder" should be marked as locked on the webUI
@@ -239,7 +239,7 @@ Feature: Locks
       | username |
       | sharer   |
     And user "sharer" has created folder "/to-share-folder" in the server
-    And user "sharer" has locked folder "to-share-folder" setting following properties
+    And user "sharer" has locked folder "to-share-folder" setting the following properties in the server
       | lockscope | <lockscope> |
     And user "sharer" has shared folder "to-share-folder" with user "brand-new-user"
     And the user has browsed to the shared-with-me page
@@ -260,7 +260,7 @@ Feature: Locks
       | username |
       | sharer   |
     And user "sharer" has created folder "/to-share-folder" in the server
-    And user "sharer" has locked folder "to-share-folder" setting following properties
+    And user "sharer" has locked folder "to-share-folder" setting the following properties in the server
       | lockscope | <lockscope> |
     And user "sharer" has shared folder "to-share-folder" with user "brand-new-user"
     And the user has browsed to the shared-with-me page
@@ -280,7 +280,7 @@ Feature: Locks
       | username |
       | sharer   |
     And user "sharer" has created folder "/to-share-folder" in the server
-    And user "sharer" has locked folder "to-share-folder" setting following properties
+    And user "sharer" has locked folder "to-share-folder" setting the following properties in the server
       | lockscope | <lockscope> |
     And user "sharer" has shared folder "to-share-folder" with user "brand-new-user"
     And the user has browsed to the shared-with-me page
@@ -305,7 +305,7 @@ Feature: Locks
       | sharer   |
     And user "sharer" has created folder "/parent" in the server
     And user "sharer" has created folder "/parent/subfolder" in the server
-    And user "sharer" has locked folder "parent" setting following properties
+    And user "sharer" has locked folder "parent" setting the following properties in the server
       | lockscope | <lockscope> |
     And user "sharer" has shared folder "parent" with user "brand-new-user"
     And the user has browsed to the shared-with-me page
@@ -330,9 +330,9 @@ Feature: Locks
       | sharer   |
     And user "sharer" has created file "lorem.txt" in the server
     And user "sharer" has created folder "simple-folder" in the server
-    And user "sharer" has locked file "lorem.txt" setting following properties
+    And user "sharer" has locked file "lorem.txt" setting the following properties in the server
       | lockscope | <lockscope> |
-    And user "sharer" has locked folder "simple-folder" setting following properties
+    And user "sharer" has locked folder "simple-folder" setting the following properties in the server
       | lockscope | <lockscope> |
     And user "sharer" has shared file "lorem.txt" with user "brand-new-user"
     And user "sharer" has shared folder "simple-folder" with user "brand-new-user"

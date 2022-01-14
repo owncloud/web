@@ -17,9 +17,9 @@ Feature: Unlock locked files and folders
 
   @issue-5417
   Scenario: unlocking file/folder deletes the lock symbols
-    Given user "brand-new-user" has locked folder "simple-folder" setting following properties
+    Given user "brand-new-user" has locked folder "simple-folder" setting the following properties in the server
       | lockscope | shared |
-    And user "brand-new-user" has locked folder "lorem.txt" setting following properties
+    And user "brand-new-user" has locked folder "lorem.txt" setting the following properties in the server
       | lockscope | shared |
     When user "brand-new-user" unlocks the lock of folder "simple-folder" using the webUI
     Then folder "simple-folder" should not be marked as locked on the webUI
@@ -31,9 +31,9 @@ Feature: Unlock locked files and folders
     Given these users have been created with default attributes and without skeleton files in the server:
       | username               | displayname   |
       | user-with-display-name | My fancy name |
-    And user "user-with-display-name" has locked folder "simple-folder" setting following properties
+    And user "user-with-display-name" has locked folder "simple-folder" setting the following properties in the server
       | lockscope | shared |
-    And user "user-with-display-name" has locked file "data.zip" setting following properties
+    And user "user-with-display-name" has locked file "data.zip" setting the following properties in the server
       | lockscope | exclusive |
     And the administrator has changed the display name of user "user-with-display-name" to "An ordinary name"
     When user "user-with-display-name" unlocks the lock of folder "simple-folder" using the webUI
@@ -42,9 +42,9 @@ Feature: Unlock locked files and folders
 
   @issue-5417
   Scenario Outline: deleting the only remaining lock of a file/folder and reloading the page
-    Given user "brand-new-user" has locked file "lorem.txt" setting following properties
+    Given user "brand-new-user" has locked file "lorem.txt" setting the following properties in the server
       | lockscope | <lockscope> |
-    And user "brand-new-user" has locked folder "simple-folder" setting following properties
+    And user "brand-new-user" has locked folder "simple-folder" setting the following properties in the server
       | lockscope | <lockscope> |
     And the user has browsed to the files page
     When the user unlocks the lock no 1 of file "lorem.txt" on the webUI
@@ -61,7 +61,7 @@ Feature: Unlock locked files and folders
 
   @issue-5417
   Scenario Outline: deleting the only remaining lock of a folder by deleting it from a file (inside the folder) and reloading the page
-    Given user "brand-new-user" has locked folder "simple-folder" setting following properties
+    Given user "brand-new-user" has locked folder "simple-folder" setting the following properties in the server
       | lockscope | <lockscope> |
     And the user has browsed to the files page
     And the user has opened folder "simple-folder" using the webUI
@@ -89,17 +89,17 @@ Feature: Unlock locked files and folders
     And user "brand-new-user" has shared folder "/FOLDER_TO_SHARE" with user "receiver1"
     And user "brand-new-user" has shared file "/lorem.txt" with user "receiver2"
     And user "brand-new-user" has shared folder "/FOLDER_TO_SHARE" with user "receiver2"
-    And user "brand-new-user" has locked file "lorem.txt" setting following properties
+    And user "brand-new-user" has locked file "lorem.txt" setting the following properties in the server
       | lockscope | shared |
-    And user "brand-new-user" has locked folder "FOLDER_TO_SHARE" setting following properties
+    And user "brand-new-user" has locked folder "FOLDER_TO_SHARE" setting the following properties in the server
       | lockscope | shared |
-    And user "receiver1" has locked file "lorem.txt" setting following properties
+    And user "receiver1" has locked file "lorem.txt" setting the following properties in the server
       | lockscope | shared |
-    And user "receiver1" has locked folder "FOLDER_TO_SHARE" setting following properties
+    And user "receiver1" has locked folder "FOLDER_TO_SHARE" setting the following properties in the server
       | lockscope | shared |
-    And user "receiver2" has locked file "lorem.txt" setting following properties
+    And user "receiver2" has locked file "lorem.txt" setting the following properties in the server
       | lockscope | shared |
-    And user "receiver2" has locked folder "FOLDER_TO_SHARE" setting following properties
+    And user "receiver2" has locked folder "FOLDER_TO_SHARE" setting the following properties in the server
       | lockscope | shared |
     And the user has browsed to the files page
     When the user unlocks the lock no 1 of file "lorem.txt" on the webUI
@@ -122,17 +122,17 @@ Feature: Unlock locked files and folders
     And user "brand-new-user" has shared folder "/FOLDER_TO_SHARE" with user "receiver1"
     And user "brand-new-user" has shared file "/lorem.txt" with user "receiver2"
     And user "brand-new-user" has shared folder "/FOLDER_TO_SHARE" with user "receiver2"
-    And user "receiver1" has locked file "lorem.txt" setting following properties
+    And user "receiver1" has locked file "lorem.txt" setting the following properties in the server
       | lockscope | shared |
-    And user "receiver1" has locked folder "FOLDER_TO_SHARE" setting following properties
+    And user "receiver1" has locked folder "FOLDER_TO_SHARE" setting the following properties in the server
       | lockscope | shared |
-    And user "brand-new-user" has locked file "lorem.txt" setting following properties
+    And user "brand-new-user" has locked file "lorem.txt" setting the following properties in the server
       | lockscope | shared |
-    And user "brand-new-user" has locked folder "FOLDER_TO_SHARE" setting following properties
+    And user "brand-new-user" has locked folder "FOLDER_TO_SHARE" setting the following properties in the server
       | lockscope | shared |
-    And user "receiver2" has locked file "lorem.txt" setting following properties
+    And user "receiver2" has locked file "lorem.txt" setting the following properties in the server
       | lockscope | shared |
-    And user "receiver2" has locked folder "FOLDER_TO_SHARE" setting following properties
+    And user "receiver2" has locked folder "FOLDER_TO_SHARE" setting the following properties in the server
       | lockscope | shared |
     And the user has browsed to the files page
     When the user unlocks the lock no 2 of file "lorem.txt" on the webUI
@@ -155,17 +155,17 @@ Feature: Unlock locked files and folders
     And user "brand-new-user" has shared folder "/FOLDER_TO_SHARE" with user "receiver1"
     And user "brand-new-user" has shared file "/lorem.txt" with user "receiver2"
     And user "brand-new-user" has shared folder "/FOLDER_TO_SHARE" with user "receiver2"
-    And user "receiver1" has locked file "lorem (2).txt" setting following properties
+    And user "receiver1" has locked file "lorem (2).txt" setting the following properties in the server
       | lockscope | shared |
-    And user "receiver1" has locked folder "FOLDER_TO_SHARE" setting following properties
+    And user "receiver1" has locked folder "FOLDER_TO_SHARE" setting the following properties in the server
       | lockscope | shared |
-    And user "receiver2" has locked file "lorem (2).txt" setting following properties
+    And user "receiver2" has locked file "lorem (2).txt" setting the following properties in the server
       | lockscope | shared |
-    And user "receiver2" has locked folder "FOLDER_TO_SHARE" setting following properties
+    And user "receiver2" has locked folder "FOLDER_TO_SHARE" setting the following properties in the server
       | lockscope | shared |
-    And user "brand-new-user" has locked file "lorem.txt" setting following properties
+    And user "brand-new-user" has locked file "lorem.txt" setting the following properties in the server
       | lockscope | shared |
-    And user "brand-new-user" has locked folder "FOLDER_TO_SHARE" setting following properties
+    And user "brand-new-user" has locked folder "FOLDER_TO_SHARE" setting the following properties in the server
       | lockscope | shared |
     And the user has browsed to the files page
     When the user unlocks the lock no 3 of file "lorem.txt" on the webUI
@@ -183,7 +183,7 @@ Feature: Unlock locked files and folders
       | username  |
       | receiver1 |
     And user "brand-new-user" has shared file "/lorem.txt" with user "receiver1"
-    And user "receiver1" has locked file "lorem.txt" setting following properties
+    And user "receiver1" has locked file "lorem.txt" setting the following properties in the server
       | lockscope | <lockscope> |
     And the user has browsed to the files page
     When the user unlocks the lock no 1 of file "lorem.txt" on the webUI

@@ -1099,18 +1099,6 @@ Then('the create file/folder button should be disabled', function () {
   return client.page.personalPage().checkForButtonDisabled()
 })
 
-When('user {string} has renamed the following file', function (user, table) {
-  const fromName = table
-    .hashes()
-    .map((data) => data['from-name-parts'])
-    .join('')
-  const toName = table
-    .hashes()
-    .map((data) => data['to-name-parts'])
-    .join('')
-  return webdav.move(user, fromName, toName)
-})
-
 Then('the following file should not be listed on the webUI', async function (table) {
   const name = table
     .hashes()
@@ -1405,14 +1393,6 @@ Then(
       .getCollaboratorsForResource(resource)
 
     assert.ok(collaboratorsArray.indexOf(lastLink.token) > -1)
-  }
-)
-
-Given(
-  'user {string} has locked file/folder {string} setting following properties',
-  function (userId, fileName, table) {
-    const properties = table.rowsHash()
-    return webdav.lockResource(userId, fileName, properties)
   }
 )
 
