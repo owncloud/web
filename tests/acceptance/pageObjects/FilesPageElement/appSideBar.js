@@ -39,7 +39,16 @@ module.exports = {
       )
       return isVisible
     },
-    isSideBarOpenForResource: async function (resource, elementType = 'any', timeout = 500) {
+    isSideBarOpenForResource: async function (
+      resource,
+      elementType = 'any',
+      expectedToOpen = true
+    ) {
+      let timeout = 5000
+      if (!expectedToOpen) {
+        timeout = 500
+      }
+
       if (!(await this.isSideBarOpen(timeout))) {
         return false
       }
