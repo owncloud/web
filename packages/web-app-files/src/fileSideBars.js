@@ -68,7 +68,6 @@ export default [
   ({ capabilities, router, multipleSelection, rootFolder }) => ({
     app: 'links-item',
     icon: 'link',
-    iconFillType: 'none',
     component: FileLinks,
     get enabled() {
       if (multipleSelection || rootFolder) return false
