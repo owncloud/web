@@ -7,7 +7,7 @@ import { MaybeRef } from '../../utils'
 import { ClientService, clientService as defaultClientService } from '../../services'
 import { DavProperties } from '../../constants'
 
-interface AppFileLoadingOptions {
+interface AppFileHandlingOptions {
   store: Store<any>
   clientService?: ClientService
   isPublicLinkContext: MaybeRef<boolean>
@@ -15,7 +15,7 @@ interface AppFileLoadingOptions {
 }
 
 type QueryParameters = Record<string, string>
-export interface AppFileLoadingResult {
+export interface AppFileHandlingResult {
   getUrlForResource(r: Resource, query?: QueryParameters): string
 
   getFileInfo(filePath: string, davProperties: DavProperties): Promise<any>
@@ -23,7 +23,7 @@ export interface AppFileLoadingResult {
   putFileContents(filePath: string, content: string, options: Record<string, any>): Promise<any>
 }
 
-export function useAppFileLoading(options: AppFileLoadingOptions): AppFileLoadingResult {
+export function useAppFileHandling(options: AppFileHandlingOptions): AppFileHandlingResult {
   const client = (options.clientService || defaultClientService).owncloudSdk
   const store = options.store
   const isPublicLinkContext = options.isPublicLinkContext

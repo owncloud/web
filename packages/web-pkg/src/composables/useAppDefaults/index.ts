@@ -6,8 +6,8 @@ import { ClientService, clientService as defaultClientService } from '../../serv
 import { FileContext } from './types'
 import { useAppNavigation, AppNavigationResult } from './useAppNavigation'
 import { useAppConfig, AppConfigResult } from './useAppConfig'
-import { useAppFileLoading, AppFileLoadingResult } from './useAppFileLoading'
-import { useAppFolderLoading, AppFolderLoadingResult } from './useAppFolderLoading'
+import { useAppFileHandling, AppFileHandlingResult } from './useAppFileHandling'
+import { useAppFolderHandling, AppFolderHandlingResult } from './useAppFolderHandling'
 
 // TODO: this file/folder contains file/folder loading logic extracted from mediaviewer and drawio extensions
 // Discussion how to progress from here can be found in this issue:
@@ -20,8 +20,8 @@ interface AppDefaultsOptions {
 
 type AppDefaultsResult = AppConfigResult &
   AppNavigationResult &
-  AppFileLoadingResult &
-  AppFolderLoadingResult & {
+  AppFileHandlingResult &
+  AppFolderHandlingResult & {
     isPublicLinkContext: Ref<boolean>
     currentFileContext: Ref<FileContext>
   }
@@ -60,7 +60,7 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
 
     ...useAppConfig({ store, ...options }),
     ...useAppNavigation({ router, currentFileContext }),
-    ...useAppFileLoading({ clientService, store, isPublicLinkContext, publicLinkPassword }),
-    ...useAppFolderLoading({ clientService, store, isPublicLinkContext, publicLinkPassword })
+    ...useAppFileHandling({ clientService, store, isPublicLinkContext, publicLinkPassword }),
+    ...useAppFolderHandling({ clientService, store, isPublicLinkContext, publicLinkPassword })
   }
 }

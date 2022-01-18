@@ -11,21 +11,21 @@ import { Resource } from '../../../../web-app-files/src/helpers/resource'
 
 import { FileContext } from './types'
 
-interface AppFolderLoadingOptions {
+interface AppFolderHandlingOptions {
   store: Store<any>
   clientService?: ClientService
   isPublicLinkContext: MaybeRef<boolean>
   publicLinkPassword: MaybeRef<string>
 }
 
-export interface AppFolderLoadingResult {
+export interface AppFolderHandlingResult {
   isFolderLoading: Ref<boolean>
   activeFiles: Ref<Array<Resource>>
 
   loadFolderForFileContext(context: MaybeRef<FileContext>): Promise<any>
 }
 
-export function useAppFolderLoading(options: AppFolderLoadingOptions): AppFolderLoadingResult {
+export function useAppFolderHandling(options: AppFolderHandlingOptions): AppFolderHandlingResult {
   const client = (options.clientService || defaultClientService).owncloudSdk
   const store = options.store
 
