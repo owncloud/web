@@ -3,7 +3,6 @@ import { clientService } from 'web-pkg/src/services'
 
 import { ImageDimension } from '../../constants'
 
-
 interface AvatarUrlOptions {
   server: string
   username: string
