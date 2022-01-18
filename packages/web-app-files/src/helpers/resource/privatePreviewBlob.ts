@@ -1,5 +1,6 @@
 import { encodePath } from 'web-pkg/src/utils'
-import { clientService, cacheService } from '../../services'
+import { cacheService } from '../../services'
+import { clientService } from 'web-pkg/src/services'
 import { buildQueryString } from './common'
 import isEqual from 'lodash-es/isEqual'
 

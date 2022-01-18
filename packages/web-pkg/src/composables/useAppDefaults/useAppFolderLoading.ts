@@ -2,7 +2,7 @@ import { Store } from 'vuex'
 import { computed, Ref, ref, unref } from '@vue/composition-api'
 import { dirname } from 'path'
 
-import { Client } from './useClient'
+import { ClientService, clientService as defaultClientService } from '../../services'
 import { MaybeRef } from '../../utils'
 
 import { DavProperties } from '../../constants'
@@ -13,7 +13,7 @@ import { FileContext } from './types'
 
 interface AppFolderLoadingOptions {
   store: Store<any>
-  client: Client
+  clientService?: ClientService
   isPublicContext: MaybeRef<boolean>
   publicLinkPassword: MaybeRef<string>
 }
@@ -26,7 +26,7 @@ export interface AppFolderLoadingResult {
 }
 
 export function useAppFolderLoading(options: AppFolderLoadingOptions): AppFolderLoadingResult {
-  const client = options.client
+  const client = (options.clientService || defaultClientService).owncloudSdk
   const store = options.store
 
   const isPublicContext = options.isPublicContext

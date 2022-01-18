@@ -1,7 +1,7 @@
 import { computed, unref, Ref } from '@vue/composition-api'
 import { useRouter } from '../../../../web-app-files/src/composables/router/useRouter'
 import { useStore } from '../../../../web-app-files/src/composables/store/useStore'
-import { useClient } from './useClient'
+import { ClientService, clientService as defaultClientService } from '../../services'
 
 import { FileContext } from './types'
 import { useAppNavigation, AppNavigationResult } from './useAppNavigation'
@@ -15,6 +15,7 @@ import { useAppFolderLoading, AppFolderLoadingResult } from './useAppFolderLoadi
 
 interface AppDefaultsOptions {
   applicationName: string
+  clientService?: ClientService
 }
 
 type AppDefaultsResult = AppConfigResult &
@@ -28,7 +29,7 @@ type AppDefaultsResult = AppConfigResult &
 export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
   const router = useRouter()
   const store = useStore()
-  const client = useClient()
+  const clientService = options.clientService || defaultClientService
 
   const currentRoute = computed(() => {
     return router.currentRoute
@@ -59,7 +60,7 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
 
     ...useAppConfig({ store, ...options }),
     ...useAppNavigation({ router, currentFileContext }),
-    ...useAppFileLoading({ client, store, isPublicContext, publicLinkPassword }),
-    ...useAppFolderLoading({ client, store, isPublicContext, publicLinkPassword })
+    ...useAppFileLoading({ clientService, store, isPublicContext, publicLinkPassword }),
+    ...useAppFolderLoading({ clientService, store, isPublicContext, publicLinkPassword })
   }
 }

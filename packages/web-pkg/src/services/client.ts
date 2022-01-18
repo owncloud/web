@@ -1,4 +1,6 @@
-import { HttpClient } from 'web-pkg/src/http'
+import { HttpClient } from '../http'
+
+export type OwnCloudSdk = any
 
 export class ClientService {
   private httpAuthenticatedClient: {
@@ -36,7 +38,7 @@ export class ClientService {
     return this.httpUnAuthenticatedClient
   }
 
-  public get owncloudSdk(): any {
+  public get owncloudSdk(): OwnCloudSdk {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     return window.Vue.prototype.$client

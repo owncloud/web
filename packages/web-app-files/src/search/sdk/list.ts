@@ -1,6 +1,6 @@
 import { SearchList, SearchResult } from 'search/src/types'
 import ListComponent from '../../components/Search/List.vue'
-import { clientService } from '../../services'
+import { clientService } from 'web-pkg/src/services'
 import { buildResource } from '../../helpers/resources'
 import { Component } from 'vue'
 import { DavProperties } from 'web-pkg/src/constants'

@@ -4,12 +4,12 @@ import queryString from 'query-string'
 
 import { Resource } from '../../../../web-app-files/src/helpers/resource'
 import { MaybeRef } from '../../utils'
-import { Client } from './useClient'
+import { ClientService, clientService as defaultClientService } from '../../services'
 import { DavProperties } from '../../constants'
 
 interface AppFileLoadingOptions {
   store: Store<any>
-  client: Client
+  clientService?: ClientService
   isPublicContext: MaybeRef<boolean>
   publicLinkPassword: MaybeRef<string>
 }
@@ -24,7 +24,7 @@ export interface AppFileLoadingResult {
 }
 
 export function useAppFileLoading(options: AppFileLoadingOptions): AppFileLoadingResult {
-  const client = options.client
+  const client = (options.clientService || defaultClientService).owncloudSdk
   const store = options.store
   const isPublicContext = options.isPublicContext
   const publicLinkPassword = options.publicLinkPassword

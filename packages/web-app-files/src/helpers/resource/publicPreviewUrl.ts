@@ -1,5 +1,5 @@
 import { buildQueryString } from './common'
-import { clientService } from '../../services'
+import { clientService } from 'web-pkg/src/services'
 
 interface PublicPreviewUrlOptions {
   resource: {
