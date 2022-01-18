@@ -2,8 +2,8 @@ const chromedriver = require('chromedriver')
 const path = require('path')
 const withHttp = (url) => (/^https?:\/\//i.test(url) ? url : `http://${url}`)
 
-const RUN_WITH_LDAP = !!process.env.RUN_WITH_LDAP
-const RUN_ON_OCIS = !!process.env.RUN_ON_OCIS
+const RUN_WITH_LDAP = process.env.RUN_WITH_LDAP === 'true'
+const RUN_ON_OCIS = process.env.RUN_ON_OCIS === 'true'
 const LOCAL_LAUNCH_URL = withHttp(
   process.env.SERVER_HOST ||
     (RUN_ON_OCIS
@@ -33,12 +33,12 @@ const LDAP_SERVER_URL = process.env.LDAP_SERVER_URL || 'ldap://127.0.0.1'
 const LDAP_BASE_DN = process.env.LDAP_BASE_DN || 'cn=admin,dc=owncloud,dc=com'
 const LDAP_ADMIN_PASSWORD = process.env.LDAP_ADMIN_PASSWORD || 'admin'
 const TESTING_DATA_DIR = process.env.TESTING_DATA_DIR || './tests/testing-app/data/'
-const OPENID_LOGIN = RUN_ON_OCIS || !!process.env.OPENID_LOGIN
+const OPENID_LOGIN = RUN_ON_OCIS || process.env.OPENID_LOGIN === 'true'
 const WEB_UI_CONFIG = process.env.WEB_UI_CONFIG || path.join(__dirname, 'dist/config.json')
-const SCREENSHOTS = !!process.env.SCREENSHOTS
+const SCREENSHOTS = process.env.SCREENSHOTS === 'true'
 
-const VISUAL_TEST = !!process.env.VISUAL_TEST
-const UPDATE_VRT_SCREENSHOTS = !!process.env.UPDATE_VRT_SCREENSHOTS
+const VISUAL_TEST = process.env.VISUAL_TEST === 'true'
+const UPDATE_VRT_SCREENSHOTS = process.env.UPDATE_VRT_SCREENSHOTS === 'true'
 
 const MIDDLEWARE_HOST = withHttp(
   process.env.MIDDLEWARE_HOST ||
