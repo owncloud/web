@@ -1,6 +1,6 @@
 <template>
   <div id="Web" class="oc-height-1-1" :style="{ backgroundImage: 'url(' + backgroundImg + ')' }">
-    <div class="oc-login" oc-height-viewport>
+    <div class="oc-login oc-height-viewport">
       <div class="oc-login-card oc-position-center">
         <img class="oc-login-logo" :src="logoImg" alt="" :aria-hidden="true" />
         <div class="oc-login-card-body">
