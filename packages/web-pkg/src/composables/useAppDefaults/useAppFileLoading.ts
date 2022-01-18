@@ -10,7 +10,7 @@ import { DavProperties } from '../../constants'
 interface AppFileLoadingOptions {
   store: Store<any>
   clientService?: ClientService
-  isPublicContext: MaybeRef<boolean>
+  isPublicLinkContext: MaybeRef<boolean>
   publicLinkPassword: MaybeRef<string>
 }
 
@@ -26,12 +26,12 @@ export interface AppFileLoadingResult {
 export function useAppFileLoading(options: AppFileLoadingOptions): AppFileLoadingResult {
   const client = (options.clientService || defaultClientService).owncloudSdk
   const store = options.store
-  const isPublicContext = options.isPublicContext
+  const isPublicLinkContext = options.isPublicLinkContext
   const publicLinkPassword = options.publicLinkPassword
 
   const getUrlForResource = ({ path, downloadURL }: Resource, query: QueryParameters = null) => {
     const queryStr = !query ? '' : queryString.stringify(query)
-    if (!unref(isPublicContext)) {
+    if (!unref(isPublicLinkContext)) {
       const urlPath = ['..', 'dav', 'files', store.getters.user.id, path.replace(/^\//, '')].join(
         '/'
       )
@@ -56,7 +56,7 @@ export function useAppFileLoading(options: AppFileLoadingOptions): AppFileLoadin
   }
 
   const getFileContents = async (filePath: string) => {
-    if (unref(isPublicContext)) {
+    if (unref(isPublicLinkContext)) {
       const res = await client.publicFiles.download('', filePath, unref(publicLinkPassword))
       res.statusCode = res.status
       return {
@@ -75,7 +75,7 @@ export function useAppFileLoading(options: AppFileLoadingOptions): AppFileLoadin
   }
 
   const getFileInfo = async (filePath: string, davProperties: DavProperties) => {
-    if (unref(isPublicContext)) {
+    if (unref(isPublicLinkContext)) {
       const fileInfo = await client.publicFiles.getFileInfo(
         filePath,
         unref(publicLinkPassword),
@@ -91,7 +91,7 @@ export function useAppFileLoading(options: AppFileLoadingOptions): AppFileLoadin
     content: string,
     putFileOptions: Record<string, any>
   ) => {
-    if (unref(isPublicContext)) {
+    if (unref(isPublicLinkContext)) {
       return client.publicFiles.putFileContents(
         '',
         filePath,

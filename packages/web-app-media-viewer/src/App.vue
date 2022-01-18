@@ -313,7 +313,7 @@ export default {
         return
       }
 
-      return this.downloadFile(this.mediaFiles[this.activeIndex], this.isPublicContext)
+      return this.downloadFile(this.mediaFiles[this.activeIndex], this.isPublicLinkContext)
     },
     next() {
       if (this.loading) {

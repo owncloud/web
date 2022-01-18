@@ -22,7 +22,7 @@ type AppDefaultsResult = AppConfigResult &
   AppNavigationResult &
   AppFileLoadingResult &
   AppFolderLoadingResult & {
-    isPublicContext: Ref<boolean>
+    isPublicLinkContext: Ref<boolean>
     currentFileContext: Ref<FileContext>
   }
 
@@ -35,7 +35,7 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
     return router.currentRoute
   })
 
-  const isPublicContext = computed(() => {
+  const isPublicLinkContext = computed(() => {
     return unref(currentRoute).params.contextRouteName === 'files-public-files'
   })
 
@@ -55,12 +55,12 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
   })
 
   return {
-    isPublicContext,
+    isPublicLinkContext,
     currentFileContext,
 
     ...useAppConfig({ store, ...options }),
     ...useAppNavigation({ router, currentFileContext }),
-    ...useAppFileLoading({ clientService, store, isPublicContext, publicLinkPassword }),
-    ...useAppFolderLoading({ clientService, store, isPublicContext, publicLinkPassword })
+    ...useAppFileLoading({ clientService, store, isPublicLinkContext, publicLinkPassword }),
+    ...useAppFolderLoading({ clientService, store, isPublicLinkContext, publicLinkPassword })
   }
 }

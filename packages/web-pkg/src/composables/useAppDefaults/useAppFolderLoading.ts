@@ -14,7 +14,7 @@ import { FileContext } from './types'
 interface AppFolderLoadingOptions {
   store: Store<any>
   clientService?: ClientService
-  isPublicContext: MaybeRef<boolean>
+  isPublicLinkContext: MaybeRef<boolean>
   publicLinkPassword: MaybeRef<string>
 }
 
@@ -29,7 +29,7 @@ export function useAppFolderLoading(options: AppFolderLoadingOptions): AppFolder
   const client = (options.clientService || defaultClientService).owncloudSdk
   const store = options.store
 
-  const isPublicContext = options.isPublicContext
+  const isPublicLinkContext = options.isPublicLinkContext
   const publicLinkPassword = options.publicLinkPassword
 
   const isFolderLoading = ref(false)
@@ -45,7 +45,7 @@ export function useAppFolderLoading(options: AppFolderLoadingOptions): AppFolder
     isFolderLoading.value = true
     store.commit('Files/CLEAR_CURRENT_FILES_LIST', null)
     try {
-      const promise = unref(isPublicContext)
+      const promise = unref(isPublicLinkContext)
         ? client.publicFiles.list(
             absoluteDirPath,
             unref(publicLinkPassword),
