@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import filterObject from 'filter-obj'
+import pickBy from 'lodash-es/pickBy'
 
 export default {
   name: 'QuickActions',
@@ -34,9 +34,7 @@ export default {
 
   computed: {
     filteredActions() {
-      return filterObject(this.actions, (key, value) => {
-        return value.displayed(this.item, this.$store) === true
-      })
+      return pickBy(this.actions, (action) => action.displayed(this.item, this.$store) === true)
     }
   }
 }

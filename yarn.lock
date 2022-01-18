@@ -6786,7 +6786,6 @@ __metadata:
   dependencies:
     "@types/semver": ^7.3.8
     copy-to-clipboard: ^3.3.1
-    filter-obj: ^2.0.1
     semver: ^6.1.0
     vue2-dropzone: ^3.6.0
   languageName: unknown
@@ -6824,13 +6823,6 @@ __metadata:
   version: 1.1.0
   resolution: "filter-obj@npm:1.1.0"
   checksum: cf2104a7c45ff48e7f505b78a3991c8f7f30f28bd8106ef582721f321f1c6277f7751aacd5d83026cb079d9d5091082f588d14a72e7c5d720ece79118fa61e10
-  languageName: node
-  linkType: hard
-
-"filter-obj@npm:^2.0.1":
-  version: 2.0.2
-  resolution: "filter-obj@npm:2.0.2"
-  checksum: e0d71ebc89515a4305db5158aeb78c9f9a4bfef4bacf272e7de8cadf0d3b694191f6fdbd3b507ee330c266c4287f21804defa8c80693d8c6ad60f1cbfad4f477
   languageName: node
   linkType: hard
 
