@@ -52,6 +52,7 @@ Details
 
    https://github.com/owncloud/web/issues/6100
    https://github.com/owncloud/web/pull/6142
+   https://github.com/owncloud/web/pull/6270
 
 * Enhancement - File selection simplification: [#5967](https://github.com/owncloud/web/issues/5967)
 
