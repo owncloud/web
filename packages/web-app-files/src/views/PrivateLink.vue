@@ -41,11 +41,11 @@ export default {
     },
 
     backgroundImg() {
-      return this.configuration.theme.loginPage.backgroundImg
+      return this.configuration.currentTheme.loginPage.backgroundImg
     },
 
     logoImg() {
-      return this.configuration.theme.logo.login
+      return this.configuration.currentTheme.logo.login
     }
   },
   mounted() {

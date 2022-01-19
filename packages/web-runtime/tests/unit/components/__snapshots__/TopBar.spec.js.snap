@@ -12,6 +12,7 @@ exports[`Top Bar component Displays applications menu 1`] = `
     <portal-target-stub name="app.runtime.header" multiple=""></portal-target-stub>
   </div>
   <div class="topbar-gap oc-flex oc-flex-middle oc-flex-between">
+    <theme-switcher-stub></theme-switcher-stub>
     <feedback-link-stub></feedback-link-stub>
     <!---->
     <user-menu-stub userid="einstein" userdisplayname="Albert Einstein" applicationslist="testApp"></user-menu-stub>

@@ -1,5 +1,10 @@
 <template>
-  <span v-if="initial" id="highlighter" :data-initial-id="index" />
+  <span
+    v-if="initial"
+    id="highlighter"
+    class="oc-background-primary-gradient"
+    :data-initial-id="index"
+  />
 </template>
 <script>
 export default {
@@ -71,7 +76,6 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(90deg, #0869de 0%, #4e85c8 100%);
   transition: transform 0.2s cubic-bezier(0.51, 0.06, 0.56, 1.37);
   border-radius: 5px;
   z-index: -1;

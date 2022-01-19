@@ -32,15 +32,15 @@ export default {
     ...mapGetters(['configuration']),
 
     backgroundImg() {
-      return this.configuration.theme.loginPage.backgroundImg
+      return this.configuration.currentTheme.loginPage.backgroundImg
     },
 
     logoImg() {
-      return this.configuration.theme.logo.login
+      return this.configuration.currentTheme.logo.login
     },
 
     favicon() {
-      return this.configuration.theme.logo.favicon
+      return this.configuration.currentTheme.logo.favicon
     }
   },
 

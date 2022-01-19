@@ -1,0 +1,5 @@
+Enhancement: Darkmode theme switcher
+
+We've added a theme switcher and now initialize the user interface theme based on the user's browser preferences.
+
+https://github.com/owncloud/web/pull/6240

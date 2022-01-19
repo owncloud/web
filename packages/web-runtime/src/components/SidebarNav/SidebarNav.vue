@@ -7,7 +7,6 @@
     }"
   >
     <oc-button
-      variation="inverse"
       appearance="raw"
       :class="toggleSidebarButtonClass"
       class="toggle-sidebar-button oc-py-s"
@@ -78,14 +77,11 @@ export default {
 
 <style lang="scss">
 #web-nav-sidebar {
-  background-color: #2d2d2d;
+  background-color: var(--oc-color-background-default);
   border-top-left-radius: 15px;
   border-bottom-left-radius: 15px;
-  color: var(--oc-color-text-inverse);
   display: flex;
   flex-direction: column;
-  position: sticky;
-  top: 0;
   transition: all 0.35s cubic-bezier(0.34, 0.11, 0, 1.12);
   box-shadow: 5px 0 25px rgba(0, 0, 0, 0.3);
   z-index: 4;
@@ -94,7 +90,7 @@ export default {
     transition: all 0.2s ease-out;
     &:hover {
       border-top-left-radius: 15px;
-      background: #383838;
+      background-color: var(--oc-color-background-highlight) !important;
     }
   }
   .toggle-sidebar-button-expanded {

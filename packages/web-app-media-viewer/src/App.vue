@@ -66,7 +66,7 @@
         >
           <oc-icon size="large" name="arrow-drop-left" />
         </oc-button>
-        <p v-if="!isFolderLoading" class="oc-m-rm oc-light">
+        <p v-if="!isFolderLoading" class="oc-m-rm media-viewer-controls-action-count">
           <span aria-hidden="true" v-text="ariaHiddenFileCount" />
           <span class="oc-invisible-sr" v-text="screenreaderFileCount" />
         </p>
@@ -356,6 +356,10 @@ export default {
     max-width: 85vw;
     max-height: 65vh;
   }
+}
+
+.media-viewer-controls-action-count {
+  color: var(--oc-color-swatch-inverse-default);
 }
 
 @media (max-width: 959px) {

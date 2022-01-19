@@ -4,10 +4,10 @@
       id="oc-notification-bell"
       v-oc-tooltip="notificationsLabel"
       appearance="raw"
+      variation="inverse"
       :aria-label="notificationsLabel"
     >
       <oc-icon
-        variation="inverse"
         class="oc-cursor-pointer oc-flex oc-flex-middle"
         name="notification-3"
         fill-type="line"

@@ -104,7 +104,7 @@ import { createLocationPublic, createLocationSpaces } from '../router'
 
 export default {
   metaInfo() {
-    const title = `${this.title} - ${this.configuration.theme.general.name}`
+    const title = `${this.title} - ${this.configuration.currentTheme.general.name}`
 
     return { title }
   },

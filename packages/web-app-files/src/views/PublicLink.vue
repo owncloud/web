@@ -45,7 +45,7 @@
       </div>
       <div class="oc-login-card-footer">
         <p>
-          {{ configuration.theme.general.slogan }}
+          {{ configuration.currentTheme.general.slogan }}
         </p>
       </div>
     </div>
@@ -83,11 +83,11 @@ export default {
     },
 
     backgroundImg() {
-      return this.configuration.theme.loginPage.backgroundImg
+      return this.configuration.currentTheme.loginPage.backgroundImg
     },
 
     logoImg() {
-      return this.configuration.theme.logo.login
+      return this.configuration.currentTheme.logo.login
     }
   },
   mounted() {

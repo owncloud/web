@@ -68,7 +68,7 @@ export const getStore = function ({
     },
     getters: {
       configuration: () => ({
-        theme: {
+        currentTheme: {
           loginPage: {
             backgroundImg: loginBackgroundImg
           },

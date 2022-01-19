@@ -14,6 +14,7 @@
       <portal-target name="app.runtime.header" multiple></portal-target>
     </div>
     <div class="topbar-gap oc-flex oc-flex-middle oc-flex-between">
+      <theme-switcher v-if="darkThemeAvailable" />
       <feedback-link v-if="isFeedbackLinkEnabled" />
       <notifications v-if="isNotificationBellEnabled" />
       <user-menu
@@ -33,12 +34,14 @@ import ApplicationsMenu from './ApplicationsMenu.vue'
 import UserMenu from './UserMenu.vue'
 import Notifications from './Notifications.vue'
 import FeedbackLink from './FeedbackLink.vue'
+import ThemeSwitcher from './ThemeSwitcher.vue'
 
 export default {
   components: {
+    ApplicationsMenu,
     FeedbackLink,
     Notifications,
-    ApplicationsMenu,
+    ThemeSwitcher,
     UserMenu
   },
   props: {
@@ -66,12 +69,16 @@ export default {
   computed: {
     ...mapGetters(['configuration', 'user']),
 
+    darkThemeAvailable() {
+      return this.configuration.themes.default && this.configuration.themes['default-dark']
+    },
+
     sidebarLogoAlt() {
       return this.$gettext('Navigate to all files page')
     },
 
     logoImage() {
-      return this.configuration.theme.logo.sidebar
+      return this.configuration.currentTheme.logo.sidebar
     },
 
     isFeedbackLinkEnabled() {

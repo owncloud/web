@@ -19,20 +19,23 @@ describe('config theme bootstrap', () => {
   })
 
   it('should be able to loadTheme', async () => {
-    const { theme, name } = await loadTheme()
+    const { theme } = await loadTheme()
+    const defaultTheme = theme.default
 
-    await store.dispatch('loadTheme', { theme, name })
-    objectKeys(theme).forEach((k) => {
+    await store.dispatch('loadTheme', { defaultTheme })
+    objectKeys(defaultTheme).forEach((k) => {
       expect(get(store.getters.configuration.theme, k)).toBe(get(theme, k))
     })
   })
 
   it('should not overwrite keys that are not part of theme', async () => {
-    const { theme, name } = await loadTheme()
-    const storeThemeKeys = objectKeys(store.getters.configuration.theme)
-    const loadedThemeKeys = objectKeys(theme)
+    const { theme } = await loadTheme()
+    const defaultTheme = theme.default
+
+    const storeThemeKeys = objectKeys(store.getters.configuration.currentTheme)
+    const loadedThemeKeys = objectKeys(defaultTheme)
     const diffThemeKeys = difference(storeThemeKeys, loadedThemeKeys)
-    await store.dispatch('loadTheme', { theme, name })
+    await store.dispatch('loadTheme', { defaultTheme })
 
     diffThemeKeys.forEach((k) => {
       expect(get(store.getters.configuration.theme, k)).toBe(get(initialStoreTheme, k))
