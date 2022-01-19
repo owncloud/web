@@ -2,6 +2,7 @@ Feature: View account information
   As a user
   I would like to view my account information
   So that I can verify and use my account details correctly
+  Touch a feature file to check CI
 
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files in the server
