@@ -133,6 +133,7 @@ Again, you can use the [ownCloud design tokens](https://owncloud.design/#/Design
 ```json
 {
   "colorPalette": {
+    "background-accentuate": "",
     "background-default": "",
     "background-highlight": "",
     "background-muted": "",
@@ -155,6 +156,7 @@ Again, you can use the [ownCloud design tokens](https://owncloud.design/#/Design
     "swatch-primary-default": "",
     "swatch-primary-hover": "",
     "swatch-primary-muted": "",
+    "swatch-primary-gradient": "",
     "swatch-success-default": "",
     "swatch-success-hover": "",
     "swatch-success-muted": "",
@@ -257,6 +259,7 @@ An empty template for your custom theme is provided below, and you can use the i
         "xlarge": ""
       },
       "colorPalette": {
+        "background-accentuate": "",
         "background-default": "",
         "background-highlight": "",
         "background-muted": "",
@@ -279,6 +282,7 @@ An empty template for your custom theme is provided below, and you can use the i
         "swatch-primary-default": "",
         "swatch-primary-hover": "",
         "swatch-primary-muted": "",
+        "swatch-primary-gradient": "",
         "swatch-success-default": "",
         "swatch-success-hover": "",
         "swatch-success-muted": "",
