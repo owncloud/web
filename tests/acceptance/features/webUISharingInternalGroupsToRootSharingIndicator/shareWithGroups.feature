@@ -23,7 +23,7 @@ Feature: Sharing files and folders with internal groups
     Given user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
     And user "Alice" has uploaded file with content "test" to "/simple-folder/lorem.txt" in the server
     And user "Alice" has uploaded file with content "test" to "/simple-folder/simple-empty-folder/inside.txt" in the server
-    And user "Alice" has shared folder "simple-folder" with group "grp1"
+    And user "Alice" has shared folder "simple-folder" with group "grp1" in the server
     When user "Alice" has logged in using the webUI
     Then the following resources should have share indicators on the webUI
       | fileName      | expectedIndicators |
@@ -42,8 +42,8 @@ Feature: Sharing files and folders with internal groups
   Scenario: sharing indicator of items inside a re-shared folder
     Given user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
     And user "Alice" has created file "/simple-folder/lorem.txt" in the server
-    And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has shared folder "simple-folder" with group "grp1"
+    And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
+    And user "Brian" has shared folder "simple-folder" with group "grp1" in the server
     When user "Brian" has logged in using the webUI
     Then the following resources should have share indicators on the webUI
       | fileName          | expectedIndicators |
@@ -58,8 +58,8 @@ Feature: Sharing files and folders with internal groups
   Scenario: sharing indicator of items inside a re-shared subfolder
     Given user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
     And user "Alice" has created file "/simple-folder/lorem.txt" in the server
-    And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has shared folder "simple-folder/simple-empty-folder" with group "grp1"
+    And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
+    And user "Brian" has shared folder "simple-folder/simple-empty-folder" with group "grp1" in the server
     When user "Brian" has logged in using the webUI
     Then the following resources should have share indicators on the webUI
       | fileName          | expectedIndicators |
@@ -74,7 +74,7 @@ Feature: Sharing files and folders with internal groups
   Scenario: sharing indicator of items inside an incoming shared folder
     Given user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
     And user "Alice" has created file "/simple-folder/lorem.txt" in the server
-    And user "Alice" has shared folder "simple-folder" with group "grp1"
+    And user "Alice" has shared folder "simple-folder" with group "grp1" in the server
     When user "Brian" has logged in using the webUI
     Then the following resources should have share indicators on the webUI
       | fileName          | expectedIndicators |
@@ -91,7 +91,7 @@ Feature: Sharing files and folders with internal groups
     And user "Brian" has created folder "simple-folder/simple-empty-folder" in the server
     And user "Brian" has created file "/simple-folder/lorem.txt" in the server
     And user "Alice" has created file "textfile0.txt" in the server
-    And user "Alice" has shared file "/textfile0.txt" with group "grp1"
+    And user "Alice" has shared file "/textfile0.txt" with group "grp1" in the server
     When user "Brian" has logged in using the webUI
     Then the following resources should not have share indicators on the webUI
       | simple-folder |
@@ -102,7 +102,7 @@ Feature: Sharing files and folders with internal groups
 
   @issue-2060
   Scenario: sharing indicator for file uploaded inside a shared folder
-    Given user "Alice" has shared folder "/simple-folder" with group "grp1"
+    Given user "Alice" has shared folder "/simple-folder" with group "grp1" in the server
     And user "Alice" has logged in using the webUI
     When the user opens folder "simple-folder" using the webUI
     And the user uploads file "new-lorem.txt" using the webUI
@@ -112,7 +112,7 @@ Feature: Sharing files and folders with internal groups
 
   @issue-2060
   Scenario: sharing indicator for folder created inside a shared folder
-    Given user "Alice" has shared folder "/simple-folder" with group "grp1"
+    Given user "Alice" has shared folder "/simple-folder" with group "grp1" in the server
     And user "Alice" has logged in using the webUI
     When the user opens folder "simple-folder" using the webUI
     And the user creates a folder with the name "sub-folder" using the webUI

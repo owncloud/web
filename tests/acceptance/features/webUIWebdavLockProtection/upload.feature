@@ -75,7 +75,7 @@ Feature: Locks
   Scenario Outline: uploading a file, trying to overwrite a file in a locked folder in a public share
     Given user "brand-new-user" has locked folder "simple-folder" setting the following properties in the server
       | lockscope | <lockscope> |
-    And user "brand-new-user" has created a public link with following settings
+    And user "brand-new-user" has created a public link with following settings in the server
       | path        | simple-folder                |
       | permissions | read, create, delete, update |
     When the public uses the webUI to access the last public link created by user "brand-new-user"

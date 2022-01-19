@@ -12,7 +12,7 @@ Feature: Public link share indicator
   Scenario: sharing indicator inside a shared folder
     Given user "Alice" has created folder "/simple-folder/sub-folder" in the server
     And user "Alice" has uploaded file with content "test" to "/simple-folder/textfile.txt" in the server
-    And user "Alice" has shared folder "simple-folder" with link with "read" permissions
+    And user "Alice" has shared folder "simple-folder" with link with "read" permissions in the server
     When user "Alice" has logged in using the webUI
     Then the following resources should have share indicators on the webUI
       | fileName      | expectedIndicators |
@@ -25,7 +25,7 @@ Feature: Public link share indicator
 
   @issue-2060
   Scenario: sharing indicator for file uploaded inside a shared folder
-    Given user "Alice" has shared folder "simple-folder" with link with "read" permissions
+    Given user "Alice" has shared folder "simple-folder" with link with "read" permissions in the server
     And user "Alice" has logged in using the webUI
     When the user opens folder "simple-folder" using the webUI
     And the user uploads file "new-lorem.txt" using the webUI
@@ -35,7 +35,7 @@ Feature: Public link share indicator
 
   @issue-2060
   Scenario: sharing indicator for folder created inside a shared folder
-    Given user "Alice" has shared folder "simple-folder" with link with "read" permissions
+    Given user "Alice" has shared folder "simple-folder" with link with "read" permissions in the server
     And user "Alice" has logged in using the webUI
     When the user opens folder "simple-folder" using the webUI
     And the user creates a folder with the name "sub-folder" using the webUI
@@ -48,8 +48,8 @@ Feature: Public link share indicator
     Given user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created folder "/simple-folder/sub-folder" in the server
     And user "Alice" has uploaded file with content "test" to "/simple-folder/textfile.txt" in the server
-    And user "Alice" has shared folder "simple-folder" with link with "read" permissions
-    And user "Alice" has shared folder "simple-folder" with user "Brian"
+    And user "Alice" has shared folder "simple-folder" with link with "read" permissions in the server
+    And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
     When user "Alice" has logged in using the webUI
     Then the following resources should have share indicators on the webUI
       | fileName      | expectedIndicators      |
@@ -65,8 +65,8 @@ Feature: Public link share indicator
     Given user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created folder "/simple-folder/sub-folder" in the server
     And user "Alice" has uploaded file with content "test" to "/simple-folder/textfile.txt" in the server
-    And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has shared folder "simple-folder" with link with "read" permissions
+    And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
+    And user "Brian" has shared folder "simple-folder" with link with "read" permissions in the server
     When user "Brian" has logged in using the webUI
     Then the following resources should have share indicators on the webUI
       | fileName          | expectedIndicators        |
@@ -82,8 +82,8 @@ Feature: Public link share indicator
     Given user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created folder "/simple-folder/sub-folder" in the server
     And user "Alice" has uploaded file with content "test" to "/simple-folder/textfile.txt" in the server
-    And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has shared folder "simple-folder/sub-folder" with link with "read" permissions
+    And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
+    And user "Brian" has shared folder "simple-folder/sub-folder" with link with "read" permissions in the server
     When user "Brian" has logged in using the webUI
     Then the following resources should have share indicators on the webUI
       | fileName          | expectedIndicators |
@@ -99,9 +99,9 @@ Feature: Public link share indicator
     Given user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Carol" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
-    And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has shared folder "simple-folder/simple-empty-folder" with user "Carol"
-    And user "Brian" has shared folder "simple-folder" with link with "read" permissions
+    And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
+    And user "Brian" has shared folder "simple-folder/simple-empty-folder" with user "Carol" in the server
+    And user "Brian" has shared folder "simple-folder" with link with "read" permissions in the server
     When the public uses the webUI to access the last public link created by user "Brian"
     Then the following resources should not have share indicators on the webUI
       | simple-empty-folder |

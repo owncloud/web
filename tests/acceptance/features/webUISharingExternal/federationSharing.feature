@@ -9,9 +9,9 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "no" on remote server
     And the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "no"
     And the setting "shareapi_auto_accept_share" of app "core" has been set to "no" on remote server
-    And the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
-    And the administrator has set the default folder for received shares to "Shares"
+    And the setting "shareapi_auto_accept_share" of app "core" has been set to "no" in the server
     And the administrator has set the default folder for received shares to "Shares" on remote server
+    And the administrator has set the default folder for received shares to "Shares" in the server
     And server "%remote_backend_url%" has been added as trusted server
     And server "%backend_url%" has been added as trusted server
     And server "%backend_url%" has been added as trusted server on remote server
@@ -27,9 +27,9 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And user "Alice" has created file "simple-folder/lorem.txt" in the server
     And the user has reloaded the current page of the webUI
     When the user shares folder "simple-folder" with remote user "Alice" as "Editor" using the webUI
-    And user "Alice" from server "REMOTE" accepts the last pending share using the sharing API
+    And user "Alice" from server "REMOTE" accepts the last pending share using the sharing API in the server
     And the user shares folder "simple-empty-folder" with remote user "Alice" as "Editor" using the webUI
-    And user "Alice" from server "REMOTE" accepts the last pending share using the sharing API
+    And user "Alice" from server "REMOTE" accepts the last pending share using the sharing API in the server
     Then as "Alice" folder "Shares/simple-folder" should exist on remote server
     And as "Alice" file "Shares/simple-folder/lorem.txt" should exist on remote server
     And as "Alice" folder "Shares/simple-empty-folder" should exist on remote server
@@ -42,9 +42,9 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And user "Alice" has uploaded file "lorem.txt" to "simple-folder/lorem.txt" on remote server
     And user "Brian" has created folder "simple-empty-folder" on remote server
     And user "Carol" has uploaded file "lorem.txt" to "lorem.txt" on remote server
-    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server
-    And user "Brian" from remote server has shared "simple-empty-folder" with user "Alice" from local server
-    And user "Carol" from remote server has shared "lorem.txt" with user "Alice" from local server
+    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server in the server
+    And user "Brian" from remote server has shared "simple-empty-folder" with user "Alice" from local server in the server
+    And user "Carol" from remote server has shared "lorem.txt" with user "Alice" from local server in the server
     And the user has reloaded the current page of the webUI
     Then the user should see 3 notifications on the webUI with these details
       | title                                                              |
@@ -68,7 +68,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
 
   Scenario: declining a federation share on the webUI
     Given user "Alice" has created file "lorem.txt" on remote server
-    And user "Alice" from remote server has shared "/lorem.txt" with user "Alice" from local server
+    And user "Alice" from remote server has shared "/lorem.txt" with user "Alice" from local server in the server
     And the user has reloaded the current page of the webUI
     When the user declines all shares displayed in the notifications on the webUI
     Then folder "Shares" should not be listed on the webUI
@@ -81,8 +81,8 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     Given user "Alice" has created folder "simple-empty-folder" in the server
     And the user has reloaded the current page of the webUI
     When the user shares folder "simple-empty-folder" with remote user "Alice" as "Viewer" using the webUI
-    And user "Alice" from server "REMOTE" accepts the last pending share using the sharing API
-    Then user "Alice" should have shared a folder "simple-empty-folder" with these details:
+    And user "Alice" from server "REMOTE" accepts the last pending share using the sharing API in the server
+    Then user "Alice" should have shared a folder "simple-empty-folder" with these details in the server:
       | field       | value                      |
       | uid_owner   | Alice                      |
       | share_with  | Alice@%remote_backend_url% |
@@ -94,7 +94,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
   Scenario: share a folder with an remote user and prohibit deleting - remote server shares - local server receives
     Given user "Alice" has created folder "simple-folder" on remote server
     And user "Alice" has created file "simple-folder/lorem.txt" on remote server
-    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server with "read" permissions
+    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server with "read" permissions in the server
     When the user reloads the current page of the webUI
     And the user accepts all shares displayed in the notifications on the webUI
     And the user reloads the current page of the webUI
@@ -106,8 +106,8 @@ Feature: Federation Sharing - sharing with users on other cloud storages
   Scenario: overwrite a file in a received share - remote server shares - local server receives
     Given user "Alice" has created folder "simple-folder" on remote server
     And user "Alice" has created file "simple-folder/lorem.txt" on remote server
-    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server
-    And user "Alice" from server "LOCAL" has accepted the last pending share
+    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server in the server
+    And user "Alice" from server "LOCAL" has accepted the last pending share in the server
     When the user reloads the current page of the webUI
     And the user opens folder "Shares" using the webUI
     And the user opens folder "simple-folder" using the webUI
@@ -117,8 +117,8 @@ Feature: Federation Sharing - sharing with users on other cloud storages
   @issue-3309
   Scenario: upload a new file in a received share - remote server shares - local server receives
     Given user "Alice" has created folder "simple-folder" on remote server
-    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server
-    And user "Alice" from server "LOCAL" has accepted the last pending share
+    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server in the server
+    And user "Alice" from server "LOCAL" has accepted the last pending share in the server
     When the user reloads the current page of the webUI
     And the user opens folder "Shares" using the webUI
     And the user opens folder "simple-folder" using the webUI
@@ -129,8 +129,8 @@ Feature: Federation Sharing - sharing with users on other cloud storages
   Scenario: rename a file in a received share - remote server shares - local server receives
     Given user "Alice" has created folder "simple-folder" on remote server
     And user "Alice" has created file "simple-folder/lorem.txt" on remote server
-    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server
-    And user "Alice" from server "LOCAL" has accepted the last pending share
+    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server in the server
+    And user "Alice" from server "LOCAL" has accepted the last pending share in the server
     When the user reloads the current page of the webUI
     And the user opens folder "Shares" using the webUI
     And the user opens folder "simple-folder" using the webUI
@@ -142,8 +142,8 @@ Feature: Federation Sharing - sharing with users on other cloud storages
   Scenario: delete a file in a received share - remote server shares - local server receives
     Given user "Alice" has created folder "simple-folder" on remote server
     And user "Alice" has created file "simple-folder/lorem.txt" on remote server
-    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server
-    And user "Alice" from server "LOCAL" has accepted the last pending share
+    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server in the server
+    And user "Alice" from server "LOCAL" has accepted the last pending share in the server
     When the user reloads the current page of the webUI
     And the user opens folder "Shares" using the webUI
     And the user opens folder "simple-folder" using the webUI
@@ -153,8 +153,8 @@ Feature: Federation Sharing - sharing with users on other cloud storages
   @issue-4102
   Scenario: unshare a federation share
     Given user "Alice" has created file "lorem.txt" on remote server
-    And user "Alice" from remote server has shared "lorem.txt" with user "Alice" from local server
-    And user "Alice" from server "LOCAL" has accepted the last pending share
+    And user "Alice" from remote server has shared "lorem.txt" with user "Alice" from local server in the server
+    And user "Alice" from server "LOCAL" has accepted the last pending share in the server
     When the user reloads the current page of the webUI
     And the user opens folder "Shares" using the webUI
     And the user deletes file "lorem.txt" using the webUI
@@ -164,8 +164,8 @@ Feature: Federation Sharing - sharing with users on other cloud storages
   @issue-2510
   Scenario: unshare a federation share from "share-with-you" page
     Given user "Alice" has created file "lorem.txt" on remote server
-    And user "Alice" from remote server has shared "lorem.txt" with user "Alice" from local server
-    And user "Alice" from server "LOCAL" has accepted the last pending share
+    And user "Alice" from remote server has shared "lorem.txt" with user "Alice" from local server in the server
+    And user "Alice" from server "LOCAL" has accepted the last pending share in the server
     And the user has reloaded the current page of the webUI
     When the user deletes file "lorem.txt" using the webUI
     Then file "lorem.txt" should not be listed on the webUI
@@ -176,14 +176,14 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     Given user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created folder "simple-folder" on remote server
     And user "Alice" has created file "simple-folder/lorem.txt" on remote server
-    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server
-    And user "Alice" from server "LOCAL" has accepted the last pending share
+    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server in the server
+    And user "Alice" from server "LOCAL" has accepted the last pending share in the server
     And the user has reloaded the current page of the webUI
     When the user opens folder "Shares" using the webUI
     And the user shares folder "simple-folder" with user "Brian Murphy" as "Viewer" using the webUI
-    And user "Brian" accepts the share "Shares/simple-folder" offered by user "Alice" using the sharing API
+    And user "Brian" accepts the share "Shares/simple-folder" offered by user "Alice" using the sharing API in the server
     Then as "Brian" file "Shares/simple-folder/lorem.txt" should exist
-    And user "Brian" should have received a share with these details:
+    And user "Brian" should have received a share with these details in the server:
       | field       | value       |
       | uid_owner   | Alice       |
       | share_with  | Brian       |
@@ -194,13 +194,13 @@ Feature: Federation Sharing - sharing with users on other cloud storages
   Scenario: test resharing a federated server to remote again
     Given user "Brian" has been created with default attributes and without skeleton files on remote server
     And user "Alice" has created folder "simple-folder" on remote server
-    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server with "read, share" permissions
-    And user "Alice" from server "LOCAL" has accepted the last pending share
+    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server with "read, share" permissions in the server
+    And user "Alice" from server "LOCAL" has accepted the last pending share in the server
     And the user has reloaded the current page of the webUI
     When the user opens folder "Shares" using the webUI
     And the user shares folder "simple-folder" with remote user "Brian" as "Viewer" using the webUI
-    And user "Brian" from server "REMOTE" accepts the last pending share using the sharing API
-    Then user "Alice" should have shared a folder "Shares/simple-folder" with these details:
+    And user "Brian" from server "REMOTE" accepts the last pending share using the sharing API in the server
+    Then user "Alice" should have shared a folder "Shares/simple-folder" with these details in the server:
       | field       | value                      |
       | uid_owner   | Alice                      |
       | share_with  | Brian@%remote_backend_url% |
@@ -211,8 +211,8 @@ Feature: Federation Sharing - sharing with users on other cloud storages
 
   Scenario: try resharing a folder with read-only permissions
     Given user "Alice" has created folder "simple-folder" on remote server
-    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server with "read" permissions
-    And user "Alice" from server "LOCAL" has accepted the last pending share
+    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server with "read" permissions in the server
+    And user "Alice" from server "LOCAL" has accepted the last pending share in the server
     When the user reloads the current page of the webUI
     And the user opens folder "Shares" using the webUI
     Then the user should not be able to share folder "simple-folder" using the webUI
@@ -222,7 +222,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     Given user "Alice" has uploaded file with content "secret" to "averylongfilenamefortestingthatfileswithlongfilenamescannotbeshared.txt" in the server
     And the user has reloaded the current page of the webUI
     When the user shares file "averylongfilenamefortestingthatfileswithlongfilenamescannotbeshared.txt" with remote user "Alice" as "Viewer" using the webUI
-    And user "Alice" from server "REMOTE" accepts the last pending share using the sharing API
+    And user "Alice" from server "REMOTE" accepts the last pending share using the sharing API in the server
     Then as "Alice" file "Shares/averylongfilenamefortestingthatfileswithlongfilenamescannotbeshared.txt" should exist on remote server
 
 
@@ -231,8 +231,8 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And user "Alice" has created folder "'single'quotes/simple-empty-folder" on remote server
     And user "Alice" has uploaded file "lorem.txt" to "'single'quotes/lorem.txt" on remote server
     And user "Alice" has uploaded file "lorem.txt" to "'single'quotes/simple-empty-folder/lorem.txt" on remote server
-    And user "Alice" from remote server has shared "'single'quotes" with user "Alice" from local server
-    And user "Alice" from server "LOCAL" has accepted the last pending share
+    And user "Alice" from remote server has shared "'single'quotes" with user "Alice" from local server in the server
+    And user "Alice" from server "LOCAL" has accepted the last pending share in the server
     And the user has reloaded the current page of the webUI
     When the user opens folder "Shares" using the webUI
     And the user opens folder "'single'quotes" using the webUI
@@ -253,8 +253,8 @@ Feature: Federation Sharing - sharing with users on other cloud storages
   Scenario: uploading a file inside a folder of a folder
     Given user "Alice" has created folder "simple-folder" on remote server
     And user "Alice" has created folder "simple-folder/simple-empty-folder" on remote server
-    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server
-    And user "Alice" from server "LOCAL" has accepted the last pending share
+    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server in the server
+    And user "Alice" from server "LOCAL" has accepted the last pending share in the server
     When the user opens folder "Shares/simple-folder/simple-empty-folder" directly on the webUI
     And the user uploads file "new-lorem.txt" using the webUI
     Then file "new-lorem.txt" should be listed on the webUI
@@ -266,8 +266,8 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     Given user "Alice" has created folder "'single'quotes" on remote server
     And user "Alice" has created folder "'single'quotes/simple-empty-folder" on remote server
     And user "Alice" has created file "'single'quotes/simple-empty-folder/for-git-commit" on remote server
-    And user "Alice" from remote server has shared "'single'quotes" with user "Alice" from local server
-    And user "Alice" from server "LOCAL" has accepted the last pending share
+    And user "Alice" from remote server has shared "'single'quotes" with user "Alice" from local server in the server
+    And user "Alice" from server "LOCAL" has accepted the last pending share in the server
     When the user opens folder "Shares/'single'quotes/simple-empty-folder" directly on the webUI
     And the user renames file "for-git-commit" to "not-for-git-commit" using the webUI
     Then file "for-git-commit" should not be listed on the webUI
@@ -282,8 +282,8 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     Given user "Alice" has created folder "'single'quotes" on remote server
     And user "Alice" has created folder "'single'quotes/simple-empty-folder" on remote server
     And user "Alice" has created file "'single'quotes/simple-empty-folder/for-git-commit" on remote server
-    And user "Alice" from remote server has shared "'single'quotes" with user "Alice" from local server
-    And user "Alice" from server "LOCAL" has accepted the last pending share
+    And user "Alice" from remote server has shared "'single'quotes" with user "Alice" from local server in the server
+    And user "Alice" from server "LOCAL" has accepted the last pending share in the server
     When the user opens folder "Shares/'single'quotes/simple-empty-folder" directly on the webUI
     And the user deletes file "for-git-commit" using the webUI
     Then file "for-git-commit" should not be listed on the webUI
@@ -298,7 +298,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And user "Alice" has uploaded file with content "test" to "/simple-folder/simple-empty-folder/lorem.txt" in the server
     And the user has reloaded the current page of the webUI
     When the user shares folder "simple-folder" with remote user "Alice" as "Editor" using the webUI
-    And user "Alice" from server "REMOTE" has accepted the last pending share
+    And user "Alice" from server "REMOTE" has accepted the last pending share in the server
     And the user opens folder "/" directly on the webUI
     Then the following resources should have share indicators on the webUI
       | fileName      | expectedIndicators |
@@ -320,13 +320,13 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
     And user "Alice" has created file "simple-folder/lorem.txt" in the server
-    And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
-    And user "Brian" has shared folder "Shares/simple-folder" with user "Carol"
+    And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
+    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice" in the server
+    And user "Brian" has shared folder "Shares/simple-folder" with user "Carol" in the server
     When the user re-logs in as "Brian" using the webUI
     And the user opens folder "Shares/simple-folder" directly on the webUI
     And the user shares folder "simple-empty-folder" with remote user "Alice" as "Editor" using the webUI
-    And user "Alice" from server "REMOTE" has accepted the last pending share
+    And user "Alice" from server "REMOTE" has accepted the last pending share in the server
     And the user opens folder "/Shares" directly on the webUI
     Then the following resources should have share indicators on the webUI
       | fileName      | expectedIndicators |
@@ -344,8 +344,8 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
     And user "Alice" has created file "simple-folder/lorem.txt" in the server
-    And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice"
+    And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
+    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice" in the server
     When the user re-logs in as "Brian" using the webUI
     And the user opens folder "Shares/simple-folder" directly on the webUI
     And the user shares folder "simple-empty-folder" with remote user "Alice" as "Editor" using the webUI
@@ -362,8 +362,8 @@ Feature: Federation Sharing - sharing with users on other cloud storages
   @issue-2060
   Scenario: sharing indicator for file uploaded inside a shared folder
     Given user "Alice" has created folder "simple-empty-folder" in the server
-    And user "Alice" has shared folder "simple-empty-folder" with user "Alice@%remote_backend_url%" with "all" permissions
-    And user "Alice" from server "REMOTE" has accepted the last pending share
+    And user "Alice" has shared folder "simple-empty-folder" with user "Alice@%remote_backend_url%" with "all" permissions in the server
+    And user "Alice" from server "REMOTE" has accepted the last pending share in the server
     And the user has reloaded the current page of the webUI
     When the user opens folder "simple-empty-folder" using the webUI
     And the user uploads file "new-lorem.txt" using the webUI
@@ -374,8 +374,8 @@ Feature: Federation Sharing - sharing with users on other cloud storages
   @issue-2060
   Scenario: sharing indicator for folder created inside a shared folder
     Given user "Alice" has created folder "simple-empty-folder" in the server
-    And user "Alice" has shared folder "simple-empty-folder" with user "Alice@%remote_backend_url%" with "all" permissions
-    And user "Alice" from server "REMOTE" has accepted the last pending share
+    And user "Alice" has shared folder "simple-empty-folder" with user "Alice@%remote_backend_url%" with "all" permissions in the server
+    And user "Alice" from server "REMOTE" has accepted the last pending share in the server
     And the user has reloaded the current page of the webUI
     When the user opens folder "simple-empty-folder" using the webUI
     And the user creates a folder with the name "sub-folder" using the webUI
@@ -388,7 +388,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     Given user "Alice" has created folder "simple-folder" in the server
     And the user has reloaded the current page of the webUI
     When the user shares folder "simple-folder" with remote user "Alice" as "Editor" using the webUI
-    And user "Alice" from server "REMOTE" accepts the last pending share using the sharing API
+    And user "Alice" from server "REMOTE" accepts the last pending share using the sharing API in the server
     Then the following resources should have share indicators on the webUI
       | fileName      | expectedIndicators |
       | simple-folder | user-direct        |
@@ -402,8 +402,8 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     Given user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has created folder "/simple-folder/sub-folder" in the server
     And user "Alice" has uploaded file with content "test" to "/simple-folder/textfile.txt" in the server
-    And user "Alice" has shared folder "simple-folder" with user "Alice@%remote_backend_url%" with "all" permissions
-    And user "Alice" from server "REMOTE" has accepted the last pending share
+    And user "Alice" has shared folder "simple-folder" with user "Alice@%remote_backend_url%" with "all" permissions in the server
+    And user "Alice" from server "REMOTE" has accepted the last pending share in the server
     And the user has reloaded the current page of the webUI
     When the user opens folder "simple-folder" using the webUI
     And the user opens the details dialog for folder "sub-folder" using the webUI
@@ -429,8 +429,8 @@ Feature: Federation Sharing - sharing with users on other cloud storages
   @issue-4246
   Scenario: accepting folder shared by remote user is listed in shared-with-me page
     Given user "Alice" has created folder "simple-folder" on remote server
-    And user "Alice" from remote server has shared "/simple-folder" with user "Alice" from local server
-    And user "Alice" from server "LOCAL" has accepted the last pending share
+    And user "Alice" from remote server has shared "/simple-folder" with user "Alice" from local server in the server
+    And user "Alice" from server "LOCAL" has accepted the last pending share in the server
     When the user browses to the shared-with-me page
     # delete below line after the issue has been fixed
     Then folder "simple-folder" should not be listed on the webUI
@@ -440,8 +440,8 @@ Feature: Federation Sharing - sharing with users on other cloud storages
   @issue-4247
   Scenario: shares folder appears only after reloading the page
     Given user "Alice" has created folder "simple-folder" on remote server
-    When user "Alice" from remote server shares "simple-folder" with user "Alice" from local server
-    And user "Alice" from server "LOCAL" accepts the last pending share using the sharing API
+    When user "Alice" from remote server shares "simple-folder" with user "Alice" from local server in the server
+    And user "Alice" from server "LOCAL" accepts the last pending share using the sharing API in the server
     Then folder "Shares" should not be listed on the webUI
     When the user reloads the current page of the webUI
     Then folder "Shares" should be listed on the webUI

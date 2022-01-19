@@ -149,7 +149,7 @@ Feature: deleting files and folders
     And user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
     And user "Alice" has created folder "simple-folder/strängé filename (duplicate #2 &).txt" in the server
     And the user has reloaded the current page of the webUI
-    And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
+    And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions in the server
     When the public uses the webUI to access the last public link created by user "Alice"
     And the user deletes the following elements using the webUI
       | name                                  |
@@ -175,7 +175,7 @@ Feature: deleting files and folders
       |                 | "double" quotes |
       |                 | question?       |
       |                 | &and#hash       |
-    And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
+    And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions in the server
     When the public uses the webUI to access the last public link created by user "Alice"
     And the user deletes the following file using the webUI
       | name-parts      |
@@ -205,7 +205,7 @@ Feature: deleting files and folders
     And user "Alice" has created file "simple-folder/lorem.txt" in the server
     And user "Alice" has created file "simple-folder/simple-empty-folder" in the server
     And the user has reloaded the current page of the webUI
-    And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
+    And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions in the server
     When the public uses the webUI to access the last public link created by user "Alice"
     And the user batch deletes these files using the webUI
       | name                |
@@ -224,8 +224,8 @@ Feature: deleting files and folders
     And user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Brian" has created folder "simple-folder" in the server
     And user "Brian" has created file "lorem.txt" in the server
-    And user "Brian" has shared folder "simple-folder" with user "Alice"
-    And user "Brian" has shared file "lorem.txt" with user "Alice"
+    And user "Brian" has shared folder "simple-folder" with user "Alice" in the server
+    And user "Brian" has shared file "lorem.txt" with user "Alice" in the server
     And the user has browsed to the shared-with-me page
     When the user accepts share "simple-folder" offered by user "Brian Murphy" using the webUI
     When the user accepts share "lorem.txt" offered by user "Brian Murphy" using the webUI

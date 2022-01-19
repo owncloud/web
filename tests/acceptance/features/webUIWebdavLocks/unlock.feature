@@ -85,10 +85,10 @@ Feature: Unlock locked files and folders
       | receiver1 |
       | receiver2 |
     And user "brand-new-user" has created folder "/FOLDER_TO_SHARE" in the server
-    And user "brand-new-user" has shared file "/lorem.txt" with user "receiver1"
-    And user "brand-new-user" has shared folder "/FOLDER_TO_SHARE" with user "receiver1"
-    And user "brand-new-user" has shared file "/lorem.txt" with user "receiver2"
-    And user "brand-new-user" has shared folder "/FOLDER_TO_SHARE" with user "receiver2"
+    And user "brand-new-user" has shared file "/lorem.txt" with user "receiver1" in the server
+    And user "brand-new-user" has shared folder "/FOLDER_TO_SHARE" with user "receiver1" in the server
+    And user "brand-new-user" has shared file "/lorem.txt" with user "receiver2" in the server
+    And user "brand-new-user" has shared folder "/FOLDER_TO_SHARE" with user "receiver2" in the server
     And user "brand-new-user" has locked file "lorem.txt" setting the following properties in the server
       | lockscope | shared |
     And user "brand-new-user" has locked folder "FOLDER_TO_SHARE" setting the following properties in the server
@@ -118,10 +118,10 @@ Feature: Unlock locked files and folders
       | receiver1 |
       | receiver2 |
     And user "brand-new-user" has created folder "/FOLDER_TO_SHARE" in the server
-    And user "brand-new-user" has shared file "/lorem.txt" with user "receiver1"
-    And user "brand-new-user" has shared folder "/FOLDER_TO_SHARE" with user "receiver1"
-    And user "brand-new-user" has shared file "/lorem.txt" with user "receiver2"
-    And user "brand-new-user" has shared folder "/FOLDER_TO_SHARE" with user "receiver2"
+    And user "brand-new-user" has shared file "/lorem.txt" with user "receiver1" in the server
+    And user "brand-new-user" has shared folder "/FOLDER_TO_SHARE" with user "receiver1" in the server
+    And user "brand-new-user" has shared file "/lorem.txt" with user "receiver2" in the server
+    And user "brand-new-user" has shared folder "/FOLDER_TO_SHARE" with user "receiver2" in the server
     And user "receiver1" has locked file "lorem.txt" setting the following properties in the server
       | lockscope | shared |
     And user "receiver1" has locked folder "FOLDER_TO_SHARE" setting the following properties in the server
@@ -151,10 +151,10 @@ Feature: Unlock locked files and folders
       | receiver1 |
       | receiver2 |
     And user "brand-new-user" has created folder "/FOLDER_TO_SHARE" in the server
-    And user "brand-new-user" has shared file "/lorem.txt" with user "receiver1"
-    And user "brand-new-user" has shared folder "/FOLDER_TO_SHARE" with user "receiver1"
-    And user "brand-new-user" has shared file "/lorem.txt" with user "receiver2"
-    And user "brand-new-user" has shared folder "/FOLDER_TO_SHARE" with user "receiver2"
+    And user "brand-new-user" has shared file "/lorem.txt" with user "receiver1" in the server
+    And user "brand-new-user" has shared folder "/FOLDER_TO_SHARE" with user "receiver1" in the server
+    And user "brand-new-user" has shared file "/lorem.txt" with user "receiver2" in the server
+    And user "brand-new-user" has shared folder "/FOLDER_TO_SHARE" with user "receiver2" in the server
     And user "receiver1" has locked file "lorem (2).txt" setting the following properties in the server
       | lockscope | shared |
     And user "receiver1" has locked folder "FOLDER_TO_SHARE" setting the following properties in the server
@@ -182,7 +182,7 @@ Feature: Unlock locked files and folders
     Given these users have been created with default attributes and without skeleton files in the server:
       | username  |
       | receiver1 |
-    And user "brand-new-user" has shared file "/lorem.txt" with user "receiver1"
+    And user "brand-new-user" has shared file "/lorem.txt" with user "receiver1" in the server
     And user "receiver1" has locked file "lorem.txt" setting the following properties in the server
       | lockscope | <lockscope> |
     And the user has browsed to the files page

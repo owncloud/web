@@ -23,8 +23,8 @@ Feature: Sharing files and folders with internal groups
 
   Scenario: notifications about new share is displayed
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
-    And user "Carol" has shared folder "/simple-folder" with group "grp1"
-    And user "Carol" has shared folder "/data.zip" with group "grp1"
+    And user "Carol" has shared folder "/simple-folder" with group "grp1" in the server
+    And user "Carol" has shared folder "/data.zip" with group "grp1" in the server
     When the user reloads the current page of the webUI
     Then the user should see the notification bell on the webUI
     And the user should see 2 notifications on the webUI with these details

@@ -10,7 +10,7 @@ Feature: Share by public link
 
   Scenario: user changes the expiration date of an already existing public link using webUI
     Given user "Alice" has created file "lorem.txt" in the server
-    And user "Alice" has created a public link with following settings
+    And user "Alice" has created a public link with following settings in the server
       | path       | lorem.txt   |
       | name       | Public link |
       | expireDate | 2038-10-14  |
@@ -38,7 +38,7 @@ Feature: Share by public link
     And user "Alice" has created <element> "<shared-resource>" in the server
     And user "Alice" has logged in using the webUI
     When the user creates a new public link for resource "<shared-resource>" using the webUI
-    Then user "Alice" should have a share with these details:
+    Then user "Alice" should have a share with these details in the server:
       | field       | value              |
       | share_type  | public_link        |
       | uid_owner   | Alice              |
@@ -58,7 +58,7 @@ Feature: Share by public link
     And user "Alice" has created <element> "<shared-resource>" in the server
     And user "Alice" has logged in using the webUI
     When the user creates a new public link for resource "<shared-resource>" using the webUI
-    Then user "Alice" should have a share with these details:
+    Then user "Alice" should have a share with these details in the server:
       | field       | value              |
       | share_type  | public_link        |
       | uid_owner   | Alice              |
@@ -80,20 +80,20 @@ Feature: Share by public link
     And user "Alice" has logged in using the webUI
     When the user tries to create a new public link for resource "simple-folder" which expires in "+15" days using the webUI
     Then the link expiration date shown on the webUI should be "+7" days
-    And user "Alice" should not have created any shares
+    And user "Alice" should not have created any shares in the server
 
   @issue-ocis-1328
   Scenario: user cannot change the expiry date of an existing public link to a date that is past the enforced max expiry date
     Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes"
     And the setting "shareapi_enforce_expire_date" of app "core" has been set to "yes"
     And user "Alice" has created file "lorem.txt" in the server
-    And user "Alice" has created a public link with following settings
+    And user "Alice" has created a public link with following settings in the server
       | path       | lorem.txt   |
       | name       | Public link |
       | expireDate | +6          |
     And user "Alice" has logged in using the webUI
     When the user tries to edit expiration of the public link named "Public link" of file "lorem.txt" to past date "+15 days"
-    Then user "Alice" should have a share with these details:
+    Then user "Alice" should have a share with these details in the server:
       | field       | value       |
       | share_type  | public_link |
       | uid_owner   | Alice       |
@@ -108,7 +108,7 @@ Feature: Share by public link
     And the setting "shareapi_expire_after_n_days" of app "core" has been set to "16"
     And the setting "shareapi_enforce_expire_date" of app "core" has been set to "yes"
     And user "Alice" has created file "lorem.txt" in the server
-    And user "Alice" has created a public link with following settings
+    And user "Alice" has created a public link with following settings in the server
       | path       | lorem.txt   |
       | name       | Public link |
       | expireDate | +16         |
@@ -117,7 +117,7 @@ Feature: Share by public link
     When the user edits the public link named "Public link" of file "lorem.txt" changing following
       | expireDate | +15 |
     Then the user should see an error message on the public link share dialog saying "Cannot set expiration date more than 7 days in the future"
-    And user "Alice" should have a share with these details:
+    And user "Alice" should have a share with these details in the server:
       | field       | value       |
       | share_type  | public_link |
       | uid_owner   | Alice       |
@@ -134,7 +134,7 @@ Feature: Share by public link
     And user "Alice" has logged in using the webUI
     When the user creates a new public link for resource "lorem.txt" using the webUI with
       | expireDate | +7 |
-    Then user "Alice" should have a share with these details:
+    Then user "Alice" should have a share with these details in the server:
       | field       | value       |
       | share_type  | public_link |
       | uid_owner   | Alice       |
@@ -148,14 +148,14 @@ Feature: Share by public link
     Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes"
     And the setting "shareapi_enforce_expire_date" of app "core" has been set to "yes"
     And user "Alice" has created file "lorem.txt" in the server
-    And user "Alice" has created a public link with following settings
+    And user "Alice" has created a public link with following settings in the server
       | path       | lorem.txt   |
       | name       | Public link |
       | expireDate | +5          |
     And user "Alice" has logged in using the webUI
     When the user edits the public link named "Public link" of file "lorem.txt" changing following
       | expireDate | +7 |
-    Then user "Alice" should have a share with these details:
+    Then user "Alice" should have a share with these details in the server:
       | field       | value       |
       | share_type  | public_link |
       | uid_owner   | Alice       |

@@ -21,14 +21,14 @@ Feature: Sharing files and folders with internal users
     And the user shares file "testimage.jpg" with user "Alice Hansen" as "<set-role>" using the webUI
     Then user "Alice Hansen" should be listed as "<expected-role>" in the collaborators list for folder "simple-folder" on the webUI
     And user "Alice Hansen" should be listed as "<expected-role>" in the collaborators list for file "testimage.jpg" on the webUI
-    And user "Alice" should have received a share with these details:
+    And user "Alice" should have received a share with these details in the server:
       | field       | value                |
       | uid_owner   | Brian                |
       | share_with  | Alice                |
       | file_target | /simple-folder       |
       | item_type   | folder               |
       | permissions | <permissions-folder> |
-    And user "Alice" should have received a share with these details:
+    And user "Alice" should have received a share with these details in the server:
       | field       | value              |
       | uid_owner   | Brian              |
       | share_with  | Alice              |
@@ -53,7 +53,7 @@ Feature: Sharing files and folders with internal users
   Scenario: share a file with another internal user who overwrites and unshares the file
     Given user "Brian" has created file "new-lorem.txt" in the server
     And user "Brian" has logged in using the webUI
-    And user "Brian" has shared file "new-lorem.txt" with user "Alice" with "all" permissions
+    And user "Brian" has shared file "new-lorem.txt" with user "Alice" with "all" permissions in the server
     When the user re-logs in as "Alice" using the webUI
     Then as "Alice" the content of "new-lorem.txt" should not be the same as the content of local file "new-lorem.txt"
     # overwrite the received shared file
@@ -116,7 +116,7 @@ Feature: Sharing files and folders with internal users
     Given user "Brian" has created folder "simple-folder" in the server
     And user "Brian" has created file "simple-folder/lorem.txt" in the server
     And user "Brian" has logged in using the webUI
-    And user "Brian" has shared folder "simple-folder" with user "Alice" with "create, read, share" permissions
+    And user "Brian" has shared folder "simple-folder" with user "Alice" with "create, read, share" permissions in the server
     When the user re-logs in as "Alice" using the webUI
     And the user opens folder "simple-folder" using the webUI
     Then it should not be possible to delete file "lorem.txt" using the webUI
@@ -125,7 +125,7 @@ Feature: Sharing files and folders with internal users
   Scenario: user shares the file/folder with another internal user and delete the share with user
     Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has logged in using the webUI
-    And user "Alice" has shared file "lorem.txt" with user "Brian"
+    And user "Alice" has shared file "lorem.txt" with user "Brian" in the server
     When the user opens the share dialog for file "lorem.txt" using the webUI
     Then user "Brian Murphy" should be listed as "Editor" in the collaborators list on the webUI
     And as "Brian" file "lorem.txt" should exist
@@ -139,8 +139,8 @@ Feature: Sharing files and folders with internal users
     Given user "Carol" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has logged in using the webUI
-    And user "Alice" has shared file "lorem.txt" with user "Brian"
-    And user "Alice" has shared file "lorem.txt" with user "Carol"
+    And user "Alice" has shared file "lorem.txt" with user "Brian" in the server
+    And user "Alice" has shared file "lorem.txt" with user "Carol" in the server
     When the user opens the share dialog for file "lorem.txt" using the webUI
     Then user "Brian Murphy" should be listed as "Editor" in the collaborators list on the webUI
     And user "Carol King" should be listed as "Editor" in the collaborators list on the webUI
@@ -181,7 +181,7 @@ Feature: Sharing files and folders with internal users
     And user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
     And user "Alice" has uploaded file with content "test" to "/simple-folder/lorem.txt" in the server
-    And user "Alice" has shared folder "simple-folder" with user "Brian"
+    And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
     And user "Alice" has logged in using the webUI
     And the user opens folder "simple-folder" using the webUI
     When the user opens the details dialog for folder "simple-empty-folder" using the webUI
@@ -195,8 +195,8 @@ Feature: Sharing files and folders with internal users
     And user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
     And user "Alice" has uploaded file with content "test" to "/simple-folder/lorem.txt" in the server
-    And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has shared folder "simple-folder" with user "Carol"
+    And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
+    And user "Brian" has shared folder "simple-folder" with user "Carol" in the server
     And user "Brian" has logged in using the webUI
     And the user opens folder "simple-folder" using the webUI
     When the user opens the details dialog for folder "simple-empty-folder" using the webUI
@@ -229,14 +229,14 @@ Feature: Sharing files and folders with internal users
     And the user shares file "sample,1.txt" with user "Alice Hansen" as "<set-role>" using the webUI
     Then user "Alice Hansen" should be listed as "<expected-role>" in the collaborators list for folder "Sample,Folder,With,Comma" on the webUI
     And user "Alice Hansen" should be listed as "<expected-role>" in the collaborators list for file "sample,1.txt" on the webUI
-    And user "Alice" should have received a share with these details:
+    And user "Alice" should have received a share with these details in the server:
       | field       | value                     |
       | uid_owner   | Brian                     |
       | share_with  | Alice                     |
       | file_target | /Sample,Folder,With,Comma |
       | item_type   | folder                    |
       | permissions | <permissions-folder>      |
-    And user "Alice" should have received a share with these details:
+    And user "Alice" should have received a share with these details in the server:
       | field       | value              |
       | uid_owner   | Brian              |
       | share_with  | Alice              |

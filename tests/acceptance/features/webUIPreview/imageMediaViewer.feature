@@ -25,7 +25,7 @@ Scenario Outline: preview of image files with media viewer is possible
   Scenario: video playback in public share
     Given user "Alice" has created folder "simple-empty-folder" in the server
     And user "Alice" has uploaded file "test_video.mp4" to "simple-empty-folder/test_video.mp4" in the server
-    And user "Alice" has created a public link with following settings
+    And user "Alice" has created a public link with following settings in the server
       | path | simple-empty-folder |
     When the public uses the webUI to access the last public link created by user "Alice"
     And the public views the file "test_video.mp4" in the media viewer using the webUI
@@ -35,7 +35,7 @@ Scenario Outline: preview of image files with media viewer is possible
   Scenario: image preview in public share
     Given user "Alice" has created folder "simple-empty-folder" in the server
     And user "Alice" has uploaded file "testavatar.jpg" to "simple-empty-folder/testavatar.jpg" in the server
-    And user "Alice" has created a public link with following settings
+    And user "Alice" has created a public link with following settings in the server
       | path | simple-empty-folder |
     When the public uses the webUI to access the last public link created by user "Alice"
     And the public views the file "testavatar.jpg" in the media viewer using the webUI
@@ -142,7 +142,7 @@ Scenario Outline: preview of image files with media viewer is possible
   @issue-5324
   Scenario: Open jpeg file with media viewer in shared-with-others page
     Given user "Brian" has uploaded file "testavatar.jpeg" to "testavatar.jpeg" in the server
-    And user "Brian" has shared file "testavatar.jpeg" with user "Alice" with "all" permissions
+    And user "Brian" has shared file "testavatar.jpeg" with user "Alice" with "all" permissions in the server
     And user "Brian" has logged in using the webUI
     And the user browses to the shared-with-others page
     When the user views the file "testavatar.jpeg" in the media viewer by clicking on the file name using the webUI
@@ -151,8 +151,8 @@ Scenario Outline: preview of image files with media viewer is possible
   @issue-5324
   Scenario: Open jpeg file with media viewer in shared-with-me page
     Given user "Brian" has uploaded file "testavatar.jpeg" to "testavatar.jpeg" in the server
-    And user "Brian" has shared file "testavatar.jpeg" with user "Alice" with "all" permissions
-    And user "Alice" has accepted the share "testavatar.jpeg" offered by user "Brian"
+    And user "Brian" has shared file "testavatar.jpeg" with user "Alice" with "all" permissions in the server
+    And user "Alice" has accepted the share "testavatar.jpeg" offered by user "Brian" in the server
     And user "Alice" has logged in using the webUI
     And the user browses to the shared-with-me page
     When the user views the file "testavatar.jpeg" in the media viewer by clicking on the file name using the webUI

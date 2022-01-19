@@ -6,7 +6,7 @@ Feature: Resharing shared files with different permissions
 
   Background:
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
-    And the administrator has set the default folder for received shares to "Shares"
+    And the administrator has set the default folder for received shares to "Shares" in the server
     And these users have been created with default attributes and without skeleton files in the server:
       | username |
       | Alice    |
@@ -16,10 +16,10 @@ Feature: Resharing shared files with different permissions
 
   @issue-ocis-1922
   Scenario: Reshare a folder without share permissions using API and check if it is listed on the collaborators list for original owner
-    Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share" permissions
-    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian"
-    And user "Alice" has shared folder "Shares/simple-folder" with user "Carol" with "read" permissions
-    And user "Carol" has accepted the share "Shares/simple-folder" offered by user "Alice"
+    Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share" permissions in the server
+    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian" in the server
+    And user "Alice" has shared folder "Shares/simple-folder" with user "Carol" with "read" permissions in the server
+    And user "Carol" has accepted the share "Shares/simple-folder" offered by user "Alice" in the server
     And user "Brian" has logged in using the webUI
     When the user opens the share dialog for folder "simple-folder" using the webUI
     Then user "Carol King" should be listed as "Custom permissions" in the collaborators list for folder "simple-folder" on the webUI
@@ -27,10 +27,10 @@ Feature: Resharing shared files with different permissions
 
   @issue-ocis-1922
   Scenario: Reshare a folder without share permissions using API and check if it is listed on the collaborators list for resharer
-    Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share" permissions
-    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian"
-    And user "Alice" has shared folder "Shares/simple-folder" with user "Carol" with "read" permissions
-    And user "Carol" has accepted the share "Shares/simple-folder" offered by user "Alice"
+    Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share" permissions in the server
+    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian" in the server
+    And user "Alice" has shared folder "Shares/simple-folder" with user "Carol" with "read" permissions in the server
+    And user "Carol" has accepted the share "Shares/simple-folder" offered by user "Alice" in the server
     And user "Alice" has logged in using the webUI
     And the user opens folder "Shares" using the webUI
     When the user opens the share dialog for folder "simple-folder" using the webUI
@@ -39,25 +39,25 @@ Feature: Resharing shared files with different permissions
 
 
   Scenario: Reshare a folder without share permissions using API and check if the receiver can reshare
-    Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share" permissions
-    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian"
-    And user "Alice" has shared folder "/Shares/simple-folder" with user "Carol" with "read" permissions
-    And user "Carol" has accepted the share "Shares/simple-folder" offered by user "Alice"
+    Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share" permissions in the server
+    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian" in the server
+    And user "Alice" has shared folder "/Shares/simple-folder" with user "Carol" with "read" permissions in the server
+    And user "Carol" has accepted the share "Shares/simple-folder" offered by user "Alice" in the server
     When user "Carol" logs in using the webUI
     And the user opens folder "Shares" using the webUI
     Then the user should not be able to share folder "simple-folder" using the webUI
 
   @issue-ocis-2260 @issue-ocis-1922
   Scenario Outline: share a received folder with another user with same permissions(including share permissions) and check if the user is displayed in collaborators list for resharer
-    Given user "Brian" has shared folder "simple-folder" with user "Alice" with "<permissions>" permissions
-    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian"
+    Given user "Brian" has shared folder "simple-folder" with user "Alice" with "<permissions>" permissions in the server
+    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian" in the server
     And user "Alice" has logged in using the webUI
     And the user opens folder "Shares" using the webUI
     When the user shares folder "simple-folder" with user "Carol King" as "<role>" with permissions "<collaborators-permissions>" using the webUI
-    And user "Carol" accepts the share "Shares/simple-folder" offered by user "Alice" using the sharing API
+    And user "Carol" accepts the share "Shares/simple-folder" offered by user "Alice" using the sharing API in the server
     Then user "Carol King" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
     And custom permissions "<displayed-permissions>" should be set for user "Carol King" for folder "simple-folder" on the webUI
-    And user "Carol" should have received a share with these details:
+    And user "Carol" should have received a share with these details in the server:
       | field       | value                 |
       | uid_owner   | Alice                 |
       | share_with  | Carol                 |
@@ -75,15 +75,15 @@ Feature: Resharing shared files with different permissions
   @skipOnOC10 @issue-ocis-2260 @issue-ocis-1922
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
   Scenario Outline: share a received folder with another user with same permissions(including share permissions) and check if the user is displayed in collaborators list for resharer (ocis bug demonstration)
-    Given user "Brian" has shared folder "simple-folder" with user "Alice" with "<permissions>" permissions
-    And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
+    Given user "Brian" has shared folder "simple-folder" with user "Alice" with "<permissions>" permissions in the server
+    And user "Alice" has accepted the share "simple-folder" offered by user "Brian" in the server
     And user "Alice" has logged in using the webUI
     And the user opens folder "Shares" using the webUI
     When the user shares folder "simple-folder" with user "Carol King" as "<role>" with permissions "<collaborators-permissions>" using the webUI
-    And user "Carol" accepts the share "Shares/simple-folder" offered by user "Alice" using the sharing API
+    And user "Carol" accepts the share "Shares/simple-folder" offered by user "Alice" using the sharing API in the server
     Then user "Carol King" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
     And custom permissions "<displayed-permissions>" should be set for user "Carol King" for folder "simple-folder" on the webUI
-    And user "Carol" should have received a share with these details:
+    And user "Carol" should have received a share with these details in the server:
       | field       | value                 |
       | uid_owner   | Alice                 |
       | share_with  | Carol                 |
@@ -100,25 +100,25 @@ Feature: Resharing shared files with different permissions
 
   @issue-ocis-1743
   Scenario Outline: share a received folder with another user with same permissions(including share permissions) and check if the user is displayed in collaborators list for original owner
-    Given user "Brian" has shared folder "simple-folder" with user "Alice" with "<permissions>" permissions
-    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian"
+    Given user "Brian" has shared folder "simple-folder" with user "Alice" with "<permissions>" permissions in the server
+    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian" in the server
     And user "Alice" has logged in using the webUI
     And the user opens folder "Shares" using the webUI
     When the user shares folder "simple-folder" with user "Carol King" as "<role>" with permissions "<collaborators-permissions>" using the webUI
-    And user "Carol" accepts the share "Shares/simple-folder" offered by user "Alice" using the sharing API
+    And user "Carol" accepts the share "Shares/simple-folder" offered by user "Alice" using the sharing API in the server
     And the user re-logs in as "Brian" using the webUI
     Then user "Carol King" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
     And custom permissions "<displayed-permissions>" should be set for user "Carol King" for folder "simple-folder" on the webUI
     And user "Alice Hansen" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
     And custom permissions "<displayed-permissions>" should be set for user "Alice Hansen" for folder "simple-folder" on the webUI
-    And user "Carol" should have received a share with these details:
+    And user "Carol" should have received a share with these details in the server:
       | field       | value                 |
       | uid_owner   | Alice                 |
       | share_with  | Carol                 |
       | file_target | /Shares/simple-folder |
       | item_type   | folder                |
       | permissions | <permissions>         |
-    And user "Alice" should have received a share with these details:
+    And user "Alice" should have received a share with these details in the server:
       | field       | value                 |
       | uid_owner   | Brian                 |
       | share_with  | Alice                 |

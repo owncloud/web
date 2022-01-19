@@ -57,7 +57,7 @@ Feature: Locks
   Scenario Outline: deleting a file in a public share of a locked folder
     Given user "brand-new-user" has locked folder "simple-folder" setting the following properties in the server
       | lockscope | <lockscope> |
-    And user "brand-new-user" has created a public link with following settings
+    And user "brand-new-user" has created a public link with following settings in the server
       | path        | simple-folder                |
       | permissions | read, create, delete, update |
     When the public uses the webUI to access the last public link created by user "brand-new-user"

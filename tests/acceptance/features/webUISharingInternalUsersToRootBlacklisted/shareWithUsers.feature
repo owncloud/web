@@ -18,8 +18,8 @@ Feature: Sharing files and folders with internal users
     And user "Carol" has uploaded file "testavatar.jpg" to "testimage.jpg" in the server
     And group "grp1" has been created in the server
     And user "Alice" has been added to group "grp1" in the server
-    And user "Carol" has shared file "testimage.jpg" with user "Alice"
-    And user "Carol" has shared folder "simple-folder" with user "Alice"
+    And user "Carol" has shared file "testimage.jpg" with user "Alice" in the server
+    And user "Carol" has shared folder "simple-folder" with user "Alice" in the server
     And the administrator has enabled exclude groups from sharing
     And the administrator has excluded group "grp1" from sharing
     When user "Alice" logs in using the webUI
@@ -33,7 +33,7 @@ Feature: Sharing files and folders with internal users
     And user "Carol" has uploaded file "testavatar.jpg" to "common/testimage.jpg" in the server
     And group "grp1" has been created in the server
     And user "Alice" has been added to group "grp1" in the server
-    And user "Carol" has shared folder "common" with user "Alice"
+    And user "Carol" has shared folder "common" with user "Alice" in the server
     And the administrator has enabled exclude groups from sharing
     And the administrator has excluded group "grp1" from sharing
     And user "Alice" has logged in using the webUI
@@ -47,7 +47,7 @@ Feature: Sharing files and folders with internal users
     And user "Carol" has created folder "common/inside-common" in the server
     And group "grp1" has been created in the server
     And user "Alice" has been added to group "grp1" in the server
-    And user "Carol" has shared folder "common" with user "Alice"
+    And user "Carol" has shared folder "common" with user "Alice" in the server
     And the administrator has enabled exclude groups from sharing
     And the administrator has excluded group "grp1" from sharing
     And user "Alice" has logged in using the webUI
@@ -71,7 +71,7 @@ Feature: Sharing files and folders with internal users
     Given user "Brian" has uploaded file "testavatar.jpg" to "testimage.jpg" in the server
     And group "grp1" has been created in the server
     And user "Alice" has been added to group "grp1" in the server
-    And user "Brian" has shared file "/testimage.jpg" with user "Alice"
+    And user "Brian" has shared file "/testimage.jpg" with user "Alice" in the server
     And the administrator has enabled exclude groups from sharing
     And the administrator has excluded group "grp1" from sharing
     And user "Alice" has logged in using the webUI

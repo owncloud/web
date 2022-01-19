@@ -9,7 +9,7 @@ OC_CI_GOLANG = "owncloudci/golang:1.17"
 OC_CI_NODEJS = "owncloudci/nodejs:14"
 OC_CI_PHP = "owncloudci/php:7.4"
 OC_CI_WAIT_FOR = "owncloudci/wait-for:latest"
-OC_TESTING_MIDDLEWARE = "owncloud/owncloud-test-middleware:1.1.0"
+OC_TESTING_MIDDLEWARE = "owncloud/owncloud-test-middleware:1.2.0"
 OC_UBUNTU = "owncloud/ubuntu:20.04"
 
 OC10_VERSION = "latest"

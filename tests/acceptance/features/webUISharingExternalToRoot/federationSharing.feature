@@ -36,9 +36,9 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And user "Alice" has uploaded file "lorem.txt" to "simple-folder/lorem.txt" on remote server
     And user "Brian" has created folder "simple-empty-folder" on remote server
     And user "Carol" has uploaded file "lorem.txt" to "lorem.txt" on remote server
-    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server
-    And user "Brian" from remote server has shared "simple-empty-folder" with user "Alice" from local server
-    And user "Carol" from remote server has shared "lorem.txt" with user "Alice" from local server
+    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server in the server
+    And user "Brian" from remote server has shared "simple-empty-folder" with user "Alice" from local server in the server
+    And user "Carol" from remote server has shared "lorem.txt" with user "Alice" from local server in the server
     And the user has reloaded the current page of the webUI
     Then the user should see 3 notifications on the webUI with these details
       | title                                                              |
@@ -61,7 +61,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
 
   Scenario: declining a federation share on the webUI
     Given user "Alice" has created file "lorem.txt" on remote server
-    And user "Alice" from remote server has shared "/lorem.txt" with user "Alice" from local server
+    And user "Alice" from remote server has shared "/lorem.txt" with user "Alice" from local server in the server
     And the user has reloaded the current page of the webUI
     When the user declines all shares displayed in the notifications on the webUI
     Then file "lorem.txt" should not be listed on the webUI
@@ -74,7 +74,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes"
     And user "Alice" has created folder "simple-folder" on remote server
     And user "Alice" has created file "simple-folder/lorem.txt" on remote server
-    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server
+    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server in the server
     When the user reloads the current page of the webUI
     Then folder "simple-folder" should be listed on the webUI
     When the user opens folder "simple-folder" directly on the webUI
@@ -88,7 +88,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     Given user "Alice" has created folder "simple-empty-folder" in the server
     And the user has reloaded the current page of the webUI
     When the user shares folder "simple-empty-folder" with remote user "Alice" as "Viewer" using the webUI
-    Then user "Alice" should have shared a folder "simple-empty-folder" with these details:
+    Then user "Alice" should have shared a folder "simple-empty-folder" with these details in the server:
       | field       | value                      |
       | uid_owner   | Alice                      |
       | share_with  | Alice@%remote_backend_url% |
@@ -100,7 +100,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
   Scenario: share a folder with an remote user and prohibit deleting - remote server shares - local server receives
     Given user "Alice" has created folder "simple-folder" on remote server
     And user "Alice" has created file "simple-folder/lorem.txt" on remote server
-    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server with "read" permissions
+    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server with "read" permissions in the server
     When the user reloads the current page of the webUI
     And the user accepts all shares displayed in the notifications on the webUI
     And the user opens folder "simple-folder" directly on the webUI
@@ -112,7 +112,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes"
     And user "Alice" has created folder "simple-folder" on remote server
     And user "Alice" has created file "simple-folder/lorem.txt" on remote server
-    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server
+    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server in the server
     And the user reloads the current page of the webUI
     And the user opens folder "simple-folder" using the webUI
     When the user uploads overwriting file "lorem.txt" using the webUI
@@ -123,7 +123,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes"
     And user "Alice" has created folder "simple-folder" on remote server
     And user "Alice" has created file "simple-folder/lorem.txt" on remote server
-    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server
+    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server in the server
     When the user reloads the current page of the webUI
     And the user opens folder "simple-folder" using the webUI
     And the user uploads file "new-lorem.txt" using the webUI
@@ -134,7 +134,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes"
     And user "Alice" has created folder "simple-folder" on remote server
     And user "Alice" has created file "simple-folder/lorem.txt" on remote server
-    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server
+    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server in the server
     When the user reloads the current page of the webUI
     And the user opens folder "simple-folder" using the webUI
     And the user renames file "lorem.txt" to "new-lorem.txt" using the webUI
@@ -146,7 +146,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes"
     And user "Alice" has created folder "simple-folder" on remote server
     And user "Alice" has created file "simple-folder/lorem.txt" on remote server
-    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server
+    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server in the server
     When the user reloads the current page of the webUI
     And the user opens folder "simple-folder" using the webUI
     And the user deletes file "lorem.txt" using the webUI
@@ -156,7 +156,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
   Scenario: unshare a federation share
     Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes"
     And user "Alice" has created file "lorem.txt" on remote server
-    And user "Alice" from remote server has shared "lorem.txt" with user "Alice" from local server
+    And user "Alice" from remote server has shared "lorem.txt" with user "Alice" from local server in the server
     When the user reloads the current page of the webUI
     And the user deletes file "lorem.txt" using the webUI
     Then file "lorem.txt" should not be listed on the webUI
@@ -168,8 +168,8 @@ Feature: Federation Sharing - sharing with users on other cloud storages
   @issue-2510
   Scenario: unshare a federation share from files page and check in the "shared-with-you" page
     Given user "Alice" has created file "lorem.txt" on remote server
-    And user "Alice" from remote server has shared "/lorem.txt" with user "Alice" from local server
-    And user "Alice" from server "LOCAL" has accepted the last pending share
+    And user "Alice" from remote server has shared "/lorem.txt" with user "Alice" from local server in the server
+    And user "Alice" from server "LOCAL" has accepted the last pending share in the server
     And the user has browsed to the shared-with-me page
     When the user deletes file "lorem.txt" using the webUI
     Then file "lorem.txt" should not be listed on the webUI
@@ -182,11 +182,11 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created folder "simple-folder" on remote server
     And user "Alice" has created file "simple-folder/lorem.txt" on remote server
-    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server
+    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server in the server
     And the user has reloaded the current page of the webUI
     When the user shares folder "simple-folder" with user "Brian Murphy" as "Viewer" using the webUI
     Then as "Brian" file "simple-folder/lorem.txt" should exist
-    And user "Brian" should have received a share with these details:
+    And user "Brian" should have received a share with these details in the server:
       | field       | value       |
       | uid_owner   | Alice       |
       | share_with  | Brian       |
@@ -198,10 +198,10 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes"
     And user "Brian" has been created with default attributes and without skeleton files on remote server
     And user "Alice" has created folder "simple-folder" on remote server
-    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server with "read, share" permissions
+    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server with "read, share" permissions in the server
     And the user has reloaded the current page of the webUI
     When the user shares folder "simple-folder" with remote user "Brian" as "Viewer" using the webUI
-    Then user "Alice" should have shared a folder "simple-folder" with these details:
+    Then user "Alice" should have shared a folder "simple-folder" with these details in the server:
       | field       | value                      |
       | uid_owner   | Alice                      |
       | share_with  | Brian@%remote_backend_url% |
@@ -213,7 +213,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
   Scenario: try resharing a folder with read-only permissions
     Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes"
     And user "Alice" has created folder "simple-folder" on remote server
-    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server with "read" permissions
+    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server with "read" permissions in the server
     When the user reloads the current page of the webUI
     Then the user should not be able to share folder "simple-folder" using the webUI
 
@@ -231,7 +231,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And user "Alice" has created folder "'single'quotes/simple-empty-folder" on remote server
     And user "Alice" has uploaded file "lorem.txt" to "'single'quotes/lorem.txt" on remote server
     And user "Alice" has uploaded file "lorem.txt" to "'single'quotes/simple-empty-folder/lorem.txt" on remote server
-    And user "Alice" from remote server has shared "'single'quotes" with user "Alice" from local server
+    And user "Alice" from remote server has shared "'single'quotes" with user "Alice" from local server in the server
     And the user has reloaded the current page of the webUI
     When the user opens folder "'single'quotes" using the webUI
     Then as "Alice" these resources should be listed on the webUI
@@ -252,7 +252,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes"
     And user "Alice" has created folder "simple-folder" on remote server
     And user "Alice" has created folder "simple-folder/simple-empty-folder" on remote server
-    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server
+    And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server in the server
     When the user opens folder "simple-folder/simple-empty-folder" directly on the webUI
     And the user uploads file "new-lorem.txt" using the webUI
     Then file "new-lorem.txt" should be listed on the webUI
@@ -265,7 +265,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And user "Alice" has created folder "'single'quotes" on remote server
     And user "Alice" has created folder "'single'quotes/simple-empty-folder" on remote server
     And user "Alice" has created file "'single'quotes/simple-empty-folder/for-git-commit" on remote server
-    And user "Alice" from remote server has shared "'single'quotes" with user "Alice" from local server
+    And user "Alice" from remote server has shared "'single'quotes" with user "Alice" from local server in the server
     When the user opens folder "/'single'quotes/simple-empty-folder" directly on the webUI
     And the user renames file "for-git-commit" to "not-for-git-commit" using the webUI
     Then file "for-git-commit" should not be listed on the webUI
@@ -281,7 +281,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And user "Alice" has created folder "'single'quotes" on remote server
     And user "Alice" has created folder "'single'quotes/simple-empty-folder" on remote server
     And user "Alice" has created file "'single'quotes/simple-empty-folder/for-git-commit" on remote server
-    And user "Alice" from remote server has shared "'single'quotes" with user "Alice" from local server
+    And user "Alice" from remote server has shared "'single'quotes" with user "Alice" from local server in the server
     When the user opens folder "/'single'quotes/simple-empty-folder" directly on the webUI
     And the user deletes file "for-git-commit" using the webUI
     Then file "for-git-commit" should not be listed on the webUI
@@ -317,9 +317,9 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
     And user "Alice" has created file "simple-folder/lorem.txt" in the server
-    And user "Alice" has shared folder "simple-folder" with user "Brian"
+    And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
     And the user re-logs in as "Brian" using the webUI
-    And user "Brian" has shared folder "simple-folder" with user "Carol"
+    And user "Brian" has shared folder "simple-folder" with user "Carol" in the server
     And the user opens folder "simple-folder" using the webUI
     And the user shares folder "simple-empty-folder" with remote user "Alice" as "Editor" using the webUI
     When the user opens folder "/" directly on the webUI
@@ -338,7 +338,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
     And user "Alice" has created file "simple-folder/lorem.txt" in the server
-    And user "Alice" has shared folder "simple-folder" with user "Brian"
+    And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
     When the user re-logs in as "Brian" using the webUI
     And the user opens folder "simple-folder" using the webUI
     And the user shares folder "simple-empty-folder" with remote user "Alice" as "Editor" using the webUI

@@ -102,10 +102,10 @@ Feature: Locks
       | lockscope | shared |
     And user "brand-new-user" has locked file "data.zip" setting the following properties in the server
       | lockscope | exclusive |
-    And user "brand-new-user" has shared file "data.zip" with user "receiver"
-    And user "brand-new-user" has shared file "data.tar.gz" with user "receiver"
-    And user "brand-new-user" has shared folder "simple-folder" with user "receiver"
-    And user "brand-new-user" has shared folder "simple-empty-folder" with user "receiver"
+    And user "brand-new-user" has shared file "data.zip" with user "receiver" in the server
+    And user "brand-new-user" has shared file "data.tar.gz" with user "receiver" in the server
+    And user "brand-new-user" has shared folder "simple-folder" with user "receiver" in the server
+    And user "brand-new-user" has shared folder "simple-empty-folder" with user "receiver" in the server
     When the user browses to the shared-with-others page
     Then folder "simple-folder" should be marked as locked on the webUI
     And folder "simple-folder" should be marked as locked on the webUIAnd folder "simple-folder" should be marked as locked by user "brand-new-user" in the locks tab of the details panel on the webUI
@@ -120,16 +120,16 @@ Feature: Locks
       | lockscope | shared |
     And user "brand-new-user" has locked file "data.zip" setting the following properties in the server
       | lockscope | exclusive |
-    And user "brand-new-user" has created a public link with following settings
+    And user "brand-new-user" has created a public link with following settings in the server
       | path        | data.zip |
       | permissions | read     |
-    And user "brand-new-user" has created a public link with following settings
+    And user "brand-new-user" has created a public link with following settings in the server
       | path        | data.tar.gz |
       | permissions | read        |
-    And user "brand-new-user" has created a public link with following settings
+    And user "brand-new-user" has created a public link with following settings in the server
       | path        | simple-folder |
       | permissions | read          |
-    And user "brand-new-user" has created a public link with following settings
+    And user "brand-new-user" has created a public link with following settings in the server
       | path        | simple-empty-folder |
       | permissions | read                |
     When the user browses to the shared-via-link page using the webUI
@@ -153,10 +153,10 @@ Feature: Locks
       | lockscope | shared |
     And user "sharer" has locked file "data.zip" setting the following properties in the server
       | lockscope | exclusive |
-    And user "sharer" has shared file "data.zip" with user "brand-new-user"
-    And user "sharer" has shared file "data.tar.gz" with user "brand-new-user"
-    And user "sharer" has shared folder "simple-folder" with user "brand-new-user"
-    And user "sharer" has shared folder "simple-empty-folder" with user "brand-new-user"
+    And user "sharer" has shared file "data.zip" with user "brand-new-user" in the server
+    And user "sharer" has shared file "data.tar.gz" with user "brand-new-user" in the server
+    And user "sharer" has shared folder "simple-folder" with user "brand-new-user" in the server
+    And user "sharer" has shared folder "simple-empty-folder" with user "brand-new-user" in the server
     When the user browses to the shared-with-me page
     Then folder "simple-folder (2)" should be marked as locked on the webUI
     And folder "simple-folder (2)" should be marked as locked by user "brand-new-user" in the locks tab of the details panel on the webUI
@@ -181,9 +181,9 @@ Feature: Locks
     And user "sharer" has uploaded file "data.zip" to "data.tar.gz" in the server
     And group "receiver-group" has been created in the server
     And user "receiver2" has been added to group "receiver-group" in the server
-    And user "sharer" has shared file "data.zip" with user "receiver"
-    And user "sharer" has shared file "data.tar.gz" with group "receiver-group"
-    And user "receiver" has shared file "data.zip" with user "brand-new-user"
+    And user "sharer" has shared file "data.zip" with user "receiver" in the server
+    And user "sharer" has shared file "data.tar.gz" with group "receiver-group" in the server
+    And user "receiver" has shared file "data.zip" with user "brand-new-user" in the server
     And user "sharer" has locked file "data.zip" setting the following properties in the server
       | lockscope | shared |
     And user "receiver" has locked file "data.zip" setting the following properties in the server
@@ -241,7 +241,7 @@ Feature: Locks
     And user "sharer" has created folder "/to-share-folder" in the server
     And user "sharer" has locked folder "to-share-folder" setting the following properties in the server
       | lockscope | <lockscope> |
-    And user "sharer" has shared folder "to-share-folder" with user "brand-new-user"
+    And user "sharer" has shared folder "to-share-folder" with user "brand-new-user" in the server
     And the user has browsed to the shared-with-me page
     When the user declines share "to-share-folder" offered by user "sharer" using the webUI
     And the user browses to the files page
@@ -262,7 +262,7 @@ Feature: Locks
     And user "sharer" has created folder "/to-share-folder" in the server
     And user "sharer" has locked folder "to-share-folder" setting the following properties in the server
       | lockscope | <lockscope> |
-    And user "sharer" has shared folder "to-share-folder" with user "brand-new-user"
+    And user "sharer" has shared folder "to-share-folder" with user "brand-new-user" in the server
     And the user has browsed to the shared-with-me page
     When the user declines share "to-share-folder" offered by user "sharer" using the webUI
     And the user accepts share "to-share-folder" offered by user "sharer" using the webUI
@@ -282,7 +282,7 @@ Feature: Locks
     And user "sharer" has created folder "/to-share-folder" in the server
     And user "sharer" has locked folder "to-share-folder" setting the following properties in the server
       | lockscope | <lockscope> |
-    And user "sharer" has shared folder "to-share-folder" with user "brand-new-user"
+    And user "sharer" has shared folder "to-share-folder" with user "brand-new-user" in the server
     And the user has browsed to the shared-with-me page
     When the user declines share "to-share-folder" offered by user "sharer" using the webUI
     And the user browses to the files page
@@ -307,7 +307,7 @@ Feature: Locks
     And user "sharer" has created folder "/parent/subfolder" in the server
     And user "sharer" has locked folder "parent" setting the following properties in the server
       | lockscope | <lockscope> |
-    And user "sharer" has shared folder "parent" with user "brand-new-user"
+    And user "sharer" has shared folder "parent" with user "brand-new-user" in the server
     And the user has browsed to the shared-with-me page
     When the user declines share "parent" offered by user "sharer" using the webUI
     And the user browses to the files page
@@ -334,8 +334,8 @@ Feature: Locks
       | lockscope | <lockscope> |
     And user "sharer" has locked folder "simple-folder" setting the following properties in the server
       | lockscope | <lockscope> |
-    And user "sharer" has shared file "lorem.txt" with user "brand-new-user"
-    And user "sharer" has shared folder "simple-folder" with user "brand-new-user"
+    And user "sharer" has shared file "lorem.txt" with user "brand-new-user" in the server
+    And user "sharer" has shared folder "simple-folder" with user "brand-new-user" in the server
     When the user browses to the files page
     And the user deletes file "lorem (2).txt" using the webUI
     Then notifications should be displayed on the webUI with the text
