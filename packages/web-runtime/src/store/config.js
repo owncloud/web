@@ -1,5 +1,4 @@
 import isEmpty from 'lodash-es/isEmpty'
-import merge from 'lodash-es/merge'
 
 const state = {
   state: null,
@@ -15,7 +14,8 @@ const state = {
   openIdConnect: {
     authority: ''
   },
-  theme: {
+  themes: [],
+  currentTheme: {
     general: {
       name: '',
       slogan: '',
@@ -32,6 +32,9 @@ const state = {
     loginPage: {
       autoRedirect: true,
       backgroundImg: ''
+    },
+    designTokens: {
+      colorPalette: {}
     }
   },
   options: {
@@ -62,6 +65,9 @@ const actions = {
   },
   loadTheme(context, { theme }) {
     context.commit('LOAD_THEME', theme)
+  },
+  loadThemes(context, { theme }) {
+    context.commit('LOAD_THEMES', theme)
   }
 }
 
@@ -82,7 +88,10 @@ const mutations = {
     }
   },
   LOAD_THEME(state, theme) {
-    state.theme = merge({}, state.theme, theme)
+    state.currentTheme = theme
+  },
+  LOAD_THEMES(state, theme) {
+    state.themes = theme
   }
 }
 
@@ -109,7 +118,7 @@ const getters = {
     return parsed
   },
   theme: (state) => {
-    return state.theme
+    return state.currentTheme
   }
 }
 

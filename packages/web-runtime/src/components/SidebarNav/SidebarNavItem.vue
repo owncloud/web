@@ -1,15 +1,18 @@
 <template>
   <li class="oc-sidebar-nav-item oc-pb-xs oc-px-s" :aria-current="active ? 'page' : null">
-    <router-link
+    <oc-button
       v-oc-tooltip="toolTip"
+      type="router-link"
+      appearance="raw"
+      :variation="active ? 'inverse' : 'passive'"
       :class="['oc-sidebar-nav-item-link', { active: active }]"
       :to="target"
       :data-nav-id="index"
     >
-      <oc-icon :name="icon" :fill-type="fillType" variation="inverse" aria-hidden="true" />
+      <oc-icon :name="icon" :fill-type="fillType" aria-hidden="true" />
       <span class="oc-ml-m text" :class="{ 'text-invisible': collapsed }" v-text="name" />
       <sidebar-nav-item-highlight :index="index" :active="active" />
-    </router-link>
+    </oc-button>
   </li>
 </template>
 <script>
@@ -73,12 +76,10 @@ export default {
 <style lang="scss">
 .oc-sidebar-nav-item-link {
   position: relative;
-  align-items: center;
-  color: var(--oc-color-border);
-  display: flex;
-  font-size: 1rem;
-  font-weight: 400;
-  padding: var(--oc-space-small) var(--oc-space-small);
+  align-items: center !important;
+  display: flex !important;
+  justify-content: flex-start !important;
+  padding: var(--oc-space-small) var(--oc-space-small) !important;
   border-radius: 5px;
   white-space: nowrap;
   user-select: none;
@@ -92,18 +93,12 @@ export default {
     opacity: 0 !important;
     transition: 0s;
   }
+  &:hover,
+  &:focus {
+    text-decoration: none !important;
+  }
   &.active {
     cursor: default;
-    color: white;
-    font-size: 0.9375rem;
-    font-weight: bold;
-    text-decoration: none;
-  }
-  &:not(.active):hover {
-    color: var(--oc-color-text-inverse);
-  }
-  &:not(.active):hover {
-    background: #383838;
   }
 }
 </style>

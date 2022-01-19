@@ -6,10 +6,11 @@
       :href="href"
       target="_blank"
       appearance="raw"
+      variation="inverse"
       :aria-label="ariaLabel"
       aria-describedby="oc-feedback-link-description"
     >
-      <oc-icon name="feedback" variation="inverse" />
+      <oc-icon name="feedback" />
     </oc-button>
     <p id="oc-feedback-link-description" class="oc-invisible-sr" v-text="description" />
   </div>

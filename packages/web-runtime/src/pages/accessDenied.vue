@@ -39,38 +39,38 @@ export default {
     },
     helpDeskText() {
       if (
-        this.configuration.theme.general.helpDeskText &&
-        this.configuration.theme.general.helpDeskText.en
+        this.configuration.currentTheme.general.helpDeskText &&
+        this.configuration.currentTheme.general.helpDeskText.en
       ) {
         const lang = this.$language.current
-        if (this.configuration.theme.general.helpDeskText[lang]) {
-          return this.configuration.theme.general.helpDeskText[lang]
+        if (this.configuration.currentTheme.general.helpDeskText[lang]) {
+          return this.configuration.currentTheme.general.helpDeskText[lang]
         }
-        return this.configuration.theme.general.helpDeskText.en
+        return this.configuration.currentTheme.general.helpDeskText.en
       }
       return this.$gettext(
         'Please contact your administrator if you think this message shows up in error.'
       )
     },
     helpDeskLink() {
-      if (this.configuration.theme.general.helpDeskLink) {
-        return this.configuration.theme.general.helpDeskLink
+      if (this.configuration.currentTheme.general.helpDeskLink) {
+        return this.configuration.currentTheme.general.helpDeskLink
       }
       return ''
     },
     helpDeskLinkText() {
-      if (this.configuration.theme.general.helpDeskLinkText) {
-        return this.configuration.theme.general.helpDeskLinkText
+      if (this.configuration.currentTheme.general.helpDeskLinkText) {
+        return this.configuration.currentTheme.general.helpDeskLinkText
       }
       return ''
     },
 
     logoImg() {
-      return this.configuration.theme.logo.login
+      return this.configuration.currentTheme.logo.login
     },
 
     backgroundImg() {
-      return this.configuration.theme.loginPage.backgroundImg
+      return this.configuration.currentTheme.loginPage.backgroundImg
     }
   },
   methods: {

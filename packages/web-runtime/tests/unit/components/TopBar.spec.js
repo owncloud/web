@@ -8,7 +8,11 @@ localVue.use(Vuex)
 
 const feedbackButtonPresent = (enabled) => ({
   options: { disableFeedbackLink: !enabled },
-  theme: {
+  themes: {
+    default: {},
+    'default-dark': {}
+  },
+  currentTheme: {
     logo: {
       sidebar: ''
     }

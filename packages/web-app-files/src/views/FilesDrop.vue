@@ -68,7 +68,7 @@
       </div>
     </div>
     <div class="oc-text-center">
-      <p v-text="configuration.theme.general.slogan" />
+      <p v-text="configuration.currentTheme.general.slogan" />
     </div>
   </div>
 </template>

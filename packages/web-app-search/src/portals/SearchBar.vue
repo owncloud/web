@@ -212,51 +212,66 @@ export default {
   #files-global-search-bar {
     width: 452px;
     @media (max-width: 959px) {
-      width: 50px;
+      min-width: 2.5rem;
+      width: 2.5rem;
+      background-color: var(--oc-color-swatch-brand-default);
 
-      &:focus {
-        min-width: 252px !important;
+      input,
+      .oc-width-expand {
+        width: 2.5rem;
+      }
+
+      .oc-search-input-icon {
+        padding: 0 var(--oc-space-large);
+      }
+
+      .oc-search-clear {
+        right: var(--oc-space-medium);
+      }
+
+      &:focus-within {
+        position: absolute;
+        height: 60px;
+        left: var(--oc-space-medium);
+        margin: 0 auto;
+        top: 0;
+        width: 100vw !important;
+
+        .oc-search-input-icon {
+          padding: 0 var(--oc-space-xlarge);
+        }
       }
 
       &:focus-within input,
       input:not(:placeholder-shown) {
-        background-color: var(--oc-color-background-muted);
-        border: 1px solid rgba(75, 94, 120, 0.6);
-        top: -20px;
+        background-color: var(--oc-color-input-bg);
+        border: 1px solid var(--oc-color-input-border);
         z-index: var(--oc-z-index-modal);
-        min-width: 252px !important;
-      }
-
-      .oc-search-clear {
-        right: -200px;
+        width: 95%;
+        margin: 0 auto;
       }
     }
-  }
-
-  .oc-search {
-    min-width: 40px;
   }
 
   .oc-search-input {
     transition: 0s;
 
     @media (max-width: 959px) {
-      background: white;
+      background: var(--oc-color-input-bg);
       border: none;
       display: inline;
-      width: 2rem;
     }
   }
 
   &.options-visible {
     .oc-search-input {
-      border: 1px solid rgba(75, 94, 120, 0.6);
+      border: 1px solid var(--oc-color-input-border);
     }
   }
 }
 
 #files-global-search-options {
-  border: 1px solid rgba(75, 94, 120, 0.6);
+  border: 1px solid var(--oc-color-input-border);
   border-bottom-left-radius: 3px;
   border-bottom-right-radius: 3px;
   background-color: var(--oc-color-input-bg);
@@ -266,8 +281,10 @@ export default {
   width: 450px;
 
   @media (max-width: 959px) {
-    min-width: 250px !important;
-    max-width: 250px !important;
+    left: var(--oc-space-medium);
+    min-width: 95% !important;
+    max-width: 95% !important;
+    top: 55px;
   }
 
   ul {
@@ -320,7 +337,7 @@ export default {
         text-align: center;
 
         &.spinner {
-          border-top-color: rgba(75, 94, 120, 0.2);
+          border-top-color: var(--oc-color-input-border);
         }
       }
 
@@ -359,7 +376,7 @@ export default {
         background-color: var(--oc-color-background-muted);
 
         &.first {
-          border-top-color: rgba(75, 94, 120, 0.6);
+          border-top-color: var(--oc-color-input-border);
         }
 
         &:hover {

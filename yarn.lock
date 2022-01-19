@@ -2750,14 +2750,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vue/composition-api@npm:^1.4.3":
-  version: 1.4.3
-  resolution: "@vue/composition-api@npm:1.4.3"
+"@vue/composition-api@npm:^1.4.4":
+  version: 1.4.4
+  resolution: "@vue/composition-api@npm:1.4.4"
   dependencies:
     tslib: ^2.3.1
   peerDependencies:
     vue: ">= 2.5 < 3"
-  checksum: 638d9be202543dd9d589fe7c75e4afbffa115d2843a31abd4fec41e942e667f042f599f692f483f30ac31dc5499e5a8cfbafe75a8827cdb55e461716fad97550
+  checksum: eaada93a68aba0adb1469a1df3d50814ab564361a02f010de250e88c48b17fe77ed000ba5c5f0ed7ac79cb3384603e263a425d51df85562bda15ef79743a3415
   languageName: node
   linkType: hard
 
@@ -10943,9 +10943,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"owncloud-design-system@npm:12.0.0-alpha13":
-  version: 12.0.0-alpha13
-  resolution: "owncloud-design-system@npm:12.0.0-alpha13"
+"owncloud-design-system@npm:12.0.0-alpha14":
+  version: 12.0.0-alpha14
+  resolution: "owncloud-design-system@npm:12.0.0-alpha14"
   peerDependencies:
     "@popperjs/core": ^2.4.0
     "@vue/composition-api": ^1.4.3
@@ -10962,7 +10962,7 @@ __metadata:
     vue-inline-svg: ^2.0.0
     vue-select: ^3.12.0
     webfontloader: ^1.6.28
-  checksum: 9ff448a14e71d438d81ab1af075181d75dc998660d34434cb0cc069e85b24a5bc1441ffa1ed6f51c7205962c6ebbf83dd24d3ed74e0327aa0f29fcbaea3e589b
+  checksum: 4d13071397c162f7808026de816706851bbfee4cb4ff7b94db110dc2ca04194dc768e63d7f5d9b69b80ffe96e30fe93ce3d31c97bb71b8f2aae374e1de943ff8
   languageName: node
   linkType: hard
 
@@ -15449,7 +15449,7 @@ typescript@^4.3.2:
   dependencies:
     "@popperjs/core": ^2.4.0
     "@types/luxon": ^2.0.8
-    "@vue/composition-api": ^1.4.3
+    "@vue/composition-api": ^1.4.4
     easygettext: ^2.16.1
     filesize: ^8.0.0
     focus-trap: ^6.4.0
@@ -15458,7 +15458,7 @@ typescript@^4.3.2:
     lodash-es: ^4.17.21
     luxon: ^2.3.0
     oidc-client: 1.11.5
-    owncloud-design-system: 12.0.0-alpha13
+    owncloud-design-system: 12.0.0-alpha14
     owncloud-sdk: 1.0.0-2296
     p-queue: ^6.1.1
     popper-max-size-modifier: ^0.2.0

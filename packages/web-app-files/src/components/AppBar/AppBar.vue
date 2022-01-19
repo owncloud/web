@@ -37,10 +37,9 @@
               key="new-file-menu-btn-enabled"
               v-oc-tooltip="newButtonTooltip"
               :aria-label="newButtonAriaLabel"
-              variation="primary"
-              appearance="filled"
+              variation="inverse"
               :disabled="isNewBtnDisabled"
-              class="oc-mb-xs"
+              class="oc-mb-xs oc-background-primary-gradient"
             >
               <oc-icon name="add" />
               <translate>New</translate>
@@ -575,6 +574,7 @@ export default {
 .files-app-bar {
   background-color: var(--oc-color-background-default);
   box-sizing: border-box;
+  transition: all 0.35s cubic-bezier(0.34, 0.11, 0, 1.12);
   z-index: 2;
 
   &-actions {

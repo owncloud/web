@@ -8,7 +8,7 @@
       v-if="user.isAuthenticated && !user.userReady"
       class="loading-overlay oc-flex oc-flex-middle oc-flex-center"
       :style="{
-        backgroundImage: 'url(' + configuration.theme.loginPage.backgroundImg + ')'
+        backgroundImage: 'url(' + configuration.currentTheme.loginPage.backgroundImg + ')'
       }"
     >
       <oc-spinner size="xlarge" :aria-label="$gettext('Loading')" />
@@ -34,7 +34,7 @@
             :nav-items="sidebarNavItems"
           />
           <router-view
-            class="app-content oc-width-1-1"
+            class="app-content oc-width-1-1 oc-pl-m"
             :class="{ 'app-content-standalone': !isSidebarVisible }"
             name="app"
           />
@@ -125,7 +125,7 @@ export default {
     },
 
     favicon() {
-      return this.configuration.theme.logo.favicon
+      return this.configuration.currentTheme.logo.favicon
     },
 
     sidebarNavItems() {
@@ -280,7 +280,7 @@ export default {
       const titleSegments = [routeTitle]
 
       if (includeGeneralName) {
-        titleSegments.push(this.configuration.theme.general.name)
+        titleSegments.push(this.configuration.currentTheme.general.name)
       }
 
       if (route.params.item) {
@@ -306,7 +306,7 @@ body {
 }
 
 #web {
-  background-color: #202020;
+  background-color: var(--oc-color-swatch-brand-default);
   height: 100vh;
   max-height: 100vh;
   overflow-y: hidden;
@@ -344,6 +344,7 @@ body {
         border-bottom-right-radius: 15px;
         padding-top: 15px;
         padding-bottom: 15px;
+        transition: all 0.35s cubic-bezier(0.34, 0.11, 0, 1.12);
 
         &-standalone {
           border-radius: 15px;

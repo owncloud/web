@@ -29,7 +29,7 @@
       </div>
       <div class="oc-login-card-footer">
         <p>
-          {{ configuration.theme.general.slogan }}
+          {{ configuration.currentTheme.general.slogan }}
         </p>
       </div>
     </div>
@@ -54,20 +54,20 @@ export default {
     },
 
     $_productName() {
-      return this.configuration.theme.general.name
+      return this.configuration.currentTheme.general.name
     },
 
     logoImg() {
-      return this.configuration.theme.logo.login
+      return this.configuration.currentTheme.logo.login
     },
 
     backgroundImg() {
-      return this.configuration.theme.loginPage.backgroundImg
+      return this.configuration.currentTheme.loginPage.backgroundImg
     }
   },
 
   created() {
-    if (this.configuration.theme.loginPage.autoRedirect) {
+    if (this.configuration.currentTheme.loginPage.autoRedirect) {
       this.login()
     } else {
       this.initialized = true

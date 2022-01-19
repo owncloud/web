@@ -653,6 +653,11 @@ export default {
 }
 </script>
 <style lang="scss">
+// To be backported to ODS probably
+.oc-table-sticky .oc-table-header-cell {
+  transition: all 0.35s cubic-bezier(0.34, 0.11, 0, 1.12);
+}
+
 .resource-table {
   &-people {
     position: absolute;
