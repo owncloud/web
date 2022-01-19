@@ -12,6 +12,7 @@ Summary
 * Bugfix - Focus management in topbar dropdowns: [#6213](https://github.com/owncloud/web/pull/6213)
 * Change - Remove UiKit: [#6103](https://github.com/owncloud/web/issues/6103)
 * Change - Use remixicons for redesign: [#6142](https://github.com/owncloud/web/pull/6142)
+* Enhancement - Darkmode theme switcher: [#6240](https://github.com/owncloud/web/pull/6240)
 * Enhancement - File selection simplification: [#5967](https://github.com/owncloud/web/issues/5967)
 * Enhancement - Reorganize urls: [#6137](https://github.com/owncloud/web/pull/6137)
 * Enhancement - Lazy resource table cells: [#6204](https://github.com/owncloud/web/pull/6204)
@@ -19,7 +20,7 @@ Summary
 * Enhancement - Show parent folder for resources: [#6226](https://github.com/owncloud/web/pull/6226)
 * Enhancement - Add default sorting to the spaces list: [#6262](https://github.com/owncloud/web/pull/6262)
 * Enhancement - Implement spaces list: [#6199](https://github.com/owncloud/web/pull/6199)
-* Enhancement - Update ODS to v12.0.0-alpha12: [#6086](https://github.com/owncloud/web/pull/6086)
+* Enhancement - Update ODS to v12.0.0-alpha14: [#6086](https://github.com/owncloud/web/pull/6086)
 
 Details
 -------
@@ -53,6 +54,13 @@ Details
    https://github.com/owncloud/web/issues/6100
    https://github.com/owncloud/web/pull/6142
    https://github.com/owncloud/web/pull/6270
+
+* Enhancement - Darkmode theme switcher: [#6240](https://github.com/owncloud/web/pull/6240)
+
+   We've added a theme switcher and now initialize the user interface theme based on the user's
+   browser preferences.
+
+   https://github.com/owncloud/web/pull/6240
 
 * Enhancement - File selection simplification: [#5967](https://github.com/owncloud/web/issues/5967)
 
@@ -117,9 +125,9 @@ Details
    https://github.com/owncloud/web/issues/6104
    https://github.com/owncloud/web/pull/6199
 
-* Enhancement - Update ODS to v12.0.0-alpha12: [#6086](https://github.com/owncloud/web/pull/6086)
+* Enhancement - Update ODS to v12.0.0-alpha14: [#6086](https://github.com/owncloud/web/pull/6086)
 
-   We updated the ownCloud Design System to version 12.0.0-alpha12. Please refer to the full
+   We updated the ownCloud Design System to version 12.0.0-alpha14. Please refer to the full
    changelog in the ODS release (linked) for more details. Summary:
 
    - Change - Do not sort in OcTable:
@@ -160,7 +168,8 @@ Details
    https://github.com/owncloud/web/pull/6142
    https://github.com/owncloud/web/pull/6213
    https://github.com/owncloud/web/pull/6228
-   https://github.com/owncloud/owncloud-design-system/releases/tag/v12.0.0-alpha12
+   https://github.com/owncloud/web/pull/6240
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v12.0.0-alpha14
 
 Changelog for ownCloud Web [4.9.0] (2021-12-24)
 =======================================
