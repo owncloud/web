@@ -1,5 +1,5 @@
 import { clientService } from '../../../src/services'
-import { HttpClient } from 'web-pkg/src/http'
+import { HttpClient } from '../../../src/http'
 import mockAxios from 'jest-mock-axios'
 
 beforeEach(jest.resetAllMocks)

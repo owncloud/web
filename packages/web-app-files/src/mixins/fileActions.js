@@ -131,15 +131,18 @@ export default {
         filePath
       })
 
+      const routeOpts = {
+        name: editor.routeName || editor.app,
+        params: {
+          filePath,
+          fileId,
+          mode,
+          contextRouteName: this.$route.name
+        }
+      }
+
       if (editor.newTab) {
-        const path = this.$router.resolve({
-          name: editor.routeName,
-          params: {
-            filePath,
-            fileId,
-            mode
-          }
-        }).href
+        const path = this.$router.resolve(routeOpts).href
         const target = `${editor.routeName}-${filePath}`
         const win = window.open(path, target)
         // in case popup is blocked win will be null
@@ -149,15 +152,7 @@ export default {
         return
       }
 
-      this.$router.push({
-        name: editor.routeName || editor.app,
-        params: {
-          filePath,
-          fileId,
-          mode,
-          contextRouteName: this.$route.name
-        }
-      })
+      this.$router.push(routeOpts)
     },
 
     // TODO: Make user-configurable what is a defaultAction for a filetype/mimetype

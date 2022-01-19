@@ -1,10 +1,5 @@
-import {
-  ArchiverService,
-  archiverService as defaultArchiverService,
-  ClientService,
-  clientService as defaultClientService
-} from '../../services'
-
+import { ArchiverService, archiverService as defaultArchiverService } from '../../services'
+import { ClientService, clientService as defaultClientService } from 'web-pkg/src/services'
 import { major } from 'semver'
 import { RuntimeError } from 'web-runtime/src/container/error'
 

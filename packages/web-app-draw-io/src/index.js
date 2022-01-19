@@ -3,13 +3,24 @@ import App from './App.vue'
 
 const routes = [
   {
-    name: 'edit',
-    path: '/edit/:filePath',
+    name: 'draw-io',
+    path: '/:contextRouteName/:filePath*',
     components: {
       fullscreen: App
     },
-    meta: { hideHeadbar: true }
+    meta: {
+      hideHeadbar: true,
+      patchCleanPath: true
+    }
   }
+]
+
+const routesForFileExtensions = [
+  'files-spaces-storage',
+  'files-common-favorites',
+  'files-shares-with-others',
+  'files-shares-with-me',
+  'files-public-files'
 ]
 
 const appInfo = {
@@ -20,31 +31,19 @@ const appInfo = {
     {
       extension: 'drawio',
       newTab: true,
-      routeName: 'draw-io-edit',
+      routeName: 'draw-io',
       newFileMenu: {
         menuTitle($gettext) {
           return $gettext('New draw.io document…')
         }
       },
-      routes: [
-        'files-spaces-storage',
-        'files-common-favorites',
-        'files-shares-with-others',
-        'files-shares-with-me',
-        'files-public-files'
-      ]
+      routes: routesForFileExtensions
     },
     {
       extension: 'vsdx',
       newTab: true,
-      routeName: 'draw-io-edit',
-      routes: [
-        'files-spaces-storage',
-        'files-common-favorites',
-        'files-shares-with-others',
-        'files-shares-with-me',
-        'files-public-files'
-      ]
+      routeName: 'draw-io',
+      routes: routesForFileExtensions
     }
   ]
 }

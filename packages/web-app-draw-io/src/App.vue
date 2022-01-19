@@ -21,9 +21,17 @@ import { basename } from 'path'
 import queryString from 'query-string'
 import { DateTime } from 'luxon'
 import { DavPermission, DavProperty } from 'web-pkg/src/constants'
+import { useAppDefaults } from 'web-pkg/src/composables/useAppDefaults'
 
 export default {
   name: 'DrawIoEditor',
+  setup() {
+    return {
+      ...useAppDefaults({
+        applicationName: 'draw-io'
+      })
+    }
+  },
   data: () => ({
     loading: true,
     filePath: '',
@@ -38,7 +46,7 @@ export default {
         url = 'https://embed.diagrams.net',
         theme = 'minimal',
         autosave = false
-      } = this.$store.state.apps.fileEditors.find((editor) => editor.app === 'draw-io').config || {}
+      } = this.applicationConfig
       return { url, theme, autosave: autosave ? 1 : 0 }
     },
     iframeSource() {
@@ -56,7 +64,7 @@ export default {
     }
   },
   created() {
-    this.filePath = this.$route.params.filePath
+    this.filePath = this.currentFileContext.path
     this.fileExtension = this.filePath.split('.').pop()
     this.checkPermissions()
     window.addEventListener('message', (event) => {
@@ -87,8 +95,7 @@ export default {
       })
     },
     checkPermissions() {
-      this.$client.files
-        .fileInfo(this.filePath, [DavProperty.Permissions])
+      this.getFileInfo(this.filePath, [DavProperty.Permissions])
         .then((v) => {
           this.isReadOnly =
             v.fileInfo[DavProperty.Permissions].indexOf(DavPermission.Updateable) === -1
@@ -99,8 +106,7 @@ export default {
         })
     },
     load() {
-      this.$client.files
-        .getFileContents(this.filePath, { resolveWithResponseObject: true })
+      this.getFileContents(this.filePath, { resolveWithResponseObject: true })
         .then((resp) => {
           this.currentETag = resp.headers.ETag
           this.$refs.drawIoEditor.contentWindow.postMessage(
@@ -117,7 +123,7 @@ export default {
         })
     },
     importVisio() {
-      const url = this.$client.files.getFileUrl(this.filePath)
+      const url = this.getFileUrl(this.filePath)
       const headers = new Headers({
         Authorization: 'Bearer ' + this.getToken,
         'X-Requested-With': 'XMLHttpRequest'
@@ -161,10 +167,9 @@ export default {
         })
     },
     save(payload) {
-      this.$client.files
-        .putFileContents(this.filePath, payload.xml, {
-          previousEntityTag: this.currentETag
-        })
+      this.putFileContents(this.filePath, payload.xml, {
+        previousEntityTag: this.currentETag
+      })
         .then((resp) => {
           this.currentETag = resp.ETag
           this.$refs.drawIoEditor.contentWindow.postMessage(

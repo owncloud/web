@@ -1,6 +1,6 @@
 import { SearchPreview, SearchResult } from 'search/src/types'
 import PreviewComponent from '../../components/Search/Preview.vue'
-import { clientService } from '../../services'
+import { clientService } from 'web-pkg/src/services'
 import { buildResource } from '../../helpers/resources'
 import { Cache } from 'web-pkg/src/cache'
 import { debounce } from 'web-pkg/src/decorator'

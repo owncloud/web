@@ -1,4 +1,6 @@
-import { cacheService, clientService } from '../../services'
+import { cacheService } from '../../services'
+import { clientService } from 'web-pkg/src/services'
+
 import { ImageDimension } from '../../constants'
 
 interface AvatarUrlOptions {

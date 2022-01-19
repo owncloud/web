@@ -27,9 +27,9 @@ export default {
           // but also when accessing pages that require no auth even when authenticated
           return !this.isAuthenticated || this.$route.meta.auth === false
         },
-        // FIXME: optional publicContext parameter is a mess
-        async downloadFile(file, publicContext = null, version = null) {
-          const publicPage = publicContext !== null ? publicContext : this.publicPage()
+        // FIXME: optional publicLinkContext parameter is a mess
+        async downloadFile(file, publicLinkContext = null, version = null) {
+          const publicPage = publicLinkContext !== null ? publicLinkContext : this.publicPage()
 
           // construct the url and headers
           let url = null

@@ -1,6 +1,6 @@
 import { createLocalVue } from '@vue/test-utils'
 import { SDKSearch } from '../../../src/search'
-import { clientService } from '../../../src/services'
+import { clientService } from 'web-pkg/src/services'
 import Vuex from 'vuex'
 import VueRouter from 'vue-router'
 
