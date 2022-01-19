@@ -18,7 +18,7 @@ Feature: download files
     Then the error message with header 'Download failed' should be displayed on the webUI
     When the user reloads the current page of the webUI
     Then file "lorem.txt" should not be listed on the webUI
-    And as "Alice" file "lorem.txt" should not exist
+    And as "Alice" file "lorem.txt" should not exist in the server
 
 
   Scenario: download file with comma in the filename

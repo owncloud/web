@@ -128,11 +128,11 @@ Feature: Sharing files and folders with internal users
     And user "Alice" has shared file "lorem.txt" with user "Brian" in the server
     When the user opens the share dialog for file "lorem.txt" using the webUI
     Then user "Brian Murphy" should be listed as "Editor" in the collaborators list on the webUI
-    And as "Brian" file "lorem.txt" should exist
+    And as "Brian" file "lorem.txt" should exist in the server
     When the user deletes "Brian Murphy" as collaborator for the current file using the webUI
     Then user "Brian Murphy" should not be listed in the collaborators list on the webUI
     And file "lorem.txt" should not be listed in shared-with-others page on the webUI
-    And as "Brian" file "lorem.txt" should not exist
+    And as "Brian" file "lorem.txt" should not exist in the server
 
   @disablePreviews
   Scenario: user shares the file/folder with multiple internal users and delete the share with one user
@@ -144,14 +144,14 @@ Feature: Sharing files and folders with internal users
     When the user opens the share dialog for file "lorem.txt" using the webUI
     Then user "Brian Murphy" should be listed as "Editor" in the collaborators list on the webUI
     And user "Carol King" should be listed as "Editor" in the collaborators list on the webUI
-    And as "Brian" file "lorem.txt" should exist
-    And as "Carol" file "lorem.txt" should exist
+    And as "Brian" file "lorem.txt" should exist in the server
+    And as "Carol" file "lorem.txt" should exist in the server
     When the user deletes "Brian Murphy" as collaborator for the current file using the webUI
     Then user "Brian Murphy" should not be listed in the collaborators list on the webUI
     And user "Carol King" should be listed as "Editor" in the collaborators list on the webUI
     And file "lorem.txt" should be listed in shared-with-others page on the webUI
-    And as "Brian" file "lorem.txt" should not exist
-    But as "Carol" file "lorem.txt" should exist
+    And as "Brian" file "lorem.txt" should not exist in the server
+    But as "Carol" file "lorem.txt" should exist in the server
 
   @disablePreviews
   Scenario: Try to share file and folder that used to exist but does not anymore
@@ -172,8 +172,8 @@ Feature: Sharing files and folders with internal users
     When the user reloads the current page of the webUI
     Then file "lorem.txt" should not be listed on the webUI
     And folder "simple-folder" should not be listed on the webUI
-    And as "Alice" file "lorem.txt" should not exist
-    And as "Alice" folder "simple-folder" should not exist
+    And as "Alice" file "lorem.txt" should not exist in the server
+    And as "Alice" folder "simple-folder" should not exist in the server
 
   @issue-2897 @disablePreviews
   Scenario: sharing details of items inside a shared folder ("via" info)

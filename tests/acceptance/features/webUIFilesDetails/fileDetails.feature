@@ -42,7 +42,7 @@ Feature: User can open the details panel for any file or folder
   Scenario: View different areas of the app-sidebar for a file in favorites page
     Given user "Alice" has created file "lorem.txt" in the server
     And the user has browsed to the files page
-    And user "Alice" has favorited element "lorem.txt"
+    And user "Alice" has favorited element "lorem.txt" in the server
     And the user has browsed to the favorites page
     When the user opens the sidebar for file "lorem.txt" on the webUI
     Then the app-sidebar should be visible
@@ -57,7 +57,7 @@ Feature: User can open the details panel for any file or folder
   Scenario: View different areas of the app-sidebar for a folder in favorites page
     Given user "Alice" has created folder "simple-folder" in the server
     And the user has browsed to the files page
-    And user "Alice" has favorited element "simple-folder"
+    And user "Alice" has favorited element "simple-folder" in the server
     And the user has browsed to the favorites page
     When the user opens the sidebar for folder "simple-folder" on the webUI
     Then the app-sidebar should be visible

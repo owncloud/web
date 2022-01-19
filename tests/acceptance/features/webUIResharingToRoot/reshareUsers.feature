@@ -198,7 +198,7 @@ Feature: Resharing shared files with different permissions
     And user "Alice" has logged in using the webUI
     When the user shares folder "simple-folder" with user "Carol King" as "Custom permissions" with permissions "share, delete, update" using the webUI
     Then the error message with header "Error while sharing." should be displayed on the webUI
-    And as "Carol" folder "simple-folder" should not exist
+    And as "Carol" folder "simple-folder" should not exist in the server
 
 
   Scenario: Reshare a file and folder from shared with me page
@@ -209,8 +209,8 @@ Feature: Resharing shared files with different permissions
     And the user has browsed to the shared-with-me page
     When the user shares folder "simple-folder" with user "Carol King" as "Editor" using the webUI
     And the user shares file "lorem.txt" with user "Carol King" as "Editor" using the webUI
-    Then as "Carol" folder "simple-folder" should exist
-    And as "Carol" file "lorem.txt" should exist
+    Then as "Carol" folder "simple-folder" should exist in the server
+    And as "Carol" file "lorem.txt" should exist in the server
 
 
   Scenario: Reshare a file and folder from shared with others page
@@ -221,22 +221,22 @@ Feature: Resharing shared files with different permissions
     And the user has browsed to the shared-with-others page
     When the user shares folder "simple-folder" with user "Carol King" as "Editor" using the webUI
     And the user shares file "lorem.txt" with user "Carol King" as "Editor" using the webUI
-    Then as "Carol" folder "simple-folder" should exist
-    And as "Carol" file "lorem.txt" should exist
+    Then as "Carol" folder "simple-folder" should exist in the server
+    And as "Carol" file "lorem.txt" should exist in the server
 
 
   Scenario: Reshare a file and folder from favorites page
     Given user "Brian" has created file "lorem.txt" in the server
     And user "Brian" has shared folder "simple-folder" with user "Alice" in the server
     And user "Brian" has shared file "lorem.txt" with user "Alice" in the server
-    And user "Alice" has favorited element "simple-folder"
-    And user "Alice" has favorited element "lorem.txt"
+    And user "Alice" has favorited element "simple-folder" in the server
+    And user "Alice" has favorited element "lorem.txt" in the server
     And user "Alice" has logged in using the webUI
     When the user browses to the favorites page using the webUI
     And the user shares folder "simple-folder" with user "Carol King" as "Editor" using the webUI
     And the user shares file "lorem.txt" with user "Carol King" as "Editor" using the webUI
-    Then as "Carol" folder "simple-folder" should exist
-    And as "Carol" file "lorem.txt" should exist
+    Then as "Carol" folder "simple-folder" should exist in the server
+    And as "Carol" file "lorem.txt" should exist in the server
 
 
   Scenario: Resource owner sees resharer in collaborators list

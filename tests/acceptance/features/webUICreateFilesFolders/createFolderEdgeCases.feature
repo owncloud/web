@@ -36,7 +36,7 @@ Feature: create folder
     Then folder "sub-folder" should be listed on the webUI
     When the user reloads the current page of the webUI
     Then folder "sub-folder" should be listed on the webUI
-    And as "Alice" folder "sub-folder" should exist inside folder <folder>
+    And as "Alice" folder "sub-folder" should exist inside folder <folder> in the server
     Examples:
       | folder    |
      #| "?&%0"    |
@@ -54,7 +54,7 @@ Feature: create folder
     Then folder "sub-folder" should be listed on the webUI
     When the user reloads the current page of the webUI
     Then folder "sub-folder" should be listed on the webUI
-    And as "Alice" folder "sub-folder" should exist inside folder <folder>
+    And as "Alice" folder "sub-folder" should exist inside folder <folder> in the server
     Examples:
       | folder                  |
       | "0"                     |

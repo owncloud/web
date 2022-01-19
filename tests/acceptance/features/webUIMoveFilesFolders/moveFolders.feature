@@ -75,14 +75,14 @@ Feature: move folders
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions in the server
     And user "Alice" has logged in using the webUI
     When the user tries to move folder "simple-empty-folder" into folder "simple-folder (2)" using the webUI
-    Then as "Alice" folder "simple-folder (2)/simple-empty-folder" should not exist
+    Then as "Alice" folder "simple-folder (2)/simple-empty-folder" should not exist in the server
 
 
   Scenario: move a folder into the same folder
     Given user "Alice" has logged in using the webUI
     When the user tries to move folder "simple-empty-folder" into folder "simple-empty-folder" using the webUI
     Then the error message with header 'Failed to move "simple-empty-folder"' should be displayed on the webUI
-    And as "Alice" folder "simple-empty-folder/simple-empty-folder" should not exist
+    And as "Alice" folder "simple-empty-folder/simple-empty-folder" should not exist in the server
 
 
   Scenario: move a folder into another folder with same name
@@ -91,5 +91,5 @@ Feature: move folders
     When the user moves folder "simple-empty-folder" into folder "simple-folder/simple-empty-folder" using the webUI
     Then breadcrumb for folder "simple-empty-folder" should be displayed on the webUI
     And folder "simple-empty-folder" should be listed on the webUI
-    And as "Alice" folder "simple-folder/simple-empty-folder/simple-empty-folder" should exist
-    And as "Alice" folder "simple-empty-folder" should not exist
+    And as "Alice" folder "simple-folder/simple-empty-folder/simple-empty-folder" should exist in the server
+    And as "Alice" folder "simple-empty-folder" should not exist in the server

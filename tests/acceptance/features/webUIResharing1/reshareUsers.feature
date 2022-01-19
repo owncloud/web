@@ -191,7 +191,7 @@ Feature: Resharing shared files with different permissions
     When the user opens folder "Shares" using the webUI
     And the user shares folder "simple-folder" with user "Carol King" as "Custom permissions" with permissions "share, delete, update" using the webUI
     Then the error message with header "Error while sharing." should be displayed on the webUI
-    And as "Carol" folder "Shares/simple-folder" should not exist
+    And as "Carol" folder "Shares/simple-folder" should not exist in the server
     And user "Carol" should not have received any shares in the server
 
 
@@ -207,8 +207,8 @@ Feature: Resharing shared files with different permissions
     And the user shares file "lorem.txt" with user "Carol King" as "Editor" using the webUI
     And user "Carol" accepts the share "Shares/simple-folder" offered by user "Alice" using the sharing API in the server
     And user "Carol" accepts the share "Shares/lorem.txt" offered by user "Alice" using the sharing API in the server
-    Then as "Carol" folder "/Shares/simple-folder" should exist
-    And as "Carol" file "/Shares/lorem.txt" should exist
+    Then as "Carol" folder "/Shares/simple-folder" should exist in the server
+    And as "Carol" file "/Shares/lorem.txt" should exist in the server
 
 
   Scenario: Reshare a file and folder from shared with others page
@@ -223,8 +223,8 @@ Feature: Resharing shared files with different permissions
     And the user shares file "lorem.txt" with user "Carol King" as "Editor" using the webUI
     And user "Carol" accepts the share "Shares/simple-folder" offered by user "Brian" using the sharing API in the server
     And user "Carol" accepts the share "Shares/lorem.txt" offered by user "Brian" using the sharing API in the server
-    Then as "Carol" folder "/Shares/simple-folder" should exist
-    And as "Carol" file "/Shares/lorem.txt" should exist
+    Then as "Carol" folder "/Shares/simple-folder" should exist in the server
+    And as "Carol" file "/Shares/lorem.txt" should exist in the server
 
   @issue-ocis-1330
   Scenario: Reshare a file and folder from favorites page
@@ -233,16 +233,16 @@ Feature: Resharing shared files with different permissions
     And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian" in the server
     And user "Brian" has shared file "lorem.txt" with user "Alice" in the server
     And user "Alice" has accepted the share "Shares/lorem.txt" offered by user "Brian" in the server
-    And user "Alice" has favorited element "/Shares/simple-folder"
-    And user "Alice" has favorited element "/Shares/lorem.txt"
+    And user "Alice" has favorited element "/Shares/simple-folder" in the server
+    And user "Alice" has favorited element "/Shares/lorem.txt" in the server
     And user "Alice" has logged in using the webUI
     When the user browses to the favorites page using the webUI
     And the user shares folder "Shares/simple-folder" with user "Carol King" as "Editor" using the webUI
     And the user shares file "Shares/lorem.txt" with user "Carol King" as "Editor" using the webUI
     And user "Carol" accepts the share "Shares/simple-folder" offered by user "Alice" using the sharing API in the server
     And user "Carol" accepts the share "Shares/lorem.txt" offered by user "Alice" using the sharing API in the server
-    Then as "Carol" folder "/Shares/simple-folder" should exist
-    And as "Carol" file "/Shares/lorem.txt" should exist
+    Then as "Carol" folder "/Shares/simple-folder" should exist in the server
+    And as "Carol" file "/Shares/lorem.txt" should exist in the server
 
   @issue-product-270
   Scenario: Resource owner sees resharer in collaborators list

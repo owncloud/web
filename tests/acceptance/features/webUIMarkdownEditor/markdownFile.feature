@@ -14,7 +14,7 @@ Feature: create markdown files
     When the user creates a markdown file with the name "simple_new.md" using the webUI
     Then the file "simple_new.md" should be displayed in the markdown editor webUI
     When the user closes the markdown editor using the webUI
-    Then as "Alice" file "simple_new.md" should exist
+    Then as "Alice" file "simple_new.md" should exist in the server
     And file "simple_new.md" should be listed on the webUI
 
   @disablePreviews
@@ -23,7 +23,7 @@ Feature: create markdown files
     When the user inputs the content "updated content" in the markdown editor webUI
     And the user saves the file in the markdown editor webUI
     And the user closes the markdown editor using the webUI
-    Then as "Alice" the file "simple.md" should have the content "updated content"
+    Then as "Alice" the file "simple.md" should have the content "updated content" in the server
 
   @disablePreviews
   Scenario: append new content in a markdown file
@@ -31,14 +31,14 @@ Feature: create markdown files
     When the user appends the content " new content added" in the markdown editor webUI
     And the user saves the file in the markdown editor webUI
     And the user closes the markdown editor using the webUI
-    Then as "Alice" the file "simple.md" should have the content "simple markdown file new content added"
+    Then as "Alice" the file "simple.md" should have the content "simple markdown file new content added" in the server
 
   @disablePreviews
   Scenario: close the markdown editor without saving the updated content
     Given the user has opened file "simple.md" in the markdown editor webUI
     When the user inputs the content "updated content" in the markdown editor webUI
     And the user closes the markdown editor using the webUI
-    And as "Alice" the file "simple.md" should have the content "simple markdown file"
+    And as "Alice" the file "simple.md" should have the content "simple markdown file" in the server
 
   @disablePreviews
   Scenario: preview content of the file

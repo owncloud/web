@@ -165,7 +165,7 @@ Feature: Search
   Scenario: Search for favorited folder in favorites page
     Given user "Alice" has created folder "favorite folder" in the server
     And user "Alice" has created folder "not favorite folder" in the server
-    And user "Alice" has favorited element "favorite folder"
+    And user "Alice" has favorited element "favorite folder" in the server
     When the user browses to the favorites page
     And the user searches for "favorite" using the webUI
     Then folder "favorite folder" should be listed on the webUI
@@ -178,8 +178,8 @@ Feature: Search
     When the user searches for "file-to" using the webUI
     And the user deletes file "file-to-delete.txt" using the webUI
     Then file "file-to-delete.txt" should not be listed on the webUI
-    And as "Alice" file "file-to-delete.txt" should not exist
-    And as "Alice" the file with original path "file-to-delete.txt" should exist in the trashbin
+    And as "Alice" file "file-to-delete.txt" should not exist in the server
+    And as "Alice" the file with original path "file-to-delete.txt" should exist in the trashbin in the server
 
 
   Scenario: Search for files/folders with comma in their name

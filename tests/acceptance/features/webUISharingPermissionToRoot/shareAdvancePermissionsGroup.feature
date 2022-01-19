@@ -54,7 +54,7 @@ Feature: Sharing folders with internal groups with role as advanced permissions
       | item_type   | folder               |
       | permissions | <actual-permissions> |
     But group "grp1" should not be listed in the collaborators list on the webUI
-    And as "Alice" folder "simple-folder (2)" should not exist
+    And as "Alice" folder "simple-folder (2)" should not exist in the server
     Examples:
       | role                 | displayed-role       | extra-permissions     | displayed-permissions | actual-permissions          |
       # | Custom permissions | Custom permissions    | delete                        | delete                | read, delete                 |

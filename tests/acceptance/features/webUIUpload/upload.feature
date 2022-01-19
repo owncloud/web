@@ -40,9 +40,9 @@ Feature: File Upload
       | entry_name |
       | parent.txt |
       | CHILD      |
-    And as "Alice" folder "PARENT" should exist
-    And as "Alice" file "PARENT/parent.txt" should exist
-    And as "Alice" folder "PARENT/CHILD" should exist
+    And as "Alice" folder "PARENT" should exist in the server
+    And as "Alice" file "PARENT/parent.txt" should exist in the server
+    And as "Alice" folder "PARENT/CHILD" should exist in the server
 
   @smokeTest @ocisSmokeTest
   Scenario: Upload of a folder inside a subdirectory
@@ -57,9 +57,9 @@ Feature: File Upload
       | entry_name |
       | parent.txt |
       | CHILD      |
-    And as "Alice" folder "simple-empty-folder/PARENT" should exist
-    And as "Alice" file "simple-empty-folder/PARENT/parent.txt" should exist
-    And as "Alice" folder "simple-empty-folder/PARENT/CHILD" should exist
+    And as "Alice" folder "simple-empty-folder/PARENT" should exist in the server
+    And as "Alice" file "simple-empty-folder/PARENT/parent.txt" should exist in the server
+    And as "Alice" folder "simple-empty-folder/PARENT/CHILD" should exist in the server
 
   @smokeTest @ocisSmokeTest
   Scenario: uploading a big file (when chunking is implemented this upload should be chunked)
@@ -172,5 +172,5 @@ Feature: File Upload
     Then the following resources should be listed on the webUI
       | entry_name        |
       | sunday,monday.txt |
-    And as "Alice" folder "Folder,With,Comma" should exist
-    And as "Alice" file "Folder,With,Comma/sunday,monday.txt" should exist
+    And as "Alice" folder "Folder,With,Comma" should exist in the server
+    And as "Alice" file "Folder,With,Comma/sunday,monday.txt" should exist in the server

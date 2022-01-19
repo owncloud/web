@@ -65,7 +65,7 @@ Feature: Mark file as favorite
   Scenario: navigate to the favorites page using the menu
     Given user "Alice" has uploaded file "data.zip" to "data.zip" in the server
     And the user has reloaded the current page of the webUI
-    And user "Alice" has favorited element "data.zip"
+    And user "Alice" has favorited element "data.zip" in the server
     When the user browses to the favorites page using the webUI
     Then the count of files and folders shown on the webUI should be 1
     And file "data.zip" should be listed on the webUI
@@ -123,8 +123,8 @@ Feature: Mark file as favorite
     And the user marks folder "simple-folder" as favorite using the webUI
     Then the error message with header 'Failed to change favorite state of "simple-folder"' should be displayed on the webUI
     And folder "simple-folder" should not be marked as favorite on the webUI
-    And as "Alice" file "lorem.txt" should not exist
-    And as "Alice" folder "simple-folder" should not exist
+    And as "Alice" file "lorem.txt" should not exist in the server
+    And as "Alice" folder "simple-folder" should not exist in the server
 
 
   Scenario: Favourite files and folders with comma in the names

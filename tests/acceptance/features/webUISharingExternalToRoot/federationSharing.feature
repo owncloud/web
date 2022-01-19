@@ -162,7 +162,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     Then file "lorem.txt" should not be listed on the webUI
     When the user browses to the shared-with-me page
     Then file "lorem.txt" should not be listed on the webUI
-    And as "Alice" file "lorem.txt" should not exist
+    And as "Alice" file "lorem.txt" should not exist in the server
     And as "Alice" file "lorem.txt" should exist on remote server
 
   @issue-2510
@@ -185,7 +185,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server in the server
     And the user has reloaded the current page of the webUI
     When the user shares folder "simple-folder" with user "Brian Murphy" as "Viewer" using the webUI
-    Then as "Brian" file "simple-folder/lorem.txt" should exist
+    Then as "Brian" file "simple-folder/lorem.txt" should exist in the server
     And user "Brian" should have received a share with these details in the server:
       | field       | value       |
       | uid_owner   | Alice       |
@@ -257,7 +257,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And the user uploads file "new-lorem.txt" using the webUI
     Then file "new-lorem.txt" should be listed on the webUI
     And as "Alice" file "simple-folder/simple-empty-folder/new-lorem.txt" should exist on remote server
-    And as "Alice" file "simple-folder/simple-empty-folder/new-lorem.txt" should exist
+    And as "Alice" file "simple-folder/simple-empty-folder/new-lorem.txt" should exist in the server
 
 
   Scenario: rename a file in a folder inside a shared folder
@@ -269,10 +269,10 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     When the user opens folder "/'single'quotes/simple-empty-folder" directly on the webUI
     And the user renames file "for-git-commit" to "not-for-git-commit" using the webUI
     Then file "for-git-commit" should not be listed on the webUI
-    And as "Alice" file "'single'quotes/simple-empty-folder/for-git-commit" should not exist
+    And as "Alice" file "'single'quotes/simple-empty-folder/for-git-commit" should not exist in the server
     And as "Alice" file "'single'quotes/simple-empty-folder/for-git-commit" should not exist on remote server
     But file "not-for-git-commit" should be listed on the webUI
-    And as "Alice" file "'single'quotes/simple-empty-folder/not-for-git-commit" should exist
+    And as "Alice" file "'single'quotes/simple-empty-folder/not-for-git-commit" should exist in the server
     And as "Alice" file "'single'quotes/simple-empty-folder/not-for-git-commit" should exist on remote server
 
 
@@ -285,7 +285,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     When the user opens folder "/'single'quotes/simple-empty-folder" directly on the webUI
     And the user deletes file "for-git-commit" using the webUI
     Then file "for-git-commit" should not be listed on the webUI
-    And as "Alice" file "'single'quotes/simple-empty-folder/for-git-commit" should not exist
+    And as "Alice" file "'single'quotes/simple-empty-folder/for-git-commit" should not exist in the server
     And as "Alice" file "'single'quotes/simple-empty-folder/for-git-commit" should not exist on remote server
 
   @issue-2060

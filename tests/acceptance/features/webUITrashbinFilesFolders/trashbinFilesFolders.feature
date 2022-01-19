@@ -28,10 +28,10 @@ Feature: files and folders exist in the trashbin after being deleted
       | strängé नेपाली folder                 |
       | strängé filename (duplicate #2 &).txt |
     And the user browses to the trashbin page
-    Then as "Alice" folder "simple-folder" should exist in the trashbin
-    And as "Alice" file "lorem.txt" should exist in the trashbin
-    And as "Alice" folder "strängé नेपाली folder" should exist in the trashbin
-    And as "Alice" file "strängé filename (duplicate #2 &).txt" should exist in the trashbin
+    Then as "Alice" folder "simple-folder" should exist in the trashbin in the server
+    And as "Alice" file "lorem.txt" should exist in the trashbin in the server
+    And as "Alice" folder "strängé नेपाली folder" should exist in the trashbin in the server
+    And as "Alice" file "strängé filename (duplicate #2 &).txt" should exist in the trashbin in the server
     And the deleted elements should be listed on the webUI
 
   @ocis-reva-issue-111 @skipOnOCIS @issue-product-183 @issue-product-186 @disablePreviews
@@ -70,12 +70,12 @@ Feature: files and folders exist in the trashbin after being deleted
       | lorem.txt         |
       | sample,1.txt      |
     And the user browses to the trashbin page
-    Then as "Alice" file "data.zip" should exist in the trashbin
-    And as "Alice" file "lorem.txt" should exist in the trashbin
-    And as "Alice" file "sample,1.txt" should exist in the trashbin
-    And as "Alice" folder "simple-folder" should exist in the trashbin
-    And as "Alice" folder "Folder,With,Comma" should exist in the trashbin
-    And as "Alice" the file with original path "simple-folder/lorem.txt" should exist in the trashbin
+    Then as "Alice" file "data.zip" should exist in the trashbin in the server
+    And as "Alice" file "lorem.txt" should exist in the trashbin in the server
+    And as "Alice" file "sample,1.txt" should exist in the trashbin in the server
+    And as "Alice" folder "simple-folder" should exist in the trashbin in the server
+    And as "Alice" folder "Folder,With,Comma" should exist in the trashbin in the server
+    And as "Alice" the file with original path "simple-folder/lorem.txt" should exist in the trashbin in the server
     And the deleted elements should be listed on the webUI
 
   @skipOnOCIS @issue-1725 @issue-1910 @issue-product-186
@@ -84,8 +84,8 @@ Feature: files and folders exist in the trashbin after being deleted
     And user "Alice" has created folder "my-other-empty-folder" in the server
     When the user reloads the current page of the webUI
     And the user deletes folder "my-empty-folder" using the webUI
-    Then as "Alice" folder "my-empty-folder" should exist in the trashbin
-    But as "Alice" the folder with original path "my-other-empty-folder" should not exist in the trashbin
+    Then as "Alice" folder "my-empty-folder" should exist in the trashbin in the server
+    But as "Alice" the folder with original path "my-other-empty-folder" should not exist in the trashbin in the server
     When the user browses to the trashbin page
     Then folder "my-empty-folder" should be listed on the webUI
     But folder "my-other-empty-folder" should not be listed on the webUI
@@ -108,9 +108,9 @@ Feature: files and folders exist in the trashbin after being deleted
       | name      |
       | lorem.txt |
     And the user browses to the trashbin page
-    Then as "Alice" the file with original path "lorem.txt" should exist in the trashbin
-    And as "Alice" the file with original path "simple-folder/lorem.txt" should exist in the trashbin
-    And as "Alice" the file with original path "strängé नेपाली folder/lorem.txt" should exist in the trashbin
+    Then as "Alice" the file with original path "lorem.txt" should exist in the trashbin in the server
+    And as "Alice" the file with original path "simple-folder/lorem.txt" should exist in the trashbin in the server
+    And as "Alice" the file with original path "strängé नेपाली folder/lorem.txt" should exist in the trashbin in the server
     And file "lorem.txt" should be listed on the webUI
 #    And file "lorem.txt" with path "./lorem.txt" should be listed in the trashbin on the webUI
 #    And file "lorem.txt" with path "simple-folder/lorem.txt" should be listed in the trashbin on the webUI

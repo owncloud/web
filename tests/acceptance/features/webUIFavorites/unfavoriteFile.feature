@@ -15,9 +15,9 @@ Feature: Unmark file/folder as favorite
     And user "Alice" has uploaded file "data.zip" to "data.zip" in the server
     And user "Alice" has created file "lorem.txt" in the server
     And the user has reloaded the current page of the webUI
-    And user "Alice" has favorited element "data.zip"
-    And user "Alice" has favorited element "data.tar.gz"
-    And user "Alice" has favorited element "lorem.txt"
+    And user "Alice" has favorited element "data.zip" in the server
+    And user "Alice" has favorited element "data.tar.gz" in the server
+    And user "Alice" has favorited element "lorem.txt" in the server
     And the user has browsed to the files page
     When the user unmarks the favorited file "data.zip" using the webUI
     Then as user "Alice" file "data.zip" should not be marked as favorite in the server
@@ -36,9 +36,9 @@ Feature: Unmark file/folder as favorite
     And user "Alice" has created folder "simple-empty-folder" in the server
     And user "Alice" has created folder "0" in the server
     And the user has reloaded the current page of the webUI
-    And user "Alice" has favorited element "simple-folder"
-    And user "Alice" has favorited element "simple-empty-folder"
-    And user "Alice" has favorited element "0"
+    And user "Alice" has favorited element "simple-folder" in the server
+    And user "Alice" has favorited element "simple-empty-folder" in the server
+    And user "Alice" has favorited element "0" in the server
     And the user has browsed to the files page
     When the user unmarks the favorited folder "simple-folder" using the webUI
     Then as user "Alice" folder "simple-folder" should not be marked as favorite in the server
@@ -57,9 +57,9 @@ Feature: Unmark file/folder as favorite
     And user "Alice" has uploaded file "data.tar.gz" to "data.tar.gz" in the server
     And user "Alice" has created file "lorem.txt" in the server
     And the user has reloaded the current page of the webUI
-    And user "Alice" has favorited element "data.zip"
-    And user "Alice" has favorited element "data.tar.gz"
-    And user "Alice" has favorited element "lorem.txt"
+    And user "Alice" has favorited element "data.zip" in the server
+    And user "Alice" has favorited element "data.tar.gz" in the server
+    And user "Alice" has favorited element "lorem.txt" in the server
     And the user has browsed to the favorites page
     When the user unmarks the favorited file "data.zip" using the webUI
     Then file "data.zip" should be listed on the webUI
@@ -74,9 +74,9 @@ Feature: Unmark file/folder as favorite
     And user "Alice" has created folder "simple-empty-folder" in the server
     And user "Alice" has created folder "0" in the server
     And the user has reloaded the current page of the webUI
-    And user "Alice" has favorited element "simple-folder"
-    And user "Alice" has favorited element "simple-empty-folder"
-    And user "Alice" has favorited element "0"
+    And user "Alice" has favorited element "simple-folder" in the server
+    And user "Alice" has favorited element "simple-empty-folder" in the server
+    And user "Alice" has favorited element "0" in the server
     And the user has browsed to the favorites page
     When the user unmarks the favorited folder "simple-folder" using the webUI
     Then folder "simple-folder" should be listed on the webUI
@@ -90,8 +90,8 @@ Feature: Unmark file/folder as favorite
     Given user "Alice" has uploaded file "data.zip" to "data.zip" in the server
     And user "Alice" has created folder "simple-folder" in the server
     And the user has reloaded the current page of the webUI
-    And user "Alice" has favorited element "data.zip"
-    And user "Alice" has favorited element "simple-folder"
+    And user "Alice" has favorited element "data.zip" in the server
+    And user "Alice" has favorited element "simple-folder" in the server
     And the user has browsed to the favorites page
     When the user unmarks the favorited folder "simple-folder" using the webUI sidebar
     And the user unmarks the favorited file "data.zip" using the webUI sidebar
@@ -105,8 +105,8 @@ Feature: Unmark file/folder as favorite
     Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has created folder "simple-folder" in the server
     And the user has reloaded the current page of the webUI
-    And user "Alice" has favorited element "simple-folder"
-    And user "Alice" has favorited element "lorem.txt"
+    And user "Alice" has favorited element "simple-folder" in the server
+    And user "Alice" has favorited element "lorem.txt" in the server
     And the user has browsed to the files page
     And the following files have been deleted by user "Alice" in the server
       | name          |
@@ -119,5 +119,5 @@ Feature: Unmark file/folder as favorite
     And the user unmarks the favorited folder "simple-folder" using the webUI
     Then the error message with header 'Failed to change favorite state of "simple-folder"' should be displayed on the webUI
     And folder "simple-folder" should be marked as favorite on the webUI
-    And as "Alice" file "lorem.txt" should not exist
-    And as "Alice" folder "simple-folder" should not exist
+    And as "Alice" file "lorem.txt" should not exist in the server
+    And as "Alice" folder "simple-folder" should not exist in the server

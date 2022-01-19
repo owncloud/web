@@ -21,8 +21,8 @@ Feature: disable sharing
 
   Scenario: Users tries to share from favorites page when sharing is disabled
     Given the setting "shareapi_enabled" of app "core" has been set to "no"
-    And user "Alice" has favorited element "lorem.txt"
-    And user "Alice" has favorited element "simple-folder"
+    And user "Alice" has favorited element "lorem.txt" in the server
+    And user "Alice" has favorited element "simple-folder" in the server
     And user "Alice" has logged in using the webUI
     When the user browses to the favorites page
     Then it should not be possible to share folder "simple-folder" using the webUI

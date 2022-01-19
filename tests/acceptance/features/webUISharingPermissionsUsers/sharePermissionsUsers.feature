@@ -203,7 +203,7 @@ Feature: Sharing files and folders with internal users with different permission
     And the user shares folder "simple-empty-folder" with user "Carol King" as "Custom permissions" with permissions "share, delete, update" using the webUI
     Then the error message with header "Error while sharing." should be displayed on the webUI
     And user "Carol" should not have received any shares in the server
-    And as "Carol" folder "/Shares/simple-empty-folder" should not exist
+    And as "Carol" folder "/Shares/simple-empty-folder" should not exist in the server
 
   @issue-ocis-2260
   Scenario: User is not allowed to update permissions of a reshared sub-folder to higher permissions than what user has received
@@ -217,7 +217,7 @@ Feature: Sharing files and folders with internal users with different permission
     And the user shares folder "simple-empty-folder" with user "Carol King" as "Custom permissions" with permissions "share, delete, update, create" using the webUI
     Then the error message with header "Error while sharing." should be displayed on the webUI
     And user "Carol" should not have received any shares in the server
-    And as "Carol" folder "/Shares/simple-empty-folder" should not exist
+    And as "Carol" folder "/Shares/simple-empty-folder" should not exist in the server
 
   @issue-ocis-2260
   Scenario: User is allowed to update permissions of a reshared sub-folder within the permissions that the user has received

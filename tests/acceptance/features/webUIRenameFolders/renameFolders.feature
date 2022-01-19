@@ -149,8 +149,8 @@ Feature: rename folders
     When the user reloads the current page of the webUI
     Then folder "simple-folder" should not be listed on the webUI
     And folder "new-simple-folder" should not be listed on the webUI
-    And as "Alice" folder "simple-folder" should not exist
-    And as "Alice" folder "new-simple-folder" should not exist
+    And as "Alice" folder "simple-folder" should not exist in the server
+    And as "Alice" folder "new-simple-folder" should not exist in the server
 
 
   Scenario Outline: Rename a folder to a name with dot
