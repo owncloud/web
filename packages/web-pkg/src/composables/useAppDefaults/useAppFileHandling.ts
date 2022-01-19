@@ -38,7 +38,7 @@ export function useAppFileHandling(options: AppFileHandlingOptions): AppFileHand
       return [client.files.getFileUrl(urlPath), queryStr].filter(Boolean).join('?')
     }
 
-    // If the mediaFile does not contain the downloadURL we fallback to the normal
+    // If the resource does not contain the downloadURL we fallback to the normal
     // public files path.
     if (!downloadURL) {
       const urlPath = ['..', 'dav', 'public-files', path].join('/')
