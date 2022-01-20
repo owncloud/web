@@ -30,7 +30,7 @@ config = {
     "branches": [
         "master",
     ],
-    "yarnlint": True,
+    "yarnlint": False,
     "acceptance": {
         "webUI": {
             "type": FULL,
@@ -753,12 +753,9 @@ def main(ctx):
 def beforePipelines(ctx):
     return checkForRecentBuilds(ctx) + \
            checkStarlark() + \
-           documentation(ctx) + \
-           changelog(ctx) + \
            yarnCache(ctx) + \
            cacheOcisPipeline(ctx) + \
-           pipelinesDependsOn(buildCacheWeb(ctx), yarnCache(ctx)) + \
-           pipelinesDependsOn(yarnlint(ctx), yarnCache(ctx))
+           pipelinesDependsOn(buildCacheWeb(ctx), yarnCache(ctx))
 
 def stagePipelines(ctx):
     unit_test_pipelines = unitTests(ctx)
