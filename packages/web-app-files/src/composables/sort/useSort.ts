@@ -1,5 +1,7 @@
-import { ref, computed, ComputedRef, unref } from '@vue/composition-api'
+import { ref, Ref, computed, ComputedRef, unref } from '@vue/composition-api'
 import { MaybeRef, MaybeReadonlyRef } from 'web-pkg/src/utils'
+import { QueryValue, useRouteName, useRouteQueryPersisted } from '../router'
+import { SortConstants } from './constants'
 
 export enum SortDir {
   Desc = 'desc',
@@ -18,6 +20,7 @@ interface SortOptions<T> {
   fields: MaybeRef<Array<SortField>>
   sortBy?: MaybeRef<string>
   sortDir?: MaybeRef<SortDir>
+  routeName?: MaybeRef<string>
 }
 
 interface SortResult<T> {
@@ -29,8 +32,8 @@ interface SortResult<T> {
 }
 
 export function useSort<T>(options: SortOptions<T>): SortResult<T> {
-  const sortByRef = ref(options.sortBy)
-  const sortDirRef = ref(options.sortDir)
+  const sortByRef = createSortByQueryRef(options)
+  const sortDirRef = createSortDirQueryRef(options)
 
   const sortBy = computed(() => unref(sortByRef) || firstSortableField(unref(fields)))
   const sortDir = computed(
@@ -56,6 +59,30 @@ export function useSort<T>(options: SortOptions<T>): SortResult<T> {
     sortDir,
     handleSort
   }
+}
+
+function createSortByQueryRef<T>(options: SortOptions<T>): Ref<QueryValue> {
+  if (options.sortBy) {
+    return ref(unref(options.sortBy))
+  }
+
+  return useRouteQueryPersisted({
+    name: SortConstants.sortByQueryName,
+    defaultValue: firstSortableField(unref(options.fields))?.sortBy,
+    routeName: options.routeName ? unref(options.routeName) : unref(useRouteName())
+  })
+}
+
+function createSortDirQueryRef<T>(options: SortOptions<T>): Ref<QueryValue> {
+  if (options.sortDir) {
+    return ref(unref(options.sortDir))
+  }
+
+  return useRouteQueryPersisted({
+    name: SortConstants.sortDirQueryName,
+    defaultValue: firstSortableField(unref(options.fields))?.sortDir,
+    routeName: options.routeName ? unref(options.routeName) : unref(useRouteName())
+  })
 }
 
 const firstSortableField = (fields) => {

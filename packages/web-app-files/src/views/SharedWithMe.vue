@@ -170,7 +170,13 @@ import MixinFilesListFilter from '../mixins/filesListFilter'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../constants'
-import { useFileListHeaderPosition, useRouteQuery, useSort, useStore } from '../composables'
+import {
+  useFileListHeaderPosition,
+  useRouteName,
+  useRouteQuery,
+  useSort,
+  useStore
+} from '../composables'
 import debounce from 'lodash-es/debounce'
 
 import ListLoader from '../components/FilesList/ListLoader.vue'
@@ -214,11 +220,10 @@ export default {
     )
 
     // pending shares
-    const pendingSortByPageQuery = useRouteQuery('pending-sort-by')
-    const pendingSortDirPageQuery = useRouteQuery('pending-sort-dir')
     const pending = computed(() =>
       unref(storeItems).filter((item) => item.status === ShareStatus.pending)
     )
+    const routeNamePending = computed(() => `${unref(useRouteName())}-pending`)
     const {
       sortBy: pendingSortBy,
       sortDir: pendingSortDir,
@@ -226,17 +231,15 @@ export default {
       handleSort: pendingHandleSort
     } = useSort({
       items: pending,
-      fields: fields,
-      sortBy: pendingSortByPageQuery,
-      sortDir: pendingSortDirPageQuery
+      fields,
+      routeName: routeNamePending
     })
 
     // shares depending on view mode
-    const sharesSortByPageQuery = useRouteQuery('shares-sort-by')
-    const sharesSortDirPageQuery = useRouteQuery('shares-sort-dir')
     const shares = computed(() =>
       unref(storeItems).filter((item) => item.status === unref(viewMode))
     )
+    const routeNameShares = computed(() => `${unref(useRouteName())}-shares`)
     const {
       sortBy: sharesSortBy,
       sortDir: sharesSortDir,
@@ -244,9 +247,8 @@ export default {
       handleSort: sharesHandleSort
     } = useSort({
       items: shares,
-      fields: fields,
-      sortBy: sharesSortByPageQuery,
-      sortDir: sharesSortDirPageQuery
+      fields,
+      routeName: routeNameShares
     })
 
     const loadResourcesTask = useTask(function* (signal, ref) {
