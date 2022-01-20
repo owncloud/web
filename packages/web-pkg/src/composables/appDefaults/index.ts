@@ -1,6 +1,6 @@
 import { computed, unref, Ref } from '@vue/composition-api'
-import { useRouter } from '../../../../web-app-files/src/composables/router/useRouter'
-import { useStore } from '../../../../web-app-files/src/composables/store/useStore'
+import { useRouter } from '../router'
+import { useStore } from '../store'
 import { ClientService, clientService as defaultClientService } from '../../services'
 
 import { FileContext } from './types'

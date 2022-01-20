@@ -49,13 +49,8 @@
 <script>
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 import ResourceTable, { determineSortFields } from '../components/FilesList/ResourceTable.vue'
-import {
-  useFileListHeaderPosition,
-  useStore,
-  useRouteQuery,
-  usePagination,
-  useSort
-} from '../composables'
+import { useFileListHeaderPosition, usePagination, useSort } from '../composables'
+import { useRouteQuery, useStore } from 'web-pkg/src/composables'
 import { computed, unref } from '@vue/composition-api'
 
 import { aggregateResourceShares } from '../helpers/resources'

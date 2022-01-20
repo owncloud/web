@@ -74,14 +74,8 @@ import { buildResource } from '../helpers/resources'
 import { fileList } from '../helpers/ui'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../constants'
-import {
-  useMutationSubscription,
-  useFileListHeaderPosition,
-  useStore,
-  useRouteQuery,
-  usePagination,
-  useSort
-} from '../composables'
+import { useFileListHeaderPosition, usePagination, useSort } from '../composables'
+import { useMutationSubscription, useRouteQuery, useStore } from 'web-pkg/src/composables'
 import { bus } from 'web-pkg/src/instance'
 
 import ResourceTable, { determineSortFields } from '../components/FilesList/ResourceTable.vue'

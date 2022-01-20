@@ -85,13 +85,8 @@ import { batchActions } from '../helpers/batchActions'
 import { cloneStateObject } from '../helpers/store'
 import MixinsGeneral from '../mixins'
 import MixinFilesListFilter from '../mixins/filesListFilter'
-import {
-  useFileListHeaderPosition,
-  useStore,
-  useRouteQuery,
-  usePagination,
-  useSort
-} from '../composables'
+import { useFileListHeaderPosition, usePagination, useSort } from '../composables'
+import { useRouteQuery, useStore } from 'web-pkg/src/composables'
 import { useTask } from 'vue-concurrency'
 
 import NoContentMessage from '../components/FilesList/NoContentMessage.vue'

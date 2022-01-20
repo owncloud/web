@@ -36,13 +36,13 @@
 </template>
 
 <script>
-import { useRouter, useStore } from '../../composables'
 import {
   createLocationPublic,
   createLocationSpaces,
   isLocationPublicActive,
   isLocationSpacesActive
 } from '../../router'
+import { useRouter, useStore } from 'web-pkg/src/composables'
 
 export default {
   name: 'NotFoundMessage',

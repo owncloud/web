@@ -54,7 +54,8 @@
 
 <script>
 import { mapMutations, mapState, mapActions } from 'vuex'
-import { PaginationConstants, useRouteQueryPersisted } from '../../composables'
+import { useRouteQueryPersisted } from 'web-pkg/src/composables'
+import { PaginationConstants } from '../../composables'
 
 export default {
   setup() {

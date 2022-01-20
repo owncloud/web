@@ -53,13 +53,8 @@ import { buildDeletedResource, buildResource } from '../helpers/resources'
 import MixinFilesListFilter from '../mixins/filesListFilter'
 import MixinResources from '../mixins/resources'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
-import {
-  useFileListHeaderPosition,
-  useStore,
-  useRouteQuery,
-  usePagination,
-  useSort
-} from '../composables'
+import { useFileListHeaderPosition, usePagination, useSort } from '../composables'
+import { useRouteQuery, useStore } from 'web-pkg/src/composables'
 import { useTask } from 'vue-concurrency'
 
 import ListLoader from '../components/FilesList/ListLoader.vue'

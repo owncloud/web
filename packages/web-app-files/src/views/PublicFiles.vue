@@ -53,14 +53,8 @@
 <script>
 import { mapGetters, mapActions, mapMutations, mapState } from 'vuex'
 import ResourceTable, { determineSortFields } from '../components/FilesList/ResourceTable.vue'
-import {
-  useMutationSubscription,
-  useFileListHeaderPosition,
-  useStore,
-  useRouteQuery,
-  usePagination,
-  useSort
-} from '../composables'
+import { useFileListHeaderPosition, usePagination, useSort } from '../composables'
+import { useMutationSubscription, useRouteQuery, useStore } from 'web-pkg/src/composables'
 import { fileList } from '../helpers/ui'
 
 import MixinAccessibleBreadcrumb from '../mixins/accessibleBreadcrumb'

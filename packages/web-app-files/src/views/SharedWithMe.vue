@@ -170,13 +170,8 @@ import MixinFilesListFilter from '../mixins/filesListFilter'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../constants'
-import {
-  useFileListHeaderPosition,
-  useRouteName,
-  useRouteQuery,
-  useSort,
-  useStore
-} from '../composables'
+import { useFileListHeaderPosition, useSort } from '../composables'
+import { useRouteName, useRouteQuery, useStore } from 'web-pkg/src/composables'
 import debounce from 'lodash-es/debounce'
 
 import ListLoader from '../components/FilesList/ListLoader.vue'

@@ -36,7 +36,8 @@
 </template>
 
 <script>
-import { useStore, useRouteQuery, usePagination } from '../../composables'
+import { usePagination } from '../../composables'
+import { useRouteQuery, useStore } from 'web-pkg/src/composables'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageType, ImageDimension } from '../../constants'
 import { createLocationSpaces } from '../../router'

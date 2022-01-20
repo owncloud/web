@@ -1,6 +1,6 @@
 import { Ref, watch } from '@vue/composition-api'
 import { QueryValue, useRouteQuery } from './useRouteQuery'
-import { useLocalStorage } from 'web-pkg/src/composables/localStorage/useLocalStorage'
+import { useLocalStorage } from '../localStorage'
 
 export interface RouteQueryPersistedOptions {
   name: string

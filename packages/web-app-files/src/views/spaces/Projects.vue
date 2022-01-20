@@ -50,7 +50,7 @@ import NoContentMessage from '../../components/FilesList/NoContentMessage.vue'
 import ListLoader from '../../components/FilesList/ListLoader.vue'
 import { client } from 'web-client'
 import { ref } from '@vue/composition-api'
-import { useStore } from '../../composables'
+import { useStore } from 'web-pkg/src/composables'
 import { useTask } from 'vue-concurrency'
 
 export default {

@@ -1,6 +1,6 @@
 import { ref, computed, ComputedRef, unref } from '@vue/composition-api'
 import { MaybeRef } from 'web-pkg/src/utils'
-import { useRouteQueryPersisted } from '../router'
+import { useRouteQueryPersisted } from 'web-pkg/src/composables'
 import { PaginationConstants } from './constants'
 
 interface PaginationOptions<T> {

@@ -1,4 +1,4 @@
-import { useRouter } from '../../../../src/composables'
+import { useRouter } from 'web-pkg/src/composables'
 import { createWrapper } from './spec'
 import VueRouter from 'vue-router'
 

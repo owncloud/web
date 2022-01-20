@@ -52,7 +52,7 @@ import {
   defineComponent,
   customRef
 } from '@vue/composition-api'
-import { useStore } from '../../../../composables'
+import { useStore } from 'web-pkg/src/composables'
 import { ShareTypes } from '../../../../helpers/share'
 
 export default defineComponent({

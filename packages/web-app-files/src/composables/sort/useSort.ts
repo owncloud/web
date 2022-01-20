@@ -1,6 +1,6 @@
 import { ref, Ref, computed, ComputedRef, unref } from '@vue/composition-api'
 import { MaybeRef, MaybeReadonlyRef } from 'web-pkg/src/utils'
-import { QueryValue, useRouteName, useRouteQueryPersisted } from '../router'
+import { QueryValue, useRouteName, useRouteQueryPersisted } from 'web-pkg/src/composables'
 import { SortConstants } from './constants'
 
 export enum SortDir {
