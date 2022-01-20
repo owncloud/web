@@ -54,19 +54,17 @@
 
 <script>
 import { mapMutations, mapState, mapActions } from 'vuex'
-import { watch } from '@vue/composition-api'
-import { useRouteQuery, useDefaults } from '../../composables'
+import { PaginationConstants, useRouteQueryPersisted } from '../../composables'
 
 export default {
   setup() {
-    const { pagination: paginationDefaults } = useDefaults()
-    const itemsPerPage = useRouteQuery('items-per-page', paginationDefaults.perPage.value)
-    watch(itemsPerPage, (v) => {
-      paginationDefaults.perPage.value = v
+    const perPageQuery = useRouteQueryPersisted({
+      name: PaginationConstants.perPageQueryName,
+      defaultValue: PaginationConstants.perPageDefault
     })
 
     return {
-      itemsPerPage
+      itemsPerPage: perPageQuery
     }
   },
   computed: {

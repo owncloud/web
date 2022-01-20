@@ -90,7 +90,6 @@ import {
   useStore,
   useRouteQuery,
   usePagination,
-  useDefaults,
   useSort
 } from '../composables'
 import { useTask } from 'vue-concurrency'
@@ -121,7 +120,6 @@ export default {
 
   setup() {
     const store = useStore()
-    const { pagination: paginationDefaults } = useDefaults()
     const { refresh: refreshFileListHeaderPosition, y: fileListHeaderY } =
       useFileListHeaderPosition()
 
@@ -142,10 +140,8 @@ export default {
 
     const paginationPageQuery = useRouteQuery('page', '1')
     const paginationPage = computed(() => parseInt(String(paginationPageQuery.value)))
-    const paginationPerPageQuery = useRouteQuery('items-per-page', paginationDefaults.perPage.value)
     const { items: paginatedResources, total: paginationPages } = usePagination({
       page: paginationPage,
-      perPage: computed(() => parseInt(String(paginationPerPageQuery.value))),
       items,
       sortDir,
       sortBy

@@ -15,8 +15,8 @@ export const createLocationSpaces = (name: spaceTypes, location = {}): Location 
     location
   )
 
-const locationSpacesProjects = createLocationSpaces('files-spaces-projects')
-const locationSpacesPersonalHome = createLocationSpaces('files-spaces-personal-home')
+export const locationSpacesProjects = createLocationSpaces('files-spaces-projects')
+export const locationSpacesPersonalHome = createLocationSpaces('files-spaces-personal-home')
 
 export const isLocationSpacesActive = isLocationActiveDirector<spaceTypes>(
   locationSpacesProjects,

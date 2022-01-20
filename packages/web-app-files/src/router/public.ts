@@ -7,8 +7,8 @@ type shareTypes = 'files-public-files' | 'files-public-drop'
 export const createLocationPublic = (name: shareTypes, location = {}): Location =>
   createLocation(name, location)
 
-const locationPublicFiles = createLocationPublic('files-public-files')
-const locationPublicDrop = createLocationPublic('files-public-drop')
+export const locationPublicFiles = createLocationPublic('files-public-files')
+export const locationPublicDrop = createLocationPublic('files-public-drop')
 
 export const isLocationPublicActive = isLocationActiveDirector<shareTypes>(
   locationPublicFiles,

@@ -54,7 +54,6 @@ import {
   useStore,
   useRouteQuery,
   usePagination,
-  useDefaults,
   useSort
 } from '../composables'
 import { computed, unref } from '@vue/composition-api'
@@ -85,7 +84,6 @@ export default {
 
   setup() {
     const store = useStore()
-    const { pagination: paginationDefaults } = useDefaults()
     const { y: fileListHeaderY } = useFileListHeaderPosition()
 
     const sortByPageQuery = useRouteQuery('sort-by')
@@ -105,10 +103,8 @@ export default {
 
     const paginationPageQuery = useRouteQuery('page', '1')
     const paginationPage = computed(() => parseInt(String(paginationPageQuery.value)))
-    const paginationPerPageQuery = useRouteQuery('items-per-page', paginationDefaults.perPage.value)
     const { items: paginatedResources, total: paginationPages } = usePagination({
       page: paginationPage,
-      perPage: computed(() => parseInt(String(paginationPerPageQuery.value))),
       items,
       sortDir,
       sortBy
