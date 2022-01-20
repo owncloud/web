@@ -185,7 +185,7 @@ For ONLYOFFICE there is a [native integration](https://github.com/ONLYOFFICE/onl
 To be able to use ONLYOFFICE in ownCloud Web, it is required to run
 - ownCloud Server >= 10.8
 - ownCloud Web >= 4.0.0
-- [ONLYOFFICE Connector for ownCloud 10](https://marketplace.owncloud.com/apps/onlyoffice) >= 7.1.1
+- [ONLYOFFICE Connector for ownCloud Classic](https://marketplace.owncloud.com/apps/onlyoffice) >= 7.1.1
 
 Make sure that ONLYOFFICE works as expected in the Classic UI and add the following to `config.json` to make it available in ownCloud Web:
 
@@ -194,6 +194,29 @@ Make sure that ONLYOFFICE works as expected in the Classic UI and add the follow
     {
         "id": "onlyoffice",
         "path": "https://<your-owncloud-server>/apps/onlyoffice/js/web/onlyoffice.js"
+    }
+]
+```
+
+{{< hint info >}}
+The URL in the example might need adaptations depending on the configuration of your ownCloud Server.
+{{< /hint >}}
+
+### Collabora Online
+For Collabora Online there is a native integration available for ownCloud Web when it is used with ownCloud Classic Server. It fully integrates the Collabora Online Document Editors and allows users to create and open documents right from ownCloud Web.
+
+To be able to use Collabora Online in ownCloud Web, it is required to run
+- ownCloud Server >= 10.8
+- ownCloud Web >= 4.0.0
+- [Collabora Online Connector for ownCloud Classic](https://marketplace.owncloud.com/apps/richdocuments) >= 2.7.0
+
+Make sure that Collabora Online works as expected in the Classic UI and add the following to `config.json` to make it available in ownCloud Web:
+
+```json
+"external_apps": [
+    {
+        "id": "richdocuments",
+        "path": "https://<your-owncloud-server>/apps/richdocuments/js/richdocuments.js"
     }
 ]
 ```
