@@ -3,7 +3,6 @@ import resolve from 'rollup-plugin-node-resolve'
 import json from '@rollup/plugin-json'
 import commonjs from '@rollup/plugin-commonjs'
 import babel from 'rollup-plugin-babel'
-import builtins from '@erquhart/rollup-plugin-node-builtins'
 import copy from 'rollup-plugin-copy-watch'
 import modify from 'rollup-plugin-modify'
 import { terser } from 'rollup-plugin-terser'
@@ -18,8 +17,10 @@ import postcss from 'rollup-plugin-postcss'
 import serve from 'rollup-plugin-serve'
 import livereload from 'rollup-plugin-livereload'
 import html from '@rollup/plugin-html'
-import globals from 'rollup-plugin-node-globals'
 import ts from 'rollup-plugin-ts'
+import nodePolyfills from 'rollup-plugin-polyfill-node'
+import alias from '@rollup/plugin-alias'
+import inject from '@rollup/plugin-inject'
 
 const production = !process.env.ROLLUP_WATCH
 const sourcemap = process.env.SOURCE_MAP === 'true'
@@ -37,18 +38,24 @@ const plugins = [
     sourceMap: sourcemap,
     config: false
   }),
+  alias({
+    entries: [{ find: 'crypto', replacement: 'polyfills/crypto.js' }]
+  }),
+  commonjs({
+    include: 'node_modules/**'
+  }),
   vue({
     css: false
   }),
-  builtins({ crypto: true }),
+  nodePolyfills(),
+  inject({
+    Buffer: ['buffer', 'Buffer']
+  }),
   resolve({
     include: 'node_modules/**',
     dedupe: ['@vue/composition-api'],
     browser: true,
     preferBuiltins: false
-  }),
-  commonjs({
-    include: 'node_modules/**'
   }),
   babel({
     exclude: 'node_modules/**'
@@ -64,7 +71,6 @@ const plugins = [
   ts({
     browserslist: false
   }),
-  globals(),
   json(),
   copy({
     watch: !production && ['./config', './packages/web-runtime/themes'],
