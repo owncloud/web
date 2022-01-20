@@ -1,11 +1,15 @@
 <template>
-  <div class="oc-p-s">
+  <div class="space-overview oc-p-s">
     <list-loader v-if="loadSpaceTask.isRunning" />
     <template v-else>
       <not-found-message v-if="!space.id" class="files-not-found oc-height-1-1" />
       <div v-else class="oc-grid oc-grid-match oc-child-width-1-3@s">
         <div class="oc-mt-s">
-          <img class="space-image" alt="" :src="'data:image/jpeg;base64,' + imageContent" />
+          <img
+            class="space-overview-image"
+            alt=""
+            :src="'data:image/jpeg;base64,' + imageContent"
+          />
         </div>
         <div>
           <h3 class="oc-mb-s">{{ space.name }}</h3>
@@ -98,7 +102,6 @@ export default {
       })
 
       imageContent.value = arrayBuffToB64(response.data)
-      console.log(imageContent.value)
     })
 
     loadSpaceTask.perform()
@@ -169,17 +172,20 @@ export default {
 </script>
 
 <style lang="scss">
-.space-image {
-  border-radius: 5px;
-  max-height: 250px;
-}
+.space-overview {
+  &-image {
+    border-radius: 5px;
+    max-height: 250px;
+  }
 
-.markdown-container * {
-  color: grey !important;
-}
+  .markdown-container * {
+    color: grey !important;
+  }
 
-.markdown-container.collapsed {
-  max-height: 150px;
-  overflow: hidden;
+  .markdown-container.collapsed {
+    max-height: 150px;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(180deg, #000 90%, transparent);
+  }
 }
 </style>

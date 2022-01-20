@@ -80,8 +80,13 @@
                     </li>
                   </ul>
                 </oc-drop>
-                <router-link :to="getSpaceProjectRoute(space.id)">
-                  <img v-if="space.image" :src="space.image" alt="" />
+                <router-link v-if="!loadImagesTask.isRunning" :to="getSpaceProjectRoute(space.id)">
+                  <img
+                    v-if="imageContentObject[space.id]"
+                    class="space-image"
+                    :src="'data:image/jpeg;base64,' + imageContentObject[space.id]"
+                    alt=""
+                  />
                   <oc-icon v-else name="layout-grid" size="xxlarge" class="oc-px-m oc-py-m" />
                 </router-link>
               </div>
@@ -108,6 +113,8 @@ import { ref } from '@vue/composition-api'
 import { useStore } from 'web-pkg/src/composables'
 import { useTask } from 'vue-concurrency'
 import { createLocationSpaces } from '../../router'
+import axios from 'axios'
+import { arrayBuffToB64 } from '../../helpers/commonUtil'
 import Rename from '../../mixins/spaces/actions/rename'
 import { mapActions } from 'vuex'
 import Delete from '../../mixins/spaces/actions/delete'
@@ -121,6 +128,7 @@ export default {
   setup() {
     const store = useStore()
     const spaces = ref([])
+    const imageContentObject = ref({})
     const { graph } = client(store.getters.configuration.server, store.getters.getToken)
 
     const loadSpacesTask = useTask(function* () {
@@ -132,11 +140,44 @@ export default {
 
     loadSpacesTask.perform()
 
+    const loadImageTask = useTask(function* (signal, { spaceId, webDavUrl, token }) {
+      const response = yield axios.get(webDavUrl, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        responseType: 'arraybuffer'
+      })
+
+      imageContentObject.value[spaceId] = arrayBuffToB64(response.data)
+    })
+
+    const loadImagesTask = useTask(function* (signal, ref) {
+      for (const space of spaces.value) {
+        const imageEntry = space?.special?.find((el) => el?.specialFolder?.name === 'image')
+
+        if (!imageEntry) {
+          return
+        }
+
+        yield loadImageTask.perform({
+          spaceId: space?.id,
+          webDavUrl: imageEntry?.webDavUrl,
+          token: ref.getToken
+        })
+      }
+    })
+
     return {
       spaces,
       graph,
-      loadSpacesTask
+      loadSpacesTask,
+      loadImagesTask,
+      imageContentObject
     }
+  },
+  async mounted() {
+    await this.loadSpacesTask.last
+    await this.loadImagesTask.perform(this)
   },
   computed: {
     hasCreatePermission() {
@@ -224,6 +265,10 @@ export default {
     width: 100%;
     background-color: var(--oc-color-background-muted);
     max-height: 150px;
+  }
+  .space-image {
+    max-width: 100%;
+    height: auto;
   }
 }
 </style>

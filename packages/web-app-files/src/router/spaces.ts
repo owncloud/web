@@ -44,7 +44,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         }
       },
       {
-        path: 'project/:spaceId*',
+        path: 'projects/:spaceId*',
         name: locationSpacesProject.name,
         component: components.Spaces?.Project,
         meta: {
