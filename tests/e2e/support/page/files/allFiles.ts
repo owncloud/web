@@ -151,7 +151,7 @@ export class AllFilesPage {
       const shareInputLocator = page.locator('#files-share-invite-input')
       await Promise.all([
         page.waitForResponse((resp) => resp.url().includes('sharees') && resp.status() === 200),
-        shareInputLocator.fill(user.displayName)
+        shareInputLocator.fill(user.id)
       ])
       await shareInputLocator.focus()
       await page.waitForSelector('.vs--open')
