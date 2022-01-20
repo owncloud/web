@@ -80,11 +80,17 @@
                     </li>
                   </ul>
                 </oc-drop>
-                <img v-if="space.image" :src="space.image" alt="" />
-                <oc-icon v-else name="layout-grid" size="xxlarge" class="oc-px-m oc-py-m" />
+                <router-link :to="getSpaceProjectRoute(space.id)">
+                  <img v-if="space.image" :src="space.image" alt="" />
+                  <oc-icon v-else name="layout-grid" size="xxlarge" class="oc-px-m oc-py-m" />
+                </router-link>
               </div>
               <span class="oc-card-body">
-                <a href="#" class="oc-card-title" v-text="space.name" />
+                <router-link
+                  :to="getSpaceProjectRoute(space.id)"
+                  class="oc-card-title"
+                  v-text="space.name"
+                />
               </span>
             </div>
           </li>
@@ -101,6 +107,7 @@ import { client } from 'web-client'
 import { ref } from '@vue/composition-api'
 import { useStore } from 'web-pkg/src/composables'
 import { useTask } from 'vue-concurrency'
+import { createLocationSpaces } from '../../router'
 import Rename from '../../mixins/spaces/actions/rename'
 import { mapActions } from 'vuex'
 import Delete from '../../mixins/spaces/actions/delete'
@@ -142,6 +149,12 @@ export default {
   },
   methods: {
     ...mapActions(['createModal', 'hideModal', 'setModalInputErrorMessage']),
+
+    getSpaceProjectRoute(spaceId) {
+      return createLocationSpaces('files-spaces-project', {
+        params: { spaceId }
+      })
+    },
 
     showCreateSpaceModal() {
       const modal = {

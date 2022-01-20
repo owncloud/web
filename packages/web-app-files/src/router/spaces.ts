@@ -2,7 +2,7 @@ import { Location, RouteConfig } from 'vue-router'
 import { RouteComponents } from './router'
 import { createLocation, isLocationActiveDirector, $gettext } from './utils'
 
-type spaceTypes = 'files-spaces-personal-home' | 'files-spaces-projects'
+type spaceTypes = 'files-spaces-personal-home' | 'files-spaces-project' | 'files-spaces-projects'
 
 export const createLocationSpaces = (name: spaceTypes, location = {}): Location =>
   createLocation(
@@ -15,10 +15,12 @@ export const createLocationSpaces = (name: spaceTypes, location = {}): Location 
     location
   )
 
-export const locationSpacesProjects = createLocationSpaces('files-spaces-projects')
-export const locationSpacesPersonalHome = createLocationSpaces('files-spaces-personal-home')
+const locationSpacesProject = createLocationSpaces('files-spaces-project')
+const locationSpacesProjects = createLocationSpaces('files-spaces-projects')
+const locationSpacesPersonalHome = createLocationSpaces('files-spaces-personal-home')
 
 export const isLocationSpacesActive = isLocationActiveDirector<spaceTypes>(
+  locationSpacesProject,
   locationSpacesProjects,
   locationSpacesPersonalHome
 )
@@ -39,6 +41,17 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
           hasBulkActions: true,
           hideAppBar: true,
           title: $gettext('Spaces')
+        }
+      },
+      {
+        path: 'project/:spaceId*',
+        name: locationSpacesProject.name,
+        component: components.Spaces?.Project,
+        meta: {
+          hideFilelistActions: true,
+          hasBulkActions: true,
+          hideAppBar: true,
+          title: $gettext('Space')
         }
       },
       {

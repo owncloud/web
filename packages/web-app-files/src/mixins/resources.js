@@ -22,6 +22,6 @@ export default {
       return filesize(size, {
         round: size < mb ? 0 : 1
       })
-    }
+    },
   }
 }

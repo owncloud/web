@@ -14,6 +14,15 @@
     </div>
     <div class="oc-mt-s">
       <oc-button
+        v-if="showSpacesButton"
+        id="space-not-found-button-go-spaces"
+        type="router-link"
+        appearance="raw"
+        :to="spacesRoute"
+      >
+        <translate>Go to »Spaces«</translate>
+      </oc-button>
+      <oc-button
         v-if="showHomeButton"
         id="files-list-not-found-button-go-home"
         type="router-link"
@@ -53,12 +62,14 @@ export default {
     return {
       showPublicLinkButton: isLocationPublicActive(router, 'files-public-files'),
       showHomeButton: isLocationSpacesActive(router, 'files-spaces-personal-home'),
+      showSpacesButton: isLocationSpacesActive(router, 'files-spaces-project'),
       homeRoute: createLocationSpaces('files-spaces-personal-home', {
         params: { item: store.getters.homeFolder }
       }),
       publicLinkRoute: createLocationPublic('files-public-files', {
         params: { item: router.currentRoute.params?.item?.split('/')[0] }
-      })
+      }),
+      spacesRoute: createLocationSpaces('files-spaces-projects')
     }
   }
 }
