@@ -1,6 +1,5 @@
 import App from './App.vue'
 import translations from '../l10n/translations'
-import store from './store.js'
 
 const routes = [
   {
@@ -56,6 +55,5 @@ const appInfo = {
 export default {
   appInfo,
   routes,
-  store,
   translations
 }

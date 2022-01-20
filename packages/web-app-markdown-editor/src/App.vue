@@ -1,6 +1,12 @@
 <template>
   <main id="markdown-editor" class="oc-mx-s oc-my-s">
-    <markdown-editor-app-bar />
+    <markdown-editor-app-bar
+      :current-file-context="currentFileContext"
+      :is-loading="isLoading"
+      :is-dirty="isDirty"
+      @closeApp="closeApp"
+      @save="save"
+    />
     <oc-notifications>
       <oc-notification-message
         v-if="lastError"
@@ -13,13 +19,12 @@
       <div class="oc-container oc-width-1-2">
         <oc-textarea
           id="markdown-editor-input"
+          v-model="currentContent"
           name="input"
           full-width
-          :value="currentContent"
           :label="$gettext('Editor')"
           class="oc-height-1-1"
           :rows="20"
-          @input="onType"
         />
       </div>
       <div class="oc-container oc-width-1-2">
@@ -31,33 +36,94 @@
 </template>
 <script>
 import MarkdownEditorAppBar from './MarkdownEditorAppBar.vue'
+import { useAppDefaults } from 'web-pkg/src/composables'
 import marked from 'marked'
-import { mapActions, mapGetters } from 'vuex'
+import { useTask } from 'vue-concurrency'
+import { computed, getCurrentInstance, onMounted, ref, unref } from '@vue/composition-api'
 
 export default {
   name: 'MarkdownEditor',
   components: {
     MarkdownEditorAppBar
   },
-  computed: {
-    ...mapGetters('MarkdownEditor', ['currentContent', 'lastError']),
-    renderedMarkdown() {
-      return this.currentContent ? marked(this.currentContent, { sanitize: true }) : null
+  setup() {
+    const serverContent = ref()
+    const currentContent = ref()
+    const currentETag = ref()
+
+    const loadFileTask = useTask(function* (signal, that) {
+      const filePath = unref(that.currentFileContext).path
+      return yield that.getFileContents(filePath).then((response) => {
+        serverContent.value = currentContent.value = response.body
+        currentETag.value = response.headers.ETag
+        return response
+      })
+    }).restartable()
+
+    const saveFileTask = useTask(function* (signal, that) {
+      const filePath = unref(that.currentFileContext).path
+      const newContent = unref(currentContent)
+
+      return yield that
+        .putFileContents(filePath, newContent, {
+          previousEntityTag: unref(currentETag)
+        })
+        .then(
+          (response) => {
+            serverContent.value = newContent
+            // FIXME: above we need response.headers.ETag, here we need response ETag - feels inconsistent
+            currentETag.value = response.ETag
+          },
+          (error) => {
+            lastError.value = error.message
+          }
+        )
+    }).restartable()
+
+    const lastError = ref()
+    const clearLastError = () => {
+      lastError.value = null
     }
-  },
-  mounted() {
-    // copied from packages/web-app-media-viewer/src/App.vue
-    // FIXME: where can/should we put this shared code?
-    const filePath = `/${this.$route.params.filePath.split('/').filter(Boolean).join('/')}`
-    this.loadFile({
-      filePath,
-      client: this.$client
+
+    const renderedMarkdown = computed(() => {
+      return unref(currentContent) ? marked(unref(currentContent), { sanitize: true }) : null
     })
-  },
-  methods: {
-    ...mapActions('MarkdownEditor', ['updateText', 'loadFile', 'clearLastError']),
-    onType(e) {
-      this.updateText(e)
+
+    const isDirty = computed(() => {
+      return unref(serverContent) !== unref(currentContent)
+    })
+
+    const isLoading = computed(() => {
+      return loadFileTask.isRunning || saveFileTask.isRunning
+    })
+
+    onMounted(() => {
+      loadFileTask.perform(getCurrentInstance().proxy)
+    })
+
+    const save = function () {
+      saveFileTask.perform(this)
+    }
+
+    return {
+      ...useAppDefaults({
+        applicationName: 'markdown-editor'
+      }),
+
+      // tasks
+      loadFileTask,
+      saveFileTask,
+
+      // data
+      isLoading,
+      isDirty,
+      currentContent,
+      lastError,
+      renderedMarkdown,
+
+      // methods
+      clearLastError,
+      save
     }
   }
 }
