@@ -171,7 +171,7 @@ import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../constants'
 import { useFileListHeaderPosition, useSort } from '../composables'
-import { useRouteName, useRouteQuery, useStore } from 'web-pkg/src/composables'
+import { useRouteQuery, useStore } from 'web-pkg/src/composables'
 import debounce from 'lodash-es/debounce'
 
 import ListLoader from '../components/FilesList/ListLoader.vue'
@@ -218,7 +218,6 @@ export default {
     const pending = computed(() =>
       unref(storeItems).filter((item) => item.status === ShareStatus.pending)
     )
-    const routeNamePending = computed(() => `${unref(useRouteName())}-pending`)
     const {
       sortBy: pendingSortBy,
       sortDir: pendingSortDir,
@@ -227,14 +226,14 @@ export default {
     } = useSort({
       items: pending,
       fields,
-      routeName: routeNamePending
+      sortByField: 'pending-sort-by',
+      sortDirField: 'pending-sort-dir'
     })
 
     // shares depending on view mode
     const shares = computed(() =>
       unref(storeItems).filter((item) => item.status === unref(viewMode))
     )
-    const routeNameShares = computed(() => `${unref(useRouteName())}-shares`)
     const {
       sortBy: sharesSortBy,
       sortDir: sharesSortDir,
@@ -243,7 +242,8 @@ export default {
     } = useSort({
       items: shares,
       fields,
-      routeName: routeNameShares
+      sortByField: 'shares-sort-by',
+      sortDirField: 'shares-sort-dir'
     })
 
     const loadResourcesTask = useTask(function* (signal, ref) {

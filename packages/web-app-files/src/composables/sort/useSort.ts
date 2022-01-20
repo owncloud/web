@@ -19,7 +19,9 @@ interface SortOptions<T> {
   items: MaybeReadonlyRef<Array<T>>
   fields: MaybeRef<Array<SortField>>
   sortBy?: MaybeRef<string>
+  sortByField?: string
   sortDir?: MaybeRef<SortDir>
+  sortDirField?: string
   routeName?: MaybeRef<string>
 }
 
@@ -67,7 +69,7 @@ function createSortByQueryRef<T>(options: SortOptions<T>): Ref<QueryValue> {
   }
 
   return useRouteQueryPersisted({
-    name: SortConstants.sortByQueryName,
+    name: options.sortByField || SortConstants.sortByQueryName,
     defaultValue: firstSortableField(unref(options.fields))?.sortBy,
     routeName: options.routeName ? unref(options.routeName) : unref(useRouteName())
   })
@@ -79,7 +81,7 @@ function createSortDirQueryRef<T>(options: SortOptions<T>): Ref<QueryValue> {
   }
 
   return useRouteQueryPersisted({
-    name: SortConstants.sortDirQueryName,
+    name: options.sortDirField || SortConstants.sortDirQueryName,
     defaultValue: firstSortableField(unref(options.fields))?.sortDir,
     routeName: options.routeName ? unref(options.routeName) : unref(useRouteName())
   })
