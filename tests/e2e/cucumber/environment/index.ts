@@ -28,6 +28,7 @@ const logger = pino({
 })
 
 setDefaultTimeout(config.debug ? -1 : config.timeout * 1000)
+let retryCounter = 0
 
 BeforeAll(async function () {
   if (config.ocis) {
@@ -39,6 +40,7 @@ BeforeAll(async function () {
 
 Before(function (this: World, { pickle }: ITestCaseHookParameter) {
   this.feature = pickle
+  console.log('featureName', this.feature.name)
   this.actorsEnvironment.on('console', async (actorId, message): Promise<void> => {
     const msg = {
       actor: actorId,
@@ -93,15 +95,20 @@ After(async function (this: World, { result }: ITestCaseHookParameter) {
 
   await this.attach(`Status: ${result?.status}. Duration:${result.duration?.seconds}s`)
 
-  if (result.status !== Status.PASSED) {
+  if (result.status !== Status.PASSED && retryCounter < config.retry) {
     if (result.willBeRetried) {
       config.reportHar = true
       config.reportTracing = true
-    }
-
-    await this.actorsEnvironment.close()
+      retryCounter += 1
+    } 
+  } else {
+    config.reportHar = false
+    config.reportTracing = false
+    retryCounter = 0
   }
+  await this.actorsEnvironment.close()
 })
+
 
 AfterAll(() => state.browser && state.browser.close())
 
