@@ -3,6 +3,7 @@ import path from 'path'
 import { DateTime } from 'luxon'
 
 import fileIconMappings from '../fileTypeIconMappings.json'
+import fileIconColorMappings from '../fileTypeColorMappings.json'
 import { getIndicators } from './statusIndicators'
 import { $gettext } from '../gettext'
 import { DavPermission, DavProperty } from 'web-pkg/src/constants'
@@ -10,13 +11,23 @@ import { PeopleShareRoles, SharePermissions, ShareStatus, ShareTypes } from './s
 
 // Should we move this to ODS?
 export function getFileIcon(extension) {
-  const icon = fileIconMappings[extension.toLowerCase()]
+  let icon = fileIconMappings[extension.toLowerCase()]
 
   if (icon) {
     return icon
   }
 
   return 'file'
+}
+
+export function getFileIconColor(extension) {
+  const color = fileIconColorMappings[extension.toLowerCase()]
+
+  if (color) {
+    return color
+  }
+
+  return '#DADCDF'
 }
 
 function _getFileExtension(name) {
@@ -46,6 +57,8 @@ export function buildResource(resource) {
     fileId: resource.fileInfo[DavProperty.FileId],
     mimeType: resource.fileInfo[DavProperty.MimeType],
     icon: isFolder ? 'folder' : getFileIcon(extension),
+    iconColor: isFolder ? '#2C65FF' : getFileIconColor(extension),
+    iconFillType: 'solid',
     name: path.basename(resource.name),
     extension: isFolder ? '' : extension,
     path: resource.name,
