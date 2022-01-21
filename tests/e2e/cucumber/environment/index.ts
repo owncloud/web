@@ -100,7 +100,7 @@ After(async function (this: World, { result }: ITestCaseHookParameter) {
       config.reportHar = true
       config.reportTracing = true
       retryCounter += 1
-    } 
+    }
   } else {
     config.reportHar = false
     config.reportTracing = false
@@ -108,7 +108,6 @@ After(async function (this: World, { result }: ITestCaseHookParameter) {
   }
   await this.actorsEnvironment.close()
 })
-
 
 AfterAll(() => state.browser && state.browser.close())
 

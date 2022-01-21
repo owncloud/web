@@ -17,7 +17,7 @@ export class ActorEnvironment extends EventEmitter implements Actor {
 
   constructor(options: ActorOptions) {
     super()
-    this.uuid = [DateTime.now().toFormat('yyyy-M-d-hh-mm-ss'), "feature.name", options.id].join('-')
+    this.uuid = [DateTime.now().toFormat('yyyy-M-d-hh-mm-ss'), 'feature.name', options.id].join('-')
     this.options = options
   }
 
