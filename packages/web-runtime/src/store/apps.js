@@ -52,7 +52,8 @@ const mutations = {
       routes: extension.routes || [],
       extension: extension.extension,
       handler: extension.handler,
-      canBeDefault: extension.canBeDefault !== false
+      canBeDefault: extension.canBeDefault !== false,
+      config: (state.fileEditorConfigs || {})[app]
     }
 
     state.fileEditors.push(editor)
@@ -98,7 +99,8 @@ const mutations = {
       name: appInfo.name || appInfo.id,
       id: appInfo.id,
       icon: appInfo.icon || 'check_box_outline_blank',
-      img: appInfo.img || null
+      img: appInfo.img || null,
+      config: (state.fileEditorConfigs || {})[appInfo.id]
     }
     state.meta[app.id] = app
   },
@@ -107,21 +109,9 @@ const mutations = {
   },
 
   LOAD_EXTENSION_CONFIG(state, { id, config }) {
-    // make available in editors
-    const editors = [...state.fileEditors]
-    for (const editor of editors) {
-      if (editor.app === id) {
-        editor.config = config
-      }
-    }
-    state.fileEditors = editors
-
-    // make available in meta
-    if (state.meta[id]) {
-      const meta = { ...state.meta }
-      meta[id].config = config
-      state.meta = meta
-    }
+    const fileEditorConfigs = { ...state.fileEditorConfigs }
+    fileEditorConfigs[id] = config
+    state.fileEditorConfigs = fileEditorConfigs
   }
 }
 
