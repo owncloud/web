@@ -51,7 +51,7 @@ export function useAppFileHandling(options: AppFileHandlingOptions): AppFileHand
 
     // Since the pre-signed url contains query parameters and the caller of this method
     // can also provide query parameters we have to combine them.
-    const combinedQuery = [queryStr, encodeURIComponent(signedQuery)].filter(Boolean).join('&')
+    const combinedQuery = [queryStr, signedQuery].filter(Boolean).join('&')
     return [url, combinedQuery].filter(Boolean).join('?')
   }
 
