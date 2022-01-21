@@ -15,7 +15,7 @@
       <oc-icon name="add" />
       <translate>Create Space</translate>
     </oc-button>
-    <h2 v-text="$gettext('Spaces')" />
+    <h2 class="oc-mt-rm" v-text="$gettext('Spaces')" />
     <span v-text="$gettext('Access all project related files in one place.')" />
     <a href="#" v-text="$gettext('Learn more about spaces.')" />
     <h3 v-text="$gettext('Your spaces')" />
@@ -80,7 +80,7 @@
                     </li>
                   </ul>
                 </oc-drop>
-                <router-link v-if="!loadImagesTask.isRunning" :to="getSpaceProjectRoute(space.id)">
+                <router-link v-if="!loadImagesTask.isRunning" :to="getSpaceProjectRoute(space)">
                   <img
                     v-if="imageContentObject[space.id]"
                     class="space-image"
@@ -92,7 +92,7 @@
               </div>
               <span class="oc-card-body">
                 <router-link
-                  :to="getSpaceProjectRoute(space.id)"
+                  :to="getSpaceProjectRoute(space)"
                   class="oc-card-title"
                   v-text="space.name"
                 />
@@ -115,6 +115,8 @@ import { useTask } from 'vue-concurrency'
 import { createLocationSpaces } from '../../router'
 import axios from 'axios'
 import { arrayBuffToB64 } from '../../helpers/commonUtil'
+import { bus } from 'web-pkg/src/instance'
+import { mapMutations } from 'vuex'
 import Rename from '../../mixins/spaces/actions/rename'
 import { mapActions } from 'vuex'
 import Delete from '../../mixins/spaces/actions/delete'
@@ -138,8 +140,6 @@ export default {
         .sort((a, b) => a.name.localeCompare(b.name))
     })
 
-    loadSpacesTask.perform()
-
     const loadImageTask = useTask(function* (signal, { spaceId, webDavUrl, token }) {
       const response = yield axios.get(webDavUrl, {
         headers: {
@@ -156,7 +156,7 @@ export default {
         const imageEntry = space?.special?.find((el) => el?.specialFolder?.name === 'image')
 
         if (!imageEntry) {
-          return
+          continue
         }
 
         yield loadImageTask.perform({
@@ -167,17 +167,30 @@ export default {
       }
     })
 
+    const loadResourcesTask = useTask(function* (signal, ref) {
+      ref.SET_CURRENT_FOLDER(null)
+
+      yield ref.loadSpacesTask.perform(ref)
+      yield ref.loadImagesTask.perform(ref)
+    })
+
     return {
       spaces,
       graph,
       loadSpacesTask,
       loadImagesTask,
+      loadResourcesTask,
       imageContentObject
     }
   },
-  async mounted() {
-    await this.loadSpacesTask.last
-    await this.loadImagesTask.perform(this)
+  mounted() {
+    this.loadResourcesTask.perform(this)
+
+    const loadSpacesEventToken = bus.subscribe('app.files.list.load', (path) => {
+      this.loadResourcesTask.perform(this)
+    })
+
+    this.$on('beforeDestroy', () => bus.unsubscribe('app.files.list.load', loadSpacesEventToken))
   },
   computed: {
     hasCreatePermission() {
@@ -190,10 +203,11 @@ export default {
   },
   methods: {
     ...mapActions(['createModal', 'hideModal', 'setModalInputErrorMessage']),
+    ...mapMutations('Files', ['SET_CURRENT_FOLDER']),
 
-    getSpaceProjectRoute(spaceId) {
+    getSpaceProjectRoute({ id, name }) {
       return createLocationSpaces('files-spaces-project', {
-        params: { spaceId }
+        params: { spaceId: id, name }
       })
     },
 
@@ -264,11 +278,18 @@ export default {
     display: inline-block;
     width: 100%;
     background-color: var(--oc-color-background-muted);
-    max-height: 150px;
+    height: 200px;
+  }
+  .oc-card-media-top a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
   }
   .space-image {
-    max-width: 100%;
-    height: auto;
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
   }
 }
 </style>

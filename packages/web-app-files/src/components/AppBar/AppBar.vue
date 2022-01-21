@@ -125,7 +125,7 @@
           <size-info v-if="hasBulkActions && selectedFiles.length > 0" class="oc-mr oc-visible@l" />
           <batch-actions v-if="hasBulkActions" />
         </div>
-        <view-options />
+        <view-options v-if="!hideViewOptions" />
       </div>
     </div>
   </div>
@@ -247,18 +247,32 @@ export default {
     hasBulkActions() {
       return this.$route.meta.hasBulkActions === true
     },
+    hideViewOptions() {
+      return this.$route.meta.hideViewOptions === true
+    },
     pageTitle() {
       const title = this.$route.meta.title
       return this.$gettext(title)
     },
 
     breadcrumbs() {
-      if (!(this.isPublicLocation || this.isPersonalLocation)) {
+      const isProjectSpaces =
+        isLocationSpacesActive(this.$router, 'files-spaces-projects') ||
+        isLocationSpacesActive(this.$router, 'files-spaces-project')
+
+      if (!(this.isPublicLocation || this.isPersonalLocation || isProjectSpaces)) {
         return []
       }
 
       const { params: routeParams, path: routePath } = this.$route
-      const { item: requestedItemPath = '' } = routeParams
+
+      let requestedItemPath = ''
+      if (isProjectSpaces) {
+        requestedItemPath = routeParams.spaceId || ''
+      } else {
+        requestedItemPath = routeParams.item || ''
+      }
+
       const basePaths =
         '/' +
         decodeURIComponent(routePath)
@@ -278,10 +292,17 @@ export default {
 
           if (i === rawItems.length - 1) {
             this.isPublicLocation && acc.shift()
-            acc.length &&
-              (acc[0].text = this.isPersonalLocation
-                ? this.$gettext('All files')
-                : this.$gettext('Public link'))
+
+            if (acc.length) {
+              if (this.isPersonalLocation) {
+                acc[0].text = this.$gettext('All files')
+              } else if (isProjectSpaces) {
+                acc[0].text = this.$gettext('Spaces')
+              } else {
+                acc[0].text = this.$gettext('Public link')
+              }
+            }
+
             acc.length && delete acc[acc.length - 1].to
           } else {
             delete acc[i].onClick

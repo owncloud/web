@@ -39,7 +39,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         meta: {
           hideFilelistActions: true,
           hasBulkActions: true,
-          hideAppBar: true,
+          hideViewOptions: true,
           title: $gettext('Spaces')
         }
       },
@@ -50,7 +50,6 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         meta: {
           hideFilelistActions: true,
           hasBulkActions: true,
-          hideAppBar: true,
           title: $gettext('Space')
         }
       },

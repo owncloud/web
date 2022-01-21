@@ -4,7 +4,7 @@
     <template v-else>
       <not-found-message v-if="!space.id" class="files-not-found oc-height-1-1" />
       <div v-else class="oc-grid oc-grid-match oc-child-width-1-3@s">
-        <div class="oc-mt-s">
+        <div>
           <img
             class="space-overview-image"
             alt=""
@@ -14,7 +14,7 @@
         <div>
           <h3 class="oc-mb-s">{{ space.name }}</h3>
           <span v-if="space.description">{{ space.description }}</span>
-          <div v-if="markdownContent">
+          <div>
             <div ref="markdownContainer" class="markdown-container" v-html="markdownContent"></div>
             <div v-if="showMarkdownCollapse" class="markdown-collapse oc-text-center oc-mt-s">
               <oc-button appearance="raw" @click="toggleCollapseMarkdown">
@@ -25,15 +25,10 @@
           </div>
         </div>
       </div>
-      <no-content-message
-        v-if="isEmpty"
-        id="files-personal-empty"
-        class="files-empty"
-        icon="folder"
-      >
+      <no-content-message v-if="isEmpty" id="files-spaces-empty" class="files-empty" icon="folder">
         <template #message>
           <p class="oc-text-muted">
-            <span v-translate>No resource found</span>
+            <span v-translate>No resources found</span>
           </p>
         </template>
       </no-content-message>
@@ -48,10 +43,12 @@ import ListLoader from '../../components/FilesList/ListLoader.vue'
 import { ref } from '@vue/composition-api'
 import { client } from 'web-client'
 import { useTask } from 'vue-concurrency'
-import { useStore, useRouter } from '../../composables'
+import { useStore, useRouter } from 'web-pkg/src/composables'
 import marked from 'marked'
 import { arrayBuffToB64 } from '../../helpers/commonUtil'
 import axios from 'axios'
+import MixinAccessibleBreadcrumb from '../../mixins/accessibleBreadcrumb'
+import { bus } from 'web-pkg/src/instance'
 
 export default {
   components: {
@@ -59,6 +56,7 @@ export default {
     ListLoader,
     NotFoundMessage
   },
+  mixins: [MixinAccessibleBreadcrumb],
   setup() {
     const router = useRouter()
     const store = useStore()
@@ -85,7 +83,16 @@ export default {
           Authorization: `Bearer ${ref.getToken}`
         }
       })
+
+      if (ref.markdownResizeObserver) {
+        ref.markdownResizeObserver.unobserve(ref.$refs.markdownContainer)
+      }
+
       markdownContent.value = marked.parse(response.data)
+
+      if (markdownContent.value) {
+        ref.markdownResizeObserver.observe(ref.$refs.markdownContainer)
+      }
     })
     const loadImageTask = useTask(function* (signal, ref) {
       const imageEntry = space.value?.special?.find((el) => el?.specialFolder?.name === 'image')
@@ -104,7 +111,11 @@ export default {
       imageContent.value = arrayBuffToB64(response.data)
     })
 
-    loadSpaceTask.perform()
+    const loadResourcesTask = useTask(function* (signal, ref) {
+      yield loadSpaceTask.perform(ref)
+      loadReadmeTask.perform(ref)
+      loadImageTask.perform(ref)
+    })
 
     return {
       space,
@@ -112,7 +123,8 @@ export default {
       loadImageTask,
       loadReadmeTask,
       markdownContent,
-      imageContent
+      imageContent,
+      loadResourcesTask
     }
   },
   data: function () {
@@ -120,7 +132,7 @@ export default {
       markdownCollapsed: true,
       markdownContainerCollapsedClass: 'collapsed',
       showMarkdownCollapse: false,
-      markdownResizeObserver: null,
+      markdownResizeObserver: new ResizeObserver(this.onMarkdownResize),
       isEmpty: true
     }
   },
@@ -135,15 +147,16 @@ export default {
     }
   },
   async mounted() {
-    await this.loadSpaceTask.last
-    await this.loadReadmeTask.perform(this)
-    await this.loadImageTask.perform(this)
-    document.title = `${this.space.name} - ${this.$route.meta.title}`
+    await this.loadResourcesTask.perform(this)
 
-    if (this.markdownContent) {
-      this.markdownResizeObserver = new ResizeObserver(this.onMarkdownResize)
-      this.markdownResizeObserver.observe(this.$refs.markdownContainer)
-    }
+    document.title = `${this.space.name} - ${this.$route.meta.title}`
+    this.$route.params.name = this.space.name
+
+    const loadSpaceEventToken = bus.subscribe('app.files.list.load', (path) => {
+      this.loadResourcesTask.perform(this)
+    })
+
+    this.$on('beforeDestroy', () => bus.unsubscribe('app.files.list.load', loadSpaceEventToken))
   },
   beforeDestroy() {
     this.markdownResizeObserver.unobserve(this.$refs.markdownContainer)
@@ -154,6 +167,10 @@ export default {
       return this.$refs.markdownContainer.classList.toggle(this.markdownContainerCollapsedClass)
     },
     onMarkdownResize() {
+      if (!this.$refs.markdownContainer) {
+        return
+      }
+
       this.$refs.markdownContainer.classList.remove(this.markdownContainerCollapsedClass)
       const markdownContainerHeight = this.$refs.markdownContainer.offsetHeight
 
@@ -174,7 +191,7 @@ export default {
 <style lang="scss">
 .space-overview {
   &-image {
-    border-radius: 5px;
+    border-radius: 10px;
     max-height: 250px;
   }
 
