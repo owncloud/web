@@ -40,10 +40,6 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
   })
 
   const publicLinkPassword = computed(() => {
-    if (!store.getters.Files) {
-      return null
-    }
-
     return store.getters['Files/publicLinkPassword']
   })
 
