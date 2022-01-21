@@ -1,4 +1,4 @@
-import { Ref, watch } from '@vue/composition-api'
+import { Ref, watch, unref } from '@vue/composition-api'
 import { QueryValue, useRouteQuery } from './useRouteQuery'
 import { useLocalStorage } from '../localStorage'
 
@@ -18,15 +18,15 @@ export const useRouteQueryPersisted = (options: RouteQueryPersistedOptions): Ref
   const localStorageVariable = useLocalStorage(localStorageKey(options))
   watch(
     (): WatcherValue => {
-      if (routeQueryVariable.value) {
+      if (unref(routeQueryVariable)) {
         return {
-          value: routeQueryVariable.value,
+          value: unref(routeQueryVariable),
           source: 'route'
         }
       }
-      if (localStorageVariable.value) {
+      if (unref(localStorageVariable)) {
         return {
-          value: localStorageVariable.value,
+          value: unref(localStorageVariable),
           source: 'storage'
         }
       }

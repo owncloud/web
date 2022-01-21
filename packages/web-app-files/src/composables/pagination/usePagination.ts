@@ -18,16 +18,16 @@ interface PaginationResult<T> {
 export function usePagination<T>(options: PaginationOptions<T>): PaginationResult<T> {
   const perPage = createPerPageRef(options)
   const page = ref(options.page)
-  const total = computed(() => Math.ceil(unref(options.items).length / perPage.value) || 1)
+  const total = computed(() => Math.ceil(unref(options.items).length / unref(perPage)) || 1)
   const items = computed(() => {
     if (!unref(perPage)) {
       return unref(options.items)
     }
 
-    const start = (page.value - 1) * perPage.value
-    const end = start + perPage.value
+    const start = (unref(page) - 1) * unref(perPage)
+    const end = start + unref(perPage)
 
-    return unref(unref(options.items)).slice(start, end)
+    return unref(options.items).slice(start, end)
   })
 
   return {
@@ -46,5 +46,5 @@ function createPerPageRef<T>(options: PaginationOptions<TextDecodeOptions>): Com
     name: PaginationConstants.perPageQueryName,
     defaultValue: PaginationConstants.perPageDefault
   })
-  return computed(() => parseInt(String(perPageQuery.value)))
+  return computed(() => parseInt(String(unref(perPageQuery))))
 }

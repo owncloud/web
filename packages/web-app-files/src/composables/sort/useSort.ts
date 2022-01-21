@@ -1,6 +1,6 @@
-import { ref, Ref, computed, ComputedRef, unref } from '@vue/composition-api'
+import { ref, Ref, computed, ComputedRef, unref, isRef } from '@vue/composition-api'
 import { MaybeRef, MaybeReadonlyRef } from 'web-pkg/src/utils'
-import { QueryValue, useRouteName, useRouteQueryPersisted } from 'web-pkg/src/composables'
+import { useRouteName, useRouteQueryPersisted } from 'web-pkg/src/composables'
 import { SortConstants } from './constants'
 
 export enum SortDir {
@@ -8,24 +8,24 @@ export enum SortDir {
   Asc = 'asc'
 }
 
-interface SortField {
+export interface SortField {
   name: MaybeRef<string>
   // eslint-disable-next-line @typescript-eslint/ban-types
   sortable?: MaybeRef<boolean | Function>
   sortDir?: MaybeRef<string>
 }
 
-interface SortOptions<T> {
+export interface SortOptions<T> {
   items: MaybeReadonlyRef<Array<T>>
   fields: MaybeRef<Array<SortField>>
   sortBy?: MaybeRef<string>
-  sortByField?: string
+  sortByQueryName?: MaybeRef<string>
   sortDir?: MaybeRef<SortDir>
-  sortDirField?: string
+  sortDirQueryName?: MaybeRef<string>
   routeName?: MaybeRef<string>
 }
 
-interface SortResult<T> {
+export interface SortResult<T> {
   items: ComputedRef<Array<T>>
   sortBy: ComputedRef<string>
   sortDir: ComputedRef<SortDir>
@@ -63,27 +63,27 @@ export function useSort<T>(options: SortOptions<T>): SortResult<T> {
   }
 }
 
-function createSortByQueryRef<T>(options: SortOptions<T>): Ref<QueryValue> {
+function createSortByQueryRef<T>(options: SortOptions<T>): Ref {
   if (options.sortBy) {
-    return ref(unref(options.sortBy))
+    return isRef(options.sortBy) ? options.sortBy : ref(options.sortBy)
   }
 
   return useRouteQueryPersisted({
-    name: options.sortByField || SortConstants.sortByQueryName,
+    name: unref(options.sortByQueryName) || SortConstants.sortByQueryName,
     defaultValue: firstSortableField(unref(options.fields))?.sortBy,
-    routeName: options.routeName ? unref(options.routeName) : unref(useRouteName())
+    routeName: unref(options.routeName || useRouteName())
   })
 }
 
-function createSortDirQueryRef<T>(options: SortOptions<T>): Ref<QueryValue> {
+function createSortDirQueryRef<T>(options: SortOptions<T>): Ref {
   if (options.sortDir) {
-    return ref(unref(options.sortDir))
+    return isRef(options.sortDir) ? options.sortDir : ref(options.sortDir)
   }
 
   return useRouteQueryPersisted({
-    name: options.sortDirField || SortConstants.sortDirQueryName,
+    name: unref(options.sortDirQueryName) || SortConstants.sortDirQueryName,
     defaultValue: firstSortableField(unref(options.fields))?.sortDir,
-    routeName: options.routeName ? unref(options.routeName) : unref(useRouteName())
+    routeName: unref(options.routeName || useRouteName())
   })
 }
 

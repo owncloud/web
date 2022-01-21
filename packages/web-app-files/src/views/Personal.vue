@@ -349,7 +349,7 @@ export default {
       if (errors.length === 1) {
         title = this.$gettext('Failed to move "%{resourceName}"')
         this.showMessage({
-          title: this.$gettextInterpolate(title, { resourceName: errors[0].resourceName }, true),
+          title: this.$gettextInterpolate(title, { resourceName: errors[0]?.resourceName }, true),
           status: 'danger'
         })
         return

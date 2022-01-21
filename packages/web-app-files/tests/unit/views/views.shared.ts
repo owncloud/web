@@ -1,17 +1,10 @@
 import Vue from 'vue'
 import { mount, VueClass } from '@vue/test-utils'
-import { localVue, getStore } from './views.setup'
+import { localVue, getStore, getRouter } from './views.setup'
 
 const $route = {
   name: 'files-personal',
   params: { page: 1 }
-}
-
-const $router = {
-  afterEach: jest.fn(),
-  currentRoute: {
-    query: {}
-  }
 }
 
 const stubs = {
@@ -67,7 +60,7 @@ export const accentuatesTableRowTest = async <V extends Vue>(
       store,
       mocks: {
         $route,
-        $router
+        $router: getRouter
       },
       stubs: stubs,
       computed: {

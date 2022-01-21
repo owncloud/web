@@ -17,7 +17,6 @@
           :class="{ 'files-table-squashed': !sidebarClosed }"
           :are-thumbnails-displayed="displayThumbnails"
           :resources="showMorePending ? pendingItems : pendingItems.slice(0, 3)"
-          :target-route="targetRoute"
           :are-resources-clickable="false"
           :header-position="fileListHeaderY"
           :sort-by="pendingSortBy"
@@ -84,7 +83,7 @@
           appearance="raw"
           type="router-link"
           :to="sharesToggleRouterLink"
-          :data-test-set-view-mode="sharesOtherViewMode.toString()"
+          :data-test-set-view-mode="sharesInvertedViewMode.toString()"
         >
           {{ sharesToggleLabel }}
         </oc-button>
@@ -109,6 +108,7 @@
         :class="{ 'files-table-squashed': !sidebarClosed }"
         :are-thumbnails-displayed="displayThumbnails"
         :resources="sharesItems"
+        :are-resources-clickable="showsAcceptedShares"
         :target-route="resourceTargetLocation"
         :header-position="fileListHeaderY"
         :sort-by="sharesSortBy"
@@ -226,8 +226,8 @@ export default {
     } = useSort({
       items: pending,
       fields,
-      sortByField: 'pending-sort-by',
-      sortDirField: 'pending-sort-dir'
+      sortByQueryName: 'pending-sort-by',
+      sortDirQueryName: 'pending-sort-dir'
     })
 
     // shares depending on view mode
@@ -242,8 +242,8 @@ export default {
     } = useSort({
       items: shares,
       fields,
-      sortByField: 'shares-sort-by',
-      sortDirField: 'shares-sort-dir'
+      sortByQueryName: 'shares-sort-by',
+      sortDirQueryName: 'shares-sort-dir'
     })
 
     const loadResourcesTask = useTask(function* (signal, ref) {
@@ -324,6 +324,12 @@ export default {
     },
 
     // accepted or declined shares
+    showsAcceptedShares() {
+      return this.viewMode === ShareStatus.accepted
+    },
+    showsDeclinedShares() {
+      return this.viewMode === ShareStatus.declined
+    },
     sharesSelected: {
       get() {
         return this.selectedFiles.filter((r) => r.status === this.viewMode)
@@ -334,17 +340,17 @@ export default {
       }
     },
     sharesTitle() {
-      return this.viewMode === ShareStatus.declined
+      return this.showsDeclinedShares
         ? this.$gettext('Declined shares')
         : this.$gettext('Accepted shares')
     },
     sharesToggleLabel() {
-      return this.viewMode === ShareStatus.declined
+      return this.showsDeclinedShares
         ? this.$gettext('Show accepted shares')
         : this.$gettext('Show declined shares')
     },
     sharesEmptyMessage() {
-      return this.viewMode === ShareStatus.declined
+      return this.showsDeclinedShares
         ? this.$gettext("You don't have any previously declined shares.")
         : this.$gettext("You are not collaborating on other people's resources.")
     },
@@ -360,8 +366,8 @@ export default {
     sharesCountFolders() {
       return this.sharesItems.filter((s) => s.type === 'folder').length
     },
-    sharesOtherViewMode() {
-      return this.viewMode === ShareStatus.accepted ? ShareStatus.declined : ShareStatus.accepted
+    sharesInvertedViewMode() {
+      return this.showsAcceptedShares ? ShareStatus.declined : ShareStatus.accepted
     },
     sharesToggleRouterLink() {
       return {
@@ -371,7 +377,7 @@ export default {
         },
         query: {
           ...this.$route.query,
-          'view-mode': this.sharesOtherViewMode
+          'view-mode': this.sharesInvertedViewMode
         }
       }
     },
@@ -391,12 +397,7 @@ export default {
   methods: {
     ...mapActions('Files', ['loadIndicators', 'loadPreview', 'loadAvatars']),
     ...mapActions(['showMessage']),
-    ...mapMutations('Files', [
-      'LOAD_FILES',
-      'SET_FILE_SELECTION',
-      'CLEAR_CURRENT_FILES_LIST',
-      'UPDATE_RESOURCE'
-    ]),
+    ...mapMutations('Files', ['LOAD_FILES', 'SET_FILE_SELECTION', 'CLEAR_CURRENT_FILES_LIST']),
 
     rowMounted(resource, component) {
       const debounced = debounce(({ unobserve }) => {
