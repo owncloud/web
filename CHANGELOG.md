@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Application config not available to application: [#6296](https://github.com/owncloud/web/issues/6296)
 * Bugfix - Open folder from context menu: [#6187](https://github.com/owncloud/web/issues/6187)
 * Bugfix - Focus management in topbar dropdowns: [#6213](https://github.com/owncloud/web/pull/6213)
 * Change - Remove UiKit: [#6103](https://github.com/owncloud/web/issues/6103)
@@ -24,6 +25,13 @@ Summary
 
 Details
 -------
+
+* Bugfix - Application config not available to application: [#6296](https://github.com/owncloud/web/issues/6296)
+
+   We fixed a bug in providing config to external apps like draw-io.
+
+   https://github.com/owncloud/web/issues/6296
+   https://github.com/owncloud/web/pull/6298
 
 * Bugfix - Open folder from context menu: [#6187](https://github.com/owncloud/web/issues/6187)
 
