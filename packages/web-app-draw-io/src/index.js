@@ -9,6 +9,7 @@ const routes = [
       fullscreen: App
     },
     meta: {
+      auth: false,
       hideHeadbar: true,
       patchCleanPath: true
     }
