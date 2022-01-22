@@ -56,11 +56,11 @@ describe('ViewOptions', () => {
 
     select.vm.$emit('input', 500)
     await wrapper.vm.$nextTick()
-    expect(window.localStorage.getItem('oc_filesPageLimit')).toBe('500')
+    expect(window.localStorage.getItem('oc_options_items-per-page')).toBe(JSON.stringify('500'))
 
     select.vm.$emit('input', 'all')
     await wrapper.vm.$nextTick()
-    expect(window.localStorage.getItem('oc_filesPageLimit')).toBe('all')
+    expect(window.localStorage.getItem('oc_options_items-per-page')).toBe(JSON.stringify('all'))
   })
 
   it('updates the files page limit when route query changes', async () => {
@@ -80,7 +80,7 @@ describe('ViewOptions', () => {
     wrapper.vm.$router.replace({ query: { 'items-per-page': 500 } }).catch(() => {})
 
     await wrapper.vm.$nextTick()
-    expect(window.localStorage.getItem('oc_filesPageLimit')).toBe('500')
+    expect(window.localStorage.getItem('oc_options_items-per-page')).toBe(JSON.stringify('500'))
   })
 
   it('triggeres mutation to toggle hidden files', () => {

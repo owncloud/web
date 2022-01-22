@@ -1,11 +1,21 @@
 import Vue from 'vue'
-import { mount, VueClass } from '@vue/test-utils'
-import { localVue, getStore, getRouter } from './views.setup'
+import Vuex from 'vuex'
+import GetTextPlugin from 'vue-gettext'
+import { mount, VueClass, createLocalVue } from '@vue/test-utils'
+import { getStore } from './views.setup'
+import VueCompositionAPI from '@vue/composition-api'
+import VueRouter from 'vue-router'
+import DesignSystem from 'owncloud-design-system'
 
-const $route = {
-  name: 'files-personal',
-  params: { page: 1 }
-}
+const localVue = createLocalVue()
+localVue.use(VueCompositionAPI)
+localVue.use(Vuex)
+localVue.use(VueRouter)
+localVue.use(DesignSystem)
+localVue.use(GetTextPlugin, {
+  translations: 'does-not-matter.json',
+  silent: true
+})
 
 const stubs = {
   'list-loader': true,
@@ -57,11 +67,8 @@ export const accentuatesTableRowTest = async <V extends Vue>(
     {
       attachTo: document.body,
       localVue,
+      router: new VueRouter(),
       store,
-      mocks: {
-        $route,
-        $router: getRouter
-      },
       stubs: stubs,
       computed: {
         displayThumbnails: () => false,

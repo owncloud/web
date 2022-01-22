@@ -1,8 +1,10 @@
 import { shallowMount, mount } from '@vue/test-utils'
-import { getStore, getRouter, localVue, createFile } from './views.setup.js'
+import { getStore, localVue, createFile } from './views.setup.js'
+import VueRouter from 'vue-router'
 import { createLocationSpaces } from '../../../src/router'
 import FileActions from '@files/src/mixins/fileActions'
 import SharedViaLink from '@files/src/views/SharedViaLink.vue'
+localVue.use(VueRouter)
 
 const component = { ...SharedViaLink, mounted: jest.fn() }
 
@@ -16,15 +18,6 @@ const stubs = {
   'context-actions': true,
   pagination: true,
   'list-info': true
-}
-
-const $route = {
-  params: {
-    fileId: '2147491323'
-  },
-  meta: {
-    title: 'Resolving private link'
-  }
 }
 
 const listLoaderStub = 'list-loader-stub'
@@ -63,7 +56,7 @@ describe('SharedViaLink view', () => {
 
     describe('when there are no files to be displayed', () => {
       let wrapper
-      beforeEach(async () => {
+      beforeEach(() => {
         wrapper = getMountedWrapper({ stubs })
       })
 
@@ -159,10 +152,7 @@ function mountOptions(store, loading, setup = {}) {
     localVue,
     store: store,
     stubs,
-    mocks: {
-      $route,
-      $router: getRouter({})
-    },
+    router: new VueRouter(),
     setup: () => ({
       loadResourcesTask: {
         isRunning: loading,
@@ -173,11 +163,11 @@ function mountOptions(store, loading, setup = {}) {
   }
 }
 
-function getMountedWrapper({ store = createStore(), loading = false, setup, stubs } = {}) {
+function getMountedWrapper({ store = createStore(), loading = false, setup } = {}) {
   return mount(component, mountOptions(store, loading, setup))
 }
 
-function getShallowWrapper({ store = createStore(), loading = false, setup, stubs } = {}) {
+function getShallowWrapper({ store = createStore(), loading = false, setup } = {}) {
   return shallowMount(component, mountOptions(store, loading, setup))
 }
 

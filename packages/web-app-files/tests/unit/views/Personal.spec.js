@@ -1,4 +1,5 @@
 import GetTextPlugin from 'vue-gettext'
+import VueRouter from 'vue-router'
 import { mount } from '@vue/test-utils'
 import { getStore, localVue } from './views.setup'
 import Personal from '@files/src/views/Personal.vue'
@@ -9,6 +10,7 @@ localVue.use(GetTextPlugin, {
   translations: 'does-not-matter.json',
   silent: true
 })
+localVue.use(VueRouter)
 
 const user = {
   id: 1,
@@ -156,11 +158,8 @@ function createWrapper(selectedFiles = [resourceForestJpg]) {
       pages: 4,
       inProgress: [null]
     }),
+    router: new VueRouter(),
     localVue,
-    mocks: {
-      $route: {},
-      $router: {}
-    },
     stubs: stubs
   })
 }

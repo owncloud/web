@@ -61,7 +61,7 @@ const cases = [
 
 describe('User can navigate in files list using pagination', () => {
   beforeEach(() => {
-    window.localStorage.setItem('oc_filesPageLimit', '2')
+    window.localStorage.setItem('oc_options_items-per-page', '2')
     store = merge({}, Store, {
       modules: {
         config: {

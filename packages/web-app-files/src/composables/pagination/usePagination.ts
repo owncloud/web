@@ -37,7 +37,7 @@ export function usePagination<T>(options: PaginationOptions<T>): PaginationResul
   }
 }
 
-function createPerPageRef<T>(options: PaginationOptions<TextDecodeOptions>): ComputedRef<number> {
+function createPerPageRef(options: PaginationOptions<TextDecodeOptions>): ComputedRef<number> {
   if (options.perPage) {
     return computed(() => unref(options.perPage))
   }
