@@ -1,0 +1,6 @@
+Bugfix: Application config not available to application
+
+We fixed a bug in providing config to external apps like draw-io.
+
+https://github.com/owncloud/web/issues/6296
+https://github.com/owncloud/web/pull/6298
