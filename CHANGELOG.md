@@ -17,6 +17,7 @@ Summary
 * Enhancement - File selection simplification: [#5967](https://github.com/owncloud/web/issues/5967)
 * Enhancement - Reorganize urls: [#6137](https://github.com/owncloud/web/pull/6137)
 * Enhancement - Lazy resource table cells: [#6204](https://github.com/owncloud/web/pull/6204)
+* Enhancement - Persist chosen sorting options: [#5930](https://github.com/owncloud/web/issues/5930)
 * Enhancement - Redesign main layout: [#6036](https://github.com/owncloud/web/issues/6036)
 * Enhancement - Show parent folder for resources: [#6226](https://github.com/owncloud/web/pull/6226)
 * Enhancement - Add default sorting to the spaces list: [#6262](https://github.com/owncloud/web/pull/6262)
@@ -101,6 +102,16 @@ Details
    default. To disable the feature set the displayResourcesLazy option to false.
 
    https://github.com/owncloud/web/pull/6204
+
+* Enhancement - Persist chosen sorting options: [#5930](https://github.com/owncloud/web/issues/5930)
+
+   We now persist the chosen sorting options per view into the local storage of the browser. This
+   means, that when e.g. the `All files` page is sorted by last modification date and the `Share
+   with others` page is sorted by share receivers, the web UI remembers those choices for example
+   across browser tabs or during navigation in the folder tree.
+
+   https://github.com/owncloud/web/issues/5930
+   https://github.com/owncloud/web/pull/6290
 
 * Enhancement - Redesign main layout: [#6036](https://github.com/owncloud/web/issues/6036)
 
