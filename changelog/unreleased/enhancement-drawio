@@ -1,0 +1,6 @@
+Enhancement: Drawio improvements
+
+- Honor the autosave configuration, and actually save
+- Show error messages to the user, currently all failures are silent
+
+https://github.com/owncloud/web/pull/6125
