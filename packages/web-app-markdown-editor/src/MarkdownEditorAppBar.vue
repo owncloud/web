@@ -2,7 +2,7 @@
   <div id="markdown-editor-app-bar" class="oc-app-bar">
     <oc-grid flex gutter="small">
       <div class="oc-width-auto">
-        <oc-button id="markdown-editor-controls-save" :disabled="!isTouched" @click="saveContent">
+        <oc-button id="markdown-editor-controls-save" :disabled="!isDirty" @click="$emit('save')">
           <oc-icon name="save" />
         </oc-button>
         <oc-spinner v-if="isLoading" :aria-label="$gettext('Loading editor content')" />
@@ -11,7 +11,7 @@
         <span id="markdown-editor-file-path">{{ activeFilePath }}</span>
       </div>
       <div class="oc-width-auto oc-text-right">
-        <oc-button id="markdown-editor-controls-close" @click="closeApp">
+        <oc-button id="markdown-editor-controls-close" @click="$emit('closeApp')">
           <oc-icon name="close" />
         </oc-button>
       </div>
@@ -19,27 +19,24 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapActions } from 'vuex'
-
 export default {
-  computed: {
-    ...mapGetters(['activeFile']),
-    ...mapGetters('MarkdownEditor', ['isTouched', 'isLoading']),
-    activeFilePath() {
-      return this.activeFile.path.replace(/^(\/|\\)+/, '')
+  props: {
+    currentFileContext: {
+      type: Object,
+      required: true
+    },
+    isDirty: {
+      type: Boolean,
+      required: true
+    },
+    isLoading: {
+      type: Boolean,
+      required: true
     }
   },
-  methods: {
-    ...mapActions('MarkdownEditor', ['saveFile']),
-    saveContent() {
-      this.saveFile({
-        client: this.$client
-      })
-    },
-    closeApp() {
-      this.$router.push({
-        path: '/files'
-      })
+  computed: {
+    activeFilePath() {
+      return this.currentFileContext.path.replace(/^(\/|\\)+/, '')
     }
   }
 }

@@ -1,0 +1,6 @@
+Enhancement: Add URL handling to markdown editor
+
+We made the markdown editor URL aware. This enables the close button to return to the source folder of the file being edited and also enables opening the editor again on page reload.
+
+https://github.com/owncloud/web/pull/6134
+https://github.com/owncloud/web/issues/5928
