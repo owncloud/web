@@ -14,6 +14,7 @@ Summary
 * Change - Remove UiKit: [#6103](https://github.com/owncloud/web/issues/6103)
 * Change - Use remixicons for redesign: [#6142](https://github.com/owncloud/web/pull/6142)
 * Enhancement - Darkmode theme switcher: [#6240](https://github.com/owncloud/web/pull/6240)
+* Enhancement - Drawio improvements: [#6125](https://github.com/owncloud/web/pull/6125)
 * Enhancement - File selection simplification: [#5967](https://github.com/owncloud/web/issues/5967)
 * Enhancement - Reorganize urls: [#6137](https://github.com/owncloud/web/pull/6137)
 * Enhancement - Lazy resource table cells: [#6204](https://github.com/owncloud/web/pull/6204)
@@ -70,6 +71,13 @@ Details
    browser preferences.
 
    https://github.com/owncloud/web/pull/6240
+
+* Enhancement - Drawio improvements: [#6125](https://github.com/owncloud/web/pull/6125)
+
+   - Honor the autosave configuration, and actually save - Show error messages to the user,
+   currently all failures are silent
+
+   https://github.com/owncloud/web/pull/6125
 
 * Enhancement - File selection simplification: [#5967](https://github.com/owncloud/web/issues/5967)
 
