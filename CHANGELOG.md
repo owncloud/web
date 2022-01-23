@@ -18,6 +18,7 @@ Summary
 * Enhancement - File selection simplification: [#5967](https://github.com/owncloud/web/issues/5967)
 * Enhancement - Reorganize urls: [#6137](https://github.com/owncloud/web/pull/6137)
 * Enhancement - Lazy resource table cells: [#6204](https://github.com/owncloud/web/pull/6204)
+* Enhancement - Add URL handling to markdown editor: [#6134](https://github.com/owncloud/web/pull/6134)
 * Enhancement - Persist chosen sorting options: [#5930](https://github.com/owncloud/web/issues/5930)
 * Enhancement - Redesign main layout: [#6036](https://github.com/owncloud/web/issues/6036)
 * Enhancement - Show parent folder for resources: [#6226](https://github.com/owncloud/web/pull/6226)
@@ -110,6 +111,14 @@ Details
    default. To disable the feature set the displayResourcesLazy option to false.
 
    https://github.com/owncloud/web/pull/6204
+
+* Enhancement - Add URL handling to markdown editor: [#6134](https://github.com/owncloud/web/pull/6134)
+
+   We made the markdown editor URL aware. This enables the close button to return to the source
+   folder of the file being edited and also enables opening the editor again on page reload.
+
+   https://github.com/owncloud/web/issues/5928
+   https://github.com/owncloud/web/pull/6134
 
 * Enhancement - Persist chosen sorting options: [#5930](https://github.com/owncloud/web/issues/5930)
 
