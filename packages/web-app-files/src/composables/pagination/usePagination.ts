@@ -16,7 +16,7 @@ interface PaginationResult<T> {
 }
 
 export function usePagination<T>(options: PaginationOptions<T>): PaginationResult<T> {
-  const perPage = createPerPageRef(options)
+  const perPage = createPerPageRef<T>(options)
   const page = ref(options.page)
   const total = computed(() => Math.ceil(unref(options.items).length / unref(perPage)) || 1)
   const items = computed(() => {
@@ -37,7 +37,7 @@ export function usePagination<T>(options: PaginationOptions<T>): PaginationResul
   }
 }
 
-function createPerPageRef(options: PaginationOptions<TextDecodeOptions>): ComputedRef<number> {
+function createPerPageRef<T>(options: PaginationOptions<T>): ComputedRef<number> {
   if (options.perPage) {
     return computed(() => unref(options.perPage))
   }
