@@ -21,7 +21,7 @@ import { basename } from 'path'
 import queryString from 'query-string'
 import { DateTime } from 'luxon'
 import { DavPermission, DavProperty } from 'web-pkg/src/constants'
-import { useAppDefaults } from 'web-pkg/src/composables/useAppDefaults'
+import { useAppDefaults } from 'web-pkg/src/composables'
 
 export default {
   name: 'DrawIoEditor',

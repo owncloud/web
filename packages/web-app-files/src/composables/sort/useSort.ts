@@ -1,26 +1,31 @@
-import { ref, computed, ComputedRef, unref } from '@vue/composition-api'
+import { ref, Ref, computed, ComputedRef, unref, isRef } from '@vue/composition-api'
 import { MaybeRef, MaybeReadonlyRef } from 'web-pkg/src/utils'
+import { useRouteName, useRouteQueryPersisted } from 'web-pkg/src/composables'
+import { SortConstants } from './constants'
 
 export enum SortDir {
   Desc = 'desc',
   Asc = 'asc'
 }
 
-interface SortField {
+export interface SortField {
   name: MaybeRef<string>
   // eslint-disable-next-line @typescript-eslint/ban-types
   sortable?: MaybeRef<boolean | Function>
   sortDir?: MaybeRef<string>
 }
 
-interface SortOptions<T> {
+export interface SortOptions<T> {
   items: MaybeReadonlyRef<Array<T>>
   fields: MaybeRef<Array<SortField>>
   sortBy?: MaybeRef<string>
+  sortByQueryName?: MaybeRef<string>
   sortDir?: MaybeRef<SortDir>
+  sortDirQueryName?: MaybeRef<string>
+  routeName?: MaybeRef<string>
 }
 
-interface SortResult<T> {
+export interface SortResult<T> {
   items: ComputedRef<Array<T>>
   sortBy: ComputedRef<string>
   sortDir: ComputedRef<SortDir>
@@ -29,8 +34,8 @@ interface SortResult<T> {
 }
 
 export function useSort<T>(options: SortOptions<T>): SortResult<T> {
-  const sortByRef = ref(options.sortBy)
-  const sortDirRef = ref(options.sortDir)
+  const sortByRef = createSortByQueryRef(options)
+  const sortDirRef = createSortDirQueryRef(options)
 
   const sortBy = computed(() => unref(sortByRef) || firstSortableField(unref(fields)))
   const sortDir = computed(
@@ -56,6 +61,30 @@ export function useSort<T>(options: SortOptions<T>): SortResult<T> {
     sortDir,
     handleSort
   }
+}
+
+function createSortByQueryRef<T>(options: SortOptions<T>): Ref {
+  if (options.sortBy) {
+    return isRef(options.sortBy) ? options.sortBy : ref(options.sortBy)
+  }
+
+  return useRouteQueryPersisted({
+    name: unref(options.sortByQueryName) || SortConstants.sortByQueryName,
+    defaultValue: firstSortableField(unref(options.fields))?.sortBy,
+    routeName: unref(options.routeName || useRouteName())
+  })
+}
+
+function createSortDirQueryRef<T>(options: SortOptions<T>): Ref {
+  if (options.sortDir) {
+    return isRef(options.sortDir) ? options.sortDir : ref(options.sortDir)
+  }
+
+  return useRouteQueryPersisted({
+    name: unref(options.sortDirQueryName) || SortConstants.sortDirQueryName,
+    defaultValue: firstSortableField(unref(options.fields))?.sortDir,
+    routeName: unref(options.routeName || useRouteName())
+  })
 }
 
 const firstSortableField = (fields) => {
@@ -119,8 +148,8 @@ const compare = (a, b, sortBy, sortDir, sortable) => {
     return (aValue - bValue) * modifier
   }
   const userLang = navigator.language // FIXME: ts error: || navigator.userLanguage
-  const compare = aValue
+  const c = (aValue || '')
     .toString()
-    .localeCompare(bValue.toString(), userLang, { sensitivity: 'base' })
-  return compare * modifier
+    .localeCompare((bValue || '').toString(), userLang, { sensitivity: 'base' })
+  return c * modifier
 }

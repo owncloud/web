@@ -37,6 +37,7 @@ localVue.use(GetTextPlugin, {
 
 export const getRouter = ({ query = {} }) => ({
   afterEach: jest.fn(),
+  replace: jest.fn(),
   currentRoute: {
     query
   }

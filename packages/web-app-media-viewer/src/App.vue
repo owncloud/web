@@ -103,7 +103,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import { useAppDefaults } from 'web-pkg/src/composables/useAppDefaults'
+import { useAppDefaults } from 'web-pkg/src/composables'
 
 export default {
   name: 'Mediaviewer',

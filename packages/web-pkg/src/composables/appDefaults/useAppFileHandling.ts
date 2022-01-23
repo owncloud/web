@@ -76,12 +76,11 @@ export function useAppFileHandling(options: AppFileHandlingOptions): AppFileHand
 
   const getFileInfo = async (filePath: string, davProperties: DavProperties) => {
     if (unref(isPublicLinkContext)) {
-      const fileInfo = await client.publicFiles.getFileInfo(
+      return await client.publicFiles.getFileInfo(
         filePath,
         unref(publicLinkPassword),
         davProperties
       )
-      return fileInfo
     }
     return client.files.fileInfo(filePath, davProperties)
   }

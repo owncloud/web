@@ -85,14 +85,8 @@ import { batchActions } from '../helpers/batchActions'
 import { cloneStateObject } from '../helpers/store'
 import MixinsGeneral from '../mixins'
 import MixinFilesListFilter from '../mixins/filesListFilter'
-import {
-  useFileListHeaderPosition,
-  useStore,
-  useRouteQuery,
-  usePagination,
-  useDefaults,
-  useSort
-} from '../composables'
+import { useFileListHeaderPosition, usePagination, useSort } from '../composables'
+import { useRouteQuery, useStore } from 'web-pkg/src/composables'
 import { useTask } from 'vue-concurrency'
 
 import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
@@ -121,12 +115,8 @@ export default {
 
   setup() {
     const store = useStore()
-    const { pagination: paginationDefaults } = useDefaults()
     const { refresh: refreshFileListHeaderPosition, y: fileListHeaderY } =
       useFileListHeaderPosition()
-
-    const sortByPageQuery = useRouteQuery('sort-by')
-    const sortDirPageQuery = useRouteQuery('sort-dir')
 
     const storeItems = computed(() => store.getters['Files/activeFiles'] || [])
     const fields = computed(() => {
@@ -135,17 +125,13 @@ export default {
 
     const { sortBy, sortDir, items, handleSort } = useSort({
       items: storeItems,
-      fields: fields,
-      sortBy: sortByPageQuery,
-      sortDir: sortDirPageQuery
+      fields
     })
 
     const paginationPageQuery = useRouteQuery('page', '1')
     const paginationPage = computed(() => parseInt(String(paginationPageQuery.value)))
-    const paginationPerPageQuery = useRouteQuery('items-per-page', paginationDefaults.perPage.value)
     const { items: paginatedResources, total: paginationPages } = usePagination({
       page: paginationPage,
-      perPage: computed(() => parseInt(String(paginationPerPageQuery.value))),
       items,
       sortDir,
       sortBy

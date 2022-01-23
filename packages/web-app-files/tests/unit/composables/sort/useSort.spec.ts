@@ -1,19 +1,20 @@
-import { ref, readonly, unref } from '@vue/composition-api'
+import { ref, readonly } from '@vue/composition-api'
 import { createWrapper } from './spec'
-import { SortDir, useSort } from '../../../../src/composables'
+import { SortDir, SortOptions, useSort } from '../../../../src/composables'
 
 describe('useSort', () => {
   it('should be valid', () => {
     expect(useSort).toBeDefined()
   })
 
-  it('does not sort if no field is sortable', () => {
+  it('does not sort if no sort field was given', () => {
     createWrapper(() => {
-      const input = {
+      const input: SortOptions<any> = {
         items: readonly([3, 4, 6, 1, 2, 5]),
         fields: [],
-        sortBy: null,
-        sortDir: null
+        sortBy: ref(null),
+        sortDir: ref(null),
+        routeName: 'mocked'
       }
 
       const { items } = useSort(input)
@@ -52,7 +53,7 @@ describe('useSort', () => {
               sortable: true
             }
           ],
-          sortBy: 'name',
+          sortBy: ref('name'),
           sortDir
         }
 
@@ -79,37 +80,6 @@ describe('useSort', () => {
           'dir3',
           'dir2',
           'Dir1'
-        ])
-      })
-    })
-
-    it('sorts by first sortable field if sortBy and sortDir are not provided', () => {
-      createWrapper(() => {
-        const input = {
-          items: readonly<Array<Resource>>(resources),
-          fields: [
-            {
-              name: 'name'
-            },
-            {
-              name: 'time',
-              sortable: true
-            }
-          ]
-        }
-
-        const { items, sortBy, sortDir } = useSort(input)
-        expect(unref(sortBy)).toEqual('time')
-        expect(unref(sortDir)).toEqual(SortDir.Desc)
-        expect(items.value.map((i) => i.name)).toMatchObject([
-          'dir3',
-          'dir2',
-          'A.png',
-          'Dir1',
-          'Dir4',
-          'a.png',
-          'c.png',
-          'b.png'
         ])
       })
     })

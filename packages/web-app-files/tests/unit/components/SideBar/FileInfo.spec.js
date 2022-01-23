@@ -106,7 +106,8 @@ function createWrapper(testResource, tooltipStub, routeName) {
     }),
     localVue,
     stubs: {
-      ...stubs
+      ...stubs,
+      'oc-resource-name': true
     },
     directives: {
       OcTooltip: tooltipStub

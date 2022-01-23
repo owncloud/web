@@ -74,15 +74,8 @@ import { buildResource } from '../helpers/resources'
 import { fileList } from '../helpers/ui'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../constants'
-import {
-  useMutationSubscription,
-  useFileListHeaderPosition,
-  useStore,
-  useRouteQuery,
-  usePagination,
-  useSort,
-  useDefaults
-} from '../composables'
+import { useFileListHeaderPosition, usePagination, useSort } from '../composables'
+import { useMutationSubscription, useRouteQuery, useStore } from 'web-pkg/src/composables'
 import { bus } from 'web-pkg/src/instance'
 
 import ResourceTable, { determineSortFields } from '../components/FilesList/ResourceTable.vue'
@@ -123,12 +116,8 @@ export default {
   ],
   setup() {
     const store = useStore()
-    const { pagination: paginationDefaults } = useDefaults()
     const { refresh: refreshFileListHeaderPosition, y: fileListHeaderY } =
       useFileListHeaderPosition()
-
-    const sortByPageQuery = useRouteQuery('sort-by')
-    const sortDirPageQuery = useRouteQuery('sort-dir')
 
     const storeItems = computed(() => store.getters['Files/activeFiles'] || [])
     const fields = computed(() => {
@@ -137,17 +126,13 @@ export default {
 
     const { sortBy, sortDir, items, handleSort } = useSort({
       items: storeItems,
-      fields: fields,
-      sortBy: sortByPageQuery,
-      sortDir: sortDirPageQuery
+      fields
     })
 
     const paginationPageQuery = useRouteQuery('page', '1')
     const paginationPage = computed(() => parseInt(String(paginationPageQuery.value)))
-    const paginationPerPageQuery = useRouteQuery('items-per-page', paginationDefaults.perPage.value)
     const { items: paginatedResources, total: paginationPages } = usePagination({
       page: paginationPage,
-      perPage: computed(() => parseInt(String(paginationPerPageQuery.value))),
       items,
       sortDir,
       sortBy
@@ -364,7 +349,7 @@ export default {
       if (errors.length === 1) {
         title = this.$gettext('Failed to move "%{resourceName}"')
         this.showMessage({
-          title: this.$gettextInterpolate(title, { resourceName: errors[0].resourceName }, true),
+          title: this.$gettextInterpolate(title, { resourceName: errors[0]?.resourceName }, true),
           status: 'danger'
         })
         return

@@ -2,7 +2,8 @@ import VueCompositionAPI, { defineComponent } from '@vue/composition-api'
 import { createLocalVue, mount, Wrapper } from '@vue/test-utils'
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { useStore, useFileListHeaderPosition } from '../../../../../src/composables'
+import { useFileListHeaderPosition } from '../../../../../src/composables'
+import { useStore } from 'web-pkg/src/composables'
 
 const localVue = createLocalVue()
 localVue.use(VueCompositionAPI)

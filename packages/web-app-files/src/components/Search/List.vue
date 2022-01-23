@@ -36,7 +36,8 @@
 </template>
 
 <script>
-import { useStore, useRouteQuery, usePagination, useDefaults } from '../../composables'
+import { usePagination } from '../../composables'
+import { useRouteQuery, useStore } from 'web-pkg/src/composables'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageType, ImageDimension } from '../../constants'
 import { createLocationSpaces } from '../../router'
@@ -66,13 +67,10 @@ export default {
   },
   setup() {
     const store = useStore()
-    const { pagination: paginationDefaults } = useDefaults()
     const paginationPageQuery = useRouteQuery('page', '1')
     const paginationPage = computed(() => parseInt(String(paginationPageQuery.value)))
-    const paginationPerPageQuery = useRouteQuery('items-per-page', paginationDefaults.perPage.value)
     const { items: paginatedResources, total: paginationPages } = usePagination({
       page: paginationPage,
-      perPage: computed(() => parseInt(String(paginationPerPageQuery.value))),
       items: computed(() => store.getters['Files/activeFiles'])
     })
 

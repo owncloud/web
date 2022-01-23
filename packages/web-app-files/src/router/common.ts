@@ -7,8 +7,8 @@ type commonTypes = 'files-common-favorites' | 'files-common-trash'
 export const createLocationCommon = (name: commonTypes, location = {}): Location =>
   createLocation(name, location)
 
-const locationFavorites = createLocationCommon('files-common-favorites')
-const locationTrash = createLocationCommon('files-common-trash')
+export const locationFavorites = createLocationCommon('files-common-favorites')
+export const locationTrash = createLocationCommon('files-common-trash')
 
 export const isLocationCommonActive = isLocationActiveDirector<commonTypes>(
   locationFavorites,

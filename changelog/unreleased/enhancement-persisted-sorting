@@ -1,0 +1,6 @@
+Enhancement: Persist chosen sorting options
+
+We now persist the chosen sorting options per view into the local storage of the browser. This means, that when e.g. the `All files` page is sorted by last modification date and the `Share with others` page is sorted by share receivers, the web UI remembers those choices for example across browser tabs or during navigation in the folder tree.
+
+https://github.com/owncloud/web/issues/5930
+https://github.com/owncloud/web/pull/6290

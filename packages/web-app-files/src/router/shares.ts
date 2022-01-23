@@ -7,9 +7,9 @@ type shareTypes = 'files-shares-with-me' | 'files-shares-with-others' | 'files-s
 export const createLocationShares = (name: shareTypes, location = {}): Location =>
   createLocation(name, location)
 
-const locationSharesWithMe = createLocationShares('files-shares-with-me')
-const locationSharesWithOthers = createLocationShares('files-shares-with-others')
-const locationSharesViaLink = createLocationShares('files-shares-via-link')
+export const locationSharesWithMe = createLocationShares('files-shares-with-me')
+export const locationSharesWithOthers = createLocationShares('files-shares-with-others')
+export const locationSharesViaLink = createLocationShares('files-shares-via-link')
 
 export const isLocationSharesActive = isLocationActiveDirector<shareTypes>(
   locationSharesWithMe,

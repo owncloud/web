@@ -1,4 +1,4 @@
-import { useRouteQuery } from '../../../../src/composables'
+import { useRouteQuery } from 'web-pkg/src/composables'
 import { createWrapper } from './spec'
 import VueRouter from 'vue-router'
 import { Ref, nextTick, computed, ComputedRef } from '@vue/composition-api'

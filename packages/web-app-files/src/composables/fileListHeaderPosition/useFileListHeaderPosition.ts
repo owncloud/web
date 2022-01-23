@@ -1,5 +1,5 @@
 import { ref, nextTick, onMounted, Ref, watch } from '@vue/composition-api'
-import { useStore } from '../store'
+import { useStore } from 'web-pkg/src/composables/store'
 
 export const useFileListHeaderPosition = (): { y: Ref; refresh: () => void } => {
   const store = useStore()
