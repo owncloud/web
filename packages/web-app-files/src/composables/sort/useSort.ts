@@ -148,8 +148,8 @@ const compare = (a, b, sortBy, sortDir, sortable) => {
     return (aValue - bValue) * modifier
   }
   const userLang = navigator.language // FIXME: ts error: || navigator.userLanguage
-  const compare = (aValue || '')
+  const c = (aValue || '')
     .toString()
     .localeCompare((bValue || '').toString(), userLang, { sensitivity: 'base' })
-  return compare * modifier
+  return c * modifier
 }
