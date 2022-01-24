@@ -44,8 +44,8 @@
           "
         >
           <div v-for="space in spaces" :key="space.id" class="oc-mb-m">
-            <span class="spaces-list-card oc-border oc-card oc-card-default">
-              <span class="oc-card-media-top oc-border-b">
+            <div class="spaces-list-card oc-border oc-card oc-card-default">
+              <div class="oc-card-media-top oc-border-b">
                 <oc-button
                   :id="`space-context-btn-${space.id}`"
                   v-oc-tooltip="$gettext('Show context menu')"
@@ -82,11 +82,11 @@
                 </oc-drop>
                 <img v-if="space.image" :src="space.image" alt="" />
                 <oc-icon v-else name="layout-grid" size="xxlarge" class="oc-px-m oc-py-m" />
-              </span>
+              </div>
               <span class="oc-card-body">
                 <a href="#" class="oc-card-title" v-text="space.name" />
               </span>
-            </span>
+            </div>
           </div>
         </div>
       </div>
@@ -170,7 +170,7 @@ export default {
       this.$refs.createNewSpaceButton.$el.blur()
 
       return this.graph.drives
-        .createNewDrive({ name }, {})
+        .createDrive({ name }, {})
         .then(() => {
           this.hideModal()
           this.loadSpacesTask.perform(this)

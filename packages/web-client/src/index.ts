@@ -1,9 +1,19 @@
-import axios, { AxiosInstance, AxiosPromise } from 'axios'
-import { Configuration, MeDrivesApi, Drive, DrivesApiFactory } from './generated'
+import axios, { AxiosInstance, AxiosPromise, AxiosResponse } from 'axios'
+import {
+  Configuration,
+  MeDrivesApi,
+  Drive,
+  DrivesApiFactory,
+  CollectionOfDrives
+} from './generated'
 
 interface Graph {
-  drives: any
-  // drives: Pick<MeDrivesApi, 'listMyDrives'>
+  drives: {
+    listMyDrives: () => Promise<AxiosResponse<CollectionOfDrives>>
+    createDrive: (drive: Drive, options: any) => AxiosPromise<Drive>
+    updateDrive: (id: string, drive: Drive, options: any) => AxiosPromise<Drive>
+    deleteDrive: (id: string, ifMatch: string, options: any) => AxiosPromise<void>
+  }
 }
 
 const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
@@ -18,7 +28,7 @@ const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
   return {
     drives: {
       listMyDrives: () => meDrivesApi.listMyDrives(),
-      createNewDrive: (drive: Drive, options: any): AxiosPromise<Drive> =>
+      createDrive: (drive: Drive, options: any): AxiosPromise<Drive> =>
         drivesApiFactory.createDrive(drive, options),
       updateDrive: (id: string, drive: Drive, options: any): AxiosPromise<Drive> =>
         drivesApiFactory.updateDrive(id, drive, options),
