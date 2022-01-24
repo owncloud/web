@@ -28,12 +28,6 @@ export default {
     ]),
 
     $_rename_showModal(space) {
-      const checkInputValue = (value) => {
-        if (value.trim() === '') {
-          this.setModalInputErrorMessage(this.$gettext('Space name cannot be empty'))
-        }
-      }
-
       const modal = {
         variation: 'passive',
         title: this.$gettext('Rename space') + ' ' + space.name,
@@ -44,10 +38,16 @@ export default {
         inputValue: space.name,
         onCancel: this.hideModal,
         onConfirm: (name) => this.$_rename_renameSpace(space.id, name),
-        onInput: checkInputValue
+        onInput: this.$_rename_checkName
       }
 
       this.createModal(modal)
+    },
+
+    $_rename_checkName(name) {
+      if (name.trim() === '') {
+        this.setModalInputErrorMessage(this.$gettext('Space name cannot be empty'))
+      }
     },
 
     $_rename_renameSpace(id, name) {

@@ -63,7 +63,7 @@
                   padding-size="small"
                   position="bottom-end"
                 >
-                  <oc-list class="oc-list oc-files-context-actions">
+                  <ul class="oc-list oc-files-context-actions">
                     <li
                       v-for="(action, actionIndex) in contextMenuActions"
                       :key="`action-${actionIndex}`"
@@ -78,7 +78,7 @@
                         {{ action.label() }}
                       </oc-button>
                     </li>
-                  </oc-list>
+                  </ul>
                 </oc-drop>
                 <img v-if="space.image" :src="space.image" alt="" />
                 <oc-icon v-else name="layout-grid" size="xxlarge" class="oc-px-m oc-py-m" />
@@ -144,12 +144,6 @@ export default {
     ...mapActions(['createModal', 'hideModal', 'setModalInputErrorMessage']),
 
     showCreateSpaceModal() {
-      const checkInputValue = (value) => {
-        if (value.trim() === '') {
-          this.setModalInputErrorMessage(this.$gettext('Space name cannot be empty'))
-        }
-      }
-
       const modal = {
         variation: 'passive',
         title: this.$gettext('Create a new space'),
@@ -160,10 +154,16 @@ export default {
         inputValue: this.$gettext('New space'),
         onCancel: this.hideModal,
         onConfirm: this.addNewSpace,
-        onInput: checkInputValue
+        onInput: this.checkSpaceName
       }
 
       this.createModal(modal)
+    },
+
+    checkSpaceName(name) {
+      if (name.trim() === '') {
+        this.setModalInputErrorMessage(this.$gettext('Space name cannot be empty'))
+      }
     },
 
     addNewSpace(name) {

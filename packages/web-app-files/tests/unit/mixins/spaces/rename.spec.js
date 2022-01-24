@@ -36,7 +36,8 @@ describe('rename', () => {
         actions: {
           createModal: jest.fn(),
           hideModal: jest.fn(),
-          showMessage: jest.fn()
+          showMessage: jest.fn(),
+          setModalInputErrorMessage: jest.fn()
         }
       })
     })
@@ -52,6 +53,19 @@ describe('rename', () => {
       await wrapper.vm.$_rename_showModal({ id: 1, name: 'renamed space' })
 
       expect(spyCreateModalStub).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('method "$_rename_checkName"', () => {
+    it('should throw an error with an empty space name', async () => {
+      const renamePromise = new Promise((resolve) => {
+        return resolve()
+      })
+      const wrapper = getWrapper(renamePromise)
+      const spyInputErrorMessageStub = jest.spyOn(wrapper.vm, 'setModalInputErrorMessage')
+      await wrapper.vm.$_rename_checkName('')
+
+      expect(spyInputErrorMessageStub).toHaveBeenCalledTimes(1)
     })
   })
 

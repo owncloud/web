@@ -68,6 +68,23 @@ describe('Spaces component', () => {
 
     expect(createModalStub).toHaveBeenCalledTimes(1)
   })
+
+  it('should show an error message when trying to create a space with an empty name', async () => {
+    mockAxios.request.mockImplementationOnce(() => {
+      return Promise.resolve({
+        data: {
+          value: []
+        }
+      })
+    })
+    const wrapper = getMountedWrapper()
+    await wrapper.vm.loadSpacesTask.last
+
+    const spyInputErrorMessageStub = jest.spyOn(wrapper.vm, 'setModalInputErrorMessage')
+    wrapper.vm.checkSpaceName('')
+
+    expect(spyInputErrorMessageStub).toHaveBeenCalledTimes(1)
+  })
 })
 
 function getMountedWrapper() {
