@@ -128,8 +128,10 @@ When('the user clears all error message from the webUI', function () {
   return client.page.webPage().clearAllErrorMessages()
 })
 
-Then('no message should be displayed on the webUI', function () {
-  return client.page.webPage().expect.element('@message').to.not.be.present
+Then('no message should be displayed on the webUI', async function () {
+  const hasMessage = await client.page.webPage().hasErrorMessage(false)
+  assert.strictEqual(hasMessage, false, 'Expected no messages but a message is displayed.')
+  return this
 })
 
 Then(
