@@ -9,6 +9,7 @@
       variation="primary"
       appearance="filled"
       class="oc-mb-xs"
+      data-testid="spaces-list-create-space-btn"
       @click="showCreateSpaceModal"
     >
       <oc-icon name="add" />
@@ -66,6 +67,7 @@
                     <li
                       v-for="(action, actionIndex) in contextMenuActions"
                       :key="`action-${actionIndex}`"
+                      class="oc-spaces-context-action oc-py-xs oc-px-s"
                     >
                       <oc-button
                         appearance="raw"
