@@ -1895,7 +1895,7 @@ def documentation(ctx):
                 },
                 {
                     "name": "test",
-                    "image": "owncloudci/hugo:0.71.0",
+                    "image": "owncloudci/hugo:0.89.4",
                     "commands": [
                         "cd hugo",
                         "hugo",
