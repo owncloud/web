@@ -1,6 +1,7 @@
 import get from 'lodash-es/get.js'
 import Vue from 'vue'
-import Router from 'vue-router'
+// eslint-disable-next-line no-unused-vars
+import Router, { Route } from 'vue-router'
 import LoginPage from '../pages/login.vue'
 import OidcCallbackPage from '../pages/oidcCallback.vue'
 import AccessDeniedPage from '../pages/accessDenied.vue'
@@ -72,11 +73,7 @@ const router = new Router({
 router.beforeEach(function (to, from, next) {
   const store = Vue.$store
   const isAuthenticated = store.getters.isAuthenticated
-  let authRequired = true
-  if (to.meta.auth === false) {
-    authRequired = false
-  }
-  if (authRequired) {
+  if (isAuthRequired(router, to)) {
     if (isAuthenticated) {
       const url = store.getters.urlBeforeLogin
       store.dispatch('saveUrlBeforeLogin', null)
@@ -93,6 +90,33 @@ router.beforeEach(function (to, from, next) {
     next()
   }
 })
+
+/**
+ * Checks if the `to` route needs authentication from the IDP by checking both the route itself and - if present - also the context route.
+ *
+ * @param router {Router}
+ * @param to {Route}
+ * @returns {boolean}
+ */
+const isAuthRequired = (router, to) => {
+  if (to.meta?.auth !== false) {
+    return true
+  }
+
+  /**
+   * The contextRouteName in routes is used to give applications additional context where the new route was triggered from.
+   * This means that the new route needs to fulfill both its own auth requirements and the auth requirements from the context route.
+   */
+  if (!to.params?.contextRouteName) {
+    return false
+  }
+
+  const contextRoute = router.getRoutes().find((r) => r.name === to.params.contextRouteName)
+  if (contextRoute) {
+    return contextRoute.meta?.auth !== false
+  }
+  return false
+}
 
 // type: patch
 // temporary patch till we have upgraded web to the latest vue router which make this obsolete
