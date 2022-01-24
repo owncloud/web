@@ -101,13 +101,14 @@ import { useStore } from 'web-pkg/src/composables'
 import { useTask } from 'vue-concurrency'
 import Rename from '../../mixins/spaces/actions/rename'
 import { mapActions } from 'vuex'
+import Delete from '../../mixins/spaces/actions/delete'
 
 export default {
   components: {
     NoContentMessage,
     ListLoader
   },
-  mixins: [Rename],
+  mixins: [Rename, Delete],
   setup() {
     const store = useStore()
     const spaces = ref([])
@@ -134,7 +135,7 @@ export default {
       return true
     },
     contextMenuActions() {
-      return [...this.$_rename_items].filter((item) => item.isEnabled())
+      return [...this.$_rename_items, ...this.$_delete_items].filter((item) => item.isEnabled())
     }
   },
   methods: {
@@ -165,6 +166,7 @@ export default {
 
     addNewSpace(name) {
       this.$refs.createNewSpaceButton.$el.blur()
+
       return this.graph.drives
         .createNewDrive({ name }, {})
         .then(() => {

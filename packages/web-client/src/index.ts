@@ -21,7 +21,9 @@ const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
       createNewDrive: (drive: Drive, options: any): AxiosPromise<Drive> =>
         drivesApiFactory.createDrive(drive, options),
       updateDrive: (id: string, drive: Drive, options: any): AxiosPromise<Drive> =>
-        drivesApiFactory.updateDrive(id, drive, options)
+        drivesApiFactory.updateDrive(id, drive, options),
+      deleteDrive: (id: string, ifMatch: string, options: any): AxiosPromise<void> =>
+        drivesApiFactory.deleteDrive(id, ifMatch, options)
     }
   }
 }
