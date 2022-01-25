@@ -10,14 +10,19 @@ Feature: Upload into a folder Shares
     And user "Alice" has been created with default attributes and without skeleton files in the server
     And user "Brian" has been created with default attributes and without skeleton files in the server
 
-  @issue-ocis-2322
+  @issue-ocis-2322 @notToImplementOnOCIS
   Scenario: the Shares folder does not exist if no share has been accepted
     Given user "Brian" has created file "lorem.txt" in the server
     And user "Brian" has shared file "lorem.txt" with user "Alice" with "all" permissions in the server
     When user "Alice" logs in using the webUI
     Then folder "Shares" should not be listed on the webUI
 
-  @issue-ocis-2322
+  @issue-ocis-2322 @notToImplementOnOC10
+  Scenario: the Shares folder should be listed even without any share
+    When user "Alice" logs in using the webUI
+    Then folder "Shares" should be listed on the webUI
+
+
   Scenario: the Shares folder exists after accepting the first shared file
     Given user "Brian" has created file "lorem.txt" in the server
     And user "Brian" has shared file "lorem.txt" with user "Alice" with "all" permissions in the server

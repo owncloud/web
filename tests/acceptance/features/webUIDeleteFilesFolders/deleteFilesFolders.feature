@@ -89,6 +89,8 @@ Feature: deleting files and folders
   Scenario: Delete all except for a few files at once
     Given user "Alice" has uploaded file "data.zip" to "data.zip" in the server
     And user "Alice" has created file "lorem.txt" in the server
+    And user "Alice" has created file "fileToDelete.txt" in the server
+    And user "Alice" has created folder "folderToDelete" in the server
     And user "Alice" has created folder "simple-folder" in the server
     And the user has reloaded the current page of the webUI
     When the user marks all files for batch action using the webUI
@@ -96,15 +98,18 @@ Feature: deleting files and folders
       | name          |
       | lorem.txt     |
       | simple-folder |
+      | Shares        |
     And the user batch deletes the marked files using the webUI
     Then as "Alice" file "lorem.txt" should exist in the server
     And as "Alice" folder "simple-folder" should exist in the server
     And folder "simple-folder" should be listed on the webUI
+    And folder "Shares" should be listed on the webUI
     And file "lorem.txt" should be listed on the webUI
-    # Check just an example of a file that should not exist any more
     But as "Alice" file "data.zip" should not exist in the server
+    And as "Alice" file "fileToDelete.txt" should not exist in the server
+    And as "Alice" folder "folderToDelete" should not exist in the server
     And file "data.zip" should not be listed on the webUI
-    And the count of files and folders shown on the webUI should be 2
+    And the count of files and folders shown on the webUI should be 4
     And no message should be displayed on the webUI
 
   @ocis-reva-issue-106

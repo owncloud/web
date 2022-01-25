@@ -122,8 +122,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIRestrictSharing/restrictSharing.feature:56](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIRestrictSharing/restrictSharing.feature#L56)
 
 ### [First request with a recreated user returns a 401 error](https://github.com/owncloud/ocis/issues/1675)
--   [webUISharingAutocompletion/shareAutocompletion.feature:56](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAutocompletion/shareAutocompletion.feature#L56)
--   [webUISharingAutocompletion/shareAutocompletion.feature:66](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAutocompletion/shareAutocompletion.feature#L66)
 -   [webUISharingAutocompletion/shareAutocompletion.feature:128](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAutocompletion/shareAutocompletion.feature#L128)
 -   [webUISharingAutocompletion/shareAutocompletion.feature:141](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAutocompletion/shareAutocompletion.feature#L141)
 
@@ -200,7 +198,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIFilesActionMenu/versions.feature:93](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesActionMenu/versions.feature#L93)
 
 ### [Accepting different shares with same filename from different users overwrites one file](https://github.com/owncloud/ocis/issues/713)
--   [webUISharingAcceptShares/acceptShares.feature:212](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L212)
+-   [webUISharingAcceptShares/acceptShares.feature:228](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L228)
 
 ### [Deletion of a selected user/group as a collaborator has unusual behavior in UI](https://github.com/owncloud/web/issues/5857)
 -   [webUISharingFolderAdvancedPermissionsGroups/shareAdvancePermissionsGroup.feature:63](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingFolderAdvancedPermissionsGroups/shareAdvancePermissionsGroup.feature#L63)
@@ -375,7 +373,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUITrashbinDelete/trashbinDelete.feature:48](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITrashbinDelete/trashbinDelete.feature#L48)
 
 ### [Tags page not implemented yet](https://github.com/owncloud/web/issues/5017)
--   [webUIDeleteFilesFolders/deleteFilesFolders.feature:131](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIDeleteFilesFolders/deleteFilesFolders.feature#L131)
+-   [webUIDeleteFilesFolders/deleteFilesFolders.feature:136](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIDeleteFilesFolders/deleteFilesFolders.feature#L136)
 -   [webUIFilesSearch/search.feature:63](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesSearch/search.feature#L63)
 -   [webUIFilesSearch/search.feature:71](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesSearch/search.feature#L71)
 -   [webUIFilesSearch/search.feature:84](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesSearch/search.feature#L84)
@@ -500,8 +498,8 @@ Other free text and markdown formatting can be used elsewhere in the document if
 
 ### [[oCIS] Received share cannot be deleted/unshared if not shared with full permissions](https://github.com/owncloud/web/issues/5531)
 -   [webUISharingAcceptShares/acceptShares.feature:50](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L50)
--   [webUISharingAcceptShares/acceptShares.feature:146](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L146)
--   [webUISharingAcceptShares/acceptShares.feature:185](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L185)
+-   [webUISharingAcceptShares/acceptShares.feature:162](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L162)
+-   [webUISharingAcceptShares/acceptShares.feature:201](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L201)
 
 ### [not possible to overwrite a received shared file](https://github.com/owncloud/ocis/issues/2267)
 -   [webUISharingInternalGroups/shareWithGroups.feature:77](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroups/shareWithGroups.feature#L77)
@@ -509,3 +507,9 @@ Other free text and markdown formatting can be used elsewhere in the document if
 
 ### [shares are not listed with full paths](https://github.com/owncloud/ocis/issues/2462)
 -   [webUISharingPublicBasic/publicLinkCreate.feature:88](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicBasic/publicLinkCreate.feature#L88)
+
+### [web config update is not properly reflected after the ocis start](https://github.com/owncloud/ocis/issues/2944)
+-   [webUIFiles/breadcrumb.feature:50](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFiles/breadcrumb.feature#L50)
+
+### [Selecting delete all](https://github.com/owncloud/web/issues/6305)
+-  [webUIDeleteFilesFolders/deleteFilesFolders.feature:77](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIDeleteFilesFolders/deleteFilesFolders.feature#L77)
