@@ -15,13 +15,13 @@ const appInfo = {
 const routes = [
   {
     name: 'apps',
-    path: '/:file_id/:app?',
+    path: '/:contextRouteName/:file_id/:app?',
     components: {
       app: App
     },
     meta: {
-      title: $gettext('External app'),
-      auth: false
+      auth: false,
+      title: $gettext('External app')
     }
   }
 ]

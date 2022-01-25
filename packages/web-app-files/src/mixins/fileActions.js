@@ -241,6 +241,7 @@ export default {
       const routeData = this.$router.resolve({
         name: 'external-apps',
         params: {
+          contextRouteName: this.$route.name,
           file_id: resourceId,
           app: appName
         },
