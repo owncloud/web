@@ -13,6 +13,7 @@ Summary
 * Bugfix - Focus management in topbar dropdowns: [#6213](https://github.com/owncloud/web/pull/6213)
 * Change - Remove UiKit: [#6103](https://github.com/owncloud/web/issues/6103)
 * Change - Use remixicons for redesign: [#6142](https://github.com/owncloud/web/pull/6142)
+* Enhancement - File creation via app provider: [#5890](https://github.com/owncloud/web/pull/5890)
 * Enhancement - Darkmode theme switcher: [#6240](https://github.com/owncloud/web/pull/6240)
 * Enhancement - Drawio improvements: [#6125](https://github.com/owncloud/web/pull/6125)
 * Enhancement - File selection simplification: [#5967](https://github.com/owncloud/web/issues/5967)
@@ -65,6 +66,14 @@ Details
    https://github.com/owncloud/web/issues/6100
    https://github.com/owncloud/web/pull/6142
    https://github.com/owncloud/web/pull/6270
+
+* Enhancement - File creation via app provider: [#5890](https://github.com/owncloud/web/pull/5890)
+
+   For oCIS deployments the integration of the app provider for editing files was enhanced by
+   adding support for the app provider capabilities to create files as well.
+
+   https://github.com/owncloud/web/pull/5890
+   https://github.com/owncloud/web/pull/6312
 
 * Enhancement - Darkmode theme switcher: [#6240](https://github.com/owncloud/web/pull/6240)
 
