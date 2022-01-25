@@ -133,9 +133,9 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIWebdavLockProtection/upload.feature:91](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIWebdavLockProtection/upload.feature#L91)
 
 ### [Uploading a file with a name that already exists is confusing](https://github.com/owncloud/web/issues/5106)
--   [webUIUpload/upload.feature:108](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/upload.feature#L108)
--   [webUIUpload/upload.feature:121](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/upload.feature#L121)
--   [webUIUpload/upload.feature:138](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/upload.feature#L138)
+-   [webUIUpload/upload.feature:110](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/upload.feature#L110)
+-   [webUIUpload/upload.feature:123](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/upload.feature#L123)
+-   [webUIUpload/upload.feature:140](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/upload.feature#L140)
 -   [webUIUpload/uploadEdgecases.feature:67](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/uploadEdgecases.feature#L67)
 
 ### [Federated shares not showing in shared with me page](https://github.com/owncloud/web/issues/2510)

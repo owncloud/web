@@ -20,15 +20,17 @@ Feature: File Upload
 
   @smokeTest @ocisSmokeTest
   Scenario: simple upload of a folder that does not exist before
-    When the user uploads a folder containing the following files in separate sub-folders using the webUI:
+    Given a folder "CUSTOM" has been created with the following files in separate sub-folders in the server
       | lorem.txt     |
       | new-lorem.txt |
+    When the user uploads folder "CUSTOM" using the webUI
     Then no message should be displayed on the webUI
-    And the last uploaded folder should be listed on the webUI
-    And as "Alice" the last uploaded folder should exist
-    And as "Alice" the last uploaded folder should contain the following files inside the sub-folders:
-      | new-lorem.txt |
-      | lorem.txt     |
+    And folder "CUSTOM" should be listed on the webUI
+    And as "Alice" folder "CUSTOM" should exist in the server
+    And as "Alice" file "CUSTOM/lorem.txt" should exist in the server
+    And as "Alice" file "CUSTOM/new-lorem.txt" should exist in the server
+    And as "Alice" the content of "CUSTOM/lorem.txt" in the server should be the same as the content of local file "CUSTOM/lorem.txt"
+    And as "Alice" the content of "CUSTOM/new-lorem.txt" in the server should be the same as the content of local file "CUSTOM/new-lorem.txt"
 
   @smokeTest @ocisSmokeTest
   Scenario: simple upload of a folder with subfolders that does not exist before

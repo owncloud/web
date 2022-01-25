@@ -72,10 +72,8 @@ services:
       - host.docker.internal:${DOCKER_HOST:-host-gateway}
     ports:
       - "3001:3001"
-    command: "sh -c /middleware.entrypoint.sh"
     volumes:
       - uploads:/uploads
-      - ./dev/docker/middleware.entrypoint.sh:/middleware.entrypoint.sh
       - /var/tmp/ocis:/var/tmp/ocis
     environment:
       MIDDLEWARE_PORT: 3001
@@ -91,10 +89,8 @@ services:
       - host.docker.internal:${DOCKER_HOST:-host-gateway}
     ports:
       - "3000:3000"
-    command: "sh -c /middleware.entrypoint.sh"
     volumes:
       - uploads:/uploads
-      - ./dev/docker/middleware.entrypoint.sh:/middleware.entrypoint.sh
     environment:
       MIDDLEWARE_PORT: 3000
       MIDDLEWARE_HOST: "0.0.0.0"
