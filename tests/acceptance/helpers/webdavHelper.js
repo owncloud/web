@@ -15,6 +15,30 @@ exports.createDavPath = function (userId, element) {
 
 /**
  *
+ * @param {string} userId
+ * @param {string} file
+ */
+exports.download = async function (userId, file) {
+  const davPath = exports.createDavPath(userId, file)
+  let res = await httpHelper.get(davPath, userId)
+
+  // wait for 500ms and retry download if the resource is locked
+  if (res.status === 423) {
+    console.info('Resource is locked. Retrying...')
+    await new Promise((resolve) => {
+      setTimeout(async () => {
+        res = await httpHelper.get(davPath, userId)
+        resolve(res)
+      }, 500)
+    })
+  }
+
+  res = httpHelper.checkStatus(res, 'Could not download file.')
+  return res.text()
+}
+
+/**
+ *
  * @param {string} path
  * @param {string} userId
  * @param {array} properties
