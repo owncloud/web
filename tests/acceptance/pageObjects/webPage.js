@@ -231,6 +231,26 @@ module.exports = {
         })
       })
       return messages
+    },
+    hasErrorMessage: async function (expectedVisible = true) {
+      let visible = false
+      let timeout = 5000
+      if (!expectedVisible) {
+        timeout = 500
+      }
+
+      const selector = {
+        selector: this.elements.message.selector,
+        locateStrategy: this.elements.message.locateStrategy
+      }
+
+      await this.isVisible(
+        { ...selector, suppressNotFoundErrors: !expectedVisible, timeout },
+        function ({ value }) {
+          visible = value === true
+        }
+      )
+      return visible
     }
   },
   elements: {

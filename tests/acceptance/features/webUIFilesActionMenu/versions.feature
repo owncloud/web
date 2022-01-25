@@ -89,7 +89,6 @@ Feature: Versions of a file
     And the user browses to display the "versions" details of file "lorem.txt"
     Then the versions list should contain 1 entries
 
-
   @issue-ocis-1328 @disablePreviews
   Scenario: sharee can see the versions of a file
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "yes"
@@ -103,11 +102,10 @@ Feature: Versions of a file
     And the versions list should contain 2 entries
 
 
-  @issue-ocis-2261
   Scenario: user downloads a previous version of the file
     Given user "Alice" has uploaded file with content "lorem" to "lorem.txt" in the server
     And user "Alice" has uploaded file with content "lorem content" to "lorem.txt" in the server
     And user "Alice" has logged in using the webUI
     And the user browses to display the "versions" details of file "lorem.txt"
     When the user downloads a previous version of the file using the webUI
-    Then as "Alice" the content of "lorem.txt" should be the same as the content of local file "lorem.txt"
+    Then no message should be displayed on the webUI
