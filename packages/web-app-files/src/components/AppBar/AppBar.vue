@@ -102,7 +102,7 @@
                     </oc-button>
                   </div>
                 </li>
-                <template v-if="mimeTypes">
+                <template v-if="mimetypesAllowedForCreation">
                   <li v-for="(mimetype, key) in mimetypesAllowedForCreation" :key="key">
                     <div>
                       <oc-button
@@ -530,6 +530,7 @@ export default {
       this.fileFolderCreationLoading = false
     },
     async addAppProviderFile(fileName) {
+      // FIXME: this belongs in web-app-external, but the app provider handles file creation differently than other editor extensions. Needs more refactoring.
       if (fileName === '') {
         return
       }
@@ -546,14 +547,16 @@ export default {
 
         const headers = {
           'X-Requested-With': 'XMLHttpRequest',
-          ...(this.isPublicLocation && {
-            'public-token': publicToken
-          }),
-          ...(this.publicLinkPassword && {
-            Authorization:
-              'Basic ' +
-              Buffer.from(['public', this.publicLinkPassword].join(':')).toString('base64')
-          }),
+          ...(this.isPublicLocation &&
+            publicToken && {
+              'public-token': publicToken
+            }),
+          ...(this.isPublicLocation &&
+            this.publicLinkPassword && {
+              Authorization:
+                'Basic ' +
+                Buffer.from(['public', this.publicLinkPassword].join(':')).toString('base64')
+            }),
           ...(this.getToken && {
             Authorization: 'Bearer ' + this.getToken
           })
@@ -565,7 +568,7 @@ export default {
         })
 
         if (response.status !== 200) {
-          throw new Error(`An error has occured: ${response.status}`)
+          throw new Error(`An error has occurred: ${response.status}`)
         }
 
         const path = pathUtil.join(this.currentPath, fileName)
