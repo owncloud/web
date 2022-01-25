@@ -1,0 +1,6 @@
+Enhancement: File creation via app provider
+
+For oCIS deployments the integration of the app provider for editing files was enhanced by adding support for the app provider capabilities to create files as well.
+
+https://github.com/owncloud/web/pull/5890
+https://github.com/owncloud/web/pull/6312
