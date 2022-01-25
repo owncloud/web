@@ -1,5 +1,5 @@
 <template>
-  <div class="uk-width-1-1 uk-container oc-p">
+  <main class="uk-width-1-1 uk-container oc-p">
     <div v-if="loading" class="uk-flex uk-flex-between uk-flex-middle">
       <h1 class="oc-page-title">{{ pageTitle }}</h1>
       <oc-loader />
@@ -68,7 +68,7 @@
         </div>
       </dl>
     </template>
-  </div>
+  </main>
 </template>
 
 <script>
