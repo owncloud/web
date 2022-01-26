@@ -2,9 +2,9 @@
   <div class="oc-p-s">
     <oc-button
       v-if="hasCreatePermission"
-      id="new-file-menu-btn"
+      id="new-space-menu-btn"
       ref="createNewSpaceButton"
-      key="new-file-menu-btn-enabled"
+      key="new-space-menu-btn-enabled"
       :aria-label="$gettext('Create a new space')"
       variation="primary"
       appearance="filled"
@@ -33,7 +33,7 @@
         </template>
       </no-content-message>
       <div v-else class="spaces-list">
-        <div
+        <ul
           class="
             oc-grid
             oc-grid-match
@@ -43,7 +43,7 @@
             oc-child-width-1-3@s
           "
         >
-          <div v-for="space in spaces" :key="space.id" class="oc-mb-m">
+          <li v-for="space in spaces" :key="space.id" class="oc-mb-m">
             <div class="spaces-list-card oc-border oc-card oc-card-default">
               <div class="oc-card-media-top oc-border-b">
                 <oc-button
@@ -87,8 +87,8 @@
                 <a href="#" class="oc-card-title" v-text="space.name" />
               </span>
             </div>
-          </div>
-        </div>
+          </li>
+        </ul>
       </div>
     </template>
   </div>
