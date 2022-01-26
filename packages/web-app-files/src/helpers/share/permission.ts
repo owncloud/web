@@ -37,6 +37,7 @@ export abstract class SharePermissions {
   static readonly create = new SharePermission('create', 4, $gettext('Create'))
   static readonly delete = new SharePermission('delete', 8, $gettext('Delete'))
   static readonly share = new SharePermission('share', 16, $gettext('Share'))
+  static readonly deny = new SharePermission('deny', 64, $gettext('Deny'))
 
   static permissionsToBitmask(permissions: SharePermission[]): number {
     return (permissions || []).reduce((b: number, p: SharePermission) => b | p.bit, 0)
