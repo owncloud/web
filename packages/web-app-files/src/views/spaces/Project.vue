@@ -45,7 +45,6 @@ import { client } from 'web-client'
 import { useTask } from 'vue-concurrency'
 import { useStore, useRouter } from 'web-pkg/src/composables'
 import marked from 'marked'
-import { arrayBuffToB64 } from '../../helpers/commonUtil'
 import axios from 'axios'
 import MixinAccessibleBreadcrumb from '../../mixins/accessibleBreadcrumb'
 import { bus } from 'web-pkg/src/instance'
@@ -78,17 +77,15 @@ export default {
         return
       }
 
-      const response = yield axios.get(markdownEntry.webDavUrl, {
-        headers: {
-          Authorization: `Bearer ${ref.getToken}`
-        }
-      })
+      const fileContents = yield ref.$client.files.getFileContents(
+        `spaces/${space.value.id}/${markdownEntry.name}`
+      )
 
       if (ref.markdownResizeObserver) {
         ref.markdownResizeObserver.unobserve(ref.$refs.markdownContainer)
       }
 
-      markdownContent.value = marked.parse(response.data)
+      markdownContent.value = marked.parse(fileContents)
 
       if (markdownContent.value) {
         ref.markdownResizeObserver.observe(ref.$refs.markdownContainer)
@@ -101,14 +98,14 @@ export default {
         return
       }
 
-      const response = yield axios.get(imageEntry.webDavUrl, {
-        headers: {
-          Authorization: `Bearer ${ref.getToken}`
-        },
-        responseType: 'arraybuffer'
-      })
+      const fileContents = yield ref.$client.files.getFileContents(
+        `spaces/${space.value.id}/${imageEntry.name}`,
+        {
+          responseType: 'arrayBuffer'
+        }
+      )
 
-      imageContent.value = arrayBuffToB64(response.data)
+      imageContent.value = Buffer.from(fileContents).toString('base64')
     })
 
     const loadResourcesTask = useTask(function* (signal, ref) {

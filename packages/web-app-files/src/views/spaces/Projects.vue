@@ -113,8 +113,6 @@ import { ref } from '@vue/composition-api'
 import { useStore } from 'web-pkg/src/composables'
 import { useTask } from 'vue-concurrency'
 import { createLocationSpaces } from '../../router'
-import axios from 'axios'
-import { arrayBuffToB64 } from '../../helpers/commonUtil'
 import { bus } from 'web-pkg/src/instance'
 import { mapMutations } from 'vuex'
 import Rename from '../../mixins/spaces/actions/rename'
@@ -140,15 +138,12 @@ export default {
         .sort((a, b) => a.name.localeCompare(b.name))
     })
 
-    const loadImageTask = useTask(function* (signal, { spaceId, webDavUrl, token }) {
-      const response = yield axios.get(webDavUrl, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        },
-        responseType: 'arraybuffer'
+    const loadImageTask = useTask(function* (signal, { client, spaceId, fileName }) {
+      const fileContents = yield client.files.getFileContents(`spaces/${spaceId}/${fileName}`, {
+        responseType: 'arrayBuffer'
       })
 
-      imageContentObject.value[spaceId] = arrayBuffToB64(response.data)
+      imageContentObject.value[spaceId] = Buffer.from(fileContents).toString('base64')
     })
 
     const loadImagesTask = useTask(function* (signal, ref) {
@@ -160,9 +155,9 @@ export default {
         }
 
         yield loadImageTask.perform({
+          client: ref.$client,
           spaceId: space?.id,
-          webDavUrl: imageEntry?.webDavUrl,
-          token: ref.getToken
+          fileName: imageEntry?.name
         })
       }
     })
