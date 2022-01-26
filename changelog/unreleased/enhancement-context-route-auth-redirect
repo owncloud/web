@@ -1,0 +1,7 @@
+Enhancement: Redirect to IDP when opening apps from bookmark
+
+We've expanded the check for authentication requirements to the referrer of the current URL. As a result an app that doesn't necessarily require authentication can still require authentication based on the file context it was opened in. This is especially important for situations where an app is opened for a file from a bookmark, so that we cannot rely on the user already having an authenticated session.
+
+https://github.com/owncloud/web/issues/6045
+https://github.com/owncloud/web/issues/6069
+https://github.com/owncloud/web/pull/6314
