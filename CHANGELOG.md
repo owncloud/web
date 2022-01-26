@@ -14,6 +14,7 @@ Summary
 * Change - Remove UiKit: [#6103](https://github.com/owncloud/web/issues/6103)
 * Change - Use remixicons for redesign: [#6142](https://github.com/owncloud/web/pull/6142)
 * Enhancement - File creation via app provider: [#5890](https://github.com/owncloud/web/pull/5890)
+* Enhancement - Redirect to IDP when opening apps from bookmark: [#6045](https://github.com/owncloud/web/issues/6045)
 * Enhancement - Darkmode theme switcher: [#6240](https://github.com/owncloud/web/pull/6240)
 * Enhancement - Drawio improvements: [#6125](https://github.com/owncloud/web/pull/6125)
 * Enhancement - File selection simplification: [#5967](https://github.com/owncloud/web/issues/5967)
@@ -74,6 +75,18 @@ Details
 
    https://github.com/owncloud/web/pull/5890
    https://github.com/owncloud/web/pull/6312
+
+* Enhancement - Redirect to IDP when opening apps from bookmark: [#6045](https://github.com/owncloud/web/issues/6045)
+
+   We've expanded the check for authentication requirements to the referrer of the current URL.
+   As a result an app that doesn't necessarily require authentication can still require
+   authentication based on the file context it was opened in. This is especially important for
+   situations where an app is opened for a file from a bookmark, so that we cannot rely on the user
+   already having an authenticated session.
+
+   https://github.com/owncloud/web/issues/6045
+   https://github.com/owncloud/web/issues/6069
+   https://github.com/owncloud/web/pull/6314
 
 * Enhancement - Darkmode theme switcher: [#6240](https://github.com/owncloud/web/pull/6240)
 
