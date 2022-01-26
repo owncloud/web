@@ -1,12 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Spaces component should only list drives of type "project" 1`] = `
-<div class="oc-p-s"><button aria-label="Create a new space" class="oc-mb-xs oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-primary" id="new-file-menu-btn" data-testid="spaces-list-create-space-btn"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span> <span>Create Space</span></button>
+<div class="oc-p-s"><button aria-label="Create a new space" class="oc-mb-xs oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-primary" id="new-space-menu-btn" data-testid="spaces-list-create-space-btn"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span> <span>Create Space</span></button>
   <h2>Spaces</h2> <span>Access all project related files in one place.</span> <a href="#">Learn more about spaces.</a>
   <h3>Your spaces</h3>
   <hr class="oc-mb-s">
   <div class="spaces-list">
-    <div class="
+    <ul class="
           oc-grid
           oc-grid-match
           oc-grid-column-small
@@ -14,7 +14,7 @@ exports[`Spaces component should only list drives of type "project" 1`] = `
           oc-text-center
           oc-child-width-1-3@s
         ">
-      <div class="oc-mb-m">
+      <li class="oc-mb-m">
         <div class="spaces-list-card oc-border oc-card oc-card-default">
           <div class="oc-card-media-top oc-border-b"><button aria-label="Show context menu" class="oc-position-absolute oc-position-top-right oc-mr-s oc-mt-s oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-outline" id="space-context-btn-1"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button>
             <div id="space-context-drop-1" class="oc-drop oc-box-shadow-medium" options="[object Object]">
@@ -31,8 +31,8 @@ exports[`Spaces component should only list drives of type "project" 1`] = `
             </div> <span class="oc-px-m oc-py-m oc-icon oc-icon-xxl oc-icon-passive"><!----></span>
           </div> <span class="oc-card-body"><a href="#" class="oc-card-title"></a></span>
         </div>
-      </div>
-    </div>
+      </li>
+    </ul>
   </div>
 </div>
 `;
