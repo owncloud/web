@@ -74,15 +74,24 @@ Feature: deleting files and folders
     And no message should be displayed on the webUI
 
   @skipOnOC10 @issue-4582
-  Scenario: Delete all files at once
+  Scenario: Delete all files at once at the root level
     Given user "Alice" has uploaded file "data.zip" to "data.zip" in the server
     And user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has created folder "simple-folder" in the server
     And the user has browsed to the files page
     When the user marks all files for batch action using the webUI
+    # Shares is a special folder that cannot be deleted on oCIS
+    # The user has to unmark it in order to "delete all" the rest of the items
+    # See discussion in web issue 6305.
+    And the user unmarks these files for batch action using the webUI
+      | name          |
+      | Shares        |
     And the user batch deletes the marked files using the webUI
-    And there should be no resources listed on the webUI
-    And there should be no resources listed on the webUI after a page reload
+    Then as "Alice" file "data.zip" should not exist in the server
+    And as "Alice" file "lorem.txt" should not exist in the server
+    And as "Alice" folder "simple-folder" should not exist in the server
+    And file "data.zip" should not be listed on the webUI
+    And the count of files and folders shown on the webUI should be 2
     And no message should be displayed on the webUI
 
   @ocis-reva-issue-106 @ocis-reve-issue-442 @skipOnOC10 @issue-4582
