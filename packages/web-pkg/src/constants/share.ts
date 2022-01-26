@@ -4,4 +4,5 @@ export abstract class SharePermissionBit {
   static readonly Create: number = 4
   static readonly Delete: number = 8
   static readonly Share: number = 16
+  static readonly Deny: number = 64
 }
