@@ -1,0 +1,7 @@
+Enhancement: Redesigned user menu
+
+We've redesigned the user menu. It now also features more detailed 
+information about the user's quota and how much space they have left.
+
+https://github.com/owncloud/web/pull/6272
+https://github.com/owncloud/web/issues/6101
