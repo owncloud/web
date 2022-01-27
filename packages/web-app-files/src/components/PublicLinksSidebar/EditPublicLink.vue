@@ -273,6 +273,17 @@ export default {
 
     this.setRole()
   },
+  mounted() {
+    this.focus({
+      to: document.getElementById('oc-files-file-link-name'),
+      revert: false
+    })
+  },
+  beforeDestroy() {
+    this.focus({
+      revert: true
+    })
+  },
   methods: {
     ...mapActions(['showMessage']),
     ...mapActions('Files', ['addLink', 'updateLink']),
