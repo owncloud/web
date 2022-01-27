@@ -13,6 +13,7 @@ Summary
 * Bugfix - Focus management in topbar dropdowns: [#6213](https://github.com/owncloud/web/pull/6213)
 * Change - Remove UiKit: [#6103](https://github.com/owncloud/web/issues/6103)
 * Change - Use remixicons for redesign: [#6142](https://github.com/owncloud/web/pull/6142)
+* Enhancement - Add spaces actions: [#6254](https://github.com/owncloud/web/pull/6254)
 * Enhancement - File creation via app provider: [#5890](https://github.com/owncloud/web/pull/5890)
 * Enhancement - Redirect to IDP when opening apps from bookmark: [#6045](https://github.com/owncloud/web/issues/6045)
 * Enhancement - Darkmode theme switcher: [#6240](https://github.com/owncloud/web/pull/6240)
@@ -67,6 +68,15 @@ Details
    https://github.com/owncloud/web/issues/6100
    https://github.com/owncloud/web/pull/6142
    https://github.com/owncloud/web/pull/6270
+
+* Enhancement - Add spaces actions: [#6254](https://github.com/owncloud/web/pull/6254)
+
+   We added the following actions to the spaces overview:
+
+   * Create a new space * Rename a space * Delete a space
+
+   https://github.com/owncloud/web/issues/6255
+   https://github.com/owncloud/web/pull/6254
 
 * Enhancement - File creation via app provider: [#5890](https://github.com/owncloud/web/pull/5890)
 
