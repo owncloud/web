@@ -3,7 +3,6 @@ import { mapActions } from 'vuex'
 import { isLocationCommonActive, isLocationSpacesActive } from '../../router'
 
 export default {
-  inject: { displayedItem: { default: null } },
   computed: {
     $_favorite_items() {
       return [
@@ -45,20 +44,14 @@ export default {
       this.markFavorite({
         client: this.$client,
         file: resources[0]
+      }).catch(() => {
+        const translated = this.$gettext('Failed to change favorite state of "%{file}"')
+        const title = this.$gettextInterpolate(translated, { file: resources[0].name }, true)
+        this.showMessage({
+          title: title,
+          status: 'danger'
+        })
       })
-        .then(() => {
-          if (this.displayedItem) {
-            this.displayedItem.value.starred = !this.displayedItem.value.starred
-          }
-        })
-        .catch(() => {
-          const translated = this.$gettext('Failed to change favorite state of "%{file}"')
-          const title = this.$gettextInterpolate(translated, { file: resources[0].name }, true)
-          this.showMessage({
-            title: title,
-            status: 'danger'
-          })
-        })
     }
   }
 }

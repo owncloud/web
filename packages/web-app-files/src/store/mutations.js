@@ -98,14 +98,6 @@ export default {
   RESET_SELECTION(state) {
     state.selectedIds = []
   },
-  FAVORITE_FILE(state, item) {
-    const files = [...state.files]
-    const fileIndex = files.findIndex((f) => {
-      return f.id === item.id
-    })
-    files[fileIndex].starred = !item.starred
-    state.files = files
-  },
   REMOVE_FILE(state, removedFile) {
     state.files = [...state.files].filter((file) => file.id !== removedFile.id)
   },

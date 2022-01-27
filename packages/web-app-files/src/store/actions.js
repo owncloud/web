@@ -46,7 +46,11 @@ export default {
     return client.files
       .favorite(file.path, newValue)
       .then(() => {
-        context.commit('FAVORITE_FILE', file)
+        context.commit('UPDATE_RESOURCE_FIELD', {
+          id: file.id,
+          field: 'starred',
+          value: newValue
+        })
       })
       .catch((error) => {
         throw new Error(error)

@@ -1,0 +1,6 @@
+Bugfix: Favorite-star in right sidebar
+
+We've fixed a bug that caused the "favorite" star in the right sidebar of the files app not to be updated when the favorite-state was modified through a click on the star icon.
+
+https://github.com/owncloud/web/issues/6328
+https://github.com/owncloud/web/pull/6330

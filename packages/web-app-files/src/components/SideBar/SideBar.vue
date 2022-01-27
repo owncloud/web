@@ -191,6 +191,9 @@ export default {
     },
     highlightedFileThumbnail() {
       return this.highlightedFile?.thumbnail
+    },
+    highlightedFileFavorite() {
+      return this.highlightedFile?.starred
     }
   },
   watch: {
@@ -212,6 +215,10 @@ export default {
 
     highlightedFileThumbnail(thumbnail) {
       this.$set(this.selectedFile, 'thumbnail', thumbnail)
+    },
+
+    highlightedFileFavorite(starred) {
+      this.$set(this.selectedFile, 'starred', starred)
     }
   },
 
