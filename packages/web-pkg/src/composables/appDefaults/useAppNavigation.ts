@@ -45,10 +45,7 @@ export function useAppNavigation(options: AppNavigationOptions): AppNavigationRe
 
     const pushOpts = {
       name: unref(routeName),
-      params: {
-        item: dirname(unref(path)) || '/',
-        ...unref(routeParams)
-      },
+      params: unref(routeParams),
       query: {
         scrollTo: basename(unref(path))
       }
