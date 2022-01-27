@@ -1,0 +1,10 @@
+Enhancement: Add spaces actions
+
+We added the following actions to the spaces overview:
+
+* Create a new space
+* Rename a space
+* Delete a space
+
+https://github.com/owncloud/web/pull/6254
+https://github.com/owncloud/web/issues/6255

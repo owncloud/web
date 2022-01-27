@@ -1,8 +1,19 @@
-import axios, { AxiosInstance } from 'axios'
-import { Configuration, MeDrivesApi } from './generated'
+import axios, { AxiosInstance, AxiosPromise, AxiosResponse } from 'axios'
+import {
+  Configuration,
+  MeDrivesApi,
+  Drive,
+  DrivesApiFactory,
+  CollectionOfDrives
+} from './generated'
 
 interface Graph {
-  drives: Pick<MeDrivesApi, 'listMyDrives'>
+  drives: {
+    listMyDrives: () => Promise<AxiosResponse<CollectionOfDrives>>
+    createDrive: (drive: Drive, options: any) => AxiosPromise<Drive>
+    updateDrive: (id: string, drive: Drive, options: any) => AxiosPromise<Drive>
+    deleteDrive: (id: string, ifMatch: string, options: any) => AxiosPromise<void>
+  }
 }
 
 const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
@@ -12,10 +23,17 @@ const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
   })
 
   const meDrivesApi = new MeDrivesApi(config, config.basePath, axiosClient)
+  const drivesApiFactory = DrivesApiFactory(config, config.basePath, axiosClient)
 
   return {
     drives: {
-      listMyDrives: () => meDrivesApi.listMyDrives()
+      listMyDrives: () => meDrivesApi.listMyDrives(),
+      createDrive: (drive: Drive, options: any): AxiosPromise<Drive> =>
+        drivesApiFactory.createDrive(drive, options),
+      updateDrive: (id: string, drive: Drive, options: any): AxiosPromise<Drive> =>
+        drivesApiFactory.updateDrive(id, drive, options),
+      deleteDrive: (id: string, ifMatch: string, options: any): AxiosPromise<void> =>
+        drivesApiFactory.deleteDrive(id, ifMatch, options)
     }
   }
 }

@@ -35,7 +35,10 @@ describe('Spaces component', () => {
     mockAxios.request.mockImplementationOnce(() => {
       return Promise.resolve({
         data: {
-          value: [{ driveType: 'project' }, { driveType: 'personal' }]
+          value: [
+            { driveType: 'project', id: '1' },
+            { driveType: 'personal', id: '2' }
+          ]
         }
       })
     })
@@ -45,6 +48,42 @@ describe('Spaces component', () => {
 
     expect(wrapper.vm.spaces.length).toEqual(1)
     expect(wrapper).toMatchSnapshot()
+  })
+
+  it('should show the "create new space" modal with sufficient permissions', async () => {
+    mockAxios.request.mockImplementationOnce(() => {
+      return Promise.resolve({
+        data: {
+          value: []
+        }
+      })
+    })
+    const wrapper = getMountedWrapper()
+    await wrapper.vm.loadSpacesTask.last
+
+    const createModalStub = jest.spyOn(wrapper.vm, 'createModal')
+    const button = wrapper.find('[data-testid="spaces-list-create-space-btn"]')
+    expect(button.exists()).toBeTruthy()
+    await button.trigger('click')
+
+    expect(createModalStub).toHaveBeenCalledTimes(1)
+  })
+
+  it('should show an error message when trying to create a space with an empty name', async () => {
+    mockAxios.request.mockImplementationOnce(() => {
+      return Promise.resolve({
+        data: {
+          value: []
+        }
+      })
+    })
+    const wrapper = getMountedWrapper()
+    await wrapper.vm.loadSpacesTask.last
+
+    const spyInputErrorMessageStub = jest.spyOn(wrapper.vm, 'setModalInputErrorMessage')
+    wrapper.vm.checkSpaceName('')
+
+    expect(spyInputErrorMessageStub).toHaveBeenCalledTimes(1)
   })
 })
 
@@ -57,6 +96,9 @@ function getMountedWrapper() {
         configuration: () => ({
           server: 'https://example.com/'
         })
+      },
+      actions: {
+        createModal: jest.fn()
       }
     })
   })
