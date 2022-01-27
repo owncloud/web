@@ -19,44 +19,30 @@
           No matching role found
         </template>
       </oc-select>
-      <div class="oc-mb uk-grid-small uk-flex" uk-grid>
-        <div v-if="$_expirationDate" class="uk-width-1-1 uk-width-2-5@m">
-          <div class="uk-position-relative">
-            <oc-datepicker
-              id="oc-files-file-link-expire-date"
-              :key="'oc-datepicker-' + expireDate"
-              :label="expirationDateLabel"
-              :date="expireDate"
-              :max-datetime="$_maxExpirationDate"
-              :min-datetime="$_minExpirationDate"
-              @input="expireDate = $event"
-            />
-            <oc-button
-              v-if="!$_expirationDate.enforced && !!expireDate"
-              id="oc-files-file-link-expire-date-delete"
-              class="oc-mt-s"
-              appearance="raw"
-              @click="expireDate = null"
-              v-text="$gettext('Remove expiration date')"
-            />
-          </div>
-        </div>
-        <div class="uk-width-1-1 uk-width-3-5@m">
-          <oc-text-input
-            id="oc-files-file-link-password"
-            v-model="password"
-            type="password"
-            :label="passwordLabel"
-          />
-          <oc-button
-            v-if="!$_passwordEnforced && (password || hasPassword)"
-            id="oc-files-file-link-password-delete"
-            class="oc-mt-s"
-            appearance="raw"
-            @click="removePassword"
-            v-text="$gettext('Remove password')"
-          />
-        </div>
+      <div v-if="$_expirationDate" class="oc-mb uk-width-1-1">
+        <oc-text-input
+          id="oc-files-file-link-expire-date"
+          v-model="enteredExpirationDate"
+          :label="expirationDateLabel"
+          :description-message="expirationDateFormatHint"
+          :error-message="expirationDateErrorMessage"
+        />
+      </div>
+      <div class="oc-mb uk-width-1-1">
+        <oc-text-input
+          id="oc-files-file-link-password"
+          v-model="password"
+          type="password"
+          :label="passwordLabel"
+        />
+        <oc-button
+          v-if="!$_passwordEnforced && (password || hasPassword)"
+          id="oc-files-file-link-password-delete"
+          class="oc-mt-s"
+          appearance="raw"
+          @click="removePassword"
+          v-text="$gettext('Remove password')"
+        />
       </div>
       <!-- @TODO: Enable Mail API to use the following
                   ++++++++++++++++++++++++++++++++++++
@@ -119,9 +105,10 @@
 <script>
 import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import mixins from '../../mixins'
-import moment from 'moment'
 import publicLinkRoles from '../../helpers/publicLinkRolesDefinition'
 import RoleItem from '../RoleItem.vue'
+import { DateTime } from 'luxon'
+const dateFormat = 'dd-MM-yyyy'
 
 export default {
   components: {
@@ -134,7 +121,7 @@ export default {
       password: null,
       name: null,
       hasPassword: false,
-      expireDate: null,
+      enteredExpirationDate: null,
       placeholder: {
         mailTo: this.$gettext('Mail recipients'),
         mailBody: this.$gettext('Personal note')
@@ -163,12 +150,8 @@ export default {
     },
 
     $_hasChanges() {
-      const expireDateBefore = this.publicLinkInEdit.expireDate
-        ? moment(this.publicLinkInEdit.expireDate).format('DD-MM-YYYY')
-        : null
-      const expireDateNow = this.expireDate ? moment(this.expireDate).format('DD-MM-YYYY') : null
       return (
-        expireDateNow !== expireDateBefore ||
+        this.parsedExpirationDateString !== this.oldExpirationDateString ||
         this.name !== this.publicLinkInEdit.name ||
         this.selectedRole.permissions !== this.publicLinkInEdit.permissions ||
         (this.publicLinkInEdit.hasPassword
@@ -189,6 +172,71 @@ export default {
       })
     },
 
+    isEnteredExpirationDateEmpty() {
+      return !this.enteredExpirationDate || !this.enteredExpirationDate.trim()
+    },
+
+    isEnteredExpirationDateParsable() {
+      if (this.isEnteredExpirationDateEmpty) {
+        return false
+      }
+      return DateTime.fromFormat(this.enteredExpirationDate.trim(), dateFormat, {
+        locale: this.$language.current
+      }).isValid
+    },
+
+    isExpirationDateEnforced() {
+      return this.$_expirationDate.enforced
+    },
+
+    isExpirationDateValid() {
+      if (this.isEnteredExpirationDateEmpty) {
+        return !this.isExpirationDateEnforced
+      }
+      if (!this.isEnteredExpirationDateParsable) {
+        return false
+      }
+      if (this.minExpirationDateJS && this.parsedExpirationDateJS < this.minExpirationDateJS) {
+        return false
+      }
+      if (this.maxExpirationDateJS && this.parsedExpirationDateJS > this.maxExpirationDateJS) {
+        return false
+      }
+      return true
+    },
+
+    parsedExpirationDate() {
+      if (!this.isEnteredExpirationDateParsable) {
+        return null
+      }
+      return DateTime.fromFormat(this.enteredExpirationDate.trim(), dateFormat, {
+        locale: this.$language.current
+      })
+    },
+
+    parsedExpirationDateString() {
+      if (!this.parsedExpirationDate) {
+        return null
+      }
+      return this.parsedExpirationDate.toFormat(dateFormat)
+    },
+
+    parsedExpirationDateJS() {
+      if (!this.parsedExpirationDate) {
+        return null
+      }
+      return this.parsedExpirationDate.toJSDate()
+    },
+
+    oldExpirationDateString() {
+      if (!this.publicLinkInEdit.expireDate) {
+        return null
+      }
+      return DateTime.fromISO(this.publicLinkInEdit.expireDate)
+        .setLocale(this.$language.current)
+        .toFormat(dateFormat)
+    },
+
     $_expirationDate() {
       const expireDate = this.capabilities.files_sharing.public.expire_date
 
@@ -199,28 +247,40 @@ export default {
       }
     },
 
-    $_minExpirationDate() {
-      return moment()
-        .add(1, 'days')
-        .endOf('day')
-        .toISOString()
+    minExpirationDate() {
+      return DateTime.now().setLocale(this.$language.current)
     },
 
-    $_maxExpirationDate() {
-      if (!this.$_expirationDate.enforced) {
+    minExpirationDateString() {
+      return this.minExpirationDate.toFormat(dateFormat)
+    },
+
+    minExpirationDateJS() {
+      return this.minExpirationDate.toJSDate()
+    },
+
+    maxExpirationDate() {
+      if (!this.isExpirationDateEnforced) {
         return null
       }
-
-      const days = parseInt(this.$_expirationDate.days, 10)
-
-      return moment()
-        .add(days, 'days')
-        .endOf('day')
-        .toISOString()
+      const days = parseInt(this.$_expirationDate.days)
+      return DateTime.now()
+        .setLocale(this.$language.current)
+        .plus({ days })
     },
 
-    $_expirationIsValid() {
-      return !(this.$_expirationDate.enforced && this.expireDate === '')
+    maxExpirationDateString() {
+      if (!this.maxExpirationDate) {
+        return null
+      }
+      return this.maxExpirationDate.toFormat(dateFormat)
+    },
+
+    maxExpirationDateJS() {
+      if (!this.maxExpirationDate) {
+        return null
+      }
+      return this.maxExpirationDate.toJSDate()
     },
 
     $_passwordIsValid() {
@@ -232,7 +292,7 @@ export default {
     },
 
     $_isValid() {
-      return this.$_expirationIsValid && this.$_passwordIsValid
+      return this.isExpirationDateValid && this.$_passwordIsValid
     },
 
     $_passwordEnforced() {
@@ -253,10 +313,56 @@ export default {
     },
 
     expirationDateLabel() {
-      if (this.$_expirationDate.enforced) {
+      if (this.isExpirationDateEnforced) {
         return this.$gettext('Expiration date (required)')
       }
       return this.$gettext('Expiration date')
+    },
+
+    expirationDateFormatHint() {
+      return this.$gettextInterpolate(this.$gettext('Format: %{ dateFormat }'), {
+        dateFormat: dateFormat.toUpperCase()
+      })
+    },
+
+    expirationDateErrorMessage() {
+      if (this.isEnteredExpirationDateEmpty) {
+        if (this.isExpirationDateEnforced) {
+          return this.$gettextInterpolate(
+            this.$gettext('An expiration date is required (format: %{ dateFormat })'),
+            {
+              dateFormat: dateFormat.toUpperCase()
+            }
+          )
+        }
+        // if the expiration date is empty and not enforced none of the other cases will be relevant
+        return null
+      }
+      if (!this.isEnteredExpirationDateParsable) {
+        return this.$gettextInterpolate(
+          this.$gettext('The expiration date is invalid (format: %{ dateFormat })'),
+          {
+            dateFormat: dateFormat.toUpperCase()
+          }
+        )
+      }
+      if (this.minExpirationDateJS && this.parsedExpirationDateJS < this.minExpirationDateJS) {
+        return this.$gettextInterpolate(
+          this.$gettext('The expiration date must be after %{ minExpirationDate }'),
+          {
+            minExpirationDate: this.minExpirationDateString
+          }
+        )
+      }
+      if (this.maxExpirationDateJS && this.parsedExpirationDateJS > this.maxExpirationDateJS) {
+        return this.$gettextInterpolate(
+          this.$gettext('Expiration date must be before %{ maxExpirationDate }'),
+          {
+            maxExpirationDate: this.maxExpirationDateString
+          }
+        )
+      }
+      return null
     },
 
     passwordLabel() {
@@ -269,7 +375,7 @@ export default {
   created() {
     this.name = this.publicLinkInEdit.name
     this.hasPassword = this.publicLinkInEdit.hasPassword
-    this.expireDate = this.publicLinkInEdit.expireDate
+    this.enteredExpirationDate = this.oldExpirationDateString
 
     this.setRole()
   },
@@ -309,7 +415,7 @@ export default {
       this.saving = true
 
       const params = {
-        expireDate: this.expireDate,
+        expireDate: this.parsedExpirationDateString,
         permissions: this.selectedRole.permissions,
         name: this.name
       }
@@ -342,7 +448,7 @@ export default {
       this.saving = true
 
       const params = {
-        expireDate: this.expireDate,
+        expireDate: this.parsedExpirationDateString || '',
         permissions: this.selectedRole.permissions,
         name: this.name
       }
