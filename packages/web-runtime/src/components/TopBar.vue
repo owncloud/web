@@ -17,13 +17,7 @@
       <theme-switcher v-if="darkThemeAvailable" />
       <feedback-link v-if="isFeedbackLinkEnabled" />
       <notifications v-if="isNotificationBellEnabled" />
-      <user-menu
-        v-if="isUserMenuEnabled"
-        :user-id="user.username || user.id"
-        :user-display-name="user.displayname"
-        :user-email="user.email"
-        :applications-list="applicationsList"
-      />
+      <user-menu v-if="isUserMenuEnabled" :applications-list="applicationsList" />
     </div>
   </header>
 </template>

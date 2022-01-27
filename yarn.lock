@@ -10383,7 +10383,7 @@ __metadata:
     webfontloader: ^1.6.28
   checksum: ba5e0dc14d0385bc7ea77ea202740c32995b10c44918dcb949a75931b5382abcd083e155aad63c8484ccc85702d68518f8a2e014f54d3c4d6ca27fb208518bac
   languageName: node
-  linkType: soft
+  linkType: hard
 
 "owncloud-sdk@npm:1.0.0-2296":
   version: 1.0.0-2296

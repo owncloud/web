@@ -32,9 +32,7 @@ describe('Top Bar component', () => {
         getters: {
           configuration: () => feedbackButtonPresent(true),
           user: () => ({
-            id: 'einstein',
-            displayname: 'Albert Einstein',
-            email: 'albert@einstein.physics'
+            id: 'einstein'
           })
         }
       }),
