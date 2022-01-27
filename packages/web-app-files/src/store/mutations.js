@@ -300,10 +300,15 @@ export default {
    * @param params.value the value that will be attached to the key
    */
   UPDATE_RESOURCE_FIELD(state, params) {
-    const fileSource = state.filesSearched || state.files
-    const index = fileSource.findIndex((r) => r.id === params.id)
+    let fileSource = state.filesSearched || state.files
+    let index = fileSource.findIndex((r) => r.id === params.id)
     if (index < 0) {
-      return
+      if (state.currentFolder?.id === params.id) {
+        fileSource = [state.currentFolder]
+        index = 0
+      } else {
+        return
+      }
     }
 
     const resource = fileSource[index]
