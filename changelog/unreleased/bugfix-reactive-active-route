@@ -1,0 +1,6 @@
+Bugfix: Breadcrumbs in different views
+
+The files app had the breadcrumbs broken in the various views. We fixed that by actively watching the current route now for updates of some active route helpers.
+
+https://github.com/owncloud/web/issues/6326
+https://github.com/owncloud/web/pull/6370

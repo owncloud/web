@@ -134,7 +134,8 @@
 <script>
 import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
 import pathUtil from 'path'
-import { useRouter } from 'web-pkg/src/composables'
+import { useRouteName, useRouter } from 'web-pkg/src/composables'
+import { ref, watch } from '@vue/composition-api'
 import get from 'lodash-es/get'
 
 import Mixins from '../../mixins'
@@ -165,9 +166,19 @@ export default {
   mixins: [Mixins, MixinFileActions],
   setup() {
     const router = useRouter()
+    const isPersonalLocation = ref(false)
+    const isPublicLocation = ref(false)
+    watch(
+      useRouteName(),
+      () => {
+        isPersonalLocation.value = isLocationSpacesActive(router, 'files-spaces-personal-home')
+        isPublicLocation.value = isLocationPublicActive(router, 'files-public-files')
+      },
+      { immediate: true }
+    )
     return {
-      isPersonalLocation: isLocationSpacesActive(router, 'files-spaces-personal-home'),
-      isPublicLocation: isLocationPublicActive(router, 'files-public-files')
+      isPersonalLocation,
+      isPublicLocation
     }
   },
   data: () => ({

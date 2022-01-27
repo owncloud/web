@@ -1,7 +1,7 @@
 import { useRouter } from './useRouter'
-import { ref, Ref } from '@vue/composition-api'
+import { computed, ComputedRef } from '@vue/composition-api'
 
-export const useRouteName = (): Ref<string> => {
+export const useRouteName = (): ComputedRef<string> => {
   const router = useRouter()
-  return ref(router.currentRoute?.name)
+  return computed(() => router.currentRoute?.name)
 }

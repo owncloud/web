@@ -27,7 +27,7 @@ export const isLocationActive = (
 }
 
 /**
- * wraps isLocationActive to be uses as a closure,
+ * wraps isLocationActive to be used as a closure,
  * the resulting closure then can be used to check a location against the defined set of director locations
  *
  * @param defaultComparatives
