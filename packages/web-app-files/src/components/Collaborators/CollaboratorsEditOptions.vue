@@ -1,13 +1,12 @@
 <template>
   <div>
-    <translate tag="label" for="files-collaborators-role-button" class="oc-label">Role</translate>
     <oc-select
       v-model="selectedRole"
       input-id="files-collaborators-role-button"
       class="files-collaborators-role-button-wrapper"
       :options="roles"
       :clearable="false"
-      label="label"
+      :label="$gettext('Role')"
     >
       <template v-slot:option="option">
         <role-item :role="option" />
