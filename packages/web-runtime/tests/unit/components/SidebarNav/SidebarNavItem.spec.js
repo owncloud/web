@@ -21,6 +21,7 @@ const propsData = {
   active: false,
   target: exampleNavItem.route.path,
   icon: exampleNavItem.icon,
+  index: 5,
   id: '123'
 }
 

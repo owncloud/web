@@ -15,7 +15,7 @@ exports[`Top Bar component Displays applications menu 1`] = `
     <theme-switcher-stub></theme-switcher-stub>
     <feedback-link-stub></feedback-link-stub>
     <!---->
-    <user-menu-stub userid="einstein" useremail="" applicationslist="testApp"></user-menu-stub>
+    <user-menu-stub userid="einstein" userdisplayname="Albert Einstein" useremail="albert@einstein.physics" applicationslist="testApp"></user-menu-stub>
   </div>
 </header>
 `;

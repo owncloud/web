@@ -27,12 +27,15 @@ const defaultRoute = () => ({
 
 describe('Top Bar component', () => {
   it('Displays applications menu', () => {
-    const userId = 'einstein'
     const wrapper = shallowMount(TopBar, {
       store: new Vuex.Store({
         getters: {
           configuration: () => feedbackButtonPresent(true),
-          user: () => ({ id: userId })
+          user: () => ({
+            id: 'einstein',
+            displayname: 'Albert Einstein',
+            email: 'albert@einstein.physics'
+          })
         }
       }),
       localVue,
