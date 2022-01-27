@@ -1,8 +1,8 @@
 import { shallowMount, createLocalVue, mount } from '@vue/test-utils'
 import Vuex from 'vuex'
 import { Store } from 'vuex-mock-store'
-import UserMenu from 'web-runtime/src/components/UserMenu.vue'
-import stubs from '../../../../../tests/unit/stubs'
+import UserMenu from 'web-runtime/src/components/Topbar/UserMenu.vue'
+import stubs from '../../../../../../tests/unit/stubs'
 import DesignSystem from 'owncloud-design-system'
 
 const localVue = createLocalVue()

@@ -64,7 +64,7 @@
 </template>
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
-import TopBar from './components/TopBar.vue'
+import TopBar from './components/Topbar/TopBar.vue'
 import MessageBar from './components/MessageBar.vue'
 import SkipTo from './components/SkipTo.vue'
 import { getBackendVersion, getWebVersion } from './container/versions'

@@ -2,7 +2,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils'
 import DesignSystem from 'owncloud-design-system'
 import GetText from 'vue-gettext'
 
-import ApplicationsMenu from 'web-runtime/src/components/ApplicationsMenu.vue'
+import ApplicationsMenu from 'web-runtime/src/components/Topbar/ApplicationsMenu.vue'
 
 const localVue = createLocalVue()
 localVue.use(DesignSystem)

@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import NavigationMixin from '../mixins/navigationMixin'
+import NavigationMixin from '../../mixins/navigationMixin'
 
 export default {
   mixins: [NavigationMixin],

@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import NavigationMixin from '../mixins/navigationMixin'
+import NavigationMixin from '../../mixins/navigationMixin'
 import { mapGetters } from 'vuex'
 import filesize from 'filesize'
 
