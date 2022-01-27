@@ -15,9 +15,9 @@ export const createLocationSpaces = (name: spaceTypes, location = {}): Location 
     location
   )
 
-const locationSpacesProject = createLocationSpaces('files-spaces-project')
-const locationSpacesProjects = createLocationSpaces('files-spaces-projects')
-const locationSpacesPersonalHome = createLocationSpaces('files-spaces-personal-home')
+export const locationSpacesProject = createLocationSpaces('files-spaces-project')
+export const locationSpacesProjects = createLocationSpaces('files-spaces-projects')
+export const locationSpacesPersonalHome = createLocationSpaces('files-spaces-personal-home')
 
 export const isLocationSpacesActive = isLocationActiveDirector<spaceTypes>(
   locationSpacesProject,
@@ -44,7 +44,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         }
       },
       {
-        path: 'projects/:spaceId*',
+        path: 'projects/:spaceId/:item*',
         name: locationSpacesProject.name,
         component: components.Spaces?.Project,
         meta: {

@@ -146,6 +146,10 @@ export default {
     const loadResourcesTask = useTask(function* (signal, ref, sameRoute, path = null) {
       ref.CLEAR_CURRENT_FILES_LIST()
 
+      if (!path && !ref.$route.params.item) {
+        path = `/files/${ref.user.id}`
+      }
+
       try {
         let resources = yield ref.fetchResources(
           path || ref.$route.params.item,

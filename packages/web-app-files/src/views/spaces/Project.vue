@@ -32,6 +32,29 @@
           </p>
         </template>
       </no-content-message>
+      <resource-table
+        v-else
+        id="files-spaces-table"
+        v-model="selected"
+        class="files-table oc-mt-xl"
+        :resources="paginatedResources"
+        :target-route="resourceTargetLocation"
+        @fileClick="$_fileActions_triggerDefaultAction"
+      >
+        <template #contextMenu="{ resource }">
+          <context-actions v-if="isResourceInSelection(resource)" :items="selected" />
+        </template>
+        <template #footer>
+          <pagination :pages="paginationPages" :current-page="paginationPage" />
+          <list-info
+            v-if="paginatedResources.length > 0"
+            class="oc-width-1-1 oc-my-s"
+            :files="totalFilesCount.files"
+            :folders="totalFilesCount.folders"
+            :size="totalFilesSize"
+          />
+        </template>
+      </resource-table>
     </template>
   </div>
 </template>
@@ -40,22 +63,36 @@
 import NoContentMessage from '../../components/FilesList/NoContentMessage.vue'
 import NotFoundMessage from '../../components/FilesList/NotFoundMessage.vue'
 import ListLoader from '../../components/FilesList/ListLoader.vue'
-import { ref } from '@vue/composition-api'
+import { computed, ref, unref } from '@vue/composition-api'
 import { client } from 'web-client'
 import { useTask } from 'vue-concurrency'
-import { useStore, useRouter } from 'web-pkg/src/composables'
+import { useStore, useRouter, useRouteQuery } from 'web-pkg/src/composables'
 import marked from 'marked'
-import axios from 'axios'
 import MixinAccessibleBreadcrumb from '../../mixins/accessibleBreadcrumb'
 import { bus } from 'web-pkg/src/instance'
+import { buildResource } from '../../helpers/resources'
+import ResourceTable, { determineSortFields } from '../../components/FilesList/ResourceTable.vue'
+import { createLocationSpaces } from '../../router'
+import { usePagination, useSort } from '../../composables'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
+import ListInfo from '../../components/FilesList/ListInfo.vue'
+import Pagination from '../../components/FilesList/Pagination.vue'
+import ContextActions from '../../components/FilesList/ContextActions.vue'
+import QuickActions from '../../components/FilesList/QuickActions.vue'
+import MixinFileActions from '../../mixins/fileActions'
 
 export default {
   components: {
     NoContentMessage,
     ListLoader,
-    NotFoundMessage
+    NotFoundMessage,
+    ResourceTable,
+    ListInfo,
+    Pagination,
+    ContextActions,
+    QuickActions
   },
-  mixins: [MixinAccessibleBreadcrumb],
+  mixins: [MixinAccessibleBreadcrumb, MixinFileActions],
   setup() {
     const router = useRouter()
     const store = useStore()
@@ -65,6 +102,25 @@ export default {
     const markdownContent = ref('')
     const imageContent = ref('')
     const { graph } = client(store.getters.configuration.server, store.getters.getToken)
+
+    const storeItems = computed(() => store.getters['Files/activeFiles'] || [])
+    const fields = computed(() => {
+      return determineSortFields(unref(storeItems)[0])
+    })
+
+    const { sortBy, sortDir, items, handleSort } = useSort({
+      items: storeItems,
+      fields
+    })
+
+    const paginationPageQuery = useRouteQuery('page', '1')
+    const paginationPage = computed(() => parseInt(String(paginationPageQuery.value)))
+    const { items: paginatedResources, total: paginationPages } = usePagination({
+      page: paginationPage,
+      items,
+      sortDir,
+      sortBy
+    })
 
     const loadSpaceTask = useTask(function* () {
       const response = yield graph.drives.getDrive(spaceId)
@@ -108,10 +164,34 @@ export default {
       imageContent.value = Buffer.from(fileContents).toString('base64')
     })
 
+    const loadFilesListTask = useTask(function* (signal, ref, sameRoute) {
+      ref.CLEAR_CURRENT_FILES_LIST()
+
+      const response = yield ref.$client.files.list(
+        ref.$route.params.item || `spaces/${space.value.id}/`
+      )
+
+      const resources = response.map(buildResource)
+      const currentFolder = resources.shift()
+
+      ref.LOAD_FILES({
+        currentFolder,
+        files: resources
+      })
+      ref.loadIndicators({
+        client: ref.$client,
+        currentFolder: currentFolder.path
+      })
+
+      ref.accessibleBreadcrumb_focusAndAnnounceBreadcrumb(sameRoute)
+      ref.scrollToResourceFromRoute()
+    })
+
     const loadResourcesTask = useTask(function* (signal, ref) {
       yield loadSpaceTask.perform(ref)
       loadReadmeTask.perform(ref)
       loadImageTask.perform(ref)
+      loadFilesListTask.perform(ref)
     })
 
     return {
@@ -121,7 +201,15 @@ export default {
       loadReadmeTask,
       markdownContent,
       imageContent,
-      loadResourcesTask
+      loadResourcesTask,
+      loadFilesListTask,
+      resourceTargetLocation: createLocationSpaces('files-spaces-project'),
+      paginatedResources,
+      paginationPages,
+      paginationPage,
+      handleSort,
+      sortBy,
+      sortDir
     }
   },
   data: function () {
@@ -129,11 +217,30 @@ export default {
       markdownCollapsed: true,
       markdownContainerCollapsedClass: 'collapsed',
       showMarkdownCollapse: false,
-      markdownResizeObserver: new ResizeObserver(this.onMarkdownResize),
-      isEmpty: true
+      markdownResizeObserver: new ResizeObserver(this.onMarkdownResize)
     }
   },
   computed: {
+    ...mapGetters('Files', [
+      'highlightedFile',
+      'selectedFiles',
+      'currentFolder',
+      'totalFilesCount',
+      'totalFilesSize'
+    ]),
+
+    selected: {
+      get() {
+        return this.selectedFiles
+      },
+      set(resources) {
+        this.SET_FILE_SELECTION(resources)
+      }
+    },
+    isEmpty() {
+      return this.paginatedResources.length < 1
+    },
+
     markdownCollapseIcon() {
       return this.markdownCollapsed === true ? 'add' : 'subtract'
     },
@@ -143,6 +250,23 @@ export default {
         : this.$gettext('Show less')
     }
   },
+  watch: {
+    $route: {
+      handler: function (to, from) {
+        const sameRoute = to.name === from?.name
+        const sameItem = to.params?.item === from?.params?.item
+
+        if (!to.params?.item) {
+          return
+        }
+
+        if (!sameRoute || !sameItem) {
+          this.loadFilesListTask.perform(this, sameRoute)
+        }
+      },
+      immediate: true
+    }
+  },
   async mounted() {
     await this.loadResourcesTask.perform(this)
 
@@ -150,7 +274,9 @@ export default {
     this.$route.params.name = this.space.name
 
     const loadSpaceEventToken = bus.subscribe('app.files.list.load', (path) => {
-      this.loadResourcesTask.perform(this)
+      console.log(this.$route.params.item)
+      console.log(path)
+      this.loadResourcesTask.perform(this, this.$route.params.item === path)
     })
 
     this.$on('beforeDestroy', () => bus.unsubscribe('app.files.list.load', loadSpaceEventToken))
@@ -159,6 +285,17 @@ export default {
     this.markdownResizeObserver.unobserve(this.$refs.markdownContainer)
   },
   methods: {
+    ...mapActions('Files', ['loadIndicators', 'loadPreview']),
+    ...mapMutations('Files', [
+      'SET_CURRENT_FOLDER',
+      'LOAD_FILES',
+      'CLEAR_CURRENT_FILES_LIST',
+      'REMOVE_FILE',
+      'REMOVE_FILE_FROM_SEARCHED',
+      'SET_FILE_SELECTION',
+      'REMOVE_FILE_SELECTION'
+    ]),
+
     toggleCollapseMarkdown() {
       this.markdownCollapsed = !this.markdownCollapsed
       return this.$refs.markdownContainer.classList.toggle(this.markdownContainerCollapsedClass)
@@ -180,6 +317,10 @@ export default {
       if (this.markdownCollapsed) {
         this.$refs.markdownContainer.classList.add(this.markdownContainerCollapsedClass)
       }
+    },
+
+    isResourceInSelection(resource) {
+      return this.selected?.includes(resource)
     }
   }
 }

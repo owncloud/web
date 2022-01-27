@@ -255,23 +255,20 @@ export default {
       return this.$gettext(title)
     },
 
-    breadcrumbs() {
-      const isProjectSpaces =
-        isLocationSpacesActive(this.$router, 'files-spaces-projects') ||
-        isLocationSpacesActive(this.$router, 'files-spaces-project')
-
-      if (!(this.isPublicLocation || this.isPersonalLocation || isProjectSpaces)) {
+    breadcrumbs: function () {
+      if (
+        !(
+          this.isPublicLocation ||
+          this.isPersonalLocation ||
+          this.isSpacesProjectsLocation ||
+          this.isSpacesProjectLocation
+        )
+      ) {
         return []
       }
 
       const { params: routeParams, path: routePath } = this.$route
-
-      let requestedItemPath = ''
-      if (isProjectSpaces) {
-        requestedItemPath = routeParams.spaceId || ''
-      } else {
-        requestedItemPath = routeParams.item || ''
-      }
+      const requestedItemPath = routeParams.item || ''
 
       const basePaths =
         '/' +
@@ -296,7 +293,7 @@ export default {
             if (acc.length) {
               if (this.isPersonalLocation) {
                 acc[0].text = this.$gettext('All files')
-              } else if (isProjectSpaces) {
+              } else if (this.isSpacesProjectLocation || this.isSpacesProjectsLocation) {
                 acc[0].text = this.$gettext('Spaces')
               } else {
                 acc[0].text = this.$gettext('Public link')

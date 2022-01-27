@@ -42,7 +42,7 @@ export default {
       if (isPublicFile) {
         url = resources[0].downloadURL
       } else {
-        url = this.$client.helpers._webdavUrl + resources[0].path
+        url = `${this.$client.helpers._davPath}${resources[0].path}`
         headers.append('Authorization', 'Bearer ' + this.getToken)
         headers.append('X-Requested-With', 'XMLHttpRequest')
       }
