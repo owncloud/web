@@ -306,7 +306,12 @@ export default {
         inputError: isFolder
           ? this.checkNewFolderName(defaultName)
           : this.checkNewFileName(defaultName),
-        onCancel: this.hideModal,
+        onCancel: () => {
+          this.hideModal()
+          this.$nextTick(() => {
+            document.getElementById('new-file-menu-btn').focus()
+          })
+        },
         onConfirm: isFolder ? this.addNewFolder : this.addNewFile,
         onInput: checkInputValue
       }
