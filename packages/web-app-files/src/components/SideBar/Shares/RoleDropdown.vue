@@ -75,6 +75,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import get from 'lodash-es/get'
 import RoleItem from '../Shared/RoleItem.vue'
 import {
@@ -120,6 +121,8 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['capabilities']),
+
     roleButtonId() {
       if (this.shareId) {
         return `files-collaborators-role-button-${this.shareId}-${uuid.v4()}`
@@ -145,7 +148,10 @@ export default {
       if (this.resourceIsSpace) {
         return SpacePeopleShareRoles.list()
       }
-      return PeopleShareRoles.list(this.resource.isFolder)
+      return PeopleShareRoles.list(
+        this.resource.isFolder,
+        this.capabilities.files_sharing.allow_custom !== false
+      )
     },
     availablePermissions() {
       return this.customPermissionsRole.permissions(this.allowSharePermission)

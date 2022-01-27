@@ -259,21 +259,21 @@ export abstract class PeopleShareRoles {
     peopleRoleViewerFile,
     peopleRoleViewerFolder,
     peopleRoleEditorFile,
-    peopleRoleEditorFolder,
-    peopleRoleCustomFile,
-    peopleRoleCustomFolder
+    peopleRoleEditorFolder
   ]
 
-  static list(isFolder: boolean): ShareRole[] {
-    return this.all.filter((r) => r.folder === isFolder)
+  static readonly allWithCustom = [...this.all, peopleRoleCustomFile, peopleRoleCustomFolder]
+
+  static list(isFolder: boolean, hasCustom: boolean): ShareRole[] {
+    return (hasCustom ? this.allWithCustom : this.all).filter((r) => r.folder === isFolder)
   }
 
   static custom(isFolder: boolean): ShareRole {
-    return this.all.find((r) => r.folder === isFolder && r.hasCustomPermissions)
+    return this.allWithCustom.find((r) => r.folder === isFolder && r.hasCustomPermissions)
   }
 
   static getByBitmask(bitmask: number, isFolder: boolean, allowSharing: boolean): ShareRole {
-    const role = this.all
+    const role = this.allWithCustom
       .filter((r) => !r.hasCustomPermissions)
       .find((r) => r.folder === isFolder && r.bitmask(allowSharing) === bitmask)
     return role || this.custom(isFolder)
