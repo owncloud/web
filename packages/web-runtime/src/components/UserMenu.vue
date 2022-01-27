@@ -6,7 +6,7 @@
       class="oc-topbar-personal uk-height-1-1 oc-pr-xs"
       appearance="raw"
       variation="passive"
-      :aria-label="$gettext('User Menu')"
+      :aria-label="userMenuLabel"
     >
       <oc-grid flex>
         <avatar-image
@@ -109,6 +109,13 @@ export default {
     }
   },
   computed: {
+    userMenuLabel() {
+      const translated = this.$gettext('User menu for currently logged in user %{ userName }')
+      return this.$gettextInterpolate(
+        translated,
+        { userName: this.userDisplayName }
+      )
+    },
     menuItems() {
       return this.navigation_getMenuItems(['user'])
     }
