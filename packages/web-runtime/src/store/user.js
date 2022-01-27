@@ -3,8 +3,6 @@ import isEmpty from 'lodash-es/isEmpty'
 import initVueAuthenticate from '../services/auth'
 import router from '../router/'
 
-import SidebarQuota from '../components/SidebarQuota.vue'
-
 let vueAuthInstance
 
 const state = {
@@ -118,14 +116,9 @@ const actions = {
           groups: userGroups
         })
 
-        // Display quota in the sidebar
         if (user.quota.definition !== 'default' && user.quota.definition !== 'none') {
           context.commit('SET_QUOTA', user.quota)
-          context.commit('SET_SIDEBAR_FOOTER_CONTENT_COMPONENT', SidebarQuota, { root: true })
-        } else {
-          context.commit('SET_SIDEBAR_FOOTER_CONTENT_COMPONENT', null, { root: true })
         }
-
         await context.dispatch('loadSettingsValues')
         if (payload.autoRedirect) {
           router.push({ path: '/' }).catch(() => {})
