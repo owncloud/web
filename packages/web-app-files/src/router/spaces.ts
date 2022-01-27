@@ -35,7 +35,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
       {
         path: 'projects',
         name: locationSpacesProjects.name,
-        component: components.Spaces?.Projects,
+        component: components.Spaces.Projects,
         meta: {
           hideFilelistActions: true,
           hasBulkActions: true,
@@ -44,9 +44,9 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         }
       },
       {
-        path: 'projects/:spaceId/:item*',
+        path: 'projects/:spaceId?/:item*',
         name: locationSpacesProject.name,
-        component: components.Spaces?.Project,
+        component: components.Spaces.Project,
         meta: {
           hideFilelistActions: true,
           hasBulkActions: true,
