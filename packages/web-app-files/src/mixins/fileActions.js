@@ -2,6 +2,7 @@ import get from 'lodash-es/get'
 import { mapGetters, mapActions, mapState } from 'vuex'
 
 import { isAuthenticatedRoute, isLocationCommonActive } from '../router'
+import { convertRouteParamsToContextQuery } from 'web-pkg/src/composables/appDefaults'
 import AcceptShare from './actions/acceptShare'
 import Copy from './actions/copy'
 import DeclineShare from './actions/declineShare'
@@ -111,6 +112,23 @@ export default {
   methods: {
     ...mapActions(['openFile']),
 
+    $_fileActions__routeOpts(app, filePath, fileId, mode) {
+      const route = this.$route
+      const { item, ...params } = route.params
+
+      return {
+        name: app.routeName || app.app,
+        params: {
+          filePath,
+          fileId,
+          mode,
+          contextRouteName: this.$route.name
+        },
+        query: convertRouteParamsToContextQuery(params)
+        }
+      }
+    },
+
     $_fileActions_openEditor(editor, filePath, fileId, mode) {
       if (editor.handler) {
         return editor.handler({
@@ -127,15 +145,7 @@ export default {
         filePath
       })
 
-      const routeOpts = {
-        name: editor.routeName || editor.app,
-        params: {
-          filePath,
-          fileId,
-          mode,
-          contextRouteName: this.$route.name
-        }
-      }
+      const routeOpts = this.$_fileActions__routeOpts(editor, filePath, fileId, mode)
 
       if (editor.newTab) {
         const path = this.$router.resolve(routeOpts).href
@@ -239,22 +249,32 @@ export default {
     },
 
     $_fileActions_openLink(appName, resourceId) {
-      const routeData = this.$router.resolve({
-        name: 'external-apps',
-        params: {
-          contextRouteName: this.$route.name,
-          file_id: resourceId,
-          app: appName
+      const routeOpts = this.$_fileActions__routeOpts(
+        {
+          routeName: 'external-apps'
         },
+        undefined,
+        resourceId,
+        undefined
+      )
+
+      routeOpts.params = {
+        ...routeOpts.params,
+        app: appName,
+        // FIXME: remove file_id fallback when we are sure noone is using it anymore
+        file_id: routeOpts.params.fileId
+      }
+
+      routeOpts.query = {
+        ...routeOpts.query,
         // public-token retrieval is weak, same as packages/web-app-files/src/index.js:106
-        query: {
-          ...(!isAuthenticatedRoute(this.$route) && {
-            'public-token': (this.$route.params.item || '').split('/')[0]
-          })
-        }
-      })
+        ...(!isAuthenticatedRoute(this.$route) && {
+          'public-token': (this.$route.params.item || '').split('/')[0]
+        })
+      }
+
       // TODO: Let users configure whether to open in same/new tab (`_blank` vs `_self`)
-      window.open(routeData.href, '_blank')
+      window.open(this.$router.resolve(routeOpts).href, '_blank')
     }
   }
 }
