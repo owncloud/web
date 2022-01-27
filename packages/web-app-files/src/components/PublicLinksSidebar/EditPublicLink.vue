@@ -4,15 +4,12 @@
       <div class="oc-mb">
         <oc-text-input id="oc-files-file-link-name" v-model="name" :label="$gettext('Name')" />
       </div>
-      <translate tag="label" for="files-file-link-role-button" class="oc-label">
-        Role
-      </translate>
       <oc-select
         v-model="selectedRole"
         input-id="files-file-link-role-button"
         :options="roles"
         :clearable="false"
-        label="label"
+        :label="$gettext('Role')"
         class="oc-mb files-file-link-role-button-wrapper"
       >
         <template v-slot:option="option">
@@ -240,16 +237,15 @@ export default {
 
     $_passwordEnforced() {
       const permissions = parseInt(this.selectedRole.permissions, 10)
-      console.log('password capabilities', this.capabilities.files_sharing.public)
       const password = this.capabilities.files_sharing.public.password.enforced_for
 
-      if (permissions === 1 && password.read_only) {
+      if (permissions === 1 && password.read_only === '1') {
         return true
       }
-      if (permissions === 4 && password.upload_only) {
+      if (permissions === 4 && password.upload_only === '1') {
         return true
       }
-      if (permissions >= 5 && password.read_write) {
+      if (permissions >= 5 && password.read_write === '1') {
         return true
       }
 
@@ -371,6 +367,7 @@ export default {
     removePassword: function() {
       this.password = ''
       this.hasPassword = false
+      document.getElementById('oc-files-file-link-password').focus()
     }
   }
 }
