@@ -24,10 +24,11 @@ Summary
 * Enhancement - Add URL handling to markdown editor: [#6134](https://github.com/owncloud/web/pull/6134)
 * Enhancement - Persist chosen sorting options: [#5930](https://github.com/owncloud/web/issues/5930)
 * Enhancement - Redesign main layout: [#6036](https://github.com/owncloud/web/issues/6036)
+* Enhancement - Redesigned user menu: [#6272](https://github.com/owncloud/web/pull/6272)
 * Enhancement - Show parent folder for resources: [#6226](https://github.com/owncloud/web/pull/6226)
 * Enhancement - Add default sorting to the spaces list: [#6262](https://github.com/owncloud/web/pull/6262)
 * Enhancement - Implement spaces list: [#6199](https://github.com/owncloud/web/pull/6199)
-* Enhancement - Update ODS to v12.0.0-alpha14: [#6086](https://github.com/owncloud/web/pull/6086)
+* Enhancement - Update ODS to v12.0.0-alpha15: [#6086](https://github.com/owncloud/web/pull/6086)
 
 Details
 -------
@@ -172,6 +173,14 @@ Details
    https://github.com/owncloud/web/pull/6222
    https://github.com/owncloud/web/pull/6228
 
+* Enhancement - Redesigned user menu: [#6272](https://github.com/owncloud/web/pull/6272)
+
+   We've redesigned the user menu. It now also features more detailed information about the
+   user's quota and how much space they have left.
+
+   https://github.com/owncloud/web/issues/6101
+   https://github.com/owncloud/web/pull/6272
+
 * Enhancement - Show parent folder for resources: [#6226](https://github.com/owncloud/web/pull/6226)
 
    We've added a visual hint for the parent folder of a resource in cases where it could be usefull.
@@ -193,9 +202,9 @@ Details
    https://github.com/owncloud/web/issues/6104
    https://github.com/owncloud/web/pull/6199
 
-* Enhancement - Update ODS to v12.0.0-alpha14: [#6086](https://github.com/owncloud/web/pull/6086)
+* Enhancement - Update ODS to v12.0.0-alpha15: [#6086](https://github.com/owncloud/web/pull/6086)
 
-   We updated the ownCloud Design System to version 12.0.0-alpha14. Please refer to the full
+   We updated the ownCloud Design System to version 12.0.0-alpha15. Please refer to the full
    changelog in the ODS release (linked) for more details. Summary:
 
    - Change - Do not sort in OcTable:
@@ -237,7 +246,7 @@ Details
    https://github.com/owncloud/web/pull/6213
    https://github.com/owncloud/web/pull/6228
    https://github.com/owncloud/web/pull/6240
-   https://github.com/owncloud/owncloud-design-system/releases/tag/v12.0.0-alpha14
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v12.0.0-alpha15
 
 Changelog for ownCloud Web [4.9.0] (2021-12-24)
 =======================================
