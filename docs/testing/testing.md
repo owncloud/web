@@ -3,7 +3,7 @@ title: "Running acceptance tests"
 date: 2021-07-27T00:00:00+00:00
 weight: 60
 geekdocRepo: https://github.com/owncloud/web
-geekdocEditPath: edit/master/docs
+geekdocEditPath: edit/master/docs/testing
 geekdocFilePath: testing.md
 ---
 
