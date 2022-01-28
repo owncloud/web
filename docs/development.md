@@ -18,14 +18,14 @@ Everyone is invited to contribute. Simply fork [the codebase](), check [the issu
 
 ### Linting and tests
 
-To make sure your pull request can be efficiently reviewed and won't need a lot of changes down the road, please run the linter and the unit tests via `yarn lint --fix` and `yarn test:unit` locally. [Our CI](https://drone.owncloud.com/owncloud/web) will run on pull requests and report back any problems after that.
+To make sure your pull request can be efficiently reviewed and won't need a lot of changes down the road, please run the linter and the unit&integration tests via `yarn lint --fix` and `yarn test:unit && yarn test:integration` locally. [Our CI](https://drone.owncloud.com/owncloud/web) will run on pull requests and report back any problems after that. For a further introduction on how we handle testing, please head to the [testing docs]({{< ref "testing/_index.md" >}}).
 
 ### Changelog items
 
 In our project, we follow [SemVer](https://semver.org/) and keep a changelog for every change that influences the user experience (where "users" can be admins, end-users and extension developers).
 Some changes, like refactoring, updating dependencies or adding tests don't require a changelog item.
 
-Please add a changelog item to the `changelog/unreleased/` folder, referencing the issue and pull request numbers.
+Please add a changelog item to the `changelog/unreleased/` folder, referencing the issue and pull request numbers, following the [changelog item template](https://github.com/owncloud/web/blob/master/changelog/TEMPLATE). 
 
 ## Code Conventions
 
