@@ -21,8 +21,6 @@ const BACKEND_ADMIN_USERNAME = process.env.BACKEND_USERNAME || 'admin'
 const BACKEND_ADMIN_PASSWORD = process.env.BACKEND_PASSWORD || 'admin'
 const SELENIUM_HOST = process.env.SELENIUM_HOST || 'localhost'
 const SELENIUM_PORT = process.env.SELENIUM_PORT || 4444
-const REMOTE_UPLOAD_DIR =
-  process.env.REMOTE_UPLOAD_DIR || require('path').join(__dirname, '/filesForUpload/')
 const SAUCE_USERNAME = process.env.SAUCE_USERNAME
 const SAUCE_ACCESS_KEY = process.env.SAUCE_ACCESS_KEY
 const BROWSER_NAME = process.env.BROWSER_NAME
@@ -60,7 +58,6 @@ const config = {
         waitForConditionTimeout: 10000,
         waitForNegativeConditionTimeout: 300,
         waitForConditionPollInterval: 10,
-        filesForUpload: REMOTE_UPLOAD_DIR,
         mountedUploadDir: LOCAL_UPLOAD_DIR,
         backend_url: LOCAL_BACKEND_URL,
         remote_backend_url: REMOTE_BACKEND_URL,

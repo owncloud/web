@@ -59,7 +59,7 @@ services:
       - 5900:5900
     volumes:
       - /dev/shm:/dev/shm
-      - ./tests/acceptance/filesForUpload:/uploads:ro
+      - uploads:/uploads:ro
     extra_hosts:
       - host.docker.internal:${DOCKER_HOST:-host-gateway}
     environment:
@@ -73,13 +73,14 @@ services:
     ports:
       - "3001:3001"
     volumes:
+      - uploads:/uploads
       - /var/tmp/ocis:/var/tmp/ocis
-      - ./tests/acceptance/filesForUpload:/usr/src/app/filesForUpload
     environment:
       MIDDLEWARE_PORT: 3001
       MIDDLEWARE_HOST: "0.0.0.0"
       RUN_ON_OCIS: 'false'
       BACKEND_HOST: "http://host.docker.internal:8080"
+      REMOTE_UPLOAD_DIR: "/uploads"
 
   middleware-ocis:
     image: owncloud/owncloud-test-middleware:latest
@@ -89,7 +90,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./tests/acceptance/filesForUpload:/usr/src/app/filesForUpload
+      - uploads:/uploads
     environment:
       MIDDLEWARE_PORT: 3000
       MIDDLEWARE_HOST: "0.0.0.0"
@@ -106,3 +107,6 @@ services:
       - 6080:6080
     extra_hosts:
       - host.docker.internal:${DOCKER_HOST:-host-gateway}
+
+volumes:
+  uploads:

@@ -196,20 +196,16 @@ When('the user/public uploads file {string} using the webUI', function (element)
 })
 
 When('the user uploads a created file {string} using the webUI', function (element) {
-  const filePath = path.join(client.globals.filesForUpload, element)
-  return client.uploadRemote(filePath, function (uploadPath) {
-    client.page.personalPage().uploadFile(uploadPath)
-  })
+  const uploadPath = path.join(client.globals.mountedUploadDir, element)
+  return client.page.personalPage().uploadFile(uploadPath)
 })
 
 When('the user uploads a created file {string} with overwrite using the webUI', function (element) {
-  const filePath = path.join(client.globals.filesForUpload, element)
-  return client.uploadRemote(filePath, function (uploadPath) {
-    client.page
-      .personalPage()
-      .selectFileForUpload(uploadPath)
-      .then(() => client.page.personalPage().confirmFileOverwrite())
-  })
+  const uploadPath = path.join(client.globals.mountedUploadDir, element)
+  client.page
+    .personalPage()
+    .selectFileForUpload(uploadPath)
+    .then(() => client.page.personalPage().confirmFileOverwrite())
 })
 
 When('the public uploads file/folder {string} in files-drop page', function (element) {
@@ -243,32 +239,6 @@ When('the user uploads folder {string} using the webUI', function (element) {
   const name = path.join(rootUploadDir, element)
   return client.page.personalPage().uploadFolder(name)
 })
-
-When(
-  'the user uploads a folder containing the following files in separate sub-folders using the webUI:',
-  async function (files) {
-    files = files.raw().map((item) => item[0])
-
-    if (new Set(files).size !== files.length) {
-      throw new Error(
-        `Allowing upload of multiple files in the same folder would complicate
-      other step-definitions. Please remove duplicated files and retry.`
-      )
-    }
-
-    if (files.length === 1) {
-      throw new Error(
-        'Please try uploading more than one file. Uploading only one file is not supported.'
-      )
-    }
-
-    for (const file of files) {
-      const filePath = path.join(client.globals.filesForUpload, file)
-      await client.uploadRemote(filePath)
-    }
-    return client.page.personalPage().uploadSessionFolder()
-  }
-)
 
 Then('it should not be possible to create files using the webUI', async function () {
   const canCreate = await client.page.personalPage().canCreateFiles()
