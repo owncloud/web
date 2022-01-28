@@ -39,14 +39,14 @@
             </span>
           </oc-button>
         </li>
-        <li v-for="(n, nid) in applicationsList" :key="`user-menu-${nid}`">
-          <oc-button v-if="n.url" type="a" appearance="raw" :target="n.target" :href="n.url">
-            <oc-icon :name="n.icon" class="oc-p-xs" />
-            <translate>{{ n.title }}</translate>
+        <li v-for="(app, index) in applicationsList" :key="`user-menu-${index}`">
+          <oc-button v-if="app.url" type="a" appearance="raw" :target="app.target" :href="app.url">
+            <oc-icon :name="app.icon" class="oc-p-xs" />
+            <translate>{{ app.title }}</translate>
           </oc-button>
-          <oc-button v-else type="router-link" appearance="raw" :to="{ path: n.path }">
-            <oc-icon :name="n.icon" class="oc-p-xs" />
-            <translate>{{ n.title }}</translate>
+          <oc-button v-else type="router-link" appearance="raw" :to="{ path: app.path }">
+            <oc-icon :name="app.icon" class="oc-p-xs" />
+            <translate>{{ app.title }}</translate>
           </oc-button>
         </li>
         <li>

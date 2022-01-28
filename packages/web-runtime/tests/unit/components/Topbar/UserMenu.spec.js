@@ -1,66 +1,87 @@
-import { shallowMount, createLocalVue, mount } from '@vue/test-utils'
+import { createLocalVue, mount } from '@vue/test-utils'
 import Vuex from 'vuex'
-import { Store } from 'vuex-mock-store'
+import DesignSystem from 'owncloud-design-system'
+import GetTextPlugin from 'vue-gettext'
 import UserMenu from 'web-runtime/src/components/Topbar/UserMenu.vue'
 import stubs from '../../../../../../tests/unit/stubs'
-import DesignSystem from 'owncloud-design-system'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
 localVue.use(DesignSystem)
-jest.useFakeTimers()
-stubs.translate = true
+localVue.use(GetTextPlugin, {
+  translations: 'does-not-matter.json',
+  silent: true
+})
+
+const basicQuota = 300
+const warningQuota = 810
+const dangerQuota = 910
+
+const noEmail = ''
+const email = 'test@test.de'
 
 describe('User Menu component', () => {
-  describe('when userId is set', () => {
-    const wrapper = shallowMount(UserMenu, {
-      localVue,
-      stubs,
-      propsData: {
-        userId: 'einstein',
-        userDisplayName: 'Albert Einstein',
-        userEmail: 'test@test.de'
-      }
-    })
-    it('displays the avatar', () => {
-      expect(wrapper.find('.oc-topbar-personal-avatar').exists()).toBeTruthy()
+  describe('when quota and no email is set', () => {
+    it('renders a navigation without email', () => {
+      const wrapper = getMountedWrapper({ used: basicQuota, total: 1000 }, noEmail)
+      expect(wrapper).toMatchSnapshot()
     })
   })
-  describe('when userId is empty', () => {
-    const wrapper = shallowMount(UserMenu, {
-      localVue,
-      stubs,
-      propsData: {
-        userId: '',
-        userDisplayName: 'Albert Einstein'
-      }
-    })
-    it('does not display the avatar', () => {
-      expect(wrapper.find('.oc-topbar-personal-avatar').exists()).toBeFalsy()
-      expect(wrapper.find('.oc-topbar-personal-label').exists()).toBeFalsy()
-    })
-    it('does not display the profile link', () => {
-      expect(wrapper.find('#oc-topbar-account-manage').exists()).toBeFalsy()
-    })
-    it('does not display the logout button', () => {
-      expect(wrapper.find('#oc-topbar-account-logout').exists()).toBeFalsy()
+  describe('when no quota and email is set', () => {
+    it('the user menu does not contain a quota', () => {
+      const wrapper = getMountedWrapper(null, email)
+      expect(wrapper).toMatchSnapshot()
     })
   })
-  describe('methods', () => {
-    const store = new Store({})
-    beforeEach(() => {
-      store.reset()
+  describe('when no quota and no email is set', () => {
+    it('the user menu does not contain a quota', () => {
+      const wrapper = getMountedWrapper(null, noEmail)
+      expect(wrapper).toMatchSnapshot()
     })
-    const wrapper = mount(UserMenu, {
-      localVue,
-      stubs: { ...stubs, 'router-link': true, 'oc-button': false },
-      propsData: {
-        userId: 'einstein',
-        userDisplayName: 'Albert Einstein'
-      },
-      mocks: {
-        $store: store
-      }
+  })
+  describe('when quota is below 80%', () => {
+    it('renders a primary quota progress bar', () => {
+      const wrapper = getMountedWrapper({ used: basicQuota, total: 1000 }, email)
+      expect(wrapper).toMatchSnapshot()
+    })
+  })
+  describe('when quota is above 80% and below 90%', () => {
+    it('renders a warning quota progress bar', () => {
+      const wrapper = getMountedWrapper({ used: warningQuota, total: 1000 }, email)
+      expect(wrapper).toMatchSnapshot()
+    })
+  })
+  describe('when basic quota is set', () => {
+    it('renders a danger quota progress bar', () => {
+      const wrapper = getMountedWrapper({ used: dangerQuota, total: 1000 }, email)
+      expect(wrapper).toMatchSnapshot()
     })
   })
 })
+
+const getMountedWrapper = (quota, userEmail) => {
+  return mount(UserMenu, {
+    store: new Vuex.Store({
+      getters: {
+        quota: () => quota,
+        user: () => ({
+          id: 'einstein',
+          username: 'einstein',
+          userDisplayName: 'Albert Einstein',
+          userEmail
+        })
+      }
+    }),
+    localVue,
+    propsData: {
+      applicationsList: [
+        {
+          icon: 'application',
+          path: '/settings',
+          title: 'Settings'
+        }
+      ]
+    },
+    stubs
+  })
+}
