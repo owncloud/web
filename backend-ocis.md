@@ -27,5 +27,5 @@ geekdocFilePath: backend-ocis.md
 
 ## Running acceptance tests
 
-For testing, please refer to the [oCIS testing section]({{< ref "testing.md#running-acceptance-tests-using-ocis-backend" >}})
+For testing, please refer to the [testing docs]({{< ref "testing/_index.md" >}})
 
