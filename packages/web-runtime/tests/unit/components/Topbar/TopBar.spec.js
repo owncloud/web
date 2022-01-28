@@ -26,6 +26,28 @@ const defaultRoute = () => ({
 })
 
 describe('Top Bar component', () => {
+  jest.spyOn(TopBar.mixins[0].methods, 'navigation_getMenuItems').mockImplementation(() => [
+    {
+      icon: 'folder',
+      iconUrl: undefined,
+      title: 'Files',
+      path: '/files'
+    },
+    {
+      icon: 'some-icon',
+      iconUrl: undefined,
+      title: 'External',
+      url: 'http://some.org',
+      target: '_blank'
+    },
+    {
+      icon: 'application',
+      iconUrl: undefined,
+      path: '/settings',
+      title: 'Settings'
+    }
+  ])
+
   it('Displays applications menu', () => {
     const wrapper = shallowMount(TopBar, {
       store: new Vuex.Store({

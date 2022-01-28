@@ -26,7 +26,7 @@
       close-on-click
     >
       <ul class="oc-my-rm oc-px-rm">
-        <li v-for="(n, nid) in menuItems" :key="`apps-menu-${nid}`" class="list-item oc-p-s">
+        <li v-for="(n, nid) in applicationsList" :key="`apps-menu-${nid}`" class="list-item oc-p-s">
           <a v-if="n.url" key="apps-menu-external-link" :target="n.target" :href="n.url">
             <oc-icon :name="n.icon" size="large" />
             <span class="link-text" v-text="$gettext(n.title)" />
@@ -42,10 +42,7 @@
 </template>
 
 <script>
-import NavigationMixin from '../../mixins/navigationMixin'
-
 export default {
-  mixins: [NavigationMixin],
   props: {
     applicationsList: {
       type: Array,
@@ -54,9 +51,6 @@ export default {
     }
   },
   computed: {
-    menuItems() {
-      return this.navigation_getMenuItems([null, 'apps', 'appSwitcher'])
-    },
     applicationSwitcherLabel() {
       return this.$gettext('Application Switcher')
     }

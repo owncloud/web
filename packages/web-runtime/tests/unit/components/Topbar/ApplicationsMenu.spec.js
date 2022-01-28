@@ -13,39 +13,21 @@ localVue.use(GetText, {
 
 const menuLinks = [
   {
-    name: 'Files',
-    id: 'files',
     icon: 'folder',
-    type: 'extension'
+    iconUrl: undefined,
+    title: 'Files',
+    path: '/files'
   },
   {
-    name: 'External',
-    id: 'external',
     icon: 'some-icon',
-    type: '',
-    url: 'http://some.org'
+    iconUrl: undefined,
+    title: 'External',
+    url: 'http://some.org',
+    target: '_blank'
   }
 ]
 
 describe('ApplicationsMenu component', () => {
-  jest
-    .spyOn(ApplicationsMenu.mixins[0].methods, 'navigation_getMenuItems')
-    .mockImplementation(() => [
-      {
-        icon: 'folder',
-        iconUrl: undefined,
-        title: 'Files',
-        path: '/files'
-      },
-      {
-        icon: 'some-icon',
-        iconUrl: undefined,
-        title: 'External',
-        url: 'http://some.org',
-        target: '_blank'
-      }
-    ])
-
   it('should render navigation with button and menu items in dropdown', () => {
     const wrapper = getWrapper(menuLinks)
     expect(wrapper).toMatchSnapshot()

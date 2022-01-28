@@ -32,14 +32,14 @@
             appearance="raw"
           >
             <avatar-image :width="32" :userid="userId" :user-name="user.displayname" />
-            <span class="profile-info-wrapper">
+            <span class="profile-info-wrapper" :class="{ 'oc-py-xs': !user.email }">
               <span v-text="user.displayname" />
               <br v-if="user.email" />
               <span v-if="user.email" class="oc-text-small" v-text="user.email" />
             </span>
           </oc-button>
         </li>
-        <li v-for="(n, nid) in menuItems" :key="`user-menu-${nid}`">
+        <li v-for="(n, nid) in applicationsList" :key="`user-menu-${nid}`">
           <oc-button v-if="n.url" type="a" appearance="raw" :target="n.target" :href="n.url">
             <oc-icon :name="n.icon" class="oc-p-xs" />
             <translate>{{ n.title }}</translate>
@@ -77,12 +77,10 @@
 </template>
 
 <script>
-import NavigationMixin from '../../mixins/navigationMixin'
 import { mapGetters } from 'vuex'
 import filesize from 'filesize'
 
 export default {
-  mixins: [NavigationMixin],
   props: {
     applicationsList: {
       type: Array,
@@ -123,9 +121,6 @@ export default {
       if (this.quotaUsagePercent < 80) return 'primary'
       if (this.quotaUsagePercent < 90) return 'warning'
       return 'danger'
-    },
-    menuItems() {
-      return this.navigation_getMenuItems(['user'])
     }
   },
   mounted() {
