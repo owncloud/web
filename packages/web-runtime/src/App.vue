@@ -21,8 +21,6 @@
         <top-bar
           :applications-list="applicationsList"
           :active-notifications="activeNotifications"
-          :user-id="user.username || user.id"
-          :user-display-name="user.displayname"
         />
       </div>
       <div id="web-content-main" class="oc-px-s oc-pb-s">
@@ -66,7 +64,7 @@
 </template>
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
-import TopBar from './components/TopBar.vue'
+import TopBar from './components/Topbar/TopBar.vue'
 import MessageBar from './components/MessageBar.vue'
 import SkipTo from './components/SkipTo.vue'
 import { getBackendVersion, getWebVersion } from './container/versions'

@@ -24,7 +24,7 @@
 </template>
 <script>
 import Mixins from './mixins'
-import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 import AppBar from './components/AppBar/AppBar.vue'
 import ProgressBar from './components/Upload/ProgressBar.vue'
 import SideBar from './components/SideBar/SideBar.vue'
@@ -76,15 +76,10 @@ export default {
     })
   },
 
-  beforeDestroy() {
-    this.SET_SIDEBAR_FOOTER_CONTENT_COMPONENT(null)
-  },
-
   methods: {
     ...mapActions('Files', ['dragOver', 'resetFileSelection']),
     ...mapActions('Files/sidebar', { closeSidebar: 'close' }),
     ...mapActions(['showMessage']),
-    ...mapMutations(['SET_SIDEBAR_FOOTER_CONTENT_COMPONENT']),
 
     trace() {
       console.info('trace', arguments)

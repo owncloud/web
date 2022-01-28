@@ -1,7 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
-import TopBar from 'web-runtime/src/components/TopBar.vue'
-import stubs from '../../../../../tests/unit/stubs'
+import TopBar from 'web-runtime/src/components/Topbar/TopBar.vue'
+import stubs from '../../../../../../tests/unit/stubs'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -26,20 +26,41 @@ const defaultRoute = () => ({
 })
 
 describe('Top Bar component', () => {
+  jest.spyOn(TopBar.mixins[0].methods, 'navigation_getMenuItems').mockImplementation(() => [
+    {
+      icon: 'folder',
+      iconUrl: undefined,
+      title: 'Files',
+      path: '/files'
+    },
+    {
+      icon: 'some-icon',
+      iconUrl: undefined,
+      title: 'External',
+      url: 'http://some.org',
+      target: '_blank'
+    },
+    {
+      icon: 'application',
+      iconUrl: undefined,
+      path: '/settings',
+      title: 'Settings'
+    }
+  ])
+
   it('Displays applications menu', () => {
-    const userId = 'einstein'
     const wrapper = shallowMount(TopBar, {
       store: new Vuex.Store({
         getters: {
           configuration: () => feedbackButtonPresent(true),
-          user: () => ({ id: userId })
+          user: () => ({
+            id: 'einstein'
+          })
         }
       }),
       localVue,
       stubs,
       propsData: {
-        userId,
-        userDisplayName: 'Albert Einstein',
         applicationsList: ['testApp']
       },
       mocks: {

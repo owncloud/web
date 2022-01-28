@@ -1,4 +1,4 @@
-import FeedbackLink from '../../../src/components/FeedbackLink'
+import FeedbackLink from '../../../../src/components/Topbar/FeedbackLink'
 import { createLocalVue, mount } from '@vue/test-utils'
 import { axe, toHaveNoViolations } from 'jest-axe'
 import DesignSystem from 'owncloud-design-system'

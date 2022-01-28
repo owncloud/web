@@ -3,15 +3,13 @@ import isEmpty from 'lodash-es/isEmpty'
 import initVueAuthenticate from '../services/auth'
 import router from '../router/'
 
-import SidebarQuota from '../components/SidebarQuota.vue'
-
 let vueAuthInstance
 
 const state = {
   token: '',
   id: '',
-  displayname: null,
-  email: null,
+  displayname: '',
+  email: '',
   isAuthenticated: false,
   capabilities: [],
   version: {},
@@ -118,14 +116,9 @@ const actions = {
           groups: userGroups
         })
 
-        // Display quota in the sidebar
         if (user.quota.definition !== 'default' && user.quota.definition !== 'none') {
           context.commit('SET_QUOTA', user.quota)
-          context.commit('SET_SIDEBAR_FOOTER_CONTENT_COMPONENT', SidebarQuota, { root: true })
-        } else {
-          context.commit('SET_SIDEBAR_FOOTER_CONTENT_COMPONENT', null, { root: true })
         }
-
         await context.dispatch('loadSettingsValues')
         if (payload.autoRedirect) {
           router.push({ path: '/' }).catch(() => {})
@@ -233,10 +226,16 @@ const actions = {
 
 const mutations = {
   SET_USER(state, user) {
+    let email
+    if (Object.keys(user.email).length === 0) {
+      email = ''
+    } else {
+      email = user.email
+    }
     state.displayname = user.displayname
     state.id = user.id
     state.username = user.username
-    state.email = user.email
+    state.email = email
     state.isAuthenticated = user.isAuthenticated
     state.token = user.token
     state.groups = user.groups

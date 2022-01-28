@@ -3,7 +3,7 @@
 exports[`Top Bar component Displays applications menu 1`] = `
 <header id="oc-topbar" aria-label="Top bar" class="oc-flex oc-flex-middle oc-flex-between oc-px-m">
   <div class="topbar-gap oc-flex oc-flex-middle oc-flex-between">
-    <applications-menu-stub applicationslist="testApp"></applications-menu-stub>
+    <applications-menu-stub applicationslist="[object Object],[object Object],[object Object]"></applications-menu-stub>
     <router-link-stub to="/">
       <oc-img-stub src="" alt="Navigate to all files page"></oc-img-stub>
     </router-link-stub>
@@ -15,7 +15,7 @@ exports[`Top Bar component Displays applications menu 1`] = `
     <theme-switcher-stub></theme-switcher-stub>
     <feedback-link-stub></feedback-link-stub>
     <!---->
-    <user-menu-stub userid="einstein" userdisplayname="Albert Einstein" applicationslist="testApp"></user-menu-stub>
+    <user-menu-stub applicationslist="[object Object],[object Object],[object Object]"></user-menu-stub>
   </div>
 </header>
 `;

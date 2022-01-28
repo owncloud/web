@@ -1,7 +1,7 @@
 import { config as testConfig, createLocalVue, mount, shallowMount } from '@vue/test-utils'
 import { Store } from 'vuex-mock-store'
-import Notifications from 'web-runtime/src/components/Notifications.vue'
-import stubs from '../../../../../tests/unit/stubs'
+import Notifications from 'web-runtime/src/components/Topbar/Notifications.vue'
+import stubs from '../../../../../../tests/unit/stubs'
 import DesignSystem from 'owncloud-design-system'
 
 const testData = {

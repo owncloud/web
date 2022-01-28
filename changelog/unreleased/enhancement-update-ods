@@ -1,6 +1,6 @@
-Enhancement: Update ODS to v12.0.0-alpha14
+Enhancement: Update ODS to v12.0.0-alpha15
 
-We updated the ownCloud Design System to version 12.0.0-alpha14. Please refer to the full changelog in the ODS release (linked) for more details. Summary:
+We updated the ownCloud Design System to version 12.0.0-alpha15. Please refer to the full changelog in the ODS release (linked) for more details. Summary:
 
 - Change - Do not sort in OcTable: https://github.com/owncloud/owncloud-design-system/pull/1825
 - Change - Remove OcAppSideBar component: https://github.com/owncloud/owncloud-design-system/pull/1810
@@ -29,4 +29,4 @@ https://github.com/owncloud/web/pull/6142
 https://github.com/owncloud/web/pull/6213
 https://github.com/owncloud/web/pull/6228
 https://github.com/owncloud/web/pull/6240
-https://github.com/owncloud/owncloud-design-system/releases/tag/v12.0.0-alpha14
+https://github.com/owncloud/owncloud-design-system/releases/tag/v12.0.0-alpha15

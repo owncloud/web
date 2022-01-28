@@ -5,7 +5,7 @@
     :aria-label="$gettext('Top bar')"
   >
     <div class="topbar-gap oc-flex oc-flex-middle oc-flex-between">
-      <applications-menu v-if="applicationsList.length" :applications-list="applicationsList" />
+      <applications-menu v-if="applicationsList.length" :applications-list="appMenuItems" />
       <router-link ref="navigationSidebarLogo" to="/">
         <oc-img :src="logoImage" :alt="sidebarLogoAlt" />
       </router-link>
@@ -17,18 +17,14 @@
       <theme-switcher v-if="darkThemeAvailable" />
       <feedback-link v-if="isFeedbackLinkEnabled" />
       <notifications v-if="isNotificationBellEnabled" />
-      <user-menu
-        v-if="isUserMenuEnabled"
-        :user-id="userId"
-        :user-display-name="userDisplayName"
-        :applications-list="applicationsList"
-      />
+      <user-menu v-if="isUserMenuEnabled" :applications-list="userMenuItems" />
     </div>
   </header>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import NavigationMixin from '../../mixins/navigationMixin'
 
 import ApplicationsMenu from './ApplicationsMenu.vue'
 import UserMenu from './UserMenu.vue'
@@ -44,17 +40,8 @@ export default {
     ThemeSwitcher,
     UserMenu
   },
+  mixins: [NavigationMixin],
   props: {
-    userId: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    userDisplayName: {
-      type: String,
-      required: false,
-      default: ''
-    },
     applicationsList: {
       type: Array,
       required: false,
@@ -68,6 +55,13 @@ export default {
   },
   computed: {
     ...mapGetters(['configuration', 'user']),
+
+    appMenuItems() {
+      return this.navigation_getMenuItems([null, 'apps', 'appSwitcher'])
+    },
+    userMenuItems() {
+      return this.navigation_getMenuItems(['user'])
+    },
 
     darkThemeAvailable() {
       return this.configuration.themes.default && this.configuration.themes['default-dark']
