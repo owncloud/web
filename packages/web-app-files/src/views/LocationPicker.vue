@@ -150,7 +150,7 @@ export default {
 
       const resources = ref.isPublicContext
         ? yield ref.$client.publicFiles.list(target, ref.publicLinkPassword, DavProperties.Default)
-        : yield ref.$client.files.list(target, 1, DavProperties.Default)
+        : yield ref.$client.files.list(`/files/${ref.user.id}/${target}`, 1, DavProperties.Default)
 
       ref.loadFiles({ currentFolder: resources[0], files: resources.slice(1) })
       ref.loadIndicators({
@@ -185,6 +185,7 @@ export default {
     ...mapGetters('Files', ['publicLinkPassword', 'totalFilesCount', 'totalFilesSize']),
     ...mapGetters(['configuration']),
     ...mapGetters(['homeFolder']),
+    ...mapState(['user']),
 
     title() {
       const translated =
@@ -365,9 +366,9 @@ export default {
 
       // Execute move or copy
       for (const resource of this.resources) {
-        let targetPath = this.target || '/'
+        let targetPath = `files/${this.user.id}/${this.target || '/'}`
         const resourceName = basename(resource)
-        targetPath += '/' + resourceName
+        targetPath += `/${resourceName}`
         const exists = this.paginatedResources.some((item) => {
           return basename(item.name) === resourceName
         })
@@ -385,13 +386,13 @@ export default {
           case batchActions.move: {
             promise = this.isPublicContext
               ? this.$client.publicFiles.move(resource, targetPath, this.publicLinkPassword)
-              : this.$client.files.move(resource, targetPath)
+              : this.$client.files.move(`files/${this.user.id}/${resource}`, targetPath)
             break
           }
           case batchActions.copy: {
             promise = this.isPublicContext
               ? this.$client.publicFiles.copy(resource, targetPath, this.publicLinkPassword)
-              : this.$client.files.copy(resource, targetPath)
+              : this.$client.files.copy(`files/${this.user.id}/${resource}`, targetPath)
             break
           }
           default:

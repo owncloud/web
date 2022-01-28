@@ -416,7 +416,7 @@ export default {
       this.fileFolderCreationLoading = true
 
       try {
-        const path = pathUtil.join(this.currentPath, folderName)
+        const path = `files/${this.user.id}/${pathUtil.join(this.currentPath, folderName)}`
 
         let resource
         if (this.isPersonalLocation) {
@@ -500,7 +500,7 @@ export default {
       this.fileFolderCreationLoading = true
 
       try {
-        const path = pathUtil.join(this.currentPath, fileName)
+        const path = `files/${this.user.id}/${pathUtil.join(this.currentPath, fileName)}`
         let resource
         if (this.isPersonalLocation) {
           await this.$client.files.putFileContents(path, '')
@@ -665,7 +665,7 @@ export default {
 
         await this.$nextTick()
 
-        const path = pathUtil.join(this.currentPath, file)
+        const path = `files/${this.user.id}/${pathUtil.join(this.currentPath, file)}`
         let resource = this.isPersonalLocation
           ? await this.$client.files.fileInfo(path, DavProperties.Default)
           : await this.$client.publicFiles.getFileInfo(

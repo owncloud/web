@@ -160,7 +160,7 @@ export default {
           this.resourcesToDelete.length &&
           isSameResource(this.resourcesToDelete[0], this.currentFolder)
         ) {
-          const resourcePath = this.resourcesToDelete[0].path
+          const resourcePath = this.resourcesToDelete[0].webDavPath
           parentFolderPath = resourcePath.substr(1, resourcePath.lastIndexOf('/'))
         }
 

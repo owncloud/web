@@ -361,7 +361,7 @@ export default {
         )
       } else {
         basePath = this.path || ''
-        relativePath = pathUtil.join(basePath, relativePath)
+        relativePath = `files/${this.user.id}/${pathUtil.join(basePath, relativePath)}`
         // FIXME: this might break if relativePath is not the currentFolder
         // and is a mount point that has no chunk support
         if (this.browserSupportsChunked && this.currentFolder.isChunkedUploadSupported) {

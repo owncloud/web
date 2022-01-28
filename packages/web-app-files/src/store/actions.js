@@ -63,7 +63,7 @@ export default {
       if (publicPage) {
         p = client.publicFiles.delete(file.path, null, context.getters.publicLinkPassword)
       } else {
-        p = client.files.delete(file.path)
+        p = client.files.delete(file.webDavPath)
       }
       const promise = p
         .then(() => {
@@ -116,17 +116,17 @@ export default {
   },
   renameFile(context, { file, newValue, client, publicPage, isSameResource }) {
     if (file !== undefined && newValue !== undefined && newValue !== file.name) {
-      const newPath = file.path.substr(1, file.path.lastIndexOf('/'))
+      const newPath = file.webDavPath.substr(1, file.webDavPath.lastIndexOf('/'))
       if (publicPage) {
         return client.publicFiles
-          .move(file.path, newPath + newValue, context.getters.publicLinkPassword)
+          .move(file.webDavPath, newPath + newValue, context.getters.publicLinkPassword)
           .then(() => {
             if (!isSameResource) {
               context.commit('RENAME_FILE', { file, newValue, newPath })
             }
           })
       }
-      return client.files.move(file.path, newPath + newValue).then(() => {
+      return client.files.move(file.webDavPath, newPath + newValue).then(() => {
         if (!isSameResource) {
           context.commit('RENAME_FILE', { file, newValue, newPath })
         }

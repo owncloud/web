@@ -168,7 +168,7 @@ export default {
       ref.CLEAR_CURRENT_FILES_LIST()
 
       const response = yield ref.$client.files.list(
-        ref.$route.params.item || `spaces/${space.value.id}/`
+        `spaces/${space.value.id}/${ref.$route.params.item || ''}`
       )
 
       const resources = response.map(buildResource)

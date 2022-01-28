@@ -90,7 +90,7 @@ import { mapGetters, mapState, mapActions } from 'vuex'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { DavProperties } from 'web-pkg/src/constants'
 
-import { buildResource } from '../../helpers/resources'
+import {buildResource, buildResource2} from '../../helpers/resources'
 import { isLocationCommonActive, isLocationSharesActive } from '../../router'
 import { computed } from '@vue/composition-api'
 
@@ -296,16 +296,17 @@ export default {
         this.selectedFile = this.highlightedFile
         return
       }
-
+      console.log(this.highlightedFile.webDavPath)
       this.loading = true
       try {
         const item = await this.$client.files.fileInfo(
-          this.highlightedFile.path,
+          this.highlightedFile.webDavPath,
           DavProperties.Default
         )
 
         this.selectedFile = buildResource(item)
-        this.$set(this.selectedFile, 'thumbnail', this.highlightedFile.thumbnail || null)
+        console.log('##')
+        // this.$set(this.selectedFile, 'thumbnail', this.highlightedFile.thumbnail || null)
       } catch (error) {
         this.selectedFile = this.highlightedFile
         console.error(error)

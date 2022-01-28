@@ -28,7 +28,67 @@ export function renameResource(resource, newName, newPath) {
 export function buildResource(resource) {
   const isFolder = resource.type === 'dir' || resource.type === 'folder'
   const extension = _getFileExtension(resource.name)
-  const shortenedPath = resource.name.split('/').splice(3).join('/')
+
+  return {
+    id: resource.fileInfo[DavProperty.FileId],
+    fileId: resource.fileInfo[DavProperty.FileId],
+    mimeType: resource.fileInfo[DavProperty.MimeType],
+    icon: isFolder ? 'folder' : getFileIcon(extension),
+    name: path.basename(resource.name),
+    extension: isFolder ? '' : extension,
+    path: resource.name.split('/').splice(3).join('/'),
+    webDavPath: resource.name,
+    type: isFolder ? 'folder' : resource.type,
+    isFolder,
+    mdate: resource.fileInfo[DavProperty.LastModifiedDate],
+    size: isFolder
+      ? resource.fileInfo[DavProperty.ContentSize]
+      : resource.fileInfo[DavProperty.ContentLength],
+    indicators: [],
+    permissions: resource.fileInfo[DavProperty.Permissions] || '',
+    starred: resource.fileInfo[DavProperty.IsFavorite] !== '0',
+    etag: resource.fileInfo[DavProperty.ETag],
+    sharePermissions: resource.fileInfo[DavProperty.SharePermissions],
+    shareTypes: (function () {
+      if (resource.fileInfo[DavProperty.ShareTypes]) {
+        return resource.fileInfo[DavProperty.ShareTypes].map((v) => parseInt(v))
+      }
+      return []
+    })(),
+    privateLink: resource.fileInfo[DavProperty.PrivateLink],
+    downloadURL: resource.fileInfo[DavProperty.DownloadURL],
+    ownerDisplayName: resource.fileInfo[DavProperty.OwnerDisplayName],
+    ownerId: resource.fileInfo[DavProperty.OwnerId],
+    canUpload: function () {
+      return this.permissions.indexOf(DavPermission.FolderCreateable) >= 0
+    },
+    canDownload: function () {
+      return true
+    },
+    canBeDeleted: function () {
+      return this.permissions.indexOf(DavPermission.Deletable) >= 0
+    },
+    canRename: function () {
+      return this.permissions.indexOf(DavPermission.Renameable) >= 0
+    },
+    canShare: function () {
+      return this.permissions.indexOf(DavPermission.Shareable) >= 0
+    },
+    canCreate: function () {
+      return this.permissions.indexOf(DavPermission.FolderCreateable) >= 0
+    },
+    isMounted: function () {
+      return this.permissions.indexOf(DavPermission.Mounted) >= 0
+    },
+    isReceivedShare: function () {
+      return this.permissions.indexOf(DavPermission.Shared) >= 0
+    }
+  }
+}
+
+export function buildResource2(resource) {
+  const isFolder = resource.type === 'dir'
+  const extension = _getFileExtension(resource.name)
 
   return {
     id: resource.fileInfo[DavProperty.FileId],
@@ -37,7 +97,6 @@ export function buildResource(resource) {
     name: path.basename(resource.name),
     extension: isFolder ? '' : extension,
     path: resource.name,
-    shortenedPath,
     type: isFolder ? 'folder' : resource.type,
     isFolder,
     mdate: resource.fileInfo[DavProperty.LastModifiedDate],

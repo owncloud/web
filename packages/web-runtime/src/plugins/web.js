@@ -29,7 +29,6 @@ export default {
         },
         // FIXME: optional publicLinkContext parameter is a mess
         async downloadFile(file, publicLinkContext = null, version = null) {
-          console.log(file)
           const publicPage = publicLinkContext !== null ? publicLinkContext : this.publicPage()
 
           // construct the url and headers
@@ -39,7 +38,7 @@ export default {
             url = file.downloadURL
           } else {
             if (version === null) {
-              url = `${this.$client.helpers._davPath}${file.path}`
+              url = `${this.$client.helpers._davPath}${file.webDavPath}`
             } else {
               url = this.$client.fileVersions.getFileVersionUrl(file.id, version)
             }

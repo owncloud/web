@@ -8,7 +8,7 @@
       :aria-label="$gettext('Create a new space')"
       variation="primary"
       appearance="filled"
-      class="oc-mb-xs"
+      class="oc-mb-l"
       data-testid="spaces-list-create-space-btn"
       @click="showCreateSpaceModal"
     >
@@ -114,9 +114,8 @@ import { useStore } from 'web-pkg/src/composables'
 import { useTask } from 'vue-concurrency'
 import { createLocationSpaces } from '../../router'
 import { bus } from 'web-pkg/src/instance'
-import { mapMutations } from 'vuex'
+import { mapMutations, mapActions } from 'vuex'
 import Rename from '../../mixins/spaces/actions/rename'
-import { mapActions } from 'vuex'
 import Delete from '../../mixins/spaces/actions/delete'
 
 export default {
@@ -178,15 +177,6 @@ export default {
       imageContentObject
     }
   },
-  mounted() {
-    this.loadResourcesTask.perform(this)
-
-    const loadSpacesEventToken = bus.subscribe('app.files.list.load', (path) => {
-      this.loadResourcesTask.perform(this)
-    })
-
-    this.$on('beforeDestroy', () => bus.unsubscribe('app.files.list.load', loadSpacesEventToken))
-  },
   computed: {
     hasCreatePermission() {
       // @TODO
@@ -195,6 +185,15 @@ export default {
     contextMenuActions() {
       return [...this.$_rename_items, ...this.$_delete_items].filter((item) => item.isEnabled())
     }
+  },
+  mounted() {
+    this.loadResourcesTask.perform(this)
+
+    const loadSpacesEventToken = bus.subscribe('app.files.list.load', (path) => {
+      this.loadResourcesTask.perform(this)
+    })
+
+    this.$on('beforeDestroy', () => bus.unsubscribe('app.files.list.load', loadSpacesEventToken))
   },
   methods: {
     ...mapActions(['createModal', 'hideModal', 'setModalInputErrorMessage']),
