@@ -416,10 +416,17 @@ export default {
       this.fileFolderCreationLoading = true
 
       try {
-        const path = `files/${this.user.id}/${pathUtil.join(this.currentPath, folderName)}`
+        let path = `files/${this.user.id}/${pathUtil.join(this.currentPath, folderName)}`
+
+        if (this.$route.params.spaceId) {
+          path = `spaces/${this.$route.params.spaceId}/${pathUtil.join(
+            this.currentPath,
+            folderName
+          )}`
+        }
 
         let resource
-        if (this.isPersonalLocation) {
+        if (this.isPersonalLocation || this.isSpacesProjectLocation) {
           await this.$client.files.createFolder(path)
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else {
@@ -665,14 +672,20 @@ export default {
 
         await this.$nextTick()
 
-        const path = `files/${this.user.id}/${pathUtil.join(this.currentPath, file)}`
-        let resource = this.isPersonalLocation
-          ? await this.$client.files.fileInfo(path, DavProperties.Default)
-          : await this.$client.publicFiles.getFileInfo(
-              path,
-              this.publicLinkPassword,
-              DavProperties.Default
-            )
+        let path = `files/${this.user.id}/${pathUtil.join(this.currentPath, file)}`
+
+        if (this.$route.params.spaceId) {
+          path = `spaces/${this.$route.params.spaceId}/${pathUtil.join(this.currentPath, file)}`
+        }
+
+        let resource =
+          this.isPersonalLocation || this.isSpacesProjectLocation
+            ? await this.$client.files.fileInfo(path, DavProperties.Default)
+            : await this.$client.publicFiles.getFileInfo(
+                path,
+                this.publicLinkPassword,
+                DavProperties.Default
+              )
 
         resource = buildResource(resource)
         this.UPSERT_RESOURCE(resource)

@@ -361,7 +361,15 @@ export default {
         )
       } else {
         basePath = this.path || ''
-        relativePath = `files/${this.user.id}/${pathUtil.join(basePath, relativePath)}`
+
+        if (this.$route.params.spaceId) {
+          relativePath = `spaces/${this.$route.params.spaceId}${pathUtil.join(
+            basePath,
+            relativePath
+          )}`
+        } else {
+          relativePath = `files/${this.user.id}/${pathUtil.join(basePath, relativePath)}`
+        }
         // FIXME: this might break if relativePath is not the currentFolder
         // and is a mount point that has no chunk support
         if (this.browserSupportsChunked && this.currentFolder.isChunkedUploadSupported) {
