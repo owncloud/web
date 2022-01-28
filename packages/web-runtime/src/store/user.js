@@ -8,8 +8,8 @@ let vueAuthInstance
 const state = {
   token: '',
   id: '',
-  displayname: null,
-  email: null,
+  displayname: '',
+  email: '',
   isAuthenticated: false,
   capabilities: [],
   version: {},
@@ -226,10 +226,16 @@ const actions = {
 
 const mutations = {
   SET_USER(state, user) {
+    let email
+    if (Object.keys(user.email).length === 0) {
+      email = ''
+    } else {
+      email = user.email
+    }
     state.displayname = user.displayname
     state.id = user.id
     state.username = user.username
-    state.email = user.email
+    state.email = email
     state.isAuthenticated = user.isAuthenticated
     state.token = user.token
     state.groups = user.groups
