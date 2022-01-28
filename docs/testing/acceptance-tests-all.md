@@ -1,10 +1,10 @@
 ---
-title: "Running acceptance tests - manual"
+title: "Running acceptance tests - all options"
 date: 2020-04-15T00:00:00+00:00
 weight: 60
 geekdocRepo: https://github.com/owncloud/web
-geekdocEditPath: edit/master/docs
-geekdocFilePath: testing-old.md
+geekdocEditPath: edit/master/docs/testing
+geekdocFilePath: acceptance-tests-all.md
 ---
 
 {{< toc >}}
