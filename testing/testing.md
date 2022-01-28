@@ -103,12 +103,12 @@ Various options are available via ENV variables, e.g.
 For debugging reasons, you may want to record a video or traces of your test run. 
 Again, you can use the following ENV variables in your command:
 
-- `REPORT_DIR=another/path` to set a directory for your recorded files
+- `REPORT_DIR=another/path` to set a directory for your recorded files (defaults to "reports")
 - `REPORT_VIDEO=true` to record a video of the test run
 - `REPORT_HAR=true` to save request information from the test run
 - `REPORT_TRACING=true` to record traces from the test run
 
-To then open e.g. the tracing, run
+To then open e.g. the tracing from the `REPORT_DIR`, run
 
 ```shell
 $ npx playwright show-trace path/to/file.zip
