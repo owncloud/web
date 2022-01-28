@@ -3,7 +3,7 @@ const withHttp = (url) => (/^https?:\/\//i.test(url) ? url : `http://${url}`)
 exports.config = {
   // environment
   ocis: process.env.OCIS === 'true',
-  assets: './tests/acceptance/filesForUpload',
+  assets: './tests/e2e/filesForUpload',
   baseUrlOcc: process.env.BASE_URL_OCC ?? 'host.docker.internal:8080',
   baseUrlOCis: process.env.BASE_URL_OCIS ?? 'host.docker.internal:9200',
   get backendUrl() {

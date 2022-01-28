@@ -2327,7 +2327,7 @@ def copyFilesForUpload():
         }],
         "commands": [
             "ls -la /filesForUpload",
-            "cp -a %s/tests/acceptance/filesForUpload/. /filesForUpload" % dir["web"],
+            "cp -a %s/tests/e2e/filesForUpload/. /filesForUpload" % dir["web"],
             "ls -la /filesForUpload",
         ],
     }]
