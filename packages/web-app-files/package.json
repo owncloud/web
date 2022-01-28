@@ -5,7 +5,7 @@
   "license": "AGPL-3.0",
   "dependencies": {
     "copy-to-clipboard": "^3.3.1",
-    "semver": "^7.3.5",
+    "semver": "^6.1.0",
     "vue2-dropzone": "^3.6.0"
   },
   "devDependencies": {

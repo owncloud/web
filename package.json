@@ -141,9 +141,5 @@
     "vue-concurrency": {
       "built": true
     }
-  },
-  "resolutions": {
-    "owncloud-sdk": "portal:/home/jan/working/owncloud-sdk",
-    "owncloud-design-system": "portal:/home/jan/working/owncloud-design-system"
   }
 }
