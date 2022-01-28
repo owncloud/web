@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Application config not available to application: [#6296](https://github.com/owncloud/web/issues/6296)
+* Bugfix - Add and remove to/from favorites: [#6328](https://github.com/owncloud/web/issues/6328)
 * Bugfix - Open folder from context menu: [#6187](https://github.com/owncloud/web/issues/6187)
 * Bugfix - Focus management in topbar dropdowns: [#6213](https://github.com/owncloud/web/pull/6213)
 * Change - Remove UiKit: [#6103](https://github.com/owncloud/web/issues/6103)
@@ -39,6 +40,16 @@ Details
 
    https://github.com/owncloud/web/issues/6296
    https://github.com/owncloud/web/pull/6298
+
+* Bugfix - Add and remove to/from favorites: [#6328](https://github.com/owncloud/web/issues/6328)
+
+   We've fixed bugs related to adding and removing files to/from favorites: - "favorite" star
+   button in the right sidebar of the files app was not being updated when the favorite-state was
+   modified through a click on the star icon - toggling the favorites state of the current folder
+   was broken (via both context menu on current folder and right sidebar without a file selection)
+
+   https://github.com/owncloud/web/issues/6328
+   https://github.com/owncloud/web/pull/6330
 
 * Bugfix - Open folder from context menu: [#6187](https://github.com/owncloud/web/issues/6187)
 
