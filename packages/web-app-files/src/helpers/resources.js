@@ -1,34 +1,10 @@
 import orderBy from 'lodash-es/orderBy'
 import path from 'path'
 import { DateTime } from 'luxon'
-
-import fileIconMappings from '../fileTypeIconMappings.json'
-import fileIconColorMappings from '../fileTypeColorMappings.json'
 import { getIndicators } from './statusIndicators'
 import { $gettext } from '../gettext'
 import { DavPermission, DavProperty } from 'web-pkg/src/constants'
 import { PeopleShareRoles, SharePermissions, ShareStatus, ShareTypes } from './share'
-
-// Should we move this to ODS?
-export function getFileIcon(extension) {
-  let icon = fileIconMappings[extension.toLowerCase()]
-
-  if (icon) {
-    return icon
-  }
-
-  return 'file'
-}
-
-export function getFileIconColor(extension) {
-  const color = fileIconColorMappings[extension.toLowerCase()]
-
-  if (color) {
-    return color
-  }
-
-  return '#DADCDF'
-}
 
 function _getFileExtension(name) {
   const extension = path.extname(name)
@@ -56,9 +32,6 @@ export function buildResource(resource) {
     id: resource.fileInfo[DavProperty.FileId],
     fileId: resource.fileInfo[DavProperty.FileId],
     mimeType: resource.fileInfo[DavProperty.MimeType],
-    icon: isFolder ? 'folder' : getFileIcon(extension),
-    iconColor: isFolder ? '#2C65FF' : getFileIconColor(extension),
-    iconFillType: 'solid',
     name: path.basename(resource.name),
     extension: isFolder ? '' : extension,
     path: resource.name,
@@ -236,7 +209,6 @@ export function buildSharedResource(share, incomingShares = false, allowSharePer
   }
 
   resource.extension = isFolder ? '' : _getFileExtension(resource.name)
-  resource.icon = isFolder ? 'folder' : getFileIcon(resource.extension)
   resource.isReceivedShare = () => incomingShares
   resource.canUpload = () => true
   resource.isMounted = () => false
@@ -361,7 +333,6 @@ export function buildDeletedResource(resource) {
     extension,
     path: resource.fileInfo[DavProperty.TrashbinOriginalLocation],
     id: path.basename(resource.name),
-    icon: isFolder ? 'folder' : getFileIcon(extension),
     indicators: [],
     canUpload: () => false,
     canDownload: () => false,

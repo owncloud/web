@@ -1,6 +1,5 @@
 import pathUtil from 'path'
 import { DateTime } from 'luxon'
-import fileTypeIconMappings from './fileTypeIconMappings.json'
 import { mapActions, mapGetters } from 'vuex'
 import PQueue from 'p-queue'
 
@@ -56,20 +55,6 @@ export default {
        * Delay for screen readers Virtual buffers
        */
       setTimeout(() => func(), delay)
-    },
-    fileTypeIcon(file) {
-      if (file) {
-        if (file.type === 'folder') {
-          return 'folder'
-        }
-        if (typeof file.extension === 'string') {
-          const icon = fileTypeIconMappings[file.extension.toLowerCase()]
-          if (icon) {
-            return `${icon}`
-          }
-        }
-      }
-      return 'file'
     },
     checkIfBrowserSupportsFolderUpload() {
       const el = document.createElement('input')
