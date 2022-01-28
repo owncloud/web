@@ -67,5 +67,5 @@ In the local Web checkout, copy the `config/config.json.sample-oc10` file to `co
 
 ## Running acceptance tests
 
-For testing, please refer to the [ownCloud 10 testing section]({{< ref "testing.md#running-acceptance-tests-using-owncloud-10-backend" >}})
+For testing, please refer to the [testing docs]({{< ref "testing/_index.md" >}})
 

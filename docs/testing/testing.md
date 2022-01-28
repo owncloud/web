@@ -117,7 +117,7 @@ $ npx playwright show-trace path/to/file.zip
 ### Acceptance Tests (Nightwatch)
 
 At ownCloud, we have decided to adopt Docker as the main environment for developing our application.
-This also applies for running our acceptance tests. To run the tests without Docker on your local machine, please refer to the [manual testing guide]({{< ref "acceptancetests-all.md" >}})
+This also applies for running our acceptance tests. To run the tests without Docker on your local machine, please refer to the [manual testing guide]({{< ref "acceptance-tests-all.md" >}})
 
 #### Prerequisites
 
