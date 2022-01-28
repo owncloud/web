@@ -98,14 +98,6 @@ export default {
   RESET_SELECTION(state) {
     state.selectedIds = []
   },
-  FAVORITE_FILE(state, item) {
-    const files = [...state.files]
-    const fileIndex = files.findIndex((f) => {
-      return f.id === item.id
-    })
-    files[fileIndex].starred = !item.starred
-    state.files = files
-  },
   REMOVE_FILE(state, removedFile) {
     state.files = [...state.files].filter((file) => file.id !== removedFile.id)
   },
@@ -308,10 +300,15 @@ export default {
    * @param params.value the value that will be attached to the key
    */
   UPDATE_RESOURCE_FIELD(state, params) {
-    const fileSource = state.filesSearched || state.files
-    const index = fileSource.findIndex((r) => r.id === params.id)
+    let fileSource = state.filesSearched || state.files
+    let index = fileSource.findIndex((r) => r.id === params.id)
     if (index < 0) {
-      return
+      if (state.currentFolder?.id === params.id) {
+        fileSource = [state.currentFolder]
+        index = 0
+      } else {
+        return
+      }
     }
 
     const resource = fileSource[index]

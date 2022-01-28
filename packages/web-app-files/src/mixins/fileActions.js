@@ -52,7 +52,6 @@ export default {
   computed: {
     ...mapState(['apps']),
     ...mapGetters('Files', ['highlightedFile', 'currentFolder']),
-    ...mapGetters('External', ['mimeTypes']),
     ...mapGetters(['capabilities', 'configuration']),
 
     $_fileActions_systemActions() {
@@ -206,15 +205,16 @@ export default {
       }
 
       const { mimeType, fileId } = resources[0]
+      const mimeTypes = this.$store.getters['External/mimeTypes'] || []
       if (
         mimeType === undefined ||
         !get(this, 'capabilities.files.app_providers') ||
-        !get(this, 'mimeTypes', []).length
+        !mimeTypes.length
       ) {
         return []
       }
 
-      const filteredMimeTypes = this.mimeTypes.find((t) => t.mime_type === mimeType)
+      const filteredMimeTypes = mimeTypes.find((t) => t.mime_type === mimeType)
       if (filteredMimeTypes === undefined) {
         return []
       }

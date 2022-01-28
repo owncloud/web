@@ -23,15 +23,11 @@
       </p>
     </div>
     <oc-button
-      v-if="!publicPage() && isFavoritesEnabled"
-      :aria-label="
-        file.starred
-          ? $gettext('Click to remove this file from your favorites')
-          : $gettext('Click to mark this file as favorite')
-      "
+      v-if="favoriteAction.isEnabled({ resources: [file] })"
+      :aria-label="favoriteAction.label({ resources: [file] })"
       appearance="raw"
       class="file_info__favorite"
-      @click.native.stop="toggleFileFavorite(file)"
+      @click="$_favorite_trigger({ resources: [file] })"
     >
       <oc-icon :class="file.starred ? 'oc-star-shining' : 'oc-star-dimm'" name="star" />
     </oc-button>
@@ -39,14 +35,14 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
 import Mixins from '../../mixins'
 import MixinResources from '../../mixins/resources'
-import { isLocationCommonActive, isLocationSharesActive } from '../../router'
+import MixinFavorite from '../../mixins/actions/favorite'
+import { isLocationCommonActive } from '../../router'
 
 export default {
   name: 'FileInfo',
-  mixins: [Mixins, MixinResources],
+  mixins: [Mixins, MixinResources, MixinFavorite],
   inject: ['displayedItem'],
   props: {
     isContentDisplayed: {
@@ -55,7 +51,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['capabilities']),
     timeData() {
       const interpolate = (obj) => {
         obj.time = this.formDateFromRFC(obj.sourceTime)
@@ -89,29 +84,13 @@ export default {
         )
       })
     },
-    isFavoritesEnabled() {
-      return (
-        this.capabilities.files &&
-        this.capabilities.files.favorites &&
-        this.isContentDisplayed &&
-        !isLocationSharesActive(this.$router, 'files-shares-with-me', 'files-shares-with-others') &&
-        !isLocationCommonActive(this.$router, 'files-common-trash')
-      )
+
+    favoriteAction() {
+      return this.$_favorite_items[0]
     },
 
     file() {
       return this.displayedItem.value
-    }
-  },
-  methods: {
-    ...mapActions('Files', ['markFavorite']),
-    toggleFileFavorite(file) {
-      this.markFavorite({
-        client: this.$client,
-        file: file
-      }).then(() => {
-        this.$set(this.file, 'starred', !this.file.starred)
-      })
     }
   }
 }
