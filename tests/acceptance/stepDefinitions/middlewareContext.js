@@ -71,7 +71,7 @@ Given(/^((?:(?!these|following).)*\S)\s(in the server|on remote server)(.*)$/, (
 })
 
 Given(
-  /^(.*(?=these|following).*\S)\s(in the server|on remote server)(.*)$/,
+  /^(.*(?=these|following).*\S)\s(in the server|on remote server|in the middleware)(.*)$/,
   (st1, st2, st3, table) => {
     if (st2 === 'on remote server') {
       st1 = st1 + ' ' + st2
