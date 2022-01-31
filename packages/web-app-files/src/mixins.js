@@ -363,7 +363,7 @@ export default {
         basePath = this.path || ''
 
         if (this.$route.params.spaceId) {
-          relativePath = `spaces/${this.$route.params.spaceId}${pathUtil.join(
+          relativePath = `spaces/${this.$route.params.spaceId}/${pathUtil.join(
             basePath,
             relativePath
           )}`
