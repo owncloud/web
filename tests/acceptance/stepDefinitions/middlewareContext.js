@@ -63,12 +63,15 @@ After(function () {
   })
 })
 
-Given(/^((?:(?!these|following).)*\S)\s(in the server|on remote server)(.*)$/, (st1, st2, st3) => {
-  if (st2 === 'on remote server') {
-    st1 = st1 + ' ' + st2
+Given(
+  /^((?:(?!these|following).)*\S)\s(in the server|on remote server|in the middleware)(.*)$/,
+  (st1, st2, st3) => {
+    if (st2 === 'on remote server') {
+      st1 = st1 + ' ' + st2
+    }
+    return handler(st1, st3)
   }
-  return handler(st1, st3)
-})
+)
 
 Given(
   /^(.*(?=these|following).*\S)\s(in the server|on remote server)(.*)$/,

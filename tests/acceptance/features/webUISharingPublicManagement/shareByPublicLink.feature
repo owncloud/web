@@ -43,7 +43,7 @@ Feature: Public link share management
     And the content of file "simple-folder/lorem.txt" for user "Brian" should be "Alice file" in the server
     When the user uploads overwriting file "lorem.txt" using the webUI
     Then file "lorem.txt" should be listed on the webUI
-    And as "Brian" the content of "simple-folder/lorem.txt" should be the same as the content of local file "lorem.txt"
+    And as "Brian" the content of "simple-folder/lorem.txt" in the server should be the same as the content of local file "lorem.txt"
 
   @issue-ocis-1328
   Scenario: user shares a file through public link and then it appears in a shared-with-others page
