@@ -269,7 +269,6 @@ export default {
 
       const { params: routeParams, path: routePath } = this.$route
       const requestedItemPath = routeParams.item || ''
-
       const basePaths =
         '/' +
         decodeURIComponent(routePath)
@@ -294,7 +293,18 @@ export default {
               if (this.isPersonalLocation) {
                 acc[0].text = this.$gettext('All files')
               } else if (this.isSpacesProjectLocation || this.isSpacesProjectsLocation) {
-                acc[0].text = this.$gettext('Spaces')
+                acc[0] = {
+                  text: this.$gettext('Spaces'),
+                  to: '/files/spaces/projects'
+                }
+                if (this.$route.params.spaceId) {
+                  acc.splice(1, 0, {
+                    text: this.$route.params.spaceId,
+                    onClick: () =>
+                      // Todo: Build space path smarter
+                      bus.publish('app.files.list.load', '/')
+                  })
+                }
               } else {
                 acc[0].text = this.$gettext('Public link')
               }
