@@ -20,7 +20,8 @@ export default {
   }),
   computed: {
     ...mapGetters('Files', ['files', 'highlightedFile', 'publicLinkPassword', 'currentFolder']),
-    ...mapGetters(['getToken', 'capabilities', 'configuration'])
+    ...mapGetters(['getToken', 'capabilities', 'configuration']),
+    ...mapGetters(['user'])
   },
   methods: {
     ...mapActions('Files', ['resetSearch', 'addFileToProgress', 'removeFileFromProgress']),
@@ -291,9 +292,13 @@ export default {
               )
             )
           } else {
-            p = this.directoryQueue.add(() =>
-              this.$client.files.createFolder(this.rootPath + directory)
-            )
+            let path = `files/${this.user.id}/${this.rootPath}${directory}`
+
+            if (this.$route.params.spaceId) {
+              path = `spaces/${this.$route.params.spaceId}/${this.rootPath}${directory}`
+            }
+
+            p = this.directoryQueue.add(() => this.$client.files.createFolder(path))
           }
 
           createFolderPromises.push(p)
