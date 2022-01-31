@@ -78,7 +78,6 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
 import Pagination from '../../components/FilesList/Pagination.vue'
 import ContextActions from '../../components/FilesList/ContextActions.vue'
-import QuickActions from '../../components/FilesList/QuickActions.vue'
 import MixinFileActions from '../../mixins/fileActions'
 
 export default {
@@ -97,6 +96,8 @@ export default {
     const store = useStore()
 
     const spaceId = router.currentRoute.params.spaceId
+    console.log(spaceId)
+
     const space = ref({})
     const markdownContent = ref('')
     const imageContent = ref('')
@@ -165,7 +166,9 @@ export default {
 
     const loadFilesListTask = useTask(function* (signal, ref, sameRoute, path = null) {
       ref.CLEAR_CURRENT_FILES_LIST()
-      const response = yield ref.$client.files.list(`spaces/${space.value.id}/${path || ''}`)
+      const response = yield ref.$client.files.list(
+        `spaces/${ref.$route.params.spaceId}/${path || ''}`
+      )
 
       const resources = response.map(buildResource)
       const currentFolder = resources.shift()
@@ -260,7 +263,7 @@ export default {
     }
   },
   async mounted() {
-    await this.loadResourcesTask.perform(this)
+    await this.loadResourcesTask.perform(this, false, this.$route.params.item || '')
 
     document.title = `${this.space.name} - ${this.$route.meta.title}`
     this.$route.params.name = this.space.name

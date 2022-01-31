@@ -49,6 +49,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         component: components.Spaces.Project,
         meta: {
           hasBulkActions: true,
+          patchCleanPath: true,
           title: $gettext('Space')
         }
       },

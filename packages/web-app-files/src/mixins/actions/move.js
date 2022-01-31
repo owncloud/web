@@ -19,6 +19,7 @@ export default {
           isEnabled: ({ resources }) => {
             if (
               !isLocationSpacesActive(this.$router, 'files-spaces-personal-home') &&
+              !isLocationSpacesActive(this.$router, 'files-spaces-project') &&
               !isLocationPublicActive(this.$router, 'files-public-files') &&
               !isLocationCommonActive(this.$router, 'files-common-favorites')
             ) {
@@ -45,10 +46,25 @@ export default {
   },
   methods: {
     $_move_trigger({ resources }) {
-      const context = isLocationPublicActive(this.$router, 'files-public-files')
-        ? 'public'
-        : 'private'
+      let context = 'private'
+
+      const query = {
+        resource: resources.map((resource) => {
+          return resource.path
+        })
+      }
+
+      if (isLocationPublicActive(this.$router, 'files-public-files')) {
+        context = 'public'
+      }
+
+      if (isLocationSpacesActive(this.$router, 'files-spaces-project')) {
+        context = 'space'
+        query.spaceId = this.$route.params.spaceId
+      }
+
       const item = this.currentFolder.path || this.homeFolder
+
       return this.$router.push(
         createLocationOperations('files-operations-location-picker', {
           params: {
@@ -56,11 +72,7 @@ export default {
             item,
             action: 'move'
           },
-          query: {
-            resource: resources.map((resource) => {
-              return resource.path
-            })
-          }
+          query
         })
       )
     }

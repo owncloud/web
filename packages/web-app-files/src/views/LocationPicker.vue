@@ -148,9 +148,32 @@ export default {
         target = ref.target
       }
 
-      const resources = ref.isPublicContext
-        ? yield ref.$client.publicFiles.list(target, ref.publicLinkPassword, DavProperties.Default)
-        : yield ref.$client.files.list(`/files/${ref.user.id}/${target}`, 1, DavProperties.Default)
+      const { context } = ref.$route.params
+
+      let resources
+
+      switch (context) {
+        case 'public':
+          resources = yield ref.$client.publicFiles.list(
+            target,
+            ref.publicLinkPassword,
+            DavProperties.Default
+          )
+          break
+        case 'space':
+          resources = yield ref.$client.files.list(
+            `/spaces/${ref.$route.query.spaceId}/${target}`,
+            1,
+            DavProperties.Default
+          )
+          break
+        default:
+          resources = yield ref.$client.files.list(
+            `/files/${ref.user.id}/${target}`,
+            1,
+            DavProperties.Default
+          )
+      }
 
       ref.loadFiles({ currentFolder: resources[0], files: resources.slice(1) })
       ref.loadIndicators({
@@ -276,7 +299,7 @@ export default {
     },
 
     targetRoute() {
-      return {
+      const route = {
         name: this.$route.name,
         query: {
           resource: this.resources
@@ -285,6 +308,12 @@ export default {
           action: this.currentAction
         }
       }
+
+      if (this.$route.query.spaceId) {
+        route.query.spaceId = this.$route.query.spaceId
+      }
+
+      return route
     },
 
     currentHint() {
@@ -346,11 +375,26 @@ export default {
     },
 
     leaveLocationPicker(target) {
-      this.$router.push(
-        this.isPublicContext
-          ? createLocationPublic('files-public-files', { params: { item: target } })
-          : createLocationSpaces('files-spaces-personal-home', { params: { item: target || '/' } })
-      )
+      console.log(this.$route.query.spaceId)
+
+      switch (this.$route.params.context) {
+        case 'public':
+          this.$router.push(
+            createLocationPublic('files-public-files', { params: { item: target } })
+          )
+          break
+        case 'space':
+          this.$router.push(
+            createLocationSpaces('files-spaces-project', {
+              params: { spaceId: this.$route.query.spaceId, item: target || '/' }
+            })
+          )
+          break
+        default:
+          this.$router.push(
+            createLocationSpaces('files-spaces-personal-home', { params: { item: target || '/' } })
+          )
+      }
     },
 
     isRowDisabled(resource) {
@@ -367,7 +411,7 @@ export default {
       // Execute move or copy
       for (const resource of this.resources) {
         let targetPath = `files/${this.user.id}/${this.target || '/'}`
-        const resourceName = basename(resource)
+        let resourceName = basename(resource)
         targetPath += `/${resourceName}`
         const exists = this.paginatedResources.some((item) => {
           return basename(item.name) === resourceName
@@ -384,15 +428,51 @@ export default {
 
         switch (this.currentAction) {
           case batchActions.move: {
-            promise = this.isPublicContext
-              ? this.$client.publicFiles.move(resource, targetPath, this.publicLinkPassword)
-              : this.$client.files.move(`files/${this.user.id}/${resource}`, targetPath)
+            switch (this.$route.params.context) {
+              case 'public':
+                promise = this.$client.publicFiles.move(
+                  resource,
+                  targetPath,
+                  this.publicLinkPassword
+                )
+                break
+              case 'space':
+                targetPath = `spaces/${this.$route.query.spaceId}/${this.target || '/'}`
+                resourceName = basename(resource)
+                targetPath += `/${resourceName}`
+
+                promise = this.$client.files.move(
+                  `spaces/${this.$route.query.spaceId}/${resource}`,
+                  targetPath
+                )
+                break
+              default:
+                promise = this.$client.files.move(`files/${this.user.id}/${resource}`, targetPath)
+            }
             break
           }
           case batchActions.copy: {
-            promise = this.isPublicContext
-              ? this.$client.publicFiles.copy(resource, targetPath, this.publicLinkPassword)
-              : this.$client.files.copy(`files/${this.user.id}/${resource}`, targetPath)
+            switch (this.$route.params.context) {
+              case 'public':
+                promise = this.$client.publicFiles.copy(
+                  resource,
+                  targetPath,
+                  this.publicLinkPassword
+                )
+                break
+              case 'space':
+                targetPath = `spaces/${this.$route.query.spaceId}/${this.target || '/'}`
+                resourceName = basename(resource)
+                targetPath += `/${resourceName}`
+
+                promise = this.$client.files.copy(
+                  `spaces/${this.$route.query.spaceId}/${resource}`,
+                  targetPath
+                )
+                break
+              default:
+                promise = this.$client.files.copy(`files/${this.user.id}/${resource}`, targetPath)
+            }
             break
           }
           default:
