@@ -18,12 +18,7 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
         <th scope="col" class="oc-pr-s">Last modified:</th>
         <td><span>ABSOLUTE_TIME</span></td>
       </tr>
-      <tr data-testid="shared-via">
-        <th scope="col" class="oc-pr-s">Shared via:</th>
-        <td>
-          <router-link-stub><span></span></router-link-stub>
-        </td>
-      </tr>
+      <!---->
       <!---->
       <tr data-testid="ownerDisplayName">
         <th scope="col" class="oc-pr-s">Owner:</th>
@@ -63,16 +58,8 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
         <th scope="col" class="oc-pr-s">Last modified:</th>
         <td><span>ABSOLUTE_TIME</span></td>
       </tr>
-      <tr data-testid="shared-via">
-        <th scope="col" class="oc-pr-s">Shared via:</th>
-        <td>
-          <router-link-stub><span>/Shares/123.png</span></router-link-stub>
-        </td>
-      </tr>
-      <tr data-testid="shared-by">
-        <th scope="col" class="oc-pr-s">Shared by:</th>
-        <td><span>Marie Curie</span></td>
-      </tr>
+      <!---->
+      <!---->
       <tr data-testid="ownerDisplayName">
         <th scope="col" class="oc-pr-s">Owner:</th>
         <td>
@@ -143,12 +130,7 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
         <th scope="col" class="oc-pr-s">Last modified:</th>
         <td><span>ABSOLUTE_TIME</span></td>
       </tr>
-      <tr data-testid="shared-via">
-        <th scope="col" class="oc-pr-s">Shared via:</th>
-        <td>
-          <router-link-stub><span></span></router-link-stub>
-        </td>
-      </tr>
+      <!---->
       <!---->
       <tr data-testid="ownerDisplayName">
         <th scope="col" class="oc-pr-s">Owner:</th>

@@ -119,6 +119,7 @@ describe('SideBar', () => {
 
     // it should be called again when a different file is loaded
     const resource = buildResource(Files['/'][4])
+    resource.path = `${resource.name}`
     wrapper.vm.$store.commit('Files/SET_HIGHLIGHTED_FILE', resource)
     await wrapper.vm.$nextTick()
     expect(spyOnFetchFileInfo).toHaveBeenCalledTimes(2)
