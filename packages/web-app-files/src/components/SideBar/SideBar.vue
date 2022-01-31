@@ -90,7 +90,7 @@ import { mapGetters, mapState, mapActions } from 'vuex'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { DavProperties } from 'web-pkg/src/constants'
 
-import {buildResource, buildResource2} from '../../helpers/resources'
+import { buildResource } from '../../helpers/resources'
 import { isLocationCommonActive, isLocationSharesActive } from '../../router'
 import { computed } from '@vue/composition-api'
 

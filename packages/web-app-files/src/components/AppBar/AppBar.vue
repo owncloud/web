@@ -300,7 +300,7 @@ export default {
                 if (this.$route.params.spaceId) {
                   acc.splice(1, 0, {
                     text: this.$route.params.spaceId,
-                    to: `/files/spaces/projects/${this.$route.params.spaceId}`,
+                    to: `/files/spaces/projects/${this.$route.params.spaceId}`
                   })
                 }
               } else {
