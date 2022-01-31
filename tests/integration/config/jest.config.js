@@ -20,6 +20,7 @@ module.exports = {
     '^@/(.*)$': '<rootDir>/$1',
     '^core-js/(.*)$': '<rootDir>/node_modules/core-js/$1'
   },
+  testEnvironment: 'jsdom',
   transformIgnorePatterns: ['<rootDir>/node_modules/(?!lodash-es)'],
   setupFiles: ['<rootDir>/tests/integration/config/jest.init.js'],
   snapshotSerializers: ['jest-serializer-vue'],
