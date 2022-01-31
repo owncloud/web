@@ -89,8 +89,7 @@ export default {
     ResourceTable,
     ListInfo,
     Pagination,
-    ContextActions,
-    QuickActions
+    ContextActions
   },
   mixins: [MixinAccessibleBreadcrumb, MixinFileActions],
   setup() {
@@ -164,12 +163,9 @@ export default {
       imageContent.value = Buffer.from(fileContents).toString('base64')
     })
 
-    const loadFilesListTask = useTask(function* (signal, ref, sameRoute) {
+    const loadFilesListTask = useTask(function* (signal, ref, sameRoute, path = null) {
       ref.CLEAR_CURRENT_FILES_LIST()
-
-      const response = yield ref.$client.files.list(
-        `spaces/${space.value.id}/${ref.$route.params.item || ''}`
-      )
+      const response = yield ref.$client.files.list(`spaces/${space.value.id}/${path || ''}`)
 
       const resources = response.map(buildResource)
       const currentFolder = resources.shift()
@@ -261,7 +257,7 @@ export default {
         }
 
         if (!sameRoute || !sameItem) {
-          this.loadFilesListTask.perform(this, sameRoute)
+          this.loadFilesListTask.perform(this, sameRoute, to.params.item)
         }
       },
       immediate: true
@@ -274,9 +270,7 @@ export default {
     this.$route.params.name = this.space.name
 
     const loadSpaceEventToken = bus.subscribe('app.files.list.load', (path) => {
-      console.log(this.$route.params.item)
-      console.log(path)
-      this.loadResourcesTask.perform(this, this.$route.params.item === path)
+      this.loadResourcesTask.perform(this, this.$route.params.item === path, path)
     })
 
     this.$on('beforeDestroy', () => bus.unsubscribe('app.files.list.load', loadSpaceEventToken))

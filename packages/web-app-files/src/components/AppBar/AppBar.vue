@@ -300,9 +300,7 @@ export default {
                 if (this.$route.params.spaceId) {
                   acc.splice(1, 0, {
                     text: this.$route.params.spaceId,
-                    onClick: () =>
-                      // Todo: Build space path smarter
-                      bus.publish('app.files.list.load', '/')
+                    onClick: () => bus.publish('app.files.list.load', '')
                   })
                 }
               } else {
