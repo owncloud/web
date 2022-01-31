@@ -300,14 +300,13 @@ export default {
                 if (this.$route.params.spaceId) {
                   acc.splice(1, 0, {
                     text: this.$route.params.spaceId,
-                    onClick: () => bus.publish('app.files.list.load', '')
+                    to: `/files/spaces/projects/${this.$route.params.spaceId}`,
                   })
                 }
               } else {
                 acc[0].text = this.$gettext('Public link')
               }
             }
-
             acc.length && delete acc[acc.length - 1].to
           } else {
             delete acc[i].onClick

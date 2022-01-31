@@ -183,11 +183,11 @@ export default {
       ref.scrollToResourceFromRoute()
     })
 
-    const loadResourcesTask = useTask(function* (signal, ref) {
+    const loadResourcesTask = useTask(function* (signal, ref, sameRoute, path) {
       yield loadSpaceTask.perform(ref)
       loadReadmeTask.perform(ref)
       loadImageTask.perform(ref)
-      loadFilesListTask.perform(ref)
+      loadFilesListTask.perform(ref, sameRoute, path)
     })
 
     return {
@@ -251,10 +251,6 @@ export default {
       handler: function (to, from) {
         const sameRoute = to.name === from?.name
         const sameItem = to.params?.item === from?.params?.item
-
-        if (!to.params?.item) {
-          return
-        }
 
         if (!sameRoute || !sameItem) {
           this.loadFilesListTask.perform(this, sameRoute, to.params.item)
