@@ -14,44 +14,79 @@ localVue.use(GetTextPlugin, {
   silent: true
 })
 
+const lightTheme = {
+  designTokens: {
+    colorPalette: {
+      'background-accentuate': 'lime'
+    }
+  }
+}
+
+const darkTheme = {
+  designTokens: {
+    colorPalette: {
+      'background-accentuate': 'gold'
+    }
+  }
+}
+
 const spyChangeTheme = jest.spyOn(ThemeSwitcher.methods, 'changeTheme')
 
 describe('ThemeSwitcher component', () => {
-  beforeEach(() => {
-    jest.clearAllMocks()
+  describe('visually', () => {
+    beforeEach(() => {
+      jest.clearAllMocks()
+    })
+
+    it('renders a button, initially in light mode per default', async () => {
+      window.matchMedia = darkModePreferred(false)
+      const wrapper = getWrapper()
+      await wrapper.vm.$nextTick()
+      expect(wrapper).toMatchSnapshot()
+    })
+
+    it('renders a button, initially in dark mode if user prefers dark color sceme', async () => {
+      window.matchMedia = darkModePreferred(true)
+      const wrapper = getWrapper()
+      await wrapper.vm.$nextTick()
+      expect(wrapper).toMatchSnapshot()
+      // await expect(spyChangeTheme).toHaveBeenCalledTimes(1)
+    })
+
+    it('toggles between themes upon click', async () => {
+      window.matchMedia = darkModePreferred(false)
+      const wrapper = getWrapper()
+      expect(spyChangeTheme).toHaveBeenCalledTimes(0)
+
+      await wrapper.find('.themeswitcher-btn').trigger('click')
+      await wrapper.vm.$nextTick()
+
+      expect(wrapper).toMatchSnapshot()
+      expect(spyChangeTheme).toHaveBeenCalledTimes(1)
+
+      await wrapper.find('.themeswitcher-btn').trigger('click')
+      await wrapper.vm.$nextTick()
+
+      expect(wrapper).toMatchSnapshot()
+      expect(spyChangeTheme).toHaveBeenCalledTimes(2)
+    })
   })
 
-  it('renders a button, initially in light mode per default', async () => {
-    window.matchMedia = darkModePreferred(false)
-    const wrapper = getWrapper()
-    await wrapper.vm.$nextTick()
-    expect(wrapper).toMatchSnapshot()
-  })
-
-  it('renders a button, initially in dark mode if user prefers dark color sceme', async () => {
-    window.matchMedia = darkModePreferred(true)
-    const wrapper = getWrapper()
-    await wrapper.vm.$nextTick()
-    expect(wrapper).toMatchSnapshot()
-    // await expect(spyChangeTheme).toHaveBeenCalledTimes(1)
-  })
-
-  it('toggles between themes upon click', async () => {
-    window.matchMedia = darkModePreferred(false)
-    const wrapper = getWrapper()
-    expect(spyChangeTheme).toHaveBeenCalledTimes(0)
-
-    await wrapper.find('.themeswitcher-btn').trigger('click')
-    await wrapper.vm.$nextTick()
-
-    expect(wrapper).toMatchSnapshot()
-    expect(spyChangeTheme).toHaveBeenCalledTimes(1)
-
-    await wrapper.find('.themeswitcher-btn').trigger('click')
-    await wrapper.vm.$nextTick()
-
-    expect(wrapper).toMatchSnapshot()
-    expect(spyChangeTheme).toHaveBeenCalledTimes(2)
+  describe('restores', () => {
+    it('light theme if light theme is saved in localstorage', async () => {
+      window.localStorage.setItem('oc_currentTheme', JSON.stringify(lightTheme))
+      window.localStorage.setItem('oc_colorMode', 'light')
+      const wrapper = getWrapper()
+      await wrapper.vm.$nextTick()
+      expect(wrapper).toMatchSnapshot()
+    })
+    it('dark theme if dark theme is saved in localstorage', async () => {
+      window.localStorage.setItem('oc_currentTheme', JSON.stringify(darkTheme))
+      window.localStorage.setItem('oc_colorMode', 'dark')
+      const wrapper = getWrapper()
+      await wrapper.vm.$nextTick()
+      expect(wrapper).toMatchSnapshot()
+    })
   })
 })
 
@@ -72,20 +107,8 @@ function getWrapper() {
       getters: {
         configuration: () => ({
           themes: {
-            default: {
-              designTokens: {
-                colorPalette: {
-                  'background-accentuate': 'lime'
-                }
-              }
-            },
-            'default-dark': {
-              designTokens: {
-                colorPalette: {
-                  'background-accentuate': 'gold'
-                }
-              }
-            }
+            default: lightTheme,
+            'default-dark': darkTheme
           },
           currentTheme: {
             designTokens: {

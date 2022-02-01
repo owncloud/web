@@ -12,14 +12,11 @@
   </oc-button>
 </template>
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { unref, watch } from '@vue/composition-api'
+import { mapGetters } from 'vuex'
+import { useStore, useLocalStorage } from 'web-pkg/src/composables'
 
 export default {
-  data() {
-    return {
-      mode: 'light'
-    }
-  },
   computed: {
     ...mapGetters(['configuration']),
     buttonLabel() {
@@ -35,33 +32,55 @@ export default {
       return this.mode === 'light' ? this.$gettext('Light mode') : this.$gettext('Dark mode')
     }
   },
+  setup() {
+    const store = useStore()
+    const mode = useLocalStorage('oc_colorMode', null)
+    const currentTheme = useLocalStorage(
+      'oc_currentTheme',
+      store.getters.configuration.currentTheme
+    )
+
+    watch(
+      currentTheme,
+      () => {
+        store.dispatch('loadTheme', { theme: unref(currentTheme) })
+      },
+      { immediate: true }
+    )
+
+    return { currentTheme, mode }
+  },
   mounted() {
-    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      this.changeTheme()
+    if (this.mode === null) {
+      this.mode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+      const themeToLoad = window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? 'default-dark'
+        : 'default'
+      this.applyTheme(themeToLoad, this.mode)
     }
   },
   methods: {
-    ...mapActions(['loadTheme']),
-
     changeTheme() {
-      if (this.mode === 'light') {
-        this.loadTheme({ theme: this.configuration.themes['default-dark'] })
-        this.applyChangedTheme()
-        this.mode = 'dark'
+      if (this.mode === 'light' || this.mode === null) {
+        this.applyTheme('default-dark', 'dark')
       } else {
-        this.loadTheme({ theme: this.configuration.themes.default })
-        this.applyChangedTheme()
-        this.mode = 'light'
+        this.applyTheme('default', 'light')
       }
     },
 
+    applyTheme(themeName, themeMode) {
+      this.currentTheme = this.configuration.themes[themeName]
+      this.mode = themeMode
+      this.applyChangedTheme()
+    },
+
     applyChangedTheme() {
-      for (const param in this.configuration.currentTheme.designTokens.colorPalette) {
+      for (const param in this.currentTheme.designTokens.colorPalette) {
         document
           .querySelector(':root')
           .style.setProperty(
             '--oc-' + 'color-' + param,
-            this.configuration.currentTheme.designTokens.colorPalette[param]
+            this.currentTheme.designTokens.colorPalette[param]
           )
       }
     }
