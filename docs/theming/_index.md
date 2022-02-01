@@ -41,7 +41,7 @@ You can use the snippet below as a base for writing your own theme by replacing 
       "slogan": "ownCloud – A safe home for all your data"
     },
     "logo": {
-      "sidebar": "https://externalurl.example.com/url/for/remote/theme/assets/logo.svg",
+      "topbar": "https://externalurl.example.com/url/for/remote/theme/assets/logo.svg",
       "favicon": "https://externalurl.example.com/url/for/remote/theme/assets/favicon.jpg",
       "login": "relative/path/for/local/theme/logo.svg"
     },
@@ -64,7 +64,7 @@ Here, you can specify a `"name"` and a `"slogan"` string. The name gets used in 
 
 ## The "logo" options
 
-Here, you can specify the images to be used in the `"sidebar"`, for the `"favicon"` and on the `"login"` page. Various formats are supported and it's up to you to decide which one fits best to your use case.
+Here, you can specify the images to be used in the `"topbar"`, for the `"favicon"` and on the `"login"` page. Various formats are supported and it's up to you to decide which one fits best to your use case.
 
 ## The "loadingPage" options
 
@@ -238,7 +238,7 @@ An empty template for your custom theme is provided below, and you can use the i
       "slogan": ""
     },
     "logo": {
-      "sidebar": "",
+      "topbar": "",
       "favicon": "",
       "login": "",
       "notFound": ""

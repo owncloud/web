@@ -20,7 +20,6 @@
       toggle="#_userMenuButton"
       mode="click"
       close-on-click
-      :options="{ pos: 'bottom-right', delayHide: 0 }"
       padding-size="small"
     >
       <oc-list class="user-menu-list">

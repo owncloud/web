@@ -1,0 +1,6 @@
+Enhancement: Redesign appswitcher
+
+We've redesigned the appswitcher to follow the new design and highlight the currently used app.
+
+https://github.com/owncloud/web/issues/6102
+https://github.com/owncloud/web/pull/6349

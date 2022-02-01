@@ -11,10 +11,11 @@ export default {
      * - applicationsList
      * - $language
      *
-     * @param permittedMenus
+     * @param {Array} permittedMenus
+     * @param {String} activeRoutePath
      * @returns {*}
      */
-    navigation_getMenuItems(permittedMenus) {
+    navigation_getMenuItems(permittedMenus, activeRoutePath) {
       return this.applicationsList
         .filter((app) => {
           if (app.type === 'extension') {
@@ -60,8 +61,10 @@ export default {
               : '_blank'
           } else if (item.path) {
             app.path = item.path
+            app.active = activeRoutePath?.startsWith(app.path)
           } else {
             app.path = `/${item.id}`
+            app.active = activeRoutePath?.startsWith(app.path)
           }
 
           return app

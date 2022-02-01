@@ -20,23 +20,29 @@
       drop-id="app-switcher-dropdown"
       toggle="#_appSwitcherButton"
       mode="click"
-      class="oc-width-auto"
-      :options="{ pos: 'bottom-right', delayHide: 0 }"
       padding-size="small"
       close-on-click
     >
-      <ul class="oc-my-rm oc-px-rm">
-        <li v-for="(n, nid) in applicationsList" :key="`apps-menu-${nid}`" class="list-item oc-p-s">
-          <a v-if="n.url" key="apps-menu-external-link" :target="n.target" :href="n.url">
-            <oc-icon :name="n.icon" size="large" />
-            <span class="link-text" v-text="$gettext(n.title)" />
-          </a>
-          <router-link v-else key="apps-menu-internal-link" :to="n.path">
-            <oc-icon :name="n.icon" size="large" />
-            <span class="link-text" v-text="$gettext(n.title)" />
-          </router-link>
+      <oc-list class="applications-list">
+        <li v-for="(n, nid) in applicationsList" :key="`apps-menu-${nid}`">
+          <oc-button
+            :key="n.url ? 'apps-menu-external-link' : 'apps-menu-internal-link'"
+            :type="n.url ? 'a' : 'router-link'"
+            :target="n.target"
+            :href="n.url"
+            :to="n.path"
+            appearance="raw"
+            :class="{ 'oc-background-primary-gradient': n.active }"
+            :variation="n.active ? 'inverse' : 'passive'"
+          >
+            <span class="icon-box" :class="{ 'icon-box-active': n.active }">
+              <oc-icon :name="n.icon" />
+            </span>
+            <span v-text="$gettext(n.title)" />
+            <oc-icon v-if="n.active" name="check" class="active-check" />
+          </oc-button>
         </li>
-      </ul>
+      </oc-list>
     </oc-drop>
   </nav>
 </template>
@@ -64,18 +70,35 @@ export default {
 }
 </script>
 
-<style lang="scss">
-#applications-menu {
-  .list-item {
-    display: inline-flex;
-    list-style: none;
-    gap: 10px;
+<style lang="scss" scoped>
+.applications-list li {
+  margin: var(--oc-space-xsmall) 0;
 
-    a {
-      text-align: center;
-      .link-text {
-        display: block;
-      }
+  a,
+  button {
+    gap: var(--oc-space-medium);
+    justify-content: flex-start;
+    width: 100%;
+
+    &:focus,
+    &:hover {
+      text-decoration: none;
+    }
+
+    .icon-box {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      width: 40px;
+      height: 40px;
+    }
+    .icon-box-active {
+      box-shadow: 2px 0 6px rgba(0, 0, 0, 0.14);
+    }
+
+    .active-check {
+      position: absolute;
+      right: 1rem;
     }
   }
 }
