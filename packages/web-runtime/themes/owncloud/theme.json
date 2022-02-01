@@ -48,7 +48,16 @@
         "swatch-warning-muted": "#b35100",
         "text-default": "#041e42",
         "text-inverse": "#ffffff",
-        "text-muted": "#4c5f79"
+        "text-muted": "#4c5f79",
+        "icon-folder": "#4d7eaf",
+        "icon-archive": "#FBBE54",
+        "icon-image": "#EE6B3B",
+        "icon-spreadsheet": "#15C286",
+        "icon-document": "#262949",
+        "icon-video": "#045459",
+        "icon-audio": "#700460",
+        "icon-presentation": "#EE6B3B",
+        "icon-pdf": "#EC0D47"
       }
     }
   },
@@ -111,7 +120,16 @@
         "swatch-warning-muted": "",
         "text-default": "#c2c2c2",
         "text-inverse": "#000000",
-        "text-muted": "#696969"
+        "text-muted": "#696969",
+        "icon-folder": "rgb(44, 101, 255)",
+        "icon-archive": "rgb(255, 207, 1)",
+        "icon-image": "rgb(255, 111, 0)",
+        "icon-spreadsheet": "rgb(0, 182, 87)",
+        "icon-document": "rgb(44, 101, 255)",
+        "icon-video": "rgb(0, 187, 219)",
+        "icon-audio": "rgb(208, 67, 236)",
+        "icon-presentation": "rgb(255, 64, 6)",
+        "icon-pdf": "rgb(225, 5, 14)"
       },
       "fontSizes": {
         "default": "",
