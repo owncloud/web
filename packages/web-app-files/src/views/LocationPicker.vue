@@ -414,7 +414,6 @@ export default {
           return basename(item.name) === resourceName
         })
         if (exists) {
-
           const message = this.$gettext('Resource with name %{name} already exists')
           errors.push({
             resource: resourceName,
