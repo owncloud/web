@@ -60,7 +60,7 @@ When running a standalone Selenium server, make sure to set the environment vari
 
 ## Setup ownCloud Web
 
-- [build Web]({{< ref "building.md" >}})
+- [build Web]({{< ref "../building.md" >}})
 - [start the Web server]({{< ref "backend-oc10.md#running-web" >}})
 - if you are running web against the oCIS backend, clone the testing app `git clone git@github.com:owncloud/testing.git tests/testing-app`
 
@@ -175,7 +175,7 @@ In order to check if new tests are compatible with oCIS, after changing the comm
 
 ### 2. oCIS Repo
 
-We follow the same approach in the `owncloud/ocis` repo too. In order to run the UI tests in CI we use commit IDs from web which can be changed in the `.drone.env` file. 
+We follow the same approach in the `owncloud/ocis` repo too. In order to run the UI tests in CI we use commit IDs from web which can be changed in the `.drone.env` file.
 
 ```
   # The test runner source for UI tests
