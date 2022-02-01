@@ -61,11 +61,10 @@ In the local Web checkout, copy the `config/config.json.sample-oc10` file to `co
 
 ## Running Web
 
-- if running from source, make sure to [build Web]({{< ref "building.md" >}}) first
+- if running from source, make sure to [build Web]({{< ref "./building.md" >}}) first
 - run by launching a rollup dev server `yarn serve`
 - when working on the Web code, rollup will recompile the code automatically
 
 ## Running acceptance tests
 
 For testing, please refer to the [testing docs]({{< ref "testing/_index.md" >}})
-
