@@ -296,7 +296,6 @@ export default {
         this.selectedFile = this.highlightedFile
         return
       }
-      console.log(this.highlightedFile.webDavPath)
       this.loading = true
       try {
         const item = await this.$client.files.fileInfo(
@@ -305,8 +304,7 @@ export default {
         )
 
         this.selectedFile = buildResource(item)
-        console.log('##')
-        // this.$set(this.selectedFile, 'thumbnail', this.highlightedFile.thumbnail || null)
+        this.$set(this.selectedFile, 'thumbnail', this.highlightedFile.thumbnail || null)
       } catch (error) {
         this.selectedFile = this.highlightedFile
         console.error(error)

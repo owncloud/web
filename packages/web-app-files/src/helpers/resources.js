@@ -200,6 +200,7 @@ export function buildSharedResource(share, incomingShares = false, allowSharePer
     resource.status = share.state
     resource.name = path.basename(share.file_target)
     resource.path = share.file_target
+    resource.webDavPath = share.file_target
     resource.canDownload = () => share.state === ShareStatus.accepted
     resource.canShare = () => SharePermissions.share.enabled(share.permissions)
     resource.canRename = () => SharePermissions.update.enabled(share.permissions)
@@ -210,6 +211,7 @@ export function buildSharedResource(share, incomingShares = false, allowSharePer
     resource.shareOwnerDisplayname = share.displayname_owner
     resource.name = path.basename(share.path)
     resource.path = share.path
+    resource.webDavPath = share.path
     resource.canDownload = () => true
     resource.canShare = () => true
     resource.canRename = () => true
