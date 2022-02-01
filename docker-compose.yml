@@ -22,7 +22,11 @@ services:
       - host.docker.internal:${DOCKER_HOST:-host-gateway}
 
   oc10:
-    image: ${OC10_IMAGE:-owncloud/server:latest}
+    build:
+      dockerfile: oc10.Dockerfile
+      context: ./dev/docker
+      args:
+        OC10_IMAGE: ${OC10_IMAGE:-owncloud/server:latest}
     container_name: web_oc10
     ports:
       - 8080:8080

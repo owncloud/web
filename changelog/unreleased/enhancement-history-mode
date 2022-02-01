@@ -1,0 +1,8 @@
+Enhancement: Option to enable Vue history mode
+
+We've added the option to use vue's history mode. All configuration is done automatically by the system.
+To enable it, add a `<base src="PATH">` header tag to `index.html`, `oidc-callback.html` and `oidc-silent-redirect.html`.
+Adding `<base>` is not needed for ocis.
+
+https://github.com/owncloud/web/issues/6363
+https://github.com/owncloud/web/issues/6277

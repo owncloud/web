@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+<body>
 <script>
-    window.onload = function() {
-		window.location.href = window.location.origin +
-			window.location.pathname.substr(0, window.location.pathname.length - 25) +
-			"index.html#/oidc-silent-redirect" + window.location.search;
-    }
+  window.onload = function () {
+    const base = document.querySelector('base')
+    const path = base ? new URL(base.href).pathname.split('/') : [...window.location.pathname.split('/').slice(0, -1), 'index.html#']
+    const url = new URL([...path, 'oidc-silent-redirect'].filter(Boolean).join('/'), window.location.origin)
+    window.location.href = url.href + window.location.search
+  }
 </script>
+</body>
 </html>

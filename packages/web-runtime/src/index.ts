@@ -4,9 +4,11 @@ import {
   translations,
   supportedLanguages,
   store,
-  Router as router,
   Vue
 } from './defaults'
+
+import { router } from './router'
+
 import {
   requestConfiguration,
   announceApplications,

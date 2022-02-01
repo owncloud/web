@@ -1,0 +1,6 @@
+Enhancement: Run web as oc10 sidecar
+
+We've added the option to run web in oc10 sidecar mode.
+Copy `config/config.json.sample-oc10` to `config/config.json`, run `yarn server` and then `docker compose up oc10`.
+
+https://github.com/owncloud/web/issues/6363
