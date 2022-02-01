@@ -375,8 +375,6 @@ export default {
     },
 
     leaveLocationPicker(target) {
-      console.log(this.$route.query.spaceId)
-
       switch (this.$route.params.context) {
         case 'public':
           this.$router.push(
@@ -410,14 +408,13 @@ export default {
 
       // Execute move or copy
       for (const resource of this.resources) {
-        let targetPath = `files/${this.user.id}/${this.target || '/'}`
+        let targetPath
         let resourceName = basename(resource)
-        targetPath += `/${resourceName}`
         const exists = this.paginatedResources.some((item) => {
           return basename(item.name) === resourceName
         })
-
         if (exists) {
+
           const message = this.$gettext('Resource with name %{name} already exists')
           errors.push({
             resource: resourceName,
@@ -430,6 +427,8 @@ export default {
           case batchActions.move: {
             switch (this.$route.params.context) {
               case 'public':
+                targetPath = `${this.target || '/'}`
+                targetPath += `/${resourceName}`
                 promise = this.$client.publicFiles.move(
                   resource,
                   targetPath,
@@ -438,15 +437,15 @@ export default {
                 break
               case 'space':
                 targetPath = `spaces/${this.$route.query.spaceId}/${this.target || '/'}`
-                resourceName = basename(resource)
                 targetPath += `/${resourceName}`
-
                 promise = this.$client.files.move(
                   `spaces/${this.$route.query.spaceId}/${resource}`,
                   targetPath
                 )
                 break
               default:
+                targetPath = `files/${this.user.id}/${this.target || '/'}`
+                targetPath += `/${resourceName}`
                 promise = this.$client.files.move(`files/${this.user.id}/${resource}`, targetPath)
             }
             break
@@ -454,6 +453,9 @@ export default {
           case batchActions.copy: {
             switch (this.$route.params.context) {
               case 'public':
+                targetPath = `${this.target || '/'}`
+                targetPath += `/${resourceName}`
+
                 promise = this.$client.publicFiles.copy(
                   resource,
                   targetPath,
@@ -464,13 +466,14 @@ export default {
                 targetPath = `spaces/${this.$route.query.spaceId}/${this.target || '/'}`
                 resourceName = basename(resource)
                 targetPath += `/${resourceName}`
-
                 promise = this.$client.files.copy(
                   `spaces/${this.$route.query.spaceId}/${resource}`,
                   targetPath
                 )
                 break
               default:
+                targetPath = `files/${this.user.id}/${this.target || '/'}`
+                targetPath += `/${resourceName}`
                 promise = this.$client.files.copy(`files/${this.user.id}/${resource}`, targetPath)
             }
             break

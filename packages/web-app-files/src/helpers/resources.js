@@ -28,14 +28,20 @@ export function renameResource(resource, newName, newPath) {
 export function buildResource(resource) {
   const isFolder = resource.type === 'dir' || resource.type === 'folder'
   const extension = _getFileExtension(resource.name)
+  let resourcePath
 
+  if (resource.name.startsWith('/files') || resource.name.startsWith('/space')) {
+    resourcePath = resource.name.split('/').splice(3).join('/')
+  } else {
+    resourcePath = resource.name
+  }
   return {
     id: resource.fileInfo[DavProperty.FileId],
     fileId: resource.fileInfo[DavProperty.FileId],
     mimeType: resource.fileInfo[DavProperty.MimeType],
     name: path.basename(resource.name),
     extension: isFolder ? '' : extension,
-    path: resource.name.split('/').splice(3).join('/'),
+    path: resourcePath,
     webDavPath: resource.name,
     type: isFolder ? 'folder' : resource.type,
     isFolder,
