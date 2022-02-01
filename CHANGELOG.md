@@ -30,6 +30,7 @@ Summary
 * Enhancement - Add default sorting to the spaces list: [#6262](https://github.com/owncloud/web/pull/6262)
 * Enhancement - Implement spaces list: [#6199](https://github.com/owncloud/web/pull/6199)
 * Enhancement - Update ODS to v12.0.0-alpha15: [#6086](https://github.com/owncloud/web/pull/6086)
+* Enhancement - Update SDK: [#6309](https://github.com/owncloud/web/pull/6309)
 
 Details
 -------
@@ -258,6 +259,14 @@ Details
    https://github.com/owncloud/web/pull/6228
    https://github.com/owncloud/web/pull/6240
    https://github.com/owncloud/owncloud-design-system/releases/tag/v12.0.0-alpha15
+
+* Enhancement - Update SDK: [#6309](https://github.com/owncloud/web/pull/6309)
+
+   We've updated the ownCloud SDK to version 1.1.2. As we've switched the SDK to semver only now
+   there is no proper changelog available.
+
+   https://github.com/owncloud/web/pull/6309
+   https://github.com/owncloud/owncloud-sdk/releases/tag/v1.1.2
 
 Changelog for ownCloud Web [4.9.0] (2021-12-24)
 =======================================
