@@ -480,9 +480,9 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUISharingExternal/federationSharing.feature:166](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingExternal/federationSharing.feature#L166)
 
 ### [Uploading a file with a name that already exists is confusing](https://github.com/owncloud/web/issues/5106)
--   [webUIUpload/upload.feature:110](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/upload.feature#L110)
--   [webUIUpload/upload.feature:123](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/upload.feature#L123)
--   [webUIUpload/upload.feature:140](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/upload.feature#L140)
+-   [webUIUpload/upload.feature:129](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/upload.feature#L129)
+-   [webUIUpload/upload.feature:142](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/upload.feature#L142)
+-   [webUIUpload/upload.feature:159](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/upload.feature#L159)
 -   [webUIUpload/uploadEdgecases.feature:67](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/uploadEdgecases.feature#L67)
 
 ### [browsing directly to a details 'tab' is not possible](https://github.com/owncloud/web/issues/5464)
@@ -510,3 +510,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 
 ### [web config update is not properly reflected after the ocis start](https://github.com/owncloud/ocis/issues/2944)
 -   [webUIFiles/breadcrumb.feature:50](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFiles/breadcrumb.feature#L50)
+
+### [empty subfolder inside a folder to be uploaded is not created on the server](https://github.com/owncloud/web/issues/6348)
+-   [webUIUpload/upload.feature:42](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/upload.feature#L42)
