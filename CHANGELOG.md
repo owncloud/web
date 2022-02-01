@@ -24,6 +24,7 @@ Summary
 * Enhancement - Lazy resource table cells: [#6204](https://github.com/owncloud/web/pull/6204)
 * Enhancement - Add URL handling to markdown editor: [#6134](https://github.com/owncloud/web/pull/6134)
 * Enhancement - Persist chosen sorting options: [#5930](https://github.com/owncloud/web/issues/5930)
+* Enhancement - Redesign appswitcher: [#6102](https://github.com/owncloud/web/issues/6102)
 * Enhancement - Redesign main layout: [#6036](https://github.com/owncloud/web/issues/6036)
 * Enhancement - Redesigned user menu: [#6272](https://github.com/owncloud/web/pull/6272)
 * Enhancement - Show parent folder for resources: [#6226](https://github.com/owncloud/web/pull/6226)
@@ -174,6 +175,14 @@ Details
 
    https://github.com/owncloud/web/issues/5930
    https://github.com/owncloud/web/pull/6290
+
+* Enhancement - Redesign appswitcher: [#6102](https://github.com/owncloud/web/issues/6102)
+
+   We've redesigned the appswitcher to follow the new design and highlight the currently used
+   app.
+
+   https://github.com/owncloud/web/issues/6102
+   https://github.com/owncloud/web/pull/6349
 
 * Enhancement - Redesign main layout: [#6036](https://github.com/owncloud/web/issues/6036)
 
