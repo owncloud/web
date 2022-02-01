@@ -5,7 +5,7 @@
     :aria-label="$gettext('Top bar')"
   >
     <div class="topbar-gap oc-flex oc-flex-middle oc-flex-between">
-      <applications-menu v-if="applicationsList.length" :applications-list="appMenuItems" />
+      <applications-menu v-if="appMenuItems.length" :applications-list="appMenuItems" />
       <router-link ref="navigationSidebarLogo" to="/">
         <oc-img :src="logoImage" :alt="sidebarLogoAlt" />
       </router-link>
@@ -56,11 +56,15 @@ export default {
   computed: {
     ...mapGetters(['configuration', 'user']),
 
+    activeRoutePath() {
+      return this.$router.resolve(this.$route).location.path
+    },
+
     appMenuItems() {
-      return this.navigation_getMenuItems([null, 'apps', 'appSwitcher'])
+      return this.navigation_getMenuItems([null, 'apps', 'appSwitcher'], this.activeRoutePath)
     },
     userMenuItems() {
-      return this.navigation_getMenuItems(['user'])
+      return this.navigation_getMenuItems(['user'], this.activeRoutePath)
     },
 
     darkThemeAvailable() {
@@ -72,7 +76,7 @@ export default {
     },
 
     logoImage() {
-      return this.configuration.currentTheme.logo.sidebar
+      return this.configuration.currentTheme.logo.topbar
     },
 
     isFeedbackLinkEnabled() {

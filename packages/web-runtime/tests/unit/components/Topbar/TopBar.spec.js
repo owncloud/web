@@ -1,10 +1,12 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
+import VueRouter from 'vue-router'
 import TopBar from 'web-runtime/src/components/Topbar/TopBar.vue'
 import stubs from '../../../../../../tests/unit/stubs'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
+localVue.use(VueRouter)
 
 const feedbackButtonPresent = (enabled) => ({
   options: { disableFeedbackLink: !enabled },
@@ -14,14 +16,8 @@ const feedbackButtonPresent = (enabled) => ({
   },
   currentTheme: {
     logo: {
-      sidebar: ''
+      topbar: 'example-logo.svg'
     }
-  }
-})
-
-const defaultRoute = () => ({
-  meta: {
-    /* default is empty */
   }
 })
 
@@ -59,12 +55,10 @@ describe('Top Bar component', () => {
         }
       }),
       localVue,
+      router: new VueRouter(),
       stubs,
       propsData: {
         applicationsList: ['testApp']
-      },
-      mocks: {
-        $route: defaultRoute()
       }
     })
 

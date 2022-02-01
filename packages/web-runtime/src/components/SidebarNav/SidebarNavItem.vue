@@ -9,7 +9,7 @@
       :to="target"
       :data-nav-id="index"
     >
-      <oc-icon :name="icon" :fill-type="fillType" aria-hidden="true" />
+      <oc-icon :name="icon" :fill-type="fillType" />
       <span class="oc-ml-m text" :class="{ 'text-invisible': collapsed }" v-text="name" />
       <sidebar-nav-item-highlight :index="index" :active="active" />
     </oc-button>
@@ -79,7 +79,7 @@ export default {
   align-items: center !important;
   display: flex !important;
   justify-content: flex-start !important;
-  padding: var(--oc-space-small) var(--oc-space-small) !important;
+  padding: var(--oc-space-small) !important;
   border-radius: 5px;
   white-space: nowrap;
   user-select: none;

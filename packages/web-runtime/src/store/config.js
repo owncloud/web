@@ -24,7 +24,7 @@ const state = {
       helpDeskLinkText: 'ownCloud Central'
     },
     logo: {
-      sidebar: '',
+      topbar: '',
       favicon: '',
       login: '',
       notFound: ''
