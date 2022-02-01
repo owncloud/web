@@ -1,0 +1,6 @@
+Enhancement: Update SDK
+
+We've updated the ownCloud SDK to version 1.1.2. As we've switched the SDK to semver only now there is no proper changelog available.
+
+https://github.com/owncloud/web/pull/6309
+https://github.com/owncloud/owncloud-sdk/releases/tag/v1.1.2
