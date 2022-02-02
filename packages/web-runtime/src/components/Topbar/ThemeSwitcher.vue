@@ -5,65 +5,59 @@
     :aria-label="buttonLabel"
     appearance="raw"
     variation="inverse"
-    @click="changeTheme"
+    @click="toggleTheme"
   >
     <span class="oc-visible@s" :aria-label="switchLabel" v-text="switchText" />
     <oc-icon :name="switchIcon" fill-type="line" />
   </oc-button>
 </template>
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { computed, unref, watch } from '@vue/composition-api'
+import { mapGetters } from 'vuex'
+import { useStore, useLocalStorage } from 'web-pkg/src/composables'
+import { themeNameDark, themeNameLight, useDefaultThemeName } from '../../composables'
 
 export default {
-  data() {
-    return {
-      mode: 'light'
+  setup() {
+    const store = useStore()
+    const currentThemeName = useLocalStorage('oc_currentThemeName', useDefaultThemeName())
+    const currentTheme = computed(() => store.getters.configuration.themes[unref(currentThemeName)])
+    const applyTheme = (theme) => {
+      for (const param in theme.designTokens.colorPalette) {
+        document
+          .querySelector(':root')
+          .style.setProperty(`--oc-color-${param}`, theme.designTokens.colorPalette[param])
+      }
     }
+
+    watch(currentThemeName, async () => {
+      await store.dispatch('loadTheme', { theme: unref(currentTheme) })
+      applyTheme(unref(currentTheme))
+    })
+
+    return { currentThemeName, currentTheme }
   },
   computed: {
     ...mapGetters(['configuration']),
+    isLightTheme() {
+      return [null, themeNameLight].includes(this.currentThemeName)
+    },
     buttonLabel() {
       return this.$gettext('Click to switch theme')
     },
     switchIcon() {
-      return this.mode === 'light' ? 'sun' : 'moon-clear'
+      return this.isLightTheme ? 'sun' : 'moon-clear'
     },
     switchLabel() {
       return this.$gettext('Currently used theme')
     },
     switchText() {
-      return this.mode === 'light' ? this.$gettext('Light mode') : this.$gettext('Dark mode')
-    }
-  },
-  mounted() {
-    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      this.changeTheme()
+      return this.isLightTheme ? this.$gettext('Light mode') : this.$gettext('Dark mode')
     }
   },
   methods: {
-    ...mapActions(['loadTheme']),
-
-    changeTheme() {
-      if (this.mode === 'light') {
-        this.loadTheme({ theme: this.configuration.themes['default-dark'] })
-        this.applyChangedTheme()
-        this.mode = 'dark'
-      } else {
-        this.loadTheme({ theme: this.configuration.themes.default })
-        this.applyChangedTheme()
-        this.mode = 'light'
-      }
-    },
-
-    applyChangedTheme() {
-      for (const param in this.configuration.currentTheme.designTokens.colorPalette) {
-        document
-          .querySelector(':root')
-          .style.setProperty(
-            '--oc-' + 'color-' + param,
-            this.configuration.currentTheme.designTokens.colorPalette[param]
-          )
-      }
+    toggleTheme() {
+      this.currentThemeName = this.isLightTheme ? themeNameDark : themeNameLight
     }
   }
 }

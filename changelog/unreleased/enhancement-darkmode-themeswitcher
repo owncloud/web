@@ -1,5 +1,8 @@
 Enhancement: Darkmode theme switcher
 
 We've added a theme switcher and now initialize the user interface theme based on the user's browser preferences.
+It also gets saved to the localstorage of the browser so the user's preference gets saved locally.
 
+https://github.com/owncloud/web/issues/6242
 https://github.com/owncloud/web/pull/6240
+https://github.com/owncloud/web/pull/6350

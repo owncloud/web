@@ -10,6 +10,9 @@ import { sync as routerSync } from 'vuex-router-sync'
 import getTextPlugin from 'vue-gettext'
 import set from 'lodash-es/set'
 import { getBackendVersion, getWebVersion } from './versions'
+import { useLocalStorage } from 'web-pkg/src/composables'
+import { unref } from '@vue/composition-api'
+import { useDefaultThemeName } from '../composables'
 
 /**
  * fetch runtime configuration, this step is optional, all later steps can use a static
@@ -165,7 +168,11 @@ export const announceTheme = async ({
 }): Promise<void> => {
   const { theme } = await loadTheme(runtimeConfiguration?.theme)
   await store.dispatch('loadThemes', { theme })
-  await store.dispatch('loadTheme', { theme: theme.default })
+  const currentThemeName = useLocalStorage('oc_currentThemeName', null) // note: use null as default so that we can fall back to system preferences
+  if (unref(currentThemeName) === null) {
+    currentThemeName.value = useDefaultThemeName()
+  }
+  await store.dispatch('loadTheme', { theme: theme[unref(currentThemeName)] || theme.default })
 
   vue.use(designSystem, {
     tokens: store.getters.theme.designTokens
