@@ -290,7 +290,10 @@ export default {
   },
   beforeDestroy() {
     visibilityObserver.disconnect()
-    this.markdownResizeObserver.unobserve(this.$refs.markdownContainer)
+
+    if (this.$refs.markdownContainer) {
+      this.markdownResizeObserver.unobserve(this.$refs.markdownContainer)
+    }
   },
   methods: {
     ...mapActions('Files', ['loadIndicators', 'loadPreview']),
