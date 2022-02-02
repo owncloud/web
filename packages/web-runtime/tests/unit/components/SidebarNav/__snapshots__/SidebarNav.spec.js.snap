@@ -2,7 +2,7 @@
 
 exports[`OcSidebarNav renders navItems into a list 1`] = `
 <div id="web-nav-sidebar" class="oc-app-navigation-expanded"><button aria-label="Toggle sidebar" class="toggle-sidebar-button oc-py-s oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw toggle-sidebar-button-expanded oc-pr-s">
-    <oc-icon-stub name="arrow-drop-left" filltype="line" accessiblelabel="" type="span" size="large" variation="passive"></oc-icon-stub>
+    <oc-icon-stub name="arrow-drop-left" filltype="line" accessiblelabel="" type="span" size="large" variation="passive" color=""></oc-icon-stub>
   </button>
   <nav aria-label="Sidebar top navigation menu" class="oc-sidebar-nav oc-my-l oc-px-xs">
     <oc-list-stub>
@@ -18,7 +18,7 @@ exports[`OcSidebarNav renders navItems into a list 1`] = `
 
 exports[`OcSidebarNav toggles back into open state upon button click 1`] = `
 <div id="web-nav-sidebar" class="oc-app-navigation-expanded"><button aria-label="Toggle sidebar" class="toggle-sidebar-button oc-py-s oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw toggle-sidebar-button-expanded oc-pr-s">
-    <oc-icon-stub name="arrow-drop-left" filltype="line" accessiblelabel="" type="span" size="large" variation="passive"></oc-icon-stub>
+    <oc-icon-stub name="arrow-drop-left" filltype="line" accessiblelabel="" type="span" size="large" variation="passive" color=""></oc-icon-stub>
   </button>
   <nav aria-label="Sidebar top navigation menu" class="oc-sidebar-nav oc-my-l oc-px-xs">
     <oc-list-stub>
@@ -34,7 +34,7 @@ exports[`OcSidebarNav toggles back into open state upon button click 1`] = `
 
 exports[`OcSidebarNav toggles into closed state upon button click 1`] = `
 <div id="web-nav-sidebar" class="oc-app-navigation-collapsed"><button aria-label="Toggle sidebar" class="toggle-sidebar-button oc-py-s oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw toggle-sidebar-button-collapsed">
-    <oc-icon-stub name="arrow-drop-right" filltype="line" accessiblelabel="" type="span" size="large" variation="passive"></oc-icon-stub>
+    <oc-icon-stub name="arrow-drop-right" filltype="line" accessiblelabel="" type="span" size="large" variation="passive" color=""></oc-icon-stub>
   </button>
   <nav aria-label="Sidebar top navigation menu" class="oc-sidebar-nav oc-my-l oc-px-xs">
     <oc-list-stub>

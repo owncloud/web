@@ -15,7 +15,7 @@ function _getFileExtension(name) {
 }
 
 export function renameResource(resource, newName, newPath) {
-  const isFolder = resource.type === 'dir'
+  const isFolder = resource.type === 'dir' || resource.type === 'folder'
   const extension = _getFileExtension(newName)
 
   resource.name = newName
@@ -26,7 +26,7 @@ export function renameResource(resource, newName, newPath) {
 }
 
 export function buildResource(resource) {
-  const isFolder = resource.type === 'dir'
+  const isFolder = resource.type === 'dir' || resource.type === 'folder'
   const extension = _getFileExtension(resource.name)
   return {
     id: resource.fileInfo[DavProperty.FileId],
@@ -322,7 +322,7 @@ export function buildCollaboratorShare(s, file, allowSharePermission) {
 }
 
 export function buildDeletedResource(resource) {
-  const isFolder = resource.type === 'dir'
+  const isFolder = resource.type === 'dir' || resource.type === 'folder'
   const fullName = resource.fileInfo[DavProperty.TrashbinOriginalFilename]
   const extension = isFolder ? '' : _getFileExtension(fullName)
   return {

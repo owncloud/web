@@ -2308,13 +2308,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:*, @types/jest@npm:^26.0.23":
-  version: 26.0.23
-  resolution: "@types/jest@npm:26.0.23"
+"@types/jest@npm:*, @types/jest@npm:^27.4.0":
+  version: 27.4.0
+  resolution: "@types/jest@npm:27.4.0"
   dependencies:
-    jest-diff: ^26.0.0
-    pretty-format: ^26.0.0
-  checksum: 69db26061e6be34de2a440c8a470b651c53ba6ee0057614a278c4f756ff00281f46cc075b24e5bd761f399f175f49d0a5758b50dd921342a8592461548dea29a
+    jest-diff: ^27.0.0
+    pretty-format: ^27.0.0
+  checksum: d2350267f954f9a2e4a15e5f02fbf19a77abfb9fd9e57a954de1fb0e9a0d3d5f8d3646ac7d9c42aeb4b4d828d2e70624ec149c85bb50a48634a54eed8429e1f8
   languageName: node
   linkType: hard
 
@@ -5042,13 +5042,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"diff-sequences@npm:^26.6.2":
-  version: 26.6.2
-  resolution: "diff-sequences@npm:26.6.2"
-  checksum: 79af871776ef149a7ff3345d6b1bf37fe6e81f68632aa5542787851f6f60fba19b0be22fdd1e06046f56ae7382763ccfe94a982c39ee72bd107aef435ecbc0cf
-  languageName: node
-  linkType: hard
-
 "diff-sequences@npm:^27.4.0":
   version: 27.4.0
   resolution: "diff-sequences@npm:27.4.0"
@@ -7551,19 +7544,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-diff@npm:^26.0.0":
-  version: 26.6.2
-  resolution: "jest-diff@npm:26.6.2"
-  dependencies:
-    chalk: ^4.0.0
-    diff-sequences: ^26.6.2
-    jest-get-type: ^26.3.0
-    pretty-format: ^26.6.2
-  checksum: d00d297f31e1ac0252127089892432caa7a11c69bde29cf3bb6c7a839c8afdb95cf1fd401f9df16a4422745da2e6a5d94b428b30666a2540c38e1c5699915c2d
-  languageName: node
-  linkType: hard
-
-"jest-diff@npm:^27.0.2, jest-diff@npm:^27.2.5, jest-diff@npm:^27.4.6":
+"jest-diff@npm:^27.0.0, jest-diff@npm:^27.0.2, jest-diff@npm:^27.2.5, jest-diff@npm:^27.4.6":
   version: 27.4.6
   resolution: "jest-diff@npm:27.4.6"
   dependencies:
@@ -7633,13 +7614,6 @@ __metadata:
     cross-fetch: ^3.0.4
     promise-polyfill: ^8.1.3
   checksum: fb052f7e0ef1c8192a9c15efdd1b18d281ab68fc6b1648b30bff8880fe24418bdf12190ea79b1996932dc15417c3c01f5b2d77ef7104a7e7943e7cbe8d61071d
-  languageName: node
-  linkType: hard
-
-"jest-get-type@npm:^26.3.0":
-  version: 26.3.0
-  resolution: "jest-get-type@npm:26.3.0"
-  checksum: 1cc6465ae4f5e880be22ba52fd270fa64c21994915f81b41f8f7553a7957dd8e077cc8d03035de9412e2d739f8bad6a032ebb5dab5805692a5fb9e20dd4ea666
   languageName: node
   linkType: hard
 
@@ -9438,9 +9412,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"owncloud-design-system@npm:12.0.0-alpha15":
-  version: 12.0.0-alpha15
-  resolution: "owncloud-design-system@npm:12.0.0-alpha15"
+"owncloud-design-system@npm:12.0.0-alpha18":
+  version: 12.0.0-alpha18
+  resolution: "owncloud-design-system@npm:12.0.0-alpha18"
   peerDependencies:
     "@popperjs/core": ^2.4.0
     "@vue/composition-api": ^1.4.3
@@ -9457,7 +9431,7 @@ __metadata:
     vue-inline-svg: ^2.0.0
     vue-select: ^3.12.0
     webfontloader: ^1.6.28
-  checksum: ba5e0dc14d0385bc7ea77ea202740c32995b10c44918dcb949a75931b5382abcd083e155aad63c8484ccc85702d68518f8a2e014f54d3c4d6ca27fb208518bac
+  checksum: 9eae031b3ac336fdd493fd0b08e4a1d3734a42b7c0a04d28558b63c225befac37a0d15cbdf52d5f9a984ae2e8d2a8ddd397c1ccbf5a71e962ab0f08d28e5e11e
   languageName: node
   linkType: hard
 
@@ -10535,7 +10509,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pretty-format@npm:^26.0.0, pretty-format@npm:^26.6.2":
+"pretty-format@npm:^26.6.2":
   version: 26.6.2
   resolution: "pretty-format@npm:26.6.2"
   dependencies:
@@ -10547,7 +10521,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pretty-format@npm:^27.0.2, pretty-format@npm:^27.2.5, pretty-format@npm:^27.4.6":
+"pretty-format@npm:^27.0.0, pretty-format@npm:^27.0.2, pretty-format@npm:^27.2.5, pretty-format@npm:^27.4.6":
   version: 27.4.6
   resolution: "pretty-format@npm:27.4.6"
   dependencies:
@@ -11518,7 +11492,7 @@ __metadata:
     "@testing-library/jest-dom": ^5.16.1
     "@testing-library/user-event": ^13.5.0
     "@testing-library/vue": ^5.8.2
-    "@types/jest": ^26.0.23
+    "@types/jest": ^27.4.0
     "@types/jest-axe": ^3.5.3
     "@types/lodash-es": ^4.17.5
     "@types/node": ^16.10.3
@@ -13407,7 +13381,7 @@ typescript@^4.3.2:
     lodash-es: ^4.17.21
     luxon: ^2.3.0
     oidc-client: 1.11.5
-    owncloud-design-system: 12.0.0-alpha15
+    owncloud-design-system: 12.0.0-alpha18
     owncloud-sdk: 1.1.2
     p-queue: ^6.1.1
     popper-max-size-modifier: ^0.2.0

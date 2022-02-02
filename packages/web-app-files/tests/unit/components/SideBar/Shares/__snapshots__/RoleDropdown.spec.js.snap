@@ -2,14 +2,14 @@
 
 exports[`RoleDropdown for file shares when an existing role is present renders a button with existing role if given for resource type file 1`] = `
 <span class="oc-flex oc-flex-middle"><oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="center" gapsize="none" id="files-collaborators-role-button-new" class="files-recipient-role-select-btn"><span>Viewer</span>
-<oc-icon-stub name="arrow-down-s" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
+<oc-icon-stub name="arrow-down-s" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
 </oc-button-stub>
 <oc-drop-stub dropid="oc-drop-17" toggle="#files-collaborators-role-button-new" position="bottom-start" mode="click" closeonclick="true" paddingsize="remove">
   <oc-list-stub aria-label="Select role for the invitation" class="files-recipient-role-drop-list">
     <li>
       <oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="space-between" gapsize="medium" id="files-recipient-role-drop-btn-viewer" class="files-recipient-role-drop-btn oc-py-xs oc-px-s selected">
         <role-item-stub role="[object Object]" allowsharepermission="true"></role-item-stub>
-        <oc-icon-stub name="check" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
+        <oc-icon-stub name="check" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
       </oc-button-stub>
     </li>
     <li>
@@ -55,14 +55,14 @@ exports[`RoleDropdown for file shares when an existing role is present renders a
 
 exports[`RoleDropdown for file shares when an existing role is present renders a button with existing role if given for resource type folder 1`] = `
 <span class="oc-flex oc-flex-middle"><oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="center" gapsize="none" id="files-collaborators-role-button-new" class="files-recipient-role-select-btn"><span>Viewer</span>
-<oc-icon-stub name="arrow-down-s" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
+<oc-icon-stub name="arrow-down-s" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
 </oc-button-stub>
 <oc-drop-stub dropid="oc-drop-15" toggle="#files-collaborators-role-button-new" position="bottom-start" mode="click" closeonclick="true" paddingsize="remove">
   <oc-list-stub aria-label="Select role for the invitation" class="files-recipient-role-drop-list">
     <li>
       <oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="space-between" gapsize="medium" id="files-recipient-role-drop-btn-viewer" class="files-recipient-role-drop-btn oc-py-xs oc-px-s selected">
         <role-item-stub role="[object Object]" allowsharepermission="true"></role-item-stub>
-        <oc-icon-stub name="check" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
+        <oc-icon-stub name="check" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
       </oc-button-stub>
     </li>
     <li>
@@ -108,14 +108,14 @@ exports[`RoleDropdown for file shares when an existing role is present renders a
 
 exports[`RoleDropdown for file shares when no existing role is present renders a button with invite text if no existing role given for resource type file 1`] = `
 <span class="oc-flex oc-flex-middle"><oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="center" gapsize="none" id="files-collaborators-role-button-new" class="files-recipient-role-select-btn"><span>Invite as viewer</span>
-<oc-icon-stub name="arrow-down-s" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
+<oc-icon-stub name="arrow-down-s" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
 </oc-button-stub>
 <oc-drop-stub dropid="oc-drop-5" toggle="#files-collaborators-role-button-new" position="bottom-start" mode="click" closeonclick="true" paddingsize="remove">
   <oc-list-stub aria-label="Select role for the invitation" class="files-recipient-role-drop-list">
     <li>
       <oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="space-between" gapsize="medium" id="files-recipient-role-drop-btn-viewer" class="files-recipient-role-drop-btn oc-py-xs oc-px-s selected">
         <role-item-stub role="[object Object]" allowsharepermission="true"></role-item-stub>
-        <oc-icon-stub name="check" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
+        <oc-icon-stub name="check" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
       </oc-button-stub>
     </li>
     <li>
@@ -155,14 +155,14 @@ exports[`RoleDropdown for file shares when no existing role is present renders a
 
 exports[`RoleDropdown for file shares when no existing role is present renders a button with invite text if no existing role given for resource type folder 1`] = `
 <span class="oc-flex oc-flex-middle"><oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="center" gapsize="none" id="files-collaborators-role-button-new" class="files-recipient-role-select-btn"><span>Invite as viewer</span>
-<oc-icon-stub name="arrow-down-s" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
+<oc-icon-stub name="arrow-down-s" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
 </oc-button-stub>
 <oc-drop-stub dropid="oc-drop-3" toggle="#files-collaborators-role-button-new" position="bottom-start" mode="click" closeonclick="true" paddingsize="remove">
   <oc-list-stub aria-label="Select role for the invitation" class="files-recipient-role-drop-list">
     <li>
       <oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="space-between" gapsize="medium" id="files-recipient-role-drop-btn-viewer" class="files-recipient-role-drop-btn oc-py-xs oc-px-s selected">
         <role-item-stub role="[object Object]" allowsharepermission="true"></role-item-stub>
-        <oc-icon-stub name="check" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
+        <oc-icon-stub name="check" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
       </oc-button-stub>
     </li>
     <li>

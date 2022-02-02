@@ -9,7 +9,7 @@ exports[`FilesDrop should show page title and configuration theme general slogan
         <h2>admin shared this folder with you for uploading</h2>
         <vue-dropzone-stub id="oc-dropzone" options="[object Object]" destroydropzone="true" usecustomslot="true">
           <div class="oc-flex oc-flex-middle oc-flex-center">
-            <oc-icon-stub name="file-upload" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
+            <oc-icon-stub name="file-upload" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
             <translate-stub tag="span">Drop files here to upload or click to select file</translate-stub>
           </div>
         </vue-dropzone-stub>
@@ -53,7 +53,7 @@ exports[`FilesDrop when "loading" is set to false should call "dropZoneFileAdded
         <h2>admin shared this folder with you for uploading</h2>
         <vue-dropzone-stub id="oc-dropzone" options="[object Object]" destroydropzone="true" usecustomslot="true">
           <div class="oc-flex oc-flex-middle oc-flex-center">
-            <oc-icon-stub name="file-upload" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
+            <oc-icon-stub name="file-upload" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
             <translate-stub tag="span">Drop files here to upload or click to select file</translate-stub>
           </div>
         </vue-dropzone-stub>
@@ -68,7 +68,7 @@ exports[`FilesDrop when "loading" is set to false should call "dropZoneFileAdded
                 <oc-resource-size-stub size="300"></oc-resource-size-stub>
               </oc-td-stub>
               <oc-td-stub alignh="left" alignv="middle" width="shrink" class="oc-pr-rm">
-                <oc-icon-stub name="checkbox-circle" filltype="fill" accessiblelabel="" type="span" size="small" variation="success"></oc-icon-stub>
+                <oc-icon-stub name="checkbox-circle" filltype="fill" accessiblelabel="" type="span" size="small" variation="success" color=""></oc-icon-stub>
                 <!---->
                 <!---->
               </oc-td-stub>
@@ -105,7 +105,7 @@ exports[`FilesDrop when "loading" is set to false should show error message if o
         <h2>admin shared this folder with you for uploading</h2>
         <vue-dropzone-stub id="oc-dropzone" options="[object Object]" destroydropzone="true" usecustomslot="true">
           <div class="oc-flex oc-flex-middle oc-flex-center">
-            <oc-icon-stub name="file-upload" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
+            <oc-icon-stub name="file-upload" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
             <translate-stub tag="span">Drop files here to upload or click to select file</translate-stub>
           </div>
         </vue-dropzone-stub>
@@ -137,7 +137,7 @@ exports[`FilesDrop when "loading" is set to false should show files list of uplo
         <h2></h2>
         <vue-dropzone-stub id="oc-dropzone" options="[object Object]" destroydropzone="true" usecustomslot="true">
           <div class="oc-flex oc-flex-middle oc-flex-center">
-            <oc-icon-stub name="file-upload" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
+            <oc-icon-stub name="file-upload" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
             <translate-stub tag="span">Drop files here to upload or click to select file</translate-stub>
           </div>
         </vue-dropzone-stub>
@@ -153,7 +153,7 @@ exports[`FilesDrop when "loading" is set to false should show files list of uplo
               </oc-td-stub>
               <oc-td-stub alignh="left" alignv="middle" width="shrink" class="oc-pr-rm">
                 <!---->
-                <oc-icon-stub name="information" filltype="fill" accessiblelabel="" type="span" size="small" variation="danger"></oc-icon-stub>
+                <oc-icon-stub name="information" filltype="fill" accessiblelabel="" type="span" size="small" variation="danger" color=""></oc-icon-stub>
                 <!---->
               </oc-td-stub>
             </oc-tr-stub>
@@ -163,7 +163,7 @@ exports[`FilesDrop when "loading" is set to false should show files list of uplo
                 <oc-resource-size-stub size="600"></oc-resource-size-stub>
               </oc-td-stub>
               <oc-td-stub alignh="left" alignv="middle" width="shrink" class="oc-pr-rm">
-                <oc-icon-stub name="checkbox-circle" filltype="fill" accessiblelabel="" type="span" size="small" variation="success"></oc-icon-stub>
+                <oc-icon-stub name="checkbox-circle" filltype="fill" accessiblelabel="" type="span" size="small" variation="success" color=""></oc-icon-stub>
                 <!---->
                 <!---->
               </oc-td-stub>
@@ -216,7 +216,7 @@ exports[`FilesDrop when "loading" is set to false should show share information 
         <h2>admin shared this folder with you for uploading</h2>
         <vue-dropzone-stub id="oc-dropzone" options="[object Object]" destroydropzone="true" usecustomslot="true">
           <div class="oc-flex oc-flex-middle oc-flex-center">
-            <oc-icon-stub name="file-upload" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive"></oc-icon-stub>
+            <oc-icon-stub name="file-upload" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
             <translate-stub tag="span">Drop files here to upload or click to select file</translate-stub>
           </div>
         </vue-dropzone-stub>
