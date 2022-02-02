@@ -17,7 +17,7 @@ Summary
 * Enhancement - Add spaces actions: [#6254](https://github.com/owncloud/web/pull/6254)
 * Enhancement - File creation via app provider: [#5890](https://github.com/owncloud/web/pull/5890)
 * Enhancement - Redirect to IDP when opening apps from bookmark: [#6045](https://github.com/owncloud/web/issues/6045)
-* Enhancement - Darkmode theme switcher: [#6240](https://github.com/owncloud/web/pull/6240)
+* Enhancement - Darkmode theme switcher: [#6242](https://github.com/owncloud/web/issues/6242)
 * Enhancement - Drawio improvements: [#6125](https://github.com/owncloud/web/pull/6125)
 * Enhancement - File selection simplification: [#5967](https://github.com/owncloud/web/issues/5967)
 * Enhancement - Reorganize urls: [#6137](https://github.com/owncloud/web/pull/6137)
@@ -112,12 +112,15 @@ Details
    https://github.com/owncloud/web/issues/6069
    https://github.com/owncloud/web/pull/6314
 
-* Enhancement - Darkmode theme switcher: [#6240](https://github.com/owncloud/web/pull/6240)
+* Enhancement - Darkmode theme switcher: [#6242](https://github.com/owncloud/web/issues/6242)
 
    We've added a theme switcher and now initialize the user interface theme based on the user's
-   browser preferences.
+   browser preferences. It also gets saved to the localstorage of the browser so the user's
+   preference gets saved locally.
 
+   https://github.com/owncloud/web/issues/6242
    https://github.com/owncloud/web/pull/6240
+   https://github.com/owncloud/web/pull/6350
 
 * Enhancement - Drawio improvements: [#6125](https://github.com/owncloud/web/pull/6125)
 
