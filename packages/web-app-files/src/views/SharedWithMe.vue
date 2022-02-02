@@ -113,6 +113,7 @@
         :header-position="fileListHeaderY"
         :sort-by="sharesSortBy"
         :sort-dir="sharesSortDir"
+        :grouping-settings="groupingSettings"
         @fileClick="$_fileActions_triggerDefaultAction"
         @rowMounted="rowMounted"
         @sort="sharesHandleSort"
@@ -297,6 +298,53 @@ export default {
     ...mapGetters(['isOcis', 'configuration', 'getToken']),
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
+    groupingSettings() {
+      return {
+        groupingBy: 'Last modified',
+        showGroupingOptions: true,
+        groupingFunctions: {
+          'Name alphabetically': function (row) {
+            let result
+            if (!isNaN(row.name.charAt(0))) result = '#'
+            if (row.name.charAt(0) === '.') result = row.name.charAt(1).toLowerCase()
+            result = row.name.charAt(0).toLowerCase()
+            console.log('result', result)
+            return result
+          },
+          'Last modified': function (row) {
+            const recently = Date.now() - 604800000
+            const lastMonth = Date.now() - 2592000000
+            if (Date.parse(row.sdate) < lastMonth) return 'Older'
+            if (Date.parse(row.sdate) >= recently) return 'Recently'
+            else return 'Last month'
+          }
+        },
+        sortGroups: {
+          'Name alphabetically': function (groups) {
+            // sort in alphabetical order by group name
+            return groups.sort(function (a, b) {
+              if (a.name < b.name) {
+                return -1
+              }
+              if (a.name > b.name) {
+                return 1
+              }
+              return 0
+            })
+          },
+          'Last modified': function (groups) {
+            // sort in order: 1-Recently, 2-Last month, 3-Older
+            const sortedGroups = []
+            const options = ['Recently', 'Last month', 'Older']
+            for (const o of options) {
+              const found = groups.find((el) => el.name.toLowerCase() === o.toLowerCase())
+              if (found) sortedGroups.push(found)
+            }
+            return sortedGroups
+          }
+        }
+      }
+    },
     // pending shares
     pendingSelected: {
       get() {
