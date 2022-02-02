@@ -96,7 +96,6 @@ export default {
     const store = useStore()
 
     const spaceId = router.currentRoute.params.spaceId
-    console.log(spaceId)
 
     const space = ref({})
     const markdownContent = ref('')
