@@ -2,9 +2,11 @@ import { mount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import GetTextPlugin from 'vue-gettext'
 import DesignSystem from 'owncloud-design-system'
+import CompositionApi from '@vue/composition-api'
 
 import ThemeSwitcher from 'web-runtime/src/components/Topbar/ThemeSwitcher.vue'
 import stubs from '../../../../../../tests/unit/stubs'
+import { themeNameDark, themeNameLight } from '../../../../src/composables'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -13,6 +15,7 @@ localVue.use(GetTextPlugin, {
   translations: 'does-not-matter.json',
   silent: true
 })
+localVue.use(CompositionApi)
 
 const lightTheme = {
   designTokens: {
@@ -30,59 +33,57 @@ const darkTheme = {
   }
 }
 
-const spyChangeTheme = jest.spyOn(ThemeSwitcher.methods, 'changeTheme')
+const spyToggleTheme = jest.spyOn(ThemeSwitcher.methods, 'toggleTheme')
 
 describe('ThemeSwitcher component', () => {
   describe('visually', () => {
     beforeEach(() => {
+      mockDarkModePreferred(false)
+    })
+    afterEach(() => {
       jest.clearAllMocks()
     })
 
     it('renders a button, initially in light mode per default', async () => {
-      window.matchMedia = darkModePreferred(false)
       const wrapper = getWrapper()
       await wrapper.vm.$nextTick()
       expect(wrapper).toMatchSnapshot()
     })
 
-    it('renders a button, initially in dark mode if user prefers dark color sceme', async () => {
-      window.matchMedia = darkModePreferred(true)
+    it('renders a button, initially in dark mode if user prefers dark color scheme', async () => {
+      mockDarkModePreferred(true)
       const wrapper = getWrapper()
       await wrapper.vm.$nextTick()
       expect(wrapper).toMatchSnapshot()
-      // await expect(spyChangeTheme).toHaveBeenCalledTimes(1)
     })
 
     it('toggles between themes upon click', async () => {
-      window.matchMedia = darkModePreferred(false)
       const wrapper = getWrapper()
-      expect(spyChangeTheme).toHaveBeenCalledTimes(0)
+      expect(spyToggleTheme).toHaveBeenCalledTimes(0)
 
       await wrapper.find('.themeswitcher-btn').trigger('click')
       await wrapper.vm.$nextTick()
 
       expect(wrapper).toMatchSnapshot()
-      expect(spyChangeTheme).toHaveBeenCalledTimes(1)
+      expect(spyToggleTheme).toHaveBeenCalledTimes(1)
 
       await wrapper.find('.themeswitcher-btn').trigger('click')
       await wrapper.vm.$nextTick()
 
       expect(wrapper).toMatchSnapshot()
-      expect(spyChangeTheme).toHaveBeenCalledTimes(2)
+      expect(spyToggleTheme).toHaveBeenCalledTimes(2)
     })
   })
 
   describe('restores', () => {
     it('light theme if light theme is saved in localstorage', async () => {
-      window.localStorage.setItem('oc_currentTheme', JSON.stringify(lightTheme))
-      window.localStorage.setItem('oc_colorMode', 'light')
+      window.localStorage.setItem('oc_currentThemeName', themeNameLight)
       const wrapper = getWrapper()
       await wrapper.vm.$nextTick()
       expect(wrapper).toMatchSnapshot()
     })
     it('dark theme if dark theme is saved in localstorage', async () => {
-      window.localStorage.setItem('oc_currentTheme', JSON.stringify(darkTheme))
-      window.localStorage.setItem('oc_colorMode', 'dark')
+      window.localStorage.setItem('oc_currentThemeName', themeNameDark)
       const wrapper = getWrapper()
       await wrapper.vm.$nextTick()
       expect(wrapper).toMatchSnapshot()
@@ -90,15 +91,21 @@ describe('ThemeSwitcher component', () => {
   })
 })
 
-function darkModePreferred(enabled = false) {
-  return function () {
-    return {
+function mockDarkModePreferred(enabled = false) {
+  // matchMedia is not implemented in JSDOM, needs to be mocked
+  Object.defineProperty(window, 'matchMedia', {
+    writable: true,
+    value: jest.fn().mockImplementation(() => ({
       matches: enabled,
       media: "'(prefers-color-scheme: dark)'",
-      addListener: function () {},
-      removeListener: function () {}
-    }
-  }
+      onchange: null,
+      addListener: jest.fn(), // Deprecated
+      removeListener: jest.fn(), // Deprecated
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn(),
+      dispatchEvent: jest.fn()
+    }))
+  })
 }
 
 function getWrapper() {
@@ -110,13 +117,7 @@ function getWrapper() {
             default: lightTheme,
             'default-dark': darkTheme
           },
-          currentTheme: {
-            designTokens: {
-              colorPalette: {
-                'background-accentuate': 'lime'
-              }
-            }
-          }
+          currentTheme: lightTheme
         })
       },
       actions: {
