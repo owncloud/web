@@ -4,7 +4,7 @@ Feature: Autocompletion of share-with names
   So that I can efficiently share my files with other users or groups
 
   Background:
-    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
+    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no" in the server
     And the administrator has set the default folder for received shares to "Shares" in the server
     And these users have been created with default attributes and without skeleton files in the server but not initialized:
       | username    |
@@ -17,7 +17,7 @@ Feature: Autocompletion of share-with names
       | groupname |
       | finance1  |
       | finance2  |
-    And the setting "outgoing_server2server_share_enabled" of app "files_sharing" has been set to "no"
+    And the setting "outgoing_server2server_share_enabled" of app "files_sharing" has been set to "no" in the server
 
   @issue-ocis-1417
   Scenario Outline: autocompletion of user having special characters in their usernames

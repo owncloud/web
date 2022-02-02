@@ -12,7 +12,7 @@ Feature: Sharing files and folders with internal users
 
 
   Scenario: member of a blacklisted from sharing group tries to re-share a file or folder received as a share
-    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "yes"
+    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "yes" in the server
     And user "Carol" has been created with default attributes and without skeleton files in the server
     And user "Carol" has created folder "simple-folder" in the server
     And user "Carol" has uploaded file "testavatar.jpg" to "testimage.jpg" in the server

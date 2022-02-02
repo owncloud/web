@@ -47,7 +47,7 @@ Feature: Public link share management
 
   @issue-ocis-1328
   Scenario: user shares a file through public link and then it appears in a shared-with-others page
-    Given the setting "shareapi_allow_public_notification" of app "core" has been set to "yes"
+    Given the setting "shareapi_allow_public_notification" of app "core" has been set to "yes" in the server
     And user "Alice" has created a public link with following settings in the server
       | path        | simple-folder                |
       | name        | link-editor                  |

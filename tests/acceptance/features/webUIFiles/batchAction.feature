@@ -60,7 +60,7 @@ Feature: Visibility of the batch actions menu
 
 
   Scenario: View batch action menu for a folder on the shared with me page (Pending Share)
-    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
+    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no" in the server
     And the administrator has set the default folder for received shares to "Shares" in the server
     And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
     And user "Brian" has logged in using the webUI
@@ -73,7 +73,7 @@ Feature: Visibility of the batch actions menu
 
 
   Scenario: View batch action menu for a folder on the shared with me page (Accepted Share)
-    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
+    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no" in the server
     And the administrator has set the default folder for received shares to "Shares" in the server
     And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
     And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice" in the server

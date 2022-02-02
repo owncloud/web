@@ -39,7 +39,7 @@ Feature: Versions of a file
     And user "user0" has uploaded file with content "lorem" to "lorem-file.txt" in the server
     And user "user0" has uploaded file with content "new lorem content" to "lorem-file.txt" in the server
     And user "user0" has logged in using the webUI
-    And the administrator has cleared the versions for user "user0"
+    And the administrator has cleared the versions for user "user0" in the server
     When the user browses to display the "versions" details of file "lorem-file.txt"
     Then the versions list should contain 0 entries
 
@@ -51,7 +51,7 @@ Feature: Versions of a file
     And user "Alice" has uploaded file with content "lorem content" to "lorem-file.txt" in the server
     And user "Alice" has uploaded file with content "lorem" to "lorem-file.txt" in the server
     And user "user0" has logged in using the webUI
-    And the administrator has cleared the versions for user "user0"
+    And the administrator has cleared the versions for user "user0" in the server
     When the user browses to display the "versions" details of file "lorem-file.txt"
     Then the versions list should contain 0 entries
     When the user re-logs in as "Alice" using the webUI
@@ -66,7 +66,7 @@ Feature: Versions of a file
     And user "Alice" has uploaded file with content "lorem content" to "/lorem-file.txt" in the server
     And user "Alice" has uploaded file with content "lorem" to "/lorem-file.txt" in the server
     And user "user0" has logged in using the webUI
-    And the administrator has cleared the versions for all users
+    And the administrator has cleared the versions for all users in the server
     When the user browses to display the "versions" details of file "lorem-file.txt"
     Then the versions list should contain 0 entries
     When the user re-logs in as "Alice" using the webUI
@@ -75,7 +75,7 @@ Feature: Versions of a file
 
   @issue-ocis-2319
   Scenario: change the file content of a received shared file
-    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
+    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no" in the server
     And the administrator has set the default folder for received shares to "Shares" in the server
     And user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Brian" has created folder "simple-folder" in the server
@@ -91,7 +91,7 @@ Feature: Versions of a file
 
   @issue-ocis-1328 @disablePreviews
   Scenario: sharee can see the versions of a file
-    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "yes"
+    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "yes" in the server
     And user "user0" has uploaded file with content "lorem content" to "lorem-file.txt" in the server
     And user "user0" has uploaded file with content "lorem" to "lorem-file.txt" in the server
     And user "user0" has uploaded file with content "new lorem content" to "lorem-file.txt" in the server

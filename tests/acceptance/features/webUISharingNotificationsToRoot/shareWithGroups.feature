@@ -22,7 +22,7 @@ Feature: Sharing files and folders with internal groups
     And user "Carol" has uploaded file "lorem.txt" to "simple-folder/lorem.txt" in the server
 
   Scenario: notifications about new share is displayed
-    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
+    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no" in the server
     And user "Carol" has shared folder "/simple-folder" with group "grp1" in the server
     And user "Carol" has shared folder "/data.zip" with group "grp1" in the server
     When the user reloads the current page of the webUI

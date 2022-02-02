@@ -4,7 +4,7 @@ Feature: copy files and folders
   So that I can work safely on a copy without changing the original
 
   Background:
-    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
+    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no" in the server
     And the administrator has set the default folder for received shares to "Shares" in the server
     And user "Alice" has been created with default attributes and without skeleton files in the server
 

@@ -9,7 +9,7 @@ Feature: Edit public link shares
 
   @issue-ocis-1328
   Scenario Outline: user tries to change the role of an existing public link role without entering share password while enforce password for that role is enforced
-    Given the setting "<setting-name>" of app "core" has been set to "yes"
+    Given the setting "<setting-name>" of app "core" has been set to "yes" in the server
     And user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has created a public link with following settings in the server
       | path        | simple-folder         |
@@ -34,7 +34,7 @@ Feature: Edit public link shares
 
   @issue-ocis-1328
   Scenario Outline: user tries to delete the password of an existing public link role while enforce password for that role is enforced
-    Given the setting "<setting-name>" of app "core" has been set to "yes"
+    Given the setting "<setting-name>" of app "core" has been set to "yes" in the server
     And user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has created a public link with following settings in the server
       | path        | simple-folder         |
@@ -60,7 +60,7 @@ Feature: Edit public link shares
 
   @issue-ocis-1328
   Scenario Outline: user changes the role of an existing public link role without entering share password while enforce password for the original role is enforced
-    Given the setting "<setting-name>" of app "core" has been set to "yes"
+    Given the setting "<setting-name>" of app "core" has been set to "yes" in the server
     And user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has created a public link with following settings in the server
       | path        | simple-folder         |
@@ -86,7 +86,7 @@ Feature: Edit public link shares
 
   @issue-ocis-1328
   Scenario: user edits a public link and does not save the changes
-    Given the setting "shareapi_allow_public_notification" of app "core" has been set to "yes"
+    Given the setting "shareapi_allow_public_notification" of app "core" has been set to "yes" in the server
     And user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has created a public link with following settings in the server
       | path     | simple-folder    |

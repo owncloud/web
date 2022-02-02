@@ -137,7 +137,7 @@ Feature: move files
 
   @issue-ocis-873
   Scenario: sharee moves a file shared by sharer into another folder
-    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
+    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no" in the server
     And the administrator has set the default folder for received shares to "Shares" in the server
     And user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Alice" has uploaded file with content "test content" to "simple-folder/testFile.txt" in the server

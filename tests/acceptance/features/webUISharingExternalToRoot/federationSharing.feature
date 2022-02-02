@@ -71,7 +71,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
 
   @issue-2510
   Scenario: automatically accept a federation share when it is allowed by the config
-    Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes"
+    Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes" in the server
     And user "Alice" has created folder "simple-folder" on remote server
     And user "Alice" has created file "simple-folder/lorem.txt" on remote server
     And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server in the server
@@ -109,7 +109,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
 
   @issue-3309
   Scenario: overwrite a file in a received share - remote server shares - local server receives
-    Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes"
+    Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes" in the server
     And user "Alice" has created folder "simple-folder" on remote server
     And user "Alice" has created file "simple-folder/lorem.txt" on remote server
     And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server in the server
@@ -120,7 +120,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
 
   @issue-3309
   Scenario: upload a new file in a received share - remote server shares - local server receives
-    Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes"
+    Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes" in the server
     And user "Alice" has created folder "simple-folder" on remote server
     And user "Alice" has created file "simple-folder/lorem.txt" on remote server
     And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server in the server
@@ -131,7 +131,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
 
   @issue-3309
   Scenario: rename a file in a received share - remote server shares - local server receives
-    Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes"
+    Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes" in the server
     And user "Alice" has created folder "simple-folder" on remote server
     And user "Alice" has created file "simple-folder/lorem.txt" on remote server
     And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server in the server
@@ -143,7 +143,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
 
   @issue-3309
   Scenario: delete a file in a received share - remote server shares - local server receives
-    Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes"
+    Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes" in the server
     And user "Alice" has created folder "simple-folder" on remote server
     And user "Alice" has created file "simple-folder/lorem.txt" on remote server
     And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server in the server
@@ -154,7 +154,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
 
 
   Scenario: unshare a federation share
-    Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes"
+    Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes" in the server
     And user "Alice" has created file "lorem.txt" on remote server
     And user "Alice" from remote server has shared "lorem.txt" with user "Alice" from local server in the server
     When the user reloads the current page of the webUI
@@ -178,7 +178,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
 
 
   Scenario: test resharing folder with "Viewer" role
-    Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes"
+    Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes" in the server
     And user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created folder "simple-folder" on remote server
     And user "Alice" has created file "simple-folder/lorem.txt" on remote server
@@ -195,7 +195,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
 
 
   Scenario: test resharing a federated server to remote again
-    Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes"
+    Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes" in the server
     And user "Brian" has been created with default attributes and without skeleton files on remote server
     And user "Alice" has created folder "simple-folder" on remote server
     And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server with "read, share" permissions in the server
@@ -211,7 +211,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
 
 
   Scenario: try resharing a folder with read-only permissions
-    Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes"
+    Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes" in the server
     And user "Alice" has created folder "simple-folder" on remote server
     And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server with "read" permissions in the server
     When the user reloads the current page of the webUI
@@ -226,7 +226,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
 
 
   Scenario: sharee should be able to access the files/folders inside other folder
-    Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes"
+    Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes" in the server
     And user "Alice" has created folder "'single'quotes" on remote server
     And user "Alice" has created folder "'single'quotes/simple-empty-folder" on remote server
     And user "Alice" has uploaded file "lorem.txt" to "'single'quotes/lorem.txt" on remote server
@@ -249,7 +249,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
 
 
   Scenario: uploading a file inside a folder of a folder
-    Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes"
+    Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes" in the server
     And user "Alice" has created folder "simple-folder" on remote server
     And user "Alice" has created folder "simple-folder/simple-empty-folder" on remote server
     And user "Alice" from remote server has shared "simple-folder" with user "Alice" from local server in the server
@@ -261,7 +261,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
 
 
   Scenario: rename a file in a folder inside a shared folder
-    Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes"
+    Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes" in the server
     And user "Alice" has created folder "'single'quotes" on remote server
     And user "Alice" has created folder "'single'quotes/simple-empty-folder" on remote server
     And user "Alice" has created file "'single'quotes/simple-empty-folder/for-git-commit" on remote server
@@ -277,7 +277,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
 
 
   Scenario: delete a file in a folder inside a shared folder
-    Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes"
+    Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes" in the server
     And user "Alice" has created folder "'single'quotes" on remote server
     And user "Alice" has created folder "'single'quotes/simple-empty-folder" on remote server
     And user "Alice" has created file "'single'quotes/simple-empty-folder/for-git-commit" on remote server

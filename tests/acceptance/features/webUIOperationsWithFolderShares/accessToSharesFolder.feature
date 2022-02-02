@@ -5,7 +5,7 @@ Feature: Upload into a folder Shares
   The folder "Shares" in ownCloud10 is a folder in which you can download or save files
 
   Background:
-    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
+    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no" in the server
     And the administrator has set the default folder for received shares to "Shares" in the server
     And user "Alice" has been created with default attributes and without skeleton files in the server
     And user "Brian" has been created with default attributes and without skeleton files in the server
