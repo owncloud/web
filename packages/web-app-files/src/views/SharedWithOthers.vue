@@ -149,19 +149,17 @@ export default {
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
     groupingSettings() {
+      const that = this
       return {
-        groupingBy: 'Last modified',
+        groupingBy: 'Shared on',
         showGroupingOptions: true,
         groupingFunctions: {
           'Name alphabetically': function (row) {
-            let result
-            if (!isNaN(row.name.charAt(0))) result = '#'
-            if (row.name.charAt(0) === '.') result = row.name.charAt(1).toLowerCase()
-            result = row.name.charAt(0).toLowerCase()
-            console.log('result', result)
-            return result
+            if (!isNaN(row.name.charAt(0))) return '#'
+            if (row.name.charAt(0) === '.') return row.name.charAt(1).toLowerCase()
+            return row.name.charAt(0).toLowerCase()
           },
-          'Last modified': function (row) {
+          'Shared on': function (row) {
             const recently = Date.now() - 604800000
             const lastMonth = Date.now() - 2592000000
             if (Date.parse(row.sdate) < lastMonth) return 'Older'
@@ -172,7 +170,7 @@ export default {
         sortGroups: {
           'Name alphabetically': function (groups) {
             // sort in alphabetical order by group name
-            return groups.sort(function (a, b) {
+            const sortedGroups = groups.sort(function (a, b) {
               if (a.name < b.name) {
                 return -1
               }
@@ -181,8 +179,11 @@ export default {
               }
               return 0
             })
+            // if sorting is done by name, reverse groups depending on asc/desc
+            if (that.sortBy === 'name' && that.sortDir === 'desc') sortedGroups.reverse()
+            return sortedGroups
           },
-          'Last modified': function (groups) {
+          'Shared on': function (groups) {
             // sort in order: 1-Recently, 2-Last month, 3-Older
             const sortedGroups = []
             const options = ['Recently', 'Last month', 'Older']
@@ -190,6 +191,8 @@ export default {
               const found = groups.find((el) => el.name.toLowerCase() === o.toLowerCase())
               if (found) sortedGroups.push(found)
             }
+            // if sorting is done by sdate, reverse groups depending on asc/desc
+            if (that.sortBy === 'sdate' && that.sortDir === 'asc') sortedGroups.reverse()
             return sortedGroups
           }
         }
