@@ -96,7 +96,6 @@ config = {
                     "webUISharingFilePermissionMultipleUsers",
                     "webUISharingFilePermissionsGroups",
                 ],
-                "webUISharingFolderAdvancedPermissionsGroups": "oC10SharingFolderAdvPermsGrp",
                 "oC10SharingFolderPermissions": [
                     "webUISharingFolderPermissionMultipleUsers",
                     "webUISharingFolderPermissionsGroups",
@@ -153,6 +152,21 @@ config = {
             },
             "visualTesting": False,
             "screenShots": True,
+        },
+        # These suites have all or most of their scenarios expected to fail.
+        # Eliminate wasted CI time by not retrying the failing scenarios.
+        "webUINoRetry": {
+            "type": FULL,
+            "suites": {
+                "webUISharingFolderAdvancedPermissionsGroups": "oC10SharingFolderAdvPermsGrp",
+            },
+            "extraEnvironment": {
+                "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
+                "WEB_UI_CONFIG": "%s/dist/config.json" % dir["web"],
+            },
+            "visualTesting": False,
+            "screenShots": True,
+            "retry": False,
         },
         "webUINotification": {
             "type": NOTIFICATIONS,
@@ -412,7 +426,6 @@ config = {
                 "oCISSharingInternal1": [
                     "webUISharingInternalGroups",
                     "webUISharingInternalGroupsEdgeCases",
-                    "webUISharingAutocompletion",
                 ],
                 "oCISSharingInternal2": [
                     "webUISharingInternalUsers",
@@ -426,6 +439,9 @@ config = {
                     "webUISharingInternalUsersShareWithPage",
                     "webUIResharing1",
                     "webUIOperationsWithFolderShares",
+                ],
+                "oCISSharingAutocompletion": [
+                    "webUISharingAutocompletion",
                 ],
                 "oCISSharingPerm1": [
                     "webUISharingPermissionsUsers",
@@ -1226,6 +1242,7 @@ def acceptance(ctx):
         "skip": False,
         "debugSuites": [],
         "earlyFail": True,
+        "retry": True,
     }
 
     if "defaults" in config:
@@ -1353,7 +1370,7 @@ def acceptance(ctx):
                         steps += waitForMiddlewareService()
 
                         # run the acceptance tests
-                        steps += runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, params["filterTags"], params["extraEnvironment"], browser, params["visualTesting"], params["screenShots"])
+                        steps += runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, params["filterTags"], params["extraEnvironment"], browser, params["visualTesting"], params["screenShots"], params["retry"])
 
                         # capture the screenshots from visual regression testing (only runs on failure)
                         if (params["visualTesting"]):
@@ -2332,7 +2349,7 @@ def copyFilesForUpload():
         ],
     }]
 
-def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnvironment, browser, visualTesting, screenShots):
+def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnvironment, browser, visualTesting, screenShots, retry):
     environment = {}
     if (filterTags != ""):
         environment["TEST_TAGS"] = filterTags
@@ -2357,7 +2374,7 @@ def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnv
             "from_secret": "sauce_access_key",
         }
 
-    if ctx.build.event == "cron":
+    if (ctx.build.event == "cron") or (not retry):
         environment["RERUN_FAILED_WEBUI_SCENARIOS"] = "false"
     if (visualTesting):
         environment["VISUAL_TEST"] = "true"
