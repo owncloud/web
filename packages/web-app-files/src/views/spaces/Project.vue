@@ -3,8 +3,8 @@
     <list-loader v-if="loadSpaceTask.isRunning" />
     <template v-else>
       <not-found-message v-if="!space.id" class="files-not-found oc-height-1-1" />
-      <div v-else class="oc-grid oc-grid-match oc-child-width-1-3@s">
-        <div>
+      <div v-else-if="isSpaceRoot" class="oc-grid oc-grid-match oc-child-width-1-3@s">
+        <div v-if="imageContent">
           <img
             class="space-overview-image"
             alt=""
@@ -243,6 +243,9 @@ export default {
       set(resources) {
         this.SET_FILE_SELECTION(resources)
       }
+    },
+    isSpaceRoot() {
+      return !this.$route.params.item
     },
     isEmpty() {
       return this.paginatedResources.length < 1

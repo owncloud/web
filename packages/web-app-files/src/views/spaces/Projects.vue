@@ -117,13 +117,14 @@ import { bus } from 'web-pkg/src/instance'
 import { mapMutations, mapActions } from 'vuex'
 import Rename from '../../mixins/spaces/actions/rename'
 import Delete from '../../mixins/spaces/actions/delete'
+import EditDescription from '../../mixins/spaces/actions/editDescription'
 
 export default {
   components: {
     NoContentMessage,
     ListLoader
   },
-  mixins: [Rename, Delete],
+  mixins: [Rename, Delete, EditDescription],
   setup() {
     const store = useStore()
     const spaces = ref([])
@@ -183,7 +184,11 @@ export default {
       return true
     },
     contextMenuActions() {
-      return [...this.$_rename_items, ...this.$_delete_items].filter((item) => item.isEnabled())
+      return [
+        ...this.$_rename_items,
+        ...this.$_editDescription_items,
+        ...this.$_delete_items
+      ].filter((item) => item.isEnabled())
     }
   },
   mounted() {
