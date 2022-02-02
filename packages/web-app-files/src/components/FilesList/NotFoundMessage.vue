@@ -20,7 +20,7 @@
         appearance="raw"
         :to="spacesRoute"
       >
-        <translate>Go to »Spaces«</translate>
+        <translate>Go to »Spaces Overview«</translate>
       </oc-button>
       <oc-button
         v-if="showHomeButton"
