@@ -10,7 +10,8 @@ const defaultOptions = {
   token: 'rules',
   resource: {
     id: 'id',
-    path: 'path'
+    path: 'path',
+    webDavPath: 'path'
   }
 }
 
