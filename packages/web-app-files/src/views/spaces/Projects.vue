@@ -119,13 +119,14 @@ import Rename from '../../mixins/spaces/actions/rename'
 import Delete from '../../mixins/spaces/actions/delete'
 import Disable from '../../mixins/spaces/actions/disable'
 import EditDescription from '../../mixins/spaces/actions/editDescription'
+import ShowDetails from '../../mixins/spaces/actions/showDetails'
 
 export default {
   components: {
     NoContentMessage,
     ListLoader
   },
-  mixins: [Rename, Delete, EditDescription, Disable],
+  mixins: [Rename, Delete, EditDescription, Disable, ShowDetails],
   setup() {
     const store = useStore()
     const spaces = ref([])
@@ -202,6 +203,7 @@ export default {
       return [
         ...this.$_rename_items,
         ...this.$_editDescription_items,
+        ...this.$_showDetails_items,
         ...this.$_delete_items,
         ...this.$_disable_items
       ].filter((item) => item.isEnabled(space))
