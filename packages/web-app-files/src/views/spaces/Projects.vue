@@ -47,7 +47,7 @@
             <div class="spaces-list-card oc-border oc-card oc-card-default">
               <div class="oc-card-media-top oc-border-b">
                 <oc-button
-                  :id="`space-context-btn-${space.id}`"
+                  :id="`space-context-btn-${sanitizeSpaceId(space.id)}`"
                   v-oc-tooltip="$gettext('Show context menu')"
                   :aria-label="$gettext('Show context menu')"
                   class="oc-position-absolute oc-position-top-right oc-mr-s oc-mt-s"
@@ -65,7 +65,7 @@
                 >
                   <ul class="oc-list oc-files-context-actions">
                     <li
-                      v-for="(action, actionIndex) in contextMenuActions"
+                      v-for="(action, actionIndex) in getContextMenuActions(space)"
                       :key="`action-${actionIndex}`"
                       class="oc-spaces-context-action oc-py-xs oc-px-s"
                     >
@@ -117,6 +117,7 @@ import { bus } from 'web-pkg/src/instance'
 import { mapMutations, mapActions } from 'vuex'
 import Rename from '../../mixins/spaces/actions/rename'
 import Delete from '../../mixins/spaces/actions/delete'
+import Disable from '../../mixins/spaces/actions/disable'
 import EditDescription from '../../mixins/spaces/actions/editDescription'
 
 export default {
@@ -124,7 +125,7 @@ export default {
     NoContentMessage,
     ListLoader
   },
-  mixins: [Rename, Delete, EditDescription],
+  mixins: [Rename, Delete, EditDescription, Disable],
   setup() {
     const store = useStore()
     const spaces = ref([])
@@ -182,13 +183,6 @@ export default {
     hasCreatePermission() {
       // @TODO
       return true
-    },
-    contextMenuActions() {
-      return [
-        ...this.$_rename_items,
-        ...this.$_editDescription_items,
-        ...this.$_delete_items
-      ].filter((item) => item.isEnabled())
     }
   },
   mounted() {
@@ -203,6 +197,15 @@ export default {
   methods: {
     ...mapActions(['createModal', 'hideModal', 'setModalInputErrorMessage']),
     ...mapMutations('Files', ['SET_CURRENT_FOLDER']),
+
+    getContextMenuActions(space) {
+      return [
+        ...this.$_rename_items,
+        ...this.$_editDescription_items,
+        ...this.$_delete_items,
+        ...this.$_disable_items
+      ].filter((item) => item.isEnabled(space))
+    },
 
     getSpaceProjectRoute({ id, name }) {
       return createLocationSpaces('files-spaces-project', {
@@ -252,7 +255,7 @@ export default {
     },
 
     sanitizeSpaceId(id) {
-      return id.replace('!', '\\!')
+      return id.replace('!', '\\!').split('.')[0]
     }
   }
 }
