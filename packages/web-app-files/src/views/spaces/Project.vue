@@ -39,6 +39,9 @@
         class="files-table oc-mt-xl"
         :resources="paginatedResources"
         :target-route="resourceTargetLocation"
+        :sort-by="sortBy"
+        :sort-dir="sortDir"
+        @sort="handleSort"
         @fileClick="$_fileActions_triggerDefaultAction"
       >
         <template #contextMenu="{ resource }">
