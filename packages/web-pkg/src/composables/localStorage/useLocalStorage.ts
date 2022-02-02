@@ -1,7 +1,7 @@
 import { ref, watch, unref } from '@vue/composition-api'
 
 export const useLocalStorage = (key: string, defaultValue: any = undefined): any => {
-  const existingValue = localStorage.getItem(key)
+  const existingValue = window.localStorage.getItem(key)
   const variable = ref(defaultValue)
 
   if (existingValue) {
@@ -19,9 +19,9 @@ export const useLocalStorage = (key: string, defaultValue: any = undefined): any
         return
       }
       if (val !== undefined) {
-        localStorage.setItem(key, JSON.stringify(val))
+        window.localStorage.setItem(key, typeof val === 'string' ? val : JSON.stringify(val))
       } else {
-        localStorage.removeItem(key)
+        window.localStorage.removeItem(key)
       }
     },
     { deep: true }
