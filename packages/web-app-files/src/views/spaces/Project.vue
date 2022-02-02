@@ -43,6 +43,7 @@
         :sort-dir="sortDir"
         @sort="handleSort"
         @fileClick="$_fileActions_triggerDefaultAction"
+        @rowMounted="rowMounted"
       >
         <template #contextMenu="{ resource }">
           <context-actions v-if="isResourceInSelection(resource)" :items="selected" />
@@ -82,6 +83,11 @@ import ListInfo from '../../components/FilesList/ListInfo.vue'
 import Pagination from '../../components/FilesList/Pagination.vue'
 import ContextActions from '../../components/FilesList/ContextActions.vue'
 import MixinFileActions from '../../mixins/fileActions'
+import { ImageDimension, ImageType } from '../../constants'
+import debounce from 'lodash-es/debounce'
+import { VisibilityObserver } from 'web-pkg/src/observer'
+
+const visibilityObserver = new VisibilityObserver()
 
 export default {
   components: {
@@ -249,6 +255,9 @@ export default {
       return this.markdownCollapsed === true
         ? this.$gettext('Show more')
         : this.$gettext('Show less')
+    },
+    displayThumbnails() {
+      return !this.configuration.options.disablePreviews
     }
   },
   watch: {
@@ -277,6 +286,7 @@ export default {
     this.$on('beforeDestroy', () => bus.unsubscribe('app.files.list.load', loadSpaceEventToken))
   },
   beforeDestroy() {
+    visibilityObserver.disconnect()
     this.markdownResizeObserver.unobserve(this.$refs.markdownContainer)
   },
   methods: {
@@ -290,7 +300,23 @@ export default {
       'SET_FILE_SELECTION',
       'REMOVE_FILE_SELECTION'
     ]),
+    rowMounted(resource, component) {
+      if (!this.displayThumbnails) {
+        return
+      }
 
+      const debounced = debounce(({ unobserve }) => {
+        unobserve()
+        this.loadPreview({
+          resource,
+          isPublic: false,
+          dimensions: ImageDimension.Thumbnail,
+          type: ImageType.Thumbnail
+        })
+      }, 250)
+
+      visibilityObserver.observe(component.$el, { onEnter: debounced, onExit: debounced.cancel })
+    },
     toggleCollapseMarkdown() {
       this.markdownCollapsed = !this.markdownCollapsed
       return this.$refs.markdownContainer.classList.toggle(this.markdownContainerCollapsedClass)
