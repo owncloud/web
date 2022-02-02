@@ -16,6 +16,7 @@ const createAuthHeader = function (userId) {
     Authorization: 'Basic ' + Buffer.from(userId + ':' + password).toString('base64')
   }
 }
+
 /**
  *
  * @param {string} userId
@@ -28,6 +29,7 @@ const createOCSRequestHeaders = function (userId) {
     'OCS-APIREQUEST': true
   }
 }
+
 /**
  *
  * @param {node-fetch.Response} response
@@ -103,36 +105,15 @@ const requestOCSEndpoint = function (path, params, userId = 'admin', header = {}
 }
 
 module.exports = {
-  createAuthHeader,
-  createOCSRequestHeaders,
   checkStatus,
   checkOCSStatus,
-  requestEndpoint,
-  requestOCSEndpoint,
   // ocs request methods
   getOCS: (url, userId, body, header) =>
     requestOCSEndpoint(url, { body, method: 'GET' }, userId, header),
-  putOCS: (url, userId, body, header) =>
-    requestOCSEndpoint(url, { body, method: 'PUT' }, userId, header),
   postOCS: (url, userId, body, header) =>
     requestOCSEndpoint(url, { body, method: 'POST' }, userId, header),
   deleteOCS: (url, userId, body, header) =>
     requestOCSEndpoint(url, { body, method: 'DELETE' }, userId, header),
-  // dav request methods
-  get: (url, userId, body, header) => requestEndpoint(url, { body, method: 'GET' }, userId, header),
-  put: (url, userId, body, header) => requestEndpoint(url, { body, method: 'PUT' }, userId, header),
-  delete: (url, userId, body, header) =>
-    requestEndpoint(url, { body, method: 'DELETE' }, userId, header),
-  move: (url, userId, body, header) =>
-    requestEndpoint(url, { body, method: 'MOVE' }, userId, header),
-  mkcol: (url, userId, body, header) =>
-    requestEndpoint(url, { body, method: 'MKCOL' }, userId, header),
   propfind: (url, userId, body, header) =>
-    requestEndpoint(url, { body, method: 'PROPFIND' }, userId, header),
-  report: (url, userId, body, header) =>
-    requestEndpoint(url, { body, method: 'REPORT' }, userId, header),
-  proppatch: (url, userId, body, header) =>
-    requestEndpoint(url, { body, method: 'PROPPATCH' }, userId, header),
-  lock: (url, userId, body, header) =>
-    requestEndpoint(url, { body, method: 'LOCK' }, userId, header)
+    requestEndpoint(url, { body, method: 'PROPFIND' }, userId, header)
 }

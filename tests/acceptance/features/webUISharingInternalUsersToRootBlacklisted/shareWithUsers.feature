@@ -20,8 +20,8 @@ Feature: Sharing files and folders with internal users
     And user "Alice" has been added to group "grp1" in the server
     And user "Carol" has shared file "testimage.jpg" with user "Alice" in the server
     And user "Carol" has shared folder "simple-folder" with user "Alice" in the server
-    And the administrator has enabled exclude groups from sharing
-    And the administrator has excluded group "grp1" from sharing
+    And the administrator has enabled exclude groups from sharing in the server
+    And the administrator has excluded group "grp1" from sharing in the server
     When user "Alice" logs in using the webUI
     Then the user should not be able to share file "testimage.jpg" using the webUI
     And the user should not be able to share folder "simple-folder" using the webUI
@@ -34,8 +34,8 @@ Feature: Sharing files and folders with internal users
     And group "grp1" has been created in the server
     And user "Alice" has been added to group "grp1" in the server
     And user "Carol" has shared folder "common" with user "Alice" in the server
-    And the administrator has enabled exclude groups from sharing
-    And the administrator has excluded group "grp1" from sharing
+    And the administrator has enabled exclude groups from sharing in the server
+    And the administrator has excluded group "grp1" from sharing in the server
     And user "Alice" has logged in using the webUI
     When the user browses to the folder "common" on the files page
     Then the user should not be able to share file "testimage.jpg" using the webUI
@@ -48,8 +48,8 @@ Feature: Sharing files and folders with internal users
     And group "grp1" has been created in the server
     And user "Alice" has been added to group "grp1" in the server
     And user "Carol" has shared folder "common" with user "Alice" in the server
-    And the administrator has enabled exclude groups from sharing
-    And the administrator has excluded group "grp1" from sharing
+    And the administrator has enabled exclude groups from sharing in the server
+    And the administrator has excluded group "grp1" from sharing in the server
     And user "Alice" has logged in using the webUI
     When the user browses to the folder "common" on the files page
     Then the user should not be able to share folder "inside-common" using the webUI
@@ -60,8 +60,8 @@ Feature: Sharing files and folders with internal users
     And user "Alice" has uploaded file "testavatar.jpg" to "testimage.jpg" in the server
     And group "grp1" has been created in the server
     And user "Alice" has been added to group "grp1" in the server
-    And the administrator has enabled exclude groups from sharing
-    And the administrator has excluded group "grp1" from sharing
+    And the administrator has enabled exclude groups from sharing in the server
+    And the administrator has excluded group "grp1" from sharing in the server
     When user "Alice" logs in using the webUI
     Then the user should not be able to share file "testimage.jpg" using the webUI
     And the user should not be able to share folder "simple-folder" using the webUI
@@ -72,8 +72,8 @@ Feature: Sharing files and folders with internal users
     And group "grp1" has been created in the server
     And user "Alice" has been added to group "grp1" in the server
     And user "Brian" has shared file "/testimage.jpg" with user "Alice" in the server
-    And the administrator has enabled exclude groups from sharing
-    And the administrator has excluded group "grp1" from sharing
+    And the administrator has enabled exclude groups from sharing in the server
+    And the administrator has excluded group "grp1" from sharing in the server
     And user "Alice" has logged in using the webUI
     When the user browses to the shared-with-me page
     And the user opens the share dialog for file "testimage.jpg" using the webUI

@@ -1,11 +1,10 @@
 const { client } = require('nightwatch-api')
-const { When, Given, Then } = require('@cucumber/cucumber')
+const { When, Then } = require('@cucumber/cucumber')
 const assert = require('assert')
 require('url-search-params-polyfill')
 const userSettings = require('../helpers/userSettings')
 const sharingHelper = require('../helpers/sharingHelper')
 const { SHARE_STATE } = require('../helpers/sharingHelper')
-const { runOcc } = require('../helpers/occHelper')
 const _ = require('lodash')
 const util = require('util')
 const { COLLABORATOR_PERMISSION_ARRAY, calculateDate } = require('../helpers/sharingHelper')
@@ -264,30 +263,6 @@ const checkCollaboratorsExpirationDate = async function (collaborator, resource,
   await api.filesList().openSharingDialog(resource)
   return api.sharingDialog().checkExpirationDate(collaborator, value)
 }
-
-Given('the administrator has enabled exclude groups from sharing', function () {
-  return runOcc(['config:app:set core shareapi_exclude_groups --value=yes'])
-})
-
-Given('the administrator has excluded group {string} from sharing', async function (group) {
-  const configList = await runOcc(['config:list'])
-  const config = _.get(configList, 'ocs.data.stdOut')
-  const configParsed = JSON.parse(config)
-  const initialExcludedGroup = JSON.parse(
-    _.get(configParsed, 'apps.core.shareapi_exclude_groups_list') || '[]'
-  )
-  if (!initialExcludedGroup.includes(group)) {
-    initialExcludedGroup.push(group)
-    const resultGroupList = initialExcludedGroup.map((res) => '"' + res + '"')
-    const resultToString = resultGroupList.join(',')
-    return runOcc([
-      'config:app:set',
-      'core',
-      'shareapi_exclude_groups_list',
-      '--value=[' + resultToString + ']'
-    ])
-  }
-})
 
 When('the user types {string} in the share-with-field', async function (input) {
   return await client.page.FilesPageElement.sharingDialog().enterAutoComplete(input)
