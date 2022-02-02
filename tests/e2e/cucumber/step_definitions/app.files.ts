@@ -253,10 +253,11 @@ Then(
   async function (this: World, stepUser: string, resource: string, countOfVersion: number) {
     const actor = this.actorsEnvironment.getActor({ id: stepUser })
     const { allFiles: allFilesPage } = new FilesPage({ actor })
+    const { versions: versionPage } = new FilesPage({ actor })
 
     // skipped in Oc10, since the version number in Oc10 is no more than 1
     if (config.ocis) {
-      await expect(await allFilesPage.numberOfVersions({ resource })).toEqual(countOfVersion)
+      await expect(await versionPage.numberOfVersions({ resource })).toEqual(countOfVersion)
     }
     await allFilesPage.navigate()
   }
