@@ -118,6 +118,7 @@ import { mapMutations, mapActions } from 'vuex'
 import Rename from '../../mixins/spaces/actions/rename'
 import Delete from '../../mixins/spaces/actions/delete'
 import Disable from '../../mixins/spaces/actions/disable'
+import Restore from '../../mixins/spaces/actions/restore'
 import EditDescription from '../../mixins/spaces/actions/editDescription'
 import ShowDetails from '../../mixins/spaces/actions/showDetails'
 
@@ -126,7 +127,7 @@ export default {
     NoContentMessage,
     ListLoader
   },
-  mixins: [Rename, Delete, EditDescription, Disable, ShowDetails],
+  mixins: [Rename, Delete, EditDescription, Disable, ShowDetails, Restore],
   setup() {
     const store = useStore()
     const spaces = ref([])
@@ -204,6 +205,7 @@ export default {
         ...this.$_rename_items,
         ...this.$_editDescription_items,
         ...this.$_showDetails_items,
+        ...this.$_restore_items,
         ...this.$_delete_items,
         ...this.$_disable_items
       ].filter((item) => item.isEnabled(space))
