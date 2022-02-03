@@ -12,7 +12,7 @@
           />
         </div>
         <div>
-          <h3 class="oc-mb-s">{{ space.name }}</h3>
+          <h3 class="space-overview-name oc-mb-s">{{ space.name }}</h3>
           <span v-if="space.description">{{ space.description }}</span>
           <div>
             <div ref="markdownContainer" class="markdown-container" v-html="markdownContent"></div>
@@ -358,6 +358,13 @@ export default {
   &-image {
     border-radius: 10px;
     max-height: 250px;
+  }
+
+  &-name {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   .markdown-container * {
