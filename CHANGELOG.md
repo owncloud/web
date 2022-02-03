@@ -242,8 +242,10 @@ Details
 
    - Change - Drop Internet Explorer support:
    https://github.com/owncloud/owncloud-design-system/pull/1909 - Change - Do not sort in
-   OcTable: https://github.com/owncloud/owncloud-design-system/pull/1825 - Change -
-   Remove OcAppSideBar component:
+   OcTable: https://github.com/owncloud/owncloud-design-system/pull/1825 - Change - Pass
+   folderLink to OcResource component:
+   https://github.com/owncloud/owncloud-design-system/pull/1913 - Change - Remove
+   OcAppSideBar component:
    https://github.com/owncloud/owncloud-design-system/pull/1810 - Change - Remove
    OcAppBar component: https://github.com/owncloud/owncloud-design-system/pull/1810 -
    Change - Remove implicit ODS registration:
@@ -277,7 +279,8 @@ Details
    - Enhancement - OcTable header alignment:
    https://github.com/owncloud/owncloud-design-system/pull/1922 - Enhancement - Use
    Roboto font: https://github.com/owncloud/owncloud-design-system/pull/1876 - Bugfix -
-   OcNotification positioning:
+   Missing OcDrop shadow: https://github.com/owncloud/owncloud-design-system/pull/1926
+   - Bugfix - OcNotification positioning:
    https://github.com/owncloud/owncloud-design-system/pull/1658 - Bugfix - Rename
    GhostElement: https://github.com/owncloud/owncloud-design-system/pull/1845 - Bugfix
    - OcTooltip isn't reactive:
@@ -291,6 +294,7 @@ Details
    https://github.com/owncloud/web/pull/6295
    https://github.com/owncloud/web/pull/6360
    https://github.com/owncloud/owncloud-design-system/releases/tag/v12.0.0-alpha19
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v12.0.0-alpha22
 
 * Enhancement - Update SDK: [#6309](https://github.com/owncloud/web/pull/6309)
 
