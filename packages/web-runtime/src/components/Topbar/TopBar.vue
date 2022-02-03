@@ -4,7 +4,7 @@
     class="oc-flex oc-flex-middle oc-flex-between oc-px-m"
     :aria-label="$gettext('Top bar')"
   >
-    <div class="topbar-gap oc-flex oc-flex-middle oc-flex-between">
+    <div class="topbar-gap-left oc-flex oc-flex-middle oc-flex-between">
       <applications-menu v-if="appMenuItems.length" :applications-list="appMenuItems" />
       <router-link ref="navigationSidebarLogo" to="/">
         <oc-img :src="logoImage" :alt="sidebarLogoAlt" />
@@ -13,7 +13,7 @@
     <div class="portal-wrapper">
       <portal-target name="app.runtime.header" multiple></portal-target>
     </div>
-    <div class="topbar-gap oc-flex oc-flex-middle oc-flex-between">
+    <div class="topbar-gap-right oc-flex oc-flex-middle oc-flex-between">
       <theme-switcher v-if="darkThemeAvailable" />
       <feedback-link v-if="isFeedbackLinkEnabled" />
       <notifications v-if="isNotificationBellEnabled" />
@@ -107,11 +107,15 @@ export default {
     image-rendering: -webkit-optimize-contrast;
     user-select: none;
   }
-  .topbar-gap {
+  .topbar-gap-left {
     gap: 30px;
   }
+  .topbar-gap-right {
+    gap: 20px;
+  }
   @media only screen and (max-width: 960px) {
-    .topbar-gap {
+    .topbar-gap-left,
+    .topbar-gap-right {
       gap: 0.5rem;
     }
   }
