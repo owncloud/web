@@ -20,7 +20,7 @@ exports[`Trashbin View when the view is not loading anymore when length of the p
     <tr tabindex="-1" data-item-id="file-id-1234" draggable="false" class="oc-tbody-tr oc-tbody-tr-file-id-1234">
       <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-table-data-cell oc-table-data-cell-select oc-pl-m "><span><input id="resource-table-select-file-id-1234" type="checkbox" name="checkbox" class="oc-checkbox oc-checkbox-l" value="[object Object]"> <label for="resource-table-select-file-id-1234" class="oc-invisible-sr oc-cursor-pointer">Select folder</label></span></td>
       <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-expand oc-text-truncate oc-table-data-cell oc-table-data-cell-name">
-        <div class="oc-resource oc-text-overflow"><span class="oc-icon oc-icon-l oc-icon-passive oc-resource-icon oc-resource-icon-file"><!----></span>
+        <div class="oc-resource oc-text-overflow" parent-folder-link="[object Object]"><span class="oc-icon oc-icon-l oc-icon-passive oc-resource-icon oc-resource-icon-file"><!----></span>
           <div class="oc-resource-details oc-text-overflow"><span data-test-resource-path="/file-path/1234" data-test-resource-name="file-path/file-name-1234" data-test-resource-type="folder" class="oc-resource-name"><span class="oc-text-truncate"><span class="oc-resource-basename">file-name-1234</span></span>
             <!---->
             </span>
@@ -40,7 +40,7 @@ exports[`Trashbin View when the view is not loading anymore when length of the p
     <tr tabindex="-1" data-item-id="file-id-5896" draggable="false" class="oc-tbody-tr oc-tbody-tr-file-id-5896">
       <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-table-data-cell oc-table-data-cell-select oc-pl-m "><span><input id="resource-table-select-file-id-5896" type="checkbox" name="checkbox" class="oc-checkbox oc-checkbox-l" value="[object Object]"> <label for="resource-table-select-file-id-5896" class="oc-invisible-sr oc-cursor-pointer">Select folder</label></span></td>
       <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-expand oc-text-truncate oc-table-data-cell oc-table-data-cell-name">
-        <div class="oc-resource oc-text-overflow"><span class="oc-icon oc-icon-l oc-icon-passive oc-resource-icon oc-resource-icon-file"><!----></span>
+        <div class="oc-resource oc-text-overflow" parent-folder-link="[object Object]"><span class="oc-icon oc-icon-l oc-icon-passive oc-resource-icon oc-resource-icon-file"><!----></span>
           <div class="oc-resource-details oc-text-overflow"><span data-test-resource-path="/file-path/5896" data-test-resource-name="file-path/file-name-5896" data-test-resource-type="folder" class="oc-resource-name"><span class="oc-text-truncate"><span class="oc-resource-basename">file-name-5896</span></span>
             <!---->
             </span>
@@ -60,7 +60,7 @@ exports[`Trashbin View when the view is not loading anymore when length of the p
     <tr tabindex="-1" data-item-id="file-id-9856" draggable="false" class="oc-tbody-tr oc-tbody-tr-file-id-9856">
       <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-table-data-cell oc-table-data-cell-select oc-pl-m "><span><input id="resource-table-select-file-id-9856" type="checkbox" name="checkbox" class="oc-checkbox oc-checkbox-l" value="[object Object]"> <label for="resource-table-select-file-id-9856" class="oc-invisible-sr oc-cursor-pointer">Select folder</label></span></td>
       <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-expand oc-text-truncate oc-table-data-cell oc-table-data-cell-name">
-        <div class="oc-resource oc-text-overflow"><span class="oc-icon oc-icon-l oc-icon-passive oc-resource-icon oc-resource-icon-file"><!----></span>
+        <div class="oc-resource oc-text-overflow" parent-folder-link="[object Object]"><span class="oc-icon oc-icon-l oc-icon-passive oc-resource-icon oc-resource-icon-file"><!----></span>
           <div class="oc-resource-details oc-text-overflow"><span data-test-resource-path="/file-path/9856" data-test-resource-name="file-path/file-name-9856" data-test-resource-type="folder" class="oc-resource-name"><span class="oc-text-truncate"><span class="oc-resource-basename">file-name-9856</span></span>
             <!---->
             </span>
