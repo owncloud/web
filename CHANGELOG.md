@@ -30,7 +30,7 @@ Summary
 * Enhancement - Show parent folder for resources: [#6226](https://github.com/owncloud/web/pull/6226)
 * Enhancement - Add default sorting to the spaces list: [#6262](https://github.com/owncloud/web/pull/6262)
 * Enhancement - Implement spaces list: [#6199](https://github.com/owncloud/web/pull/6199)
-* Enhancement - Update ODS to v12.0.0-alpha15: [#6086](https://github.com/owncloud/web/pull/6086)
+* Enhancement - Update ODS to v12.0.0-alpha18: [#6086](https://github.com/owncloud/web/pull/6086)
 * Enhancement - Update SDK: [#6309](https://github.com/owncloud/web/pull/6309)
 
 Details
@@ -226,14 +226,15 @@ Details
    https://github.com/owncloud/web/issues/6104
    https://github.com/owncloud/web/pull/6199
 
-* Enhancement - Update ODS to v12.0.0-alpha15: [#6086](https://github.com/owncloud/web/pull/6086)
+* Enhancement - Update ODS to v12.0.0-alpha18: [#6086](https://github.com/owncloud/web/pull/6086)
 
-   We updated the ownCloud Design System to version 12.0.0-alpha15. Please refer to the full
+   We updated the ownCloud Design System to version 12.0.0-alpha18. Please refer to the full
    changelog in the ODS release (linked) for more details. Summary:
 
-   - Change - Do not sort in OcTable:
-   https://github.com/owncloud/owncloud-design-system/pull/1825 - Change - Remove
-   OcAppSideBar component:
+   - Change - Drop Internet Explorer support:
+   https://github.com/owncloud/owncloud-design-system/pull/1909 - Change - Do not sort in
+   OcTable: https://github.com/owncloud/owncloud-design-system/pull/1825 - Change -
+   Remove OcAppSideBar component:
    https://github.com/owncloud/owncloud-design-system/pull/1810 - Change - Remove
    OcAppBar component: https://github.com/owncloud/owncloud-design-system/pull/1810 -
    Change - Remove implicit ODS registration:
@@ -248,16 +249,23 @@ Details
    remixicons for redesign:
    https://github.com/owncloud/owncloud-design-system/pull/1826 - Enhancement - Make
    Vue-Composition-API available:
-   https://github.com/owncloud/owncloud-design-system/pull/1848 - Enhancement - Fix
+   https://github.com/owncloud/owncloud-design-system/pull/1848 - Enhancement - Export
+   mappings of types, icons and colors of resources:
+   https://github.com/owncloud/owncloud-design-system/pull/1920 - Enhancement - Fix
    OcAvatar line-height: https://github.com/owncloud/owncloud-design-system/pull/1810
    - Enhancement - Add option to render table cells lazy:
-   https://github.com/owncloud/owncloud-design-system/pull/1848 - Enhancement - Show
-   path / parent folder to distinguish files: https://github.com/owncloud/web/issues/5953 -
-   Enhancement - Adjust OcSearchBar to new design:
-   https://github.com/owncloud/owncloud-design-system/pull/1810/ - Enhancement - Sizes:
-   https://github.com/owncloud/owncloud-design-system/pull/1858 - Enhancement - Add svg
-   icon for spaces: https://github.com/owncloud/owncloud-design-system/pull/1846 -
-   Enhancement - Use Roboto font:
+   https://github.com/owncloud/owncloud-design-system/pull/1848 - Enhancement - Make
+   OcDrop rounded: https://github.com/owncloud/owncloud-design-system/pull/1881 -
+   Enhancement - Change background color of OcDrop:
+   https://github.com/owncloud/owncloud-design-system/pull/1919 - Enhancement - Improve
+   OcList: https://github.com/owncloud/owncloud-design-system/pull/1881 - Enhancement -
+   Show path / parent folder to distinguish files:
+   https://github.com/owncloud/web/issues/5953 - Enhancement - Redesign Filetype icons:
+   https://github.com/owncloud/web/issues/6278 - Enhancement - Adjust OcSearchBar to new
+   design: https://github.com/owncloud/owncloud-design-system/pull/1810/ - Enhancement
+   - Sizes: https://github.com/owncloud/owncloud-design-system/pull/1858 - Enhancement -
+   Add svg icon for spaces: https://github.com/owncloud/owncloud-design-system/pull/1846
+   - Enhancement - Use Roboto font:
    https://github.com/owncloud/owncloud-design-system/pull/1876 - Bugfix -
    OcNotification positioning:
    https://github.com/owncloud/owncloud-design-system/pull/1658 - Bugfix - Rename
@@ -270,7 +278,8 @@ Details
    https://github.com/owncloud/web/pull/6213
    https://github.com/owncloud/web/pull/6228
    https://github.com/owncloud/web/pull/6240
-   https://github.com/owncloud/owncloud-design-system/releases/tag/v12.0.0-alpha15
+   https://github.com/owncloud/web/pull/6295
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v12.0.0-alpha18
 
 * Enhancement - Update SDK: [#6309](https://github.com/owncloud/web/pull/6309)
 
