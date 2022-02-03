@@ -77,20 +77,19 @@ export default {
 
 <style lang="scss">
 #web-nav-sidebar {
-  background-color: var(--oc-color-background-default);
-  border-top-left-radius: 15px;
-  border-bottom-left-radius: 15px;
+  border-radius: 15px;
+  box-shadow: 5px 0 25px rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   transition: all 0.35s cubic-bezier(0.34, 0.11, 0, 1.12);
-  box-shadow: 5px 0 25px rgba(0, 0, 0, 0.3);
   z-index: 4;
 
   .toggle-sidebar-button {
     transition: all 0.2s ease-out;
     &:hover {
-      border-top-left-radius: 15px;
       background-color: var(--oc-color-background-highlight) !important;
+      overflow: hidden;
     }
   }
   .toggle-sidebar-button-expanded {

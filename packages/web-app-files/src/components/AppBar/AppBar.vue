@@ -691,9 +691,9 @@ export default {
 .files-app-bar {
   background-color: var(--oc-color-background-default);
   box-sizing: border-box;
-  transition: all 0.35s cubic-bezier(0.34, 0.11, 0, 1.12);
   z-index: 2;
   padding: 0 var(--oc-space-medium);
+  border-top-right-radius: 15px;
 
   &-actions {
     align-items: center;

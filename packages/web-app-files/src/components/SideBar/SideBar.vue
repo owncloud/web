@@ -330,7 +330,6 @@ export default {
   max-height: 100%;
   display: grid;
   grid-template-rows: 50px 70px 1fr;
-  background-color: var(--oc-color-background-default);
   top: 0;
   position: absolute;
   transform: translateX(100%);
@@ -392,7 +391,6 @@ export default {
 
   &__file_info {
     border-bottom: 1px solid var(--oc-color-border);
-    background-color: var(--oc-color-background-default);
     padding: 0 10px;
   }
 

@@ -31,11 +31,7 @@
             class="app-navigation"
             :nav-items="sidebarNavItems"
           />
-          <router-view
-            class="app-content oc-width-1-1"
-            :class="{ 'app-content-standalone': !isSidebarVisible }"
-            name="app"
-          />
+          <router-view class="app-content oc-width-1-1" name="app" />
         </div>
       </div>
     </div>
@@ -330,22 +326,12 @@ body {
 
     .app-container {
       height: 100%;
-
-      .app-navigation {
-        border-top-left-radius: 15px;
-        border-bottom-left-radius: 15px;
-      }
+      background-color: var(--oc-color-background-default);
+      border-radius: 15px;
 
       .app-content {
-        background-color: var(--oc-color-background-default);
-        border-top-right-radius: 15px;
-        border-bottom-right-radius: 15px;
         transition: all 0.35s cubic-bezier(0.34, 0.11, 0, 1.12);
         overflow: hidden;
-
-        &-standalone {
-          border-radius: 15px;
-        }
       }
     }
   }
