@@ -310,7 +310,7 @@ module.exports = {
       const currentSharePermissions = await this.getSharePermissions()
 
       // Hide role select dropdown
-      this.moveToElement('@customPermissionsDrop', -3, 0)
+      this.moveToElement('@customPermissionsDrop', -7, 0)
       this.api.mouseButtonClick()
       this.waitForElementNotPresent('@customPermissionsDrop', 1000)
       return currentSharePermissions
