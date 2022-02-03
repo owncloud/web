@@ -12,7 +12,7 @@
           :key="`section-${section.name}-action-${actionIndex}`"
           :action="action"
           :items="items"
-          class="oc-files-context-action oc-py-xs oc-px-s"
+          class="oc-files-context-action oc-px-s"
         />
       </oc-list>
     </template>
@@ -77,7 +77,11 @@ export default {
       if (this.items.length > 1) {
         sections.push({
           name: 'batch-actions',
-          items: this.menuItemsBatchActions
+          items: [...this.menuItemsBatchActions]
+        })
+        sections.push({
+          name: 'batch-details',
+          items: [...this.$_showDetails_items]
         })
         return sections
       }
@@ -86,6 +90,12 @@ export default {
         sections.push({
           name: 'context',
           items: this.menuItemsContext
+        })
+      }
+      if (this.menuItemsShare.length) {
+        sections.push({
+          name: 'share',
+          items: this.menuItemsShare
         })
       }
       if (this.menuItemsActions.length) {
@@ -114,12 +124,11 @@ export default {
         ...this.$_acceptShare_items,
         ...this.$_declineShare_items,
         ...this.$_downloadArchive_items,
+        ...this.$_delete_items,
         ...this.$_move_items,
         ...this.$_copy_items,
         ...this.$_emptyTrashBin_items,
-        ...this.$_restore_items,
-        ...this.$_delete_items,
-        ...this.$_showDetails_items
+        ...this.$_restore_items
       ].filter((item) => item.isEnabled(this.filterParams))
     },
 
@@ -127,51 +136,56 @@ export default {
       const fileHandlers = [
         ...this.$_fileActions_editorActions,
         ...this.$_fileActions_loadExternalAppActions(this.filterParams.resources),
-        ...this.$_navigate_items,
         ...this.$_fetch_items
       ]
 
-      return [
-        ...fileHandlers,
-        ...this.$_downloadArchive_items,
-        ...this.$_downloadFile_items,
-        ...this.$_createPublicLink_items,
-        ...this.$_showShares_items,
-        ...this.$_favorite_items.map((action) => {
-          action.keepOpen = true
-          return action
-        })
-      ].filter((item) => item.isEnabled(this.filterParams))
+      return [...fileHandlers].filter((item) => item.isEnabled(this.filterParams))
+    },
+
+    menuItemsShare() {
+      return [...this.$_showShares_items, ...this.$_createPublicLink_items].filter((item) =>
+        item.isEnabled(this.filterParams)
+      )
     },
 
     menuItemsActions() {
       return [
-        ...this.$_rename_items,
+        ...this.$_downloadArchive_items,
+        ...this.$_downloadFile_items,
+        ...this.$_delete_items,
         ...this.$_move_items,
         ...this.$_copy_items,
+        ...this.$_rename_items,
         ...this.$_restore_items,
         ...this.$_acceptShare_items,
-        ...this.$_declineShare_items,
-        ...this.$_delete_items,
-        ...this.$_showActions_items
+        ...this.$_declineShare_items
       ].filter((item) => item.isEnabled(this.filterParams))
     },
 
     menuItemsSidebar() {
-      return [...this.$_showDetails_items].filter((item) => item.isEnabled(this.filterParams))
+      const fileHandlers = [...this.$_navigate_items]
+
+      return [
+        ...this.$_favorite_items.map((action) => {
+          action.keepOpen = true
+          return action
+        }),
+        ...fileHandlers,
+        ...this.$_showDetails_items
+      ].filter((item) => item.isEnabled(this.filterParams))
     }
   },
   methods: {
     getSectionClasses(index) {
       const classes = []
-      if (index === 0) {
-        classes.push('oc-mt-s')
+      if (index === 0 && this.menuSections.length) {
+        classes.push('oc-pb-s oc-files-context-actions-border')
       }
-      if (index < this.menuSections.length - 1) {
-        classes.push('oc-files-context-actions-border', 'oc-pb-s', 'oc-mb-s')
+      if (index !== 0 && index < this.menuSections.length - 1) {
+        classes.push('oc-files-context-actions-border', 'oc-py-s')
       }
       if (index === this.menuSections.length - 1) {
-        classes.push('oc-mb-s')
+        classes.push('oc-pt-s')
       }
       return classes
     }
@@ -184,16 +198,22 @@ export default {
   text-align: left;
   white-space: normal;
 
+  li {
+    padding: 6px;
+  }
+
   > li {
     a,
     a:hover,
     button,
     button:hover {
-      text-align: left;
       color: var(--oc-color-swatch-passive-default);
       display: inline-flex;
       gap: 10px;
+      justify-content: flex-start;
       vertical-align: top;
+      width: 100%;
+      font-weight: normal !important;
     }
   }
 
