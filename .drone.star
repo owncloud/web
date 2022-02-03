@@ -61,7 +61,6 @@ config = {
                     "webUIFilesList",
                     "webUIFilesSearch",
                     "webUIFilesActionMenu",
-                    "webUIUpload",
                 ],
                 "oC10Files3": [
                     "webUIRenameFiles",
@@ -144,6 +143,9 @@ config = {
                 "oC10SharingPublic2": [
                     "webUISharingPublicDifferentRoles",
                     "webUISharingPublicManagement",
+                ],
+                "oC10Upload": [
+                    "webUIUpload",
                 ],
             },
             "extraEnvironment": {
