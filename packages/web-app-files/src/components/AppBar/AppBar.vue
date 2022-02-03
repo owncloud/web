@@ -15,7 +15,7 @@
         v-if="breadcrumbs.length"
         id="files-breadcrumb"
         data-testid="files-breadcrumbs"
-        class="oc-p-s"
+        class="oc-py-s"
         :items="breadcrumbs"
       >
         <template #contextMenu>
@@ -693,13 +693,13 @@ export default {
   box-sizing: border-box;
   transition: all 0.35s cubic-bezier(0.34, 0.11, 0, 1.12);
   z-index: 2;
+  padding: 0 var(--oc-space-medium);
 
   &-actions {
     align-items: center;
     display: flex;
     gap: var(--oc-space-small);
     justify-content: flex-end;
-    padding: 0 var(--oc-space-small);
   }
 }
 </style>
