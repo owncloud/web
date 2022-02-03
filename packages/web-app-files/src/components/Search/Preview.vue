@@ -3,7 +3,8 @@
     <oc-resource
       :resource="resource"
       :is-path-displayed="true"
-      :target-route="resourceTargetLocation"
+      :folder-link="folderLink(resource)"
+      :parent-folder-link="parentFolderLink(resource)"
     />
   </div>
 </template>
@@ -17,6 +18,7 @@ import debounce from 'lodash-es/debounce'
 import Vue from 'vue'
 import { mapGetters } from 'vuex'
 import { createLocationSpaces } from '../../router'
+import path from 'path'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -73,6 +75,45 @@ export default {
   },
   beforeDestroy() {
     visibilityObserver.disconnect()
+  },
+  methods: {
+    folderLink(file) {
+      if (this.resourceTargetLocation === null) {
+        return {}
+      }
+      const additionalParams = {}
+      if (this.$route.params.spaceId) {
+        additionalParams.spaceId = this.$route.params.spaceId
+      }
+      const path = file.path.replace(/^\//, '')
+      return {
+        name: this.resourceTargetLocation.name,
+        query: this.resourceTargetLocation.query,
+        params: {
+          item: path,
+          ...this.resourceTargetLocation.params,
+          ...additionalParams
+        }
+      }
+    },
+    parentFolderLink(file) {
+      if (this.resourceTargetLocation === null) {
+        return {}
+      }
+      const additionalParams = {}
+      if (this.$route.params.spaceId) {
+        additionalParams.spaceId = this.$route.params.spaceId
+      }
+      return {
+        name: this.resourceTargetLocation.name,
+        query: this.resourceTargetLocation.query,
+        params: {
+          item: path.dirname(file.path),
+          ...this.resourceTargetLocation.params,
+          ...additionalParams
+        }
+      }
+    }
   }
 }
 </script>

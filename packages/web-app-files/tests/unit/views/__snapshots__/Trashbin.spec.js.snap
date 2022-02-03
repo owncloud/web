@@ -24,7 +24,8 @@ exports[`Trashbin View when the view is not loading anymore when length of the p
           <div class="oc-resource-details oc-text-overflow"><span data-test-resource-path="/file-path/1234" data-test-resource-name="file-path/file-name-1234" data-test-resource-type="folder" class="oc-resource-name"><span class="oc-text-truncate"><span class="oc-resource-basename">file-name-1234</span></span>
             <!---->
             </span>
-            <div class="oc-resource-indicators"><span to="[object Object]" class="parent-folder" style="cursor: default;"><span class="oc-icon oc-icon-s oc-icon-passive"><!----></span> <span class="text">file-path</span></span>
+            <div class="oc-resource-indicators">
+              <router-link to="[object Object]" class="parent-folder" style="cursor: pointer;"><span class="oc-icon oc-icon-s oc-icon-passive"><!----></span> <span class="text">file-path</span></router-link>
               <!---->
             </div>
           </div>
@@ -44,7 +45,8 @@ exports[`Trashbin View when the view is not loading anymore when length of the p
           <div class="oc-resource-details oc-text-overflow"><span data-test-resource-path="/file-path/5896" data-test-resource-name="file-path/file-name-5896" data-test-resource-type="folder" class="oc-resource-name"><span class="oc-text-truncate"><span class="oc-resource-basename">file-name-5896</span></span>
             <!---->
             </span>
-            <div class="oc-resource-indicators"><span to="[object Object]" class="parent-folder" style="cursor: default;"><span class="oc-icon oc-icon-s oc-icon-passive"><!----></span> <span class="text">file-path</span></span>
+            <div class="oc-resource-indicators">
+              <router-link to="[object Object]" class="parent-folder" style="cursor: pointer;"><span class="oc-icon oc-icon-s oc-icon-passive"><!----></span> <span class="text">file-path</span></router-link>
               <!---->
             </div>
           </div>
@@ -64,7 +66,8 @@ exports[`Trashbin View when the view is not loading anymore when length of the p
           <div class="oc-resource-details oc-text-overflow"><span data-test-resource-path="/file-path/9856" data-test-resource-name="file-path/file-name-9856" data-test-resource-type="folder" class="oc-resource-name"><span class="oc-text-truncate"><span class="oc-resource-basename">file-name-9856</span></span>
             <!---->
             </span>
-            <div class="oc-resource-indicators"><span to="[object Object]" class="parent-folder" style="cursor: default;"><span class="oc-icon oc-icon-s oc-icon-passive"><!----></span> <span class="text">file-path</span></span>
+            <div class="oc-resource-indicators">
+              <router-link to="[object Object]" class="parent-folder" style="cursor: pointer;"><span class="oc-icon oc-icon-s oc-icon-passive"><!----></span> <span class="text">file-path</span></router-link>
               <!---->
             </div>
           </div>

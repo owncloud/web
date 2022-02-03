@@ -50,8 +50,9 @@
         :resource="item"
         :is-path-displayed="arePathsDisplayed"
         :is-thumbnail-displayed="areThumbnailsDisplayed"
-        :target-route="targetRoute"
         :is-resource-clickable="isResourceClickable(item.id)"
+        :folder-link="folderLink(item)"
+        :parent-folder-link="parentFolderLink(item)"
         @click="emitFileClick(item)"
       />
     </template>
@@ -145,6 +146,7 @@ import maxSize from 'popper-max-size-modifier'
 import { mapGetters } from 'vuex'
 import { EVENT_TROW_MOUNTED, EVENT_FILE_DROPPED } from '../../constants'
 import { SortDir } from '../../composables'
+import * as path from 'path'
 
 const dateSortValue = (date) => {
   return DateTime.fromRFC2822(date).toUTC().valueOf()
@@ -508,6 +510,43 @@ export default {
     }
   },
   methods: {
+    folderLink(file) {
+      if (this.targetRoute === null) {
+        return {}
+      }
+      const additionalParams = {}
+      if (this.$route.params.spaceId) {
+        additionalParams.spaceId = this.$route.params.spaceId
+      }
+      const path = file.path.replace(/^\//, '')
+      return {
+        name: this.targetRoute.name,
+        query: this.targetRoute.query,
+        params: {
+          item: path,
+          ...this.targetRoute.params,
+          ...additionalParams
+        }
+      }
+    },
+    parentFolderLink(file) {
+      if (this.targetRoute === null) {
+        return {}
+      }
+      const additionalParams = {}
+      if (this.$route.params.spaceId) {
+        additionalParams.spaceId = this.$route.params.spaceId
+      }
+      return {
+        name: this.targetRoute.name,
+        query: this.targetRoute.query,
+        params: {
+          item: path.dirname(file.path),
+          ...this.targetRoute.params,
+          ...additionalParams
+        }
+      }
+    },
     fileDragged(file) {
       this.addSelectedResource(file)
     },
