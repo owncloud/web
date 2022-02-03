@@ -77,6 +77,7 @@ export default {
 
 <style lang="scss">
 #web-nav-sidebar {
+  background-color: var(--oc-color-background-default);
   border-radius: 15px;
   box-shadow: 5px 0 25px rgba(0, 0, 0, 0.3);
   display: flex;
