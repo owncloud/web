@@ -267,22 +267,6 @@ export class AllFilesPage {
     })
   }
 
-  async numberOfVersions({ resource }: { resource: string }): Promise<number> {
-    const { page } = this.actor
-    const folderPaths = resource.split('/')
-    const resourceName = folderPaths.pop()
-
-    if (folderPaths.length) {
-      await filesCta.navigateToFolder({ page: page, path: folderPaths.join('/') })
-    }
-
-    await filesCta.sidebar.open({ page: page, resource: resourceName })
-    await filesCta.sidebar.openPanel({ page: page, name: 'versions' })
-
-    const elements = page.locator('//*[@id="oc-file-versions-sidebar"]/table/tbody/tr')
-    return await elements.count()
-  }
-
   async deleteResource({ resource }: { resource: string }): Promise<void> {
     const { page } = this.actor
     const startUrl = page.url()
