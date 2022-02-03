@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Application config not available to application: [#6296](https://github.com/owncloud/web/issues/6296)
 * Bugfix - Add and remove to/from favorites: [#6328](https://github.com/owncloud/web/issues/6328)
+* Bugfix - Jumpy batch actions: [#6360](https://github.com/owncloud/web/pull/6360)
 * Bugfix - Open folder from context menu: [#6187](https://github.com/owncloud/web/issues/6187)
 * Bugfix - Focus management in topbar dropdowns: [#6213](https://github.com/owncloud/web/pull/6213)
 * Change - Remove UiKit: [#6103](https://github.com/owncloud/web/issues/6103)
@@ -30,7 +31,7 @@ Summary
 * Enhancement - Show parent folder for resources: [#6226](https://github.com/owncloud/web/pull/6226)
 * Enhancement - Add default sorting to the spaces list: [#6262](https://github.com/owncloud/web/pull/6262)
 * Enhancement - Implement spaces list: [#6199](https://github.com/owncloud/web/pull/6199)
-* Enhancement - Update ODS to v12.0.0-alpha18: [#6086](https://github.com/owncloud/web/pull/6086)
+* Enhancement - Update ODS to v12.0.0-alpha19: [#6086](https://github.com/owncloud/web/pull/6086)
 * Enhancement - Update SDK: [#6309](https://github.com/owncloud/web/pull/6309)
 
 Details
@@ -52,6 +53,13 @@ Details
 
    https://github.com/owncloud/web/issues/6328
    https://github.com/owncloud/web/pull/6330
+
+* Bugfix - Jumpy batch actions: [#6360](https://github.com/owncloud/web/pull/6360)
+
+   We fixed a bug that made the batch actions move up and down a few pixels every time they
+   appeared/disappeared.
+
+   https://github.com/owncloud/web/pull/6360
 
 * Bugfix - Open folder from context menu: [#6187](https://github.com/owncloud/web/issues/6187)
 
@@ -196,6 +204,7 @@ Details
    https://github.com/owncloud/web/pull/6086
    https://github.com/owncloud/web/pull/6222
    https://github.com/owncloud/web/pull/6228
+   https://github.com/owncloud/web/pull/6360
 
 * Enhancement - Redesigned user menu: [#6272](https://github.com/owncloud/web/pull/6272)
 
@@ -226,7 +235,7 @@ Details
    https://github.com/owncloud/web/issues/6104
    https://github.com/owncloud/web/pull/6199
 
-* Enhancement - Update ODS to v12.0.0-alpha18: [#6086](https://github.com/owncloud/web/pull/6086)
+* Enhancement - Update ODS to v12.0.0-alpha19: [#6086](https://github.com/owncloud/web/pull/6086)
 
    We updated the ownCloud Design System to version 12.0.0-alpha18. Please refer to the full
    changelog in the ODS release (linked) for more details. Summary:
@@ -265,8 +274,9 @@ Details
    design: https://github.com/owncloud/owncloud-design-system/pull/1810/ - Enhancement
    - Sizes: https://github.com/owncloud/owncloud-design-system/pull/1858 - Enhancement -
    Add svg icon for spaces: https://github.com/owncloud/owncloud-design-system/pull/1846
-   - Enhancement - Use Roboto font:
-   https://github.com/owncloud/owncloud-design-system/pull/1876 - Bugfix -
+   - Enhancement - OcTable header alignment:
+   https://github.com/owncloud/owncloud-design-system/pull/1922 - Enhancement - Use
+   Roboto font: https://github.com/owncloud/owncloud-design-system/pull/1876 - Bugfix -
    OcNotification positioning:
    https://github.com/owncloud/owncloud-design-system/pull/1658 - Bugfix - Rename
    GhostElement: https://github.com/owncloud/owncloud-design-system/pull/1845 - Bugfix
@@ -279,7 +289,8 @@ Details
    https://github.com/owncloud/web/pull/6228
    https://github.com/owncloud/web/pull/6240
    https://github.com/owncloud/web/pull/6295
-   https://github.com/owncloud/owncloud-design-system/releases/tag/v12.0.0-alpha18
+   https://github.com/owncloud/web/pull/6360
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v12.0.0-alpha19
 
 * Enhancement - Update SDK: [#6309](https://github.com/owncloud/web/pull/6309)
 
