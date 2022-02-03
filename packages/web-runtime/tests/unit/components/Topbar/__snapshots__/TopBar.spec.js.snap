@@ -2,7 +2,7 @@
 
 exports[`Top Bar component Displays applications menu 1`] = `
 <header id="oc-topbar" aria-label="Top bar" class="oc-flex oc-flex-middle oc-flex-between oc-px-m">
-  <div class="topbar-gap oc-flex oc-flex-middle oc-flex-between">
+  <div class="topbar-gap-left oc-flex oc-flex-middle oc-flex-between">
     <applications-menu-stub applicationslist="[object Object],[object Object],[object Object]"></applications-menu-stub>
     <router-link-stub to="/" tag="a" ariacurrentvalue="page" event="click">
       <oc-img-stub src="example-logo.svg" alt="Navigate to all files page"></oc-img-stub>
@@ -11,7 +11,7 @@ exports[`Top Bar component Displays applications menu 1`] = `
   <div class="portal-wrapper">
     <portal-target-stub name="app.runtime.header" multiple=""></portal-target-stub>
   </div>
-  <div class="topbar-gap oc-flex oc-flex-middle oc-flex-between">
+  <div class="topbar-gap-right oc-flex oc-flex-middle oc-flex-between">
     <theme-switcher-stub></theme-switcher-stub>
     <feedback-link-stub></feedback-link-stub>
     <!---->

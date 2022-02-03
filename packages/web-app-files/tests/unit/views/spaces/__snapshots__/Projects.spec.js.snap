@@ -18,7 +18,7 @@ exports[`Spaces component should only list drives of type "project" 1`] = `
         <div class="spaces-list-card oc-border oc-card oc-card-default">
           <div class="oc-card-media-top oc-border-b"><button aria-label="Show context menu" class="oc-position-absolute oc-position-top-right oc-mr-s oc-mt-s oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-outline" id="space-context-btn-1"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button>
             <div id="space-context-drop-1" class="oc-drop oc-box-shadow-medium oc-drop-rounded" style="box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.12);" options="[object Object]">
-              <div class="oc-card oc-card-body oc-rounded oc-background-muted oc-p-s">
+              <div class="oc-card oc-card-body oc-rounded oc-background-highlight oc-p-s">
                 <ul class="oc-list oc-files-context-actions">
                   <li class="oc-spaces-context-action oc-py-xs oc-px-s"><button class="oc-button oc-button-m oc-button-justify-content-left oc-button-gap-m oc-button-passive oc-button-passive-raw"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span>
                       Rename
