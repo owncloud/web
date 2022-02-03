@@ -98,7 +98,7 @@
         "input-text-default": "#c2c2c2",
         "input-text-muted": "#696969",
         "swatch-brand-default": "#212121",
-        "swatch-brand-hover": "",
+        "swatch-brand-hover": "#ffffff",
         "swatch-danger-default": "",
         "swatch-danger-hover": "",
         "swatch-danger-muted": "",
