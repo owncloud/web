@@ -110,13 +110,16 @@ export const router = patchRouter(
 export const buildUrl = (pathname) => {
   const baseUrl = new URL(window.location.href.split('#')[0])
   if (baseUrl.pathname.endsWith('/index.html')) {
-    baseUrl.pathname = baseUrl.pathname.substr(0, baseUrl.pathname.length - 11)
+    baseUrl.pathname = baseUrl.pathname.split('/').slice(0, -1).filter(Boolean).join('/')
   }
 
   if (/\.(html?)$/i.test(pathname)) {
-    baseUrl.pathname = base
-      ? pathname
-      : [...baseUrl.pathname.split('/'), ...pathname.split('/')].filter(Boolean).join('/')
+    baseUrl.pathname = [
+      ...(base ? new URL(base.href) : baseUrl).pathname.split('/'),
+      ...pathname.split('/')
+    ]
+      .filter(Boolean)
+      .join('/')
   } else {
     baseUrl[base ? 'pathname' : 'hash'] = router.resolve(pathname).href
   }
