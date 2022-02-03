@@ -13,7 +13,6 @@ localVue.use(GetTextPlugin, {
   silent: true
 })
 
-beforeEach(mockAxios.reset)
 
 const composables = '@files/src/composables/index'
 jest.mock(composables, () => ({
@@ -27,8 +26,16 @@ jest.mock(composables, () => ({
   })
 }))
 
+beforeEach(mockAxios.reset)
+
+beforeEach(() => {
+  jest.useFakeTimers('modern')
+  jest.setSystemTime(new Date(2020, 3, 1))
+})
+
 afterEach(() => {
   jest.unmock(composables)
+  jest.useRealTimers()
 })
 
 window.ResizeObserver =
