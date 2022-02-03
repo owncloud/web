@@ -340,6 +340,8 @@ export default {
   // hidden: if element is off screen
   // visible: if element is on screen
   visibility: hidden;
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
 
   @media screen and (prefers-reduced-motion: reduce), (update: slow) {
     transition-duration: 0.001ms !important;
