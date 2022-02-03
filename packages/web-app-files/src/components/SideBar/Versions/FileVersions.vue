@@ -5,7 +5,7 @@
       <oc-tbody>
         <oc-tr v-for="(item, index) in versions" :key="index" class="file-row">
           <oc-td width="shrink" data-testid="file-versions-file-icon">
-            <oc-icon :name="fileTypeIcon(highlightedFile)" />
+            <oc-resource-icon :resource="highlightedFile" size="medium" />
           </oc-td>
           <oc-td
             width="shrink"

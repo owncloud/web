@@ -58,7 +58,7 @@ const versionTableStubSelector = 'oc-simple-table-stub'
 
 const selectors = {
   noVersionsMessage: '[data-testid="file-versions-no-versions"]',
-  fileTypeIcon: '[data-testid="file-versions-file-icon"] oc-icon-stub',
+  fileTypeIcon: '[data-testid="file-versions-file-icon"] oc-resource-icon-stub',
   lastModifiedDate: '[data-testid="file-versions-file-last-modified-date"]',
   resourceSize: '[data-testid="file-versions-file-size"]',
   revertVersionButton: '[data-testid="file-versions-revert-button"]',
@@ -96,6 +96,7 @@ function getMountedWrapper(store) {
       store: store,
       stubs: {
         ...defaultStubs,
+        'oc-resource-icon': true,
         'oc-button': false
       }
     })
@@ -200,7 +201,6 @@ describe('FileVersions', () => {
           const iconElements = wrapper.findAll(selectors.fileTypeIcon)
 
           expect(iconElements.length).toBe(1)
-          expect(iconElements.at(0).attributes('name')).toBe('image')
         })
         it('should show item last modified date', () => {
           const wrapper = getShallowWrapper(createStore())

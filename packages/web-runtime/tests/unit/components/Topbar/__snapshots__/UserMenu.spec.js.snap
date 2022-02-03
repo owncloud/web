@@ -16,18 +16,18 @@ exports[`User Menu component when basic quota is set renders a danger quota prog
       </li>
       <li>
         <oc-button-stub type="router-link" size="medium" to="[object Object]" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">
-          <oc-icon-stub name="application" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" class="oc-p-xs"></oc-icon-stub>
+          <oc-icon-stub name="application" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub>
           <translate-stub tag="span">Settings</translate-stub>
         </oc-button-stub>
       </li>
       <li>
         <oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="oc-topbar-account-logout">
-          <oc-icon-stub name="logout-box-r" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" class="oc-p-xs"></oc-icon-stub>
+          <oc-icon-stub name="logout-box-r" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub>
           <translate-stub tag="span">Log out</translate-stub>
         </oc-button-stub>
       </li>
       <li class="storage-wrapper oc-pl-s">
-        <oc-icon-stub name="cloud" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" class="oc-p-xs"></oc-icon-stub>
+        <oc-icon-stub name="cloud" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub>
         <div class="storage-wrapper-text">
           <p class="oc-my-rm"><span>Personal storage (91.00% full)</span> <br> <span class="oc-text-small">910 B of 1 kB used</span></p> <progress max="100" aria-valuemax="100" aria-valuenow="91" aria-busy="true" aria-valuemin="0" tabindex="-1" class="oc-progress oc-progress-small oc-progress-danger" value="91"></progress>
         </div>
@@ -53,13 +53,13 @@ exports[`User Menu component when no quota and email is set the user menu does n
       </li>
       <li>
         <oc-button-stub type="router-link" size="medium" to="[object Object]" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">
-          <oc-icon-stub name="application" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" class="oc-p-xs"></oc-icon-stub>
+          <oc-icon-stub name="application" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub>
           <translate-stub tag="span">Settings</translate-stub>
         </oc-button-stub>
       </li>
       <li>
         <oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="oc-topbar-account-logout">
-          <oc-icon-stub name="logout-box-r" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" class="oc-p-xs"></oc-icon-stub>
+          <oc-icon-stub name="logout-box-r" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub>
           <translate-stub tag="span">Log out</translate-stub>
         </oc-button-stub>
       </li>
@@ -85,13 +85,13 @@ exports[`User Menu component when no quota and no email is set the user menu doe
       </li>
       <li>
         <oc-button-stub type="router-link" size="medium" to="[object Object]" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">
-          <oc-icon-stub name="application" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" class="oc-p-xs"></oc-icon-stub>
+          <oc-icon-stub name="application" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub>
           <translate-stub tag="span">Settings</translate-stub>
         </oc-button-stub>
       </li>
       <li>
         <oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="oc-topbar-account-logout">
-          <oc-icon-stub name="logout-box-r" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" class="oc-p-xs"></oc-icon-stub>
+          <oc-icon-stub name="logout-box-r" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub>
           <translate-stub tag="span">Log out</translate-stub>
         </oc-button-stub>
       </li>
@@ -117,18 +117,18 @@ exports[`User Menu component when quota and no email is set renders a navigation
       </li>
       <li>
         <oc-button-stub type="router-link" size="medium" to="[object Object]" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">
-          <oc-icon-stub name="application" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" class="oc-p-xs"></oc-icon-stub>
+          <oc-icon-stub name="application" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub>
           <translate-stub tag="span">Settings</translate-stub>
         </oc-button-stub>
       </li>
       <li>
         <oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="oc-topbar-account-logout">
-          <oc-icon-stub name="logout-box-r" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" class="oc-p-xs"></oc-icon-stub>
+          <oc-icon-stub name="logout-box-r" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub>
           <translate-stub tag="span">Log out</translate-stub>
         </oc-button-stub>
       </li>
       <li class="storage-wrapper oc-pl-s">
-        <oc-icon-stub name="cloud" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" class="oc-p-xs"></oc-icon-stub>
+        <oc-icon-stub name="cloud" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub>
         <div class="storage-wrapper-text">
           <p class="oc-my-rm"><span>Personal storage (30.00% full)</span> <br> <span class="oc-text-small">300 B of 1 kB used</span></p> <progress max="100" aria-valuemax="100" aria-valuenow="30" aria-busy="true" aria-valuemin="0" tabindex="-1" class="oc-progress oc-progress-small oc-progress-primary" value="30"></progress>
         </div>
@@ -154,18 +154,18 @@ exports[`User Menu component when quota is above 80% and below 90% renders a war
       </li>
       <li>
         <oc-button-stub type="router-link" size="medium" to="[object Object]" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">
-          <oc-icon-stub name="application" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" class="oc-p-xs"></oc-icon-stub>
+          <oc-icon-stub name="application" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub>
           <translate-stub tag="span">Settings</translate-stub>
         </oc-button-stub>
       </li>
       <li>
         <oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="oc-topbar-account-logout">
-          <oc-icon-stub name="logout-box-r" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" class="oc-p-xs"></oc-icon-stub>
+          <oc-icon-stub name="logout-box-r" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub>
           <translate-stub tag="span">Log out</translate-stub>
         </oc-button-stub>
       </li>
       <li class="storage-wrapper oc-pl-s">
-        <oc-icon-stub name="cloud" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" class="oc-p-xs"></oc-icon-stub>
+        <oc-icon-stub name="cloud" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub>
         <div class="storage-wrapper-text">
           <p class="oc-my-rm"><span>Personal storage (81.00% full)</span> <br> <span class="oc-text-small">810 B of 1 kB used</span></p> <progress max="100" aria-valuemax="100" aria-valuenow="81" aria-busy="true" aria-valuemin="0" tabindex="-1" class="oc-progress oc-progress-small oc-progress-warning" value="81"></progress>
         </div>
@@ -191,18 +191,18 @@ exports[`User Menu component when quota is below 80% renders a primary quota pro
       </li>
       <li>
         <oc-button-stub type="router-link" size="medium" to="[object Object]" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">
-          <oc-icon-stub name="application" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" class="oc-p-xs"></oc-icon-stub>
+          <oc-icon-stub name="application" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub>
           <translate-stub tag="span">Settings</translate-stub>
         </oc-button-stub>
       </li>
       <li>
         <oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="oc-topbar-account-logout">
-          <oc-icon-stub name="logout-box-r" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" class="oc-p-xs"></oc-icon-stub>
+          <oc-icon-stub name="logout-box-r" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub>
           <translate-stub tag="span">Log out</translate-stub>
         </oc-button-stub>
       </li>
       <li class="storage-wrapper oc-pl-s">
-        <oc-icon-stub name="cloud" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" class="oc-p-xs"></oc-icon-stub>
+        <oc-icon-stub name="cloud" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub>
         <div class="storage-wrapper-text">
           <p class="oc-my-rm"><span>Personal storage (30.00% full)</span> <br> <span class="oc-text-small">300 B of 1 kB used</span></p> <progress max="100" aria-valuemax="100" aria-valuenow="30" aria-busy="true" aria-valuemin="0" tabindex="-1" class="oc-progress oc-progress-small oc-progress-primary" value="30"></progress>
         </div>

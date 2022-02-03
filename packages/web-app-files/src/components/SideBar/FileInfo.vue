@@ -1,6 +1,6 @@
 <template>
   <div class="file_info">
-    <oc-icon :name="file.icon" size="large" class="file_info__icon" />
+    <oc-resource-icon :resource="file" size="large" class="file_info__icon" />
     <div class="file_info__body oc-text-overflow">
       <h3 data-testid="files-info-name">
         <oc-resource-name

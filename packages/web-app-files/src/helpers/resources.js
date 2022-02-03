@@ -1,23 +1,10 @@
 import orderBy from 'lodash-es/orderBy'
 import path from 'path'
 import { DateTime } from 'luxon'
-
-import fileIconMappings from '../fileTypeIconMappings.json'
 import { getIndicators } from './statusIndicators'
 import { $gettext } from '../gettext'
 import { DavPermission, DavProperty } from 'web-pkg/src/constants'
 import { PeopleShareRoles, SharePermissions, ShareStatus, ShareTypes } from './share'
-
-// Should we move this to ODS?
-export function getFileIcon(extension) {
-  const icon = fileIconMappings[extension.toLowerCase()]
-
-  if (icon) {
-    return icon
-  }
-
-  return 'file'
-}
 
 function _getFileExtension(name) {
   const extension = path.extname(name)
@@ -28,7 +15,7 @@ function _getFileExtension(name) {
 }
 
 export function renameResource(resource, newName, newPath) {
-  const isFolder = resource.type === 'dir'
+  const isFolder = resource.type === 'dir' || resource.type === 'folder'
   const extension = _getFileExtension(newName)
 
   resource.name = newName
@@ -39,13 +26,12 @@ export function renameResource(resource, newName, newPath) {
 }
 
 export function buildResource(resource) {
-  const isFolder = resource.type === 'dir'
+  const isFolder = resource.type === 'dir' || resource.type === 'folder'
   const extension = _getFileExtension(resource.name)
   return {
     id: resource.fileInfo[DavProperty.FileId],
     fileId: resource.fileInfo[DavProperty.FileId],
     mimeType: resource.fileInfo[DavProperty.MimeType],
-    icon: isFolder ? 'folder' : getFileIcon(extension),
     name: path.basename(resource.name),
     extension: isFolder ? '' : extension,
     path: resource.name,
@@ -223,7 +209,6 @@ export function buildSharedResource(share, incomingShares = false, allowSharePer
   }
 
   resource.extension = isFolder ? '' : _getFileExtension(resource.name)
-  resource.icon = isFolder ? 'folder' : getFileIcon(resource.extension)
   resource.isReceivedShare = () => incomingShares
   resource.canUpload = () => true
   resource.isMounted = () => false
@@ -337,7 +322,7 @@ export function buildCollaboratorShare(s, file, allowSharePermission) {
 }
 
 export function buildDeletedResource(resource) {
-  const isFolder = resource.type === 'dir'
+  const isFolder = resource.type === 'dir' || resource.type === 'folder'
   const fullName = resource.fileInfo[DavProperty.TrashbinOriginalFilename]
   const extension = isFolder ? '' : _getFileExtension(fullName)
   return {
@@ -348,7 +333,6 @@ export function buildDeletedResource(resource) {
     extension,
     path: resource.fileInfo[DavProperty.TrashbinOriginalLocation],
     id: path.basename(resource.name),
-    icon: isFolder ? 'folder' : getFileIcon(extension),
     indicators: [],
     canUpload: () => false,
     canDownload: () => false,
