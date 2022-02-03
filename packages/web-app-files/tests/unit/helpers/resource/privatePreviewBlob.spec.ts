@@ -11,7 +11,7 @@ const defaultOptions = {
   resource: {
     id: 'id',
     path: 'path',
-    webDavPath: 'path'
+    webDavPath: '/path'
   }
 }
 
@@ -20,7 +20,7 @@ describe('privatePreviewBlob', () => {
     window.URL.createObjectURL = jest.fn()
     const privatePreviewBlobPromise = privatePreviewBlob(defaultOptions)
     mockAxios.mockResponseFor(
-      { url: 'https://www.ocis.rules/remote.php/dav/files/ocispath?a=1&preview=1&scalingup=0' },
+      { url: 'https://www.ocis.rules/remote.php/dav/path?a=1&preview=1&scalingup=0' },
       { data: 'data' }
     )
     await privatePreviewBlobPromise

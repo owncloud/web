@@ -2,7 +2,7 @@
   <div class="space-overview oc-p-s">
     <list-loader v-if="loadSpaceTask.isRunning" />
     <template v-else>
-      <not-found-message v-if="!space.id" class="files-not-found oc-height-1-1" />
+      <not-found-message v-if="!space.id" class="space-not-found oc-height-1-1" />
       <div v-else-if="isSpaceRoot" class="oc-grid oc-grid-match oc-child-width-1-3@s">
         <div v-if="imageContent">
           <img
@@ -25,7 +25,7 @@
           </div>
         </div>
       </div>
-      <no-content-message v-if="isEmpty" id="files-spaces-empty" class="files-empty" icon="folder">
+      <no-content-message v-if="isEmpty" id="files-space-empty" class="files-empty" icon="folder">
         <template #message>
           <p class="oc-text-muted">
             <span v-translate>No resources found</span>
