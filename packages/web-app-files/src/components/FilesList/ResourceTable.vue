@@ -125,7 +125,7 @@
           :popper-options="popperOptions"
           mode="click"
           close-on-click
-          padding-size="remove"
+          padding-size="small"
           @click.native.stop.prevent
         >
           <!-- @slot Add context actions that open in a dropdown when clicking on the "three dots" button -->

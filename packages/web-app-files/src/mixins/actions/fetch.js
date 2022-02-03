@@ -6,7 +6,8 @@ export default {
       return [
         {
           name: 'open-pdf',
-          icon: 'remove_red_eye',
+          icon: 'eye',
+          iconFillType: 'line',
           handler: ({ resources }) =>
             this.$_fetch_trigger({
               resources,

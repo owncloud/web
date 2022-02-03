@@ -32,7 +32,7 @@ exports[`SharedWithOthers when the wrapper is not loading anymore when length of
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-actions oc-pr-m">
         <div class="resource-table-actions">
           <oc-button-stub type="button" size="medium" arialabel="Show context menu" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="context-menu-trigger-38" class="resource-table-btn-action-dropdown"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></oc-button-stub>
-          <oc-drop-stub dropid="context-menu-drop-38" popperoptions="[object Object]" toggle="#context-menu-trigger-38" position="bottom-start" mode="click" closeonclick="true" paddingsize="remove"></oc-drop-stub>
+          <oc-drop-stub dropid="context-menu-drop-38" popperoptions="[object Object]" toggle="#context-menu-trigger-38" position="bottom-start" mode="click" closeonclick="true" paddingsize="small"></oc-drop-stub>
         </div>
       </td>
     </tr>
@@ -49,7 +49,7 @@ exports[`SharedWithOthers when the wrapper is not loading anymore when length of
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-actions oc-pr-m">
         <div class="resource-table-actions">
           <oc-button-stub type="button" size="medium" arialabel="Show context menu" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="context-menu-trigger-64" class="resource-table-btn-action-dropdown"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></oc-button-stub>
-          <oc-drop-stub dropid="context-menu-drop-64" popperoptions="[object Object]" toggle="#context-menu-trigger-64" position="bottom-start" mode="click" closeonclick="true" paddingsize="remove"></oc-drop-stub>
+          <oc-drop-stub dropid="context-menu-drop-64" popperoptions="[object Object]" toggle="#context-menu-trigger-64" position="bottom-start" mode="click" closeonclick="true" paddingsize="small"></oc-drop-stub>
         </div>
       </td>
     </tr>
@@ -66,7 +66,7 @@ exports[`SharedWithOthers when the wrapper is not loading anymore when length of
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-actions oc-pr-m">
         <div class="resource-table-actions">
           <oc-button-stub type="button" size="medium" arialabel="Show context menu" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="context-menu-trigger-39" class="resource-table-btn-action-dropdown"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></oc-button-stub>
-          <oc-drop-stub dropid="context-menu-drop-39" popperoptions="[object Object]" toggle="#context-menu-trigger-39" position="bottom-start" mode="click" closeonclick="true" paddingsize="remove"></oc-drop-stub>
+          <oc-drop-stub dropid="context-menu-drop-39" popperoptions="[object Object]" toggle="#context-menu-trigger-39" position="bottom-start" mode="click" closeonclick="true" paddingsize="small"></oc-drop-stub>
         </div>
       </td>
     </tr>
@@ -83,7 +83,7 @@ exports[`SharedWithOthers when the wrapper is not loading anymore when length of
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-actions oc-pr-m">
         <div class="resource-table-actions">
           <oc-button-stub type="button" size="medium" arialabel="Show context menu" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="context-menu-trigger-30" class="resource-table-btn-action-dropdown"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></oc-button-stub>
-          <oc-drop-stub dropid="context-menu-drop-30" popperoptions="[object Object]" toggle="#context-menu-trigger-30" position="bottom-start" mode="click" closeonclick="true" paddingsize="remove"></oc-drop-stub>
+          <oc-drop-stub dropid="context-menu-drop-30" popperoptions="[object Object]" toggle="#context-menu-trigger-30" position="bottom-start" mode="click" closeonclick="true" paddingsize="small"></oc-drop-stub>
         </div>
       </td>
     </tr>
