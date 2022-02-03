@@ -1,0 +1,5 @@
+Bugfix: Jumpy batch actions
+
+We fixed a bug that made the batch actions move up and down a few pixels every time they appeared/disappeared.
+
+https://github.com/owncloud/web/pull/6360

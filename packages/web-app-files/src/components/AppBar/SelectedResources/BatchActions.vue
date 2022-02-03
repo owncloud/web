@@ -74,6 +74,11 @@ export default {
   }
 
   @media only screen and (min-width: 1200px) {
+    li {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
     align-items: center;
     display: flex;
     gap: var(--oc-space-small);

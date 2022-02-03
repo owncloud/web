@@ -2,7 +2,7 @@
 
 exports[`FileInfo shows deletion date info 1`] = `
 <div class="file_info">
-  <oc-icon-stub size="large" class="file_info__icon"></oc-icon-stub>
+  <oc-resource-icon resource="[object Object]" size="large" class="file_info__icon"></oc-resource-icon>
   <div class="file_info__body oc-text-overflow">
     <h3 data-testid="files-info-name">
       <oc-resource-name-stub type="file"></oc-resource-name-stub>
@@ -17,7 +17,7 @@ exports[`FileInfo shows deletion date info 1`] = `
 
 exports[`FileInfo shows modification date info 1`] = `
 <div class="file_info">
-  <oc-icon-stub size="large" class="file_info__icon"></oc-icon-stub>
+  <oc-resource-icon resource="[object Object]" size="large" class="file_info__icon"></oc-resource-icon>
   <div class="file_info__body oc-text-overflow">
     <h3 data-testid="files-info-name">
       <oc-resource-name-stub type="file"></oc-resource-name-stub>

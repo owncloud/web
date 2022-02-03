@@ -12,6 +12,7 @@
     :selection="selection"
     :sort-by="sortBy"
     :sort-dir="sortDir"
+    padding-x="medium"
     @highlight="fileClicked"
     @rowMounted="rowMounted"
     @contextmenuClicked="showContextMenu"
@@ -23,6 +24,7 @@
       <div class="resource-table-select-all">
         <oc-checkbox
           id="resource-table-select-all"
+          size="large"
           :label="allResourcesCheckboxLabel"
           :hide-label="true"
           :value="areAllResourcesSelected"

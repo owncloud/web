@@ -4,23 +4,23 @@ exports[`SharedWithOthers when the wrapper is not loading anymore when length of
 <table class="files-table oc-table oc-table-sticky files-table-squashed" id="files-shared-with-others-table">
   <thead class="oc-thead">
     <tr tabindex="-1" class="oc-table-header-row">
-      <th class="oc-th oc-table-cell oc-table-cell-align-left oc-table-cell-align-bottom oc-table-cell-width-shrink oc-text-nowrap oc-table-header-cell oc-table-header-cell-select oc-pl-s " style="top: 0px;"><span class="oc-table-thead-content"><div class="resource-table-select-all"><oc-checkbox-stub id="resource-table-select-all" label="Select all resources" hidelabel="true" size="medium"></oc-checkbox-stub></div></span>
+      <th class="oc-th oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-text-nowrap oc-table-header-cell oc-table-header-cell-select oc-pl-m " style="top: 0px;"><span class="oc-table-thead-content"><div class="resource-table-select-all"><oc-checkbox-stub id="resource-table-select-all" label="Select all resources" hidelabel="true" size="large"></oc-checkbox-stub></div></span>
         <!---->
       </th>
-      <th class="oc-th oc-table-cell oc-table-cell-align-left oc-table-cell-align-bottom oc-table-cell-width-expand oc-text-nowrap oc-table-header-cell oc-table-header-cell-name" aria-sort="none" style="top: 0px;"><span class="oc-table-thead-content">Name</span>
+      <th class="oc-th oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-expand oc-text-nowrap oc-table-header-cell oc-table-header-cell-name" aria-sort="none" style="top: 0px;"><span class="oc-table-thead-content">Name</span>
         <oc-button-stub type="button" size="medium" arialabel="Sort by name" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" variant="passive" class="oc-button-sort"></oc-button-stub>
       </th>
-      <th class="oc-th oc-table-cell oc-table-cell-align-right oc-table-cell-align-bottom oc-table-cell-width-auto oc-text-nowrap oc-table-header-cell oc-table-header-cell-sharedWith" aria-sort="none" style="top: 0px;"><span class="oc-table-thead-content">Shared with</span>
+      <th class="oc-th oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-header-cell oc-table-header-cell-sharedWith" aria-sort="none" style="top: 0px;"><span class="oc-table-thead-content">Shared with</span>
         <oc-button-stub type="button" size="medium" arialabel="Sort by sharedWith" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" variant="passive" class="oc-button-sort"></oc-button-stub>
       </th>
-      <th class="oc-th oc-table-cell oc-table-cell-align-right oc-table-cell-align-bottom oc-table-cell-width-auto oc-text-nowrap oc-table-header-cell oc-table-header-cell-actions oc-pr-s" style="top: 0px;"><span class="oc-table-thead-content">Actions</span>
+      <th class="oc-th oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-header-cell oc-table-header-cell-actions oc-pr-m" style="top: 0px;"><span class="oc-table-thead-content">Actions</span>
         <!---->
       </th>
     </tr>
   </thead>
   <tbody>
     <tr tabindex="-1" data-item-id="38" draggable="false" class="oc-tbody-tr oc-tbody-tr-38">
-      <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-table-data-cell oc-table-data-cell-select oc-pl-s ">
+      <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-table-data-cell oc-table-data-cell-select oc-pl-m ">
         <oc-checkbox-stub id="resource-table-select-38" value="" option="[object Object]" label="Select file" hidelabel="true" size="large"></oc-checkbox-stub>
       </td>
       <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-expand oc-text-truncate oc-table-data-cell oc-table-data-cell-name">
@@ -29,7 +29,7 @@ exports[`SharedWithOthers when the wrapper is not loading anymore when length of
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-sharedWith">
         <oc-avatars-stub items="[object Object]" stacked="true" istooltipdisplayed="true" maxdisplayed="3" accessibledescription=" This file is shared via 1 link" class="resource-table-people"></oc-avatars-stub>
       </td>
-      <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-actions oc-pr-s">
+      <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-actions oc-pr-m">
         <div class="resource-table-actions">
           <oc-button-stub type="button" size="medium" arialabel="Show context menu" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="context-menu-trigger-38" class="resource-table-btn-action-dropdown"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></oc-button-stub>
           <oc-drop-stub dropid="context-menu-drop-38" popperoptions="[object Object]" toggle="#context-menu-trigger-38" position="bottom-start" mode="click" closeonclick="true" paddingsize="remove"></oc-drop-stub>
@@ -37,7 +37,7 @@ exports[`SharedWithOthers when the wrapper is not loading anymore when length of
       </td>
     </tr>
     <tr tabindex="-1" data-item-id="64" draggable="false" class="oc-tbody-tr oc-tbody-tr-64">
-      <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-table-data-cell oc-table-data-cell-select oc-pl-s ">
+      <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-table-data-cell oc-table-data-cell-select oc-pl-m ">
         <oc-checkbox-stub id="resource-table-select-64" value="" option="[object Object]" label="Select file" hidelabel="true" size="large"></oc-checkbox-stub>
       </td>
       <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-expand oc-text-truncate oc-table-data-cell oc-table-data-cell-name">
@@ -46,7 +46,7 @@ exports[`SharedWithOthers when the wrapper is not loading anymore when length of
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-sharedWith">
         <oc-avatars-stub items="[object Object]" stacked="true" istooltipdisplayed="true" maxdisplayed="3" accessibledescription=" This file is shared via 1 link" class="resource-table-people"></oc-avatars-stub>
       </td>
-      <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-actions oc-pr-s">
+      <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-actions oc-pr-m">
         <div class="resource-table-actions">
           <oc-button-stub type="button" size="medium" arialabel="Show context menu" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="context-menu-trigger-64" class="resource-table-btn-action-dropdown"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></oc-button-stub>
           <oc-drop-stub dropid="context-menu-drop-64" popperoptions="[object Object]" toggle="#context-menu-trigger-64" position="bottom-start" mode="click" closeonclick="true" paddingsize="remove"></oc-drop-stub>
@@ -54,7 +54,7 @@ exports[`SharedWithOthers when the wrapper is not loading anymore when length of
       </td>
     </tr>
     <tr tabindex="-1" data-item-id="39" draggable="false" class="oc-tbody-tr oc-tbody-tr-39">
-      <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-table-data-cell oc-table-data-cell-select oc-pl-s ">
+      <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-table-data-cell oc-table-data-cell-select oc-pl-m ">
         <oc-checkbox-stub id="resource-table-select-39" value="" option="[object Object]" label="Select file" hidelabel="true" size="large"></oc-checkbox-stub>
       </td>
       <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-expand oc-text-truncate oc-table-data-cell oc-table-data-cell-name">
@@ -63,7 +63,7 @@ exports[`SharedWithOthers when the wrapper is not loading anymore when length of
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-sharedWith">
         <oc-avatars-stub items="[object Object]" stacked="true" istooltipdisplayed="true" maxdisplayed="3" accessibledescription=" This file is shared via 1 link" class="resource-table-people"></oc-avatars-stub>
       </td>
-      <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-actions oc-pr-s">
+      <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-actions oc-pr-m">
         <div class="resource-table-actions">
           <oc-button-stub type="button" size="medium" arialabel="Show context menu" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="context-menu-trigger-39" class="resource-table-btn-action-dropdown"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></oc-button-stub>
           <oc-drop-stub dropid="context-menu-drop-39" popperoptions="[object Object]" toggle="#context-menu-trigger-39" position="bottom-start" mode="click" closeonclick="true" paddingsize="remove"></oc-drop-stub>
@@ -71,7 +71,7 @@ exports[`SharedWithOthers when the wrapper is not loading anymore when length of
       </td>
     </tr>
     <tr tabindex="-1" data-item-id="30" draggable="false" class="oc-tbody-tr oc-tbody-tr-30">
-      <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-table-data-cell oc-table-data-cell-select oc-pl-s ">
+      <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-table-data-cell oc-table-data-cell-select oc-pl-m ">
         <oc-checkbox-stub id="resource-table-select-30" value="" option="[object Object]" label="Select file" hidelabel="true" size="large"></oc-checkbox-stub>
       </td>
       <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-expand oc-text-truncate oc-table-data-cell oc-table-data-cell-name">
@@ -80,7 +80,7 @@ exports[`SharedWithOthers when the wrapper is not loading anymore when length of
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-sharedWith">
         <oc-avatars-stub items="[object Object],[object Object]" stacked="true" istooltipdisplayed="true" maxdisplayed="3" accessibledescription="This file is shared via 1 invite This file is shared via 1 link" class="resource-table-people"></oc-avatars-stub>
       </td>
-      <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-actions oc-pr-s">
+      <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-actions oc-pr-m">
         <div class="resource-table-actions">
           <oc-button-stub type="button" size="medium" arialabel="Show context menu" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="context-menu-trigger-30" class="resource-table-btn-action-dropdown"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></oc-button-stub>
           <oc-drop-stub dropid="context-menu-drop-30" popperoptions="[object Object]" toggle="#context-menu-trigger-30" position="bottom-start" mode="click" closeonclick="true" paddingsize="remove"></oc-drop-stub>
