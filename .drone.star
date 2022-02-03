@@ -394,7 +394,6 @@ config = {
             ],
             "suites": {
                 "oCISBasic": [
-                    "webUILogin",
                     "webUINotifications",
                     "webUIPrivateLinks",
                     "webUIPreview",
@@ -402,10 +401,6 @@ config = {
                     "webUIWebdavLocks",
                 ],
                 "webUIWebdavLockProtection": "oCISWebdavLockProtection",
-                "oCISRename": [
-                    "webUIRenameFiles",
-                    "webUIRenameFolders",
-                ],
                 "oCISSharingBasic": [
                     "webUISharingAcceptShares",
                     "webUIRestrictSharing",
@@ -415,15 +410,22 @@ config = {
                 "oCISFiles1": [
                     "webUICreateFilesFolders",
                     "webUIDeleteFilesFolders",
-                    "webUIFiles",
                     "webUIFilesCopy",
+                    "webUIMarkdownEditor",
                 ],
                 "oCISFiles2": [
                     "webUIFilesList",
-                    "webUIMarkdownEditor",
                     "webUIFilesDetails",
                     "webUIFilesSearch",
                     "webUIFilesActionMenu",
+                ],
+                "oCISFiles3": [
+                    "webUIRenameFiles",
+                    "webUILogin",
+                ],
+                "oCISFiles4": [
+                    "webUIFiles",
+                    "webUIRenameFolders",
                 ],
                 "oCISSharingInternal1": [
                     "webUISharingInternalGroups",
