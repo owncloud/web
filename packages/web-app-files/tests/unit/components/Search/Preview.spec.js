@@ -2,9 +2,11 @@ import { shallowMount, createLocalVue } from '@vue/test-utils'
 import DesignSystem from 'owncloud-design-system'
 
 import Preview from '@files/src/components/Search/Preview.vue'
+import VueCompositionAPI from '@vue/composition-api'
 
 const localVue = createLocalVue()
 localVue.use(DesignSystem)
+localVue.use(VueCompositionAPI)
 
 const selectors = {
   searchPreview: '.files-search-preview'
@@ -13,7 +15,8 @@ const selectors = {
 const searchResult = {
   id: 1234,
   data: {
-    name: 'lorem.txt'
+    name: 'lorem.txt',
+    path: '/'
   }
 }
 
@@ -23,12 +26,23 @@ const spyTriggerDefaultAction = jest
 
 const wrapper = shallowMount(Preview, {
   localVue,
+  mocks: {
+    $route: {
+      query: {},
+      params: {}
+    }
+  },
   propsData: {
     searchResult
   },
   stubs: {
     'oc-progress': true,
     'oc-resource': true
+  },
+  setup: () => {
+    return {
+      resourceTargetLocation: {}
+    }
   }
 })
 

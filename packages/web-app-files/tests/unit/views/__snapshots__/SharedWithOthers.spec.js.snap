@@ -24,7 +24,7 @@ exports[`SharedWithOthers when the wrapper is not loading anymore when length of
         <oc-checkbox-stub id="resource-table-select-38" value="" option="[object Object]" label="Select file" hidelabel="true" size="large"></oc-checkbox-stub>
       </td>
       <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-expand oc-text-truncate oc-table-data-cell oc-table-data-cell-name">
-        <oc-resource-stub folderlink="[object Object]" resource="[object Object]" ispathdisplayed="true" isresourceclickable="true" parent-folder-link="[object Object]"></oc-resource-stub>
+        <oc-resource-stub folderlink="[object Object]" parentfolderlink="[object Object]" resource="[object Object]" ispathdisplayed="true" isresourceclickable="true"></oc-resource-stub>
       </td>
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-sharedWith">
         <oc-avatars-stub items="[object Object]" stacked="true" istooltipdisplayed="true" maxdisplayed="3" accessibledescription=" This file is shared via 1 link" class="resource-table-people"></oc-avatars-stub>
@@ -41,7 +41,7 @@ exports[`SharedWithOthers when the wrapper is not loading anymore when length of
         <oc-checkbox-stub id="resource-table-select-64" value="" option="[object Object]" label="Select file" hidelabel="true" size="large"></oc-checkbox-stub>
       </td>
       <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-expand oc-text-truncate oc-table-data-cell oc-table-data-cell-name">
-        <oc-resource-stub folderlink="[object Object]" resource="[object Object]" ispathdisplayed="true" isresourceclickable="true" parent-folder-link="[object Object]"></oc-resource-stub>
+        <oc-resource-stub folderlink="[object Object]" parentfolderlink="[object Object]" resource="[object Object]" ispathdisplayed="true" isresourceclickable="true"></oc-resource-stub>
       </td>
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-sharedWith">
         <oc-avatars-stub items="[object Object]" stacked="true" istooltipdisplayed="true" maxdisplayed="3" accessibledescription=" This file is shared via 1 link" class="resource-table-people"></oc-avatars-stub>
@@ -58,7 +58,7 @@ exports[`SharedWithOthers when the wrapper is not loading anymore when length of
         <oc-checkbox-stub id="resource-table-select-39" value="" option="[object Object]" label="Select file" hidelabel="true" size="large"></oc-checkbox-stub>
       </td>
       <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-expand oc-text-truncate oc-table-data-cell oc-table-data-cell-name">
-        <oc-resource-stub folderlink="[object Object]" resource="[object Object]" ispathdisplayed="true" isresourceclickable="true" parent-folder-link="[object Object]"></oc-resource-stub>
+        <oc-resource-stub folderlink="[object Object]" parentfolderlink="[object Object]" resource="[object Object]" ispathdisplayed="true" isresourceclickable="true"></oc-resource-stub>
       </td>
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-sharedWith">
         <oc-avatars-stub items="[object Object]" stacked="true" istooltipdisplayed="true" maxdisplayed="3" accessibledescription=" This file is shared via 1 link" class="resource-table-people"></oc-avatars-stub>
@@ -75,7 +75,7 @@ exports[`SharedWithOthers when the wrapper is not loading anymore when length of
         <oc-checkbox-stub id="resource-table-select-30" value="" option="[object Object]" label="Select file" hidelabel="true" size="large"></oc-checkbox-stub>
       </td>
       <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-expand oc-text-truncate oc-table-data-cell oc-table-data-cell-name">
-        <oc-resource-stub folderlink="[object Object]" resource="[object Object]" ispathdisplayed="true" isresourceclickable="true" parent-folder-link="[object Object]"></oc-resource-stub>
+        <oc-resource-stub folderlink="[object Object]" parentfolderlink="[object Object]" resource="[object Object]" ispathdisplayed="true" isresourceclickable="true"></oc-resource-stub>
       </td>
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-sharedWith">
         <oc-avatars-stub items="[object Object],[object Object]" stacked="true" istooltipdisplayed="true" maxdisplayed="3" accessibledescription="This file is shared via 1 invite This file is shared via 1 link" class="resource-table-people"></oc-avatars-stub>
