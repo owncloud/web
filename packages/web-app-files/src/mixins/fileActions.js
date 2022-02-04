@@ -81,7 +81,7 @@ export default {
             handler: ({ resources }) =>
               this.$_fileActions_openEditor(
                 editor,
-                resources[0].path,
+                resources[0].webDavPath,
                 resources[0].id,
                 EDITOR_MODE_EDIT
               ),
