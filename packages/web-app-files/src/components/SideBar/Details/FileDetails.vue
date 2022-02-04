@@ -348,7 +348,6 @@ export default {
       })
     },
     getParentSharePath(childPath, shares) {
-      // let currentPath = `/${childPath}`
       let currentPath = childPath
       if (!currentPath) {
         return null
