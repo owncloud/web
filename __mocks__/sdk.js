@@ -22,7 +22,15 @@ export default {
       return fixtureFiles[path]
     },
     getFavoriteFiles: () => fixtureFavoriteFiles,
-    fileInfo: (path) => fixtureFiles[path][0]
+    fileInfo: (path) => {
+      if (path.startsWith('/files/')) {
+        path = path.split('/').splice(3).join('/')
+        if (path === '') {
+          path = '/'
+        }
+      }
+      return fixtureFiles[path][0]
+    }
   },
   users: {
     getUser: (id) => fixtureUsers[id]

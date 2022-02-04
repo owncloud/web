@@ -40,7 +40,7 @@ exports[`Spaces component should only list drives of type "project" 1`] = `
                 </ul>
               </div>
             </div> <a href="#/" aria-current="page" class="router-link-exact-active router-link-active"><span class="space-default-image oc-px-m oc-py-m oc-icon oc-icon-xxl oc-icon-passive"><!----></span></a>
-          </div> <span class="oc-card-body"><a href="#/" aria-current="page" class="oc-card-title router-link-exact-active router-link-active"></a> <!----></span>
+          </div> <span class="oc-card-body"><a href="#/" aria-current="page" class="oc-card-title router-link-exact-active router-link-active"></a> <br> <!----></span>
         </div>
       </li>
     </ul>
