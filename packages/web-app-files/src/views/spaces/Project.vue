@@ -3,12 +3,18 @@
     <list-loader v-if="loadSpaceTask.isRunning" />
     <template v-else>
       <not-found-message v-if="!space.id" class="space-not-found oc-height-1-1" />
-      <div v-else-if="isSpaceRoot" class="oc-grid oc-grid-match oc-child-width-1-3@s">
+      <div
+        v-else-if="isSpaceRoot"
+        class="oc-grid oc-grid-match"
+        :class="{ 'oc-child-width-1-1@s': imageExpanded, 'oc-child-width-1-3@s': !imageExpanded }"
+      >
         <div v-if="imageContent">
           <img
-            class="space-overview-image"
+            :class="{ expanded: imageExpanded }"
+            class="space-overview-image oc-cursor-pointer"
             alt=""
             :src="'data:image/jpeg;base64,' + imageContent"
+            @click="toggleImageExpanded"
           />
         </div>
         <div>
@@ -224,7 +230,8 @@ export default {
       markdownCollapsed: true,
       markdownContainerCollapsedClass: 'collapsed',
       showMarkdownCollapse: false,
-      markdownResizeObserver: new ResizeObserver(this.onMarkdownResize)
+      markdownResizeObserver: new ResizeObserver(this.onMarkdownResize),
+      imageExpanded: false
     }
   },
   computed: {
@@ -327,6 +334,9 @@ export default {
       this.markdownCollapsed = !this.markdownCollapsed
       return this.$refs.markdownContainer.classList.toggle(this.markdownContainerCollapsedClass)
     },
+    toggleImageExpanded() {
+      this.imageExpanded = !this.imageExpanded
+    },
     onMarkdownResize() {
       if (!this.$refs.markdownContainer) {
         return
@@ -358,6 +368,11 @@ export default {
   &-image {
     border-radius: 10px;
     max-height: 250px;
+  }
+
+  &-image.expanded {
+    max-height: 100%;
+    max-width: 100%;
   }
 
   &-name {
