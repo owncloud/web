@@ -46,8 +46,9 @@ export default {
 
     $_rename_checkName(name) {
       if (name.trim() === '') {
-        this.setModalInputErrorMessage(this.$gettext('Space name cannot be empty'))
+        return this.setModalInputErrorMessage(this.$gettext('Space name cannot be empty'))
       }
+      return this.setModalInputErrorMessage(null)
     },
 
     $_rename_renameSpace(id, name) {

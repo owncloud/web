@@ -6137,7 +6137,7 @@ __metadata:
   dependencies:
     "@types/semver": ^7.3.8
     copy-to-clipboard: ^3.3.1
-    semver: ^6.1.0
+    semver: ^7.3.5
     vue2-dropzone: ^3.6.0
   languageName: unknown
   linkType: soft
@@ -9451,9 +9451,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"owncloud-sdk@npm:1.1.2":
-  version: 1.1.2
-  resolution: "owncloud-sdk@npm:1.1.2"
+"owncloud-sdk@npm:2.0.0-alpha.1":
+  version: 2.0.0-alpha.1
+  resolution: "owncloud-sdk@npm:2.0.0-alpha.1"
   dependencies:
     axios: ^0.21.1
     cross-fetch: ^3.0.6
@@ -9464,7 +9464,7 @@ __metadata:
     uuid: ^8.2.0
     webdav: 4.6.0
     xml-js: ^1.6.11
-  checksum: 41772419cf7d4f95bfc8c424f684c74881f157271bdca63d29c60965b5e8a88a48e07a1e172ab6302bd38be1170e54fa2407861c76e8021d6d7e533fc24eb200
+  checksum: c5b212ae61850b4989750e4f4a46208c04e340cbef97009a01931425511f62fbabf8513e4efafab04cef4f9ff0dae90a959feee5ce29582ed37e9faf5f7de126
   languageName: node
   linkType: hard
 
@@ -13398,8 +13398,13 @@ typescript@^4.3.2:
     lodash-es: ^4.17.21
     luxon: ^2.3.0
     oidc-client: 1.11.5
+<<<<<<< HEAD
     owncloud-design-system: 12.0.0
     owncloud-sdk: 1.1.2
+=======
+    owncloud-design-system: 12.0.0-alpha.22
+    owncloud-sdk: 2.0.0-alpha.1
+>>>>>>> 4993d08c6 (Update)
     p-queue: ^6.1.1
     popper-max-size-modifier: ^0.2.0
     portal-vue: ^2.1.7
