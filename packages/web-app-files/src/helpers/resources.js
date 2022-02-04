@@ -18,8 +18,14 @@ export function renameResource(resource, newName, newPath) {
   const isFolder = resource.type === 'dir' || resource.type === 'folder'
   const extension = _getFileExtension(newName)
 
+  let resourcePath = '/' + newPath + newName
+  if (resourcePath.startsWith('/files') || resourcePath.startsWith('/space')) {
+    resourcePath = resourcePath.split('/').splice(3).join('/')
+  }
+
   resource.name = newName
-  resource.path = '/' + newPath + newName
+  resource.path = resourcePath
+  resource.webDavPath = '/' + newPath + newName
   resource.extension = isFolder ? '' : extension
 
   return resource
@@ -205,7 +211,7 @@ export function buildSharedResource(share, incomingShares = false, allowSharePer
     resource.status = share.state
     resource.name = path.basename(share.file_target)
     resource.path = share.file_target
-    resource.webDavPath = share.file_target
+    resource.webDavPath = `/files/${share.share_with}/${share.file_target}`
     resource.canDownload = () => share.state === ShareStatus.accepted
     resource.canShare = () => SharePermissions.share.enabled(share.permissions)
     resource.canRename = () => SharePermissions.update.enabled(share.permissions)
@@ -216,7 +222,7 @@ export function buildSharedResource(share, incomingShares = false, allowSharePer
     resource.shareOwnerDisplayname = share.displayname_owner
     resource.name = path.basename(share.path)
     resource.path = share.path
-    resource.webDavPath = share.path
+    resource.webDavPath = `/files/${share.uid_owner}${share.path}`
     resource.canDownload = () => true
     resource.canShare = () => true
     resource.canRename = () => true
