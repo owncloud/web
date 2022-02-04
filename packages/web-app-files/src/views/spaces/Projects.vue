@@ -107,12 +107,11 @@
                   class="oc-card-title"
                   v-text="space.name"
                 />
-                <oc-tag
-                  v-if="isSpaceDisabled(space)"
-                  class="oc-mr-s"
-                  type="button"
-                  v-text="$gettext('Disabled')"
-                ></oc-tag>
+                <br />
+                <oc-tag v-if="isSpaceDisabled(space)" class="oc-mt-s" type="span">
+                  <oc-icon name="forbid-2" />
+                  <span v-translate>Disabled</span>
+                </oc-tag>
               </span>
             </div>
           </li>
