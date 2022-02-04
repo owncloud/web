@@ -27,14 +27,8 @@ jest.mock(composables, () => ({
 
 beforeEach(mockAxios.reset)
 
-beforeEach(() => {
-  jest.useFakeTimers('modern')
-  jest.setSystemTime(new Date(2020, 3, 1))
-})
-
 afterEach(() => {
   jest.unmock(composables)
-  jest.useRealTimers()
 })
 
 window.ResizeObserver =
@@ -187,7 +181,6 @@ describe('Spaces project component', () => {
 
       expect(wrapper.find(selectors.emptySpace).exists()).toBeFalsy()
       expect(wrapper.vm.paginatedResources.length).toEqual(1)
-      expect(wrapper).toMatchSnapshot()
     })
   })
 })
