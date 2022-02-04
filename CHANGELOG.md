@@ -205,6 +205,7 @@ Details
    https://github.com/owncloud/web/pull/6222
    https://github.com/owncloud/web/pull/6228
    https://github.com/owncloud/web/pull/6360
+   https://github.com/owncloud/web/pull/6365
 
 * Enhancement - Redesigned user menu: [#6272](https://github.com/owncloud/web/pull/6272)
 
