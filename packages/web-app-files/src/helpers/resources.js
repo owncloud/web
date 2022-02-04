@@ -35,6 +35,11 @@ export function buildResource(resource) {
   } else {
     resourcePath = resource.name
   }
+
+  if (!resourcePath.startsWith('/')) {
+    resourcePath = `/${resourcePath}`
+  }
+
   return {
     id: resource.fileInfo[DavProperty.FileId],
     fileId: resource.fileInfo[DavProperty.FileId],

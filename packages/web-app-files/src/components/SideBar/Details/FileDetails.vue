@@ -193,7 +193,7 @@ export default {
       return (
         this.showShares &&
         !this.sharesTreeLoading &&
-        this.file.webDavPath !== this.sharedParentDir &&
+        this.file.path !== this.sharedParentDir &&
         this.sharedParentDir !== null
       )
     },
@@ -294,10 +294,7 @@ export default {
       // missing early return
       this.sharedItem = null
 
-      const sharePathParentOrCurrent = this.getParentSharePath(
-        this.file.webDavPath,
-        this.sharesTree
-      )
+      const sharePathParentOrCurrent = this.getParentSharePath(this.file.path, this.sharesTree)
       if (sharePathParentOrCurrent === null) {
         return
       }
@@ -346,11 +343,12 @@ export default {
     refreshShareDetailsTree() {
       this.loadSharesTree({
         client: this.$client,
-        path: this.file.webDavPath,
+        path: this.file.path,
         $gettext: this.$gettext
       })
     },
     getParentSharePath(childPath, shares) {
+      // let currentPath = `/${childPath}`
       let currentPath = childPath
       if (!currentPath) {
         return null
