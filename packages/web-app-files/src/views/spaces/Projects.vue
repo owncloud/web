@@ -107,6 +107,12 @@
                   class="oc-card-title"
                   v-text="space.name"
                 />
+                <oc-tag
+                  v-if="isSpaceDisabled(space)"
+                  class="oc-mr-s"
+                  type="button"
+                  v-text="$gettext('Disabled')"
+                ></oc-tag>
               </span>
             </div>
           </li>
@@ -274,10 +280,14 @@ export default {
     },
 
     getSpaceCardAdditionalClass(space) {
-      if (space.root?.deleted?.state === 'trashed') {
+      if (this.isSpaceDisabled(space)) {
         return 'state-trashed'
       }
       return ''
+    },
+
+    isSpaceDisabled(space) {
+      return space.root?.deleted?.state === 'trashed'
     }
   }
 }
