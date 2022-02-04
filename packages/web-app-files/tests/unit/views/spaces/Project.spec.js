@@ -13,7 +13,6 @@ localVue.use(GetTextPlugin, {
   silent: true
 })
 
-
 const composables = '@files/src/composables/index'
 jest.mock(composables, () => ({
   ...jest.requireActual(composables),
