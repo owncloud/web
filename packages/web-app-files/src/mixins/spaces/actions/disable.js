@@ -12,8 +12,7 @@ export default {
           },
           handler: this.$_disable_showModal,
           isEnabled: (space) => {
-            // TODO: check property after API is capable
-            return !space.id.includes('.T.')
+            return !(space.root?.deleted?.state === 'trashed')
           },
           componentType: 'oc-button',
           class: 'oc-files-actions-delete-trigger'
