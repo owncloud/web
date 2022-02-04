@@ -44,13 +44,19 @@
           "
         >
           <li v-for="space in spaces" :key="space.id" class="oc-mb-m">
-            <div class="spaces-list-card oc-border oc-card oc-card-default">
+            <div
+              class="spaces-list-card oc-border oc-card oc-card-default"
+              :class="getSpaceCardAdditionalClass(space)"
+            >
               <div class="oc-card-media-top oc-border-b">
                 <oc-button
                   :id="`space-context-btn-${sanitizeSpaceId(space.id)}`"
                   v-oc-tooltip="$gettext('Show context menu')"
                   :aria-label="$gettext('Show context menu')"
-                  class="oc-position-absolute oc-position-top-right oc-mr-s oc-mt-s"
+                  class="
+                    space-context-btn
+                    oc-position-absolute oc-position-top-right oc-mr-s oc-mt-s
+                  "
                 >
                   <oc-icon name="more-2" />
                 </oc-button>
@@ -87,7 +93,12 @@
                     :src="'data:image/jpeg;base64,' + imageContentObject[space.id]"
                     alt=""
                   />
-                  <oc-icon v-else name="layout-grid" size="xxlarge" class="oc-px-m oc-py-m" />
+                  <oc-icon
+                    v-else
+                    name="layout-grid"
+                    size="xxlarge"
+                    class="space-default-image oc-px-m oc-py-m"
+                  />
                 </router-link>
               </div>
               <span class="oc-card-body">
@@ -260,6 +271,13 @@ export default {
 
     sanitizeSpaceId(id) {
       return id.replace('!', '\\!').split('.')[0]
+    },
+
+    getSpaceCardAdditionalClass(space) {
+      if (space.root?.deleted?.state === 'trashed') {
+        return 'state-trashed'
+      }
+      return ''
     }
   }
 }
@@ -274,9 +292,21 @@ export default {
   &-card {
     box-shadow: none !important;
 
+    .space-context-btn {
+      z-index: 999;
+    }
+
     .oc-card-media-top button {
       top: 0;
       right: 0;
+    }
+  }
+
+  &-card.state-trashed {
+    .space-image,
+    .space-default-image > svg {
+      filter: grayscale(100%);
+      opacity: 80%;
     }
   }
 
