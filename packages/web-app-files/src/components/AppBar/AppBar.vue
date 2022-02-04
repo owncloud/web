@@ -514,18 +514,16 @@ export default {
       this.fileFolderCreationLoading = true
 
       try {
-        const path = `files/${this.user.id}/${pathUtil.join(this.currentPath, fileName)}`
-        let resource
+        let path, resource
+
         if (this.isPersonalLocation) {
+          path = `files/${this.user.id}/${pathUtil.join(this.currentPath, fileName)}`
           await this.$client.files.putFileContents(path, '')
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
-        } else {
-          await this.$client.publicFiles.putFileContents(path, null, this.publicLinkPassword, '')
-          resource = await this.$client.publicFiles.getFileInfo(
-            path,
-            this.publicLinkPassword,
-            DavProperties.Default
-          )
+        } else if (this.isSpacesProjectLocation) {
+          path = `spaces/${this.$route.params.spaceId}/${pathUtil.join(this.currentPath, fileName)}`
+          await this.$client.files.putFileContents(path, '')
+          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         }
 
         if (this.newFileAction) {
