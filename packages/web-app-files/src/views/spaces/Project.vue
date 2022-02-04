@@ -1,11 +1,11 @@
 <template>
-  <div class="space-overview oc-p-s">
+  <div class="space-overview">
     <list-loader v-if="loadSpaceTask.isRunning" />
     <template v-else>
       <not-found-message v-if="!space.id" class="space-not-found oc-height-1-1" />
       <div
         v-else-if="isSpaceRoot"
-        class="oc-grid oc-grid-match"
+        class="oc-grid oc-grid-match oc-px-m oc-mt-m"
         :class="{ 'oc-child-width-1-1@s': imageExpanded, 'oc-child-width-1-3@s': !imageExpanded }"
       >
         <div v-if="imageContent">
@@ -368,6 +368,7 @@ export default {
   &-image {
     border-radius: 10px;
     max-height: 250px;
+    object-fit: cover;
   }
 
   &-image.expanded {

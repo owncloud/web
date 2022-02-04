@@ -1,5 +1,5 @@
 <template>
-  <div class="oc-p-s">
+  <div class="oc-py-s oc-px-m">
     <oc-button
       v-if="hasCreatePermission"
       id="new-space-menu-btn"
