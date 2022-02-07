@@ -82,10 +82,10 @@ export default {
       })
     },
     appName() {
-      return this.$route.params.app
+      return this.$route.params.appName
     },
     fileId() {
-      return this.$route.params.file_id
+      return this.$route.params.fileId
     }
   },
   async created() {

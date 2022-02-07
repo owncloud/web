@@ -35,5 +35,5 @@ Feature: create files
     Then there should be no resources listed on the webUI
     When the user creates a markdown file with the name "sample.md" using the webUI
     And the user closes the text editor using the webUI
-    Then the user should be in the root directory on the webUI
-    # Then breadcrumb for folder "parent-folder" should be displayed on the webUI
+    Then breadcrumb for folder "parent-folder" should be displayed on the webUI
+    And file "sample.md" should be listed on the webUI

@@ -256,12 +256,7 @@ export default {
         undefined
       )
 
-      routeOpts.params = {
-        ...routeOpts.params,
-        app: appName,
-        // FIXME: remove file_id fallback when we are sure noone is using it anymore
-        file_id: routeOpts.params.fileId
-      }
+      routeOpts.params.appName = appName
 
       routeOpts.query = {
         ...routeOpts.query,
