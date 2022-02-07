@@ -44,7 +44,7 @@ export default {
     const newValue = !file.starred
 
     return client.files
-      .favorite(file.path, newValue)
+      .favorite(file.webDavPath, newValue)
       .then(() => {
         context.commit('UPDATE_RESOURCE_FIELD', {
           id: file.id,
