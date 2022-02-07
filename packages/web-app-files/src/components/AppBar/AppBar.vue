@@ -134,14 +134,18 @@
 <script>
 import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
 import pathUtil from 'path'
-import { useRouter } from 'web-pkg/src/composables'
 import get from 'lodash-es/get'
 
 import Mixins from '../../mixins'
 import MixinFileActions, { EDITOR_MODE_CREATE } from '../../mixins/fileActions'
 import { buildResource } from '../../helpers/resources'
 import { bus } from 'web-pkg/src/instance'
-import { isLocationActive, isLocationPublicActive, isLocationSpacesActive } from '../../router'
+import {
+  isLocationActive,
+  isLocationPublicActive,
+  isLocationSpacesActive,
+  watchActiveLocation
+} from '../../router'
 
 import BatchActions from './SelectedResources/BatchActions.vue'
 import FileDrop from './Upload/FileDrop.vue'
@@ -164,10 +168,9 @@ export default {
   },
   mixins: [Mixins, MixinFileActions],
   setup() {
-    const router = useRouter()
     return {
-      isPersonalLocation: isLocationSpacesActive(router, 'files-spaces-personal-home'),
-      isPublicLocation: isLocationPublicActive(router, 'files-public-files')
+      isPersonalLocation: watchActiveLocation(isLocationSpacesActive, 'files-spaces-personal-home'),
+      isPublicLocation: watchActiveLocation(isLocationPublicActive, 'files-public-files')
     }
   },
   data: () => ({

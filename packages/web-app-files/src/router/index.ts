@@ -23,7 +23,7 @@ import {
   isLocationCommonActive,
   createLocationCommon
 } from './common'
-import { isAuthenticatedRoute } from './utils'
+import { isAuthenticatedRoute, watchActiveLocation } from './utils'
 import { buildRoutes as buildDeprecatedRoutes, isLocationActive } from './deprecated'
 import { RouteComponents } from './router'
 import { RouteConfig } from 'vue-router'
@@ -56,5 +56,6 @@ export {
   isLocationPublicActive,
   isLocationActive,
   isAuthenticatedRoute,
+  watchActiveLocation,
   buildRoutes
 }

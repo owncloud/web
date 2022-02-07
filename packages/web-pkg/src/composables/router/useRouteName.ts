@@ -1,7 +1,15 @@
 import { useRouter } from './useRouter'
-import { ref, Ref } from '@vue/composition-api'
+import { Ref, ref, watch } from '@vue/composition-api'
 
 export const useRouteName = (): Ref<string> => {
   const router = useRouter()
-  return ref(router.currentRoute?.name)
+  const routeName = ref('')
+  watch(
+    () => router.currentRoute,
+    (currentRoute) => {
+      routeName.value = currentRoute?.name
+    },
+    { immediate: true }
+  )
+  return routeName
 }
