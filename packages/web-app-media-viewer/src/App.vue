@@ -10,7 +10,10 @@
     <h1 class="oc-invisible-sr" v-text="pageTitle" />
     <div
       v-show="!loading && activeMediaFileCached"
-      class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-box-shadow-medium media-viewer-player"
+      class="
+        oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-box-shadow-medium
+        media-viewer-player
+      "
     >
       <video v-if="medium.isVideo" :key="`media-video-${medium.id}`" controls preload>
         <source :src="medium.url" :type="`video/${medium.ext}`" />
@@ -43,7 +46,16 @@
         {{ medium.name }}
       </p>
       <div
-        class="oc-background-brand oc-p-s oc-width-large oc-flex oc-flex-middle oc-flex-center oc-flex-around media-viewer-controls-action-bar"
+        class="
+          oc-background-brand
+          oc-p-s
+          oc-width-large
+          oc-flex
+          oc-flex-middle
+          oc-flex-center
+          oc-flex-around
+          media-viewer-controls-action-bar
+        "
       >
         <oc-button
           class="media-viewer-controls-previous"
@@ -229,7 +241,7 @@ export default {
   methods: {
     setCurrentFile(filePath) {
       for (let i = 0; i < this.mediaFiles.length; i++) {
-        if (this.mediaFiles[i].path === filePath) {
+        if (this.mediaFiles[i].webDavPath === filePath) {
           this.activeIndex = i
           break
         }

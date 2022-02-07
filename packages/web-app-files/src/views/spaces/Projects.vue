@@ -34,7 +34,14 @@
       </no-content-message>
       <div v-else class="spaces-list">
         <ul
-          class="oc-grid oc-grid-match oc-grid-column-small oc-grid-row-large oc-text-center oc-child-width-1-3@s"
+          class="
+            oc-grid
+            oc-grid-match
+            oc-grid-column-small
+            oc-grid-row-large
+            oc-text-center
+            oc-child-width-1-3@s
+          "
         >
           <li v-for="space in spaces" :key="space.id" class="oc-mb-m">
             <div
@@ -46,7 +53,10 @@
                   :id="`space-context-btn-${sanitizeSpaceId(space.id)}`"
                   v-oc-tooltip="$gettext('Show context menu')"
                   :aria-label="$gettext('Show context menu')"
-                  class="space-context-btn oc-position-absolute oc-position-top-right oc-mr-s oc-mt-s"
+                  class="
+                    space-context-btn
+                    oc-position-absolute oc-position-top-right oc-mr-s oc-mt-s
+                  "
                 >
                   <oc-icon name="more-2" />
                 </oc-button>
