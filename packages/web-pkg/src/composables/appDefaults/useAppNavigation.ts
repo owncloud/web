@@ -1,5 +1,5 @@
 import { unref } from '@vue/composition-api'
-import { basename, dirname } from 'path'
+import { basename } from 'path'
 import VueRouter from 'vue-router'
 
 import { MaybeRef } from '../../utils'
@@ -15,7 +15,7 @@ export interface AppNavigationResult {
   closeApp(): void
 }
 
-const paramsKey = 'params'
+const paramsKey = 'contextRouteParams'
 
 export const convertRouteParamsToContextQuery = (routeParams: LocationParams): LocationQuery => {
   const query = {}
@@ -29,7 +29,7 @@ export const convertContextQueryToRouteParams = (query: LocationQuery): Location
   const routeParams = {}
   const paramRegexp = new RegExp(`${paramsKey}\\[(.*)\\]`)
   Object.keys(query).forEach((paramName) => {
-    const routeParamName = (paramName.match(paramRegexp) || [] )[1]
+    const routeParamName = (paramName.match(paramRegexp) || [])[1]
     if (routeParamName) {
       routeParams[routeParamName] = query[paramName]
     }

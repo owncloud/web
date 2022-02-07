@@ -1,4 +1,3 @@
-
 type Dictionary<T> = { [key: string]: T }
 
 export type QueryValue = string | (string | null)[]
