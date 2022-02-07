@@ -107,6 +107,7 @@
                   class="oc-card-title"
                   v-text="space.name"
                 />
+                <span class="oc-display-block oc-mt-s" v-text="space.description"></span>
                 <br />
                 <oc-tag v-if="isSpaceDisabled(space)" class="oc-mt-s" type="span">
                   <oc-icon name="forbid-2" />
