@@ -2398,7 +2398,6 @@ def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnv
         "image": OC_CI_NODEJS,
         "environment": environment,
         "commands": [
-            "ls /usr/src/app/filesForUpload",
             "cd %s/tests/acceptance && ./run.sh" % dir["web"],
         ],
         "volumes": [{
@@ -2407,9 +2406,6 @@ def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnv
         }, {
             "name": "configs",
             "path": "/srv/config",
-        }, {
-            "name": "uploads",
-            "path": "/usr/src/app/filesForUpload",
         }],
     }]
 
@@ -2904,7 +2900,7 @@ def middlewareService(ocis = False, federatedServer = False):
         "BACKEND_HOST": "https://ocis:9200" if ocis else "http://owncloud",
         "OCIS_REVA_DATA_ROOT": "/srv/app/tmp/ocis/storage/owncloud/",
         "RUN_ON_OCIS": "true" if ocis else "false",
-        "REMOTE_UPLOAD_DIR": "/usr/src/app/filesForUpload",
+        "REMOTE_UPLOAD_DIR": "/uploads",
         "NODE_TLS_REJECT_UNAUTHORIZED": "0",
         "MIDDLEWARE_HOST": "middleware",
     }
@@ -2921,7 +2917,7 @@ def middlewareService(ocis = False, federatedServer = False):
             "path": "/srv/app",
         }, {
             "name": "uploads",
-            "path": "/usr/src/app/filesForUpload",
+            "path": "/uploads",
         }],
     }]
 
