@@ -103,27 +103,6 @@ module.exports = {
   },
 
   /**
-   *
-   * @param {string} userId
-   */
-  deleteUserFromCreatedUsersList: function (userId) {
-    delete this.createdUsers[userId]
-  },
-  /**
-   *
-   * @param {string} groupId
-   */
-  addGroupToCreatedGroupsList: function (groupId) {
-    this.createdGroups.push(groupId)
-  },
-  /**
-   *
-   * @param {string} userId
-   */
-  deleteGroupFromCreatedGroupsList: function (groupId) {
-    this.createdGroups = this.createdGroups.filter((item) => item !== groupId)
-  },
-  /**
    * gets the password of a previously created user
    * if the user was not created yet, gets the password from the default Users list
    * if the user is not in that list either, returns the userId as password
@@ -169,70 +148,6 @@ module.exports = {
   },
 
   /**
-   * gets the username of a previously created user from displayName
-   *
-   * @param {string} displayName
-   */
-  getUsernameFromDisplayname: async function (displayName) {
-    await this.fetchState()
-    for (const userid in this.state.created_users) {
-      if (this.state.created_users[userid].displayname === displayName) {
-        return userid
-      }
-    }
-  },
-  /**
-   * gets the display name of the specified user from the default users list
-   * returns null if the user is not in that list
-   *
-   * @param {string} userId
-   * @returns {null|string}
-   */
-  getDisplayNameOfDefaultUser: function (userId) {
-    if (userId in this.defaultUsers) {
-      return this.defaultUsers[userId].displayname
-    } else {
-      return null
-    }
-  },
-  /**
-   * gets the email address of a previously created user
-   * if the user was not created yet, gets the email address from the default Users list
-   * if the user is not in that list either, returns null
-   *
-   * @param {string} userId
-   * @returns {null|string}
-   */
-  getEmailAddressForUser: function (userId) {
-    let user = {}
-    if (userId in this.createdUsers) {
-      user = this.createdUsers[userId]
-    } else if (userId in this.defaultUsers) {
-      user = this.defaultUsers[userId]
-    } else {
-      return `${userId}@example.org`
-    }
-    if ('email' in user && user.email !== null) {
-      return user.email
-    } else {
-      return `${userId}@example.org`
-    }
-  },
-  /**
-   * gets the email address of the specified user from the default users list
-   * returns null if the user is not in that list
-   *
-   * @param {string} userId
-   * @returns {null|string}
-   */
-  getEmailAddressOfDefaultUser: function (userId) {
-    if (userId in this.defaultUsers) {
-      return this.defaultUsers[userId].email
-    } else {
-      return null
-    }
-  },
-  /**
    *
    * @returns {module.exports.createdUsers|{}}
    */
@@ -262,13 +177,5 @@ module.exports = {
   getCreatedGroups: function () {
     this.fetchState()
     return this.state.created_groups
-  },
-
-  resetCreatedUsers: function () {
-    this.createdUsers = {}
-  },
-
-  resetCreatedGroups: function () {
-    this.createdGroups = []
   }
 }
