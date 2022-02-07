@@ -12,6 +12,7 @@ Summary
 * Bugfix - Add and remove to/from favorites: [#6328](https://github.com/owncloud/web/issues/6328)
 * Bugfix - Jumpy batch actions: [#6360](https://github.com/owncloud/web/pull/6360)
 * Bugfix - Open folder from context menu: [#6187](https://github.com/owncloud/web/issues/6187)
+* Bugfix - Breadcrumbs in different views: [#6326](https://github.com/owncloud/web/issues/6326)
 * Bugfix - Focus management in topbar dropdowns: [#6213](https://github.com/owncloud/web/pull/6213)
 * Change - Remove UiKit: [#6103](https://github.com/owncloud/web/issues/6103)
 * Change - Use remixicons for redesign: [#6142](https://github.com/owncloud/web/pull/6142)
@@ -67,6 +68,14 @@ Details
 
    https://github.com/owncloud/web/issues/6187
    https://github.com/owncloud/web/pull/6232
+
+* Bugfix - Breadcrumbs in different views: [#6326](https://github.com/owncloud/web/issues/6326)
+
+   The files app had the breadcrumbs broken in the various views. We fixed that by actively
+   watching the current route now for updates of some active route helpers.
+
+   https://github.com/owncloud/web/issues/6326
+   https://github.com/owncloud/web/pull/6370
 
 * Bugfix - Focus management in topbar dropdowns: [#6213](https://github.com/owncloud/web/pull/6213)
 
