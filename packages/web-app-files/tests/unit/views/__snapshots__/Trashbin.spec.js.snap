@@ -34,7 +34,7 @@ exports[`Trashbin View when the view is not loading anymore when length of the p
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-status"></td>
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-actions oc-pr-m">
         <div class="resource-table-actions"> <button aria-label="Show context menu" class="resource-table-btn-action-dropdown oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="context-menu-trigger-file-id-1234"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button>
-          <div id="context-menu-drop-file-id-1234" class="oc-drop oc-box-shadow-medium oc-drop-rounded" style="box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.12);"></div>
+          <div id="context-menu-drop-file-id-1234" class="oc-drop oc-box-shadow-medium oc-rounded"></div>
         </div>
       </td>
     </tr>
@@ -55,7 +55,7 @@ exports[`Trashbin View when the view is not loading anymore when length of the p
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-status"></td>
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-actions oc-pr-m">
         <div class="resource-table-actions"> <button aria-label="Show context menu" class="resource-table-btn-action-dropdown oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="context-menu-trigger-file-id-5896"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button>
-          <div id="context-menu-drop-file-id-5896" class="oc-drop oc-box-shadow-medium oc-drop-rounded" style="box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.12);"></div>
+          <div id="context-menu-drop-file-id-5896" class="oc-drop oc-box-shadow-medium oc-rounded"></div>
         </div>
       </td>
     </tr>
@@ -76,7 +76,7 @@ exports[`Trashbin View when the view is not loading anymore when length of the p
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-status"></td>
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-actions oc-pr-m">
         <div class="resource-table-actions"> <button aria-label="Show context menu" class="resource-table-btn-action-dropdown oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="context-menu-trigger-file-id-9856"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button>
-          <div id="context-menu-drop-file-id-9856" class="oc-drop oc-box-shadow-medium oc-drop-rounded" style="box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.12);"></div>
+          <div id="context-menu-drop-file-id-9856" class="oc-drop oc-box-shadow-medium oc-rounded"></div>
         </div>
       </td>
     </tr>
