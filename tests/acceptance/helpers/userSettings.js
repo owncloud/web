@@ -148,6 +148,20 @@ module.exports = {
   },
 
   /**
+   * gets the username of a previously created user from displayName
+   *
+   * @param {string} displayName
+   */
+  getUsernameFromDisplayname: async function (displayName) {
+    await this.fetchState()
+    for (const userid in this.state.created_users) {
+      if (this.state.created_users[userid].displayname === displayName) {
+        return userid
+      }
+    }
+  },
+
+  /**
    *
    * @returns {module.exports.createdUsers|{}}
    */
