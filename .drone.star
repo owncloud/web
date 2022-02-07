@@ -2917,9 +2917,6 @@ def middlewareService(ocis = False, federatedServer = False):
         "image": OC_TESTING_MIDDLEWARE,
         "environment": environment,
         "volumes": [{
-            "name": "uploads",
-            "path": "/filesForUpload",
-        }, {
             "name": "gopath",
             "path": "/srv/app",
         }, {
