@@ -6290,6 +6290,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"follow-redirects@npm:^1.14.7":
+  version: 1.14.7
+  resolution: "follow-redirects@npm:1.14.7"
+  peerDependenciesMeta:
+    debug:
+      optional: true
+  checksum: f6d03e5e30877431065bca0d1b2e3db93949eb799d368a5c07ea8a4b71205f0349a3f8f0191bf13a07c93885522834dca1dc8e527dc99a772c6911fba24edc5f
+  languageName: node
+  linkType: hard
+
 "form-data@npm:^3.0.0":
   version: 3.0.1
   resolution: "form-data@npm:3.0.1"
@@ -9451,11 +9461,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"owncloud-sdk@npm:2.0.0-alpha.1":
-  version: 2.0.0-alpha.1
-  resolution: "owncloud-sdk@npm:2.0.0-alpha.1"
+"owncloud-sdk@npm:2.0.0-alpha.2":
+  version: 2.0.0-alpha.2
+  resolution: "owncloud-sdk@npm:2.0.0-alpha.2"
   dependencies:
-    axios: ^0.21.1
+    axios: ^0.25.0
     cross-fetch: ^3.0.6
     promise: ^8.0.3
     qs: ^6.10.3
@@ -9464,7 +9474,7 @@ __metadata:
     uuid: ^8.2.0
     webdav: 4.6.0
     xml-js: ^1.6.11
-  checksum: c5b212ae61850b4989750e4f4a46208c04e340cbef97009a01931425511f62fbabf8513e4efafab04cef4f9ff0dae90a959feee5ce29582ed37e9faf5f7de126
+  checksum: d2f0a64b28a47c3f06d9ee01cf9e6850d30eb6237c615af63f97ba39d6b2b58454b311202b1352d1f9c8489d0292c8ebd283f92cd7106763e206947eb63cb6ed
   languageName: node
   linkType: hard
 
@@ -13403,8 +13413,12 @@ typescript@^4.3.2:
     owncloud-sdk: 1.1.2
 =======
     owncloud-design-system: 12.0.0-alpha.22
+<<<<<<< HEAD
     owncloud-sdk: 2.0.0-alpha.1
 >>>>>>> 4993d08c6 (Update)
+=======
+    owncloud-sdk: 2.0.0-alpha.2
+>>>>>>> 33332739a (Bump SDK version to 2.0.0-alpha.2)
     p-queue: ^6.1.1
     popper-max-size-modifier: ^0.2.0
     portal-vue: ^2.1.7

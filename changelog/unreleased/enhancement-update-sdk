@@ -1,6 +1,6 @@
 Enhancement: Update SDK
 
-We've updated the ownCloud SDK to version 2.0.0-alpha.1.
+We've updated the ownCloud SDK to version 2.0.0-alpha.2.
 
 - Change - Drop Internet Explorer support: https://github.com/owncloud/owncloud-sdk/pull/966
 - Change - Pass full file or directory path to methods of Files class: https://github.com/owncloud/owncloud-sdk/pull/971
@@ -11,3 +11,4 @@ https://github.com/owncloud/web/pull/6309
 https://github.com/owncloud/web/pull/6287
 https://github.com/owncloud/owncloud-sdk/releases/tag/v1.1.2
 https://github.com/owncloud/owncloud-sdk/releases/tag/v2.0.0-alpha.1
+https://github.com/owncloud/owncloud-sdk/releases/tag/v2.0.0-alpha.2
