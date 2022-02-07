@@ -32,7 +32,7 @@ Summary
 * Enhancement - Show parent folder for resources: [#6226](https://github.com/owncloud/web/pull/6226)
 * Enhancement - Add default sorting to the spaces list: [#6262](https://github.com/owncloud/web/pull/6262)
 * Enhancement - Implement spaces list: [#6199](https://github.com/owncloud/web/pull/6199)
-* Enhancement - Update ODS to v12.0.0-alpha19: [#6086](https://github.com/owncloud/web/pull/6086)
+* Enhancement - Update ODS to v12.0.0: [#6086](https://github.com/owncloud/web/pull/6086)
 * Enhancement - Update SDK: [#6309](https://github.com/owncloud/web/pull/6309)
 
 Details
@@ -245,10 +245,10 @@ Details
    https://github.com/owncloud/web/issues/6104
    https://github.com/owncloud/web/pull/6199
 
-* Enhancement - Update ODS to v12.0.0-alpha19: [#6086](https://github.com/owncloud/web/pull/6086)
+* Enhancement - Update ODS to v12.0.0: [#6086](https://github.com/owncloud/web/pull/6086)
 
-   We updated the ownCloud Design System to version 12.0.0-alpha18. Please refer to the full
-   changelog in the ODS release (linked) for more details. Summary:
+   We updated the ownCloud Design System to version 12.0.0. Please refer to the full changelog in
+   the ODS release (linked) for more details. Summary:
 
    - Change - Drop Internet Explorer support:
    https://github.com/owncloud/owncloud-design-system/pull/1909 - Change - Do not sort in
@@ -303,8 +303,8 @@ Details
    https://github.com/owncloud/web/pull/6240
    https://github.com/owncloud/web/pull/6295
    https://github.com/owncloud/web/pull/6360
-   https://github.com/owncloud/owncloud-design-system/releases/tag/v12.0.0-alpha19
-   https://github.com/owncloud/owncloud-design-system/releases/tag/v12.0.0-alpha22
+   https://github.com/owncloud/web/pull/6368
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v12.0.0
 
 * Enhancement - Update SDK: [#6309](https://github.com/owncloud/web/pull/6309)
 
