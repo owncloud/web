@@ -43,15 +43,13 @@ export function useAppNavigation(options: AppNavigationOptions): AppNavigationRe
 
     const { path, routeName, routeParams } = unref(context)
 
-    const pushOpts = {
+    return router.push({
       name: unref(routeName),
       params: unref(routeParams),
       query: {
         scrollTo: basename(unref(path))
       }
-    }
-
-    return router.push(pushOpts)
+    })
   }
 
   const closeApp = () => {
