@@ -36,7 +36,13 @@ export default {
   },
   computed: {
     activeFilePath() {
-      return this.currentFileContext.path.replace(/^(\/|\\)+/, '')
+      let path = this.currentFileContext.path
+
+      if (path.startsWith('/files/') || path.startsWith('/spaces/')) {
+        path = path.split('/').splice(3).join('/')
+      }
+
+      return path.replace(/^(\/|\\)+/, '')
     }
   }
 }
