@@ -171,10 +171,10 @@ export default {
       isPersonalLocation: watchActiveLocation(isLocationSpacesActive, 'files-spaces-personal-home'),
       isPublicLocation: watchActiveLocation(isLocationPublicActive, 'files-public-files'),
       isSpacesProjectsLocation: watchActiveLocation(
-        isLocationPublicActive,
+        isLocationSpacesActive,
         'files-spaces-projects'
       ),
-      isSpacesProjectLocation: watchActiveLocation(isLocationPublicActive, 'files-spaces-project')
+      isSpacesProjectLocation: watchActiveLocation(isLocationSpacesActive, 'files-spaces-project')
     }
   },
   data: () => ({
