@@ -16,14 +16,6 @@ const routes = [
   }
 ]
 
-const routesForFileExtensions = [
-  'files-spaces-storage',
-  'files-common-favorites',
-  'files-shares-with-others',
-  'files-shares-with-me',
-  'files-public-files'
-]
-
 const appInfo = {
   name: 'Draw.io',
   id: 'draw-io',
@@ -37,14 +29,12 @@ const appInfo = {
         menuTitle($gettext) {
           return $gettext('New draw.io document…')
         }
-      },
-      routes: routesForFileExtensions
+      }
     },
     {
       extension: 'vsdx',
       newTab: true,
-      routeName: 'draw-io',
-      routes: routesForFileExtensions
+      routeName: 'draw-io'
     }
   ]
 }

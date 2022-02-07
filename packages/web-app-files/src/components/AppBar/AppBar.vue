@@ -134,7 +134,6 @@
 <script>
 import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
 import pathUtil from 'path'
-import get from 'lodash-es/get'
 
 import Mixins from '../../mixins'
 import MixinFileActions, { EDITOR_MODE_CREATE } from '../../mixins/fileActions'
@@ -179,7 +178,6 @@ export default {
     fileFolderCreationLoading: false
   }),
   computed: {
-    ...mapGetters('External', ['mimeTypes']),
     ...mapGetters([
       'getToken',
       'capabilities',
@@ -192,10 +190,12 @@ export default {
     ...mapState('Files', ['areHiddenFilesShown']),
 
     mimetypesAllowedForCreation() {
-      if (!get(this, 'mimeTypes', []).length) {
+      // we can't use `mapGetters` here because the External app doesn't exist in all deployments
+      const mimeTypes = this.$store.getters['External/mimeTypes']
+      if (!mimeTypes) {
         return []
       }
-      return this.mimeTypes.filter((mimetype) => mimetype.allow_creation) || []
+      return mimeTypes.filter((mimetype) => mimetype.allow_creation) || []
     },
     newButtonTooltip() {
       if (!this.canUpload) {

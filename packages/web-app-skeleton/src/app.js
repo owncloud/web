@@ -19,14 +19,7 @@ const injectExtensions = async (api) => {
       menuTitle($gettext) {
         return $gettext('Extension from skeleton')
       }
-    },
-    routes: [
-      'files-spaces-storage',
-      'files-common-favorites',
-      'files-shares-with-others',
-      'files-shares-with-me',
-      'files-public-files'
-    ]
+    }
   })
 }
 

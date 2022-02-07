@@ -15,14 +15,7 @@ const routes = [
 ]
 
 const fileExtensionConfig = {
-  canBeDefault: true,
-  routes: [
-    'files-spaces-storage',
-    'files-common-favorites',
-    'files-shares-with-others',
-    'files-shares-with-me',
-    'files-public-files'
-  ]
+  canBeDefault: true
 }
 
 const appInfo = {

@@ -23,18 +23,9 @@ const routes = [
 
 const routeName = 'mediaviewer-media'
 
-const routesForFileExtensions = [
-  'files-spaces-storage',
-  'files-common-favorites',
-  'files-shares-with-others',
-  'files-shares-with-me',
-  'files-public-files'
-]
-
 const fileExtensionConfig = {
   canBeDefault: true,
-  routeName,
-  routes: routesForFileExtensions
+  routeName
 }
 
 const appInfo = {
