@@ -51,7 +51,7 @@
     "@rollup/plugin-html": "^0.2.0",
     "@rollup/plugin-inject": "^4.0.4",
     "@rollup/plugin-json": "^4.1.0",
-    "@rollup/plugin-typescript": "^8.2.5",
+    "@rollup/plugin-typescript": "^8.3.0",
     "@testing-library/dom": "^8.11.0",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/user-event": "^13.5.0",
