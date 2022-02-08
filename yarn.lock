@@ -1584,6 +1584,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fortawesome/fontawesome-free@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "@fortawesome/fontawesome-free@npm:6.0.0"
+  checksum: 138e352ba6e9ecdd711899943919d4020704ddf22dc6a7de14d0dbfb5222c60738fcded6ca39a3fcd6fa8eaf9b83033e44dd25625d9e0118a9cea1d4585b36de
+  languageName: node
+  linkType: hard
+
 "@gar/promisify@npm:^1.0.1":
   version: 1.1.2
   resolution: "@gar/promisify@npm:1.1.2"
@@ -13379,6 +13386,7 @@ typescript@^4.3.2:
   version: 0.0.0-use.local
   resolution: "web-runtime@workspace:packages/web-runtime"
   dependencies:
+    "@fortawesome/fontawesome-free": ^6.0.0
     "@popperjs/core": ^2.4.0
     "@types/luxon": ^2.0.8
     "@vue/composition-api": ^1.4.4
