@@ -299,7 +299,9 @@ export default {
       const isTargetSelected = selected.some((e) => e.id === fileIdTarget)
       if (isTargetSelected) return
       if (targetInfo.type !== 'folder') return
-      const itemsInTarget = await this.fetchResources(targetInfo.path)
+      console.log(targetInfo)
+
+      const itemsInTarget = await this.fetchResources(targetInfo.webDavPath)
 
       // try to move all selected files
       const errors = []
@@ -318,8 +320,13 @@ export default {
               return
             }
 
+            console.log(resource)
+            console.log(targetInfo)
             try {
-              await this.$client.files.move(resource.path, join(targetInfo.path, resource.name))
+              await this.$client.files.move(
+                resource.webDavPath,
+                join(targetInfo.webDavPath, resource.name)
+              )
               this.REMOVE_FILE(resource)
               this.REMOVE_FILE_FROM_SEARCHED(resource)
               this.REMOVE_FILE_SELECTION(resource)
