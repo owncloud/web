@@ -37,7 +37,7 @@ export function buildResource(resource) {
   let resourcePath
 
   if (resource.name.startsWith('/files') || resource.name.startsWith('/space')) {
-    resourcePath = resource.name.split('/').splice(3).join('/')
+    resourcePath = resource.name.split('/').slice(3).join('/')
   } else {
     resourcePath = resource.name
   }
@@ -100,6 +100,14 @@ export function buildResource(resource) {
       return this.permissions.indexOf(DavPermission.Shared) >= 0
     }
   }
+}
+
+export function buildWebDavFilesPath(userId, path) {
+  return `files/${userId}/${path}`
+}
+
+export function buildWebDavSpacesPath(spaceId, path) {
+  return `spaces/${spaceId}/${path}`
 }
 
 export function attachIndicators(resource, sharesTree) {
@@ -211,7 +219,7 @@ export function buildSharedResource(share, incomingShares = false, allowSharePer
     resource.status = share.state
     resource.name = path.basename(share.file_target)
     resource.path = share.file_target
-    resource.webDavPath = `/files/${share.share_with}/${share.file_target}`
+    resource.webDavPath = buildWebDavFilesPath(share.share_with, share.file_target)
     resource.canDownload = () => share.state === ShareStatus.accepted
     resource.canShare = () => SharePermissions.share.enabled(share.permissions)
     resource.canRename = () => SharePermissions.update.enabled(share.permissions)
@@ -222,7 +230,7 @@ export function buildSharedResource(share, incomingShares = false, allowSharePer
     resource.shareOwnerDisplayname = share.displayname_owner
     resource.name = path.basename(share.path)
     resource.path = share.path
-    resource.webDavPath = `/files/${share.uid_owner}${share.path}`
+    resource.webDavPath = buildWebDavFilesPath(share.uid_owner, share.path)
     resource.canDownload = () => true
     resource.canShare = () => true
     resource.canRename = () => true

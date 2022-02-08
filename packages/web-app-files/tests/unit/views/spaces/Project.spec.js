@@ -67,7 +67,7 @@ const spaceMocks = {
   }
 }
 
-describe('Spaces project component', () => {
+describe('Spaces project view', () => {
   it('should not show anything if space can not be found', async () => {
     mockAxios.request.mockImplementationOnce(() => {
       return Promise.resolve({

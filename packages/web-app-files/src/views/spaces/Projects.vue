@@ -78,7 +78,7 @@
                       <oc-button
                         appearance="raw"
                         justify-content="left"
-                        @click="action.handler(space)"
+                        @click="action.handler({ spaces: [space] })"
                       >
                         <oc-icon :name="action.icon" />
                         {{ action.label() }}
@@ -138,6 +138,7 @@ import Disable from '../../mixins/spaces/actions/disable'
 import Restore from '../../mixins/spaces/actions/restore'
 import EditDescription from '../../mixins/spaces/actions/editDescription'
 import ShowDetails from '../../mixins/spaces/actions/showDetails'
+import { buildWebDavSpacesPath } from '../../helpers/resources'
 
 export default {
   components: {
@@ -159,9 +160,12 @@ export default {
     })
 
     const loadImageTask = useTask(function* (signal, { client, spaceId, fileName }) {
-      const fileContents = yield client.files.getFileContents(`spaces/${spaceId}/${fileName}`, {
-        responseType: 'arrayBuffer'
-      })
+      const fileContents = yield client.files.getFileContents(
+        buildWebDavSpacesPath(spaceId, fileName),
+        {
+          responseType: 'arrayBuffer'
+        }
+      )
 
       imageContentObject.value[spaceId] = Buffer.from(fileContents).toString('base64')
     })
@@ -225,7 +229,7 @@ export default {
         ...this.$_restore_items,
         ...this.$_delete_items,
         ...this.$_disable_items
-      ].filter((item) => item.isEnabled(space))
+      ].filter((item) => item.isEnabled({ spaces: [space] }))
     },
 
     getSpaceProjectRoute({ id, name }) {

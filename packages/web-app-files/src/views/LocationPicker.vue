@@ -99,6 +99,7 @@ import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
 import { DavProperties } from 'web-pkg/src/constants'
 import { createLocationPublic, createLocationSpaces } from '../router'
+import { buildWebDavFilesPath, buildWebDavSpacesPath } from '../helpers/resources'
 
 export default {
   metaInfo() {
@@ -162,14 +163,14 @@ export default {
           break
         case 'space':
           resources = yield ref.$client.files.list(
-            `/spaces/${ref.$route.query.spaceId}/${target}`,
+            buildWebDavSpacesPath(ref.$route.query.spaceId, target),
             1,
             DavProperties.Default
           )
           break
         default:
           resources = yield ref.$client.files.list(
-            `/files/${ref.user.id}/${target}`,
+            buildWebDavFilesPath(ref.user.id, target),
             1,
             DavProperties.Default
           )
@@ -435,17 +436,20 @@ export default {
                 )
                 break
               case 'space':
-                targetPath = `spaces/${this.$route.query.spaceId}/${this.target || '/'}`
+                targetPath = buildWebDavSpacesPath(this.$route.query.spaceId, this.target || '/')
                 targetPath += `/${resourceName}`
                 promise = this.$client.files.move(
-                  `spaces/${this.$route.query.spaceId}/${resource}`,
+                  buildWebDavSpacesPath(this.$route.query.spaceId, resource),
                   targetPath
                 )
                 break
               default:
-                targetPath = `files/${this.user.id}/${this.target || '/'}`
+                targetPath = buildWebDavFilesPath(this.user.id, this.target || '/')
                 targetPath += `/${resourceName}`
-                promise = this.$client.files.move(`files/${this.user.id}/${resource}`, targetPath)
+                promise = this.$client.files.move(
+                  buildWebDavFilesPath(this.user.id, resource),
+                  targetPath
+                )
             }
             break
           }
@@ -462,18 +466,21 @@ export default {
                 )
                 break
               case 'space':
-                targetPath = `spaces/${this.$route.query.spaceId}/${this.target || '/'}`
+                targetPath = buildWebDavSpacesPath(this.$route.query.spaceId, this.target || '/')
                 resourceName = basename(resource)
                 targetPath += `/${resourceName}`
                 promise = this.$client.files.copy(
-                  `spaces/${this.$route.query.spaceId}/${resource}`,
+                  buildWebDavSpacesPath(this.$route.query.spaceId, resource),
                   targetPath
                 )
                 break
               default:
-                targetPath = `files/${this.user.id}/${this.target || '/'}`
+                targetPath = buildWebDavFilesPath(this.user.id, this.target || '/')
                 targetPath += `/${resourceName}`
-                promise = this.$client.files.copy(`files/${this.user.id}/${resource}`, targetPath)
+                promise = this.$client.files.copy(
+                  buildWebDavFilesPath(this.user.id, resource),
+                  targetPath
+                )
             }
             break
           }

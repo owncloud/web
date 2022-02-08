@@ -42,14 +42,14 @@ describe('delete', () => {
     })
   }
 
-  describe('method "$_delete_showModal"', () => {
+  describe('method "$_delete_trigger"', () => {
     it('should trigger the delete modal window', async () => {
       const deletePromise = new Promise((resolve) => {
         return resolve()
       })
       const wrapper = getWrapper(deletePromise)
       const spyCreateModalStub = jest.spyOn(wrapper.vm, 'createModal')
-      await wrapper.vm.$_delete_showModal({ id: 1 })
+      await wrapper.vm.$_delete_trigger({ spaces: [{ id: 1 }] })
 
       expect(spyCreateModalStub).toHaveBeenCalledTimes(1)
     })

@@ -137,7 +137,7 @@ import pathUtil from 'path'
 
 import Mixins from '../../mixins'
 import MixinFileActions, { EDITOR_MODE_CREATE } from '../../mixins/fileActions'
-import { buildResource } from '../../helpers/resources'
+import { buildResource, buildWebDavFilesPath, buildWebDavSpacesPath } from '../../helpers/resources'
 import { bus } from 'web-pkg/src/instance'
 import {
   isLocationActive,
@@ -428,20 +428,18 @@ export default {
       this.fileFolderCreationLoading = true
 
       try {
-        let resource, path
+        let path = pathUtil.join(this.currentPath, folderName)
+        let resource
+
         if (this.isPersonalLocation) {
-          path = `files/${this.user.id}/${pathUtil.join(this.currentPath, folderName)}`
+          path = buildWebDavFilesPath(this.user.id, path)
           await this.$client.files.createFolder(path)
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else if (this.isSpacesProjectLocation) {
-          path = `spaces/${this.$route.params.spaceId}/${pathUtil.join(
-            this.currentPath,
-            folderName
-          )}`
+          path = buildWebDavSpacesPath(this.$route.params.spaceId, path)
           await this.$client.files.createFolder(path)
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else {
-          path = pathUtil.join(this.currentPath, folderName)
           await this.$client.publicFiles.createFolder(path, null, this.publicLinkPassword)
           resource = await this.$client.publicFiles.getFileInfo(
             path,
@@ -519,14 +517,15 @@ export default {
       this.fileFolderCreationLoading = true
 
       try {
-        let path, resource
+        let resource
+        let path = pathUtil.join(this.currentPath, fileName)
 
         if (this.isPersonalLocation) {
-          path = `files/${this.user.id}/${pathUtil.join(this.currentPath, fileName)}`
+          path = buildWebDavFilesPath(this.user.id, path)
           await this.$client.files.putFileContents(path, '')
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else if (this.isSpacesProjectLocation) {
-          path = `spaces/${this.$route.params.spaceId}/${pathUtil.join(this.currentPath, fileName)}`
+          path = buildWebDavSpacesPath(this.$route.params.spaceId, path)
           await this.$client.files.putFileContents(path, '')
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         }
@@ -682,16 +681,16 @@ export default {
 
         await this.$nextTick()
 
-        let path, resource
+        let path = pathUtil.join(this.currentPath, file)
+        let resource
 
         if (this.isPersonalLocation) {
-          path = `files/${this.user.id}/${pathUtil.join(this.currentPath, file)}`
+          path = buildWebDavFilesPath(this.user.id, path)
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else if (this.isSpacesProjectLocation) {
-          path = `spaces/${this.$route.params.spaceId}/${pathUtil.join(this.currentPath, file)}`
+          path = buildWebDavSpacesPath(this.$route.params.spaceId, path)
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else {
-          path = pathUtil.join(this.currentPath, file)
           resource = await this.$client.publicFiles.getFileInfo(
             path,
             this.publicLinkPassword,

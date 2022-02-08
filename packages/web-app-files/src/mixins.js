@@ -2,6 +2,7 @@ import pathUtil from 'path'
 import { DateTime } from 'luxon'
 import { mapActions, mapGetters } from 'vuex'
 import PQueue from 'p-queue'
+import { buildWebDavFilesPath, buildWebDavSpacesPath } from './helpers/resources'
 
 export default {
   filters: {
@@ -292,10 +293,13 @@ export default {
               )
             )
           } else {
-            let path = `files/${this.user.id}/${this.rootPath}${directory}`
+            let path = buildWebDavFilesPath(this.user.id, `${this.rootPath}${directory}`)
 
             if (this.$route.params.spaceId) {
-              path = `spaces/${this.$route.params.spaceId}/${this.rootPath}${directory}`
+              path = buildWebDavSpacesPath(
+                this.$route.params.spaceId,
+                `${this.rootPath}${directory}`
+              )
             }
 
             p = this.directoryQueue.add(() => this.$client.files.createFolder(path))
@@ -366,14 +370,12 @@ export default {
         )
       } else {
         basePath = this.path || ''
+        const joinedPath = pathUtil.join(basePath, relativePath)
 
         if (this.$route.params.spaceId) {
-          relativePath = `spaces/${this.$route.params.spaceId}/${pathUtil.join(
-            basePath,
-            relativePath
-          )}`
+          relativePath = buildWebDavSpacesPath(this.$route.params.spaceId, joinedPath)
         } else {
-          relativePath = `files/${this.user.id}/${pathUtil.join(basePath, relativePath)}`
+          relativePath = buildWebDavFilesPath(this.user.id, joinedPath)
         }
         // FIXME: this might break if relativePath is not the currentFolder
         // and is a mount point that has no chunk support

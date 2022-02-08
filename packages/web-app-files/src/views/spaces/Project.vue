@@ -18,7 +18,7 @@
           />
         </div>
         <div>
-          <h3 class="space-overview-name oc-mb-s">{{ space.name }}</h3>
+          <h1 class="space-overview-name oc-mb-s">{{ space.name }}</h1>
           <p v-if="space.description" class="oc-mt-rm">{{ space.description }}</p>
           <div>
             <div ref="markdownContainer" class="markdown-container" v-html="markdownContent"></div>
@@ -78,7 +78,7 @@ import { useStore, useRouter, useRouteQuery } from 'web-pkg/src/composables'
 import marked from 'marked'
 import MixinAccessibleBreadcrumb from '../../mixins/accessibleBreadcrumb'
 import { bus } from 'web-pkg/src/instance'
-import { buildResource } from '../../helpers/resources'
+import { buildResource, buildWebDavSpacesPath } from '../../helpers/resources'
 import ResourceTable, { determineSortFields } from '../../components/FilesList/ResourceTable.vue'
 import { createLocationSpaces } from '../../router'
 import { usePagination, useSort } from '../../composables'
@@ -146,7 +146,7 @@ export default {
       }
 
       const fileContents = yield ref.$client.files.getFileContents(
-        `spaces/${space.value.id}/${markdownEntry.name}`
+        buildWebDavSpacesPath(space.value.id, markdownEntry.name)
       )
 
       if (ref.markdownResizeObserver) {
@@ -167,7 +167,7 @@ export default {
       }
 
       const fileContents = yield ref.$client.files.getFileContents(
-        `spaces/${space.value.id}/${imageEntry.name}`,
+        buildWebDavSpacesPath(space.value.id, imageEntry.name),
         {
           responseType: 'arrayBuffer'
         }
@@ -179,7 +179,7 @@ export default {
     const loadFilesListTask = useTask(function* (signal, ref, sameRoute, path = null) {
       ref.CLEAR_CURRENT_FILES_LIST()
       const response = yield ref.$client.files.list(
-        `spaces/${ref.$route.params.spaceId}/${path || ''}`
+        buildWebDavSpacesPath(ref.$route.params.spaceId, path || '')
       )
 
       const resources = response.map(buildResource)
@@ -379,6 +379,7 @@ export default {
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    font-size: 1.5rem;
   }
 
   .markdown-container * {

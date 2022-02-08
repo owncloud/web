@@ -1,11 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Spaces project component space image should show if given 1`] = `
+exports[`Spaces project view space image should show if given 1`] = `
 <div class="space-overview">
   <div class="oc-grid oc-grid-match oc-px-m oc-mt-m oc-child-width-1-3@s">
     <div><img alt="" src="data:image/jpeg;base64,ZmlsZUNvbnRlbnQ=" class="space-overview-image oc-cursor-pointer"></div>
     <div>
-      <h3 class="space-overview-name oc-mb-s">space</h3>
+      <h1 class="space-overview-name oc-mb-s">space</h1>
       <!---->
       <div>
         <div class="markdown-container">
@@ -27,12 +27,12 @@ exports[`Spaces project component space image should show if given 1`] = `
 </div>
 `;
 
-exports[`Spaces project component space readme should show if given 1`] = `
+exports[`Spaces project view space readme should show if given 1`] = `
 <div class="space-overview">
   <div class="oc-grid oc-grid-match oc-px-m oc-mt-m oc-child-width-1-3@s">
     <div><img alt="" src="data:image/jpeg;base64,ZmlsZUNvbnRlbnQ=" class="space-overview-image oc-cursor-pointer"></div>
     <div>
-      <h3 class="space-overview-name oc-mb-s">space</h3>
+      <h1 class="space-overview-name oc-mb-s">space</h1>
       <!---->
       <div>
         <div class="markdown-container">

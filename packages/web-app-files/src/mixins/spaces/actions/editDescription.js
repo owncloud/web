@@ -10,8 +10,8 @@ export default {
           label: () => {
             return this.$gettext('Change description')
           },
-          handler: this.$_editDescription_showModal,
-          isEnabled: () => true,
+          handler: this.$_editDescription_trigger,
+          isEnabled: () => false, // @TODO enable as soon as backend supports this
           componentType: 'oc-button',
           class: 'oc-files-actions-edit-description-trigger'
         }
@@ -27,18 +27,18 @@ export default {
       'toggleModalConfirmButton'
     ]),
 
-    $_editDescription_showModal(space) {
+    $_editDescription_trigger({ spaces }) {
       const modal = {
         variation: 'passive',
-        title: this.$gettext('Change description for space') + ' ' + space.name,
+        title: this.$gettext('Change description for space') + ' ' + spaces[0].name,
         cancelText: this.$gettext('Cancel'),
         confirmText: this.$gettext('Confirm'),
         hasInput: true,
         inputLabel: this.$gettext('Space description'),
-        inputValue: space.description,
+        inputValue: spaces[0].description,
         onCancel: this.hideModal,
         onConfirm: (description) =>
-          this.$_editDescription_editDescriptionSpace(space.id, description)
+          this.$_editDescription_editDescriptionSpace(spaces[0].id, description)
       }
 
       this.createModal(modal)

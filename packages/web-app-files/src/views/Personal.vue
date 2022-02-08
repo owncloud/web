@@ -70,7 +70,7 @@ import MixinFileActions from '../mixins/fileActions'
 import MixinFilesListFilter from '../mixins/filesListFilter'
 import MixinFilesListScrolling from '../mixins/filesListScrolling'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
-import { buildResource } from '../helpers/resources'
+import { buildResource, buildWebDavFilesPath } from '../helpers/resources'
 import { fileList } from '../helpers/ui'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../constants'
@@ -148,7 +148,7 @@ export default {
 
       try {
         let resources = yield ref.fetchResources(
-          `/files/${ref.user.id}/${path || ref.$route.params.item || ''}`,
+          buildWebDavFilesPath(ref.user.id, path || ref.$route.params.item || ''),
           DavProperties.Default
         )
         resources = resources.map(buildResource)

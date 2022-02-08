@@ -10,9 +10,13 @@ export default {
           label: () => {
             return this.$gettext('Delete')
           },
-          handler: this.$_delete_showModal,
-          isEnabled: (space) => {
-            return space.root?.deleted?.state === 'trashed'
+          handler: this.$_delete_trigger,
+          isEnabled: ({ spaces }) => {
+            if (spaces.length === 0) {
+              return false
+            }
+
+            return spaces.every((space) => space.root?.deleted?.state === 'trashed')
           },
           componentType: 'oc-button',
           class: 'oc-files-actions-delete-trigger'
@@ -29,17 +33,17 @@ export default {
       'toggleModalConfirmButton'
     ]),
 
-    $_delete_showModal(space) {
+    $_delete_trigger({ spaces }) {
       const modal = {
         variation: 'danger',
-        title: this.$gettext('Delete space') + ' ' + space.name,
+        title: this.$gettext('Delete space') + ' ' + spaces[0].name,
         cancelText: this.$gettext('Cancel'),
         confirmText: this.$gettext('Delete'),
         icon: 'alarm-warning',
         message: this.$gettext('Are you sure you want to delete this space?'),
         hasInput: false,
         onCancel: this.hideModal,
-        onConfirm: () => this.$_delete_deleteSpace(space.id)
+        onConfirm: () => this.$_delete_deleteSpace(spaces[0].id)
       }
 
       this.createModal(modal)

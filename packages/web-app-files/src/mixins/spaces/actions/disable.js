@@ -5,17 +5,21 @@ export default {
     $_disable_items() {
       return [
         {
-          name: 'delete',
+          name: 'disable',
           icon: 'forbid-2',
           label: () => {
             return this.$gettext('Disable')
           },
-          handler: this.$_disable_showModal,
-          isEnabled: (space) => {
-            return !(space.root?.deleted?.state === 'trashed')
+          handler: this.$_disable_trigger,
+          isEnabled: ({ spaces }) => {
+            if (spaces.length === 0) {
+              return false
+            }
+
+            return spaces.every((space) => space.root?.deleted?.state !== 'trashed')
           },
           componentType: 'oc-button',
-          class: 'oc-files-actions-delete-trigger'
+          class: 'oc-files-actions-disable-trigger'
         }
       ]
     }
@@ -29,17 +33,17 @@ export default {
       'toggleModalConfirmButton'
     ]),
 
-    $_disable_showModal(space) {
+    $_disable_trigger({ spaces }) {
       const modal = {
         variation: 'danger',
-        title: this.$gettext('Disable space') + ' ' + space.name,
+        title: this.$gettext('Disable space') + ' ' + spaces[0].name,
         cancelText: this.$gettext('Cancel'),
         confirmText: this.$gettext('Disable'),
         icon: 'alarm-warning',
         message: this.$gettext('Are you sure you want to disable this space?'),
         hasInput: false,
         onCancel: this.hideModal,
-        onConfirm: () => this.$_disable_disableSpace(space.id)
+        onConfirm: () => this.$_disable_disableSpace(spaces[0].id)
       }
 
       this.createModal(modal)

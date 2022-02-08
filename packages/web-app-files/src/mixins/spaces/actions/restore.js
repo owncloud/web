@@ -10,9 +10,13 @@ export default {
           label: () => {
             return this.$gettext('Restore')
           },
-          handler: this.$_restore_showModal,
-          isEnabled: (space) => {
-            return space.root?.deleted?.state === 'trashed'
+          handler: this.$_restore_trigger,
+          isEnabled: ({ spaces }) => {
+            if (spaces.length === 0) {
+              return false
+            }
+
+            return spaces.every((space) => space.root?.deleted?.state === 'trashed')
           },
           componentType: 'oc-button',
           class: 'oc-files-actions-restore-trigger'
@@ -29,17 +33,17 @@ export default {
       'toggleModalConfirmButton'
     ]),
 
-    $_restore_showModal(space) {
+    $_restore_trigger({ spaces }) {
       const modal = {
         variation: 'passive',
-        title: this.$gettext('Restore space') + ' ' + space.name,
+        title: this.$gettext('Restore space') + ' ' + spaces[0].name,
         cancelText: this.$gettext('Cancel'),
         confirmText: this.$gettext('Restore'),
         icon: 'alarm-warning',
         message: this.$gettext('Are you sure you want to restore this space?'),
         hasInput: false,
         onCancel: this.hideModal,
-        onConfirm: () => this.$_restore_restoreSpace(space.id)
+        onConfirm: () => this.$_restore_restoreSpace(spaces[0].id)
       }
 
       this.createModal(modal)
