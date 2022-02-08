@@ -99,6 +99,7 @@ export default {
   }
   &.active {
     cursor: default;
+    overflow: hidden;
   }
 }
 </style>

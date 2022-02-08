@@ -39,7 +39,7 @@
               :aria-label="newButtonAriaLabel"
               variation="inverse"
               :disabled="isNewBtnDisabled"
-              class="oc-mb-xs oc-background-primary-gradient"
+              class="oc-background-primary-gradient"
             >
               <oc-icon name="add" />
               <translate>New</translate>
