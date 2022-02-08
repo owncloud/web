@@ -4,6 +4,7 @@
   "description": "ownCloud web runtime",
   "license": "AGPL-3.0",
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.4",
     "@popperjs/core": "^2.4.0",
     "@vue/composition-api": "^1.4.4",
     "easygettext": "^2.16.1",
