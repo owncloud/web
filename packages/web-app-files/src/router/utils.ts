@@ -3,7 +3,7 @@ import merge from 'lodash-es/merge'
 import get from 'lodash-es/get'
 import { RouteMeta } from 'vue-router/types/router'
 import { ref, Ref, watch } from '@vue/composition-api'
-import { useRouter } from 'web-pkg/src/composables'
+import { useRouter, useCurrentRoute } from 'web-pkg/src/composables'
 
 export interface ActiveRouteDirectorFunc<T extends string> {
   (router: VueRouter, ...comparatives: T[]): boolean
@@ -73,8 +73,9 @@ export const watchActiveLocation = <T extends string>(
 ): Ref<boolean> => {
   const value = ref(false)
   const router = useRouter()
+  const currentRoute = useCurrentRoute()
   watch(
-    () => router.currentRoute,
+    currentRoute,
     () => {
       value.value = director(router, ...comparatives)
     },
