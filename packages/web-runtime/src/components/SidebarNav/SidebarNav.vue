@@ -87,6 +87,7 @@ export default {
   z-index: 4;
 
   .toggle-sidebar-button {
+    min-height: 3rem;
     transition: all 0.2s ease-out;
     &:hover {
       background-color: var(--oc-color-background-highlight) !important;
@@ -103,6 +104,6 @@ export default {
   width: var(--oc-size-width-medium) !important;
 }
 .oc-app-navigation-collapsed {
-  width: 65px !important;
+  width: 67px !important;
 }
 </style>

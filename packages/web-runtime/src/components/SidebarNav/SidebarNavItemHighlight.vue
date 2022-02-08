@@ -71,22 +71,23 @@ export default {
 
 <style lang="scss">
 #highlighter {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  transition: transform 0.2s cubic-bezier(0.51, 0.06, 0.56, 1.37);
   border-radius: 5px;
-  z-index: -1;
-}
-#highlighter::before {
-  content: '';
-  position: absolute;
-  width: 40px;
-  top: 0;
   bottom: 0;
   left: 0;
-  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.14);
+  position: absolute;
+  right: 0;
+  top: 0;
+  transition: transform 0.2s cubic-bezier(0.51, 0.06, 0.56, 1.37);
+  z-index: -1;
+
+  &::before {
+    bottom: 0;
+    box-shadow: 2px 0 6px rgba(0, 0, 0, 0.14);
+    content: '';
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 40px;
+  }
 }
 </style>
