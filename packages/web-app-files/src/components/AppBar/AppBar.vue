@@ -1,5 +1,5 @@
 <template>
-  <div id="files-app-bar">
+  <div v-if="(isLightweight && !isHomeRoute) || !isLightweight" id="files-app-bar">
     <oc-hidden-announcer :announcement="selectedResourcesAnnouncement" level="polite" />
     <div class="files-topbar oc-py-s">
       <h1 class="oc-invisible-sr" v-text="pageTitle" />
@@ -80,6 +80,14 @@ export default {
     ...mapGetters('Files', ['files', 'selectedFiles']),
     ...mapState('Files', ['areHiddenFilesShown', 'areFileExtensionsShown']),
 
+    isLightweight() {
+      return window.Vue.$store.getters.user.usertype === 'lightweight'
+    },
+    isHomeRoute() {
+      return this.$route.fullPath.includes(
+        `/${window.Vue.$store.getters.user.id.charAt(0)}/${window.Vue.$store.getters.user.id}`
+      )
+    },
     pageTitle() {
       const title = this.$route.meta.title
       return this.$gettext(title)
