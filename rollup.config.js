@@ -102,7 +102,7 @@ const plugins = [
   }),
   copy({
     targets: [
-      { src: 'node_modules/owncloud-design-system/dist/system/icons/', dest: 'dist/' }
+      /*{ src: 'node_modules/owncloud-design-system/dist/system/icons/', dest: 'dist/' }*/
     ],
     copyOnce: true
   }),
