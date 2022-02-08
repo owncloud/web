@@ -1,7 +1,6 @@
 import { customRef, Ref } from '@vue/composition-api'
 import { useRouter } from './useRouter'
-
-export type QueryValue = string | (string | null)[]
+import { QueryValue } from './types'
 
 export const useRouteQuery = (name: string, defaultValue?: QueryValue): Ref<QueryValue> => {
   const router = useRouter()

@@ -21,8 +21,8 @@ const $route = {
     'public-token': 'a-token'
   },
   params: {
-    app: 'exampleApp',
-    file_id: '2147491323'
+    appName: 'exampleApp',
+    fileId: '2147491323'
   }
 }
 

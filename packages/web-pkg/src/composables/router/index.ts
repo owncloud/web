@@ -1,3 +1,4 @@
+export * from './types'
 export * from './useRouteName'
 export * from './useRouteQuery'
 export * from './useRouteQueryPersisted'
