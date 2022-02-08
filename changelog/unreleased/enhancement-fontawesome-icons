@@ -1,0 +1,7 @@
+Enhancement: Resource-specific icons in ResourceTable
+
+We've added FontAwesome icons for the different resource types, 
+each getting their respective resource type color from the ODS definition.
+
+https://github.com/owncloud/web/pull/6295
+https://github.com/owncloud/web/pull/6387
