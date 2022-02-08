@@ -1,0 +1,6 @@
+Bugfix: Rollup config
+
+The rollup config caused our watch changes build reloader with docker
+to be not working. 
+
+https://github.com/owncloud/web/pull/6382
