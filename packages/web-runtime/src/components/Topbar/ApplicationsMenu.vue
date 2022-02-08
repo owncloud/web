@@ -34,6 +34,7 @@
             appearance="raw"
             :class="{ 'oc-background-primary-gradient': n.active }"
             :variation="n.active ? 'inverse' : 'passive'"
+            @click="clickApp(n)"
           >
             <span class="icon-box">
               <oc-icon :name="n.icon" />
@@ -48,6 +49,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   props: {
     applicationsList: {
@@ -57,6 +60,8 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['configuration', 'getToken']),
+
     applicationSwitcherLabel() {
       return this.$gettext('Application Switcher')
     }
@@ -66,6 +71,27 @@ export default {
       onHidden: () => this.$refs.menubutton.$el.focus(),
       onShown: () => this.$refs.menu.$el.querySelector('a:first-of-type').focus()
     })
+  },
+  methods: {
+    async clickApp(appEntry) {
+      // @TODO use id or similar
+      if (appEntry.iconMaterial === 'switch_ui') {
+        await this.setClassicUIDefault()
+      }
+    },
+    setClassicUIDefault() {
+      const endpoint = new URL(this.configuration.server || window.location.origin)
+      endpoint.pathname =
+        endpoint.pathname.replace(/\/$/, '') + '/index.php/apps/web/settings/default'
+      const headers = new Headers()
+      headers.append('Authorization', 'Bearer ' + this.getToken)
+      headers.append('X-Requested-With', 'XMLHttpRequest')
+      return fetch(endpoint.href, {
+        headers,
+        method: 'POST',
+        body: JSON.stringify({ isDefault: false })
+      })
+    }
   }
 }
 </script>
