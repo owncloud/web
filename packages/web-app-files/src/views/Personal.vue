@@ -1,74 +1,77 @@
 <template>
   <div>
-    <app-bar
-      :has-bulk-actions="true"
-      :breadcrumbs="breadcrumbs"
-      :breadcrumbs-context-actions-items="[currentFolder]"
-      :show-actions-on-selection="true"
-    >
-      <template #actions>
-        <create-and-upload />
+    <div v-if="isLightweight && isHomeRoute"><home /></div>
+    <div v-else>
+      <app-bar
+        :has-bulk-actions="true"
+        :breadcrumbs="breadcrumbs"
+        :breadcrumbs-context-actions-items="[currentFolder]"
+        :show-actions-on-selection="true"
+      >
+        <template #actions>
+          <create-and-upload />
+        </template>
+      </app-bar>
+      <app-loading-spinner v-if="loadResourcesTask.isRunning" />
+      <template v-else>
+        <not-found-message v-if="folderNotFound" class="files-not-found oc-height-1-1" />
+        <no-content-message
+          v-else-if="isEmpty"
+          id="files-personal-empty"
+          class="files-empty"
+          icon="folder"
+        >
+          <template #message>
+            <span v-translate>There are no resources in this folder</span>
+          </template>
+          <template #callToAction>
+            <span v-translate>
+              Drag files and folders here or use the "New" or "Upload" buttons to add files
+            </span>
+          </template>
+        </no-content-message>
+        <resource-table
+          v-else
+          id="files-personal-table"
+          v-model="selectedResources"
+          class="files-table"
+          :class="{ 'files-table-squashed': !sidebarClosed }"
+          :are-thumbnails-displayed="displayThumbnails"
+          :resources="paginatedResources"
+          :target-route="resourceTargetLocation"
+          :header-position="fileListHeaderY"
+          :drag-drop="true"
+          :sort-by="sortBy"
+          :sort-dir="sortDir"
+          @fileDropped="fileDropped"
+          @fileClick="$_fileActions_triggerDefaultAction"
+          @rowMounted="rowMounted"
+          @sort="handleSort"
+        >
+          <template #quickActions="{ resource }">
+            <quick-actions
+              :class="resource.preview"
+              class="oc-visible@s"
+              :item="resource"
+              :actions="app.quickActions"
+            />
+          </template>
+          <template #contextMenu="{ resource }">
+            <context-actions v-if="isResourceInSelection(resource)" :items="selectedResources" />
+          </template>
+          <template #footer>
+            <pagination :pages="paginationPages" :current-page="paginationPage" />
+            <list-info
+              v-if="paginatedResources.length > 0"
+              class="oc-width-1-1 oc-my-s"
+              :files="totalFilesCount.files"
+              :folders="totalFilesCount.folders"
+              :size="totalFilesSize"
+            />
+          </template>
+        </resource-table>
       </template>
-    </app-bar>
-    <app-loading-spinner v-if="loadResourcesTask.isRunning" />
-    <template v-else>
-      <not-found-message v-if="folderNotFound" class="files-not-found oc-height-1-1" />
-      <no-content-message
-        v-else-if="isEmpty"
-        id="files-personal-empty"
-        class="files-empty"
-        icon="folder"
-      >
-        <template #message>
-          <span v-translate>There are no resources in this folder</span>
-        </template>
-        <template #callToAction>
-          <span v-translate>
-            Drag files and folders here or use the "New" or "Upload" buttons to add files
-          </span>
-        </template>
-      </no-content-message>
-      <resource-table
-        v-else
-        id="files-personal-table"
-        v-model="selectedResources"
-        class="files-table"
-        :class="{ 'files-table-squashed': !sidebarClosed }"
-        :are-thumbnails-displayed="displayThumbnails"
-        :resources="paginatedResources"
-        :target-route="resourceTargetLocation"
-        :header-position="fileListHeaderY"
-        :drag-drop="true"
-        :sort-by="sortBy"
-        :sort-dir="sortDir"
-        @fileDropped="fileDropped"
-        @fileClick="$_fileActions_triggerDefaultAction"
-        @rowMounted="rowMounted"
-        @sort="handleSort"
-      >
-        <template #quickActions="{ resource }">
-          <quick-actions
-            :class="resource.preview"
-            class="oc-visible@s"
-            :item="resource"
-            :actions="app.quickActions"
-          />
-        </template>
-        <template #contextMenu="{ resource }">
-          <context-actions v-if="isResourceInSelection(resource)" :items="selectedResources" />
-        </template>
-        <template #footer>
-          <pagination :pages="paginationPages" :current-page="paginationPage" />
-          <list-info
-            v-if="paginatedResources.length > 0"
-            class="oc-width-1-1 oc-my-s"
-            :files="totalFilesCount.files"
-            :folders="totalFilesCount.folders"
-            :size="totalFilesSize"
-          />
-        </template>
-      </resource-table>
-    </template>
+    </div>
   </div>
 </template>
 
@@ -103,6 +106,7 @@ import { defineComponent, unref, computed } from '@vue/composition-api'
 import { Resource, move } from '../helpers/resource'
 import { useCapabilityShareJailEnabled, useRouteParam, useStore } from 'web-pkg/src/composables'
 import { clientService } from 'web-pkg/src/services'
+import Home from './Home.vue'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -117,7 +121,8 @@ export default defineComponent({
     NotFoundMessage,
     ListInfo,
     Pagination,
-    ContextActions
+    ContextActions,
+    Home
   },
 
   mixins: [
@@ -161,6 +166,17 @@ export default defineComponent({
     ]),
     ...mapGetters(['user', 'homeFolder', 'configuration']),
 
+    isLightweight() {
+      const windowVue = window.Vue as any
+      console.log('user', windowVue.$store.getters.user)
+      return windowVue.$store.getters.user.usertype === 'lightweight'
+    },
+    isHomeRoute() {
+      const windowVue = window.Vue as any
+      return this.$route.fullPath.includes(
+        `/${windowVue.$store.getters.user.id.charAt(0)}/${windowVue.$store.getters.user.id}`
+      )
+    },
     isEmpty() {
       return this.paginatedResources.length < 1
     },

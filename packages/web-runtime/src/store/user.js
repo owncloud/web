@@ -161,7 +161,11 @@ const actions = {
           isAuthenticated: true,
           groups: userGroups,
           role,
-          language
+          language,
+          usertype:
+            user['user-type'] === 'federated' || user['user-type'] === 'lightweight'
+              ? 'lightweight'
+              : user['user-type']
         })
 
         if (user.quota.definition !== 'default' && user.quota.definition !== 'none') {
@@ -176,7 +180,7 @@ const actions = {
       }
 
       await context.dispatch('loadCapabilities', { token })
-      context.commit('SET_USER_READY', true)
+      context.state.id && context.commit('SET_USER_READY', true)
     }
     // if called from login, use available vue-authenticate instance; else re-init
     if (!vueAuthInstance) {
@@ -300,6 +304,7 @@ const mutations = {
     state.language = user.language
     state.role = user.role
     sentrySetUser({ username: user.id })
+    state.usertype = user.usertype
   },
   SET_CAPABILITIES(state, data) {
     state.capabilities = data.capabilities
