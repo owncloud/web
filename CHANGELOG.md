@@ -14,6 +14,7 @@ Summary
 * Bugfix - Open folder from context menu: [#6187](https://github.com/owncloud/web/issues/6187)
 * Bugfix - Breadcrumbs in different views: [#6326](https://github.com/owncloud/web/issues/6326)
 * Bugfix - Focus management in topbar dropdowns: [#6213](https://github.com/owncloud/web/pull/6213)
+* Change - Dropped editor route whitelist: [#6381](https://github.com/owncloud/web/pull/6381)
 * Change - Remove UiKit: [#6103](https://github.com/owncloud/web/issues/6103)
 * Change - Use remixicons for redesign: [#6142](https://github.com/owncloud/web/pull/6142)
 * Enhancement - Add spaces actions: [#6254](https://github.com/owncloud/web/pull/6254)
@@ -83,6 +84,15 @@ Details
    ApplicationSwitcher and Usermenu.
 
    https://github.com/owncloud/web/pull/6213
+
+* Change - Dropped editor route whitelist: [#6381](https://github.com/owncloud/web/pull/6381)
+
+   We've dropped the `routes` key from file extension handlers defined by editor apps. This was
+   used as a whitelist for being rendered as available editor in the files app. The only usage of
+   this was for disabling editors in the trashbin. We've moved that part of the business logic to
+   the files app itself and from now on ignore the `routes` key from editors.
+
+   https://github.com/owncloud/web/pull/6381
 
 * Change - Remove UiKit: [#6103](https://github.com/owncloud/web/issues/6103)
 
