@@ -1,6 +1,24 @@
 import { Commit } from 'vuex'
+
+interface AppProvider {
+  icon: string
+  name: string
+}
+
+/* eslint-disable camelcase */
+interface MimeType {
+  allow_creation?: boolean
+  app_providers: Array<AppProvider>
+  default_application?: string
+  description?: string
+  ext?: string
+  mime_type: string
+  name?: string
+}
+/* eslint-enable camelcase */
+
 const State = {
-  mimeTypes: {}
+  mimeTypes: []
 }
 
 const actions = {
@@ -25,23 +43,18 @@ const actions = {
     }
 
     const { 'mime-types': mimeTypes } = await response.json()
-
     commit('SET_MIME_TYPES', mimeTypes)
   }
 }
 
 const getters = {
-  mimeTypes: (
-    state: typeof State
-  ): {
-    [key: string]: string
-  } => {
+  mimeTypes: (state: typeof State): Array<MimeType> => {
     return state.mimeTypes
   }
 }
 
 const mutations = {
-  SET_MIME_TYPES(state: typeof State, mimeTypes: { [key: string]: string }): void {
+  SET_MIME_TYPES(state: typeof State, mimeTypes: Array<MimeType>): void {
     state.mimeTypes = mimeTypes
   }
 }
