@@ -229,7 +229,7 @@ export default {
               )
               break
             case 500:
-              errorFunc(this.$gettext('Saving error. Error when contacting the server'))
+              errorFunc(this.$gettext("Couldn't save. Error when contacting the server"))
               break
             case 401:
               errorFunc(this.$gettext("Saving error. You're not authorized to save this file"))
