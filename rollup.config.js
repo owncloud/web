@@ -97,9 +97,14 @@ const plugins = [
         src: `./config/${production ? 'config.dist.json' : 'config.json'}`,
         dest: 'dist'
       },
+    ]
+  }),
+  copy({
+    targets: [
       { src: 'node_modules/requirejs/require.js', dest: 'dist/js' },
       { src: 'node_modules/owncloud-design-system/dist/system/icons', dest: 'dist/' }
-    ]
+    ],
+    copyOnce: true
   }),
   html({
     title: process.env.TITLE || 'ownCloud',
