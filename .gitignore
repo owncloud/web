@@ -8,6 +8,7 @@ build/version.json
 /hugo
 
 .idea
+.vscode
 *.bundle.js
 *.bundle.js.map
 *.chunk.js
