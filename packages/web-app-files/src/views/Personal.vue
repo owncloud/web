@@ -299,8 +299,6 @@ export default {
       const isTargetSelected = selected.some((e) => e.id === fileIdTarget)
       if (isTargetSelected) return
       if (targetInfo.type !== 'folder') return
-      console.log(targetInfo)
-
       const itemsInTarget = await this.fetchResources(targetInfo.webDavPath)
 
       // try to move all selected files
