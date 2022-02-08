@@ -19,7 +19,7 @@
         </div>
         <div>
           <h3 class="space-overview-name oc-mb-s">{{ space.name }}</h3>
-          <span v-if="space.description">{{ space.description }}</span>
+          <p v-if="space.description" class="oc-mt-rm">{{ space.description }}</p>
           <div>
             <div ref="markdownContainer" class="markdown-container" v-html="markdownContent"></div>
             <div v-if="showMarkdownCollapse" class="markdown-collapse oc-text-center oc-mt-s">
@@ -33,9 +33,7 @@
       </div>
       <no-content-message v-if="isEmpty" id="files-space-empty" class="files-empty" icon="folder">
         <template #message>
-          <p class="oc-text-muted">
-            <span v-translate>No resources found</span>
-          </p>
+          <p v-translate class="oc-text-muted">No resources found</p>
         </template>
       </no-content-message>
       <resource-table
@@ -384,7 +382,7 @@ export default {
   }
 
   .markdown-container * {
-    color: grey !important;
+    color: var(--oc-color-text-muted) !important;
   }
 
   .markdown-container.collapsed {
