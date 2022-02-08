@@ -20,7 +20,7 @@ exports[`Spaces project component space image should show if given 1`] = `
       <!---->
     </div>
     <div class="oc-text-muted oc-text-large">
-      <p class="oc-text-muted"><span data-msgid="No resources found" data-current-language="en_US">No resources found</span></p>
+      <p class="oc-text-muted" data-msgid="No resources found" data-current-language="en_US">No resources found</p>
     </div>
     <div class="oc-text-muted"></div>
   </div>
@@ -47,7 +47,7 @@ exports[`Spaces project component space readme should show if given 1`] = `
       <!---->
     </div>
     <div class="oc-text-muted oc-text-large">
-      <p class="oc-text-muted"><span data-msgid="No resources found" data-current-language="en_US">No resources found</span></p>
+      <p class="oc-text-muted" data-msgid="No resources found" data-current-language="en_US">No resources found</p>
     </div>
     <div class="oc-text-muted"></div>
   </div>
