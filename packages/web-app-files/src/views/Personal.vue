@@ -320,8 +320,6 @@ export default {
               return
             }
 
-            console.log(resource)
-            console.log(targetInfo)
             try {
               await this.$client.files.move(
                 resource.webDavPath,
