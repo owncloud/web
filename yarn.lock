@@ -1584,10 +1584,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fortawesome/fontawesome-free@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "@fortawesome/fontawesome-free@npm:6.0.0"
-  checksum: 138e352ba6e9ecdd711899943919d4020704ddf22dc6a7de14d0dbfb5222c60738fcded6ca39a3fcd6fa8eaf9b83033e44dd25625d9e0118a9cea1d4585b36de
+"@fortawesome/fontawesome-free@npm:^5.15.4":
+  version: 5.15.4
+  resolution: "@fortawesome/fontawesome-free@npm:5.15.4"
+  checksum: 32281c3df4075290d9a96dfc22f72fadb3da7055d4117e48d34046b8c98032a55fa260ae351b0af5d6f6fb57a2f5d79a4abe52af456da35195f7cb7dda27b4a2
   languageName: node
   linkType: hard
 
@@ -13386,7 +13386,7 @@ typescript@^4.3.2:
   version: 0.0.0-use.local
   resolution: "web-runtime@workspace:packages/web-runtime"
   dependencies:
-    "@fortawesome/fontawesome-free": ^6.0.0
+    "@fortawesome/fontawesome-free": ^5.15.4
     "@popperjs/core": ^2.4.0
     "@types/luxon": ^2.0.8
     "@vue/composition-api": ^1.4.4
