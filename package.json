@@ -26,11 +26,14 @@
     "test:unit": "jest --coverage --config ./tests/unit/config/jest.config.js"
   },
   "browserslist": [
-    "last 2 version",
+    "last 2 versions",
     "> .2%",
     "not dead",
-    "not IE 11",
-    "not IE_Mob 11"
+    "not Explorer > 0",
+    "not ExplorerMobile > 0",
+    "not BlackBerry > 0",
+    "not OperaMini all",
+    "not OperaMobile > 0"
   ],
   "dependencies": {
     "vue": "^2.6.10"
