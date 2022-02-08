@@ -26,35 +26,38 @@ const announceRoutes = (applicationId: string, router: VueRouter, routes: RouteC
   const namespaceRouteName = (name: string) => {
     return name.startsWith(`${applicationId}-`) ? name : `${applicationId}-${name}`
   }
-  const applicationRoutes = routes.map((applicationRoute) => {
-    if (!isObject(applicationRoute)) {
-      throw new ApiError("route can't be blank", applicationRoute)
-    }
+  routes
+    .map((applicationRoute) => {
+      if (!isObject(applicationRoute)) {
+        throw new ApiError("route can't be blank", applicationRoute)
+      }
 
-    const route = clone(applicationRoute)
-    if (route.name) {
-      route.name = applicationId === route.name ? route.name : namespaceRouteName(route.name)
-    }
+      const route = clone(applicationRoute)
+      if (route.name) {
+        route.name = applicationId === route.name ? route.name : namespaceRouteName(route.name)
+      }
 
-    route.path = `/${encodeURI(applicationId)}${route.path}`
+      route.path = `/${encodeURI(applicationId)}${route.path}`
 
-    if (route.children) {
-      route.children = route.children.map((childRoute) => {
-        if (!isObject(applicationRoute)) {
-          throw new ApiError("route children can't be blank", applicationRoute, childRoute)
-        }
+      if (route.children) {
+        route.children = route.children.map((childRoute) => {
+          if (!isObject(applicationRoute)) {
+            throw new ApiError("route children can't be blank", applicationRoute, childRoute)
+          }
 
-        const r = clone(childRoute)
-        if (childRoute.name) {
-          r.name = namespaceRouteName(childRoute.name)
-        }
-        return r
-      })
-    }
+          const r = clone(childRoute)
+          if (childRoute.name) {
+            r.name = namespaceRouteName(childRoute.name)
+          }
+          return r
+        })
+      }
 
-    return route
-  })
-  router.addRoutes(applicationRoutes)
+      return route
+    })
+    .forEach((route) => {
+      router.addRoute(route)
+    })
 }
 
 /**

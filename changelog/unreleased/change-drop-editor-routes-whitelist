@@ -1,0 +1,5 @@
+Change: Dropped editor route whitelist
+
+We've dropped the `routes` key from file extension handlers defined by editor apps. This was used as a whitelist for being rendered as available editor in the files app. The only usage of this was for disabling editors in the trashbin. We've moved that part of the business logic to the files app itself and from now on ignore the `routes` key from editors.
+
+https://github.com/owncloud/web/pull/6381

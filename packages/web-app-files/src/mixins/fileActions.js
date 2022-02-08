@@ -1,7 +1,7 @@
 import get from 'lodash-es/get'
 import { mapGetters, mapActions, mapState } from 'vuex'
 
-import { isAuthenticatedRoute, isLocationActive } from '../router'
+import { isAuthenticatedRoute, isLocationCommonActive } from '../router'
 import AcceptShare from './actions/acceptShare'
 import Copy from './actions/copy'
 import DeclineShare from './actions/declineShare'
@@ -61,6 +61,9 @@ export default {
     },
 
     $_fileActions_editorActions() {
+      if (isLocationCommonActive(this.$router, 'files-common-trash')) {
+        return []
+      }
       return this.apps.fileEditors
         .map((editor) => {
           return {
@@ -83,12 +86,6 @@ export default {
               ),
             isEnabled: ({ resources }) => {
               if (resources.length !== 1) {
-                return false
-              }
-              if (
-                Array.isArray(editor.routes) &&
-                !isLocationActive(this.$router, ...editor.routes.map((name) => ({ name })))
-              ) {
                 return false
               }
 
@@ -199,6 +196,10 @@ export default {
     // to open a resource with a specific mimeType
     // FIXME: filesApp should not know anything about any other app, dont cross the line!!! BAD
     $_fileActions_loadExternalAppActions(resources) {
+      if (isLocationCommonActive(this.$router, 'files-common-trash')) {
+        return []
+      }
+
       // we don't support external apps as batch action as of now
       if (resources.length > 1) {
         return []
