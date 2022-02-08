@@ -1,0 +1,9 @@
+Bugfix: Scrolling inside Markdown Editor
+
+Scrolling inside the Markdown Editor was broken, before the redesign by 
+allowing the user to scroll the appBar out of the viewport, and after 
+the redesign by cutting a potentially long preview off at the bottom.
+This has been addressed by allowing to scroll the preview content.
+
+https://github.com/owncloud/web/issues/4606
+https://github.com/owncloud/web/pull/6386
