@@ -254,10 +254,10 @@ export default {
   }
 
   .oc-search-input {
+    background-color: var(--oc-color-input-bg);
     transition: 0s;
 
     @media (max-width: 959px) {
-      background: var(--oc-color-input-bg);
       border: none;
       display: inline;
     }
