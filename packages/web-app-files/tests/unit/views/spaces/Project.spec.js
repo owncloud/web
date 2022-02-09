@@ -1,5 +1,5 @@
 import GetTextPlugin from 'vue-gettext'
-import { mount, RouterLinkStub } from '@vue/test-utils'
+import { RouterLinkStub, shallowMount } from '@vue/test-utils'
 import { localVue } from '../views.setup'
 import { createStore } from 'vuex-extensions'
 import Files from '@/__fixtures__/files'
@@ -199,7 +199,7 @@ function getMountedWrapper(spaceResources = [], spaceItem = null) {
     }
   }
 
-  return mount(SpaceProject, {
+  return shallowMount(SpaceProject, {
     localVue,
     stubs: {
       RouterLink: RouterLinkStub
@@ -212,8 +212,7 @@ function getMountedWrapper(spaceResources = [], spaceItem = null) {
           getFileContents: jest.fn(() => 'fileContent'),
           list: jest.fn(() => spaceResources)
         }
-      },
-      $ngettext: () => 'text'
+      }
     },
 
     store: createStore(Vuex.Store, {
