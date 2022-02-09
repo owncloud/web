@@ -1,0 +1,6 @@
+Enhancement: Implement spaces front page
+
+Each space can now be entered from within the spaces list. The space front page will then display all the space contents, plus an image and a readme file if set. Basic actions like uploading files, creating folders, renaming resources, and more. were also implemented in the course of this.
+
+https://github.com/owncloud/web/pull/6287
+https://github.com/owncloud/web/issues/6271

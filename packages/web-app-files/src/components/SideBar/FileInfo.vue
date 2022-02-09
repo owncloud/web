@@ -7,7 +7,7 @@
           :name="file.name"
           :extension="file.extension"
           :type="file.type"
-          :full-path="file.path"
+          :full-path="file.webDavPath"
           :is-path-displayed="false"
         />
       </h3>

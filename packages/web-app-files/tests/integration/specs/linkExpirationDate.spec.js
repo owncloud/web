@@ -14,6 +14,8 @@ import Personal from '@files/src/views/Personal.vue'
 import SharedWithMe from '@files/src/views/SharedWithMe.vue'
 import SharedWithOthers from '@files/src/views/SharedWithOthers.vue'
 import SharedViaLink from '@files/src/views/SharedViaLink.vue'
+import SpaceProject from '@files/src/views/spaces/Project.vue'
+import SpaceProjects from '@files/src/views/spaces/Projects.vue'
 import Trashbin from '@files/src/views/Trashbin.vue'
 import { buildRoutes, createLocationSpaces } from '@files/src/router'
 import fileSideBars from '@files/src/fileSideBars'
@@ -35,6 +37,10 @@ const routes = buildRoutes({
   SharedViaLink,
   SharedWithMe,
   SharedWithOthers,
+  Spaces: {
+    Project: SpaceProject,
+    Projects: SpaceProjects
+  },
   Trashbin
 })
 

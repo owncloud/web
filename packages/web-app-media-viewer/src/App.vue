@@ -241,7 +241,7 @@ export default {
   methods: {
     setCurrentFile(filePath) {
       for (let i = 0; i < this.mediaFiles.length; i++) {
-        if (this.mediaFiles[i].path === filePath) {
+        if (this.mediaFiles[i].webDavPath === filePath) {
           this.activeIndex = i
           break
         }

@@ -125,7 +125,7 @@
           <size-info v-if="hasBulkActions && selectedFiles.length > 0" class="oc-mr oc-visible@l" />
           <batch-actions v-if="hasBulkActions" />
         </div>
-        <view-options />
+        <view-options v-if="!hideViewOptions" />
       </div>
     </div>
   </div>
@@ -137,7 +137,7 @@ import pathUtil from 'path'
 
 import Mixins from '../../mixins'
 import MixinFileActions, { EDITOR_MODE_CREATE } from '../../mixins/fileActions'
-import { buildResource } from '../../helpers/resources'
+import { buildResource, buildWebDavFilesPath, buildWebDavSpacesPath } from '../../helpers/resources'
 import { bus } from 'web-pkg/src/instance'
 import {
   isLocationActive,
@@ -169,7 +169,12 @@ export default {
   setup() {
     return {
       isPersonalLocation: watchActiveLocation(isLocationSpacesActive, 'files-spaces-personal-home'),
-      isPublicLocation: watchActiveLocation(isLocationPublicActive, 'files-public-files')
+      isPublicLocation: watchActiveLocation(isLocationPublicActive, 'files-public-files'),
+      isSpacesProjectsLocation: watchActiveLocation(
+        isLocationSpacesActive,
+        'files-spaces-projects'
+      ),
+      isSpacesProjectLocation: watchActiveLocation(isLocationSpacesActive, 'files-spaces-project')
     }
   },
   data: () => ({
@@ -247,18 +252,28 @@ export default {
     hasBulkActions() {
       return this.$route.meta.hasBulkActions === true
     },
+    hideViewOptions() {
+      return this.$route.meta.hideViewOptions === true
+    },
     pageTitle() {
       const title = this.$route.meta.title
       return this.$gettext(title)
     },
 
-    breadcrumbs() {
-      if (!(this.isPublicLocation || this.isPersonalLocation)) {
+    breadcrumbs: function () {
+      if (
+        !(
+          this.isPublicLocation ||
+          this.isPersonalLocation ||
+          this.isSpacesProjectsLocation ||
+          this.isSpacesProjectLocation
+        )
+      ) {
         return []
       }
 
       const { params: routeParams, path: routePath } = this.$route
-      const { item: requestedItemPath = '' } = routeParams
+      const requestedItemPath = routeParams.item || ''
       const basePaths =
         '/' +
         decodeURIComponent(routePath)
@@ -278,10 +293,25 @@ export default {
 
           if (i === rawItems.length - 1) {
             this.isPublicLocation && acc.shift()
-            acc.length &&
-              (acc[0].text = this.isPersonalLocation
-                ? this.$gettext('All files')
-                : this.$gettext('Public link'))
+
+            if (acc.length) {
+              if (this.isPersonalLocation) {
+                acc[0].text = this.$gettext('All files')
+              } else if (this.isSpacesProjectLocation || this.isSpacesProjectsLocation) {
+                acc[0] = {
+                  text: this.$gettext('Spaces'),
+                  to: '/files/spaces/projects'
+                }
+                if (this.$route.params.spaceId) {
+                  acc.splice(1, 0, {
+                    text: this.$route.params.spaceId,
+                    to: `/files/spaces/projects/${this.$route.params.spaceId}`
+                  })
+                }
+              } else {
+                acc[0].text = this.$gettext('Public link')
+              }
+            }
             acc.length && delete acc[acc.length - 1].to
           } else {
             delete acc[i].onClick
@@ -398,10 +428,15 @@ export default {
       this.fileFolderCreationLoading = true
 
       try {
-        const path = pathUtil.join(this.currentPath, folderName)
-
+        let path = pathUtil.join(this.currentPath, folderName)
         let resource
+
         if (this.isPersonalLocation) {
+          path = buildWebDavFilesPath(this.user.id, path)
+          await this.$client.files.createFolder(path)
+          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
+        } else if (this.isSpacesProjectLocation) {
+          path = buildWebDavSpacesPath(this.$route.params.spaceId, path)
           await this.$client.files.createFolder(path)
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else {
@@ -482,18 +517,17 @@ export default {
       this.fileFolderCreationLoading = true
 
       try {
-        const path = pathUtil.join(this.currentPath, fileName)
         let resource
+        let path = pathUtil.join(this.currentPath, fileName)
+
         if (this.isPersonalLocation) {
+          path = buildWebDavFilesPath(this.user.id, path)
           await this.$client.files.putFileContents(path, '')
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
-        } else {
-          await this.$client.publicFiles.putFileContents(path, null, this.publicLinkPassword, '')
-          resource = await this.$client.publicFiles.getFileInfo(
-            path,
-            this.publicLinkPassword,
-            DavProperties.Default
-          )
+        } else if (this.isSpacesProjectLocation) {
+          path = buildWebDavSpacesPath(this.$route.params.spaceId, path)
+          await this.$client.files.putFileContents(path, '')
+          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         }
 
         if (this.newFileAction) {
@@ -647,16 +681,25 @@ export default {
 
         await this.$nextTick()
 
-        const path = pathUtil.join(this.currentPath, file)
-        let resource = this.isPersonalLocation
-          ? await this.$client.files.fileInfo(path, DavProperties.Default)
-          : await this.$client.publicFiles.getFileInfo(
-              path,
-              this.publicLinkPassword,
-              DavProperties.Default
-            )
+        let path = pathUtil.join(this.currentPath, file)
+        let resource
+
+        if (this.isPersonalLocation) {
+          path = buildWebDavFilesPath(this.user.id, path)
+          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
+        } else if (this.isSpacesProjectLocation) {
+          path = buildWebDavSpacesPath(this.$route.params.spaceId, path)
+          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
+        } else {
+          resource = await this.$client.publicFiles.getFileInfo(
+            path,
+            this.publicLinkPassword,
+            DavProperties.Default
+          )
+        }
 
         resource = buildResource(resource)
+
         this.UPSERT_RESOURCE(resource)
 
         if (this.isPersonalLocation) {

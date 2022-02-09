@@ -296,11 +296,10 @@ export default {
         this.selectedFile = this.highlightedFile
         return
       }
-
       this.loading = true
       try {
         const item = await this.$client.files.fileInfo(
-          this.highlightedFile.path,
+          this.highlightedFile.webDavPath,
           DavProperties.Default
         )
 

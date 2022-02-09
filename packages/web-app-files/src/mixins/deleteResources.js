@@ -151,9 +151,10 @@ export default {
         this.toggleModalConfirmButton()
 
         // Load quota
-        const user = await this.$client.users.getUser(this.user.id)
-
-        this.SET_QUOTA(user.quota)
+        if (this.user?.id) {
+          const user = await this.$client.users.getUser(this.user.id)
+          this.SET_QUOTA(user.quota)
+        }
 
         let parentFolderPath
         if (
@@ -161,7 +162,7 @@ export default {
           isSameResource(this.resourcesToDelete[0], this.currentFolder)
         ) {
           const resourcePath = this.resourcesToDelete[0].path
-          parentFolderPath = resourcePath.substr(1, resourcePath.lastIndexOf('/'))
+          parentFolderPath = resourcePath.substr(0, resourcePath.lastIndexOf('/'))
         }
 
         if (parentFolderPath !== undefined) {

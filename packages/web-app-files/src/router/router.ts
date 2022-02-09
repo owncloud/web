@@ -20,6 +20,7 @@ export interface RouteComponents {
   SharedViaLink: ComponentOptions<Vue>
   Spaces: {
     Projects: ComponentOptions<Vue>
+    Project: ComponentOptions<Vue>
   }
   Trashbin: ComponentOptions<Vue>
 }

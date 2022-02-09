@@ -10,6 +10,7 @@ import {
 interface Graph {
   drives: {
     listMyDrives: () => Promise<AxiosResponse<CollectionOfDrives>>
+    getDrive: (id: string) => AxiosPromise<Drive>
     createDrive: (drive: Drive, options: any) => AxiosPromise<Drive>
     updateDrive: (id: string, drive: Drive, options: any) => AxiosPromise<Drive>
     deleteDrive: (id: string, ifMatch: string, options: any) => AxiosPromise<void>
@@ -28,6 +29,7 @@ const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
   return {
     drives: {
       listMyDrives: () => meDrivesApi.listMyDrives(),
+      getDrive: (id: string) => drivesApiFactory.getDrive(id),
       createDrive: (drive: Drive, options: any): AxiosPromise<Drive> =>
         drivesApiFactory.createDrive(drive, options),
       updateDrive: (id: string, drive: Drive, options: any): AxiosPromise<Drive> =>

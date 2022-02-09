@@ -10,8 +10,8 @@ export default {
           label: () => {
             return this.$gettext('Rename')
           },
-          handler: this.$_rename_showModal,
-          isEnabled: () => true,
+          handler: this.$_rename_trigger,
+          isEnabled: ({ spaces }) => spaces.length === 1,
           componentType: 'oc-button',
           class: 'oc-files-actions-rename-trigger'
         }
@@ -27,17 +27,21 @@ export default {
       'toggleModalConfirmButton'
     ]),
 
-    $_rename_showModal(space) {
+    $_rename_trigger({ spaces }) {
+      if (spaces.length !== 1) {
+        return
+      }
+
       const modal = {
         variation: 'passive',
-        title: this.$gettext('Rename space') + ' ' + space.name,
+        title: this.$gettext('Rename space') + ' ' + spaces[0].name,
         cancelText: this.$gettext('Cancel'),
         confirmText: this.$gettext('Rename'),
         hasInput: true,
         inputLabel: this.$gettext('Space name'),
-        inputValue: space.name,
+        inputValue: spaces[0].name,
         onCancel: this.hideModal,
-        onConfirm: (name) => this.$_rename_renameSpace(space.id, name),
+        onConfirm: (name) => this.$_rename_renameSpace(spaces[0].id, name),
         onInput: this.$_rename_checkName
       }
 
@@ -46,8 +50,9 @@ export default {
 
     $_rename_checkName(name) {
       if (name.trim() === '') {
-        this.setModalInputErrorMessage(this.$gettext('Space name cannot be empty'))
+        return this.setModalInputErrorMessage(this.$gettext('Space name cannot be empty'))
       }
+      return this.setModalInputErrorMessage(null)
     },
 
     $_rename_renameSpace(id, name) {

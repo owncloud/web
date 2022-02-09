@@ -10,6 +10,7 @@ interface PrivatePreviewBlobOptions {
   resource: {
     id: string
     path: string
+    webDavPath: string
     etag?: string
   }
   token: string
@@ -26,9 +27,8 @@ export const privatePreviewBlob = async (
 
   const url = [
     options.server,
-    'remote.php/dav/files/',
-    options.userId,
-    encodePath(options.resource.path),
+    'remote.php/dav',
+    encodePath(options.resource.webDavPath),
     '?',
     buildQueryString({
       etag: options.resource.etag,

@@ -2,6 +2,7 @@ import pathUtil from 'path'
 import { DateTime } from 'luxon'
 import { mapActions, mapGetters } from 'vuex'
 import PQueue from 'p-queue'
+import { buildWebDavFilesPath, buildWebDavSpacesPath } from './helpers/resources'
 
 export default {
   filters: {
@@ -20,7 +21,8 @@ export default {
   }),
   computed: {
     ...mapGetters('Files', ['files', 'highlightedFile', 'publicLinkPassword', 'currentFolder']),
-    ...mapGetters(['getToken', 'capabilities', 'configuration'])
+    ...mapGetters(['getToken', 'capabilities', 'configuration']),
+    ...mapGetters(['user'])
   },
   methods: {
     ...mapActions('Files', ['resetSearch', 'addFileToProgress', 'removeFileFromProgress']),
@@ -291,9 +293,16 @@ export default {
               )
             )
           } else {
-            p = this.directoryQueue.add(() =>
-              this.$client.files.createFolder(this.rootPath + directory)
-            )
+            let path = buildWebDavFilesPath(this.user.id, `${this.rootPath}${directory}`)
+
+            if (this.$route.params.spaceId) {
+              path = buildWebDavSpacesPath(
+                this.$route.params.spaceId,
+                `${this.rootPath}${directory}`
+              )
+            }
+
+            p = this.directoryQueue.add(() => this.$client.files.createFolder(path))
           }
 
           createFolderPromises.push(p)
@@ -361,7 +370,13 @@ export default {
         )
       } else {
         basePath = this.path || ''
-        relativePath = pathUtil.join(basePath, relativePath)
+        const joinedPath = pathUtil.join(basePath, relativePath)
+
+        if (this.$route.params.spaceId) {
+          relativePath = buildWebDavSpacesPath(this.$route.params.spaceId, joinedPath)
+        } else {
+          relativePath = buildWebDavFilesPath(this.user.id, joinedPath)
+        }
         // FIXME: this might break if relativePath is not the currentFolder
         // and is a mount point that has no chunk support
         if (this.browserSupportsChunked && this.currentFolder.isChunkedUploadSupported) {

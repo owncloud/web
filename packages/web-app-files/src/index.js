@@ -9,6 +9,7 @@ import Personal from './views/Personal.vue'
 import SharedWithMe from './views/SharedWithMe.vue'
 import SharedWithOthers from './views/SharedWithOthers.vue'
 import SharedViaLink from './views/SharedViaLink.vue'
+import SpaceProject from './views/spaces/Project.vue'
 import SpaceProjects from './views/spaces/Projects.vue'
 import Trashbin from './views/Trashbin.vue'
 import translations from '../l10n/translations.json'
@@ -111,6 +112,7 @@ export default {
     SharedWithMe,
     SharedWithOthers,
     Spaces: {
+      Project: SpaceProject,
       Projects: SpaceProjects
     },
     Trashbin

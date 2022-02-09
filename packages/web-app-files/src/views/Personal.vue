@@ -70,7 +70,7 @@ import MixinFileActions from '../mixins/fileActions'
 import MixinFilesListFilter from '../mixins/filesListFilter'
 import MixinFilesListScrolling from '../mixins/filesListScrolling'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
-import { buildResource } from '../helpers/resources'
+import { buildResource, buildWebDavFilesPath } from '../helpers/resources'
 import { fileList } from '../helpers/ui'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../constants'
@@ -148,7 +148,7 @@ export default {
 
       try {
         let resources = yield ref.fetchResources(
-          path || ref.$route.params.item,
+          buildWebDavFilesPath(ref.user.id, path || ref.$route.params.item || ''),
           DavProperties.Default
         )
         resources = resources.map(buildResource)
@@ -299,7 +299,7 @@ export default {
       const isTargetSelected = selected.some((e) => e.id === fileIdTarget)
       if (isTargetSelected) return
       if (targetInfo.type !== 'folder') return
-      const itemsInTarget = await this.fetchResources(targetInfo.path)
+      const itemsInTarget = await this.fetchResources(targetInfo.webDavPath)
 
       // try to move all selected files
       const errors = []
@@ -319,7 +319,10 @@ export default {
             }
 
             try {
-              await this.$client.files.move(resource.path, join(targetInfo.path, resource.name))
+              await this.$client.files.move(
+                resource.webDavPath,
+                join(targetInfo.webDavPath, resource.name)
+              )
               this.REMOVE_FILE(resource)
               this.REMOVE_FILE_FROM_SEARCHED(resource)
               this.REMOVE_FILE_SELECTION(resource)

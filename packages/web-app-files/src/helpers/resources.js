@@ -18,8 +18,14 @@ export function renameResource(resource, newName, newPath) {
   const isFolder = resource.type === 'dir' || resource.type === 'folder'
   const extension = _getFileExtension(newName)
 
+  let resourcePath = '/' + newPath + newName
+  if (resourcePath.startsWith('/files') || resourcePath.startsWith('/space')) {
+    resourcePath = resourcePath.split('/').splice(3).join('/')
+  }
+
   resource.name = newName
-  resource.path = '/' + newPath + newName
+  resource.path = resourcePath
+  resource.webDavPath = '/' + newPath + newName
   resource.extension = isFolder ? '' : extension
 
   return resource
@@ -28,13 +34,26 @@ export function renameResource(resource, newName, newPath) {
 export function buildResource(resource) {
   const isFolder = resource.type === 'dir' || resource.type === 'folder'
   const extension = _getFileExtension(resource.name)
+  let resourcePath
+
+  if (resource.name.startsWith('/files') || resource.name.startsWith('/space')) {
+    resourcePath = resource.name.split('/').slice(3).join('/')
+  } else {
+    resourcePath = resource.name
+  }
+
+  if (!resourcePath.startsWith('/')) {
+    resourcePath = `/${resourcePath}`
+  }
+
   return {
     id: resource.fileInfo[DavProperty.FileId],
     fileId: resource.fileInfo[DavProperty.FileId],
     mimeType: resource.fileInfo[DavProperty.MimeType],
     name: path.basename(resource.name),
     extension: isFolder ? '' : extension,
-    path: resource.name,
+    path: resourcePath,
+    webDavPath: resource.name,
     type: isFolder ? 'folder' : resource.type,
     isFolder,
     mdate: resource.fileInfo[DavProperty.LastModifiedDate],
@@ -81,6 +100,14 @@ export function buildResource(resource) {
       return this.permissions.indexOf(DavPermission.Shared) >= 0
     }
   }
+}
+
+export function buildWebDavFilesPath(userId, path) {
+  return `/files/${userId}/${path}`
+}
+
+export function buildWebDavSpacesPath(spaceId, path) {
+  return `/spaces/${spaceId}/${path}`
 }
 
 export function attachIndicators(resource, sharesTree) {
@@ -192,6 +219,7 @@ export function buildSharedResource(share, incomingShares = false, allowSharePer
     resource.status = share.state
     resource.name = path.basename(share.file_target)
     resource.path = share.file_target
+    resource.webDavPath = buildWebDavFilesPath(share.share_with, share.file_target)
     resource.canDownload = () => share.state === ShareStatus.accepted
     resource.canShare = () => SharePermissions.share.enabled(share.permissions)
     resource.canRename = () => SharePermissions.update.enabled(share.permissions)
@@ -202,6 +230,7 @@ export function buildSharedResource(share, incomingShares = false, allowSharePer
     resource.shareOwnerDisplayname = share.displayname_owner
     resource.name = path.basename(share.path)
     resource.path = share.path
+    resource.webDavPath = buildWebDavFilesPath(share.uid_owner, share.path)
     resource.canDownload = () => true
     resource.canShare = () => true
     resource.canRename = () => true

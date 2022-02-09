@@ -19,6 +19,7 @@
 
 <script>
 import Mixins from '../../../mixins'
+import { mapState } from 'vuex'
 
 export default {
   mixins: [Mixins],
@@ -37,6 +38,9 @@ export default {
       }
     },
     requestType: { type: String, default: 'PUT' }
+  },
+  computed: {
+    ...mapState(['user'])
   },
   methods: {
     triggerUpload() {

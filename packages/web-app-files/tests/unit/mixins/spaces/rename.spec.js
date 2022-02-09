@@ -43,14 +43,14 @@ describe('rename', () => {
     })
   }
 
-  describe('method "$_rename_showModal"', () => {
+  describe('method "$_rename_trigger"', () => {
     it('should trigger the rename modal window', async () => {
       const renamePromise = new Promise((resolve) => {
         return resolve()
       })
       const wrapper = getWrapper(renamePromise)
       const spyCreateModalStub = jest.spyOn(wrapper.vm, 'createModal')
-      await wrapper.vm.$_rename_showModal({ id: 1, name: 'renamed space' })
+      await wrapper.vm.$_rename_trigger({ spaces: [{ id: 1, name: 'renamed space' }] })
 
       expect(spyCreateModalStub).toHaveBeenCalledTimes(1)
     })

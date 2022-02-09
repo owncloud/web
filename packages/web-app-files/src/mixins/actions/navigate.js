@@ -5,7 +5,8 @@ import {
   createLocationSpaces,
   isLocationCommonActive,
   isLocationPublicActive,
-  isLocationSharesActive
+  isLocationSharesActive,
+  isLocationSpacesActive
 } from '../../router'
 import { ShareStatus } from '../../helpers/share'
 import merge from 'lodash-es/merge'
@@ -59,9 +60,17 @@ export default {
       ]
     },
     routeName() {
-      return isLocationPublicActive(this.$router, 'files-public-files')
-        ? createLocationPublic('files-public-files')
-        : createLocationSpaces('files-spaces-personal-home')
+      if (isLocationPublicActive(this.$router, 'files-public-files')) {
+        createLocationPublic('files-public-files')
+        return
+      }
+
+      if (isLocationSpacesActive(this.$router, 'files-spaces-project')) {
+        createLocationPublic('files-spaces-project')
+        return
+      }
+
+      createLocationSpaces('files-spaces-personal-home')
     }
   }
 }

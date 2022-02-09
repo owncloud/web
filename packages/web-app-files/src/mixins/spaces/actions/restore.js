@@ -2,15 +2,15 @@ import { mapActions } from 'vuex'
 
 export default {
   computed: {
-    $_delete_items() {
+    $_restore_items() {
       return [
         {
-          name: 'delete',
-          icon: 'delete-bin-5',
+          name: 'restore',
+          icon: 'restart',
           label: () => {
-            return this.$gettext('Delete')
+            return this.$gettext('Restore')
           },
-          handler: this.$_delete_trigger,
+          handler: this.$_restore_trigger,
           isEnabled: ({ spaces }) => {
             if (spaces.length !== 1) {
               return false
@@ -19,7 +19,7 @@ export default {
             return spaces[0].root?.deleted?.state === 'trashed'
           },
           componentType: 'oc-button',
-          class: 'oc-files-actions-delete-trigger'
+          class: 'oc-files-actions-restore-trigger'
         }
       ]
     }
@@ -33,40 +33,44 @@ export default {
       'toggleModalConfirmButton'
     ]),
 
-    $_delete_trigger({ spaces }) {
+    $_restore_trigger({ spaces }) {
       if (spaces.length !== 1) {
         return
       }
 
       const modal = {
-        variation: 'danger',
-        title: this.$gettext('Delete space') + ' ' + spaces[0].name,
+        variation: 'passive',
+        title: this.$gettext('Restore space') + ' ' + spaces[0].name,
         cancelText: this.$gettext('Cancel'),
-        confirmText: this.$gettext('Delete'),
+        confirmText: this.$gettext('Restore'),
         icon: 'alarm-warning',
-        message: this.$gettext('Are you sure you want to delete this space?'),
+        message: this.$gettext('Are you sure you want to restore this space?'),
         hasInput: false,
         onCancel: this.hideModal,
-        onConfirm: () => this.$_delete_deleteSpace(spaces[0].id)
+        onConfirm: () => this.$_restore_restoreSpace(spaces[0].id)
       }
 
       this.createModal(modal)
     },
 
-    $_delete_deleteSpace(id) {
+    $_restore_restoreSpace(id) {
       return this.graph.drives
-        .deleteDrive(id, '', {
-          headers: {
-            Purge: 'T'
+        .updateDrive(
+          id,
+          {},
+          {
+            headers: {
+              Restore: true
+            }
           }
-        })
+        )
         .then(() => {
           this.hideModal()
           this.loadSpacesTask.perform(this)
         })
         .catch((error) => {
           this.showMessage({
-            title: this.$gettext('Deleting space failed…'),
+            title: this.$gettext('Restoring space failed…'),
             desc: error,
             status: 'danger'
           })

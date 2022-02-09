@@ -38,7 +38,7 @@ export default {
             url = file.downloadURL
           } else {
             if (version === null) {
-              url = this.$client.helpers._webdavUrl + file.path
+              url = `${this.$client.helpers._davPath}${file.webDavPath}`
             } else {
               url = this.$client.fileVersions.getFileVersionUrl(file.id, version)
             }

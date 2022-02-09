@@ -99,6 +99,7 @@ import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
 import { DavProperties } from 'web-pkg/src/constants'
 import { createLocationPublic, createLocationSpaces } from '../router'
+import { buildWebDavFilesPath, buildWebDavSpacesPath } from '../helpers/resources'
 
 export default {
   metaInfo() {
@@ -148,9 +149,32 @@ export default {
         target = ref.target
       }
 
-      const resources = ref.isPublicContext
-        ? yield ref.$client.publicFiles.list(target, ref.publicLinkPassword, DavProperties.Default)
-        : yield ref.$client.files.list(target, 1, DavProperties.Default)
+      const { context } = ref.$route.params
+
+      let resources
+
+      switch (context) {
+        case 'public':
+          resources = yield ref.$client.publicFiles.list(
+            target,
+            ref.publicLinkPassword,
+            DavProperties.Default
+          )
+          break
+        case 'space':
+          resources = yield ref.$client.files.list(
+            buildWebDavSpacesPath(ref.$route.query.spaceId, target),
+            1,
+            DavProperties.Default
+          )
+          break
+        default:
+          resources = yield ref.$client.files.list(
+            buildWebDavFilesPath(ref.user.id, target),
+            1,
+            DavProperties.Default
+          )
+      }
 
       ref.loadFiles({ currentFolder: resources[0], files: resources.slice(1) })
       ref.loadIndicators({
@@ -185,6 +209,7 @@ export default {
     ...mapGetters('Files', ['publicLinkPassword', 'totalFilesCount', 'totalFilesSize']),
     ...mapGetters(['configuration']),
     ...mapGetters(['homeFolder']),
+    ...mapState(['user']),
 
     title() {
       const translated =
@@ -275,7 +300,7 @@ export default {
     },
 
     targetRoute() {
-      return {
+      const route = {
         name: this.$route.name,
         query: {
           resource: this.resources
@@ -284,6 +309,12 @@ export default {
           action: this.currentAction
         }
       }
+
+      if (this.$route.query.spaceId) {
+        route.query.spaceId = this.$route.query.spaceId
+      }
+
+      return route
     },
 
     currentHint() {
@@ -345,11 +376,24 @@ export default {
     },
 
     leaveLocationPicker(target) {
-      this.$router.push(
-        this.isPublicContext
-          ? createLocationPublic('files-public-files', { params: { item: target } })
-          : createLocationSpaces('files-spaces-personal-home', { params: { item: target || '/' } })
-      )
+      switch (this.$route.params.context) {
+        case 'public':
+          this.$router.push(
+            createLocationPublic('files-public-files', { params: { item: target } })
+          )
+          break
+        case 'space':
+          this.$router.push(
+            createLocationSpaces('files-spaces-project', {
+              params: { spaceId: this.$route.query.spaceId, item: target || '/' }
+            })
+          )
+          break
+        default:
+          this.$router.push(
+            createLocationSpaces('files-spaces-personal-home', { params: { item: target || '/' } })
+          )
+      }
     },
 
     isRowDisabled(resource) {
@@ -365,13 +409,11 @@ export default {
 
       // Execute move or copy
       for (const resource of this.resources) {
-        let targetPath = this.target || '/'
-        const resourceName = basename(resource)
-        targetPath += '/' + resourceName
+        let targetPath
+        let resourceName = basename(resource)
         const exists = this.paginatedResources.some((item) => {
           return basename(item.name) === resourceName
         })
-
         if (exists) {
           const message = this.$gettext('Resource with name %{name} already exists')
           errors.push({
@@ -383,15 +425,63 @@ export default {
 
         switch (this.currentAction) {
           case batchActions.move: {
-            promise = this.isPublicContext
-              ? this.$client.publicFiles.move(resource, targetPath, this.publicLinkPassword)
-              : this.$client.files.move(resource, targetPath)
+            switch (this.$route.params.context) {
+              case 'public':
+                targetPath = `${this.target || '/'}`
+                targetPath += `/${resourceName}`
+                promise = this.$client.publicFiles.move(
+                  resource,
+                  targetPath,
+                  this.publicLinkPassword
+                )
+                break
+              case 'space':
+                targetPath = buildWebDavSpacesPath(this.$route.query.spaceId, this.target || '/')
+                targetPath += `/${resourceName}`
+                promise = this.$client.files.move(
+                  buildWebDavSpacesPath(this.$route.query.spaceId, resource),
+                  targetPath
+                )
+                break
+              default:
+                targetPath = buildWebDavFilesPath(this.user.id, this.target || '/')
+                targetPath += `/${resourceName}`
+                promise = this.$client.files.move(
+                  buildWebDavFilesPath(this.user.id, resource),
+                  targetPath
+                )
+            }
             break
           }
           case batchActions.copy: {
-            promise = this.isPublicContext
-              ? this.$client.publicFiles.copy(resource, targetPath, this.publicLinkPassword)
-              : this.$client.files.copy(resource, targetPath)
+            switch (this.$route.params.context) {
+              case 'public':
+                targetPath = `${this.target || '/'}`
+                targetPath += `/${resourceName}`
+
+                promise = this.$client.publicFiles.copy(
+                  resource,
+                  targetPath,
+                  this.publicLinkPassword
+                )
+                break
+              case 'space':
+                targetPath = buildWebDavSpacesPath(this.$route.query.spaceId, this.target || '/')
+                resourceName = basename(resource)
+                targetPath += `/${resourceName}`
+                promise = this.$client.files.copy(
+                  buildWebDavSpacesPath(this.$route.query.spaceId, resource),
+                  targetPath
+                )
+                break
+              default:
+                targetPath = buildWebDavFilesPath(this.user.id, this.target || '/')
+                targetPath += `/${resourceName}`
+                promise = this.$client.files.copy(
+                  buildWebDavFilesPath(this.user.id, resource),
+                  targetPath
+                )
+            }
             break
           }
           default:

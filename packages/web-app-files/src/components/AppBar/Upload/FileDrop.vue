@@ -52,6 +52,7 @@ export default {
   },
   computed: {
     ...mapState(['navigation']),
+    ...mapState(['user']),
     ...mapGetters('Files', ['dropzone']),
     sidebarStateClass() {
       return this.navigation.closed
