@@ -4,37 +4,7 @@
     <skip-to target="web-content-main">
       <translate>Skip to main</translate>
     </skip-to>
-    <div
-      v-if="user.isAuthenticated && !user.userReady"
-      class="loading-overlay oc-flex oc-flex-middle oc-flex-center"
-      :style="{
-        backgroundImage: 'url(' + configuration.currentTheme.loginPage.backgroundImg + ')'
-      }"
-    >
-      <oc-spinner size="xlarge" :aria-label="$gettext('Loading')" />
-    </div>
-    <template v-else-if="!showHeader">
-      <router-view name="fullscreen" />
-    </template>
-    <div v-else id="web-content">
-      <div id="web-content-header">
-        <top-bar
-          :applications-list="applicationsList"
-          :active-notifications="activeNotifications"
-        />
-      </div>
-      <div id="web-content-main" class="oc-px-s oc-pb-s">
-        <message-bar :active-messages="activeMessages" @deleteMessage="$_deleteMessage" />
-        <div class="app-container oc-flex">
-          <sidebar-nav
-            v-if="isSidebarVisible"
-            class="app-navigation"
-            :nav-items="sidebarNavItems"
-          />
-          <router-view class="app-content oc-width-1-1" name="app" />
-        </div>
-      </div>
-    </div>
+    <component :is="layout"></component>
     <oc-modal
       v-if="modal.displayed"
       :variation="modal.variation"
@@ -60,18 +30,15 @@
 </template>
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
-import TopBar from './components/Topbar/TopBar.vue'
-import MessageBar from './components/MessageBar.vue'
 import SkipTo from './components/SkipTo.vue'
+import LayoutApplication from './layouts/Application.vue'
+import LayoutLoading from './layouts/Loading.vue'
+import LayoutPlain from './layouts/Plain.vue'
 import { getBackendVersion, getWebVersion } from './container/versions'
-import SidebarNav from './components/SidebarNav/SidebarNav.vue'
 
 export default {
   components: {
-    MessageBar,
-    TopBar,
-    SkipTo,
-    SidebarNav
+    SkipTo
   },
   data() {
     return {
@@ -83,81 +50,29 @@ export default {
   },
   computed: {
     ...mapState(['route', 'user', 'modal', 'sidebar']),
-    ...mapGetters([
-      'configuration',
-      'activeNotifications',
-      'activeMessages',
-      'capabilities',
-      'apps',
-      'getSettingsValue',
-      'getNavItemsByExtension',
-      'getExtensionsWithNavItems'
-    ]),
-    applicationsList() {
-      const list = []
+    ...mapGetters(['configuration', 'capabilities', 'getSettingsValue']),
+    layout() {
+      if (this.user.isAuthenticated && !this.user.userReady) {
+        return LayoutLoading
+      }
 
-      // Get extensions which have at least one nav item
-      this.getExtensionsWithNavItems.forEach((extensionId) => {
-        list.push({
-          ...this.apps[extensionId],
-          type: 'extension'
-        })
-      })
+      if (
+        [
+          'login',
+          'oidcCallback',
+          'oidcSilentRedirect',
+          'privateLink',
+          'publicLink',
+          'accessDenied'
+        ].includes(this.$route.name)
+      ) {
+        return LayoutPlain
+      }
 
-      // Get extensions manually added into config
-      this.configuration.applications.forEach((application) => {
-        list.push({
-          ...application,
-          type: 'link'
-        })
-      })
-
-      return list
+      return LayoutApplication
     },
-    showHeader() {
-      return this.$route.meta.hideHeadbar !== true
-    },
-
     favicon() {
       return this.configuration.currentTheme.logo.favicon
-    },
-
-    sidebarNavItems() {
-      if (this.publicPage()) {
-        return []
-      }
-
-      const items = this.getNavItemsByExtension(this.currentExtension)
-      if (!items) {
-        return []
-      }
-
-      items.filter((item) => {
-        if (this.capabilities === undefined) {
-          return false
-        }
-
-        if (item.enabled === undefined) {
-          return true
-        }
-
-        return item.enabled(this.capabilities)
-      })
-
-      const { href: currentHref } = this.$router.resolve(this.$route)
-      return items.map((item) => {
-        const { href: comparativeHref } = this.$router.resolve(item.route)
-
-        return {
-          ...item,
-          name: this.$gettext(item.name),
-          active: currentHref.startsWith(comparativeHref)
-        }
-      })
-    },
-
-    isSidebarVisible() {
-      return this.sidebarNavItems.length && this.windowWidth >= 640
     },
 
     selectedLanguage() {
@@ -207,10 +122,6 @@ export default {
     }
   },
 
-  beforeDestroy() {
-    window.removeEventListener('resize', this.onResize)
-  },
-
   destroyed() {
     if (this.$_notificationsInterval) {
       clearInterval(this.$_notificationsInterval)
@@ -232,15 +143,8 @@ export default {
     return metaInfo
   },
 
-  mounted() {
-    this.$nextTick(() => {
-      window.addEventListener('resize', this.onResize)
-      this.onResize()
-    })
-  },
-
   methods: {
-    ...mapActions(['fetchNotifications', 'deleteMessage']),
+    ...mapActions(['fetchNotifications']),
 
     focusModal(component, event) {
       this.focus({
@@ -253,14 +157,6 @@ export default {
         console.error('Error while loading notifications: ', error)
         clearInterval(this.$_notificationsInterval)
       })
-    },
-
-    $_deleteMessage(item) {
-      this.deleteMessage(item)
-    },
-
-    onResize() {
-      this.windowWidth = window.innerWidth
     },
 
     announceRouteChange(route) {
@@ -304,53 +200,5 @@ body {
   height: 100vh;
   max-height: 100vh;
   overflow-y: hidden;
-}
-
-#web-content {
-  display: flex;
-  flex-flow: column;
-  flex-wrap: nowrap;
-  height: 100vh;
-
-  #web-content-header,
-  #web-content-main {
-    flex-shrink: 1;
-    flex-basis: auto;
-  }
-  #web-content-header {
-    flex-grow: 0;
-  }
-  #web-content-main {
-    flex-grow: 1;
-    overflow-y: hidden;
-
-    .app-container {
-      height: 100%;
-      background-color: var(--oc-color-background-default);
-      border-radius: 15px;
-
-      .app-content {
-        transition: all 0.35s cubic-bezier(0.34, 0.11, 0, 1.12);
-        overflow: hidden;
-      }
-    }
-  }
-}
-
-.loading-overlay {
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  height: 100%;
-  width: 100%;
-
-  .oc-spinner {
-    color: #0a264e;
-    display: inline-block;
-    &::after {
-      border: 10px solid;
-      border-bottom: 10px solid transparent;
-    }
-  }
 }
 </style>

@@ -4,9 +4,7 @@ import translations from '../l10n/translations'
 const routes = [
   {
     path: '/:contextRouteName/:filePath*',
-    components: {
-      app: App
-    },
+    component: App,
     name: 'markdown-editor',
     meta: {
       patchCleanPath: true
