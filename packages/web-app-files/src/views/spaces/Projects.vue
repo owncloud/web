@@ -317,7 +317,7 @@ export default {
     background-color: var(--oc-color-background-highlight) !important;
 
     .oc-card-body {
-      padding: 15px;
+      padding: 10px;
     }
   }
 
