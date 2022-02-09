@@ -14,6 +14,13 @@ try {
 
 config.mocks = {
   $gettext: (str) => str,
+  $ngettext: (msgid, plural, n) => {
+    if (n > 1 || n === 0 || n < 0 || !Number.isInteger(n)) {
+      return plural
+    } else {
+      return msgid
+    }
+  },
   isIE11: () => false,
   $language: {
     current: 'en'
