@@ -6,6 +6,7 @@ const {
   startWebDriver,
   stopWebDriver
 } = require('nightwatch-api')
+const fs = require('fs')
 const { rollbackConfigs, cacheConfigs } = require('./helpers/config')
 const { getAllLogsWithDateTime } = require('./helpers/browserConsole.js')
 const { runOcc } = require('./helpers/occHelper')
@@ -23,6 +24,12 @@ setDefaultTimeout(CUCUMBER_TIMEOUT)
 
 let env = RUNNING_ON_CI ? 'drone' : 'local'
 env = RUNNING_ON_SAUCELABS ? 'saucelabs' : env
+
+// create report dir if not exists
+const reportDir = 'report'
+if (!fs.existsSync(reportDir)) {
+  fs.mkdirSync(reportDir)
+}
 
 defineParameterType({
   name: 'code',
