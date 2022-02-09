@@ -1,23 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`PublicLink theming options should display the configuration theme general slogan as the login card footer 1`] = `
-<div class="oc-login-card-footer">
+<div class="oc-card-footer">
   <p>
     some-slogan
   </p>
 </div>
 `;
 
-exports[`PublicLink theming options should display the logo image inside login card 1`] = `<img src="some-logo" alt="" aria-hidden="true" class="oc-login-logo">`;
-
-exports[`PublicLink theming options should have the background image and page-title set 1`] = `
-<div class="oc-login oc-height-viewport" style="background-image: url(some-image);">
+exports[`PublicLink theming options should have the page-title set 1`] = `
+<div class="oc-height-1-1">
   <h1 class="oc-invisible-sr">some page title</h1>
-  <div class="oc-login-card oc-position-center"><img src="some-logo" alt="" aria-hidden="true" class="oc-login-logo">
-    <div class="oc-login-card-body">
-      <!---->
-    </div>
-    <div class="oc-login-card-footer">
+  <div class="oc-card oc-border oc-rounded oc-position-center oc-text-center oc-width-large">
+    <!---->
+    <div class="oc-card-footer">
       <p>
         some-slogan
       </p>
@@ -38,33 +34,28 @@ exports[`PublicLink when the view is not loading anymore and when "passwordRequi
 
 exports[`PublicLink when the view is not loading anymore and when "passwordRequired" is set as true should display the password required form 1`] = `
 <form>
-  <h2 class="oc-login-card-title">
-    <translate-stub tag="span">This resource is password-protected.</translate-stub>
-  </h2>
-  <oc-text-input-stub id="oc-textinput-3" type="password" clearbuttonaccessiblelabel="" label="Enter password for public link" class="oc-mb-s"></oc-text-input-stub>
-  <oc-button-stub type="button" disabled="true" size="medium" variation="primary" appearance="filled" justifycontent="center" gapsize="medium" class="oc-login-authorize-button">
-    <translate-stub tag="span">Continue</translate-stub>
-  </oc-button-stub>
+  <div class="oc-card-header">
+    <h2>
+      <translate-stub tag="span">This resource is password-protected</translate-stub>
+    </h2>
+  </div>
+  <div class="oc-card-body">
+    <oc-text-input-stub id="oc-textinput-3" type="password" clearbuttonaccessiblelabel="" label="Enter password for public link" class="oc-mb-s"></oc-text-input-stub>
+    <oc-button-stub type="button" disabled="true" size="medium" variation="primary" appearance="filled" justifycontent="center" gapsize="medium" class="oc-login-authorize-button">
+      <translate-stub tag="span">Continue</translate-stub>
+    </oc-button-stub>
+  </div>
 </form>
 `;
 
 exports[`PublicLink when the view is not loading anymore should display the error message if "errorMessage" is not empty 1`] = `
-<h2 class="oc-login-card-title oc-login-card-error">
-  <translate-stub tag="span">An error occurred while loading the public link</translate-stub>
-</h2>
-`;
-
-exports[`PublicLink when the view is not loading anymore should not display the loading text and the spinner 1`] = `
-<div class="oc-login-card-body">
-  <!---->
+<div class="oc-card-body oc-link-resolve-error">
+  <p class="oc-text-lead">some-error-message</p>
 </div>
 `;
 
 exports[`PublicLink when the view is still loading should display the loading text with the spinner 1`] = `
-<div class="oc-login-card-body">
-  <h2 class="oc-login-card-title">
-    <translate-stub tag="span">Loading public link…</translate-stub>
-  </h2>
+<div class="oc-card-body">
   <oc-spinner-stub arialabel="" size="medium" aria-hidden="true"></oc-spinner-stub>
 </div>
 `;

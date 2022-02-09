@@ -1,22 +1,31 @@
 <template>
-  <div
-    class="oc-login oc-height-viewport"
-    :style="{ backgroundImage: 'url(' + backgroundImg + ')' }"
-  >
+  <div class="oc-height-1-1">
     <h1 class="oc-invisible-sr">{{ pageTitle }}</h1>
-    <div class="oc-login-card oc-position-center">
-      <img class="oc-login-logo" :src="logoImg" alt="" :aria-hidden="true" />
-      <div v-if="loading" class="oc-login-card-body">
-        <h2 class="oc-login-card-title">
-          <translate>Resolving private link…</translate>
-        </h2>
-        <oc-spinner :aria-hidden="true" />
-      </div>
-      <div v-if="errorMessage" class="oc-login-card-body">
-        <h2 class="oc-login-card-title">
-          <translate>An error occurred while resolving the private link</translate>
-        </h2>
-        <span>{{ errorMessage }}</span>
+    <div class="oc-card oc-border oc-rounded oc-position-center oc-text-center oc-width-large">
+      <template v-if="loading">
+        <div class="oc-card-header">
+          <h2>
+            <translate>Resolving private link…</translate>
+          </h2>
+        </div>
+        <div class="oc-card-body">
+          <oc-spinner :aria-hidden="true" />
+        </div>
+      </template>
+      <template v-else-if="errorMessage">
+        <div class="oc-card-header">
+          <h2>
+            <translate>An error occurred while resolving the private link</translate>
+          </h2>
+        </div>
+        <div class="oc-card-body oc-link-resolve-error">
+          <p class="oc-text-lead">{{ errorMessage }}</p>
+        </div>
+      </template>
+      <div class="oc-card-footer">
+        <p>
+          {{ configuration.currentTheme.general.slogan }}
+        </p>
       </div>
     </div>
   </div>
@@ -38,14 +47,6 @@ export default {
 
     pageTitle() {
       return this.$gettext(this.$route.meta.title)
-    },
-
-    backgroundImg() {
-      return this.configuration.currentTheme.loginPage.backgroundImg
-    },
-
-    logoImg() {
-      return this.configuration.currentTheme.logo.login
     }
   },
   mounted() {
@@ -77,3 +78,10 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.oc-card-header h2,
+.oc-card-footer p {
+  margin: 0;
+}
+</style>
