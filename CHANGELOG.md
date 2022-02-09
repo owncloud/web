@@ -13,16 +13,21 @@ Summary
 * Bugfix - Jumpy batch actions: [#6360](https://github.com/owncloud/web/pull/6360)
 * Bugfix - Open folder from context menu: [#6187](https://github.com/owncloud/web/issues/6187)
 * Bugfix - Breadcrumbs in different views: [#6326](https://github.com/owncloud/web/issues/6326)
+* Bugfix - Scrolling inside Markdown Editor: [#4606](https://github.com/owncloud/web/issues/4606)
 * Bugfix - Focus management in topbar dropdowns: [#6213](https://github.com/owncloud/web/pull/6213)
 * Change - Dropped editor route whitelist: [#6381](https://github.com/owncloud/web/pull/6381)
 * Change - Remove UiKit: [#6103](https://github.com/owncloud/web/issues/6103)
+* Change - Rename theme logo sidebar to topbar: [#6349](https://github.com/owncloud/web/pull/6349)
 * Change - Use remixicons for redesign: [#6142](https://github.com/owncloud/web/pull/6142)
+* Change - Drop support for Internet Explorer and other dead browsers: [#6386](https://github.com/owncloud/web/pull/6386)
 * Enhancement - Add spaces actions: [#6254](https://github.com/owncloud/web/pull/6254)
 * Enhancement - File creation via app provider: [#5890](https://github.com/owncloud/web/pull/5890)
 * Enhancement - Redirect to IDP when opening apps from bookmark: [#6045](https://github.com/owncloud/web/issues/6045)
+* Enhancement - Context Route Params: [#6331](https://github.com/owncloud/web/pull/6331)
 * Enhancement - Darkmode theme switcher: [#6242](https://github.com/owncloud/web/issues/6242)
 * Enhancement - Drawio improvements: [#6125](https://github.com/owncloud/web/pull/6125)
 * Enhancement - File selection simplification: [#5967](https://github.com/owncloud/web/issues/5967)
+* Enhancement - Resource-specific icons in ResourceTable: [#6295](https://github.com/owncloud/web/pull/6295)
 * Enhancement - Reorganize urls: [#6137](https://github.com/owncloud/web/pull/6137)
 * Enhancement - Lazy resource table cells: [#6204](https://github.com/owncloud/web/pull/6204)
 * Enhancement - Add URL handling to markdown editor: [#6134](https://github.com/owncloud/web/pull/6134)
@@ -79,6 +84,15 @@ Details
    https://github.com/owncloud/web/issues/6326
    https://github.com/owncloud/web/pull/6370
 
+* Bugfix - Scrolling inside Markdown Editor: [#4606](https://github.com/owncloud/web/issues/4606)
+
+   Scrolling inside the Markdown Editor was broken, before the redesign by allowing the user to
+   scroll the appBar out of the viewport, and after the redesign by cutting a potentially long
+   preview off at the bottom. This has been addressed by allowing to scroll the preview content.
+
+   https://github.com/owncloud/web/issues/4606
+   https://github.com/owncloud/web/pull/6386
+
 * Bugfix - Focus management in topbar dropdowns: [#6213](https://github.com/owncloud/web/pull/6213)
 
    We've fixed issues with focus management upon opening and closing the dropdown menus in the
@@ -103,6 +117,14 @@ Details
    https://github.com/owncloud/web/issues/6103
    https://github.com/owncloud/web/pull/6213
 
+* Change - Rename theme logo sidebar to topbar: [#6349](https://github.com/owncloud/web/pull/6349)
+
+   With the redesign, the theme-able logo has moved from the sidebar to the topbar. Accordingly,
+   within a theme, the key for it has been renamed from `sidebar` to `topbar`.
+
+   https://github.com/owncloud/web/pull/6349
+   https://github.com/owncloud/web/pull/6386
+
 * Change - Use remixicons for redesign: [#6142](https://github.com/owncloud/web/pull/6142)
 
    We've switched the iconset to remixicons to fit the new design.
@@ -110,6 +132,13 @@ Details
    https://github.com/owncloud/web/issues/6100
    https://github.com/owncloud/web/pull/6142
    https://github.com/owncloud/web/pull/6270
+
+* Change - Drop support for Internet Explorer and other dead browsers: [#6386](https://github.com/owncloud/web/pull/6386)
+
+   Even though it was never officially supported, we were still checking for certain dead
+   browsers. This has now been dropped.
+
+   https://github.com/owncloud/web/pull/6386
 
 * Enhancement - Add spaces actions: [#6254](https://github.com/owncloud/web/pull/6254)
 
@@ -140,6 +169,16 @@ Details
    https://github.com/owncloud/web/issues/6069
    https://github.com/owncloud/web/pull/6314
 
+* Enhancement - Context Route Params: [#6331](https://github.com/owncloud/web/pull/6331)
+
+   We now add params of the source context route to the query of app routes and convert them back to
+   params when routing back to the origin - this is necessary to properly navigate back from
+   opening files in extensions or in search results, throughout personal, public or, in the
+   future, spaces views.
+
+   https://github.com/owncloud/web/issues/6390
+   https://github.com/owncloud/web/pull/6331
+
 * Enhancement - Darkmode theme switcher: [#6242](https://github.com/owncloud/web/issues/6242)
 
    We've added a theme switcher and now initialize the user interface theme based on the user's
@@ -167,6 +206,14 @@ Details
 
    https://github.com/owncloud/web/issues/5967
    https://github.com/owncloud/web/pull/6208
+
+* Enhancement - Resource-specific icons in ResourceTable: [#6295](https://github.com/owncloud/web/pull/6295)
+
+   We've added FontAwesome icons for the different resource types, each getting their
+   respective resource type color from the ODS definition.
+
+   https://github.com/owncloud/web/pull/6295
+   https://github.com/owncloud/web/pull/6387
 
 * Enhancement - Reorganize urls: [#6137](https://github.com/owncloud/web/pull/6137)
 
@@ -226,6 +273,8 @@ Details
    https://github.com/owncloud/web/pull/6228
    https://github.com/owncloud/web/pull/6360
    https://github.com/owncloud/web/pull/6365
+   https://github.com/owncloud/web/pull/6366
+   https://github.com/owncloud/web/pull/6386
 
 * Enhancement - Redesigned user menu: [#6272](https://github.com/owncloud/web/pull/6272)
 
@@ -329,19 +378,21 @@ Details
 
 * Enhancement - Update SDK: [#6309](https://github.com/owncloud/web/pull/6309)
 
-   We've updated the ownCloud SDK to version 2.0.0-alpha.2.
+   We've updated the ownCloud SDK to version 2.0.0.
 
    - Change - Drop Internet Explorer support:
    https://github.com/owncloud/owncloud-sdk/pull/966 - Change - Pass full file or directory
    path to methods of Files class: https://github.com/owncloud/owncloud-sdk/pull/971 -
    Change - Remove webdav v1 api support:
-   https://github.com/owncloud/owncloud-sdk/pull/962 - Bugfix - Graceful reject for
-   failing network request in OCS: https://github.com/owncloud/owncloud-sdk/pull/977
+   https://github.com/owncloud/owncloud-sdk/pull/962 - Change - Use peerDependencies
+   instead of dependencies: https://github.com/owncloud/owncloud-sdk/pull/979 - Bugfix -
+   Graceful reject for failing network request in OCS:
+   https://github.com/owncloud/owncloud-sdk/pull/977
 
    https://github.com/owncloud/web/pull/6309
    https://github.com/owncloud/web/pull/6287
    https://github.com/owncloud/owncloud-sdk/releases/tag/v1.1.2
-   https://github.com/owncloud/owncloud-sdk/releases/tag/v2.0.0-alpha.2
+   https://github.com/owncloud/owncloud-sdk/releases/tag/v2.0.0
 
 Changelog for ownCloud Web [4.9.0] (2021-12-24)
 =======================================
@@ -1072,7 +1123,7 @@ Summary
 * Enhancement - Fetch file info in the Files sidebar: [#5570](https://github.com/owncloud/web/issues/5570)
 * Enhancement - Add missing tooltips: [#5723](https://github.com/owncloud/web/issues/5723)
 * Enhancement - Re-design recipients role select: [#5632](https://github.com/owncloud/web/pull/5632)
-* Enhancement - Show sharees as collapsed list of avatars: [#5758](https://github.com/owncloud/web/pull/5758/files)
+* Enhancement - Show sharees as collapsed list of avatars: [#5758](https://github.com/owncloud/web/pull/5758)
 * Enhancement - Show sharing information in details sidebar: [#5735](https://github.com/owncloud/web/issues/5735)
 * Enhancement - Switch filesize calculation base: [#5739](https://github.com/owncloud/web/pull/5739)
 * Enhancement - Update ODS to 10.0.0: [#5725](https://github.com/owncloud/web/pull/5725)
@@ -1116,14 +1167,14 @@ Details
 
    https://github.com/owncloud/web/pull/5632
 
-* Enhancement - Show sharees as collapsed list of avatars: [#5758](https://github.com/owncloud/web/pull/5758/files)
+* Enhancement - Show sharees as collapsed list of avatars: [#5758](https://github.com/owncloud/web/pull/5758)
 
    We've introduced a collapsed list of avatars of sharees in the `People` panel of the right
    sidebar. On click we switch to showing the full list of sharees. With this additional
    intermediate state we were able to clean up the UI a bit for easier cognitive load.
 
    https://github.com/owncloud/web/issues/5736
-   https://github.com/owncloud/web/pull/5758/files
+   https://github.com/owncloud/web/pull/5758
 
 * Enhancement - Show sharing information in details sidebar: [#5735](https://github.com/owncloud/web/issues/5735)
 
