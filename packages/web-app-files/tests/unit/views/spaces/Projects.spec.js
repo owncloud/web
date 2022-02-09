@@ -79,6 +79,7 @@ describe('Spaces component', () => {
     })
     const wrapper = getMountedWrapper()
     await wrapper.vm.loadSpacesTask.last
+    wrapper.vm.setModalInputErrorMessage = jest.fn()
 
     const spyInputErrorMessageStub = jest.spyOn(wrapper.vm, 'setModalInputErrorMessage')
     wrapper.vm.checkSpaceName('')
