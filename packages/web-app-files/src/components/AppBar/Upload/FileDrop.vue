@@ -107,8 +107,8 @@ export default {
     width: calc(100% - 65px - (2 * var(--oc-space-small)));
   }
   .oc-dropzone-navigation-expanded > .oc-dropzone-container {
-    left: calc(var(--oc-size-width-medium) + var(--oc-space-small));
-    width: calc(100% - var(--oc-size-width-medium) - (2 * var(--oc-space-small)));
+    left: var(--oc-space-medium);
+    width: calc(100% - var(--oc-size-width-medium));
   }
 }
 </style>
