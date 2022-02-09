@@ -1,0 +1,7 @@
+Change: Rename theme logo sidebar to topbar
+
+With the redesign, the theme-able logo has moved from the sidebar to the topbar.
+Accordingly, within a theme, the key for it has been renamed from `sidebar` to `topbar`.
+
+https://github.com/owncloud/web/pull/6349
+https://github.com/owncloud/web/pull/6386

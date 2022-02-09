@@ -29,7 +29,7 @@
       </div>
       <div class="oc-container oc-width-1-2">
         <!-- eslint-disable-next-line vue/no-v-html -->
-        <div id="markdown-editor-preview" v-html="renderedMarkdown"></div>
+        <div id="markdown-editor-preview" v-html="renderedMarkdown" />
       </div>
     </div>
   </main>
@@ -128,3 +128,9 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+#markdown-editor-preview {
+  max-height: 80vh;
+  overflow-y: scroll;
+}
+</style>

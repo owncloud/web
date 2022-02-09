@@ -93,12 +93,18 @@ export default {
     opacity: 0 !important;
     transition: 0s;
   }
+
+  &:hover:not(.active) {
+    color: var(--oc-color-swatch-brand-hover) !important;
+  }
+
   &:hover,
   &:focus {
     text-decoration: none !important;
   }
   &.active {
     cursor: default;
+    overflow: hidden;
   }
 }
 </style>

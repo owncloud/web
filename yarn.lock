@@ -2024,9 +2024,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/plugin-typescript@npm:^8.2.5":
-  version: 8.2.5
-  resolution: "@rollup/plugin-typescript@npm:8.2.5"
+"@rollup/plugin-typescript@npm:^8.3.0":
+  version: 8.3.0
+  resolution: "@rollup/plugin-typescript@npm:8.3.0"
   dependencies:
     "@rollup/pluginutils": ^3.1.0
     resolve: ^1.17.0
@@ -2034,7 +2034,7 @@ __metadata:
     rollup: ^2.14.0
     tslib: "*"
     typescript: ">=3.7.0"
-  checksum: ab32daf727e05fc1c166b2dc2211c16dd7f8d1fa8b916de60a83a8818ff1a84ddff119a39b4862aa0aa58de1e881053a20d51bf1baeb3d50bcea960872b18143
+  checksum: f8253a775389f29feadf639c2e04d87bddb4c30126b0d95b9e17bfffa2addad1b6275cb8dead40604348ea7ac0128fe4394413bc3b2129c4a545f93eb4585149
   languageName: node
   linkType: hard
 
@@ -6135,9 +6135,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "files@workspace:packages/web-app-files"
   dependencies:
-    "@types/semver": ^7.3.8
     copy-to-clipboard: ^3.3.1
-    semver: ^7.3.5
     vue2-dropzone: ^3.6.0
   languageName: unknown
   linkType: soft
@@ -9451,10 +9449,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"owncloud-sdk@npm:2.0.0-alpha.2":
-  version: 2.0.0-alpha.2
-  resolution: "owncloud-sdk@npm:2.0.0-alpha.2"
-  dependencies:
+"owncloud-sdk@npm:~2.0.0":
+  version: 2.0.0
+  resolution: "owncloud-sdk@npm:2.0.0"
+  peerDependencies:
     axios: ^0.25.0
     cross-fetch: ^3.0.6
     promise: ^8.0.3
@@ -9464,7 +9462,7 @@ __metadata:
     uuid: ^8.2.0
     webdav: 4.6.0
     xml-js: ^1.6.11
-  checksum: d2f0a64b28a47c3f06d9ee01cf9e6850d30eb6237c615af63f97ba39d6b2b58454b311202b1352d1f9c8489d0292c8ebd283f92cd7106763e206947eb63cb6ed
+  checksum: 67e65e2dd55e650f11b29888766660feea25ede5e48c171c403c42c027f9b26165ea23856a68e450f7e2df57ee8bff70a83524796d3b1c54cae795acada1948d
   languageName: node
   linkType: hard
 
@@ -11503,7 +11501,7 @@ __metadata:
     "@rollup/plugin-html": ^0.2.0
     "@rollup/plugin-inject": ^4.0.4
     "@rollup/plugin-json": ^4.1.0
-    "@rollup/plugin-typescript": ^8.2.5
+    "@rollup/plugin-typescript": ^8.3.0
     "@testing-library/dom": ^8.11.0
     "@testing-library/jest-dom": ^5.16.1
     "@testing-library/user-event": ^13.5.0
@@ -11573,7 +11571,7 @@ __metadata:
     ts-jest: ^27.1.3
     ts-node: ^10.4.0
     tslib: ^2.2.0
-    typescript: ^4.3.2
+    typescript: ^4.5.5
     url-search-params-polyfill: ^8.0.0
     vue: ^2.6.10
     vue-jest: ^3.0.7
@@ -12824,23 +12822,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-typescript@^4.3.2:
-  version: 4.3.3
-  resolution: "typescript@npm:4.3.3"
+"typescript@npm:^4.5.5":
+  version: 4.5.5
+  resolution: "typescript@npm:4.5.5"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: a9611281390443fa7b2933802f6deb45204dc2481c085fb6b2d0654e98d81233e8c683812abe8e0cf22ab7c516fc31d25dd763ae0345461c97bb9f24ed6c884f
+  checksum: 506f4c919dc8aeaafa92068c997f1d213b9df4d9756d0fae1a1e7ab66b585ab3498050e236113a1c9e57ee08c21ec6814ca7a7f61378c058d79af50a4b1f5a5e
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@^4.3.2#~builtin<compat/typescript>":
-  version: 4.3.3
-  resolution: "typescript@patch:typescript@npm%3A4.3.3#~builtin<compat/typescript>::version=4.3.3&hash=ddd1e8"
+"typescript@patch:typescript@^4.5.5#~builtin<compat/typescript>":
+  version: 4.5.5
+  resolution: "typescript@patch:typescript@npm%3A4.5.5#~builtin<compat/typescript>::version=4.5.5&hash=ddd1e8"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: a1bca2d1ee41d425f35396fdfbf740bd012e4e186402d0444974b0184a7ea6b19e9a6fd744dc7bc99cdaceddfde8a338cd4e68c63510bc3ade4a9415bbe83855
+  checksum: 9cdde4aae20b2904431f3f2ca8acaf3b0cc52faddf68aa88b288c9d0520221817da43783a756fce7ab9360033ada0371c3ff93dfc4bdb4b13f6e9bac64e1658d
   languageName: node
   linkType: hard
 
@@ -13029,7 +13027,7 @@ typescript@^4.3.2:
   languageName: node
   linkType: hard
 
-"uuid@npm:8.3.2, uuid@npm:^8.2.0, uuid@npm:^8.3.2":
+"uuid@npm:8.3.2, uuid@npm:^8.3.2":
   version: 8.3.2
   resolution: "uuid@npm:8.3.2"
   bin:
@@ -13375,10 +13373,6 @@ typescript@^4.3.2:
 "web-pkg@*, web-pkg@workspace:packages/web-pkg":
   version: 0.0.0-use.local
   resolution: "web-pkg@workspace:packages/web-pkg"
-  dependencies:
-    axios: ^0.25.0
-    lodash-es: ^4.17.21
-    uuid: ^8.3.2
   languageName: unknown
   linkType: soft
 
@@ -13389,7 +13383,10 @@ typescript@^4.3.2:
     "@fortawesome/fontawesome-free": ^5.15.4
     "@popperjs/core": ^2.4.0
     "@types/luxon": ^2.0.8
+    "@types/semver": ^7.3.8
     "@vue/composition-api": ^1.4.4
+    axios: ^0.25.0
+    cross-fetch: ^3.0.6
     easygettext: ^2.16.1
     filesize: ^8.0.0
     focus-trap: ^6.4.0
@@ -13399,15 +13396,20 @@ typescript@^4.3.2:
     luxon: ^2.3.0
     oidc-client: 1.11.5
     owncloud-design-system: 12.0.0
-    owncloud-sdk: 2.0.0-alpha.2
+    owncloud-sdk: ~2.0.0
     p-queue: ^6.1.1
     popper-max-size-modifier: ^0.2.0
     portal-vue: ^2.1.7
     postcss-import: ^12.0.1
     postcss-url: ^9.0.0
+    promise: ^8.0.3
+    qs: ^6.10.3
     query-string: ^6.8.3
+    semver: ^7.3.5
     tippy.js: ^6.3.7
     tus-js-client: ^2.3.0
+    utf8: ^3.0.0
+    uuid: ^8.3.2
     v-calendar: ^2.3.2
     vue: ^2.6.10
     vue-async-computed: ^3.9.0
@@ -13426,7 +13428,9 @@ typescript@^4.3.2:
     vuex-persist: 3.1.3
     vuex-router-sync: ^5.0.0
     web-pkg: "*"
+    webdav: 4.6.0
     webfontloader: ^1.6.28
+    xml-js: ^1.6.11
   languageName: unknown
   linkType: soft
 

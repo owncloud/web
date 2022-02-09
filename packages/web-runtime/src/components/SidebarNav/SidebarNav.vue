@@ -15,10 +15,7 @@
     >
       <oc-icon size="large" fill-type="line" :name="toggleSidebarButtonIcon" />
     </oc-button>
-    <nav
-      class="oc-sidebar-nav oc-my-l oc-px-xs"
-      :aria-label="$gettext('Sidebar top navigation menu')"
-    >
+    <nav class="oc-sidebar-nav oc-my-l oc-px-xs" :aria-label="$gettext('Sidebar navigation menu')">
       <oc-list>
         <sidebar-nav-item
           v-for="(link, index) in navItems"
@@ -87,6 +84,7 @@ export default {
   z-index: 4;
 
   .toggle-sidebar-button {
+    min-height: 3rem;
     transition: all 0.2s ease-out;
     &:hover {
       background-color: var(--oc-color-background-highlight) !important;
@@ -103,6 +101,6 @@ export default {
   width: var(--oc-size-width-medium) !important;
 }
 .oc-app-navigation-collapsed {
-  width: 65px !important;
+  width: 67px !important;
 }
 </style>

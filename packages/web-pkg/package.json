@@ -2,10 +2,5 @@
   "name": "web-pkg",
   "version": "0.0.0",
   "description": "ownCloud web pkg",
-  "license": "AGPL-3.0",
-  "devDependencies": {
-    "axios": "^0.25.0",
-    "lodash-es": "^4.17.21",
-    "uuid": "^8.3.2"
-  }
+  "license": "AGPL-3.0"
 }
