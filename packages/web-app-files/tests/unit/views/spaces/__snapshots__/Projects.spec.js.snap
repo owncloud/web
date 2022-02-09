@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Spaces component should only list drives of type "project" 1`] = `
-<div class="oc-py-s oc-px-m"><button aria-label="Create a new space" class="oc-mb-l oc-background-primary-gradient oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-inverse oc-button-inverse-outline" id="new-space-menu-btn" data-testid="spaces-list-create-space-btn"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span> <span>Create Space</span></button> <span class="oc-display-block oc-mb-xl"><span>Store your project related files in Spaces for seamless collaboration.</span> <a href="#">Learn more about spaces.</a></span>
-  <hr class="oc-mb-l">
+<div class="oc-py-s oc-px-m"><button aria-label="Create a new space" class="oc-mb-l oc-background-primary-gradient oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-inverse oc-button-inverse-outline" id="new-space-menu-btn" data-testid="spaces-list-create-space-btn"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span> <span>Create Space</span></button> <span class="oc-display-block oc-mb-xl"><span>Store your project related files in Spaces for seamless collaboration.</span></span>
+  <hr class="oc-mb-l oc-border-b">
   <div class="spaces-list">
     <ul class="
           oc-grid
@@ -15,7 +15,7 @@ exports[`Spaces component should only list drives of type "project" 1`] = `
         ">
       <li class="oc-mb-m">
         <div class="spaces-list-card oc-card oc-card-default">
-          <div class="oc-card-media-top"><a href="#/" aria-current="page" class="router-link-exact-active router-link-active">
+          <div class="oc-card-media-top oc-border-b"><a href="#/" aria-current="page" class="router-link-exact-active router-link-active">
               <!----> <span class="space-default-image oc-px-m oc-py-m oc-icon oc-icon-xxl oc-icon-passive"><!----></span>
             </a></div> <span class="oc-card-body"><div class="oc-flex oc-flex-between oc-flex-middle"><div class="oc-flex oc-flex-middle"><span class="oc-mr-s oc-icon oc-icon-m oc-icon-passive"><!----></span> <a href="#/" aria-current="page" class="space-name oc-text-left router-link-exact-active router-link-active"><span></span></a>
         </div>
