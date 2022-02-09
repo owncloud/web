@@ -4,7 +4,7 @@
     <template v-else>
       <!-- Pending shares -->
       <div v-if="hasPending">
-        <h2 class="oc-p-s">
+        <h2 class="oc-px-m oc-py-s">
           {{ pendingTitle }}
           <span class="oc-text-initial">({{ pendingCount }})</span>
         </h2>
@@ -75,7 +75,7 @@
       </div>
 
       <!-- Accepted or declined shares -->
-      <h2 class="oc-p-s">
+      <h2 class="oc-px-m oc-py-s">
         {{ sharesTitle }}
         <span class="oc-text-initial">({{ sharesCount }})</span>
         <oc-button
