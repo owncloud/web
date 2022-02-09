@@ -330,7 +330,6 @@ export default {
   }
 
   .oc-card-media-top {
-    display: inline-block;
     width: 100%;
     background-color: var(--oc-color-background-muted);
     height: 150px;
