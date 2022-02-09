@@ -18,9 +18,9 @@
       <span
         v-text="$gettext('Store your project related files in Spaces for seamless collaboration.')"
       />
-      <a href="#" v-text="$gettext('Learn more about spaces.')" />
+      <!-- <a href="#" v-text="$gettext('Learn more about spaces.')" /> -->
     </span>
-    <hr class="oc-mb-l" />
+    <hr class="oc-mb-l oc-border-b" />
     <list-loader v-if="loadSpacesTask.isRunning" />
     <template v-else>
       <no-content-message
@@ -50,7 +50,7 @@
               class="spaces-list-card oc-card oc-card-default"
               :class="getSpaceCardAdditionalClass(space)"
             >
-              <div class="oc-card-media-top">
+              <div class="oc-card-media-top oc-border-b">
                 <router-link v-if="!loadImagesTask.isRunning" :to="getSpaceProjectRoute(space)">
                   <oc-tag
                     v-if="isSpaceDisabled(space)"
@@ -331,7 +331,6 @@ export default {
 
   .oc-card-media-top {
     width: 100%;
-    background-color: var(--oc-color-background-muted);
     height: 150px;
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
