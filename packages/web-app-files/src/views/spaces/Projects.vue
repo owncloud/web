@@ -15,10 +15,10 @@
       <oc-icon name="add" />
       <translate>Create Space</translate>
     </oc-button>
-    <h2 class="oc-mt-rm" v-text="$gettext('Spaces')" />
-    <span v-text="$gettext('Access all project related files in one place.')" />
-    <a href="#" v-text="$gettext('Learn more about spaces.')" />
-    <h3 v-text="$gettext('Your spaces')" />
+    <span class="oc-display-block oc-mb-l">
+      <span v-text="$gettext('Access all project related files in one place.')" />
+      <a href="#" v-text="$gettext('Learn more about spaces.')" />
+    </span>
     <hr class="oc-mb-s" />
     <list-loader v-if="loadSpacesTask.isRunning" />
     <template v-else>
