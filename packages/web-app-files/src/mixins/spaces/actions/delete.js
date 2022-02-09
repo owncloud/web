@@ -12,11 +12,11 @@ export default {
           },
           handler: this.$_delete_trigger,
           isEnabled: ({ spaces }) => {
-            if (spaces.length === 0) {
+            if (spaces.length !== 1) {
               return false
             }
 
-            return spaces.every((space) => space.root?.deleted?.state === 'trashed')
+            return spaces[0].root?.deleted?.state === 'trashed'
           },
           componentType: 'oc-button',
           class: 'oc-files-actions-delete-trigger'
@@ -34,6 +34,10 @@ export default {
     ]),
 
     $_delete_trigger({ spaces }) {
+      if (spaces.length !== 1) {
+        return
+      }
+
       const modal = {
         variation: 'danger',
         title: this.$gettext('Delete space') + ' ' + spaces[0].name,

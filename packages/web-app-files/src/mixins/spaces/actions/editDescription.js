@@ -28,6 +28,10 @@ export default {
     ]),
 
     $_editDescription_trigger({ spaces }) {
+      if (spaces.length !== 1) {
+        return
+      }
+
       const modal = {
         variation: 'passive',
         title: this.$gettext('Change description for space') + ' ' + spaces[0].name,
