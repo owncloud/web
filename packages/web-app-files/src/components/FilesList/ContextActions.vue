@@ -73,12 +73,13 @@ export default {
   computed: {
     menuSections() {
       const sections = []
-
       if (this.items.length > 1) {
-        sections.push({
-          name: 'batch-actions',
-          items: [...this.menuItemsBatchActions]
-        })
+        if (this.menuItemsBatchActions.length) {
+          sections.push({
+            name: 'batch-actions',
+            items: [...this.menuItemsBatchActions]
+          })
+        }
         sections.push({
           name: 'batch-details',
           items: [...this.$_showDetails_items]
@@ -178,14 +179,17 @@ export default {
   methods: {
     getSectionClasses(index) {
       const classes = []
-      if (index === 0 && this.menuSections.length) {
-        classes.push('oc-pb-s oc-files-context-actions-border')
+      if (!this.menuSections.length) {
+        return classes
       }
-      if (index !== 0 && index < this.menuSections.length - 1) {
-        classes.push('oc-files-context-actions-border', 'oc-py-s')
+      if (index < this.menuSections.length - 1) {
+        classes.push('oc-pb-s')
       }
-      if (index === this.menuSections.length - 1) {
+      if (index > 0) {
         classes.push('oc-pt-s')
+      }
+      if (index < this.menuSections.length - 1) {
+        classes.push('oc-files-context-actions-border')
       }
       return classes
     }

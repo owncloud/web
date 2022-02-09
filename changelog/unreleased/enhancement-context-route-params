@@ -1,9 +1,9 @@
 Enhancement: Context Route Params
 
 We now add params of the source context route to the query of app routes and 
-converts them back to params when routing back to the origin - this is necessary 
+convert them back to params when routing back to the origin - this is necessary 
 to properly navigate back from opening files in extensions or in search results, 
-both to the personal or, in the future, spaces views.
+throughout personal, public or, in the future, spaces views.
 
 https://github.com/owncloud/web/pull/6331
 https://github.com/owncloud/web/issues/6390
