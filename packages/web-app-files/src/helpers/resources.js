@@ -103,11 +103,11 @@ export function buildResource(resource) {
 }
 
 export function buildWebDavFilesPath(userId, path) {
-  return `files/${userId}/${path}`
+  return `/files/${userId}/${path}`
 }
 
 export function buildWebDavSpacesPath(spaceId, path) {
-  return `spaces/${spaceId}/${path}`
+  return `/spaces/${spaceId}/${path}`
 }
 
 export function attachIndicators(resource, sharesTree) {
