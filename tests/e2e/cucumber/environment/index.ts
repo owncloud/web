@@ -28,7 +28,6 @@ const logger = pino({
 })
 
 setDefaultTimeout(config.debug ? -1 : config.timeout * 1000)
-let retryCounter = 0
 
 BeforeAll(async function () {
   if (config.ocis) {
@@ -88,6 +87,11 @@ BeforeAll(async (): Promise<void> => {
   }[config.browser]()
 })
 
+const defaults = {
+  reportHar: config.reportHar,
+  reportTracing: config.reportTracing
+}
+
 After(async function (this: World, { result }: ITestCaseHookParameter) {
   if (!result) {
     return
@@ -95,18 +99,12 @@ After(async function (this: World, { result }: ITestCaseHookParameter) {
 
   await this.attach(`Status: ${result?.status}. Duration:${result.duration?.seconds}s`)
 
-  if (result.status !== Status.PASSED && retryCounter < config.retry) {
-    if (result.willBeRetried) {
-      config.reportHar = true
-      config.reportTracing = true
-      retryCounter += 1
-    }
-  } else {
-    config.reportHar = false
-    config.reportTracing = false
-    retryCounter = 0
+  config.reportHar = result.willBeRetried || defaults.reportHar
+  config.reportTracing = result.willBeRetried || defaults.reportTracing
+
+  if (result.status !== Status.PASSED) {
+    await this.actorsEnvironment.close()
   }
-  await this.actorsEnvironment.close()
 })
 
 AfterAll(() => state.browser && state.browser.close())
