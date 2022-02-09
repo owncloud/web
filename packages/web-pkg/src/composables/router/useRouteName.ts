@@ -1,15 +1,9 @@
-import { useRouter } from './useRouter'
-import { Ref, ref, watch } from '@vue/composition-api'
+import { computed, ComputedRef, unref } from '@vue/composition-api'
+import { useRoute } from './useRoute'
 
-export const useRouteName = (): Ref<string> => {
-  const router = useRouter()
-  const routeName = ref('')
-  watch(
-    () => router.currentRoute,
-    (currentRoute) => {
-      routeName.value = currentRoute?.name
-    },
-    { immediate: true }
-  )
-  return routeName
+export const useRouteName = (): ComputedRef<string> => {
+  const route = useRoute()
+  return computed(() => {
+    return unref(route).name
+  })
 }

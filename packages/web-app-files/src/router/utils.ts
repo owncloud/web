@@ -2,8 +2,6 @@ import VueRouter, { Location } from 'vue-router'
 import merge from 'lodash-es/merge'
 import get from 'lodash-es/get'
 import { RouteMeta } from 'vue-router/types/router'
-import { ref, Ref, watch } from '@vue/composition-api'
-import { useRouter, useCurrentRoute } from 'web-pkg/src/composables'
 
 export interface ActiveRouteDirectorFunc<T extends string> {
   (router: VueRouter, ...comparatives: T[]): boolean
@@ -58,30 +56,6 @@ export const isLocationActiveDirector = <T extends string>(
 
     return isLocationActive(router, first, ...rest)
   }
-}
-
-/**
- * watches the current route and re-evaluates the provided active location director
- * on each route name update.
- *
- * @param director
- * @param comparatives
- */
-export const watchActiveLocation = <T extends string>(
-  director: ActiveRouteDirectorFunc<T>,
-  ...comparatives: T[]
-): Ref<boolean> => {
-  const value = ref(false)
-  const router = useRouter()
-  const currentRoute = useCurrentRoute()
-  watch(
-    currentRoute,
-    () => {
-      value.value = director(router, ...comparatives)
-    },
-    { immediate: true }
-  )
-  return value
 }
 
 /**

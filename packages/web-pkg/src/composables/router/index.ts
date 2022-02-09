@@ -1,5 +1,5 @@
 export * from './types'
-export * from './useCurrentRoute'
+export * from './useRoute'
 export * from './useRouteName'
 export * from './useRouteQuery'
 export * from './useRouteQueryPersisted'

@@ -139,12 +139,8 @@ import Mixins from '../../mixins'
 import MixinFileActions, { EDITOR_MODE_CREATE } from '../../mixins/fileActions'
 import { buildResource, buildWebDavFilesPath, buildWebDavSpacesPath } from '../../helpers/resources'
 import { bus } from 'web-pkg/src/instance'
-import {
-  isLocationActive,
-  isLocationPublicActive,
-  isLocationSpacesActive,
-  watchActiveLocation
-} from '../../router'
+import { isLocationActive, isLocationPublicActive, isLocationSpacesActive } from '../../router'
+import { useActiveLocation } from '../../composables'
 
 import BatchActions from './SelectedResources/BatchActions.vue'
 import FileDrop from './Upload/FileDrop.vue'
@@ -168,13 +164,9 @@ export default {
   mixins: [Mixins, MixinFileActions],
   setup() {
     return {
-      isPersonalLocation: watchActiveLocation(isLocationSpacesActive, 'files-spaces-personal-home'),
-      isPublicLocation: watchActiveLocation(isLocationPublicActive, 'files-public-files'),
-      isSpacesProjectsLocation: watchActiveLocation(
-        isLocationSpacesActive,
-        'files-spaces-projects'
-      ),
-      isSpacesProjectLocation: watchActiveLocation(isLocationSpacesActive, 'files-spaces-project')
+      isPersonalLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-personal-home'),
+      isPublicLocation: useActiveLocation(isLocationPublicActive, 'files-public-files'),
+      isSpacesProjectsLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-projects')
     }
   },
   data: () => ({
