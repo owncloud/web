@@ -115,6 +115,9 @@ function getMountedWrapper() {
           }
         }
       }
-    })
+    }),
+    stubs: {
+      translate: true
+    }
   })
 }
