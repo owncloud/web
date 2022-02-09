@@ -32,6 +32,7 @@ Summary
 * Enhancement - Redesigned user menu: [#6272](https://github.com/owncloud/web/pull/6272)
 * Enhancement - Show parent folder for resources: [#6226](https://github.com/owncloud/web/pull/6226)
 * Enhancement - Add default sorting to the spaces list: [#6262](https://github.com/owncloud/web/pull/6262)
+* Enhancement - Implement spaces front page: [#6287](https://github.com/owncloud/web/pull/6287)
 * Enhancement - Implement spaces list: [#6199](https://github.com/owncloud/web/pull/6199)
 * Enhancement - Update ODS to v12.0.0: [#6086](https://github.com/owncloud/web/pull/6086)
 * Enhancement - Update SDK: [#6309](https://github.com/owncloud/web/pull/6309)
@@ -248,6 +249,16 @@ Details
    https://github.com/owncloud/web/issues/6253
    https://github.com/owncloud/web/pull/6262
 
+* Enhancement - Implement spaces front page: [#6287](https://github.com/owncloud/web/pull/6287)
+
+   Each space can now be entered from within the spaces list. The space front page will then display
+   all the space contents, plus an image and a readme file if set. Basic actions like uploading
+   files, creating folders, renaming resources, and more. were also implemented in the course of
+   this.
+
+   https://github.com/owncloud/web/issues/6271
+   https://github.com/owncloud/web/pull/6287
+
 * Enhancement - Implement spaces list: [#6199](https://github.com/owncloud/web/pull/6199)
 
    We added a new route that lists all available spaces of type "project".
@@ -318,11 +329,19 @@ Details
 
 * Enhancement - Update SDK: [#6309](https://github.com/owncloud/web/pull/6309)
 
-   We've updated the ownCloud SDK to version 1.1.2. As we've switched the SDK to semver only now
-   there is no proper changelog available.
+   We've updated the ownCloud SDK to version 2.0.0-alpha.2.
+
+   - Change - Drop Internet Explorer support:
+   https://github.com/owncloud/owncloud-sdk/pull/966 - Change - Pass full file or directory
+   path to methods of Files class: https://github.com/owncloud/owncloud-sdk/pull/971 -
+   Change - Remove webdav v1 api support:
+   https://github.com/owncloud/owncloud-sdk/pull/962 - Bugfix - Graceful reject for
+   failing network request in OCS: https://github.com/owncloud/owncloud-sdk/pull/977
 
    https://github.com/owncloud/web/pull/6309
+   https://github.com/owncloud/web/pull/6287
    https://github.com/owncloud/owncloud-sdk/releases/tag/v1.1.2
+   https://github.com/owncloud/owncloud-sdk/releases/tag/v2.0.0-alpha.2
 
 Changelog for ownCloud Web [4.9.0] (2021-12-24)
 =======================================
