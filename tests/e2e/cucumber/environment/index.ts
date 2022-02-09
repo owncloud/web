@@ -39,7 +39,6 @@ BeforeAll(async function () {
 
 Before(function (this: World, { pickle }: ITestCaseHookParameter) {
   this.feature = pickle
-  console.log('featureName', this.feature.name)
   this.actorsEnvironment.on('console', async (actorId, message): Promise<void> => {
     const msg = {
       actor: actorId,
