@@ -276,6 +276,7 @@ export default {
 
         if (!sameRoute || !sameItem) {
           this.loadFilesListTask.perform(this, sameRoute, to.params.item)
+          this.loadReadmeTask.perform(this)
         }
       },
       immediate: true
