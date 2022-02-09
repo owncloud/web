@@ -86,6 +86,11 @@ BeforeAll(async (): Promise<void> => {
   }[config.browser]()
 })
 
+const defaults = {
+  reportHar: config.reportHar,
+  reportTracing: config.reportTracing
+}
+
 After(async function (this: World, { result }: ITestCaseHookParameter) {
   if (!result) {
     return
@@ -93,12 +98,10 @@ After(async function (this: World, { result }: ITestCaseHookParameter) {
 
   await this.attach(`Status: ${result?.status}. Duration:${result.duration?.seconds}s`)
 
-  if (result.status !== Status.PASSED) {
-    if (result.willBeRetried) {
-      config.reportHar = true
-      config.reportTracing = true
-    }
+  config.reportHar = result.willBeRetried || defaults.reportHar
+  config.reportTracing = result.willBeRetried || defaults.reportTracing
 
+  if (result.status !== Status.PASSED) {
     await this.actorsEnvironment.close()
   }
 })

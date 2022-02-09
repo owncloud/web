@@ -26,12 +26,12 @@ export class ActorsEnvironment extends EventEmitter {
     return this.store.get(id)
   }
 
-  public async createActor({ id }: { id: string }): Promise<Actor> {
+  public async createActor({ id, namespace }: { id: string; namespace: string }): Promise<Actor> {
     if (this.store.has(id)) {
       return this.getActor({ id })
     }
 
-    const actor = new ActorEnvironment({ id, ...this.options })
+    const actor = new ActorEnvironment({ id, namespace, ...this.options })
     await actor.setup()
     actor.on('closed', () => this.store.delete(id))
     actor.page.on('console', (message) => {

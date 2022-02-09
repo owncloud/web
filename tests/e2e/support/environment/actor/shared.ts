@@ -14,26 +14,24 @@ export interface ActorsOptions {
 
 export interface ActorOptions extends ActorsOptions {
   id: string
+  namespace: string
 }
 
-export const buildBrowserContextOptions = (
-  uuid: string,
-  options: ActorOptions['context']
-): BrowserContextOptions => {
+export const buildBrowserContextOptions = (options: ActorOptions): BrowserContextOptions => {
   const contextOptions: BrowserContextOptions = {
-    acceptDownloads: options.acceptDownloads,
+    acceptDownloads: options.context.acceptDownloads,
     ignoreHTTPSErrors: true
   }
 
-  if (options.reportVideo) {
+  if (options.context.reportVideo) {
     contextOptions.recordVideo = {
-      dir: path.join(options.reportDir, 'playwright', 'video')
+      dir: path.join(options.context.reportDir, 'playwright', 'video')
     }
   }
 
-  if (options.reportHar) {
+  if (options.context.reportHar) {
     contextOptions.recordHar = {
-      path: path.join(options.reportDir, 'playwright', 'har', `${uuid}.har`)
+      path: path.join(options.context.reportDir, 'playwright', 'har', `${options.namespace}.har`)
     }
   }
 
