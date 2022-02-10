@@ -107,8 +107,13 @@ describe('Personal view', () => {
       const spyOnMoveFiles = jest.spyOn(localVue.prototype.$client.files, 'move')
 
       const wrapper = createWrapper([resourceDocumentsFolder])
+      const spyOnshowMessage = jest.spyOn(wrapper.vm, 'showMessage')
       await wrapper.vm.fileDropped(resourcePdfsFolder.id)
       expect(spyOnMoveFiles).not.toBeCalled()
+      expect(spyOnshowMessage).toBeCalledWith({
+        status: 'danger',
+        title: 'Failed to move "Documents"'
+      })
 
       spyOnMoveFiles.mockReset()
       spyOnGetFolderItems.mockReset()
