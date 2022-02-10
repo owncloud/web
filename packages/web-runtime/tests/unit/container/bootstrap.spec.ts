@@ -1,6 +1,5 @@
 import { announceApplications } from '../../../src/container'
 import { buildApplication } from '../../../src/container/application'
-import { mocked } from 'ts-jest/utils'
 
 jest.mock('../../../src/container/application')
 
@@ -20,7 +19,7 @@ describe('announce applications', () => {
         return Promise.reject(fishyError)
       })
 
-    mocked(buildApplication).mockImplementation(buildApplicationMock)
+    jest.mocked(buildApplication).mockImplementation(buildApplicationMock)
 
     await announceApplications({
       runtimeConfiguration: {
