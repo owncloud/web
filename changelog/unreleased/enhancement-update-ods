@@ -1,6 +1,6 @@
-Enhancement: Update ODS to v12.0.0
+Enhancement: Update ODS to v12.1.0
 
-We updated the ownCloud Design System to version 12.0.0. Please refer to the full changelog in the ODS release (linked) for more details. Summary:
+We updated the ownCloud Design System to version 12.1.0. Please refer to the full changelog in the ODS release (linked) for more details. Summary:
 
 - Change - Drop Internet Explorer support: https://github.com/owncloud/owncloud-design-system/pull/1909
 - Change - Do not sort in OcTable: https://github.com/owncloud/owncloud-design-system/pull/1825
@@ -28,10 +28,12 @@ We updated the ownCloud Design System to version 12.0.0. Please refer to the ful
 - Enhancement - Add svg icon for spaces: https://github.com/owncloud/owncloud-design-system/pull/1846
 - Enhancement - OcTable header alignment: https://github.com/owncloud/owncloud-design-system/pull/1922
 - Enhancement - Use Roboto font: https://github.com/owncloud/owncloud-design-system/pull/1876
+- Enhancement - Redesign OcModal: https://github.com/owncloud/owncloud-design-system/pull/1953
 - Bugfix - Missing OcDrop shadow: https://github.com/owncloud/owncloud-design-system/pull/1926
 - Bugfix - OcNotification positioning: https://github.com/owncloud/owncloud-design-system/pull/1658
 - Bugfix - Rename GhostElement: https://github.com/owncloud/owncloud-design-system/pull/1845
 - Bugfix - OcTooltip isn't reactive: https://github.com/owncloud/owncloud-design-system/pull/1863
+- Bugfix - Background-primary-gradient border: https://github.com/owncloud/web/issues/6383
 
 https://github.com/owncloud/web/pull/6086
 https://github.com/owncloud/web/pull/6142
@@ -41,4 +43,6 @@ https://github.com/owncloud/web/pull/6240
 https://github.com/owncloud/web/pull/6295
 https://github.com/owncloud/web/pull/6360
 https://github.com/owncloud/web/pull/6368
+https://github.com/owncloud/web/pull/6418
 https://github.com/owncloud/owncloud-design-system/releases/tag/v12.0.0
+https://github.com/owncloud/owncloud-design-system/releases/tag/v12.1.0
