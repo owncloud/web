@@ -89,9 +89,15 @@ describe('Spaces component', () => {
 })
 
 function getMountedWrapper() {
+  const routes = [
+    {
+      name: 'files-spaces-project',
+      path: '/'
+    }
+  ]
   return mount(SpaceProjects, {
     localVue,
-    router: new VueRouter(),
+    router: new VueRouter({ routes }),
     store: createStore(Vuex.Store, {
       getters: {
         configuration: () => ({
