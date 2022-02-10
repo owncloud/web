@@ -314,6 +314,7 @@ Details
 
    https://github.com/owncloud/web/issues/6104
    https://github.com/owncloud/web/pull/6199
+   https://github.com/owncloud/web/pull/6399
 
 * Enhancement - Update ODS to v12.0.0: [#6086](https://github.com/owncloud/web/pull/6086)
 
