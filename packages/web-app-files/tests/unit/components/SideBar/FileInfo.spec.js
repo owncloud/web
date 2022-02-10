@@ -40,10 +40,14 @@ const formRelativeDateFromRFC = jest.fn()
 const resetDateMocks = () => {
   formDateFromRFC.mockReset()
   formRelativeDateFromRFC.mockReset()
+  formDateFromRFC.mockImplementation(() => 'ABSOLUTE_TIME')
+  formRelativeDateFromRFC.mockImplementation(() => 'RELATIVE_TIME')
 }
 
 describe('FileInfo', () => {
   it('shows file info', () => {
+    resetDateMocks()
+
     const tooltipStub = jest.fn()
     const wrapper = createWrapper(simpleOwnFile, tooltipStub)
     expect(wrapper.find(selectors.name).exists()).toBeTruthy()
@@ -52,8 +56,6 @@ describe('FileInfo', () => {
 
   it('shows modification date info', () => {
     resetDateMocks()
-    formDateFromRFC.mockImplementation(() => 'ABSOLUTE_MODIFICATION_TIME')
-    formRelativeDateFromRFC.mockImplementation(() => 'RELATIVE_MODIFICATION_TIME')
 
     const tooltipStub = jest.fn()
     const wrapper = createWrapper(simpleOwnFile, tooltipStub)
@@ -68,8 +70,6 @@ describe('FileInfo', () => {
 
   it('shows deletion date info', () => {
     resetDateMocks()
-    formDateFromRFC.mockImplementation(() => 'ABSOLUTE_DELETION_TIME')
-    formRelativeDateFromRFC.mockImplementation(() => 'RELATIVE_DELETION_TIME')
 
     const tooltipStub = jest.fn()
     const wrapper = createWrapper(simpleDeletedFile, tooltipStub, 'files-common-trash')
