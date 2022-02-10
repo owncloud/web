@@ -11,6 +11,8 @@ import { buildResource, renameResource } from '@files/src/helpers/resources'
 import SideBar from '@files/src/components/SideBar/SideBar.vue'
 import { createLocationSpaces } from '../../../../src/router'
 
+jest.mock('web-pkg/src/observer')
+
 const simpleOwnFolder = {
   type: 'folder',
   ownerId: 'marie',
