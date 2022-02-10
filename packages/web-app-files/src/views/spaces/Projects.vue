@@ -61,7 +61,7 @@
                   </oc-tag>
                   <img
                     v-if="imageContentObject[space.id]"
-                    class="space-image"
+                    class="space-image oc-rounded-top"
                     :src="'data:image/jpeg;base64,' + imageContentObject[space.id]"
                     alt=""
                   />
@@ -344,8 +344,6 @@ export default {
     width: 100%;
     height: 150px;
     object-fit: cover;
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
   }
 
   .space-name {
