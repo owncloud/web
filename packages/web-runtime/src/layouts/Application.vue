@@ -30,15 +30,6 @@ export default {
       windowWidth: 0
     }
   },
-  mounted() {
-    this.$nextTick(() => {
-      window.addEventListener('resize', this.onResize)
-      this.onResize()
-    })
-  },
-  beforeDestroy() {
-    window.removeEventListener('resize', this.onResize)
-  },
   computed: {
     ...mapGetters([
       'capabilities',
@@ -106,6 +97,15 @@ export default {
 
       return list
     }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      window.addEventListener('resize', this.onResize)
+      this.onResize()
+    })
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.onResize)
   },
   methods: {
     ...mapActions(['deleteMessage']),
