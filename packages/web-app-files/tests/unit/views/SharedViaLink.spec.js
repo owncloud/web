@@ -148,11 +148,17 @@ describe('SharedViaLink view', () => {
 })
 
 function mountOptions(store, loading, setup = {}) {
+  const routes = [
+    {
+      name: 'files-spaces-personal-home',
+      path: '/'
+    }
+  ]
   return {
     localVue,
     store: store,
     stubs,
-    router: new VueRouter(),
+    router: new VueRouter({ routes }),
     setup: () => ({
       loadResourcesTask: {
         isRunning: loading,
