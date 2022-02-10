@@ -6,7 +6,7 @@ exports[`ApplicationsMenu component should render navigation with button and men
     <oc-icon-stub name="grid" size="large" class="oc-flex"></oc-icon-stub>
   </oc-button-stub>
   <oc-drop-stub drop-id="app-switcher-dropdown" toggle="#_appSwitcherButton" mode="click" padding-size="small" close-on-click="">
-    <oc-list class="applications-list">
+    <oc-list-stub class="applications-list">
       <li>
         <oc-button-stub type="router-link" to="/files" appearance="raw" variation="passive" class=""><span class="icon-box"><oc-icon-stub name="folder"></oc-icon-stub></span> <span>Files</span>
           <!---->
@@ -17,7 +17,7 @@ exports[`ApplicationsMenu component should render navigation with button and men
           <!---->
         </oc-button-stub>
       </li>
-    </oc-list>
+    </oc-list-stub>
   </oc-drop-stub>
 </nav>
 `;
