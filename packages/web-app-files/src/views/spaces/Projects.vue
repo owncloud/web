@@ -6,7 +6,6 @@
       ref="createNewSpaceButton"
       key="new-space-menu-btn-enabled"
       :aria-label="$gettext('Create a new space')"
-      variation="inverse"
       class="oc-mb-l oc-background-primary-gradient"
       data-testid="spaces-list-create-space-btn"
       @click="showCreateSpaceModal"
@@ -14,13 +13,12 @@
       <oc-icon name="add" />
       <translate>Create Space</translate>
     </oc-button>
-    <span class="oc-display-block oc-mb-xl">
+    <div class="oc-pb-xl oc-border-b">
       <span
         v-text="$gettext('Store your project related files in Spaces for seamless collaboration.')"
       />
       <!-- <a href="#" v-text="$gettext('Learn more about spaces.')" /> -->
-    </span>
-    <hr class="oc-mb-l oc-border-b" />
+    </div>
     <list-loader v-if="loadSpacesTask.isRunning" />
     <template v-else>
       <no-content-message
@@ -33,7 +31,7 @@
           <span v-translate>You don't have access to any spaces</span>
         </template>
       </no-content-message>
-      <div v-else class="spaces-list">
+      <div v-else class="spaces-list oc-mt-l">
         <ul
           class="
             oc-grid
@@ -47,7 +45,7 @@
         >
           <li v-for="space in spaces" :key="space.id" class="oc-mb-m">
             <div
-              class="spaces-list-card oc-card oc-card-default"
+              class="spaces-list-card oc-card oc-card-default oc-rounded"
               :class="getSpaceCardAdditionalClass(space)"
             >
               <div class="oc-card-media-top oc-border-b">
@@ -73,7 +71,7 @@
                   />
                 </router-link>
               </div>
-              <span class="oc-card-body">
+              <span class="oc-card-body oc-p-s">
                 <div class="oc-flex oc-flex-between oc-flex-middle">
                   <div class="oc-flex oc-flex-middle">
                     <oc-icon class="oc-mr-s" name="layout-grid" />
@@ -81,7 +79,7 @@
                       <span v-text="space.name"> </span>
                     </router-link>
                   </div>
-                  <div>
+                  <div class="oc-flex oc-flex-middle">
                     <oc-button
                       :id="`space-context-btn-${sanitizeSpaceId(space.id)}`"
                       v-oc-tooltip="$gettext('Show context menu')"
@@ -313,12 +311,7 @@ export default {
 .spaces-list {
   &-card {
     box-shadow: none !important;
-    border-radius: 3px;
     background-color: var(--oc-color-background-highlight) !important;
-
-    .oc-card-body {
-      padding: 10px;
-    }
   }
 
   &-card.state-trashed {
@@ -332,9 +325,8 @@ export default {
   .oc-card-media-top {
     width: 100%;
     height: 150px;
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
   }
+
   .oc-card-media-top a {
     display: flex;
     justify-content: center;
