@@ -97,10 +97,11 @@ export default {
 }
 
 .oc-app-navigation-expanded {
-  // FIXME: width is set, but actual width of the sidebar is something around 260px (depending on the browser).
-  width: var(--oc-size-width-medium) !important;
+  min-width: 250px !important;
+  max-width: 250px !important;
 }
 .oc-app-navigation-collapsed {
-  width: 67px !important;
+  min-width: 67px !important;
+  max-width: 67px !important;
 }
 </style>

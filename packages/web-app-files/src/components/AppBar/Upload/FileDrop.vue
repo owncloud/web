@@ -103,12 +103,12 @@ export default {
 }
 @media only screen and (min-width: 640px) {
   .oc-dropzone-navigation-collapsed > .oc-dropzone-container {
-    left: calc(65px + var(--oc-space-small));
-    width: calc(100% - 65px - (2 * var(--oc-space-small)));
+    left: calc(67px + var(--oc-space-small));
+    width: calc(100% - 67px - (2 * var(--oc-space-small)));
   }
   .oc-dropzone-navigation-expanded > .oc-dropzone-container {
-    left: var(--oc-space-medium);
-    width: calc(100% - var(--oc-size-width-medium));
+    left: calc(250px + var(--oc-space-small));
+    width: calc(100% - 250px - (2 * var(--oc-space-small)));
   }
 }
 </style>
