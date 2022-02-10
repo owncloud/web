@@ -68,6 +68,9 @@ export default {
         .then(() => {
           this.hideModal()
           this.REMOVE_FILE({ id })
+          this.showMessage({
+            title: this.$gettext('Space successfully deleted')
+          })
         })
         .catch((error) => {
           this.showMessage({

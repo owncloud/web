@@ -70,6 +70,9 @@ export default {
             field: 'name',
             value: name
           })
+          this.showMessage({
+            title: this.$gettext('Space name successfully changed')
+          })
         })
         .catch((error) => {
           this.showMessage({

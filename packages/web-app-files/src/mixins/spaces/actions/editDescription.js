@@ -11,10 +11,10 @@ export default {
           name: 'editDescription',
           icon: 'pencil',
           label: () => {
-            return this.$gettext('Change description')
+            return this.$gettext('Change subtitle')
           },
           handler: this.$_editDescription_trigger,
-          isEnabled: () => false, // @TODO enable as soon as backend supports this
+          isEnabled: ({ resources }) => spaces.length === 1,
           componentType: 'oc-button',
           class: 'oc-files-actions-edit-description-trigger'
         }
@@ -38,12 +38,12 @@ export default {
 
       const modal = {
         variation: 'passive',
-        title: this.$gettext('Change description for space') + ' ' + resources[0].name,
+        title: this.$gettext('Change subtitle for space') + ' ' + spaces[0].name,
         cancelText: this.$gettext('Cancel'),
         confirmText: this.$gettext('Confirm'),
         hasInput: true,
-        inputLabel: this.$gettext('Space description'),
-        inputValue: resources[0].description,
+        inputLabel: this.$gettext('Space subtitle'),
+        inputValue: spaces[0].description,
         onCancel: this.hideModal,
         onConfirm: (description) =>
           this.$_editDescription_editDescriptionSpace(resources[0].id, description)
@@ -63,10 +63,13 @@ export default {
             field: 'description',
             value: description
           })
+          this.showMessage({
+            title: this.$gettext('Space subtitle successfully changed')
+          })
         })
         .catch((error) => {
           this.showMessage({
-            title: this.$gettext('Renaming space description failed…'),
+            title: this.$gettext('Changing space subtitle failed…'),
             desc: error,
             status: 'danger'
           })

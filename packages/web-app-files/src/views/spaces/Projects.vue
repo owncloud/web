@@ -21,7 +21,7 @@
       />
       <!-- <a href="#" v-text="$gettext('Learn more about spaces.')" /> -->
     </div>
-    <list-loader v-if="loadSpacesTask.isRunning" />
+    <list-loader v-if="loadResourcesTask.isRunning" />
     <template v-else>
       <no-content-message
         v-if="!spaces.length"
@@ -34,6 +34,16 @@
         </template>
       </no-content-message>
       <div v-else class="spaces-list oc-mt-l">
+        <input
+          id="space-image-upload-input"
+          ref="spaceImageInput"
+          type="file"
+          name="file"
+          multiple
+          tabindex="-1"
+          accept="image/*"
+          @change="$_uploadSpaceImage"
+        />
         <ul
           class="
             oc-grid
@@ -51,7 +61,7 @@
               :class="getSpaceCardAdditionalClass(space)"
             >
               <div class="oc-card-media-top oc-border-b">
-                <router-link v-if="!loadImagesTask.isRunning" :to="getSpaceProjectRoute(space)">
+                <router-link :to="getSpaceProjectRoute(space)">
                   <oc-tag
                     v-if="space.disabled"
                     class="oc-position-absolute space-disabled-indicator"
@@ -62,7 +72,7 @@
                   <img
                     v-if="imageContentObject[space.id]"
                     class="space-image oc-rounded-top"
-                    :src="'data:image/jpeg;base64,' + imageContentObject[space.id]"
+                    :src="'data:image/jpeg;base64,' + imageContentObject[space.id]['content']"
                     alt=""
                   />
                   <oc-icon
@@ -118,7 +128,10 @@
                     </oc-drop>
                   </div>
                 </div>
-                <p v-if="space.description" class="oc-text-left oc-mt-xs oc-mb-rm oc-text-truncate">
+                <p
+                  v-if="space.description"
+                  class="oc-text-left oc-ml-xs oc-mt-xs oc-mb-rm oc-text-truncate"
+                >
                   <small v-text="space.description"></small>
                 </p>
               </div>
@@ -133,11 +146,10 @@
 <script>
 import NoContentMessage from '../../components/FilesList/NoContentMessage.vue'
 import ListLoader from '../../components/FilesList/ListLoader.vue'
-import { computed, ref } from '@vue/composition-api'
+import { computed } from '@vue/composition-api'
 import { useStore } from 'web-pkg/src/composables'
 import { useTask } from 'vue-concurrency'
 import { createLocationSpaces } from '../../router'
-import { bus } from 'web-pkg/src/instance'
 import { mapMutations, mapActions } from 'vuex'
 import Rename from '../../mixins/spaces/actions/rename'
 import Delete from '../../mixins/spaces/actions/delete'
@@ -145,6 +157,7 @@ import Disable from '../../mixins/spaces/actions/disable'
 import Restore from '../../mixins/spaces/actions/restore'
 import EditDescription from '../../mixins/spaces/actions/editDescription'
 import ShowDetails from '../../mixins/spaces/actions/showDetails'
+import UploadImage from '../../mixins/spaces/actions/uploadImage'
 import { buildSpace, buildWebDavSpacesPath } from '../../helpers/resources'
 import { clientService } from 'web-pkg/src/services'
 
@@ -153,17 +166,16 @@ export default {
     NoContentMessage,
     ListLoader
   },
-  mixins: [Rename, Delete, EditDescription, Disable, ShowDetails, Restore],
+  mixins: [Rename, Delete, EditDescription, Disable, ShowDetails, Restore, UploadImage],
   setup() {
     const store = useStore()
     const spaces = computed(() => store.getters['Files/activeFiles'] || [])
-    const imageContentObject = ref({})
     const graphClient = clientService.graphAuthenticated(
       store.getters.configuration.server,
       store.getters.getToken
     )
 
-    const loadSpacesTask = useTask(function* (signal, ref) {
+    const loadResourcesTask = useTask(function* (signal, ref) {
       ref.CLEAR_CURRENT_FILES_LIST()
 
       const response = yield graphClient.drives.listMyDrives()
@@ -175,43 +187,15 @@ export default {
       ref.LOAD_FILES({ currentFolder: null, files: loadedSpaces })
     })
 
-    const loadImageTask = useTask(function* (signal, { client, spaceId, fileName }) {
-      const fileContents = yield client.files.getFileContents(
-        buildWebDavSpacesPath(spaceId, fileName),
-        {
-          responseType: 'arrayBuffer'
-        }
-      )
-
-      imageContentObject.value[spaceId] = Buffer.from(fileContents).toString('base64')
-    })
-
-    const loadImagesTask = useTask(function* (signal, ref) {
-      for (const space of spaces.value) {
-        if (!space?.spaceImageData) {
-          continue
-        }
-
-        yield loadImageTask.perform({
-          client: ref.$client,
-          spaceId: space?.id,
-          fileName: space.spaceImageData.name
-        })
-      }
-    })
-
-    const loadResourcesTask = useTask(function* (signal, ref) {
-      yield ref.loadSpacesTask.perform(ref)
-      yield ref.loadImagesTask.perform(ref)
-    })
-
     return {
       spaces,
       graphClient,
-      loadSpacesTask,
-      loadImagesTask,
-      loadResourcesTask,
-      imageContentObject
+      loadResourcesTask
+    }
+  },
+  data: function () {
+    return {
+      imageContentObject: {}
     }
   },
   computed: {
@@ -222,12 +206,6 @@ export default {
   },
   created() {
     this.loadResourcesTask.perform(this)
-
-    const loadSpacesEventToken = bus.subscribe('app.files.list.load', (path) => {
-      this.loadResourcesTask.perform(this)
-    })
-
-    this.$on('beforeDestroy', () => bus.unsubscribe('app.files.list.load', loadSpacesEventToken))
   },
   methods: {
     ...mapActions(['createModal', 'hideModal', 'setModalInputErrorMessage']),
@@ -235,13 +213,16 @@ export default {
       'SET_CURRENT_FOLDER',
       'LOAD_FILES',
       'CLEAR_CURRENT_FILES_LIST',
-      'SET_FILE_SELECTION'
+      'SET_FILE_SELECTION',
+      'UPSERT_RESOURCE'
     ]),
 
     getContextMenuActions(space) {
       return [
         ...this.$_rename_items,
         ...this.$_editDescription_items,
+        ...this.$_uploadSpaceImage_items,
+        ...this.$_showDetails_items,
         ...this.$_restore_items,
         ...this.$_delete_items,
         ...this.$_disable_items,
@@ -276,6 +257,7 @@ export default {
       if (name.trim() === '') {
         this.setModalInputErrorMessage(this.$gettext('Space name cannot be empty'))
       }
+      return this.setModalInputErrorMessage(null)
     },
 
     addNewSpace(name) {
@@ -283,9 +265,50 @@ export default {
 
       return this.graphClient.drives
         .createDrive({ name }, {})
-        .then(() => {
+        .then(({ data: space }) => {
           this.hideModal()
-          this.loadSpacesTask.perform(this)
+          const resource = buildSpace(space)
+          this.UPSERT_RESOURCE(resource)
+          this.spaces.sort((a, b) => a.name.localeCompare(b.name))
+
+          this.$client.files.createFolder(`spaces/${space.id}/.space`).then(() => {
+            this.$client.files
+              .putFileContents(
+                `spaces/${space.id}/.space/readme.md`,
+                `### 👋 ${this.$gettext('Hello!')}\r\n${this.$gettext(
+                  'Add a description to welcome the members of the Space.'
+                )}\r\n${this.$gettext(
+                  'Use markdown to format your text. [More info]'
+                )}(https://www.markdownguide.org/basic-syntax/)`
+              )
+              .then((markdown) => {
+                this.graphClient.drives
+                  .updateDrive(
+                    space.id,
+                    {
+                      special: [
+                        {
+                          specialFolder: {
+                            name: 'readme'
+                          },
+                          id: Buffer.from(markdown['OC-FileId'], 'base64')
+                            .toString()
+                            .split(':')
+                            .pop()
+                        }
+                      ]
+                    },
+                    {}
+                  )
+                  .then(({ data }) => {
+                    this.UPDATE_RESOURCE_FIELD({
+                      id: space.id,
+                      field: 'spaceReadmeData',
+                      value: data.special.find((special) => special.specialFolder.name === 'readme')
+                    })
+                  })
+              })
+          })
         })
         .catch((error) => {
           this.showMessage({
@@ -305,6 +328,40 @@ export default {
         return 'state-trashed'
       }
       return ''
+    }
+  },
+  watch: {
+    spaces: {
+      handler: function (val) {
+        if (!val) return
+
+        for (const space of this.spaces) {
+          if (!space.spaceImageData) {
+            continue
+          }
+
+          if (this.imageContentObject[space.id]?.fileId === space.spaceImageData?.id) {
+            continue
+          }
+
+          const webDavPathComponents = space.spaceImageData.webDavUrl.split('/')
+          const path = webDavPathComponents
+            .slice(webDavPathComponents.indexOf(space.id) + 1)
+            .join('/')
+
+          this.$client.files
+            .getFileContents(buildWebDavSpacesPath(space.id, path), {
+              responseType: 'arrayBuffer'
+            })
+            .then((fileContents) => {
+              this.$set(this.imageContentObject, space.id, {
+                fileId: space.spaceImageData.id,
+                content: Buffer.from(fileContents).toString('base64')
+              })
+            })
+        }
+      },
+      deep: true
     }
   }
 }
@@ -361,6 +418,11 @@ export default {
 
   .space-disabled-indicator {
     z-index: 999;
+  }
+
+  #space-image-upload-input {
+    position: absolute;
+    left: -99999px;
   }
 }
 </style>

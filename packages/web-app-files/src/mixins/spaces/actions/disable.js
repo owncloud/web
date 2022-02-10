@@ -68,6 +68,9 @@ export default {
             field: 'disabled',
             value: true
           })
+          this.showMessage({
+            title: this.$gettext('Space successfully disabled')
+          })
         })
         .catch((error) => {
           this.showMessage({
