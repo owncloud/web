@@ -44,7 +44,8 @@ function getWrapper(applicationsList = []) {
       'oc-button': true,
       'oc-icon': true,
       'oc-drop': true,
-      'router-link': true
+      'router-link': true,
+      'oc-list': true
     },
     directives: {
       'oc-tooltip': jest.fn()
