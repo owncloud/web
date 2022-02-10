@@ -5,8 +5,10 @@
       id="new-space-menu-btn"
       ref="createNewSpaceButton"
       key="new-space-menu-btn-enabled"
+      variation="primary"
+      appearance="filled"
       :aria-label="$gettext('Create a new space')"
-      class="oc-mb-l oc-background-primary-gradient"
+      class="oc-mb-l"
       data-testid="spaces-list-create-space-btn"
       @click="showCreateSpaceModal"
     >
@@ -116,7 +118,7 @@
                     </oc-drop>
                   </div>
                 </div>
-                <p class="oc-text-left oc-mt-xs oc-mb-rm oc-text-truncate">
+                <p v-if="space.description" class="oc-text-left oc-mt-xs oc-mb-rm oc-text-truncate">
                   <small v-text="space.description"></small>
                 </p>
               </div>
