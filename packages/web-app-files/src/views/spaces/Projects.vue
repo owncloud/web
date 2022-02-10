@@ -5,9 +5,9 @@
       id="new-space-menu-btn"
       ref="createNewSpaceButton"
       key="new-space-menu-btn-enabled"
-      :aria-label="$gettext('Create a new space')"
       variation="primary"
       appearance="filled"
+      :aria-label="$gettext('Create a new space')"
       class="oc-mb-l"
       data-testid="spaces-list-create-space-btn"
       @click="showCreateSpaceModal"
@@ -15,11 +15,12 @@
       <oc-icon name="add" />
       <translate>Create Space</translate>
     </oc-button>
-    <span class="oc-display-block oc-mb-l">
-      <span v-text="$gettext('Access all project related files in one place.')" />
-      <a href="#" v-text="$gettext('Learn more about spaces.')" />
-    </span>
-    <hr class="oc-mb-s" />
+    <div class="oc-pb-xl oc-border-b">
+      <span
+        v-text="$gettext('Store your project related files in Spaces for seamless collaboration.')"
+      />
+      <!-- <a href="#" v-text="$gettext('Learn more about spaces.')" /> -->
+    </div>
     <list-loader v-if="loadSpacesTask.isRunning" />
     <template v-else>
       <no-content-message
@@ -32,7 +33,7 @@
           <span v-translate>You don't have access to any spaces</span>
         </template>
       </no-content-message>
-      <div v-else class="spaces-list">
+      <div v-else class="spaces-list oc-mt-l">
         <ul
           class="
             oc-grid
@@ -40,56 +41,27 @@
             oc-grid-column-small
             oc-grid-row-large
             oc-text-center
-            oc-child-width-1-3@s
+            oc-child-width-1-3@m
+            oc-child-width-1-5@l
           "
         >
           <li v-for="space in spaces" :key="space.id" class="oc-mb-m">
             <div
-              class="spaces-list-card oc-border oc-card oc-card-default"
+              class="spaces-list-card oc-card oc-card-default oc-rounded"
               :class="getSpaceCardAdditionalClass(space)"
             >
               <div class="oc-card-media-top oc-border-b">
-                <oc-button
-                  :id="`space-context-btn-${sanitizeSpaceId(space.id)}`"
-                  v-oc-tooltip="$gettext('Show context menu')"
-                  :aria-label="$gettext('Show context menu')"
-                  class="
-                    space-context-btn
-                    oc-position-absolute oc-position-top-right oc-mr-s oc-mt-s
-                  "
-                >
-                  <oc-icon name="more-2" />
-                </oc-button>
-                <oc-drop
-                  :drop-id="`space-context-drop-${space.id}`"
-                  :toggle="`#space-context-btn-${sanitizeSpaceId(space.id)}`"
-                  mode="click"
-                  close-on-click
-                  :options="{ delayHide: 0 }"
-                  padding-size="small"
-                  position="bottom-end"
-                >
-                  <ul class="oc-list oc-files-context-actions">
-                    <li
-                      v-for="(action, actionIndex) in getContextMenuActions(space)"
-                      :key="`action-${actionIndex}`"
-                      class="oc-spaces-context-action oc-py-xs oc-px-s"
-                    >
-                      <oc-button
-                        appearance="raw"
-                        justify-content="left"
-                        @click="action.handler({ spaces: [space] })"
-                      >
-                        <oc-icon :name="action.icon" />
-                        {{ action.label() }}
-                      </oc-button>
-                    </li>
-                  </ul>
-                </oc-drop>
                 <router-link v-if="!loadImagesTask.isRunning" :to="getSpaceProjectRoute(space)">
+                  <oc-tag
+                    v-if="isSpaceDisabled(space)"
+                    class="oc-position-absolute space-disabled-indicator"
+                    type="span"
+                  >
+                    <span v-translate>Disabled</span>
+                  </oc-tag>
                   <img
                     v-if="imageContentObject[space.id]"
-                    class="space-image"
+                    class="space-image oc-rounded-top"
                     :src="'data:image/jpeg;base64,' + imageContentObject[space.id]"
                     alt=""
                   />
@@ -101,19 +73,55 @@
                   />
                 </router-link>
               </div>
-              <span class="oc-card-body">
-                <router-link
-                  :to="getSpaceProjectRoute(space)"
-                  class="oc-card-title"
-                  v-text="space.name"
-                />
-                <p v-text="space.description"></p>
-                <br />
-                <oc-tag v-if="isSpaceDisabled(space)" class="oc-mt-s" type="span">
-                  <oc-icon name="forbid-2" />
-                  <span v-translate>Disabled</span>
-                </oc-tag>
-              </span>
+              <div class="oc-card-body oc-p-s">
+                <div class="oc-flex oc-flex-between oc-flex-middle">
+                  <div class="oc-flex oc-flex-middle">
+                    <oc-icon class="oc-mr-s" name="layout-grid" />
+                    <router-link class="space-name oc-text-left" :to="getSpaceProjectRoute(space)">
+                      <span v-text="space.name"> </span>
+                    </router-link>
+                  </div>
+                  <div class="oc-flex oc-flex-middle">
+                    <oc-button
+                      :id="`space-context-btn-${sanitizeSpaceId(space.id)}`"
+                      v-oc-tooltip="$gettext('Show context menu')"
+                      :aria-label="$gettext('Show context menu')"
+                      appearance="raw"
+                    >
+                      <oc-icon name="more-2" />
+                    </oc-button>
+                    <oc-drop
+                      :drop-id="`space-context-drop-${space.id}`"
+                      :toggle="`#space-context-btn-${sanitizeSpaceId(space.id)}`"
+                      mode="click"
+                      close-on-click
+                      :options="{ delayHide: 0 }"
+                      padding-size="small"
+                      position="bottom-end"
+                    >
+                      <ul class="oc-list oc-files-context-actions">
+                        <li
+                          v-for="(action, actionIndex) in getContextMenuActions(space)"
+                          :key="`action-${actionIndex}`"
+                          class="oc-spaces-context-action oc-py-xs oc-px-s"
+                        >
+                          <oc-button
+                            appearance="raw"
+                            justify-content="left"
+                            @click="action.handler({ spaces: [space] })"
+                          >
+                            <oc-icon :name="action.icon" />
+                            {{ action.label() }}
+                          </oc-button>
+                        </li>
+                      </ul>
+                    </oc-drop>
+                  </div>
+                </div>
+                <p v-if="space.description" class="oc-text-left oc-mt-xs oc-mb-rm oc-text-truncate">
+                  <small v-text="space.description"></small>
+                </p>
+              </div>
             </div>
           </li>
         </ul>
@@ -305,15 +313,7 @@ export default {
 .spaces-list {
   &-card {
     box-shadow: none !important;
-
-    .space-context-btn {
-      z-index: 999;
-    }
-
-    .oc-card-media-top button {
-      top: 0;
-      right: 0;
-    }
+    background-color: var(--oc-color-background-highlight) !important;
   }
 
   &-card.state-trashed {
@@ -325,21 +325,37 @@ export default {
   }
 
   .oc-card-media-top {
-    display: inline-block;
     width: 100%;
-    background-color: var(--oc-color-background-muted);
-    height: 200px;
+    height: 150px;
   }
+
   .oc-card-media-top a {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100%;
   }
+
+  .oc-tag {
+    color: var(--oc-color-text-default);
+  }
+
   .space-image {
     width: 100%;
-    height: 200px;
+    height: 150px;
     object-fit: cover;
+  }
+
+  .space-name {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    color: var(--oc-color-text-default);
+  }
+
+  .space-disabled-indicator {
+    z-index: 999;
   }
 }
 </style>
