@@ -106,6 +106,14 @@ function getMountedWrapper() {
       },
       actions: {
         createModal: jest.fn()
+      },
+      modules: {
+        Files: {
+          namespaced: true,
+          mutations: {
+            SET_CURRENT_FOLDER: jest.fn()
+          }
+        }
       }
     })
   })
