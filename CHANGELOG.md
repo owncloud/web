@@ -39,7 +39,7 @@ Summary
 * Enhancement - Add default sorting to the spaces list: [#6262](https://github.com/owncloud/web/pull/6262)
 * Enhancement - Implement spaces front page: [#6287](https://github.com/owncloud/web/pull/6287)
 * Enhancement - Implement spaces list: [#6199](https://github.com/owncloud/web/pull/6199)
-* Enhancement - Update ODS to v12.0.0: [#6086](https://github.com/owncloud/web/pull/6086)
+* Enhancement - Update ODS to v12.1.0: [#6086](https://github.com/owncloud/web/pull/6086)
 * Enhancement - Update SDK: [#6309](https://github.com/owncloud/web/pull/6309)
 
 Details
@@ -316,9 +316,9 @@ Details
    https://github.com/owncloud/web/pull/6199
    https://github.com/owncloud/web/pull/6399
 
-* Enhancement - Update ODS to v12.0.0: [#6086](https://github.com/owncloud/web/pull/6086)
+* Enhancement - Update ODS to v12.1.0: [#6086](https://github.com/owncloud/web/pull/6086)
 
-   We updated the ownCloud Design System to version 12.0.0. Please refer to the full changelog in
+   We updated the ownCloud Design System to version 12.1.0. Please refer to the full changelog in
    the ODS release (linked) for more details. Summary:
 
    - Change - Drop Internet Explorer support:
@@ -359,13 +359,16 @@ Details
    Add svg icon for spaces: https://github.com/owncloud/owncloud-design-system/pull/1846
    - Enhancement - OcTable header alignment:
    https://github.com/owncloud/owncloud-design-system/pull/1922 - Enhancement - Use
-   Roboto font: https://github.com/owncloud/owncloud-design-system/pull/1876 - Bugfix -
-   Missing OcDrop shadow: https://github.com/owncloud/owncloud-design-system/pull/1926
-   - Bugfix - OcNotification positioning:
+   Roboto font: https://github.com/owncloud/owncloud-design-system/pull/1876 -
+   Enhancement - Redesign OcModal:
+   https://github.com/owncloud/owncloud-design-system/pull/1953 - Bugfix - Missing
+   OcDrop shadow: https://github.com/owncloud/owncloud-design-system/pull/1926 - Bugfix
+   - OcNotification positioning:
    https://github.com/owncloud/owncloud-design-system/pull/1658 - Bugfix - Rename
    GhostElement: https://github.com/owncloud/owncloud-design-system/pull/1845 - Bugfix
    - OcTooltip isn't reactive:
-   https://github.com/owncloud/owncloud-design-system/pull/1863
+   https://github.com/owncloud/owncloud-design-system/pull/1863 - Bugfix -
+   Background-primary-gradient border: https://github.com/owncloud/web/issues/6383
 
    https://github.com/owncloud/web/pull/6086
    https://github.com/owncloud/web/pull/6142
@@ -375,7 +378,9 @@ Details
    https://github.com/owncloud/web/pull/6295
    https://github.com/owncloud/web/pull/6360
    https://github.com/owncloud/web/pull/6368
+   https://github.com/owncloud/web/pull/6418
    https://github.com/owncloud/owncloud-design-system/releases/tag/v12.0.0
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v12.1.0
 
 * Enhancement - Update SDK: [#6309](https://github.com/owncloud/web/pull/6309)
 
