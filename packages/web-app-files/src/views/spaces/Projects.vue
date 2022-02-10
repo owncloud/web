@@ -71,7 +71,7 @@
                   />
                 </router-link>
               </div>
-              <span class="oc-card-body oc-p-s">
+              <div class="oc-card-body oc-p-s">
                 <div class="oc-flex oc-flex-between oc-flex-middle">
                   <div class="oc-flex oc-flex-middle">
                     <oc-icon class="oc-mr-s" name="layout-grid" />
@@ -119,7 +119,7 @@
                 <p class="oc-text-left oc-mt-xs oc-mb-rm oc-text-truncate">
                   <small v-text="space.description"></small>
                 </p>
-              </span>
+              </div>
             </div>
           </li>
         </ul>

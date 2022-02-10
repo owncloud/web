@@ -1,9 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Spaces component should only list drives of type "project" 1`] = `
-<div class="oc-py-s oc-px-m"><button aria-label="Create a new space" class="oc-mb-l oc-background-primary-gradient oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-inverse oc-button-inverse-outline" id="new-space-menu-btn" data-testid="spaces-list-create-space-btn"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span> <span>Create Space</span></button> <span class="oc-display-block oc-mb-xl"><span>Store your project related files in Spaces for seamless collaboration.</span></span>
-  <hr class="oc-mb-l oc-border-b">
-  <div class="spaces-list">
+<div class="oc-py-s oc-px-m"><button aria-label="Create a new space" class="oc-mb-l oc-background-primary-gradient oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-outline" id="new-space-menu-btn" data-testid="spaces-list-create-space-btn"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span> <span>Create Space</span></button>
+  <div class="oc-pb-xl oc-border-b"><span>Store your project related files in Spaces for seamless collaboration.</span></div>
+  <div class="spaces-list oc-mt-l">
     <ul class="
           oc-grid
           oc-grid-match
@@ -14,30 +14,33 @@ exports[`Spaces component should only list drives of type "project" 1`] = `
           oc-child-width-1-5@l
         ">
       <li class="oc-mb-m">
-        <div class="spaces-list-card oc-card oc-card-default">
+        <div class="spaces-list-card oc-card oc-card-default oc-rounded">
           <div class="oc-card-media-top oc-border-b"><a href="#/" aria-current="page" class="router-link-exact-active router-link-active">
               <!----> <span class="space-default-image oc-px-m oc-py-m oc-icon oc-icon-xxl oc-icon-passive"><!----></span>
-            </a></div> <span class="oc-card-body"><div class="oc-flex oc-flex-between oc-flex-middle"><div class="oc-flex oc-flex-middle"><span class="oc-mr-s oc-icon oc-icon-m oc-icon-passive"><!----></span> <a href="#/" aria-current="page" class="space-name oc-text-left router-link-exact-active router-link-active"><span></span></a>
-        </div>
-        <div><button aria-label="Show context menu" class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="space-context-btn-1"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button>
-          <div id="space-context-drop-1" class="oc-drop oc-box-shadow-medium oc-rounded" options="[object Object]">
-            <div class="oc-card oc-card-body oc-rounded oc-background-highlight oc-p-s">
-              <ul class="oc-list oc-files-context-actions">
-                <li class="oc-spaces-context-action oc-py-xs oc-px-s"><button class="oc-button oc-button-m oc-button-justify-content-left oc-button-gap-m oc-button-passive oc-button-passive-raw"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span>
-                    Rename
-                  </button></li>
-                <li class="oc-spaces-context-action oc-py-xs oc-px-s"><button class="oc-button oc-button-m oc-button-justify-content-left oc-button-gap-m oc-button-passive oc-button-passive-raw"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span>
-                    Disable
-                  </button></li>
-              </ul>
+            </a></div>
+          <div class="oc-card-body oc-p-s">
+            <div class="oc-flex oc-flex-between oc-flex-middle">
+              <div class="oc-flex oc-flex-middle"><span class="oc-mr-s oc-icon oc-icon-m oc-icon-passive"><!----></span> <a href="#/" aria-current="page" class="space-name oc-text-left router-link-exact-active router-link-active"><span></span></a></div>
+              <div class="oc-flex oc-flex-middle"><button aria-label="Show context menu" class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="space-context-btn-1"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button>
+                <div id="space-context-drop-1" class="oc-drop oc-box-shadow-medium oc-rounded" options="[object Object]">
+                  <div class="oc-card oc-card-body oc-rounded oc-background-highlight oc-p-s">
+                    <ul class="oc-list oc-files-context-actions">
+                      <li class="oc-spaces-context-action oc-py-xs oc-px-s"><button class="oc-button oc-button-m oc-button-justify-content-left oc-button-gap-m oc-button-passive oc-button-passive-raw"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span>
+                          Rename
+                        </button></li>
+                      <li class="oc-spaces-context-action oc-py-xs oc-px-s"><button class="oc-button oc-button-m oc-button-justify-content-left oc-button-gap-m oc-button-passive oc-button-passive-raw"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span>
+                          Disable
+                        </button></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
             </div>
+            <p class="oc-text-left oc-mt-xs oc-mb-rm oc-text-truncate"><small></small></p>
           </div>
         </div>
+      </li>
+    </ul>
   </div>
-  <p class="oc-text-left oc-mt-xs oc-mb-rm oc-text-truncate"><small></small></p></span>
-</div>
-</li>
-</ul>
-</div>
 </div>
 `;
