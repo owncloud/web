@@ -22,7 +22,7 @@ const $route = {
 const selectors = {
   pageTitle: 'h1.oc-invisible-sr',
   loader: '.oc-card-body',
-  errorMessage: '.oc-link-resolve-error'
+  errorTitle: '.oc-link-resolve-error-title'
 }
 
 describe('PrivateLink view', () => {
@@ -62,7 +62,7 @@ describe('PrivateLink view', () => {
 
       await new Promise((resolve) => {
         setTimeout(() => {
-          expect(wrapper.find(selectors.errorMessage)).toMatchSnapshot()
+          expect(wrapper.find(selectors.errorTitle)).toMatchSnapshot()
           resolve()
         }, 1)
       })

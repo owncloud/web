@@ -23,7 +23,9 @@ exports[`PrivateLink view when the view is still loading should display the load
 `;
 
 exports[`PrivateLink view when there was an error should display the error message 1`] = `
-<div class="oc-card-body oc-link-resolve-error">
-  <p class="oc-text-lead">Error: some error</p>
+<div class="oc-card-header oc-link-resolve-error-title">
+  <h2>
+    <translate-stub tag="span">An error occurred while resolving the private link</translate-stub>
+  </h2>
 </div>
 `;

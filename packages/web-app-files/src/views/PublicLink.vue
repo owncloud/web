@@ -4,7 +4,7 @@
     <div class="oc-card oc-border oc-rounded oc-position-center oc-text-center oc-width-large">
       <template v-if="loading">
         <div class="oc-card-header">
-          <h2>
+          <h2 key="public-link-loading">
             <translate>Loading public link…</translate>
           </h2>
         </div>
@@ -13,12 +13,12 @@
         </div>
       </template>
       <template v-else-if="errorMessage">
-        <div class="oc-card-header">
-          <h2>
+        <div class="oc-card-header oc-link-resolve-error-title">
+          <h2 key="public-link-error">
             <translate>An error occurred while loading the public link</translate>
           </h2>
         </div>
-        <div class="oc-card-body oc-link-resolve-error">
+        <div class="oc-card-body oc-link-resolve-error-message">
           <p class="oc-text-lead">{{ errorMessage }}</p>
         </div>
       </template>
@@ -88,7 +88,7 @@ export default {
       return this.$gettext('Enter password for public link')
     }
   },
-  mounted() {
+  created() {
     this.resolvePublicLink()
   },
   methods: {

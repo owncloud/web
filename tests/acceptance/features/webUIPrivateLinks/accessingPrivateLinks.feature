@@ -36,11 +36,11 @@ Feature: Access private link
     Given user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Brian" has logged in using the webUI
     When the user navigates to the private link created by user "Alice" for file "lorem.txt"
-    Then the user should see the following error message on the login card dialog
+    Then the user should see the following error message on the link resolve page
       """
       An error occurred while resolving the private link
-      Error: Unknown error
       """
+
 
   Scenario: Access the private link anonymously
     When an anonymous user tries to navigate to the private link created by user "Alice" for file "lorem.txt"

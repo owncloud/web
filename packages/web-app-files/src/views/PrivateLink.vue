@@ -4,7 +4,7 @@
     <div class="oc-card oc-border oc-rounded oc-position-center oc-text-center oc-width-large">
       <template v-if="loading">
         <div class="oc-card-header">
-          <h2>
+          <h2 key="private-link-loading">
             <translate>Resolving private link…</translate>
           </h2>
         </div>
@@ -13,12 +13,12 @@
         </div>
       </template>
       <template v-else-if="errorMessage">
-        <div class="oc-card-header">
-          <h2>
+        <div class="oc-card-header oc-link-resolve-error-title">
+          <h2 key="private-link-error">
             <translate>An error occurred while resolving the private link</translate>
           </h2>
         </div>
-        <div class="oc-card-body oc-link-resolve-error">
+        <div class="oc-card-body oc-link-resolve-error-message">
           <p class="oc-text-lead">{{ errorMessage }}</p>
         </div>
       </template>

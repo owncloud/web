@@ -19,7 +19,7 @@ const selectors = {
   cardFooter: '.oc-card-footer',
   cardBody: '.oc-card-body',
   submitButton: '.oc-login-authorize-button',
-  errorMessage: '.oc-link-resolve-error',
+  errorTitle: '.oc-link-resolve-error-title',
   publicLinkPasswordRequired: 'form > .oc-card-title'
 }
 
@@ -49,7 +49,7 @@ describe('PublicLink', () => {
       expect(loading).toMatchSnapshot()
     })
     it('should not display the error message', () => {
-      expect(wrapper.find(selectors.errorMessage).exists()).toBeFalsy()
+      expect(wrapper.find(selectors.errorTitle).exists()).toBeFalsy()
     })
     it('should not display the password required form', () => {
       expect(wrapper.find(selectors.publicLinkPasswordRequired).exists()).toBeFalsy()
@@ -67,8 +67,8 @@ describe('PublicLink', () => {
       const wrapper = getWrapper({ loading: false })
       await wrapper.setData({ errorMessage: 'some-error-message' })
 
-      expect(wrapper.find(selectors.errorMessage).exists()).toBeTruthy()
-      expect(wrapper.find(selectors.errorMessage)).toMatchSnapshot()
+      expect(wrapper.find(selectors.errorTitle).exists()).toBeTruthy()
+      expect(wrapper.find(selectors.errorTitle)).toMatchSnapshot()
     })
 
     describe('and when "passwordRequired" is set as true', () => {

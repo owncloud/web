@@ -49,8 +49,10 @@ exports[`PublicLink when the view is not loading anymore and when "passwordRequi
 `;
 
 exports[`PublicLink when the view is not loading anymore should display the error message if "errorMessage" is not empty 1`] = `
-<div class="oc-card-body oc-link-resolve-error">
-  <p class="oc-text-lead">some-error-message</p>
+<div class="oc-card-header oc-link-resolve-error-title">
+  <h2>
+    <translate-stub tag="span">An error occurred while loading the public link</translate-stub>
+  </h2>
 </div>
 `;
 
