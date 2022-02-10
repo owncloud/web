@@ -101,7 +101,7 @@ export default {
   max-width: 250px !important;
 }
 .oc-app-navigation-collapsed {
-  min-width: 67px !important;
-  max-width: 67px !important;
+  min-width: 64px !important;
+  max-width: 64px !important;
 }
 </style>

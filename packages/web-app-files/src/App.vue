@@ -104,7 +104,6 @@ export default {
 main {
   height: 100%;
   max-height: 100%;
-  overflow: hidden;
 }
 
 .files-list-wrapper {
