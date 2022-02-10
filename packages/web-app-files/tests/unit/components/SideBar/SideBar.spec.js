@@ -1,4 +1,4 @@
-import { mount, createLocalVue } from '@vue/test-utils'
+import { shallowMount, createLocalVue } from '@vue/test-utils'
 import VueCompositionAPI from '@vue/composition-api'
 import Vuex from 'vuex'
 import GetTextPlugin from 'vue-gettext'
@@ -27,7 +27,7 @@ function createWrapper({ item, selectedItems, mocks }) {
     translations: 'does-not-matter.json',
     silent: true
   })
-  return mount(SideBar, {
+  return shallowMount(SideBar, {
     store: new Vuex.Store({
       getters: {
         user: function () {
