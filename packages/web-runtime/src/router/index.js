@@ -1,5 +1,6 @@
 import get from 'lodash-es/get.js'
 import Vue from 'vue'
+import qs from 'node_modules/qs/dist/qs.js'
 // eslint-disable-next-line no-unused-vars
 import Router, { Route } from 'vue-router'
 import LoginPage from '../pages/login.vue'
@@ -16,6 +17,15 @@ function $gettext(msg) {
 
 const router = new Router({
   //  mode: 'history',
+  parseQuery(query) {
+    return qs.parse(query)
+  },
+  stringifyQuery(obj) {
+    return qs.stringify(obj, {
+      allowDots: true,
+      addQueryPrefix: true
+    })
+  },
   routes: [
     {
       path: '/login',
