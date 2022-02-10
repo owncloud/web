@@ -166,7 +166,8 @@ export default {
     return {
       isPersonalLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-personal-home'),
       isPublicLocation: useActiveLocation(isLocationPublicActive, 'files-public-files'),
-      isSpacesProjectsLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-projects')
+      isSpacesProjectsLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-projects'),
+      isSpacesProjectLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-project')
     }
   },
   data: () => ({
