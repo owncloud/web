@@ -26,7 +26,6 @@
     "postcss-url": "^9.0.0",
     "promise": "^8.0.3",
     "qs": "^6.10.3",
-    "query-string": "^6.8.3",
     "semver": "^7.3.5",
     "tippy.js": "^6.3.7",
     "tus-js-client": "^2.3.0",

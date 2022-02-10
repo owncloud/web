@@ -24,7 +24,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { basename } from 'path'
-import queryString from 'query-string'
+import qs from 'qs'
 import { DateTime } from 'luxon'
 import { DavPermission, DavProperty } from 'web-pkg/src/constants'
 import { useAppDefaults } from 'web-pkg/src/composables'
@@ -58,7 +58,7 @@ export default {
       return { url, theme, autosave: autosave ? 1 : 0 }
     },
     iframeSource() {
-      const query = queryString.stringify({
+      const query = qs.stringify({
         embed: 1,
         chrome: this.isReadOnly ? 0 : 1,
         picker: 0,

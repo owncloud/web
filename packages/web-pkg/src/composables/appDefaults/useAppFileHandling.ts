@@ -1,6 +1,6 @@
 import { Store } from 'vuex'
 import { unref } from '@vue/composition-api'
-import queryString from 'query-string'
+import qs from 'qs'
 
 import { Resource } from '../../../../web-app-files/src/helpers/resource'
 import { MaybeRef } from '../../utils'
@@ -30,7 +30,7 @@ export function useAppFileHandling(options: AppFileHandlingOptions): AppFileHand
   const publicLinkPassword = options.publicLinkPassword
 
   const getUrlForResource = ({ path, downloadURL }: Resource, query: QueryParameters = null) => {
-    const queryStr = !query ? '' : queryString.stringify(query)
+    const queryStr = !query ? '' : qs.stringify(query)
     if (!unref(isPublicLinkContext)) {
       const urlPath = ['..', 'dav', 'files', store.getters.user.id, path.replace(/^\//, '')].join(
         '/'
