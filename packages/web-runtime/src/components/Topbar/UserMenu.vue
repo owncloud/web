@@ -141,12 +141,15 @@ export default {
 
 <style lang="scss" scoped>
 .user-menu-list li {
+  align-items: center;
+  display: flex;
   margin: var(--oc-space-xsmall) 0;
 
   a,
   button {
     gap: var(--oc-space-medium);
     justify-content: flex-start;
+    min-height: 3rem;
     padding-left: var(--oc-space-small);
     width: 100%;
 
@@ -161,11 +164,11 @@ export default {
   }
 
   &.storage-wrapper {
-    display: inline-flex;
     gap: var(--oc-space-medium);
-    justify-content: flex-start;
+    min-height: 3rem;
 
-    &-text {
+    .storage-wrapper-text {
+      align-self: flex-end;
       display: inline-block;
     }
   }
