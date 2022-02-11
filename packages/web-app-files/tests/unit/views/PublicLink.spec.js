@@ -3,9 +3,7 @@ import { getStore, localVue } from './views.setup.js'
 import { shallowMount, mount } from '@vue/test-utils'
 
 const theme = {
-  general: { slogan: 'some-slogan' },
-  logo: 'some-logo',
-  loginPage: { backgroundImg: 'some-image' }
+  general: { slogan: 'some-slogan' }
 }
 
 const stubs = {
@@ -18,12 +16,11 @@ const route = { meta: { title: 'some page title' }, params: { token: 'some-token
 const component = { ...PublicLink, mounted: jest.fn(), created: jest.fn() }
 
 const selectors = {
-  loginLogo: '.oc-login-logo',
-  loginCardFooter: '.oc-login-card-footer',
-  loginCardBody: '.oc-login-card-body',
+  cardFooter: '.oc-card-footer',
+  cardBody: '.oc-card-body',
   submitButton: '.oc-login-authorize-button',
-  errorMessage: '.oc-login-card-error',
-  publicLinkPasswordRequired: 'form > .oc-login-card-title'
+  errorTitle: '.oc-link-resolve-error-title',
+  publicLinkPasswordRequired: 'form > .oc-card-title'
 }
 
 const spinnerStub = 'oc-spinner-stub'
@@ -33,16 +30,11 @@ describe('PublicLink', () => {
   describe('theming options', () => {
     const wrapper = getWrapper()
 
-    it('should have the background image and page-title set', () => {
+    it('should have the page-title set', () => {
       expect(wrapper).toMatchSnapshot()
     })
-    it('should display the logo image inside login card', () => {
-      const logo = wrapper.find(selectors.loginLogo)
-
-      expect(logo).toMatchSnapshot()
-    })
     it('should display the configuration theme general slogan as the login card footer', () => {
-      const slogan = wrapper.find(selectors.loginCardFooter)
+      const slogan = wrapper.find(selectors.cardFooter)
 
       expect(slogan).toMatchSnapshot()
     })
@@ -51,13 +43,13 @@ describe('PublicLink', () => {
   describe('when the view is still loading', () => {
     const wrapper = getWrapper({ loading: true })
     it('should display the loading text with the spinner', () => {
-      const loading = wrapper.find(selectors.loginCardBody)
+      const loading = wrapper.find(selectors.cardBody)
 
       expect(wrapper.find(spinnerStub).exists()).toBeTruthy()
       expect(loading).toMatchSnapshot()
     })
     it('should not display the error message', () => {
-      expect(wrapper.find(selectors.errorMessage).exists()).toBeFalsy()
+      expect(wrapper.find(selectors.errorTitle).exists()).toBeFalsy()
     })
     it('should not display the password required form', () => {
       expect(wrapper.find(selectors.publicLinkPasswordRequired).exists()).toBeFalsy()
@@ -67,16 +59,16 @@ describe('PublicLink', () => {
   describe('when the view is not loading anymore', () => {
     it('should not display the loading text and the spinner', () => {
       const wrapper = getWrapper({ loading: false })
-      const loading = wrapper.find(selectors.loginCardBody)
+      const loading = wrapper.find(selectors.cardBody)
 
-      expect(loading).toMatchSnapshot()
+      expect(loading.exists()).toBeFalsy()
     })
     it('should display the error message if "errorMessage" is not empty', async () => {
       const wrapper = getWrapper({ loading: false })
       await wrapper.setData({ errorMessage: 'some-error-message' })
 
-      expect(wrapper.find(selectors.errorMessage).exists()).toBeTruthy()
-      expect(wrapper.find(selectors.errorMessage)).toMatchSnapshot()
+      expect(wrapper.find(selectors.errorTitle).exists()).toBeTruthy()
+      expect(wrapper.find(selectors.errorTitle)).toMatchSnapshot()
     })
 
     describe('and when "passwordRequired" is set as true', () => {
@@ -148,9 +140,7 @@ describe('PublicLink', () => {
 function getMountOptions({
   $route = route,
   store = getStore({
-    slogan: theme.general.slogan,
-    loginLogo: theme.logo,
-    loginBackgroundImg: theme.loginPage.backgroundImg
+    slogan: theme.general.slogan
   }),
   loading = false
 } = {}) {

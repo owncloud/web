@@ -18,9 +18,7 @@ export const isLocationPublicActive = isLocationActiveDirector<shareTypes>(
 export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
   {
     path: '/public',
-    components: {
-      app: components.App
-    },
+    component: components.App,
     meta: {
       auth: false
     },
@@ -41,9 +39,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
   {
     name: locationPublicDrop.name,
     path: '/public/drop/:token',
-    components: {
-      app: components.FilesDrop
-    },
+    component: components.FilesDrop,
     meta: { auth: false, title: $gettext('Public file upload') }
   }
 ]

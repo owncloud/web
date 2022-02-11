@@ -18,9 +18,7 @@ export const isLocationCommonActive = isLocationActiveDirector<commonTypes>(
 export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
   {
     path: '/trash',
-    components: {
-      app: components.App
-    },
+    component: components.App,
     children: [
       {
         name: locationTrash.name,
@@ -36,9 +34,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
   },
   {
     path: '/favorites',
-    components: {
-      app: components.App
-    },
+    component: components.App,
     children: [
       {
         name: locationFavorites.name,

@@ -20,51 +20,43 @@ const router = new Router({
     {
       path: '/login',
       name: 'login',
-      components: {
-        fullscreen: LoginPage
-      },
-      meta: { auth: false, hideHeadbar: true, title: $gettext('Login') }
+      component: LoginPage,
+      meta: { auth: false, title: $gettext('Login') }
     },
     {
       path: '/oidc-callback',
-      components: {
-        fullscreen: OidcCallbackPage
-      },
-      meta: { auth: false, hideHeadbar: true, title: $gettext('Oidc callback') }
+      name: 'oidcCallback',
+      component: OidcCallbackPage,
+      meta: { auth: false, title: $gettext('Oidc callback') }
     },
     {
       path: '/oidc-silent-redirect',
-      components: {
-        fullscreen: OidcCallbackPage
-      },
-      meta: { auth: false, hideHeadbar: true, title: $gettext('Oidc redirect') }
+      name: 'oidcSilentRedirect',
+      component: OidcCallbackPage,
+      meta: { auth: false, title: $gettext('Oidc redirect') }
     },
     {
       path: '/f/:fileId',
       name: 'privateLink',
       redirect: '/files/ops/resolver/private-link/:fileId',
-      meta: { hideHeadbar: true, title: $gettext('Private link') }
+      meta: { title: $gettext('Private link') }
     },
     {
       path: '/s/:token',
       name: 'publicLink',
       redirect: '/files/ops/resolver/public-link/:token',
-      meta: { auth: false, hideHeadbar: true, title: $gettext('Public link') }
+      meta: { auth: false, title: $gettext('Public link') }
     },
     {
       path: '/access-denied',
       name: 'accessDenied',
-      components: {
-        fullscreen: AccessDeniedPage
-      },
-      meta: { auth: false, hideHeadbar: true, title: $gettext('Access denied') }
+      component: AccessDeniedPage,
+      meta: { auth: false, title: $gettext('Access denied') }
     },
     {
       path: '/account',
       name: 'account',
-      components: {
-        app: Account
-      },
+      component: Account,
       meta: { title: $gettext('Account') }
     }
   ]

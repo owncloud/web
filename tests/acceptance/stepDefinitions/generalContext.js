@@ -101,12 +101,12 @@ Then(
 )
 
 Then(
-  'the user should see the following error message on the login card dialog',
+  'the user should see the following error message on the link resolve page',
   function (message) {
     return client.page
       .publicLinkPasswordPage()
-      .waitForElementVisible('@loginCardDialogBox')
-      .expect.element('@loginCardDialogBox')
+      .waitForElementVisible('@linkResolveErrorTitle')
+      .expect.element('@linkResolveErrorTitle')
       .text.to.equal(message)
   }
 )

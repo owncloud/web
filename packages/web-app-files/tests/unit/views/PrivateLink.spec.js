@@ -6,8 +6,9 @@ localVue.prototype.$client.files = {
   getPathForFileId: jest.fn(() => Promise.resolve('/lorem.txt'))
 }
 
-const backgroundImgPath = 'assets/loginBackground.jpg'
-const loginLogoPath = 'assets/logo.svg'
+const theme = {
+  general: { slogan: 'some-slogan' }
+}
 
 const $route = {
   params: {
@@ -19,11 +20,9 @@ const $route = {
 }
 
 const selectors = {
-  backgroundImg: '.oc-login',
   pageTitle: 'h1.oc-invisible-sr',
-  loginLogo: '.oc-login-logo',
-  loader: '.oc-login-card-body',
-  errorMessage: '.oc-login-card-body'
+  loader: '.oc-card-body',
+  errorTitle: '.oc-link-resolve-error-title'
 }
 
 describe('PrivateLink view', () => {
@@ -37,22 +36,8 @@ describe('PrivateLink view', () => {
       wrapper = getShallowWrapper()
     })
 
-    it('should have the background image set', () => {
-      const backgroundImg = wrapper.find(selectors.backgroundImg)
-
-      expect(backgroundImg.exists()).toBeTruthy()
-      expect(backgroundImg.attributes().style).toEqual(
-        `background-image: url(${backgroundImgPath});`
-      )
-    })
     it('should display the page title', () => {
       expect(wrapper.find(selectors.pageTitle)).toMatchSnapshot()
-    })
-    it('should display the logo', () => {
-      const loginLogo = wrapper.find(selectors.loginLogo)
-
-      expect(loginLogo.exists()).toBeTruthy()
-      expect(loginLogo.attributes().src).toEqual(loginLogoPath)
     })
     it('should resolve the provided file id to a path', () => {
       expect(localVue.prototype.$client.files.getPathForFileId).toHaveBeenCalledTimes(1)
@@ -77,7 +62,7 @@ describe('PrivateLink view', () => {
 
       await new Promise((resolve) => {
         setTimeout(() => {
-          expect(wrapper.find(selectors.errorMessage)).toMatchSnapshot()
+          expect(wrapper.find(selectors.errorTitle)).toMatchSnapshot()
           resolve()
         }, 1)
       })
@@ -111,7 +96,6 @@ function getShallowWrapper(loading = false) {
 
 function createStore() {
   return getStore({
-    loginBackgroundImg: backgroundImgPath,
-    loginLogo: loginLogoPath
+    slogan: theme.general.slogan
   })
 }

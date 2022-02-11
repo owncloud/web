@@ -26,9 +26,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
   {
     name: locationLocationPicker.name,
     path: '/ops/location-picker/:context/:action/:item*',
-    components: {
-      app: components.LocationPicker
-    },
+    component: components.LocationPicker,
     meta: {
       verbose: true,
       auth: false,
@@ -38,21 +36,16 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
   {
     name: locationResolverPublicLink.name,
     path: '/ops/resolver/public-link/:token',
-    components: {
-      fullscreen: components.PublicLink
-    },
+    component: components.PublicLink,
     meta: {
       auth: false,
-      hideHeadbar: true,
       title: $gettext('Resolving public link')
     }
   },
   {
     name: locationResolverPrivateLink.name,
     path: '/ops/resolver/private-link/:fileId',
-    components: {
-      fullscreen: components.PrivateLink
-    },
-    meta: { hideHeadbar: true, title: $gettext('Resolving private link') }
+    component: components.PrivateLink,
+    meta: { title: $gettext('Resolving private link') }
   }
 ]

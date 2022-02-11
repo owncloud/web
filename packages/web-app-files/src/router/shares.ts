@@ -20,9 +20,7 @@ export const isLocationSharesActive = isLocationActiveDirector<shareTypes>(
 export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
   {
     path: '/shares',
-    components: {
-      app: components.App
-    },
+    component: components.App,
     redirect: locationSharesWithMe,
     children: [
       {

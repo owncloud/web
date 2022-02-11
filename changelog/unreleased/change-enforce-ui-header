@@ -1,0 +1,6 @@
+Change: Enforce extensions to always display the ui-header
+
+We've enforced the ui to always render the header for third party extensions.
+From now on extensions are not able to disable the header anymore.
+
+https://github.com/owncloud/web/pull/6401

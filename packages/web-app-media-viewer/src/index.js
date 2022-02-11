@@ -9,9 +9,7 @@ function $gettext(msg) {
 const routes = [
   {
     path: '/:contextRouteName/:filePath*',
-    components: {
-      app: App
-    },
+    component: App,
     name: 'media',
     meta: {
       auth: false,

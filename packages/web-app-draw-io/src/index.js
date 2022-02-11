@@ -5,12 +5,9 @@ const routes = [
   {
     name: 'draw-io',
     path: '/:contextRouteName/:filePath*',
-    components: {
-      fullscreen: App
-    },
+    component: App,
     meta: {
       auth: false,
-      hideHeadbar: true,
       patchCleanPath: true
     }
   }

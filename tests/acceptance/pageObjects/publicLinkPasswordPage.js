@@ -54,19 +54,14 @@ module.exports = {
       selector: '.oc-login-authorize-button'
     },
     resourceProtectedText: {
-      selector: '//h2[@class="oc-login-card-title"]/span',
+      selector: '//*[@class="oc-card-header"]',
       locateStrategy: 'xpath'
     },
-    loadingPublicLink: {
-      selector: "//div[@class='oc-login-card oc-position-center']//span[.='Loading public link…']",
-      locateStrategy: 'xpath'
-    },
-    loginCardDialogBox: {
-      selector: '.oc-login-card-body'
+    linkResolveErrorTitle: {
+      selector: '.oc-link-resolve-error-title'
     },
     publicLinkPasswordSection: {
-      selector:
-        '//div[@class="oc-login-card-body"]//h2[@class="oc-login-card-title"]/span[text()="This resource is password-protected."]',
+      selector: '//*[@class="oc-card-header"]//*[text()="This resource is password-protected"]',
       locateStrategy: 'xpath'
     }
   }

@@ -28,9 +28,7 @@ export const isLocationSpacesActive = isLocationActiveDirector<spaceTypes>(
 export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
   {
     path: '/spaces',
-    components: {
-      app: components.App
-    },
+    component: components.App,
     children: [
       {
         path: 'projects',

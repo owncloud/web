@@ -107,7 +107,7 @@ Then('the public should not get access to the publicly shared file', async funct
     .submitLinkPasswordForm() // form is submitted as password input is filled in the step before this particular step in 'when' part
     .getResourceAccessDeniedMsg()
   return assert.strictEqual(
-    'This resource is password-protected.',
+    'This resource is password-protected',
     message,
     'Resource protected message invalid, Found: ',
     message

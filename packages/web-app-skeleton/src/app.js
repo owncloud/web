@@ -38,9 +38,7 @@ export default {
     {
       name: 'skeleton',
       path: '/',
-      components: {
-        app: App
-      }
+      component: App
     }
   ],
   async mounted(api) {

@@ -30,9 +30,7 @@ export default {
     {
       name: 'search',
       path: '/',
-      components: {
-        app: App
-      },
+      component: App,
       children: [
         {
           name: 'provider-list',

@@ -103,8 +103,8 @@ export default {
 }
 @media only screen and (min-width: 640px) {
   .oc-dropzone-navigation-collapsed > .oc-dropzone-container {
-    left: calc(67px + var(--oc-space-small));
-    width: calc(100% - 67px - (2 * var(--oc-space-small)));
+    left: calc(64px + var(--oc-space-small));
+    width: calc(100% - 64px - (2 * var(--oc-space-small)));
   }
   .oc-dropzone-navigation-expanded > .oc-dropzone-container {
     left: calc(250px + var(--oc-space-small));

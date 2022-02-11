@@ -16,9 +16,7 @@ const routes = [
   {
     name: 'apps',
     path: '/:contextRouteName/:fileId/:appName?',
-    components: {
-      app: App
-    },
+    component: App,
     meta: {
       auth: false,
       title: $gettext('External app')
