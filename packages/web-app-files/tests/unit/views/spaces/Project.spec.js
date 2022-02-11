@@ -5,7 +5,6 @@ import { createStore } from 'vuex-extensions'
 import Files from '@/__fixtures__/files'
 import mockAxios from 'jest-mock-axios'
 import SpaceProject from '../../../../src/views/spaces/Project.vue'
-import { buildResource } from '@files/src/helpers/resources'
 import Vuex from 'vuex'
 
 localVue.use(GetTextPlugin, {
