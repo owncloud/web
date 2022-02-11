@@ -15,15 +15,7 @@ exports[`Spaces project view space image should show if given 1`] = `
       </div>
     </div>
   </div>
-  <div class="oc-height-1-1 oc-flex oc-flex-column oc-flex-center oc-flex-middle oc-text-center files-empty" id="files-space-empty">
-    <div class="oc-icon oc-icon-xxl oc-icon-passive">
-      <!---->
-    </div>
-    <div class="oc-text-muted oc-text-large">
-      <p class="oc-text-muted" data-msgid="No resources found" data-current-language="en_US">No resources found</p>
-    </div>
-    <div class="oc-text-muted"></div>
-  </div>
+  <no-content-message-stub icon="folder" id="files-space-empty" class="files-empty"></no-content-message-stub>
 </div>
 `;
 
@@ -42,14 +34,6 @@ exports[`Spaces project view space readme should show if given 1`] = `
       </div>
     </div>
   </div>
-  <div class="oc-height-1-1 oc-flex oc-flex-column oc-flex-center oc-flex-middle oc-text-center files-empty" id="files-space-empty">
-    <div class="oc-icon oc-icon-xxl oc-icon-passive">
-      <!---->
-    </div>
-    <div class="oc-text-muted oc-text-large">
-      <p class="oc-text-muted" data-msgid="No resources found" data-current-language="en_US">No resources found</p>
-    </div>
-    <div class="oc-text-muted"></div>
-  </div>
+  <no-content-message-stub icon="folder" id="files-space-empty" class="files-empty"></no-content-message-stub>
 </div>
 `;
