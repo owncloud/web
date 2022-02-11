@@ -38,6 +38,14 @@ describe('rename', () => {
             server: 'https://example.com'
           }),
           getToken: () => 'token'
+        },
+        modules: {
+          Files: {
+            namespaced: true,
+            mutations: {
+              UPDATE_RESOURCE_FIELD: jest.fn()
+            }
+          }
         }
       })
     })
@@ -45,9 +53,6 @@ describe('rename', () => {
 
   describe('method "$_rename_trigger"', () => {
     it('should trigger the rename modal window', async () => {
-      mockAxios.request.mockImplementationOnce(() => {
-        return Promise.resolve()
-      })
       const wrapper = getWrapper()
       const spyCreateModalStub = jest.spyOn(wrapper.vm, 'createModal')
       await wrapper.vm.$_rename_trigger({ spaces: [{ id: 1, name: 'renamed space' }] })
@@ -58,9 +63,6 @@ describe('rename', () => {
 
   describe('method "$_rename_checkName"', () => {
     it('should throw an error with an empty space name', async () => {
-      mockAxios.request.mockImplementationOnce(() => {
-        return Promise.resolve()
-      })
       const wrapper = getWrapper()
       const spyInputErrorMessageStub = jest.spyOn(wrapper.vm, 'setModalInputErrorMessage')
       await wrapper.vm.$_rename_checkName('')

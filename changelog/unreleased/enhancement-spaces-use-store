@@ -1,0 +1,5 @@
+Enhancement: Use the Vue store for spaces
+
+Using the store for spaces integrates them seamlessly in our ecosystem and makes it easier to develop spaces even further. E.g. the properties of a space can now be altered without fetching all spaces again. This was achieved by introducing a "buildSpace" method, that transforms a space into a more generic resource object (just like regular files or shares).
+
+https://github.com/owncloud/web/pull/6427

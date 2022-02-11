@@ -161,10 +161,7 @@ describe('Spaces project view', () => {
         })
       })
 
-      const spaceResource = buildResource(Files['/'][0])
-      spaceResource.path = '/'
-
-      const wrapper = getMountedWrapper([spaceResource])
+      const wrapper = getMountedWrapper([Files['/'][0]])
       await wrapper.vm.loadResourcesTask.last
 
       expect(wrapper.find(selectors.emptySpace).exists()).toBeFalsy()

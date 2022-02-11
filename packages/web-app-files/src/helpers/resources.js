@@ -102,6 +102,80 @@ export function buildResource(resource) {
   }
 }
 
+export function buildSpace(space) {
+  let spaceImageData, spaceReadmeData, spacePermissions
+  let disabled = false
+
+  if (space.special) {
+    spaceImageData = space.special.find((el) => el.specialFolder.name === 'image')
+    spaceReadmeData = space.special.find((el) => el.specialFolder.name === 'readme')
+  }
+
+  if (space.root) {
+    spacePermissions = space.root.permissions
+
+    if (space.root.deleted) {
+      disabled = space.root?.deleted?.state === 'trashed'
+    }
+  }
+
+  return {
+    id: space.id,
+    fileId: '',
+    mimeType: '',
+    name: space.name,
+    description: space.description,
+    extension: '',
+    path: '',
+    webDavPath: '',
+    type: 'space',
+    isFolder: true,
+    mdate: space.lastModifiedDateTime,
+    size: '',
+    indicators: [],
+    permissions: '',
+    starred: false,
+    etag: '',
+    sharePermissions: '',
+    shareTypes: (function () {
+      return []
+    })(),
+    privateLink: '',
+    downloadURL: '',
+    ownerDisplayName: '',
+    ownerId: '',
+    disabled,
+    spaceQuota: space.quota,
+    spacePermissions,
+    spaceImageData,
+    spaceReadmeData,
+    canUpload: function () {
+      return true
+    },
+    canDownload: function () {
+      return true
+    },
+    canBeDeleted: function () {
+      return true
+    },
+    canRename: function () {
+      return true
+    },
+    canShare: function () {
+      return true
+    },
+    canCreate: function () {
+      return true
+    },
+    isMounted: function () {
+      return true
+    },
+    isReceivedShare: function () {
+      return false
+    }
+  }
+}
+
 export function buildWebDavFilesPath(userId, path) {
   return `/files/${userId}/${path}`
 }

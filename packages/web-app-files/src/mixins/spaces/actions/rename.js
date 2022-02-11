@@ -1,4 +1,4 @@
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { clientService } from 'web-pkg/src/services'
 
 export default {
@@ -29,6 +29,7 @@ export default {
       'showMessage',
       'toggleModalConfirmButton'
     ]),
+    ...mapMutations('Files', ['UPDATE_RESOURCE_FIELD']),
 
     $_rename_trigger({ spaces }) {
       if (spaces.length !== 1) {
@@ -64,7 +65,11 @@ export default {
         .updateDrive(id, { name }, {})
         .then(() => {
           this.hideModal()
-          this.loadSpacesTask.perform(this)
+          this.UPDATE_RESOURCE_FIELD({
+            id: id,
+            field: 'name',
+            value: name
+          })
         })
         .catch((error) => {
           this.showMessage({
