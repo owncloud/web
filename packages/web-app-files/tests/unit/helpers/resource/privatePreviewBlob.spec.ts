@@ -19,10 +19,7 @@ describe('privatePreviewBlob', () => {
   it('returns a preview objectURL', async () => {
     window.URL.createObjectURL = jest.fn()
     const privatePreviewBlobPromise = privatePreviewBlob(defaultOptions)
-    mockAxios.mockResponseFor(
-      { url: 'https://www.ocis.rules/remote.php/dav/path?a=1&preview=1&scalingup=0' },
-      { data: 'data' }
-    )
+    mockAxios.mockResponse({ data: 'data' })
     await privatePreviewBlobPromise
     await expect(mockAxios.get).toBeCalledTimes(1)
     await expect(window.URL.createObjectURL).toBeCalledTimes(1)

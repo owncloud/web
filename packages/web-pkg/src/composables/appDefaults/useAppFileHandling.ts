@@ -1,6 +1,6 @@
 import { Store } from 'vuex'
 import { unref } from '@vue/composition-api'
-import qs from 'node_modules/qs/dist/qs.js'
+import qs from 'qs'
 
 import { Resource } from '../../../../web-app-files/src/helpers/resource'
 import { MaybeRef } from '../../utils'

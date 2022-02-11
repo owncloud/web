@@ -48,7 +48,10 @@ const plugins = [
     config: false
   }),
   alias({
-    entries: [{ find: 'crypto', replacement: 'polyfills/crypto.js' }]
+    entries: [
+      { find: 'crypto', replacement: 'polyfills/crypto.js' },
+      { find: 'qs', replacement: 'node_modules/qs/lib/index.js' }
+    ]
   }),
   commonjs({
     include: 'node_modules/**'

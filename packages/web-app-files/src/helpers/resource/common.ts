@@ -1,4 +1,4 @@
-import qs from 'node_modules/qs/dist/qs.js'
+import qs from 'qs'
 
 interface BuildQueryStringOptions {
   preview?: number

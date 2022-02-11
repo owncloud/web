@@ -1,6 +1,6 @@
 import get from 'lodash-es/get.js'
 import Vue from 'vue'
-import qs from 'node_modules/qs/dist/qs.js'
+import qs from 'qs'
 // eslint-disable-next-line no-unused-vars
 import Router, { Route } from 'vue-router'
 import LoginPage from '../pages/login.vue'

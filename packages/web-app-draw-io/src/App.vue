@@ -24,7 +24,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { basename } from 'path'
-import qs from 'node_modules/qs/dist/qs.js'
+import qs from 'qs'
 import { DateTime } from 'luxon'
 import { DavPermission, DavProperty } from 'web-pkg/src/constants'
 import { useAppDefaults } from 'web-pkg/src/composables'
