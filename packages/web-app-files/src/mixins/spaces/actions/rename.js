@@ -1,7 +1,10 @@
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
+import { clientService } from 'web-pkg/src/services'
 
 export default {
   computed: {
+    ...mapGetters(['configuration', 'getToken']),
+
     $_rename_items() {
       return [
         {
@@ -56,7 +59,8 @@ export default {
     },
 
     $_rename_renameSpace(id, name) {
-      return this.graph.drives
+      const graphClient = clientService.graphAuthenticated(this.configuration.server, this.getToken)
+      return graphClient.drives
         .updateDrive(id, { name }, {})
         .then(() => {
           this.hideModal()

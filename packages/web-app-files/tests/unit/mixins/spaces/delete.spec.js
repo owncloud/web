@@ -3,6 +3,7 @@ import { createStore } from 'vuex-extensions'
 import { mount, createLocalVue } from '@vue/test-utils'
 import Delete from '@files/src/mixins/spaces/actions/delete.js'
 import { createLocationSpaces } from '../../../../src/router'
+import mockAxios from 'jest-mock-axios'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -13,7 +14,7 @@ describe('delete', () => {
     mixins: [Delete]
   }
 
-  function getWrapper(deleteSpacePromise) {
+  function getWrapper() {
     return mount(Component, {
       localVue,
       mocks: {
@@ -23,13 +24,6 @@ describe('delete', () => {
             return { href: r.name }
           }
         },
-        graph: {
-          drives: {
-            deleteDrive: jest.fn(() => {
-              return deleteSpacePromise
-            })
-          }
-        },
         $gettext: jest.fn()
       },
       store: createStore(Vuex.Store, {
@@ -37,6 +31,12 @@ describe('delete', () => {
           createModal: jest.fn(),
           hideModal: jest.fn(),
           showMessage: jest.fn()
+        },
+        getters: {
+          configuration: () => ({
+            server: 'https://example.com'
+          }),
+          getToken: () => 'token'
         }
       })
     })
@@ -44,10 +44,10 @@ describe('delete', () => {
 
   describe('method "$_delete_trigger"', () => {
     it('should trigger the delete modal window', async () => {
-      const deletePromise = new Promise((resolve) => {
-        return resolve()
+      mockAxios.request.mockImplementationOnce(() => {
+        return Promise.resolve()
       })
-      const wrapper = getWrapper(deletePromise)
+      const wrapper = getWrapper()
       const spyCreateModalStub = jest.spyOn(wrapper.vm, 'createModal')
       await wrapper.vm.$_delete_trigger({ spaces: [{ id: 1 }] })
 
@@ -57,11 +57,10 @@ describe('delete', () => {
 
   describe('method "$_delete_deleteSpace"', () => {
     it('should hide the modal on success', async () => {
-      const deletePromise = new Promise((resolve) => {
-        return resolve()
+      mockAxios.request.mockImplementationOnce(() => {
+        return Promise.resolve()
       })
-
-      const wrapper = getWrapper(deletePromise)
+      const wrapper = getWrapper()
       const hideModalStub = jest.spyOn(wrapper.vm, 'hideModal')
       await wrapper.vm.$_delete_deleteSpace(1)
 
@@ -69,11 +68,10 @@ describe('delete', () => {
     })
 
     it('should show message on error', async () => {
-      const deletePromise = new Promise((resolve, reject) => {
-        return reject(new Error())
+      mockAxios.request.mockImplementationOnce(() => {
+        return Promise.reject(new Error())
       })
-
-      const wrapper = getWrapper(deletePromise)
+      const wrapper = getWrapper()
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       await wrapper.vm.$_delete_deleteSpace(1)
 

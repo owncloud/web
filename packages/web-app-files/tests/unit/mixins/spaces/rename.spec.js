@@ -3,6 +3,7 @@ import { createStore } from 'vuex-extensions'
 import { mount, createLocalVue } from '@vue/test-utils'
 import rename from '@files/src/mixins/spaces/actions/rename.js'
 import { createLocationSpaces } from '../../../../src/router'
+import mockAxios from 'jest-mock-axios'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -13,7 +14,7 @@ describe('rename', () => {
     mixins: [rename]
   }
 
-  function getWrapper(renameSpacePromise) {
+  function getWrapper() {
     return mount(Component, {
       localVue,
       mocks: {
@@ -21,13 +22,6 @@ describe('rename', () => {
           currentRoute: createLocationSpaces('files-spaces-projects'),
           resolve: (r) => {
             return { href: r.name }
-          }
-        },
-        graph: {
-          drives: {
-            updateDrive: jest.fn(() => {
-              return renameSpacePromise
-            })
           }
         },
         $gettext: jest.fn()
@@ -38,6 +32,12 @@ describe('rename', () => {
           hideModal: jest.fn(),
           showMessage: jest.fn(),
           setModalInputErrorMessage: jest.fn()
+        },
+        getters: {
+          configuration: () => ({
+            server: 'https://example.com'
+          }),
+          getToken: () => 'token'
         }
       })
     })
@@ -45,10 +45,10 @@ describe('rename', () => {
 
   describe('method "$_rename_trigger"', () => {
     it('should trigger the rename modal window', async () => {
-      const renamePromise = new Promise((resolve) => {
-        return resolve()
+      mockAxios.request.mockImplementationOnce(() => {
+        return Promise.resolve()
       })
-      const wrapper = getWrapper(renamePromise)
+      const wrapper = getWrapper()
       const spyCreateModalStub = jest.spyOn(wrapper.vm, 'createModal')
       await wrapper.vm.$_rename_trigger({ spaces: [{ id: 1, name: 'renamed space' }] })
 
@@ -58,10 +58,10 @@ describe('rename', () => {
 
   describe('method "$_rename_checkName"', () => {
     it('should throw an error with an empty space name', async () => {
-      const renamePromise = new Promise((resolve) => {
-        return resolve()
+      mockAxios.request.mockImplementationOnce(() => {
+        return Promise.resolve()
       })
-      const wrapper = getWrapper(renamePromise)
+      const wrapper = getWrapper()
       const spyInputErrorMessageStub = jest.spyOn(wrapper.vm, 'setModalInputErrorMessage')
       await wrapper.vm.$_rename_checkName('')
 
@@ -71,11 +71,11 @@ describe('rename', () => {
 
   describe('method "$_rename_renameSpace"', () => {
     it('should hide the modal on success', async () => {
-      const renamePromise = new Promise((resolve) => {
-        return resolve()
+      mockAxios.request.mockImplementationOnce(() => {
+        return Promise.resolve()
       })
 
-      const wrapper = getWrapper(renamePromise)
+      const wrapper = getWrapper()
       const hideModalStub = jest.spyOn(wrapper.vm, 'hideModal')
       await wrapper.vm.$_rename_renameSpace(1, 'renamed space')
 
@@ -83,11 +83,11 @@ describe('rename', () => {
     })
 
     it('should show message on error', async () => {
-      const renamePromise = new Promise((resolve, reject) => {
-        return reject(new Error())
+      mockAxios.request.mockImplementationOnce(() => {
+        return Promise.reject(new Error())
       })
 
-      const wrapper = getWrapper(renamePromise)
+      const wrapper = getWrapper()
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       await wrapper.vm.$_rename_renameSpace(1, 'renamed space')
 

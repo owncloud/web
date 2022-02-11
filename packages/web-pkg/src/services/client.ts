@@ -1,4 +1,5 @@
 import { HttpClient } from '../http'
+import { client, Graph } from 'web-client'
 
 export type OwnCloudSdk = any
 
@@ -9,6 +10,11 @@ export class ClientService {
   }
 
   private httpUnAuthenticatedClient: HttpClient
+
+  private graphAuthenticatedClient: {
+    token: string
+    instance: Graph
+  }
 
   public httpAuthenticated(token: string): HttpClient {
     if (!this.httpAuthenticatedClient || this.httpAuthenticatedClient.token !== token) {
@@ -24,6 +30,18 @@ export class ClientService {
     }
 
     return this.httpAuthenticatedClient.instance
+  }
+
+  public graphAuthenticated(serverUrl: string, token: string): Graph {
+    if (!this.graphAuthenticatedClient || this.graphAuthenticatedClient.token !== token) {
+      const { graph } = client(serverUrl, token)
+      this.graphAuthenticatedClient = {
+        token,
+        instance: graph
+      }
+    }
+
+    return this.graphAuthenticatedClient.instance
   }
 
   public get httpUnAuthenticated(): HttpClient {

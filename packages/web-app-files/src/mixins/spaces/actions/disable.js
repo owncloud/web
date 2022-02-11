@@ -1,7 +1,10 @@
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
+import { clientService } from 'web-pkg/src/services'
 
 export default {
   computed: {
+    ...mapGetters(['configuration', 'getToken']),
+
     $_disable_items() {
       return [
         {
@@ -54,7 +57,8 @@ export default {
     },
 
     $_disable_disableSpace(id) {
-      return this.graph.drives
+      const graphClient = clientService.graphAuthenticated(this.configuration.server, this.getToken)
+      return graphClient.drives
         .deleteDrive(id)
         .then(() => {
           this.hideModal()
