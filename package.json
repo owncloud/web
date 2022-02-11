@@ -23,7 +23,7 @@
     "serve": "SERVER=true yarn build:w",
     "test:integration": "jest --config ./tests/integration/config/jest.config.js",
     "test:e2e:cucumber": "NODE_TLS_REJECT_UNAUTHORIZED=0 cucumber-js --profile=e2e -f json:tests/e2e/cucumber/reportGenerator/cucumber_report.json",
-    "test:unit": "jest --coverage --config ./tests/unit/config/jest.config.js"
+    "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw jest --coverage --config ./tests/unit/config/jest.config.js"
   },
   "browserslist": [
     "last 2 versions",

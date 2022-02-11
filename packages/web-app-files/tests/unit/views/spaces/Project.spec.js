@@ -13,22 +13,10 @@ localVue.use(GetTextPlugin, {
   silent: true
 })
 
-const composables = '@files/src/composables/index'
-jest.mock(composables, () => ({
-  ...jest.requireActual(composables),
-  usePagination: jest.fn(({ page, items, sortDir, sortBy }) => {
-    return {
-      items,
-      total: 1,
-      perPage: 10
-    }
-  })
-}))
-
 beforeEach(mockAxios.reset)
 
 afterEach(() => {
-  jest.unmock(composables)
+  jest.unmock('@files/src/composables/index')
 })
 
 window.ResizeObserver =
