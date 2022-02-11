@@ -1,4 +1,5 @@
 import { mapActions } from 'vuex'
+import { clientService } from 'web-pkg/src/services'
 
 export default {
   computed: {
@@ -49,7 +50,8 @@ export default {
     },
 
     $_editDescription_editDescriptionSpace(id, description) {
-      return this.graph.drives
+      const graphClient = clientService.graphAuthenticated(this.configuration.server, this.getToken)
+      return graphClient.drives
         .updateDrive(id, { description }, {})
         .then(() => {
           this.hideModal()

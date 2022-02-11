@@ -72,7 +72,6 @@ import NoContentMessage from '../../components/FilesList/NoContentMessage.vue'
 import NotFoundMessage from '../../components/FilesList/NotFoundMessage.vue'
 import ListLoader from '../../components/FilesList/ListLoader.vue'
 import { computed, ref, unref } from '@vue/composition-api'
-import { client } from 'web-client'
 import { useTask } from 'vue-concurrency'
 import { useStore, useRouter, useRouteQuery } from 'web-pkg/src/composables'
 import marked from 'marked'
@@ -90,7 +89,7 @@ import MixinFileActions from '../../mixins/fileActions'
 import { ImageDimension, ImageType } from '../../constants'
 import debounce from 'lodash-es/debounce'
 import { VisibilityObserver } from 'web-pkg/src/observer'
-
+import { clientService } from 'web-pkg/src/services'
 const visibilityObserver = new VisibilityObserver()
 
 export default {
@@ -113,7 +112,10 @@ export default {
     const space = ref({})
     const markdownContent = ref('')
     const imageContent = ref('')
-    const { graph } = client(store.getters.configuration.server, store.getters.getToken)
+    const graphClient = clientService.graphAuthenticated(
+      store.getters.configuration.server,
+      store.getters.getToken
+    )
 
     const storeItems = computed(() => store.getters['Files/activeFiles'] || [])
     const fields = computed(() => {
@@ -135,7 +137,7 @@ export default {
     })
 
     const loadSpaceTask = useTask(function* () {
-      const response = yield graph.drives.getDrive(spaceId)
+      const response = yield graphClient.drives.getDrive(spaceId)
       space.value = response.data || {}
     })
     const loadReadmeTask = useTask(function* (signal, ref) {

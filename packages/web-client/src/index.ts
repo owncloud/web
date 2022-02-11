@@ -7,7 +7,7 @@ import {
   CollectionOfDrives
 } from './generated'
 
-interface Graph {
+export interface Graph {
   drives: {
     listMyDrives: () => Promise<AxiosResponse<CollectionOfDrives>>
     getDrive: (id: string) => AxiosPromise<Drive>

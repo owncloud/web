@@ -1,0 +1,5 @@
+Enhancement: Add the graph client to the client service
+
+This way, the client for the graph API can easily be fetched when needed.
+
+https://github.com/owncloud/web/pull/6425

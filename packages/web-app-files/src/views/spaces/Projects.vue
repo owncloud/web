@@ -133,7 +133,6 @@
 <script>
 import NoContentMessage from '../../components/FilesList/NoContentMessage.vue'
 import ListLoader from '../../components/FilesList/ListLoader.vue'
-import { client } from 'web-client'
 import { ref } from '@vue/composition-api'
 import { useStore } from 'web-pkg/src/composables'
 import { useTask } from 'vue-concurrency'
@@ -147,6 +146,7 @@ import Restore from '../../mixins/spaces/actions/restore'
 import EditDescription from '../../mixins/spaces/actions/editDescription'
 import ShowDetails from '../../mixins/spaces/actions/showDetails'
 import { buildWebDavSpacesPath } from '../../helpers/resources'
+import { clientService } from 'web-pkg/src/services'
 
 export default {
   components: {
@@ -158,10 +158,13 @@ export default {
     const store = useStore()
     const spaces = ref([])
     const imageContentObject = ref({})
-    const { graph } = client(store.getters.configuration.server, store.getters.getToken)
+    const graphClient = clientService.graphAuthenticated(
+      store.getters.configuration.server,
+      store.getters.getToken
+    )
 
     const loadSpacesTask = useTask(function* () {
-      const response = yield graph.drives.listMyDrives()
+      const response = yield graphClient.drives.listMyDrives()
       spaces.value = (response.data?.value || [])
         .filter((drive) => drive.driveType === 'project')
         .sort((a, b) => a.name.localeCompare(b.name))
@@ -203,7 +206,7 @@ export default {
 
     return {
       spaces,
-      graph,
+      graphClient,
       loadSpacesTask,
       loadImagesTask,
       loadResourcesTask,
@@ -272,7 +275,7 @@ export default {
     addNewSpace(name) {
       this.$refs.createNewSpaceButton.$el.blur()
 
-      return this.graph.drives
+      return this.graphClient.drives
         .createDrive({ name }, {})
         .then(() => {
           this.hideModal()

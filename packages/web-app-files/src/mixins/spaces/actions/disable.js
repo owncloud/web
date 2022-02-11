@@ -1,4 +1,5 @@
 import { mapActions } from 'vuex'
+import { clientService } from 'web-pkg/src/services'
 
 export default {
   computed: {
@@ -54,7 +55,8 @@ export default {
     },
 
     $_disable_disableSpace(id) {
-      return this.graph.drives
+      const graphClient = clientService.graphAuthenticated(this.configuration.server, this.getToken)
+      return graphClient.drives
         .deleteDrive(id)
         .then(() => {
           this.hideModal()
