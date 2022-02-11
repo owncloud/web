@@ -17,6 +17,7 @@ Summary
 * Bugfix - Scrolling inside Markdown Editor: [#4606](https://github.com/owncloud/web/issues/4606)
 * Bugfix - Focus management in topbar dropdowns: [#6213](https://github.com/owncloud/web/pull/6213)
 * Change - Dropped editor route whitelist: [#6381](https://github.com/owncloud/web/pull/6381)
+* Change - Enforce extensions to always display the ui-header: [#6401](https://github.com/owncloud/web/pull/6401)
 * Change - Remove UiKit: [#6103](https://github.com/owncloud/web/issues/6103)
 * Change - Rename theme logo sidebar to topbar: [#6349](https://github.com/owncloud/web/pull/6349)
 * Change - Use remixicons for redesign: [#6142](https://github.com/owncloud/web/pull/6142)
@@ -116,6 +117,13 @@ Details
    the files app itself and from now on ignore the `routes` key from editors.
 
    https://github.com/owncloud/web/pull/6381
+
+* Change - Enforce extensions to always display the ui-header: [#6401](https://github.com/owncloud/web/pull/6401)
+
+   We've enforced the ui to always render the header for third party extensions. From now on
+   extensions are not able to disable the header anymore.
+
+   https://github.com/owncloud/web/pull/6401
 
 * Change - Remove UiKit: [#6103](https://github.com/owncloud/web/issues/6103)
 
