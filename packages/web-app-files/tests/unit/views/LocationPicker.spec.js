@@ -438,7 +438,8 @@ describe('LocationPicker', () => {
       currentFolder: currentFolder,
       totalFilesSize: totalFilesSize,
       totalFilesCount: totalFilesCount,
-      generalThemeName: generalThemeName
+      generalThemeName: generalThemeName,
+      user: { id: 'test' }
     })
   }
 

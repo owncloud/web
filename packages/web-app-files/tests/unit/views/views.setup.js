@@ -167,7 +167,8 @@ export const getStore = function ({
             namespaced: true
           }
         }
-      }
+      },
+      user: { state: user }
     }
   })
 }
