@@ -2,6 +2,8 @@ import { ref } from '@vue/composition-api'
 import { createWrapper } from './spec'
 import { usePagination } from '../../../../src/composables'
 
+jest.unmock('@files/src/composables')
+
 describe('usePagination', () => {
   it('should be valid', () => {
     expect(usePagination).toBeDefined()
