@@ -35,6 +35,11 @@ localVue.use(GetTextPlugin, {
   silent: true
 })
 
+// mock `v-translate` directive
+localVue.directive('translate', {
+  inserted: (el) => {}
+})
+
 export const getRouter = ({ query = {} }) => ({
   afterEach: jest.fn(),
   replace: jest.fn(),
