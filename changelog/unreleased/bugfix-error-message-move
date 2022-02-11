@@ -1,0 +1,5 @@
+Bugfix: Failed move by drag'n'drop doesn't show the resource name in the error
+
+We fixed the error message when moving an item via drag-and-drop failed, now it shows the correct name of the item.
+
+https://github.com/owncloud/web/issues/6412
