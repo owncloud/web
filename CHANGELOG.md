@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Application config not available to application: [#6296](https://github.com/owncloud/web/issues/6296)
+* Bugfix - Failed move by drag'n'drop doesn't show the resource name in the error: [#6412](https://github.com/owncloud/web/issues/6412)
 * Bugfix - Add and remove to/from favorites: [#6328](https://github.com/owncloud/web/issues/6328)
 * Bugfix - Jumpy batch actions: [#6360](https://github.com/owncloud/web/pull/6360)
 * Bugfix - Open folder from context menu: [#6187](https://github.com/owncloud/web/issues/6187)
@@ -51,6 +52,13 @@ Details
 
    https://github.com/owncloud/web/issues/6296
    https://github.com/owncloud/web/pull/6298
+
+* Bugfix - Failed move by drag'n'drop doesn't show the resource name in the error: [#6412](https://github.com/owncloud/web/issues/6412)
+
+   We fixed the error message when moving an item via drag-and-drop failed, now it shows the
+   correct name of the item.
+
+   https://github.com/owncloud/web/issues/6412
 
 * Bugfix - Add and remove to/from favorites: [#6328](https://github.com/owncloud/web/issues/6328)
 
