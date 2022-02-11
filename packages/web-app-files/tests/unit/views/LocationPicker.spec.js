@@ -481,6 +481,7 @@ describe('LocationPicker', () => {
       mountOptions(store, $route, loading, setup, {
         'oc-button': false,
         'list-info': true,
+        translate: true,
         pagination: true,
         RouterLink: RouterLinkStub
       })
