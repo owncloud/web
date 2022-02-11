@@ -30,6 +30,7 @@ Summary
 * Enhancement - Drawio improvements: [#6125](https://github.com/owncloud/web/pull/6125)
 * Enhancement - File selection simplification: [#5967](https://github.com/owncloud/web/issues/5967)
 * Enhancement - Resource-specific icons in ResourceTable: [#6295](https://github.com/owncloud/web/pull/6295)
+* Enhancement - Add the graph client to the client service: [#6425](https://github.com/owncloud/web/pull/6425)
 * Enhancement - Reorganize urls: [#6137](https://github.com/owncloud/web/pull/6137)
 * Enhancement - Lazy resource table cells: [#6204](https://github.com/owncloud/web/pull/6204)
 * Enhancement - Add URL handling to markdown editor: [#6134](https://github.com/owncloud/web/pull/6134)
@@ -230,6 +231,12 @@ Details
 
    https://github.com/owncloud/web/pull/6295
    https://github.com/owncloud/web/pull/6387
+
+* Enhancement - Add the graph client to the client service: [#6425](https://github.com/owncloud/web/pull/6425)
+
+   This way, the client for the graph API can easily be fetched when needed.
+
+   https://github.com/owncloud/web/pull/6425
 
 * Enhancement - Reorganize urls: [#6137](https://github.com/owncloud/web/pull/6137)
 
