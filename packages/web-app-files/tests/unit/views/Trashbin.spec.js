@@ -8,7 +8,8 @@ const stubs = {
   'resource-table': true,
   'context-actions': true,
   pagination: true,
-  'list-info': true
+  'list-info': true,
+  'router-link': true
 }
 
 const listLoaderStub = 'list-loader-stub'
