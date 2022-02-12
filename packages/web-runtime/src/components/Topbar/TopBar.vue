@@ -4,16 +4,16 @@
     class="oc-flex oc-flex-middle oc-flex-between oc-px-m"
     :aria-label="$gettext('Top bar')"
   >
-    <div class="topbar-gap-left oc-flex oc-flex-middle oc-flex-between">
+    <div class="oc-topbar-left oc-flex oc-flex-middle oc-flex-between">
       <applications-menu v-if="appMenuItems.length" :applications-list="appMenuItems" />
       <router-link ref="navigationSidebarLogo" to="/">
-        <oc-img :src="logoImage" :alt="sidebarLogoAlt" />
+        <oc-img :src="logoImage" :alt="sidebarLogoAlt" class="oc-logo-image" />
       </router-link>
     </div>
     <div class="portal-wrapper">
       <portal-target name="app.runtime.header" multiple></portal-target>
     </div>
-    <div class="topbar-gap-right oc-flex oc-flex-middle oc-flex-between">
+    <div class="oc-topbar-right oc-flex oc-flex-middle oc-flex-between">
       <theme-switcher v-if="darkThemeAvailable" />
       <feedback-link v-if="isFeedbackLinkEnabled" />
       <notifications v-if="isNotificationBellEnabled" />
@@ -99,23 +99,29 @@ export default {
   height: 60px;
   position: sticky;
   z-index: 5;
+
   img {
-    height: 42px;
+    max-height: 42px;
     image-rendering: auto;
     image-rendering: crisp-edges;
     image-rendering: pixelated;
     image-rendering: -webkit-optimize-contrast;
     user-select: none;
   }
-  .topbar-gap-left {
+
+  .oc-topbar-left {
     gap: 30px;
+
+    img.oc-logo-image {
+      height: 42px;
+    }
   }
-  .topbar-gap-right {
+  .oc-topbar-right {
     gap: 20px;
   }
   @media only screen and (max-width: 960px) {
-    .topbar-gap-left,
-    .topbar-gap-right {
+    .oc-topbar-left,
+    .oc-topbar-right {
       gap: 0.5rem;
     }
   }
