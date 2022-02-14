@@ -15,7 +15,7 @@
     >
       <oc-icon size="large" fill-type="line" :name="toggleSidebarButtonIcon" />
     </oc-button>
-    <nav class="oc-sidebar-nav oc-my-l oc-px-xs" :aria-label="$gettext('Sidebar navigation menu')">
+    <nav class="oc-sidebar-nav oc-my-m oc-px-xs" :aria-label="$gettext('Sidebar navigation menu')">
       <oc-list>
         <sidebar-nav-item
           v-for="(link, index) in navItems"
