@@ -42,6 +42,7 @@ Summary
 * Enhancement - Add default sorting to the spaces list: [#6262](https://github.com/owncloud/web/pull/6262)
 * Enhancement - Implement spaces front page: [#6287](https://github.com/owncloud/web/pull/6287)
 * Enhancement - Implement spaces list: [#6199](https://github.com/owncloud/web/pull/6199)
+* Enhancement - Use the Vue store for spaces: [#6427](https://github.com/owncloud/web/pull/6427)
 * Enhancement - Update ODS to v12.1.0: [#6086](https://github.com/owncloud/web/pull/6086)
 * Enhancement - Update SDK: [#6309](https://github.com/owncloud/web/pull/6309)
 
@@ -338,6 +339,15 @@ Details
    https://github.com/owncloud/web/issues/6104
    https://github.com/owncloud/web/pull/6199
    https://github.com/owncloud/web/pull/6399
+
+* Enhancement - Use the Vue store for spaces: [#6427](https://github.com/owncloud/web/pull/6427)
+
+   Using the store for spaces integrates them seamlessly in our ecosystem and makes it easier to
+   develop spaces even further. E.g. the properties of a space can now be altered without fetching
+   all spaces again. This was achieved by introducing a "buildSpace" method, that transforms a
+   space into a more generic resource object (just like regular files or shares).
+
+   https://github.com/owncloud/web/pull/6427
 
 * Enhancement - Update ODS to v12.1.0: [#6086](https://github.com/owncloud/web/pull/6086)
 
