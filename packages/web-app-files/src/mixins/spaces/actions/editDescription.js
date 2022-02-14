@@ -59,7 +59,7 @@ export default {
         .then(() => {
           this.hideModal()
           this.UPDATE_RESOURCE_FIELD({
-            id: id,
+            id,
             field: 'description',
             value: description
           })

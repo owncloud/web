@@ -115,7 +115,7 @@ export function buildSpace(space) {
     spacePermissions = space.root.permissions
 
     if (space.root.deleted) {
-      disabled = space.root?.deleted?.state === 'trashed'
+      disabled = space.root.deleted?.state === 'trashed'
     }
   }
 
