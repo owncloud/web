@@ -72,20 +72,28 @@ export default {
       return this.files.find((file) => file.name === name)
     },
 
-    processDirectoryEntryRecursively(directory) {
-      return this.$client.files.createFolder(this.rootPath + directory.fullPath).then(() => {
-        const directoryReader = directory.createReader()
-        const ctrl = this
-        directoryReader.readEntries(function (entries) {
-          entries.forEach(function (entry) {
-            if (entry.isDirectory) {
+    async processDirectoryEntryRecursively(directory) {
+      // step 1: create folder
+      await this.$_buildCreateFolderCallback(this.rootPath, directory.fullPath, {
+        userId: this.user?.id,
+        spaceId: this.$route.params.spaceId,
+        publicLinkPassword: this.publicLinkPassword
+      })()
+
+      // step 2: for all files in folder: recursion (if folder) or upload (if file)
+      const directoryReader = directory.createReader()
+      const ctrl = this
+      directoryReader.readEntries(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isDirectory) {
+            ;(() => {
               ctrl.processDirectoryEntryRecursively(entry)
-            } else {
-              entry.file((file) => {
-                ctrl.$_ocUpload(file, entry.fullPath, null, false)
-              })
-            }
-          })
+            })()
+          } else {
+            entry.file((file) => {
+              ctrl.$_ocUpload(file, entry.fullPath, null, false)
+            })
+          }
         })
       })
     },
@@ -282,30 +290,15 @@ export default {
         const createFolderPromises = []
         const rootDir = directoriesToCreate[0]
         for (const directory of directoriesToCreate) {
-          let p
-
-          if (this.publicPage()) {
-            p = this.directoryQueue.add(() =>
-              this.$client.publicFiles.createFolder(
-                this.rootPath,
-                directory,
-                this.publicLinkPassword
-              )
+          createFolderPromises.push(
+            this.directoryQueue.add(
+              this.$_buildCreateFolderCallback(this.rootPath, directory, {
+                userId: this.user?.id,
+                spaceId: this.$route.params.spaceId,
+                publicLinkPassword: this.publicLinkPassword
+              })
             )
-          } else {
-            let path = buildWebDavFilesPath(this.user.id, `${this.rootPath}${directory}`)
-
-            if (this.$route.params.spaceId) {
-              path = buildWebDavSpacesPath(
-                this.$route.params.spaceId,
-                `${this.rootPath}${directory}`
-              )
-            }
-
-            p = this.directoryQueue.add(() => this.$client.files.createFolder(path))
-          }
-
-          createFolderPromises.push(p)
+          )
         }
         // Upload files
         const uploadPromises = []
@@ -320,6 +313,17 @@ export default {
           })
         })
       }
+    },
+
+    $_buildCreateFolderCallback(rootPath, directory, { userId, spaceId, publicLinkPassword }) {
+      if (this.publicPage()) {
+        return () => this.$client.publicFiles.createFolder(rootPath, directory, publicLinkPassword)
+      }
+
+      const path = spaceId
+        ? buildWebDavSpacesPath(spaceId, `${rootPath}${directory}`)
+        : buildWebDavFilesPath(userId, `${rootPath}${directory}`)
+      return () => this.$client.files.createFolder(path)
     },
 
     /**
@@ -344,8 +348,8 @@ export default {
       if (this.publicPage()) {
         // strip out public link token from path
         const tokenSplit = basePath.indexOf('/')
-        const token = basePath.substr(0, tokenSplit)
-        basePath = basePath.substr(tokenSplit + 1) || ''
+        const token = basePath.substring(0, tokenSplit)
+        basePath = basePath.substring(tokenSplit + 1) || ''
         relativePath = pathUtil.join(basePath, relativePath)
         const extraHeaders = {}
         if (file.lastModifiedDate) {
