@@ -161,7 +161,7 @@ export default {
       })
       const getDescription = () =>
         this.$gettextInterpolate(
-          'The diagram will open as a new .drawio file: %{file}',
+          this.$gettext('The diagram will open as a new .drawio file: %{file}'),
           { file: basename(this.filePath) },
           true
         )
