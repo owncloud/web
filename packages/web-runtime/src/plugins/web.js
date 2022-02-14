@@ -10,10 +10,6 @@ export default {
         ...mapGetters('Files', ['publicLinkPassword']),
         ...mapGetters(['configuration']),
 
-        currentExtension() {
-          return this.$route.path.split('/')[1]
-        },
-
         isUrlSigningEnabled() {
           return this.capabilities.core && this.capabilities.core['support-url-signing']
         }

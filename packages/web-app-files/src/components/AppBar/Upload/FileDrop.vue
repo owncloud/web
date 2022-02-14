@@ -24,6 +24,7 @@ import vue2DropZone from 'vue2-dropzone'
 import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 import Mixins from '../../../mixins'
 import { mapActions, mapGetters, mapState } from 'vuex'
+import { useActiveApp } from 'web-pkg/src/composables'
 
 export default {
   components: {
@@ -41,6 +42,11 @@ export default {
     },
     requestType: { type: String, default: 'PUT' }
   },
+  setup() {
+    return {
+      activeApp: useActiveApp()
+    }
+  },
   data() {
     return {
       ocDropzone_options: {
@@ -51,10 +57,19 @@ export default {
     }
   },
   computed: {
-    ...mapState(['navigation']),
-    ...mapState(['user']),
+    ...mapState(['navigation', 'user']),
+    ...mapGetters(['getNavItemsByExtension']),
     ...mapGetters('Files', ['dropzone']),
+    hasSidebarNavItems() {
+      if (this.publicPage()) {
+        return false
+      }
+      return (this.getNavItemsByExtension(this.activeApp) || []).length
+    },
     sidebarStateClass() {
+      if (!this.hasSidebarNavItems) {
+        return 'oc-dropzone-navigation-hidden'
+      }
       return this.navigation.closed
         ? 'oc-dropzone-navigation-collapsed'
         : 'oc-dropzone-navigation-expanded'
@@ -74,6 +89,7 @@ export default {
 </script>
 
 <style lang="scss">
+.oc-dropzone-navigation-hidden,
 .oc-dropzone-navigation-collapsed,
 .oc-dropzone-navigation-expanded {
   position: fixed;
@@ -87,8 +103,8 @@ export default {
   position: fixed;
   top: 60px;
   height: calc(100% - 60px - var(--oc-space-small));
-  left: 0;
-  width: 100%;
+  left: var(--oc-space-small);
+  width: calc(100% - (2 * var(--oc-space-small)));
   z-index: 3;
 
   // TODO: Remove vue-dropzone
@@ -96,8 +112,7 @@ export default {
     height: 100%;
   }
   .oc-dropzone {
-    border-bottom-right-radius: 15px;
-    border-top-right-radius: 15px;
+    border-radius: 15px;
     height: calc(100% - (2 * var(--oc-space-medium)));
   }
 }
