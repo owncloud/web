@@ -18,7 +18,7 @@
             :include-styling="false"
             @vdropzone-file-added="dropZoneFileAdded"
           >
-            <div class="oc-flex oc-flex-middle oc-flex-center">
+            <div class="oc-flex oc-flex-middle oc-flex-center oc-files-drop-drag-area">
               <oc-icon name="file-upload" />
               <translate>Drop files here to upload or click to select file</translate>
             </div>
@@ -26,7 +26,7 @@
           <div id="previews" hidden />
         </div>
         <div
-          class="oc-flex oc-flex-center oc-overflow-auto oc-width-1-1"
+          class="oc-flex oc-flex-center oc-overflow-auto oc-width-1-1 oc-mt"
           :class="{ 'files-empty': !getUploadedFiles }"
         >
           <oc-table-simple v-if="getUploadedFiles" class="oc-width-1-1 oc-width-xxlarge@m">
@@ -212,3 +212,13 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+#files-drop-container {
+  .oc-files-drop-drag-area {
+    background: transparent;
+    border: 1px dashed var(--oc-color-input-border);
+    padding: var(--oc-space-xlarge);
+  }
+}
+</style>
