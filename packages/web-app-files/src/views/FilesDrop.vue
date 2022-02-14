@@ -77,7 +77,8 @@
 import vue2DropZone from 'vue2-dropzone'
 import { mapGetters } from 'vuex'
 import Mixins from '../mixins.js'
-import { DavProperties } from 'web-pkg/src/constants'
+import { DavProperties, DavProperty } from 'web-pkg/src/constants'
+import { linkRoleUploaderFolder } from '../helpers/share'
 import { createLocationOperations, createLocationPublic } from '../router'
 
 export default {
@@ -140,8 +141,10 @@ export default {
       this.$client.publicFiles
         .list(this.publicLinkToken, this.publicLinkPassword, DavProperties.PublicLink, '0')
         .then((files) => {
-          if (files[0].getProperty(this.$client.publicFiles.PUBLIC_LINK_SHARE_DATETIME !== '4')) {
-            this.$router.push(
+          // Redirect to files list if the link doesn't have role "uploader"
+          const sharePermissions = parseInt(files[0].getProperty(DavProperty.PublicLinkPermission))
+          if (linkRoleUploaderFolder.bitmask(false) !== sharePermissions) {
+            this.$router.replace(
               createLocationPublic('files-public-files', {
                 params: { item: this.publicLinkToken }
               })
