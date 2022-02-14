@@ -3,7 +3,7 @@
 exports[`PrivateLink view when the page has loaded successfully should display the page title 1`] = `<h1 class="oc-invisible-sr">Resolving private link</h1>`;
 
 exports[`PrivateLink view when the view has finished loading and there was no error should not display the loading text and the error message 1`] = `
-<div class="oc-height-1-1">
+<div class="oc-height-1-1 oc-link-resolve">
   <h1 class="oc-invisible-sr">Resolving private link</h1>
   <div class="oc-card oc-border oc-rounded oc-position-center oc-text-center oc-width-large">
     <!---->

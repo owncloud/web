@@ -38,12 +38,12 @@ export default {
   },
   computed: {
     ...mapGetters([
+      'apps',
+      'activeMessages',
+      'activeNotifications',
       'capabilities',
       'configuration',
       'getExtensionsWithNavItems',
-      'apps',
-      'activeNotifications',
-      'activeMessages',
       'getNavItemsByExtension'
     ]),
     isSidebarVisible() {
