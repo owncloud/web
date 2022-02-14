@@ -31,19 +31,18 @@ describe('Spaces component', () => {
     expect(wrapper.find(selectors.sharesNoContentMessage).exists()).toBeTruthy()
   })
 
-  it('should only list drives of type "project"', async () => {
+  it('should list spaces', async () => {
+    const drives = [{ driveType: 'project', id: '1' }]
+
     mockAxios.request.mockImplementationOnce(() => {
       return Promise.resolve({
         data: {
-          value: [
-            { driveType: 'project', id: '1' },
-            { driveType: 'personal', id: '2' }
-          ]
+          value: drives
         }
       })
     })
 
-    const wrapper = getMountedWrapper()
+    const wrapper = getMountedWrapper(drives)
     await wrapper.vm.loadSpacesTask.last
 
     expect(wrapper.vm.spaces.length).toEqual(1)
@@ -88,7 +87,7 @@ describe('Spaces component', () => {
   })
 })
 
-function getMountedWrapper() {
+function getMountedWrapper(activeFiles = []) {
   const routes = [
     {
       name: 'files-spaces-project',
@@ -110,8 +109,14 @@ function getMountedWrapper() {
       modules: {
         Files: {
           namespaced: true,
+          getters: {
+            activeFiles: () => activeFiles
+          },
           mutations: {
-            SET_CURRENT_FOLDER: jest.fn()
+            SET_CURRENT_FOLDER: jest.fn(),
+            CLEAR_CURRENT_FILES_LIST: jest.fn(),
+            CLEAR_FILES_SEARCHED: jest.fn(),
+            LOAD_FILES: jest.fn()
           }
         }
       }

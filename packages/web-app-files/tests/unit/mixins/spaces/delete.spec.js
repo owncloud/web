@@ -37,6 +37,14 @@ describe('delete', () => {
             server: 'https://example.com'
           }),
           getToken: () => 'token'
+        },
+        modules: {
+          Files: {
+            namespaced: true,
+            mutations: {
+              REMOVE_FILE: jest.fn()
+            }
+          }
         }
       })
     })
@@ -44,9 +52,6 @@ describe('delete', () => {
 
   describe('method "$_delete_trigger"', () => {
     it('should trigger the delete modal window', async () => {
-      mockAxios.request.mockImplementationOnce(() => {
-        return Promise.resolve()
-      })
       const wrapper = getWrapper()
       const spyCreateModalStub = jest.spyOn(wrapper.vm, 'createModal')
       await wrapper.vm.$_delete_trigger({ spaces: [{ id: 1 }] })

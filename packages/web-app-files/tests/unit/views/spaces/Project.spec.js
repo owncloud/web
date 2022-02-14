@@ -5,7 +5,6 @@ import { createStore } from 'vuex-extensions'
 import Files from '@/__fixtures__/files'
 import mockAxios from 'jest-mock-axios'
 import SpaceProject from '../../../../src/views/spaces/Project.vue'
-import { buildResource } from '@files/src/helpers/resources'
 import Vuex from 'vuex'
 
 localVue.use(GetTextPlugin, {
@@ -161,10 +160,7 @@ describe('Spaces project view', () => {
         })
       })
 
-      const spaceResource = buildResource(Files['/'][0])
-      spaceResource.path = '/'
-
-      const wrapper = getMountedWrapper([spaceResource])
+      const wrapper = getMountedWrapper([Files['/'][0]])
       await wrapper.vm.loadResourcesTask.last
 
       expect(wrapper.find(selectors.emptySpace).exists()).toBeFalsy()
