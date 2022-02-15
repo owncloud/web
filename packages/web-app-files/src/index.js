@@ -30,7 +30,7 @@ function $gettext(msg) {
 const appInfo = {
   name: $gettext('Files'),
   id: 'files',
-  icon: 'folder',
+  icon: 'resource-type-folder',
   isFileEditor: false,
   extensions: [],
   fileSideBars
