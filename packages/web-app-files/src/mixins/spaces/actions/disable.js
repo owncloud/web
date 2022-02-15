@@ -1,7 +1,10 @@
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { clientService } from 'web-pkg/src/services'
 
 export default {
   computed: {
+    ...mapGetters(['configuration', 'getToken']),
+
     $_disable_items() {
       return [
         {
@@ -16,7 +19,7 @@ export default {
               return false
             }
 
-            return spaces[0].root?.deleted?.state !== 'trashed'
+            return !spaces[0].disabled
           },
           componentType: 'oc-button',
           class: 'oc-files-actions-disable-trigger'
@@ -32,6 +35,7 @@ export default {
       'showMessage',
       'toggleModalConfirmButton'
     ]),
+    ...mapMutations('Files', ['UPDATE_RESOURCE_FIELD']),
 
     $_disable_trigger({ spaces }) {
       if (spaces.length !== 1) {
@@ -54,11 +58,16 @@ export default {
     },
 
     $_disable_disableSpace(id) {
-      return this.graph.drives
+      const graphClient = clientService.graphAuthenticated(this.configuration.server, this.getToken)
+      return graphClient.drives
         .deleteDrive(id)
         .then(() => {
           this.hideModal()
-          this.loadSpacesTask.perform(this)
+          this.UPDATE_RESOURCE_FIELD({
+            id,
+            field: 'disabled',
+            value: true
+          })
         })
         .catch((error) => {
           this.showMessage({

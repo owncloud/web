@@ -17,6 +17,7 @@ Summary
 * Bugfix - Scrolling inside Markdown Editor: [#4606](https://github.com/owncloud/web/issues/4606)
 * Bugfix - Focus management in topbar dropdowns: [#6213](https://github.com/owncloud/web/pull/6213)
 * Change - Dropped editor route whitelist: [#6381](https://github.com/owncloud/web/pull/6381)
+* Change - Enforce extensions to always display the ui-header: [#6401](https://github.com/owncloud/web/pull/6401)
 * Change - Remove UiKit: [#6103](https://github.com/owncloud/web/issues/6103)
 * Change - Rename theme logo sidebar to topbar: [#6349](https://github.com/owncloud/web/pull/6349)
 * Change - Use remixicons for redesign: [#6142](https://github.com/owncloud/web/pull/6142)
@@ -29,6 +30,7 @@ Summary
 * Enhancement - Drawio improvements: [#6125](https://github.com/owncloud/web/pull/6125)
 * Enhancement - File selection simplification: [#5967](https://github.com/owncloud/web/issues/5967)
 * Enhancement - Resource-specific icons in ResourceTable: [#6295](https://github.com/owncloud/web/pull/6295)
+* Enhancement - Add the graph client to the client service: [#6425](https://github.com/owncloud/web/pull/6425)
 * Enhancement - Reorganize urls: [#6137](https://github.com/owncloud/web/pull/6137)
 * Enhancement - Lazy resource table cells: [#6204](https://github.com/owncloud/web/pull/6204)
 * Enhancement - Add URL handling to markdown editor: [#6134](https://github.com/owncloud/web/pull/6134)
@@ -40,6 +42,7 @@ Summary
 * Enhancement - Add default sorting to the spaces list: [#6262](https://github.com/owncloud/web/pull/6262)
 * Enhancement - Implement spaces front page: [#6287](https://github.com/owncloud/web/pull/6287)
 * Enhancement - Implement spaces list: [#6199](https://github.com/owncloud/web/pull/6199)
+* Enhancement - Use the Vue store for spaces: [#6427](https://github.com/owncloud/web/pull/6427)
 * Enhancement - Update ODS to v12.1.0: [#6086](https://github.com/owncloud/web/pull/6086)
 * Enhancement - Update SDK: [#6309](https://github.com/owncloud/web/pull/6309)
 
@@ -116,6 +119,13 @@ Details
    the files app itself and from now on ignore the `routes` key from editors.
 
    https://github.com/owncloud/web/pull/6381
+
+* Change - Enforce extensions to always display the ui-header: [#6401](https://github.com/owncloud/web/pull/6401)
+
+   We've enforced the ui to always render the header for third party extensions. From now on
+   extensions are not able to disable the header anymore.
+
+   https://github.com/owncloud/web/pull/6401
 
 * Change - Remove UiKit: [#6103](https://github.com/owncloud/web/issues/6103)
 
@@ -223,6 +233,12 @@ Details
    https://github.com/owncloud/web/pull/6295
    https://github.com/owncloud/web/pull/6387
 
+* Enhancement - Add the graph client to the client service: [#6425](https://github.com/owncloud/web/pull/6425)
+
+   This way, the client for the graph API can easily be fetched when needed.
+
+   https://github.com/owncloud/web/pull/6425
+
 * Enhancement - Reorganize urls: [#6137](https://github.com/owncloud/web/pull/6137)
 
    With the [global-url-format
@@ -323,6 +339,15 @@ Details
    https://github.com/owncloud/web/issues/6104
    https://github.com/owncloud/web/pull/6199
    https://github.com/owncloud/web/pull/6399
+
+* Enhancement - Use the Vue store for spaces: [#6427](https://github.com/owncloud/web/pull/6427)
+
+   Using the store for spaces integrates them seamlessly in our ecosystem and makes it easier to
+   develop spaces even further. E.g. the properties of a space can now be altered without fetching
+   all spaces again. This was achieved by introducing a "buildSpace" method, that transforms a
+   space into a more generic resource object (just like regular files or shares).
+
+   https://github.com/owncloud/web/pull/6427
 
 * Enhancement - Update ODS to v12.1.0: [#6086](https://github.com/owncloud/web/pull/6086)
 

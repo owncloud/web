@@ -1,6 +1,6 @@
 <template>
   <div class="space-overview">
-    <list-loader v-if="loadSpaceTask.isRunning" />
+    <list-loader v-if="loadFilesListTask.isRunning" />
     <template v-else>
       <not-found-message v-if="!space.id" class="space-not-found oc-height-1-1" />
       <div
@@ -72,13 +72,12 @@ import NoContentMessage from '../../components/FilesList/NoContentMessage.vue'
 import NotFoundMessage from '../../components/FilesList/NotFoundMessage.vue'
 import ListLoader from '../../components/FilesList/ListLoader.vue'
 import { computed, ref, unref } from '@vue/composition-api'
-import { client } from 'web-client'
 import { useTask } from 'vue-concurrency'
 import { useStore, useRouter, useRouteQuery } from 'web-pkg/src/composables'
 import marked from 'marked'
 import MixinAccessibleBreadcrumb from '../../mixins/accessibleBreadcrumb'
 import { bus } from 'web-pkg/src/instance'
-import { buildResource, buildWebDavSpacesPath } from '../../helpers/resources'
+import { buildResource, buildSpace, buildWebDavSpacesPath } from '../../helpers/resources'
 import ResourceTable, { determineSortFields } from '../../components/FilesList/ResourceTable.vue'
 import { createLocationSpaces } from '../../router'
 import { usePagination, useSort } from '../../composables'
@@ -90,7 +89,7 @@ import MixinFileActions from '../../mixins/fileActions'
 import { ImageDimension, ImageType } from '../../constants'
 import debounce from 'lodash-es/debounce'
 import { VisibilityObserver } from 'web-pkg/src/observer'
-
+import { clientService } from 'web-pkg/src/services'
 const visibilityObserver = new VisibilityObserver()
 
 export default {
@@ -113,7 +112,10 @@ export default {
     const space = ref({})
     const markdownContent = ref('')
     const imageContent = ref('')
-    const { graph } = client(store.getters.configuration.server, store.getters.getToken)
+    const graphClient = clientService.graphAuthenticated(
+      store.getters.configuration.server,
+      store.getters.getToken
+    )
 
     const storeItems = computed(() => store.getters['Files/activeFiles'] || [])
     const fields = computed(() => {
@@ -134,19 +136,13 @@ export default {
       sortBy
     })
 
-    const loadSpaceTask = useTask(function* () {
-      const response = yield graph.drives.getDrive(spaceId)
-      space.value = response.data || {}
-    })
     const loadReadmeTask = useTask(function* (signal, ref) {
-      const markdownEntry = space.value?.special?.find((el) => el?.specialFolder?.name === 'readme')
-
-      if (!markdownEntry) {
+      if (!space.value.spaceReadmeData) {
         return
       }
 
       const fileContents = yield ref.$client.files.getFileContents(
-        buildWebDavSpacesPath(space.value.id, markdownEntry.name)
+        buildWebDavSpacesPath(space.value.id, space.value.spaceReadmeData.name)
       )
 
       if (ref.markdownResizeObserver) {
@@ -160,14 +156,12 @@ export default {
       }
     })
     const loadImageTask = useTask(function* (signal, ref) {
-      const imageEntry = space.value?.special?.find((el) => el?.specialFolder?.name === 'image')
-
-      if (!imageEntry) {
+      if (!space.value.spaceImageData) {
         return
       }
 
       const fileContents = yield ref.$client.files.getFileContents(
-        buildWebDavSpacesPath(space.value.id, imageEntry.name),
+        buildWebDavSpacesPath(space.value.id, space.value.spaceImageData.name),
         {
           responseType: 'arrayBuffer'
         }
@@ -178,11 +172,30 @@ export default {
 
     const loadFilesListTask = useTask(function* (signal, ref, sameRoute, path = null) {
       ref.CLEAR_CURRENT_FILES_LIST()
-      const response = yield ref.$client.files.list(
+      const graphResponse = yield graphClient.drives.getDrive(spaceId)
+
+      if (!graphResponse.data) {
+        return
+      }
+
+      space.value = buildSpace(graphResponse.data)
+
+      const webDavResponse = yield ref.$client.files.list(
         buildWebDavSpacesPath(ref.$route.params.spaceId, path || '')
       )
 
-      const resources = response.map(buildResource)
+      let resources = []
+      if (!path) {
+        // space front page -> use space as current folder
+        resources.push(space.value)
+
+        const webDavResources = webDavResponse.map(buildResource)
+        webDavResources.shift() // Remove webdav entry for the space itself
+        resources = resources.concat(webDavResources)
+      } else {
+        resources = webDavResponse.map(buildResource)
+      }
+
       const currentFolder = resources.shift()
 
       ref.LOAD_FILES({
@@ -191,23 +204,22 @@ export default {
       })
       ref.loadIndicators({
         client: ref.$client,
-        currentFolder: currentFolder.path
+        currentFolder: currentFolder?.path
       })
-
-      ref.accessibleBreadcrumb_focusAndAnnounceBreadcrumb(sameRoute)
-      ref.scrollToResourceFromRoute()
     })
 
     const loadResourcesTask = useTask(function* (signal, ref, sameRoute, path) {
-      yield loadSpaceTask.perform(ref)
-      loadReadmeTask.perform(ref)
-      loadImageTask.perform(ref)
-      loadFilesListTask.perform(ref, sameRoute, path)
+      yield loadFilesListTask.perform(ref, sameRoute, path)
+
+      // Only load when in space root, no need to fetch in subdirectories
+      if (!path) {
+        loadReadmeTask.perform(ref)
+        loadImageTask.perform(ref)
+      }
     })
 
     return {
       space,
-      loadSpaceTask,
       loadImageTask,
       loadReadmeTask,
       markdownContent,
@@ -274,9 +286,8 @@ export default {
         const sameRoute = to.name === from?.name
         const sameItem = to.params?.item === from?.params?.item
 
-        if (!sameRoute || !sameItem) {
-          this.loadFilesListTask.perform(this, sameRoute, to.params.item)
-          this.loadReadmeTask.perform(this)
+        if ((!sameRoute || !sameItem) && from) {
+          this.loadResourcesTask.perform(this, sameRoute, to.params.item)
         }
       },
       immediate: true

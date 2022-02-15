@@ -1,7 +1,10 @@
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { clientService } from 'web-pkg/src/services'
 
 export default {
   computed: {
+    ...mapGetters(['configuration', 'getToken']),
+
     $_rename_items() {
       return [
         {
@@ -26,6 +29,7 @@ export default {
       'showMessage',
       'toggleModalConfirmButton'
     ]),
+    ...mapMutations('Files', ['UPDATE_RESOURCE_FIELD']),
 
     $_rename_trigger({ spaces }) {
       if (spaces.length !== 1) {
@@ -56,11 +60,16 @@ export default {
     },
 
     $_rename_renameSpace(id, name) {
-      return this.graph.drives
+      const graphClient = clientService.graphAuthenticated(this.configuration.server, this.getToken)
+      return graphClient.drives
         .updateDrive(id, { name }, {})
         .then(() => {
           this.hideModal()
-          this.loadSpacesTask.perform(this)
+          this.UPDATE_RESOURCE_FIELD({
+            id,
+            field: 'name',
+            value: name
+          })
         })
         .catch((error) => {
           this.showMessage({

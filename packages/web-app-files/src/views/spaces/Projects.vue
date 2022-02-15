@@ -53,7 +53,7 @@
               <div class="oc-card-media-top oc-border-b">
                 <router-link v-if="!loadImagesTask.isRunning" :to="getSpaceProjectRoute(space)">
                   <oc-tag
-                    v-if="isSpaceDisabled(space)"
+                    v-if="space.disabled"
                     class="oc-position-absolute space-disabled-indicator"
                     type="span"
                   >
@@ -133,8 +133,7 @@
 <script>
 import NoContentMessage from '../../components/FilesList/NoContentMessage.vue'
 import ListLoader from '../../components/FilesList/ListLoader.vue'
-import { client } from 'web-client'
-import { ref } from '@vue/composition-api'
+import { computed, ref } from '@vue/composition-api'
 import { useStore } from 'web-pkg/src/composables'
 import { useTask } from 'vue-concurrency'
 import { createLocationSpaces } from '../../router'
@@ -146,7 +145,8 @@ import Disable from '../../mixins/spaces/actions/disable'
 import Restore from '../../mixins/spaces/actions/restore'
 import EditDescription from '../../mixins/spaces/actions/editDescription'
 import ShowDetails from '../../mixins/spaces/actions/showDetails'
-import { buildWebDavSpacesPath } from '../../helpers/resources'
+import { buildSpace, buildWebDavSpacesPath } from '../../helpers/resources'
+import { clientService } from 'web-pkg/src/services'
 
 export default {
   components: {
@@ -156,15 +156,23 @@ export default {
   mixins: [Rename, Delete, EditDescription, Disable, ShowDetails, Restore],
   setup() {
     const store = useStore()
-    const spaces = ref([])
+    const spaces = computed(() => store.getters['Files/activeFiles'] || [])
     const imageContentObject = ref({})
-    const { graph } = client(store.getters.configuration.server, store.getters.getToken)
+    const graphClient = clientService.graphAuthenticated(
+      store.getters.configuration.server,
+      store.getters.getToken
+    )
 
-    const loadSpacesTask = useTask(function* () {
-      const response = yield graph.drives.listMyDrives()
-      spaces.value = (response.data?.value || [])
+    const loadSpacesTask = useTask(function* (signal, ref) {
+      ref.CLEAR_CURRENT_FILES_LIST()
+
+      const response = yield graphClient.drives.listMyDrives()
+      let loadedSpaces = (response.data?.value || [])
         .filter((drive) => drive.driveType === 'project')
         .sort((a, b) => a.name.localeCompare(b.name))
+
+      loadedSpaces = loadedSpaces.map(buildSpace)
+      ref.LOAD_FILES({ currentFolder: null, files: loadedSpaces })
     })
 
     const loadImageTask = useTask(function* (signal, { client, spaceId, fileName }) {
@@ -180,30 +188,26 @@ export default {
 
     const loadImagesTask = useTask(function* (signal, ref) {
       for (const space of spaces.value) {
-        const imageEntry = space?.special?.find((el) => el?.specialFolder?.name === 'image')
-
-        if (!imageEntry) {
+        if (!space?.spaceImageData) {
           continue
         }
 
         yield loadImageTask.perform({
           client: ref.$client,
           spaceId: space?.id,
-          fileName: imageEntry?.name
+          fileName: space.spaceImageData.name
         })
       }
     })
 
     const loadResourcesTask = useTask(function* (signal, ref) {
-      ref.SET_CURRENT_FOLDER(null)
-
       yield ref.loadSpacesTask.perform(ref)
       yield ref.loadImagesTask.perform(ref)
     })
 
     return {
       spaces,
-      graph,
+      graphClient,
       loadSpacesTask,
       loadImagesTask,
       loadResourcesTask,
@@ -216,7 +220,7 @@ export default {
       return true
     }
   },
-  mounted() {
+  created() {
     this.loadResourcesTask.perform(this)
 
     const loadSpacesEventToken = bus.subscribe('app.files.list.load', (path) => {
@@ -227,7 +231,7 @@ export default {
   },
   methods: {
     ...mapActions(['createModal', 'hideModal', 'setModalInputErrorMessage']),
-    ...mapMutations('Files', ['SET_CURRENT_FOLDER']),
+    ...mapMutations('Files', ['SET_CURRENT_FOLDER', 'LOAD_FILES', 'CLEAR_CURRENT_FILES_LIST']),
 
     getContextMenuActions(space) {
       return [
@@ -272,7 +276,7 @@ export default {
     addNewSpace(name) {
       this.$refs.createNewSpaceButton.$el.blur()
 
-      return this.graph.drives
+      return this.graphClient.drives
         .createDrive({ name }, {})
         .then(() => {
           this.hideModal()
@@ -292,14 +296,10 @@ export default {
     },
 
     getSpaceCardAdditionalClass(space) {
-      if (this.isSpaceDisabled(space)) {
+      if (space.disabled) {
         return 'state-trashed'
       }
       return ''
-    },
-
-    isSpaceDisabled(space) {
-      return space.root?.deleted?.state === 'trashed'
     }
   }
 }
