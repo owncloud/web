@@ -14,12 +14,12 @@ export default {
             return this.$gettext('Restore')
           },
           handler: this.$_restore_trigger,
-          isEnabled: ({ spaces }) => {
-            if (spaces.length !== 1) {
+          isEnabled: ({ resources }) => {
+            if (resources.length !== 1) {
               return false
             }
 
-            return spaces[0].disabled
+            return resources[0].disabled
           },
           componentType: 'oc-button',
           class: 'oc-files-actions-restore-trigger'
@@ -37,21 +37,21 @@ export default {
     ]),
     ...mapMutations('Files', ['UPDATE_RESOURCE_FIELD']),
 
-    $_restore_trigger({ spaces }) {
-      if (spaces.length !== 1) {
+    $_restore_trigger({ resources }) {
+      if (resources.length !== 1) {
         return
       }
 
       const modal = {
         variation: 'passive',
-        title: this.$gettext('Restore space') + ' ' + spaces[0].name,
+        title: this.$gettext('Restore space') + ' ' + resources[0].name,
         cancelText: this.$gettext('Cancel'),
         confirmText: this.$gettext('Restore'),
         icon: 'alarm-warning',
         message: this.$gettext('Are you sure you want to restore this space?'),
         hasInput: false,
         onCancel: this.hideModal,
-        onConfirm: () => this.$_restore_restoreSpace(spaces[0].id)
+        onConfirm: () => this.$_restore_restoreSpace(resources[0].id)
       }
 
       this.createModal(modal)

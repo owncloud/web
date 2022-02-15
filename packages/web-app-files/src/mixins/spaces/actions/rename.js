@@ -14,7 +14,7 @@ export default {
             return this.$gettext('Rename')
           },
           handler: this.$_rename_trigger,
-          isEnabled: ({ spaces }) => spaces.length === 1,
+          isEnabled: ({ resources }) => resources.length === 1,
           componentType: 'oc-button',
           class: 'oc-files-actions-rename-trigger'
         }
@@ -31,21 +31,21 @@ export default {
     ]),
     ...mapMutations('Files', ['UPDATE_RESOURCE_FIELD']),
 
-    $_rename_trigger({ spaces }) {
-      if (spaces.length !== 1) {
+    $_rename_trigger({ resources }) {
+      if (resources.length !== 1) {
         return
       }
 
       const modal = {
         variation: 'passive',
-        title: this.$gettext('Rename space') + ' ' + spaces[0].name,
+        title: this.$gettext('Rename space') + ' ' + resources[0].name,
         cancelText: this.$gettext('Cancel'),
         confirmText: this.$gettext('Rename'),
         hasInput: true,
         inputLabel: this.$gettext('Space name'),
-        inputValue: spaces[0].name,
+        inputValue: resources[0].name,
         onCancel: this.hideModal,
-        onConfirm: (name) => this.$_rename_renameSpace(spaces[0].id, name),
+        onConfirm: (name) => this.$_rename_renameSpace(resources[0].id, name),
         onInput: this.$_rename_checkName
       }
 
