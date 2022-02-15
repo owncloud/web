@@ -7,7 +7,12 @@
       <message-bar :active-messages="activeMessages" @deleteMessage="deleteMessage" />
       <div class="app-container oc-flex">
         <sidebar-nav v-if="isSidebarVisible" class="app-navigation" :nav-items="sidebarNavItems" />
-        <router-view class="app-content oc-width-1-1" />
+        <router-view
+          v-for="name in ['default', 'app', 'fullscreen']"
+          :key="`router-view-${name}`"
+          class="app-content oc-width-1-1"
+          :name="name"
+        />
       </div>
     </div>
   </div>
@@ -18,7 +23,8 @@ import { mapActions, mapGetters } from 'vuex'
 import TopBar from '../components/Topbar/TopBar.vue'
 import MessageBar from '../components/MessageBar.vue'
 import SidebarNav from '../components/SidebarNav/SidebarNav.vue'
-import { useActiveApp } from 'web-pkg/src/composables'
+import { useActiveApp, useRoute } from 'web-pkg/src/composables'
+import { watch } from '@vue/composition-api'
 
 export default {
   components: {
@@ -27,6 +33,25 @@ export default {
     SidebarNav
   },
   setup() {
+    // FIXME: we can convert to a single router-view without name (thus without the loop) and without this watcher when we release v6.0.0
+    watch(
+      useRoute(),
+      (route) => {
+        if (route.matched.length) {
+          route.matched.forEach((match) => {
+            const keys = Object.keys(match.components).filter((key) => key !== 'default')
+            if (keys.length) {
+              console.warn(
+                `named components are deprecated, use "default" instead of "${keys.join(
+                  ', '
+                )}" on route ${route.name}`
+              )
+            }
+          })
+        }
+      },
+      { immediate: true }
+    )
     return {
       activeApp: useActiveApp()
     }

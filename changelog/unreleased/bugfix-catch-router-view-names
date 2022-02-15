@@ -1,0 +1,5 @@
+Bugfix: App compatibility
+
+We've made sure that apps that were not made compatible with ownCloud Web 5.0.0 don't run into a non-rendered state.
+
+https://github.com/owncloud/web/pull/6439
