@@ -14,6 +14,13 @@
         alt=""
         class="oc-icon oc-icon-m"
       />
+      <oc-img
+        v-else-if="action.icon && action.icon.startsWith('https://')"
+        data-testid="action-img"
+        :src="action.icon"
+        alt=""
+        class="oc-icon oc-icon-m"
+      />
       <oc-icon
         v-else-if="action.icon"
         data-testid="action-icon"
