@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Details SideBar Panel displayes the details side panel 1`] = `
+<div id="oc-space-details-sidebar">
+  <div class="oc-space-details-sidebar-image oc-text-center">
+    <oc-icon-stub name="layout-grid" size="xxlarge" class="space-default-image oc-px-m oc-py-m"></oc-icon-stub>
+  </div>
+  <!---->
+  <div>
+    <table aria-label="Overview of the information about the selected space" class="details-table">
+      <tr>
+        <th scope="col" class="oc-pr-s">Last activity</th>
+        <td>Invalid DateTime</td>
+      </tr>
+      <!---->
+      <tr>
+        <th scope="col" class="oc-pr-s">Manager</th>
+        <td><span></span></td>
+      </tr>
+      <tr>
+        <th scope="col" class="oc-pr-s">Quota</th>
+        <td>
+          <p class="oc-mb-s oc-mt-rm">10.00 % full (100 B of 1 kB used)</p>
+          <oc-progress-stub value="10" max="100" size="small" variation="primary"></oc-progress-stub>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+`;
