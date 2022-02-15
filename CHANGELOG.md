@@ -3,7 +3,38 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v4.9.0...master
+[unreleased]: https://github.com/owncloud/web/compare/v5.0.0...master
+
+Summary
+-------
+
+* Enhancement - Add the graph client to the client service: [#6425](https://github.com/owncloud/web/pull/6425)
+* Enhancement - Use the Vue store for spaces: [#6427](https://github.com/owncloud/web/pull/6427)
+
+Details
+-------
+
+* Enhancement - Add the graph client to the client service: [#6425](https://github.com/owncloud/web/pull/6425)
+
+   This way, the client for the graph API can easily be fetched when needed.
+
+   https://github.com/owncloud/web/pull/6425
+
+* Enhancement - Use the Vue store for spaces: [#6427](https://github.com/owncloud/web/pull/6427)
+
+   Using the store for spaces integrates them seamlessly in our ecosystem and makes it easier to
+   develop spaces even further. E.g. the properties of a space can now be altered without fetching
+   all spaces again. This was achieved by introducing a "buildSpace" method, that transforms a
+   space into a more generic resource object (just like regular files or shares).
+
+   https://github.com/owncloud/web/pull/6427
+
+Changelog for ownCloud Web [5.0.0] (2022-02-14)
+=======================================
+The following sections list the changes in ownCloud web 5.0.0 relevant to
+ownCloud admins and users.
+
+[5.0.0]: https://github.com/owncloud/web/compare/v4.9.0...v5.0.0
 
 Summary
 -------
@@ -30,7 +61,6 @@ Summary
 * Enhancement - Drawio improvements: [#6125](https://github.com/owncloud/web/pull/6125)
 * Enhancement - File selection simplification: [#5967](https://github.com/owncloud/web/issues/5967)
 * Enhancement - Resource-specific icons in ResourceTable: [#6295](https://github.com/owncloud/web/pull/6295)
-* Enhancement - Add the graph client to the client service: [#6425](https://github.com/owncloud/web/pull/6425)
 * Enhancement - Reorganize urls: [#6137](https://github.com/owncloud/web/pull/6137)
 * Enhancement - Lazy resource table cells: [#6204](https://github.com/owncloud/web/pull/6204)
 * Enhancement - Add URL handling to markdown editor: [#6134](https://github.com/owncloud/web/pull/6134)
@@ -42,7 +72,6 @@ Summary
 * Enhancement - Add default sorting to the spaces list: [#6262](https://github.com/owncloud/web/pull/6262)
 * Enhancement - Implement spaces front page: [#6287](https://github.com/owncloud/web/pull/6287)
 * Enhancement - Implement spaces list: [#6199](https://github.com/owncloud/web/pull/6199)
-* Enhancement - Use the Vue store for spaces: [#6427](https://github.com/owncloud/web/pull/6427)
 * Enhancement - Update ODS to v12.1.0: [#6086](https://github.com/owncloud/web/pull/6086)
 * Enhancement - Update SDK: [#6309](https://github.com/owncloud/web/pull/6309)
 
@@ -233,12 +262,6 @@ Details
    https://github.com/owncloud/web/pull/6295
    https://github.com/owncloud/web/pull/6387
 
-* Enhancement - Add the graph client to the client service: [#6425](https://github.com/owncloud/web/pull/6425)
-
-   This way, the client for the graph API can easily be fetched when needed.
-
-   https://github.com/owncloud/web/pull/6425
-
 * Enhancement - Reorganize urls: [#6137](https://github.com/owncloud/web/pull/6137)
 
    With the [global-url-format
@@ -339,15 +362,6 @@ Details
    https://github.com/owncloud/web/issues/6104
    https://github.com/owncloud/web/pull/6199
    https://github.com/owncloud/web/pull/6399
-
-* Enhancement - Use the Vue store for spaces: [#6427](https://github.com/owncloud/web/pull/6427)
-
-   Using the store for spaces integrates them seamlessly in our ecosystem and makes it easier to
-   develop spaces even further. E.g. the properties of a space can now be altered without fetching
-   all spaces again. This was achieved by introducing a "buildSpace" method, that transforms a
-   space into a more generic resource object (just like regular files or shares).
-
-   https://github.com/owncloud/web/pull/6427
 
 * Enhancement - Update ODS to v12.1.0: [#6086](https://github.com/owncloud/web/pull/6086)
 
