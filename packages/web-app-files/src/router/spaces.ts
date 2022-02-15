@@ -36,7 +36,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         component: components.Spaces.Projects,
         meta: {
           hideFilelistActions: true,
-          hasBulkActions: true,
+          hasBulkActions: false,
           hideViewOptions: true,
           title: $gettext('Spaces')
         }

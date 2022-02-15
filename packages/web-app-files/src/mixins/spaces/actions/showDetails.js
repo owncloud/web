@@ -1,4 +1,4 @@
-import { mapActions } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 
 export default {
   computed: {
@@ -10,7 +10,7 @@ export default {
           iconFillType: 'line',
           label: () => this.$gettext('Details'),
           handler: this.$_showDetails_trigger,
-          isEnabled: () => false, // @TODO As soon as we have the details
+          isEnabled: ({ resources }) => resources.length === 1,
           componentType: 'oc-button',
           class: 'oc-files-actions-show-details-trigger'
         }
@@ -18,9 +18,16 @@ export default {
     }
   },
   methods: {
-    ...mapActions('Files/sidebar', { openSidebar: 'open' }),
+    ...mapActions('Files/sidebar', { openSidebar: 'open', closeSidebar: 'close' }),
+    ...mapMutations('Files', ['SET_FILE_SELECTION']),
 
-    async $_showDetails_trigger() {
+    async $_showDetails_trigger({ resources }) {
+      if (resources.length !== 1) {
+        return
+      }
+
+      this.SET_FILE_SELECTION([resources[0]])
+      await this.closeSidebar()
       await this.openSidebar()
     }
   }
