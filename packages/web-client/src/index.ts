@@ -4,7 +4,9 @@ import {
   MeDrivesApi,
   Drive,
   DrivesApiFactory,
-  CollectionOfDrives
+  CollectionOfDrives,
+  UserApiFactory,
+  User
 } from './generated'
 
 export interface Graph {
@@ -15,6 +17,9 @@ export interface Graph {
     updateDrive: (id: string, drive: Drive, options: any) => AxiosPromise<Drive>
     deleteDrive: (id: string, ifMatch: string, options: any) => AxiosPromise<void>
   }
+  users: {
+    getUser: (userId: string) => AxiosPromise<User>
+  }
 }
 
 const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
@@ -24,6 +29,7 @@ const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
   })
 
   const meDrivesApi = new MeDrivesApi(config, config.basePath, axiosClient)
+  const userApiFactory = UserApiFactory(config, config.basePath, axiosClient)
   const drivesApiFactory = DrivesApiFactory(config, config.basePath, axiosClient)
 
   return {
@@ -36,6 +42,9 @@ const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
         drivesApiFactory.updateDrive(id, drive, options),
       deleteDrive: (id: string, ifMatch: string, options: any): AxiosPromise<void> =>
         drivesApiFactory.deleteDrive(id, ifMatch, options)
+    },
+    users: {
+      getUser: (userId: string) => userApiFactory.getUser(userId)
     }
   }
 }
