@@ -8,11 +8,19 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - App compatibility: [#6439](https://github.com/owncloud/web/pull/6439)
 * Enhancement - Add the graph client to the client service: [#6425](https://github.com/owncloud/web/pull/6425)
 * Enhancement - Use the Vue store for spaces: [#6427](https://github.com/owncloud/web/pull/6427)
 
 Details
 -------
+
+* Bugfix - App compatibility: [#6439](https://github.com/owncloud/web/pull/6439)
+
+   We've made sure that apps that were not made compatible with ownCloud Web 5.0.0 don't run into a
+   non-rendered state.
+
+   https://github.com/owncloud/web/pull/6439
 
 * Enhancement - Add the graph client to the client service: [#6425](https://github.com/owncloud/web/pull/6425)
 
