@@ -1,5 +1,5 @@
 <template>
-  <div class="oc-height-1-1">
+  <div class="oc-height-1-1 oc-link-resolve">
     <h1 class="oc-invisible-sr">{{ pageTitle }}</h1>
     <div class="oc-card oc-border oc-rounded oc-position-center oc-text-center oc-width-large">
       <template v-if="loading">
@@ -141,11 +141,14 @@ export default {
 </script>
 
 <style lang="scss">
-.oc-text-input-message {
-  justify-content: center;
-}
-.oc-card-header h2,
-.oc-card-footer p {
-  margin: 0;
+.oc-link-resolve {
+  .oc-text-input-message {
+    justify-content: center;
+  }
+
+  .oc-card-header h2,
+  .oc-card-footer p {
+    margin: 0;
+  }
 }
 </style>

@@ -18,12 +18,18 @@ import { mapActions, mapGetters } from 'vuex'
 import TopBar from '../components/Topbar/TopBar.vue'
 import MessageBar from '../components/MessageBar.vue'
 import SidebarNav from '../components/SidebarNav/SidebarNav.vue'
+import { useActiveApp } from 'web-pkg/src/composables'
 
 export default {
   components: {
     MessageBar,
     TopBar,
     SidebarNav
+  },
+  setup() {
+    return {
+      activeApp: useActiveApp()
+    }
   },
   data() {
     return {
@@ -32,12 +38,12 @@ export default {
   },
   computed: {
     ...mapGetters([
+      'apps',
+      'activeMessages',
+      'activeNotifications',
       'capabilities',
       'configuration',
       'getExtensionsWithNavItems',
-      'apps',
-      'activeNotifications',
-      'activeMessages',
       'getNavItemsByExtension'
     ]),
     isSidebarVisible() {
@@ -48,22 +54,10 @@ export default {
         return []
       }
 
-      const items = this.getNavItemsByExtension(this.currentExtension)
+      const items = this.getNavItemsByExtension(this.activeApp)
       if (!items) {
         return []
       }
-
-      items.filter((item) => {
-        if (this.capabilities === undefined) {
-          return false
-        }
-
-        if (item.enabled === undefined) {
-          return true
-        }
-
-        return item.enabled(this.capabilities)
-      })
 
       const { href: currentHref } = this.$router.resolve(this.$route)
       return items.map((item) => {

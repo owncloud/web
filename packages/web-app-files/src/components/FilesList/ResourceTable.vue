@@ -673,22 +673,20 @@ export default {
             )
           : ''
       const description = [shareText, linkText].join(' ')
-      const translated = this.$gettextInterpolate(description, {
+      return this.$gettextInterpolate(description, {
         resourceType,
         shareCount,
         linkCount
       })
-      return translated
     },
     getOwnerAvatarDescription(resource) {
       const translated = this.$gettext('This %{ resourceType } is owned by %{ ownerName }')
       const resourceType =
         resource.type === 'folder' ? this.$gettext('folder') : this.$gettext('file')
-      const description = this.$gettextInterpolate(translated, {
+      return this.$gettextInterpolate(translated, {
         resourceType,
         ownerName: resource.owner[0].displayName
       })
-      return description
     }
   }
 }

@@ -8,14 +8,14 @@ exports[`FilesDrop should show page title and configuration theme general slogan
       <div class="oc-text-center oc-width-1-1 oc-width-xxlarge@m">
         <h2>admin shared this folder with you for uploading</h2>
         <vue-dropzone-stub id="oc-dropzone" options="[object Object]" destroydropzone="true" usecustomslot="true">
-          <div class="oc-flex oc-flex-middle oc-flex-center">
+          <div class="oc-flex oc-flex-middle oc-flex-center oc-files-drop-drag-area">
             <oc-icon-stub name="file-upload" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
             <translate-stub tag="span">Drop files here to upload or click to select file</translate-stub>
           </div>
         </vue-dropzone-stub>
         <div id="previews" hidden="hidden"></div>
       </div>
-      <div class="oc-flex oc-flex-center oc-overflow-auto oc-width-1-1 files-empty">
+      <div class="oc-flex oc-flex-center oc-overflow-auto oc-width-1-1 oc-mt files-empty">
         <!---->
       </div>
       <!---->
@@ -52,14 +52,14 @@ exports[`FilesDrop when "loading" is set to false should call "dropZoneFileAdded
       <div class="oc-text-center oc-width-1-1 oc-width-xxlarge@m">
         <h2>admin shared this folder with you for uploading</h2>
         <vue-dropzone-stub id="oc-dropzone" options="[object Object]" destroydropzone="true" usecustomslot="true">
-          <div class="oc-flex oc-flex-middle oc-flex-center">
+          <div class="oc-flex oc-flex-middle oc-flex-center oc-files-drop-drag-area">
             <oc-icon-stub name="file-upload" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
             <translate-stub tag="span">Drop files here to upload or click to select file</translate-stub>
           </div>
         </vue-dropzone-stub>
         <div id="previews" hidden="hidden"></div>
       </div>
-      <div class="oc-flex oc-flex-center oc-overflow-auto oc-width-1-1">
+      <div class="oc-flex oc-flex-center oc-overflow-auto oc-width-1-1 oc-mt">
         <oc-table-simple-stub class="oc-width-1-1 oc-width-xxlarge@m">
           <oc-tbody-stub>
             <oc-tr-stub>
@@ -80,7 +80,7 @@ exports[`FilesDrop when "loading" is set to false should call "dropZoneFileAdded
         <h2>
           <translate-stub tag="span">An error occurred while loading the public link</translate-stub>
         </h2>
-        <p class="oc-m-rm">TypeError: Cannot read property 'push' of undefined</p>
+        <p class="oc-m-rm">TypeError: Cannot read property 'replace' of undefined</p>
       </div>
     </div>
   </div>
@@ -91,7 +91,7 @@ exports[`FilesDrop when "loading" is set to false should call "dropZoneFileAdded
 `;
 
 exports[`FilesDrop when "loading" is set to false should not show files table if uploaded files list is empty 1`] = `
-<div class="oc-flex oc-flex-center oc-overflow-auto oc-width-1-1 files-empty">
+<div class="oc-flex oc-flex-center oc-overflow-auto oc-width-1-1 oc-mt files-empty">
   <!---->
 </div>
 `;
@@ -104,14 +104,14 @@ exports[`FilesDrop when "loading" is set to false should show error message if o
       <div class="oc-text-center oc-width-1-1 oc-width-xxlarge@m">
         <h2>admin shared this folder with you for uploading</h2>
         <vue-dropzone-stub id="oc-dropzone" options="[object Object]" destroydropzone="true" usecustomslot="true">
-          <div class="oc-flex oc-flex-middle oc-flex-center">
+          <div class="oc-flex oc-flex-middle oc-flex-center oc-files-drop-drag-area">
             <oc-icon-stub name="file-upload" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
             <translate-stub tag="span">Drop files here to upload or click to select file</translate-stub>
           </div>
         </vue-dropzone-stub>
         <div id="previews" hidden="hidden"></div>
       </div>
-      <div class="oc-flex oc-flex-center oc-overflow-auto oc-width-1-1 files-empty">
+      <div class="oc-flex oc-flex-center oc-overflow-auto oc-width-1-1 oc-mt files-empty">
         <!---->
       </div>
       <div class="oc-text-center">
@@ -136,14 +136,14 @@ exports[`FilesDrop when "loading" is set to false should show files list of uplo
       <div class="oc-text-center oc-width-1-1 oc-width-xxlarge@m">
         <h2></h2>
         <vue-dropzone-stub id="oc-dropzone" options="[object Object]" destroydropzone="true" usecustomslot="true">
-          <div class="oc-flex oc-flex-middle oc-flex-center">
+          <div class="oc-flex oc-flex-middle oc-flex-center oc-files-drop-drag-area">
             <oc-icon-stub name="file-upload" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
             <translate-stub tag="span">Drop files here to upload or click to select file</translate-stub>
           </div>
         </vue-dropzone-stub>
         <div id="previews" hidden="hidden"></div>
       </div>
-      <div class="oc-flex oc-flex-center oc-overflow-auto oc-width-1-1">
+      <div class="oc-flex oc-flex-center oc-overflow-auto oc-width-1-1 oc-mt">
         <oc-table-simple-stub class="oc-width-1-1 oc-width-xxlarge@m">
           <oc-tbody-stub>
             <oc-tr-stub>
@@ -197,7 +197,7 @@ exports[`FilesDrop when "loading" is set to false should show files list of uplo
         <h2>
           <translate-stub tag="span">An error occurred while loading the public link</translate-stub>
         </h2>
-        <p class="oc-m-rm">TypeError: Cannot read property 'push' of undefined</p>
+        <p class="oc-m-rm">TypeError: Cannot read property 'replace' of undefined</p>
       </div>
     </div>
   </div>
@@ -215,21 +215,21 @@ exports[`FilesDrop when "loading" is set to false should show share information 
       <div class="oc-text-center oc-width-1-1 oc-width-xxlarge@m">
         <h2>admin shared this folder with you for uploading</h2>
         <vue-dropzone-stub id="oc-dropzone" options="[object Object]" destroydropzone="true" usecustomslot="true">
-          <div class="oc-flex oc-flex-middle oc-flex-center">
+          <div class="oc-flex oc-flex-middle oc-flex-center oc-files-drop-drag-area">
             <oc-icon-stub name="file-upload" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
             <translate-stub tag="span">Drop files here to upload or click to select file</translate-stub>
           </div>
         </vue-dropzone-stub>
         <div id="previews" hidden="hidden"></div>
       </div>
-      <div class="oc-flex oc-flex-center oc-overflow-auto oc-width-1-1 files-empty">
+      <div class="oc-flex oc-flex-center oc-overflow-auto oc-width-1-1 oc-mt files-empty">
         <!---->
       </div>
       <div class="oc-text-center">
         <h2>
           <translate-stub tag="span">An error occurred while loading the public link</translate-stub>
         </h2>
-        <p class="oc-m-rm">TypeError: Cannot read property 'push' of undefined</p>
+        <p class="oc-m-rm">TypeError: Cannot read property 'replace' of undefined</p>
       </div>
     </div>
   </div>

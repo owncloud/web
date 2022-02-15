@@ -9,7 +9,7 @@ exports[`PublicLink theming options should display the configuration theme gener
 `;
 
 exports[`PublicLink theming options should have the page-title set 1`] = `
-<div class="oc-height-1-1">
+<div class="oc-height-1-1 oc-link-resolve">
   <h1 class="oc-invisible-sr">some page title</h1>
   <div class="oc-card oc-border oc-rounded oc-position-center oc-text-center oc-width-large">
     <!---->

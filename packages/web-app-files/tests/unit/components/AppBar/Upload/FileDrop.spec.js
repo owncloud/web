@@ -86,6 +86,9 @@ function createWrapper(options = {}) {
       rootPath: '/',
       path: '/'
     },
+    computed: {
+      hasSidebarNavItems: jest.fn(() => true)
+    },
     ...options
   })
 }

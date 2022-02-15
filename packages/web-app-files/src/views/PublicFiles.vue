@@ -78,8 +78,9 @@ import NotFoundMessage from '../components/FilesList/NotFoundMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
-import { DavProperties } from 'web-pkg/src/constants'
-import { createLocationOperations, createLocationShares } from '../router'
+import { DavProperties, DavProperty } from 'web-pkg/src/constants'
+import { linkRoleUploaderFolder } from '../helpers/share'
+import { createLocationOperations, createLocationPublic } from '../router'
 
 // hacky, get rid asap, just a workaround
 const unauthenticatedUserReady = async (router, store) => {
@@ -170,15 +171,15 @@ export default {
         )
 
         // Redirect to files drop if the link has role "uploader"
-        if (resources[0].getProperty(ref.$client.publicFiles.PUBLIC_LINK_PERMISSION) === '4') {
-          ref.$router.push(
-            createLocationShares('files-shares-public-link', {
-              params: {
-                token: ref.$route.params.item
-              }
+        const sharePermissions = parseInt(
+          resources[0].getProperty(DavProperty.PublicLinkPermission)
+        )
+        if (linkRoleUploaderFolder.bitmask(false) === sharePermissions) {
+          ref.$router.replace(
+            createLocationPublic('files-public-drop', {
+              params: { token: ref.$route.params.item }
             })
           )
-
           return
         }
 

@@ -94,12 +94,12 @@ export default {
       return this.user.username || this.user.id
     },
     personalStorageLabel() {
-      return this.$gettextInterpolate('Personal storage (%{percentage}% full)', {
+      return this.$gettextInterpolate(this.$gettext('Personal storage (%{percentage}% used)'), {
         percentage: this.quotaUsagePercent
       })
     },
     personalStorageDetailsLabel() {
-      return this.$gettextInterpolate('%{used} of %{total} used', {
+      return this.$gettextInterpolate(this.$gettext('%{used} of %{total} used'), {
         used: this.quotaUsed,
         total: this.quotaTotal
       })
@@ -114,7 +114,7 @@ export default {
       return filesize(this.quota.used)
     },
     quotaUsagePercent() {
-      return ((this.quota.used / this.quota.total) * 100).toFixed(2)
+      return ((this.quota.used / this.quota.total) * 100).toFixed(1)
     },
     quotaProgressVariant() {
       if (this.quotaUsagePercent < 80) return 'primary'

@@ -14,7 +14,12 @@
       @input="updateTerm"
       @clear="resetProvider"
     />
-    <div v-if="optionsVisible && term" id="files-global-search-options" ref="options">
+    <div
+      v-if="optionsVisible && term"
+      id="files-global-search-options"
+      ref="options"
+      class="oc-mt-s oc-rounded"
+    >
       <ul class="oc-list oc-list-divider">
         <li
           v-for="provider in availableProviders"
@@ -25,7 +30,7 @@
         >
           <oc-icon name="search" fill-type="line" accessible-label="Search" />
           <span class="term">{{ term | truncate }}</span>
-          <button v-if="provider.label" class="label">{{ provider.label }}</button>
+          <button v-if="provider.label" class="label oc-rounded">{{ provider.label }}</button>
         </li>
         <li v-if="$asyncComputed.searchResults.updating" class="loading spinner">
           <oc-spinner size="small" :aria-hidden="true" aria-label="" />
@@ -272,19 +277,16 @@ export default {
 
 #files-global-search-options {
   border: 1px solid var(--oc-color-input-border);
-  border-bottom-left-radius: 3px;
-  border-bottom-right-radius: 3px;
   background-color: var(--oc-color-input-bg);
   overflow: hidden;
   position: absolute;
-  margin-top: -3px;
   width: 450px;
 
   @media (max-width: 959px) {
     left: var(--oc-space-medium);
     min-width: 95% !important;
     max-width: 95% !important;
-    top: 55px;
+    top: 60px;
   }
 
   ul {
@@ -302,18 +304,14 @@ export default {
 
       border-top-color: var(--oc-color-input-border);
 
-      &.selected {
+      &.selected,
+      &:hover {
         background-color: var(--oc-color-input-border);
-      }
-
-      &:hover:not(.selected) {
-        background-color: var(--oc-color-background-muted);
       }
 
       .label {
         background-color: white;
         border: 1px solid var(--oc-color-swatch-passive-hover);
-        border-radius: 3px;
         float: right;
         font-size: 0.6rem;
         padding: 0.5rem 1rem;
@@ -373,14 +371,14 @@ export default {
       &.preview {
         padding-top: 12px;
         padding-bottom: 12px;
-        background-color: var(--oc-color-background-muted);
+        background-color: var(--oc-color-background-highlight);
 
         &.first {
           border-top-color: var(--oc-color-input-border);
         }
 
         &:hover {
-          background-color: var(--oc-color-input-bg);
+          background-color: var(--oc-color-input-border);
 
           > .label {
             opacity: 1;

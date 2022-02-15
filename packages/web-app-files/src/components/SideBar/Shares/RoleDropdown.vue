@@ -127,7 +127,7 @@ export default {
       if (this.selectedRole.hasCustomPermissions) {
         return this.$gettext('Invite with custom permissions')
       } else {
-        return this.$gettextInterpolate('Invite as %{ name }', {
+        return this.$gettextInterpolate(this.$gettext('Invite as %{ name }'), {
           name: this.selectedRole.inlineLabel || ''
         })
       }

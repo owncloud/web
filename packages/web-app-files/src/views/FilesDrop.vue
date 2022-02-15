@@ -18,7 +18,7 @@
             :include-styling="false"
             @vdropzone-file-added="dropZoneFileAdded"
           >
-            <div class="oc-flex oc-flex-middle oc-flex-center">
+            <div class="oc-flex oc-flex-middle oc-flex-center oc-files-drop-drag-area">
               <oc-icon name="file-upload" />
               <translate>Drop files here to upload or click to select file</translate>
             </div>
@@ -26,7 +26,7 @@
           <div id="previews" hidden />
         </div>
         <div
-          class="oc-flex oc-flex-center oc-overflow-auto oc-width-1-1"
+          class="oc-flex oc-flex-center oc-overflow-auto oc-width-1-1 oc-mt"
           :class="{ 'files-empty': !getUploadedFiles }"
         >
           <oc-table-simple v-if="getUploadedFiles" class="oc-width-1-1 oc-width-xxlarge@m">
@@ -77,7 +77,8 @@
 import vue2DropZone from 'vue2-dropzone'
 import { mapGetters } from 'vuex'
 import Mixins from '../mixins.js'
-import { DavProperties } from 'web-pkg/src/constants'
+import { DavProperties, DavProperty } from 'web-pkg/src/constants'
+import { linkRoleUploaderFolder } from '../helpers/share'
 import { createLocationOperations, createLocationPublic } from '../router'
 
 export default {
@@ -140,8 +141,10 @@ export default {
       this.$client.publicFiles
         .list(this.publicLinkToken, this.publicLinkPassword, DavProperties.PublicLink, '0')
         .then((files) => {
-          if (files[0].getProperty(this.$client.publicFiles.PUBLIC_LINK_SHARE_DATETIME !== '4')) {
-            this.$router.push(
+          // Redirect to files list if the link doesn't have role "uploader"
+          const sharePermissions = parseInt(files[0].getProperty(DavProperty.PublicLinkPermission))
+          if (linkRoleUploaderFolder.bitmask(false) !== sharePermissions) {
+            this.$router.replace(
               createLocationPublic('files-public-files', {
                 params: { item: this.publicLinkToken }
               })
@@ -212,3 +215,13 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+#files-drop-container {
+  .oc-files-drop-drag-area {
+    background: transparent;
+    border: 1px dashed var(--oc-color-input-border);
+    padding: var(--oc-space-xlarge);
+  }
+}
+</style>

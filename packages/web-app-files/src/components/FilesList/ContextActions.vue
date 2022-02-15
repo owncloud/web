@@ -208,16 +208,21 @@ export default {
 
   > li {
     a,
-    a:hover,
     button,
-    button:hover {
-      color: var(--oc-color-swatch-passive-default);
+    span {
+      color: var(--oc-color-swatch-passive-default) !important;
       display: inline-flex;
+      font-weight: normal !important;
       gap: 10px;
       justify-content: flex-start;
       vertical-align: top;
       width: 100%;
-      font-weight: normal !important;
+
+      span:hover,
+      &:hover {
+        color: var(--oc-color-swatch-passive-hover) !important;
+        text-decoration: underline !important;
+      }
     }
   }
 
