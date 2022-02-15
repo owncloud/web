@@ -1,8 +1,8 @@
 <template>
   <div>
     <oc-button class="oc-width-1-1" justify-content="left" appearance="raw" @click="triggerUpload">
-      <oc-icon name="upload" fill-type="line" />
-      <span id="files-file-upload-button" v-translate>Upload File</span>
+      <oc-resource-icon :resource="{ extension: '' }" />
+      <span id="files-file-upload-button" v-translate>Files</span>
     </oc-button>
     <input
       id="fileUploadInput"

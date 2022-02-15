@@ -64,7 +64,7 @@ export class AllFilesPage {
       await filesCta.navigateToFolder({ page: page, path: folder })
     }
 
-    await page.locator('#new-file-menu-btn').click()
+    await page.locator('#upload-menu-btn').click()
     await page.locator('#fileUploadInput').setInputFiles(files.map((file) => file.path))
 
     if (newVersion) {

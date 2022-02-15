@@ -24,8 +24,11 @@ const elSelector = {
   batchActions: 'batch-actions-stub',
   sizeInfo: 'size-info-stub',
   newFileButton: '#new-file-menu-btn',
-  ocDrop: 'oc-drop-stub',
-  fileMenuList: 'oc-drop-stub .oc-list > li',
+  newFileDrop: 'oc-drop-stub #new-file-menu-drop',
+  newFileMenuList: '#create-list > li',
+  uploadButton: '#upload-menu-btn',
+  uploadDrop: 'oc-drop-stub #upload-menu-drop',
+  uploadMenuList: '#upload-list > li',
   fileUpload: 'file-upload-stub',
   folderUpload: 'folder-upload-stub',
   newFolderBtn: '#new-folder-btn',
@@ -57,7 +60,7 @@ const newFileHandlers = [
       extension: 'txt'
     },
     routes,
-    menuTitle: () => 'New plain text file...'
+    menuTitle: () => 'Plain text file'
   },
   {
     ext: 'md',
@@ -67,7 +70,7 @@ const newFileHandlers = [
       extension: 'md'
     },
     routes,
-    menuTitle: () => 'New mark-down file...'
+    menuTitle: () => 'Mark-down file'
   },
   {
     ext: 'drawio',
@@ -78,7 +81,7 @@ const newFileHandlers = [
       extension: 'drawio'
     },
     routes,
-    menuTitle: () => 'New draw.io document...'
+    menuTitle: () => 'Draw.io document'
   }
 ]
 
@@ -126,26 +129,26 @@ describe('AppBar component', () => {
         wrapper = getShallowWrapper(route, store)
       })
 
-      it('should show "New" button', () => {
-        const newButton = wrapper.find(elSelector.newFileButton)
+      it('should only show "New" and "Upload" button', () => {
+        const newFolderBtn = wrapper.find(elSelector.newFolderBtn)
         const sizeInfo = wrapper.find(elSelector.sizeInfo)
+        const newFileButton = wrapper.find(elSelector.newFileButton)
+        const uploadButton = wrapper.find(elSelector.uploadButton)
 
         expect(sizeInfo.exists()).toBeFalsy()
-        expect(newButton.isVisible()).toBeTruthy()
-        expect(newButton.props('ariaLabel')).toEqual('Add files or folders')
+        expect(newFileButton.exists()).toBeFalsy()
+        expect(uploadButton.exists()).toBeTruthy()
+        expect(newFolderBtn.isVisible()).toBeTruthy()
+        expect(newFolderBtn.props('ariaLabel')).toEqual('Create a new folder')
       })
       it('should show default file menu items', () => {
-        const ocDrop = wrapper.find(elSelector.ocDrop)
         const fileUpload = wrapper.find(elSelector.fileUpload)
         const folderUpload = wrapper.find(elSelector.folderUpload)
         const newFolderBtn = wrapper.find(elSelector.newFolderBtn)
-        const fileMenuList = wrapper.findAll(elSelector.fileMenuList)
 
-        expect(ocDrop.isVisible()).toBeTruthy()
         expect(fileUpload.isVisible()).toBeTruthy()
         expect(folderUpload.isVisible()).toBeTruthy()
         expect(newFolderBtn.isVisible()).toBeTruthy()
-        expect(fileMenuList.length).toBe(3)
       })
       it('should trigger "showCreateResourceModal" if new-folder button is clicked', async () => {
         const store = createStore({ currentFolder, selected: [] })
@@ -162,12 +165,12 @@ describe('AppBar component', () => {
         const newTextFileBtn = wrapper.find(elSelector.newTextFileBtn)
         const newMdFileBtn = wrapper.find(elSelector.newMdFileBtn)
         const newDrawioFileBtn = wrapper.find(elSelector.newDrawioFileBtn)
-        const fileMenuList = wrapper.findAll(elSelector.fileMenuList)
+        const newFileMenuList = wrapper.findAll(elSelector.newFileMenuList)
 
         expect(newTextFileBtn.isVisible()).toBeTruthy()
         expect(newMdFileBtn.isVisible()).toBeTruthy()
         expect(newDrawioFileBtn.isVisible()).toBeTruthy()
-        expect(fileMenuList.length).toBe(6)
+        expect(newFileMenuList.length).toBe(4)
       })
       it.each(newFileHandlers)(
         'should trigger "showCreateResourceModal" if new file button is clicked',
@@ -193,7 +196,7 @@ describe('AppBar component', () => {
         const store = createStore({ currentFolder, selected: selectedFiles })
         const wrapper = getShallowWrapper(route, store)
         const newButton = wrapper.find(elSelector.newFileButton)
-        const ocDrop = wrapper.find(elSelector.ocDrop)
+        const ocDrop = wrapper.find(elSelector.newFileDrop)
         const sizeInfo = wrapper.find(elSelector.sizeInfo)
 
         expect(newButton.exists()).toBeFalsy()
@@ -221,7 +224,7 @@ describe('AppBar component', () => {
 
     it('should not show "New" button and file menu list', () => {
       const newButton = wrapper.find(elSelector.newFileButton)
-      const ocDrop = wrapper.find(elSelector.ocDrop)
+      const ocDrop = wrapper.find(elSelector.newFileDrop)
 
       expect(newButton.exists()).toBeFalsy()
       expect(ocDrop.exists()).toBeFalsy()
@@ -272,7 +275,7 @@ describe('AppBar component', () => {
       describe('when no items are selected', () => {
         it('should not show "New" button and file menu list', () => {
           const newButton = wrapper.find(elSelector.newFileButton)
-          const ocDrop = wrapper.find(elSelector.ocDrop)
+          const ocDrop = wrapper.find(elSelector.newFileDrop)
 
           expect(newButton.exists()).toBeFalsy()
           expect(ocDrop.exists()).toBeFalsy()

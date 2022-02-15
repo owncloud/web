@@ -24,7 +24,7 @@ const appInfo = {
       routeName: 'draw-io',
       newFileMenu: {
         menuTitle($gettext) {
-          return $gettext('New draw.io document…')
+          return $gettext('Draw.io document')
         }
       }
     },
