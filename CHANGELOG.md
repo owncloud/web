@@ -11,6 +11,7 @@ Summary
 * Bugfix - App compatibility: [#6439](https://github.com/owncloud/web/pull/6439)
 * Bugfix - Fix closing apps opened from search: [#6444](https://github.com/owncloud/web/pull/6444)
 * Enhancement - Add the graph client to the client service: [#6425](https://github.com/owncloud/web/pull/6425)
+* Enhancement - Enable context menu for search results: [#6445](https://github.com/owncloud/web/pull/6445)
 * Enhancement - Use the Vue store for spaces: [#6427](https://github.com/owncloud/web/pull/6427)
 
 Details
@@ -35,6 +36,12 @@ Details
    This way, the client for the graph API can easily be fetched when needed.
 
    https://github.com/owncloud/web/pull/6425
+
+* Enhancement - Enable context menu for search results: [#6445](https://github.com/owncloud/web/pull/6445)
+
+   We've enabled a rudimentary context menu for search results.
+
+   https://github.com/owncloud/web/pull/6445
 
 * Enhancement - Use the Vue store for spaces: [#6427](https://github.com/owncloud/web/pull/6427)
 
