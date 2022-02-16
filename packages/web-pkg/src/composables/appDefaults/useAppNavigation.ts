@@ -15,26 +15,23 @@ export interface AppNavigationResult {
   closeApp(): void
 }
 
-const paramsKey = 'contextRouteParams'
+const contextRouteParamsKey = 'contextRouteParams'
 
+/*
+  vue-router type bindings do not allow nested objects
+  because they are not handled by default. We override
+  parseQuery and stringifyQuery and handle it there.
+  That's why we have types that match the router types
+  and break them here once on purpose in encapsulated
+  functions
+*/
 export const convertRouteParamsToContextQuery = (routeParams: LocationParams): LocationQuery => {
-  const query = {}
-  Object.keys(routeParams).forEach((key) => {
-    query[`${paramsKey}[${key}]`] = routeParams[key]
-  })
-  return query
+  return {
+    [contextRouteParamsKey]: routeParams
+  } as any
 }
-
 export const convertContextQueryToRouteParams = (query: LocationQuery): LocationParams => {
-  const routeParams = {}
-  const paramRegexp = new RegExp(`${paramsKey}\\[(.*)\\]`)
-  Object.keys(query).forEach((paramName) => {
-    const routeParamName = (paramName.match(paramRegexp) || [])[1]
-    if (routeParamName) {
-      routeParams[routeParamName] = query[paramName]
-    }
-  })
-  return routeParams
+  return query[contextRouteParamsKey] as any
 }
 
 export function useAppNavigation(options: AppNavigationOptions): AppNavigationResult {

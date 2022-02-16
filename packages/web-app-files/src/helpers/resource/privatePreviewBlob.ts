@@ -35,7 +35,6 @@ export const privatePreviewBlob = async (
       dimensions: options.dimensions
     })
   ].join('')
-
   try {
     const { data } = await clientService.httpAuthenticated(options.token).get(url, {
       responseType: 'blob'

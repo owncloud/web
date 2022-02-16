@@ -1,5 +1,6 @@
 import { publicPreviewUrl } from '../../../../src/helpers/resource'
 import mockAxios from 'jest-mock-axios'
+import { URLSearchParams } from 'url'
 
 beforeEach(mockAxios.reset)
 
@@ -17,14 +18,18 @@ describe('publicPreviewUrl', () => {
     mockAxios.mockResponse({ data: undefined })
 
     let url = await publicPreviewUrlPromise
-    await expect(url).toBe('downloadURL?a=1&c=etag&preview=1&scalingup=0')
-    await expect(mockAxios.head).toBeCalledTimes(1)
+    const params = new URLSearchParams(url.split('?')[1])
+    expect(params.get('a')).toBe('1')
+    expect(params.get('c')).toBe('etag')
+    expect(params.get('preview')).toBe('1')
+    expect(params.get('scalingup')).toBe('0')
+    expect(mockAxios.head).toBeCalledTimes(1)
 
     publicPreviewUrlPromise = publicPreviewUrl(defaultOptions)
     mockAxios.mockResponse({ data: undefined, status: 404 })
 
     url = await publicPreviewUrlPromise
-    await expect(url).toBeFalsy()
-    await expect(mockAxios.head).toBeCalledTimes(2)
+    expect(url).toBeFalsy()
+    expect(mockAxios.head).toBeCalledTimes(2)
   })
 })
