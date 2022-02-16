@@ -76,12 +76,7 @@ exports[`FilesDrop when "loading" is set to false should call "dropZoneFileAdded
           </oc-tbody-stub>
         </oc-table-simple-stub>
       </div>
-      <div class="oc-text-center">
-        <h2>
-          <translate-stub tag="span">An error occurred while loading the public link</translate-stub>
-        </h2>
-        <p class="oc-m-rm">TypeError: Cannot read property 'replace' of undefined</p>
-      </div>
+      <!---->
     </div>
   </div>
   <div class="oc-text-center">
@@ -134,7 +129,7 @@ exports[`FilesDrop when "loading" is set to false should show files list of uplo
   <div class="oc-p oc-height-1-1">
     <div class="oc-flex oc-flex-column oc-flex-middle oc-height-1-1">
       <div class="oc-text-center oc-width-1-1 oc-width-xxlarge@m">
-        <h2></h2>
+        <h2>admin shared this folder with you for uploading</h2>
         <vue-dropzone-stub id="oc-dropzone" options="[object Object]" destroydropzone="true" usecustomslot="true">
           <div class="oc-flex oc-flex-middle oc-flex-center oc-files-drop-drag-area">
             <oc-icon-stub name="file-upload" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
@@ -193,12 +188,7 @@ exports[`FilesDrop when "loading" is set to false should show files list of uplo
           </oc-tbody-stub>
         </oc-table-simple-stub>
       </div>
-      <div class="oc-text-center">
-        <h2>
-          <translate-stub tag="span">An error occurred while loading the public link</translate-stub>
-        </h2>
-        <p class="oc-m-rm">TypeError: Cannot read property 'replace' of undefined</p>
-      </div>
+      <!---->
     </div>
   </div>
   <div class="oc-text-center">
@@ -225,12 +215,7 @@ exports[`FilesDrop when "loading" is set to false should show share information 
       <div class="oc-flex oc-flex-center oc-overflow-auto oc-width-1-1 oc-mt files-empty">
         <!---->
       </div>
-      <div class="oc-text-center">
-        <h2>
-          <translate-stub tag="span">An error occurred while loading the public link</translate-stub>
-        </h2>
-        <p class="oc-m-rm">TypeError: Cannot read property 'replace' of undefined</p>
-      </div>
+      <!---->
     </div>
   </div>
   <div class="oc-text-center">

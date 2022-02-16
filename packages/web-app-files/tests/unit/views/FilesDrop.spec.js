@@ -3,6 +3,8 @@ import { shallowMount } from '@vue/test-utils'
 import GetTextPlugin from 'vue-gettext'
 import vue2DropZone from 'vue2-dropzone'
 import { getStore, localVue } from './views.setup.js'
+import { DavProperty } from 'web-pkg/src/constants'
+import { linkRoleUploaderFolder } from '@files/src/helpers/share'
 
 localVue.use(vue2DropZone)
 localVue.use(GetTextPlugin, {
@@ -13,7 +15,16 @@ localVue.use(GetTextPlugin, {
 localVue.prototype.$client.publicFiles = {
   PUBLIC_LINK_SHARE_OWNER: 'admin',
   // function is mocked because it should return a promise with a list of resources
-  list: async () => [{ getProperty: jest.fn((val) => val) }],
+  list: async () => [
+    {
+      getProperty: jest.fn((val) => {
+        if (val === DavProperty.PublicLinkPermission) {
+          return linkRoleUploaderFolder.bitmask(false)
+        }
+        return val
+      })
+    }
+  ],
   // function takes token as an argument and is mocked because it should return some public link url
   getFileUrl: (token) => `http://some-url/${token}`,
   putFileContents: jest.fn()
