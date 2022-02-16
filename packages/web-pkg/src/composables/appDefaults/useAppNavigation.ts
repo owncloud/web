@@ -26,16 +26,26 @@ const contextRouteQueryKey = 'contextRouteQuery'
   and break them here once on purpose in encapsulated
   functions
 */
-export const routeToContextQuery = ({ params, query } : Location) : LocationQuery => {
+export const routeToContextQuery = (location: Location): LocationQuery => {
+  const { params, query } = location
+
+  const contextQuery = {}
+  const contextQueryItems = ((location as any).meta?.contextQueryItems || []) as string[]
+  for (const queryItem of contextQueryItems) {
+    contextQuery[queryItem] = query[queryItem]
+  }
+
   return {
     [contextRouteParamsKey]: params,
-    [contextRouteQueryKey]: query,
+    [contextRouteQueryKey]: contextQuery
   } as any
 }
-export const contextQueryToFileContextProps = (query: LocationQuery): { routeParams: LocationParams, routeQuery: LocationQuery} => {
+export const contextQueryToFileContextProps = (
+  query: LocationQuery
+): { routeParams: LocationParams; routeQuery: LocationQuery } => {
   return {
     routeParams: query[contextRouteParamsKey] as any,
-    routeQuery: query[contextRouteQueryKey] as any,
+    routeQuery: query[contextRouteQueryKey] as any
   }
 }
 

@@ -35,7 +35,10 @@ export default {
         {
           name: 'provider-list',
           path: 'list/:page?',
-          component: List
+          component: List,
+          meta: {
+            contextQueryItems: ['term', 'provider']
+          }
         }
       ]
     }
