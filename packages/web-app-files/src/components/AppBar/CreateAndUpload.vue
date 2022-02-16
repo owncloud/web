@@ -22,17 +22,13 @@
         padding-size="small"
       >
         <oc-list id="create-list">
-          <li class="create-list-folder oc-py-xs">
+          <li class="create-list-folder">
             <oc-button id="new-folder-btn" appearance="raw" @click="showCreateResourceModal">
               <oc-resource-icon :resource="{ isFolder: true, extension: '' }" />
               <translate>Folder</translate>
             </oc-button>
           </li>
-          <li
-            v-for="(newFileHandler, key) in newFileHandlersForRoute"
-            :key="key"
-            class="create-list-file oc-py-xs"
-          >
+          <li v-for="(newFileHandler, key) in newFileHandlers" :key="key" class="create-list-file">
             <oc-button
               appearance="raw"
               :class="['new-file-btn-' + newFileHandler.ext]"
@@ -46,7 +42,7 @@
             <li
               v-for="(mimetype, key) in mimetypesAllowedForCreation"
               :key="key"
-              class="create-list-file oc-py-xs"
+              class="create-list-file"
             >
               <oc-button
                 appearance="raw"
@@ -67,11 +63,11 @@
         variation="inverse"
         :aria-label="newButtonAriaLabel"
         :disabled="uploadOrFileCreationBlocked"
-        class="oc-background-primary-gradient"
+        class="oc-background-primary-gradient oc-text-nowrap"
         @click="showCreateResourceModal"
       >
         <oc-icon name="resource-type-folder" />
-        <translate style="display: ruby">New folder</translate>
+        <translate>New folder</translate>
       </oc-button>
     </template>
     <oc-button
@@ -93,7 +89,7 @@
       padding-size="small"
     >
       <oc-list id="upload-list">
-        <li class="oc-p-s">
+        <li>
           <folder-upload
             v-if="!isIE11()"
             :root-path="currentPath"
@@ -104,7 +100,7 @@
             @progress="uploadProgress"
           />
         </li>
-        <li class="oc-p-s">
+        <li>
           <file-upload
             :path="currentPath"
             :headers="headers"
@@ -125,7 +121,7 @@ import pathUtil from 'path'
 import Mixins from '../../mixins'
 import MixinFileActions, { EDITOR_MODE_CREATE } from '../../mixins/fileActions'
 import { buildResource, buildWebDavFilesPath, buildWebDavSpacesPath } from '../../helpers/resources'
-import { isLocationActive, isLocationPublicActive, isLocationSpacesActive } from '../../router'
+import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
 import { useActiveLocation } from '../../composables'
 
 import { DavProperties, DavProperty } from 'web-pkg/src/constants'
@@ -141,7 +137,7 @@ export default {
   mixins: [Mixins, MixinFileActions],
   props: {
     canUpload: { type: Boolean, default: false },
-    currentPath: { type: String, default: null },
+    currentPath: { type: String, required: true },
     hasFreeSpace: { type: Boolean, default: false },
     headers: { type: Object, default: null }
   },
@@ -154,15 +150,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'getToken',
-      'capabilities',
-      'configuration',
-      'newFileHandlers',
-      'quota',
-      'user'
-    ]),
-    ...mapGetters('Files', ['files', 'currentFolder', 'selectedFiles', 'publicLinkPassword']),
+    ...mapGetters(['getToken', 'capabilities', 'configuration', 'newFileHandlers', 'user']),
+    ...mapGetters('Files', ['files', 'currentFolder', 'publicLinkPassword']),
     ...mapState('Files', ['areHiddenFilesShown']),
 
     mimetypesAllowedForCreation() {
@@ -174,7 +163,7 @@ export default {
       return mimeTypes.filter((mimetype) => mimetype.allow_creation) || []
     },
     createFileActionsAvailable() {
-      return this.newFileHandlersForRoute.length > 0 || this.mimetypesAllowedForCreation.length > 0
+      return this.newFileHandlers.length > 0 || this.mimetypesAllowedForCreation.length > 0
     },
     newButtonTooltip() {
       if (!this.canUpload) {
@@ -214,12 +203,6 @@ export default {
 
     uploadOrFileCreationBlocked() {
       return !this.canUpload || !this.hasFreeSpace
-    },
-
-    newFileHandlersForRoute() {
-      return this.newFileHandlers.filter(({ routes = [] }) =>
-        isLocationActive(this.$router, ...routes.map((name) => ({ name })))
-      )
     }
   },
   methods: {
@@ -227,14 +210,14 @@ export default {
     ...mapActions(['openFile', 'showMessage', 'createModal', 'setModalInputErrorMessage']),
     ...mapMutations('Files', ['UPSERT_RESOURCE']),
 
-    uploadSuccess() {
-      this.$emit('success')
+    uploadSuccess(args, file) {
+      this.$emit('success', args, file)
     },
-    uploadError() {
-      this.$emit('error')
+    uploadError(error) {
+      this.$emit('error', error)
     },
-    uploadProgress() {
-      this.$emit('progress')
+    uploadProgress(progress) {
+      this.$emit('progress', progress)
     },
 
     showCreateResourceModal(
@@ -397,6 +380,8 @@ export default {
           )
         }
 
+        this.UPSERT_RESOURCE(buildResource(resource))
+
         if (this.newFileAction) {
           const fileId = resource.fileInfo[DavProperty.FileId]
 
@@ -406,9 +391,6 @@ export default {
           return
         }
 
-        resource = buildResource(resource)
-
-        this.UPSERT_RESOURCE(resource)
         this.hideModal()
 
         if (this.isPersonalLocation) {

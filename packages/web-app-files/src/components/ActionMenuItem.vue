@@ -15,7 +15,7 @@
         class="oc-icon oc-icon-m"
       />
       <oc-img
-        v-else-if="action.icon && action.icon.startsWith('https://')"
+        v-else-if="hasExternalImageIcon(action)"
         data-testid="action-img"
         :src="action.icon"
         alt=""
@@ -97,6 +97,10 @@ export default {
       return {
         click: callback
       }
+    },
+
+    hasExternalImageIcon(action) {
+      return action.icon && /^https?:\/\//i.test(action.icon)
     }
   }
 }
