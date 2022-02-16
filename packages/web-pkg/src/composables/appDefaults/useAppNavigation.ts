@@ -1,6 +1,6 @@
 import { unref } from '@vue/composition-api'
 import { basename } from 'path'
-import VueRouter from 'vue-router'
+import VueRouter, { Location } from 'vue-router'
 
 import { MaybeRef } from '../../utils'
 import { FileContext } from './types'
@@ -16,6 +16,7 @@ export interface AppNavigationResult {
 }
 
 const contextRouteParamsKey = 'contextRouteParams'
+const contextRouteQueryKey = 'contextRouteQuery'
 
 /*
   vue-router type bindings do not allow nested objects
@@ -25,25 +26,30 @@ const contextRouteParamsKey = 'contextRouteParams'
   and break them here once on purpose in encapsulated
   functions
 */
-export const convertRouteParamsToContextQuery = (routeParams: LocationParams): LocationQuery => {
+export const routeToContextQuery = ({ params, query } : Location) : LocationQuery => {
   return {
-    [contextRouteParamsKey]: routeParams
+    [contextRouteParamsKey]: params,
+    [contextRouteQueryKey]: query,
   } as any
 }
-export const convertContextQueryToRouteParams = (query: LocationQuery): LocationParams => {
-  return query[contextRouteParamsKey] as any
+export const contextQueryToFileContextProps = (query: LocationQuery): { routeParams: LocationParams, routeQuery: LocationQuery} => {
+  return {
+    routeParams: query[contextRouteParamsKey] as any,
+    routeQuery: query[contextRouteQueryKey] as any,
+  }
 }
 
 export function useAppNavigation(options: AppNavigationOptions): AppNavigationResult {
   const navigateToContext = (context: MaybeRef<FileContext>) => {
     const router = options.router
 
-    const { path, routeName, routeParams } = unref(context)
+    const { path, routeName, routeParams, routeQuery } = unref(context)
 
     return router.push({
       name: unref(routeName),
       params: unref(routeParams),
       query: {
+        ...unref(routeQuery),
         scrollTo: basename(unref(path))
       }
     })
