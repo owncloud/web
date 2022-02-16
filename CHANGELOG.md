@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - App compatibility: [#6439](https://github.com/owncloud/web/pull/6439)
+* Bugfix - Fix closing apps opened from search: [#6444](https://github.com/owncloud/web/pull/6444)
 * Enhancement - Add the graph client to the client service: [#6425](https://github.com/owncloud/web/pull/6425)
 * Enhancement - Use the Vue store for spaces: [#6427](https://github.com/owncloud/web/pull/6427)
 
@@ -21,6 +22,13 @@ Details
    non-rendered state.
 
    https://github.com/owncloud/web/pull/6439
+
+* Bugfix - Fix closing apps opened from search: [#6444](https://github.com/owncloud/web/pull/6444)
+
+   We've made sure that closing apps that were opened from search navigates properly back to the
+   original search.
+
+   https://github.com/owncloud/web/pull/6444
 
 * Enhancement - Add the graph client to the client service: [#6425](https://github.com/owncloud/web/pull/6425)
 
