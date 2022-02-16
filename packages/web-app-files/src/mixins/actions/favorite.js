@@ -18,6 +18,7 @@ export default {
           },
           isEnabled: ({ resources }) => {
             if (
+              this.isFilesAppActive &&
               !isLocationSpacesActive(this.$router, 'files-spaces-personal-home') &&
               !isLocationCommonActive(this.$router, 'files-common-favorites')
             ) {

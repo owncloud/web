@@ -13,6 +13,11 @@ export default {
           label: () => this.$gettext('Share'),
           handler: this.$_showShares_trigger,
           isEnabled: ({ resources }) => {
+            // sidebar is currently only available inside files app
+            if (!this.isFilesAppActive) {
+              return false
+            }
+
             if (isLocationCommonActive(this.$router, 'files-common-trash')) {
               return false
             }

@@ -10,17 +10,21 @@
     </no-content-message>
     <resource-table
       v-else
+      v-model="selected"
       class="files-table"
       :class="{ 'files-table-squashed': false }"
       :resources="paginatedResources"
       :target-route="resourceTargetLocation"
       :are-paths-displayed="true"
       :are-thumbnails-displayed="displayThumbnails"
-      :has-actions="false"
+      :has-actions="true"
       :is-selectable="false"
       @fileClick="$_fileActions_triggerDefaultAction"
       @rowMounted="rowMounted"
     >
+      <template #contextMenu="{ resource }">
+        <context-actions v-if="isResourceInSelection(resource)" :items="selected" />
+      </template>
       <template #footer>
         <pagination :pages="paginationPages" :current-page="paginationPage" />
         <list-info
@@ -43,9 +47,10 @@ import { ImageType, ImageDimension } from '../../constants'
 import { createLocationSpaces } from '../../router'
 import NoContentMessage from '../FilesList/NoContentMessage.vue'
 import ResourceTable from '../FilesList/ResourceTable.vue'
+import ContextActions from '../FilesList/ContextActions.vue'
 import debounce from 'lodash-es/debounce'
 import { mapMutations, mapGetters, mapActions } from 'vuex'
-import { computed } from '@vue/composition-api'
+import { computed, ref } from '@vue/composition-api'
 import ListInfo from '../FilesList/ListInfo.vue'
 import Pagination from '../FilesList/Pagination.vue'
 import MixinFileActions from '../../mixins/fileActions'
@@ -55,7 +60,7 @@ import MixinFilesListScrolling from '../../mixins/filesListScrolling'
 const visibilityObserver = new VisibilityObserver()
 
 export default {
-  components: { ListInfo, Pagination, NoContentMessage, ResourceTable },
+  components: { ContextActions, ListInfo, Pagination, NoContentMessage, ResourceTable },
   mixins: [MixinFileActions, MixinFilesListFilter, MixinFilesListScrolling],
   props: {
     searchResults: {
@@ -74,7 +79,9 @@ export default {
       items: computed(() => store.getters['Files/activeFiles'])
     })
 
+    const selected = ref([])
     return {
+      selected,
       paginatedResources,
       paginationPages,
       paginationPage,
@@ -124,6 +131,9 @@ export default {
       }, 250)
 
       visibilityObserver.observe(component.$el, { onEnter: debounced, onExit: debounced.cancel })
+    },
+    isResourceInSelection(resource) {
+      return this.selected?.includes(resource)
     }
   }
 }

@@ -14,6 +14,11 @@ export default {
           // we don't have details in the trashbin, yet.
           // remove trashbin route rule once we have them.
           isEnabled: ({ resources }) => {
+            // sidebar is currently only available inside files app
+            if (!this.isFilesAppActive) {
+              return false
+            }
+
             if (isLocationCommonActive(this.$router, 'files-common-trash')) {
               return false
             }

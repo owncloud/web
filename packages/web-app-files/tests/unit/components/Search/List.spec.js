@@ -42,7 +42,15 @@ const files = [
     path: 'lorem.pdf',
     size: 50
   }
-]
+].map((file) => {
+  return {
+    ...file,
+    canDownload: () => true,
+    canBeDeleted: () => true,
+    isReceivedShare: () => false,
+    isMounted: () => false
+  }
+})
 
 describe('List component', () => {
   afterEach(() => {
@@ -140,7 +148,15 @@ function createStore(activeFiles) {
         getters: {
           activeFiles: () => activeFiles,
           totalFilesCount: () => ({ files: activeFiles.length, folders: 0 }),
-          totalFilesSize: () => getTotalSize(activeFiles)
+          totalFilesSize: () => getTotalSize(activeFiles),
+          currentFolder: () => {
+            return {
+              path: '',
+              canCreate() {
+                return false
+              }
+            }
+          }
         },
         mutations: {
           CLEAR_CURRENT_FILES_LIST: jest.fn(),

@@ -12,6 +12,11 @@ export default {
           label: () => this.$gettext('All Actions'),
           handler: this.$_showActions_trigger,
           isEnabled: ({ resources }) => {
+            // sidebar is currently only available inside files app
+            if (!this.isFilesAppActive) {
+              return false
+            }
+
             // we don't have batch actions in the right sidebar, yet.
             // return hardcoded `true` in all cases once we have them.
             return resources.length === 1

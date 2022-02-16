@@ -1,0 +1,5 @@
+Enhancement: Enable context menu for search results
+
+We've enabled a rudimentary context menu for search results.
+
+https://github.com/owncloud/web/pull/6445
