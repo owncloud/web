@@ -16,11 +16,14 @@
       :target-route="resourceTargetLocation"
       :are-paths-displayed="true"
       :are-thumbnails-displayed="displayThumbnails"
-      :has-actions="false"
+      :has-actions="true"
       :is-selectable="false"
       @fileClick="$_fileActions_triggerDefaultAction"
       @rowMounted="rowMounted"
     >
+      <template #contextMenu="{ resource }">
+        <context-actions :items="[resource]" />
+      </template>
       <template #footer>
         <pagination :pages="paginationPages" :current-page="paginationPage" />
         <list-info
@@ -43,6 +46,7 @@ import { ImageType, ImageDimension } from '../../constants'
 import { createLocationSpaces } from '../../router'
 import NoContentMessage from '../FilesList/NoContentMessage.vue'
 import ResourceTable from '../FilesList/ResourceTable.vue'
+import ContextActions from '../FilesList/ContextActions.vue'
 import debounce from 'lodash-es/debounce'
 import { mapMutations, mapGetters, mapActions } from 'vuex'
 import { computed } from '@vue/composition-api'
@@ -55,7 +59,7 @@ import MixinFilesListScrolling from '../../mixins/filesListScrolling'
 const visibilityObserver = new VisibilityObserver()
 
 export default {
-  components: { ListInfo, Pagination, NoContentMessage, ResourceTable },
+  components: { ContextActions, ListInfo, Pagination, NoContentMessage, ResourceTable },
   mixins: [MixinFileActions, MixinFilesListFilter, MixinFilesListScrolling],
   props: {
     searchResults: {
