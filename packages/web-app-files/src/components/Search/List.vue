@@ -10,6 +10,7 @@
     </no-content-message>
     <resource-table
       v-else
+      v-model="selected"
       class="files-table"
       :class="{ 'files-table-squashed': false }"
       :resources="paginatedResources"
@@ -22,7 +23,7 @@
       @rowMounted="rowMounted"
     >
       <template #contextMenu="{ resource }">
-        <context-actions :items="[resource]" />
+        <context-actions v-if="isResourceInSelection(resource)" :items="selected" />
       </template>
       <template #footer>
         <pagination :pages="paginationPages" :current-page="paginationPage" />
@@ -49,7 +50,7 @@ import ResourceTable from '../FilesList/ResourceTable.vue'
 import ContextActions from '../FilesList/ContextActions.vue'
 import debounce from 'lodash-es/debounce'
 import { mapMutations, mapGetters, mapActions } from 'vuex'
-import { computed } from '@vue/composition-api'
+import { computed, ref } from '@vue/composition-api'
 import ListInfo from '../FilesList/ListInfo.vue'
 import Pagination from '../FilesList/Pagination.vue'
 import MixinFileActions from '../../mixins/fileActions'
@@ -78,7 +79,9 @@ export default {
       items: computed(() => store.getters['Files/activeFiles'])
     })
 
+    const selected = ref([])
     return {
+      selected,
       paginatedResources,
       paginationPages,
       paginationPage,
@@ -128,6 +131,9 @@ export default {
       }, 250)
 
       visibilityObserver.observe(component.$el, { onEnter: debounced, onExit: debounced.cancel })
+    },
+    isResourceInSelection(resource) {
+      return this.selected?.includes(resource)
     }
   }
 }
