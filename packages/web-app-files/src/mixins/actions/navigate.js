@@ -29,7 +29,7 @@ export default {
               return false
             }
 
-            if (isSameResource(resources[0], this.currentFolder)) {
+            if (this.currentFolder !== null && isSameResource(resources[0], this.currentFolder)) {
               return false
             }
 
@@ -61,16 +61,14 @@ export default {
     },
     routeName() {
       if (isLocationPublicActive(this.$router, 'files-public-files')) {
-        createLocationPublic('files-public-files')
-        return
+        return createLocationPublic('files-public-files')
       }
 
       if (isLocationSpacesActive(this.$router, 'files-spaces-project')) {
-        createLocationPublic('files-spaces-project')
-        return
+        return createLocationPublic('files-spaces-project')
       }
 
-      createLocationSpaces('files-spaces-personal-home')
+      return createLocationSpaces('files-spaces-personal-home')
     }
   }
 }

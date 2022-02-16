@@ -39,8 +39,14 @@ import Restore from '../../mixins/actions/restore'
 import ShowActions from '../../mixins/actions/showActions'
 import ShowDetails from '../../mixins/actions/showDetails'
 import ShowShares from '../../mixins/actions/showShares'
+import { useIsFilesAppActive } from '../../composables/useIsFilesAppActive'
 
 export default {
+  setup() {
+    return {
+      isFilesAppActive: useIsFilesAppActive()
+    }
+  },
   name: 'ContextActions',
   components: { ActionMenuItem },
   mixins: [
