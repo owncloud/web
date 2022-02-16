@@ -2,7 +2,7 @@ import get from 'lodash-es/get'
 import { mapGetters, mapActions, mapState } from 'vuex'
 
 import { isAuthenticatedRoute, isLocationCommonActive } from '../router'
-import { convertRouteParamsToContextQuery } from 'web-pkg/src/composables/appDefaults'
+import { routeToContextQuery } from 'web-pkg/src/composables/appDefaults'
 import AcceptShare from './actions/acceptShare'
 import Copy from './actions/copy'
 import DeclineShare from './actions/declineShare'
@@ -123,7 +123,7 @@ export default {
           mode,
           contextRouteName: this.$route.name
         },
-        query: convertRouteParamsToContextQuery(route.params)
+        query: routeToContextQuery(route)
       }
     },
 

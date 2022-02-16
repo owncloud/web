@@ -1,0 +1,5 @@
+Bugfix: Fix closing apps opened from search
+
+We've made sure that closing apps that were opened from search navigates properly back to the original search.
+
+https://github.com/owncloud/web/pull/6444

@@ -7,7 +7,7 @@ import { FileContext } from './types'
 import {
   useAppNavigation,
   AppNavigationResult,
-  convertContextQueryToRouteParams
+  contextQueryToFileContextProps
 } from './useAppNavigation'
 import { useAppConfig, AppConfigResult } from './useAppConfig'
 import { useAppFileHandling, AppFileHandlingResult } from './useAppFileHandling'
@@ -51,7 +51,7 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
     return {
       path: `/${unref(currentRoute).params.filePath.split('/').filter(Boolean).join('/')}`,
       routeName: unref(currentRoute).params.contextRouteName,
-      routeParams: convertContextQueryToRouteParams(unref(currentRoute).query)
+      ...contextQueryToFileContextProps(unref(currentRoute).query)
     }
   })
 
