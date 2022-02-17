@@ -78,13 +78,13 @@ export default {
                 title: this.$gettext('Space image successfully uploaded')
               })
             })
-            .catch((error) => {
-              this.showMessage({
-                title: this.$gettext('Upload new space image failed…'),
-                desc: error,
-                status: 'danger'
-              })
-            })
+        })
+        .catch((error) => {
+          this.showMessage({
+            title: this.$gettext('Upload new space image failed…'),
+            desc: error,
+            status: 'danger'
+          })
         })
     }
   }

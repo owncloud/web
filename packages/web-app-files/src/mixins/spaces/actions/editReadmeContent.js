@@ -1,4 +1,4 @@
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 
 export default {
   data: function () {
@@ -9,7 +9,7 @@ export default {
   },
   computed: {
     ...mapGetters(['configuration', 'getToken']),
-    ...mapGetters('Files', ['currentFolder']),
+    ...mapState('Files', ['currentFolder']),
     $_editReadmeContent_items() {
       return [
         {
@@ -60,7 +60,7 @@ export default {
       const webDavPathComponents = space.spaceReadmeData.webDavUrl.split('/')
       const path = webDavPathComponents.slice(webDavPathComponents.indexOf('dav') + 1).join('/')
 
-      this.$client.files
+      return this.$client.files
         .putFileContents(path, this.$data.$_editReadmeContent_content)
         .then((readmeMetaData) => {
           this.$_editReadmeContent_closeModal()
