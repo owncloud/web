@@ -87,7 +87,7 @@ export default {
     min-height: 3rem;
     transition: all 0.2s ease-out;
     &:hover {
-      background-color: var(--oc-color-background-highlight) !important;
+      background-color: var(--oc-color-background-secondary) !important;
       overflow: hidden;
     }
   }
@@ -95,7 +95,6 @@ export default {
     justify-content: flex-end !important;
   }
 }
-
 .oc-app-navigation-expanded {
   min-width: 250px !important;
   max-width: 250px !important;
