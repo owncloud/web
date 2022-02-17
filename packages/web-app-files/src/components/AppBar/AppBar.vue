@@ -521,6 +521,13 @@ export default {
           path = buildWebDavSpacesPath(this.$route.params.spaceId, path)
           await this.$client.files.putFileContents(path, '')
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
+        } else {
+          await this.$client.publicFiles.putFileContents('', path, this.publicLinkPassword, '')
+          resource = await this.$client.publicFiles.getFileInfo(
+            path,
+            this.publicLinkPassword,
+            DavProperties.Default
+          )
         }
 
         if (this.newFileAction) {
