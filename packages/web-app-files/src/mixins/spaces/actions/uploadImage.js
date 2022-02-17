@@ -1,20 +1,22 @@
-import { mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { clientService } from 'web-pkg/src/services'
 import { bus } from 'web-pkg/src/instance'
 
 export default {
   data: function () {
     return {
-      selectedSpace: null
+      $_uploadImage_selectedSpace: null
     }
   },
   computed: {
-    $_uploadSpaceImage_items() {
+    ...mapState('Files', ['currentFolder']),
+    ...mapGetters(['configuration']),
+    $_uploadImage_items() {
       return [
         {
           name: 'upload-space-image',
           icon: 'image-add',
-          handler: this.$_uploadSpaceImage_trigger,
+          handler: this.$_uploadImage_trigger,
           label: () => {
             return this.$gettext('Upload new space image')
           },
@@ -27,15 +29,16 @@ export default {
   },
   methods: {
     ...mapMutations('Files', ['UPDATE_RESOURCE_FIELD']),
-    $_uploadSpaceImage_trigger({ spaces }) {
+    ...mapActions(['showMessage']),
+    $_uploadImage_trigger({ spaces }) {
       if (spaces.length !== 1) {
         return
       }
 
-      this.selectedSpace = spaces[0]
+      this.$data.$_uploadImage_selectedSpace = spaces[0]
       this.$refs.spaceImageInput.click()
     },
-    $_uploadSpaceImage(ev) {
+    $_uploadImage_uploadImageSpace(ev) {
       const graphClient = clientService.graphAuthenticated(this.configuration.server, this.getToken)
       const file = ev.currentTarget.files[0]
 
@@ -46,15 +49,19 @@ export default {
         extraHeaders['X-OC-Mtime'] = '' + file.lastModified / 1000
       }
 
-      this.$client.files
-        .putFileContents(`/spaces/${this.selectedSpace.id}/.space/${file.name}`, file, {
-          headers: extraHeaders,
-          overwrite: true
-        })
+      return this.$client.files
+        .putFileContents(
+          `/spaces/${this.$data.$_uploadImage_selectedSpace.id}/.space/${file.name}`,
+          file,
+          {
+            headers: extraHeaders,
+            overwrite: true
+          }
+        )
         .then((image) => {
-          graphClient.drives
+          return graphClient.drives
             .updateDrive(
-              this.selectedSpace.id,
+              this.$data.$_uploadImage_selectedSpace.id,
               {
                 special: [
                   {
@@ -69,14 +76,14 @@ export default {
             )
             .then(({ data }) => {
               this.UPDATE_RESOURCE_FIELD({
-                id: this.selectedSpace.id,
+                id: this.$data.$_uploadImage_selectedSpace.id,
                 field: 'spaceImageData',
                 value: data.special.find((special) => special.specialFolder.name === 'image')
               })
-              bus.publish('app.files.list.load')
               this.showMessage({
                 title: this.$gettext('Space image successfully uploaded')
               })
+              bus.publish('app.files.list.load')
             })
         })
         .catch((error) => {

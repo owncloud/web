@@ -8,7 +8,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['configuration', 'getToken']),
     ...mapState('Files', ['currentFolder']),
     $_editReadmeContent_items() {
       return [

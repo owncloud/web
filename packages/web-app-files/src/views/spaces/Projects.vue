@@ -42,7 +42,7 @@
           multiple
           tabindex="-1"
           accept="image/*"
-          @change="$_uploadSpaceImage"
+          @change="$_uploadImage_uploadImageSpace"
         />
         <ul
           class="
@@ -221,7 +221,7 @@ export default {
       return [
         ...this.$_rename_items,
         ...this.$_editDescription_items,
-        ...this.$_uploadSpaceImage_items,
+        ...this.$_uploadImage_items,
         ...this.$_showDetails_items,
         ...this.$_restore_items,
         ...this.$_delete_items,
