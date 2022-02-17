@@ -73,6 +73,11 @@ export default {
       required: true
     }
   },
+  setup() {
+    return {
+      isFilesAppActive: useIsFilesAppActive()
+    }
+  },
 
   computed: {
     menuSections() {
