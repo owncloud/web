@@ -1,10 +1,10 @@
 import { isLocationSpacesActive } from '../../../router'
-import { mapMutations, mapGetters } from 'vuex'
+import { mapMutations, mapState, mapActions } from 'vuex'
 import { bus } from 'web-pkg/src/instance'
 
 export default {
   computed: {
-    ...mapGetters('Files', ['currentFolder']),
+    ...mapState('Files', ['currentFolder']),
     $_setSpaceReadme_items() {
       return [
         {
@@ -32,23 +32,33 @@ export default {
   },
   methods: {
     ...mapMutations('Files', ['UPDATE_RESOURCE_FIELD']),
+    ...mapActions(['showMessage']),
     $_setSpaceReadme_setReadmeSpace({ resources }) {
       const space = this.currentFolder
-      this.$client.files.getFileContents(resources[0].webDavPath).then((fileContent) => {
-        this.$client.files
-          .putFileContents(`/spaces/${space.id}/.space/readme.md`, fileContent)
-          .then((fileMetaData) => {
-            this.UPDATE_RESOURCE_FIELD({
-              id: space.id,
-              field: 'spaceReadmeData',
-              value: { ...space.spaceReadmeData, ...{ etag: fileMetaData.ETag } }
+      return this.$client.files
+        .getFileContents(resources[0].webDavPath)
+        .then((fileContent) => {
+          return this.$client.files
+            .putFileContents(`/spaces/${space.id}/.space/readme.md`, fileContent)
+            .then((fileMetaData) => {
+              this.UPDATE_RESOURCE_FIELD({
+                id: space.id,
+                field: 'spaceReadmeData',
+                value: { ...space.spaceReadmeData, ...{ etag: fileMetaData.ETag } }
+              })
+              this.showMessage({
+                title: this.$gettext('Space description successfully set')
+              })
+              bus.publish('app.files.list.load')
             })
-            this.showMessage({
-              title: this.$gettext('Space description successfully set')
-            })
-            bus.publish('app.files.list.load')
+        })
+        .catch((error) => {
+          this.showMessage({
+            title: this.$gettext('Set space readme failed…'),
+            desc: error,
+            status: 'danger'
           })
-      })
+        })
     }
   }
 }
