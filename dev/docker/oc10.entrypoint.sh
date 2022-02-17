@@ -23,7 +23,9 @@ then
       web \
       M8W5mo3wQV3VHWYsaYpWhkr8dwa949i4GljCkedHhl7GWqmHMkxSeJgK2PcS0jt5 \
       sqvPYXK94tMsEEVOYORxg8Ufesi2kC4WpJJSYb0Kj1DSAYl6u2XvJZjc3VcitjDv \
-      http://host.docker.internal:8080/index.php/apps/web/oidc-callback.html
+      http://host.docker.internal:8080/index.php/apps/web/oidc-callback.html \
+      false \
+      true
     occ oauth2:add-client \
       web-sidecar \
       UmCVsEIxdWmssxa6uVRRPC3txYBVN4qqxooJbsPhuuoPmHk9Pt9Oy68N4ZaKXUYy \
