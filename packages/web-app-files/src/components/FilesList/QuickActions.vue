@@ -6,7 +6,7 @@
       v-oc-tooltip="action.label($gettext)"
       :aria-label="action.label($gettext)"
       appearance="raw"
-      class="oc-mr-xs"
+      class="oc-mr-xs quick-action-button"
       :class="`files-quick-action-${action.id}`"
       @click="action.handler({ item, client: $client, store: $store, $gettext })"
     >
@@ -39,3 +39,12 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.quick-action-button {
+  padding: 6px !important;
+  &:hover {
+    background-color: var(--oc-color-background-muted) !important;
+  }
+}
+</style>

@@ -20,7 +20,7 @@
         "background-default": "#ffffff",
         "background-highlight": "#edf3fa",
         "background-muted": "#f8f8f8",
-        "background-secondary": "#ffffff",
+        "background-secondary": "#ECECEC",
         "border": "#ecebee",
         "input-bg": "#f0f4f8",
         "input-border": "#ceddee",
