@@ -437,7 +437,7 @@ export default {
           resource = await this.$client.publicFiles.getFileInfo(
             path,
             this.publicLinkPassword,
-            DavProperties.Default
+            DavProperties.PublicLink
           )
         }
         resource = buildResource(resource)
@@ -521,6 +521,13 @@ export default {
           path = buildWebDavSpacesPath(this.$route.params.spaceId, path)
           await this.$client.files.putFileContents(path, '')
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
+        } else {
+          await this.$client.publicFiles.putFileContents('', path, this.publicLinkPassword, '')
+          resource = await this.$client.publicFiles.getFileInfo(
+            path,
+            this.publicLinkPassword,
+            DavProperties.PublicLink
+          )
         }
 
         if (this.newFileAction) {
@@ -601,9 +608,14 @@ export default {
           throw new Error(`An error has occurred: ${response.status}`)
         }
 
-        const path = pathUtil.join(this.currentPath, fileName)
         let resource
+        let path = pathUtil.join(this.currentPath, fileName)
+
         if (this.isPersonalLocation) {
+          path = buildWebDavFilesPath(this.user.id, path)
+          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
+        } else if (this.isSpacesProjectLocation) {
+          path = buildWebDavSpacesPath(this.$route.params.spaceId, path)
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else {
           resource = await this.$client.publicFiles.getFileInfo(
@@ -687,7 +699,7 @@ export default {
           resource = await this.$client.publicFiles.getFileInfo(
             path,
             this.publicLinkPassword,
-            DavProperties.Default
+            DavProperties.PublicLink
           )
         }
 
