@@ -137,7 +137,7 @@ export default {
         })
     },
     load() {
-      this.getFileContents(this.filePath, { resolveWithResponseObject: true })
+      this.getFileContents(this.filePath)
         .then((resp) => {
           this.currentETag = resp.headers.ETag
           this.$refs.drawIoEditor.contentWindow.postMessage(
