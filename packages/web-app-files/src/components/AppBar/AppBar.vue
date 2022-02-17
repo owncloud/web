@@ -437,7 +437,7 @@ export default {
           resource = await this.$client.publicFiles.getFileInfo(
             path,
             this.publicLinkPassword,
-            DavProperties.Default
+            DavProperties.PublicLink
           )
         }
         resource = buildResource(resource)
@@ -526,7 +526,7 @@ export default {
           resource = await this.$client.publicFiles.getFileInfo(
             path,
             this.publicLinkPassword,
-            DavProperties.Default
+            DavProperties.PublicLink
           )
         }
 
@@ -621,7 +621,7 @@ export default {
           resource = await this.$client.publicFiles.getFileInfo(
             path,
             this.publicLinkPassword,
-            DavProperties.Default
+            DavProperties.PublicLink
           )
         }
         resource = buildResource(resource)
@@ -699,7 +699,7 @@ export default {
           resource = await this.$client.publicFiles.getFileInfo(
             path,
             this.publicLinkPassword,
-            DavProperties.Default
+            DavProperties.PublicLink
           )
         }
 
