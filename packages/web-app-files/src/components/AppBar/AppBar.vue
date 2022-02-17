@@ -601,15 +601,20 @@ export default {
           throw new Error(`An error has occurred: ${response.status}`)
         }
 
-        const path = pathUtil.join(this.currentPath, fileName)
         let resource
+        let path = pathUtil.join(this.currentPath, fileName)
+
         if (this.isPersonalLocation) {
+          path = buildWebDavFilesPath(this.user.id, path)
+          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
+        } else if (this.isSpacesProjectLocation) {
+          path = buildWebDavSpacesPath(this.$route.params.spaceId, path)
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else {
           resource = await this.$client.publicFiles.getFileInfo(
             path,
             this.publicLinkPassword,
-            DavProperties.PublicLink
+            DavProperties.Default
           )
         }
         resource = buildResource(resource)
