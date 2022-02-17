@@ -91,9 +91,9 @@
       "colorPalette": {
         "background-accentuate": "#696969",
         "background-default": "#292929",
-        "background-highlight": "#0869de26",
+        "background-highlight": "#9dc7fb12",
         "background-muted": "#696969",
-        "background-secondary": "#4F4F4F",
+        "background-secondary": "#383838",
         "border": "#383838",
         "input-bg": "#4f4f4f",
         "input-border": "#4f4f4f",
