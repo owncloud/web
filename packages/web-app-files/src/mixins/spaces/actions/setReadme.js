@@ -10,7 +10,7 @@ export default {
         {
           name: 'set-space-readme',
           icon: 'markdown',
-          handler: this.$_setSpaceReadme_trigger,
+          handler: this.$_setSpaceReadme_setReadmeSpace,
           label: () => {
             return this.$gettext('Set as space description')
           },
@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     ...mapMutations('Files', ['UPDATE_RESOURCE_FIELD']),
-    $_setSpaceReadme_trigger({ resources }) {
+    $_setSpaceReadme_setReadmeSpace({ resources }) {
       const space = this.currentFolder
       this.$client.files.getFileContents(resources[0].webDavPath).then((fileContent) => {
         this.$client.files

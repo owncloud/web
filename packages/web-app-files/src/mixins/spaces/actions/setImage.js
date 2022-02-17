@@ -1,17 +1,18 @@
 import { isLocationSpacesActive } from '../../../router'
 import { clientService } from 'web-pkg/src/services'
-import { mapMutations } from 'vuex'
+import { mapMutations, mapActions, mapGetters } from 'vuex'
 import { buildResource } from '../../../helpers/resources'
 import { bus } from 'web-pkg/src/instance'
 
 export default {
   computed: {
+    ...mapGetters(['configuration']),
     $_setSpaceImage_items() {
       return [
         {
           name: 'set-space-image',
           icon: 'image-edit',
-          handler: this.$_setSpaceImage_trigger,
+          handler: this.$_setSpaceImage_setImageSpace,
           label: () => {
             return this.$gettext('Set as space image')
           },
@@ -33,7 +34,8 @@ export default {
   },
   methods: {
     ...mapMutations('Files', ['UPDATE_RESOURCE_FIELD']),
-    $_setSpaceImage_trigger({ resources }) {
+    ...mapActions(['showMessage']),
+    $_setSpaceImage_setImageSpace({ resources }) {
       const graphClient = clientService.graphAuthenticated(this.configuration.server, this.getToken)
       const spaceId = this.$route.params.spaceId
       const sourcePath = resources[0].webDavPath
@@ -43,11 +45,10 @@ export default {
         return
       }
 
-      this.$client.files.copy(sourcePath, destinationPath).then(() => {
-        this.$client.files.fileInfo(destinationPath).then((fileInfo) => {
+      return this.$client.files.copy(sourcePath, destinationPath).then(() => {
+        return this.$client.files.fileInfo(destinationPath).then((fileInfo) => {
           const file = buildResource(fileInfo)
-
-          graphClient.drives
+          return graphClient.drives
             .updateDrive(
               spaceId,
               {
@@ -68,6 +69,7 @@ export default {
                 field: 'spaceImageData',
                 value: data.special.find((special) => special.specialFolder.name === 'image')
               })
+
               this.showMessage({
                 title: this.$gettext('Space image successfully set')
               })
