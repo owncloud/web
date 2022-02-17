@@ -79,16 +79,18 @@ describe('rename', () => {
   })
 
   describe('method "$_rename_renameSpace"', () => {
-    it('should hide the modal on success', async () => {
+    it('should hide the modal and show message on success', async () => {
       mockAxios.request.mockImplementationOnce(() => {
         return Promise.resolve()
       })
 
       const wrapper = getWrapper()
       const hideModalStub = jest.spyOn(wrapper.vm, 'hideModal')
+      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       await wrapper.vm.$_rename_renameSpace(1, 'renamed space')
 
       expect(hideModalStub).toHaveBeenCalledTimes(1)
+      expect(showMessageStub).toHaveBeenCalledTimes(1)
     })
 
     it('should show message on error', async () => {
