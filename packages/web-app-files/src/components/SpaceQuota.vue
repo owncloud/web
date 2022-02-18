@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="space-quota">
     <p class="oc-mb-s oc-mt-rm" v-text="spaceStorageDetailsLabel" />
     <oc-progress
       :value="parseInt(quotaUsagePercent)"
