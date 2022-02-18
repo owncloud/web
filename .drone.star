@@ -1832,8 +1832,8 @@ def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnv
             "from_secret": "sauce_access_key",
         }
 
-    if (ctx.build.event == "cron") or (not retry):
-        environment["RERUN_FAILED_WEBUI_SCENARIOS"] = "false"
+    # if (ctx.build.event == "cron") or (not retry):
+    environment["RERUN_FAILED_WEBUI_SCENARIOS"] = "false"
     if (visualTesting):
         environment["VISUAL_TEST"] = "true"
     if (screenShots):
