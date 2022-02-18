@@ -24,7 +24,7 @@ export default {
   computed: {
     spaceStorageDetailsLabel() {
       return this.$gettextInterpolate(
-        this.$gettext('%{used} of %{total} used (%{percentage} % used)'),
+        this.$gettext('%{used} of %{total} used (%{percentage}% used)'),
         {
           used: this.quotaUsed,
           total: this.quotaTotal,
@@ -39,7 +39,7 @@ export default {
       return filesize(this.spaceQuota.used)
     },
     quotaUsagePercent() {
-      return ((this.spaceQuota.used / this.spaceQuota.total) * 100).toFixed(2)
+      return ((this.spaceQuota.used / this.spaceQuota.total) * 100).toFixed(1)
     },
     quotaProgressVariant() {
       switch (this.spaceQuota.state) {
