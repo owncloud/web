@@ -48,7 +48,7 @@ module.exports = {
         selector += util.format(this.elements.shareOwnerName.selector, owner)
       }
       let isPresent = false
-      await this.api.element('xpath', selector, function (result) {
+      await this.api.isVisible('xpath', selector, function (result) {
         isPresent = !!(result.value && result.value.ELEMENT)
       })
       return isPresent
