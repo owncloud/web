@@ -15,14 +15,8 @@ import { mapGetters } from 'vuex'
 import ActionMenuItem from '../../ActionMenuItem.vue'
 
 import FileActions from '../../../mixins/fileActions'
-import { useIsFilesAppActive } from '../../../composables/useIsFilesAppActive'
 
 export default {
-  setup() {
-    return {
-      isFilesAppActive: useIsFilesAppActive()
-    }
-  },
   name: 'FileActions',
   title: ($gettext) => {
     return $gettext('Actions')

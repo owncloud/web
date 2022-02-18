@@ -1,6 +1,11 @@
 import { computed, ComputedRef, unref } from '@vue/composition-api'
 import { useActiveApp } from 'web-pkg/src/composables'
-import FilesApp from '../index'
+
+export const isFilesAppActive = (activeApp: string): boolean => {
+  // FIXME: we should use this constant but it somehow breaks the unit tests
+  // return activeApp === FilesApp.appInfo.id
+  return activeApp === 'files'
+}
 
 /*
  * This composable can be used to check whether the current route
@@ -12,6 +17,6 @@ import FilesApp from '../index'
 export const useIsFilesAppActive = (): ComputedRef<boolean> => {
   const activeApp = useActiveApp()
   return computed(() => {
-    return unref(activeApp) === FilesApp.appInfo.id
+    return isFilesAppActive(unref(activeApp))
   })
 }
