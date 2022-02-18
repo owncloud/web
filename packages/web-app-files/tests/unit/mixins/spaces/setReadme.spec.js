@@ -73,6 +73,28 @@ describe('setReadme', () => {
     })
   }
 
+  describe('isEnabled property', () => {
+    it('should be false when no resource given', () => {
+      const wrapper = getWrapper()
+      expect(wrapper.vm.$_setSpaceReadme_items[0].isEnabled({ resources: [] })).toBe(false)
+    })
+    it('should be false when mimeType is not text', () => {
+      const wrapper = getWrapper()
+      expect(
+        wrapper.vm.$_setSpaceReadme_items[0].isEnabled({
+          resources: [{ id: 1, mimeType: 'image/png' }]
+        })
+      ).toBe(false)
+    })
+    it('should be true when when mimeType is text', () => {
+      const wrapper = getWrapper()
+      expect(
+        wrapper.vm.$_setSpaceReadme_items[0].isEnabled({
+          resources: [{ id: 1, mimeType: 'text/plain' }]
+        })
+      ).toBe(true)
+    })
+  })
   describe('method "$_setSpaceReadme_setReadmeSpace"', () => {
     it('should show message on success', async () => {
       const wrapper = getWrapper()

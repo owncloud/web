@@ -68,6 +68,29 @@ describe('setImage', () => {
     })
   }
 
+  describe('isEnabled property', () => {
+    it('should be false when no resource given', () => {
+      const wrapper = getWrapper()
+      expect(wrapper.vm.$_setSpaceImage_items[0].isEnabled({ resources: [] })).toBe(false)
+    })
+    it('should be false when mimeType is not image', () => {
+      const wrapper = getWrapper()
+      expect(
+        wrapper.vm.$_setSpaceImage_items[0].isEnabled({
+          resources: [{ id: 1, mimeType: 'text/plain' }]
+        })
+      ).toBe(false)
+    })
+    it('should be true when when mimeType is image', () => {
+      const wrapper = getWrapper()
+      expect(
+        wrapper.vm.$_setSpaceImage_items[0].isEnabled({
+          resources: [{ id: 1, mimeType: 'image/png' }]
+        })
+      ).toBe(true)
+    })
+  })
+
   describe('method "$_setSpaceImage_setImageSpace"', () => {
     it('should show message on success', async () => {
       mockAxios.request.mockImplementationOnce(() => {
