@@ -32,9 +32,9 @@ const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
   const userApiFactory = UserApiFactory(config, config.basePath, axiosClient)
   const drivesApiFactory = DrivesApiFactory(config, config.basePath, axiosClient)
 
-  return {
+  return <Graph>{
     drives: {
-      listMyDrives: () => meDrivesApi.listMyDrives(),
+      listMyDrives: (filter?: string) => meDrivesApi.listMyDrives(0, 0, '', filter),
       getDrive: (id: string) => drivesApiFactory.getDrive(id),
       createDrive: (drive: Drive, options: any): AxiosPromise<Drive> =>
         drivesApiFactory.createDrive(drive, options),

@@ -178,10 +178,8 @@ export default {
     const loadResourcesTask = useTask(function* (signal, ref) {
       ref.CLEAR_CURRENT_FILES_LIST()
 
-      const response = yield graphClient.drives.listMyDrives()
-      let loadedSpaces = (response.data?.value || [])
-        .filter((drive) => drive.driveType === 'project')
-        .sort((a, b) => a.name.localeCompare(b.name))
+      const response = yield graphClient.drives.listMyDrives('driveType eq project')
+      let loadedSpaces = (response.data?.value || []).sort((a, b) => a.name.localeCompare(b.name))
 
       loadedSpaces = loadedSpaces.map(buildSpace)
       ref.LOAD_FILES({ currentFolder: null, files: loadedSpaces })
