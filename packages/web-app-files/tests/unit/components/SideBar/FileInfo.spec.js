@@ -122,6 +122,9 @@ function createWrapper(testResource, tooltipStub, routeName) {
       }
     ],
     mocks: {
+      $route: {
+        path: '/files'
+      },
       $router: {
         currentRoute: {
           name: routeName || 'some-route',

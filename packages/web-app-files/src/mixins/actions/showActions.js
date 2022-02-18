@@ -1,7 +1,9 @@
 import { mapActions } from 'vuex'
 import { isLocationCommonActive } from '../../router'
+import isFilesAppActive from './helpers/isFilesAppActive'
 
 export default {
+  mixins: [isFilesAppActive],
   computed: {
     $_showActions_items() {
       return [
@@ -13,7 +15,7 @@ export default {
           handler: this.$_showActions_trigger,
           isEnabled: ({ resources }) => {
             // sidebar is currently only available inside files app
-            if (!this.isFilesAppActive) {
+            if (!this.$_isFilesAppActive) {
               return false
             }
 

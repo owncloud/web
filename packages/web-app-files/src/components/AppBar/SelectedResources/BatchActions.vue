@@ -23,14 +23,8 @@ import DownloadFile from '../../../mixins/actions/downloadFile'
 import EmptyTrashBin from '../../../mixins/actions/emptyTrashBin'
 import Move from '../../../mixins/actions/move'
 import Restore from '../../../mixins/actions/restore'
-import { useIsFilesAppActive } from '../../../composables/useIsFilesAppActive'
 
 export default {
-  setup() {
-    return {
-      isFilesAppActive: useIsFilesAppActive()
-    }
-  },
   name: 'BatchActions',
   components: { ActionMenuItem },
   mixins: [

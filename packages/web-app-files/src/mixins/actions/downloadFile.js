@@ -3,8 +3,10 @@ import {
   isLocationPublicActive,
   isLocationSpacesActive
 } from '../../router'
+import isFilesAppActive from './helpers/isFilesAppActive'
 
 export default {
+  mixins: [isFilesAppActive],
   computed: {
     $_downloadFile_items() {
       return [
@@ -17,7 +19,7 @@ export default {
           },
           isEnabled: ({ resources }) => {
             if (
-              this.isFilesAppActive &&
+              this.$_isFilesAppActive &&
               !isLocationSpacesActive(this.$router, 'files-spaces-personal-home') &&
               !isLocationSpacesActive(this.$router, 'files-spaces-project') &&
               !isLocationPublicActive(this.$router, 'files-public-files') &&
