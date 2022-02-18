@@ -1,8 +1,10 @@
 import { mapActions } from 'vuex'
 
 import { isLocationCommonActive, isLocationSpacesActive } from '../../router'
+import isFilesAppActive from './helpers/isFilesAppActive'
 
 export default {
+  mixins: [isFilesAppActive],
   computed: {
     $_favorite_items() {
       return [
@@ -18,7 +20,7 @@ export default {
           },
           isEnabled: ({ resources }) => {
             if (
-              this.isFilesAppActive &&
+              this.$_isFilesAppActive &&
               !isLocationSpacesActive(this.$router, 'files-spaces-personal-home') &&
               !isLocationCommonActive(this.$router, 'files-common-favorites')
             ) {

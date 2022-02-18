@@ -17,9 +17,6 @@ import Rename from './actions/rename'
 import Restore from './actions/restore'
 import kebabCase from 'lodash-es/kebabCase'
 
-import { activeApp } from 'web-pkg/src/composables'
-import { isFilesAppActive } from '../composables'
-
 const actionsMixins = [
   'fetch',
   'navigate',
@@ -57,12 +54,6 @@ export default {
     ...mapState(['apps']),
     ...mapGetters('Files', ['highlightedFile', 'currentFolder']),
     ...mapGetters(['capabilities', 'configuration']),
-
-    // TODO: Replace this with the useIsFilesAppActive composable
-    // once we port this mixin to something using the composition api
-    isFilesAppActive() {
-      return isFilesAppActive(activeApp(this.$route))
-    },
 
     $_fileActions_systemActions() {
       return actionsMixins.flatMap((actionMixin) => {

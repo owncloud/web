@@ -23,7 +23,6 @@ import DownloadFile from '../../../mixins/actions/downloadFile'
 import EmptyTrashBin from '../../../mixins/actions/emptyTrashBin'
 import Move from '../../../mixins/actions/move'
 import Restore from '../../../mixins/actions/restore'
-import { useIsFilesAppActive } from '../../../composables'
 
 export default {
   name: 'BatchActions',
@@ -39,11 +38,6 @@ export default {
     Move,
     Restore
   ],
-  setup() {
-    return {
-      isFilesAppActive: useIsFilesAppActive()
-    }
-  },
   computed: {
     ...mapGetters('Files', ['selectedFiles']),
 

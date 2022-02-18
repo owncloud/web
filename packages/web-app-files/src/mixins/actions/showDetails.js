@@ -1,7 +1,9 @@
 import { mapActions } from 'vuex'
 import { isLocationCommonActive } from '../../router'
+import isFilesAppActive from './helpers/isFilesAppActive'
 
 export default {
+  mixins: [isFilesAppActive],
   computed: {
     $_showDetails_items() {
       return [
@@ -15,7 +17,7 @@ export default {
           // remove trashbin route rule once we have them.
           isEnabled: ({ resources }) => {
             // sidebar is currently only available inside files app
-            if (!this.isFilesAppActive) {
+            if (!this.$_isFilesAppActive) {
               return false
             }
 
