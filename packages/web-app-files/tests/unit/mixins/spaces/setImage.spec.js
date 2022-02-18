@@ -133,10 +133,6 @@ describe('setImage', () => {
     })
 
     it('should not set the image if source and destination path are the same', async () => {
-      mockAxios.request.mockImplementationOnce(() => {
-        return Promise.resolve({})
-      })
-
       const wrapper = getWrapper()
       await wrapper.vm.$_setSpaceImage_setImageSpace({
         resources: [
@@ -146,7 +142,7 @@ describe('setImage', () => {
           }
         ]
       })
-      expect(mockAxios.request).toBeCalledTimes(0)
+      expect(wrapper.vm.$client.files.copy).toBeCalledTimes(0)
     })
   })
 })
