@@ -501,10 +501,6 @@ export default {
     font-size: 1.5rem;
   }
 
-  .markdown-container * {
-    color: var(--oc-color-text-muted) !important;
-  }
-
   .markdown-container.collapsed {
     max-height: 150px;
     overflow: hidden;

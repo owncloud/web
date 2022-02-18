@@ -291,10 +291,7 @@ export default {
                           specialFolder: {
                             name: 'readme'
                           },
-                          id: Buffer.from(markdown['OC-FileId'], 'base64')
-                            .toString()
-                            .split(':')
-                            .pop()
+                          id: markdown['OC-FileId']
                         }
                       ]
                     },

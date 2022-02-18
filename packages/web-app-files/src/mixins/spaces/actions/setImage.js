@@ -57,7 +57,7 @@ export default {
                     specialFolder: {
                       name: 'image'
                     },
-                    id: Buffer.from(file.id, 'base64').toString().split(':').pop()
+                    id: file.id
                   }
                 ]
               },
