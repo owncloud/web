@@ -30,29 +30,27 @@ export function useAppFileHandling(options: AppFileHandlingOptions): AppFileHand
   const publicLinkPassword = options.publicLinkPassword
 
   const getUrlForResource = ({ path, downloadURL }: Resource, query: QueryParameters = null) => {
-    const queryStr = !query ? '' : qs.stringify(query)
-    if (!unref(isPublicLinkContext)) {
-      const urlPath = ['..', 'dav', 'files', store.getters.user.id, path.replace(/^\//, '')].join(
-        '/'
-      )
-      return [client.files.getFileUrl(urlPath), queryStr].filter(Boolean).join('?')
+    const queryStr = qs.stringify(query)
+    if (unref(isPublicLinkContext)) {
+      // If the resource does not contain the downloadURL we fallback to the normal
+      // public files path.
+      if (!downloadURL) {
+        const urlPath = ['..', 'dav', 'public-files', path].join('/')
+        return [client.files.getFileUrl(urlPath), queryStr].filter(Boolean).join('?')
+      }
+
+      // In a public context, i.e. public shares, the downloadURL contains a pre-signed url to
+      // download the file.
+      const [url, signedQuery] = downloadURL.split('?')
+
+      // Since the pre-signed url contains query parameters and the caller of this method
+      // can also provide query parameters we have to combine them.
+      const combinedQuery = [queryStr, signedQuery].filter(Boolean).join('&')
+      return [url, combinedQuery].filter(Boolean).join('?')
     }
 
-    // If the resource does not contain the downloadURL we fallback to the normal
-    // public files path.
-    if (!downloadURL) {
-      const urlPath = ['..', 'dav', 'public-files', path].join('/')
-      return [client.files.getFileUrl(urlPath), queryStr].filter(Boolean).join('?')
-    }
-
-    // In a public context, i.e. public shares, the downloadURL contains a pre-signed url to
-    // download the file.
-    const [url, signedQuery] = downloadURL.split('?')
-
-    // Since the pre-signed url contains query parameters and the caller of this method
-    // can also provide query parameters we have to combine them.
-    const combinedQuery = [queryStr, signedQuery].filter(Boolean).join('&')
-    return [url, combinedQuery].filter(Boolean).join('?')
+    const urlPath = ['..', 'dav', 'files', store.getters.user.id, path.replace(/^\//, '')].join('/')
+    return [client.files.getFileUrl(urlPath), queryStr].filter(Boolean).join('?')
   }
 
   const getFileContents = async (filePath: string) => {
