@@ -2,7 +2,11 @@
   <div class="space_info">
     <div class="space_info__body oc-text-overflow oc-flex oc-flex-middle">
       <div class="oc-mr-s">
-        <oc-icon name="layout-grid" size="large" class="oc-display-block" />
+        <oc-icon
+          name="layout-grid"
+          :size="space.description ? 'large' : 'medium'"
+          class="oc-display-block"
+        />
       </div>
       <div>
         <h3 data-testid="space-info-name" v-text="space.name" />

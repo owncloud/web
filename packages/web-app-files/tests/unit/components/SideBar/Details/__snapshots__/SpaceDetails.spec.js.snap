@@ -20,8 +20,7 @@ exports[`Details SideBar Panel displayes the details side panel 1`] = `
       <tr>
         <th scope="col" class="oc-pr-s">Quota</th>
         <td>
-          <p class="oc-mb-s oc-mt-rm">10.00 % full (100 B of 1 kB used)</p>
-          <oc-progress-stub value="10" max="100" size="small" variation="primary"></oc-progress-stub>
+          <space-quota-stub spacequota="[object Object]"></space-quota-stub>
         </td>
       </tr>
     </table>

@@ -39,13 +39,7 @@
         <tr>
           <th scope="col" class="oc-pr-s" v-text="$gettext('Quota')" />
           <td>
-            <p class="oc-mb-s oc-mt-rm" v-text="personalStorageDetailsLabel" />
-            <oc-progress
-              :value="parseInt(quotaUsagePercent)"
-              :max="100"
-              size="small"
-              :variation="quotaProgressVariant"
-            />
+            <space-quota :space-quota="space.spaceQuota" />
           </td>
         </tr>
       </table>
@@ -59,12 +53,13 @@ import MixinResources from '../../../mixins/resources'
 import { mapGetters } from 'vuex'
 import { useTask } from 'vue-concurrency'
 import { buildWebDavSpacesPath } from '../../../helpers/resources'
-import filesize from 'filesize'
 import { useStore } from 'web-pkg/src/composables'
 import { clientService } from 'web-pkg/src/services'
+import SpaceQuota from '../../SpaceQuota.vue'
 
 export default {
   name: 'SpaceDetails',
+  components: { SpaceQuota },
   mixins: [Mixins, MixinResources],
   inject: ['displayedItem'],
   title: ($gettext) => {
@@ -120,27 +115,6 @@ export default {
     },
     lastModifyDate() {
       return this.formDateFromISO(this.space.mdate)
-    },
-    personalStorageDetailsLabel() {
-      return this.$gettextInterpolate('%{percentage} % full (%{used} of %{total} used)', {
-        used: this.quotaUsed,
-        total: this.quotaTotal,
-        percentage: this.quotaUsagePercent
-      })
-    },
-    quotaTotal() {
-      return filesize(this.space.spaceQuota.total)
-    },
-    quotaUsed() {
-      return filesize(this.space.spaceQuota.used)
-    },
-    quotaUsagePercent() {
-      return ((this.space.spaceQuota.used / this.space.spaceQuota.total) * 100).toFixed(2)
-    },
-    quotaProgressVariant() {
-      if (this.quotaUsagePercent < 80) return 'primary'
-      if (this.quotaUsagePercent < 90) return 'warning'
-      return 'danger'
     },
     ownerUserIds() {
       const permissions = this.space.spacePermissions?.filter((permission) =>

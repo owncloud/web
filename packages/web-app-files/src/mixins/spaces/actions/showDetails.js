@@ -21,14 +21,13 @@ export default {
     ...mapActions('Files/sidebar', { openSidebar: 'open', closeSidebar: 'close' }),
     ...mapMutations('Files', ['SET_FILE_SELECTION']),
 
-    async $_showDetails_trigger({ resources }) {
+    $_showDetails_trigger({ resources }) {
       if (resources.length !== 1) {
         return
       }
 
       this.SET_FILE_SELECTION([resources[0]])
-      await this.closeSidebar()
-      await this.openSidebar()
+      this.openSidebar()
     }
   }
 }
