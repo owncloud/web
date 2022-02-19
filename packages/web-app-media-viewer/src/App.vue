@@ -256,7 +256,7 @@ export default {
 
     // update route and url
     updateLocalHistory() {
-      this.$route.params.filePath = this.activeMediaFile.path
+      this.$route.params.filePath = this.activeMediaFile.webDavPath
       history.pushState({}, document.title, this.$router.resolve(this.$route).href)
     },
 

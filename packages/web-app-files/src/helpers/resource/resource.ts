@@ -3,5 +3,6 @@
 export interface Resource {
   id: number | string
   path: string
+  webDavPath: string
   downloadURL?: string
 }

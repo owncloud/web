@@ -29,13 +29,17 @@ export function useAppFileHandling(options: AppFileHandlingOptions): AppFileHand
   const isPublicLinkContext = options.isPublicLinkContext
   const publicLinkPassword = options.publicLinkPassword
 
-  const getUrlForResource = ({ path, downloadURL }: Resource, query: QueryParameters = null) => {
+  const getUrlForResource = (
+    { webDavPath, downloadURL }: Resource,
+    query: QueryParameters = null
+  ) => {
     const queryStr = qs.stringify(query)
     if (unref(isPublicLinkContext)) {
       // If the resource does not contain the downloadURL we fallback to the normal
       // public files path.
       if (!downloadURL) {
-        const urlPath = ['..', 'dav', 'public-files', path].join('/')
+        // TODO: check whether we can fix the resource to always contain public-files in the webDavPath
+        const urlPath = ['public-files', webDavPath].join('/')
         return [client.files.getFileUrl(urlPath), queryStr].filter(Boolean).join('?')
       }
 
@@ -49,8 +53,7 @@ export function useAppFileHandling(options: AppFileHandlingOptions): AppFileHand
       return [url, combinedQuery].filter(Boolean).join('?')
     }
 
-    const urlPath = ['..', 'dav', 'files', store.getters.user.id, path.replace(/^\//, '')].join('/')
-    return [client.files.getFileUrl(urlPath), queryStr].filter(Boolean).join('?')
+    return [client.files.getFileUrl(webDavPath), queryStr].filter(Boolean).join('?')
   }
 
   const getFileContents = async (filePath: string) => {
