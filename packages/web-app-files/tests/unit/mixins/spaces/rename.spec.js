@@ -55,9 +55,16 @@ describe('rename', () => {
     it('should trigger the rename modal window', async () => {
       const wrapper = getWrapper()
       const spyCreateModalStub = jest.spyOn(wrapper.vm, 'createModal')
-      await wrapper.vm.$_rename_trigger({ spaces: [{ id: 1, name: 'renamed space' }] })
+      await wrapper.vm.$_rename_trigger({ resources: [{ id: 1, name: 'renamed space' }] })
 
       expect(spyCreateModalStub).toHaveBeenCalledTimes(1)
+    })
+    it('should not trigger the rename modal window without any resource', async () => {
+      const wrapper = getWrapper()
+      const spyCreateModalStub = jest.spyOn(wrapper.vm, 'createModal')
+      await wrapper.vm.$_rename_trigger({ resources: [] })
+
+      expect(spyCreateModalStub).toHaveBeenCalledTimes(0)
     })
   })
 

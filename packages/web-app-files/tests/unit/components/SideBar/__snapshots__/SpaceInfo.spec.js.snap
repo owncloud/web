@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SpaceInfo shows space info 1`] = `
+<div class="space_info">
+  <div class="space_info__body oc-text-overflow oc-flex oc-flex-middle">
+    <div class="oc-mr-s">
+      <oc-icon-stub name="layout-grid" size="medium" class="oc-display-block"></oc-icon-stub>
+    </div>
+    <div>
+      <h3 data-testid="space-info-name"> space</h3> <span data-testid="space-info-subtitle"></span>
+    </div>
+  </div>
+</div>
+`;

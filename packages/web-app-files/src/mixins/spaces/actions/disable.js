@@ -14,12 +14,12 @@ export default {
             return this.$gettext('Disable')
           },
           handler: this.$_disable_trigger,
-          isEnabled: ({ spaces }) => {
-            if (spaces.length !== 1) {
+          isEnabled: ({ resources }) => {
+            if (resources.length !== 1) {
               return false
             }
 
-            return !spaces[0].disabled
+            return !resources[0].disabled
           },
           componentType: 'oc-button',
           class: 'oc-files-actions-disable-trigger'
@@ -37,21 +37,21 @@ export default {
     ]),
     ...mapMutations('Files', ['UPDATE_RESOURCE_FIELD']),
 
-    $_disable_trigger({ spaces }) {
-      if (spaces.length !== 1) {
+    $_disable_trigger({ resources }) {
+      if (resources.length !== 1) {
         return
       }
 
       const modal = {
         variation: 'danger',
-        title: this.$gettext('Disable space') + ' ' + spaces[0].name,
+        title: this.$gettext('Disable space') + ' ' + resources[0].name,
         cancelText: this.$gettext('Cancel'),
         confirmText: this.$gettext('Disable'),
         icon: 'alarm-warning',
         message: this.$gettext('Are you sure you want to disable this space?'),
         hasInput: false,
         onCancel: this.hideModal,
-        onConfirm: () => this.$_disable_disableSpace(spaces[0].id)
+        onConfirm: () => this.$_disable_disableSpace(resources[0].id)
       }
 
       this.createModal(modal)

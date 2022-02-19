@@ -31,22 +31,22 @@ export default {
     ]),
     ...mapMutations('Files', ['UPDATE_RESOURCE_FIELD']),
 
-    $_editDescription_trigger({ spaces }) {
-      if (spaces.length !== 1) {
+    $_editDescription_trigger({ resources }) {
+      if (resources.length !== 1) {
         return
       }
 
       const modal = {
         variation: 'passive',
-        title: this.$gettext('Change description for space') + ' ' + spaces[0].name,
+        title: this.$gettext('Change description for space') + ' ' + resources[0].name,
         cancelText: this.$gettext('Cancel'),
         confirmText: this.$gettext('Confirm'),
         hasInput: true,
         inputLabel: this.$gettext('Space description'),
-        inputValue: spaces[0].description,
+        inputValue: resources[0].description,
         onCancel: this.hideModal,
         onConfirm: (description) =>
-          this.$_editDescription_editDescriptionSpace(spaces[0].id, description)
+          this.$_editDescription_editDescriptionSpace(resources[0].id, description)
       }
 
       this.createModal(modal)

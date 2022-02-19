@@ -15,5 +15,6 @@ export default {
   'oc-img': true,
   'oc-page-size': true,
   'router-link': true,
-  'portal-target': true
+  'portal-target': true,
+  'oc-progress': true
 }

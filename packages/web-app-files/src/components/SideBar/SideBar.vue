@@ -52,10 +52,11 @@
           </oc-button>
         </div>
         <file-info
-          v-if="isSingleResource"
+          v-if="isSingleResource && !highlightedFileIsSpace"
           class="sidebar-panel__file_info"
           :is-content-displayed="isContentDisplayed"
         />
+        <space-info v-if="highlightedFileIsSpace" class="sidebar-panel__space_info" />
         <div class="sidebar-panel__body">
           <template v-if="isContentDisplayed">
             <component :is="panel.component" class="sidebar-panel__body-content" />
@@ -95,12 +96,13 @@ import { isLocationCommonActive, isLocationSharesActive } from '../../router'
 import { computed } from '@vue/composition-api'
 
 import FileInfo from './FileInfo.vue'
+import SpaceInfo from './SpaceInfo.vue'
 
 let visibilityObserver
 let hiddenObserver
 
 export default {
-  components: { FileInfo },
+  components: { FileInfo, SpaceInfo },
 
   provide() {
     return {
@@ -181,7 +183,7 @@ export default {
       return null
     },
     isSingleResource() {
-      return !this.areMultipleSelected && !this.isRootFolder
+      return !this.areMultipleSelected && (!this.isRootFolder || this.highlightedFileIsSpace)
     },
     areMultipleSelected() {
       return this.selectedFiles && this.selectedFiles.length > 1
@@ -194,6 +196,9 @@ export default {
     },
     highlightedFileFavorite() {
       return this.highlightedFile?.starred
+    },
+    highlightedFileIsSpace() {
+      return this.highlightedFile?.type === 'space'
     }
   },
   watch: {
@@ -292,7 +297,10 @@ export default {
         return
       }
 
-      if (isLocationCommonActive(this.$router, 'files-common-trash')) {
+      if (
+        isLocationCommonActive(this.$router, 'files-common-trash') ||
+        this.highlightedFileIsSpace
+      ) {
         this.selectedFile = this.highlightedFile
         return
       }
@@ -391,7 +399,8 @@ export default {
     }
   }
 
-  &__file_info {
+  &__file_info,
+  &__space_info {
     border-bottom: 1px solid var(--oc-color-border);
     background-color: var(--oc-color-background-default);
     padding: 0 10px;
