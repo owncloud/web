@@ -177,11 +177,11 @@ export function buildSpace(space) {
 }
 
 export function buildWebDavFilesPath(userId, path) {
-  return `/files/${userId}/${path}`
+  return '/' + `files/${userId}/${path}`.split('/').filter(Boolean).join('/')
 }
 
 export function buildWebDavSpacesPath(spaceId, path) {
-  return `/spaces/${spaceId}/${path}`
+  return '/' + `spaces/${spaceId}/${path}`.split('/').filter(Boolean).join('/')
 }
 
 export function attachIndicators(resource, sharesTree) {
