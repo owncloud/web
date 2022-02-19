@@ -12,6 +12,7 @@ Summary
 * Bugfix - Fix closing apps opened from search: [#6444](https://github.com/owncloud/web/pull/6444)
 * Enhancement - Add the graph client to the client service: [#6425](https://github.com/owncloud/web/pull/6425)
 * Enhancement - Enable context menu for search results: [#6445](https://github.com/owncloud/web/pull/6445)
+* Enhancement - Implement the right sidebar for spaces: [#6437](https://github.com/owncloud/web/pull/6437)
 * Enhancement - Use the Vue store for spaces: [#6427](https://github.com/owncloud/web/pull/6427)
 
 Details
@@ -42,6 +43,14 @@ Details
    We've enabled a rudimentary context menu for search results.
 
    https://github.com/owncloud/web/pull/6445
+
+* Enhancement - Implement the right sidebar for spaces: [#6437](https://github.com/owncloud/web/pull/6437)
+
+   The right sidebar for a space functions similar to the files sidebar and gives the user basic
+   information and actions for the current space.
+
+   https://github.com/owncloud/web/issues/6284
+   https://github.com/owncloud/web/pull/6437
 
 * Enhancement - Use the Vue store for spaces: [#6427](https://github.com/owncloud/web/pull/6427)
 
