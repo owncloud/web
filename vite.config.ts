@@ -25,6 +25,8 @@ const buildConfig = {
   requirejs: {},
   cdn: process.env.CDN === 'true',
   documentation_url: process.env.DOCUMENTATION_URL,
+  baseUrl: process.env.BASE_URL || '/',
+  history_mode: process.env.HISTORY_MODE === 'true',
   ...(process.env.REQUIRE_TIMEOUT && {
     requirejs: { waitSeconds: parseInt(process.env.REQUIRE_TIMEOUT) }
   })
