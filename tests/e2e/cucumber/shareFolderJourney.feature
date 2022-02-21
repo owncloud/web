@@ -41,9 +41,13 @@ Feature: share folder with file
       | folder_to_shared/lorem_new.txt |
       | folder_to_shared/simple.pdf    |
     When "Alice" creates a new version of the following files
-      | resource   | to               |
-      | simple.pdf | folder_to_shared |
+      | resource          | to               |
+      | PARENT/simple.pdf | folder_to_shared |
     Then "Alice" should see that the resource "folder_to_shared/simple.pdf" has 1 version
+    When "Brian" restores old version of the following files
+      | resource   | to                      |
+      | simple.pdf | Shares/folder_to_shared |
+    Then "Brian" should see that the version of resource "simple.pdf" has been restored
     When "Alice" deletes the following resources
       | folder_to_shared/lorem_new.txt |
       | folder_to_shared               |

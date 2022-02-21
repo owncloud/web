@@ -262,6 +262,37 @@ Then(
     await allFilesPage.navigate()
   }
 )
+When(
+  '{string} restores old version of the following files',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const actor = this.actorsEnvironment.getActor({ id: stepUser })
+    const { versions: versionPage } = new FilesPage({ actor })
+    const fileInfo = stepTable.hashes().reduce((acc, stepRow) => {
+      const { to, resource } = stepRow
+
+      if (!acc[to]) {
+        acc[to] = []
+      }
+
+      acc[to].push(this.filesEnvironment.getFile({ name: resource }))
+
+      return acc
+    }, {})
+
+    for (const folder of Object.keys(fileInfo)) {
+      await versionPage.restoreOlderVersion({ folder, files: fileInfo[folder] })
+    }
+  }
+)
+
+Then(
+  '{string} should see that the version of resource {string} has been restored',
+  async function (this: World, stepUser: string, resource: string): Promise<void> {
+    const actor = this.actorsEnvironment.getActor({ id: stepUser })
+    const { versions: versionPage } = new FilesPage({ actor })
+    await versionPage.checkOlderVersionRestored({ resource })
+  }
+)
 
 When(
   '{string} deletes the following resource(s)',
