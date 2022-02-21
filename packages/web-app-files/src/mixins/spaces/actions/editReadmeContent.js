@@ -19,11 +19,11 @@ export default {
           },
           handler: this.$_editReadmeContent_trigger,
           isEnabled: ({ resources }) => {
-            if (!resources[0].spaceReadmeData) {
+            if (resources.length === 1) {
               return false
             }
 
-            return resources.length === 1
+            return resources[0].spaceReadmeData
           },
           componentType: 'oc-button',
           class: 'oc-files-actions-edit-readme-content-trigger'
