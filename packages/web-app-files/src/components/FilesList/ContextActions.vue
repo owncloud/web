@@ -73,11 +73,6 @@ export default {
       required: true
     }
   },
-  setup() {
-    return {
-      isFilesAppActive: useIsFilesAppActive()
-    }
-  },
 
   computed: {
     menuSections() {
@@ -168,7 +163,9 @@ export default {
         ...this.$_rename_items,
         ...this.$_restore_items,
         ...this.$_acceptShare_items,
-        ...this.$_declineShare_items
+        ...this.$_declineShare_items,
+        ...this.$_setSpaceImage_items,
+        ...this.$_setSpaceReadme_items,
       ].filter((item) => item.isEnabled(this.filterParams))
     },
 

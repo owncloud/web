@@ -78,7 +78,7 @@
                     <oc-button
                       appearance="raw"
                       justify-content="left"
-                      @click="action.handler({ spaces: [space] })"
+                      @click="action.handler({ resources: [space] })"
                     >
                       <oc-icon :name="action.icon" />
                       {{ action.label() }}
@@ -422,16 +422,17 @@ export default {
       'REMOVE_FILE_SELECTION'
     ]),
     getContextMenuActions(space) {
+      console.log(space)
       return [
         ...this.$_rename_items,
         ...this.$_editDescription_items,
         ...this.$_editReadmeContent_items,
         ...this.$_uploadImage_items,
-        ...this.$_showDetails_items,
         ...this.$_restore_items,
         ...this.$_delete_items,
-        ...this.$_disable_items
-      ].filter((item) => item.isEnabled({ spaces: [space] }))
+        ...this.$_disable_items,
+        ...this.$_showDetails_items
+      ].filter((item) => item.isEnabled({ resources: [space] }))
     },
 
     rowMounted(resource, component) {

@@ -46,6 +46,12 @@ exports[`Spaces project view space image should show if given 1`] = `
                   Disable
                 </oc-button-stub>
               </li>
+              <li class="oc-spaces-context-action oc-py-xs oc-px-s">
+                <oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="left" gapsize="medium">
+                  <oc-icon-stub name="information" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
+                  Details
+                </oc-button-stub>
+              </li>
             </ul>
           </oc-drop-stub>
         </div>
@@ -103,6 +109,12 @@ exports[`Spaces project view space readme should show if given 1`] = `
                 <oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="left" gapsize="medium">
                   <oc-icon-stub name="forbid-2" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
                   Disable
+                </oc-button-stub>
+              </li>
+              <li class="oc-spaces-context-action oc-py-xs oc-px-s">
+                <oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="left" gapsize="medium">
+                  <oc-icon-stub name="information" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
+                  Details
                 </oc-button-stub>
               </li>
             </ul>

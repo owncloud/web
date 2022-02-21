@@ -220,7 +220,6 @@ export default {
         ...this.$_rename_items,
         ...this.$_editDescription_items,
         ...this.$_uploadImage_items,
-        ...this.$_showDetails_items,
         ...this.$_restore_items,
         ...this.$_delete_items,
         ...this.$_disable_items,

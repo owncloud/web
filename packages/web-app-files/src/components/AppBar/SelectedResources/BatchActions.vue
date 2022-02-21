@@ -38,11 +38,6 @@ export default {
     Move,
     Restore
   ],
-  setup() {
-    return {
-      isFilesAppActive: useIsFilesAppActive()
-    }
-  },
   computed: {
     ...mapGetters('Files', ['selectedFiles']),
 

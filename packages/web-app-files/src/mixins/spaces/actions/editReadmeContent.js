@@ -18,12 +18,12 @@ export default {
             return this.$gettext('Change description')
           },
           handler: this.$_editReadmeContent_trigger,
-          isEnabled: ({ spaces }) => {
-            if (!spaces[0].spaceReadmeData) {
+          isEnabled: ({ resources }) => {
+            if (!resources[0].spaceReadmeData) {
               return false
             }
 
-            return spaces.length === 1
+            return resources.length === 1
           },
           componentType: 'oc-button',
           class: 'oc-files-actions-edit-readme-content-trigger'
@@ -41,11 +41,11 @@ export default {
     ]),
     ...mapMutations('Files', ['UPDATE_RESOURCE_FIELD']),
 
-    $_editReadmeContent_trigger({ spaces }) {
-      if (spaces.length !== 1) {
+    $_editReadmeContent_trigger({ resources }) {
+      if (resources.length !== 1) {
         return
       }
-      const webDavPathComponents = spaces[0].spaceReadmeData.webDavUrl.split('/')
+      const webDavPathComponents = resources[0].spaceReadmeData.webDavUrl.split('/')
       const path = webDavPathComponents.slice(webDavPathComponents.indexOf('dav') + 1).join('/')
 
       this.$client.files.getFileContents(path).then((readmeContent) => {

@@ -20,7 +20,7 @@ export default {
           label: () => {
             return this.$gettext('Upload new space image')
           },
-          isEnabled: ({ spaces }) => spaces.length === 1,
+          isEnabled: ({ resources }) => resources.length === 1,
           componentType: 'oc-button',
           class: 'oc-files-actions-upload-space-image-trigger'
         }
@@ -30,12 +30,12 @@ export default {
   methods: {
     ...mapMutations('Files', ['UPDATE_RESOURCE_FIELD']),
     ...mapActions(['showMessage']),
-    $_uploadImage_trigger({ spaces }) {
-      if (spaces.length !== 1) {
+    $_uploadImage_trigger({ resources }) {
+      if (resources.length !== 1) {
         return
       }
 
-      this.$data.$_uploadImage_selectedSpace = spaces[0]
+      this.$data.$_uploadImage_selectedSpace = resources[0]
       this.$refs.spaceImageInput.click()
     },
     $_uploadImage_uploadImageSpace(ev) {

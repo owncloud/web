@@ -14,7 +14,7 @@ export default {
             return this.$gettext('Change subtitle')
           },
           handler: this.$_editDescription_trigger,
-          isEnabled: ({ resources }) => spaces.length === 1,
+          isEnabled: ({ resources }) => resources.length === 1,
           componentType: 'oc-button',
           class: 'oc-files-actions-edit-description-trigger'
         }
@@ -38,12 +38,12 @@ export default {
 
       const modal = {
         variation: 'passive',
-        title: this.$gettext('Change subtitle for space') + ' ' + spaces[0].name,
+        title: this.$gettext('Change subtitle for space') + ' ' + resources[0].name,
         cancelText: this.$gettext('Cancel'),
         confirmText: this.$gettext('Confirm'),
         hasInput: true,
         inputLabel: this.$gettext('Space subtitle'),
-        inputValue: spaces[0].description,
+        inputValue: resources[0].description,
         onCancel: this.hideModal,
         onConfirm: (description) =>
           this.$_editDescription_editDescriptionSpace(resources[0].id, description)
