@@ -28,7 +28,7 @@
     "qs": "^6.10.3",
     "semver": "^7.3.5",
     "tippy.js": "^6.3.7",
-    "tus-js-client": "^2.3.0",
+    "tus-js-client": "^2.3.1",
     "utf8": "^3.0.0",
     "uuid": "^8.3.2",
     "v-calendar": "^2.3.2",
