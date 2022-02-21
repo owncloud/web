@@ -202,6 +202,40 @@ export default {
       return true
     }
   },
+  watch: {
+    spaces: {
+      handler: function (val) {
+        if (!val) return
+
+        for (const space of this.spaces) {
+          if (!space.spaceImageData) {
+            continue
+          }
+
+          if (this.imageContentObject[space.id]?.fileId === space.spaceImageData?.id) {
+            continue
+          }
+
+          const webDavPathComponents = space.spaceImageData.webDavUrl.split('/')
+          const path = webDavPathComponents
+            .slice(webDavPathComponents.indexOf(space.id) + 1)
+            .join('/')
+
+          this.$client.files
+            .getFileContents(buildWebDavSpacesPath(space.id, path), {
+              responseType: 'arrayBuffer'
+            })
+            .then((fileContents) => {
+              this.$set(this.imageContentObject, space.id, {
+                fileId: space.spaceImageData.id,
+                content: Buffer.from(fileContents).toString('base64')
+              })
+            })
+        }
+      },
+      deep: true
+    }
+  },
   created() {
     this.loadResourcesTask.perform(this)
   },
@@ -322,40 +356,6 @@ export default {
         return 'state-trashed'
       }
       return ''
-    }
-  },
-  watch: {
-    spaces: {
-      handler: function (val) {
-        if (!val) return
-
-        for (const space of this.spaces) {
-          if (!space.spaceImageData) {
-            continue
-          }
-
-          if (this.imageContentObject[space.id]?.fileId === space.spaceImageData?.id) {
-            continue
-          }
-
-          const webDavPathComponents = space.spaceImageData.webDavUrl.split('/')
-          const path = webDavPathComponents
-            .slice(webDavPathComponents.indexOf(space.id) + 1)
-            .join('/')
-
-          this.$client.files
-            .getFileContents(buildWebDavSpacesPath(space.id, path), {
-              responseType: 'arrayBuffer'
-            })
-            .then((fileContents) => {
-              this.$set(this.imageContentObject, space.id, {
-                fileId: space.spaceImageData.id,
-                content: Buffer.from(fileContents).toString('base64')
-              })
-            })
-        }
-      },
-      deep: true
     }
   }
 }
