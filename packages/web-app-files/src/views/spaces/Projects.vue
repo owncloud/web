@@ -72,7 +72,12 @@
                   <img
                     v-if="imageContentObject[space.id]"
                     class="space-image oc-rounded-top"
-                    :src="'data:image/jpeg;base64,' + imageContentObject[space.id]['content']"
+                    :src="
+                      'data:' +
+                      imageContentObject[space.id]['mimeType'] +
+                      ';base64,' +
+                      imageContentObject[space.id]['data']
+                    "
                     alt=""
                   />
                   <oc-icon
@@ -228,7 +233,8 @@ export default {
             .then((fileContents) => {
               this.$set(this.imageContentObject, space.id, {
                 fileId: space.spaceImageData.id,
-                content: Buffer.from(fileContents).toString('base64')
+                data: Buffer.from(fileContents).toString('base64'),
+                mimeType: space.spaceImageData.file.mimeType
               })
             })
         }

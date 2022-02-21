@@ -34,7 +34,7 @@
                 :class="{ expanded: imageExpanded }"
                 class="space-overview-image oc-cursor-pointer"
                 alt=""
-                :src="'data:image/jpeg;base64,' + imageContent"
+                :src="'data:' + imageContent.mimeType + ';base64,' + imageContent.data"
                 @click="toggleImageExpanded"
               />
             </div>
@@ -288,7 +288,7 @@ export default {
       showMarkdownCollapse: false,
       markdownResizeObserver: new ResizeObserver(this.onMarkdownResize),
       imageExpanded: false,
-      imageContent: ''
+      imageContent: null
     }
   },
   computed: {
@@ -346,13 +346,15 @@ export default {
         const path = webDavPathComponents
           .slice(webDavPathComponents.indexOf(this.space.id) + 1)
           .join('/')
-
         this.$client.files
           .getFileContents(buildWebDavSpacesPath(this.space.id, path), {
             responseType: 'arrayBuffer'
           })
           .then((fileContents) => {
-            this.imageContent = Buffer.from(fileContents).toString('base64')
+            this.imageContent = {
+              data: Buffer.from(fileContents).toString('base64'),
+              mimeType: this.space.spaceImageData.file.mimeType
+            }
           })
       },
       deep: true
@@ -422,7 +424,6 @@ export default {
       'REMOVE_FILE_SELECTION'
     ]),
     getContextMenuActions(space) {
-      console.log(space)
       return [
         ...this.$_rename_items,
         ...this.$_editDescription_items,
