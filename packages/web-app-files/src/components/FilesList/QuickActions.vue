@@ -42,7 +42,7 @@ export default {
 
 <style lang="scss">
 .quick-action-button {
-  padding: 6px !important;
+  padding: calc(1.5 * var(--oc-space-xsmall)) !important;
   &:hover {
     background-color: var(--oc-color-background-muted) !important;
   }
