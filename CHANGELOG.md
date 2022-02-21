@@ -11,6 +11,7 @@ Summary
 * Bugfix - App compatibility: [#6439](https://github.com/owncloud/web/pull/6439)
 * Bugfix - Fix closing apps opened from search: [#6444](https://github.com/owncloud/web/pull/6444)
 * Enhancement - Add the graph client to the client service: [#6425](https://github.com/owncloud/web/pull/6425)
+* Enhancement - Redesign FilesTable: [#6207](https://github.com/owncloud/web/issues/6207)
 * Enhancement - Enable context menu for search results: [#6445](https://github.com/owncloud/web/pull/6445)
 * Enhancement - Implement the right sidebar for spaces: [#6437](https://github.com/owncloud/web/pull/6437)
 * Enhancement - Use the Vue store for spaces: [#6427](https://github.com/owncloud/web/pull/6427)
@@ -37,6 +38,13 @@ Details
    This way, the client for the graph API can easily be fetched when needed.
 
    https://github.com/owncloud/web/pull/6425
+
+* Enhancement - Redesign FilesTable: [#6207](https://github.com/owncloud/web/issues/6207)
+
+   We've redesigned the QuickActions visually and updated theming to fit the redesign
+
+   https://github.com/owncloud/web/issues/6207
+   https://github.com/owncloud/web/pull/6450
 
 * Enhancement - Enable context menu for search results: [#6445](https://github.com/owncloud/web/pull/6445)
 
