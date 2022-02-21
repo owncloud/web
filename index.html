@@ -10,12 +10,12 @@
     <script>
       window.global = window
     </script>
-    <link rel="manifest" href="manifest.json" crossorigin="use-credentials">
+    <link rel="manifest" href="<%= data.buildConfig.baseUrl %>manifest.json" crossorigin="use-credentials">
   <% if (data.buildConfig.cdn) { %>
     <script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
-    <script>if (typeof requirejs === 'undefined') { document.write('<script src="js/require.js?<%= data.compilationTimestamp %>">\x3C/script>') }</script>
+    <script>if (typeof requirejs === 'undefined') { document.write('<script src="<%= data.buildConfig.baseUrl %>js/require.js?<%= data.compilationTimestamp %>">\x3C/script>') }</script>
   <% } else { %>
-    <script src="js/require.js?<%= data.compilationTimestamp %>"></script>
+    <script src="<%= data.buildConfig.baseUrl %>js/require.js?<%= data.compilationTimestamp %>"></script>
   <% } %>
     <script type="module" src="./packages/web-runtime/src/index.ts"></script>
     <script type="module">
@@ -62,6 +62,7 @@
         to { -webkit-transform: rotate(360deg); }
       }
     </style>
+    <base href="<%= data.buildConfig.baseUrl %>"/>
   </head>
   <body>
     <div id="splash-incompatible" class="splash-banner splash-hide">
