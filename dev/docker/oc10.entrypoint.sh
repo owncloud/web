@@ -16,9 +16,14 @@ done
 
 if [ ! -d /mnt/data/apps/testing ]
 then
+    # testing app
     git clone https://github.com/owncloud/testing.git /mnt/data/apps/testing
-    occ app:enable oauth2
     occ app:enable testing
+    # oauth2 app
+    rm -rf /var/www/owncloud/apps/oauth2
+    git clone https://github.com/owncloud/oauth2.git /var/www/owncloud/apps/oauth2
+    make -C /var/www/owncloud/apps/oauth2 vendor
+    occ app:enable oauth2
     occ oauth2:add-client \
       web \
       M8W5mo3wQV3VHWYsaYpWhkr8dwa949i4GljCkedHhl7GWqmHMkxSeJgK2PcS0jt5 \
