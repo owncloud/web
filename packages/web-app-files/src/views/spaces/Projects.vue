@@ -318,7 +318,7 @@ export default {
 .spaces-list {
   &-card {
     box-shadow: none !important;
-    background-color: var(--oc-color-background-highlight) !important;
+    background-color: var(--oc-color-background-secondary) !important;
   }
 
   &-card.state-trashed {

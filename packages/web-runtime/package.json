@@ -17,7 +17,7 @@
     "lodash-es": "^4.17.21",
     "luxon": "^2.3.0",
     "oidc-client": "1.11.5",
-    "owncloud-design-system": "12.1.0",
+    "owncloud-design-system": "12.1.1-rc1",
     "owncloud-sdk": "~2.0.0",
     "p-queue": "^6.1.1",
     "popper-max-size-modifier": "^0.2.0",
