@@ -39,7 +39,7 @@
     "vue": "^2.6.10"
   },
   "devDependencies": {
-    "@babel/core": "^7.16.5",
+    "@babel/core": "^7.17.5",
     "@babel/eslint-parser": "^7.16.5",
     "@babel/polyfill": "^7.12.1",
     "@babel/preset-env": "^7.16.5",
