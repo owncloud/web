@@ -29,7 +29,9 @@ const compilationTimestamp = new Date().getTime()
 
 const config = {
   requirejs: {},
-  cdn: process.env.CDN === 'true'
+  cdn: process.env.CDN === 'true',
+  baseUrl: process.env.BASE_URL || '/',
+  history_mode: process.env.HISTORY_MODE === 'true'
 }
 if (process.env.REQUIRE_TIMEOUT) {
   config.requirejs.waitSeconds = parseInt(process.env.REQUIRE_TIMEOUT)
@@ -153,8 +155,8 @@ const plugins = [
                 return acc
               }, {}),
               roots: {
-                css: 'css',
-                js: 'js'
+                css: config.baseUrl + 'css',
+                js: config.baseUrl + 'js'
               },
               config: config,
               compilationTimestamp: compilationTimestamp
