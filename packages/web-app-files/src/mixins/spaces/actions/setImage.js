@@ -35,7 +35,7 @@ export default {
   methods: {
     ...mapMutations('Files', ['UPDATE_RESOURCE_FIELD']),
     ...mapActions(['showMessage']),
-    $_setSpaceImage_setImageSpace({ resources }) {
+    async $_setSpaceImage_setImageSpace({ resources }) {
       const graphClient = clientService.graphAuthenticated(this.configuration.server, this.getToken)
       const spaceId = this.$route.params.spaceId
       const sourcePath = resources[0].webDavPath
@@ -44,46 +44,41 @@ export default {
       if (sourcePath === destinationPath) {
         return
       }
-
-      return this.$client.files.copy(sourcePath, destinationPath).then(() => {
-        return this.$client.files.fileInfo(destinationPath).then((fileInfo) => {
-          const file = buildResource(fileInfo)
-          return graphClient.drives
-            .updateDrive(
-              spaceId,
+      try {
+        await this.$client.files.copy(sourcePath, destinationPath)
+        const fileInfo = await this.$client.files.fileInfo(destinationPath)
+        const file = buildResource(fileInfo)
+        const { data } = await graphClient.drives.updateDrive(
+          spaceId,
+          {
+            special: [
               {
-                special: [
-                  {
-                    specialFolder: {
-                      name: 'image'
-                    },
-                    id: file.id
-                  }
-                ]
-              },
-              {}
-            )
-            .then(({ data }) => {
-              this.UPDATE_RESOURCE_FIELD({
-                id: spaceId,
-                field: 'spaceImageData',
-                value: data.special.find((special) => special.specialFolder.name === 'image')
-              })
-
-              this.showMessage({
-                title: this.$gettext('Space image successfully set')
-              })
-              bus.publish('app.files.list.load')
-            })
-            .catch((error) => {
-              this.showMessage({
-                title: this.$gettext('Set space image failed…'),
-                desc: error,
-                status: 'danger'
-              })
-            })
+                specialFolder: {
+                  name: 'image'
+                },
+                id: file.id
+              }
+            ]
+          },
+          {}
+        )
+        this.UPDATE_RESOURCE_FIELD({
+          id: spaceId,
+          field: 'spaceImageData',
+          value: data.special.find((special) => special.specialFolder.name === 'image')
         })
-      })
+
+        this.showMessage({
+          title: this.$gettext('Space image successfully set')
+        })
+        bus.publish('app.files.list.load')
+      } catch (error) {
+        this.showMessage({
+          title: this.$gettext('Set space image failed…'),
+          desc: error,
+          status: 'danger'
+        })
+      }
     }
   }
 }

@@ -33,32 +33,31 @@ export default {
   methods: {
     ...mapMutations('Files', ['UPDATE_RESOURCE_FIELD']),
     ...mapActions(['showMessage']),
-    $_setSpaceReadme_setReadmeSpace({ resources }) {
+    async $_setSpaceReadme_setReadmeSpace({ resources }) {
       const space = this.currentFolder
-      return this.$client.files
-        .getFileContents(resources[0].webDavPath)
-        .then((fileContent) => {
-          return this.$client.files
-            .putFileContents(`/spaces/${space.id}/.space/readme.md`, fileContent)
-            .then((fileMetaData) => {
-              this.UPDATE_RESOURCE_FIELD({
-                id: space.id,
-                field: 'spaceReadmeData',
-                value: { ...space.spaceReadmeData, ...{ etag: fileMetaData.ETag } }
-              })
-              this.showMessage({
-                title: this.$gettext('Space description successfully set')
-              })
-              bus.publish('app.files.list.load')
-            })
+
+      try {
+        const fileContent = await this.$client.files.getFileContents(resources[0].webDavPath)
+        const fileMetaData = await this.$client.files.putFileContents(
+          `/spaces/${space.id}/.space/readme.md`,
+          fileContent
+        )
+        this.UPDATE_RESOURCE_FIELD({
+          id: space.id,
+          field: 'spaceReadmeData',
+          value: { ...space.spaceReadmeData, ...{ etag: fileMetaData?.ETag } }
         })
-        .catch((error) => {
-          this.showMessage({
-            title: this.$gettext('Set space readme failed…'),
-            desc: error,
-            status: 'danger'
-          })
+        this.showMessage({
+          title: this.$gettext('Space description successfully set')
         })
+        bus.publish('app.files.list.load')
+      } catch (error) {
+        this.showMessage({
+          title: this.$gettext('Set space readme failed…'),
+          desc: error,
+          status: 'danger'
+        })
+      }
     }
   }
 }
