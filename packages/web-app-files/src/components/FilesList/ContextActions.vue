@@ -217,6 +217,7 @@ export default {
       justify-content: flex-start;
       vertical-align: top;
       width: 100%;
+      text-align: left;
 
       span:hover,
       &:hover {
