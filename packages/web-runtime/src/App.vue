@@ -5,6 +5,7 @@
       <translate>Skip to main</translate>
     </skip-to>
     <component :is="layout"></component>
+    <portal-target name="app.runtime.modal" multiple></portal-target>
     <oc-modal
       v-if="modal.displayed"
       :variation="modal.variation"

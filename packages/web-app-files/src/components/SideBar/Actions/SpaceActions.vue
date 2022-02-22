@@ -1,23 +1,25 @@
 <template>
   <div>
-    <oc-modal
-      v-if="$data.$_editReadmeContent_modalOpen"
-      :title="$gettext('Change description for space') + ' ' + resources[0].name"
-      :button-cancel-text="$gettext('Cancel')"
-      :button-confirm-text="$gettext('Confirm')"
-      @confirm="$_editReadmeContent_editReadmeContentSpace"
-      @cancel="$_editReadmeContent_closeModal"
-    >
-      <template #content>
-        <label v-translate class="oc-label" for="description-input-area">Space description</label>
-        <textarea
-          id="description-input-area"
-          v-model="$data.$_editReadmeContent_content"
-          class="oc-width-1-1 oc-height-1-1 oc-text-input"
-          rows="30"
-        ></textarea>
-      </template>
-    </oc-modal>
+    <portal v-if="$data.$_editReadmeContent_modalOpen" to="app.runtime.modal">
+      <oc-modal
+        focus-trap-initial="#description-input-area"
+        :title="$gettext('Change description for space') + ' ' + resources[0].name"
+        :button-cancel-text="$gettext('Cancel')"
+        :button-confirm-text="$gettext('Confirm')"
+        @confirm="$_editReadmeContent_editReadmeContentSpace"
+        @cancel="$_editReadmeContent_closeModal"
+      >
+        <template #content>
+          <label v-translate class="oc-label" for="description-input-area">Space description</label>
+          <textarea
+            id="description-input-area"
+            v-model="$data.$_editReadmeContent_content"
+            class="oc-width-1-1 oc-height-1-1 oc-text-input"
+            rows="30"
+          ></textarea>
+        </template>
+      </oc-modal>
+    </portal>
     <input
       id="space-image-upload-input"
       ref="spaceImageInput"
