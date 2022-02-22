@@ -11,8 +11,10 @@ Summary
 * Bugfix - App compatibility: [#6439](https://github.com/owncloud/web/pull/6439)
 * Bugfix - Fix closing apps opened from search: [#6444](https://github.com/owncloud/web/pull/6444)
 * Enhancement - Add the graph client to the client service: [#6425](https://github.com/owncloud/web/pull/6425)
+* Enhancement - Option to enable Vue history mode: [#6363](https://github.com/owncloud/web/issues/6363)
 * Enhancement - Redesign FilesTable: [#6207](https://github.com/owncloud/web/issues/6207)
 * Enhancement - Enable context menu for search results: [#6445](https://github.com/owncloud/web/pull/6445)
+* Enhancement - Run web as oc10 sidecar: [#6363](https://github.com/owncloud/web/issues/6363)
 * Enhancement - Implement the right sidebar for spaces: [#6437](https://github.com/owncloud/web/pull/6437)
 * Enhancement - Use the Vue store for spaces: [#6427](https://github.com/owncloud/web/pull/6427)
 
@@ -39,6 +41,16 @@ Details
 
    https://github.com/owncloud/web/pull/6425
 
+* Enhancement - Option to enable Vue history mode: [#6363](https://github.com/owncloud/web/issues/6363)
+
+   We've added the option to use vue's history mode. All configuration is done automatically by
+   the system. To enable it, add a `<base src="PATH">` header tag to `index.html`,
+   `oidc-callback.html` and `oidc-silent-redirect.html`. Adding `<base>` is not needed for
+   ocis.
+
+   https://github.com/owncloud/web/issues/6363
+   https://github.com/owncloud/web/issues/6277
+
 * Enhancement - Redesign FilesTable: [#6207](https://github.com/owncloud/web/issues/6207)
 
    We've redesigned the QuickActions visually and updated theming to fit the redesign
@@ -51,6 +63,14 @@ Details
    We've enabled a rudimentary context menu for search results.
 
    https://github.com/owncloud/web/pull/6445
+
+* Enhancement - Run web as oc10 sidecar: [#6363](https://github.com/owncloud/web/issues/6363)
+
+   We've added the option to run web in oc10 sidecar mode. Copy
+   `config/config.json.sample-oc10` to `config/config.json`, run `yarn server` and then
+   `docker compose up oc10`.
+
+   https://github.com/owncloud/web/issues/6363
 
 * Enhancement - Implement the right sidebar for spaces: [#6437](https://github.com/owncloud/web/pull/6437)
 
