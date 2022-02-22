@@ -1,0 +1,6 @@
+Bugfix: Breadcrumb 'All Files' path
+
+We've reverted the `All Files` breadcrumb link back to `/` to be storage agnostic and don't rely on configured homeFolder.
+
+https://github.com/owncloud/web/pull/6467
+https://github.com/owncloud/web/issues/6327
