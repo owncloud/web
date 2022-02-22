@@ -35,118 +35,118 @@ config = {
         "webUI": {
             "type": FULL,
             "suites": {
-                "oC10Basic1": [
-                    "webUIAccount",
-                    "webUIWebdavLocks",
-                ],
-                "oC10Basic2": [
-                    "webUIPrivateLinks",
-                    "webUIWebdavLockProtection",
-                ],
-                "oC10FileOperations": [
-                    "webUICreateFilesFolders",
-                    "webUIDeleteFilesFolders",
-                ],
-                "oC10SharingAccept": [
-                    "webUISharingAcceptShares",
-                    "webUISharingAcceptSharesToRoot",
-                    "webUISharingInternalUsersCollaborator",
-                ],
+                # "oC10Basic1": [
+                #     "webUIAccount",
+                #     "webUIWebdavLocks",
+                # ],
+                # "oC10Basic2": [
+                #     "webUIPrivateLinks",
+                #     "webUIWebdavLockProtection",
+                # ],
+                # "oC10FileOperations": [
+                #     "webUICreateFilesFolders",
+                #     "webUIDeleteFilesFolders",
+                # ],
+                # "oC10SharingAccept": [
+                #     "webUISharingAcceptShares",
+                #     "webUISharingAcceptSharesToRoot",
+                #     "webUISharingInternalUsersCollaborator",
+                # ],
                 "oC10Files1": [
                     "webUIFilesCopy",
                     "webUIFavorites",
                     "webUIMarkdownEditor",
                 ],
-                "oC10Files2": [
-                    "webUIFilesList",
-                    "webUIFilesSearch",
-                    "webUIFilesActionMenu",
-                ],
-                "oC10Files3": [
-                    "webUIRenameFiles",
-                    "webUILogin",
-                ],
-                "oC10Files4": [
-                    "webUIPreview",
-                    "webUIFilesDetails",
-                ],
-                "oC10Files5": [
-                    "webUIFiles",
-                    "webUIRenameFolders",
-                ],
-                "oC10Move": [
-                    "webUIMoveFilesFolders",
-                    "webUIOperationsWithFolderShares",
-                ],
-                "oC10Resharing": [
-                    "webUIResharing1",
-                    "webUIResharing2",
-                ],
-                "oC10Sharing1": [
-                    "webUISharingAutocompletion",
-                    "webUISharingExpirationDate",
-                    "webUIRestrictSharing",
-                ],
-                "oC10Sharing2": [
-                    "webUIResharingToRoot",
-                    "webUISharingInternalUsersBlacklisted",
-                ],
-                "oC10SharingFilePerm": [
-                    "webUISharingFilePermissionMultipleUsers",
-                    "webUISharingFilePermissionsGroups",
-                ],
-                "oC10SharingFolderPermissions": [
-                    "webUISharingFolderPermissionMultipleUsers",
-                    "webUISharingFolderPermissionsGroups",
-                ],
-                "oC10SharingIntGroups": [
-                    "webUISharingInternalGroups",
-                    "webUISharingInternalGroupsEdgeCases",
-                ],
-                "oC10SharingIntGroupsToRoot": [
-                    "webUISharingInternalGroupsToRoot",
-                    "webUISharingInternalGroupsToRootEdgeCases",
-                ],
-                "oC10SharingIntUsers1": [
-                    "webUISharingInternalUsers",
-                    "webUISharingInternalUsersToRootCollaborator",
-                ],
-                "oC10SharingIntUsers2": [
-                    "webUISharingInternalUsersToRoot",
-                    "webUISharingInternalUsersToRootShareWithPage",
-                ],
-                "oc10SharingIntUsers3": [
-                    "webUISharingInternalUsersToRootBlacklisted",
-                    "webUISharingInternalUsersShareWithPage",
-                ],
-                "oC10SharingSharingInd": [
-                    "webUISharingInternalGroupsSharingIndicator",
-                    "webUISharingInternalGroupsToRootSharingIndicator",
-                    "webUISharingInternalUsersSharingIndicator",
-                    "webUISharingInternalUsersToRootSharingIndicator",
-                ],
-                "oC10SharingAndTrashbin": [
-                    "webUISharingInternalUsersToRootPreviews",
-                    "webUITrashbinDelete",
-                    "webUITrashbinFilesFolders",
-                    "webUITrashbinRestore",
-                ],
-                "oC10SharingPermission": [
-                    "webUISharingPermissionsUsers",
-                    "webUISharingFolderAdvancedPermissionMultipleUsers",
-                ],
-                "webUISharingPermissionToRoot": "oC10SharingPermToRoot",
-                "oC10SharingPublic1": [
-                    "webUISharingPublicBasic",
-                    "webUISharingPublicExpire",
-                ],
-                "oC10SharingPublic2": [
-                    "webUISharingPublicDifferentRoles",
-                    "webUISharingPublicManagement",
-                ],
-                "oC10Upload": [
-                    "webUIUpload",
-                ],
+                # "oC10Files2": [
+                #     "webUIFilesList",
+                #     "webUIFilesSearch",
+                #     "webUIFilesActionMenu",
+                # ],
+                # "oC10Files3": [
+                #     "webUIRenameFiles",
+                #     "webUILogin",
+                # ],
+                # "oC10Files4": [
+                #     "webUIPreview",
+                #     "webUIFilesDetails",
+                # ],
+                # "oC10Files5": [
+                #     "webUIFiles",
+                #     "webUIRenameFolders",
+                # ],
+                # "oC10Move": [
+                #     "webUIMoveFilesFolders",
+                #     "webUIOperationsWithFolderShares",
+                # ],
+                # "oC10Resharing": [
+                #     "webUIResharing1",
+                #     "webUIResharing2",
+                # ],
+                # "oC10Sharing1": [
+                #     "webUISharingAutocompletion",
+                #     "webUISharingExpirationDate",
+                #     "webUIRestrictSharing",
+                # ],
+                # "oC10Sharing2": [
+                #     "webUIResharingToRoot",
+                #     "webUISharingInternalUsersBlacklisted",
+                # ],
+                # "oC10SharingFilePerm": [
+                #     "webUISharingFilePermissionMultipleUsers",
+                #     "webUISharingFilePermissionsGroups",
+                # ],
+                # "oC10SharingFolderPermissions": [
+                #     "webUISharingFolderPermissionMultipleUsers",
+                #     "webUISharingFolderPermissionsGroups",
+                # ],
+                # "oC10SharingIntGroups": [
+                #     "webUISharingInternalGroups",
+                #     "webUISharingInternalGroupsEdgeCases",
+                # ],
+                # "oC10SharingIntGroupsToRoot": [
+                #     "webUISharingInternalGroupsToRoot",
+                #     "webUISharingInternalGroupsToRootEdgeCases",
+                # ],
+                # "oC10SharingIntUsers1": [
+                #     "webUISharingInternalUsers",
+                #     "webUISharingInternalUsersToRootCollaborator",
+                # ],
+                # "oC10SharingIntUsers2": [
+                #     "webUISharingInternalUsersToRoot",
+                #     "webUISharingInternalUsersToRootShareWithPage",
+                # ],
+                # "oc10SharingIntUsers3": [
+                #     "webUISharingInternalUsersToRootBlacklisted",
+                #     "webUISharingInternalUsersShareWithPage",
+                # ],
+                # "oC10SharingSharingInd": [
+                #     "webUISharingInternalGroupsSharingIndicator",
+                #     "webUISharingInternalGroupsToRootSharingIndicator",
+                #     "webUISharingInternalUsersSharingIndicator",
+                #     "webUISharingInternalUsersToRootSharingIndicator",
+                # ],
+                # "oC10SharingAndTrashbin": [
+                #     "webUISharingInternalUsersToRootPreviews",
+                #     "webUITrashbinDelete",
+                #     "webUITrashbinFilesFolders",
+                #     "webUITrashbinRestore",
+                # ],
+                # "oC10SharingPermission": [
+                #     "webUISharingPermissionsUsers",
+                #     "webUISharingFolderAdvancedPermissionMultipleUsers",
+                # ],
+                # "webUISharingPermissionToRoot": "oC10SharingPermToRoot",
+                # "oC10SharingPublic1": [
+                #     "webUISharingPublicBasic",
+                #     "webUISharingPublicExpire",
+                # ],
+                # "oC10SharingPublic2": [
+                #     "webUISharingPublicDifferentRoles",
+                #     "webUISharingPublicManagement",
+                # ],
+                # "oC10Upload": [
+                #     "webUIUpload",
+                # ],
             },
             "extraEnvironment": {
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
@@ -169,6 +169,7 @@ config = {
             "visualTesting": False,
             "screenShots": True,
             "retry": False,
+            "skip": True,
         },
         "webUINotification": {
             "type": NOTIFICATIONS,
@@ -186,6 +187,7 @@ config = {
             "visualTesting": False,
             "screenShots": True,
             "notificationsAppNeeded": True,
+            "skip": True,
         },
         "webUIFederation": {
             "type": FEDERATED,
@@ -200,6 +202,7 @@ config = {
             "notificationsAppNeeded": True,
             "federatedServerNeeded": True,
             "federatedServerVersion": OC10_VERSION,
+            "skip": True,
         },
         "webUI-XGA-Notifications": {
             "type": NOTIFICATIONS,
@@ -216,6 +219,7 @@ config = {
             },
             "notificationsAppNeeded": True,
             "filterTags": "@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10 and not @notToImplementOnOC10",
+            "skip": True,
         },
         "webUI-XGA": {
             "type": FULL,
@@ -293,6 +297,7 @@ config = {
                 "SCREEN_RESOLUTION": "768x1024",
             },
             "filterTags": "@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10 and not @notToImplementOnOC10",
+            "skip": True,
         },
         "webUI-Notifications-iPhone": {
             "type": NOTIFICATIONS,
@@ -309,6 +314,7 @@ config = {
             },
             "notificationsAppNeeded": True,
             "filterTags": "@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10 and not @notToImplementOnOC10",
+            "skip": True,
         },
         "webUI-iPhone": {
             "type": FULL,
@@ -386,6 +392,7 @@ config = {
                 "SCREEN_RESOLUTION": "375x812",
             },
             "filterTags": "@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10 and not @notToImplementOnOC10",
+            "skip": True,
         },
         "webUI-ocis": {
             "type": FULL,
@@ -494,6 +501,7 @@ config = {
             "visualTesting": False,
             "filterTags": "not @skip and not @skipOnOCIS and not @notToImplementOnOCIS",
             "screenShots": True,
+            "skip": True,
         },
         "webUI-notifications-oc10-integration": {
             "type": NOTIFICATIONS,
@@ -513,6 +521,7 @@ config = {
             "oc10IntegrationAppIncluded": True,
             "notificationsAppNeeded": True,
             "screenShots": True,
+            "skip": True,
         },
         "webUI-oc10-integration": {
             "type": FULL,
@@ -591,6 +600,7 @@ config = {
             "filterTags": "not @skip and not @skipOnOC10 and not @notToImplementOnOC10 and not @openIdLogin and @smokeTest",
             "oc10IntegrationAppIncluded": True,
             "screenShots": True,
+            "skip": True,
         },
     },
     "build": True,
@@ -725,10 +735,10 @@ def Diff(li1, li2):
     return li_dif
 
 def main(ctx):
-    uiSuitesCheck = checkTestSuites()
-    if (uiSuitesCheck == False):
-        print("Errors detected. Review messages above.")
-        return []
+    # uiSuitesCheck = checkTestSuites()
+    # if (uiSuitesCheck == False):
+    #     print("Errors detected. Review messages above.")
+    #     return []
 
     before = beforePipelines(ctx)
 
@@ -738,26 +748,27 @@ def main(ctx):
         print("Errors detected. Review messages above.")
         return []
 
-    after = pipelinesDependsOn(afterPipelines(ctx), stages)
+    # after = pipelinesDependsOn(afterPipelines(ctx), stages)
 
-    pipelines = before + stages + after
+    # pipelines = before + stages + after
+    pipelines = before + stages
 
-    deploys = example_deploys(ctx)
-    if ctx.build.event != "cron":
-        # run example deploys on cron even if some prior pipelines fail
-        deploys = pipelinesDependsOn(deploys, pipelines)
+    # deploys = example_deploys(ctx)
+    # if ctx.build.event != "cron":
+    #     # run example deploys on cron even if some prior pipelines fail
+    #     deploys = pipelinesDependsOn(deploys, pipelines)
 
-    pipelines = pipelines + deploys + pipelinesDependsOn(
-        [
-            purgeBuildArtifactCache(ctx, "yarn"),
-            purgeBuildArtifactCache(ctx, "playwright"),
-            purgeBuildArtifactCache(ctx, "tests-yarn"),
-            purgeBuildArtifactCache(ctx, "web-dist"),
-        ],
-        pipelines,
-    )
+    # pipelines = pipelines + deploys + pipelinesDependsOn(
+    #     [
+    #         purgeBuildArtifactCache(ctx, "yarn"),
+    #         purgeBuildArtifactCache(ctx, "playwright"),
+    #         purgeBuildArtifactCache(ctx, "tests-yarn"),
+    #         purgeBuildArtifactCache(ctx, "web-dist"),
+    #     ],
+    #     pipelines,
+    # )
 
-    pipelineSanityChecks(ctx, pipelines)
+    # pipelineSanityChecks(ctx, pipelines)
     return pipelines
 
 def beforePipelines(ctx):
@@ -771,10 +782,12 @@ def beforePipelines(ctx):
            pipelinesDependsOn(yarnlint(ctx), yarnCache(ctx))
 
 def stagePipelines(ctx):
-    unit_test_pipelines = unitTests(ctx)
-    e2e_pipelines = e2eTests(ctx)
+    # unit_test_pipelines = unitTests(ctx)
+    # e2e_pipelines = e2eTests(ctx)
     acceptance_pipelines = acceptance(ctx)
-    return unit_test_pipelines + pipelinesDependsOn(e2e_pipelines, unit_test_pipelines) + pipelinesDependsOn(acceptance_pipelines, e2e_pipelines)
+
+    # return unit_test_pipelines + pipelinesDependsOn(e2e_pipelines, unit_test_pipelines) + pipelinesDependsOn(acceptance_pipelines, e2e_pipelines)
+    return acceptance_pipelines
 
 def afterPipelines(ctx):
     return build(ctx) + notify()
@@ -1146,7 +1159,7 @@ def e2eTests(ctx):
         ],
     }]
 
-    services = databaseService(db) + owncloudService() + webService()
+    services = databaseService(db) + owncloudService()
 
     stepsClassic = \
         skipIfUnchanged(ctx, "e2e-tests") + \
@@ -1354,7 +1367,7 @@ def acceptance(ctx):
                             else:
                                 ## Configure oc10 and web with oauth2 and web Service
                                 steps += setUpOauth2(params["oc10IntegrationAppIncluded"], True)
-                                services += webService()
+                                steps += webService()
 
                             steps += fixPermissions()
                             steps += waitForOwncloudService()
@@ -1992,18 +2005,28 @@ def getSkeletonFiles():
     }]
 
 def webService():
-    return [{
-        "name": "web",
-        "image": OC_CI_PHP,
-        "environment": {
-            "APACHE_WEBROOT": "%s/dist" % dir["web"],
-            "APACHE_LOGGING_PATH": "/dev/null",
+    return [
+        {
+            "name": "web",
+            "detach": True,
+            "image": OC_CI_NODEJS,
+            # "environment": {
+            #     "APACHE_WEBROOT": "%s/dist" % dir["web"],
+            #     "APACHE_LOGGING_PATH": "/dev/null",
+            # },
+            "commands": [
+                "yarn",
+                "yarn serve",
+            ],
         },
-        "commands": [
-            "mkdir -p %s/dist" % dir["web"],
-            "/usr/local/bin/apachectl -D FOREGROUND",
-        ],
-    }]
+        {
+            "name": "wait-for-web-server",
+            "image": OC_CI_WAIT_FOR,
+            "commands": [
+                "wait-for -it web:9100 -t 300",
+            ],
+        },
+    ]
 
 def setUpOauth2(forIntegrationApp, disableFileLocking):
     oidcURL = ""
@@ -2384,7 +2407,7 @@ def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnv
         environment["VISUAL_TEST"] = "true"
     if (screenShots):
         environment["SCREENSHOTS"] = "true"
-    environment["SERVER_HOST"] = "http://web"
+    environment["SERVER_HOST"] = "http://web:9100"
     environment["BACKEND_HOST"] = "http://owncloud"
     environment["COMMENTS_FILE"] = "/var/www/owncloud/web/comments.file"
     environment["MIDDLEWARE_HOST"] = "http://middleware:3000"
