@@ -19,7 +19,7 @@ export default {
           },
           handler: this.$_editReadmeContent_trigger,
           isEnabled: ({ resources }) => {
-            if (resources.length === 1) {
+            if (resources.length !== 1) {
               return false
             }
 

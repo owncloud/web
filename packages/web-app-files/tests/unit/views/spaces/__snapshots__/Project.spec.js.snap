@@ -30,6 +30,12 @@ exports[`Spaces project view space image should show if given 1`] = `
               </li>
               <li class="oc-spaces-context-action oc-py-xs oc-px-s">
                 <oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="left" gapsize="medium">
+                  <oc-icon-stub name="markdown" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
+                  Change description
+                </oc-button-stub>
+              </li>
+              <li class="oc-spaces-context-action oc-py-xs oc-px-s">
+                <oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="left" gapsize="medium">
                   <oc-icon-stub name="image-add" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
                   Upload new space image
                 </oc-button-stub>
@@ -85,6 +91,12 @@ exports[`Spaces project view space readme should show if given 1`] = `
                 <oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="left" gapsize="medium">
                   <oc-icon-stub name="pencil" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
                   Change subtitle
+                </oc-button-stub>
+              </li>
+              <li class="oc-spaces-context-action oc-py-xs oc-px-s">
+                <oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="left" gapsize="medium">
+                  <oc-icon-stub name="markdown" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
+                  Change description
                 </oc-button-stub>
               </li>
               <li class="oc-spaces-context-action oc-py-xs oc-px-s">

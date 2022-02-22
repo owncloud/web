@@ -2,18 +2,18 @@
 
 exports[`ApplicationsMenu component should render navigation with button and menu items in dropdown 1`] = `
 <nav id="applications-menu" aria-label="Main navigation" class="oc-flex oc-flex-middle">
-  <oc-button-stub type="button" size="medium" arialabel="Application Switcher" variation="inverse" appearance="raw" justifycontent="center" gapsize="medium" id="_appSwitcherButton" class="oc-topbar-menu-burger">
-    <oc-icon-stub name="grid" filltype="fill" accessiblelabel="" type="span" size="large" variation="passive" color="" class="oc-flex"></oc-icon-stub>
+  <oc-button-stub id="_appSwitcherButton" appearance="raw" variation="inverse" aria-label="Application Switcher" class="oc-topbar-menu-burger">
+    <oc-icon-stub name="grid" size="large" class="oc-flex"></oc-icon-stub>
   </oc-button-stub>
-  <oc-drop-stub dropid="app-switcher-dropdown" toggle="#_appSwitcherButton" position="bottom-start" mode="click" closeonclick="true" paddingsize="small">
+  <oc-drop-stub drop-id="app-switcher-dropdown" toggle="#_appSwitcherButton" mode="click" padding-size="small" close-on-click="">
     <oc-list-stub class="applications-list">
       <li>
-        <oc-button-stub type="router-link" size="medium" to="/files" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" class=""><span class="icon-box"><oc-icon-stub name="folder" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub></span> <span>Files</span>
+        <oc-button-stub type="router-link" to="/files" appearance="raw" variation="passive" class=""><span class="icon-box"><oc-icon-stub name="folder"></oc-icon-stub></span> <span>Files</span>
           <!---->
         </oc-button-stub>
       </li>
       <li>
-        <oc-button-stub type="a" size="medium" href="http://some.org" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" target="_blank" class=""><span class="icon-box"><oc-icon-stub name="some-icon" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub></span> <span>External</span>
+        <oc-button-stub type="a" target="_blank" href="http://some.org" appearance="raw" variation="passive" class=""><span class="icon-box"><oc-icon-stub name="some-icon"></oc-icon-stub></span> <span>External</span>
           <!---->
         </oc-button-stub>
       </li>

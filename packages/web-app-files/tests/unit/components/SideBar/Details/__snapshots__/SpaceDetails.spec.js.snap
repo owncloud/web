@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Details SideBar Panel displayes the details side panel 1`] = `
-<div id="oc-space-details-sidebar">
+<div id="oc-space-details-sidebar"><input id="space-image-upload-input" type="file" name="file" multiple="multiple" tabindex="-1" accept="image/*">
   <div class="oc-space-details-sidebar-image oc-text-center">
     <oc-icon-stub name="layout-grid" size="xxlarge" class="space-default-image oc-px-m oc-py-m"></oc-icon-stub>
   </div>
