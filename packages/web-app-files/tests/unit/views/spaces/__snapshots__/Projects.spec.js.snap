@@ -24,8 +24,8 @@ exports[`Spaces component should list spaces 1`] = `
             <div class="oc-flex oc-flex-between oc-flex-middle">
               <div class="oc-flex oc-flex-middle"><span class="oc-mr-s oc-icon oc-icon-m oc-icon-passive"><!----></span> <a href="#/" aria-current="page" class="space-name oc-text-left router-link-exact-active router-link-active"><span></span></a></div>
               <div class="oc-flex oc-flex-middle"><button aria-label="Show context menu" class="oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="space-context-btn-1"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button>
-                <div id="space-context-drop-1" class="oc-drop oc-box-shadow-medium oc-rounded" options="[object Object]">
-                  <div class="oc-card oc-card-body oc-rounded oc-background-secondary oc-p-s">
+                <div id="space-context-drop-1" class="oc-drop oc-box-shadow-medium oc-drop-rounded" style="box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.12);" options="[object Object]">
+                  <div class="oc-card oc-card-body oc-rounded oc-background-highlight oc-p-s">
                     <ul class="oc-list oc-files-context-actions">
                       <li class="oc-files-context-action oc-px-s"><button class="oc-button oc-button-m oc-button-justify-content-left oc-button-gap-m oc-button-passive oc-button-passive-raw"><span class="oc-flex oc-icon oc-icon-m oc-icon-passive"><!----></span>
                           Rename

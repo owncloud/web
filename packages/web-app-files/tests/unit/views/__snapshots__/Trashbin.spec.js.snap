@@ -4,26 +4,26 @@ exports[`Trashbin View when the view is not loading anymore when length of the p
 <table class="files-table oc-table oc-table-sticky files-table-squashed" id="files-trashbin-table">
   <thead class="oc-thead">
     <tr tabindex="-1" class="oc-table-header-row">
-      <th class="oc-th oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-text-nowrap oc-table-header-cell oc-table-header-cell-select oc-pl-m " style="top: 0px;"><span class="oc-table-thead-content"><div class="resource-table-select-all"><span><input id="resource-table-select-all" type="checkbox" name="checkbox" class="oc-checkbox oc-rounded oc-checkbox-l" value=""> <label for="resource-table-select-all" class="oc-invisible-sr oc-cursor-pointer">Select all resources</label></span></div></span>
+      <th class="oc-th oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-text-nowrap oc-table-header-cell oc-table-header-cell-select oc-pl-m " style="top: 0px;"><span class="oc-table-thead-content"><div class="resource-table-select-all"><span><input id="resource-table-select-all" type="checkbox" name="checkbox" class="oc-checkbox oc-checkbox-l" value=""> <label for="resource-table-select-all" class="oc-invisible-sr oc-cursor-pointer">Select all resources</label></span></div></span>
         <!---->
       </th>
-      <th class="oc-th oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-expand oc-text-nowrap oc-table-header-cell oc-table-header-cell-name" aria-sort="none" style="top: 0px;"><span class="oc-table-thead-content header-text">Name</span> <button aria-label="Sort by name" class="oc-button-sort oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw"><span class="oc-icon oc-icon-s oc-icon-passive"><!----></span></button></th>
-      <th class="oc-th oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-header-cell oc-table-header-cell-status" style="top: 0px;"><span class="oc-table-thead-content header-text">Status</span>
+      <th class="oc-th oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-expand oc-text-nowrap oc-table-header-cell oc-table-header-cell-name" aria-sort="none" style="top: 0px;"><span class="oc-table-thead-content">Name</span> <button aria-label="Sort by name" class="oc-button-sort oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" variant="passive"></button></th>
+      <th class="oc-th oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-header-cell oc-table-header-cell-status" style="top: 0px;"><span class="oc-table-thead-content">Status</span>
         <!---->
       </th>
-      <th class="oc-th oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-header-cell oc-table-header-cell-actions oc-pr-m" style="top: 0px;"><span class="oc-table-thead-content header-text">Actions</span>
+      <th class="oc-th oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-header-cell oc-table-header-cell-actions oc-pr-m" style="top: 0px;"><span class="oc-table-thead-content">Actions</span>
         <!---->
       </th>
     </tr>
   </thead>
   <tbody>
     <tr tabindex="-1" data-item-id="file-id-1234" draggable="false" class="oc-tbody-tr oc-tbody-tr-file-id-1234">
-      <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-table-data-cell oc-table-data-cell-select oc-pl-m "><span><input id="resource-table-select-file-id-1234" type="checkbox" name="checkbox" class="oc-checkbox oc-rounded oc-checkbox-l" value="[object Object]"> <label for="resource-table-select-file-id-1234" class="oc-invisible-sr oc-cursor-pointer">Select folder</label></span></td>
+      <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-table-data-cell oc-table-data-cell-select oc-pl-m "><span><input id="resource-table-select-file-id-1234" type="checkbox" name="checkbox" class="oc-checkbox oc-checkbox-l" value="[object Object]"> <label for="resource-table-select-file-id-1234" class="oc-invisible-sr oc-cursor-pointer">Select folder</label></span></td>
       <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-expand oc-text-truncate oc-table-data-cell oc-table-data-cell-name">
-        <div class="oc-resource oc-text-overflow">
-          <!---->
+        <div class="oc-resource oc-text-overflow"><span class="oc-icon oc-icon-l oc-icon-passive oc-resource-icon oc-resource-icon-file"><!----></span>
           <div class="oc-resource-details oc-text-overflow"><span data-test-resource-path="/file-path/1234" data-test-resource-name="file-path/file-name-1234" data-test-resource-type="folder" class="oc-resource-name"><span class="oc-text-truncate"><span class="oc-resource-basename">file-name-1234</span></span>
-            <!----></span>
+            <!---->
+            </span>
             <div class="oc-resource-indicators">
               <router-link-stub to="[object Object]" class="parent-folder" style="cursor: pointer;"><span class="oc-icon oc-icon-s oc-icon-passive"><!----></span> <span class="text">file-path</span></router-link-stub>
               <!---->
@@ -34,17 +34,17 @@ exports[`Trashbin View when the view is not loading anymore when length of the p
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-status"></td>
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-actions oc-pr-m">
         <div class="resource-table-actions"> <button aria-label="Show context menu" class="resource-table-btn-action-dropdown oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="context-menu-trigger-file-id-1234"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button>
-          <div id="context-menu-drop-file-id-1234" class="oc-drop oc-box-shadow-medium oc-rounded"></div>
+          <div id="context-menu-drop-file-id-1234" class="oc-drop oc-box-shadow-medium oc-drop-rounded" style="box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.12);"></div>
         </div>
       </td>
     </tr>
     <tr tabindex="-1" data-item-id="file-id-5896" draggable="false" class="oc-tbody-tr oc-tbody-tr-file-id-5896">
-      <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-table-data-cell oc-table-data-cell-select oc-pl-m "><span><input id="resource-table-select-file-id-5896" type="checkbox" name="checkbox" class="oc-checkbox oc-rounded oc-checkbox-l" value="[object Object]"> <label for="resource-table-select-file-id-5896" class="oc-invisible-sr oc-cursor-pointer">Select folder</label></span></td>
+      <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-table-data-cell oc-table-data-cell-select oc-pl-m "><span><input id="resource-table-select-file-id-5896" type="checkbox" name="checkbox" class="oc-checkbox oc-checkbox-l" value="[object Object]"> <label for="resource-table-select-file-id-5896" class="oc-invisible-sr oc-cursor-pointer">Select folder</label></span></td>
       <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-expand oc-text-truncate oc-table-data-cell oc-table-data-cell-name">
-        <div class="oc-resource oc-text-overflow">
-          <!---->
+        <div class="oc-resource oc-text-overflow"><span class="oc-icon oc-icon-l oc-icon-passive oc-resource-icon oc-resource-icon-file"><!----></span>
           <div class="oc-resource-details oc-text-overflow"><span data-test-resource-path="/file-path/5896" data-test-resource-name="file-path/file-name-5896" data-test-resource-type="folder" class="oc-resource-name"><span class="oc-text-truncate"><span class="oc-resource-basename">file-name-5896</span></span>
-            <!----></span>
+            <!---->
+            </span>
             <div class="oc-resource-indicators">
               <router-link-stub to="[object Object]" class="parent-folder" style="cursor: pointer;"><span class="oc-icon oc-icon-s oc-icon-passive"><!----></span> <span class="text">file-path</span></router-link-stub>
               <!---->
@@ -55,17 +55,17 @@ exports[`Trashbin View when the view is not loading anymore when length of the p
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-status"></td>
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-actions oc-pr-m">
         <div class="resource-table-actions"> <button aria-label="Show context menu" class="resource-table-btn-action-dropdown oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="context-menu-trigger-file-id-5896"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button>
-          <div id="context-menu-drop-file-id-5896" class="oc-drop oc-box-shadow-medium oc-rounded"></div>
+          <div id="context-menu-drop-file-id-5896" class="oc-drop oc-box-shadow-medium oc-drop-rounded" style="box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.12);"></div>
         </div>
       </td>
     </tr>
     <tr tabindex="-1" data-item-id="file-id-9856" draggable="false" class="oc-tbody-tr oc-tbody-tr-file-id-9856">
-      <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-table-data-cell oc-table-data-cell-select oc-pl-m "><span><input id="resource-table-select-file-id-9856" type="checkbox" name="checkbox" class="oc-checkbox oc-rounded oc-checkbox-l" value="[object Object]"> <label for="resource-table-select-file-id-9856" class="oc-invisible-sr oc-cursor-pointer">Select folder</label></span></td>
+      <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-table-data-cell oc-table-data-cell-select oc-pl-m "><span><input id="resource-table-select-file-id-9856" type="checkbox" name="checkbox" class="oc-checkbox oc-checkbox-l" value="[object Object]"> <label for="resource-table-select-file-id-9856" class="oc-invisible-sr oc-cursor-pointer">Select folder</label></span></td>
       <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-expand oc-text-truncate oc-table-data-cell oc-table-data-cell-name">
-        <div class="oc-resource oc-text-overflow">
-          <!---->
+        <div class="oc-resource oc-text-overflow"><span class="oc-icon oc-icon-l oc-icon-passive oc-resource-icon oc-resource-icon-file"><!----></span>
           <div class="oc-resource-details oc-text-overflow"><span data-test-resource-path="/file-path/9856" data-test-resource-name="file-path/file-name-9856" data-test-resource-type="folder" class="oc-resource-name"><span class="oc-text-truncate"><span class="oc-resource-basename">file-name-9856</span></span>
-            <!----></span>
+            <!---->
+            </span>
             <div class="oc-resource-indicators">
               <router-link-stub to="[object Object]" class="parent-folder" style="cursor: pointer;"><span class="oc-icon oc-icon-s oc-icon-passive"><!----></span> <span class="text">file-path</span></router-link-stub>
               <!---->
@@ -76,7 +76,7 @@ exports[`Trashbin View when the view is not loading anymore when length of the p
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-status"></td>
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-actions oc-pr-m">
         <div class="resource-table-actions"> <button aria-label="Show context menu" class="resource-table-btn-action-dropdown oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="context-menu-trigger-file-id-9856"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button>
-          <div id="context-menu-drop-file-id-9856" class="oc-drop oc-box-shadow-medium oc-rounded"></div>
+          <div id="context-menu-drop-file-id-9856" class="oc-drop oc-box-shadow-medium oc-drop-rounded" style="box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.12);"></div>
         </div>
       </td>
     </tr>
