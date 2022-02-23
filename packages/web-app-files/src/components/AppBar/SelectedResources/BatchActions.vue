@@ -26,6 +26,11 @@ import Restore from '../../../mixins/actions/restore'
 import { useIsFilesAppActive } from '../../../composables/useIsFilesAppActive'
 
 export default {
+  setup() {
+    return {
+      isFilesAppActive: useIsFilesAppActive()
+    }
+  },
   name: 'BatchActions',
   components: { ActionMenuItem },
   mixins: [
@@ -39,11 +44,6 @@ export default {
     Move,
     Restore
   ],
-  setup() {
-    return {
-      isFilesAppActive: useIsFilesAppActive()
-    }
-  },
   computed: {
     ...mapGetters('Files', ['selectedFiles']),
 
