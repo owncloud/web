@@ -15,7 +15,7 @@ export default {
           name: 'editReadmeContent',
           icon: 'markdown',
           label: () => {
-            return this.$gettext('Change description')
+            return this.$gettext('Edit description')
           },
           handler: this.$_editReadmeContent_trigger,
           isEnabled: ({ resources }) => {
@@ -69,12 +69,12 @@ export default {
             value: { ...space.spaceReadmeData, ...{ etag: readmeMetaData.ETag } }
           })
           this.showMessage({
-            title: this.$gettext('Space description successfully changed')
+            title: this.$gettext('Space description successfully edited')
           })
         })
         .catch((error) => {
           this.showMessage({
-            title: this.$gettext('Changing space description failed…'),
+            title: this.$gettext('Editing space description failed…'),
             desc: error,
             status: 'danger'
           })

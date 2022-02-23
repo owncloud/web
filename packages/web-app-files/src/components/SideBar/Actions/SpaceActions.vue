@@ -3,7 +3,7 @@
     <portal v-if="$data.$_editReadmeContent_modalOpen" to="app.runtime.modal">
       <oc-modal
         focus-trap-initial="#description-input-area"
-        :title="$gettext('Change description for space') + ' ' + resources[0].name"
+        :title="$gettext('Edit description for space') + ' ' + resources[0].name"
         :button-cancel-text="$gettext('Cancel')"
         :button-confirm-text="$gettext('Confirm')"
         @confirm="$_editReadmeContent_editReadmeContentSpace"
