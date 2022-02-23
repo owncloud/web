@@ -122,7 +122,7 @@
         "swatch-warning-default": "",
         "swatch-warning-hover": "",
         "swatch-warning-muted": "",
-        "text-default": "#dadcdf",
+        "text-default": "#ffffff",
         "text-inverse": "#000000",
         "text-muted": "#696969",
         "icon-folder": "rgb(44, 101, 255)",
