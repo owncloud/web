@@ -38,7 +38,7 @@ done
 # Default to retrying failing tests
 if [ -z "${RERUN_FAILED_WEBUI_SCENARIOS}" ]
 then
-	RERUN_FAILED_WEBUI_SCENARIOS=true
+	RERUN_FAILED_WEBUI_SCENARIOS=false
 fi
 
 # An array of the suites that were run. Each value is a string like:
