@@ -66,7 +66,7 @@ import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../constants'
 import debounce from 'lodash-es/debounce'
-import merge from 'lodash-es/merge'
+import omit from 'lodash-es/omit'
 import { buildResource } from '../helpers/resources'
 import { bus } from 'web-pkg/src/instance'
 import { useTask } from 'vue-concurrency'
@@ -96,10 +96,6 @@ const unauthenticatedUserReady = async (router, store) => {
   const publicToken = (router.currentRoute.params.item || '').split('/')[0]
   const publicLinkPassword = store.getters['Files/publicLinkPassword']
 
-  if (publicLinkPassword) {
-    return
-  }
-
   await store.dispatch('loadCapabilities', {
     publicToken,
     ...(publicLinkPassword && { user: 'public', password: publicLinkPassword })
@@ -108,10 +104,10 @@ const unauthenticatedUserReady = async (router, store) => {
   // ocis at the moment is not able to create archives for public links that are password protected
   // till this is supported by the backend remove it hard as a workaround
   if (publicLinkPassword) {
-    store.commit(
-      'SET_CAPABILITIES',
-      merge({}, store.getters.capabilities, { files: { archivers: null } })
-    )
+    store.commit('SET_CAPABILITIES', {
+      capabilities: omit(store.getters.capabilities, ['files.archivers']),
+      version: store.getters.version
+    })
   }
 
   store.commit('SET_USER_READY', true)
@@ -197,7 +193,7 @@ export default {
         }
       }
 
-      // this is a workAround till we have a real bootProcess
+      // this is a workAround till we have extended the bootProcess
       // if a visitor is able to view the current page
       // the user is ready and the TOO LATE provisioning can start.
       // there is no other way at the moment to find out if:
