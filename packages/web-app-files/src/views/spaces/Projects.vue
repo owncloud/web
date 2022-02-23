@@ -374,7 +374,7 @@ export default {
 .spaces-list {
   &-card {
     box-shadow: none !important;
-    background-color: var(--oc-color-background-secondary) !important;
+    background-color: var(--oc-color-background-highlight) !important;
   }
 
   &-card.state-trashed {
