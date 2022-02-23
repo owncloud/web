@@ -3,6 +3,7 @@ const _ = require('lodash')
 const timeoutHelper = require('../../helpers/timeoutHelper')
 const xpathHelper = require('../../helpers/xpath')
 const util = require('util')
+const {client} = require("nightwatch-api");
 
 module.exports = {
   commands: {
@@ -69,6 +70,7 @@ module.exports = {
       return util.format(this.elements.fileInfoResourceName.selector, name, path, type)
     },
     activatePanel: async function (item) {
+      await client.pause(1000)
       const panelName = item === 'people' ? 'collaborators' : item
       const active = await this.isPanelActive(
         item,

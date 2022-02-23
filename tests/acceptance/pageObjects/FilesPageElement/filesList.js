@@ -242,6 +242,7 @@ module.exports = {
      * @returns {*}
      */
     openSideBar: async function (resource, elementType = 'any') {
+      await client.pause(1000)
       // nothing to do if already open for correct resource
       if (await appSideBar.isSideBarOpenForResource(resource, elementType)) {
         return appSideBar
