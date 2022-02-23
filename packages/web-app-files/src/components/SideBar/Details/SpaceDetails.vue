@@ -235,6 +235,7 @@ export default {
 #space-image-upload-button {
   top: 0;
   right: 0;
+  opacity: 0.8;
 }
 
 .oc-space-details-sidebar {
