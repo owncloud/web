@@ -70,7 +70,6 @@ module.exports = {
       return util.format(this.elements.fileInfoResourceName.selector, name, path, type)
     },
     activatePanel: async function (item) {
-      await client.pause(1000)
       const panelName = item === 'people' ? 'collaborators' : item
       const active = await this.isPanelActive(
         item,
@@ -99,6 +98,7 @@ module.exports = {
           .waitForAjaxCallsToStartAndFinish()
           .waitForAnimationToFinish() // wait for sliding animation to the sub panel
       }
+      await client.pause(1000)
       const panelElement = this.elements[panelName + 'Panel']
       return await this.waitForElementPresent(panelElement.locateStrategy, panelElement.selector)
     },

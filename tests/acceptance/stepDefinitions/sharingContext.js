@@ -576,6 +576,10 @@ When(
   'the user opens the link share dialog for file/folder/resource {string} using the webUI',
   async function (file) {
     await client.refresh()
+    await client.refresh()
+    await client.refresh()
+    await client.refresh()
+    await client.refresh()
     return client.page.FilesPageElement.filesList().openPublicLinkDialog(file)
   }
 )

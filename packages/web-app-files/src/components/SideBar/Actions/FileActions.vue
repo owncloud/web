@@ -18,17 +18,17 @@ import FileActions from '../../../mixins/fileActions'
 import { useIsFilesAppActive } from '../../../composables/useIsFilesAppActive'
 
 export default {
+  name: 'FileActions',
+  components: { ActionMenuItem },
+  mixins: [FileActions],
   setup() {
     return {
       isFilesAppActive: useIsFilesAppActive()
     }
   },
-  name: 'FileActions',
   title: ($gettext) => {
     return $gettext('Actions')
   },
-  components: { ActionMenuItem },
-  mixins: [FileActions],
   computed: {
     ...mapGetters('Files', ['highlightedFile']),
 

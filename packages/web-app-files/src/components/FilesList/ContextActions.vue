@@ -42,11 +42,6 @@ import ShowShares from '../../mixins/actions/showShares'
 import { useIsFilesAppActive } from '../../composables/useIsFilesAppActive'
 
 export default {
-  setup() {
-    return {
-      isFilesAppActive: useIsFilesAppActive()
-    }
-  },
   name: 'ContextActions',
   components: { ActionMenuItem },
   mixins: [
@@ -73,6 +68,11 @@ export default {
     items: {
       type: Array,
       required: true
+    }
+  },
+  setup() {
+    return {
+      isFilesAppActive: useIsFilesAppActive()
     }
   },
 
