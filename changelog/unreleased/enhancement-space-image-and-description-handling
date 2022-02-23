@@ -1,0 +1,6 @@
+Enhancement: Implement solutions to update space image and description
+
+We have implemented multiple ways to update the image and description of a space.
+
+https://github.com/owncloud/web/pull/6410
+https://github.com/owncloud/web/issues/6377
