@@ -232,14 +232,9 @@ export default {
   watch: {
     $route: {
       handler: function (to, from) {
-        const sameRoute = to.name === from?.name
-        const sameItem = to.params?.item === from?.params?.item
-
         const needsRedirectToHome =
-          this.homeFolder !== '/' &&
-          isNil(to.params.item) &&
-          !to.path.endsWith('/') &&
-          (!sameRoute || !sameItem)
+          this.homeFolder !== '/' && isNil(to.params.item) && !to.path.endsWith('/')
+
         if (needsRedirectToHome) {
           this.$router.replace(
             {
@@ -259,6 +254,8 @@ export default {
           return
         }
 
+        const sameRoute = to.name === from?.name
+        const sameItem = to.params?.item === from?.params?.item
         if (!sameRoute || !sameItem) {
           this.loadResourcesTask.perform(this, sameRoute)
         }
