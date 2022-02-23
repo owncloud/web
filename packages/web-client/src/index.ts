@@ -11,7 +11,7 @@ import {
 
 export interface Graph {
   drives: {
-    listMyDrives: () => Promise<AxiosResponse<CollectionOfDrives>>
+    listMyDrives: (orderBy?: string, filter?: string) => Promise<AxiosResponse<CollectionOfDrives>>
     getDrive: (id: string) => AxiosPromise<Drive>
     createDrive: (drive: Drive, options: any) => AxiosPromise<Drive>
     updateDrive: (id: string, drive: Drive, options: any) => AxiosPromise<Drive>
@@ -34,7 +34,8 @@ const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
 
   return <Graph>{
     drives: {
-      listMyDrives: (filter?: string) => meDrivesApi.listMyDrives(0, 0, '', filter),
+      listMyDrives: (orderBy?: string, filter?: string) =>
+        meDrivesApi.listMyDrives(0, 0, orderBy, filter),
       getDrive: (id: string) => drivesApiFactory.getDrive(id),
       createDrive: (drive: Drive, options: any): AxiosPromise<Drive> =>
         drivesApiFactory.createDrive(drive, options),

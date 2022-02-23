@@ -183,8 +183,8 @@ export default {
     const loadResourcesTask = useTask(function* (signal, ref) {
       ref.CLEAR_CURRENT_FILES_LIST()
 
-      const response = yield graphClient.drives.listMyDrives('driveType eq project')
-      let loadedSpaces = (response.data?.value || []).sort((a, b) => a.name.localeCompare(b.name))
+      const response = yield graphClient.drives.listMyDrives('name asc', 'driveType eq project')
+      let loadedSpaces = response.data?.value || []
 
       loadedSpaces = loadedSpaces.map(buildSpace)
       ref.LOAD_FILES({ currentFolder: null, files: loadedSpaces })
@@ -225,7 +225,6 @@ export default {
           const path = webDavPathComponents
             .slice(webDavPathComponents.indexOf(space.id) + 1)
             .join('/')
-
           this.$client.files
             .getFileContents(buildWebDavSpacesPath(space.id, path), {
               responseType: 'arrayBuffer'
