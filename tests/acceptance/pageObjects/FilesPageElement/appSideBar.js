@@ -3,7 +3,7 @@ const _ = require('lodash')
 const timeoutHelper = require('../../helpers/timeoutHelper')
 const xpathHelper = require('../../helpers/xpath')
 const util = require('util')
-const {client} = require("nightwatch-api");
+const { client } = require('nightwatch-api')
 
 module.exports = {
   commands: {
