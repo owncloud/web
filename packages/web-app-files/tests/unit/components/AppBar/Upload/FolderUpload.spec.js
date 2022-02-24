@@ -44,6 +44,7 @@ describe('FolderUpload Component', () => {
           ...mountOptions,
           stubs: {
             'oc-icon': true,
+            'oc-resource-icon': true,
             'oc-button': true
           }
         })

@@ -1,8 +1,8 @@
 <template>
   <div>
     <oc-button class="oc-width-1-1" justify-content="left" appearance="raw" @click="triggerUpload">
-      <oc-icon name="upload-cloud" />
-      <span id="files-folder-upload-button" v-translate>Upload Folder</span>
+      <oc-resource-icon :resource="{ isFolder: true, extension: '' }" />
+      <span id="files-folder-upload-button" v-translate>Folder</span>
     </oc-button>
     <input
       id="folderUploadInput"

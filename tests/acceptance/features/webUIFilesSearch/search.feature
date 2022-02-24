@@ -128,7 +128,7 @@ Feature: Search
 
   Scenario: Search for a newly uploaded file
     When the user uploads file "simple.pdf" using the webUI
-    And the user opens folder "simple-folder" using the webUI
+    And the user opens folder "simple-folder" directly on the webUI
     And the user uploads file "simple.odt" using the webUI
     And the user browses to the files page
     And the user searches globally for "simple" using the webUI

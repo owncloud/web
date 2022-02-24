@@ -125,8 +125,8 @@ module.exports = {
       return this
     },
     selectFileForUpload: function (filePath) {
-      return this.waitForElementVisible('@newFileMenuButton')
-        .click('@newFileMenuButton')
+      return this.waitForElementVisible('@uploadFilesButton')
+        .click('@uploadFilesButton')
         .waitForElementVisible('@fileUploadButton')
         .setValue('@fileUploadInput', filePath)
     },
@@ -182,8 +182,8 @@ module.exports = {
      * @param {string} folderName
      */
     uploadFolder: function (folderName) {
-      return this.waitForElementVisible('@newFileMenuButton')
-        .click('@newFileMenuButton')
+      return this.waitForElementVisible('@uploadFilesButton')
+        .click('@uploadFilesButton')
         .waitForElementVisible('@fileUploadButton')
         .setValue('@folderUploadInput', folderName)
         .waitForElementVisible(
@@ -193,7 +193,7 @@ module.exports = {
           false
         )
         .waitForElementNotVisible('@fileUploadProgress')
-        .click('@newFileMenuButton')
+        .click('@uploadFilesButton')
     },
     /**
      * Returns whether files or folders can be created in the current page.
@@ -313,6 +313,9 @@ module.exports = {
   elements: {
     searchInput: {
       selector: 'input.oc-search-input'
+    },
+    uploadFilesButton: {
+      selector: '#upload-menu-btn'
     },
     newFileMenuButtonAnyState: {
       selector: '#new-file-menu-btn'

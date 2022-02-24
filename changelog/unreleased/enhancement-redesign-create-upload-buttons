@@ -1,0 +1,7 @@
+Enhancement: Redesign create and upload buttons
+
+We have separated the "Create new file/folder" and "Upload" actions above the files list into two separate buttons,
+also using the new resource type icons for more consistency.
+
+https://github.com/owncloud/web/issues/6279
+https://github.com/owncloud/web/pull/6358

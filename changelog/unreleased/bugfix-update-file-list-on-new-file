@@ -1,0 +1,6 @@
+Bugfix: Update file list when creating new files
+
+We update the file list now when creating a file in an editor that openes in a new tab (like draw.io).
+
+https://github.com/owncloud/web/issues/5530
+https://github.com/owncloud/web/pull/6358

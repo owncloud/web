@@ -1,9 +1,8 @@
-import { shallowMount, mount, createLocalVue } from '@vue/test-utils'
+import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import DesignSystem from 'owncloud-design-system'
 import GetTextPlugin from 'vue-gettext'
 
-import stubs from '@/tests/unit/stubs'
 import AppBar from '@files/src/components/AppBar/AppBar'
 import {
   createLocationCommon,
@@ -23,64 +22,14 @@ localVue.use(GetTextPlugin, {
 const elSelector = {
   batchActions: 'batch-actions-stub',
   sizeInfo: 'size-info-stub',
-  newFileButton: '#new-file-menu-btn',
-  ocDrop: 'oc-drop-stub',
-  fileMenuList: 'oc-drop-stub .oc-list > li',
-  fileUpload: 'file-upload-stub',
-  folderUpload: 'folder-upload-stub',
-  newFolderBtn: '#new-folder-btn',
-  newTextFileBtn: '.new-file-btn-txt',
-  newMdFileBtn: '.new-file-btn-md',
-  newDrawioFileBtn: '.new-file-btn-drawio'
+  createAndUpload: 'create-and-upload-stub'
 }
 
-const spacesDefaultLocation = createLocationSpaces('files-spaces-personal-home')
+const personalHomeLocation = createLocationSpaces('files-spaces-personal-home')
 const sharesWithMeLocation = createLocationShares('files-shares-with-me')
 const sharesWithOthersLocation = createLocationShares('files-shares-with-others')
 const publicFilesLocation = createLocationPublic('files-public-files')
 const favoritesLocation = createLocationCommon('files-common-favorites')
-
-const routes = [
-  spacesDefaultLocation.name,
-  favoritesLocation.name,
-  sharesWithOthersLocation.name,
-  sharesWithMeLocation.name,
-  publicFilesLocation.name
-]
-
-const newFileHandlers = [
-  {
-    ext: 'txt',
-    action: {
-      app: 'markdown-editor',
-      newTab: false,
-      extension: 'txt'
-    },
-    routes,
-    menuTitle: () => 'New plain text file...'
-  },
-  {
-    ext: 'md',
-    action: {
-      app: 'markdown-editor',
-      newTab: false,
-      extension: 'md'
-    },
-    routes,
-    menuTitle: () => 'New mark-down file...'
-  },
-  {
-    ext: 'drawio',
-    action: {
-      app: 'draw-io',
-      newTab: true,
-      routeName: 'draw-io-edit',
-      extension: 'drawio'
-    },
-    routes,
-    menuTitle: () => 'New draw.io document...'
-  }
-]
 
 const selectedFiles = [
   {
@@ -101,7 +50,7 @@ describe('AppBar component', () => {
     jest.clearAllMocks()
   })
 
-  describe.each([spacesDefaultLocation.name, publicFilesLocation.name])('%s route', (page) => {
+  describe.each([personalHomeLocation.name, publicFilesLocation.name])('%s route', (page) => {
     const route = {
       name: page,
       params: {
@@ -115,89 +64,25 @@ describe('AppBar component', () => {
     }
 
     describe('when no items are selected', () => {
-      let wrapper
-
-      const spyShowCreateResourceModal = jest
-        .spyOn(AppBar.methods, 'showCreateResourceModal')
-        .mockImplementation()
-
-      beforeEach(() => {
+      it('should only show create and upload component', () => {
         const store = createStore({ selected: [], currentFolder })
-        wrapper = getShallowWrapper(route, store)
-      })
-
-      it('should show "New" button', () => {
-        const newButton = wrapper.find(elSelector.newFileButton)
+        const wrapper = getShallowWrapper(route, store)
+        const createAndUpload = wrapper.find(elSelector.createAndUpload)
         const sizeInfo = wrapper.find(elSelector.sizeInfo)
 
+        expect(createAndUpload.exists()).toBeTruthy()
         expect(sizeInfo.exists()).toBeFalsy()
-        expect(newButton.isVisible()).toBeTruthy()
-        expect(newButton.props('ariaLabel')).toEqual('Add files or folders')
       })
-      it('should show default file menu items', () => {
-        const ocDrop = wrapper.find(elSelector.ocDrop)
-        const fileUpload = wrapper.find(elSelector.fileUpload)
-        const folderUpload = wrapper.find(elSelector.folderUpload)
-        const newFolderBtn = wrapper.find(elSelector.newFolderBtn)
-        const fileMenuList = wrapper.findAll(elSelector.fileMenuList)
-
-        expect(ocDrop.isVisible()).toBeTruthy()
-        expect(fileUpload.isVisible()).toBeTruthy()
-        expect(folderUpload.isVisible()).toBeTruthy()
-        expect(newFolderBtn.isVisible()).toBeTruthy()
-        expect(fileMenuList.length).toBe(3)
-      })
-      it('should trigger "showCreateResourceModal" if new-folder button is clicked', async () => {
-        const store = createStore({ currentFolder, selected: [] })
-        wrapper = getWrapper(route, store)
-
-        const newFolderBtn = wrapper.find(elSelector.newFolderBtn)
-        await newFolderBtn.trigger('click')
-
-        expect(spyShowCreateResourceModal).toHaveBeenCalled()
-      })
-      it('should show extra file menu items', () => {
-        const store = createStore({ currentFolder, selected: [] }, newFileHandlers)
-        wrapper = getShallowWrapper(route, store)
-        const newTextFileBtn = wrapper.find(elSelector.newTextFileBtn)
-        const newMdFileBtn = wrapper.find(elSelector.newMdFileBtn)
-        const newDrawioFileBtn = wrapper.find(elSelector.newDrawioFileBtn)
-        const fileMenuList = wrapper.findAll(elSelector.fileMenuList)
-
-        expect(newTextFileBtn.isVisible()).toBeTruthy()
-        expect(newMdFileBtn.isVisible()).toBeTruthy()
-        expect(newDrawioFileBtn.isVisible()).toBeTruthy()
-        expect(fileMenuList.length).toBe(6)
-      })
-      it.each(newFileHandlers)(
-        'should trigger "showCreateResourceModal" if new file button is clicked',
-        async (fileHandler) => {
-          const store = createStore({ currentFolder, selected: [] }, newFileHandlers)
-          wrapper = getWrapper(route, store)
-
-          const button = wrapper.find(getFileHandlerSelector(fileHandler.ext))
-          await button.trigger('click')
-
-          expect(spyShowCreateResourceModal).toHaveBeenCalled()
-          expect(spyShowCreateResourceModal).toHaveBeenCalledWith(
-            false,
-            fileHandler.ext,
-            fileHandler.action
-          )
-        }
-      )
     })
 
     describe('when an item is selected', () => {
-      it('should hide "New" button but show size info', () => {
+      it('should hide create and upload component but show size info', () => {
         const store = createStore({ currentFolder, selected: selectedFiles })
         const wrapper = getShallowWrapper(route, store)
-        const newButton = wrapper.find(elSelector.newFileButton)
-        const ocDrop = wrapper.find(elSelector.ocDrop)
+        const createAndUpload = wrapper.find(elSelector.createAndUpload)
         const sizeInfo = wrapper.find(elSelector.sizeInfo)
 
-        expect(newButton.exists()).toBeFalsy()
-        expect(ocDrop.exists()).toBeFalsy()
+        expect(createAndUpload.exists()).toBeFalsy()
         expect(sizeInfo.isVisible()).toBeTruthy()
       })
     })
@@ -219,21 +104,19 @@ describe('AppBar component', () => {
       wrapper = getShallowWrapper(route, store)
     })
 
-    it('should not show "New" button and file menu list', () => {
-      const newButton = wrapper.find(elSelector.newFileButton)
-      const ocDrop = wrapper.find(elSelector.ocDrop)
-
-      expect(newButton.exists()).toBeFalsy()
-      expect(ocDrop.exists()).toBeFalsy()
+    it('should never show create and upload component', () => {
+      const createAndUpload = wrapper.find(elSelector.createAndUpload)
+      expect(createAndUpload.exists()).toBeFalsy()
     })
 
     describe('when no items are selected', () => {
-      it('should show batch actions but not size-info', () => {
-        const batchActions = wrapper.find(elSelector.batchActions)
+      it('should not show size-info', () => {
         const sizeInfo = wrapper.find(elSelector.sizeInfo)
-
         expect(sizeInfo.exists()).toBeFalsy()
-        expect(batchActions.isVisible()).toBeTruthy()
+      })
+      it('should show batch actions', () => {
+        const batchActions = wrapper.find(elSelector.batchActions)
+        expect(batchActions.exists()).toBeTruthy()
       })
     })
 
@@ -269,14 +152,12 @@ describe('AppBar component', () => {
         wrapper = getShallowWrapper(route, store)
       })
 
-      describe('when no items are selected', () => {
-        it('should not show "New" button and file menu list', () => {
-          const newButton = wrapper.find(elSelector.newFileButton)
-          const ocDrop = wrapper.find(elSelector.ocDrop)
+      it('should never show create and upload component', () => {
+        const createAndUpload = wrapper.find(elSelector.createAndUpload)
+        expect(createAndUpload.exists()).toBeFalsy()
+      })
 
-          expect(newButton.exists()).toBeFalsy()
-          expect(ocDrop.exists()).toBeFalsy()
-        })
+      describe('when no items are selected', () => {
         it('should not show size-info', () => {
           const sizeInfo = wrapper.find(elSelector.sizeInfo)
           expect(sizeInfo.exists()).toBeFalsy()
@@ -303,46 +184,6 @@ describe('AppBar component', () => {
   )
 })
 
-function getFileHandlerSelector(extension) {
-  const ext = extension.toLowerCase()
-  if (ext === 'txt') {
-    return elSelector.newTextFileBtn
-  } else if (ext === 'md') {
-    return elSelector.newMdFileBtn
-  } else if (ext === 'drawio') {
-    return elSelector.newDrawioFileBtn
-  }
-  return null
-}
-
-function getWrapper(route = {}, store = {}) {
-  return mount(AppBar, {
-    localVue,
-    mocks: {
-      $route: route,
-      $router: {
-        currentRoute: route,
-        resolve: (r) => {
-          return { href: r.name }
-        }
-      },
-      publicPage: jest.fn(() => false),
-      isIE11: jest.fn(() => false)
-    },
-    stubs: {
-      ...stubs,
-      'oc-button': false,
-      'size-info': true,
-      'batch-actions': true,
-      'view-options': true,
-      'file-drop': true,
-      'file-upload': true,
-      'folder-upload': true
-    },
-    store
-  })
-}
-
 function getShallowWrapper(route = {}, store = {}) {
   return shallowMount(AppBar, {
     localVue,
@@ -365,7 +206,6 @@ function createStore(state = { selected: [], currentFolder: {} }, fileHandlers =
   return new Vuex.Store({
     getters: {
       getToken: jest.fn(),
-      newFileHandlers: jest.fn(() => fileHandlers),
       quota: jest.fn()
     },
     modules: {

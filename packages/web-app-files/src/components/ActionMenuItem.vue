@@ -14,6 +14,13 @@
         alt=""
         class="oc-icon oc-icon-m"
       />
+      <oc-img
+        v-else-if="hasExternalImageIcon(action)"
+        data-testid="action-img"
+        :src="action.icon"
+        alt=""
+        class="oc-icon oc-icon-m"
+      />
       <oc-icon
         v-else-if="action.icon"
         data-testid="action-icon"
@@ -90,6 +97,10 @@ export default {
       return {
         click: callback
       }
+    },
+
+    hasExternalImageIcon(action) {
+      return action.icon && /^https?:\/\//i.test(action.icon)
     }
   }
 }
