@@ -69,7 +69,8 @@ export function useAppFileHandling(options: AppFileHandlingOptions): AppFileHand
       }
     } else {
       return client.files.getFileContents(filePath, {
-        resolveWithResponseObject: true
+        resolveWithResponseObject: true,
+        noCache: true
       })
     }
   }
