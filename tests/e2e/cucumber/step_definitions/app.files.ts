@@ -3,6 +3,7 @@ import { World } from '../environment'
 import { config } from '../../config'
 import { FilesPage } from '../../support'
 import { expect } from '@playwright/test'
+import assert = require('assert')
 
 When(
   '{string} navigates to the files page',
@@ -96,6 +97,42 @@ When(
         via: actionType === 'quick action' ? 'QUICK_ACTION' : 'SIDEBAR_PANEL'
       })
     }
+  }
+)
+
+When(
+  /^"([^"]*)" creates a public link to the following resource(s)? via the (sidebar panel|quick action)$/,
+  async function (
+    this: World,
+    stepUser: string,
+    _: string,
+    actionType: string,
+    stepTable: DataTable
+  ) {
+    const actor = this.actorsEnvironment.getActor({ id: stepUser })
+    const { publicLink: publicLinkPage } = new FilesPage({ actor })
+    const shareInfo = stepTable.hashes()
+    for (const linkShare of shareInfo) {
+      const { resource, name, role, dateOfExpiration, password } = linkShare
+      await publicLinkPage.createPublicLinkForResource({
+        resource,
+        name,
+        role,
+        dateOfExpiration,
+        password,
+        via: actionType === 'quick action' ? 'QUICK_ACTION' : 'SIDEBAR_PANEL'
+      })
+    }
+  }
+)
+
+Then(
+  '{string} should see {int} public link',
+  async function (this: World, stepUser: string, expectedLinkNumber: number): Promise<void> {
+    const actor = this.actorsEnvironment.getActor({ id: stepUser })
+    const { publicLink: publicLinkPage } = new FilesPage({ actor })
+    const actualNoPublicLinks = await publicLinkPage.getLinksCount()
+    return assert.strictEqual(actualNoPublicLinks, expectedLinkNumber)
   }
 )
 
