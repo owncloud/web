@@ -3,21 +3,18 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v5.0.0...master
+[unreleased]: https://github.com/owncloud/web/compare/v5.1.0...master
 
 Summary
 -------
 
 * Bugfix - Breadcrumb 'All Files' link: [#6467](https://github.com/owncloud/web/pull/6467)
-* Bugfix - App compatibility: [#6439](https://github.com/owncloud/web/pull/6439)
-* Bugfix - Fix closing apps opened from search: [#6444](https://github.com/owncloud/web/pull/6444)
-* Enhancement - Add the graph client to the client service: [#6425](https://github.com/owncloud/web/pull/6425)
+* Bugfix - Update file list when creating new files: [#5530](https://github.com/owncloud/web/issues/5530)
 * Enhancement - Option to enable Vue history mode: [#6363](https://github.com/owncloud/web/issues/6363)
+* Enhancement - Redesign create and upload buttons: [#6279](https://github.com/owncloud/web/issues/6279)
 * Enhancement - Redesign FilesTable: [#6207](https://github.com/owncloud/web/issues/6207)
-* Enhancement - Enable context menu for search results: [#6445](https://github.com/owncloud/web/pull/6445)
 * Enhancement - Run web as oc10 sidecar: [#6363](https://github.com/owncloud/web/issues/6363)
 * Enhancement - Implement the right sidebar for spaces: [#6437](https://github.com/owncloud/web/pull/6437)
-* Enhancement - Use the Vue store for spaces: [#6427](https://github.com/owncloud/web/pull/6427)
 
 Details
 -------
@@ -29,6 +26,74 @@ Details
 
    https://github.com/owncloud/web/issues/6327
    https://github.com/owncloud/web/pull/6467
+
+* Bugfix - Update file list when creating new files: [#5530](https://github.com/owncloud/web/issues/5530)
+
+   We update the file list now when creating a file in an editor that openes in a new tab (like
+   draw.io).
+
+   https://github.com/owncloud/web/issues/5530
+   https://github.com/owncloud/web/pull/6358
+
+* Enhancement - Option to enable Vue history mode: [#6363](https://github.com/owncloud/web/issues/6363)
+
+   We've added the option to use vue's history mode. All configuration is done automatically by
+   the system. To enable it, add a `<base href="PATH">` header tag to `index.html`,
+   `oidc-callback.html` and `oidc-silent-redirect.html`. Adding `<base>` is not needed for
+   ocis.
+
+   https://github.com/owncloud/web/issues/6363
+   https://github.com/owncloud/web/issues/6277
+
+* Enhancement - Redesign create and upload buttons: [#6279](https://github.com/owncloud/web/issues/6279)
+
+   We have separated the "Create new file/folder" and "Upload" actions above the files list into
+   two separate buttons, also using the new resource type icons for more consistency.
+
+   https://github.com/owncloud/web/issues/6279
+   https://github.com/owncloud/web/pull/6358
+
+* Enhancement - Redesign FilesTable: [#6207](https://github.com/owncloud/web/issues/6207)
+
+   We've redesigned the QuickActions visually and updated theming to fit the redesign
+
+   https://github.com/owncloud/web/issues/6207
+   https://github.com/owncloud/web/pull/6450
+
+* Enhancement - Run web as oc10 sidecar: [#6363](https://github.com/owncloud/web/issues/6363)
+
+   We've added the option to run web in oc10 sidecar mode. Copy
+   `config/config.json.sample-oc10` to `config/config.json`, run `yarn server` and then
+   `docker compose up oc10`.
+
+   https://github.com/owncloud/web/issues/6363
+
+* Enhancement - Implement the right sidebar for spaces: [#6437](https://github.com/owncloud/web/pull/6437)
+
+   The right sidebar for a space functions similar to the files sidebar and gives the user basic
+   information and actions for the current space.
+
+   https://github.com/owncloud/web/issues/6284
+   https://github.com/owncloud/web/pull/6437
+
+Changelog for ownCloud Web [5.1.0] (2022-02-18)
+=======================================
+The following sections list the changes in ownCloud web 5.1.0 relevant to
+ownCloud admins and users.
+
+[5.1.0]: https://github.com/owncloud/web/compare/v5.0.0...v5.1.0
+
+Summary
+-------
+
+* Bugfix - App compatibility: [#6439](https://github.com/owncloud/web/pull/6439)
+* Bugfix - Fix closing apps opened from search: [#6444](https://github.com/owncloud/web/pull/6444)
+* Enhancement - Add the graph client to the client service: [#6425](https://github.com/owncloud/web/pull/6425)
+* Enhancement - Enable context menu for search results: [#6445](https://github.com/owncloud/web/pull/6445)
+* Enhancement - Use the Vue store for spaces: [#6427](https://github.com/owncloud/web/pull/6427)
+
+Details
+-------
 
 * Bugfix - App compatibility: [#6439](https://github.com/owncloud/web/pull/6439)
 
@@ -50,44 +115,11 @@ Details
 
    https://github.com/owncloud/web/pull/6425
 
-* Enhancement - Option to enable Vue history mode: [#6363](https://github.com/owncloud/web/issues/6363)
-
-   We've added the option to use vue's history mode. All configuration is done automatically by
-   the system. To enable it, add a `<base href="PATH">` header tag to `index.html`,
-   `oidc-callback.html` and `oidc-silent-redirect.html`. Adding `<base>` is not needed for
-   ocis.
-
-   https://github.com/owncloud/web/issues/6363
-   https://github.com/owncloud/web/issues/6277
-
-* Enhancement - Redesign FilesTable: [#6207](https://github.com/owncloud/web/issues/6207)
-
-   We've redesigned the QuickActions visually and updated theming to fit the redesign
-
-   https://github.com/owncloud/web/issues/6207
-   https://github.com/owncloud/web/pull/6450
-
 * Enhancement - Enable context menu for search results: [#6445](https://github.com/owncloud/web/pull/6445)
 
    We've enabled a rudimentary context menu for search results.
 
    https://github.com/owncloud/web/pull/6445
-
-* Enhancement - Run web as oc10 sidecar: [#6363](https://github.com/owncloud/web/issues/6363)
-
-   We've added the option to run web in oc10 sidecar mode. Copy
-   `config/config.json.sample-oc10` to `config/config.json`, run `yarn server` and then
-   `docker compose up oc10`.
-
-   https://github.com/owncloud/web/issues/6363
-
-* Enhancement - Implement the right sidebar for spaces: [#6437](https://github.com/owncloud/web/pull/6437)
-
-   The right sidebar for a space functions similar to the files sidebar and gives the user basic
-   information and actions for the current space.
-
-   https://github.com/owncloud/web/issues/6284
-   https://github.com/owncloud/web/pull/6437
 
 * Enhancement - Use the Vue store for spaces: [#6427](https://github.com/owncloud/web/pull/6427)
 
