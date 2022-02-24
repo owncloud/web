@@ -10,7 +10,11 @@ export class RuntimePage {
   async navigateToApp({ name }: { name: string }): Promise<void> {
     const { page } = this.actor
     await page.locator('#_appSwitcherButton').click()
-    await page.locator(`a[href="#/${name}"]`).click()
+    await page
+      .locator(
+        `//ul[contains(@class, "applications-list")]//a[@href="#/${name}" or @href="/${name}"]`
+      )
+      .click()
   }
 
   async logout(): Promise<void> {

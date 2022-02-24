@@ -11,7 +11,9 @@ export class SharedWithMePage {
 
   async navigate(): Promise<void> {
     const { page } = this.actor
-    await page.locator('a[href="#/files/shares/with-me"]').click()
+    await page
+      .locator('//a[@href="#/files/shares/with-me" or @href="/files/shares/with-me"]')
+      .click()
   }
 
   async acceptShare({ name }: { name: string }): Promise<void> {

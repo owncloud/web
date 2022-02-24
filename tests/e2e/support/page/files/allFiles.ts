@@ -13,7 +13,9 @@ export class AllFilesPage {
   async navigate(): Promise<void> {
     const { page } = this.actor
 
-    const allFilesBtn = page.locator('a[href="#/files/spaces/personal/home"] .text')
+    const allFilesBtn = page.locator(
+      '//a[@href="#/files/spaces/personal/home" or @href="/files/spaces/personal/home"]//span[contains(@class, "text")]'
+    )
     await allFilesBtn.click()
   }
 
