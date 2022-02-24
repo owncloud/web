@@ -1,7 +1,7 @@
 import get from 'lodash-es/get.js'
 import isEmpty from 'lodash-es/isEmpty'
 import initVueAuthenticate from '../services/auth'
-import router from '../router/'
+import { router } from '../router'
 
 let vueAuthInstance
 

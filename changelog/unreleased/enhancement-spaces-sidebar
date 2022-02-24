@@ -1,0 +1,6 @@
+Enhancement: Implement the right sidebar for spaces
+
+The right sidebar for a space functions similar to the files sidebar and gives the user basic information and actions for the current space.
+
+https://github.com/owncloud/web/pull/6437
+https://github.com/owncloud/web/issues/6284

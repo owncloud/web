@@ -1,0 +1,7 @@
+Enhancement: Redesign FilesTable
+
+We've redesigned the QuickActions visually
+and updated theming to fit the redesign
+
+https://github.com/owncloud/web/issues/6207
+https://github.com/owncloud/web/pull/6450

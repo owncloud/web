@@ -5,18 +5,20 @@ import FileVersions from './components/SideBar/Versions/FileVersions.vue'
 import FileShares from './components/SideBar/Shares/FileShares.vue'
 import FileLinks from './components/SideBar/Links/FileLinks.vue'
 import NoSelection from './components/SideBar/NoSelection.vue'
-import { isLocationCommonActive } from './router'
+import SpaceActions from './components/SideBar/Actions/SpaceActions.vue'
+import SpaceDetails from './components/SideBar/Details/SpaceDetails.vue'
+import { isLocationCommonActive, isLocationSpacesActive } from './router'
 
 export default [
   // We don't have file details in the trashbin, yet.
   // Only allow `actions` panel on trashbin route for now.
-  ({ rootFolder }) => ({
+  ({ rootFolder, highlightedFile }) => ({
     app: 'no-selection-item',
     icon: 'questionnaire-line',
     component: NoSelection,
     default: () => true,
     get enabled() {
-      return rootFolder
+      return rootFolder && highlightedFile?.type !== 'space'
     }
   }),
   ({ router, multipleSelection, rootFolder }) => ({
@@ -91,6 +93,24 @@ export default [
         return false
       }
       return !!capabilities.core && highlightedFile && highlightedFile.type !== 'folder'
+    }
+  }),
+  ({ router, highlightedFile }) => ({
+    app: 'details-space-item',
+    icon: 'questionnaire-line',
+    component: SpaceDetails,
+    default: isLocationSpacesActive(router, 'files-spaces-projects'),
+    get enabled() {
+      return highlightedFile?.type === 'space'
+    }
+  }),
+  ({ highlightedFile }) => ({
+    app: 'space-actions-item',
+    component: SpaceActions,
+    icon: 'slideshow-3',
+    iconFillType: 'line',
+    get enabled() {
+      return highlightedFile?.type === 'space'
     }
   })
 ]

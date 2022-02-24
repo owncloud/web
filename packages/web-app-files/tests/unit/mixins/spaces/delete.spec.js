@@ -50,13 +50,39 @@ describe('delete', () => {
     })
   }
 
+  describe('isEnabled property', () => {
+    it('should be false when not resource given', () => {
+      const wrapper = getWrapper()
+      expect(wrapper.vm.$_delete_items[0].isEnabled({ resources: [] })).toBe(false)
+    })
+    it('should be false when the space is not disabled', () => {
+      const wrapper = getWrapper()
+      expect(
+        wrapper.vm.$_delete_items[0].isEnabled({ resources: [{ id: 1, disabled: false }] })
+      ).toBe(false)
+    })
+    it('should be true when the space is disabled', () => {
+      const wrapper = getWrapper()
+      expect(
+        wrapper.vm.$_delete_items[0].isEnabled({ resources: [{ id: 1, disabled: true }] })
+      ).toBe(true)
+    })
+  })
+
   describe('method "$_delete_trigger"', () => {
     it('should trigger the delete modal window', async () => {
       const wrapper = getWrapper()
       const spyCreateModalStub = jest.spyOn(wrapper.vm, 'createModal')
-      await wrapper.vm.$_delete_trigger({ spaces: [{ id: 1 }] })
+      await wrapper.vm.$_delete_trigger({ resources: [{ id: 1 }] })
 
       expect(spyCreateModalStub).toHaveBeenCalledTimes(1)
+    })
+    it('should not trigger the delete modal window without any resource', async () => {
+      const wrapper = getWrapper()
+      const spyCreateModalStub = jest.spyOn(wrapper.vm, 'createModal')
+      await wrapper.vm.$_delete_trigger({ resources: [] })
+
+      expect(spyCreateModalStub).toHaveBeenCalledTimes(0)
     })
   })
 

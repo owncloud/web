@@ -7,8 +7,6 @@ Given(/^the user has browsed to the login page$/, () => {
   return client.page.loginPage().navigate()
 })
 
-Given('the user has clicked the authenticate button', () => client.page.loginPage().authenticate())
-
 When('the user clicks the authenticate button', () => client.page.loginPage().authenticate())
 
 When(
@@ -32,10 +30,6 @@ When(
 )
 
 When('user {string} logs in using the webUI', (username) => loginHelper.loginAsUser(username))
-
-When('the user authorizes access to web', () => {
-  return client.page.ownCloudAuthorizePage().authorize()
-})
 
 Then('the files table should not be empty', () => {
   return (
@@ -110,11 +104,7 @@ Then('the user should be redirected to the user disabled page', function () {
 })
 
 Then('the user should be redirected to the IdP login page', function () {
-  if (client.globals.openid_login) {
-    return client.page.ocisLoginPage().waitForPage()
-  }
-
-  return client.page.ownCloudAuthorizePage().waitForPage()
+  return client.page.ocisLoginPage().waitForPage()
 })
 
 Then('the user should be redirected to the login error page', function () {

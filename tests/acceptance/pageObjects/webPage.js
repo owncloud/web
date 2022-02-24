@@ -311,7 +311,7 @@ module.exports = {
       selector: '#web'
     },
     appContainer: {
-      selector: '.app-content'
+      selector: '#files-view'
     },
     notificationElement: {
       selector: '//div[@id="oc-notification"]//h4',

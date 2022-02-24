@@ -103,14 +103,14 @@
                         <li
                           v-for="(action, actionIndex) in getContextMenuActions(space)"
                           :key="`action-${actionIndex}`"
-                          class="oc-spaces-context-action oc-py-xs oc-px-s"
+                          class="oc-files-context-action oc-px-s"
                         >
                           <oc-button
                             appearance="raw"
                             justify-content="left"
-                            @click="action.handler({ spaces: [space] })"
+                            @click="action.handler({ resources: [space] })"
                           >
-                            <oc-icon :name="action.icon" />
+                            <oc-icon :name="action.icon" fill-type="line" class="oc-flex" />
                             {{ action.label() }}
                           </oc-button>
                         </li>
@@ -231,17 +231,22 @@ export default {
   },
   methods: {
     ...mapActions(['createModal', 'hideModal', 'setModalInputErrorMessage']),
-    ...mapMutations('Files', ['SET_CURRENT_FOLDER', 'LOAD_FILES', 'CLEAR_CURRENT_FILES_LIST']),
+    ...mapMutations('Files', [
+      'SET_CURRENT_FOLDER',
+      'LOAD_FILES',
+      'CLEAR_CURRENT_FILES_LIST',
+      'SET_FILE_SELECTION'
+    ]),
 
     getContextMenuActions(space) {
       return [
         ...this.$_rename_items,
         ...this.$_editDescription_items,
-        ...this.$_showDetails_items,
         ...this.$_restore_items,
         ...this.$_delete_items,
-        ...this.$_disable_items
-      ].filter((item) => item.isEnabled({ spaces: [space] }))
+        ...this.$_disable_items,
+        ...this.$_showDetails_items
+      ].filter((item) => item.isEnabled({ resources: [space] }))
     },
 
     getSpaceProjectRoute({ id, name }) {
@@ -313,7 +318,7 @@ export default {
 .spaces-list {
   &-card {
     box-shadow: none !important;
-    background-color: var(--oc-color-background-highlight) !important;
+    background-color: var(--oc-color-background-secondary) !important;
   }
 
   &-card.state-trashed {

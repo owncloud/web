@@ -1,4 +1,5 @@
 import { Log, User, UserManager, WebStorageStateStore } from 'oidc-client'
+import { buildUrl } from '../router'
 
 export function initVueAuthenticate(config) {
   if (config) {
@@ -6,21 +7,17 @@ export function initVueAuthenticate(config) {
       prefix: 'oc_oAuth',
       store: sessionStorage
     })
-    let baseUrl = window.location.href.split('#')[0]
-    if (baseUrl.endsWith('/index.html')) {
-      baseUrl = baseUrl.substr(0, baseUrl.length - 10)
-    }
     const openIdConfig = {
       userStore: store,
-      redirect_uri: baseUrl + 'oidc-callback.html',
+      redirect_uri: buildUrl('/oidc-callback.html'),
       response_type: 'code', // code triggers auth code grant flow
       response_mode: 'query',
       scope: 'openid profile offline_access',
       monitorSession: false,
       // set uri directly to the login route to prevent problems with query parameters.
       // See https://github.com/owncloud/web/issues/3285
-      post_logout_redirect_uri: baseUrl + '#/login',
-      silent_redirect_uri: baseUrl + 'oidc-silent-redirect.html',
+      post_logout_redirect_uri: buildUrl('/login'),
+      silent_redirect_uri: buildUrl('/oidc-silent-redirect.html'),
       accessTokenExpiringNotificationTime: 10,
       automaticSilentRenew: true,
       filterProtocolClaims: true,
