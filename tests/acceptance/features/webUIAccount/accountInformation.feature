@@ -26,7 +26,7 @@ Feature: View account information
     When the user browses to the account page
     Then the user should have following details displayed on the account information
       | Username          | Alice             |
-      | Display name      | Alice Hansen          |
+      | Display name      | Alice Hansen      |
       | Email             | alice@example.org |
       | Group memberships | Group1            |
 
@@ -50,6 +50,6 @@ Feature: View account information
     When the user browses to the account page
     Then the user should have following details displayed on the account information
       | Username          | Alice                                            |
-      | Display name      | Alice Hansen                                         |
+      | Display name      | Alice Hansen                                     |
       | Email             | alice@example.org                                |
       | Group memberships | Group1, Group2, Group3, Group4, Group31, A111111 |

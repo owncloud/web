@@ -18,7 +18,7 @@ Then(
     const actualKeys = Object.keys(actualAccInfo)
 
     if (actualKeys.length === 0) {
-      throw new Error('Sorry, no any account information was found.')
+      throw new Error('Sorry, no account information was found.')
     }
 
     const notFoundArray = []
