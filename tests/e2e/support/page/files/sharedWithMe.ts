@@ -12,7 +12,7 @@ export class SharedWithMePage {
   async navigate(): Promise<void> {
     const { page } = this.actor
     await page
-      .locator('//a[@href="#/files/shares/with-me" or @href="/files/shares/with-me"]')
+      .locator('//li[contains(@class, "oc-sidebar-nav-item")]//span[text()="Shared with me"]')
       .click()
   }
 

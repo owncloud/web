@@ -11,7 +11,7 @@ Feature: login users
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files in the server
 
-  @ocisSmokeTest
+
   Scenario: admin login
     Given the user has browsed to the login page
     When the user logs in with username "admin" and password "admin" using the webUI

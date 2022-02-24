@@ -14,7 +14,7 @@ export class AllFilesPage {
     const { page } = this.actor
 
     const allFilesBtn = page.locator(
-      '//a[@href="#/files/spaces/personal/home" or @href="/files/spaces/personal/home"]//span[contains(@class, "text")]'
+      '//li[contains(@class, "oc-sidebar-nav-item")]//span[text()="All files"]'
     )
     await allFilesBtn.click()
   }
