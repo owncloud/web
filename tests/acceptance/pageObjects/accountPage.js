@@ -60,7 +60,7 @@ module.exports = {
       selector: '#account-page-title'
     },
     accountInformationElements: {
-      selector: '//dt[contains(@class, "account-page-info-")]',
+      selector: '//dt[contains(@class, "account-page-info-")]/parent::div',
       locateStrategy: 'xpath'
     }
   }
