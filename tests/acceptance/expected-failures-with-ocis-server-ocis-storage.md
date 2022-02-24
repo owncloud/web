@@ -498,3 +498,8 @@ Other free text and markdown formatting can be used elsewhere in the document if
 
 ### [empty subfolder inside a folder to be uploaded is not created on the server](https://github.com/owncloud/web/issues/6348)
 -   [webUIUpload/upload.feature:42](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/upload.feature#L42)
+
+### [Account page group membership information is set differently for `ocis` and `oc10`](https://github.com/owncloud/web/issues/6475)
+-   [webUIAccount/accountInformation.feature:34](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIAccount/accountInformation.feature#L34)
+-   [webUIAccount/accountInformation.feature:20](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIAccount/accountInformation.feature#L20)
+-   [webUIAccount/accountInformation.feature:10](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIAccount/accountInformation.feature#L10)
