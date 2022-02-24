@@ -1,0 +1,6 @@
+Bugfix: Breadcrumb 'All Files' link
+
+The `All Files` link in the breadcrumb now always point to the root of the personal storage home instead of the optional homeFolder.
+
+https://github.com/owncloud/web/pull/6467
+https://github.com/owncloud/web/issues/6327
