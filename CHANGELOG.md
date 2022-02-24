@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Breadcrumb 'All Files' link: [#6467](https://github.com/owncloud/web/pull/6467)
 * Bugfix - App compatibility: [#6439](https://github.com/owncloud/web/pull/6439)
 * Bugfix - Fix closing apps opened from search: [#6444](https://github.com/owncloud/web/pull/6444)
 * Enhancement - Add the graph client to the client service: [#6425](https://github.com/owncloud/web/pull/6425)
@@ -20,6 +21,14 @@ Summary
 
 Details
 -------
+
+* Bugfix - Breadcrumb 'All Files' link: [#6467](https://github.com/owncloud/web/pull/6467)
+
+   The `All Files` link in the breadcrumb now always point to the root of the personal storage home
+   instead of the optional homeFolder.
+
+   https://github.com/owncloud/web/issues/6327
+   https://github.com/owncloud/web/pull/6467
 
 * Bugfix - App compatibility: [#6439](https://github.com/owncloud/web/pull/6439)
 
