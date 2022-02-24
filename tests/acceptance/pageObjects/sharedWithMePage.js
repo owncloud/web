@@ -4,7 +4,7 @@ const { SHARE_STATE } = require('../helpers/sharingHelper')
 
 module.exports = {
   url: function (viewMode) {
-    return join(this.api.launchUrl, '/#/files/shares/with-me/?view-mode=' + viewMode)
+    return join(this.api.launchUrl, '/files/shares/with-me/?view-mode=' + viewMode)
   },
   commands: {
     /**

@@ -2,7 +2,7 @@ const { join } = require('../helpers/path')
 
 module.exports = {
   url: function () {
-    return join(this.api.launchUrl, '/#/files/ops/resolver/public-link/')
+    return join(this.api.launchUrl, '/files/ops/resolver/public-link/')
   },
   commands: {
     /**
@@ -15,7 +15,7 @@ module.exports = {
       )
     },
     navigateAndWaitForPasswordPage: function (token) {
-      this.navigate(join(this.api.launchUrl, '/#/files/ops/resolver/public-link', token))
+      this.navigate(join(this.api.launchUrl, '/files/ops/resolver/public-link', token))
       return this.page.publicLinkPasswordPage().waitForElementPresent('@passwordInput')
     },
     /**

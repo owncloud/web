@@ -2,7 +2,7 @@ const { join } = require('../helpers/path')
 
 module.exports = {
   url: function () {
-    return join(this.api.launchUrl, '/#/files/favorites/')
+    return join(this.api.launchUrl, '/files/favorites/')
   },
   commands: {
     /**
