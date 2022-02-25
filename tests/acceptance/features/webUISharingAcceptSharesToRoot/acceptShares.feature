@@ -118,12 +118,12 @@ Feature: accept/decline shares coming from internal users
     And the user has browsed to the shared-with-me page
     When the user unshares folder "simple-folder" using the webUI
     And the user unshares file "testimage.jpg" using the webUI
-    And the user browses to the files page
-    Then folder "simple-folder" should not be listed on the webUI
-    And file "testimage.jpg" should not be listed on the webUI
-    When the user browses to the shared-with-me page in declined shares view
+    And the user browses to the shared-with-me page in declined shares view
     Then folder "simple-folder" shared by "Alice Hansen" should be in "Declined" state on the webUI
     And file "testimage.jpg" shared by "Alice Hansen" should be in "Declined" state on the webUI
+    When the user browses to the files page
+    Then folder "simple-folder" should not be listed on the webUI
+    And file "testimage.jpg" should not be listed on the webUI
 
   Scenario: unshare renamed shares
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "yes" in the server
