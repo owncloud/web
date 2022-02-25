@@ -2566,21 +2566,23 @@ def uploadScreenshots():
         "image": "plugins/s3",
         "pull": "if-not-exists",
         "settings": {
-            "bucket": "owncloud",
+            "bucket": {
+                "from_secret": "cache_public_s3_bucket",
+            },
             "endpoint": {
-                "from_secret": "cache_s3_endpoint",
+                "from_secret": "cache_public_s3_server",
             },
             "path_style": True,
             "source": "%s/tests/acceptance/reports/screenshots/**/*" % dir["web"],
             "strip_prefix": "%s/tests/acceptance/reports/screenshots" % dir["web"],
-            "target": "/web/screenshots/${DRONE_BUILD_NUMBER}",
+            "target": "/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/screenshots",
         },
         "environment": {
             "AWS_ACCESS_KEY_ID": {
-                "from_secret": "cache_s3_access_key",
+                "from_secret": "cache_public_s3_access_key",
             },
             "AWS_SECRET_ACCESS_KEY": {
-                "from_secret": "cache_s3_secret_key",
+                "from_secret": "cache_public_s3_secret_key",
             },
         },
         "when": {
@@ -2613,21 +2615,23 @@ def uploadVisualDiff():
         "image": "plugins/s3",
         "pull": "if-not-exists",
         "settings": {
-            "bucket": "owncloud",
+            "bucket": {
+                "from_secret": "cache_public_s3_bucket",
+            },
             "endpoint": {
-                "from_secret": "cache_s3_endpoint",
+                "from_secret": "cache_public_s3_server",
             },
             "path_style": True,
             "source": "%s/tests/vrt/diff/**/*" % dir["web"],
             "strip_prefix": "%s/tests/vrt" % dir["web"],
-            "target": "/web/screenshots/${DRONE_BUILD_NUMBER}",
+            "target": "/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/vrt/screenshots",
         },
         "environment": {
             "AWS_ACCESS_KEY_ID": {
-                "from_secret": "cache_s3_access_key",
+                "from_secret": "cache_public_s3_access_key",
             },
             "AWS_SECRET_ACCESS_KEY": {
-                "from_secret": "cache_s3_secret_key",
+                "from_secret": "cache_public_s3_secret_key",
             },
         },
         "when": {
@@ -2646,21 +2650,23 @@ def uploadVisualScreenShots():
         "image": "plugins/s3",
         "pull": "if-not-exists",
         "settings": {
-            "bucket": "owncloud",
+            "bucket": {
+                "from_secret": "cache_public_s3_bucket",
+            },
             "endpoint": {
-                "from_secret": "cache_s3_endpoint",
+                "from_secret": "cache_public_s3_server",
             },
             "path_style": True,
             "source": "%s/tests/vrt/latest/**/*" % dir["web"],
             "strip_prefix": "%s/tests/vrt" % dir["web"],
-            "target": "/web/screenshots/${DRONE_BUILD_NUMBER}",
+            "target": "/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/vrt/screenshots",
         },
         "environment": {
             "AWS_ACCESS_KEY_ID": {
-                "from_secret": "cache_s3_access_key",
+                "from_secret": "cache_public_s3_access_key",
             },
             "AWS_SECRET_ACCESS_KEY": {
-                "from_secret": "cache_s3_secret_key",
+                "from_secret": "cache_public_s3_secret_key",
             },
         },
         "when": {
@@ -2688,11 +2694,11 @@ def buildGithubCommentVisualDiff(ctx, suite, runningOnOCIS):
             "ls -la",
             'echo "<details><summary>:boom: Visual regression tests failed. Please find the screenshots inside ...</summary>\\n\\n<p>\\n\\n" >> %s/comments.file' % dir["web"],
             'echo "Diff Image: </br>" >> %s/comments.file' % dir["web"],
-            'for f in *.png; do echo \'!\'"[$f]($CACHE_ENDPOINT/owncloud/web/screenshots/${DRONE_BUILD_NUMBER}/diff/%s/$f)" >> %s/comments.file; done' % (backend, dir["web"]),
+            'for f in *.png; do echo \'!\'"[$f]($CACHE_ENDPOINT/$CACHE_BUCKET/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/vrt/screenshots/diff/%s/$f)" >> %s/comments.file; done' % (backend, dir["web"]),
             "cd ../../latest",
             "cd %s" % backend,
             'echo "Actual Image: </br>" >> %s/comments.file' % dir["web"],
-            'for f in *.png; do echo \'!\'"[$f]($CACHE_ENDPOINT/owncloud/web/screenshots/${DRONE_BUILD_NUMBER}/latest/%s/$f)" >> %s/comments.file; done' % (backend, dir["web"]),
+            'for f in *.png; do echo \'!\'"[$f]($CACHE_ENDPOINT/$CACHE_BUCKET/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/vrt/screenshots/latest/%s/$f)" >> %s/comments.file; done' % (backend, dir["web"]),
             'echo "Comparing Against: </br>" >> %s/comments.file' % dir["web"],
             'for f in *.png; do echo \'!\'"[$f](https://raw.githubusercontent.com/owncloud/web/%s/tests/vrt/baseline/%s/$f)" >> %s/comments.file; done' % (branch, backend, dir["web"]),
             'echo "\n</p></details>" >> %s/comments.file' % dir["web"],
@@ -2701,7 +2707,10 @@ def buildGithubCommentVisualDiff(ctx, suite, runningOnOCIS):
         "environment": {
             "TEST_CONTEXT": suite,
             "CACHE_ENDPOINT": {
-                "from_secret": "cache_s3_endpoint",
+                "from_secret": "cache_public_s3_server",
+            },
+            "CACHE_BUCKET": {
+                "from_secret": "cache_public_s3_bucket",
             },
         },
         "when": {
@@ -2721,14 +2730,17 @@ def buildGithubComment(suite):
         "commands": [
             "cd %s/tests/acceptance/reports/screenshots/" % dir["web"],
             'echo "<details><summary>:boom: The acceptance tests failed on retry. Please find the screenshots inside ...</summary>\\n\\n<p>\\n\\n" >> %s/comments.file' % dir["web"],
-            'for f in *.png; do echo "### $f\n" \'!\'"[$f]($CACHE_ENDPOINT/owncloud/web/screenshots/${DRONE_BUILD_NUMBER}/$f) \n" >> %s/comments.file; done' % dir["web"],
+            'for f in *.png; do echo "### $f\n" \'!\'"[$f]($CACHE_ENDPOINT/$CACHE_BUCKET/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/screenshots/$f) \n" >> %s/comments.file; done' % dir["web"],
             'echo "\n</p></details>" >> %s/comments.file' % dir["web"],
             "more %s/comments.file" % dir["web"],
         ],
         "environment": {
             "TEST_CONTEXT": suite,
             "CACHE_ENDPOINT": {
-                "from_secret": "cache_s3_endpoint",
+                "from_secret": "cache_public_s3_server",
+            },
+            "CACHE_BUCKET": {
+                "from_secret": "cache_public_s3_bucket",
             },
         },
         "when": {
@@ -3196,21 +3208,23 @@ def uploadTracingResult(ctx):
         "image": "plugins/s3",
         "pull": "if-not-exists",
         "settings": {
-            "bucket": "owncloud",
+            "bucket": {
+                "from_secret": "cache_public_s3_bucket",
+            },
             "endpoint": {
-                "from_secret": "cache_s3_endpoint",
+                "from_secret": "cache_public_s3_server",
             },
             "path_style": True,
             "source": "%s/reports/e2e/playwright/tracing/**/*" % dir["web"],
             "strip_prefix": "%s/reports/e2e/playwright/tracing" % dir["web"],
-            "target": "/web/tracing/${DRONE_BUILD_NUMBER}",
+            "target": "/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/tracing",
         },
         "environment": {
             "AWS_ACCESS_KEY_ID": {
-                "from_secret": "cache_s3_access_key",
+                "from_secret": "cache_public_s3_access_key",
             },
             "AWS_SECRET_ACCESS_KEY": {
-                "from_secret": "cache_s3_secret_key",
+                "from_secret": "cache_public_s3_secret_key",
             },
         },
         "when": {
@@ -3232,14 +3246,17 @@ def publishTracingResult(ctx, suite):
         "commands": [
             "cd %s/reports/e2e/playwright/tracing/" % dir["web"],
             'echo "<details><summary>:boom: To see the trace, please open the link in the console ...</summary>\\n\\n<p>\\n\\n" >> %s/comments.file' % dir["web"],
-            'for f in *.zip; do echo "#### npx playwright show-trace https://cache.owncloud.com/owncloud/web/tracing/${DRONE_BUILD_NUMBER}/$f \n" >> %s/comments.file; done' % dir["web"],
+            'for f in *.zip; do echo "#### npx playwright show-trace $CACHE_ENDPOINT/$CACHE_BUCKET/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/tracing/$f \n" >> %s/comments.file; done' % dir["web"],
             'echo "\n</p></details>" >> %s/comments.file' % dir["web"],
             "more %s/comments.file" % dir["web"],
         ],
         "environment": {
             "TEST_CONTEXT": suite,
             "CACHE_ENDPOINT": {
-                "from_secret": "cache_s3_endpoint",
+                "from_secret": "cache_public_s3_server",
+            },
+            "CACHE_BUCKET": {
+                "from_secret": "cache_public_s3_bucket",
             },
         },
         "when": {
