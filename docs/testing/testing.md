@@ -32,6 +32,12 @@ $ yarn test:integration
 
 You can also specify which tests to run by giving a path param, like so: `yarn test:unit packages/<app-name>/tests/unit/path/to/test.spec.js`.
 
+#### Unit test file structure
+Our unit tests spec files follow a simple structure:
+- fixtures and mocks at the top
+- helper functions at the bottom
+- tests in between
+
 ### E2E Tests (Playwright)
 
 Our end-to-end test suite is built upon [Playwright Framework](https://github.com/microsoft/playwright), 
