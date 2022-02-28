@@ -37,20 +37,6 @@ const mapActions = {
   updateLink: jest.fn()
 }
 
-const mountOptions = (data, store) => ({
-  localVue,
-  store,
-  provide: {
-    changeView: jest.fn()
-  },
-  directives: {
-    translate: jest.fn()
-  },
-  data() {
-    return data
-  }
-})
-
 describe('LinkEdit', () => {
   beforeEach(() => {
     jest.useFakeTimers('modern')
@@ -569,3 +555,17 @@ function getMountedWrapper(store = createStore(), data = {}) {
     }
   })
 }
+
+const mountOptions = (data, store) => ({
+  localVue,
+  store,
+  provide: {
+    changeView: jest.fn()
+  },
+  directives: {
+    translate: jest.fn()
+  },
+  data() {
+    return data
+  }
+})

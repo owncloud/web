@@ -16,7 +16,31 @@ const slots = {
 }
 
 describe('OcSidebarNav', () => {
-  const wrapper = mount(SidebarNav, {
+  const wrapper = getWrapper()
+
+  it('displays a bottom slot if given', () => {
+    expect(wrapper.findAll('.footer').length).toBe(1)
+  })
+
+  it('renders navItems into a list', () => {
+    expect(wrapper).toMatchSnapshot()
+  })
+
+  it('toggles into closed state upon button click', async () => {
+    await wrapper.find('.toggle-sidebar-button').trigger('click')
+    await wrapper.vm.$nextTick()
+    expect(wrapper).toMatchSnapshot()
+  })
+
+  it('toggles back into open state upon button click', async () => {
+    await wrapper.find('.toggle-sidebar-button').trigger('click')
+    await wrapper.vm.$nextTick()
+    expect(wrapper).toMatchSnapshot()
+  })
+})
+
+function getWrapper() {
+  return mount(SidebarNav, {
     store: new Vuex.Store({
       state: {
         navigation: {
@@ -48,24 +72,4 @@ describe('OcSidebarNav', () => {
       navItems: sidebarNavItemFixtures
     }
   })
-
-  it('displays a bottom slot if given', () => {
-    expect(wrapper.findAll('.footer').length).toBe(1)
-  })
-
-  it('renders navItems into a list', () => {
-    expect(wrapper).toMatchSnapshot()
-  })
-
-  it('toggles into closed state upon button click', async () => {
-    await wrapper.find('.toggle-sidebar-button').trigger('click')
-    await wrapper.vm.$nextTick()
-    expect(wrapper).toMatchSnapshot()
-  })
-
-  it('toggles back into open state upon button click', async () => {
-    await wrapper.find('.toggle-sidebar-button').trigger('click')
-    await wrapper.vm.$nextTick()
-    expect(wrapper).toMatchSnapshot()
-  })
-})
+}

@@ -17,13 +17,6 @@ const selectors = {
 }
 
 const spacesLocation = createLocationSpaces('files-spaces-personal-home')
-function publicLocation(item) {
-  return createLocationPublic('files-public-files', {
-    params: {
-      item: item
-    }
-  })
-}
 
 const store = new Vuex.Store({
   getters: {
@@ -32,44 +25,6 @@ const store = new Vuex.Store({
     }
   }
 })
-
-function getWrapper(route) {
-  return shallowMount(NotFoundMessage, {
-    localVue,
-    store: store,
-    stubs: stubs,
-    mocks: {
-      $route: route,
-      $router: {
-        resolve: (r) => {
-          return {
-            href: r.name
-          }
-        },
-        currentRoute: route
-      }
-    }
-  })
-}
-
-function getMountedWrapper(route) {
-  return mount(NotFoundMessage, {
-    localVue,
-    store: store,
-    stubs: stubs,
-    mocks: {
-      $route: route,
-      $router: {
-        resolve: (r) => {
-          return {
-            href: r.name
-          }
-        },
-        currentRoute: route
-      }
-    }
-  })
-}
 
 describe('NotFoundMessage', () => {
   describe('when user on personal route', () => {
@@ -125,3 +80,42 @@ describe('NotFoundMessage', () => {
     })
   })
 })
+
+function publicLocation(item) {
+  return createLocationPublic('files-public-files', {
+    params: {
+      item: item
+    }
+  })
+}
+
+function getMountOpts(route) {
+  return {
+    localVue,
+    store: store,
+    stubs: stubs,
+    mocks: {
+      $route: route,
+      $router: {
+        resolve: (r) => {
+          return {
+            href: r.name
+          }
+        },
+        currentRoute: route
+      }
+    }
+  }
+}
+
+function getMountedWrapper(route) {
+  return mount(NotFoundMessage, {
+    ...getMountOpts(route)
+  })
+}
+
+function getWrapper(route) {
+  return shallowMount(NotFoundMessage, {
+    ...getMountOpts(route)
+  })
+}

@@ -7,69 +7,47 @@ import DesignSystem from 'owncloud-design-system'
 import { DateTime } from 'luxon'
 import { ShareTypes } from '../../../../../../src/helpers/share'
 
-const asCapabilitiesGetter = (capabilities = {}): { getters: GetterTree<unknown, unknown> } => ({
-  getters: {
-    capabilities: () => ({
-      files_sharing: capabilities
-    })
+const bareCapabilities = {
+  user: {
+    expire_date: {}
+  },
+  group: {
+    expire_date: {}
+  }
+}
+
+const enabledCapabilities = merge({}, bareCapabilities, {
+  user: {
+    expire_date: {
+      enabled: true,
+      days: 1
+    }
+  },
+  group: {
+    expire_date: {
+      enabled: true,
+      days: 2
+    }
   }
 })
-const createWrapper = (store = {}): Wrapper<any> => {
-  const localVue = createLocalVue()
-  localVue.use(VueCompositionAPI)
-  localVue.use(Vuex)
-  localVue.use(DesignSystem)
 
-  return mount(ExpirationDatepicker, {
-    localVue,
-    store: new Vuex.Store(store),
-    stubs: {
-      translate: true
+const enforcedCapabilities = merge({}, enabledCapabilities, {
+  user: {
+    expire_date: {
+      enforced: true
     }
-  })
-}
+  },
+  group: {
+    expire_date: {
+      enforced: true
+    }
+  }
+})
 
 describe('InviteCollaborator ExpirationDatepicker', () => {
   it('only gets displayed if share expiration is supported', () => {
     const wrapper = createWrapper(asCapabilitiesGetter())
     expect(wrapper.html()).toBe('')
-  })
-
-  const bareCapabilities = {
-    user: {
-      expire_date: {}
-    },
-    group: {
-      expire_date: {}
-    }
-  }
-
-  const enabledCapabilities = merge({}, bareCapabilities, {
-    user: {
-      expire_date: {
-        enabled: true,
-        days: 1
-      }
-    },
-    group: {
-      expire_date: {
-        enabled: true,
-        days: 2
-      }
-    }
-  })
-
-  const enforcedCapabilities = merge({}, enabledCapabilities, {
-    user: {
-      expire_date: {
-        enforced: true
-      }
-    },
-    group: {
-      expire_date: {
-        enforced: true
-      }
-    }
   })
 
   it('renders a button to open the datepicker and set an expiration date', () => {
@@ -186,3 +164,26 @@ describe('InviteCollaborator ExpirationDatepicker', () => {
     )
   })
 })
+
+const asCapabilitiesGetter = (capabilities = {}): { getters: GetterTree<unknown, unknown> } => ({
+  getters: {
+    capabilities: () => ({
+      files_sharing: capabilities
+    })
+  }
+})
+
+const createWrapper = (store = {}): Wrapper<any> => {
+  const localVue = createLocalVue()
+  localVue.use(VueCompositionAPI)
+  localVue.use(Vuex)
+  localVue.use(DesignSystem)
+
+  return mount(ExpirationDatepicker, {
+    localVue,
+    store: new Vuex.Store(store),
+    stubs: {
+      translate: true
+    }
+  })
+}

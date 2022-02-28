@@ -24,33 +24,6 @@ const spyTriggerDefaultAction = jest
   .spyOn(Preview.mixins[0].methods, '$_fileActions_triggerDefaultAction')
   .mockImplementation()
 
-function getWrapper({
-  resourceTargetLocation = {},
-  route = {
-    query: {},
-    params: {}
-  }
-} = {}) {
-  return shallowMount(Preview, {
-    localVue,
-    mocks: {
-      $route: route
-    },
-    propsData: {
-      searchResult
-    },
-    stubs: {
-      'oc-progress': true,
-      'oc-resource': true
-    },
-    setup: () => {
-      return {
-        resourceTargetLocation
-      }
-    }
-  })
-}
-
 describe('Preview component', () => {
   it('should set correct props on oc-resource component', () => {
     const wrapper = getWrapper()
@@ -85,3 +58,30 @@ describe('Preview component', () => {
     expect(wrapper.vm.parentFolderLink(searchResult.data).params.spaceId).toEqual(1)
   })
 })
+
+function getWrapper({
+  resourceTargetLocation = {},
+  route = {
+    query: {},
+    params: {}
+  }
+} = {}) {
+  return shallowMount(Preview, {
+    localVue,
+    mocks: {
+      $route: route
+    },
+    propsData: {
+      searchResult
+    },
+    stubs: {
+      'oc-progress': true,
+      'oc-resource': true
+    },
+    setup: () => {
+      return {
+        resourceTargetLocation
+      }
+    }
+  })
+}

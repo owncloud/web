@@ -1,15 +1,6 @@
 import resources from '@files/src/mixins/resources.js'
 import { shallowMount } from '@vue/test-utils'
 
-const getWrapper = () => {
-  const Component = {
-    render() {}
-  }
-  return shallowMount(Component, {
-    mixins: [resources]
-  })
-}
-
 describe('resources', () => {
   describe('getResourcesSize', () => {
     const wrapper = getWrapper()
@@ -40,3 +31,12 @@ describe('resources', () => {
     })
   })
 })
+
+function getWrapper() {
+  const Component = {
+    render() {}
+  }
+  return shallowMount(Component, {
+    mixins: [resources]
+  })
+}

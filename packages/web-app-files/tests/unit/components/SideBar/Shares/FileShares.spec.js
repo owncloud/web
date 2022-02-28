@@ -156,7 +156,7 @@ const storeOptions = (data, isInLoadingState) => {
     owner = user
   }
 
-  const storeOpts = {
+  return {
     state: {
       user
     },
@@ -213,8 +213,6 @@ const storeOptions = (data, isInLoadingState) => {
       }
     }
   }
-
-  return storeOpts
 }
 
 function getMountedWrapper(data, loading = false) {

@@ -21,43 +21,6 @@ localVue.use(GetTextPlugin, {
   silent: true
 })
 
-function getShallowWrapper(
-  link = {
-    token: '122235445488',
-    url: 'some-link'
-  }
-) {
-  return shallowMount(LinkInfo, {
-    localVue,
-    stubs: { ...stubs, 'oc-tag': true },
-    propsData: {
-      link: link
-    },
-    directives: {
-      'oc-tooltip': jest.fn()
-    }
-  })
-}
-
-function getMountedWrapper(
-  link = {
-    token: '122235445488',
-    url: 'some-link'
-  }
-) {
-  localVue.use(DesignSystem)
-  return mount(LinkInfo, {
-    localVue,
-    propsData: {
-      link: link
-    },
-    stubs,
-    directives: {
-      'oc-tooltip': jest.fn()
-    }
-  })
-}
-
 describe('LinkInfo', () => {
   describe('link name', () => {
     it('should show token as link name if link does not have name', () => {
@@ -218,3 +181,40 @@ describe('LinkInfo', () => {
     })
   })
 })
+
+function getShallowWrapper(
+  link = {
+    token: '122235445488',
+    url: 'some-link'
+  }
+) {
+  return shallowMount(LinkInfo, {
+    localVue,
+    stubs: { ...stubs, 'oc-tag': true },
+    propsData: {
+      link: link
+    },
+    directives: {
+      'oc-tooltip': jest.fn()
+    }
+  })
+}
+
+function getMountedWrapper(
+  link = {
+    token: '122235445488',
+    url: 'some-link'
+  }
+) {
+  localVue.use(DesignSystem)
+  return mount(LinkInfo, {
+    localVue,
+    propsData: {
+      link: link
+    },
+    stubs,
+    directives: {
+      'oc-tooltip': jest.fn()
+    }
+  })
+}

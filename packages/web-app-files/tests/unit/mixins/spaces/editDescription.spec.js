@@ -8,48 +8,12 @@ import mockAxios from 'jest-mock-axios'
 const localVue = createLocalVue()
 localVue.use(Vuex)
 
+const Component = {
+  render() {},
+  mixins: [EditDescription]
+}
+
 describe('editDescription', () => {
-  const Component = {
-    render() {},
-    mixins: [EditDescription]
-  }
-
-  function getWrapper() {
-    return mount(Component, {
-      localVue,
-      mocks: {
-        $router: {
-          currentRoute: createLocationSpaces('files-spaces-projects'),
-          resolve: (r) => {
-            return { href: r.name }
-          }
-        },
-        $gettext: jest.fn()
-      },
-      store: createStore(Vuex.Store, {
-        actions: {
-          createModal: jest.fn(),
-          hideModal: jest.fn(),
-          showMessage: jest.fn()
-        },
-        getters: {
-          configuration: () => ({
-            server: 'https://example.com'
-          }),
-          getToken: () => 'token'
-        },
-        modules: {
-          Files: {
-            namespaced: true,
-            mutations: {
-              UPDATE_RESOURCE_FIELD: jest.fn()
-            }
-          }
-        }
-      })
-    })
-  }
-
   describe('method "$_editDescription_trigger"', () => {
     it('should trigger the editDescription modal window with one resource', async () => {
       const wrapper = getWrapper()
@@ -91,3 +55,39 @@ describe('editDescription', () => {
     })
   })
 })
+
+function getWrapper() {
+  return mount(Component, {
+    localVue,
+    mocks: {
+      $router: {
+        currentRoute: createLocationSpaces('files-spaces-projects'),
+        resolve: (r) => {
+          return { href: r.name }
+        }
+      },
+      $gettext: jest.fn()
+    },
+    store: createStore(Vuex.Store, {
+      actions: {
+        createModal: jest.fn(),
+        hideModal: jest.fn(),
+        showMessage: jest.fn()
+      },
+      getters: {
+        configuration: () => ({
+          server: 'https://example.com'
+        }),
+        getToken: () => 'token'
+      },
+      modules: {
+        Files: {
+          namespaced: true,
+          mutations: {
+            UPDATE_RESOURCE_FIELD: jest.fn()
+          }
+        }
+      }
+    })
+  })
+}
