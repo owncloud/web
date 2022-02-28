@@ -7,29 +7,11 @@ beforeEach(() => {
   mockClient(undefined)
 })
 
-const mockClient = (signUrl: any) => {
-  const vue = jest.fn()
-  vue.prototype.$client = jest.fn()
-  vue.prototype.$client.signUrl = signUrl
-  ;(global as any).Vue = vue
-}
-
 const defaultOptions = {
   server: 'https://www.ocis.rules/',
   username: 'ocis',
   token: 'rules'
 }
-
-const buildUrl = ({
-  server,
-  username,
-  size
-}: {
-  server: string
-  username: string
-  size?: number
-}) =>
-  [server, 'remote.php/dav/avatars/', username, `/${size || ImageDimension.Avatar}.png`].join('')
 
 describe('avatarUrl', () => {
   it('throws an error', async () => {
@@ -78,3 +60,21 @@ describe('avatarUrl', () => {
     expect(mockAxios.head).toBeCalledTimes(3)
   })
 })
+
+const mockClient = (signUrl: any) => {
+  const vue = jest.fn()
+  vue.prototype.$client = jest.fn()
+  vue.prototype.$client.signUrl = signUrl
+  ;(global as any).Vue = vue
+}
+
+const buildUrl = ({
+  server,
+  username,
+  size
+}: {
+  server: string
+  username: string
+  size?: number
+}) =>
+  [server, 'remote.php/dav/avatars/', username, `/${size || ImageDimension.Avatar}.png`].join('')

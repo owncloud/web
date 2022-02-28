@@ -3,14 +3,6 @@ import stubs from '../../../../../../tests/unit/stubs/index.js'
 import NoContentMessage from '../../../../src/components/FilesList/NoContentMessage.vue'
 
 describe('NoContentMessage', () => {
-  function getWrapper(slots = {}) {
-    return shallowMount(NoContentMessage, {
-      slots: slots,
-      propsData: { icon: 'mdi-test-icon' },
-      stubs: stubs
-    })
-  }
-
   describe('icon prop', () => {
     it('should render the provided icon', () => {
       const wrapper = getWrapper()
@@ -52,3 +44,11 @@ describe('NoContentMessage', () => {
     })
   })
 })
+
+function getWrapper(slots = {}) {
+  return shallowMount(NoContentMessage, {
+    slots: slots,
+    propsData: { icon: 'mdi-test-icon' },
+    stubs: stubs
+  })
+}

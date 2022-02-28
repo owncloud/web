@@ -21,6 +21,62 @@ const simpleOwnFolder = {
   size: '740'
 }
 
+describe('SideBar', () => {
+  it('fetches file info if 1 item is selected', () => {
+    const mockFileInfo = jest.fn()
+    mockFileInfo.mockReturnValueOnce(Files['/'][1])
+
+    createWrapper({
+      item: simpleOwnFolder,
+      selectedItems: [simpleOwnFolder],
+      mocks: { $client: { files: { fileInfo: mockFileInfo } } }
+    })
+
+    expect(mockFileInfo).toHaveBeenCalledTimes(1)
+  })
+
+  it('fetches file info if the selected item changes', async () => {
+    const spyOnFetchFileInfo = jest
+      .spyOn(SideBar.methods, 'fetchFileInfo')
+      .mockImplementation(jest.fn)
+
+    const wrapper = createWrapper({
+      item: simpleOwnFolder,
+      selectedItems: [simpleOwnFolder]
+    })
+
+    // fetchFileInfo is called once in created()
+    expect(spyOnFetchFileInfo).toHaveBeenCalledTimes(1)
+
+    // it should be called again when a different file is loaded
+    const resource = buildResource(Files['/'][4])
+    resource.path = `${resource.name}`
+    wrapper.vm.$store.commit('Files/SET_HIGHLIGHTED_FILE', resource)
+    await wrapper.vm.$nextTick()
+    expect(spyOnFetchFileInfo).toHaveBeenCalledTimes(2)
+
+    // and again if the file is renamed
+    const renamedResource = renameResource(Object.assign({}, resource), 'foobar.png', '')
+    wrapper.vm.$store.commit('Files/SET_HIGHLIGHTED_FILE', Object.assign(renamedResource))
+    await wrapper.vm.$nextTick()
+    expect(spyOnFetchFileInfo).toHaveBeenCalledTimes(3)
+
+    jest.resetAllMocks()
+  })
+
+  it('does not fetch file info if multiple items are selected', () => {
+    const mockFileInfo = jest.fn()
+
+    createWrapper({
+      item: simpleOwnFolder,
+      selectedItems: [simpleOwnFolder, simpleOwnFolder],
+      mocks: { $client: { files: { fileInfo: mockFileInfo } } }
+    })
+
+    expect(mockFileInfo).not.toHaveBeenCalled()
+  })
+})
+
 function createWrapper({ item, selectedItems, mocks }) {
   const localVue = createLocalVue()
   localVue.use(Vuex)
@@ -91,59 +147,3 @@ function createWrapper({ item, selectedItems, mocks }) {
     )
   })
 }
-
-describe('SideBar', () => {
-  it('fetches file info if 1 item is selected', () => {
-    const mockFileInfo = jest.fn()
-    mockFileInfo.mockReturnValueOnce(Files['/'][1])
-
-    createWrapper({
-      item: simpleOwnFolder,
-      selectedItems: [simpleOwnFolder],
-      mocks: { $client: { files: { fileInfo: mockFileInfo } } }
-    })
-
-    expect(mockFileInfo).toHaveBeenCalledTimes(1)
-  })
-
-  it('fetches file info if the selected item changes', async () => {
-    const spyOnFetchFileInfo = jest
-      .spyOn(SideBar.methods, 'fetchFileInfo')
-      .mockImplementation(jest.fn)
-
-    const wrapper = createWrapper({
-      item: simpleOwnFolder,
-      selectedItems: [simpleOwnFolder]
-    })
-
-    // fetchFileInfo is called once in created()
-    expect(spyOnFetchFileInfo).toHaveBeenCalledTimes(1)
-
-    // it should be called again when a different file is loaded
-    const resource = buildResource(Files['/'][4])
-    resource.path = `${resource.name}`
-    wrapper.vm.$store.commit('Files/SET_HIGHLIGHTED_FILE', resource)
-    await wrapper.vm.$nextTick()
-    expect(spyOnFetchFileInfo).toHaveBeenCalledTimes(2)
-
-    // and again if the file is renamed
-    const renamedResource = renameResource(Object.assign({}, resource), 'foobar.png', '')
-    wrapper.vm.$store.commit('Files/SET_HIGHLIGHTED_FILE', Object.assign(renamedResource))
-    await wrapper.vm.$nextTick()
-    expect(spyOnFetchFileInfo).toHaveBeenCalledTimes(3)
-
-    jest.resetAllMocks()
-  })
-
-  it('does not fetch file info if multiple items are selected', () => {
-    const mockFileInfo = jest.fn()
-
-    createWrapper({
-      item: simpleOwnFolder,
-      selectedItems: [simpleOwnFolder, simpleOwnFolder],
-      mocks: { $client: { files: { fileInfo: mockFileInfo } } }
-    })
-
-    expect(mockFileInfo).not.toHaveBeenCalled()
-  })
-})

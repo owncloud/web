@@ -4,17 +4,6 @@ import DesignSystem from 'owncloud-design-system'
 
 const Translate = jest.fn()
 
-function getOptions() {
-  const localVue = createLocalVue()
-  localVue.use(DesignSystem)
-  return {
-    propsData: {
-      path: ''
-    },
-    localVue,
-    directives: { Translate }
-  }
-}
 describe('File Upload Component', () => {
   it('should render component', () => {
     const wrapper = mount(FileUpload, getOptions())
@@ -67,3 +56,15 @@ describe('File Upload Component', () => {
     })
   })
 })
+
+function getOptions() {
+  const localVue = createLocalVue()
+  localVue.use(DesignSystem)
+  return {
+    propsData: {
+      path: ''
+    },
+    localVue,
+    directives: { Translate }
+  }
+}

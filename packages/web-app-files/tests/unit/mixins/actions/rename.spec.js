@@ -12,54 +12,12 @@ const currentFolder = {
   path: '/folder'
 }
 
+const Component = {
+  render() {},
+  mixins: [rename]
+}
+
 describe('rename', () => {
-  const Component = {
-    render() {},
-    mixins: [rename]
-  }
-
-  function getWrapper(renameFilePromise) {
-    return mount(Component, {
-      localVue,
-      mocks: {
-        $router: {
-          currentRoute: createLocationSpaces('files-spaces-personal-home'),
-          resolve: (r) => {
-            return { href: r.name }
-          }
-        },
-        $client: { files: { find: jest.fn(() => [{ name: 'file1' }]), list: jest.fn(() => []) } },
-        $gettextInterpolate: jest.fn(),
-        $gettext: jest.fn(),
-        publicPage: () => false,
-        flatFileList: false
-      },
-      store: createStore(Vuex.Store, {
-        modules: {
-          Files: {
-            namespaced: true,
-            getters: {
-              currentFolder: () => currentFolder,
-              files: () => [{ name: 'file1' }]
-            },
-            actions: {
-              renameFile: jest.fn(() => {
-                return renameFilePromise
-              })
-            }
-          }
-        },
-        actions: {
-          createModal: jest.fn(),
-          hideModal: jest.fn(),
-          toggleModalConfirmButton: jest.fn(),
-          showMessage: jest.fn(),
-          setModalInputErrorMessage: jest.fn()
-        }
-      })
-    })
-  }
-
   describe('computed property "$_rename_items"', () => {
     describe('isEnabled property of returned element', () => {
       it.each([
@@ -172,3 +130,45 @@ describe('rename', () => {
     })
   })
 })
+
+function getWrapper(renameFilePromise) {
+  return mount(Component, {
+    localVue,
+    mocks: {
+      $router: {
+        currentRoute: createLocationSpaces('files-spaces-personal-home'),
+        resolve: (r) => {
+          return { href: r.name }
+        }
+      },
+      $client: { files: { find: jest.fn(() => [{ name: 'file1' }]), list: jest.fn(() => []) } },
+      $gettextInterpolate: jest.fn(),
+      $gettext: jest.fn(),
+      publicPage: () => false,
+      flatFileList: false
+    },
+    store: createStore(Vuex.Store, {
+      modules: {
+        Files: {
+          namespaced: true,
+          getters: {
+            currentFolder: () => currentFolder,
+            files: () => [{ name: 'file1' }]
+          },
+          actions: {
+            renameFile: jest.fn(() => {
+              return renameFilePromise
+            })
+          }
+        }
+      },
+      actions: {
+        createModal: jest.fn(),
+        hideModal: jest.fn(),
+        toggleModalConfirmButton: jest.fn(),
+        showMessage: jest.fn(),
+        setModalInputErrorMessage: jest.fn()
+      }
+    })
+  })
+}

@@ -10,16 +10,6 @@ localVue.use(GetTextPlugin, {
   silent: true
 })
 describe('ListInfo', () => {
-  function getWrapper(props = {}) {
-    return shallowMount(ListInfo, {
-      localVue,
-      propsData: {
-        files: 2,
-        folders: 3,
-        ...props
-      }
-    })
-  }
   describe('files and folders prop', () => {
     const wrapper = getWrapper()
     const itemElement = wrapper.find('p')
@@ -99,3 +89,14 @@ describe('ListInfo', () => {
     })
   })
 })
+
+function getWrapper(props = {}) {
+  return shallowMount(ListInfo, {
+    localVue,
+    propsData: {
+      files: 2,
+      folders: 3,
+      ...props
+    }
+  })
+}

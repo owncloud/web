@@ -30,6 +30,7 @@ const spaceMock = {
 const formDateFromJSDate = jest.fn().mockImplementation(() => 'ABSOLUTE_TIME')
 const formDateFromHTTP = jest.fn().mockImplementation(() => 'ABSOLUTE_TIME')
 const refreshShareDetailsTree = jest.fn()
+
 beforeEach(() => {
   formDateFromJSDate.mockClear()
   formDateFromHTTP.mockClear()

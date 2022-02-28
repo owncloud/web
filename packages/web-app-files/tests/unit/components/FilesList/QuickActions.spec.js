@@ -26,50 +26,6 @@ const testItem = {
   size: '12220'
 }
 
-function getShallowMountedWrapper() {
-  const localVue = createLocalVue()
-  localVue.use(DesignSystem)
-  return shallowMount(QuickActions, {
-    localVue,
-    propsData: {
-      actions: {
-        collaborators: collaboratorAction,
-        publicLink: publicLinkAction
-      },
-      item: testItem
-    },
-    directives: {
-      'oc-tooltip': jest.fn()
-    },
-    stubs: {
-      'oc-icon': true,
-      'oc-button': true
-    }
-  })
-}
-
-function getMountedWrapper() {
-  const localVue = createLocalVue()
-  localVue.use(DesignSystem)
-  return mount(QuickActions, {
-    localVue,
-    propsData: {
-      actions: {
-        collaborators: collaboratorAction,
-        publicLink: publicLinkAction
-      },
-      item: testItem
-    },
-    directives: {
-      'oc-tooltip': jest.fn()
-    },
-    stubs: {
-      'oc-icon': false,
-      'oc-button': false
-    }
-  })
-}
-
 describe('QuickActions', () => {
   afterEach(() => {
     jest.clearAllMocks()
@@ -114,3 +70,47 @@ describe('QuickActions', () => {
     })
   })
 })
+
+function getShallowMountedWrapper() {
+  const localVue = createLocalVue()
+  localVue.use(DesignSystem)
+  return shallowMount(QuickActions, {
+    localVue,
+    propsData: {
+      actions: {
+        collaborators: collaboratorAction,
+        publicLink: publicLinkAction
+      },
+      item: testItem
+    },
+    directives: {
+      'oc-tooltip': jest.fn()
+    },
+    stubs: {
+      'oc-icon': true,
+      'oc-button': true
+    }
+  })
+}
+
+function getMountedWrapper() {
+  const localVue = createLocalVue()
+  localVue.use(DesignSystem)
+  return mount(QuickActions, {
+    localVue,
+    propsData: {
+      actions: {
+        collaborators: collaboratorAction,
+        publicLink: publicLinkAction
+      },
+      item: testItem
+    },
+    directives: {
+      'oc-tooltip': jest.fn()
+    },
+    stubs: {
+      'oc-icon': false,
+      'oc-button': false
+    }
+  })
+}

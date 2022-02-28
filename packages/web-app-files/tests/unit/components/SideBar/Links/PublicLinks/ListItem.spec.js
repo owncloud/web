@@ -4,27 +4,6 @@ import { createLocalVue, shallowMount } from '@vue/test-utils'
 const localVue = createLocalVue()
 
 describe('ListItem', () => {
-  function getLinkObject(indirect = false) {
-    return {
-      link: {
-        name: 'public link',
-        url: 'some-url',
-        indirect: indirect
-      }
-    }
-  }
-
-  function getShallowWrapper(props) {
-    return shallowMount(ListItem, {
-      localVue,
-      propsData: props,
-      stubs: {
-        'oc-grid': true,
-        'link-info': true,
-        'link-actions': true
-      }
-    })
-  }
   it('should show link info component', () => {
     const wrapper = getShallowWrapper(getLinkObject())
     expect(wrapper.find('link-info-stub').props('link')).toMatchObject({
@@ -50,3 +29,25 @@ describe('ListItem', () => {
     expect(linkActions.exists()).toBeFalsy()
   })
 })
+
+function getLinkObject(indirect = false) {
+  return {
+    link: {
+      name: 'public link',
+      url: 'some-url',
+      indirect: indirect
+    }
+  }
+}
+
+function getShallowWrapper(props) {
+  return shallowMount(ListItem, {
+    localVue,
+    propsData: props,
+    stubs: {
+      'oc-grid': true,
+      'link-info': true,
+      'link-actions': true
+    }
+  })
+}

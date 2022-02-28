@@ -17,6 +17,59 @@ const mapActions = {
   showMessage: jest.fn()
 }
 
+describe('CopyToClipboardButton', () => {
+  it('should set provided label as button aria label', () => {
+    const wrapper = getShallowWrapper()
+
+    expect(wrapper.attributes('arialabel')).toBe('test label')
+  })
+
+  describe('copy to clipboard copied icon', () => {
+    it('should be visible if copied is set to true', () => {
+      const wrapper = getShallowWrapper(true)
+
+      expect(wrapper.find(selectors.copiedIcon).exists()).toBeTruthy()
+    })
+
+    it('should not be visible if copied is set to false', () => {
+      const wrapper = getShallowWrapper()
+
+      expect(wrapper.find(selectors.copiedIcon).exists()).toBeFalsy()
+    })
+  })
+  describe('when the button is clicked', () => {
+    const spyShowMessage = jest.spyOn(mapActions, 'showMessage')
+    const windowSpy = jest.spyOn(window, 'prompt').mockImplementation()
+    const wrapper = getMountedWrapper()
+
+    it('should copy the value to the clipboard and trigger the showMessage store action', async () => {
+      expect(spyShowMessage).not.toHaveBeenCalled()
+      expect(windowSpy).not.toHaveBeenCalled()
+
+      await wrapper.trigger('click')
+
+      expect(spyShowMessage).toHaveBeenCalledTimes(1)
+      expect(windowSpy).toHaveBeenCalledTimes(1)
+      expect(windowSpy).toHaveBeenCalledWith('Copy to clipboard: Ctrl+C, Enter', 'test string')
+      expect(wrapper.find(selectors.copiedIcon).exists()).toBeTruthy()
+    })
+
+    it('should set copied to true and then to false after a timeout', () => {
+      // constant set in wrapper component
+      const clipboardSuccessHandlerTimeout = 550
+      expect(wrapper.vm.copied).toBeTruthy()
+      expect(wrapper.find(selectors.copiedIcon).exists()).toBeTruthy()
+
+      jest.advanceTimersByTime(clipboardSuccessHandlerTimeout)
+
+      wrapper.vm.$nextTick(() => {
+        expect(wrapper.vm.copied).toBeFalsy()
+        expect(wrapper.find(selectors.copiedIcon).exists()).toBeFalsy()
+      })
+    })
+  })
+})
+
 function createStore() {
   return new Vuex.Store({
     actions: mapActions,
@@ -75,56 +128,3 @@ function getMountedWrapper() {
     })
   )
 }
-
-describe('CopyToClipboardButton', () => {
-  it('should set provided label as button aria label', () => {
-    const wrapper = getShallowWrapper()
-
-    expect(wrapper.attributes('arialabel')).toBe('test label')
-  })
-
-  describe('copy to clipboard copied icon', () => {
-    it('should be visible if copied is set to true', () => {
-      const wrapper = getShallowWrapper(true)
-
-      expect(wrapper.find(selectors.copiedIcon).exists()).toBeTruthy()
-    })
-
-    it('should not be visible if copied is set to false', () => {
-      const wrapper = getShallowWrapper()
-
-      expect(wrapper.find(selectors.copiedIcon).exists()).toBeFalsy()
-    })
-  })
-  describe('when the button is clicked', () => {
-    const spyShowMessage = jest.spyOn(mapActions, 'showMessage')
-    const windowSpy = jest.spyOn(window, 'prompt').mockImplementation()
-    const wrapper = getMountedWrapper()
-
-    it('should copy the value to the clipboard and trigger the showMessage store action', async () => {
-      expect(spyShowMessage).not.toHaveBeenCalled()
-      expect(windowSpy).not.toHaveBeenCalled()
-
-      await wrapper.trigger('click')
-
-      expect(spyShowMessage).toHaveBeenCalledTimes(1)
-      expect(windowSpy).toHaveBeenCalledTimes(1)
-      expect(windowSpy).toHaveBeenCalledWith('Copy to clipboard: Ctrl+C, Enter', 'test string')
-      expect(wrapper.find(selectors.copiedIcon).exists()).toBeTruthy()
-    })
-
-    it('should set copied to true and then to false after a timeout', () => {
-      // constant set in wrapper component
-      const clipboardSuccessHandlerTimeout = 550
-      expect(wrapper.vm.copied).toBeTruthy()
-      expect(wrapper.find(selectors.copiedIcon).exists()).toBeTruthy()
-
-      jest.advanceTimersByTime(clipboardSuccessHandlerTimeout)
-
-      wrapper.vm.$nextTick(() => {
-        expect(wrapper.vm.copied).toBeFalsy()
-        expect(wrapper.find(selectors.copiedIcon).exists()).toBeFalsy()
-      })
-    })
-  })
-})

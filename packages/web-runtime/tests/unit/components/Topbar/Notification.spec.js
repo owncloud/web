@@ -55,33 +55,6 @@ const testData = {
     ]
   }
 }
-const wrapperMounted = (mocks, mockMethods) => {
-  const localVue = createLocalVue()
-  localVue.use(DesignSystem)
-
-  return mount(Notifications, {
-    localVue,
-    mocks,
-    ...(mockMethods && { methods: mockMethods })
-  })
-}
-const wrapperShallowMounted = (mocks) => {
-  return shallowMount(Notifications, {
-    stubs,
-    mocks,
-    directives: {
-      'oc-tooltip': () => {}
-    }
-  })
-}
-const notificationStore = (activeNotifications) => {
-  return new Store({
-    getters: {
-      activeNotifications
-    }
-  })
-}
-
 testConfig.showDeprecationWarnings = false
 
 describe('Notification component', () => {
@@ -210,3 +183,32 @@ describe('Notification component', () => {
     })
   })
 })
+
+function wrapperMounted(mocks, mockMethods) {
+  const localVue = createLocalVue()
+  localVue.use(DesignSystem)
+
+  return mount(Notifications, {
+    localVue,
+    mocks,
+    ...(mockMethods && { methods: mockMethods })
+  })
+}
+
+function wrapperShallowMounted(mocks) {
+  return shallowMount(Notifications, {
+    stubs,
+    mocks,
+    directives: {
+      'oc-tooltip': () => {}
+    }
+  })
+}
+
+function notificationStore(activeNotifications) {
+  return new Store({
+    getters: {
+      activeNotifications
+    }
+  })
+}

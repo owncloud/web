@@ -69,71 +69,6 @@ const mapActions = {
   loadVersions: jest.fn()
 }
 
-function getMountOptions({ store, loading = false, stubs = defaultStubs }) {
-  return {
-    localVue,
-    store: store,
-    stubs: stubs,
-    directives: {
-      'oc-tooltip': true
-    },
-    data() {
-      return {
-        loading: loading
-      }
-    }
-  }
-}
-
-function getShallowWrapper(store, loading = false) {
-  return shallowMount(FileVersions, getMountOptions({ store: store, loading: loading }))
-}
-
-function getMountedWrapper(store) {
-  return mount(
-    FileVersions,
-    getMountOptions({
-      store: store,
-      stubs: {
-        ...defaultStubs,
-        'oc-resource-icon': true,
-        'oc-button': false
-      }
-    })
-  )
-}
-
-function createStore({
-  highlightedFile = {
-    id: 1223,
-    name: 'lorem.txt',
-    path: '/lorem.txt'
-  },
-  versions = defaultVersions
-} = {}) {
-  return new Vuex.Store({
-    getters: {
-      getToken: function () {
-        return 'token'
-      }
-    },
-    modules: {
-      Files: {
-        namespaced: true,
-        getters: {
-          highlightedFile: function () {
-            return highlightedFile
-          },
-          versions: function () {
-            return versions
-          }
-        },
-        actions: mapActions
-      }
-    }
-  })
-}
-
 describe('FileVersions', () => {
   describe('loading is true', () => {
     // fetchFileVersion is fired up when the wrapper is mounted and it sets loading to false
@@ -255,3 +190,68 @@ describe('FileVersions', () => {
     })
   })
 })
+
+function getMountOptions({ store, loading = false, stubs = defaultStubs }) {
+  return {
+    localVue,
+    store: store,
+    stubs: stubs,
+    directives: {
+      'oc-tooltip': true
+    },
+    data() {
+      return {
+        loading: loading
+      }
+    }
+  }
+}
+
+function getShallowWrapper(store, loading = false) {
+  return shallowMount(FileVersions, getMountOptions({ store: store, loading: loading }))
+}
+
+function getMountedWrapper(store) {
+  return mount(
+    FileVersions,
+    getMountOptions({
+      store: store,
+      stubs: {
+        ...defaultStubs,
+        'oc-resource-icon': true,
+        'oc-button': false
+      }
+    })
+  )
+}
+
+function createStore({
+  highlightedFile = {
+    id: 1223,
+    name: 'lorem.txt',
+    path: '/lorem.txt'
+  },
+  versions = defaultVersions
+} = {}) {
+  return new Vuex.Store({
+    getters: {
+      getToken: function () {
+        return 'token'
+      }
+    },
+    modules: {
+      Files: {
+        namespaced: true,
+        getters: {
+          highlightedFile: function () {
+            return highlightedFile
+          },
+          versions: function () {
+            return versions
+          }
+        },
+        actions: mapActions
+      }
+    }
+  })
+}

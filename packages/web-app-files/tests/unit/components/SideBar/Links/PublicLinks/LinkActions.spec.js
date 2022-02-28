@@ -12,11 +12,6 @@ localVue.use(GetTextPlugin, {
   silent: true
 })
 
-const selectors = {
-  editActionButton: '.oc-files-file-link-edit',
-  deleteActionButton: '.oc-files-file-link-delete'
-}
-
 const storeOptions = {
   modules: {
     Files: {
@@ -34,6 +29,11 @@ const storeOptions = {
     createModal: jest.fn(),
     hideModal: jest.fn()
   }
+}
+
+const selectors = {
+  editActionButton: '.oc-files-file-link-edit',
+  deleteActionButton: '.oc-files-file-link-delete'
 }
 
 describe('LinkActions', () => {

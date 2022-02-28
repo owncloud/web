@@ -16,62 +16,12 @@ const currentFolder = {
   path: '/folder'
 }
 
+const Component = {
+  render() {},
+  mixins: [deleteResources]
+}
+
 describe('deleteResources', () => {
-  const Component = {
-    render() {},
-    mixins: [deleteResources]
-  }
-
-  function getWrapper(resourcesToDelete) {
-    return mount(Component, {
-      localVue,
-      mocks: {
-        $route: {
-          name: 'files-personal'
-        },
-        $router: [],
-        $client: {
-          users: {
-            getUser: jest.fn(() => user)
-          }
-        },
-        publicPage: () => false,
-        currentFolder: currentFolder
-      },
-      data: () => {
-        return { resourcesToDelete: resourcesToDelete }
-      },
-      store: createStore(Vuex.Store, {
-        getters: {
-          user: () => {
-            return { id: 'marie' }
-          }
-        },
-        modules: {
-          Files: {
-            namespaced: true,
-            actions: {
-              deleteFiles: jest.fn(
-                () =>
-                  new Promise((resolve) => {
-                    resolve()
-                  })
-              )
-            }
-          }
-        },
-        mutations: {
-          SET_QUOTA: () => {}
-        },
-        actions: {
-          createModal: jest.fn(),
-          hideModal: jest.fn(),
-          toggleModalConfirmButton: jest.fn()
-        }
-      })
-    })
-  }
-
   describe('method "$_deleteResources_filesList_delete"', () => {
     it('should call the delete action on a resource in the file list', async () => {
       const resourcesToDelete = [{ id: 2, path: '/' }]
@@ -94,3 +44,53 @@ describe('deleteResources', () => {
     })
   })
 })
+
+function getWrapper(resourcesToDelete) {
+  return mount(Component, {
+    localVue,
+    mocks: {
+      $route: {
+        name: 'files-personal'
+      },
+      $router: [],
+      $client: {
+        users: {
+          getUser: jest.fn(() => user)
+        }
+      },
+      publicPage: () => false,
+      currentFolder: currentFolder
+    },
+    data: () => {
+      return { resourcesToDelete: resourcesToDelete }
+    },
+    store: createStore(Vuex.Store, {
+      getters: {
+        user: () => {
+          return { id: 'marie' }
+        }
+      },
+      modules: {
+        Files: {
+          namespaced: true,
+          actions: {
+            deleteFiles: jest.fn(
+              () =>
+                new Promise((resolve) => {
+                  resolve()
+                })
+            )
+          }
+        }
+      },
+      mutations: {
+        SET_QUOTA: () => {}
+      },
+      actions: {
+        createModal: jest.fn(),
+        hideModal: jest.fn(),
+        toggleModalConfirmButton: jest.fn()
+      }
+    })
+  })
+}

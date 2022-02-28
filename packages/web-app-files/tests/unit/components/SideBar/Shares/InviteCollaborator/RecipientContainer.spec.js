@@ -74,7 +74,7 @@ describe('InviteCollaborator RecipientContainer', () => {
 })
 
 const storeOptions = (avatarsEnabled) => {
-  const storeOpts = {
+  return {
     state: {
       user
     },
@@ -111,8 +111,6 @@ const storeOptions = (avatarsEnabled) => {
       }
     }
   }
-
-  return storeOpts
 }
 
 function getMountedWrapper(recipient, avatarsEnabled = false) {

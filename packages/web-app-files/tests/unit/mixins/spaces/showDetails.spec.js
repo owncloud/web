@@ -7,46 +7,12 @@ import { createLocationSpaces } from '../../../../src/router'
 const localVue = createLocalVue()
 localVue.use(Vuex)
 
+const Component = {
+  render() {},
+  mixins: [ShowDetails]
+}
+
 describe('showDetails', () => {
-  const Component = {
-    render() {},
-    mixins: [ShowDetails]
-  }
-
-  function getWrapper() {
-    return mount(Component, {
-      localVue,
-      mocks: {
-        $router: {
-          currentRoute: createLocationSpaces('files-spaces-projects'),
-          resolve: (r) => {
-            return { href: r.name }
-          }
-        },
-        $gettext: jest.fn()
-      },
-      store: createStore(Vuex.Store, {
-        modules: {
-          Files: {
-            namespaced: true,
-            mutations: {
-              SET_FILE_SELECTION: jest.fn()
-            },
-            modules: {
-              sidebar: {
-                namespaced: true,
-                actions: {
-                  close: jest.fn(),
-                  open: jest.fn()
-                }
-              }
-            }
-          }
-        }
-      })
-    })
-  }
-
   describe('method "$_showDetails_trigger"', () => {
     it('should trigger the sidebar for one resource', async () => {
       const wrapper = getWrapper()
@@ -68,3 +34,37 @@ describe('showDetails', () => {
     })
   })
 })
+
+function getWrapper() {
+  return mount(Component, {
+    localVue,
+    mocks: {
+      $router: {
+        currentRoute: createLocationSpaces('files-spaces-projects'),
+        resolve: (r) => {
+          return { href: r.name }
+        }
+      },
+      $gettext: jest.fn()
+    },
+    store: createStore(Vuex.Store, {
+      modules: {
+        Files: {
+          namespaced: true,
+          mutations: {
+            SET_FILE_SELECTION: jest.fn()
+          },
+          modules: {
+            sidebar: {
+              namespaced: true,
+              actions: {
+                close: jest.fn(),
+                open: jest.fn()
+              }
+            }
+          }
+        }
+      }
+    })
+  })
+}

@@ -31,27 +31,6 @@ const selectors = {
   listInfo: 'list-info-stub'
 }
 
-const files = [
-  {
-    id: '1',
-    path: 'lorem.txt',
-    size: 100
-  },
-  {
-    id: '2',
-    path: 'lorem.pdf',
-    size: 50
-  }
-].map((file) => {
-  return {
-    ...file,
-    canDownload: () => true,
-    canBeDeleted: () => true,
-    isReceivedShare: () => false,
-    isMounted: () => false
-  }
-})
-
 describe('List component', () => {
   afterEach(() => {
     jest.clearAllMocks()
@@ -175,3 +154,24 @@ function getSearchResults(files) {
 function getTotalSize(files) {
   return files.reduce((total, file) => total + file.size, 0)
 }
+
+const files = [
+  {
+    id: '1',
+    path: 'lorem.txt',
+    size: 100
+  },
+  {
+    id: '2',
+    path: 'lorem.pdf',
+    size: 50
+  }
+].map((file) => {
+  return {
+    ...file,
+    canDownload: () => true,
+    canBeDeleted: () => true,
+    isReceivedShare: () => false,
+    isMounted: () => false
+  }
+})

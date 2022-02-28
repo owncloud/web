@@ -14,41 +14,6 @@ const selectors = {
   filesPagination: '.files-pagination'
 }
 
-const createLocalVue = () => {
-  const localVue = OGCreateLocalVue()
-  localVue.use(DesignSystem)
-  localVue.prototype.$gettextInterpolate = jest.fn()
-
-  return localVue
-}
-
-const getWrapper = (propsData = {}) => {
-  return shallowMount(Pagination, {
-    localVue: createLocalVue(),
-    stubs: {
-      'oc-pagination': true
-    },
-    propsData: _.merge({ currentPage: 1, pages: 10 }, propsData),
-    mocks: {
-      $route: filesPersonalRoute
-    }
-  })
-}
-
-const getMountedWrapper = (propsData = {}) => {
-  return mount(Pagination, {
-    localVue: createLocalVue(),
-    propsData: _.merge({ currentPage: 1, pages: 10 }, propsData),
-    stubs: {
-      'oc-pagination': false,
-      RouterLink: RouterLinkStub
-    },
-    mocks: {
-      $route: filesPersonalRoute
-    }
-  })
-}
-
 describe('Pagination', () => {
   describe('when amount of pages is', () => {
     describe('less than or equals one', () => {
@@ -90,3 +55,38 @@ describe('Pagination', () => {
     })
   })
 })
+
+function createLocalVue() {
+  const localVue = OGCreateLocalVue()
+  localVue.use(DesignSystem)
+  localVue.prototype.$gettextInterpolate = jest.fn()
+
+  return localVue
+}
+
+function getWrapper(propsData = {}) {
+  return shallowMount(Pagination, {
+    localVue: createLocalVue(),
+    stubs: {
+      'oc-pagination': true
+    },
+    propsData: _.merge({ currentPage: 1, pages: 10 }, propsData),
+    mocks: {
+      $route: filesPersonalRoute
+    }
+  })
+}
+
+const getMountedWrapper = (propsData = {}) => {
+  return mount(Pagination, {
+    localVue: createLocalVue(),
+    propsData: _.merge({ currentPage: 1, pages: 10 }, propsData),
+    stubs: {
+      'oc-pagination': false,
+      RouterLink: RouterLinkStub
+    },
+    mocks: {
+      $route: filesPersonalRoute
+    }
+  })
+}

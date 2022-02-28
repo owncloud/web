@@ -6,28 +6,12 @@ import { createLocationSpaces } from '../../../../src/router'
 const localVue = createLocalVue()
 localVue.use(Vuex)
 
+const Component = {
+  render() {},
+  mixins: [Delete]
+}
+
 describe('delete', () => {
-  const Component = {
-    render() {},
-    mixins: [Delete]
-  }
-
-  function getWrapper() {
-    return mount(Component, {
-      localVue,
-      mocks: {
-        $route: createLocationSpaces('files-spaces-personal-home'),
-        $router: {
-          resolve: () => {
-            return {
-              href: 'href'
-            }
-          }
-        }
-      }
-    })
-  }
-
   describe('computed property "$_delete_items"', () => {
     describe('isEnabled property of returned element', () => {
       it.each([
@@ -41,3 +25,19 @@ describe('delete', () => {
     })
   })
 })
+
+function getWrapper() {
+  return mount(Component, {
+    localVue,
+    mocks: {
+      $route: createLocationSpaces('files-spaces-personal-home'),
+      $router: {
+        resolve: () => {
+          return {
+            href: 'href'
+          }
+        }
+      }
+    }
+  })
+}
