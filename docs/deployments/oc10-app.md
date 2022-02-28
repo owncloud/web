@@ -87,7 +87,7 @@ There are a few config values which need to be set in order for ownCloud Web to 
         "fr": "Design classique",
         "zh_CN": "文件"
       },
-      "icon": "switch_ui",
+      "icon": "swap-box",
       "url": "https://<your-owncloud-server>/index.php/apps/files"
     },
     {
