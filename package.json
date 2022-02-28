@@ -48,7 +48,7 @@
     "@cucumber/messages": "^17.1.1",
     "@cucumber/pretty-formatter": "^1.0.0-alpha.1",
     "@noble/hashes": "^1.0.0",
-    "@playwright/test": "^1.17.2",
+    "@playwright/test": "^1.19.2",
     "@rollup/plugin-alias": "^3.1.9",
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-html": "^0.2.4",
