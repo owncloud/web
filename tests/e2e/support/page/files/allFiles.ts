@@ -229,7 +229,7 @@ export class AllFilesPage {
 
     await page.locator(`//*[@data-test-resource-name="${resourceBase}"]`).click({ button: 'right' })
     await page.locator(`.oc-files-actions-${action}-trigger`).first().click()
-    await page.locator('//ol[@class="oc-breadcrumb-list"]/li/*[1]').first().click()
+    await page.locator('//nav[contains(@class, "oc-breadcrumb")]/ol/li[1]/a').click()
 
     if (newLocation !== 'All files') {
       await filesCta.navigateToFolder({ page: page, path: newLocation })

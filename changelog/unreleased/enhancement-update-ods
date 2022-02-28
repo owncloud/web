@@ -1,0 +1,11 @@
+Enhancement: Update ODS to v12.2.0
+
+We updated the ownCloud Design System to version 12.2.0. Please refer to the full changelog in the ODS release (linked) for more details. Summary:
+
+- Enhancement - Apply outstanding background color to oc-card: https://github.com/owncloud/owncloud-design-system/pull/1974
+- Enhancement - Redesign OcBreadcrumb: https://github.com/owncloud/web/issues/6218
+- Enhancement - Redesign files table related components: https://github.com/owncloud/owncloud-design-system/pull/1958
+
+https://github.com/owncloud/web/pull/6450
+https://github.com/owncloud/web/pull/6472
+https://github.com/owncloud/owncloud-design-system/releases/tag/v12.2.0

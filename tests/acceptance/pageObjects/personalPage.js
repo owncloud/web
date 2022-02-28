@@ -360,7 +360,7 @@ module.exports = {
     },
     resourceBreadcrumb: {
       selector:
-        '//nav[@id="files-breadcrumb"]//*[(self::a or self::button) and contains(text(),%s)]',
+        '//nav[@id="files-breadcrumb"]//*[(self::a or self::button)]/span[contains(text(),%s)]',
       locateStrategy: 'xpath'
     },
     resourceBreadcrumbNonClickable: {
