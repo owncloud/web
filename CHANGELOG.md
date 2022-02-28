@@ -11,10 +11,12 @@ Summary
 * Bugfix - Breadcrumb 'All Files' link: [#6467](https://github.com/owncloud/web/pull/6467)
 * Bugfix - Update file list when creating new files: [#5530](https://github.com/owncloud/web/issues/5530)
 * Enhancement - Option to enable Vue history mode: [#6363](https://github.com/owncloud/web/issues/6363)
+* Enhancement - Redesign OcBreadcrumb: [#6218](https://github.com/owncloud/web/issues/6218)
 * Enhancement - Redesign create and upload buttons: [#6279](https://github.com/owncloud/web/issues/6279)
 * Enhancement - Redesign FilesTable: [#6207](https://github.com/owncloud/web/issues/6207)
 * Enhancement - Run web as oc10 sidecar: [#6363](https://github.com/owncloud/web/issues/6363)
 * Enhancement - Implement the right sidebar for spaces: [#6437](https://github.com/owncloud/web/pull/6437)
+* Enhancement - Update ODS to v12.2.0: [#6450](https://github.com/owncloud/web/pull/6450)
 
 Details
 -------
@@ -44,6 +46,13 @@ Details
 
    https://github.com/owncloud/web/issues/6363
    https://github.com/owncloud/web/issues/6277
+
+* Enhancement - Redesign OcBreadcrumb: [#6218](https://github.com/owncloud/web/issues/6218)
+
+   We've adjustet the look of the OcBreadcrumb to fit the Redesign
+
+   https://github.com/owncloud/web/issues/6218
+   https://github.com/owncloud/web/pull/6472
 
 * Enhancement - Redesign create and upload buttons: [#6279](https://github.com/owncloud/web/issues/6279)
 
@@ -75,6 +84,21 @@ Details
 
    https://github.com/owncloud/web/issues/6284
    https://github.com/owncloud/web/pull/6437
+
+* Enhancement - Update ODS to v12.2.0: [#6450](https://github.com/owncloud/web/pull/6450)
+
+   We updated the ownCloud Design System to version 12.2.0. Please refer to the full changelog in
+   the ODS release (linked) for more details. Summary:
+
+   - Enhancement - Apply outstanding background color to oc-card:
+   https://github.com/owncloud/owncloud-design-system/pull/1974 - Enhancement -
+   Redesign OcBreadcrumb: https://github.com/owncloud/web/issues/6218 - Enhancement -
+   Redesign files table related components:
+   https://github.com/owncloud/owncloud-design-system/pull/1958
+
+   https://github.com/owncloud/web/pull/6450
+   https://github.com/owncloud/web/pull/6472
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v12.2.0
 
 Changelog for ownCloud Web [5.1.0] (2022-02-18)
 =======================================
