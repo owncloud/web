@@ -12,7 +12,7 @@ export default {
         {
           name: 'set-space-image',
           icon: 'image-edit',
-          handler: this.$_setSpaceImage_setImageSpace,
+          handler: this.$_setSpaceImage_trigger,
           label: () => {
             return this.$gettext('Set as space image')
           },
@@ -35,7 +35,7 @@ export default {
   methods: {
     ...mapMutations('Files', ['UPDATE_RESOURCE_FIELD']),
     ...mapActions(['showMessage']),
-    async $_setSpaceImage_setImageSpace({ resources }) {
+    async $_setSpaceImage_trigger({ resources }) {
       const graphClient = clientService.graphAuthenticated(this.configuration.server, this.getToken)
       const spaceId = this.$route.params.spaceId
       const sourcePath = resources[0].webDavPath
@@ -69,13 +69,13 @@ export default {
         })
 
         this.showMessage({
-          title: this.$gettext('Space image successfully set')
+          title: this.$gettext('Space image was set successfully')
         })
         bus.publish('app.files.list.load')
       } catch (error) {
+        console.error(error)
         this.showMessage({
-          title: this.$gettext('Set space image failed…'),
-          desc: error,
+          title: this.$gettext('Failed to set space image'),
           status: 'danger'
         })
       }

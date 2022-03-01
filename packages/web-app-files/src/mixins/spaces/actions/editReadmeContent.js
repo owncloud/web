@@ -69,13 +69,13 @@ export default {
             value: { ...space.spaceReadmeData, ...{ etag: readmeMetaData.ETag } }
           })
           this.showMessage({
-            title: this.$gettext('Space description successfully edited')
+            title: this.$gettext('Space description was edited successfully')
           })
         })
         .catch((error) => {
+          console.error(error)
           this.showMessage({
-            title: this.$gettext('Editing space description failed…'),
-            desc: error,
+            title: this.$gettext('Failed to edit space description'),
             status: 'danger'
           })
         })

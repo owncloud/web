@@ -81,15 +81,15 @@ export default {
                 value: data.special.find((special) => special.specialFolder.name === 'image')
               })
               this.showMessage({
-                title: this.$gettext('Space image successfully uploaded')
+                title: this.$gettext('Space image was uploaded successfully')
               })
               bus.publish('app.files.list.load')
             })
         })
         .catch((error) => {
+          console.error(error)
           this.showMessage({
-            title: this.$gettext('Upload new space image failed…'),
-            desc: error,
+            title: this.$gettext('Failed to upload space image'),
             status: 'danger'
           })
         })

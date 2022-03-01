@@ -64,13 +64,13 @@ export default {
             value: description
           })
           this.showMessage({
-            title: this.$gettext('Space subtitle successfully changed')
+            title: this.$gettext('Space subtitle was changed successfully')
           })
         })
         .catch((error) => {
+          console.error(error)
           this.showMessage({
-            title: this.$gettext('Changing space subtitle failed…'),
-            desc: error,
+            title: this.$gettext('Failed to change space subtitle'),
             status: 'danger'
           })
         })

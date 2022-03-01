@@ -71,13 +71,13 @@ export default {
             value: name
           })
           this.showMessage({
-            title: this.$gettext('Space name successfully changed')
+            title: this.$gettext('Space name was changed successfully')
           })
         })
         .catch((error) => {
+          console.error(error)
           this.showMessage({
-            title: this.$gettext('Renaming space failed…'),
-            desc: error,
+            title: this.$gettext('Failed to rename space'),
             status: 'danger'
           })
         })

@@ -77,13 +77,13 @@ export default {
             value: false
           })
           this.showMessage({
-            title: this.$gettext('Space successfully restored')
+            title: this.$gettext('Space was restored successfully')
           })
         })
         .catch((error) => {
+          console.error(error)
           this.showMessage({
-            title: this.$gettext('Restoring space failed…'),
-            desc: error,
+            title: this.$gettext('Failed to restore space'),
             status: 'danger'
           })
         })

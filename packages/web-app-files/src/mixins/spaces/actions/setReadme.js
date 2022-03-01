@@ -10,7 +10,7 @@ export default {
         {
           name: 'set-space-readme',
           icon: 'markdown',
-          handler: this.$_setSpaceReadme_setReadmeSpace,
+          handler: this.$_setSpaceReadme_trigger,
           label: () => {
             return this.$gettext('Set as space description')
           },
@@ -33,7 +33,7 @@ export default {
   methods: {
     ...mapMutations('Files', ['UPDATE_RESOURCE_FIELD']),
     ...mapActions(['showMessage']),
-    async $_setSpaceReadme_setReadmeSpace({ resources }) {
+    async $_setSpaceReadme_trigger({ resources }) {
       const space = this.currentFolder
 
       try {
@@ -48,13 +48,13 @@ export default {
           value: { ...space.spaceReadmeData, ...{ etag: fileMetaData?.ETag } }
         })
         this.showMessage({
-          title: this.$gettext('Space description successfully set')
+          title: this.$gettext('Space description was set successfully')
         })
         bus.publish('app.files.list.load')
       } catch (error) {
+        console.error(error)
         this.showMessage({
-          title: this.$gettext('Set space readme failed…'),
-          desc: error,
+          title: this.$gettext('Failed to set space description'),
           status: 'danger'
         })
       }
