@@ -1,0 +1,7 @@
+Bugfix: No selection info right sidebar
+
+We fixed that the right sidebar was not showing the "no selection" info panel anymore in the root of "All files". In addition we also use the same "no selection" info panel now in the root nodes of public links.
+
+https://github.com/owncloud/web/issues/6502
+https://github.com/owncloud/web/issues/6182
+https://github.com/owncloud/web/pull/6505

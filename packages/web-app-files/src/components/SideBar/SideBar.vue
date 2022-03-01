@@ -92,7 +92,11 @@ import { VisibilityObserver } from 'web-pkg/src/observer'
 import { DavProperties } from 'web-pkg/src/constants'
 
 import { buildResource } from '../../helpers/resources'
-import { isLocationCommonActive, isLocationSharesActive } from '../../router'
+import {
+  isLocationCommonActive,
+  isLocationPublicActive,
+  isLocationSharesActive
+} from '../../router'
 import { computed } from '@vue/composition-api'
 
 import FileInfo from './FileInfo.vue'
@@ -120,7 +124,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('Files', ['highlightedFile', 'selectedFiles', 'currentFolder']),
+    ...mapGetters('Files', ['highlightedFile', 'selectedFiles', 'publicLinkPassword']),
     ...mapGetters(['fileSideBars', 'capabilities']),
     ...mapState('Files/sidebar', { sidebarActivePanel: 'activePanel' }),
     activeAvailablePanelName() {
@@ -189,7 +193,13 @@ export default {
       return this.selectedFiles && this.selectedFiles.length > 1
     },
     isRootFolder() {
-      return !this.highlightedFile?.path
+      const pathSegments = this.highlightedFile?.path?.split('/').filter(Boolean) || []
+      if (isLocationPublicActive(this.$router, 'files-public-files')) {
+        // root node of a public link has the public link token as path
+        // root path `/` like for personal home doesn't exist for public links
+        return pathSegments.length === 1
+      }
+      return !pathSegments.length
     },
     highlightedFileThumbnail() {
       return this.highlightedFile?.thumbnail
@@ -304,12 +314,22 @@ export default {
         this.selectedFile = this.highlightedFile
         return
       }
+
       this.loading = true
       try {
-        const item = await this.$client.files.fileInfo(
-          this.highlightedFile.webDavPath,
-          DavProperties.Default
-        )
+        let item
+        if (isLocationPublicActive(this.$router, 'files-public-files')) {
+          item = await this.$client.publicFiles.getFileInfo(
+            this.highlightedFile.webDavPath,
+            this.publicLinkPassword,
+            DavProperties.PublicLink
+          )
+        } else {
+          item = await this.$client.files.fileInfo(
+            this.highlightedFile.webDavPath,
+            DavProperties.Default
+          )
+        }
 
         this.selectedFile = buildResource(item)
         this.$set(this.selectedFile, 'thumbnail', this.highlightedFile.thumbnail || null)
