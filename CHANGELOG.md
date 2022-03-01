@@ -15,6 +15,7 @@ Summary
 * Enhancement - Redesign create and upload buttons: [#6279](https://github.com/owncloud/web/issues/6279)
 * Enhancement - Redesign FilesTable: [#6207](https://github.com/owncloud/web/issues/6207)
 * Enhancement - Run web as oc10 sidecar: [#6363](https://github.com/owncloud/web/issues/6363)
+* Enhancement - Allow updating space image and description: [#6410](https://github.com/owncloud/web/pull/6410)
 * Enhancement - Implement the right sidebar for spaces: [#6437](https://github.com/owncloud/web/pull/6437)
 * Enhancement - Update ODS to v12.2.0: [#6450](https://github.com/owncloud/web/pull/6450)
 
@@ -76,6 +77,13 @@ Details
    `docker compose up oc10`.
 
    https://github.com/owncloud/web/issues/6363
+
+* Enhancement - Allow updating space image and description: [#6410](https://github.com/owncloud/web/pull/6410)
+
+   We have implemented multiple ways to update the image and description of a space.
+
+   https://github.com/owncloud/web/issues/6377
+   https://github.com/owncloud/web/pull/6410
 
 * Enhancement - Implement the right sidebar for spaces: [#6437](https://github.com/owncloud/web/pull/6437)
 
