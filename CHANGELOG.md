@@ -62,6 +62,7 @@ Details
 
    https://github.com/owncloud/web/issues/6279
    https://github.com/owncloud/web/pull/6358
+   https://github.com/owncloud/web/pull/6500
 
 * Enhancement - Redesign FilesTable: [#6207](https://github.com/owncloud/web/issues/6207)
 
