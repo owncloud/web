@@ -14,7 +14,7 @@
         </template>
         <template v-if="currentFolder.canCreate()" #callToAction>
           <span v-translate data-testid="public-files-call-to-action">
-            Drag files and folders here or use the "+ New" button to upload
+            Drag files and folders here or use the "New" or "Upload" buttons to add files
           </span>
         </template>
       </no-content-message>
