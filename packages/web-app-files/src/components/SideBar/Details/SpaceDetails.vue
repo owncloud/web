@@ -1,29 +1,8 @@
 <template>
   <div id="oc-space-details-sidebar">
-    <input
-      id="space-image-upload-input"
-      ref="spaceImageInput"
-      type="file"
-      name="file"
-      multiple
-      tabindex="-1"
-      accept="image/*"
-      @change="$_uploadImage_uploadImageSpace"
-    />
     <div class="oc-space-details-sidebar-image oc-text-center">
       <oc-spinner v-if="loadImageTask.isRunning" />
       <div v-else-if="spaceImage" class="oc-position-relative">
-        <oc-button
-          id="space-image-upload-button"
-          class="oc-position-absolute oc-mt-s oc-mr-s"
-          variation="passive"
-          size="small"
-          appearance="filled"
-          @click="$_uploadImage_trigger({ resources: [space] })"
-        >
-          <oc-icon name="image-add" />
-          <translate>Upload new space image</translate>
-        </oc-button>
         <img :src="'data:image/jpeg;base64,' + spaceImage" alt="" class="oc-mb-m" />
       </div>
       <oc-icon
@@ -74,12 +53,11 @@ import { buildWebDavSpacesPath } from '../../../helpers/resources'
 import { useStore } from 'web-pkg/src/composables'
 import { clientService } from 'web-pkg/src/services'
 import SpaceQuota from '../../SpaceQuota.vue'
-import UploadImage from '../../../mixins/spaces/actions/uploadImage'
 
 export default {
   name: 'SpaceDetails',
   components: { SpaceQuota },
-  mixins: [Mixins, MixinResources, UploadImage],
+  mixins: [Mixins, MixinResources],
   inject: ['displayedItem'],
   title: ($gettext) => {
     return $gettext('Details')
@@ -232,11 +210,6 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-#space-image-upload-button {
-  top: 0;
-  right: 0;
-}
-
 .oc-space-details-sidebar {
   &-image img {
     max-height: 150px;
