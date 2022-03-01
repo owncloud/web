@@ -95,12 +95,12 @@ describe('setReadme', () => {
       ).toBe(true)
     })
   })
-  describe('method "$_setSpaceReadme_setReadmeSpace"', () => {
+  describe('method "$_setSpaceReadme_trigger"', () => {
     it('should show message on success', async () => {
       const wrapper = getWrapper()
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       bus.publish = jest.fn((path) => path)
-      await wrapper.vm.$_setSpaceReadme_setReadmeSpace({
+      await wrapper.vm.$_setSpaceReadme_trigger({
         resources: [
           {
             webDavPath: '/spaces/1fe58d8b-aa69-4c22-baf7-97dd57479f22/subfolder',
@@ -116,7 +116,7 @@ describe('setReadme', () => {
     it('should show message on error', async () => {
       const wrapper = getWrapper(false)
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
-      await wrapper.vm.$_setSpaceReadme_setReadmeSpace({
+      await wrapper.vm.$_setSpaceReadme_trigger({
         resources: [
           {
             webDavPath: '/spaces/1fe58d8b-aa69-4c22-baf7-97dd57479f22/subfolder',

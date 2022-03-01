@@ -91,7 +91,7 @@ describe('setImage', () => {
     })
   })
 
-  describe('method "$_setSpaceImage_setImageSpace"', () => {
+  describe('method "$_setSpaceImage_trigger"', () => {
     it('should show message on success', async () => {
       mockAxios.request.mockImplementationOnce(() => {
         return Promise.resolve({ data: { special: [{ specialFolder: { name: 'image' } }] } })
@@ -100,7 +100,7 @@ describe('setImage', () => {
       const wrapper = getWrapper()
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       bus.publish = jest.fn((path) => path)
-      await wrapper.vm.$_setSpaceImage_setImageSpace({
+      await wrapper.vm.$_setSpaceImage_trigger({
         resources: [
           {
             webDavPath: '/spaces/1fe58d8b-aa69-4c22-baf7-97dd57479f22/subfolder/image.png',
@@ -120,7 +120,7 @@ describe('setImage', () => {
 
       const wrapper = getWrapper()
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
-      await wrapper.vm.$_setSpaceImage_setImageSpace({
+      await wrapper.vm.$_setSpaceImage_trigger({
         resources: [
           {
             webDavPath: '/spaces/1fe58d8b-aa69-4c22-baf7-97dd57479f22/subfolder/image.png',
@@ -134,7 +134,7 @@ describe('setImage', () => {
 
     it('should not set the image if source and destination path are the same', async () => {
       const wrapper = getWrapper()
-      await wrapper.vm.$_setSpaceImage_setImageSpace({
+      await wrapper.vm.$_setSpaceImage_trigger({
         resources: [
           {
             webDavPath: '/spaces/1fe58d8b-aa69-4c22-baf7-97dd57479f22/.space/image.png',
