@@ -5,12 +5,11 @@ Feature: download files
 
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files in the server
-    And user "Alice" has logged in using the webUI
 
 
   Scenario: Try to download file and folder that used to exist but does not anymore
     Given user "Alice" has created file "lorem.txt" in the server
-    And the user has browsed to the files page
+    And user "Alice" has logged in using the webUI
     And the following files have been deleted by user "Alice" in the server
       | name      |
       | lorem.txt |
@@ -23,6 +22,6 @@ Feature: download files
 
   Scenario: download file with comma in the filename
     Given user "Alice" has created file "sample,1.txt" in the server
-    When the user has browsed to the files page
-    And the user downloads file "sample,1.txt" using the webUI
+    And user "Alice" has logged in using the webUI
+    When the user downloads file "sample,1.txt" using the webUI
     Then no message should be displayed on the webUI
