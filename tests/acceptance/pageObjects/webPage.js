@@ -5,7 +5,7 @@ const { defaultUsers } = require('../helpers/userSettings')
 
 module.exports = {
   url: function () {
-    return join(this.api.launchUrl, '/#/')
+    return join(this.api.launchUrl, '/')
   },
   commands: {
     /**

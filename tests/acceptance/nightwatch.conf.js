@@ -53,7 +53,8 @@ const config = {
   custom_assertions_path: ['node_modules/nightwatch-vrt/assertions'],
   test_settings: {
     default: {
-      launch_url: LOCAL_LAUNCH_URL,
+      // ocis doesn't have '#' in the url path anymore
+      launch_url: RUN_ON_OCIS ? LOCAL_LAUNCH_URL : `${LOCAL_LAUNCH_URL}/#`,
       globals: {
         waitForConditionTimeout: 10000,
         waitForNegativeConditionTimeout: 300,

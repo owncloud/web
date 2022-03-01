@@ -13,8 +13,7 @@ export class AllFilesPage {
   async navigate(): Promise<void> {
     const { page } = this.actor
 
-    const allFilesBtn = page.locator('a[href="#/files/spaces/personal/home"] .text')
-    await allFilesBtn.click()
+    await page.locator('//a[@data-nav-name="files-spaces-personal-home"]').click()
   }
 
   async createFolder({ name }: { name: string }): Promise<void> {
@@ -316,10 +315,19 @@ export class AllFilesPage {
 
     for (const user of users) {
       const userColumn = `//*[@data-testid="collaborator-user-item-${user.id}"]`
-      await page.click(`${userColumn}//button[contains(@class,"files-recipient-role-select-btn")]`)
-      await page.click(
-        `${userColumn}//ul[contains(@class,"files-recipient-role-drop-list")]//button[@id="files-recipient-role-drop-btn-${role}"]`
-      )
+
+      await Promise.all([
+        page.click(`${userColumn}//button[contains(@class,"files-recipient-role-select-btn")]`),
+        page.click(
+          `${userColumn}//ul[contains(@class,"files-recipient-role-drop-list")]//button[@id="files-recipient-role-drop-btn-${role}"]`
+        ),
+        page.waitForResponse(
+          (resp) =>
+            resp.url().includes('shares') &&
+            resp.status() === 200 &&
+            resp.request().method() === 'PUT'
+        )
+      ])
     }
     await page.goto(startUrl)
   }

@@ -5,7 +5,7 @@ const { client } = require('nightwatch-api')
 
 module.exports = {
   url: function () {
-    return join(this.api.launchUrl, '#/files/list/all')
+    return join(this.api.launchUrl, '/files/list/all')
   },
   commands: {
     /**
