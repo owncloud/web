@@ -11,9 +11,7 @@ export class SharedWithMePage {
 
   async navigate(): Promise<void> {
     const { page } = this.actor
-    await page
-      .locator('//li[contains(@class, "oc-sidebar-nav-item")]//span[text()="Shared with me"]')
-      .click()
+    await page.locator('//a[@data-nav-name="files-shares-with-me"]').click()
   }
 
   async acceptShare({ name }: { name: string }): Promise<void> {

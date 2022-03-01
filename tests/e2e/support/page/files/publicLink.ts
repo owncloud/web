@@ -22,7 +22,6 @@ export class PublicLink {
   private readonly publicLinkListSelector: string
   private readonly roleSelector: string
   private readonly folderSelector: string
-  private dateType: string
 
   constructor({ actor }: { actor: Actor }) {
     this.actor = actor
@@ -51,108 +50,9 @@ export class PublicLink {
     this.folderSelector = `//*[@data-test-resource-name="%s"]/ancestor::tr//button[contains(@class, "files-quick-action-collaborators")]`
   }
 
-  async selectRole(role: string): Promise<void> {
-    await this.roleDropdownLocator.click()
-    await this.actor.page.locator(util.format(this.roleSelector, role)).click()
-  }
-
-  async selectExpiryMonth(year: string, month: string): Promise<void> {
-    await this.actor.page.locator(util.format(this.monthSelector, year, month)).click()
-  }
-
-  async selectExpiryDay(dayMonthYear: string): Promise<void> {
-    await this.actor.page.locator(util.format(this.daySelector, dayMonthYear)).click()
-  }
-
-  getDateType = (expiryDate: string): string => {
-    if (expiryDate.charAt(0).includes('-')) {
-      throw new Error('The provided date is negative and has already expired !!')
-    } else if (expiryDate.charAt(0).includes('+')) {
-      return expiryDate.toLowerCase().match(/[dayrmonthwek]+/)[0]
-    }
-  }
-
-  async selectDate(dateOfExpiration: string): Promise<void> {
-    const newExpiryDate = getActualExpiryDate(this.dateType, dateOfExpiration)
-    const expiryDay = newExpiryDate.getDate()
-    const expiryMonth = ('0' + (newExpiryDate.getMonth() + 1)).slice(-2)
-    const expiryYear = newExpiryDate.getFullYear().toString()
-    await this.expirationDateDropdownLocator.click()
-    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-    const months = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December'
-    ]
-    const dayMonthYear =
-      days[newExpiryDate.getDay()] +
-      ', ' +
-      months[newExpiryDate.getMonth()] +
-      ' ' +
-      expiryDay +
-      ', ' +
-      expiryYear
-    await this.monthAndYearDropdownLocator.click()
-    if ((await this.yearButtonLocator.innerText()) !== expiryYear) {
-      await this.yearButtonLocator.click()
-      while (true) {
-        const nextYearSpanValue = await this.yearButtonLocator.innerText()
-        const splitNextSpanYear = nextYearSpanValue.split('-')
-        if (
-          newExpiryDate.getFullYear() >= parseInt(splitNextSpanYear[0]) &&
-          newExpiryDate.getFullYear() <= parseInt(splitNextSpanYear[1])
-        ) {
-          const yearLocator = await this.actor.page.locator(
-            util.format(this.yearSelector, expiryYear)
-          )
-          await yearLocator.click()
-          break
-        }
-        await this.nextSpanYearLocator.click()
-      }
-    }
-
-    await this.selectExpiryMonth(expiryYear, expiryMonth)
-    await this.selectExpiryDay(dayMonthYear)
-  }
-
   async getLinksCount(): Promise<number> {
     await this.actor.page.waitForSelector(this.publicLinkListSelector)
     return await this.actor.page.locator(this.publicLinkListSelector).count()
-  }
-
-  async fillThePublicLinkForm({
-    name,
-    password,
-    role,
-    dateOfExpiration
-  }: {
-    name: string
-    password: string
-    role: string
-    dateOfExpiration: string
-  }): Promise<void> {
-    if (name) {
-      await this.publicLinkNameLocator.fill(name)
-    }
-    if (role) {
-      await this.selectRole(role)
-    }
-    if (dateOfExpiration) {
-      await this.selectDate(dateOfExpiration)
-    }
-    if (password) {
-      await this.publicLinkPasswordLocator.fill(password)
-    }
   }
 
   async createPublicLinkForResource({
@@ -170,7 +70,6 @@ export class PublicLink {
     password: string
     via: 'SIDEBAR_PANEL' | 'QUICK_ACTION'
   }): Promise<void> {
-    this.dateType = this.getDateType(dateOfExpiration)
     const { page } = this.actor
     const resourcePaths = resource.split('/')
     const resourceName = resourcePaths.pop()
@@ -189,7 +88,34 @@ export class PublicLink {
         break
     }
     await this.publicLinkButtonLocator.click()
-    await this.fillThePublicLinkForm({ name, password, role, dateOfExpiration })
+
+    if (name) {
+      await this.publicLinkNameLocator.fill(name)
+    }
+
+    if (role) {
+      await this.roleDropdownLocator.click()
+      await this.actor.page.locator(util.format(this.roleSelector, role)).click()
+    }
+
+    if (dateOfExpiration) {
+      const newExpiryDate = getActualExpiryDate(
+        dateOfExpiration.toLowerCase().match(/[dayrmonthwek]+/)[0],
+        dateOfExpiration
+      )
+
+      await page.locator('#oc-files-file-link-expire-date').evaluate(
+        (datePicker: any, { newExpiryDate }): any => {
+          datePicker.__vue__.updateValue(newExpiryDate)
+        },
+        { newExpiryDate }
+      )
+    }
+
+    if (password) {
+      await this.publicLinkPasswordLocator.fill(password)
+    }
+
     await this.createLinkButtonLocator.click()
   }
 }

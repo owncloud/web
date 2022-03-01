@@ -8,6 +8,7 @@
       :class="['oc-sidebar-nav-item-link', { active: active }]"
       :to="target"
       :data-nav-id="index"
+      :data-nav-name="navName"
     >
       <oc-icon :name="icon" :fill-type="fillType" />
       <span class="oc-ml-m text" :class="{ 'text-invisible': collapsed }" v-text="name" />
@@ -17,6 +18,7 @@
 </template>
 <script>
 import SidebarNavItemHighlight from './SidebarNavItemHighlight.vue'
+import get from 'lodash-es/get'
 
 export default {
   components: {
@@ -57,6 +59,9 @@ export default {
     }
   },
   computed: {
+    navName() {
+      return get(this.$router?.resolve(this.target), 'route.name')
+    },
     toolTip() {
       const value = this.collapsed
         ? this.$gettextInterpolate(this.$gettext('Navigate to %{ pageName } page'), {
