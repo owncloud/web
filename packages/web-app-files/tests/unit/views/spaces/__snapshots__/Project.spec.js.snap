@@ -2,16 +2,64 @@
 
 exports[`Spaces project view space image should show if given 1`] = `
 <div class="space-overview">
-  <div class="oc-grid oc-grid-match oc-px-m oc-mt-m oc-child-width-1-3@s">
-    <div><img alt="" src="data:image/jpeg;base64,ZmlsZUNvbnRlbnQ=" class="space-overview-image oc-cursor-pointer"></div>
-    <div>
-      <h1 class="space-overview-name oc-mb-s">space</h1>
-      <!---->
+  <div>
+    <!---->
+    <div class="oc-grid oc-px-m oc-mt-m oc-child-width-1-3@s">
       <div>
-        <div class="markdown-container">
-          <p>fileContent</p>
+        <div class="oc-position-relative"><img alt="" src="data:undefined;base64,undefined" class="space-overview-image oc-cursor-pointer"></div>
+      </div>
+      <div>
+        <div class="oc-flex oc-mb-s oc-flex-middle">
+          <h1 class="space-overview-name oc-text-truncate">space</h1>
+          <oc-button-stub type="button" size="medium" arialabel="Show context menu" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="space-context-btn">
+            <oc-icon-stub name="more-2" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
+          </oc-button-stub>
+          <oc-drop-stub dropid="space-context-drop" toggle="#space-context-btn" position="right-start" mode="click" closeonclick="true" paddingsize="small" options="[object Object]"><input id="space-image-upload-input" type="file" name="file" multiple="multiple" tabindex="-1" accept="image/*">
+            <ul class="oc-list oc-files-context-actions">
+              <li class="oc-spaces-context-action oc-py-xs oc-px-s">
+                <oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="left" gapsize="medium">
+                  <oc-icon-stub name="edit" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
+                  Rename
+                </oc-button-stub>
+              </li>
+              <li class="oc-spaces-context-action oc-py-xs oc-px-s">
+                <oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="left" gapsize="medium">
+                  <oc-icon-stub name="pencil" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
+                  Change subtitle
+                </oc-button-stub>
+              </li>
+              <li class="oc-spaces-context-action oc-py-xs oc-px-s">
+                <oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="left" gapsize="medium">
+                  <oc-icon-stub name="markdown" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
+                  Edit description
+                </oc-button-stub>
+              </li>
+              <li class="oc-spaces-context-action oc-py-xs oc-px-s">
+                <oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="left" gapsize="medium">
+                  <oc-icon-stub name="image-add" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
+                  Upload new space image
+                </oc-button-stub>
+              </li>
+              <li class="oc-spaces-context-action oc-py-xs oc-px-s">
+                <oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="left" gapsize="medium">
+                  <oc-icon-stub name="forbid-2" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
+                  Disable
+                </oc-button-stub>
+              </li>
+              <li class="oc-spaces-context-action oc-py-xs oc-px-s">
+                <oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="left" gapsize="medium">
+                  <oc-icon-stub name="information" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
+                  Details
+                </oc-button-stub>
+              </li>
+            </ul>
+          </oc-drop-stub>
         </div>
         <!---->
+        <div>
+          <div class="markdown-container"></div>
+          <!---->
+        </div>
       </div>
     </div>
   </div>
@@ -21,16 +69,62 @@ exports[`Spaces project view space image should show if given 1`] = `
 
 exports[`Spaces project view space readme should show if given 1`] = `
 <div class="space-overview">
-  <div class="oc-grid oc-grid-match oc-px-m oc-mt-m oc-child-width-1-3@s">
-    <div><img alt="" src="data:image/jpeg;base64,ZmlsZUNvbnRlbnQ=" class="space-overview-image oc-cursor-pointer"></div>
-    <div>
-      <h1 class="space-overview-name oc-mb-s">space</h1>
+  <div>
+    <!---->
+    <div class="oc-grid oc-px-m oc-mt-m oc-child-width-1-3@s">
       <!---->
       <div>
-        <div class="markdown-container">
-          <p>fileContent</p>
+        <div class="oc-flex oc-mb-s oc-flex-middle">
+          <h1 class="space-overview-name oc-text-truncate">space</h1>
+          <oc-button-stub type="button" size="medium" arialabel="Show context menu" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="space-context-btn">
+            <oc-icon-stub name="more-2" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
+          </oc-button-stub>
+          <oc-drop-stub dropid="space-context-drop" toggle="#space-context-btn" position="right-start" mode="click" closeonclick="true" paddingsize="small" options="[object Object]"><input id="space-image-upload-input" type="file" name="file" multiple="multiple" tabindex="-1" accept="image/*">
+            <ul class="oc-list oc-files-context-actions">
+              <li class="oc-spaces-context-action oc-py-xs oc-px-s">
+                <oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="left" gapsize="medium">
+                  <oc-icon-stub name="edit" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
+                  Rename
+                </oc-button-stub>
+              </li>
+              <li class="oc-spaces-context-action oc-py-xs oc-px-s">
+                <oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="left" gapsize="medium">
+                  <oc-icon-stub name="pencil" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
+                  Change subtitle
+                </oc-button-stub>
+              </li>
+              <li class="oc-spaces-context-action oc-py-xs oc-px-s">
+                <oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="left" gapsize="medium">
+                  <oc-icon-stub name="markdown" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
+                  Edit description
+                </oc-button-stub>
+              </li>
+              <li class="oc-spaces-context-action oc-py-xs oc-px-s">
+                <oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="left" gapsize="medium">
+                  <oc-icon-stub name="image-add" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
+                  Upload new space image
+                </oc-button-stub>
+              </li>
+              <li class="oc-spaces-context-action oc-py-xs oc-px-s">
+                <oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="left" gapsize="medium">
+                  <oc-icon-stub name="forbid-2" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
+                  Disable
+                </oc-button-stub>
+              </li>
+              <li class="oc-spaces-context-action oc-py-xs oc-px-s">
+                <oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="left" gapsize="medium">
+                  <oc-icon-stub name="information" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
+                  Details
+                </oc-button-stub>
+              </li>
+            </ul>
+          </oc-drop-stub>
         </div>
         <!---->
+        <div>
+          <div class="markdown-container"></div>
+          <!---->
+        </div>
       </div>
     </div>
   </div>

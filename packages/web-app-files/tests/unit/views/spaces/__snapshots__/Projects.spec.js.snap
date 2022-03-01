@@ -5,7 +5,7 @@ exports[`Spaces component should list spaces 1`] = `
     <translate-stub tag="span">Create Space</translate-stub>
   </button>
   <div class="oc-pb-xl oc-border-b"><span>Store your project related files in Spaces for seamless collaboration.</span></div>
-  <div class="spaces-list oc-mt-l">
+  <div class="spaces-list oc-mt-l"><input id="space-image-upload-input" type="file" name="file" multiple="multiple" tabindex="-1" accept="image/*">
     <ul class="
           oc-grid
           oc-grid-match
@@ -29,6 +29,12 @@ exports[`Spaces component should list spaces 1`] = `
                     <ul class="oc-list oc-files-context-actions">
                       <li class="oc-files-context-action oc-px-s"><button class="oc-button oc-button-m oc-button-justify-content-left oc-button-gap-m oc-button-passive oc-button-passive-raw"><span class="oc-flex oc-icon oc-icon-m oc-icon-passive"><!----></span>
                           Rename
+                        </button></li>
+                      <li class="oc-files-context-action oc-px-s"><button class="oc-button oc-button-m oc-button-justify-content-left oc-button-gap-m oc-button-passive oc-button-passive-raw"><span class="oc-flex oc-icon oc-icon-m oc-icon-passive"><!----></span>
+                          Change subtitle
+                        </button></li>
+                      <li class="oc-files-context-action oc-px-s"><button class="oc-button oc-button-m oc-button-justify-content-left oc-button-gap-m oc-button-passive oc-button-passive-raw"><span class="oc-flex oc-icon oc-icon-m oc-icon-passive"><!----></span>
+                          Upload new space image
                         </button></li>
                       <li class="oc-files-context-action oc-px-s"><button class="oc-button oc-button-m oc-button-justify-content-left oc-button-gap-m oc-button-passive oc-button-passive-raw"><span class="oc-flex oc-icon oc-icon-m oc-icon-passive"><!----></span>
                           Disable

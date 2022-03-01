@@ -26,7 +26,7 @@ describe('Spaces component', () => {
     })
 
     const wrapper = getMountedWrapper()
-    await wrapper.vm.loadSpacesTask.last
+    await wrapper.vm.loadResourcesTask.last
 
     expect(wrapper.find(selectors.sharesNoContentMessage).exists()).toBeTruthy()
   })
@@ -43,7 +43,7 @@ describe('Spaces component', () => {
     })
 
     const wrapper = getMountedWrapper(drives)
-    await wrapper.vm.loadSpacesTask.last
+    await wrapper.vm.loadResourcesTask.last
 
     expect(wrapper.vm.spaces.length).toEqual(1)
     expect(wrapper).toMatchSnapshot()
@@ -58,7 +58,7 @@ describe('Spaces component', () => {
       })
     })
     const wrapper = getMountedWrapper()
-    await wrapper.vm.loadSpacesTask.last
+    await wrapper.vm.loadResourcesTask.last
 
     const createModalStub = jest.spyOn(wrapper.vm, 'createModal')
     const button = wrapper.find('[data-testid="spaces-list-create-space-btn"]')
@@ -77,13 +77,13 @@ describe('Spaces component', () => {
       })
     })
     const wrapper = getMountedWrapper()
-    await wrapper.vm.loadSpacesTask.last
+    await wrapper.vm.loadResourcesTask.last
     wrapper.vm.setModalInputErrorMessage = jest.fn()
 
     const spyInputErrorMessageStub = jest.spyOn(wrapper.vm, 'setModalInputErrorMessage')
     wrapper.vm.checkSpaceName('')
 
-    expect(spyInputErrorMessageStub).toHaveBeenCalledTimes(1)
+    expect(spyInputErrorMessageStub).toHaveBeenCalledWith('Space name cannot be empty')
   })
 })
 

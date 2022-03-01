@@ -39,6 +39,8 @@ import Restore from '../../mixins/actions/restore'
 import ShowActions from '../../mixins/actions/showActions'
 import ShowDetails from '../../mixins/actions/showDetails'
 import ShowShares from '../../mixins/actions/showShares'
+import SetSpaceImage from '../../mixins/spaces/actions/setImage'
+import SetSpaceReadme from '../../mixins/spaces/actions/setReadme'
 
 export default {
   name: 'ContextActions',
@@ -60,7 +62,9 @@ export default {
     Restore,
     ShowActions,
     ShowDetails,
-    ShowShares
+    ShowShares,
+    SetSpaceImage,
+    SetSpaceReadme
   ],
 
   props: {
@@ -159,7 +163,9 @@ export default {
         ...this.$_rename_items,
         ...this.$_restore_items,
         ...this.$_acceptShare_items,
-        ...this.$_declineShare_items
+        ...this.$_declineShare_items,
+        ...this.$_setSpaceImage_items,
+        ...this.$_setSpaceReadme_items
       ].filter((item) => item.isEnabled(this.filterParams))
     },
 

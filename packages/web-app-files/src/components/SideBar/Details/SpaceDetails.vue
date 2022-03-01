@@ -2,12 +2,9 @@
   <div id="oc-space-details-sidebar">
     <div class="oc-space-details-sidebar-image oc-text-center">
       <oc-spinner v-if="loadImageTask.isRunning" />
-      <img
-        v-else-if="spaceImage"
-        :src="'data:image/jpeg;base64,' + spaceImage"
-        alt=""
-        class="oc-mb-m"
-      />
+      <div v-else-if="spaceImage" class="oc-position-relative">
+        <img :src="'data:image/jpeg;base64,' + spaceImage" alt="" class="oc-mb-m" />
+      </div>
       <oc-icon
         v-else
         name="layout-grid"
@@ -79,8 +76,13 @@ export default {
         return
       }
 
+      const webDavPathComponents = ref.space.spaceImageData.webDavUrl.split('/')
+      const path = webDavPathComponents
+        .slice(webDavPathComponents.indexOf(ref.space.id) + 1)
+        .join('/')
+
       const fileContents = yield ref.$client.files.getFileContents(
-        buildWebDavSpacesPath(ref.space.id, ref.space.spaceImageData.name),
+        buildWebDavSpacesPath(ref.space.id, path),
         { responseType: 'arrayBuffer' }
       )
 

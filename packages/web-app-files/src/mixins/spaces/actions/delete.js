@@ -68,11 +68,14 @@ export default {
         .then(() => {
           this.hideModal()
           this.REMOVE_FILE({ id })
+          this.showMessage({
+            title: this.$gettext('Space was deleted successfully')
+          })
         })
         .catch((error) => {
+          console.error(error)
           this.showMessage({
-            title: this.$gettext('Deleting space failed…'),
-            desc: error,
+            title: this.$gettext('Failed to delete space'),
             status: 'danger'
           })
         })
