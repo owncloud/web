@@ -868,7 +868,6 @@ Then('the app-sidebar should be invisible', async function () {
 })
 
 Then('the {string} details panel should be visible', async function (panel) {
-  await client.page.FilesPageElement.appSideBar().activatePanel(panel)
   const expanded = await client.page.FilesPageElement.appSideBar().isPanelActive(panel)
   assert.strictEqual(expanded, true, `'${panel}-panel' should be active, but is not`)
 })
