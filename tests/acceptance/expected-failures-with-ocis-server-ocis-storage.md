@@ -495,7 +495,3 @@ Other free text and markdown formatting can be used elsewhere in the document if
 
 ### [empty subfolder inside a folder to be uploaded is not created on the server](https://github.com/owncloud/web/issues/6348)
 -   [webUIUpload/upload.feature:42](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/upload.feature#L42)
-
-### [Logging out doesn't work with the latest oCIS server](https://github.com/owncloud/web/issues/6479)
--   [webUILogin/openidLogin.feature:22](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/openidLogin.feature#L22)
--   [webUILogin/openidLogin.feature:29](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/openidLogin.feature#L29)
