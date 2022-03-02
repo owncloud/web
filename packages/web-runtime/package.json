@@ -6,7 +6,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.4",
     "@popperjs/core": "^2.4.0",
-    "@vue/composition-api": "^1.4.6",
+    "@vue/composition-api": "^1.4.9",
     "axios": "^0.25.0",
     "cross-fetch": "^3.0.6",
     "easygettext": "^2.16.1",
@@ -17,7 +17,7 @@
     "lodash-es": "^4.17.21",
     "luxon": "^2.3.0",
     "oidc-client": "1.11.5",
-    "owncloud-design-system": "12.2.0",
+    "owncloud-design-system": "^12.2.1",
     "owncloud-sdk": "~2.0.0",
     "p-queue": "^6.1.1",
     "popper-max-size-modifier": "^0.2.0",
