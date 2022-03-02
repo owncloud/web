@@ -5,7 +5,7 @@
     :class="collaboratorClass"
   >
     <avatar-image
-      v-if="isUser"
+      v-if="isUser || isSpace"
       class="oc-mr-s"
       :width="48"
       :userid="item.value.shareWith"
@@ -65,6 +65,10 @@ export default {
 
     isUser() {
       return this.shareType === ShareTypes.user
+    },
+
+    isSpace() {
+      return this.shareType === ShareTypes.space
     },
 
     isGroup() {

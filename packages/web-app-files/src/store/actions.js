@@ -2,12 +2,17 @@ import PQueue from 'p-queue'
 
 import { getParentPaths } from '../helpers/path'
 import { dirname } from 'path'
-import { buildResource, buildShare, buildCollaboratorShare } from '../helpers/resources'
+import {
+  buildResource,
+  buildShare,
+  buildCollaboratorShare,
+  buildSpaceShare
+} from '../helpers/resources'
 import { $gettext, $gettextInterpolate } from '../gettext'
 import { loadPreview } from '../helpers/resource'
 import { avatarUrl } from '../helpers/user'
 import { has } from 'lodash-es'
-import { ShareTypes } from '../helpers/share'
+import { ShareTypes, SpacePeopleShareRoles } from '../helpers/share'
 
 export default {
   updateFileProgress({ commit }, progress) {
@@ -144,10 +149,46 @@ export default {
       value: computeShareTypes(state.currentFileOutgoingShares)
     })
   },
-  loadCurrentFileOutgoingShares(context, { client, path }) {
+  loadCurrentFileOutgoingShares(context, { client, path, space }) {
     context.commit('CURRENT_FILE_OUTGOING_SHARES_SET', [])
     context.commit('CURRENT_FILE_OUTGOING_SHARES_ERROR', null)
     context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', true)
+
+    if (space) {
+      const promises = []
+      const spaceShares = []
+
+      for (const permission of space.spacePermissions) {
+        for (const {
+          user: { id }
+        } of permission.grantedTo) {
+          promises.push(
+            client.users.getUser(id).then((resolved) => {
+              spaceShares.push(
+                buildSpaceShare(
+                  {
+                    ...resolved.data,
+                    role: permission.roles[0]
+                  },
+                  space.id
+                )
+              )
+            })
+          )
+        }
+      }
+
+      return Promise.all(promises)
+        .then(() => {
+          context.commit('CURRENT_FILE_OUTGOING_SHARES_SET', spaceShares)
+          context.dispatch('updateCurrentFileShareTypes')
+          context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', false)
+        })
+        .catch((error) => {
+          context.commit('CURRENT_FILE_OUTGOING_SHARES_ERROR', error.message)
+          context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', false)
+        })
+    }
 
     // see https://owncloud.dev/owncloud-sdk/Shares.html
     client.shares
@@ -211,6 +252,29 @@ export default {
       })
     }
 
+    if (share.shareType === ShareTypes.space.value) {
+      return new Promise((resolve, reject) => {
+        client.shares
+          .shareSpaceWithUser('', share.collaborator.name, share.id, {
+            permissions
+          })
+          .then(() => {
+            const role = SpacePeopleShareRoles.getByBitmask(permissions)
+            const shareObj = {
+              role: role.inlineLabel,
+              onPremisesSamAccountName: share.collaborator.name,
+              displayName: share.collaborator.displayName
+            }
+            const updatedShare = buildSpaceShare(shareObj, share.id)
+            commit('CURRENT_FILE_OUTGOING_SHARES_UPDATE', updatedShare)
+            resolve(updatedShare)
+          })
+          .catch((e) => {
+            reject(e)
+          })
+      })
+    }
+
     return new Promise((resolve, reject) => {
       client.shares
         .updateShare(share.id, params)
@@ -228,7 +292,10 @@ export default {
         })
     })
   },
-  addShare(context, { client, path, shareWith, shareType, permissions, expirationDate }) {
+  addShare(
+    context,
+    { client, path, shareWith, shareType, permissions, expirationDate, spaceId, displayName }
+  ) {
     if (shareType === ShareTypes.group.value) {
       client.shares
         .shareFileWithGroup(path, shareWith, {
@@ -246,6 +313,41 @@ export default {
           )
           context.dispatch('updateCurrentFileShareTypes')
           context.dispatch('loadIndicators', { client, currentFolder: path })
+        })
+        .catch((e) => {
+          context.dispatch(
+            'showMessage',
+            {
+              title: $gettext('Error while sharing.'),
+              desc: e,
+              status: 'danger'
+            },
+            { root: true }
+          )
+        })
+      return
+    }
+
+    if (shareType === ShareTypes.space.value) {
+      client.shares
+        .shareSpaceWithUser(path, shareWith, spaceId, {
+          permissions
+        })
+        .then(() => {
+          const role = SpacePeopleShareRoles.getByBitmask(permissions)
+          const shareObj = {
+            role: role.inlineLabel,
+            onPremisesSamAccountName: shareWith,
+            displayName
+          }
+
+          context.commit('CURRENT_FILE_OUTGOING_SHARES_ADD', buildSpaceShare(shareObj, spaceId))
+          context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', true)
+
+          // FIXME
+          return Promise.all([]).then(() => {
+            context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', false)
+          })
         })
         .catch((e) => {
           context.dispatch(
@@ -293,12 +395,27 @@ export default {
       })
   },
   deleteShare(context, { client, share, resource }) {
+    const additionalParams = {}
+    if (share.shareType === ShareTypes.space.value) {
+      additionalParams.shareWith = share.collaborator.name
+    }
+
     client.shares
-      .deleteShare(share.id)
+      .deleteShare(share.id, additionalParams)
       .then(() => {
         context.commit('CURRENT_FILE_OUTGOING_SHARES_REMOVE', share)
-        context.dispatch('updateCurrentFileShareTypes')
-        context.dispatch('loadIndicators', { client, currentFolder: resource.path })
+
+        if (share.shareType !== ShareTypes.space.value) {
+          context.dispatch('updateCurrentFileShareTypes')
+          context.dispatch('loadIndicators', { client, currentFolder: resource.path })
+        } else {
+          context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', true)
+
+          // FIXME
+          return Promise.all([]).then(() => {
+            context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', false)
+          })
+        }
       })
       .catch((e) => {
         console.error(e)

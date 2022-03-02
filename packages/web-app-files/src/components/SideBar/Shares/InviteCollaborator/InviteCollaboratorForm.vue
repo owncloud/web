@@ -42,7 +42,7 @@
     <div class="oc-flex oc-flex-middle oc-flex-between oc-mb-l">
       <role-dropdown
         :resource="highlightedFile"
-        :allow-share-permission="!isOcis"
+        :allow-share-permission="!isOcis || resourceIsSpace"
         @optionChange="collaboratorRoleChanged"
       />
       <expiration-datepicker
@@ -79,7 +79,12 @@ import AutocompleteItem from './AutocompleteItem.vue'
 import RoleDropdown from '../RoleDropdown.vue'
 import RecipientContainer from './RecipientContainer.vue'
 import ExpirationDatepicker from './ExpirationDatepicker.vue'
-import { PeopleShareRoles, SharePermissions, ShareTypes } from '../../../../helpers/share'
+import {
+  PeopleShareRoles,
+  SharePermissions,
+  ShareTypes,
+  SpacePeopleShareRoles
+} from '../../../../helpers/share'
 
 export default {
   name: 'InviteCollaboratorForm',
@@ -124,11 +129,20 @@ export default {
     },
     selectedCollaboratorsLabel() {
       return this.$gettext('Invite')
+    },
+
+    resourceIsSpace() {
+      return this.highlightedFile.type === 'space'
     }
   },
   mounted() {
     this.fetchRecipients = debounce(this.fetchRecipients, 500)
-    this.selectedRole = PeopleShareRoles.list(this.highlightedFile.isFolder)[0]
+
+    if (this.resourceIsSpace) {
+      this.selectedRole = SpacePeopleShareRoles.all[0]
+    } else {
+      this.selectedRole = PeopleShareRoles.list(this.highlightedFile.isFolder)[0]
+    }
   },
 
   methods: {
@@ -142,9 +156,15 @@ export default {
           1,
           this.configuration.options.sharingRecipientsPerPage
         )
+
+        const shareType = this.resourceIsSpace ? ShareTypes.space.value : ShareTypes.user.value
         const users = recipients.exact.users
           .concat(recipients.users)
           .filter((user) => user.value.shareWith !== this.user.id)
+          .map((result) => {
+            // Inject the correct share type here as the response has always type "user"
+            return { ...result, value: { ...result.value, shareType } }
+          })
         const groups = recipients.exact.groups.concat(recipients.groups)
         const remotes = recipients.exact.remotes.concat(recipients.remotes)
 
@@ -229,15 +249,19 @@ export default {
           saveQueue.add(() => {
             const bitmask = this.selectedRole.hasCustomPermissions
               ? SharePermissions.permissionsToBitmask(this.customPermissions)
-              : SharePermissions.permissionsToBitmask(this.selectedRole.permissions(!this.isOcis))
+              : SharePermissions.permissionsToBitmask(
+                  this.selectedRole.permissions(!this.isOcis || this.resourceIsSpace)
+                )
             this.addShare({
               client: this.$client,
               path: this.highlightedFile.path,
               $gettext: this.$gettext,
               shareWith: collaborator.value.shareWith,
+              displayName: collaborator.label,
               shareType: collaborator.value.shareType,
               permissions: bitmask,
-              expirationDate: this.expirationDate
+              expirationDate: this.expirationDate,
+              spaceId: this.resourceIsSpace ? this.highlightedFile.id : null
             })
           })
         )

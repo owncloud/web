@@ -40,7 +40,9 @@ export default {
       formattedRecipient: {
         name: this.recipient.label,
         icon: this.getRecipientIcon(),
-        hasAvatar: this.recipient.value.shareType === ShareTypes.user.value,
+        hasAvatar:
+          this.recipient.value.shareType === ShareTypes.user.value ||
+          this.recipient.value.shareType === ShareTypes.space.value,
         isLoadingAvatar: true
       }
     }
@@ -57,10 +59,7 @@ export default {
   },
 
   async created() {
-    if (
-      this.capabilities.files_sharing.user.profile_picture &&
-      this.recipient.value.shareType === ShareTypes.user.value
-    ) {
+    if (this.capabilities.files_sharing.user.profile_picture && this.hasAvatar) {
       try {
         this.formattedRecipient.avatar = await avatarUrl({
           server: this.configuration.server,
