@@ -4,6 +4,7 @@ require('url-search-params-polyfill')
 const sharingHelper = require('../helpers/sharingHelper')
 const assert = require('assert')
 const loginHelper = require('../helpers/loginHelper')
+let lastLinkShare = null
 
 When(
   'the user (tries to )create/creates a new public link for file/folder/resource {string} using the webUI',
@@ -45,17 +46,6 @@ Then(
   }
 )
 
-When(
-  'the public uses the webUI to access the last public link created by user {string}',
-  async function (linkCreator) {
-    const lastShare = await sharingHelper.fetchLastPublicLinkShare(linkCreator)
-    if (lastShare.permissions === sharingHelper.PERMISSION_TYPES.create) {
-      return client.page.filesDropPage().navigateAndWaitTillLoaded(lastShare.token)
-    }
-    return client.page.publicLinkFilesPage().navigateAndWaitTillLoaded(lastShare.token)
-  }
-)
-
 Then('the password input for the public link should appear on the webUI', function () {
   return client.page.publicLinkPasswordPage().waitForVisible()
 })
@@ -68,28 +58,43 @@ When(
 )
 
 When(
-  'the public uses the webUI to access the last public link created by user {string} with password {string}',
-  function (linkCreator, password) {
-    return loadPublicLinkWithPassword(linkCreator, password, false)
+  'the public uses the webUI to access the last public link created by user {string} on a new session',
+  function (linkCreator) {
+    return loadPublicLink(linkCreator)
   }
 )
 
 When(
   'the public uses the webUI to access the last public link created by user {string} with password {string} on a new session',
   function (linkCreator, password) {
-    return loadPublicLinkWithPassword(linkCreator, password, true)
+    return loadPublicLinkWithPassword(linkCreator, password)
   }
 )
 
-const loadPublicLinkWithPassword = async function (linkCreator, password, newSession) {
-  const lastShare = await sharingHelper.fetchLastPublicLinkShare(linkCreator)
+When('the user navigates to the root of the last public link', function () {
+  return client.page.publicLinkFilesPage().navigateToRootFolder(lastLinkShare.name)
+})
+
+const loadPublicLink = async function (linkCreator, newSession = true) {
+  lastLinkShare = await sharingHelper.fetchLastPublicLinkShare(linkCreator)
   if (newSession) {
     await loginHelper.startNewSession()
   }
-  if (lastShare.permissions === sharingHelper.PERMISSION_TYPES.create) {
-    await client.page.filesDropPage().navigateAndWaitForPasswordPage(lastShare.token)
+  if (lastLinkShare.permissions === sharingHelper.PERMISSION_TYPES.create) {
+    return client.page.filesDropPage().navigateAndWaitTillLoaded(lastLinkShare.token)
+  }
+  return client.page.publicLinkFilesPage().navigateAndWaitTillLoaded(lastLinkShare.token)
+}
+
+const loadPublicLinkWithPassword = async function (linkCreator, password, newSession = true) {
+  lastLinkShare = await sharingHelper.fetchLastPublicLinkShare(linkCreator)
+  if (newSession) {
+    await loginHelper.startNewSession()
+  }
+  if (lastLinkShare.permissions === sharingHelper.PERMISSION_TYPES.create) {
+    await client.page.filesDropPage().navigateAndWaitForPasswordPage(lastLinkShare.token)
   } else {
-    await client.page.publicLinkFilesPage().navigateAndWaitForPasswordPage(lastShare.token)
+    await client.page.publicLinkFilesPage().navigateAndWaitForPasswordPage(lastLinkShare.token)
   }
   return client.page.publicLinkPasswordPage().submitPublicLinkPassword(password)
 }

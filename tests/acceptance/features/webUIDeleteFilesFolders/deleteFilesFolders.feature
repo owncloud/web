@@ -164,7 +164,7 @@ Feature: deleting files and folders
     And user "Alice" has created folder "simple-folder/strängé filename (duplicate #2 &).txt" in the server
     And the user has reloaded the current page of the webUI
     And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions in the server
-    When the public uses the webUI to access the last public link created by user "Alice"
+    When the public uses the webUI to access the last public link created by user "Alice" on a new session
     And the user deletes the following elements using the webUI
       | name                                  |
       | simple-empty-folder                   |
@@ -190,7 +190,7 @@ Feature: deleting files and folders
       |                 | question?       |
       |                 | &and#hash       |
     And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions in the server
-    When the public uses the webUI to access the last public link created by user "Alice"
+    When the public uses the webUI to access the last public link created by user "Alice" on a new session
     And the user deletes the following file using the webUI
       | name-parts      |
       | 'single'        |
@@ -220,7 +220,7 @@ Feature: deleting files and folders
     And user "Alice" has created file "simple-folder/simple-empty-folder" in the server
     And the user has reloaded the current page of the webUI
     And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions in the server
-    When the public uses the webUI to access the last public link created by user "Alice"
+    When the public uses the webUI to access the last public link created by user "Alice" on a new session
     And the user batch deletes these files using the webUI
       | name                |
       | data.zip            |

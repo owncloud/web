@@ -27,7 +27,7 @@ Scenario Outline: preview of image files with media viewer is possible
     And user "Alice" has uploaded file "test_video.mp4" to "simple-empty-folder/test_video.mp4" in the server
     And user "Alice" has created a public link with following settings in the server
       | path | simple-empty-folder |
-    When the public uses the webUI to access the last public link created by user "Alice"
+    When the public uses the webUI to access the last public link created by user "Alice" on a new session
     And the public views the file "test_video.mp4" in the media viewer using the webUI
     Then the file "test_video.mp4" should be displayed in the media viewer webUI
 
@@ -37,7 +37,7 @@ Scenario Outline: preview of image files with media viewer is possible
     And user "Alice" has uploaded file "testavatar.jpg" to "simple-empty-folder/testavatar.jpg" in the server
     And user "Alice" has created a public link with following settings in the server
       | path | simple-empty-folder |
-    When the public uses the webUI to access the last public link created by user "Alice"
+    When the public uses the webUI to access the last public link created by user "Alice" on a new session
     And the public views the file "testavatar.jpg" in the media viewer using the webUI
     Then the file "testavatar.jpg" should be displayed in the media viewer webUI
 

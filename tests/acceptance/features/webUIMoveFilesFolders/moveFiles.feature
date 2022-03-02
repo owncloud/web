@@ -86,7 +86,7 @@ Feature: move files
     Given user "Alice" has uploaded file "data.zip" to "simple-folder/data.zip" in the server
     And user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
     And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions in the server
-    And the public uses the webUI to access the last public link created by user "Alice"
+    And the public uses the webUI to access the last public link created by user "Alice" on a new session
     And the user moves file "data.zip" into folder "simple-empty-folder" using the webUI
     Then breadcrumb for folder "simple-empty-folder" should be displayed on the webUI
     And file "data.zip" should be listed on the webUI

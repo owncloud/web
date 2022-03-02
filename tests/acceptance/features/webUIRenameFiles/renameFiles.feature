@@ -185,7 +185,7 @@ Feature: rename files
     And user "Alice" has uploaded file "lorem.txt" to "simple-folder/lorem.txt" in the server
     And the user has reloaded the current page of the webUI
     And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions in the server
-    When the public uses the webUI to access the last public link created by user "Alice"
+    When the public uses the webUI to access the last public link created by user "Alice" on a new session
     And the user renames file "lorem.txt" to "a-renamed-file.txt" using the webUI
     Then file "a-renamed-file.txt" should be listed on the webUI
     But file "lorem.txt" should not be listed on the webUI
