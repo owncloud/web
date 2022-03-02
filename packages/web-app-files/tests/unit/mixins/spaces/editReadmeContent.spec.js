@@ -73,6 +73,8 @@ describe('editReadmeContent', () => {
     })
   }
 
+  afterEach(() => jest.clearAllMocks())
+
   describe('method "$_editReadmeContent_editReadmeContentSpace"', () => {
     it('should show message on success', async () => {
       const wrapper = getWrapper()
@@ -83,6 +85,7 @@ describe('editReadmeContent', () => {
     })
 
     it('should show message on error', async () => {
+      jest.spyOn(console, 'error').mockImplementation(() => {})
       const wrapper = getWrapper(false)
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       await wrapper.vm.$_editReadmeContent_editReadmeContentSpace()

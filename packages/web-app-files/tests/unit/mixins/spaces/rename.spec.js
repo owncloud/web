@@ -14,6 +14,8 @@ const Component = {
 }
 
 describe('rename', () => {
+  afterEach(() => jest.clearAllMocks())
+
   describe('method "$_rename_trigger"', () => {
     it('should trigger the rename modal window', async () => {
       const wrapper = getWrapper()
@@ -57,6 +59,7 @@ describe('rename', () => {
     })
 
     it('should show message on error', async () => {
+      jest.spyOn(console, 'error').mockImplementation(() => {})
       mockAxios.request.mockImplementationOnce(() => {
         return Promise.reject(new Error())
       })

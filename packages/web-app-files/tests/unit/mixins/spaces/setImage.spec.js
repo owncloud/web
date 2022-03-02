@@ -68,6 +68,8 @@ describe('setImage', () => {
     })
   }
 
+  afterEach(() => jest.clearAllMocks())
+
   describe('isEnabled property', () => {
     it('should be false when no resource given', () => {
       const wrapper = getWrapper()
@@ -114,6 +116,7 @@ describe('setImage', () => {
     })
 
     it('should show message on error', async () => {
+      jest.spyOn(console, 'error').mockImplementation(() => {})
       mockAxios.request.mockImplementationOnce(() => {
         return Promise.reject(new Error())
       })
