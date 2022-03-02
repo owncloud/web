@@ -4,28 +4,11 @@
     <template v-else>
       <not-found-message v-if="!space.id" class="space-not-found oc-height-1-1" />
       <div v-else-if="isSpaceRoot">
-        <portal v-if="$data.$_editReadmeContent_modalOpen" to="app.runtime.modal">
-          <oc-modal
-            focus-trap-initial="#description-input-area"
-            :title="$gettext('Edit description for space') + ' ' + space.name"
-            :button-cancel-text="$gettext('Cancel')"
-            :button-confirm-text="$gettext('Confirm')"
-            @confirm="$_editReadmeContent_editReadmeContentSpace"
-            @cancel="$_editReadmeContent_closeModal"
-          >
-            <template #content>
-              <label v-translate class="oc-label" for="description-input-area"
-                >Space description</label
-              >
-              <textarea
-                id="description-input-area"
-                v-model="$data.$_editReadmeContent_content"
-                class="oc-width-1-1 oc-height-1-1 oc-text-input"
-                rows="30"
-              ></textarea>
-            </template>
-          </oc-modal>
-        </portal>
+        <readme-content-modal
+          v-if="readmeContentModalIsOpen"
+          :cancel="closeReadmeContentModal"
+          :space="space"
+        ></readme-content-modal>
         <div
           class="oc-grid oc-px-m oc-mt-m"
           :class="{ 'oc-child-width-1-1@s': imageExpanded, 'oc-child-width-1-3@s': !imageExpanded }"
@@ -175,6 +158,7 @@ import EditDescription from '../../mixins/spaces/actions/editDescription'
 import ShowDetails from '../../mixins/spaces/actions/showDetails'
 import UploadImage from '../../mixins/spaces/actions/uploadImage'
 import EditReadmeContent from '../../mixins/spaces/actions/editReadmeContent'
+import ReadmeContentModal from '../../components/Spaces/ReadmeContentModal.vue'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -186,7 +170,8 @@ export default {
     ResourceTable,
     ListInfo,
     Pagination,
-    ContextActions
+    ContextActions,
+    ReadmeContentModal
   },
   mixins: [
     MixinAccessibleBreadcrumb,
@@ -327,6 +312,9 @@ export default {
     },
     displayThumbnails() {
       return !this.configuration.options.disablePreviews
+    },
+    readmeContentModalIsOpen() {
+      return this.$data.$_editReadmeContent_modalOpen
     }
   },
   watch: {
@@ -482,6 +470,9 @@ export default {
     },
     isResourceInSelection(resource) {
       return this.selected?.includes(resource)
+    },
+    closeReadmeContentModal() {
+      this.$_editReadmeContent_closeModal()
     }
   }
 }

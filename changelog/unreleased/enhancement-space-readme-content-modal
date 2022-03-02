@@ -1,0 +1,5 @@
+Enhancement: Outsource space readme content modal
+
+We've added a new component for space readme content modal and extracted duplicated code.
+
+https://github.com/owncloud/web/pull/6509
