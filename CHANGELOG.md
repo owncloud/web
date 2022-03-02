@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Breadcrumb 'All Files' link: [#6467](https://github.com/owncloud/web/pull/6467)
+* Bugfix - No selection info right sidebar: [#6502](https://github.com/owncloud/web/issues/6502)
 * Bugfix - Update file list when creating new files: [#5530](https://github.com/owncloud/web/issues/5530)
 * Enhancement - Option to enable Vue history mode: [#6363](https://github.com/owncloud/web/issues/6363)
 * Enhancement - Redesign OcBreadcrumb: [#6218](https://github.com/owncloud/web/issues/6218)
@@ -17,7 +18,7 @@ Summary
 * Enhancement - Run web as oc10 sidecar: [#6363](https://github.com/owncloud/web/issues/6363)
 * Enhancement - Allow updating space image and description: [#6410](https://github.com/owncloud/web/pull/6410)
 * Enhancement - Implement the right sidebar for spaces: [#6437](https://github.com/owncloud/web/pull/6437)
-* Enhancement - Update ODS to v12.2.0: [#6450](https://github.com/owncloud/web/pull/6450)
+* Enhancement - Update ODS to v12.2.1: [#6450](https://github.com/owncloud/web/pull/6450)
 
 Details
 -------
@@ -29,6 +30,16 @@ Details
 
    https://github.com/owncloud/web/issues/6327
    https://github.com/owncloud/web/pull/6467
+
+* Bugfix - No selection info right sidebar: [#6502](https://github.com/owncloud/web/issues/6502)
+
+   We fixed that the right sidebar was not showing the "no selection" info panel anymore in the root
+   of "All files". In addition we also use the same "no selection" info panel now in the root nodes of
+   public links.
+
+   https://github.com/owncloud/web/issues/6502
+   https://github.com/owncloud/web/issues/6182
+   https://github.com/owncloud/web/pull/6505
 
 * Bugfix - Update file list when creating new files: [#5530](https://github.com/owncloud/web/issues/5530)
 
@@ -94,9 +105,9 @@ Details
    https://github.com/owncloud/web/issues/6284
    https://github.com/owncloud/web/pull/6437
 
-* Enhancement - Update ODS to v12.2.0: [#6450](https://github.com/owncloud/web/pull/6450)
+* Enhancement - Update ODS to v12.2.1: [#6450](https://github.com/owncloud/web/pull/6450)
 
-   We updated the ownCloud Design System to version 12.2.0. Please refer to the full changelog in
+   We updated the ownCloud Design System to version 12.2.1. Please refer to the full changelog in
    the ODS release (linked) for more details. Summary:
 
    - Enhancement - Apply outstanding background color to oc-card:
@@ -107,7 +118,8 @@ Details
 
    https://github.com/owncloud/web/pull/6450
    https://github.com/owncloud/web/pull/6472
-   https://github.com/owncloud/owncloud-design-system/releases/tag/v12.2.0
+   https://github.com/owncloud/web/pull/6505
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v12.2.1
 
 Changelog for ownCloud Web [5.1.0] (2022-02-18)
 =======================================
