@@ -40,10 +40,14 @@ const spaceMocks = {
     name: 'space',
     special: [
       {
-        specialFolder: { name: 'readme' }
+        specialFolder: { name: 'readme' },
+        webDavUrl: '/',
+        file: { mimeType: 'text/plain' }
       },
       {
-        specialFolder: { name: 'image' }
+        specialFolder: { name: 'image' },
+        webDavUrl: '/',
+        file: { mimeType: 'image/png' }
       }
     ]
   },
@@ -202,7 +206,7 @@ function getMountedWrapper(spaceResources = [], spaceItem = null, imageContent =
       $router,
       $client: {
         files: {
-          getFileContents: jest.fn(() => 'fileContent'),
+          getFileContents: jest.fn().mockImplementation(() => Promise.resolve('filecontent')),
           list: jest.fn(() => spaceResources)
         }
       }
