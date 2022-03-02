@@ -10,37 +10,20 @@
           :space="space"
         ></readme-content-modal>
         <quota-modal v-if="quotaModalIsOpen" :cancel="closeQuotaModal" :space="space" />
-        <div
-          class="oc-grid oc-px-m oc-mt-m"
-          :class="{ 'oc-child-width-1-1@s': imageExpanded, 'oc-child-width-1-3@s': !imageExpanded }"
-        >
-          <div v-if="imageContent">
-            <div class="oc-position-relative">
-              <img
-                :class="{ expanded: imageExpanded }"
-                class="space-overview-image oc-cursor-pointer"
-                alt=""
-                :src="'data:' + imageContent.mimeType + ';base64,' + imageContent.data"
-                @click="toggleImageExpanded"
-              />
-            </div>
+        <div class="oc-px-m oc-mt-m" :class="{ 'oc-flex': !imageExpanded }">
+          <div v-if="imageContent" :class="{ 'oc-width-1-4 oc-mr-l': !imageExpanded }">
+            <img
+              :class="{ expanded: imageExpanded }"
+              class="space-overview-image oc-cursor-pointer"
+              alt=""
+              :src="'data:' + imageContent.mimeType + ';base64,' + imageContent.data"
+              @click="toggleImageExpanded"
+            />
           </div>
-          <div>
+          <div :class="{ 'oc-width-3-4': !imageExpanded }">
             <div class="oc-flex oc-mb-s oc-flex-middle oc-flex-between">
-              <h1 class="space-overview-name oc-text-truncate">{{ space.name }}</h1>
               <div class="oc-flex oc-flex-middle">
-                <oc-button
-                  v-if="!loadSharesTask.isRunning && currentFileOutgoingCollaborators.length"
-                  :aria-label="$gettext('Open context menu and show invited people')"
-                  appearance="raw"
-                  @click="openSidebarSharePanel"
-                >
-                  <oc-icon name="group" fill-type="line" size="small" />
-                  <span
-                    class="space-overview-people-count oc-text-small"
-                    v-text="peopleCountString"
-                  ></span>
-                </oc-button>
+                <h1 class="space-overview-name oc-text-truncate">{{ space.name }}</h1>
                 <oc-button
                   :id="`space-context-btn`"
                   v-oc-tooltip="$gettext('Show context menu')"
@@ -86,6 +69,18 @@
                   </ul>
                 </oc-drop>
               </div>
+              <oc-button
+                v-if="!loadSharesTask.isRunning && currentFileOutgoingCollaborators.length"
+                :aria-label="$gettext('Open context menu and show members')"
+                appearance="raw"
+                @click="openSidebarSharePanel"
+              >
+                <oc-icon name="group" fill-type="line" size="small" />
+                <span
+                  class="space-overview-people-count oc-text-small"
+                  v-text="peopleCountString"
+                ></span>
+              </oc-button>
             </div>
             <p v-if="space.description" class="oc-mt-rm">{{ space.description }}</p>
             <div>
@@ -345,8 +340,8 @@ export default {
     },
     peopleCountString() {
       const translated = this.$ngettext(
-        '%{count} invited person',
-        '%{count} invited people',
+        '%{count} member',
+        '%{count} members',
         this.currentFileOutgoingCollaborators.length
       )
 
@@ -541,9 +536,9 @@ export default {
 .space-overview {
   &-image {
     border-radius: 10px;
-    max-height: 250px;
-    object-fit: cover;
     width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
   }
 
   &-image.expanded {
