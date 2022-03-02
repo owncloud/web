@@ -90,7 +90,19 @@ export default {
                 return false
               }
 
-              return resources[0].extension.toLowerCase() === editor.extension.toLowerCase()
+              if (resources[0].extension && editor.extension) {
+                return resources[0].extension.toLowerCase() === editor.extension.toLowerCase()
+              }
+
+              if (resources[0].mimeType && editor.mimeType) {
+                return (
+                  resources[0].mimeType.toLowerCase() === editor.mimeType.toLowerCase() ||
+                  resources[0].mimeType.split('/')[0].toLowerCase() ===
+                    editor.mimeType.toLowerCase()
+                )
+              }
+
+              return false
             },
             canBeDefault: editor.canBeDefault,
             componentType: 'oc-button',

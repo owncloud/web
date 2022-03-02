@@ -15,23 +15,26 @@
         media-viewer-player
       "
     >
-      <video v-if="medium.isVideo" :key="`media-video-${medium.id}`" controls preload>
-        <source :src="medium.url" :type="`video/${medium.ext}`" />
-      </video>
       <img
-        v-else
+        v-if="medium.isImage"
         :key="`media-image-${medium.id}`"
         :src="medium.url"
         :alt="medium.name"
         :data-id="medium.id"
       />
+      <video v-else-if="medium.isVideo" :key="`media-video-${medium.id}`" controls preload>
+        <source :src="medium.url" :type="medium.mimeType" />
+      </video>
+      <audio v-else-if="medium.isAudio" :key="`media-audio-${medium.id}`" controls preload>
+        <source :src="medium.url" :type="medium.mimeType" />
+      </audio>
     </div>
     <div v-if="loading" class="oc-position-center">
       <oc-spinner :aria-label="$gettext('Loading media file')" size="xlarge" />
     </div>
     <oc-icon
       v-if="failed"
-      name="review"
+      name="file-damage"
       variation="danger"
       size="xlarge"
       class="oc-position-center"
@@ -104,6 +107,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { useAppDefaults } from 'web-pkg/src/composables'
+import MediaViewer from './index'
 
 export default {
   name: 'Mediaviewer',
@@ -156,7 +160,7 @@ export default {
       }
 
       return this.activeFiles.filter((file) => {
-        return file.extension.toLowerCase().match(/(png|jpg|jpeg|gif|mp4|webm|ogg)/)
+        return MediaViewer.mimeTypes.includes(file.mimeType.toLowerCase().split('/')[0])
       })
     },
     activeMediaFile() {
@@ -198,16 +202,16 @@ export default {
       return this.getUrlForResource(this.activeMediaFile)
     },
 
-    videoExtensions() {
-      return ['mp4', 'webm', 'ogg']
-    },
-
     isActiveMediaFileTypeVideo() {
-      return this.videoExtensions.includes(this.activeMediaFile.extension.toLowerCase())
+      return this.activeMediaFile.mimeType.toLowerCase().startsWith('video')
     },
 
     isActiveMediaFileTypeImage() {
-      return !this.isActiveMediaFileTypeVideo
+      return this.activeMediaFile.mimeType.toLowerCase().startsWith('image')
+    },
+
+    isActiveMediaFileTypeAudio() {
+      return this.activeMediaFile.mimeType.toLowerCase().startsWith('audio')
     },
 
     isUrlSigningEnabled() {
@@ -295,8 +299,10 @@ export default {
             name: this.activeMediaFile.name,
             url: mediaUrl,
             ext: this.activeMediaFile.extension,
+            mimeType: this.activeMediaFile.mimeType,
             isVideo: this.isActiveMediaFileTypeVideo,
-            isImage: this.isActiveMediaFileTypeImage
+            isImage: this.isActiveMediaFileTypeImage,
+            isAudio: this.isActiveMediaFileTypeAudio
           })
           this.medium = this.activeMediaFileCached
           this.loading = false

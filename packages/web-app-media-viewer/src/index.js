@@ -20,50 +20,22 @@ const routes = [
 ]
 
 const routeName = 'mediaviewer-media'
-
-const fileExtensionConfig = {
-  canBeDefault: true,
-  routeName
-}
+const mimeTypes = ['image', 'video', 'audio']
 
 const appInfo = {
   name: 'Mediaviewer',
   id: 'mediaviewer',
   icon: 'image',
-  extensions: [
-    {
-      extension: 'png',
-      ...fileExtensionConfig
-    },
-    {
-      extension: 'jpg',
-      ...fileExtensionConfig
-    },
-    {
-      extension: 'jpeg',
-      ...fileExtensionConfig
-    },
-    {
-      extension: 'gif',
-      ...fileExtensionConfig
-    },
-    {
-      extension: 'mp4',
-      ...fileExtensionConfig
-    },
-    {
-      extension: 'webm',
-      ...fileExtensionConfig
-    },
-    {
-      extension: 'ogg',
-      ...fileExtensionConfig
-    }
-  ]
+  extensions: mimeTypes.map((mimeType) => ({
+    canBeDefault: true,
+    mimeType,
+    routeName
+  }))
 }
 
 export default {
   appInfo,
   routes,
-  translations
+  translations,
+  mimeTypes
 }

@@ -51,6 +51,7 @@ const mutations = {
       routeName: extension.routeName,
       routes: extension.routes || [],
       extension: extension.extension,
+      mimeType: extension.mimeType,
       handler: extension.handler,
       canBeDefault: extension.canBeDefault !== false,
       config: (state.fileEditorConfigs || {})[app]
