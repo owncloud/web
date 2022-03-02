@@ -34,11 +34,10 @@
           class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm"
           :aria-label="$gettext('Share receivers')"
         >
-          <li v-for="(collaborator, index) in collaborators" :key="collaborator.key">
+          <li v-for="collaborator in collaborators" :key="collaborator.key">
             <collaborator-list-item
               :share="collaborator"
               :modifiable="!collaborator.indirect"
-              :index="index"
               @onDelete="$_ocCollaborators_deleteShare"
             />
           </li>

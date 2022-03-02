@@ -83,6 +83,7 @@ import {
   ShareRole,
   SpacePeopleShareRoles
 } from '../../../helpers/share'
+import * as uuid from 'uuid'
 
 export default {
   name: 'RoleDropdown',
@@ -110,11 +111,6 @@ export default {
     allowSharePermission: {
       type: Boolean,
       required: true
-    },
-    index: {
-      type: Number,
-      required: false,
-      default: 0
     }
   },
   data() {
@@ -126,7 +122,7 @@ export default {
   computed: {
     roleButtonId() {
       if (this.shareId) {
-        return `files-collaborators-role-button-${this.shareId}-${this.index}`
+        return `files-collaborators-role-button-${this.shareId}-${uuid.v4()}`
       }
       return 'files-collaborators-role-button-new'
     },

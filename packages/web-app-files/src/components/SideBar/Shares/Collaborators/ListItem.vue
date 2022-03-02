@@ -67,7 +67,6 @@
         :existing-permissions="share.customPermissions"
         :existing-role="share.role"
         :allow-share-permission="!isOcis || isSpace"
-        :index="index"
         class="files-collaborators-collaborator-role"
         @optionChange="shareRoleChanged"
       />
@@ -110,11 +109,6 @@ export default {
     modifiable: {
       type: Boolean,
       default: false
-    },
-    index: {
-      type: Number,
-      required: false,
-      default: 0
     }
   },
   computed: {
