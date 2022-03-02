@@ -1,25 +1,10 @@
 <template>
   <div>
-    <portal v-if="$data.$_editReadmeContent_modalOpen" to="app.runtime.modal">
-      <oc-modal
-        focus-trap-initial="#description-input-area"
-        :title="$gettext('Edit description for space') + ' ' + resources[0].name"
-        :button-cancel-text="$gettext('Cancel')"
-        :button-confirm-text="$gettext('Confirm')"
-        @confirm="$_editReadmeContent_editReadmeContentSpace"
-        @cancel="$_editReadmeContent_closeModal"
-      >
-        <template #content>
-          <label v-translate class="oc-label" for="description-input-area">Space description</label>
-          <textarea
-            id="description-input-area"
-            v-model="$data.$_editReadmeContent_content"
-            class="oc-width-1-1 oc-height-1-1 oc-text-input"
-            rows="30"
-          ></textarea>
-        </template>
-      </oc-modal>
-    </portal>
+    <readme-content-modal
+      v-if="readmeContentModalIsOpen"
+      :cancel="closeReadmeContentModal"
+      :space="resources[0]"
+    ></readme-content-modal>
     <input
       id="space-image-upload-input"
       ref="spaceImageInput"
@@ -52,21 +37,20 @@ import Restore from '../../../mixins/spaces/actions/restore'
 import EditDescription from '../../../mixins/spaces/actions/editDescription'
 import EditReadmeContent from '../../../mixins/spaces/actions/editReadmeContent'
 import UploadImage from '../../../mixins/spaces/actions/uploadImage'
+import ReadmeContentModal from '../../../components/Spaces/ReadmeContentModal.vue'
 
 export default {
   name: 'SpaceActions',
   title: ($gettext) => {
     return $gettext('Actions')
   },
-  components: { ActionMenuItem },
+  components: { ActionMenuItem, ReadmeContentModal },
   mixins: [Rename, Delete, EditDescription, EditReadmeContent, Disable, Restore, UploadImage],
   computed: {
     ...mapGetters('Files', ['highlightedFile']),
-
     resources() {
       return [this.highlightedFile]
     },
-
     actions() {
       return [
         ...this.$_rename_items,
@@ -77,6 +61,14 @@ export default {
         ...this.$_delete_items,
         ...this.$_disable_items
       ].filter((item) => item.isEnabled({ resources: this.resources }))
+    },
+    readmeContentModalIsOpen() {
+      return this.$data.$_editReadmeContent_modalOpen
+    }
+  },
+  methods: {
+    closeReadmeContentModal() {
+      this.$_editReadmeContent_closeModal()
     }
   }
 }
