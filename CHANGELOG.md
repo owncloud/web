@@ -17,6 +17,7 @@ Summary
 * Enhancement - Redesign FilesTable: [#6207](https://github.com/owncloud/web/issues/6207)
 * Enhancement - Run web as oc10 sidecar: [#6363](https://github.com/owncloud/web/issues/6363)
 * Enhancement - Allow updating space image and description: [#6410](https://github.com/owncloud/web/pull/6410)
+* Enhancement - Outsource space readme content modal: [#6509](https://github.com/owncloud/web/pull/6509)
 * Enhancement - Implement the right sidebar for spaces: [#6437](https://github.com/owncloud/web/pull/6437)
 * Enhancement - Update ODS to v12.2.1: [#6450](https://github.com/owncloud/web/pull/6450)
 
@@ -96,6 +97,12 @@ Details
 
    https://github.com/owncloud/web/issues/6377
    https://github.com/owncloud/web/pull/6410
+
+* Enhancement - Outsource space readme content modal: [#6509](https://github.com/owncloud/web/pull/6509)
+
+   We've added a new component for space readme content modal and extracted duplicated code.
+
+   https://github.com/owncloud/web/pull/6509
 
 * Enhancement - Implement the right sidebar for spaces: [#6437](https://github.com/owncloud/web/pull/6437)
 
