@@ -14,6 +14,8 @@ const Component = {
 }
 
 describe('delete', () => {
+  afterEach(() => jest.clearAllMocks())
+
   describe('isEnabled property', () => {
     it('should be false when not resource given', () => {
       const wrapper = getWrapper()
@@ -65,6 +67,7 @@ describe('delete', () => {
     })
 
     it('should show message on error', async () => {
+      jest.spyOn(console, 'error').mockImplementation(() => {})
       mockAxios.request.mockImplementationOnce(() => {
         return Promise.reject(new Error())
       })

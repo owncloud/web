@@ -73,6 +73,8 @@ describe('uploadImage', () => {
     })
   }
 
+  afterEach(() => jest.clearAllMocks())
+
   describe('method "$_uploadImage_uploadImageSpace"', () => {
     it('should show message on success', async () => {
       mockAxios.request.mockImplementationOnce(() => {
@@ -91,6 +93,7 @@ describe('uploadImage', () => {
     })
 
     it('should show message on error', async () => {
+      jest.spyOn(console, 'error').mockImplementation(() => {})
       const wrapper = getWrapper(false)
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       await wrapper.vm.$_uploadImage_uploadImageSpace({

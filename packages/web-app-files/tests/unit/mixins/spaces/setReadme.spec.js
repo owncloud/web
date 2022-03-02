@@ -73,6 +73,8 @@ describe('setReadme', () => {
     })
   }
 
+  afterEach(() => jest.clearAllMocks())
+
   describe('isEnabled property', () => {
     it('should be false when no resource given', () => {
       const wrapper = getWrapper()
@@ -114,6 +116,7 @@ describe('setReadme', () => {
     })
 
     it('should show message on error', async () => {
+      jest.spyOn(console, 'error').mockImplementation(() => {})
       const wrapper = getWrapper(false)
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       await wrapper.vm.$_setSpaceReadme_trigger({

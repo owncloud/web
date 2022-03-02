@@ -14,6 +14,8 @@ const Component = {
 }
 
 describe('editDescription', () => {
+  afterEach(() => jest.clearAllMocks())
+
   describe('method "$_editDescription_trigger"', () => {
     it('should trigger the editDescription modal window with one resource', async () => {
       const wrapper = getWrapper()
@@ -44,6 +46,7 @@ describe('editDescription', () => {
     })
 
     it('should show message on error', async () => {
+      jest.spyOn(console, 'error').mockImplementation(() => {})
       mockAxios.request.mockImplementationOnce(() => {
         return Promise.reject(new Error())
       })
