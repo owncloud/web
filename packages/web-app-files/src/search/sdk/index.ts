@@ -29,7 +29,7 @@ export default class Provider extends EventBus implements SearchProvider {
   }
 
   public activate(term: string): void {
-    const listRoute = 'search-provider-list'
+    const listRoute = 'files-common-search'
 
     if (!term && this.router.currentRoute.name !== listRoute) {
       return

@@ -48,7 +48,7 @@ describe('SDKProvider', () => {
 
     const search = new SDKSearch(store, { push } as unknown as VueRouter)
     const expected = {
-      name: 'search-provider-list',
+      name: 'files-common-search',
       query: { term: 'foo', provider: 'files.sdk' }
     }
 

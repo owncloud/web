@@ -1,0 +1,8 @@
+Enhancement: Display search results within files app
+
+We've updated the "Search in all files" view to be displayed within the files app instead of showing them in a dedicated extension.
+This way, users don't loose their context and can still use sidebar.
+
+https://github.com/owncloud/web/issues/6496
+https://github.com/owncloud/web/issues/6507
+https://github.com/owncloud/web/pulls/6511

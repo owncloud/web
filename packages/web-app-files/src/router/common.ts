@@ -2,20 +2,39 @@ import { RouteComponents } from './router'
 import { Location, RouteConfig } from 'vue-router'
 import { createLocation, $gettext, isLocationActiveDirector } from './utils'
 
-type commonTypes = 'files-common-favorites' | 'files-common-trash'
+type commonTypes = 'files-common-favorites' | 'files-common-search' | 'files-common-trash'
 
 export const createLocationCommon = (name: commonTypes, location = {}): Location =>
   createLocation(name, location)
 
 export const locationFavorites = createLocationCommon('files-common-favorites')
 export const locationTrash = createLocationCommon('files-common-trash')
+export const locationSearch = createLocationCommon('files-common-search')
 
 export const isLocationCommonActive = isLocationActiveDirector<commonTypes>(
   locationFavorites,
+  locationSearch,
   locationTrash
 )
 
 export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
+  {
+    path: '/search',
+    component: components.App,
+    children: [
+      {
+        name: locationSearch.name,
+        path: 'list/:page?',
+        component: components.SearchResults,
+        meta: {
+          hideFilelistActions: true,
+          hasBulkActions: true,
+          title: $gettext('Search results'),
+          contextQueryItems: ['term', 'provider']
+        }
+      }
+    ]
+  },
   {
     path: '/trash',
     component: components.App,
