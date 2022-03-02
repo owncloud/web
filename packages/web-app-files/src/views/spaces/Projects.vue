@@ -100,8 +100,8 @@
                   <div class="oc-flex oc-flex-middle">
                     <div>
                       <oc-button
-                        v-oc-tooltip="$gettext('Show invited people')"
-                        :aria-label="$gettext('Show invited people')"
+                        v-oc-tooltip="$gettext('Show members')"
+                        :aria-label="$gettext('Show members')"
                         appearance="raw"
                         @click="openSidebarSharePanel(space)"
                       >

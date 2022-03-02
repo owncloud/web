@@ -12,17 +12,32 @@
         class="space-default-image oc-px-m oc-py-m"
       />
     </div>
-    <div v-if="hasPeopleShares || hasLinkShares" class="oc-flex oc-flex-middle oc-mb-m">
-      <oc-button
-        v-if="hasPeopleShares"
-        appearance="raw"
-        :aria-label="$gettext('Open the people panel')"
-        @click="expandPeoplePanel"
-      >
-        <oc-icon name="group" class="oc-mr-s" />
-      </oc-button>
-      <oc-icon v-if="hasLinkShares" name="link" class="oc-mr-s" />
-      <span class="oc-text-small" v-text="shareLabel" />
+    <div
+      v-if="hasMemberShares || hasLinkShares"
+      class="oc-flex oc-flex-middle oc-mb-m oc-text-small"
+    >
+      <div v-if="hasMemberShares" class="oc-flex oc-flex-middle">
+        <oc-button
+          appearance="raw"
+          :aria-label="$gettext('Open the member panel')"
+          @click="expandMemberPanel"
+        >
+          <oc-icon name="group" class="oc-mr-s" />
+        </oc-button>
+        <span class="oc-mr-xs" v-text="memberShareLabel" />
+        <oc-button
+          appearance="raw"
+          :aria-label="$gettext('Open the member panel')"
+          size="small"
+          @click="expandMemberPanel"
+        >
+          <span class="oc-text-small" v-text="$gettext('Show')"></span>
+        </oc-button>
+      </div>
+      <div v-if="hasLinkShares" class="oc-flex oc-flex-middle">
+        <oc-icon name="link" class="oc-mr-s" />
+        <span v-text="linkShareLabel" />
+      </div>
     </div>
     <div>
       <table class="details-table" :aria-label="detailsTableLabel">
@@ -122,60 +137,41 @@ export default {
         })
         .join(', ')
     },
-    hasPeopleShares() {
-      return this.peopleShareCount > 1
+    hasMemberShares() {
+      return this.memberShareCount > 1
     },
     hasLinkShares() {
       return this.linkShareCount > 1
     },
-    peopleShareCount() {
+    memberShareCount() {
       return this.currentFileOutgoingCollaborators.length
     },
     linkShareCount() {
       return this.currentFileOutgoingLinks.length
     },
-    shareLabel() {
-      let peopleString, linksString
-
-      if (this.hasPeopleShares) {
-        peopleString = this.$gettextInterpolate(
-          this.$ngettext(
-            'This space has been shared with %{peopleShareCount} person.',
-            'This space has been shared with %{peopleShareCount} people.',
-            this.peopleShareCount
-          ),
-          {
-            peopleShareCount: this.peopleShareCount
-          }
-        )
-      }
-
-      if (this.hasLinkShares) {
-        linksString = this.$gettextInterpolate(
-          this.$ngettext(
-            '%{linkShareCount} link giving access.',
-            '%{linkShareCount} links giving access.',
-            this.linkShareCount
-          ),
-          {
-            linkShareCount: this.linkShareCount
-          }
-        )
-      }
-
-      if (peopleString && linksString) {
-        return `${peopleString} ${linksString}`
-      }
-
-      if (peopleString) {
-        return peopleString
-      }
-
-      if (linksString) {
-        return linksString
-      }
-
-      return ''
+    memberShareLabel() {
+      return this.$gettextInterpolate(
+        this.$ngettext(
+          'This space has %{memberShareCount} member.',
+          'This space has %{memberShareCount} members.',
+          this.memberShareCount
+        ),
+        {
+          memberShareCount: this.memberShareCount
+        }
+      )
+    },
+    linkShareLabel() {
+      return this.$gettextInterpolate(
+        this.$ngettext(
+          '%{linkShareCount} link giving access.',
+          '%{linkShareCount} links giving access.',
+          this.linkShareCount
+        ),
+        {
+          linkShareCount: this.linkShareCount
+        }
+      )
     }
   },
   mounted() {
@@ -187,7 +183,7 @@ export default {
       closeSidebar: 'close'
     }),
 
-    expandPeoplePanel() {
+    expandMemberPanel() {
       this.setSidebarPanel('space-share-item')
     }
   }

@@ -1,6 +1,6 @@
 <template>
   <div id="oc-files-sharing-sidebar" class="oc-position-relative">
-    <oc-loader v-if="sharesLoading" :aria-label="$gettext('Loading people list')" />
+    <oc-loader v-if="sharesLoading" :aria-label="$gettext('Loading members')" />
     <template v-else>
       <invite-collaborator-form v-if="currentUserCanShare" key="new-collaborator" class="oc-my-s" />
       <template v-if="hasCollaborators">
@@ -34,7 +34,7 @@ import { useTask } from 'vue-concurrency'
 
 export default {
   title: ($gettext) => {
-    return $gettext('People')
+    return $gettext('Members')
   },
   name: 'SpaceShares',
   components: {

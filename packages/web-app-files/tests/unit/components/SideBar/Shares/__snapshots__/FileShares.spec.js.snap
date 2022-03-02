@@ -27,10 +27,10 @@ exports[`FileShares if there are collaborators present renders sharedWithLabel a
   </div>
   <ul id="files-collaborators-list" aria-label="Share receivers" class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm">
     <li>
-      <collaborator-list-item-stub share="[object Object]" modifiable="true" index="0"></collaborator-list-item-stub>
+      <collaborator-list-item-stub share="[object Object]" modifiable="true"></collaborator-list-item-stub>
     </li>
     <li>
-      <collaborator-list-item-stub share="[object Object]" modifiable="true" index="1"></collaborator-list-item-stub>
+      <collaborator-list-item-stub share="[object Object]" modifiable="true"></collaborator-list-item-stub>
     </li>
   </ul>
 </div>
