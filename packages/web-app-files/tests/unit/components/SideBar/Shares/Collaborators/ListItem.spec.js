@@ -4,6 +4,7 @@ import ListItem from '../../../../../../src/components/SideBar/Shares/Collaborat
 import stubs from '../../../../../../../../tests/unit/stubs'
 import GetTextPlugin from 'vue-gettext'
 import { peopleRoleViewerFolder, ShareTypes } from '../../../../../../src/helpers/share'
+import Users from '@/__fixtures__/users'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -39,15 +40,16 @@ describe('Collaborator ListItem component', () => {
       })
     })
     describe('non-user share types', () => {
-      it.each(ShareTypes.all.filter((shareType) => shareType !== ShareTypes.user))(
-        'should display an oc-avatar-item for any non-user share types',
-        (shareType) => {
-          const wrapper = createWrapper({ shareType: shareType.value })
-          expect(wrapper.find(selectors.userAvatarImage).exists()).toBeFalsy()
-          expect(wrapper.find(selectors.notUserAvatar).exists()).toBeTruthy()
-          expect(wrapper.find(selectors.notUserAvatar).attributes().name).toEqual(shareType.key)
-        }
-      )
+      it.each(
+        ShareTypes.all.filter(
+          (shareType) => ![ShareTypes.user, ShareTypes.space].includes(shareType)
+        )
+      )('should display an oc-avatar-item for any non-user share types', (shareType) => {
+        const wrapper = createWrapper({ shareType: shareType.value })
+        expect(wrapper.find(selectors.userAvatarImage).exists()).toBeFalsy()
+        expect(wrapper.find(selectors.notUserAvatar).exists()).toBeTruthy()
+        expect(wrapper.find(selectors.notUserAvatar).attributes().name).toEqual(shareType.key)
+      })
     })
   })
   describe('share info', () => {
@@ -102,6 +104,9 @@ function createWrapper({
 } = {}) {
   return mount(ListItem, {
     store: new Vuex.Store({
+      state: {
+        user: Users.alice
+      },
       getters: {
         isOcis: () => false
       },

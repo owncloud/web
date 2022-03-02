@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Details SideBar Panel displayes the details side panel 1`] = `
+exports[`Details SideBar Panel displays the details side panel 1`] = `
 <div id="oc-space-details-sidebar">
   <div class="oc-space-details-sidebar-image oc-text-center">
     <oc-icon-stub name="layout-grid" size="xxlarge" class="space-default-image oc-px-m oc-py-m"></oc-icon-stub>
@@ -15,7 +15,7 @@ exports[`Details SideBar Panel displayes the details side panel 1`] = `
       <!---->
       <tr>
         <th scope="col" class="oc-pr-s">Manager</th>
-        <td><span></span></td>
+        <td><span>alice</span></td>
       </tr>
       <tr>
         <th scope="col" class="oc-pr-s">Quota</th>

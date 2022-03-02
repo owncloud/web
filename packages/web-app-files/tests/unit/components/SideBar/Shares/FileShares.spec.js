@@ -14,7 +14,7 @@ localVue.use(GetTextPlugin, {
   silent: true
 })
 
-const user = Users.admin
+const user = Users.alice
 const collaborators = [Collaborators[0], Collaborators[1]]
 
 const selectors = {
