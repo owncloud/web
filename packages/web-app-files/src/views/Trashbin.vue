@@ -6,7 +6,7 @@
         v-if="isEmpty"
         id="files-trashbin-empty"
         class="files-empty"
-        icon="delete"
+        icon="delete-bin-5"
       >
         <template #message>
           <span v-translate>You have no deleted files</span>

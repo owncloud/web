@@ -8,7 +8,7 @@
         @close="clearNotificationMessage"
       />
     </oc-notifications>
-    <div v-if="loading" class="uk-position-center">
+    <div v-if="loading" class="oc-position-center">
       <oc-spinner size="xlarge" />
       <p v-translate class="oc-invisible">Loading media</p>
     </div>
