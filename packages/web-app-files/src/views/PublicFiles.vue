@@ -103,6 +103,7 @@ const unauthenticatedUserReady = async (router, store) => {
 
   // ocis at the moment is not able to create archives for public links that are password protected
   // till this is supported by the backend remove it hard as a workaround
+  // https://github.com/owncloud/web/issues/6515
   if (publicLinkPassword) {
     store.commit('SET_CAPABILITIES', {
       capabilities: omit(store.getters.capabilities, ['files.archivers']),
