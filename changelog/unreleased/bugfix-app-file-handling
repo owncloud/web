@@ -1,0 +1,6 @@
+Bugfix: File handling in apps
+
+We fixed loading and saving files in apps in all contexts. It's now possible to open files in apps in personal files, favorites, share views and spaces.
+
+https://github.com/owncloud/web/pull/6456
+
