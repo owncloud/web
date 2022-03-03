@@ -60,12 +60,16 @@ When('the user browses to the shared-with-others page', function () {
   return client.page.sharedWithOthersPage().navigateAndWaitTillLoaded()
 })
 
-When('the user browses to the shared-with-others page using the webUI', function () {
-  return client.page.webPage().navigateToUsingMenu('Shared with others')
+When('the user browses to the shared-with-others page using the webUI', async function () {
+  await client.page.webPage().navigateToUsingMenu('Shares')
+  await appBarActions.navigateToSharesSubPage('Shared with others')
+  return client
 })
 
-When('the user browses to the shared-via-link page using the webUI', function () {
-  return client.page.webPage().navigateToUsingMenu('Shared via link')
+When('the user browses to the shared-via-link page using the webUI', async function () {
+  await client.page.webPage().navigateToUsingMenu('Shares')
+  await appBarActions.navigateToSharesSubPage('Shared via link')
+  return client
 })
 
 Given('the user has browsed to the trashbin page', function () {

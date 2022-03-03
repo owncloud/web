@@ -35,7 +35,7 @@
       v-if="!enforced && dateCurrent"
       class="recipient-edit-expiration-btn-remove"
       appearance="raw"
-      :aria-label="gettext('Remove expiration date')"
+      :aria-label="$gettext('Remove expiration date')"
       @click="dateCurrent = null"
     >
       <oc-icon name="close" />
@@ -68,7 +68,6 @@ export default defineComponent({
   setup(props, { emit }) {
     const vm = getCurrentInstance().proxy
     const language = computed(() => vm.$language)
-    const gettext = computed(() => vm.$gettext)
     const store = useStore()
     const capabilities = computed(() => store.getters.capabilities)
     const optionsUser = computed(() => capabilities.value.files_sharing.user?.expire_date)
@@ -146,7 +145,6 @@ export default defineComponent({
 
     return {
       language,
-      gettext,
       enforced,
       available,
       dateCurrent,

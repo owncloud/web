@@ -1,0 +1,7 @@
+Enhancement: Shares overview
+
+We've merged the three shares navigation items into one central "Shares" item, 
+with a toggle to switch between the three different kinds of shares (incoming, outgoing, links).
+
+https://github.com/owncloud/web/issues/6440
+https://github.com/owncloud/web/pull/6512

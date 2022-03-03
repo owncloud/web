@@ -11,18 +11,22 @@
       @progress="onFileProgress"
     />
     <div class="files-topbar oc-py-s">
-      <oc-breadcrumb
-        v-if="breadcrumbs.length"
-        id="files-breadcrumb"
-        data-testid="files-breadcrumbs"
-        class="oc-py-s"
-        :items="breadcrumbs"
-      >
-        <template #contextMenu>
-          <context-actions v-if="showContextActions" :items="[currentFolder]" />
-        </template>
-      </oc-breadcrumb>
       <h1 class="oc-invisible-sr" v-text="pageTitle" />
+      <div class="oc-flex oc-flex-between">
+        <oc-breadcrumb
+          v-if="breadcrumbs.length"
+          id="files-breadcrumb"
+          data-testid="files-breadcrumbs"
+          class="oc-py-s"
+          :items="breadcrumbs"
+        >
+          <template #contextMenu>
+            <context-actions v-if="showContextActions" :items="[currentFolder]" />
+          </template>
+        </oc-breadcrumb>
+        <shares-navigation v-if="isSharesLocation" />
+        <view-options v-if="!hideViewOptions" />
+      </div>
       <div class="files-app-bar-actions">
         <div
           v-if="showActions || selectedFiles.length > 0 || hasBulkActions"
@@ -42,7 +46,6 @@
           <size-info v-if="hasBulkActions && selectedFiles.length > 0" class="oc-mr oc-visible@l" />
           <batch-actions v-if="hasBulkActions" />
         </div>
-        <view-options v-if="!hideViewOptions" />
       </div>
     </div>
   </div>
@@ -57,13 +60,18 @@ import MixinFileActions from '../../mixins/fileActions'
 import { buildResource, buildWebDavFilesPath, buildWebDavSpacesPath } from '../../helpers/resources'
 import { bus } from 'web-pkg/src/instance'
 import { DavProperties } from 'web-pkg/src/constants'
-import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
+import {
+  isLocationPublicActive,
+  isLocationSharesActive,
+  isLocationSpacesActive
+} from '../../router'
 import { useActiveLocation } from '../../composables'
 
 import BatchActions from './SelectedResources/BatchActions.vue'
 import ContextActions from '../FilesList/ContextActions.vue'
 import CreateAndUpload from './CreateAndUpload.vue'
 import FileDrop from './Upload/FileDrop.vue'
+import SharesNavigation from './SharesNavigation.vue'
 import SizeInfo from './SelectedResources/SizeInfo.vue'
 import ViewOptions from './ViewOptions.vue'
 
@@ -73,12 +81,14 @@ export default {
     ContextActions,
     CreateAndUpload,
     FileDrop,
+    SharesNavigation,
     SizeInfo,
     ViewOptions
   },
   mixins: [Mixins, MixinFileActions],
   setup() {
     return {
+      isSharesLocation: useActiveLocation(isLocationSharesActive),
       isPersonalLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-personal-home'),
       isPublicLocation: useActiveLocation(isLocationPublicActive, 'files-public-files'),
       isSpacesProjectsLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-projects'),

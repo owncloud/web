@@ -1,9 +1,9 @@
 import { shallowMount, mount } from '@vue/test-utils'
-import { getStore, localVue, createFile } from './views.setup.js'
+import { getStore, localVue, createFile } from '../views.setup.js'
 import VueRouter from 'vue-router'
-import { createLocationSpaces } from '../../../src/router'
+import { createLocationSpaces } from '../../../../src/router'
 import FileActions from '@files/src/mixins/fileActions'
-import SharedViaLink from '@files/src/views/SharedViaLink.vue'
+import SharedViaLink from '@files/src/views/shares/SharedViaLink.vue'
 localVue.use(VueRouter)
 
 const component = { ...SharedViaLink, mounted: jest.fn() }

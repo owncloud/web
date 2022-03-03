@@ -4,17 +4,19 @@
     <template v-else>
       <no-content-message
         v-if="isEmpty"
-        id="files-shared-via-link-empty"
+        id="files-shared-with-others-empty"
         class="files-empty"
-        icon="link"
+        icon="group"
       >
         <template #message>
-          <span v-translate>There are no resources with a public link at the moment</span>
+          <span v-translate>
+            You are currently not collaborating on any of your resources with other people
+          </span>
         </template>
       </no-content-message>
       <resource-table
         v-else
-        id="files-shared-via-link-table"
+        id="files-shared-with-others-table"
         v-model="selected"
         class="files-table"
         :class="{ 'files-table-squashed': !sidebarClosed }"
@@ -48,27 +50,27 @@
 
 <script>
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
-import ResourceTable, { determineSortFields } from '../components/FilesList/ResourceTable.vue'
-import { useFileListHeaderPosition, usePagination, useSort } from '../composables'
-import { useRouteQuery, useStore } from 'web-pkg/src/composables'
 import { computed, unref } from '@vue/composition-api'
+import ResourceTable, { determineSortFields } from '../../components/FilesList/ResourceTable.vue'
 
-import { aggregateResourceShares } from '../helpers/resources'
-import FileActions from '../mixins/fileActions'
-import MixinFilesListFilter from '../mixins/filesListFilter'
-import MixinResources from '../mixins/resources'
-import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
+import { aggregateResourceShares } from '../../helpers/resources'
+import FileActions from '../../mixins/fileActions'
+import MixinFilesListFilter from '../../mixins/filesListFilter'
+import MixinResources from '../../mixins/resources'
+import MixinMountSideBar from '../../mixins/sidebar/mountSideBar'
 import { VisibilityObserver } from 'web-pkg/src/observer'
-import { ImageDimension, ImageType } from '../constants'
+import { ImageDimension, ImageType } from '../../constants'
+import { useFileListHeaderPosition, usePagination, useSort } from '../../composables'
+import { useRouteQuery, useStore } from 'web-pkg/src/composables'
 import debounce from 'lodash-es/debounce'
 import { useTask } from 'vue-concurrency'
 
-import ListLoader from '../components/FilesList/ListLoader.vue'
-import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
-import ListInfo from '../components/FilesList/ListInfo.vue'
-import Pagination from '../components/FilesList/Pagination.vue'
-import ContextActions from '../components/FilesList/ContextActions.vue'
-import { createLocationSpaces } from '../router'
+import ListLoader from '../../components/FilesList/ListLoader.vue'
+import NoContentMessage from '../../components/FilesList/NoContentMessage.vue'
+import ListInfo from '../../components/FilesList/ListInfo.vue'
+import Pagination from '../../components/FilesList/Pagination.vue'
+import ContextActions from '../../components/FilesList/ContextActions.vue'
+import { createLocationSpaces } from '../../router'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -102,9 +104,10 @@ export default {
 
     const loadResourcesTask = useTask(function* (signal, ref) {
       ref.CLEAR_CURRENT_FILES_LIST()
+
       let resources = yield ref.$client.requests.ocs({
         service: 'apps/files_sharing',
-        action: '/api/v1/shares?format=json&share_types=3&include_tags=false',
+        action: '/api/v1/shares?format=json&reshares=true&include_tags=false',
         method: 'GET'
       })
 
@@ -130,10 +133,10 @@ export default {
       paginatedResources,
       paginationPages,
       paginationPage,
-      resourceTargetLocation: createLocationSpaces('files-spaces-personal-home'),
       handleSort,
       sortBy,
-      sortDir
+      sortDir,
+      resourceTargetLocation: createLocationSpaces('files-spaces-personal-home')
     }
   },
 
@@ -171,16 +174,18 @@ export default {
   },
 
   methods: {
-    ...mapActions('Files', ['loadIndicators', 'loadPreview']),
+    ...mapActions('Files', ['loadIndicators', 'loadPreview', 'loadAvatars']),
     ...mapMutations('Files', ['LOAD_FILES', 'SET_FILE_SELECTION', 'CLEAR_CURRENT_FILES_LIST']),
 
     rowMounted(resource, component) {
-      if (!this.displayThumbnails) {
-        return
-      }
-
       const debounced = debounce(({ unobserve }) => {
         unobserve()
+        this.loadAvatars({ resource })
+
+        if (!this.displayThumbnails) {
+          return
+        }
+
         this.loadPreview({
           resource,
           isPublic: false,
