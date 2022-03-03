@@ -9,27 +9,21 @@ import fixturePublicFiles from '../__fixtures__/publicFiles'
 import fixtureRecipients from '../__fixtures__/recipients'
 import { DateTime } from 'luxon'
 
+const mockPath = (path) => {
+  if (path.startsWith('/files/')) {
+    path = '/' + path.split('/').splice(3).join('/')
+  }
+  return path
+}
+
 export default {
   files: {
     list: (path = '/') => {
-      if (path.startsWith('/files/')) {
-        path = path.split('/').splice(3).join('/')
-        if (path === '') {
-          path = '/'
-        }
-      }
-
-      return fixtureFiles[path]
+      return fixtureFiles[mockPath(path)]
     },
     getFavoriteFiles: () => fixtureFavoriteFiles,
     fileInfo: (path) => {
-      if (path.startsWith('/files/')) {
-        path = path.split('/').splice(3).join('/')
-        if (path === '') {
-          path = '/'
-        }
-      }
-      return fixtureFiles[path][0]
+      return fixtureFiles[mockPath(path)][0]
     }
   },
   users: {
