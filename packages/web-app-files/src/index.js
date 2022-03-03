@@ -22,6 +22,9 @@ import fileSideBars from './fileSideBars'
 import { buildRoutes } from './router'
 import get from 'lodash-es/get'
 
+// dirty: importing view from other extension within project
+import SearchResults from '../../web-app-search/src/views/List.vue'
+
 // just a dummy function to trick gettext tools
 function $gettext(msg) {
   return msg
@@ -108,6 +111,7 @@ export default {
     PrivateLink,
     PublicFiles,
     PublicLink,
+    SearchResults,
     SharedViaLink,
     SharedWithMe,
     SharedWithOthers,

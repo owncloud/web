@@ -6,7 +6,7 @@
         v-if="isEmpty"
         id="files-shared-via-link-empty"
         class="files-empty"
-        icon="group"
+        icon="link"
       >
         <template #message>
           <span v-translate>There are no resources with a public link at the moment</span>
