@@ -14,9 +14,7 @@ export function initVueAuthenticate(config) {
       response_mode: 'query',
       scope: 'openid profile offline_access',
       monitorSession: false,
-      // set uri directly to the login route to prevent problems with query parameters.
-      // See https://github.com/owncloud/web/issues/3285
-      post_logout_redirect_uri: buildUrl('/login'),
+      post_logout_redirect_uri: buildUrl('/'),
       silent_redirect_uri: buildUrl('/oidc-silent-redirect.html'),
       accessTokenExpiringNotificationTime: 10,
       automaticSilentRenew: true,
