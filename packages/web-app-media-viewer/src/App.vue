@@ -18,6 +18,11 @@
       <video v-if="medium.isVideo" :key="`media-video-${medium.id}`" controls preload>
         <source :src="medium.url" :type="`video/${medium.ext}`" />
       </video>
+      <audio v-if="medium.isAudio" controls>
+        <source :src="medium.url" type="audio/ogg" />
+        <source :src="medium.url" type="audio/mpeg" />
+        <span v-text="$gettext('Your browser does not support the audio tag.')" />
+      </audio>
       <img
         v-else
         :key="`media-image-${medium.id}`"
@@ -156,7 +161,7 @@ export default {
       }
 
       return this.activeFiles.filter((file) => {
-        return file.extension.toLowerCase().match(/(png|jpg|jpeg|gif|mp4|webm|ogg)/)
+        return file.extension.toLowerCase().match(/(png|jpg|jpeg|gif|mp4|webm|ogg|mp3)/)
       })
     },
     activeMediaFile() {
@@ -201,12 +206,20 @@ export default {
       return ['mp4', 'webm', 'ogg']
     },
 
+    audioExtensions() {
+      return ['mp3']
+    },
+
     isActiveMediaFileTypeVideo() {
       return this.videoExtensions.includes(this.activeMediaFile.extension.toLowerCase())
     },
 
+    isActiveMediaFileTypeAudio() {
+      return this.audioExtensions.includes(this.activeMediaFile.extension.toLowerCase())
+    },
+
     isActiveMediaFileTypeImage() {
-      return !this.isActiveMediaFileTypeVideo
+      return !this.isActiveMediaFileTypeVideo && !this.isActiveMediaFileTypeAudio
     },
 
     isUrlSigningEnabled() {
@@ -295,6 +308,7 @@ export default {
             url: mediaUrl,
             ext: this.activeMediaFile.extension,
             isVideo: this.isActiveMediaFileTypeVideo,
+            isAudio: this.isActiveMediaFileTypeAudio,
             isImage: this.isActiveMediaFileTypeImage
           })
           this.medium = this.activeMediaFileCached

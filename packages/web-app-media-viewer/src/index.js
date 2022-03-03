@@ -52,6 +52,10 @@ const appInfo = {
       ...fileExtensionConfig
     },
     {
+      extension: 'mp3',
+      ...fileExtensionConfig
+    },
+    {
       extension: 'webm',
       ...fileExtensionConfig
     },
