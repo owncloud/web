@@ -11,6 +11,7 @@ Summary
 * Bugfix - Breadcrumb 'All Files' link: [#6467](https://github.com/owncloud/web/pull/6467)
 * Bugfix - No selection info right sidebar: [#6502](https://github.com/owncloud/web/issues/6502)
 * Bugfix - Update file list when creating new files: [#5530](https://github.com/owncloud/web/issues/5530)
+* Enhancement - Display search results within files app: [#6496](https://github.com/owncloud/web/issues/6496)
 * Enhancement - Option to enable Vue history mode: [#6363](https://github.com/owncloud/web/issues/6363)
 * Enhancement - Redesign OcBreadcrumb: [#6218](https://github.com/owncloud/web/issues/6218)
 * Enhancement - Redesign create and upload buttons: [#6279](https://github.com/owncloud/web/issues/6279)
@@ -49,6 +50,16 @@ Details
 
    https://github.com/owncloud/web/issues/5530
    https://github.com/owncloud/web/pull/6358
+
+* Enhancement - Display search results within files app: [#6496](https://github.com/owncloud/web/issues/6496)
+
+   We've updated the "Search in all files" view to be displayed within the files app instead of
+   showing them in a dedicated extension. This way, users don't loose their context and can still
+   use sidebar.
+
+   https://github.com/owncloud/web/issues/6496
+   https://github.com/owncloud/web/issues/6507
+   https://github.com/owncloud/web/pulls/6511
 
 * Enhancement - Option to enable Vue history mode: [#6363](https://github.com/owncloud/web/issues/6363)
 
