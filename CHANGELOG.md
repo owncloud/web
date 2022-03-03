@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Breadcrumb 'All Files' link: [#6467](https://github.com/owncloud/web/pull/6467)
+* Bugfix - Load capabilities for password protected public links: [#6471](https://github.com/owncloud/web/pull/6471)
 * Bugfix - No selection info right sidebar: [#6502](https://github.com/owncloud/web/issues/6502)
 * Bugfix - Update file list when creating new files: [#5530](https://github.com/owncloud/web/issues/5530)
 * Enhancement - Display search results within files app: [#6496](https://github.com/owncloud/web/issues/6496)
@@ -32,6 +33,13 @@ Details
 
    https://github.com/owncloud/web/issues/6327
    https://github.com/owncloud/web/pull/6467
+
+* Bugfix - Load capabilities for password protected public links: [#6471](https://github.com/owncloud/web/pull/6471)
+
+   We've enabled capability loading for password protected public links.
+
+   https://github.com/owncloud/web/issues/5863
+   https://github.com/owncloud/web/pull/6471
 
 * Bugfix - No selection info right sidebar: [#6502](https://github.com/owncloud/web/issues/6502)
 
