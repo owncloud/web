@@ -1,7 +1,6 @@
 <template>
   <portal to="app.runtime.modal">
     <oc-modal
-      id="edit-quota-modal"
       :title="modalTitle"
       :button-cancel-text="$gettext('Cancel')"
       :button-confirm-text="$gettext('Confirm')"
@@ -11,7 +10,6 @@
     >
       <template #content>
         <oc-select
-          id="quota-input-select"
           v-model="selectedOption"
           :selectable="optionSelectable"
           taggable
