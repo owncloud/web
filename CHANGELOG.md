@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - File handling in apps: [#6456](https://github.com/owncloud/web/pull/6456)
+* Bugfix - Show no auth popup on password protected public links in ownCloud 10: [#6530](https://github.com/owncloud/web/pull/6530)
 * Bugfix - Don't write error message on passing ReadmeContentModal.spec.js test: [#6525](https://github.com/owncloud/web/pull/6525)
 * Bugfix - Prevent cross-site scripting attack while displaying space description: [#6523](https://github.com/owncloud/web/pull/6523)
 * Enhancement - Update the graph SDK: [#6519](https://github.com/owncloud/web/pull/6519)
@@ -22,6 +23,15 @@ Details
    in personal files, favorites, share views and spaces.
 
    https://github.com/owncloud/web/pull/6456
+
+* Bugfix - Show no auth popup on password protected public links in ownCloud 10: [#6530](https://github.com/owncloud/web/pull/6530)
+
+   We fixed a native browser auth popup erroneously being shown for password protected public
+   links with ownCloud 10.
+
+   https://github.com/owncloud/web/issues/5727
+   https://github.com/owncloud/web/pull/6530
+   https://github.com/owncloud/owncloud-sdk/pull/1020
 
 * Bugfix - Don't write error message on passing ReadmeContentModal.spec.js test: [#6525](https://github.com/owncloud/web/pull/6525)
 
