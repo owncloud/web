@@ -185,7 +185,8 @@ export default {
         x: this.thumbDimensions,
         y: this.thumbDimensions,
         // strip double quotes from etag
-        c: this.activeMediaFile.etag.substr(1, this.activeMediaFile.etag.length - 2),
+        // we have no etag, e.g. on shared with others page
+        c: this.activeMediaFile.etag?.substr(1, this.activeMediaFile.etag.length - 2),
         scalingup: 0,
         preview: 1,
         a: 1
@@ -256,7 +257,7 @@ export default {
 
     // update route and url
     updateLocalHistory() {
-      this.$route.params.filePath = this.activeMediaFile.path
+      this.$route.params.filePath = this.activeMediaFile.webDavPath
       history.pushState({}, document.title, this.$router.resolve(this.$route).href)
     },
 

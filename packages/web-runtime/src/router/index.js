@@ -50,7 +50,9 @@ const base = document.querySelector('base')
 export const router = patchRouter(
   new Router({
     parseQuery(query) {
-      return qs.parse(query)
+      return qs.parse(query, {
+        allowDots: true
+      })
     },
     stringifyQuery(obj) {
       return qs.stringify(obj, {
