@@ -185,10 +185,15 @@ module.exports = {
         const disabled = await this.isExpiryDateDisabled(dateToSet)
         if (disabled) {
           console.log('WARNING: Cannot change expiration date to disabled value!')
-          await this.click(
-            client.page.FilesPageElement.SharingDialog.collaboratorsDialog().elements
-              .expirationDatePickerTrigger.selector
-          )
+          await this.api.elements('@datePickerButton', ({ value }) => {
+            for (const { ELEMENT } of value) {
+              this.api.elementIdDisplayed(ELEMENT, (result) => {
+                if (result.value === true) {
+                  this.api.elementIdClick(ELEMENT)
+                }
+              })
+            }
+          })
           return false
         }
       }
@@ -227,6 +232,9 @@ module.exports = {
     },
     datepickerMonthAndYearTitle: {
       selector: '.vc-nav-title.vc-grid-focus'
+    },
+    datePickerButton: {
+      selector: 'button[data-testid="recipient-datepicker-btn"]'
     }
   }
 }

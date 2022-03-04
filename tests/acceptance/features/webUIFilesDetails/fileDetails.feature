@@ -77,7 +77,7 @@ Feature: User can open the details panel for any file or folder
     And user "Alice" has created a public link with following settings in the server
       | path | simple-folder |
     And the user has browsed to the shared-via-link page
-    When the user opens the actions sidebar panel of file "simple-folder" on the webUI
+    When the user opens the actions sidebar panel of folder "simple-folder" on the webUI
     Then the thumbnail should be visible in the app-sidebar
     When the user switches to "people" panel in details panel using the webUI
     Then the "people" details panel should be visible
@@ -158,7 +158,7 @@ Feature: User can open the details panel for any file or folder
     When the user browses to the tags page
     And the user searches for tag "simple" using the webUI
     Then folder "simple-folder" should be listed on the webUI
-    When the user opens the actions sidebar panel of file "simple-folder" on the webUI
+    When the user opens the actions sidebar panel of folder "simple-folder" on the webUI
     Then the thumbnail should be visible in the app-sidebar
     When the user switches to "people" panel in details panel using the webUI
     Then the "people" details panel should be visible

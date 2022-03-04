@@ -422,7 +422,18 @@ module.exports = {
     },
 
     displayAllCollaboratorsAutocompleteResults: function () {
-      return this.click('@sharingAutoCompleteShowAllResultsButton')
+      return this.isVisible(
+        {
+          selector: '@sharingAutoCompleteShowAllResultsButton',
+          timeout: this.api.globals.waitForNegativeConditionTimeout,
+          suppressNotFoundErrors: true
+        },
+        (result) => {
+          if (result.value === true) {
+            this.click('@sharingAutoCompleteShowAllResultsButton')
+          }
+        }
+      )
     },
 
     /**

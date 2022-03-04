@@ -10,7 +10,7 @@ module.exports = {
       return this.waitForElementVisible('@sidebar').waitForElementVisible('@fileInfoIcon')
     },
     closeSidebarIfOpen: async function (timeout = 300) {
-      if (!(await this.isSideBarOpen(timeout))) {
+      if (!(await this.isSideBarOpen(false))) {
         return this.api.page.FilesPageElement.filesList()
       }
 
@@ -24,14 +24,16 @@ module.exports = {
       }
       return this.api.page.FilesPageElement.filesList()
     },
-    isSideBarOpen: async function (timeout = 500) {
+    isSideBarOpen: async function (expectedToOpen = true) {
       const element = this.elements.sidebar
       let isVisible = false
+      const timeout = expectedToOpen ? 5000 : this.api.globals.waitForNegativeConditionTimeout
       await this.isVisible(
         {
           locateStrategy: element.locateStrategy,
           selector: element.selector,
-          timeout: timeoutHelper.parseTimeout(timeout)
+          timeout: timeoutHelper.parseTimeout(timeout),
+          suppressNotFoundErrors: !expectedToOpen
         },
         (result) => {
           isVisible = result.value === true
@@ -44,18 +46,22 @@ module.exports = {
       elementType = 'any',
       expectedToOpen = true
     ) {
-      let timeout = 5000
-      if (!expectedToOpen) {
-        timeout = 500
-      }
-
-      if (!(await this.isSideBarOpen(timeout))) {
+      if (!(await this.isSideBarOpen(expectedToOpen))) {
         return false
       }
       const selector = this.getResourceInfoSelector(resource, elementType)
       let resourceInfoVisible = false
-      await this.isVisible({ locateStrategy: 'xpath', selector, timeout }, (result) => {
-        resourceInfoVisible = result.status === 0
+      await this.api.elements('xpath', selector, ({ value }) => {
+        if (value.length === 0) {
+          return
+        }
+        for (const { ELEMENT } of value) {
+          this.api.elementIdDisplayed(ELEMENT, function (result) {
+            if (result.value === true) {
+              resourceInfoVisible = true
+            }
+          })
+        }
       })
       return resourceInfoVisible
     },
@@ -70,15 +76,15 @@ module.exports = {
     },
     activatePanel: async function (item) {
       const panelName = item === 'people' ? 'collaborators' : item
-      const active = await this.isPanelActive(
-        item,
-        this.api.globals.waitForNegativeConditionTimeout
-      )
+      const active = await this.isPanelActive(item, false)
       if (!active) {
         let backBtnVisible = false
-        const backBtn = this.elements.sidebarBackBtn
         await this.isVisible(
-          { locateStrategy: backBtn.locateStrategy, selector: backBtn.selector, timeout: 200 },
+          {
+            selector: '@sidebarBackBtn',
+            timeout: this.api.globals.waitForNegativeConditionTimeout,
+            suppressNotFoundErrors: true
+          },
           (result) => {
             backBtnVisible = result.value === true
           }
@@ -134,15 +140,19 @@ module.exports = {
       }
       return items
     },
-    isPanelActive: async function (panelName, timeout = null) {
+    isPanelActive: async function (panelName, expectToBeActive = true) {
       panelName = panelName === 'people' ? 'collaborators' : panelName
       const element = this.elements[panelName + 'Panel']
       let isVisible = false
+
+      const timeout = expectToBeActive ? 5000 : this.api.globals.waitForNegativeConditionTimeout
+
       await this.isVisible(
         {
           locateStrategy: element.locateStrategy,
           selector: element.selector,
-          timeout: timeoutHelper.parseTimeout(timeout)
+          timeout: timeoutHelper.parseTimeout(timeout),
+          suppressNotFoundErrors: !expectToBeActive
         },
         (result) => {
           isVisible = result.value === true
@@ -157,15 +167,19 @@ module.exports = {
      * @param {number} timeout
      * @returns {Promise<boolean>}
      */
-    isPanelSelectable: async function (panelName, timeout = 300) {
+    isPanelSelectable: async function (panelName, expectToBeSelectable = true) {
       panelName = panelName === 'people' ? 'collaborators' : panelName
       const element = this.elements[panelName + 'PanelMenuItem']
       let isVisible = false
+
+      const timeout = expectToBeSelectable ? 5000 : this.api.globals.waitForNegativeConditionTimeout
+
       await this.isVisible(
         {
           locateStrategy: element.locateStrategy,
           selector: element.selector,
-          timeout: timeoutHelper.parseTimeout(timeout)
+          timeout: timeoutHelper.parseTimeout(timeout),
+          suppressNotFoundErrors: !expectToBeSelectable
         },
         (result) => {
           isVisible = result.value === true
@@ -173,11 +187,11 @@ module.exports = {
       )
       return isVisible
     },
-    isLinksPanelSelectable: async function () {
-      return await this.isPanelSelectable('links')
+    isLinksPanelSelectable: async function (expectToBeSelectable = true) {
+      return await this.isPanelSelectable('links', expectToBeSelectable)
     },
-    isSharingPanelSelectable: async function () {
-      return await this.isPanelSelectable('people')
+    isSharingPanelSelectable: async function (expectToBeSelectable = true) {
+      return await this.isPanelSelectable('people', expectToBeSelectable)
     },
     markFavoriteSidebar: function () {
       return this.waitForElementVisible('@sidebar')

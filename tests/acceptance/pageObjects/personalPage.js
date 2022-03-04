@@ -80,7 +80,14 @@ module.exports = {
         await this.setValue('@dialogInput', name)
       }
 
-      await this.click('@dialogConfirmBtnEnabled').waitForAjaxCallsToStartAndFinish()
+      const timeout = expectToSucceed ? 5000 : this.api.globals.waitForNegativeConditionTimeout
+      await this.click(
+        {
+          selector: '@dialogConfirmBtnEnabled',
+          suppressNotFoundErrors: !expectToSucceed
+        },
+        timeout
+      ).waitForAjaxCallsToStartAndFinish()
 
       if (expectToSucceed) {
         await this.waitForElementNotPresent('@dialog')
@@ -112,7 +119,14 @@ module.exports = {
         await this.setValue('@dialogInput', name)
       }
 
-      await this.click('@dialogConfirmBtnEnabled')
+      const timeout = expectToSucceed ? 5000 : this.api.globals.waitForNegativeConditionTimeout
+      await this.click(
+        {
+          selector: '@dialogConfirmBtnEnabled',
+          suppressNotFoundErrors: !expectToSucceed
+        },
+        timeout
+      )
 
       if (expectToSucceed) {
         await this.waitForElementNotPresent('@dialog')
@@ -263,7 +277,16 @@ module.exports = {
         await this.setValue('@dialogInput', name)
       }
 
-      await this.initAjaxCounters().click('@dialogConfirmBtnEnabled').waitForOutstandingAjaxCalls()
+      const timeout = expectToSucceed ? 5000 : this.api.globals.waitForNegativeConditionTimeout
+      await this.initAjaxCounters()
+        .click(
+          {
+            selector: '@dialogConfirmBtnEnabled',
+            suppressNotFoundErrors: !expectToSucceed
+          },
+          timeout
+        )
+        .waitForOutstandingAjaxCalls()
 
       if (expectToSucceed) {
         await this.waitForElementNotPresent('@dialog')
@@ -298,7 +321,8 @@ module.exports = {
       await this.isVisible(
         {
           selector: '@clearSelectionBtn',
-          timeout: client.globals.waitForNegativeConditionTimeout
+          timeout: client.globals.waitForNegativeConditionTimeout,
+          suppressNotFoundErrors: true
         },
         (result) => {
           activeFileSelection = result.value === true
