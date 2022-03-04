@@ -9815,6 +9815,12 @@ __metadata:
   languageName: node
   linkType: hard
 
+"pdf-viewer@workspace:packages/web-app-pdf-viewer":
+  version: 0.0.0-use.local
+  resolution: "pdf-viewer@workspace:packages/web-app-pdf-viewer"
+  languageName: unknown
+  linkType: soft
+
 "pend@npm:~1.2.0":
   version: 1.2.0
   resolution: "pend@npm:1.2.0"

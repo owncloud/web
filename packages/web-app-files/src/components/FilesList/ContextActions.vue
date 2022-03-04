@@ -140,8 +140,7 @@ export default {
     menuItemsContext() {
       const fileHandlers = [
         ...this.$_fileActions_editorActions,
-        ...this.$_fileActions_loadExternalAppActions(this.filterParams.resources),
-        ...this.$_fetch_items
+        ...this.$_fileActions_loadExternalAppActions(this.filterParams.resources)
       ]
 
       return [...fileHandlers].filter((item) => item.isEnabled(this.filterParams))

@@ -10,7 +10,6 @@ import Delete from './actions/delete'
 import DownloadArchive from './actions/downloadArchive'
 import DownloadFile from './actions/downloadFile'
 import Favorite from './actions/favorite'
-import Fetch from './actions/fetch'
 import Move from './actions/move'
 import Navigate from './actions/navigate'
 import Rename from './actions/rename'
@@ -18,7 +17,6 @@ import Restore from './actions/restore'
 import kebabCase from 'lodash-es/kebabCase'
 
 const actionsMixins = [
-  'fetch',
   'navigate',
   'downloadArchive',
   'downloadFile',
@@ -44,7 +42,6 @@ export default {
     DownloadFile,
     DownloadArchive,
     Favorite,
-    Fetch,
     Move,
     Navigate,
     Rename,

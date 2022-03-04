@@ -10,6 +10,7 @@
     "packages/web-app-files",
     "packages/web-app-markdown-editor",
     "packages/web-app-media-viewer",
+    "packages/web-app-pdf-viewer",
     "packages/web-app-search",
     "packages/web-client",
     "packages/web-pkg",
