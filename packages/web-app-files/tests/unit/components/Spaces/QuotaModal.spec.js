@@ -37,6 +37,7 @@ describe('QuotaModal', () => {
     })
 
     it('should show message on server error', async () => {
+      jest.spyOn(console, 'error').mockImplementation(() => {})
       mockAxios.request.mockImplementationOnce(() => {
         return Promise.reject(new Error())
       })
