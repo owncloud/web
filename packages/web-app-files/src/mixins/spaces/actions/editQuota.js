@@ -12,7 +12,7 @@ export default {
       return [
         {
           name: 'editQuota',
-          icon: 'hard-drive',
+          icon: 'cloud',
           label: () => {
             return this.$gettext('Edit quota')
           },
