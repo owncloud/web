@@ -13,7 +13,7 @@
       name="file"
       multiple
       tabindex="-1"
-      accept="image/*"
+      :accept="supportedSpaceImageMimeTypes"
       @change="$_uploadImage_uploadImageSpace"
     />
     <oc-list id="oc-spaces-actions-sidebar" class-name="oc-mt-s">
@@ -41,6 +41,7 @@ import UploadImage from '../../../mixins/spaces/actions/uploadImage'
 import EditQuota from '../../../mixins/spaces/actions/editQuota'
 import QuotaModal from '../../Spaces/QuotaModal.vue'
 import ReadmeContentModal from '../../../components/Spaces/ReadmeContentModal.vue'
+import { ThumbnailService } from '../../../constants'
 
 export default {
   name: 'SpaceActions',
@@ -80,6 +81,11 @@ export default {
     },
     quotaModalIsOpen() {
       return this.$data.$_editQuota_modalOpen
+    },
+    supportedSpaceImageMimeTypes() {
+      return ThumbnailService.SupportedMimeTypes.filter((mimeType) =>
+        mimeType.startsWith('image/')
+      ).join(',')
     }
   },
   methods: {

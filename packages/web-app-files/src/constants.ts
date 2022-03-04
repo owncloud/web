@@ -12,3 +12,13 @@ export abstract class ImageType {
   static readonly Preview: string = 'preview'
   static readonly Avatar: string = 'avatar'
 }
+
+export abstract class ThumbnailService {
+  static readonly SupportedMimeTypes: Array<string> = [
+    'image/png',
+    'image/jpg',
+    'image/jpeg',
+    'image/gif',
+    'text/plain'
+  ]
+}

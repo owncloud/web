@@ -3,6 +3,7 @@ import { clientService } from 'web-pkg/src/services'
 import { mapMutations, mapActions, mapGetters } from 'vuex'
 import { buildResource } from '../../../helpers/resources'
 import { bus } from 'web-pkg/src/instance'
+import { ThumbnailService } from '../../../constants'
 
 export default {
   computed: {
@@ -20,7 +21,7 @@ export default {
             if (resources.length !== 1) {
               return false
             }
-            if (!resources[0].mimeType?.startsWith('image/')) {
+            if (!this.$_setSpaceImage_supportedMimeTypes.includes(resources[0].mimeType)) {
               return false
             }
             return isLocationSpacesActive(this.$router, 'files-spaces-project')
@@ -30,6 +31,9 @@ export default {
           class: 'oc-files-actions-set-space-image-trigger'
         }
       ]
+    },
+    $_setSpaceImage_supportedMimeTypes: function () {
+      return ThumbnailService.SupportedMimeTypes.filter((mimeType) => mimeType.startsWith('image/'))
     }
   },
   methods: {

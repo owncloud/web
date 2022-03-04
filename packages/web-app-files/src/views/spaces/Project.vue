@@ -158,7 +158,7 @@ import ListInfo from '../../components/FilesList/ListInfo.vue'
 import Pagination from '../../components/FilesList/Pagination.vue'
 import ContextActions from '../../components/FilesList/ContextActions.vue'
 import MixinFileActions from '../../mixins/fileActions'
-import { ImageDimension, ImageType } from '../../constants'
+import { ImageDimension, ImageType, ThumbnailService } from '../../constants'
 import debounce from 'lodash-es/debounce'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { clientService } from 'web-pkg/src/services'
@@ -357,6 +357,11 @@ export default {
     },
     readmeContentModalIsOpen() {
       return this.$data.$_editReadmeContent_modalOpen
+    },
+    supportedSpaceImageMimeTypes() {
+      return ThumbnailService.SupportedMimeTypes.filter((mimeType) =>
+        mimeType.startsWith('image/')
+      ).join(',')
     }
   },
   watch: {

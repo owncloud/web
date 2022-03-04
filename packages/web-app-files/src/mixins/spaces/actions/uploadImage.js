@@ -1,6 +1,7 @@
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { clientService } from 'web-pkg/src/services'
 import { bus } from 'web-pkg/src/instance'
+import { ThumbnailService } from '../../../constants'
 
 export default {
   data: function () {
@@ -38,9 +39,20 @@ export default {
       this.$data.$_uploadImage_selectedSpace = resources[0]
       this.$refs.spaceImageInput.click()
     },
-    $_uploadImage_uploadImageSpace(ev) {
+    $_uploadImage_uploadImageSpace: function (ev) {
       const graphClient = clientService.graphAuthenticated(this.configuration.server, this.getToken)
       const file = ev.currentTarget.files[0]
+
+      if (
+        !ThumbnailService.SupportedMimeTypes.filter((mimeType) =>
+          mimeType.startsWith('image/')
+        ).includes(file.type)
+      ) {
+        return this.showMessage({
+          title: this.$gettext('Failed to upload space image'),
+          status: 'danger'
+        })
+      }
 
       const extraHeaders = {}
       if (file.lastModifiedDate) {
