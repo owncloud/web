@@ -7,11 +7,23 @@
     <template v-else>
       <div class="oc-flex oc-flex-between oc-flex-middle">
         <h1 id="account-page-title" v-translate class="oc-page-title">Account</h1>
-        <oc-button v-if="editUrl" variation="primary" type="a" :href="editUrl">
+        <oc-button
+          v-if="editUrl"
+          variation="primary"
+          type="a"
+          :href="editUrl"
+          data-testid="account-page-edit-url-btn"
+        >
           <oc-icon name="edit" />
           <translate>Edit</translate>
         </oc-button>
-        <oc-button v-else-if="editRoute" variation="primary" type="router-link" :to="editRoute">
+        <oc-button
+          v-else-if="editRoute"
+          variation="primary"
+          type="router-link"
+          :to="editRoute"
+          data-testid="account-page-edit-route-btn"
+        >
           <oc-icon name="edit" />
           <translate>Edit</translate>
         </oc-button>
@@ -20,39 +32,35 @@
       <h2 v-translate class="oc-text-bold oc-text-initial oc-mb">Account Information</h2>
 
       <dl class="account-page-info oc-flex oc-flex-wrap">
-        <div class="oc-mb oc-width-1-2@s">
-          <dt v-translate class="account-page-info-username oc-text-normal oc-text-muted">
-            Username
-          </dt>
+        <div class="account-page-info-username oc-mb oc-width-1-2@s">
+          <dt v-translate class="oc-text-normal oc-text-muted">Username</dt>
           <dd>
             {{ user.username || user.id }}
           </dd>
         </div>
-        <div v-if="user.username && user.id">
-          <dt v-translate class="account-page-info-userid oc-text-normal oc-text-muted">User ID</dt>
+        <div v-if="user.username && user.id" class="account-page-info-userid">
+          <dt v-translate class="oc-text-normal oc-text-muted">User ID</dt>
           <dd>
             {{ user.id }}
           </dd>
         </div>
-        <div class="oc-mb oc-width-1-2@s">
-          <dt v-translate class="account-page-info-displayname oc-text-normal oc-text-muted">
-            Display name
-          </dt>
+        <div class="account-page-info-displayname oc-mb oc-width-1-2@s">
+          <dt v-translate class="oc-text-normal oc-text-muted">Display name</dt>
           <dd>
             {{ user.displayname }}
           </dd>
         </div>
-        <div class="oc-mb oc-width-1-2@s">
-          <dt v-translate class="account-page-info-email oc-text-normal oc-text-muted">Email</dt>
+        <div class="account-page-info-email oc-mb oc-width-1-2@s">
+          <dt v-translate class="oc-text-normal oc-text-muted">Email</dt>
           <dd>
             <template v-if="user.email">{{ user.email }}</template>
             <span v-else v-translate>No email has been set up</span>
           </dd>
         </div>
-        <div class="oc-mb oc-width-1-2@s">
+        <div class="account-page-info-groups oc-mb oc-width-1-2@s">
           <dt
             v-translate
-            class="account-page-info-groups oc-text-normal oc-text-muted"
+            class="oc-text-normal oc-text-muted"
             @click="$_oc_settingsAccount_getGroup"
           >
             Group memberships
