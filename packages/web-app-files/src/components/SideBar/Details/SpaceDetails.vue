@@ -3,7 +3,7 @@
     <div class="oc-space-details-sidebar-image oc-text-center">
       <oc-spinner v-if="loadImageTask.isRunning" />
       <div v-else-if="spaceImage" class="oc-position-relative">
-        <img :src="'data:image/jpeg;base64,' + spaceImage" alt="" class="oc-mb-m" />
+        <img :src="spaceImage" alt="" class="oc-mb-m" />
       </div>
       <oc-icon
         v-else
@@ -71,9 +71,13 @@ import Mixins from '../../../mixins'
 import MixinResources from '../../../mixins/resources'
 import { mapActions, mapGetters } from 'vuex'
 import { useTask } from 'vue-concurrency'
-import { buildWebDavSpacesPath } from '../../../helpers/resources'
+import { buildResource, buildWebDavSpacesPath } from '../../../helpers/resources'
+import { useStore } from 'web-pkg/src/composables'
+import { clientService } from 'web-pkg/src/services'
 import { spaceRoleManager } from '../../../helpers/share'
 import SpaceQuota from '../../SpaceQuota.vue'
+import { loadPreview } from '../../../helpers/resource'
+import { ImageDimension } from '../../../constants'
 
 export default {
   name: 'SpaceDetails',
@@ -96,12 +100,25 @@ export default {
         .slice(webDavPathComponents.indexOf(ref.space.id) + 1)
         .join('/')
 
-      const fileContents = yield ref.$client.files.getFileContents(
-        buildWebDavSpacesPath(ref.space.id, path),
-        { responseType: 'arrayBuffer' }
-      )
-
-      spaceImage.value = Buffer.from(fileContents).toString('base64')
+      if (ref.space?.spaceImageData.file.mimeType === 'image/gif') {
+        const fileContents = yield ref.$client.files.getFileContents(
+          buildWebDavSpacesPath(ref.space.id, path),
+          { responseType: 'arrayBuffer' }
+        )
+        spaceImage.value = `data:image/gif;base64, ${Buffer.from(fileContents).toString('base64')}`
+      } else {
+        const fileInfo = yield ref.$client.files.fileInfo(buildWebDavSpacesPath(ref.space.id, path))
+        const resource = buildResource(fileInfo)
+        console.log(resource)
+        spaceImage.value = yield loadPreview({
+          resource,
+          isPublic: false,
+          dimensions: ImageDimension.Preview,
+          server: ref.configuration.server,
+          userId: ref.user.id,
+          token: ref.getToken
+        })
+      }
     })
 
     return { loadImageTask, spaceImage }
@@ -112,7 +129,7 @@ export default {
       'currentFileOutgoingCollaborators',
       'currentFileOutgoingLinks'
     ]),
-    ...mapGetters(['user']),
+    ...mapGetters(['user', 'getToken']),
 
     space() {
       return this.displayedItem.value
