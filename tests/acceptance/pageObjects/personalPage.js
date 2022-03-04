@@ -315,7 +315,7 @@ module.exports = {
       selector: 'input.oc-search-input'
     },
     uploadFilesButton: {
-      selector: '#upload-menu-btn'
+      selector: '#upload-menu-btn:not([disabled])'
     },
     newFileMenuButtonAnyState: {
       selector: '#new-file-menu-btn'
