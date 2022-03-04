@@ -73,12 +73,7 @@
                   <img
                     v-if="imageContentObject[space.id]"
                     class="space-image oc-rounded-top"
-                    :src="
-                      'data:' +
-                      imageContentObject[space.id]['mimeType'] +
-                      ';base64,' +
-                      imageContentObject[space.id]['data']
-                    "
+                    :src="imageContentObject[space.id]['data']"
                     alt=""
                   />
                   <oc-icon
@@ -168,7 +163,7 @@ import { computed } from '@vue/composition-api'
 import { useStore } from 'web-pkg/src/composables'
 import { useTask } from 'vue-concurrency'
 import { createLocationSpaces } from '../../router'
-import { mapMutations, mapActions } from 'vuex'
+import { mapMutations, mapActions, mapGetters } from 'vuex'
 import Rename from '../../mixins/spaces/actions/rename'
 import Delete from '../../mixins/spaces/actions/delete'
 import Disable from '../../mixins/spaces/actions/disable'
@@ -176,8 +171,10 @@ import Restore from '../../mixins/spaces/actions/restore'
 import EditDescription from '../../mixins/spaces/actions/editDescription'
 import ShowDetails from '../../mixins/spaces/actions/showDetails'
 import UploadImage from '../../mixins/spaces/actions/uploadImage'
-import { buildSpace, buildWebDavSpacesPath } from '../../helpers/resources'
+import { buildResource, buildSpace, buildWebDavSpacesPath } from '../../helpers/resources'
 import { clientService } from 'web-pkg/src/services'
+import { loadPreview } from '../../helpers/resource'
+import { ImageDimension } from '../../constants'
 
 export default {
   components: {
@@ -215,6 +212,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['user', 'getToken']),
     hasCreatePermission() {
       // @TODO
       return true
@@ -238,17 +236,36 @@ export default {
           const path = webDavPathComponents
             .slice(webDavPathComponents.indexOf(space.id) + 1)
             .join('/')
-          this.$client.files
-            .getFileContents(buildWebDavSpacesPath(space.id, path), {
-              responseType: 'arrayBuffer'
-            })
-            .then((fileContents) => {
-              this.$set(this.imageContentObject, space.id, {
-                fileId: space.spaceImageData.id,
-                data: Buffer.from(fileContents).toString('base64'),
-                mimeType: space.spaceImageData.file.mimeType
+
+          if (space.spaceImageData.file.mimeType === 'image/gif') {
+            this.$client.files
+              .getFileContents(buildWebDavSpacesPath(space.id, path), {
+                responseType: 'arrayBuffer'
+              })
+              .then((fileContents) => {
+                this.$set(this.imageContentObject, space.id, {
+                  fileId: space.spaceImageData.id,
+                  data: `data:image/gif;base64, ${Buffer.from(fileContents).toString('base64')}`
+                })
+              })
+          } else {
+            this.$client.files.fileInfo(buildWebDavSpacesPath(space.id, path)).then((fileInfo) => {
+              const resource = buildResource(fileInfo)
+              loadPreview({
+                resource,
+                isPublic: false,
+                dimensions: ImageDimension.Preview,
+                server: this.configuration.server,
+                userId: this.user.id,
+                token: this.getToken
+              }).then((imageBlob) => {
+                this.$set(this.imageContentObject, space.id, {
+                  fileId: space.spaceImageData.id,
+                  data: imageBlob
+                })
               })
             })
+          }
         }
       },
       deep: true
