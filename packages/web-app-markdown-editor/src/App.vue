@@ -37,7 +37,8 @@
 <script>
 import MarkdownEditorAppBar from './MarkdownEditorAppBar.vue'
 import { useAppDefaults } from 'web-pkg/src/composables'
-import marked from 'marked'
+import { marked } from 'marked'
+import sanitizeHtml from 'sanitize-html'
 import { useTask } from 'vue-concurrency'
 import { computed, getCurrentInstance, onMounted, ref, unref } from '@vue/composition-api'
 
@@ -86,7 +87,7 @@ export default {
     }
 
     const renderedMarkdown = computed(() => {
-      return unref(currentContent) ? marked(unref(currentContent), { sanitize: true }) : null
+      return unref(currentContent) ? sanitizeHtml(marked(unref(currentContent))) : null
     })
 
     const isDirty = computed(() => {
