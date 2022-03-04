@@ -100,7 +100,8 @@ export default {
         .slice(webDavPathComponents.indexOf(ref.space.id) + 1)
         .join('/')
 
-      if (ref.space?.spaceImageData.file.mimeType === 'image/gif') {
+      if (ref.space.spaceImageData.file.mimeType === 'image/gif') {
+        // TODO: Remove condition as soon https://github.com/owncloud/ocis/issues/3264 is done
         const fileContents = yield ref.$client.files.getFileContents(
           buildWebDavSpacesPath(ref.space.id, path),
           { responseType: 'arrayBuffer' }

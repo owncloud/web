@@ -238,6 +238,7 @@ export default {
             .join('/')
 
           if (space.spaceImageData.file.mimeType === 'image/gif') {
+            // TODO: Remove condition as soon https://github.com/owncloud/ocis/issues/3264 is done
             this.$client.files
               .getFileContents(buildWebDavSpacesPath(space.id, path), {
                 responseType: 'arrayBuffer'
