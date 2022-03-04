@@ -16,7 +16,7 @@
               :class="{ expanded: imageExpanded }"
               class="space-overview-image oc-cursor-pointer"
               alt=""
-              :src="'data:' + imageContent.mimeType + ';base64,' + imageContent.data"
+              :src="imageContent"
               @click="toggleImageExpanded"
             />
           </div>
@@ -149,6 +149,7 @@ import sanitizeHtml from 'sanitize-html'
 import MixinAccessibleBreadcrumb from '../../mixins/accessibleBreadcrumb'
 import { bus } from 'web-pkg/src/instance'
 import { buildResource, buildSpace, buildWebDavSpacesPath } from '../../helpers/resources'
+import { loadPreview } from '../../helpers/resource'
 import ResourceTable, { determineSortFields } from '../../components/FilesList/ResourceTable.vue'
 import { createLocationSpaces } from '../../router'
 import { usePagination, useSort } from '../../composables'
@@ -312,6 +313,7 @@ export default {
       'totalFilesSize',
       'currentFileOutgoingCollaborators'
     ]),
+    ...mapGetters(['user', 'getToken']),
 
     selected: {
       get() {
@@ -376,16 +378,32 @@ export default {
         const path = webDavPathComponents
           .slice(webDavPathComponents.indexOf(this.space.id) + 1)
           .join('/')
-        this.$client.files
-          .getFileContents(buildWebDavSpacesPath(this.space.id, path), {
-            responseType: 'arrayBuffer'
+
+        if (val.file.mimeType === 'image/gif') {
+          this.$client.files
+            .getFileContents(buildWebDavSpacesPath(this.space.id, path), {
+              responseType: 'arrayBuffer'
+            })
+            .then((fileContents) => {
+              this.imageContent = `data:image/gif;base64, ${Buffer.from(fileContents).toString(
+                'base64'
+              )}`
+            })
+        } else {
+          this.$client.files.fileInfo(buildWebDavSpacesPath(this.space.id, path)).then((data) => {
+            const resource = buildResource(data)
+            loadPreview({
+              resource,
+              isPublic: false,
+              dimensions: ImageDimension.Preview,
+              server: this.configuration.server,
+              userId: this.user.id,
+              token: this.getToken
+            }).then((imageBlob) => {
+              this.imageContent = imageBlob
+            })
           })
-          .then((fileContents) => {
-            this.imageContent = {
-              data: Buffer.from(fileContents).toString('base64'),
-              mimeType: this.space.spaceImageData.file.mimeType
-            }
-          })
+        }
       },
       deep: true
     },
