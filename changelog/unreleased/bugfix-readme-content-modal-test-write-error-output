@@ -1,0 +1,6 @@
+Bugfix: Don't write error message on passing ReadmeContentModal.spec.js test
+
+ReadmeContentModal.spec.js test doesn't write error output anymore while passing
+
+https://github.com/owncloud/web/pull/6525
+https://github.com/owncloud/web/issues/6337
