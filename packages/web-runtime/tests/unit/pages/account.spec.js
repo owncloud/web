@@ -33,7 +33,7 @@ const selectors = {
 }
 
 describe('account', () => {
-  describe('when the wrapper is still loading', () => {
+  describe('when the page is still loading', () => {
     let wrapper
     beforeEach(() => {
       wrapper = getWrapper()
@@ -47,12 +47,12 @@ describe('account', () => {
     })
     it('should not render the account page content', () => {
       const accountPageTitle = wrapper.find(selectors.accountPageTitle)
-      const accountPageInfo = wrapper.find('.account-page-info')
+      const accountPageInfo = wrapper.find(selectors.accountPageInfo)
       expect(accountPageTitle.exists()).toBeFalsy()
       expect(accountPageInfo.exists()).toBeFalsy()
     })
   })
-  describe('when the wrapper is not loading anymore', () => {
+  describe('when the page is not in loading state anymore', () => {
     it('should not render the loading state', async () => {
       const store = getStore()
       const wrapper = getWrapper(store)
@@ -75,7 +75,6 @@ describe('account', () => {
           const editUrlButton = wrapper.find(selectors.editUrlButton)
           const editRouteButton = wrapper.find(selectors.editRouteButton)
           expect(editUrlButton).toMatchSnapshot()
-          expect(editUrlButton.attributes()).toMatchSnapshot()
           expect(editRouteButton.exists()).toBeFalsy()
         })
         it('should not be displayed if running with ocis', async () => {
@@ -99,7 +98,6 @@ describe('account', () => {
           await wrapper.setData({ loading: false })
           const editRouteButton = wrapper.find(selectors.editRouteButton)
           expect(editRouteButton).toMatchSnapshot()
-          expect(editRouteButton.attributes()).toMatchSnapshot()
         })
       })
     })

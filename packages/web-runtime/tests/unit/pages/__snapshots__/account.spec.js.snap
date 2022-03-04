@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`account when the wrapper is not loading anymore account information with group information 1`] = `
+exports[`account when the page is not in loading state anymore account information with group information 1`] = `
 <div class="account-page-info-groups oc-mb oc-width-1-2@s">
   <dt class="oc-text-normal oc-text-muted">
     Group memberships
@@ -9,7 +9,7 @@ exports[`account when the wrapper is not loading anymore account information wit
 </div>
 `;
 
-exports[`account when the wrapper is not loading anymore account information without group information 1`] = `
+exports[`account when the page is not in loading state anymore account information without group information 1`] = `
 <dl class="account-page-info oc-flex oc-flex-wrap">
   <div class="account-page-info-username oc-mb oc-width-1-2@s">
     <dt class="oc-text-normal oc-text-muted">Username</dt>
@@ -37,34 +37,16 @@ exports[`account when the wrapper is not loading anymore account information wit
 </dl>
 `;
 
-exports[`account when the wrapper is not loading anymore edit buttons edit route button should be displayed if running with ocis and has navItems 1`] = `
+exports[`account when the page is not in loading state anymore edit buttons edit route button should be displayed if running with ocis and has navItems 1`] = `
 <oc-button-stub variation="primary" type="router-link" to="some-route" data-testid="account-page-edit-route-btn">
   <oc-icon-stub name="edit"></oc-icon-stub>
   <translate-stub tag="span">Edit</translate-stub>
 </oc-button-stub>
 `;
 
-exports[`account when the wrapper is not loading anymore edit buttons edit route button should be displayed if running with ocis and has navItems 2`] = `
-Object {
-  "data-testid": "account-page-edit-route-btn",
-  "to": "some-route",
-  "type": "router-link",
-  "variation": "primary",
-}
-`;
-
-exports[`account when the wrapper is not loading anymore edit buttons edit url button should be displayed if not running with ocis 1`] = `
+exports[`account when the page is not in loading state anymore edit buttons edit url button should be displayed if not running with ocis 1`] = `
 <oc-button-stub variation="primary" type="a" href="http://server/address/index.php/settings/personal" data-testid="account-page-edit-url-btn">
   <oc-icon-stub name="edit"></oc-icon-stub>
   <translate-stub tag="span">Edit</translate-stub>
 </oc-button-stub>
-`;
-
-exports[`account when the wrapper is not loading anymore edit buttons edit url button should be displayed if not running with ocis 2`] = `
-Object {
-  "data-testid": "account-page-edit-url-btn",
-  "href": "http://server/address/index.php/settings/personal",
-  "type": "a",
-  "variation": "primary",
-}
 `;
