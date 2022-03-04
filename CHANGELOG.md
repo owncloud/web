@@ -8,10 +8,35 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - File handling in apps: [#6456](https://github.com/owncloud/web/pull/6456)
+* Bugfix - Don't write error message on passing ReadmeContentModal.spec.js test: [#6525](https://github.com/owncloud/web/pull/6525)
+* Bugfix - Prevent cross-site scripting attack while displaying space description: [#6523](https://github.com/owncloud/web/pull/6523)
 * Enhancement - Update the graph SDK: [#6519](https://github.com/owncloud/web/pull/6519)
 
 Details
 -------
+
+* Bugfix - File handling in apps: [#6456](https://github.com/owncloud/web/pull/6456)
+
+   We fixed loading and saving files in apps in all contexts. It's now possible to open files in apps
+   in personal files, favorites, share views and spaces.
+
+   https://github.com/owncloud/web/pull/6456
+
+* Bugfix - Don't write error message on passing ReadmeContentModal.spec.js test: [#6525](https://github.com/owncloud/web/pull/6525)
+
+   ReadmeContentModal.spec.js test doesn't write error output anymore while passing
+
+   https://github.com/owncloud/web/issues/6337
+   https://github.com/owncloud/web/pull/6525
+
+* Bugfix - Prevent cross-site scripting attack while displaying space description: [#6523](https://github.com/owncloud/web/pull/6523)
+
+   We've added a new package that strips out possible XSS attack code while displaying the space
+   description
+
+   https://github.com/owncloud/web/issues/6526
+   https://github.com/owncloud/web/pull/6523
 
 * Enhancement - Update the graph SDK: [#6519](https://github.com/owncloud/web/pull/6519)
 
