@@ -382,7 +382,7 @@ export default {
       }
     },
     displayThumbnails() {
-      return !this.configuration.options.disablePreviews
+      return !this.configuration.options.disablePreviews && this.viewMode === ShareStatus.accepted
     }
   },
 
