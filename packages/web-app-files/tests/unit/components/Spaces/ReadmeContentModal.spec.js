@@ -11,7 +11,7 @@ localVue.use(Vuex)
 
 afterEach(() => jest.clearAllMocks())
 
-describe('ReadeContentModal', () => {
+describe('ReadmeContentModal', () => {
   describe('method "editReadme"', () => {
     it('should show message on success', async () => {
       const wrapper = getWrapper()

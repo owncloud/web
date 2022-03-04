@@ -9,7 +9,7 @@
       v-if="quotaModalIsOpen"
       :cancel="closeQuotaModal"
       :space="resources[0]"
-    ></quota-modal>
+    />
     <input
       id="space-image-upload-input"
       ref="spaceImageInput"

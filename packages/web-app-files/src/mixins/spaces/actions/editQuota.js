@@ -25,7 +25,7 @@ export default {
             return resources[0].spaceQuota
           },
           componentType: 'oc-button',
-          class: 'oc-files-actions-edit-quota-content-trigger'
+          class: 'oc-files-actions-edit-quota-trigger'
         }
       ]
     }

@@ -37,7 +37,7 @@
         </oc-select>
         <p
           class="oc-mt-xs oc-text-meta"
-          v-text="$gettext('Select an item or enter your own value')"
+          v-text="$gettext('Select a quota option or enter your own value')"
         />
       </template>
     </oc-modal>
@@ -109,7 +109,7 @@ export default {
       return this.space.spaceQuota.total === this.selectedOption.value
     },
     modalTitle() {
-      return this.$gettextInterpolate(this.$gettext('Edit quota for space %{name}'), {
+      return this.$gettextInterpolate(this.$gettext('Change quota for space %{name}'), {
         name: this.space.name
       })
     }
@@ -126,7 +126,7 @@ export default {
 
       if (isNaN(newTotalQuota)) {
         return this.showMessage({
-          title: this.$gettext('Editing space quota failed…'),
+          title: this.$gettext('Changing space quota failed…'),
           status: 'danger'
         })
       }
@@ -142,7 +142,7 @@ export default {
             value: data.quota
           })
           this.showMessage({
-            title: this.$gettext('Space quota was edited successfully')
+            title: this.$gettext('Space quota was changed successfully')
           })
         })
         .catch((error) => {
