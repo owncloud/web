@@ -8863,19 +8863,8 @@ __metadata:
 "markdown-editor@workspace:packages/web-app-markdown-editor":
   version: 0.0.0-use.local
   resolution: "markdown-editor@workspace:packages/web-app-markdown-editor"
-  dependencies:
-    marked: ^3.0.0
   languageName: unknown
   linkType: soft
-
-"marked@npm:^3.0.0":
-  version: 3.0.2
-  resolution: "marked@npm:3.0.2"
-  bin:
-    marked: bin/marked
-  checksum: 6f88083a7e50494f97af9f92f1b03a299ecde78055f7378dd0837f12aa2e192db84b7ed528d3e7008fd8d26d39f23a2a07af2a349899917171531574798563b5
-  languageName: node
-  linkType: hard
 
 "marked@npm:^4.0.12":
   version: 4.0.12
