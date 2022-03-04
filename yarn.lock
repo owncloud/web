@@ -5302,6 +5302,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dompurify@npm:^2.3.6":
+  version: 2.3.6
+  resolution: "dompurify@npm:2.3.6"
+  checksum: 4b2bbf6bc68ebd776aec4a533cef74a5ae30391eed528f3df748af71da318afdc298b6f40449bef093b7454ffd2ae82656636560474de5a3b34316b762c85b12
+  languageName: node
+  linkType: hard
+
 "domutils@npm:^1.7.0":
   version: 1.7.0
   resolution: "domutils@npm:1.7.0"
@@ -8867,6 +8874,15 @@ __metadata:
   bin:
     marked: bin/marked
   checksum: 6f88083a7e50494f97af9f92f1b03a299ecde78055f7378dd0837f12aa2e192db84b7ed528d3e7008fd8d26d39f23a2a07af2a349899917171531574798563b5
+  languageName: node
+  linkType: hard
+
+"marked@npm:^4.0.12":
+  version: 4.0.12
+  resolution: "marked@npm:4.0.12"
+  bin:
+    marked: bin/marked.js
+  checksum: 7575117f85a8986652f3ac8b8a7b95056c4c5fce01a1fc76dc4c7960412cb4c9bd9da8133487159b6b3ff84f52b543dfe9a36f826a5f358892b5ec4b6824f192
   languageName: node
   linkType: hard
 
@@ -13543,6 +13559,7 @@ __metadata:
     "@vue/composition-api": ^1.4.9
     axios: ^0.25.0
     cross-fetch: ^3.0.6
+    dompurify: ^2.3.6
     easygettext: ^2.16.1
     filesize: ^8.0.7
     focus-trap: ^6.4.0
@@ -13550,6 +13567,7 @@ __metadata:
     fuse.js: ^6.5.3
     lodash-es: ^4.17.21
     luxon: ^2.3.0
+    marked: ^4.0.12
     oidc-client: 1.11.5
     owncloud-design-system: ^12.2.1
     owncloud-sdk: ~2.0.0
