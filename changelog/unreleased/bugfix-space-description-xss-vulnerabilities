@@ -1,0 +1,6 @@
+Bugfix: Prevent cross-site scripting attack while displaying space description
+
+We've added a new package that strips out possible XSS attack code while displaying the space description
+
+https://github.com/owncloud/web/pull/6523
+https://github.com/owncloud/web/issues/6526
