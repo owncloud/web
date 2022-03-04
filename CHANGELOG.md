@@ -1,3 +1,24 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v5.2.0...master
+
+Summary
+-------
+
+* Enhancement - Update the graph SDK: [#6519](https://github.com/owncloud/web/pull/6519)
+
+Details
+-------
+
+* Enhancement - Update the graph SDK: [#6519](https://github.com/owncloud/web/pull/6519)
+
+   We've updated the graph SDK to include the "me"-endpoint.
+
+   https://github.com/owncloud/web/pull/6519
+
 Changelog for ownCloud Web [5.2.0] (2022-03-03)
 =======================================
 The following sections list the changes in ownCloud web 5.2.0 relevant to
