@@ -134,7 +134,7 @@ import { computed, ref, unref } from '@vue/composition-api'
 import { useTask } from 'vue-concurrency'
 import { useStore, useRouter, useRouteQuery } from 'web-pkg/src/composables'
 import marked from 'marked'
-import DOMPurify from 'dompurify'
+import sanitizeHtml from 'sanitize-html'
 import MixinAccessibleBreadcrumb from '../../mixins/accessibleBreadcrumb'
 import { bus } from 'web-pkg/src/instance'
 import { buildResource, buildSpace, buildWebDavSpacesPath } from '../../helpers/resources'
@@ -368,7 +368,7 @@ export default {
             }
             const parsedMarkdown = marked.parse(fileContents)
             // Sanitize markdown content to prevent XSS vulnerabilities
-            this.markdownContent = DOMPurify.sanitize(parsedMarkdown)
+            this.markdownContent = sanitizeHtml(parsedMarkdown)
 
             if (this.markdownContent) {
               this.markdownResizeObserver.observe(this.$refs.markdownContainer)
