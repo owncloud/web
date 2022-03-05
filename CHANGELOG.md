@@ -12,6 +12,7 @@ Summary
 * Bugfix - Show no auth popup on password protected public links in ownCloud 10: [#6530](https://github.com/owncloud/web/pull/6530)
 * Bugfix - Don't write error message on passing ReadmeContentModal.spec.js test: [#6525](https://github.com/owncloud/web/pull/6525)
 * Bugfix - Prevent cross-site scripting attack while displaying space description: [#6523](https://github.com/owncloud/web/pull/6523)
+* Enhancement - Allow updating space quota: [#6477](https://github.com/owncloud/web/pull/6477)
 * Enhancement - Update the graph SDK: [#6519](https://github.com/owncloud/web/pull/6519)
 
 Details
@@ -47,6 +48,13 @@ Details
 
    https://github.com/owncloud/web/issues/6526
    https://github.com/owncloud/web/pull/6523
+
+* Enhancement - Allow updating space quota: [#6477](https://github.com/owncloud/web/pull/6477)
+
+   We have implemented a way to update the quota of a space
+
+   https://github.com/owncloud/web/issues/6470
+   https://github.com/owncloud/web/pull/6477
 
 * Enhancement - Update the graph SDK: [#6519](https://github.com/owncloud/web/pull/6519)
 
