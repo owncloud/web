@@ -9,7 +9,7 @@
           :cancel="closeReadmeContentModal"
           :space="space"
         ></readme-content-modal>
-        <quota-modal v-if="quotaModalIsOpen" :cancel="closeQuotaModal" :space="space"/>
+        <quota-modal v-if="quotaModalIsOpen" :cancel="closeQuotaModal" :space="space" />
         <div
           class="oc-grid oc-px-m oc-mt-m"
           :class="{ 'oc-child-width-1-1@s': imageExpanded, 'oc-child-width-1-3@s': !imageExpanded }"

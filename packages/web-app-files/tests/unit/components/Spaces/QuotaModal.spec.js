@@ -63,13 +63,13 @@ describe('QuotaModal', () => {
     })
   })
   describe('method "optionSelectable"', () => {
-    it('should return true while option is a number', async () => {
+    it('should return true while option is a number', () => {
       const wrapper = getWrapper()
       expect(wrapper.vm.optionSelectable({ value: 11 })).toBeTruthy()
       expect(wrapper.vm.optionSelectable({ value: 11.2 })).toBeTruthy()
     })
 
-    it('should return false while option is not a number', async () => {
+    it('should return false while option is not a number', () => {
       const wrapper = getWrapper()
       expect(wrapper.vm.optionSelectable({ value: null })).toBeFalsy()
       expect(wrapper.vm.optionSelectable({ value: 'lorem ipsum' })).toBeFalsy()
