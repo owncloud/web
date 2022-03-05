@@ -85,11 +85,13 @@
             </div>
             <p v-if="space.description" class="oc-mt-rm">{{ space.description }}</p>
             <div>
+              <!-- eslint-disable vue/no-v-html -->
               <div
                 ref="markdownContainer"
                 class="markdown-container"
                 v-html="markdownContent"
               ></div>
+              <!-- eslint-enable -->
               <div v-if="showMarkdownCollapse" class="markdown-collapse oc-text-center oc-mt-s">
                 <oc-button appearance="raw" @click="toggleCollapseMarkdown">
                   <oc-icon :name="markdownCollapseIcon" />
