@@ -9,6 +9,7 @@
           :cancel="closeReadmeContentModal"
           :space="space"
         ></readme-content-modal>
+        <quota-modal v-if="quotaModalIsOpen" :cancel="closeQuotaModal" :space="space" />
         <div
           class="oc-grid oc-px-m oc-mt-m"
           :class="{ 'oc-child-width-1-1@s': imageExpanded, 'oc-child-width-1-3@s': !imageExpanded }"
@@ -158,7 +159,9 @@ import Restore from '../../mixins/spaces/actions/restore'
 import EditDescription from '../../mixins/spaces/actions/editDescription'
 import ShowDetails from '../../mixins/spaces/actions/showDetails'
 import UploadImage from '../../mixins/spaces/actions/uploadImage'
+import EditQuota from '../../mixins/spaces/actions/editQuota'
 import EditReadmeContent from '../../mixins/spaces/actions/editReadmeContent'
+import QuotaModal from '../../components/Spaces/QuotaModal.vue'
 import ReadmeContentModal from '../../components/Spaces/ReadmeContentModal.vue'
 
 const visibilityObserver = new VisibilityObserver()
@@ -172,7 +175,8 @@ export default {
     ListInfo,
     Pagination,
     ContextActions,
-    ReadmeContentModal
+    ReadmeContentModal,
+    QuotaModal
   },
   mixins: [
     MixinAccessibleBreadcrumb,
@@ -185,7 +189,8 @@ export default {
     ShowDetails,
     Restore,
     UploadImage,
-    EditReadmeContent
+    EditReadmeContent,
+    EditQuota
   ],
   setup() {
     const router = useRouter()
@@ -314,6 +319,9 @@ export default {
     displayThumbnails() {
       return !this.configuration.options.disablePreviews
     },
+    quotaModalIsOpen() {
+      return this.$data.$_editQuota_modalOpen
+    },
     readmeContentModalIsOpen() {
       return this.$data.$_editReadmeContent_modalOpen
     }
@@ -421,6 +429,7 @@ export default {
         ...this.$_editDescription_items,
         ...this.$_editReadmeContent_items,
         ...this.$_uploadImage_items,
+        ...this.$_editQuota_items,
         ...this.$_restore_items,
         ...this.$_delete_items,
         ...this.$_disable_items,
@@ -472,6 +481,9 @@ export default {
     },
     isResourceInSelection(resource) {
       return this.selected?.includes(resource)
+    },
+    closeQuotaModal() {
+      this.$_editQuota_closeModal()
     },
     closeReadmeContentModal() {
       this.$_editReadmeContent_closeModal()

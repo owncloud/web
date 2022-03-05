@@ -1,0 +1,6 @@
+Enhancement: Allow updating space quota
+
+We have implemented a way to update the quota of a space
+
+https://github.com/owncloud/web/pull/6477
+https://github.com/owncloud/web/issues/6470

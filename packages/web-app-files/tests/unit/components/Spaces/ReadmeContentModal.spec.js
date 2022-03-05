@@ -11,7 +11,7 @@ localVue.use(Vuex)
 
 afterEach(() => jest.clearAllMocks())
 
-describe('editReadmeContent', () => {
+describe('ReadmeContentModal', () => {
   describe('method "editReadme"', () => {
     it('should show message on success', async () => {
       const wrapper = getWrapper()
@@ -69,15 +69,6 @@ function getWrapper(resolvePutFileContents = true) {
           namespaced: true,
           mutations: {
             UPDATE_RESOURCE_FIELD: jest.fn()
-          },
-          state: {
-            currentFolder: {
-              id: '1fe58d8b-aa69-4c22-baf7-97dd57479f22',
-              spaceReadmeData: {
-                webDavUrl:
-                  'https://localhost:9200/dav/spaces/1fe58d8b-aa69-4c22-baf7-97dd57479f22/.space/readme.md'
-              }
-            }
           }
         }
       }

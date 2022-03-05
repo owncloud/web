@@ -5,6 +5,7 @@
       :cancel="closeReadmeContentModal"
       :space="resources[0]"
     ></readme-content-modal>
+    <quota-modal v-if="quotaModalIsOpen" :cancel="closeQuotaModal" :space="resources[0]" />
     <input
       id="space-image-upload-input"
       ref="spaceImageInput"
@@ -37,6 +38,8 @@ import Restore from '../../../mixins/spaces/actions/restore'
 import EditDescription from '../../../mixins/spaces/actions/editDescription'
 import EditReadmeContent from '../../../mixins/spaces/actions/editReadmeContent'
 import UploadImage from '../../../mixins/spaces/actions/uploadImage'
+import EditQuota from '../../../mixins/spaces/actions/editQuota'
+import QuotaModal from '../../Spaces/QuotaModal.vue'
 import ReadmeContentModal from '../../../components/Spaces/ReadmeContentModal.vue'
 
 export default {
@@ -44,8 +47,17 @@ export default {
   title: ($gettext) => {
     return $gettext('Actions')
   },
-  components: { ActionMenuItem, ReadmeContentModal },
-  mixins: [Rename, Delete, EditDescription, EditReadmeContent, Disable, Restore, UploadImage],
+  components: { ActionMenuItem, QuotaModal, ReadmeContentModal },
+  mixins: [
+    Rename,
+    Delete,
+    EditDescription,
+    EditReadmeContent,
+    Disable,
+    Restore,
+    UploadImage,
+    EditQuota
+  ],
   computed: {
     ...mapGetters('Files', ['highlightedFile']),
     resources() {
@@ -57,6 +69,7 @@ export default {
         ...this.$_editDescription_items,
         ...this.$_uploadImage_items,
         ...this.$_editReadmeContent_items,
+        ...this.$_editQuota_items,
         ...this.$_restore_items,
         ...this.$_delete_items,
         ...this.$_disable_items
@@ -64,11 +77,17 @@ export default {
     },
     readmeContentModalIsOpen() {
       return this.$data.$_editReadmeContent_modalOpen
+    },
+    quotaModalIsOpen() {
+      return this.$data.$_editQuota_modalOpen
     }
   },
   methods: {
     closeReadmeContentModal() {
       this.$_editReadmeContent_closeModal()
+    },
+    closeQuotaModal() {
+      this.$_editQuota_closeModal()
     }
   }
 }
