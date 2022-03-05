@@ -100,25 +100,16 @@ export default {
         .slice(webDavPathComponents.indexOf(ref.space.id) + 1)
         .join('/')
 
-      if (ref.space.spaceImageData.file.mimeType === 'image/gif') {
-        // TODO: Remove condition as soon https://github.com/owncloud/ocis/issues/3264 is done
-        const fileContents = yield ref.$client.files.getFileContents(
-          buildWebDavSpacesPath(ref.space.id, path),
-          { responseType: 'arrayBuffer' }
-        )
-        spaceImage.value = `data:image/gif;base64, ${Buffer.from(fileContents).toString('base64')}`
-      } else {
-        const fileInfo = yield ref.$client.files.fileInfo(buildWebDavSpacesPath(ref.space.id, path))
-        const resource = buildResource(fileInfo)
-        spaceImage.value = yield loadPreview({
-          resource,
-          isPublic: false,
-          dimensions: ImageDimension.Preview,
-          server: ref.configuration.server,
-          userId: ref.user.id,
-          token: ref.getToken
-        })
-      }
+      const fileInfo = yield ref.$client.files.fileInfo(buildWebDavSpacesPath(ref.space.id, path))
+      const resource = buildResource(fileInfo)
+      spaceImage.value = yield loadPreview({
+        resource,
+        isPublic: false,
+        dimensions: ImageDimension.Preview,
+        server: ref.configuration.server,
+        userId: ref.user.id,
+        token: ref.getToken
+      })
     })
 
     return { loadImageTask, spaceImage }

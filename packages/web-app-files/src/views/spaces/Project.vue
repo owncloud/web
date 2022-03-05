@@ -384,32 +384,19 @@ export default {
           .slice(webDavPathComponents.indexOf(this.space.id) + 1)
           .join('/')
 
-        if (this.space.spaceImageData.file.mimeType === 'image/gif') {
-          // TODO: Remove condition as soon https://github.com/owncloud/ocis/issues/3264 is done
-          this.$client.files
-            .getFileContents(buildWebDavSpacesPath(this.space.id, path), {
-              responseType: 'arrayBuffer'
-            })
-            .then((fileContents) => {
-              this.imageContent = `data:image/gif;base64, ${Buffer.from(fileContents).toString(
-                'base64'
-              )}`
-            })
-        } else {
-          this.$client.files.fileInfo(buildWebDavSpacesPath(this.space.id, path)).then((data) => {
-            const resource = buildResource(data)
-            loadPreview({
-              resource,
-              isPublic: false,
-              dimensions: ImageDimension.Preview,
-              server: this.configuration.server,
-              userId: this.user.id,
-              token: this.getToken
-            }).then((imageBlob) => {
-              this.imageContent = imageBlob
-            })
+        this.$client.files.fileInfo(buildWebDavSpacesPath(this.space.id, path)).then((data) => {
+          const resource = buildResource(data)
+          loadPreview({
+            resource,
+            isPublic: false,
+            dimensions: ImageDimension.Preview,
+            server: this.configuration.server,
+            userId: this.user.id,
+            token: this.getToken
+          }).then((imageBlob) => {
+            this.imageContent = imageBlob
           })
-        }
+        })
       },
       deep: true
     },

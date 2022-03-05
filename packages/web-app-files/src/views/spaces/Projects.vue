@@ -237,36 +237,22 @@ export default {
             .slice(webDavPathComponents.indexOf(space.id) + 1)
             .join('/')
 
-          if (space.spaceImageData.file.mimeType === 'image/gif') {
-            // TODO: Remove condition as soon https://github.com/owncloud/ocis/issues/3264 is done
-            this.$client.files
-              .getFileContents(buildWebDavSpacesPath(space.id, path), {
-                responseType: 'arrayBuffer'
-              })
-              .then((fileContents) => {
-                this.$set(this.imageContentObject, space.id, {
-                  fileId: space.spaceImageData.id,
-                  data: `data:image/gif;base64, ${Buffer.from(fileContents).toString('base64')}`
-                })
-              })
-          } else {
-            this.$client.files.fileInfo(buildWebDavSpacesPath(space.id, path)).then((fileInfo) => {
-              const resource = buildResource(fileInfo)
-              loadPreview({
-                resource,
-                isPublic: false,
-                dimensions: ImageDimension.Preview,
-                server: this.configuration.server,
-                userId: this.user.id,
-                token: this.getToken
-              }).then((imageBlob) => {
-                this.$set(this.imageContentObject, space.id, {
-                  fileId: space.spaceImageData.id,
-                  data: imageBlob
-                })
+          this.$client.files.fileInfo(buildWebDavSpacesPath(space.id, path)).then((fileInfo) => {
+            const resource = buildResource(fileInfo)
+            loadPreview({
+              resource,
+              isPublic: false,
+              dimensions: ImageDimension.Preview,
+              server: this.configuration.server,
+              userId: this.user.id,
+              token: this.getToken
+            }).then((imageBlob) => {
+              this.$set(this.imageContentObject, space.id, {
+                fileId: space.spaceImageData.id,
+                data: imageBlob
               })
             })
-          }
+          })
         }
       },
       deep: true
