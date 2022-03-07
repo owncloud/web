@@ -14,6 +14,7 @@ Summary
 * Bugfix - Don't write error message on passing ReadmeContentModal.spec.js test: [#6525](https://github.com/owncloud/web/pull/6525)
 * Bugfix - Prevent cross-site scripting attack while displaying space description: [#6523](https://github.com/owncloud/web/pull/6523)
 * Enhancement - Allow updating space quota: [#6477](https://github.com/owncloud/web/pull/6477)
+* Enhancement - Implement people sharing for spaces: [#6455](https://github.com/owncloud/web/pull/6455)
 * Enhancement - Update the graph SDK: [#6519](https://github.com/owncloud/web/pull/6519)
 
 Details
@@ -63,6 +64,18 @@ Details
 
    https://github.com/owncloud/web/issues/6470
    https://github.com/owncloud/web/pull/6477
+
+* Enhancement - Implement people sharing for spaces: [#6455](https://github.com/owncloud/web/pull/6455)
+
+   Spaces can now be shared with other people. This change specifically includes:
+
+   * listing all members who have access to a space (possible for all space members) * adding
+   members to a space and giving them dedicated roles (possible for managers only) * editing the
+   role of members (possible for managers only) * removing members from a space (possible for
+   managers only)
+
+   https://github.com/owncloud/web/issues/6283
+   https://github.com/owncloud/web/pull/6455
 
 * Enhancement - Update the graph SDK: [#6519](https://github.com/owncloud/web/pull/6519)
 
