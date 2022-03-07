@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Thumbnails only for accepted shares: [#5310](https://github.com/owncloud/web/issues/5310)
 * Bugfix - File handling in apps: [#6456](https://github.com/owncloud/web/pull/6456)
 * Bugfix - Show no auth popup on password protected public links in ownCloud 10: [#6530](https://github.com/owncloud/web/pull/6530)
 * Bugfix - Don't write error message on passing ReadmeContentModal.spec.js test: [#6525](https://github.com/owncloud/web/pull/6525)
@@ -17,6 +18,13 @@ Summary
 
 Details
 -------
+
+* Bugfix - Thumbnails only for accepted shares: [#5310](https://github.com/owncloud/web/issues/5310)
+
+   Only accepted shares now display a thumbnail in the "Shared with me" resource table.
+
+   https://github.com/owncloud/web/issues/5310
+   https://github.com/owncloud/web/pull/6534
 
 * Bugfix - File handling in apps: [#6456](https://github.com/owncloud/web/pull/6456)
 
