@@ -6,7 +6,8 @@ import {
   buildResource,
   buildShare,
   buildCollaboratorShare,
-  buildSpaceShare
+  buildSpaceShare,
+  buildSpace
 } from '../helpers/resources'
 import { $gettext, $gettextInterpolate } from '../gettext'
 import { loadPreview } from '../helpers/resource'
@@ -158,17 +159,15 @@ export default {
       const promises = []
       const spaceShares = []
 
-      for (const permission of space.spacePermissions) {
-        for (const {
-          user: { id }
-        } of permission.grantedTo) {
+      for (const role of Object.keys(space.spaceRoles)) {
+        for (const userId of space.spaceRoles[role]) {
           promises.push(
-            client.users.getUser(id).then((resolved) => {
+            client.users.getUser(userId).then((resolved) => {
               spaceShares.push(
                 buildSpaceShare(
                   {
                     ...resolved.data,
-                    role: permission.roles[0]
+                    role
                   },
                   space.id
                 )
@@ -240,7 +239,10 @@ export default {
         context.commit('INCOMING_SHARES_LOADING', false)
       })
   },
-  changeShare({ commit, getters, rootGetters }, { client, share, permissions, expirationDate }) {
+  changeShare(
+    { commit, getters, rootGetters },
+    { client, graphClient, share, permissions, expirationDate }
+  ) {
     const params = {
       permissions: permissions,
       expireDate: expirationDate
@@ -267,6 +269,16 @@ export default {
             }
             const updatedShare = buildSpaceShare(shareObj, share.id)
             commit('CURRENT_FILE_OUTGOING_SHARES_UPDATE', updatedShare)
+
+            graphClient.drives.getDrive(share.id).then((response) => {
+              const space = buildSpace(response.data)
+              commit('UPDATE_RESOURCE_FIELD', {
+                id: share.id,
+                field: 'spaceRoles',
+                value: space.spaceRoles
+              })
+            })
+
             resolve(updatedShare)
           })
           .catch((e) => {
@@ -294,7 +306,17 @@ export default {
   },
   addShare(
     context,
-    { client, path, shareWith, shareType, permissions, expirationDate, spaceId, displayName }
+    {
+      client,
+      graphClient,
+      path,
+      shareWith,
+      shareType,
+      permissions,
+      expirationDate,
+      spaceId,
+      displayName
+    }
   ) {
     if (shareType === ShareTypes.group.value) {
       client.shares
@@ -344,8 +366,13 @@ export default {
           context.commit('CURRENT_FILE_OUTGOING_SHARES_ADD', buildSpaceShare(shareObj, spaceId))
           context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', true)
 
-          // FIXME
-          return Promise.all([]).then(() => {
+          return graphClient.drives.getDrive(spaceId).then((response) => {
+            const space = buildSpace(response.data)
+            context.commit('UPDATE_RESOURCE_FIELD', {
+              id: spaceId,
+              field: 'spaceRoles',
+              value: space.spaceRoles
+            })
             context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', false)
           })
         })
@@ -394,7 +421,7 @@ export default {
         )
       })
   },
-  deleteShare(context, { client, share, resource }) {
+  deleteShare(context, { client, graphClient, share, resource }) {
     const additionalParams = {}
     if (share.shareType === ShareTypes.space.value) {
       additionalParams.shareWith = share.collaborator.name
@@ -411,8 +438,13 @@ export default {
         } else {
           context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', true)
 
-          // FIXME
-          return Promise.all([]).then(() => {
+          return graphClient.drives.getDrive(share.id).then((response) => {
+            const space = buildSpace(response.data)
+            context.commit('UPDATE_RESOURCE_FIELD', {
+              id: share.id,
+              field: 'spaceRoles',
+              value: space.spaceRoles
+            })
             context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', false)
           })
         }

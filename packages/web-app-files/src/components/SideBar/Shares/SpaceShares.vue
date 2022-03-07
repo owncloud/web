@@ -118,6 +118,7 @@ export default {
     $_ocCollaborators_deleteShare(share) {
       this.deleteShare({
         client: this.$client,
+        graphClient: this.graphClient,
         share: share,
         resource: this.highlightedFile
       }).then(() => {

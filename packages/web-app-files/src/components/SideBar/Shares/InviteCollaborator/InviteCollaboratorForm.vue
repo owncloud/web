@@ -85,6 +85,7 @@ import {
   ShareTypes,
   SpacePeopleShareRoles
 } from '../../../../helpers/share'
+import { clientService } from 'web-pkg/src/services'
 
 export default {
   name: 'InviteCollaboratorForm',
@@ -109,8 +110,7 @@ export default {
   },
   computed: {
     ...mapGetters('Files', ['currentFileOutgoingCollaborators', 'highlightedFile']),
-    ...mapGetters(['user']),
-    ...mapGetters(['configuration', 'isOcis']),
+    ...mapGetters(['configuration', 'isOcis', 'getToken', 'user']),
 
     inviteDescriptionMessage() {
       return this.$gettext('Add new person by name, email or federation IDs')
@@ -133,6 +133,9 @@ export default {
 
     resourceIsSpace() {
       return this.highlightedFile.type === 'space'
+    },
+    graphClient() {
+      return clientService.graphAuthenticated(this.configuration.server, this.getToken)
     }
   },
   mounted() {
@@ -252,6 +255,7 @@ export default {
                 )
             this.addShare({
               client: this.$client,
+              graphClient: this.graphClient,
               path: this.highlightedFile.path,
               $gettext: this.$gettext,
               shareWith: collaborator.value.shareWith,

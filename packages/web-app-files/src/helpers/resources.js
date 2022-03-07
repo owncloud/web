@@ -9,6 +9,7 @@ import {
   SharePermissions,
   ShareStatus,
   ShareTypes,
+  SpacePeopleShareRoles,
   spaceRoleEditor,
   spaceRoleManager,
   spaceRoleViewer
@@ -111,8 +112,12 @@ export function buildResource(resource) {
 }
 
 export function buildSpace(space) {
-  let spaceImageData, spaceReadmeData, spacePermissions
+  let spaceImageData, spaceReadmeData
   let disabled = false
+  const spaceRoles = SpacePeopleShareRoles.list().reduce((obj, role) => {
+    obj[role.name] = []
+    return obj
+  }, {})
 
   if (space.special) {
     spaceImageData = space.special.find((el) => el.specialFolder.name === 'image')
@@ -120,7 +125,13 @@ export function buildSpace(space) {
   }
 
   if (space.root) {
-    spacePermissions = space.root.permissions
+    for (const permission of space.root.permissions) {
+      for (const role of SpacePeopleShareRoles.list()) {
+        if (permission.roles.includes(role.name)) {
+          spaceRoles[role.name].push(...permission.grantedTo.map((el) => el.user.id))
+        }
+      }
+    }
 
     if (space.root.deleted) {
       disabled = space.root.deleted?.state === 'trashed'
@@ -154,7 +165,7 @@ export function buildSpace(space) {
     ownerId: '',
     disabled,
     spaceQuota: space.quota,
-    spacePermissions,
+    spaceRoles,
     spaceImageData,
     spaceReadmeData,
     canUpload: function () {

@@ -1,0 +1,5 @@
+Enhancement: Update the stored space after its members have been changed
+
+We now update the stored space after its members have been changed. Also, the permission-object of a built space has been simplified in the course of this.
+
+https://github.com/owncloud/web/pull/6545

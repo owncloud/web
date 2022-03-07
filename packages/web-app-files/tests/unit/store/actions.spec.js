@@ -1,5 +1,6 @@
 import actions from '../../../src/store/actions'
 import { ShareTypes, spaceRoleManager } from '../../../src/helpers/share'
+import { buildSpace } from '../../../src/helpers/resources'
 
 const stateMock = {
   commit: jest.fn(),
@@ -37,22 +38,24 @@ const clientMock = {
   }
 }
 
+const graphClientMock = {
+  drives: {
+    getDrive: () => {
+      return Promise.resolve({ data: spaceMock })
+    }
+  }
+}
 const shareMock = {
   id: '1',
   shareType: ShareTypes.user.value
 }
 
-const spaceMock = {
+const spaceMock = buildSpace({
   type: 'space',
   name: ' space',
   id: '1',
-  mdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
-  spacePermissions: [{ grantedTo: [{ user: { id: 1 } }], roles: ['manager'] }],
-  spaceQuota: {
-    used: 100,
-    total: 1000
-  }
-}
+  root: { permissions: [{ roles: ['manager'], grantedTo: [{ user: { id: 1 } }] }] }
+})
 
 const spaceShareMock = {
   id: '1',
@@ -91,21 +94,22 @@ describe('vuex store actions', () => {
   })
 
   describe('changeShare', () => {
-    it.each([{ share: spaceShareMock }, { share: shareMock }])(
-      'succeeds using action %s',
-      async (dataSet) => {
-        const commitSpy = jest.spyOn(stateMock, 'commit')
+    it.each([
+      { share: spaceShareMock, expectedCommitCalls: 2 },
+      { share: shareMock, expectedCommitCalls: 1 }
+    ])('succeeds using action %s', async (dataSet) => {
+      const commitSpy = jest.spyOn(stateMock, 'commit')
 
-        await actions.changeShare(stateMock, {
-          client: clientMock,
-          share: dataSet.share,
-          permissions: 1,
-          expirationDate: null
-        })
+      await actions.changeShare(stateMock, {
+        client: clientMock,
+        graphClient: graphClientMock,
+        share: dataSet.share,
+        permissions: 1,
+        expirationDate: null
+      })
 
-        expect(commitSpy).toBeCalledTimes(1)
-      }
-    )
+      expect(commitSpy).toBeCalledTimes(dataSet.expectedCommitCalls)
+    })
   })
 
   describe('addShare', () => {
@@ -117,6 +121,7 @@ describe('vuex store actions', () => {
 
       await actions.addShare(stateMock, {
         client: clientMock,
+        graphClient: graphClientMock,
         shareType: dataSet.shareType,
         spaceId: dataSet.spaceId,
         permissions: 1,
@@ -136,6 +141,7 @@ describe('vuex store actions', () => {
 
       await actions.deleteShare(stateMock, {
         client: clientMock,
+        graphClient: graphClientMock,
         share: dataSet.share,
         resource: {}
       })
