@@ -1,0 +1,5 @@
+Enhancement: Add a watcher for the share panel of a space
+
+We've added a watcher for the share panel of a space to ensure seamless navigation via the share indicator.
+
+https://github.com/owncloud/web/pull/6543

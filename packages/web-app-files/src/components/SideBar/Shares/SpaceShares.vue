@@ -87,8 +87,15 @@ export default {
       return currentUserCollaborator?.role?.name === spaceRoleManager.name
     }
   },
-  mounted() {
-    this.loadSharesTask.perform(this)
+  watch: {
+    highlightedFile: {
+      handler: function (newItem, oldItem) {
+        if (oldItem !== newItem) {
+          this.loadSharesTask.perform(this)
+        }
+      },
+      immediate: true
+    }
   },
   methods: {
     ...mapActions('Files', ['loadCurrentFileOutgoingShares', 'deleteShare']),
