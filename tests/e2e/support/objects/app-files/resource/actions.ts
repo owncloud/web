@@ -13,8 +13,10 @@ export const clickResource = async ({
 }): Promise<void> => {
   const paths = path.split('/')
   for (const name of paths) {
+    const resourceSelector = `[data-test-resource-name="${name}"]`
+    await page.waitForSelector(resourceSelector)
     await Promise.all([
-      page.locator(`[data-test-resource-name="${name}"]`).click(),
+      page.locator(resourceSelector).click(),
       page.waitForResponse((resp) => resp.url().endsWith(encodeURIComponent(name)))
     ])
   }
@@ -93,31 +95,78 @@ export interface downloadResourcesArgs {
   page: Page
   names: string[]
   folder: string
+  via: 'SIDEBAR_PANEL' | 'BATCH_ACTION'
 }
 
 export const downloadResources = async (args: downloadResourcesArgs): Promise<Download[]> => {
-  const { page, names, folder } = args
+  const { page, names, folder, via } = args
   const downloads = []
 
-  if (folder) {
-    await clickResource({ page, path: folder })
-  }
+  switch (via) {
+    case 'SIDEBAR_PANEL': {
+      if (folder) {
+        await clickResource({ page, path: folder })
+      }
 
-  for (const name of names) {
-    await sidebar.open({ page: page, resource: name })
-    await sidebar.openPanel({ page: page, name: 'actions' })
+      for (const name of names) {
+        await sidebar.open({ page: page, resource: name })
+        await sidebar.openPanel({ page: page, name: 'actions' })
 
-    const [download] = await Promise.all([
-      page.waitForEvent('download'),
-      page.locator('#oc-files-actions-sidebar .oc-files-actions-download-file-trigger').click()
-    ])
+        const [download] = await Promise.all([
+          page.waitForEvent('download'),
+          page.locator('#oc-files-actions-sidebar .oc-files-actions-download-file-trigger').click()
+        ])
 
-    await sidebar.close({ page: page })
+        await sidebar.close({ page: page })
 
-    downloads.push(download)
+        downloads.push(download)
+      }
+      break
+    }
+
+    case 'BATCH_ACTION': {
+      await selectMultipleResources({ page: page, names: names, folder: folder })
+      if (names.length === 1) {
+        const [download] = await Promise.all([
+          page.waitForEvent('download'),
+          page.locator('.oc-files-actions-download-file-trigger').click()
+        ])
+        downloads.push(download)
+      } else {
+        const [download] = await Promise.all([
+          page.waitForEvent('download'),
+          page.locator('.oc-files-actions-download-archive-trigger').click()
+        ])
+        downloads.push(download)
+      }
+      break
+    }
   }
 
   return downloads
+}
+
+export type selectResourcesArgs = {
+  page: Page
+  names: string[]
+  folder: string
+}
+
+export const selectMultipleResources = async (args: selectResourcesArgs): Promise<void> => {
+  const { page, folder, names } = args
+  if (folder) {
+    await clickResource({ page: page, path: folder })
+  }
+
+  for (const name of names) {
+    const resourceCheckbox = page.locator(
+      `//*[@data-test-resource-name="${name}"]//ancestor::tr//input`
+    )
+
+    if (!(await resourceCheckbox.isChecked())) {
+      await resourceCheckbox.check()
+    }
+  }
 }
 
 /**/

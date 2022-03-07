@@ -1,4 +1,4 @@
-import { DataTable, Given, When } from '@cucumber/cucumber'
+import { DataTable, When } from '@cucumber/cucumber'
 import { World } from '../../environment'
 import { objects } from '../../../support'
 import { expect } from '@playwright/test'
@@ -34,11 +34,19 @@ When(
   }
 )
 
-Given(
-  '{string} downloads the following resource(s)',
-  async function (this: World, stepUser: string, stepTable: DataTable) {
+When(
+  /^"([^"]*)" downloads the following file(s)? using the (sidebar panel|batch action)$/,
+  async function (
+    this: World,
+    stepUser: string,
+    _: string,
+    actionType: string,
+    stepTable: DataTable
+  ) {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
+    let downloads
+    let files
     const downloadInfo = stepTable.hashes().reduce((acc, stepRow) => {
       const { resource, from } = stepRow
 
@@ -52,13 +60,32 @@ Given(
     }, {})
 
     for (const folder of Object.keys(downloadInfo)) {
-      const files = downloadInfo[folder]
-      const downloads = await resourceObject.download({ folder, names: files })
-
-      expect(files.length).toBe(downloads.length)
-      downloads.forEach((download) => {
-        expect(files).toContain(download.suggestedFilename())
+      files = downloadInfo[folder]
+      downloads = await resourceObject.download({
+        folder,
+        names: files,
+        via: actionType === 'batch action' ? 'BATCH_ACTION' : 'SIDEBAR_PANEL'
       })
+      if (actionType === 'sidebar panel') {
+        expect(files.length).toBe(downloads.length)
+        downloads.forEach((download) => {
+          expect(files).toContain(download.suggestedFilename())
+        })
+      }
+    }
+
+    if (actionType === 'batch action') {
+      if (files.length === 1) {
+        expect(files.length).toBe(downloads.length)
+        downloads.forEach((download) => {
+          expect(files[0]).toBe(download.suggestedFilename())
+        })
+      } else {
+        expect(downloads.length).toBe(1)
+        downloads.forEach((download) => {
+          expect(download.suggestedFilename()).toBe('download.tar')
+        })
+      }
     }
   }
 )

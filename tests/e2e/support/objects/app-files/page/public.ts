@@ -1,5 +1,7 @@
 import { Page } from 'playwright'
 import { File } from '../../../types'
+import util from 'util'
+import path from 'path'
 
 export class Public {
   #page: Page
@@ -22,8 +24,15 @@ export class Public {
   }
 
   async upload({ resources }: { resources: File[] }): Promise<void> {
+    const startUrl = this.#page.url()
+    const resourceSelector = `//tbody/tr/td[contains(@class, "oc-pl-rm") and contains(text(), "%s")]`
     await this.#page
       .locator('//input[@id="file_upload_start" or @class="dz-hidden-input"]')
       .setInputFiles(resources.map((file) => file.path))
+    const names = resources.map((file) => path.basename(file.name))
+    await Promise.all(
+      names.map((name) => this.#page.waitForSelector(util.format(resourceSelector, name)))
+    )
+    await this.#page.goto(startUrl)
   }
 }
