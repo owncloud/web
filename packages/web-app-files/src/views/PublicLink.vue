@@ -43,6 +43,7 @@
               appearance="filled"
               class="oc-login-authorize-button"
               :disabled="!password"
+              submit="submit"
             >
               <translate>Continue</translate>
             </oc-button>

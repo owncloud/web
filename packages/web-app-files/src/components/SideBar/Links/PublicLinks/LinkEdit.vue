@@ -136,6 +136,7 @@
             variation="primary"
             appearance="filled"
             @click="$_addLink"
+            submit="submit"
           >
             <translate>Create</translate>
           </oc-button>
@@ -147,6 +148,7 @@
             variation="primary"
             appearance="filled"
             @click="$_updateLink"
+            submit="submit"
           >
             <translate>Save</translate>
           </oc-button>

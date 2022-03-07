@@ -63,6 +63,7 @@
         appearance="filled"
         @click="share"
         v-text="$gettext('Share')"
+        submit="submit"
       />
     </div>
     <oc-hidden-announcer level="assertive" :announcement="announcement" />
