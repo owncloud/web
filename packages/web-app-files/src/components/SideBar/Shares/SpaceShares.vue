@@ -97,9 +97,6 @@ export default {
       immediate: true
     }
   },
-  mounted() {
-    this.loadSharesTask.perform(this)
-  },
   methods: {
     ...mapActions('Files', ['loadCurrentFileOutgoingShares', 'deleteShare']),
 
