@@ -1,12 +1,8 @@
 <template>
-  <div class="oc-width-1-1 oc-container oc-p">
-    <div v-if="loading" class="oc-flex oc-flex-between oc-flex-middle">
-      <h1 class="oc-page-title">{{ pageTitle }}</h1>
-      <oc-loader />
-    </div>
-    <template v-else>
-      <div class="oc-flex oc-flex-between oc-flex-middle">
-        <h1 id="account-page-title" v-translate class="oc-page-title">Account</h1>
+  <main id="account" class="oc-height-1-1 oc-m">
+    <div class="oc-flex oc-flex-between oc-flex-bottom oc-width-1-1 oc-border-b oc-py">
+      <h1 id="account-page-title" class="oc-page-title oc-m-rm">{{ pageTitle }}</h1>
+      <div>
         <oc-button
           v-if="editUrl"
           variation="primary"
@@ -28,51 +24,51 @@
           <translate>Edit</translate>
         </oc-button>
       </div>
-      <hr />
-      <h2 v-translate class="oc-text-bold oc-text-initial oc-mb">Account Information</h2>
-
-      <dl class="account-page-info oc-flex oc-flex-wrap">
-        <div class="account-page-info-username oc-mb oc-width-1-2@s">
-          <dt v-translate class="oc-text-normal oc-text-muted">Username</dt>
-          <dd>
-            {{ user.username || user.id }}
-          </dd>
-        </div>
-        <div v-if="user.username && user.id" class="account-page-info-userid">
-          <dt v-translate class="oc-text-normal oc-text-muted">User ID</dt>
-          <dd>
-            {{ user.id }}
-          </dd>
-        </div>
-        <div class="account-page-info-displayname oc-mb oc-width-1-2@s">
-          <dt v-translate class="oc-text-normal oc-text-muted">Display name</dt>
-          <dd>
-            {{ user.displayname }}
-          </dd>
-        </div>
-        <div class="account-page-info-email oc-mb oc-width-1-2@s">
-          <dt v-translate class="oc-text-normal oc-text-muted">Email</dt>
-          <dd>
-            <template v-if="user.email">{{ user.email }}</template>
-            <span v-else v-translate>No email has been set up</span>
-          </dd>
-        </div>
-        <div class="account-page-info-groups oc-mb oc-width-1-2@s">
-          <dt
-            v-translate
-            class="oc-text-normal oc-text-muted"
-            @click="$_oc_settingsAccount_getGroup"
+    </div>
+    <h2 v-translate class="oc-text-bold oc-text-initial oc-mb">Account Information</h2>
+    <dl class="account-page-info oc-flex oc-flex-wrap">
+      <div class="account-page-info-username oc-mb oc-width-1-2@s">
+        <dt v-translate class="oc-text-normal oc-text-muted">Username</dt>
+        <dd>
+          {{ user.username || user.id }}
+        </dd>
+      </div>
+      <div v-if="user.username && user.id" class="account-page-info-userid">
+        <dt v-translate class="oc-text-normal oc-text-muted">User ID</dt>
+        <dd>
+          {{ user.id }}
+        </dd>
+      </div>
+      <div class="account-page-info-displayname oc-mb oc-width-1-2@s">
+        <dt v-translate class="oc-text-normal oc-text-muted">Display name</dt>
+        <dd>
+          {{ user.displayname }}
+        </dd>
+      </div>
+      <div class="account-page-info-email oc-mb oc-width-1-2@s">
+        <dt v-translate class="oc-text-normal oc-text-muted">Email</dt>
+        <dd>
+          <template v-if="user.email">{{ user.email }}</template>
+          <span v-else v-translate>No email has been set up</span>
+        </dd>
+      </div>
+      <div class="account-page-info-groups oc-mb oc-width-1-2@s">
+        <dt v-translate class="oc-text-normal oc-text-muted" @click="loadGroups">
+          Group memberships
+        </dt>
+        <dd data-testid="group-names">
+          <oc-spinner
+            v-if="loadingGroups"
+            :aria-label="$gettext('Loading group membership information')"
+          />
+          <span v-else-if="groupNames">{{ groupNames }}</span>
+          <span v-else v-translate data-testid="group-names-empty"
+            >You are not part of any group</span
           >
-            Group memberships
-          </dt>
-          <dd>
-            <span v-if="groupNames">{{ groupNames }}</span>
-            <span v-else v-translate>You are not part of any group</span>
-          </dd>
-        </div>
-      </dl>
-    </template>
-  </div>
+        </dd>
+      </div>
+    </dl>
+  </main>
 </template>
 
 <script>
@@ -81,7 +77,7 @@ export default {
   name: 'Personal',
   data() {
     return {
-      loading: true,
+      loadingGroups: true,
       groups: []
     }
   },
@@ -108,14 +104,12 @@ export default {
     }
   },
   mounted() {
-    this.$_oc_settingsAccount_getGroup()
+    this.loadGroups()
   },
   methods: {
-    $_oc_settingsAccount_getGroup() {
-      this.$client.users.getUserGroups(this.user.id).then((groups) => {
-        this.groups = groups
-        this.loading = false
-      })
+    async loadGroups() {
+      this.groups = await this.$client.users.getUserGroups(this.user.id)
+      this.loadingGroups = false
     }
   }
 }
