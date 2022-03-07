@@ -128,9 +128,7 @@ export function buildSpace(space) {
     for (const permission of space.root.permissions) {
       for (const role of SpacePeopleShareRoles.list()) {
         if (permission.roles.includes(role.name)) {
-          spaceRoles[role.name] = spaceRoles[role.name].concat(
-            permission.grantedTo.map((el) => el.user.id)
-          )
+          spaceRoles[role.name].push(...permission.grantedTo.map((el) => el.user.id))
         }
       }
     }
