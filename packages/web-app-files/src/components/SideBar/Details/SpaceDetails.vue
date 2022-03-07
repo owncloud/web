@@ -181,6 +181,15 @@ export default {
       )
     }
   },
+  watch: {
+    'space.spaceImageData': {
+      handler: function (val) {
+        if (!val) return
+        this.loadImageTask.perform(this)
+      },
+      deep: true
+    }
+  },
   mounted() {
     this.loadImageTask.perform(this)
   },
