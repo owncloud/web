@@ -15,6 +15,7 @@ Summary
 * Bugfix - Prevent cross-site scripting attack while displaying space description: [#6523](https://github.com/owncloud/web/pull/6523)
 * Enhancement - Add a watcher for the share panel of a space: [#6543](https://github.com/owncloud/web/pull/6543)
 * Enhancement - Allow updating space quota: [#6477](https://github.com/owncloud/web/pull/6477)
+* Enhancement - Update the stored space after its members have been changed: [#6545](https://github.com/owncloud/web/pull/6545)
 * Enhancement - Implement people sharing for spaces: [#6455](https://github.com/owncloud/web/pull/6455)
 * Enhancement - Update the graph SDK: [#6519](https://github.com/owncloud/web/pull/6519)
 
@@ -72,6 +73,13 @@ Details
 
    https://github.com/owncloud/web/issues/6470
    https://github.com/owncloud/web/pull/6477
+
+* Enhancement - Update the stored space after its members have been changed: [#6545](https://github.com/owncloud/web/pull/6545)
+
+   We now update the stored space after its members have been changed. Also, the
+   permission-object of a built space has been simplified in the course of this.
+
+   https://github.com/owncloud/web/pull/6545
 
 * Enhancement - Implement people sharing for spaces: [#6455](https://github.com/owncloud/web/pull/6455)
 
