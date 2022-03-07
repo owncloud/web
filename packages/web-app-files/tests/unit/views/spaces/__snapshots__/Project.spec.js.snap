@@ -14,7 +14,7 @@ exports[`Spaces project view space image should show if given 1`] = `
             <oc-button-stub type="button" size="medium" arialabel="Show context menu" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="space-context-btn" class="oc-ml-s">
               <oc-icon-stub name="more-2" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
             </oc-button-stub>
-            <oc-drop-stub dropid="space-context-drop" toggle="#space-context-btn" position="right-start" mode="click" closeonclick="true" paddingsize="small" options="[object Object]"><input id="space-image-upload-input" type="file" name="file" multiple="multiple" tabindex="-1" accept="image/*">
+            <oc-drop-stub dropid="space-context-drop" toggle="#space-context-btn" position="right-start" mode="click" closeonclick="true" paddingsize="small" options="[object Object]"><input id="space-image-upload-input" type="file" name="file" multiple="multiple" tabindex="-1" accept="image/png,image/jpg,image/jpeg,image/gif">
               <ul class="oc-list oc-files-context-actions">
                 <li class="oc-spaces-context-action oc-py-xs oc-px-s">
                   <oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="left" gapsize="medium">
@@ -87,7 +87,7 @@ exports[`Spaces project view space readme should show if given 1`] = `
             <oc-button-stub type="button" size="medium" arialabel="Show context menu" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="space-context-btn" class="oc-ml-s">
               <oc-icon-stub name="more-2" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
             </oc-button-stub>
-            <oc-drop-stub dropid="space-context-drop" toggle="#space-context-btn" position="right-start" mode="click" closeonclick="true" paddingsize="small" options="[object Object]"><input id="space-image-upload-input" type="file" name="file" multiple="multiple" tabindex="-1" accept="image/*">
+            <oc-drop-stub dropid="space-context-drop" toggle="#space-context-btn" position="right-start" mode="click" closeonclick="true" paddingsize="small" options="[object Object]"><input id="space-image-upload-input" type="file" name="file" multiple="multiple" tabindex="-1" accept="image/png,image/jpg,image/jpeg,image/gif">
               <ul class="oc-list oc-files-context-actions">
                 <li class="oc-spaces-context-action oc-py-xs oc-px-s">
                   <oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="left" gapsize="medium">

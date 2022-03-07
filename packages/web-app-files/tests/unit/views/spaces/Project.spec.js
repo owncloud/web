@@ -7,10 +7,19 @@ import mockAxios from 'jest-mock-axios'
 import SpaceProject from '../../../../src/views/spaces/Project.vue'
 import Vuex from 'vuex'
 import { ShareTypes, spaceRoleManager } from '../../../../src/helpers/share'
+import { thumbnailService } from '../../../../src/services'
 
 localVue.use(GetTextPlugin, {
   translations: 'does-not-matter.json',
   silent: true
+})
+
+beforeAll(() => {
+  thumbnailService.initialize({
+    enabled: true,
+    version: '0.1',
+    supportedMimeTypes: ['image/png', 'image/jpg', 'image/jpeg', 'image/gif', 'text/plain']
+  })
 })
 
 beforeEach(mockAxios.reset)
