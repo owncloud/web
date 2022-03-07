@@ -40,7 +40,7 @@ import UploadImage from '../../../mixins/spaces/actions/uploadImage'
 import EditQuota from '../../../mixins/spaces/actions/editQuota'
 import QuotaModal from '../../Spaces/QuotaModal.vue'
 import ReadmeContentModal from '../../../components/Spaces/ReadmeContentModal.vue'
-import { ThumbnailService } from '../../../constants'
+import { thumbnailService } from '../../../services'
 
 export default {
   name: 'SpaceActions',
@@ -58,6 +58,9 @@ export default {
     UploadImage,
     EditQuota
   ],
+  data: function () {
+    return { thumbnailService }
+  },
   computed: {
     ...mapGetters('Files', ['highlightedFile']),
     resources() {
@@ -82,9 +85,9 @@ export default {
       return this.$data.$_editQuota_modalOpen
     },
     supportedSpaceImageMimeTypes() {
-      return ThumbnailService.SupportedMimeTypes.filter((mimeType) =>
-        mimeType.startsWith('image/')
-      ).join(',')
+      return thumbnailService.capability.supportedMimeTypes
+        .filter((mimeType) => mimeType.startsWith('image/'))
+        .join(',')
     }
   },
   methods: {

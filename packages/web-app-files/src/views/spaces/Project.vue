@@ -49,7 +49,7 @@
                     name="file"
                     multiple
                     tabindex="-1"
-                    accept="image/*"
+                    :accept="supportedSpaceImageMimeTypes"
                     @change="$_uploadImage_uploadImageSpace"
                   />
                   <ul class="oc-list oc-files-context-actions">
@@ -160,7 +160,7 @@ import ListInfo from '../../components/FilesList/ListInfo.vue'
 import Pagination from '../../components/FilesList/Pagination.vue'
 import ContextActions from '../../components/FilesList/ContextActions.vue'
 import MixinFileActions from '../../mixins/fileActions'
-import { ImageDimension, ImageType, ThumbnailService } from '../../constants'
+import { ImageDimension, ImageType } from '../../constants'
 import debounce from 'lodash-es/debounce'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { clientService } from 'web-pkg/src/services'
@@ -176,6 +176,7 @@ import EditQuota from '../../mixins/spaces/actions/editQuota'
 import EditReadmeContent from '../../mixins/spaces/actions/editReadmeContent'
 import QuotaModal from '../../components/Spaces/QuotaModal.vue'
 import ReadmeContentModal from '../../components/Spaces/ReadmeContentModal.vue'
+import { thumbnailService } from '../../services'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -303,7 +304,8 @@ export default {
       showMarkdownCollapse: false,
       markdownResizeObserver: new ResizeObserver(this.onMarkdownResize),
       imageExpanded: false,
-      imageContent: null
+      imageContent: null,
+      thumbnailService
     }
   },
   computed: {
@@ -361,9 +363,9 @@ export default {
       return this.$data.$_editReadmeContent_modalOpen
     },
     supportedSpaceImageMimeTypes() {
-      return ThumbnailService.SupportedMimeTypes.filter((mimeType) =>
-        mimeType.startsWith('image/')
-      ).join(',')
+      return thumbnailService.capability.supportedMimeTypes
+        .filter((mimeType) => mimeType.startsWith('image/'))
+        .join(',')
     }
   },
   watch: {
