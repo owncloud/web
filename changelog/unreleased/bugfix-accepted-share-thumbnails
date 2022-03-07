@@ -1,0 +1,6 @@
+Bugfix: Thumbnails only for accepted shares
+
+Only accepted shares now display a thumbnail in the "Shared with me" resource table.
+
+https://github.com/owncloud/web/issues/5310
+https://github.com/owncloud/web/pull/6534
