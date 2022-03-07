@@ -344,6 +344,14 @@ function createStore(store) {
     Store,
     {
       modules: {
+        config: {
+          getters: {
+            configuration: () => ({
+              server: 'https://example.com',
+              options: {}
+            })
+          }
+        },
         user: {
           state: {
             id: 'alice',
