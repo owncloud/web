@@ -49,7 +49,7 @@ export default {
         ).includes(file.type)
       ) {
         return this.showMessage({
-          title: this.$gettext('Failed to upload space image'),
+          title: this.$gettext('The file type is unsupported'),
           status: 'danger'
         })
       }
