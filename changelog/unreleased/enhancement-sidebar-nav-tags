@@ -1,0 +1,6 @@
+Enhancement: Side bar nav tags
+
+We have implemented a way to show a tag next to the sidebar navigation item link text
+
+https://github.com/owncloud/web/pull/6540
+https://github.com/owncloud/web/issues/6259

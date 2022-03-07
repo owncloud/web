@@ -66,6 +66,7 @@ const navItems = [
   {
     name: $gettext('Spaces'),
     icon: 'layout-grid',
+    tag: $gettext('beta'),
     route: {
       path: `/${appInfo.id}/spaces/projects`
     },
