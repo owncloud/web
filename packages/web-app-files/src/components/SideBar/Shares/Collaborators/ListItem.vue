@@ -93,6 +93,7 @@ import { DateTime } from 'luxon'
 import EditDropdown from './EditDropdown.vue'
 import RoleDropdown from '../RoleDropdown.vue'
 import { SharePermissions, ShareTypes } from '../../../../helpers/share'
+import { clientService } from 'web-pkg/src/services'
 
 export default {
   name: 'ListItem',
@@ -113,7 +114,7 @@ export default {
   },
   computed: {
     ...mapGetters('Files', ['highlightedFile']),
-    ...mapGetters(['isOcis']),
+    ...mapGetters(['isOcis', 'getToken', 'configuration']),
     ...mapState(['user']),
 
     shareType() {
@@ -218,6 +219,10 @@ export default {
         .endOf('day')
         .setLocale(this.$language.current)
         .toRelative()
+    },
+
+    graphClient() {
+      return clientService.graphAuthenticated(this.configuration.server, this.getToken)
     }
   },
   methods: {
@@ -263,6 +268,7 @@ export default {
           )
       this.changeShare({
         client: this.$client,
+        graphClient: this.graphClient,
         share: this.share,
         permissions: bitmask,
         expirationDate: expirationDate || ''
