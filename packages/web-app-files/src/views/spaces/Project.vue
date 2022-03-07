@@ -10,68 +10,78 @@
           :space="space"
         ></readme-content-modal>
         <quota-modal v-if="quotaModalIsOpen" :cancel="closeQuotaModal" :space="space" />
-        <div
-          class="oc-grid oc-px-m oc-mt-m"
-          :class="{ 'oc-child-width-1-1@s': imageExpanded, 'oc-child-width-1-3@s': !imageExpanded }"
-        >
-          <div v-if="imageContent">
-            <div class="oc-position-relative">
-              <img
-                :class="{ expanded: imageExpanded }"
-                class="space-overview-image oc-cursor-pointer"
-                alt=""
-                :src="'data:' + imageContent.mimeType + ';base64,' + imageContent.data"
-                @click="toggleImageExpanded"
-              />
-            </div>
+        <div class="oc-px-m oc-mt-m" :class="{ 'oc-flex': !imageExpanded }">
+          <div v-if="imageContent" :class="{ 'oc-width-1-4 oc-mr-l': !imageExpanded }">
+            <img
+              :class="{ expanded: imageExpanded }"
+              class="space-overview-image oc-cursor-pointer"
+              alt=""
+              :src="'data:' + imageContent.mimeType + ';base64,' + imageContent.data"
+              @click="toggleImageExpanded"
+            />
           </div>
-          <div>
-            <div class="oc-flex oc-mb-s oc-flex-middle">
-              <h1 class="space-overview-name oc-text-truncate">{{ space.name }}</h1>
-              <oc-button
-                :id="`space-context-btn`"
-                v-oc-tooltip="$gettext('Show context menu')"
-                :aria-label="$gettext('Show context menu')"
-                appearance="raw"
-              >
-                <oc-icon name="more-2" />
-              </oc-button>
-              <oc-drop
-                :drop-id="`space-context-drop`"
-                :toggle="`#space-context-btn`"
-                mode="click"
-                close-on-click
-                :options="{ delayHide: 0 }"
-                padding-size="small"
-                position="right-start"
-              >
-                <input
-                  id="space-image-upload-input"
-                  ref="spaceImageInput"
-                  type="file"
-                  name="file"
-                  multiple
-                  tabindex="-1"
-                  accept="image/*"
-                  @change="$_uploadImage_uploadImageSpace"
-                />
-                <ul class="oc-list oc-files-context-actions">
-                  <li
-                    v-for="(action, actionIndex) in getContextMenuActions(space)"
-                    :key="`action-${actionIndex}`"
-                    class="oc-spaces-context-action oc-py-xs oc-px-s"
-                  >
-                    <oc-button
-                      appearance="raw"
-                      justify-content="left"
-                      @click="action.handler({ resources: [space] })"
+          <div :class="{ 'oc-width-3-4': !imageExpanded }">
+            <div class="oc-flex oc-mb-s oc-flex-middle oc-flex-between">
+              <div class="oc-flex oc-flex-middle">
+                <h1 class="space-overview-name oc-text-truncate">{{ space.name }}</h1>
+                <oc-button
+                  :id="`space-context-btn`"
+                  v-oc-tooltip="$gettext('Show context menu')"
+                  :aria-label="$gettext('Show context menu')"
+                  appearance="raw"
+                  class="oc-ml-s"
+                >
+                  <oc-icon name="more-2" />
+                </oc-button>
+                <oc-drop
+                  :drop-id="`space-context-drop`"
+                  :toggle="`#space-context-btn`"
+                  mode="click"
+                  close-on-click
+                  :options="{ delayHide: 0 }"
+                  padding-size="small"
+                  position="right-start"
+                >
+                  <input
+                    id="space-image-upload-input"
+                    ref="spaceImageInput"
+                    type="file"
+                    name="file"
+                    multiple
+                    tabindex="-1"
+                    accept="image/*"
+                    @change="$_uploadImage_uploadImageSpace"
+                  />
+                  <ul class="oc-list oc-files-context-actions">
+                    <li
+                      v-for="(action, actionIndex) in getContextMenuActions(space)"
+                      :key="`action-${actionIndex}`"
+                      class="oc-spaces-context-action oc-py-xs oc-px-s"
                     >
-                      <oc-icon :name="action.icon" />
-                      {{ action.label() }}
-                    </oc-button>
-                  </li>
-                </ul>
-              </oc-drop>
+                      <oc-button
+                        appearance="raw"
+                        justify-content="left"
+                        @click="action.handler({ resources: [space] })"
+                      >
+                        <oc-icon :name="action.icon" />
+                        {{ action.label() }}
+                      </oc-button>
+                    </li>
+                  </ul>
+                </oc-drop>
+              </div>
+              <oc-button
+                v-if="!loadSharesTask.isRunning && currentFileOutgoingCollaborators.length"
+                :aria-label="$gettext('Open context menu and show members')"
+                appearance="raw"
+                @click="openSidebarSharePanel"
+              >
+                <oc-icon name="group" fill-type="line" size="small" />
+                <span
+                  class="space-overview-people-count oc-text-small"
+                  v-text="peopleCountString"
+                ></span>
+              </oc-button>
             </div>
             <p v-if="space.description" class="oc-mt-rm">{{ space.description }}</p>
             <div>
@@ -261,9 +271,18 @@ export default {
       })
     })
 
+    const loadSharesTask = useTask(function* (signal, ref) {
+      yield ref.loadCurrentFileOutgoingShares({
+        client: graphClient,
+        path: ref.space.id,
+        space: ref.space
+      })
+    })
+
     return {
       space,
       loadResourcesTask,
+      loadSharesTask,
       resourceTargetLocation: createLocationSpaces('files-spaces-project'),
       paginatedResources,
       paginationPages,
@@ -290,7 +309,8 @@ export default {
       'selectedFiles',
       'currentFolder',
       'totalFilesCount',
-      'totalFilesSize'
+      'totalFilesSize',
+      'currentFileOutgoingCollaborators'
     ]),
 
     selected: {
@@ -318,6 +338,17 @@ export default {
     },
     displayThumbnails() {
       return !this.configuration.options.disablePreviews
+    },
+    peopleCountString() {
+      const translated = this.$ngettext(
+        '%{count} member',
+        '%{count} members',
+        this.currentFileOutgoingCollaborators.length
+      )
+
+      return this.$gettextInterpolate(translated, {
+        count: this.currentFileOutgoingCollaborators.length
+      })
     },
     quotaModalIsOpen() {
       return this.$data.$_editQuota_modalOpen
@@ -388,6 +419,7 @@ export default {
   },
   async mounted() {
     await this.loadResourcesTask.perform(this, false, this.$route.params.item || '')
+    this.loadSharesTask.perform(this)
 
     if (this.markdownResizeObserver) {
       this.markdownResizeObserver.unobserve(this.$refs.markdownContainer)
@@ -413,7 +445,11 @@ export default {
     }
   },
   methods: {
-    ...mapActions('Files', ['loadIndicators', 'loadPreview']),
+    ...mapActions('Files', ['loadIndicators', 'loadPreview', 'loadCurrentFileOutgoingShares']),
+    ...mapActions('Files/sidebar', {
+      openSidebarWithPanel: 'openWithPanel',
+      closeSidebar: 'close'
+    }),
     ...mapMutations('Files', [
       'SET_CURRENT_FOLDER',
       'LOAD_FILES',
@@ -485,6 +521,11 @@ export default {
     closeQuotaModal() {
       this.$_editQuota_closeModal()
     },
+    async openSidebarSharePanel() {
+      await this.closeSidebar()
+      this.SET_FILE_SELECTION([this.space])
+      this.openSidebarWithPanel('space-share-item')
+    },
     closeReadmeContentModal() {
       this.$_editReadmeContent_closeModal()
     }
@@ -496,9 +537,9 @@ export default {
 .space-overview {
   &-image {
     border-radius: 10px;
-    max-height: 250px;
-    object-fit: cover;
     width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
   }
 
   &-image.expanded {
@@ -508,6 +549,10 @@ export default {
 
   &-name {
     font-size: 1.5rem;
+  }
+
+  &-people-count {
+    white-space: nowrap;
   }
 
   .markdown-container.collapsed {

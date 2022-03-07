@@ -7,6 +7,7 @@ import FileLinks from './components/SideBar/Links/FileLinks.vue'
 import NoSelection from './components/SideBar/NoSelection.vue'
 import SpaceActions from './components/SideBar/Actions/SpaceActions.vue'
 import SpaceDetails from './components/SideBar/Details/SpaceDetails.vue'
+import SpaceShares from './components/SideBar/Shares/SpaceShares.vue'
 import { isLocationCommonActive, isLocationSpacesActive } from './router'
 
 export default [
@@ -108,6 +109,15 @@ export default [
     app: 'space-actions-item',
     component: SpaceActions,
     icon: 'slideshow-3',
+    iconFillType: 'line',
+    get enabled() {
+      return highlightedFile?.type === 'space'
+    }
+  }),
+  ({ highlightedFile }) => ({
+    app: 'space-share-item',
+    component: SpaceShares,
+    icon: 'group',
     iconFillType: 'line',
     get enabled() {
       return highlightedFile?.type === 'space'

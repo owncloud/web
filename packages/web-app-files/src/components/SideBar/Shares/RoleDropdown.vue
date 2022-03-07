@@ -77,7 +77,13 @@
 <script>
 import get from 'lodash-es/get'
 import RoleItem from '../Shared/RoleItem.vue'
-import { PeopleShareRoles, SharePermissions, ShareRole } from '../../../helpers/share'
+import {
+  PeopleShareRoles,
+  SharePermissions,
+  ShareRole,
+  SpacePeopleShareRoles
+} from '../../../helpers/share'
+import * as uuid from 'uuid'
 
 export default {
   name: 'RoleDropdown',
@@ -116,7 +122,7 @@ export default {
   computed: {
     roleButtonId() {
       if (this.shareId) {
-        return `files-collaborators-role-button-${this.shareId}`
+        return `files-collaborators-role-button-${this.shareId}-${uuid.v4()}`
       }
       return 'files-collaborators-role-button-new'
     },
@@ -136,10 +142,16 @@ export default {
       return PeopleShareRoles.custom(this.resource.isFolder)
     },
     availableRoles() {
+      if (this.resourceIsSpace) {
+        return SpacePeopleShareRoles.list()
+      }
       return PeopleShareRoles.list(this.resource.isFolder)
     },
     availablePermissions() {
       return this.customPermissionsRole.permissions(this.allowSharePermission)
+    },
+    resourceIsSpace() {
+      return this.resource.type === 'space'
     }
   },
 
@@ -158,7 +170,14 @@ export default {
 
   methods: {
     applyRoleAndPermissions() {
-      this.selectedRole = this.existingRole || PeopleShareRoles.list(this.resource.isFolder)[0]
+      if (this.existingRole) {
+        this.selectedRole = this.existingRole
+      } else if (this.resourceIsSpace) {
+        this.selectedRole = SpacePeopleShareRoles.list()[0]
+      } else {
+        this.selectedRole = PeopleShareRoles.list(this.resource.isFolder)[0]
+      }
+
       if (this.selectedRole.hasCustomPermissions) {
         this.customPermissions = this.existingPermissions
       } else {

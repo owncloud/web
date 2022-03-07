@@ -4,7 +4,15 @@ import { DateTime } from 'luxon'
 import { getIndicators } from './statusIndicators'
 import { $gettext } from '../gettext'
 import { DavPermission, DavProperty } from 'web-pkg/src/constants'
-import { PeopleShareRoles, SharePermissions, ShareStatus, ShareTypes } from './share'
+import {
+  PeopleShareRoles,
+  SharePermissions,
+  ShareStatus,
+  ShareTypes,
+  spaceRoleEditor,
+  spaceRoleManager,
+  spaceRoleViewer
+} from './share'
 
 function _getFileExtension(name) {
   const extension = path.extname(name)
@@ -324,7 +332,42 @@ export function buildShare(s, file, allowSharePermission) {
   if (parseInt(s.share_type) === ShareTypes.link.value) {
     return _buildLink(s)
   }
+  if (parseInt(s.share_type) === ShareTypes.space.value) {
+    return buildSpaceShare(s, file)
+  }
+
   return buildCollaboratorShare(s, file, allowSharePermission)
+}
+
+export function buildSpaceShare(s, spaceId) {
+  let permissions, role
+
+  switch (s.role) {
+    case spaceRoleManager.name:
+      permissions = spaceRoleManager.bitmask(true)
+      role = spaceRoleManager
+      break
+    case spaceRoleEditor.name:
+      permissions = spaceRoleEditor.bitmask(true)
+      role = spaceRoleEditor
+      break
+    case spaceRoleViewer.name:
+      permissions = spaceRoleViewer.bitmask(true)
+      role = spaceRoleViewer
+      break
+  }
+
+  return {
+    shareType: ShareTypes.space.value,
+    id: spaceId,
+    collaborator: {
+      name: s.onPremisesSamAccountName,
+      displayName: s.displayName,
+      additionalInfo: null
+    },
+    permissions,
+    role
+  }
 }
 
 function _buildLink(link) {

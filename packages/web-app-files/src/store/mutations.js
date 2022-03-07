@@ -4,6 +4,7 @@ import { DateTime } from 'luxon'
 import { set, has } from 'lodash-es'
 import { getIndicators } from '../helpers/statusIndicators'
 import { renameResource } from '../helpers/resources'
+import { ShareTypes } from '../helpers/share'
 
 export default {
   UPDATE_FILE_PROGRESS(state, file) {
@@ -121,14 +122,28 @@ export default {
     state.currentFileOutgoingShares.push(share)
   },
   CURRENT_FILE_OUTGOING_SHARES_REMOVE(state, share) {
+    if (share.shareType === ShareTypes.space.value) {
+      state.currentFileOutgoingShares = state.currentFileOutgoingShares.filter(
+        (s) => share.id === s.id && share.collaborator.name !== s.collaborator.name
+      )
+      return
+    }
     state.currentFileOutgoingShares = state.currentFileOutgoingShares.filter(
       (s) => share.id !== s.id
     )
   },
   CURRENT_FILE_OUTGOING_SHARES_UPDATE(state, share) {
-    const fileIndex = state.currentFileOutgoingShares.findIndex((s) => {
-      return s.id === share.id
-    })
+    let fileIndex
+    if (share.shareType === ShareTypes.space.value) {
+      fileIndex = state.currentFileOutgoingShares.findIndex((s) => {
+        return share.id === s.id && share.collaborator.name === s.collaborator.name
+      })
+    } else {
+      fileIndex = state.currentFileOutgoingShares.findIndex((s) => {
+        return s.id === share.id
+      })
+    }
+
     if (fileIndex >= 0) {
       Vue.set(state.currentFileOutgoingShares, fileIndex, share)
     } else {

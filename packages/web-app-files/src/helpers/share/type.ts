@@ -35,12 +35,13 @@ export abstract class ShareTypes {
   static readonly link = new ShareType('link', 3, $gettext('Link'))
   static readonly guest = new ShareType('guest', 4, $gettext('Guest'))
   static readonly remote = new ShareType('remote', 6, $gettext('Federated'))
+  static readonly space = new ShareType('space', 7, $gettext('User'))
 
-  static readonly individuals = [this.user, this.guest, this.remote]
+  static readonly individuals = [this.user, this.guest, this.remote, this.space]
   static readonly collectives = [this.group]
   static readonly unauthenticated = [this.link]
-  static readonly authenticated = [this.user, this.group, this.guest, this.remote]
-  static readonly all = [this.user, this.group, this.link, this.guest, this.remote]
+  static readonly authenticated = [this.user, this.group, this.guest, this.remote, this.space]
+  static readonly all = [this.user, this.group, this.link, this.guest, this.remote, this.space]
 
   static isIndividual(type: ShareType): boolean {
     return this.individuals.includes(type)

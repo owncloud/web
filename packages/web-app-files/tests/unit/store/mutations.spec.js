@@ -1,5 +1,6 @@
 import mutations from '../../../src/store/mutations'
 import { cloneDeep } from 'lodash-es'
+import { ShareTypes } from '../../../src/helpers/share'
 
 const stateFixture = {
   files: [
@@ -82,5 +83,50 @@ describe('vuex store mutations', () => {
     SET_HIDDEN_FILES_VISIBILITY(state, false)
 
     expect(state.areHiddenFilesShown).toEqual(false)
+  })
+
+  describe('CURRENT_FILE_OUTGOING_SHARES_REMOVE', () => {
+    it('removes an outgoing user share', () => {
+      const shareToRemove = { id: 1, shareType: ShareTypes.user.value }
+      const state = { currentFileOutgoingShares: [shareToRemove] }
+      mutations.CURRENT_FILE_OUTGOING_SHARES_REMOVE(state, shareToRemove)
+
+      expect(state.currentFileOutgoingShares.length).toEqual(0)
+    })
+    it('removes an outgoing space share', () => {
+      const shareToRemove = {
+        id: 1,
+        shareType: ShareTypes.space.value,
+        collaborator: { name: 'admin' }
+      }
+      const state = { currentFileOutgoingShares: [shareToRemove] }
+      mutations.CURRENT_FILE_OUTGOING_SHARES_REMOVE(state, shareToRemove)
+
+      expect(state.currentFileOutgoingShares.length).toEqual(0)
+    })
+  })
+
+  describe('CURRENT_FILE_OUTGOING_SHARES_UPDATE', () => {
+    it('updates an outgoing user share', () => {
+      const share = { id: 1, shareType: ShareTypes.user.value, permissions: 1 }
+      const state = { currentFileOutgoingShares: [share] }
+      const updatedShare = { ...share, permissions: 31 }
+      mutations.CURRENT_FILE_OUTGOING_SHARES_UPDATE(state, updatedShare)
+
+      expect(state.currentFileOutgoingShares[0]).toEqual(updatedShare)
+    })
+    it('updates an outgoing space share', () => {
+      const share = {
+        id: 1,
+        shareType: ShareTypes.space.value,
+        permissions: 1,
+        collaborator: { name: 'admin' }
+      }
+      const state = { currentFileOutgoingShares: [share] }
+      const updatedShare = { ...share, permissions: 31 }
+      mutations.CURRENT_FILE_OUTGOING_SHARES_UPDATE(state, updatedShare)
+
+      expect(state.currentFileOutgoingShares[0]).toEqual(updatedShare)
+    })
   })
 })

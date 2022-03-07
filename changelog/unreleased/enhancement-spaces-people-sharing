@@ -1,0 +1,11 @@
+Enhancement: Implement people sharing for spaces
+
+Spaces can now be shared with other people. This change specifically includes:
+
+* listing all members who have access to a space (possible for all space members)
+* adding members to a space and giving them dedicated roles (possible for managers only)
+* editing the role of members (possible for managers only)
+* removing members from a space (possible for managers only)
+
+https://github.com/owncloud/web/pull/6455
+https://github.com/owncloud/web/issues/6283

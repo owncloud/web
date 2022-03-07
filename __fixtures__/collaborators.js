@@ -1,6 +1,7 @@
 import {
   peopleRoleEditorFile,
-  peopleRoleViewerFile
+  peopleRoleViewerFile,
+  spaceRoleEditor
 } from '../packages/web-app-files/src/helpers/share'
 
 export default [
@@ -142,5 +143,25 @@ export default [
     role: peopleRoleViewerFile,
     path: "/Neuer Ordner-'singe'",
     key: "collaborator-51a8aafe-cd40-4d0a-8566-87a1149b7fea"
+  },
+  {
+    shareType: 7,
+    id: "f5c28709-b921-4ec8-b39a-4c243709b514",
+    collaborator: {
+      name: "einstein",
+      displayName: "Albert Einstein",
+      additionalInfo: "einstein@example.org"
+    },
+    owner: {
+      name: "admin",
+      displayName: "Admin",
+      additionalInfo: "admin@example.org"
+    },
+    fileOwner: {
+      name: "admin",
+      displayName: "Admin",
+      additionalInfo: "admin@example.org"
+    },
+    role: spaceRoleEditor
   }
 ]

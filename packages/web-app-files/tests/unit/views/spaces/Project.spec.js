@@ -6,6 +6,7 @@ import Files from '@/__fixtures__/files'
 import mockAxios from 'jest-mock-axios'
 import SpaceProject from '../../../../src/views/spaces/Project.vue'
 import Vuex from 'vuex'
+import { ShareTypes, spaceRoleManager } from '../../../../src/helpers/share'
 
 localVue.use(GetTextPlugin, {
   translations: 'does-not-matter.json',
@@ -55,6 +56,18 @@ const spaceMocks = {
     id: 1,
     name: 'space',
     special: []
+  }
+}
+
+const spaceShare = {
+  id: '1',
+  shareType: ShareTypes.space.value,
+  collaborator: {
+    onPremisesSamAccountName: 'Alice',
+    displayName: 'alice'
+  },
+  role: {
+    name: spaceRoleManager.name
   }
 }
 
@@ -230,14 +243,16 @@ function getMountedWrapper(spaceResources = [], spaceItem = null, imageContent =
             LOAD_FILES: jest.fn()
           },
           actions: {
-            loadIndicators: jest.fn()
+            loadIndicators: jest.fn(),
+            loadCurrentFileOutgoingShares: jest.fn()
           },
           getters: {
             activeFiles: () => spaceResources,
             totalFilesCount: () => ({ files: spaceResources.length, folders: 0 }),
             selectedFiles: () => [],
             totalFilesSize: () => 10,
-            pages: () => 1
+            pages: () => 1,
+            currentFileOutgoingCollaborators: () => [spaceShare]
           }
         }
       }

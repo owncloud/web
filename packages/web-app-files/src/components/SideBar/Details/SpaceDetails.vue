@@ -12,10 +12,32 @@
         class="space-default-image oc-px-m oc-py-m"
       />
     </div>
-    <div v-if="hasPeopleShares || hasLinkShares" class="oc-flex oc-flex-middle oc-mb-m">
-      <oc-icon v-if="hasPeopleShares" name="group" class="oc-mr-s" />
-      <oc-icon v-if="hasLinkShares" name="link" class="oc-mr-s" />
-      <span class="oc-text-small" v-text="shareLabel" />
+    <div
+      v-if="hasMemberShares || hasLinkShares"
+      class="oc-flex oc-flex-middle oc-mb-m oc-text-small"
+    >
+      <div v-if="hasMemberShares" class="oc-flex oc-flex-middle">
+        <oc-button
+          appearance="raw"
+          :aria-label="$gettext('Open the member panel')"
+          @click="expandMemberPanel"
+        >
+          <oc-icon name="group" class="oc-mr-s" />
+        </oc-button>
+        <span class="oc-mr-xs" v-text="memberShareLabel" />
+        <oc-button
+          appearance="raw"
+          :aria-label="$gettext('Open the member panel')"
+          size="small"
+          @click="expandMemberPanel"
+        >
+          <span class="oc-text-small" v-text="$gettext('Show')"></span>
+        </oc-button>
+      </div>
+      <div v-if="hasLinkShares" class="oc-flex oc-flex-middle">
+        <oc-icon name="link" class="oc-mr-s" />
+        <span v-text="linkShareLabel" />
+      </div>
     </div>
     <div>
       <table class="details-table" :aria-label="detailsTableLabel">
@@ -30,7 +52,7 @@
         <tr>
           <th scope="col" class="oc-pr-s" v-text="$gettext('Manager')" />
           <td>
-            <span v-if="!loadOwnersTask.isRunning" v-text="ownerUsernames" />
+            <span v-text="ownerUsernames" />
           </td>
         </tr>
         <tr>
@@ -47,11 +69,10 @@
 import { ref } from '@vue/composition-api'
 import Mixins from '../../../mixins'
 import MixinResources from '../../../mixins/resources'
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { useTask } from 'vue-concurrency'
 import { buildWebDavSpacesPath } from '../../../helpers/resources'
-import { useStore } from 'web-pkg/src/composables'
-import { clientService } from 'web-pkg/src/services'
+import { spaceRoleManager } from '../../../helpers/share'
 import SpaceQuota from '../../SpaceQuota.vue'
 
 export default {
@@ -63,13 +84,7 @@ export default {
     return $gettext('Details')
   },
   setup() {
-    const store = useStore()
     const spaceImage = ref('')
-    const owners = ref([])
-    const graphClient = clientService.graphAuthenticated(
-      store.getters.configuration.server,
-      store.getters.getToken
-    )
 
     const loadImageTask = useTask(function* (signal, ref) {
       if (!ref.space?.spaceImageData) {
@@ -89,24 +104,14 @@ export default {
       spaceImage.value = Buffer.from(fileContents).toString('base64')
     })
 
-    const loadOwnersTask = useTask(function* (signal, ref) {
-      const promises = []
-      for (const userId of ref.ownerUserIds) {
-        promises.push(graphClient.users.getUser(userId))
-      }
-
-      if (promises.length > 0) {
-        yield Promise.all(promises).then((resolvedData) => {
-          resolvedData.forEach((response) => {
-            owners.value.push(response.data)
-          })
-        })
-      }
-    })
-
-    return { loadImageTask, loadOwnersTask, spaceImage, owners }
+    return { loadImageTask, spaceImage }
   },
   computed: {
+    ...mapGetters('Files', [
+      'highlightedFile',
+      'currentFileOutgoingCollaborators',
+      'currentFileOutgoingLinks'
+    ]),
     ...mapGetters(['user']),
 
     space() {
@@ -118,94 +123,69 @@ export default {
     lastModifyDate() {
       return this.formDateFromISO(this.space.mdate)
     },
-    ownerUserIds() {
-      const permissions = this.space.spacePermissions?.filter((permission) =>
-        permission.roles.includes('manager')
-      )
-      if (!permissions.length) {
-        return []
-      }
-
-      const userIds = permissions.reduce((acc, item) => {
-        const ids = item.grantedTo.map((user) => user.user.id)
-        acc = acc.concat(ids)
-        return acc
-      }, [])
-
-      return [...new Set(userIds)]
-    },
     ownerUsernames() {
       const userId = this.user?.id
-      return this.owners
-        .map((owner) => {
-          if (owner.onPremisesSamAccountName === userId) {
+      return this.currentFileOutgoingCollaborators
+        .filter((share) => share.role.name === spaceRoleManager.name)
+        .map((share) => {
+          if (share.collaborator.name === userId) {
             return this.$gettextInterpolate(this.$gettext('%{displayName} (me)'), {
-              displayName: owner.displayName
+              displayName: share.collaborator.displayName
             })
           }
-          return owner.displayName
+          return share.collaborator.displayName
         })
         .join(', ')
     },
-    hasPeopleShares() {
-      return false // @TODO
+    hasMemberShares() {
+      return this.memberShareCount > 1
     },
     hasLinkShares() {
-      return false // @TODO
+      return this.linkShareCount > 0
     },
-    peopleShareCount() {
-      return 0 // @TODO
+    memberShareCount() {
+      return this.currentFileOutgoingCollaborators.length
     },
     linkShareCount() {
-      return 0 // @TODO
+      return this.currentFileOutgoingLinks.length
     },
-    shareLabel() {
-      let peopleString, linksString
-
-      if (this.hasPeopleShares) {
-        peopleString = this.$gettextInterpolate(
-          this.$ngettext(
-            'This space has been shared with %{peopleShareCount} person.',
-            'This space has been shared with %{peopleShareCount} people.',
-            this.peopleShareCount
-          ),
-          {
-            peopleShareCount: this.peopleShareCount
-          }
-        )
-      }
-
-      if (this.hasLinkShares) {
-        linksString = this.$gettextInterpolate(
-          this.$ngettext(
-            '%{linkShareCount} link giving access.',
-            '%{linkShareCount} links giving access.',
-            this.linkShareCount
-          ),
-          {
-            linkShareCount: this.linkShareCount
-          }
-        )
-      }
-
-      if (peopleString && linksString) {
-        return `${peopleString} ${linksString}`
-      }
-
-      if (peopleString) {
-        return peopleString
-      }
-
-      if (linksString) {
-        return linksString
-      }
-
-      return ''
+    memberShareLabel() {
+      return this.$gettextInterpolate(
+        this.$ngettext(
+          'This space has %{memberShareCount} member.',
+          'This space has %{memberShareCount} members.',
+          this.memberShareCount
+        ),
+        {
+          memberShareCount: this.memberShareCount
+        }
+      )
+    },
+    linkShareLabel() {
+      return this.$gettextInterpolate(
+        this.$ngettext(
+          '%{linkShareCount} link giving access.',
+          '%{linkShareCount} links giving access.',
+          this.linkShareCount
+        ),
+        {
+          linkShareCount: this.linkShareCount
+        }
+      )
     }
   },
   mounted() {
     this.loadImageTask.perform(this)
-    this.loadOwnersTask.perform(this)
+  },
+  methods: {
+    ...mapActions('Files/sidebar', {
+      setSidebarPanel: 'setActivePanel',
+      closeSidebar: 'close'
+    }),
+
+    expandMemberPanel() {
+      this.setSidebarPanel('space-share-item')
+    }
   }
 }
 </script>

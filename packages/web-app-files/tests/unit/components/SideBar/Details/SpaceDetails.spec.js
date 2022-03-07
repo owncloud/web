@@ -5,6 +5,7 @@ import stubs from '../../../../../../../tests/unit/stubs'
 import GetTextPlugin from 'vue-gettext'
 import AsyncComputed from 'vue-async-computed'
 import VueCompositionAPI from '@vue/composition-api/dist/vue-composition-api'
+import { ShareTypes, spaceRoleManager } from '../../../../../src/helpers/share'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -27,6 +28,18 @@ const spaceMock = {
   }
 }
 
+const spaceShare = {
+  id: '1',
+  shareType: ShareTypes.space.value,
+  collaborator: {
+    onPremisesSamAccountName: 'Alice',
+    displayName: 'alice'
+  },
+  role: {
+    name: spaceRoleManager.name
+  }
+}
+
 const formDateFromJSDate = jest.fn().mockImplementation(() => 'ABSOLUTE_TIME')
 const formDateFromHTTP = jest.fn().mockImplementation(() => 'ABSOLUTE_TIME')
 const refreshShareDetailsTree = jest.fn()
@@ -38,7 +51,7 @@ beforeEach(() => {
 })
 
 describe('Details SideBar Panel', () => {
-  it('displayes the details side panel', () => {
+  it('displays the details side panel', () => {
     const wrapper = createWrapper(spaceMock)
     expect(wrapper).toMatchSnapshot()
   })
@@ -76,7 +89,9 @@ function createWrapper(spaceResource) {
           getters: {
             highlightedFile: function () {
               return spaceResource
-            }
+            },
+            currentFileOutgoingCollaborators: () => [spaceShare],
+            currentFileOutgoingLinks: () => []
           }
         }
       }
