@@ -111,7 +111,10 @@ export function buildResource(resource) {
 }
 
 export function buildSpace(space) {
-  let spaceImageData, spaceReadmeData, spacePermissions
+  let spaceImageData, spaceReadmeData
+  let spaceViewers = []
+  let spaceEditors = []
+  let spaceManagers = []
   let disabled = false
 
   if (space.special) {
@@ -120,7 +123,19 @@ export function buildSpace(space) {
   }
 
   if (space.root) {
-    spacePermissions = space.root.permissions
+    for (const permission of space.root.permissions) {
+      if (permission.roles.includes(spaceRoleViewer.name)) {
+        spaceViewers = spaceViewers.concat(permission.grantedTo.map((el) => el.user.id))
+      }
+
+      if (permission.roles.includes(spaceRoleEditor.name)) {
+        spaceEditors = spaceEditors.concat(permission.grantedTo.map((el) => el.user.id))
+      }
+
+      if (permission.roles.includes(spaceRoleManager.name)) {
+        spaceManagers = spaceManagers.concat(permission.grantedTo.map((el) => el.user.id))
+      }
+    }
 
     if (space.root.deleted) {
       disabled = space.root.deleted?.state === 'trashed'
@@ -154,7 +169,11 @@ export function buildSpace(space) {
     ownerId: '',
     disabled,
     spaceQuota: space.quota,
-    spacePermissions,
+    spaceRoles: {
+      viewers: spaceViewers,
+      editors: spaceEditors,
+      managers: spaceManagers
+    },
     spaceImageData,
     spaceReadmeData,
     canUpload: function () {
