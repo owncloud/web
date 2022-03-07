@@ -141,6 +141,7 @@ describe('vuex store actions', () => {
 
       await actions.deleteShare(stateMock, {
         client: clientMock,
+        graphClient: graphClientMock,
         share: dataSet.share,
         resource: {}
       })

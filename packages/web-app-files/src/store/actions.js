@@ -13,13 +13,7 @@ import { $gettext, $gettextInterpolate } from '../gettext'
 import { loadPreview } from '../helpers/resource'
 import { avatarUrl } from '../helpers/user'
 import { has } from 'lodash-es'
-import {
-  ShareTypes,
-  SpacePeopleShareRoles,
-  spaceRoleEditor,
-  spaceRoleManager,
-  spaceRoleViewer
-} from '../helpers/share'
+import { ShareTypes, SpacePeopleShareRoles } from '../helpers/share'
 
 export default {
   updateFileProgress({ commit }, progress) {
@@ -164,23 +158,9 @@ export default {
     if (space) {
       const promises = []
       const spaceShares = []
-      const userRoles = [
-        {
-          role: spaceRoleViewer.name,
-          userIds: space.spaceRoles.viewers
-        },
-        {
-          role: spaceRoleEditor.name,
-          userIds: space.spaceRoles.editors
-        },
-        {
-          role: spaceRoleManager.name,
-          userIds: space.spaceRoles.managers
-        }
-      ]
 
-      for (const { role, userIds } of userRoles) {
-        for (const userId of userIds) {
+      for (const role of Object.keys(space.spaceRoles)) {
+        for (const userId of space.spaceRoles[role]) {
           promises.push(
             client.users.getUser(userId).then((resolved) => {
               spaceShares.push(

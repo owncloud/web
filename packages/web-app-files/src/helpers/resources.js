@@ -9,6 +9,7 @@ import {
   SharePermissions,
   ShareStatus,
   ShareTypes,
+  SpacePeopleShareRoles,
   spaceRoleEditor,
   spaceRoleManager,
   spaceRoleViewer
@@ -112,10 +113,11 @@ export function buildResource(resource) {
 
 export function buildSpace(space) {
   let spaceImageData, spaceReadmeData
-  let spaceViewers = []
-  let spaceEditors = []
-  let spaceManagers = []
   let disabled = false
+  const spaceRoles = SpacePeopleShareRoles.list().reduce((obj, role) => {
+    obj[role.name] = []
+    return obj
+  }, {})
 
   if (space.special) {
     spaceImageData = space.special.find((el) => el.specialFolder.name === 'image')
@@ -124,16 +126,12 @@ export function buildSpace(space) {
 
   if (space.root) {
     for (const permission of space.root.permissions) {
-      if (permission.roles.includes(spaceRoleViewer.name)) {
-        spaceViewers = spaceViewers.concat(permission.grantedTo.map((el) => el.user.id))
-      }
-
-      if (permission.roles.includes(spaceRoleEditor.name)) {
-        spaceEditors = spaceEditors.concat(permission.grantedTo.map((el) => el.user.id))
-      }
-
-      if (permission.roles.includes(spaceRoleManager.name)) {
-        spaceManagers = spaceManagers.concat(permission.grantedTo.map((el) => el.user.id))
+      for (const role of SpacePeopleShareRoles.list()) {
+        if (permission.roles.includes(role.name)) {
+          spaceRoles[role.name] = spaceRoles[role.name].concat(
+            permission.grantedTo.map((el) => el.user.id)
+          )
+        }
       }
     }
 
@@ -169,11 +167,7 @@ export function buildSpace(space) {
     ownerId: '',
     disabled,
     spaceQuota: space.quota,
-    spaceRoles: {
-      viewers: spaceViewers,
-      editors: spaceEditors,
-      managers: spaceManagers
-    },
+    spaceRoles,
     spaceImageData,
     spaceReadmeData,
     canUpload: function () {
