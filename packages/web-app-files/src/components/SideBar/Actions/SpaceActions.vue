@@ -11,7 +11,6 @@
       ref="spaceImageInput"
       type="file"
       name="file"
-      multiple
       tabindex="-1"
       :accept="supportedSpaceImageMimeTypes"
       @change="$_uploadImage_uploadImageSpace"
