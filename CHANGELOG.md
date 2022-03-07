@@ -13,6 +13,7 @@ Summary
 * Bugfix - Show no auth popup on password protected public links in ownCloud 10: [#6530](https://github.com/owncloud/web/pull/6530)
 * Bugfix - Don't write error message on passing ReadmeContentModal.spec.js test: [#6525](https://github.com/owncloud/web/pull/6525)
 * Bugfix - Prevent cross-site scripting attack while displaying space description: [#6523](https://github.com/owncloud/web/pull/6523)
+* Enhancement - Add a watcher for the share panel of a space: [#6543](https://github.com/owncloud/web/pull/6543)
 * Enhancement - Allow updating space quota: [#6477](https://github.com/owncloud/web/pull/6477)
 * Enhancement - Implement people sharing for spaces: [#6455](https://github.com/owncloud/web/pull/6455)
 * Enhancement - Update the graph SDK: [#6519](https://github.com/owncloud/web/pull/6519)
@@ -57,6 +58,13 @@ Details
 
    https://github.com/owncloud/web/issues/6526
    https://github.com/owncloud/web/pull/6523
+
+* Enhancement - Add a watcher for the share panel of a space: [#6543](https://github.com/owncloud/web/pull/6543)
+
+   We've added a watcher for the share panel of a space to ensure seamless navigation via the share
+   indicator.
+
+   https://github.com/owncloud/web/pull/6543
 
 * Enhancement - Allow updating space quota: [#6477](https://github.com/owncloud/web/pull/6477)
 
