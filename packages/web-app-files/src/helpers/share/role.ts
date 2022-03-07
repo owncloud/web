@@ -102,11 +102,11 @@ export class SpaceShareRole extends ShareRole {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public description(allowSharing: boolean): string {
     switch (this.name) {
-      case spaceViewer.name:
+      case spaceRoleViewer.name:
         return $gettext('Download and preview')
-      case spaceEditor.name:
+      case spaceRoleEditor.name:
         return $gettext('Upload, edit, delete, download and preview')
-      case spaceManager.name:
+      case spaceRoleManager.name:
         return $gettext('Upload, edit, delete, download, preview and share')
     }
   }
@@ -207,22 +207,22 @@ export const linkRoleUploaderFolder = new LinkShareRole(
   $gettext('uploader'),
   [SharePermissions.create]
 )
-export const spaceViewer = new SpaceShareRole(
-  'spaceViewer',
+export const spaceRoleViewer = new SpaceShareRole(
+  'viewer',
   false,
   $gettext('Viewer'),
   $gettext('viewer'),
   [SharePermissions.read]
 )
-export const spaceEditor = new SpaceShareRole(
-  'spaceEditor',
+export const spaceRoleEditor = new SpaceShareRole(
+  'editor',
   false,
   $gettext('Editor'),
   $gettext('editor'),
   [SharePermissions.read, SharePermissions.update, SharePermissions.create, SharePermissions.delete]
 )
-export const spaceManager = new SpaceShareRole(
-  'spaceManager',
+export const spaceRoleManager = new SpaceShareRole(
+  'manager',
   false,
   $gettext('Manager'),
   $gettext('manager'),
@@ -236,7 +236,11 @@ export const spaceManager = new SpaceShareRole(
 )
 
 export abstract class SpacePeopleShareRoles {
-  static readonly all = [spaceViewer, spaceEditor, spaceManager]
+  static readonly all = [spaceRoleViewer, spaceRoleEditor, spaceRoleManager]
+
+  static list(): ShareRole[] {
+    return this.all
+  }
 
   static getByBitmask(bitmask: number): ShareRole {
     return this.all.find((r) => r.bitmask(true) === bitmask)

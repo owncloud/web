@@ -1,7 +1,7 @@
 import {
   peopleRoleEditorFile,
   peopleRoleViewerFile,
-  spaceEditor
+  spaceRoleEditor
 } from '../packages/web-app-files/src/helpers/share'
 
 export default [
@@ -162,6 +162,6 @@ export default [
       displayName: "Admin",
       additionalInfo: "admin@example.org"
     },
-    role: spaceEditor
+    role: spaceRoleEditor
   }
 ]

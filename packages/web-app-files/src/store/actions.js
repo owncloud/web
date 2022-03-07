@@ -261,7 +261,7 @@ export default {
           .then(() => {
             const role = SpacePeopleShareRoles.getByBitmask(permissions)
             const shareObj = {
-              role: role.inlineLabel,
+              role: role.name,
               onPremisesSamAccountName: share.collaborator.name,
               displayName: share.collaborator.displayName
             }
@@ -336,7 +336,7 @@ export default {
         .then(() => {
           const role = SpacePeopleShareRoles.getByBitmask(permissions)
           const shareObj = {
-            role: role.inlineLabel,
+            role: role.name,
             onPremisesSamAccountName: shareWith,
             displayName
           }

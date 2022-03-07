@@ -1,5 +1,5 @@
 import actions from '../../../src/store/actions'
-import { ShareTypes, spaceManager } from '../../../src/helpers/share'
+import { ShareTypes, spaceRoleManager } from '../../../src/helpers/share'
 
 const stateMock = {
   commit: jest.fn(),
@@ -62,7 +62,7 @@ const spaceShareMock = {
     displayName: 'alice'
   },
   role: {
-    name: spaceManager.name
+    name: spaceRoleManager.name
   }
 }
 

@@ -9,9 +9,9 @@ import {
   SharePermissions,
   ShareStatus,
   ShareTypes,
-  spaceEditor,
-  spaceManager,
-  spaceViewer
+  spaceRoleEditor,
+  spaceRoleManager,
+  spaceRoleViewer
 } from './share'
 
 function _getFileExtension(name) {
@@ -343,17 +343,17 @@ export function buildSpaceShare(s, spaceId) {
   let permissions, role
 
   switch (s.role) {
-    case spaceManager.inlineLabel:
-      permissions = 31
-      role = spaceManager
+    case spaceRoleManager.name:
+      permissions = spaceRoleManager.bitmask(true)
+      role = spaceRoleManager
       break
-    case spaceEditor.inlineLabel:
-      permissions = 15
-      role = spaceEditor
+    case spaceRoleEditor.name:
+      permissions = spaceRoleEditor.bitmask(true)
+      role = spaceRoleEditor
       break
-    case spaceViewer.inlineLabel:
-      permissions = 1
-      role = spaceViewer
+    case spaceRoleViewer.name:
+      permissions = spaceRoleViewer.bitmask(true)
+      role = spaceRoleViewer
       break
   }
 

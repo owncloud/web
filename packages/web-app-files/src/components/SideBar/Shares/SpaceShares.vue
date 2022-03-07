@@ -28,7 +28,7 @@ import { useStore } from 'web-pkg/src/composables'
 import { clientService } from 'web-pkg/src/services'
 import CollaboratorListItem from './Collaborators/ListItem.vue'
 import InviteCollaboratorForm from './InviteCollaborator/InviteCollaboratorForm.vue'
-import { spaceManager } from '../../../helpers/share'
+import { spaceRoleManager } from '../../../helpers/share'
 import { createLocationSpaces, isLocationSpacesActive } from '../../../router'
 import { useTask } from 'vue-concurrency'
 
@@ -84,7 +84,7 @@ export default {
         (collaborator) => collaborator.collaborator.name === this.user.id
       )
 
-      return currentUserCollaborator?.role?.name === spaceManager.name
+      return currentUserCollaborator?.role?.name === spaceRoleManager.name
     }
   },
   mounted() {
@@ -94,20 +94,19 @@ export default {
     ...mapActions('Files', ['loadCurrentFileOutgoingShares', 'deleteShare']),
 
     isModifiable(share) {
-      if (this.currentFileOutgoingCollaborators.length < 2) {
+      if (!this.currentUserIsManager) {
         return false
       }
 
+      if (share.role.name !== spaceRoleManager.name) {
+        return true
+      }
+
+      // forbid to remove last manager of a space
       const managers = this.currentFileOutgoingCollaborators.filter(
-        (collaborator) => collaborator.role.name === spaceManager.name
+        (collaborator) => collaborator.role.name === spaceRoleManager.name
       )
-
-      // only one manager -> can't remove those
-      if (managers.length < 2 && share.role.name === spaceManager.name) {
-        return false
-      }
-
-      return this.currentUserIsManager
+      return managers.length > 1
     },
     $_ocCollaborators_deleteShare(share) {
       this.deleteShare({
@@ -118,7 +117,7 @@ export default {
         // current user was removed from the share.
         if (share.collaborator.name === this.user.id) {
           if (isLocationSpacesActive(this.$router, 'files-spaces-projects')) {
-            return this.$router.go(0)
+            return this.$router.go()
           }
           return this.$router.push(createLocationSpaces('files-spaces-projects'))
         }

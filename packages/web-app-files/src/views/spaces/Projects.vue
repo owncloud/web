@@ -380,7 +380,6 @@ export default {
       return ''
     },
     async openSidebarSharePanel(space) {
-      await this.closeSidebar()
       this.SET_FILE_SELECTION([space])
       this.openSidebarWithPanel('space-share-item')
     }

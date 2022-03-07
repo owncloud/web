@@ -4,7 +4,7 @@ import GetTextPlugin from 'vue-gettext'
 import Vuex from 'vuex'
 import DesignSystem from 'owncloud-design-system'
 import Users from '@/__fixtures__/users'
-import { ShareTypes, spaceManager, spaceViewer } from '../../../../../src/helpers/share'
+import { ShareTypes, spaceRoleManager, spaceRoleViewer } from '../../../../../src/helpers/share'
 import VueCompositionAPI from '@vue/composition-api/dist/vue-composition-api'
 
 const localVue = createLocalVue()
@@ -37,7 +37,7 @@ const outgoingShares = [
       displayName: user.displayname
     },
     role: {
-      name: spaceManager.name
+      name: spaceRoleManager.name
     }
   },
   {
@@ -48,7 +48,7 @@ const outgoingShares = [
       displayName: 'einstein'
     },
     role: {
-      name: spaceViewer.name
+      name: spaceRoleViewer.name
     }
   },
   {
@@ -59,7 +59,7 @@ const outgoingShares = [
       displayName: 'marie'
     },
     role: {
-      name: spaceManager.name
+      name: spaceRoleManager.name
     }
   }
 ]

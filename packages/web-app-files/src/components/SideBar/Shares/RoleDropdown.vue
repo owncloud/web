@@ -143,7 +143,7 @@ export default {
     },
     availableRoles() {
       if (this.resourceIsSpace) {
-        return SpacePeopleShareRoles.all
+        return SpacePeopleShareRoles.list()
       }
       return PeopleShareRoles.list(this.resource.isFolder)
     },
@@ -173,7 +173,7 @@ export default {
       if (this.existingRole) {
         this.selectedRole = this.existingRole
       } else if (this.resourceIsSpace) {
-        this.selectedRole = SpacePeopleShareRoles.all[0]
+        this.selectedRole = SpacePeopleShareRoles.list()[0]
       } else {
         this.selectedRole = PeopleShareRoles.list(this.resource.isFolder)[0]
       }

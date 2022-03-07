@@ -5,7 +5,7 @@ import stubs from '../../../../../../../tests/unit/stubs'
 import GetTextPlugin from 'vue-gettext'
 import AsyncComputed from 'vue-async-computed'
 import VueCompositionAPI from '@vue/composition-api/dist/vue-composition-api'
-import { ShareTypes, spaceManager } from '../../../../../src/helpers/share'
+import { ShareTypes, spaceRoleManager } from '../../../../../src/helpers/share'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -36,7 +36,7 @@ const spaceShare = {
     displayName: 'alice'
   },
   role: {
-    name: spaceManager.name
+    name: spaceRoleManager.name
   }
 }
 

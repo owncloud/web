@@ -72,7 +72,7 @@ import MixinResources from '../../../mixins/resources'
 import { mapActions, mapGetters } from 'vuex'
 import { useTask } from 'vue-concurrency'
 import { buildWebDavSpacesPath } from '../../../helpers/resources'
-import { spaceManager } from '../../../helpers/share'
+import { spaceRoleManager } from '../../../helpers/share'
 import SpaceQuota from '../../SpaceQuota.vue'
 
 export default {
@@ -126,7 +126,7 @@ export default {
     ownerUsernames() {
       const userId = this.user?.id
       return this.currentFileOutgoingCollaborators
-        .filter((share) => share.role.name === spaceManager.name)
+        .filter((share) => share.role.name === spaceRoleManager.name)
         .map((share) => {
           if (share.collaborator.name === userId) {
             return this.$gettextInterpolate(this.$gettext('%{displayName} (me)'), {
@@ -141,7 +141,7 @@ export default {
       return this.memberShareCount > 1
     },
     hasLinkShares() {
-      return this.linkShareCount > 1
+      return this.linkShareCount > 0
     },
     memberShareCount() {
       return this.currentFileOutgoingCollaborators.length

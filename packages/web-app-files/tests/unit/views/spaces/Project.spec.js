@@ -6,7 +6,7 @@ import Files from '@/__fixtures__/files'
 import mockAxios from 'jest-mock-axios'
 import SpaceProject from '../../../../src/views/spaces/Project.vue'
 import Vuex from 'vuex'
-import { ShareTypes, spaceManager } from '../../../../src/helpers/share'
+import { ShareTypes, spaceRoleManager } from '../../../../src/helpers/share'
 
 localVue.use(GetTextPlugin, {
   translations: 'does-not-matter.json',
@@ -67,7 +67,7 @@ const spaceShare = {
     displayName: 'alice'
   },
   role: {
-    name: spaceManager.name
+    name: spaceRoleManager.name
   }
 }
 

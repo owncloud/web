@@ -138,11 +138,9 @@ export default {
   mounted() {
     this.fetchRecipients = debounce(this.fetchRecipients, 500)
 
-    if (this.resourceIsSpace) {
-      this.selectedRole = SpacePeopleShareRoles.all[0]
-    } else {
-      this.selectedRole = PeopleShareRoles.list(this.highlightedFile.isFolder)[0]
-    }
+    this.selectedRole = this.resourceIsSpace
+      ? SpacePeopleShareRoles.list()[0]
+      : PeopleShareRoles.list(this.highlightedFile.isFolder)[0]
   },
 
   methods: {
