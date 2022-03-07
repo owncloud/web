@@ -315,7 +315,7 @@ export default {
       'totalFilesSize',
       'currentFileOutgoingCollaborators'
     ]),
-    ...mapGetters(['user']),
+    ...mapGetters(['user', 'getToken']),
 
     selected: {
       get() {
@@ -393,7 +393,8 @@ export default {
             isPublic: false,
             dimensions: ImageDimension.Preview,
             server: this.configuration.server,
-            userId: this.user.id
+            userId: this.user.id,
+            token: this.getToken
           }).then((imageBlob) => {
             this.imageContent = imageBlob
           })

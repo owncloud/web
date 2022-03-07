@@ -100,6 +100,7 @@ export default {
 
       const fileInfo = yield ref.$client.files.fileInfo(buildWebDavSpacesPath(ref.space.id, path))
       const resource = buildResource(fileInfo)
+
       spaceImage.value = yield loadPreview({
         resource,
         isPublic: false,
