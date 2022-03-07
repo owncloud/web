@@ -6,11 +6,6 @@ import { bus } from 'web-pkg/src/instance'
 import { thumbnailService } from '../../../services'
 
 export default {
-  data: function () {
-    return {
-      $_setSpaceImage_thumbnailService: thumbnailService
-    }
-  },
   computed: {
     ...mapGetters(['configuration']),
     $_setSpaceImage_items() {
@@ -29,12 +24,7 @@ export default {
             if (!resources[0].mimeType) {
               return false
             }
-            if (
-              !this.$data.$_setSpaceImage_thumbnailService.isMimetypeSupported(
-                resources[0].mimeType,
-                true
-              )
-            ) {
+            if (!thumbnailService.isMimetypeSupported(resources[0].mimeType, true)) {
               return false
             }
             return isLocationSpacesActive(this.$router, 'files-spaces-project')

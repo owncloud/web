@@ -8,7 +8,7 @@ export class ThumbnailService {
   serverUrl: string
   capability?: ThumbnailCapability
 
-  public initialize(thumbnailCapability: ThumbnailCapability): void {
+  public initialize(thumbnailCapability: ThumbnailCapability = null): void {
     this.capability = thumbnailCapability
   }
 
@@ -20,6 +20,13 @@ export class ThumbnailService {
     return onlyImages
       ? mimeType.startsWith('image/') && this.capability.supportedMimeTypes.includes(mimeType)
       : this.capability.supportedMimeTypes.includes(mimeType)
+  }
+
+  public getSupportedMimeTypes(filter?: string) {
+    if (!filter) {
+      return this.capability.supportedMimeTypes
+    }
+    return this.capability.supportedMimeTypes.filter((mimeType) => mimeType.startsWith(filter))
   }
 }
 

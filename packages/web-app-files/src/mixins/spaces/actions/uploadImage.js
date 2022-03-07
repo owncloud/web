@@ -6,8 +6,7 @@ import { thumbnailService } from '../../../services'
 export default {
   data: function () {
     return {
-      $_uploadImage_selectedSpace: null,
-      $_uploadImage_thumbnailService: thumbnailService
+      $_uploadImage_selectedSpace: null
     }
   },
   computed: {
@@ -44,7 +43,11 @@ export default {
       const graphClient = clientService.graphAuthenticated(this.configuration.server, this.getToken)
       const file = ev.currentTarget.files[0]
 
-      if (!this.$data.$_uploadImage_thumbnailService.isMimetypeSupported(file.type, true)) {
+      if (!file) {
+        return
+      }
+
+      if (!thumbnailService.isMimetypeSupported(file.type, true)) {
         return this.showMessage({
           title: this.$gettext('The file type is unsupported'),
           status: 'danger'

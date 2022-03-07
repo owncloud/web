@@ -58,9 +58,6 @@ export default {
     UploadImage,
     EditQuota
   ],
-  data: function () {
-    return { thumbnailService }
-  },
   computed: {
     ...mapGetters('Files', ['highlightedFile']),
     resources() {
@@ -85,9 +82,7 @@ export default {
       return this.$data.$_editQuota_modalOpen
     },
     supportedSpaceImageMimeTypes() {
-      return thumbnailService.capability.supportedMimeTypes
-        .filter((mimeType) => mimeType.startsWith('image/'))
-        .join(',')
+      return thumbnailService.getSupportedMimeTypes('image/').join(',')
     }
   },
   methods: {

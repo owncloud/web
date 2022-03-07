@@ -304,8 +304,7 @@ export default {
       showMarkdownCollapse: false,
       markdownResizeObserver: new ResizeObserver(this.onMarkdownResize),
       imageExpanded: false,
-      imageContent: null,
-      thumbnailService
+      imageContent: null
     }
   },
   computed: {
@@ -363,9 +362,7 @@ export default {
       return this.$data.$_editReadmeContent_modalOpen
     },
     supportedSpaceImageMimeTypes() {
-      return thumbnailService.capability.supportedMimeTypes
-        .filter((mimeType) => mimeType.startsWith('image/'))
-        .join(',')
+      return thumbnailService.getSupportedMimeTypes('image/').join(',')
     }
   },
   watch: {
