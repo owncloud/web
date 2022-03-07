@@ -183,8 +183,10 @@ export default {
   },
   watch: {
     'space.spaceImageData': {
-      handler: function (val) {
-        if (!val) return
+      handler(val) {
+        if (!val) {
+          return
+        }
         this.loadImageTask.perform(this)
       },
       deep: true

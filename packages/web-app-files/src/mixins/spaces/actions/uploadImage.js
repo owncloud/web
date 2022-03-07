@@ -39,7 +39,7 @@ export default {
       this.$data.$_uploadImage_selectedSpace = resources[0]
       this.$refs.spaceImageInput.click()
     },
-    $_uploadImage_uploadImageSpace: function (ev) {
+    $_uploadImage_uploadImageSpace(ev) {
       const graphClient = clientService.graphAuthenticated(this.configuration.server, this.getToken)
       const file = ev.currentTarget.files[0]
 
