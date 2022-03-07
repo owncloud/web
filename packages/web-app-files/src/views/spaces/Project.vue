@@ -447,8 +447,7 @@ export default {
   methods: {
     ...mapActions('Files', ['loadIndicators', 'loadPreview', 'loadCurrentFileOutgoingShares']),
     ...mapActions('Files/sidebar', {
-      openSidebarWithPanel: 'openWithPanel',
-      closeSidebar: 'close'
+      openSidebarWithPanel: 'openWithPanel'
     }),
     ...mapMutations('Files', [
       'SET_CURRENT_FOLDER',
@@ -521,8 +520,7 @@ export default {
     closeQuotaModal() {
       this.$_editQuota_closeModal()
     },
-    async openSidebarSharePanel() {
-      await this.closeSidebar()
+    openSidebarSharePanel() {
       this.SET_FILE_SELECTION([this.space])
       this.openSidebarWithPanel('space-share-item')
     },

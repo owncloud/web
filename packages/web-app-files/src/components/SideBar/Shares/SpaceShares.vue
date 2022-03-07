@@ -87,6 +87,16 @@ export default {
       return currentUserCollaborator?.role?.name === spaceRoleManager.name
     }
   },
+  watch: {
+    highlightedFile: {
+      handler: function (newItem, oldItem) {
+        if (oldItem !== newItem) {
+          this.loadSharesTask.perform(this)
+        }
+      },
+      immediate: true
+    }
+  },
   mounted() {
     this.loadSharesTask.perform(this)
   },

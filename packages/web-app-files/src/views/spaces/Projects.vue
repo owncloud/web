@@ -260,8 +260,7 @@ export default {
   methods: {
     ...mapActions(['createModal', 'hideModal', 'setModalInputErrorMessage']),
     ...mapActions('Files/sidebar', {
-      openSidebarWithPanel: 'openWithPanel',
-      closeSidebar: 'close'
+      openSidebarWithPanel: 'openWithPanel'
     }),
     ...mapMutations('Files', [
       'SET_CURRENT_FOLDER',
@@ -379,8 +378,7 @@ export default {
       }
       return ''
     },
-    async openSidebarSharePanel(space) {
-      await this.closeSidebar()
+    openSidebarSharePanel(space) {
       this.SET_FILE_SELECTION([space])
       this.openSidebarWithPanel('space-share-item')
     }
