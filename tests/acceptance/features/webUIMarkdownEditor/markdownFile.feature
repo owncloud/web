@@ -7,7 +7,7 @@ Feature: create markdown files
     Given user "Alice" has been created with default attributes and without skeleton files in the server
     And user "Alice" has uploaded file with content "simple markdown file" to "simple.md" in the server
     And user "Alice" has logged in using the webUI
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
 
   @disablePreviews
   Scenario: create a new markdown file in the root directory
@@ -66,9 +66,9 @@ Feature: create markdown files
     When the user opens file "<file>" in the markdown editor using the action menu option on the webUI
     Then the file "<file>" should be displayed in the markdown editor webUI
     Examples:
-      | file          |
-      | simple.md     |
-      | lorem.txt     |
+      | file      |
+      | simple.md |
+      | lorem.txt |
 
   @disablePreviews
   Scenario Outline: Previewing text writen in markdown format
@@ -76,9 +76,9 @@ Feature: create markdown files
     When the user inputs the content "<content>" in the markdown editor webUI
     Then the preview panel should have "<tagname>" element with text "<innertext>"
     Examples:
-      | content         | innertext | tagname     |
-      | `code`          | code      | p > code    |
-      | # heading       | heading   | h1          |
-      | ###### heading  | heading   | h6          |
-      | - list1         | list1     | ul > li     |
-      | [link]()        | link      | p > a       |
+      | content        | innertext | tagname  |
+      | `code`         | code      | p > code |
+      | # heading      | heading   | h1       |
+      | ###### heading | heading   | h6       |
+      | - list1        | list1     | ul > li  |
+      | [link]()       | link      | p > a    |

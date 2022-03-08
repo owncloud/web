@@ -98,7 +98,7 @@ Feature: File Upload
   # upload into "simple-folder" because there is already a folder called "0" in the root
   Scenario: Upload a big file called "0" (when chunking in implemented that upload should be chunked)
     Given user "Alice" has created folder "simple-folder" in the server
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     And a file with the size of "30000000" bytes and the name "0" has been created locally in the middleware
     When the user opens folder "simple-folder" using the webUI
     And the user uploads a created file "0" using the webUI
@@ -114,10 +114,10 @@ Feature: File Upload
       """
       Failed to upload
       """
-    # Then the following error message should be displayed on the webUI
-    #   """
-    #   (Any nice error message)
-    #   """
+  # Then the following error message should be displayed on the webUI
+  #   """
+  #   (Any nice error message)
+  #   """
 
 
   # When this issue is fixed merge with the scenario above
@@ -130,7 +130,7 @@ Feature: File Upload
       """
       Failed to upload
       """
-    # Then the following error message should be displayed on the webUI
-    #   """
-    #   (Any nice error message)
-    #   """
+# Then the following error message should be displayed on the webUI
+#   """
+#   (Any nice error message)
+#   """

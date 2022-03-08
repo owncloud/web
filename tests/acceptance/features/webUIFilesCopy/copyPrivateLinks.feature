@@ -9,7 +9,7 @@ Feature: copy path as a permanent link
     And user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has logged in using the webUI
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
 
 
   Scenario Outline: Copy permalink to clipboard

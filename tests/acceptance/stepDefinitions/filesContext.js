@@ -60,12 +60,16 @@ When('the user browses to the shared-with-others page', function () {
   return client.page.sharedWithOthersPage().navigateAndWaitTillLoaded()
 })
 
-When('the user browses to the shared-with-others page using the webUI', function () {
-  return client.page.webPage().navigateToUsingMenu('Shared with others')
+When('the user browses to the shared-with-others page using the webUI', async function () {
+  await client.page.webPage().navigateToUsingMenu('Shares')
+  await appBarActions.navigateToSharesSubPage('Shared with others')
+  return client
 })
 
-When('the user browses to the shared-via-link page using the webUI', function () {
-  return client.page.webPage().navigateToUsingMenu('Shared via link')
+When('the user browses to the shared-via-link page using the webUI', async function () {
+  await client.page.webPage().navigateToUsingMenu('Shares')
+  await appBarActions.navigateToSharesSubPage('Shared via link')
+  return client
 })
 
 Given('the user has browsed to the trashbin page', function () {
@@ -85,15 +89,15 @@ When('the user browses to the favorites page using the webUI', function () {
 })
 
 When('the user browses to the files page using the webUI', function () {
-  return client.page.webPage().navigateToUsingMenu('All files')
+  return client.page.webPage().navigateToUsingMenu('Personal')
 })
 
 Then('the files table should be displayed', () => {
   return client.page.FilesPageElement.filesList().waitForElementVisible('@anyAfterLoading')
 })
 
-Given('the user has browsed to the files page', function () {
-  return client.page.personalPage().navigateToBreadcrumb('All files')
+Given('the user has browsed to the personal page', function () {
+  return client.page.personalPage().navigateToBreadcrumb('Personal')
 })
 
 When('the user opens folder {string} directly on the webUI', async function (folder) {

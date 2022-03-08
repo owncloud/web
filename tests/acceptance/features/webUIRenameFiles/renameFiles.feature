@@ -131,9 +131,9 @@ Feature: rename files
     Then the error message 'The name cannot contain "/"' should be displayed on the webUI dialog prompt
     And file "<from_file_name>" should be listed on the webUI
     Examples:
-      | from_file_name | to_file_name                      |
-      | lorem.txt      | simple-folder/lorem.txt           |
-      | lorem.txt      | lorem/txt                         |
+      | from_file_name | to_file_name            |
+      | lorem.txt      | simple-folder/lorem.txt |
+      | lorem.txt      | lorem/txt               |
 
 
 
@@ -255,7 +255,7 @@ Feature: rename files
 
 
   Scenario: User tries to rename a file that used to exist but does not anymore
-    Given the user has browsed to the files page
+    Given the user has browsed to the personal page
     And the following files have been deleted by user "Alice" in the server
       | name      |
       | lorem.txt |

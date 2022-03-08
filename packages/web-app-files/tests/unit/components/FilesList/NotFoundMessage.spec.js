@@ -35,7 +35,7 @@ describe('NotFoundMessage', () => {
 
       expect(homeButton.exists()).toBeTruthy()
       expect(homeButton.find('translate-stub')).toBeTruthy()
-      expect(homeButton.find('translate-stub').text()).toBe('Go to »All files«')
+      expect(homeButton.find('translate-stub').text()).toBe('Go to »Personal« page')
     })
 
     it('should not show reload public link button', () => {

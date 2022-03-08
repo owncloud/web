@@ -18,7 +18,7 @@ Feature: Locks
   Scenario Outline: moving a locked file
     Given user "brand-new-user" has locked file "lorem.txt" setting the following properties in the server
       | lockscope | <lockscope> |
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     When the user tries to move file "lorem.txt" into folder "simple-empty-folder" using the webUI
     Then notifications should be displayed on the webUI with the text
       """
@@ -39,7 +39,7 @@ Feature: Locks
   Scenario Outline: moving a file trying to overwrite a locked file
     Given user "brand-new-user" has locked file "/simple-folder/lorem.txt" setting the following properties in the server
       | lockscope | <lockscope> |
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     When the user tries to move file "lorem.txt" into folder "simple-folder" using the webUI
     Then notifications should be displayed on the webUI with the text
       """
@@ -61,7 +61,7 @@ Feature: Locks
   Scenario Outline: moving a file into a locked folder
     Given user "brand-new-user" has locked file "/simple-empty-folder" setting the following properties in the server
       | lockscope | <lockscope> |
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     When the user tries to move file "lorem.txt" into folder "simple-empty-folder" using the webUI
     Then notifications should be displayed on the webUI with the text
       """
@@ -83,7 +83,7 @@ Feature: Locks
   Scenario Outline: renaming of a locked file
     Given user "brand-new-user" has locked file "lorem.txt" setting the following properties in the server
       | lockscope | <lockscope> |
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     When the user tries to rename file "lorem.txt" to "a-renamed-file.txt" using the webUI
     Then notifications should be displayed on the webUI with the text
       """

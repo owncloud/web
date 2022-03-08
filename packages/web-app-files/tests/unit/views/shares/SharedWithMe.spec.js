@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
-import { localVue, getStore, getRouter } from './views.setup'
-import SharedWithMe from '@files/src/views/SharedWithMe.vue'
+import { localVue, getStore, getRouter } from '../views.setup'
+import SharedWithMe from '@files/src/views/shares/SharedWithMe.vue'
 import { ShareStatus, ShareTypes } from '@files/src/helpers/share'
 
 const stubs = {

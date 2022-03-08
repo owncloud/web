@@ -11,7 +11,7 @@ Feature: Visibility of the batch actions menu
     And user "Alice" has created folder "simple-folder" in the server
 
 
-  Scenario: View batch action menu for a folder on the all files page
+  Scenario: View batch action menu for a folder on the personal page
     Given user "Alice" has logged in using the webUI
     When the user marks the folder "simple-folder" using the webUI
     Then the following batch action buttons should be visible
@@ -21,7 +21,7 @@ Feature: Visibility of the batch actions menu
       | Delete     |
 
 
-  Scenario: View batch action menu for a file on the all files page
+  Scenario: View batch action menu for a file on the personal page
     Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has logged in using the webUI
     When the user marks the file "lorem.txt" using the webUI
@@ -33,7 +33,7 @@ Feature: Visibility of the batch actions menu
       | Copy       |
 
 
-  Scenario: View batch action menu when selecting both file and folder on the all files page
+  Scenario: View batch action menu when selecting both file and folder on the personal page
     Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has logged in using the webUI
     When the user marks these files for batch action using the webUI
@@ -99,7 +99,7 @@ Feature: Visibility of the batch actions menu
 
   Scenario: View batch action menu for a folder on the shared via link page
     Given user "Alice" has created a public link with following settings in the server
-      | path        | /simple-folder |
+      | path | /simple-folder |
     And user "Alice" has logged in using the webUI
     And the user has browsed to the shared-via-link page
     When the user marks the folder "simple-folder" using the webUI

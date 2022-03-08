@@ -7,13 +7,13 @@ import toKebabCase from '../../../../../tests/helpers/toKebabCase'
 import StoreFiles from '@files/src/store'
 import Store from '@runtime/src/store'
 
-import Personal from '../../../src/views/Personal.vue'
-import Favorites from '../../../src/views/Favorites.vue'
-import LocationPicker from '../../../src/views/LocationPicker.vue'
-import PublicFiles from '../../../src/views/PublicFiles.vue'
-import SharedViaLink from '../../../src/views/SharedViaLink.vue'
-import SharedWithOthers from '../../../src/views/SharedWithOthers.vue'
-import Trashbin from '../../../src/views/Trashbin.vue'
+import Personal from '@files/src/views/Personal.vue'
+import Favorites from '@files/src/views/Favorites.vue'
+import LocationPicker from '@files/src/views/LocationPicker.vue'
+import PublicFiles from '@files/src/views/PublicFiles.vue'
+import SharedViaLink from '@files/src/views/shares/SharedViaLink.vue'
+import SharedWithOthers from '@files/src/views/shares/SharedWithOthers.vue'
+import Trashbin from '@files/src/views/Trashbin.vue'
 
 // TODO: Make routes importable instead of defining them manually
 const routes = [

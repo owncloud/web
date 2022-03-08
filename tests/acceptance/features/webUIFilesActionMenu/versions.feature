@@ -15,7 +15,7 @@ Feature: Versions of a file
   Scenario: upload new file with same name to see if different versions are shown
     Given user "user0" has logged in using the webUI
     And user "user0" has uploaded file "lorem.txt" to "lorem.txt" in the server
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     And user "user0" has uploaded file with content "lorem content" to "lorem.txt" in the server
     And user "user0" has uploaded file with content "new lorem content" to "lorem.txt" in the server
     When the user browses to display the "versions" details of file "lorem.txt"
@@ -27,7 +27,7 @@ Feature: Versions of a file
     Given user "user0" has uploaded file with content "lorem content" to "lorem-file.txt" in the server
     And user "user0" has uploaded file with content "new lorem content" to "lorem-file.txt" in the server
     And user "user0" has logged in using the webUI
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     When the user browses to display the "versions" details of file "lorem-file.txt"
     And the user restores the file to last version using the webUI
     Then the content of file "lorem-file.txt" for user "user0" should be "lorem content" in the server

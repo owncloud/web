@@ -230,7 +230,7 @@ export class AllFilesPage {
     await page.locator(`.oc-files-actions-${action}-trigger`).first().click()
     await page.locator('//nav[contains(@class, "oc-breadcrumb")]/ol/li[1]/a').click()
 
-    if (newLocation !== 'All files') {
+    if (newLocation !== 'Personal') {
       await filesCta.navigateToFolder({ page: page, path: newLocation })
     }
 

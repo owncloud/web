@@ -78,7 +78,7 @@ Feature: deleting files and folders
     Given user "Alice" has uploaded file "data.zip" to "data.zip" in the server
     And user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has created folder "simple-folder" in the server
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     When the user marks all files for batch action using the webUI
     # Shares is a special folder that cannot be deleted on oCIS
     # The user has to unmark it in order to "delete all" the rest of the items
@@ -253,7 +253,7 @@ Feature: deleting files and folders
   Scenario: Try to delete file and folder that used to exist but does not anymore
     Given user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has created file "lorem.txt" in the server
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     And the following files have been deleted by user "Alice" in the server
       | name          |
       | lorem.txt     |

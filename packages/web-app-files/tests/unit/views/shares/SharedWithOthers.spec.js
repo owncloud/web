@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils'
-import { getStore, localVue } from './views.setup.js'
+import { getStore, localVue } from '../views.setup.js'
 import FileActions from '@files/src/mixins/fileActions.js'
-import SharedWithOthers from '@files/src/views/SharedWithOthers.vue'
+import SharedWithOthers from '@files/src/views/shares/SharedWithOthers.vue'
 import SharedData from '@/__fixtures__/sharedFiles.js'
 
 const resourcesList = SharedData.json().ocs.data

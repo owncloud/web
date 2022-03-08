@@ -9,31 +9,31 @@ Feature: Sort files/folders
     And user "Alice" has logged in using the webUI
     And user "Alice" has created folder "test_sort" in the server
     And user "Alice" has created the following folders in the server
-      | entry_name     |
-      | test_sort/a    |
+      | entry_name       |
+      | test_sort/a      |
       | test_sort/a 文件 |
-      | test_sort/10   |
-      | test_sort/1    |
-      | test_sort/2    |
-      | test_sort/z    |
+      | test_sort/10     |
+      | test_sort/1      |
+      | test_sort/2      |
+      | test_sort/z      |
     And user "Alice" has created the following files in the server
       | entry_name                |
       | test_sort/a.txt           |
       | test_sort/a space.txt     |
       | test_sort/a space (2).txt |
-      | test_sort/a space 文件      |
-      | test_sort/a space 文件夹     |
+      | test_sort/a space 文件    |
+      | test_sort/a space 文件夹  |
       | test_sort/b1.txt          |
       | test_sort/b2.txt          |
       | test_sort/b10.txt         |
       | test_sort/z.txt           |
 
   Scenario: Folders are listed before files alphabetically by default and sorted using natural sort
-    When the user has browsed to the files page
+    When the user has browsed to the personal page
     Then these resources should be listed in the folder "test_sort" on the webUI
       | entry_name      |
       | a               |
-      | a 文件            |
+      | a 文件          |
       | 1               |
       | 2               |
       | 10              |
@@ -41,15 +41,15 @@ Feature: Sort files/folders
       | a.txt           |
       | a space.txt     |
       | a space (2).txt |
-      | a space 文件      |
-      | a space 文件夹     |
+      | a space 文件    |
+      | a space 文件夹  |
       | b1.txt          |
       | b2.txt          |
       | b10.txt         |
       | z.txt           |
 
   Scenario: Resources can be sorted in reverse alphabetical order
-    When the user has browsed to the files page
+    When the user has browsed to the personal page
     And the user has set the sort order of the "Name" column to descending order
     Then these resources should be listed in the folder "test_sort" on the webUI
       | entry_name      |
@@ -57,8 +57,8 @@ Feature: Sort files/folders
       | b10.txt         |
       | b2.txt          |
       | b1.txt          |
-      | a space 文件夹     |
-      | a space 文件      |
+      | a space 文件夹  |
+      | a space 文件    |
       | a space (2).txt |
       | a space.txt     |
       | a.txt           |
@@ -66,16 +66,16 @@ Feature: Sort files/folders
       | 10              |
       | 2               |
       | 1               |
-      | a 文件            |
+      | a 文件          |
       | a               |
 
   Scenario: Resources can be sorted by updated time
-    When the user has browsed to the files page
+    When the user has browsed to the personal page
     And the user has set the sort order of the "Modified" column to ascending order
     Then these resources should be listed in the folder "test_sort" on the webUI
       | entry_name |
       | a          |
-      | a 文件       |
+      | a 文件     |
       | 10         |
       | 1          |
       | 2          |

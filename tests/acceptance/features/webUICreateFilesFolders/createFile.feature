@@ -7,7 +7,7 @@ Feature: create files
     Given user "Alice" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created file "/lorem.txt" in the server
     And user "Alice" has logged in using the webUI
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
 
   @ocisSmokeTest
   Scenario: create a new file

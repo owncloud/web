@@ -1,6 +1,6 @@
 export default [
   {
-    name: "All files",
+    name: "Personal",
     icon: "folder",
     route: {
       name: "files-personal",
@@ -9,29 +9,11 @@ export default [
     active: true
   },
   {
-    name: "Shared with me",
-    icon: "shared-with-me",
+    name: "Shares",
+    icon: 'share-forward',
     route: {
       name: "files-shared-with-me",
       path: "/files/list/shared-with-me"
-    },
-    active: false
-  },
-  {
-    name: "Shared with others",
-    icon: "shared-with-others",
-    route: {
-      name: "files-shared-with-others",
-      path: "/files/list/shared-with-others"
-    },
-    active: false
-  },
-  {
-    name: "Shared via link",
-    icon: "link",
-    route: {
-      name: "files-shared-via-link",
-      path: "/files/list/shared-via-link"
     },
     active: false
   },
