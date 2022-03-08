@@ -71,7 +71,7 @@
                 </oc-drop>
               </div>
               <oc-button
-                v-if="!loadSharesTask.isRunning && currentFileOutgoingCollaborators.length"
+                v-if="memberCount"
                 :aria-label="$gettext('Open context menu and show members')"
                 appearance="raw"
                 @click="openSidebarSharePanel"
@@ -79,7 +79,7 @@
                 <oc-icon name="group" fill-type="line" size="small" />
                 <span
                   class="space-overview-people-count oc-text-small"
-                  v-text="peopleCountString"
+                  v-text="memberCountString"
                 ></span>
               </oc-button>
             </div>
@@ -280,18 +280,9 @@ export default {
       })
     })
 
-    const loadSharesTask = useTask(function* (signal, ref) {
-      yield ref.loadCurrentFileOutgoingShares({
-        client: graphClient,
-        path: ref.space.id,
-        space: ref.space
-      })
-    })
-
     return {
       space,
       loadResourcesTask,
-      loadSharesTask,
       resourceTargetLocation: createLocationSpaces('files-spaces-project'),
       paginatedResources,
       paginationPages,
@@ -318,8 +309,7 @@ export default {
       'selectedFiles',
       'currentFolder',
       'totalFilesCount',
-      'totalFilesSize',
-      'currentFileOutgoingCollaborators'
+      'totalFilesSize'
     ]),
     ...mapGetters(['user', 'getToken']),
 
@@ -349,15 +339,14 @@ export default {
     displayThumbnails() {
       return !this.configuration.options.disablePreviews
     },
-    peopleCountString() {
-      const translated = this.$ngettext(
-        '%{count} member',
-        '%{count} members',
-        this.currentFileOutgoingCollaborators.length
-      )
+    memberCount() {
+      return this.space.spaceMemberIds.length
+    },
+    memberCountString() {
+      const translated = this.$ngettext('%{count} member', '%{count} members', this.memberCount)
 
       return this.$gettextInterpolate(translated, {
-        count: this.currentFileOutgoingCollaborators.length
+        count: this.memberCount
       })
     },
     quotaModalIsOpen() {
@@ -436,7 +425,6 @@ export default {
   },
   async mounted() {
     await this.loadResourcesTask.perform(this, false, this.$route.params.item || '')
-    this.loadSharesTask.perform(this)
 
     if (this.markdownResizeObserver) {
       this.markdownResizeObserver.unobserve(this.$refs.markdownContainer)
