@@ -14,7 +14,13 @@ export default {
             return this.$gettext('Change subtitle')
           },
           handler: this.$_editDescription_trigger,
-          isEnabled: ({ resources }) => resources.length === 1,
+          isEnabled: ({ resources }) => {
+            if (resources.length !== 1) {
+              return false
+            }
+
+            return resources[0].canEditDescription({ user: this.user })
+          },
           componentType: 'oc-button',
           class: 'oc-files-actions-edit-description-trigger'
         }

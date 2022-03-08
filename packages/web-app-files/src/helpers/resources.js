@@ -168,20 +168,50 @@ export function buildSpace(space) {
     spaceRoles,
     spaceImageData,
     spaceReadmeData,
-    canUpload: function () {
-      return true
+    canUpload: function ({ user }) {
+      const allowedRoles = [
+        ...this.spaceRoles[spaceRoleManager.name],
+        ...this.spaceRoles[spaceRoleEditor.name]
+      ]
+      return user && allowedRoles.includes(user.uuid)
     },
     canDownload: function () {
       return true
     },
-    canBeDeleted: function () {
-      return true
+    canBeDeleted: function ({ user }) {
+      return this.disabled && user && this.spaceRoles[spaceRoleManager.name].includes(user.uuid)
     },
-    canRename: function () {
-      return true
+    canRename: function ({ user }) {
+      return user && this.spaceRoles[spaceRoleManager.name].includes(user.uuid)
     },
-    canShare: function () {
-      return true
+    canEditDescription: function ({ user }) {
+      return user && this.spaceRoles[spaceRoleManager.name].includes(user.uuid)
+    },
+    canRestore: function ({ user }) {
+      return this.disabled && user && this.spaceRoles[spaceRoleManager.name].includes(user.uuid)
+    },
+    canDisable: function ({ user }) {
+      return !this.disabled && user && this.spaceRoles[spaceRoleManager.name].includes(user.uuid)
+    },
+    canShare: function ({ user }) {
+      return user && this.spaceRoles[spaceRoleManager.name].includes(user.uuid)
+    },
+    canEditImage: function ({ user }) {
+      const allowedRoles = [
+        ...this.spaceRoles[spaceRoleManager.name],
+        ...this.spaceRoles[spaceRoleEditor.name]
+      ]
+      return user && allowedRoles.includes(user.uuid)
+    },
+    canEditReadme: function ({ user }) {
+      const allowedRoles = [
+        ...this.spaceRoles[spaceRoleManager.name],
+        ...this.spaceRoles[spaceRoleEditor.name]
+      ]
+      return user && allowedRoles.includes(user.uuid)
+    },
+    canEditQuota: function ({ user }) {
+      return user && this.spaceRoles[spaceRoleManager.name].includes(user.uuid)
     },
     canCreate: function () {
       return true

@@ -134,7 +134,7 @@ export default {
       if (!this.currentFolder) {
         return false
       }
-      return this.currentFolder.canUpload()
+      return this.currentFolder.canUpload({ user: this.user })
     },
     showActions() {
       return this.$route.meta.hideFilelistActions !== true

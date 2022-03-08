@@ -1,3 +1,5 @@
+import { mapState } from 'vuex'
+
 export default {
   data: function () {
     return {
@@ -5,6 +7,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(['user']),
     $_editReadmeContent_items() {
       return [
         {
@@ -16,6 +19,10 @@ export default {
           handler: this.$_editReadmeContent_trigger,
           isEnabled: ({ resources }) => {
             if (resources.length !== 1) {
+              return false
+            }
+
+            if (!resources[0].canEditReadme({ user: this.user })) {
               return false
             }
 

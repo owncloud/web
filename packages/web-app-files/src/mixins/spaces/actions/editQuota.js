@@ -8,6 +8,8 @@ export default {
   },
   computed: {
     ...mapState('Files', ['currentFolder']),
+    ...mapState(['user']),
+
     $_editQuota_items() {
       return [
         {
@@ -22,7 +24,11 @@ export default {
               return false
             }
 
-            return resources[0].spaceQuota
+            if (!resources[0].spaceQuota) {
+              return false
+            }
+
+            return resources[0].canEditQuota({ user: this.user })
           },
           componentType: 'oc-button',
           class: 'oc-files-actions-edit-quota-trigger'

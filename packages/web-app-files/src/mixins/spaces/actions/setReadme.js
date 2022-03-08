@@ -3,8 +3,15 @@ import { mapMutations, mapState, mapActions } from 'vuex'
 import { bus } from 'web-pkg/src/instance'
 
 export default {
+  inject: {
+    currentSpace: {
+      from: 'currentSpace',
+      default: null
+    }
+  },
   computed: {
     ...mapState('Files', ['currentFolder']),
+    ...mapState(['user']),
     $_setSpaceReadme_items() {
       return [
         {
@@ -21,13 +28,24 @@ export default {
             if (!resources[0].mimeType?.startsWith('text/')) {
               return false
             }
-            return isLocationSpacesActive(this.$router, 'files-spaces-project')
+            if (!isLocationSpacesActive(this.$router, 'files-spaces-project')) {
+              return false
+            }
+
+            if (!this.space) {
+              return false
+            }
+
+            return this.space.canEditReadme({ user: this.user })
           },
           canBeDefault: false,
           componentType: 'oc-button',
           class: 'oc-files-actions-set-space-readme-trigger'
         }
       ]
+    },
+    space() {
+      return this.currentSpace?.value
     }
   },
   methods: {

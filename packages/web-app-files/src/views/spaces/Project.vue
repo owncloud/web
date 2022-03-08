@@ -206,6 +206,11 @@ export default {
     EditReadmeContent,
     EditQuota
   ],
+  provide() {
+    return {
+      currentSpace: computed(() => this.space)
+    }
+  },
   setup() {
     const router = useRouter()
     const store = useStore()
