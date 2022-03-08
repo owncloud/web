@@ -19,6 +19,7 @@ Summary
 * Enhancement - Allow updating space quota: [#6477](https://github.com/owncloud/web/pull/6477)
 * Enhancement - Update the stored space after its members have been changed: [#6545](https://github.com/owncloud/web/pull/6545)
 * Enhancement - Implement people sharing for spaces: [#6455](https://github.com/owncloud/web/pull/6455)
+* Enhancement - Implement the spaces permission concept: [#6531](https://github.com/owncloud/web/pull/6531)
 * Enhancement - Update the graph SDK: [#6519](https://github.com/owncloud/web/pull/6519)
 
 Details
@@ -108,6 +109,13 @@ Details
 
    https://github.com/owncloud/web/issues/6283
    https://github.com/owncloud/web/pull/6455
+
+* Enhancement - Implement the spaces permission concept: [#6531](https://github.com/owncloud/web/pull/6531)
+
+   We've implemented the spaces permission concept and improved the code structure for further
+   permission changes.
+
+   https://github.com/owncloud/web/pull/6531
 
 * Enhancement - Update the graph SDK: [#6519](https://github.com/owncloud/web/pull/6519)
 
