@@ -1,0 +1,5 @@
+Enhancement: Don't block account page while groups are loading
+
+We don't show a loading state for the full account information page anymore while the group membership information is loading. Instead we only show a loading spinner for the group membership information, while the rest of the user information is available immediately.
+
+https://github.com/owncloud/web/pull/6547
