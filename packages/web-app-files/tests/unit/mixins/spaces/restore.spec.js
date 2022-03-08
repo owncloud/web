@@ -4,6 +4,7 @@ import { mount, createLocalVue } from '@vue/test-utils'
 import restore from '@files/src/mixins/spaces/actions/restore.js'
 import { createLocationSpaces } from '../../../../src/router'
 import mockAxios from 'jest-mock-axios'
+import { buildSpace } from '../../../../src/helpers/resources'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -22,16 +23,42 @@ describe('restore', () => {
       expect(wrapper.vm.$_restore_items[0].isEnabled({ resources: [] })).toBe(false)
     })
     it('should be false when the space is not disabled', () => {
+      const spaceMock = {
+        id: '1',
+        root: {
+          permissions: [{ roles: ['manager'], grantedTo: [{ user: { id: 1 } }] }]
+        }
+      }
       const wrapper = getWrapper()
-      expect(
-        wrapper.vm.$_restore_items[0].isEnabled({ resources: [{ id: 1, disabled: false }] })
-      ).toBe(false)
+      expect(wrapper.vm.$_restore_items[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(
+        false
+      )
     })
     it('should be true when the space is disabled', () => {
+      const spaceMock = {
+        id: '1',
+        root: {
+          permissions: [{ roles: ['manager'], grantedTo: [{ user: { id: 1 } }] }],
+          deleted: { state: 'trashed' }
+        }
+      }
       const wrapper = getWrapper()
-      expect(
-        wrapper.vm.$_restore_items[0].isEnabled({ resources: [{ id: 1, disabled: true }] })
-      ).toBe(true)
+      expect(wrapper.vm.$_restore_items[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(
+        true
+      )
+    })
+    it('should be false when the current user is a viewer', () => {
+      const spaceMock = {
+        id: '1',
+        root: {
+          permissions: [{ roles: ['viewer'], grantedTo: [{ user: { id: 1 } }] }],
+          deleted: { state: 'trashed' }
+        }
+      }
+      const wrapper = getWrapper()
+      expect(wrapper.vm.$_restore_items[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(
+        false
+      )
     })
   })
 
@@ -106,6 +133,12 @@ function getWrapper() {
         getToken: () => 'token'
       },
       modules: {
+        user: {
+          state: {
+            id: 'alice',
+            uuid: 1
+          }
+        },
         Files: {
           namespaced: true,
           mutations: {
