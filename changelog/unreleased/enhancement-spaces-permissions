@@ -1,0 +1,5 @@
+Enhancement: Implement the spaces permission concept
+
+We've implemented the spaces permission concept and improved the code structure for further permission changes.
+
+https://github.com/owncloud/web/pull/6531
