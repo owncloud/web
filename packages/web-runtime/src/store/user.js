@@ -103,7 +103,11 @@ const actions = {
 
         // FIXME: Can be removed as soon as the uuid is integrated in the OCS api
         const graphClient = clientService.graphAuthenticated(instance, token)
-        const graphUser = await graphClient.users.getMe()
+
+        let graphUser
+        if (context.state.capabilities.spaces?.enabled) {
+          graphUser = await graphClient.users.getMe()
+        }
 
         let userEmail = ''
         if (login && login.email) {
@@ -114,7 +118,7 @@ const actions = {
 
         context.commit('SET_USER', {
           id: login.id,
-          uuid: graphUser.data.id,
+          uuid: graphUser?.data?.id || '',
           username: login.username,
           displayname: login.displayname || login['display-name'],
           email: userEmail,
