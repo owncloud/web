@@ -17,6 +17,7 @@ Summary
 * Enhancement - Don't block account page while groups are loading: [#6547](https://github.com/owncloud/web/pull/6547)
 * Enhancement - Add a watcher for the share panel of a space: [#6543](https://github.com/owncloud/web/pull/6543)
 * Enhancement - Load space images as preview: [#6529](https://github.com/owncloud/web/pull/6529)
+* Enhancement - Shares overview: [#6440](https://github.com/owncloud/web/issues/6440)
 * Enhancement - Allow updating space quota: [#6477](https://github.com/owncloud/web/pull/6477)
 * Enhancement - Update the stored space after its members have been changed: [#6545](https://github.com/owncloud/web/pull/6545)
 * Enhancement - Implement people sharing for spaces: [#6455](https://github.com/owncloud/web/pull/6455)
@@ -91,6 +92,17 @@ Details
    We've added a new logic which renders space images as preview to minimize data traffic
 
    https://github.com/owncloud/web/pull/6529
+
+* Enhancement - Shares overview: [#6440](https://github.com/owncloud/web/issues/6440)
+
+   We've merged the three shares navigation items into one central "Shares" item, with a toggle to
+   switch between the three different kinds of shares (incoming, outgoing, links). In the
+   process, we have also renamed the "All files" page to the "Personal" page, indicating that this
+   is the user's personal space since shares (and potentially other shared spaces) live
+   elsewhere.
+
+   https://github.com/owncloud/web/issues/6440
+   https://github.com/owncloud/web/pull/6512
 
 * Enhancement - Allow updating space quota: [#6477](https://github.com/owncloud/web/pull/6477)
 
