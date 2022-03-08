@@ -179,22 +179,28 @@ export function buildSpace(space) {
       return true
     },
     canBeDeleted: function ({ user }) {
-      return this.disabled && user && this.spaceRoles[spaceRoleManager.name].includes(user.uuid)
+      const allowedRoles = [...this.spaceRoles[spaceRoleManager.name]]
+      return this.disabled && user && allowedRoles.includes(user.uuid)
     },
     canRename: function ({ user }) {
-      return user && this.spaceRoles[spaceRoleManager.name].includes(user.uuid)
+      const allowedRoles = [...this.spaceRoles[spaceRoleManager.name]]
+      return user && allowedRoles.includes(user.uuid)
     },
     canEditDescription: function ({ user }) {
-      return user && this.spaceRoles[spaceRoleManager.name].includes(user.uuid)
+      const allowedRoles = [...this.spaceRoles[spaceRoleManager.name]]
+      return user && allowedRoles.includes(user.uuid)
     },
     canRestore: function ({ user }) {
-      return this.disabled && user && this.spaceRoles[spaceRoleManager.name].includes(user.uuid)
+      const allowedRoles = [...this.spaceRoles[spaceRoleManager.name]]
+      return this.disabled && user && allowedRoles.includes(user.uuid)
     },
     canDisable: function ({ user }) {
-      return !this.disabled && user && this.spaceRoles[spaceRoleManager.name].includes(user.uuid)
+      const allowedRoles = [...this.spaceRoles[spaceRoleManager.name]]
+      return !this.disabled && user && allowedRoles.includes(user.uuid)
     },
     canShare: function ({ user }) {
-      return user && this.spaceRoles[spaceRoleManager.name].includes(user.uuid)
+      const allowedRoles = [...this.spaceRoles[spaceRoleManager.name]]
+      return user && allowedRoles.includes(user.uuid)
     },
     canEditImage: function ({ user }) {
       const allowedRoles = [
@@ -211,7 +217,8 @@ export function buildSpace(space) {
       return user && allowedRoles.includes(user.uuid)
     },
     canEditQuota: function ({ user }) {
-      return user && this.spaceRoles[spaceRoleManager.name].includes(user.uuid)
+      const allowedRoles = [...this.spaceRoles[spaceRoleManager.name]]
+      return user && allowedRoles.includes(user.uuid)
     },
     canCreate: function () {
       return true
