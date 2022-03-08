@@ -210,6 +210,10 @@ export default {
 
   li {
     padding: 6px;
+    &:hover {
+      background-color: var(--oc-color-background-hover);
+      border-radius: 4px;
+    }
   }
 
   > li {
@@ -224,12 +228,6 @@ export default {
       vertical-align: top;
       width: 100%;
       text-align: left;
-
-      span:hover,
-      &:hover {
-        color: var(--oc-color-swatch-passive-hover) !important;
-        text-decoration: underline !important;
-      }
     }
   }
 
