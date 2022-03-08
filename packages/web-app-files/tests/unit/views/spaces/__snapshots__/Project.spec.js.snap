@@ -11,13 +11,13 @@ exports[`Spaces project view space image should show if given 1`] = `
         <div class="oc-flex oc-mb-s oc-flex-middle oc-flex-between">
           <div class="oc-flex oc-flex-middle">
             <h1 class="space-overview-name oc-text-truncate">space</h1>
-            <oc-button-stub type="button" size="medium" arialabel="Show context menu" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="space-context-btn" class="oc-ml-s">
+            <oc-button-stub type="button" size="medium" arialabel="Show context menu" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="space-context-btn" class="oc-ml-s">
               <oc-icon-stub name="more-2" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
             </oc-button-stub>
             <oc-drop-stub dropid="space-context-drop" toggle="#space-context-btn" position="right-start" mode="click" closeonclick="true" paddingsize="small" options="[object Object]"><input id="space-image-upload-input" type="file" name="file" multiple="multiple" tabindex="-1" accept="image/png,image/jpg,image/jpeg,image/gif">
               <ul class="oc-list oc-files-context-actions">
                 <li class="oc-spaces-context-action oc-py-xs oc-px-s">
-                  <oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="left" gapsize="medium">
+                  <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="left" gapsize="medium">
                     <oc-icon-stub name="information" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
                     Details
                   </oc-button-stub>
@@ -25,7 +25,7 @@ exports[`Spaces project view space image should show if given 1`] = `
               </ul>
             </oc-drop-stub>
           </div>
-          <oc-button-stub type="button" size="medium" arialabel="Open context menu and show members" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">
+          <oc-button-stub type="button" size="medium" arialabel="Open context menu and show members" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">
             <oc-icon-stub name="group" filltype="line" accessiblelabel="" type="span" size="small" variation="passive" color=""></oc-icon-stub> <span class="space-overview-people-count oc-text-small">1 member</span>
           </oc-button-stub>
         </div>
@@ -54,13 +54,13 @@ exports[`Spaces project view space readme should show if given 1`] = `
         <div class="oc-flex oc-mb-s oc-flex-middle oc-flex-between">
           <div class="oc-flex oc-flex-middle">
             <h1 class="space-overview-name oc-text-truncate">space</h1>
-            <oc-button-stub type="button" size="medium" arialabel="Show context menu" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="space-context-btn" class="oc-ml-s">
+            <oc-button-stub type="button" size="medium" arialabel="Show context menu" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="space-context-btn" class="oc-ml-s">
               <oc-icon-stub name="more-2" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
             </oc-button-stub>
             <oc-drop-stub dropid="space-context-drop" toggle="#space-context-btn" position="right-start" mode="click" closeonclick="true" paddingsize="small" options="[object Object]"><input id="space-image-upload-input" type="file" name="file" multiple="multiple" tabindex="-1" accept="image/png,image/jpg,image/jpeg,image/gif">
               <ul class="oc-list oc-files-context-actions">
                 <li class="oc-spaces-context-action oc-py-xs oc-px-s">
-                  <oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="left" gapsize="medium">
+                  <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="left" gapsize="medium">
                     <oc-icon-stub name="information" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
                     Details
                   </oc-button-stub>
@@ -68,7 +68,7 @@ exports[`Spaces project view space readme should show if given 1`] = `
               </ul>
             </oc-drop-stub>
           </div>
-          <oc-button-stub type="button" size="medium" arialabel="Open context menu and show members" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">
+          <oc-button-stub type="button" size="medium" arialabel="Open context menu and show members" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">
             <oc-icon-stub name="group" filltype="line" accessiblelabel="" type="span" size="small" variation="passive" color=""></oc-icon-stub> <span class="space-overview-people-count oc-text-small">1 member</span>
           </oc-button-stub>
         </div>

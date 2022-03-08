@@ -4,28 +4,28 @@ exports[`SharesNavigation component renders a shares navigation for both mobile 
 <nav id="shares-navigation" aria-label="Shares pages navigation" class="oc-py-s">
   <ul class="oc-list oc-my-rm oc-mx-rm oc-flex oc-visible@s">
     <li>
-      <oc-button-stub type="router-link" size="medium" to="/files/shares/with-me/" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" class="oc-mr-s"><span>Shared with me</span></oc-button-stub>
+      <oc-button-stub type="router-link" size="medium" to="/files/shares/with-me/" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" class="oc-mr-s"><span>Shared with me</span></oc-button-stub>
     </li>
     <li>
-      <oc-button-stub type="router-link" size="medium" to="/files/shares/with-others/" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" class="oc-mr-s"><span>Shared with others</span></oc-button-stub>
+      <oc-button-stub type="router-link" size="medium" to="/files/shares/with-others/" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" class="oc-mr-s"><span>Shared with others</span></oc-button-stub>
     </li>
     <li>
-      <oc-button-stub type="router-link" size="medium" to="/files/shares/via-link/" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" class="oc-mr-s"><span>Shared via link</span></oc-button-stub>
+      <oc-button-stub type="router-link" size="medium" to="/files/shares/via-link/" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" class="oc-mr-s"><span>Shared via link</span></oc-button-stub>
     </li>
   </ul>
   <div class="oc-hidden@s">
-    <oc-button-stub type="button" size="medium" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="shares_navigation_mobile">Shares pages</oc-button-stub>
+    <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="shares_navigation_mobile">Shares pages</oc-button-stub>
     <div id="oc-drop-3" class="oc-drop oc-box-shadow-medium oc-rounded">
       <div class="oc-card oc-card-body oc-rounded oc-background-secondary oc-p-s">
         <ul class="oc-list oc-my-rm oc-mx-rm">
           <li>
-            <oc-button-stub type="router-link" size="medium" to="/files/shares/with-me/" variation="passive" appearance="raw" justifycontent="center" gapsize="medium"><span>Shared with me</span></oc-button-stub>
+            <oc-button-stub type="router-link" size="medium" to="/files/shares/with-me/" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium"><span>Shared with me</span></oc-button-stub>
           </li>
           <li>
-            <oc-button-stub type="router-link" size="medium" to="/files/shares/with-others/" variation="passive" appearance="raw" justifycontent="center" gapsize="medium"><span>Shared with others</span></oc-button-stub>
+            <oc-button-stub type="router-link" size="medium" to="/files/shares/with-others/" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium"><span>Shared with others</span></oc-button-stub>
           </li>
           <li>
-            <oc-button-stub type="router-link" size="medium" to="/files/shares/via-link/" variation="passive" appearance="raw" justifycontent="center" gapsize="medium"><span>Shared via link</span></oc-button-stub>
+            <oc-button-stub type="router-link" size="medium" to="/files/shares/via-link/" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium"><span>Shared via link</span></oc-button-stub>
           </li>
         </ul>
       </div>

@@ -102,6 +102,9 @@ function getMountedWrapper(activeFiles = []) {
       getters: {
         configuration: () => ({
           server: 'https://example.com/'
+        }),
+        user: () => ({
+          id: 'marie'
         })
       },
       actions: {
