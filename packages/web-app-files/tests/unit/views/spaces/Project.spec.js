@@ -39,6 +39,7 @@ const spaceMocks = {
   spaceWithReadmeAndImage: {
     id: 1,
     name: 'space',
+    root: { permissions: [{ roles: ['manager'], grantedTo: [{ user: { id: 1 } }] }] },
     special: [
       {
         specialFolder: { name: 'readme' },
@@ -55,6 +56,7 @@ const spaceMocks = {
   spaceWithoutReadmeAndImage: {
     id: 1,
     name: 'space',
+    root: { permissions: [{ roles: ['manager'], grantedTo: [{ user: { id: 1 } }] }] },
     special: []
   }
 }

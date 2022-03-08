@@ -1,0 +1,5 @@
+Bugfix: Prevent the member count inside a space from disappearing
+
+We've fixed a bug where opening the sidebar for a file inside a space caused the member count of the space to disappear.
+
+https://github.com/owncloud/web/pull/6550
