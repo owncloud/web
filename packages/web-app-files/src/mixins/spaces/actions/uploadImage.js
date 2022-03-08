@@ -21,7 +21,13 @@ export default {
           label: () => {
             return this.$gettext('Upload new space image')
           },
-          isEnabled: ({ resources }) => resources.length === 1,
+          isEnabled: ({ resources }) => {
+            if (resources.length !== 1) {
+              return false
+            }
+
+            return resources[0].canEditImage({ user: this.user })
+          },
           componentType: 'oc-button',
           class: 'oc-files-actions-upload-space-image-trigger'
         }

@@ -6,6 +6,7 @@ import { createLocationSpaces } from '../../../../src/router'
 // eslint-disable-next-line jest/no-mocks-import
 import sdkMock from '@/__mocks__/sdk'
 import { bus } from 'web-pkg/src/instance'
+import { buildSpace } from '../../../../src/helpers/resources'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -16,7 +17,7 @@ describe('setReadme', () => {
     mixins: [setReadme]
   }
 
-  function getWrapper(resolveGetFileContents = true) {
+  function getWrapper(resolveGetFileContents = true, space) {
     return mount(Component, {
       localVue,
       mocks: {
@@ -43,6 +44,11 @@ describe('setReadme', () => {
         },
         $gettext: jest.fn()
       },
+      provide: {
+        currentSpace: {
+          value: space
+        }
+      },
       store: createStore(Vuex.Store, {
         actions: {
           createModal: jest.fn(),
@@ -57,6 +63,12 @@ describe('setReadme', () => {
           getToken: () => 'token'
         },
         modules: {
+          user: {
+            state: {
+              id: 'alice',
+              uuid: 1
+            }
+          },
           Files: {
             namespaced: true,
             mutations: {
@@ -81,20 +93,43 @@ describe('setReadme', () => {
       expect(wrapper.vm.$_setSpaceReadme_items[0].isEnabled({ resources: [] })).toBe(false)
     })
     it('should be false when mimeType is not text', () => {
-      const wrapper = getWrapper()
+      const spaceMock = {
+        id: '1',
+        root: { permissions: [{ roles: ['manager'], grantedTo: [{ user: { id: 1 } }] }] },
+        special: [{ specialFolder: { name: 'readme' } }]
+      }
+      const wrapper = getWrapper(true, buildSpace(spaceMock))
       expect(
         wrapper.vm.$_setSpaceReadme_items[0].isEnabled({
           resources: [{ id: 1, mimeType: 'image/png' }]
         })
       ).toBe(false)
     })
-    it('should be true when when mimeType is text', () => {
-      const wrapper = getWrapper()
+    it('should be true when the mimeType is "text/plain"', () => {
+      const spaceMock = {
+        id: '1',
+        root: { permissions: [{ roles: ['manager'], grantedTo: [{ user: { id: 1 } }] }] },
+        special: [{ specialFolder: { name: 'readme' } }]
+      }
+      const wrapper = getWrapper(true, buildSpace(spaceMock))
       expect(
         wrapper.vm.$_setSpaceReadme_items[0].isEnabled({
           resources: [{ id: 1, mimeType: 'text/plain' }]
         })
       ).toBe(true)
+    })
+    it('should be true when when mimeType is text', () => {
+      const spaceMock = {
+        id: '1',
+        root: { permissions: [{ roles: ['viewer'], grantedTo: [{ user: { id: 1 } }] }] },
+        special: [{ specialFolder: { name: 'readme' } }]
+      }
+      const wrapper = getWrapper(true, buildSpace(spaceMock))
+      expect(
+        wrapper.vm.$_setSpaceReadme_items[0].isEnabled({
+          resources: [{ id: 1, mimeType: 'text/plain' }]
+        })
+      ).toBe(false)
     })
   })
   describe('method "$_setSpaceReadme_trigger"', () => {

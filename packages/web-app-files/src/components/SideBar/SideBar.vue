@@ -127,6 +127,7 @@ export default {
     ...mapGetters('Files', ['highlightedFile', 'selectedFiles', 'publicLinkPassword']),
     ...mapGetters(['fileSideBars', 'capabilities']),
     ...mapState('Files/sidebar', { sidebarActivePanel: 'activePanel' }),
+    ...mapState(['user']),
     activeAvailablePanelName() {
       if (!this.sidebarActivePanel) {
         return null
@@ -148,7 +149,8 @@ export default {
             route: this.$route,
             router: this.$router,
             multipleSelection: this.areMultipleSelected,
-            rootFolder: this.isRootFolder
+            rootFolder: this.isRootFolder,
+            user: this.user
           })
 
           if (panel.enabled) {

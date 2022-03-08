@@ -206,7 +206,10 @@ function createStore(state = { selected: [], currentFolder: {} }, fileHandlers =
   return new Vuex.Store({
     getters: {
       getToken: jest.fn(),
-      quota: jest.fn()
+      quota: jest.fn(),
+      user: function () {
+        return { id: 'alice' }
+      }
     },
     modules: {
       Files: {

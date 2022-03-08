@@ -2,12 +2,14 @@ import get from 'lodash-es/get.js'
 import isEmpty from 'lodash-es/isEmpty'
 import initVueAuthenticate from '../services/auth'
 import { router } from '../router'
+import { clientService } from 'web-pkg/src/services'
 
 let vueAuthInstance
 
 const state = {
   token: '',
   id: '',
+  uuid: '',
   displayname: '',
   email: '',
   isAuthenticated: false,
@@ -99,6 +101,13 @@ const actions = {
         const userGroups = await client.users.getUserGroups(login.id)
         const user = await client.users.getUser(login.id)
 
+        // FIXME: Can be removed as soon as the uuid is integrated in the OCS api
+        let graphUser
+        if (context.state.capabilities.spaces?.enabled) {
+          const graphClient = clientService.graphAuthenticated(instance, token)
+          graphUser = await graphClient.users.getMe()
+        }
+
         let userEmail = ''
         if (login && login.email) {
           userEmail = login.email
@@ -108,6 +117,7 @@ const actions = {
 
         context.commit('SET_USER', {
           id: login.id,
+          uuid: graphUser?.data?.id || '',
           username: login.username,
           displayname: login.displayname || login['display-name'],
           email: userEmail,
@@ -234,6 +244,7 @@ const mutations = {
     }
     state.displayname = user.displayname
     state.id = user.id
+    state.uuid = user.uuid
     state.username = user.username
     state.email = email
     state.isAuthenticated = user.isAuthenticated

@@ -4,6 +4,7 @@ import { mount, createLocalVue } from '@vue/test-utils'
 import disable from '@files/src/mixins/spaces/actions/disable.js'
 import { createLocationSpaces } from '../../../../src/router'
 import mockAxios from 'jest-mock-axios'
+import { buildSpace } from '../../../../src/helpers/resources'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -22,16 +23,41 @@ describe('disable', () => {
       expect(wrapper.vm.$_disable_items[0].isEnabled({ resources: [] })).toBe(false)
     })
     it('should be true when the space is not disabled', () => {
+      const spaceMock = {
+        id: '1',
+        root: {
+          permissions: [{ roles: ['manager'], grantedTo: [{ user: { id: 1 } }] }]
+        }
+      }
       const wrapper = getWrapper()
-      expect(
-        wrapper.vm.$_disable_items[0].isEnabled({ resources: [{ id: 1, disabled: false }] })
-      ).toBe(true)
+      expect(wrapper.vm.$_disable_items[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(
+        true
+      )
     })
     it('should be false when the space is disabled', () => {
+      const spaceMock = {
+        id: '1',
+        root: {
+          permissions: [{ roles: ['manager'], grantedTo: [{ user: { id: 1 } }] }],
+          deleted: { state: 'trashed' }
+        }
+      }
       const wrapper = getWrapper()
-      expect(
-        wrapper.vm.$_disable_items[0].isEnabled({ resources: [{ id: 1, disabled: true }] })
-      ).toBe(false)
+      expect(wrapper.vm.$_disable_items[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(
+        false
+      )
+    })
+    it('should be false when current user is a viewer', () => {
+      const spaceMock = {
+        id: '1',
+        root: {
+          permissions: [{ roles: ['viewer'], grantedTo: [{ user: { id: 1 } }] }]
+        }
+      }
+      const wrapper = getWrapper()
+      expect(wrapper.vm.$_disable_items[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(
+        false
+      )
     })
   })
 
@@ -106,6 +132,12 @@ function getWrapper() {
         getToken: () => 'token'
       },
       modules: {
+        user: {
+          state: {
+            id: 'alice',
+            uuid: 1
+          }
+        },
         Files: {
           namespaced: true,
           mutations: {

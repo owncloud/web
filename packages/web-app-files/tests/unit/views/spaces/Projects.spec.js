@@ -5,6 +5,7 @@ import mockAxios from 'jest-mock-axios'
 import SpaceProjects from '../../../../src/views/spaces/Projects.vue'
 import VueRouter from 'vue-router'
 import Vuex from 'vuex'
+import { buildSpace } from '../../../../src/helpers/resources'
 
 localVue.use(VueRouter)
 
@@ -32,7 +33,7 @@ describe('Spaces component', () => {
   })
 
   it('should list spaces', async () => {
-    const drives = [{ driveType: 'project', id: '1' }]
+    const drives = [buildSpace({ driveType: 'project', id: '1' })]
 
     mockAxios.request.mockImplementationOnce(() => {
       return Promise.resolve({
