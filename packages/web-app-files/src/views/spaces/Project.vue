@@ -330,8 +330,7 @@ export default {
       return !this.configuration.options.disablePreviews
     },
     memberCount() {
-      const roles = Object.values(this.space.spaceRoles)
-      return roles.reduce((arr, obj) => arr.concat(obj), []).length
+      return this.space.spaceMemberIds.length
     },
     memberCountString() {
       const translated = this.$ngettext('%{count} member', '%{count} members', this.memberCount)
