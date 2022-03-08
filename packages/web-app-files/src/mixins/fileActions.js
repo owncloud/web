@@ -1,7 +1,7 @@
 import get from 'lodash-es/get'
 import { mapGetters, mapActions, mapState } from 'vuex'
 
-import { isAuthenticatedRoute, isLocationCommonActive } from '../router'
+import { isAuthenticatedRoute, isLocationTrashActive } from '../router'
 import { routeToContextQuery } from 'web-pkg/src/composables/appDefaults'
 import AcceptShare from './actions/acceptShare'
 import Copy from './actions/copy'
@@ -62,7 +62,10 @@ export default {
     },
 
     $_fileActions_editorActions() {
-      if (isLocationCommonActive(this.$router, 'files-common-trash')) {
+      if (
+        isLocationTrashActive(this.$router, 'files-trash-personal') ||
+        isLocationTrashActive(this.$router, 'files-trash-project')
+      ) {
         return []
       }
       return this.apps.fileEditors
@@ -204,7 +207,10 @@ export default {
     // to open a resource with a specific mimeType
     // FIXME: filesApp should not know anything about any other app, dont cross the line!!! BAD
     $_fileActions_loadExternalAppActions(resources) {
-      if (isLocationCommonActive(this.$router, 'files-common-trash')) {
+      if (
+        isLocationTrashActive(this.$router, 'files-trash-personal') ||
+        isLocationTrashActive(this.$router, 'files-trash-project')
+      ) {
         return []
       }
 

@@ -1,5 +1,5 @@
 import { mapActions } from 'vuex'
-import { isLocationCommonActive } from '../../router'
+import { isLocationTrashActive } from '../../router'
 import isFilesAppActive from './helpers/isFilesAppActive'
 
 export default {
@@ -36,7 +36,10 @@ export default {
       // we don't have details in the trashbin, yet.
       // return hardcoded `actions-item` in all cases once we have them.
       await this.openSidebarWithPanel(
-        isLocationCommonActive(this.$router, 'files-common-trash') ? null : 'actions-item'
+        isLocationTrashActive(this.$router, 'files-trash-personal') ||
+          isLocationTrashActive(this.$router, 'files-trash-project')
+          ? null
+          : 'actions-item'
       )
     }
   }

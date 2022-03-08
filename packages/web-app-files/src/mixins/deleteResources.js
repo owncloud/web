@@ -1,8 +1,9 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 import { cloneStateObject } from '../helpers/store'
 import { isSameResource } from '../helpers/resource'
+import { buildWebDavFilesTrashPath } from '../helpers/resources'
 import PQueue from 'p-queue'
-import { isLocationCommonActive } from '../router'
+import { isLocationTrashActive } from '../router'
 
 export default {
   data: () => ({
@@ -16,7 +17,10 @@ export default {
     ...mapGetters(['user']),
 
     $_deleteResources_isInTrashbin() {
-      return isLocationCommonActive(this.$router, 'files-common-trash')
+      return (
+        isLocationTrashActive(this.$router, 'files-trash-personal') ||
+        isLocationTrashActive(this.$router, 'files-trash-project')
+      )
     },
 
     $_deleteResources_resources() {
@@ -96,7 +100,7 @@ export default {
 
     $_deleteResources_trashbin_deleteOp(resource) {
       return this.$client.fileTrash
-        .clearTrashBin(resource.id)
+        .clearTrashBin(buildWebDavFilesTrashPath(this.user.id), resource.id)
         .then(() => {
           this.removeFilesFromTrashbin([resource])
           const translated = this.$gettext('"%{file}" was deleted successfully')

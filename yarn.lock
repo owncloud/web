@@ -5741,6 +5741,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eslint-plugin-unused-imports@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "eslint-plugin-unused-imports@npm:2.0.0"
+  dependencies:
+    eslint-rule-composer: ^0.3.0
+  peerDependencies:
+    "@typescript-eslint/eslint-plugin": ^5.0.0
+    eslint: ^8.0.0
+  peerDependenciesMeta:
+    "@typescript-eslint/eslint-plugin":
+      optional: true
+  checksum: 8aa1e03e75da2a62a354065e0cb8fe370118c6f8d9720a32fe8c1da937de6adb81a4fed7d0d391d115ac9453b49029fb19f970d180a2cf3dba451fd4c20f0dc4
+  languageName: node
+  linkType: hard
+
 "eslint-plugin-vue@npm:^7.13.0":
   version: 7.13.0
   resolution: "eslint-plugin-vue@npm:7.13.0"
@@ -5765,6 +5780,13 @@ __metadata:
   peerDependencies:
     eslint: ^5.0.0 || ^6.0.0 || ^7.0.0
   checksum: ec6236b11d11458236b6d42a2ab986fcaa3900426cb185899596df4719480895b157200da778b3ab7d2c1e11a332028edf5a3c3557c8e3a7aa2298f4266ce3de
+  languageName: node
+  linkType: hard
+
+"eslint-rule-composer@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "eslint-rule-composer@npm:0.3.0"
+  checksum: c2f57cded8d1c8f82483e0ce28861214347e24fd79fd4144667974cd334d718f4ba05080aaef2399e3bbe36f7d6632865110227e6b176ed6daa2d676df9281b1
   languageName: node
   linkType: hard
 
@@ -9548,9 +9570,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"owncloud-sdk@npm:~2.1.0-alpha.3":
-  version: 2.1.0-alpha.3
-  resolution: "owncloud-sdk@npm:2.1.0-alpha.3"
+"owncloud-sdk@portal:/home/jan/working/owncloud-sdk::locator=root-workspace-0b6124%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "owncloud-sdk@portal:/home/jan/working/owncloud-sdk::locator=root-workspace-0b6124%40workspace%3A."
   peerDependencies:
     axios: ^0.26.0
     cross-fetch: ^3.0.6
@@ -9560,9 +9582,8 @@ __metadata:
     uuid: ^8.2.0
     webdav: 4.8.0
     xml-js: ^1.6.11
-  checksum: 566bbccd59e4cfbd6471942621e2f006c3337a3637b971492d7324913a37f4d3299deb9029546331cb0ec7e065efd6c4f9ba96a8f850c230d64e83dd9fc8c5db
   languageName: node
-  linkType: hard
+  linkType: soft
 
 "p-cancelable@npm:^2.0":
   version: 2.1.1
@@ -11626,6 +11647,7 @@ __metadata:
     eslint-plugin-node: ^11.1.0
     eslint-plugin-prettier: ^4.0.0
     eslint-plugin-promise: ^5.2.0
+    eslint-plugin-unused-imports: ^2.0.0
     eslint-plugin-vue: ^7.13.0
     eslint-plugin-vuejs-accessibility: ^0.7.1
     focus-trap: ^6.4.0

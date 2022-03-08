@@ -22,6 +22,7 @@ export interface RouteComponents {
   Spaces: {
     Projects: ComponentOptions<Vue>
     Project: ComponentOptions<Vue>
+    Trashbin: ComponentOptions<Vue>
   }
   Trashbin: ComponentOptions<Vue>
 }

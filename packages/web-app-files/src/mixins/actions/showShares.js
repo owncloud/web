@@ -1,5 +1,5 @@
 import quickActions, { canShare, openNewCollaboratorsPanel } from '../../quickActions'
-import { isLocationCommonActive, isLocationSharesActive } from '../../router'
+import { isLocationSharesActive, isLocationTrashActive } from '../../router'
 import { ShareStatus } from '../../helpers/share'
 import isFilesAppActive from './helpers/isFilesAppActive'
 
@@ -20,7 +20,10 @@ export default {
               return false
             }
 
-            if (isLocationCommonActive(this.$router, 'files-common-trash')) {
+            if (
+              isLocationTrashActive(this.$router, 'files-trash-personal') ||
+              isLocationTrashActive(this.$router, 'files-trash-project')
+            ) {
               return false
             }
             if (resources.length !== 1) {

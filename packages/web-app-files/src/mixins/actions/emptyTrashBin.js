@@ -1,5 +1,6 @@
 import { mapActions, mapGetters } from 'vuex'
-import { isLocationCommonActive } from '../../router'
+import { isLocationTrashActive } from '../../router'
+import { buildWebDavFilesTrashPath } from '../../helpers/resources'
 
 export default {
   computed: {
@@ -12,7 +13,10 @@ export default {
           label: () => this.$gettext('Empty trash bin'),
           handler: this.$_emptyTrashBin_trigger,
           isEnabled: ({ resources }) => {
-            if (!isLocationCommonActive(this.$router, 'files-common-trash')) {
+            if (
+              !isLocationTrashActive(this.$router, 'files-trash-personal') &&
+              !isLocationTrashActive(this.$router, 'files-trash-project')
+            ) {
               return false
             }
             // empty trash bin is not available for individual resources, but only for the trash bin as a whole
@@ -29,9 +33,10 @@ export default {
   methods: {
     ...mapActions(['showMessage']),
     ...mapActions('Files', ['clearTrashBin']),
+    ...mapGetters(['user']),
     $_emptyTrashBin_trigger() {
       this.$client.fileTrash
-        .clearTrashBin()
+        .clearTrashBin(buildWebDavFilesTrashPath(this.user.id))
         .then(() => {
           this.showMessage({
             title: this.$gettext('All deleted files were removed')

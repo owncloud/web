@@ -38,7 +38,7 @@
 import Mixins from '../../mixins'
 import MixinResources from '../../mixins/resources'
 import MixinFavorite from '../../mixins/actions/favorite'
-import { isLocationCommonActive } from '../../router'
+import { isLocationTrashActive } from '../../router'
 
 export default {
   name: 'FileInfo',
@@ -61,7 +61,10 @@ export default {
         return obj
       }
 
-      if (isLocationCommonActive(this.$router, 'files-common-trash')) {
+      if (
+        isLocationTrashActive(this.$router, 'files-trash-personal') ||
+        isLocationTrashActive(this.$router, 'files-trash-project')
+      ) {
         return interpolate({
           sourceTime: this.file.ddate,
           infoString: this.$pgettext('inline info about deletion date', 'deleted %{timeRelative}'),

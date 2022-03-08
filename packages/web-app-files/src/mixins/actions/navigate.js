@@ -3,10 +3,10 @@ import { isSameResource } from '../../helpers/resource'
 import {
   createLocationPublic,
   createLocationSpaces,
-  isLocationCommonActive,
   isLocationPublicActive,
   isLocationSharesActive,
-  isLocationSpacesActive
+  isLocationSpacesActive,
+  isLocationTrashActive
 } from '../../router'
 import { ShareStatus } from '../../helpers/share'
 import merge from 'lodash-es/merge'
@@ -22,7 +22,10 @@ export default {
           label: () =>
             this.$pgettext('Action in the files list row to open a folder', 'Open folder'),
           isEnabled: ({ resources }) => {
-            if (isLocationCommonActive(this.$router, 'files-common-trash')) {
+            if (
+              isLocationTrashActive(this.$router, 'files-trash-personal') ||
+              isLocationTrashActive(this.$router, 'files-trash-project')
+            ) {
               return false
             }
             if (resources.length !== 1) {

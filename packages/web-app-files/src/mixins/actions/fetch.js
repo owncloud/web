@@ -1,4 +1,4 @@
-import { isLocationCommonActive, isLocationPublicActive } from '../../router'
+import { isLocationPublicActive, isLocationTrashActive } from '../../router'
 
 export default {
   computed: {
@@ -18,7 +18,10 @@ export default {
             return this.$gettext('Open in browser')
           },
           isEnabled: ({ resources }) => {
-            if (isLocationCommonActive(this.$router, 'files-common-trash')) {
+            if (
+              isLocationTrashActive(this.$router, 'files-trash-personal') ||
+              isLocationTrashActive(this.$router, 'files-trash-project')
+            ) {
               return false
             }
             if (resources.length !== 1) {

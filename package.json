@@ -83,6 +83,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-promise": "^5.2.0",
+    "eslint-plugin-unused-imports": "^2.0.0",
     "eslint-plugin-vue": "^7.13.0",
     "eslint-plugin-vuejs-accessibility": "^0.7.1",
     "focus-trap": "^6.4.0",
@@ -144,5 +145,8 @@
     "vue-concurrency": {
       "built": true
     }
+  },
+  "resolutions": {
+    "owncloud-sdk": "portal:/home/jan/working/owncloud-sdk"
   }
 }

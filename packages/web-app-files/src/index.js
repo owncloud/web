@@ -10,6 +10,7 @@ import SharedWithMe from './views/shares/SharedWithMe.vue'
 import SharedWithOthers from './views/shares/SharedWithOthers.vue'
 import SharedViaLink from './views/shares/SharedViaLink.vue'
 import SpaceProject from './views/spaces/Project.vue'
+import SpaceTrashbin from './views/spaces/Trashbin.vue'
 import SpaceProjects from './views/spaces/Projects.vue'
 import Trashbin from './views/Trashbin.vue'
 import translations from '../l10n/translations.json'
@@ -78,7 +79,7 @@ const navItems = [
     name: $gettext('Deleted files'),
     icon: 'delete-bin-5',
     route: {
-      path: `/${appInfo.id}/trash`
+      path: `/${appInfo.id}/trash/personal`
     },
     enabled(capabilities) {
       return capabilities.dav && capabilities.dav.trashbin === '1.0'
@@ -104,7 +105,8 @@ export default {
     SharedWithOthers,
     Spaces: {
       Project: SpaceProject,
-      Projects: SpaceProjects
+      Projects: SpaceProjects,
+      Trashbin: SpaceTrashbin
     },
     Trashbin
   }),
