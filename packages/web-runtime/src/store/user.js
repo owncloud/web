@@ -102,10 +102,9 @@ const actions = {
         const user = await client.users.getUser(login.id)
 
         // FIXME: Can be removed as soon as the uuid is integrated in the OCS api
-        const graphClient = clientService.graphAuthenticated(instance, token)
-
         let graphUser
         if (context.state.capabilities.spaces?.enabled) {
+          const graphClient = clientService.graphAuthenticated(instance, token)
           graphUser = await graphClient.users.getMe()
         }
 
