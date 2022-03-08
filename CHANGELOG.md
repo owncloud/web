@@ -15,6 +15,7 @@ Summary
 * Bugfix - Prevent cross-site scripting attack while displaying space description: [#6523](https://github.com/owncloud/web/pull/6523)
 * Enhancement - Don't block account page while groups are loading: [#6547](https://github.com/owncloud/web/pull/6547)
 * Enhancement - Add a watcher for the share panel of a space: [#6543](https://github.com/owncloud/web/pull/6543)
+* Enhancement - Load space images as preview: [#6529](https://github.com/owncloud/web/pull/6529)
 * Enhancement - Allow updating space quota: [#6477](https://github.com/owncloud/web/pull/6477)
 * Enhancement - Update the stored space after its members have been changed: [#6545](https://github.com/owncloud/web/pull/6545)
 * Enhancement - Implement people sharing for spaces: [#6455](https://github.com/owncloud/web/pull/6455)
@@ -75,6 +76,12 @@ Details
    indicator.
 
    https://github.com/owncloud/web/pull/6543
+
+* Enhancement - Load space images as preview: [#6529](https://github.com/owncloud/web/pull/6529)
+
+   We've added a new logic which renders space images as preview to minimize data traffic
+
+   https://github.com/owncloud/web/pull/6529
 
 * Enhancement - Allow updating space quota: [#6477](https://github.com/owncloud/web/pull/6477)
 
