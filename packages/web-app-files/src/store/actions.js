@@ -14,6 +14,7 @@ import { loadPreview } from '../helpers/resource'
 import { avatarUrl } from '../helpers/user'
 import { has } from 'lodash-es'
 import { ShareTypes, SpacePeopleShareRoles } from '../helpers/share'
+import { sortSpaceMembers } from '../helpers/space'
 
 export default {
   updateFileProgress({ commit }, progress) {
@@ -179,7 +180,7 @@ export default {
 
       return Promise.all(promises)
         .then(() => {
-          context.commit('CURRENT_FILE_OUTGOING_SHARES_SET', spaceShares)
+          context.commit('CURRENT_FILE_OUTGOING_SHARES_SET', sortSpaceMembers(spaceShares))
           context.dispatch('updateCurrentFileShareTypes')
           context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', false)
         })
