@@ -8,7 +8,6 @@ import { thumbnailService } from '../../../services'
 export default {
   inject: {
     currentSpace: {
-      from: 'currentSpace',
       default: null
     }
   },

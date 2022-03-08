@@ -5,7 +5,6 @@ import { bus } from 'web-pkg/src/instance'
 export default {
   inject: {
     currentSpace: {
-      from: 'currentSpace',
       default: null
     }
   },
