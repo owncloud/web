@@ -8,10 +8,10 @@ exports[`SharedWithOthers when the wrapper is not loading anymore when length of
         <!---->
       </th>
       <th class="oc-th oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-expand oc-text-nowrap oc-table-header-cell oc-table-header-cell-name" aria-sort="none" style="top: 0px;"><span class="oc-table-thead-content header-text">Name</span>
-        <oc-button-stub type="button" size="medium" arialabel="Sort by name" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" class="oc-button-sort oc-invisible"><span class="oc-icon oc-icon-s oc-icon-passive"><!----></span></oc-button-stub>
+        <oc-button-stub type="button" size="medium" arialabel="Sort by name" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" class="oc-button-sort oc-invisible"><span class="oc-icon oc-icon-s oc-icon-passive"><!----></span></oc-button-stub>
       </th>
       <th class="oc-th oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-header-cell oc-table-header-cell-sharedWith" aria-sort="none" style="top: 0px;"><span class="oc-table-thead-content header-text">Shared with</span>
-        <oc-button-stub type="button" size="medium" arialabel="Sort by sharedWith" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" class="oc-button-sort oc-invisible"><span class="oc-icon oc-icon-s oc-icon-passive"><!----></span></oc-button-stub>
+        <oc-button-stub type="button" size="medium" arialabel="Sort by sharedWith" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" class="oc-button-sort oc-invisible"><span class="oc-icon oc-icon-s oc-icon-passive"><!----></span></oc-button-stub>
       </th>
       <th class="oc-th oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-header-cell oc-table-header-cell-actions oc-pr-m" style="top: 0px;"><span class="oc-table-thead-content header-text">Actions</span>
         <!---->
@@ -31,7 +31,7 @@ exports[`SharedWithOthers when the wrapper is not loading anymore when length of
       </td>
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-actions oc-pr-m">
         <div class="resource-table-actions">
-          <oc-button-stub type="button" size="medium" arialabel="Show context menu" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="context-menu-trigger-38" class="resource-table-btn-action-dropdown"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></oc-button-stub>
+          <oc-button-stub type="button" size="medium" arialabel="Show context menu" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="context-menu-trigger-38" class="resource-table-btn-action-dropdown"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></oc-button-stub>
           <oc-drop-stub dropid="context-menu-drop-38" popperoptions="[object Object]" toggle="#context-menu-trigger-38" position="bottom-start" mode="click" closeonclick="true" paddingsize="small"></oc-drop-stub>
         </div>
       </td>
@@ -48,7 +48,7 @@ exports[`SharedWithOthers when the wrapper is not loading anymore when length of
       </td>
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-actions oc-pr-m">
         <div class="resource-table-actions">
-          <oc-button-stub type="button" size="medium" arialabel="Show context menu" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="context-menu-trigger-64" class="resource-table-btn-action-dropdown"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></oc-button-stub>
+          <oc-button-stub type="button" size="medium" arialabel="Show context menu" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="context-menu-trigger-64" class="resource-table-btn-action-dropdown"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></oc-button-stub>
           <oc-drop-stub dropid="context-menu-drop-64" popperoptions="[object Object]" toggle="#context-menu-trigger-64" position="bottom-start" mode="click" closeonclick="true" paddingsize="small"></oc-drop-stub>
         </div>
       </td>
@@ -65,7 +65,7 @@ exports[`SharedWithOthers when the wrapper is not loading anymore when length of
       </td>
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-actions oc-pr-m">
         <div class="resource-table-actions">
-          <oc-button-stub type="button" size="medium" arialabel="Show context menu" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="context-menu-trigger-39" class="resource-table-btn-action-dropdown"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></oc-button-stub>
+          <oc-button-stub type="button" size="medium" arialabel="Show context menu" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="context-menu-trigger-39" class="resource-table-btn-action-dropdown"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></oc-button-stub>
           <oc-drop-stub dropid="context-menu-drop-39" popperoptions="[object Object]" toggle="#context-menu-trigger-39" position="bottom-start" mode="click" closeonclick="true" paddingsize="small"></oc-drop-stub>
         </div>
       </td>
@@ -82,7 +82,7 @@ exports[`SharedWithOthers when the wrapper is not loading anymore when length of
       </td>
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-actions oc-pr-m">
         <div class="resource-table-actions">
-          <oc-button-stub type="button" size="medium" arialabel="Show context menu" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="context-menu-trigger-30" class="resource-table-btn-action-dropdown"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></oc-button-stub>
+          <oc-button-stub type="button" size="medium" arialabel="Show context menu" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="context-menu-trigger-30" class="resource-table-btn-action-dropdown"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></oc-button-stub>
           <oc-drop-stub dropid="context-menu-drop-30" popperoptions="[object Object]" toggle="#context-menu-trigger-30" position="bottom-start" mode="click" closeonclick="true" paddingsize="small"></oc-drop-stub>
         </div>
       </td>

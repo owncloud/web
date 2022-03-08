@@ -231,6 +231,8 @@ function getMountedWrapper(spaceResources = [], spaceItem = null, imageContent =
       $client: {
         files: {
           getFileContents: jest.fn().mockImplementation(() => Promise.resolve('filecontent')),
+          // TODO: Add & reference space fixtures in line below
+          // fileInfo: jest.fn().mockImplementation(() => Promise.resolve(Files['/'][4])),
           list: jest.fn(() => spaceResources)
         }
       }
@@ -243,7 +245,11 @@ function getMountedWrapper(spaceResources = [], spaceItem = null, imageContent =
           options: {
             disablePreviews: true
           }
-        })
+        }),
+        user: () => ({
+          id: 'marie'
+        }),
+        getToken: jest.fn()
       },
       modules: {
         Files: {
