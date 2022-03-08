@@ -89,15 +89,15 @@ When('the user browses to the favorites page using the webUI', function () {
 })
 
 When('the user browses to the files page using the webUI', function () {
-  return client.page.webPage().navigateToUsingMenu('All files')
+  return client.page.webPage().navigateToUsingMenu('Personal')
 })
 
 Then('the files table should be displayed', () => {
   return client.page.FilesPageElement.filesList().waitForElementVisible('@anyAfterLoading')
 })
 
-Given('the user has browsed to the files page', function () {
-  return client.page.personalPage().navigateToBreadcrumb('All files')
+Given('the user has browsed to the personal page', function () {
+  return client.page.personalPage().navigateToBreadcrumb('Personal')
 })
 
 When('the user opens folder {string} directly on the webUI', async function (folder) {

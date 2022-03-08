@@ -46,7 +46,7 @@ Feature: Unlock locked files and folders
       | lockscope | <lockscope> |
     And user "brand-new-user" has locked folder "simple-folder" setting the following properties in the server
       | lockscope | <lockscope> |
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     When the user unlocks the lock no 1 of file "lorem.txt" on the webUI
     And the user unlocks the lock no 1 of folder "simple-folder" on the webUI
     Then file "lorem.txt" should not be marked as locked on the webUI
@@ -63,7 +63,7 @@ Feature: Unlock locked files and folders
   Scenario Outline: deleting the only remaining lock of a folder by deleting it from a file (inside the folder) and reloading the page
     Given user "brand-new-user" has locked folder "simple-folder" setting the following properties in the server
       | lockscope | <lockscope> |
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     And the user has opened folder "simple-folder" using the webUI
     When the user unlocks the lock no 1 of file "lorem.txt" on the webUI
     Then file "lorem.txt" should not be marked as locked on the webUI
@@ -101,7 +101,7 @@ Feature: Unlock locked files and folders
       | lockscope | shared |
     And user "receiver2" has locked folder "FOLDER_TO_SHARE" setting the following properties in the server
       | lockscope | shared |
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     When the user unlocks the lock no 1 of file "lorem.txt" on the webUI
     Then file "lorem.txt" should be marked as locked on the webUI
     And file "lorem.txt" should be marked as locked by user "receiver1" in the locks tab of the details panel on the webUI
@@ -134,7 +134,7 @@ Feature: Unlock locked files and folders
       | lockscope | shared |
     And user "receiver2" has locked folder "FOLDER_TO_SHARE" setting the following properties in the server
       | lockscope | shared |
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     When the user unlocks the lock no 2 of file "lorem.txt" on the webUI
     Then file "lorem.txt" should be marked as locked on the webUI
     And file "lorem.txt" should be marked as locked by user "receiver1" in the locks tab of the details panel on the webUI
@@ -167,7 +167,7 @@ Feature: Unlock locked files and folders
       | lockscope | shared |
     And user "brand-new-user" has locked folder "FOLDER_TO_SHARE" setting the following properties in the server
       | lockscope | shared |
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     When the user unlocks the lock no 3 of file "lorem.txt" on the webUI
     Then file "lorem.txt" should be marked as locked on the webUI
     And file "lorem.txt" should be marked as locked by user "receiver1" in the locks tab of the details panel on the webUI
@@ -185,7 +185,7 @@ Feature: Unlock locked files and folders
     And user "brand-new-user" has shared file "/lorem.txt" with user "receiver1" in the server
     And user "receiver1" has locked file "lorem.txt" setting the following properties in the server
       | lockscope | <lockscope> |
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     When the user unlocks the lock no 1 of file "lorem.txt" on the webUI
     Then notifications should be displayed on the webUI with the text
       """

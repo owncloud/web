@@ -131,7 +131,7 @@ describe('LocationPicker', () => {
           expect(breadcrumbItems.length).toBe(3)
           expect(breadcrumbItems[0]).toMatchObject({
             index: 0,
-            text: 'All files',
+            text: 'Personal',
             to: {
               name: route.name,
               params: { action: route.params.action, item: '/' },

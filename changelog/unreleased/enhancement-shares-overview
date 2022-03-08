@@ -2,6 +2,8 @@ Enhancement: Shares overview
 
 We've merged the three shares navigation items into one central "Shares" item, 
 with a toggle to switch between the three different kinds of shares (incoming, outgoing, links).
+In the process, we have also renamed the "All files" page to the "Personal" page, indicating that 
+this is the user's personal space since shares (and potentially other shared spaces) live elsewhere.
 
 https://github.com/owncloud/web/issues/6440
 https://github.com/owncloud/web/pull/6512

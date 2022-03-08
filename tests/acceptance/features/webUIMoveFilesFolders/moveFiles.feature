@@ -11,7 +11,7 @@ Feature: move files
 
   Scenario: An attempt to move a file into a sub-folder using rename is not allowed
     Given user "Alice" has logged in using the webUI
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     When the user tries to rename file "lorem.txt" to "simple-folder/lorem.txt" using the webUI
     Then the error message 'The name cannot contain "/"' should be displayed on the webUI dialog prompt
     And file "lorem.txt" should be listed on the webUI
@@ -43,11 +43,11 @@ Feature: move files
   Scenario: move a file into a folder where a file with the same name already exists
     Given user "Alice" has logged in using the webUI
     And user "Alice" has uploaded file "lorem.txt" to "simple-folder/lorem.txt" in the server
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     When the user tries to move file "lorem.txt" into folder "simple-folder" using the webUI
     Then the error message with header 'Failed to move "lorem.txt"' should be displayed on the webUI
 
-   @smokeTest @ocisSmokeTest  @disablePreviews
+  @smokeTest @ocisSmokeTest  @disablePreviews
   Scenario: Move multiple files at once
     Given user "Alice" has logged in using the webUI
     And user "Alice" has uploaded file "data.zip" to "data.zip" in the server
@@ -68,7 +68,7 @@ Feature: move files
 
   Scenario Outline: move a file into a folder (problematic characters)
     Given user "Alice" has logged in using the webUI
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     When the user renames file "lorem.txt" to <file_name> using the webUI
     And the user renames folder "simple-folder" to <folder_name> using the webUI
     And the user moves file <file_name> into folder <folder_name> using the webUI
@@ -104,7 +104,7 @@ Feature: move files
 
   Scenario: cancel moving a file
     Given user "Alice" has logged in using the webUI
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     And the user selects move action for file "lorem.txt" using the webUI
     And the user selects the folder "simple-folder" as a place to move the file using the webUI
     And the user cancels the attempt to move resources using the webUI
@@ -115,7 +115,7 @@ Feature: move files
     Given user "Alice" has logged in using the webUI
     And user "Alice" has uploaded file "data.zip" to "data.zip" in the server
     And user "Alice" has uploaded file "data.zip" to "testapp.zip" in the server
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     When the user marks these files for batch action using the webUI
       | file_name   |
       | data.zip    |

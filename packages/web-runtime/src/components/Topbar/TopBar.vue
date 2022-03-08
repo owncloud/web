@@ -72,7 +72,7 @@ export default {
     },
 
     sidebarLogoAlt() {
-      return this.$gettext('Navigate to all files page')
+      return this.$gettext('Navigate to personal files page')
     },
 
     logoImage() {

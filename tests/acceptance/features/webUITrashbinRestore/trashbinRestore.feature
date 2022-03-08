@@ -29,7 +29,7 @@ Feature: Restore deleted files/folders
 
   Scenario: Restore folder
     Given user "Alice" has created folder "folder with space" in the server
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     When the user deletes folder "folder with space" using the webUI
     And the user deletes folder "Folder,With,Comma" using the webUI
     And the user browses to the trashbin page
@@ -145,9 +145,9 @@ Feature: Restore deleted files/folders
     When the user browses to the trashbin page
     And the user restores file "simple-folder/file-to-delete-and-restore" from the trashbin using the webUI
     Then the following error message should be displayed on the webUI
-     """
-     Failed to restore "file-to-delete-and-restore"
-     """
+      """
+      Failed to restore "file-to-delete-and-restore"
+      """
     #And a success message "file-to-delete-and-restore was restored successfully" should be displayed on the webUI
     #And as "Alice" the file with original path "simple-folder/file-to-delete-and-restore" should not exist in the trashbin
     And as "Alice" the file with original path "simple-folder/file-to-delete-and-restore" should exist in the trashbin in the server
@@ -188,14 +188,14 @@ Feature: Restore deleted files/folders
     When the user browses to the trashbin page
     And the user restores file "simple-folder/file-to-delete-and-restore" from the trashbin using the webUI
     Then the following error message should be displayed on the webUI
-     """
-     Failed to restore "file-to-delete-and-restore"
-     """
+      """
+      Failed to restore "file-to-delete-and-restore"
+      """
     #And a success message "file-to-delete-and-restore was restored successfully" should be displayed on the webUI
     #And as "Alice" the file with original path "simple-folder/file-to-delete-and-restore" should not exist in the trashbin
     And as "Alice" the file with original path "simple-folder/file-to-delete-and-restore" should exist in the trashbin in the server
     And as "Alice" file "simple-folder/file-to-delete-and-restore" should not exist in the server
-    #And as "Alice" file "simple-folder/file-to-delete-and-restore" should exist
+  #And as "Alice" file "simple-folder/file-to-delete-and-restore" should exist
 
 
   @skipOnOC10 @issue-product-186 @issue-ocis-1057
@@ -215,7 +215,7 @@ Feature: Restore deleted files/folders
     #And a success message "file-to-delete-and-restore was restored successfully" should be displayed on the webUI
     #And as "Alice" the file with original path "simple-folder/file-to-delete-and-restore" should not exist in the trashbin
     And as "Alice" file "simple-folder/file-to-delete-and-restore" should not exist in the server
-    #And as "Alice" file "simple-folder/file-to-delete-and-restore" should exist
+  #And as "Alice" file "simple-folder/file-to-delete-and-restore" should exist
 
 
   @issue-1723

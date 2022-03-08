@@ -56,7 +56,7 @@ Feature: Autocompletion of share-with names
   Scenario: autocompletion for a pattern that does not match any user or group
     Given user "regularuser" has created folder "simple-folder" in the server
     And user "regularuser" has logged in using the webUI
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     And the user has opened the share dialog for folder "simple-folder"
 
     When the user types "doesnotexist" in the share-with-field
@@ -66,7 +66,7 @@ Feature: Autocompletion of share-with names
   Scenario: autocompletion when minimum characters is the default (2) and not enough characters are typed
     Given user "regularuser" has created folder "simple-folder" in the server
     And user "regularuser" has logged in using the webUI
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     And the user has opened the share dialog for folder "simple-folder"
 
     When the user types "u" in the share-with-field
@@ -77,7 +77,7 @@ Feature: Autocompletion of share-with names
     Given the administrator has set the minimum characters for sharing autocomplete to "4" in the server
     And user "regularuser" has created folder "simple-folder" in the server
     And user "regularuser" has logged in using the webUI
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     And the user has opened the share dialog for folder "simple-folder"
 
     When the user types "use" in the share-with-field
@@ -88,7 +88,7 @@ Feature: Autocompletion of share-with names
     Given the administrator has set the minimum characters for sharing autocomplete to "3" in the server
     And user "regularuser" has created folder "simple-folder" in the server
     And user "regularuser" has logged in using the webUI
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     And these users have been created without initialization and without skeleton files in the server:
       | username | password | displayname | email        |
       | use      | %alt1%   | Use         | uz@oc.com.np |
@@ -105,7 +105,7 @@ Feature: Autocompletion of share-with names
       | groupname |
       | fi        |
     And user "regularuser" has logged in using the webUI
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     And the user has opened the share dialog for folder "simple-folder"
 
     When the user types "fi" in the share-with-field
@@ -116,7 +116,7 @@ Feature: Autocompletion of share-with names
     Given the administrator has set the minimum characters for sharing autocomplete to "3" in the server
     And user "regularuser" has created folder "simple-folder" in the server
     And user "regularuser" has logged in using the webUI
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     And the user has opened the share dialog for folder "simple-folder"
 
     When the user types "use" in the share-with-field
@@ -128,7 +128,7 @@ Feature: Autocompletion of share-with names
   Scenario: autocompletion of a pattern that matches regular existing users but also a user with whom the item is already shared (folder)
     Given user "regularuser" has created folder "simple-folder" in the server
     And user "regularuser" has logged in using the webUI
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     And user "regularuser" has shared folder "simple-folder" with user "Alice" in the server
     And the user has opened the share dialog for folder "simple-folder"
 
@@ -141,7 +141,7 @@ Feature: Autocompletion of share-with names
   Scenario: autocompletion of a pattern that matches regular existing users but also a user with whom the item is already shared (file)
     Given user "regularuser" has created file "data.zip" in the server
     And user "regularuser" has logged in using the webUI
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     And user "regularuser" has shared file "data.zip" with user "usergrp" in the server
     And the user has opened the share dialog for file "data.zip"
 
@@ -155,7 +155,7 @@ Feature: Autocompletion of share-with names
     Given the administrator has set the minimum characters for sharing autocomplete to "2" in the server
     And user "regularuser" has created folder "simple-folder" in the server
     And user "regularuser" has logged in using the webUI
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     And user "regularuser" has shared folder "simple-folder" with group "finance1" in the server
     And the user has opened the share dialog for folder "simple-folder"
 
@@ -169,7 +169,7 @@ Feature: Autocompletion of share-with names
     Given the administrator has set the minimum characters for sharing autocomplete to "2" in the server
     And user "regularuser" has created file "data.zip" in the server
     And user "regularuser" has logged in using the webUI
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     And user "regularuser" has shared file "data.zip" with group "finance1" in the server
     And the user has opened the share dialog for file "data.zip"
 

@@ -34,8 +34,8 @@ Feature: share folder with file
       | resource   | to                      |
       | simple.pdf | Shares/folder_to_shared |
     And "Brian" copies the following resource
-      | resource                | to        |
-      | Shares/folder_to_shared | All files |
+      | resource                | to       |
+      | Shares/folder_to_shared | Personal |
     When "Alice" opens the "files" app
     Then "Alice" should see the following resources
       | folder_to_shared/lorem_new.txt |

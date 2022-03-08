@@ -11,7 +11,7 @@ Feature: move folders
 
   Scenario: An attempt to move a folder into a sub-folder using rename is not allowed
     Given user "Alice" has logged in using the webUI
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     When the user tries to rename folder "simple-empty-folder" to "simple-folder/simple-empty-folder" using the webUI
     Then the error message 'The name cannot contain "/"' should be displayed on the webUI dialog prompt
     And folder "simple-empty-folder" should be listed on the webUI
@@ -33,7 +33,7 @@ Feature: move folders
   Scenario: move a folder into another folder where a folder with the same name already exists
     Given user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
     And user "Alice" has logged in using the webUI
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     When the user tries to move folder "simple-empty-folder" into folder "simple-folder" using the webUI
     Then the error message with header 'Failed to move "simple-empty-folder"' should be displayed on the webUI
 
@@ -55,7 +55,7 @@ Feature: move folders
 
   Scenario Outline: move a folder into another folder (problematic characters)
     Given user "Alice" has logged in using the webUI
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     When the user renames folder "simple-folder" to <folder_name> using the webUI
     And the user renames folder "simple-empty-folder" to <target_name> using the webUI
     And the user moves folder <folder_name> into folder <target_name> using the webUI

@@ -26,8 +26,8 @@ Feature: share file
     And "Brian" accepts the following resource
       | testavatar.jpeg |
     And "Brian" copies the following resource
-      | resource               | to        |
-      | Shares/testavatar.jpeg | All files |
+      | resource               | to       |
+      | Shares/testavatar.jpeg | Personal |
     And "Brian" downloads the following file
       | resource        | from   |
       | testavatar.jpeg | Shares |

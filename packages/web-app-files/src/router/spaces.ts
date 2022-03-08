@@ -57,7 +57,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         component: components.Personal,
         meta: {
           hasBulkActions: true,
-          title: $gettext('All files'),
+          title: $gettext('Personal'),
           patchCleanPath: true
         }
       }

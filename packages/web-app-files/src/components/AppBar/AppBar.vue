@@ -196,7 +196,7 @@ export default {
 
             if (acc.length) {
               if (this.isPersonalLocation) {
-                acc[0].text = this.$gettext('All files')
+                acc[0].text = this.$gettext('Personal')
                 acc[0].to = acc[0].to + '/'
               } else if (this.isSpacesProjectLocation || this.isSpacesProjectsLocation) {
                 acc[0] = {

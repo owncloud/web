@@ -216,7 +216,7 @@ export default {
         this.currentAction === batchActions.move
           ? this.$gettext('Move into »%{ target }«')
           : this.$gettext('Copy into »%{ target }«')
-      const target = basename(this.target) || this.$gettext('All files')
+      const target = basename(this.target) || this.$gettext('Personal')
       return this.$gettextInterpolate(translated, { target })
     },
 
@@ -259,7 +259,7 @@ export default {
           breadcrumbs.push(this.createBreadcrumbNode(i + 1, pathSegments[i], itemPath))
         }
       } else {
-        breadcrumbs.push(this.createBreadcrumbNode(0, this.$gettext('All files'), '/'))
+        breadcrumbs.push(this.createBreadcrumbNode(0, this.$gettext('Personal'), '/'))
         for (let i = 0; i < pathSegments.length; i++) {
           const itemPath = join.apply(null, pathSegments.slice(0, i + 1))
           breadcrumbs.push(this.createBreadcrumbNode(i + 1, pathSegments[i], itemPath))

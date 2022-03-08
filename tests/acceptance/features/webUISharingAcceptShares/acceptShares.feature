@@ -12,7 +12,7 @@ Feature: accept/decline shares coming from internal users
       | Brian    |
     And user "Brian" has logged in using the webUI
 
- @issue-ocis-1950
+  @issue-ocis-1950
   Scenario: reject a share that you received as user and as group member
     Given these groups have been created in the server:
       | groupname |
@@ -37,7 +37,7 @@ Feature: accept/decline shares coming from internal users
     And user "Brian" has been added to group "grp1" in the server
     And user "Alice" has shared folder "/simple-folder" with user "Brian" in the server
     And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice" in the server
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     And the user opens folder "Shares" using the webUI
     When the user shares folder "simple-folder" with group "grp1" as "Viewer" using the webUI
     And the user deletes folder "simple-folder" using the webUI
@@ -58,7 +58,7 @@ Feature: accept/decline shares coming from internal users
     And user "Alice" has shared file "/testimage.jpg" with group "grp1" in the server
     And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice" in the server
     And user "Brian" has accepted the share "Shares/testimage.jpg" offered by user "Alice" in the server
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     When the user opens folder "Shares" using the webUI
     And the user deletes folder "simple-folder" using the webUI
     And the user deletes file "testimage.jpg" using the webUI
@@ -209,11 +209,11 @@ Feature: accept/decline shares coming from internal users
     Then file "lorem.txt" shared by "Alice Hansen" should be in "Declined" state on the webUI
 
   @ocis-issue-714 @issue-5532
-  Scenario: the deleted shared file is restored back to all files list when accepted from the shared with me file list
+  Scenario: the deleted shared file is restored back to the personal file list when accepted from the shared with me file list
     Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has shared file "lorem.txt" with user "Brian" in the server
     And user "Brian" has accepted the share "Shares/lorem.txt" offered by user "Alice" in the server
-   And the following files have been deleted by user "Brian" in the server
+    And the following files have been deleted by user "Brian" in the server
       | name             |
       | Shares/lorem.txt |
     When the user browses to the shared-with-me page in declined shares view
