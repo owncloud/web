@@ -13,6 +13,7 @@ Summary
 * Bugfix - Show no auth popup on password protected public links in ownCloud 10: [#6530](https://github.com/owncloud/web/pull/6530)
 * Bugfix - Don't write error message on passing ReadmeContentModal.spec.js test: [#6525](https://github.com/owncloud/web/pull/6525)
 * Bugfix - Prevent cross-site scripting attack while displaying space description: [#6523](https://github.com/owncloud/web/pull/6523)
+* Bugfix - Prevent the member count inside a space from disappearing: [#6550](https://github.com/owncloud/web/pull/6550)
 * Enhancement - Don't block account page while groups are loading: [#6547](https://github.com/owncloud/web/pull/6547)
 * Enhancement - Add a watcher for the share panel of a space: [#6543](https://github.com/owncloud/web/pull/6543)
 * Enhancement - Load space images as preview: [#6529](https://github.com/owncloud/web/pull/6529)
@@ -62,6 +63,13 @@ Details
 
    https://github.com/owncloud/web/issues/6526
    https://github.com/owncloud/web/pull/6523
+
+* Bugfix - Prevent the member count inside a space from disappearing: [#6550](https://github.com/owncloud/web/pull/6550)
+
+   We've fixed a bug where opening the sidebar for a file inside a space caused the member count of
+   the space to disappear.
+
+   https://github.com/owncloud/web/pull/6550
 
 * Enhancement - Don't block account page while groups are loading: [#6547](https://github.com/owncloud/web/pull/6547)
 
