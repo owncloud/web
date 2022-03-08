@@ -16,7 +16,7 @@
               :class="{ expanded: imageExpanded }"
               class="space-overview-image oc-cursor-pointer"
               alt=""
-              :src="'data:' + imageContent.mimeType + ';base64,' + imageContent.data"
+              :src="imageContent"
               @click="toggleImageExpanded"
             />
           </div>
@@ -49,7 +49,7 @@
                     name="file"
                     multiple
                     tabindex="-1"
-                    accept="image/*"
+                    :accept="supportedSpaceImageMimeTypes"
                     @change="$_uploadImage_uploadImageSpace"
                   />
                   <ul class="oc-list oc-files-context-actions">
@@ -85,11 +85,13 @@
             </div>
             <p v-if="space.description" class="oc-mt-rm">{{ space.description }}</p>
             <div>
+              <!-- eslint-disable vue/no-v-html -->
               <div
                 ref="markdownContainer"
                 class="markdown-container"
                 v-html="markdownContent"
               ></div>
+              <!-- eslint-enable -->
               <div v-if="showMarkdownCollapse" class="markdown-collapse oc-text-center oc-mt-s">
                 <oc-button appearance="raw" @click="toggleCollapseMarkdown">
                   <oc-icon :name="markdownCollapseIcon" />
@@ -149,6 +151,7 @@ import sanitizeHtml from 'sanitize-html'
 import MixinAccessibleBreadcrumb from '../../mixins/accessibleBreadcrumb'
 import { bus } from 'web-pkg/src/instance'
 import { buildResource, buildSpace, buildWebDavSpacesPath } from '../../helpers/resources'
+import { loadPreview } from '../../helpers/resource'
 import ResourceTable, { determineSortFields } from '../../components/FilesList/ResourceTable.vue'
 import { createLocationSpaces } from '../../router'
 import { usePagination, useSort } from '../../composables'
@@ -173,6 +176,7 @@ import EditQuota from '../../mixins/spaces/actions/editQuota'
 import EditReadmeContent from '../../mixins/spaces/actions/editReadmeContent'
 import QuotaModal from '../../components/Spaces/QuotaModal.vue'
 import ReadmeContentModal from '../../components/Spaces/ReadmeContentModal.vue'
+import { thumbnailService } from '../../services'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -312,6 +316,7 @@ export default {
       'totalFilesSize',
       'currentFileOutgoingCollaborators'
     ]),
+    ...mapGetters(['user', 'getToken']),
 
     selected: {
       get() {
@@ -355,6 +360,9 @@ export default {
     },
     readmeContentModalIsOpen() {
       return this.$data.$_editReadmeContent_modalOpen
+    },
+    supportedSpaceImageMimeTypes() {
+      return thumbnailService.getSupportedMimeTypes('image/').join(',')
     }
   },
   watch: {
@@ -376,16 +384,20 @@ export default {
         const path = webDavPathComponents
           .slice(webDavPathComponents.indexOf(this.space.id) + 1)
           .join('/')
-        this.$client.files
-          .getFileContents(buildWebDavSpacesPath(this.space.id, path), {
-            responseType: 'arrayBuffer'
+
+        this.$client.files.fileInfo(buildWebDavSpacesPath(this.space.id, path)).then((data) => {
+          const resource = buildResource(data)
+          loadPreview({
+            resource,
+            isPublic: false,
+            dimensions: ImageDimension.Preview,
+            server: this.configuration.server,
+            userId: this.user.id,
+            token: this.getToken
+          }).then((imageBlob) => {
+            this.imageContent = imageBlob
           })
-          .then((fileContents) => {
-            this.imageContent = {
-              data: Buffer.from(fileContents).toString('base64'),
-              mimeType: this.space.spaceImageData.file.mimeType
-            }
-          })
+        })
       },
       deep: true
     },

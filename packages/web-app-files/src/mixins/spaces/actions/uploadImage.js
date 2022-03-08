@@ -1,6 +1,7 @@
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { clientService } from 'web-pkg/src/services'
 import { bus } from 'web-pkg/src/instance'
+import { thumbnailService } from '../../../services'
 
 export default {
   data: function () {
@@ -41,6 +42,17 @@ export default {
     $_uploadImage_uploadImageSpace(ev) {
       const graphClient = clientService.graphAuthenticated(this.configuration.server, this.getToken)
       const file = ev.currentTarget.files[0]
+
+      if (!file) {
+        return
+      }
+
+      if (!thumbnailService.isMimetypeSupported(file.type, true)) {
+        return this.showMessage({
+          title: this.$gettext('The file type is unsupported'),
+          status: 'danger'
+        })
+      }
 
       const extraHeaders = {}
       if (file.lastModifiedDate) {

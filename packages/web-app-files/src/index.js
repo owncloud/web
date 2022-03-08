@@ -17,7 +17,7 @@ import quickActions from './quickActions'
 import store from './store'
 import { FilterSearch, SDKSearch } from './search'
 import { bus } from 'web-pkg/src/instance'
-import { archiverService, Registry } from './services'
+import { archiverService, thumbnailService, Registry } from './services'
 import fileSideBars from './fileSideBars'
 import { buildRoutes } from './router'
 import get from 'lodash-es/get'
@@ -137,6 +137,14 @@ export default {
     archiverService.initialize(
       store.getters.configuration.server || window.location.origin,
       get(store, 'getters.capabilities.files.archivers', [])
+    )
+    // FIXME: Remove mock data
+    thumbnailService.initialize(
+      get(store, 'getters.capabilities.files.thumbnail', {
+        enabled: true,
+        version: 'v0.1',
+        supportedMimeTypes: ['image/png', 'image/jpg', 'image/jpeg', 'image/gif', 'text/plain']
+      })
     )
   }
 }

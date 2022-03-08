@@ -8,6 +8,7 @@ import mockAxios from 'jest-mock-axios'
 import sdkMock from '@/__mocks__/sdk'
 import fileFixtures from '__fixtures__/files'
 import { bus } from 'web-pkg/src/instance'
+import { thumbnailService } from '../../../../src/services'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -67,6 +68,14 @@ describe('setImage', () => {
       })
     })
   }
+
+  beforeAll(() => {
+    thumbnailService.initialize({
+      enabled: true,
+      version: '0.1',
+      supportedMimeTypes: ['image/png', 'image/jpg', 'image/jpeg', 'image/gif', 'text/plain']
+    })
+  })
 
   afterEach(() => jest.clearAllMocks())
 

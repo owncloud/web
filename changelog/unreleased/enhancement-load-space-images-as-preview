@@ -1,0 +1,5 @@
+Enhancement: Load space images as preview
+
+We've added a new logic which renders space images as preview to minimize data traffic
+
+https://github.com/owncloud/web/pull/6529
