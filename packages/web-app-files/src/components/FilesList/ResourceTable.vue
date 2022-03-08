@@ -80,6 +80,13 @@
         v-text="formatDateRelative(item.mdate)"
       />
     </template>
+    <template #shareTypes="{ item }">
+      <oc-status-indicators
+        v-if="item.indicators.length"
+        :resource="item"
+        :indicators="item.indicators"
+      ></oc-status-indicators>
+    </template>
     <template #sdate="{ item }">
       <span
         v-oc-tooltip="formatDate(item.sdate)"
@@ -394,6 +401,8 @@ export default {
         })
       }
       const sortFields = determineSortFields(firstResource)
+      console.log('FIRST RESOURCE')
+      console.log(firstResource)
       fields.push(
         ...[
           {
@@ -402,6 +411,13 @@ export default {
             type: 'slot',
             width: 'expand',
             wrap: 'truncate'
+          },
+          {
+            name: 'shareTypes',
+            title: this.$gettext('Shares'), // How do we get the translations here?
+            type: 'slot',
+            alignH: 'right',
+            wrap: 'nowrap'
           },
           {
             name: 'size',
