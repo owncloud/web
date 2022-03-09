@@ -10,6 +10,7 @@ import { buildResource, renameResource } from '@files/src/helpers/resources'
 
 import SideBar from '@files/src/components/SideBar/SideBar.vue'
 import { createLocationSpaces } from '../../../../src/router'
+import mockAxios from 'jest-mock-axios'
 
 jest.mock('web-pkg/src/observer')
 jest.mock('@files/src/helpers/resources', () => {
@@ -165,13 +166,58 @@ describe('SideBar', () => {
       })
     })
   })
+
+  describe('current space', () => {
+    beforeEach(() => {
+      buildResource.mockImplementation((item) => item)
+    })
+    afterEach(() => {
+      jest.clearAllMocks()
+      mockAxios.reset()
+    })
+    it('fetches the current space if a space id is given', async () => {
+      const spaceId = 1
+      mockAxios.request.mockImplementationOnce(() => {
+        return Promise.resolve({
+          data: { id: spaceId }
+        })
+      })
+
+      const mockFileInfo = jest.fn()
+      mockFileInfo.mockReturnValueOnce(Files['/'][1])
+
+      const wrapper = createWrapper({
+        item: simpleOwnFolder,
+        selectedItems: [simpleOwnFolder],
+        mocks: { $client: { files: { fileInfo: mockFileInfo } } },
+        spaceId
+      })
+
+      await wrapper.vm.loadSpaceTask.last
+      expect(wrapper.vm.currentSpace.id).toBe(spaceId)
+    })
+    it('does not fetch the current space if no space id is given', async () => {
+      const mockFileInfo = jest.fn()
+      mockFileInfo.mockReturnValueOnce(Files['/'][1])
+
+      const wrapper = createWrapper({
+        item: simpleOwnFolder,
+        selectedItems: [simpleOwnFolder],
+        mocks: { $client: { files: { fileInfo: mockFileInfo } } }
+      })
+
+      await wrapper.vm.loadSpaceTask.last
+      expect(wrapper.vm.currentSpace).toBeNull()
+    })
+  })
 })
 
 function createWrapper({
   item,
   selectedItems,
   mocks,
-  currentRouteName = 'files-spaces-personal-home'
+  currentRouteName = 'files-spaces-personal-home',
+  spaceId = undefined
 }) {
   const localVue = createLocalVue()
   localVue.use(Vuex)
@@ -180,6 +226,7 @@ function createWrapper({
     translations: 'does-not-matter.json',
     silent: true
   })
+
   return shallowMount(SideBar, {
     store: new Vuex.Store({
       getters: {
@@ -191,7 +238,11 @@ function createWrapper({
             api_enabled: true,
             public: { enabled: true }
           }
-        })
+        }),
+        getToken: jest.fn(() => 'GFwHKXdsMgoFwt'),
+        configuration: jest.fn(() => ({
+          server: 'http://example.com/'
+        }))
       },
       modules: {
         apps: {
@@ -236,6 +287,11 @@ function createWrapper({
           currentRoute: createLocationSpaces(currentRouteName),
           resolve: (r) => {
             return { href: r.name }
+          }
+        },
+        $route: {
+          params: {
+            spaceId
           }
         }
       },

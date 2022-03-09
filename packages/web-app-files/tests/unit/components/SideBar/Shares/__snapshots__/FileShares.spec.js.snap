@@ -5,12 +5,14 @@ exports[`FileShares if currentUser can not share initially renders no share perm
   <p data-testid="files-collaborators-no-reshare-permissions-message">You don't have permission to share this file.</p>
   <!---->
   <!---->
+  <!---->
 </div>
 `;
 
 exports[`FileShares if currentUser can share initially renders add people dialog 1`] = `
 <div id="oc-files-sharing-sidebar" class="oc-position-relative">
   <invite-collaborator-form-stub class="oc-my-s"></invite-collaborator-form-stub>
+  <!---->
   <!---->
   <!---->
 </div>
@@ -33,12 +35,14 @@ exports[`FileShares if there are collaborators present renders sharedWithLabel a
       <collaborator-list-item-stub share="[object Object]" modifiable="true"></collaborator-list-item-stub>
     </li>
   </ul>
+  <!---->
 </div>
 `;
 
 exports[`FileShares if there are no collaborators does not render avatar wrapper or collaborator list 1`] = `
 <div id="oc-files-sharing-sidebar" class="oc-position-relative">
   <invite-collaborator-form-stub class="oc-my-s"></invite-collaborator-form-stub>
+  <!---->
   <!---->
   <!---->
 </div>

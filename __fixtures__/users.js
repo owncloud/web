@@ -11,8 +11,9 @@ export default {
     id: 'alice',
     name: 'alice',
     displayname: 'Alice Hansen',
-    additionalInfo: "alice@example.org",
+    additionalInfo: 'alice@example.org',
     home: '/mnt/data/files/alice',
-    two_factor_auth_enabled: 'false'
+    two_factor_auth_enabled: 'false',
+    uuid: 1
   }
 }
