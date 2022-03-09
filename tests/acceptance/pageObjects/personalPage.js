@@ -80,7 +80,9 @@ module.exports = {
         await this.setValue('@dialogInput', name)
       }
 
-      const timeout = expectToSucceed ? 5000 : this.api.globals.waitForNegativeConditionTimeout
+      const timeout = expectToSucceed
+        ? this.api.waitForConditionTimeout
+        : this.api.globals.waitForNegativeConditionTimeout
       await this.click(
         {
           selector: '@dialogConfirmBtnEnabled',
@@ -119,7 +121,9 @@ module.exports = {
         await this.setValue('@dialogInput', name)
       }
 
-      const timeout = expectToSucceed ? 5000 : this.api.globals.waitForNegativeConditionTimeout
+      const timeout = expectToSucceed
+        ? this.api.waitForConditionTimeout
+        : this.api.globals.waitForNegativeConditionTimeout
       await this.click(
         {
           selector: '@dialogConfirmBtnEnabled',
@@ -234,6 +238,7 @@ module.exports = {
     },
     confirmFileOverwrite: async function () {
       await this.waitForAnimationToFinish() // wait for transition on the modal to finish
+        .waitForElementVisible('@dialogConfirmBtnEnabled')
         .click('@dialogConfirmBtnEnabled')
         .waitForElementNotPresent('@dialog')
         .waitForAjaxCallsToStartAndFinish()
@@ -277,7 +282,9 @@ module.exports = {
         await this.setValue('@dialogInput', name)
       }
 
-      const timeout = expectToSucceed ? 5000 : this.api.globals.waitForNegativeConditionTimeout
+      const timeout = expectToSucceed
+        ? this.api.waitForConditionTimeout
+        : this.api.globals.waitForNegativeConditionTimeout
       await this.initAjaxCounters()
         .click(
           {

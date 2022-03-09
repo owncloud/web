@@ -27,7 +27,9 @@ module.exports = {
     isSideBarOpen: async function (expectedToOpen = true) {
       const element = this.elements.sidebar
       let isVisible = false
-      const timeout = expectedToOpen ? 5000 : this.api.globals.waitForNegativeConditionTimeout
+      const timeout = expectedToOpen
+        ? this.api.waitForConditionTimeout
+        : this.api.globals.waitForNegativeConditionTimeout
       await this.isVisible(
         {
           locateStrategy: element.locateStrategy,
@@ -145,7 +147,9 @@ module.exports = {
       const element = this.elements[panelName + 'Panel']
       let isVisible = false
 
-      const timeout = expectToBeActive ? 5000 : this.api.globals.waitForNegativeConditionTimeout
+      const timeout = expectToBeActive
+        ? this.api.waitForConditionTimeout
+        : this.api.globals.waitForNegativeConditionTimeout
 
       await this.isVisible(
         {
@@ -172,7 +176,9 @@ module.exports = {
       const element = this.elements[panelName + 'PanelMenuItem']
       let isVisible = false
 
-      const timeout = expectToBeSelectable ? 5000 : this.api.globals.waitForNegativeConditionTimeout
+      const timeout = expectToBeSelectable
+        ? this.api.waitForConditionTimeout
+        : this.api.globals.waitForNegativeConditionTimeout
 
       await this.isVisible(
         {

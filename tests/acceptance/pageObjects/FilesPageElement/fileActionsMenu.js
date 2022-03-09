@@ -84,7 +84,9 @@ module.exports = {
         .setValue('@dialogInput', toName)
         .useCss()
 
-      const timeout = expectToSucceed ? 5000 : this.api.globals.waitForNegativeConditionTimeout
+      const timeout = expectToSucceed
+        ? this.api.waitForConditionTimeout
+        : this.api.globals.waitForNegativeConditionTimeout
       await this.click(
         {
           selector: '@dialogConfirmBtnEnabled',

@@ -248,7 +248,9 @@ module.exports = {
     },
     hasErrorMessage: async function (expectedVisible = true) {
       let visible = false
-      const timeout = expectedVisible ? 5000 : this.api.globals.waitForNegativeConditionTimeout
+      const timeout = expectedVisible
+        ? this.api.waitForConditionTimeout
+        : this.api.globals.waitForNegativeConditionTimeout
 
       const selector = {
         selector: this.elements.errorMessage.selector,

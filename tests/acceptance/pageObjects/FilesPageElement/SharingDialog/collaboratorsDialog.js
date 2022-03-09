@@ -61,7 +61,9 @@ module.exports = {
       let isVisible = false
       const element = this.elements.collaboratorsList
 
-      const timeout = expectCollaborator ? 5000 : this.api.globals.waitForNegativeConditionTimeout
+      const timeout = expectCollaborator
+        ? this.api.waitForConditionTimeout
+        : this.api.globals.waitForNegativeConditionTimeout
 
       await this.isVisible(
         {
