@@ -161,7 +161,7 @@
 
 <script>
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
-import ResourceTable, { determineSortFields } from '../../components/FilesList/ResourceTable.vue'
+import ResourceTable from '../../components/FilesList/ResourceTable.vue'
 import FileActions from '../../mixins/fileActions'
 import MixinAcceptShare from '../../mixins/actions/acceptShare'
 import MixinDeclineShare from '../../mixins/actions/declineShare'
@@ -169,8 +169,8 @@ import MixinFilesListFilter from '../../mixins/filesListFilter'
 import MixinMountSideBar from '../../mixins/sidebar/mountSideBar'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../../constants'
-import { useFileListHeaderPosition, useSort } from '../../composables'
-import { useRouteQuery, useStore } from 'web-pkg/src/composables'
+import { useSort, useResourcesViewDefaults } from '../../composables'
+import { useRouteQuery } from 'web-pkg/src/composables'
 import debounce from 'lodash-es/debounce'
 
 import ListLoader from '../../components/FilesList/ListLoader.vue'
@@ -180,7 +180,6 @@ import ContextActions from '../../components/FilesList/ContextActions.vue'
 import { ShareStatus } from '../../helpers/share'
 import { computed, unref } from '@vue/composition-api'
 import { createLocationSpaces } from '../../router'
-import { folderService } from '../../services/folder'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -202,12 +201,7 @@ export default {
   ],
 
   setup() {
-    const store = useStore()
-    const { y: fileListHeaderY } = useFileListHeaderPosition()
-    const storeItems = computed(() => store.getters['Files/activeFiles'] || [])
-    const fields = computed(() => {
-      return determineSortFields(unref(storeItems)[0])
-    })
+    const { fileListHeaderY, storeItems, fields, loadResourcesTask } = useResourcesViewDefaults()
 
     const viewMode = computed(() =>
       parseInt(String(unref(useRouteQuery('view-mode', ShareStatus.accepted.toString()))))
@@ -245,13 +239,13 @@ export default {
       sortDirQueryName: 'shares-sort-dir'
     })
 
-    const loadResourcesTask = folderService.getTask()
-
     return {
-      resourceTargetLocation: createLocationSpaces('files-spaces-personal-home'),
-      viewMode,
+      // defaults
       fileListHeaderY,
       loadResourcesTask,
+
+      // view specific
+      viewMode,
       pendingHandleSort,
       pendingSortBy,
       pendingSortDir,
@@ -259,7 +253,9 @@ export default {
       sharesHandleSort,
       sharesSortBy,
       sharesSortDir,
-      sharesItems
+      sharesItems,
+
+      resourceTargetLocation: createLocationSpaces('files-spaces-personal-home')
     }
   },
 

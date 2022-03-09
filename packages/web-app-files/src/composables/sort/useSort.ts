@@ -2,6 +2,7 @@ import { ref, Ref, computed, ComputedRef, unref, isRef } from '@vue/composition-
 import { MaybeRef, MaybeReadonlyRef } from 'web-pkg/src/utils'
 import { useRouteName, useRouteQueryPersisted } from 'web-pkg/src/composables'
 import { SortConstants } from './constants'
+import { Resource } from '../../helpers/resource'
 
 export enum SortDir {
   Desc = 'desc',
@@ -11,12 +12,12 @@ export enum SortDir {
 export interface SortField {
   name: MaybeRef<string>
   // eslint-disable-next-line @typescript-eslint/ban-types
-  sortable?: MaybeRef<boolean | Function>
+  sortable?: MaybeRef<boolean | Function | string>
   sortDir?: MaybeRef<string>
 }
 
 export interface SortOptions<T> {
-  items: MaybeReadonlyRef<Array<T>>
+  items: MaybeReadonlyRef<Array<Resource>>
   fields: MaybeRef<Array<SortField>>
   sortBy?: MaybeRef<string>
   sortByQueryName?: MaybeRef<string>

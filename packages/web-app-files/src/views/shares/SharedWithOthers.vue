@@ -50,8 +50,7 @@
 
 <script>
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
-import { computed, unref } from '@vue/composition-api'
-import ResourceTable, { determineSortFields } from '../../components/FilesList/ResourceTable.vue'
+import ResourceTable from '../../components/FilesList/ResourceTable.vue'
 
 import FileActions from '../../mixins/fileActions'
 import MixinFilesListFilter from '../../mixins/filesListFilter'
@@ -59,8 +58,6 @@ import MixinResources from '../../mixins/resources'
 import MixinMountSideBar from '../../mixins/sidebar/mountSideBar'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../../constants'
-import { useFileListHeaderPosition, usePagination, useSort } from '../../composables'
-import { useRouteQuery, useStore } from 'web-pkg/src/composables'
 import debounce from 'lodash-es/debounce'
 
 import ListLoader from '../../components/FilesList/ListLoader.vue'
@@ -69,7 +66,7 @@ import ListInfo from '../../components/FilesList/ListInfo.vue'
 import Pagination from '../../components/FilesList/Pagination.vue'
 import ContextActions from '../../components/FilesList/ContextActions.vue'
 import { createLocationSpaces } from '../../router'
-import { folderService } from '../../services/folder'
+import { useResourcesViewDefaults } from '../../composables'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -79,39 +76,8 @@ export default {
   mixins: [FileActions, MixinResources, MixinMountSideBar, MixinFilesListFilter],
 
   setup() {
-    const store = useStore()
-    const { y: fileListHeaderY } = useFileListHeaderPosition()
-
-    const storeItems = computed(() => store.getters['Files/activeFiles'] || [])
-    const fields = computed(() => {
-      return determineSortFields(unref(storeItems)[0])
-    })
-
-    const { sortBy, sortDir, items, handleSort } = useSort({
-      items: storeItems,
-      fields
-    })
-
-    const paginationPageQuery = useRouteQuery('page', '1')
-    const paginationPage = computed(() => parseInt(String(paginationPageQuery.value)))
-    const { items: paginatedResources, total: paginationPages } = usePagination({
-      page: paginationPage,
-      items,
-      sortDir,
-      sortBy
-    })
-
-    const loadResourcesTask = folderService.getTask()
-
     return {
-      fileListHeaderY,
-      loadResourcesTask,
-      paginatedResources,
-      paginationPages,
-      paginationPage,
-      handleSort,
-      sortBy,
-      sortDir,
+      ...useResourcesViewDefaults(),
       resourceTargetLocation: createLocationSpaces('files-spaces-personal-home')
     }
   },

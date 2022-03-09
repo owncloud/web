@@ -35,7 +35,7 @@
         </oc-grid>
       </div>
       <div id="files-view">
-        <list-loader v-if="navigateToTargetTask.isRunning" />
+        <list-loader v-if="loadResourcesTask.isRunning" />
         <template v-else>
           <no-content-message
             v-if="isEmpty"
@@ -81,16 +81,13 @@
 
 <script>
 import { mapMutations, mapState, mapActions, mapGetters } from 'vuex'
-import { computed, unref } from '@vue/composition-api'
 
 import { basename, join } from 'path'
-import ResourceTable, { determineSortFields } from '../components/FilesList/ResourceTable.vue'
+import ResourceTable from '../components/FilesList/ResourceTable.vue'
 import { batchActions } from '../helpers/batchActions'
 import { cloneStateObject } from '../helpers/store'
 import MixinsGeneral from '../mixins'
 import MixinFilesListFilter from '../mixins/filesListFilter'
-import { useFileListHeaderPosition, usePagination, useSort } from '../composables'
-import { useRouteQuery, useStore } from 'web-pkg/src/composables'
 import { useTask } from 'vue-concurrency'
 
 import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
@@ -100,6 +97,7 @@ import Pagination from '../components/FilesList/Pagination.vue'
 import { DavProperties } from 'web-pkg/src/constants'
 import { createLocationPublic, createLocationSpaces } from '../router'
 import { buildWebDavFilesPath, buildWebDavSpacesPath } from '../helpers/resources'
+import { useResourcesViewDefaults } from '../composables'
 
 export default {
   metaInfo() {
@@ -119,30 +117,7 @@ export default {
   mixins: [MixinsGeneral, MixinFilesListFilter],
 
   setup() {
-    const store = useStore()
-    const { refresh: refreshFileListHeaderPosition, y: fileListHeaderY } =
-      useFileListHeaderPosition()
-
-    const storeItems = computed(() => store.getters['Files/activeFiles'] || [])
-    const fields = computed(() => {
-      return determineSortFields(unref(storeItems)[0])
-    })
-
-    const { sortBy, sortDir, items, handleSort } = useSort({
-      items: storeItems,
-      fields
-    })
-
-    const paginationPageQuery = useRouteQuery('page', '1')
-    const paginationPage = computed(() => parseInt(String(paginationPageQuery.value)))
-    const { items: paginatedResources, total: paginationPages } = usePagination({
-      page: paginationPage,
-      items,
-      sortDir,
-      sortBy
-    })
-
-    const navigateToTargetTask = useTask(function* (signal, ref, target) {
+    const loadResourcesTask = useTask(function* (signal, ref, target) {
       ref.CLEAR_CURRENT_FILES_LIST()
 
       if (typeof target === 'object') {
@@ -181,18 +156,11 @@ export default {
         client: ref.$client,
         currentFolder: ref.$route.params.item || '/'
       })
-      refreshFileListHeaderPosition()
+      ref.refreshFileListHeaderPosition()
     }).restartable()
 
     return {
-      fileListHeaderY,
-      navigateToTargetTask,
-      paginatedResources,
-      paginationPages,
-      paginationPage,
-      handleSort,
-      sortBy,
-      sortDir
+      ...useResourcesViewDefaults({ loadResourcesTask })
     }
   },
 
@@ -342,7 +310,7 @@ export default {
         const sameRoute = to.name === from?.name
         const sameItem = to.params?.item === from?.params?.item
         if (!sameRoute || !sameItem) {
-          this.navigateToTargetTask.perform(this, this.$route)
+          this.loadResourcesTask.perform(this, this.$route)
         }
       },
       immediate: true

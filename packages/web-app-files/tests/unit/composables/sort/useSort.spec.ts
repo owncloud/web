@@ -1,6 +1,7 @@
 import { ref, readonly } from '@vue/composition-api'
 import { createWrapper } from './spec'
 import { SortDir, SortOptions, useSort } from '../../../../src/composables'
+import { Resource } from '../../../../src/helpers/resource'
 
 describe('useSort', () => {
   it('should be valid', () => {
@@ -10,7 +11,11 @@ describe('useSort', () => {
   it('does not sort if no sort field was given', () => {
     createWrapper(() => {
       const input: SortOptions<any> = {
-        items: readonly([3, 4, 6, 1, 2, 5]),
+        items: readonly([
+          { id: '1', path: '1', webDavPath: '/1' },
+          { id: '2', path: '2', webDavPath: '/2' },
+          { id: '3', path: '3', webDavPath: '/3' }
+        ]),
         fields: [],
         sortBy: ref(null),
         sortDir: ref(null),
@@ -19,30 +24,31 @@ describe('useSort', () => {
 
       const { items } = useSort(input)
 
-      expect(items.value).toMatchObject([3, 4, 6, 1, 2, 5])
+      expect(items.value).toMatchObject([
+        { id: '1', path: '1', webDavPath: '/1' },
+        { id: '2', path: '2', webDavPath: '/2' },
+        { id: '3', path: '3', webDavPath: '/3' }
+      ])
     })
   })
 
   describe('sorting resources', () => {
-    interface Resource {
-      name: string
-    }
     const resources = [
-      { name: 'c.png', time: 2 },
-      { name: 'Dir4', time: 4, type: 'folder' },
-      { name: 'a.png', time: 3 },
-      { name: 'A.png', time: 6 },
-      { name: 'dir2', time: 7, type: 'folder' },
-      { name: 'b.png', time: 1 },
-      { name: 'Dir1', time: 5, type: 'folder' },
-      { name: 'dir3', time: 8, type: 'folder' }
+      { id: '1', name: 'c.png', path: '', webDavPath: '', time: 2 },
+      { id: '1', name: 'Dir4', path: '', webDavPath: '', time: 4, type: 'folder' },
+      { id: '1', name: 'a.png', path: '', webDavPath: '', time: 3 },
+      { id: '1', name: 'A.png', path: '', webDavPath: '', time: 6 },
+      { id: '1', name: 'dir2', path: '', webDavPath: '', time: 7, type: 'folder' },
+      { id: '1', name: 'b.png', path: '', webDavPath: '', time: 1 },
+      { id: '1', name: 'Dir1', path: '', webDavPath: '', time: 5, type: 'folder' },
+      { id: '1', name: 'dir3', path: '', webDavPath: '', time: 8, type: 'folder' }
     ]
 
     it('sorts resources by name', () => {
       createWrapper(() => {
         const sortDir = ref(SortDir.Asc)
         const input = {
-          items: readonly<Array<Resource>>(resources),
+          items: readonly<Resource[]>(resources),
           fields: [
             {
               name: 'name',
@@ -57,7 +63,7 @@ describe('useSort', () => {
           sortDir
         }
 
-        const { items } = useSort(input)
+        const { items } = useSort<Resource>(input)
 
         expect(items.value.map((i) => i.name)).toMatchObject([
           'Dir1',

@@ -72,14 +72,11 @@ import MixinFileActions from '../mixins/fileActions'
 import MixinFilesListFilter from '../mixins/filesListFilter'
 import MixinFilesListScrolling from '../mixins/filesListScrolling'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
-import { fileList } from '../helpers/ui'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../constants'
-import { useFileListHeaderPosition, usePagination, useSort } from '../composables'
-import { useMutationSubscription, useRouteQuery, useStore } from 'web-pkg/src/composables'
 import { bus } from 'web-pkg/src/instance'
 
-import ResourceTable, { determineSortFields } from '../components/FilesList/ResourceTable.vue'
+import ResourceTable from '../components/FilesList/ResourceTable.vue'
 import QuickActions from '../components/FilesList/QuickActions.vue'
 import ListLoader from '../components/FilesList/ListLoader.vue'
 import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
@@ -89,10 +86,8 @@ import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
 import { basename, join } from 'path'
 import PQueue from 'p-queue'
-import { nextTick, computed, unref } from '@vue/composition-api'
 import { createLocationSpaces } from '../router'
-import { folderService } from '../services/folder'
-
+import { useResourcesViewDefaults } from '../composables'
 const visibilityObserver = new VisibilityObserver()
 
 export default {
@@ -115,47 +110,9 @@ export default {
     MixinFilesListFilter
   ],
   setup() {
-    const store = useStore()
-    const { refresh: refreshFileListHeaderPosition, y: fileListHeaderY } =
-      useFileListHeaderPosition()
-
-    const storeItems = computed(() => store.getters['Files/activeFiles'] || [])
-    const fields = computed(() => {
-      return determineSortFields(unref(storeItems)[0])
-    })
-
-    const { sortBy, sortDir, items, handleSort } = useSort({
-      items: storeItems,
-      fields
-    })
-
-    const paginationPageQuery = useRouteQuery('page', '1')
-    const paginationPage = computed(() => parseInt(String(paginationPageQuery.value)))
-    const { items: paginatedResources, total: paginationPages } = usePagination({
-      page: paginationPage,
-      items,
-      sortDir,
-      sortBy
-    })
-
-    useMutationSubscription(['Files/UPSERT_RESOURCE'], async ({ payload }) => {
-      await nextTick()
-      fileList.accentuateItem(payload.id)
-    })
-
-    const loadResourcesTask = folderService.getTask()
-
     return {
-      fileListHeaderY,
-      refreshFileListHeaderPosition,
-      loadResourcesTask,
-      paginatedResources,
-      paginationPages,
-      resourceTargetLocation: createLocationSpaces('files-spaces-personal-home'),
-      paginationPage,
-      handleSort,
-      sortBy,
-      sortDir
+      ...useResourcesViewDefaults(),
+      resourceTargetLocation: createLocationSpaces('files-spaces-personal-home')
     }
   },
 
