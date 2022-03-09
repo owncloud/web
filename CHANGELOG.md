@@ -17,6 +17,7 @@ Summary
 * Bugfix - Prevent the member count inside a space from disappearing: [#6550](https://github.com/owncloud/web/pull/6550)
 * Enhancement - Don't block account page while groups are loading: [#6547](https://github.com/owncloud/web/pull/6547)
 * Enhancement - Add a watcher for the share panel of a space: [#6543](https://github.com/owncloud/web/pull/6543)
+* Enhancement - Contextmenu background hover: [#6553](https://github.com/owncloud/web/pull/6553)
 * Enhancement - Load space images as preview: [#6529](https://github.com/owncloud/web/pull/6529)
 * Enhancement - Resolve private links into folders instead of parent: [#5533](https://github.com/owncloud/web/issues/5533)
 * Enhancement - Shares overview: [#6440](https://github.com/owncloud/web/issues/6440)
@@ -97,11 +98,20 @@ Details
 
    https://github.com/owncloud/web/pull/6543
 
+* Enhancement - Contextmenu background hover: [#6553](https://github.com/owncloud/web/pull/6553)
+
+   We've added a background hover color for contextmenu actions.
+
+   https://github.com/owncloud/web/issues/6560
+   https://github.com/owncloud/web/pull/6553
+   https://github.com/owncloud/web/pull/6559
+
 * Enhancement - Load space images as preview: [#6529](https://github.com/owncloud/web/pull/6529)
 
    We've added a new logic which renders space images as preview to minimize data traffic
 
    https://github.com/owncloud/web/pull/6529
+   https://github.com/owncloud/web/pull/6558
 
 * Enhancement - Resolve private links into folders instead of parent: [#5533](https://github.com/owncloud/web/issues/5533)
 
