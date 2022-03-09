@@ -1,0 +1,6 @@
+Enhancement: Resolve private links into folders instead of parent
+
+Private links always resolved into the parent folder of the linked file and visually highlighted the file or folder from the link. We've changed this behaviour to directly navigate into the folder in case the linked resource is a folder and only keep the previous behaviour for when the linked resource is a file.
+
+https://github.com/owncloud/web/issues/5533
+https://github.com/owncloud/web/pull/5654

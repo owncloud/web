@@ -32,8 +32,11 @@
 </template>
 
 <script>
+import path from 'path'
 import { mapGetters } from 'vuex'
+import { buildResource, buildWebDavFilesPath } from '../helpers/resources'
 import { createLocationSpaces } from '../router'
+import { DavProperties } from 'web-pkg/src/constants'
 
 export default {
   data() {
@@ -43,38 +46,43 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['configuration']),
+    ...mapGetters(['configuration', 'user']),
 
     pageTitle() {
       return this.$gettext(this.$route.meta.title)
     }
   },
-  mounted() {
-    // query oc10 server to translate fileId to real path
+  async mounted() {
+    // query server to translate fileId to real path
     this.loading = true
-    this.$client.files
-      .getPathForFileId(this.$route.params.fileId)
-      .then((path) => {
-        const lastSlash = path.lastIndexOf('/')
-        const folder = path.substring(0, lastSlash).replace(/^(\/)/, '')
-        const file = path.substring(lastSlash + 1)
-        this.$router.push(
-          createLocationSpaces('files-spaces-personal-home', {
-            params: {
-              item: folder || '/'
-            },
-            query: {
-              scrollTo: file
-            }
-          })
-        )
-      })
-      .catch((error) => {
-        this.errorMessage = error
-      })
-      .finally(() => {
-        this.loading = false
-      })
+    try {
+      let resourcePath = await this.$client.files.getPathForFileId(this.$route.params.fileId)
+      resourcePath = buildWebDavFilesPath(this.user.id, resourcePath)
+      let resource = await this.$client.files.fileInfo(resourcePath, DavProperties.Default)
+      resource = buildResource(resource)
+
+      const params = {}
+      const query = {}
+      if (resource.isFolder) {
+        // if folder: route directly into it
+        params.item = resource.path || ''
+      } else {
+        // if file: route into parent and highlight file
+        params.item = path.dirname(resource.path)
+        query.scrollTo = resource.name
+      }
+      this.$router.push(
+        createLocationSpaces('files-spaces-personal-home', {
+          params,
+          query
+        })
+      )
+    } catch (error) {
+      console.error(error)
+      this.errorMessage = error
+    } finally {
+      this.loading = false
+    }
   }
 }
 </script>
