@@ -24,43 +24,21 @@ const $route = {
 
 const selectors = {
   pageTitle: '.oc-page-title',
-  loaderStub: 'oc-loader-stub',
-  accountPageTitle: '#account-page-title',
+  loaderStub: 'oc-spinner-stub',
   editUrlButton: '[data-testid="account-page-edit-url-btn"]',
   editRouteButton: '[data-testid="account-page-edit-route-btn"]',
   accountPageInfo: '.account-page-info',
-  groupInformation: '.account-page-info-groups'
+  groupNames: '[data-testid="group-names"]',
+  groupNamesEmpty: '[data-testid="group-names-empty"]'
 }
 
-describe('account', () => {
-  describe('when the page is still loading', () => {
-    let wrapper
-    beforeEach(() => {
-      wrapper = getWrapper()
-      wrapper.setData({ loading: true })
-    })
-    it('should render the loading state', () => {
+describe('account page', () => {
+  describe('header section', () => {
+    it('renders page title', () => {
+      const wrapper = getWrapper()
       const pageTitle = wrapper.find(selectors.pageTitle)
-      const ocLoader = wrapper.find(selectors.loaderStub)
+      expect(pageTitle.exists()).toBeTruthy()
       expect(pageTitle.text()).toBe($route.meta.title)
-      expect(ocLoader.exists()).toBeTruthy()
-    })
-    it('should not render the account page content', () => {
-      const accountPageTitle = wrapper.find(selectors.accountPageTitle)
-      const accountPageInfo = wrapper.find(selectors.accountPageInfo)
-      expect(accountPageTitle.exists()).toBeFalsy()
-      expect(accountPageInfo.exists()).toBeFalsy()
-    })
-  })
-  describe('when the page is not in loading state anymore', () => {
-    it('should not render the loading state', async () => {
-      const store = getStore()
-      const wrapper = getWrapper(store)
-      await wrapper.setData({ loading: false })
-      const pageTitle = wrapper.find(selectors.pageTitle)
-      const ocLoader = wrapper.find(selectors.loaderStub)
-      expect(pageTitle.text()).toBe('Account')
-      expect(ocLoader.exists()).toBeFalsy()
     })
 
     describe('edit buttons', () => {
@@ -71,7 +49,7 @@ describe('account', () => {
             isOcis: false
           })
           const wrapper = getWrapper(store)
-          await wrapper.setData({ loading: false })
+          await wrapper.setData({ loadingGroups: false })
           const editUrlButton = wrapper.find(selectors.editUrlButton)
           const editRouteButton = wrapper.find(selectors.editRouteButton)
           expect(editUrlButton).toMatchSnapshot()
@@ -83,9 +61,9 @@ describe('account', () => {
             isOcis: true
           })
           const wrapper = getWrapper(store)
-          await wrapper.setData({ loading: false })
-          const editButton = wrapper.find(selectors.editUrlButton)
-          expect(editButton.exists()).toBeFalsy()
+          await wrapper.setData({ loadingGroups: false })
+          const editUrlButton = wrapper.find(selectors.editUrlButton)
+          expect(editUrlButton.exists()).toBeFalsy()
         })
       })
       describe('edit route button', () => {
@@ -95,42 +73,57 @@ describe('account', () => {
             getNavItemsByExtension: jest.fn(() => [{ route: 'some-route' }])
           })
           const wrapper = getWrapper(store)
-          await wrapper.setData({ loading: false })
+          await wrapper.setData({ loadingGroups: false })
           const editRouteButton = wrapper.find(selectors.editRouteButton)
           expect(editRouteButton).toMatchSnapshot()
         })
       })
     })
+  })
 
-    describe('account information', () => {
-      it('without group information', async () => {
-        const store = getStore({
-          user: {
-            username: 'some-username',
-            displayname: 'some-displayname',
-            email: 'some-email'
-          }
-        })
-        const wrapper = getWrapper(store)
-        await wrapper.setData({ loading: false })
-
-        const accountPageInfo = wrapper.find(selectors.accountPageInfo)
-        expect(accountPageInfo).toMatchSnapshot()
+  describe('account information', () => {
+    it('displays basic user information', async () => {
+      const store = getStore({
+        user: {
+          username: 'some-username',
+          displayname: 'some-displayname',
+          email: 'some-email'
+        }
       })
-      it('with group information', async () => {
+      const wrapper = getWrapper(store)
+
+      const accountPageInfo = wrapper.find(selectors.accountPageInfo)
+      expect(accountPageInfo).toMatchSnapshot()
+    })
+
+    describe('group membership', () => {
+      it('shows loading indicator when in loading state', () => {
+        const wrapper = getWrapper()
+        const groupInfoLoading = wrapper.find(selectors.loaderStub)
+        expect(groupInfoLoading.exists()).toBeTruthy()
+      })
+      it('displays message if not member of any groups', async () => {
         const store = getStore()
         const wrapper = getWrapper(store)
-        await wrapper.setData({ loading: false })
+        await wrapper.setData({ loadingGroups: false })
+
+        const groupNamesEmpty = wrapper.find(selectors.groupNamesEmpty)
+        expect(groupNamesEmpty.exists()).toBeTruthy()
+      })
+      it('displays group names', async () => {
+        const store = getStore()
+        const wrapper = getWrapper(store)
+        await wrapper.setData({ loadingGroups: false })
         await wrapper.setData({ groups: ['one', 'two', 'three'] })
 
-        const groupInformation = wrapper.find(selectors.groupInformation)
-        expect(groupInformation).toMatchSnapshot()
+        const groupNames = wrapper.find(selectors.groupNames)
+        expect(groupNames).toMatchSnapshot()
       })
     })
   })
 })
 
-function getWrapper(store = null) {
+function getWrapper(store = getStore()) {
   const component = {
     ...account,
     mounted: jest.fn()
@@ -141,12 +134,12 @@ function getWrapper(store = null) {
       $route
     },
     stubs: {
-      'oc-loader': true,
+      'oc-spinner': true,
       'oc-button': true,
       'oc-icon': true
-    }
+    },
+    store
   }
-  if (store) opts.store = store
   return shallowMount(component, opts)
 }
 

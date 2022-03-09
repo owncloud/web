@@ -1,12 +1,19 @@
 import { isLocationSpacesActive } from '../../../router'
 import { clientService } from 'web-pkg/src/services'
-import { mapMutations, mapActions, mapGetters } from 'vuex'
+import { mapMutations, mapActions, mapGetters, mapState } from 'vuex'
 import { buildResource } from '../../../helpers/resources'
 import { bus } from 'web-pkg/src/instance'
+import { thumbnailService } from '../../../services'
 
 export default {
+  inject: {
+    currentSpace: {
+      default: null
+    }
+  },
   computed: {
     ...mapGetters(['configuration']),
+    ...mapState(['user']),
     $_setSpaceImage_items() {
       return [
         {
@@ -20,16 +27,30 @@ export default {
             if (resources.length !== 1) {
               return false
             }
-            if (!resources[0].mimeType?.startsWith('image/')) {
+            if (!resources[0].mimeType) {
               return false
             }
-            return isLocationSpacesActive(this.$router, 'files-spaces-project')
+            if (!thumbnailService.isMimetypeSupported(resources[0].mimeType, true)) {
+              return false
+            }
+
+            if (!isLocationSpacesActive(this.$router, 'files-spaces-project')) {
+              return false
+            }
+            if (!this.space) {
+              return false
+            }
+
+            return this.space.canEditImage({ user: this.user })
           },
           canBeDefault: false,
           componentType: 'oc-button',
           class: 'oc-files-actions-set-space-image-trigger'
         }
       ]
+    },
+    space() {
+      return this.currentSpace?.value
     }
   },
   methods: {

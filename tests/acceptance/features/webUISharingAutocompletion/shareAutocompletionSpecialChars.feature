@@ -10,9 +10,9 @@ Feature: Autocompletion of share-with names
       | username    |
       | regularuser |
     And these users have been created without initialization and without skeleton files in the server:
-      | username | password  | displayname | email        |
-      | two      | %regular% | Brian Murphy    | u2@oc.com.np |
-      | u444     | %regular% | Four        | u3@oc.com.np |
+      | username | password  | displayname  | email        |
+      | two      | %regular% | Brian Murphy | u2@oc.com.np |
+      | u444     | %regular% | Four         | u3@oc.com.np |
     And these groups have been created in the server:
       | groupname |
       | finance1  |
@@ -26,7 +26,7 @@ Feature: Autocompletion of share-with names
       | <username> | %regular% | SpecialUser | usrmail@oc.com.np |
     And user "regularuser" has created file "data.zip" in the server
     And user "regularuser" has logged in using the webUI
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     And the user has opened the share dialog for file "data.zip"
 
     When the user types "<search>" in the share-with-field
@@ -45,7 +45,7 @@ Feature: Autocompletion of share-with names
       | normalusr | %regular% | <displayName> | msrmail@oc.com.np |
     And user "regularuser" has created file "data.zip" in the server
     And user "regularuser" has logged in using the webUI
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     And the user has opened the share dialog for file "data.zip"
 
     When the user types "<search>" in the share-with-field
@@ -63,7 +63,7 @@ Feature: Autocompletion of share-with names
       | <group>   |
     And user "regularuser" has created file "data.zip" in the server
     And user "regularuser" has logged in using the webUI
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     And the user has opened the share dialog for file "data.zip"
 
     When the user types "<search>" in the share-with-field

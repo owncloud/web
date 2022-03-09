@@ -1,9 +1,10 @@
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { clientService } from 'web-pkg/src/services'
 
 export default {
   computed: {
     ...mapGetters(['configuration', 'getToken']),
+    ...mapState(['user']),
 
     $_restore_items() {
       return [
@@ -19,7 +20,7 @@ export default {
               return false
             }
 
-            return resources[0].disabled
+            return resources[0].canRestore({ user: this.user })
           },
           componentType: 'oc-button',
           class: 'oc-files-actions-restore-trigger'

@@ -7,7 +7,7 @@ exports[`Trashbin View when the view is not loading anymore when length of the p
       <th class="oc-th oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-text-nowrap oc-table-header-cell oc-table-header-cell-select oc-pl-m " style="top: 0px;"><span class="oc-table-thead-content"><div class="resource-table-select-all"><span><input id="resource-table-select-all" type="checkbox" name="checkbox" class="oc-checkbox oc-rounded oc-checkbox-l" value=""> <label for="resource-table-select-all" class="oc-invisible-sr oc-cursor-pointer">Select all resources</label></span></div></span>
         <!---->
       </th>
-      <th class="oc-th oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-expand oc-text-nowrap oc-table-header-cell oc-table-header-cell-name" aria-sort="none" style="top: 0px;"><span class="oc-table-thead-content header-text">Name</span> <button aria-label="Sort by name" class="oc-button-sort oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-invisible"><span class="oc-icon oc-icon-s oc-icon-passive"><!----></span></button></th>
+      <th class="oc-th oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-expand oc-text-nowrap oc-table-header-cell oc-table-header-cell-name" aria-sort="none" style="top: 0px;"><span class="oc-table-thead-content header-text">Name</span> <button aria-label="Sort by name" type="button" class="oc-button-sort oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-invisible"><span class="oc-icon oc-icon-s oc-icon-passive"><!----></span></button></th>
       <th class="oc-th oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-header-cell oc-table-header-cell-status" style="top: 0px;"><span class="oc-table-thead-content header-text">Status</span>
         <!---->
       </th>
@@ -32,7 +32,7 @@ exports[`Trashbin View when the view is not loading anymore when length of the p
       </td>
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-status"></td>
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-actions oc-pr-m">
-        <div class="resource-table-actions"> <button aria-label="Show context menu" class="resource-table-btn-action-dropdown oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="context-menu-trigger-file-id-1234"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button>
+        <div class="resource-table-actions"> <button aria-label="Show context menu" type="button" class="resource-table-btn-action-dropdown oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="context-menu-trigger-file-id-1234"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button>
           <div id="context-menu-drop-file-id-1234" class="oc-drop oc-box-shadow-medium oc-rounded"></div>
         </div>
       </td>
@@ -52,7 +52,7 @@ exports[`Trashbin View when the view is not loading anymore when length of the p
       </td>
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-status"></td>
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-actions oc-pr-m">
-        <div class="resource-table-actions"> <button aria-label="Show context menu" class="resource-table-btn-action-dropdown oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="context-menu-trigger-file-id-5896"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button>
+        <div class="resource-table-actions"> <button aria-label="Show context menu" type="button" class="resource-table-btn-action-dropdown oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="context-menu-trigger-file-id-5896"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button>
           <div id="context-menu-drop-file-id-5896" class="oc-drop oc-box-shadow-medium oc-rounded"></div>
         </div>
       </td>
@@ -72,7 +72,7 @@ exports[`Trashbin View when the view is not loading anymore when length of the p
       </td>
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-status"></td>
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-actions oc-pr-m">
-        <div class="resource-table-actions"> <button aria-label="Show context menu" class="resource-table-btn-action-dropdown oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="context-menu-trigger-file-id-9856"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button>
+        <div class="resource-table-actions"> <button aria-label="Show context menu" type="button" class="resource-table-btn-action-dropdown oc-button oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="context-menu-trigger-file-id-9856"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button>
           <div id="context-menu-drop-file-id-9856" class="oc-drop oc-box-shadow-medium oc-rounded"></div>
         </div>
       </td>

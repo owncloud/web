@@ -6,6 +6,7 @@ import { createLocationSpaces } from '../../../../src/router'
 import mockAxios from 'jest-mock-axios'
 // eslint-disable-next-line jest/no-mocks-import
 import sdkMock from '@/__mocks__/sdk'
+import { thumbnailService } from '../../../../src/services'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -73,6 +74,14 @@ describe('uploadImage', () => {
     })
   }
 
+  beforeAll(() => {
+    thumbnailService.initialize({
+      enabled: true,
+      version: '0.1',
+      supportedMimeTypes: ['image/png', 'image/jpg', 'image/jpeg', 'image/gif', 'text/plain']
+    })
+  })
+
   afterEach(() => jest.clearAllMocks())
 
   describe('method "$_uploadImage_uploadImageSpace"', () => {
@@ -85,7 +94,7 @@ describe('uploadImage', () => {
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       await wrapper.vm.$_uploadImage_uploadImageSpace({
         currentTarget: {
-          files: [{ name: 'image.png', lastModifiedDate: new Date() }]
+          files: [{ name: 'image.png', lastModifiedDate: new Date(), type: 'image/png' }]
         }
       })
 
@@ -98,7 +107,7 @@ describe('uploadImage', () => {
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       await wrapper.vm.$_uploadImage_uploadImageSpace({
         currentTarget: {
-          files: [{ name: 'image.png', lastModifiedDate: new Date() }]
+          files: [{ name: 'image.png', lastModifiedDate: new Date(), type: 'image/png' }]
         }
       })
 

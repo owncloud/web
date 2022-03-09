@@ -3,7 +3,7 @@ import { clientService } from 'web-pkg/src/services'
 
 export default {
   computed: {
-    ...mapGetters(['configuration', 'getToken']),
+    ...mapGetters(['configuration', 'getToken', 'user']),
 
     $_rename_items() {
       return [
@@ -14,7 +14,13 @@ export default {
             return this.$gettext('Rename')
           },
           handler: this.$_rename_trigger,
-          isEnabled: ({ resources }) => resources.length === 1,
+          isEnabled: ({ resources }) => {
+            if (resources.length !== 1) {
+              return false
+            }
+
+            return resources[0].canRename({ user: this.user })
+          },
           componentType: 'oc-button',
           class: 'oc-files-actions-rename-trigger'
         }

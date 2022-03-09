@@ -16,7 +16,7 @@
               :class="{ expanded: imageExpanded }"
               class="space-overview-image oc-cursor-pointer"
               alt=""
-              :src="'data:' + imageContent.mimeType + ';base64,' + imageContent.data"
+              :src="imageContent"
               @click="toggleImageExpanded"
             />
           </div>
@@ -49,7 +49,7 @@
                     name="file"
                     multiple
                     tabindex="-1"
-                    accept="image/*"
+                    :accept="supportedSpaceImageMimeTypes"
                     @change="$_uploadImage_uploadImageSpace"
                   />
                   <ul class="oc-list oc-files-context-actions">
@@ -71,7 +71,7 @@
                 </oc-drop>
               </div>
               <oc-button
-                v-if="!loadSharesTask.isRunning && currentFileOutgoingCollaborators.length"
+                v-if="memberCount"
                 :aria-label="$gettext('Open context menu and show members')"
                 appearance="raw"
                 @click="openSidebarSharePanel"
@@ -79,17 +79,19 @@
                 <oc-icon name="group" fill-type="line" size="small" />
                 <span
                   class="space-overview-people-count oc-text-small"
-                  v-text="peopleCountString"
+                  v-text="memberCountString"
                 ></span>
               </oc-button>
             </div>
             <p v-if="space.description" class="oc-mt-rm">{{ space.description }}</p>
             <div>
+              <!-- eslint-disable vue/no-v-html -->
               <div
                 ref="markdownContainer"
                 class="markdown-container"
                 v-html="markdownContent"
               ></div>
+              <!-- eslint-enable -->
               <div v-if="showMarkdownCollapse" class="markdown-collapse oc-text-center oc-mt-s">
                 <oc-button appearance="raw" @click="toggleCollapseMarkdown">
                   <oc-icon :name="markdownCollapseIcon" />
@@ -149,6 +151,7 @@ import sanitizeHtml from 'sanitize-html'
 import MixinAccessibleBreadcrumb from '../../mixins/accessibleBreadcrumb'
 import { bus } from 'web-pkg/src/instance'
 import { buildResource, buildSpace, buildWebDavSpacesPath } from '../../helpers/resources'
+import { loadPreview } from '../../helpers/resource'
 import ResourceTable, { determineSortFields } from '../../components/FilesList/ResourceTable.vue'
 import { createLocationSpaces } from '../../router'
 import { usePagination, useSort } from '../../composables'
@@ -173,6 +176,7 @@ import EditQuota from '../../mixins/spaces/actions/editQuota'
 import EditReadmeContent from '../../mixins/spaces/actions/editReadmeContent'
 import QuotaModal from '../../components/Spaces/QuotaModal.vue'
 import ReadmeContentModal from '../../components/Spaces/ReadmeContentModal.vue'
+import { thumbnailService } from '../../services'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -202,6 +206,11 @@ export default {
     EditReadmeContent,
     EditQuota
   ],
+  provide() {
+    return {
+      currentSpace: computed(() => this.space)
+    }
+  },
   setup() {
     const router = useRouter()
     const store = useStore()
@@ -271,18 +280,9 @@ export default {
       })
     })
 
-    const loadSharesTask = useTask(function* (signal, ref) {
-      yield ref.loadCurrentFileOutgoingShares({
-        client: graphClient,
-        path: ref.space.id,
-        space: ref.space
-      })
-    })
-
     return {
       space,
       loadResourcesTask,
-      loadSharesTask,
       resourceTargetLocation: createLocationSpaces('files-spaces-project'),
       paginatedResources,
       paginationPages,
@@ -309,9 +309,9 @@ export default {
       'selectedFiles',
       'currentFolder',
       'totalFilesCount',
-      'totalFilesSize',
-      'currentFileOutgoingCollaborators'
+      'totalFilesSize'
     ]),
+    ...mapGetters(['user', 'getToken']),
 
     selected: {
       get() {
@@ -339,15 +339,14 @@ export default {
     displayThumbnails() {
       return !this.configuration.options.disablePreviews
     },
-    peopleCountString() {
-      const translated = this.$ngettext(
-        '%{count} member',
-        '%{count} members',
-        this.currentFileOutgoingCollaborators.length
-      )
+    memberCount() {
+      return this.space.spaceMemberIds.length
+    },
+    memberCountString() {
+      const translated = this.$ngettext('%{count} member', '%{count} members', this.memberCount)
 
       return this.$gettextInterpolate(translated, {
-        count: this.currentFileOutgoingCollaborators.length
+        count: this.memberCount
       })
     },
     quotaModalIsOpen() {
@@ -355,6 +354,9 @@ export default {
     },
     readmeContentModalIsOpen() {
       return this.$data.$_editReadmeContent_modalOpen
+    },
+    supportedSpaceImageMimeTypes() {
+      return thumbnailService.getSupportedMimeTypes('image/').join(',')
     }
   },
   watch: {
@@ -376,16 +378,20 @@ export default {
         const path = webDavPathComponents
           .slice(webDavPathComponents.indexOf(this.space.id) + 1)
           .join('/')
-        this.$client.files
-          .getFileContents(buildWebDavSpacesPath(this.space.id, path), {
-            responseType: 'arrayBuffer'
+
+        this.$client.files.fileInfo(buildWebDavSpacesPath(this.space.id, path)).then((data) => {
+          const resource = buildResource(data)
+          loadPreview({
+            resource,
+            isPublic: false,
+            dimensions: ImageDimension.Preview,
+            server: this.configuration.server,
+            userId: this.user.id,
+            token: this.getToken
+          }).then((imageBlob) => {
+            this.imageContent = imageBlob
           })
-          .then((fileContents) => {
-            this.imageContent = {
-              data: Buffer.from(fileContents).toString('base64'),
-              mimeType: this.space.spaceImageData.file.mimeType
-            }
-          })
+        })
       },
       deep: true
     },
@@ -419,7 +425,6 @@ export default {
   },
   async mounted() {
     await this.loadResourcesTask.perform(this, false, this.$route.params.item || '')
-    this.loadSharesTask.perform(this)
 
     if (this.markdownResizeObserver) {
       this.markdownResizeObserver.unobserve(this.$refs.markdownContainer)

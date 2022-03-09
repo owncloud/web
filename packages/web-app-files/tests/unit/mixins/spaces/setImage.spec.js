@@ -8,6 +8,8 @@ import mockAxios from 'jest-mock-axios'
 import sdkMock from '@/__mocks__/sdk'
 import fileFixtures from '__fixtures__/files'
 import { bus } from 'web-pkg/src/instance'
+import { thumbnailService } from '../../../../src/services'
+import { buildSpace } from '../../../../src/helpers/resources'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -18,7 +20,7 @@ describe('setImage', () => {
     mixins: [setImage]
   }
 
-  function getWrapper() {
+  function getWrapper(space) {
     return mount(Component, {
       localVue,
       mocks: {
@@ -43,6 +45,11 @@ describe('setImage', () => {
         },
         $gettext: jest.fn()
       },
+      provide: {
+        currentSpace: {
+          value: space
+        }
+      },
       store: createStore(Vuex.Store, {
         actions: {
           createModal: jest.fn(),
@@ -57,6 +64,12 @@ describe('setImage', () => {
           getToken: () => 'token'
         },
         modules: {
+          user: {
+            state: {
+              id: 'alice',
+              uuid: 1
+            }
+          },
           Files: {
             namespaced: true,
             mutations: {
@@ -68,28 +81,76 @@ describe('setImage', () => {
     })
   }
 
+  beforeAll(() => {
+    thumbnailService.initialize({
+      enabled: true,
+      version: '0.1',
+      supportedMimeTypes: ['image/png', 'image/jpg', 'image/jpeg', 'image/gif', 'text/plain']
+    })
+  })
+
   afterEach(() => jest.clearAllMocks())
 
   describe('isEnabled property', () => {
     it('should be false when no resource given', () => {
-      const wrapper = getWrapper()
+      const spaceMock = {
+        id: '1',
+        quota: {},
+        root: {
+          permissions: [{ roles: ['manager'], grantedTo: [{ user: { id: 1 } }] }]
+        },
+        special: [{ specialFolder: { name: 'image' }, file: { mimeType: 'image/png' } }]
+      }
+      const wrapper = getWrapper(buildSpace(spaceMock))
       expect(wrapper.vm.$_setSpaceImage_items[0].isEnabled({ resources: [] })).toBe(false)
     })
     it('should be false when mimeType is not image', () => {
-      const wrapper = getWrapper()
+      const spaceMock = {
+        id: '1',
+        quota: {},
+        root: {
+          permissions: [{ roles: ['manager'], grantedTo: [{ user: { id: 1 } }] }]
+        },
+        special: [{ specialFolder: { name: 'image' }, file: { mimeType: 'image/png' } }]
+      }
+      const wrapper = getWrapper(buildSpace(spaceMock))
       expect(
         wrapper.vm.$_setSpaceImage_items[0].isEnabled({
           resources: [{ id: 1, mimeType: 'text/plain' }]
         })
       ).toBe(false)
     })
-    it('should be true when when mimeType is image', () => {
-      const wrapper = getWrapper()
+    it('should be true when the mimeType is image', () => {
+      const spaceMock = {
+        id: '1',
+        quota: {},
+        root: {
+          permissions: [{ roles: ['manager'], grantedTo: [{ user: { id: 1 } }] }]
+        },
+        special: [{ specialFolder: { name: 'image' }, file: { mimeType: 'image/png' } }]
+      }
+      const wrapper = getWrapper(buildSpace(spaceMock))
       expect(
         wrapper.vm.$_setSpaceImage_items[0].isEnabled({
           resources: [{ id: 1, mimeType: 'image/png' }]
         })
       ).toBe(true)
+    })
+    it('should be false when the current user is a viewer', () => {
+      const spaceMock = {
+        id: '1',
+        quota: {},
+        root: {
+          permissions: [{ roles: ['viewer'], grantedTo: [{ user: { id: 1 } }] }]
+        },
+        special: [{ specialFolder: { name: 'image' }, file: { mimeType: 'image/png' } }]
+      }
+      const wrapper = getWrapper(buildSpace(spaceMock))
+      expect(
+        wrapper.vm.$_setSpaceImage_items[0].isEnabled({
+          resources: [{ id: 1, mimeType: 'image/png' }]
+        })
+      ).toBe(false)
     })
   })
 

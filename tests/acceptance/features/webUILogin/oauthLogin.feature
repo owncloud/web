@@ -21,7 +21,7 @@ Feature: login users
 
   Scenario: logging out
     Given user "Alice" has logged in using the webUI
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     When the user logs out of the webUI
     Then the user should be redirected to the IdP login page
 
@@ -40,7 +40,7 @@ Feature: login users
 
   Scenario: the user session of a deleted user is cleared properly
     Given user "Alice" has logged in using the webUI
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     And user "Alice" has been deleted in the server
     When the user reloads the current page of the webUI
     Then the user should be redirected to the owncloud login page

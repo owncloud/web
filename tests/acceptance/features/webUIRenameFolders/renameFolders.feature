@@ -9,7 +9,7 @@ Feature: rename folders
     And user "Alice" has created folder "simple-empty-folder" in the server
     And user "Alice" has uploaded file "lorem.txt" to "lorem.txt" in the server
     And user "Alice" has logged in using the webUI
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
 
   @ocisSmokeTest
   Scenario Outline: Rename a folder
@@ -140,7 +140,7 @@ Feature: rename folders
     Then folder "simple.part" should be listed on the webUI
 
   Scenario: User tries to rename a folder that used to exist but does not anymore
-    Given the user has browsed to the files page
+    Given the user has browsed to the personal page
     And the following files have been deleted by user "Alice" in the server
       | name          |
       | simple-folder |
@@ -157,7 +157,7 @@ Feature: rename folders
     When the user renames folder "simple-folder" to "<to_name>" using the webUI
     Then folder "<to_name>" should be listed on the webUI
     Examples:
-      | to_name  |
-      | fo.      |
-      | fo.1     |
-      | fo.xyz   |
+      | to_name |
+      | fo.     |
+      | fo.1    |
+      | fo.xyz  |

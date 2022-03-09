@@ -8,7 +8,7 @@ Feature: Mark file as favorite
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files in the server
     And user "Alice" has logged in using the webUI
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
 
   @smokeTest
   Scenario: mark files as favorites
@@ -111,7 +111,7 @@ Feature: Mark file as favorite
   Scenario: Try to favorite file and folder that used to exist but does not anymore
     Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has created folder "simple-folder" in the server
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     And the following files have been deleted by user "Alice" in the server
       | name          |
       | lorem.txt     |

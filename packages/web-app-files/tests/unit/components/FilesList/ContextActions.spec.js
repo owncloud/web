@@ -201,6 +201,11 @@ function getWrapper(route, { filename, extension, type = '', mimeType }, availab
       $route: route,
       publicPage: () => false
     },
+    provide: {
+      currentSpace: {
+        value: {}
+      }
+    },
     propsData: {
       items: [
         {

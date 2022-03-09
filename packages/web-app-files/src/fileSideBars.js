@@ -9,6 +9,7 @@ import SpaceActions from './components/SideBar/Actions/SpaceActions.vue'
 import SpaceDetails from './components/SideBar/Details/SpaceDetails.vue'
 import SpaceShares from './components/SideBar/Shares/SpaceShares.vue'
 import { isLocationCommonActive, isLocationSpacesActive } from './router'
+import { spaceRoleEditor, spaceRoleManager } from './helpers/share'
 
 export default [
   // We don't have file details in the trashbin, yet.
@@ -105,13 +106,19 @@ export default [
       return highlightedFile?.type === 'space'
     }
   }),
-  ({ highlightedFile }) => ({
+  ({ highlightedFile, user }) => ({
     app: 'space-actions-item',
     component: SpaceActions,
     icon: 'slideshow-3',
     iconFillType: 'line',
     get enabled() {
-      return highlightedFile?.type === 'space'
+      if (highlightedFile?.type !== 'space') {
+        return false
+      }
+      return [
+        ...highlightedFile.spaceRoles[spaceRoleManager.name],
+        ...highlightedFile.spaceRoles[spaceRoleEditor.name]
+      ].includes(user.uuid)
     }
   }),
   ({ highlightedFile }) => ({

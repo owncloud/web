@@ -22,12 +22,23 @@ module.exports = {
     },
     getBatchActionButtonElementSelector: function (batchButtonName) {
       return util.format(this.elements.batchActionButton.selector, batchButtonName)
+    },
+    navigateToSharesSubPage: async function (sharesSubPageButtonName) {
+      const sharesSubPageBtn = {
+        selector: util.format(this.elements.sharesSubPageButton.selector, sharesSubPageButtonName),
+        locateStrategy: 'xpath'
+      }
+      return this.waitForElementVisible(sharesSubPageBtn).click(sharesSubPageBtn)
     }
   },
   elements: {
     batchActionButton: {
       selector:
         '//div[@class="files-app-bar-actions"]//button/descendant-or-self::*[contains(text(),"%s")]',
+      locateStrategy: 'xpath'
+    },
+    sharesSubPageButton: {
+      selector: '//nav[@id="shares-navigation"]/ul/li/a[.="%s"]',
       locateStrategy: 'xpath'
     }
   }

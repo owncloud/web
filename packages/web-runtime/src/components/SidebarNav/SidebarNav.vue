@@ -27,6 +27,7 @@
           :fill-type="link.fillType"
           :name="link.name"
           :collapsed="navigation.closed"
+          :tag="link.tag"
         />
       </oc-list>
     </nav>

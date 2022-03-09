@@ -18,7 +18,7 @@ Feature: Unmark file/folder as favorite
     And user "Alice" has favorited element "data.zip" in the server
     And user "Alice" has favorited element "data.tar.gz" in the server
     And user "Alice" has favorited element "lorem.txt" in the server
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     When the user unmarks the favorited file "data.zip" using the webUI
     Then as user "Alice" file "data.zip" should not be marked as favorite in the server
     And file "data.zip" should not be marked as favorite on the webUI
@@ -39,7 +39,7 @@ Feature: Unmark file/folder as favorite
     And user "Alice" has favorited element "simple-folder" in the server
     And user "Alice" has favorited element "simple-empty-folder" in the server
     And user "Alice" has favorited element "0" in the server
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     When the user unmarks the favorited folder "simple-folder" using the webUI
     Then as user "Alice" folder "simple-folder" should not be marked as favorite in the server
     And folder "simple-folder" should not be marked as favorite on the webUI
@@ -107,7 +107,7 @@ Feature: Unmark file/folder as favorite
     And the user has reloaded the current page of the webUI
     And user "Alice" has favorited element "simple-folder" in the server
     And user "Alice" has favorited element "lorem.txt" in the server
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     And the following files have been deleted by user "Alice" in the server
       | name          |
       | lorem.txt     |

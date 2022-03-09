@@ -14,9 +14,9 @@ exports[`LocationPicker files app bar should show current hint according to the 
   Resources will be moved into the folder where you are currently located.</p>
 `;
 
-exports[`LocationPicker files app bar should show location picker selection info according to route action and item 1`] = `<h1 class="location-picker-selection-info oc-mb">Move into »All files«</h1>`;
+exports[`LocationPicker files app bar should show location picker selection info according to route action and item 1`] = `<h1 class="location-picker-selection-info oc-mb">Move into »Personal«</h1>`;
 
-exports[`LocationPicker files app bar should show location picker selection info according to route action and item 2`] = `<h1 class="location-picker-selection-info oc-mb">Copy into »All files«</h1>`;
+exports[`LocationPicker files app bar should show location picker selection info according to route action and item 2`] = `<h1 class="location-picker-selection-info oc-mb">Copy into »Personal«</h1>`;
 
 exports[`LocationPicker files app bar should show location picker selection info according to route action and item 3`] = `<h1 class="location-picker-selection-info oc-mb">Move into »child«</h1>`;
 

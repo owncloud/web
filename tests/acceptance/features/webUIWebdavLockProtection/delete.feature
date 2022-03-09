@@ -17,7 +17,7 @@ Feature: Locks
   Scenario Outline: deleting a locked file
     Given user "brand-new-user" has locked folder "lorem.txt" setting the following properties in the server
       | lockscope | <lockscope> |
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     When the user tries to delete folder "lorem.txt" using the webUI
     Then notifications should be displayed on the webUI with the text
       """
@@ -36,7 +36,7 @@ Feature: Locks
   Scenario Outline: deleting a file in a locked folder
     Given user "brand-new-user" has locked folder "simple-folder" setting the following properties in the server
       | lockscope | <lockscope> |
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     And the user has opened folder "simple-folder"
     When the user tries to delete folder "lorem.txt" using the webUI
     Then notifications should be displayed on the webUI with the text

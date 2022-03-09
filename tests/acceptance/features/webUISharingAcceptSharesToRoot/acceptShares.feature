@@ -38,7 +38,7 @@ Feature: accept/decline shares coming from internal users
     And user "Brian" has been added to group "grp1" in the server
     And user "Alice" has shared folder "/simple-folder" with user "Brian" in the server
     And user "Brian" has accepted the share "simple-folder" offered by user "Alice" in the server
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     When the user shares folder "simple-folder (2)" with group "grp1" as "Viewer" using the webUI
     And the user deletes folder "simple-folder (2)" using the webUI
     And the user browses to the shared-with-me page in declined shares view
@@ -59,7 +59,7 @@ Feature: accept/decline shares coming from internal users
     And user "Alice" has shared folder "/testimage.jpg" with group "grp1" in the server
     And user "Brian" has accepted the share "simple-folder" offered by user "Alice" in the server
     And user "Brian" has accepted the share "testimage.jpg" offered by user "Alice" in the server
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     When the user deletes folder "simple-folder" using the webUI
     And the user deletes file "testimage.jpg" using the webUI
     Then folder "simple-folder" should not be listed on the webUI
@@ -96,7 +96,7 @@ Feature: accept/decline shares coming from internal users
     And user "Brian" has been added to group "grp1" in the server
     And user "Alice" has shared folder "/simple-folder" with group "grp1" in the server
     And user "Alice" has shared folder "/testimage.jpg" with user "Brian" in the server
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     When the user deletes folder "simple-folder" using the webUI
     And the user deletes file "testimage.jpg" using the webUI
     Then folder "simple-folder" should not be listed on the webUI
@@ -142,7 +142,7 @@ Feature: accept/decline shares coming from internal users
     And user "Brian" has created folder "/simple-folder" in the server
     And user "Brian" has created folder "/simple-folder/shared" in the server
     And user "Alice" has shared folder "simple-folder" with user "Brian" with "create, read, share, update" permissions in the server
-     And user "Brian" has moved folder "/simple-folder (2)" to "/simple-folder/shared" in the server
+    And user "Brian" has moved folder "/simple-folder (2)" to "/simple-folder/shared" in the server
     And the user has reloaded the current page of the webUI
     When the user opens folder "simple-folder" using the webUI
     And the user deletes folder "shared" using the webUI

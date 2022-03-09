@@ -30,7 +30,7 @@ Feature: copy files and folders
     And user "Alice" has created folder "strängé नेपाली folder" in the server
     And user "Alice" has created file "strängé नेपाली folder/strängé filename (duplicate #2 &).txt" in the server
     And user "Alice" has logged in using the webUI
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     When the user tries to copy file "strängé filename (duplicate #2 &).txt" into folder "strängé नेपाली folder" using the webUI
     Then the error message with header 'Failed to copy "strängé filename (duplicate #2 &).txt"' should be displayed on the webUI
 
@@ -59,7 +59,7 @@ Feature: copy files and folders
     Given user "Alice" has uploaded file "lorem.txt" to "lorem.txt" in the server
     And user "Alice" has created folder "simple-empty-folder" in the server
     And user "Alice" has logged in using the webUI
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     When the user renames file "lorem.txt" to <file_name> using the webUI
     And the user renames folder "simple-empty-folder" to <folder_name> using the webUI
     And the user copies file <file_name> into folder <folder_name> using the webUI
@@ -132,7 +132,7 @@ Feature: copy files and folders
     Given user "Alice" has uploaded file "data.zip" to "data.zip" in the server
     And user "Alice" has created folder "simple-empty-folder" in the server
     And user "Alice" has logged in using the webUI
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     When the user selects copy action for folder "data.zip" using the webUI
     And the user selects the folder "simple-empty-folder" as a place to copy the file using the webUI
     And the user cancels the attempt to copy resources using the webUI
@@ -145,7 +145,7 @@ Feature: copy files and folders
     And user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has created folder "simple-empty-folder" in the server
     And user "Alice" has logged in using the webUI
-    And the user has browsed to the files page
+    And the user has browsed to the personal page
     When the user marks these files for batch action using the webUI
       | file_name   |
       | data.zip    |

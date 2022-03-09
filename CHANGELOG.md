@@ -13,10 +13,15 @@ Summary
 * Bugfix - Show no auth popup on password protected public links in ownCloud 10: [#6530](https://github.com/owncloud/web/pull/6530)
 * Bugfix - Don't write error message on passing ReadmeContentModal.spec.js test: [#6525](https://github.com/owncloud/web/pull/6525)
 * Bugfix - Prevent cross-site scripting attack while displaying space description: [#6523](https://github.com/owncloud/web/pull/6523)
+* Bugfix - Prevent the member count inside a space from disappearing: [#6550](https://github.com/owncloud/web/pull/6550)
+* Enhancement - Don't block account page while groups are loading: [#6547](https://github.com/owncloud/web/pull/6547)
 * Enhancement - Add a watcher for the share panel of a space: [#6543](https://github.com/owncloud/web/pull/6543)
+* Enhancement - Load space images as preview: [#6529](https://github.com/owncloud/web/pull/6529)
+* Enhancement - Shares overview: [#6440](https://github.com/owncloud/web/issues/6440)
 * Enhancement - Allow updating space quota: [#6477](https://github.com/owncloud/web/pull/6477)
 * Enhancement - Update the stored space after its members have been changed: [#6545](https://github.com/owncloud/web/pull/6545)
 * Enhancement - Implement people sharing for spaces: [#6455](https://github.com/owncloud/web/pull/6455)
+* Enhancement - Implement the spaces permission concept: [#6531](https://github.com/owncloud/web/pull/6531)
 * Enhancement - Update the graph SDK: [#6519](https://github.com/owncloud/web/pull/6519)
 
 Details
@@ -60,12 +65,44 @@ Details
    https://github.com/owncloud/web/issues/6526
    https://github.com/owncloud/web/pull/6523
 
+* Bugfix - Prevent the member count inside a space from disappearing: [#6550](https://github.com/owncloud/web/pull/6550)
+
+   We've fixed a bug where opening the sidebar for a file inside a space caused the member count of
+   the space to disappear.
+
+   https://github.com/owncloud/web/pull/6550
+
+* Enhancement - Don't block account page while groups are loading: [#6547](https://github.com/owncloud/web/pull/6547)
+
+   We don't show a loading state for the full account information page anymore while the group
+   membership information is loading. Instead we only show a loading spinner for the group
+   membership information, while the rest of the user information is available immediately.
+
+   https://github.com/owncloud/web/pull/6547
+
 * Enhancement - Add a watcher for the share panel of a space: [#6543](https://github.com/owncloud/web/pull/6543)
 
    We've added a watcher for the share panel of a space to ensure seamless navigation via the share
    indicator.
 
    https://github.com/owncloud/web/pull/6543
+
+* Enhancement - Load space images as preview: [#6529](https://github.com/owncloud/web/pull/6529)
+
+   We've added a new logic which renders space images as preview to minimize data traffic
+
+   https://github.com/owncloud/web/pull/6529
+
+* Enhancement - Shares overview: [#6440](https://github.com/owncloud/web/issues/6440)
+
+   We've merged the three shares navigation items into one central "Shares" item, with a toggle to
+   switch between the three different kinds of shares (incoming, outgoing, links). In the
+   process, we have also renamed the "All files" page to the "Personal" page, indicating that this
+   is the user's personal space since shares (and potentially other shared spaces) live
+   elsewhere.
+
+   https://github.com/owncloud/web/issues/6440
+   https://github.com/owncloud/web/pull/6512
 
 * Enhancement - Allow updating space quota: [#6477](https://github.com/owncloud/web/pull/6477)
 
@@ -92,6 +129,13 @@ Details
 
    https://github.com/owncloud/web/issues/6283
    https://github.com/owncloud/web/pull/6455
+
+* Enhancement - Implement the spaces permission concept: [#6531](https://github.com/owncloud/web/pull/6531)
+
+   We've implemented the spaces permission concept and improved the code structure for further
+   permission changes.
+
+   https://github.com/owncloud/web/pull/6531
 
 * Enhancement - Update the graph SDK: [#6519](https://github.com/owncloud/web/pull/6519)
 

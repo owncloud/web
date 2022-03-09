@@ -6,9 +6,9 @@ import PrivateLink from './views/PrivateLink.vue'
 import PublicFiles from './views/PublicFiles.vue'
 import PublicLink from './views/PublicLink.vue'
 import Personal from './views/Personal.vue'
-import SharedWithMe from './views/SharedWithMe.vue'
-import SharedWithOthers from './views/SharedWithOthers.vue'
-import SharedViaLink from './views/SharedViaLink.vue'
+import SharedWithMe from './views/shares/SharedWithMe.vue'
+import SharedWithOthers from './views/shares/SharedWithOthers.vue'
+import SharedViaLink from './views/shares/SharedViaLink.vue'
 import SpaceProject from './views/spaces/Project.vue'
 import SpaceProjects from './views/spaces/Projects.vue'
 import Trashbin from './views/Trashbin.vue'
@@ -17,7 +17,7 @@ import quickActions from './quickActions'
 import store from './store'
 import { FilterSearch, SDKSearch } from './search'
 import { bus } from 'web-pkg/src/instance'
-import { archiverService, Registry } from './services'
+import { archiverService, thumbnailService, Registry } from './services'
 import fileSideBars from './fileSideBars'
 import { buildRoutes } from './router'
 import get from 'lodash-es/get'
@@ -40,7 +40,7 @@ const appInfo = {
 }
 const navItems = [
   {
-    name: $gettext('All files'),
+    name: $gettext('Personal'),
     icon: appInfo.icon,
     route: {
       path: `/${appInfo.id}/spaces/personal/home`
@@ -57,29 +57,16 @@ const navItems = [
     }
   },
   {
-    name: $gettext('Shared with me'),
+    name: $gettext('Shares'),
     icon: 'share-forward',
     route: {
-      path: `/${appInfo.id}/shares/with-me`
-    }
-  },
-  {
-    name: $gettext('Shared with others'),
-    icon: 'reply',
-    route: {
-      path: `/${appInfo.id}/shares/with-others`
-    }
-  },
-  {
-    name: $gettext('Shared via link'),
-    icon: 'link',
-    route: {
-      path: `/${appInfo.id}/shares/via-link`
+      path: `/${appInfo.id}/shares`
     }
   },
   {
     name: $gettext('Spaces'),
     icon: 'layout-grid',
+    tag: $gettext('beta'),
     route: {
       path: `/${appInfo.id}/spaces/projects`
     },
@@ -137,6 +124,14 @@ export default {
     archiverService.initialize(
       store.getters.configuration.server || window.location.origin,
       get(store, 'getters.capabilities.files.archivers', [])
+    )
+    // FIXME: Remove mock data
+    thumbnailService.initialize(
+      get(store, 'getters.capabilities.files.thumbnail', {
+        enabled: true,
+        version: 'v0.1',
+        supportedMimeTypes: ['image/png', 'image/jpg', 'image/jpeg', 'image/gif', 'text/plain']
+      })
     )
   }
 }
