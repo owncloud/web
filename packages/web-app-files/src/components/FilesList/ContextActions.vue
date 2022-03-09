@@ -12,7 +12,7 @@
           :key="`section-${section.name}-action-${actionIndex}`"
           :action="action"
           :items="items"
-          class="oc-files-context-action oc-px-s"
+          class="oc-files-context-action oc-px-s oc-rounded"
         />
       </oc-list>
     </template>
@@ -210,6 +210,9 @@ export default {
 
   li {
     padding: 6px;
+    &:hover {
+      background-color: var(--oc-color-background-hover);
+    }
   }
 
   > li {
@@ -224,12 +227,6 @@ export default {
       vertical-align: top;
       width: 100%;
       text-align: left;
-
-      span:hover,
-      &:hover {
-        color: var(--oc-color-swatch-passive-hover) !important;
-        text-decoration: underline !important;
-      }
     }
   }
 

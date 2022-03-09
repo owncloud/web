@@ -1,0 +1,7 @@
+Enhancement: Contextmenu background hover
+
+We've added a background hover color for contextmenu actions.
+
+https://github.com/owncloud/web/pull/6553
+https://github.com/owncloud/web/pull/6559
+https://github.com/owncloud/web/issues/6560
