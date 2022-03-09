@@ -1,0 +1,8 @@
+Bugfix: Pressing enter in forms
+
+We fixed behavior when pressing enter in forms. For instance when adding or editing public links
+pressing enter in the name or password input fields, instead of saving the link it opened the datepicker.
+
+
+https://github.com/owncloud/web/pull/6548
+https://github.com/owncloud/owncloud-design-system/pull/2009
