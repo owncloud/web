@@ -16,17 +16,20 @@ export class ThumbnailService {
     return !!this.capability?.version
   }
 
+  private get supportedMimeTypes() {
+    return this.capability?.supportedMimeTypes || []
+  }
+
   public isMimetypeSupported(mimeType: string, onlyImages = false) {
-    return onlyImages
-      ? mimeType.startsWith('image/') && this.capability.supportedMimeTypes.includes(mimeType)
-      : this.capability.supportedMimeTypes.includes(mimeType)
+    const mimeTypes = this.getSupportedMimeTypes(onlyImages ? 'image/' : null)
+    return mimeTypes.includes(mimeType)
   }
 
   public getSupportedMimeTypes(filter?: string) {
     if (!filter) {
-      return this.capability.supportedMimeTypes
+      return this.supportedMimeTypes
     }
-    return this.capability.supportedMimeTypes.filter((mimeType) => mimeType.startsWith(filter))
+    return this.supportedMimeTypes.filter((mimeType) => mimeType.startsWith(filter))
   }
 }
 
