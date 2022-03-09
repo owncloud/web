@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Thumbnails only for accepted shares: [#5310](https://github.com/owncloud/web/issues/5310)
 * Bugfix - File handling in apps: [#6456](https://github.com/owncloud/web/pull/6456)
+* Bugfix - Pressing enter in forms: [#6548](https://github.com/owncloud/web/pull/6548)
 * Bugfix - Show no auth popup on password protected public links in ownCloud 10: [#6530](https://github.com/owncloud/web/pull/6530)
 * Bugfix - Don't write error message on passing ReadmeContentModal.spec.js test: [#6525](https://github.com/owncloud/web/pull/6525)
 * Bugfix - Resolve private links: [#5654](https://github.com/owncloud/web/pull/5654)
@@ -21,11 +22,13 @@ Summary
 * Enhancement - Load space images as preview: [#6529](https://github.com/owncloud/web/pull/6529)
 * Enhancement - Resolve private links into folders instead of parent: [#5533](https://github.com/owncloud/web/issues/5533)
 * Enhancement - Shares overview: [#6440](https://github.com/owncloud/web/issues/6440)
+* Enhancement - Side bar nav tags: [#6540](https://github.com/owncloud/web/pull/6540)
 * Enhancement - Allow updating space quota: [#6477](https://github.com/owncloud/web/pull/6477)
 * Enhancement - Update the stored space after its members have been changed: [#6545](https://github.com/owncloud/web/pull/6545)
 * Enhancement - Implement people sharing for spaces: [#6455](https://github.com/owncloud/web/pull/6455)
 * Enhancement - Implement the spaces permission concept: [#6531](https://github.com/owncloud/web/pull/6531)
 * Enhancement - Update the graph SDK: [#6519](https://github.com/owncloud/web/pull/6519)
+* Enhancement - Update ODS to v13.0.0-rc.1: [#6540](https://github.com/owncloud/web/pull/6540)
 
 Details
 -------
@@ -43,6 +46,15 @@ Details
    in personal files, favorites, share views and spaces.
 
    https://github.com/owncloud/web/pull/6456
+
+* Bugfix - Pressing enter in forms: [#6548](https://github.com/owncloud/web/pull/6548)
+
+   We fixed behavior when pressing enter in forms. For instance when adding or editing public
+   links pressing enter in the name or password input fields, instead of saving the link it opened
+   the datepicker.
+
+   https://github.com/owncloud/web/pull/6548
+   https://github.com/owncloud/owncloud-design-system/pull/2009
 
 * Bugfix - Show no auth popup on password protected public links in ownCloud 10: [#6530](https://github.com/owncloud/web/pull/6530)
 
@@ -134,6 +146,13 @@ Details
    https://github.com/owncloud/web/issues/6440
    https://github.com/owncloud/web/pull/6512
 
+* Enhancement - Side bar nav tags: [#6540](https://github.com/owncloud/web/pull/6540)
+
+   We have implemented a way to show a tag next to the sidebar navigation item link text
+
+   https://github.com/owncloud/web/issues/6259
+   https://github.com/owncloud/web/pull/6540
+
 * Enhancement - Allow updating space quota: [#6477](https://github.com/owncloud/web/pull/6477)
 
    We have implemented a way to update the quota of a space
@@ -172,6 +191,22 @@ Details
    We've updated the graph SDK to include the "me"-endpoint.
 
    https://github.com/owncloud/web/pull/6519
+
+* Enhancement - Update ODS to v13.0.0-rc.1: [#6540](https://github.com/owncloud/web/pull/6540)
+
+   We updated the ownCloud Design System to version 13.0.0-rc.1. Please refer to the full
+   changelog in the ODS release (linked) for more details. Summary:
+
+   - Change - Default type of OcButton:
+   https//github.com/owncloud/owncloud-design-system/pull/2009 - Enhancement - Apply
+   size property to oc-card:
+   https//github.com/owncloud/owncloud-design-system/pull/2011 - Bugfix - Disabled
+   OcSelect background: https//github.com/owncloud/owncloud-design-system/pull/2008 -
+   Bugfix - Icons/Thumbnails were only visible for clickable resources:
+   https//github.com/owncloud/owncloud-design-system/pull/2007
+
+   https://github.com/owncloud/web/pull/6540
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v13.0.0-rc.1
 
 Changelog for ownCloud Web [5.2.0] (2022-03-03)
 =======================================
