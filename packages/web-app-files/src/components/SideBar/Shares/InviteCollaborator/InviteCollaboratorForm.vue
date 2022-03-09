@@ -61,9 +61,9 @@
         :disabled="!$_isValid"
         variation="primary"
         appearance="filled"
+        submit="submit"
         @click="share"
         v-text="$gettext('Share')"
-        submit="submit"
       />
     </div>
     <oc-hidden-announcer level="assertive" :announcement="announcement" />

@@ -135,8 +135,8 @@
             :disabled="!$_isValid"
             variation="primary"
             appearance="filled"
-            @click="$_addLink"
             submit="submit"
+            @click="$_addLink"
           >
             <translate>Create</translate>
           </oc-button>
@@ -147,8 +147,8 @@
             :disabled="!$_isValid || !$_hasChanges"
             variation="primary"
             appearance="filled"
-            @click="$_updateLink"
             submit="submit"
+            @click="$_updateLink"
           >
             <translate>Save</translate>
           </oc-button>
