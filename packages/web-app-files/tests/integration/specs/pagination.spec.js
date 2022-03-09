@@ -14,49 +14,19 @@ import PublicFiles from '@files/src/views/PublicFiles.vue'
 import SharedViaLink from '@files/src/views/shares/SharedViaLink.vue'
 import SharedWithOthers from '@files/src/views/shares/SharedWithOthers.vue'
 import Trashbin from '@files/src/views/Trashbin.vue'
+import FilesApp from '@files/src'
 
-// TODO: Make routes importable instead of defining them manually
-const routes = [
-  { name: 'files-personal', path: '/files/list/personal/:item?', component: Personal },
-  { name: 'files-favorites', path: '/files/list/favorites', component: Favorites },
-  {
-    name: 'files-shared-with-others',
-    path: '/files/list/shared-with-others',
-    component: SharedWithOthers
-  },
-  { name: 'files-via-link', path: '/files/list/via-link', component: SharedViaLink },
-  { name: 'files-trashbin', path: '/files/list/trash-bin', component: Trashbin },
-  {
-    name: 'files-location-picker',
-    path: '/files/location-picker/:context/:action/:item?',
-    component: LocationPicker
-  },
-  {
-    name: 'files-public-list',
-    path: '/files/public/list/:item',
-    component: PublicFiles,
-    meta: {
-      auth: false,
-      hasBulkActions: true,
-      title: 'Public files'
-    }
-  }
-]
 let store
-
+const routes = FilesApp.routes
 const stubs = { 'context-actions': true }
 const cases = [
-  ['Personal', '/files/list/personal/', Personal],
-  ['Favorites', '/files/list/favorites/', Favorites],
-  [
-    'LocationPicker',
-    '/files/location-picker/private/move/%2F?resource=%2FDocuments',
-    LocationPicker
-  ],
-  ['PublicFiles', '/files/public/list/link', PublicFiles],
-  ['SharedViaLink', '/files/list/via-link/', SharedViaLink],
-  ['SharedWithOthers', '/files/list/shared-with-others/', SharedWithOthers],
-  ['Trashbin', '/files/list/trash-bin/', Trashbin]
+  ['Personal', '/spaces/personal/home', Personal],
+  ['Favorites', '/list/favorites/', Favorites],
+  ['LocationPicker', '/ops/location-picker/private/move/%2F?resource=%2FDocuments', LocationPicker],
+  ['PublicFiles', '/public/list/link', PublicFiles],
+  ['SharedViaLink', '/list/shared-via-link/', SharedViaLink],
+  ['SharedWithOthers', '/list/shared-with-others/', SharedWithOthers],
+  ['Trashbin', '/trash-bin/', Trashbin]
 ]
 
 describe('User can navigate in files list using pagination', () => {
