@@ -12,11 +12,13 @@ Summary
 * Bugfix - File handling in apps: [#6456](https://github.com/owncloud/web/pull/6456)
 * Bugfix - Show no auth popup on password protected public links in ownCloud 10: [#6530](https://github.com/owncloud/web/pull/6530)
 * Bugfix - Don't write error message on passing ReadmeContentModal.spec.js test: [#6525](https://github.com/owncloud/web/pull/6525)
+* Bugfix - Resolve private links: [#5654](https://github.com/owncloud/web/pull/5654)
 * Bugfix - Prevent cross-site scripting attack while displaying space description: [#6523](https://github.com/owncloud/web/pull/6523)
 * Bugfix - Prevent the member count inside a space from disappearing: [#6550](https://github.com/owncloud/web/pull/6550)
 * Enhancement - Don't block account page while groups are loading: [#6547](https://github.com/owncloud/web/pull/6547)
 * Enhancement - Add a watcher for the share panel of a space: [#6543](https://github.com/owncloud/web/pull/6543)
 * Enhancement - Load space images as preview: [#6529](https://github.com/owncloud/web/pull/6529)
+* Enhancement - Resolve private links into folders instead of parent: [#5533](https://github.com/owncloud/web/issues/5533)
 * Enhancement - Shares overview: [#6440](https://github.com/owncloud/web/issues/6440)
 * Enhancement - Allow updating space quota: [#6477](https://github.com/owncloud/web/pull/6477)
 * Enhancement - Update the stored space after its members have been changed: [#6545](https://github.com/owncloud/web/pull/6545)
@@ -57,6 +59,14 @@ Details
    https://github.com/owncloud/web/issues/6337
    https://github.com/owncloud/web/pull/6525
 
+* Bugfix - Resolve private links: [#5654](https://github.com/owncloud/web/pull/5654)
+
+   Private links didn't resolve correctly anymore because the internal file path handling was
+   changed in our api client (owncloud-sdk). We've adjusted it accordingly so that private links
+   now resolve correctly again.
+
+   https://github.com/owncloud/web/pull/5654
+
 * Bugfix - Prevent cross-site scripting attack while displaying space description: [#6523](https://github.com/owncloud/web/pull/6523)
 
    We've added a new package that strips out possible XSS attack code while displaying the space
@@ -92,6 +102,16 @@ Details
    We've added a new logic which renders space images as preview to minimize data traffic
 
    https://github.com/owncloud/web/pull/6529
+
+* Enhancement - Resolve private links into folders instead of parent: [#5533](https://github.com/owncloud/web/issues/5533)
+
+   Private links always resolved into the parent folder of the linked file and visually
+   highlighted the file or folder from the link. We've changed this behaviour to directly
+   navigate into the folder in case the linked resource is a folder and only keep the previous
+   behaviour for when the linked resource is a file.
+
+   https://github.com/owncloud/web/issues/5533
+   https://github.com/owncloud/web/pull/5654
 
 * Enhancement - Shares overview: [#6440](https://github.com/owncloud/web/issues/6440)
 
