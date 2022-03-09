@@ -50,7 +50,6 @@ import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 import { computed, unref } from '@vue/composition-api'
 import ResourceTable, { determineSortFields } from '../components/FilesList/ResourceTable.vue'
 
-import { buildResource } from '../helpers/resources'
 import FileActions from '../mixins/fileActions'
 import MixinFilesListFilter from '../mixins/filesListFilter'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
@@ -59,7 +58,6 @@ import { ImageDimension, ImageType } from '../constants'
 import { useFileListHeaderPosition, usePagination, useSort } from '../composables'
 import { useRouteQuery, useStore } from 'web-pkg/src/composables'
 import debounce from 'lodash-es/debounce'
-import { useTask } from 'vue-concurrency'
 
 import QuickActions from '../components/FilesList/QuickActions.vue'
 import ListLoader from '../components/FilesList/ListLoader.vue'
@@ -67,8 +65,8 @@ import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
-import { DavProperties } from 'web-pkg/src/constants'
 import { createLocationSpaces } from '../router'
+import { folderService } from '../services/folder'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -108,14 +106,7 @@ export default {
       sortBy
     })
 
-    const loadResourcesTask = useTask(function* (signal, ref) {
-      ref.CLEAR_CURRENT_FILES_LIST()
-
-      let resources = yield ref.$client.files.getFavoriteFiles(DavProperties.Default)
-      resources = resources.map(buildResource)
-      ref.LOAD_FILES({ currentFolder: null, files: resources })
-      ref.loadIndicators({ client: this.$client, currentFolder: '/' })
-    })
+    const loadResourcesTask = folderService.getTask()
 
     return {
       fileListHeaderY,

@@ -72,7 +72,6 @@ import MixinFileActions from '../mixins/fileActions'
 import MixinFilesListFilter from '../mixins/filesListFilter'
 import MixinFilesListScrolling from '../mixins/filesListScrolling'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
-import { buildResource, buildWebDavFilesPath } from '../helpers/resources'
 import { fileList } from '../helpers/ui'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../constants'
@@ -88,12 +87,11 @@ import NotFoundMessage from '../components/FilesList/NotFoundMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
-import { DavProperties } from 'web-pkg/src/constants'
 import { basename, join } from 'path'
 import PQueue from 'p-queue'
 import { nextTick, computed, unref } from '@vue/composition-api'
-import { useTask } from 'vue-concurrency'
 import { createLocationSpaces } from '../router'
+import { folderService } from '../services/folder'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -145,46 +143,11 @@ export default {
       fileList.accentuateItem(payload.id)
     })
 
-    const loadResourcesTask = useTask(function* (signal, ref, sameRoute, path = null) {
-      ref.CLEAR_CURRENT_FILES_LIST()
-
-      try {
-        let resources = yield ref.fetchResources(
-          buildWebDavFilesPath(ref.user.id, path || ref.$route.params.item || ''),
-          DavProperties.Default
-        )
-        resources = resources.map(buildResource)
-
-        const currentFolder = resources.shift()
-
-        ref.LOAD_FILES({
-          currentFolder,
-          files: resources
-        })
-        ref.loadIndicators({
-          client: ref.$client,
-          currentFolder: currentFolder.path
-        })
-
-        // Load quota
-        const promiseUser = ref.$client.users.getUser(ref.user.id)
-        // The semicolon is important to separate from the previous statement
-        ;(async () => {
-          const user = await promiseUser
-          ref.SET_QUOTA(user.quota)
-        })()
-      } catch (error) {
-        ref.SET_CURRENT_FOLDER(null)
-        console.error(error)
-      }
-
-      refreshFileListHeaderPosition()
-      ref.accessibleBreadcrumb_focusAndAnnounceBreadcrumb(sameRoute)
-      ref.scrollToResourceFromRoute()
-    }).restartable()
+    const loadResourcesTask = folderService.getTask()
 
     return {
       fileListHeaderY,
+      refreshFileListHeaderPosition,
       loadResourcesTask,
       paginatedResources,
       paginationPages,
