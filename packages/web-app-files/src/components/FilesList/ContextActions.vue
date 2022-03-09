@@ -12,7 +12,7 @@
           :key="`section-${section.name}-action-${actionIndex}`"
           :action="action"
           :items="items"
-          class="oc-files-context-action oc-px-s"
+          class="oc-files-context-action oc-px-s oc-rounded"
         />
       </oc-list>
     </template>
@@ -212,7 +212,6 @@ export default {
     padding: 6px;
     &:hover {
       background-color: var(--oc-color-background-hover);
-      border-radius: 4px;
     }
   }
 
