@@ -1,0 +1,5 @@
+Bugfix: Resolve private links
+
+Private links didn't resolve correctly anymore because the internal file path handling was changed in our api client (owncloud-sdk). We've adjusted it accordingly so that private links now resolve correctly again.
+
+https://github.com/owncloud/web/pull/5654
