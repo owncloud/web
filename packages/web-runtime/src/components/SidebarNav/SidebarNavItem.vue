@@ -10,8 +10,11 @@
       :data-nav-id="index"
       :data-nav-name="navName"
     >
-      <oc-icon :name="icon" :fill-type="fillType" />
-      <span class="oc-ml-m text" :class="{ 'text-invisible': collapsed }" v-text="name" />
+      <span class="oc-flex">
+        <oc-icon :name="icon" :fill-type="fillType" />
+        <span class="oc-ml-m text" :class="{ 'text-invisible': collapsed }" v-text="name" />
+      </span>
+      <oc-tag v-if="tag" class="oc-py-rm" size="small">{{ tag }}</oc-tag>
       <sidebar-nav-item-highlight :index="index" :active="active" />
     </oc-button>
   </li>
@@ -56,6 +59,11 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    tag: {
+      type: String,
+      required: false,
+      default: null
     }
   },
   computed: {
@@ -83,12 +91,16 @@ export default {
   position: relative;
   align-items: center !important;
   display: flex !important;
-  justify-content: flex-start !important;
+  justify-content: space-between !important;
   padding: var(--oc-space-small) !important;
   border-radius: 5px;
   white-space: nowrap;
   user-select: none;
 
+  .oc-tag {
+    color: var(--oc-color-text-default);
+    background-color: var(--oc-color-background-highlight);
+  }
   .text {
     opacity: 1;
     transition: all 0s;

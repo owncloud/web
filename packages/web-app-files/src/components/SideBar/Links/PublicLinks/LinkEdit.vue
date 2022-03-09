@@ -135,6 +135,7 @@
             :disabled="!$_isValid"
             variation="primary"
             appearance="filled"
+            submit="submit"
             @click="$_addLink"
           >
             <translate>Create</translate>
@@ -146,6 +147,7 @@
             :disabled="!$_isValid || !$_hasChanges"
             variation="primary"
             appearance="filled"
+            submit="submit"
             @click="$_updateLink"
           >
             <translate>Save</translate>
