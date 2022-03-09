@@ -8,6 +8,10 @@ import Collaborators from '@/__fixtures__/collaborators'
 import mockAxios from 'jest-mock-axios'
 import { spaceRoleManager } from '../../../../../src/helpers/share'
 import VueCompositionAPI from '@vue/composition-api/dist/vue-composition-api'
+import mockAxios from 'jest-mock-axios'
+import { buildSpace } from '../../../../../src/helpers/resources'
+import { spaceRoleManager } from '../../../../../src/helpers/share'
+import VueCompositionAPI from '@vue/composition-api/dist/vue-composition-api'
 
 const localVue = createLocalVue()
 localVue.use(DesignSystem)
