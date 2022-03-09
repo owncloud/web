@@ -25,7 +25,6 @@ exports[`Trashbin View when the view is not loading anymore when length of the p
             <!----></span></span>
             <div class="oc-resource-indicators">
               <router-link-stub to="[object Object]" class="parent-folder" style="cursor: pointer;"><span class="oc-icon oc-icon-s oc-icon-passive"><!----></span> <span class="text">file-path</span></router-link-stub>
-              <!---->
             </div>
           </div>
         </div>
@@ -45,7 +44,6 @@ exports[`Trashbin View when the view is not loading anymore when length of the p
             <!----></span></span>
             <div class="oc-resource-indicators">
               <router-link-stub to="[object Object]" class="parent-folder" style="cursor: pointer;"><span class="oc-icon oc-icon-s oc-icon-passive"><!----></span> <span class="text">file-path</span></router-link-stub>
-              <!---->
             </div>
           </div>
         </div>
@@ -65,7 +63,6 @@ exports[`Trashbin View when the view is not loading anymore when length of the p
             <!----></span></span>
             <div class="oc-resource-indicators">
               <router-link-stub to="[object Object]" class="parent-folder" style="cursor: pointer;"><span class="oc-icon oc-icon-s oc-icon-passive"><!----></span> <span class="text">file-path</span></router-link-stub>
-              <!---->
             </div>
           </div>
         </div>

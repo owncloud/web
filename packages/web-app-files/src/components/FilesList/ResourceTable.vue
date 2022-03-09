@@ -85,7 +85,7 @@
         v-if="item.indicators.length"
         :resource="item"
         :indicators="item.indicators"
-      ></oc-status-indicators>
+      />
     </template>
     <template #sdate="{ item }">
       <span
@@ -401,20 +401,18 @@ export default {
         })
       }
       const sortFields = determineSortFields(firstResource)
-      console.log('FIRST RESOURCE')
-      console.log(firstResource)
       fields.push(
         ...[
           {
             name: 'name',
-            title: this.$gettext('Name'), // How do we get the translations here?
+            title: this.$gettext('Name'),
             type: 'slot',
             width: 'expand',
             wrap: 'truncate'
           },
           {
             name: 'shareTypes',
-            title: this.$gettext('Shares'), // How do we get the translations here?
+            title: this.$gettext('Shares'),
             type: 'slot',
             alignH: 'right',
             wrap: 'nowrap'
