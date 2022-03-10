@@ -28,7 +28,7 @@ module.exports = {
       const element = this.elements.sidebar
       let isVisible = false
       const timeout = expectedToOpen
-        ? this.api.waitForConditionTimeout
+        ? this.api.globals.waitForConditionTimeout
         : this.api.globals.waitForNegativeConditionTimeout
       await this.isVisible(
         {
@@ -148,7 +148,7 @@ module.exports = {
       let isVisible = false
 
       const timeout = expectToBeActive
-        ? this.api.waitForConditionTimeout
+        ? this.api.globals.waitForConditionTimeout
         : this.api.globals.waitForNegativeConditionTimeout
 
       await this.isVisible(
@@ -177,7 +177,7 @@ module.exports = {
       let isVisible = false
 
       const timeout = expectToBeSelectable
-        ? this.api.waitForConditionTimeout
+        ? this.api.globals.waitForConditionTimeout
         : this.api.globals.waitForNegativeConditionTimeout
 
       await this.isVisible(

@@ -85,7 +85,7 @@ module.exports = {
         .useCss()
 
       const timeout = expectToSucceed
-        ? this.api.waitForConditionTimeout
+        ? this.api.globals.waitForConditionTimeout
         : this.api.globals.waitForNegativeConditionTimeout
       await this.click(
         {

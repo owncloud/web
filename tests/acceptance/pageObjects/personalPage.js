@@ -81,7 +81,7 @@ module.exports = {
       }
 
       const timeout = expectToSucceed
-        ? this.api.waitForConditionTimeout
+        ? this.api.globals.waitForConditionTimeout
         : this.api.globals.waitForNegativeConditionTimeout
       await this.click(
         {
@@ -122,7 +122,7 @@ module.exports = {
       }
 
       const timeout = expectToSucceed
-        ? this.api.waitForConditionTimeout
+        ? this.api.globals.waitForConditionTimeout
         : this.api.globals.waitForNegativeConditionTimeout
       await this.click(
         {
@@ -283,7 +283,7 @@ module.exports = {
       }
 
       const timeout = expectToSucceed
-        ? this.api.waitForConditionTimeout
+        ? this.api.globals.waitForConditionTimeout
         : this.api.globals.waitForNegativeConditionTimeout
       await this.initAjaxCounters()
         .click(
