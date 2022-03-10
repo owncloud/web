@@ -1,0 +1,8 @@
+Enhancement: Move share indicators
+
+We've moved the share/status indicators into a separate column
+and adjusted the design in ODS.
+
+https://github.com/owncloud/web/issues/5976
+https://github.com/owncloud/web/pull/6552
+https://github.com/owncloud/owncloud-design-system/pull/2014

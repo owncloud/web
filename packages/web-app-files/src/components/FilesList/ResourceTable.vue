@@ -80,6 +80,13 @@
         v-text="formatDateRelative(item.mdate)"
       />
     </template>
+    <template #shareTypes="{ item }">
+      <oc-status-indicators
+        v-if="item.indicators.length"
+        :resource="item"
+        :indicators="item.indicators"
+      />
+    </template>
     <template #sdate="{ item }">
       <span
         v-oc-tooltip="formatDate(item.sdate)"
@@ -398,10 +405,17 @@ export default {
         ...[
           {
             name: 'name',
-            title: this.$gettext('Name'), // How do we get the translations here?
+            title: this.$gettext('Name'),
             type: 'slot',
             width: 'expand',
             wrap: 'truncate'
+          },
+          {
+            name: 'shareTypes',
+            title: this.$gettext('Shares'),
+            type: 'slot',
+            alignH: 'right',
+            wrap: 'nowrap'
           },
           {
             name: 'size',

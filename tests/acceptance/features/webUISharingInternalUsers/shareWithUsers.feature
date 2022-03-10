@@ -12,7 +12,7 @@ Feature: Sharing files and folders with internal users
       | Brian    |
     And user "Brian" has created folder "simple-folder" in the server
 
-  @smokeTest @issue-ocis-2260 @ocisSmokeTest @disablePreviews
+  @smokeTest @issue-ocis-2260 @ocisSmokeTest @disablePreviews @skipOnXGAPortraitResolution
   Scenario Outline: share a file & folder with another internal user
     Given user "Brian" has created file "testimage.jpg" in the server
     And user "Brian" has created file "simple-folder/lorem.txt" in the server
@@ -48,10 +48,10 @@ Feature: Sharing files and folders with internal users
     # When the user opens the share dialog for file "testimage.jpg" using the webUI
     # Then user "Brian Murphy" should be listed as "Owner" in the collaborators list on the webUI
     Examples:
-      | set-role             | expected-role        | permissions-folder              | permissions-file  |
-      | Viewer               | Viewer               | read,share                      | read, share       |
-      | Editor               | Editor               | read,update,create,delete,share | read,update,share |
-      | Custom permissions   | Custom permissions   | read                            | read              |
+      | set-role           | expected-role      | permissions-folder              | permissions-file  |
+      | Viewer             | Viewer             | read,share                      | read, share       |
+      | Editor             | Editor             | read,update,create,delete,share | read,update,share |
+      | Custom permissions | Custom permissions | read                            | read              |
 
   @issue-4102 @issue-ocis-2267 @disablePreviews
   Scenario: share a file with another internal user who overwrites and unshares the file
@@ -271,9 +271,9 @@ Feature: Sharing files and folders with internal users
       | Sample,Folder,With,Comma |
       | sample,1.txt             |
     Examples:
-      | set-role             | expected-role        | permissions-folder              | permissions-file  |
-      | Viewer               | Viewer               | read,share                      | read,share        |
-      | Editor               | Editor               | read,update,create,delete,share | read,update,share |
+      | set-role           | expected-role      | permissions-folder              | permissions-file  |
+      | Viewer             | Viewer             | read,share                      | read,share        |
+      | Editor             | Editor             | read,update,create,delete,share | read,update,share |
       | Custom permissions | Custom permissions | read                            | read              |
 
   @skipOnOC10 @ocisSmokeTest @disablePreviews
@@ -309,9 +309,9 @@ Feature: Sharing files and folders with internal users
       | Sample,Folder,With,Comma |
       | sample,1.txt             |
     Examples:
-      | set-role             | expected-role | permissions-folder        | permissions-file |
-      | Viewer               | Viewer        | read                      | read             |
-      | Editor               | Editor        | read,update,create,delete | read,update      |
+      | set-role           | expected-role | permissions-folder        | permissions-file |
+      | Viewer             | Viewer        | read                      | read             |
+      | Editor             | Editor        | read,update,create,delete | read,update      |
       | Custom permissions | Viewer        | read                      | read             |
 
 
