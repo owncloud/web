@@ -18,13 +18,13 @@ Feature: Public link share management
 
   Scenario: opening public-link page of the files-drop link protected with password should redirect to files-drop page
     Given user "Alice" has shared folder "simple-folder" with link with "create" permissions and password "pass123" in the server
-    When the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
+    When the public uses the webUI to access the last public link created by user "Alice" with password "pass123" in a new session
     Then the user should be redirected to the files-drop page
 
 
   Scenario: opening public-link page of the files-drop link without password set should redirect to files-drop page
     Given user "Alice" has shared folder "simple-folder" with link with "create" permissions in the server
-    When the public uses the webUI to access the last public link created by user "Alice"
+    When the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then the user should be redirected to the files-drop page
 
   @issue-5321
@@ -35,7 +35,7 @@ Feature: Public link share management
       | path        | simple-folder                |
       | name        | Public-link                  |
       | permissions | read, update, create, delete |
-    When the public uses the webUI to access the last public link created by user "Alice"
+    When the public uses the webUI to access the last public link created by user "Alice" in a new session
     And the public adds the public link to "%remote_server%" as user "Brian" with password "%alt2%" using the webUI in the server
     Then folder "simple-folder" should be listed on the webUI
     When the user opens folder "simple-folder" using the webUI
@@ -86,23 +86,22 @@ Feature: Public link share management
     And the user navigates to the copied public link using the webUI
     Then file "lorem.txt" should be listed on the webUI
 
-  @issue-2090
+
   Scenario: access details dialog of public share and check the tabs displayed
     Given user "Alice" has created file "simple-folder/lorem.txt" in the server
     And user "Alice" has logged in using the webUI
     When the user creates a new public link for folder "simple-folder" using the webUI with
       | role | Editor |
-    And the public uses the webUI to access the last public link created by user "Alice"
+    And the public uses the webUI to access the last public link created by user "Alice" in a new session
     And the user opens the sidebar for file "lorem.txt" on the webUI
     Then the following panels should be visible in the details dialog on the webUI
-      | name     |
-      | versions |
-      | links    |
-      | people   |
-#    Then the following tabs should not be visible in the details dialog
-#      | name          |
-#      | links         |
-#      | people        |
+      | name    |
+      | actions |
+    And the following panels should not be visible in the details dialog on the webUI
+     | name     |
+     | people   |
+     | links    |
+     | versions |
 
   @issue-2897
   Scenario: sharing details of indirect items inside a shared folder
@@ -162,7 +161,7 @@ Feature: Public link share management
       | path        | lorem.txt   |
       | name        | public link |
       | permissions | read        |
-    When the public uses the webUI to access the last public link created by user "Alice"
+    When the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then file "lorem.txt" should be listed on the webUI
     And it should not be possible to create files using the webUI
 

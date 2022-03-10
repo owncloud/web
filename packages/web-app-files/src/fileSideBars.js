@@ -8,7 +8,7 @@ import NoSelection from './components/SideBar/NoSelection.vue'
 import SpaceActions from './components/SideBar/Actions/SpaceActions.vue'
 import SpaceDetails from './components/SideBar/Details/SpaceDetails.vue'
 import SpaceShares from './components/SideBar/Shares/SpaceShares.vue'
-import { isLocationCommonActive, isLocationSpacesActive } from './router'
+import { isLocationCommonActive, isLocationPublicActive, isLocationSpacesActive } from './router'
 import { spaceRoleEditor, spaceRoleManager } from './helpers/share'
 
 export default [
@@ -59,7 +59,10 @@ export default [
     component: FileShares,
     get enabled() {
       if (multipleSelection || rootFolder) return false
-      if (isLocationCommonActive(router, 'files-common-trash')) {
+      if (
+        isLocationCommonActive(router, 'files-common-trash') ||
+        isLocationPublicActive(router, 'files-public-files')
+      ) {
         return false
       }
 
@@ -75,7 +78,10 @@ export default [
     component: FileLinks,
     get enabled() {
       if (multipleSelection || rootFolder) return false
-      if (isLocationCommonActive(router, 'files-common-trash')) {
+      if (
+        isLocationCommonActive(router, 'files-common-trash') ||
+        isLocationPublicActive(router, 'files-public-files')
+      ) {
         return false
       }
 
@@ -91,7 +97,10 @@ export default [
     component: FileVersions,
     get enabled() {
       if (multipleSelection || rootFolder) return false
-      if (isLocationCommonActive(router, 'files-common-trash')) {
+      if (
+        isLocationCommonActive(router, 'files-common-trash') ||
+        isLocationPublicActive(router, 'files-public-files')
+      ) {
         return false
       }
       return !!capabilities.core && highlightedFile && highlightedFile.type !== 'folder'

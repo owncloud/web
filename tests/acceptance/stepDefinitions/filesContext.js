@@ -882,9 +882,27 @@ Then(
     const visibleItems = await client.page.FilesPageElement.appSideBar().getVisibleAccordionItems()
     const expectedVisibleItems = table.rows()
     const difference = _.difference(expectedVisibleItems.flat(), visibleItems)
-    if (difference.length !== 0) {
-      throw new Error(`${difference} panels was expected to be visible but not found.`)
-    }
+
+    assert.strictEqual(
+      difference.length,
+      0,
+      `'${difference}' panels were expected to be visible but not found. Available panels '${visibleItems}'`
+    )
+  }
+)
+
+Then(
+  'the following panels should not be visible in the details dialog on the webUI',
+  async function (table) {
+    const visibleItems = await client.page.FilesPageElement.appSideBar().getVisibleAccordionItems()
+    const expectedNotVisibleItems = table.rows()
+    const difference = _.difference(expectedNotVisibleItems.flat(), visibleItems)
+
+    assert.strictEqual(
+      expectedNotVisibleItems.length,
+      difference.length,
+      `'${expectedNotVisibleItems}' panels were not expected to be visible but found. Available panels '${visibleItems}'`
+    )
   }
 )
 

@@ -1,4 +1,5 @@
 const { join } = require('../helpers/path')
+const util = require('util')
 
 module.exports = {
   url: function () {
@@ -32,12 +33,31 @@ module.exports = {
         .useStrategy(menuButton)
         .assert.elementNotPresent(menuButton)
         .useCss()
+    },
+    /**
+     * navigates to the root directory of the link share
+     * @param {string} linkName
+     *
+     * @returns {*}
+     */
+    navigateToRootFolder: function (linkName) {
+      if (!linkName) {
+        linkName = 'Public link'
+      }
+      const linkNameSelector = {
+        selector: util.format(this.elements.linkName.selector, linkName),
+        locateStrategy: 'xpath'
+      }
+      return this.waitForElementVisible(linkNameSelector).click(linkNameSelector)
     }
   },
   elements: {
     filesListContainer: {
       selector: '#files-list-container',
       locateStrategy: 'css selector'
+    },
+    linkName: {
+      selector: '//li[@class="oc-breadcrumb-list-item"]//span[text()="%s"]'
     }
   }
 }

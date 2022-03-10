@@ -18,13 +18,13 @@ Feature: Access public link shares by public
   Scenario: public should be able to access a public link with correct password
     Given user "Alice" has created file "simple-folder/lorem.txt" in the server
     And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123" in the server
-    When the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
+    When the public uses the webUI to access the last public link created by user "Alice" with password "pass123" in a new session
     Then file "lorem.txt" should be listed on the webUI
 
 
   Scenario: public should not be able to access a public link with wrong password
     Given user "Alice" has shared folder "simple-folder" with link with "read" permissions and password "pass123" in the server
-    When the public uses the webUI to access the last public link created by user "Alice" with password "pass12"
+    When the public uses the webUI to access the last public link created by user "Alice" with password "pass12" in a new session
     Then the public should not get access to the publicly shared file
 
 
@@ -33,7 +33,7 @@ Feature: Access public link shares by public
       | path        | /simple-folder |
       | name        | public link    |
       | permissions | read, create   |
-    When the public uses the webUI to access the last public link created by user "Alice"
+    When the public uses the webUI to access the last public link created by user "Alice" in a new session
     And the public creates a folder with the name "public-created-folder" using the webUI
     Then folder "public-created-folder" should be listed on the webUI
     When the public reloads the current page of the webUI
@@ -49,7 +49,7 @@ Feature: Access public link shares by public
       | path        | /simple-folder               |
       | name        | public link                  |
       | permissions | read, create, delete, update |
-    When the public uses the webUI to access the last public link created by user "Alice"
+    When the public uses the webUI to access the last public link created by user "Alice" in a new session
     And the public marks these files for batch action using the webUI
       | name                |
       | lorem.txt           |
@@ -71,7 +71,7 @@ Feature: Access public link shares by public
     And user "Alice" has created a public link with following settings in the server
       | path | /simple-folder |
       | name | public link    |
-    When the public uses the webUI to access the last public link created by user "Alice"
+    When the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then these files should not be selected on the webUI
       | name                |
       | lorem.txt           |
@@ -86,7 +86,7 @@ Feature: Access public link shares by public
     And user "Alice" has created a public link with following settings in the server
       | path | /simple-folder |
       | name | public link    |
-    When the public uses the webUI to access the last public link created by user "Alice"
+    When the public uses the webUI to access the last public link created by user "Alice" in a new session
     And the public marks these files for batch action using the webUI
       | name                |
       | lorem.txt           |

@@ -26,7 +26,7 @@ Feature: Share by public link with different roles
       | path        | /simple-folder |
       | name        | Public link    |
     And a link named "Public link" should be listed with role "<role>" in the public link list of folder "simple-folder" on the webUI
-    When the public uses the webUI to access the last public link created by user "Alice"
+    When the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then file "lorem.txt" should be listed on the webUI
     Examples:
       | role        | permissions                  |
@@ -48,7 +48,7 @@ Feature: Share by public link with different roles
       | permissions | <permissions>  |
       | path        | /simple-folder |
     And a public link with the last created link share token as name should be listed for resource "simple-folder" on the webUI
-    When the public uses the webUI to access the last public link created by user "Alice"
+    When the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then file "lorem.txt" should be listed on the webUI
     Examples:
       | role        | permissions                  |
@@ -70,7 +70,7 @@ Feature: Share by public link with different roles
       | path        | /simple-folder |
       | name        | Public link    |
     And a link named "Public link" should be listed with role "Uploader" in the public link list of folder "simple-folder" on the webUI
-    When the public uses the webUI to access the last public link created by user "Alice"
+    When the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then there should be no resources listed on the webUI
 
   @skipOnOC10 @issue-ocis-reva-383
@@ -86,7 +86,7 @@ Feature: Share by public link with different roles
       | permissions | create         |
       | path        | /simple-folder |
     And a public link with the last created link share token as name should be listed for resource "simple-folder" on the webUI
-    When the public uses the webUI to access the last public link created by user "Alice"
+    When the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then there should be no resources listed on the webUI
 
   @issue-4582 @disablePreviews
@@ -100,7 +100,7 @@ Feature: Share by public link with different roles
       | simple-folder/strängé filename (duplicate #2 &).txt |
       | simple-folder/zzzz-must-be-last-file-in-folder.txt  |
     And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions in the server
-    When the public uses the webUI to access the last public link created by user "Alice"
+    When the public uses the webUI to access the last public link created by user "Alice" in a new session
     And the user deletes the following elements using the webUI
       | name                                  |
       | simple-empty-folder                   |
@@ -121,7 +121,7 @@ Feature: Share by public link with different roles
       | simple-folder/strängé filename (duplicate #2 &).txt |
       | simple-folder/zzzz-must-be-last-file-in-folder.txt  |
     And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123" in the server
-    When the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
+    When the public uses the webUI to access the last public link created by user "Alice" with password "pass123" in a new session
     And the user deletes the following elements using the webUI
       | name                                  |
       | simple-empty-folder                   |
@@ -134,13 +134,13 @@ Feature: Share by public link with different roles
   Scenario: creating a public link with "Viewer" role only makes it impossible to delete files via the link
     Given user "Alice" has created file "simple-folder/lorem.txt" in the server
     And user "Alice" has shared folder "simple-folder" with link with "read" permissions in the server
-    When the public uses the webUI to access the last public link created by user "Alice"
+    When the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then it should not be possible to delete file "lorem.txt" using the webUI
 
 
   Scenario: creating a public link with "Editor" role makes it possible to upload a file
     Given user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions in the server
-    When the public uses the webUI to access the last public link created by user "Alice"
+    When the public uses the webUI to access the last public link created by user "Alice" in a new session
     And the user uploads file "new-lorem.txt" using the webUI
     Then file "new-lorem.txt" should be listed on the webUI
     And as "Alice" file "simple-folder/new-lorem.txt" should exist in the server
@@ -149,7 +149,7 @@ Feature: Share by public link with different roles
   Scenario: creating a public link with "Editor" role makes it possible to upload a file inside a subdirectory with password set
     Given user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
     And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123" in the server
-    When the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
+    When the public uses the webUI to access the last public link created by user "Alice" with password "pass123" in a new session
     And the user opens folder "simple-empty-folder" using the webUI
     And the user uploads file "new-lorem.txt" using the webUI
     Then file "new-lorem.txt" should be listed on the webUI
@@ -158,7 +158,7 @@ Feature: Share by public link with different roles
 
   Scenario: creating a public link with "Editor" role makes it possible to upload a folder
     Given user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions in the server
-    When the public uses the webUI to access the last public link created by user "Alice"
+    When the public uses the webUI to access the last public link created by user "Alice" in a new session
     And the user uploads folder "PARENT" using the webUI
     Then folder "PARENT" should be listed on the webUI
     And folder "CHILD" should be listed in the folder "PARENT" on the webUI
@@ -169,7 +169,7 @@ Feature: Share by public link with different roles
   Scenario: creating a public link with "Editor" role makes it possible to upload a folder inside a subdirectory
     Given user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
     And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions in the server
-    When the public uses the webUI to access the last public link created by user "Alice"
+    When the public uses the webUI to access the last public link created by user "Alice" in a new session
     And the user opens folder "simple-empty-folder" using the webUI
     And the user uploads folder "PARENT" using the webUI
     Then folder "PARENT" should be listed on the webUI
@@ -180,7 +180,7 @@ Feature: Share by public link with different roles
 
   Scenario: creating a public link with "Editor" role makes it possible to upload files via the link even with password set
     Given user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123" in the server
-    When the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
+    When the public uses the webUI to access the last public link created by user "Alice" with password "pass123" in a new session
     And the user uploads file "new-lorem.txt" using the webUI
     Then file "new-lorem.txt" should be listed on the webUI
     And as "Alice" file "simple-folder/new-lorem.txt" should exist in the server
@@ -189,7 +189,7 @@ Feature: Share by public link with different roles
   Scenario: creating a public link with "Editor" role makes it possible to upload files inside a subdirectory
     Given user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
     And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions in the server
-    When the public uses the webUI to access the last public link created by user "Alice"
+    When the public uses the webUI to access the last public link created by user "Alice" in a new session
     And the user opens folder "simple-empty-folder" using the webUI
     And the user uploads file "new-lorem.txt" using the webUI
     Then file "new-lorem.txt" should be listed on the webUI
@@ -198,7 +198,7 @@ Feature: Share by public link with different roles
 
   Scenario: creating a public link with "Editor" role makes it possible to upload a folder even with password set
     Given user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123" in the server
-    When the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
+    When the public uses the webUI to access the last public link created by user "Alice" with password "pass123" in a new session
     And the user uploads folder "PARENT" using the webUI
     Then folder "PARENT" should be listed on the webUI
     And folder "CHILD" should be listed in the folder "PARENT" on the webUI
@@ -209,7 +209,7 @@ Feature: Share by public link with different roles
   Scenario: creating a public link with "Editor" role makes it possible to upload a folder inside a sub-directory even with password set
     Given user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
     And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123" in the server
-    When the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
+    When the public uses the webUI to access the last public link created by user "Alice" with password "pass123" in a new session
     And the user opens folder "simple-empty-folder" using the webUI
     And the user uploads folder "PARENT" using the webUI
     Then folder "PARENT" should be listed on the webUI
@@ -220,13 +220,13 @@ Feature: Share by public link with different roles
   @issue-ocis-723
   Scenario: creating a public link with "Viewer" role makes it impossible to create files via the link even with password set
     Given user "Alice" has shared folder "simple-folder" with link with "read" permissions and password "pass123" in the server
-    When the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
+    When the public uses the webUI to access the last public link created by user "Alice" with password "pass123" in a new session
     Then it should not be possible to create files using the webUI
 
 
   Scenario: creating a public link with "Uploader" role makes it possible to upload a file through files-drop page
     Given user "Alice" has shared folder "simple-folder" with link with "create" permissions in the server
-    When the public uses the webUI to access the last public link created by user "Alice"
+    When the public uses the webUI to access the last public link created by user "Alice" in a new session
     And the public uploads file "new-lorem.txt" in files-drop page
     Then the following files should be listed on the files-drop page:
       | new-lorem.txt |
@@ -235,7 +235,7 @@ Feature: Share by public link with different roles
 
   Scenario: creating a public link with "Uploader" role makes it possible to upload multiple files via files-drop page
     Given user "Alice" has shared folder "simple-folder" with link with "create" permissions in the server
-    When the public uses the webUI to access the last public link created by user "Alice"
+    When the public uses the webUI to access the last public link created by user "Alice" in a new session
     And the public uploads file "'single'quotes.txt" in files-drop page
     And the public uploads file "new-lorem.txt" in files-drop page
     Then the following files should be listed on the files-drop page:
@@ -247,7 +247,7 @@ Feature: Share by public link with different roles
   @issue-2443
   Scenario: creating a public link with "Uploader" role makes it possible to upload a folder
     Given user "Alice" has shared folder "simple-folder" with link with "create" permissions in the server
-    When the public uses the webUI to access the last public link created by user "Alice"
+    When the public uses the webUI to access the last public link created by user "Alice" in a new session
     And the public uploads folder "FOLDER" in files-drop page
     Then the following files should be listed on the files-drop page:
       | FOLDER |
@@ -256,7 +256,7 @@ Feature: Share by public link with different roles
   @issue-ocis-723
   Scenario: creating a public link with "Uploader" role makes it possible to create files through files-drop page even with password set
     Given user "Alice" has shared folder "simple-folder" with link with "create" permissions and password "pass123" in the server
-    When the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
+    When the public uses the webUI to access the last public link created by user "Alice" with password "pass123" in a new session
     And the public uploads file "'single'quotes.txt" in files-drop page
     Then the following files should be listed on the files-drop page:
       | 'single'quotes.txt |
@@ -265,7 +265,7 @@ Feature: Share by public link with different roles
   @issue-ocis-723
   Scenario: creating a public link with "Uploader" role makes it possible to upload multiple files via files-drop page even with password set
     Given user "Alice" has shared folder "simple-folder" with link with "create" permissions and password "pass123" in the server
-    When the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
+    When the public uses the webUI to access the last public link created by user "Alice" with password "pass123" in a new session
     And the public uploads file "'single'quotes.txt" in files-drop page
     And the public uploads file "new-lorem.txt" in files-drop page
     Then the following files should be listed on the files-drop page:
