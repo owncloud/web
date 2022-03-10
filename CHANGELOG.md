@@ -23,6 +23,7 @@ Summary
 * Enhancement - Add a watcher for the share panel of a space: [#6543](https://github.com/owncloud/web/pull/6543)
 * Enhancement - Contextmenu background hover: [#6553](https://github.com/owncloud/web/pull/6553)
 * Enhancement - Load space images as preview: [#6529](https://github.com/owncloud/web/pull/6529)
+* Enhancement - Move share indicators: [#5976](https://github.com/owncloud/web/issues/5976)
 * Enhancement - Resolve private links into folders instead of parent: [#5533](https://github.com/owncloud/web/issues/5533)
 * Enhancement - Shares overview: [#6440](https://github.com/owncloud/web/issues/6440)
 * Enhancement - Side bar nav tags: [#6540](https://github.com/owncloud/web/pull/6540)
@@ -31,7 +32,7 @@ Summary
 * Enhancement - Implement people sharing for spaces: [#6455](https://github.com/owncloud/web/pull/6455)
 * Enhancement - Implement the spaces permission concept: [#6531](https://github.com/owncloud/web/pull/6531)
 * Enhancement - Update the graph SDK: [#6519](https://github.com/owncloud/web/pull/6519)
-* Enhancement - Update ODS to v13.0.0-rc.1: [#6540](https://github.com/owncloud/web/pull/6540)
+* Enhancement - Update ODS to v13.0.0-rc.2: [#6540](https://github.com/owncloud/web/pull/6540)
 
 Details
 -------
@@ -150,6 +151,14 @@ Details
    https://github.com/owncloud/web/pull/6529
    https://github.com/owncloud/web/pull/6558
 
+* Enhancement - Move share indicators: [#5976](https://github.com/owncloud/web/issues/5976)
+
+   We've moved the share/status indicators into a separate column and adjusted the design in ODS.
+
+   https://github.com/owncloud/web/issues/5976
+   https://github.com/owncloud/web/pull/6552
+   https://github.com/owncloud/owncloud-design-system/pull/2014
+
 * Enhancement - Resolve private links into folders instead of parent: [#5533](https://github.com/owncloud/web/issues/5533)
 
    Private links always resolved into the parent folder of the linked file and visually
@@ -218,21 +227,25 @@ Details
 
    https://github.com/owncloud/web/pull/6519
 
-* Enhancement - Update ODS to v13.0.0-rc.1: [#6540](https://github.com/owncloud/web/pull/6540)
+* Enhancement - Update ODS to v13.0.0-rc.2: [#6540](https://github.com/owncloud/web/pull/6540)
 
-   We updated the ownCloud Design System to version 13.0.0-rc.1. Please refer to the full
+   We updated the ownCloud Design System to version 13.0.0-rc.2. Please refer to the full
    changelog in the ODS release (linked) for more details. Summary:
 
    - Change - Default type of OcButton:
-   https//github.com/owncloud/owncloud-design-system/pull/2009 - Enhancement - Apply
-   size property to oc-card:
-   https//github.com/owncloud/owncloud-design-system/pull/2011 - Bugfix - Disabled
-   OcSelect background: https//github.com/owncloud/owncloud-design-system/pull/2008 -
-   Bugfix - Icons/Thumbnails were only visible for clickable resources:
+   https//github.com/owncloud/owncloud-design-system/pull/2009 - Change - Remove
+   OcStatusIndicators from OcResource:
+   https://github.com/owncloud/owncloud-design-system/pull/5976 - Enhancement -
+   Redesign OcStatusIndicators:
+   https://github.com/owncloud/owncloud-design-system/pull/5976 - Enhancement - Apply
+   size property to oc-tag: https//github.com/owncloud/owncloud-design-system/pull/2011
+   - Bugfix - Disabled OcSelect background:
+   https//github.com/owncloud/owncloud-design-system/pull/2008 - Bugfix -
+   Icons/Thumbnails were only visible for clickable resources:
    https//github.com/owncloud/owncloud-design-system/pull/2007
 
    https://github.com/owncloud/web/pull/6540
-   https://github.com/owncloud/owncloud-design-system/releases/tag/v13.0.0-rc.1
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v13.0.0-rc.2
 
 Changelog for ownCloud Web [5.2.0] (2022-03-03)
 =======================================
