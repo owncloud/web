@@ -9570,9 +9570,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"owncloud-sdk@portal:/home/jan/working/owncloud-sdk::locator=root-workspace-0b6124%40workspace%3A.":
-  version: 0.0.0-use.local
-  resolution: "owncloud-sdk@portal:/home/jan/working/owncloud-sdk::locator=root-workspace-0b6124%40workspace%3A."
+"owncloud-sdk@npm:~2.1.0-alpha.3":
+  version: 2.1.0-alpha.3
+  resolution: "owncloud-sdk@npm:2.1.0-alpha.3"
   peerDependencies:
     axios: ^0.26.0
     cross-fetch: ^3.0.6
@@ -9582,8 +9582,9 @@ __metadata:
     uuid: ^8.2.0
     webdav: 4.8.0
     xml-js: ^1.6.11
+  checksum: 566bbccd59e4cfbd6471942621e2f006c3337a3637b971492d7324913a37f4d3299deb9029546331cb0ec7e065efd6c4f9ba96a8f850c230d64e83dd9fc8c5db
   languageName: node
-  linkType: soft
+  linkType: hard
 
 "p-cancelable@npm:^2.0":
   version: 2.1.1
