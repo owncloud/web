@@ -1,0 +1,5 @@
+Bugfix: Resize observer errors within subfolders of a space
+
+We've fixed a bug where the resize observer crashes within subfolders of a space because there is no element to observe.
+
+https://github.com/owncloud/web/pull/6569

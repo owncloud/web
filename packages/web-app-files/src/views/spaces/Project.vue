@@ -324,6 +324,13 @@ export default {
         if ((!sameRoute || !sameItem) && from) {
           this.loadResourcesTask.perform(this, sameRoute, to.params.item)
         }
+
+        if (this.$refs.markdownContainer) {
+          if (this.markdownResizeObserver) {
+            this.markdownResizeObserver.unobserve(this.$refs.markdownContainer)
+          }
+          this.markdownResizeObserver.observe(this.$refs.markdownContainer)
+        }
       },
       immediate: true
     },
@@ -381,11 +388,6 @@ export default {
   },
   async mounted() {
     await this.loadResourcesTask.perform(this, false, this.$route.params.item || '')
-
-    if (this.markdownResizeObserver) {
-      this.markdownResizeObserver.unobserve(this.$refs.markdownContainer)
-    }
-    this.markdownResizeObserver.observe(this.$refs.markdownContainer)
 
     document.title = `${this.space.name} - ${this.$route.meta.title}`
     this.$route.params.name = this.space.name
