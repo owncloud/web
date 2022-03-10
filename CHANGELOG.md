@@ -14,6 +14,7 @@ Summary
 * Bugfix - Show no auth popup on password protected public links in ownCloud 10: [#6530](https://github.com/owncloud/web/pull/6530)
 * Bugfix - Sidebar panels in public links: [#2090](https://github.com/owncloud/web/issues/2090)
 * Bugfix - Don't write error message on passing ReadmeContentModal.spec.js test: [#6525](https://github.com/owncloud/web/pull/6525)
+* Bugfix - Resize observer errors within subfolders of a space: [#6569](https://github.com/owncloud/web/pull/6569)
 * Bugfix - Resolve private links: [#5654](https://github.com/owncloud/web/pull/5654)
 * Bugfix - Prevent cross-site scripting attack while displaying space description: [#6523](https://github.com/owncloud/web/pull/6523)
 * Bugfix - Prevent the member count inside a space from disappearing: [#6550](https://github.com/owncloud/web/pull/6550)
@@ -81,6 +82,13 @@ Details
 
    https://github.com/owncloud/web/issues/6337
    https://github.com/owncloud/web/pull/6525
+
+* Bugfix - Resize observer errors within subfolders of a space: [#6569](https://github.com/owncloud/web/pull/6569)
+
+   We've fixed a bug where the resize observer crashes within subfolders of a space because there
+   is no element to observe.
+
+   https://github.com/owncloud/web/pull/6569
 
 * Bugfix - Resolve private links: [#5654](https://github.com/owncloud/web/pull/5654)
 
