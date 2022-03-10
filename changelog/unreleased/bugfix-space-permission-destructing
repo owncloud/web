@@ -1,0 +1,5 @@
+Bugfix: TypeErrors when trying to destruct undefined properties
+
+We fixed TypeErrors when trying to destruct undefined properties in the space permissions checks by providing a default value.
+
+https://github.com/owncloud/web/pull/6568

@@ -169,7 +169,7 @@ export function buildSpace(space) {
     spaceMemberIds: Object.values(spaceRoles).reduce((arr, ids) => arr.concat(ids), []),
     spaceImageData,
     spaceReadmeData,
-    canUpload: function ({ user }) {
+    canUpload: function ({ user } = {}) {
       const allowedRoles = [
         ...this.spaceRoles[spaceRoleManager.name],
         ...this.spaceRoles[spaceRoleEditor.name]
@@ -179,45 +179,45 @@ export function buildSpace(space) {
     canDownload: function () {
       return true
     },
-    canBeDeleted: function ({ user }) {
+    canBeDeleted: function ({ user } = {}) {
       const allowedRoles = [...this.spaceRoles[spaceRoleManager.name]]
       return this.disabled && user && allowedRoles.includes(user.uuid)
     },
-    canRename: function ({ user }) {
+    canRename: function ({ user } = {}) {
       const allowedRoles = [...this.spaceRoles[spaceRoleManager.name]]
       return user && allowedRoles.includes(user.uuid)
     },
-    canEditDescription: function ({ user }) {
+    canEditDescription: function ({ user } = {}) {
       const allowedRoles = [...this.spaceRoles[spaceRoleManager.name]]
       return user && allowedRoles.includes(user.uuid)
     },
-    canRestore: function ({ user }) {
+    canRestore: function ({ user } = {}) {
       const allowedRoles = [...this.spaceRoles[spaceRoleManager.name]]
       return this.disabled && user && allowedRoles.includes(user.uuid)
     },
-    canDisable: function ({ user }) {
+    canDisable: function ({ user } = {}) {
       const allowedRoles = [...this.spaceRoles[spaceRoleManager.name]]
       return !this.disabled && user && allowedRoles.includes(user.uuid)
     },
-    canShare: function ({ user }) {
+    canShare: function ({ user } = {}) {
       const allowedRoles = [...this.spaceRoles[spaceRoleManager.name]]
       return user && allowedRoles.includes(user.uuid)
     },
-    canEditImage: function ({ user }) {
+    canEditImage: function ({ user } = {}) {
       const allowedRoles = [
         ...this.spaceRoles[spaceRoleManager.name],
         ...this.spaceRoles[spaceRoleEditor.name]
       ]
       return user && allowedRoles.includes(user.uuid)
     },
-    canEditReadme: function ({ user }) {
+    canEditReadme: function ({ user } = {}) {
       const allowedRoles = [
         ...this.spaceRoles[spaceRoleManager.name],
         ...this.spaceRoles[spaceRoleEditor.name]
       ]
       return user && allowedRoles.includes(user.uuid)
     },
-    canEditQuota: function ({ user }) {
+    canEditQuota: function ({ user } = {}) {
       const allowedRoles = [...this.spaceRoles[spaceRoleManager.name]]
       return user && allowedRoles.includes(user.uuid)
     },
