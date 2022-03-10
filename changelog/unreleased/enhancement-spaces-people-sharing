@@ -8,4 +8,5 @@ Spaces can now be shared with other people. This change specifically includes:
 * removing members from a space (possible for managers only)
 
 https://github.com/owncloud/web/pull/6455
+https://github.com/owncloud/web/pull/6572
 https://github.com/owncloud/web/issues/6283
