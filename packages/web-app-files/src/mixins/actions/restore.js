@@ -5,6 +5,8 @@ import { buildWebDavFilesTrashPath, buildWebDavFilesPath } from '../../helpers/r
 
 export default {
   computed: {
+    ...mapGetters(['user']),
+
     $_restore_items() {
       return [
         {
@@ -29,7 +31,6 @@ export default {
   },
   methods: {
     ...mapActions('Files', ['removeFilesFromTrashbin']),
-    ...mapGetters(['user']),
 
     async $_restore_trigger({ resources }) {
       const restoredResources = []

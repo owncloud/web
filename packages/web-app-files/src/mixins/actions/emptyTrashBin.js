@@ -5,6 +5,7 @@ import { buildWebDavFilesTrashPath } from '../../helpers/resources'
 export default {
   computed: {
     ...mapGetters('Files', ['activeFiles']),
+    ...mapGetters(['user']),
     $_emptyTrashBin_items() {
       return [
         {
@@ -33,7 +34,6 @@ export default {
   methods: {
     ...mapActions(['showMessage']),
     ...mapActions('Files', ['clearTrashBin']),
-    ...mapGetters(['user']),
     $_emptyTrashBin_trigger() {
       this.$client.fileTrash
         .clearTrashBin(buildWebDavFilesTrashPath(this.user.id))
