@@ -67,6 +67,7 @@ import ListInfo from '../../components/FilesList/ListInfo.vue'
 import Pagination from '../../components/FilesList/Pagination.vue'
 import ContextActions from '../../components/FilesList/ContextActions.vue'
 import { DavProperties } from 'web-pkg/src/constants'
+import { bus } from 'web-pkg/src/instance'
 
 export default {
   components: { ResourceTable, ListLoader, NoContentMessage, ListInfo, Pagination, ContextActions },
@@ -146,6 +147,14 @@ export default {
 
   created() {
     this.loadResourcesTask.perform(this)
+
+    const loadResourcesEventToken = bus.subscribe('app.files.list.load', (path) => {
+      this.loadResourcesTask.perform(this)
+    })
+
+    this.$on('beforeDestroy', () => {
+      bus.unsubscribe('app.files.list.load', loadResourcesEventToken)
+    })
   },
 
   methods: {
