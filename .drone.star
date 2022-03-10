@@ -3,14 +3,38 @@ FULL = 1
 FEDERATED = 2
 NOTIFICATIONS = 3
 
+ALPINE_GIT = "alpine/git:latest"
+DEEPDRIVER_DOCKER_ORACLE_XE_11G = "deepdiver/docker-oracle-xe-11g:latest"
+DRONE_CLI_ALPINE = "drone/cli:alpine"
+HENRICH_DOCKER_SAUCE_CONNECT = "henrrich/docker-sauce-connect:latest"
+MELTWATER_DRONE_CACHE = "meltwater/drone-cache:v1"
+MINIO_MC_RELEASE_2020_VERSION = "minio/mc:RELEASE.2020-12-10T01-26-17Z"
+MINIO_MC_RELEASE_2021_VERSION = "minio/mc:RELEASE.2021-03-23T05-46-11Z"
 OC_CI_ALPINE = "owncloudci/alpine:latest"
+OC_CI_BAZEL_BUILDIFIER = "owncloudci/bazel-buildifier"
 OC_CI_CORE_NODEJS = "owncloudci/core:nodejs14"
+OC_CI_DRONE_ANSIBLE = "owncloudci/drone-ansible:latest"
+OC_CI_DRONE_CANCEL_PREVIOUS_BUILDS = "owncloudci/drone-cancel-previous-builds"
+OC_CI_DRONE_SKIP_PIPELINE = "owncloudci/drone-skip-pipeline"
 OC_CI_GOLANG = "owncloudci/golang:1.17"
+OC_CI_HUGO = "owncloudci/hugo:0.89.4"
 OC_CI_NODEJS = "owncloudci/nodejs:14"
 OC_CI_PHP = "owncloudci/php:7.4"
 OC_CI_WAIT_FOR = "owncloudci/wait-for:latest"
 OC_TESTING_MIDDLEWARE = "owncloud/owncloud-test-middleware:1.4.0"
 OC_UBUNTU = "owncloud/ubuntu:20.04"
+PLUGINS_DOCKER = "plugins/docker:18.09"
+PLUGINS_DOWNSTREAM = "plugins/downstream"
+PLUGINS_GH_PAGES = "plugins/gh-pages:1"
+PLUGINS_GIT_ACTION = "plugins/git-action:1"
+PLUGINS_GITHUB_RELEASE = "plugins/github-release:1"
+PLUGINS_S3 = "plugins/s3"
+PLUGINS_SLACK = "plugins/slack:1"
+SELENIUM_STANDALONE_CHROME_DEBUG = "selenium/standalone-chrome-debug:3.141.59"
+SELENIUM_STANDALONE_FIREFOX_DEBUG = "selenium/standalone-firefox-debug:3.141.59"
+SONARSOURCE_SONAR_SCANNER_CLI = "sonarsource/sonar-scanner-cli:latest"
+THEGEEKLAB_DRONE_GITHUB_COMMENT = "thegeeklab/drone-github-comment:1"
+TOOLHIPPIE_CALENS = "toolhippie/calens:latest"
 
 OC10_VERSION = "latest"
 
@@ -761,7 +785,7 @@ def main(ctx):
     return pipelines
 
 def beforePipelines(ctx):
-    return checkForRecentBuilds(ctx) + \
+    return cancelPreviousBuilds() + \
            checkStarlark() + \
            documentation(ctx) + \
            changelog(ctx) + \
@@ -838,29 +862,22 @@ def yarnlint(ctx):
 
     return pipelines
 
-def checkForRecentBuilds(ctx):
+def cancelPreviousBuilds():
     return [{
         "kind": "pipeline",
         "type": "docker",
-        "name": "stop-recent-builds",
-        "workspace": {
-            "base": dir["base"],
-            "path": config["app"],
+        "name": "cancel-previous-builds",
+        "clone": {
+            "disable": True,
         },
         "steps": [{
-            "name": "stop-recent-builds",
-            "image": "drone/cli:alpine",
-            "environment": {
-                "DRONE_SERVER": "https://drone.owncloud.com",
+            "name": "cancel-previous-builds",
+            "image": OC_CI_DRONE_CANCEL_PREVIOUS_BUILDS,
+            "settings": {
                 "DRONE_TOKEN": {
                     "from_secret": "drone_token",
                 },
             },
-            "commands": [
-                "drone build ls %s --status running > %s/recentBuilds.txt" % (ctx.repo.slug, dir["web"]),
-                "drone build info %s ${DRONE_BUILD_NUMBER} > %s/thisBuildInfo.txt" % (ctx.repo.slug, dir["web"]),
-                "cd %s && ./tests/acceptance/cancelBuilds.sh" % dir["web"],
-            ],
         }],
         "trigger": {
             "ref": [
@@ -918,7 +935,7 @@ def changelog(ctx):
         "steps": [
             {
                 "name": "clone",
-                "image": "plugins/git-action:1",
+                "image": PLUGINS_GIT_ACTION,
                 "settings": {
                     "actions": [
                         "clone",
@@ -937,7 +954,7 @@ def changelog(ctx):
             },
             {
                 "name": "generate",
-                "image": "toolhippie/calens:latest",
+                "image": TOOLHIPPIE_CALENS,
                 "commands": [
                     "calens >| CHANGELOG.md",
                 ],
@@ -951,14 +968,14 @@ def changelog(ctx):
             },
             {
                 "name": "output",
-                "image": "toolhippie/calens:latest",
+                "image": TOOLHIPPIE_CALENS,
                 "commands": [
                     "cat CHANGELOG.md",
                 ],
             },
             {
                 "name": "publish",
-                "image": "plugins/git-action:1",
+                "image": PLUGINS_GIT_ACTION,
                 "settings": {
                     "actions": [
                         "commit",
@@ -1080,7 +1097,7 @@ def unitTests(ctx):
                      },
                      {
                          "name": "sonarcloud",
-                         "image": "sonarsource/sonar-scanner-cli:latest",
+                         "image": SONARSOURCE_SONAR_SCANNER_CLI,
                          "environment": sonar_env,
                      },
                  ],
@@ -1451,7 +1468,7 @@ def notify():
         "steps": [
             {
                 "name": "notify-rocketchat",
-                "image": "plugins/slack:1",
+                "image": PLUGINS_SLACK,
                 "settings": {
                     "webhook": {
                         "from_secret": config["rocketchat"]["from_secret"],
@@ -1525,7 +1542,7 @@ def databaseService(db):
     if dbName == "oracle":
         return [{
             "name": dbName,
-            "image": "deepdiver/docker-oracle-xe-11g:latest",
+            "image": DEEPDRIVER_DOCKER_ORACLE_XE_11G,
             "environment": {
                 "ORACLE_USER": getDbUsername(db),
                 "ORACLE_PASSWORD": getDbPassword(db),
@@ -1540,7 +1557,7 @@ def browserService(alternateSuiteName, browser):
     if browser == "chrome":
         return [{
             "name": "selenium",
-            "image": "selenium/standalone-chrome-debug:3.141.59",
+            "image": SELENIUM_STANDALONE_CHROME_DEBUG,
             "volumes": [{
                 "name": "uploads",
                 "path": "/uploads",
@@ -1550,7 +1567,7 @@ def browserService(alternateSuiteName, browser):
     if browser == "firefox":
         return [{
             "name": "selenium",
-            "image": "selenium/standalone-firefox-debug:3.141.59",
+            "image": SELENIUM_STANDALONE_FIREFOX_DEBUG,
             "volumes": [{
                 "name": "uploads",
                 "path": "/uploads",
@@ -1560,7 +1577,7 @@ def browserService(alternateSuiteName, browser):
     if not isLocalBrowser(browser):
         return [{
             "name": "saucelabs",
-            "image": "henrrich/docker-sauce-connect:latest",
+            "image": HENRICH_DOCKER_SAUCE_CONNECT,
             "pull": "if-not-exists",
             "environment": {
                 "SAUCE_USERNAME": {
@@ -1825,7 +1842,7 @@ def setupIntegrationWebApp():
 def buildDockerImage():
     return [{
         "name": "docker",
-        "image": "plugins/docker:18.09",
+        "image": PLUGINS_DOCKER,
         "settings": {
             "username": {
                 "from_secret": "docker_username",
@@ -1858,7 +1875,7 @@ def buildRelease(ctx):
         },
         {
             "name": "changelog",
-            "image": "toolhippie/calens:latest",
+            "image": TOOLHIPPIE_CALENS,
             "commands": [
                 "calens --version %s -o dist/CHANGELOG.md -t changelog/CHANGELOG-Release.tmpl" % ctx.build.ref.replace("refs/tags/v", "").split("-")[0],
             ],
@@ -1870,7 +1887,7 @@ def buildRelease(ctx):
         },
         {
             "name": "publish",
-            "image": "plugins/github-release:1",
+            "image": PLUGINS_GITHUB_RELEASE,
             "settings": {
                 "api_key": {
                     "from_secret": "github_token",
@@ -1914,7 +1931,7 @@ def documentation(ctx):
                 },
                 {
                     "name": "test",
-                    "image": "owncloudci/hugo:0.89.4",
+                    "image": OC_CI_HUGO,
                     "commands": [
                         "cd hugo",
                         "hugo",
@@ -1929,7 +1946,7 @@ def documentation(ctx):
                 },
                 {
                     "name": "publish",
-                    "image": "plugins/gh-pages:1",
+                    "image": PLUGINS_GH_PAGES,
                     "settings": {
                         "username": {
                             "from_secret": "github_username",
@@ -1950,7 +1967,7 @@ def documentation(ctx):
                 },
                 {
                     "name": "downstream",
-                    "image": "plugins/downstream",
+                    "image": PLUGINS_DOWNSTREAM,
                     "settings": {
                         "server": "https://drone.owncloud.com/",
                         "token": {
@@ -2438,7 +2455,7 @@ def cacheOcisPipeline(ctx):
 def getOcis():
     return [{
         "name": "get-ocis-from-cache",
-        "image": "minio/mc:RELEASE.2020-12-10T01-26-17Z",
+        "image": MINIO_MC_RELEASE_2020_VERSION,
         "failure": "ignore",
         "environment": {
             "MC_HOST": {
@@ -2496,7 +2513,7 @@ def buildOCISCache():
 def cacheOcis():
     return [{
         "name": "upload-ocis-bin",
-        "image": "plugins/s3",
+        "image": PLUGINS_S3,
         "pull": "if-not-exists",
         "settings": {
             "bucket": "owncloud",
@@ -2519,7 +2536,7 @@ def cacheOcis():
 def listRemoteCache():
     return [{
         "name": "list-ocis-bin-cache",
-        "image": "minio/mc:RELEASE.2020-12-10T01-26-17Z",
+        "image": MINIO_MC_RELEASE_2020_VERSION,
         "failure": "ignore",
         "environment": {
             "MC_HOST": {
@@ -2540,7 +2557,7 @@ def listRemoteCache():
 def stopBuild():
     return [{
         "name": "stop-build",
-        "image": "drone/cli:alpine",
+        "image": DRONE_CLI_ALPINE,
         "environment": {
             "DRONE_SERVER": "https://drone.owncloud.com",
             "DRONE_TOKEN": {
@@ -2563,7 +2580,7 @@ def stopBuild():
 def uploadScreenshots():
     return [{
         "name": "upload-screenshots",
-        "image": "plugins/s3",
+        "image": PLUGINS_S3,
         "pull": "if-not-exists",
         "settings": {
             "bucket": {
@@ -2612,7 +2629,7 @@ def listScreenShots():
 def uploadVisualDiff():
     return [{
         "name": "upload-diff-screenshots",
-        "image": "plugins/s3",
+        "image": PLUGINS_S3,
         "pull": "if-not-exists",
         "settings": {
             "bucket": {
@@ -2647,7 +2664,7 @@ def uploadVisualDiff():
 def uploadVisualScreenShots():
     return [{
         "name": "upload-latest-screenshots",
-        "image": "plugins/s3",
+        "image": PLUGINS_S3,
         "pull": "if-not-exists",
         "settings": {
             "bucket": {
@@ -2774,13 +2791,13 @@ def githubComment(alternateSuiteName):
     prefix = "Results for <strong>%s</strong> ${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}${DRONE_STAGE_NUMBER}/1" % alternateSuiteName
     return [{
         "name": "github-comment",
-        "image": "jmccann/drone-github-comment:1",
+        "image": THEGEEKLAB_DRONE_GITHUB_COMMENT,
         "pull": "if-not-exists",
         "settings": {
-            "message_file": "%s/comments.file" % dir["web"],
-        },
-        "environment": {
-            "GITHUB_TOKEN": {
+            "message": "%s/comments.file" % dir["web"],
+            "key": "pr-${DRONE_PULL_REQUEST}",  #TODO: we could delete the comment after a successful CI run
+            "update": "true",
+            "api_key": {
                 "from_secret": "github_token",
             },
         },
@@ -2789,7 +2806,6 @@ def githubComment(alternateSuiteName):
         ],
         "when": {
             "status": [
-                "success",
                 "failure",
             ],
             "event": [
@@ -2834,7 +2850,7 @@ def deploy(ctx, config, rebuild):
         "steps": [
             {
                 "name": "clone continuous deployment playbook",
-                "image": "alpine/git:latest",
+                "image": ALPINE_GIT,
                 "commands": [
                     "cd deployments/continuous-deployment-config",
                     "git clone https://github.com/owncloud-devops/continuous-deployment.git",
@@ -2842,7 +2858,7 @@ def deploy(ctx, config, rebuild):
             },
             {
                 "name": "deploy",
-                "image": "owncloudci/drone-ansible:latest",
+                "image": OC_CI_DRONE_ANSIBLE,
                 "failure": "ignore",
                 "environment": {
                     "CONTINUOUS_DEPLOY_SERVERS_CONFIG": "../%s" % (config),
@@ -2881,14 +2897,14 @@ def checkStarlark():
         "steps": [
             {
                 "name": "format-check-starlark",
-                "image": "owncloudci/bazel-buildifier",
+                "image": OC_CI_BAZEL_BUILDIFIER,
                 "commands": [
                     "buildifier --mode=check .drone.star",
                 ],
             },
             {
                 "name": "show-diff",
-                "image": "owncloudci/bazel-buildifier",
+                "image": OC_CI_BAZEL_BUILDIFIER,
                 "commands": [
                     "buildifier --mode=fix .drone.star",
                     "git diff",
@@ -2976,7 +2992,7 @@ def skipIfUnchanged(ctx, type):
 
     skip_step = {
         "name": "skip-if-unchanged",
-        "image": "owncloudci/drone-skip-pipeline",
+        "image": OC_CI_DRONE_SKIP_PIPELINE,
         "when": {
             "event": [
                 "pull_request",
@@ -3052,7 +3068,7 @@ def genericCache(name, action, mounts, cache_key):
 
     step = {
         "name": "%s_%s" % (action, name),
-        "image": "meltwater/drone-cache:v1",
+        "image": MELTWATER_DRONE_CACHE,
         "environment": {
             "AWS_ACCESS_KEY_ID": {
                 "from_secret": "cache_s3_access_key",
@@ -3088,7 +3104,7 @@ def genericCachePurge(ctx, name, cache_key):
         "steps": [
             {
                 "name": "purge-cache",
-                "image": "minio/mc:RELEASE.2021-03-23T05-46-11Z",
+                "image": MINIO_MC_RELEASE_2021_VERSION,
                 "failure": "ignore",
                 "environment": {
                     "MC_HOST_cache": {
@@ -3205,7 +3221,7 @@ def uploadTracingResult(ctx):
 
     return [{
         "name": "upload-tracing-result",
-        "image": "plugins/s3",
+        "image": PLUGINS_S3,
         "pull": "if-not-exists",
         "settings": {
             "bucket": {
