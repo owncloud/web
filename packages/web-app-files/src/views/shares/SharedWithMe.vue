@@ -162,7 +162,6 @@
 <script>
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 import ResourceTable, { determineSortFields } from '../../components/FilesList/ResourceTable.vue'
-import { aggregateResourceShares } from '../../helpers/resources'
 import FileActions from '../../mixins/fileActions'
 import MixinAcceptShare from '../../mixins/actions/acceptShare'
 import MixinDeclineShare from '../../mixins/actions/declineShare'
@@ -178,10 +177,10 @@ import ListLoader from '../../components/FilesList/ListLoader.vue'
 import NoContentMessage from '../../components/FilesList/NoContentMessage.vue'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
 import ContextActions from '../../components/FilesList/ContextActions.vue'
-import { useTask } from 'vue-concurrency'
 import { ShareStatus } from '../../helpers/share'
 import { computed, unref } from '@vue/composition-api'
 import { createLocationSpaces } from '../../router'
+import { folderService } from '../../services/folder'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -246,30 +245,7 @@ export default {
       sortDirQueryName: 'shares-sort-dir'
     })
 
-    const loadResourcesTask = useTask(function* (signal, ref) {
-      ref.CLEAR_CURRENT_FILES_LIST()
-
-      let resources = yield ref.$client.requests.ocs({
-        service: 'apps/files_sharing',
-        action: '/api/v1/shares?format=json&shared_with_me=true&state=all&include_tags=false',
-        method: 'GET'
-      })
-
-      resources = yield resources.json()
-      resources = resources.ocs.data
-
-      if (resources.length) {
-        resources = aggregateResourceShares(
-          resources,
-          true,
-          !ref.isOcis,
-          ref.configuration.server,
-          ref.getToken
-        )
-      }
-
-      ref.LOAD_FILES({ currentFolder: null, files: resources })
-    })
+    const loadResourcesTask = folderService.getTask()
 
     return {
       resourceTargetLocation: createLocationSpaces('files-spaces-personal-home'),

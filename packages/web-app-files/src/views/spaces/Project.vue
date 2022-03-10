@@ -144,13 +144,12 @@ import NoContentMessage from '../../components/FilesList/NoContentMessage.vue'
 import NotFoundMessage from '../../components/FilesList/NotFoundMessage.vue'
 import ListLoader from '../../components/FilesList/ListLoader.vue'
 import { computed, ref, unref } from '@vue/composition-api'
-import { useTask } from 'vue-concurrency'
-import { useStore, useRouter, useRouteQuery } from 'web-pkg/src/composables'
+import { useStore, useRouteQuery } from 'web-pkg/src/composables'
 import { marked } from 'marked'
 import sanitizeHtml from 'sanitize-html'
 import MixinAccessibleBreadcrumb from '../../mixins/accessibleBreadcrumb'
 import { bus } from 'web-pkg/src/instance'
-import { buildResource, buildSpace, buildWebDavSpacesPath } from '../../helpers/resources'
+import { buildResource, buildWebDavSpacesPath } from '../../helpers/resources'
 import { loadPreview } from '../../helpers/resource'
 import ResourceTable, { determineSortFields } from '../../components/FilesList/ResourceTable.vue'
 import { createLocationSpaces } from '../../router'
@@ -163,7 +162,6 @@ import MixinFileActions from '../../mixins/fileActions'
 import { ImageDimension, ImageType } from '../../constants'
 import debounce from 'lodash-es/debounce'
 import { VisibilityObserver } from 'web-pkg/src/observer'
-import { clientService } from 'web-pkg/src/services'
 import Mixins from '../../mixins'
 import Rename from '../../mixins/spaces/actions/rename'
 import Delete from '../../mixins/spaces/actions/delete'
@@ -177,6 +175,7 @@ import EditReadmeContent from '../../mixins/spaces/actions/editReadmeContent'
 import QuotaModal from '../../components/Spaces/QuotaModal.vue'
 import ReadmeContentModal from '../../components/Spaces/ReadmeContentModal.vue'
 import { thumbnailService } from '../../services'
+import { folderService } from '../../services/folder'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -212,16 +211,9 @@ export default {
     }
   },
   setup() {
-    const router = useRouter()
     const store = useStore()
 
-    const spaceId = router.currentRoute.params.spaceId
-
     const space = ref({})
-    const graphClient = clientService.graphAuthenticated(
-      store.getters.configuration.server,
-      store.getters.getToken
-    )
 
     const storeItems = computed(() => store.getters['Files/activeFiles'] || [])
     const fields = computed(() => {
@@ -242,43 +234,7 @@ export default {
       sortBy
     })
 
-    const loadResourcesTask = useTask(function* (signal, ref, sameRoute, path = null) {
-      ref.CLEAR_CURRENT_FILES_LIST()
-      const graphResponse = yield graphClient.drives.getDrive(spaceId)
-
-      if (!graphResponse.data) {
-        return
-      }
-
-      space.value = buildSpace(graphResponse.data)
-
-      const webDavResponse = yield ref.$client.files.list(
-        buildWebDavSpacesPath(ref.$route.params.spaceId, path || '')
-      )
-
-      let resources = []
-      if (!path) {
-        // space front page -> use space as current folder
-        resources.push(space.value)
-
-        const webDavResources = webDavResponse.map(buildResource)
-        webDavResources.shift() // Remove webdav entry for the space itself
-        resources = resources.concat(webDavResources)
-      } else {
-        resources = webDavResponse.map(buildResource)
-      }
-
-      const currentFolder = resources.shift()
-
-      ref.LOAD_FILES({
-        currentFolder,
-        files: resources
-      })
-      ref.loadIndicators({
-        client: ref.$client,
-        currentFolder: currentFolder?.path
-      })
-    })
+    const loadResourcesTask = folderService.getTask()
 
     return {
       space,

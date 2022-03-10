@@ -49,20 +49,18 @@ import { mapGetters, mapMutations, mapState } from 'vuex'
 import { computed, unref } from '@vue/composition-api'
 import ResourceTable, { determineSortFields } from '../components/FilesList/ResourceTable.vue'
 
-import { buildDeletedResource, buildResource } from '../helpers/resources'
 import MixinFilesListFilter from '../mixins/filesListFilter'
 import MixinResources from '../mixins/resources'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 import { useFileListHeaderPosition, usePagination, useSort } from '../composables'
 import { useRouteQuery, useStore } from 'web-pkg/src/composables'
-import { useTask } from 'vue-concurrency'
 
 import ListLoader from '../components/FilesList/ListLoader.vue'
 import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
-import { DavProperties } from 'web-pkg/src/constants'
+import { folderService } from '../services/folder'
 
 export default {
   components: { ResourceTable, ListLoader, NoContentMessage, ListInfo, Pagination, ContextActions },
@@ -93,20 +91,11 @@ export default {
       sortDir
     })
 
-    const loadResourcesTask = useTask(function* (signal, ref) {
-      ref.CLEAR_CURRENT_FILES_LIST()
-
-      const resources = yield ref.$client.fileTrash.list('', '1', DavProperties.Trashbin)
-
-      ref.LOAD_FILES({
-        currentFolder: buildResource(resources[0]),
-        files: resources.slice(1).map(buildDeletedResource)
-      })
-      refreshFileListHeaderPosition()
-    })
+    const loadResourcesTask = folderService.getTask()
 
     return {
       fileListHeaderY,
+      refreshFileListHeaderPosition,
       loadResourcesTask,
       paginatedResources,
       paginationPages,

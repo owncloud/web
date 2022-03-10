@@ -53,7 +53,6 @@ import { useFileListHeaderPosition, usePagination, useSort } from '../../composa
 import { useRouteQuery, useStore } from 'web-pkg/src/composables'
 import { computed, unref } from '@vue/composition-api'
 
-import { aggregateResourceShares } from '../../helpers/resources'
 import FileActions from '../../mixins/fileActions'
 import MixinFilesListFilter from '../../mixins/filesListFilter'
 import MixinResources from '../../mixins/resources'
@@ -61,7 +60,6 @@ import MixinMountSideBar from '../../mixins/sidebar/mountSideBar'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../../constants'
 import debounce from 'lodash-es/debounce'
-import { useTask } from 'vue-concurrency'
 
 import ListLoader from '../../components/FilesList/ListLoader.vue'
 import NoContentMessage from '../../components/FilesList/NoContentMessage.vue'
@@ -69,6 +67,7 @@ import ListInfo from '../../components/FilesList/ListInfo.vue'
 import Pagination from '../../components/FilesList/Pagination.vue'
 import ContextActions from '../../components/FilesList/ContextActions.vue'
 import { createLocationSpaces } from '../../router'
+import { folderService } from '../../services/folder'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -100,29 +99,7 @@ export default {
       sortBy
     })
 
-    const loadResourcesTask = useTask(function* (signal, ref) {
-      ref.CLEAR_CURRENT_FILES_LIST()
-      let resources = yield ref.$client.requests.ocs({
-        service: 'apps/files_sharing',
-        action: '/api/v1/shares?format=json&share_types=3&include_tags=false',
-        method: 'GET'
-      })
-
-      resources = yield resources.json()
-      resources = resources.ocs.data
-
-      if (resources.length) {
-        resources = aggregateResourceShares(
-          resources,
-          false,
-          !ref.isOcis,
-          ref.configuration.server,
-          ref.getToken
-        )
-      }
-
-      ref.LOAD_FILES({ currentFolder: null, files: resources })
-    })
+    const loadResourcesTask = folderService.getTask()
 
     return {
       fileListHeaderY,
