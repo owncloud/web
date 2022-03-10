@@ -79,7 +79,7 @@
         @removeShare="removeShare"
       />
     </div>
-    <div v-else>
+    <div v-else-if="share.role">
       <span class="oc-mr-xs" v-text="share.role.label" />
     </div>
   </div>
