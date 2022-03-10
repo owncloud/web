@@ -114,11 +114,11 @@ export default {
       const promises = []
       const spaceShares = []
 
-      for (const role of Object.keys(ref.currentSpace.spaceRoles)) {
-        for (const userId of ref.currentSpace.spaceRoles[role]) {
+      for (const role of Object.keys(ref.space.spaceRoles)) {
+        for (const userId of ref.space.spaceRoles[role]) {
           promises.push(
             graphClient.users.getUser(userId).then((resolved) => {
-              spaceShares.push(buildSpaceShare({ ...resolved.data, role }, ref.currentSpace.id))
+              spaceShares.push(buildSpaceShare({ ...resolved.data, role }, ref.space.id))
             })
           )
         }
