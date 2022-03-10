@@ -53,6 +53,7 @@ export default {
           })
         )
       })
+
       await Promise.all(restorePromises)
 
       // success handler (for partial and full success)

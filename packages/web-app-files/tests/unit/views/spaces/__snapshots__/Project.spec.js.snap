@@ -18,6 +18,12 @@ exports[`Spaces project view space image should show if given 1`] = `
               <ul class="oc-list oc-files-context-actions">
                 <li class="oc-spaces-context-action oc-py-xs oc-px-s">
                   <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="left" gapsize="medium">
+                    <oc-icon-stub name="delete-bin-5" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
+                    Deleted Files
+                  </oc-button-stub>
+                </li>
+                <li class="oc-spaces-context-action oc-py-xs oc-px-s">
+                  <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="left" gapsize="medium">
                     <oc-icon-stub name="information" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
                     Details
                   </oc-button-stub>
@@ -59,6 +65,12 @@ exports[`Spaces project view space readme should show if given 1`] = `
             </oc-button-stub>
             <oc-drop-stub dropid="space-context-drop" toggle="#space-context-btn" position="right-start" mode="click" closeonclick="true" paddingsize="small" options="[object Object]"><input id="space-image-upload-input" type="file" name="file" multiple="multiple" tabindex="-1" accept="image/png,image/jpg,image/jpeg,image/gif">
               <ul class="oc-list oc-files-context-actions">
+                <li class="oc-spaces-context-action oc-py-xs oc-px-s">
+                  <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="left" gapsize="medium">
+                    <oc-icon-stub name="delete-bin-5" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
+                    Deleted Files
+                  </oc-button-stub>
+                </li>
                 <li class="oc-spaces-context-action oc-py-xs oc-px-s">
                   <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="left" gapsize="medium">
                     <oc-icon-stub name="information" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
