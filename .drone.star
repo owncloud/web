@@ -2801,9 +2801,6 @@ def githubComment(alternateSuiteName):
                 "from_secret": "github_token",
             },
         },
-        "commands": [
-            "if [ -s /var/www/owncloud/web/comments.file ]; then echo '%s' | cat - comments.file > temp && mv temp comments.file && /bin/drone-github-comment; fi" % prefix,
-        ],
         "when": {
             "status": [
                 "failure",
