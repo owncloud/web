@@ -86,7 +86,7 @@ Feature: Public link share management
     And the user navigates to the copied public link using the webUI
     Then file "lorem.txt" should be listed on the webUI
 
-  @issue-2090
+
   Scenario: access details dialog of public share and check the tabs displayed
     Given user "Alice" has created file "simple-folder/lorem.txt" in the server
     And user "Alice" has logged in using the webUI

@@ -495,6 +495,3 @@ Other free text and markdown formatting can be used elsewhere in the document if
 
 ### [empty subfolder inside a folder to be uploaded is not created on the server](https://github.com/owncloud/web/issues/6348)
 -   [webUIUpload/upload.feature:42](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/upload.feature#L42)
-
-### [Public link page should not display links and collaborators](https://github.com/owncloud/web/issues/2090)
--   [webUISharingPublicManagement/shareByPublicLink.feature:90](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicManagement/shareByPublicLink.feature#L90)
