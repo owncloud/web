@@ -11,12 +11,14 @@ import {
 import pino from 'pino'
 
 import { config } from '../../config'
-import { api, store } from '../../support'
+import { api, environment } from '../../support'
 import { World } from './world'
 import { state } from './shared'
 import { Browser, chromium, firefox, webkit } from 'playwright'
 
 export { World }
+
+const usersEnvironment = new environment.UsersEnvironment()
 const logger = pino({
   level: config.logLevel,
   transport: {
@@ -26,20 +28,22 @@ const logger = pino({
     }
   }
 })
-
 setDefaultTimeout(config.debug ? -1 : config.timeout * 1000)
 
-BeforeAll(async function () {
+BeforeAll(async function (this: World) {
   if (config.ocis) {
     return
   }
 
-  await api.config.setLocking({ value: false, user: store.userStore.get('admin') })
+  await api.config.setLocking({
+    value: false,
+    user: usersEnvironment.getUser({ id: 'admin' })
+  })
 })
 
 Before(function (this: World, { pickle }: ITestCaseHookParameter) {
   this.feature = pickle
-  this.actorsEnvironment.on('console', async (actorId, message): Promise<void> => {
+  this.actorsEnvironment.on('console', (actorId, message): void => {
     const msg = {
       actor: actorId,
       text: message.text(),
@@ -47,7 +51,6 @@ Before(function (this: World, { pickle }: ITestCaseHookParameter) {
       args: message.args(),
       location: message.location()
     }
-    await this.attach(JSON.stringify(msg), 'application/json')
 
     switch (message.type()) {
       case 'debug':
@@ -95,8 +98,6 @@ After(async function (this: World, { result }: ITestCaseHookParameter) {
   if (!result) {
     return
   }
-
-  await this.attach(`Status: ${result?.status}. Duration:${result.duration?.seconds}s`)
 
   config.reportHar = result.willBeRetried || defaults.reportHar
   config.reportTracing = result.willBeRetried || defaults.reportTracing

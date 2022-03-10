@@ -518,6 +518,8 @@ module.exports = {
         resourceRowXpath + this.elements.shareIndicatorsInFileRow.selector
       const indicators = []
       await this.waitForFileVisible(fileName)
+      await this.waitForAnimationToFinish()
+
       const {
         waitForNegativeConditionTimeout,
         waitForConditionTimeout,
