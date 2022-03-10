@@ -2,7 +2,7 @@
 	"name": "Web | ownCloud",
 	"short_name": "Web",
 	"icons": [{
-		"src": "/img/app.png",
+		"src": "img/app.png",
 		"sizes": "512x512",
 		"type": "image/png"
 	}],
