@@ -108,7 +108,7 @@ Feature: Locks
     And user "brand-new-user" has created a public link with following settings in the server
       | path        | simple-folder                |
       | permissions | read, create, delete, update |
-    When the public uses the webUI to access the last public link created by user "brand-new-user" on a new session
+    When the public uses the webUI to access the last public link created by user "brand-new-user" in a new session
     And the user tries to rename file "lorem.txt" to "a-renamed-file.txt" using the webUI
     Then notifications should be displayed on the webUI with the text
       """
@@ -131,7 +131,7 @@ Feature: Locks
     And user "brand-new-user" has created a public link with following settings in the server
       | path        | simple-folder                |
       | permissions | read, create, delete, update |
-    When the public uses the webUI to access the last public link created by user "brand-new-user" on a new session
+    When the public uses the webUI to access the last public link created by user "brand-new-user" in a new session
     And the user tries to move file "lorem.txt" into folder "simple-empty-folder" using the webUI
     Then notifications should be displayed on the webUI with the text
       """

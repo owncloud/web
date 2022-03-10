@@ -21,7 +21,7 @@ Feature: Create public link shares
       | path        | /simple-folder     |
       | name        | Public link        |
     And a link named "Public link" should be listed with role "Viewer" in the public link list of resource "simple-folder" on the webUI
-    When the public uses the webUI to access the last public link created by user "Alice" on a new session
+    When the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then file "lorem.txt" should be listed on the webUI
 
   @smokeTest @ocisSmokeTest @issue-ocis-reva-383
@@ -37,7 +37,7 @@ Feature: Create public link shares
       | path        | /lorem.txt         |
       | name        | Public link        |
     And a link named "Public link" should be listed with role "Viewer" in the public link list of resource "lorem.txt" on the webUI
-    When the public uses the webUI to access the last public link created by user "Alice" on a new session
+    When the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then file "lorem.txt" should be listed on the webUI
 
   @skipOnOC10 @issue-ocis-reva-383
@@ -54,7 +54,7 @@ Feature: Create public link shares
       | permissions | read               |
       | path        | /simple-folder     |
     And a public link with the last created link share token as name should be listed for resource "simple-folder" on the webUI
-    When the public uses the webUI to access the last public link created by user "Alice" on a new session
+    When the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then file "lorem.txt" should be listed on the webUI
 
   @skipOnOC10 @issue-ocis-reva-383
@@ -70,7 +70,7 @@ Feature: Create public link shares
       | permissions | read               |
       | path        | /lorem.txt         |
     And a public link with the last created link share token as name should be listed for resource "lorem.txt" on the webUI
-    When the public uses the webUI to access the last public link created by user "Alice" on a new session
+    When the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then file "lorem.txt" should be listed on the webUI
 
   @issue-ocis-reva-389
@@ -81,7 +81,7 @@ Feature: Create public link shares
     And user "Alice" has logged in using the webUI
     When the user creates a new public link for folder "aquickbrownfoxjumpsoveraverylazydogaquickbrownfoxjumpsoveralazydog" using the webUI with
       | name | short_linkname |
-    And the public uses the webUI to access the last public link created by user "Alice" on a new session
+    And the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then file "lorem.txt" should be listed on the webUI
 
 

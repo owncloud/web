@@ -95,7 +95,7 @@ Feature: Edit public link shares
     And user "Alice" has logged in using the webUI
     When the user edits the public link named "test_public_link" of folder "simple-folder" changing following but not saving
       | password | qwertyui |
-    And the public uses the webUI to access the last public link created by user "Alice" with password "qwertyui" on a new session
+    And the public uses the webUI to access the last public link created by user "Alice" with password "qwertyui" in a new session
     Then the public should not get access to the publicly shared file
 
   Scenario: user edits a name of an already existing public link
@@ -109,7 +109,7 @@ Feature: Edit public link shares
       | password    | pass123       |
     When the user edits the public link named "Public-link" of folder "simple-folder" changing following
       | name | simple-folder Share |
-    And the public uses the webUI to access the last public link created by user "Alice" with password "pass123" on a new session
+    And the public uses the webUI to access the last public link created by user "Alice" with password "pass123" in a new session
     Then file "lorem.txt" should be listed on the webUI
 
   Scenario: user edits the password of an already existing public link
@@ -123,7 +123,7 @@ Feature: Edit public link shares
     And user "Alice" has logged in using the webUI
     When the user edits the public link named "Public-link" of folder "simple-folder" changing following
       | password | qwertyui |
-    And the public uses the webUI to access the last public link created by user "Alice" with password "qwertyui" on a new session
+    And the public uses the webUI to access the last public link created by user "Alice" with password "qwertyui" in a new session
     Then file "lorem.txt" should be listed on the webUI
 
   @issue-3830
@@ -138,7 +138,7 @@ Feature: Edit public link shares
     And user "Alice" has logged in using the webUI
     When the user tries to edit the public link named "Public-link" of folder "simple-folder" changing following
       | password | qwertyui |
-    And the public uses the webUI to access the last public link created by user "Alice" with password "pass123" on a new session
+    And the public uses the webUI to access the last public link created by user "Alice" with password "pass123" in a new session
     Then the public should not get access to the publicly shared file
 
   @issue-ocis-reva-292
@@ -152,7 +152,7 @@ Feature: Edit public link shares
     And user "Alice" has logged in using the webUI
     When the user edits the public link named "Public-link" of folder "simple-folder" changing following
       | role | Viewer |
-    And the public uses the webUI to access the last public link created by user "Alice" on a new session
+    And the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then file "lorem.txt" should be listed on the webUI
     And it should not be possible to delete file "lorem.txt" using the webUI
 
@@ -168,7 +168,7 @@ Feature: Edit public link shares
     And user "Alice" has logged in using the webUI
     When the user edits the public link named "Public-link" of folder "simple-folder" changing following
       | role | Editor |
-    And the public uses the webUI to access the last public link created by user "Alice" on a new session
+    And the public uses the webUI to access the last public link created by user "Alice" in a new session
     And the user deletes the following elements using the webUI
       | name                |
       | simple-empty-folder |
@@ -198,7 +198,7 @@ Feature: Edit public link shares
     And user "Alice" has logged in using the webUI
     When the user edits the public link named "Public-link" of folder "simple-folder" changing following
       | role | Contributor |
-    And the public uses the webUI to access the last public link created by user "Alice" on a new session
+    And the public uses the webUI to access the last public link created by user "Alice" in a new session
     And the user uploads file "lorem.txt" using the webUI
     Then file "simple.txt" should be listed on the webUI
     And file "lorem.txt" should be listed on the webUI
@@ -212,5 +212,5 @@ Feature: Edit public link shares
     And user "Alice" has logged in using the webUI
     When the user edits the public link named "Public-link" of file "lorem.txt" changing following
       | password | pass123 |
-    And the public uses the webUI to access the last public link created by user "Alice" with password "pass123" on a new session
+    And the public uses the webUI to access the last public link created by user "Alice" with password "pass123" in a new session
     Then file "lorem.txt" should be listed on the webUI

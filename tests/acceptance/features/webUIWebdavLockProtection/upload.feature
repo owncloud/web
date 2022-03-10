@@ -78,7 +78,7 @@ Feature: Locks
     And user "brand-new-user" has created a public link with following settings in the server
       | path        | simple-folder                |
       | permissions | read, create, delete, update |
-    When the public uses the webUI to access the last public link created by user "brand-new-user" on a new session
+    When the public uses the webUI to access the last public link created by user "brand-new-user" in a new session
     And the user uploads overwriting file "lorem.txt" using the webUI
     Then notifications should be displayed on the webUI with the text
       """

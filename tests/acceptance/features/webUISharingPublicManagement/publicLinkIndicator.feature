@@ -102,7 +102,7 @@ Feature: Public link share indicator
     And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
     And user "Brian" has shared folder "simple-folder/simple-empty-folder" with user "Carol" in the server
     And user "Brian" has shared folder "simple-folder" with link with "read" permissions in the server
-    When the public uses the webUI to access the last public link created by user "Brian" on a new session
+    When the public uses the webUI to access the last public link created by user "Brian" in a new session
     Then the following resources should not have share indicators on the webUI
       | simple-empty-folder |
 

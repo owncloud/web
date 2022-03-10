@@ -58,14 +58,14 @@ When(
 )
 
 When(
-  'the public uses the webUI to access the last public link created by user {string} on a new session',
+  'the public uses the webUI to access the last public link created by user {string} in a new session',
   function (linkCreator) {
     return loadPublicLink(linkCreator)
   }
 )
 
 When(
-  'the public uses the webUI to access the last public link created by user {string} with password {string} on a new session',
+  'the public uses the webUI to access the last public link created by user {string} with password {string} in a new session',
   function (linkCreator, password) {
     return loadPublicLinkWithPassword(linkCreator, password)
   }
