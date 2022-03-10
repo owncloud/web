@@ -51,14 +51,16 @@ Feature: File Upload
 
 
   Scenario: overwrite an existing file
+    Given user "Alice" has created file "'single'quotes.txt" in the server
+    And user "Alice" has created file "strängé filename (duplicate #2 &).txt" in the server
+    And user "Alice" has created file "zzzz-must-be-last-file-in-folder.txt" in the server
+    And the user has reloaded the current page of the webUI
     When the user uploads overwriting file "'single'quotes.txt" using the webUI
     Then file "'single'quotes.txt" should be listed on the webUI
     And as "Alice" the content of "'single'quotes.txt" in the server should be the same as the content of local file "'single'quotes.txt"
-
     When the user uploads overwriting file "strängé filename (duplicate #2 &).txt" using the webUI
     Then file "strängé filename (duplicate #2 &).txt" should be listed on the webUI
     And as "Alice" the content of "strängé filename (duplicate #2 &).txt" in the server should be the same as the content of local file "strängé filename (duplicate #2 &).txt"
-
     When the user uploads overwriting file "zzzz-must-be-last-file-in-folder.txt" using the webUI
     Then file "zzzz-must-be-last-file-in-folder.txt" should be listed on the webUI
     And as "Alice" the content of "zzzz-must-be-last-file-in-folder.txt" in the server should be the same as the content of local file "zzzz-must-be-last-file-in-folder.txt"

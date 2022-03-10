@@ -15,9 +15,9 @@ module.exports = {
     search: function (searchTerm, global = false) {
       if (global === true) {
         return this.initAjaxCounters()
-          .isVisible('#files-open-search-btn', (result) => {
+          .isVisible({ selector: '@openSearchButton', suppressNotFoundErrors: true }, (result) => {
             if (result.value === true) {
-              this.click('#files-open-search-btn')
+              this.click('@openSearchButton')
                 .waitForElementVisible('@searchInputFieldLowResolution')
                 .setValue('@searchInputFieldLowResolution', [searchTerm])
                 .click('@searchGlobalButton')
@@ -31,18 +31,24 @@ module.exports = {
           .waitForOutstandingAjaxCalls()
       }
       return this.initAjaxCounters()
-        .isVisible('#files-open-search-btn', (result) => {
-          if (result.value === true) {
-            this.click('#files-open-search-btn')
-              .waitForElementVisible('@searchInputFieldLowResolution')
-              .setValue('@searchInputFieldLowResolution', [searchTerm, this.api.Keys.ENTER])
-          } else {
-            this.waitForElementVisible('@searchInputFieldHighResolution').setValue(
-              '@searchInputFieldHighResolution',
-              [searchTerm, this.api.Keys.ENTER]
-            )
+        .isVisible(
+          {
+            selector: '@openSearchButton',
+            suppressNotFoundErrors: true
+          },
+          (result) => {
+            if (result.value === true) {
+              this.click('@openSearchButton')
+                .waitForElementVisible('@searchInputFieldLowResolution')
+                .setValue('@searchInputFieldLowResolution', [searchTerm, this.api.Keys.ENTER])
+            } else {
+              this.waitForElementVisible('@searchInputFieldHighResolution').setValue(
+                '@searchInputFieldHighResolution',
+                [searchTerm, this.api.Keys.ENTER]
+              )
+            }
           }
-        })
+        )
         .waitForElementNotVisible('@searchLoadingIndicator')
         .waitForOutstandingAjaxCalls()
     },
@@ -54,11 +60,16 @@ module.exports = {
       let isAppNavigationVisible = false
 
       // Check if the navigation is visible
-      await this.api.element('@appNavigation', (result) => {
-        if (result.status > -1) {
-          isAppNavigationVisible = true
+      await this.isVisible(
+        {
+          selector: '@appNavigation',
+          timeout: this.api.globals.waitForNegativeConditionTimeout,
+          suppressNotFoundErrors: true
+        },
+        (result) => {
+          isAppNavigationVisible = result.value === true
         }
-      })
+      )
 
       // If app navigation is not visible, try to click on the menu button
       if (!isAppNavigationVisible) {
@@ -178,7 +189,7 @@ module.exports = {
      */
     clearAllErrorMessages: async function () {
       let notificationElements, cancelButtons
-      await this.api.element('@messages', (result) => {
+      await this.api.element('@errorMessages', (result) => {
         notificationElements = result.value.ELEMENT
       })
       if (!notificationElements) {
@@ -199,10 +210,13 @@ module.exports = {
     browseToUserProfile: function () {
       return this.click('@userMenuButton')
     },
-    getDisplayedMessage: async function (titleOnly = false) {
+    getDisplayedMessage: async function (type, titleOnly = false) {
       let element = ''
       let displayedmessage
-      const selector = titleOnly ? '@message' : '@messages'
+      let selector = titleOnly ? '@message' : '@messages'
+      if (type === 'error') {
+        selector = titleOnly ? '@errorMessage' : '@errorMessages'
+      }
       await this.waitForElementVisible(selector)
       await this.api.element(selector, (result) => {
         element = result.value.ELEMENT
@@ -222,8 +236,8 @@ module.exports = {
     },
     getPopupErrorMessages: async function () {
       const messages = []
-      await this.waitForElementVisible('@messages')
-      await this.api.elements('@messages', function ({ value }) {
+      await this.waitForElementVisible('@errorMessages')
+      await this.api.elements('@errorMessages', function ({ value }) {
         value.forEach(async function ({ ELEMENT }) {
           await client.elementIdText(ELEMENT, function ({ value }) {
             messages.push(value)
@@ -234,14 +248,13 @@ module.exports = {
     },
     hasErrorMessage: async function (expectedVisible = true) {
       let visible = false
-      let timeout = 5000
-      if (!expectedVisible) {
-        timeout = 500
-      }
+      const timeout = expectedVisible
+        ? this.api.globals.waitForConditionTimeout
+        : this.api.globals.waitForNegativeConditionTimeout
 
       const selector = {
-        selector: this.elements.message.selector,
-        locateStrategy: this.elements.message.locateStrategy
+        selector: this.elements.errorMessage.selector,
+        locateStrategy: this.elements.errorMessage.locateStrategy
       }
 
       await this.isVisible(
@@ -261,6 +274,15 @@ module.exports = {
     },
     messages: {
       selector: '//*[contains(@class, "oc-notification-message")]',
+      locateStrategy: 'xpath'
+    },
+    errorMessage: {
+      selector:
+        '//*[contains(@class, "oc-notification-message-danger")]/div/div[contains(@class, "oc-notification-message-title")]',
+      locateStrategy: 'xpath'
+    },
+    errorMessages: {
+      selector: '//*[contains(@class, "oc-notification-message-danger")]',
       locateStrategy: 'xpath'
     },
     clearErrorMessage: {
@@ -290,6 +312,9 @@ module.exports = {
     searchGlobalButton: {
       selector: '//button[.="Search all files ↵"]',
       locateStrategy: 'xpath'
+    },
+    openSearchButton: {
+      selector: '#files-open-search-btn'
     },
     userMenuButton: {
       selector: '#_userMenuButton'

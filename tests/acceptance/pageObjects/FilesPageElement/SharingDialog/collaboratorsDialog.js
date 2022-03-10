@@ -57,18 +57,23 @@ module.exports = {
       this.useXpath().waitForElementVisible(editExpirationSelector).click(editExpirationSelector)
       return client.page.FilesPageElement.expirationDatePicker()
     },
-    hasCollaboratorsList: async function () {
+    hasCollaboratorsList: async function (expectCollaborator = true) {
       let isVisible = false
       const element = this.elements.collaboratorsList
+
+      const timeout = expectCollaborator
+        ? this.api.globals.waitForConditionTimeout
+        : this.api.globals.waitForNegativeConditionTimeout
+
       await this.isVisible(
         {
           locateStrategy: element.locateStrategy,
           selector: element.selector,
-          timeout: timeoutHelper.parseTimeout(this.api.globals.waitForNegativeConditionTimeout)
+          timeout: timeoutHelper.parseTimeout(timeout),
+          suppressNotFoundErrors: !expectCollaborator
         },
         (result) => {
-          console.log(result)
-          isVisible = result.status !== -1
+          isVisible = result.value === true
         }
       )
       return isVisible

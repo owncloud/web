@@ -97,7 +97,7 @@ module.exports = {
     ) {
       await this.openContextMenu(fromName, elementType)
       await contextMenu.selectRenameFile()
-      return await fileActionsMenu.rename(toName, expectToSucceed)
+      return await fileActionsMenu.rename(toName, expectToSucceed, true)
     },
     /**
      * @param {string} resource
@@ -125,6 +125,23 @@ module.exports = {
      * @return {Promise<module.exports.commands>}
      */
     restoreFile: async function (resource, elementType = 'any') {
+      // if there is popup message then wait for it to disappear
+      await this.isVisible(
+        {
+          selector: this.page.webPage().elements.message.__selector,
+          locateStrategy: this.page.webPage().elements.message.locateStrategy,
+          timeout: this.api.globals.waitForNegativeConditionTimeout,
+          suppressNotFoundErrors: true
+        },
+        (result) => {
+          if (result.value === true) {
+            this.waitForElementNotPresent({
+              selector: this.page.webPage().elements.message.__selector,
+              locateStrategy: this.page.webPage().elements.message.locateStrategy
+            })
+          }
+        }
+      )
       await this.openFileActionsMenu(resource, elementType)
       await fileActionsMenu.restore()
       return this
@@ -243,7 +260,7 @@ module.exports = {
      */
     openSideBar: async function (resource, elementType = 'any') {
       // nothing to do if already open for correct resource
-      if (await appSideBar.isSideBarOpenForResource(resource, elementType)) {
+      if (await appSideBar.isSideBarOpenForResource(resource, elementType, false)) {
         return appSideBar
       }
 

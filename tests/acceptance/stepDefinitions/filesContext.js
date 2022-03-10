@@ -867,7 +867,7 @@ Then('the app-sidebar should be visible', async function () {
 })
 
 Then('the app-sidebar should be invisible', async function () {
-  const visible = await client.page.FilesPageElement.appSideBar().isSideBarOpen()
+  const visible = await client.page.FilesPageElement.appSideBar().isSideBarOpen(false)
   assert.strictEqual(visible, false, 'app-sidebar should be invisible, but is not')
 })
 

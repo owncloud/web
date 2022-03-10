@@ -73,15 +73,27 @@ module.exports = {
      * @param {boolean} expectToSucceed
      * @return {*}
      */
-    rename: async function (toName, expectToSucceed = true) {
-      await this.performFileAction(this.FileAction.rename)
+    rename: async function (toName, expectToSucceed = true, fromContextMenu = false) {
+      if (!fromContextMenu) {
+        await this.performFileAction(this.FileAction.rename)
+      }
       await this.useXpath()
         .waitForElementVisible('@dialog')
         .waitForAnimationToFinish() // wait for transition on the modal to finish
         .clearValue('@dialogInput')
         .setValue('@dialogInput', toName)
-        .click('@dialogConfirmBtnEnabled')
         .useCss()
+
+      const timeout = expectToSucceed
+        ? this.api.globals.waitForConditionTimeout
+        : this.api.globals.waitForNegativeConditionTimeout
+      await this.click(
+        {
+          selector: '@dialogConfirmBtnEnabled',
+          suppressNotFoundErrors: !expectToSucceed
+        },
+        timeout
+      )
 
       if (expectToSucceed) {
         await this.waitForElementNotPresent('@dialog')

@@ -80,7 +80,16 @@ module.exports = {
         await this.setValue('@dialogInput', name)
       }
 
-      await this.click('@dialogConfirmBtnEnabled').waitForAjaxCallsToStartAndFinish()
+      const timeout = expectToSucceed
+        ? this.api.globals.waitForConditionTimeout
+        : this.api.globals.waitForNegativeConditionTimeout
+      await this.click(
+        {
+          selector: '@dialogConfirmBtnEnabled',
+          suppressNotFoundErrors: !expectToSucceed
+        },
+        timeout
+      ).waitForAjaxCallsToStartAndFinish()
 
       if (expectToSucceed) {
         await this.waitForElementNotPresent('@dialog')
@@ -112,7 +121,16 @@ module.exports = {
         await this.setValue('@dialogInput', name)
       }
 
-      await this.click('@dialogConfirmBtnEnabled')
+      const timeout = expectToSucceed
+        ? this.api.globals.waitForConditionTimeout
+        : this.api.globals.waitForNegativeConditionTimeout
+      await this.click(
+        {
+          selector: '@dialogConfirmBtnEnabled',
+          suppressNotFoundErrors: !expectToSucceed
+        },
+        timeout
+      )
 
       if (expectToSucceed) {
         await this.waitForElementNotPresent('@dialog')
@@ -220,6 +238,7 @@ module.exports = {
     },
     confirmFileOverwrite: async function () {
       await this.waitForAnimationToFinish() // wait for transition on the modal to finish
+        .waitForElementVisible('@dialogConfirmBtnEnabled')
         .click('@dialogConfirmBtnEnabled')
         .waitForElementNotPresent('@dialog')
         .waitForAjaxCallsToStartAndFinish()
@@ -263,7 +282,18 @@ module.exports = {
         await this.setValue('@dialogInput', name)
       }
 
-      await this.initAjaxCounters().click('@dialogConfirmBtnEnabled').waitForOutstandingAjaxCalls()
+      const timeout = expectToSucceed
+        ? this.api.globals.waitForConditionTimeout
+        : this.api.globals.waitForNegativeConditionTimeout
+      await this.initAjaxCounters()
+        .click(
+          {
+            selector: '@dialogConfirmBtnEnabled',
+            suppressNotFoundErrors: !expectToSucceed
+          },
+          timeout
+        )
+        .waitForOutstandingAjaxCalls()
 
       if (expectToSucceed) {
         await this.waitForElementNotPresent('@dialog')
@@ -298,7 +328,8 @@ module.exports = {
       await this.isVisible(
         {
           selector: '@clearSelectionBtn',
-          timeout: client.globals.waitForNegativeConditionTimeout
+          timeout: client.globals.waitForNegativeConditionTimeout,
+          suppressNotFoundErrors: true
         },
         (result) => {
           activeFileSelection = result.value === true
