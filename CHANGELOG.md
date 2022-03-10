@@ -195,6 +195,7 @@ Details
 
    https://github.com/owncloud/web/issues/6283
    https://github.com/owncloud/web/pull/6455
+   https://github.com/owncloud/web/pull/6572
 
 * Enhancement - Implement the spaces permission concept: [#6531](https://github.com/owncloud/web/pull/6531)
 
