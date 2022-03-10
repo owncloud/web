@@ -19,7 +19,7 @@ export default {
     $_deleteResources_isInTrashbin() {
       return (
         isLocationTrashActive(this.$router, 'files-trash-personal') ||
-        isLocationTrashActive(this.$router, 'files-trash-project')
+        isLocationTrashActive(this.$router, 'files-trash-spaces-project')
       )
     },
 

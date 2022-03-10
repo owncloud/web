@@ -2,13 +2,13 @@ import { RouteComponents } from './router'
 import { Location, RouteConfig } from 'vue-router'
 import { createLocation, $gettext, isLocationActiveDirector } from './utils'
 
-type trashTypes = 'files-trash-personal' | 'files-trash-project'
+type trashTypes = 'files-trash-personal' | 'files-trash-spaces-project'
 
 export const createLocationTrash = (name: trashTypes, location = {}): Location =>
   createLocation(name, location)
 
 export const locationTrashPersonal = createLocationTrash('files-trash-personal')
-export const locationTrashProject = createLocationTrash('files-trash-project')
+export const locationTrashProject = createLocationTrash('files-trash-spaces-project')
 
 export const isLocationTrashActive = isLocationActiveDirector<trashTypes>(
   locationTrashPersonal,
@@ -32,7 +32,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
       },
       {
         name: locationTrashProject.name,
-        path: 'project/:spaceId',
+        path: 'spaces/projects/:spaceId',
         component: components.Spaces.Trashbin,
         meta: {
           hideFilelistActions: true,

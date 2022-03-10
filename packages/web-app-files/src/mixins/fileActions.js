@@ -64,7 +64,7 @@ export default {
     $_fileActions_editorActions() {
       if (
         isLocationTrashActive(this.$router, 'files-trash-personal') ||
-        isLocationTrashActive(this.$router, 'files-trash-project')
+        isLocationTrashActive(this.$router, 'files-trash-spaces-project')
       ) {
         return []
       }
@@ -209,7 +209,7 @@ export default {
     $_fileActions_loadExternalAppActions(resources) {
       if (
         isLocationTrashActive(this.$router, 'files-trash-personal') ||
-        isLocationTrashActive(this.$router, 'files-trash-project')
+        isLocationTrashActive(this.$router, 'files-trash-spaces-project')
       ) {
         return []
       }

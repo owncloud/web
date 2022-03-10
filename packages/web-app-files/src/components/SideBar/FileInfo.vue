@@ -63,7 +63,7 @@ export default {
 
       if (
         isLocationTrashActive(this.$router, 'files-trash-personal') ||
-        isLocationTrashActive(this.$router, 'files-trash-project')
+        isLocationTrashActive(this.$router, 'files-trash-spaces-project')
       ) {
         return interpolate({
           sourceTime: this.file.ddate,

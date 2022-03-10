@@ -63,7 +63,8 @@ import { DavProperties } from 'web-pkg/src/constants'
 import {
   isLocationPublicActive,
   isLocationSharesActive,
-  isLocationSpacesActive
+  isLocationSpacesActive,
+  isLocationTrashActive
 } from '../../router'
 import { useActiveLocation } from '../../composables'
 
@@ -92,7 +93,11 @@ export default {
       isPersonalLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-personal-home'),
       isPublicLocation: useActiveLocation(isLocationPublicActive, 'files-public-files'),
       isSpacesProjectsLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-projects'),
-      isSpacesProjectLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-project')
+      isSpacesProjectLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-project'),
+      isTrashSpacesProjectActive: useActiveLocation(
+        isLocationTrashActive,
+        'files-trash-spaces-project'
+      )
     }
   },
   data: () => ({
@@ -113,6 +118,9 @@ export default {
     ...mapState('Files', ['areHiddenFilesShown']),
 
     showContextActions() {
+      if (this.isTrashSpacesProjectActive) {
+        return false
+      }
       if (this.isSpacesProjectLocation) {
         return this.currentFolder && this.breadcrumbs.length > 2
       }
@@ -166,10 +174,28 @@ export default {
           this.isPublicLocation ||
           this.isPersonalLocation ||
           this.isSpacesProjectsLocation ||
-          this.isSpacesProjectLocation
+          this.isSpacesProjectLocation ||
+          this.isTrashSpacesProjectActive
         )
       ) {
         return []
+      }
+
+      if (this.isTrashSpacesProjectActive) {
+        return [
+          {
+            text: this.$gettext('Spaces'),
+            to: '/files/spaces/projects'
+          },
+          {
+            text: this.$route.params.spaceId,
+            to: `/files/spaces/projects/${this.$route.params.spaceId}`
+          },
+          {
+            text: this.$gettext('Deleted Files'),
+            onClick: () => bus.publish('app.files.list.load')
+          }
+        ]
       }
 
       const { params: routeParams, path: routePath } = this.$route

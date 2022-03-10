@@ -9,7 +9,7 @@
         icon="delete-bin-5"
       >
         <template #message>
-          <span v-translate>Space have no deleted files</span>
+          <span v-translate>You have no deleted files</span>
         </template>
       </no-content-message>
       <resource-table
@@ -49,24 +49,18 @@ import { mapGetters, mapMutations, mapState } from 'vuex'
 import { computed, unref } from '@vue/composition-api'
 import ResourceTable, { determineSortFields } from '../../components/FilesList/ResourceTable.vue'
 
-import {
-  buildDeletedResource,
-  buildResource,
-  buildWebDavFilesTrashPath
-} from '../../helpers/resources'
 import MixinFilesListFilter from '../../mixins/filesListFilter'
 import MixinResources from '../../mixins/resources'
 import MixinMountSideBar from '../../mixins/sidebar/mountSideBar'
 import { useFileListHeaderPosition, usePagination, useSort } from '../../composables'
 import { useRouteQuery, useStore } from 'web-pkg/src/composables'
-import { useTask } from 'vue-concurrency'
 
 import ListLoader from '../../components/FilesList/ListLoader.vue'
 import NoContentMessage from '../../components/FilesList/NoContentMessage.vue'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
 import Pagination from '../../components/FilesList/Pagination.vue'
 import ContextActions from '../../components/FilesList/ContextActions.vue'
-import { DavProperties } from 'web-pkg/src/constants'
+import { folderService } from '../../services/folder'
 import { bus } from 'web-pkg/src/instance'
 
 export default {
@@ -98,23 +92,11 @@ export default {
       sortDir
     })
 
-    const loadResourcesTask = useTask(function* (signal, ref) {
-      ref.CLEAR_CURRENT_FILES_LIST()
-      const resources = yield ref.$client.fileTrash.list(
-        buildWebDavFilesTrashPath(ref.user.id),
-        '1',
-        DavProperties.Trashbin
-      )
-
-      ref.LOAD_FILES({
-        currentFolder: buildResource(resources[0]),
-        files: resources.slice(1).map(buildDeletedResource)
-      })
-      refreshFileListHeaderPosition()
-    })
+    const loadResourcesTask = folderService.getTask()
 
     return {
       fileListHeaderY,
+      refreshFileListHeaderPosition,
       loadResourcesTask,
       paginatedResources,
       paginationPages,
@@ -128,7 +110,6 @@ export default {
   computed: {
     ...mapState('Files', ['files']),
     ...mapGetters('Files', ['highlightedFile', 'selectedFiles', 'totalFilesCount']),
-    ...mapGetters(['user']),
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
     selected: {
@@ -148,7 +129,7 @@ export default {
   created() {
     this.loadResourcesTask.perform(this)
 
-    const loadResourcesEventToken = bus.subscribe('app.files.list.load', (path) => {
+    const loadResourcesEventToken = bus.subscribe('app.files.list.load', () => {
       this.loadResourcesTask.perform(this)
     })
 

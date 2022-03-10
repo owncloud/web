@@ -37,7 +37,7 @@ export default {
       // return hardcoded `actions-item` in all cases once we have them.
       await this.openSidebarWithPanel(
         isLocationTrashActive(this.$router, 'files-trash-personal') ||
-          isLocationTrashActive(this.$router, 'files-trash-project')
+          isLocationTrashActive(this.$router, 'files-trash-spaces-project')
           ? null
           : 'actions-item'
       )

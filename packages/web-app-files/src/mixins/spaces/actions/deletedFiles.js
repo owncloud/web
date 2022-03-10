@@ -13,7 +13,6 @@ export default {
           handler: this.$_deletedFiles_trigger,
           isEnabled: ({ resources }) => {
             return resources.length === 1
-
           },
           componentType: 'oc-button',
           class: 'oc-files-actions-delete-trigger'
@@ -24,7 +23,7 @@ export default {
   methods: {
     $_deletedFiles_trigger({ resources }) {
       this.$router.push(
-        createLocationTrash('files-trash-project', {
+        createLocationTrash('files-trash-spaces-project', {
           params: {
             spaceId: resources[0].id
           }
