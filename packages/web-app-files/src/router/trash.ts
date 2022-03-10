@@ -18,6 +18,7 @@ export const isLocationTrashActive = isLocationActiveDirector<trashTypes>(
 export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
   {
     path: '/trash',
+    redirect: (to) => createLocationTrash('files-trash-personal', to),
     component: components.App,
     children: [
       {

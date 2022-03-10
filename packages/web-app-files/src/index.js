@@ -79,7 +79,7 @@ const navItems = [
     name: $gettext('Deleted files'),
     icon: 'delete-bin-5',
     route: {
-      path: `/${appInfo.id}/trash/personal`
+      path: `/${appInfo.id}/trash`
     },
     enabled(capabilities) {
       return capabilities.dav && capabilities.dav.trashbin === '1.0'
