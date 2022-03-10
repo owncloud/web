@@ -1,0 +1,6 @@
+Bugfix: Sidebar panels in public links
+
+Public links were showing some panels (People, Links, Versions) that were not supposed to be visible in public links. We've fixed that by excluding those panels on public link routes.
+
+https://github.com/owncloud/web/issues/2090
+https://github.com/owncloud/web/pull/6567
