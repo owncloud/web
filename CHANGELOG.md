@@ -12,10 +12,12 @@ Summary
 * Bugfix - File handling in apps: [#6456](https://github.com/owncloud/web/pull/6456)
 * Bugfix - Pressing enter in forms: [#6548](https://github.com/owncloud/web/pull/6548)
 * Bugfix - Show no auth popup on password protected public links in ownCloud 10: [#6530](https://github.com/owncloud/web/pull/6530)
+* Bugfix - Sidebar panels in public links: [#2090](https://github.com/owncloud/web/issues/2090)
 * Bugfix - Don't write error message on passing ReadmeContentModal.spec.js test: [#6525](https://github.com/owncloud/web/pull/6525)
 * Bugfix - Resolve private links: [#5654](https://github.com/owncloud/web/pull/5654)
 * Bugfix - Prevent cross-site scripting attack while displaying space description: [#6523](https://github.com/owncloud/web/pull/6523)
 * Bugfix - Prevent the member count inside a space from disappearing: [#6550](https://github.com/owncloud/web/pull/6550)
+* Bugfix - TypeErrors when trying to destruct undefined properties: [#6568](https://github.com/owncloud/web/pull/6568)
 * Enhancement - Don't block account page while groups are loading: [#6547](https://github.com/owncloud/web/pull/6547)
 * Enhancement - Add a watcher for the share panel of a space: [#6543](https://github.com/owncloud/web/pull/6543)
 * Enhancement - Contextmenu background hover: [#6553](https://github.com/owncloud/web/pull/6553)
@@ -65,6 +67,14 @@ Details
    https://github.com/owncloud/web/pull/6530
    https://github.com/owncloud/owncloud-sdk/pull/1020
 
+* Bugfix - Sidebar panels in public links: [#2090](https://github.com/owncloud/web/issues/2090)
+
+   Public links were showing some panels (People, Links, Versions) that were not supposed to be
+   visible in public links. We've fixed that by excluding those panels on public link routes.
+
+   https://github.com/owncloud/web/issues/2090
+   https://github.com/owncloud/web/pull/6567
+
 * Bugfix - Don't write error message on passing ReadmeContentModal.spec.js test: [#6525](https://github.com/owncloud/web/pull/6525)
 
    ReadmeContentModal.spec.js test doesn't write error output anymore while passing
@@ -94,6 +104,13 @@ Details
    the space to disappear.
 
    https://github.com/owncloud/web/pull/6550
+
+* Bugfix - TypeErrors when trying to destruct undefined properties: [#6568](https://github.com/owncloud/web/pull/6568)
+
+   We fixed TypeErrors when trying to destruct undefined properties in the space permissions
+   checks by providing a default value.
+
+   https://github.com/owncloud/web/pull/6568
 
 * Enhancement - Don't block account page while groups are loading: [#6547](https://github.com/owncloud/web/pull/6547)
 
