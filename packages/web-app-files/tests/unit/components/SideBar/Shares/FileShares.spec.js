@@ -6,7 +6,6 @@ import DesignSystem from 'owncloud-design-system'
 import Users from '@/__fixtures__/users'
 import Collaborators from '@/__fixtures__/collaborators'
 import mockAxios from 'jest-mock-axios'
-import { buildSpace } from '../../../../../src/helpers/resources'
 import { spaceRoleManager } from '../../../../../src/helpers/share'
 import VueCompositionAPI from '@vue/composition-api/dist/vue-composition-api'
 
@@ -125,25 +124,27 @@ describe('FileShares', () => {
       }
       mockAxios.request.mockImplementationOnce(() => {
         return Promise.resolve({
+          data: spaceMock
+        })
+      })
+      mockAxios.request.mockImplementationOnce(() => {
+        return Promise.resolve({
           data: { role: spaceRoleManager.name }
         })
       })
 
-      const wrapper = getShallowMountedWrapper({
-        user,
-        space: buildSpace(spaceMock)
-      })
+      const wrapper = getShallowMountedWrapper({ user })
 
+      await wrapper.vm.loadSpaceTask.last
       await wrapper.vm.loadSpaceMembersTask.last
       expect(wrapper.vm.spaceMembers.length).toBe(1)
       expect(wrapper.find('#space-collaborators-list').exists()).toBeTruthy()
     })
-    it('does not load space members if no space is given', async () => {
+    it('does not load space members if no space is given', () => {
       const wrapper = getShallowMountedWrapper({
         user
       })
 
-      await wrapper.vm.loadSpaceMembersTask.last
       expect(wrapper.vm.spaceMembers.length).toBe(0)
     })
   })
@@ -280,9 +281,11 @@ function getShallowMountedWrapper(data, loading = false) {
       'oc-icon': true,
       'oc-spinner': true
     },
-    provide: {
-      currentSpace: {
-        value: data.space
+    mocks: {
+      $route: {
+        params: {
+          spaceId: 1
+        }
       }
     }
   })
