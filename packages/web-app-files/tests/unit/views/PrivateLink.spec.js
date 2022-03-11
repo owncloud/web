@@ -1,6 +1,7 @@
 import { shallowMount } from '@vue/test-utils'
 import { getRouter, getStore, localVue } from './views.setup'
 import PrivateLink from '@files/src/views/PrivateLink.vue'
+import fileFixtures from '../../../../../__fixtures__/files'
 
 localVue.prototype.$client.files = {
   getPathForFileId: jest.fn(() => Promise.resolve('/lorem.txt'))
@@ -40,7 +41,7 @@ describe('PrivateLink view', () => {
       expect(wrapper.find(selectors.pageTitle)).toMatchSnapshot()
     })
     it('should resolve the provided file id to a path', () => {
-      expect(localVue.prototype.$client.files.getPathForFileId).toHaveBeenCalledTimes(1)
+      expect(wrapper.vm.$client.files.getPathForFileId).toHaveBeenCalledTimes(1)
     })
   })
 
@@ -54,11 +55,11 @@ describe('PrivateLink view', () => {
 
   describe('when there was an error', () => {
     it('should display the error message', async () => {
-      const errMsg = 'some error'
-      localVue.prototype.$client.files = {
-        getPathForFileId: jest.fn(() => Promise.reject(Error(errMsg)))
-      }
-      const wrapper = getShallowWrapper()
+      jest.spyOn(console, 'error').mockImplementation(() => {})
+      const wrapper = getShallowWrapper(
+        false,
+        jest.fn(() => Promise.reject(Error('some error')))
+      )
 
       await new Promise((resolve) => {
         setTimeout(() => {
@@ -78,13 +79,19 @@ describe('PrivateLink view', () => {
   })
 })
 
-function getShallowWrapper(loading = false) {
+function getShallowWrapper(loading = false, getPathForFileIdMock = jest.fn()) {
   return shallowMount(PrivateLink, {
     localVue,
     store: createStore(),
     mocks: {
       $route,
-      $router: getRouter({})
+      $router: getRouter({}),
+      $client: {
+        files: {
+          fileInfo: jest.fn().mockImplementation(() => Promise.resolve(fileFixtures['/'][4])),
+          getPathForFileId: getPathForFileIdMock
+        }
+      }
     },
     data() {
       return {
@@ -96,6 +103,7 @@ function getShallowWrapper(loading = false) {
 
 function createStore() {
   return getStore({
-    slogan: theme.general.slogan
+    slogan: theme.general.slogan,
+    user: { id: 1 }
   })
 }
