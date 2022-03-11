@@ -32,12 +32,31 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['showMessage']),
+    ...mapActions(['showMessage', 'createModal', 'hideModal', 'toggleModalConfirmButton']),
     ...mapActions('Files', ['clearTrashBin']),
+
     $_emptyTrashBin_trigger() {
+      const modal = {
+        variation: 'danger',
+        title: this.$gettext('Empty trash'),
+        cancelText: this.$gettext('Cancel'),
+        confirmText: this.$gettext('Delete'),
+        icon: 'alarm-warning',
+        message: this.$gettext(
+          'Are you sure you want to permanently delete your items in the trash? You can’t undo this action.'
+        ),
+        hasInput: false,
+        onCancel: this.hideModal,
+        onConfirm: () => this.$_emptyTrashBin_emptyTrashBin()
+      }
+
+      this.createModal(modal)
+    },
+    $_emptyTrashBin_emptyTrashBin() {
       this.$client.fileTrash
         .clearTrashBin(buildWebDavFilesTrashPath(this.user.id))
         .then(() => {
+          this.hideModal()
           this.showMessage({
             title: this.$gettext('All deleted files were removed')
           })
