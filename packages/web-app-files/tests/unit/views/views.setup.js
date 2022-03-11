@@ -5,6 +5,7 @@ import { createStore } from 'vuex-extensions'
 import DesignSystem from 'owncloud-design-system'
 import GetTextPlugin from 'vue-gettext'
 import VueCompositionAPI from '@vue/composition-api'
+import { clientService } from 'web-pkg/src/services/client'
 
 export const createFile = ({ id, status = 1, type = 'folder' }) => ({
   id: `file-id-${id}`,
@@ -22,6 +23,8 @@ export const createFile = ({ id, status = 1, type = 'folder' }) => ({
 export const localVue = createLocalVue()
 localVue.prototype.$client = new OwnCloud()
 localVue.prototype.$client.init({ baseUrl: 'http://none.de' })
+localVue.prototype.$clientService = clientService
+localVue.prototype.$clientService.owncloudSdk = localVue.prototype.$client
 localVue.use(Vuex)
 localVue.use(DesignSystem)
 localVue.use(VueCompositionAPI)
