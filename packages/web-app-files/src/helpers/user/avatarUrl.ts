@@ -1,9 +1,10 @@
 import { cacheService } from '../../services'
-import { clientService } from 'web-pkg/src/services'
+import { ClientService } from 'web-pkg/src/services'
 
 import { ImageDimension } from '../../constants'
 
 interface AvatarUrlOptions {
+  clientService: ClientService
   server: string
   username: string
   token: string
@@ -19,13 +20,15 @@ export const avatarUrl = async (options: AvatarUrlOptions, cached = false): Prom
 
   const url = [options.server, 'remote.php/dav/avatars/', options.username, `/${size}.png`].join('')
 
-  const { status, statusText } = await clientService.httpAuthenticated(options.token).head(url)
+  const { status, statusText } = await options.clientService
+    .httpAuthenticated(options.token)
+    .head(url)
 
   if (status !== 200) {
     throw new Error(statusText)
   }
 
-  const { owncloudSdk } = clientService
+  const { owncloudSdk } = options.clientService
   if (!owncloudSdk || typeof owncloudSdk.signUrl !== 'function') {
     return url
   }

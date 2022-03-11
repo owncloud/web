@@ -638,6 +638,7 @@ export default {
         }
         avatarUrl(
           {
+            clientService: this.$clientService,
             username: obj.username,
             server: rootGetters.configuration.server,
             token: rootGetters.getToken

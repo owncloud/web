@@ -62,6 +62,7 @@ export default {
     if (this.capabilities.files_sharing.user.profile_picture && this.hasAvatar) {
       try {
         this.formattedRecipient.avatar = await avatarUrl({
+          clientService: this.$clientService,
           server: this.configuration.server,
           username: this.recipient.value.shareWith,
           token: this.getToken
