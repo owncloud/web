@@ -208,14 +208,11 @@ export default {
   text-align: left;
   white-space: normal;
 
-  li {
-    padding: 6px;
+  > li {
     &:hover {
       background-color: var(--oc-color-background-hover);
     }
-  }
 
-  > li {
     a,
     button,
     span {
@@ -227,6 +224,11 @@ export default {
       vertical-align: top;
       width: 100%;
       text-align: left;
+
+      &:hover {
+        color: var(--oc-color-swatch-passive-default);
+        text-decoration: none !important;
+      }
     }
   }
 

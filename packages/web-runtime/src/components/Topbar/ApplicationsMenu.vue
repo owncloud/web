@@ -82,6 +82,8 @@ export default {
 
     &:focus,
     &:hover {
+      background-color: var(--oc-color-background-hover);
+      color: var(--oc-color-swatch-passive-default);
       text-decoration: none;
     }
 

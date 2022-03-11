@@ -18,6 +18,7 @@
           id="files-breadcrumb"
           data-testid="files-breadcrumbs"
           class="oc-py-s"
+          context-menu-padding="small"
           :items="breadcrumbs"
         >
           <template #contextMenu>
