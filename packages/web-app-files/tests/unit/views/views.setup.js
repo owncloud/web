@@ -43,6 +43,7 @@ localVue.directive('translate', {
 export const getRouter = ({ query = {} }) => ({
   afterEach: jest.fn(),
   replace: jest.fn(),
+  push: jest.fn(),
   currentRoute: {
     query
   }
