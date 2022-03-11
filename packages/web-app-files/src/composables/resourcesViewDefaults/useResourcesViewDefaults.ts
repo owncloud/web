@@ -12,10 +12,10 @@ interface ResourcesViewDefaultsOptions<T, U extends any[]> {
   loadResourcesTask?: Task<T, U>
 }
 
-interface ResourcesViewDefaultsResult<T, U extends any[]> {
+interface ResourcesViewDefaultsResult<T, TT, TU extends any[]> {
   fileListHeaderY: Ref<any>
   refreshFileListHeaderPosition(): void
-  loadResourcesTask: Task<T, U>
+  loadResourcesTask: Task<TT, TU>
   storeItems: ComputedRef<T[]>
   fields: ComputedRef<SortField[]>
   paginatedResources: ComputedRef<T[]>
@@ -26,9 +26,9 @@ interface ResourcesViewDefaultsResult<T, U extends any[]> {
   sortDir: ComputedRef<SortDir>
 }
 
-export const useResourcesViewDefaults = <T, U extends any[]>(
-  options: ResourcesViewDefaultsOptions<T, U> = {}
-): ResourcesViewDefaultsResult<T, U> => {
+export const useResourcesViewDefaults = <T, TT, TU extends any[]>(
+  options: ResourcesViewDefaultsOptions<TT, TU> = {}
+): ResourcesViewDefaultsResult<T, TT, TU> => {
   const loadResourcesTask = options.loadResourcesTask || folderService.getTask()
 
   const store = useStore()
