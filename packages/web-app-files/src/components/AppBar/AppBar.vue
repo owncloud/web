@@ -181,7 +181,6 @@ export default {
         return []
       }
 
-      console.log(this.isTrashSpacesProjectActive)
       if (this.isTrashSpacesProjectActive) {
         return [
           {
@@ -198,7 +197,6 @@ export default {
           }
         ]
       }
-      console.log(2)
 
       const { params: routeParams, path: routePath } = this.$route
       const requestedItemPath = routeParams.item || ''

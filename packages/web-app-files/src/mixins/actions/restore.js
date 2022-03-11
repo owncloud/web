@@ -1,7 +1,12 @@
 import { mapActions, mapGetters } from 'vuex'
 import PQueue from 'p-queue'
 import { isLocationTrashActive } from '../../router'
-import { buildWebDavFilesTrashPath, buildWebDavFilesPath } from '../../helpers/resources'
+import {
+  buildWebDavFilesTrashPath,
+  buildWebDavFilesPath,
+  buildWebDavSpacesTrashPath,
+  buildWebDavSpacesPath
+} from '../../helpers/resources'
 
 export default {
   computed: {
@@ -38,14 +43,17 @@ export default {
       const restorePromises = []
       const restoreQueue = new PQueue({ concurrency: 4 })
       resources.forEach((resource) => {
+        const path = isLocationTrashActive(this.$router, 'files-trash-spaces-project')
+          ? buildWebDavSpacesTrashPath(this.$route.params.spaceId)
+          : buildWebDavFilesTrashPath(this.user.id)
+        const restorePath = isLocationTrashActive(this.$router, 'files-trash-spaces-project')
+          ? buildWebDavSpacesPath(this.$route.params.spaceId, resource.path)
+          : buildWebDavFilesPath(this.user.id, resource.path)
+
         restorePromises.push(
           restoreQueue.add(async () => {
             try {
-              await this.$client.fileTrash.restore(
-                buildWebDavFilesTrashPath(this.user.id),
-                resource.id,
-                buildWebDavFilesPath(this.user.id, resource.path)
-              )
+              await this.$client.fileTrash.restore(path, resource.id, restorePath)
               restoredResources.push(resource)
             } catch (e) {
               console.error(e)
@@ -54,7 +62,6 @@ export default {
           })
         )
       })
-
       await Promise.all(restorePromises)
 
       // success handler (for partial and full success)

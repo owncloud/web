@@ -1,6 +1,6 @@
 import { mapActions, mapGetters } from 'vuex'
 import { isLocationTrashActive } from '../../router'
-import { buildWebDavFilesTrashPath } from '../../helpers/resources'
+import { buildWebDavFilesTrashPath, buildWebDavSpacesTrashPath } from '../../helpers/resources'
 
 export default {
   computed: {
@@ -53,8 +53,13 @@ export default {
       this.createModal(modal)
     },
     $_emptyTrashBin_emptyTrashBin() {
+      const path = isLocationTrashActive(this.$router, 'files-trash-spaces-project')
+        ? buildWebDavSpacesTrashPath(this.$route.params.spaceId)
+        : buildWebDavFilesTrashPath(this.user.id)
+
+      console.log(path)
       this.$client.fileTrash
-        .clearTrashBin(buildWebDavFilesTrashPath(this.user.id))
+        .clearTrashBin(path)
         .then(() => {
           this.hideModal()
           this.showMessage({
