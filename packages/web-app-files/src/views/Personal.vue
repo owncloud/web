@@ -88,6 +88,8 @@ import { basename, join } from 'path'
 import PQueue from 'p-queue'
 import { createLocationSpaces } from '../router'
 import { useResourcesViewDefaults } from '../composables'
+import { fetchResources } from '../services/folder/loaderPersonal'
+
 const visibilityObserver = new VisibilityObserver()
 
 export default {
@@ -199,18 +201,16 @@ export default {
   },
 
   methods: {
-    ...mapActions('Files', ['loadIndicators', 'loadPreview']),
+    ...mapActions('Files', ['loadPreview']),
     ...mapActions(['showMessage']),
     ...mapMutations('Files', [
-      'SET_CURRENT_FOLDER',
-      'LOAD_FILES',
-      'CLEAR_CURRENT_FILES_LIST',
       'REMOVE_FILE',
       'REMOVE_FILE_FROM_SEARCHED',
       'SET_FILE_SELECTION',
       'REMOVE_FILE_SELECTION'
     ]),
-    ...mapMutations(['SET_QUOTA']),
+
+    fetchResources,
 
     async fileDropped(fileIdTarget) {
       const selected = [...this.selectedFiles]
@@ -218,7 +218,7 @@ export default {
       const isTargetSelected = selected.some((e) => e.id === fileIdTarget)
       if (isTargetSelected) return
       if (targetInfo.type !== 'folder') return
-      const itemsInTarget = await this.fetchResources(targetInfo.webDavPath)
+      const itemsInTarget = await this.fetchResources(this.$client, targetInfo.webDavPath)
 
       // try to move all selected files
       const errors = []
@@ -303,13 +303,6 @@ export default {
       }, 250)
 
       visibilityObserver.observe(component.$el, { onEnter: debounced, onExit: debounced.cancel })
-    },
-    async fetchResources(path, properties) {
-      try {
-        return await this.$client.files.list(path, 1, properties)
-      } catch (error) {
-        console.error(error)
-      }
     },
     scrollToResourceFromRoute() {
       const resourceName = this.$route.query.scrollTo

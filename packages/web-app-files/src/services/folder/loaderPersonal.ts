@@ -5,43 +5,58 @@ import { DavProperties } from 'web-pkg/src/constants'
 import { buildResource, buildWebDavFilesPath } from '../../helpers/resources'
 import { isLocationSpacesActive } from '../../router'
 
+export const fetchResources = async (client, path, properties) => {
+  try {
+    return await client.files.list(path, 1, properties)
+  } catch (error) {
+    console.error(error)
+  }
+}
+
 export class FolderLoaderPersonal implements FolderLoader {
   public isEnabled(router: Router): boolean {
     return isLocationSpacesActive(router, 'files-spaces-personal-home')
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {
+    const {
+      store,
+      router,
+      clientService: { owncloudSdk: client }
+    } = context
+
     return useTask(function* (signal1, signal2, ref, sameRoute, path = null) {
       try {
-        ref.CLEAR_CURRENT_FILES_LIST()
+        store.commit('Files/CLEAR_CURRENT_FILES_LIST')
 
-        let resources = yield ref.fetchResources(
-          buildWebDavFilesPath(ref.user.id, path || context.route.params.item || ''),
+        let resources = yield fetchResources(
+          ref.$client,
+          buildWebDavFilesPath(ref.user.id, path || router.currentRoute.params.item || ''),
           DavProperties.Default
         )
         resources = resources.map(buildResource)
 
         const currentFolder = resources.shift()
 
-        ref.LOAD_FILES({
+        store.commit('Files/LOAD_FILES', {
           currentFolder,
           files: resources
         })
 
-        ref.loadIndicators({
-          client: ref.$client,
+        store.dispatch('Files/loadIndicators', {
+          client: client,
           currentFolder: currentFolder.path
         })
 
         // Load quota
-        const promiseUser = ref.$client.users.getUser(ref.user.id)
+        const promiseUser = client.users.getUser(ref.user.id)
         // The semicolon is important to separate from the previous statement
         ;(async () => {
           const user = await promiseUser
-          ref.SET_QUOTA(user.quota)
+          store.commit('Files/SET_QUOTA', user.quota)
         })()
       } catch (error) {
-        ref.SET_CURRENT_FOLDER(null)
+        store.commit('Files/SET_CURRENT_FOLDER', null)
         console.error(error)
       }
 
