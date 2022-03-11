@@ -7,10 +7,7 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
       <oc-spinner-stub></oc-spinner-stub>
     </div>
     <div data-testid="sharingInfo" class="oc-flex oc-flex-middle oc-my-m">
-      <oc-button-stub appearance="raw" aria-label="Show invited people" class="oc-mr-xs">
-        <oc-icon-stub name="group"></oc-icon-stub>
-      </oc-button-stub>
-      <!---->
+      <oc-status-indicators resource="[object Object]" indicators="[object Object]"></oc-status-indicators>
       <p class="oc-my-rm oc-mx-s">This file has been shared.</p>
     </div>
     <table aria-label="Overview of the information about the selected file" class="details-table">
@@ -52,10 +49,7 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
       <oc-spinner-stub></oc-spinner-stub>
     </div>
     <div data-testid="sharingInfo" class="oc-flex oc-flex-middle oc-my-m">
-      <oc-button-stub appearance="raw" aria-label="Show invited people" class="oc-mr-xs">
-        <oc-icon-stub name="group"></oc-icon-stub>
-      </oc-button-stub>
-      <!---->
+      <oc-status-indicators resource="[object Object]" indicators="[object Object]"></oc-status-indicators>
       <p class="oc-my-rm oc-mx-s">This file has been shared.</p>
     </div>
     <table aria-label="Overview of the information about the selected file" class="details-table">
@@ -131,13 +125,7 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
     <div data-testid="preview" class="details-preview oc-flex oc-flex-middle oc-flex-center oc-mb" style="background-image: none;">
       <oc-spinner-stub></oc-spinner-stub>
     </div>
-    <div data-testid="sharingInfo" class="oc-flex oc-flex-middle oc-my-m">
-      <oc-button-stub appearance="raw" aria-label="Show invited people" class="oc-mr-xs">
-        <oc-icon-stub name="group"></oc-icon-stub>
-      </oc-button-stub>
-      <!---->
-      <p class="oc-my-rm oc-mx-s">This file has been shared.</p>
-    </div>
+    <!---->
     <table aria-label="Overview of the information about the selected file" class="details-table">
       <tr data-testid="timestamp">
         <th scope="col" class="oc-pr-s">Last modified:</th>
@@ -274,13 +262,7 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
 <div id="oc-file-details-sidebar">
   <div>
     <!---->
-    <div data-testid="sharingInfo" class="oc-flex oc-flex-middle oc-my-m">
-      <oc-button-stub appearance="raw" aria-label="Show invited people" class="oc-mr-xs">
-        <oc-icon-stub name="group"></oc-icon-stub>
-      </oc-button-stub>
-      <!---->
-      <p class="oc-my-rm oc-mx-s">This folder has been shared.</p>
-    </div>
+    <!---->
     <table aria-label="Overview of the information about the selected file" class="details-table">
       <tr data-testid="timestamp">
         <th scope="col" class="oc-pr-s">Last modified:</th>

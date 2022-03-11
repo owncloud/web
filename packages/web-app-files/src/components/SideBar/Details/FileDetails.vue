@@ -13,31 +13,12 @@
         <oc-spinner v-if="$asyncComputed.preview.updating" />
       </div>
       <div
-        v-if="showShares"
+        v-if="shareIndicators.length"
         key="file-shares"
         data-testid="sharingInfo"
         class="oc-flex oc-flex-middle oc-my-m"
       >
-        <oc-button
-          v-if="hasPeopleShares"
-          v-oc-tooltip="peopleSharesLabel"
-          appearance="raw"
-          class="oc-mr-xs"
-          :aria-label="peopleSharesLabel"
-          @click="expandPeoplesPanel"
-        >
-          <oc-icon name="group" />
-        </oc-button>
-        <oc-button
-          v-if="hasLinkShares"
-          v-oc-tooltip="linkSharesLabel"
-          appearance="raw"
-          class="oc-mr-xs"
-          :aria-label="linkSharesLabel"
-          @click="expandLinksPanel"
-        >
-          <oc-icon name="link" />
-        </oc-button>
+        <oc-status-indicators :resource="file" :indicators="shareIndicators" />
         <p class="oc-my-rm oc-mx-s" v-text="detailSharingInformation" />
       </div>
       <table class="details-table" :aria-label="detailsTableLabel">
@@ -113,6 +94,7 @@ import upperFirst from 'lodash-es/upperFirst'
 import path from 'path'
 import { createLocationSpaces, isAuthenticatedRoute } from '../../../router'
 import { ShareTypes } from '../../../helpers/share'
+import { getIndicators } from '../../../helpers/statusIndicators'
 
 export default {
   name: 'FileDetails',
@@ -142,7 +124,8 @@ export default {
     sharedByName: '',
     sharedByDisplayName: '',
     sharedTime: 0,
-    sharedItem: null
+    sharedItem: null,
+    shareIndicators: []
   }),
   computed: {
     ...mapGetters('Files', ['versions', 'sharesTree', 'sharesTreeLoading']),
@@ -207,12 +190,6 @@ export default {
       }
       return this.$gettext('This file has been shared.')
     },
-    peopleSharesLabel() {
-      return this.$gettext('Show invited people')
-    },
-    linkSharesLabel() {
-      return this.$gettext('Show links')
-    },
     sharedByLabel() {
       return this.$gettext('Shared by:')
     },
@@ -264,19 +241,6 @@ export default {
         this.sharedItem !== null
       )
     },
-    hasPeopleShares() {
-      return (
-        ShareTypes.containsAnyValue(ShareTypes.authenticated, this.file.shareTypes) ||
-        this.file.indicators?.filter((e) => e.icon === 'group').length > 0 ||
-        this.sharedItem !== null
-      )
-    },
-    hasLinkShares() {
-      return (
-        ShareTypes.containsAnyValue(ShareTypes.unauthenticated, this.file.shareTypes) ||
-        this.file.indicators?.filter((e) => e.icon === 'link').length > 0
-      )
-    },
     ownedByCurrentUser() {
       return (
         this.file.ownerId === this.user.id ||
@@ -287,13 +251,12 @@ export default {
   },
   watch: {
     file() {
-      this.loadData()
-      this.refreshShareDetailsTree()
+      this.loadData().then(this.refreshShareDetailsTree)
     },
     sharesTree() {
       // missing early return
       this.sharedItem = null
-
+      this.shareIndicators = getIndicators(this.file, this.sharesTree)
       const sharePathParentOrCurrent = this.getParentSharePath(this.file.path, this.sharesTree)
       if (sharePathParentOrCurrent === null) {
         return
@@ -315,7 +278,7 @@ export default {
       this.sharedParentDir = sharePathParentOrCurrent
     }
   },
-  mounted() {
+  async mounted() {
     this.loadData()
     this.refreshShareDetailsTree()
   },
@@ -340,12 +303,13 @@ export default {
   methods: {
     ...mapActions('Files', ['loadPreview', 'loadVersions', 'loadSharesTree']),
     ...mapActions('Files/sidebar', { setSidebarPanel: 'setActivePanel' }),
-    refreshShareDetailsTree() {
-      this.loadSharesTree({
+    async refreshShareDetailsTree() {
+      await this.loadSharesTree({
         client: this.$client,
         path: this.file.path,
         $gettext: this.$gettext
       })
+      this.shareIndicators = getIndicators(this.file, this.sharesTree)
     },
     getParentSharePath(childPath, shares) {
       let currentPath = childPath

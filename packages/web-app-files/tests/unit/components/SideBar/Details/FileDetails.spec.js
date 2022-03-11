@@ -16,6 +16,7 @@ localVue.use(GetTextPlugin, {
 const OcTooltip = jest.fn()
 
 const simpleOwnFolder = {
+  id: '1',
   type: 'folder',
   ownerId: 'marie',
   ownerDisplayName: 'Marie',
@@ -24,6 +25,7 @@ const simpleOwnFolder = {
 }
 
 const sharedFolder = {
+  id: '2',
   type: 'folder',
   ownerId: 'einstein',
   ownerDisplayName: 'Einstein',
@@ -33,6 +35,7 @@ const sharedFolder = {
 }
 
 const simpleOwnFile = {
+  id: '3',
   type: 'file',
   ownerId: 'marie',
   ownerDisplayName: 'Marie',
@@ -41,6 +44,7 @@ const simpleOwnFile = {
 }
 
 const sharedFile = {
+  id: '4',
   path: '/Shares/123.png',
   type: 'file',
   ownerId: 'einstein',
