@@ -285,7 +285,7 @@ describe('LocationPicker', () => {
         it('should not show the no content message component', () => {
           expect(filesView.find(selectors.noContentMessage).exists()).toBeFalsy()
         })
-        it('should show location picker table', async () => {
+        it('should show location picker table', () => {
           expect(filesView.find(selectors.filesTable).exists()).toBeTruthy()
 
           const actualProps = filesView.find(selectors.filesTable).props()

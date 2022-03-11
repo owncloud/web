@@ -1,38 +1,51 @@
-import { nextTick, computed, unref, readonly } from '@vue/composition-api'
-import { MaybeReadonlyRef, MaybeRef } from 'web-pkg/src/utils'
+import { nextTick, computed, unref, Ref, ComputedRef } from '@vue/composition-api'
 import { folderService } from '../../services/folder'
 import { fileList } from '../../helpers/ui'
 import { usePagination, useFileListHeaderPosition, SortField } from '../'
-import { useSort } from '../sort/'
+import { useSort, SortDir } from '../sort/'
 
 import { useMutationSubscription, useRouteQuery, useStore } from 'web-pkg/src/composables'
 import { determineSortFields } from '../../helpers/ui/resourceTable'
-import { Resource } from '../../helpers/resource'
+import { Task } from 'vue-concurrency'
 
-interface ResourcesViewDefaultsOptions {
-  loadResourcesTask?()
+interface ResourcesViewDefaultsOptions<T, U extends any[]> {
+  loadResourcesTask?: Task<T, U>
 }
 
-export const useResourcesViewDefaults = (options: ResourcesViewDefaultsOptions = {}): any => {
+interface ResourcesViewDefaultsResult<T, U extends any[]> {
+  fileListHeaderY: Ref<any>
+  refreshFileListHeaderPosition(): void
+  loadResourcesTask: Task<T, U>
+  storeItems: ComputedRef<T[]>
+  fields: ComputedRef<SortField[]>
+  paginatedResources: ComputedRef<T[]>
+  paginationPages: ComputedRef<number>
+  paginationPage: ComputedRef<number>
+  handleSort({ sortBy, sortDir }: { sortBy: string; sortDir: SortDir }): void
+  sortBy: ComputedRef<string>
+  sortDir: ComputedRef<SortDir>
+}
+
+export const useResourcesViewDefaults = <T, U extends any[]>(
+  options: ResourcesViewDefaultsOptions<T, U> = {}
+): ResourcesViewDefaultsResult<T, U> => {
   const loadResourcesTask = options.loadResourcesTask || folderService.getTask()
 
   const store = useStore()
   const { refresh: refreshFileListHeaderPosition, y: fileListHeaderY } = useFileListHeaderPosition()
 
-  const storeItems: MaybeReadonlyRef<Resource[]> = computed(
-    (): Resource[] => store.getters['Files/activeFiles'] || []
-  )
-  const fields: MaybeRef<SortField[]> = computed((): SortField[] => {
+  const storeItems = computed((): T[] => store.getters['Files/activeFiles'] || [])
+  const fields = computed((): SortField[] => {
     return determineSortFields(unref(storeItems)[0])
   })
 
-  const { sortBy, sortDir, items, handleSort } = useSort<Resource>({
+  const { sortBy, sortDir, items, handleSort } = useSort<T>({
     items: storeItems,
     fields
   })
 
   const paginationPageQuery = useRouteQuery('page', '1')
-  const paginationPage = computed(() => parseInt(String(paginationPageQuery.value)))
+  const paginationPage = computed((): number => parseInt(String(paginationPageQuery.value)))
   const { items: paginatedResources, total: paginationPages } = usePagination({
     page: paginationPage,
     items

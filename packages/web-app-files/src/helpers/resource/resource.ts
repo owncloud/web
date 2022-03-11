@@ -6,4 +6,5 @@ export interface Resource {
   path: string
   webDavPath: string
   downloadURL?: string
+  type?: string
 }

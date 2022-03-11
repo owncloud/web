@@ -220,6 +220,9 @@ function getMountedWrapper(spaceResources = [], spaceItem = null, imageContent =
     },
     resolve: (r) => {
       return { href: r.name }
+    },
+    replace({ query }) {
+      this.currentRoute.query = query
     }
   }
 

@@ -12,9 +12,12 @@ describe('useSort', () => {
     createWrapper(() => {
       const input: SortOptions<any> = {
         items: readonly([
-          { id: '1', path: '1', webDavPath: '/1' },
-          { id: '2', path: '2', webDavPath: '/2' },
-          { id: '3', path: '3', webDavPath: '/3' }
+          { id: '3' },
+          { id: '4' },
+          { id: '6' },
+          { id: '1' },
+          { id: '2' },
+          { id: '5' }
         ]),
         fields: [],
         sortBy: ref(null),
@@ -25,9 +28,12 @@ describe('useSort', () => {
       const { items } = useSort(input)
 
       expect(items.value).toMatchObject([
-        { id: '1', path: '1', webDavPath: '/1' },
-        { id: '2', path: '2', webDavPath: '/2' },
-        { id: '3', path: '3', webDavPath: '/3' }
+        { id: '3' },
+        { id: '4' },
+        { id: '6' },
+        { id: '1' },
+        { id: '2' },
+        { id: '5' }
       ])
     })
   })
@@ -35,13 +41,13 @@ describe('useSort', () => {
   describe('sorting resources', () => {
     const resources = [
       { id: '1', name: 'c.png', path: '', webDavPath: '', time: 2 },
-      { id: '1', name: 'Dir4', path: '', webDavPath: '', time: 4, type: 'folder' },
-      { id: '1', name: 'a.png', path: '', webDavPath: '', time: 3 },
-      { id: '1', name: 'A.png', path: '', webDavPath: '', time: 6 },
-      { id: '1', name: 'dir2', path: '', webDavPath: '', time: 7, type: 'folder' },
-      { id: '1', name: 'b.png', path: '', webDavPath: '', time: 1 },
-      { id: '1', name: 'Dir1', path: '', webDavPath: '', time: 5, type: 'folder' },
-      { id: '1', name: 'dir3', path: '', webDavPath: '', time: 8, type: 'folder' }
+      { id: '2', name: 'Dir4', path: '', webDavPath: '', time: 4, type: 'folder' },
+      { id: '3', name: 'a.png', path: '', webDavPath: '', time: 3 },
+      { id: '4', name: 'A.png', path: '', webDavPath: '', time: 6 },
+      { id: '5', name: 'dir2', path: '', webDavPath: '', time: 7, type: 'folder' },
+      { id: '6', name: 'b.png', path: '', webDavPath: '', time: 1 },
+      { id: '7', name: 'Dir1', path: '', webDavPath: '', time: 5, type: 'folder' },
+      { id: '8', name: 'dir3', path: '', webDavPath: '', time: 8, type: 'folder' }
     ]
 
     it('sorts resources by name', () => {
