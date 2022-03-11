@@ -53,7 +53,7 @@ export default {
       yield ref.loadCurrentFileOutgoingShares({
         client: graphClient,
         path: ref.space.id,
-        space: ref.space
+        resource: ref.space
       })
     })
 

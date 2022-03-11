@@ -60,7 +60,8 @@ export class FolderLoaderProject implements FolderLoader {
       })
       ref.loadIndicators({
         client: ref.$client,
-        currentFolder: currentFolder?.path
+        currentFolder: currentFolder?.path,
+        spaceId: ref.space.id
       })
 
       if (!sameRoute) {

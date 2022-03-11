@@ -254,6 +254,14 @@ export default {
               : SharePermissions.permissionsToBitmask(
                   this.selectedRole.permissions(!this.isOcis || this.resourceIsSpace)
                 )
+
+            let spaceId
+            if (this.resourceIsSpace) {
+              spaceId = this.highlightedFile.id
+            } else if (this.$route.params.spaceId) {
+              spaceId = this.$route.params.spaceId
+            }
+
             this.addShare({
               client: this.$client,
               graphClient: this.graphClient,
@@ -264,7 +272,7 @@ export default {
               shareType: collaborator.value.shareType,
               permissions: bitmask,
               expirationDate: this.expirationDate,
-              storageId: this.resourceIsSpace ? this.highlightedFile.id : null
+              spaceId
             })
           })
         )

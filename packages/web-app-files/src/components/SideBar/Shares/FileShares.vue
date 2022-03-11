@@ -31,7 +31,8 @@
       <template v-if="showShareesList && hasSharees">
         <ul
           id="files-collaborators-list"
-          class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm"
+          class="oc-list oc-list-divider oc-overflow-hidden"
+          :class="{ 'oc-mb-l': showSpaceMembers, 'oc-m-rm': !showSpaceMembers }"
           :aria-label="$gettext('Share receivers')"
         >
           <li v-for="collaborator in collaborators" :key="collaborator.key">
@@ -246,7 +247,7 @@ export default {
     },
 
     currentUserCanShare() {
-      return this.highlightedFile.canShare()
+      return this.highlightedFile.canShare({ user: this.user })
     },
     noResharePermsMessage() {
       const translatedFile = this.$gettext("You don't have permission to share this file.")
@@ -340,24 +341,28 @@ export default {
       this.deleteShare({
         client: this.$client,
         share: share,
-        resource: this.highlightedFile
+        resource: this.highlightedFile,
+        spaceId: this.$route.params.spaceId
       })
     },
     $_reloadShares() {
       this.loadCurrentFileOutgoingShares({
         client: this.$client,
         path: this.highlightedFile.path,
-        $gettext: this.$gettext
+        $gettext: this.$gettext,
+        spaceId: this.$route.params.spaceId
       })
       this.loadIncomingShares({
         client: this.$client,
         path: this.highlightedFile.path,
-        $gettext: this.$gettext
+        $gettext: this.$gettext,
+        spaceId: this.$route.params.spaceId
       })
       this.loadSharesTree({
         client: this.$client,
         path: dirname(this.highlightedFile.path),
-        $gettext: this.$gettext
+        $gettext: this.$gettext,
+        spaceId: this.$route.params.spaceId
       })
     }
   }
