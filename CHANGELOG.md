@@ -11,6 +11,7 @@ Summary
 * Bugfix - Thumbnails only for accepted shares: [#5310](https://github.com/owncloud/web/issues/5310)
 * Bugfix - File handling in apps: [#6456](https://github.com/owncloud/web/pull/6456)
 * Bugfix - Pressing enter in forms: [#6548](https://github.com/owncloud/web/pull/6548)
+* Bugfix - Remove iFrame border: [#6555](https://github.com/owncloud/web/issues/6555)
 * Bugfix - Show no auth popup on password protected public links in ownCloud 10: [#6530](https://github.com/owncloud/web/pull/6530)
 * Bugfix - Sidebar panels in public links: [#2090](https://github.com/owncloud/web/issues/2090)
 * Bugfix - Don't write error message on passing ReadmeContentModal.spec.js test: [#6525](https://github.com/owncloud/web/pull/6525)
@@ -59,6 +60,13 @@ Details
 
    https://github.com/owncloud/web/pull/6548
    https://github.com/owncloud/owncloud-design-system/pull/2009
+
+* Bugfix - Remove iFrame border: [#6555](https://github.com/owncloud/web/issues/6555)
+
+   We fixed a UI issue which showed small borders around iFrames, e.g. in the external app.
+
+   https://github.com/owncloud/web/issues/6555
+   https://github.com/owncloud/web/pull/6573
 
 * Bugfix - Show no auth popup on password protected public links in ownCloud 10: [#6530](https://github.com/owncloud/web/pull/6530)
 
@@ -178,7 +186,9 @@ Details
    elsewhere.
 
    https://github.com/owncloud/web/issues/6440
+   https://github.com/owncloud/web/issues/6570
    https://github.com/owncloud/web/pull/6512
+   https://github.com/owncloud/web/pull/6573
 
 * Enhancement - Side bar nav tags: [#6540](https://github.com/owncloud/web/pull/6540)
 
