@@ -9,7 +9,7 @@
         icon="delete-bin-5"
       >
         <template #message>
-          <span v-translate>You have no deleted files</span>
+          <span v-translate>Space has no deleted files</span>
         </template>
       </no-content-message>
       <resource-table
