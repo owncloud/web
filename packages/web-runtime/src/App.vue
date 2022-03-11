@@ -202,4 +202,8 @@ body {
   max-height: 100vh;
   overflow-y: hidden;
 }
+
+iframe {
+  border: 0;
+}
 </style>

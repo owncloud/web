@@ -1,0 +1,6 @@
+Bugfix: Remove iFrame border
+
+We fixed a UI issue which showed small borders around iFrames, e.g. in the external app.
+
+https://github.com/owncloud/web/issues/6555
+https://github.com/owncloud/web/pull/6573
