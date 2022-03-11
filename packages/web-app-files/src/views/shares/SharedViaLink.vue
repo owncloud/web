@@ -85,7 +85,7 @@ export default {
     ...mapState(['app']),
     ...mapState('Files', ['files']),
     ...mapGetters('Files', ['highlightedFile', 'selectedFiles', 'totalFilesCount']),
-    ...mapGetters(['isOcis', 'configuration', 'getToken', 'user']),
+    ...mapGetters(['configuration']),
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
     selected: {
@@ -107,7 +107,7 @@ export default {
   },
 
   created() {
-    this.loadResourcesTask.perform(this)
+    this.loadResourcesTask.perform()
   },
 
   beforeDestroy() {
