@@ -3419,12 +3419,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^0.21.1":
-  version: 0.21.3
-  resolution: "axios@npm:0.21.3"
+"axios@npm:^0.24.0":
+  version: 0.24.0
+  resolution: "axios@npm:0.24.0"
   dependencies:
-    follow-redirects: ^1.14.0
-  checksum: fdcac33adb0330e127ab0e58f8d9fb7470b49dbfb0aba251ff54f146f2fc7d9362e3300581b6c98d2ea3b8db958ed099c831c3c7832ae79b14f517d5947a029a
+    follow-redirects: ^1.14.4
+  checksum: 468cf496c08a6aadfb7e699bebdac02851e3043d4e7d282350804ea8900e30d368daa6e3cd4ab83b8ddb5a3b1e17a5a21ada13fc9cebd27b74828f47a4236316
   languageName: node
   linkType: hard
 
@@ -6408,13 +6408,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:^1.14.0, follow-redirects@npm:^1.14.7":
-  version: 1.14.7
-  resolution: "follow-redirects@npm:1.14.7"
+"follow-redirects@npm:^1.14.4, follow-redirects@npm:^1.14.7":
+  version: 1.14.9
+  resolution: "follow-redirects@npm:1.14.9"
   peerDependenciesMeta:
     debug:
       optional: true
-  checksum: f6d03e5e30877431065bca0d1b2e3db93949eb799d368a5c07ea8a4b71205f0349a3f8f0191bf13a07c93885522834dca1dc8e527dc99a772c6911fba24edc5f
+  checksum: f5982e0eb481818642492d3ca35a86989c98af1128b8e1a62911a3410621bc15d2b079e8170b35b19d3bdee770b73ed431a257ed86195af773771145baa57845
   languageName: node
   linkType: hard
 
@@ -9172,16 +9172,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nanoid@npm:^3.1.22, nanoid@npm:^3.1.23":
-  version: 3.1.23
-  resolution: "nanoid@npm:3.1.23"
-  bin:
-    nanoid: bin/nanoid.cjs
-  checksum: 8fa8dc3283a4fa159700a36cb22f61197547c8155831cb74f1b9c51fbc29ea80c136fd91001468d147a31d3a77f884958aec6c1beabac903c89780acacca9327
-  languageName: node
-  linkType: hard
-
-"nanoid@npm:^3.3.1":
+"nanoid@npm:^3.1.22, nanoid@npm:^3.3.1":
   version: 3.3.1
   resolution: "nanoid@npm:3.3.1"
   bin:
@@ -10636,18 +10627,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.1.10, postcss@npm:^8.3.6":
-  version: 8.3.6
-  resolution: "postcss@npm:8.3.6"
-  dependencies:
-    colorette: ^1.2.2
-    nanoid: ^3.1.23
-    source-map-js: ^0.6.2
-  checksum: ff55b91bea21f42c2a94d77fd05c3f66dd15889c68506cf1dbb9cdee8c3b9e9d0e219bcbc6e61a107bd63e3cac0670176486e2a5794c106a4e1b9babceb79317
-  languageName: node
-  linkType: hard
-
-"postcss@npm:^8.3.11":
+"postcss@npm:^8.1.10, postcss@npm:^8.3.11, postcss@npm:^8.3.6":
   version: 8.4.7
   resolution: "postcss@npm:8.4.7"
   dependencies:
@@ -11748,7 +11728,7 @@ __metadata:
     ts-jest: ^27.1.3
     ts-node: ^10.5.0
     tslib: ^2.2.0
-    typescript: ^4.5.5
+    typescript: ^4.6.2
     url-search-params-polyfill: ^8.0.0
     vue: ^2.6.10
     vue-jest: ^3.0.7
@@ -12075,13 +12055,6 @@ __metadata:
   dependencies:
     atomic-sleep: ^1.0.0
   checksum: 77369f6211544f4fb30519b7ab2523b67818963c036301f5e417a2bcb0e1f3bc88f4cbd0d963607965be228e29644202452a6d7717f117652956f43e8c8be0e2
-  languageName: node
-  linkType: hard
-
-"source-map-js@npm:^0.6.2":
-  version: 0.6.2
-  resolution: "source-map-js@npm:0.6.2"
-  checksum: 9c8151a29e00fd8d3ba87709fdf9a9ce48313d653f4a29a39b4ae53d346ac79e005de624796ff42eff55cbaf26d2e87f4466001ca87831d400d818c5cf146a0e
   languageName: node
   linkType: hard
 
@@ -13021,23 +12994,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^4.5.5":
-  version: 4.5.5
-  resolution: "typescript@npm:4.5.5"
+"typescript@npm:^4.6.2":
+  version: 4.6.2
+  resolution: "typescript@npm:4.6.2"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 506f4c919dc8aeaafa92068c997f1d213b9df4d9756d0fae1a1e7ab66b585ab3498050e236113a1c9e57ee08c21ec6814ca7a7f61378c058d79af50a4b1f5a5e
+  checksum: 8a44ed7e6f6c4cb1ebe8cf236ecda2fb119d84dcf0fbd77e707b2dfea1bbcfc4e366493a143513ce7f57203c75da9d4e20af6fe46de89749366351046be7577c
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@^4.5.5#~builtin<compat/typescript>":
-  version: 4.5.5
-  resolution: "typescript@patch:typescript@npm%3A4.5.5#~builtin<compat/typescript>::version=4.5.5&hash=ddd1e8"
+"typescript@patch:typescript@^4.6.2#~builtin<compat/typescript>":
+  version: 4.6.2
+  resolution: "typescript@patch:typescript@npm%3A4.6.2#~builtin<compat/typescript>::version=4.6.2&hash=ddd1e8"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 9cdde4aae20b2904431f3f2ca8acaf3b0cc52faddf68aa88b288c9d0520221817da43783a756fce7ab9360033ada0371c3ff93dfc4bdb4b13f6e9bac64e1658d
+  checksum: efb83260a22ee49d4c8bdc59b3cefe54fdf51d6f563f5c3a35aa3d5e46fb12f3f1d33a36d6f9f64171e567ead1847e99cb612d0a9a74e7d44e16cad9d0bbc937
   languageName: node
   linkType: hard
 
@@ -13176,7 +13149,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"url-parse@npm:^1.5.1, url-parse@npm:^1.5.7":
+"url-parse@npm:^1.5.3, url-parse@npm:^1.5.7":
   version: 1.5.10
   resolution: "url-parse@npm:1.5.10"
   dependencies:
@@ -13637,17 +13610,17 @@ __metadata:
     vuex-persist: 3.1.3
     vuex-router-sync: ^5.0.0
     web-pkg: "*"
-    webdav: 4.6.0
+    webdav: 4.8.0
     webfontloader: ^1.6.28
     xml-js: ^1.6.11
   languageName: unknown
   linkType: soft
 
-"webdav@npm:4.6.0":
-  version: 4.6.0
-  resolution: "webdav@npm:4.6.0"
+"webdav@npm:4.8.0":
+  version: 4.8.0
+  resolution: "webdav@npm:4.8.0"
   dependencies:
-    axios: ^0.21.1
+    axios: ^0.24.0
     base-64: ^1.0.0
     fast-xml-parser: ^3.19.0
     he: ^1.2.0
@@ -13658,8 +13631,8 @@ __metadata:
     nested-property: ^4.0.0
     path-posix: ^1.0.0
     url-join: ^4.0.1
-    url-parse: ^1.5.1
-  checksum: 17d445757e43f7c8ea05cebac23978441ee568174c65b8d324b41689d942c036840e135480cf656562dda80e8e4c0fe6b581d5f9db79c5966ff6717dd57f6011
+    url-parse: ^1.5.3
+  checksum: be3f04c359b8f8800febfd18ca5e05258503180f3da7f804630a09bb19b69c0a558182f9bc427daee23785ddd0066a916f740c775de1ca3762981b09f2f1478a
   languageName: node
   linkType: hard
 

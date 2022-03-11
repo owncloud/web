@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="oc-flex">
     <oc-button
       id="files-view-options-btn"
       key="files-view-options-btn"
