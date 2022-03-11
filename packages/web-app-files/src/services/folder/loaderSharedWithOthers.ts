@@ -10,10 +10,15 @@ export class FolderLoaderSharedWithOthers implements FolderLoader {
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {
-    return useTask(function* (signal1, signal2, ref) {
-      ref.CLEAR_CURRENT_FILES_LIST()
+    const {
+      store,
+      clientService: { owncloudSdk: client }
+    } = context
 
-      let resources = yield ref.$client.requests.ocs({
+    return useTask(function* (signal1, signal2) {
+      store.commit('Files/CLEAR_CURRENT_FILES_LIST')
+
+      let resources = yield client.requests.ocs({
         service: 'apps/files_sharing',
         action: '/api/v1/shares?format=json&reshares=true&include_tags=false',
         method: 'GET'
@@ -23,16 +28,20 @@ export class FolderLoaderSharedWithOthers implements FolderLoader {
       resources = resources.ocs.data
 
       if (resources.length) {
+        const isOcis = store.getters.isOcis
+        const configuration = store.getters.configuration
+        const getToken = store.getters.getToken
+
         resources = aggregateResourceShares(
           resources,
           false,
-          !ref.isOcis,
-          ref.configuration.server,
-          ref.getToken
+          !isOcis,
+          configuration.server,
+          getToken
         )
       }
 
-      ref.LOAD_FILES({ currentFolder: null, files: resources })
+      store.commit('Files/LOAD_FILES', { currentFolder: null, files: resources })
     })
   }
 }
