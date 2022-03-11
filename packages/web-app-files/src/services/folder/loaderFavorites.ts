@@ -11,13 +11,24 @@ export class FolderLoaderFavorites implements FolderLoader {
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {
-    return useTask(function* (signal1, signal2, ref) {
-      ref.CLEAR_CURRENT_FILES_LIST()
+    const {
+      store,
+      clientService: { owncloudSdk: client }
+    } = context
 
-      let resources = yield ref.$client.files.getFavoriteFiles(DavProperties.Default)
+    return useTask(function* (signal1, signal2) {
+      store.commit('Files/CLEAR_CURRENT_FILES_LIST')
+
+      let resources = yield client.files.getFavoriteFiles(DavProperties.Default)
       resources = resources.map(buildResource)
-      ref.LOAD_FILES({ currentFolder: null, files: resources })
-      ref.loadIndicators({ client: this.$client, currentFolder: '/' })
+      store.commit('Files/LOAD_FILES', {
+        currentFolder: null,
+        files: resources
+      })
+      store.dispatch('Files/loadIndicators', {
+        client: client,
+        currentFolder: '/'
+      })
     })
   }
 }

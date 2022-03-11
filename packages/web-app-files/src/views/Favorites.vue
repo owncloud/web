@@ -118,7 +118,7 @@ export default {
   },
 
   created() {
-    this.loadResourcesTask.perform(this)
+    this.loadResourcesTask.perform()
   },
 
   beforeDestroy() {
@@ -126,8 +126,8 @@ export default {
   },
 
   methods: {
-    ...mapActions('Files', ['loadIndicators', 'loadPreview']),
-    ...mapMutations('Files', ['SET_FILE_SELECTION', 'LOAD_FILES', 'CLEAR_CURRENT_FILES_LIST']),
+    ...mapActions('Files', ['loadPreview']),
+    ...mapMutations('Files', ['SET_FILE_SELECTION']),
 
     rowMounted(resource, component) {
       if (!this.displayThumbnails) {
