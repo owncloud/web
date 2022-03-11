@@ -3,9 +3,15 @@ import Router from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { DavProperties, DavProperty } from 'web-pkg/src/constants'
 import { buildResource } from '../../helpers/resources'
-import { isLocationPublicActive, createLocationPublic } from '../../router'
+import {
+  isLocationPublicActive,
+  createLocationPublic,
+  createLocationOperations
+} from '../../router'
+
 import { linkRoleUploaderFolder } from '../../helpers/share'
 import omit from 'lodash-es/omit'
+import { Store } from 'vuex'
 
 export class FolderLoaderPublicFiles implements FolderLoader {
   public isEnabled(router: Router): boolean {
@@ -13,13 +19,21 @@ export class FolderLoaderPublicFiles implements FolderLoader {
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {
+    const {
+      store,
+      router,
+      clientService: { owncloudSdk: client }
+    } = context
+
     return useTask(function* (signal1, signal2, ref, sameRoute, path = null) {
-      ref.CLEAR_CURRENT_FILES_LIST()
+      store.commit('Files/CLEAR_CURRENT_FILES_LIST')
+
+      const publicLinkPassword = store.getters['Files/publicLinkPassword']
 
       try {
-        let resources = yield ref.$client.publicFiles.list(
-          path || ref.$route.params.item,
-          ref.publicLinkPassword,
+        let resources = yield client.publicFiles.list(
+          path || router.currentRoute.params.item,
+          publicLinkPassword,
           DavProperties.PublicLink
         )
 
@@ -28,24 +42,27 @@ export class FolderLoaderPublicFiles implements FolderLoader {
           resources[0].getProperty(DavProperty.PublicLinkPermission)
         )
         if (linkRoleUploaderFolder.bitmask(false) === sharePermissions) {
-          ref.$router.replace(
+          router.replace(
             createLocationPublic('files-public-drop', {
-              params: { token: ref.$route.params.item }
+              params: { token: router.currentRoute.params.item }
             })
           )
           return
         }
 
         resources = resources.map(buildResource)
-        ref.LOAD_FILES({ currentFolder: resources[0], files: resources.slice(1) })
+        store.commit('Files/LOAD_FILES', {
+          currentFolder: resources[0],
+          files: resources.slice(1)
+        })
 
         ref.refreshFileListHeaderPosition()
       } catch (error) {
-        ref.SET_CURRENT_FOLDER(null)
+        store.commit('Files/SET_CURRENT_FOLDER', null)
         console.error(error)
 
         if (error.statusCode === 401) {
-          ref.redirectToResolvePage()
+          redirectToResolvePage(router)
           return
         }
       }
@@ -57,14 +74,22 @@ export class FolderLoaderPublicFiles implements FolderLoader {
       // publicLink is password protected
       // public link is viewable
       // so we expect if the user is able to load resources, so he also is ready
-      yield unauthenticatedUserReady(ref.$router, ref.$store)
+      yield unauthenticatedUserReady(router, store)
       ref.accessibleBreadcrumb_focusAndAnnounceBreadcrumb(sameRoute)
     })
   }
 }
 
+const redirectToResolvePage = (router: Router) => {
+  router.push(
+    createLocationOperations('files-operations-resolver-public-link', {
+      params: { token: router.currentRoute.params.item }
+    })
+  )
+}
+
 // hacky, get rid asap, just a workaround
-const unauthenticatedUserReady = async (router, store) => {
+const unauthenticatedUserReady = async (router: Router, store: Store<any>) => {
   // exit early which could happen if
   // the resources get reloaded
   // another application decided that the user is already provisioned
