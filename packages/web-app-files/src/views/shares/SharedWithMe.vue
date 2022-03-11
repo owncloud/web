@@ -359,7 +359,7 @@ export default {
   },
 
   created() {
-    this.loadResourcesTask.perform(this)
+    this.loadResourcesTask.perform()
   },
 
   beforeDestroy() {
