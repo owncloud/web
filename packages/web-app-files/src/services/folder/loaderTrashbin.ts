@@ -11,15 +11,21 @@ export class FolderLoaderTrashbin implements FolderLoader {
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {
+    const {
+      store,
+      clientService: { owncloudSdk: client }
+    } = context
+
     return useTask(function* (signal1, signal2, ref) {
-      ref.CLEAR_CURRENT_FILES_LIST()
+      store.commit('Files/CLEAR_CURRENT_FILES_LIST')
 
-      const resources = yield ref.$client.fileTrash.list('', '1', DavProperties.Trashbin)
+      const resources = yield client.fileTrash.list('', '1', DavProperties.Trashbin)
 
-      ref.LOAD_FILES({
+      store.commit('Files/LOAD_FILES', {
         currentFolder: buildResource(resources[0]),
         files: resources.slice(1).map(buildDeletedResource)
       })
+
       ref.refreshFileListHeaderPosition()
     })
   }
