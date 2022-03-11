@@ -274,6 +274,11 @@ function getMountedWrapper(data, loading = false) {
       'oc-icon': true,
       'oc-spinner': true,
       'avatar-image': true
+    },
+    mocks: {
+      $route: {
+        params: {}
+      }
     }
   })
 }
