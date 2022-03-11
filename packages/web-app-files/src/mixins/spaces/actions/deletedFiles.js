@@ -8,7 +8,7 @@ export default {
           name: 'deletedFiles',
           icon: 'delete-bin-5',
           label: () => {
-            return this.$gettext('Deleted Files')
+            return this.$gettext('Deleted files')
           },
           handler: this.$_deletedFiles_trigger,
           isEnabled: ({ resources }) => {
