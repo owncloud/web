@@ -45,9 +45,9 @@ import {
   locationSharesWithMe,
   locationSharesWithOthers
 } from '../../router/shares'
-import { useActiveLocation } from '../../composables'
 import { computed, getCurrentInstance, unref } from '@vue/composition-api'
 import { useRouter } from 'web-pkg/src/composables'
+import { useActiveLocation } from '../../composables'
 
 export default {
   setup() {
@@ -61,24 +61,33 @@ export default {
       routes[route.name] = router.getRoutes().find((r) => r.name === route.name)
       return routes
     }, {})
+    const sharesWithMeActive = useActiveLocation(isLocationSharesActive, locationSharesWithMe.name)
+    const sharesWithOthersActive = useActiveLocation(
+      isLocationSharesActive,
+      locationSharesWithOthers.name
+    )
+    const sharesViaLinkActive = useActiveLocation(
+      isLocationSharesActive,
+      locationSharesViaLink.name
+    )
     const navItems = computed(() => [
       {
         icon: 'share-forward',
         to: sharesRoutes[locationSharesWithMe.name].path,
         text: $gettext('Shared with me'),
-        active: unref(useActiveLocation(isLocationSharesActive, locationSharesWithMe.name))
+        active: unref(sharesWithMeActive)
       },
       {
         icon: 'reply',
         to: sharesRoutes[locationSharesWithOthers.name].path,
         text: $gettext('Shared with others'),
-        active: unref(useActiveLocation(isLocationSharesActive, locationSharesWithOthers.name))
+        active: unref(sharesWithOthersActive)
       },
       {
         icon: 'link',
         to: sharesRoutes[locationSharesViaLink.name].path,
         text: $gettext('Shared via link'),
-        active: unref(useActiveLocation(isLocationSharesActive, locationSharesViaLink.name))
+        active: unref(sharesViaLinkActive)
       }
     ])
     return {
