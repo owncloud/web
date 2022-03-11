@@ -1,6 +1,6 @@
 import Router, { Route } from 'vue-router'
 import { useTask } from 'vue-concurrency'
-import { useRoute, useRouter, useClientService } from 'web-pkg/src/composables'
+import { useRouter, useClientService } from 'web-pkg/src/composables'
 import { unref } from '@vue/composition-api'
 import { useStore } from '../../../web-pkg/src/composables'
 import { Store } from 'vuex'
@@ -23,7 +23,6 @@ export type TaskContext = {
   clientService: ClientService
   store: Store<any>
   router: Router
-  route: Route
 }
 
 export interface FolderLoader {
@@ -50,7 +49,6 @@ export class FolderService {
   public getTask(): FolderLoaderTask {
     const store = useStore()
     const router = useRouter()
-    const route = useRoute()
     const clientService = useClientService()
     const loaders = this.loaders
 
@@ -62,8 +60,7 @@ export class FolderService {
       const context = {
         clientService,
         store,
-        router,
-        route: unref(route)
+        router
       }
       yield loader.getTask(context).perform(...args)
     })
