@@ -38,7 +38,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     sharesSubPageButton: {
-      selector: '//nav[@id="shares-navigation"]/ul/li/a[.="%s"]',
+      selector: '//nav[@id="shares-navigation"]//*[.="%s"]',
       locateStrategy: 'xpath'
     }
   }

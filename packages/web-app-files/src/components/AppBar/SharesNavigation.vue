@@ -4,11 +4,11 @@
       <li v-for="navItem in navItems" :key="`shares-navigation-desktop-${navItem.to}`">
         <oc-button
           type="router-link"
-          class="oc-mr-s"
+          class="oc-mr-m oc-py-s shares-nav-desktop"
           appearance="raw"
-          :variation="navItem.active ? 'primary' : 'passive'"
           :to="navItem.to"
         >
+          <oc-icon size="small" :name="navItem.icon" />
           <span v-text="navItem.text" />
         </oc-button>
       </li>
@@ -20,10 +20,15 @@
           <li v-for="navItem in navItems" :key="`shares-navigation-mobile-${navItem.to}`">
             <oc-button
               type="router-link"
+              class="oc-my-xs shares-nav-mobile"
               appearance="raw"
-              :variation="navItem.active ? 'primary' : 'passive'"
               :to="navItem.to"
+              :class="{ 'oc-background-primary-gradient': navItem.active }"
+              :variation="navItem.active ? 'inverse' : 'passive'"
             >
+              <span class="icon-box" :class="{ 'icon-box-active': navItem.active }">
+                <oc-icon :name="navItem.icon" />
+              </span>
               <span v-text="navItem.text" />
             </oc-button>
           </li>
@@ -40,7 +45,8 @@ import {
   locationSharesWithMe,
   locationSharesWithOthers
 } from '../../router/shares'
-import { computed, getCurrentInstance } from '@vue/composition-api'
+import { useActiveLocation } from '../../composables'
+import { computed, getCurrentInstance, unref } from '@vue/composition-api'
 import { useRouter } from 'web-pkg/src/composables'
 
 export default {
@@ -57,19 +63,22 @@ export default {
     }, {})
     const navItems = computed(() => [
       {
+        icon: 'share-forward',
         to: sharesRoutes[locationSharesWithMe.name].path,
         text: $gettext('Shared with me'),
-        active: isLocationSharesActive(router, 'files-shares-with-me')
+        active: unref(useActiveLocation(isLocationSharesActive, locationSharesWithMe.name))
       },
       {
+        icon: 'reply',
         to: sharesRoutes[locationSharesWithOthers.name].path,
         text: $gettext('Shared with others'),
-        active: isLocationSharesActive(router, 'files-shares-with-others')
+        active: unref(useActiveLocation(isLocationSharesActive, locationSharesWithOthers.name))
       },
       {
+        icon: 'link',
         to: sharesRoutes[locationSharesViaLink.name].path,
         text: $gettext('Shared via link'),
-        active: isLocationSharesActive(router, 'files-shares-via-link')
+        active: unref(useActiveLocation(isLocationSharesActive, locationSharesViaLink.name))
       }
     ])
     return {
@@ -79,7 +88,35 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.router-link-active {
-  text-decoration: underline;
+#shares-navigation {
+  a {
+    gap: var(--oc-space-medium);
+    width: 100%;
+
+    &:focus,
+    &:hover {
+      text-decoration: none;
+    }
+
+    &.shares-nav-mobile {
+      justify-content: flex-start;
+    }
+
+    .icon-box {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      width: 40px;
+      height: 40px;
+    }
+    .icon-box-active {
+      box-shadow: 2px 0 6px rgba(0, 0, 0, 0.14);
+    }
+  }
+
+  .shares-nav-desktop.router-link-active {
+    border-bottom: 2px solid var(--oc-color-swatch-primary-default) !important;
+    border-radius: 0;
+  }
 }
 </style>
