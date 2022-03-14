@@ -2696,7 +2696,7 @@ def githubComment(alternateSuiteName):
         "image": THEGEEKLAB_DRONE_GITHUB_COMMENT,
         "pull": "if-not-exists",
         "settings": {
-            "message": "%s/comments.file" % dir["web"],
+            "message_file": "%s/comments.file" % dir["web"],
             "key": "pr-${DRONE_PULL_REQUEST}",  #TODO: we could delete the comment after a successful CI run
             "update": "true",
             "api_key": {
