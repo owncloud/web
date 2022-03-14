@@ -25,7 +25,7 @@ export type TaskContext = {
 }
 
 export interface FolderLoader {
-  isEnabled(router: Router): boolean
+  isActive(router: Router): boolean
   getTask(options: TaskContext): FolderLoaderTask
 }
 
@@ -52,7 +52,7 @@ export class FolderService {
     const loaders = this.loaders
 
     return useTask(function* (...args) {
-      const loader = loaders.find((l) => l.isEnabled(unref(router)))
+      const loader = loaders.find((l) => l.isActive(unref(router)))
       if (!loader) {
         throw new Error('No folder loader found for route')
       }

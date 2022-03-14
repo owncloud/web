@@ -7,7 +7,7 @@ import { buildResource, buildSpace, buildWebDavSpacesPath } from '../../helpers/
 import { DavProperties } from 'web-pkg/src/constants'
 
 export class FolderLoaderProject implements FolderLoader {
-  public isEnabled(router: Router): boolean {
+  public isActive(router: Router): boolean {
     return isLocationSpacesActive(router, 'files-spaces-project')
   }
 

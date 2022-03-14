@@ -14,7 +14,7 @@ import omit from 'lodash-es/omit'
 import { Store } from 'vuex'
 
 export class FolderLoaderPublicFiles implements FolderLoader {
-  public isEnabled(router: Router): boolean {
+  public isActive(router: Router): boolean {
     return isLocationPublicActive(router, 'files-public-files')
   }
 

@@ -14,7 +14,7 @@ export const fetchResources = async (client, path, properties) => {
 }
 
 export class FolderLoaderPersonal implements FolderLoader {
-  public isEnabled(router: Router): boolean {
+  public isActive(router: Router): boolean {
     return isLocationSpacesActive(router, 'files-spaces-personal-home')
   }
 

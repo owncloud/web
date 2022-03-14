@@ -11,7 +11,11 @@ import {
 } from '../../helpers/resources'
 
 export class FolderLoaderTrashbin implements FolderLoader {
-  public isEnabled(router: Router): boolean {
+  public isEnabled(): boolean {
+    return true
+  }
+
+  public isActive(router: Router): boolean {
     return (
       isLocationTrashActive(router, 'files-trash-personal') ||
       isLocationTrashActive(router, 'files-trash-spaces-project')

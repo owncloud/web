@@ -6,7 +6,7 @@ import { buildResource } from '../../helpers/resources'
 import { isLocationCommonActive } from '../../router'
 
 export class FolderLoaderFavorites implements FolderLoader {
-  public isEnabled(router: Router): boolean {
+  public isActive(router: Router): boolean {
     return isLocationCommonActive(router, 'files-common-favorites')
   }
 

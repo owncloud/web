@@ -7,7 +7,7 @@ import { useCapabilityFilesSharingResharing } from 'web-pkg/src/composables'
 import { unref } from '@vue/composition-api'
 
 export class FolderLoaderSharedWithMe implements FolderLoader {
-  public isEnabled(router: Router): boolean {
+  public isActive(router: Router): boolean {
     return isLocationSharesActive(router, 'files-shares-with-me')
   }
 

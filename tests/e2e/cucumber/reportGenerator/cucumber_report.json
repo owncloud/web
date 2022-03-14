@@ -1,0 +1,748 @@
+[
+  {
+    "description": "  As a kindergarten operator named Alice\n  I want to manage all file related operations by using ownCloud WEB\n  So that i'm sure all parents are informed and have the latest information in a easy and secure way",
+    "elements": [
+      {
+        "description": "",
+        "id": "kindergarten-can-use-web-to-organize-a-day;alice-can-share-this-weeks-meal-plan-with-all-parents",
+        "keyword": "Scenario",
+        "line": 15,
+        "name": "Alice can share this weeks meal plan with all parents",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "Alice"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "Brian"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "Carol"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "the following users have been created",
+            "match": {
+              "location": "tests/e2e/cucumber/step_definitions/api.ts:6"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2535000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 12,
+            "name": "the default folder for received shares has been set to \"Shares\"",
+            "match": {
+              "location": "tests/e2e/cucumber/step_definitions/api.ts:19"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 397000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 13,
+            "name": "auto-accept shares has been disabled",
+            "match": {
+              "location": "tests/e2e/cucumber/step_definitions/api.ts:30"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 434000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 16,
+            "name": "\"Alice\" logs in",
+            "match": {
+              "location": "tests/e2e/cucumber/step_definitions/session.ts:24"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 3577000000
+            },
+            "embeddings": [
+              {
+                "data": "{\"actor\":\"Alice\",\"text\":\"Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com\\nLicense - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)\\n\",\"type\":\"log\",\"args\":[{\"_type\":\"JSHandle\",\"_guid\":\"handle@80ae64c00c8e195ef92b6606288c7cb6\"}],\"location\":{\"url\":\"http://host.docker.internal:8080/index.php/apps/web/js/chunks/vendor.js\",\"lineNumber\":51233,\"columnNumber\":10}}",
+                "mime_type": "application/json"
+              },
+              {
+                "data": "{\"actor\":\"Alice\",\"text\":\"Download the Vue Devtools extension for a better development experience:\\nhttps://github.com/vuejs/vue-devtools\",\"type\":\"info\",\"args\":[{\"_type\":\"JSHandle\",\"_guid\":\"handle@c8ea60cf68227a690e74c556988bfe69\"}],\"location\":{\"url\":\"http://host.docker.internal:8080/index.php/apps/web/js/chunks/vendor.js\",\"lineNumber\":20383,\"columnNumber\":48}}",
+                "mime_type": "application/json"
+              },
+              {
+                "data": "{\"actor\":\"Alice\",\"text\":\"You are running Vue in development mode.\\nMake sure to turn on production mode when deploying for production.\\nSee more tips at https://vuejs.org/guide/deployment.html\",\"type\":\"info\",\"args\":[{\"_type\":\"JSHandle\",\"_guid\":\"handle@373a4f0d73498b5e4aba0a572ce9289f\"}],\"location\":{\"url\":\"http://host.docker.internal:8080/index.php/apps/web/js/chunks/vendor.js\",\"lineNumber\":20392,\"columnNumber\":46}}",
+                "mime_type": "application/json"
+              },
+              {
+                "data": "{\"actor\":\"Alice\",\"text\":\"UserManager.getUser: user not found in storage\",\"type\":\"info\",\"args\":[{\"_type\":\"JSHandle\",\"_guid\":\"handle@edcbc7ae70776e832d48cff2faee23ad\"}],\"location\":{\"url\":\"http://host.docker.internal:8080/index.php/apps/web/js/chunks/vendor.js\",\"lineNumber\":47822,\"columnNumber\":1832}}",
+                "mime_type": "application/json"
+              },
+              {
+                "data": "{\"actor\":\"Alice\",\"text\":\"requestStore // store api is deprecated, use with caution\",\"type\":\"warning\",\"args\":[{\"_type\":\"JSHandle\",\"_guid\":\"handle@d7b515623635a662cac6a0728a083ac6\"}],\"location\":{\"url\":\"http://host.docker.internal:8080/index.php/apps/web/js/web-runtime.js\",\"lineNumber\":5866,\"columnNumber\":18}}",
+                "mime_type": "application/json"
+              },
+              {
+                "data": "{\"actor\":\"Alice\",\"text\":\"requestRouter // router api is deprecated, use with caution\",\"type\":\"warning\",\"args\":[{\"_type\":\"JSHandle\",\"_guid\":\"handle@cda719bd282f89b97b58f55fcd83c982\"}],\"location\":{\"url\":\"http://host.docker.internal:8080/index.php/apps/web/js/web-runtime.js\",\"lineNumber\":5879,\"columnNumber\":18}}",
+                "mime_type": "application/json"
+              },
+              {
+                "data": "{\"actor\":\"Alice\",\"text\":\"Theme '' does not specify a json file, using default theme.\",\"type\":\"info\",\"args\":[{\"_type\":\"JSHandle\",\"_guid\":\"handle@9d6acede2640421ad2d54cde995641ee\"}],\"location\":{\"url\":\"http://host.docker.internal:8080/index.php/apps/web/js/web-runtime.js\",\"lineNumber\":6055,\"columnNumber\":16}}",
+                "mime_type": "application/json"
+              },
+              {
+                "data": "{\"actor\":\"Alice\",\"text\":\"%c ownCloud Web UI 5.0.0  background-color: #041E42; color: #FFFFFF; font-weight: bold; border: 1px solid #FFFFFF; padding: 5px;\",\"type\":\"log\",\"args\":[{\"_type\":\"JSHandle\",\"_guid\":\"handle@7100deecb49292a3b5bb928225cdb689\"},{\"_type\":\"JSHandle\",\"_guid\":\"handle@c470fa96ebda702b68eef42283d6397e\"}],\"location\":{\"url\":\"http://host.docker.internal:8080/index.php/apps/web/js/web-runtime.js\",\"lineNumber\":6248,\"columnNumber\":18}}",
+                "mime_type": "application/json"
+              },
+              {
+                "data": "{\"actor\":\"Alice\",\"text\":\"requestStore // store api is deprecated, use with caution\",\"type\":\"warning\",\"args\":[{\"_type\":\"JSHandle\",\"_guid\":\"handle@15e2d8648fb8060e2e30611a41dd455d\"}],\"location\":{\"url\":\"http://host.docker.internal:8080/index.php/apps/web/js/web-runtime.js\",\"lineNumber\":5866,\"columnNumber\":18}}",
+                "mime_type": "application/json"
+              },
+              {
+                "data": "{\"actor\":\"Alice\",\"text\":\"requestRouter // router api is deprecated, use with caution\",\"type\":\"warning\",\"args\":[{\"_type\":\"JSHandle\",\"_guid\":\"handle@a3a047e93c6ff49a51c6d22b427cb043\"}],\"location\":{\"url\":\"http://host.docker.internal:8080/index.php/apps/web/js/web-runtime.js\",\"lineNumber\":5879,\"columnNumber\":18}}",
+                "mime_type": "application/json"
+              },
+              {
+                "data": "{\"actor\":\"Alice\",\"text\":\"UserManager.getUser: user not found in storage\",\"type\":\"info\",\"args\":[{\"_type\":\"JSHandle\",\"_guid\":\"handle@bfad8a1072649e64cb916e5e864ab049\"}],\"location\":{\"url\":\"http://host.docker.internal:8080/index.php/apps/web/js/chunks/vendor.js\",\"lineNumber\":47822,\"columnNumber\":1832}}",
+                "mime_type": "application/json"
+              },
+              {
+                "data": "{\"actor\":\"Alice\",\"text\":\"UserManager.signinRedirect: successful\",\"type\":\"info\",\"args\":[{\"_type\":\"JSHandle\",\"_guid\":\"handle@11398450677af860c87514154ee21727\"}],\"location\":{\"url\":\"http://host.docker.internal:8080/index.php/apps/web/js/chunks/vendor.js\",\"lineNumber\":47822,\"columnNumber\":1832}}",
+                "mime_type": "application/json"
+              },
+              {
+                "data": "{\"actor\":\"Alice\",\"text\":\"JQMIGRATE: Migrate is installed, version 1.4.0\",\"type\":\"log\",\"args\":[{\"_type\":\"JSHandle\",\"_guid\":\"handle@420a5b57486e89f0988c758709219b85\"}],\"location\":{\"url\":\"http://host.docker.internal:8080/core/vendor/jquery-migrate/jquery-migrate.min.js?v=b263f999303617799370112dc28aeaa8\",\"lineNumber\":1,\"columnNumber\":551}}",
+                "mime_type": "application/json"
+              },
+              {
+                "data": "{\"actor\":\"Alice\",\"text\":\"JQMIGRATE: Migrate is installed, version 1.4.0\",\"type\":\"log\",\"args\":[{\"_type\":\"JSHandle\",\"_guid\":\"handle@88c223a9d019b3a6a9a36077c6f643f3\"}],\"location\":{\"url\":\"http://host.docker.internal:8080/core/vendor/jquery-migrate/jquery-migrate.min.js?v=b263f999303617799370112dc28aeaa8\",\"lineNumber\":1,\"columnNumber\":551}}",
+                "mime_type": "application/json"
+              },
+              {
+                "data": "{\"actor\":\"Alice\",\"text\":\"Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com\\nLicense - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)\\n\",\"type\":\"log\",\"args\":[{\"_type\":\"JSHandle\",\"_guid\":\"handle@f540ce1f695559bf7900273413519c9f\"}],\"location\":{\"url\":\"http://host.docker.internal:8080/index.php/apps/web/js/chunks/vendor.js\",\"lineNumber\":51233,\"columnNumber\":10}}",
+                "mime_type": "application/json"
+              },
+              {
+                "data": "{\"actor\":\"Alice\",\"text\":\"Download the Vue Devtools extension for a better development experience:\\nhttps://github.com/vuejs/vue-devtools\",\"type\":\"info\",\"args\":[{\"_type\":\"JSHandle\",\"_guid\":\"handle@d84361b67c24dd6c0c5498405020c257\"}],\"location\":{\"url\":\"http://host.docker.internal:8080/index.php/apps/web/js/chunks/vendor.js\",\"lineNumber\":20383,\"columnNumber\":48}}",
+                "mime_type": "application/json"
+              },
+              {
+                "data": "{\"actor\":\"Alice\",\"text\":\"You are running Vue in development mode.\\nMake sure to turn on production mode when deploying for production.\\nSee more tips at https://vuejs.org/guide/deployment.html\",\"type\":\"info\",\"args\":[{\"_type\":\"JSHandle\",\"_guid\":\"handle@5cb1fb6019342edd5dddbc0e91fabb71\"}],\"location\":{\"url\":\"http://host.docker.internal:8080/index.php/apps/web/js/chunks/vendor.js\",\"lineNumber\":20392,\"columnNumber\":46}}",
+                "mime_type": "application/json"
+              },
+              {
+                "data": "{\"actor\":\"Alice\",\"text\":\"UserManager.getUser: user not found in storage\",\"type\":\"info\",\"args\":[{\"_type\":\"JSHandle\",\"_guid\":\"handle@388009684d820b32094c83ff9f50c9fe\"}],\"location\":{\"url\":\"http://host.docker.internal:8080/index.php/apps/web/js/chunks/vendor.js\",\"lineNumber\":47822,\"columnNumber\":1832}}",
+                "mime_type": "application/json"
+              },
+              {
+                "data": "{\"actor\":\"Alice\",\"text\":\"requestStore // store api is deprecated, use with caution\",\"type\":\"warning\",\"args\":[{\"_type\":\"JSHandle\",\"_guid\":\"handle@35783b93d046a1fe3b6652c951c0d600\"}],\"location\":{\"url\":\"http://host.docker.internal:8080/index.php/apps/web/js/web-runtime.js\",\"lineNumber\":5866,\"columnNumber\":18}}",
+                "mime_type": "application/json"
+              },
+              {
+                "data": "{\"actor\":\"Alice\",\"text\":\"requestRouter // router api is deprecated, use with caution\",\"type\":\"warning\",\"args\":[{\"_type\":\"JSHandle\",\"_guid\":\"handle@f24be750d49d43a6a56176feb3d69a4a\"}],\"location\":{\"url\":\"http://host.docker.internal:8080/index.php/apps/web/js/web-runtime.js\",\"lineNumber\":5879,\"columnNumber\":18}}",
+                "mime_type": "application/json"
+              },
+              {
+                "data": "{\"actor\":\"Alice\",\"text\":\"Theme '' does not specify a json file, using default theme.\",\"type\":\"info\",\"args\":[{\"_type\":\"JSHandle\",\"_guid\":\"handle@de562a0cbaa5fecf73b79f7355d55f21\"}],\"location\":{\"url\":\"http://host.docker.internal:8080/index.php/apps/web/js/web-runtime.js\",\"lineNumber\":6055,\"columnNumber\":16}}",
+                "mime_type": "application/json"
+              },
+              {
+                "data": "{\"actor\":\"Alice\",\"text\":\"%c ownCloud Web UI 5.0.0  background-color: #041E42; color: #FFFFFF; font-weight: bold; border: 1px solid #FFFFFF; padding: 5px;\",\"type\":\"log\",\"args\":[{\"_type\":\"JSHandle\",\"_guid\":\"handle@43b1390e1ff877ac7af1aead8ff3d38a\"},{\"_type\":\"JSHandle\",\"_guid\":\"handle@b4cc663462176bc33f229c83b4cfec47\"}],\"location\":{\"url\":\"http://host.docker.internal:8080/index.php/apps/web/js/web-runtime.js\",\"lineNumber\":6248,\"columnNumber\":18}}",
+                "mime_type": "application/json"
+              },
+              {
+                "data": "{\"actor\":\"Alice\",\"text\":\"requestStore // store api is deprecated, use with caution\",\"type\":\"warning\",\"args\":[{\"_type\":\"JSHandle\",\"_guid\":\"handle@7fe49f94c577c7bc6ac697a14d6d0e59\"}],\"location\":{\"url\":\"http://host.docker.internal:8080/index.php/apps/web/js/web-runtime.js\",\"lineNumber\":5866,\"columnNumber\":18}}",
+                "mime_type": "application/json"
+              },
+              {
+                "data": "{\"actor\":\"Alice\",\"text\":\"requestRouter // router api is deprecated, use with caution\",\"type\":\"warning\",\"args\":[{\"_type\":\"JSHandle\",\"_guid\":\"handle@fff2e2ce41f2ee90af7fd6592f05c8f0\"}],\"location\":{\"url\":\"http://host.docker.internal:8080/index.php/apps/web/js/web-runtime.js\",\"lineNumber\":5879,\"columnNumber\":18}}",
+                "mime_type": "application/json"
+              },
+              {
+                "data": "{\"actor\":\"Alice\",\"text\":\"New User Loaded. access_token： JFo399F5FGvJ69qnJdeCbqPeUEVqmz8ZXvx3jclkZBFeWyZucyr8ICHFgiIVHMtD, refresh_token: undefined\",\"type\":\"log\",\"args\":[{\"_type\":\"JSHandle\",\"_guid\":\"handle@dd868b029ffd67ed10c930a965f8e4b3\"}],\"location\":{\"url\":\"http://host.docker.internal:8080/index.php/apps/web/js/web-runtime.js\",\"lineNumber\":4365,\"columnNumber\":18}}",
+                "mime_type": "application/json"
+              },
+              {
+                "data": "{\"actor\":\"Alice\",\"text\":\"UserManager.signinRedirectCallback: no sub\",\"type\":\"info\",\"args\":[{\"_type\":\"JSHandle\",\"_guid\":\"handle@4a1fbc55d28a3ef1fe0600cf70de6ab8\"}],\"location\":{\"url\":\"http://host.docker.internal:8080/index.php/apps/web/js/chunks/vendor.js\",\"lineNumber\":47822,\"columnNumber\":1832}}",
+                "mime_type": "application/json"
+              }
+            ]
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 17,
+            "name": "\"Alice\" opens the \"files\" app",
+            "match": {
+              "location": "tests/e2e/cucumber/step_definitions/runtime.ts:5"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 349000000
+            },
+            "embeddings": [
+              {
+                "data": "{\"actor\":\"Alice\",\"text\":\"UserManager.getUser: user loaded\",\"type\":\"info\",\"args\":[{\"_type\":\"JSHandle\",\"_guid\":\"handle@460998932502c3f01fe8dc865417d798\"}],\"location\":{\"url\":\"http://host.docker.internal:8080/index.php/apps/web/js/chunks/vendor.js\",\"lineNumber\":47822,\"columnNumber\":1832}}",
+                "mime_type": "application/json"
+              },
+              {
+                "data": "{\"actor\":\"Alice\",\"text\":\"UserManager.signinRedirect: successful\",\"type\":\"info\",\"args\":[{\"_type\":\"JSHandle\",\"_guid\":\"handle@828c79ad4d6b5d2364e9de323bcb53d4\"}],\"location\":{\"url\":\"http://host.docker.internal:8080/index.php/apps/web/js/chunks/vendor.js\",\"lineNumber\":47822,\"columnNumber\":1832}}",
+                "mime_type": "application/json"
+              },
+              {
+                "data": "{\"actor\":\"Alice\",\"text\":\"requestStore // store api is deprecated, use with caution\",\"type\":\"warning\",\"args\":[{\"_type\":\"JSHandle\",\"_guid\":\"handle@b0a2c840874055c22f4a4c7f14de21bd\"}],\"location\":{\"url\":\"http://host.docker.internal:8080/index.php/apps/web/js/web-runtime.js\",\"lineNumber\":5866,\"columnNumber\":18}}",
+                "mime_type": "application/json"
+              },
+              {
+                "data": "{\"actor\":\"Alice\",\"text\":\"requestRouter // router api is deprecated, use with caution\",\"type\":\"warning\",\"args\":[{\"_type\":\"JSHandle\",\"_guid\":\"handle@b21d0168a91f3a923c6bab0bac6fa869\"}],\"location\":{\"url\":\"http://host.docker.internal:8080/index.php/apps/web/js/web-runtime.js\",\"lineNumber\":5879,\"columnNumber\":18}}",
+                "mime_type": "application/json"
+              }
+            ]
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 18,
+            "name": "\"Alice\" navigates to the files page",
+            "match": {
+              "location": "tests/e2e/cucumber/step_definitions/app.files.ts:7"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 26492000000,
+              "error_message": "locator.click: Target closed\n=========================== logs ===========================\nwaiting for selector \"a[href=\"#/files/spaces/personal/home\"] .text\"\n============================================================\n    at AllFilesPage.navigate (/Users/bene/Code/owncloud/phoenix/tests/e2e/support/page/files/allFiles.ts:17:23)\n    at World.<anonymous> (/Users/bene/Code/owncloud/phoenix/tests/e2e/cucumber/step_definitions/app.files.ts:13:24)"
+            },
+            "embeddings": [
+              {
+                "data": "{\"actor\":\"Alice\",\"text\":\"JQMIGRATE: Migrate is installed, version 1.4.0\",\"type\":\"log\",\"args\":[{\"_type\":\"JSHandle\",\"_guid\":\"handle@aad61ffce494e8db920c4d9986916d68\"}],\"location\":{\"url\":\"http://host.docker.internal:8080/core/vendor/jquery-migrate/jquery-migrate.min.js?v=b263f999303617799370112dc28aeaa8\",\"lineNumber\":1,\"columnNumber\":551}}",
+                "mime_type": "application/json"
+              }
+            ]
+          },
+          {
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "groups/Kindergarten Koalas/meal plan"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "groups/Pre-Schools Pirates/meal plan"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "groups/Teddy Bear Daycare/meal plan"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "And ",
+            "line": 19,
+            "name": "\"Alice\" creates the following folders",
+            "match": {
+              "location": "tests/e2e/cucumber/step_definitions/app.files.ts:27"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "resource",
+                      "to"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "PARENT/parent.txt",
+                      "groups/Kindergarten Koalas/meal plan"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "lorem.txt",
+                      "groups/Kindergarten Koalas/meal plan"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "lorem-big.txt",
+                      "groups/Kindergarten Koalas/meal plan"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "data.zip",
+                      "groups/Pre-Schools Pirates/meal plan"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "lorem.txt",
+                      "groups/Pre-Schools Pirates/meal plan"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "lorem-big.txt",
+                      "groups/Pre-Schools Pirates/meal plan"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "data.zip",
+                      "groups/Teddy Bear Daycare/meal plan"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "lorem.txt",
+                      "groups/Teddy Bear Daycare/meal plan"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "lorem-big.txt",
+                      "groups/Teddy Bear Daycare/meal plan"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "And ",
+            "line": 23,
+            "name": "\"Alice\" uploads the following resources",
+            "match": {
+              "location": "tests/e2e/cucumber/step_definitions/app.files.ts:40"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "resource",
+                      "user",
+                      "role"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "groups/Pre-Schools Pirates/meal plan",
+                      "Brian",
+                      "editor"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "groups/Pre-Schools Pirates/meal plan",
+                      "Carol",
+                      "viewer"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "And ",
+            "line": 36,
+            "name": "\"Alice\" shares the following resources via the sidebar panel",
+            "match": {
+              "location": "tests/e2e/cucumber/step_definitions/app.files.ts:66"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 41,
+            "name": "\"Brian\" logs in",
+            "match": {
+              "location": "tests/e2e/cucumber/step_definitions/session.ts:24"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 42,
+            "name": "\"Brian\" opens the \"files\" app",
+            "match": {
+              "location": "tests/e2e/cucumber/step_definitions/runtime.ts:5"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "meal plan"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "And ",
+            "line": 43,
+            "name": "\"Brian\" accepts the following resources",
+            "match": {
+              "location": "tests/e2e/cucumber/step_definitions/app.files.ts:134"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "resource",
+                      "from"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "data.zip",
+                      "Shares/meal plan"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "And ",
+            "line": 45,
+            "name": "\"Brian\" downloads the following files",
+            "match": {
+              "location": "tests/e2e/cucumber/step_definitions/app.files.ts:102"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 50,
+            "name": "\"Carol\" logs in",
+            "match": {
+              "location": "tests/e2e/cucumber/step_definitions/session.ts:24"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 51,
+            "name": "\"Carol\" opens the \"files\" app",
+            "match": {
+              "location": "tests/e2e/cucumber/step_definitions/runtime.ts:5"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "meal plan"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "And ",
+            "line": 52,
+            "name": "\"Carol\" accepts the following resources",
+            "match": {
+              "location": "tests/e2e/cucumber/step_definitions/app.files.ts:134"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "resource",
+                      "from"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "data.zip",
+                      "Shares/meal plan"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "lorem.txt",
+                      "Shares/meal plan"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "lorem-big.txt",
+                      "Shares/meal plan"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "And ",
+            "line": 54,
+            "name": "\"Carol\" downloads the following files",
+            "match": {
+              "location": "tests/e2e/cucumber/step_definitions/app.files.ts:102"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 61,
+            "name": "\"Carol\" logs out",
+            "match": {
+              "location": "tests/e2e/cucumber/step_definitions/session.ts:35"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "resource",
+                      "from"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "lorem.txt",
+                      "Shares/meal plan"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "lorem-big.txt",
+                      "Shares/meal plan"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "When ",
+            "line": 62,
+            "name": "\"Brian\" downloads the following files",
+            "match": {
+              "location": "tests/e2e/cucumber/step_definitions/app.files.ts:102"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 68,
+            "name": "\"Brian\" logs out",
+            "match": {
+              "location": "tests/e2e/cucumber/step_definitions/session.ts:35"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "resource",
+                      "from"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "parent.txt",
+                      "groups/Kindergarten Koalas/meal plan"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "lorem.txt",
+                      "groups/Kindergarten Koalas/meal plan"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "lorem-big.txt",
+                      "groups/Kindergarten Koalas/meal plan"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "data.zip",
+                      "groups/Pre-Schools Pirates/meal plan"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "lorem.txt",
+                      "groups/Pre-Schools Pirates/meal plan"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "lorem-big.txt",
+                      "groups/Pre-Schools Pirates/meal plan"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "data.zip",
+                      "groups/Teddy Bear Daycare/meal plan"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "lorem.txt",
+                      "groups/Teddy Bear Daycare/meal plan"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "lorem-big.txt",
+                      "groups/Teddy Bear Daycare/meal plan"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "And ",
+            "line": 69,
+            "name": "\"Alice\" downloads the following files",
+            "match": {
+              "location": "tests/e2e/cucumber/step_definitions/app.files.ts:102"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 82,
+            "name": "\"Alice\" logs out",
+            "match": {
+              "location": "tests/e2e/cucumber/step_definitions/session.ts:35"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 31000000
+            },
+            "embeddings": [
+              {
+                "data": "Status: FAILED. Duration:26s",
+                "mime_type": "text/plain"
+              }
+            ]
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      }
+    ],
+    "id": "kindergarten-can-use-web-to-organize-a-day",
+    "line": 1,
+    "keyword": "Feature",
+    "name": "Kindergarten can use web to organize a day",
+    "tags": [],
+    "uri": "tests/e2e/cucumber/kindergarten.feature"
+  }
+]
