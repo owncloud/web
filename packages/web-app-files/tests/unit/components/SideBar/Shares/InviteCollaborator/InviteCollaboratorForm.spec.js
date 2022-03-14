@@ -46,7 +46,7 @@ describe('InviteCollaboratorForm', () => {
   })
   describe('behaves correctly', () => {
     it.todo('upon mount fetches recipients')
-    it('the "share" button', async () => {
+    it('clicking the invite-sharees button calls the "share"-action', async () => {
       const selectedCollaborators = [
         { shareWith: 'marie', value: { shareType: ShareTypes.user.value }, label: 'label' }
       ]
