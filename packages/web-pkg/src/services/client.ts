@@ -16,6 +16,8 @@ export class ClientService {
     instance: Graph
   }
 
+  private owncloudSdkClient: OwnCloudSdk
+
   public httpAuthenticated(token: string): HttpClient {
     if (!this.httpAuthenticatedClient || this.httpAuthenticatedClient.token !== token) {
       this.httpAuthenticatedClient = {
@@ -57,9 +59,11 @@ export class ClientService {
   }
 
   public get owncloudSdk(): OwnCloudSdk {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    return window.Vue.prototype.$client
+    return this.owncloudSdkClient
+  }
+
+  public set owncloudSdk(owncloudSdk: OwnCloudSdk) {
+    this.owncloudSdkClient = owncloudSdk
   }
 }
 

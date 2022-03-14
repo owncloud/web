@@ -453,7 +453,7 @@ describe('LocationPicker', () => {
         $router: router
       },
       setup: () => ({
-        navigateToTargetTask: {
+        loadResourcesTask: {
           isRunning: loading,
           perform: jest.fn()
         },

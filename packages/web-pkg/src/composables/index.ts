@@ -1,4 +1,5 @@
 export * from './appDefaults'
+export * from './clientService'
 export * from './localStorage'
 export * from './router'
 export * from './store'

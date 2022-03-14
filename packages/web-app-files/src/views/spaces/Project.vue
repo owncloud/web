@@ -143,17 +143,15 @@
 import NoContentMessage from '../../components/FilesList/NoContentMessage.vue'
 import NotFoundMessage from '../../components/FilesList/NotFoundMessage.vue'
 import ListLoader from '../../components/FilesList/ListLoader.vue'
-import { computed, ref, unref } from '@vue/composition-api'
-import { useStore, useRouteQuery } from 'web-pkg/src/composables'
+import { computed, ref } from '@vue/composition-api'
 import { marked } from 'marked'
 import sanitizeHtml from 'sanitize-html'
 import MixinAccessibleBreadcrumb from '../../mixins/accessibleBreadcrumb'
 import { bus } from 'web-pkg/src/instance'
 import { buildResource, buildWebDavSpacesPath } from '../../helpers/resources'
 import { loadPreview } from '../../helpers/resource'
-import ResourceTable, { determineSortFields } from '../../components/FilesList/ResourceTable.vue'
+import ResourceTable from '../../components/FilesList/ResourceTable.vue'
 import { createLocationSpaces } from '../../router'
-import { usePagination, useSort } from '../../composables'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
 import Pagination from '../../components/FilesList/Pagination.vue'
@@ -175,7 +173,7 @@ import EditReadmeContent from '../../mixins/spaces/actions/editReadmeContent'
 import QuotaModal from '../../components/Spaces/QuotaModal.vue'
 import ReadmeContentModal from '../../components/Spaces/ReadmeContentModal.vue'
 import { thumbnailService } from '../../services'
-import { folderService } from '../../services/folder'
+import { useResourcesViewDefaults } from '../../composables'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -211,41 +209,12 @@ export default {
     }
   },
   setup() {
-    const store = useStore()
-
     const space = ref({})
 
-    const storeItems = computed(() => store.getters['Files/activeFiles'] || [])
-    const fields = computed(() => {
-      return determineSortFields(unref(storeItems)[0])
-    })
-
-    const { sortBy, sortDir, items, handleSort } = useSort({
-      items: storeItems,
-      fields
-    })
-
-    const paginationPageQuery = useRouteQuery('page', '1')
-    const paginationPage = computed(() => parseInt(String(paginationPageQuery.value)))
-    const { items: paginatedResources, total: paginationPages } = usePagination({
-      page: paginationPage,
-      items,
-      sortDir,
-      sortBy
-    })
-
-    const loadResourcesTask = folderService.getTask()
-
     return {
-      space,
-      loadResourcesTask,
+      ...useResourcesViewDefaults(),
       resourceTargetLocation: createLocationSpaces('files-spaces-project'),
-      paginatedResources,
-      paginationPages,
-      paginationPage,
-      handleSort,
-      sortBy,
-      sortDir
+      space
     }
   },
   data: function () {

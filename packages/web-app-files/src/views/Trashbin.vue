@@ -46,21 +46,18 @@
 
 <script>
 import { mapGetters, mapMutations, mapState } from 'vuex'
-import { computed, unref } from '@vue/composition-api'
-import ResourceTable, { determineSortFields } from '../components/FilesList/ResourceTable.vue'
+import ResourceTable from '../components/FilesList/ResourceTable.vue'
 
 import MixinFilesListFilter from '../mixins/filesListFilter'
 import MixinResources from '../mixins/resources'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
-import { useFileListHeaderPosition, usePagination, useSort } from '../composables'
-import { useRouteQuery, useStore } from 'web-pkg/src/composables'
 
 import ListLoader from '../components/FilesList/ListLoader.vue'
 import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
-import { folderService } from '../services/folder'
+import { useResourcesViewDefaults } from '../composables'
 
 export default {
   components: { ResourceTable, ListLoader, NoContentMessage, ListInfo, Pagination, ContextActions },
@@ -68,41 +65,8 @@ export default {
   mixins: [MixinResources, MixinMountSideBar, MixinFilesListFilter],
 
   setup() {
-    const store = useStore()
-    const { refresh: refreshFileListHeaderPosition, y: fileListHeaderY } =
-      useFileListHeaderPosition()
-
-    const storeItems = computed(() => store.getters['Files/activeFiles'] || [])
-    const fields = computed(() => {
-      return determineSortFields(unref(storeItems)[0])
-    })
-
-    const { sortBy, sortDir, items, handleSort } = useSort({
-      items: storeItems,
-      fields
-    })
-
-    const paginationPageQuery = useRouteQuery('page', '1')
-    const paginationPage = computed(() => parseInt(String(paginationPageQuery.value)))
-    const { items: paginatedResources, total: paginationPages } = usePagination({
-      page: paginationPage,
-      items,
-      sortBy,
-      sortDir
-    })
-
-    const loadResourcesTask = folderService.getTask()
-
     return {
-      fileListHeaderY,
-      refreshFileListHeaderPosition,
-      loadResourcesTask,
-      paginatedResources,
-      paginationPages,
-      paginationPage,
-      handleSort,
-      sortBy,
-      sortDir
+      ...useResourcesViewDefaults()
     }
   },
 

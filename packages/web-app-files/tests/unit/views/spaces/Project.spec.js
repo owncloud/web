@@ -220,6 +220,9 @@ function getMountedWrapper(spaceResources = [], spaceItem = null, imageContent =
     },
     resolve: (r) => {
       return { href: r.name }
+    },
+    replace({ query }) {
+      this.currentRoute.query = query
     }
   }
 
@@ -244,7 +247,6 @@ function getMountedWrapper(spaceResources = [], spaceItem = null, imageContent =
         }
       }
     },
-
     store: createStore(Vuex.Store, {
       getters: {
         configuration: () => ({
@@ -276,7 +278,8 @@ function getMountedWrapper(spaceResources = [], spaceItem = null, imageContent =
             selectedFiles: () => [],
             totalFilesSize: () => 10,
             pages: () => 1,
-            currentFileOutgoingCollaborators: () => [spaceShare]
+            currentFileOutgoingCollaborators: () => [spaceShare],
+            inProgress: jest.fn(() => [])
           }
         }
       }

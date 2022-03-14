@@ -39,6 +39,9 @@ console.warn = jest.fn()
 
 config.mocks = {
   $client: sdkMock,
+  $clientService: {
+    owncloudSdk: sdkMock
+  },
   encodePath,
   isIE11: () => false
 }

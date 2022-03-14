@@ -54,10 +54,8 @@
 
 <script>
 import { mapGetters, mapActions, mapMutations, mapState } from 'vuex'
-import ResourceTable, { determineSortFields } from '../components/FilesList/ResourceTable.vue'
-import { useFileListHeaderPosition, usePagination, useSort } from '../composables'
-import { useMutationSubscription, useRouteQuery, useStore } from 'web-pkg/src/composables'
-import { fileList } from '../helpers/ui'
+import ResourceTable from '../components/FilesList/ResourceTable.vue'
+import { useResourcesViewDefaults } from '../composables'
 
 import MixinAccessibleBreadcrumb from '../mixins/accessibleBreadcrumb'
 import MixinFileActions from '../mixins/fileActions'
@@ -67,7 +65,6 @@ import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../constants'
 import debounce from 'lodash-es/debounce'
 import { bus } from 'web-pkg/src/instance'
-import { nextTick, computed, unref } from '@vue/composition-api'
 
 import ListLoader from '../components/FilesList/ListLoader.vue'
 import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
@@ -76,7 +73,6 @@ import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
 import { createLocationOperations } from '../router'
-import { folderService } from '../services/folder'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -94,46 +90,8 @@ export default {
   mixins: [MixinAccessibleBreadcrumb, MixinFileActions, MixinMountSideBar],
 
   setup() {
-    const store = useStore()
-    const { refresh: refreshFileListHeaderPosition, y: fileListHeaderY } =
-      useFileListHeaderPosition()
-
-    const storeItems = computed(() => store.getters['Files/activeFiles'] || [])
-    const fields = computed(() => {
-      return determineSortFields(unref(storeItems)[0])
-    })
-
-    const { sortBy, sortDir, items, handleSort } = useSort({
-      items: storeItems,
-      fields
-    })
-
-    const paginationPageQuery = useRouteQuery('page', '1')
-    const paginationPage = computed(() => parseInt(String(paginationPageQuery.value)))
-    const { items: paginatedResources, total: paginationPages } = usePagination({
-      page: paginationPage,
-      items,
-      sortDir,
-      sortBy
-    })
-
-    useMutationSubscription(['Files/UPSERT_RESOURCE'], async ({ payload }) => {
-      await nextTick()
-      fileList.accentuateItem(payload.id)
-    })
-
-    const loadResourcesTask = folderService.getTask()
-
     return {
-      fileListHeaderY,
-      refreshFileListHeaderPosition,
-      loadResourcesTask,
-      paginatedResources,
-      paginationPages,
-      paginationPage,
-      handleSort,
-      sortBy,
-      sortDir
+      ...useResourcesViewDefaults()
     }
   },
 

@@ -48,10 +48,7 @@
 
 <script>
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
-import ResourceTable, { determineSortFields } from '../../components/FilesList/ResourceTable.vue'
-import { useFileListHeaderPosition, usePagination, useSort } from '../../composables'
-import { useRouteQuery, useStore } from 'web-pkg/src/composables'
-import { computed, unref } from '@vue/composition-api'
+import ResourceTable from '../../components/FilesList/ResourceTable.vue'
 
 import FileActions from '../../mixins/fileActions'
 import MixinFilesListFilter from '../../mixins/filesListFilter'
@@ -67,7 +64,7 @@ import ListInfo from '../../components/FilesList/ListInfo.vue'
 import Pagination from '../../components/FilesList/Pagination.vue'
 import ContextActions from '../../components/FilesList/ContextActions.vue'
 import { createLocationSpaces } from '../../router'
-import { folderService } from '../../services/folder'
+import { useResourcesViewDefaults } from '../../composables'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -77,40 +74,10 @@ export default {
   mixins: [FileActions, MixinResources, MixinMountSideBar, MixinFilesListFilter],
 
   setup() {
-    const store = useStore()
-    const { y: fileListHeaderY } = useFileListHeaderPosition()
-
-    const storeItems = computed(() => store.getters['Files/activeFiles'] || [])
-    const fields = computed(() => {
-      return determineSortFields(unref(storeItems)[0])
-    })
-
-    const { sortBy, sortDir, items, handleSort } = useSort({
-      items: storeItems,
-      fields
-    })
-
-    const paginationPageQuery = useRouteQuery('page', '1')
-    const paginationPage = computed(() => parseInt(String(paginationPageQuery.value)))
-    const { items: paginatedResources, total: paginationPages } = usePagination({
-      page: paginationPage,
-      items,
-      sortDir,
-      sortBy
-    })
-
-    const loadResourcesTask = folderService.getTask()
-
     return {
-      fileListHeaderY,
-      loadResourcesTask,
-      paginatedResources,
-      paginationPages,
-      paginationPage,
-      resourceTargetLocation: createLocationSpaces('files-spaces-personal-home'),
-      handleSort,
-      sortBy,
-      sortDir
+      ...useResourcesViewDefaults(),
+
+      resourceTargetLocation: createLocationSpaces('files-spaces-personal-home')
     }
   },
 
@@ -118,7 +85,7 @@ export default {
     ...mapState(['app']),
     ...mapState('Files', ['files']),
     ...mapGetters('Files', ['highlightedFile', 'selectedFiles', 'totalFilesCount']),
-    ...mapGetters(['isOcis', 'configuration', 'getToken', 'user']),
+    ...mapGetters(['configuration']),
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
     selected: {
@@ -140,7 +107,7 @@ export default {
   },
 
   created() {
-    this.loadResourcesTask.perform(this)
+    this.loadResourcesTask.perform()
   },
 
   beforeDestroy() {

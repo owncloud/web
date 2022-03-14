@@ -13,15 +13,15 @@ export class FolderLoaderProject implements FolderLoader {
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {
+    const router = context.router
+    const store = context.store
+
+    const graphClient = clientService.graphAuthenticated(
+      store.getters.configuration.server,
+      store.getters.getToken
+    )
+
     return useTask(function* (signal1, signal2, ref, sameRoute, path = null) {
-      const router = context.router
-      const store = context.store
-
-      const graphClient = clientService.graphAuthenticated(
-        store.getters.configuration.server,
-        store.getters.getToken
-      )
-
       ref.CLEAR_CURRENT_FILES_LIST()
       const spaceId = router.currentRoute.params.spaceId
       const graphResponse = yield graphClient.drives.getDrive(spaceId)

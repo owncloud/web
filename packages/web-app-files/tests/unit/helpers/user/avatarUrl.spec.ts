@@ -1,13 +1,18 @@
 import { avatarUrl } from '../../../../src/helpers/user'
 import { ImageDimension } from '../../../../src/constants'
 import mockAxios from 'jest-mock-axios'
+import { ClientService } from 'web-pkg/src/services'
+import OwnCloud from 'owncloud-sdk'
 
 beforeEach(() => {
   mockAxios.reset()
-  mockClient(undefined)
 })
 
+const clientService = new ClientService()
+clientService.owncloudSdk = {}
+
 const defaultOptions = {
+  clientService,
   server: 'https://www.ocis.rules/',
   username: 'ocis',
   token: 'rules'
@@ -21,7 +26,7 @@ describe('avatarUrl', () => {
     expect(mockAxios.head).toHaveBeenCalledWith(buildUrl(defaultOptions), expect.anything())
   })
 
-  it('returns a unsigned url', async () => {
+  it('returns an unsigned url', async () => {
     const avatarUrlPromise = avatarUrl(defaultOptions)
     mockAxios.mockResponse({ data: undefined })
     await expect(avatarUrlPromise).resolves.toBe(buildUrl(defaultOptions))
@@ -29,10 +34,9 @@ describe('avatarUrl', () => {
   })
 
   it('returns a signed url', async () => {
-    const signUrlMock = jest.fn().mockImplementation((url) => {
+    clientService.owncloudSdk.signUrl = jest.fn().mockImplementation((url) => {
       return `${url}?signed=true`
     })
-    mockClient(signUrlMock)
     const avatarUrlPromise = avatarUrl(defaultOptions)
     mockAxios.mockResponse({ data: undefined })
     await expect(avatarUrlPromise).resolves.toBe(`${buildUrl(defaultOptions)}?signed=true`)
@@ -40,6 +44,8 @@ describe('avatarUrl', () => {
   })
 
   it('handles caching', async () => {
+    clientService.owncloudSdk.signUrl = jest.fn().mockImplementation((url) => url)
+
     const avatarUrlPromiseUncached = avatarUrl(defaultOptions, true)
     await mockAxios.mockResponse({ data: undefined })
     await expect(avatarUrlPromiseUncached).resolves.toBe(buildUrl(defaultOptions))
@@ -60,13 +66,6 @@ describe('avatarUrl', () => {
     expect(mockAxios.head).toBeCalledTimes(3)
   })
 })
-
-const mockClient = (signUrl: any) => {
-  const vue = jest.fn()
-  vue.prototype.$client = jest.fn()
-  vue.prototype.$client.signUrl = signUrl
-  ;(global as any).Vue = vue
-}
 
 const buildUrl = ({
   server,
