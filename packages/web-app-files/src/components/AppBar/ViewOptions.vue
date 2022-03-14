@@ -8,7 +8,7 @@
       :aria-label="viewOptionsButtonLabel"
       variation="passive"
       appearance="raw"
-      class="oc-py-s oc-mb-xs"
+      class="oc-my-s oc-mb-xs oc-px-xs pc-py-xs"
     >
       <oc-icon name="settings-3" fill-type="line" />
     </oc-button>
@@ -18,7 +18,7 @@
       :aria-label="toggleSidebarButtonLabel"
       variation="passive"
       appearance="raw"
-      class="oc-ml-s oc-py-s oc-mb-xs"
+      class="oc-my-s oc-mb-xs oc-px-xs pc-py-xs"
       @click.stop="toggleSidebar"
     >
       <oc-icon name="side-bar-right" :fill-type="toggleSidebarButtonIconFillType" />
@@ -103,6 +103,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+#files-toggle-sidebar,
+#files-view-options-btn {
+  vertical-align: middle;
+  border: 3px solid transparent;
+  &:hover {
+    background-color: var(--oc-color-background-hover);
+    border-radius: 3px;
+  }
+}
 .files-view-options-list-item {
   & > * {
     display: flex;

@@ -107,7 +107,7 @@
         "swatch-danger-hover": "",
         "swatch-danger-muted": "",
         "swatch-inverse-default": "",
-        "swatch-inverse-hover": "",
+        "swatch-inverse-hover": "#ffffff",
         "swatch-inverse-muted": "#696969",
         "swatch-passive-default": "#c2c2c2",
         "swatch-passive-hover": "",
