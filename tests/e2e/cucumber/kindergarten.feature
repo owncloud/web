@@ -16,10 +16,6 @@ Feature: Kindergarten can use web to organize a day
     When "Alice" logs in
     And "Alice" opens the "files" app
     And "Alice" navigates to the files page
-    And "Alice" creates the following folders
-      | groups/Kindergarten Koalas/meal plan |
-      | groups/Pre-Schools Pirates/meal plan |
-      | groups/Teddy Bear Daycare/meal plan  |
     And "Alice" uploads the following resources
       | resource          | to                                   |
       | PARENT/parent.txt | groups/Kindergarten Koalas/meal plan |
@@ -40,8 +36,6 @@ Feature: Kindergarten can use web to organize a day
     # Then what do we check for to be confident that the above things done by Alice have worked?
     When "Brian" logs in
     And "Brian" opens the "files" app
-    And "Brian" accepts the following resources
-      | meal plan |
     And "Brian" downloads the following files
       | resource      | from      |
       | data.zip      | Shares/meal plan |

@@ -60,7 +60,7 @@ config = {
             "type": FULL,
             "suites": {
                 "oC10Upload": [
-                    "webUIUpload",
+                    "webUIUserJourney",
                 ],
             },
             "extraEnvironment": {
@@ -69,6 +69,7 @@ config = {
             },
             "visualTesting": False,
             "screenShots": True,
+            "skip": True,
         },
         # These suites have all or most of their scenarios expected to fail.
         # Eliminate wasted CI time by not retrying the failing scenarios.
@@ -699,7 +700,7 @@ def stagePipelines(ctx):
     unit_test_pipelines = unitTests(ctx)
     e2e_pipelines = e2eTests(ctx)
     acceptance_pipelines = acceptance(ctx)
-    return acceptance_pipelines
+    return e2e_pipelines
 
 def afterPipelines(ctx):
     return build(ctx) + notify()
