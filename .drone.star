@@ -59,115 +59,6 @@ config = {
         "webUI": {
             "type": FULL,
             "suites": {
-                "oC10Basic1": [
-                    "webUIAccount",
-                    "webUIWebdavLocks",
-                ],
-                "oC10Basic2": [
-                    "webUIPrivateLinks",
-                    "webUIWebdavLockProtection",
-                ],
-                "oC10FileOperations": [
-                    "webUICreateFilesFolders",
-                    "webUIDeleteFilesFolders",
-                ],
-                "oC10SharingAccept": [
-                    "webUISharingAcceptShares",
-                    "webUISharingAcceptSharesToRoot",
-                    "webUISharingInternalUsersCollaborator",
-                ],
-                "oC10Files1": [
-                    "webUIFilesCopy",
-                    "webUIFavorites",
-                    "webUIMarkdownEditor",
-                ],
-                "oC10Files2": [
-                    "webUIFilesList",
-                    "webUIFilesSearch",
-                    "webUIFilesActionMenu",
-                ],
-                "oC10Files3": [
-                    "webUIRenameFiles",
-                    "webUILogin",
-                ],
-                "oC10Files4": [
-                    "webUIPreview",
-                    "webUIFilesDetails",
-                ],
-                "oC10Files5": [
-                    "webUIFiles",
-                    "webUIRenameFolders",
-                ],
-                "oC10Move": [
-                    "webUIMoveFilesFolders",
-                    "webUIOperationsWithFolderShares",
-                ],
-                "oC10Resharing": [
-                    "webUIResharing1",
-                    "webUIResharing2",
-                ],
-                "oC10Sharing1": [
-                    "webUISharingAutocompletion",
-                    "webUISharingExpirationDate",
-                    "webUIRestrictSharing",
-                ],
-                "oC10Sharing2": [
-                    "webUIResharingToRoot",
-                    "webUISharingInternalUsersBlacklisted",
-                ],
-                "oC10SharingFilePerm": [
-                    "webUISharingFilePermissionMultipleUsers",
-                    "webUISharingFilePermissionsGroups",
-                ],
-                "oC10SharingFolderPermissions": [
-                    "webUISharingFolderPermissionMultipleUsers",
-                    "webUISharingFolderPermissionsGroups",
-                ],
-                "oC10SharingIntGroups": [
-                    "webUISharingInternalGroups",
-                    "webUISharingInternalGroupsEdgeCases",
-                ],
-                "oC10SharingIntGroupsToRoot": [
-                    "webUISharingInternalGroupsToRoot",
-                    "webUISharingInternalGroupsToRootEdgeCases",
-                ],
-                "oC10SharingIntUsers1": [
-                    "webUISharingInternalUsers",
-                    "webUISharingInternalUsersToRootCollaborator",
-                ],
-                "oC10SharingIntUsers2": [
-                    "webUISharingInternalUsersToRoot",
-                    "webUISharingInternalUsersToRootShareWithPage",
-                ],
-                "oc10SharingIntUsers3": [
-                    "webUISharingInternalUsersToRootBlacklisted",
-                    "webUISharingInternalUsersShareWithPage",
-                ],
-                "oC10SharingSharingInd": [
-                    "webUISharingInternalGroupsSharingIndicator",
-                    "webUISharingInternalGroupsToRootSharingIndicator",
-                    "webUISharingInternalUsersSharingIndicator",
-                    "webUISharingInternalUsersToRootSharingIndicator",
-                ],
-                "oC10SharingAndTrashbin": [
-                    "webUISharingInternalUsersToRootPreviews",
-                    "webUITrashbinDelete",
-                    "webUITrashbinFilesFolders",
-                    "webUITrashbinRestore",
-                ],
-                "oC10SharingPermission": [
-                    "webUISharingPermissionsUsers",
-                    "webUISharingFolderAdvancedPermissionMultipleUsers",
-                ],
-                "webUISharingPermissionToRoot": "oC10SharingPermToRoot",
-                "oC10SharingPublic1": [
-                    "webUISharingPublicBasic",
-                    "webUISharingPublicExpire",
-                ],
-                "oC10SharingPublic2": [
-                    "webUISharingPublicDifferentRoles",
-                    "webUISharingPublicManagement",
-                ],
                 "oC10Upload": [
                     "webUIUpload",
                 ],
@@ -193,6 +84,7 @@ config = {
             "visualTesting": False,
             "screenShots": True,
             "retry": False,
+            "skip": True,
         },
         "webUINotification": {
             "type": NOTIFICATIONS,
@@ -210,6 +102,7 @@ config = {
             "visualTesting": False,
             "screenShots": True,
             "notificationsAppNeeded": True,
+            "skip": True,
         },
         "webUIFederation": {
             "type": FEDERATED,
@@ -224,6 +117,7 @@ config = {
             "notificationsAppNeeded": True,
             "federatedServerNeeded": True,
             "federatedServerVersion": OC10_VERSION,
+            "skip": True,
         },
         "webUI-XGA-Notifications": {
             "type": NOTIFICATIONS,
@@ -238,6 +132,7 @@ config = {
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-XGA-with-oc10-server-oauth2-login.md" % dir["web"],
                 "SCREEN_RESOLUTION": "768x1024",
             },
+            "skip": True,
             "notificationsAppNeeded": True,
             "filterTags": "@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10 and not @notToImplementOnOC10",
         },
@@ -316,6 +211,7 @@ config = {
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-XGA-with-oc10-server-oauth2-login.md" % dir["web"],
                 "SCREEN_RESOLUTION": "768x1024",
             },
+            "skip": True,
             "filterTags": "@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10 and not @notToImplementOnOC10",
         },
         "webUI-Notifications-iPhone": {
@@ -331,6 +227,7 @@ config = {
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-Iphone-oc10-server-oauth2-login.md" % dir["web"],
                 "SCREEN_RESOLUTION": "375x812",
             },
+            "skip": True,
             "notificationsAppNeeded": True,
             "filterTags": "@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10 and not @notToImplementOnOC10",
         },
@@ -409,9 +306,11 @@ config = {
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-Iphone-oc10-server-oauth2-login.md" % dir["web"],
                 "SCREEN_RESOLUTION": "375x812",
             },
+            "skip": True,
             "filterTags": "@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10 and not @notToImplementOnOC10",
         },
         "webUI-ocis": {
+            "skip": True,
             "type": FULL,
             "servers": [
                 "",
@@ -520,6 +419,7 @@ config = {
             "screenShots": True,
         },
         "webUI-notifications-oc10-integration": {
+            "skip": True,
             "type": NOTIFICATIONS,
             "suites": {
                 "oC10IntegrationNotifications": [
@@ -539,6 +439,7 @@ config = {
             "screenShots": True,
         },
         "webUI-oc10-integration": {
+            "skip": True,
             "type": FULL,
             "suites": {
                 "oC10IntegrationApp1": [
@@ -798,7 +699,7 @@ def stagePipelines(ctx):
     unit_test_pipelines = unitTests(ctx)
     e2e_pipelines = e2eTests(ctx)
     acceptance_pipelines = acceptance(ctx)
-    return unit_test_pipelines + pipelinesDependsOn(e2e_pipelines, unit_test_pipelines) + pipelinesDependsOn(acceptance_pipelines, e2e_pipelines)
+    return acceptance_pipelines
 
 def afterPipelines(ctx):
     return build(ctx) + notify()
@@ -2788,7 +2689,6 @@ def buildGithubCommentForBuildStopped(suite):
     }]
 
 def githubComment(alternateSuiteName):
-    prefix = "Results for <strong>%s</strong> ${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}${DRONE_STAGE_NUMBER}/1" % alternateSuiteName
     return [{
         "name": "github-comment",
         "image": THEGEEKLAB_DRONE_GITHUB_COMMENT,

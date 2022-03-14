@@ -28,7 +28,7 @@ Feature: File Upload
       | sub2/sub3 | new-lorem.txt |
     When the user uploads folder "CUSTOM" using the webUI
     Then no message should be displayed on the webUI
-    And folder "CUSTOM" should be listed on the webUI
+    And folder "aaple" should be listed on the webUI
     And as "Alice" folder "CUSTOM" should exist in the server
     And as "Alice" file "CUSTOM/lorem.txt" should exist in the server
     And as "Alice" file "CUSTOM/sub1/lorem.txt" should exist in the server
