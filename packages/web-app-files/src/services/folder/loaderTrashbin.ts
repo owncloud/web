@@ -21,15 +21,16 @@ export class FolderLoaderTrashbin implements FolderLoader {
   public getTask(context: TaskContext): FolderLoaderTask {
     const {
       store,
-      clientService: { owncloudSdk: client }
+      clientService: { owncloudSdk: client },
+      router
     } = context
 
     return useTask(function* (signal1, signal2, ref) {
       store.commit('Files/CLEAR_CURRENT_FILES_LIST')
 
-      const path = isLocationTrashActive(context.router, 'files-trash-spaces-project')
-        ? buildWebDavSpacesTrashPath(context.route.params.spaceId)
-        : buildWebDavFilesTrashPath(context.store.getters.user.id)
+      const path = isLocationTrashActive(router, 'files-trash-spaces-project')
+        ? buildWebDavSpacesTrashPath(router.currentRoute.params.spaceId)
+        : buildWebDavFilesTrashPath(store.getters.user.id)
       const resources = yield client.fileTrash.list(path, '1', DavProperties.Trashbin)
 
       store.commit('Files/LOAD_FILES', {
