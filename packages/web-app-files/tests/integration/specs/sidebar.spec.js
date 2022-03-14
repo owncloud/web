@@ -80,8 +80,6 @@ const store = {
     }
   }
 }
-// eslint-disable-next-line jest/no-commented-out-tests
-/**
 describe('Files sidebar', () => {
   test('Links panel displays private link for a shared file', async () => {
     config.mocks.publicPage = () => false
@@ -103,4 +101,3 @@ describe('Files sidebar', () => {
     expect(await findByText('http://host.docker.internal:8080/f/3867')).toBeVisible()
   })
 })
-**/
