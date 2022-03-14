@@ -278,9 +278,9 @@ export default {
       this.sharedParentDir = sharePathParentOrCurrent
     }
   },
-  async mounted() {
-    await this.loadData()
-    await this.refreshShareDetailsTree()
+  mounted() {
+    this.loadData()
+    this.refreshShareDetailsTree()
   },
   asyncComputed: {
     preview: {
