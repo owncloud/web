@@ -279,8 +279,8 @@ export default {
     }
   },
   async mounted() {
-    this.loadData()
-    this.refreshShareDetailsTree()
+    await this.loadData()
+    await this.refreshShareDetailsTree()
   },
   asyncComputed: {
     preview: {
