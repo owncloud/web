@@ -1,8 +1,7 @@
 import Router from 'vue-router'
 import { useTask } from 'vue-concurrency'
-import { useRouter, useClientService } from 'web-pkg/src/composables'
+import { useRouter, useClientService, useStore } from 'web-pkg/src/composables'
 import { unref } from '@vue/composition-api'
-import { useStore } from '../../../web-pkg/src/composables'
 import { Store } from 'vuex'
 import { ClientService } from 'web-pkg/src/services/client'
 
@@ -31,7 +30,7 @@ export interface FolderLoader {
 }
 
 export class FolderService {
-  private loaders: FolderLoader[]
+  private readonly loaders: FolderLoader[]
 
   constructor() {
     this.loaders = [
