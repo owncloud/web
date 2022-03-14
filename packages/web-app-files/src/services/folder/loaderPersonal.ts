@@ -53,7 +53,7 @@ export class FolderLoaderPersonal implements FolderLoader {
         // The semicolon is important to separate from the previous statement
         ;(async () => {
           const user = await promiseUser
-          store.commit('Files/SET_QUOTA', user.quota)
+          store.commit('SET_QUOTA', user.quota)
         })()
       } catch (error) {
         store.commit('Files/SET_CURRENT_FOLDER', null)
