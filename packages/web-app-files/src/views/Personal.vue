@@ -28,6 +28,7 @@
         :resources="paginatedResources"
         :target-route="resourceTargetLocation"
         :header-position="fileListHeaderY"
+        :hover="true"
         :drag-drop="true"
         :sort-by="sortBy"
         :sort-dir="sortDir"
