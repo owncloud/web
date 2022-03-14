@@ -18,7 +18,7 @@
       :aria-label="toggleSidebarButtonLabel"
       variation="passive"
       appearance="raw"
-      class="oc-my-s oc-mb-xs oc-px-xs pc-py-xs"
+      class="oc-my-s oc-mb-xs oc-px-xs oc-py-xs"
       @click.stop="toggleSidebar"
     >
       <oc-icon name="side-bar-right" :fill-type="toggleSidebarButtonIconFillType" />
