@@ -284,7 +284,7 @@ export default {
     hover: {
       type: Boolean,
       required: false,
-      default: false
+      default: true
     },
     /**
      * Show that the table is sorted by this column (no actual sorting takes place)
