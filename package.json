@@ -95,7 +95,7 @@
     "jest-serializer-vue": "^2.0.2",
     "join-path": "^1.1.1",
     "lodash": "^4.17.21",
-    "node-fetch": "^2.6.7",
+    "node-fetch": "^3.2.3",
     "pino": "^7.6.3",
     "pino-pretty": "^7.3.0",
     "playwright": "^1.19.2",
