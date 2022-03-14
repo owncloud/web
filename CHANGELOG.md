@@ -166,6 +166,7 @@ Details
    https://github.com/owncloud/web/issues/5976
    https://github.com/owncloud/web/pull/6552
    https://github.com/owncloud/owncloud-design-system/pull/2014
+   https://github.com/owncloud/web/pull/6583
 
 * Enhancement - Resolve private links into folders instead of parent: [#5533](https://github.com/owncloud/web/issues/5533)
 
