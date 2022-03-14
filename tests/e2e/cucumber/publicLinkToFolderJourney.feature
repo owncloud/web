@@ -21,3 +21,13 @@ Feature: Create public link to folder
       | resource     | name         | role     | dateOfExpiration | password |
       | folderPublic | myPublicLink | uploader | +5 days          | 12345    |
     Then "Alice" should see 1 public link
+    When the public accesses the last created public link with password "12345"
+    Then the public should not see the following resource
+      | lorem.txt |
+    When the public uploads the following files on the files-drop page
+      | textfile.txt |
+    Then the public should see the following files on the files-drop page
+      | textfile.txt |
+    When the public reloads the public link pages
+    Then the public should not see the following files on the files-drop page
+      | textfile.txt |

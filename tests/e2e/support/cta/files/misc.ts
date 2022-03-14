@@ -53,3 +53,15 @@ export const waitForResources = async ({
     names.map((name) => page.waitForSelector(`[data-test-resource-name="${name}"]`))
   )
 }
+
+export const resourceExistenceErrorMessage = (
+  actionType: string,
+  resourceExist: boolean,
+  resource: string
+): void => {
+  if (actionType === '' && !resourceExist) {
+    throw new Error(`resource wasn't found: "${resource}"`)
+  } else if (actionType === 'not' && resourceExist) {
+    throw new Error(`resource was found: "${resource}"`)
+  }
+}

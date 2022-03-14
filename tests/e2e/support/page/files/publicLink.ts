@@ -22,6 +22,8 @@ export class PublicLink {
   private readonly publicLinkListSelector: string
   private readonly roleSelector: string
   private readonly folderSelector: string
+  private publicLinkSelector: string
+  private static lastCreatedPublicLink: string
 
   constructor({ actor }: { actor: Actor }) {
     this.actor = actor
@@ -48,6 +50,7 @@ export class PublicLink {
     this.publicLinkListSelector = `//ul[@class = 'oc-list oc-list-divider oc-overflow-hidden oc-m-rm']/li`
     this.roleSelector = `//span[@id="files-role-%s"]`
     this.folderSelector = `//*[@data-test-resource-name="%s"]/ancestor::tr//button[contains(@class, "files-quick-action-collaborators")]`
+    this.publicLinkSelector = `//ul/li//h5[contains(text(),'%s')]/following-sibling::div/a`
   }
 
   async getLinksCount(): Promise<number> {
@@ -117,5 +120,18 @@ export class PublicLink {
     }
 
     await this.createLinkButtonLocator.click()
+
+    const publicLinkUrl = await page
+      .locator(util.format(this.publicLinkSelector, name))
+      .textContent()
+    PublicLink.setLastCreatedPublicLink(publicLinkUrl)
+  }
+
+  public static setLastCreatedPublicLink(publicLinkUrl: string): void {
+    this.lastCreatedPublicLink = publicLinkUrl
+  }
+
+  public static getLastCreatedPublicLink(): string {
+    return this.lastCreatedPublicLink
   }
 }

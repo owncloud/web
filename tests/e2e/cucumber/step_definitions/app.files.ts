@@ -1,9 +1,11 @@
 import { DataTable, Given, Then, When } from '@cucumber/cucumber'
+import { expect } from '@playwright/test'
+import * as assert from 'assert'
 import { World } from '../environment'
 import { config } from '../../config'
 import { FilesPage } from '../../support'
-import { expect } from '@playwright/test'
-import assert = require('assert')
+import { PublicLinkPage } from '../../support/page/publicLinkPage'
+import { filesCta } from '../../support/cta'
 
 When(
   '{string} navigates to the files page',
@@ -275,11 +277,7 @@ Then(
       await allFilesPage.navigate()
       const resourceExist = await allFilesPage.resourceExist({ name: resource })
 
-      if (actionType === 'see' && !resourceExist) {
-        throw new Error(`resource wasn't found: "${resource}"`)
-      } else if (actionType === 'not see' && resourceExist) {
-        throw new Error(`resource was found: "${resource}"`)
-      }
+      filesCta.resourceExistenceErrorMessage(actionType, resourceExist, resource)
     }
     await allFilesPage.navigate()
   }
@@ -294,7 +292,7 @@ Then(
 
     // skipped in Oc10, since the version number in Oc10 is no more than 1
     if (config.ocis) {
-      await expect(await versionPage.numberOfVersions({ resource })).toEqual(countOfVersion)
+      expect(await versionPage.numberOfVersions({ resource })).toEqual(countOfVersion)
     }
     await allFilesPage.navigate()
   }
@@ -394,3 +392,44 @@ When(
     }
   }
 )
+
+When(
+  'the public accesses the last created public link with password {string}',
+  async function (this: World, password: string): Promise<void> {
+    const publicLinkPage = await PublicLinkPage.setup()
+    await publicLinkPage.navigateToPublicLink()
+    await publicLinkPage.authenticatePassword(password)
+  }
+)
+
+Then(
+  /the public should( not | )see the following (resource|resources)$/,
+  async function (this: World, actionType: string, _: string, stepTable: DataTable): Promise<void> {
+    await filesCta.checkResourcesExistence({ actionType, stepTable })
+  }
+)
+
+When(
+  'the public uploads the following files on the files-drop page',
+  async function (this: World, stepTable: DataTable): Promise<void> {
+    const publicLinkPage = new PublicLinkPage()
+
+    const files = stepTable.raw().map((f) => f[0])
+    for (const file of files) {
+      const uploadInfo = this.filesEnvironment.getFile({ name: file })
+      await publicLinkPage.uploadFiles(uploadInfo.path)
+    }
+  }
+)
+
+Then(
+  /the public should( not | )see the following files on the files-drop page$/,
+  async function (this: World, actionType: string, stepTable: DataTable): Promise<void> {
+    await filesCta.checkResourcesExistence({ actionType, stepTable, pageType: 'upload' })
+  }
+)
+
+When('the public reloads the public link pages', async function (this: World): Promise<void> {
+  const publicLinkPage = new PublicLinkPage()
+  await publicLinkPage.reload()
+})
