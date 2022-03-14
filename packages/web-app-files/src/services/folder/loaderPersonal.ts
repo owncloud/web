@@ -4,6 +4,7 @@ import { useTask } from 'vue-concurrency'
 import { DavProperties } from 'web-pkg/src/constants'
 import { buildResource, buildWebDavFilesPath } from '../../helpers/resources'
 import { isLocationSpacesActive } from '../../router'
+import { Store } from 'vuex'
 
 export const fetchResources = async (client, path, properties) => {
   try {
@@ -13,7 +14,12 @@ export const fetchResources = async (client, path, properties) => {
   }
 }
 
-export class FolderLoaderPersonal implements FolderLoader {
+export class FolderLoaderLegacyPersonal implements FolderLoader {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public isEnabled(store: Store<any>): boolean {
+    return true
+  }
+
   public isActive(router: Router): boolean {
     return isLocationSpacesActive(router, 'files-spaces-personal-home')
   }

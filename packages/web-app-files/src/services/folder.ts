@@ -7,13 +7,14 @@ import { ClientService } from 'web-pkg/src/services/client'
 
 import {
   FolderLoaderFavorites,
-  FolderLoaderPersonal,
-  FolderLoaderProject,
+  FolderLoaderLegacyPersonal,
+  FolderLoaderSpacesProject,
   FolderLoaderPublicFiles,
   FolderLoaderSharedViaLink,
   FolderLoaderSharedWithMe,
   FolderLoaderSharedWithOthers,
-  FolderLoaderTrashbin
+  FolderLoaderTrashbin,
+  FolderLoaderSpacesSharedWithMe
 } from './folder/'
 
 export type FolderLoaderTask = any
@@ -25,6 +26,7 @@ export type TaskContext = {
 }
 
 export interface FolderLoader {
+  isEnabled(store: Store<any>): boolean
   isActive(router: Router): boolean
   getTask(options: TaskContext): FolderLoaderTask
 }
@@ -34,12 +36,16 @@ export class FolderService {
 
   constructor() {
     this.loaders = [
+      // legacy loaders
+      new FolderLoaderLegacyPersonal(),
+      new FolderLoaderSharedWithMe(),
+      // spaces loaders
+      new FolderLoaderSpacesProject(),
+      new FolderLoaderSpacesSharedWithMe(),
+      // generic loaders
       new FolderLoaderFavorites(),
-      new FolderLoaderPersonal(),
-      new FolderLoaderProject(),
       new FolderLoaderPublicFiles(),
       new FolderLoaderSharedViaLink(),
-      new FolderLoaderSharedWithMe(),
       new FolderLoaderSharedWithOthers(),
       new FolderLoaderTrashbin()
     ]
@@ -52,7 +58,7 @@ export class FolderService {
     const loaders = this.loaders
 
     return useTask(function* (...args) {
-      const loader = loaders.find((l) => l.isActive(unref(router)))
+      const loader = loaders.find((l) => l.isEnabled(unref(store)) && l.isActive(unref(router)))
       if (!loader) {
         throw new Error('No folder loader found for route')
       }

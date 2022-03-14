@@ -14,6 +14,11 @@ import omit from 'lodash-es/omit'
 import { Store } from 'vuex'
 
 export class FolderLoaderPublicFiles implements FolderLoader {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public isEnabled(store: Store<any>): boolean {
+    return true
+  }
+
   public isActive(router: Router): boolean {
     return isLocationPublicActive(router, 'files-public-files')
   }

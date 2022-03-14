@@ -9,9 +9,11 @@ import {
   buildWebDavFilesTrashPath,
   buildWebDavSpacesTrashPath
 } from '../../helpers/resources'
+import { Store } from 'vuex'
 
 export class FolderLoaderTrashbin implements FolderLoader {
-  public isEnabled(): boolean {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public isEnabled(store: Store<any>): boolean {
     return true
   }
 

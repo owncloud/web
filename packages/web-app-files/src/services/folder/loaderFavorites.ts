@@ -4,8 +4,14 @@ import { useTask } from 'vue-concurrency'
 import { DavProperties } from 'web-pkg/src/constants'
 import { buildResource } from '../../helpers/resources'
 import { isLocationCommonActive } from '../../router'
+import { Store } from 'vuex'
+import get from 'lodash-es/get'
 
 export class FolderLoaderFavorites implements FolderLoader {
+  public isEnabled(store: Store<any>): boolean {
+    return get(store, 'getters.capabilities.files.favorites', true)
+  }
+
   public isActive(router: Router): boolean {
     return isLocationCommonActive(router, 'files-common-favorites')
   }

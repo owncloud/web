@@ -3,19 +3,22 @@ import Router from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { aggregateResourceShares } from '../../helpers/resources'
 import { isLocationSharesActive } from '../../router'
+import { Store } from 'vuex'
 import { useCapabilityFilesSharingResharing } from 'web-pkg/src/composables'
 import { unref } from '@vue/composition-api'
 
 export class FolderLoaderSharedWithMe implements FolderLoader {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public isEnabled(store: Store<any>): boolean {
+    return true
+  }
+
   public isActive(router: Router): boolean {
     return isLocationSharesActive(router, 'files-shares-with-me')
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {
-    const {
-      store,
-      clientService: { owncloudSdk: client }
-    } = context
+    const { store, clientService } = context
 
     const hasResharing = useCapabilityFilesSharingResharing(store)
 
@@ -23,7 +26,7 @@ export class FolderLoaderSharedWithMe implements FolderLoader {
     return useTask(function* (signal1, signal2) {
       store.commit('Files/CLEAR_CURRENT_FILES_LIST')
 
-      let resources = yield client.shares.getShares('', {
+      let resources = yield clientService.owncloudSdk.shares.getShares('', {
         state: 'all',
         include_tags: false,
         shared_with_me: true
