@@ -6,11 +6,11 @@
         key="new-file-menu-btn-enabled"
         v-oc-tooltip="newButtonTooltip"
         :aria-label="newButtonAriaLabel"
-        variation="inverse"
+        variation="raw"
         :disabled="uploadOrFileCreationBlocked"
         class="oc-background-primary-gradient"
       >
-        <oc-icon name="add" />
+        <oc-icon name="add" color="#ffffff" />
         <translate>New</translate>
       </oc-button>
       <oc-drop
@@ -530,6 +530,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+#new-file-menu-btn {
+  color: white;
+  border: 0;
+}
 #create-list {
   li {
     border: 1px solid transparent;
