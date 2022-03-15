@@ -2,7 +2,12 @@ import { Location, RouteConfig } from 'vue-router'
 import { RouteComponents } from './router'
 import { createLocation, isLocationActiveDirector, $gettext } from './utils'
 
-type spaceTypes = 'files-spaces-personal-home' | 'files-spaces-project' | 'files-spaces-projects'
+type spaceTypes =
+  | 'files-spaces-personal-home'
+  | 'files-spaces-project'
+  | 'files-spaces-projects'
+  | 'files-spaces-share'
+  | 'files-spaces-shares'
 
 export const createLocationSpaces = (name: spaceTypes, location = {}): Location =>
   createLocation(
@@ -18,11 +23,15 @@ export const createLocationSpaces = (name: spaceTypes, location = {}): Location 
 export const locationSpacesProject = createLocationSpaces('files-spaces-project')
 export const locationSpacesProjects = createLocationSpaces('files-spaces-projects')
 export const locationSpacesPersonalHome = createLocationSpaces('files-spaces-personal-home')
+export const locationSpacesShare = createLocationSpaces('files-spaces-share')
+export const locationSpacesShares = createLocationSpaces('files-spaces-shares')
 
 export const isLocationSpacesActive = isLocationActiveDirector<spaceTypes>(
   locationSpacesProject,
   locationSpacesProjects,
-  locationSpacesPersonalHome
+  locationSpacesPersonalHome,
+  locationSpacesShare,
+  locationSpacesShares
 )
 
 export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
@@ -53,8 +62,25 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         name: locationSpacesPersonalHome.name,
         component: components.Personal,
         meta: {
-          title: $gettext('Personal'),
-          patchCleanPath: true
+          patchCleanPath: true,
+          title: $gettext('Personal')
+        }
+      },
+      {
+        path: 'shares',
+        name: locationSpacesShares.name,
+        component: components.SharedWithMe,
+        meta: {
+          title: $gettext('Files shared with me')
+        }
+      },
+      {
+        path: 'shares/:item*',
+        name: locationSpacesShare.name,
+        component: components.Personal,
+        meta: {
+          patchCleanPath: true,
+          title: $gettext('Files shared with me')
         }
       }
     ]

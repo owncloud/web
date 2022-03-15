@@ -173,8 +173,9 @@ import MixinMountSideBar from '../../mixins/sidebar/mountSideBar'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../../constants'
 import { useSort, useResourcesViewDefaults } from '../../composables'
-import { useRouteQuery } from 'web-pkg/src/composables'
+import { useRouteQuery, useStore } from 'web-pkg/src/composables'
 import debounce from 'lodash-es/debounce'
+import get from 'lodash-es/get'
 
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
@@ -183,7 +184,7 @@ import ListInfo from '../../components/FilesList/ListInfo.vue'
 import ContextActions from '../../components/FilesList/ContextActions.vue'
 import { ShareStatus } from '../../helpers/share'
 import { computed, defineComponent, unref } from '@vue/composition-api'
-import { createLocationSpaces } from '../../router'
+import { createLocationShares, createLocationSpaces } from '../../router'
 import { Resource } from '../../helpers/resource'
 
 const visibilityObserver = new VisibilityObserver()
@@ -213,6 +214,14 @@ export default defineComponent({
       any,
       any[]
     >()
+
+    const store = useStore()
+    const hasSpaces = computed(() => get(store, 'getters.capabilities.spaces', false))
+    const resourceTargetLocation = computed(() => {
+      return unref(hasSpaces)
+        ? createLocationShares('files-shares-with-me')
+        : createLocationSpaces('files-spaces-personal-home')
+    })
 
     const viewMode = computed(() =>
       parseInt(String(unref(useRouteQuery('view-mode', ShareStatus.accepted.toString()))))
@@ -267,7 +276,7 @@ export default defineComponent({
       sharesItems,
 
       displayedFields,
-      resourceTargetLocation: createLocationSpaces('files-spaces-personal-home')
+      resourceTargetLocation
     }
   },
 

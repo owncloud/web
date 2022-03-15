@@ -14,7 +14,7 @@ export const fetchResources = async (client, path, properties) => {
   }
 }
 
-export class FolderLoaderLegacyPersonal implements FolderLoader {
+export class FolderLoaderPersonal implements FolderLoader {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public isEnabled(store: Store<any>): boolean {
     return true
