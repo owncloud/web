@@ -31,6 +31,7 @@ Summary
 * Enhancement - Side bar nav tags: [#6540](https://github.com/owncloud/web/pull/6540)
 * Enhancement - Allow updating space quota: [#6477](https://github.com/owncloud/web/pull/6477)
 * Enhancement - Update the stored space after its members have been changed: [#6545](https://github.com/owncloud/web/pull/6545)
+* Enhancement - Implement edit quota action in spaces overview: [#6598](https://github.com/owncloud/web/pull/6598)
 * Enhancement - Implement people sharing for spaces: [#6455](https://github.com/owncloud/web/pull/6455)
 * Enhancement - Implement the spaces permission concept: [#6531](https://github.com/owncloud/web/pull/6531)
 * Enhancement - Update the graph SDK: [#6519](https://github.com/owncloud/web/pull/6519)
@@ -219,6 +220,12 @@ Details
    permission-object of a built space has been simplified in the course of this.
 
    https://github.com/owncloud/web/pull/6545
+
+* Enhancement - Implement edit quota action in spaces overview: [#6598](https://github.com/owncloud/web/pull/6598)
+
+   We've added the edit quota action to the space context menu in the spaces overview.
+
+   https://github.com/owncloud/web/pull/6598
 
 * Enhancement - Implement people sharing for spaces: [#6455](https://github.com/owncloud/web/pull/6455)
 
