@@ -3,7 +3,8 @@ import { mapState } from 'vuex'
 export default {
   data: () => {
     return {
-      $_editQuota_modalOpen: false
+      $_editQuota_modalOpen: false,
+      $_editQuota_selectedSpace: null
     }
   },
   computed: {
@@ -37,7 +38,8 @@ export default {
     }
   },
   methods: {
-    $_editQuota_trigger() {
+    $_editQuota_trigger({ resources }) {
+      this.$data.$_editQuota_selectedSpace = resources[0]
       this.$data.$_editQuota_modalOpen = true
     },
     $_editQuota_closeModal() {
