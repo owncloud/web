@@ -550,4 +550,8 @@ export default {
     margin: 2px 0;
   }
 }
+#upload-list,
+#new-file-menu-drop {
+  min-width: 200px;
+}
 </style>
