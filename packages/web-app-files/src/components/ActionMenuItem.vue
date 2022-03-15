@@ -3,8 +3,10 @@
     <component
       :is="action.componentType"
       v-bind="getComponentProps(action, items)"
-      :class="['oc-text-bold', action.class]"
+      :class="[action.class, 'action-menu-item']"
       data-testid="action-handler"
+      appearance="raw"
+      size="small"
       v-on="getComponentListeners(action, items)"
     >
       <oc-img
@@ -105,3 +107,15 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+.action-menu-item {
+  vertical-align: middle;
+  &:hover {
+    color: var(--oc-color-swatch-brand-hover);
+    text-decoration: underline;
+    .oc-icon > svg {
+      fill: var(--oc-color-swatch-brand-hover) !important;
+    }
+  }
+}
+</style>

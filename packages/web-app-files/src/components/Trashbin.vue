@@ -24,6 +24,7 @@
         :resources="paginatedResources"
         :are-resources-clickable="false"
         :header-position="fileListHeaderY"
+        :hover="true"
         :sort-by="sortBy"
         :sort-dir="sortDir"
         @sort="handleSort"
