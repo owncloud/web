@@ -184,7 +184,7 @@ import ListInfo from '../../components/FilesList/ListInfo.vue'
 import ContextActions from '../../components/FilesList/ContextActions.vue'
 import { ShareStatus } from '../../helpers/share'
 import { computed, defineComponent, unref } from '@vue/composition-api'
-import { createLocationShares, createLocationSpaces } from '../../router'
+import { createLocationSpaces } from '../../router'
 import { Resource } from '../../helpers/resource'
 
 const visibilityObserver = new VisibilityObserver()
@@ -217,11 +217,9 @@ export default defineComponent({
 
     const store = useStore()
     const hasSpaces = computed(() => get(store, 'getters.capabilities.spaces', false))
-    const resourceTargetLocation = computed(() => {
-      return unref(hasSpaces)
-        ? createLocationShares('files-shares-with-me')
-        : createLocationSpaces('files-spaces-personal-home')
-    })
+    const resourceTargetLocation = computed(() =>
+      createLocationSpaces(unref(hasSpaces) ? 'files-spaces-share' : 'files-spaces-personal-home')
+    )
 
     const viewMode = computed(() =>
       parseInt(String(unref(useRouteQuery('view-mode', ShareStatus.accepted.toString()))))
@@ -425,7 +423,9 @@ export default defineComponent({
 
     isResourceInSharesSelection(resource) {
       return this.sharesSelected?.includes(resource)
-    }
+    },
+
+    createRouteTarget() {}
   }
 })
 </script>

@@ -6,6 +6,7 @@ import PrivateLink from './views/PrivateLink.vue'
 import PublicFiles from './views/PublicFiles.vue'
 import PublicLink from './views/PublicLink.vue'
 import Personal from './views/Personal.vue'
+import SharedResource from './views/shares/SharedResource.vue'
 import SharedWithMe from './views/shares/SharedWithMe.vue'
 import SharedWithOthers from './views/shares/SharedWithOthers.vue'
 import SharedViaLink from './views/shares/SharedViaLink.vue'
@@ -103,6 +104,7 @@ export default {
     PublicFiles,
     PublicLink,
     SearchResults,
+    SharedResource,
     SharedViaLink,
     SharedWithMe,
     SharedWithOthers,

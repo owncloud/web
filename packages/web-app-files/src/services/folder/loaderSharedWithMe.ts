@@ -4,6 +4,7 @@ import { useTask } from 'vue-concurrency'
 import { aggregateResourceShares } from '../../helpers/resources'
 import { isLocationSharesActive } from '../../router'
 import { Store } from 'vuex'
+import get from 'lodash-es/get'
 import { useCapabilityFilesSharingResharing } from 'web-pkg/src/composables'
 import { unref } from '@vue/composition-api'
 
@@ -45,6 +46,16 @@ export class FolderLoaderSharedWithMe implements FolderLoader {
           configuration.server,
           getToken
         )
+
+        // FIXME, HACK 1: `/Shares` path prefix needs to be removed backend side. We remove it client side in the meantime.
+        // FIXME, HACK 2: webDavPath points to `files/<user>/Shares/xyz` but now needs to point to a shares webDavPath according to the storageId of the share. meh.
+        if (get(store, 'getters.capabilities.spaces.enabled', false)) {
+          resources.forEach((resource) => {
+            if (resource.path.startsWith('/Shares')) {
+              resource.path = resource.path.substring('/Shares'.length)
+            }
+          })
+        }
       }
 
       store.commit('Files/LOAD_FILES', {

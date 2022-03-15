@@ -7,7 +7,6 @@ type spaceTypes =
   | 'files-spaces-project'
   | 'files-spaces-projects'
   | 'files-spaces-share'
-  | 'files-spaces-shares'
 
 export const createLocationSpaces = (name: spaceTypes, location = {}): Location =>
   createLocation(
@@ -24,14 +23,12 @@ export const locationSpacesProject = createLocationSpaces('files-spaces-project'
 export const locationSpacesProjects = createLocationSpaces('files-spaces-projects')
 export const locationSpacesPersonalHome = createLocationSpaces('files-spaces-personal-home')
 export const locationSpacesShare = createLocationSpaces('files-spaces-share')
-export const locationSpacesShares = createLocationSpaces('files-spaces-shares')
 
 export const isLocationSpacesActive = isLocationActiveDirector<spaceTypes>(
   locationSpacesProject,
   locationSpacesProjects,
   locationSpacesPersonalHome,
-  locationSpacesShare,
-  locationSpacesShares
+  locationSpacesShare
 )
 
 export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
@@ -67,17 +64,9 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         }
       },
       {
-        path: 'shares',
-        name: locationSpacesShares.name,
-        component: components.SharedWithMe,
-        meta: {
-          title: $gettext('Files shared with me')
-        }
-      },
-      {
         path: 'shares/:item*',
         name: locationSpacesShare.name,
-        component: components.Personal,
+        component: components.SharedResource,
         meta: {
           patchCleanPath: true,
           title: $gettext('Files shared with me')

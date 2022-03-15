@@ -16,6 +16,7 @@ export interface RouteComponents {
   Personal: ComponentOptions<Vue>
   SearchResults: ComponentOptions<Vue>
   PublicLink: ComponentOptions<Vue>
+  SharedResource: ComponentOptions<Vue>
   SharedWithMe: ComponentOptions<Vue>
   SharedWithOthers: ComponentOptions<Vue>
   SharedViaLink: ComponentOptions<Vue>

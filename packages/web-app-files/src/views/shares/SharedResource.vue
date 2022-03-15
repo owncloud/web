@@ -1,20 +1,11 @@
 <template>
   <div>
-    <app-bar
-      :has-bulk-actions="true"
-      :breadcrumbs="breadcrumbs"
-      :breadcrumbs-context-actions-items="[currentFolder]"
-    >
-      <template #actions>
-        <create-and-upload />
-      </template>
-    </app-bar>
-    <app-loading-spinner v-if="loadResourcesTask.isRunning" />
+    <list-loader v-if="loadResourcesTask.isRunning" />
     <template v-else>
       <not-found-message v-if="folderNotFound" class="files-not-found oc-height-1-1" />
       <no-content-message
         v-else-if="isEmpty"
-        id="files-personal-empty"
+        id="files-shared-resource-empty"
         class="files-empty"
         icon="folder"
       >
@@ -29,8 +20,8 @@
       </no-content-message>
       <resource-table
         v-else
-        id="files-personal-table"
-        v-model="selectedResources"
+        id="files-shared-resource-table"
+        v-model="selected"
         class="files-table"
         :class="{ 'files-table-squashed': !sidebarClosed }"
         :are-thumbnails-displayed="displayThumbnails"
@@ -54,7 +45,7 @@
           />
         </template>
         <template #contextMenu="{ resource }">
-          <context-actions v-if="isResourceInSelection(resource)" :items="selectedResources" />
+          <context-actions v-if="isResourceInSelection(resource)" :items="selected" />
         </template>
         <template #footer>
           <pagination :pages="paginationPages" :current-page="paginationPage" />
@@ -71,49 +62,41 @@
   </div>
 </template>
 
-<script lang="ts">
-import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
-import isNil from 'lodash-es/isNil'
-import debounce from 'lodash-es/debounce'
-
-import MixinAccessibleBreadcrumb from '../mixins/accessibleBreadcrumb'
-import MixinFileActions from '../mixins/fileActions'
-import MixinFilesListFilter from '../mixins/filesListFilter'
-import MixinFilesListScrolling from '../mixins/filesListScrolling'
-import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
+<script>
+// mixins
+import MixinAccessibleBreadcrumb from '../../mixins/accessibleBreadcrumb'
+import MixinFileActions from '../../mixins/fileActions'
+import MixinFilesListFilter from '../../mixins/filesListFilter'
+import MixinFilesListScrolling from '../../mixins/filesListScrolling'
+import MixinMountSideBar from '../../mixins/sidebar/mountSideBar'
+// components
+import ResourceTable from '../../components/FilesList/ResourceTable.vue'
+import QuickActions from '../../components/FilesList/QuickActions.vue'
+import ListLoader from '../../components/FilesList/ListLoader.vue'
+import NoContentMessage from '../../components/FilesList/NoContentMessage.vue'
+import NotFoundMessage from '../../components/FilesList/NotFoundMessage.vue'
+import ListInfo from '../../components/FilesList/ListInfo.vue'
+import Pagination from '../../components/FilesList/Pagination.vue'
+import ContextActions from '../../components/FilesList/ContextActions.vue'
+// misc
 import { VisibilityObserver } from 'web-pkg/src/observer'
-import { ImageDimension, ImageType } from '../constants'
+import { ImageDimension, ImageType } from '../../constants'
 import { bus } from 'web-pkg/src/instance'
-import { breadcrumbsFromPath, concatBreadcrumbs } from '../helpers/breadcrumbs'
-
-import AppBar from '../components/AppBar/AppBar.vue'
-import CreateAndUpload from '../components/AppBar/CreateAndUpload.vue'
-import ResourceTable from '../components/FilesList/ResourceTable.vue'
-import QuickActions from '../components/FilesList/QuickActions.vue'
-import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
-import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
-import NotFoundMessage from '../components/FilesList/NotFoundMessage.vue'
-import ListInfo from '../components/FilesList/ListInfo.vue'
-import Pagination from '../components/FilesList/Pagination.vue'
-import ContextActions from '../components/FilesList/ContextActions.vue'
+import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
+import debounce from 'lodash-es/debounce'
 import { basename, join } from 'path'
 import PQueue from 'p-queue'
-import { createLocationSpaces } from '../router'
-import { useResourcesViewDefaults } from '../composables'
-import { fetchResources } from '../services/folder'
-import { defineComponent } from '@vue/composition-api'
-import { Resource } from '../helpers/resource'
-import { useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
+import { createLocationSpaces } from '../../router'
+import { useResourcesViewDefaults } from '../../composables'
+import { fetchResources } from '../../services/folder'
 
 const visibilityObserver = new VisibilityObserver()
 
-export default defineComponent({
+export default {
   components: {
-    AppBar,
-    CreateAndUpload,
     ResourceTable,
     QuickActions,
-    AppLoadingSpinner,
+    ListLoader,
     NoContentMessage,
     NotFoundMessage,
     ListInfo,
@@ -130,9 +113,8 @@ export default defineComponent({
   ],
   setup() {
     return {
-      ...useResourcesViewDefaults<Resource, any, any[]>(),
-      resourceTargetLocation: createLocationSpaces('files-spaces-personal-home'),
-      hasSpaces: useCapabilitySpacesEnabled()
+      ...useResourcesViewDefaults(),
+      resourceTargetLocation: createLocationSpaces('files-spaces-share')
     }
   },
 
@@ -142,6 +124,7 @@ export default defineComponent({
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
     ...mapGetters('Files', [
       'highlightedFile',
+      'selectedFiles',
       'currentFolder',
       'totalFilesCount',
       'totalFilesSize'
@@ -152,14 +135,13 @@ export default defineComponent({
       return this.paginatedResources.length < 1
     },
 
-    breadcrumbs() {
-      const personalRouteName = this.hasSpaces
-        ? this.$gettext('Personal')
-        : this.$gettext('All files')
-      return concatBreadcrumbs(
-        { text: personalRouteName, to: '/' },
-        ...breadcrumbsFromPath(this.$route.path, this.$route.params.item)
-      )
+    selected: {
+      get() {
+        return this.selectedFiles
+      },
+      set(resources) {
+        this.SET_FILE_SELECTION(resources)
+      }
     },
 
     folderNotFound() {
@@ -168,39 +150,17 @@ export default defineComponent({
 
     displayThumbnails() {
       return !this.configuration.options.disablePreviews
+    },
+
+    storageId() {
+      return this.$route.params.storageId
     }
   },
 
   watch: {
     $route: {
-      handler: function (to, from) {
-        const needsRedirectToHome =
-          this.homeFolder !== '/' && isNil(to.params.item) && !to.path.endsWith('/')
-
-        if (needsRedirectToHome) {
-          this.$router.replace(
-            {
-              name: to.name,
-              params: {
-                ...to.params,
-                item: this.homeFolder
-              },
-              query: to.query
-            },
-            () => {},
-            (e) => {
-              console.error(e)
-            }
-          )
-
-          return
-        }
-
-        const sameRoute = to.name === from?.name
-        const sameItem = to.params?.item === from?.params?.item
-        if (!sameRoute || !sameItem) {
-          this.loadResourcesTask.perform(this, sameRoute)
-        }
+      handler: function () {
+        this.loadResourcesTask.perform(this, this.storageId)
       },
       immediate: true
     }
@@ -208,7 +168,7 @@ export default defineComponent({
 
   mounted() {
     const loadResourcesEventToken = bus.subscribe('app.files.list.load', (path) => {
-      this.loadResourcesTask.perform(this, this.$route.params.item === path, path)
+      this.loadResourcesTask.perform(this, this.storageId, path)
     })
 
     this.$on('beforeDestroy', () => bus.unsubscribe('app.files.list.load', loadResourcesEventToken))
@@ -221,12 +181,17 @@ export default defineComponent({
   methods: {
     ...mapActions('Files', ['loadPreview']),
     ...mapActions(['showMessage']),
-    ...mapMutations('Files', ['REMOVE_FILE', 'REMOVE_FILE_FROM_SEARCHED', 'REMOVE_FILE_SELECTION']),
+    ...mapMutations('Files', [
+      'REMOVE_FILE',
+      'REMOVE_FILE_FROM_SEARCHED',
+      'SET_FILE_SELECTION',
+      'REMOVE_FILE_SELECTION'
+    ]),
 
     fetchResources,
 
     async fileDropped(fileIdTarget) {
-      const selected = [...this.selectedResources]
+      const selected = [...this.selectedFiles]
       const targetInfo = this.paginatedResources.find((e) => e.id === fileIdTarget)
       const isTargetSelected = selected.some((e) => e.id === fileIdTarget)
       if (isTargetSelected) return
@@ -325,13 +290,17 @@ export default defineComponent({
           const resource = this.paginatedResources.find((r) => r.name === resourceName)
 
           if (resource) {
-            this.selectedResources = [resource]
+            this.selected = [resource]
             this.$_mountSideBar_showDefaultPanel(resource)
             this.scrollToResource(resource)
           }
         })
       }
+    },
+
+    isResourceInSelection(resource) {
+      return this.selected?.includes(resource)
     }
   }
-})
+}
 </script>

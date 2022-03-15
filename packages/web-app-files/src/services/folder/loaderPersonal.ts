@@ -5,14 +5,7 @@ import { DavProperties } from 'web-pkg/src/constants'
 import { buildResource, buildWebDavFilesPath } from '../../helpers/resources'
 import { isLocationSpacesActive } from '../../router'
 import { Store } from 'vuex'
-
-export const fetchResources = async (client, path, properties) => {
-  try {
-    return await client.files.list(path, 1, properties)
-  } catch (error) {
-    console.error(error)
-  }
-}
+import { fetchResources } from './util'
 
 export class FolderLoaderPersonal implements FolderLoader {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

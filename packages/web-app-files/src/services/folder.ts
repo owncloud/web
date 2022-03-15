@@ -7,6 +7,7 @@ import { ClientService } from 'web-pkg/src/services/client'
 
 import {
   FolderLoaderSpacesProject,
+  FolderLoaderSpacesShare,
   FolderLoaderFavorites,
   FolderLoaderPersonal,
   FolderLoaderPublicFiles,
@@ -15,6 +16,8 @@ import {
   FolderLoaderSharedWithOthers,
   FolderLoaderTrashbin
 } from './folder/'
+
+export * from './folder/util'
 
 export type FolderLoaderTask = any
 
@@ -37,6 +40,7 @@ export class FolderService {
     this.loaders = [
       // spaces loaders
       new FolderLoaderSpacesProject(),
+      new FolderLoaderSpacesShare(),
       // generic loaders
       new FolderLoaderFavorites(),
       new FolderLoaderPersonal(),
@@ -57,7 +61,8 @@ export class FolderService {
     return useTask(function* (...args) {
       const loader = loaders.find((l) => l.isEnabled(unref(store)) && l.isActive(unref(router)))
       if (!loader) {
-        throw new Error('No folder loader found for route')
+        console.error('No folder loader found for route')
+        return
       }
       const context = {
         clientService,
