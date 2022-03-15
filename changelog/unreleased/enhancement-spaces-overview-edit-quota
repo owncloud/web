@@ -1,0 +1,5 @@
+Enhancement: Implement edit quota action in spaces overview
+
+We've added the edit quota action to the space context menu in the spaces overview.
+
+https://github.com/owncloud/web/pull/6598
