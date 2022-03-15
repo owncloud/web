@@ -8,7 +8,7 @@ Feature: deleting files and folders
     And user "Alice" has logged in using the webUI
     And the user reloads the current page of the webUI
 
-  @smokeTest @ocisSmokeTest @disablePreviews @skipOnXGAPortraitResolution
+  @smokeTest @ocisSmokeTest @disablePreviews
   Scenario: Delete files & folders one by one and check its existence after page reload
     Given user "Alice" has created folder "simple-empty-folder" in the server
     And user "Alice" has created folder "simple-folder" in the server

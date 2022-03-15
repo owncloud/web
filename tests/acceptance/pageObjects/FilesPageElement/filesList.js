@@ -353,7 +353,7 @@ module.exports = {
       await this.checkFileName(fileName, elementType)
       const rowSelector = this.getFileRowSelectorByFileName(fileName, elementType)
       await appSideBar.closeSidebarIfOpen()
-      await this.waitForElementPresent({ selector: rowSelector, locateStrategy: 'xpath' })
+      await this.waitForElementVisible({ selector: rowSelector, locateStrategy: 'xpath' })
     },
     checkFileName: async function (fileName, elementType = 'any') {
       const fileSelector = this.getFileSelectorByFileName(fileName, elementType)

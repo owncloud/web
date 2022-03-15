@@ -10,7 +10,7 @@ Feature: Sharing files and folders with internal users
       | Alice    |
       | Brian    |
 
-  @smokeTest @disablePreviews @skipOnXGAPortraitResolution
+  @smokeTest @disablePreviews
   Scenario Outline: share a file & folder with another internal user
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "yes" in the server
     And user "Brian" has created folder "simple-folder" in the server
