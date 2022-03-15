@@ -45,7 +45,7 @@
     "vue-resize": "^1.0.1",
     "vue-router": "^3.5.3",
     "vue-scrollto": "^2.15.0",
-    "vue-select": "^3.13.2",
+    "vue-select": "^3.18.3",
     "vuex": "^3.6.2",
     "vuex-extensions": "^1.1.5",
     "vuex-persist": "3.1.3",
