@@ -25,6 +25,7 @@ Summary
 * Enhancement - Contextmenu background hover: [#6553](https://github.com/owncloud/web/pull/6553)
 * Enhancement - Load space images as preview: [#6529](https://github.com/owncloud/web/pull/6529)
 * Enhancement - Move share indicators: [#5976](https://github.com/owncloud/web/issues/5976)
+* Enhancement - Polish ViewOptions: [#6492](https://github.com/owncloud/web/issues/6492)
 * Enhancement - Resolve private links into folders instead of parent: [#5533](https://github.com/owncloud/web/issues/5533)
 * Enhancement - Shares overview: [#6440](https://github.com/owncloud/web/issues/6440)
 * Enhancement - Side bar nav tags: [#6540](https://github.com/owncloud/web/pull/6540)
@@ -167,6 +168,13 @@ Details
    https://github.com/owncloud/web/pull/6552
    https://github.com/owncloud/owncloud-design-system/pull/2014
    https://github.com/owncloud/web/pull/6583
+
+* Enhancement - Polish ViewOptions: [#6492](https://github.com/owncloud/web/issues/6492)
+
+   We've added an hover effect for ViewOptions buttons
+
+   https://github.com/owncloud/web/issues/6492
+   https://github.com/owncloud/web/pull/6591
 
 * Enhancement - Resolve private links into folders instead of parent: [#5533](https://github.com/owncloud/web/issues/5533)
 
