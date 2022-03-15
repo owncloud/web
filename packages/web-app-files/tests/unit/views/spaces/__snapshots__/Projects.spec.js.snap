@@ -6,6 +6,7 @@ exports[`Spaces component should list spaces 1`] = `
   </button>
   <div class="oc-pb-xl oc-border-b"><span>Store your project related files in Spaces for seamless collaboration.</span></div>
   <div class="spaces-list oc-mt-l"><input id="space-image-upload-input" type="file" name="file" multiple="multiple" tabindex="-1" accept="image/*">
+    <!---->
     <ul class="
           oc-grid
           oc-grid-match
