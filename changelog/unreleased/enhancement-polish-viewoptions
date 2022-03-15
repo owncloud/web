@@ -1,0 +1,6 @@
+Enhancement: Polish ViewOptions
+
+We've added an hover effect for ViewOptions buttons
+
+https://github.com/owncloud/web/issues/6492
+https://github.com/owncloud/web/pull/6591
