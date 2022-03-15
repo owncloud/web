@@ -9525,9 +9525,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"owncloud-design-system@npm:^13.0.0-rc.3":
-  version: 13.0.0-rc.3
-  resolution: "owncloud-design-system@npm:13.0.0-rc.3"
+"owncloud-design-system@portal:/Users/paul/repos/owncloud-design-system::locator=root-workspace-0b6124%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "owncloud-design-system@portal:/Users/paul/repos/owncloud-design-system::locator=root-workspace-0b6124%40workspace%3A."
   peerDependencies:
     "@popperjs/core": ^2.4.0
     "@vue/composition-api": ^1.4.3
@@ -9544,9 +9544,8 @@ __metadata:
     vue-inline-svg: ^2.0.0
     vue-select: ^3.12.0
     webfontloader: ^1.6.28
-  checksum: aadf94f8e038bbb535996175be622d4492a88efecffdc7fbf9a5f46516661734d33aac090bd787ef9251016b6fa0e3028b1b794a626c876a848abaffb8d8a6af
   languageName: node
-  linkType: hard
+  linkType: soft
 
 "owncloud-sdk@npm:~2.1.0-alpha.3":
   version: 2.1.0-alpha.3
@@ -11670,8 +11669,10 @@ __metadata:
     typescript: ^4.6.2
     url-search-params-polyfill: ^8.0.0
     vue: ^2.6.10
+    vue-class-component: ^7.2.6
     vue-jest: ^3.0.7
-    vue-template-compiler: ^2.6.12
+    vue-property-decorator: ^9.1.2
+    vue-template-compiler: ^2.6.14
     vuex-mock-store: 0.0.8
   dependenciesMeta:
     "@playwright/test":
@@ -13244,6 +13245,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"vue-class-component@npm:^7.2.6":
+  version: 7.2.6
+  resolution: "vue-class-component@npm:7.2.6"
+  peerDependencies:
+    vue: ^2.0.0
+  checksum: 3b4e1de0328b2af0216cbbf125c4ac3da5701c9585713ee634f887092f4faaa1ff9589130ec9fc0b3240d7709217eb8d03e9c0e27fe80768d2883ffe5faf9a14
+  languageName: node
+  linkType: hard
+
 "vue-concurrency@npm:^2.2.1":
   version: 2.2.1
   resolution: "vue-concurrency@npm:2.2.1"
@@ -13332,6 +13342,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"vue-property-decorator@npm:^9.1.2":
+  version: 9.1.2
+  resolution: "vue-property-decorator@npm:9.1.2"
+  peerDependencies:
+    vue: "*"
+    vue-class-component: "*"
+  checksum: 0155127c3e31bde1c6da13116793a215d60f445b5338e5f2717e0090556f698284d555b7c3f3e76c651c82880f1560d6f8d992f183c50a9be09ce7fe6d1f5300
+  languageName: node
+  linkType: hard
+
 "vue-resize@npm:^1.0.1":
   version: 1.0.1
   resolution: "vue-resize@npm:1.0.1"
@@ -13375,7 +13395,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vue-template-compiler@npm:^2.6.12":
+"vue-template-compiler@npm:^2.6.14":
   version: 2.6.14
   resolution: "vue-template-compiler@npm:2.6.14"
   dependencies:

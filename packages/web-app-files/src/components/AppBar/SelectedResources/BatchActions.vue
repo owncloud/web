@@ -11,7 +11,7 @@
   </oc-list>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters } from 'vuex'
 import ActionMenuItem from '../../ActionMenuItem.vue'
 import AcceptShare from '../../../mixins/actions/acceptShare'
@@ -23,43 +23,45 @@ import DownloadFile from '../../../mixins/actions/downloadFile'
 import EmptyTrashBin from '../../../mixins/actions/emptyTrashBin'
 import Move from '../../../mixins/actions/move'
 import Restore from '../../../mixins/actions/restore'
+import { Vue, Component, Mixins } from 'vue-property-decorator'
 
-export default {
-  name: 'BatchActions',
-  components: { ActionMenuItem },
-  mixins: [
-    AcceptShare,
-    Copy,
-    DeclineShare,
-    Delete,
-    DownloadArchive,
-    DownloadFile,
-    EmptyTrashBin,
-    Move,
-    Restore
-  ],
-  computed: {
-    ...mapGetters('Files', ['selectedFiles']),
-
-    filterParams() {
-      return {
-        resources: this.selectedFiles
-      }
-    },
-
-    menuItemsBatchActions() {
-      return [
-        ...this.$_acceptShare_items,
-        ...this.$_declineShare_items,
-        ...this.$_downloadArchive_items,
-        ...this.$_downloadFile_items,
-        ...this.$_move_items,
-        ...this.$_copy_items,
-        ...this.$_emptyTrashBin_items,
-        ...this.$_delete_items,
-        ...this.$_restore_items
-      ].filter((item) => item.isEnabled({ resources: this.selectedFiles }))
+@Component({
+  name: "BatchActions",
+  extends: Vue,
+  components: {
+    ActionMenuItem
+  },
+  computed: {...mapGetters('Files', ['selectedFiles'])}
+})
+export default class BatchActions extends Mixins(
+    Vue.extend(AcceptShare),
+    Vue.extend(Copy),
+    Vue.extend(DeclineShare),
+    Vue.extend(Delete),
+    Vue.extend(DownloadArchive),
+    Vue.extend(DownloadFile),
+    Vue.extend(EmptyTrashBin),
+    Vue.extend(Move),
+    Vue.extend(Restore)
+ ) {
+  get filterParams() {
+    return {
+      resources: this.selectedFiles
     }
+  }
+
+  get menuItemsBatchActions() {
+    return [
+      ...this.$_acceptShare_items,
+      ...this.$_declineShare_items,
+      ...this.$_downloadArchive_items,
+      ...this.$_downloadFile_items,
+      ...this.$_move_items,
+      ...this.$_copy_items,
+      ...this.$_emptyTrashBin_items,
+      ...this.$_delete_items,
+      ...this.$_restore_items
+    ].filter((item) => item.isEnabled({ resources: this.selectedFiles }))
   }
 }
 </script>
