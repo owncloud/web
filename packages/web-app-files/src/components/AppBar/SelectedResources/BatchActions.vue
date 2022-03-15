@@ -31,19 +31,20 @@ import { Vue, Component, Mixins } from 'vue-property-decorator'
   components: {
     ActionMenuItem
   },
-  computed: {...mapGetters('Files', ['selectedFiles'])}
+  computed: {...mapGetters('Files', ['selectedFiles'])},
+  mixins: [
+    AcceptShare,
+    Copy,
+    DeclineShare,
+    Delete,
+    DownloadArchive,
+    DownloadFile,
+    EmptyTrashBin,
+    Move,
+    Restore
+  ]
 })
-export default class BatchActions extends Mixins(
-    Vue.extend(AcceptShare),
-    Vue.extend(Copy),
-    Vue.extend(DeclineShare),
-    Vue.extend(Delete),
-    Vue.extend(DownloadArchive),
-    Vue.extend(DownloadFile),
-    Vue.extend(EmptyTrashBin),
-    Vue.extend(Move),
-    Vue.extend(Restore)
- ) {
+export default class BatchActions extends Vue{
   get filterParams() {
     return {
       resources: this.selectedFiles

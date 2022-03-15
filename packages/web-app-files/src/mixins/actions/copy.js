@@ -5,7 +5,7 @@ import {
   isLocationSpacesActive
 } from '../../router'
 
-export default {
+export default Vue.extend({
   computed: {
     $_copy_items() {
       return [
@@ -75,4 +75,4 @@ export default {
       )
     }
   }
-}
+})

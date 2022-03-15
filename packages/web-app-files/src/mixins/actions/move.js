@@ -6,7 +6,7 @@ import {
   isLocationSpacesActive
 } from '../../router'
 
-export default {
+export default Vue.extend({
   computed: {
     $_move_items() {
       return [
@@ -77,4 +77,4 @@ export default {
       )
     }
   }
-}
+})

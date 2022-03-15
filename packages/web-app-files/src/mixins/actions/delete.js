@@ -6,7 +6,7 @@ import {
   isLocationSpacesActive
 } from '../../router'
 
-export default {
+export default Vue.extend({
   mixins: [MixinDeleteResources],
   computed: {
     ...mapState('Files', ['currentFolder']),
@@ -60,4 +60,4 @@ export default {
       this.$_deleteResources_displayDialog(resources)
     }
   }
-}
+})

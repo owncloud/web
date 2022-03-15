@@ -5,7 +5,7 @@ import PQueue from 'p-queue'
 import { ShareStatus } from '../../helpers/share'
 import { isLocationSharesActive } from '../../router'
 
-export default {
+export default Vue.extend({
   computed: {
     ...mapGetters(['isOcis']),
     $_acceptShare_items() {
@@ -80,4 +80,4 @@ export default {
       })
     }
   }
-}
+})

@@ -4,7 +4,7 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 import PQueue from 'p-queue'
 import { ShareStatus } from '../../helpers/share'
 
-export default {
+export default Vue.extend({
   computed: {
     ...mapGetters(['isOcis']),
     $_declineShare_items() {
@@ -79,4 +79,4 @@ export default {
       })
     }
   }
-}
+})

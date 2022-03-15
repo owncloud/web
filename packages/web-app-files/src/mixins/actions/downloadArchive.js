@@ -9,7 +9,7 @@ import {
 } from '../../router'
 import isFilesAppActive from './helpers/isFilesAppActive'
 
-export default {
+export default Vue.extend({
   mixins: [isFilesAppActive],
   computed: {
     $_downloadArchive_items() {
@@ -72,4 +72,4 @@ export default {
       })
     }
   }
-}
+})
