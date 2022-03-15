@@ -14,21 +14,27 @@ export class FolderLoaderProject implements FolderLoader {
     const router = context.router
     const store = context.store
 
-    const graphClient = clientService.graphAuthenticated(
-      store.getters.configuration.server,
-      store.getters.getToken
-    )
-
-    return useTask(function* (signal1, signal2, ref, sameRoute, path = null) {
+    return useTask(function* (signal1, signal2, ref, sameRoute, path = null, fetchSpace = true) {
       ref.CLEAR_CURRENT_FILES_LIST()
-      const storageId = router.currentRoute.params.storageId
-      const graphResponse = yield graphClient.drives.getDrive(storageId)
 
-      if (!graphResponse.data) {
-        return
+      let space
+      if (fetchSpace) {
+        const graphClient = clientService.graphAuthenticated(
+          store.getters.configuration.server,
+          store.getters.getToken
+        )
+
+        const storageId = router.currentRoute.params.storageId
+        const graphResponse = yield graphClient.drives.getDrive(storageId)
+
+        if (!graphResponse.data) {
+          return
+        }
+
+        space = buildSpace(graphResponse.data)
+      } else {
+        space = ref.space
       }
-
-      ref.space = buildSpace(graphResponse.data)
 
       const webDavResponse = yield ref.$client.files.list(
         buildWebDavSpacesPath(ref.$route.params.storageId, path || '')
@@ -37,7 +43,7 @@ export class FolderLoaderProject implements FolderLoader {
       let resources = []
       if (!path) {
         // space front page -> use space as current folder
-        resources.push(ref.space)
+        resources.push(space)
 
         const webDavResources = webDavResponse.map(buildResource)
         webDavResources.shift() // Remove webdav entry for the space itself
@@ -56,6 +62,10 @@ export class FolderLoaderProject implements FolderLoader {
         client: ref.$client,
         currentFolder: currentFolder?.path
       })
+
+      if (fetchSpace) {
+        ref.space = space
+      }
     })
   }
 }

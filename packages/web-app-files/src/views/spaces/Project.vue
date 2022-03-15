@@ -288,12 +288,12 @@ export default {
   },
   watch: {
     $route: {
-      handler: function (to, from) {
+      handler: async function (to, from) {
         const sameRoute = to.name === from?.name
         const sameItem = to.params?.item === from?.params?.item
 
         if ((!sameRoute || !sameItem) && from) {
-          this.loadResourcesTask.perform(this, sameRoute, to.params.item)
+          await this.loadResourcesTask.perform(this, sameRoute, to.params.item, false)
         }
 
         if (this.$refs.markdownContainer) {
