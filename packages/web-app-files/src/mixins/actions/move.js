@@ -60,7 +60,7 @@ export default {
 
       if (isLocationSpacesActive(this.$router, 'files-spaces-project')) {
         context = 'space'
-        query.spaceId = this.$route.params.spaceId
+        query.storageId = this.$route.params.storageId
       }
 
       const item = this.currentFolder.path || this.homeFolder

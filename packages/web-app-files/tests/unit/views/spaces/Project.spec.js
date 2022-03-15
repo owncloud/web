@@ -216,7 +216,7 @@ function getMountedWrapper(spaceResources = [], spaceItem = null, imageContent =
     currentRoute: {
       name: createLocationSpaces('files-spaces-project').name,
       query: {},
-      params: { spaceId: 1 }
+      params: { storageId: 1 }
     },
     resolve: (r) => {
       return { href: r.name }

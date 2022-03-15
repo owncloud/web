@@ -110,7 +110,7 @@
                     </div>
                     <div>
                       <oc-button
-                        :id="`space-context-btn-${sanitizeSpaceId(space.id)}`"
+                        :id="`space-context-btn-${sanitizeStorageId(space.id)}`"
                         v-oc-tooltip="$gettext('Show context menu')"
                         :aria-label="$gettext('Show context menu')"
                         appearance="raw"
@@ -119,7 +119,7 @@
                       </oc-button>
                       <oc-drop
                         :drop-id="`space-context-drop-${space.id}`"
-                        :toggle="`#space-context-btn-${sanitizeSpaceId(space.id)}`"
+                        :toggle="`#space-context-btn-${sanitizeStorageId(space.id)}`"
                         mode="click"
                         close-on-click
                         :options="{ delayHide: 0 }"
@@ -303,7 +303,7 @@ export default {
 
     getSpaceProjectRoute({ id, name }) {
       return createLocationSpaces('files-spaces-project', {
-        params: { spaceId: id, name }
+        params: { storageId: id, name }
       })
     },
 
@@ -387,7 +387,7 @@ export default {
         })
     },
 
-    sanitizeSpaceId(id) {
+    sanitizeStorageId(id) {
       return id.replace('!', '\\!').split('.')[0]
     },
 

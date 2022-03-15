@@ -76,7 +76,7 @@ export default {
       // step 1: create folder
       await this.$_buildCreateFolderCallback(this.rootPath, directory.fullPath, {
         userId: this.user?.id,
-        spaceId: this.$route.params.spaceId,
+        storageId: this.$route.params.storageId,
         publicLinkPassword: this.publicLinkPassword
       })()
 
@@ -294,7 +294,7 @@ export default {
             this.directoryQueue.add(
               this.$_buildCreateFolderCallback(this.rootPath, directory, {
                 userId: this.user?.id,
-                spaceId: this.$route.params.spaceId,
+                storageId: this.$route.params.storageId,
                 publicLinkPassword: this.publicLinkPassword
               })
             )
@@ -315,13 +315,13 @@ export default {
       }
     },
 
-    $_buildCreateFolderCallback(rootPath, directory, { userId, spaceId, publicLinkPassword }) {
+    $_buildCreateFolderCallback(rootPath, directory, { userId, storageId, publicLinkPassword }) {
       if (this.publicPage()) {
         return () => this.$client.publicFiles.createFolder(rootPath, directory, publicLinkPassword)
       }
 
-      const path = spaceId
-        ? buildWebDavSpacesPath(spaceId, `${rootPath}${directory}`)
+      const path = storageId
+        ? buildWebDavSpacesPath(storageId, `${rootPath}${directory}`)
         : buildWebDavFilesPath(userId, `${rootPath}${directory}`)
       return () => this.$client.files.createFolder(path)
     },
@@ -376,8 +376,8 @@ export default {
         basePath = this.path || ''
         const joinedPath = pathUtil.join(basePath, relativePath)
 
-        if (this.$route.params.spaceId) {
-          relativePath = buildWebDavSpacesPath(this.$route.params.spaceId, joinedPath)
+        if (this.$route.params.storageId) {
+          relativePath = buildWebDavSpacesPath(this.$route.params.storageId, joinedPath)
         } else {
           relativePath = buildWebDavFilesPath(this.user.id, joinedPath)
         }

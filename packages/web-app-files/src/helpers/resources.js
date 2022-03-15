@@ -14,6 +14,7 @@ import {
   spaceRoleManager,
   spaceRoleViewer
 } from './share'
+import { extractStorageId } from './resource'
 
 function _getFileExtension(name) {
   const extension = path.extname(name)
@@ -58,6 +59,7 @@ export function buildResource(resource) {
   return {
     id: resource.fileInfo[DavProperty.FileId],
     fileId: resource.fileInfo[DavProperty.FileId],
+    storageId: extractStorageId(resource.fileInfo[DavProperty.FileId]),
     mimeType: resource.fileInfo[DavProperty.MimeType],
     name: path.basename(resource.name),
     extension: isFolder ? '' : extension,
@@ -141,6 +143,7 @@ export function buildSpace(space) {
   return {
     id: space.id,
     fileId: '',
+    storageId: space.id,
     mimeType: '',
     name: space.name,
     description: space.description,
@@ -237,8 +240,8 @@ export function buildWebDavFilesPath(userId, path) {
   return '/' + `files/${userId}/${path}`.split('/').filter(Boolean).join('/')
 }
 
-export function buildWebDavSpacesPath(spaceId, path) {
-  return '/' + `spaces/${spaceId}/${path}`.split('/').filter(Boolean).join('/')
+export function buildWebDavSpacesPath(storageId, path) {
+  return '/' + `spaces/${storageId}/${path}`.split('/').filter(Boolean).join('/')
 }
 
 export function attachIndicators(resource, sharesTree) {
@@ -326,6 +329,7 @@ export function buildSharedResource(share, incomingShares = false, allowSharePer
   const resource = {
     id: share.id,
     fileId: share.item_source,
+    storageId: extractStorageId(share.item_source),
     type: share.item_type,
     mimeType: share.state === 0 ? share.mimetype : '',
     isFolder,
@@ -388,7 +392,7 @@ export function buildShare(s, file, allowSharePermission) {
   return buildCollaboratorShare(s, file, allowSharePermission)
 }
 
-export function buildSpaceShare(s, spaceId) {
+export function buildSpaceShare(s, storageId) {
   let permissions, role
 
   switch (s.role) {
@@ -408,7 +412,7 @@ export function buildSpaceShare(s, spaceId) {
 
   return {
     shareType: ShareTypes.space.value,
-    id: spaceId,
+    id: storageId,
     collaborator: {
       name: s.onPremisesSamAccountName,
       displayName: s.displayName,

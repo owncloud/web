@@ -42,7 +42,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         }
       },
       {
-        path: 'projects/:spaceId?/:item*',
+        path: 'projects/:storageId?/:item*',
         name: locationSpacesProject.name,
         component: components.Spaces.Project,
         meta: {
@@ -52,6 +52,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         }
       },
       {
+        // intentionally not `storageId`, yet, because we use an alphanumeric alias here instead of an id
         path: 'personal/:storage/:item*',
         name: locationSpacesPersonalHome.name,
         component: components.Personal,

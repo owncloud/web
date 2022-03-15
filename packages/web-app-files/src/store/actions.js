@@ -314,7 +314,7 @@ export default {
       shareType,
       permissions,
       expirationDate,
-      spaceId,
+      storageId,
       displayName
     }
   ) {
@@ -352,7 +352,7 @@ export default {
 
     if (shareType === ShareTypes.space.value) {
       client.shares
-        .shareSpaceWithUser(path, shareWith, spaceId, {
+        .shareSpaceWithUser(path, shareWith, storageId, {
           permissions
         })
         .then(() => {
@@ -363,13 +363,13 @@ export default {
             displayName
           }
 
-          context.commit('CURRENT_FILE_OUTGOING_SHARES_ADD', buildSpaceShare(shareObj, spaceId))
+          context.commit('CURRENT_FILE_OUTGOING_SHARES_ADD', buildSpaceShare(shareObj, storageId))
           context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', true)
 
-          return graphClient.drives.getDrive(spaceId).then((response) => {
+          return graphClient.drives.getDrive(storageId).then((response) => {
             const space = buildSpace(response.data)
             context.commit('UPDATE_RESOURCE_FIELD', {
-              id: spaceId,
+              id: storageId,
               field: 'spaceRoles',
               value: space.spaceRoles
             })

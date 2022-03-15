@@ -203,10 +203,10 @@ export default {
                   text: this.$gettext('Spaces'),
                   to: '/files/spaces/projects'
                 }
-                if (this.$route.params.spaceId) {
+                if (this.$route.params.storageId) {
                   acc.splice(1, 0, {
-                    text: this.$route.params.spaceId,
-                    to: `/files/spaces/projects/${this.$route.params.spaceId}`
+                    text: this.$route.params.storageId,
+                    to: `/files/spaces/projects/${this.$route.params.storageId}`
                   })
                 }
               } else {
@@ -283,7 +283,7 @@ export default {
           path = buildWebDavFilesPath(this.user.id, path)
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else if (this.isSpacesProjectLocation) {
-          path = buildWebDavSpacesPath(this.$route.params.spaceId, path)
+          path = buildWebDavSpacesPath(this.$route.params.storageId, path)
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else {
           resource = await this.$client.publicFiles.getFileInfo(

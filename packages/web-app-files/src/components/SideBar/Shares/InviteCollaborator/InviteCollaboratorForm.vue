@@ -264,7 +264,7 @@ export default {
               shareType: collaborator.value.shareType,
               permissions: bitmask,
               expirationDate: this.expirationDate,
-              spaceId: this.resourceIsSpace ? this.highlightedFile.id : null
+              storageId: this.resourceIsSpace ? this.highlightedFile.id : null
             })
           })
         )
