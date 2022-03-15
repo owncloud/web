@@ -2,7 +2,7 @@ import Vuex from 'vuex'
 import { createStore } from 'vuex-extensions'
 import { mount, createLocalVue } from '@vue/test-utils'
 import EmptyTashBin from '@files/src/mixins/actions/emptyTrashBin.js'
-import { createLocationTrash } from '../../../../src/router'
+import { createLocationTrash, createLocationSpaces } from '../../../../src/router'
 // eslint-disable-next-line jest/no-mocks-import
 import sdkMock from '@/__mocks__/sdk'
 
@@ -25,6 +25,10 @@ describe('emptyTrashBin', () => {
     it('should be true when no resource is given', () => {
       const wrapper = getWrapper()
       expect(wrapper.vm.$_emptyTrashBin_items[0].isEnabled({ resources: [] })).toBe(true)
+    })
+    it('should be false when location is invalid', () => {
+      const wrapper = getWrapper({ invalidLocation: true })
+      expect(wrapper.vm.$_emptyTrashBin_items[0].isEnabled({ resources: [] })).toBe(false)
     })
   })
 
@@ -52,7 +56,7 @@ describe('emptyTrashBin', () => {
     it('should show message on error', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => {})
 
-      const wrapper = getWrapper(false)
+      const wrapper = getWrapper({ resolveClearTrashBin: false })
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       await wrapper.vm.$_emptyTrashBin_emptyTrashBin()
 
@@ -61,12 +65,14 @@ describe('emptyTrashBin', () => {
   })
 })
 
-function getWrapper(resolveClearTrashBin = true) {
+function getWrapper({ invalidLocation = false, resolveClearTrashBin = true } = {}) {
   return mount(Component, {
     localVue,
     mocks: {
       $router: {
-        currentRoute: createLocationTrash('files-trash-personal'),
+        currentRoute: invalidLocation
+          ? createLocationSpaces('files-spaces-personal-home')
+          : createLocationTrash('files-trash-personal'),
         resolve: (r) => {
           return { href: r.name }
         }
