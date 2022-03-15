@@ -138,7 +138,7 @@ export default {
           break
         case 'space':
           resources = yield ref.$client.files.list(
-            buildWebDavSpacesPath(ref.$route.query.spaceId, target),
+            buildWebDavSpacesPath(ref.$route.query.storageId, target),
             1,
             DavProperties.Default
           )
@@ -278,8 +278,8 @@ export default {
         }
       }
 
-      if (this.$route.query.spaceId) {
-        route.query.spaceId = this.$route.query.spaceId
+      if (this.$route.query.storageId) {
+        route.query.storageId = this.$route.query.storageId
       }
 
       return route
@@ -353,7 +353,7 @@ export default {
         case 'space':
           this.$router.push(
             createLocationSpaces('files-spaces-project', {
-              params: { spaceId: this.$route.query.spaceId, item: target || '/' }
+              params: { storageId: this.$route.query.storageId, item: target || '/' }
             })
           )
           break
@@ -404,10 +404,10 @@ export default {
                 )
                 break
               case 'space':
-                targetPath = buildWebDavSpacesPath(this.$route.query.spaceId, this.target || '/')
+                targetPath = buildWebDavSpacesPath(this.$route.query.storageId, this.target || '/')
                 targetPath += `/${resourceName}`
                 promise = this.$client.files.move(
-                  buildWebDavSpacesPath(this.$route.query.spaceId, resource),
+                  buildWebDavSpacesPath(this.$route.query.storageId, resource),
                   targetPath
                 )
                 break
@@ -434,11 +434,11 @@ export default {
                 )
                 break
               case 'space':
-                targetPath = buildWebDavSpacesPath(this.$route.query.spaceId, this.target || '/')
+                targetPath = buildWebDavSpacesPath(this.$route.query.storageId, this.target || '/')
                 resourceName = basename(resource)
                 targetPath += `/${resourceName}`
                 promise = this.$client.files.copy(
-                  buildWebDavSpacesPath(this.$route.query.spaceId, resource),
+                  buildWebDavSpacesPath(this.$route.query.storageId, resource),
                   targetPath
                 )
                 break

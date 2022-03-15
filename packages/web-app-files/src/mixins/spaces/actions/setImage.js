@@ -58,9 +58,9 @@ export default {
     ...mapActions(['showMessage']),
     async $_setSpaceImage_trigger({ resources }) {
       const graphClient = clientService.graphAuthenticated(this.configuration.server, this.getToken)
-      const spaceId = this.$route.params.spaceId
+      const storageId = this.$route.params.storageId
       const sourcePath = resources[0].webDavPath
-      const destinationPath = `/spaces/${spaceId}/.space/${resources[0].name}`
+      const destinationPath = `/spaces/${storageId}/.space/${resources[0].name}`
 
       if (sourcePath === destinationPath) {
         return
@@ -70,7 +70,7 @@ export default {
         const fileInfo = await this.$client.files.fileInfo(destinationPath)
         const file = buildResource(fileInfo)
         const { data } = await graphClient.drives.updateDrive(
-          spaceId,
+          storageId,
           {
             special: [
               {
@@ -84,7 +84,7 @@ export default {
           {}
         )
         this.UPDATE_RESOURCE_FIELD({
-          id: spaceId,
+          id: storageId,
           field: 'spaceImageData',
           value: data.special.find((special) => special.specialFolder.name === 'image')
         })

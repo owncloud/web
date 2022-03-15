@@ -279,7 +279,7 @@ export default {
           await this.$client.files.createFolder(path)
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else if (this.isSpacesProjectLocation) {
-          path = buildWebDavSpacesPath(this.$route.params.spaceId, path)
+          path = buildWebDavSpacesPath(this.$route.params.storageId, path)
           await this.$client.files.createFolder(path)
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else {
@@ -368,7 +368,7 @@ export default {
           await this.$client.files.putFileContents(path, '')
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else if (this.isSpacesProjectLocation) {
-          path = buildWebDavSpacesPath(this.$route.params.spaceId, path)
+          path = buildWebDavSpacesPath(this.$route.params.storageId, path)
           await this.$client.files.putFileContents(path, '')
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else {
@@ -463,7 +463,7 @@ export default {
           path = buildWebDavFilesPath(this.user.id, path)
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else if (this.isSpacesProjectLocation) {
-          path = buildWebDavSpacesPath(this.$route.params.spaceId, path)
+          path = buildWebDavSpacesPath(this.$route.params.storageId, path)
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else {
           resource = await this.$client.publicFiles.getFileInfo(

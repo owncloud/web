@@ -114,8 +114,8 @@ describe('vuex store actions', () => {
 
   describe('addShare', () => {
     it.each([
-      { shareType: spaceShareMock.shareType, spaceId: spaceMock.id, expectedCommitCalls: 2 },
-      { shareType: shareMock.shareType, spaceId: null, expectedCommitCalls: 1 }
+      { shareType: spaceShareMock.shareType, storageId: spaceMock.id, expectedCommitCalls: 2 },
+      { shareType: shareMock.shareType, storageId: null, expectedCommitCalls: 1 }
     ])('succeeds using action %s', async (dataSet) => {
       const commitSpy = jest.spyOn(stateMock, 'commit')
 
@@ -123,7 +123,7 @@ describe('vuex store actions', () => {
         client: clientMock,
         graphClient: graphClientMock,
         shareType: dataSet.shareType,
-        spaceId: dataSet.spaceId,
+        storageId: dataSet.storageId,
         permissions: 1,
         expirationDate: null
       })
@@ -134,8 +134,8 @@ describe('vuex store actions', () => {
 
   describe('deleteShare', () => {
     it.each([
-      { share: spaceShareMock, spaceId: spaceMock.id, expectedCommitCalls: 2 },
-      { share: shareMock, spaceId: null, expectedCommitCalls: 1 }
+      { share: spaceShareMock, storageId: spaceMock.id, expectedCommitCalls: 2 },
+      { share: shareMock, storageId: null, expectedCommitCalls: 1 }
     ])('succeeds using action %s', async (dataSet) => {
       const commitSpy = jest.spyOn(stateMock, 'commit')
 

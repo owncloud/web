@@ -11,9 +11,9 @@ export interface Resource {
   type?: string
 }
 
-export const extractStorageId = (id: string): string => {
-  if (id?.indexOf('!')) {
-    return id.split('!')[0]
+export const extractStorageId = (id?: string): string => {
+  if (!id || typeof id !== 'string') {
+    return ''
   }
-  return ''
+  return id.indexOf('!') >= 0 ? id.split('!')[0] : ''
 }

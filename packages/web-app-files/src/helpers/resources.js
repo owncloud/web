@@ -240,8 +240,8 @@ export function buildWebDavFilesPath(userId, path) {
   return '/' + `files/${userId}/${path}`.split('/').filter(Boolean).join('/')
 }
 
-export function buildWebDavSpacesPath(spaceId, path) {
-  return '/' + `spaces/${spaceId}/${path}`.split('/').filter(Boolean).join('/')
+export function buildWebDavSpacesPath(storageId, path) {
+  return '/' + `spaces/${storageId}/${path}`.split('/').filter(Boolean).join('/')
 }
 
 export function attachIndicators(resource, sharesTree) {
@@ -392,7 +392,7 @@ export function buildShare(s, file, allowSharePermission) {
   return buildCollaboratorShare(s, file, allowSharePermission)
 }
 
-export function buildSpaceShare(s, spaceId) {
+export function buildSpaceShare(s, storageId) {
   let permissions, role
 
   switch (s.role) {
@@ -412,7 +412,7 @@ export function buildSpaceShare(s, spaceId) {
 
   return {
     shareType: ShareTypes.space.value,
-    id: spaceId,
+    id: storageId,
     collaborator: {
       name: s.onPremisesSamAccountName,
       displayName: s.displayName,

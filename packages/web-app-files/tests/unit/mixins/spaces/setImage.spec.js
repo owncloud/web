@@ -34,7 +34,7 @@ describe('setImage', () => {
         },
         $route: {
           params: {
-            spaceId: '1fe58d8b-aa69-4c22-baf7-97dd57479f22'
+            storageId: '1fe58d8b-aa69-4c22-baf7-97dd57479f22'
           }
         },
         $router: {

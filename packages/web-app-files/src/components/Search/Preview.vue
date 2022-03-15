@@ -78,39 +78,22 @@ export default {
   },
   methods: {
     folderLink(file) {
-      if (this.resourceTargetLocation === null) {
-        return {}
-      }
-      const additionalParams = {}
-      if (this.$route.params.spaceId) {
-        additionalParams.spaceId = this.$route.params.spaceId
-      }
-      const path = file.path.replace(/^\//, '')
-      return {
-        name: this.resourceTargetLocation.name,
-        query: this.resourceTargetLocation.query,
-        params: {
-          item: path,
-          ...this.resourceTargetLocation.params,
-          ...additionalParams
-        }
-      }
+      return this.createFolderLink(file.path, file.storageId)
     },
     parentFolderLink(file) {
+      return this.createFolderLink(path.dirname(file.path), file.storageId)
+    },
+    createFolderLink(path, storageId) {
       if (this.resourceTargetLocation === null) {
         return {}
-      }
-      const additionalParams = {}
-      if (this.$route.params.spaceId) {
-        additionalParams.spaceId = this.$route.params.spaceId
       }
       return {
         name: this.resourceTargetLocation.name,
         query: this.resourceTargetLocation.query,
         params: {
-          item: path.dirname(file.path),
+          item: path.replace(/^\//, ''),
           ...this.resourceTargetLocation.params,
-          ...additionalParams
+          ...(storageId && { storageId })
         }
       }
     }

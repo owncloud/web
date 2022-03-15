@@ -15,6 +15,7 @@ const selectors = {
 const searchResult = {
   id: 1234,
   data: {
+    storageId: 1,
     name: 'lorem.txt',
     path: '/'
   }
@@ -42,20 +43,17 @@ describe('Preview component', () => {
 
     expect(spyTriggerDefaultAction).toHaveBeenCalledTimes(1)
   })
-  it('should have an empty (parent) folder link without a resource target location', () => {
-    const wrapper = getWrapper({ resourceTargetLocation: null })
-    expect(wrapper.vm.folderLink(searchResult.data)).toEqual({})
-    expect(wrapper.vm.parentFolderLink(searchResult.data)).toEqual({})
-  })
-  it('should set the space id as route param if given', () => {
-    const wrapper = getWrapper({
-      route: {
-        query: {},
-        params: { spaceId: 1 }
-      }
+  describe('folder and parent folder link', () => {
+    it('should be empty if no resource target location given', () => {
+      const wrapper = getWrapper({ resourceTargetLocation: null })
+      expect(wrapper.vm.folderLink(searchResult.data)).toEqual({})
+      expect(wrapper.vm.parentFolderLink(searchResult.data)).toEqual({})
     })
-    expect(wrapper.vm.folderLink(searchResult.data).params.spaceId).toEqual(1)
-    expect(wrapper.vm.parentFolderLink(searchResult.data).params.spaceId).toEqual(1)
+    it('should use the items storageId for the resource target location if present', () => {
+      const wrapper = getWrapper({ resourceTargetLocation: { name: 'some-route' } })
+      expect(wrapper.vm.folderLink(searchResult.data).params.storageId).toEqual(1)
+      expect(wrapper.vm.parentFolderLink(searchResult.data).params.storageId).toEqual(1)
+    })
   })
 })
 

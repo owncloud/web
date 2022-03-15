@@ -23,8 +23,8 @@ export class FolderLoaderProject implements FolderLoader {
 
     return useTask(function* (signal1, signal2, ref, sameRoute, path = null) {
       ref.CLEAR_CURRENT_FILES_LIST()
-      const spaceId = router.currentRoute.params.spaceId
-      const graphResponse = yield graphClient.drives.getDrive(spaceId)
+      const storageId = router.currentRoute.params.storageId
+      const graphResponse = yield graphClient.drives.getDrive(storageId)
 
       if (!graphResponse.data) {
         return
@@ -33,7 +33,7 @@ export class FolderLoaderProject implements FolderLoader {
       ref.space = buildSpace(graphResponse.data)
 
       const webDavResponse = yield ref.$client.files.list(
-        buildWebDavSpacesPath(ref.$route.params.spaceId, path || '')
+        buildWebDavSpacesPath(ref.$route.params.storageId, path || '')
       )
 
       let resources = []
