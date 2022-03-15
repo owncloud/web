@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import Trashbin from '@files/src/components/Trashbin.vue'
-import { getStore, localVue, createFile } from '@files/tests/unit/views/views.setup.js'
+import { getStore, localVue, createFile } from '@files/tests/unit/components/components.setup.js'
 
 const stubs = {
   'list-loader': true,
