@@ -152,10 +152,18 @@ export class AllFilesPage {
         page.waitForResponse((resp) => resp.url().includes('sharees') && resp.status() === 200),
         shareInputLocator.fill(user.id)
       ])
-      await shareInputLocator.focus()
-      await page.waitForSelector('.vs--open')
-      await page.locator('#files-share-invite-input').press('Enter')
 
+      // sometimes the 'locator.fill()' doesn't work for shareInputLocator
+      // check if fill worked
+      // if not try again
+      if ((await shareInputLocator.getAttribute('value')) !== user.displayName) {
+        await shareInputLocator.fill(user.id)
+      }
+      await page
+        .locator(
+          `//div[contains(@data-testid, "recipient-autocomplete-item")]//span[text()="${user.displayName}"]`
+        )
+        .click()
       await page.locator('//*[@id="files-collaborators-role-button-new"]').click()
       await page.locator(`//*[@id="files-role-${role}"]`).click()
     }
