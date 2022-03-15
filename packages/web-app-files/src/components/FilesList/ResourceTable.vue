@@ -473,39 +473,22 @@ export default {
   },
   methods: {
     folderLink(file) {
-      if (this.targetRoute === null) {
-        return {}
-      }
-      const additionalParams = {}
-      if (this.$route.params.spaceId) {
-        additionalParams.spaceId = this.$route.params.spaceId
-      }
-      const path = file.path.replace(/^\//, '')
-      return {
-        name: this.targetRoute.name,
-        query: this.targetRoute.query,
-        params: {
-          item: path,
-          ...this.targetRoute.params,
-          ...additionalParams
-        }
-      }
+      return this.createFolderLink(file.path, file.storageId)
     },
     parentFolderLink(file) {
+      return this.createFolderLink(path.dirname(file.path), file.storageId)
+    },
+    createFolderLink(path, storageId) {
       if (this.targetRoute === null) {
         return {}
-      }
-      const additionalParams = {}
-      if (this.$route.params.spaceId) {
-        additionalParams.spaceId = this.$route.params.spaceId
       }
       return {
         name: this.targetRoute.name,
         query: this.targetRoute.query,
         params: {
-          item: path.dirname(file.path),
+          item: path.replace(/^\//, ''),
           ...this.targetRoute.params,
-          ...additionalParams
+          ...(storageId && { storageId })
         }
       }
     },
