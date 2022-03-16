@@ -18,7 +18,11 @@ module.exports = {
       return this.waitForElementVisible('@clearTrashbin')
         .initAjaxCounters()
         .click('@clearTrashbin')
-        .waitForOutstandingAjaxCalls()
+        .waitForElementVisible('@dialog')
+        .waitForAnimationToFinish() // wait for transition on the modal to finish
+        .click('@dialogConfirmBtnEnabled')
+        .waitForAjaxCallsToStartAndFinish()
+        .waitForElementNotPresent('@dialog')
     },
     restoreSelected: function () {
       return this.waitForElementVisible('@restoreSelectedButton')
