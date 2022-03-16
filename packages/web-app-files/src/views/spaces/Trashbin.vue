@@ -1,4 +1,4 @@
-<template><Trashbin :no-content-message="$gettext('Space have no deleted files')" /></template>
+<template><Trashbin :no-content-message="$gettext('Space has no deleted files')" /></template>
 
 <script>
 import Trashbin from '../../components/Trashbin.vue'

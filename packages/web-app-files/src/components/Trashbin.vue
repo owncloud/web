@@ -62,7 +62,7 @@ import { useResourcesViewDefaults } from '../composables'
 import { bus } from 'web-pkg/src/instance'
 
 export default {
-  name: 'SpaceQuota',
+  name: 'Trashbin',
 
   components: { ResourceTable, ListLoader, NoContentMessage, ListInfo, Pagination, ContextActions },
 
