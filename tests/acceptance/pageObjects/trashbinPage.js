@@ -41,8 +41,14 @@ module.exports = {
     }
   },
   elements: {
+    dialog: {
+      selector: '.oc-modal'
+    },
+    dialogConfirmBtnEnabled: {
+      selector: '.oc-modal-body-actions-confirm:enabled'
+    },
     clearTrashbin: {
-      selector: '.oc-files-actions-empty-trash-bin-trigger'
+      selector: '.oc-files-actions-empty-trash-bin-trigger:not([disabled])'
     },
     restoreSelectedButton: {
       selector: '.oc-files-actions-restore-trigger'
