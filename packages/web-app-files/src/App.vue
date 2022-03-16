@@ -31,7 +31,7 @@ import { Vue, Component, Watch } from 'vue-property-decorator'
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 @Component({
-  name: "BatchActions",
+  name: "App",
   extends: Vue,
   components: {
     AppBar,
@@ -49,7 +49,7 @@ import { mapActions, mapGetters, mapState } from 'vuex'
   },
   mixins: [Mixins]
 })
-export default class BatchActions extends Vue{
+export default class App extends Vue{
   createFolder: boolean = false
   fileUploadName: string = ''
   fileUploadProgress: number = 0
