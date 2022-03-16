@@ -25,7 +25,7 @@ dist
 .envrc
 
 reports
-tests/e2e/cucumber/reportGenerator/cucumber_report.json
+tests/e2e/cucumber/report/cucumber_report.json
 tests/ocis
 tests/testing-app
 

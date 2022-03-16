@@ -1,16 +1,19 @@
-export const addDays = (days: number): Date => {
+const addDays = (days: number): Date => {
   const date = new Date()
   date.setDate(date.getDate() + days)
   return date
 }
 
-export const addMonth = (noOfMonths: number): Date => {
+const addMonth = (noOfMonths: number): Date => {
   const date = new Date()
   date.setMonth(date.getMonth() + noOfMonths)
   return date
 }
 
-export const getActualExpiryDate = (dateType: string, dateOfExpiration: string): Date => {
+export const getActualExpiryDate = (
+  dateType: 'day' | 'week' | 'month' | 'year',
+  dateOfExpiration: string
+): Date => {
   switch (dateType) {
     case 'day':
       return addDays(parseInt(dateOfExpiration))

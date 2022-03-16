@@ -10,7 +10,6 @@ export declare interface ActorsEnvironment {
 }
 
 export class ActorsEnvironment extends EventEmitter {
-  private store = actorStore
   private readonly options: ActorsOptions
 
   constructor(options: ActorsOptions) {
@@ -19,29 +18,29 @@ export class ActorsEnvironment extends EventEmitter {
   }
 
   public getActor({ id }: { id: string }): Actor {
-    if (!this.store.has(id)) {
+    if (!actorStore.has(id)) {
       throw new Error(`Actor '${id}' does not exist.`)
     }
 
-    return this.store.get(id)
+    return actorStore.get(id)
   }
 
   public async createActor({ id, namespace }: { id: string; namespace: string }): Promise<Actor> {
-    if (this.store.has(id)) {
+    if (actorStore.has(id)) {
       return this.getActor({ id })
     }
 
     const actor = new ActorEnvironment({ id, namespace, ...this.options })
     await actor.setup()
-    actor.on('closed', () => this.store.delete(id))
+    actor.on('closed', () => actorStore.delete(id))
     actor.page.on('console', (message) => {
       this.emit('console', id, message)
     })
 
-    return this.store.set(id, actor).get(id)
+    return actorStore.set(id, actor).get(id)
   }
 
   public async close(): Promise<void> {
-    await Promise.all([...this.store.values()].map((actor) => actor.close()))
+    await Promise.all([...actorStore.values()].map((actor) => actor.close()))
   }
 }

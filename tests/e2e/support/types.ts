@@ -1,5 +1,11 @@
 import { BrowserContext, Page } from 'playwright'
 
+export interface Link {
+  name: string
+  url: string
+  password?: string
+}
+
 export interface Actor {
   context: BrowserContext
   page: Page

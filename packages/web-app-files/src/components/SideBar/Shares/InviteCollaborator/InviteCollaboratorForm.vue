@@ -271,6 +271,8 @@ export default {
       })
 
       await Promise.all(savePromises)
+      this.selectedCollaborators = []
+      this.saving = false
     },
 
     resetFocusOnInvite() {

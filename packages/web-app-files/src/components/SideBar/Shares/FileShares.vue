@@ -49,6 +49,8 @@
 
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
+import { watch, computed } from '@vue/composition-api'
+import { useStore, useDebouncedRef } from 'web-pkg/src/composables'
 import { textUtils } from '../../../helpers/textUtils'
 import { getParentPaths } from '../../../helpers/path'
 import { dirname } from 'path'
@@ -57,13 +59,30 @@ import CollaboratorListItem from './Collaborators/ListItem.vue'
 import { ShareTypes } from '../../../helpers/share'
 
 export default {
-  title: ($gettext) => {
-    return $gettext('People')
-  },
   name: 'FileShares',
   components: {
     InviteCollaboratorForm,
     CollaboratorListItem
+  },
+  setup() {
+    const store = useStore()
+    const currentFileOutgoingSharesLoading = computed(
+      () => store.getters['Files/currentFileOutgoingSharesLoading']
+    )
+    const incomingSharesLoading = computed(() => store.state.Files.incomingSharesLoading)
+    const sharesTreeLoading = computed(() => store.state.Files.sharesTreeLoading)
+    const sharesLoading = useDebouncedRef(true, 250)
+    watch([currentFileOutgoingSharesLoading, incomingSharesLoading, sharesTreeLoading], () => {
+      sharesLoading.value =
+        currentFileOutgoingSharesLoading.value ||
+        incomingSharesLoading.value ||
+        sharesTreeLoading.value
+    })
+
+    return { sharesLoading }
+  },
+  title: ($gettext) => {
+    return $gettext('People')
   },
   data() {
     return {
@@ -72,13 +91,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('Files', [
-      'highlightedFile',
-      'currentFileOutgoingCollaborators',
-      'currentFileOutgoingSharesLoading',
-      'sharesTreeLoading'
-    ]),
-    ...mapState('Files', ['incomingShares', 'incomingSharesLoading', 'sharesTree']),
+    ...mapGetters('Files', ['highlightedFile', 'currentFileOutgoingCollaborators']),
+    ...mapState('Files', ['incomingShares', 'sharesTree']),
     ...mapState(['user']),
 
     sharedWithLabel() {
@@ -93,14 +107,6 @@ export default {
       return this.showShareesList
         ? this.$gettext('Collapse list of invited people')
         : this.$gettext('Show all invited people')
-    },
-
-    sharesLoading() {
-      return (
-        this.currentFileOutgoingSharesLoading ||
-        this.incomingSharesLoading ||
-        this.sharesTreeLoading
-      )
     },
 
     collaboratorsAvatar() {

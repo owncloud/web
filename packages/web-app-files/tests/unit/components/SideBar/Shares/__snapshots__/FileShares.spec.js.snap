@@ -46,6 +46,8 @@ exports[`FileShares if there are no collaborators does not render avatar wrapper
 
 exports[`FileShares renders loading spinner while loading 1`] = `
 <div id="oc-files-sharing-sidebar" class="oc-position-relative">
-  <oc-loader-stub arialabel="Loading people list"></oc-loader-stub>
+  <invite-collaborator-form-stub class="oc-my-s"></invite-collaborator-form-stub>
+  <!---->
+  <!---->
 </div>
 `;
