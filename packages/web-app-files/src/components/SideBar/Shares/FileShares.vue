@@ -100,8 +100,8 @@ export default {
         store.getters.configuration.server,
         store.getters.getToken)
 
-    const loadSpaceTask = useTask(function* (signal, ref, spaceId) {
-      const graphResponse = yield graphClient.drives.getDrive(spaceId)
+    const loadSpaceTask = useTask(function* (signal, ref, storageId) {
+      const graphResponse = yield graphClient.drives.getDrive(storageId)
 
       if (!graphResponse.data) {
         return
@@ -290,8 +290,8 @@ export default {
     }
   },
   async mounted() {
-    if (this.$route.params.spaceId) {
-      await this.loadSpaceTask.perform(this, this.$route.params.spaceId)
+    if (this.$route.params.storageId) {
+      await this.loadSpaceTask.perform(this, this.$route.params.storageId)
 
       if (this.showSpaceMembers) {
         this.loadSpaceMembersTask.perform(this)

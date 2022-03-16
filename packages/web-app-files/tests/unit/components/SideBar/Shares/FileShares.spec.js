@@ -284,7 +284,7 @@ function getShallowMountedWrapper(data, loading = false) {
     mocks: {
       $route: {
         params: {
-          spaceId: 1
+          storageId: 1
         }
       }
     }
