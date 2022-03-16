@@ -1,7 +1,7 @@
 import { mapActions, mapGetters } from 'vuex'
 import { isLocationCommonActive } from '../../router'
 
-export default {
+export default Vue.extend({
   computed: {
     ...mapGetters('Files', ['activeFiles']),
     $_emptyTrashBin_items() {
@@ -50,4 +50,4 @@ export default {
         })
     }
   }
-}
+})

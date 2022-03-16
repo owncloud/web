@@ -5,7 +5,7 @@ import {
 } from '../../router'
 import isFilesAppActive from './helpers/isFilesAppActive'
 
-export default {
+export default Vue.extend({
   mixins: [isFilesAppActive],
   computed: {
     $_downloadFile_items() {
@@ -47,4 +47,4 @@ export default {
       this.downloadFile(resources[0])
     }
   }
-}
+})

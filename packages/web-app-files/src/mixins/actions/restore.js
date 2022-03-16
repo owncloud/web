@@ -2,7 +2,7 @@ import { mapActions } from 'vuex'
 import PQueue from 'p-queue'
 import { isLocationCommonActive } from '../../router'
 
-export default {
+export default Vue.extend({
   computed: {
     $_restore_items() {
       return [
@@ -81,4 +81,4 @@ export default {
       }
     }
   }
-}
+})

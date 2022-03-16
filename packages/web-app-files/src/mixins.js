@@ -4,7 +4,7 @@ import { mapActions, mapGetters } from 'vuex'
 import PQueue from 'p-queue'
 import { buildWebDavFilesPath, buildWebDavSpacesPath } from './helpers/resources'
 
-export default {
+export default Vue.extend({
   filters: {
     roundNumber(int) {
       return parseInt(int.toFixed(0))
@@ -450,4 +450,4 @@ export default {
       }
     }
   }
-}
+})
