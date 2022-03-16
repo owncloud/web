@@ -181,61 +181,47 @@ export default class ResourceTable extends Vue{
   */
   @Prop({ required: true })
   readonly resources!: Array<any>
-  // v-model for the selection
+ 
   @ModelSync(
     'selection', 'select', { type: Array, default: [] }
-  )
+  ) // v-model for the selection
   readonly selectionValue!: Array<any>
-  // Closure function to mutate the resource id into a valid DOM selector.
   readonly resourceDomSelector = (resource) => {
     resource.id.replace(/[^A-Za-z0-9\-_]/g, '')
-  }
-  // Asserts whether resources path should be shown in the resource name
-  @Prop({ default: false })
+  } // Closure function to mutate the resource id into a valid DOM selector.
+  @Prop({ default: false }) // Asserts whether resources path should be shown in the resource name
   readonly arePathsDisplayed!: boolean
-  // Asserts whether icons should be replaced with thumbnails for resources which provide them
-  @Prop({ default: true })
+  @Prop({ default: true }) // Asserts whether icons should be replaced with thumbnails for resources which provide them
   readonly areThumbnailsDisplayed!: boolean
-  // Asserts whether actions are available
-  @Prop({ default: true })
+  @Prop({ default: true }) // Asserts whether actions are available
   readonly hasActions!: boolean 
-  // Target route path used to build the link when navigating into a resource
-  @Prop({ default: null })
+  @Prop({ default: null }) // Target route path used to build the link when navigating into a resource
   readonly targetRoute!: any 
-  // Asserts whether clicking on the resource name triggers any action
-  @Prop({ default: true })
+  @Prop({ default: true }) // Asserts whether clicking on the resource name triggers any action
   readonly areResourcesClickable!: boolean 
-  // Top position of header used when the header is sticky in pixels
-  @Prop({ default: 0 })
+  @Prop({ default: 0 }) // Top position of header used when the header is sticky in pixels
   readonly headerPosition!: number 
-  // Asserts whether resources in the table can be selected
-  @Prop({ default: true })
+  @Prop({ default: true }) // Asserts whether resources in the table can be selected
   readonly isSelectable!: boolean 
-  // The ids of disabled resources. Null or an empty string/array for no disabled resources.
-  @Prop({ default: null })
+  @Prop({ default: null }) // The ids of disabled resources. Null or an empty string/array for no disabled resources.
   readonly disabled!: [string, Array<any>]  
-  // Sets the padding size for x axis @values xsmall, small, medium, large, xlarge
   @Prop({ 
     default: 'small',
     validator: (size) => /(xsmall|small|medium|large|xlarge)/.test(size)
-  })
+  }) // Sets the padding size for x axis @values xsmall, small, medium, large, xlarge
   readonly paddingX!: string
-  // Enable Drag & Drop events
-  @Prop({ default: false }) 
+  @Prop({ default: false })  // Enable Drag & Drop events
   readonly dragDrop!: boolean 
-  // Enable hover effect
-  @Prop({ default: false })
+  @Prop({ default: false }) // Enable hover effect
   readonly hover!: boolean 
-  // Show that the table is sorted by this column (no actual sorting takes place)
-  @Prop({ default: undefined })
+  @Prop({ default: undefined }) // Show that the table is sorted by this column (no actual sorting takes place)
   readonly sortBy!: string 
-  // Show that the table is sorted ascendingly/descendingly (no actual sorting takes place)
   @Prop({ 
     default: undefined,
     validator: (value) => {
       return value === undefined || [SortDir.Asc, SortDir.Desc].includes(value)
     }
-  })
+  }) // Show that the table is sorted ascendingly/descendingly (no actual sorting takes place)
   readonly sortDir!: string 
 
   get popperOptions() {
