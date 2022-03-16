@@ -151,7 +151,7 @@ export default {
       return this.$gettext('Shared with')
     },
     spaceMemberLabel() {
-      return this.$gettext('Space Members')
+      return this.$gettext('Space members')
     },
 
     hasSharees() {
