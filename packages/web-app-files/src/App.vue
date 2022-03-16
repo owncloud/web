@@ -22,80 +22,82 @@
     />
   </main>
 </template>
-<script>
+<script lang="ts">
 import Mixins from './mixins'
-import { mapActions, mapGetters, mapState } from 'vuex'
 import AppBar from './components/AppBar/AppBar.vue'
 import ProgressBar from './components/Upload/ProgressBar.vue'
 import SideBar from './components/SideBar/SideBar.vue'
+import { Vue, Component, Watch } from 'vue-property-decorator'
+import { mapActions, mapGetters, mapState } from 'vuex'
 
-export default {
+@Component({
+  name: "BatchActions",
+  extends: Vue,
   components: {
     AppBar,
     ProgressBar,
     SideBar
   },
-  mixins: [Mixins],
-  data() {
-    return {
-      createFolder: false,
-      fileUploadName: '',
-      fileUploadProgress: 0,
-      upload: false,
-      fileName: '',
-      breadcrumbs: []
-    }
-  },
   computed: {
     ...mapGetters('Files', ['dropzone', 'inProgress']),
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
-
-    $_uploadProgressVisible() {
-      return this.inProgress.length > 0
-    },
-    showSidebar() {
-      return !this.sidebarClosed
-    },
-    hideAppBar() {
-      return this.$route.meta.hideAppBar === true
-    }
   },
-  watch: {
-    $route: {
-      handler: function (to, from) {
-        this.resetFileSelection()
-        if (from?.name !== to.name) {
-          this.closeSidebar()
-        }
-      }
-    }
-  },
-  created() {
-    this.$root.$on('upload-end', () => {
-      this.delayForScreenreader(() => this.$refs.filesListWrapper.focus())
-    })
-  },
-
   methods: {
     ...mapActions('Files', ['dragOver', 'resetFileSelection']),
     ...mapActions('Files/sidebar', { closeSidebar: 'close' }),
     ...mapActions(['showMessage']),
+  },
+  mixins: [Mixins]
+})
+export default class BatchActions extends Vue{
+  createFolder: boolean = false
+  fileUploadName: string = ''
+  fileUploadProgress: number = 0
+  upload: boolean = false
+  fileName: string = ''
+  breadcrumbs: [] = []
 
-    trace() {
-      console.info('trace', arguments)
-    },
+  get $_uploadProgressVisible() {
+    return this.inProgress.length > 0
+  }
+  get showSidebar() {
+    return !this.sidebarClosed
+  }
+  get hideAppBar() {
+    return this.$route.meta.hideAppBar === true
+  }
 
-    focusSideBar(component, event) {
-      this.focus({
-        from: document.activeElement,
-        to: this.$refs.filesSidebar?.$el,
-        revert: event === 'beforeDestroy'
-      })
-    },
-    $_ocApp_dragOver(event) {
-      const hasfileInEvent = (event.dataTransfer.types || []).some((e) => e === 'Files')
-      this.dragOver(hasfileInEvent)
+  @Watch('$route')
+  onPersonChanged2(to, from) {
+    this.resetFileSelection()
+    if (from?.name !== to.name) {
+      this.closeSidebar()
     }
+  }
+
+  created() {
+    this.$root.$on('upload-end', () => {
+      this.delayForScreenreader(
+        () => (this.$refs.filesListWrapper as HTMLElement).focus()
+      )
+    })
+  }
+
+  trace() {
+    console.info('trace', arguments)
+  }
+
+  focusSideBar(component, event) {
+    this.focus({
+      from: document.activeElement,
+      to: (this.$refs.filesSidebar as HTMLElement),
+      revert: event === 'beforeDestroy'
+    })
+  }
+
+  $_ocApp_dragOver(event) {
+    const hasfileInEvent = (event.dataTransfer.types || []).some((e) => e === 'Files')
+    this.dragOver(hasfileInEvent)
   }
 }
 </script>
