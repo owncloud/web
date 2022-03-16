@@ -1,4 +1,4 @@
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import PQueue from 'p-queue'
 import { isLocationTrashActive } from '../../router'
 import {
@@ -10,7 +10,7 @@ import {
 
 export default {
   computed: {
-    ...mapGetters(['user']),
+    ...mapState(['user']),
 
     $_restore_items() {
       return [
@@ -36,6 +36,7 @@ export default {
   },
   methods: {
     ...mapActions('Files', ['removeFilesFromTrashbin']),
+    ...mapActions(['showMessage']),
 
     async $_restore_trigger({ resources }) {
       const restoredResources = []
