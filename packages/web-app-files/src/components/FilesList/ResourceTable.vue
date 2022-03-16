@@ -229,7 +229,7 @@ export default class ResourceTable extends Vue{
 
   @Prop({ default: undefined }) // Show that the table is sorted by this column (no actual sorting takes place)
   readonly sortBy!: string 
-  
+
   @Prop({ 
     default: undefined,
     validator: (value) => {
@@ -394,13 +394,13 @@ export default class ResourceTable extends Vue{
     return (this.$language?.current || '').split('_')[0]
   }
 
-  folderLink(file) {
+  folderLink(file: any) {
     return this.createFolderLink(file.path, file.storageId)
   }
-  parentFolderLink(file) {
+  parentFolderLink(file: any) {
     return this.createFolderLink(path.dirname(file.path), file.storageId)
   }
-  createFolderLink(path, storageId) {
+  createFolderLink(path: string, storageId: string) {
     if (this.targetRoute === null) {
       return {}
     }
@@ -414,16 +414,16 @@ export default class ResourceTable extends Vue{
       }
     }
   }
-  fileDragged(file) {
+  fileDragged(file: any) {
     this.addSelectedResource(file)
   }
-  fileDropped(fileId) {
+  fileDropped(fileId: string) {
     this.$emit(EVENT_FILE_DROPPED, fileId)
   }
-  sort(opts) {
+  sort(opts: any) {
     this.$emit('sort', opts)
   }
-  addSelectedResource(file) {
+  addSelectedResource(file: any) {
     const isSelected = this.selection.some((e) => e.id === file.id)
     if (!isSelected) {
       this.$emit('select', this.selection.concat([file]))
@@ -431,7 +431,7 @@ export default class ResourceTable extends Vue{
       this.$emit('select', this.selection)
     }
   }
-  resetDropPosition(id, event, item) {
+  resetDropPosition(id: string, event: any, item: any) {
     const instance = (this.$refs[id] as any).tippy
     if (instance === undefined) return
     if (!this.selection.includes(item)) {
@@ -439,7 +439,7 @@ export default class ResourceTable extends Vue{
     }
     this.displayPositionedDropdown(instance, event)
   }
-  showContextMenu(row, event, item) {
+  showContextMenu(row: any, event: any, item: any) {
     event.preventDefault()
     const instance = row.$el.getElementsByClassName('resource-table-btn-action-dropdown')[0]
     if (instance === undefined) return
@@ -448,7 +448,7 @@ export default class ResourceTable extends Vue{
     }
     this.displayPositionedDropdown(instance._tippy, event)
   }
-  displayPositionedDropdown(dropdown, event) {
+  displayPositionedDropdown(dropdown: any, event: any) {
     dropdown.setProps({
       getReferenceClientRect: () => ({
         width: 0,
@@ -461,7 +461,7 @@ export default class ResourceTable extends Vue{
     })
     dropdown.show()
   }
-  rowMounted(resource, component) {
+  rowMounted(resource: any, component: any) {
     /**
      * Triggered whenever a row is mounted
      * @property {object} resource The resource which was mounted as table row
@@ -469,22 +469,22 @@ export default class ResourceTable extends Vue{
      */
     this.$emit('rowMounted', resource, component)
   }
-  fileClicked(resource) {
+  fileClicked(resource: any) {
     /**
      * Triggered when the file row is clicked
      * @property {object} resource The resource for which the event is triggered
      */
     this.emitSelect([resource])
   }
-  formatDate(date) {
+  formatDate(date: string) {
     return DateTime.fromJSDate(new Date(date))
       .setLocale(this.currentLanguage)
       .toLocaleString(DateTime.DATETIME_FULL)
   }
-  formatDateRelative(date) {
+  formatDateRelative(date: string) {
     return DateTime.fromJSDate(new Date(date)).setLocale(this.currentLanguage).toRelative()
   }
-  emitSelect(resources) {
+  emitSelect(resources: any) {
     /**
      * Triggered when a checkbox for selecting a resource or the checkbox for selecting all resources is clicked
      * @property {array} resources The selected resources
@@ -497,14 +497,14 @@ export default class ResourceTable extends Vue{
     }
     this.emitSelect(this.resources)
   }
-  emitFileClick(resource) {
+  emitFileClick(resource: any) {
     /**
      * Triggered when a default action is triggered on a file
      * @property {object} resource resource for which the event is triggered
      */
     this.$emit('fileClick', resource)
   }
-  isResourceClickable(resourceId) {
+  isResourceClickable(resourceId: string) {
     if (!this.areResourcesClickable) {
       return false
     }
@@ -512,13 +512,13 @@ export default class ResourceTable extends Vue{
       ? !this.disabled.includes(resourceId)
       : this.disabled !== resourceId
   }
-  getResourceCheckboxLabel(resource) {
+  getResourceCheckboxLabel(resource: any) {
     if (resource.type === 'folder') {
       return this.$gettext('Select folder')
     }
     return this.$gettext('Select file')
   }
-  getSharedWithAvatarDescription(resource) {
+  getSharedWithAvatarDescription(resource: any) {
     const resourceType =
       resource.type === 'folder' ? this.$gettext('folder') : this.$gettext('file')
     const shareCount = resource.sharedWith.filter((u) => !u.link).length
@@ -546,7 +546,7 @@ export default class ResourceTable extends Vue{
       linkCount
     })
   }
-  getOwnerAvatarDescription(resource) {
+  getOwnerAvatarDescription(resource: any) {
     const translated = this.$gettext('This %{ resourceType } is owned by %{ ownerName }')
     const resourceType =
       resource.type === 'folder' ? this.$gettext('folder') : this.$gettext('file')
