@@ -146,493 +146,414 @@
     </template>
   </oc-table>
 </template>
-
-<script>
+<script lang="ts">
 import { DateTime } from 'luxon'
 import maxSize from 'popper-max-size-modifier'
 import { mapGetters } from 'vuex'
-import { EVENT_TROW_MOUNTED, EVENT_FILE_DROPPED } from '../../constants'
+import { EVENT_FILE_DROPPED } from '../../constants'
 import { SortDir } from '../../composables'
 import * as path from 'path'
 import { determineSortFields } from '../../helpers/ui/resourceTable'
+import { Vue, Component, Watch, ModelSync, Prop } from 'vue-property-decorator'
 
-export default {
-  model: {
-    prop: 'selection',
-    event: 'select'
-  },
-  props: {
-    /**
-     * Resources to be displayed in the table.
-     * Required fields:
-     * - name: The name of the resource containing the file extension in case of a file
-     * - path: The full path of the resource
-     * - type: The type of the resource. Can be `file` or `folder`
-     * Optional fields:
-     * - thumbnail
-     * - size: The size of the resource
-     * - modificationDate: The date of the last modification of the resource
-     * - shareDate: The date when the share was created
-     * - deletionDate: The date when the resource has been deleted
-     * - status: The status of the share. Contains also actions to accept/decline the share
-     * - opensInNewWindow: Open the link in a new window
-     */
-    resources: {
-      type: Array,
-      required: true
-    },
-    /**
-     * Closure function to mutate the resource id into a valid DOM selector.
-     */
-    resourceDomSelector: {
-      type: Function,
-      required: false,
-      default: (resource) => resource.id.replace(/[^A-Za-z0-9\-_]/g, '')
-    },
-    /**
-     * Asserts whether resources path should be shown in the resource name
-     */
-    arePathsDisplayed: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    /**
-     * Asserts whether icons should be replaced with thumbnails for resources which provide them
-     */
-    areThumbnailsDisplayed: {
-      type: Boolean,
-      required: false,
-      default: true
-    },
-    /**
-     * V-model for the selection
-     */
-    selection: {
-      type: Array,
-      default: () => []
-    },
-    /**
-     * Asserts whether actions are available
-     */
-    hasActions: {
-      type: Boolean,
-      required: false,
-      default: true
-    },
-    /**
-     * Target route path used to build the link when navigating into a resource
-     */
-    targetRoute: {
-      type: Object,
-      required: false,
-      default: null
-    },
-    /**
-     * Asserts whether clicking on the resource name triggers any action
-     */
-    areResourcesClickable: {
-      type: Boolean,
-      required: false,
-      default: true
-    },
-    /**
-     * Top position of header used when the header is sticky in pixels
-     */
-    headerPosition: {
-      type: Number,
-      required: false,
-      default: 0
-    },
-    /**
-     * Asserts whether resources in the table can be selected
-     */
-    isSelectable: {
-      type: Boolean,
-      required: false,
-      default: true
-    },
-    /**
-     * The ids of disabled resources. Null or an empty string/array for no disabled resources.
-     */
-    disabled: {
-      type: [String, Array],
-      required: false,
-      default: null
-    },
-    /**
-     * Sets the padding size for x axis
-     * @values xsmall, small, medium, large, xlarge
-     */
-    paddingX: {
-      type: String,
-      required: false,
-      default: 'small',
-      validator: (size) => /(xsmall|small|medium|large|xlarge)/.test(size)
-    },
-    /**
-     * Enable Drag & Drop events
-     */
-    dragDrop: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    /**
-     * Enable hover effect
-     */
-    hover: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    /**
-     * Show that the table is sorted by this column (no actual sorting takes place)
-     */
-    sortBy: {
-      type: String,
-      required: false,
-      default: undefined
-    },
-    /**
-     * Show that the table is sorted ascendingly/descendingly (no actual sorting takes place)
-     */
-    sortDir: {
-      type: String,
-      required: false,
-      default: undefined,
-      validator: (value) => {
-        return value === undefined || [SortDir.Asc, SortDir.Desc].includes(value)
-      }
-    }
-  },
-  data() {
-    return {
-      constants: {
-        EVENT_TROW_MOUNTED
-      }
-    }
-  },
+@Component({
+  name: "ResourceTable",
+  extends: Vue,
   computed: {
     ...mapGetters(['configuration']),
-    popperOptions() {
-      return {
-        modifiers: [
-          maxSize,
-          {
-            name: 'applyMaxSize',
-            enabled: true,
-            phase: 'beforeWrite',
-            requires: ['maxSize'],
-            fn({ state }) {
-              const { height } = state.modifiersData.maxSize
-              state.styles.popper.overflowY = `auto`
-              state.styles.popper.maxHeight = `${height - 5}px`
-            }
+  }
+})
+export default class ResourceTable extends Vue{
+  /**
+   * Resources to be displayed in the table.
+   * Required fields:
+   * - name: The name of the resource containing the file extension in case of a file
+   * - path: The full path of the resource
+   * - type: The type of the resource. Can be `file` or `folder`
+   * Optional fields:
+   * - thumbnail
+   * - size: The size of the resource
+   * - modificationDate: The date of the last modification of the resource
+   * - shareDate: The date when the share was created
+   * - deletionDate: The date when the resource has been deleted
+   * - status: The status of the share. Contains also actions to accept/decline the share
+   * - opensInNewWindow: Open the link in a new window
+  */
+  @Prop({ required: true })
+  readonly resources!: Array<any>
+  // v-model for the selection
+  @ModelSync(
+    'selection', 'select', { type: Array, default: [] }
+  )
+  readonly selectionValue!: Array<any>
+  // Closure function to mutate the resource id into a valid DOM selector.
+  readonly resourceDomSelector = (resource) => {
+    resource.id.replace(/[^A-Za-z0-9\-_]/g, '')
+  }
+  // Asserts whether resources path should be shown in the resource name
+  @Prop({ default: false })
+  readonly arePathsDisplayed!: boolean
+  // Asserts whether icons should be replaced with thumbnails for resources which provide them
+  @Prop({ default: true })
+  readonly areThumbnailsDisplayed!: boolean
+  // Asserts whether actions are available
+  @Prop({ default: true })
+  readonly hasActions!: boolean 
+  // Target route path used to build the link when navigating into a resource
+  @Prop({ default: null })
+  readonly targetRoute!: any 
+  // Asserts whether clicking on the resource name triggers any action
+  @Prop({ default: true })
+  readonly areResourcesClickable!: boolean 
+  // Top position of header used when the header is sticky in pixels
+  @Prop({ default: 0 })
+  readonly headerPosition!: number 
+  // Asserts whether resources in the table can be selected
+  @Prop({ default: true })
+  readonly isSelectable!: boolean 
+  // The ids of disabled resources. Null or an empty string/array for no disabled resources.
+  @Prop({ default: null })
+  readonly disabled!: [string, Array<any>]  
+  // Sets the padding size for x axis @values xsmall, small, medium, large, xlarge
+  @Prop({ 
+    default: 'small',
+    validator: (size) => /(xsmall|small|medium|large|xlarge)/.test(size)
+  })
+  readonly paddingX!: string
+  // Enable Drag & Drop events
+  @Prop({ default: false }) 
+  readonly dragDrop!: boolean 
+  // Enable hover effect
+  @Prop({ default: false })
+  readonly hover!: boolean 
+  // Show that the table is sorted by this column (no actual sorting takes place)
+  @Prop({ default: undefined })
+  readonly sortBy!: string 
+  // Show that the table is sorted ascendingly/descendingly (no actual sorting takes place)
+  @Prop({ 
+    default: undefined,
+    validator: (value) => {
+      return value === undefined || [SortDir.Asc, SortDir.Desc].includes(value)
+    }
+  })
+  readonly sortDir!: string 
+
+  get popperOptions() {
+    return {
+      modifiers: [
+        maxSize,
+        {
+          name: 'applyMaxSize',
+          enabled: true,
+          phase: 'beforeWrite',
+          requires: ['maxSize'],
+          fn({ state }) {
+            const { height } = state.modifiersData.maxSize
+            state.styles.popper.overflowY = `auto`
+            state.styles.popper.maxHeight = `${height - 5}px`
           }
-        ]
-      }
-    },
-    fields() {
-      if (this.resources.length === 0) {
-        return []
-      }
-      const firstResource = this.resources[0]
-      const fields = []
-      if (this.isSelectable) {
-        fields.push({
-          name: 'select',
-          title: '',
+        }
+      ]
+    }
+  }
+  get fields() {
+    if (this.resources.length === 0) {
+      return []
+    }
+    const firstResource = this.resources[0]
+    const fields = []
+    if (this.isSelectable) {
+      fields.push({
+        name: 'select',
+        title: '',
+        type: 'slot',
+        headerType: 'slot',
+        width: 'shrink'
+      })
+    }
+    const sortFields = determineSortFields(firstResource)
+    fields.push(
+      ...[
+        {
+          name: 'name',
+          title: this.$gettext('Name'),
           type: 'slot',
-          headerType: 'slot',
-          width: 'shrink'
-        })
-      }
-      const sortFields = determineSortFields(firstResource)
-      fields.push(
-        ...[
-          {
-            name: 'name',
-            title: this.$gettext('Name'),
-            type: 'slot',
-            width: 'expand',
-            wrap: 'truncate'
-          },
-          {
-            name: 'shareTypes',
-            title: this.$gettext('Shares'),
-            type: 'slot',
-            alignH: 'right',
-            wrap: 'nowrap'
-          },
-          {
-            name: 'size',
-            title: this.$gettext('Size'),
-            type: 'slot',
-            alignH: 'right',
-            wrap: 'nowrap'
-          },
-          {
-            name: 'sharedWith',
-            title: this.$gettext('Shared with'),
-            type: 'slot',
-            alignH: 'right',
-            wrap: 'nowrap'
-          },
-          {
-            name: 'status',
-            title: this.$gettext('Status'),
-            type: 'slot',
-            alignH: 'right',
-            wrap: 'nowrap'
-          },
-          {
-            name: 'owner',
-            title: this.$gettext('Share owner'),
-            type: 'slot',
-            alignH: 'right',
-            wrap: 'nowrap'
-          },
-          {
-            name: 'mdate',
-            title: this.$gettext('Modified'),
-            type: 'slot',
-            alignH: 'right',
-            wrap: 'nowrap',
-            accessibleLabelCallback: (item) =>
-              this.formatDateRelative(item.mdate) + ' (' + this.formatDate(item.mdate) + ')'
-          },
-          {
-            name: 'sdate',
-            title: this.$gettext('Shared on'),
-            type: 'slot',
-            alignH: 'right',
-            wrap: 'nowrap',
-            accessibleLabelCallback: (item) =>
-              this.formatDateRelative(item.sdate) + ' (' + this.formatDate(item.sdate) + ')'
-          },
-          {
-            name: 'ddate',
-            title: this.$gettext('Deleted'),
-            type: 'slot',
-            alignH: 'right',
-            wrap: 'nowrap',
-            accessibleLabelCallback: (item) =>
-              this.formatDateRelative(item.ddate) + ' (' + this.formatDate(item.ddate) + ')'
-          }
-        ]
-          .filter((field) => Object.prototype.hasOwnProperty.call(firstResource, field.name))
-          .map((field) => {
-            const sortField = sortFields.find((f) => f.name === field.name)
-            if (sortField) {
-              Object.assign(field, {
-                sortable: sortField.sortable,
-                sortDir: sortField.sortDir
-              })
-            }
-            return field
-          })
-      )
-      if (this.hasActions) {
-        fields.push({
-          name: 'actions',
-          title: this.$gettext('Actions'),
+          width: 'expand',
+          wrap: 'truncate'
+        },
+        {
+          name: 'shareTypes',
+          title: this.$gettext('Shares'),
           type: 'slot',
           alignH: 'right',
           wrap: 'nowrap'
-        })
-      }
-
-      if (this.configuration?.options?.displayResourcesLazy) {
-        fields.forEach((field) =>
-          Object.assign(field, {
-            lazy: {
-              delay: 250
-            }
-          })
-        )
-      }
-
-      return fields
-    },
-    areAllResourcesSelected() {
-      return this.selection.length === this.resources.length
-    },
-    selectedIds() {
-      return this.selection.map((r) => r.id)
-    },
-    allResourcesCheckboxLabel() {
-      return this.$gettext('Select all resources')
-    },
-    contextMenuLabel() {
-      return this.$gettext('Show context menu')
-    },
-    currentLanguage() {
-      return (this.$language?.current || '').split('_')[0]
-    }
-  },
-  methods: {
-    folderLink(file) {
-      return this.createFolderLink(file.path, file.storageId)
-    },
-    parentFolderLink(file) {
-      return this.createFolderLink(path.dirname(file.path), file.storageId)
-    },
-    createFolderLink(path, storageId) {
-      if (this.targetRoute === null) {
-        return {}
-      }
-      return {
-        name: this.targetRoute.name,
-        query: this.targetRoute.query,
-        params: {
-          item: path.replace(/^\//, ''),
-          ...this.targetRoute.params,
-          ...(storageId && { storageId })
+        },
+        {
+          name: 'size',
+          title: this.$gettext('Size'),
+          type: 'slot',
+          alignH: 'right',
+          wrap: 'nowrap'
+        },
+        {
+          name: 'sharedWith',
+          title: this.$gettext('Shared with'),
+          type: 'slot',
+          alignH: 'right',
+          wrap: 'nowrap'
+        },
+        {
+          name: 'status',
+          title: this.$gettext('Status'),
+          type: 'slot',
+          alignH: 'right',
+          wrap: 'nowrap'
+        },
+        {
+          name: 'owner',
+          title: this.$gettext('Share owner'),
+          type: 'slot',
+          alignH: 'right',
+          wrap: 'nowrap'
+        },
+        {
+          name: 'mdate',
+          title: this.$gettext('Modified'),
+          type: 'slot',
+          alignH: 'right',
+          wrap: 'nowrap',
+          accessibleLabelCallback: (item) =>
+            this.formatDateRelative(item.mdate) + ' (' + this.formatDate(item.mdate) + ')'
+        },
+        {
+          name: 'sdate',
+          title: this.$gettext('Shared on'),
+          type: 'slot',
+          alignH: 'right',
+          wrap: 'nowrap',
+          accessibleLabelCallback: (item) =>
+            this.formatDateRelative(item.sdate) + ' (' + this.formatDate(item.sdate) + ')'
+        },
+        {
+          name: 'ddate',
+          title: this.$gettext('Deleted'),
+          type: 'slot',
+          alignH: 'right',
+          wrap: 'nowrap',
+          accessibleLabelCallback: (item) =>
+            this.formatDateRelative(item.ddate) + ' (' + this.formatDate(item.ddate) + ')'
         }
-      }
-    },
-    fileDragged(file) {
-      this.addSelectedResource(file)
-    },
-    fileDropped(fileId) {
-      this.$emit(EVENT_FILE_DROPPED, fileId)
-    },
-    sort(opts) {
-      this.$emit('sort', opts)
-    },
-    addSelectedResource(file) {
-      const isSelected = this.selection.some((e) => e.id === file.id)
-      if (!isSelected) {
-        this.$emit('select', this.selection.concat([file]))
-      } else {
-        this.$emit('select', this.selection)
-      }
-    },
-    resetDropPosition(id, event, item) {
-      const instance = this.$refs[id].tippy
-      if (instance === undefined) return
-      if (!this.selection.includes(item)) {
-        this.emitSelect([item])
-      }
-      this.displayPositionedDropdown(instance, event)
-    },
-    showContextMenu(row, event, item) {
-      event.preventDefault()
-      const instance = row.$el.getElementsByClassName('resource-table-btn-action-dropdown')[0]
-      if (instance === undefined) return
-      if (!this.selection.includes(item)) {
-        this.emitSelect([item])
-      }
-      this.displayPositionedDropdown(instance._tippy, event)
-    },
-    displayPositionedDropdown(dropdown, event) {
-      dropdown.setProps({
-        getReferenceClientRect: () => ({
-          width: 0,
-          height: 0,
-          top: event.clientY,
-          bottom: event.clientY,
-          left: event.clientX,
-          right: event.clientX
+      ]
+        .filter((field) => Object.prototype.hasOwnProperty.call(firstResource, field.name))
+        .map((field) => {
+          const sortField = sortFields.find((f) => f.name === field.name)
+          if (sortField) {
+            Object.assign(field, {
+              sortable: sortField.sortable,
+              sortDir: sortField.sortDir
+            })
+          }
+          return field
         })
-      })
-      dropdown.show()
-    },
-    rowMounted(resource, component) {
-      /**
-       * Triggered whenever a row is mounted
-       * @property {object} resource The resource which was mounted as table row
-       * @property {object} component The table row component
-       */
-      this.$emit('rowMounted', resource, component)
-    },
-    fileClicked(resource) {
-      /**
-       * Triggered when the file row is clicked
-       * @property {object} resource The resource for which the event is triggered
-       */
-      this.emitSelect([resource])
-    },
-    formatDate(date) {
-      return DateTime.fromJSDate(new Date(date))
-        .setLocale(this.currentLanguage)
-        .toLocaleString(DateTime.DATETIME_FULL)
-    },
-    formatDateRelative(date) {
-      return DateTime.fromJSDate(new Date(date)).setLocale(this.currentLanguage).toRelative()
-    },
-    emitSelect(resources) {
-      /**
-       * Triggered when a checkbox for selecting a resource or the checkbox for selecting all resources is clicked
-       * @property {array} resources The selected resources
-       */
-      this.$emit('select', resources)
-    },
-    toggleSelectionAll() {
-      if (this.areAllResourcesSelected) {
-        return this.emitSelect([])
-      }
-      this.emitSelect(this.resources)
-    },
-    emitFileClick(resource) {
-      /**
-       * Triggered when a default action is triggered on a file
-       * @property {object} resource resource for which the event is triggered
-       */
-      this.$emit('fileClick', resource)
-    },
-    isResourceClickable(resourceId) {
-      if (!this.areResourcesClickable) {
-        return false
-      }
-      return Array.isArray(this.disabled)
-        ? !this.disabled.includes(resourceId)
-        : this.disabled !== resourceId
-    },
-    getResourceCheckboxLabel(resource) {
-      if (resource.type === 'folder') {
-        return this.$gettext('Select folder')
-      }
-      return this.$gettext('Select file')
-    },
-    getSharedWithAvatarDescription(resource) {
-      const resourceType =
-        resource.type === 'folder' ? this.$gettext('folder') : this.$gettext('file')
-      const shareCount = resource.sharedWith.filter((u) => !u.link).length
-      const linkCount = resource.sharedWith.filter((u) => !!u.link).length
-      const shareText =
-        shareCount > 0
-          ? this.$ngettext(
-              'This %{ resourceType } is shared via %{ shareCount } invite',
-              'This %{ resourceType } is shared via %{ shareCount } invites',
-              shareCount
-            )
-          : ''
-      const linkText =
-        linkCount > 0
-          ? this.$ngettext(
-              'This %{ resourceType } is shared via %{ linkCount } link',
-              'This %{ resourceType } is shared via %{ linkCount } links',
-              linkCount
-            )
-          : ''
-      const description = [shareText, linkText].join(' ')
-      return this.$gettextInterpolate(description, {
-        resourceType,
-        shareCount,
-        linkCount
-      })
-    },
-    getOwnerAvatarDescription(resource) {
-      const translated = this.$gettext('This %{ resourceType } is owned by %{ ownerName }')
-      const resourceType =
-        resource.type === 'folder' ? this.$gettext('folder') : this.$gettext('file')
-      return this.$gettextInterpolate(translated, {
-        resourceType,
-        ownerName: resource.owner[0].displayName
+    )
+    if (this.hasActions) {
+      fields.push({
+        name: 'actions',
+        title: this.$gettext('Actions'),
+        type: 'slot',
+        alignH: 'right',
+        wrap: 'nowrap'
       })
     }
+
+    if (this.configuration?.options?.displayResourcesLazy) {
+      fields.forEach((field) =>
+        Object.assign(field, {
+          lazy: {
+            delay: 250
+          }
+        })
+      )
+    }
+
+    return fields
+  }
+  get areAllResourcesSelected() {
+      return this.selection.length === this.resources.length
+  }
+  get selectedIds() {
+    return this.selection.map((r) => r.id)
+  }
+  get allResourcesCheckboxLabel() {
+    return this.$gettext('Select all resources')
+  }
+  get contextMenuLabel() {
+    return this.$gettext('Show context menu')
+  }
+  get currentLanguage() {
+    return (this.$language?.current || '').split('_')[0]
+  }
+
+  folderLink(file) {
+    return this.createFolderLink(file.path, file.storageId)
+  }
+  parentFolderLink(file) {
+    return this.createFolderLink(path.dirname(file.path), file.storageId)
+  }
+  createFolderLink(path, storageId) {
+    if (this.targetRoute === null) {
+      return {}
+    }
+    return {
+      name: this.targetRoute.name,
+      query: this.targetRoute.query,
+      params: {
+        item: path.replace(/^\//, ''),
+        ...this.targetRoute.params,
+        ...(storageId && { storageId })
+      }
+    }
+  }
+  fileDragged(file) {
+    this.addSelectedResource(file)
+  }
+  fileDropped(fileId) {
+    this.$emit(EVENT_FILE_DROPPED, fileId)
+  }
+  sort(opts) {
+    this.$emit('sort', opts)
+  }
+  addSelectedResource(file) {
+    const isSelected = this.selection.some((e) => e.id === file.id)
+    if (!isSelected) {
+      this.$emit('select', this.selection.concat([file]))
+    } else {
+      this.$emit('select', this.selection)
+    }
+  }
+  resetDropPosition(id, event, item) {
+    const instance = (this.$refs[id] as any).tippy
+    if (instance === undefined) return
+    if (!this.selection.includes(item)) {
+      this.emitSelect([item])
+    }
+    this.displayPositionedDropdown(instance, event)
+  }
+  showContextMenu(row, event, item) {
+    event.preventDefault()
+    const instance = row.$el.getElementsByClassName('resource-table-btn-action-dropdown')[0]
+    if (instance === undefined) return
+    if (!this.selection.includes(item)) {
+      this.emitSelect([item])
+    }
+    this.displayPositionedDropdown(instance._tippy, event)
+  }
+  displayPositionedDropdown(dropdown, event) {
+    dropdown.setProps({
+      getReferenceClientRect: () => ({
+        width: 0,
+        height: 0,
+        top: event.clientY,
+        bottom: event.clientY,
+        left: event.clientX,
+        right: event.clientX
+      })
+    })
+    dropdown.show()
+  }
+  rowMounted(resource, component) {
+    /**
+     * Triggered whenever a row is mounted
+     * @property {object} resource The resource which was mounted as table row
+     * @property {object} component The table row component
+     */
+    this.$emit('rowMounted', resource, component)
+  }
+  fileClicked(resource) {
+    /**
+     * Triggered when the file row is clicked
+     * @property {object} resource The resource for which the event is triggered
+     */
+    this.emitSelect([resource])
+  }
+  formatDate(date) {
+    return DateTime.fromJSDate(new Date(date))
+      .setLocale(this.currentLanguage)
+      .toLocaleString(DateTime.DATETIME_FULL)
+  }
+  formatDateRelative(date) {
+    return DateTime.fromJSDate(new Date(date)).setLocale(this.currentLanguage).toRelative()
+  }
+  emitSelect(resources) {
+    /**
+     * Triggered when a checkbox for selecting a resource or the checkbox for selecting all resources is clicked
+     * @property {array} resources The selected resources
+     */
+    this.$emit('select', resources)
+  }
+  toggleSelectionAll() {
+    if (this.areAllResourcesSelected) {
+      return this.emitSelect([])
+    }
+    this.emitSelect(this.resources)
+  }
+  emitFileClick(resource) {
+    /**
+     * Triggered when a default action is triggered on a file
+     * @property {object} resource resource for which the event is triggered
+     */
+    this.$emit('fileClick', resource)
+  }
+  isResourceClickable(resourceId) {
+    if (!this.areResourcesClickable) {
+      return false
+    }
+    return Array.isArray(this.disabled)
+      ? !this.disabled.includes(resourceId)
+      : this.disabled !== resourceId
+  }
+  getResourceCheckboxLabel(resource) {
+    if (resource.type === 'folder') {
+      return this.$gettext('Select folder')
+    }
+    return this.$gettext('Select file')
+  }
+  getSharedWithAvatarDescription(resource) {
+    const resourceType =
+      resource.type === 'folder' ? this.$gettext('folder') : this.$gettext('file')
+    const shareCount = resource.sharedWith.filter((u) => !u.link).length
+    const linkCount = resource.sharedWith.filter((u) => !!u.link).length
+    const shareText =
+      shareCount > 0
+        ? this.$ngettext(
+            'This %{ resourceType } is shared via %{ shareCount } invite',
+            'This %{ resourceType } is shared via %{ shareCount } invites',
+            shareCount
+          )
+        : ''
+    const linkText =
+      linkCount > 0
+        ? this.$ngettext(
+            'This %{ resourceType } is shared via %{ linkCount } link',
+            'This %{ resourceType } is shared via %{ linkCount } links',
+            linkCount
+          )
+        : ''
+    const description = [shareText, linkText].join(' ')
+    return this.$gettextInterpolate(description, {
+      resourceType,
+      shareCount,
+      linkCount
+    })
+  }
+  getOwnerAvatarDescription(resource) {
+    const translated = this.$gettext('This %{ resourceType } is owned by %{ ownerName }')
+    const resourceType =
+      resource.type === 'folder' ? this.$gettext('folder') : this.$gettext('file')
+    return this.$gettextInterpolate(translated, {
+      resourceType,
+      ownerName: resource.owner[0].displayName
+    })
   }
 }
 </script>
