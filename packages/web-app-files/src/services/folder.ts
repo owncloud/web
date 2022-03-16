@@ -69,7 +69,11 @@ export class FolderService {
         store,
         router
       }
-      yield loader.getTask(context).perform(...args)
+      try {
+        yield loader.getTask(context).perform(...args)
+      } catch (e) {
+        console.error(e)
+      }
     })
   }
 }
