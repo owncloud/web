@@ -45,10 +45,10 @@ export default {
       const restoreQueue = new PQueue({ concurrency: 4 })
       resources.forEach((resource) => {
         const path = isLocationTrashActive(this.$router, 'files-trash-spaces-project')
-          ? buildWebDavSpacesTrashPath(this.$route.params.spaceId)
+          ? buildWebDavSpacesTrashPath(this.$route.params.storageId)
           : buildWebDavFilesTrashPath(this.user.id)
         const restorePath = isLocationTrashActive(this.$router, 'files-trash-spaces-project')
-          ? buildWebDavSpacesPath(this.$route.params.spaceId, resource.path)
+          ? buildWebDavSpacesPath(this.$route.params.storageId, resource.path)
           : buildWebDavFilesPath(this.user.id, resource.path)
 
         restorePromises.push(

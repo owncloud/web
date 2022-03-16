@@ -100,7 +100,7 @@ export default {
 
     $_deleteResources_trashbin_deleteOp(resource) {
       const path = isLocationTrashActive(this.$router, 'files-trash-spaces-project')
-        ? buildWebDavSpacesTrashPath(this.$route.params.spaceId)
+        ? buildWebDavSpacesTrashPath(this.$route.params.storageId)
         : buildWebDavFilesTrashPath(this.user.id)
 
       return this.$client.fileTrash

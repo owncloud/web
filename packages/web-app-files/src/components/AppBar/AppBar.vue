@@ -188,8 +188,8 @@ export default {
             to: '/files/spaces/projects'
           },
           {
-            text: this.$route.params.spaceId,
-            to: `/files/spaces/projects/${this.$route.params.spaceId}`
+            text: this.$route.params.storageId,
+            to: `/files/spaces/projects/${this.$route.params.storageId}`
           },
           {
             text: this.$gettext('Deleted Files'),

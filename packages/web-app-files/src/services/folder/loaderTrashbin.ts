@@ -29,7 +29,7 @@ export class FolderLoaderTrashbin implements FolderLoader {
       store.commit('Files/CLEAR_CURRENT_FILES_LIST')
 
       const path = isLocationTrashActive(router, 'files-trash-spaces-project')
-        ? buildWebDavSpacesTrashPath(router.currentRoute.params.spaceId)
+        ? buildWebDavSpacesTrashPath(router.currentRoute.params.storageId)
         : buildWebDavFilesTrashPath(store.getters.user.id)
       const resources = yield client.fileTrash.list(path, '1', DavProperties.Trashbin)
 

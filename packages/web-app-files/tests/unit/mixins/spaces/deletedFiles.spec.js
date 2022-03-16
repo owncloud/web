@@ -44,7 +44,7 @@ describe('delete', () => {
       expect(wrapper.vm.$router.push).toHaveBeenCalledWith(
         createLocationTrash('files-trash-spaces-project', {
           params: {
-            spaceId: spaceMock.id
+            storageId: spaceMock.id
           }
         })
       )

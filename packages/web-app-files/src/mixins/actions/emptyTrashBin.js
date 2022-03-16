@@ -54,7 +54,7 @@ export default {
     },
     $_emptyTrashBin_emptyTrashBin() {
       const path = isLocationTrashActive(this.$router, 'files-trash-spaces-project')
-        ? buildWebDavSpacesTrashPath(this.$route.params.spaceId)
+        ? buildWebDavSpacesTrashPath(this.$route.params.storageId)
         : buildWebDavFilesTrashPath(this.user.id)
 
       return this.$client.fileTrash

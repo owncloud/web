@@ -25,7 +25,7 @@ export default {
       this.$router.push(
         createLocationTrash('files-trash-spaces-project', {
           params: {
-            spaceId: resources[0].id
+            storageId: resources[0].id
           }
         })
       )
