@@ -16,43 +16,20 @@ export class FolderLoaderSpacesShare implements FolderLoader {
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {
-    const router = context.router
-    const store = context.store
-    const clientService = context.clientService
-
-    const graphClient = clientService.graphAuthenticated(
-      store.getters.configuration.server,
-      store.getters.getToken
-    )
+    const {
+      store,
+      clientService: { owncloudSdk: client }
+    } = context
 
     return useTask(function* (signal1, signal2, ref, storageId, path = null) {
-      ref.CLEAR_CURRENT_FILES_LIST()
-      console.log('wololo')
-      const graphResponse = yield graphClient.drives.listMyDrives('', 'driveType eq mountpoint')
-      console.log('mountpoints', graphResponse.data)
-      if (!graphResponse.data) {
-        return
-      }
+      store.commit('Files/CLEAR_CURRENT_FILES_LIST')
 
-      const webDavResponse = yield ref.$client.files.list(
-        buildWebDavSpacesPath(storageId, path || '')
-      )
+      const webDavResponse = yield client.files.list(buildWebDavSpacesPath(storageId, path || ''))
 
-      let resources = []
-      if (!path) {
-        // space front page -> use space as current folder
-        resources.push(ref.space)
-
-        const webDavResources = webDavResponse.map(buildResource)
-        webDavResources.shift() // Remove webdav entry for the space itself
-        resources = resources.concat(webDavResources)
-      } else {
-        resources = webDavResponse.map(buildResource)
-      }
-
+      const resources = webDavResponse.map(buildResource)
       const currentFolder = resources.shift()
 
-      ref.LOAD_FILES({
+      store.commit('Files/LOAD_FILES', {
         currentFolder,
         files: resources
       })

@@ -29,7 +29,7 @@ export class FolderLoaderPersonal implements FolderLoader {
         store.commit('Files/CLEAR_CURRENT_FILES_LIST')
 
         let resources = yield fetchResources(
-          ref.$client,
+          client,
           buildWebDavFilesPath(ref.user.id, path || router.currentRoute.params.item || ''),
           DavProperties.Default
         )
