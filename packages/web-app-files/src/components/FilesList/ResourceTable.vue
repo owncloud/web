@@ -186,36 +186,50 @@ export default class ResourceTable extends Vue{
     'selection', 'select', { type: Array, default: [] }
   ) // v-model for the selection
   readonly selectionValue!: Array<any>
+
   readonly resourceDomSelector = (resource) => {
     resource.id.replace(/[^A-Za-z0-9\-_]/g, '')
   } // Closure function to mutate the resource id into a valid DOM selector.
+
   @Prop({ default: false }) // Asserts whether resources path should be shown in the resource name
   readonly arePathsDisplayed!: boolean
+
   @Prop({ default: true }) // Asserts whether icons should be replaced with thumbnails for resources which provide them
   readonly areThumbnailsDisplayed!: boolean
+
   @Prop({ default: true }) // Asserts whether actions are available
   readonly hasActions!: boolean 
+
   @Prop({ default: null }) // Target route path used to build the link when navigating into a resource
   readonly targetRoute!: any 
+
   @Prop({ default: true }) // Asserts whether clicking on the resource name triggers any action
   readonly areResourcesClickable!: boolean 
+
   @Prop({ default: 0 }) // Top position of header used when the header is sticky in pixels
   readonly headerPosition!: number 
+
   @Prop({ default: true }) // Asserts whether resources in the table can be selected
   readonly isSelectable!: boolean 
+
   @Prop({ default: null }) // The ids of disabled resources. Null or an empty string/array for no disabled resources.
   readonly disabled!: [string, Array<any>]  
+
   @Prop({ 
     default: 'small',
     validator: (size) => /(xsmall|small|medium|large|xlarge)/.test(size)
   }) // Sets the padding size for x axis @values xsmall, small, medium, large, xlarge
   readonly paddingX!: string
+
   @Prop({ default: false })  // Enable Drag & Drop events
   readonly dragDrop!: boolean 
+
   @Prop({ default: false }) // Enable hover effect
   readonly hover!: boolean 
+
   @Prop({ default: undefined }) // Show that the table is sorted by this column (no actual sorting takes place)
   readonly sortBy!: string 
+  
   @Prop({ 
     default: undefined,
     validator: (value) => {
