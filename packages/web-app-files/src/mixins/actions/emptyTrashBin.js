@@ -38,12 +38,12 @@ export default {
     $_emptyTrashBin_trigger() {
       const modal = {
         variation: 'danger',
-        title: this.$gettext('Empty trash'),
+        title: this.$gettext('Empty trash bin'),
         cancelText: this.$gettext('Cancel'),
         confirmText: this.$gettext('Delete'),
         icon: 'alarm-warning',
         message: this.$gettext(
-          'Are you sure you want to permanently delete your items in the trash? You can’t undo this action.'
+          'Are you sure you want to permanently delete your items in the trash bin? You can’t undo this action.'
         ),
         hasInput: false,
         onCancel: this.hideModal,
