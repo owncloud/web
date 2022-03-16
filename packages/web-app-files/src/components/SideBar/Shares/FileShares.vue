@@ -342,7 +342,7 @@ export default {
         client: this.$client,
         share: share,
         resource: this.highlightedFile,
-        spaceId: this.$route.params.spaceId
+        storageId: this.$route.params.storageId
       })
     },
     $_reloadShares() {
@@ -350,19 +350,19 @@ export default {
         client: this.$client,
         path: this.highlightedFile.path,
         $gettext: this.$gettext,
-        spaceId: this.$route.params.spaceId
+        storageId: this.$route.params.storageId
       })
       this.loadIncomingShares({
         client: this.$client,
         path: this.highlightedFile.path,
         $gettext: this.$gettext,
-        spaceId: this.$route.params.spaceId
+        storageId: this.$route.params.storageId
       })
       this.loadSharesTree({
         client: this.$client,
         path: dirname(this.highlightedFile.path),
         $gettext: this.$gettext,
-        spaceId: this.$route.params.spaceId
+        storageId: this.$route.params.storageId
       })
     }
   }

@@ -110,7 +110,7 @@ export default {
     const sharedParentRoute = computed(() => {
       if (isLocationSpacesActive(router, 'files-spaces-project')) {
         return createLocationSpaces('files-spaces-project', {
-          params: { spaceId: route.value.params.spaceId, item: sharedParentDir.value }
+          params: { storageId: route.value.params.storageId, item: sharedParentDir.value }
         })
       }
 
@@ -318,7 +318,7 @@ export default {
         client: this.$client,
         path: this.file.path,
         $gettext: this.$gettext,
-        spaceId: this.$route.params.spaceId
+        storageId: this.$route.params.storageId
       })
       this.shareIndicators = getIndicators(this.file, this.sharesTree)
     },

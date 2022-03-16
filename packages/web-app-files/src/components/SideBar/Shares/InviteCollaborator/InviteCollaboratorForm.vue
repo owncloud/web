@@ -255,11 +255,11 @@ export default {
                   this.selectedRole.permissions(!this.isOcis || this.resourceIsSpace)
                 )
 
-            let spaceId
+            let storageId
             if (this.resourceIsSpace) {
-              spaceId = this.highlightedFile.id
-            } else if (this.$route.params.spaceId) {
-              spaceId = this.$route.params.spaceId
+              storageId = this.highlightedFile.id
+            } else if (this.$route.params.storageId) {
+              storageId = this.$route.params.storageId
             }
 
             this.addShare({
@@ -272,7 +272,7 @@ export default {
               shareType: collaborator.value.shareType,
               permissions: bitmask,
               expirationDate: this.expirationDate,
-              spaceId
+              storageId
             })
           })
         )

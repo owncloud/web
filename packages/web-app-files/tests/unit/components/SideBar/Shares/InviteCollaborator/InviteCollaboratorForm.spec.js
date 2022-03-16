@@ -59,16 +59,16 @@ describe('InviteCollaboratorForm', () => {
       expect(spyTriggerUpload).toHaveBeenCalledTimes(0)
     })
     it.each([
-      { spaceId: undefined, highlightedFile: folderMock },
-      { spaceId: undefined, highlightedFile: spaceMock },
-      { spaceId: 1, highlightedFile: folderMock }
+      { storageId: undefined, highlightedFile: folderMock },
+      { storageId: undefined, highlightedFile: spaceMock },
+      { storageId: 1, highlightedFile: folderMock }
     ])('calls the "addShare" action', async (dataSet) => {
       const selectedCollaborators = [
         { shareWith: 'marie', value: { shareType: ShareTypes.user.value }, label: 'label' }
       ]
       const wrapper = getWrapper({
         selectedCollaborators,
-        spaceId: dataSet.spaceId,
+        storageId: dataSet.storageId,
         highlightedFile: dataSet.highlightedFile
       })
       const addShareSpy = jest.spyOn(wrapper.vm, 'addShare')
@@ -79,7 +79,7 @@ describe('InviteCollaboratorForm', () => {
   })
 })
 
-function getWrapper({ selectedCollaborators = [], spaceId, highlightedFile = folderMock } = {}) {
+function getWrapper({ selectedCollaborators = [], storageId, highlightedFile = folderMock } = {}) {
   return mount(InviteCollaboratorForm, {
     localVue,
     stubs: {
@@ -94,7 +94,7 @@ function getWrapper({ selectedCollaborators = [], spaceId, highlightedFile = fol
     },
     mocks: {
       $route: {
-        params: { spaceId }
+        params: { storageId }
       }
     },
     store: new Vuex.Store({
