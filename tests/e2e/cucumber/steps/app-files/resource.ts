@@ -38,6 +38,7 @@ Given(
   '{string} downloads the following resource(s)',
   async function (this: World, stepUser: string, stepTable: DataTable) {
     const { page } = this.actorsEnvironment.getActor({ id: stepUser })
+    await page.reload()
     const resourceObject = new objects.applicationFiles.Resource({ page })
     const downloadInfo = stepTable.hashes().reduce((acc, stepRow) => {
       const { resource, from } = stepRow
