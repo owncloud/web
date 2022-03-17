@@ -762,9 +762,9 @@ def main(ctx):
 
 def beforePipelines(ctx):
     return checkForRecentBuilds(ctx) + \
-           checkStarlark() + \
-           documentation(ctx) + \
-           changelog(ctx) + \
+           #checkStarlark() + \
+           #documentation(ctx) + \
+           #changelog(ctx) + \
            yarnCache(ctx) + \
            cacheOcisPipeline(ctx) + \
            pipelinesDependsOn(buildCacheWeb(ctx), yarnCache(ctx)) + \
@@ -774,7 +774,7 @@ def stagePipelines(ctx):
     unit_test_pipelines = unitTests(ctx)
     e2e_pipelines = e2eTests(ctx)
     acceptance_pipelines = acceptance(ctx)
-    return unit_test_pipelines + pipelinesDependsOn(e2e_pipelines, unit_test_pipelines) + pipelinesDependsOn(acceptance_pipelines, e2e_pipelines)
+    return e2e_pipelines
 
 def afterPipelines(ctx):
     return build(ctx) + notify()
@@ -1128,7 +1128,7 @@ def e2eTests(ctx):
             "REPORT_TRACING": reportTracing,
         },
         "commands": [
-            "sleep 10 && yarn test:e2e:cucumber tests/e2e/cucumber/",
+            "sleep 10 && yarn test:e2e:cucumber tests/e2e/cucumber/features/load.feature",
         ],
     }]
 
@@ -1142,7 +1142,7 @@ def e2eTests(ctx):
             "REPORT_TRACING": reportTracing,
         },
         "commands": [
-            "sleep 10 && yarn test:e2e:cucumber tests/e2e/cucumber/",
+            "sleep 10 && yarn test:e2e:cucumber tests/e2e/cucumber/features/load.feature",
         ],
     }]
 
