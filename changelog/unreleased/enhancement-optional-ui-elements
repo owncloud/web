@@ -1,0 +1,12 @@
+Enhancement: Make some UI elements/actions optional
+
+Make renaming a share, permanently deleting files and showing the custom permissions role optional via capabilities.
+By default, all of these options are enabled/showed.
+
+Capabilities:
+* capabilities.files_sharing.can_rename
+* capabilities.files.permanent_deletion
+* capabilities.files_sharing.allow_custom
+
+https://github.com/owncloud/web/pull/6618
+https://github.com/owncloud/web/issues/6324
