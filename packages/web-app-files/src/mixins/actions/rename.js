@@ -3,11 +3,12 @@ import { mapActions, mapGetters } from 'vuex'
 import { isSameResource } from '../../helpers/resource'
 import { getParentPaths } from '../../helpers/path'
 import { buildResource } from '../../helpers/resources'
-import { isLocationTrashActive } from '../../router'
+import { isLocationTrashActive, isLocationSharesActive } from '../../router'
 
 export default {
   computed: {
     ...mapGetters('Files', ['files', 'currentFolder']),
+    ...mapGetters('capabilities'),
 
     $_rename_items() {
       return [
@@ -22,6 +23,12 @@ export default {
             if (
               isLocationTrashActive(this.$router, 'files-trash-personal') ||
               isLocationTrashActive(this.$router, 'files-trash-spaces-project')
+            ) {
+              return false
+            }
+            if (
+              isLocationSharesActive(this.$router, 'files-shares-with-me') &&
+              this.capabilities.files_sharing.can_rename === false
             ) {
               return false
             }
