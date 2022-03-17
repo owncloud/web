@@ -1,16 +1,16 @@
-import { FolderLoader, FolderLoaderTask, TaskContext } from '../folder'
+import { FolderLoader, FolderLoaderTask, TaskContext } from '../../folder'
 import Router from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { DavProperties } from 'web-pkg/src/constants'
-import { buildResource, buildWebDavFilesPath } from '../../helpers/resources'
-import { isLocationSpacesActive } from '../../router'
+import { buildResource, buildWebDavFilesPath } from '../../../helpers/resources'
+import { isLocationSpacesActive } from '../../../router'
 import { Store } from 'vuex'
-import { fetchResources } from './util'
+import { fetchResources } from '../util'
+import get from 'lodash-es/get'
 
-export class FolderLoaderPersonal implements FolderLoader {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+export class FolderLoaderLegacyPersonal implements FolderLoader {
   public isEnabled(store: Store<any>): boolean {
-    return true
+    return !get(store, 'getters.capabilities.spaces.enabled', false)
   }
 
   public isActive(router: Router): boolean {
@@ -42,16 +42,17 @@ export class FolderLoaderPersonal implements FolderLoader {
           files: resources
         })
 
-        store.dispatch('Files/loadIndicators', {
-          client: client,
-          currentFolder: currentFolder.path
-        })
+        // load indicators
+        ;(() => {
+          store.dispatch('Files/loadIndicators', {
+            client: client,
+            currentFolder: currentFolder.path
+          })
+        })()
 
-        // Load quota
-        const promiseUser = client.users.getUser(ref.user.id)
-        // The semicolon is important to separate from the previous statement
+        // fetch user quota
         ;(async () => {
-          const user = await promiseUser
+          const user = await client.users.getUser(ref.user.id)
           store.commit('SET_QUOTA', user.quota)
         })()
       } catch (error) {

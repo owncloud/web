@@ -9,12 +9,13 @@ import {
   FolderLoaderSpacesProject,
   FolderLoaderSpacesShare,
   FolderLoaderFavorites,
-  FolderLoaderPersonal,
+  FolderLoaderLegacyPersonal,
   FolderLoaderPublicFiles,
   FolderLoaderSharedViaLink,
   FolderLoaderSharedWithMe,
   FolderLoaderSharedWithOthers,
-  FolderLoaderTrashbin
+  FolderLoaderTrashbin,
+  FolderLoaderSpacesPersonal
 } from './folder/'
 
 export * from './folder/util'
@@ -38,12 +39,14 @@ export class FolderService {
 
   constructor() {
     this.loaders = [
+      // legacy loaders
+      new FolderLoaderLegacyPersonal(),
       // spaces loaders
+      new FolderLoaderSpacesPersonal(),
       new FolderLoaderSpacesProject(),
       new FolderLoaderSpacesShare(),
       // generic loaders
       new FolderLoaderFavorites(),
-      new FolderLoaderPersonal(),
       new FolderLoaderPublicFiles(),
       new FolderLoaderSharedViaLink(),
       new FolderLoaderSharedWithMe(),
