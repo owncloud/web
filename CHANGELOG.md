@@ -34,6 +34,7 @@ Summary
 * Enhancement - Implement edit quota action in spaces overview: [#6598](https://github.com/owncloud/web/pull/6598)
 * Enhancement - Implement people sharing for spaces: [#6455](https://github.com/owncloud/web/pull/6455)
 * Enhancement - Implement the spaces permission concept: [#6531](https://github.com/owncloud/web/pull/6531)
+* Enhancement - Trash bin: [#6566](https://github.com/owncloud/web/pull/6566)
 * Enhancement - Update the graph SDK: [#6519](https://github.com/owncloud/web/pull/6519)
 * Enhancement - Update ODS to v13.0.0-rc.3: [#6540](https://github.com/owncloud/web/pull/6540)
 
@@ -246,6 +247,16 @@ Details
    permission changes.
 
    https://github.com/owncloud/web/pull/6531
+
+* Enhancement - Trash bin: [#6566](https://github.com/owncloud/web/pull/6566)
+
+   We've improved the trash bin in general: * Add compatibility with owncloud-sdk 3.0.0-alpha 1 *
+   Add a confirmation dialog while hitting the `Empty trash bin` button * Add trash bin for project
+   spaces * Change personal trash bin route from `files/trash` to `files/trash/personal`
+
+   https://github.com/owncloud/web/issues/6544
+   https://github.com/owncloud/web/issues/5974
+   https://github.com/owncloud/web/pull/6566
 
 * Enhancement - Update the graph SDK: [#6519](https://github.com/owncloud/web/pull/6519)
 
