@@ -69,12 +69,17 @@ export type acceptShareArgs = {
 
 export const acceptShare = async (args: acceptShareArgs): Promise<void> => {
   const { name, page } = args
-  await page
-    .locator(
-      `//*[@data-test-resource-name="${name}"]/ancestor::tr//button[contains(@class, "file-row-share-status-accept")]`
-    )
-    .click()
-  await page.waitForResponse((resp) => resp.url().includes('shares') && resp.status() === 200)
+  await Promise.all([
+    page
+      .locator(
+        `//*[@data-test-resource-name="${name}"]/ancestor::tr//button[contains(@class, "file-row-share-status-accept")]`
+      )
+      .click(),
+    page.waitForResponse((resp) => resp.url().includes('shares') && resp.status() === 200),
+    page
+      .locator(`#files-shared-with-me-shares-table [data-test-resource-name="${args.name}"]`)
+      .waitFor()
+  ])
 }
 
 /**/
