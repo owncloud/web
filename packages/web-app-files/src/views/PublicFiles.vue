@@ -28,7 +28,6 @@
         :resources="paginatedResources"
         :target-route="targetRoute"
         :header-position="fileListHeaderY"
-        :hover="true"
         :sort-by="sortBy"
         :sort-dir="sortDir"
         @fileClick="$_fileActions_triggerDefaultAction"

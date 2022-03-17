@@ -56,7 +56,6 @@
             :disabled="disabledResources"
             :target-route="targetRoute"
             :has-actions="false"
-            :hover="true"
             :is-selectable="false"
             :header-position="fileListHeaderY"
             :sort-by="sortBy"

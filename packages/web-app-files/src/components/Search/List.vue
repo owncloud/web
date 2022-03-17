@@ -18,7 +18,6 @@
       :are-paths-displayed="true"
       :are-thumbnails-displayed="displayThumbnails"
       :has-actions="true"
-      :hover="true"
       :is-selectable="false"
       @fileClick="$_fileActions_triggerDefaultAction"
       @rowMounted="rowMounted"

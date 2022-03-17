@@ -113,7 +113,6 @@
         id="files-spaces-table"
         v-model="selected"
         class="files-table oc-mt-xl"
-        :hover="true"
         :resources="paginatedResources"
         :target-route="resourceTargetLocation"
         :sort-by="sortBy"
