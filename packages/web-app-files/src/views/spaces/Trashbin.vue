@@ -1,7 +1,7 @@
-<template><Trashbin :no-content-message="$gettext('Space has no deleted files')" /></template>
+<template><trash-bin :no-content-message="$gettext('Space has no deleted files')" /></template>
 
 <script>
-import Trashbin from '../../components/Trashbin.vue'
+import TrashBin from '../../components/TrashBin.vue'
 import { useStore } from 'web-pkg/src/composables'
 import { ref } from '@vue/composition-api'
 import { clientService } from 'web-pkg/src/services'
@@ -9,7 +9,7 @@ import { useTask } from 'vue-concurrency'
 import { buildSpace } from '../../helpers/resources'
 
 export default {
-  components: { Trashbin },
+  components: { TrashBin },
 
   setup() {
     const store = useStore()

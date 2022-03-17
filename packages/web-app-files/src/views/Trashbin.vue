@@ -1,9 +1,9 @@
-<template><Trashbin /></template>
+<template><trash-bin /></template>
 
 <script>
-import Trashbin from '../components/Trashbin.vue'
+import TrashBin from '../components/TrashBin.vue'
 
 export default {
-  components: { Trashbin }
+  components: { TrashBin }
 }
 </script>
