@@ -761,10 +761,10 @@ def main(ctx):
     return pipelines
 
 def beforePipelines(ctx):
+   #checkStarlark() + \
+   #documentation(ctx) + \
+   #changelog(ctx) + \
     return checkForRecentBuilds(ctx) + \
-           #checkStarlark() + \
-           #documentation(ctx) + \
-           #changelog(ctx) + \
            yarnCache(ctx) + \
            cacheOcisPipeline(ctx) + \
            pipelinesDependsOn(buildCacheWeb(ctx), yarnCache(ctx)) + \
