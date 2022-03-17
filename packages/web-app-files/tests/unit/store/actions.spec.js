@@ -7,9 +7,6 @@ const stateMock = {
   dispatch: jest.fn(),
   getters: {
     highlightedFile: { isFolder: false }
-  },
-  rootGetters: {
-    isOcis: true
   }
 }
 
