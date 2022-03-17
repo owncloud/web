@@ -36,12 +36,24 @@
           />
           <span class="oc-invisible-sr" v-text="screenreaderShareDisplayName" />
         </p>
-        <p class="oc-m-rm">
+        <p class="oc-m-rm oc-flex">
           <span
             aria-hidden="true"
             class="files-collaborators-collaborator-share-type"
             v-text="shareTypeText"
           />
+          <span v-if="sharedParentRoute" class="oc-resource-indicators oc-text-truncate">
+            <span class="oc-mx-s">·</span>
+            <router-link
+              v-oc-tooltip="$gettext('Navigate to inheriting folder')"
+              class="parent-folder oc-text-truncate"
+              :to="sharedParentRoute"
+            >
+              <span class="text" v-text="$gettext('via')" />
+              <oc-icon name="folder-2" size="small" fill-type="line" class="oc-px-xs" />
+              <span class="text oc-text-truncate" v-text="sharedParentDir" />
+            </router-link>
+          </span>
           <span class="oc-invisible-sr" v-text="screenreaderShareDetails" />
         </p>
         <p v-if="hasExpirationDate" class="oc-m-rm">
@@ -111,6 +123,10 @@ export default {
     modifiable: {
       type: Boolean,
       default: false
+    },
+    sharedParentRoute: {
+      type: Object,
+      default: null
     }
   },
   setup() {
@@ -229,6 +245,10 @@ export default {
 
     graphClient() {
       return clientService.graphAuthenticated(this.configuration.server, this.getToken)
+    },
+
+    sharedParentDir() {
+      return this.sharedParentRoute?.params?.item.split('/').pop()
     }
   },
   methods: {

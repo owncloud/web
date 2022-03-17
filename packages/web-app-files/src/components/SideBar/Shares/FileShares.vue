@@ -39,6 +39,7 @@
             <collaborator-list-item
               :share="collaborator"
               :modifiable="!collaborator.indirect"
+              :shared-parent-route="getSharedParentRoute(collaborator)"
               @onDelete="$_ocCollaborators_deleteShare"
             />
           </li>
@@ -66,7 +67,7 @@ import { watch, computed } from '@vue/composition-api'
 import { useStore, useDebouncedRef } from 'web-pkg/src/composables'
 import { textUtils } from '../../../helpers/textUtils'
 import { getParentPaths } from '../../../helpers/path'
-import { dirname } from 'path'
+import path, { dirname } from 'path'
 import InviteCollaboratorForm from './InviteCollaborator/InviteCollaboratorForm.vue'
 import CollaboratorListItem from './Collaborators/ListItem.vue'
 import { ShareTypes } from '../../../helpers/share'
@@ -74,6 +75,7 @@ import { clientService } from 'web-pkg/src/services'
 import { useTask } from 'vue-concurrency'
 import { buildSpace, buildSpaceShare } from '../../../helpers/resources'
 import { sortSpaceMembers } from '../../../helpers/space'
+import { createLocationSpaces, isLocationSpacesActive } from '../../../router'
 
 export default {
   name: 'FileShares',
@@ -364,6 +366,33 @@ export default {
         $gettext: this.$gettext,
         storageId: this.$route.params.storageId
       })
+    },
+    getSharedParentRoute(parentShare) {
+      let currentPath = this.highlightedFile.path
+      if (!currentPath || parentShare.path === currentPath) {
+        return null
+      }
+
+      while (currentPath !== '/') {
+        const share = this.sharesTree[currentPath]
+        if (
+          share !== undefined &&
+          share[0] !== undefined &&
+          parentShare.collaborator.name === share[0].collaborator.name
+        ) {
+          if (isLocationSpacesActive(this.$router, 'files-spaces-project')) {
+            return createLocationSpaces('files-spaces-project', {
+              params: { storageId: this.$route.params.storageId, item: currentPath }
+            })
+          }
+
+          return createLocationSpaces('files-spaces-personal-home', {
+            params: { item: currentPath }
+          })
+        }
+        currentPath = path.dirname(currentPath)
+      }
+      return null
     }
   }
 }
