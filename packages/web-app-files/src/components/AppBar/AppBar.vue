@@ -47,9 +47,8 @@
           <size-info
             v-if="hasBulkActions && selectedFiles.length > 0"
             class="oc-mr-m oc-visible@l"
-            style="padding-bottom: calc(1rem + 1px)"
           />
-          <batch-actions v-if="hasBulkActions" style="padding-bottom: calc(1rem + 1px)" />
+          <batch-actions v-if="hasBulkActions" />
         </div>
       </div>
     </div>
@@ -372,6 +371,7 @@ export default {
     display: flex;
     gap: var(--oc-space-small);
     justify-content: flex-end;
+    min-height: 3rem;
   }
 }
 </style>
