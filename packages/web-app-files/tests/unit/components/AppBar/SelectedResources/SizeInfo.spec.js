@@ -55,7 +55,7 @@ describe('SizeInfo component', () => {
         expect(translate.props().translateN).toEqual(selectedCount)
         expect(translate.props().translateParams.amount).toEqual(selectedCount)
         expect(translate.props().translateParams.size).toEqual(totalSize + ' B')
-        expect(translate.text()).toEqual('%{ amount } selected item - %{ size }')
+        expect(translate.text()).toEqual('%{ amount } selected - %{ size }')
       }
     )
     it('should have selected number count but not size if item size is NaN', () => {
@@ -71,7 +71,7 @@ describe('SizeInfo component', () => {
       expect(translate.props().translateN).toEqual(1)
       expect(translate.props().translateParams.amount).toEqual(1)
       expect(translate.props().translateParams.size).toBeFalsy()
-      expect(translate.text()).toEqual('%{ amount } selected item')
+      expect(translate.text()).toEqual('%{ amount } selected')
     })
     it('should trigger "RESET_SELECTION" if clear button is clicked', () => {
       const spyResetSelection = jest.spyOn(SizeInfo.methods, 'RESET_SELECTION').mockImplementation()

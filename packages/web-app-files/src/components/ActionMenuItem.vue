@@ -5,7 +5,6 @@
       v-bind="getComponentProps(action, items)"
       :class="[action.class, 'action-menu-item']"
       data-testid="action-handler"
-      appearance="raw"
       size="small"
       v-on="getComponentListeners(action, items)"
     >

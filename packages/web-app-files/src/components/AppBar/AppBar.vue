@@ -44,10 +44,7 @@
             @error="onFileError"
             @progress="onFileProgress"
           />
-          <size-info
-            v-if="hasBulkActions && selectedFiles.length > 0"
-            class="oc-mr-m oc-visible@l"
-          />
+          <size-info v-if="hasBulkActions && selectedFiles.length > 0" class="oc-visible@l" />
           <batch-actions v-if="hasBulkActions" />
         </div>
       </div>
