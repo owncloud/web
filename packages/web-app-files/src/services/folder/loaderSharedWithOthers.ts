@@ -3,6 +3,8 @@ import Router from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { isLocationSharesActive } from '../../router'
 import { aggregateResourceShares } from '../../helpers/resources'
+import { useCapabilityFilesSharingResharing } from 'web-runtime/src/composables'
+import { unref } from '@vue/composition-api'
 
 export class FolderLoaderSharedWithOthers implements FolderLoader {
   public isEnabled(router: Router): boolean {
@@ -14,6 +16,8 @@ export class FolderLoaderSharedWithOthers implements FolderLoader {
       store,
       clientService: { owncloudSdk: client }
     } = context
+
+    const resharingCapability = useCapabilityFilesSharingResharing(store)
 
     return useTask(function* (signal1, signal2) {
       store.commit('Files/CLEAR_CURRENT_FILES_LIST')
@@ -28,14 +32,13 @@ export class FolderLoaderSharedWithOthers implements FolderLoader {
       resources = resources.ocs.data
 
       if (resources.length) {
-        const isOcis = store.getters.isOcis
         const configuration = store.getters.configuration
         const getToken = store.getters.getToken
 
         resources = aggregateResourceShares(
           resources,
           false,
-          !isOcis,
+          unref(resharingCapability),
           configuration.server,
           getToken
         )
