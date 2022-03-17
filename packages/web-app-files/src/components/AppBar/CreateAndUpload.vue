@@ -6,11 +6,12 @@
         key="new-file-menu-btn-enabled"
         v-oc-tooltip="newButtonTooltip"
         :aria-label="newButtonAriaLabel"
-        variation="raw"
+        appearance="raw"
+        variation="inverse"
         :disabled="uploadOrFileCreationBlocked"
-        class="oc-background-primary-gradient"
+        class="oc-background-primary-gradient oc-px-s"
       >
-        <oc-icon name="add" variation="inverse" />
+        <oc-icon name="add" />
         <translate>New</translate>
       </oc-button>
       <oc-drop
@@ -60,10 +61,11 @@
       <oc-button
         id="new-folder-btn"
         v-oc-tooltip="newButtonAriaLabel"
+        appearance="raw"
         variation="inverse"
         :aria-label="newButtonAriaLabel"
         :disabled="uploadOrFileCreationBlocked"
-        class="oc-background-primary-gradient oc-text-nowrap"
+        class="oc-background-primary-gradient oc-px-s oc-text-nowrap"
         @click="showCreateResourceModal"
       >
         <oc-icon name="resource-type-folder" />
@@ -529,14 +531,7 @@ export default {
   }
 }
 </script>
-<style lang="scss">
-#new-file-menu-btn {
-  color: var(--oc-color-swatch-inverse-default);
-  border: 0;
-  .oc-icon > svg {
-    fill: var(--oc-color-swatch-inverse-default) !important;
-  }
-}
+<style lang="scss" scoped>
 #create-list {
   li {
     border: 1px solid transparent;
