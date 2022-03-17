@@ -97,9 +97,6 @@ import { computed } from '@vue/composition-api'
 
 import FileInfo from './FileInfo.vue'
 import SpaceInfo from './SpaceInfo.vue'
-import { useTask } from 'vue-concurrency'
-import { clientService } from 'web-pkg/src/services'
-import { useStore } from 'web-pkg/src/composables'
 
 let visibilityObserver
 let hiddenObserver
@@ -248,11 +245,6 @@ export default {
   beforeDestroy() {
     visibilityObserver.disconnect()
     hiddenObserver.disconnect()
-  },
-  mounted() {
-    if (this.$route.params.spaceId && !this.highlightedFileIsSpace) {
-      this.loadSpaceTask.perform(this, this.$route.params.spaceId)
-    }
   },
   methods: {
     ...mapActions('Files/sidebar', {

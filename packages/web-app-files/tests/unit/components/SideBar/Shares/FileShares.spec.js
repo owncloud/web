@@ -184,7 +184,7 @@ function getResource({
   }
 }
 
-const storeOptions = (data, isInLoadingState) => {
+const storeOptions = (data) => {
   let {
     user,
     outgoingCollaborators = [],
@@ -204,7 +204,6 @@ const storeOptions = (data, isInLoadingState) => {
       Files: {
         state: {
           incomingShares: incomingCollaborators,
-          incomingSharesLoading: isInLoadingState,
           sharesTree: []
         },
         namespaced: true,
@@ -262,7 +261,10 @@ const storeOptions = (data, isInLoadingState) => {
 function getMountedWrapper(data, loading = false) {
   return mount(FileShares, {
     localVue,
-    store: createStore(data, loading),
+    store: createStore(data),
+    mocks: {
+      sharesLoading: loading
+    },
     stubs: {
       'oc-button': false,
       'oc-icon': true,
@@ -275,13 +277,14 @@ function getMountedWrapper(data, loading = false) {
 function getShallowMountedWrapper(data, loading = false) {
   return shallowMount(FileShares, {
     localVue,
-    store: createStore(data, loading),
+    store: createStore(data),
     stubs: {
       'oc-button': true,
       'oc-icon': true,
       'oc-spinner': true
     },
     mocks: {
+      sharesLoading: loading,
       $route: {
         params: {
           storageId: 1
@@ -291,6 +294,6 @@ function getShallowMountedWrapper(data, loading = false) {
   })
 }
 
-function createStore(data, loading) {
-  return new Vuex.Store(storeOptions(data, loading))
+function createStore(data) {
+  return new Vuex.Store(storeOptions(data))
 }

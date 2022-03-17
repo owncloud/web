@@ -69,7 +69,6 @@ import { dirname } from 'path'
 import InviteCollaboratorForm from './InviteCollaborator/InviteCollaboratorForm.vue'
 import CollaboratorListItem from './Collaborators/ListItem.vue'
 import { ShareTypes } from '../../../helpers/share'
-import { useStore } from 'web-pkg/src/composables'
 import { clientService } from 'web-pkg/src/services'
 import { useTask } from 'vue-concurrency'
 import { buildSpace, buildSpaceShare } from '../../../helpers/resources'
@@ -96,9 +95,10 @@ export default {
         sharesTreeLoading.value
     })
 
-      const graphClient = clientService.graphAuthenticated(
-        store.getters.configuration.server,
-        store.getters.getToken)
+    const graphClient = clientService.graphAuthenticated(
+      store.getters.configuration.server,
+      store.getters.getToken
+    )
 
     const loadSpaceTask = useTask(function* (signal, ref, storageId) {
       const graphResponse = yield graphClient.drives.getDrive(storageId)
