@@ -71,7 +71,7 @@ export const getStore = function ({
   slogan = null,
   user = null,
   generalThemeName = '',
-  isOcis = true,
+  capabilities = {},
   selectedResourcesForMove = null,
   locationPickerTargetFolder = null
 } = {}) {
@@ -97,8 +97,8 @@ export const getStore = function ({
           disablePreviews: disablePreviews
         }
       }),
+      capabilities: () => capabilities,
       getToken: () => '',
-      isOcis: () => isOcis,
       homeFolder: () => '/',
       user: () => user
     },

@@ -1,13 +1,18 @@
 import { triggerShareAction } from '../../helpers/share/triggerShareAction'
 
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 import PQueue from 'p-queue'
 import { ShareStatus } from '../../helpers/share'
 import { isLocationSharesActive } from '../../router'
+import { useCapabilityFilesSharingResharing } from 'web-runtime/src/composables'
 
 export default {
   computed: {
-    ...mapGetters(['isOcis']),
+    setup() {
+      return {
+        resharingCapability: useCapabilityFilesSharingResharing()
+      }
+    },
     $_acceptShare_items() {
       return [
         {
@@ -50,7 +55,7 @@ export default {
               const share = await triggerShareAction(
                 resource,
                 ShareStatus.accepted,
-                !this.isOcis,
+                this.resharingCapability,
                 this.$client
               )
               if (share) {

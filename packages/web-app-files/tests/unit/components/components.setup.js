@@ -71,7 +71,6 @@ export const getStore = function ({
   slogan = null,
   user = null,
   generalThemeName = '',
-  isOcis = true,
   selectedResourcesForMove = null,
   locationPickerTargetFolder = null
 } = {}) {
@@ -98,7 +97,6 @@ export const getStore = function ({
         }
       }),
       getToken: () => '',
-      isOcis: () => isOcis,
       homeFolder: () => '/',
       user: () => user
     },

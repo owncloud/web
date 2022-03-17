@@ -234,7 +234,6 @@ const storeOptions = (data) => {
       configuration: jest.fn(() => ({
         server: 'http://example.com/'
       })),
-      isOcis: () => false,
       user: () => user,
       capabilities: () => {
         return {

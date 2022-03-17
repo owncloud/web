@@ -86,7 +86,7 @@ export default {
     ...mapState(['app']),
     ...mapState('Files', ['files']),
     ...mapGetters('Files', ['highlightedFile', 'selectedFiles', 'totalFilesCount']),
-    ...mapGetters(['isOcis', 'configuration', 'getToken', 'user']),
+    ...mapGetters(['configuration', 'getToken', 'user']),
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
     selected: {
