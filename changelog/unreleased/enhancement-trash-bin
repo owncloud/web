@@ -1,0 +1,12 @@
+Enhancement: Trash bin
+
+We've improved the trash bin in general:
+* Add compatibility with owncloud-sdk 3.0.0-alpha 1
+* Add a confirmation dialog while hitting the `Empty trash bin` button
+* Add trash bin for project spaces
+* Change personal trash bin route from `files/trash` to `files/trash/personal`
+
+https://github.com/owncloud/web/pull/6566
+https://github.com/owncloud/web/issues/6544
+https://github.com/owncloud/web/issues/5974
+

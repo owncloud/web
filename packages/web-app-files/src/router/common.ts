@@ -2,19 +2,17 @@ import { RouteComponents } from './router'
 import { Location, RouteConfig } from 'vue-router'
 import { createLocation, $gettext, isLocationActiveDirector } from './utils'
 
-type commonTypes = 'files-common-favorites' | 'files-common-search' | 'files-common-trash'
+type commonTypes = 'files-common-favorites' | 'files-common-search'
 
 export const createLocationCommon = (name: commonTypes, location = {}): Location =>
   createLocation(name, location)
 
 export const locationFavorites = createLocationCommon('files-common-favorites')
-export const locationTrash = createLocationCommon('files-common-trash')
 export const locationSearch = createLocationCommon('files-common-search')
 
 export const isLocationCommonActive = isLocationActiveDirector<commonTypes>(
   locationFavorites,
-  locationSearch,
-  locationTrash
+  locationSearch
 )
 
 export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
@@ -31,22 +29,6 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
           hasBulkActions: true,
           title: $gettext('Search results'),
           contextQueryItems: ['term', 'provider']
-        }
-      }
-    ]
-  },
-  {
-    path: '/trash',
-    component: components.App,
-    children: [
-      {
-        name: locationTrash.name,
-        path: '',
-        component: components.Trashbin,
-        meta: {
-          hideFilelistActions: true,
-          hasBulkActions: true,
-          title: $gettext('Deleted files')
         }
       }
     ]

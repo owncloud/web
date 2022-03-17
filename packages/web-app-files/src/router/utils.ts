@@ -25,6 +25,16 @@ export const isLocationActive = (
         ...comparative
         // ...(comparative.name && { name: resolveRouteName(comparative.name) })
       })
+      /**
+       * Href might be '/' or '#/' if router is not able to resolve the proper path.
+       * This happens if the we don't pass a param which is defined in the route configuration, for example:
+       * path: user/:id
+       *
+       * This implies that the comparative route is not active
+       **/
+      if (comparativeHref === '/' || comparativeHref === '#/') {
+        return false
+      }
       return currentHref.startsWith(comparativeHref)
     })
     .some(Boolean)

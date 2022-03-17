@@ -18,7 +18,11 @@ module.exports = {
       return this.waitForElementVisible('@clearTrashbin')
         .initAjaxCounters()
         .click('@clearTrashbin')
-        .waitForOutstandingAjaxCalls()
+        .waitForElementVisible('@dialog')
+        .waitForAnimationToFinish() // wait for transition on the modal to finish
+        .click('@dialogConfirmBtnEnabled')
+        .waitForAjaxCallsToStartAndFinish()
+        .waitForElementNotPresent('@dialog')
     },
     restoreSelected: function () {
       return this.waitForElementVisible('@restoreSelectedButton')
@@ -37,8 +41,14 @@ module.exports = {
     }
   },
   elements: {
+    dialog: {
+      selector: '.oc-modal'
+    },
+    dialogConfirmBtnEnabled: {
+      selector: '.oc-modal-body-actions-confirm:enabled'
+    },
     clearTrashbin: {
-      selector: '.oc-files-actions-empty-trash-bin-trigger'
+      selector: '.oc-files-actions-empty-trash-bin-trigger:not([disabled])'
     },
     restoreSelectedButton: {
       selector: '.oc-files-actions-restore-trigger'

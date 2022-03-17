@@ -163,6 +163,7 @@ import { VisibilityObserver } from 'web-pkg/src/observer'
 import Mixins from '../../mixins'
 import Rename from '../../mixins/spaces/actions/rename'
 import Delete from '../../mixins/spaces/actions/delete'
+import DeletedFiles from '../../mixins/spaces/actions/deletedFiles'
 import Disable from '../../mixins/spaces/actions/disable'
 import Restore from '../../mixins/spaces/actions/restore'
 import EditDescription from '../../mixins/spaces/actions/editDescription'
@@ -195,6 +196,7 @@ export default {
     Mixins,
     Rename,
     Delete,
+    DeletedFiles,
     EditDescription,
     Disable,
     ShowDetails,
@@ -397,6 +399,7 @@ export default {
         ...this.$_editReadmeContent_items,
         ...this.$_uploadImage_items,
         ...this.$_editQuota_items,
+        ...this.$_deletedFiles_items,
         ...this.$_restore_items,
         ...this.$_delete_items,
         ...this.$_disable_items,

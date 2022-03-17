@@ -80,7 +80,6 @@ const store = {
     }
   }
 }
-
 describe('Files sidebar', () => {
   test('Links panel displays private link for a shared file', async () => {
     config.mocks.publicPage = () => false

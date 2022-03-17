@@ -32,6 +32,9 @@ exports[`Spaces component should list spaces 1`] = `
                     <div class="oc-card oc-card-body oc-rounded oc-background-secondary oc-p-s">
                       <ul class="oc-list oc-files-context-actions">
                         <li class="oc-files-context-action oc-px-s"><button type="button" class="oc-button oc-button-m oc-button-justify-content-left oc-button-gap-m oc-button-passive oc-button-passive-raw"><span class="oc-flex oc-icon oc-icon-m oc-icon-passive"><!----></span>
+                            Deleted files
+                          </button></li>
+                        <li class="oc-files-context-action oc-px-s"><button type="button" class="oc-button oc-button-m oc-button-justify-content-left oc-button-gap-m oc-button-passive oc-button-passive-raw"><span class="oc-flex oc-icon oc-icon-m oc-icon-passive"><!----></span>
                             Details
                           </button></li>
                       </ul>

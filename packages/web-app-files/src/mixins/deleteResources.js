@@ -1,8 +1,9 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 import { cloneStateObject } from '../helpers/store'
 import { isSameResource } from '../helpers/resource'
+import { buildWebDavFilesTrashPath, buildWebDavSpacesTrashPath } from '../helpers/resources'
 import PQueue from 'p-queue'
-import { isLocationCommonActive } from '../router'
+import { isLocationTrashActive } from '../router'
 
 export default {
   data: () => ({
@@ -16,7 +17,10 @@ export default {
     ...mapGetters(['user']),
 
     $_deleteResources_isInTrashbin() {
-      return isLocationCommonActive(this.$router, 'files-common-trash')
+      return (
+        isLocationTrashActive(this.$router, 'files-trash-personal') ||
+        isLocationTrashActive(this.$router, 'files-trash-spaces-project')
+      )
     },
 
     $_deleteResources_resources() {
@@ -95,8 +99,12 @@ export default {
     ...mapMutations(['SET_QUOTA']),
 
     $_deleteResources_trashbin_deleteOp(resource) {
+      const path = isLocationTrashActive(this.$router, 'files-trash-spaces-project')
+        ? buildWebDavSpacesTrashPath(this.$route.params.storageId)
+        : buildWebDavFilesTrashPath(this.user.id)
+
       return this.$client.fileTrash
-        .clearTrashBin(resource.id)
+        .clearTrashBin(path, resource.id)
         .then(() => {
           this.removeFilesFromTrashbin([resource])
           const translated = this.$gettext('"%{file}" was deleted successfully')

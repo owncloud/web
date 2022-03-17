@@ -1,9 +1,17 @@
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import PQueue from 'p-queue'
-import { isLocationCommonActive } from '../../router'
+import { isLocationTrashActive } from '../../router'
+import {
+  buildWebDavFilesTrashPath,
+  buildWebDavFilesPath,
+  buildWebDavSpacesTrashPath,
+  buildWebDavSpacesPath
+} from '../../helpers/resources'
 
 export default {
   computed: {
+    ...mapState(['user']),
+
     $_restore_items() {
       return [
         {
@@ -12,7 +20,10 @@ export default {
           label: () => this.$gettext('Restore'),
           handler: this.$_restore_trigger,
           isEnabled: ({ resources }) => {
-            if (!isLocationCommonActive(this.$router, 'files-common-trash')) {
+            if (
+              !isLocationTrashActive(this.$router, 'files-trash-personal') &&
+              !isLocationTrashActive(this.$router, 'files-trash-spaces-project')
+            ) {
               return false
             }
             return resources.length > 0
@@ -25,6 +36,7 @@ export default {
   },
   methods: {
     ...mapActions('Files', ['removeFilesFromTrashbin']),
+    ...mapActions(['showMessage']),
 
     async $_restore_trigger({ resources }) {
       const restoredResources = []
@@ -32,10 +44,17 @@ export default {
       const restorePromises = []
       const restoreQueue = new PQueue({ concurrency: 4 })
       resources.forEach((resource) => {
+        const path = isLocationTrashActive(this.$router, 'files-trash-spaces-project')
+          ? buildWebDavSpacesTrashPath(this.$route.params.storageId)
+          : buildWebDavFilesTrashPath(this.user.id)
+        const restorePath = isLocationTrashActive(this.$router, 'files-trash-spaces-project')
+          ? buildWebDavSpacesPath(this.$route.params.storageId, resource.path)
+          : buildWebDavFilesPath(this.user.id, resource.path)
+
         restorePromises.push(
           restoreQueue.add(async () => {
             try {
-              await this.$client.fileTrash.restore(resource.id, resource.path)
+              await this.$client.fileTrash.restore(path, resource.id, restorePath)
               restoredResources.push(resource)
             } catch (e) {
               console.error(e)

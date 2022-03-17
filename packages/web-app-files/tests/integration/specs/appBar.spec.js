@@ -39,6 +39,7 @@ describe('AppBar contains set of actions and informations', () => {
         {
           setup: () => {
             return {
+              isPersonalLocation: true,
               isSharesLocation: false
             }
           },

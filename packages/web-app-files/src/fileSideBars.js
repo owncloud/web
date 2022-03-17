@@ -8,7 +8,7 @@ import NoSelection from './components/SideBar/NoSelection.vue'
 import SpaceActions from './components/SideBar/Actions/SpaceActions.vue'
 import SpaceDetails from './components/SideBar/Details/SpaceDetails.vue'
 import SpaceShares from './components/SideBar/Shares/SpaceShares.vue'
-import { isLocationCommonActive, isLocationPublicActive, isLocationSpacesActive } from './router'
+import { isLocationSpacesActive, isLocationTrashActive, isLocationPublicActive } from './router'
 import { spaceRoleEditor, spaceRoleManager } from './helpers/share'
 
 export default [
@@ -27,10 +27,15 @@ export default [
     app: 'details-item',
     icon: 'questionnaire-line',
     component: FileDetails,
-    default: !isLocationCommonActive(router, 'files-common-trash'),
+    default:
+      !isLocationTrashActive(router, 'files-trash-personal') &&
+      !isLocationTrashActive(router, 'files-trash-spaces-project'),
     get enabled() {
       return (
-        !isLocationCommonActive(router, 'files-common-trash') && !multipleSelection && !rootFolder
+        !isLocationTrashActive(router, 'files-trash-personal') &&
+        !isLocationTrashActive(router, 'files-trash-spaces-project') &&
+        !multipleSelection &&
+        !rootFolder
       )
     }
   }),
@@ -48,7 +53,9 @@ export default [
     component: FileActions,
     icon: 'slideshow-3',
     iconFillType: 'line',
-    default: isLocationCommonActive(router, 'files-common-trash'),
+    default:
+      isLocationTrashActive(router, 'files-trash-personal') ||
+      isLocationTrashActive(router, 'files-trash-spaces-project'),
     get enabled() {
       return !multipleSelection && !rootFolder
     }
@@ -60,7 +67,8 @@ export default [
     get enabled() {
       if (multipleSelection || rootFolder) return false
       if (
-        isLocationCommonActive(router, 'files-common-trash') ||
+        isLocationTrashActive(router, 'files-trash-personal') ||
+        isLocationTrashActive(router, 'files-trash-spaces-project') ||
         isLocationPublicActive(router, 'files-public-files')
       ) {
         return false
@@ -79,7 +87,8 @@ export default [
     get enabled() {
       if (multipleSelection || rootFolder) return false
       if (
-        isLocationCommonActive(router, 'files-common-trash') ||
+        isLocationTrashActive(router, 'files-trash-personal') ||
+        isLocationTrashActive(router, 'files-trash-spaces-project') ||
         isLocationPublicActive(router, 'files-public-files')
       ) {
         return false
@@ -98,7 +107,8 @@ export default [
     get enabled() {
       if (multipleSelection || rootFolder) return false
       if (
-        isLocationCommonActive(router, 'files-common-trash') ||
+        isLocationTrashActive(router, 'files-trash-personal') ||
+        isLocationTrashActive(router, 'files-trash-spaces-project') ||
         isLocationPublicActive(router, 'files-public-files')
       ) {
         return false

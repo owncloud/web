@@ -1,9 +1,11 @@
-import { mapActions, mapGetters } from 'vuex'
-import { isLocationCommonActive } from '../../router'
+import { mapActions, mapGetters, mapState } from 'vuex'
+import { isLocationTrashActive } from '../../router'
+import { buildWebDavFilesTrashPath, buildWebDavSpacesTrashPath } from '../../helpers/resources'
 
 export default {
   computed: {
     ...mapGetters('Files', ['activeFiles']),
+    ...mapState(['user']),
     $_emptyTrashBin_items() {
       return [
         {
@@ -12,7 +14,10 @@ export default {
           label: () => this.$gettext('Empty trash bin'),
           handler: this.$_emptyTrashBin_trigger,
           isEnabled: ({ resources }) => {
-            if (!isLocationCommonActive(this.$router, 'files-common-trash')) {
+            if (
+              !isLocationTrashActive(this.$router, 'files-trash-personal') &&
+              !isLocationTrashActive(this.$router, 'files-trash-spaces-project')
+            ) {
               return false
             }
             // empty trash bin is not available for individual resources, but only for the trash bin as a whole
@@ -27,12 +32,35 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['showMessage']),
+    ...mapActions(['showMessage', 'createModal', 'hideModal', 'toggleModalConfirmButton']),
     ...mapActions('Files', ['clearTrashBin']),
+
     $_emptyTrashBin_trigger() {
-      this.$client.fileTrash
-        .clearTrashBin()
+      const modal = {
+        variation: 'danger',
+        title: this.$gettext('Empty trash bin'),
+        cancelText: this.$gettext('Cancel'),
+        confirmText: this.$gettext('Delete'),
+        icon: 'alarm-warning',
+        message: this.$gettext(
+          'Are you sure you want to permanently delete your items in the trash bin? You can’t undo this action.'
+        ),
+        hasInput: false,
+        onCancel: this.hideModal,
+        onConfirm: () => this.$_emptyTrashBin_emptyTrashBin()
+      }
+
+      this.createModal(modal)
+    },
+    $_emptyTrashBin_emptyTrashBin() {
+      const path = isLocationTrashActive(this.$router, 'files-trash-spaces-project')
+        ? buildWebDavSpacesTrashPath(this.$route.params.storageId)
+        : buildWebDavFilesTrashPath(this.user.id)
+
+      return this.$client.fileTrash
+        .clearTrashBin(path)
         .then(() => {
+          this.hideModal()
           this.showMessage({
             title: this.$gettext('All deleted files were removed')
           })

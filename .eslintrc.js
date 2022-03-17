@@ -10,7 +10,7 @@ module.exports = {
     'plugin:prettier/recommended',
     'plugin:jest/recommended'
   ],
-  parser: "@babel/eslint-parser",
+  parser: '@babel/eslint-parser',
   parserOptions: {
     requireConfigFile: false,
     sourceType: 'module'
@@ -23,13 +23,14 @@ module.exports = {
     'require-await': 'warn',
     'no-new': 'off',
     'jest/no-standalone-expect': 'off',
-    'node/no-callback-literal': 'off'
+    'node/no-callback-literal': 'off',
+    'unused-imports/no-unused-imports': 'error'
   },
   globals: {
     require: false,
     requirejs: false
   },
-  plugins: ['jest'],
+  plugins: ['jest', 'unused-imports'],
   overrides: [
     {
       files: ['**/*.vue'],

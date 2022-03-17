@@ -26,7 +26,7 @@ const cases = [
   ['PublicFiles', '/public/list/link', PublicFiles],
   ['SharedViaLink', '/list/shared-via-link/', SharedViaLink],
   ['SharedWithOthers', '/list/shared-with-others/', SharedWithOthers],
-  ['Trashbin', '/trash-bin/', Trashbin]
+  ['Trashbin', '/trash/personal', Trashbin]
 ]
 
 describe('User can navigate in files list using pagination', () => {

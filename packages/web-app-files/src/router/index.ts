@@ -1,13 +1,11 @@
+import { RouteConfig } from 'vue-router'
+
 import {
-  buildRoutes as buildSpacesRoutes,
-  isLocationSpacesActive,
-  createLocationSpaces
-} from './spaces'
-import {
-  buildRoutes as buildSharesRoutes,
-  isLocationSharesActive,
-  createLocationShares
-} from './shares'
+  buildRoutes as buildCommonRoutes,
+  isLocationCommonActive,
+  createLocationCommon
+} from './common'
+import { buildRoutes as buildDeprecatedRoutes, isLocationActive } from './deprecated'
 import {
   buildRoutes as buildOperationsRoutes,
   createLocationOperations,
@@ -18,15 +16,23 @@ import {
   createLocationPublic,
   isLocationPublicActive
 } from './public'
-import {
-  buildRoutes as buildCommonRoutes,
-  isLocationCommonActive,
-  createLocationCommon
-} from './common'
-import { isAuthenticatedRoute, ActiveRouteDirectorFunc } from './utils'
-import { buildRoutes as buildDeprecatedRoutes, isLocationActive } from './deprecated'
 import { RouteComponents } from './router'
-import { RouteConfig } from 'vue-router'
+import {
+  buildRoutes as buildSharesRoutes,
+  isLocationSharesActive,
+  createLocationShares
+} from './shares'
+import {
+  buildRoutes as buildSpacesRoutes,
+  isLocationSpacesActive,
+  createLocationSpaces
+} from './spaces'
+import {
+  buildRoutes as buildTrashRoutes,
+  isLocationTrashActive,
+  createLocationTrash
+} from './trash'
+import { isAuthenticatedRoute, ActiveRouteDirectorFunc } from './utils'
 
 const ROOT_ROUTE = {
   path: '/',
@@ -35,11 +41,12 @@ const ROOT_ROUTE = {
 
 const buildRoutes = (components: RouteComponents): RouteConfig[] => [
   ROOT_ROUTE,
+  ...buildCommonRoutes(components),
   ...buildSharesRoutes(components),
   ...buildPublicRoutes(components),
   ...buildSpacesRoutes(components),
   ...buildOperationsRoutes(components),
-  ...buildCommonRoutes(components),
+  ...buildTrashRoutes(components),
   ...buildDeprecatedRoutes()
 ]
 
@@ -56,6 +63,8 @@ export {
   isLocationPublicActive,
   isLocationActive,
   isAuthenticatedRoute,
+  isLocationTrashActive,
+  createLocationTrash,
   buildRoutes,
   ActiveRouteDirectorFunc
 }

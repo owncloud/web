@@ -5,6 +5,7 @@ import { createLocationCommon } from './common'
 import { createLocationOperations } from './operations'
 import { createLocationPublic } from './public'
 import { isLocationActive as isLocationActiveNoCompat } from './utils'
+import { createLocationTrash } from './trash'
 
 /**
  * all route configs created by buildRoutes are deprecated,
@@ -66,7 +67,7 @@ export const buildRoutes = (): RouteConfig[] =>
     },
     {
       path: '/trash-bin',
-      redirect: (to) => createLocationCommon('files-common-trash', to)
+      redirect: (to) => createLocationTrash('files-trash-personal', to)
     },
     {
       path: '/public/list/:item*',
@@ -106,7 +107,7 @@ export const isLocationActive = (
       'files-favorites': createLocationCommon('files-common-favorites').name,
       'files-shared-with-others': createLocationShares('files-shares-with-others').name,
       'files-shared-with-me': createLocationShares('files-shares-with-me').name,
-      'files-trashbin	': createLocationCommon('files-common-trash').name,
+      'files-trashbin	': createLocationTrash('files-trash-personal').name,
       'files-public-list': createLocationPublic('files-public-files').name
     }[c.name]
 

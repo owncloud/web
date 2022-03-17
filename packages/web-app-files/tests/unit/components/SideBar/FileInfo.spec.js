@@ -72,7 +72,7 @@ describe('FileInfo', () => {
     resetDateMocks()
 
     const tooltipStub = jest.fn()
-    const wrapper = createWrapper(simpleDeletedFile, tooltipStub, 'files-common-trash')
+    const wrapper = createWrapper(simpleDeletedFile, tooltipStub, 'files-trash-personal')
 
     expect(tooltipStub).toHaveBeenCalledTimes(1)
     expect(formDateFromRFC).toHaveBeenCalledTimes(1)
