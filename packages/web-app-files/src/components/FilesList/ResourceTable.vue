@@ -72,14 +72,16 @@
       <slot name="status" :resource="item" />
     </template>
     <template #sharedWith="{ item }">
-      <oc-avatars
-        class="resource-table-people"
-        :items="item.sharedWith"
-        :stacked="true"
-        :max-displayed="3"
-        :is-tooltip-displayed="true"
-        :accessible-description="getSharedWithAvatarDescription(item)"
-      />
+      <oc-button appearance="raw" variation="inverse" @click="openSharingSidebar(item)">
+        <oc-avatars
+          class="resource-table-people"
+          :items="item.sharedWith"
+          :stacked="true"
+          :max-displayed="3"
+          :is-tooltip-displayed="true"
+          :accessible-description="getSharedWithAvatarDescription(item)"
+        />
+      </oc-button>
     </template>
     <template #size="{ item }">
       <oc-resource-size :size="item.size || Number.NaN" />
@@ -91,7 +93,7 @@
         v-text="formatDateRelative(item.mdate)"
       />
     </template>
-    <template #shareTypes="{ item }">
+    <template #indicators="{ item }">
       <oc-status-indicators
         v-if="item.indicators.length"
         :resource="item"
@@ -113,12 +115,14 @@
       />
     </template>
     <template #owner="{ item }">
-      <oc-avatars
-        class="resource-table-people"
-        :items="item.owner"
-        :is-tooltip-displayed="true"
-        :accessible-description="getOwnerAvatarDescription(item)"
-      />
+      <oc-button appearance="raw" variation="inverse" @click="openSharingSidebar(item)">
+        <oc-avatars
+          class="resource-table-people"
+          :items="item.owner"
+          :is-tooltip-displayed="true"
+          :accessible-description="getOwnerAvatarDescription(item)"
+        />
+      </oc-button>
     </template>
     <template #actions="{ item }">
       <div class="resource-table-actions">
@@ -161,7 +165,7 @@
 <script lang="ts">
 import { DateTime } from 'luxon'
 import maxSize from 'popper-max-size-modifier'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { EVENT_TROW_MOUNTED, EVENT_FILE_DROPPED } from '../../constants'
 import { SortDir } from '../../composables'
 import * as path from 'path'
@@ -170,6 +174,7 @@ import { useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
 import Rename from '../../mixins/actions/rename'
 import { defineComponent, PropType } from '@vue/composition-api'
 import { Resource } from '../../helpers/resource'
+import { ShareTypes } from '../../helpers/share'
 
 export default defineComponent({
   mixins: [Rename],
@@ -382,7 +387,7 @@ export default defineComponent({
             wrap: 'truncate'
           },
           {
-            name: 'shareTypes',
+            name: 'indicators',
             title: this.$gettext('Shares'),
             type: 'slot',
             alignH: 'right',
@@ -444,7 +449,15 @@ export default defineComponent({
               this.formatDateRelative(item.ddate) + ' (' + this.formatDate(item.ddate) + ')'
           }
         ]
-          .filter((field) => Object.prototype.hasOwnProperty.call(firstResource, field.name))
+          .filter((field) => {
+            if (!Object.prototype.hasOwnProperty.call(firstResource, field.name)) {
+              return false
+            }
+            if (field.name !== 'indicators') {
+              return true
+            }
+            return firstResource.indicators.length
+          })
           .map((field) => {
             const sortField = sortFields.find((f) => f.name === field.name)
             if (sortField) {
@@ -498,12 +511,20 @@ export default defineComponent({
     }
   },
   methods: {
+    ...mapActions('Files/sidebar', ['openWithPanel']),
     hasRenameAction(item) {
       return this.$_rename_items.filter((menuItem) => menuItem.isEnabled({ resources: [item] }))
         .length
     },
     openRenameDialog(item) {
       this.$_rename_trigger({ resources: [item] })
+    },
+    openSharingSidebar(file) {
+      if (file.shareTypes?.includes(ShareTypes.link.value)) {
+        this.openWithPanel('links-item')
+        return
+      }
+      this.openWithPanel('sharing-item')
     },
     folderLink(file) {
       return this.createFolderLink(file.path, file.storageId)

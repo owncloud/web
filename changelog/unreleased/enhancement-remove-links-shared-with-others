@@ -1,0 +1,6 @@
+Enhancement: Remove public links from SharedWithOthers page
+
+We've removed links from the shared-with-others page as those belong in the `Shared via link` page (and already exist there).
+
+https://github.com/owncloud/web/issues/5976
+https://github.com/owncloud/web/pull/6612
