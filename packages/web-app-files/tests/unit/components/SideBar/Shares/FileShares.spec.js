@@ -8,10 +8,6 @@ import Collaborators from '@/__fixtures__/collaborators'
 import mockAxios from 'jest-mock-axios'
 import { spaceRoleManager } from '../../../../../src/helpers/share'
 import VueCompositionAPI from '@vue/composition-api/dist/vue-composition-api'
-import mockAxios from 'jest-mock-axios'
-import { buildSpace } from '../../../../../src/helpers/resources'
-import { spaceRoleManager } from '../../../../../src/helpers/share'
-import VueCompositionAPI from '@vue/composition-api/dist/vue-composition-api'
 
 const localVue = createLocalVue()
 localVue.use(DesignSystem)
@@ -267,18 +263,16 @@ function getMountedWrapper(data, loading = false) {
     localVue,
     store: createStore(data),
     mocks: {
-      sharesLoading: loading
+      sharesLoading: loading,
+      $route: {
+        params: {}
+      }
     },
     stubs: {
       'oc-button': false,
       'oc-icon': true,
       'oc-spinner': true,
       'avatar-image': true
-    },
-    mocks: {
-      $route: {
-        params: {}
-      }
     }
   })
 }
