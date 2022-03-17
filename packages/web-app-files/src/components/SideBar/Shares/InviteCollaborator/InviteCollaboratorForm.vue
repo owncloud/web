@@ -42,7 +42,7 @@
     <div class="oc-flex oc-flex-middle oc-flex-between oc-mb-l">
       <role-dropdown
         :resource="highlightedFile"
-        :allow-share-permission="!isOcis || resourceIsSpace"
+        :allow-share-permission="resharingCapability || resourceIsSpace"
         @optionChange="collaboratorRoleChanged"
       />
       <expiration-datepicker
@@ -87,6 +87,7 @@ import {
   SpacePeopleShareRoles
 } from '../../../../helpers/share'
 import { clientService } from 'web-pkg/src/services'
+import { useCapabilityFilesSharingResharing } from 'web-runtime/src/composables'
 
 export default {
   name: 'InviteCollaboratorForm',
@@ -95,6 +96,11 @@ export default {
     RoleDropdown,
     RecipientContainer,
     ExpirationDatepicker
+  },
+  setup() {
+    return {
+      resharingCapability: useCapabilityFilesSharingResharing()
+    }
   },
   data() {
     return {
@@ -111,7 +117,7 @@ export default {
   },
   computed: {
     ...mapGetters('Files', ['currentFileOutgoingCollaborators', 'highlightedFile']),
-    ...mapGetters(['configuration', 'isOcis', 'getToken', 'user']),
+    ...mapGetters(['configuration', 'getToken', 'user']),
 
     inviteDescriptionMessage() {
       return this.$gettext('Add new person by name, email or federation IDs')
@@ -252,7 +258,7 @@ export default {
             const bitmask = this.selectedRole.hasCustomPermissions
               ? SharePermissions.permissionsToBitmask(this.customPermissions)
               : SharePermissions.permissionsToBitmask(
-                  this.selectedRole.permissions(!this.isOcis || this.resourceIsSpace)
+                  this.selectedRole.permissions(this.resharingCapability || this.resourceIsSpace)
                 )
 
             let storageId

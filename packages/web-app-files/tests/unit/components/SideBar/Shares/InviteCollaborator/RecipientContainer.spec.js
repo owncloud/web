@@ -87,7 +87,6 @@ const storeOptions = (avatarsEnabled) => {
       }
     },
     getters: {
-      isOcis: () => false,
       user: () => user,
       getToken: () => '',
       capabilities: () => {
