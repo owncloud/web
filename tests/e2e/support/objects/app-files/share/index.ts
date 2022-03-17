@@ -11,8 +11,6 @@ import {
   declineShareArgs,
   declineShare
 } from './actions'
-import path from 'path'
-import { clickResource } from '../resource/actions'
 
 export class Share {
   #page: Page
@@ -30,23 +28,7 @@ export class Share {
   }
 
   async accept(args: Omit<acceptShareArgs, 'page'>): Promise<void> {
-    const startUrl = this.#page.url()
     await acceptShare({ page: this.#page, ...args })
-
-    /**
-     * the next part exists to trick the backend, in some cases accepting a share can take longer in the backend.
-     * therefore we're waiting for the resource to exist, navigate into it (if resource is a folder) to be really sure its there and then come back.
-     * If the logic is needed more often it can be refactored into a shared helper.
-     */
-    await this.#page
-      .locator(`#files-shared-with-me-shares-table [data-test-resource-name="${args.name}"]`)
-      .waitFor()
-
-    if (!path.extname(args.name)) {
-      await clickResource({ page: this.#page, path: args.name })
-    }
-
-    await this.#page.goto(startUrl)
   }
 
   async declineShare(args: Omit<declineShareArgs, 'page'>): Promise<void> {
