@@ -764,11 +764,11 @@ def beforePipelines(ctx):
    #checkStarlark() + \
    #documentation(ctx) + \
    #changelog(ctx) + \
+   #pipelinesDependsOn(yarnlint(ctx), yarnCache(ctx))
     return checkForRecentBuilds(ctx) + \
            yarnCache(ctx) + \
            cacheOcisPipeline(ctx) + \
-           pipelinesDependsOn(buildCacheWeb(ctx), yarnCache(ctx)) + \
-           pipelinesDependsOn(yarnlint(ctx), yarnCache(ctx))
+           pipelinesDependsOn(buildCacheWeb(ctx), yarnCache(ctx))
 
 def stagePipelines(ctx):
     unit_test_pipelines = unitTests(ctx)
