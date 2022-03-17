@@ -73,8 +73,17 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { useCapabilityFilesSharingResharing } from '../composables'
 export default {
   name: 'Personal',
+  setup() {
+    return {
+      // FIXME: We need a clean way to know whether account editing is enabled or not
+      // for now we abuse the files_sharing.resharing capability, as *currently*
+      // oCIS does not support that exactly like it does not support account editing
+      isAccountEditingEnabled: useCapabilityFilesSharingResharing()
+    }
+  },
   data() {
     return {
       loadingGroups: true,
@@ -82,12 +91,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['user', 'configuration', 'getNavItemsByExtension', 'isOcis']),
+    ...mapGetters(['user', 'configuration', 'getNavItemsByExtension']),
     pageTitle() {
       return this.$gettext(this.$route.meta.title)
     },
     editUrl() {
-      if (this.isOcis) {
+      if (!this.isAccountEditingEnabled) {
         return null
       }
       return this.configuration.server.replace(/\/$/, '') + '/index.php/settings/personal'
