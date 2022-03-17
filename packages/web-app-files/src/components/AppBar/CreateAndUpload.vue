@@ -10,7 +10,7 @@
         :disabled="uploadOrFileCreationBlocked"
         class="oc-background-primary-gradient"
       >
-        <oc-icon name="add" color="#ffffff" />
+        <oc-icon name="add" variation="inverse" />
         <translate>New</translate>
       </oc-button>
       <oc-drop
@@ -529,10 +529,13 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 #new-file-menu-btn {
-  color: white;
+  color: var(--oc-color-swatch-inverse-default);
   border: 0;
+  .oc-icon > svg {
+    fill: var(--oc-color-swatch-inverse-default) !important;
+  }
 }
 #create-list {
   li {
