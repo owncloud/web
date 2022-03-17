@@ -1,11 +1,12 @@
 import MixinDeleteResources from '../../mixins/deleteResources'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { isLocationPublicActive, isLocationSpacesActive, isLocationTrashActive } from '../../router'
 
 export default {
   mixins: [MixinDeleteResources],
   computed: {
     ...mapState('Files', ['currentFolder']),
+    ...mapGetters('capabilities'),
     $_delete_items() {
       return [
         {
@@ -44,6 +45,9 @@ export default {
               !isLocationTrashActive(this.$router, 'files-trash-personal') &&
               !isLocationTrashActive(this.$router, 'files-trash-spaces-project')
             ) {
+              return false
+            }
+            if (this.capabilities.files.permanent_deletion === false) {
               return false
             }
             return resources.length > 0
