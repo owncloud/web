@@ -543,7 +543,12 @@ export function buildDeletedResource(resource) {
     indicators: [],
     canUpload: () => false,
     canDownload: () => false,
-    canBeDeleted: () => true,
+    canBeDeleted: () => {
+      return true
+    },
+    canBeRestored: function () {
+      return true
+    },
     canRename: () => false,
     canShare: () => false,
     canCreate: () => false,

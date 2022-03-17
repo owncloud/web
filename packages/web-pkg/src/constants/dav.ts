@@ -75,6 +75,7 @@ export abstract class DavProperties {
     DavProperty.ResourceType,
     DavProperty.TrashbinOriginalLocation,
     DavProperty.TrashbinOriginalFilename,
-    DavProperty.TrashbinDeletedDate
+    DavProperty.TrashbinDeletedDate,
+    DavProperty.Permissions
   ]
 }
