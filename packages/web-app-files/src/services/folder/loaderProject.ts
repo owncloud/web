@@ -14,11 +14,11 @@ export class FolderLoaderProject implements FolderLoader {
     const router = context.router
     const store = context.store
 
-    return useTask(function* (signal1, signal2, ref, sameRoute, path = null, fetchSpace = true) {
+    return useTask(function* (signal1, signal2, ref, sameRoute, path = null) {
       ref.CLEAR_CURRENT_FILES_LIST()
 
       let space
-      if (fetchSpace) {
+      if (!sameRoute) {
         const graphClient = clientService.graphAuthenticated(
           store.getters.configuration.server,
           store.getters.getToken
@@ -63,7 +63,7 @@ export class FolderLoaderProject implements FolderLoader {
         currentFolder: currentFolder?.path
       })
 
-      if (fetchSpace) {
+      if (!sameRoute) {
         ref.space = space
       }
     })
