@@ -17,7 +17,7 @@
           v-if="breadcrumbs.length"
           id="files-breadcrumb"
           data-testid="files-breadcrumbs"
-          class="oc-py-s"
+          class="oc-flex oc-flex-middle"
           context-menu-padding="small"
           :items="breadcrumbs"
         >
@@ -372,6 +372,10 @@ export default {
     gap: var(--oc-space-small);
     justify-content: flex-end;
     min-height: 3rem;
+  }
+
+  #files-breadcrumb {
+    min-height: 2rem;
   }
 }
 </style>
