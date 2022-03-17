@@ -22,7 +22,7 @@
           :items="breadcrumbs"
         >
           <template #contextMenu>
-            <context-actions v-if="showContextActions" :items="[currentFolder]" />
+            <context-actions v-if="showContextActions" :items="contextActionItems" />
           </template>
         </oc-breadcrumb>
         <shares-navigation v-if="isSharesLocation" />
@@ -95,6 +95,7 @@ export default {
       isPublicLocation: useActiveLocation(isLocationPublicActive, 'files-public-files'),
       isSpacesProjectsLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-projects'),
       isSpacesProjectLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-project'),
+      isTrashPersonalActive: useActiveLocation(isLocationTrashActive, 'files-trash-personal'),
       isTrashSpacesProjectActive: useActiveLocation(
         isLocationTrashActive,
         'files-trash-spaces-project'
@@ -119,7 +120,7 @@ export default {
     ...mapState('Files', ['areHiddenFilesShown']),
 
     showContextActions() {
-      if (this.isTrashSpacesProjectActive) {
+      if (this.isTrashPersonalActive) {
         return false
       }
       if (this.isSpacesProjectLocation) {
@@ -127,6 +128,12 @@ export default {
       }
 
       return this.currentFolder && this.breadcrumbs.length > 1
+    },
+    contextActionItems() {
+      if (this.isTrashSpacesProjectActive) {
+        return []
+      }
+      return [this.currentFolder]
     },
     currentPath() {
       const path = this.$route.params.item || ''
@@ -176,24 +183,34 @@ export default {
           this.isPersonalLocation ||
           this.isSpacesProjectsLocation ||
           this.isSpacesProjectLocation ||
+          this.isTrashPersonalActive ||
           this.isTrashSpacesProjectActive
         )
       ) {
         return []
       }
 
+      if (this.isTrashPersonalActive) {
+        return [
+          {
+            text: this.$gettext('Deleted files'),
+            to: '/files/trash'
+          },
+          {
+            text: this.$gettext('Personal'),
+            onClick: () => bus.publish('app.files.list.load')
+          }
+        ]
+      }
+
       if (this.isTrashSpacesProjectActive) {
         return [
           {
-            text: this.$gettext('Spaces'),
-            to: '/files/spaces/projects'
+            text: this.$gettext('Deleted files'),
+            to: '/files/trash'
           },
           {
             text: this.$route.params.storageId,
-            to: `/files/spaces/projects/${this.$route.params.storageId}`
-          },
-          {
-            text: this.$gettext('Deleted Files'),
             onClick: () => bus.publish('app.files.list.load')
           }
         ]
