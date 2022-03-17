@@ -1,0 +1,7 @@
+Enhancement: Design improvements
+
+We've fixed various design glitches and improved the overall look-and-feel of the UI.
+
+https://github.com/owncloud/web/issues/6492
+https://github.com/owncloud/web/issues/6555
+https://github.com/owncloud/web/pulls/6584

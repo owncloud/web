@@ -17,7 +17,8 @@
           v-if="breadcrumbs.length"
           id="files-breadcrumb"
           data-testid="files-breadcrumbs"
-          class="oc-py-s"
+          class="oc-flex oc-flex-middle"
+          context-menu-padding="small"
           :items="breadcrumbs"
         >
           <template #contextMenu>
@@ -43,7 +44,7 @@
             @error="onFileError"
             @progress="onFileProgress"
           />
-          <size-info v-if="hasBulkActions && selectedFiles.length > 0" class="oc-mr oc-visible@l" />
+          <size-info v-if="hasBulkActions && selectedFiles.length > 0" class="oc-visible@l" />
           <batch-actions v-if="hasBulkActions" />
         </div>
       </div>
@@ -367,6 +368,11 @@ export default {
     display: flex;
     gap: var(--oc-space-small);
     justify-content: flex-end;
+    min-height: 3rem;
+  }
+
+  #files-breadcrumb {
+    min-height: 2rem;
   }
 }
 </style>

@@ -49,8 +49,10 @@ function getWrapper() {
           active: false
         }
       ]
+      const currentNavItem = navItems[0]
       return {
-        navItems
+        navItems,
+        currentNavItem
       }
     },
     router,

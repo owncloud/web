@@ -1,28 +1,29 @@
 <template>
-  <div class="oc-flex oc-flex-middle oc-text-nowrap">
+  <div class="oc-flex oc-flex-middle oc-text-nowrap size-info">
     <translate
       v-if="selectedResourcesSize !== '?'"
       key="multiple-select-info-with-size"
       :translate-n="selectedResourcesAmount"
       :translate-params="{ amount: selectedResourcesAmount, size: selectedResourcesSize }"
-      translate-plural="%{ amount } selected items - %{ size }"
+      translate-plural="%{ amount } selected - %{ size }"
       translate-comment="Number of selected resources and their size displayed above the files list"
-      >%{ amount } selected item - %{ size }
+      >%{ amount } selected - %{ size }
     </translate>
     <translate
       v-else
       key="multiple-select-info"
       :translate-n="selectedResourcesAmount"
       :translate-params="{ amount: selectedResourcesAmount }"
-      translate-plural="%{ amount } selected items"
+      translate-plural="%{ amount } selected"
       translate-comment="Number of selected resources displayed above the files list"
-      >%{ amount } selected item
+      >%{ amount } selected
     </translate>
     <oc-button
       id="files-clear-selection"
       v-oc-tooltip="clearSelectionLabel"
       :aria-label="clearSelectionLabel"
-      class="oc-ml"
+      class="oc-ml-m"
+      appearance="outline"
       @click="RESET_SELECTION"
     >
       <oc-icon name="close" />
@@ -66,3 +67,8 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+.size-info span {
+  color: var(--oc-color-swatch-passive-default);
+}
+</style>

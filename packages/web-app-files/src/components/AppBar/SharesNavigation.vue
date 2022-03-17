@@ -14,7 +14,10 @@
       </li>
     </oc-list>
     <div class="oc-hidden@s">
-      <oc-button id="shares_navigation_mobile" appearance="raw" v-text="$gettext('Shares pages')" />
+      <oc-button id="shares_navigation_mobile" appearance="raw">
+        <span v-text="currentNavItem.text" />
+        <oc-icon name="arrow-down-s" fill-type="line" size="small" />
+      </oc-button>
       <oc-drop toggle="#shares_navigation_mobile" mode="click" close-on-click padding-size="small">
         <oc-list>
           <li v-for="navItem in navItems" :key="`shares-navigation-mobile-${navItem.to}`">
@@ -90,7 +93,9 @@ export default {
         active: unref(sharesViaLinkActive)
       }
     ])
+    const currentNavItem = computed(() => unref(navItems).find((navItem) => navItem.active))
     return {
+      currentNavItem,
       navItems
     }
   }
