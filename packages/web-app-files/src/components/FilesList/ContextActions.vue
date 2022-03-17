@@ -209,6 +209,7 @@ export default {
   white-space: normal;
 
   > li {
+    padding: 6px;
     &:hover {
       background-color: var(--oc-color-background-hover);
     }
