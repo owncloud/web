@@ -158,7 +158,9 @@ function getStore({
         server: server
       }),
       getNavItemsByExtension: () => getNavItemsByExtension,
-      apps: () => (isAccountEditingEnabled ? [{ id: 'settings' }] : [])
+      apps: () => ({
+        ...(isAccountEditingEnabled || { settings: {} })
+      })
     }
   })
 }

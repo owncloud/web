@@ -84,7 +84,7 @@ export default {
   computed: {
     ...mapGetters(['user', 'configuration', 'getNavItemsByExtension', 'apps']),
     isAccountEditingEnabled() {
-      return !!this.apps.find((app) => app.id === 'settings')
+      return !this.apps.settings
     },
     pageTitle() {
       return this.$gettext(this.$route.meta.title)
