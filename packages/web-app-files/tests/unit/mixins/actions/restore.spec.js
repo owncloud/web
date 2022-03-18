@@ -22,9 +22,17 @@ describe('restore', () => {
       const wrapper = getWrapper()
       expect(wrapper.vm.$_restore_items[0].isEnabled({ resources: [] })).toBe(false)
     })
-    it('should be true when resource is given', () => {
+    it('should be true when permission is sufficient', () => {
       const wrapper = getWrapper()
-      expect(wrapper.vm.$_restore_items[0].isEnabled({ resources: [{}] })).toBe(true)
+      expect(
+        wrapper.vm.$_restore_items[0].isEnabled({ resources: [{ canBeRestored: () => true }] })
+      ).toBe(true)
+    })
+    it('should be false when permission is not sufficient', () => {
+      const wrapper = getWrapper()
+      expect(
+        wrapper.vm.$_restore_items[0].isEnabled({ resources: [{ canBeRestored: () => false }] })
+      ).toBe(false)
     })
     it('should be false when location is invalid', () => {
       const wrapper = getWrapper({ invalidLocation: true })
