@@ -87,7 +87,7 @@ import {
   SpacePeopleShareRoles
 } from '../../../../helpers/share'
 import { clientService } from 'web-pkg/src/services'
-import { useCapabilityFilesSharingResharing } from 'web-runtime/src/composables'
+import { useCapabilityFilesSharingResharing } from 'web-pkg/src/composables'
 
 export default {
   name: 'InviteCollaboratorForm',

@@ -2,7 +2,7 @@ import { unref } from '@vue/composition-api'
 import { createWrapper } from './spec'
 import { useCapability } from '../../../../src/composables/capability/useCapability'
 import { Store } from 'vuex'
-import user from '../../../../src/store/user'
+import user from 'web-runtime/src/store/user'
 import set from 'lodash-es/set'
 
 let store

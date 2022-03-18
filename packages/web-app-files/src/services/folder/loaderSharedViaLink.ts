@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { isLocationSharesActive } from '../../router'
 import { aggregateResourceShares } from '../../helpers/resources'
-import { useCapabilityFilesSharingResharing } from 'web-runtime/src/composables'
+import { useCapabilityFilesSharingResharing } from 'web-pkg/src/composables'
 import { unref } from '@vue/composition-api'
 
 export class FolderLoaderSharedViaLink implements FolderLoader {

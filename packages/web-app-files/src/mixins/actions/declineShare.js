@@ -3,7 +3,7 @@ import { isLocationSharesActive } from '../../router'
 import { mapActions, mapMutations } from 'vuex'
 import PQueue from 'p-queue'
 import { ShareStatus } from '../../helpers/share'
-import { useCapabilityFilesSharingResharing } from 'web-runtime/src/composables'
+import { useCapabilityFilesSharingResharing } from 'web-pkg/src/composables'
 
 export default {
   setup() {
