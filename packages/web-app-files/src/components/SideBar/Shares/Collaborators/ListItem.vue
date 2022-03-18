@@ -45,7 +45,7 @@
           <span v-if="sharedParentRoute" class="oc-resource-indicators oc-text-truncate">
             <span class="oc-mx-s">·</span>
             <router-link
-              v-oc-tooltip="$gettext('Navigate to inheriting folder')"
+              v-oc-tooltip="$gettext('Navigate to parent folder')"
               class="parent-folder oc-text-truncate"
               :to="sharedParentRoute"
             >

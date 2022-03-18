@@ -111,6 +111,13 @@ describe('FileShares', () => {
       await wrapper.vm.$nextTick()
       expect(spyOnReloadShares).toHaveBeenCalledTimes(1)
     })
+    it('correctly passes the shared parent route to the collaborator list item', () => {
+      const wrapper = getShallowMountedWrapper({
+        user,
+        outgoingCollaborators: collaborators
+      })
+      expect(wrapper).toMatchSnapshot()
+    })
   })
 
   describe('current space', () => {
@@ -196,6 +203,8 @@ const storeOptions = (data) => {
     owner = user
   }
 
+  const highlightedFile = 'testfile.jpg'
+
   return {
     state: {
       user
@@ -204,12 +213,17 @@ const storeOptions = (data) => {
       Files: {
         state: {
           incomingShares: incomingCollaborators,
-          sharesTree: []
+          sharesTree: { [`/${highlightedFile}`]: [Collaborators[0]] }
         },
         namespaced: true,
         getters: {
           highlightedFile: () => {
-            return getResource({ filename: 'testfile', extension: 'jpg', type: 'file', canShare })
+            return getResource({
+              filename: highlightedFile.split('.')[0],
+              extension: highlightedFile.split('.')[1],
+              type: 'file',
+              canShare
+            })
           },
           currentFileOutgoingCollaborators: () => outgoingCollaborators,
           currentFileOutgoingSharesLoading: () => false,
@@ -264,7 +278,15 @@ function getMountedWrapper(data, loading = false) {
     mocks: {
       sharesLoading: loading,
       $route: {
-        params: {}
+        params: { storageId: 1 }
+      },
+      $router: {
+        currentRoute: { name: 'some-route' },
+        resolve: (r) => {
+          return {
+            href: r.name
+          }
+        }
       }
     },
     stubs: {
@@ -290,6 +312,14 @@ function getShallowMountedWrapper(data, loading = false) {
       $route: {
         params: {
           storageId: 1
+        }
+      },
+      $router: {
+        currentRoute: { name: 'some-route' },
+        resolve: (r) => {
+          return {
+            href: r.name
+          }
         }
       }
     }
