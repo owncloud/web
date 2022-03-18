@@ -190,7 +190,7 @@ export default {
   },
   computed: {
     ...mapGetters('Files', ['highlightedFile']),
-    ...mapGetters(['getToken', 'capabilities']),
+    ...mapGetters(['getToken', 'capabilities', 'isOcis']),
     ...mapState('Files', ['publicLinkInEdit']),
 
     selectedRole() {
@@ -219,7 +219,7 @@ export default {
     },
 
     availableRoleOptions() {
-      return LinkShareRoles.list(this.highlightedFile.isFolder).map((r) =>
+      return LinkShareRoles.list(this.highlightedFile.isFolder, this.isOcis).map((r) =>
         this.convertRoleToSelectOption(r)
       )
     },
