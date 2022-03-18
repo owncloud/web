@@ -8,7 +8,7 @@ import { useCapabilityFilesSharingResharing } from 'web-runtime/src/composables'
 export default {
   setup() {
     return {
-      resharingCapability: useCapabilityFilesSharingResharing()
+      hasResharing: useCapabilityFilesSharingResharing()
     }
   },
   computed: {
@@ -54,7 +54,7 @@ export default {
               const share = await triggerShareAction(
                 resource,
                 ShareStatus.declined,
-                this.resharingCapability,
+                this.hasResharing,
                 this.$client
               )
               if (share) {

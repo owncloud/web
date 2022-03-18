@@ -28,8 +28,8 @@ describe('useCapability', () => {
   })
 
   it('handles bools correctly', () => {
-    const resharingCapability = useCapability<boolean>(store, 'files_sharing.resharing')
-    const resharingCapabilityWithDefault = useCapability<boolean>(
+    const hasResharing = useCapability<boolean>(store, 'files_sharing.resharing')
+    const hasResharingWithDefault = useCapability<boolean>(
       store,
       'files_sharing.resharing',
       true
@@ -37,17 +37,17 @@ describe('useCapability', () => {
 
     // FIXME: how to test this?
     // expect(() => {
-    //     unref(resharingCapability)
+    //     unref(hasResharing)
     // }).rejects.toThrow()
-    expect(unref(resharingCapabilityWithDefault)).toBe(true)
+    expect(unref(hasResharingWithDefault)).toBe(true)
 
     commitValue('files_sharing.resharing', false)
-    expect(unref(resharingCapability)).toBe(false)
-    expect(unref(resharingCapabilityWithDefault)).toBe(false)
+    expect(unref(hasResharing)).toBe(false)
+    expect(unref(hasResharingWithDefault)).toBe(false)
 
     commitValue('files_sharing.resharing', true)
-    expect(unref(resharingCapability)).toBe(true)
-    expect(unref(resharingCapabilityWithDefault)).toBe(true)
+    expect(unref(hasResharing)).toBe(true)
+    expect(unref(hasResharingWithDefault)).toBe(true)
   })
 
   it('handles arrays correctly', () => {
@@ -60,7 +60,7 @@ describe('useCapability', () => {
 
     // FIXME: how to test this?
     // expect(() => {
-    //     unref(resharingCapability)
+    //     unref(hasResharing)
     // }).rejects.toThrow()
     expect(unref(supportedTypesCapabilityWithDefaults)).toStrictEqual(['foo', 'bar'])
 

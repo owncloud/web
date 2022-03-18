@@ -10,7 +10,7 @@ export default {
   computed: {
     setup() {
       return {
-        resharingCapability: useCapabilityFilesSharingResharing()
+        hasResharing: useCapabilityFilesSharingResharing()
       }
     },
     $_acceptShare_items() {
@@ -55,7 +55,7 @@ export default {
               const share = await triggerShareAction(
                 resource,
                 ShareStatus.accepted,
-                this.resharingCapability,
+                this.hasResharing,
                 this.$client
               )
               if (share) {

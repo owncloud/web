@@ -42,7 +42,7 @@
     <div class="oc-flex oc-flex-middle oc-flex-between oc-mb-l">
       <role-dropdown
         :resource="highlightedFile"
-        :allow-share-permission="resharingCapability || resourceIsSpace"
+        :allow-share-permission="hasResharing || resourceIsSpace"
         @optionChange="collaboratorRoleChanged"
       />
       <expiration-datepicker
@@ -99,7 +99,7 @@ export default {
   },
   setup() {
     return {
-      resharingCapability: useCapabilityFilesSharingResharing()
+      hasResharing: useCapabilityFilesSharingResharing()
     }
   },
   data() {
@@ -258,7 +258,7 @@ export default {
             const bitmask = this.selectedRole.hasCustomPermissions
               ? SharePermissions.permissionsToBitmask(this.customPermissions)
               : SharePermissions.permissionsToBitmask(
-                  this.selectedRole.permissions(this.resharingCapability || this.resourceIsSpace)
+                  this.selectedRole.permissions(this.hasResharing || this.resourceIsSpace)
                 )
 
             let storageId

@@ -17,7 +17,7 @@ export class FolderLoaderSharedWithMe implements FolderLoader {
       clientService: { owncloudSdk: client }
     } = context
 
-    const resharingCapability = useCapabilityFilesSharingResharing(store)
+    const hasResharing = useCapabilityFilesSharingResharing(store)
 
     return useTask(function* (signal1, signal2) {
       store.commit('Files/CLEAR_CURRENT_FILES_LIST')
@@ -38,7 +38,7 @@ export class FolderLoaderSharedWithMe implements FolderLoader {
         resources = aggregateResourceShares(
           resources,
           true,
-          unref(resharingCapability),
+          unref(hasResharing),
           configuration.server,
           getToken
         )

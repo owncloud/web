@@ -66,7 +66,7 @@
         :share-id="share.id"
         :existing-permissions="share.customPermissions"
         :existing-role="share.role"
-        :allow-share-permission="resharingCapability || isSpace"
+        :allow-share-permission="hasResharing || isSpace"
         class="files-collaborators-collaborator-role"
         @optionChange="shareRoleChanged"
       />
@@ -115,7 +115,7 @@ export default {
   },
   setup() {
     return {
-      resharingCapability: useCapabilityFilesSharingResharing()
+      hasResharing: useCapabilityFilesSharingResharing()
     }
   },
   computed: {
@@ -270,7 +270,7 @@ export default {
       const bitmask = role.hasCustomPermissions
         ? SharePermissions.permissionsToBitmask(permissions)
         : SharePermissions.permissionsToBitmask(
-            role.permissions(this.resharingCapability || this.shareType === ShareTypes.space)
+            role.permissions(this.hasResharing || this.shareType === ShareTypes.space)
           )
       this.changeShare({
         client: this.$client,
