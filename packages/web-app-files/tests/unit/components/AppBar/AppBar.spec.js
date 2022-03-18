@@ -135,7 +135,7 @@ describe('AppBar component', () => {
     })
   })
 
-  describe('method showContextActions', () => {
+  describe('computed showContextActions', () => {
     it('should be false if isTrashPersonalActive is true', () => {
       const store = createStore({ selected: [], currentFolder })
       const route = {
@@ -182,6 +182,71 @@ describe('AppBar component', () => {
         isSpacesProjectLocation: true
       })
       expect(wrapper.vm.showContextActions).toBeFalsy()
+    })
+
+    it('should be true if isPersonalLocation is true and item is given', () => {
+      const store = createStore({ selected: [], currentFolder })
+      const route = {
+        ...createLocationSpaces('files-spaces-personal-home', {
+          params: {
+            storageId: '1',
+            item: 'New folder'
+          }
+        }),
+        meta: {}
+      }
+
+      const wrapper = getShallowWrapper(route, store, {
+        isPersonalLocation: true
+      })
+      expect(wrapper.vm.showContextActions).toBeTruthy()
+    })
+
+    it('should be false if isPersonalLocation is true but no item is given', () => {
+      const store = createStore({ selected: [], currentFolder })
+      const route = {
+        ...createLocationSpaces('files-spaces-personal-home', {
+          params: {
+            storageId: '1'
+          }
+        }),
+        meta: {}
+      }
+
+      const wrapper = getShallowWrapper(route, store, {
+        isPersonalLocation: true
+      })
+      expect(wrapper.vm.showContextActions).toBeFalsy()
+    })
+  })
+
+  describe('computed contextActionItems', () => {
+    it('should be empty if isTrashSpacesProjectActive is true', () => {
+      const store = createStore({ selected: [], currentFolder })
+      const route = {
+        ...createLocationTrash('files-trash-personal', {
+          params: {
+            storageId: '1'
+          }
+        }),
+        meta: {}
+      }
+      const wrapper = getShallowWrapper(route, store, { isTrashSpacesProjectActive: true })
+      expect(wrapper.vm.contextActionItems).toEqual([])
+    })
+
+    it('should not be empty if isTrashPersonalActive is true', () => {
+      const store = createStore({ selected: [], currentFolder })
+      const route = {
+        ...createLocationTrash('files-trash-personal', {
+          params: {
+            storageId: '1'
+          }
+        }),
+        meta: {}
+      }
+      const wrapper = getShallowWrapper(route, store, { isTrashPersonalActive: true })
+      expect(wrapper.vm.contextActionItems).toEqual([wrapper.vm.currentFolder])
     })
   })
 
