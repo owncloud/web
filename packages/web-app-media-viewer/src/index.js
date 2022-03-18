@@ -8,7 +8,7 @@ function $gettext(msg) {
 
 const routes = [
   {
-    path: '/:contextRouteName/:filePath*',
+    path: '/:filePath*',
     component: App,
     name: 'media',
     meta: {
