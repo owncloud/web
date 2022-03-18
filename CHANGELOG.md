@@ -31,6 +31,7 @@ Summary
 * Enhancement - Resolve private links into folders instead of parent: [#5533](https://github.com/owncloud/web/issues/5533)
 * Enhancement - Shares overview: [#6440](https://github.com/owncloud/web/issues/6440)
 * Enhancement - Side bar nav tags: [#6540](https://github.com/owncloud/web/pull/6540)
+* Enhancement - Show space members in share panel for files inside a space: [#6554](https://github.com/owncloud/web/pull/6554)
 * Enhancement - Allow updating space quota: [#6477](https://github.com/owncloud/web/pull/6477)
 * Enhancement - Update the stored space after its members have been changed: [#6545](https://github.com/owncloud/web/pull/6545)
 * Enhancement - Implement edit quota action in spaces overview: [#6598](https://github.com/owncloud/web/pull/6598)
@@ -230,6 +231,14 @@ Details
 
    https://github.com/owncloud/web/issues/6259
    https://github.com/owncloud/web/pull/6540
+
+* Enhancement - Show space members in share panel for files inside a space: [#6554](https://github.com/owncloud/web/pull/6554)
+
+   The space managers are now displayed in the sidebar for resources within a space. Also, space
+   members are now sorted via role (managers first) and name.
+
+   https://github.com/owncloud/web/issues/6283
+   https://github.com/owncloud/web/pull/6554
 
 * Enhancement - Allow updating space quota: [#6477](https://github.com/owncloud/web/pull/6477)
 
