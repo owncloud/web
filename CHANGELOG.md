@@ -20,6 +20,7 @@ Summary
 * Bugfix - Prevent cross-site scripting attack while displaying space description: [#6523](https://github.com/owncloud/web/pull/6523)
 * Bugfix - Prevent the member count inside a space from disappearing: [#6550](https://github.com/owncloud/web/pull/6550)
 * Bugfix - TypeErrors when trying to destruct undefined properties: [#6568](https://github.com/owncloud/web/pull/6568)
+* Change - App context route to query instead of params: [#6622](https://github.com/owncloud/web/pull/6622)
 * Enhancement - Don't block account page while groups are loading: [#6547](https://github.com/owncloud/web/pull/6547)
 * Enhancement - Add a watcher for the share panel of a space: [#6543](https://github.com/owncloud/web/pull/6543)
 * Enhancement - Contextmenu background hover: [#6553](https://github.com/owncloud/web/pull/6553)
@@ -135,6 +136,14 @@ Details
    checks by providing a default value.
 
    https://github.com/owncloud/web/pull/6568
+
+* Change - App context route to query instead of params: [#6622](https://github.com/owncloud/web/pull/6622)
+
+   We've moved app context information (where you get redirected when you close an app) into the
+   query instead of a regular param. This relocates this information further to the back of the url
+   where it's less confusing for users.
+
+   https://github.com/owncloud/web/pull/6622
 
 * Enhancement - Don't block account page while groups are loading: [#6547](https://github.com/owncloud/web/pull/6547)
 
