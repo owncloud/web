@@ -24,6 +24,7 @@ Summary
 * Enhancement - Add a watcher for the share panel of a space: [#6543](https://github.com/owncloud/web/pull/6543)
 * Enhancement - Contextmenu background hover: [#6553](https://github.com/owncloud/web/pull/6553)
 * Enhancement - Design improvements: [#6492](https://github.com/owncloud/web/issues/6492)
+* Enhancement - Improve resource loading within spaces: [#6601](https://github.com/owncloud/web/pull/6601)
 * Enhancement - Load space images as preview: [#6529](https://github.com/owncloud/web/pull/6529)
 * Enhancement - Move share indicators: [#5976](https://github.com/owncloud/web/issues/5976)
 * Enhancement - Polish ViewOptions: [#6492](https://github.com/owncloud/web/issues/6492)
@@ -163,6 +164,19 @@ Details
    https://github.com/owncloud/web/issues/6492
    https://github.com/owncloud/web/issues/6555
    https://github.com/owncloud/web/pulls/6584
+
+* Enhancement - Improve resource loading within spaces: [#6601](https://github.com/owncloud/web/pull/6601)
+
+   We've improved the loading of resources within a space. This enhances performance and overall
+   stability within spaces.
+
+   * The loading task will determine if a space needs to be fetched or not. Route changes within a
+   space do not require the space the be fetched again. This also ensures that the space image and
+   readme won't be fetched when navigating into subfolders. * The space now gets set at the end of
+   the loading task. This ensures that the space task has finished as soon as the image and readme
+   get loaded.
+
+   https://github.com/owncloud/web/pull/6601
 
 * Enhancement - Load space images as preview: [#6529](https://github.com/owncloud/web/pull/6529)
 
