@@ -151,17 +151,17 @@ export default {
       value: computeShareTypes(state.currentFileOutgoingShares)
     })
   },
-  loadCurrentFileOutgoingShares(context, { client, path, space }) {
+  loadCurrentFileOutgoingShares(context, { client, path, resource, storageId }) {
     context.commit('CURRENT_FILE_OUTGOING_SHARES_SET', [])
     context.commit('CURRENT_FILE_OUTGOING_SHARES_ERROR', null)
     context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', true)
 
-    if (space) {
+    if (resource?.type === 'space') {
       const promises = []
       const spaceShares = []
 
-      for (const role of Object.keys(space.spaceRoles)) {
-        for (const userId of space.spaceRoles[role]) {
+      for (const role of Object.keys(resource.spaceRoles)) {
+        for (const userId of resource.spaceRoles[role]) {
           promises.push(
             client.users.getUser(userId).then((resolved) => {
               spaceShares.push(
@@ -170,7 +170,7 @@ export default {
                     ...resolved.data,
                     role
                   },
-                  space.id
+                  resource.id
                 )
               )
             })
@@ -190,9 +190,14 @@ export default {
         })
     }
 
+    let spaceRef
+    if (storageId) {
+      spaceRef = `${storageId}${path}`
+    }
+
     // see https://owncloud.dev/owncloud-sdk/Shares.html
     client.shares
-      .getShares(path, { reshares: true })
+      .getShares(path, { reshares: true, spaceRef })
       .then((data) => {
         context.commit(
           'CURRENT_FILE_OUTGOING_SHARES_SET',
@@ -391,12 +396,18 @@ export default {
       return
     }
 
+    let spaceRef
+    if (storageId) {
+      spaceRef = `${storageId}${path}`
+    }
+
     const remoteShare = shareType === ShareTypes.remote.value
     client.shares
       .shareFileWithUser(path, shareWith, {
         permissions: permissions,
         remoteUser: remoteShare,
-        expirationDate: expirationDate
+        expirationDate: expirationDate,
+        spaceRef
       })
       .then((share) => {
         context.commit(
@@ -408,7 +419,7 @@ export default {
           )
         )
         context.dispatch('updateCurrentFileShareTypes')
-        context.dispatch('loadIndicators', { client, currentFolder: path })
+        context.dispatch('loadIndicators', { client, currentFolder: path, storageId })
       })
       .catch((e) => {
         context.dispatch(
@@ -422,7 +433,7 @@ export default {
         )
       })
   },
-  deleteShare(context, { client, graphClient, share, resource }) {
+  deleteShare(context, { client, graphClient, share, resource, storageId }) {
     const additionalParams = {}
     if (share.shareType === ShareTypes.space.value) {
       additionalParams.shareWith = share.collaborator.name
@@ -435,7 +446,7 @@ export default {
 
         if (share.shareType !== ShareTypes.space.value) {
           context.dispatch('updateCurrentFileShareTypes')
-          context.dispatch('loadIndicators', { client, currentFolder: resource.path })
+          context.dispatch('loadIndicators', { client, currentFolder: resource.path, storageId })
         } else {
           context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', true)
 
@@ -466,7 +477,7 @@ export default {
    * This will add new entries into the shares tree and will
    * not remove unrelated existing ones.
    */
-  loadSharesTree(context, { client, path }) {
+  loadSharesTree(context, { client, path, storageId }) {
     context.commit('SHARESTREE_ERROR', null)
     // prune shares tree cache for all unrelated paths, keeping only
     // existing relevant parent entries
@@ -477,6 +488,11 @@ export default {
 
     if (!parentPaths.length) {
       return Promise.resolve()
+    }
+
+    let spaceRef
+    if (storageId) {
+      spaceRef = `${storageId}${path}`
     }
 
     // remove last entry which is the root folder
@@ -496,7 +512,7 @@ export default {
       shareQueriesPromises.push(
         shareQueriesQueue.add(() =>
           client.shares
-            .getShares(queryPath, { reshares: true })
+            .getShares(queryPath, { reshares: true, spaceRef })
             .then((data) => {
               data.forEach((element) => {
                 sharesTree[queryPath].push({
@@ -517,7 +533,7 @@ export default {
       shareQueriesPromises.push(
         shareQueriesQueue.add(() =>
           client.shares
-            .getShares(queryPath, { shared_with_me: true })
+            .getShares(queryPath, { shared_with_me: true, spaceRef })
             .then((data) => {
               data.forEach((element) => {
                 sharesTree[queryPath].push({
@@ -619,11 +635,11 @@ export default {
     commit('CLEAR_RESOURCES_TO_DELETE_LIST')
   },
 
-  async loadIndicators({ dispatch, commit }, { client, currentFolder }) {
+  async loadIndicators({ dispatch, commit }, { client, currentFolder, storageId }) {
     // kind of bruteforce for now: remove the shares for the current folder and children, reload shares tree for the current folder.
     // TODO: when we refactor the shares tree we want to modify shares tree nodes incrementally during adding and removing shares, not loading everything new from the backend.
     commit('SHARESTREE_PRUNE_OUTSIDE_PATH', dirname(currentFolder))
-    await dispatch('loadSharesTree', { client, path: currentFolder })
+    await dispatch('loadSharesTree', { client, path: currentFolder, storageId })
     commit('LOAD_INDICATORS')
   },
 

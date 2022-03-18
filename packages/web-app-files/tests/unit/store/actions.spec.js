@@ -85,7 +85,7 @@ describe('vuex store actions', () => {
       await actions.loadCurrentFileOutgoingShares(stateMock, {
         client: clientMock,
         path: 'path',
-        space: dataSet.space
+        resource: dataSet.space
       })
 
       expect(commitSpy).toBeCalledTimes(dataSet.expectedCommitCalls)

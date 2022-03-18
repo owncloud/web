@@ -235,6 +235,11 @@ describe('FileLinks', () => {
       stubs: stubs,
       provide: {
         changeView: jest.fn()
+      },
+      mocks: {
+        $route: {
+          params: {}
+        }
       }
     })
   }
@@ -249,6 +254,11 @@ describe('FileLinks', () => {
       },
       provide: {
         changeView: jest.fn()
+      },
+      mocks: {
+        $route: {
+          params: {}
+        }
       }
     })
   }

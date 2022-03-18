@@ -197,12 +197,14 @@ export default {
       this.loadCurrentFileOutgoingShares({
         client: this.$client,
         path: this.highlightedFile.path,
-        $gettext: this.$gettext
+        $gettext: this.$gettext,
+        storageId: this.$route.params.storageId
       })
       this.loadSharesTree({
         client: this.$client,
         path: dirname(this.highlightedFile.path),
-        $gettext: this.$gettext
+        $gettext: this.$gettext,
+        storageId: this.$route.params.storageId
       })
     },
     linksComparator(l1, l2) {

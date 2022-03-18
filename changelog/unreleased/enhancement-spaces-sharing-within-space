@@ -1,0 +1,6 @@
+Enhancement: Implement people sharing for resources within a space
+
+Resources within a space can now be shared with other people.
+
+https://github.com/owncloud/web/pull/6577
+https://github.com/owncloud/web/issues/6283

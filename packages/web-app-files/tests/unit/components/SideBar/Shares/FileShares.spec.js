@@ -263,7 +263,10 @@ function getMountedWrapper(data, loading = false) {
     localVue,
     store: createStore(data),
     mocks: {
-      sharesLoading: loading
+      sharesLoading: loading,
+      $route: {
+        params: {}
+      }
     },
     stubs: {
       'oc-button': false,

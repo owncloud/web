@@ -92,8 +92,9 @@ import { ImageDimension } from '../../../constants'
 import { loadPreview } from '../../../helpers/resource'
 import upperFirst from 'lodash-es/upperFirst'
 import path from 'path'
-import { createLocationSpaces, isAuthenticatedRoute } from '../../../router'
+import { createLocationSpaces, isAuthenticatedRoute, isLocationSpacesActive } from '../../../router'
 import { ShareTypes } from '../../../helpers/share'
+import { useRoute, useRouter } from 'web-pkg/src/composables'
 import { getIndicators } from '../../../helpers/statusIndicators'
 
 export default {
@@ -103,11 +104,20 @@ export default {
   inject: ['displayedItem'],
   setup() {
     const sharedParentDir = ref('')
-    const sharedParentRoute = computed(() =>
-      createLocationSpaces('files-spaces-personal-home', {
+    const router = useRouter()
+    const route = useRoute()
+
+    const sharedParentRoute = computed(() => {
+      if (isLocationSpacesActive(router, 'files-spaces-project')) {
+        return createLocationSpaces('files-spaces-project', {
+          params: { storageId: route.value.params.storageId, item: sharedParentDir.value }
+        })
+      }
+
+      return createLocationSpaces('files-spaces-personal-home', {
         params: { item: sharedParentDir.value }
       })
-    )
+    })
 
     return {
       sharedParentDir,
@@ -307,7 +317,8 @@ export default {
       await this.loadSharesTree({
         client: this.$client,
         path: this.file.path,
-        $gettext: this.$gettext
+        $gettext: this.$gettext,
+        storageId: this.$route.params.storageId
       })
       this.shareIndicators = getIndicators(this.file, this.sharesTree)
     },
