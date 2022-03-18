@@ -544,9 +544,19 @@ export function buildDeletedResource(resource) {
     canUpload: () => false,
     canDownload: () => false,
     canBeDeleted: () => {
+      /** FIXME: once https://github.com/owncloud/ocis/issues/3339 gets implemented,
+       * we want to add a check if the permission is set.
+       * We might to be careful and do an early return true if DavProperty.Permissions is not set
+       * as oc10 does not support it.
+       **/
       return true
     },
     canBeRestored: function () {
+      /** FIXME: once https://github.com/owncloud/ocis/issues/3339 gets implemented,
+       * we want to add a check if the permission is set.
+       * We might to be careful and do an early return true if DavProperty.Permissions is not set
+       * as oc10 does not support it.
+       **/
       return true
     },
     canRename: () => false,
