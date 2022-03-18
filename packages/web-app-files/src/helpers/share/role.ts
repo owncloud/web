@@ -264,7 +264,7 @@ export abstract class PeopleShareRoles {
 
   static readonly allWithCustom = [...this.all, peopleRoleCustomFile, peopleRoleCustomFolder]
 
-  static list(isFolder: boolean, hasCustom: boolean): ShareRole[] {
+  static list(isFolder: boolean, hasCustom = true): ShareRole[] {
     return (hasCustom ? this.allWithCustom : this.all).filter((r) => r.folder === isFolder)
   }
 
@@ -289,8 +289,10 @@ export abstract class LinkShareRoles {
     linkRoleUploaderFolder
   ]
 
-  static list(isFolder: boolean, isOcis: boolean): ShareRole[] {
-    return [...this.all, ...(isOcis ? [linkRoleEditorFile] : [])].filter((r) => r.folder === isFolder)
+  static list(isFolder: boolean, isOcis = false): ShareRole[] {
+    return [...this.all, ...(isOcis ? [linkRoleEditorFile] : [])].filter(
+      (r) => r.folder === isFolder
+    )
   }
 
   static getByBitmask(bitmask: number, isFolder: boolean): ShareRole {

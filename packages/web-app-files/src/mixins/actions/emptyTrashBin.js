@@ -5,7 +5,7 @@ import { buildWebDavFilesTrashPath, buildWebDavSpacesTrashPath } from '../../hel
 export default {
   computed: {
     ...mapGetters('Files', ['activeFiles']),
-    ...mapGetters('capabilities'),
+    ...mapGetters(['capabilities']),
     ...mapState(['user']),
     $_emptyTrashBin_items() {
       return [
@@ -21,7 +21,7 @@ export default {
             ) {
               return false
             }
-            if (this.capabilities.files.permanent_deletion === false) {
+            if (this.capabilities?.files?.permanent_deletion === false) {
               return false
             }
             // empty trash bin is not available for individual resources, but only for the trash bin as a whole

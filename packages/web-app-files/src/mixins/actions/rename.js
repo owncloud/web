@@ -8,7 +8,7 @@ import { isLocationTrashActive, isLocationSharesActive } from '../../router'
 export default {
   computed: {
     ...mapGetters('Files', ['files', 'currentFolder']),
-    ...mapGetters('capabilities'),
+    ...mapGetters(['capabilities']),
 
     $_rename_items() {
       return [
@@ -28,7 +28,7 @@ export default {
             }
             if (
               isLocationSharesActive(this.$router, 'files-shares-with-me') &&
-              this.capabilities.files_sharing.can_rename === false
+              this.capabilities?.files_sharing?.can_rename === false
             ) {
               return false
             }

@@ -150,7 +150,7 @@ export default {
       }
       return PeopleShareRoles.list(
         this.resource.isFolder,
-        this.capabilities.files_sharing.allow_custom !== false
+        this.capabilities?.files_sharing?.allow_custom !== false
       )
     },
     availablePermissions() {

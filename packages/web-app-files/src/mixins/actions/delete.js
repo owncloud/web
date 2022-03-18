@@ -6,7 +6,7 @@ export default {
   mixins: [MixinDeleteResources],
   computed: {
     ...mapState('Files', ['currentFolder']),
-    ...mapGetters('capabilities'),
+    ...mapGetters(['capabilities']),
     $_delete_items() {
       return [
         {
@@ -47,7 +47,7 @@ export default {
             ) {
               return false
             }
-            if (this.capabilities.files.permanent_deletion === false) {
+            if (this.capabilities?.files?.permanent_deletion === false) {
               return false
             }
             return resources.length > 0
