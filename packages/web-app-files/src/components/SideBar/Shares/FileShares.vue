@@ -43,6 +43,18 @@
           </li>
         </ul>
       </template>
+      <template v-if="showSpaceMembers">
+        <h4 class="oc-text-initial oc-text-bold oc-my-s" v-text="spaceMemberLabel" />
+        <ul
+          id="space-collaborators-list"
+          class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm"
+          :aria-label="spaceMemberLabel"
+        >
+          <li v-for="collaborator in spaceMembers" :key="collaborator.key">
+            <collaborator-list-item :share="collaborator" :modifiable="false" />
+          </li>
+        </ul>
+      </template>
     </template>
   </div>
 </template>
@@ -57,6 +69,10 @@ import { dirname } from 'path'
 import InviteCollaboratorForm from './InviteCollaborator/InviteCollaboratorForm.vue'
 import CollaboratorListItem from './Collaborators/ListItem.vue'
 import { ShareTypes } from '../../../helpers/share'
+import { clientService } from 'web-pkg/src/services'
+import { useTask } from 'vue-concurrency'
+import { buildSpace, buildSpaceShare } from '../../../helpers/resources'
+import { sortSpaceMembers } from '../../../helpers/space'
 
 export default {
   name: 'FileShares',
@@ -79,7 +95,41 @@ export default {
         sharesTreeLoading.value
     })
 
-    return { sharesLoading }
+    const graphClient = clientService.graphAuthenticated(
+      store.getters.configuration.server,
+      store.getters.getToken
+    )
+
+    const loadSpaceTask = useTask(function* (signal, ref, storageId) {
+      const graphResponse = yield graphClient.drives.getDrive(storageId)
+
+      if (!graphResponse.data) {
+        return
+      }
+
+      ref.currentSpace = buildSpace(graphResponse.data)
+    })
+
+    const loadSpaceMembersTask = useTask(function* (signal, ref) {
+      const promises = []
+      const spaceShares = []
+
+      for (const role of Object.keys(ref.currentSpace.spaceRoles)) {
+        for (const userId of ref.currentSpace.spaceRoles[role]) {
+          promises.push(
+            graphClient.users.getUser(userId).then((resolved) => {
+              spaceShares.push(buildSpaceShare({ ...resolved.data, role }, ref.currentSpace.id))
+            })
+          )
+        }
+      }
+
+      yield Promise.all(promises).then(() => {
+        ref.spaceMembers = sortSpaceMembers(spaceShares)
+      })
+    })
+
+    return { sharesLoading, loadSpaceTask, loadSpaceMembersTask }
   },
   title: ($gettext) => {
     return $gettext('People')
@@ -87,7 +137,9 @@ export default {
   data() {
     return {
       currentShare: null,
-      showShareesList: true
+      showShareesList: true,
+      currentSpace: null,
+      spaceMembers: []
     }
   },
   computed: {
@@ -97,6 +149,9 @@ export default {
 
     sharedWithLabel() {
       return this.$gettext('Shared with')
+    },
+    spaceMemberLabel() {
+      return this.$gettext('Space members')
     },
 
     hasSharees() {
@@ -211,6 +266,16 @@ export default {
       }
 
       return null
+    },
+    currentUserIsMemberOfSpace() {
+      return this.currentSpace?.spaceMemberIds.includes(this.user.uuid)
+    },
+    showSpaceMembers() {
+      return (
+        this.currentSpace &&
+        this.highlightedFile.type !== 'space' &&
+        this.currentUserIsMemberOfSpace
+      )
     }
   },
   watch: {
@@ -224,7 +289,15 @@ export default {
       immediate: true
     }
   },
+  async mounted() {
+    if (this.$route.params.storageId) {
+      await this.loadSpaceTask.perform(this, this.$route.params.storageId)
 
+      if (this.showSpaceMembers) {
+        this.loadSpaceMembersTask.perform(this)
+      }
+    }
+  },
   methods: {
     ...mapActions('Files', [
       'loadCurrentFileOutgoingShares',

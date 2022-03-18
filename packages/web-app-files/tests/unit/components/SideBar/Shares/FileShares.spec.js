@@ -5,10 +5,14 @@ import Vuex from 'vuex'
 import DesignSystem from 'owncloud-design-system'
 import Users from '@/__fixtures__/users'
 import Collaborators from '@/__fixtures__/collaborators'
+import mockAxios from 'jest-mock-axios'
+import { spaceRoleManager } from '../../../../../src/helpers/share'
+import VueCompositionAPI from '@vue/composition-api/dist/vue-composition-api'
 
 const localVue = createLocalVue()
 localVue.use(DesignSystem)
 localVue.use(Vuex)
+localVue.use(VueCompositionAPI)
 localVue.use(GetTextPlugin, {
   translations: 'does-not-matter.json',
   silent: true
@@ -108,6 +112,42 @@ describe('FileShares', () => {
       expect(spyOnReloadShares).toHaveBeenCalledTimes(1)
     })
   })
+
+  describe('current space', () => {
+    afterEach(() => {
+      mockAxios.reset()
+    })
+    it('loads space members if a space is given', async () => {
+      const spaceMock = {
+        id: '1',
+        root: { permissions: [{ roles: ['manager'], grantedTo: [{ user: { id: 1 } }] }] }
+      }
+      mockAxios.request.mockImplementationOnce(() => {
+        return Promise.resolve({
+          data: spaceMock
+        })
+      })
+      mockAxios.request.mockImplementationOnce(() => {
+        return Promise.resolve({
+          data: { role: spaceRoleManager.name }
+        })
+      })
+
+      const wrapper = getShallowMountedWrapper({ user })
+
+      await wrapper.vm.loadSpaceTask.last
+      await wrapper.vm.loadSpaceMembersTask.last
+      expect(wrapper.vm.spaceMembers.length).toBe(1)
+      expect(wrapper.find('#space-collaborators-list').exists()).toBeTruthy()
+    })
+    it('does not load space members if no space is given', () => {
+      const wrapper = getShallowMountedWrapper({
+        user
+      })
+
+      expect(wrapper.vm.spaceMembers.length).toBe(0)
+    })
+  })
 })
 
 function getResource({
@@ -144,7 +184,7 @@ function getResource({
   }
 }
 
-const storeOptions = (data, isInLoadingState) => {
+const storeOptions = (data) => {
   let {
     user,
     outgoingCollaborators = [],
@@ -164,7 +204,6 @@ const storeOptions = (data, isInLoadingState) => {
       Files: {
         state: {
           incomingShares: incomingCollaborators,
-          incomingSharesLoading: isInLoadingState,
           sharesTree: []
         },
         namespaced: true,
@@ -191,6 +230,10 @@ const storeOptions = (data, isInLoadingState) => {
       }
     },
     getters: {
+      getToken: jest.fn(() => 'GFwHKXdsMgoFwt'),
+      configuration: jest.fn(() => ({
+        server: 'http://example.com/'
+      })),
       isOcis: () => false,
       user: () => user,
       capabilities: () => {
@@ -218,7 +261,10 @@ const storeOptions = (data, isInLoadingState) => {
 function getMountedWrapper(data, loading = false) {
   return mount(FileShares, {
     localVue,
-    store: createStore(data, loading),
+    store: createStore(data),
+    mocks: {
+      sharesLoading: loading
+    },
     stubs: {
       'oc-button': false,
       'oc-icon': true,
@@ -231,15 +277,23 @@ function getMountedWrapper(data, loading = false) {
 function getShallowMountedWrapper(data, loading = false) {
   return shallowMount(FileShares, {
     localVue,
-    store: createStore(data, loading),
+    store: createStore(data),
     stubs: {
       'oc-button': true,
       'oc-icon': true,
       'oc-spinner': true
+    },
+    mocks: {
+      sharesLoading: loading,
+      $route: {
+        params: {
+          storageId: 1
+        }
+      }
     }
   })
 }
 
-function createStore(data, loading) {
-  return new Vuex.Store(storeOptions(data, loading))
+function createStore(data) {
+  return new Vuex.Store(storeOptions(data))
 }

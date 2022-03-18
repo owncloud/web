@@ -1,0 +1,6 @@
+Enhancement: Show space members in share panel for files inside a space
+
+The space managers are now displayed in the sidebar for resources within a space. Also, space members are now sorted via role (managers first) and name.
+
+https://github.com/owncloud/web/pull/6554
+https://github.com/owncloud/web/issues/6283
