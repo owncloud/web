@@ -1,12 +1,17 @@
 import { triggerShareAction } from '../../helpers/share/triggerShareAction'
 import { isLocationSharesActive } from '../../router'
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 import PQueue from 'p-queue'
 import { ShareStatus } from '../../helpers/share'
+import { useCapabilityFilesSharingResharing } from 'web-pkg/src/composables'
 
 export default {
+  setup() {
+    return {
+      hasResharing: useCapabilityFilesSharingResharing()
+    }
+  },
   computed: {
-    ...mapGetters(['isOcis']),
     $_declineShare_items() {
       return [
         {
@@ -49,7 +54,7 @@ export default {
               const share = await triggerShareAction(
                 resource,
                 ShareStatus.declined,
-                !this.isOcis,
+                this.hasResharing,
                 this.$client
               )
               if (share) {

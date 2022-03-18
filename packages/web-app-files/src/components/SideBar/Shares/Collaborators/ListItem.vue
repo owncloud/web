@@ -66,7 +66,7 @@
         :share-id="share.id"
         :existing-permissions="share.customPermissions"
         :existing-role="share.role"
-        :allow-share-permission="!isOcis || isSpace"
+        :allow-share-permission="hasResharing || isSpace"
         class="files-collaborators-collaborator-role"
         @optionChange="shareRoleChanged"
       />
@@ -94,6 +94,7 @@ import EditDropdown from './EditDropdown.vue'
 import RoleDropdown from '../RoleDropdown.vue'
 import { SharePermissions, ShareTypes } from '../../../../helpers/share'
 import { clientService } from 'web-pkg/src/services'
+import { useCapabilityFilesSharingResharing } from 'web-pkg/src/composables'
 
 export default {
   name: 'ListItem',
@@ -112,9 +113,14 @@ export default {
       default: false
     }
   },
+  setup() {
+    return {
+      hasResharing: useCapabilityFilesSharingResharing()
+    }
+  },
   computed: {
     ...mapGetters('Files', ['highlightedFile']),
-    ...mapGetters(['isOcis', 'getToken', 'configuration']),
+    ...mapGetters(['getToken', 'configuration']),
     ...mapState(['user']),
 
     shareType() {
@@ -264,7 +270,7 @@ export default {
       const bitmask = role.hasCustomPermissions
         ? SharePermissions.permissionsToBitmask(permissions)
         : SharePermissions.permissionsToBitmask(
-            role.permissions(!this.isOcis || this.shareType === ShareTypes.space)
+            role.permissions(this.hasResharing || this.shareType === ShareTypes.space)
           )
       this.changeShare({
         client: this.$client,

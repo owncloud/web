@@ -266,7 +266,7 @@ export default {
 
   computed: {
     ...mapGetters('Files', ['selectedFiles']),
-    ...mapGetters(['isOcis', 'configuration', 'getToken']),
+    ...mapGetters(['configuration', 'getToken']),
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
     // pending shares

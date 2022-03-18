@@ -82,12 +82,15 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['user', 'configuration', 'getNavItemsByExtension', 'isOcis']),
+    ...mapGetters(['user', 'configuration', 'getNavItemsByExtension', 'apps']),
+    isAccountEditingEnabled() {
+      return !this.apps.settings
+    },
     pageTitle() {
       return this.$gettext(this.$route.meta.title)
     },
     editUrl() {
-      if (this.isOcis) {
+      if (!this.isAccountEditingEnabled) {
         return null
       }
       return this.configuration.server.replace(/\/$/, '') + '/index.php/settings/personal'

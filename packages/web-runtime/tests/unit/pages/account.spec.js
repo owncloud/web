@@ -3,9 +3,11 @@ import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import { createStore } from 'vuex-extensions'
 import GetTextPlugin from 'vue-gettext'
+import VueCompositionAPI from '@vue/composition-api'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
+localVue.use(VueCompositionAPI)
 
 localVue.use(GetTextPlugin, {
   translations: 'does-not-matter.json',
@@ -46,7 +48,7 @@ describe('account page', () => {
         it('should be displayed if not running with ocis', async () => {
           const store = getStore({
             server: 'http://server/address/',
-            isOcis: false
+            isAccountEditingEnabled: true
           })
           const wrapper = getWrapper(store)
           await wrapper.setData({ loadingGroups: false })
@@ -58,7 +60,7 @@ describe('account page', () => {
         it('should not be displayed if running with ocis', async () => {
           const store = getStore({
             server: 'http://server/address/',
-            isOcis: true
+            isAccountEditingEnabled: false
           })
           const wrapper = getWrapper(store)
           await wrapper.setData({ loadingGroups: false })
@@ -69,7 +71,7 @@ describe('account page', () => {
       describe('edit route button', () => {
         it('should be displayed if running with ocis and has navItems', async () => {
           const store = getStore({
-            isOcis: true,
+            isAccountEditingEnabled: false,
             getNavItemsByExtension: jest.fn(() => [{ route: 'some-route' }])
           })
           const wrapper = getWrapper(store)
@@ -147,7 +149,7 @@ function getStore({
   user = {},
   server = '',
   getNavItemsByExtension = jest.fn(() => []),
-  isOcis = false
+  isAccountEditingEnabled = true
 } = {}) {
   return createStore(Vuex.Store, {
     getters: {
@@ -156,7 +158,9 @@ function getStore({
         server: server
       }),
       getNavItemsByExtension: () => getNavItemsByExtension,
-      isOcis: () => isOcis
+      apps: () => ({
+        ...(isAccountEditingEnabled || { settings: {} })
+      })
     }
   })
 }

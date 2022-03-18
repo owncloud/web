@@ -15,6 +15,11 @@ import { avatarUrl } from '../helpers/user'
 import { has } from 'lodash-es'
 import { ShareTypes, SpacePeopleShareRoles } from '../helpers/share'
 import { sortSpaceMembers } from '../helpers/space'
+import get from 'lodash-es/get'
+
+const allowSharePermissions = (getters) => {
+  return get(getters, `capabilities.files_sharing.resharing`, true)
+}
 
 export default {
   updateFileProgress({ commit }, progress) {
@@ -205,7 +210,7 @@ export default {
             return buildShare(
               element.shareInfo,
               context.getters.highlightedFile,
-              !context.rootGetters.isOcis
+              allowSharePermissions(context.rootGetters)
             )
           })
         )
@@ -234,7 +239,7 @@ export default {
             return buildCollaboratorShare(
               element.shareInfo,
               context.getters.highlightedFile,
-              !context.rootGetters.isOcis
+              allowSharePermissions(context.rootGetters)
             )
           })
         )
@@ -300,7 +305,7 @@ export default {
           const share = buildCollaboratorShare(
             updatedShare.shareInfo,
             getters.highlightedFile,
-            !rootGetters.isOcis
+            allowSharePermissions(rootGetters)
           )
           commit('CURRENT_FILE_OUTGOING_SHARES_UPDATE', share)
           resolve(share)
@@ -336,7 +341,7 @@ export default {
             buildCollaboratorShare(
               share.shareInfo,
               context.getters.highlightedFile,
-              !context.rootGetters.isOcis
+              allowSharePermissions(context.rootGetters)
             )
           )
           context.dispatch('updateCurrentFileShareTypes')
@@ -415,7 +420,7 @@ export default {
           buildCollaboratorShare(
             share.shareInfo,
             context.getters.highlightedFile,
-            !context.rootGetters.isOcis
+            allowSharePermissions(context.rootGetters)
           )
         )
         context.dispatch('updateCurrentFileShareTypes')
@@ -516,7 +521,11 @@ export default {
             .then((data) => {
               data.forEach((element) => {
                 sharesTree[queryPath].push({
-                  ...buildShare(element.shareInfo, { type: 'folder' }, !context.rootGetters.isOcis),
+                  ...buildShare(
+                    element.shareInfo,
+                    { type: 'folder' },
+                    allowSharePermissions(context.rootGetters)
+                  ),
                   outgoing: true,
                   indirect: true
                 })
@@ -540,7 +549,7 @@ export default {
                   ...buildCollaboratorShare(
                     element.shareInfo,
                     { type: 'folder' },
-                    !context.rootGetters.isOcis
+                    allowSharePermissions(context.rootGetters)
                   ),
                   incoming: true,
                   indirect: true
@@ -583,7 +592,7 @@ export default {
       client.shares
         .shareFileWithLink(path, params)
         .then((data) => {
-          const link = buildShare(data.shareInfo, null, !context.rootGetters.isOcis)
+          const link = buildShare(data.shareInfo, null, allowSharePermissions(context.rootGetters))
           context.commit('CURRENT_FILE_OUTGOING_SHARES_ADD', link)
           context.dispatch('updateCurrentFileShareTypes')
           context.dispatch('loadIndicators', { client, currentFolder: path })
@@ -599,7 +608,7 @@ export default {
       client.shares
         .updateShare(id, params)
         .then((data) => {
-          const link = buildShare(data.shareInfo, null, !context.rootGetters.isOcis)
+          const link = buildShare(data.shareInfo, null, allowSharePermissions(context.rootGetters))
           context.commit('CURRENT_FILE_OUTGOING_SHARES_UPDATE', link)
           resolve(link)
         })

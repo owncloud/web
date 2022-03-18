@@ -156,7 +156,6 @@ const storeOptions = (data, isInLoadingState) => {
       }
     },
     getters: {
-      isOcis: () => true,
       user: () => user,
       capabilities: () => {
         return {

@@ -107,9 +107,6 @@ function createWrapper({
       state: {
         user: Users.alice
       },
-      getters: {
-        isOcis: () => false
-      },
       modules: {
         Files: {
           namespaced: true,

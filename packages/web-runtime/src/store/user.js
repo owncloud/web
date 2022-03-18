@@ -1,4 +1,4 @@
-import get from 'lodash-es/get.js'
+import get from 'lodash-es/get'
 import isEmpty from 'lodash-es/isEmpty'
 import initVueAuthenticate from '../services/auth'
 import { router } from '../router'
