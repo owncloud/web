@@ -9,13 +9,9 @@ export const useCapability = <T>(
   defaultValue?: T
 ): ComputedRef<T> => {
   return computed((): T => {
-    if (defaultValue) {
-      return get(store, `getters.capabilities.${name}`, defaultValue) as T
-    }
-
-    const value = get(store, `getters.capabilities.${name}`) as T
+    const value = get(store, `getters.capabilities.${name}`, defaultValue) as T
     if (value === undefined) {
-      throw new Error('useCapability: capability is not defined and no default was defined')
+      throw new Error('useCapability: capability is not defined and no default was provided')
     }
     return value
   })

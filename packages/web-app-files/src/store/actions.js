@@ -17,7 +17,7 @@ import { ShareTypes, SpacePeopleShareRoles } from '../helpers/share'
 import { sortSpaceMembers } from '../helpers/space'
 import get from 'lodash-es/get'
 
-const allowSharePermissions = (getters, state) => {
+const allowSharePermissions = (getters) => {
   return get(getters, `capabilities.files_sharing.resharing`, true)
 }
 
