@@ -1,0 +1,9 @@
+Enhancement: Trash bin breadcrumbs
+
+We've improved the trash bin in general:
+* Add a breadcrumb for personal trash bin
+* Improve the breadcrumb for spaces trash bin, also add 'Navigate to space' action to context menu
+* Fix wrong page title in spaces trash bin
+
+https://github.com/owncloud/web/pull/6609
+
