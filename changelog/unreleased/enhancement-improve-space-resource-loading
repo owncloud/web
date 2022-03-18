@@ -1,0 +1,8 @@
+Enhancement: Improve resource loading within spaces
+
+We've improved the loading of resources within a space. This enhances performance and overall stability within spaces.
+
+* The loading task will determine if a space needs to be fetched or not. Route changes within a space do not require the space the be fetched again. This also ensures that the space image and readme won't be fetched when navigating into subfolders.
+* The space now gets set at the end of the loading task. This ensures that the space task has finished as soon as the image and readme get loaded.
+
+https://github.com/owncloud/web/pull/6601
