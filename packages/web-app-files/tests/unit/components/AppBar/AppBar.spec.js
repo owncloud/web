@@ -250,6 +250,38 @@ describe('AppBar component', () => {
     })
   })
 
+  describe('computed breadcrumbs', () => {
+    it('should contain to two items if isTrashPersonalActive is true', () => {
+      const store = createStore({ selected: [], currentFolder })
+      const route = {
+        ...createLocationTrash('files-trash-personal', {
+          params: {
+            storageId: '1'
+          }
+        }),
+        meta: {}
+      }
+      const wrapper = getShallowWrapper(route, store, { isTrashSpacesProjectActive: true })
+      expect(wrapper.vm.breadcrumbs[0].to).toEqual('/files/trash')
+      expect(wrapper.vm.breadcrumbs.length).toEqual(2)
+    })
+
+    it('should contain to two items if isTrashSpacesProjectActive is true', () => {
+      const store = createStore({ selected: [], currentFolder })
+      const route = {
+        ...createLocationTrash('files-trash-spaces-project', {
+          params: {
+            storageId: '1'
+          }
+        }),
+        meta: {}
+      }
+      const wrapper = getShallowWrapper(route, store, { isTrashSpacesProjectActive: true })
+      expect(wrapper.vm.breadcrumbs[0].to).toEqual('/files/trash')
+      expect(wrapper.vm.breadcrumbs.length).toEqual(2)
+    })
+  })
+
   describe.each([favoritesLocation.name, sharesWithOthersLocation.name, sharesWithMeLocation.name])(
     '%s page',
     (page) => {
