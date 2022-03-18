@@ -158,12 +158,7 @@ function getStore({
         server: server
       }),
       getNavItemsByExtension: () => getNavItemsByExtension,
-      // FIXME: see account.vue
-      capabilities: () => ({
-        files_sharing: {
-          resharing: isAccountEditingEnabled
-        }
-      })
+      apps: () => (isAccountEditingEnabled ? [{ id: 'settings' }] : [])
     }
   })
 }

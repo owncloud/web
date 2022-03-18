@@ -29,11 +29,7 @@ describe('useCapability', () => {
 
   it('handles bools correctly', () => {
     const hasResharing = useCapability<boolean>(store, 'files_sharing.resharing')
-    const hasResharingWithDefault = useCapability<boolean>(
-      store,
-      'files_sharing.resharing',
-      true
-    )
+    const hasResharingWithDefault = useCapability<boolean>(store, 'files_sharing.resharing', true)
 
     // FIXME: how to test this?
     // expect(() => {
