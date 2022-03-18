@@ -113,6 +113,8 @@
         :resources="sharesItems"
         :are-resources-clickable="showsAcceptedShares"
         :target-route="resourceTargetLocation"
+        :target-route-param-mapping="resourceTargetParamMapping"
+        :target-route-query-mapping="resourceTargetQueryMapping"
         :header-position="fileListHeaderY"
         :sort-by="sharesSortBy"
         :sort-dir="sharesSortDir"
@@ -173,9 +175,8 @@ import MixinMountSideBar from '../../mixins/sidebar/mountSideBar'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../../constants'
 import { useSort, useResourcesViewDefaults } from '../../composables'
-import { useRouteQuery, useStore } from 'web-pkg/src/composables'
+import { useCapabilitySpacesEnabled, useRouteQuery } from 'web-pkg/src/composables'
 import debounce from 'lodash-es/debounce'
-import get from 'lodash-es/get'
 
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
@@ -215,11 +216,14 @@ export default defineComponent({
       any[]
     >()
 
-    const store = useStore()
-    const hasSpaces = computed(() => get(store, 'getters.capabilities.spaces', false))
+    const hasSpaces = useCapabilitySpacesEnabled()
     const resourceTargetLocation = computed(() =>
       createLocationSpaces(unref(hasSpaces) ? 'files-spaces-share' : 'files-spaces-personal-home')
     )
+    const resourceTargetParamMapping = computed(() =>
+      unref(hasSpaces) ? { name: 'shareName' } : null
+    )
+    const resourceTargetQueryMapping = computed(() => (unref(hasSpaces) ? { id: 'shareId' } : null))
 
     const viewMode = computed(() =>
       parseInt(String(unref(useRouteQuery('view-mode', ShareStatus.accepted.toString()))))
@@ -274,7 +278,9 @@ export default defineComponent({
       sharesItems,
 
       displayedFields,
-      resourceTargetLocation
+      resourceTargetLocation,
+      resourceTargetParamMapping,
+      resourceTargetQueryMapping
     }
   },
 

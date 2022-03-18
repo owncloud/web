@@ -2,11 +2,7 @@ import { FolderLoader, FolderLoaderTask, TaskContext } from '../../folder'
 import Router from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { DavProperties } from 'web-pkg/src/constants'
-import {
-  buildResource,
-  buildWebDavFilesPath,
-  buildWebDavSpacesPath
-} from '../../../helpers/resources'
+import { buildResource, buildWebDavSpacesPath } from '../../../helpers/resources'
 import { isLocationSpacesActive } from '../../../router'
 import { Store } from 'vuex'
 import { fetchResources } from '../util'

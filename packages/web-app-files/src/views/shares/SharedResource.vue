@@ -1,7 +1,17 @@
 <template>
   <div>
-    <list-loader v-if="loadResourcesTask.isRunning" />
+    <app-bar
+      :has-bulk-actions="true"
+      :breadcrumbs="breadcrumbs"
+      :breadcrumbs-context-actions-items="[currentFolder]"
+    >
+      <template #actions>
+        <create-and-upload />
+      </template>
+    </app-bar>
+    <app-loading-spinner v-if="loadResourcesTask.isRunning" />
     <template v-else>
+      <progress-bar v-show="$_uploadProgressVisible" id="files-upload-progress" class="oc-p-s" />
       <not-found-message v-if="folderNotFound" class="files-not-found oc-height-1-1" />
       <no-content-message
         v-else-if="isEmpty"
@@ -62,7 +72,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 // mixins
 import MixinAccessibleBreadcrumb from '../../mixins/accessibleBreadcrumb'
 import MixinFileActions from '../../mixins/fileActions'
@@ -70,10 +80,13 @@ import MixinFilesListFilter from '../../mixins/filesListFilter'
 import MixinFilesListScrolling from '../../mixins/filesListScrolling'
 import MixinMountSideBar from '../../mixins/sidebar/mountSideBar'
 // components
+import AppBar from '../../components/AppBar/AppBar.vue'
+import ProgressBar from '../../components/Upload/ProgressBar.vue'
+import CreateAndUpload from '../../components/AppBar/CreateAndUpload.vue'
 import ResourceTable from '../../components/FilesList/ResourceTable.vue'
 import QuickActions from '../../components/FilesList/QuickActions.vue'
-import ListLoader from '../../components/FilesList/ListLoader.vue'
-import NoContentMessage from '../../components/FilesList/NoContentMessage.vue'
+import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
+import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import NotFoundMessage from '../../components/FilesList/NotFoundMessage.vue'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
 import Pagination from '../../components/FilesList/Pagination.vue'
@@ -88,15 +101,22 @@ import { basename, join } from 'path'
 import PQueue from 'p-queue'
 import { createLocationSpaces } from '../../router'
 import { useResourcesViewDefaults } from '../../composables'
+import { defineComponent } from '@vue/composition-api'
 import { fetchResources } from '../../services/folder'
+import { Resource } from '../../helpers/resource'
+import { breadcrumbsFromPath, concatBreadcrumbs } from '../../helpers/breadcrumbs'
+import { useRouteQuery } from 'web-pkg/src/composables'
 
 const visibilityObserver = new VisibilityObserver()
 
-export default {
+export default defineComponent({
   components: {
+    AppBar,
+    ProgressBar,
+    CreateAndUpload,
     ResourceTable,
     QuickActions,
-    ListLoader,
+    AppLoadingSpinner,
     NoContentMessage,
     NotFoundMessage,
     ListInfo,
@@ -113,8 +133,9 @@ export default {
   ],
   setup() {
     return {
-      ...useResourcesViewDefaults(),
-      resourceTargetLocation: createLocationSpaces('files-spaces-share')
+      ...useResourcesViewDefaults<Resource, any, any[]>(),
+      resourceTargetLocation: createLocationSpaces('files-spaces-share'),
+      shareId: useRouteQuery('shareId')
     }
   },
 
@@ -124,24 +145,28 @@ export default {
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
     ...mapGetters('Files', [
       'highlightedFile',
-      'selectedFiles',
       'currentFolder',
+      'inProgress',
       'totalFilesCount',
       'totalFilesSize'
     ]),
     ...mapGetters(['user', 'homeFolder', 'configuration']),
 
+    $_uploadProgressVisible() {
+      return this.inProgress.length > 0
+    },
     isEmpty() {
       return this.paginatedResources.length < 1
     },
 
-    selected: {
-      get() {
-        return this.selectedFiles
-      },
-      set(resources) {
-        this.SET_FILE_SELECTION(resources)
-      }
+    breadcrumbs() {
+      return concatBreadcrumbs(
+        {
+          text: this.$gettext('Shared with me'),
+          to: '/files/shares/with-me'
+        },
+        ...breadcrumbsFromPath(this.$route.path, this.$route.params.item)
+      )
     },
 
     folderNotFound() {
@@ -150,17 +175,14 @@ export default {
 
     displayThumbnails() {
       return !this.configuration.options.disablePreviews
-    },
-
-    storageId() {
-      return this.$route.params.storageId
     }
   },
 
   watch: {
     $route: {
       handler: function () {
-        this.loadResourcesTask.perform(this, this.storageId)
+        // TODO: we also need to extract the share path from the URL. for now let's get loading a "share root" working at all...
+        this.loadResourcesTask.perform(this, this.shareId)
       },
       immediate: true
     }
@@ -168,7 +190,7 @@ export default {
 
   mounted() {
     const loadResourcesEventToken = bus.subscribe('app.files.list.load', (path) => {
-      this.loadResourcesTask.perform(this, this.storageId, path)
+      this.loadResourcesTask.perform(this, this.shareId, path)
     })
 
     this.$on('beforeDestroy', () => bus.unsubscribe('app.files.list.load', loadResourcesEventToken))
@@ -181,12 +203,7 @@ export default {
   methods: {
     ...mapActions('Files', ['loadPreview']),
     ...mapActions(['showMessage']),
-    ...mapMutations('Files', [
-      'REMOVE_FILE',
-      'REMOVE_FILE_FROM_SEARCHED',
-      'SET_FILE_SELECTION',
-      'REMOVE_FILE_SELECTION'
-    ]),
+    ...mapMutations('Files', ['REMOVE_FILE', 'REMOVE_FILE_FROM_SEARCHED', 'REMOVE_FILE_SELECTION']),
 
     fetchResources,
 
@@ -296,11 +313,7 @@ export default {
           }
         })
       }
-    },
-
-    isResourceInSelection(resource) {
-      return this.selected?.includes(resource)
     }
   }
-}
+})
 </script>

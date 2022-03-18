@@ -1,7 +1,7 @@
 import { FolderLoader, FolderLoaderTask, TaskContext } from '../folder'
 import Router from 'vue-router'
 import { useTask } from 'vue-concurrency'
-import { aggregateResourceShares } from '../../helpers/resources'
+import { aggregateResourceShares, buildWebDavSpacesPath } from '../../helpers/resources'
 import { isLocationSharesActive } from '../../router'
 import { Store } from 'vuex'
 import get from 'lodash-es/get'
@@ -47,13 +47,12 @@ export class FolderLoaderSharedWithMe implements FolderLoader {
           getToken
         )
 
-        // FIXME, HACK 1: `/Shares` path prefix needs to be removed backend side. We remove it client side in the meantime.
-        // FIXME, HACK 2: webDavPath points to `files/<user>/Shares/xyz` but now needs to point to a shares webDavPath according to the storageId of the share. meh.
+        // FIXME, HACK 1: path needs to be empty because the share has it's own webdav endpoint (we access it's root and thus don't need any relative path). should ideally be removed backend side.
+        // FIXME, HACK 2: webDavPath points to `files/<user>/Shares/xyz` but now needs to point to a shares webdav root.
         if (get(store, 'getters.capabilities.spaces.enabled', false)) {
           resources.forEach((resource) => {
-            if (resource.path.startsWith('/Shares')) {
-              resource.path = resource.path.substring('/Shares'.length)
-            }
+            resource.path = ''
+            resource.webDavPath = buildWebDavSpacesPath(resource.storageId, '')
           })
         }
       }
