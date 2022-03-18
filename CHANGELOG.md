@@ -37,6 +37,7 @@ Summary
 * Enhancement - Implement edit quota action in spaces overview: [#6598](https://github.com/owncloud/web/pull/6598)
 * Enhancement - Implement people sharing for spaces: [#6455](https://github.com/owncloud/web/pull/6455)
 * Enhancement - Implement the spaces permission concept: [#6531](https://github.com/owncloud/web/pull/6531)
+* Enhancement - Implement people sharing for resources within a space: [#6577](https://github.com/owncloud/web/pull/6577)
 * Enhancement - Trash bin: [#6566](https://github.com/owncloud/web/pull/6566)
 * Enhancement - Update the graph SDK: [#6519](https://github.com/owncloud/web/pull/6519)
 * Enhancement - Update ODS to v13.0.0-rc.4: [#6540](https://github.com/owncloud/web/pull/6540)
@@ -279,6 +280,13 @@ Details
    permission changes.
 
    https://github.com/owncloud/web/pull/6531
+
+* Enhancement - Implement people sharing for resources within a space: [#6577](https://github.com/owncloud/web/pull/6577)
+
+   Resources within a space can now be shared with other people.
+
+   https://github.com/owncloud/web/issues/6283
+   https://github.com/owncloud/web/pull/6577
 
 * Enhancement - Trash bin: [#6566](https://github.com/owncloud/web/pull/6566)
 
