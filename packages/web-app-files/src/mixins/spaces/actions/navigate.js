@@ -24,11 +24,11 @@ export default {
     }
   },
   methods: {
-    $_navigate_space_trigger({ resources }) {
+    $_navigate_space_trigger() {
       this.$router.push(
         createLocationSpaces('files-spaces-project', {
           params: {
-            storageId: this.$route.params.storageId
+            storageId: this.$router.currentRoute.params.storageId
           }
         })
       )
