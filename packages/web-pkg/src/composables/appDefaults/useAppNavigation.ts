@@ -15,6 +15,7 @@ export interface AppNavigationResult {
   closeApp(): void
 }
 
+export const contextRouteNameKey = 'contextRouteName'
 const contextRouteParamsKey = 'contextRouteParams'
 const contextRouteQueryKey = 'contextRouteQuery'
 
@@ -36,17 +37,27 @@ export const routeToContextQuery = (location: Location): LocationQuery => {
   }
 
   return {
+    [contextRouteNameKey]: location.name,
     [contextRouteParamsKey]: params,
     [contextRouteQueryKey]: contextQuery
   } as any
 }
 export const contextQueryToFileContextProps = (
   query: LocationQuery
-): { routeParams: LocationParams; routeQuery: LocationQuery } => {
+): { routeName: string; routeParams: LocationParams; routeQuery: LocationQuery } => {
   return {
+    routeName: queryItemAsString(query[contextRouteNameKey]),
     routeParams: query[contextRouteParamsKey] as any,
     routeQuery: query[contextRouteQueryKey] as any
   }
+}
+
+const queryItemAsString = (queryItem: string | string[]) => {
+  if (Array.isArray(queryItem)) {
+    return queryItem[0]
+  }
+
+  return queryItem
 }
 
 export function useAppNavigation(options: AppNavigationOptions): AppNavigationResult {

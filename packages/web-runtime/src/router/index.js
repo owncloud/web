@@ -175,11 +175,12 @@ const isAuthRequired = (router, to) => {
    * The contextRouteName in routes is used to give applications additional context where the new route was triggered from.
    * This means that the new route needs to fulfill both its own auth requirements and the auth requirements from the context route.
    */
-  if (!to.params?.contextRouteName) {
+  const contextRouteNameKey = 'contextRouteName'
+  if (!to.query || !to.query[contextRouteNameKey]) {
     return false
   }
 
-  const contextRoute = router.getRoutes().find((r) => r.name === to.params.contextRouteName)
+  const contextRoute = router.getRoutes().find((r) => r.name === to.query[contextRouteNameKey])
   if (contextRoute) {
     return contextRoute.meta?.auth !== false
   }

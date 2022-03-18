@@ -1,0 +1,8 @@
+Change: App context route to query instead of params
+
+We've moved app context information (where you get redirected
+when you close an app) into the query instead of a regular
+param. This relocates this information further to the back
+of the url where it's less confusing for users.
+
+https://github.com/owncloud/web/pull/6622

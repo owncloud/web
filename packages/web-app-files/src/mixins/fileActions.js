@@ -123,8 +123,7 @@ export default {
         params: {
           filePath,
           fileId,
-          mode,
-          contextRouteName: this.$route.name
+          mode
         },
         query: routeToContextQuery(route)
       }
