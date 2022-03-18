@@ -8,7 +8,8 @@ import {
   createLocationCommon,
   createLocationPublic,
   createLocationShares,
-  createLocationSpaces
+  createLocationSpaces,
+  createLocationTrash
 } from '../../../../src/router'
 
 const localVue = createLocalVue()
@@ -134,6 +135,56 @@ describe('AppBar component', () => {
     })
   })
 
+  describe('method showContextActions', () => {
+    it('should be false if isTrashPersonalActive is true', () => {
+      const store = createStore({ selected: [], currentFolder })
+      const route = {
+        ...createLocationTrash('files-trash-personal', {
+          params: {
+            storageId: '1'
+          }
+        }),
+        meta: {}
+      }
+      const wrapper = getShallowWrapper(route, store, { isTrashPersonalActive: true })
+      expect(wrapper.vm.showContextActions).toBeFalsy()
+    })
+    it('should be true if isSpacesProjectLocation is true and item is given', () => {
+      const store = createStore({ selected: [], currentFolder })
+      const route = {
+        ...createLocationTrash('files-trash-personal', {
+          params: {
+            storageId: '1',
+            item: 'New folder'
+          }
+        }),
+        meta: {}
+      }
+
+      const wrapper = getShallowWrapper(route, store, {
+        isSpacesProjectLocation: true
+      })
+      expect(wrapper.vm.showContextActions).toBeTruthy()
+    })
+
+    it('should be false if isSpacesProjectLocation is true but no item is given', () => {
+      const store = createStore({ selected: [], currentFolder })
+      const route = {
+        ...createLocationTrash('files-trash-personal', {
+          params: {
+            storageId: '1'
+          }
+        }),
+        meta: {}
+      }
+
+      const wrapper = getShallowWrapper(route, store, {
+        isSpacesProjectLocation: true
+      })
+      expect(wrapper.vm.showContextActions).toBeFalsy()
+    })
+  })
+
   describe.each([favoritesLocation.name, sharesWithOthersLocation.name, sharesWithMeLocation.name])(
     '%s page',
     (page) => {
@@ -184,7 +235,7 @@ describe('AppBar component', () => {
   )
 })
 
-function getShallowWrapper(route = {}, store = {}) {
+function getShallowWrapper(route = {}, store = {}, mocks = {}) {
   return shallowMount(AppBar, {
     localVue,
     mocks: {
@@ -196,7 +247,8 @@ function getShallowWrapper(route = {}, store = {}) {
         }
       },
       publicPage: jest.fn(() => false),
-      isIE11: jest.fn(() => false)
+      isIE11: jest.fn(() => false),
+      ...mocks
     },
     store
   })
