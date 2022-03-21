@@ -31,6 +31,7 @@ Summary
 * Enhancement - Move share indicators: [#5976](https://github.com/owncloud/web/issues/5976)
 * Enhancement - Polish ViewOptions: [#6492](https://github.com/owncloud/web/issues/6492)
 * Enhancement - Resolve private links into folders instead of parent: [#5533](https://github.com/owncloud/web/issues/5533)
+* Enhancement - Share inheritance indicators: [#6613](https://github.com/owncloud/web/pull/6613)
 * Enhancement - Shares overview: [#6440](https://github.com/owncloud/web/issues/6440)
 * Enhancement - Side bar nav tags: [#6540](https://github.com/owncloud/web/pull/6540)
 * Enhancement - Show space members in share panel for files inside a space: [#6554](https://github.com/owncloud/web/pull/6554)
@@ -231,6 +232,14 @@ Details
 
    https://github.com/owncloud/web/issues/5533
    https://github.com/owncloud/web/pull/5654
+
+* Enhancement - Share inheritance indicators: [#6613](https://github.com/owncloud/web/pull/6613)
+
+   We've implemented the share inheritance indicators in the share sidebar panel. They indicate
+   whether a resource is shared indirectly via one of its parent folders.
+
+   https://github.com/owncloud/web/issues/6528
+   https://github.com/owncloud/web/pull/6613
 
 * Enhancement - Shares overview: [#6440](https://github.com/owncloud/web/issues/6440)
 
