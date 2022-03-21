@@ -26,6 +26,7 @@ Summary
 * Enhancement - Contextmenu background hover: [#6553](https://github.com/owncloud/web/pull/6553)
 * Enhancement - Design improvements: [#6492](https://github.com/owncloud/web/issues/6492)
 * Enhancement - Improve resource loading within spaces: [#6601](https://github.com/owncloud/web/pull/6601)
+* Enhancement - Internet Explorer deprecation warning banner: [#6629](https://github.com/owncloud/web/pull/6629)
 * Enhancement - Load space images as preview: [#6529](https://github.com/owncloud/web/pull/6529)
 * Enhancement - Move share indicators: [#5976](https://github.com/owncloud/web/issues/5976)
 * Enhancement - Polish ViewOptions: [#6492](https://github.com/owncloud/web/issues/6492)
@@ -189,6 +190,14 @@ Details
    get loaded.
 
    https://github.com/owncloud/web/pull/6601
+
+* Enhancement - Internet Explorer deprecation warning banner: [#6629](https://github.com/owncloud/web/pull/6629)
+
+   We've removed some internal checks for the internet explorer browser since it's not
+   officially supported anymore in favor of a warning banner that informs the user that the web app
+   may not work properly if they use it with IE.
+
+   https://github.com/owncloud/web/pull/6629
 
 * Enhancement - Load space images as preview: [#6529](https://github.com/owncloud/web/pull/6529)
 
