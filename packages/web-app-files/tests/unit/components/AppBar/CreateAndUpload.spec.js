@@ -192,8 +192,7 @@ function getWrapper(route = {}, store = {}) {
           return { href: r.name }
         }
       },
-      publicPage: jest.fn(() => false),
-      isIE11: jest.fn(() => false)
+      publicPage: jest.fn(() => false)
     },
     propsData: {
       currentPath: ''
@@ -219,8 +218,7 @@ function getShallowWrapper(route = {}, store = {}) {
           return { href: r.name }
         }
       },
-      publicPage: jest.fn(() => false),
-      isIE11: jest.fn(() => false)
+      publicPage: jest.fn(() => false)
     },
     propsData: {
       currentPath: ''

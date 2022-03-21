@@ -230,15 +230,6 @@ export default {
     },
 
     $_ocUpload_addDirectoryToQueue(e) {
-      if (this.isIE11()) {
-        this.showMessage({
-          title: this.$gettext('Failed to upload'),
-          desc: this.$gettext('Upload of a folder is not supported in Internet Explorer.'),
-          status: 'danger'
-        })
-        return
-      }
-
       const files = e.target.files || e.dataTransfer.files
       if (!files.length) return
 

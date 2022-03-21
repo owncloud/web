@@ -1,6 +1,9 @@
 <template>
   <div id="web-content">
     <div id="web-content-header">
+      <div v-if="isIE11" class="oc-background-muted oc-text-center oc-py-m">
+        <p class="oc-m-rm" v-text="IEdeprecationWarning" />
+      </div>
       <top-bar :applications-list="applicationsList" :active-notifications="activeNotifications" />
     </div>
     <div id="web-content-main" class="oc-px-s oc-pb-s">
@@ -71,6 +74,14 @@ export default {
       'getExtensionsWithNavItems',
       'getNavItemsByExtension'
     ]),
+    isIE11() {
+      return !!window.MSInputMethodContext && !!document.documentMode
+    },
+    IEdeprecationWarning() {
+      return this.$gettext(
+        'Internet Explorer (your current browser) is not officially supported. For security reasons, please switch to another browser.'
+      )
+    },
     isSidebarVisible() {
       return this.sidebarNavItems.length && this.windowWidth >= 640
     },

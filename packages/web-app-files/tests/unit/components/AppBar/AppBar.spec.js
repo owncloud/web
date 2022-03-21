@@ -358,7 +358,6 @@ function getShallowWrapper(route = {}, store = {}, mocks = {}) {
         }
       },
       publicPage: jest.fn(() => false),
-      isIE11: jest.fn(() => false),
       ...mocks
     },
     store

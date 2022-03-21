@@ -2,7 +2,7 @@
   <div class="files-app-bar">
     <oc-hidden-announcer :announcement="selectedResourcesAnnouncement" level="polite" />
     <file-drop
-      v-if="!isIE11() && canUpload && hasFreeSpace"
+      v-if="canUpload && hasFreeSpace"
       :root-path="currentPath"
       :path="currentPath"
       :headers="headers"

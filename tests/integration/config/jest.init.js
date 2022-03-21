@@ -42,6 +42,5 @@ config.mocks = {
   $clientService: {
     owncloudSdk: sdkMock
   },
-  encodePath,
-  isIE11: () => false
+  encodePath
 }
