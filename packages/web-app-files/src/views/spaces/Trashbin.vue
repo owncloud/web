@@ -7,6 +7,7 @@ import { ref } from '@vue/composition-api'
 import { clientService } from 'web-pkg/src/services'
 import { useTask } from 'vue-concurrency'
 import { buildSpace } from '../../helpers/resources'
+import { mapGetters } from 'vuex'
 
 export default {
   components: { TrashBin },
@@ -31,9 +32,13 @@ export default {
     }
   },
 
+  computed: {
+    ...mapGetters(['configuration'])
+  },
+
   async mounted() {
     await this.loadResourcesTask.perform(this)
-    document.title = `${this.$route.meta.title} - ${this.space.name} - ${this.configuration.currentTheme.general.name}`
+    document.title = `${this.$router.currentRoute.meta.title} - ${this.space.name} - ${this.configuration.currentTheme.general.name}`
   }
 }
 </script>
