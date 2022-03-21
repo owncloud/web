@@ -23,9 +23,14 @@ export class FolderLoaderSharedWithOthers implements FolderLoader {
     return useTask(function* (signal1, signal2) {
       store.commit('Files/CLEAR_CURRENT_FILES_LIST')
 
+      const shareTypes = ShareTypes.authenticated
+        .filter((type) => type.value !== ShareTypes.space.value)
+        .map((share) => share.value)
+        .join(',')
+
       let resources = yield client.requests.ocs({
         service: 'apps/files_sharing',
-        action: '/api/v1/shares?format=json&reshares=true&include_tags=false',
+        action: `/api/v1/shares?format=json&reshares=true&include_tags=false&share_types=${shareTypes}`,
         method: 'GET'
       })
 
