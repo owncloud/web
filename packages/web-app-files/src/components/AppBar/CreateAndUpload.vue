@@ -93,7 +93,6 @@
       <oc-list id="upload-list">
         <li>
           <folder-upload
-            v-if="!isIE11()"
             :root-path="currentPath"
             :path="currentPath"
             :headers="headers"

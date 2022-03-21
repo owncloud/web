@@ -22,7 +22,6 @@ config.mocks = {
       return msgid
     }
   },
-  isIE11: () => false,
   $language: {
     current: 'en'
   }

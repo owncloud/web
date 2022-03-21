@@ -1,0 +1,6 @@
+Enhancement: Internet Explorer deprecation warning banner
+
+We've removed some internal checks for the internet explorer browser since it's not officially supported anymore 
+in favor of a warning banner that informs the user that the web app may not work properly if they use it with IE.
+
+https://github.com/owncloud/web/pull/6629
