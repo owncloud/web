@@ -40,6 +40,7 @@ Summary
 * Enhancement - Implement the spaces permission concept: [#6531](https://github.com/owncloud/web/pull/6531)
 * Enhancement - Implement people sharing for resources within a space: [#6577](https://github.com/owncloud/web/pull/6577)
 * Enhancement - Trash bin: [#6566](https://github.com/owncloud/web/pull/6566)
+* Enhancement - Trash bin breadcrumbs: [#6609](https://github.com/owncloud/web/pull/6609)
 * Enhancement - Update the graph SDK: [#6519](https://github.com/owncloud/web/pull/6519)
 * Enhancement - Update ODS to v13.0.0-rc.4: [#6540](https://github.com/owncloud/web/pull/6540)
 
@@ -306,6 +307,14 @@ Details
    https://github.com/owncloud/web/issues/6544
    https://github.com/owncloud/web/issues/5974
    https://github.com/owncloud/web/pull/6566
+
+* Enhancement - Trash bin breadcrumbs: [#6609](https://github.com/owncloud/web/pull/6609)
+
+   We've improved the trash bin in general: * Add a breadcrumb for personal trash bin * Improve the
+   breadcrumb for spaces trash bin, also add 'Navigate to space' action to context menu * Fix wrong
+   page title in spaces trash bin
+
+   https://github.com/owncloud/web/pull/6609
 
 * Enhancement - Update the graph SDK: [#6519](https://github.com/owncloud/web/pull/6519)
 
