@@ -39,6 +39,7 @@
             <collaborator-list-item
               :share="collaborator"
               :modifiable="!collaborator.indirect"
+              :shared-parent-route="getSharedParentRoute(collaborator)"
               @onDelete="$_ocCollaborators_deleteShare"
             />
           </li>
@@ -74,6 +75,7 @@ import { clientService } from 'web-pkg/src/services'
 import { useTask } from 'vue-concurrency'
 import { buildSpace, buildSpaceShare } from '../../../helpers/resources'
 import { sortSpaceMembers } from '../../../helpers/space'
+import { createLocationSpaces, isLocationSpacesActive } from '../../../router'
 
 export default {
   name: 'FileShares',
@@ -364,6 +366,25 @@ export default {
         $gettext: this.$gettext,
         storageId: this.$route.params.storageId
       })
+    },
+    getSharedParentRoute(parentShare) {
+      if (!parentShare.indirect) {
+        return null
+      }
+
+      if (this.sharesTree[parentShare.path]) {
+        if (isLocationSpacesActive(this.$router, 'files-spaces-project')) {
+          return createLocationSpaces('files-spaces-project', {
+            params: { storageId: this.$route.params.storageId, item: parentShare.path }
+          })
+        }
+
+        return createLocationSpaces('files-spaces-personal-home', {
+          params: { item: parentShare.path }
+        })
+      }
+
+      return null
     }
   }
 }

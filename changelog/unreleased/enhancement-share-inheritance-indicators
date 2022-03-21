@@ -1,0 +1,6 @@
+Enhancement: Share inheritance indicators
+
+We've implemented the share inheritance indicators in the share sidebar panel. They indicate whether a resource is shared indirectly via one of its parent folders.
+
+https://github.com/owncloud/web/pull/6613
+https://github.com/owncloud/web/issues/6528

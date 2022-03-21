@@ -20,7 +20,8 @@ const selectors = {
   collaboratorName: '.files-collaborators-collaborator-name',
   shareType: '.files-collaborators-collaborator-share-type',
   collaboratorRole: '.files-collaborators-collaborator-role',
-  collaboratorEdit: '.files-collaborators-collaborator-edit'
+  collaboratorEdit: '.files-collaborators-collaborator-edit',
+  shareInheritanceIndicators: '.oc-resource-indicators'
 }
 
 describe('Collaborator ListItem component', () => {
@@ -90,6 +91,17 @@ describe('Collaborator ListItem component', () => {
       expect(wrapper.find(selectors.collaboratorEdit).exists()).toBeFalsy()
     })
   })
+  describe('share inheritance indicators', () => {
+    it('show when sharedParentRoute is given', () => {
+      const wrapper = createWrapper({ sharedParentRoute: { params: { item: '/folder' } } })
+      expect(wrapper.find(selectors.shareInheritanceIndicators).exists()).toBeTruthy()
+      expect(wrapper).toMatchSnapshot()
+    })
+    it('do not show when sharedParentRoute is not given', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.find(selectors.shareInheritanceIndicators).exists()).toBeFalsy()
+    })
+  })
 })
 
 function createWrapper({
@@ -100,7 +112,8 @@ function createWrapper({
     additionalInfo: 'brian@owncloud.com'
   },
   role = peopleRoleViewerFolder,
-  modifiable = true
+  modifiable = true,
+  sharedParentRoute = null
 } = {}) {
   return mount(ListItem, {
     store: new Vuex.Store({
@@ -124,7 +137,8 @@ function createWrapper({
         shareType,
         role
       },
-      modifiable
+      modifiable,
+      sharedParentRoute
     },
     localVue,
     stubs: {

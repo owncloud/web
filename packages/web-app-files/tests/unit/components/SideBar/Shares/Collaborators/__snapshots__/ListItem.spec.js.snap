@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Collaborator ListItem component share inheritance indicators show when sharedParentRoute is given 1`] = `
+<div data-testid="collaborator-user-item-brian" class="files-collaborators-collaborator oc-flex oc-flex-middle oc-py-xs oc-flex-between">
+  <div class="oc-width-2-3 oc-flex oc-flex-middle" style="gap: 10px;">
+    <avatar-image-stub userid="brian" user-name="Brian Murphy" width="48" class="files-collaborators-collaborator-indicator"></avatar-image-stub>
+    <div class="oc-text-truncate">
+      <p class="oc-text-bold oc-text-truncate oc-m-rm"><span aria-hidden="true" class="files-collaborators-collaborator-name">Brian Murphy</span> <span aria-hidden="true" class="files-collaborators-collaborator-additional-info"> (brian@owncloud.com)</span> <span class="oc-invisible-sr">Share receiver name: Brian Murphy (brian@owncloud.com)</span></p>
+      <p class="oc-m-rm oc-flex"><span aria-hidden="true" class="files-collaborators-collaborator-share-type">User</span> <span class="oc-resource-indicators oc-text-truncate"><span class="oc-mx-s">·</span>
+        <router-link-stub to="[object Object]" class="parent-folder oc-text-truncate"><span class="text">via</span>
+          <oc-icon-stub name="folder-2" size="small" fill-type="line" class="oc-px-xs"></oc-icon-stub> <span class="text oc-text-truncate">folder</span>
+        </router-link-stub>
+        </span> <span class="oc-invisible-sr">Share type: User</span>
+      </p>
+      <!---->
+    </div>
+  </div>
+  <div class="oc-width-1-3 oc-flex oc-flex-nowrap oc-flex-right oc-flex-middle">
+    <role-dropdown-stub resource="[object Object]" existingrole="[object Object]" existingpermissions="" class="files-collaborators-collaborator-role"></role-dropdown-stub>
+    <edit-dropdown-stub sharecategory="user" data-testid="collaborator-edit" class="files-collaborators-collaborator-edit"></edit-dropdown-stub>
+  </div>
+</div>
+`;

@@ -111,6 +111,13 @@ describe('FileShares', () => {
       await wrapper.vm.$nextTick()
       expect(spyOnReloadShares).toHaveBeenCalledTimes(1)
     })
+    it('correctly passes the shared parent route to the collaborator list item', () => {
+      const wrapper = getShallowMountedWrapper({
+        user,
+        outgoingCollaborators: [{ ...Collaborators[0], indirect: true }]
+      })
+      expect(wrapper).toMatchSnapshot()
+    })
   })
 
   describe('current space', () => {
@@ -204,7 +211,7 @@ const storeOptions = (data) => {
       Files: {
         state: {
           incomingShares: incomingCollaborators,
-          sharesTree: []
+          sharesTree: { [Collaborators[0].path]: [Collaborators[0]] }
         },
         namespaced: true,
         getters: {
@@ -264,7 +271,15 @@ function getMountedWrapper(data, loading = false) {
     mocks: {
       sharesLoading: loading,
       $route: {
-        params: {}
+        params: { storageId: 1 }
+      },
+      $router: {
+        currentRoute: { name: 'some-route' },
+        resolve: (r) => {
+          return {
+            href: r.name
+          }
+        }
       }
     },
     stubs: {
@@ -290,6 +305,14 @@ function getShallowMountedWrapper(data, loading = false) {
       $route: {
         params: {
           storageId: 1
+        }
+      },
+      $router: {
+        currentRoute: { name: 'some-route' },
+        resolve: (r) => {
+          return {
+            href: r.name
+          }
         }
       }
     }
