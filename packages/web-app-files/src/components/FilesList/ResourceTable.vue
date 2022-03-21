@@ -456,7 +456,7 @@ export default defineComponent({
             if (field.name !== 'indicators') {
               return true
             }
-            return firstResource.indicators.length
+            return this.resources.some((resource) => resource.indicators.length > 0)
           })
           .map((field) => {
             const sortField = sortFields.find((f) => f.name === field.name)
@@ -520,7 +520,7 @@ export default defineComponent({
       this.$_rename_trigger({ resources: [item] })
     },
     openSharingSidebar(file) {
-      if (file.shareTypes?.includes(ShareTypes.link.value)) {
+      if (file.share?.shareType === ShareTypes.link.value) {
         this.openWithPanel('links-item')
         return
       }
