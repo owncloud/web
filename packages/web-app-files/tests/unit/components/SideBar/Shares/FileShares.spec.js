@@ -114,7 +114,7 @@ describe('FileShares', () => {
     it('correctly passes the shared parent route to the collaborator list item', () => {
       const wrapper = getShallowMountedWrapper({
         user,
-        outgoingCollaborators: collaborators
+        outgoingCollaborators: [{ ...Collaborators[0], indirect: true }]
       })
       expect(wrapper).toMatchSnapshot()
     })
@@ -203,8 +203,6 @@ const storeOptions = (data) => {
     owner = user
   }
 
-  const highlightedFile = 'testfile.jpg'
-
   return {
     state: {
       user
@@ -213,17 +211,12 @@ const storeOptions = (data) => {
       Files: {
         state: {
           incomingShares: incomingCollaborators,
-          sharesTree: { [`/${highlightedFile}`]: [Collaborators[0]] }
+          sharesTree: { [Collaborators[0].path]: [Collaborators[0]] }
         },
         namespaced: true,
         getters: {
           highlightedFile: () => {
-            return getResource({
-              filename: highlightedFile.split('.')[0],
-              extension: highlightedFile.split('.')[1],
-              type: 'file',
-              canShare
-            })
+            return getResource({ filename: 'testfile', extension: 'jpg', type: 'file', canShare })
           },
           currentFileOutgoingCollaborators: () => outgoingCollaborators,
           currentFileOutgoingSharesLoading: () => false,

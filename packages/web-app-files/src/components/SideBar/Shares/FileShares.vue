@@ -67,7 +67,7 @@ import { watch, computed } from '@vue/composition-api'
 import { useStore, useDebouncedRef } from 'web-pkg/src/composables'
 import { textUtils } from '../../../helpers/textUtils'
 import { getParentPaths } from '../../../helpers/path'
-import path, { dirname } from 'path'
+import { dirname } from 'path'
 import InviteCollaboratorForm from './InviteCollaborator/InviteCollaboratorForm.vue'
 import CollaboratorListItem from './Collaborators/ListItem.vue'
 import { ShareTypes } from '../../../helpers/share'
@@ -368,30 +368,22 @@ export default {
       })
     },
     getSharedParentRoute(parentShare) {
-      let currentPath = this.highlightedFile.path
-      if (!currentPath || parentShare.path === currentPath) {
+      if (!parentShare.indirect) {
         return null
       }
 
-      while (currentPath !== '/') {
-        const share = this.sharesTree[currentPath]
-        if (
-          share !== undefined &&
-          share[0] !== undefined &&
-          parentShare.collaborator.name === share[0].collaborator.name
-        ) {
-          if (isLocationSpacesActive(this.$router, 'files-spaces-project')) {
-            return createLocationSpaces('files-spaces-project', {
-              params: { storageId: this.$route.params.storageId, item: currentPath }
-            })
-          }
-
-          return createLocationSpaces('files-spaces-personal-home', {
-            params: { item: currentPath }
+      if (this.sharesTree[parentShare.path]) {
+        if (isLocationSpacesActive(this.$router, 'files-spaces-project')) {
+          return createLocationSpaces('files-spaces-project', {
+            params: { storageId: this.$route.params.storageId, item: parentShare.path }
           })
         }
-        currentPath = path.dirname(currentPath)
+
+        return createLocationSpaces('files-spaces-personal-home', {
+          params: { item: parentShare.path }
+        })
       }
+
       return null
     }
   }
