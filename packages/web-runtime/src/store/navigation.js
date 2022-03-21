@@ -65,7 +65,7 @@ const getters = {
         return true
       }
       try {
-        return navItem.enabled(getters.capabilities)
+        return navItem.enabled(getters.capabilities || {})
       } catch (e) {
         console.error('`enabled` callback on navItem ' + navItem.name + ' threw an error', e)
         return false

@@ -33,7 +33,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
       },
       {
         name: locationTrashProject.name,
-        path: 'spaces/projects/:storageId',
+        path: 'spaces/projects/:storageId?',
         component: components.Spaces.Trashbin,
         meta: {
           hideFilelistActions: true,
