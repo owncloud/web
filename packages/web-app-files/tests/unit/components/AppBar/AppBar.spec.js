@@ -8,7 +8,8 @@ import {
   createLocationCommon,
   createLocationPublic,
   createLocationShares,
-  createLocationSpaces
+  createLocationSpaces,
+  createLocationTrash
 } from '../../../../src/router'
 
 const localVue = createLocalVue()
@@ -134,6 +135,167 @@ describe('AppBar component', () => {
     })
   })
 
+  describe('computed showContextActions', () => {
+    describe('if isPersonalLocation is true', () => {
+      describe('and item is selected', () => {
+        it('should be true', () => {
+          const store = createStore({ selected: [], currentFolder })
+          const route = {
+            ...createLocationSpaces('files-spaces-personal-home', {
+              params: {
+                storageId: '1',
+                item: 'New folder'
+              }
+            }),
+            meta: {}
+          }
+
+          const wrapper = getShallowWrapper(route, store, {
+            isPersonalLocation: true
+          })
+          expect(wrapper.vm.showContextActions).toBeTruthy()
+        })
+      })
+      describe('and no item is selected', () => {
+        it('should be false', () => {
+          const store = createStore({ selected: [], currentFolder })
+          const route = {
+            ...createLocationSpaces('files-spaces-personal-home', {
+              params: {
+                storageId: '1'
+              }
+            }),
+            meta: {}
+          }
+
+          const wrapper = getShallowWrapper(route, store, {
+            isPersonalLocation: true
+          })
+          expect(wrapper.vm.showContextActions).toBeFalsy()
+        })
+      })
+    })
+
+    describe('if isSpacesProjectLocation is true', () => {
+      describe('and item is selected', () => {
+        it('should be true', () => {
+          const store = createStore({ selected: [], currentFolder })
+          const route = {
+            ...createLocationTrash('files-trash-personal', {
+              params: {
+                storageId: '1',
+                item: 'New folder'
+              }
+            }),
+            meta: {}
+          }
+
+          const wrapper = getShallowWrapper(route, store, {
+            isSpacesProjectLocation: true
+          })
+          expect(wrapper.vm.showContextActions).toBeTruthy()
+        })
+      })
+
+      describe('and no item is selected', () => {
+        it('should be false', () => {
+          const store = createStore({ selected: [], currentFolder })
+          const route = {
+            ...createLocationTrash('files-trash-personal', {
+              params: {
+                storageId: '1'
+              }
+            }),
+            meta: {}
+          }
+
+          const wrapper = getShallowWrapper(route, store, {
+            isSpacesProjectLocation: true
+          })
+          expect(wrapper.vm.showContextActions).toBeFalsy()
+        })
+      })
+    })
+
+    describe('if isTrashPersonalActive is true', () => {
+      it('should be false', () => {
+        const store = createStore({ selected: [], currentFolder })
+        const route = {
+          ...createLocationTrash('files-trash-personal', {
+            params: {
+              storageId: '1'
+            }
+          }),
+          meta: {}
+        }
+        const wrapper = getShallowWrapper(route, store, { isTrashPersonalActive: true })
+        expect(wrapper.vm.showContextActions).toBeFalsy()
+      })
+    })
+  })
+
+  describe('computed contextActionItems', () => {
+    it('should be empty if isTrashSpacesProjectActive is true', () => {
+      const store = createStore({ selected: [], currentFolder })
+      const route = {
+        ...createLocationTrash('files-trash-personal', {
+          params: {
+            storageId: '1'
+          }
+        }),
+        meta: {}
+      }
+      const wrapper = getShallowWrapper(route, store, { isTrashSpacesProjectActive: true })
+      expect(wrapper.vm.contextActionItems).toEqual([])
+    })
+
+    it('should not be empty if isTrashPersonalActive is true', () => {
+      const store = createStore({ selected: [], currentFolder })
+      const route = {
+        ...createLocationTrash('files-trash-personal', {
+          params: {
+            storageId: '1'
+          }
+        }),
+        meta: {}
+      }
+      const wrapper = getShallowWrapper(route, store, { isTrashPersonalActive: true })
+      expect(wrapper.vm.contextActionItems).toEqual([wrapper.vm.currentFolder])
+    })
+  })
+
+  describe('computed breadcrumbs', () => {
+    it('should contain two items if isTrashPersonalActive is true', () => {
+      const store = createStore({ selected: [], currentFolder })
+      const route = {
+        ...createLocationTrash('files-trash-personal', {
+          params: {
+            storageId: '1'
+          }
+        }),
+        meta: {}
+      }
+      const wrapper = getShallowWrapper(route, store, { isTrashSpacesProjectActive: true })
+      expect(wrapper.vm.breadcrumbs[0].to).toEqual('/files/trash')
+      expect(wrapper.vm.breadcrumbs.length).toEqual(2)
+    })
+
+    it('should contain two items if isTrashSpacesProjectActive is true', () => {
+      const store = createStore({ selected: [], currentFolder })
+      const route = {
+        ...createLocationTrash('files-trash-spaces-project', {
+          params: {
+            storageId: '1'
+          }
+        }),
+        meta: {}
+      }
+      const wrapper = getShallowWrapper(route, store, { isTrashSpacesProjectActive: true })
+      expect(wrapper.vm.breadcrumbs[0].to).toEqual('/files/trash')
+      expect(wrapper.vm.breadcrumbs.length).toEqual(2)
+    })
+  })
+
   describe.each([favoritesLocation.name, sharesWithOthersLocation.name, sharesWithMeLocation.name])(
     '%s page',
     (page) => {
@@ -184,7 +346,7 @@ describe('AppBar component', () => {
   )
 })
 
-function getShallowWrapper(route = {}, store = {}) {
+function getShallowWrapper(route = {}, store = {}, mocks = {}) {
   return shallowMount(AppBar, {
     localVue,
     mocks: {
@@ -196,7 +358,8 @@ function getShallowWrapper(route = {}, store = {}) {
         }
       },
       publicPage: jest.fn(() => false),
-      isIE11: jest.fn(() => false)
+      isIE11: jest.fn(() => false),
+      ...mocks
     },
     store
   })

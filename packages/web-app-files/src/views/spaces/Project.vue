@@ -238,7 +238,7 @@ export default {
       'totalFilesCount',
       'totalFilesSize'
     ]),
-    ...mapGetters(['user', 'getToken']),
+    ...mapGetters(['user', 'getToken', 'configuration']),
 
     selected: {
       get() {
@@ -360,7 +360,7 @@ export default {
   async mounted() {
     await this.loadResourcesTask.perform(this, false, this.$route.params.item || '')
 
-    document.title = `${this.space.name} - ${this.$route.meta.title}`
+    document.title = `${this.$route.meta.title} - ${this.space.name} - ${this.configuration.currentTheme.general.name}`
     this.$route.params.name = this.space.name
 
     const loadSpaceEventToken = bus.subscribe('app.files.list.load', (path) => {

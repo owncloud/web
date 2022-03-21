@@ -26,6 +26,10 @@ export default {
             ) {
               return false
             }
+            if (!resources.every((r) => r.canBeRestored())) {
+              return false
+            }
+
             return resources.length > 0
           },
           componentType: 'oc-button',

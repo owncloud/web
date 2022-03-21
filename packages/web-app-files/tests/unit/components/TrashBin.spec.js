@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
-import Trashbin from '@files/src/components/Trashbin.vue'
-import { getStore, localVue, createFile } from '@files/tests/unit/views/views.setup.js'
+import TrashBin from '@files/src/components/TrashBin.vue'
+import { getStore, localVue, createFile } from '@files/tests/unit/components/components.setup.js'
 
 const stubs = {
   'list-loader': true,
@@ -176,7 +176,7 @@ describe('Trashbin component', () => {
     paginationPages = 12,
     paginationPage = 21
   } = {}) {
-    const component = { ...Trashbin, created: jest.fn() }
+    const component = { ...TrashBin, created: jest.fn() }
     const store = createStore({
       totalFilesCount: { files: paginatedResources.length, folders: 0 },
       selectedFiles

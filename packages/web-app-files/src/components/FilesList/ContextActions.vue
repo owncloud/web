@@ -41,6 +41,7 @@ import ShowDetails from '../../mixins/actions/showDetails'
 import ShowShares from '../../mixins/actions/showShares'
 import SetSpaceImage from '../../mixins/spaces/actions/setImage'
 import SetSpaceReadme from '../../mixins/spaces/actions/setReadme'
+import SpaceNavigate from '../../mixins/spaces/actions/navigate'
 
 export default {
   name: 'ContextActions',
@@ -64,7 +65,8 @@ export default {
     ShowDetails,
     ShowShares,
     SetSpaceImage,
-    SetSpaceReadme
+    SetSpaceReadme,
+    SpaceNavigate
   ],
 
   props: {
@@ -165,7 +167,8 @@ export default {
         ...this.$_acceptShare_items,
         ...this.$_declineShare_items,
         ...this.$_setSpaceImage_items,
-        ...this.$_setSpaceReadme_items
+        ...this.$_setSpaceReadme_items,
+        ...this.$_navigate_space_items
       ].filter((item) => item.isEnabled(this.filterParams))
     },
 
