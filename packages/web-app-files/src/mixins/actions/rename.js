@@ -53,7 +53,10 @@ export default {
     async $_rename_trigger({ resources }) {
       let parentResources
       if (isSameResource(resources[0], this.currentFolder)) {
-        const parentPaths = getParentPaths(resources[0].path, false)
+        const prefix = resources[0].webDavPath.slice(0, -resources[0].path.length)
+        const parentPaths = getParentPaths(resources[0].path, false).map((path) => {
+          return prefix + path
+        })
         parentResources = await this.$client.files.list(parentPaths[0], 1)
         parentResources = parentResources.map(buildResource)
       }
