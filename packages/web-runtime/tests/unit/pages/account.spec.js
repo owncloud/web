@@ -84,7 +84,7 @@ describe('account page', () => {
   })
 
   describe('account information', () => {
-    it('displays basic user information', async () => {
+    it('displays basic user information', () => {
       const store = getStore({
         user: {
           username: 'some-username',

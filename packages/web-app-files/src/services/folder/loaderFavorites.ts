@@ -16,6 +16,7 @@ export class FolderLoaderFavorites implements FolderLoader {
       clientService: { owncloudSdk: client }
     } = context
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     return useTask(function* (signal1, signal2) {
       store.commit('Files/CLEAR_CURRENT_FILES_LIST')
 

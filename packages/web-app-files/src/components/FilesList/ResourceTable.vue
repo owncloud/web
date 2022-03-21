@@ -316,6 +316,15 @@ export default defineComponent({
       default: undefined
     },
     /**
+     * Define what fields should be displayed in the table
+     * If null, all fields are displayed
+     */
+    fieldsDisplayed: {
+      type: Array,
+      required: false,
+      default: null
+    },
+    /**
      * Show that the table is sorted ascendingly/descendingly (no actual sorting takes place)
      */
     sortDir: {
@@ -450,13 +459,9 @@ export default defineComponent({
           }
         ]
           .filter((field) => {
-            if (!Object.prototype.hasOwnProperty.call(firstResource, field.name)) {
-              return false
-            }
-            if (field.name !== 'indicators') {
-              return true
-            }
-            return this.resources.some((resource) => resource.indicators.length > 0)
+            const hasProperty = Object.prototype.hasOwnProperty.call(firstResource, field.name)
+            if (!this.fieldsDisplayed) return hasProperty
+            return hasProperty && this.fieldsDisplayed.includes(field.name)
           })
           .map((field) => {
             const sortField = sortFields.find((f) => f.name === field.name)

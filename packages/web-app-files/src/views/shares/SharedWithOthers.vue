@@ -19,6 +19,7 @@
         id="files-shared-with-others-table"
         v-model="selected"
         class="files-table"
+        :fields-displayed="['name', 'sharedWith', 'sdate']"
         :class="{ 'files-table-squashed': !sidebarClosed }"
         :are-thumbnails-displayed="displayThumbnails"
         :are-paths-displayed="true"

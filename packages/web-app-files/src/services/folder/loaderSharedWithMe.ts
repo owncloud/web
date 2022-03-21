@@ -19,6 +19,7 @@ export class FolderLoaderSharedWithMe implements FolderLoader {
 
     const hasResharing = useCapabilityFilesSharingResharing(store)
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     return useTask(function* (signal1, signal2) {
       store.commit('Files/CLEAR_CURRENT_FILES_LIST')
 

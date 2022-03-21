@@ -1,19 +1,19 @@
 @mailhog @public_link_share-feature-required
 Feature: Public link share management
   As a user
-  I want to check different opitions available in public shares
+  I want to check different options available in public shares
   So that I can manage and organize the shares
 
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created folder "/simple-folder" in the server
 
-  @ocisSmokeTest
-  Scenario: public link share shows up on shared-with-others page
-    Given user "Alice" has logged in using the webUI
-    And user "Alice" has shared folder "simple-folder" with link with "read" permissions in the server
-    When the user browses to the shared-with-others page using the webUI
-    Then the resource "simple-folder" should have the token of last link in the people column on the webUI
+
+
+
+
+
+
 
 
   Scenario: opening public-link page of the files-drop link protected with password should redirect to files-drop page
@@ -46,7 +46,7 @@ Feature: Public link share management
     And as "Brian" the content of "simple-folder/lorem.txt" in the server should be the same as the content of local file "lorem.txt"
 
   @issue-ocis-1328
-  Scenario: user shares a file through public link and then it appears in a shared-with-others page
+  Scenario: user shares a file through public link and then it appears in a shared-via-link page
     Given the setting "shareapi_allow_public_notification" of app "core" has been set to "yes" in the server
     And user "Alice" has created a public link with following settings in the server
       | path        | simple-folder                |
@@ -57,7 +57,7 @@ Feature: Public link share management
       | name        | link-viewer   |
       | permissions | read          |
     And user "Alice" has logged in using the webUI
-    When the user browses to the shared-with-others page
+    When the user browses to the shared-via-link page using the webUI
     Then folder "simple-folder" should be listed on the webUI
     And the following resources should have the following collaborators
       | fileName      | expectedCollaborators    |
@@ -98,10 +98,10 @@ Feature: Public link share management
       | name    |
       | actions |
     And the following panels should not be visible in the details dialog on the webUI
-     | name     |
-     | people   |
-     | links    |
-     | versions |
+      | name     |
+      | people   |
+      | links    |
+      | versions |
 
   @issue-2897
   Scenario: sharing details of indirect items inside a shared folder
@@ -140,12 +140,12 @@ Feature: Public link share management
       | name | Public Link Sub                    |
     And user "Alice" has favorited element "simple-folder/simple-empty-folder" in the server
     And user "Alice" has logged in using the webUI
-    When the user browses to the shared-with-others page
-    And the user opens the share dialog for folder "simple-folder/simple-empty-folder" using the webUI
-    Then a link named "Public Link" should be listed with role "Viewer" in the public link list of resource "simple-empty-folder" via "simple-folder" on the webUI
+    When the user browses to the shared-via-link page using the webUI
+    Then a link named "Public Link" should be listed with role "Viewer" in the public link list of resource "simple-folder/simple-empty-folder" via "simple-folder" on the webUI
     And a link named "Public Link Sub" should be listed with role "Viewer" in the public link list of resource "simple-empty-folder" on the webUI
     When the user browses to the favorites page using the webUI
     Then a link named "Public Link" should be listed with role "Viewer" in the public link list of resource "simple-folder/simple-empty-folder" via "simple-folder" on the webUI
+
 
   @issue-ocis-reva-243
   Scenario: token is shown for links without a name
@@ -169,8 +169,8 @@ Feature: Public link share management
   Scenario: Shared via link page is displayed
     Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has created a public link with following settings in the server
-      | path        | lorem.txt             |
-      | name        | Public-link           |
+      | path | lorem.txt   |
+      | name | Public-link |
     And user "Alice" has logged in using the webUI
     When the user browses to the shared-via-link page using the webUI
     Then file "lorem.txt" should be listed on the webUI

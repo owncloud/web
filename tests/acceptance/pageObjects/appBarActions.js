@@ -23,7 +23,7 @@ module.exports = {
     getBatchActionButtonElementSelector: function (batchButtonName) {
       return util.format(this.elements.batchActionButton.selector, batchButtonName)
     },
-    navigateToSharesSubPage: async function (sharesSubPageButtonName) {
+    navigateToSharesSubPage: function (sharesSubPageButtonName) {
       const sharesSubPageBtn = {
         selector: util.format(this.elements.sharesSubPageButton.selector, sharesSubPageButtonName),
         locateStrategy: 'xpath'
