@@ -136,87 +136,101 @@ describe('AppBar component', () => {
   })
 
   describe('computed showContextActions', () => {
-    it('should be false if isTrashPersonalActive is true', () => {
-      const store = createStore({ selected: [], currentFolder })
-      const route = {
-        ...createLocationTrash('files-trash-personal', {
-          params: {
-            storageId: '1'
+    describe('if isPersonalLocation is true', () => {
+      describe('and item is selected', () => {
+        it('should be true', () => {
+          const store = createStore({ selected: [], currentFolder })
+          const route = {
+            ...createLocationSpaces('files-spaces-personal-home', {
+              params: {
+                storageId: '1',
+                item: 'New folder'
+              }
+            }),
+            meta: {}
           }
-        }),
-        meta: {}
-      }
-      const wrapper = getShallowWrapper(route, store, { isTrashPersonalActive: true })
-      expect(wrapper.vm.showContextActions).toBeFalsy()
-    })
-    it('should be true if isSpacesProjectLocation is true and item is given', () => {
-      const store = createStore({ selected: [], currentFolder })
-      const route = {
-        ...createLocationTrash('files-trash-personal', {
-          params: {
-            storageId: '1',
-            item: 'New folder'
-          }
-        }),
-        meta: {}
-      }
 
-      const wrapper = getShallowWrapper(route, store, {
-        isSpacesProjectLocation: true
+          const wrapper = getShallowWrapper(route, store, {
+            isPersonalLocation: true
+          })
+          expect(wrapper.vm.showContextActions).toBeTruthy()
+        })
       })
-      expect(wrapper.vm.showContextActions).toBeTruthy()
-    })
-
-    it('should be false if isSpacesProjectLocation is true but no item is given', () => {
-      const store = createStore({ selected: [], currentFolder })
-      const route = {
-        ...createLocationTrash('files-trash-personal', {
-          params: {
-            storageId: '1'
+      describe('and no item is selected', () => {
+        it('should be false', () => {
+          const store = createStore({ selected: [], currentFolder })
+          const route = {
+            ...createLocationSpaces('files-spaces-personal-home', {
+              params: {
+                storageId: '1'
+              }
+            }),
+            meta: {}
           }
-        }),
-        meta: {}
-      }
 
-      const wrapper = getShallowWrapper(route, store, {
-        isSpacesProjectLocation: true
+          const wrapper = getShallowWrapper(route, store, {
+            isPersonalLocation: true
+          })
+          expect(wrapper.vm.showContextActions).toBeFalsy()
+        })
       })
-      expect(wrapper.vm.showContextActions).toBeFalsy()
     })
 
-    it('should be true if isPersonalLocation is true and item is given', () => {
-      const store = createStore({ selected: [], currentFolder })
-      const route = {
-        ...createLocationSpaces('files-spaces-personal-home', {
-          params: {
-            storageId: '1',
-            item: 'New folder'
+    describe('if isSpacesProjectLocation is true', () => {
+      describe('and item is selected', () => {
+        it('should be true', () => {
+          const store = createStore({ selected: [], currentFolder })
+          const route = {
+            ...createLocationTrash('files-trash-personal', {
+              params: {
+                storageId: '1',
+                item: 'New folder'
+              }
+            }),
+            meta: {}
           }
-        }),
-        meta: {}
-      }
 
-      const wrapper = getShallowWrapper(route, store, {
-        isPersonalLocation: true
+          const wrapper = getShallowWrapper(route, store, {
+            isSpacesProjectLocation: true
+          })
+          expect(wrapper.vm.showContextActions).toBeTruthy()
+        })
       })
-      expect(wrapper.vm.showContextActions).toBeTruthy()
+
+      describe('and no item is selected', () => {
+        it('should be false', () => {
+          const store = createStore({ selected: [], currentFolder })
+          const route = {
+            ...createLocationTrash('files-trash-personal', {
+              params: {
+                storageId: '1'
+              }
+            }),
+            meta: {}
+          }
+
+          const wrapper = getShallowWrapper(route, store, {
+            isSpacesProjectLocation: true
+          })
+          expect(wrapper.vm.showContextActions).toBeFalsy()
+        })
+      })
     })
 
-    it('should be false if isPersonalLocation is true but no item is given', () => {
-      const store = createStore({ selected: [], currentFolder })
-      const route = {
-        ...createLocationSpaces('files-spaces-personal-home', {
-          params: {
-            storageId: '1'
-          }
-        }),
-        meta: {}
-      }
-
-      const wrapper = getShallowWrapper(route, store, {
-        isPersonalLocation: true
+    describe('if isTrashPersonalActive is true', () => {
+      it('should be false', () => {
+        const store = createStore({ selected: [], currentFolder })
+        const route = {
+          ...createLocationTrash('files-trash-personal', {
+            params: {
+              storageId: '1'
+            }
+          }),
+          meta: {}
+        }
+        const wrapper = getShallowWrapper(route, store, { isTrashPersonalActive: true })
+        expect(wrapper.vm.showContextActions).toBeFalsy()
       })
-      expect(wrapper.vm.showContextActions).toBeFalsy()
     })
   })
 
@@ -251,7 +265,7 @@ describe('AppBar component', () => {
   })
 
   describe('computed breadcrumbs', () => {
-    it('should contain to two items if isTrashPersonalActive is true', () => {
+    it('should contain two items if isTrashPersonalActive is true', () => {
       const store = createStore({ selected: [], currentFolder })
       const route = {
         ...createLocationTrash('files-trash-personal', {
@@ -266,7 +280,7 @@ describe('AppBar component', () => {
       expect(wrapper.vm.breadcrumbs.length).toEqual(2)
     })
 
-    it('should contain to two items if isTrashSpacesProjectActive is true', () => {
+    it('should contain two items if isTrashSpacesProjectActive is true', () => {
       const store = createStore({ selected: [], currentFolder })
       const route = {
         ...createLocationTrash('files-trash-spaces-project', {
