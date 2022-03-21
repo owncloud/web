@@ -15,6 +15,7 @@
     "packages/web-app-search",
     "packages/web-client",
     "packages/web-pkg",
+    "packages/web-pocs",
     "packages/web-runtime"
   ],
   "scripts": {
