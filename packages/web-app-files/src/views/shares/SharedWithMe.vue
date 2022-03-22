@@ -1,6 +1,6 @@
 <template>
   <div class="oc-flex oc-flex-column">
-    <list-loader v-if="loadResourcesTask.isRunning" />
+    <app-loading-spinner v-if="loadResourcesTask.isRunning" />
     <template v-else>
       <!-- Pending shares -->
       <div v-if="hasPending">
@@ -173,7 +173,7 @@ import { useSort, useResourcesViewDefaults } from '../../composables'
 import { useRouteQuery } from 'web-pkg/src/composables'
 import debounce from 'lodash-es/debounce'
 
-import ListLoader from '../../components/FilesList/ListLoader.vue'
+import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
 import ContextActions from '../../components/FilesList/ContextActions.vue'
@@ -186,7 +186,7 @@ const visibilityObserver = new VisibilityObserver()
 export default {
   components: {
     ResourceTable,
-    ListLoader,
+    AppLoadingSpinner,
     NoContentMessage,
     ListInfo,
     ContextActions

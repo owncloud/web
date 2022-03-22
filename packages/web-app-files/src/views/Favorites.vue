@@ -1,6 +1,6 @@
 <template>
   <div>
-    <list-loader v-if="loadResourcesTask.isRunning" />
+    <app-loading-spinner v-if="loadResourcesTask.isRunning" />
     <template v-else>
       <no-content-message v-if="isEmpty" id="files-favorites-empty" class="files-empty" icon="star">
         <template #message>
@@ -57,7 +57,7 @@ import { ImageDimension, ImageType } from '../constants'
 import debounce from 'lodash-es/debounce'
 
 import QuickActions from '../components/FilesList/QuickActions.vue'
-import ListLoader from '../components/FilesList/ListLoader.vue'
+import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
@@ -71,7 +71,7 @@ export default {
   components: {
     ResourceTable,
     QuickActions,
-    ListLoader,
+    AppLoadingSpinner,
     Pagination,
     NoContentMessage,
     ListInfo,

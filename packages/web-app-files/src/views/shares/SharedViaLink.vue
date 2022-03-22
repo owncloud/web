@@ -1,6 +1,6 @@
 <template>
   <div>
-    <list-loader v-if="loadResourcesTask.isRunning" />
+    <app-loading-spinner v-if="loadResourcesTask.isRunning" />
     <template v-else>
       <no-content-message
         v-if="isEmpty"
@@ -58,7 +58,7 @@ import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../../constants'
 import debounce from 'lodash-es/debounce'
 
-import ListLoader from '../../components/FilesList/ListLoader.vue'
+import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
 import Pagination from '../../components/FilesList/Pagination.vue'
@@ -69,7 +69,14 @@ import { useResourcesViewDefaults } from '../../composables'
 const visibilityObserver = new VisibilityObserver()
 
 export default {
-  components: { ResourceTable, ListLoader, NoContentMessage, ListInfo, Pagination, ContextActions },
+  components: {
+    ResourceTable,
+    AppLoadingSpinner,
+    NoContentMessage,
+    ListInfo,
+    Pagination,
+    ContextActions
+  },
 
   mixins: [FileActions, MixinResources, MixinMountSideBar, MixinFilesListFilter],
 

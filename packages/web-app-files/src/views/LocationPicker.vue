@@ -35,7 +35,7 @@
         </oc-grid>
       </div>
       <div id="files-view">
-        <list-loader v-if="loadResourcesTask.isRunning" />
+        <app-loading-spinner v-if="loadResourcesTask.isRunning" />
         <template v-else>
           <no-content-message
             v-if="isEmpty"
@@ -91,7 +91,7 @@ import MixinFilesListFilter from '../mixins/filesListFilter'
 import { useTask } from 'vue-concurrency'
 
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
-import ListLoader from '../components/FilesList/ListLoader.vue'
+import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
 import { DavProperties } from 'web-pkg/src/constants'
@@ -109,7 +109,7 @@ export default {
   components: {
     ResourceTable,
     NoContentMessage,
-    ListLoader,
+    AppLoadingSpinner,
     ListInfo,
     Pagination
   },

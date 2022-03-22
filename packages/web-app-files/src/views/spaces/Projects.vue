@@ -21,7 +21,7 @@
       />
       <!-- <a href="#" v-text="$gettext('Learn more about spaces.')" /> -->
     </div>
-    <list-loader v-if="loadResourcesTask.isRunning" />
+    <app-loading-spinner v-if="loadResourcesTask.isRunning" />
     <template v-else>
       <no-content-message
         v-if="!spaces.length"
@@ -163,7 +163,7 @@
 
 <script>
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
-import ListLoader from '../../components/FilesList/ListLoader.vue'
+import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import { computed } from '@vue/composition-api'
 import { useStore } from 'web-pkg/src/composables'
 import { useTask } from 'vue-concurrency'
@@ -188,7 +188,7 @@ export default {
   components: {
     NoContentMessage,
     QuotaModal,
-    ListLoader
+    AppLoadingSpinner
   },
   mixins: [
     Rename,
