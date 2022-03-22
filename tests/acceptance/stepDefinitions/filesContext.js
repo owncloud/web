@@ -89,7 +89,12 @@ When('the user browses to the favorites page using the webUI', function () {
 })
 
 When('the user browses to the files page using the webUI', function () {
-  return client.page.webPage().navigateToUsingMenu('Personal')
+  let menuItem = 'All files'
+  if (client.globals.ocis) {
+    menuItem = 'Personal'
+  }
+
+  return client.page.webPage().navigateToUsingMenu(menuItem)
 })
 
 Then('the files table should be displayed', () => {
@@ -97,7 +102,12 @@ Then('the files table should be displayed', () => {
 })
 
 Given('the user has browsed to the personal page', function () {
-  return client.page.personalPage().navigateToBreadcrumb('Personal')
+  let menuItem = 'All files'
+  if (client.globals.ocis) {
+    menuItem = 'Personal'
+  }
+
+  return client.page.personalPage().navigateToBreadcrumb(menuItem)
 })
 
 When('the user opens folder {string} directly on the webUI', async function (folder) {
