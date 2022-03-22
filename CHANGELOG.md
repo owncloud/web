@@ -17,6 +17,7 @@ Summary
 * Bugfix - Don't write error message on passing ReadmeContentModal.spec.js test: [#6525](https://github.com/owncloud/web/pull/6525)
 * Bugfix - Resize observer errors within subfolders of a space: [#6569](https://github.com/owncloud/web/pull/6569)
 * Bugfix - Resolve private links: [#5654](https://github.com/owncloud/web/pull/5654)
+* Bugfix - Natural sort order: [#6532](https://github.com/owncloud/web/issues/6532)
 * Bugfix - Prevent cross-site scripting attack while displaying space description: [#6523](https://github.com/owncloud/web/pull/6523)
 * Bugfix - Prevent the member count inside a space from disappearing: [#6550](https://github.com/owncloud/web/pull/6550)
 * Bugfix - TypeErrors when trying to destruct undefined properties: [#6568](https://github.com/owncloud/web/pull/6568)
@@ -117,6 +118,15 @@ Details
    now resolve correctly again.
 
    https://github.com/owncloud/web/pull/5654
+
+* Bugfix - Natural sort order: [#6532](https://github.com/owncloud/web/issues/6532)
+
+   We've fixed the sort order to respect natural sorting again. Also used the chance to make use of
+   `Intl.Collator` instead of `localeCompare` which is considered to be a performance
+   improvement.
+
+   https://github.com/owncloud/web/issues/6532
+   https://github.com/owncloud/web/pull/6632
 
 * Bugfix - Prevent cross-site scripting attack while displaying space description: [#6523](https://github.com/owncloud/web/pull/6523)
 
