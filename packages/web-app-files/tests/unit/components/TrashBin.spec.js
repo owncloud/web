@@ -3,7 +3,7 @@ import TrashBin from '@files/src/components/TrashBin.vue'
 import { getStore, localVue, createFile } from '@files/tests/unit/components/components.setup.js'
 
 const stubs = {
-  'list-loader': true,
+  'app-loading-spinner': true,
   'no-content-message': true,
   'resource-table': true,
   'context-actions': true,
@@ -12,7 +12,7 @@ const stubs = {
   'router-link': true
 }
 
-const listLoaderStub = 'list-loader-stub'
+const appLoadingSpinnerStub = 'app-loading-spinner-stub'
 const noContentStub = 'no-content-message-stub'
 const filesTableStub = 'resource-table-stub'
 const filesTableSelector = '#files-trashbin-table'
@@ -21,10 +21,10 @@ const listInfoStub = 'list-info-stub'
 const paginationStub = 'pagination-stub'
 
 describe('Trashbin component', () => {
-  it('should show the list loader when the view is still loading', () => {
+  it('should show the app-loading-spinner component when the view is still loading', () => {
     const wrapper = getMountedWrapper({ loading: true })
 
-    expect(wrapper.find(listLoaderStub).exists()).toBeTruthy()
+    expect(wrapper.find(appLoadingSpinnerStub).exists()).toBeTruthy()
     expect(wrapper.find(noContentStub).exists()).toBeFalsy()
     expect(wrapper.find(filesTableStub).exists()).toBeFalsy()
   })
@@ -33,7 +33,7 @@ describe('Trashbin component', () => {
     it('should show the no content message component if the paginated resources is empty', () => {
       const wrapper = getMountedWrapper()
 
-      expect(wrapper.find(listLoaderStub).exists()).toBeFalsy()
+      expect(wrapper.find(appLoadingSpinnerStub).exists()).toBeFalsy()
       expect(wrapper.find(filesTableStub).exists()).toBeFalsy()
       expect(wrapper.find(noContentStub).exists()).toBeTruthy()
     })

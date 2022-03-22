@@ -9,7 +9,7 @@ const createFolder = ({ name = '1234', canCreate = false } = {}) => ({
 })
 
 const stubs = {
-  'list-loader': true,
+  'app-loading-spinner': true,
   'not-found-message': true,
   'no-content-message': true,
   'resource-table': true,
@@ -34,7 +34,7 @@ const $router = {
 const resourceList = [createFile({ id: 1234 }), createFile({ id: 1235 }), createFile({ id: 1236 })]
 
 const stubSelectors = {
-  listLoader: 'list-loader-stub',
+  appLoadingSpinner: 'app-loading-spinner-stub',
   notFoundMessage: 'not-found-message-stub',
   noContentMessage: 'no-content-message-stub',
   resourceTable: 'resource-table-stub',
@@ -50,18 +50,18 @@ describe('PublicFiles view', () => {
       await accentuatesTableRowTest(PublicFiles)
     })
   })
-  it('should show the list loader when the view is still loading', () => {
+  it('should show the app-loading-spinner component when the view is still loading', () => {
     const wrapper = getMountedWrapper({ loading: true })
 
-    expect(wrapper.find(stubSelectors.listLoader).exists()).toBeTruthy()
+    expect(wrapper.find(stubSelectors.appLoadingSpinner).exists()).toBeTruthy()
     expect(wrapper.find(stubSelectors.noContentMessage).exists()).toBeFalsy()
     expect(wrapper.find(stubSelectors.resourceTable).exists()).toBeFalsy()
   })
   describe('when the view is not loading anymore', () => {
-    it('should not show the list loader', () => {
+    it('should not show the app-loading-spinner component', () => {
       const wrapper = getMountedWrapper({ loading: false })
 
-      expect(wrapper.find(stubSelectors.listLoader).exists()).toBeFalsy()
+      expect(wrapper.find(stubSelectors.appLoadingSpinner).exists()).toBeFalsy()
     })
 
     describe('not found message component', () => {

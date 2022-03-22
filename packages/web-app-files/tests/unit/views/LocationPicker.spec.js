@@ -29,7 +29,7 @@ const router = {
   }
 }
 
-const listLoaderStub = 'list-loader-stub'
+const listLoaderStub = 'app-loading-spinner-stub'
 const breadcrumbStub = 'oc-breadcrumb-stub'
 const listInfoStub = 'list-info-stub'
 const filesPaginationStub = 'pagination-stub'
@@ -243,7 +243,7 @@ describe('LocationPicker', () => {
         const wrapper = getShallowWrapper({ loading: true })
         filesView = wrapper.find(selectors.filesView)
       })
-      it('should show list loader', () => {
+      it('should show app-loading-spinner component', () => {
         expect(filesView.find(listLoaderStub).exists()).toBeTruthy()
         expect(filesView.find(listLoaderStub)).toMatchSnapshot()
       })
@@ -257,7 +257,7 @@ describe('LocationPicker', () => {
     describe('when the view is not loading anymore', () => {
       const wrapper = getShallowWrapper()
       const filesView = wrapper.find(selectors.filesView)
-      it('should not show list loader', () => {
+      it('should not show app-loading-spinner component', () => {
         expect(filesView.find(listLoaderStub).exists()).toBeFalsy()
       })
       it('should show no content message if active files length is less than one', () => {
