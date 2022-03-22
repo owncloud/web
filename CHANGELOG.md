@@ -30,6 +30,7 @@ Summary
 * Enhancement - Improve resource loading within spaces: [#6601](https://github.com/owncloud/web/pull/6601)
 * Enhancement - Internet Explorer deprecation warning banner: [#6629](https://github.com/owncloud/web/pull/6629)
 * Enhancement - Load space images as preview: [#6529](https://github.com/owncloud/web/pull/6529)
+* Enhancement - Move ListLoader component: [#6644](https://github.com/owncloud/web/pull/6644)
 * Enhancement - Move NoContentMessage component: [#6643](https://github.com/owncloud/web/pull/6643)
 * Enhancement - Move share indicators: [#5976](https://github.com/owncloud/web/issues/5976)
 * Enhancement - Polish ViewOptions: [#6492](https://github.com/owncloud/web/issues/6492)
@@ -226,6 +227,13 @@ Details
 
    https://github.com/owncloud/web/pull/6529
    https://github.com/owncloud/web/pull/6558
+
+* Enhancement - Move ListLoader component: [#6644](https://github.com/owncloud/web/pull/6644)
+
+   We've moved the ListLoader component into the web-pkg package and give it a more general name,
+   to ease the use in other packages.
+
+   https://github.com/owncloud/web/pull/6644
 
 * Enhancement - Move NoContentMessage component: [#6643](https://github.com/owncloud/web/pull/6643)
 
