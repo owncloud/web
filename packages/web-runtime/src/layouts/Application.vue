@@ -77,7 +77,7 @@ export default {
     isIE11() {
       return !!window.MSInputMethodContext && !!document.documentMode
     },
-    IEdeprecationWarning() {
+    ieDeprecationWarning() {
       return this.$gettext(
         'Internet Explorer (your current browser) is not officially supported. For security reasons, please switch to another browser.'
       )
