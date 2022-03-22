@@ -15,6 +15,7 @@ Summary
 * Bugfix - Show no auth popup on password protected public links in ownCloud 10: [#6530](https://github.com/owncloud/web/pull/6530)
 * Bugfix - Sidebar panels in public links: [#2090](https://github.com/owncloud/web/issues/2090)
 * Bugfix - Don't write error message on passing ReadmeContentModal.spec.js test: [#6525](https://github.com/owncloud/web/pull/6525)
+* Bugfix - Rename parent folder: [#6516](https://github.com/owncloud/web/issues/6516)
 * Bugfix - Resize observer errors within subfolders of a space: [#6569](https://github.com/owncloud/web/pull/6569)
 * Bugfix - Resolve private links: [#5654](https://github.com/owncloud/web/pull/5654)
 * Bugfix - Natural sort order: [#6532](https://github.com/owncloud/web/issues/6532)
@@ -103,6 +104,14 @@ Details
 
    https://github.com/owncloud/web/issues/6337
    https://github.com/owncloud/web/pull/6525
+
+* Bugfix - Rename parent folder: [#6516](https://github.com/owncloud/web/issues/6516)
+
+   We fixed the rename option in the parent folder / breadcrumb context menu. It was broken due to
+   malformed webdav paths.
+
+   https://github.com/owncloud/web/issues/6516
+   https://github.com/owncloud/web/pull/6631
 
 * Bugfix - Resize observer errors within subfolders of a space: [#6569](https://github.com/owncloud/web/pull/6569)
 
