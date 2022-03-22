@@ -1,0 +1,6 @@
+Bugfix: Natural sort order
+
+We've fixed the sort order to respect natural sorting again. Also used the chance to make use of `Intl.Collator` instead of `localeCompare` which is considered to be a performance improvement.
+
+https://github.com/owncloud/web/issues/6532
+https://github.com/owncloud/web/pull/6632

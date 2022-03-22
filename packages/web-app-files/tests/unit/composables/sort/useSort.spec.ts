@@ -47,7 +47,8 @@ describe('useSort', () => {
       { id: '5', name: 'dir2', path: '', webDavPath: '', time: 7, type: 'folder' },
       { id: '6', name: 'b.png', path: '', webDavPath: '', time: 1 },
       { id: '7', name: 'Dir1', path: '', webDavPath: '', time: 5, type: 'folder' },
-      { id: '8', name: 'dir3', path: '', webDavPath: '', time: 8, type: 'folder' }
+      { id: '8', name: 'dir11', path: '', webDavPath: '', time: 8, type: 'folder' },
+      { id: '9', name: 'dir3', path: '', webDavPath: '', time: 9, type: 'folder' }
     ]
 
     it('sorts resources by name', () => {
@@ -76,6 +77,7 @@ describe('useSort', () => {
           'dir2',
           'dir3',
           'Dir4',
+          'dir11',
           'a.png',
           'A.png',
           'b.png',
@@ -88,6 +90,7 @@ describe('useSort', () => {
           'b.png',
           'a.png',
           'A.png',
+          'dir11',
           'Dir4',
           'dir3',
           'dir2',

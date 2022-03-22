@@ -125,23 +125,31 @@ const sortHelper = <T extends SortableItem>(
     return items
   }
   const { sortable } = field
+  const collator = new Intl.Collator(navigator.language, { sensitivity: 'base', numeric: true })
 
   if (sortBy === 'name') {
     const folders = [...items.filter((i) => i.type === 'folder')].sort((a, b) =>
-      compare(a, b, sortBy, sortDir, sortable)
+      compare(a, b, collator, sortBy, sortDir, sortable)
     )
     const files = [...items.filter((i) => i.type !== 'folder')].sort((a, b) =>
-      compare(a, b, sortBy, sortDir, sortable)
+      compare(a, b, collator, sortBy, sortDir, sortable)
     )
     if (sortDir === SortDir.Asc) {
       return folders.concat(files)
     }
     return files.concat(folders)
   }
-  return [...items].sort((a, b) => compare(a, b, sortBy, sortDir, sortable))
+  return [...items].sort((a, b) => compare(a, b, collator, sortBy, sortDir, sortable))
 }
 
-const compare = (a: SortableItem, b: SortableItem, sortBy: string, sortDir: SortDir, sortable) => {
+const compare = (
+  a: SortableItem,
+  b: SortableItem,
+  collator: Intl.Collator,
+  sortBy: string,
+  sortDir: SortDir,
+  sortable
+) => {
   let aValue = a[sortBy]
   let bValue = b[sortBy]
   const modifier = sortDir === SortDir.Asc ? 1 : -1
@@ -163,10 +171,7 @@ const compare = (a: SortableItem, b: SortableItem, sortBy: string, sortDir: Sort
   if (!isNaN(aValue) && !isNaN(bValue)) {
     return (aValue - bValue) * modifier
   }
-  const userLang = navigator.language // FIXME: ts error: || navigator.userLanguage
-  const c = (aValue || '')
-    .toString()
-    .localeCompare((bValue || '').toString(), userLang, { sensitivity: 'base' })
+  const c = collator.compare((aValue || '').toString(), (bValue || '').toString())
   return c * modifier
 }
 
