@@ -1,0 +1,5 @@
+Enhancement: Move NoContentMessage component
+
+We've moved the NoContentMessage component into the web-pkg package to ease the use in other packages
+
+https://github.com/owncloud/web/pull/6643
