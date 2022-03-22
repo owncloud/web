@@ -1,0 +1,6 @@
+Enhancement: Add quick rename button
+
+We've added a button for quick editing a resource name
+
+https://github.com/owncloud/web/pull/6645
+https://github.com/owncloud/web/issues/6626
