@@ -329,11 +329,17 @@ export default {
       displayName
     }
   ) {
+    let spaceRef
+    if (storageId) {
+      spaceRef = `${storageId}${path}`
+    }
+
     if (shareType === ShareTypes.group.value) {
       client.shares
         .shareFileWithGroup(path, shareWith, {
           permissions: permissions,
-          expirationDate: expirationDate
+          expirationDate: expirationDate,
+          spaceRef
         })
         .then((share) => {
           context.commit(
@@ -399,11 +405,6 @@ export default {
           )
         })
       return
-    }
-
-    let spaceRef
-    if (storageId) {
-      spaceRef = `${storageId}${path}`
     }
 
     const remoteShare = shareType === ShareTypes.remote.value
