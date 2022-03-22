@@ -6,10 +6,9 @@
         key="new-file-menu-btn-enabled"
         v-oc-tooltip="newButtonTooltip"
         :aria-label="newButtonAriaLabel"
-        appearance="raw"
-        variation="inverse"
+        appearance="filled"
+        variation="primary"
         :disabled="uploadOrFileCreationBlocked"
-        class="oc-background-primary-gradient oc-px-s"
       >
         <oc-icon name="add" />
         <translate>New</translate>
@@ -61,11 +60,10 @@
       <oc-button
         id="new-folder-btn"
         v-oc-tooltip="newButtonAriaLabel"
-        appearance="raw"
-        variation="inverse"
+        appearance="filled"
+        variation="primary"
         :aria-label="newButtonAriaLabel"
         :disabled="uploadOrFileCreationBlocked"
-        class="oc-background-primary-gradient oc-px-s oc-text-nowrap"
         @click="showCreateResourceModal"
       >
         <oc-icon name="resource-type-folder" />
