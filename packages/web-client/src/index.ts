@@ -23,7 +23,10 @@ export interface Graph {
   users: {
     getUser: (userId: string) => AxiosPromise<User>
     getMe: () => AxiosPromise<User>
-    listUsers: () => AxiosPromise<User>
+    listUsers: (orderBy?: string) => AxiosPromise<User>
+  }
+  groups: {
+    listGroups: (orderBy?: string) => AxiosPromise<User>
   }
 }
 
@@ -55,10 +58,12 @@ const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
     users: {
       getUser: (userId: string) => userApiFactory.getUser(userId),
       getMe: () => meUserApiFactory.meGet(),
-      listUsers: () => usersApiFactory.listUsers()
+      listUsers: (orderBy?: any) =>
+        usersApiFactory.listUsers(0, 0, '', '', false, new Set<any>([orderBy]))
     },
     groups: {
-      listGroups: () => groupsApiFactory.listGroups()
+      listGroups: (orderBy?: any) =>
+        groupsApiFactory.listGroups(0, 0, '', '', false, new Set<any>([orderBy]))
     }
   }
 }
