@@ -190,7 +190,7 @@ export default {
   },
   computed: {
     ...mapGetters('Files', ['highlightedFile']),
-    ...mapGetters(['getToken', 'capabilities', 'isOcis']),
+    ...mapGetters(['getToken', 'capabilities']),
     ...mapState('Files', ['publicLinkInEdit']),
 
     selectedRole() {
@@ -219,9 +219,10 @@ export default {
     },
 
     availableRoleOptions() {
-      return LinkShareRoles.list(this.highlightedFile.isFolder, this.isOcis).map((r) =>
-        this.convertRoleToSelectOption(r)
-      )
+      return LinkShareRoles.list(
+        this.highlightedFile.isFolder,
+        this.capabilities.files_sharing?.public?.can_edit
+      ).map((r) => this.convertRoleToSelectOption(r))
     },
 
     $_expirationDate() {

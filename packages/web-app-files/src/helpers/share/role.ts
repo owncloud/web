@@ -289,8 +289,8 @@ export abstract class LinkShareRoles {
     linkRoleUploaderFolder
   ]
 
-  static list(isFolder: boolean, isOcis = false): ShareRole[] {
-    return [...this.all, ...(isOcis ? [linkRoleEditorFile] : [])].filter(
+  static list(isFolder: boolean, canEditFile = false): ShareRole[] {
+    return [...this.all, ...(canEditFile ? [linkRoleEditorFile] : [])].filter(
       (r) => r.folder === isFolder
     )
   }
