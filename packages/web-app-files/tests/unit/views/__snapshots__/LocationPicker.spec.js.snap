@@ -42,4 +42,4 @@ exports[`LocationPicker files app bar should show location picker selection info
 
 exports[`LocationPicker files view when the view is not loading anymore should show no content message if active files length is less than one 1`] = `<no-content-message-stub icon="folder" id="files-location-picker-empty" class="files-empty"></no-content-message-stub>`;
 
-exports[`LocationPicker files view when the view is still loading should show list loader 1`] = `<list-loader-stub></list-loader-stub>`;
+exports[`LocationPicker files view when the view is still loading should show app-loading-spinner component 1`] = `<app-loading-spinner-stub></app-loading-spinner-stub>`;

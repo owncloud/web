@@ -20,7 +20,7 @@ const stubs = {
   'list-info': true
 }
 
-const listLoaderStub = 'list-loader-stub'
+const listLoaderStub = 'app-loading-spinner-stub'
 const listInfoStub = 'list-info-stub'
 const contextActionsStub = 'context-actions-stub'
 
@@ -40,7 +40,7 @@ describe('SharedViaLink view', () => {
   })
 
   describe('when the view is still loading', () => {
-    it('should show list-loader component', () => {
+    it('should show app-loading-spinner component', () => {
       const wrapper = getShallowWrapper({ loading: true })
       const listLoader = wrapper.find(listLoaderStub)
 
@@ -49,7 +49,7 @@ describe('SharedViaLink view', () => {
   })
 
   describe('when the view is not loading anymore', () => {
-    it('should not show list-loader component', () => {
+    it('should not app-loading-spinner component', () => {
       const wrapper = getShallowWrapper()
       expect(wrapper.find(listLoaderStub).exists()).toBeFalsy()
     })

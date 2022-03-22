@@ -1,6 +1,6 @@
 <template>
   <div>
-    <list-loader v-if="loadResourcesTask.isRunning" />
+    <app-loading-spinner v-if="loadResourcesTask.isRunning" />
     <template v-else>
       <not-found-message v-if="folderNotFound" class="files-not-found oc-height-1-1" />
       <no-content-message
@@ -78,7 +78,7 @@ import { bus } from 'web-pkg/src/instance'
 
 import ResourceTable from '../components/FilesList/ResourceTable.vue'
 import QuickActions from '../components/FilesList/QuickActions.vue'
-import ListLoader from '../components/FilesList/ListLoader.vue'
+import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import NotFoundMessage from '../components/FilesList/NotFoundMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
@@ -96,7 +96,7 @@ export default {
   components: {
     ResourceTable,
     QuickActions,
-    ListLoader,
+    AppLoadingSpinner,
     NoContentMessage,
     NotFoundMessage,
     ListInfo,

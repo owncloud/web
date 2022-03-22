@@ -1,6 +1,6 @@
 <template>
   <div>
-    <list-loader v-if="loadResourcesTask.isRunning" />
+    <app-loading-spinner v-if="loadResourcesTask.isRunning" />
     <template v-else>
       <not-found-message v-if="folderNotFound" class="files-not-found oc-height-1-1" />
       <no-content-message
@@ -66,7 +66,7 @@ import { ImageDimension, ImageType } from '../constants'
 import debounce from 'lodash-es/debounce'
 import { bus } from 'web-pkg/src/instance'
 
-import ListLoader from '../components/FilesList/ListLoader.vue'
+import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import NotFoundMessage from '../components/FilesList/NotFoundMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
@@ -81,7 +81,7 @@ export default {
     ResourceTable,
     ListInfo,
     Pagination,
-    ListLoader,
+    AppLoadingSpinner,
     NoContentMessage,
     NotFoundMessage,
     ContextActions

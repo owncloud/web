@@ -1,6 +1,6 @@
 <template>
   <div class="space-overview">
-    <list-loader v-if="loadResourcesTask.isRunning" />
+    <app-loading-spinner v-if="loadResourcesTask.isRunning" />
     <template v-else>
       <not-found-message v-if="!space.id" class="space-not-found oc-height-1-1" />
       <div v-else-if="isSpaceRoot">
@@ -142,7 +142,7 @@
 <script>
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import NotFoundMessage from '../../components/FilesList/NotFoundMessage.vue'
-import ListLoader from '../../components/FilesList/ListLoader.vue'
+import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import { computed, ref } from '@vue/composition-api'
 import { marked } from 'marked'
 import sanitizeHtml from 'sanitize-html'
@@ -181,7 +181,7 @@ const visibilityObserver = new VisibilityObserver()
 export default {
   components: {
     NoContentMessage,
-    ListLoader,
+    AppLoadingSpinner,
     NotFoundMessage,
     ResourceTable,
     ListInfo,

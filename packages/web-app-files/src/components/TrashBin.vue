@@ -1,6 +1,6 @@
 <template>
   <div>
-    <list-loader v-if="loadResourcesTask.isRunning" />
+    <app-loading-spinner v-if="loadResourcesTask.isRunning" />
     <template v-else>
       <no-content-message
         v-if="isEmpty"
@@ -53,7 +53,7 @@ import MixinFilesListFilter from '../mixins/filesListFilter'
 import MixinResources from '../mixins/resources'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 
-import ListLoader from './FilesList/ListLoader.vue'
+import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import ListInfo from './FilesList/ListInfo.vue'
 import Pagination from './FilesList/Pagination.vue'
@@ -64,7 +64,14 @@ import { bus } from 'web-pkg/src/instance'
 export default {
   name: 'TrashBin',
 
-  components: { ResourceTable, ListLoader, NoContentMessage, ListInfo, Pagination, ContextActions },
+  components: {
+    ResourceTable,
+    AppLoadingSpinner,
+    NoContentMessage,
+    ListInfo,
+    Pagination,
+    ContextActions
+  },
 
   mixins: [MixinResources, MixinMountSideBar, MixinFilesListFilter],
   props: {
