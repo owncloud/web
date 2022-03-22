@@ -49,43 +49,6 @@ describe('Spaces projects view', () => {
     expect(wrapper.vm.spaces.length).toEqual(1)
     expect(wrapper).toMatchSnapshot()
   })
-
-  it('should show the "create new space" modal with sufficient permissions', async () => {
-    mockAxios.request.mockImplementationOnce(() => {
-      return Promise.resolve({
-        data: {
-          value: []
-        }
-      })
-    })
-    const wrapper = getMountedWrapper()
-    await wrapper.vm.loadResourcesTask.last
-
-    const createModalStub = jest.spyOn(wrapper.vm, 'createModal')
-    const button = wrapper.find('[data-testid="spaces-list-create-space-btn"]')
-    expect(button.exists()).toBeTruthy()
-    await button.trigger('click')
-
-    expect(createModalStub).toHaveBeenCalledTimes(1)
-  })
-
-  it('should show an error message when trying to create a space with an empty name', async () => {
-    mockAxios.request.mockImplementationOnce(() => {
-      return Promise.resolve({
-        data: {
-          value: []
-        }
-      })
-    })
-    const wrapper = getMountedWrapper()
-    await wrapper.vm.loadResourcesTask.last
-    wrapper.vm.setModalInputErrorMessage = jest.fn()
-
-    const spyInputErrorMessageStub = jest.spyOn(wrapper.vm, 'setModalInputErrorMessage')
-    wrapper.vm.checkSpaceName('')
-
-    expect(spyInputErrorMessageStub).toHaveBeenCalledWith('Space name cannot be empty')
-  })
 })
 
 function getMountedWrapper(activeFiles = []) {
@@ -106,9 +69,6 @@ function getMountedWrapper(activeFiles = []) {
         user: () => ({
           id: 'marie'
         })
-      },
-      actions: {
-        createModal: jest.fn()
       },
       modules: {
         Files: {

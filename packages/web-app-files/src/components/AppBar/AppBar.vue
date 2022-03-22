@@ -26,7 +26,7 @@
           </template>
         </oc-breadcrumb>
         <shares-navigation v-if="isSharesLocation" />
-        <view-options v-if="!hideViewOptions" />
+        <view-options />
       </div>
       <div class="files-app-bar-actions">
         <div
@@ -169,9 +169,6 @@ export default {
     },
     hasBulkActions() {
       return this.$route.meta.hasBulkActions === true
-    },
-    hideViewOptions() {
-      return this.$route.meta.hideViewOptions === true
     },
     pageTitle() {
       const title = this.$route.meta.title

@@ -1,20 +1,5 @@
 <template>
   <div class="oc-py-s oc-px-m">
-    <oc-button
-      v-if="hasCreatePermission"
-      id="new-space-menu-btn"
-      ref="createNewSpaceButton"
-      key="new-space-menu-btn-enabled"
-      variation="primary"
-      appearance="filled"
-      :aria-label="$gettext('Create a new space')"
-      class="oc-mb-l"
-      data-testid="spaces-list-create-space-btn"
-      @click="showCreateSpaceModal"
-    >
-      <oc-icon name="add" />
-      <translate>Create Space</translate>
-    </oc-button>
     <div class="oc-pb-xl oc-border-b">
       <span
         v-text="$gettext('Store your project related files in Spaces for seamless collaboration.')"
@@ -287,7 +272,6 @@ export default {
     this.loadResourcesTask.perform(this)
   },
   methods: {
-    ...mapActions(['createModal', 'hideModal', 'setModalInputErrorMessage']),
     ...mapActions('Files/sidebar', {
       openSidebarWithPanel: 'openWithPanel'
     }),
@@ -295,8 +279,7 @@ export default {
       'SET_CURRENT_FOLDER',
       'LOAD_FILES',
       'CLEAR_CURRENT_FILES_LIST',
-      'SET_FILE_SELECTION',
-      'UPSERT_RESOURCE'
+      'SET_FILE_SELECTION'
     ]),
 
     getContextMenuActions(space) {
@@ -317,86 +300,6 @@ export default {
       return createLocationSpaces('files-spaces-project', {
         params: { storageId: id, name }
       })
-    },
-
-    showCreateSpaceModal() {
-      const modal = {
-        variation: 'passive',
-        title: this.$gettext('Create a new space'),
-        cancelText: this.$gettext('Cancel'),
-        confirmText: this.$gettext('Create'),
-        hasInput: true,
-        inputLabel: this.$gettext('Space name'),
-        inputValue: this.$gettext('New space'),
-        onCancel: this.hideModal,
-        onConfirm: this.addNewSpace,
-        onInput: this.checkSpaceName
-      }
-
-      this.createModal(modal)
-    },
-
-    checkSpaceName(name) {
-      if (name.trim() === '') {
-        this.setModalInputErrorMessage(this.$gettext('Space name cannot be empty'))
-      }
-      return this.setModalInputErrorMessage(null)
-    },
-
-    addNewSpace(name) {
-      this.$refs.createNewSpaceButton.$el.blur()
-
-      return this.graphClient.drives
-        .createDrive({ name }, {})
-        .then(({ data: space }) => {
-          this.hideModal()
-          const resource = buildSpace(space)
-          this.UPSERT_RESOURCE(resource)
-          this.spaces.sort((a, b) => a.name.localeCompare(b.name))
-
-          this.$client.files.createFolder(`spaces/${space.id}/.space`).then(() => {
-            this.$client.files
-              .putFileContents(
-                `spaces/${space.id}/.space/readme.md`,
-                `### 👋 ${this.$gettext('Hello!')}\r\n${this.$gettext(
-                  'Add a description to welcome the members of the Space.'
-                )}\r\n${this.$gettext(
-                  'Use markdown to format your text. [More info]'
-                )}(https://www.markdownguide.org/basic-syntax/)`
-              )
-              .then((markdown) => {
-                this.graphClient.drives
-                  .updateDrive(
-                    space.id,
-                    {
-                      special: [
-                        {
-                          specialFolder: {
-                            name: 'readme'
-                          },
-                          id: markdown['OC-FileId']
-                        }
-                      ]
-                    },
-                    {}
-                  )
-                  .then(({ data }) => {
-                    this.UPDATE_RESOURCE_FIELD({
-                      id: space.id,
-                      field: 'spaceReadmeData',
-                      value: data.special.find((special) => special.specialFolder.name === 'readme')
-                    })
-                  })
-              })
-          })
-        })
-        .catch((error) => {
-          this.showMessage({
-            title: this.$gettext('Creating space failed…'),
-            desc: error,
-            status: 'danger'
-          })
-        })
     },
 
     sanitizeStorageId(id) {
