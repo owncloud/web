@@ -2,6 +2,7 @@ import { DataTable, When } from '@cucumber/cucumber'
 import { World } from '../../environment'
 import { objects } from '../../../support'
 import { expect } from '@playwright/test'
+import { config } from '../../../config'
 
 When(
   '{string} creates the following resource(s)',
@@ -46,7 +47,7 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     let downloads
-    let files
+    let files, parentFolder
     const downloadInfo = stepTable.hashes().reduce((acc, stepRow) => {
       const { resource, from } = stepRow
 
@@ -61,6 +62,7 @@ When(
 
     for (const folder of Object.keys(downloadInfo)) {
       files = downloadInfo[folder]
+      parentFolder = folder
       downloads = await resourceObject.download({
         folder,
         names: files,
@@ -73,7 +75,6 @@ When(
         })
       }
     }
-
     if (actionType === 'batch action') {
       if (files.length === 1) {
         expect(files.length).toBe(downloads.length)
@@ -83,7 +84,15 @@ When(
       } else {
         expect(downloads.length).toBe(1)
         downloads.forEach((download) => {
-          expect(download.suggestedFilename()).toBe('download.tar')
+          if (config.ocis) {
+            expect(download.suggestedFilename()).toBe('download.tar')
+          } else {
+            if (parentFolder) {
+              expect(download.suggestedFilename()).toBe(parentFolder + '.zip')
+            } else {
+              expect(download.suggestedFilename()).toBe('download.zip')
+            }
+          }
         })
       }
     }

@@ -1,4 +1,5 @@
 import { Page } from 'playwright'
+import { expect } from '@playwright/test'
 import util from 'util'
 import { sidebar } from '../utils'
 import { getActualExpiryDate } from '../../../utils/datePicker'
@@ -12,6 +13,50 @@ export interface createLinkArgs {
   dateOfExpiration: string
   password: string
   via: 'SIDEBAR_PANEL' | 'QUICK_ACTION'
+}
+
+export type changeRoleArgs = {
+  page: Page
+  resource: string
+  name: string
+  role: string
+}
+
+const publicLinkEditRoleButton =
+  `//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]//ancestor::li//div[contains(@class, "link-details")]/` +
+  `div/button[contains(@class, "edit-public-link-role-dropdown-toggl")]`
+const publicLinkChangeRoleButton = `#files-role-%s`
+const publicLinkRole =
+  '//button[contains(@class,"edit-public-link-role-dropdown-toggl")]//span[contains(@class,"oc-invisible-sr")]'
+const linkUpdateSuccessfulDialog = '//div[contains(@class,"oc-notification-message-title")]'
+
+const fillPublicLink = async (page, name, role, dateOfExpiration, password): Promise<void> => {
+  if (name) {
+    await page.locator('#oc-files-file-link-name').fill(name)
+  }
+
+  if (role) {
+    await page.locator('#files-file-link-role-button').click()
+    await page.locator(util.format(`//span[@id="files-role-%s"]`, role)).click()
+  }
+
+  if (dateOfExpiration) {
+    const newExpiryDate = getActualExpiryDate(
+      dateOfExpiration.toLowerCase().match(/[dayrmonthwek]+/)[0] as any,
+      dateOfExpiration
+    )
+
+    await page.locator('#oc-files-file-link-expire-date').evaluate(
+      (datePicker: any, { newExpiryDate }): any => {
+        datePicker.__vue__.updateValue(newExpiryDate)
+      },
+      { newExpiryDate }
+    )
+  }
+
+  if (password) {
+    await page.locator('#oc-files-file-link-password').fill(password)
+  }
 }
 
 export const createLink = async (args: createLinkArgs): Promise<string> => {
@@ -40,36 +85,25 @@ export const createLink = async (args: createLinkArgs): Promise<string> => {
       break
   }
   await page.locator('#files-file-link-add').click()
-
-  if (name) {
-    await page.locator('#oc-files-file-link-name').fill(name)
-  }
-
-  if (role) {
-    await page.locator('#files-file-link-role-button').click()
-    await page.locator(util.format(`//span[@id="files-role-%s"]`, role)).click()
-  }
-
-  if (dateOfExpiration) {
-    const newExpiryDate = getActualExpiryDate(
-      dateOfExpiration.toLowerCase().match(/[dayrmonthwek]+/)[0] as any,
-      dateOfExpiration
-    )
-
-    await page.locator('#oc-files-file-link-expire-date').evaluate(
-      (datePicker: any, { newExpiryDate }): any => {
-        datePicker.__vue__.updateValue(newExpiryDate)
-      },
-      { newExpiryDate }
-    )
-  }
-
-  if (password) {
-    await page.locator('#oc-files-file-link-password').fill(password)
-  }
-
+  await fillPublicLink(page, name, role, dateOfExpiration, password)
   await page.locator('#oc-files-file-link-create').click()
   return await page
     .locator(`//ul/li/div/h4[contains(text(),'${name}')]/following-sibling::div//p`)
     .textContent()
+}
+
+export const changeRole = async (args: changeRoleArgs): Promise<string> => {
+  const { page, resource, name, role } = args
+  const resourcePaths = resource.split('/')
+  const resourceName = resourcePaths.pop()
+  if (resourcePaths.length) {
+    await clickResource({ page: page, path: resourcePaths.join('/') })
+  }
+  await sidebar.open({ page: page, resource: resourceName })
+  await sidebar.openPanel({ page: page, name: 'sharing' })
+  await page.locator(util.format(publicLinkEditRoleButton, name)).click()
+  await page.locator(util.format(publicLinkChangeRoleButton, role.toLowerCase())).click()
+  const message = await page.locator(linkUpdateSuccessfulDialog).textContent()
+  expect(message.trim()).toBe('Link was updated successfully')
+  return await page.locator(publicLinkRole).textContent()
 }
