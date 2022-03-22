@@ -162,7 +162,7 @@
 </template>
 
 <script>
-import NoContentMessage from '../../components/FilesList/NoContentMessage.vue'
+import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import ListLoader from '../../components/FilesList/ListLoader.vue'
 import { computed } from '@vue/composition-api'
 import { useStore } from 'web-pkg/src/composables'

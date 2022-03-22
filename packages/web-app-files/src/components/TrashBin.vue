@@ -54,7 +54,7 @@ import MixinResources from '../mixins/resources'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 
 import ListLoader from './FilesList/ListLoader.vue'
-import NoContentMessage from './FilesList/NoContentMessage.vue'
+import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import ListInfo from './FilesList/ListInfo.vue'
 import Pagination from './FilesList/Pagination.vue'
 import ContextActions from './FilesList/ContextActions.vue'

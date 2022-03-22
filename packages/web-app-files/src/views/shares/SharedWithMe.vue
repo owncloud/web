@@ -174,7 +174,7 @@ import { useRouteQuery } from 'web-pkg/src/composables'
 import debounce from 'lodash-es/debounce'
 
 import ListLoader from '../../components/FilesList/ListLoader.vue'
-import NoContentMessage from '../../components/FilesList/NoContentMessage.vue'
+import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
 import ContextActions from '../../components/FilesList/ContextActions.vue'
 import { ShareStatus } from '../../helpers/share'

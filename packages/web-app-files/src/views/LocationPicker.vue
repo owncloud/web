@@ -90,7 +90,7 @@ import MixinsGeneral from '../mixins'
 import MixinFilesListFilter from '../mixins/filesListFilter'
 import { useTask } from 'vue-concurrency'
 
-import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
+import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import ListLoader from '../components/FilesList/ListLoader.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
