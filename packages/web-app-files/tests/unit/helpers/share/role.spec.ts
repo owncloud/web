@@ -58,14 +58,14 @@ describe('PeopleShareRoles', () => {
         'all folder related share roles',
         {
           folder: true,
-          result: PeopleShareRoles.all.filter((r) => r.folder === true)
+          result: PeopleShareRoles.allWithCustom.filter((r) => r.folder === true)
         }
       ],
       [
         'all file related share roles',
         {
           folder: false,
-          result: PeopleShareRoles.all.filter((r) => r.folder === false)
+          result: PeopleShareRoles.allWithCustom.filter((r) => r.folder === false)
         }
       ]
     ])('%s', (name: string, { folder, result }) => {

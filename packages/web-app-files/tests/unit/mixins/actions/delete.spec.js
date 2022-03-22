@@ -15,6 +15,14 @@ const Component = {
   mixins: [Delete]
 }
 
+const store = new Vuex.Store({
+  getters: {
+    capabilities: () => {
+      return {}
+    }
+  }
+})
+
 describe('delete', () => {
   describe('computed property "$_delete_items"', () => {
     describe('delete isEnabled property of returned element', () => {
@@ -57,6 +65,7 @@ describe('delete', () => {
 function getWrapper({ deletePermanent = false, invalidLocation = false } = {}) {
   return mount(Component, {
     localVue,
+    store,
     mocks: {
       $router: {
         currentRoute: invalidLocation
