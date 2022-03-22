@@ -7,7 +7,9 @@ import {
   CollectionOfDrives,
   UserApiFactory,
   User,
-  MeUserApiFactory
+  MeUserApiFactory,
+  UsersApiFactory,
+  GroupsApiFactory
 } from './generated'
 
 export interface Graph {
@@ -21,6 +23,7 @@ export interface Graph {
   users: {
     getUser: (userId: string) => AxiosPromise<User>
     getMe: () => AxiosPromise<User>
+    listUsers: () => AxiosPromise<User>
   }
 }
 
@@ -33,6 +36,8 @@ const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
   const meDrivesApi = new MeDrivesApi(config, config.basePath, axiosClient)
   const meUserApiFactory = MeUserApiFactory(config, config.basePath, axiosClient)
   const userApiFactory = UserApiFactory(config, config.basePath, axiosClient)
+  const usersApiFactory = UsersApiFactory(config, config.basePath, axiosClient)
+  const groupsApiFactory = GroupsApiFactory(config, config.basePath, axiosClient)
   const drivesApiFactory = DrivesApiFactory(config, config.basePath, axiosClient)
 
   return <Graph>{
@@ -49,7 +54,11 @@ const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
     },
     users: {
       getUser: (userId: string) => userApiFactory.getUser(userId),
-      getMe: () => meUserApiFactory.meGet()
+      getMe: () => meUserApiFactory.meGet(),
+      listUsers: () => usersApiFactory.listUsers()
+    },
+    groups: {
+      listGroups: () => groupsApiFactory.listGroups()
     }
   }
 }
