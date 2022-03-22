@@ -1,0 +1,6 @@
+Enhancement: Spaces link sharing
+
+Spaces and their resources can now be shared via links.
+
+https://github.com/owncloud/web/pull/6633
+https://github.com/owncloud/web/issues/6283

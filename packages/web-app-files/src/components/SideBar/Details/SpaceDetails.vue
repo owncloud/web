@@ -43,9 +43,10 @@
             size="small"
             @click="expandMemberPanel"
           >
-            <span class="oc-text-small" v-text="$gettext('Show.')"></span>
+            <span class="oc-text-small" v-text="$gettext('Show')"></span>
           </oc-button>
         </span>
+        <span v-if="hasMemberShares && hasLinkShares">·</span>
         <span v-if="hasLinkShares">
           <span v-text="linkShareLabel" />
           <oc-button
@@ -54,7 +55,7 @@
             size="small"
             @click="expandLinkPanel"
           >
-            <span class="oc-text-small" v-text="$gettext('Show.')"></span>
+            <span class="oc-text-small" v-text="$gettext('Show')"></span>
           </oc-button>
         </span>
       </div>

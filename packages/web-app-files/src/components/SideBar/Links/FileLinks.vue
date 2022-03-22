@@ -228,7 +228,7 @@ export default {
         client: this.$client,
         path: this.highlightedFile.path === '' ? '/' : dirname(this.highlightedFile.path),
         $gettext: this.$gettext,
-        storageId: this.$route.params.storageId
+        storageId
       })
     },
     linksComparator(l1, l2) {
