@@ -552,6 +552,13 @@ function getMountedWrapper(store = createStore(), data = {}) {
     ...mountOptions(data, store),
     stubs: {
       'vue-select': VueSelect
+    },
+    mocks: {
+      $route: {
+        params: {
+          storageId: 1
+        }
+      }
     }
   })
 }

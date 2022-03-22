@@ -36,7 +36,8 @@ export default {
         item: resources[0],
         client: this.$client,
         store: this.$store,
-        $gettext: this.$gettext
+        $gettext: this.$gettext,
+        storageId: this.$route.params.storageId
       })
     }
   }

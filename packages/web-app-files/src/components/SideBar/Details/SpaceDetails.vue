@@ -24,19 +24,39 @@
         >
           <oc-icon name="group" class="oc-mr-s" />
         </oc-button>
-        <span class="oc-mr-xs" v-text="memberShareLabel" />
-        <oc-button
-          appearance="raw"
-          :aria-label="$gettext('Open the member panel')"
-          size="small"
-          @click="expandMemberPanel"
-        >
-          <span class="oc-text-small" v-text="$gettext('Show')"></span>
-        </oc-button>
       </div>
       <div v-if="hasLinkShares" class="oc-flex oc-flex-middle">
-        <oc-icon name="link" class="oc-mr-s" />
-        <span v-text="linkShareLabel" />
+        <oc-button
+          appearance="raw"
+          :aria-label="$gettext('Open the link panel')"
+          @click="expandLinkPanel"
+        >
+          <oc-icon name="link" class="oc-mr-s" />
+        </oc-button>
+      </div>
+      <div>
+        <span v-if="hasMemberShares">
+          <span v-text="memberShareLabel" />
+          <oc-button
+            appearance="raw"
+            :aria-label="$gettext('Open the member panel')"
+            size="small"
+            @click="expandMemberPanel"
+          >
+            <span class="oc-text-small" v-text="$gettext('Show.')"></span>
+          </oc-button>
+        </span>
+        <span v-if="hasLinkShares">
+          <span v-text="linkShareLabel" />
+          <oc-button
+            appearance="raw"
+            :aria-label="$gettext('Open the link panel')"
+            size="small"
+            @click="expandLinkPanel"
+          >
+            <span class="oc-text-small" v-text="$gettext('Show.')"></span>
+          </oc-button>
+        </span>
       </div>
     </div>
     <div>
@@ -203,6 +223,10 @@ export default {
 
     expandMemberPanel() {
       this.setSidebarPanel('space-share-item')
+    },
+
+    expandLinkPanel() {
+      this.setSidebarPanel('links-item')
     }
   }
 }
