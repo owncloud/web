@@ -1,6 +1,5 @@
 import { shallowMount } from '@vue/test-utils'
-import stubs from '../../../../../../tests/unit/stubs/index.js'
-import NoContentMessage from '../../../../src/components/FilesList/NoContentMessage.vue'
+import NoContentMessage from '../../../src/components/NoContentMessage.vue'
 
 describe('NoContentMessage', () => {
   describe('icon prop', () => {
@@ -49,6 +48,8 @@ function getWrapper(slots = {}) {
   return shallowMount(NoContentMessage, {
     slots: slots,
     propsData: { icon: 'mdi-test-icon' },
-    stubs: stubs
+    stubs: {
+      'oc-icon': true
+    }
   })
 }
