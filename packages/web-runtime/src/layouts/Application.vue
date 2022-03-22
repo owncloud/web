@@ -99,9 +99,11 @@ export default {
       return items.map((item) => {
         const { href: comparativeHref } = this.$router.resolve(item.route)
 
+        const name = typeof item.name === 'function' ? item.name(this.capabilities) : item.name
+
         return {
           ...item,
-          name: this.$gettext(item.name),
+          name: this.$gettext(name),
           active: currentHref.startsWith(comparativeHref)
         }
       })
