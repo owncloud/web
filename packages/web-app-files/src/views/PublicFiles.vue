@@ -67,7 +67,7 @@ import debounce from 'lodash-es/debounce'
 import { bus } from 'web-pkg/src/instance'
 
 import ListLoader from '../components/FilesList/ListLoader.vue'
-import NoContentMessage from '../components/FilesList/NoContentMessage.vue'
+import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import NotFoundMessage from '../components/FilesList/NotFoundMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
