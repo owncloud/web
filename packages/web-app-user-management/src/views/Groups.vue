@@ -10,7 +10,7 @@
           v-if="!groups.length"
           id="user-management-users-empty"
           class="files-empty"
-          icon="team"
+          icon="group-2"
         >
           <template #message>
             <span v-translate>No groups in here</span>

@@ -10,7 +10,7 @@
           v-if="!users.length"
           id="user-management-users-empty"
           class="files-empty"
-          icon="team"
+          icon="user"
         >
           <template #message>
             <span v-translate>No users in here</span>

@@ -10,7 +10,7 @@ function $gettext(msg) {
 const appInfo = {
   name: $gettext('User management'),
   id: 'user-management',
-  icon: 'team',
+  icon: 'user-settings',
   isFileEditor: false
 }
 
@@ -36,14 +36,14 @@ const routes = [
 const navItems = [
   {
     name: $gettext('Users'),
-    icon: appInfo.icon,
+    icon: 'user',
     route: {
       path: `/${appInfo.id}/users`
     }
   },
   {
     name: $gettext('Groups'),
-    icon: appInfo.icon,
+    icon: 'group-2',
     route: {
       path: `/${appInfo.id}/groups`
     }
