@@ -1,0 +1,6 @@
+Enhancement: Move ListLoader component
+
+We've moved the ListLoader component into the web-pkg package and give it a more general name,
+to ease the use in other packages.
+
+https://github.com/owncloud/web/pull/6644
