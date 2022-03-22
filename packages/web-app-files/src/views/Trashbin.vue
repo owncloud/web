@@ -1,4 +1,6 @@
-<template><trash-bin /></template>
+<template>
+  <trash-bin />
+</template>
 
 <script>
 import TrashBin from '../components/TrashBin.vue'
