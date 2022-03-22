@@ -46,7 +46,7 @@ Summary
 * Enhancement - Trash bin: [#6566](https://github.com/owncloud/web/pull/6566)
 * Enhancement - Trash bin breadcrumbs: [#6609](https://github.com/owncloud/web/pull/6609)
 * Enhancement - Update the graph SDK: [#6519](https://github.com/owncloud/web/pull/6519)
-* Enhancement - Update ODS to v13.0.0-rc.4: [#6540](https://github.com/owncloud/web/pull/6540)
+* Enhancement - Update ODS to v13.0.0-rc.6: [#6540](https://github.com/owncloud/web/pull/6540)
 
 Details
 -------
@@ -359,30 +359,38 @@ Details
 
    https://github.com/owncloud/web/pull/6519
 
-* Enhancement - Update ODS to v13.0.0-rc.4: [#6540](https://github.com/owncloud/web/pull/6540)
+* Enhancement - Update ODS to v13.0.0-rc.6: [#6540](https://github.com/owncloud/web/pull/6540)
 
-   We updated the ownCloud Design System to version 13.0.0-rc.4. Please refer to the full
+   We updated the ownCloud Design System to version 13.0.0-rc.6. Please refer to the full
    changelog in the ODS release (linked) for more details. Summary:
 
    - Change - Default type of OcButton:
-   https//github.com/owncloud/owncloud-design-system/pull/2009 - Change - Remove
+   https://github.com/owncloud/owncloud-design-system/pull/2009 - Change - Remove
    OcStatusIndicators from OcResource:
    https://github.com/owncloud/owncloud-design-system/pull/2014 - Enhancement -
    Redesign OcStatusIndicators:
    https://github.com/owncloud/owncloud-design-system/pull/2014 - Enhancement - Icons
    for drawio, ifc and odg resource types:
-   https//github.com/owncloud/owncloud-design-system/pull/2005 - Enhancement - Apply
-   size property to oc-tag: https//github.com/owncloud/owncloud-design-system/pull/2011
-   - Enhancement - Underline OcResourceName:
-   https//github.com/owncloud/owncloud-design-system/pull/2019 - Bugfix - Disabled
-   OcSelect background: https//github.com/owncloud/owncloud-design-system/pull/2008 -
+   https://github.com/owncloud/owncloud-design-system/pull/2005 - Enhancement - Apply
+   size property to oc-tag:
+   https://github.com/owncloud/owncloud-design-system/pull/2011 - Enhancement -
+   Underline OcResourceName:
+   https://github.com/owncloud/owncloud-design-system/pull/2019 - Enhancement -
+   Configurable OcResource parentfolder name:
+   https://github.com/owncloud/owncloud-design-system/pull/2029 - Enhancement - Polish
+   OcSwitch: https://github.com/owncloud/owncloud-design-system/pull/2018 -
+   Enhancement - Make filled primary OcButton use gradient background:
+   https://github.com/owncloud/owncloud-design-system/pull/2036 - Bugfix - Disabled
+   OcSelect background: https://github.com/owncloud/owncloud-design-system/pull/2008 -
    Bugfix - Icons/Thumbnails were only visible for clickable resources:
-   https//github.com/owncloud/owncloud-design-system/pull/2007
+   https://github.com/owncloud/owncloud-design-system/pull/2007 - Bugfix - OcSelect
+   transparent background:
+   https://github.com/owncloud/owncloud-design-system/pull/2036
 
    https://github.com/owncloud/web/pull/6540
    https://github.com/owncloud/web/pull/6600
    https://github.com/owncloud/web/pull/6584
-   https://github.com/owncloud/owncloud-design-system/releases/tag/v13.0.0-rc.4
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v13.0.0-rc.6
 
 Changelog for ownCloud Web [5.2.0] (2022-03-03)
 =======================================
