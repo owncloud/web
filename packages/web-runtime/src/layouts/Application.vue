@@ -77,7 +77,7 @@ export default {
     isIE11() {
       return !!window.MSInputMethodContext && !!document.documentMode
     },
-    IEdeprecationWarning() {
+    ieDeprecationWarning() {
       return this.$gettext(
         'Internet Explorer (your current browser) is not officially supported. For security reasons, please switch to another browser.'
       )
@@ -99,9 +99,11 @@ export default {
       return items.map((item) => {
         const { href: comparativeHref } = this.$router.resolve(item.route)
 
+        const name = typeof item.name === 'function' ? item.name(this.capabilities) : item.name
+
         return {
           ...item,
-          name: this.$gettext(item.name),
+          name: this.$gettext(name),
           active: currentHref.startsWith(comparativeHref)
         }
       })

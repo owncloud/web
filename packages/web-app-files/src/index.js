@@ -41,7 +41,9 @@ const appInfo = {
 }
 const navItems = [
   {
-    name: $gettext('Personal'),
+    name(capabilities) {
+      return capabilities.spaces?.enabled ? $gettext('Personal') : $gettext('All files')
+    },
     icon: appInfo.icon,
     route: {
       path: `/${appInfo.id}/spaces/personal/home`

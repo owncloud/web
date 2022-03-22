@@ -76,6 +76,7 @@ import FileDrop from './Upload/FileDrop.vue'
 import SharesNavigation from './SharesNavigation.vue'
 import SizeInfo from './SelectedResources/SizeInfo.vue'
 import ViewOptions from './ViewOptions.vue'
+import { useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
 
 export default {
   components: {
@@ -90,6 +91,7 @@ export default {
   mixins: [Mixins, MixinFileActions],
   setup() {
     return {
+      hasSpaces: useCapabilitySpacesEnabled(),
       isSharesLocation: useActiveLocation(isLocationSharesActive),
       isPersonalLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-personal-home'),
       isPublicLocation: useActiveLocation(isLocationPublicActive, 'files-public-files'),
@@ -190,6 +192,10 @@ export default {
         return []
       }
 
+      const personalRouteName = this.hasSpaces
+        ? this.$gettext('Personal')
+        : this.$gettext('All files')
+
       if (this.isTrashPersonalActive) {
         return [
           {
@@ -197,7 +203,7 @@ export default {
             to: '/files/trash'
           },
           {
-            text: this.$gettext('Personal'),
+            text: personalRouteName,
             onClick: () => bus.publish('app.files.list.load')
           }
         ]
@@ -240,7 +246,7 @@ export default {
 
             if (acc.length) {
               if (this.isPersonalLocation) {
-                acc[0].text = this.$gettext('Personal')
+                acc[0].text = personalRouteName
                 acc[0].to = acc[0].to + '/'
               } else if (this.isSpacesProjectLocation || this.isSpacesProjectsLocation) {
                 acc[0] = {

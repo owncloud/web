@@ -49,6 +49,7 @@
         :key="`${item.path}-${resourceDomSelector(item)}-${item.thumbnail}`"
         :resource="item"
         :is-path-displayed="arePathsDisplayed"
+        :parent-folder-name-default="defaultParentFolderName"
         :is-thumbnail-displayed="areThumbnailsDisplayed"
         :is-resource-clickable="isResourceClickable(item.id)"
         :folder-link="folderLink(item)"
@@ -155,6 +156,7 @@ import { EVENT_TROW_MOUNTED, EVENT_FILE_DROPPED } from '../../constants'
 import { SortDir } from '../../composables'
 import * as path from 'path'
 import { determineSortFields } from '../../helpers/ui/resourceTable'
+import { useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
 
 export default {
   model: {
@@ -304,6 +306,11 @@ export default {
       validator: (value) => {
         return value === undefined || [SortDir.Asc, SortDir.Desc].includes(value)
       }
+    }
+  },
+  setup() {
+    return {
+      hasSpaces: useCapabilitySpacesEnabled()
     }
   },
   data() {
@@ -469,6 +476,9 @@ export default {
     },
     currentLanguage() {
       return (this.$language?.current || '').split('_')[0]
+    },
+    defaultParentFolderName() {
+      return this.hasSpaces ? this.$gettext('Personal') : this.$gettext('All files and folders')
     }
   },
   methods: {

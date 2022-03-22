@@ -5,6 +5,7 @@
       :is-path-displayed="true"
       :folder-link="folderLink(resource)"
       :parent-folder-link="parentFolderLink(resource)"
+      :parent-folder-name-default="defaultParentFolderName"
     />
   </div>
 </template>
@@ -19,6 +20,7 @@ import Vue from 'vue'
 import { mapGetters } from 'vuex'
 import { createLocationSpaces } from '../../router'
 import path from 'path'
+import { useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -40,6 +42,7 @@ export default {
   },
   setup() {
     return {
+      hasSpaces: useCapabilitySpacesEnabled(),
       resourceTargetLocation: createLocationSpaces('files-spaces-personal-home')
     }
   },
@@ -49,7 +52,11 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['configuration', 'user', 'getToken'])
+    ...mapGetters(['configuration', 'user', 'getToken']),
+
+    defaultParentFolderName() {
+      return this.hasSpaces ? this.$gettext('Personal') : this.$gettext('All files and folders')
+    }
   },
   beforeMount() {
     this.resource = this.searchResult.data
