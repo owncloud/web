@@ -9,7 +9,8 @@ localVue.use(Vuex)
 
 const currentFolder = {
   id: 1,
-  path: '/folder'
+  path: '/folder',
+  webDavPath: '/files/admin/folder'
 }
 
 const Component = {
@@ -36,7 +37,7 @@ describe('rename', () => {
     it('should trigger the rename modal window', async () => {
       const wrapper = getWrapper()
       const spyCreateModalStub = jest.spyOn(wrapper.vm, 'createModal')
-      const resources = [{ id: 1 }]
+      const resources = [currentFolder]
       await wrapper.vm.$_rename_trigger({ resources })
       expect(spyCreateModalStub).toHaveBeenCalledTimes(1)
     })
@@ -91,7 +92,7 @@ describe('rename', () => {
 
       const wrapper = getWrapper(promise)
       const spyHideModalStub = jest.spyOn(wrapper.vm, 'hideModal')
-      const resource = { id: 2, path: 'folder' }
+      const resource = { id: 2, path: '/folder', webDavPath: '/files/admin/folder' }
       wrapper.vm.$_rename_renameResource(resource, 'new name')
       await wrapper.vm.$nextTick()
 

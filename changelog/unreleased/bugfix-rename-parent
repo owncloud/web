@@ -1,0 +1,6 @@
+Bugfix: Rename parent folder
+
+We fixed the rename option in the parent folder / breadcrumb context menu. It was broken due to malformed webdav paths.
+
+https://github.com/owncloud/web/issues/6516
+https://github.com/owncloud/web/pull/6631
