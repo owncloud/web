@@ -19,7 +19,7 @@ export interface AppFileHandlingResult {
   getUrlForResource(r: Resource, query?: QueryParameters): string
 
   getFileInfo(filePath: string, davProperties: DavProperties): Promise<any>
-  getFileContents(filePath: string): Promise<any>
+  getFileContents(filePath: string, options: Record<string, any>): Promise<any>
   putFileContents(filePath: string, content: string, options: Record<string, any>): Promise<any>
 }
 
@@ -56,13 +56,15 @@ export function useAppFileHandling(options: AppFileHandlingOptions): AppFileHand
     return [client.files.getFileUrl(webDavPath), queryStr].filter(Boolean).join('?')
   }
 
-  const getFileContents = async (filePath: string) => {
+  const getFileContents = async (filePath: string, options: Record<string, any>) => {
     if (unref(isPublicLinkContext)) {
       const res = await client.publicFiles.download('', filePath, unref(publicLinkPassword))
       res.statusCode = res.status
+
+      const responseType = ['arrayBuffer', 'blob', 'text'].includes(options?.responseType) ? options.responseType : 'text'
       return {
         response: res,
-        body: await res.text(),
+        body: await res[responseType](),
         headers: {
           ETag: res.headers.get('etag'),
           'OC-FileId': res.headers.get('oc-fileid')
@@ -70,7 +72,8 @@ export function useAppFileHandling(options: AppFileHandlingOptions): AppFileHand
       }
     } else {
       return client.files.getFileContents(filePath, {
-        resolveWithResponseObject: true
+        resolveWithResponseObject: true,
+        ...options
       })
     }
   }
