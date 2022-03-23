@@ -1,6 +1,6 @@
-Enhancement: Update ODS to v13.0.0-rc.6
+Enhancement: Update ODS to v13.0.0
 
-We updated the ownCloud Design System to version 13.0.0-rc.6. Please refer to the full changelog in the ODS release (linked) for more details. Summary:
+We updated the ownCloud Design System to version 13.0.0. Please refer to the full changelog in the ODS release (linked) for more details. Summary:
 
 - Change - Default type of OcButton: https://github.com/owncloud/owncloud-design-system/pull/2009
 - Change - Remove OcStatusIndicators from OcResource: https://github.com/owncloud/owncloud-design-system/pull/2014
@@ -18,4 +18,5 @@ We updated the ownCloud Design System to version 13.0.0-rc.6. Please refer to th
 https://github.com/owncloud/web/pull/6540
 https://github.com/owncloud/web/pull/6600
 https://github.com/owncloud/web/pull/6584
-https://github.com/owncloud/owncloud-design-system/releases/tag/v13.0.0-rc.6
+https://github.com/owncloud/web/pull/6561
+https://github.com/owncloud/owncloud-design-system/releases/tag/v13.0.0
