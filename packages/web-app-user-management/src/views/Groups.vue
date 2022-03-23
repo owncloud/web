@@ -1,7 +1,7 @@
 <template>
   <div>
     <main class="oc-flex oc-flex-column oc-height-1-1 oc-p-m">
-      <list-loader v-if="loadResourcesTask.isRunning" />
+      <app-loading-spinner v-if="loadResourcesTask.isRunning" />
       <template v-else>
         <div class="oc-app-bar">
           <oc-breadcrumb :items="breadcrumbs" />
@@ -25,8 +25,8 @@
 </template>
 
 <script>
-import ListLoader from '../../../web-app-files/src/components/FilesList/ListLoader.vue'
-import NoContentMessage from '../../../web-app-files/src/components/FilesList/NoContentMessage.vue'
+import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
+import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import { useStore } from 'web-pkg/src/composables'
 import { ref } from '@vue/composition-api'
 import { clientService } from 'web-pkg/src/services'
@@ -35,7 +35,7 @@ import GroupList from '../components/Groups/GroupsList.vue'
 import { bus } from 'web-pkg/src/instance'
 
 export default {
-  components: { GroupList, ListLoader, NoContentMessage },
+  components: { GroupList, AppLoadingSpinner, NoContentMessage },
 
   setup() {
     const store = useStore()
