@@ -44,7 +44,7 @@ export default {
   unmounted() {
     this.unloadPdf()
   },
-  methods:  {
+  methods: {
     async loadPdf(fileContext) {
       try {
         this.loading = true
@@ -59,7 +59,7 @@ export default {
     },
     unloadPdf() {
       URL.revokeObjectURL(this.blobUrl)
-    },
+    }
   }
 }
 </script>

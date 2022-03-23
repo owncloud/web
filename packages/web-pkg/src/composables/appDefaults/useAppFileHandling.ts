@@ -61,7 +61,9 @@ export function useAppFileHandling(options: AppFileHandlingOptions): AppFileHand
       const res = await client.publicFiles.download('', filePath, unref(publicLinkPassword))
       res.statusCode = res.status
 
-      const responseType = ['arrayBuffer', 'blob', 'text'].includes(options?.responseType) ? options.responseType : 'text'
+      const responseType = ['arrayBuffer', 'blob', 'text'].includes(options?.responseType)
+        ? options.responseType
+        : 'text'
       return {
         response: res,
         body: await res[responseType](),
