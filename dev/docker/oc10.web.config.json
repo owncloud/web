@@ -9,6 +9,7 @@
     "files",
     "media-viewer",
     "markdown-editor",
+    "pdf-viewer",
     "search"
   ],
   "options": {

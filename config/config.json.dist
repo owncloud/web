@@ -9,9 +9,10 @@
   },
   "apps" : [
     "files",
-    "search",
+    "draw-io",
     "media-viewer",
-    "draw-io"
+    "pdf-viewer", 
+    "search"
   ],
   "applications" : []
 }
