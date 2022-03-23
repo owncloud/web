@@ -1,6 +1,6 @@
 {
   "name": "user-management",
   "version": "0.0.0",
-  "description": "ownCloud web search",
+  "description": "ownCloud user management",
   "license": "AGPL-3.0"
 }
