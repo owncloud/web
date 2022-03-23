@@ -1,9 +1,9 @@
-Changelog for ownCloud Web [unreleased] (UNRELEASED)
+Changelog for ownCloud Web [5.3.0] (2022-03-23)
 =======================================
-The following sections list the changes in ownCloud web unreleased relevant to
+The following sections list the changes in ownCloud web 5.3.0 relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v5.2.0...master
+[5.3.0]: https://github.com/owncloud/web/compare/v5.2.0...v5.3.0
 
 Summary
 -------
@@ -22,9 +22,9 @@ Summary
 * Bugfix - Prevent cross-site scripting attack while displaying space description: [#6523](https://github.com/owncloud/web/pull/6523)
 * Bugfix - Prevent the member count inside a space from disappearing: [#6550](https://github.com/owncloud/web/pull/6550)
 * Bugfix - TypeErrors when trying to destruct undefined properties: [#6568](https://github.com/owncloud/web/pull/6568)
-* Change - App context route to query instead of params: [#6622](https://github.com/owncloud/web/pull/6622)
 * Enhancement - Don't block account page while groups are loading: [#6547](https://github.com/owncloud/web/pull/6547)
 * Enhancement - Add a watcher for the share panel of a space: [#6543](https://github.com/owncloud/web/pull/6543)
+* Enhancement - App context route to query instead of params: [#6622](https://github.com/owncloud/web/pull/6622)
 * Enhancement - Contextmenu background hover: [#6553](https://github.com/owncloud/web/pull/6553)
 * Enhancement - Design improvements: [#6492](https://github.com/owncloud/web/issues/6492)
 * Enhancement - Improve resource loading within spaces: [#6601](https://github.com/owncloud/web/pull/6601)
@@ -48,7 +48,7 @@ Summary
 * Enhancement - Trash bin: [#6566](https://github.com/owncloud/web/pull/6566)
 * Enhancement - Trash bin breadcrumbs: [#6609](https://github.com/owncloud/web/pull/6609)
 * Enhancement - Update the graph SDK: [#6519](https://github.com/owncloud/web/pull/6519)
-* Enhancement - Update ODS to v13.0.0-rc.6: [#6540](https://github.com/owncloud/web/pull/6540)
+* Enhancement - Update ODS to v13.0.0: [#6540](https://github.com/owncloud/web/pull/6540)
 
 Details
 -------
@@ -161,14 +161,6 @@ Details
 
    https://github.com/owncloud/web/pull/6568
 
-* Change - App context route to query instead of params: [#6622](https://github.com/owncloud/web/pull/6622)
-
-   We've moved app context information (where you get redirected when you close an app) into the
-   query instead of a regular param. This relocates this information further to the back of the url
-   where it's less confusing for users.
-
-   https://github.com/owncloud/web/pull/6622
-
 * Enhancement - Don't block account page while groups are loading: [#6547](https://github.com/owncloud/web/pull/6547)
 
    We don't show a loading state for the full account information page anymore while the group
@@ -183,6 +175,14 @@ Details
    indicator.
 
    https://github.com/owncloud/web/pull/6543
+
+* Enhancement - App context route to query instead of params: [#6622](https://github.com/owncloud/web/pull/6622)
+
+   We've moved app context information (where you get redirected when you close an app) into the
+   query instead of a regular param. This relocates this information further to the back of the url
+   where it's less confusing for users.
+
+   https://github.com/owncloud/web/pull/6622
 
 * Enhancement - Contextmenu background hover: [#6553](https://github.com/owncloud/web/pull/6553)
 
@@ -375,10 +375,10 @@ Details
 
    https://github.com/owncloud/web/pull/6519
 
-* Enhancement - Update ODS to v13.0.0-rc.6: [#6540](https://github.com/owncloud/web/pull/6540)
+* Enhancement - Update ODS to v13.0.0: [#6540](https://github.com/owncloud/web/pull/6540)
 
-   We updated the ownCloud Design System to version 13.0.0-rc.6. Please refer to the full
-   changelog in the ODS release (linked) for more details. Summary:
+   We updated the ownCloud Design System to version 13.0.0. Please refer to the full changelog in
+   the ODS release (linked) for more details. Summary:
 
    - Change - Default type of OcButton:
    https://github.com/owncloud/owncloud-design-system/pull/2009 - Change - Remove
@@ -406,7 +406,8 @@ Details
    https://github.com/owncloud/web/pull/6540
    https://github.com/owncloud/web/pull/6600
    https://github.com/owncloud/web/pull/6584
-   https://github.com/owncloud/owncloud-design-system/releases/tag/v13.0.0-rc.6
+   https://github.com/owncloud/web/pull/6561
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v13.0.0
 
 Changelog for ownCloud Web [5.2.0] (2022-03-03)
 =======================================
