@@ -1,13 +1,19 @@
 import translations from '../l10n/translations'
 import App from './App.vue'
 
+// just a dummy function to trick gettext tools
+function $gettext(msg) {
+  return msg
+}
+
 const routes = [
   {
-    name: 'pdf-viewer',
     path: '/:filePath*',
     component: App,
+    name: 'pdf-viewer',
     meta: {
       auth: false,
+      title: $gettext('PDF Viewer app'),
       patchCleanPath: true
     }
   }
