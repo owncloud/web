@@ -13,9 +13,6 @@
 <script>
 import { mapGetters } from 'vuex'
 import { useAppDefaults } from 'web-pkg/src/composables'
-import { DavProperties } from 'web-pkg/src/constants'
-import { buildResource } from '../../web-app-files/src/helpers/resources'
-import HTTPError from 'owncloud-sdk'
 import ErrorScreen from './components/ErrorScreen.vue'
 import LoadingScreen from './components/LoadingScreen.vue'
 
@@ -41,45 +38,28 @@ export default {
   computed: {
     ...mapGetters(['getToken'])
   },
-  async created() {
-    this.filePath = this.currentFileContext.path
-
-    try {
-      let resource = await this.getFileInfo(
-        this.filePath,
-        this.isPublicLinkContext ? DavProperties.PublicLink : DavProperties.Default
-      )
-      resource = buildResource(resource)
-
-      let url
-      const headers = new Headers()
-      if (this.isPublicLinkContext) {
-        url = resource.downloadURL
-      } else {
-        url = `${this.$client.helpers._davPath}${resource.webDavPath}`
-        headers.append('Authorization', 'Bearer ' + this.getToken)
-        headers.append('X-Requested-With', 'XMLHttpRequest')
+  created() {
+    this.loadPdf(this.currentFileContext)
+  },
+  unmounted() {
+    this.unloadPdf()
+  },
+  methods:  {
+    async loadPdf(fileContext) {
+      try {
+        this.loading = true
+        const response = await this.getFileContents(fileContext.path, { responseType: 'blob' })
+        this.blobUrl = URL.createObjectURL(response.body)
+      } catch (e) {
+        this.loadingError = true
+        console.error('Error fetching pdf', e)
+      } finally {
+        this.loading = false
       }
-
-      const response = await fetch(url, {
-        method: 'GET',
-        headers
-      })
-
-      if (response.status !== 200) {
-        throw new HTTPError(response.status, response.message)
-      }
-
-      const newBlob = new Blob([await response.blob()], { type: 'application/pdf' })
-      this.blobUrl = URL.createObjectURL(newBlob)
-      this.loading = false
-    } catch (e) {
-      this.loading = false
-      this.loadingError = true
-      console.error('Error fetching pdf', e.statusCode, e)
-    }
-
-    // TODO free memory when leaving
+    },
+    unloadPdf() {
+      URL.revokeObjectURL(this.blobUrl)
+    },
   }
 }
 </script>
