@@ -5,6 +5,24 @@
       <template v-else>
         <div class="oc-app-bar">
           <oc-breadcrumb :items="breadcrumbs" />
+          <div class="oc-flex-1 oc-flex oc-flex-start">
+            <div
+              v-if="selectedUsers.length"
+              class="oc-flex oc-flex-middle oc-text-nowrap size-info oc-visible@l"
+            >
+              <span v-text="selectedUsersText" />
+              <oc-button
+                id="files-clear-selection"
+                v-oc-tooltip="$gettext('Clear selection')"
+                :aria-label="$gettext('Clear selection')"
+                class="oc-ml-m"
+                appearance="outline"
+                @click="unselectAllUsers"
+              >
+                <oc-icon name="close" />
+              </oc-button>
+            </div>
+          </div>
         </div>
         <no-content-message
           v-if="!users.length"
@@ -65,6 +83,11 @@ export default {
     }
   },
   computed: {
+    selectedUsersText() {
+      const translated = this.$gettext('%{ users } selected')
+
+      return this.$gettextInterpolate(translated, { users: this.selectedUsers.length })
+    },
     breadcrumbs() {
       return [
         { text: this.$gettext('User management'), to: { path: '/user-management' } },
@@ -108,6 +131,10 @@ export default {
       }
 
       this.selectedUsers = this.selectedUsers.filter((user) => user.id !== toggledUser.id)
+    },
+
+    unselectAllUsers() {
+      this.selectedUsers = []
     }
   }
 }
