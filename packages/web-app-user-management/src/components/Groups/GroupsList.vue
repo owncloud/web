@@ -5,6 +5,7 @@
         <oc-tr>
           <oc-th shrink type="head" align-h="center">
             <oc-checkbox
+              size="large"
               class="oc-ml-s"
               :label="$gettext('Select all groups')"
               :value="allGroupsSelected"

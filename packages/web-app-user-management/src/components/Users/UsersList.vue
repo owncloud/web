@@ -5,6 +5,7 @@
         <oc-tr>
           <oc-th shrink type="head" align-h="center">
             <oc-checkbox
+              size="large"
               class="oc-ml-s"
               :label="$gettext('Select all users')"
               :value="allUsersSelected"
@@ -43,11 +44,10 @@ export default {
     users: {
       type: Array,
       required: true
-    }
-  },
-  data: function () {
-    return {
-      selectedUsers: []
+    },
+    selectedUsers: {
+      type: Array,
+      required: true
     }
   },
   computed: {
@@ -55,31 +55,9 @@ export default {
       return this.users.length === this.selectedUsers.length
     }
   },
-  mounted() {
-    const loadResourcesEventToken = bus.subscribe('app.user-management.users.toggle', (group) =>
-      this.toggleSelectedGroup(group)
-    )
-
-    this.$on('beforeDestroy', () => {
-      bus.unsubscribe('app.user-management.groups.toggle', loadResourcesEventToken)
-    })
-  },
   methods: {
     toggleSelectAllUsers() {
-      if (this.allUsersSelected) {
-        return (this.selectedUsers = [])
-      }
-      this.selectedUsers = [...this.users]
-    },
-
-    toggleSelectedGroup(toggledUser) {
-      const isUserSelected = this.selectedUsers.find((user) => user.id === toggledUser.id)
-
-      if (!isUserSelected) {
-        return this.selectedUsers.push(toggledUser)
-      }
-
-      this.selectedUsers = this.selectedUsers.filter((user) => user.id !== toggledUser.id)
+      bus.publish('app.user-management.users.toggle.users')
     }
   }
 }

@@ -17,7 +17,7 @@
           </template>
         </no-content-message>
         <div v-else>
-          <UsersList :users="users" />
+          <UsersList :users="users" :selected-users="selectedUsers" />
         </div>
       </template>
     </main>
@@ -36,7 +36,6 @@ import { bus } from 'web-pkg/src/instance'
 
 export default {
   components: { UsersList, AppLoadingSpinner, NoContentMessage },
-
   setup() {
     const store = useStore()
     const users = ref([])
@@ -55,6 +54,11 @@ export default {
       loadResourcesTask
     }
   },
+  data: function () {
+    return {
+      selectedUsers: []
+    }
+  },
   computed: {
     breadcrumbs() {
       return [
@@ -64,6 +68,10 @@ export default {
           onClick: () => bus.publish('app.user-management.list.load')
         }
       ]
+    },
+
+    allUsersSelected() {
+      return this.users.length === this.selectedUsers.length
     }
   },
 
@@ -74,9 +82,40 @@ export default {
       this.loadResourcesTask.perform(this)
     })
 
+    const toggleSelectedUserEventToken = bus.subscribe(
+      'app.user-management.users.toggle.user',
+      (group) => this.toggleSelectedUser(group)
+    )
+
+    const toggleSelectedUsersEventToken = bus.subscribe(
+      'app.user-management.users.toggle.users',
+      (group) => this.toggleSelectAllUsers(group)
+    )
+
     this.$on('beforeDestroy', () => {
       bus.unsubscribe('app.user-management.list.load', loadResourcesEventToken)
+      bus.unsubscribe('app.user-management.users.toggle.user', toggleSelectedUserEventToken)
+      bus.unsubscribe('app.user-management.users.toggle.users', toggleSelectedUsersEventToken)
     })
+  },
+
+  methods: {
+    toggleSelectAllUsers() {
+      if (this.allUsersSelected) {
+        return (this.selectedUsers = [])
+      }
+      this.selectedUsers = [...this.users]
+    },
+
+    toggleSelectedUser(toggledUser) {
+      const isUserSelected = this.selectedUsers.find((user) => user.id === toggledUser.id)
+
+      if (!isUserSelected) {
+        return this.selectedUsers.push(toggledUser)
+      }
+
+      this.selectedUsers = this.selectedUsers.filter((user) => user.id !== toggledUser.id)
+    }
   }
 }
 </script>
