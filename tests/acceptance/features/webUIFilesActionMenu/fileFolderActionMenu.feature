@@ -23,9 +23,9 @@ Feature: User can see the file or folder actions menu options
     When the user opens the actions sidebar panel of file "lorem.pdf" on the webUI
     Then the app-sidebar for file "lorem.pdf" should be visible on the webUI
     And only the following items with default items should be visible in the actions menu on the webUI
-      | items           |
-      | open in browser |
-      | download        |
+      | items              |
+      | open in pdf viewer |
+      | download           |
     When the user opens the actions sidebar panel of file "testavatar.png" on the webUI
     Then the app-sidebar for file "testavatar.png" should be visible on the webUI
     And only the following items with default items should be visible in the actions menu on the webUI
