@@ -1,5 +1,6 @@
 <template>
   <div>
+    <create-user-modal v-if="createUserModalOpen" @cancel="toggleCreateUserModal"/>
     <main class="oc-flex oc-flex-column oc-height-1-1 oc-p-m">
       <app-loading-spinner v-if="loadResourcesTask.isRunning" />
       <template v-else>
@@ -24,6 +25,17 @@
               <oc-button appearance="outline" class="oc-ml-m" @click="deleteSelectedUsersTrigger">
                 <oc-icon name="delete-bin" />
                 <translate>Delete</translate>
+              </oc-button>
+            </div>
+            <div v-else class="oc-flex oc-flex-middle oc-text-nowrap size-info oc-visible@l">
+              <oc-button
+                variation="primary"
+                appearance="filled"
+                class="oc-ml-m"
+                @click="toggleCreateUserModal"
+              >
+                <oc-icon name="add" />
+                <translate>Create user</translate>
               </oc-button>
             </div>
           </div>
@@ -53,6 +65,7 @@
 
 <script>
 import UsersList from '../components/Users/UsersList.vue'
+import CreateUserModal from '../components/Users/CreateUserModal.vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import { useStore } from 'web-pkg/src/composables'
@@ -63,7 +76,7 @@ import { bus } from 'web-pkg/src/instance'
 import { mapActions } from 'vuex'
 
 export default {
-  components: { UsersList, AppLoadingSpinner, NoContentMessage },
+  components: { UsersList, AppLoadingSpinner, NoContentMessage, CreateUserModal },
   setup() {
     const store = useStore()
     const users = ref([])
@@ -85,7 +98,8 @@ export default {
   },
   data: function () {
     return {
-      selectedUsers: []
+      selectedUsers: [],
+      createUserModalOpen: false
     }
   },
   computed: {
@@ -230,6 +244,10 @@ export default {
             status: 'danger'
           })
         })
+    },
+
+    toggleCreateUserModal() {
+      this.createUserModalOpen = !this.createUserModalOpen
     }
   }
 }
