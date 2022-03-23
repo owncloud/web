@@ -6,9 +6,10 @@
           <oc-th shrink type="head" align-h="center">
             <oc-checkbox
               class="oc-ml-s"
-              :value="true"
               :label="$gettext('Select all users')"
+              :value="allUsersSelected"
               hide-label
+              @input="toggleSelectAllUsers"
             />
           </oc-th>
           <oc-th shrink type="head" />
@@ -20,7 +21,12 @@
         </oc-tr>
       </oc-thead>
       <oc-tbody>
-        <users-list-row v-for="user in users" :key="`user-list-row-${user.id}`" :user="user" />
+        <users-list-row
+          v-for="user in users"
+          :key="`user-list-row-${user.id}`"
+          :user="user"
+          :selected-users="selectedUsers"
+        />
       </oc-tbody>
     </oc-table-simple>
   </div>
@@ -28,6 +34,7 @@
 
 <script>
 import UsersListRow from './UsersListRow.vue'
+import { bus } from 'web-pkg/src/instance'
 
 export default {
   name: 'UsersList',
@@ -36,6 +43,43 @@ export default {
     users: {
       type: Array,
       required: true
+    }
+  },
+  data: function () {
+    return {
+      selectedUsers: []
+    }
+  },
+  computed: {
+    allUsersSelected() {
+      return this.users.length === this.selectedUsers.length
+    }
+  },
+  mounted() {
+    const loadResourcesEventToken = bus.subscribe('app.user-management.users.toggle', (group) =>
+      this.toggleSelectedGroup(group)
+    )
+
+    this.$on('beforeDestroy', () => {
+      bus.unsubscribe('app.user-management.groups.toggle', loadResourcesEventToken)
+    })
+  },
+  methods: {
+    toggleSelectAllUsers() {
+      if (this.allUsersSelected) {
+        return (this.selectedUsers = [])
+      }
+      this.selectedUsers = [...this.users]
+    },
+
+    toggleSelectedGroup(toggledUser) {
+      const isUserSelected = this.selectedUsers.find((user) => user.id === toggledUser.id)
+
+      if (!isUserSelected) {
+        return this.selectedUsers.push(toggledUser)
+      }
+
+      this.selectedUsers = this.selectedUsers.filter((user) => user.id !== toggledUser.id)
     }
   }
 }
