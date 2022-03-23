@@ -4,7 +4,7 @@ import App from './App.vue'
 const routes = [
   {
     name: 'pdf-viewer',
-    path: '/:contextRouteName/:filePath*',
+    path: '/:filePath*',
     component: App,
     meta: {
       auth: false,
