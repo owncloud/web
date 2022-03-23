@@ -23,6 +23,7 @@ export interface Graph {
   users: {
     getUser: (userId: string) => AxiosPromise<User>
     getMe: () => AxiosPromise<User>
+    deleteUser: (userId: string) => AxiosPromise<void>
     listUsers: (orderBy?: string) => AxiosPromise<User>
   }
   groups: {
@@ -58,6 +59,7 @@ const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
     users: {
       getUser: (userId: string) => userApiFactory.getUser(userId),
       getMe: () => meUserApiFactory.meGet(),
+      deleteUser: (userId: string) => userApiFactory.deleteUser(userId),
       listUsers: (orderBy?: any) =>
         usersApiFactory.listUsers(0, 0, '', '', false, new Set<any>([orderBy]))
     },

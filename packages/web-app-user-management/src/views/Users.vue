@@ -21,6 +21,10 @@
               >
                 <oc-icon name="close" />
               </oc-button>
+              <oc-button appearance="outline" class="oc-ml-m" @click="deleteSelectedUsersTrigger">
+                <oc-icon name="delete-bin" />
+                <translate>Delete</translate>
+              </oc-button>
             </div>
           </div>
         </div>
@@ -56,6 +60,7 @@ import { ref } from '@vue/composition-api'
 import { clientService } from 'web-pkg/src/services'
 import { useTask } from 'vue-concurrency'
 import { bus } from 'web-pkg/src/instance'
+import { mapActions } from 'vuex'
 
 export default {
   components: { UsersList, AppLoadingSpinner, NoContentMessage },
@@ -74,7 +79,8 @@ export default {
 
     return {
       users,
-      loadResourcesTask
+      loadResourcesTask,
+      graphClient
     }
   },
   data: function () {
@@ -84,9 +90,9 @@ export default {
   },
   computed: {
     selectedUsersText() {
-      const translated = this.$gettext('%{ users } selected')
+      const translated = this.$gettext('%{ userCount } selected')
 
-      return this.$gettextInterpolate(translated, { users: this.selectedUsers.length })
+      return this.$gettextInterpolate(translated, { userCount: this.selectedUsers.length })
     },
     breadcrumbs() {
       return [
@@ -116,6 +122,7 @@ export default {
   },
 
   methods: {
+    ...mapActions(['showMessage', 'createModal', 'hideModal']),
     toggleSelectAllUsers() {
       if (this.allUsersSelected) {
         return (this.selectedUsers = [])
@@ -135,6 +142,94 @@ export default {
 
     unselectAllUsers() {
       this.selectedUsers = []
+    },
+
+    deleteSelectedUsersTrigger() {
+      const modal = {
+        variation: 'danger',
+        title: this.$gettextInterpolate(
+          this.$ngettext(
+            'Delete user %{user}?',
+            'Delete %{userCount} selected users?',
+            this.selectedUsers.length
+          ),
+          {
+            userCount: this.selectedUsers.length,
+            user:
+              this.selectedUsers[0].displayName || this.selectedUsers[0].onPremisesSamAccountName
+          }
+        ),
+        cancelText: this.$gettext('Cancel'),
+        confirmText: this.$gettext('Delete'),
+        icon: 'alarm-warning',
+        message: this.$gettextInterpolate(
+          this.$ngettext(
+            'Are you sure you want to delete this user?',
+            'Are you sure you want to delete all selected users?',
+            this.selectedUsers.length
+          ),
+          {
+            userCount: this.selectedUsers.length
+          }
+        ),
+        hasInput: false,
+        onCancel: this.hideModal,
+        onConfirm: () => this.deleteSelectedUsers()
+      }
+
+      this.createModal(modal)
+    },
+
+    deleteSelectedUsers() {
+      const promises = []
+      this.selectedUsers.reduce((acc, user) => {
+        acc.push(this.graphClient.users.deleteUser(user.id))
+        return acc
+      }, promises)
+
+      Promise.all(promises)
+        .then(() => {
+          this.showMessage({
+            title: this.$gettextInterpolate(
+              this.$ngettext(
+                'User "%{user}" was deleted successfully',
+                '%{userCount} users were deleted successfully',
+                this.selectedUsers.length
+              ),
+              {
+                userCount: this.selectedUsers.length,
+                user:
+                  this.selectedUsers[0].displayName ||
+                  this.selectedUsers[0].onPremisesSamAccountName
+              },
+              true
+            )
+          })
+          this.users = this.users.filter((user) => {
+            return !this.selectedUsers.find((selectedUser) => user.id === selectedUser.id)
+          })
+          this.selectedUsers = []
+          this.hideModal()
+        })
+        .catch(() => {
+          this.showMessage({
+            title: this.$gettextInterpolate(
+              this.$ngettext(
+                'Failed to delete user "%{user}"',
+                'Failed to delete %{userCount} users',
+                this.selectedUsers.length
+              ),
+              {
+                userCount: this.selectedUsers.length,
+                user:
+                  this.selectedUsers[0].displayName ||
+                  this.selectedUsers[0].onPremisesSamAccountName
+              },
+              true
+            ),
+            status: 'danger'
+          })
+        })
     }
   }
 }
