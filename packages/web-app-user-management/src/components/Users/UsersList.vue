@@ -10,7 +10,7 @@
               :label="$gettext('Select all users')"
               :value="allUsersSelected"
               hide-label
-              @input="toggleSelectAllUsers"
+              @input="$emit('toggleSelectAllUser')"
             />
           </oc-th>
           <oc-th shrink type="head" />
@@ -27,6 +27,7 @@
           :key="`user-list-row-${user.id}`"
           :user="user"
           :selected-users="selectedUsers"
+          @toggleSelectUser="$emit('toggleSelectUser', user)"
         />
       </oc-tbody>
     </oc-table-simple>
@@ -35,7 +36,6 @@
 
 <script>
 import UsersListRow from './UsersListRow.vue'
-import { bus } from 'web-pkg/src/instance'
 
 export default {
   name: 'UsersList',
@@ -53,11 +53,6 @@ export default {
   computed: {
     allUsersSelected() {
       return this.users.length === this.selectedUsers.length
-    }
-  },
-  methods: {
-    toggleSelectAllUsers() {
-      bus.publish('app.user-management.users.toggle.users')
     }
   }
 }

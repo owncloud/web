@@ -8,7 +8,7 @@
         :option="user"
         :label="selectUserLabel"
         hide-label
-        @input="toggleSelectedUser"
+        @input="$emit('toggleSelectUser', user)"
       />
     </oc-td>
     <oc-td>
@@ -23,8 +23,6 @@
 </template>
 
 <script>
-import { bus } from 'web-pkg/src/instance'
-
 export default {
   name: 'UserListRow',
 
@@ -43,11 +41,6 @@ export default {
       const translated = this.$gettext('Select %{ user }')
 
       return this.$gettextInterpolate(translated, { group: this.user.displayName }, true)
-    }
-  },
-  methods: {
-    toggleSelectedUser() {
-      bus.publish('app.user-management.users.toggle', this.user)
     }
   }
 }

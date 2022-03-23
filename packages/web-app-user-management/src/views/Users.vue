@@ -17,7 +17,12 @@
           </template>
         </no-content-message>
         <div v-else>
-          <UsersList :users="users" :selected-users="selectedUsers" />
+          <UsersList
+            :users="users"
+            :selected-users="selectedUsers"
+            @toggleSelectUser="toggleSelectUser"
+            @toggleSelectAllUser="toggleSelectAllUsers"
+          />
         </div>
       </template>
     </main>
@@ -82,20 +87,8 @@ export default {
       this.loadResourcesTask.perform(this)
     })
 
-    const toggleSelectedUserEventToken = bus.subscribe(
-      'app.user-management.users.toggle.user',
-      (group) => this.toggleSelectedUser(group)
-    )
-
-    const toggleSelectedUsersEventToken = bus.subscribe(
-      'app.user-management.users.toggle.users',
-      (group) => this.toggleSelectAllUsers(group)
-    )
-
     this.$on('beforeDestroy', () => {
       bus.unsubscribe('app.user-management.list.load', loadResourcesEventToken)
-      bus.unsubscribe('app.user-management.users.toggle.user', toggleSelectedUserEventToken)
-      bus.unsubscribe('app.user-management.users.toggle.users', toggleSelectedUsersEventToken)
     })
   },
 
@@ -107,7 +100,7 @@ export default {
       this.selectedUsers = [...this.users]
     },
 
-    toggleSelectedUser(toggledUser) {
+    toggleSelectUser(toggledUser) {
       const isUserSelected = this.selectedUsers.find((user) => user.id === toggledUser.id)
 
       if (!isUserSelected) {
