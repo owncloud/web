@@ -372,11 +372,23 @@ export default {
         params.password = this.password
       }
 
+      let storageId
+      if (this.highlightedFile.type === 'space') {
+        storageId = this.highlightedFile.id
+      } else if (this.$route.params.storageId) {
+        storageId = this.$route.params.storageId
+      }
+
+      if (storageId) {
+        params.spaceRef = `${storageId}${this.highlightedFile.path}`
+      }
+
       this.addLink({
         path: this.highlightedFile.path,
         client: this.$client,
         $gettext: this.$gettext,
-        params
+        params,
+        storageId
       })
         .then((e) => {
           this.saving = false

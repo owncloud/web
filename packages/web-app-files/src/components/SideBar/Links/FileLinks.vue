@@ -55,7 +55,6 @@
 </template>
 <script>
 import { DateTime } from 'luxon'
-import { dirname } from 'path'
 import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import mixins from '../../../mixins'
 import { getParentPaths } from '../../../helpers/path'
@@ -65,6 +64,9 @@ import LinkEdit from './PublicLinks/LinkEdit.vue'
 import ListItem from './PublicLinks/ListItem.vue'
 import PrivateLinkItem from './PrivateLinkItem.vue'
 import { ShareTypes } from '../../../helpers/share'
+import { useStore } from 'web-pkg/src/composables'
+import { clientService } from 'web-pkg/src/services'
+import { dirname } from 'path'
 
 const VIEW_SHOW = 'showLinks'
 const VIEW_EDIT = 'editPublicLink'
@@ -85,6 +87,15 @@ export default {
       changeView: (view) => (this.$data.currentView = view)
     }
   },
+  setup() {
+    const store = useStore()
+    const graphClient = clientService.graphAuthenticated(
+      store.getters.configuration.server,
+      store.getters.getToken
+    )
+
+    return { graphClient }
+  },
   data() {
     return {
       VIEW_SHOW,
@@ -101,9 +112,10 @@ export default {
     ]),
     ...mapGetters(['capabilities']),
     ...mapState('Files', ['sharesTree']),
+    ...mapState(['user']),
 
     canCreatePublicLinks() {
-      return this.highlightedFile.canShare()
+      return this.highlightedFile.canShare({ user: this.user })
     },
 
     noResharePermsMessage() {
@@ -172,6 +184,9 @@ export default {
 
     privateLinkEnabled() {
       return this.capabilities.files.privateLinks
+    },
+    resourceIsSpace() {
+      return this.highlightedFile.type === 'space'
     }
   },
   watch: {
@@ -193,18 +208,27 @@ export default {
       this.currentView = VIEW_SHOW
     },
     $_reloadLinks() {
+      let storageId
+      if (this.resourceIsSpace) {
+        storageId = this.highlightedFile.id
+      } else if (this.$route.params.storageId) {
+        storageId = this.$route.params.storageId
+      }
+
       this.$_showList()
       this.loadCurrentFileOutgoingShares({
         client: this.$client,
+        graphClient: this.graphClient,
         path: this.highlightedFile.path,
         $gettext: this.$gettext,
-        storageId: this.$route.params.storageId
+        storageId,
+        resource: this.highlightedFile
       })
       this.loadSharesTree({
         client: this.$client,
-        path: dirname(this.highlightedFile.path),
+        path: this.highlightedFile.path === '' ? '/' : dirname(this.highlightedFile.path),
         $gettext: this.$gettext,
-        storageId: this.$route.params.storageId
+        storageId
       })
     },
     linksComparator(l1, l2) {

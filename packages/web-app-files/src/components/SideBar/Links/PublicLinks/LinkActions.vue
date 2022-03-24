@@ -80,8 +80,15 @@ export default {
     },
 
     deleteLink({ client, share, resource }) {
+      let storageId
+      if (this.highlightedFile.type === 'space') {
+        storageId = this.highlightedFile.id
+      } else if (this.$route.params.storageId) {
+        storageId = this.$route.params.storageId
+      }
+
       this.hideModal()
-      this.removeLink({ client, share, resource })
+      this.removeLink({ client, share, resource, storageId })
 
       this.showMessage({
         title: this.$gettext('Public link was deleted successfully')

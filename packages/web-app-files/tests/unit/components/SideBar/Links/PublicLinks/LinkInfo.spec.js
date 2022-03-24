@@ -167,7 +167,7 @@ describe('LinkInfo', () => {
       expect(linkDirectTag.exists()).toBeTruthy()
       expect(linkDirectTag.props().to).toMatchObject({
         name: 'files-spaces-personal-home',
-        params: { item: '/' },
+        params: { item: '/some-path' },
         query: { scrollTo: 'some-path' }
       })
       expect(linkDirectTag.find(selectors.linkViaLabel).text()).toBe('Via some-path')
@@ -215,6 +215,21 @@ function getMountedWrapper(
     stubs,
     directives: {
       'oc-tooltip': jest.fn()
+    },
+    mocks: {
+      $router: {
+        currentRoute: { name: 'some-route' },
+        resolve: (r) => {
+          return {
+            href: r.name
+          }
+        }
+      },
+      $route: {
+        params: {
+          storageId: 1
+        }
+      }
     }
   })
 }
