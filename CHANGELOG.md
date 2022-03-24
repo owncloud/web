@@ -1,3 +1,36 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v5.3.0...master
+
+Summary
+-------
+
+* Enhancement - Editor role for single file public links: [#6618](https://github.com/owncloud/web/pull/6618)
+* Enhancement - Make some UI elements/actions optional: [#6618](https://github.com/owncloud/web/pull/6618)
+
+Details
+-------
+
+* Enhancement - Editor role for single file public links: [#6618](https://github.com/owncloud/web/pull/6618)
+
+   Allow creating a public link with editor role for a single file. Only available in oCIS.
+
+   https://github.com/owncloud/web/pull/6618
+
+* Enhancement - Make some UI elements/actions optional: [#6618](https://github.com/owncloud/web/pull/6618)
+
+   Make renaming a share, permanently deleting files and showing the custom permissions role
+   optional via capabilities. By default, all of these options are enabled/showed.
+
+   Capabilities: * capabilities.files_sharing.can_rename *
+   capabilities.files.permanent_deletion * capabilities.files_sharing.allow_custom
+
+   https://github.com/owncloud/web/issues/6324
+   https://github.com/owncloud/web/pull/6618
+
 Changelog for ownCloud Web [5.3.0] (2022-03-23)
 =======================================
 The following sections list the changes in ownCloud web 5.3.0 relevant to
