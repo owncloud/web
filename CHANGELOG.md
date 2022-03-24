@@ -8,11 +8,22 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Use oC10 navigation entry names: [#6656](https://github.com/owncloud/web/pull/6656)
 * Enhancement - Editor role for single file public links: [#6618](https://github.com/owncloud/web/pull/6618)
 * Enhancement - Make some UI elements/actions optional: [#6618](https://github.com/owncloud/web/pull/6618)
 
 Details
 -------
+
+* Bugfix - Use oC10 navigation entry names: [#6656](https://github.com/owncloud/web/pull/6656)
+
+   When fetching navigation entries from oC10, we previously used the app's names. This caused
+   issues when the navigation entry ID and the app ID differ. Also, the navigation entries did not
+   match with the ones in the classic UI. This has been fixed as we now use the navigation entry name,
+   which falls back to the app name if not given.
+
+   https://github.com/owncloud/web/issues/6585
+   https://github.com/owncloud/web/pull/6656
 
 * Enhancement - Editor role for single file public links: [#6618](https://github.com/owncloud/web/pull/6618)
 
