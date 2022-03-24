@@ -111,7 +111,7 @@ class ConfigController extends Controller {
             $titles = [];
             foreach ($supportedLanguages as $lang) {
                 $l10n = \OC::$server->getL10N($appInfo['id'], $lang);
-                $titles[$lang] = $l10n->t($appInfo['name']);
+                $titles[$lang] = $l10n->t($navigationEntry['name']);
             }
 
             $apps[] = [
