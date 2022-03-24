@@ -25,6 +25,14 @@ const stubs = {
   'oc-icon': true
 }
 
+const store = new Vuex.Store({
+  getters: {
+    capabilities: () => {
+      return {}
+    }
+  }
+})
+
 // needs differentiation between file and folder type?
 
 describe('RoleDropdown', () => {
@@ -208,6 +216,7 @@ function getMountOptions({ existingRole, shareId, resourceType = 'folder' }) {
       shareId,
       allowSharePermission: true
     },
+    store,
     localVue,
     stubs
   }

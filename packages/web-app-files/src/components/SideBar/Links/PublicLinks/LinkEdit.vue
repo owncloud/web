@@ -219,9 +219,10 @@ export default {
     },
 
     availableRoleOptions() {
-      return LinkShareRoles.list(this.highlightedFile.isFolder).map((r) =>
-        this.convertRoleToSelectOption(r)
-      )
+      return LinkShareRoles.list(
+        this.highlightedFile.isFolder,
+        this.capabilities.files_sharing?.public?.can_edit
+      ).map((r) => this.convertRoleToSelectOption(r))
     },
 
     $_expirationDate() {

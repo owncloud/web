@@ -193,6 +193,13 @@ export const linkRoleContributorFolder = new LinkShareRole(
   $gettext('contributor'),
   [SharePermissions.read, SharePermissions.create]
 )
+export const linkRoleEditorFile = new LinkShareRole(
+  'editor',
+  false,
+  $gettext('Editor'),
+  $gettext('editor'),
+  [SharePermissions.read, SharePermissions.update]
+)
 export const linkRoleEditorFolder = new LinkShareRole(
   'editor',
   true,
@@ -252,21 +259,21 @@ export abstract class PeopleShareRoles {
     peopleRoleViewerFile,
     peopleRoleViewerFolder,
     peopleRoleEditorFile,
-    peopleRoleEditorFolder,
-    peopleRoleCustomFile,
-    peopleRoleCustomFolder
+    peopleRoleEditorFolder
   ]
 
-  static list(isFolder: boolean): ShareRole[] {
-    return this.all.filter((r) => r.folder === isFolder)
+  static readonly allWithCustom = [...this.all, peopleRoleCustomFile, peopleRoleCustomFolder]
+
+  static list(isFolder: boolean, hasCustom = true): ShareRole[] {
+    return (hasCustom ? this.allWithCustom : this.all).filter((r) => r.folder === isFolder)
   }
 
   static custom(isFolder: boolean): ShareRole {
-    return this.all.find((r) => r.folder === isFolder && r.hasCustomPermissions)
+    return this.allWithCustom.find((r) => r.folder === isFolder && r.hasCustomPermissions)
   }
 
   static getByBitmask(bitmask: number, isFolder: boolean, allowSharing: boolean): ShareRole {
-    const role = this.all
+    const role = this.allWithCustom
       .filter((r) => !r.hasCustomPermissions)
       .find((r) => r.folder === isFolder && r.bitmask(allowSharing) === bitmask)
     return role || this.custom(isFolder)
@@ -282,12 +289,15 @@ export abstract class LinkShareRoles {
     linkRoleUploaderFolder
   ]
 
-  static list(isFolder: boolean): ShareRole[] {
-    return this.all.filter((r) => r.folder === isFolder)
+  static list(isFolder: boolean, canEditFile = false): ShareRole[] {
+    return [...this.all, ...(canEditFile ? [linkRoleEditorFile] : [])].filter(
+      (r) => r.folder === isFolder
+    )
   }
 
   static getByBitmask(bitmask: number, isFolder: boolean): ShareRole {
-    return this.all.find((r) => r.folder === isFolder && r.bitmask(false) === bitmask)
+    return [...this.all, linkRoleEditorFile] // Always return all roles
+      .find((r) => r.folder === isFolder && r.bitmask(false) === bitmask)
   }
 }
 
@@ -316,6 +326,7 @@ const linkRoleDescriptions = {
   [linkRoleContributorFolder.bitmask(false)]: $gettext(
     'Recipients can view, download and upload contents.'
   ),
+  [linkRoleEditorFile.bitmask(false)]: $gettext('Recipients can view, download and edit contents.'),
   [linkRoleEditorFolder.bitmask(false)]: $gettext(
     'Recipients can view, download, edit, delete and upload contents.'
   ),

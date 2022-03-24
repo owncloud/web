@@ -227,6 +227,9 @@ export default {
         return []
       }
 
+      // Allow advanced queries
+      query = query.split(':')[1] || query
+
       return recipients.filter(
         (recipient) =>
           recipient.value.shareType === ShareTypes.remote.value ||

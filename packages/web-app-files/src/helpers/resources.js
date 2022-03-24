@@ -439,6 +439,9 @@ function _buildLink(link) {
     case 1: // read (1)
       description = $gettext('Viewer')
       break
+    case 3: // read (1) + update (2)
+      description = $gettext('Editor')
+      break
     case 5: // read (1) + create (4)
       description = $gettext('Contributor')
       break
