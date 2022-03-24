@@ -13,14 +13,14 @@ const routes = [
     name: 'pdf-viewer',
     meta: {
       auth: false,
-      title: $gettext('PDF Viewer app'),
+      title: $gettext('PDF Viewer'),
       patchCleanPath: true
     }
   }
 ]
 
 const appInfo = {
-  name: 'PDF viewer',
+  name: $gettext('PDF Viewer'),
   id: 'pdf-viewer',
   icon: 'eye',
   extensions: [
