@@ -5,6 +5,7 @@ import { getIndicators } from './statusIndicators'
 import { $gettext } from '../gettext'
 import { DavPermission, DavProperty } from 'web-pkg/src/constants'
 import {
+  LinkShareRoles,
   PeopleShareRoles,
   SharePermissions,
   ShareStatus,
@@ -434,23 +435,9 @@ export function buildSpaceShare(s, storageId) {
 function _buildLink(link) {
   let description = ''
 
-  // FIXME: use bitmask matching with constants
-  switch (parseInt(link.permissions)) {
-    case 1: // read (1)
-      description = $gettext('Viewer')
-      break
-    case 3: // read (1) + update (2)
-      description = $gettext('Editor')
-      break
-    case 5: // read (1) + create (4)
-      description = $gettext('Contributor')
-      break
-    case 4: // create (4)
-      description = $gettext('Uploader')
-      break
-    case 15: // read (1) + update (2) + create (4) + delete (8)
-      description = $gettext('Editor')
-      break
+  const role = LinkShareRoles.getByBitmask(parseInt(link.permissions), link.item_type === 'folder')
+  if (role) {
+    description = $gettext(role.label)
   }
 
   return {
