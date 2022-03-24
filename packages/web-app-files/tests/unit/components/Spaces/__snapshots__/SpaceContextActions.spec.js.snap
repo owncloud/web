@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SpaceContextActions action handlers renders actions that are always available: "Members", "Deleted files", "Details" 1`] = `
+<div>
+  <div id="oc-files-context-menu">
+    <ul id="oc-files-context-actions-members" class="oc-list oc-my-rm oc-mx-rm oc-files-context-actions oc-pb-s oc-files-context-actions-border">
+      <li class="oc-files-context-action oc-px-s oc-rounded"><button type="button" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-show-details-trigger action-menu-item" data-testid="action-handler"><span class="oc-icon oc-icon-m oc-icon-passive" data-testid="action-icon"><!----></span> <span data-testid="action-label" class="oc-files-context-action-label">Members</span>
+          <!---->
+        </button></li>
+    </ul>
+    <ul id="oc-files-context-actions-trashBin" class="oc-list oc-my-rm oc-mx-rm oc-files-context-actions oc-pb-s oc-pt-s oc-files-context-actions-border">
+      <li class="oc-files-context-action oc-px-s oc-rounded"><button type="button" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-delete-trigger action-menu-item" data-testid="action-handler"><span class="oc-icon oc-icon-m oc-icon-passive" data-testid="action-icon"><!----></span> <span data-testid="action-label" class="oc-files-context-action-label">Deleted files</span>
+          <!---->
+        </button></li>
+    </ul>
+    <ul id="oc-files-context-actions-sidebar" class="oc-list oc-my-rm oc-mx-rm oc-files-context-actions oc-pt-s">
+      <li class="oc-files-context-action oc-px-s oc-rounded"><button type="button" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-show-details-trigger action-menu-item" data-testid="action-handler"><span class="oc-icon oc-icon-m oc-icon-passive" data-testid="action-icon"><!----></span> <span data-testid="action-label" class="oc-files-context-action-label">Details</span>
+          <!---->
+        </button></li>
+    </ul>
+  </div>
+  <!---->
+  <!----> <input id="space-image-upload-input" type="file" name="file" multiple="multiple" tabindex="-1" accept="image/*">
+</div>
+`;
