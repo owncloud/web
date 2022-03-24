@@ -21,8 +21,10 @@
         <oc-text-input
           v-model="user.displayName"
           class="oc-mb-s"
-          :label="$gettext('First and last name')"
+          :label="$gettext('First and last name') + '*'"
+          :error-message="formData.displayName.errorMessage"
           :fix-message-line="true"
+          @input="validateDisplayName"
         />
         <oc-text-input
           v-model="user.mail"
@@ -31,7 +33,7 @@
           :error-message="formData.email.errorMessage"
           type="email"
           :fix-message-line="true"
-          @input="validateEmail"
+          @change="validateEmail"
         />
         <oc-text-input
           v-model="user.passwordProfile.password"
@@ -56,6 +58,10 @@ export default {
     return {
       formData: {
         userName: {
+          errorMessage: '',
+          valid: false
+        },
+        displayName: {
           errorMessage: '',
           valid: false
         },
@@ -100,15 +106,25 @@ export default {
       this.formData.userName.errorMessage = ''
       this.formData.userName.valid = true
     },
+
+    validateDisplayName() {
+      this.formData.displayName.valid = false
+
+      if (this.user.displayName.trim() === '') {
+        return (this.formData.displayName.errorMessage = this.$gettext(
+          'Display name cannot be empty'
+        ))
+      }
+
+      this.formData.displayName.errorMessage = ''
+      this.formData.displayName.valid = true
+    },
+
     validateEmail() {
       this.formData.email.valid = false
 
-      if (this.user.mail.trim() === '') {
-        return (this.formData.email.errorMessage = this.$gettext('Email cannot be empty'))
-      }
-
       if (!EmailValidator.validate(this.user.mail)) {
-        return (this.formData.email.errorMessage = this.$gettext('Email must be valid'))
+        return (this.formData.email.errorMessage = this.$gettext('Please enter a valid email'))
       }
 
       this.formData.email.errorMessage = ''

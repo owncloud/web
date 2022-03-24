@@ -5,16 +5,21 @@
       @cancel="toggleCreateUserModal"
       @confirm="createUser"
     />
+    <delete-user-modal
+      v-if="deleteUserModalOpen"
+      :users="selectedUsers"
+      @cancel="toggleDeleteUserModal"
+      @confirm="deleteUsers"
+    />
     <main class="oc-flex oc-flex-column oc-height-1-1 oc-p-m">
       <app-loading-spinner v-if="loadResourcesTask.isRunning" />
       <template v-else>
         <div class="oc-app-bar">
-          <oc-breadcrumb :items="breadcrumbs" />
-          <div class="oc-flex-1 oc-flex oc-flex-start">
-            <div
-              v-if="selectedUsers.length"
-              class="oc-flex oc-flex-middle oc-text-nowrap size-info oc-visible@l"
-            >
+          <div class="oc-flex oc-flex-between">
+            <oc-breadcrumb class="oc-flex oc-flex-middle" :items="breadcrumbs" />
+          </div>
+          <div class="oc-flex-1 oc-flex oc-flex-start oc-mt-m">
+            <div v-if="selectedUsers.length" class="oc-flex oc-flex-middle">
               <span v-text="selectedUsersText" />
               <oc-button
                 id="files-clear-selection"
@@ -26,18 +31,13 @@
               >
                 <oc-icon name="close" />
               </oc-button>
-              <oc-button appearance="outline" class="oc-ml-m" @click="deleteSelectedUsersTrigger">
+              <oc-button appearance="outline" class="oc-ml-m" @click="toggleDeleteUserModal">
                 <oc-icon name="delete-bin" />
                 <translate>Delete</translate>
               </oc-button>
             </div>
-            <div v-else class="oc-flex oc-flex-middle oc-text-nowrap size-info oc-visible@l">
-              <oc-button
-                variation="primary"
-                appearance="filled"
-                class="oc-ml-m"
-                @click="toggleCreateUserModal"
-              >
+            <div v-else>
+              <oc-button variation="primary" appearance="filled" @click="toggleCreateUserModal">
                 <oc-icon name="add" />
                 <translate>New user</translate>
               </oc-button>
@@ -58,6 +58,7 @@
           <UsersList
             :users="users"
             :selected-users="selectedUsers"
+            class="oc-mt-m"
             @toggleSelectUser="toggleSelectUser"
             @toggleSelectAllUser="toggleSelectAllUsers"
           />
@@ -70,6 +71,7 @@
 <script>
 import UsersList from '../components/Users/UsersList.vue'
 import CreateUserModal from '../components/Users/CreateUserModal.vue'
+import DeleteUserModal from '../components/Users/DeleteUserModal.vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import { useStore } from 'web-pkg/src/composables'
@@ -80,7 +82,7 @@ import { bus } from 'web-pkg/src/instance'
 import { mapActions } from 'vuex'
 
 export default {
-  components: { UsersList, AppLoadingSpinner, NoContentMessage, CreateUserModal },
+  components: { UsersList, AppLoadingSpinner, NoContentMessage, CreateUserModal, DeleteUserModal },
   setup() {
     const store = useStore()
     const users = ref([])
@@ -103,7 +105,8 @@ export default {
   data: function () {
     return {
       selectedUsers: [],
-      createUserModalOpen: false
+      createUserModalOpen: false,
+      deleteUserModalOpen: false
     }
   },
   computed: {
@@ -140,7 +143,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['showMessage', 'createModal', 'hideModal']),
+    ...mapActions(['showMessage']),
     toggleSelectAllUsers() {
       if (this.allUsersSelected) {
         return (this.selectedUsers = [])
@@ -162,45 +165,16 @@ export default {
       this.selectedUsers = []
     },
 
-    deleteSelectedUsersTrigger() {
-      const modal = {
-        variation: 'danger',
-        title: this.$gettextInterpolate(
-          this.$ngettext(
-            'Delete user %{user}?',
-            'Delete %{userCount} selected users?',
-            this.selectedUsers.length
-          ),
-          {
-            userCount: this.selectedUsers.length,
-            user:
-              this.selectedUsers[0].displayName || this.selectedUsers[0].onPremisesSamAccountName
-          }
-        ),
-        cancelText: this.$gettext('Cancel'),
-        confirmText: this.$gettext('Delete'),
-        icon: 'alarm-warning',
-        message: this.$gettextInterpolate(
-          this.$ngettext(
-            'Are you sure you want to delete this user?',
-            'Are you sure you want to delete all selected users?',
-            this.selectedUsers.length
-          ),
-          {
-            userCount: this.selectedUsers.length
-          }
-        ),
-        hasInput: false,
-        onCancel: this.hideModal,
-        onConfirm: () => this.deleteSelectedUsers()
-      }
-
-      this.createModal(modal)
+    toggleCreateUserModal() {
+      this.createUserModalOpen = !this.createUserModalOpen
     },
 
-    deleteSelectedUsers() {
+    toggleDeleteUserModal() {
+      this.deleteUserModalOpen = !this.deleteUserModalOpen
+    },
+    deleteUsers(users) {
       const promises = []
-      this.selectedUsers.reduce((acc, user) => {
+      users.reduce((acc, user) => {
         acc.push(this.graphClient.users.deleteUser(user.id))
         return acc
       }, promises)
@@ -216,18 +190,16 @@ export default {
               ),
               {
                 userCount: this.selectedUsers.length,
-                user:
-                  this.selectedUsers[0].displayName ||
-                  this.selectedUsers[0].onPremisesSamAccountName
+                user: this.selectedUsers[0].onPremisesSamAccountName
               },
               true
             )
           })
           this.users = this.users.filter((user) => {
-            return !this.selectedUsers.find((selectedUser) => user.id === selectedUser.id)
+            return !users.find((deletedUser) => user.id === deletedUser.id)
           })
           this.selectedUsers = []
-          this.hideModal()
+          this.toggleDeleteUserModal()
         })
         .catch(() => {
           this.showMessage({
@@ -238,20 +210,14 @@ export default {
                 this.selectedUsers.length
               ),
               {
-                userCount: this.selectedUsers.length,
-                user:
-                  this.selectedUsers[0].displayName ||
-                  this.selectedUsers[0].onPremisesSamAccountName
+                userCount: users.length,
+                user: users.onPremisesSamAccountName
               },
               true
             ),
             status: 'danger'
           })
         })
-    },
-
-    toggleCreateUserModal() {
-      this.createUserModalOpen = !this.createUserModalOpen
     },
 
     createUser(user) {

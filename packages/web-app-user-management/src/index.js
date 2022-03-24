@@ -38,14 +38,14 @@ const navItems = [
     name: $gettext('Users'),
     icon: 'user',
     route: {
-      path: `/${appInfo.id}/users`
+      path: `/${appInfo.id}/users?`
     }
   },
   {
     name: $gettext('Groups'),
     icon: 'group-2',
     route: {
-      path: `/${appInfo.id}/groups`
+      path: `/${appInfo.id}/groups?`
     }
   }
 ]

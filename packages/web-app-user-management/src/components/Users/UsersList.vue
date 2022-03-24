@@ -1,45 +1,59 @@
 <template>
   <div>
-    <oc-table-simple id="user-list" class="oc-mt-l">
-      <oc-thead>
-        <oc-tr>
-          <oc-th shrink type="head" align-h="center">
-            <oc-checkbox
-              size="large"
-              class="oc-ml-s"
-              :label="$gettext('Select all users')"
-              :value="allUsersSelected"
-              hide-label
-              @input="$emit('toggleSelectAllUser')"
-            />
-          </oc-th>
-          <oc-th shrink type="head" />
-          <oc-th type="head" v-text="$gettext('User name')" />
-          <oc-th type="head" v-text="$gettext('Display name')" />
-          <oc-th type="head" v-text="$gettext('Email')" />
-          <oc-th type="head" v-text="$gettext('Role')" />
-          <oc-th type="head" v-text="$gettext('Status')" />
-        </oc-tr>
-      </oc-thead>
-      <oc-tbody>
-        <users-list-row
-          v-for="user in users"
-          :key="`user-list-row-${user.id}`"
-          :user="user"
-          :selected-users="selectedUsers"
-          @toggleSelectUser="$emit('toggleSelectUser', user)"
+    <oc-table
+      :sort-by="sortBy"
+      :sort-dir="sortDir"
+      :fields="fields"
+      :data="data"
+      :highlighted="highlighted"
+      @sort="handleSort"
+    >
+      <template #selectHeader>
+        <oc-checkbox
+          size="large"
+          class="oc-ml-s"
+          :label="$gettext('Select all users')"
+          :value="allUsersSelected"
+          hide-label
+          @input="$emit('toggleSelectAllUser')"
         />
-      </oc-tbody>
-    </oc-table-simple>
+      </template>
+      <template #select="rowData">
+        <oc-checkbox
+          class="oc-ml-s"
+          size="large"
+          :value="selectedUsers"
+          :option="rowData.item"
+          :label="getSelectUserLabel(rowData.item)"
+          hide-label
+          @input="$emit('toggleSelectUser', rowData.item)"
+        />
+      </template>
+      <template #avatar="rowData">
+        <avatar-image :width="32" :userid="rowData.item.id" :user-name="rowData.item.displayName" />
+      </template>
+      <template #footer>
+        <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
+          <p class="oc-text-muted">{{ footerText }}</p>
+        </div>
+      </template>
+    </oc-table>
   </div>
 </template>
 
 <script>
-import UsersListRow from './UsersListRow.vue'
+const orderBy = (list, prop, desc) => {
+  return [...list].sort((a, b) => {
+    a = a[prop]
+    b = b[prop]
+
+    if (a === b) return 0
+    return (desc ? a > b : a < b) ? -1 : 1
+  })
+}
 
 export default {
   name: 'UsersList',
-  components: { UsersListRow },
   props: {
     users: {
       type: Array,
@@ -50,9 +64,76 @@ export default {
       required: true
     }
   },
+  data() {
+    return {
+      sortBy: 'onPremisesSamAccountName',
+      sortDir: 'asc',
+      fields: [
+        {
+          name: 'select',
+          title: '',
+          type: 'slot',
+          width: 'shrink',
+          headerType: 'slot'
+        },
+        {
+          name: 'avatar',
+          title: '',
+          type: 'slot',
+          width: 'shrink'
+        },
+        {
+          name: 'onPremisesSamAccountName',
+          title: 'User name',
+          sortable: true
+        },
+        {
+          name: 'displayName',
+          title: 'Display name',
+          sortable: true
+        },
+        {
+          name: 'mail',
+          title: 'Email',
+          sortable: true
+        },
+        {
+          name: 'role',
+          title: 'Role',
+          sortable: true
+        },
+        {
+          name: 'status',
+          title: 'Status',
+          sortable: true
+        }
+      ]
+    }
+  },
   computed: {
     allUsersSelected() {
       return this.users.length === this.selectedUsers.length
+    },
+    footerText() {
+      const translated = this.$gettext('%{userCount} users in total')
+      return this.$gettextInterpolate(translated, { userCount: this.users.length })
+    },
+    data() {
+      return orderBy([...this.users], this.sortBy, this.sortDir === 'desc')
+    },
+    highlighted() {
+      return this.selectedUsers.map((user) => user.id)
+    }
+  },
+  methods: {
+    handleSort(event) {
+      this.sortBy = event.sortBy
+      this.sortDir = event.sortDir
+    },
+    getSelectUserLabel(user) {
+      const translated = this.$gettext('Select %{ user }')
+
+      return this.$gettextInterpolate(translated, { user: user.displayName }, true)
     }
   }
 }
