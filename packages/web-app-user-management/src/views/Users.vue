@@ -1,6 +1,10 @@
 <template>
   <div>
-    <create-user-modal v-if="createUserModalOpen" @cancel="toggleCreateUserModal"/>
+    <create-user-modal
+      v-if="createUserModalOpen"
+      @cancel="toggleCreateUserModal"
+      @confirm="createUser"
+    />
     <main class="oc-flex oc-flex-column oc-height-1-1 oc-p-m">
       <app-loading-spinner v-if="loadResourcesTask.isRunning" />
       <template v-else>
@@ -35,7 +39,7 @@
                 @click="toggleCreateUserModal"
               >
                 <oc-icon name="add" />
-                <translate>Create user</translate>
+                <translate>New user</translate>
               </oc-button>
             </div>
           </div>
@@ -248,6 +252,24 @@ export default {
 
     toggleCreateUserModal() {
       this.createUserModalOpen = !this.createUserModalOpen
+    },
+
+    createUser(user) {
+      this.graphClient.users
+        .createUser(user)
+        .then((response) => {
+          this.toggleCreateUserModal()
+          this.showMessage({
+            title: this.$gettext('User was created successfully')
+          })
+          this.users.push(response.data)
+        })
+        .catch(() => {
+          this.showMessage({
+            title: this.$gettext('Failed to create user'),
+            status: 'danger'
+          })
+        })
     }
   }
 }
