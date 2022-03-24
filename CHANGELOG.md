@@ -11,6 +11,7 @@ Summary
 * Bugfix - Use oC10 navigation entry names: [#6656](https://github.com/owncloud/web/pull/6656)
 * Enhancement - Editor role for single file public links: [#6618](https://github.com/owncloud/web/pull/6618)
 * Enhancement - Make some UI elements/actions optional: [#6618](https://github.com/owncloud/web/pull/6618)
+* Enhancement - PDF viewer: [#6654](https://github.com/owncloud/web/pull/6654)
 
 Details
 -------
@@ -41,6 +42,12 @@ Details
 
    https://github.com/owncloud/web/issues/6324
    https://github.com/owncloud/web/pull/6618
+
+* Enhancement - PDF viewer: [#6654](https://github.com/owncloud/web/pull/6654)
+
+   We've added a lightweight PDF viewer app which allows the user to bookmark PDF files.
+
+   https://github.com/owncloud/web/pull/6654
 
 Changelog for ownCloud Web [5.3.0] (2022-03-23)
 =======================================
