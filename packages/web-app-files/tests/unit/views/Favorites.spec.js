@@ -26,7 +26,7 @@ const listInfoStub = 'list-info-stub'
 
 const defaultActiveFiles = [createFile({ id: '1233' }), createFile({ id: '1234' })]
 
-describe('Favorites component', () => {
+describe('Favorites view', () => {
   describe('loading indicator', () => {
     it('shows only the list-loader during loading', () => {
       const wrapper = getMountedWrapper({ loading: true })

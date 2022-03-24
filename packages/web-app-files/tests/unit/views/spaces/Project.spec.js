@@ -253,6 +253,11 @@ function getMountedWrapper(spaceResources = [], spaceItem = null, imageContent =
           server: 'https://example.com/',
           options: {
             disablePreviews: true
+          },
+          currentTheme: {
+            general: {
+              name: 'some-company'
+            }
           }
         }),
         user: () => ({

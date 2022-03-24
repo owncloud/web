@@ -3,8 +3,22 @@ import { getStore, localVue } from '../views.setup.js'
 import FileActions from '@files/src/mixins/fileActions.js'
 import SharedWithOthers from '@files/src/views/shares/SharedWithOthers.vue'
 import SharedData from '@/__fixtures__/sharedFiles.js'
+import { createLocationShares } from '../../../../src/router'
+import { buildSharedResource } from '../../../../src/helpers/resources'
 
-const resourcesList = SharedData.json().ocs.data
+const resourcesList = SharedData.json().ocs.data.map((resource) => buildSharedResource(resource))
+
+const router = {
+  push: jest.fn(),
+  afterEach: jest.fn(),
+  currentRoute: {
+    ...createLocationShares('files-shares-with-others'),
+    query: {}
+  },
+  resolve: (r) => {
+    return { href: r.name }
+  }
+}
 
 const stubs = {
   'app-loading-spinner': true,
@@ -29,7 +43,7 @@ const contextActionsStub = 'context-actions-stub'
 const listInfoStub = 'list-info-stub'
 const paginationStub = 'pagination-stub'
 
-describe('SharedWithOthers', () => {
+describe('SharedWithOthers view', () => {
   it('should show the app-loading-spinner component when the wrapper is still loading', () => {
     const wrapper = getMountedWrapper({ loading: true })
 
@@ -203,9 +217,8 @@ describe('SharedWithOthers', () => {
       store: store,
       stubs,
       mocks: {
-        $route: {
-          name: 'some-route'
-        }
+        $route: router.currentRoute,
+        $router: router
       }
     })
   }

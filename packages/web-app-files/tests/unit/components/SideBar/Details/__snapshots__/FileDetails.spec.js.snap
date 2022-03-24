@@ -7,7 +7,7 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
       <oc-spinner-stub></oc-spinner-stub>
     </div>
     <div data-testid="sharingInfo" class="oc-flex oc-flex-middle oc-my-m">
-      <oc-status-indicators resource="[object Object]" indicators="[object Object]"></oc-status-indicators>
+      <oc-status-indicators-stub resource="[object Object]" indicators="[object Object]"></oc-status-indicators-stub>
       <p class="oc-my-rm oc-mx-s">This file has been shared.</p>
     </div>
     <table aria-label="Overview of the information about the selected file" class="details-table">
@@ -49,7 +49,7 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
       <oc-spinner-stub></oc-spinner-stub>
     </div>
     <div data-testid="sharingInfo" class="oc-flex oc-flex-middle oc-my-m">
-      <oc-status-indicators resource="[object Object]" indicators="[object Object]"></oc-status-indicators>
+      <oc-status-indicators-stub resource="[object Object]" indicators="[object Object]"></oc-status-indicators-stub>
       <p class="oc-my-rm oc-mx-s">This file has been shared.</p>
     </div>
     <table aria-label="Overview of the information about the selected file" class="details-table">

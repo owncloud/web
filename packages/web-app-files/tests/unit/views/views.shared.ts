@@ -35,7 +35,8 @@ const forestJpg = {
   thumbnail: 'https://cdn.pixabay.com/photo/2015/09/09/16/05/forest-931706_960_720.jpg',
   type: 'file',
   size: '111000234',
-  mdate: 'Thu, 01 Jul 2021 08:34:04 GMT'
+  mdate: 'Thu, 01 Jul 2021 08:34:04 GMT',
+  canRename: jest.fn
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -92,7 +93,8 @@ export const accentuatesTableRowTest = async <V extends Vue>(
     icon: 'text',
     type: 'file',
     size: '1245',
-    mdate: 'Thu, 01 Jul 2021 08:45:04 GMT'
+    mdate: 'Thu, 01 Jul 2021 08:45:04 GMT',
+    canRename: jest.fn
   })
 
   await wrapper.vm.$nextTick()

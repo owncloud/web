@@ -58,6 +58,7 @@
           @click="emitFileClick(item)"
         />
         <oc-button
+          v-if="hasRenameAction(item)"
           class="resource-table-edit-name"
           appearance="raw"
           @click="openRenameDialog(item)"
@@ -493,6 +494,10 @@ export default {
     }
   },
   methods: {
+    hasRenameAction(item) {
+      return this.$_rename_items.filter((menuItem) => menuItem.isEnabled({ resources: [item] }))
+        .length
+    },
     openRenameDialog(item) {
       this.$_rename_trigger({ resources: [item] })
     },
