@@ -1,0 +1,5 @@
+Enhancement: PDF viewer
+
+We've added a lightweight PDF viewer app which allows the user to bookmark PDF files.
+
+https://github.com/owncloud/web/pull/6654

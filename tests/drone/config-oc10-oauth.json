@@ -1,5 +1,5 @@
 {
-  "server" : "http://owncloud",
+  "server": "http://owncloud",
   "theme": "http://owncloud/themes/owncloud/theme.json",
   "version": "0.1.0",
   "auth": {
@@ -15,6 +15,7 @@
     "draw-io",
     "markdown-editor",
     "media-viewer",
+    "pdf-viewer",
     "search"
   ]
 }
