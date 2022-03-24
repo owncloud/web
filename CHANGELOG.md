@@ -12,6 +12,7 @@ Summary
 * Enhancement - Editor role for single file public links: [#6618](https://github.com/owncloud/web/pull/6618)
 * Enhancement - Make some UI elements/actions optional: [#6618](https://github.com/owncloud/web/pull/6618)
 * Enhancement - PDF viewer: [#6654](https://github.com/owncloud/web/pull/6654)
+* Enhancement - Spaces link sharing: [#6633](https://github.com/owncloud/web/pull/6633)
 
 Details
 -------
@@ -48,6 +49,13 @@ Details
    We've added a lightweight PDF viewer app which allows the user to bookmark PDF files.
 
    https://github.com/owncloud/web/pull/6654
+
+* Enhancement - Spaces link sharing: [#6633](https://github.com/owncloud/web/pull/6633)
+
+   Spaces and their resources can now be shared via links.
+
+   https://github.com/owncloud/web/issues/6283
+   https://github.com/owncloud/web/pull/6633
 
 Changelog for ownCloud Web [5.3.0] (2022-03-23)
 =======================================
