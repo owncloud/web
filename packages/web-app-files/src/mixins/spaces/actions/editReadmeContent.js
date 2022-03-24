@@ -12,7 +12,7 @@ export default {
       return [
         {
           name: 'editReadmeContent',
-          icon: 'markdown',
+          icon: 'article',
           label: () => {
             return this.$gettext('Edit description')
           },

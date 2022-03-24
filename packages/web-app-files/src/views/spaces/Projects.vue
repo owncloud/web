@@ -34,21 +34,6 @@
         </template>
       </no-content-message>
       <div v-else class="spaces-list oc-mt-l">
-        <input
-          id="space-image-upload-input"
-          ref="spaceImageInput"
-          type="file"
-          name="file"
-          multiple
-          tabindex="-1"
-          accept="image/*"
-          @change="$_uploadImage_uploadImageSpace"
-        />
-        <quota-modal
-          v-if="quotaModalIsOpen"
-          :cancel="closeQuotaModal"
-          :space="quotaModalSelectedSpace"
-        />
         <ul
           class="
             oc-grid
@@ -126,22 +111,7 @@
                         padding-size="small"
                         position="bottom-end"
                       >
-                        <ul class="oc-list oc-files-context-actions">
-                          <li
-                            v-for="(action, actionIndex) in getContextMenuActions(space)"
-                            :key="`action-${actionIndex}`"
-                            class="oc-files-context-action oc-px-s"
-                          >
-                            <oc-button
-                              appearance="raw"
-                              justify-content="left"
-                              @click="action.handler({ resources: [space] })"
-                            >
-                              <oc-icon :name="action.icon" fill-type="line" class="oc-flex" />
-                              {{ action.label() }}
-                            </oc-button>
-                          </li>
-                        </ul>
+                        <space-context-actions :items="[space]" />
                       </oc-drop>
                     </div>
                   </div>
@@ -169,38 +139,18 @@ import { useStore } from 'web-pkg/src/composables'
 import { useTask } from 'vue-concurrency'
 import { createLocationSpaces } from '../../router'
 import { mapMutations, mapActions, mapGetters } from 'vuex'
-import Rename from '../../mixins/spaces/actions/rename'
-import Delete from '../../mixins/spaces/actions/delete'
-import DeletedFiles from '../../mixins/spaces/actions/deletedFiles'
-import Disable from '../../mixins/spaces/actions/disable'
-import Restore from '../../mixins/spaces/actions/restore'
-import EditDescription from '../../mixins/spaces/actions/editDescription'
-import EditQuota from '../../mixins/spaces/actions/editQuota'
-import ShowDetails from '../../mixins/spaces/actions/showDetails'
-import UploadImage from '../../mixins/spaces/actions/uploadImage'
 import { buildResource, buildSpace, buildWebDavSpacesPath } from '../../helpers/resources'
 import { clientService } from 'web-pkg/src/services'
 import { loadPreview } from '../../helpers/resource'
 import { ImageDimension } from '../../constants'
-import QuotaModal from '../../components/Spaces/QuotaModal.vue'
+import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
 
 export default {
   components: {
     NoContentMessage,
-    QuotaModal,
-    AppLoadingSpinner
+    AppLoadingSpinner,
+    SpaceContextActions
   },
-  mixins: [
-    Rename,
-    Delete,
-    EditDescription,
-    EditQuota,
-    DeletedFiles,
-    Disable,
-    ShowDetails,
-    Restore,
-    UploadImage
-  ],
   setup() {
     const store = useStore()
     const spaces = computed(() => store.getters['Files/activeFiles'] || [])
@@ -235,12 +185,6 @@ export default {
     hasCreatePermission() {
       // @TODO
       return true
-    },
-    quotaModalSelectedSpace() {
-      return this.$data.$_editQuota_selectedSpace
-    },
-    quotaModalIsOpen() {
-      return this.$data.$_editQuota_modalOpen
     }
   },
   watch: {
@@ -298,20 +242,6 @@ export default {
       'SET_FILE_SELECTION',
       'UPSERT_RESOURCE'
     ]),
-
-    getContextMenuActions(space) {
-      return [
-        ...this.$_rename_items,
-        ...this.$_editDescription_items,
-        ...this.$_uploadImage_items,
-        ...this.$_editQuota_items,
-        ...this.$_deletedFiles_items,
-        ...this.$_restore_items,
-        ...this.$_delete_items,
-        ...this.$_disable_items,
-        ...this.$_showDetails_items
-      ].filter((item) => item.isEnabled({ resources: [space] }))
-    },
 
     getSpaceProjectRoute({ id, name }) {
       return createLocationSpaces('files-spaces-project', {
@@ -413,10 +343,6 @@ export default {
     openSidebarSharePanel(space) {
       this.SET_FILE_SELECTION([space])
       this.openSidebarWithPanel('space-share-item')
-    },
-
-    closeQuotaModal() {
-      this.$_editQuota_closeModal()
     }
   }
 }
@@ -473,11 +399,6 @@ export default {
 
   .space-disabled-indicator {
     z-index: 999;
-  }
-
-  #space-image-upload-input {
-    position: absolute;
-    left: -99999px;
   }
 }
 </style>

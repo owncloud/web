@@ -10,9 +10,9 @@ export default {
       return [
         {
           name: 'restore',
-          icon: 'restart',
+          icon: 'play-circle',
           label: () => {
-            return this.$gettext('Restore')
+            return this.$gettext('Enable')
           },
           handler: this.$_restore_trigger,
           isEnabled: ({ resources }) => {

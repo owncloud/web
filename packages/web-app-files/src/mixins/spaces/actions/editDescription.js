@@ -9,9 +9,10 @@ export default {
       return [
         {
           name: 'editDescription',
-          icon: 'pencil',
+          icon: 'h-2',
+          iconFillType: 'none',
           label: () => {
-            return this.$gettext('Change subtitle')
+            return this.$gettext('Edit subtitle')
           },
           handler: this.$_editDescription_trigger,
           isEnabled: ({ resources }) => {

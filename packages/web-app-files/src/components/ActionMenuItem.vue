@@ -26,7 +26,7 @@
         v-else-if="action.icon"
         data-testid="action-icon"
         :name="action.icon"
-        fill-type="line"
+        :fill-type="action.iconFillType || 'line'"
         size="medium"
       />
       <span class="oc-files-context-action-label" data-testid="action-label">{{

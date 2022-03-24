@@ -48,6 +48,10 @@ export async function openNewCollaboratorsPanel(ctx) {
   await ctx.store.dispatch('Files/sidebar/openWithPanel', 'sharing-item')
 }
 
+export async function openSpaceMembersPanel(ctx) {
+  await ctx.store.dispatch('Files/sidebar/openWithPanel', 'space-share-item')
+}
+
 export function canShare(item, store) {
   return (
     store.state.user.capabilities.files_sharing &&
