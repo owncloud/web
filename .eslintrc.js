@@ -10,8 +10,12 @@ module.exports = {
     'plugin:prettier/recommended',
     'plugin:jest/recommended'
   ],
-  parser: '@babel/eslint-parser',
+  parser: 'vue-eslint-parser',
   parserOptions: {
+    parser: {
+      "js": "@babel/eslint-parser",
+      "ts": "@typescript-eslint/parser",
+    },
     requireConfigFile: false,
     sourceType: 'module'
   },
