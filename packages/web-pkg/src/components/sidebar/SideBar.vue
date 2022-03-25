@@ -52,13 +52,13 @@
           </oc-button>
         </div>
 
-        <slot name="header"/>
+        <slot name="header" />
 
         <div class="sidebar-panel__body">
           <template v-if="isContentDisplayed">
             <div class="sidebar-panel__body-content">
               <slot name="body">
-                <component :is="panel.component"/>
+                <component :is="panel.component" />
               </slot>
             </div>
 
@@ -106,11 +106,11 @@ export default {
     sidebarActivePanel: {
       type: String,
       required: false,
-      default: ""
+      default: ''
     },
     sidebarAccordionsWarningMessage: {
       type: String,
-      required: false,
+      required: false
     },
     isContentDisplayed: {
       type: Boolean,
@@ -128,7 +128,7 @@ export default {
     return {
       focused: undefined,
       oldPanelName: null,
-      selectedFile: {},
+      selectedFile: {}
     }
   },
 
@@ -153,7 +153,7 @@ export default {
       return this.$gettextInterpolate(translated, {
         panel: this.defaultPanel.component.title(this.$gettext)
       })
-    },
+    }
   },
   watch: {
     activePanelName: {
@@ -163,7 +163,7 @@ export default {
         })
       },
       immediate: true
-    },
+    }
   },
 
   beforeDestroy() {
