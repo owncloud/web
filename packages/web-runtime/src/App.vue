@@ -29,15 +29,16 @@
     />
   </div>
 </template>
-<script>
+<script lang="ts">
 import { mapGetters, mapState, mapActions } from 'vuex'
 import SkipTo from './components/SkipTo.vue'
 import LayoutApplication from './layouts/Application.vue'
 import LayoutLoading from './layouts/Loading.vue'
 import LayoutPlain from './layouts/Plain.vue'
 import { getBackendVersion, getWebVersion } from './container/versions'
+import { defineComponent } from '@vue/composition-api'
 
-export default {
+export default defineComponent({
   components: {
     SkipTo
   },
@@ -130,7 +131,7 @@ export default {
   },
 
   metaInfo() {
-    const metaInfo = {}
+    const metaInfo: any = {}
     if (this.favicon) {
       metaInfo.link = [{ rel: 'icon', href: this.favicon }]
     }
@@ -189,7 +190,7 @@ export default {
       return titleSegments.join(' - ')
     }
   }
-}
+})
 </script>
 <style lang="scss">
 body {

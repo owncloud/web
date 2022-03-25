@@ -158,7 +158,7 @@
   </oc-table>
 </template>
 
-<script>
+<script lang="ts">
 import { DateTime } from 'luxon'
 import maxSize from 'popper-max-size-modifier'
 import { mapGetters } from 'vuex'
@@ -168,8 +168,10 @@ import * as path from 'path'
 import { determineSortFields } from '../../helpers/ui/resourceTable'
 import { useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
 import Rename from '../../mixins/actions/rename'
+import { defineComponent, PropType } from '@vue/composition-api'
+import { Resource } from '../../helpers/resource'
 
-export default {
+export default defineComponent({
   mixins: [Rename],
   model: {
     prop: 'selection',
@@ -192,7 +194,7 @@ export default {
      * - opensInNewWindow: Open the link in a new window
      */
     resources: {
-      type: Array,
+      type: Array as PropType<Resource[]>,
       required: true
     },
     /**
@@ -282,7 +284,7 @@ export default {
       type: String,
       required: false,
       default: 'small',
-      validator: (size) => /(xsmall|small|medium|large|xlarge)/.test(size)
+      validator: (size: string) => /(xsmall|small|medium|large|xlarge)/.test(size)
     },
     /**
      * Enable Drag & Drop events
@@ -315,8 +317,10 @@ export default {
       type: String,
       required: false,
       default: undefined,
-      validator: (value) => {
-        return value === undefined || [SortDir.Asc, SortDir.Desc].includes(value)
+      validator: (value: string) => {
+        return (
+          value === undefined || [SortDir.Asc.toString(), SortDir.Desc.toString()].includes(value)
+        )
       }
     }
   },
@@ -663,7 +667,7 @@ export default {
       })
     }
   }
-}
+})
 </script>
 <style lang="scss">
 .resource-table {
