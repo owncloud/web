@@ -44,9 +44,7 @@ const orderBy = (list, prop, desc) => {
   return [...list].sort((a, b) => {
     a = a[prop]
     b = b[prop]
-
-    if (a === b) return 0
-    return (desc ? a > b : a < b) ? -1 : 1
+    return desc ? b.localeCompare(a) : a.localeCompare(b)
   })
 }
 

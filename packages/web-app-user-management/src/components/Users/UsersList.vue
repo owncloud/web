@@ -1,42 +1,42 @@
 <template>
-    <oc-table
-      :sort-by="sortBy"
-      :sort-dir="sortDir"
-      :fields="fields"
-      :data="data"
-      :highlighted="highlighted"
-      @sort="handleSort"
-    >
-      <template #selectHeader>
-        <oc-checkbox
-          size="large"
-          class="oc-ml-s"
-          :label="$gettext('Select all users')"
-          :value="allUsersSelected"
-          hide-label
-          @input="$emit('toggleSelectAllUsers')"
-        />
-      </template>
-      <template #select="rowData">
-        <oc-checkbox
-          class="oc-ml-s"
-          size="large"
-          :value="selectedUsers"
-          :option="rowData.item"
-          :label="getSelectUserLabel(rowData.item)"
-          hide-label
-          @input="$emit('toggleSelectUser', rowData.item)"
-        />
-      </template>
-      <template #avatar="rowData">
-        <avatar-image :width="32" :userid="rowData.item.id" :user-name="rowData.item.displayName" />
-      </template>
-      <template #footer>
-        <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
-          <p class="oc-text-muted">{{ footerText }}</p>
-        </div>
-      </template>
-    </oc-table>
+  <oc-table
+    :sort-by="sortBy"
+    :sort-dir="sortDir"
+    :fields="fields"
+    :data="data"
+    :highlighted="highlighted"
+    @sort="handleSort"
+  >
+    <template #selectHeader>
+      <oc-checkbox
+        size="large"
+        class="oc-ml-s"
+        :label="$gettext('Select all users')"
+        :value="allUsersSelected"
+        hide-label
+        @input="$emit('toggleSelectAllUsers')"
+      />
+    </template>
+    <template #select="rowData">
+      <oc-checkbox
+        class="oc-ml-s"
+        size="large"
+        :value="selectedUsers"
+        :option="rowData.item"
+        :label="getSelectUserLabel(rowData.item)"
+        hide-label
+        @input="$emit('toggleSelectUser', rowData.item)"
+      />
+    </template>
+    <template #avatar="rowData">
+      <avatar-image :width="32" :userid="rowData.item.id" :user-name="rowData.item.displayName" />
+    </template>
+    <template #footer>
+      <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
+        <p class="oc-text-muted">{{ footerText }}</p>
+      </div>
+    </template>
+  </oc-table>
 </template>
 
 <script>
@@ -44,9 +44,7 @@ const orderBy = (list, prop, desc) => {
   return [...list].sort((a, b) => {
     a = a[prop]
     b = b[prop]
-
-    if (a === b) return 0
-    return (desc ? a > b : a < b) ? -1 : 1
+    return desc ? b.localeCompare(a) : a.localeCompare(b)
   })
 }
 
