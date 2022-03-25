@@ -33,7 +33,9 @@ exports[`SharedWithOthers view when the wrapper is not loading anymore when leng
         </div>
       </td>
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-sharedWith">
-        <oc-avatars-stub items="[object Object]" stacked="true" istooltipdisplayed="true" maxdisplayed="3" accessibledescription=" This folder is shared via 1 link" class="resource-table-people"></oc-avatars-stub>
+        <oc-button-stub type="button" size="medium" submit="button" variation="inverse" appearance="raw" justifycontent="center" gapsize="medium">
+          <oc-avatars-stub items="[object Object]" stacked="true" istooltipdisplayed="true" maxdisplayed="3" accessibledescription=" This folder is shared via 1 link" class="resource-table-people"></oc-avatars-stub>
+        </oc-button-stub>
       </td>
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-sdate" aria-label="9 months ago (June 9, 2021, 12:44 PM UTC)"><span tabindex="0">9 months ago</span></td>
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-actions oc-pr-m">
@@ -54,7 +56,9 @@ exports[`SharedWithOthers view when the wrapper is not loading anymore when leng
         </div>
       </td>
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-sharedWith">
-        <oc-avatars-stub items="[object Object]" stacked="true" istooltipdisplayed="true" maxdisplayed="3" accessibledescription=" This folder is shared via 1 link" class="resource-table-people"></oc-avatars-stub>
+        <oc-button-stub type="button" size="medium" submit="button" variation="inverse" appearance="raw" justifycontent="center" gapsize="medium">
+          <oc-avatars-stub items="[object Object]" stacked="true" istooltipdisplayed="true" maxdisplayed="3" accessibledescription=" This folder is shared via 1 link" class="resource-table-people"></oc-avatars-stub>
+        </oc-button-stub>
       </td>
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-sdate" aria-label="9 months ago (June 9, 2021, 12:44 PM UTC)"><span tabindex="0">9 months ago</span></td>
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-actions oc-pr-m">
@@ -75,7 +79,9 @@ exports[`SharedWithOthers view when the wrapper is not loading anymore when leng
         </div>
       </td>
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-sharedWith">
-        <oc-avatars-stub items="[object Object]" stacked="true" istooltipdisplayed="true" maxdisplayed="3" accessibledescription=" This folder is shared via 1 link" class="resource-table-people"></oc-avatars-stub>
+        <oc-button-stub type="button" size="medium" submit="button" variation="inverse" appearance="raw" justifycontent="center" gapsize="medium">
+          <oc-avatars-stub items="[object Object]" stacked="true" istooltipdisplayed="true" maxdisplayed="3" accessibledescription=" This folder is shared via 1 link" class="resource-table-people"></oc-avatars-stub>
+        </oc-button-stub>
       </td>
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-sdate" aria-label="9 months ago (June 9, 2021, 12:44 PM UTC)"><span tabindex="0">9 months ago</span></td>
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-actions oc-pr-m">
