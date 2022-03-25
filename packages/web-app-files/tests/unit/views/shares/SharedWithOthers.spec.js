@@ -5,7 +5,7 @@ import SharedWithOthers from '@files/src/views/shares/SharedWithOthers.vue'
 import SharedData from '@/__fixtures__/sharedFiles.js'
 import { createLocationShares } from '../../../../src/router'
 import { buildSharedResource } from '../../../../src/helpers/resources'
-
+import { Settings } from 'luxon'
 const resourcesList = SharedData.json().ocs.data.map((resource) => buildSharedResource(resource))
 
 const router = {
@@ -44,6 +44,10 @@ const listInfoStub = 'list-info-stub'
 const paginationStub = 'pagination-stub'
 
 describe('SharedWithOthers view', () => {
+  beforeAll(() => {
+    Settings.defaultZone = 'utc'
+  })
+
   it('should show the app-loading-spinner component when the wrapper is still loading', () => {
     const wrapper = getMountedWrapper({ loading: true })
 
