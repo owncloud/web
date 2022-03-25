@@ -1,5 +1,5 @@
 <template>
-  <div class="oc-flex" style="gap: 15px">
+  <div class="oc-flex-inline oc-width-1-1" style="gap: 15px">
     <template v-if="createFileActionsAvailable">
       <oc-button
         id="new-file-menu-btn"
