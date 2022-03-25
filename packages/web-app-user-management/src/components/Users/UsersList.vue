@@ -15,7 +15,7 @@
           :label="$gettext('Select all users')"
           :value="allUsersSelected"
           hide-label
-          @input="$emit('toggleSelectAllUser')"
+          @input="$emit('toggleSelectAllUsers')"
         />
       </template>
       <template #select="rowData">
