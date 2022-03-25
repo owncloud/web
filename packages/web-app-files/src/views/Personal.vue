@@ -62,7 +62,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 import isNil from 'lodash-es/isNil'
 import debounce from 'lodash-es/debounce'
@@ -89,10 +89,12 @@ import PQueue from 'p-queue'
 import { createLocationSpaces } from '../router'
 import { useResourcesViewDefaults } from '../composables'
 import { fetchResources } from '../services/folder/loaderPersonal'
+import { defineComponent } from '@vue/composition-api'
+import { Resource } from '../helpers/resource'
 
 const visibilityObserver = new VisibilityObserver()
 
-export default {
+export default defineComponent({
   components: {
     ResourceTable,
     QuickActions,
@@ -113,7 +115,7 @@ export default {
   ],
   setup() {
     return {
-      ...useResourcesViewDefaults(),
+      ...useResourcesViewDefaults<Resource, any, any[]>(),
       resourceTargetLocation: createLocationSpaces('files-spaces-personal-home')
     }
   },
@@ -324,5 +326,5 @@ export default {
       return this.selected?.includes(resource)
     }
   }
-}
+})
 </script>
