@@ -1,7 +1,6 @@
 <template>
   <div>
     <oc-modal
-      icon="info"
       :title="$gettext('Create group')"
       :button-cancel-text="$gettext('Cancel')"
       :button-confirm-text="$gettext('Create')"
