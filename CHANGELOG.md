@@ -12,6 +12,7 @@ Summary
 * Enhancement - Editor role for single file public links: [#6618](https://github.com/owncloud/web/pull/6618)
 * Enhancement - Make some UI elements/actions optional: [#6618](https://github.com/owncloud/web/pull/6618)
 * Enhancement - PDF viewer: [#6654](https://github.com/owncloud/web/pull/6654)
+* Enhancement - Spaces group sharing: [#6639](https://github.com/owncloud/web/pull/6639)
 * Enhancement - Spaces link sharing: [#6633](https://github.com/owncloud/web/pull/6633)
 
 Details
@@ -49,6 +50,15 @@ Details
    We've added a lightweight PDF viewer app which allows the user to bookmark PDF files.
 
    https://github.com/owncloud/web/pull/6654
+
+* Enhancement - Spaces group sharing: [#6639](https://github.com/owncloud/web/pull/6639)
+
+   Resources within a space can now be shared with user groups. Spaces themselves can't be shared
+   with groups, therefore those have been removed from the autocomplete results when adding
+   members to a space.
+
+   https://github.com/owncloud/web/issues/6283
+   https://github.com/owncloud/web/pull/6639
 
 * Enhancement - Spaces link sharing: [#6633](https://github.com/owncloud/web/pull/6633)
 
