@@ -5,7 +5,7 @@
     :sidebar-accordions-warning-message="sidebarAccordionsWarningMessage"
     :is-content-displayed="isContentDisplayed"
     :loading="loading"
-    :is-single-resource="isSingleResource"
+    :is-header-compact="isSingleResource"
     v-on="$listeners"
     v-bind="$attrs"
   >

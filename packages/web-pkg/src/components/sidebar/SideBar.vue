@@ -20,7 +20,7 @@
           'is-active-sub-panel': activeAvailablePanelName === panel.app,
           'is-active-default-panel': panel.default && activePanelName === panel.app,
           'sidebar-panel-default': panel.default,
-          'resource-info-hidden': !isSingleResource
+          'compact-header': isHeaderCompact
         }"
       >
         <div
@@ -117,10 +117,10 @@ export default {
       required: false,
       default: true
     },
-    // FIXME: remove
-    isSingleResource: {
+    isHeaderCompact: {
       type: Boolean,
-      required: true,
+      required: false,
+      default: false
     }
   },
 
@@ -245,7 +245,7 @@ export default {
   height: 100%;
   max-height: 100%;
   display: grid;
-  grid-template-rows: 50px 70px 1fr;
+  grid-template-rows: 50px 1fr;
   background-color: var(--oc-color-background-default);
   top: 0;
   position: absolute;
@@ -263,8 +263,8 @@ export default {
     transition-duration: 0.001ms !important;
   }
 
-  &.resource-info-hidden {
-    grid-template-rows: 50px 1fr;
+  &.compact-header {
+    grid-template-rows: 50px 70px 1fr;
   }
 
   &.sidebar-panel-default {
