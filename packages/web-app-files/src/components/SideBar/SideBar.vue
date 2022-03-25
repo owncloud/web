@@ -6,22 +6,22 @@
     :is-content-displayed="isContentDisplayed"
     :loading="loading"
     :is-header-compact="isSingleResource"
-    v-on="$listeners"
     v-bind="$attrs"
+    v-on="$listeners"
   >
     <template #header>
-        <file-info
-          v-if="isSingleResource && !highlightedFileIsSpace"
-          class="sidebar-panel__file_info"
-          :is-content-displayed="isContentDisplayed"
-        />
-        <space-info v-if="highlightedFileIsSpace" class="sidebar-panel__space_info" />
+      <file-info
+        v-if="isSingleResource && !highlightedFileIsSpace"
+        class="sidebar-panel__file_info"
+        :is-content-displayed="isContentDisplayed"
+      />
+      <space-info v-if="highlightedFileIsSpace" class="sidebar-panel__space_info" />
     </template>
   </SideBar>
 </template>
 
 <script>
-import { mapGetters, mapState, mapActions } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import { DavProperties } from 'web-pkg/src/constants'
 import SideBar from 'web-pkg/src/components/sidebar/SideBar.vue'
 

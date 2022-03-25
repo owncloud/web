@@ -63,7 +63,10 @@ export default defineComponent({
 
   methods: {
     ...mapActions('Files', ['dragOver', 'resetFileSelection']),
-    ...mapActions('Files/sidebar', { closeSidebar: 'close', setActiveSidebarPanel: 'setActivePanel' }),
+    ...mapActions('Files/sidebar', {
+      closeSidebar: 'close',
+      setActiveSidebarPanel: 'setActivePanel'
+    }),
     ...mapActions(['showMessage']),
 
     focusSideBar(component, event) {
