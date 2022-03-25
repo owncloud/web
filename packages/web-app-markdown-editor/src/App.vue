@@ -1,9 +1,10 @@
 <template>
-  <main id="markdown-editor" class="oc-mx-s oc-my-s">
+  <main id="markdown-editor" class="oc-mx-l oc-my-m">
     <markdown-editor-app-bar
       :current-file-context="currentFileContext"
       :is-loading="isLoading"
       :is-dirty="isDirty"
+      :is-read-only="isReadOnly"
       @closeApp="closeApp"
       @save="save"
     />
@@ -16,18 +17,19 @@
       />
     </oc-notifications>
     <div class="oc-flex">
-      <div class="oc-container oc-width-1-2">
+      <div :class="showPreview ? 'oc-width-1-2' : 'oc-width-1-1'">
         <oc-textarea
           id="markdown-editor-input"
           v-model="currentContent"
           name="input"
           full-width
-          :label="$gettext('Editor')"
+          label=""
           class="oc-height-1-1"
           :rows="20"
+          :disabled="isReadOnly"
         />
       </div>
-      <div class="oc-container oc-width-1-2">
+      <div v-if="showPreview" class="oc-container oc-width-1-2">
         <!-- eslint-disable-next-line vue/no-v-html -->
         <div id="markdown-editor-preview" v-html="renderedMarkdown" />
       </div>
@@ -40,32 +42,73 @@ import { useAppDefaults } from 'web-pkg/src/composables'
 import { marked } from 'marked'
 import sanitizeHtml from 'sanitize-html'
 import { useTask } from 'vue-concurrency'
-import { computed, getCurrentInstance, onMounted, ref, unref } from '@vue/composition-api'
+import { computed, onMounted, onBeforeUnmount, ref, unref } from '@vue/composition-api'
+import { mapActions } from 'vuex'
+import { DavPermission, DavProperty } from 'web-pkg/src/constants'
 
 export default {
   name: 'MarkdownEditor',
   components: {
     MarkdownEditorAppBar
   },
+  beforeRouteLeave(to, from, next) {
+    if (this.isDirty) {
+      const modal = {
+        variation: 'danger',
+        icon: 'warning',
+        title: this.$gettext('Changes not saved'),
+        message: this.$gettext('Your changes were not saved. Do you want to save them?'),
+        cancelText: this.$gettext('Not Save'),
+        confirmText: this.$gettext('Save'),
+        onCancel: () => {
+          this.hideModal()
+          next()
+        },
+        onConfirm: () => {
+          this.save()
+          this.hideModal()
+          next()
+        }
+      }
+      this.createModal(modal)
+    } else {
+      next()
+    }
+  },
   setup() {
+    const defaults = useAppDefaults({
+      applicationName: 'markdown-editor'
+    })
+    const { applicationConfig, currentFileContext } = defaults
     const serverContent = ref()
     const currentContent = ref()
     const currentETag = ref()
+    const isReadOnly = ref(true)
 
-    const loadFileTask = useTask(function* (signal, that) {
-      const filePath = unref(that.currentFileContext).path
-      return yield that.getFileContents(filePath).then((response) => {
-        serverContent.value = currentContent.value = response.body
-        currentETag.value = response.headers.ETag
-        return response
-      })
+    const loadFileTask = useTask(function* (signal) {
+      const filePath = unref(currentFileContext).path
+
+      unref(defaults)
+        .getFileInfo(filePath, [DavProperty.Permissions])
+        .then((response) => {
+          isReadOnly.value =
+            response.fileInfo[DavProperty.Permissions].indexOf(DavPermission.Updateable) === -1
+        })
+
+      return yield unref(defaults)
+        .getFileContents(filePath)
+        .then((response) => {
+          serverContent.value = currentContent.value = response.body
+          currentETag.value = response.headers.ETag
+          return response
+        })
     }).restartable()
 
-    const saveFileTask = useTask(function* (signal, that) {
-      const filePath = unref(that.currentFileContext).path
+    const saveFileTask = useTask(function* (signal) {
+      const filePath = unref(currentFileContext).path
       const newContent = unref(currentContent)
 
-      return yield that
+      return yield unref(defaults)
         .putFileContents(filePath, newContent, {
           previousEntityTag: unref(currentETag)
         })
@@ -76,7 +119,20 @@ export default {
             currentETag.value = response.ETag
           },
           (error) => {
-            lastError.value = error.message
+            switch (error.statusCode) {
+              case 412:
+                lastError.value =
+                  'This file was updated outside this window. Please refresh the page (all changes will be lost).'
+                break
+              case 500:
+                lastError.value = 'Error when contacting the server'
+                break
+              case 401:
+                lastError.value = "You're not authorized to save this file"
+                break
+              default:
+                lastError.value = error.message || error
+            }
           }
         )
     }).restartable()
@@ -87,7 +143,9 @@ export default {
     }
 
     const renderedMarkdown = computed(() => {
-      return unref(currentContent) ? sanitizeHtml(marked(unref(currentContent))) : null
+      return unref(currentContent) && showPreview
+        ? sanitizeHtml(marked(unref(currentContent)))
+        : null
     })
 
     const isDirty = computed(() => {
@@ -98,18 +156,53 @@ export default {
       return loadFileTask.isRunning || saveFileTask.isRunning
     })
 
+    const showPreview = computed(() => {
+      return unref(fileExtension) === 'md' || !unref(config).showPreviewOnlyMd
+    })
+
+    const fileExtension = computed(() => {
+      return unref(currentFileContext).path.split('.').pop()
+    })
+
+    const config = computed(() => {
+      const { showPreviewOnlyMd = true } = unref(applicationConfig)
+      return { showPreviewOnlyMd }
+    })
+
     onMounted(() => {
-      loadFileTask.perform(getCurrentInstance().proxy)
+      loadFileTask.perform()
+
+      // Enable ctrl/cmd + s
+      document.addEventListener('keydown', handleSKey, false)
+      // Ensure reload is not possible if there are changes
+      window.addEventListener('beforeunload', handleUnload)
+    })
+
+    onBeforeUnmount(() => {
+      window.removeEventListener('beforeunload', handleUnload)
+      document.removeEventListener('keydown', handleSKey, false)
     })
 
     const save = function () {
-      saveFileTask.perform(this)
+      saveFileTask.perform()
+    }
+
+    const handleSKey = function (e) {
+      if ((e.ctrlKey || e.metaKey) && e.code === 'KeyS') {
+        e.preventDefault()
+        save()
+      }
+    }
+
+    const handleUnload = function (e) {
+      if (unref(isDirty)) {
+        e.preventDefault()
+        e.returnValue = ''
+      }
     }
 
     return {
-      ...useAppDefaults({
-        applicationName: 'markdown-editor'
-      }),
+      ...defaults,
 
       // tasks
       loadFileTask,
@@ -117,15 +210,23 @@ export default {
 
       // data
       isLoading,
+      showPreview,
       isDirty,
+      isReadOnly,
       currentContent,
       lastError,
       renderedMarkdown,
+      config,
 
       // methods
       clearLastError,
-      save
+      save,
+      handleSKey,
+      handleUnload
     }
+  },
+  methods: {
+    ...mapActions(['createModal', 'hideModal'])
   }
 }
 </script>
@@ -133,5 +234,8 @@ export default {
 #markdown-editor-preview {
   max-height: 80vh;
   overflow-y: scroll;
+}
+#markdown-editor-input {
+  resize: vertical;
 }
 </style>

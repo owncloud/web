@@ -1,8 +1,12 @@
 <template>
-  <div id="markdown-editor-app-bar" class="oc-app-bar">
+  <div id="markdown-editor-app-bar" class="oc-app-bar oc-width-1-1 oc-my-s">
     <oc-grid flex gutter="small">
       <div class="oc-width-auto">
-        <oc-button id="markdown-editor-controls-save" :disabled="!isDirty" @click="$emit('save')">
+        <oc-button
+          id="markdown-editor-controls-save"
+          :disabled="isReadOnly || !isDirty"
+          @click="$emit('save')"
+        >
           <oc-icon name="save" />
         </oc-button>
         <oc-spinner v-if="isLoading" :aria-label="$gettext('Loading editor content')" />
@@ -30,6 +34,10 @@ export default {
       required: true
     },
     isLoading: {
+      type: Boolean,
+      required: true
+    },
+    isReadOnly: {
       type: Boolean,
       required: true
     }
