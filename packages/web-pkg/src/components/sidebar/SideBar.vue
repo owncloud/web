@@ -87,8 +87,7 @@
   </div>
 </template>
 
-<script>
-import { mapState, mapActions } from 'vuex'
+<script lang="ts">
 import { VisibilityObserver } from 'web-pkg/src/observer'
 
 let visibilityObserver
@@ -103,6 +102,11 @@ export default {
     availablePanels: {
       type: Array,
       required: true
+    },
+    sidebarActivePanel: {
+      type: String,
+      required: false,
+      default: ""
     },
     sidebarAccordionsWarningMessage: {
       type: String,
@@ -129,7 +133,6 @@ export default {
   },
 
   computed: {
-    ...mapState('Files/sidebar', { sidebarActivePanel: 'activePanel' }),
     activeAvailablePanelName() {
       if (!this.sidebarActivePanel) {
         return null
@@ -168,11 +171,17 @@ export default {
     hiddenObserver.disconnect()
   },
   methods: {
-    ...mapActions('Files/sidebar', {
-      closeSidebar: 'close',
-      setSidebarPanel: 'setActivePanel',
-      resetSidebarPanel: 'resetActivePanel'
-    }),
+    setSidebarPanel(panel: string) {
+      this.$emit('selectPanel', panel)
+    },
+
+    resetSidebarPanel() {
+      this.$emit('selectPanel', null)
+    },
+
+    closeSidebar() {
+      this.$emit('close')
+    },
 
     initVisibilityObserver() {
       visibilityObserver = new VisibilityObserver({

@@ -9,30 +9,37 @@
       <router-view id="files-view" />
     </div>
     <side-bar
-      v-if="!sidebarClosed"
+      v-if="showSidebar"
       id="files-sidebar"
       ref="filesSidebar"
       tabindex="-1"
       class="oc-width-1-1 oc-width-1-3@m oc-width-1-4@xl"
+      :sidebar-active-panel="sidebarActivePanel"
       @beforeDestroy="focusSideBar"
       @mounted="focusSideBar"
       @fileChanged="focusSideBar"
+      @selectPanel="setActiveSidebarPanel"
+      @close="closeSidebar"
     />
   </main>
 </template>
-<script>
+<script lang="ts">
 import Mixins from './mixins'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import SideBar from './components/SideBar/SideBar.vue'
+import { defineComponent } from '@vue/composition-api'
 
-export default {
+export default defineComponent({
   components: {
     SideBar
   },
   mixins: [Mixins],
   computed: {
-    ...mapGetters('Files', ['dropzone']),
-    ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
+    ...mapGetters('Files', ['dropzone', 'inProgress']),
+    ...mapState('Files/sidebar', {
+      sidebarClosed: 'closed',
+      sidebarActivePanel: 'activePanel'
+    }),
 
     showSidebar() {
       return !this.sidebarClosed
@@ -56,7 +63,7 @@ export default {
 
   methods: {
     ...mapActions('Files', ['dragOver', 'resetFileSelection']),
-    ...mapActions('Files/sidebar', { closeSidebar: 'close' }),
+    ...mapActions('Files/sidebar', { closeSidebar: 'close', setActiveSidebarPanel: 'setActivePanel' }),
     ...mapActions(['showMessage']),
 
     focusSideBar(component, event) {
@@ -71,7 +78,7 @@ export default {
       this.dragOver(hasfileInEvent)
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

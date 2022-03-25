@@ -6,6 +6,8 @@
     :is-content-displayed="isContentDisplayed"
     :loading="loading"
     :is-single-resource="isSingleResource"
+    v-on="$listeners"
+    v-bind="$attrs"
   >
     <template #header>
         <file-info
