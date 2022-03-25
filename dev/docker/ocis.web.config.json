@@ -19,7 +19,8 @@
     "markdown-editor",
     "media-viewer",
     "search",
-    "external"
+    "external",
+    "user-management"
   ],
   "external_apps": [
     {
