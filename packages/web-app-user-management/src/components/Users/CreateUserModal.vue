@@ -83,13 +83,9 @@ export default {
   },
   computed: {
     buttonConfirmDisabled() {
-      let invalid = false
-      Object.keys(this.formData).forEach((key) => {
-        if (this.formData[key].valid === false) {
-          invalid = true
-        }
-      })
-      return invalid
+      return Object.keys(this.formData)
+        .map((k) => !!this.formData[k].valid)
+        .includes(false)
     }
   },
   methods: {
@@ -97,7 +93,8 @@ export default {
       this.formData.userName.valid = false
 
       if (this.user.onPremisesSamAccountName.trim() === '') {
-        return (this.formData.userName.errorMessage = this.$gettext('User name cannot be empty'))
+        this.formData.userName.errorMessage = this.$gettext('User name cannot be empty')
+        return
       }
 
       this.formData.userName.errorMessage = ''
@@ -108,9 +105,8 @@ export default {
       this.formData.displayName.valid = false
 
       if (this.user.displayName.trim() === '') {
-        return (this.formData.displayName.errorMessage = this.$gettext(
-          'Display name cannot be empty'
-        ))
+        this.formData.displayName.errorMessage = this.$gettext('Display name cannot be empty')
+        return
       }
 
       this.formData.displayName.errorMessage = ''
@@ -121,7 +117,8 @@ export default {
       this.formData.email.valid = false
 
       if (!EmailValidator.validate(this.user.mail)) {
-        return (this.formData.email.errorMessage = this.$gettext('Please enter a valid email'))
+        this.formData.email.errorMessage = this.$gettext('Please enter a valid email')
+        return
       }
 
       this.formData.email.errorMessage = ''
@@ -131,7 +128,8 @@ export default {
       this.formData.password.valid = false
 
       if (this.user.passwordProfile.password.trim() === '') {
-        return (this.formData.password.errorMessage = this.$gettext('Password cannot be empty'))
+        this.formData.password.errorMessage = this.$gettext('Password cannot be empty')
+        return
       }
 
       this.formData.password.errorMessage = ''

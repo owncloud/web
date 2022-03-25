@@ -38,13 +38,9 @@ export default {
   },
   computed: {
     buttonConfirmDisabled() {
-      let invalid = false
-      Object.keys(this.formData).forEach((key) => {
-        if (this.formData[key].valid === false) {
-          invalid = true
-        }
-      })
-      return invalid
+      return Object.keys(this.formData)
+        .map((k) => !!this.formData[k].valid)
+        .includes(false)
     }
   },
   methods: {
@@ -52,9 +48,8 @@ export default {
       this.formData.displayName.valid = false
 
       if (this.group.displayName.trim() === '') {
-        return (this.formData.displayName.errorMessage = this.$gettext(
-          'Group name cannot be empty'
-        ))
+        this.formData.displayName.errorMessage = this.$gettext('Group name cannot be empty')
+        return
       }
 
       this.formData.displayName.errorMessage = ''
