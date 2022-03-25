@@ -51,6 +51,15 @@ import * as EmailValidator from 'email-validator'
 
 export default {
   name: 'CreateUserModal',
+  props: {
+    existingUsers: {
+      type: Array,
+      required: false,
+      default: () => {
+        return []
+      }
+    }
+  },
   data: function () {
     return {
       formData: {
@@ -94,6 +103,19 @@ export default {
 
       if (this.user.onPremisesSamAccountName.trim() === '') {
         this.formData.userName.errorMessage = this.$gettext('User name cannot be empty')
+        return
+      }
+
+      if (
+        this.existingUsers.find(
+          (existingUser) =>
+            existingUser.onPremisesSamAccountName === this.user.onPremisesSamAccountName
+        )
+      ) {
+        this.formData.userName.errorMessage = this.$gettextInterpolate(
+          this.$gettext('User "%{userName}" already exists'),
+          { userName: this.user.onPremisesSamAccountName }
+        )
         return
       }
 

@@ -23,6 +23,15 @@
 <script>
 export default {
   name: 'CreateGroupModal',
+  props: {
+    existingGroups: {
+      type: Array,
+      required: false,
+      default: () => {
+        return []
+      }
+    }
+  },
   data: function () {
     return {
       formData: {
@@ -49,6 +58,18 @@ export default {
 
       if (this.group.displayName.trim() === '') {
         this.formData.displayName.errorMessage = this.$gettext('Group name cannot be empty')
+        return
+      }
+
+      if (
+        this.existingGroups.find(
+          (existingGroup) => existingGroup.displayName === this.group.displayName
+        )
+      ) {
+        this.formData.displayName.errorMessage = this.$gettextInterpolate(
+          this.$gettext('Group "%{groupName}" already exists'),
+          { groupName: this.group.displayName }
+        )
         return
       }
 

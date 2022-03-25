@@ -2,6 +2,7 @@
   <div>
     <create-user-modal
       v-if="createUserModalOpen"
+      :existing-users="users"
       @cancel="toggleCreateUserModal"
       @confirm="createUser"
     />

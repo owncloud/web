@@ -2,6 +2,7 @@
   <div>
     <create-group-modal
       v-if="createGroupModalOpen"
+      :existing-groups="groups"
       @cancel="toggleCreateGroupModal"
       @confirm="createGroup"
     />
