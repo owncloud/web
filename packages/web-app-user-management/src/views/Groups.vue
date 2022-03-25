@@ -178,66 +178,66 @@ export default {
     toggleDeleteGroupModal() {
       this.deleteGroupModalOpen = !this.deleteGroupModalOpen
     },
-    deleteGroups(groups) {
+
+    async deleteGroups(groups) {
       const promises = groups.map((group) => this.graphClient.groups.deleteGroup(group.id))
 
-      Promise.all(promises)
-        .then(() => {
-          this.showMessage({
-            title: this.$gettextInterpolate(
-              this.$ngettext(
-                'Group "%{group}" was deleted successfully',
-                '%{groupCount} groups were deleted successfully',
-                this.selectedGroups.length
-              ),
-              {
-                groupCount: this.selectedGroups.length,
-                group: this.selectedGroups[0].displayName
-              },
-              true
-            )
-          })
-          this.groups = this.groups.filter((group) => {
-            return !groups.find((deletedGroup) => group.id === deletedGroup.id)
-          })
-          this.selectedGroups = []
-          this.toggleDeleteGroupModal()
-        })
-        .catch(() => {
-          this.showMessage({
-            title: this.$gettextInterpolate(
-              this.$ngettext(
-                'Failed to delete group "%{group}"',
-                'Failed to delete %{groupCount} groups',
-                this.selectedGroups.length
-              ),
-              {
-                groupCount: this.selectedGroups.length,
-                group: this.selectedGroups[0].displayName
-              },
-              true
+      try {
+        await Promise.all(promises)
+        this.showMessage({
+          title: this.$gettextInterpolate(
+            this.$ngettext(
+              'Group "%{group}" was deleted successfully',
+              '%{groupCount} groups were deleted successfully',
+              this.selectedGroups.length
             ),
-            status: 'danger'
-          })
+            {
+              groupCount: this.selectedGroups.length,
+              group: this.selectedGroups[0].displayName
+            },
+            true
+          )
         })
+        this.groups = this.groups.filter((group) => {
+          return !groups.find((deletedGroup) => group.id === deletedGroup.id)
+        })
+        this.selectedGroups = []
+        this.toggleDeleteGroupModal()
+      } catch (error) {
+        console.error(error)
+        this.showMessage({
+          title: this.$gettextInterpolate(
+            this.$ngettext(
+              'Failed to delete group "%{group}"',
+              'Failed to delete %{groupCount} groups',
+              this.selectedGroups.length
+            ),
+            {
+              groupCount: this.selectedGroups.length,
+              group: this.selectedGroups[0].displayName
+            },
+            true
+          ),
+          status: 'danger'
+        })
+      }
     },
 
-    createGroup(group) {
-      this.graphClient.groups
-        .createGroup(group)
-        .then((response) => {
-          this.toggleCreateGroupModal()
-          this.showMessage({
-            title: this.$gettext('Group was created successfully')
-          })
-          this.groups.push(response.data)
+    async createGroup(group) {
+      try {
+        const response = await this.graphClient.groups.createGroup(group)
+        this.toggleCreateGroupModal()
+        this.showMessage({
+          title: this.$gettext('Group was created successfully')
         })
-        .catch(() => {
-          this.showMessage({
-            title: this.$gettext('Failed to create group'),
-            status: 'danger'
-          })
+        this.groups.push(response?.data)
+      } catch (error) {
+        console.error(error)
+        this.showMessage({
+          title: this.$gettext('Failed to create group'),
+          status: 'danger'
         })
+      }
     }
   }
 }

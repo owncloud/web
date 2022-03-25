@@ -172,66 +172,65 @@ export default {
     toggleDeleteUserModal() {
       this.deleteUserModalOpen = !this.deleteUserModalOpen
     },
-    deleteUsers(users) {
+    async deleteUsers(users) {
       const promises = users.map((user) => this.graphClient.users.deleteUser(user.id))
 
-      Promise.all(promises)
-        .then(() => {
-          this.showMessage({
-            title: this.$gettextInterpolate(
-              this.$ngettext(
-                'User "%{user}" was deleted successfully',
-                '%{userCount} users were deleted successfully',
-                this.selectedUsers.length
-              ),
-              {
-                userCount: this.selectedUsers.length,
-                user: this.selectedUsers[0].onPremisesSamAccountName
-              },
-              true
-            )
-          })
-          this.users = this.users.filter((user) => {
-            return !users.find((deletedUser) => user.id === deletedUser.id)
-          })
-          this.selectedUsers = []
-          this.toggleDeleteUserModal()
-        })
-        .catch(() => {
-          this.showMessage({
-            title: this.$gettextInterpolate(
-              this.$ngettext(
-                'Failed to delete user "%{user}"',
-                'Failed to delete %{userCount} users',
-                this.selectedUsers.length
-              ),
-              {
-                userCount: users.length,
-                user: users.onPremisesSamAccountName
-              },
-              true
+      try {
+        await Promise.all(promises)
+        this.showMessage({
+          title: this.$gettextInterpolate(
+            this.$ngettext(
+              'User "%{user}" was deleted successfully',
+              '%{userCount} users were deleted successfully',
+              this.selectedUsers.length
             ),
-            status: 'danger'
-          })
+            {
+              userCount: this.selectedUsers.length,
+              user: this.selectedUsers[0].onPremisesSamAccountName
+            },
+            true
+          )
         })
+        this.users = this.users.filter((user) => {
+          return !users.find((deletedUser) => user.id === deletedUser.id)
+        })
+        this.selectedUsers = []
+        this.toggleDeleteUserModal()
+      } catch (error) {
+        console.error(error)
+        this.showMessage({
+          title: this.$gettextInterpolate(
+            this.$ngettext(
+              'Failed to delete user "%{user}"',
+              'Failed to delete %{userCount} users',
+              this.selectedUsers.length
+            ),
+            {
+              userCount: users.length,
+              user: users.onPremisesSamAccountName
+            },
+            true
+          ),
+          status: 'danger'
+        })
+      }
     },
 
-    createUser(user) {
-      this.graphClient.users
-        .createUser(user)
-        .then((response) => {
-          this.toggleCreateUserModal()
-          this.showMessage({
-            title: this.$gettext('User was created successfully')
-          })
-          this.users.push(response.data)
+    async createUser(user) {
+      try {
+        const response = await this.graphClient.users.createUser(user)
+        this.toggleCreateUserModal()
+        this.showMessage({
+          title: this.$gettext('User was created successfully')
         })
-        .catch(() => {
-          this.showMessage({
-            title: this.$gettext('Failed to create user'),
-            status: 'danger'
-          })
+        this.users.push(response?.data)
+      } catch (error) {
+        console.log(error)
+        this.showMessage({
+          title: this.$gettext('Failed to create user'),
+          status: 'danger'
         })
+      }
     }
   }
 }
