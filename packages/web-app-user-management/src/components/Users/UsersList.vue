@@ -67,8 +67,19 @@ export default {
   data() {
     return {
       sortBy: 'onPremisesSamAccountName',
-      sortDir: 'asc',
-      fields: [
+      sortDir: 'asc'
+    }
+  },
+  computed: {
+    allUsersSelected() {
+      return this.users.length === this.selectedUsers.length
+    },
+    footerText() {
+      const translated = this.$gettext('%{userCount} users in total')
+      return this.$gettextInterpolate(translated, { userCount: this.users.length })
+    },
+    fields() {
+      return [
         {
           name: 'select',
           title: '',
@@ -84,39 +95,30 @@ export default {
         },
         {
           name: 'onPremisesSamAccountName',
-          title: 'User name',
+          title: this.$gettext('User name'),
           sortable: true
         },
         {
           name: 'displayName',
-          title: 'Display name',
+          title: this.$gettext('Display name'),
           sortable: true
         },
         {
           name: 'mail',
-          title: 'Email',
+          title: this.$gettext('Email'),
           sortable: true
         },
         {
           name: 'role',
-          title: 'Role',
+          title: this.$gettext('Role'),
           sortable: true
         },
         {
           name: 'status',
-          title: 'Status',
+          title: this.$gettext('Status'),
           sortable: true
         }
       ]
-    }
-  },
-  computed: {
-    allUsersSelected() {
-      return this.users.length === this.selectedUsers.length
-    },
-    footerText() {
-      const translated = this.$gettext('%{userCount} users in total')
-      return this.$gettextInterpolate(translated, { userCount: this.users.length })
     },
     data() {
       return orderBy([...this.users], this.sortBy, this.sortDir === 'desc')

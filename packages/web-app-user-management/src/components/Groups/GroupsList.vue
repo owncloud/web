@@ -1,84 +1,130 @@
 <template>
   <div>
-    <oc-table-simple id="group-list" class="oc-mt-l">
-      <oc-thead>
-        <oc-tr>
-          <oc-th shrink type="head" align-h="center">
-            <oc-checkbox
-              size="large"
-              class="oc-ml-s"
-              :label="$gettext('Select all groups')"
-              :value="allGroupsSelected"
-              hide-label
-              @input="toggleSelectAllGroups"
-            />
-          </oc-th>
-          <oc-th shrink type="head" />
-          <oc-th type="head" v-text="$gettext('Group name')" />
-          <oc-th type="head" v-text="$gettext('Your role')" />
-          <oc-th type="head" v-text="$gettext('Members')" />
-        </oc-tr>
-      </oc-thead>
-      <oc-tbody>
-        <groups-list-row
-          v-for="group in groups"
-          :key="`group-list-row-${group.id}`"
-          :group="group"
-          :selected-groups="selectedGroups"
+    <oc-table
+      :sort-by="sortBy"
+      :sort-dir="sortDir"
+      :fields="fields"
+      :data="data"
+      :highlighted="highlighted"
+      @sort="handleSort"
+    >
+      <template #selectHeader>
+        <oc-checkbox
+          size="large"
+          class="oc-ml-s"
+          :label="$gettext('Select all groups')"
+          :value="allGroupsSelected"
+          hide-label
+          @input="$emit('toggleSelectAllGroups')"
         />
-      </oc-tbody>
-    </oc-table-simple>
+      </template>
+      <template #select="rowData">
+        <oc-checkbox
+          class="oc-ml-s"
+          size="large"
+          :value="selectedGroups"
+          :option="rowData.item"
+          :label="getSelectGroupLabel(rowData.item)"
+          hide-label
+          @input="$emit('toggleSelectGroup', rowData.item)"
+        />
+      </template>
+      <template #avatar="rowData">
+        <avatar-image :width="32" :userid="rowData.item.id" :user-name="rowData.item.displayName" />
+      </template>
+      <template #footer>
+        <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
+          <p class="oc-text-muted">{{ footerText }}</p>
+        </div>
+      </template>
+    </oc-table>
   </div>
 </template>
 
 <script>
-import GroupsListRow from './GroupsListRow.vue'
-import { bus } from 'web-pkg/src/instance'
+const orderBy = (list, prop, desc) => {
+  return [...list].sort((a, b) => {
+    a = a[prop]
+    b = b[prop]
+
+    if (a === b) return 0
+    return (desc ? a > b : a < b) ? -1 : 1
+  })
+}
 
 export default {
   name: 'GroupsList',
-  components: { GroupsListRow },
   props: {
     groups: {
       type: Array,
       required: true
+    },
+    selectedGroups: {
+      type: Array,
+      required: true
     }
   },
-  data: function () {
+  data() {
     return {
-      selectedGroups: []
+      sortBy: 'displayName',
+      sortDir: 'asc'
     }
   },
   computed: {
+    fields() {
+      return [
+        {
+          name: 'select',
+          title: '',
+          type: 'slot',
+          width: 'shrink',
+          headerType: 'slot'
+        },
+        {
+          name: 'avatar',
+          title: '',
+          type: 'slot',
+          width: 'shrink'
+        },
+        {
+          name: 'displayName',
+          title: this.$gettext('Group name'),
+          sortable: true
+        },
+        {
+          name: 'role',
+          title: this.$gettext('Your role'),
+          sortable: true
+        },
+        {
+          name: 'members',
+          title: this.$gettext('Members'),
+          sortable: true
+        }
+      ]
+    },
     allGroupsSelected() {
       return this.groups.length === this.selectedGroups.length
+    },
+    footerText() {
+      const translated = this.$gettext('%{groupCount} groups in total')
+      return this.$gettextInterpolate(translated, { groupCount: this.groups.length })
+    },
+    data() {
+      return orderBy([...this.groups], this.sortBy, this.sortDir === 'desc')
+    },
+    highlighted() {
+      return this.selectedGroups.map((group) => group.id)
     }
   },
-  mounted() {
-    const loadResourcesEventToken = bus.subscribe('app.user-management.groups.toggle', (group) =>
-      this.toggleSelectedGroup(group)
-    )
-
-    this.$on('beforeDestroy', () => {
-      bus.unsubscribe('app.user-management.groups.toggle', loadResourcesEventToken)
-    })
-  },
   methods: {
-    toggleSelectAllGroups() {
-      if (this.allGroupsSelected) {
-        return (this.selectedGroups = [])
-      }
-      this.selectedGroups = [...this.groups]
+    handleSort(event) {
+      this.sortBy = event.sortBy
+      this.sortDir = event.sortDir
     },
-
-    toggleSelectedGroup(toggledGroup) {
-      const isGroupSelected = this.selectedGroups.find((group) => group.id === toggledGroup.id)
-
-      if (!isGroupSelected) {
-        return this.selectedGroups.push(toggledGroup)
-      }
-
-      this.selectedGroups = this.selectedGroups.filter((group) => group.id !== toggledGroup.id)
+    getSelectGroupLabel(group) {
+      const translated = this.$gettext('Select %{ group }')
+      return this.$gettextInterpolate(translated, { group: group.displayName }, true)
     }
   }
 }

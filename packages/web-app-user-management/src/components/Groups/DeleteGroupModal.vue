@@ -7,7 +7,7 @@
       :button-cancel-text="$gettext('Cancel')"
       :button-confirm-text="$gettext('Delete')"
       variation="danger"
-      @confirm="$emit('confirm', users)"
+      @confirm="$emit('confirm', groups)"
       @cancel="$emit('cancel')"
     >
     </oc-modal>
@@ -16,9 +16,9 @@
 
 <script>
 export default {
-  name: 'DeleteUserModal',
+  name: 'DeleteGroupModal',
   props: {
-    users: {
+    groups: {
       type: Array,
       required: true
     }
@@ -27,21 +27,21 @@ export default {
     title() {
       return this.$gettextInterpolate(
         this.$ngettext(
-          'Delete user %{user}?',
-          'Delete %{userCount} selected users?',
-          this.users.length
+          'Delete group %{group}?',
+          'Delete %{groupCount} selected groups?',
+          this.groups.length
         ),
         {
-          userCount: this.users.length,
-          user: this.users[0].onPremisesSamAccountName
+          group: this.groups[0].displayName,
+          groupCount: this.groups.length
         }
       )
     },
     message() {
       return this.$ngettext(
-        'Are you sure you want to delete this user?',
-        'Are you sure you want to delete all selected users?',
-        this.users.length
+        'Are you sure you want to delete this group?',
+        'Are you sure you want to delete all selected groups?',
+        this.groups.length
       )
     }
   }

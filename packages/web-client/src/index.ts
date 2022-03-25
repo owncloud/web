@@ -9,7 +9,11 @@ import {
   User,
   MeUserApiFactory,
   UsersApiFactory,
-  GroupsApiFactory
+  GroupsApiFactory,
+  Group,
+  CollectionOfGroup,
+  CollectionOfUser,
+  GroupApiFactory
 } from './generated'
 
 export interface Graph {
@@ -25,10 +29,12 @@ export interface Graph {
     createUser: (user: User) => AxiosPromise<User>
     getMe: () => AxiosPromise<User>
     deleteUser: (userId: string) => AxiosPromise<void>
-    listUsers: (orderBy?: string) => AxiosPromise<User>
+    listUsers: (orderBy?: string) => AxiosPromise<CollectionOfUser>
   }
   groups: {
-    listGroups: (orderBy?: string) => AxiosPromise<User>
+    listGroups: (orderBy?: string) => AxiosPromise<CollectionOfGroup>
+    createGroup: (group: Group) => AxiosPromise<Group>
+    deleteGroup: (groupId: string) => AxiosPromise<void>
   }
 }
 
@@ -42,6 +48,7 @@ const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
   const meUserApiFactory = MeUserApiFactory(config, config.basePath, axiosClient)
   const userApiFactory = UserApiFactory(config, config.basePath, axiosClient)
   const usersApiFactory = UsersApiFactory(config, config.basePath, axiosClient)
+  const groupApiFactory = GroupApiFactory(config, config.basePath, axiosClient)
   const groupsApiFactory = GroupsApiFactory(config, config.basePath, axiosClient)
   const drivesApiFactory = DrivesApiFactory(config, config.basePath, axiosClient)
 
@@ -66,6 +73,8 @@ const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
         usersApiFactory.listUsers(0, 0, '', '', false, new Set<any>([orderBy]))
     },
     groups: {
+      createGroup: (group: Group) => groupsApiFactory.createGroup(group),
+      deleteGroup: (groupId: string) => groupApiFactory.deleteGroup(groupId),
       listGroups: (orderBy?: any) =>
         groupsApiFactory.listGroups(0, 0, '', '', false, new Set<any>([orderBy]))
     }

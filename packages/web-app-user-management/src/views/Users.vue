@@ -60,7 +60,7 @@
             :selected-users="selectedUsers"
             class="oc-mt-m"
             @toggleSelectUser="toggleSelectUser"
-            @toggleSelectAllUser="toggleSelectAllUsers"
+            @toggleSelectAllUsers="toggleSelectAllUsers"
           />
         </div>
       </template>
@@ -173,11 +173,7 @@ export default {
       this.deleteUserModalOpen = !this.deleteUserModalOpen
     },
     deleteUsers(users) {
-      const promises = []
-      users.reduce((acc, user) => {
-        acc.push(this.graphClient.users.deleteUser(user.id))
-        return acc
-      }, promises)
+      const promises = users.map((user) => this.graphClient.users.deleteUser(user.id))
 
       Promise.all(promises)
         .then(() => {
