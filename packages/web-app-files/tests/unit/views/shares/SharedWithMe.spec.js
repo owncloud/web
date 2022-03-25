@@ -24,7 +24,7 @@ const selectors = {
 
 const spinnerStub = 'oc-spinner-stub'
 
-describe('SharedWithMe page', () => {
+describe('SharedWithMe view', () => {
   describe('when the view is still loading', () => {
     it('should show the loading indicator', () => {
       const wrapper = getMountedWrapper({ loading: true })

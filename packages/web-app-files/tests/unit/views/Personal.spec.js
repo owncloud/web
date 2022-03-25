@@ -1,16 +1,27 @@
 import GetTextPlugin from 'vue-gettext'
-import VueRouter from 'vue-router'
 import { mount } from '@vue/test-utils'
 import { getStore, localVue } from './views.setup'
 import Personal from '@files/src/views/Personal.vue'
 import MixinAccessibleBreadcrumb from '@files/src/mixins/accessibleBreadcrumb'
 import { accentuatesTableRowTest } from './views.shared'
+import { createLocationSpaces } from '../../../src/router'
 
 localVue.use(GetTextPlugin, {
   translations: 'does-not-matter.json',
   silent: true
 })
-localVue.use(VueRouter)
+
+const router = {
+  push: jest.fn(),
+  afterEach: jest.fn(),
+  currentRoute: {
+    ...createLocationSpaces('files-spaces-personal-home'),
+    query: {}
+  },
+  resolve: (r) => {
+    return { href: r.name }
+  }
+}
 
 const user = {
   id: 1,
@@ -167,8 +178,11 @@ function createWrapper(selectedFiles = [resourceForestJpg]) {
       pages: 4,
       inProgress: [null]
     }),
-    router: new VueRouter(),
     localVue,
-    stubs: stubs
+    stubs,
+    mocks: {
+      $route: router.currentRoute,
+      $router: router
+    }
   })
 }

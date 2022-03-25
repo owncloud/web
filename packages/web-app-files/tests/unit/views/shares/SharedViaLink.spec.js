@@ -1,12 +1,22 @@
 import { shallowMount, mount } from '@vue/test-utils'
 import { getStore, localVue, createFile } from '../views.setup.js'
-import VueRouter from 'vue-router'
 import { createLocationSpaces } from '../../../../src/router'
 import FileActions from '@files/src/mixins/fileActions'
 import SharedViaLink from '@files/src/views/shares/SharedViaLink.vue'
-localVue.use(VueRouter)
 
 const component = { ...SharedViaLink, mounted: jest.fn() }
+
+const router = {
+  push: jest.fn(),
+  afterEach: jest.fn(),
+  currentRoute: {
+    name: 'some-route-name',
+    query: {}
+  },
+  resolve: (r) => {
+    return { href: r.name }
+  }
+}
 
 const resources = [
   createFile({ id: 2147491323, type: 'file' }),
@@ -17,7 +27,8 @@ const stubs = {
   'resource-table': false,
   'context-actions': true,
   pagination: true,
-  'list-info': true
+  'list-info': true,
+  'router-link': true
 }
 
 const listLoaderStub = 'app-loading-spinner-stub'
@@ -148,17 +159,14 @@ describe('SharedViaLink view', () => {
 })
 
 function mountOptions(store, loading, setup = {}) {
-  const routes = [
-    {
-      name: 'files-spaces-personal-home',
-      path: '/'
-    }
-  ]
   return {
     localVue,
     store: store,
     stubs,
-    router: new VueRouter({ routes }),
+    mocks: {
+      $route: router.currentRoute,
+      $router: router
+    },
     setup: () => ({
       loadResourcesTask: {
         isRunning: loading,

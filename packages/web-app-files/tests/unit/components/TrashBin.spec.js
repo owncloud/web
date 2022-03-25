@@ -146,7 +146,11 @@ describe('Trashbin component', () => {
     const $router = {
       afterEach: jest.fn(),
       currentRoute: {
+        name: 'some-route-name',
         query: {}
+      },
+      resolve: (r) => {
+        return { href: r.name }
       }
     }
     return {

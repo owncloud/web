@@ -10,7 +10,7 @@ localVue.use(Vuex)
 
 afterEach(() => jest.clearAllMocks())
 
-describe('Trashbin', () => {
+describe('Trashbin view', () => {
   describe('method "mounted"', () => {
     it('should change document title', async () => {
       const wrapper = getWrapper()

@@ -16,7 +16,7 @@ const selectors = {
 
 beforeEach(mockAxios.reset)
 
-describe('Spaces component', () => {
+describe('Spaces projects view', () => {
   it('should show a "no content" message', async () => {
     mockAxios.request.mockImplementationOnce(() => {
       return Promise.resolve({

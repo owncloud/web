@@ -1,6 +1,7 @@
 import { createFile, getStore, localVue } from './views.setup.js'
 import LocationPicker from '@files/src/views/LocationPicker.vue'
 import { mount, RouterLinkStub, shallowMount } from '@vue/test-utils'
+import { createLocationOperations } from '../../../src/router'
 
 const component = { ...LocationPicker, mounted: jest.fn() }
 
@@ -25,7 +26,11 @@ const router = {
   push: jest.fn(),
   afterEach: jest.fn(),
   currentRoute: {
+    ...createLocationOperations('files-operations-location-picker'),
     query: {}
+  },
+  resolve: (r) => {
+    return { href: r.name }
   }
 }
 
