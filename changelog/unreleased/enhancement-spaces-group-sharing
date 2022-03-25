@@ -1,0 +1,6 @@
+Enhancement: Spaces group sharing
+
+Resources within a space can now be shared with user groups. Spaces themselves can't be shared with groups, therefore those have been removed from the autocomplete results when adding members to a space.
+
+https://github.com/owncloud/web/pull/6639
+https://github.com/owncloud/web/issues/6283

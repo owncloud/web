@@ -20,7 +20,8 @@
         <autocomplete-item :item="option" />
       </template>
       <template #no-options>
-        <translate> No users or groups found. </translate>
+        <translate v-if="resourceIsSpace"> No users found. </translate>
+        <translate v-else> No users or groups found. </translate>
       </template>
       <template #selected-option-container="{ option, deselect }">
         <recipient-container
@@ -173,7 +174,12 @@ export default {
             // Inject the correct share type here as the response has always type "user"
             return { ...result, value: { ...result.value, shareType } }
           })
-        const groups = recipients.exact.groups.concat(recipients.groups)
+
+        let groups = []
+        if (!this.resourceIsSpace) {
+          groups = recipients.exact.groups.concat(recipients.groups)
+        }
+
         const remotes = recipients.exact.remotes.concat(recipients.remotes)
 
         this.autocompleteResults = users.concat(groups, remotes).filter((collaborator) => {
