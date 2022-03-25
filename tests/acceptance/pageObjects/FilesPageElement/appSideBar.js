@@ -51,20 +51,21 @@ module.exports = {
       if (!(await this.isSideBarOpen(expectedToOpen))) {
         return false
       }
+      const timeout = expectedToOpen
+        ? this.api.globals.waitForConditionTimeout
+        : this.api.globals.waitForNegativeConditionTimeout
+
       const selector = this.getResourceInfoSelector(resource, elementType)
       let resourceInfoVisible = false
-      await this.api.elements('xpath', selector, ({ value }) => {
-        if (value.length === 0) {
-          return
-        }
-        for (const { ELEMENT } of value) {
-          this.api.elementIdDisplayed(ELEMENT, function (result) {
-            if (result.value === true) {
-              resourceInfoVisible = true
-            }
-          })
-        }
-      })
+      await this.isAnyElementVisible(
+        {
+          locateStrategy: 'xpath',
+          selector,
+          timeout: timeoutHelper.parseTimeout(timeout),
+          suppressNotFoundErrors: !expectedToOpen
+        },
+        (result) => (resourceInfoVisible = result.isVisible)
+      )
       return resourceInfoVisible
     },
     getResourceInfoSelector: function (resource, elementType = 'any') {
