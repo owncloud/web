@@ -492,6 +492,7 @@ Summary
 * Bugfix - Load capabilities for password protected public links: [#6471](https://github.com/owncloud/web/pull/6471)
 * Bugfix - No selection info right sidebar: [#6502](https://github.com/owncloud/web/issues/6502)
 * Bugfix - Update file list when creating new files: [#5530](https://github.com/owncloud/web/issues/5530)
+* Enhancement - Add quick rename button: [#6645](https://github.com/owncloud/web/pull/6645)
 * Enhancement - Display search results within files app: [#6496](https://github.com/owncloud/web/issues/6496)
 * Enhancement - Option to enable Vue history mode: [#6363](https://github.com/owncloud/web/issues/6363)
 * Enhancement - Redesign OcBreadcrumb: [#6218](https://github.com/owncloud/web/issues/6218)
@@ -538,6 +539,13 @@ Details
 
    https://github.com/owncloud/web/issues/5530
    https://github.com/owncloud/web/pull/6358
+
+* Enhancement - Add quick rename button: [#6645](https://github.com/owncloud/web/pull/6645)
+
+   We've added a button for quick editing a resource name
+
+   https://github.com/owncloud/web/issues/6626
+   https://github.com/owncloud/web/pull/6645
 
 * Enhancement - Display search results within files app: [#6496](https://github.com/owncloud/web/issues/6496)
 
