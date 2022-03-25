@@ -56,7 +56,11 @@
 
         <div class="sidebar-panel__body">
           <template v-if="isContentDisplayed">
-            <component :is="panel.component" class="sidebar-panel__body-content" />
+            <div class="sidebar-panel__body-content">
+              <slot name="body">
+                <component :is="panel.component"/>
+              </slot>
+            </div>
 
             <div
               v-if="panel.default && availablePanels.length > 1"
