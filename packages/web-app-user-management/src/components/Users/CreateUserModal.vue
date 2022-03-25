@@ -1,51 +1,49 @@
 <template>
-  <div>
-    <oc-modal
-      :title="$gettext('Create user')"
-      :button-cancel-text="$gettext('Cancel')"
-      :button-confirm-text="$gettext('Create')"
-      :button-confirm-disabled="buttonConfirmDisabled"
-      @cancel="$emit('cancel')"
-      @confirm="$emit('confirm', user)"
-    >
-      <template #content>
-        <oc-text-input
-          v-model="user.onPremisesSamAccountName"
-          class="oc-mb-s"
-          :label="$gettext('User name') + '*'"
-          :error-message="formData.userName.errorMessage"
-          :fix-message-line="true"
-          @input="validateUserName"
-        />
-        <oc-text-input
-          v-model="user.displayName"
-          class="oc-mb-s"
-          :label="$gettext('First and last name') + '*'"
-          :error-message="formData.displayName.errorMessage"
-          :fix-message-line="true"
-          @input="validateDisplayName"
-        />
-        <oc-text-input
-          v-model="user.mail"
-          class="oc-mb-s"
-          :label="$gettext('Email') + '*'"
-          :error-message="formData.email.errorMessage"
-          type="email"
-          :fix-message-line="true"
-          @change="validateEmail"
-        />
-        <oc-text-input
-          v-model="user.passwordProfile.password"
-          class="oc-mb-s"
-          :label="$gettext('Password') + '*'"
-          :error-message="formData.password.errorMessage"
-          type="password"
-          :fix-message-line="true"
-          @input="validatePassword"
-        />
-      </template>
-    </oc-modal>
-  </div>
+  <oc-modal
+    :title="$gettext('Create user')"
+    :button-cancel-text="$gettext('Cancel')"
+    :button-confirm-text="$gettext('Create')"
+    :button-confirm-disabled="buttonConfirmDisabled"
+    @cancel="$emit('cancel')"
+    @confirm="$emit('confirm', user)"
+  >
+    <template #content>
+      <oc-text-input
+        v-model="user.onPremisesSamAccountName"
+        class="oc-mb-s"
+        :label="$gettext('User name') + '*'"
+        :error-message="formData.userName.errorMessage"
+        :fix-message-line="true"
+        @input="validateUserName"
+      />
+      <oc-text-input
+        v-model="user.displayName"
+        class="oc-mb-s"
+        :label="$gettext('First and last name') + '*'"
+        :error-message="formData.displayName.errorMessage"
+        :fix-message-line="true"
+        @input="validateDisplayName"
+      />
+      <oc-text-input
+        v-model="user.mail"
+        class="oc-mb-s"
+        :label="$gettext('Email') + '*'"
+        :error-message="formData.email.errorMessage"
+        type="email"
+        :fix-message-line="true"
+        @change="validateEmail"
+      />
+      <oc-text-input
+        v-model="user.passwordProfile.password"
+        class="oc-mb-s"
+        :label="$gettext('Password') + '*'"
+        :error-message="formData.password.errorMessage"
+        type="password"
+        :fix-message-line="true"
+        @input="validatePassword"
+      />
+    </template>
+  </oc-modal>
 </template>
 
 <script>

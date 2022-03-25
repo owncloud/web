@@ -1,17 +1,15 @@
 <template>
-  <div>
-    <oc-modal
-      icon="alarm-warning"
-      :title="title"
-      :message="message"
-      :button-cancel-text="$gettext('Cancel')"
-      :button-confirm-text="$gettext('Delete')"
-      variation="danger"
-      @confirm="$emit('confirm', groups)"
-      @cancel="$emit('cancel')"
-    >
-    </oc-modal>
-  </div>
+  <oc-modal
+    icon="alarm-warning"
+    :title="title"
+    :message="message"
+    :button-cancel-text="$gettext('Cancel')"
+    :button-confirm-text="$gettext('Delete')"
+    variation="danger"
+    @confirm="$emit('confirm', groups)"
+    @cancel="$emit('cancel')"
+  >
+  </oc-modal>
 </template>
 
 <script>

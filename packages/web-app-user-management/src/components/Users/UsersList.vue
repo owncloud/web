@@ -1,5 +1,4 @@
 <template>
-  <div>
     <oc-table
       :sort-by="sortBy"
       :sort-dir="sortDir"
@@ -38,7 +37,6 @@
         </div>
       </template>
     </oc-table>
-  </div>
 </template>
 
 <script>

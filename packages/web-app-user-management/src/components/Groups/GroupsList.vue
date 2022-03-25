@@ -1,44 +1,42 @@
 <template>
-  <div>
-    <oc-table
-      :sort-by="sortBy"
-      :sort-dir="sortDir"
-      :fields="fields"
-      :data="data"
-      :highlighted="highlighted"
-      @sort="handleSort"
-    >
-      <template #selectHeader>
-        <oc-checkbox
-          size="large"
-          class="oc-ml-s"
-          :label="$gettext('Select all groups')"
-          :value="allGroupsSelected"
-          hide-label
-          @input="$emit('toggleSelectAllGroups')"
-        />
-      </template>
-      <template #select="rowData">
-        <oc-checkbox
-          class="oc-ml-s"
-          size="large"
-          :value="selectedGroups"
-          :option="rowData.item"
-          :label="getSelectGroupLabel(rowData.item)"
-          hide-label
-          @input="$emit('toggleSelectGroup', rowData.item)"
-        />
-      </template>
-      <template #avatar="rowData">
-        <avatar-image :width="32" :userid="rowData.item.id" :user-name="rowData.item.displayName" />
-      </template>
-      <template #footer>
-        <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
-          <p class="oc-text-muted">{{ footerText }}</p>
-        </div>
-      </template>
-    </oc-table>
-  </div>
+  <oc-table
+    :sort-by="sortBy"
+    :sort-dir="sortDir"
+    :fields="fields"
+    :data="data"
+    :highlighted="highlighted"
+    @sort="handleSort"
+  >
+    <template #selectHeader>
+      <oc-checkbox
+        size="large"
+        class="oc-ml-s"
+        :label="$gettext('Select all groups')"
+        :value="allGroupsSelected"
+        hide-label
+        @input="$emit('toggleSelectAllGroups')"
+      />
+    </template>
+    <template #select="rowData">
+      <oc-checkbox
+        class="oc-ml-s"
+        size="large"
+        :value="selectedGroups"
+        :option="rowData.item"
+        :label="getSelectGroupLabel(rowData.item)"
+        hide-label
+        @input="$emit('toggleSelectGroup', rowData.item)"
+      />
+    </template>
+    <template #avatar="rowData">
+      <avatar-image :width="32" :userid="rowData.item.id" :user-name="rowData.item.displayName" />
+    </template>
+    <template #footer>
+      <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
+        <p class="oc-text-muted">{{ footerText }}</p>
+      </div>
+    </template>
+  </oc-table>
 </template>
 
 <script>

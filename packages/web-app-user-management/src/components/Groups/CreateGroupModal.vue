@@ -1,25 +1,23 @@
 <template>
-  <div>
-    <oc-modal
-      :title="$gettext('Create group')"
-      :button-cancel-text="$gettext('Cancel')"
-      :button-confirm-text="$gettext('Create')"
-      :button-confirm-disabled="buttonConfirmDisabled"
-      @cancel="$emit('cancel')"
-      @confirm="$emit('confirm', group)"
-    >
-      <template #content>
-        <oc-text-input
-          v-model="group.displayName"
-          class="oc-mb-s"
-          :label="$gettext('Group name') + '*'"
-          :error-message="formData.displayName.errorMessage"
-          :fix-message-line="true"
-          @input="validateDisplayName"
-        />
-      </template>
-    </oc-modal>
-  </div>
+  <oc-modal
+    :title="$gettext('Create group')"
+    :button-cancel-text="$gettext('Cancel')"
+    :button-confirm-text="$gettext('Create')"
+    :button-confirm-disabled="buttonConfirmDisabled"
+    @cancel="$emit('cancel')"
+    @confirm="$emit('confirm', group)"
+  >
+    <template #content>
+      <oc-text-input
+        v-model="group.displayName"
+        class="oc-mb-s"
+        :label="$gettext('Group name') + '*'"
+        :error-message="formData.displayName.errorMessage"
+        :fix-message-line="true"
+        @input="validateDisplayName"
+      />
+    </template>
+  </oc-modal>
 </template>
 
 <script>

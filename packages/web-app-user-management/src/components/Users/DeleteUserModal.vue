@@ -1,5 +1,4 @@
 <template>
-  <div>
     <oc-modal
       icon="alarm-warning"
       :title="title"
@@ -11,7 +10,6 @@
       @cancel="$emit('cancel')"
     >
     </oc-modal>
-  </div>
 </template>
 
 <script>
